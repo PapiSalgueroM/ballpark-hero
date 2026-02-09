@@ -1,8 +1,10 @@
+import { useState, useEffect } from 'react';
 import { useGame } from '@/hooks/useGame';
 import { PlayerSearch } from '@/components/game/PlayerSearch';
 import { GameBoard } from '@/components/game/GameBoard';
+import { HowToPlay } from '@/components/game/HowToPlay';
 import { cn } from '@/lib/utils';
-import { RotateCcw } from 'lucide-react';
+import { RotateCcw, HelpCircle } from 'lucide-react';
 import { getClubLogoUrl } from '@/lib/clubData';
 
 const Index = () => {
@@ -19,11 +21,31 @@ const Index = () => {
     targetPlayer,
   } = useGame();
 
+  const [showRules, setShowRules] = useState(false);
+
+  // Show rules on first visit
+  useEffect(() => {
+    const seen = localStorage.getItem('footle-rules-seen');
+    if (!seen) {
+      setShowRules(true);
+      localStorage.setItem('footle-rules-seen', '1');
+    }
+  }, []);
+
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
         {/* Header */}
-        <header className="text-center mb-8">
+        <header className="text-center mb-8 relative">
+          {/* Help button */}
+          <button
+            onClick={() => setShowRules(true)}
+            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors"
+            aria-label="How to play"
+          >
+            <HelpCircle className="w-6 h-6" />
+          </button>
+
           <h1 className="text-5xl md:text-7xl font-bold tracking-[0.25em] text-primary font-display mb-1">
             FOOTLE
           </h1>
@@ -33,28 +55,22 @@ const Index = () => {
 
           {/* Mode Toggle */}
           <div className="flex items-center justify-center gap-2 mt-6">
-            <button
-              onClick={() => changeDifficulty('easy')}
-              className={cn(
-                'px-6 py-2 rounded-full text-sm font-semibold transition-all',
-                difficulty === 'easy'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-              )}
-            >
-              Easy
-            </button>
-            <button
-              onClick={() => changeDifficulty('hard')}
-              className={cn(
-                'px-6 py-2 rounded-full text-sm font-semibold transition-all',
-                difficulty === 'hard'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-              )}
-            >
-              Hard
-            </button>
+            {(['easy', 'hard', 'insane'] as const).map((mode) => (
+              <button
+                key={mode}
+                onClick={() => changeDifficulty(mode)}
+                className={cn(
+                  'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
+                  difficulty === mode
+                    ? mode === 'insane'
+                      ? 'bg-destructive text-destructive-foreground'
+                      : 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                )}
+              >
+                {mode}
+              </button>
+            ))}
           </div>
 
           {/* Guess Counter */}
@@ -88,21 +104,18 @@ const Index = () => {
               {/* Player image */}
               {targetPlayer && (
                 <div className="flex justify-center mb-4">
-                  <div className="relative">
-                    <img
-                      src={`https://img.a]sports.com/tiny-image/player-search/${encodeURIComponent(targetPlayer.name.toLowerCase().replace(/ /g, '-'))}`}
-                      alt={targetPlayer.name}
-                      className="w-24 h-24 rounded-full object-cover bg-secondary border-2 border-primary/30"
-                      onError={(e) => {
-                        // Fallback to club logo if player image fails
-                        const clubLogo = getClubLogoUrl(targetPlayer.club);
-                        if (clubLogo) {
-                          e.currentTarget.src = clubLogo;
-                          e.currentTarget.className = "w-24 h-24 rounded-full object-contain bg-secondary border-2 border-primary/30 p-3";
-                        }
-                      }}
-                    />
-                  </div>
+                  <img
+                    src={`https://img.a]sports.com/tiny-image/player-search/${encodeURIComponent(targetPlayer.name.toLowerCase().replace(/ /g, '-'))}`}
+                    alt={targetPlayer.name}
+                    className="w-24 h-24 rounded-full object-cover bg-secondary border-2 border-primary/30"
+                    onError={(e) => {
+                      const clubLogo = getClubLogoUrl(targetPlayer.club);
+                      if (clubLogo) {
+                        e.currentTarget.src = clubLogo;
+                        e.currentTarget.className = "w-24 h-24 rounded-full object-contain bg-secondary border-2 border-primary/30 p-3";
+                      }
+                    }}
+                  />
                 </div>
               )}
               {gameStatus === 'won' ? (
@@ -173,6 +186,9 @@ const Index = () => {
           </div>
         </div>
       </div>
+
+      {/* How to Play Modal */}
+      <HowToPlay open={showRules} onOpenChange={setShowRules} />
     </main>
   );
 };
