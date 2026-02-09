@@ -54,7 +54,7 @@ export function ConnectionsBoard({
                 key={player}
                 onClick={() => onToggle(player)}
                 className={cn(
-                  'rounded-lg px-2 py-4 text-sm font-semibold transition-all text-center leading-tight',
+                  'rounded-lg px-1.5 py-3 text-[11px] sm:text-xs font-semibold transition-all text-center leading-tight break-words',
                   'border border-border hover:scale-[1.03] active:scale-[0.97]',
                   isSelected
                     ? 'bg-primary text-primary-foreground border-primary shadow-lg'
