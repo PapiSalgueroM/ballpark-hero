@@ -50,7 +50,7 @@ const PrivacyPolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">7. Contact</h2>
-          <p>If you have any questions about this privacy policy, please reach out through the platform where you found this application.</p>
+          <p>If you have any questions about this privacy policy, please contact us at <a href="mailto:footyfein1@gmail.com" className="underline hover:text-foreground transition-colors">footyfein1@gmail.com</a>.</p>
         </div>
       </section>
 
