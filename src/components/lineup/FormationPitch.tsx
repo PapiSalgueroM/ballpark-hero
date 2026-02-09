@@ -50,7 +50,7 @@ const FormationPitch = ({ positions, filledSlots, selectedIndex, onSelectPositio
   const coords = getPositionCoords(positions);
 
   return (
-    <div className="relative w-full max-w-md mx-auto aspect-[3/4] bg-correct/10 rounded-2xl border border-correct/20 overflow-hidden">
+    <div className="relative w-full max-w-lg mx-auto aspect-[3/4.5] bg-correct/10 rounded-2xl border border-correct/20 overflow-hidden">
       {/* Pitch markings */}
       <div className="absolute inset-0">
         {/* Center line */}
@@ -76,7 +76,7 @@ const FormationPitch = ({ positions, filledSlots, selectedIndex, onSelectPositio
             disabled={!!filled}
             className={cn(
               'absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-200',
-              'flex flex-col items-center justify-center rounded-lg text-center min-w-[3.5rem] px-1.5 py-1',
+              'flex flex-col items-center justify-center rounded-lg text-center min-w-[4rem] px-2 py-1.5',
               filled
                 ? 'bg-correct text-correct-foreground shadow-md cursor-default'
                 : isSelected
