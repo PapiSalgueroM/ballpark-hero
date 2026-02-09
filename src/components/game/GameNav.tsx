@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 const games = [
   { path: '/', label: '🎯 Footle', description: 'Guess the player from stats' },
   { path: '/career', label: '📜 Career Quiz', description: 'Guess from career history' },
+  { path: '/higher-lower', label: '📊 Higher or Lower', description: 'Compare all-time career stats' },
 ];
 
 export function GameNav() {
