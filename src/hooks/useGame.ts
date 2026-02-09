@@ -6,9 +6,15 @@ import { compareGuess } from '@/lib/gameLogic';
 const MAX_GUESSES = 8;
 
 function selectRandomPlayer(diff: Difficulty): Player {
-  const pool = diff === 'easy'
-    ? players.filter(p => p.difficulty === 'easy')
-    : players;
+  let pool: Player[];
+  if (diff === 'easy') {
+    pool = players.filter(p => p.difficulty === 'easy');
+  } else if (diff === 'hard') {
+    pool = players.filter(p => p.difficulty === 'easy' || p.difficulty === 'hard');
+  } else {
+    // insane: all players
+    pool = players;
+  }
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
@@ -19,9 +25,9 @@ export function useGame() {
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
 
   const availablePlayers = useMemo(() => {
-    return difficulty === 'easy'
-      ? players.filter(p => p.difficulty === 'easy')
-      : players;
+    if (difficulty === 'easy') return players.filter(p => p.difficulty === 'easy');
+    if (difficulty === 'hard') return players.filter(p => p.difficulty === 'easy' || p.difficulty === 'hard');
+    return players;
   }, [difficulty]);
 
   const resetGame = useCallback((diff?: Difficulty) => {

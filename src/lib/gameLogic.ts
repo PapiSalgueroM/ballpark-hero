@@ -10,6 +10,8 @@ const continentMap: Record<string, string> = {
   'Georgia': 'Europe', 'Denmark': 'Europe', 'Austria': 'Europe',
   'Scotland': 'Europe', 'Wales': 'Europe', 'Ukraine': 'Europe',
   'Czech Republic': 'Europe', 'Slovenia': 'Europe', 'Albania': 'Europe',
+  'Greece': 'Europe', 'Israel': 'Europe', 'Bosnia': 'Europe',
+  'Guinea-Bissau': 'Europe',
   'Brazil': 'South America', 'Argentina': 'South America',
   'Uruguay': 'South America', 'Colombia': 'South America',
   'Ecuador': 'South America', 'Paraguay': 'South America',
@@ -17,9 +19,9 @@ const continentMap: Record<string, string> = {
   'Egypt': 'Africa', 'Senegal': 'Africa', 'Nigeria': 'Africa',
   'Morocco': 'Africa', 'Ghana': 'Africa', 'Ivory Coast': 'Africa',
   'Cameroon': 'Africa', 'Guinea': 'Africa', 'Mali': 'Africa',
-  'Algeria': 'Africa',
+  'Algeria': 'Africa', 'Gabon': 'Africa',
   'South Korea': 'Asia', 'Japan': 'Asia',
-  'Australia': 'Oceania',
+  'Australia': 'Oceania', 'New Zealand': 'Oceania',
   'USA': 'North America', 'Mexico': 'North America', 'Canada': 'North America',
   'Jamaica': 'North America',
 };
@@ -41,8 +43,6 @@ function compareNationality(guess: string, target: string): CellResult {
   return { value: guess, status: 'incorrect' };
 }
 
-
-
 function compareClub(guessClub: string, targetClub: string, guessLeague: string, targetLeague: string): CellResult {
   const logoUrl = getClubLogoUrl(guessClub);
   if (guessClub === targetClub) {
@@ -54,12 +54,7 @@ function compareClub(guessClub: string, targetClub: string, guessLeague: string,
   return { value: guessClub, status: 'incorrect', imageUrl: logoUrl };
 }
 
-function compareNumeric(
-  guessVal: number,
-  targetVal: number,
-  threshold: number,
-  displayValue?: string
-): CellResult {
+function compareNumeric(guessVal: number, targetVal: number, threshold: number, displayValue?: string): CellResult {
   const display = displayValue || String(guessVal);
   if (guessVal === targetVal) return { value: display, status: 'correct' };
   const diff = Math.abs(guessVal - targetVal);
@@ -75,8 +70,6 @@ function comparePosition(guess: string, target: string): CellResult {
   if (guessGroup === targetGroup) return { value: guess, status: 'close' };
   return { value: guess, status: 'incorrect' };
 }
-
-
 
 export function compareGuess(guess: Player, target: Player): GuessResult {
   return {
