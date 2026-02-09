@@ -7,7 +7,7 @@ import FormationPitch from '@/components/lineup/FormationPitch';
 import PlayerSuggestions from '@/components/lineup/PlayerSuggestions';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
-import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle } from 'lucide-react';
+import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle } from 'lucide-react';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -32,6 +32,7 @@ const LineupBuilder = () => {
     evaluateTeam,
     resetGame,
     finishSpin,
+    rerollTeam,
     teamAssignments,
   } = useLineupBuilder();
 
@@ -107,13 +108,24 @@ const LineupBuilder = () => {
 
             {/* Spinner + Input on top */}
             <div className="max-w-lg mx-auto space-y-4">
-              {/* Slot machine spinner */}
-              <TeamSpinner
-                teams={teamAssignments}
-                targetIndex={filledCount}
-                isSpinning={isSpinning}
-                onFinish={finishSpin}
-              />
+              {/* Slot machine spinner + reroll */}
+              <div className="relative">
+                <TeamSpinner
+                  teams={teamAssignments}
+                  targetIndex={filledCount}
+                  isSpinning={isSpinning}
+                  onFinish={finishSpin}
+                />
+                {!isSpinning && currentTeam && (
+                  <button
+                    onClick={rerollTeam}
+                    className="absolute top-3 right-3 p-2 rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
+                    title="Reroll – get a different team"
+                  >
+                    <Shuffle className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
 
               {/* Input area */}
               {selectedPositionIndex !== null && currentTeam && !isSpinning && (
