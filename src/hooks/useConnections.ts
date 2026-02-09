@@ -1,9 +1,13 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { connectionsPuzzles } from '@/data/connectionsPuzzles';
 import type { ConnectionGroup, ConnectionDifficulty } from '@/types/connections';
 
 export function useConnections() {
   const [puzzleIndex, setPuzzleIndex] = useState(0);
+  const [streak, setStreak] = useState(() => {
+    const saved = localStorage.getItem('connections-streak');
+    return saved ? parseInt(saved, 10) : 0;
+  });
 
   const puzzle = useMemo(() => connectionsPuzzles[puzzleIndex % connectionsPuzzles.length], [puzzleIndex]);
 
@@ -29,6 +33,20 @@ export function useConnections() {
     if (lives <= 0) return 'lost' as const;
     return 'playing' as const;
   }, [solvedGroups, lives]);
+
+  // Update streak when game ends
+  useEffect(() => {
+    if (gameStatus === 'won') {
+      setStreak((prev) => {
+        const next = prev + 1;
+        localStorage.setItem('connections-streak', String(next));
+        return next;
+      });
+    } else if (gameStatus === 'lost') {
+      setStreak(0);
+      localStorage.setItem('connections-streak', '0');
+    }
+  }, [gameStatus]);
 
   const [shuffleKey, setShuffleKey] = useState(0);
 
@@ -130,6 +148,7 @@ export function useConnections() {
     puzzle,
     puzzleIndex,
     totalPuzzles,
+    streak,
     selected,
     solvedGroups,
     lives,
