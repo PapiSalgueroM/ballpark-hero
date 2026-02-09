@@ -32,8 +32,8 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are a football database. Answer ONLY with a JSON object: {"valid": true/false, "reason": "short explanation"}.
-A player is valid if they have EVER played for the given ${teamType} in a competitive match at senior level. Youth/academy doesn't count unless they also played for the senior team. Be accurate and strict. If you're unsure or the player name doesn't match any known footballer, return false.`,
+              content: `You are a football database with knowledge up to February 2026. Answer ONLY with a JSON object: {"valid": true/false, "reason": "short explanation"}.
+A player is valid if they have EVER played for the given ${teamType} in a competitive match at senior level, including the current 2025-26 season. Youth/academy doesn't count unless they also played for the senior team. Include loan spells. For example, Victor Osimhen plays for Galatasaray (joined 2024 on loan from Napoli, then permanently). Be accurate but give benefit of the doubt for recent transfers.`,
             },
             {
               role: "user",
