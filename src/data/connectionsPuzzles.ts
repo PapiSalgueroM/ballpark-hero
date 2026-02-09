@@ -22,7 +22,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       {
         category: 'Over 100 Premier League assists',
         players: ['Fabregas', 'De Bruyne', 'Giggs', 'Rooney'],
-        difficulty: 'tricky',
+        difficulty: 'insane',
       },
     ],
   },
@@ -47,7 +47,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       {
         category: 'Captained their country at a World Cup',
         players: ['Ramos', 'Lloris', 'Kane', 'Buffon'],
-        difficulty: 'tricky',
+        difficulty: 'insane',
       },
     ],
   },
@@ -72,7 +72,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       {
         category: 'Scored a famous bicycle kick goal',
         players: ['Rooney', 'Zlatan', 'Bale', 'Giroud'],
-        difficulty: 'tricky',
+        difficulty: 'insane',
       },
     ],
   },
@@ -97,7 +97,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       {
         category: 'Known by a single name',
         players: ['Ronaldinho', 'Kaká', 'Neymar', 'Pelé'],
-        difficulty: 'tricky',
+        difficulty: 'insane',
       },
     ],
   },
@@ -122,7 +122,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       {
         category: 'Transferred for over €100M',
         players: ['Mbappé', 'Pogba', 'Bale', 'Griezmann'],
-        difficulty: 'tricky',
+        difficulty: 'insane',
       },
     ],
   },
@@ -147,7 +147,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       {
         category: 'Scored in their international debut',
         players: ['Rashford', 'Owen', 'Rooney', 'Fowler'],
-        difficulty: 'tricky',
+        difficulty: 'insane',
       },
     ],
   },
@@ -172,7 +172,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       {
         category: 'Scored a hat-trick on their league debut',
         players: ['Haaland', 'Yakubu', 'Mané', 'Demba Ba'],
-        difficulty: 'tricky',
+        difficulty: 'insane',
       },
     ],
   },
