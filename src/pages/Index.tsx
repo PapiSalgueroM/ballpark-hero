@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { RotateCcw, HelpCircle } from 'lucide-react';
 import { getClubLogoUrl } from '@/lib/clubData';
 import { GameNav } from '@/components/game/GameNav';
+import { Footer } from '@/components/game/Footer';
 
 const Index = () => {
   const {
@@ -189,6 +190,7 @@ const Index = () => {
 
         {/* Game Navigation */}
         <GameNav />
+        <Footer />
       </div>
 
       {/* How to Play Modal */}
