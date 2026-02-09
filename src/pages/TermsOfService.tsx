@@ -46,42 +46,37 @@ const TermsOfService = () => {
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">5. Third-Party Advertisements</h2>
-          <p>The Site may display advertisements provided by third-party ad networks. These advertisers may use cookies and similar technologies to serve ads based on your browsing activity. FootyFein is not responsible for the content, accuracy, or practices of any third-party advertisements. Your interactions with advertisers and any purchases made through their ads are solely between you and the advertiser. Please review the privacy policies of any third-party advertisers for more information about their practices.</p>
-        </div>
-
-        <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">6. Disclaimer of Warranties</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">5. Disclaimer of Warranties</h2>
           <p>The Site is provided on an "as is" and "as available" basis. FootyFein makes no representations or warranties of any kind, express or implied, regarding the accuracy, reliability, completeness, or availability of the Site or its content. Player statistics and data presented in the games are approximations for entertainment purposes and may not reflect exact real-world figures.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">7. Limitation of Liability</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">6. Limitation of Liability</h2>
           <p>To the fullest extent permitted by law, FootyFein and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, arising from your use of or inability to use the Site.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">8. Indemnification</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">7. Indemnification</h2>
           <p>You agree to indemnify, defend, and hold harmless FootyFein and its operators from any claims, liabilities, damages, losses, or expenses arising from your use of the Site or your violation of these Terms.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">9. Age Requirement</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">8. Age Requirement</h2>
           <p>The Site is intended for users of all ages. No account creation or personal information is required to use the Site.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">10. Modifications to Terms</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">9. Modifications to Terms</h2>
           <p>FootyFein reserves the right to modify these Terms at any time. Changes will be effective immediately upon posting to the Site. Your continued use of the Site after changes are posted constitutes your acceptance of the revised Terms.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">11. Governing Law</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">10. Governing Law</h2>
           <p>These Terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law principles.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">12. Contact</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">11. Contact</h2>
           <p>If you have any questions about these Terms of Service, please reach out through the platform where you found this application.</p>
         </div>
       </section>
