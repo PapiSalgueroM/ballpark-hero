@@ -24,8 +24,8 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">2. Cookies</h2>
-          <p>This site does not use cookies or any tracking technologies.</p>
+          <h2 className="text-lg font-semibold text-foreground mb-2">2. Cookies &amp; Local Storage</h2>
+          <p>This site uses browser local storage to save your game progress, preferences, and UI state. Local storage data never leaves your device and is not shared with any third party. This site does not use tracking cookies or any tracking technologies. You can clear all stored data at any time by clearing your browser's site data.</p>
         </div>
 
         <div>
