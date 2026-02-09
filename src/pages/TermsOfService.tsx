@@ -25,7 +25,16 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">2. Description of Service</h2>
-          <p>FootyFein is a free, browser-based entertainment platform that provides football-themed trivia and guessing games. The Site is provided "as is" and "as available" without any warranties of any kind.</p>
+          <p>FootyFein is a free, browser-based entertainment platform that provides football-themed trivia and guessing games. Current game modes include:</p>
+          <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li><strong>Footle</strong> — Guess the footballer from stat-based clues in 8 tries</li>
+            <li><strong>Career Quiz</strong> — Identify a player from their season-by-season career history</li>
+            <li><strong>Higher or Lower</strong> — Compare all-time career statistics between players</li>
+            <li><strong>Connections</strong> — Find groups of 4 players sharing a hidden link</li>
+            <li><strong>Build Your XI</strong> — Create a lineup and receive an AI-generated rating</li>
+            <li><strong>Guess the Face</strong> — Identify a blurred footballer as hints are revealed</li>
+          </ul>
+          <p className="mt-2">The Site is provided "as is" and "as available" without any warranties of any kind.</p>
         </div>
 
         <div>
