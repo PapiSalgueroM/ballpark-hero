@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { connectionsPuzzles } from '@/data/connectionsPuzzles';
-import { ConnectionGroup, ConnectionDifficulty } from '@/types/connections';
+import type { ConnectionGroup, ConnectionDifficulty } from '@/types/connections';
 
 function getDailyPuzzleIndex(): number {
   const start = new Date('2026-02-09').getTime();
