@@ -32,7 +32,8 @@ function getPositionCoords(positions: PositionSlot[]): { x: number; y: number }[
   const coords: { x: number; y: number }[] = Array.from({ length: positions.length });
 
   sortedTiers.forEach(([_tier, indices], rowIdx) => {
-    const rowY = 100 - (rowIdx / (sortedTiers.length - 1)) * 100; // 100 = bottom (GK), 0 = top (ST)
+    const padding = 8; // % padding top/bottom so edge positions aren't clipped
+    const rowY = padding + (1 - rowIdx / (sortedTiers.length - 1)) * (100 - 2 * padding); // bottom (GK) to top (ST) with padding
     const count = indices.length;
     indices.forEach((posIdx, col) => {
       const xSpacing = 100 / (count + 1);

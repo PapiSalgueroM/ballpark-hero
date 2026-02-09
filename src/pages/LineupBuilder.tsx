@@ -4,6 +4,7 @@ import { FORMATIONS, type Formation } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import FormationPitch from '@/components/lineup/FormationPitch';
+import PlayerSuggestions from '@/components/lineup/PlayerSuggestions';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
 import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle } from 'lucide-react';
@@ -151,6 +152,18 @@ const LineupBuilder = () => {
                       )}
                     </button>
                   </div>
+
+                  {/* Player suggestions */}
+                  <PlayerSuggestions
+                    query={playerInput}
+                    teamName={currentTeam.name}
+                    isNation={currentTeam.isNation}
+                    visible={!isValidating && !!playerInput.trim()}
+                    onSelect={(name) => {
+                      setPlayerInput(name);
+                      submitPlayer(name);
+                    }}
+                  />
 
                   {validationError && (
                     <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
