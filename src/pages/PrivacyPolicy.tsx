@@ -20,7 +20,7 @@ const PrivacyPolicy = () => {
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">1. Information We Collect</h2>
-          <p>We do not collect any personal information. All game data (scores, streaks, progress) is stored locally on your device using browser storage and is never transmitted to any server.</p>
+          <p>We do not collect any personal information. All game data (scores, streaks, progress) is stored locally on your device using browser storage and is never transmitted to any server. We do not require account creation, login, or any form of registration.</p>
         </div>
 
         <div>
@@ -30,7 +30,12 @@ const PrivacyPolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">3. Third-Party Services</h2>
-          <p>We do not integrate with any third-party analytics, advertising, or data collection services.</p>
+          <p>We use the following third-party services solely to power game features:</p>
+          <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li><strong>Wikipedia REST API</strong> — Used in the "Guess the Face" game mode to fetch publicly available player photographs. No personal data is sent; only the player's Wikipedia page name is requested. Wikipedia's own <a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">privacy policy</a> applies to their service.</li>
+            <li><strong>AI Evaluation Service</strong> — Used in the "Build Your XI" game mode to generate lineup ratings. Only the team formation and player names you select are sent for evaluation. No personal or identifying information is transmitted.</li>
+          </ul>
+          <p className="mt-2">We do not integrate with any advertising networks, analytics platforms, or data brokers.</p>
         </div>
 
         <div>
