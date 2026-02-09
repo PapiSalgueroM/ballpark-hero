@@ -59,8 +59,8 @@ export const players: Player[] = [
   { name: "Antonio Rüdiger", club: "Real Madrid", nationality: "Germany", league: "La Liga", goals: 2, assists: 1, position: "CB", kitNumber: 22, age: 33, marketValue: 25, difficulty: "hard" },
   { name: "Julián Álvarez", club: "Atlético Madrid", nationality: "Argentina", league: "La Liga", goals: 11, assists: 5, position: "ST", kitNumber: 19, age: 26, marketValue: 85, difficulty: "hard" },
   { name: "Gavi", club: "Barcelona", nationality: "Spain", league: "La Liga", goals: 3, assists: 4, position: "CM", kitNumber: 6, age: 21, marketValue: 60, difficulty: "hard" },
-  { name: "Alphonso Davies", club: "Real Madrid", nationality: "Canada", league: "La Liga", goals: 1, assists: 4, position: "LB", kitNumber: 19, age: 25, marketValue: 55, difficulty: "hard" },
-  { name: "Jonathan Tah", club: "Barcelona", nationality: "Germany", league: "La Liga", goals: 2, assists: 1, position: "CB", kitNumber: 4, age: 29, marketValue: 35, difficulty: "hard" },
+  { name: "Alphonso Davies", club: "Bayern Munich", nationality: "Canada", league: "Bundesliga", goals: 1, assists: 4, position: "LB", kitNumber: 19, age: 25, marketValue: 55, difficulty: "hard" },
+  { name: "Jonathan Tah", club: "Bayern Munich", nationality: "Germany", league: "Bundesliga", goals: 2, assists: 1, position: "CB", kitNumber: 4, age: 29, marketValue: 35, difficulty: "hard" },
 
   // =================== SERIE A ===================
   // Easy
@@ -89,9 +89,9 @@ export const players: Player[] = [
   { name: "Jamal Musiala", club: "Bayern Munich", nationality: "Germany", league: "Bundesliga", goals: 12, assists: 8, position: "CAM", kitNumber: 42, age: 23, marketValue: 150, difficulty: "easy" },
   // Hard
   { name: "Serhou Guirassy", club: "Borussia Dortmund", nationality: "Guinea", league: "Bundesliga", goals: 13, assists: 3, position: "ST", kitNumber: 9, age: 30, marketValue: 35, difficulty: "hard" },
-  { name: "Leroy Sané", club: "Bayern Munich", nationality: "Germany", league: "Bundesliga", goals: 5, assists: 4, position: "RW", kitNumber: 10, age: 30, marketValue: 35, difficulty: "hard" },
+  { name: "Leroy Sané", club: "Galatasaray", nationality: "Germany", league: "Turkish Süper Lig", goals: 5, assists: 4, position: "RW", kitNumber: 10, age: 30, marketValue: 35, difficulty: "hard" },
   { name: "Granit Xhaka", club: "Bayer Leverkusen", nationality: "Switzerland", league: "Bundesliga", goals: 3, assists: 5, position: "CM", kitNumber: 34, age: 33, marketValue: 22, difficulty: "hard" },
-  { name: "Xavi Simons", club: "RB Leipzig", nationality: "Netherlands", league: "Bundesliga", goals: 10, assists: 8, position: "CAM", kitNumber: 7, age: 23, marketValue: 110, difficulty: "hard" },
+  { name: "Xavi Simons", club: "Tottenham", nationality: "Netherlands", league: "Premier League", goals: 10, assists: 8, position: "CAM", kitNumber: 7, age: 23, marketValue: 110, difficulty: "hard" },
   { name: "Alejandro Grimaldo", club: "Bayer Leverkusen", nationality: "Spain", league: "Bundesliga", goals: 3, assists: 7, position: "LB", kitNumber: 20, age: 30, marketValue: 38, difficulty: "hard" },
   { name: "Joshua Kimmich", club: "Bayern Munich", nationality: "Germany", league: "Bundesliga", goals: 2, assists: 5, position: "CDM", kitNumber: 6, age: 31, marketValue: 45, difficulty: "hard" },
   { name: "Karim Adeyemi", club: "Borussia Dortmund", nationality: "Germany", league: "Bundesliga", goals: 6, assists: 3, position: "LW", kitNumber: 27, age: 24, marketValue: 35, difficulty: "hard" },
@@ -109,7 +109,7 @@ export const players: Player[] = [
   { name: "Gonçalo Ramos", club: "PSG", nationality: "Portugal", league: "Ligue 1", goals: 9, assists: 3, position: "ST", kitNumber: 9, age: 24, marketValue: 65, difficulty: "hard" },
   { name: "Lee Kang-in", club: "PSG", nationality: "South Korea", league: "Ligue 1", goals: 5, assists: 6, position: "CAM", kitNumber: 19, age: 24, marketValue: 45, difficulty: "hard" },
   { name: "Vitinha", club: "PSG", nationality: "Portugal", league: "Ligue 1", goals: 5, assists: 5, position: "CM", kitNumber: 17, age: 26, marketValue: 60, difficulty: "hard" },
-  { name: "Jonathan David", club: "Lille", nationality: "Canada", league: "Ligue 1", goals: 14, assists: 3, position: "ST", kitNumber: 9, age: 26, marketValue: 55, difficulty: "hard" },
+  { name: "Jonathan David", club: "Juventus", nationality: "Canada", league: "Serie A", goals: 14, assists: 3, position: "ST", kitNumber: 9, age: 26, marketValue: 55, difficulty: "hard" },
   { name: "Mason Greenwood", club: "Marseille", nationality: "England", league: "Ligue 1", goals: 9, assists: 3, position: "RW", kitNumber: 10, age: 24, marketValue: 35, difficulty: "hard" },
 
   // =================== INSANE MODE - ADDITIONAL LEAGUES ===================
@@ -143,7 +143,7 @@ export const players: Player[] = [
   { name: "Christian Benteke", club: "DC United", nationality: "Belgium", league: "MLS", goals: 13, assists: 3, position: "ST", kitNumber: 9, age: 35, marketValue: 3, difficulty: "insane" },
 
   // Brazilian Série A
-  { name: "Endrick", club: "Real Madrid", nationality: "Brazil", league: "La Liga", goals: 5, assists: 2, position: "ST", kitNumber: 16, age: 20, marketValue: 45, difficulty: "insane" },
+  { name: "Endrick", club: "Lyon", nationality: "Brazil", league: "Ligue 1", goals: 5, assists: 2, position: "ST", kitNumber: 16, age: 20, marketValue: 45, difficulty: "insane" },
   { name: "Luiz Henrique", club: "Botafogo", nationality: "Brazil", league: "Brazilian Série A", goals: 8, assists: 4, position: "RW", kitNumber: 7, age: 25, marketValue: 22, difficulty: "insane" },
 
   // Scottish Premiership
