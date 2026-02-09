@@ -3,7 +3,8 @@ import { useCareerGame } from '@/hooks/useCareerGame';
 import { CareerBoard } from '@/components/career/CareerBoard';
 import { GameNav } from '@/components/game/GameNav';
 import { getClubLogoUrl } from '@/lib/clubData';
-import { RotateCcw, Flag, Search, Lightbulb } from 'lucide-react';
+import { RotateCcw, Flag, Search, Lightbulb, HelpCircle } from 'lucide-react';
+import { CareerHowToPlay } from '@/components/career/CareerHowToPlay';
 
 const CareerGame = () => {
   const {
@@ -22,6 +23,7 @@ const CareerGame = () => {
     allRevealed,
   } = useCareerGame();
 
+  const [showHelp, setShowHelp] = useState(false);
   const [input, setInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(-1);
@@ -87,7 +89,14 @@ const CareerGame = () => {
     <main className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-10">
         {/* Header */}
-        <header className="text-center mb-8">
+        <header className="text-center mb-8 relative">
+          <button
+            onClick={() => setShowHelp(true)}
+            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors"
+            aria-label="How to play"
+          >
+            <HelpCircle className="w-6 h-6" />
+          </button>
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.2em] text-primary font-display mb-1">
             CAREER QUIZ
           </h1>
@@ -212,6 +221,7 @@ const CareerGame = () => {
           </div>
         )}
 
+        <CareerHowToPlay open={showHelp} onOpenChange={setShowHelp} />
         <GameNav />
       </div>
     </main>
