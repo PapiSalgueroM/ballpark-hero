@@ -1,4 +1,5 @@
 import { Player, CellResult, CellStatus, ArrowDirection, GuessResult } from '@/types/game';
+import { getClubLogoUrl } from '@/lib/clubData';
 
 const continentMap: Record<string, string> = {
   'England': 'Europe', 'France': 'Europe', 'Germany': 'Europe',
@@ -40,11 +41,17 @@ function compareNationality(guess: string, target: string): CellResult {
   return { value: guess, status: 'incorrect' };
 }
 
-function compareExact(guessVal: string, targetVal: string): CellResult {
-  return {
-    value: guessVal,
-    status: guessVal === targetVal ? 'correct' : 'incorrect',
-  };
+
+
+function compareClub(guessClub: string, targetClub: string, guessLeague: string, targetLeague: string): CellResult {
+  const logoUrl = getClubLogoUrl(guessClub);
+  if (guessClub === targetClub) {
+    return { value: guessClub, status: 'correct', imageUrl: logoUrl };
+  }
+  if (guessLeague === targetLeague) {
+    return { value: guessClub, status: 'close', imageUrl: logoUrl };
+  }
+  return { value: guessClub, status: 'incorrect', imageUrl: logoUrl };
 }
 
 function compareNumeric(
@@ -69,12 +76,7 @@ function comparePosition(guess: string, target: string): CellResult {
   return { value: guess, status: 'incorrect' };
 }
 
-export function cmToFeetInches(cm: number): string {
-  const totalInches = Math.round(cm / 2.54);
-  const feet = Math.floor(totalInches / 12);
-  const inches = totalInches % 12;
-  return `${feet}'${inches}"`;
-}
+
 
 export function compareGuess(guess: Player, target: Player): GuessResult {
   return {
@@ -82,11 +84,10 @@ export function compareGuess(guess: Player, target: Player): GuessResult {
     isCorrect: guess.name === target.name,
     cells: {
       nationality: compareNationality(guess.nationality, target.nationality),
-      league: compareExact(guess.league, target.league),
+      club: compareClub(guess.club, target.club, guess.league, target.league),
       goals: compareNumeric(guess.goals, target.goals, 3),
       assists: compareNumeric(guess.assists, target.assists, 3),
       position: comparePosition(guess.position, target.position),
-      height: compareNumeric(guess.heightCm, target.heightCm, 5, cmToFeetInches(guess.heightCm)),
       kitNumber: compareNumeric(guess.kitNumber, target.kitNumber, 3),
       age: compareNumeric(guess.age, target.age, 2),
       marketValue: compareNumeric(guess.marketValue, target.marketValue, 5, `$${guess.marketValue}M`),

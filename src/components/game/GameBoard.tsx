@@ -9,17 +9,16 @@ interface GameBoardProps {
 const HEADERS = [
   { key: 'player', label: 'PLAYER', emoji: '👤' },
   { key: 'nationality', label: 'NAT', emoji: '🌍' },
-  { key: 'league', label: 'LEAGUE', emoji: '🏟️' },
+  { key: 'club', label: 'CLUB', emoji: '🏟️' },
   { key: 'goals', label: 'GOALS', emoji: '⚽' },
   { key: 'assists', label: 'AST', emoji: '👟' },
   { key: 'position', label: 'POS', emoji: '📍' },
-  { key: 'height', label: 'HEIGHT', emoji: '📏' },
   { key: 'kitNumber', label: 'KIT #', emoji: '👕' },
   { key: 'age', label: 'AGE', emoji: '📅' },
   { key: 'marketValue', label: 'VALUE', emoji: '💰' },
 ];
 
-const cellKeys = ['nationality', 'league', 'goals', 'assists', 'position', 'height', 'kitNumber', 'age', 'marketValue'] as const;
+const cellKeys = ['nationality', 'club', 'goals', 'assists', 'position', 'kitNumber', 'age', 'marketValue'] as const;
 
 function CellComponent({ cell, animDelay }: { cell: CellResult; animDelay: number }) {
   const statusClasses = {
@@ -36,7 +35,19 @@ function CellComponent({ cell, animDelay }: { cell: CellResult; animDelay: numbe
       )}
       style={{ animationDelay: `${animDelay}ms` }}
     >
-      <span className="leading-tight text-center px-1">{cell.value}</span>
+      {cell.imageUrl ? (
+        <div className="flex flex-col items-center gap-0.5">
+          <img
+            src={cell.imageUrl}
+            alt={cell.value}
+            className="w-7 h-7 object-contain"
+            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+          />
+          <span className="leading-tight text-center px-1 text-[10px]">{cell.value}</span>
+        </div>
+      ) : (
+        <span className="leading-tight text-center px-1">{cell.value}</span>
+      )}
       {cell.arrow && (
         <span className="text-[10px] mt-0.5 opacity-80">
           {cell.arrow === 'up' ? '▲' : '▼'}
@@ -46,13 +57,12 @@ function CellComponent({ cell, animDelay }: { cell: CellResult; animDelay: numbe
   );
 }
 
-function GuessRow({ guess, rowIndex }: { guess: GuessResult; rowIndex: number }) {
+function GuessRow({ guess }: { guess: GuessResult }) {
   return (
     <div
       className="grid gap-1.5 mb-1.5"
-      style={{ gridTemplateColumns: '130px repeat(9, minmax(85px, 1fr))' }}
+      style={{ gridTemplateColumns: '130px repeat(8, minmax(85px, 1fr))' }}
     >
-      {/* Player Name Cell */}
       <div
         className={cn(
           'flex items-center justify-center rounded-lg h-16 px-2 font-bold text-xs animate-cell-reveal',
@@ -63,7 +73,6 @@ function GuessRow({ guess, rowIndex }: { guess: GuessResult; rowIndex: number })
         <span className="text-center leading-tight">{guess.playerName}</span>
       </div>
 
-      {/* Category Cells */}
       {cellKeys.map((key, i) => (
         <CellComponent
           key={key}
@@ -79,9 +88,9 @@ function EmptyRow() {
   return (
     <div
       className="grid gap-1.5 mb-1.5"
-      style={{ gridTemplateColumns: '130px repeat(9, minmax(85px, 1fr))' }}
+      style={{ gridTemplateColumns: '130px repeat(8, minmax(85px, 1fr))' }}
     >
-      {Array.from({ length: 10 }).map((_, i) => (
+      {Array.from({ length: 9 }).map((_, i) => (
         <div
           key={i}
           className="rounded-lg h-16 bg-muted/40 border border-border/30"
@@ -96,11 +105,10 @@ export function GameBoard({ guesses, maxGuesses }: GameBoardProps) {
 
   return (
     <div className="overflow-x-auto pb-4">
-      <div style={{ minWidth: '960px' }}>
-        {/* Header Row */}
+      <div style={{ minWidth: '880px' }}>
         <div
           className="grid gap-1.5 mb-2"
-          style={{ gridTemplateColumns: '130px repeat(9, minmax(85px, 1fr))' }}
+          style={{ gridTemplateColumns: '130px repeat(8, minmax(85px, 1fr))' }}
         >
           {HEADERS.map((h) => (
             <div
@@ -115,12 +123,10 @@ export function GameBoard({ guesses, maxGuesses }: GameBoardProps) {
           ))}
         </div>
 
-        {/* Guess Rows */}
         {guesses.map((guess, i) => (
-          <GuessRow key={i} guess={guess} rowIndex={i} />
+          <GuessRow key={i} guess={guess} />
         ))}
 
-        {/* Empty Rows */}
         {Array.from({ length: emptyRows }).map((_, i) => (
           <EmptyRow key={`empty-${i}`} />
         ))}

@@ -27,6 +27,7 @@ export interface CellResult {
   value: string;
   status: CellStatus;
   arrow?: ArrowDirection;
+  imageUrl?: string; // for club badges
 }
 
 export interface GuessResult {
@@ -34,11 +35,10 @@ export interface GuessResult {
   isCorrect: boolean;
   cells: {
     nationality: CellResult;
-    league: CellResult;
+    club: CellResult;
     goals: CellResult;
     assists: CellResult;
     position: CellResult;
-    height: CellResult;
     kitNumber: CellResult;
     age: CellResult;
     marketValue: CellResult;
