@@ -26,6 +26,7 @@ const Connections = () => {
     hintsUsed,
     hintCategories,
     lastIncorrect,
+    oneAway,
     togglePlayer,
     submitGuess,
     useHint,
@@ -76,6 +77,15 @@ const Connections = () => {
             ))}
           </div>
         </header>
+
+        {/* One Away */}
+        {oneAway && (
+          <div className="max-w-xl mx-auto mb-4 bg-destructive/10 border border-destructive/30 rounded-xl px-4 py-3 text-center animate-cell-reveal">
+            <p className="text-sm font-semibold text-destructive">
+              🔥 One away!
+            </p>
+          </div>
+        )}
 
         {/* Hint */}
         {hintCategories.length > 0 && (

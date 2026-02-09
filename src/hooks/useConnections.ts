@@ -28,6 +28,7 @@ export function useConnections() {
   const [hintsUsed, setHintsUsed] = useState(0);
   const [hintCategories, setHintCategories] = useState<string[]>([]);
   const [lastIncorrect, setLastIncorrect] = useState<string[] | null>(null);
+  const [oneAway, setOneAway] = useState(false);
 
   const gameStatus = useMemo(() => {
     if (solvedGroups.length === 4) return 'won' as const;
@@ -44,6 +45,7 @@ export function useConnections() {
     (player: string) => {
       if (gameStatus !== 'playing') return;
       setLastIncorrect(null);
+      setOneAway(false);
       setSelected((prev) => {
         if (prev.includes(player)) return prev.filter((p) => p !== player);
         if (prev.length >= 4) return prev;
@@ -68,6 +70,13 @@ export function useConnections() {
       setSelected([]);
       setLastIncorrect(null);
     } else {
+      // Check if one away from any unsolved group
+      const isOneAway = puzzle.groups.some(
+        (g) =>
+          !solvedGroups.includes(g) &&
+          selected.filter((p) => g.players.includes(p)).length === 3
+      );
+      setOneAway(isOneAway);
       setLives((prev) => prev - 1);
       setLastIncorrect([...selected]);
       setSelected([]);
@@ -96,6 +105,7 @@ export function useConnections() {
     setHintsUsed(0);
     setHintCategories([]);
     setLastIncorrect(null);
+    setOneAway(false);
   }, []);
 
   return {
@@ -108,6 +118,7 @@ export function useConnections() {
     hintsUsed,
     hintCategories,
     lastIncorrect,
+    oneAway,
     togglePlayer,
     submitGuess,
     useHint,
