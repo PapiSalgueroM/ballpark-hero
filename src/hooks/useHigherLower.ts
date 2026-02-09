@@ -53,6 +53,7 @@ export function useHigherLower() {
 
     if (isCorrect) {
       setTimeout(() => {
+
         const newStreak = streak + 1;
         setStreak(newStreak);
         if (newStreak > bestStreak) setBestStreak(newStreak);
@@ -63,11 +64,11 @@ export function useHigherLower() {
         setNextPlayer(newNext);
         setRevealedStats(false);
         setLastChoice(null);
-      }, 1500);
+      }, 3000);
     } else {
       setTimeout(() => {
         setGameStatus('lost');
-      }, 1500);
+      }, 3000);
     }
   }, [gameStatus, currentPlayer, nextPlayer, streak, bestStreak, revealedStats]);
 
