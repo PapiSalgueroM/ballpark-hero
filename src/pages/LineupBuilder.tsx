@@ -104,84 +104,81 @@ const LineupBuilder = () => {
               <span className="ml-2 text-xs text-muted-foreground font-semibold">{filledCount}/11</span>
             </div>
 
-            {/* Spinner + Pitch side by side on desktop */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Formation Pitch */}
-              <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-2 text-center">
-                  Tap a position to fill it
-                </p>
-                <FormationPitch
-                  positions={positions}
-                  filledSlots={filledSlots}
-                  selectedIndex={selectedPositionIndex}
-                  onSelectPosition={selectPosition}
-                />
-              </div>
+            {/* Spinner + Input on top */}
+            <div className="max-w-lg mx-auto space-y-4">
+              {/* Slot machine spinner */}
+              <TeamSpinner
+                teams={teamAssignments}
+                targetIndex={filledCount}
+                isSpinning={isSpinning}
+                onFinish={finishSpin}
+              />
 
-              {/* Team assignment + Input */}
-              <div className="space-y-4 flex flex-col justify-center">
-                {/* Slot machine spinner */}
-                <TeamSpinner
-                  teams={teamAssignments}
-                  targetIndex={filledCount}
-                  isSpinning={isSpinning}
-                  onFinish={finishSpin}
-                />
-
-                {/* Input area */}
-                {selectedPositionIndex !== null && currentTeam && !isSpinning && (
-                  <div className="animate-fade-in space-y-3">
-                    <p className="text-sm text-center text-muted-foreground">
-                      Filling: <span className="font-bold text-primary">{positions[selectedPositionIndex]?.label}</span>
-                    </p>
-
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={playerInput}
-                        onChange={(e) => {
-                          setPlayerInput(e.target.value);
-                        }}
-                        onKeyDown={(e) => e.key === 'Enter' && handleSubmitPlayer()}
-                        placeholder="Enter player name..."
-                        className="flex-1 rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                        autoFocus
-                        disabled={isValidating}
-                      />
-                      <button
-                        onClick={handleSubmitPlayer}
-                        disabled={!playerInput.trim() || isValidating}
-                        className={cn(
-                          'rounded-xl px-5 py-3 font-semibold transition-all inline-flex items-center gap-2',
-                          playerInput.trim() && !isValidating
-                            ? 'bg-primary text-primary-foreground hover:opacity-90'
-                            : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
-                        )}
-                      >
-                        {isValidating ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <ArrowRight className="w-4 h-4" />
-                        )}
-                      </button>
-                    </div>
-
-                    {validationError && (
-                      <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
-                        <AlertCircle className="w-4 h-4 shrink-0" />
-                        <span>{validationError}</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {selectedPositionIndex === null && !isSpinning && (
-                  <p className="text-center text-sm text-muted-foreground animate-fade-in">
-                    ← Select a position on the pitch
+              {/* Input area */}
+              {selectedPositionIndex !== null && currentTeam && !isSpinning && (
+                <div className="animate-fade-in space-y-3">
+                  <p className="text-sm text-center text-muted-foreground">
+                    Filling: <span className="font-bold text-primary">{positions[selectedPositionIndex]?.label}</span>
                   </p>
-                )}
-              </div>
+
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={playerInput}
+                      onChange={(e) => {
+                        setPlayerInput(e.target.value);
+                      }}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSubmitPlayer()}
+                      placeholder="Enter player name..."
+                      className="flex-1 rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      autoFocus
+                      disabled={isValidating}
+                    />
+                    <button
+                      onClick={handleSubmitPlayer}
+                      disabled={!playerInput.trim() || isValidating}
+                      className={cn(
+                        'rounded-xl px-5 py-3 font-semibold transition-all inline-flex items-center gap-2',
+                        playerInput.trim() && !isValidating
+                          ? 'bg-primary text-primary-foreground hover:opacity-90'
+                          : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
+                      )}
+                    >
+                      {isValidating ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <ArrowRight className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
+
+                  {validationError && (
+                    <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>{validationError}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {selectedPositionIndex === null && !isSpinning && (
+                <p className="text-center text-sm text-muted-foreground animate-fade-in">
+                  ↓ Select a position on the pitch
+                </p>
+              )}
+            </div>
+
+            {/* Formation Pitch on bottom */}
+            <div>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-2 text-center">
+                Tap a position to fill it
+              </p>
+              <FormationPitch
+                positions={positions}
+                filledSlots={filledSlots}
+                selectedIndex={selectedPositionIndex}
+                onSelectPosition={selectPosition}
+              />
             </div>
           </div>
         )}
