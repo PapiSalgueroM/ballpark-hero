@@ -4,8 +4,9 @@ import { CareerBoard } from '@/components/career/CareerBoard';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import { getClubLogoUrl } from '@/lib/clubData';
-import { RotateCcw, Flag, Search, Lightbulb, HelpCircle } from 'lucide-react';
+import { RotateCcw, Flag, Search, Lightbulb, HelpCircle, Share2 } from 'lucide-react';
 import { CareerHowToPlay } from '@/components/career/CareerHowToPlay';
+import { shareResult } from '@/lib/share';
 
 const CareerGame = () => {
   const {
@@ -211,13 +212,27 @@ const CareerGame = () => {
                   </p>
                 </>
               )}
-              <button
-                onClick={() => { resetGame(); setInput(''); }}
-                className="mt-6 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
+              <div className="mt-6 flex items-center gap-3 justify-center">
+                <button
+                  onClick={() => { resetGame(); setInput(''); }}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Play Again
+                </button>
+                <button
+                  onClick={() => {
+                    const result = gameStatus === 'won'
+                      ? `🎉 Career Quiz\nGuessed ${targetPlayer.name} in ${guessesUsed} ${guessesUsed === 1 ? 'guess' : 'guesses'} with ${boxesUsed} ${boxesUsed === 1 ? 'box' : 'boxes'} uncovered!`
+                      : `😞 Career Quiz\nCouldn't guess ${targetPlayer.name}`;
+                    shareResult(`${result}\n\nPlay at footyfein.lovable.app/career`, 'Career Quiz');
+                  }}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
+                >
+                  <Share2 className="w-4 h-4" />
+                  Share
+                </button>
+              </div>
             </div>
           </div>
         )}
