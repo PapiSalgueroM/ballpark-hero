@@ -6,47 +6,119 @@ import { FORMATIONS } from '@/types/lineupBuilder';
 export function useLineupBuilder() {
   const [formation, setFormation] = useState<Formation | null>(null);
   const [phase, setPhase] = useState<GamePhase>('formation');
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [filledSlots, setFilledSlots] = useState<FilledSlot[]>([]);
+  const [selectedPositionIndex, setSelectedPositionIndex] = useState<number | null>(null);
+  const [filledSlots, setFilledSlots] = useState<Map<number, FilledSlot>>(new Map());
   const [teamAssignments, setTeamAssignments] = useState<TeamAssignment[]>([]);
   const [verdict, setVerdict] = useState<AIVerdict | null>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [spinTeamIndex, setSpinTeamIndex] = useState(0);
 
   const positions = useMemo(() => (formation ? FORMATIONS[formation] : []), [formation]);
 
-  const currentTeam = useMemo(() => teamAssignments[currentIndex] ?? null, [teamAssignments, currentIndex]);
-  const currentPosition = useMemo(() => positions[currentIndex] ?? null, [positions, currentIndex]);
+  // Current team is based on how many slots have been filled
+  const filledCount = filledSlots.size;
+  const currentTeam = useMemo(() => teamAssignments[filledCount] ?? null, [teamAssignments, filledCount]);
 
   const selectFormation = useCallback((f: Formation) => {
     setFormation(f);
     setTeamAssignments(getRandomTeamAssignments(11));
     setPhase('building');
-    setCurrentIndex(0);
-    setFilledSlots([]);
+    setSelectedPositionIndex(null);
+    setFilledSlots(new Map());
     setVerdict(null);
+    setValidationError(null);
+  }, []);
+
+  const selectPosition = useCallback((index: number) => {
+    if (filledSlots.has(index)) return; // already filled
+    setSelectedPositionIndex(index);
+    setValidationError(null);
+  }, [filledSlots]);
+
+  const startSpin = useCallback(() => {
+    setIsSpinning(true);
+    setSpinTeamIndex(0);
+  }, []);
+
+  const finishSpin = useCallback(() => {
+    setIsSpinning(false);
   }, []);
 
   const submitPlayer = useCallback(
-    (playerName: string) => {
-      if (!currentPosition || !currentTeam) return;
+    async (playerName: string) => {
+      if (selectedPositionIndex === null || !currentTeam) return;
+      const position = positions[selectedPositionIndex];
+      if (!position) return;
+
+      setIsValidating(true);
+      setValidationError(null);
+
+      try {
+        const resp = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/validate-player`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            },
+            body: JSON.stringify({
+              playerName: playerName.trim(),
+              teamName: currentTeam.name,
+              isNation: currentTeam.isNation,
+            }),
+          }
+        );
+
+        const result = await resp.json();
+
+        if (!result.valid) {
+          setValidationError(result.reason || `${playerName} hasn't played for ${currentTeam.name}`);
+          setIsValidating(false);
+          return;
+        }
+      } catch {
+        // On error allow through
+      }
+
       const slot: FilledSlot = {
-        ...currentPosition,
+        ...position,
         playerName: playerName.trim(),
         assignedTeam: currentTeam.name,
         isNation: currentTeam.isNation,
       };
-      setFilledSlots((prev) => [...prev, slot]);
-      if (currentIndex + 1 >= 11) {
+
+      setFilledSlots((prev) => {
+        const next = new Map(prev);
+        next.set(selectedPositionIndex, slot);
+        return next;
+      });
+
+      setSelectedPositionIndex(null);
+      setIsValidating(false);
+
+      // Check if all 11 filled
+      if (filledCount + 1 >= 11) {
         setPhase('reviewing');
       } else {
-        setCurrentIndex((prev) => prev + 1);
+        // Trigger spin for next team
+        startSpin();
       }
     },
-    [currentPosition, currentTeam, currentIndex]
+    [selectedPositionIndex, currentTeam, positions, filledCount, startSpin]
   );
 
+  const filledSlotsArray = useMemo(() => {
+    return Array.from(filledSlots.entries())
+      .sort(([a], [b]) => a - b)
+      .map(([, slot]) => slot);
+  }, [filledSlots]);
+
   const evaluateTeam = useCallback(async () => {
-    if (filledSlots.length !== 11) return;
+    if (filledSlotsArray.length !== 11) return;
     setIsEvaluating(true);
     try {
       const resp = await fetch(
@@ -57,7 +129,7 @@ export function useLineupBuilder() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
-          body: JSON.stringify({ formation, players: filledSlots }),
+          body: JSON.stringify({ formation, players: filledSlotsArray }),
         }
       );
       if (!resp.ok) throw new Error('Failed to evaluate');
@@ -71,30 +143,42 @@ export function useLineupBuilder() {
     } finally {
       setIsEvaluating(false);
     }
-  }, [filledSlots, formation]);
+  }, [filledSlotsArray, formation]);
 
   const resetGame = useCallback(() => {
     setFormation(null);
     setPhase('formation');
-    setCurrentIndex(0);
-    setFilledSlots([]);
+    setSelectedPositionIndex(null);
+    setFilledSlots(new Map());
     setTeamAssignments([]);
     setVerdict(null);
+    setValidationError(null);
+    setIsSpinning(false);
   }, []);
 
   return {
     formation,
     phase,
-    currentIndex,
+    selectedPositionIndex,
     currentTeam,
-    currentPosition,
     positions,
     filledSlots,
+    filledSlotsArray,
+    filledCount,
     verdict,
     isEvaluating,
+    isValidating,
+    validationError,
+    isSpinning,
+    spinTeamIndex,
+    setSpinTeamIndex,
     selectFormation,
+    selectPosition,
     submitPlayer,
     evaluateTeam,
     resetGame,
+    startSpin,
+    finishSpin,
+    teamAssignments,
   };
 }

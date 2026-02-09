@@ -3,8 +3,10 @@ import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS, type Formation } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
+import FormationPitch from '@/components/lineup/FormationPitch';
+import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
-import { ArrowRight, RotateCcw, Send, Trophy, Loader2, Flag, Shield } from 'lucide-react';
+import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle } from 'lucide-react';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -12,26 +14,43 @@ const LineupBuilder = () => {
   const {
     formation,
     phase,
-    currentIndex,
+    selectedPositionIndex,
     currentTeam,
-    currentPosition,
     positions,
     filledSlots,
+    filledSlotsArray,
+    filledCount,
     verdict,
     isEvaluating,
+    isValidating,
+    validationError,
+    isSpinning,
     selectFormation,
+    selectPosition,
     submitPlayer,
     evaluateTeam,
     resetGame,
+    finishSpin,
+    teamAssignments,
   } = useLineupBuilder();
 
   const [playerInput, setPlayerInput] = useState('');
 
-  const handleSubmitPlayer = () => {
-    if (!playerInput.trim()) return;
-    submitPlayer(playerInput);
-    setPlayerInput('');
+  const handleSubmitPlayer = async () => {
+    if (!playerInput.trim() || isValidating) return;
+    await submitPlayer(playerInput);
+    if (!validationError) setPlayerInput('');
   };
+
+  // Clear input when validation succeeds (position changes)
+  const [lastPos, setLastPos] = useState<number | null>(null);
+  if (selectedPositionIndex !== lastPos) {
+    if (lastPos !== null && selectedPositionIndex === null) {
+      // Player was accepted
+      setPlayerInput('');
+    }
+    setLastPos(selectedPositionIndex);
+  }
 
   return (
     <main className="min-h-screen bg-background">
@@ -69,84 +88,101 @@ const LineupBuilder = () => {
         )}
 
         {/* Building Phase */}
-        {phase === 'building' && currentTeam && currentPosition && (
-          <div className="max-w-xl mx-auto space-y-6">
+        {phase === 'building' && (
+          <div className="max-w-3xl mx-auto space-y-6">
             {/* Progress */}
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-1.5">
               {positions.map((_, i) => (
                 <div
                   key={i}
                   className={cn(
                     'w-3 h-3 rounded-full transition-all',
-                    i < currentIndex ? 'bg-correct' : i === currentIndex ? 'bg-primary scale-125' : 'bg-secondary'
+                    filledSlots.has(i) ? 'bg-correct' : selectedPositionIndex === i ? 'bg-primary scale-125' : 'bg-secondary'
                   )}
                 />
               ))}
+              <span className="ml-2 text-xs text-muted-foreground font-semibold">{filledCount}/11</span>
             </div>
 
-            {/* Current assignment */}
-            <div className="bg-card border border-border rounded-2xl p-6 text-center shadow-lg">
-              <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
-                Position {currentIndex + 1} of 11
-              </p>
-              <p className="text-xl font-bold text-primary font-display mb-4">{currentPosition.label}</p>
-
-              <div className="flex items-center justify-center gap-2 mb-2">
-                {currentTeam.isNation ? (
-                  <Flag className="w-5 h-5 text-muted-foreground" />
-                ) : (
-                  <Shield className="w-5 h-5 text-muted-foreground" />
-                )}
-                <span className="text-sm text-muted-foreground">
-                  {currentTeam.isNation ? 'Nation' : 'Club'}
-                </span>
+            {/* Spinner + Pitch side by side on desktop */}
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Formation Pitch */}
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-2 text-center">
+                  Tap a position to fill it
+                </p>
+                <FormationPitch
+                  positions={positions}
+                  filledSlots={filledSlots}
+                  selectedIndex={selectedPositionIndex}
+                  onSelectPosition={selectPosition}
+                />
               </div>
-              <p className="text-3xl font-bold text-foreground">{currentTeam.name}</p>
-              <p className="text-xs text-muted-foreground mt-2">
-                Name a player who has played for {currentTeam.name}
-              </p>
-            </div>
 
-            {/* Input */}
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={playerInput}
-                onChange={(e) => setPlayerInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSubmitPlayer()}
-                placeholder="Enter player name..."
-                className="flex-1 rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                autoFocus
-              />
-              <button
-                onClick={handleSubmitPlayer}
-                disabled={!playerInput.trim()}
-                className={cn(
-                  'rounded-xl px-5 py-3 font-semibold transition-all inline-flex items-center gap-2',
-                  playerInput.trim()
-                    ? 'bg-primary text-primary-foreground hover:opacity-90'
-                    : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
-                )}
-              >
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+              {/* Team assignment + Input */}
+              <div className="space-y-4 flex flex-col justify-center">
+                {/* Slot machine spinner */}
+                <TeamSpinner
+                  teams={teamAssignments}
+                  targetIndex={filledCount}
+                  isSpinning={isSpinning}
+                  onFinish={finishSpin}
+                />
 
-            {/* Already filled */}
-            {filledSlots.length > 0 && (
-              <div className="space-y-1.5">
-                <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Your Squad</p>
-                {filledSlots.map((slot, i) => (
-                  <div key={i} className="flex items-center gap-3 bg-secondary/50 rounded-lg px-3 py-2 text-sm">
-                    <span className="text-xs font-bold text-primary w-8">{slot.label}</span>
-                    <span className="font-semibold text-foreground flex-1">{slot.playerName}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {slot.isNation ? '🏳️' : '🏟️'} {slot.assignedTeam}
-                    </span>
+                {/* Input area */}
+                {selectedPositionIndex !== null && currentTeam && !isSpinning && (
+                  <div className="animate-fade-in space-y-3">
+                    <p className="text-sm text-center text-muted-foreground">
+                      Filling: <span className="font-bold text-primary">{positions[selectedPositionIndex]?.label}</span>
+                    </p>
+
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={playerInput}
+                        onChange={(e) => {
+                          setPlayerInput(e.target.value);
+                        }}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSubmitPlayer()}
+                        placeholder="Enter player name..."
+                        className="flex-1 rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                        autoFocus
+                        disabled={isValidating}
+                      />
+                      <button
+                        onClick={handleSubmitPlayer}
+                        disabled={!playerInput.trim() || isValidating}
+                        className={cn(
+                          'rounded-xl px-5 py-3 font-semibold transition-all inline-flex items-center gap-2',
+                          playerInput.trim() && !isValidating
+                            ? 'bg-primary text-primary-foreground hover:opacity-90'
+                            : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
+                        )}
+                      >
+                        {isValidating ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <ArrowRight className="w-4 h-4" />
+                        )}
+                      </button>
+                    </div>
+
+                    {validationError && (
+                      <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
+                        <AlertCircle className="w-4 h-4 shrink-0" />
+                        <span>{validationError}</span>
+                      </div>
+                    )}
                   </div>
-                ))}
+                )}
+
+                {selectedPositionIndex === null && !isSpinning && (
+                  <p className="text-center text-sm text-muted-foreground animate-fade-in">
+                    ← Select a position on the pitch
+                  </p>
+                )}
               </div>
-            )}
+            </div>
           </div>
         )}
 
@@ -157,9 +193,9 @@ const LineupBuilder = () => {
               <h2 className="text-center text-xl font-bold text-foreground font-display mb-1">
                 Your {formation} Starting XI
               </h2>
-              <p className="text-center text-sm text-muted-foreground mb-4">Review your team before submitting for evaluation</p>
+              <p className="text-center text-sm text-muted-foreground mb-4">Review your team before submitting</p>
               <div className="space-y-2">
-                {filledSlots.map((slot, i) => (
+                {filledSlotsArray.map((slot, i) => (
                   <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-4 py-2.5">
                     <span className="text-xs font-bold text-primary w-10">{slot.label}</span>
                     <span className="font-semibold text-foreground flex-1">{slot.playerName}</span>
@@ -184,11 +220,7 @@ const LineupBuilder = () => {
                 disabled={isEvaluating}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
               >
-                {isEvaluating ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Send className="w-4 h-4" />
-                )}
+                {isEvaluating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                 {isEvaluating ? 'Evaluating...' : 'Submit Team'}
               </button>
             </div>
@@ -205,11 +237,10 @@ const LineupBuilder = () => {
               <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{verdict.analysis}</p>
             </div>
 
-            {/* Show the team */}
             <div className="bg-card border border-border rounded-2xl p-4">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Your {formation} XI</p>
               <div className="space-y-1.5">
-                {filledSlots.map((slot, i) => (
+                {filledSlotsArray.map((slot, i) => (
                   <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-3 py-2 text-sm">
                     <span className="text-xs font-bold text-primary w-8">{slot.label}</span>
                     <span className="font-semibold text-foreground flex-1">{slot.playerName}</span>
