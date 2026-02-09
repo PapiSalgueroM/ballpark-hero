@@ -7,7 +7,8 @@ import FormationPitch from '@/components/lineup/FormationPitch';
 import PlayerSuggestions from '@/components/lineup/PlayerSuggestions';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
-import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle } from 'lucide-react';
+import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, Share2, Copy, Check } from 'lucide-react';
+import { toast } from 'sonner';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -274,13 +275,32 @@ const LineupBuilder = () => {
               </div>
             </div>
 
-            <div className="flex justify-center">
+            <div className="flex justify-center gap-3">
               <button
                 onClick={resetGame}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
               >
                 <RotateCcw className="w-4 h-4" />
                 Play Again
+              </button>
+              <button
+                onClick={() => {
+                  const lines = filledSlotsArray.map(
+                    (s) => `${s.label} – ${s.playerName} (${s.isNation ? '🏳️' : '🏟️'} ${s.assignedTeam})`
+                  );
+                  const text = `⚽ My Build Your XI – ${formation}\n${verdict.rating}\n"${verdict.headline}"\n\n${lines.join('\n')}\n\nPlay at footyfein.lovable.app/build-your-xi`;
+
+                  if (navigator.share) {
+                    navigator.share({ title: 'Build Your XI', text }).catch(() => {});
+                  } else {
+                    navigator.clipboard.writeText(text);
+                    toast.success('Copied to clipboard!');
+                  }
+                }}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
+              >
+                <Share2 className="w-4 h-4" />
+                Share
               </button>
             </div>
           </div>
