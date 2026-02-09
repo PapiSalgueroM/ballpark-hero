@@ -72,6 +72,21 @@ const clubLogos: Record<string, string> = {
   "Sevilla": "https://crests.football-data.org/559.png",
   "Werder Bremen": "https://crests.football-data.org/12.png",
   "VfL Wolfsburg": "https://crests.football-data.org/11.png",
+  "Palermo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/US_Citt%C3%A0_di_Palermo_Logo.svg/120px-US_Citt%C3%A0_di_Palermo_Logo.svg.png",
+  "Southampton": "https://crests.football-data.org/340.png",
+  "Hamburg": "https://crests.football-data.org/7.png",
+  "Birmingham City": "https://crests.football-data.org/332.png",
+  "Las Palmas": "https://upload.wikimedia.org/wikipedia/en/thumb/3/3f/UD_Las_Palmas_logo.svg/120px-UD_Las_Palmas_logo.svg.png",
+  "West Ham": "https://crests.football-data.org/563.png",
+  "Villarreal": "https://crests.football-data.org/94.png",
+  "Rennes": "https://crests.football-data.org/529.png",
+  "Real Sociedad": "https://crests.football-data.org/92.png",
+  "Udinese": "https://crests.football-data.org/115.png",
+  "Sampdoria": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/UC_Sampdoria_logo.svg/120px-UC_Sampdoria_logo.svg.png",
+  "Everton": "https://crests.football-data.org/62.png",
+  "Lens": "https://crests.football-data.org/546.png",
+  "Fluminense": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Fluminense_fc_logo.svg/120px-Fluminense_fc_logo.svg.png",
+  "Napoli": "https://crests.football-data.org/113.png",
 };
 
 export function getClubLogoUrl(club: string): string {
@@ -95,12 +110,17 @@ const clubLeagueMap: Record<string, string> = {
   "Galatasaray": "Turkish Süper Lig", "Fenerbahçe": "Turkish Süper Lig",
   "Al-Nassr": "Saudi Pro League", "Al-Hilal": "Saudi Pro League", "Al-Ittihad": "Saudi Pro League", "Al-Ahli": "Saudi Pro League",
   "Inter Miami": "MLS", "LA Galaxy": "MLS", "LAFC": "MLS", "Toronto FC": "MLS", "DC United": "MLS",
-  "Palmeiras": "Brazilian Série A", "Botafogo": "Brazilian Série A",
+  "Palmeiras": "Brazilian Série A", "Botafogo": "Brazilian Série A", "Flamengo": "Brazilian Série A", "Santos": "Brazilian Série A", "Fluminense": "Brazilian Série A",
   "Celtic": "Scottish Premiership",
   "Basel": "Swiss Super League",
   "RB Salzburg": "Austrian Bundesliga",
   "Olympiacos": "Greek Super League",
   "Copenhagen": "Danish Superliga",
+  "Monaco": "Ligue 1", "Lyon": "Ligue 1", "Rennes": "Ligue 1", "Lens": "Ligue 1",
+  "Fiorentina": "Serie A", "Napoli": "Serie A", "Palermo": "Serie A", "Udinese": "Serie A", "Sampdoria": "Serie A",
+  "Sevilla": "La Liga", "Real Sociedad": "La Liga", "Villarreal": "La Liga", "Las Palmas": "La Liga",
+  "Werder Bremen": "Bundesliga", "VfL Wolfsburg": "Bundesliga", "Hamburg": "Bundesliga",
+  "Southampton": "Premier League", "West Ham": "Premier League", "Everton": "Premier League", "Birmingham City": "Championship",
 };
 
 export function getPlayerImageUrl(playerName: string): string {

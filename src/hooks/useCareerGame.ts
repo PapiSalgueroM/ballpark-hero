@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { CareerPlayer } from '@/types/career';
 import { careerPlayers } from '@/data/careerPlayers';
+import { toast } from 'sonner';
 
 export function useCareerGame() {
   const [targetPlayer, setTargetPlayer] = useState<CareerPlayer>(() =>
@@ -22,11 +23,14 @@ export function useCareerGame() {
     });
   }, [gameStatus]);
 
-  const makeGuess = useCallback((name: string) => {
-    if (gameStatus !== 'playing') return;
+  const makeGuess = useCallback((name: string): boolean => {
+    if (gameStatus !== 'playing') return false;
     if (name.toLowerCase().trim() === targetPlayer.name.toLowerCase().trim()) {
       setGameStatus('won');
+      return true;
     }
+    toast.error(`❌ Not ${name}. Try again!`);
+    return false;
   }, [gameStatus, targetPlayer]);
 
   const giveUp = useCallback(() => {

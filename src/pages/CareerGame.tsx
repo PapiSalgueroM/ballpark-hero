@@ -28,15 +28,16 @@ const CareerGame = () => {
     : [];
 
   const handleSelect = (name: string) => {
-    setInput(name);
     setShowSuggestions(false);
     makeGuess(name);
+    setInput('');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim()) {
       makeGuess(input.trim());
+      setInput('');
     }
   };
 
