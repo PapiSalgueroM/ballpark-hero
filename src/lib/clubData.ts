@@ -63,6 +63,15 @@ const clubLogos: Record<string, string> = {
   "Olympiacos": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e9/Olympiacos_FC_logo.svg/120px-Olympiacos_FC_logo.svg.png",
   // Danish
   "Copenhagen": "https://upload.wikimedia.org/wikipedia/en/thumb/9/93/F.C._Copenhagen_logo.svg/120px-F.C._Copenhagen_logo.svg.png",
+  // Career mode extras
+  "Monaco": "https://crests.football-data.org/548.png",
+  "Flamengo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Flamengo_bw.svg/120px-Flamengo_bw.svg.png",
+  "Santos": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Santos_Logo.png/120px-Santos_Logo.png",
+  "Lyon": "https://crests.football-data.org/523.png",
+  "Fiorentina": "https://crests.football-data.org/99.png",
+  "Sevilla": "https://crests.football-data.org/559.png",
+  "Werder Bremen": "https://crests.football-data.org/12.png",
+  "VfL Wolfsburg": "https://crests.football-data.org/11.png",
 };
 
 export function getClubLogoUrl(club: string): string {

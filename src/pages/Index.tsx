@@ -6,6 +6,7 @@ import { HowToPlay } from '@/components/game/HowToPlay';
 import { cn } from '@/lib/utils';
 import { RotateCcw, HelpCircle } from 'lucide-react';
 import { getClubLogoUrl } from '@/lib/clubData';
+import { GameNav } from '@/components/game/GameNav';
 
 const Index = () => {
   const {
@@ -185,6 +186,9 @@ const Index = () => {
             <span>Higher / Lower hint</span>
           </div>
         </div>
+
+        {/* Game Navigation */}
+        <GameNav />
       </div>
 
       {/* How to Play Modal */}
