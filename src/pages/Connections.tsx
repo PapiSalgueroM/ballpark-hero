@@ -4,7 +4,7 @@ import { ConnectionsBoard } from '@/components/connections/ConnectionsBoard';
 import { ConnectionsHowToPlay } from '@/components/connections/ConnectionsHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
-import { HelpCircle, RotateCcw, Lightbulb, Send } from 'lucide-react';
+import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ConnectionDifficulty } from '@/types/connections';
 
@@ -31,6 +31,9 @@ const Connections = () => {
     submitGuess,
     useHint,
     resetGame,
+    nextPuzzle,
+    puzzleIndex,
+    totalPuzzles,
   } = useConnections();
 
   const [showRules, setShowRules] = useState(false);
@@ -61,6 +64,9 @@ const Connections = () => {
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">
             Group 16 footballers into 4 secret categories — can you crack the connection?
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Puzzle {(puzzleIndex % totalPuzzles) + 1} of {totalPuzzles}
           </p>
 
           {/* Lives */}
@@ -186,13 +192,22 @@ const Connections = () => {
                   </div>
                 </>
               )}
-              <button
-                onClick={resetGame}
-                className="mt-6 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
+              <div className="mt-6 flex items-center gap-3 justify-center">
+                <button
+                  onClick={resetGame}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Retry
+                </button>
+                <button
+                  onClick={nextPuzzle}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+                >
+                  Next Puzzle
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
         )}
