@@ -1,5 +1,6 @@
 import { useHigherLower } from '@/hooks/useHigherLower';
 import { GameNav } from '@/components/game/GameNav';
+import { Footer } from '@/components/game/Footer';
 import { HigherLowerHowToPlay } from '@/components/higher-lower/HigherLowerHowToPlay';
 import { RotateCcw, HelpCircle } from 'lucide-react';
 import { useState } from 'react';
@@ -127,6 +128,7 @@ const HigherLowerGame = () => {
 
         <HigherLowerHowToPlay open={showHelp} onOpenChange={setShowHelp} />
         <GameNav />
+        <Footer />
       </div>
     </main>
   );

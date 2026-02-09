@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import CareerGame from "./pages/CareerGame";
 import HigherLower from "./pages/HigherLower";
 import NotFound from "./pages/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/career" element={<CareerGame />} />
           <Route path="/higher-lower" element={<HigherLower />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
