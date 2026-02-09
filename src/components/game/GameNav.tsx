@@ -6,6 +6,7 @@ const games = [
   { path: '/career', label: '📜 Career Quiz', description: 'Guess from career history' },
   { path: '/higher-lower', label: '📊 Higher or Lower', description: 'Compare all-time career stats' },
   { path: '/connections', label: '🔗 Connections', description: 'Find groups of 4 players' },
+  { path: '/build-your-xi', label: '⚽ Build Your XI', description: 'Create a lineup, get AI rated' },
 ];
 
 export function GameNav() {
