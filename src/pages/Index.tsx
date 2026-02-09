@@ -3,6 +3,7 @@ import { PlayerSearch } from '@/components/game/PlayerSearch';
 import { GameBoard } from '@/components/game/GameBoard';
 import { cn } from '@/lib/utils';
 import { RotateCcw } from 'lucide-react';
+import { getClubLogoUrl } from '@/lib/clubData';
 
 const Index = () => {
   const {
@@ -84,6 +85,26 @@ const Index = () => {
         {gameStatus !== 'playing' && (
           <div className="mt-8 flex justify-center">
             <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
+              {/* Player image */}
+              {targetPlayer && (
+                <div className="flex justify-center mb-4">
+                  <div className="relative">
+                    <img
+                      src={`https://img.a]sports.com/tiny-image/player-search/${encodeURIComponent(targetPlayer.name.toLowerCase().replace(/ /g, '-'))}`}
+                      alt={targetPlayer.name}
+                      className="w-24 h-24 rounded-full object-cover bg-secondary border-2 border-primary/30"
+                      onError={(e) => {
+                        // Fallback to club logo if player image fails
+                        const clubLogo = getClubLogoUrl(targetPlayer.club);
+                        if (clubLogo) {
+                          e.currentTarget.src = clubLogo;
+                          e.currentTarget.className = "w-24 h-24 rounded-full object-contain bg-secondary border-2 border-primary/30 p-3";
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
               {gameStatus === 'won' ? (
                 <>
                   <div className="text-5xl mb-3">🎉</div>
@@ -111,9 +132,14 @@ const Index = () => {
                       {targetPlayer?.name}
                     </span>
                   </p>
-                  <p className="text-muted-foreground text-sm mt-1">
-                    {targetPlayer?.club} · {targetPlayer?.league}
-                  </p>
+                  <div className="flex items-center justify-center gap-2 mt-1">
+                    {getClubLogoUrl(targetPlayer?.club || '') && (
+                      <img src={getClubLogoUrl(targetPlayer?.club || '')} alt={targetPlayer?.club} className="w-5 h-5 object-contain" />
+                    )}
+                    <p className="text-muted-foreground text-sm">
+                      {targetPlayer?.club} · {targetPlayer?.league}
+                    </p>
+                  </div>
                 </>
               )}
               <button
