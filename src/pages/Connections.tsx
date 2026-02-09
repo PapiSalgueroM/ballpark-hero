@@ -4,7 +4,7 @@ import { ConnectionsBoard } from '@/components/connections/ConnectionsBoard';
 import { ConnectionsHowToPlay } from '@/components/connections/ConnectionsHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
-import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight } from 'lucide-react';
+import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight, Shuffle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ConnectionDifficulty } from '@/types/connections';
 
@@ -30,6 +30,7 @@ const Connections = () => {
     togglePlayer,
     submitGuess,
     useHint,
+    shufflePlayers,
     resetGame,
     nextPuzzle,
     puzzleIndex,
@@ -119,6 +120,13 @@ const Connections = () => {
         {/* Actions */}
         {gameStatus === 'playing' && (
           <div className="flex items-center justify-center gap-3 mt-6">
+            <button
+              onClick={shufflePlayers}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            >
+              <Shuffle className="w-4 h-4" />
+              Shuffle
+            </button>
             <button
               onClick={useHint}
               disabled={hintsUsed >= 4}

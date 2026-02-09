@@ -30,10 +30,24 @@ export function useConnections() {
     return 'playing' as const;
   }, [solvedGroups, lives]);
 
+  const [shuffleKey, setShuffleKey] = useState(0);
+
   const remainingPlayers = useMemo(() => {
     const solved = new Set(solvedGroups.flatMap((g) => g.players));
-    return allPlayers.filter((p) => !solved.has(p));
-  }, [allPlayers, solvedGroups]);
+    const remaining = allPlayers.filter((p) => !solved.has(p));
+    if (shuffleKey === 0) return remaining;
+    // Fisher-Yates shuffle using shuffleKey as seed
+    const arr = [...remaining];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.abs(Math.sin(shuffleKey * (i + 1) * 9301 + 49297) * 233280) % (i + 1) | 0;
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }, [allPlayers, solvedGroups, shuffleKey]);
+
+  const shufflePlayers = useCallback(() => {
+    setShuffleKey((prev) => prev + 1);
+  }, []);
 
   const togglePlayer = useCallback(
     (player: string) => {
@@ -98,6 +112,7 @@ export function useConnections() {
     setHintCategories([]);
     setLastIncorrect(null);
     setOneAway(false);
+    setShuffleKey(0);
   }, []);
 
   const resetGame = useCallback(() => {
@@ -127,6 +142,7 @@ export function useConnections() {
     togglePlayer,
     submitGuess,
     useHint,
+    shufflePlayers,
     resetGame,
     nextPuzzle,
   };
