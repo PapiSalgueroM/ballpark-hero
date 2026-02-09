@@ -12,7 +12,7 @@ const difficultyColors: Record<ConnectionDifficulty, string> = {
   easy: 'bg-correct',
   medium: 'bg-close',
   hard: 'bg-blue-500',
-  tricky: 'bg-purple-500',
+  insane: 'bg-purple-500',
 };
 
 const Connections = () => {
@@ -23,8 +23,8 @@ const Connections = () => {
     lives,
     gameStatus,
     remainingPlayers,
-    hintUsed,
-    hintCategory,
+    hintsUsed,
+    hintCategories,
     lastIncorrect,
     togglePlayer,
     submitGuess,
@@ -59,7 +59,7 @@ const Connections = () => {
             CONNECTIONS
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">
-            Find 4 groups of 4 players that share something in common
+            Group 16 footballers into 4 secret categories — can you crack the connection?
           </p>
 
           {/* Lives */}
@@ -78,12 +78,16 @@ const Connections = () => {
         </header>
 
         {/* Hint */}
-        {hintCategory && (
-          <div className="max-w-xl mx-auto mb-4 bg-accent/50 border border-accent rounded-xl px-4 py-3 text-center">
-            <p className="text-sm text-accent-foreground">
-              <Lightbulb className="w-4 h-4 inline mr-1.5 -mt-0.5" />
-              Hint: <strong>{hintCategory}</strong>
-            </p>
+        {hintCategories.length > 0 && (
+          <div className="max-w-xl mx-auto mb-4 space-y-2">
+            {hintCategories.map((cat) => (
+              <div key={cat} className="bg-accent/50 border border-accent rounded-xl px-4 py-3 text-center">
+                <p className="text-sm text-accent-foreground">
+                  <Lightbulb className="w-4 h-4 inline mr-1.5 -mt-0.5" />
+                  Hint: <strong>{cat}</strong>
+                </p>
+              </div>
+            ))}
           </div>
         )}
 
@@ -101,16 +105,16 @@ const Connections = () => {
           <div className="flex items-center justify-center gap-3 mt-6">
             <button
               onClick={useHint}
-              disabled={hintUsed}
+              disabled={hintsUsed >= 4}
               className={cn(
                 'inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all',
-                hintUsed
+                hintsUsed >= 4
                   ? 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
                   : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
               )}
             >
               <Lightbulb className="w-4 h-4" />
-              Hint
+              Hint ({4 - hintsUsed})
             </button>
             <button
               onClick={submitGuess}
@@ -160,7 +164,7 @@ const Connections = () => {
                           className={cn(
                             'rounded-lg p-3 text-center',
                             difficultyColors[g.difficulty],
-                            g.difficulty === 'easy' || g.difficulty === 'hard' || g.difficulty === 'tricky'
+                            g.difficulty === 'easy' || g.difficulty === 'hard' || g.difficulty === 'insane'
                               ? 'text-white'
                               : 'text-close-foreground'
                           )}
@@ -188,7 +192,7 @@ const Connections = () => {
           <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-correct" /> Easy</span>
           <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-close" /> Medium</span>
           <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-blue-500" /> Hard</span>
-          <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-purple-500" /> Tricky</span>
+          <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-purple-500" /> Insane</span>
         </div>
 
         <GameNav />

@@ -5,7 +5,7 @@ const difficultyColors: Record<ConnectionDifficulty, { bg: string; text: string 
   easy: { bg: 'bg-correct', text: 'text-correct-foreground' },
   medium: { bg: 'bg-close', text: 'text-close-foreground' },
   hard: { bg: 'bg-blue-500', text: 'text-white' },
-  tricky: { bg: 'bg-purple-500', text: 'text-white' },
+  insane: { bg: 'bg-purple-500', text: 'text-white' },
 };
 
 interface ConnectionsBoardProps {

@@ -25,8 +25,8 @@ export function useConnections() {
   const [selected, setSelected] = useState<string[]>([]);
   const [solvedGroups, setSolvedGroups] = useState<ConnectionGroup[]>([]);
   const [lives, setLives] = useState(4);
-  const [hintUsed, setHintUsed] = useState(false);
-  const [hintCategory, setHintCategory] = useState<string | null>(null);
+  const [hintsUsed, setHintsUsed] = useState(0);
+  const [hintCategories, setHintCategories] = useState<string[]>([]);
   const [lastIncorrect, setLastIncorrect] = useState<string[] | null>(null);
 
   const gameStatus = useMemo(() => {
@@ -75,24 +75,26 @@ export function useConnections() {
   }, [selected, puzzle, solvedGroups, gameStatus]);
 
   const useHint = useCallback(() => {
-    if (hintUsed || gameStatus !== 'playing') return;
-    const difficultyOrder: ConnectionDifficulty[] = ['easy', 'medium', 'hard', 'tricky'];
+    if (hintsUsed >= 4 || gameStatus !== 'playing') return;
+    const difficultyOrder: ConnectionDifficulty[] = ['easy', 'medium', 'hard', 'insane'];
     const unsolved = puzzle.groups.filter((g) => !solvedGroups.includes(g));
     unsolved.sort(
       (a, b) => difficultyOrder.indexOf(a.difficulty) - difficultyOrder.indexOf(b.difficulty)
     );
-    if (unsolved.length > 0) {
-      setHintCategory(unsolved[0].category);
-      setHintUsed(true);
+    // Reveal the next unsolved category (skip already hinted ones)
+    const unhinted = unsolved.filter((g) => !hintCategories.includes(g.category));
+    if (unhinted.length > 0) {
+      setHintCategories((prev) => [...prev, unhinted[0].category]);
+      setHintsUsed((prev) => prev + 1);
     }
-  }, [hintUsed, puzzle, solvedGroups, gameStatus]);
+  }, [hintsUsed, puzzle, solvedGroups, gameStatus, hintCategories]);
 
   const resetGame = useCallback(() => {
     setSelected([]);
     setSolvedGroups([]);
     setLives(4);
-    setHintUsed(false);
-    setHintCategory(null);
+    setHintsUsed(0);
+    setHintCategories([]);
     setLastIncorrect(null);
   }, []);
 
@@ -103,8 +105,8 @@ export function useConnections() {
     lives,
     gameStatus,
     remainingPlayers,
-    hintUsed,
-    hintCategory,
+    hintsUsed,
+    hintCategories,
     lastIncorrect,
     togglePlayer,
     submitGuess,

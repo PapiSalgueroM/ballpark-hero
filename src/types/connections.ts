@@ -1,4 +1,4 @@
-export type ConnectionDifficulty = 'easy' | 'medium' | 'hard' | 'tricky';
+export type ConnectionDifficulty = 'easy' | 'medium' | 'hard' | 'insane';
 
 export interface ConnectionGroup {
   category: string;
