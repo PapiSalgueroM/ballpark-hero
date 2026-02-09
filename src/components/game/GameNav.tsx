@@ -7,6 +7,7 @@ const games = [
   { path: '/higher-lower', label: '📊 Higher or Lower', description: 'Compare all-time career stats' },
   { path: '/connections', label: '🔗 Connections', description: 'Find groups of 4 players' },
   { path: '/build-your-xi', label: '⚽ Build Your XI', description: 'Create a lineup, get AI rated' },
+  { path: '/guess-the-face', label: '🖼️ Guess the Face', description: 'Unblur the footballer' },
 ];
 
 export function GameNav() {
