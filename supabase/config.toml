@@ -1,0 +1,4 @@
+project_id = "ldnmovwrdpdgdrwrgbto"
+
+[functions.evaluate-lineup]
+verify_jwt = false
