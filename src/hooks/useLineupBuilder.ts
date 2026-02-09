@@ -139,6 +139,16 @@ export function useLineupBuilder() {
       const position = positions[selectedPositionIndex];
       if (!position) return;
 
+      // Check for duplicate players
+      const trimmedName = playerName.trim().toLowerCase();
+      const isDuplicate = Array.from(filledSlots.values()).some(
+        (slot) => slot.playerName.toLowerCase() === trimmedName
+      );
+      if (isDuplicate) {
+        setValidationError(`${playerName.trim()} is already in your lineup!`);
+        return;
+      }
+
       setIsValidating(true);
       setValidationError(null);
 
