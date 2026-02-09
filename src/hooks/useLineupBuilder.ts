@@ -1,20 +1,71 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { getRandomTeamAssignments } from '@/data/lineupTeams';
 import type { Formation, FilledSlot, GamePhase, AIVerdict, TeamAssignment } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
 
+const STORAGE_KEY = 'lineup-builder-state';
+
+function loadSavedState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    // Restore filledSlots from array back to Map
+    const filledSlots = new Map<number, FilledSlot>(parsed.filledSlots ?? []);
+    return { ...parsed, filledSlots };
+  } catch {
+    return null;
+  }
+}
+
+function saveState(state: {
+  formation: Formation | null;
+  phase: GamePhase;
+  filledSlots: Map<number, FilledSlot>;
+  teamAssignments: TeamAssignment[];
+  verdict: AIVerdict | null;
+}) {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        formation: state.formation,
+        phase: state.phase,
+        filledSlots: Array.from(state.filledSlots.entries()),
+        teamAssignments: state.teamAssignments,
+        verdict: state.verdict,
+      })
+    );
+  } catch {}
+}
+
+function clearSavedState() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
 export function useLineupBuilder() {
-  const [formation, setFormation] = useState<Formation | null>(null);
-  const [phase, setPhase] = useState<GamePhase>('formation');
+  const saved = useMemo(() => loadSavedState(), []);
+
+  const [formation, setFormation] = useState<Formation | null>(saved?.formation ?? null);
+  const [phase, setPhase] = useState<GamePhase>(saved?.phase ?? 'formation');
   const [selectedPositionIndex, setSelectedPositionIndex] = useState<number | null>(null);
-  const [filledSlots, setFilledSlots] = useState<Map<number, FilledSlot>>(new Map());
-  const [teamAssignments, setTeamAssignments] = useState<TeamAssignment[]>([]);
-  const [verdict, setVerdict] = useState<AIVerdict | null>(null);
+  const [filledSlots, setFilledSlots] = useState<Map<number, FilledSlot>>(saved?.filledSlots ?? new Map());
+  const [teamAssignments, setTeamAssignments] = useState<TeamAssignment[]>(saved?.teamAssignments ?? []);
+  const [verdict, setVerdict] = useState<AIVerdict | null>(saved?.verdict ?? null);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [spinTeamIndex, setSpinTeamIndex] = useState(0);
+
+  // Persist state on changes
+  useEffect(() => {
+    if (phase === 'formation') {
+      clearSavedState();
+    } else {
+      saveState({ formation, phase, filledSlots, teamAssignments, verdict });
+    }
+  }, [formation, phase, filledSlots, teamAssignments, verdict]);
 
   const positions = useMemo(() => (formation ? FORMATIONS[formation] : []), [formation]);
 
@@ -181,6 +232,7 @@ export function useLineupBuilder() {
   }, [filledSlotsArray, formation]);
 
   const resetGame = useCallback(() => {
+    clearSavedState();
     setFormation(null);
     setPhase('formation');
     setSelectedPositionIndex(null);
