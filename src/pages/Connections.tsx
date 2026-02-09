@@ -4,7 +4,7 @@ import { ConnectionsBoard } from '@/components/connections/ConnectionsBoard';
 import { ConnectionsHowToPlay } from '@/components/connections/ConnectionsHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
-import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight, Shuffle } from 'lucide-react';
+import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight, Shuffle, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ConnectionDifficulty } from '@/types/connections';
 
@@ -27,6 +27,7 @@ const Connections = () => {
     hintCategories,
     lastIncorrect,
     oneAway,
+    streak,
     togglePlayer,
     submitGuess,
     useHint,
@@ -70,18 +71,26 @@ const Connections = () => {
             Puzzle {(puzzleIndex % totalPuzzles) + 1} of {totalPuzzles}
           </p>
 
-          {/* Lives */}
-          <div className="flex items-center justify-center gap-1.5 mt-5">
-            <span className="text-sm text-muted-foreground mr-1">Lives:</span>
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div
-                key={i}
-                className={cn(
-                  'w-3 h-3 rounded-full transition-all',
-                  i < lives ? 'bg-primary' : 'bg-secondary'
-                )}
-              />
-            ))}
+          {/* Lives & Streak */}
+          <div className="flex items-center justify-center gap-4 mt-5">
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm text-muted-foreground mr-1">Lives:</span>
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={cn(
+                    'w-3 h-3 rounded-full transition-all',
+                    i < lives ? 'bg-primary' : 'bg-secondary'
+                  )}
+                />
+              ))}
+            </div>
+            {streak > 0 && (
+              <div className="flex items-center gap-1 text-sm font-semibold text-primary">
+                <Flame className="w-4 h-4" />
+                {streak}
+              </div>
+            )}
           </div>
         </header>
 
@@ -128,19 +137,6 @@ const Connections = () => {
               Shuffle
             </button>
             <button
-              onClick={useHint}
-              disabled={hintsUsed >= 4}
-              className={cn(
-                'inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all',
-                hintsUsed >= 4
-                  ? 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
-                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-              )}
-            >
-              <Lightbulb className="w-4 h-4" />
-              Hint ({4 - hintsUsed})
-            </button>
-            <button
               onClick={submitGuess}
               disabled={selected.length !== 4}
               className={cn(
@@ -152,6 +148,19 @@ const Connections = () => {
             >
               <Send className="w-4 h-4" />
               Submit
+            </button>
+            <button
+              onClick={useHint}
+              disabled={hintsUsed >= 4}
+              className={cn(
+                'inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all',
+                hintsUsed >= 4
+                  ? 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
+                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+              )}
+            >
+              <Lightbulb className="w-4 h-4" />
+              Hint ({4 - hintsUsed})
             </button>
           </div>
         )}
