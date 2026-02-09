@@ -2,19 +2,13 @@ import { useState, useMemo, useCallback } from 'react';
 import { connectionsPuzzles } from '@/data/connectionsPuzzles';
 import type { ConnectionGroup, ConnectionDifficulty } from '@/types/connections';
 
-function getDailyPuzzleIndex(): number {
-  const start = new Date('2026-02-09').getTime();
-  const now = new Date().setHours(0, 0, 0, 0);
-  const dayIndex = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-  return Math.abs(dayIndex) % connectionsPuzzles.length;
-}
-
 export function useConnections() {
-  const puzzle = useMemo(() => connectionsPuzzles[getDailyPuzzleIndex()], []);
+  const [puzzleIndex, setPuzzleIndex] = useState(0);
+
+  const puzzle = useMemo(() => connectionsPuzzles[puzzleIndex % connectionsPuzzles.length], [puzzleIndex]);
 
   const allPlayers = useMemo(() => {
     const players = puzzle.groups.flatMap((g) => g.players);
-    // Deterministic shuffle based on puzzle id
     const seed = puzzle.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
     return players
       .map((p, i) => ({ p, sort: Math.sin(seed * (i + 1)) }))
@@ -70,7 +64,6 @@ export function useConnections() {
       setSelected([]);
       setLastIncorrect(null);
     } else {
-      // Check if one away from any unsolved group
       const isOneAway = puzzle.groups.some(
         (g) =>
           !solvedGroups.includes(g) &&
@@ -90,7 +83,6 @@ export function useConnections() {
     unsolved.sort(
       (a, b) => difficultyOrder.indexOf(a.difficulty) - difficultyOrder.indexOf(b.difficulty)
     );
-    // Reveal the next unsolved category (skip already hinted ones)
     const unhinted = unsolved.filter((g) => !hintCategories.includes(g.category));
     if (unhinted.length > 0) {
       setHintCategories((prev) => [...prev, unhinted[0].category]);
@@ -98,7 +90,7 @@ export function useConnections() {
     }
   }, [hintsUsed, puzzle, solvedGroups, gameStatus, hintCategories]);
 
-  const resetGame = useCallback(() => {
+  const resetState = useCallback(() => {
     setSelected([]);
     setSolvedGroups([]);
     setLives(4);
@@ -108,8 +100,21 @@ export function useConnections() {
     setOneAway(false);
   }, []);
 
+  const resetGame = useCallback(() => {
+    resetState();
+  }, [resetState]);
+
+  const nextPuzzle = useCallback(() => {
+    resetState();
+    setPuzzleIndex((prev) => prev + 1);
+  }, [resetState]);
+
+  const totalPuzzles = connectionsPuzzles.length;
+
   return {
     puzzle,
+    puzzleIndex,
+    totalPuzzles,
     selected,
     solvedGroups,
     lives,
@@ -123,5 +128,6 @@ export function useConnections() {
     submitGuess,
     useHint,
     resetGame,
+    nextPuzzle,
   };
 }
