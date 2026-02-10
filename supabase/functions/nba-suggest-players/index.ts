@@ -92,7 +92,7 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are an NBA player database with comprehensive knowledge of all NBA players in history up to February 2026. Given a partial name and an NBA team, return up to 5 real NBA players whose names match the partial input and have played for that team at any point in their career (regular season or playoffs). Include current players for the 2025-26 season. Return ONLY a JSON array of strings with full player names, e.g. ["LeBron James", "Stephen Curry"]. If no matches, return []. Use conventional name format (first name last name).`,
+              content: `You are an NBA player database with comprehensive, fully up-to-date knowledge of all NBA players in history through February 10, 2026. You MUST account for ALL recent trades and roster moves — for example Kevin Durant is now on the Houston Rockets (traded 2025), and all other mid-season trades/signings through Feb 2026. Given a partial name and an NBA team, return up to 5 real NBA players whose names match the partial input and have played for that team at any point in their career (regular season or playoffs), including the current 2025-26 season. Return ONLY a JSON array of strings with full player names, e.g. ["LeBron James", "Stephen Curry"]. If no matches, return []. Use conventional name format (first name last name).`,
             },
             {
               role: "user",
