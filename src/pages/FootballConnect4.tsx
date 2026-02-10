@@ -106,6 +106,7 @@ const FootballConnect4 = () => {
           board={board}
           currentTurn={currentTurn}
           selectedColumn={selectedColumn}
+          targetRow={targetRow}
           onSelectColumn={selectColumn}
           disabled={phase !== 'playing' || isValidating}
         />

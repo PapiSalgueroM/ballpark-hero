@@ -6,6 +6,7 @@ interface Props {
   board: Board;
   currentTurn: Team;
   selectedColumn: number | null;
+  targetRow: number | null;
   onSelectColumn: (col: number) => void;
   disabled: boolean;
 }
@@ -15,6 +16,7 @@ export function FootballConnect4Board({
   board,
   currentTurn,
   selectedColumn,
+  targetRow,
   onSelectColumn,
   disabled,
 }: Props) {
@@ -50,7 +52,12 @@ export function FootballConnect4Board({
             style={{ gridTemplateColumns: `120px repeat(${COLS}, 1fr)` }}
           >
             {/* Row label */}
-            <div className="text-[10px] sm:text-xs font-semibold p-1 sm:p-2 rounded-lg bg-secondary text-foreground flex items-center justify-center text-center leading-tight min-h-[52px]">
+            <div className={cn(
+              'text-[10px] sm:text-xs font-semibold p-1 sm:p-2 rounded-lg flex items-center justify-center text-center leading-tight min-h-[52px] transition-all',
+              targetRow === row
+                ? 'bg-primary text-primary-foreground ring-2 ring-primary'
+                : 'bg-secondary text-foreground'
+            )}>
               {boardConfig.rowAttributes[row]}
             </div>
 
