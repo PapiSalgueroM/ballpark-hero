@@ -16,7 +16,7 @@ const NbaLineup = () => {
   const {
     phase,
     challenge,
-    currentPositionIndex,
+    selectedPosition,
     currentTeam,
     filledSlots,
     filledSlotsArray,
@@ -28,10 +28,13 @@ const NbaLineup = () => {
     isStatSpinning,
     isTeamSpinning,
     teamAssignments,
+    availablePositions,
+    totalStat,
     startGame,
     finishStatSpin,
     beginBuilding,
     finishTeamSpin,
+    selectPosition,
     rerollTeam,
     submitPlayer,
     evaluateTeam,
@@ -46,11 +49,11 @@ const NbaLineup = () => {
     if (!validationError) setPlayerInput('');
   };
 
-  // Clear input when position changes (player was accepted)
+  // Clear input when position changes
   const [lastPos, setLastPos] = useState<number | null>(null);
-  if (currentPositionIndex !== lastPos) {
-    if (lastPos !== null) setPlayerInput('');
-    setLastPos(currentPositionIndex);
+  if (selectedPosition !== lastPos) {
+    if (lastPos !== null && selectedPosition !== null) setPlayerInput('');
+    setLastPos(selectedPosition);
   }
 
   return (
@@ -113,25 +116,34 @@ const NbaLineup = () => {
               </div>
             )}
 
-            {/* Progress */}
-            <div className="flex items-center justify-center gap-2">
-              {NBA_POSITIONS.map((pos, i) => (
-                <div key={i} className="flex flex-col items-center gap-1">
-                  <div
-                    className={cn(
-                      'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all',
-                      filledSlots.has(i)
-                        ? 'bg-orange-500 text-white'
-                        : currentPositionIndex === i
-                          ? 'bg-primary text-primary-foreground scale-110'
-                          : 'bg-secondary text-muted-foreground'
-                    )}
-                  >
-                    {pos.label}
-                  </div>
-                </div>
-              ))}
-              <span className="ml-2 text-xs text-muted-foreground font-semibold">{filledCount}/5</span>
+            {/* Position Picker */}
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+                Pick a position ({filledCount}/5 filled)
+              </p>
+              <div className="flex items-center justify-center gap-2 flex-wrap">
+                {NBA_POSITIONS.map((pos, i) => {
+                  const isFilled = filledSlots.has(i);
+                  const isSelected = selectedPosition === i;
+                  return (
+                    <button
+                      key={i}
+                      disabled={isFilled || isTeamSpinning}
+                      onClick={() => selectPosition(i)}
+                      className={cn(
+                        'w-12 h-12 rounded-xl flex items-center justify-center text-sm font-bold transition-all',
+                        isFilled
+                          ? 'bg-orange-500 text-white cursor-default'
+                          : isSelected
+                            ? 'bg-primary text-primary-foreground scale-110 ring-2 ring-primary/50'
+                            : 'bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground'
+                      )}
+                    >
+                      {pos.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Team Spinner + Input */}
@@ -154,11 +166,11 @@ const NbaLineup = () => {
                 )}
               </div>
 
-              {/* Input area */}
-              {currentPositionIndex !== null && currentTeam && !isTeamSpinning && (
+              {/* Input area - only show when position is selected */}
+              {selectedPosition !== null && currentTeam && !isTeamSpinning && (
                 <div className="animate-fade-in space-y-3">
                   <p className="text-sm text-center text-muted-foreground">
-                    Filling: <span className="font-bold text-primary">{NBA_POSITIONS[currentPositionIndex]?.label}</span>
+                    Filling: <span className="font-bold text-primary">{NBA_POSITIONS[selectedPosition]?.label}</span> from <span className="font-bold text-orange-400">{currentTeam.name}</span>
                   </p>
 
                   <div className="flex gap-2">
@@ -208,17 +220,30 @@ const NbaLineup = () => {
                   )}
                 </div>
               )}
+
+              {/* Prompt to pick position if none selected */}
+              {selectedPosition === null && !isTeamSpinning && currentTeam && filledCount < 5 && (
+                <p className="text-sm text-center text-muted-foreground animate-fade-in">
+                  👆 Select a position above to start picking a player
+                </p>
+              )}
             </div>
 
             {/* Court Layout */}
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-2 text-center">
                 Your Starting 5
+                {totalStat !== null && challenge && (
+                  <span className="ml-2 text-primary">
+                    — Total: {Number.isInteger(totalStat) ? totalStat : totalStat.toFixed(1)} {challenge.unit}
+                  </span>
+                )}
               </p>
               <NbaCourtLayout
                 positions={NBA_POSITIONS}
                 filledSlots={filledSlots}
-                currentIndex={currentPositionIndex ?? -1}
+                selectedPosition={selectedPosition}
+                challengeUnit={challenge?.unit}
               />
             </div>
           </div>
@@ -248,10 +273,22 @@ const NbaLineup = () => {
                   <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-4 py-2.5">
                     <span className="text-xs font-bold text-primary w-10">{slot.label}</span>
                     <span className="font-semibold text-foreground flex-1">{slot.playerName}</span>
+                    {slot.statValue !== undefined && slot.statValue !== null && (
+                      <span className="text-sm font-bold text-orange-400">
+                        {typeof slot.statValue === 'number'
+                          ? Number.isInteger(slot.statValue) ? slot.statValue : slot.statValue.toFixed(1)
+                          : slot.statValue} {challenge?.unit}
+                      </span>
+                    )}
                     <span className="text-xs text-muted-foreground">🏀 {slot.assignedTeam}</span>
                   </div>
                 ))}
               </div>
+              {totalStat !== null && challenge && (
+                <div className="mt-4 text-center text-lg font-bold text-primary">
+                  Total: {Number.isInteger(totalStat) ? totalStat : totalStat.toFixed(1)} {challenge.unit}
+                </div>
+              )}
             </div>
 
             <div className="flex items-center justify-center gap-3">
@@ -302,10 +339,22 @@ const NbaLineup = () => {
                   <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-3 py-2 text-sm">
                     <span className="text-xs font-bold text-primary w-8">{slot.label}</span>
                     <span className="font-semibold text-foreground flex-1">{slot.playerName}</span>
+                    {slot.statValue !== undefined && slot.statValue !== null && (
+                      <span className="text-xs font-bold text-orange-400">
+                        {typeof slot.statValue === 'number'
+                          ? Number.isInteger(slot.statValue) ? slot.statValue : slot.statValue.toFixed(1)
+                          : slot.statValue} {challenge?.unit}
+                      </span>
+                    )}
                     <span className="text-xs text-muted-foreground">🏀 {slot.assignedTeam}</span>
                   </div>
                 ))}
               </div>
+              {totalStat !== null && challenge && (
+                <div className="mt-3 text-center text-lg font-bold text-primary">
+                  Total: {Number.isInteger(totalStat) ? totalStat : totalStat.toFixed(1)} {challenge.unit}
+                </div>
+              )}
             </div>
 
             <div className="flex justify-center gap-3">
@@ -319,10 +368,11 @@ const NbaLineup = () => {
               <button
                 onClick={() => {
                   const lines = filledSlotsArray.map(
-                    (s) => `${s.label} – ${s.playerName} (🏀 ${s.assignedTeam})`
+                    (s) => `${s.label} – ${s.playerName}${s.statValue != null ? ` (${s.statValue} ${challenge?.unit})` : ''} (🏀 ${s.assignedTeam})`
                   );
                   const dir = challenge?.direction === 'highest' ? '⬆️' : '⬇️';
-                  const text = `🏀 My NBA Starting 5\n${dir} ${challenge?.stat} Challenge\n${verdict.rating}\n"${verdict.headline}"\n\n${lines.join('\n')}\n\nPlay at footyfein.lovable.app/nba-starting-5`;
+                  const totalLine = totalStat !== null ? `\nTotal: ${Number.isInteger(totalStat) ? totalStat : totalStat.toFixed(1)} ${challenge?.unit}` : '';
+                  const text = `🏀 My NBA Starting 5\n${dir} ${challenge?.stat} Challenge\n${verdict.rating}\n"${verdict.headline}"\n\n${lines.join('\n')}${totalLine}\n\nPlay at footyfein.lovable.app/nba-starting-5`;
                   shareResult(text, 'NBA Starting 5');
                 }}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"

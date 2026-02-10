@@ -8,6 +8,7 @@ export interface NbaPositionSlot {
 export interface NbaFilledSlot extends NbaPositionSlot {
   playerName: string;
   assignedTeam: string;
+  statValue?: number | string;
 }
 
 export interface StatChallenge {

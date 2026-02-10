@@ -24,6 +24,7 @@ function saveState(state: {
   filledSlots: Map<number, NbaFilledSlot>;
   teamAssignments: NbaTeam[];
   verdict: NbaAIVerdict | null;
+  selectedPosition: number | null;
 }) {
   try {
     localStorage.setItem(
@@ -34,6 +35,7 @@ function saveState(state: {
         filledSlots: Array.from(state.filledSlots.entries()),
         teamAssignments: state.teamAssignments,
         verdict: state.verdict,
+        selectedPosition: state.selectedPosition,
       })
     );
   } catch {}
@@ -51,24 +53,33 @@ export function useNbaLineup() {
   const [filledSlots, setFilledSlots] = useState<Map<number, NbaFilledSlot>>(saved?.filledSlots ?? new Map());
   const [teamAssignments, setTeamAssignments] = useState<NbaTeam[]>(saved?.teamAssignments ?? []);
   const [verdict, setVerdict] = useState<NbaAIVerdict | null>(saved?.verdict ?? null);
+  const [selectedPosition, setSelectedPosition] = useState<number | null>(saved?.selectedPosition ?? null);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isStatSpinning, setIsStatSpinning] = useState(false);
   const [isTeamSpinning, setIsTeamSpinning] = useState(false);
 
+  const filledCount = filledSlots.size;
+
+  // The current team is based on how many slots are filled (each pick gets the next team)
+  const currentTeam = useMemo(() => teamAssignments[filledCount] ?? null, [teamAssignments, filledCount]);
+
+  // Available positions = not yet filled
+  const availablePositions = useMemo(() => {
+    return NBA_POSITIONS.map((pos, i) => ({ ...pos, index: i })).filter(
+      (_, i) => !filledSlots.has(i)
+    );
+  }, [filledSlots]);
+
   // Persist state
   useEffect(() => {
     if (phase === 'challenge' && !challenge) {
       clearSavedState();
     } else {
-      saveState({ phase, challenge, filledSlots, teamAssignments, verdict });
+      saveState({ phase, challenge, filledSlots, teamAssignments, verdict, selectedPosition });
     }
-  }, [phase, challenge, filledSlots, teamAssignments, verdict]);
-
-  const filledCount = filledSlots.size;
-  const currentTeam = useMemo(() => teamAssignments[filledCount] ?? null, [teamAssignments, filledCount]);
-  const currentPositionIndex = filledCount < 5 ? filledCount : null;
+  }, [phase, challenge, filledSlots, teamAssignments, verdict, selectedPosition]);
 
   const startGame = useCallback(() => {
     const newChallenge = getRandomStatChallenge();
@@ -78,6 +89,7 @@ export function useNbaLineup() {
     setFilledSlots(new Map());
     setVerdict(null);
     setValidationError(null);
+    setSelectedPosition(null);
   }, []);
 
   // Auto-start stat spin on first load
@@ -100,6 +112,12 @@ export function useNbaLineup() {
     setIsTeamSpinning(false);
   }, []);
 
+  const selectPosition = useCallback((posIndex: number) => {
+    if (filledSlots.has(posIndex)) return;
+    setSelectedPosition(posIndex);
+    setValidationError(null);
+  }, [filledSlots]);
+
   const rerollTeam = useCallback(() => {
     setTeamAssignments((prev) => {
       const usedNames = new Set(prev.filter((_, i) => i !== filledCount).map((t) => t.name));
@@ -116,8 +134,8 @@ export function useNbaLineup() {
 
   const submitPlayer = useCallback(
     async (playerName: string) => {
-      if (currentPositionIndex === null || !currentTeam) return;
-      const position = NBA_POSITIONS[currentPositionIndex];
+      if (selectedPosition === null || !currentTeam) return;
+      const position = NBA_POSITIONS[selectedPosition];
       if (!position) return;
 
       // Check duplicates
@@ -133,6 +151,8 @@ export function useNbaLineup() {
       setIsValidating(true);
       setValidationError(null);
 
+      let statValue: number | string | undefined;
+
       try {
         const resp = await fetch(
           `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nba-validate-player`,
@@ -145,6 +165,8 @@ export function useNbaLineup() {
             body: JSON.stringify({
               playerName: playerName.trim(),
               teamName: currentTeam.name,
+              position: position.role,
+              challengeStat: challenge?.stat,
             }),
           }
         );
@@ -152,9 +174,13 @@ export function useNbaLineup() {
         const result = await resp.json();
 
         if (!result.valid) {
-          setValidationError(result.reason || `${playerName} hasn't played for the ${currentTeam.name}`);
+          setValidationError(result.reason || `${playerName} is not valid for this pick.`);
           setIsValidating(false);
           return;
+        }
+
+        if (result.statValue !== undefined && result.statValue !== null) {
+          statValue = result.statValue;
         }
       } catch {
         // On error allow through
@@ -164,16 +190,18 @@ export function useNbaLineup() {
         ...position,
         playerName: playerName.trim(),
         assignedTeam: currentTeam.name,
+        statValue,
       };
 
       setFilledSlots((prev) => {
         const next = new Map(prev);
-        next.set(currentPositionIndex, slot);
+        next.set(selectedPosition, slot);
         return next;
       });
 
       setIsValidating(false);
       setValidationError(null);
+      setSelectedPosition(null);
 
       if (filledCount + 1 >= 5) {
         setPhase('reviewing');
@@ -181,7 +209,7 @@ export function useNbaLineup() {
         setIsTeamSpinning(true);
       }
     },
-    [currentPositionIndex, currentTeam, filledCount, filledSlots]
+    [selectedPosition, currentTeam, filledCount, filledSlots, challenge]
   );
 
   const filledSlotsArray = useMemo(() => {
@@ -189,6 +217,14 @@ export function useNbaLineup() {
       .sort(([a], [b]) => a - b)
       .map(([, slot]) => slot);
   }, [filledSlots]);
+
+  const totalStat = useMemo(() => {
+    const values = filledSlotsArray
+      .map((s) => (typeof s.statValue === 'number' ? s.statValue : parseFloat(String(s.statValue))))
+      .filter((v) => !isNaN(v));
+    if (values.length === 0) return null;
+    return values.reduce((a, b) => a + b, 0);
+  }, [filledSlotsArray]);
 
   const evaluateTeam = useCallback(async () => {
     if (filledSlotsArray.length !== 5 || !challenge) return;
@@ -231,7 +267,7 @@ export function useNbaLineup() {
     setValidationError(null);
     setIsStatSpinning(false);
     setIsTeamSpinning(false);
-    // Auto-start new game
+    setSelectedPosition(null);
     setTimeout(() => {
       const newChallenge = getRandomStatChallenge();
       setChallenge(newChallenge);
@@ -243,7 +279,7 @@ export function useNbaLineup() {
   return {
     phase,
     challenge,
-    currentPositionIndex,
+    selectedPosition,
     currentTeam,
     filledSlots,
     filledSlotsArray,
@@ -255,10 +291,13 @@ export function useNbaLineup() {
     isStatSpinning,
     isTeamSpinning,
     teamAssignments,
+    availablePositions,
+    totalStat,
     startGame,
     finishStatSpin,
     beginBuilding,
     finishTeamSpin,
+    selectPosition,
     rerollTeam,
     submitPlayer,
     evaluateTeam,
