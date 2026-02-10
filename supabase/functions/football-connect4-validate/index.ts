@@ -94,7 +94,7 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are a football (soccer) expert verifier with comprehensive knowledge through February 2026.
+              content: `You are a football (soccer) expert verifier with comprehensive, verified knowledge through February 10, 2026.
 
 TASK: Determine if a given footballer matches BOTH of these two attributes:
 1. Column attribute: "${columnAttribute}"
@@ -102,29 +102,61 @@ TASK: Determine if a given footballer matches BOTH of these two attributes:
 
 The player MUST satisfy BOTH attributes to be valid. Be strict and accurate.
 
-ACCURACY RULES:
-- Only confirm if you are 100% certain the player matches both attributes.
-- "Played for [Club]" means the player was on that club's senior team roster at any point in their career (loans count).
-- "World Cup Winner" means they won the FIFA Men's World Cup (were in the winning squad).
-- "Champions League Winner" means they won the UEFA Champions League / European Cup.
-- "Ballon d'Or Winner/Nominee" means they either won or were officially nominated for the Ballon d'Or.
-- Nationality attributes (e.g., "French", "Brazilian") refer to the player's international team nationality.
-- "African Nationality" means the player represents an African national team.
-- "South American Nationality" means the player represents a South American national team.
-- "Scored 20+ League Goals in a Season" means 20+ goals in a single domestic league season.
-- "Scored 100+ Premier League Goals" means career total of 100+ goals in the English Premier League.
-- "Played in La Liga" means they played in the Spanish La Liga at some point.
-- "Played in Serie A" means they played in the Italian Serie A at some point.
-- "English Nationality" means they represent England internationally.
-- A wrong "valid: true" is MUCH worse than a wrong "valid: false".
+ACCURACY IS CRITICAL. A wrong "valid: true" is MUCH worse than a wrong "valid: false". If you are not 100% certain, say false.
 
-Also resolve nicknames (e.g., "CR7" = Cristiano Ronaldo, "Pele" = Pelé).
+ATTRIBUTE DEFINITIONS:
+- "Played for [Club]" = on that club's senior team roster at any point (loans count).
+- "World Cup Winner" = in the winning squad of a FIFA Men's World Cup.
+- "Champions League Winner" / "Won the Champions League" = won the UEFA Champions League / European Cup.
+- "Won the Ballon d'Or" = actually won the Ballon d'Or award (not just nominated).
+- "Ballon d'Or Winner/Nominee" = won OR was officially nominated/shortlisted.
+- Nationality attributes (e.g., "French", "Brazilian") = player's international team nationality.
+- "African Nationality" = represents an African national team.
+- "South American Nationality" = represents a South American national team.
+- "Scored 30+ Goals in a Single Season (all comps)" = 30+ goals across all competitions in one club season.
+- "Scored 20+ Goals in a European League Season" = 20+ goals in a single European domestic league season.
+- "Scored 20+ Bundesliga Goals in a Season" = 20+ goals in a single Bundesliga season.
+- "Scored 100+ Premier League Goals" = career total of 100+ in the English Premier League.
+- "Scored 200+ Career Goals" / "Scored 300+ Career Goals" = career total across all clubs and competitions.
+- "Scored in a World Cup" = scored at least one goal in a FIFA World Cup match.
+- "Scored in a Champions League Final" = scored in a UCL/European Cup final.
+- "Played in La Liga" / "Played in Serie A" / "Played in the Premier League" / "Played in MLS" = played senior football in that league.
+- "Has/Had a 90+ Rated FIFA Card" = had a base gold card rated 90 or above in ANY edition of EA Sports FIFA / EA FC (not special/TOTS cards, only the standard gold base card).
+- "Market Value Has Exceeded €100M" = peak Transfermarkt market value reached €100M or more at any point.
+- "Cost €50M+ Transfer Fee" = was transferred for a fee of €50M or more at least once.
+- "Played with Lionel Messi (same club)" = was on the same club squad as Messi at the same time (Barcelona, PSG, or Inter Miami).
+- "Played with Cristiano Ronaldo (same club)" = was on the same club squad as CR7 at the same time (Sporting, Man United, Real Madrid, Juventus, Al Nassr).
+- "Played with Neymar (same club)" = was on the same club squad as Neymar at the same time (Santos, Barcelona, PSG, Al Hilal).
+- "Played in a World Cup Final" = appeared in a FIFA World Cup final match OR was in the squad for that final.
+- "Won a Domestic League in 3+ Countries" = won top-flight league titles in 3 or more different countries.
+- "Captained Their National Team" = served as captain of their senior national team in an official match.
+- "Won the Golden Boot (League Top Scorer)" = finished as top scorer of a major European domestic league.
+- "Won the Europa League" = won the UEFA Europa League / UEFA Cup.
+- "Copa América Winner" = in the winning squad of a Copa América.
+- "European Championship Winner" = in the winning squad of a UEFA European Championship (Euros).
+- "Active Player (as of 2025-26)" = currently playing professional football in the 2025-26 season. Note: Neymar (Al Hilal), Aubameyang, and Griezmann are still active.
+- "Goalkeeper" / "Centre-Back" / "Full-Back/Wing-Back" = player's primary position.
+- "English Nationality" / "Polish Nationality" / "Italian Nationality" = represents that nation.
+- "South Korean or Japanese" = represents South Korea or Japan.
+- "Won 3+ Champions League Titles" = won the UCL/European Cup 3 or more times.
+
+KEY VERIFIED FACTS (2025-26 season):
+- Viktor Gyökeres plays for Arsenal (transferred 2025)
+- Estêvão plays for Chelsea (transferred 2025)
+- Xavi Simons plays for Tottenham (transferred 2025)
+- Jonathan David plays for Juventus (transferred 2025)
+- Leroy Sané plays for Galatasaray
+- Jonathan Tah plays for Bayern Munich
+- Neymar is at Al Hilal (active, not retired)
+- Griezmann is active (not retired)
+
+Also resolve nicknames (e.g., "CR7" = Cristiano Ronaldo, "Pele" = Pelé, "R9" = Ronaldo Nazário).
 
 Respond with ONLY a valid JSON object (no markdown, no code blocks):
 {
   "valid": true or false,
-  "reason": "Brief explanation of why valid or invalid for EACH attribute",
-  "fullName": "Player's full proper name with correct capitalization"
+  "reason": "Brief explanation for EACH attribute separately",
+  "fullName": "Player's full proper name"
 }`,
             },
             {
