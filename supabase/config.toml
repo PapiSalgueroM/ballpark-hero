@@ -8,3 +8,12 @@ verify_jwt = false
 
 [functions.suggest-players]
 verify_jwt = false
+
+[functions.nba-suggest-players]
+verify_jwt = false
+
+[functions.nba-validate-player]
+verify_jwt = false
+
+[functions.nba-evaluate-lineup]
+verify_jwt = false

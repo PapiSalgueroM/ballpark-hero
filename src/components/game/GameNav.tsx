@@ -12,6 +12,7 @@ const footyGames = [
 
 const moreGames = [
   { path: '/ufc', label: '🥊 UFC Guesser', description: 'Guess the UFC fighter' },
+  { path: '/nba-starting-5', label: '🏀 NBA Starting 5', description: 'Build a lineup with stat challenges' },
 ];
 
 function GameSection({ title, games, currentPath, grid }: { title: string; games: typeof footyGames; currentPath: string; grid?: boolean }) {

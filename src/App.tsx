@@ -10,6 +10,7 @@ import Connections from "./pages/Connections";
 import LineupBuilder from "./pages/LineupBuilder";
 import BlurredFace from "./pages/BlurredFace";
 import UfcGame from "./pages/UfcGame";
+import NbaLineup from "./pages/NbaLineup";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/build-your-xi" element={<LineupBuilder />} />
           <Route path="/guess-the-face" element={<BlurredFace />} />
           <Route path="/ufc" element={<UfcGame />} />
+          <Route path="/nba-starting-5" element={<NbaLineup />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
