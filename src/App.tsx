@@ -12,6 +12,7 @@ import BlurredFace from "./pages/BlurredFace";
 import UfcGame from "./pages/UfcGame";
 import NbaLineup from "./pages/NbaLineup";
 import NbaConnect4 from "./pages/NbaConnect4";
+import NbaChain from "./pages/NbaChain";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/ufc" element={<UfcGame />} />
           <Route path="/nba-starting-5" element={<NbaLineup />} />
           <Route path="/nba-connect-4" element={<NbaConnect4 />} />
+          <Route path="/nba-chain" element={<NbaChain />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
