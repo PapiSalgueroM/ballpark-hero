@@ -33,9 +33,14 @@ const TermsOfService = () => {
             <li><strong>Connections</strong> — Find groups of 4 players sharing a hidden link</li>
             <li><strong>Build Your XI</strong> — Create a lineup and receive an AI-generated rating</li>
             <li><strong>Guess the Face</strong> — Identify a blurred footballer as hints are revealed</li>
+            <li><strong>Football Connect 4</strong> — Two-player trivia Connect 4 with football knowledge</li>
+            <li><strong>NBA Guesser</strong> — Guess the NBA player from stat-based clues</li>
+            <li><strong>NBA Build Your V</strong> — Create an NBA lineup and receive an AI rating</li>
+            <li><strong>NBA Chain</strong> — Link NBA players who shared the same team</li>
+            <li><strong>NBA Connect 4</strong> — Two-player trivia Connect 4 with NBA knowledge</li>
             <li><strong>UFC Guesser</strong> — Guess the UFC fighter from stat-based clues in 8 tries</li>
           </ul>
-          <p className="mt-2">The Site is provided "as is" and "as available" without any warranties of any kind.</p>
+          <p className="mt-2">The Site is provided "as is" and "as available" without any warranties of any kind. The Site is supported by advertising provided by Google AdSense.</p>
         </div>
 
         <div>
@@ -93,7 +98,7 @@ const TermsOfService = () => {
 
       <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
         <p>© 2026 FootyFein. All rights reserved.</p>
-        <p>All logos, club crests, player names, fighter names, and brands are the property of their respective owners and are used for identification purposes only. This application is not affiliated with or endorsed by FIFA, EA Sports, the UFC, or any football club, MMA organization, or sports governing body.</p>
+        <p>All logos, club crests, player names, fighter names, and brands are the property of their respective owners and are used for identification purposes only. This application is not affiliated with or endorsed by FIFA, EA Sports, the UFC, the NBA, or any football club, MMA organization, basketball team, or sports governing body.</p>
         <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>
       </div>
     </div>
