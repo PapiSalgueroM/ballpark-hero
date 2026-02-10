@@ -8,6 +8,7 @@ import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight, Shuffle, Flame, Sha
 import { cn } from '@/lib/utils';
 import { ConnectionDifficulty } from '@/types/connections';
 import { shareResult } from '@/lib/share';
+import AdBanner from '@/components/ads/AdBanner';
 
 const difficultyColors: Record<ConnectionDifficulty, string> = {
   easy: 'bg-correct',
@@ -250,6 +251,8 @@ const Connections = () => {
           <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-blue-500" /> Hard</span>
           <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-purple-500" /> Insane</span>
         </div>
+
+        <AdBanner slot="1234567893" format="horizontal" className="mt-8" />
 
         <GameNav />
         <Footer />

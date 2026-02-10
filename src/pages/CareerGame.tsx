@@ -7,6 +7,7 @@ import { getClubLogoUrl } from '@/lib/clubData';
 import { RotateCcw, Flag, Search, Lightbulb, HelpCircle, Share2 } from 'lucide-react';
 import { CareerHowToPlay } from '@/components/career/CareerHowToPlay';
 import { shareResult } from '@/lib/share';
+import AdBanner from '@/components/ads/AdBanner';
 
 const CareerGame = () => {
   const {
@@ -236,6 +237,8 @@ const CareerGame = () => {
             </div>
           </div>
         )}
+
+        <AdBanner slot="1234567891" format="horizontal" className="mt-8" />
 
         <CareerHowToPlay open={showHelp} onOpenChange={setShowHelp} />
         <GameNav />

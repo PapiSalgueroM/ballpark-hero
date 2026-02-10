@@ -7,6 +7,7 @@ import { Footer } from '@/components/game/Footer';
 import { RotateCcw, HelpCircle, Flag, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { shareResult } from '@/lib/share';
+import AdBanner from '@/components/ads/AdBanner';
 
 const BlurredFace = () => {
   const {
@@ -263,6 +264,8 @@ const BlurredFace = () => {
             </div>
           </div>
         )}
+
+        <AdBanner slot="1234567895" format="horizontal" className="mt-8" />
 
         <GameNav />
         <Footer />
