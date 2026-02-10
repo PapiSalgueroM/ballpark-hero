@@ -95,10 +95,12 @@ serve(async (req) => {
               role: "system",
               content: `You are an NBA expert database with comprehensive, fully up-to-date knowledge of all NBA players through February 10, 2026.
 
-CRITICAL: Account for ALL recent trades and roster moves through Feb 2026, including:
+CRITICAL: Account for ALL recent trades, draft picks, and roster moves through Feb 2026, including but not limited to:
+- Bronny James was drafted by the Los Angeles Lakers (2024 NBA Draft) and is teammates with LeBron James on the Lakers in the 2024-25 and 2025-26 seasons
 - Luka Dončić traded to Los Angeles Lakers (Feb 2025)
 - Kevin Durant traded to Houston Rockets (2025)
-- All other mid-season trades, buyouts, signings through Feb 2026
+- All other mid-season trades, draft picks, buyouts, signings through Feb 2026
+- Include ALL rookies drafted in 2024 and 2025 on their respective teams
 
 Your task: Determine if two NBA players have a valid connection — meaning they were teammates on the same NBA team during at least one season (regular season or playoffs). Even partial seasons, mid-season trades, or short stints count.
 
