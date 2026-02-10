@@ -8,6 +8,7 @@ const footyGames = [
   { path: '/connections', label: '🔗 Connections', description: 'Find groups of 4 players' },
   { path: '/build-your-xi', label: '⚽ Build Your XI', description: 'Create a lineup, get AI rated' },
   { path: '/guess-the-face', label: '🖼️ Guess the Face', description: 'Unblur the footballer' },
+  { path: '/football-connect-4', label: '🔴🔵 Connect 4', description: 'Football trivia meets Connect 4' },
 ];
 
 const moreGames = [
