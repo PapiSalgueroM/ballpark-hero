@@ -63,7 +63,7 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { playerName, teamName } = body;
+    const { playerName, teamName, position, challengeStat } = body;
 
     if (!playerName || typeof playerName !== "string" || playerName.length > 100) {
       return new Response(JSON.stringify({ error: "Invalid playerName" }), {
@@ -81,6 +81,12 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
+    const positionCheck = position ? `\n3. Is "${position}" a valid/primary position for this player? A player's position is valid if they primarily played that position during their career. PG=Point Guard, SG=Shooting Guard, SF=Small Forward, PF=Power Forward, C=Center. Some players may qualify for adjacent positions (e.g. a SG/SF can play either).` : '';
+    const positionField = position ? ', "validPosition": true/false' : '';
+
+    const statLookup = challengeStat ? `\n4. Look up this player's career ${challengeStat}. For per-game stats use career averages. For counting stats (3PM, Games Played, Championships) use career totals. For Height use inches, Weight use lbs.` : '';
+    const statField = challengeStat ? ', "statValue": <number or null if unknown>' : '';
+
     const response = await fetch(
       "https://ai.gateway.lovable.dev/v1/chat/completions",
       {
@@ -94,12 +100,16 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are an NBA database with comprehensive knowledge up to February 2026. Answer ONLY with a JSON object: {"valid": true/false, "reason": "short explanation"}.
-A player is valid if they have EVER played for the given NBA team in regular season or playoff games. Include current 2025-26 season players. Account for team name changes (e.g., Seattle SuperSonics → Oklahoma City Thunder, New Jersey Nets → Brooklyn Nets, Vancouver Grizzlies → Memphis Grizzlies). Be accurate but give benefit of the doubt for recent trades and signings.`,
+              content: `You are an NBA database with comprehensive knowledge up to February 2026. Answer ONLY with a JSON object.
+Tasks:
+1. Check if the player name is a real NBA player.
+2. Check if they have EVER played for the given NBA team (regular season or playoffs). Account for team name changes (e.g., Seattle SuperSonics → Oklahoma City Thunder, New Jersey Nets → Brooklyn Nets).${positionCheck}${statLookup}
+
+Response format: {"valid": true/false, "reason": "short explanation"${positionField}${statField}}`,
             },
             {
               role: "user",
-              content: `Has "${playerName}" ever played for the ${teamName}?`,
+              content: `Player: "${playerName}", Team: "${teamName}"${position ? `, Position: "${position}"` : ''}${challengeStat ? `, Stat: "${challengeStat}"` : ''}`,
             },
           ],
         }),
@@ -122,6 +132,12 @@ A player is valid if they have EVER played for the given NBA team in regular sea
       parsed = JSON.parse(jsonMatch[1].trim());
     } catch {
       parsed = { valid: true, reason: "Could not parse validation response." };
+    }
+
+    // If player is valid for team but not for position, override
+    if (parsed.valid && position && parsed.validPosition === false) {
+      parsed.valid = false;
+      parsed.reason = `${playerName} did not primarily play ${position}. Try a different position.`;
     }
 
     return new Response(JSON.stringify(parsed), {
