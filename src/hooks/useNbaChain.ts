@@ -44,9 +44,12 @@ export function useNbaChain() {
 
       const lowerName = trimmed.toLowerCase();
 
-      // Check duplicate
+      // Check duplicate — instant game over
       if (usedPlayers.has(lowerName)) {
-        setValidationError(`${trimmed} has already been used in this chain!`);
+        setPhase('ended');
+        setGameOverReason(`${trimmed} was already used — game over!`);
+        const finalScore = chain.length - 1;
+        if (finalScore > bestStreak) { setBestStreak(finalScore); saveBestStreak(finalScore); }
         return;
       }
 
@@ -74,19 +77,28 @@ export function useNbaChain() {
 
         // Check if the resolved full name is a duplicate or self-connection
         if (usedPlayers.has(displayName.toLowerCase())) {
-          setValidationError(`${displayName} has already been used in this chain!`);
+          setPhase('ended');
+          setGameOverReason(`${displayName} was already used — game over!`);
+          const finalScore = chain.length - 1;
+          if (finalScore > bestStreak) { setBestStreak(finalScore); saveBestStreak(finalScore); }
           setIsValidating(false);
           return;
         }
 
         if (displayName.toLowerCase() === lastPlayer.toLowerCase()) {
-          setValidationError(`${displayName} is the current player — you need a different player!`);
+          setPhase('ended');
+          setGameOverReason(`${displayName} is the same as the current player — game over!`);
+          const finalScore = chain.length - 1;
+          if (finalScore > bestStreak) { setBestStreak(finalScore); saveBestStreak(finalScore); }
           setIsValidating(false);
           return;
         }
 
         if (!result.valid) {
-          setValidationError(result.reason || `No verified NBA connection found.`);
+          setPhase('ended');
+          setGameOverReason(result.reason || 'No valid NBA connection found — game over!');
+          const finalScore = chain.length - 1;
+          if (finalScore > bestStreak) { setBestStreak(finalScore); saveBestStreak(finalScore); }
           setIsValidating(false);
           return;
         }
