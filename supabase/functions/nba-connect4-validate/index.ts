@@ -97,9 +97,10 @@ serve(async (req) => {
               content: `You are an NBA expert database with comprehensive, fully up-to-date knowledge of all NBA players in history through February 10, 2026.
 
 CRITICAL: You MUST account for ALL recent trades and roster moves through February 10, 2026. Notable recent moves include but are not limited to:
+- Jimmy Butler traded to the Golden State Warriors (2024-25 season)
+- Bronny James drafted by the Los Angeles Lakers (2024 NBA Draft)
 - Luka Dončić was traded to the Los Angeles Lakers (February 2025)
 - Kevin Durant was traded to the Houston Rockets (2025)
-- Jimmy Butler trade situations (2025)
 - Any other mid-season trades, buyouts, or signings through Feb 2026
 All of these players count as "Traded Mid-Season" as well as playing for their new teams.
 

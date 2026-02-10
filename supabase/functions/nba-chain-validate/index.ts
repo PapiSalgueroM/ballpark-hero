@@ -96,6 +96,7 @@ serve(async (req) => {
               content: `You are an NBA expert database with comprehensive, fully up-to-date knowledge of all NBA players through February 10, 2026.
 
 CRITICAL: Account for ALL recent trades, draft picks, and roster moves through Feb 2026, including but not limited to:
+- Jimmy Butler traded to the Golden State Warriors (2024-25 season)
 - Bronny James was drafted by the Los Angeles Lakers (2024 NBA Draft) and is teammates with LeBron James on the Lakers in the 2024-25 and 2025-26 seasons
 - Luka Dončić traded to Los Angeles Lakers (Feb 2025)
 - Kevin Durant traded to Houston Rockets (2025)
