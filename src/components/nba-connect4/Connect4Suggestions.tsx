@@ -34,8 +34,7 @@ const Connect4Suggestions = ({ query, columnAttribute, rowAttribute, onSelect, v
             },
             body: JSON.stringify({
               query,
-              teamName: columnAttribute,
-              context: `Must also match: ${rowAttribute}`,
+              context: `Must match BOTH: "${columnAttribute}" AND "${rowAttribute}"`,
             }),
           }
         );
