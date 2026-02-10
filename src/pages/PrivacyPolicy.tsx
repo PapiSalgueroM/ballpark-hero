@@ -15,7 +15,7 @@ const PrivacyPolicy = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: February 9, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: February 10, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -61,7 +61,7 @@ const PrivacyPolicy = () => {
 
       <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
         <p>© 2026 FootyFein. All rights reserved.</p>
-        <p>All logos, club crests, player names, and brands are the property of their respective owners and are used for identification purposes only. This application is not affiliated with or endorsed by FIFA, EA Sports, or any football club or organization.</p>
+        <p>All logos, club crests, player names, fighter names, and brands are the property of their respective owners and are used for identification purposes only. This application is not affiliated with or endorsed by FIFA, EA Sports, the UFC, or any football club, MMA organization, or sports governing body.</p>
       </div>
     </div>
   );
