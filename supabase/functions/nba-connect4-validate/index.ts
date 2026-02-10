@@ -134,7 +134,7 @@ Attribute types and what they mean:
 - "20000+ Career Points", "10000+ Career Rebounds", "5000+ Career Assists": Career totals.
 - "500+ Career Blocks", "1000+ Career Steals": Career totals.
 
-Respond with ONLY a JSON object: {"valid": true/false, "reason": "brief explanation of why they do or don't match BOTH attributes"}`,
+Respond with ONLY a JSON object: {"valid": true/false, "reason": "brief explanation", "fullName": "Player's Full Name in Proper Case (e.g. LeBron James, Stephen Curry, Kevin Durant)"}. Always include fullName with correct capitalization and full first+last name.`,
             },
             {
               role: "user",

@@ -127,6 +127,8 @@ export function useNbaConnect4() {
       const colAttr = board.columnAttributes[selectedCol];
       const rowAttr = board.rowAttributes[targetRow];
 
+      let displayName = trimmed;
+
       try {
         const resp = await fetch(
           `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nba-connect4-validate`,
@@ -153,13 +155,16 @@ export function useNbaConnect4() {
           setIsValidating(false);
           return;
         }
+
+        // Use the full proper name from AI if available
+        if (result.fullName) displayName = result.fullName;
       } catch {
         // Allow on error
       }
 
       // Place the piece
       const newGrid = grid.map((row) => [...row]);
-      newGrid[targetRow][selectedCol] = { team: currentTeam, playerName: trimmed };
+      newGrid[targetRow][selectedCol] = { team: currentTeam, playerName: displayName };
       setGrid(newGrid);
       setUsedPlayers((prev) => new Set(prev).add(lowerName));
 
@@ -169,7 +174,6 @@ export function useNbaConnect4() {
         setWinInfo({ winner: currentTeam, cells: winCells });
         setPhase('won');
       } else {
-        // Check draw
         const isFull = newGrid.every((row) => row.every((cell) => cell !== null));
         if (isFull) {
           setPhase('draw');
