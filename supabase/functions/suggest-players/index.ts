@@ -1,20 +1,49 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+const allowedOrigins = [
+  "https://footyfein.lovable.app",
+  "https://id-preview--d69b1c20-4988-43ae-947e-7c6feb3ed683.lovable.app",
+  "http://localhost:8080",
+  "http://localhost:5173",
+];
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("origin") || "";
+  return {
+    "Access-Control-Allow-Origin": allowedOrigins.includes(origin) ? origin : allowedOrigins[0],
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  };
+}
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
-    const { query, teamName, isNation } = await req.json();
+  // Validate apikey header
+  const apikey = req.headers.get("apikey");
+  const expectedKey = Deno.env.get("SUPABASE_ANON_KEY");
+  if (!apikey || apikey !== expectedKey) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
-    if (!query || query.length < 2) {
+  try {
+    const body = await req.json();
+    const { query, teamName, isNation } = body;
+
+    // Input validation
+    if (!query || typeof query !== "string" || query.length < 2 || query.length > 100) {
+      return new Response(JSON.stringify({ suggestions: [] }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (!teamName || typeof teamName !== "string" || teamName.length > 100) {
       return new Response(JSON.stringify({ suggestions: [] }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

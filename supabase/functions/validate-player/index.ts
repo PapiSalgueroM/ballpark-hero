@@ -1,18 +1,55 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+const allowedOrigins = [
+  "https://footyfein.lovable.app",
+  "https://id-preview--d69b1c20-4988-43ae-947e-7c6feb3ed683.lovable.app",
+  "http://localhost:8080",
+  "http://localhost:5173",
+];
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("origin") || "";
+  return {
+    "Access-Control-Allow-Origin": allowedOrigins.includes(origin) ? origin : allowedOrigins[0],
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  };
+}
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Validate apikey header
+  const apikey = req.headers.get("apikey");
+  const expectedKey = Deno.env.get("SUPABASE_ANON_KEY");
+  if (!apikey || apikey !== expectedKey) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
-    const { playerName, teamName, isNation } = await req.json();
+    const body = await req.json();
+    const { playerName, teamName, isNation } = body;
+
+    // Input validation
+    if (!playerName || typeof playerName !== "string" || playerName.length > 100) {
+      return new Response(JSON.stringify({ error: "Invalid playerName" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (!teamName || typeof teamName !== "string" || teamName.length > 100) {
+      return new Response(JSON.stringify({ error: "Invalid teamName" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
@@ -45,7 +82,6 @@ A player is valid if they have EVER played for the given ${teamType} in a compet
     );
 
     if (!response.ok) {
-      // On error, allow the player through to not block gameplay
       return new Response(
         JSON.stringify({ valid: true, reason: "Could not verify, allowing." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -60,7 +96,6 @@ A player is valid if they have EVER played for the given ${teamType} in a compet
       const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/) || [null, content];
       parsed = JSON.parse(jsonMatch[1].trim());
     } catch {
-      // If parsing fails, allow the player
       parsed = { valid: true, reason: "Could not parse validation response." };
     }
 
