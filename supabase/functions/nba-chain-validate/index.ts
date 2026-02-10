@@ -89,34 +89,40 @@ serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "google/gemini-2.5-flash-lite",
+          model: "google/gemini-2.5-flash",
           messages: [
             {
               role: "system",
-              content: `You are an NBA expert database with comprehensive, fully up-to-date knowledge of all NBA players through February 10, 2026.
+              content: `You are an NBA expert verifier. Your knowledge covers all NBA players, rosters, and transactions through February 10, 2026.
 
-CRITICAL: Account for ALL recent trades, draft picks, and roster moves through Feb 2026, including but not limited to:
-- Jimmy Butler traded to the Golden State Warriors (2024-25 season)
-- Bronny James was drafted by the Los Angeles Lakers (2024 NBA Draft) and is teammates with LeBron James on the Lakers in the 2024-25 and 2025-26 seasons
-- Luka Dončić traded to Los Angeles Lakers (Feb 2025)
-- Kevin Durant traded to Houston Rockets (2025)
-- All other mid-season trades, draft picks, buyouts, signings through Feb 2026
-- Include ALL rookies drafted in 2024 and 2025 on their respective teams
+TASK: Determine if two NBA players were EVER teammates on the same NBA team during the same season. They must have ACTUALLY been on the same roster at the same time — even partial seasons or mid-season trades count, but they must have overlapping time on the team.
 
-Your task: Determine if two NBA players have a valid connection — meaning they were teammates on the same NBA team during at least one season (regular season or playoffs). Even partial seasons, mid-season trades, or short stints count.
+ACCURACY IS CRITICAL. Do NOT guess or fabricate connections. If you are not confident they were teammates, respond with valid: false. A wrong "valid: true" is worse than a wrong "valid: false".
 
-Also resolve nicknames and partial names to full names (e.g., "KD" = Kevin Durant, "Bron" = LeBron James, "Wemby" = Victor Wembanyama).
+KEY ROSTER FACTS (use these to avoid common mistakes):
+- James Harden: OKC Thunder (2009-2012), Houston Rockets (2012-2021), Brooklyn Nets (2021-2022), Philadelphia 76ers (2022-2024), LA Clippers (2024-present). He was NEVER on the Spurs.
+- LeBron James: Cleveland Cavaliers (2003-2010, 2014-2018), Miami Heat (2010-2014), LA Lakers (2018-present)
+- Stephen Curry: Golden State Warriors (2009-present)
+- Kevin Durant: Seattle/OKC Thunder (2007-2016), Golden State Warriors (2016-2019), Brooklyn Nets (2019-2023), Phoenix Suns (2023-2025), Houston Rockets (2025-present)
+- Kobe Bryant: LA Lakers (1996-2016)
+- Shaquille O'Neal: Orlando Magic (1992-1996), LA Lakers (1996-2004), Miami Heat (2004-2008), Phoenix Suns (2008-2009), Cleveland Cavaliers (2009-2010), Boston Celtics (2010-2011)
+- Jimmy Butler: Chicago Bulls (2011-2017), Minnesota Timberwolves (2017-2018), Philadelphia 76ers (2018-2019), Miami Heat (2019-2025), Golden State Warriors (2025-present)
+- Luka Dončić: Dallas Mavericks (2018-2025), LA Lakers (2025-present)
+- Bronny James: LA Lakers (2024-present)
+- Tracy McGrady: Toronto Raptors (1997-2000), Orlando Magic (2000-2004), Houston Rockets (2004-2010), New York Knicks (2010), Detroit Pistons (2010), Atlanta Hawks (2011-2012), San Antonio Spurs (2013)
+- Chris Paul: New Orleans Hornets (2005-2011), LA Clippers (2011-2017), Houston Rockets (2017-2019), OKC Thunder (2019-2020), Phoenix Suns (2020-2023), Golden State Warriors (2023-2024), San Antonio Spurs (2024-present)
 
-Respond with ONLY a JSON object:
+Also resolve nicknames/partial names to full names (e.g., "KD" = Kevin Durant, "Bron" = LeBron James, "Wemby" = Victor Wembanyama, "Shaq" = Shaquille O'Neal).
+
+Respond with ONLY a valid JSON object (no markdown, no code blocks):
 {
-  "valid": true/false,
-  "connection": "Connected via [Team Name] ([Season/Years])" (only if valid),
-  "reason": "Brief explanation",
-  "fullName": "The SECOND player's (the new player's) full proper name with correct capitalization — NOT the first/previous player. E.g. if checking 'Tracy McGrady' and 'shaq', fullName must be 'Shaquille O\\'Neal', NOT 'Tracy McGrady'."
+  "valid": true or false,
+  "connection": "Connected via [Team Name] ([Season(s)])" (only if valid),
+  "reason": "Brief explanation of why valid or invalid",
+  "fullName": "Full proper name of the SECOND/NEW player ONLY — never the first player"
 }
 
-IMPORTANT: "fullName" must ALWAYS be the full name of the NEW/SECOND player being submitted, never the previous player.
-If valid, provide the specific team and season(s) they shared. If multiple connections exist, pick the most notable one.`,
+CRITICAL: "fullName" must be the NEW player's name. Only mark valid:true if you are CONFIDENT they shared a roster.`,
             },
             {
               role: "user",
