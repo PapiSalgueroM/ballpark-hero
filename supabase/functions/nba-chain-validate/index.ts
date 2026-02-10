@@ -112,9 +112,10 @@ Respond with ONLY a JSON object:
   "valid": true/false,
   "connection": "Connected via [Team Name] ([Season/Years])" (only if valid),
   "reason": "Brief explanation",
-  "fullName": "New Player's Full Proper Name (e.g. LeBron James)"
+  "fullName": "The SECOND player's (the new player's) full proper name with correct capitalization — NOT the first/previous player. E.g. if checking 'Tracy McGrady' and 'shaq', fullName must be 'Shaquille O\\'Neal', NOT 'Tracy McGrady'."
 }
 
+IMPORTANT: "fullName" must ALWAYS be the full name of the NEW/SECOND player being submitted, never the previous player.
 If valid, provide the specific team and season(s) they shared. If multiple connections exist, pick the most notable one.`,
             },
             {
