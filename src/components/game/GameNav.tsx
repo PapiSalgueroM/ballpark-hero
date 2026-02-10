@@ -14,7 +14,7 @@ const moreGames = [
   { path: '/ufc', label: '🥊 UFC Guesser', description: 'Guess the UFC fighter' },
 ];
 
-function GameSection({ title, games, currentPath }: { title: string; games: typeof footyGames; currentPath: string }) {
+function GameSection({ title, games, currentPath, grid }: { title: string; games: typeof footyGames; currentPath: string; grid?: boolean }) {
   const filtered = games.filter((g) => g.path !== currentPath);
   if (filtered.length === 0) return null;
 
@@ -23,17 +23,21 @@ function GameSection({ title, games, currentPath }: { title: string; games: type
       <h3 className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
         {title}
       </h3>
-      <div className="flex flex-wrap items-center justify-center gap-3">
+      <div className={cn(
+        grid
+          ? 'grid grid-cols-2 gap-3 max-w-xl mx-auto'
+          : 'flex flex-wrap items-center justify-center gap-3'
+      )}>
         {filtered.map((g) => (
           <Link
             key={g.path}
             to={g.path}
             className={cn(
-              'flex flex-col items-center gap-1 px-6 py-4 rounded-xl border border-border bg-card hover:bg-card/80 transition-all hover:scale-105 min-w-[180px]'
+              'flex flex-col items-center gap-1 px-6 py-4 rounded-xl border border-border bg-card hover:bg-card/80 transition-all hover:scale-105'
             )}
           >
             <span className="text-xl font-bold text-primary font-display">{g.label}</span>
-            <span className="text-xs text-muted-foreground">{g.description}</span>
+            <span className="text-xs text-muted-foreground text-center">{g.description}</span>
           </Link>
         ))}
       </div>
@@ -43,29 +47,12 @@ function GameSection({ title, games, currentPath }: { title: string; games: type
 
 export function GameNav() {
   const location = useLocation();
-  const isFootyPage = footyGames.some(g => g.path === location.pathname);
-  const isMorePage = moreGames.some(g => g.path === location.pathname);
 
   return (
     <div className="mt-12 mb-6">
       <div className="border-t border-border/50 pt-8 space-y-8">
-        {/* Show the "other" category first, then the current category */}
-        {isFootyPage ? (
-          <>
-            <GameSection title="More Games" games={moreGames} currentPath={location.pathname} />
-            <GameSection title="More Footy" games={footyGames} currentPath={location.pathname} />
-          </>
-        ) : isMorePage ? (
-          <>
-            <GameSection title="More Footy" games={footyGames} currentPath={location.pathname} />
-            <GameSection title="More Games" games={moreGames} currentPath={location.pathname} />
-          </>
-        ) : (
-          <>
-            <GameSection title="More Footy" games={footyGames} currentPath={location.pathname} />
-            <GameSection title="More Games" games={moreGames} currentPath={location.pathname} />
-          </>
-        )}
+        <GameSection title="More Footy" games={footyGames} currentPath={location.pathname} grid />
+        <GameSection title="More Games" games={moreGames} currentPath={location.pathname} />
       </div>
     </div>
   );
