@@ -55,7 +55,9 @@ export interface UfcGuessResult {
     weightClass: UfcCellResult;
     nationality: UfcCellResult;
     age: UfcCellResult;
-    record: UfcCellResult;
+    wins: UfcCellResult;
+    losses: UfcCellResult;
+    draws: UfcCellResult;
     koTko: UfcCellResult;
     submissions: UfcCellResult;
     p4pRank: UfcCellResult;

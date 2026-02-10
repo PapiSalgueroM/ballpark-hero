@@ -39,22 +39,25 @@ function compareNumeric(guessVal: number, targetVal: number, threshold: number, 
   return { value: display, status, arrow };
 }
 
-function compareYearsActive(guess: UfcFighter, target: UfcFighter): UfcCellResult {
-  if (guess.yearsActive === target.yearsActive) return { value: guess.yearsActive, status: 'correct' };
-  // Close if overlapping by at least 3 years
-  const overlapStart = Math.max(guess.yearsActiveStart, target.yearsActiveStart);
-  const overlapEnd = Math.min(guess.yearsActiveEnd, target.yearsActiveEnd);
-  const overlap = overlapEnd - overlapStart;
-  if (overlap >= 3) return { value: guess.yearsActive, status: 'close' };
-  return { value: guess.yearsActive, status: 'incorrect' };
+function getYearsActiveCount(fighter: UfcFighter): number {
+  return fighter.yearsActiveEnd - fighter.yearsActiveStart;
 }
 
-function compareRecord(guess: UfcFighter, target: UfcFighter): UfcCellResult {
-  if (guess.record === target.record) return { value: guess.record, status: 'correct' };
-  const gTotal = guess.wins + guess.losses + guess.draws;
-  const tTotal = target.wins + target.losses + target.draws;
-  if (Math.abs(guess.wins - target.wins) <= 3) return { value: guess.record, status: 'close' };
-  return { value: guess.record, status: 'incorrect' };
+function compareYearsActive(guess: UfcFighter, target: UfcFighter): UfcCellResult {
+  const guessYears = getYearsActiveCount(guess);
+  const targetYears = getYearsActiveCount(target);
+  return compareNumeric(guessYears, targetYears, 2);
+}
+
+
+function compareP4PRank(guessVal: number, targetVal: number): UfcCellResult {
+  const display = `#${guessVal}`;
+  if (guessVal === targetVal) return { value: display, status: 'correct' };
+  const diff = Math.abs(guessVal - targetVal);
+  // Lower rank number = better. If guess is lower number (better), target is "lower" (worse).
+  const arrow: UfcArrowDirection = targetVal > guessVal ? 'down' : 'up';
+  const status: UfcCellStatus = diff <= 2 ? 'close' : 'incorrect';
+  return { value: display, status, arrow };
 }
 
 export function compareUfcGuess(guess: UfcFighter, target: UfcFighter): UfcGuessResult {
@@ -66,10 +69,12 @@ export function compareUfcGuess(guess: UfcFighter, target: UfcFighter): UfcGuess
       weightClass: compareWeightClass(guess.weightClass, target.weightClass),
       nationality: compareNationality(guess.nationality, target.nationality),
       age: compareNumeric(guess.age, target.age, 2),
-      record: compareRecord(guess, target),
+      wins: compareNumeric(guess.wins, target.wins, 3),
+      losses: compareNumeric(guess.losses, target.losses, 2),
+      draws: compareNumeric(guess.draws, target.draws, 1),
       koTko: compareNumeric(guess.koTko, target.koTko, 3),
       submissions: compareNumeric(guess.submissions, target.submissions, 2),
-      p4pRank: compareNumeric(guess.highestP4PRank, target.highestP4PRank, 2, `#${guess.highestP4PRank}`),
+      p4pRank: compareP4PRank(guess.highestP4PRank, target.highestP4PRank),
     },
   };
 }
