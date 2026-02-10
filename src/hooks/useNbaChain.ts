@@ -21,18 +21,18 @@ function saveBestStreak(val: number) {
 }
 
 export function useNbaChain() {
-  const [chain, setChain] = useState<ChainLink[]>(() => [{ playerName: getRandomStarter() }]);
+  const [initialStarter] = useState(() => getRandomStarter());
+  const [chain, setChain] = useState<ChainLink[]>(() => [{ playerName: initialStarter }]);
   const [phase, setPhase] = useState<ChainGamePhase>('playing');
   const [gameOverReason, setGameOverReason] = useState<string | null>(null);
   const [bestStreak, setBestStreak] = useState(loadBestStreak);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [usedPlayers, setUsedPlayers] = useState<Set<string>>(() => {
-    const starter = getRandomStarter();
-    return new Set([starter.toLowerCase()]);
+    return new Set([initialStarter.toLowerCase()]);
   });
 
-  const score = chain.length - 1; // first player doesn't count
+  const score = chain.length - 1;
 
   const lastPlayer = chain[chain.length - 1]?.playerName || '';
 
@@ -70,6 +70,20 @@ export function useNbaChain() {
         );
 
         const result = await resp.json();
+        const displayName = result.fullName || trimmed;
+
+        // Check if the resolved full name is a duplicate or self-connection
+        if (usedPlayers.has(displayName.toLowerCase())) {
+          setValidationError(`${displayName} has already been used in this chain!`);
+          setIsValidating(false);
+          return;
+        }
+
+        if (displayName.toLowerCase() === lastPlayer.toLowerCase()) {
+          setValidationError(`${displayName} is the current player — you need a different player!`);
+          setIsValidating(false);
+          return;
+        }
 
         if (!result.valid) {
           setValidationError(result.reason || `No verified NBA connection found.`);
@@ -77,7 +91,6 @@ export function useNbaChain() {
           return;
         }
 
-        const displayName = result.fullName || trimmed;
         const connection = result.connection || '';
 
         const newLink: ChainLink = { playerName: displayName, connection };
