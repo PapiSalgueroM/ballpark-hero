@@ -4,6 +4,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import { FootballConnect4Board } from '@/components/football-connect4/FootballConnect4Board';
 import { FootballConnect4HowToPlay } from '@/components/football-connect4/FootballConnect4HowToPlay';
+import FootballConnect4Suggestions from '@/components/football-connect4/FootballConnect4Suggestions';
 import { shareResult } from '@/lib/share';
 import { cn } from '@/lib/utils';
 import {
@@ -39,11 +40,18 @@ const FootballConnect4 = () => {
 
   const [playerInput, setPlayerInput] = useState('');
   const [showHowToPlay, setShowHowToPlay] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const handleSubmit = async () => {
     if (!playerInput.trim() || isValidating) return;
+    setShowSuggestions(false);
     await submitPlayer(playerInput);
     setPlayerInput('');
+  };
+
+  const handleSelectSuggestion = (name: string) => {
+    setPlayerInput(name);
+    setShowSuggestions(false);
   };
 
   const colAttr = selectedColumn !== null ? boardConfig.columnAttributes[selectedColumn] : '';
@@ -120,16 +128,28 @@ const FootballConnect4 = () => {
               <span className="font-bold text-primary">"{rowAttr}"</span>
             </p>
             <div className="flex gap-2">
-              <input
-                type="text"
-                value={playerInput}
-                onChange={(e) => setPlayerInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-                placeholder="Enter footballer name..."
-                className="flex-1 rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                autoFocus
-                disabled={isValidating}
-              />
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  value={playerInput}
+                  onChange={(e) => { setPlayerInput(e.target.value); setShowSuggestions(true); }}
+                  onFocus={() => playerInput.trim().length >= 2 && setShowSuggestions(true)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                  placeholder="Enter footballer name..."
+                  className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  autoFocus
+                  disabled={isValidating}
+                />
+                <div className="absolute top-full left-0 right-0 z-50 mt-1">
+                  <FootballConnect4Suggestions
+                    query={playerInput}
+                    columnAttribute={colAttr}
+                    rowAttribute={rowAttr}
+                    onSelect={handleSelectSuggestion}
+                    visible={showSuggestions && !isValidating}
+                  />
+                </div>
+              </div>
               <button
                 onClick={handleSubmit}
                 disabled={!playerInput.trim() || isValidating}
