@@ -33,7 +33,7 @@ function GameSection({ title, games, currentPath, grid }: { title: string; games
             key={g.path}
             to={g.path}
             className={cn(
-              'flex flex-col items-center gap-1 px-6 py-4 rounded-xl border border-border bg-card hover:bg-card/80 transition-all hover:scale-105'
+              'flex flex-col items-center justify-center gap-1 px-6 py-4 rounded-xl border border-border bg-card hover:bg-card/80 transition-all hover:scale-105 text-center'
             )}
           >
             <span className="text-xl font-bold text-primary font-display">{g.label}</span>
