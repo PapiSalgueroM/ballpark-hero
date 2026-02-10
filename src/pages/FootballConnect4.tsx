@@ -13,6 +13,7 @@ import {
   HelpCircle,
   Share2,
   X,
+  SkipForward,
 } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
 
@@ -31,6 +32,7 @@ const FootballConnect4 = () => {
     selectColumn,
     cancelSelection,
     submitPlayer,
+    skipTurn,
     resetGame,
     getShareText,
   } = useFootballConnect4();
@@ -87,6 +89,14 @@ const FootballConnect4 = () => {
               />
               {currentTurn === 'blue' ? 'Blue' : 'Red'}'s Turn
             </div>
+            <button
+              onClick={skipTurn}
+              disabled={isValidating}
+              className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-xs font-semibold bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <SkipForward className="w-3 h-3" />
+              Skip Turn
+            </button>
           </div>
         )}
 
