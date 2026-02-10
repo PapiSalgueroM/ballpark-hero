@@ -63,14 +63,9 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { query, teamName } = body;
+    const { query, teamName, context } = body;
 
     if (!query || typeof query !== "string" || query.length < 2 || query.length > 100) {
-      return new Response(JSON.stringify({ suggestions: [] }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-    if (!teamName || typeof teamName !== "string" || teamName.length > 100) {
       return new Response(JSON.stringify({ suggestions: [] }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -78,6 +73,15 @@ serve(async (req) => {
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    // Build the user prompt based on whether we have a team name, general context, or both
+    let userPrompt = `Partial name: "${query}"`;
+    if (teamName) userPrompt += `, NBA Team: ${teamName}`;
+    if (context) userPrompt += `, Additional criteria: ${context}`;
+
+    const systemPrompt = teamName && !context
+      ? `You are an NBA player database with comprehensive, fully up-to-date knowledge of all NBA players in history through February 10, 2026. You MUST account for ALL recent trades and roster moves — for example Luka Dončić was traded to the Los Angeles Lakers (Feb 2025), Kevin Durant is now on the Houston Rockets (2025), and all other mid-season trades/signings through Feb 2026. Given a partial name and an NBA team, return up to 5 real NBA players whose names match the partial input and have played for that team at any point in their career (regular season or playoffs), including the current 2025-26 season. Return ONLY a JSON array of strings with full player names, e.g. ["LeBron James", "Stephen Curry"]. If no matches, return []. Use conventional name format (first name last name).`
+      : `You are an NBA player database with comprehensive, fully up-to-date knowledge of all NBA players in history through February 10, 2026. You MUST account for ALL recent trades and roster moves — Luka Dončić to Lakers (Feb 2025), Kevin Durant to Rockets (2025), etc. Given a partial player name and one or two NBA attributes/criteria, return up to 5 real NBA players whose names match the partial input AND satisfy ALL given criteria. Attributes can be team names, awards (MVP, DPOY, etc.), stats thresholds, or other categories. Return ONLY a JSON array of strings with full player names, e.g. ["LeBron James", "Stephen Curry"]. If no matches, return []. Use conventional name format (first name last name). Be generous with partial name matching — "wemby" should match "Victor Wembanyama", "bron" should match "LeBron James", nicknames and partial spellings should work.`;
 
     const response = await fetch(
       "https://ai.gateway.lovable.dev/v1/chat/completions",
@@ -90,14 +94,8 @@ serve(async (req) => {
         body: JSON.stringify({
           model: "google/gemini-2.5-flash-lite",
           messages: [
-            {
-              role: "system",
-              content: `You are an NBA player database with comprehensive, fully up-to-date knowledge of all NBA players in history through February 10, 2026. You MUST account for ALL recent trades and roster moves — for example Luka Dončić was traded to the Los Angeles Lakers (Feb 2025), Kevin Durant is now on the Houston Rockets (2025), and all other mid-season trades/signings through Feb 2026. Given a partial name and an NBA team, return up to 5 real NBA players whose names match the partial input and have played for that team at any point in their career (regular season or playoffs), including the current 2025-26 season. Return ONLY a JSON array of strings with full player names, e.g. ["LeBron James", "Stephen Curry"]. If no matches, return []. Use conventional name format (first name last name).`,
-            },
-            {
-              role: "user",
-              content: `Partial name: "${query}", NBA Team: ${teamName}`,
-            },
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt },
           ],
         }),
       }
