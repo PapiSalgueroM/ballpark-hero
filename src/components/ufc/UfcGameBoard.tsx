@@ -8,17 +8,19 @@ interface UfcGameBoardProps {
 
 const HEADERS = [
   { key: 'fighter', label: 'FIGHTER', emoji: '🥊' },
-  { key: 'yearsActive', label: 'YEARS', emoji: '📅' },
+  { key: 'yearsActive', label: 'YRS', emoji: '📅' },
   { key: 'weightClass', label: 'WEIGHT', emoji: '⚖️' },
   { key: 'nationality', label: 'NAT', emoji: '🌍' },
   { key: 'age', label: 'AGE', emoji: '🎂' },
-  { key: 'record', label: 'RECORD', emoji: '📋' },
+  { key: 'wins', label: 'WINS', emoji: '✅' },
+  { key: 'losses', label: 'LOSSES', emoji: '❌' },
+  { key: 'draws', label: 'DRAWS', emoji: '🤝' },
   { key: 'koTko', label: 'KO/TKO', emoji: '💥' },
   { key: 'submissions', label: 'SUBS', emoji: '🔒' },
   { key: 'p4pRank', label: 'P4P', emoji: '🏆' },
 ];
 
-const cellKeys = ['yearsActive', 'weightClass', 'nationality', 'age', 'record', 'koTko', 'submissions', 'p4pRank'] as const;
+const cellKeys = ['yearsActive', 'weightClass', 'nationality', 'age', 'wins', 'losses', 'draws', 'koTko', 'submissions', 'p4pRank'] as const;
 
 function CellComponent({ cell, animDelay }: { cell: UfcCellResult; animDelay: number }) {
   const statusClasses = {
@@ -49,7 +51,7 @@ function GuessRow({ guess }: { guess: UfcGuessResult }) {
   return (
     <div
       className="grid gap-1.5 mb-1.5"
-      style={{ gridTemplateColumns: '130px repeat(8, minmax(85px, 1fr))' }}
+      style={{ gridTemplateColumns: '120px repeat(10, minmax(75px, 1fr))' }}
     >
       <div
         className={cn(
@@ -72,9 +74,9 @@ function EmptyRow() {
   return (
     <div
       className="grid gap-1.5 mb-1.5"
-      style={{ gridTemplateColumns: '130px repeat(8, minmax(85px, 1fr))' }}
+      style={{ gridTemplateColumns: '120px repeat(10, minmax(75px, 1fr))' }}
     >
-      {Array.from({ length: 9 }).map((_, i) => (
+      {Array.from({ length: 11 }).map((_, i) => (
         <div key={i} className="rounded-lg h-16 bg-muted/40 border border-border/30" />
       ))}
     </div>
@@ -86,10 +88,10 @@ export function UfcGameBoard({ guesses, maxGuesses }: UfcGameBoardProps) {
 
   return (
     <div className="overflow-x-auto pb-4">
-      <div style={{ minWidth: '880px' }}>
+      <div style={{ minWidth: '960px' }}>
         <div
           className="grid gap-1.5 mb-2"
-          style={{ gridTemplateColumns: '130px repeat(8, minmax(85px, 1fr))' }}
+          style={{ gridTemplateColumns: '120px repeat(10, minmax(75px, 1fr))' }}
         >
           {HEADERS.map((h) => (
             <div key={h.key} className="text-center py-2 flex flex-col items-center gap-0.5">
