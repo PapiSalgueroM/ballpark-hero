@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.nba-connect4-validate]
 verify_jwt = false
+
+[functions.nba-chain-validate]
+verify_jwt = false
