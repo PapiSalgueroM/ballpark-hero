@@ -172,6 +172,14 @@ export function useFootballConnect4() {
     [phase, selectedColumn, targetRow, board, currentTurn, boardConfig, usedPlayers]
   );
 
+  const skipTurn = useCallback(() => {
+    if (phase !== 'playing') return;
+    setCurrentTurn(currentTurn === 'blue' ? 'red' : 'blue');
+    setSelectedColumn(null);
+    setTargetRow(null);
+    setValidationError(null);
+  }, [phase, currentTurn]);
+
   const resetGame = useCallback(() => {
     setBoardConfig(getRandomBoard());
     setBoard(createEmptyBoard());
@@ -210,6 +218,7 @@ export function useFootballConnect4() {
     selectColumn,
     cancelSelection,
     submitPlayer,
+    skipTurn,
     resetGame,
     getShareText,
   };
