@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.nba-evaluate-lineup]
 verify_jwt = false
+
+[functions.nba-connect4-validate]
+verify_jwt = false
