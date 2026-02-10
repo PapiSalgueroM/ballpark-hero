@@ -9,6 +9,7 @@ import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
 import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, Share2 } from 'lucide-react';
 import { shareResult } from '@/lib/share';
+import AdBanner from '@/components/ads/AdBanner';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -299,6 +300,8 @@ const LineupBuilder = () => {
             </div>
           </div>
         )}
+
+        <AdBanner slot="1234567896" format="horizontal" className="mt-8" />
 
         <GameNav />
         <Footer />

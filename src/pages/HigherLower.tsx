@@ -6,6 +6,7 @@ import { RotateCcw, HelpCircle, Share2 } from 'lucide-react';
 import { useState } from 'react';
 import { shareResult } from '@/lib/share';
 import { cn } from '@/lib/utils';
+import AdBanner from '@/components/ads/AdBanner';
 
 type StatKey = 'appearances' | 'goals' | 'assists' | 'trophies' | 'internationalCaps';
 
@@ -138,6 +139,8 @@ const HigherLowerGame = () => {
             </div>
           </div>
         )}
+
+        <AdBanner slot="1234567894" format="horizontal" className="mt-8" />
 
         <HigherLowerHowToPlay open={showHelp} onOpenChange={setShowHelp} />
         <GameNav />
