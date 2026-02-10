@@ -89,44 +89,57 @@ serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "google/gemini-2.5-flash",
+          model: "google/gemini-2.5-pro",
           messages: [
             {
               role: "system",
-              content: `You are an NBA expert verifier. Your knowledge covers all NBA players, rosters, and transactions through February 10, 2026.
+              content: `You are a strict NBA roster verifier. You must determine if two NBA players were EVER on the same NBA team roster at the same time during any season through February 10, 2026.
 
-TASK: Determine if two NBA players were EVER teammates on the same NBA team during the same season. They must have ACTUALLY been on the same roster at the same time — even partial seasons or mid-season trades count, but they must have overlapping time on the team.
+CRITICAL RULES:
+1. ONLY mark valid:true if you are 100% CERTAIN they shared a roster. When in doubt, say false.
+2. A wrong "valid: true" is MUCH worse than a wrong "valid: false". Be conservative.
+3. Do NOT confuse "played against each other" with "were teammates."
+4. Do NOT hallucinate connections. If you cannot recall a specific shared roster, say false.
 
-ACCURACY IS CRITICAL. Do NOT guess or fabricate connections. If you are not confident they were teammates, respond with valid: false. A wrong "valid: true" is worse than a wrong "valid: false".
-
-KEY ROSTER FACTS (use these to avoid common mistakes):
-- James Harden: OKC Thunder (2009-2012), Houston Rockets (2012-2021), Brooklyn Nets (2021-2022), Philadelphia 76ers (2022-2024), LA Clippers (2024-present). He was NEVER on the Spurs.
+VERIFIED CAREER HISTORIES (reference these to avoid mistakes):
+- Nikola Jokić: Denver Nuggets (2015-present). ONLY TEAM EVER.
+- Russell Westbrook: OKC Thunder (2008-2019), Houston Rockets (2019-2020), Washington Wizards (2020-2021), LA Lakers (2021-2022), LA Clippers (2022-2023), Denver Nuggets (2023-2024 — signed Feb 2024, waived). NEVER on same team as Jokić except briefly with Nuggets in 2023-24 if rosters overlapped.
+- James Harden: OKC Thunder (2009-2012), Houston Rockets (2012-2021), Brooklyn Nets (2021-2022), Philadelphia 76ers (2022-2024), LA Clippers (2024-present). NEVER on the Spurs.
 - LeBron James: Cleveland Cavaliers (2003-2010, 2014-2018), Miami Heat (2010-2014), LA Lakers (2018-present)
-- Stephen Curry: Golden State Warriors (2009-present)
+- Stephen Curry: Golden State Warriors (2009-present). ONLY TEAM EVER.
 - Kevin Durant: Seattle/OKC Thunder (2007-2016), Golden State Warriors (2016-2019), Brooklyn Nets (2019-2023), Phoenix Suns (2023-2025), Houston Rockets (2025-present)
-- Kobe Bryant: LA Lakers (1996-2016)
+- Kobe Bryant: LA Lakers (1996-2016). ONLY TEAM EVER.
 - Shaquille O'Neal: Orlando Magic (1992-1996), LA Lakers (1996-2004), Miami Heat (2004-2008), Phoenix Suns (2008-2009), Cleveland Cavaliers (2009-2010), Boston Celtics (2010-2011)
 - Jimmy Butler: Chicago Bulls (2011-2017), Minnesota Timberwolves (2017-2018), Philadelphia 76ers (2018-2019), Miami Heat (2019-2025), Golden State Warriors (2025-present)
 - Luka Dončić: Dallas Mavericks (2018-2025), LA Lakers (2025-present)
 - Bronny James: LA Lakers (2024-present)
 - Tracy McGrady: Toronto Raptors (1997-2000), Orlando Magic (2000-2004), Houston Rockets (2004-2010), New York Knicks (2010), Detroit Pistons (2010), Atlanta Hawks (2011-2012), San Antonio Spurs (2013)
 - Chris Paul: New Orleans Hornets (2005-2011), LA Clippers (2011-2017), Houston Rockets (2017-2019), OKC Thunder (2019-2020), Phoenix Suns (2020-2023), Golden State Warriors (2023-2024), San Antonio Spurs (2024-present)
+- Giannis Antetokounmpo: Milwaukee Bucks (2013-present). ONLY TEAM EVER.
+- Tim Duncan: San Antonio Spurs (1997-2016). ONLY TEAM EVER.
+- Damian Lillard: Portland Trail Blazers (2012-2023), Milwaukee Bucks (2023-present)
+- Anthony Davis: New Orleans Pelicans (2012-2019), LA Lakers (2019-present)
+- Kyrie Irving: Cleveland Cavaliers (2011-2017), Boston Celtics (2017-2019), Brooklyn Nets (2019-2023), Dallas Mavericks (2023-present)
+- Carmelo Anthony: Denver Nuggets (2003-2011), New York Knicks (2011-2017), OKC Thunder (2017-2018), Houston Rockets (2018-2019), Portland Trail Blazers (2019-2021), LA Lakers (2021-2022)
+- Dwight Howard: Orlando Magic (2004-2012), LA Lakers (2012-2013), Houston Rockets (2013-2016), Atlanta Hawks (2016-2017), Charlotte Hornets (2017-2018), Washington Wizards (2018-2019), LA Lakers (2019-2021), Philadelphia 76ers (2021-2022), Taoyuan Leopards (2022-present)
+- Joel Embiid: Philadelphia 76ers (2014-present). ONLY TEAM EVER (through Feb 2026).
+- Jayson Tatum: Boston Celtics (2017-present). ONLY TEAM EVER.
 
-Also resolve nicknames/partial names to full names (e.g., "KD" = Kevin Durant, "Bron" = LeBron James, "Wemby" = Victor Wembanyama, "Shaq" = Shaquille O'Neal).
+Also resolve nicknames/partial names (e.g., "KD" = Kevin Durant, "Bron" = LeBron James, "Wemby" = Victor Wembanyama, "Shaq" = Shaquille O'Neal, "AI" = Allen Iverson, "The Answer" = Allen Iverson).
 
 Respond with ONLY a valid JSON object (no markdown, no code blocks):
 {
   "valid": true or false,
   "connection": "Connected via [Team Name] ([Season(s)])" (only if valid),
-  "reason": "Brief explanation of why valid or invalid",
-  "fullName": "Full proper name of the SECOND/NEW player ONLY — never the first player"
+  "reason": "Brief explanation",
+  "fullName": "Full proper name of the SECOND/NEW player ONLY"
 }
 
-CRITICAL: "fullName" must be the NEW player's name. Only mark valid:true if you are CONFIDENT they shared a roster.`,
+CRITICAL: "fullName" must be the NEW player's name, never the previous player. Be CONSERVATIVE — only confirm connections you are certain about.`,
             },
             {
               role: "user",
-              content: `Were "${previousPlayer}" and "${newPlayer}" ever teammates on the same NBA team?`,
+              content: `Were "${previousPlayer}" and "${newPlayer}" ever teammates on the same NBA team? Think carefully about each player's full career history before answering.`,
             },
           ],
         }),
