@@ -191,7 +191,7 @@ const NbaConnect4 = () => {
                         )}
                       >
                         {cell && (
-                          <span className="text-[7px] md:text-[9px] font-semibold text-white text-center leading-tight px-0.5 truncate">
+                          <span className="text-[7px] md:text-[9px] font-semibold text-white text-center leading-tight px-0.5 break-words line-clamp-2">
                             {cell.playerName}
                           </span>
                         )}
@@ -246,9 +246,10 @@ const NbaConnect4 = () => {
               columnAttribute={board.columnAttributes[selectedCol]}
               rowAttribute={board.rowAttributes[targetRow]}
               visible={!isValidating && !!playerInput.trim()}
-              onSelect={(name) => {
+              onSelect={async (name) => {
                 setPlayerInput(name);
-                submitPlayer(name);
+                await submitPlayer(name);
+                setPlayerInput('');
               }}
             />
             {validationError && (
