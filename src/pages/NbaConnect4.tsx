@@ -3,6 +3,7 @@ import { useNbaConnect4 } from '@/hooks/useNbaConnect4';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import { NbaConnect4HowToPlay } from '@/components/nba-connect4/NbaConnect4HowToPlay';
+import Connect4Suggestions from '@/components/nba-connect4/Connect4Suggestions';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Loader2, AlertCircle, HelpCircle, SkipForward, ArrowDown } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
@@ -240,6 +241,16 @@ const NbaConnect4 = () => {
                 )}
               </button>
             </div>
+            <Connect4Suggestions
+              query={playerInput}
+              columnAttribute={board.columnAttributes[selectedCol]}
+              rowAttribute={board.rowAttributes[targetRow]}
+              visible={!isValidating && !!playerInput.trim()}
+              onSelect={(name) => {
+                setPlayerInput(name);
+                submitPlayer(name);
+              }}
+            />
             {validationError && (
               <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
                 <AlertCircle className="w-4 h-4 shrink-0" />
