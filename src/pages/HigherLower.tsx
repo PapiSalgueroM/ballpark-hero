@@ -127,7 +127,7 @@ const HigherLowerGame = () => {
                 </button>
                 <button
                   onClick={() => {
-                    const text = `⚽ Higher or Lower\nStreak: ${streak} | Best: ${bestStreak}\n\nPlay at footyfein.lovable.app/higher-lower`;
+                    const text = `⚽ Higher or Lower\nStreak: ${streak} | Best: ${bestStreak}\n\nPlay at douknowball.lovable.app/higher-lower`;
                     shareResult(text, 'Higher or Lower');
                   }}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"

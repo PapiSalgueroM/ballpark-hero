@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const allowedOrigins = [
-  "https://footyfein.lovable.app",
+  "https://douknowball.lovable.app",
   "https://id-preview--d69b1c20-4988-43ae-947e-7c6feb3ed683.lovable.app",
   "http://localhost:8080",
   "http://localhost:5173",

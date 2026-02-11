@@ -20,12 +20,12 @@ const TermsOfService = () => {
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">1. Acceptance of Terms</h2>
-          <p>By accessing or using FootyFein ("the Site"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Site.</p>
+          <p>By accessing or using DoUKnowBall ("the Site"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Site.</p>
         </div>
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">2. Description of Service</h2>
-          <p>FootyFein is a free, browser-based entertainment platform that provides sports-themed trivia and guessing games. Current game modes include:</p>
+          <p>DoUKnowBall is a free, browser-based entertainment platform that provides sports-themed trivia and guessing games. Current game modes include:</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li><strong>Footle</strong> — Guess the footballer from stat-based clues in 8 tries</li>
             <li><strong>Career Quiz</strong> — Identify a player from their season-by-season career history</li>
@@ -57,22 +57,22 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">4. Intellectual Property</h2>
-          <p>All original content, features, and functionality of FootyFein are owned by FootyFein and are protected by international copyright, trademark, and other intellectual property laws. All player names, fighter names, club names, logos, and brand identifiers referenced on this Site are the property of their respective owners and are used solely for identification and informational purposes. FootyFein is not affiliated with, endorsed by, or sponsored by FIFA, EA Sports, the UFC, any football club, MMA organization, league, or governing body.</p>
+          <p>All original content, features, and functionality of DoUKnowBall are owned by DoUKnowBall and are protected by international copyright, trademark, and other intellectual property laws. All player names, fighter names, club names, logos, and brand identifiers referenced on this Site are the property of their respective owners and are used solely for identification and informational purposes. DoUKnowBall is not affiliated with, endorsed by, or sponsored by FIFA, EA Sports, the UFC, any football club, MMA organization, league, or governing body.</p>
         </div>
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">5. Disclaimer of Warranties</h2>
-          <p>The Site is provided on an "as is" and "as available" basis. FootyFein makes no representations or warranties of any kind, express or implied, regarding the accuracy, reliability, completeness, or availability of the Site or its content. Player statistics and data presented in the games are approximations for entertainment purposes and may not reflect exact real-world figures.</p>
+          <p>The Site is provided on an "as is" and "as available" basis. DoUKnowBall makes no representations or warranties of any kind, express or implied, regarding the accuracy, reliability, completeness, or availability of the Site or its content. Player statistics and data presented in the games are approximations for entertainment purposes and may not reflect exact real-world figures.</p>
         </div>
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">6. Limitation of Liability</h2>
-          <p>To the fullest extent permitted by law, FootyFein and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, arising from your use of or inability to use the Site.</p>
+          <p>To the fullest extent permitted by law, DoUKnowBall and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, arising from your use of or inability to use the Site.</p>
         </div>
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">7. Indemnification</h2>
-          <p>You agree to indemnify, defend, and hold harmless FootyFein and its operators from any claims, liabilities, damages, losses, or expenses arising from your use of the Site or your violation of these Terms.</p>
+          <p>You agree to indemnify, defend, and hold harmless DoUKnowBall and its operators from any claims, liabilities, damages, losses, or expenses arising from your use of the Site or your violation of these Terms.</p>
         </div>
 
         <div>
@@ -82,7 +82,7 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">9. Modifications to Terms</h2>
-          <p>FootyFein reserves the right to modify these Terms at any time. Changes will be effective immediately upon posting to the Site. Your continued use of the Site after changes are posted constitutes your acceptance of the revised Terms.</p>
+          <p>DoUKnowBall reserves the right to modify these Terms at any time. Changes will be effective immediately upon posting to the Site. Your continued use of the Site after changes are posted constitutes your acceptance of the revised Terms.</p>
         </div>
 
         <div>
@@ -92,12 +92,12 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">11. Contact</h2>
-          <p>If you have any questions about these Terms of Service, please contact us at <a href="mailto:footyfein1@gmail.com" className="underline hover:text-foreground transition-colors">footyfein1@gmail.com</a>.</p>
+          <p>If you have any questions about these Terms of Service, please contact us at <a href="mailto:douknowball@gmail.com" className="underline hover:text-foreground transition-colors">douknowball@gmail.com</a>.</p>
         </div>
       </section>
 
       <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
-        <p>© 2026 FootyFein. All rights reserved.</p>
+        <p>© 2026 DoUKnowBall. All rights reserved.</p>
         <p>All logos, club crests, player names, fighter names, and brands are the property of their respective owners and are used for identification purposes only. This application is not affiliated with or endorsed by FIFA, EA Sports, the UFC, the NBA, or any football club, MMA organization, basketball team, or sports governing body.</p>
         <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>
       </div>

@@ -383,7 +383,7 @@ const NbaLineup = () => {
                   );
                   const dir = challenge?.direction === 'highest' ? '⬆️' : '⬇️';
                   const totalLine = totalStat !== null ? `\nTotal: ${Number.isInteger(totalStat) ? totalStat : totalStat.toFixed(1)} ${challenge?.unit}` : '';
-                  const text = `🏀 My NBA Starting 5\n${dir} ${challenge?.stat} Challenge\n${verdict.rating}\n"${verdict.headline}"\n\n${lines.join('\n')}${totalLine}\n\nPlay at footyfein.lovable.app/nba-starting-5`;
+                  const text = `🏀 My NBA Starting 5\n${dir} ${challenge?.stat} Challenge\n${verdict.rating}\n"${verdict.headline}"\n\n${lines.join('\n')}${totalLine}\n\nPlay at douknowball.lovable.app/nba-starting-5`;
                   shareResult(text, 'NBA Starting 5');
                 }}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
