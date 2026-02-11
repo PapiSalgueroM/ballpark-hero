@@ -105,7 +105,8 @@ Tasks:
 1. Check if the player name is a real NBA player.
 2. Check if they have EVER played for the given NBA team (regular season or playoffs). Account for team name changes (e.g., Seattle SuperSonics → Oklahoma City Thunder, New Jersey Nets → Brooklyn Nets).${positionCheck}${statLookup}
 
-Response format: {"valid": true/false, "reason": "short explanation"${positionField}${statField}}`,
+Response format: {"valid": true/false, "reason": "short explanation", "fullName": "Player Full First and Last Name"${positionField}${statField}}
+The "fullName" field MUST always contain the player's commonly known full name (first and last). For example: "LeBron" → "LeBron James", "Curry" → "Stephen Curry", "MJ" → "Michael Jordan".`,
             },
             {
               role: "user",

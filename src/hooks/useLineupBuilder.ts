@@ -134,7 +134,8 @@ export function useLineupBuilder() {
   }, [filledCount, startSpin]);
 
   const submitPlayer = useCallback(
-    async (playerName: string) => {
+    async (inputName: string) => {
+      let playerName = inputName;
       if (selectedPositionIndex === null || !currentTeam) return;
       const position = positions[selectedPositionIndex];
       if (!position) return;
@@ -175,6 +176,11 @@ export function useLineupBuilder() {
           setValidationError(result.reason || `${playerName} hasn't played for ${currentTeam.name}`);
           setIsValidating(false);
           return;
+        }
+
+        // Use the full name returned by AI if available
+        if (result.fullName && typeof result.fullName === 'string') {
+          playerName = result.fullName;
         }
       } catch {
         // On error allow through
