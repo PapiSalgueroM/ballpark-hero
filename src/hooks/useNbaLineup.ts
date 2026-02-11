@@ -133,7 +133,8 @@ export function useNbaLineup() {
   }, [filledCount]);
 
   const submitPlayer = useCallback(
-    async (playerName: string) => {
+    async (inputName: string) => {
+      let playerName = inputName;
       if (selectedPosition === null || !currentTeam) return;
       const position = NBA_POSITIONS[selectedPosition];
       if (!position) return;
@@ -177,6 +178,11 @@ export function useNbaLineup() {
           setValidationError(result.reason || `${playerName} is not valid for this pick.`);
           setIsValidating(false);
           return;
+        }
+
+        // Use full name returned by AI
+        if (result.fullName && typeof result.fullName === 'string') {
+          playerName = result.fullName;
         }
 
         if (result.statValue !== undefined && result.statValue !== null) {
