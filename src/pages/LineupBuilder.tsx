@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS, type Formation } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
@@ -7,7 +7,8 @@ import FormationPitch from '@/components/lineup/FormationPitch';
 import PlayerSuggestions from '@/components/lineup/PlayerSuggestions';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
-import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, Share2 } from 'lucide-react';
+import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, Share2, HelpCircle } from 'lucide-react';
+import { LineupHowToPlay } from '@/components/lineup/LineupHowToPlay';
 import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 
@@ -39,6 +40,15 @@ const LineupBuilder = () => {
   } = useLineupBuilder();
 
   const [playerInput, setPlayerInput] = useState('');
+  const [showRules, setShowRules] = useState(false);
+
+  useEffect(() => {
+    const seen = localStorage.getItem('lineup-rules-seen');
+    if (!seen) {
+      setShowRules(true);
+      localStorage.setItem('lineup-rules-seen', '1');
+    }
+  }, []);
 
   const handleSubmitPlayer = async () => {
     if (!playerInput.trim() || isValidating) return;
@@ -59,7 +69,14 @@ const LineupBuilder = () => {
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-8">
+        <header className="text-center mb-8 relative">
+          <button
+            onClick={() => setShowRules(true)}
+            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors"
+            aria-label="How to play"
+          >
+            <HelpCircle className="w-6 h-6" />
+          </button>
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.15em] text-primary font-display mb-1">
             BUILD YOUR XI
           </h1>
@@ -306,6 +323,8 @@ const LineupBuilder = () => {
         <GameNav />
         <Footer />
       </div>
+
+      <LineupHowToPlay open={showRules} onOpenChange={setShowRules} />
     </main>
   );
 };
