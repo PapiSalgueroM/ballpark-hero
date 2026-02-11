@@ -65,9 +65,11 @@ const Index = () => {
                 className={cn(
                   'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
                   difficulty === mode
-                    ? mode === 'insane'
-                      ? 'bg-destructive text-destructive-foreground'
-                      : 'bg-primary text-primary-foreground'
+                    ? mode === 'easy'
+                      ? 'bg-correct text-correct-foreground'
+                      : mode === 'hard'
+                        ? 'bg-yellow-500 text-white'
+                        : 'bg-destructive text-destructive-foreground'
                     : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                 )}
               >
