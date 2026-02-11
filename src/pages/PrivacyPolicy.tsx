@@ -55,12 +55,12 @@ const PrivacyPolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">7. Contact</h2>
-          <p>If you have any questions about this privacy policy, please contact us at <a href="mailto:footyfein1@gmail.com" className="underline hover:text-foreground transition-colors">footyfein1@gmail.com</a>.</p>
+          <p>If you have any questions about this privacy policy, please contact us at <a href="mailto:douknowball@gmail.com" className="underline hover:text-foreground transition-colors">douknowball@gmail.com</a>.</p>
         </div>
       </section>
 
       <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
-        <p>© 2026 FootyFein. All rights reserved.</p>
+        <p>© 2026 DoUKnowBall. All rights reserved.</p>
         <p>All logos, club crests, player names, fighter names, and brands are the property of their respective owners and are used for identification purposes only. This application is not affiliated with or endorsed by FIFA, EA Sports, the UFC, the NBA, or any football club, MMA organization, basketball team, or sports governing body.</p>
         <Link to="/terms" className="underline hover:text-foreground transition-colors">Terms of Service</Link>
       </div>

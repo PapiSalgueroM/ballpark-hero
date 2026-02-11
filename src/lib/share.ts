@@ -1,6 +1,6 @@
 import { toast } from 'sonner';
 
-export async function shareResult(text: string, title = 'FootyFein') {
+export async function shareResult(text: string, title = 'DoUKnowBall') {
   try {
     if (navigator.share) {
       await navigator.share({ title, text });

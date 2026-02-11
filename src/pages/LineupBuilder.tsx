@@ -306,7 +306,7 @@ const LineupBuilder = () => {
                   const lines = filledSlotsArray.map(
                     (s) => `${s.label} – ${s.playerName} (${s.isNation ? '🏳️' : '🏟️'} ${s.assignedTeam})`
                   );
-                  const text = `⚽ My Build Your XI – ${formation}\n${verdict.rating}\n"${verdict.headline}"\n\n${lines.join('\n')}\n\nPlay at footyfein.lovable.app/build-your-xi`;
+                  const text = `⚽ My Build Your XI – ${formation}\n${verdict.rating}\n"${verdict.headline}"\n\n${lines.join('\n')}\n\nPlay at douknowball.lovable.app/build-your-xi`;
                   shareResult(text, 'Build Your XI');
                 }}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"

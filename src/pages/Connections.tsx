@@ -225,7 +225,7 @@ const Connections = () => {
                       ? `🎉 Connections Puzzle ${(puzzleIndex % totalPuzzles) + 1}\nSolved with ${lives} ${lives === 1 ? 'life' : 'lives'} remaining!`
                       : `😞 Connections Puzzle ${(puzzleIndex % totalPuzzles) + 1}\nCouldn't crack all the connections`;
                     const groups = solvedGroups.map(g => `✅ ${g.category}`).join('\n');
-                    shareResult(`${result}\n${groups}\n\nPlay at footyfein.lovable.app/connections`, 'Connections');
+                    shareResult(`${result}\n${groups}\n\nPlay at douknowball.lovable.app/connections`, 'Connections');
                   }}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
                 >

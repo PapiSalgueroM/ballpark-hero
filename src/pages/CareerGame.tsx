@@ -226,7 +226,7 @@ const CareerGame = () => {
                     const result = gameStatus === 'won'
                       ? `🎉 Career Quiz\nGuessed ${targetPlayer.name} in ${guessesUsed} ${guessesUsed === 1 ? 'guess' : 'guesses'} with ${boxesUsed} ${boxesUsed === 1 ? 'box' : 'boxes'} uncovered!`
                       : `😞 Career Quiz\nCouldn't guess ${targetPlayer.name}`;
-                    shareResult(`${result}\n\nPlay at footyfein.lovable.app/career`, 'Career Quiz');
+                    shareResult(`${result}\n\nPlay at douknowball.lovable.app/career`, 'Career Quiz');
                   }}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
                 >
