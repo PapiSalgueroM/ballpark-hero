@@ -12,11 +12,23 @@ const STAT_LABELS: Record<StatKey, string> = {
   internationalCaps: 'Int\'l Caps',
 };
 
-function getRandomPlayer(exclude: string[]): HigherLowerPlayer {
+function getRandomPlayer(exclude: string[], currentPlayer?: HigherLowerPlayer): HigherLowerPlayer {
   const available = higherLowerPlayers.filter(p => !exclude.includes(p.name));
   if (available.length === 0) {
     return higherLowerPlayers[Math.floor(Math.random() * higherLowerPlayers.length)];
   }
+
+  // If we have a current player, ensure at least one stat where current >= next
+  if (currentPlayer) {
+    const statKeys: (keyof HigherLowerPlayer['stats'])[] = ['appearances', 'goals', 'assists', 'trophies', 'internationalCaps'];
+    const valid = available.filter(p =>
+      statKeys.some(stat => currentPlayer.stats[stat] >= p.stats[stat])
+    );
+    if (valid.length > 0) {
+      return valid[Math.floor(Math.random() * valid.length)];
+    }
+  }
+
   return available[Math.floor(Math.random() * available.length)];
 }
 
@@ -32,7 +44,7 @@ function getStreakReaction(streak: number): { emoji: string; message: string } {
 
 export function useHigherLower() {
   const [currentPlayer, setCurrentPlayer] = useState<HigherLowerPlayer>(() => getRandomPlayer([]));
-  const [nextPlayer, setNextPlayer] = useState<HigherLowerPlayer>(() => getRandomPlayer([currentPlayer.name]));
+  const [nextPlayer, setNextPlayer] = useState<HigherLowerPlayer>(() => getRandomPlayer([currentPlayer.name], currentPlayer));
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
   const [gameStatus, setGameStatus] = useState<'playing' | 'lost'>('playing');
@@ -59,7 +71,7 @@ export function useHigherLower() {
         if (newStreak > bestStreak) setBestStreak(newStreak);
         // Shift: next becomes current, pick new next
         const usedNames = [nextPlayer.name];
-        const newNext = getRandomPlayer(usedNames);
+        const newNext = getRandomPlayer(usedNames, nextPlayer);
         setCurrentPlayer(nextPlayer);
         setNextPlayer(newNext);
         setRevealedStats(false);
@@ -74,7 +86,7 @@ export function useHigherLower() {
 
   const resetGame = useCallback(() => {
     const p1 = getRandomPlayer([]);
-    const p2 = getRandomPlayer([p1.name]);
+    const p2 = getRandomPlayer([p1.name], p1);
     setCurrentPlayer(p1);
     setNextPlayer(p2);
     setStreak(0);
