@@ -968,4 +968,112 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Had a famous touchline celebration', players: ['José Mourinho', 'Alex Ferguson', 'Jürgen Klopp', 'Arsène Wenger'], difficulty: 'insane' },
     ],
   },
+  {
+    id: 'puzzle-64',
+    groups: [
+      { category: 'Played for AC Milan', players: ['Kaká', 'Clarence Seedorf', 'Filippo Inzaghi', 'Cafu'], difficulty: 'easy' },
+      { category: 'From Canada', players: ['Alphonso Davies', 'Jonathan David', 'Atiba Hutchinson', 'Dwayne De Rosario'], difficulty: 'medium' },
+      { category: 'Won the Ballon d\'Or in the 2000s', players: ['Ronaldinho Gaúcho', 'Fabio Cannavaro', 'Kaká', 'Cristiano Ronaldo'], difficulty: 'hard' },
+      { category: 'Played in the 2006 World Cup Final', players: ['Marco Materazzi', 'Zinedine Zidane', 'Fabio Cannavaro', 'Thierry Henry'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-65',
+    groups: [
+      { category: 'Played for Chelsea', players: ['Gianfranco Zola', 'Claude Makélélé', 'Michael Essien', 'Arjen Robben'], difficulty: 'easy' },
+      { category: 'From Côte d\'Ivoire', players: ['Didier Drogba', 'Yaya Touré', 'Gervinho', 'Wilfried Bony'], difficulty: 'medium' },
+      { category: 'Scored a World Cup-winning goal', players: ['Mario Götze', 'Andrés Iniesta', 'Geoff Hurst', 'Pelé'], difficulty: 'hard' },
+      { category: 'Had their shirt number retired', players: ['Paolo Maldini', 'Diego Maradona', 'Bobby Moore', 'Gianluigi Buffon'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-66',
+    groups: [
+      { category: 'Played for Tottenham Hotspur', players: ['Dimitar Berbatov', 'Rafael van der Vaart', 'Jermain Defoe', 'Robbie Keane'], difficulty: 'easy' },
+      { category: 'From Colombia', players: ['Carlos Valderrama', 'Freddy Rincón', 'Juan Cuadrado', 'Luis Díaz'], difficulty: 'medium' },
+      { category: 'Won the Premier League Player of the Season', players: ['Cristiano Ronaldo', 'Mohamed Salah', 'Kevin De Bruyne', 'Erling Haaland'], difficulty: 'hard' },
+      { category: 'Scored in a penalty shootout at a World Cup Final', players: ['Andrea Pirlo', 'Zinedine Zidane', 'Kylian Mbappé', 'Lionel Messi'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-67',
+    groups: [
+      { category: 'Played for Real Sociedad', players: ['Antoine Griezmann', 'Martin Ødegaard', 'David Silva', 'Xabi Alonso'], difficulty: 'easy' },
+      { category: 'From DR Congo', players: ['Yannick Bolasie', 'Cédric Bakambu', 'Dieumerci Mbokani', 'Hérita Ilunga'], difficulty: 'medium' },
+      { category: 'Won the Champions League with Real Madrid 3 times in a row', players: ['Cristiano Ronaldo', 'Sergio Ramos', 'Luka Modrić', 'Karim Benzema'], difficulty: 'hard' },
+      { category: 'Scored a header in a Champions League Final', players: ['Sergio Ramos', 'Gareth Bale', 'Didier Drogba', 'Samuel Eto\'o'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-68',
+    groups: [
+      { category: 'Played for Athletic Bilbao', players: ['Fernando Llorente', 'Iker Muniain', 'Aritz Aduriz', 'Andoni Zubizarreta'], difficulty: 'easy' },
+      { category: 'From Mali', players: ['Frédéric Kanouté', 'Seydou Keita', 'Yves Bissouma', 'Moussa Sissoko'], difficulty: 'medium' },
+      { category: 'Scored 30+ goals in a single Premier League season', players: ['Mohamed Salah', 'Alan Shearer', 'Erling Haaland', 'Robin van Persie'], difficulty: 'hard' },
+      { category: 'Played in 4+ different top-5 European leagues', players: ['Zlatan Ibrahimović', 'David Beckham', 'Kevin-Prince Boateng', 'Michael Owen'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-69',
+    groups: [
+      { category: 'Played for Borussia Mönchengladbach', players: ['Marco Reus', 'Granit Xhaka', 'Juan Arango', 'Denis Zakaria'], difficulty: 'easy' },
+      { category: 'From Zambia', players: ['Patson Daka', 'Christopher Katongo', 'Kalusha Bwalya', 'Emmanuel Mayuka'], difficulty: 'medium' },
+      { category: 'Won the Capocannoniere (Serie A top scorer)', players: ['Gonzalo Higuaín', 'Ciro Immobile', 'Luca Toni', 'Francesco Totti'], difficulty: 'hard' },
+      { category: 'Scored on their Premier League debut', players: ['Sergio Agüero', 'Marcus Rashford', 'Álvaro Morata', 'Romelu Lukaku'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-70',
+    groups: [
+      { category: 'Played for Atalanta', players: ['Gian Piero Gasperini', 'Ademola Lookman', 'Luis Muriel', 'Duván Zapata'], difficulty: 'easy' },
+      { category: 'From Georgia', players: ['Khvicha Kvaratskhelia', 'Giorgi Mamardashvili', 'Willy Sagnol', 'Levan Kobiashvili'], difficulty: 'medium' },
+      { category: 'Won the Premier League with Manchester United in the Fergie era', players: ['Ryan Giggs', 'Paul Scholes', 'Wayne Rooney', 'Nemanja Vidić'], difficulty: 'hard' },
+      { category: 'Had a famous goal against Brazil', players: ['Zinedine Zidane', 'Miroslav Klose', 'James Rodríguez', 'Toni Kroos'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-71',
+    groups: [
+      { category: 'Played for Eintracht Frankfurt', players: ['Kevin Trapp', 'Luka Jović', 'Sébastien Haller', 'Martin Hinteregger'], difficulty: 'easy' },
+      { category: 'From Guinea', players: ['Naby Keïta', 'Florentin Pogba', 'Titi Camara', 'Pascal Feindouno'], difficulty: 'medium' },
+      { category: 'Won the Champions League unbeaten', players: ['Lionel Messi', 'Samuel Eto\'o', 'Andrés Iniesta', 'Xavi Hernández'], difficulty: 'hard' },
+      { category: 'Scored directly from the restart after conceding', players: ['Charlie Adam', 'Fabrizio Ravanelli', 'Obafemi Martins', 'Djibril Cissé'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-72',
+    groups: [
+      { category: 'Played for Lille', players: ['Eden Hazard', 'Nicolas Pépé', 'Victor Osimhen', 'Jonathan David'], difficulty: 'easy' },
+      { category: 'From Iran', players: ['Ali Daei', 'Mehdi Taremi', 'Sardar Azmoun', 'Alireza Jahanbakhsh'], difficulty: 'medium' },
+      { category: 'Won the Golden Glove (Premier League)', players: ['Petr Čech', 'Edwin van der Sar', 'Alisson Becker', 'Ederson'], difficulty: 'hard' },
+      { category: 'Famous for their overhead/bicycle kick', players: ['Pelé', 'Wayne Rooney', 'Cristiano Ronaldo', 'Zlatan Ibrahimović'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-73',
+    groups: [
+      { category: 'Played for PSV Eindhoven', players: ['Romário', 'Ruud van Nistelrooy', 'Arjen Robben', 'Memphis Depay'], difficulty: 'easy' },
+      { category: 'From Gabon', players: ['Pierre-Emerick Aubameyang', 'Mario Lemina', 'Aaron Boupendza', 'Daniel Cousin'], difficulty: 'medium' },
+      { category: 'Won the World Cup with France (2018)', players: ['Kylian Mbappé', 'Antoine Griezmann', 'N\'Golo Kanté', 'Paul Pogba'], difficulty: 'hard' },
+      { category: 'Broke a long-standing goalscoring record', players: ['Cristiano Ronaldo', 'Robert Lewandowski', 'Erling Haaland', 'Lionel Messi'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-74',
+    groups: [
+      { category: 'Played for Feyenoord', players: ['Giovanni van Bronckhorst', 'Robin van Persie', 'Pierre van Hooijdonk', 'Arne Slot'], difficulty: 'easy' },
+      { category: 'From Serbia', players: ['Dušan Tadić', 'Aleksandar Mitrović', 'Dušan Vlahović', 'Lazar Marković'], difficulty: 'medium' },
+      { category: 'Won the Premier League and La Liga in their career', players: ['Michael Owen', 'Gareth Bale', 'Emmanuel Petit', 'Nicolas Anelka'], difficulty: 'hard' },
+      { category: 'Scored an injury-time equaliser in a final', players: ['Sergio Ramos', 'Rodri', 'Teddy Sheringham', 'Steven Gerrard'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-75',
+    groups: [
+      { category: 'Current La Liga stars', players: ['Vinícius Júnior', 'Robert Lewandowski', 'Jude Bellingham', 'Lamine Yamal'], difficulty: 'easy' },
+      { category: 'From Australia', players: ['Mark Viduka', 'Tim Cahill', 'Harry Kewell', 'Aaron Mooy'], difficulty: 'medium' },
+      { category: 'Won the Puskas Award', players: ['Cristiano Ronaldo', 'Mohamed Salah', 'Neymar Jr', 'Zlatan Ibrahimović'], difficulty: 'hard' },
+      { category: 'Played for both Liverpool and Chelsea', players: ['Fernando Torres', 'Daniel Sturridge', 'Mohamed Salah', 'Dominic Solanke'], difficulty: 'insane' },
+    ],
+  },
 ];

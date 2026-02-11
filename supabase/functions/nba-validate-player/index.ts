@@ -101,12 +101,15 @@ serve(async (req) => {
             {
               role: "system",
               content: `You are an NBA database with comprehensive knowledge up to February 2026. Answer ONLY with a JSON object.
+
+IMPORTANT: The user MUST provide a full first and last name (e.g. "LeBron James", "Stephen Curry"). If they only provide a first name (e.g. "LeBron", "Steph", "Kobe") or a nickname without a last name, return {"valid": false, "reason": "Please enter the player's full first and last name (e.g. 'LeBron James')", "fullName": null}. Single-word names are NOT acceptable.
+
 Tasks:
-1. Check if the player name is a real NBA player.
+1. Check if the player name is a real NBA player (must be full first and last name).
 2. Check if they have EVER played for the given NBA team (regular season or playoffs). Account for team name changes (e.g., Seattle SuperSonics → Oklahoma City Thunder, New Jersey Nets → Brooklyn Nets).${positionCheck}${statLookup}
 
 Response format: {"valid": true/false, "reason": "short explanation", "fullName": "Player Full First and Last Name"${positionField}${statField}}
-The "fullName" field MUST always contain the player's commonly known full name (first and last). For example: "LeBron" → "LeBron James", "Curry" → "Stephen Curry", "MJ" → "Michael Jordan".`,
+The "fullName" field MUST always contain the player's commonly known full name (first and last). For example: "LeBron James" → "LeBron James", "Stephen Curry" → "Stephen Curry", "Michael Jordan" → "Michael Jordan".`,
             },
             {
               role: "user",

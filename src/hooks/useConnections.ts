@@ -3,7 +3,7 @@ import { connectionsPuzzles } from '@/data/connectionsPuzzles';
 import type { ConnectionGroup, ConnectionDifficulty } from '@/types/connections';
 
 export function useConnections() {
-  const [puzzleIndex, setPuzzleIndex] = useState(0);
+  const [puzzleIndex, setPuzzleIndex] = useState(() => Math.floor(Math.random() * connectionsPuzzles.length));
   const [streak, setStreak] = useState(() => {
     const saved = localStorage.getItem('connections-streak');
     return saved ? parseInt(saved, 10) : 0;
