@@ -181,6 +181,9 @@ function PlayerCard({
           {statKeys.map((stat) => {
             const isChosen = lastChoice?.stat === stat;
             const value = player.stats[stat];
+            const isRevealed = revealed && nextPlayerStats;
+            const isHigher = isRevealed ? player.stats[stat] >= (nextPlayerStats?.[stat] ?? 0) : false;
+            const isLower = isRevealed ? player.stats[stat] < (nextPlayerStats?.[stat] ?? 0) : false;
 
             return (
               <button
@@ -192,8 +195,9 @@ function PlayerCard({
                   interactive
                     ? 'border-border hover:border-primary/50 hover:bg-secondary/50 cursor-pointer'
                     : 'border-border/30 cursor-default',
-                  isChosen && lastChoice?.correct && 'border-correct bg-correct/10',
-                  isChosen && !lastChoice?.correct && 'border-destructive bg-destructive/10',
+                  isRevealed && isHigher && 'border-correct bg-correct/10',
+                  isRevealed && isLower && 'border-destructive bg-destructive/10',
+                  isChosen && 'ring-2 ring-primary/50',
                 )}
               >
                 <span className="flex items-center gap-2 text-muted-foreground">
