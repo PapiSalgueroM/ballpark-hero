@@ -102,14 +102,23 @@ serve(async (req) => {
               role: "system",
               content: `You are an NBA database with comprehensive knowledge up to February 2026. Answer ONLY with a JSON object.
 
-IMPORTANT: The user MUST provide a full first and last name (e.g. "LeBron James", "Stephen Curry"). If they only provide a first name (e.g. "LeBron", "Steph", "Kobe") or a nickname without a last name, return {"valid": false, "reason": "Please enter the player's full first and last name (e.g. 'LeBron James')", "fullName": null}. Single-word names are NOT acceptable.
+IMPORTANT RULES:
+1. The user MUST provide a full first and last name (e.g. "LeBron James", "Stephen Curry"). If they only provide a first name (e.g. "LeBron", "Steph", "Kobe") or a nickname without a last name, return {"valid": false, "reason": "Please enter the player's full first and last name (e.g. 'LeBron James')", "fullName": null}. Single-word names are NOT acceptable.
+
+2. You MUST verify the player actually played for the specified team. This is CRITICAL. If the player NEVER played for that team (regular season or playoffs), you MUST return valid: false. Do NOT return valid: true unless you are certain the player played for that specific team. Account for team name changes (e.g., Seattle SuperSonics → Oklahoma City Thunder, New Jersey Nets → Brooklyn Nets, Charlotte Bobcats → Charlotte Hornets).
+
+For example:
+- "LeBron James" + "Boston Celtics" → valid: false (he never played for the Celtics)
+- "Stephen Curry" + "Chicago Bulls" → valid: false (he never played for the Bulls)
+- "LeBron James" + "Los Angeles Lakers" → valid: true (he plays for the Lakers)
 
 Tasks:
 1. Check if the player name is a real NBA player (must be full first and last name).
-2. Check if they have EVER played for the given NBA team (regular season or playoffs). Account for team name changes (e.g., Seattle SuperSonics → Oklahoma City Thunder, New Jersey Nets → Brooklyn Nets).${positionCheck}${statLookup}
+2. Check if they have EVER played for the given NBA team. If NOT, return valid: false with reason explaining they never played for that team.${positionCheck}${statLookup}
 
 Response format: {"valid": true/false, "reason": "short explanation", "fullName": "Player Full First and Last Name"${positionField}${statField}}
-The "fullName" field MUST always contain the player's commonly known full name (first and last). For example: "LeBron James" → "LeBron James", "Stephen Curry" → "Stephen Curry", "Michael Jordan" → "Michael Jordan".`,
+- If the player never played for the team, set valid to false and reason to "[Player] never played for the [Team]."
+- The "fullName" field MUST always contain the player's commonly known full name (first and last).`,
             },
             {
               role: "user",
