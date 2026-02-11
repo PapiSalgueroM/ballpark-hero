@@ -93,7 +93,7 @@ const FormationPitch = ({ positions, filledSlots, selectedIndex, onSelectPositio
               {pos.label}
             </span>
             {filled && (
-              <span className="text-[9px] font-semibold truncate max-w-[5.5rem] leading-tight mt-0.5">
+              <span className="text-[8px] font-semibold truncate max-w-[7rem] leading-tight mt-0.5 whitespace-nowrap">
                 {filled.playerName}
               </span>
             )}
