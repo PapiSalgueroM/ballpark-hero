@@ -56,7 +56,7 @@ export function GameNav() {
     <div className="mt-12 mb-6">
       <div className="border-t border-border/50 pt-8 space-y-8">
         <GameSection title="More Footy" games={footyGames} currentPath={location.pathname} grid />
-        <GameSection title="More Games" games={moreGames} currentPath={location.pathname} />
+        <GameSection title="More Games" games={moreGames} currentPath={location.pathname} grid />
       </div>
     </div>
   );
