@@ -139,6 +139,13 @@ export function useNbaLineup() {
       const position = NBA_POSITIONS[selectedPosition];
       if (!position) return;
 
+      // Require full first and last name
+      const nameParts = playerName.trim().split(/\s+/);
+      if (nameParts.length < 2) {
+        setValidationError('Please enter the player\'s full first and last name (e.g. "LeBron James")');
+        return;
+      }
+
       // Check duplicates
       const trimmedName = playerName.trim().toLowerCase();
       const isDuplicate = Array.from(filledSlots.values()).some(
