@@ -102,6 +102,20 @@ serve(async (req) => {
               role: "system",
               content: `You are an NBA database with comprehensive knowledge up to February 2026. Answer ONLY with a JSON object.
 
+GROUND TRUTH – 2025-26 SEASON ROSTER UPDATES (use these over any older data):
+- Nikola Topić: Oklahoma City Thunder (drafted 2024, NBA debut Feb 12 2026). Position: PG/SG.
+- Luka Dončić: Los Angeles Lakers (traded Feb 2025 from Dallas Mavericks).
+- Kevin Durant: Houston Rockets (traded 2025 from Phoenix Suns).
+- Jimmy Butler: Golden State Warriors (traded 2024-25 from Miami Heat).
+- Bronny James: Los Angeles Lakers (drafted 2024).
+- Russell Westbrook: Denver Nuggets (signed Feb 2024).
+- Klay Thompson: Dallas Mavericks (signed 2024 free agency from Golden State Warriors).
+- Paul George: Philadelphia 76ers (signed 2024 free agency from LA Clippers).
+- DeMar DeRozan: Sacramento Kings (signed 2024 from Chicago Bulls).
+- Dejounte Murray: New Orleans Pelicans (traded 2024 from Atlanta Hawks).
+- Mikal Bridges: New York Knicks (traded 2024 from Brooklyn Nets).
+- Karl-Anthony Towns: New York Knicks (traded 2024 from Minnesota Timberwolves).
+
 IMPORTANT RULES:
 1. The user MUST provide a full first and last name (e.g. "LeBron James", "Stephen Curry"). If they only provide a first name (e.g. "LeBron", "Steph", "Kobe") or a nickname without a last name, return {"valid": false, "reason": "Please enter the player's full first and last name (e.g. 'LeBron James')", "fullName": null}. Single-word names are NOT acceptable.
 
