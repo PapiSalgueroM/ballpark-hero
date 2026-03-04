@@ -195,7 +195,7 @@ Respond with ONLY a JSON object with these fields:
       JSON.stringify({
         rating: "Error",
         headline: "Something went wrong",
-        analysis: e instanceof Error ? e.message : "Unknown error occurred",
+        analysis: "Something went wrong. Please try again.",
       }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
