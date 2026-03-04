@@ -39,6 +39,20 @@ serve(async (req) => {
       });
     }
 
+    // Validate columnAttribute and rowAttribute to prevent prompt injection
+    if (
+      !columnAttribute || typeof columnAttribute !== "string" || columnAttribute.length > 200 ||
+      !rowAttribute || typeof rowAttribute !== "string" || rowAttribute.length > 200
+    ) {
+      return new Response(JSON.stringify({ suggestions: [] }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Strip newlines to prevent prompt structure manipulation
+    const safeColumnAttribute = columnAttribute.replace(/[\n\r]/g, " ").trim();
+    const safeRowAttribute = rowAttribute.replace(/[\n\r]/g, " ").trim();
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
@@ -55,7 +69,7 @@ serve(async (req) => {
             role: "system",
             content: `You are a football (soccer) player name autocomplete engine. The user is typing a partial name. Suggest up to 8 real footballer names that:
 1. Start with or closely match the partial text "${query}" (fuzzy match — handle typos and partial spellings)
-2. Could plausibly match BOTH attributes: "${columnAttribute}" AND "${rowAttribute}"
+2. Could plausibly match BOTH attributes: "${safeColumnAttribute}" AND "${safeRowAttribute}"
 
 Return ONLY a JSON array of full player names, most likely matches first. No explanations, no markdown.
 Example: ["Lionel Messi", "Luka Modrić", "Luis Suárez"]
