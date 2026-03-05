@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { shareResult } from '@/lib/share';
 import { cn } from '@/lib/utils';
 import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
 
 type StatKey = 'appearances' | 'goals' | 'assists' | 'trophies' | 'internationalCaps';
 
@@ -143,6 +144,9 @@ const HigherLowerGame = () => {
         <AdBanner slot="1234567894" format="horizontal" className="mt-8" />
 
         <HigherLowerHowToPlay open={showHelp} onOpenChange={setShowHelp} />
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="higher-lower" gameContext={{ currentPlayer: currentPlayer?.name, nextPlayer: nextPlayer?.name }} />
+        </div>
         <GameNav />
         <Footer />
       </div>

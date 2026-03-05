@@ -7,6 +7,7 @@ import Connect4Suggestions from '@/components/nba-connect4/Connect4Suggestions';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Loader2, AlertCircle, HelpCircle, SkipForward, ArrowDown } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
 
 const ROWS = 6;
 const COLS = 7;
@@ -276,6 +277,9 @@ const NbaConnect4 = () => {
 
         <AdBanner slot="1234567898" format="horizontal" className="mt-8" />
 
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="nba-connect-4" gameContext={{ board: board?.id }} />
+        </div>
         <GameNav />
         <Footer />
       </div>

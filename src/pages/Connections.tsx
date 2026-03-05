@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { ConnectionDifficulty } from '@/types/connections';
 import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
 
 const difficultyColors: Record<ConnectionDifficulty, string> = {
   easy: 'bg-correct',
@@ -254,6 +255,9 @@ const Connections = () => {
 
         <AdBanner slot="1234567893" format="horizontal" className="mt-8" />
 
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="connections" gameContext={{ puzzleId: puzzle?.id }} />
+        </div>
         <GameNav />
         <Footer />
       </div>

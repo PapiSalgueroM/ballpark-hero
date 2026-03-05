@@ -8,6 +8,7 @@ import { RotateCcw, Flag, Search, Lightbulb, HelpCircle, Share2 } from 'lucide-r
 import { CareerHowToPlay } from '@/components/career/CareerHowToPlay';
 import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
 
 const CareerGame = () => {
   const {
@@ -241,6 +242,9 @@ const CareerGame = () => {
         <AdBanner slot="1234567891" format="horizontal" className="mt-8" />
 
         <CareerHowToPlay open={showHelp} onOpenChange={setShowHelp} />
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="career" gameContext={{ targetPlayer: targetPlayer?.name }} />
+        </div>
         <GameNav />
         <Footer />
       </div>
