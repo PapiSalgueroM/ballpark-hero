@@ -17,13 +17,13 @@ export function BlurredFaceHowToPlay({ open, onOpenChange }: BlurredFaceHowToPla
 
         <div className="space-y-5 text-sm">
           <p className="text-muted-foreground text-center">
-            A footballer's face is completely blurred — figure out who it is!
+            A soccer player's face is completely blurred — figure out who it is!
           </p>
 
           <section>
             <h3 className="font-bold text-foreground mb-2">🖼️ The Image</h3>
             <p className="text-muted-foreground">
-              You'll see a heavily blurred photo of a footballer. With each wrong guess, the image gets
+              You'll see a heavily blurred photo of a soccer player. With each wrong guess, the image gets
               <span className="text-foreground font-semibold"> a little clearer</span>.
             </p>
           </section>

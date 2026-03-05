@@ -100,7 +100,7 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a football (soccer) player name autocomplete engine. The user is typing a partial name. Suggest up to 8 real footballer names that:
+            content: `You are a soccer player name autocomplete engine. The user is typing a partial name. Suggest up to 8 real soccer player names that:
 1. Start with or closely match the partial text "${query}" (fuzzy match — handle typos and partial spellings)
 2. Could plausibly match BOTH attributes: "${safeColumnAttribute}" AND "${safeRowAttribute}"
 

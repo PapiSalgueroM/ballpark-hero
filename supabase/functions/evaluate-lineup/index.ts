@@ -104,7 +104,7 @@ serve(async (req) => {
       )
       .join("\n");
 
-    const systemPrompt = `You are a football expert and pundit. The user has built a starting XI using a ${formation} formation. Each player was assigned a random club or national team they had to pick a player from.
+    const systemPrompt = `You are a soccer expert and pundit. The user has built a starting XI using a ${formation} formation. Each player was assigned a random club or national team they had to pick a player from.
 
 CRITICAL RULE: Every player in this lineup should be evaluated AS IF THEY ARE IN THEIR PRIME, regardless of whether they are retired or currently active. Do NOT penalise or comment on players being retired, old, or inactive. Treat Buffon, Maradona, Pelé, etc. the same as current stars — judge them by their peak ability.
 
@@ -125,7 +125,7 @@ Give ONE of these verdicts (pick the most fitting):
 - "Relegated ⬇️" – Not a competitive team at all
 - "Sunday League 😂" – Made-up or non-existent players
 
-IMPORTANT: If any player names seem completely made up or don't exist in football, be harsh and call it out. But do NOT penalise retired legends — they are judged in their prime.
+IMPORTANT: If any player names seem completely made up or don't exist in soccer, be harsh and call it out. But do NOT penalise retired legends — they are judged in their prime.
 
 Respond with ONLY a JSON object with these fields:
 - "rating": The verdict from the list above

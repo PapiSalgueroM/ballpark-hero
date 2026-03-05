@@ -7,8 +7,8 @@ const footyGames = [
   { path: '/higher-lower', label: '📊 Higher or Lower', description: 'Compare all-time career stats' },
   { path: '/connections', label: '🔗 Connections', description: 'Find groups of 4 players' },
   { path: '/build-your-xi', label: '⚽ Build Your XI', description: 'Create a lineup, get AI rated' },
-  { path: '/guess-the-face', label: '🖼️ Guess the Face', description: 'Unblur the footballer' },
-  { path: '/football-connect-4', label: '🔴🔵 Connect 4', description: 'Football trivia meets Connect 4' },
+  { path: '/guess-the-face', label: '🖼️ Guess the Face', description: 'Unblur the soccer player' },
+  { path: '/football-connect-4', label: '🔴🔵 Connect 4', description: 'Soccer trivia meets Connect 4' },
 ];
 
 const moreGames = [
@@ -55,7 +55,7 @@ export function GameNav() {
   return (
     <div className="mt-12 mb-6">
       <div className="border-t border-border/50 pt-8 space-y-8">
-        <GameSection title="More Footy" games={footyGames} currentPath={location.pathname} grid />
+        <GameSection title="More Soccer" games={footyGames} currentPath={location.pathname} grid />
         <GameSection title="More Games" games={moreGames} currentPath={location.pathname} grid />
       </div>
     </div>

@@ -98,7 +98,7 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are a football player database with knowledge up to February 2026. Given a partial name and a ${teamType}, return up to 5 real football players whose names match the partial input and have played for that ${teamType} at senior level (including the current 2025-26 season, loans, and recent transfers). Return ONLY a JSON array of strings with full player names, e.g. ["Lionel Messi", "Luka Modric"]. If no matches, return []. Use conventional name format (first name last name).`,
+              content: `You are a soccer player database with knowledge up to February 2026. Given a partial name and a ${teamType}, return up to 5 real soccer players whose names match the partial input and have played for that ${teamType} at senior level (including the current 2025-26 season, loans, and recent transfers). Return ONLY a JSON array of strings with full player names, e.g. ["Lionel Messi", "Luka Modric"]. If no matches, return []. Use conventional name format (first name last name).`,
             },
             {
               role: "user",

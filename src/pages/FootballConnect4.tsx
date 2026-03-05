@@ -62,7 +62,7 @@ const FootballConnect4 = () => {
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-10">
         <header className="text-center mb-6 relative">
           <h1 className="text-3xl md:text-5xl font-bold tracking-[0.12em] text-primary font-display mb-1">
-            FOOTBALL CONNECT 4
+            SOCCER CONNECT 4
           </h1>
           <p className="text-muted-foreground text-sm">
             Two players, trivia, and 4 in a row
@@ -135,7 +135,7 @@ const FootballConnect4 = () => {
                   onChange={(e) => { setPlayerInput(e.target.value); setShowSuggestions(true); }}
                   onFocus={() => playerInput.trim().length >= 2 && setShowSuggestions(true)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-                  placeholder="Enter footballer name..."
+                  placeholder="Enter soccer player name..."
                   className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   autoFocus
                   disabled={isValidating}

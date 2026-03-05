@@ -21,7 +21,7 @@ export function ConnectionsHowToPlay({ open, onOpenChange }: ConnectionsHowToPla
         </DialogHeader>
         <div className="space-y-4 text-sm text-foreground">
           <p>
-            <strong>Football Connections</strong> — 16 footballers, 4 hidden categories.
+            <strong>Soccer Connections</strong> — 16 soccer players, 4 hidden categories.
             Select 4 players you think belong together and hit Submit. Crack all 4 groups before your lives run out!
           </p>
           <ul className="list-disc pl-5 space-y-1.5 text-muted-foreground">

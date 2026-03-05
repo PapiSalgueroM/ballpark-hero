@@ -99,7 +99,7 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are a football database with knowledge up to February 2026. Answer ONLY with a JSON object: {"valid": true/false, "reason": "short explanation", "fullName": "Player's Full First and Last Name"}.
+              content: `You are a soccer database with knowledge up to February 2026. Answer ONLY with a JSON object: {"valid": true/false, "reason": "short explanation", "fullName": "Player's Full First and Last Name"}.
 The "fullName" field MUST always contain the player's commonly known full name (first name and last name). For example: "Messi" → "Lionel Messi", "James" → "James Rodríguez", "CR7" or "Ronaldo" → "Cristiano Ronaldo", "Neymar" → "Neymar Jr", "Vini" → "Vinícius Júnior".
 A player is valid if they have EVER played for the given ${teamType} in a competitive match at senior level, including the current 2025-26 season. Youth/academy doesn't count unless they also played for the senior team. Include loan spells. Be accurate but give benefit of the doubt for recent transfers.`,
             },
