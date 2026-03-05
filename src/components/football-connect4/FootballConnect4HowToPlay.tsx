@@ -21,8 +21,8 @@ export function FootballConnect4HowToPlay({ open, onOpenChange }: Props) {
         </DialogHeader>
         <div className="space-y-3 text-sm text-foreground">
           <p>
-            <strong>Football Connect 4</strong> is a two-player trivia game that combines
-            classic Connect 4 with football knowledge!
+            <strong>Soccer Connect 4</strong> is a two-player trivia game that combines
+            classic Connect 4 with soccer knowledge!
           </p>
           <div className="space-y-2">
             <h4 className="font-semibold text-primary">Rules:</h4>
@@ -30,7 +30,7 @@ export function FootballConnect4HowToPlay({ open, onOpenChange }: Props) {
               <li>🔵 Blue and 🔴 Red take turns</li>
               <li>Pick a column to drop your piece — it falls to the lowest empty row</li>
               <li>
-                Name a footballer who matches <strong>both</strong> the column attribute
+                Name a soccer player who matches <strong>both</strong> the column attribute
                 (top) and the row attribute (left side)
               </li>
               <li>If your answer is valid, your piece is placed</li>

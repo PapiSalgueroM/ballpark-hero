@@ -34,7 +34,7 @@ const PrivacyPolicy = () => {
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li><strong>Google AdSense</strong> — We display advertisements provided by Google AdSense. Google may use cookies and web beacons to serve ads based on your prior visits to this or other websites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">Google's Ads Settings</a>. For more information, see <a href="https://policies.google.com/technologies/ads" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">Google's advertising policies</a>.</li>
             <li><strong>Wikipedia REST API</strong> — Used in the "Guess the Face" game mode to fetch publicly available player photographs. No personal data is sent; only the player's Wikipedia page name is requested. Wikipedia's own <a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">privacy policy</a> applies to their service.</li>
-            <li><strong>AI Evaluation &amp; Suggestion Services</strong> — Used in game modes such as "Build Your XI," "Football Connect 4," and NBA games to generate lineup ratings and player name suggestions. Only game-related data (team names, player names, formation data) is sent. No personal or identifying information is transmitted.</li>
+            <li><strong>AI Evaluation &amp; Suggestion Services</strong> — Used in game modes such as "Build Your XI," "Soccer Connect 4," and NBA games to generate lineup ratings and player name suggestions. Only game-related data (team names, player names, formation data) is sent. No personal or identifying information is transmitted.</li>
           </ul>
         </div>
 
@@ -61,7 +61,7 @@ const PrivacyPolicy = () => {
 
       <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
         <p>© 2026 DoUKnowBall. All rights reserved.</p>
-        <p>All logos, club crests, player names, fighter names, and brands are the property of their respective owners and are used for identification purposes only. This application is not affiliated with or endorsed by FIFA, EA Sports, the UFC, the NBA, or any football club, MMA organization, basketball team, or sports governing body.</p>
+        <p>All logos, club crests, player names, fighter names, and brands are the property of their respective owners and are used for identification purposes only. This application is not affiliated with or endorsed by FIFA, EA Sports, the UFC, the NBA, or any soccer club, MMA organization, basketball team, or sports governing body.</p>
         <Link to="/terms" className="underline hover:text-foreground transition-colors">Terms of Service</Link>
       </div>
     </div>

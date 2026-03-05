@@ -37,9 +37,9 @@ function getStreakReaction(streak: number): { emoji: string; message: string } {
   if (streak <= 2) return { emoji: '😐', message: "Meh. My nan could do better." };
   if (streak <= 5) return { emoji: '🙂', message: "Not bad, but nothing to brag about." };
   if (streak <= 10) return { emoji: '😊', message: "Decent run! You know your stuff." };
-  if (streak <= 19) return { emoji: '🔥', message: "On fire! Proper football brain." };
+  if (streak <= 19) return { emoji: '🔥', message: "On fire! Proper soccer brain." };
   if (streak <= 29) return { emoji: '🌟', message: "Incredible! You're a walking encyclopedia." };
-  return { emoji: '🏆', message: "LEGENDARY! You absolute football genius!" };
+  return { emoji: '🏆', message: "LEGENDARY! You absolute soccer genius!" };
 }
 
 export function useHigherLower() {

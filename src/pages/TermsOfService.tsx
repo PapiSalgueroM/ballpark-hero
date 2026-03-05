@@ -27,13 +27,13 @@ const TermsOfService = () => {
           <h2 className="text-lg font-semibold text-foreground mb-2">2. Description of Service</h2>
           <p>DoUKnowBall is a free, browser-based entertainment platform that provides sports-themed trivia and guessing games. Current game modes include:</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li><strong>Footle</strong> — Guess the footballer from stat-based clues in 8 tries</li>
+            <li><strong>Footle</strong> — Guess the soccer player from stat-based clues in 8 tries</li>
             <li><strong>Career Quiz</strong> — Identify a player from their season-by-season career history</li>
             <li><strong>Higher or Lower</strong> — Compare all-time career statistics between players</li>
             <li><strong>Connections</strong> — Find groups of 4 players sharing a hidden link</li>
             <li><strong>Build Your XI</strong> — Create a lineup and receive an AI-generated rating</li>
-            <li><strong>Guess the Face</strong> — Identify a blurred footballer as hints are revealed</li>
-            <li><strong>Football Connect 4</strong> — Two-player trivia Connect 4 with football knowledge</li>
+            <li><strong>Guess the Face</strong> — Identify a blurred soccer player as hints are revealed</li>
+            <li><strong>Soccer Connect 4</strong> — Two-player trivia Connect 4 with soccer knowledge</li>
             <li><strong>NBA Guesser</strong> — Guess the NBA player from stat-based clues</li>
             <li><strong>NBA Build Your V</strong> — Create an NBA lineup and receive an AI rating</li>
             <li><strong>NBA Chain</strong> — Link NBA players who shared the same team</li>
@@ -57,7 +57,7 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">4. Intellectual Property</h2>
-          <p>All original content, features, and functionality of DoUKnowBall are owned by DoUKnowBall and are protected by international copyright, trademark, and other intellectual property laws. All player names, fighter names, club names, logos, and brand identifiers referenced on this Site are the property of their respective owners and are used solely for identification and informational purposes. DoUKnowBall is not affiliated with, endorsed by, or sponsored by FIFA, EA Sports, the UFC, any football club, MMA organization, league, or governing body.</p>
+          <p>All original content, features, and functionality of DoUKnowBall are owned by DoUKnowBall and are protected by international copyright, trademark, and other intellectual property laws. All player names, fighter names, club names, logos, and brand identifiers referenced on this Site are the property of their respective owners and are used solely for identification and informational purposes. DoUKnowBall is not affiliated with, endorsed by, or sponsored by FIFA, EA Sports, the UFC, any soccer club, MMA organization, league, or governing body.</p>
         </div>
 
         <div>
@@ -98,7 +98,7 @@ const TermsOfService = () => {
 
       <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
         <p>© 2026 DoUKnowBall. All rights reserved.</p>
-        <p>All logos, club crests, player names, fighter names, and brands are the property of their respective owners and are used for identification purposes only. This application is not affiliated with or endorsed by FIFA, EA Sports, the UFC, the NBA, or any football club, MMA organization, basketball team, or sports governing body.</p>
+        <p>All logos, club crests, player names, fighter names, and brands are the property of their respective owners and are used for identification purposes only. This application is not affiliated with or endorsed by FIFA, EA Sports, the UFC, the NBA, or any soccer club, MMA organization, basketball team, or sports governing body.</p>
         <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>
       </div>
     </div>

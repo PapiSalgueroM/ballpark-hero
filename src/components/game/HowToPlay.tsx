@@ -17,7 +17,7 @@ export function HowToPlay({ open, onOpenChange }: HowToPlayProps) {
 
         <div className="space-y-5 text-sm">
           <p className="text-muted-foreground text-center">
-            Guess the mystery football player in 8 tries!
+            Guess the mystery soccer player in 8 tries!
           </p>
 
           <section>

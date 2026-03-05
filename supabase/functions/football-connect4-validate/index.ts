@@ -94,9 +94,9 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are a football (soccer) expert verifier with comprehensive, verified knowledge through February 10, 2026.
+              content: `You are a soccer expert verifier with comprehensive, verified knowledge through February 10, 2026.
 
-TASK: Determine if a given footballer matches BOTH of these two attributes:
+TASK: Determine if a given soccer player matches BOTH of these two attributes:
 1. Column attribute: "${columnAttribute}"
 2. Row attribute: "${rowAttribute}"
 
@@ -120,7 +120,7 @@ ATTRIBUTE DEFINITIONS:
 - "Scored 200+ Career Goals" / "Scored 300+ Career Goals" = career total across all clubs and competitions.
 - "Scored in a World Cup" = scored at least one goal in a FIFA World Cup match.
 - "Scored in a Champions League Final" = scored in a UCL/European Cup final.
-- "Played in La Liga" / "Played in Serie A" / "Played in the Premier League" / "Played in MLS" = played senior football in that league.
+- "Played in La Liga" / "Played in Serie A" / "Played in the Premier League" / "Played in MLS" = played senior soccer in that league.
 - "Has/Had a 90+ Rated FIFA Card" = had a base gold card rated 90 or above in ANY edition of EA Sports FIFA / EA FC (not special/TOTS cards, only the standard gold base card).
 - "Market Value Has Exceeded €100M" = peak Transfermarkt market value reached €100M or more at any point.
 - "Cost €50M+ Transfer Fee" = was transferred for a fee of €50M or more at least once.
@@ -134,7 +134,7 @@ ATTRIBUTE DEFINITIONS:
 - "Won the Europa League" = won the UEFA Europa League / UEFA Cup.
 - "Copa América Winner" = in the winning squad of a Copa América.
 - "European Championship Winner" = in the winning squad of a UEFA European Championship (Euros).
-- "Active Player (as of 2025-26)" = currently playing professional football in the 2025-26 season. Note: Neymar (Al Hilal), Aubameyang, and Griezmann are still active.
+- "Active Player (as of 2025-26)" = currently playing professional soccer in the 2025-26 season. Note: Neymar (Al Hilal), Aubameyang, and Griezmann are still active.
 - "Goalkeeper" / "Centre-Back" / "Full-Back/Wing-Back" = player's primary position.
 - "English Nationality" / "Polish Nationality" / "Italian Nationality" = represents that nation.
 - "South Korean or Japanese" = represents South Korea or Japan.
@@ -161,7 +161,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
             },
             {
               role: "user",
-              content: `Does the footballer "${playerName}" match BOTH: "${columnAttribute}" AND "${rowAttribute}"? Think carefully about each attribute before answering.`,
+              content: `Does the soccer player "${playerName}" match BOTH: "${columnAttribute}" AND "${rowAttribute}"? Think carefully about each attribute before answering.`,
             },
           ],
         }),

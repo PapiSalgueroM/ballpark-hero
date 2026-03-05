@@ -53,7 +53,7 @@ const Index = () => {
             FOOTLE
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-lg mx-auto">
-            Guess the football player in 8 tries — one of 10+ free sports trivia games across football, NBA &amp; UFC. No login. No tracking. Just play.
+            Guess the soccer player in 8 tries — one of 10+ free sports trivia games across soccer, NBA &amp; UFC. No login. No tracking. Just play.
           </p>
 
           {/* Mode Toggle */}
