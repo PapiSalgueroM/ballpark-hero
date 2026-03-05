@@ -8,6 +8,7 @@ import { RotateCcw, HelpCircle, Flag, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
 
 const BlurredFace = () => {
   const {
@@ -267,6 +268,9 @@ const BlurredFace = () => {
 
         <AdBanner slot="1234567895" format="horizontal" className="mt-8" />
 
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="guess-the-face" gameContext={{ targetPlayer: targetPlayer?.name }} />
+        </div>
         <GameNav />
         <Footer />
       </div>

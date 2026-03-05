@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, Share2, HelpCircle } from 'lucide-react';
 import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
 
 const NbaLineup = () => {
   const {
@@ -397,6 +398,9 @@ const NbaLineup = () => {
 
         <AdBanner slot="1234567897" format="horizontal" className="mt-8" />
 
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="nba-starting-5" gameContext={{ team: currentTeam }} />
+        </div>
         <GameNav />
         <Footer />
       </div>

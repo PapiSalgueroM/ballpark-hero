@@ -9,6 +9,7 @@ import { getClubLogoUrl } from '@/lib/clubData';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
 
 const Index = () => {
   const {
@@ -193,6 +194,10 @@ const Index = () => {
 
         {/* Ad placement */}
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
+
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="footle" gameContext={{ targetPlayer: targetPlayer?.name, difficulty }} />
+        </div>
 
         {/* Game Navigation */}
         <GameNav />

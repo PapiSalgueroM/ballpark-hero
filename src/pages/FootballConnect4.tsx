@@ -17,6 +17,7 @@ import {
   SkipForward,
 } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
 
 const FootballConnect4 = () => {
   const {
@@ -228,6 +229,9 @@ const FootballConnect4 = () => {
         )}
 
         <AdBanner slot="1234567898" format="horizontal" className="mt-8" />
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="soccer-connect-4" gameContext={{ boardId: boardConfig?.id }} />
+        </div>
         <GameNav />
         <Footer />
       </div>

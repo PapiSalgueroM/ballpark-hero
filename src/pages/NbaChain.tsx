@@ -18,6 +18,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
 
 const NbaChain = () => {
   const {
@@ -208,6 +209,9 @@ const NbaChain = () => {
 
         <AdBanner slot="1234567898" format="horizontal" className="mt-8" />
 
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="nba-chain" gameContext={{ lastPlayer, chainLength: score }} />
+        </div>
         <GameNav />
         <Footer />
       </div>

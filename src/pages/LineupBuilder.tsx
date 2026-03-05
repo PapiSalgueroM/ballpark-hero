@@ -11,6 +11,7 @@ import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, Sha
 import { LineupHowToPlay } from '@/components/lineup/LineupHowToPlay';
 import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -320,6 +321,9 @@ const LineupBuilder = () => {
 
         <AdBanner slot="1234567896" format="horizontal" className="mt-8" />
 
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="build-your-xi" gameContext={{ team: currentTeam, formation }} />
+        </div>
         <GameNav />
         <Footer />
       </div>

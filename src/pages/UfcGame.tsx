@@ -7,6 +7,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import { RotateCcw, HelpCircle } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
 
 const UfcGame = () => {
   const {
@@ -125,6 +126,9 @@ const UfcGame = () => {
 
         <AdBanner slot="1234567892" format="horizontal" className="mt-8" />
 
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="ufc" gameContext={{ targetFighter: targetFighter?.name }} />
+        </div>
         <GameNav />
         <Footer />
       </div>
