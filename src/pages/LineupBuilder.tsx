@@ -12,6 +12,7 @@ import { LineupHowToPlay } from '@/components/lineup/LineupHowToPlay';
 import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -69,6 +70,11 @@ const LineupBuilder = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <PageSeo
+        title="Build Your XI – Soccer Lineup Builder Game | DoUKnowBall"
+        description="Spin a random challenge, get two soccer teams, and build the ultimate starting XI. AI validates your picks. Free lineup-building game — no login needed."
+        path="/build-your-xi"
+      />
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
         <header className="text-center mb-8 relative">
           <button

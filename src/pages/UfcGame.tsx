@@ -8,6 +8,7 @@ import { Footer } from '@/components/game/Footer';
 import { RotateCcw, HelpCircle } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
 
 const UfcGame = () => {
   const {
@@ -33,6 +34,11 @@ const UfcGame = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <PageSeo
+        title="UFC Guesser – Combat Sports Trivia Game | DoUKnowBall"
+        description="Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia game — no login required."
+        path="/ufc"
+      />
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
         <header className="text-center mb-8 relative">
           <button
@@ -47,7 +53,7 @@ const UfcGame = () => {
             UFC GUESSER
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">
-            Guess the UFC fighter in 8 tries
+            Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia — no login needed.
           </p>
 
           <p className="text-sm text-muted-foreground mt-4">

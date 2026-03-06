@@ -9,6 +9,7 @@ import { CareerHowToPlay } from '@/components/career/CareerHowToPlay';
 import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
 
 const CareerGame = () => {
   const {
@@ -91,6 +92,11 @@ const CareerGame = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <PageSeo
+        title="Career Path – Soccer Career Guessing Game | DoUKnowBall"
+        description="Can you identify the soccer player from their career history? Reveal clubs one by one and guess the mystery player. Free trivia game — no signup needed."
+        path="/career"
+      />
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-10">
         {/* Header */}
         <header className="text-center mb-8 relative">

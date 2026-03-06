@@ -8,6 +8,7 @@ import { shareResult } from '@/lib/share';
 import { cn } from '@/lib/utils';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
 
 type StatKey = 'appearances' | 'goals' | 'assists' | 'trophies' | 'internationalCaps';
 
@@ -39,6 +40,11 @@ const HigherLowerGame = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <PageSeo
+        title="Higher or Lower – Soccer Stats Comparison Game | DoUKnowBall"
+        description="Compare soccer player stats and guess who's higher! Pick the right stat to build your streak. Free sports trivia game — no login required."
+        path="/higher-lower"
+      />
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-10">
         {/* Header */}
         <header className="text-center mb-8 relative">

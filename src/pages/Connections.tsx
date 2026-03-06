@@ -10,6 +10,7 @@ import { ConnectionDifficulty } from '@/types/connections';
 import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
 
 const difficultyColors: Record<ConnectionDifficulty, string> = {
   easy: 'bg-correct',
@@ -53,6 +54,11 @@ const Connections = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <PageSeo
+        title="Connections – Soccer Player Grouping Puzzle | DoUKnowBall"
+        description="Group 16 soccer players into 4 secret categories. Can you crack the connection? A free puzzle game inspired by NYT Connections for soccer fans."
+        path="/connections"
+      />
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
         {/* Header */}
         <header className="text-center mb-8 relative">
@@ -68,7 +74,7 @@ const Connections = () => {
             CONNECTIONS
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">
-            Group 16 footballers into 4 secret categories — can you crack the connection?
+            Group 16 soccer players into 4 secret categories — can you crack the connection?
           </p>
           <p className="text-xs text-muted-foreground mt-1">
             Puzzle {(puzzleIndex % totalPuzzles) + 1} of {totalPuzzles}

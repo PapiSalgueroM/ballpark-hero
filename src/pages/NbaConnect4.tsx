@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { RotateCcw, Loader2, AlertCircle, HelpCircle, SkipForward, ArrowDown } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
 
 const ROWS = 6;
 const COLS = 7;
@@ -46,13 +47,18 @@ const NbaConnect4 = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <PageSeo
+        title="NBA Connect 4 – Basketball Trivia Grid Game | DoUKnowBall"
+        description="Play Connect 4 with NBA trivia! Name players matching team and stat criteria to claim cells. Free basketball puzzle game — no login required."
+        path="/nba-connect-4"
+      />
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
         <header className="text-center mb-6 relative">
           <h1 className="text-3xl md:text-5xl font-bold tracking-[0.12em] text-primary font-display mb-1">
             NBA CONNECT 4
           </h1>
           <p className="text-muted-foreground text-sm">
-            Two players, NBA trivia, four in a row wins
+            Play Connect 4 with NBA trivia — name players matching team and stat criteria to claim cells and get four in a row.
           </p>
           <button
             onClick={() => setShowHowToPlay(true)}
