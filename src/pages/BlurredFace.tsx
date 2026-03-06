@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
 
 const BlurredFace = () => {
   const {
@@ -83,6 +84,11 @@ const BlurredFace = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <PageSeo
+        title="Guess the Face – Blurred Soccer Player Game | DoUKnowBall"
+        description="Can you identify the soccer player from a blurred photo? Each wrong guess reveals more of the face. Free sports trivia — no signup required."
+        path="/guess-the-face"
+      />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
         {/* Header */}
         <header className="text-center mb-8 relative">
@@ -98,7 +104,7 @@ const BlurredFace = () => {
             GUESS THE FACE
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">
-            Who is this footballer? Unblur the face in {maxGuesses} tries
+            Can you identify the soccer player from a blurred photo? Each wrong guess reveals more of the face. Test your knowledge in {maxGuesses} tries.
           </p>
 
           <p className="text-sm text-muted-foreground mt-4">

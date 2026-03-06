@@ -13,6 +13,7 @@ import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, Sha
 import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
 
 const NbaLineup = () => {
   const {
@@ -61,6 +62,11 @@ const NbaLineup = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <PageSeo
+        title="NBA Starting 5 – Basketball Lineup Builder Game | DoUKnowBall"
+        description="Spin a stat challenge, get random NBA teams, and build the ultimate starting five. AI validates your picks. Free NBA trivia game — no signup needed."
+        path="/nba-starting-5"
+      />
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
         <header className="text-center mb-8 relative">
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.15em] text-primary font-display mb-1">

@@ -10,6 +10,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
 
 const Index = () => {
   const {
@@ -38,6 +39,11 @@ const Index = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <PageSeo
+        title="Footle – Soccer Player Guessing Game | DoUKnowBall"
+        description="Guess the soccer player in 8 tries using clues like club, league, nationality, and age. One of 10+ free sports trivia games on DoUKnowBall. No login required."
+        path="/"
+      />
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
         {/* Header */}
         <header className="text-center mb-8 relative">

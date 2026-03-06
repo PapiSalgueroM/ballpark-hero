@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
 
 const NbaChain = () => {
   const {
@@ -53,13 +54,18 @@ const NbaChain = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <PageSeo
+        title="NBA Chain Game – Basketball Player Connection Game | DoUKnowBall"
+        description="Build the longest chain of connected NBA players by naming teammates. Each link must share a team. Free basketball trivia — no signup needed."
+        path="/nba-chain"
+      />
       <div className="max-w-3xl mx-auto px-4 py-6 md:py-10">
         <header className="text-center mb-6 relative">
           <h1 className="text-3xl md:text-5xl font-bold tracking-[0.12em] text-primary font-display mb-1">
             NBA CHAIN GAME
           </h1>
           <p className="text-muted-foreground text-sm">
-            Build the longest chain of connected NBA players
+            Build the longest chain of connected NBA players by naming teammates. Each new player must have shared a team with the previous one.
           </p>
           <button
             onClick={() => setShowHowToPlay(true)}

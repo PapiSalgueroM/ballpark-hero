@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
 
 const FootballConnect4 = () => {
   const {
@@ -60,6 +61,11 @@ const FootballConnect4 = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <PageSeo
+        title="Soccer Connect 4 – Soccer Trivia Grid Game | DoUKnowBall"
+        description="Play Connect 4 with soccer trivia! Name players matching club and league criteria to claim cells. Free soccer puzzle game — no login required."
+        path="/football-connect-4"
+      />
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-10">
         <header className="text-center mb-6 relative">
           <h1 className="text-3xl md:text-5xl font-bold tracking-[0.12em] text-primary font-display mb-1">
