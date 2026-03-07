@@ -4,10 +4,10 @@ import { ConnectionsBoard } from '@/components/connections/ConnectionsBoard';
 import { ConnectionsHowToPlay } from '@/components/connections/ConnectionsHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
-import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight, Shuffle, Flame, Share2 } from 'lucide-react';
+import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight, Shuffle, Flame } from 'lucide-react';
+import ShareButtons from '@/components/game/ShareButtons';
 import { cn } from '@/lib/utils';
 import { ConnectionDifficulty } from '@/types/connections';
-import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -219,26 +219,18 @@ const Connections = () => {
                   </div>
                 </>
               )}
-              <div className="mt-6 flex items-center gap-3 justify-center flex-wrap">
+              <ShareButtons
+                score={gameStatus === 'won' ? `${solvedGroups.length}/4 groups, ${lives} lives left` : `${solvedGroups.length}/4 groups`}
+                gameName="Connections"
+                gamePath="/connections"
+              />
+              <div className="mt-4 flex items-center gap-3 justify-center flex-wrap">
                 <button
                   onClick={resetGame}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
                 >
                   <RotateCcw className="w-4 h-4" />
                   Retry
-                </button>
-                <button
-                  onClick={() => {
-                    const result = gameStatus === 'won'
-                      ? `🎉 Connections Puzzle ${(puzzleIndex % totalPuzzles) + 1}\nSolved with ${lives} ${lives === 1 ? 'life' : 'lives'} remaining!`
-                      : `😞 Connections Puzzle ${(puzzleIndex % totalPuzzles) + 1}\nCouldn't crack all the connections`;
-                    const groups = solvedGroups.map(g => `✅ ${g.category}`).join('\n');
-                    shareResult(`${result}\n${groups}\n\nPlay at douknowball.lovable.app/connections`, 'Connections');
-                  }}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-                >
-                  <Share2 className="w-4 h-4" />
-                  Share
                 </button>
                 <button
                   onClick={nextPuzzle}

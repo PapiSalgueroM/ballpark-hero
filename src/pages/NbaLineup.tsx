@@ -9,8 +9,8 @@ import NbaStatSpinner from '@/components/nba/NbaStatSpinner';
 import NbaPlayerSuggestions from '@/components/nba/NbaPlayerSuggestions';
 import { NbaHowToPlay } from '@/components/nba/NbaHowToPlay';
 import { cn } from '@/lib/utils';
-import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, Share2, HelpCircle } from 'lucide-react';
-import { shareResult } from '@/lib/share';
+import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
+import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -376,28 +376,18 @@ const NbaLineup = () => {
               )}
             </div>
 
-            <div className="flex justify-center gap-3">
+            <ShareButtons
+              score={verdict.rating}
+              gameName="NBA Starting 5"
+              gamePath="/nba-starting-5"
+            />
+            <div className="flex justify-center gap-3 mt-4">
               <button
                 onClick={resetGame}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
               >
                 <RotateCcw className="w-4 h-4" />
                 Play Again
-              </button>
-              <button
-                onClick={() => {
-                  const lines = filledSlotsArray.map(
-                    (s) => `${s.label} – ${s.playerName}${s.statValue != null ? ` (${s.statValue} ${challenge?.unit})` : ''} (🏀 ${s.assignedTeam})`
-                  );
-                  const dir = challenge?.direction === 'highest' ? '⬆️' : '⬇️';
-                  const totalLine = totalStat !== null ? `\nTotal: ${Number.isInteger(totalStat) ? totalStat : totalStat.toFixed(1)} ${challenge?.unit}` : '';
-                  const text = `🏀 My NBA Starting 5\n${dir} ${challenge?.stat} Challenge\n${verdict.rating}\n"${verdict.headline}"\n\n${lines.join('\n')}${totalLine}\n\nPlay at douknowball.lovable.app/nba-starting-5`;
-                  shareResult(text, 'NBA Starting 5');
-                }}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-              >
-                <Share2 className="w-4 h-4" />
-                Share
               </button>
             </div>
           </div>

@@ -4,7 +4,6 @@ import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import { NbaChainHowToPlay } from '@/components/nba-chain/NbaChainHowToPlay';
 import ChainSuggestions from '@/components/nba-chain/ChainSuggestions';
-import { shareResult } from '@/lib/share';
 import { cn } from '@/lib/utils';
 import {
   RotateCcw,
@@ -12,11 +11,11 @@ import {
   AlertCircle,
   HelpCircle,
   Link2,
-  Share2,
   Trophy,
   StopCircle,
   ArrowRight,
 } from 'lucide-react';
+import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -35,7 +34,7 @@ const NbaChain = () => {
     submitPlayer,
     endGame,
     resetGame,
-    getShareText,
+    
   } = useNbaChain();
 
   const [playerInput, setPlayerInput] = useState('');
@@ -195,20 +194,18 @@ const NbaChain = () => {
             {gameOverReason && (
               <p className="text-sm text-muted-foreground">{gameOverReason}</p>
             )}
-            <div className="flex items-center justify-center gap-3">
+            <ShareButtons
+              score={`${score} chain (best: ${bestStreak})`}
+              gameName="NBA Chain Game"
+              gamePath="/nba-chain"
+            />
+            <div className="flex items-center justify-center gap-3 mt-4">
               <button
                 onClick={resetGame}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
               >
                 <RotateCcw className="w-4 h-4" />
                 Play Again
-              </button>
-              <button
-                onClick={() => shareResult(getShareText())}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
-              >
-                <Share2 className="w-4 h-4" />
-                Share Chain
               </button>
             </div>
           </div>

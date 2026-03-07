@@ -6,6 +6,7 @@ import { UfcHowToPlay } from '@/components/ufc/UfcHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import { RotateCcw, HelpCircle } from 'lucide-react';
+import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -101,9 +102,14 @@ const UfcGame = () => {
                   </p>
                 </>
               )}
+              <ShareButtons
+                score={gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`}
+                gameName="UFC Guesser"
+                gamePath="/ufc"
+              />
               <button
                 onClick={resetGame}
-                className="mt-6 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+                className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
               >
                 <RotateCcw className="w-4 h-4" />
                 Play Again

@@ -5,6 +5,7 @@ import { GameBoard } from '@/components/game/GameBoard';
 import { HowToPlay } from '@/components/game/HowToPlay';
 import { cn } from '@/lib/utils';
 import { RotateCcw, HelpCircle } from 'lucide-react';
+import ShareButtons from '@/components/game/ShareButtons';
 import { getClubLogoUrl } from '@/lib/clubData';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
@@ -167,9 +168,14 @@ const Index = () => {
                   </div>
                 </>
               )}
+              <ShareButtons
+                score={gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`}
+                gameName="Footle"
+                gamePath="/"
+              />
               <button
                 onClick={() => resetGame()}
-                className="mt-6 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+                className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
               >
                 <RotateCcw className="w-4 h-4" />
                 Play Again

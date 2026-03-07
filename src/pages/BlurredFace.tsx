@@ -5,8 +5,8 @@ import { BlurredFaceHowToPlay } from '@/components/blurred-face/BlurredFaceHowTo
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import { RotateCcw, HelpCircle, Flag, Search } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { shareResult } from '@/lib/share';
+import ShareButtons from '@/components/game/ShareButtons';
+
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -74,14 +74,6 @@ const BlurredFace = () => {
 
   const isGameOver = gameStatus === 'won' || gameStatus === 'lost' || gameStatus === 'gave-up';
 
-  const handleShare = () => {
-    if (!targetPlayer) return;
-    const status = gameStatus === 'won' ? `✅ Guessed in ${wrongGuesses.length + 1}/${maxGuesses}` : '❌ Failed';
-    shareResult(
-      '🖼️ Footle — Guess the Face',
-      `${status}\nPlayer: ${targetPlayer.name}\nHints used: ${revealedHints.length}`,
-    );
-  };
 
   return (
     <main className="min-h-screen bg-background">
@@ -254,21 +246,18 @@ const BlurredFace = () => {
                 </>
               )}
 
-              <div className="flex items-center justify-center gap-3 mt-6">
-                <button
-                  onClick={resetGame}
-                  className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Play Again
-                </button>
-                <button
-                  onClick={handleShare}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-colors"
-                >
-                  📤 Share
-                </button>
-              </div>
+              <ShareButtons
+                score={gameStatus === 'won' ? `${wrongGuesses.length + 1}/${maxGuesses} guesses` : `0/${maxGuesses}`}
+                gameName="Guess the Face"
+                gamePath="/guess-the-face"
+              />
+              <button
+                onClick={resetGame}
+                className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Play Again
+              </button>
             </div>
           </div>
         )}

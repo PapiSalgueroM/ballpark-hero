@@ -4,9 +4,9 @@ import { CareerBoard } from '@/components/career/CareerBoard';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import { getClubLogoUrl } from '@/lib/clubData';
-import { RotateCcw, Flag, Search, Lightbulb, HelpCircle, Share2 } from 'lucide-react';
+import { RotateCcw, Flag, Search, Lightbulb, HelpCircle } from 'lucide-react';
+import ShareButtons from '@/components/game/ShareButtons';
 import { CareerHowToPlay } from '@/components/career/CareerHowToPlay';
-import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -221,27 +221,18 @@ const CareerGame = () => {
                   </p>
                 </>
               )}
-              <div className="mt-6 flex items-center gap-3 justify-center">
-                <button
-                  onClick={() => { resetGame(); setInput(''); }}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Play Again
-                </button>
-                <button
-                  onClick={() => {
-                    const result = gameStatus === 'won'
-                      ? `🎉 Career Quiz\nGuessed ${targetPlayer.name} in ${guessesUsed} ${guessesUsed === 1 ? 'guess' : 'guesses'} with ${boxesUsed} ${boxesUsed === 1 ? 'box' : 'boxes'} uncovered!`
-                      : `😞 Career Quiz\nCouldn't guess ${targetPlayer.name}`;
-                    shareResult(`${result}\n\nPlay at douknowball.lovable.app/career`, 'Career Quiz');
-                  }}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-                >
-                  <Share2 className="w-4 h-4" />
-                  Share
-                </button>
-              </div>
+              <ShareButtons
+                score={gameStatus === 'won' ? `${guessesUsed} guesses, ${boxesUsed} boxes` : `0/${maxGuesses}`}
+                gameName="Career Quiz"
+                gamePath="/career"
+              />
+              <button
+                onClick={() => { resetGame(); setInput(''); }}
+                className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Play Again
+              </button>
             </div>
           </div>
         )}

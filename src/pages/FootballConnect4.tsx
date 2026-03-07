@@ -5,17 +5,16 @@ import { Footer } from '@/components/game/Footer';
 import { FootballConnect4Board } from '@/components/football-connect4/FootballConnect4Board';
 import { FootballConnect4HowToPlay } from '@/components/football-connect4/FootballConnect4HowToPlay';
 import FootballConnect4Suggestions from '@/components/football-connect4/FootballConnect4Suggestions';
-import { shareResult } from '@/lib/share';
 import { cn } from '@/lib/utils';
 import {
   RotateCcw,
   Loader2,
   AlertCircle,
   HelpCircle,
-  Share2,
   X,
   SkipForward,
 } from 'lucide-react';
+import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -38,7 +37,7 @@ const FootballConnect4 = () => {
     submitPlayer,
     skipTurn,
     resetGame,
-    getShareText,
+    
   } = useFootballConnect4();
 
   const [playerInput, setPlayerInput] = useState('');
@@ -216,20 +215,18 @@ const FootballConnect4 = () => {
                   : `${winner === 'blue' ? '🔵 Blue' : '🔴 Red'} Wins! 🎉`}
               </span>
             </div>
-            <div className="flex items-center justify-center gap-3">
+            <ShareButtons
+              score={isDraw ? 'Draw' : `${winner === 'blue' ? 'Blue' : 'Red'} wins`}
+              gameName="Soccer Connect 4"
+              gamePath="/football-connect-4"
+            />
+            <div className="flex items-center justify-center gap-3 mt-4">
               <button
                 onClick={resetGame}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
               >
                 <RotateCcw className="w-4 h-4" />
                 Play Again
-              </button>
-              <button
-                onClick={() => shareResult(getShareText())}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
-              >
-                <Share2 className="w-4 h-4" />
-                Share
               </button>
             </div>
           </div>
