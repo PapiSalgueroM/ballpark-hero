@@ -34,7 +34,7 @@ const NbaChain = () => {
     submitPlayer,
     endGame,
     resetGame,
-    getShareText,
+    
   } = useNbaChain();
 
   const [playerInput, setPlayerInput] = useState('');

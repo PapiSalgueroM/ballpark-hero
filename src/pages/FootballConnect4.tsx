@@ -37,7 +37,7 @@ const FootballConnect4 = () => {
     submitPlayer,
     skipTurn,
     resetGame,
-    getShareText,
+    
   } = useFootballConnect4();
 
   const [playerInput, setPlayerInput] = useState('');

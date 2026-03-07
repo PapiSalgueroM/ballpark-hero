@@ -6,7 +6,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import { RotateCcw, HelpCircle, Flag, Search } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
-import { cn } from '@/lib/utils';
+
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -74,14 +74,6 @@ const BlurredFace = () => {
 
   const isGameOver = gameStatus === 'won' || gameStatus === 'lost' || gameStatus === 'gave-up';
 
-  const handleShare = () => {
-    if (!targetPlayer) return;
-    const status = gameStatus === 'won' ? `✅ Guessed in ${wrongGuesses.length + 1}/${maxGuesses}` : '❌ Failed';
-    shareResult(
-      '🖼️ Footle — Guess the Face',
-      `${status}\nPlayer: ${targetPlayer.name}\nHints used: ${revealedHints.length}`,
-    );
-  };
 
   return (
     <main className="min-h-screen bg-background">
