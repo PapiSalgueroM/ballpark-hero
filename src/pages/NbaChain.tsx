@@ -20,6 +20,7 @@ import {
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const NbaChain = () => {
   const {
@@ -212,6 +213,17 @@ const NbaChain = () => {
             </div>
           </div>
         )}
+
+        <GameSeoContent
+          title="Pro Basketball Chain Game | DoUKnowBall"
+          description="Chain together players who shared a team. How long can you keep the chain going before you get stuck?"
+          howToPlay={[
+            "Start with a given NBA player",
+            "Name a player who was a teammate of the previous player",
+            "Keep the chain going as long as you can — no repeats allowed",
+            "Your best streak is saved locally so you can beat your record",
+          ]}
+        />
 
         <AdBanner slot="1234567898" format="horizontal" className="mt-8" />
 
