@@ -19,6 +19,7 @@ import {
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const FootballConnect4 = () => {
   const {
@@ -233,6 +234,17 @@ const FootballConnect4 = () => {
             </div>
           </div>
         )}
+
+        <GameSeoContent
+          title="Football Connect 4 | DoUKnowBall"
+          description="Connect four football players in a row by finding the common link — teams played for, draft class, position or awards."
+          howToPlay={[
+            "Two players take turns — Blue and Red",
+            "Pick a column to drop your piece into the grid",
+            "Name a soccer player who matches both the column and row criteria",
+            "First to connect 4 in a row (horizontal, vertical or diagonal) wins",
+          ]}
+        />
 
         <AdBanner slot="1234567898" format="horizontal" className="mt-8" />
         <div className="flex justify-center mt-6">

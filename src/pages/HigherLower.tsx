@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 
 type StatKey = 'appearances' | 'goals' | 'assists' | 'trophies' | 'internationalCaps';
 
@@ -146,6 +147,16 @@ const HigherLowerGame = () => {
             </div>
           </div>
         )}
+
+        <GameSeoContent
+          title="Higher or Lower Sports Game | DoUKnowBall"
+          description="Guess whether the next player's stat is higher or lower. Tests your knowledge of player stats across football, NBA and UFC."
+          howToPlay={[
+            "Two players are shown side by side with their stats",
+            "Pick a stat where the left player has a higher value",
+            "Correct picks extend your streak — wrong picks end the game",
+          ]}
+        />
 
         <AdBanner slot="1234567894" format="horizontal" className="mt-8" />
 

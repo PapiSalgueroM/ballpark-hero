@@ -10,6 +10,7 @@ import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const BlurredFace = () => {
   const {
@@ -271,6 +272,17 @@ const BlurredFace = () => {
             </div>
           </div>
         )}
+
+        <GameSeoContent
+          title="Guess The Player | DoUKnowBall"
+          description="Clues are revealed one by one — position, college, draft info, teams, stats and awards. Guess the mystery player before all clues run out."
+          howToPlay={[
+            "A blurred photo of a soccer player is shown",
+            "Each wrong guess slightly unblurs the image and reveals a hint",
+            "Use the hints (nationality, club, position) to narrow it down",
+            "Guess correctly before running out of attempts to win",
+          ]}
+        />
 
         <AdBanner slot="1234567895" format="horizontal" className="mt-8" />
 

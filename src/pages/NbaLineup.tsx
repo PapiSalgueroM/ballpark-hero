@@ -14,6 +14,7 @@ import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const NbaLineup = () => {
   const {
@@ -401,6 +402,17 @@ const NbaLineup = () => {
             </div>
           </div>
         )}
+
+        <GameSeoContent
+          title="Pro Basketball Starting 5 | DoUKnowBall"
+          description="Build the starting five that matches all the given criteria. Tests your knowledge of NBA rosters, positions and player history."
+          howToPlay={[
+            "Spin to receive a stat challenge (highest or lowest)",
+            "Pick a position and get a random NBA team assignment",
+            "Name a player from that team to fill the slot",
+            "Submit your lineup for an AI evaluation and rating",
+          ]}
+        />
 
         <AdBanner slot="1234567897" format="horizontal" className="mt-8" />
 

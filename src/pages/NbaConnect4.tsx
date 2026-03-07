@@ -9,6 +9,7 @@ import { RotateCcw, Loader2, AlertCircle, HelpCircle, SkipForward, ArrowDown } f
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const ROWS = 6;
 const COLS = 7;
@@ -280,6 +281,17 @@ const NbaConnect4 = () => {
             </button>
           </div>
         )}
+
+        <GameSeoContent
+          title="Pro Basketball Connect 4 | DoUKnowBall"
+          description="Connect four basketball players in a row by finding what links them together — teams, awards, colleges or stats."
+          howToPlay={[
+            "Pick a column to drop your piece into the lowest empty row",
+            "Name an NBA player who matches both the column and row criteria",
+            "Valid answers place your piece — first to get 4 in a row wins",
+            "Each player can only be used once per game",
+          ]}
+        />
 
         <AdBanner slot="1234567898" format="horizontal" className="mt-8" />
 

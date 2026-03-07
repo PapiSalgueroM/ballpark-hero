@@ -10,6 +10,7 @@ import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const CareerGame = () => {
   const {
@@ -244,6 +245,17 @@ const CareerGame = () => {
             </div>
           </div>
         )}
+
+        <GameSeoContent
+          title="Career Path Game | DoUKnowBall"
+          description="Guess the mystery sports player from their career history. Each clue reveals a team they played for. The fewer clues you need, the higher your score."
+          howToPlay={[
+            "Click boxes to reveal teams from the mystery player's career",
+            "Use the search bar to guess the player at any time",
+            "Use hints to reveal additional boxes automatically",
+            "The fewer boxes and guesses you use, the better your score",
+          ]}
+        />
 
         <AdBanner slot="1234567891" format="horizontal" className="mt-8" />
 
