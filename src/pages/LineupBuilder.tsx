@@ -13,6 +13,7 @@ import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -324,6 +325,17 @@ const LineupBuilder = () => {
             </div>
           </div>
         )}
+
+        <GameSeoContent
+          title="Build Your XI | DoUKnowBall"
+          description="Build your ultimate starting eleven from players who match specific criteria. Test your football knowledge across positions, teams and eras."
+          howToPlay={[
+            "Choose a formation for your starting eleven",
+            "Spin to get a random team assignment for each position",
+            "Name a player from that team who fits the position",
+            "Submit your full XI for an AI-powered evaluation and rating",
+          ]}
+        />
 
         <AdBanner slot="1234567896" format="horizontal" className="mt-8" />
 

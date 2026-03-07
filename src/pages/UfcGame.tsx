@@ -9,6 +9,7 @@ import { RotateCcw, HelpCircle } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const UfcGame = () => {
   const {
@@ -129,6 +130,17 @@ const UfcGame = () => {
             <span>Higher / Lower hint</span>
           </div>
         </div>
+
+        <GameSeoContent
+          title="Combat Sports Trivia Game | DoUKnowBall"
+          description="Test your UFC and MMA knowledge with daily trivia puzzles covering fighters, records, weight classes and championship history."
+          howToPlay={[
+            "A mystery UFC fighter is selected — guess who it is in 8 tries",
+            "Each guess reveals clues: weight class, record, nationality and more",
+            "Green means correct, yellow means close, red means wrong",
+            "Use the higher/lower arrows to narrow down numeric stats",
+          ]}
+        />
 
         <AdBanner slot="1234567892" format="horizontal" className="mt-8" />
 
