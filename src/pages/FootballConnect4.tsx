@@ -6,7 +6,6 @@ import { FootballConnect4Board } from '@/components/football-connect4/FootballCo
 import { FootballConnect4HowToPlay } from '@/components/football-connect4/FootballConnect4HowToPlay';
 import FootballConnect4Suggestions from '@/components/football-connect4/FootballConnect4Suggestions';
 import { cn } from '@/lib/utils';
-import { cn } from '@/lib/utils';
 import {
   RotateCcw,
   Loader2,

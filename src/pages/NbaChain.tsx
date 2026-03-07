@@ -5,7 +5,6 @@ import { Footer } from '@/components/game/Footer';
 import { NbaChainHowToPlay } from '@/components/nba-chain/NbaChainHowToPlay';
 import ChainSuggestions from '@/components/nba-chain/ChainSuggestions';
 import { cn } from '@/lib/utils';
-import { cn } from '@/lib/utils';
 import {
   RotateCcw,
   Loader2,
