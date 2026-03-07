@@ -2,7 +2,8 @@ import { useHigherLower } from '@/hooks/useHigherLower';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import { HigherLowerHowToPlay } from '@/components/higher-lower/HigherLowerHowToPlay';
-import { RotateCcw, HelpCircle, Share2 } from 'lucide-react';
+import { RotateCcw, HelpCircle } from 'lucide-react';
+import ShareButtons from '@/components/game/ShareButtons';
 import { useState } from 'react';
 import { shareResult } from '@/lib/share';
 import { cn } from '@/lib/utils';
@@ -125,25 +126,18 @@ const HigherLowerGame = () => {
                 </div>
               )}
 
-              <div className="mt-6 flex items-center gap-3 justify-center">
-                <button
-                  onClick={resetGame}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Play Again
-                </button>
-                <button
-                  onClick={() => {
-                    const text = `⚽ Higher or Lower\nStreak: ${streak} | Best: ${bestStreak}\n\nPlay at douknowball.lovable.app/higher-lower`;
-                    shareResult(text, 'Higher or Lower');
-                  }}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-                >
-                  <Share2 className="w-4 h-4" />
-                  Share
-                </button>
-              </div>
+              <ShareButtons
+                score={`${streak} streak (best: ${bestStreak})`}
+                gameName="Higher or Lower"
+                gamePath="/higher-lower"
+              />
+              <button
+                onClick={resetGame}
+                className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Play Again
+              </button>
             </div>
           </div>
         )}

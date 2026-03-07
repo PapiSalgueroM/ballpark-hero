@@ -6,6 +6,7 @@ import { NbaConnect4HowToPlay } from '@/components/nba-connect4/NbaConnect4HowTo
 import Connect4Suggestions from '@/components/nba-connect4/Connect4Suggestions';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Loader2, AlertCircle, HelpCircle, SkipForward, ArrowDown } from 'lucide-react';
+import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -271,10 +272,15 @@ const NbaConnect4 = () => {
 
         {/* Reset */}
         {(phase === 'won' || phase === 'draw') && (
-          <div className="flex justify-center mt-6">
+          <div className="flex flex-col items-center mt-6">
+            <ShareButtons
+              score={phase === 'draw' ? 'Draw' : `${winInfo?.winner === 'red' ? 'Red' : 'Blue'} wins`}
+              gameName="NBA Connect 4"
+              gamePath="/nba-connect-4"
+            />
             <button
               onClick={resetGame}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
+              className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
             >
               <RotateCcw className="w-4 h-4" />
               New Game
