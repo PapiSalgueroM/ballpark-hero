@@ -5,7 +5,6 @@ import { HigherLowerHowToPlay } from '@/components/higher-lower/HigherLowerHowTo
 import { RotateCcw, HelpCircle } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { useState } from 'react';
-import { shareResult } from '@/lib/share';
 import { cn } from '@/lib/utils';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';

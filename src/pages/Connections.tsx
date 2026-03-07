@@ -8,7 +8,6 @@ import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight, Shuffle, Flame } fr
 import ShareButtons from '@/components/game/ShareButtons';
 import { cn } from '@/lib/utils';
 import { ConnectionDifficulty } from '@/types/connections';
-import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';

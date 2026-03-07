@@ -7,7 +7,6 @@ import { getClubLogoUrl } from '@/lib/clubData';
 import { RotateCcw, Flag, Search, Lightbulb, HelpCircle } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { CareerHowToPlay } from '@/components/career/CareerHowToPlay';
-import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';

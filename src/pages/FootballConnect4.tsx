@@ -5,7 +5,7 @@ import { Footer } from '@/components/game/Footer';
 import { FootballConnect4Board } from '@/components/football-connect4/FootballConnect4Board';
 import { FootballConnect4HowToPlay } from '@/components/football-connect4/FootballConnect4HowToPlay';
 import FootballConnect4Suggestions from '@/components/football-connect4/FootballConnect4Suggestions';
-import { shareResult } from '@/lib/share';
+import { cn } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import {
   RotateCcw,

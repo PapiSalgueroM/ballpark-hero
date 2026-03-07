@@ -10,7 +10,6 @@ import { cn } from '@/lib/utils';
 import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { LineupHowToPlay } from '@/components/lineup/LineupHowToPlay';
-import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';

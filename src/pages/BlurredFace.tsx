@@ -7,7 +7,6 @@ import { Footer } from '@/components/game/Footer';
 import { RotateCcw, HelpCircle, Flag, Search } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { cn } from '@/lib/utils';
-import { shareResult } from '@/lib/share';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
