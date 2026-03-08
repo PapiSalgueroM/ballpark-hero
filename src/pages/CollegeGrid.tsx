@@ -75,7 +75,7 @@ const CollegeGrid = () => {
           activeCell={activeCell}
           onCellClick={setActiveCell}
           accentVar="--cg-green"
-          headerBgVar="--cg-green"
+          headerBgVar="--cg-header"
         />
 
         {activeCell !== null && gameStatus === 'playing' && (
