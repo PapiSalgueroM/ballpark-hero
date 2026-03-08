@@ -16,6 +16,7 @@ import NbaChain from "./pages/NbaChain";
 import WorldCup from "./pages/WorldCup";
 import FootballConnect4 from "./pages/FootballConnect4";
 import FootballGrid from "./pages/FootballGrid";
+import CollegeGrid from "./pages/CollegeGrid";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -44,6 +45,7 @@ const App = () => (
           <Route path="/football-connect-4" element={<FootballConnect4 />} />
           <Route path="/world-cup" element={<WorldCup />} />
           <Route path="/football-grid" element={<FootballGrid />} />
+          <Route path="/college-grid" element={<CollegeGrid />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/admin/login" element={<AdminLogin />} />
