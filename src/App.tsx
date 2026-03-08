@@ -13,6 +13,7 @@ import UfcGame from "./pages/UfcGame";
 import NbaLineup from "./pages/NbaLineup";
 import NbaConnect4 from "./pages/NbaConnect4";
 import NbaChain from "./pages/NbaChain";
+import WorldCup from "./pages/WorldCup";
 import FootballConnect4 from "./pages/FootballConnect4";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/nba-connect-4" element={<NbaConnect4 />} />
           <Route path="/nba-chain" element={<NbaChain />} />
           <Route path="/football-connect-4" element={<FootballConnect4 />} />
+          <Route path="/world-cup" element={<WorldCup />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/admin/login" element={<AdminLogin />} />
