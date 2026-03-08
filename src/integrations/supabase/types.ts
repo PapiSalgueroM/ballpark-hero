@@ -38,6 +38,36 @@ export type Database = {
         }
         Relationships: []
       }
+      college_guess_scores: {
+        Row: {
+          clues_used: number
+          created_at: string
+          guessed: boolean
+          id: string
+          mode: string
+          puzzle_date: string
+          score: number
+        }
+        Insert: {
+          clues_used: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date: string
+          score: number
+        }
+        Update: {
+          clues_used?: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date?: string
+          score?: number
+        }
+        Relationships: []
+      }
       football_grid_selections: {
         Row: {
           cell_index: number

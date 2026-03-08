@@ -32,9 +32,10 @@ const CATEGORIES: { title: string; games: GameLink[] }[] = [
     ],
   },
   {
-    title: 'College Football',
+    title: 'College',
     games: [
       { path: '/college-grid', label: '🎓 College Grid', description: 'College football 3×3 grid puzzle', daily: true },
+      { path: '/guess-the-college', label: '🎓 Guess The College', description: 'Guess the D1 school from clues', daily: true },
     ],
   },
   {
