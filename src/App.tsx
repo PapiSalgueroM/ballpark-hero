@@ -23,6 +23,7 @@ import BaseballCareer from "./pages/BaseballCareer";
 import BaseballConnections from "./pages/BaseballConnections";
 import HockeyCareer from "./pages/HockeyCareer";
 import HockeyHigherLower from "./pages/HockeyHigherLower";
+import NFLCareer from "./pages/NFLCareer";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
