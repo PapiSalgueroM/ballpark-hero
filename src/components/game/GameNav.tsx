@@ -25,6 +25,7 @@ const moreGames = [
   { path: '/baseball-connections', label: '⚾ Connections', description: 'Group baseball players' },
   { path: '/hockey-career', label: '🏒 Career Path', description: 'Guess the hockey player' },
   { path: '/hockey-higher-lower', label: '🏒 Higher/Lower', description: 'Compare career points' },
+  { path: '/nfl-career', label: '🏈 NFL Career Path', description: 'Guess the NFL player' },
 ];
 
 function GameSection({ title, games, currentPath, grid }: { title: string; games: typeof footyGames; currentPath: string; grid?: boolean }) {
