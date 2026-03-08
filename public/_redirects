@@ -13,6 +13,7 @@
 /terms/ /terms 301
 /world-cup/ /world-cup 301
 /football-grid/ /football-grid 301
+/college-grid/ /college-grid 301
 
 # SPA fallback
 /* /index.html 200
