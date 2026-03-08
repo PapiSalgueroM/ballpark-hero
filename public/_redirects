@@ -1,4 +1,5 @@
 # Remove trailing slashes (301 redirect)
+/footle/ /footle 301
 /career/ /career 301
 /higher-lower/ /higher-lower 301
 /connections/ /connections 301
