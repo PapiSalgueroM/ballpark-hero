@@ -25,51 +25,51 @@ const CATEGORIES: { title: string; games: GameLink[] }[] = [
   {
     title: 'Pro Football',
     games: [
-      { path: '/football-grid', label: '🏈 Pro Football Grid', description: '3×3 grid puzzle with rarity scores' },
-      { path: '/football-timeline', label: '📅 Timeline', description: 'Order players by draft year' },
-      { path: '/football-draft', label: '🎰 Draft Guesser', description: 'Guess the draft round' },
-      { path: '/nfl-career', label: '🏈 NFL Career Path', description: 'Guess the NFL player' },
+      { path: '/football-grid', label: '🏈 Pro Football Grid', description: '3×3 grid puzzle with rarity scores', daily: true },
+      { path: '/football-timeline', label: '📅 Timeline', description: 'Order players by draft year', daily: true },
+      { path: '/football-draft', label: '🎰 Draft Guesser', description: 'Guess the draft round', daily: true },
+      { path: '/nfl-career', label: '🏈 NFL Career Path', description: 'Guess the NFL player', daily: true },
     ],
   },
   {
     title: 'College Football',
     games: [
-      { path: '/college-grid', label: '🎓 College Grid', description: 'College football 3×3 grid puzzle' },
+      { path: '/college-grid', label: '🎓 College Grid', description: 'College football 3×3 grid puzzle', daily: true },
     ],
   },
   {
     title: 'Basketball',
     games: [
       { path: '/nba-starting-5', label: '🏀 NBA Starting 5', description: 'Build a lineup with stat challenges' },
-      { path: '/nba-connect-4', label: '🏀 NBA Connect 4', description: 'NBA trivia meets Connect 4' },
-      { path: '/nba-chain', label: '🔗 NBA Chain', description: 'Build a chain of connected players' },
+      { path: '/nba-connect-4', label: '🏀 NBA Connect 4', description: 'NBA trivia meets Connect 4', daily: true },
+      { path: '/nba-chain', label: '🔗 NBA Chain', description: 'Build a chain of connected players', daily: true },
     ],
   },
   {
     title: 'Baseball',
     games: [
-      { path: '/baseball-career', label: '⚾ Career Path', description: 'Guess the baseball player' },
-      { path: '/baseball-connections', label: '⚾ Connections', description: 'Group baseball players' },
+      { path: '/baseball-career', label: '⚾ Career Path', description: 'Guess the baseball player', daily: true },
+      { path: '/baseball-connections', label: '⚾ Connections', description: 'Group baseball players', daily: true },
     ],
   },
   {
     title: 'Hockey',
     games: [
-      { path: '/hockey-career', label: '🏒 Career Path', description: 'Guess the hockey player' },
-      { path: '/hockey-higher-lower', label: '🏒 Higher/Lower', description: 'Compare career points' },
+      { path: '/hockey-career', label: '🏒 Career Path', description: 'Guess the hockey player', daily: true },
+      { path: '/hockey-higher-lower', label: '🏒 Higher/Lower', description: 'Compare career points', daily: true },
     ],
   },
   {
     title: 'Combat Sports',
     games: [
-      { path: '/ufc', label: '🥊 UFC Guesser', description: 'Guess the UFC fighter' },
+      { path: '/ufc', label: '🥊 UFC Guesser', description: 'Guess the UFC fighter', daily: true },
     ],
   },
   {
     title: 'Multi-Sport',
     games: [
       { path: '/teammates', label: '🤝 Teammates or Not?', description: 'Were they ever teammates?' },
-      { path: '/olympics', label: '🏅 The Medal Games', description: 'Guess the mystery athlete' },
+      { path: '/olympics', label: '🏅 The Medal Games', description: 'Guess the mystery athlete', daily: true },
     ],
   },
 ];
