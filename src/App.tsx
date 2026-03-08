@@ -63,6 +63,7 @@ const App = () => (
           <Route path="/hockey-higher-lower" element={<HockeyHigherLower />} />
           <Route path="/nfl-career" element={<NFLCareer />} />
           <Route path="/teammates" element={<Teammates />} />
+          <Route path="/olympics" element={<Olympics />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/admin/login" element={<AdminLogin />} />
