@@ -1,0 +1,49 @@
+import { TeammatesPair } from '@/types/teammates';
+
+export const teammatesPairs: TeammatesPair[] = [
+  // EASY (difficulty 1) — obvious pairings
+  { player1: "LeBron James", player2: "Dwyane Wade", sport: "NBA", answer: true, funFact: "Both played for the Miami Heat from 2010–2014, winning two championships together.", difficulty: 1 },
+  { player1: "Tom Brady", player2: "Rob Gronkowski", sport: "NFL", answer: true, funFact: "Teammates on the Patriots (2010–2018) and Buccaneers (2020–2021), winning 4 Super Bowls together.", difficulty: 1 },
+  { player1: "Lionel Messi", player2: "Neymar", sport: "Soccer", answer: true, funFact: "Both played for Barcelona (2013–2017) and Paris Saint-Germain (2021–2023).", difficulty: 1 },
+  { player1: "Stephen Curry", player2: "Kevin Durant", sport: "NBA", answer: true, funFact: "Both played for the Golden State Warriors from 2016–2019, winning two championships.", difficulty: 1 },
+  { player1: "Peyton Manning", player2: "Aaron Rodgers", sport: "NFL", answer: false, funFact: "They never played together — Manning was with the Colts/Broncos while Rodgers was with the Packers/Jets.", difficulty: 1 },
+  { player1: "Cristiano Ronaldo", player2: "Lionel Messi", sport: "Soccer", answer: false, funFact: "Despite being the greatest rivals, they never played on the same club team.", difficulty: 1 },
+  { player1: "Patrick Mahomes", player2: "Travis Kelce", sport: "NFL", answer: true, funFact: "Both have been Kansas City Chiefs teammates since 2017, winning multiple Super Bowls.", difficulty: 1 },
+  { player1: "Kobe Bryant", player2: "Shaquille O'Neal", sport: "NBA", answer: true, funFact: "Lakers teammates from 1996–2004, winning three consecutive championships (2000–2002).", difficulty: 1 },
+  { player1: "Zlatan Ibrahimovic", player2: "Cristiano Ronaldo", sport: "Soccer", answer: false, funFact: "They never played on the same team — Zlatan left Barcelona before Ronaldo's brief return to Man Utd.", difficulty: 1 },
+  { player1: "Michael Jordan", player2: "Scottie Pippen", sport: "NBA", answer: true, funFact: "Chicago Bulls teammates from 1987–1998, winning six NBA championships together.", difficulty: 1 },
+
+  // MEDIUM (difficulty 2) — less obvious
+  { player1: "David Beckham", player2: "Zlatan Ibrahimovic", sport: "Soccer", answer: true, funFact: "Both played for PSG during the 2012–2013 season.", difficulty: 2 },
+  { player1: "LeBron James", player2: "Shaquille O'Neal", sport: "NBA", answer: true, funFact: "They were Cleveland Cavaliers teammates during the 2009–2010 season.", difficulty: 2 },
+  { player1: "Russell Wilson", player2: "Peyton Manning", sport: "NFL", answer: false, funFact: "They were division rivals — Wilson with Seattle and Manning with Denver — but never teammates.", difficulty: 2 },
+  { player1: "Thierry Henry", player2: "Lionel Messi", sport: "Soccer", answer: true, funFact: "Both played for Barcelona from 2007–2010, with Henry providing assists for a young Messi.", difficulty: 2 },
+  { player1: "Derrick Henry", player2: "Patrick Mahomes", sport: "NFL", answer: false, funFact: "Henry was with the Titans/Ravens, never a teammate of Mahomes on the Chiefs.", difficulty: 2 },
+  { player1: "Kevin Garnett", player2: "Ray Allen", sport: "NBA", answer: true, funFact: "Both played for the Boston Celtics (2007–2012), winning the 2008 championship.", difficulty: 2 },
+  { player1: "Wayne Rooney", player2: "Robin van Persie", sport: "Soccer", answer: true, funFact: "Both played for Manchester United from 2012–2015, winning the Premier League in 2013.", difficulty: 2 },
+  { player1: "Odell Beckham Jr.", player2: "Baker Mayfield", sport: "NFL", answer: true, funFact: "Both played for the Cleveland Browns from 2019–2021.", difficulty: 2 },
+  { player1: "James Harden", player2: "Kevin Durant", sport: "NBA", answer: true, funFact: "Teammates on OKC Thunder (2009–2012) and briefly on the Brooklyn Nets (2021).", difficulty: 2 },
+  { player1: "Sergio Ramos", player2: "Lionel Messi", sport: "Soccer", answer: true, funFact: "Despite years as El Clásico rivals, they became PSG teammates in 2021–2023.", difficulty: 2 },
+
+  // HARD (difficulty 3) — obscure overlaps and tricky false ones
+  { player1: "Randy Moss", player2: "Tom Brady", sport: "NFL", answer: true, funFact: "Moss joined the Patriots in 2007, setting the single-season TD receiving record with 23 TDs alongside Brady.", difficulty: 3 },
+  { player1: "Andrea Pirlo", player2: "David Villa", sport: "Soccer", answer: true, funFact: "Both played for New York City FC in MLS — Pirlo from 2015–2017 and Villa from 2014–2018.", difficulty: 3 },
+  { player1: "Carmelo Anthony", player2: "LeBron James", sport: "NBA", answer: true, funFact: "Briefly teammates on the 2003 draft class All-Star teams, and finally on the Lakers in 2021–2022.", difficulty: 3 },
+  { player1: "Aaron Rodgers", player2: "Davante Adams", sport: "NFL", answer: true, funFact: "Both played for the Green Bay Packers from 2014–2021, forming one of the best QB-WR duos.", difficulty: 3 },
+  { player1: "Frank Lampard", player2: "Andrea Pirlo", sport: "Soccer", answer: true, funFact: "Both played in MLS — Lampard at NYCFC and Pirlo at NYCFC, they were teammates from 2015–2016!", difficulty: 3 },
+  { player1: "Kyrie Irving", player2: "Luka Dončić", sport: "NBA", answer: true, funFact: "Both played for the Dallas Mavericks starting in 2023, reaching the NBA Finals together.", difficulty: 3 },
+  { player1: "J.J. Watt", player2: "DeAndre Hopkins", sport: "NFL", answer: true, funFact: "Both were Houston Texans teammates from 2013–2019.", difficulty: 3 },
+  { player1: "Ronaldinho", player2: "Cristiano Ronaldo", sport: "Soccer", answer: false, funFact: "They never played together — Ronaldinho left Barcelona in 2008, while Ronaldo was at Manchester United.", difficulty: 3 },
+  { player1: "Tim Duncan", player2: "LeBron James", sport: "NBA", answer: false, funFact: "Despite overlapping careers for 13 seasons, they were always on opposite teams (Spurs vs. various).", difficulty: 3 },
+  { player1: "Von Miller", player2: "Odell Beckham Jr.", sport: "NFL", answer: true, funFact: "Both played for the Los Angeles Rams in the 2021 season, winning Super Bowl LVI together.", difficulty: 3 },
+  { player1: "Robert Lewandowski", player2: "Pierre-Emerick Aubameyang", sport: "Soccer", answer: true, funFact: "Both played for Borussia Dortmund from 2013–2014 before Lewandowski left for Bayern Munich.", difficulty: 3 },
+  { player1: "Russell Westbrook", player2: "LeBron James", sport: "NBA", answer: true, funFact: "Both played for the Los Angeles Lakers during the 2021–2022 season.", difficulty: 3 },
+  { player1: "Cam Newton", player2: "Patrick Mahomes", sport: "NFL", answer: false, funFact: "Newton was with the Panthers/Patriots while Mahomes was with the Chiefs — never teammates.", difficulty: 3 },
+  { player1: "Kylian Mbappé", player2: "Neymar", sport: "Soccer", answer: true, funFact: "Both played for Paris Saint-Germain from 2017–2023.", difficulty: 3 },
+  { player1: "Anthony Davis", player2: "DeMarcus Cousins", sport: "NBA", answer: true, funFact: "Both played for the New Orleans Pelicans from 2017–2019.", difficulty: 3 },
+  { player1: "Julio Jones", player2: "Derrick Henry", sport: "NFL", answer: true, funFact: "Jones joined the Tennessee Titans in 2021, playing alongside Henry for one season.", difficulty: 3 },
+  { player1: "Eden Hazard", player2: "Kevin De Bruyne", sport: "Soccer", answer: true, funFact: "Both were at Chelsea briefly in 2012–2014, though De Bruyne was mostly on loan.", difficulty: 3 },
+  { player1: "Giannis Antetokounmpo", player2: "Stephen Curry", sport: "NBA", answer: false, funFact: "They've been conference rivals their entire careers — Giannis with the Bucks, Curry with the Warriors.", difficulty: 3 },
+  { player1: "Saquon Barkley", player2: "Jalen Hurts", sport: "NFL", answer: true, funFact: "Barkley joined the Philadelphia Eagles in 2024, becoming Hurts' teammate and rushing for 2,000 yards.", difficulty: 3 },
+  { player1: "Karim Benzema", player2: "Cristiano Ronaldo", sport: "Soccer", answer: true, funFact: "Both played for Real Madrid from 2009–2018, winning four Champions League titles together.", difficulty: 3 },
+];

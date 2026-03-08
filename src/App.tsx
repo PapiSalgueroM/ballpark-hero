@@ -24,6 +24,7 @@ import BaseballConnections from "./pages/BaseballConnections";
 import HockeyCareer from "./pages/HockeyCareer";
 import HockeyHigherLower from "./pages/HockeyHigherLower";
 import NFLCareer from "./pages/NFLCareer";
+import Teammates from "./pages/Teammates";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -60,6 +61,7 @@ const App = () => (
           <Route path="/hockey-career" element={<HockeyCareer />} />
           <Route path="/hockey-higher-lower" element={<HockeyHigherLower />} />
           <Route path="/nfl-career" element={<NFLCareer />} />
+          <Route path="/teammates" element={<Teammates />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/admin/login" element={<AdminLogin />} />

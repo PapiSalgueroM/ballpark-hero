@@ -26,6 +26,7 @@ const moreGames = [
   { path: '/hockey-career', label: '🏒 Career Path', description: 'Guess the hockey player' },
   { path: '/hockey-higher-lower', label: '🏒 Higher/Lower', description: 'Compare career points' },
   { path: '/nfl-career', label: '🏈 NFL Career Path', description: 'Guess the NFL player' },
+  { path: '/teammates', label: '🤝 Teammates or Not?', description: 'Were they ever teammates?' },
 ];
 
 function GameSection({ title, games, currentPath, grid }: { title: string; games: typeof footyGames; currentPath: string; grid?: boolean }) {
