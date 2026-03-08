@@ -21,6 +21,8 @@ import FootballTimeline from "./pages/FootballTimeline";
 import FootballDraft from "./pages/FootballDraft";
 import BaseballCareer from "./pages/BaseballCareer";
 import BaseballConnections from "./pages/BaseballConnections";
+import HockeyCareer from "./pages/HockeyCareer";
+import HockeyHigherLower from "./pages/HockeyHigherLower";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -54,6 +56,8 @@ const App = () => (
           <Route path="/football-draft" element={<FootballDraft />} />
           <Route path="/baseball-career" element={<BaseballCareer />} />
           <Route path="/baseball-connections" element={<BaseballConnections />} />
+          <Route path="/hockey-career" element={<HockeyCareer />} />
+          <Route path="/hockey-higher-lower" element={<HockeyHigherLower />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/admin/login" element={<AdminLogin />} />

@@ -23,6 +23,8 @@ const moreGames = [
   { path: '/football-draft', label: '🎰 Draft Guesser', description: 'Guess the draft round' },
   { path: '/baseball-career', label: '⚾ Career Path', description: 'Guess the baseball player' },
   { path: '/baseball-connections', label: '⚾ Connections', description: 'Group baseball players' },
+  { path: '/hockey-career', label: '🏒 Career Path', description: 'Guess the hockey player' },
+  { path: '/hockey-higher-lower', label: '🏒 Higher/Lower', description: 'Compare career points' },
 ];
 
 function GameSection({ title, games, currentPath, grid }: { title: string; games: typeof footyGames; currentPath: string; grid?: boolean }) {
