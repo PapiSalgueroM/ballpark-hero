@@ -62,6 +62,33 @@ export type Database = {
         }
         Relationships: []
       }
+      medal_games_scores: {
+        Row: {
+          clues_used: number
+          created_at: string
+          guessed: boolean
+          id: string
+          puzzle_date: string
+          score: number
+        }
+        Insert: {
+          clues_used: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          puzzle_date: string
+          score: number
+        }
+        Update: {
+          clues_used?: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          puzzle_date?: string
+          score?: number
+        }
+        Relationships: []
+      }
       question_reports: {
         Row: {
           created_at: string
