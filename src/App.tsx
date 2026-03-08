@@ -52,6 +52,8 @@ const App = () => (
           <Route path="/college-grid" element={<CollegeGrid />} />
           <Route path="/football-timeline" element={<FootballTimeline />} />
           <Route path="/football-draft" element={<FootballDraft />} />
+          <Route path="/baseball-career" element={<BaseballCareer />} />
+          <Route path="/baseball-connections" element={<BaseballConnections />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/admin/login" element={<AdminLogin />} />

@@ -21,6 +21,8 @@ const moreGames = [
   { path: '/college-grid', label: '🎓 College Grid', description: 'College football 3×3 grid puzzle' },
   { path: '/football-timeline', label: '📅 Timeline', description: 'Order players by draft year' },
   { path: '/football-draft', label: '🎰 Draft Guesser', description: 'Guess the draft round' },
+  { path: '/baseball-career', label: '⚾ Career Path', description: 'Guess the baseball player' },
+  { path: '/baseball-connections', label: '⚾ Connections', description: 'Group baseball players' },
 ];
 
 function GameSection({ title, games, currentPath, grid }: { title: string; games: typeof footyGames; currentPath: string; grid?: boolean }) {
