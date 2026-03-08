@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { baseballConnectionsPuzzles, BaseballConnectionGroup } from '@/data/baseballConnectionsPuzzles';
+import { baseballConnectionsPuzzles } from '@/data/baseballConnectionsPuzzles';
 
 function getDailyIndex(): number {
   const now = new Date();
