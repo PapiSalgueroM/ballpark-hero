@@ -27,6 +27,7 @@ import HockeyHigherLower from "./pages/HockeyHigherLower";
 import NFLCareer from "./pages/NFLCareer";
 import Teammates from "./pages/Teammates";
 import Olympics from "./pages/Olympics";
+import GuessTheCollege from "./pages/GuessTheCollege";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -66,6 +67,7 @@ const App = () => (
           <Route path="/nfl-career" element={<NFLCareer />} />
           <Route path="/teammates" element={<Teammates />} />
           <Route path="/olympics" element={<Olympics />} />
+          <Route path="/guess-the-college" element={<GuessTheCollege />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/admin/login" element={<AdminLogin />} />
