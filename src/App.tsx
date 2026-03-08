@@ -27,6 +27,7 @@ import HockeyHigherLower from "./pages/HockeyHigherLower";
 import NFLCareer from "./pages/NFLCareer";
 import Teammates from "./pages/Teammates";
 import Olympics from "./pages/Olympics";
+import GuessTheCollege from "./pages/GuessTheCollege";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
