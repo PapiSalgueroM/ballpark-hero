@@ -102,6 +102,11 @@ export function GameNav() {
                 >
                   <span className="text-xl font-bold text-primary font-display">{g.label}</span>
                   <span className="text-xs text-muted-foreground text-center">{g.description}</span>
+                  {g.daily && (
+                    <span className="inline-flex items-center text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-primary/15 text-primary mt-1">
+                      Daily
+                    </span>
+                  )}
                 </Link>
               ))}
             </div>
