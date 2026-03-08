@@ -48,6 +48,8 @@ const App = () => (
           <Route path="/world-cup" element={<WorldCup />} />
           <Route path="/football-grid" element={<FootballGrid />} />
           <Route path="/college-grid" element={<CollegeGrid />} />
+          <Route path="/football-timeline" element={<FootballTimeline />} />
+          <Route path="/football-draft" element={<FootballDraft />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/admin/login" element={<AdminLogin />} />

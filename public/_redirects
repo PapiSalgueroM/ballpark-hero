@@ -14,6 +14,8 @@
 /world-cup/ /world-cup 301
 /football-grid/ /football-grid 301
 /college-grid/ /college-grid 301
+/football-timeline/ /football-timeline 301
+/football-draft/ /football-draft 301
 
 # SPA fallback
 /* /index.html 200
