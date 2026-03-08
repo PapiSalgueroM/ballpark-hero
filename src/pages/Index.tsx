@@ -21,13 +21,13 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     title: 'Soccer',
     emoji: '⚽',
     games: [
-      { path: '/footle', label: 'Footle', emoji: '🎯', description: 'Guess the soccer player from stats', daily: true, storageKey: 'footle' },
-      { path: '/career', label: 'Career Quiz', emoji: '📜', description: 'Guess from career history', daily: true, storageKey: 'career-game' },
-      { path: '/higher-lower', label: 'Higher or Lower', emoji: '📊', description: 'Compare all-time career stats', daily: true },
-      { path: '/connections', label: 'Connections', emoji: '🔗', description: 'Find groups of 4 connected players', daily: true },
+      { path: '/footle', label: 'Footle', emoji: '🎯', description: 'Guess the soccer player from stats', storageKey: 'footle' },
+      { path: '/career', label: 'Career Quiz', emoji: '📜', description: 'Guess from career history', storageKey: 'career-game' },
+      { path: '/higher-lower', label: 'Higher or Lower', emoji: '📊', description: 'Compare all-time career stats' },
+      { path: '/connections', label: 'Connections', emoji: '🔗', description: 'Find groups of 4 connected players' },
       { path: '/build-your-xi', label: 'Build Your XI', emoji: '⚽', description: 'Create a lineup, get AI rated' },
-      { path: '/guess-the-face', label: 'Guess the Face', emoji: '🖼️', description: 'Unblur the soccer player', daily: true },
-      { path: '/football-connect-4', label: 'Connect 4', emoji: '🔴', description: 'Soccer trivia meets Connect 4', daily: true },
+      { path: '/guess-the-face', label: 'Guess the Face', emoji: '🖼️', description: 'Unblur the soccer player' },
+      { path: '/football-connect-4', label: 'Connect 4', emoji: '🔴', description: 'Soccer trivia meets Connect 4' },
       { path: '/world-cup', label: 'World Cup', emoji: '🏆', description: 'Guess the World Cup legend', daily: true },
     ],
   },
@@ -42,10 +42,11 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     ],
   },
   {
-    title: 'College Football',
+    title: 'College',
     emoji: '🎓',
     games: [
       { path: '/college-grid', label: 'College Grid', emoji: '🎓', description: 'College football 3×3 grid puzzle', daily: true },
+      { path: '/guess-the-college', label: 'Guess The College', emoji: '🏫', description: 'Guess the D1 school from clues', daily: true, isNew: true },
     ],
   },
   {
@@ -53,8 +54,8 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     emoji: '🏀',
     games: [
       { path: '/nba-starting-5', label: 'NBA Starting 5', emoji: '🏀', description: 'Build a lineup with stat challenges' },
-      { path: '/nba-connect-4', label: 'NBA Connect 4', emoji: '🏀', description: 'NBA trivia meets Connect 4', daily: true },
-      { path: '/nba-chain', label: 'NBA Chain', emoji: '🔗', description: 'Build a chain of connected players', daily: true },
+      { path: '/nba-connect-4', label: 'NBA Connect 4', emoji: '🏀', description: 'NBA trivia meets Connect 4' },
+      { path: '/nba-chain', label: 'NBA Chain', emoji: '🔗', description: 'Build a chain of connected players' },
     ],
   },
   {
@@ -77,7 +78,7 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     title: 'Combat Sports',
     emoji: '🥊',
     games: [
-      { path: '/ufc', label: 'UFC Guesser', emoji: '🥊', description: 'Guess the UFC fighter', daily: true },
+      { path: '/ufc', label: 'UFC Guesser', emoji: '🥊', description: 'Guess the UFC fighter' },
     ],
   },
   {
