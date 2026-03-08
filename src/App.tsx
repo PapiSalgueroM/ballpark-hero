@@ -13,6 +13,7 @@ import UfcGame from "./pages/UfcGame";
 import NbaLineup from "./pages/NbaLineup";
 import NbaConnect4 from "./pages/NbaConnect4";
 import NbaChain from "./pages/NbaChain";
+import WorldCup from "./pages/WorldCup";
 import FootballConnect4 from "./pages/FootballConnect4";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
