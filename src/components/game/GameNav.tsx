@@ -17,6 +17,7 @@ const moreGames = [
   { path: '/nba-starting-5', label: '🏀 NBA Starting 5', description: 'Build a lineup with stat challenges' },
   { path: '/nba-connect-4', label: '🏀 NBA Connect 4', description: 'NBA trivia meets Connect 4' },
   { path: '/nba-chain', label: '🔗 NBA Chain', description: 'Build a chain of connected players' },
+  { path: '/football-grid', label: '🏈 Pro Football Grid', description: '3×3 grid puzzle with rarity scores' },
 ];
 
 function GameSection({ title, games, currentPath, grid }: { title: string; games: typeof footyGames; currentPath: string; grid?: boolean }) {
