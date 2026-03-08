@@ -1,11 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import PageSeo from '@/components/seo/PageSeo';
 
 const TermsOfService = () => {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
+      <PageSeo title="Terms of Service — DoUKnowBall" description="Terms of service for DoUKnowBall sports trivia games." path="/terms" />
       <button
         onClick={() => navigate(-1)}
         className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
@@ -15,7 +17,7 @@ const TermsOfService = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Terms of Service</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: February 10, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: March 8, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -25,80 +27,79 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">2. Description of Service</h2>
-          <p>DoUKnowBall is a free, browser-based entertainment platform that provides sports-themed trivia and guessing games. Current game modes include:</p>
-          <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li><strong>Footle</strong> — Guess the soccer player from stat-based clues in 8 tries</li>
-            <li><strong>Career Quiz</strong> — Identify a player from their season-by-season career history</li>
-            <li><strong>Higher or Lower</strong> — Compare all-time career statistics between players</li>
-            <li><strong>Connections</strong> — Find groups of 4 players sharing a hidden link</li>
-            <li><strong>Build Your XI</strong> — Create a lineup and receive an AI-generated rating</li>
-            <li><strong>Guess the Face</strong> — Identify a blurred soccer player as hints are revealed</li>
-            <li><strong>Soccer Connect 4</strong> — Two-player trivia Connect 4 with soccer knowledge</li>
-            <li><strong>NBA Guesser</strong> — Guess the NBA player from stat-based clues</li>
-            <li><strong>NBA Build Your V</strong> — Create an NBA lineup and receive an AI rating</li>
-            <li><strong>NBA Chain</strong> — Link NBA players who shared the same team</li>
-            <li><strong>NBA Connect 4</strong> — Two-player trivia Connect 4 with NBA knowledge</li>
-            <li><strong>UFC Guesser</strong> — Guess the UFC fighter from stat-based clues in 8 tries</li>
-          </ul>
-          <p className="mt-2">The Site is provided "as is" and "as available" without any warranties of any kind. The Site is supported by advertising provided by Google AdSense.</p>
+          <p>DoUKnowBall is a free, independent fan site and browser-based entertainment platform that provides sports-themed trivia and guessing games. The Site is operated for entertainment purposes only and is not an official product of any sports league, players' association, or governing body.</p>
+          <p className="mt-2">Current game categories include soccer, pro football (NFL), college football, basketball (NBA), baseball (MLB), hockey (NHL), combat sports (UFC), and multi-sport trivia. The Site is provided "as is" and "as available" without any warranties of any kind.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">3. User Conduct</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">3. Sports Data &amp; Player Information</h2>
+          <p>All sports statistics, player names, team names, and career information presented on this Site are factual public information sourced from publicly available databases and records. This data is used for entertainment and educational purposes in the context of trivia games.</p>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">4. Intellectual Property &amp; Trademarks</h2>
+          <p>All original content, game designs, features, and functionality of DoUKnowBall are owned by DoUKnowBall and are protected by international copyright and intellectual property laws.</p>
+          <p className="mt-2">All team names, player names, league names, logos, and trademarks referenced on this Site are the property of their respective owners and are used solely for identification and informational purposes.</p>
+          <p className="mt-2"><strong>DoUKnowBall is not affiliated with, endorsed by, or sponsored by the NFL, NFLPA, NBA, NBPA, UFC, NHL, NHLPA, MLB, MLBPA, FIFA, IOC, NCAA, or any team, club, or sports governing body.</strong></p>
+          <p className="mt-2">The Olympic name, Olympic rings, and related marks are trademarks of the International Olympic Committee (IOC). DoUKnowBall makes no claim to these marks and does not use any official Olympic branding.</p>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">5. User Conduct</h2>
           <p>You agree not to:</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li>Use the Site for any unlawful purpose or in violation of any applicable laws</li>
             <li>Attempt to interfere with, compromise, or disrupt the Site's systems or infrastructure</li>
-            <li>Scrape, crawl, or use automated tools to extract data from the Site without permission</li>
+            <li>Copy, scrape, crawl, or use automated tools to extract or redistribute game content, data, or any part of the Site without prior written permission</li>
             <li>Reverse engineer, decompile, or attempt to extract the source code of the Site</li>
+            <li>Redistribute, republish, or commercially exploit any game content or data from the Site</li>
             <li>Use the Site in any manner that could damage, disable, or impair its functionality</li>
           </ul>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">4. Intellectual Property</h2>
-          <p>All original content, features, and functionality of DoUKnowBall are owned by DoUKnowBall and are protected by international copyright, trademark, and other intellectual property laws. All player names, fighter names, club names, logos, and brand identifiers referenced on this Site are the property of their respective owners and are used solely for identification and informational purposes. DoUKnowBall is not affiliated with, endorsed by, or sponsored by FIFA, EA Sports, the UFC, any soccer club, MMA organization, league, or governing body.</p>
+          <h2 className="text-lg font-semibold text-foreground mb-2">6. Content Updates</h2>
+          <p>DoUKnowBall reserves the right to add, modify, or remove games, game content, player data, and features at any time without prior notice. Daily challenges, puzzles, and game data may change at our sole discretion.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">5. Disclaimer of Warranties</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">7. Disclaimer of Warranties</h2>
           <p>The Site is provided on an "as is" and "as available" basis. DoUKnowBall makes no representations or warranties of any kind, express or implied, regarding the accuracy, reliability, completeness, or availability of the Site or its content. Player statistics and data presented in the games are approximations for entertainment purposes and may not reflect exact real-world figures.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">6. Limitation of Liability</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">8. Limitation of Liability</h2>
           <p>To the fullest extent permitted by law, DoUKnowBall and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, arising from your use of or inability to use the Site.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">7. Indemnification</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">9. Indemnification</h2>
           <p>You agree to indemnify, defend, and hold harmless DoUKnowBall and its operators from any claims, liabilities, damages, losses, or expenses arising from your use of the Site or your violation of these Terms.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">8. Age Requirement</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">10. Age Requirement</h2>
           <p>The Site is intended for users of all ages. No account creation or personal information is required to use the Site.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">9. Modifications to Terms</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">11. Modifications to Terms</h2>
           <p>DoUKnowBall reserves the right to modify these Terms at any time. Changes will be effective immediately upon posting to the Site. Your continued use of the Site after changes are posted constitutes your acceptance of the revised Terms.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">10. Governing Law</h2>
-          <p>These Terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law principles.</p>
+          <h2 className="text-lg font-semibold text-foreground mb-2">12. Governing Law</h2>
+          <p>These Terms shall be governed by and construed in accordance with the laws of the United States, without regard to conflict of law principles. Any disputes arising under these Terms shall be resolved in the applicable courts.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">11. Contact</h2>
-          <p>If you have any questions about these Terms of Service, please contact us at <a href="mailto:footyfein1@gmail.com" className="underline hover:text-foreground transition-colors">footyfein1@gmail.com</a>.</p>
+          <h2 className="text-lg font-semibold text-foreground mb-2">13. Contact</h2>
+          <p>If you have any questions about these Terms of Service or need to reach us for legal inquiries, please contact us at <a href="mailto:footyfein1@gmail.com" className="underline hover:text-foreground transition-colors">footyfein1@gmail.com</a>.</p>
         </div>
       </section>
 
       <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
-        <p>© 2026 DoUKnowBall. All rights reserved.</p>
-        <p>All logos, club crests, player names, fighter names, and brands are the property of their respective owners and are used for identification purposes only. This application is not affiliated with or endorsed by FIFA, EA Sports, the UFC, the NBA, or any soccer club, MMA organization, basketball team, or sports governing body.</p>
+        <p>All team names, logos and trademarks are property of their respective owners and used for identification purposes only. DoUKnowBall is not affiliated with the NFL, NBA, UFC, NHL, MLB, FIFA, IOC or NCAA. © 2026 DoUKnowBall</p>
         <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>
       </div>
     </div>
