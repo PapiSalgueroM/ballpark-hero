@@ -1,225 +1,261 @@
-import { useState, useEffect } from 'react';
-import { useGame } from '@/hooks/useGame';
-import { PlayerSearch } from '@/components/game/PlayerSearch';
-import { GameBoard } from '@/components/game/GameBoard';
-import { HowToPlay } from '@/components/game/HowToPlay';
-import { cn } from '@/lib/utils';
-import { RotateCcw, HelpCircle } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
-import { getClubLogoUrl } from '@/lib/clubData';
-import { GameNav } from '@/components/game/GameNav';
+import { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { Trophy, Flame, TrendingUp, CheckCircle2, Sparkles } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 import { Footer } from '@/components/game/Footer';
-import AdBanner from '@/components/ads/AdBanner';
-import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 
-const Index = () => {
-  const {
-    difficulty,
-    changeDifficulty,
-    guesses,
-    gameStatus,
-    makeGuess,
-    resetGame,
-    availablePlayers,
-    guessedPlayerNames,
-    maxGuesses,
-    targetPlayer,
-  } = useGame();
+// ─── game registry ───
+interface GameDef {
+  path: string;
+  label: string;
+  emoji: string;
+  description: string;
+  daily?: boolean;
+  isNew?: boolean;
+  storageKey?: string; // localStorage key pattern to check "played today"
+}
 
-  const [showRules, setShowRules] = useState(false);
+const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
+  {
+    title: 'Soccer',
+    emoji: '⚽',
+    games: [
+      { path: '/footle', label: 'Footle', emoji: '🎯', description: 'Guess the soccer player from stats', daily: true, storageKey: 'footle' },
+      { path: '/career', label: 'Career Quiz', emoji: '📜', description: 'Guess from career history', daily: true, storageKey: 'career-game' },
+      { path: '/higher-lower', label: 'Higher or Lower', emoji: '📊', description: 'Compare all-time career stats', daily: true },
+      { path: '/connections', label: 'Connections', emoji: '🔗', description: 'Find groups of 4 connected players', daily: true },
+      { path: '/build-your-xi', label: 'Build Your XI', emoji: '⚽', description: 'Create a lineup, get AI rated' },
+      { path: '/guess-the-face', label: 'Guess the Face', emoji: '🖼️', description: 'Unblur the soccer player', daily: true },
+      { path: '/football-connect-4', label: 'Connect 4', emoji: '🔴', description: 'Soccer trivia meets Connect 4', daily: true },
+      { path: '/world-cup', label: 'World Cup', emoji: '🏆', description: 'Guess the World Cup legend', daily: true },
+    ],
+  },
+  {
+    title: 'Pro Football',
+    emoji: '🏈',
+    games: [
+      { path: '/football-grid', label: 'Pro Football Grid', emoji: '🏈', description: '3×3 grid puzzle with rarity scores', daily: true },
+      { path: '/football-timeline', label: 'Timeline', emoji: '📅', description: 'Order players by draft year', daily: true },
+      { path: '/football-draft', label: 'Draft Guesser', emoji: '🎰', description: 'Guess the draft round', daily: true },
+      { path: '/nfl-career', label: 'NFL Career Path', emoji: '🏈', description: 'Guess the NFL player from clues', daily: true },
+    ],
+  },
+  {
+    title: 'College Football',
+    emoji: '🎓',
+    games: [
+      { path: '/college-grid', label: 'College Grid', emoji: '🎓', description: 'College football 3×3 grid puzzle', daily: true },
+    ],
+  },
+  {
+    title: 'Pro Basketball',
+    emoji: '🏀',
+    games: [
+      { path: '/nba-starting-5', label: 'NBA Starting 5', emoji: '🏀', description: 'Build a lineup with stat challenges' },
+      { path: '/nba-connect-4', label: 'NBA Connect 4', emoji: '🏀', description: 'NBA trivia meets Connect 4', daily: true },
+      { path: '/nba-chain', label: 'NBA Chain', emoji: '🔗', description: 'Build a chain of connected players', daily: true },
+    ],
+  },
+  {
+    title: 'Baseball',
+    emoji: '⚾',
+    games: [
+      { path: '/baseball-career', label: 'Career Path', emoji: '⚾', description: 'Guess the baseball player', daily: true },
+      { path: '/baseball-connections', label: 'Connections', emoji: '⚾', description: 'Group baseball players', daily: true },
+    ],
+  },
+  {
+    title: 'Hockey',
+    emoji: '🏒',
+    games: [
+      { path: '/hockey-career', label: 'Career Path', emoji: '🏒', description: 'Guess the hockey player', daily: true },
+      { path: '/hockey-higher-lower', label: 'Higher / Lower', emoji: '🏒', description: 'Compare career points', daily: true },
+    ],
+  },
+  {
+    title: 'Combat Sports',
+    emoji: '🥊',
+    games: [
+      { path: '/ufc', label: 'UFC Guesser', emoji: '🥊', description: 'Guess the UFC fighter', daily: true },
+    ],
+  },
+  {
+    title: 'Multi-Sport',
+    emoji: '🏅',
+    games: [
+      { path: '/teammates', label: 'Teammates or Not?', emoji: '🤝', description: 'Were they ever teammates?', isNew: true },
+      { path: '/olympics', label: 'The Medal Games', emoji: '🏅', description: 'Guess the mystery athlete from clues', daily: true, isNew: true },
+    ],
+  },
+];
 
-  // Show rules on first visit
-  useEffect(() => {
-    const seen = localStorage.getItem('footle-rules-seen');
-    if (!seen) {
-      setShowRules(true);
-      localStorage.setItem('footle-rules-seen', '1');
+const ALL_GAMES = CATEGORIES.flatMap(c => c.games);
+const TOTAL_GAMES = ALL_GAMES.length;
+
+function getPlayedToday(): Set<string> {
+  const played = new Set<string>();
+  const today = new Date().toISOString().slice(0, 10);
+  // Check common storage patterns
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.includes(today)) {
+      played.add(key);
     }
+  }
+  return played;
+}
+
+function countPlayedGames(): number {
+  const today = new Date().toISOString().slice(0, 10);
+  let count = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.includes(today)) {
+      try {
+        const val = localStorage.getItem(key);
+        if (val) {
+          const parsed = JSON.parse(val);
+          if (parsed.status && parsed.status !== 'playing') count++;
+        }
+      } catch { /* not a game key */ }
+    }
+  }
+  return count;
+}
+
+export default function Index() {
+  const [playedCount, setPlayedCount] = useState(0);
+  const [totalPlayed, setTotalPlayed] = useState<number | null>(null);
+
+  useEffect(() => {
+    setPlayedCount(countPlayedGames());
+  }, []);
+
+  // Fetch total scores from Supabase as social proof
+  useEffect(() => {
+    (async () => {
+      try {
+        const { count } = await supabase
+          .from('medal_games_scores')
+          .select('*', { count: 'exact', head: true });
+        // Combine with grid selections for a bigger number
+        const { count: fgCount } = await supabase
+          .from('football_grid_selections')
+          .select('*', { count: 'exact', head: true });
+        const { count: cgCount } = await supabase
+          .from('college_grid_selections')
+          .select('*', { count: 'exact', head: true });
+        setTotalPlayed((count ?? 0) + (fgCount ?? 0) + (cgCount ?? 0));
+      } catch { /* silent */ }
+    })();
   }, []);
 
   return (
-    <main className="min-h-screen bg-background">
+    <>
       <PageSeo
-        title="Footle – Soccer Player Guessing Game | DoUKnowBall"
-        description="Guess the soccer player in 8 tries using clues like club, league, nationality, and age. One of 10+ free sports trivia games on DoUKnowBall. No login required."
+        title="DoUKnowBall — The Ultimate Sports Trivia Hub"
+        description="20+ free sports trivia games covering soccer, NFL, NBA, MLB, NHL, UFC and more. Daily challenges, no login required. How well do you know ball?"
         path="/"
       />
-      <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
-        {/* Header */}
-        <header className="text-center mb-8 relative">
-          {/* Help button */}
-          <button
-            onClick={() => setShowRules(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
+      <div className="min-h-screen bg-background text-foreground">
+        {/* ─── HERO ─── */}
+        <section className="relative overflow-hidden border-b border-border">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-[hsl(43,85%,55%)]/5" />
+          <div className="relative max-w-3xl mx-auto px-4 py-12 md:py-20 text-center">
+            <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tight text-primary mb-3">
+              DoUKnowBall
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-md mx-auto mb-6">
+              The Ultimate Sports Trivia Hub
+            </p>
 
-          <h1 className="text-5xl md:text-7xl font-bold tracking-[0.25em] text-primary font-display mb-1">
-            FOOTLE
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-lg mx-auto">
-            Guess the soccer player in 8 tries — one of 10+ free sports trivia games across soccer, NBA &amp; UFC. No login. No tracking. Just play.
-          </p>
-
-          {/* Mode Toggle */}
-          <div className="flex items-center justify-center gap-2 mt-6">
-            {(['easy', 'hard', 'insane'] as const).map((mode) => (
-              <button
-                key={mode}
-                onClick={() => changeDifficulty(mode)}
-                className={cn(
-                  'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
-                  difficulty === mode
-                    ? mode === 'easy'
-                      ? 'bg-correct text-correct-foreground'
-                      : mode === 'hard'
-                        ? 'bg-yellow-500 text-white'
-                        : 'bg-destructive text-destructive-foreground'
-                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                )}
-              >
-                {mode}
-              </button>
-            ))}
-          </div>
-
-          {/* Guess Counter */}
-          <p className="text-sm text-muted-foreground mt-4">
-            Guesses:{' '}
-            <span className="text-foreground font-semibold">
-              {guesses.length}
-            </span>{' '}
-            / {maxGuesses}
-          </p>
-        </header>
-
-        {/* Search */}
-        {gameStatus === 'playing' && (
-          <div className="mb-8">
-            <PlayerSearch
-              players={availablePlayers}
-              guessedNames={guessedPlayerNames}
-              onSelect={makeGuess}
-            />
-          </div>
-        )}
-
-        {/* Game Board */}
-        <GameBoard guesses={guesses} maxGuesses={maxGuesses} />
-
-        {/* Game Over */}
-        {gameStatus !== 'playing' && (
-          <div className="mt-8 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              {/* Player image */}
-              {targetPlayer && (
-                <div className="flex justify-center mb-4">
-                  <img
-                    src={`https://img.a]sports.com/tiny-image/player-search/${encodeURIComponent(targetPlayer.name.toLowerCase().replace(/ /g, '-'))}`}
-                    alt={targetPlayer.name}
-                    className="w-24 h-24 rounded-full object-cover bg-secondary border-2 border-primary/30"
-                    onError={(e) => {
-                      const clubLogo = getClubLogoUrl(targetPlayer.club);
-                      if (clubLogo) {
-                        e.currentTarget.src = clubLogo;
-                        e.currentTarget.className = "w-24 h-24 rounded-full object-contain bg-secondary border-2 border-primary/30 p-3";
-                      }
-                    }}
-                  />
+            {/* Stats bar */}
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm">
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                <Flame className="w-4 h-4 text-primary" />
+                <span><strong className="text-foreground">{TOTAL_GAMES}</strong> games to play</span>
+              </div>
+              {totalPlayed !== null && totalPlayed > 0 && (
+                <div className="flex items-center gap-1.5 text-muted-foreground">
+                  <TrendingUp className="w-4 h-4 text-primary" />
+                  <span><strong className="text-foreground">{totalPlayed.toLocaleString()}</strong> rounds played</span>
                 </div>
               )}
-              {gameStatus === 'won' ? (
-                <>
-                  <div className="text-5xl mb-3">🎉</div>
-                  <h2 className="text-2xl font-bold text-correct font-display mb-2">
-                    Correct!
-                  </h2>
-                  <p className="text-foreground">
-                    You guessed{' '}
-                    <span className="font-bold text-primary">
-                      {targetPlayer?.name}
-                    </span>{' '}
-                    in {guesses.length}{' '}
-                    {guesses.length === 1 ? 'try' : 'tries'}!
-                  </p>
-                </>
-              ) : (
-                <>
-                  <div className="text-5xl mb-3">😞</div>
-                  <h2 className="text-2xl font-bold text-destructive font-display mb-2">
-                    Game Over
-                  </h2>
-                  <p className="text-foreground">
-                    The player was{' '}
-                    <span className="font-bold text-primary">
-                      {targetPlayer?.name}
-                    </span>
-                  </p>
-                  <div className="flex items-center justify-center gap-2 mt-1">
-                    {getClubLogoUrl(targetPlayer?.club || '') && (
-                      <img src={getClubLogoUrl(targetPlayer?.club || '')} alt={targetPlayer?.club} className="w-5 h-5 object-contain" />
-                    )}
-                    <p className="text-muted-foreground text-sm">
-                      {targetPlayer?.club} · {targetPlayer?.league}
-                    </p>
-                  </div>
-                </>
-              )}
-              <ShareButtons
-                score={gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`}
-                gameName="Footle"
-                gamePath="/"
-              />
-              <button
-                onClick={() => resetGame()}
-                className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                <Trophy className="w-4 h-4 text-[hsl(43,85%,55%)]" />
+                <span>You've played <strong className="text-foreground">{playedCount}/{TOTAL_GAMES}</strong> today</span>
+              </div>
             </div>
           </div>
-        )}
+        </section>
 
-        {/* Legend */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
-          <div className="flex items-center gap-1.5">
-            <div className="w-4 h-4 rounded bg-correct" />
-            <span>Correct</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-4 h-4 rounded bg-close" />
-            <span>Close</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-4 h-4 rounded bg-incorrect" />
-            <span>Not a match</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span>▲▼</span>
-            <span>Higher / Lower hint</span>
-          </div>
+        {/* ─── GAME CATEGORIES ─── */}
+        <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
+          {CATEGORIES.map(cat => (
+            <section key={cat.title}>
+              <h2 className="flex items-center gap-2 text-lg font-display font-bold text-foreground mb-4">
+                <span className="text-xl">{cat.emoji}</span>
+                {cat.title}
+                <span className="text-xs font-normal text-muted-foreground ml-1">
+                  ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
+                </span>
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {cat.games.map(game => (
+                  <GameCard key={game.path} game={game} />
+                ))}
+              </div>
+            </section>
+          ))}
+
+          {/* ─── SOCIAL PROOF ─── */}
+          {totalPlayed !== null && totalPlayed > 0 && (
+            <section className="rounded-2xl border border-border bg-card p-6 text-center">
+              <TrendingUp className="w-8 h-8 text-primary mx-auto mb-2" />
+              <p className="text-2xl font-display font-bold text-foreground mb-1">
+                {totalPlayed.toLocaleString()} rounds played
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Join players from around the world testing their sports knowledge daily.
+              </p>
+            </section>
+          )}
+
+          <Footer />
         </div>
-
-        {/* Ad placement */}
-        <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
-
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="footle" gameContext={{ targetPlayer: targetPlayer?.name, difficulty }} />
-        </div>
-
-        {/* Game Navigation */}
-        <GameNav />
-        <Footer />
       </div>
-
-      {/* How to Play Modal */}
-      <HowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+    </>
   );
-};
+}
 
-export default Index;
+/* ─── GAME CARD ─── */
+function GameCard({ game }: { game: GameDef }) {
+  return (
+    <Link
+      to={game.path}
+      className="group flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/40 hover:bg-card/80 transition-all"
+    >
+      <span className="text-2xl shrink-0 mt-0.5">{game.emoji}</span>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-display font-bold text-foreground group-hover:text-primary transition-colors">
+            {game.label}
+          </span>
+          {game.daily && (
+            <span className="inline-flex items-center text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-primary/15 text-primary">
+              Daily
+            </span>
+          )}
+          {game.isNew && (
+            <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[hsl(43,85%,55%)]/15 text-[hsl(43,85%,55%)]">
+              <Sparkles className="w-3 h-3" />
+              New
+            </span>
+          )}
+        </div>
+        <p className="text-xs text-muted-foreground mt-0.5 leading-snug">{game.description}</p>
+      </div>
+    </Link>
+  );
+}

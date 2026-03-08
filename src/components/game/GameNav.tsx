@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 const footyGames = [
-  { path: '/', label: '🎯 Footle', description: 'Guess the player from stats' },
+  { path: '/footle', label: '🎯 Footle', description: 'Guess the player from stats' },
   { path: '/career', label: '📜 Career Quiz', description: 'Guess from career history' },
   { path: '/higher-lower', label: '📊 Higher or Lower', description: 'Compare all-time career stats' },
   { path: '/connections', label: '🔗 Connections', description: 'Find groups of 4 players' },
