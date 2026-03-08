@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      football_grid_selections: {
+        Row: {
+          cell_index: number
+          created_at: string
+          id: string
+          player_name: string
+          puzzle_id: string
+        }
+        Insert: {
+          cell_index: number
+          created_at?: string
+          id?: string
+          player_name: string
+          puzzle_id: string
+        }
+        Update: {
+          cell_index?: number
+          created_at?: string
+          id?: string
+          player_name?: string
+          puzzle_id?: string
+        }
+        Relationships: []
+      }
       question_reports: {
         Row: {
           created_at: string
