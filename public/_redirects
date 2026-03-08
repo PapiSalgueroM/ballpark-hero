@@ -11,6 +11,8 @@
 /football-connect-4/ /football-connect-4 301
 /privacy/ /privacy 301
 /terms/ /terms 301
+/world-cup/ /world-cup 301
+/football-grid/ /football-grid 301
 
 # SPA fallback
 /* /index.html 200
