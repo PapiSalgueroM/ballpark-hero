@@ -1,0 +1,16 @@
+# Remove trailing slashes (301 redirect)
+/career/ /career 301
+/higher-lower/ /higher-lower 301
+/connections/ /connections 301
+/build-your-xi/ /build-your-xi 301
+/guess-the-face/ /guess-the-face 301
+/ufc/ /ufc 301
+/nba-starting-5/ /nba-starting-5 301
+/nba-connect-4/ /nba-connect-4 301
+/nba-chain/ /nba-chain 301
+/football-connect-4/ /football-connect-4 301
+/privacy/ /privacy 301
+/terms/ /terms 301
+
+# SPA fallback
+/* /index.html 200
