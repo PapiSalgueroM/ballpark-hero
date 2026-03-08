@@ -1,18 +1,25 @@
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
-const CATEGORIES = [
+interface GameLink {
+  path: string;
+  label: string;
+  description: string;
+  daily?: boolean;
+}
+
+const CATEGORIES: { title: string; games: GameLink[] }[] = [
   {
     title: 'Soccer',
     games: [
-      { path: '/footle', label: '🎯 Footle', description: 'Guess the player from stats' },
-      { path: '/career', label: '📜 Career Quiz', description: 'Guess from career history' },
-      { path: '/higher-lower', label: '📊 Higher or Lower', description: 'Compare all-time career stats' },
-      { path: '/connections', label: '🔗 Connections', description: 'Find groups of 4 players' },
+      { path: '/footle', label: '🎯 Footle', description: 'Guess the player from stats', daily: true },
+      { path: '/career', label: '📜 Career Quiz', description: 'Guess from career history', daily: true },
+      { path: '/higher-lower', label: '📊 Higher or Lower', description: 'Compare all-time career stats', daily: true },
+      { path: '/connections', label: '🔗 Connections', description: 'Find groups of 4 players', daily: true },
       { path: '/build-your-xi', label: '⚽ Build Your XI', description: 'Create a lineup, get AI rated' },
-      { path: '/guess-the-face', label: '🖼️ Guess the Face', description: 'Unblur the soccer player' },
-      { path: '/football-connect-4', label: '🔴🔵 Connect 4', description: 'Soccer trivia meets Connect 4' },
-      { path: '/world-cup', label: '🏆 World Cup', description: 'Guess the World Cup legend' },
+      { path: '/guess-the-face', label: '🖼️ Guess the Face', description: 'Unblur the soccer player', daily: true },
+      { path: '/football-connect-4', label: '🔴🔵 Connect 4', description: 'Soccer trivia meets Connect 4', daily: true },
+      { path: '/world-cup', label: '🏆 World Cup', description: 'Guess the World Cup legend', daily: true },
     ],
   },
   {
