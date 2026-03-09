@@ -39,6 +39,7 @@ import Profile from "./pages/Profile";
 import Leaderboard from "./pages/Leaderboard";
 import GuessTheYear from "./pages/GuessTheYear";
 import GuessNflTeam from "./pages/GuessNflTeam";
+import GuessSoccerClub from "./pages/GuessSoccerClub";
 
 const queryClient = new QueryClient();
 
