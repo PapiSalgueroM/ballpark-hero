@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { HigherLowerPlayer } from '@/types/higherLower';
 import { higherLowerPlayers } from '@/data/higherLowerPlayers';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 type StatKey = 'appearances' | 'goals' | 'assists' | 'trophies' | 'internationalCaps';
 
