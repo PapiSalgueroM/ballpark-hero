@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import {
   NationPuzzle,
@@ -7,6 +7,7 @@ import {
   MAX_CLUES,
   STREAK_BADGES,
 } from '@/types/guessTheNation';
+import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 
 const STORAGE_KEY = 'guess-nation';
 
