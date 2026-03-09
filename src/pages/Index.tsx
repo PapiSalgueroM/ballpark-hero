@@ -167,7 +167,7 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    (async () => {
+    const fetchStats = async () => {
       try {
         // Games played today from multiple score tables
         const tables = [
@@ -186,18 +186,21 @@ export default function Index() {
         }
         setTotalPlayed(total);
 
-        // Active players today (unique users who completed a game today)
-        const today = new Date().toISOString().slice(0, 10);
+        // Active players in last 24 hours from user_scores
+        const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
         const { data: activeData } = await supabase
-          .from('daily_completions')
+          .from('user_scores')
           .select('user_id')
-          .eq('date', today);
+          .gte('last_played_at', cutoff);
         if (activeData) {
-          const uniqueUsers = new Set(activeData.map(r => r.user_id));
-          setTotalPlayers(uniqueUsers.size);
+          setTotalPlayers(activeData.length);
         }
       } catch { /* silent */ }
-    })();
+    };
+
+    fetchStats();
+    const interval = setInterval(fetchStats, 5 * 60 * 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -233,10 +236,14 @@ export default function Index() {
                   <span><strong className="text-foreground">{totalPlayed.toLocaleString()}</strong> games played today</span>
                 </div>
               )}
-              {totalPlayers !== null && totalPlayers > 0 && (
+              {totalPlayers !== null && (
                 <div className="flex items-center gap-1.5 text-muted-foreground">
                   <Users className="w-4 h-4 text-primary" />
-                  <span><strong className="text-foreground">{totalPlayers.toLocaleString()}</strong> playing today</span>
+                  {totalPlayers > 0 ? (
+                    <span><strong className="text-foreground">{totalPlayers.toLocaleString()}</strong> playing today</span>
+                  ) : (
+                    <span>Be the first to play today!</span>
+                  )}
                 </div>
               )}
               <div className="flex items-center gap-1.5 text-muted-foreground">
