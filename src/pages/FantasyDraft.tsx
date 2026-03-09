@@ -1,12 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Shield, Trophy } from 'lucide-react';
+import { Sparkles, Shield, Trophy, Target, Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const FantasyDraft = () => {
   const [started, setStarted] = useState(false);
+  const [criteria, setCriteria] = useState<string | null>(null);
+  const [loadingCriteria, setLoadingCriteria] = useState(true);
+
+  useEffect(() => {
+    const fetchCriteria = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('fantasy-draft-daily');
+        if (!error && data?.criteria) {
+          setCriteria(data.criteria);
+        }
+      } catch {
+        // silent fail
+      } finally {
+        setLoadingCriteria(false);
+      }
+    };
+    fetchCriteria();
+  }, []);
 
   return (
     <>
@@ -41,6 +60,29 @@ const FantasyDraft = () => {
             <p className="text-base sm:text-xl text-muted-foreground max-w-md mx-auto leading-relaxed">
               Draft your Starting XI. Simulate a season. Vote for the winner.
             </p>
+
+            {/* Today's Criteria Card */}
+            {!started && (
+              <div className="w-full max-w-md mx-auto rounded-2xl border border-primary/30 bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-lg shadow-primary/10">
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <Target className="w-5 h-5 text-primary" />
+                  <h2 className="text-sm font-bold uppercase tracking-widest text-primary">
+                    Today's Criteria
+                  </h2>
+                </div>
+                {loadingCriteria ? (
+                  <div className="flex items-center justify-center py-3">
+                    <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+                  </div>
+                ) : criteria ? (
+                  <p className="text-base sm:text-lg font-semibold text-foreground leading-snug">
+                    {criteria}
+                  </p>
+                ) : (
+                  <p className="text-sm text-muted-foreground">Could not load today's criteria.</p>
+                )}
+              </div>
+            )}
 
             <Button
               size="lg"
