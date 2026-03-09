@@ -54,6 +54,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
         gamesPlayedToday: gamesPlayed,
         totalPointsToday: totalPoints,
         dailyRank: rank && rank > 0 ? rank : null,
+        currentStreak: streak,
         loading: false,
       });
     } catch (error) {
