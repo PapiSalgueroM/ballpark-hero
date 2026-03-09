@@ -94,6 +94,8 @@ export function useBaseballCareer() {
 
   const playerNames = useMemo(() => ensureAnswerInOptions(baseballCareerPuzzles.map(p => p.player.name), player.name), [player]);
 
+  useGameCompletion('baseball-career', status !== 'playing', score);
+
   return {
     puzzle,
     player,

@@ -56,6 +56,8 @@ export function useTeammates() {
     return `Teammates or Not? ${emoji} ${score}/${ROUNDS}\n\nhttps://douknowball.com/teammates`;
   }, [gameOver, score]);
 
+  useGameCompletion('teammates', gameOver, score * 100);
+
   return {
     currentPair,
     currentIdx,

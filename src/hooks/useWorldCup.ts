@@ -92,6 +92,8 @@ export function useWorldCup() {
     }
   };
 
+  useGameCompletion('world-cup', gameStatus !== 'playing', score);
+
   return {
     puzzle,
     clues,

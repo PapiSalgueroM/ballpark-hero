@@ -39,6 +39,9 @@ export function useUfcGame() {
   const guessedFighterNames = useMemo(() => guesses.map(g => g.fighterName), [guesses]);
   const validatedFighters = useMemo(() => ensureAnswerInList(uniqueUfcFighters, targetFighter.name, f => f.name, targetFighter), [targetFighter]);
 
+  const completionScore = gameStatus === 'won' ? Math.max(100, (MAX_GUESSES - guesses.length) * 100) : 0;
+  useGameCompletion('ufc-game', gameStatus !== 'playing', completionScore);
+
   return {
     targetFighter,
     guesses,
