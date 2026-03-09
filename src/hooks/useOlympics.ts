@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { olympicAthletes } from '@/data/olympicsAthletes';
 import { OlympicAthlete } from '@/types/olympics';
 import { supabase } from '@/integrations/supabase/client';
+import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { toast } from 'sonner';
 
 const TOTAL_CLUES = 7;
