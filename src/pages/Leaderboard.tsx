@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
-import { Button } from '@/components/ui/button';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
