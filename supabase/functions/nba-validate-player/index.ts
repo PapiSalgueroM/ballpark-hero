@@ -115,6 +115,12 @@ GROUND TRUTH – 2025-26 SEASON ROSTER UPDATES (use these over any older data):
 - Dejounte Murray: New Orleans Pelicans (traded 2024 from Atlanta Hawks).
 - Mikal Bridges: New York Knicks (traded 2024 from Brooklyn Nets).
 - Karl-Anthony Towns: New York Knicks (traded 2024 from Minnesota Timberwolves).
+- Lauri Markkanen: Still on Utah Jazz (2025-26 season).
+- Victor Wembanyama: San Antonio Spurs (drafted 2023, 2025-26 sophomore season).
+- Chet Holmgren: Oklahoma City Thunder (drafted 2022).
+- Paolo Banchero: Orlando Magic (drafted 2022).
+- Zion Williamson: New Orleans Pelicans (drafted 2019).
+- Karl-Anthony Towns: New York Knicks (traded 2024 from Minnesota Timberwolves).
 
 IMPORTANT RULES:
 1. The user MUST provide a full first and last name (e.g. "LeBron James", "Stephen Curry"). If they only provide a first name (e.g. "LeBron", "Steph", "Kobe") or a nickname without a last name, return {"valid": false, "reason": "Please enter the player's full first and last name (e.g. 'LeBron James')", "fullName": null}. Single-word names are NOT acceptable.
