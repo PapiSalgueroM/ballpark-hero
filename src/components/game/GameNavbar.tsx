@@ -93,6 +93,14 @@ export function GameNavbar() {
                 </span>
               </div>
 
+              {/* Streak */}
+              {user && currentStreak > 0 && (
+                <div className="flex items-center gap-1 text-xs sm:text-sm">
+                  <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-500" />
+                  <span className="font-medium text-foreground">{currentStreak}</span>
+                </div>
+              )}
+
               {/* Daily Rank */}
               <div className="flex items-center gap-1 text-xs sm:text-sm">
                 <Medal className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-500" />

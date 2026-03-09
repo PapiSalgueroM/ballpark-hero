@@ -316,6 +316,8 @@ export default function Profile() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <Card>
               <CardContent className="pt-4 text-center">
+                <Flame className="w-8 h-8 text-orange-500 mx-auto mb-2" />
+              <CardContent className="pt-4 text-center">
                 <p className="text-3xl font-bold">{userScoreData?.current_streak ?? viewingProfile.current_streak ?? 0}</p>
                 <p className="text-sm text-muted-foreground">Current Streak</p>
               </CardContent>
