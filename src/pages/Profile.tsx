@@ -19,6 +19,7 @@ interface BestScore {
   achieved_at: string;
 }
 
+
 const GAME_LABELS: Record<string, string> = {
   'footle': '🎯 Footle',
   'career': '📜 Career Quiz',
@@ -58,6 +59,8 @@ export default function Profile() {
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({ display_name: '', username: '' });
   const [saving, setSaving] = useState(false);
+  const [legendStreak, setLegendStreak] = useState<number>(0);
+  const [legendBadgeCount, setLegendBadgeCount] = useState<number>(0);
 
   const isOwnProfile = !username || (profile?.username === username);
 
@@ -103,6 +106,28 @@ export default function Profile() {
           .order('best_score', { ascending: false });
 
         setBestScores(scores || []);
+
+        // Load daily legend badges
+        const { data: badges } = await supabase
+          .from('daily_badges')
+          .select('date, streak_days')
+          .eq('user_id', user.id)
+          .order('date', { ascending: false });
+
+        if (badges && badges.length > 0) {
+          setLegendBadgeCount(badges.length);
+          // Calculate current streak from most recent badge
+          const today = new Date().toISOString().split('T')[0];
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          const yesterdayStr = yesterday.toISOString().split('T')[0];
+          
+          if (badges[0].date === today || badges[0].date === yesterdayStr) {
+            setLegendStreak(badges[0].streak_days);
+          } else {
+            setLegendStreak(0);
+          }
+        }
       } else if (!user) {
         navigate('/');
         toast.error('Please sign in to view your profile');
@@ -290,6 +315,31 @@ export default function Profile() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Daily Legend Streak */}
+          {isOwnProfile && (legendStreak > 0 || legendBadgeCount > 0) && (
+            <Card className="mb-6 border-[hsl(var(--ft-gold)/0.3)] bg-gradient-to-r from-card to-secondary/30">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-4xl">🏆</span>
+                    <div>
+                      <h3 className="text-lg font-bold font-display text-[hsl(var(--ft-gold))]">Daily Legend</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Completed all 37 games in a day — {legendBadgeCount} {legendBadgeCount === 1 ? 'time' : 'times'}
+                      </p>
+                    </div>
+                  </div>
+                  {legendStreak > 0 && (
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-foreground">🔥 {legendStreak} day{legendStreak !== 1 ? 's' : ''}</p>
+                      <p className="text-xs text-muted-foreground">streak</p>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Favourite Game */}
           {getFavouriteGame() && (
