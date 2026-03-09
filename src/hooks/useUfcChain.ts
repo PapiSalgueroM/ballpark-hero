@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { GameState, GameMode, WeightClass, getChainLengthMultiplier, getEarnedBadge } from '@/types/ufcChain';
 import { UFC_FIGHTERS, getFightersWhoBeat, getFightResult, getRandomStartingFighter, getDailyStartingFighter, getHallOfFamers, getFightersByWeightClass } from '@/data/ufcChainData';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const CHAMPIONSHIP_BONUS = 50;
 
