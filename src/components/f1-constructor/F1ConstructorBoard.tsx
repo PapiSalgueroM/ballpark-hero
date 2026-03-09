@@ -113,7 +113,7 @@ export function F1ConstructorBoard() {
         )}
 
         {!isOver && (
-          <F1ConstructorSearch onGuess={handleGuess} guesses={guesses} />
+          <F1ConstructorSearch onGuess={handleGuess} guesses={guesses} currentPuzzle={gameState?.puzzle} />
         )}
 
         {guesses.length > 0 && !isOver && (

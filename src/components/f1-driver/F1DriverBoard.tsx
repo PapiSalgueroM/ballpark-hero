@@ -121,7 +121,7 @@ export function F1DriverBoard() {
 
         {/* Guess input */}
         {!isOver && (
-          <F1DriverSearch onGuess={handleGuess} guesses={guesses} />
+          <F1DriverSearch onGuess={handleGuess} guesses={guesses} currentPuzzle={gameState?.puzzle} />
         )}
 
         {/* Previous guesses */}
