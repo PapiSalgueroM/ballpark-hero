@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { getRandomConnect4Board } from '@/data/nbaConnect4Boards';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 import type {
   Connect4Team,
   Connect4Grid,
