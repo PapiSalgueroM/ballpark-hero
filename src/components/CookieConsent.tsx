@@ -19,15 +19,15 @@ export function CookieConsent() {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-card border-t border-border shadow-lg">
       <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center gap-3 text-sm text-muted-foreground">
-        <p className="flex-1">
-          We use cookies and local storage to save your game progress and serve ads via Google AdSense.{' '}
-          <Link to="/privacy" className="underline hover:text-foreground">Learn more</Link>
+        <p className="flex-1 text-center sm:text-left">
+          We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy.{' '}
+          <Link to="/privacy" className="underline hover:text-foreground font-medium">Learn More</Link>
         </p>
         <button
           onClick={accept}
           className="px-5 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity whitespace-nowrap"
         >
-          Got it
+          Accept
         </button>
       </div>
     </div>
