@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { NascarChainState, NascarChainMode, getNascarChainMultiplier, getNascarEarnedBadge, NASCAR_CHAIN_STARTERS } from '@/types/nascarChain';
 import { supabase } from '@/integrations/supabase/client';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDailyStarter(): string {
   const today = new Date().toISOString().slice(0, 10);
