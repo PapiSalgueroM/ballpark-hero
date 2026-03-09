@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { teammatesPairs } from '@/data/teammatesPairs';
 import { TeammatesPair } from '@/types/teammates';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const ROUNDS = 10;
 
