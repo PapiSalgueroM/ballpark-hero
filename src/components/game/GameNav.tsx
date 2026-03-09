@@ -20,6 +20,7 @@ const CATEGORIES: { title: string; games: GameLink[] }[] = [
       { path: '/guess-the-face', label: '🖼️ Guess the Face', description: 'Unblur the soccer player', daily: true },
       { path: '/football-connect-4', label: '🔴🔵 Connect 4', description: 'Soccer trivia meets Connect 4', daily: true },
       { path: '/world-cup', label: '🏆 World Cup', description: 'Guess the World Cup legend', daily: true },
+      { path: '/guess-soccer-club', label: '🏟️ Guess The Club', description: 'Identify the mystery football club', daily: true },
     ],
   },
   {
