@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useNFLCareer } from '@/hooks/useNFLCareer';
 import { NFLCareerHowToPlay } from '@/components/nfl-career/NFLCareerHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { Search, Flag, HelpCircle, RotateCcw } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
