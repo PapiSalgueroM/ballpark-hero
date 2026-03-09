@@ -158,7 +158,7 @@ export function F1DriverBoard() {
               </>
             )}
 
-            <ShareButtons shareText={shareText} />
+            <ShareButtons score={shareScore} gameName="Guess The F1 Driver" gamePath="/f1-driver" />
 
             {gameState.mode === 'unlimited' && (
               <button
