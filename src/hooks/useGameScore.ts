@@ -14,14 +14,48 @@ export function useGameScore() {
     if (!user) return { saved: false };
 
     try {
+      const today = new Date().toISOString().split('T')[0];
+
       // Insert game score
       await supabase.from('user_game_scores').insert({
         user_id: user.id,
         game_type: gameType,
         score,
         correct_answers: correctAnswers,
-        puzzle_date: new Date().toISOString().split('T')[0],
+        puzzle_date: today,
       });
+
+      // Upsert user_scores for real-time navbar
+      const { data: existing } = await supabase
+        .from('user_scores')
+        .select('total_points, games_played_today, last_played_at')
+        .eq('user_id', user.id)
+        .single();
+
+      const lastDate = existing?.last_played_at
+        ? new Date(existing.last_played_at).toISOString().split('T')[0]
+        : null;
+      const isSameDay = lastDate === today;
+
+      if (!existing) {
+        await supabase.from('user_scores').insert({
+          user_id: user.id,
+          total_points: score,
+          games_played_today: 1,
+          last_played_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
+      } else {
+        await supabase
+          .from('user_scores')
+          .update({
+            total_points: existing.total_points + score,
+            games_played_today: isSameDay ? existing.games_played_today + 1 : 1,
+            last_played_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          })
+          .eq('user_id', user.id);
+      }
 
       // Update or insert best score
       const { data: existingBest } = await supabase
@@ -48,7 +82,6 @@ export function useGameScore() {
       }
 
       // Update streak and stats
-      const today = new Date().toISOString().split('T')[0];
       const lastPlayed = profile?.last_played_date;
       
       let newStreak = profile?.current_streak || 0;
