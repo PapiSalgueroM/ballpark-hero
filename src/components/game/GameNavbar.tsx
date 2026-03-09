@@ -121,6 +121,10 @@ export function GameNavbar() {
         onClose={() => setAuthModal(false)}
         defaultTab="login"
       />
+
+      {showCelebration && (
+        <DailyLegendOverlay streakDays={streakDays} onDismiss={dismissCelebration} />
+      )}
     </>
   );
 }
