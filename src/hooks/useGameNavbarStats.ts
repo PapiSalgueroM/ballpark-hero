@@ -24,7 +24,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
 
   const fetchStats = async () => {
     if (!user) {
-      setStats({ gamesPlayedToday: 0, totalPointsToday: 0, dailyRank: null, loading: false });
+      setStats({ gamesPlayedToday: 0, totalPointsToday: 0, dailyRank: null, currentStreak: 0, loading: false });
       return;
     }
 
