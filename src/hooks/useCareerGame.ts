@@ -3,6 +3,7 @@ import { CareerPlayer } from '@/types/career';
 import { careerPlayers } from '@/data/careerPlayers';
 import { toast } from 'sonner';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const MAX_GUESSES = 8;
 
