@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { collegeGridPuzzles } from '@/data/collegeGridPuzzles';
 import { CellState, FootballGridGameStatus, GridPuzzle } from '@/types/footballGrid';
 import { supabase } from '@/integrations/supabase/client';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDailyIndex(): number {
   const now = new Date();
