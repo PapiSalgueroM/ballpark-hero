@@ -459,6 +459,110 @@ export type Database = {
         }
         Relationships: []
       }
+      tennis_daily: {
+        Row: {
+          created_at: string
+          difficulty: string
+          id: string
+          player_id: string
+          puzzle_date: string
+        }
+        Insert: {
+          created_at?: string
+          difficulty?: string
+          id?: string
+          player_id: string
+          puzzle_date: string
+        }
+        Update: {
+          created_at?: string
+          difficulty?: string
+          id?: string
+          player_id?: string
+          puzzle_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tennis_daily_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "tennis_players"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tennis_players: {
+        Row: {
+          common_names: string[]
+          created_at: string
+          difficulty: string
+          famous_moment_hint: string
+          id: string
+          nationality_era_hint: string
+          player_name: string
+          slam_count_hint: string
+          slam_detail_hint: string
+          tour_hint: string
+          vibe_word: string
+        }
+        Insert: {
+          common_names?: string[]
+          created_at?: string
+          difficulty?: string
+          famous_moment_hint: string
+          id?: string
+          nationality_era_hint: string
+          player_name: string
+          slam_count_hint: string
+          slam_detail_hint: string
+          tour_hint: string
+          vibe_word: string
+        }
+        Update: {
+          common_names?: string[]
+          created_at?: string
+          difficulty?: string
+          famous_moment_hint?: string
+          id?: string
+          nationality_era_hint?: string
+          player_name?: string
+          slam_count_hint?: string
+          slam_detail_hint?: string
+          tour_hint?: string
+          vibe_word?: string
+        }
+        Relationships: []
+      }
+      tennis_scores: {
+        Row: {
+          clues_used: number
+          created_at: string
+          guessed: boolean
+          id: string
+          mode: string
+          puzzle_date: string
+          score: number
+        }
+        Insert: {
+          clues_used: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date: string
+          score: number
+        }
+        Update: {
+          clues_used?: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date?: string
+          score?: number
+        }
+        Relationships: []
+      }
       ufc_chain_scores: {
         Row: {
           chain_length: number

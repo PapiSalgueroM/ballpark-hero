@@ -78,6 +78,12 @@ const CATEGORIES: { title: string; games: GameLink[] }[] = [
     ],
   },
   {
+    title: 'Tennis',
+    games: [
+      { path: '/guess-tennis-player', label: '🎾 Guess The Tennis Player', description: 'Guess the mystery tennis player', daily: true },
+    ],
+  },
+  {
     title: 'Multi-Sport',
     games: [
       { path: '/teammates', label: '🤝 Teammates or Not?', description: 'Were they ever teammates?' },
