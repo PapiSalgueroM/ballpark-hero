@@ -11,6 +11,7 @@ import { AuthModal } from '@/components/auth/AuthModal';
 export function GameNavbar() {
   const { user, profile, loading: authLoading } = useAuth();
   const { gamesPlayedToday, totalPointsToday, dailyRank, totalGames, loading: statsLoading } = useGameNavbarStats();
+  const { showCelebration, streakDays, dismissCelebration } = useDailyLegend();
   const [authModal, setAuthModal] = useState(false);
 
   const getUserInitial = () => {
