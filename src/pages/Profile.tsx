@@ -130,6 +130,21 @@ export default function Profile() {
           } else {
             setLegendStreak(0);
           }
+
+          // Compute badge milestone dates (badges sorted desc by date)
+          const sortedAsc = [...badges].reverse(); // oldest first
+          const firstDate = sortedAsc[0]?.date || null;
+          let streak3Date: string | null = null;
+          let streak7Date: string | null = null;
+          let streak30Date: string | null = null;
+          let streak100Date: string | null = null;
+          for (const b of sortedAsc) {
+            if (!streak3Date && b.streak_days >= 3) streak3Date = b.date;
+            if (!streak7Date && b.streak_days >= 7) streak7Date = b.date;
+            if (!streak30Date && b.streak_days >= 30) streak30Date = b.date;
+            if (!streak100Date && b.streak_days >= 100) streak100Date = b.date;
+          }
+          setBadgeDates({ firstDate, streak3Date, streak7Date, streak30Date, streak100Date });
         }
       } else if (!user) {
         navigate('/');
