@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Trophy, Gamepad2, Medal } from 'lucide-react';
+import { Trophy, Gamepad2, Medal, Flame } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
 import { useDailyLegend } from '@/hooks/useDailyLegend';
