@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { F1DriverState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/f1Driver';
 import { getDailyF1Puzzle, getRandomF1Puzzle, resolveF1Driver } from '@/data/f1Drivers';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 export function useF1Driver() {
   const [gameState, setGameState] = useState<F1DriverState | null>(null);
