@@ -1,17 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
 import { getAllF1DriverNames } from '@/data/f1Drivers';
+import { F1DriverPuzzle } from '@/types/f1Driver';
 
 interface Props {
   onGuess: (name: string) => void;
   disabled?: boolean;
   guesses: string[];
+  currentPuzzle?: F1DriverPuzzle;
 }
 
-export function F1DriverSearch({ onGuess, disabled, guesses }: Props) {
+export function F1DriverSearch({ onGuess, disabled, guesses, currentPuzzle }: Props) {
   const [input, setInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const allDrivers = getAllF1DriverNames();
+  const allDrivers = getAllF1DriverNames(currentPuzzle);
 
   const filtered = input.length >= 1
     ? allDrivers.filter(d =>
