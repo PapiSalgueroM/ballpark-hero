@@ -29,6 +29,7 @@ const CATEGORIES: { title: string; games: GameLink[] }[] = [
       { path: '/football-timeline', label: '📅 Timeline', description: 'Order players by draft year', daily: true },
       { path: '/football-draft', label: '🎰 Draft Guesser', description: 'Guess the draft round', daily: true },
       { path: '/nfl-career', label: '🏈 NFL Career Path', description: 'Guess the NFL player', daily: true },
+      { path: '/guess-nfl-team', label: '🏈 Guess The Team', description: 'Identify the NFL franchise', daily: true },
     ],
   },
   {
