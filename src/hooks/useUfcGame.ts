@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { UfcFighter, UfcGuessResult } from '@/types/ufc';
 import { uniqueUfcFighters } from '@/data/ufcFighters';
 import { compareUfcGuess } from '@/lib/ufcGameLogic';
+import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 
 const MAX_GUESSES = 8;
 
