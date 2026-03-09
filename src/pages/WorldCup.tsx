@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useWorldCup } from '@/hooks/useWorldCup';
 import { WorldCupHowToPlay } from '@/components/world-cup/WorldCupHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
