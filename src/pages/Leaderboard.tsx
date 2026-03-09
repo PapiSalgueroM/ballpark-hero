@@ -88,9 +88,10 @@ export default function Leaderboard() {
     const userIds = sorted.map((s) => s.user_id);
     const { data: profiles } = userIds.length > 0
       ? await supabase.from('profiles').select('user_id, display_name, username, current_streak').in('user_id', userIds)
-      : { data: [] };
+      : { data: [] as any[] };
 
-    const profileMap = new Map(profiles?.map((p) => [p.user_id, p]) || []);
+    const profileMap = new Map<string, { display_name: string | null; username: string | null; current_streak: number }>();
+    profiles?.forEach((p: any) => profileMap.set(p.user_id, p));
 
     const dailyEntries: DailyLeaderboardEntry[] = sorted.map((entry, i) => {
       const p = profileMap.get(entry.user_id);
