@@ -33,6 +33,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import AdminLogin from "./pages/AdminLogin";
 import AdminReports from "./pages/AdminReports";
+import UfcChain from "./pages/UfcChain";
 
 const queryClient = new QueryClient();
 
