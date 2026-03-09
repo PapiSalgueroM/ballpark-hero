@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { timelinePuzzles, TimelinePlayer } from '@/data/timelinePlayers';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDailyIndex(): number {
   const now = new Date();
