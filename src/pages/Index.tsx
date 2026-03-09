@@ -163,6 +163,8 @@ export default function Index() {
         path="/"
       />
       <div className="min-h-screen bg-background text-foreground">
+        <Header />
+        
         {/* ─── HERO ─── */}
         <section className="relative overflow-hidden border-b border-border">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-[hsl(43,85%,55%)]/5" />
