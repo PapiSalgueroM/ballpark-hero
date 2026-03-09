@@ -1,19 +1,16 @@
 import { useUfcChain } from '@/hooks/useUfcChain';
 import { UfcChainSearch } from './UfcChainSearch';
 import { ChainTimeline } from './ChainTimeline';
-import { UFC_FIGHTERS, getFightersWhoBeat } from '@/data/ufcChainData';
+import { UFC_FIGHTERS } from '@/data/ufcChainData';
 import { Button } from '@/components/ui/button';
-import { ShareButtons } from '@/components/game/ShareButtons';
+import ShareButtons from '@/components/game/ShareButtons';
 
 export function CombatChainBoard() {
   const { gameState, makeGuess, giveUp, resetGame } = useUfcChain();
 
-  const handleFighterSelect = (fighter: any) => {
+  const handleFighterSelect = (fighter: { name: string }) => {
     makeGuess(fighter.name);
   };
-
-  const shareText = `I built a chain of ${gameState.chain.length - 1} fighters on DoUKnowBall Combat Chain! Score: ${gameState.score} 🥊`;
-  const shareUrl = 'douknowball.com/ufc-chain';
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -109,9 +106,9 @@ export function CombatChainBoard() {
                 </Button>
                 
                 <ShareButtons 
-                  score={gameState.score}
-                  text={shareText}
-                  url={shareUrl}
+                  score={`${gameState.score} points • Chain of ${gameState.chain.length - 1}`}
+                  gameName="Combat Chain"
+                  gamePath="/ufc-chain"
                 />
               </div>
             </div>

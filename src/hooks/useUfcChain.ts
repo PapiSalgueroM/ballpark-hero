@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { GameState, UfcFighter, ChainLink } from '@/types/ufcChain';
+import { GameState } from '@/types/ufcChain';
 import { UFC_FIGHTERS, getFightersWhoBeat, getRandomStartingFighter } from '@/data/ufcChainData';
 
 export function useUfcChain() {
