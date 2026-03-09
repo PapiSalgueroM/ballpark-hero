@@ -100,22 +100,15 @@ export function useGuessNflTeam() {
   }, [gameState]);
 
   const getAvailableTeams = useCallback(() => {
-    if (!gameState) return nflTeamPuzzles.map(t => t.fullName).sort();
+    // Always show all 32 current NFL teams as selectable options
+    const allTeams = nflTeamPuzzles.map(t => t.fullName);
     
-    const excludeRelocated = gameState.difficulty === 'easy';
-    let teams = nflTeamPuzzles;
-    
-    if (excludeRelocated) {
-      teams = teams.filter(t => !t.isRelocated);
-    }
-    if (gameState.conferenceFilter) {
-      teams = teams.filter(t => t.conference === gameState.conferenceFilter);
-    }
-    if (gameState.divisionFilter) {
-      teams = teams.filter(t => t.division === gameState.divisionFilter);
+    // Ensure the current puzzle answer is always included
+    if (gameState?.puzzle && !allTeams.includes(gameState.puzzle.fullName)) {
+      allTeams.push(gameState.puzzle.fullName);
     }
     
-    return teams.map(t => t.fullName).sort();
+    return [...new Set(allTeams)].sort();
   }, [gameState]);
 
   return {
