@@ -5,123 +5,147 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Trophy, Flame, Calendar, Loader2, Medal } from 'lucide-react';
+import { Trophy, Flame, Calendar, Loader2, Medal, Gamepad2 } from 'lucide-react';
 
-interface LeaderboardEntry {
+interface DailyLeaderboardEntry {
   rank: number;
   user_id: string;
   display_name: string | null;
   username: string | null;
-  score?: number;
-  streak?: number;
+  games_completed: number;
+  total_points: number;
+  current_streak: number;
+}
+
+interface AllTimeEntry {
+  rank: number;
+  user_id: string;
+  display_name: string | null;
+  username: string | null;
+  score: number;
   game_type?: string;
 }
 
-const GAME_OPTIONS = [
-  { value: 'all', label: 'All Games' },
-  { value: 'footle', label: '🎯 Footle' },
-  { value: 'career', label: '📜 Career Quiz' },
-  { value: 'ufc-chain', label: '🔗 Combat Chain' },
-  { value: 'football-grid', label: '🏈 Football Grid' },
-  { value: 'nba-connect-4', label: '🏀 NBA Connect 4' },
-];
+interface StreakEntry {
+  rank: number;
+  user_id: string;
+  display_name: string | null;
+  username: string | null;
+  streak: number;
+}
+
+const TOTAL_GAMES = 37;
 
 export default function Leaderboard() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('daily');
-  const [gameFilter, setGameFilter] = useState('all');
   const [loading, setLoading] = useState(true);
-  const [dailyLeaderboard, setDailyLeaderboard] = useState<LeaderboardEntry[]>([]);
-  const [allTimeLeaderboard, setAllTimeLeaderboard] = useState<LeaderboardEntry[]>([]);
-  const [streakLeaderboard, setStreakLeaderboard] = useState<LeaderboardEntry[]>([]);
-  const [userRank, setUserRank] = useState<number | null>(null);
+  const [dailyLeaderboard, setDailyLeaderboard] = useState<DailyLeaderboardEntry[]>([]);
+  const [allTimeLeaderboard, setAllTimeLeaderboard] = useState<AllTimeEntry[]>([]);
+  const [streakLeaderboard, setStreakLeaderboard] = useState<StreakEntry[]>([]);
 
   useEffect(() => {
     loadLeaderboards();
-  }, [gameFilter, user]);
+  }, [user]);
 
   const loadLeaderboards = async () => {
     setLoading(true);
+    const today = new Date().toISOString().split('T')[0];
 
-    // Load daily scores
-    let dailyQuery = supabase
+    // === Daily leaderboard from daily_completions + user_game_scores ===
+    // Get all completions for today
+    const { data: completions } = await supabase
+      .from('daily_completions')
+      .select('user_id, game_slug')
+      .eq('date', today);
+
+    // Get all scores for today
+    const { data: scores } = await supabase
       .from('user_game_scores')
-      .select(`
-        user_id,
-        score,
-        game_type,
-        profiles!inner(display_name, username)
-      `)
-      .eq('puzzle_date', new Date().toISOString().split('T')[0])
-      .order('score', { ascending: false })
-      .limit(10);
+      .select('user_id, score')
+      .eq('puzzle_date', today);
 
-    if (gameFilter !== 'all') {
-      dailyQuery = dailyQuery.eq('game_type', gameFilter);
-    }
+    // Aggregate per user
+    const userMap = new Map<string, { games: Set<string>; points: number }>();
+    completions?.forEach((c) => {
+      if (!userMap.has(c.user_id)) userMap.set(c.user_id, { games: new Set(), points: 0 });
+      userMap.get(c.user_id)!.games.add(c.game_slug);
+    });
+    scores?.forEach((s) => {
+      if (!userMap.has(s.user_id)) userMap.set(s.user_id, { games: new Set(), points: 0 });
+      userMap.get(s.user_id)!.points += s.score;
+    });
 
-    const { data: dailyData } = await dailyQuery;
+    // Sort by games desc, then points desc
+    const sorted = Array.from(userMap.entries())
+      .map(([uid, data]) => ({ user_id: uid, games_completed: data.games.size, total_points: data.points }))
+      .sort((a, b) => b.games_completed - a.games_completed || b.total_points - a.total_points)
+      .slice(0, 50);
 
-    if (dailyData) {
-      setDailyLeaderboard(
-        dailyData.map((entry: any, index: number) => ({
-          rank: index + 1,
-          user_id: entry.user_id,
-          display_name: entry.profiles?.display_name,
-          username: entry.profiles?.username,
-          score: entry.score,
-          game_type: entry.game_type,
-        }))
-      );
-    }
+    // Fetch profiles for these users
+    const userIds = sorted.map((s) => s.user_id);
+    const { data: profiles } = userIds.length > 0
+      ? await supabase.from('profiles').select('user_id, display_name, username, current_streak').in('user_id', userIds)
+      : { data: [] as any[] };
 
-    // Load all-time best scores
-    let allTimeQuery = supabase
+    const profileMap = new Map<string, { display_name: string | null; username: string | null; current_streak: number }>();
+    profiles?.forEach((p: any) => profileMap.set(p.user_id, p));
+
+    const dailyEntries: DailyLeaderboardEntry[] = sorted.map((entry, i) => {
+      const p = profileMap.get(entry.user_id);
+      return {
+        rank: i + 1,
+        user_id: entry.user_id,
+        display_name: p?.display_name || null,
+        username: p?.username || null,
+        games_completed: entry.games_completed,
+        total_points: entry.total_points,
+        current_streak: p?.current_streak || 0,
+      };
+    });
+    setDailyLeaderboard(dailyEntries);
+
+    // === All-time best scores ===
+    const { data: allTimeData } = await supabase
       .from('user_best_scores')
-      .select(`
-        user_id,
-        best_score,
-        game_type,
-        profiles!inner(display_name, username)
-      `)
+      .select('user_id, best_score, game_type')
       .order('best_score', { ascending: false })
-      .limit(10);
-
-    if (gameFilter !== 'all') {
-      allTimeQuery = allTimeQuery.eq('game_type', gameFilter);
-    }
-
-    const { data: allTimeData } = await allTimeQuery;
+      .limit(50);
 
     if (allTimeData) {
+      const atUserIds = [...new Set(allTimeData.map((d) => d.user_id))];
+      const { data: atProfiles } = atUserIds.length > 0
+        ? await supabase.from('profiles').select('user_id, display_name, username').in('user_id', atUserIds)
+        : { data: [] as any[] };
+      const atMap = new Map<string, { display_name: string | null; username: string | null }>();
+      atProfiles?.forEach((p: any) => atMap.set(p.user_id, p));
+
       setAllTimeLeaderboard(
-        allTimeData.map((entry: any, index: number) => ({
-          rank: index + 1,
+        allTimeData.map((entry, i) => ({
+          rank: i + 1,
           user_id: entry.user_id,
-          display_name: entry.profiles?.display_name,
-          username: entry.profiles?.username,
+          display_name: atMap.get(entry.user_id)?.display_name || null,
+          username: atMap.get(entry.user_id)?.username || null,
           score: entry.best_score,
           game_type: entry.game_type,
         }))
       );
     }
 
-    // Load streak leaderboard
+    // === Streak leaderboard ===
     const { data: streakData } = await supabase
       .from('profiles')
       .select('user_id, display_name, username, current_streak')
       .gt('current_streak', 0)
       .order('current_streak', { ascending: false })
-      .limit(10);
+      .limit(50);
 
     if (streakData) {
       setStreakLeaderboard(
-        streakData.map((entry: any, index: number) => ({
-          rank: index + 1,
+        streakData.map((entry, i) => ({
+          rank: i + 1,
           user_id: entry.user_id,
           display_name: entry.display_name,
           username: entry.username,
@@ -130,159 +154,211 @@ export default function Leaderboard() {
       );
     }
 
-    // Calculate user's rank
-    if (user) {
-      const { count } = await supabase
-        .from('user_game_scores')
-        .select('*', { count: 'exact', head: true })
-        .eq('puzzle_date', new Date().toISOString().split('T')[0])
-        .gt('score', dailyData?.[0]?.score || 0);
-
-      setUserRank(count ? count + 1 : null);
-    }
-
     setLoading(false);
   };
 
-  const getRankIcon = (rank: number) => {
+  const getRankDisplay = (rank: number) => {
     if (rank === 1) return <Medal className="w-5 h-5 text-yellow-500" />;
     if (rank === 2) return <Medal className="w-5 h-5 text-gray-400" />;
     if (rank === 3) return <Medal className="w-5 h-5 text-amber-600" />;
-    return <span className="w-5 h-5 flex items-center justify-center text-muted-foreground">{rank}</span>;
+    return <span className="w-5 text-center text-sm font-medium text-muted-foreground">{rank}</span>;
   };
 
-  const LeaderboardList = ({ entries, type }: { entries: LeaderboardEntry[]; type: 'score' | 'streak' }) => (
-    <div className="space-y-2">
-      {entries.length === 0 ? (
-        <p className="text-center text-muted-foreground py-8">No data yet</p>
-      ) : (
-        entries.map((entry) => (
-          <div
-            key={`${entry.user_id}-${entry.game_type || 'streak'}`}
-            className={`flex items-center gap-3 p-3 rounded-lg border ${
-              entry.user_id === user?.id ? 'border-primary bg-primary/5' : 'border-border'
-            }`}
-          >
-            {getRankIcon(entry.rank)}
-            <div className="flex-1 min-w-0">
-              {entry.username ? (
-                <Link to={`/profile/${entry.username}`} className="font-medium hover:text-primary">
-                  {entry.display_name || `@${entry.username}`}
-                </Link>
-              ) : (
-                <span className="font-medium">{entry.display_name || 'Anonymous'}</span>
-              )}
-              {entry.game_type && (
-                <p className="text-xs text-muted-foreground">{entry.game_type}</p>
-              )}
-            </div>
-            <div className="text-right">
-              {type === 'score' ? (
-                <span className="text-lg font-bold text-primary">{entry.score}</span>
-              ) : (
-                <div className="flex items-center gap-1">
-                  <Flame className="w-4 h-4 text-orange-500" />
-                  <span className="text-lg font-bold">{entry.streak}</span>
-                </div>
-              )}
-            </div>
-          </div>
-        ))
-      )}
-    </div>
-  );
+  const UserName = ({ entry }: { entry: { username: string | null; display_name: string | null } }) =>
+    entry.username ? (
+      <Link to={`/profile/${entry.username}`} className="font-medium hover:text-primary transition-colors truncate">
+        {entry.display_name || `@${entry.username}`}
+      </Link>
+    ) : (
+      <span className="font-medium truncate">{entry.display_name || 'Anonymous'}</span>
+    );
 
   return (
     <>
       <PageSeo
-        title="Leaderboard | DoUKnowBall"
-        description="See the top players on DoUKnowBall. Daily scores, all-time bests, and longest streaks."
+        title="Daily Leaderboard — Top Players Today | DoUKnowBall"
+        description="See who's completed the most games today on DoUKnowBall. Compete for the top spot on the daily leaderboard!"
         path="/leaderboard"
       />
       <div className="min-h-screen bg-background">
         <Header />
 
         <main className="max-w-4xl mx-auto px-4 py-8">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-3xl font-display font-bold">🏆 Leaderboard</h1>
-            <Select value={gameFilter} onValueChange={setGameFilter}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by game" />
-              </SelectTrigger>
-              <SelectContent>
-                {GAME_OPTIONS.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* User's rank */}
-          {user && userRank && (
-            <Card className="mb-6 border-primary">
-              <CardContent className="pt-4">
-                <p className="text-center">
-                  <span className="text-muted-foreground">You are ranked </span>
-                  <span className="text-2xl font-bold text-primary">#{userRank}</span>
-                  <span className="text-muted-foreground"> today</span>
-                </p>
-              </CardContent>
-            </Card>
-          )}
+          <h1 className="text-3xl md:text-4xl font-display font-bold mb-6 text-center">🏆 Leaderboard</h1>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-3 mb-6">
-              <TabsTrigger value="daily" className="gap-2">
+              <TabsTrigger value="daily" className="gap-1.5 text-xs sm:text-sm">
                 <Calendar className="w-4 h-4" />
                 Today
               </TabsTrigger>
-              <TabsTrigger value="alltime" className="gap-2">
+              <TabsTrigger value="alltime" className="gap-1.5 text-xs sm:text-sm">
                 <Trophy className="w-4 h-4" />
                 All Time
               </TabsTrigger>
-              <TabsTrigger value="streaks" className="gap-2">
+              <TabsTrigger value="streaks" className="gap-1.5 text-xs sm:text-sm">
                 <Flame className="w-4 h-4" />
                 Streaks
               </TabsTrigger>
             </TabsList>
 
             {loading ? (
-              <div className="flex justify-center py-12">
+              <div className="flex justify-center py-16">
                 <Loader2 className="w-8 h-8 animate-spin text-primary" />
               </div>
             ) : (
               <>
+                {/* ===== DAILY TAB ===== */}
                 <TabsContent value="daily">
                   <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">Top Scores Today</CardTitle>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg">Top 50 — Games Completed Today</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <LeaderboardList entries={dailyLeaderboard} type="score" />
+                      {dailyLeaderboard.length === 0 ? (
+                        <p className="text-center text-muted-foreground py-12">No one has completed a game yet today. Be the first!</p>
+                      ) : (
+                        <>
+                          {/* Table header */}
+                          <div className="hidden sm:grid grid-cols-[2.5rem_1fr_5rem_5rem_4.5rem] gap-2 px-3 pb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider border-b border-border mb-2">
+                            <span>#</span>
+                            <span>Player</span>
+                            <span className="text-center">Games</span>
+                            <span className="text-center">Points</span>
+                            <span className="text-center">Streak</span>
+                          </div>
+
+                          <div className="space-y-1">
+                            {dailyLeaderboard.map((entry) => {
+                              const isCurrentUser = entry.user_id === user?.id;
+                              return (
+                                <div
+                                  key={entry.user_id}
+                                  className={`grid grid-cols-[2.5rem_1fr_auto] sm:grid-cols-[2.5rem_1fr_5rem_5rem_4.5rem] gap-2 items-center px-3 py-2.5 rounded-lg border transition-colors ${
+                                    isCurrentUser
+                                      ? 'border-green-500/40 bg-green-500/10'
+                                      : 'border-border hover:bg-secondary/30'
+                                  }`}
+                                >
+                                  {/* Rank */}
+                                  <div className="flex items-center justify-center">
+                                    {getRankDisplay(entry.rank)}
+                                  </div>
+
+                                  {/* Name */}
+                                  <div className="min-w-0">
+                                    <UserName entry={entry} />
+                                    {/* Mobile inline stats */}
+                                    <div className="flex items-center gap-3 sm:hidden mt-0.5">
+                                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                        <Gamepad2 className="w-3 h-3" />
+                                        {entry.games_completed}/{TOTAL_GAMES}
+                                      </span>
+                                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                        <Trophy className="w-3 h-3 text-yellow-500" />
+                                        {entry.total_points.toLocaleString()}
+                                      </span>
+                                      {entry.current_streak > 0 && (
+                                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                          <Flame className="w-3 h-3 text-orange-500" />
+                                          {entry.current_streak}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  {/* Desktop stats */}
+                                  <span className="hidden sm:block text-center text-sm font-semibold">
+                                    {entry.games_completed}/{TOTAL_GAMES}
+                                  </span>
+                                  <span className="hidden sm:block text-center text-sm font-semibold text-[hsl(var(--ft-gold))]">
+                                    {entry.total_points.toLocaleString()}
+                                  </span>
+                                  <span className="hidden sm:flex items-center justify-center gap-1 text-sm">
+                                    {entry.current_streak > 0 ? (
+                                      <>
+                                        <Flame className="w-3.5 h-3.5 text-orange-500" />
+                                        <span className="font-medium">{entry.current_streak}</span>
+                                      </>
+                                    ) : (
+                                      <span className="text-muted-foreground">—</span>
+                                    )}
+                                  </span>
+
+                                  {/* Mobile right side — empty since stats inline */}
+                                  <span className="sm:hidden" />
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </>
+                      )}
                     </CardContent>
                   </Card>
                 </TabsContent>
 
+                {/* ===== ALL-TIME TAB ===== */}
                 <TabsContent value="alltime">
                   <Card>
-                    <CardHeader>
+                    <CardHeader className="pb-3">
                       <CardTitle className="text-lg">All-Time Best Scores</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <LeaderboardList entries={allTimeLeaderboard} type="score" />
+                      {allTimeLeaderboard.length === 0 ? (
+                        <p className="text-center text-muted-foreground py-12">No scores yet</p>
+                      ) : (
+                        <div className="space-y-1">
+                          {allTimeLeaderboard.map((entry) => (
+                            <div
+                              key={`${entry.user_id}-${entry.game_type}`}
+                              className={`flex items-center gap-3 p-3 rounded-lg border ${
+                                entry.user_id === user?.id ? 'border-green-500/40 bg-green-500/10' : 'border-border'
+                              }`}
+                            >
+                              <div className="flex items-center justify-center w-6">{getRankDisplay(entry.rank)}</div>
+                              <div className="flex-1 min-w-0">
+                                <UserName entry={entry} />
+                                {entry.game_type && <p className="text-xs text-muted-foreground">{entry.game_type}</p>}
+                              </div>
+                              <span className="text-lg font-bold text-primary">{entry.score}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </TabsContent>
 
+                {/* ===== STREAKS TAB ===== */}
                 <TabsContent value="streaks">
                   <Card>
-                    <CardHeader>
+                    <CardHeader className="pb-3">
                       <CardTitle className="text-lg">Longest Active Streaks</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <LeaderboardList entries={streakLeaderboard} type="streak" />
+                      {streakLeaderboard.length === 0 ? (
+                        <p className="text-center text-muted-foreground py-12">No active streaks</p>
+                      ) : (
+                        <div className="space-y-1">
+                          {streakLeaderboard.map((entry) => (
+                            <div
+                              key={entry.user_id}
+                              className={`flex items-center gap-3 p-3 rounded-lg border ${
+                                entry.user_id === user?.id ? 'border-green-500/40 bg-green-500/10' : 'border-border'
+                              }`}
+                            >
+                              <div className="flex items-center justify-center w-6">{getRankDisplay(entry.rank)}</div>
+                              <div className="flex-1 min-w-0">
+                                <UserName entry={entry} />
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Flame className="w-4 h-4 text-orange-500" />
+                                <span className="text-lg font-bold">{entry.streak}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </TabsContent>
