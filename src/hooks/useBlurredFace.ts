@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { BlurredFacePlayer, BlurredFaceGameStatus, BlurredFaceHint } from '@/types/blurredFace';
 import { blurredFacePlayers } from '@/data/blurredFacePlayers';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const MAX_GUESSES = 6;
 const BLUR_LEVELS = [30, 24, 18, 12, 7, 3, 0]; // index = number of wrong guesses
