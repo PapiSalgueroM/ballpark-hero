@@ -87,6 +87,13 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     ],
   },
   {
+    title: 'Motorsport',
+    emoji: '🏎️',
+    games: [
+      { path: '/f1-driver', label: 'Guess The F1 Driver', emoji: '🏎️', description: 'Guess the mystery F1 driver from clues', daily: true, isNew: true },
+    ],
+  },
+  {
     title: 'Multi-Sport',
     emoji: '🏅',
     games: [
