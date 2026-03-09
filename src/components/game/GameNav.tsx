@@ -64,6 +64,7 @@ const CATEGORIES: { title: string; games: GameLink[] }[] = [
     title: 'Combat Sports',
     games: [
       { path: '/ufc', label: '🥊 UFC Guesser', description: 'Guess the UFC fighter', daily: true },
+      { path: '/ufc-chain', label: '🔗 Combat Chain', description: 'Build a chain of fighters' },
     ],
   },
   {
