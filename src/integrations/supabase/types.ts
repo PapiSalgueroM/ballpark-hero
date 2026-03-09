@@ -172,6 +172,27 @@ export type Database = {
         }
         Relationships: []
       }
+      fantasy_draft_daily: {
+        Row: {
+          created_at: string
+          criteria: string
+          id: string
+          puzzle_date: string
+        }
+        Insert: {
+          created_at?: string
+          criteria: string
+          id?: string
+          puzzle_date: string
+        }
+        Update: {
+          created_at?: string
+          criteria?: string
+          id?: string
+          puzzle_date?: string
+        }
+        Relationships: []
+      }
       football_grid_selections: {
         Row: {
           cell_index: number
