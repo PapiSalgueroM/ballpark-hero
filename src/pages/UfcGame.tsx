@@ -4,6 +4,7 @@ import { UfcFighterSearch } from '@/components/ufc/UfcFighterSearch';
 import { UfcGameBoard } from '@/components/ufc/UfcGameBoard';
 import { UfcHowToPlay } from '@/components/ufc/UfcHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { RotateCcw, HelpCircle } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
