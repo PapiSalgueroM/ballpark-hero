@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
 import { getRandomTeamAssignments } from '@/data/lineupTeams';
 import type { Formation, FilledSlot, GamePhase, AIVerdict, TeamAssignment } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const STORAGE_KEY = 'lineup-builder-state';
 
