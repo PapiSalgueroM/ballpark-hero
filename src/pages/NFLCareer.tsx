@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useNFLCareer } from '@/hooks/useNFLCareer';
 import { NFLCareerHowToPlay } from '@/components/nfl-career/NFLCareerHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { Search, Flag, HelpCircle, RotateCcw } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -66,6 +67,7 @@ const NFLCareer = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="NFL Career Path – Guess the NFL Player | DoUKnowBall"
         description="Can you identify the NFL player from progressive career clues? Draft info, college, teams, stats and more. Free daily trivia — no signup needed."

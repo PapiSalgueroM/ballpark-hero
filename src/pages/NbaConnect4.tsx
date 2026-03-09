@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNbaConnect4 } from '@/hooks/useNbaConnect4';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { NbaConnect4HowToPlay } from '@/components/nba-connect4/NbaConnect4HowToPlay';
 import Connect4Suggestions from '@/components/nba-connect4/Connect4Suggestions';
@@ -49,6 +50,7 @@ const NbaConnect4 = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="NBA Connect 4 – Basketball Trivia Grid Game | DoUKnowBall"
         description="Play Connect 4 with NBA trivia! Name players matching team and stat criteria to claim cells. Free basketball puzzle game — no login required."

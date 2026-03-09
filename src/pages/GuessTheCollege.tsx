@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import PageSeo from '@/components/seo/PageSeo';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import ShareButtons from '@/components/game/ShareButtons';
 import GuessCollegeHowToPlay from '@/components/guess-college/GuessCollegeHowToPlay';
@@ -83,6 +84,7 @@ const GuessTheCollege = () => {
 
   return (
     <>
+      <GameNavbar />
       <PageSeo
         title="Guess The College - D1 College Trivia | DoUKnowBall"
         description="Can you guess the Division 1 college from progressive clues? Test your knowledge of D1 schools with daily challenges and unlimited play."

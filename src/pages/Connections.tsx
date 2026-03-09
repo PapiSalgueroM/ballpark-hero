@@ -3,6 +3,7 @@ import { useConnections } from '@/hooks/useConnections';
 import { ConnectionsBoard } from '@/components/connections/ConnectionsBoard';
 import { ConnectionsHowToPlay } from '@/components/connections/ConnectionsHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight, Shuffle, Flame } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -55,6 +56,7 @@ const Connections = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Connections – Soccer Player Grouping Puzzle | DoUKnowBall"
         description="Group 16 soccer players into 4 secret categories. Can you crack the connection? A free puzzle game inspired by NYT Connections for soccer fans."

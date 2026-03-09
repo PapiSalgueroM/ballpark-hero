@@ -3,10 +3,10 @@ import { useBlurredFace } from '@/hooks/useBlurredFace';
 import { allPlayerNames } from '@/data/blurredFacePlayers';
 import { BlurredFaceHowToPlay } from '@/components/blurred-face/BlurredFaceHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { RotateCcw, HelpCircle, Flag, Search } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
-
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -77,6 +77,7 @@ const BlurredFace = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Guess the Face – Blurred Soccer Player Game | DoUKnowBall"
         description="Can you identify the soccer player from a blurred photo? Each wrong guess reveals more of the face. Free sports trivia — no signup required."

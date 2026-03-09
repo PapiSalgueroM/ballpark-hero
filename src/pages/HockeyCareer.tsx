@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useHockeyCareer } from '@/hooks/useHockeyCareer';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
@@ -31,6 +32,7 @@ const HockeyCareer = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Hockey Career Path – Guess the Player | DoUKnowBall"
         description="Progressive clues reveal a mystery hockey player. Guess from position, country, draft, teams, stats, and awards. Daily challenge."

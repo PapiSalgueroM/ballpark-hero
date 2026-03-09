@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useBaseballConnections } from '@/hooks/useBaseballConnections';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
@@ -51,6 +52,7 @@ const BaseballConnections = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Baseball Connections – Group 5 Players | DoUKnowBall"
         description="Find four groups of 5 baseball players that share a connection. Same team, award, country, or era. Daily challenge with 4 lives."

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS, type Formation } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import FormationPitch from '@/components/lineup/FormationPitch';
 import PlayerSuggestions from '@/components/lineup/PlayerSuggestions';
@@ -71,6 +72,7 @@ const LineupBuilder = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Build Your XI – Soccer Lineup Builder Game | DoUKnowBall"
         description="Spin a random challenge, get two soccer teams, and build the ultimate starting XI. AI validates your picks. Free lineup-building game — no login needed."

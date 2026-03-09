@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useFootballDraft } from '@/hooks/useFootballDraft';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
@@ -58,6 +59,7 @@ const FootballDraft = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Pro Football Draft Guesser – Guess the Round | DoUKnowBall"
         description="A player's college, position, and combine stats are progressively revealed. Guess what round they were drafted in. Daily challenge with scoring."

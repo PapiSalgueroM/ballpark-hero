@@ -4,6 +4,7 @@ import { GridBoard } from '@/components/football-grid/GridBoard';
 import { GridPlayerSearch } from '@/components/football-grid/GridPlayerSearch';
 import { CollegeGridHowToPlay } from '@/components/college-grid/CollegeGridHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
@@ -38,6 +39,7 @@ const CollegeGrid = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="College Football Grid – 3x3 Trivia Puzzle | DoUKnowBall"
         description="Fill the 3x3 grid with college football players who match both row and column criteria. Heisman winners, All-Americans, and more. Daily challenge with rarity scoring."

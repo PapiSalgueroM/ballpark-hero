@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useFootballTimeline } from '@/hooks/useFootballTimeline';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
@@ -39,6 +40,7 @@ const FootballTimeline = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Pro Football Timeline – Draft Order Puzzle | DoUKnowBall"
         description="Put 5 NFL players in the correct chronological order by their draft year. Daily challenge with scoring and sharing."

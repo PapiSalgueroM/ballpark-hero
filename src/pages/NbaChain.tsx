@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNbaChain } from '@/hooks/useNbaChain';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { NbaChainHowToPlay } from '@/components/nba-chain/NbaChainHowToPlay';
 import ChainSuggestions from '@/components/nba-chain/ChainSuggestions';
@@ -54,6 +55,7 @@ const NbaChain = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="NBA Chain Game – Basketball Player Connection Game | DoUKnowBall"
         description="Build the longest chain of connected NBA players by naming teammates. Each link must share a team. Free basketball trivia — no signup needed."

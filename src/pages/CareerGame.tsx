@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useCareerGame } from '@/hooks/useCareerGame';
 import { CareerBoard } from '@/components/career/CareerBoard';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { getClubLogoUrl } from '@/lib/clubData';
 import { RotateCcw, Flag, Search, Lightbulb, HelpCircle } from 'lucide-react';
@@ -93,6 +94,7 @@ const CareerGame = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Career Path – Soccer Career Guessing Game | DoUKnowBall"
         description="Can you identify the soccer player from their career history? Reveal clubs one by one and guess the mystery player. Free trivia game — no signup needed."

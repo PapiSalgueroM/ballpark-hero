@@ -1,5 +1,6 @@
 import { useHigherLower } from '@/hooks/useHigherLower';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { HigherLowerHowToPlay } from '@/components/higher-lower/HigherLowerHowToPlay';
 import { RotateCcw, HelpCircle } from 'lucide-react';
@@ -41,6 +42,7 @@ const HigherLowerGame = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Higher or Lower – Soccer Stats Comparison Game | DoUKnowBall"
         description="Compare soccer player stats and guess who's higher! Pick the right stat to build your streak. Free sports trivia game — no login required."

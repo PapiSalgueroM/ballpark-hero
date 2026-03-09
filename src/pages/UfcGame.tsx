@@ -4,6 +4,7 @@ import { UfcFighterSearch } from '@/components/ufc/UfcFighterSearch';
 import { UfcGameBoard } from '@/components/ufc/UfcGameBoard';
 import { UfcHowToPlay } from '@/components/ufc/UfcHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { RotateCcw, HelpCircle } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -36,6 +37,7 @@ const UfcGame = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="UFC Guesser – Combat Sports Trivia Game | DoUKnowBall"
         description="Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia game — no login required."

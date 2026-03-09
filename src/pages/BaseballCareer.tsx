@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useBaseballCareer } from '@/hooks/useBaseballCareer';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
@@ -45,6 +46,7 @@ const BaseballCareer = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Baseball Career Path – Guess the Player | DoUKnowBall"
         description="Progressive clues reveal a mystery baseball player. Guess from position, draft, teams, stats, and awards. Daily challenge with scoring."

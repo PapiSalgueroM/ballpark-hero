@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useFootballConnect4 } from '@/hooks/useFootballConnect4';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { FootballConnect4Board } from '@/components/football-connect4/FootballConnect4Board';
 import { FootballConnect4HowToPlay } from '@/components/football-connect4/FootballConnect4HowToPlay';
@@ -61,6 +62,7 @@ const FootballConnect4 = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Soccer Connect 4 – Soccer Trivia Grid Game | DoUKnowBall"
         description="Play Connect 4 with soccer trivia! Name players matching club and league criteria to claim cells. Free soccer puzzle game — no login required."

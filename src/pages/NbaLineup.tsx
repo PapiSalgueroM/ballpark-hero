@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNbaLineup } from '@/hooks/useNbaLineup';
 import { NBA_POSITIONS } from '@/types/nba';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import NbaCourtLayout from '@/components/nba/NbaCourtLayout';
 import NbaTeamSpinner from '@/components/nba/NbaTeamSpinner';
@@ -63,6 +64,7 @@ const NbaLineup = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="NBA Starting 5 – Basketball Lineup Builder Game | DoUKnowBall"
         description="Spin a stat challenge, get random NBA teams, and build the ultimate starting five. AI validates your picks. Free NBA trivia game — no signup needed."

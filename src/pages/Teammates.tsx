@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTeammates } from '@/hooks/useTeammates';
 import { TeammatesHowToPlay } from '@/components/teammates/TeammatesHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { HelpCircle, RotateCcw, User, ArrowRight } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -30,6 +31,7 @@ const Teammates = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Teammates or Not? – Sports Trivia | DoUKnowBall"
         description="Were these two athletes ever on the same team? Test your sports knowledge across NFL, NBA, and soccer. 10 questions, fun facts, and shareable scores."
