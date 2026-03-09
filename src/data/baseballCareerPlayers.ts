@@ -70,8 +70,8 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       draftInfo: 'International Free Agent (2017)',
       firstTeam: 'Los Angeles Angels',
       teams: ['Los Angeles Angels', 'Los Angeles Dodgers'],
-      stats: ['.275 AVG', '225 HR', '38 W', '3.01 ERA'],
-      awards: ['2× AL MVP', '2024 NL MVP', '4× All-Star', '2024 World Series Champion'],
+      stats: ['.280 AVG', '250+ HR', '38 W', '3.01 ERA'],
+      awards: ['2× AL MVP', '2024 NL MVP', '4× All-Star', '2× World Series Champion (2024, 2025)'],
     },
   },
   {
