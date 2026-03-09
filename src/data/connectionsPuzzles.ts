@@ -1436,4 +1436,184 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'Played in 6+ major international tournaments', players: ['Cristiano Ronaldo', 'Lionel Messi', 'Gianluigi Buffon', 'Lothar Matthäus'], difficulty: 'insane' },
     ],
   },
+  {
+    id: 'puzzle-116',
+    groups: [
+      { category: 'Played for PSG', players: ['Edinson Cavani', 'Thiago Silva', 'Marco Verratti', 'Ángel Di María'], difficulty: 'easy' },
+      { category: 'Premier League Golden Boot winners', players: ['Mohamed Salah', 'Harry Kane', 'Jamie Vardy', 'Robin van Persie'], difficulty: 'medium' },
+      { category: 'Brazilian legends', players: ['Ronaldo Nazário', 'Romário', 'Garrincha', 'Sócrates'], difficulty: 'hard' },
+      { category: 'Managed after retiring', players: ['Zinedine Zidane', 'Frank Rijkaard', 'Ruud Gullit', 'Diego Simeone'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-117',
+    groups: [
+      { category: 'Won the World Cup with Brazil', players: ['Cafu', 'Roberto Carlos', 'Rivaldo Vítor', 'Ronaldinho Gaúcho'], difficulty: 'easy' },
+      { category: 'Played in MLS', players: ['Carlos Vela', 'Zlatan Ibrahimović', 'Andrea Pirlo', 'Bastian Schweinsteiger'], difficulty: 'medium' },
+      { category: 'African Footballers of the Year', players: ['George Weah', 'Samuel Eto\'o', 'El Hadji Diouf', 'Yaya Touré'], difficulty: 'hard' },
+      { category: 'One club legends (15+ years)', players: ['Francesco Totti', 'Paolo Maldini', 'Ryan Giggs', 'Sergio Busquets'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-118',
+    groups: [
+      { category: 'Players who wore the number 10', players: ['Diego Maradona', 'Zinedine Zidane', 'Ronaldinho Gaúcho', 'Dennis Bergkamp'], difficulty: 'easy' },
+      { category: 'Champions League winners with Liverpool', players: ['Steven Gerrard', 'Xabi Alonso', 'Jerzy Dudek', 'Jamie Carragher'], difficulty: 'medium' },
+      { category: 'From Ivory Coast', players: ['Didier Drogba', 'Wilfried Zaha', 'Nicolas Pépé', 'Kolo Touré'], difficulty: 'hard' },
+      { category: 'Played for both Inter Milan and AC Milan', players: ['Ronaldo Nazário', 'Zlatan Ibrahimović', 'Andrea Pirlo', 'Clarence Seedorf'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-119',
+    groups: [
+      { category: 'Played for PSG (2020s)', players: ['Lionel Messi', 'Neymar Jr', 'Sergio Ramos', 'Gianluigi Donnarumma'], difficulty: 'easy' },
+      { category: 'Premier League Golden Boot (2010s)', players: ['Sergio Agüero', 'Pierre-Emerick Aubameyang', 'Sadio Mané', 'Riyad Mahrez'], difficulty: 'medium' },
+      { category: 'Won the World Cup with Spain', players: ['Xavi Hernández', 'Andrés Iniesta', 'David Villa', 'Carles Puyol'], difficulty: 'hard' },
+      { category: 'One club legends (never transferred)', players: ['Matt Le Tissier', 'Tony Adams', 'Carles Puyol', 'Alessandro Del Piero'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-120',
+    groups: [
+      { category: 'Brazilian legends of the 1990s-2000s', players: ['Rivaldo Vítor', 'Ricardo Kaká', 'Roberto Carlos', 'Adriano Leite'], difficulty: 'easy' },
+      { category: 'Played in MLS after European career', players: ['Thierry Henry', 'David Villa', 'Frank Lampard', 'Steven Gerrard'], difficulty: 'medium' },
+      { category: 'African Champions League winners', players: ['Mohamed Aboutrika', 'Achraf Hakimi', 'Youssef En-Nesyri', 'Percy Tau'], difficulty: 'hard' },
+      { category: 'Players who wore number 10 at Barcelona', players: ['Lionel Messi', 'Ronaldinho Gaúcho', 'Rivaldo Vítor', 'Maradona'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-121',
+    groups: [
+      { category: 'Champions League winners with Real Madrid (2010s)', players: ['Toni Kroos', 'Luka Modrić', 'Sergio Ramos', 'Marcelo'], difficulty: 'easy' },
+      { category: 'Played for PSG and Barcelona', players: ['Neymar Jr', 'Ronaldinho Gaúcho', 'Dani Alves', 'Ludovic Giuly'], difficulty: 'medium' },
+      { category: 'From Nigeria', players: ['Victor Osimhen', 'Rashidi Yekini', 'Obafemi Martins', 'Kelechi Iheanacho'], difficulty: 'hard' },
+      { category: 'Managed the club they became legendary at', players: ['Pep Guardiola', 'Carlo Ancelotti', 'Zinedine Zidane', 'Kenny Dalglish'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-122',
+    groups: [
+      { category: 'Won the World Cup with France (1998)', players: ['Zinedine Zidane', 'Lilian Thuram', 'Marcel Desailly', 'Emmanuel Petit'], difficulty: 'easy' },
+      { category: 'Played in MLS (current 2025-26)', players: ['Lorenzo Insigne', 'Riqui Puig', 'Luis Suárez', 'Federico Bernardeschi'], difficulty: 'medium' },
+      { category: 'African defenders who starred in Europe', players: ['Kolo Touré', 'Kalidou Koulibaly', 'Joel Matip', 'Serge Aurier'], difficulty: 'hard' },
+      { category: 'Players who wore number 10 at Real Madrid', players: ['Luís Figo', 'Mesut Özil', 'Luka Modrić', 'Clarence Seedorf'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-123',
+    groups: [
+      { category: 'Played for PSG and Chelsea', players: ['Thiago Silva', 'David Luiz', 'Edinson Cavani', 'Mauro Icardi'], difficulty: 'easy' },
+      { category: 'Premier League Golden Boot (pre-2010)', players: ['Thierry Henry', 'Didier Drogba', 'Cristiano Ronaldo', 'Ruud van Nistelrooy'], difficulty: 'medium' },
+      { category: 'Brazilian legends of the 1950s-70s', players: ['Pelé', 'Garrincha', 'Jairzinho', 'Tostão'], difficulty: 'hard' },
+      { category: 'One club legends of Serie A', players: ['Francesco Totti', 'Alessandro Del Piero', 'Javier Zanetti', 'Giuseppe Bergomi'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-124',
+    groups: [
+      { category: 'Champions League winners with Bayern Munich', players: ['Franck Ribéry', 'Arjen Robben', 'Manuel Neuer', 'Thomas Müller'], difficulty: 'easy' },
+      { category: 'From Ghana', players: ['Thomas Partey', 'André Ayew', 'Michael Essien', 'Asamoah Gyan'], difficulty: 'medium' },
+      { category: 'Won the World Cup with Argentina', players: ['Lionel Messi', 'Ángel Di María', 'Mario Kempes', 'Osvaldo Ardiles'], difficulty: 'hard' },
+      { category: 'Managed after retiring (Premier League)', players: ['Patrick Vieira', 'Vincent Kompany', 'Steven Gerrard', 'Frank Lampard'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-125',
+    groups: [
+      { category: 'Played for PSG and Real Madrid', players: ['Kylian Mbappé', 'David Beckham', 'Ángel Di María', 'Sergio Ramos'], difficulty: 'easy' },
+      { category: 'African midfielders in the Premier League', players: ['Yaya Touré', 'Michael Essien', 'Idrissa Gueye', 'Cheick Tioté'], difficulty: 'medium' },
+      { category: 'Players who wore number 10 at Juventus', players: ['Alessandro Del Piero', 'Michel Platini', 'Roberto Baggio', 'Paulo Dybala'], difficulty: 'hard' },
+      { category: 'Played in MLS and La Liga', players: ['David Beckham', 'Kaká', 'Thierry Henry', 'Xavi Hernández'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-126',
+    groups: [
+      { category: 'Won the World Cup with Italy (2006)', players: ['Fabio Cannavaro', 'Andrea Pirlo', 'Gennaro Gattuso', 'Francesco Totti'], difficulty: 'easy' },
+      { category: 'Brazilian legends at Barcelona', players: ['Ronaldinho Gaúcho', 'Rivaldo Vítor', 'Neymar Jr', 'Dani Alves'], difficulty: 'medium' },
+      { category: 'Champions League winners with Manchester United', players: ['Wayne Rooney', 'Paul Scholes', 'Rio Ferdinand', 'Edwin van der Sar'], difficulty: 'hard' },
+      { category: 'One club legends of the Premier League', players: ['Steven Gerrard', 'John Terry', 'Tony Adams', 'Matt Le Tissier'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-127',
+    groups: [
+      { category: 'Played for PSG and Juventus', players: ['Gianluigi Buffon', 'Blaise Matuidi', 'Moise Kean', 'Adrien Rabiot'], difficulty: 'easy' },
+      { category: 'From DR Congo', players: ['Yannick Bolasie', 'Cédric Bakambu', 'Chancel Mbemba', 'Dieumerci Mbokani'], difficulty: 'medium' },
+      { category: 'Premier League Golden Boot (2020s)', players: ['Erling Haaland', 'Mohamed Salah', 'Son Heung-min', 'Ivan Toney'], difficulty: 'hard' },
+      { category: 'Managed after retiring (La Liga managers)', players: ['Diego Simeone', 'Luis Enrique', 'Xavi Hernández', 'Michel'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-128',
+    groups: [
+      { category: 'African strikers who starred in Europe', players: ['Didier Drogba', 'Samuel Eto\'o', 'Pierre-Emerick Aubameyang', 'Victor Osimhen'], difficulty: 'easy' },
+      { category: 'Won the World Cup with Germany (2014)', players: ['Mario Götze', 'Toni Kroos', 'Manuel Neuer', 'André Schürrle'], difficulty: 'medium' },
+      { category: 'Players who wore number 10 at Manchester United', players: ['Wayne Rooney', 'Ruud van Nistelrooy', 'David Beckham', 'Marcus Rashford'], difficulty: 'hard' },
+      { category: 'Played in MLS and Serie A', players: ['Andrea Pirlo', 'Sebastian Giovinco', 'Lorenzo Insigne', 'Federico Bernardeschi'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-129',
+    groups: [
+      { category: 'Champions League winners with Barcelona (2015)', players: ['Lionel Messi', 'Neymar Jr', 'Luis Suárez', 'Javier Mascherano'], difficulty: 'easy' },
+      { category: 'Brazilian legends at Real Madrid', players: ['Ronaldo Nazário', 'Roberto Carlos', 'Marcelo', 'Casemiro'], difficulty: 'medium' },
+      { category: 'Played for PSG and AC Milan', players: ['Thiago Silva', 'Ronaldinho Gaúcho', 'George Weah', 'Zlatan Ibrahimović'], difficulty: 'hard' },
+      { category: 'One club legends of La Liga', players: ['Raúl González', 'Xavi Hernández', 'Iker Casillas', 'Andrés Iniesta'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-130',
+    groups: [
+      { category: 'Won the World Cup with England', players: ['Bobby Moore', 'Geoff Hurst', 'Bobby Charlton', 'Gordon Banks'], difficulty: 'easy' },
+      { category: 'African goalkeepers in top European leagues', players: ['André Onana', 'Edouard Mendy', 'Carlos Kameni', 'Vincent Enyeama'], difficulty: 'medium' },
+      { category: 'Players who wore number 10 at Chelsea', players: ['Eden Hazard', 'Joe Cole', 'Willian', 'Juan Mata'], difficulty: 'hard' },
+      { category: 'Managed after retiring (Bundesliga)', players: ['Niko Kovač', 'Xabi Alonso', 'Urs Fischer', 'Oliver Glasner'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-131',
+    groups: [
+      { category: 'Played for PSG and Manchester City', players: ['Carlos Tévez', 'Nicolas Anelka', 'Fabian Delph', 'Georginio Wijnaldum'], difficulty: 'easy' },
+      { category: 'Premier League Golden Boot shared winners', players: ['Luis Suárez', 'Daniel Sturridge', 'Sadio Mané', 'Pierre-Emerick Aubameyang'], difficulty: 'medium' },
+      { category: 'Brazilian legends at Inter Milan', players: ['Ronaldo Nazário', 'Adriano Leite', 'Maicon', 'Julio César'], difficulty: 'hard' },
+      { category: 'Champions League winners as a substitute in the final', players: ['Ole Gunnar Solskjær', 'Divock Origi', 'Teddy Sheringham', 'Naby Keïta'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-132',
+    groups: [
+      { category: 'Won the World Cup with France (2018)', players: ['Hugo Lloris', 'Raphaël Varane', 'Benjamin Pavard', 'Olivier Giroud'], difficulty: 'easy' },
+      { category: 'African midfield legends', players: ['Jay-Jay Okocha', 'Abedi Pelé', 'Geremi Njitap', 'George Weah'], difficulty: 'medium' },
+      { category: 'Played in MLS and Bundesliga', players: ['Bastian Schweinsteiger', 'Jürgen Klinsmann', 'Lothar Matthäus', 'Marco Reus'], difficulty: 'hard' },
+      { category: 'One club legends of Bundesliga', players: ['Thomas Müller', 'Philipp Lahm', 'Bastian Schweinsteiger', 'Sepp Maier'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-133',
+    groups: [
+      { category: 'Players who wore number 10 at Arsenal', players: ['Dennis Bergkamp', 'Robin van Persie', 'Jack Wilshere', 'Mesut Özil'], difficulty: 'easy' },
+      { category: 'Champions League winners with Inter Milan (2010)', players: ['Diego Milito', 'Wesley Sneijder', 'Samuel Eto\'o', 'Javier Zanetti'], difficulty: 'medium' },
+      { category: 'Brazilian legends in Ligue 1', players: ['Juninho Pernambucano', 'Ronaldinho Gaúcho', 'Neymar Jr', 'Lucas Moura'], difficulty: 'hard' },
+      { category: 'Managed after retiring (Italian managers)', players: ['Antonio Conte', 'Gennaro Gattuso', 'Filippo Inzaghi', 'Simone Inzaghi'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-134',
+    groups: [
+      { category: 'Played for PSG and Tottenham', players: ['Lucas Moura', 'Serge Aurier', 'Giovani Lo Celso', 'Erik Lamela'], difficulty: 'easy' },
+      { category: 'Won the World Cup twice', players: ['Pelé', 'Cafu', 'Ronaldo Nazário', 'Didier Deschamps'], difficulty: 'medium' },
+      { category: 'African players at Liverpool', players: ['Mohamed Salah', 'Sadio Mané', 'Naby Keïta', 'Joel Matip'], difficulty: 'hard' },
+      { category: 'One club legends who became club ambassadors', players: ['Paolo Maldini', 'Ryan Giggs', 'Steven Gerrard', 'Alessandro Del Piero'], difficulty: 'insane' },
+    ],
+  },
+  {
+    id: 'puzzle-135',
+    groups: [
+      { category: 'Players who wore number 10 at Liverpool', players: ['Michael Owen', 'Philippe Coutinho', 'Sadio Mané', 'John Barnes'], difficulty: 'easy' },
+      { category: 'Played in MLS and Ligue 1', players: ['Thierry Henry', 'Blaise Matuidi', 'Gonzalo Higuaín', 'Jozy Altidore'], difficulty: 'medium' },
+      { category: 'Champions League winners with AC Milan (2007)', players: ['Kaká', 'Andrea Pirlo', 'Filippo Inzaghi', 'Paolo Maldini'], difficulty: 'hard' },
+      { category: 'Brazilian legends at PSG', players: ['Neymar Jr', 'Ronaldinho Gaúcho', 'Marquinhos', 'Thiago Silva'], difficulty: 'insane' },
+    ],
+  },
 ];
