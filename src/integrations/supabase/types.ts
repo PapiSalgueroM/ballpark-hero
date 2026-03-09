@@ -194,6 +194,36 @@ export type Database = {
         }
         Relationships: []
       }
+      soccer_club_guess_scores: {
+        Row: {
+          clues_used: number
+          created_at: string
+          guessed: boolean
+          id: string
+          mode: string
+          puzzle_date: string
+          score: number
+        }
+        Insert: {
+          clues_used: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date: string
+          score: number
+        }
+        Update: {
+          clues_used?: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date?: string
+          score?: number
+        }
+        Relationships: []
+      }
       ufc_chain_scores: {
         Row: {
           chain_length: number
