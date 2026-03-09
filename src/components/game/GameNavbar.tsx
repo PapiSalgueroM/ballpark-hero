@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Trophy, Gamepad2, Medal } from 'lucide-react';
+import { Trophy, Gamepad2, Medal, Flame } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
 import { useDailyLegend } from '@/hooks/useDailyLegend';
@@ -10,7 +10,7 @@ import { AuthModal } from '@/components/auth/AuthModal';
 
 export function GameNavbar() {
   const { user, profile, loading: authLoading } = useAuth();
-  const { gamesPlayedToday, totalPointsToday, dailyRank, totalGames, loading: statsLoading } = useGameNavbarStats();
+  const { gamesPlayedToday, totalPointsToday, dailyRank, currentStreak, totalGames, loading: statsLoading } = useGameNavbarStats();
   const { showCelebration, streakDays, dismissCelebration } = useDailyLegend();
   const [authModal, setAuthModal] = useState(false);
 
@@ -92,6 +92,14 @@ export function GameNavbar() {
                   )}
                 </span>
               </div>
+
+              {/* Streak */}
+              {user && currentStreak > 0 && (
+                <div className="flex items-center gap-1 text-xs sm:text-sm">
+                  <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-500" />
+                  <span className="font-medium text-foreground">{currentStreak}</span>
+                </div>
+              )}
 
               {/* Daily Rank */}
               <div className="flex items-center gap-1 text-xs sm:text-sm">

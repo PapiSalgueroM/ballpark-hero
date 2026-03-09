@@ -59,6 +59,7 @@ export default function Profile() {
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({ display_name: '', username: '' });
   const [saving, setSaving] = useState(false);
+  const [userScoreData, setUserScoreData] = useState<{ current_streak: number; longest_streak: number } | null>(null);
   const [legendStreak, setLegendStreak] = useState<number>(0);
   const [legendBadgeCount, setLegendBadgeCount] = useState<number>(0);
   const [badgeDates, setBadgeDates] = useState<{ firstDate: string | null; streak3Date: string | null; streak7Date: string | null; streak30Date: string | null; streak100Date: string | null }>({
@@ -109,6 +110,17 @@ export default function Profile() {
           .order('best_score', { ascending: false });
 
         setBestScores(scores || []);
+
+        // Load streak data from user_scores
+        const { data: scoreRow } = await supabase
+          .from('user_scores')
+          .select('current_streak, longest_streak')
+          .eq('user_id', user.id)
+          .single();
+        
+        if (scoreRow) {
+          setUserScoreData(scoreRow as any);
+        }
 
         // Load daily legend badges
         const { data: badges } = await supabase
@@ -305,14 +317,14 @@ export default function Profile() {
             <Card>
               <CardContent className="pt-4 text-center">
                 <Flame className="w-8 h-8 text-orange-500 mx-auto mb-2" />
-                <p className="text-3xl font-bold">{viewingProfile.current_streak}</p>
+                <p className="text-3xl font-bold">{userScoreData?.current_streak ?? viewingProfile.current_streak ?? 0}</p>
                 <p className="text-sm text-muted-foreground">Current Streak</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-4 text-center">
                 <Trophy className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-                <p className="text-3xl font-bold">{viewingProfile.longest_streak}</p>
+                <p className="text-3xl font-bold">{userScoreData?.longest_streak ?? viewingProfile.longest_streak ?? 0}</p>
                 <p className="text-sm text-muted-foreground">Best Streak</p>
               </CardContent>
             </Card>

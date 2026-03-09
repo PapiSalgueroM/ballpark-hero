@@ -28,7 +28,7 @@ export function useGameScore() {
       // Upsert user_scores for real-time navbar
       const { data: existing } = await supabase
         .from('user_scores')
-        .select('total_points, games_played_today, last_played_at')
+        .select('total_points, games_played_today, last_played_at, current_streak, longest_streak')
         .eq('user_id', user.id)
         .single();
 
@@ -44,8 +44,25 @@ export function useGameScore() {
           games_played_today: 1,
           last_played_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
+          current_streak: 1,
+          longest_streak: 1,
         });
       } else {
+        // Calculate streak
+        let newStreak = existing.current_streak || 0;
+        if (!isSameDay) {
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+          if (lastDate === yesterdayStr) {
+            newStreak += 1;
+          } else {
+            newStreak = 1;
+          }
+        }
+        const newLongest = Math.max(newStreak, existing.longest_streak || 0);
+
         await supabase
           .from('user_scores')
           .update({
@@ -53,6 +70,8 @@ export function useGameScore() {
             games_played_today: isSameDay ? existing.games_played_today + 1 : 1,
             last_played_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
+            current_streak: newStreak,
+            longest_streak: newLongest,
           })
           .eq('user_id', user.id);
       }

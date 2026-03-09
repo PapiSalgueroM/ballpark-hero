@@ -6,6 +6,7 @@ interface GameNavbarStats {
   gamesPlayedToday: number;
   totalPointsToday: number;
   dailyRank: number | null;
+  currentStreak: number;
   loading: boolean;
 }
 
@@ -17,12 +18,13 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
     gamesPlayedToday: 0,
     totalPointsToday: 0,
     dailyRank: null,
+    currentStreak: 0,
     loading: true,
   });
 
   const fetchStats = async () => {
     if (!user) {
-      setStats({ gamesPlayedToday: 0, totalPointsToday: 0, dailyRank: null, loading: false });
+      setStats({ gamesPlayedToday: 0, totalPointsToday: 0, dailyRank: null, currentStreak: 0, loading: false });
       return;
     }
 
@@ -30,12 +32,13 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
       // Fetch user's own score from user_scores
       const { data: userScore } = await supabase
         .from('user_scores')
-        .select('total_points, games_played_today')
+        .select('total_points, games_played_today, current_streak')
         .eq('user_id', user.id)
         .single();
 
       const totalPoints = userScore?.total_points || 0;
       const gamesPlayed = userScore?.games_played_today || 0;
+      const streak = (userScore as any)?.current_streak || 0;
 
       // Fetch all scores for rank calculation
       const { data: allScores } = await supabase
@@ -51,6 +54,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
         gamesPlayedToday: gamesPlayed,
         totalPointsToday: totalPoints,
         dailyRank: rank && rank > 0 ? rank : null,
+        currentStreak: streak,
         loading: false,
       });
     } catch (error) {

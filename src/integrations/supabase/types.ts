@@ -975,25 +975,31 @@ export type Database = {
       }
       user_scores: {
         Row: {
+          current_streak: number
           games_played_today: number
           id: string
           last_played_at: string
+          longest_streak: number
           total_points: number
           updated_at: string
           user_id: string
         }
         Insert: {
+          current_streak?: number
           games_played_today?: number
           id?: string
           last_played_at?: string
+          longest_streak?: number
           total_points?: number
           updated_at?: string
           user_id: string
         }
         Update: {
+          current_streak?: number
           games_played_today?: number
           id?: string
           last_played_at?: string
+          longest_streak?: number
           total_points?: number
           updated_at?: string
           user_id?: string
