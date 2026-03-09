@@ -73,6 +73,7 @@ const App = () => (
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/reports" element={<AdminReports />} />
+          <Route path="/ufc-chain" element={<UfcChain />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
