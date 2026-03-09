@@ -66,6 +66,9 @@ export function useGame() {
 
   const guessedPlayerNames = useMemo(() => guesses.map(g => g.playerName), [guesses]);
 
+  const completionScore = gameStatus === 'won' ? Math.max(100, (MAX_GUESSES - guesses.length) * 100) : 0;
+  useGameCompletion('footle', gameStatus !== 'playing', completionScore);
+
   return {
     difficulty,
     changeDifficulty,

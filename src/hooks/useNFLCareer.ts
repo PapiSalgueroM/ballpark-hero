@@ -83,6 +83,8 @@ export function useNFLCareer() {
 
   const playerNames = useMemo(() => ensureAnswerInOptions(nflCareerPlayers.map(p => p.name), targetPlayer.name), [targetPlayer]);
 
+  useGameCompletion('nfl-career', gameStatus !== 'playing', score);
+
   return {
     targetPlayer,
     clues,

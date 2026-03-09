@@ -96,6 +96,9 @@ export function useCareerGame() {
 
   const playerNames = useMemo(() => ensureAnswerInOptions(careerPlayers.map(p => p.name), targetPlayer.name), [targetPlayer]);
 
+  const completionScore = gameStatus === 'won' ? Math.max(100, (MAX_GUESSES - guessesUsed) * 100) : 0;
+  useGameCompletion('career-path', gameStatus !== 'playing', completionScore);
+
   return {
     targetPlayer,
     revealedCells,

@@ -118,6 +118,8 @@ export function useOlympics() {
 
   const athleteNames = useMemo(() => ensureAnswerInOptions(olympicAthletes.map(a => a.name), athlete.name), [athlete]);
 
+  useGameCompletion('olympics', status !== 'playing', score);
+
   return {
     athlete,
     clueLevel,
