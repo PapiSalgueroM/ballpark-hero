@@ -1,11 +1,30 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Shield, Trophy, Target, Loader2 } from 'lucide-react';
+import { Sparkles, Shield, Trophy, Target, Loader2, User, Bot, CheckCircle2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { PlayerPool, type DraftPlayer } from '@/components/fantasy-draft/PlayerPool';
+import { DraftRoster } from '@/components/fantasy-draft/DraftRoster';
+import { cn } from '@/lib/utils';
+
+const TEAM_SIZE = 11;
+const TOTAL_PICKS = TEAM_SIZE * 2; // 22 picks total
+
+/**
+ * Snake draft order: round alternates who picks.
+ * If userFirst, picks 0-based: even rounds user picks, odd rounds AI picks — but it snakes.
+ * Round = Math.floor(pickIndex / 2), within each round both pick once.
+ * Snake: R0 → user,ai  R1 → ai,user  R2 → user,ai ...
+ */
+function getPickOwner(pickIndex: number, userFirst: boolean): 'user' | 'ai' {
+  const round = Math.floor(pickIndex / 2);
+  const posInRound = pickIndex % 2; // 0 = first pick, 1 = second pick
+  const roundStarts = round % 2 === 0 ? (userFirst ? 'user' : 'ai') : (userFirst ? 'ai' : 'user');
+  if (posInRound === 0) return roundStarts;
+  return roundStarts === 'user' ? 'ai' : 'user';
+}
 
 const FantasyDraft = () => {
   const [started, setStarted] = useState(false);
@@ -13,26 +32,32 @@ const FantasyDraft = () => {
   const [loadingCriteria, setLoadingCriteria] = useState(true);
   const [players, setPlayers] = useState<DraftPlayer[]>([]);
   const [loadingPlayers, setLoadingPlayers] = useState(false);
+
+  // Draft state
+  const [userFirst, setUserFirst] = useState(true);
+  const [pickIndex, setPickIndex] = useState(0);
+  const [userTeam, setUserTeam] = useState<DraftPlayer[]>([]);
+  const [aiTeam, setAiTeam] = useState<DraftPlayer[]>([]);
   const [draftedIds, setDraftedIds] = useState<Set<string>>(new Set());
+  const [lastPickId, setLastPickId] = useState<string | null>(null);
+  const aiTimerRef = useRef<number | null>(null);
+
+  const draftComplete = pickIndex >= TOTAL_PICKS;
+  const currentTurn = draftComplete ? 'user' : getPickOwner(pickIndex, userFirst);
 
   // Fetch daily criteria
   useEffect(() => {
     const fetchCriteria = async () => {
       try {
         const { data, error } = await supabase.functions.invoke('fantasy-draft-daily');
-        if (!error && data?.criteria) {
-          setCriteria(data.criteria);
-        }
-      } catch {
-        // silent fail
-      } finally {
-        setLoadingCriteria(false);
-      }
+        if (!error && data?.criteria) setCriteria(data.criteria);
+      } catch { /* silent */ }
+      finally { setLoadingCriteria(false); }
     };
     fetchCriteria();
   }, []);
 
-  // Fetch players when draft starts
+  // Fetch players when draft starts & randomize first pick
   useEffect(() => {
     if (!started) return;
     const fetchPlayers = async () => {
@@ -44,12 +69,40 @@ const FantasyDraft = () => {
       if (data) setPlayers(data as DraftPlayer[]);
       setLoadingPlayers(false);
     };
+    setUserFirst(Math.random() < 0.5);
     fetchPlayers();
   }, [started]);
 
-  const handleSelectPlayer = (player: DraftPlayer) => {
+  // Draft a player for a side
+  const draftPlayer = useCallback((player: DraftPlayer, side: 'user' | 'ai') => {
+    if (side === 'user') setUserTeam((prev) => [...prev, player]);
+    else setAiTeam((prev) => [...prev, player]);
     setDraftedIds((prev) => new Set(prev).add(player.id));
-  };
+    setLastPickId(player.id);
+    setPickIndex((prev) => prev + 1);
+  }, []);
+
+  // User picks
+  const handleUserPick = useCallback((player: DraftPlayer) => {
+    if (currentTurn !== 'user' || draftComplete) return;
+    draftPlayer(player, 'user');
+  }, [currentTurn, draftComplete, draftPlayer]);
+
+  // AI auto-pick
+  useEffect(() => {
+    if (draftComplete || currentTurn !== 'ai' || players.length === 0) return;
+
+    aiTimerRef.current = window.setTimeout(() => {
+      const available = players.filter((p) => !draftedIds.has(p.id));
+      if (available.length === 0) return;
+      const pick = available[Math.floor(Math.random() * available.length)];
+      draftPlayer(pick, 'ai');
+    }, 2000);
+
+    return () => {
+      if (aiTimerRef.current) clearTimeout(aiTimerRef.current);
+    };
+  }, [currentTurn, draftComplete, players, draftedIds, draftPlayer]);
 
   return (
     <>
@@ -61,53 +114,41 @@ const FantasyDraft = () => {
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(145 40% 8%) 0%, hsl(152 35% 6%) 50%, hsl(225 25% 6%) 100%)' }}>
         <Header />
 
-        <main className="flex-1 flex flex-col items-center px-4 py-8 sm:py-14 relative overflow-hidden">
+        <main className="flex-1 flex flex-col items-center px-4 py-6 sm:py-10 relative overflow-hidden">
           {/* Pitch lines decoration */}
           <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] rounded-full border-2 border-foreground" />
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-foreground" />
           </div>
 
-          <div className="relative z-10 w-full max-w-2xl mx-auto space-y-8 text-center">
+          <div className="relative z-10 w-full max-w-4xl mx-auto space-y-6 text-center">
+            {/* Pre-draft landing */}
             {!started && (
               <>
-                {/* Icon cluster */}
                 <div className="flex items-center justify-center gap-3 text-primary">
                   <Shield className="w-8 h-8 sm:w-10 sm:h-10 opacity-60" />
                   <Trophy className="w-10 h-10 sm:w-14 sm:h-14" />
                   <Shield className="w-8 h-8 sm:w-10 sm:h-10 opacity-60" />
                 </div>
-
                 <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-foreground leading-tight">
-                  Fantasy Draft
-                  <span className="block text-primary">Showdown</span>
+                  Fantasy Draft<span className="block text-primary">Showdown</span>
                 </h1>
-
                 <p className="text-base sm:text-xl text-muted-foreground max-w-md mx-auto leading-relaxed">
                   Draft your Starting XI. Simulate a season. Vote for the winner.
                 </p>
-
-                {/* Today's Criteria Card */}
                 <div className="w-full max-w-md mx-auto rounded-2xl border border-primary/30 bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-lg shadow-primary/10">
                   <div className="flex items-center justify-center gap-2 mb-3">
                     <Target className="w-5 h-5 text-primary" />
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-primary">
-                      Today's Criteria
-                    </h2>
+                    <h2 className="text-sm font-bold uppercase tracking-widest text-primary">Today's Criteria</h2>
                   </div>
                   {loadingCriteria ? (
-                    <div className="flex items-center justify-center py-3">
-                      <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
-                    </div>
+                    <Loader2 className="w-5 h-5 animate-spin text-muted-foreground mx-auto" />
                   ) : criteria ? (
-                    <p className="text-base sm:text-lg font-semibold text-foreground leading-snug">
-                      {criteria}
-                    </p>
+                    <p className="text-base sm:text-lg font-semibold text-foreground leading-snug">{criteria}</p>
                   ) : (
                     <p className="text-sm text-muted-foreground">Could not load today's criteria.</p>
                   )}
                 </div>
-
                 <Button
                   size="lg"
                   onClick={() => setStarted(true)}
@@ -119,15 +160,35 @@ const FantasyDraft = () => {
               </>
             )}
 
+            {/* Draft phase */}
             {started && (
               <>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground">
-                  Draft Your XI
-                </h1>
+                {/* Turn indicator */}
+                {!draftComplete ? (
+                  <div className={cn(
+                    'inline-flex items-center gap-2 px-5 py-2.5 rounded-full border text-sm font-bold uppercase tracking-wider animate-pulse',
+                    currentTurn === 'user'
+                      ? 'bg-primary/15 border-primary/40 text-primary'
+                      : 'bg-amber-500/15 border-amber-500/40 text-amber-400'
+                  )}>
+                    {currentTurn === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+                    {currentTurn === 'user' ? 'Your Pick' : 'AI is picking...'}
+                    <span className="text-xs font-mono opacity-60 ml-1">
+                      Round {Math.floor(pickIndex / 2) + 1} • Pick {pickIndex + 1}/{TOTAL_PICKS}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/15 border border-primary/40 text-primary text-sm font-bold uppercase tracking-wider">
+                    <CheckCircle2 className="w-4 h-4" />
+                    Draft Complete!
+                  </div>
+                )}
+
+                {/* Criteria pill */}
                 {criteria && (
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30">
-                    <Target className="w-4 h-4 text-primary" />
-                    <span className="text-sm font-semibold text-primary">{criteria}</span>
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card/60 border border-border">
+                    <Target className="w-3.5 h-3.5 text-primary" />
+                    <span className="text-xs font-semibold text-muted-foreground">{criteria}</span>
                   </div>
                 )}
 
@@ -136,11 +197,27 @@ const FantasyDraft = () => {
                     <Loader2 className="w-8 h-8 animate-spin text-primary" />
                   </div>
                 ) : (
-                  <PlayerPool
-                    players={players}
-                    draftedIds={draftedIds}
-                    onSelect={handleSelectPlayer}
-                  />
+                  <div className="flex flex-col lg:flex-row gap-4 w-full">
+                    {/* Rosters */}
+                    <div className="w-full lg:w-[380px] shrink-0 order-2 lg:order-1">
+                      <DraftRoster
+                        userTeam={userTeam}
+                        aiTeam={aiTeam}
+                        currentTurn={currentTurn}
+                        lastPickId={lastPickId}
+                      />
+                    </div>
+
+                    {/* Player pool */}
+                    <div className="flex-1 order-1 lg:order-2">
+                      <PlayerPool
+                        players={players}
+                        draftedIds={draftedIds}
+                        onSelect={handleUserPick}
+                        disabled={currentTurn !== 'user' || draftComplete}
+                      />
+                    </div>
+                  </div>
                 )}
               </>
             )}
