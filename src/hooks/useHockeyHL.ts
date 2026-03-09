@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { hockeyHLPlayers, HockeyHLPlayer } from '@/data/hockeyHLPlayers';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDailySeed(): number {
   const now = new Date();
