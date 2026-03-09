@@ -23,3 +23,6 @@ verify_jwt = false
 
 [functions.nba-chain-validate]
 verify_jwt = false
+
+[functions.nascar-daily]
+verify_jwt = false
