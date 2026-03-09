@@ -41,6 +41,7 @@ import GuessTheYear from "./pages/GuessTheYear";
 import GuessNflTeam from "./pages/GuessNflTeam";
 import GuessSoccerClub from "./pages/GuessSoccerClub";
 import GuessTheNation from "./pages/GuessTheNation";
+import F1Driver from "./pages/F1Driver";
 
 const queryClient = new QueryClient();
 
