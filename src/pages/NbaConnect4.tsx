@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNbaConnect4 } from '@/hooks/useNbaConnect4';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { NbaConnect4HowToPlay } from '@/components/nba-connect4/NbaConnect4HowToPlay';
 import Connect4Suggestions from '@/components/nba-connect4/Connect4Suggestions';
