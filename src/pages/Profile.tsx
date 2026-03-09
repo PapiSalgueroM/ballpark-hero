@@ -19,6 +19,11 @@ interface BestScore {
   achieved_at: string;
 }
 
+interface DailyBadge {
+  date: string;
+  streak_days: number;
+}
+
 const GAME_LABELS: Record<string, string> = {
   'footle': '🎯 Footle',
   'career': '📜 Career Quiz',
