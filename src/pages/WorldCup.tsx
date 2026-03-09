@@ -45,6 +45,7 @@ const WorldCup = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="World Cup Trivia – Guess the Player | DoUKnowBall"
         description="Guess the mystery World Cup player from progressive clues. Covers every tournament from 1970 to 2026. Daily challenge — same puzzle for everyone."

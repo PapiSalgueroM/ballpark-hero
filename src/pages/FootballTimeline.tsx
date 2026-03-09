@@ -40,6 +40,7 @@ const FootballTimeline = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Pro Football Timeline – Draft Order Puzzle | DoUKnowBall"
         description="Put 5 NFL players in the correct chronological order by their draft year. Daily challenge with scoring and sharing."

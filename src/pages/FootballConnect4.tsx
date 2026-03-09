@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useFootballConnect4 } from '@/hooks/useFootballConnect4';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { FootballConnect4Board } from '@/components/football-connect4/FootballConnect4Board';
 import { FootballConnect4HowToPlay } from '@/components/football-connect4/FootballConnect4HowToPlay';

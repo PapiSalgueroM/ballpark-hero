@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNbaChain } from '@/hooks/useNbaChain';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { NbaChainHowToPlay } from '@/components/nba-chain/NbaChainHowToPlay';
 import ChainSuggestions from '@/components/nba-chain/ChainSuggestions';

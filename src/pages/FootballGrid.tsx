@@ -39,6 +39,7 @@ const FootballGrid = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Pro Football Grid – 3x3 Trivia Puzzle | DoUKnowBall"
         description="Fill the 3x3 grid with players who match both row and column criteria. Daily challenge with rarity scoring. Free pro football trivia — no login required."
