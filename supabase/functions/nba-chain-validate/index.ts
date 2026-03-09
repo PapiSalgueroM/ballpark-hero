@@ -93,7 +93,7 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are a strict NBA roster verifier. You must determine if two NBA players were EVER on the same NBA team roster at the same time during any season through February 10, 2026.
+              content: `You are a strict NBA roster verifier. You must determine if two NBA players were EVER on the same NBA team roster at the same time during any season through March 2026.
 
 CRITICAL RULES:
 1. ONLY mark valid:true if you are 100% CERTAIN they shared a roster. When in doubt, say false.
