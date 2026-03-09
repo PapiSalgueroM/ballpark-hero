@@ -93,7 +93,7 @@ export function useCareerGame() {
     setGuessesUsed(0);
   }, []);
 
-  const playerNames = useMemo(() => careerPlayers.map(p => p.name), []);
+  const playerNames = useMemo(() => ensureAnswerInOptions(careerPlayers.map(p => p.name), targetPlayer.name), [targetPlayer]);
 
   return {
     targetPlayer,

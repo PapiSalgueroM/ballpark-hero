@@ -44,7 +44,7 @@ export function useUfcGame() {
     gameStatus,
     makeGuess,
     resetGame,
-    fighters: uniqueUfcFighters,
+    fighters: validatedFighters,
     guessedFighterNames,
     maxGuesses: MAX_GUESSES,
   };

@@ -115,7 +115,7 @@ export function useOlympics() {
     return `I couldn't guess today's athlete on DoUKnowBall 😞 — douknowball.com/olympics`;
   }, [status, clueLevel, score]);
 
-  const athleteNames = useMemo(() => olympicAthletes.map(a => a.name), []);
+  const athleteNames = useMemo(() => ensureAnswerInOptions(olympicAthletes.map(a => a.name), athlete.name), [athlete]);
 
   return {
     athlete,
