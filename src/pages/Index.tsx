@@ -79,6 +79,7 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     emoji: '🥊',
     games: [
       { path: '/ufc', label: 'UFC Guesser', emoji: '🥊', description: 'Guess the UFC fighter' },
+      { path: '/ufc-chain', label: 'Combat Chain', emoji: '🔗', description: 'Build a chain of fighters who beat each other', isNew: true },
     ],
   },
   {
