@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Footle from "./pages/Footle";
 import CareerGame from "./pages/CareerGame";
@@ -34,51 +35,58 @@ import TermsOfService from "./pages/TermsOfService";
 import AdminLogin from "./pages/AdminLogin";
 import AdminReports from "./pages/AdminReports";
 import UfcChain from "./pages/UfcChain";
+import Profile from "./pages/Profile";
+import Leaderboard from "./pages/Leaderboard";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/footle" element={<Footle />} />
-          <Route path="/career" element={<CareerGame />} />
-          <Route path="/higher-lower" element={<HigherLower />} />
-          <Route path="/connections" element={<Connections />} />
-          <Route path="/build-your-xi" element={<LineupBuilder />} />
-          <Route path="/guess-the-face" element={<BlurredFace />} />
-          <Route path="/ufc" element={<UfcGame />} />
-          <Route path="/nba-starting-5" element={<NbaLineup />} />
-          <Route path="/nba-connect-4" element={<NbaConnect4 />} />
-          <Route path="/nba-chain" element={<NbaChain />} />
-          <Route path="/football-connect-4" element={<FootballConnect4 />} />
-          <Route path="/world-cup" element={<WorldCup />} />
-          <Route path="/football-grid" element={<FootballGrid />} />
-          <Route path="/college-grid" element={<CollegeGrid />} />
-          <Route path="/football-timeline" element={<FootballTimeline />} />
-          <Route path="/football-draft" element={<FootballDraft />} />
-          <Route path="/baseball-career" element={<BaseballCareer />} />
-          <Route path="/baseball-connections" element={<BaseballConnections />} />
-          <Route path="/hockey-career" element={<HockeyCareer />} />
-          <Route path="/hockey-higher-lower" element={<HockeyHigherLower />} />
-          <Route path="/nfl-career" element={<NFLCareer />} />
-          <Route path="/teammates" element={<Teammates />} />
-          <Route path="/olympics" element={<Olympics />} />
-          <Route path="/guess-the-college" element={<GuessTheCollege />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsOfService />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/reports" element={<AdminReports />} />
-          <Route path="/ufc-chain" element={<UfcChain />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/footle" element={<Footle />} />
+            <Route path="/career" element={<CareerGame />} />
+            <Route path="/higher-lower" element={<HigherLower />} />
+            <Route path="/connections" element={<Connections />} />
+            <Route path="/build-your-xi" element={<LineupBuilder />} />
+            <Route path="/guess-the-face" element={<BlurredFace />} />
+            <Route path="/ufc" element={<UfcGame />} />
+            <Route path="/nba-starting-5" element={<NbaLineup />} />
+            <Route path="/nba-connect-4" element={<NbaConnect4 />} />
+            <Route path="/nba-chain" element={<NbaChain />} />
+            <Route path="/football-connect-4" element={<FootballConnect4 />} />
+            <Route path="/world-cup" element={<WorldCup />} />
+            <Route path="/football-grid" element={<FootballGrid />} />
+            <Route path="/college-grid" element={<CollegeGrid />} />
+            <Route path="/football-timeline" element={<FootballTimeline />} />
+            <Route path="/football-draft" element={<FootballDraft />} />
+            <Route path="/baseball-career" element={<BaseballCareer />} />
+            <Route path="/baseball-connections" element={<BaseballConnections />} />
+            <Route path="/hockey-career" element={<HockeyCareer />} />
+            <Route path="/hockey-higher-lower" element={<HockeyHigherLower />} />
+            <Route path="/nfl-career" element={<NFLCareer />} />
+            <Route path="/teammates" element={<Teammates />} />
+            <Route path="/olympics" element={<Olympics />} />
+            <Route path="/guess-the-college" element={<GuessTheCollege />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/reports" element={<AdminReports />} />
+            <Route path="/ufc-chain" element={<UfcChain />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:username" element={<Profile />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

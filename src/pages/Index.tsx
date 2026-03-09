@@ -1,9 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Flame, TrendingUp, CheckCircle2, Sparkles } from 'lucide-react';
+import { Trophy, Flame, TrendingUp, Sparkles } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
+import { Header } from '@/components/layout/Header';
+import { StreakReminder } from '@/components/game/StreakReminder';
 
 // ─── game registry ───
 interface GameDef {
@@ -95,18 +97,6 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
 const ALL_GAMES = CATEGORIES.flatMap(c => c.games);
 const TOTAL_GAMES = ALL_GAMES.length;
 
-function getPlayedToday(): Set<string> {
-  const played = new Set<string>();
-  const today = new Date().toISOString().slice(0, 10);
-  // Check common storage patterns
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.includes(today)) {
-      played.add(key);
-    }
-  }
-  return played;
-}
 
 function countPlayedGames(): number {
   const today = new Date().toISOString().slice(0, 10);
@@ -161,6 +151,8 @@ export default function Index() {
         path="/"
       />
       <div className="min-h-screen bg-background text-foreground">
+        <Header />
+        
         {/* ─── HERO ─── */}
         <section className="relative overflow-hidden border-b border-border">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-[hsl(43,85%,55%)]/5" />
@@ -194,6 +186,8 @@ export default function Index() {
 
         {/* ─── GAME CATEGORIES ─── */}
         <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
+          <StreakReminder />
+          
           {CATEGORIES.map(cat => (
             <section key={cat.title}>
               <h2 className="flex items-center gap-2 text-lg font-display font-bold text-foreground mb-4">

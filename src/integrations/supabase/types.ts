@@ -119,6 +119,51 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          current_streak: number
+          display_name: string | null
+          id: string
+          last_played_date: string | null
+          longest_streak: number
+          total_correct_answers: number
+          total_games_played: number
+          updated_at: string
+          user_id: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          current_streak?: number
+          display_name?: string | null
+          id?: string
+          last_played_date?: string | null
+          longest_streak?: number
+          total_correct_answers?: number
+          total_games_played?: number
+          updated_at?: string
+          user_id: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          current_streak?: number
+          display_name?: string | null
+          id?: string
+          last_played_date?: string | null
+          longest_streak?: number
+          total_correct_answers?: number
+          total_games_played?: number
+          updated_at?: string
+          user_id?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
       question_reports: {
         Row: {
           created_at: string
@@ -176,6 +221,60 @@ export type Database = {
           nickname?: string
           puzzle_date?: string
           score?: number
+        }
+        Relationships: []
+      }
+      user_best_scores: {
+        Row: {
+          achieved_at: string
+          best_score: number
+          game_type: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          achieved_at?: string
+          best_score?: number
+          game_type: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          achieved_at?: string
+          best_score?: number
+          game_type?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_game_scores: {
+        Row: {
+          correct_answers: number
+          game_type: string
+          id: string
+          played_at: string
+          puzzle_date: string
+          score: number
+          user_id: string
+        }
+        Insert: {
+          correct_answers?: number
+          game_type: string
+          id?: string
+          played_at?: string
+          puzzle_date?: string
+          score?: number
+          user_id: string
+        }
+        Update: {
+          correct_answers?: number
+          game_type?: string
+          id?: string
+          played_at?: string
+          puzzle_date?: string
+          score?: number
+          user_id?: string
         }
         Relationships: []
       }
