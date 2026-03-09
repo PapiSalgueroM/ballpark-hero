@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { draftGuesserPuzzles, DraftGuesserPlayer } from '@/data/draftGuesserPlayers';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDailyIndex(): number {
   const now = new Date();
