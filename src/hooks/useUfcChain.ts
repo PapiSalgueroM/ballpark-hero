@@ -9,16 +9,13 @@ export function useUfcChain() {
 
   const startGame = useCallback((mode: GameMode, weightClass?: WeightClass) => {
     let startingFighter;
-    let availableFighters = UFC_FIGHTERS;
     
     if (mode === 'daily') {
       startingFighter = getDailyStartingFighter();
     } else if (mode === 'hall-of-fame') {
       startingFighter = getRandomStartingFighter({ hallOfFameOnly: true });
-      availableFighters = getHallOfFamers();
     } else if (mode === 'weight-class' && weightClass) {
       startingFighter = getRandomStartingFighter({ weightClass });
-      availableFighters = getFightersByWeightClass(weightClass);
     } else {
       startingFighter = getRandomStartingFighter();
     }
