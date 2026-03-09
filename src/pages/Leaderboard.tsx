@@ -118,8 +118,9 @@ export default function Leaderboard() {
       const atUserIds = [...new Set(allTimeData.map((d) => d.user_id))];
       const { data: atProfiles } = atUserIds.length > 0
         ? await supabase.from('profiles').select('user_id, display_name, username').in('user_id', atUserIds)
-        : { data: [] };
-      const atMap = new Map(atProfiles?.map((p) => [p.user_id, p]) || []);
+        : { data: [] as any[] };
+      const atMap = new Map<string, { display_name: string | null; username: string | null }>();
+      atProfiles?.forEach((p: any) => atMap.set(p.user_id, p));
 
       setAllTimeLeaderboard(
         allTimeData.map((entry, i) => ({
