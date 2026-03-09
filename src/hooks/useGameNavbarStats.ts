@@ -20,67 +20,70 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
     loading: true,
   });
 
-  useEffect(() => {
+  const fetchStats = async () => {
     if (!user) {
-      setStats({
-        gamesPlayedToday: 0,
-        totalPointsToday: 0,
-        dailyRank: null,
-        loading: false,
-      });
+      setStats({ gamesPlayedToday: 0, totalPointsToday: 0, dailyRank: null, loading: false });
       return;
     }
 
-    const fetchStats = async () => {
-      const today = new Date().toISOString().split('T')[0];
+    try {
+      // Fetch user's own score from user_scores
+      const { data: userScore } = await supabase
+        .from('user_scores')
+        .select('total_points, games_played_today')
+        .eq('user_id', user.id)
+        .single();
 
-      try {
-        // Fetch user's games played and total points today
-        const { data: userScores, error: userError } = await supabase
-          .from('user_game_scores')
-          .select('game_type, score')
-          .eq('user_id', user.id)
-          .eq('puzzle_date', today);
+      const totalPoints = userScore?.total_points || 0;
+      const gamesPlayed = userScore?.games_played_today || 0;
 
-        if (userError) throw userError;
+      // Fetch all scores for rank calculation
+      const { data: allScores } = await supabase
+        .from('user_scores')
+        .select('user_id, total_points')
+        .order('total_points', { ascending: false });
 
-        // Calculate unique games played and total points
-        const uniqueGames = new Set(userScores?.map(s => s.game_type) || []);
-        const totalPoints = userScores?.reduce((sum, s) => sum + s.score, 0) || 0;
+      const rank = allScores
+        ? allScores.findIndex(s => s.user_id === user.id) + 1
+        : null;
 
-        // Fetch all users' daily totals to calculate rank
-        const { data: allScores, error: allError } = await supabase
-          .from('user_game_scores')
-          .select('user_id, score')
-          .eq('puzzle_date', today);
+      setStats({
+        gamesPlayedToday: gamesPlayed,
+        totalPointsToday: totalPoints,
+        dailyRank: rank && rank > 0 ? rank : null,
+        loading: false,
+      });
+    } catch (error) {
+      console.error('Failed to fetch game navbar stats:', error);
+      setStats(prev => ({ ...prev, loading: false }));
+    }
+  };
 
-        if (allError) throw allError;
-
-        // Aggregate scores by user
-        const userTotals = new Map<string, number>();
-        allScores?.forEach(s => {
-          userTotals.set(s.user_id, (userTotals.get(s.user_id) || 0) + s.score);
-        });
-
-        // Calculate rank
-        const sortedTotals = Array.from(userTotals.entries())
-          .sort((a, b) => b[1] - a[1]);
-        
-        const rank = sortedTotals.findIndex(([uid]) => uid === user.id) + 1;
-
-        setStats({
-          gamesPlayedToday: uniqueGames.size,
-          totalPointsToday: totalPoints,
-          dailyRank: rank > 0 ? rank : null,
-          loading: false,
-        });
-      } catch (error) {
-        console.error('Failed to fetch game navbar stats:', error);
-        setStats(prev => ({ ...prev, loading: false }));
-      }
-    };
-
+  useEffect(() => {
     fetchStats();
+
+    if (!user) return;
+
+    // Subscribe to realtime changes on user_scores
+    const channel = supabase
+      .channel('user_scores_realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'user_scores',
+          filter: `user_id=eq.${user.id}`,
+        },
+        () => {
+          fetchStats();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user]);
 
   return { ...stats, totalGames: TOTAL_GAMES };
