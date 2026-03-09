@@ -1,6 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { CbbProgramPuzzle, CbbProgramState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/cbbProgram';
 import { supabase } from '@/integrations/supabase/client';
+import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 
 function mapRow(row: any): CbbProgramPuzzle {
   return {
