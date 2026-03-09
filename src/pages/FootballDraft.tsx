@@ -59,6 +59,7 @@ const FootballDraft = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Pro Football Draft Guesser – Guess the Round | DoUKnowBall"
         description="A player's college, position, and combine stats are progressively revealed. Guess what round they were drafted in. Daily challenge with scoring."

@@ -52,6 +52,7 @@ const BaseballConnections = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Baseball Connections – Group 5 Players | DoUKnowBall"
         description="Find four groups of 5 baseball players that share a connection. Same team, award, country, or era. Daily challenge with 4 lives."

@@ -46,6 +46,7 @@ const BaseballCareer = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Baseball Career Path – Guess the Player | DoUKnowBall"
         description="Progressive clues reveal a mystery baseball player. Guess from position, draft, teams, stats, and awards. Daily challenge with scoring."

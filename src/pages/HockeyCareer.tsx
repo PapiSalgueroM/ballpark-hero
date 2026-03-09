@@ -32,6 +32,7 @@ const HockeyCareer = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Hockey Career Path – Guess the Player | DoUKnowBall"
         description="Progressive clues reveal a mystery hockey player. Guess from position, country, draft, teams, stats, and awards. Daily challenge."

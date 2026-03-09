@@ -62,6 +62,7 @@ const FootballConnect4 = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Soccer Connect 4 – Soccer Trivia Grid Game | DoUKnowBall"
         description="Play Connect 4 with soccer trivia! Name players matching club and league criteria to claim cells. Free soccer puzzle game — no login required."
