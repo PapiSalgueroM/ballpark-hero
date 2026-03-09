@@ -4,7 +4,6 @@ import { UfcChainSearch } from './UfcChainSearch';
 import { ChainTimeline } from './ChainTimeline';
 import { ModeSelector } from './ModeSelector';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import ShareButtons from '@/components/game/ShareButtons';
 import { getChainLengthMultiplier } from '@/types/ufcChain';
 import { supabase } from '@/integrations/supabase/client';
@@ -35,6 +34,9 @@ export function CombatChainBoard() {
 
   useEffect(() => {
     if (gameState?.gameStatus === 'ended') {
+      setScoreSubmitted(false);
+      setPlayerRank(null);
+      setNickname('');
       fetchLeaderboard();
     }
   }, [gameState?.gameStatus]);
@@ -43,7 +45,7 @@ export function CombatChainBoard() {
     if (!gameState || !nickname.trim() || saving) return;
     setSaving(true);
     const chainLength = gameState.chain.length - 1;
-    
+
     const { error } = await supabase.from('ufc_chain_scores').insert({
       nickname: nickname.trim(),
       score: gameState.score,
@@ -52,7 +54,6 @@ export function CombatChainBoard() {
     });
 
     if (!error) {
-      // Calculate rank
       const { count } = await supabase
         .from('ufc_chain_scores')
         .select('*', { count: 'exact', head: true })
@@ -62,6 +63,14 @@ export function CombatChainBoard() {
       fetchLeaderboard();
     }
     setSaving(false);
+  };
+
+  const handleReset = () => {
+    setScoreSubmitted(false);
+    setPlayerRank(null);
+    setNickname('');
+    setLeaderboard([]);
+    resetGame();
   };
 
   const handleFighterSelect = (fighter: { name: string }) => {
@@ -209,9 +218,65 @@ export function CombatChainBoard() {
                 Chain Length: {chainLength}
               </div>
 
+              {/* Nickname & Save */}
+              {!scoreSubmitted ? (
+                <div className="mb-6">
+                  <p className="text-gray-400 mb-2">Enter your nickname to save your score</p>
+                  <div className="flex gap-2 max-w-xs mx-auto">
+                    <input
+                      type="text"
+                      value={nickname}
+                      onChange={(e) => setNickname(e.target.value)}
+                      placeholder="Nickname"
+                      maxLength={30}
+                      className="flex-1 bg-gray-800 border border-gray-600 rounded-md px-3 py-2 text-white placeholder:text-gray-500 focus:outline-none focus:border-red-500"
+                    />
+                    <Button
+                      onClick={handleSaveScore}
+                      disabled={!nickname.trim() || saving}
+                      className="bg-red-600 hover:bg-red-700 text-white"
+                    >
+                      {saving ? '...' : 'Save'}
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                playerRank && (
+                  <div className="mb-6 text-green-400 font-bold text-lg">
+                    You ranked #{playerRank} today!
+                  </div>
+                )
+              )}
+
+              {/* Leaderboard */}
+              {leaderboard.length > 0 && (
+                <div className="mb-6 text-left">
+                  <h3 className="text-lg font-bold text-red-400 mb-3 text-center">🏆 Today's Top 10</h3>
+                  <div className="bg-gray-800 rounded-lg overflow-hidden">
+                    <div className="grid grid-cols-[40px_1fr_80px_80px] gap-1 p-2 text-xs text-gray-400 font-semibold border-b border-gray-700">
+                      <div>#</div>
+                      <div>Nickname</div>
+                      <div className="text-right">Chain</div>
+                      <div className="text-right">Score</div>
+                    </div>
+                    {leaderboard.map((entry, i) => (
+                      <div
+                        key={i}
+                        className="grid grid-cols-[40px_1fr_80px_80px] gap-1 p-2 text-sm border-b border-gray-700/50 last:border-0"
+                      >
+                        <div className="text-gray-400">{i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}`}</div>
+                        <div className="text-white truncate">{entry.nickname}</div>
+                        <div className="text-right text-gray-300">{entry.chain_length}</div>
+                        <div className="text-right text-red-400">{entry.score}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-4">
                 <Button 
-                  onClick={resetGame}
+                  onClick={handleReset}
                   className="w-full bg-red-600 hover:bg-red-700 text-white"
                 >
                   Play Again
