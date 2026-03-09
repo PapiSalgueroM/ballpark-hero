@@ -119,5 +119,10 @@ export function useTennisPlayer() {
   const pointsForCurrentClue =
     gameState ? (POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0) : POINTS_BY_CLUE[0];
 
-  return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPlayers, loading };
+  const validatedPlayers = useMemo(() => {
+    if (!gameState?.puzzle) return allPlayers;
+    return ensureAnswerInList(allPlayers, gameState.puzzle.player_name, p => p.player_name, gameState.puzzle);
+  }, [allPlayers, gameState?.puzzle]);
+
+  return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPlayers: validatedPlayers, loading };
 }

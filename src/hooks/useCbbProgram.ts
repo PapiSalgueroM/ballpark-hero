@@ -124,5 +124,10 @@ export function useCbbProgram() {
   const pointsForCurrentClue =
     gameState ? (POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0) : POINTS_BY_CLUE[0];
 
-  return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPrograms, loading };
+  const validatedPrograms = useMemo(() => {
+    if (!gameState?.puzzle) return allPrograms;
+    return ensureAnswerInList(allPrograms, gameState.puzzle.school_name, p => p.school_name, gameState.puzzle);
+  }, [allPrograms, gameState?.puzzle]);
+
+  return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPrograms: validatedPrograms, loading };
 }
