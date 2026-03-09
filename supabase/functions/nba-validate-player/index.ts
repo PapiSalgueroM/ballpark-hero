@@ -100,7 +100,7 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are an NBA database with comprehensive knowledge up to February 2026. Answer ONLY with a JSON object.
+              content: `You are an NBA database with comprehensive knowledge up to March 2026. Answer ONLY with a JSON object.
 
 GROUND TRUTH – 2025-26 SEASON ROSTER UPDATES (use these over any older data):
 - Nikola Topić: Oklahoma City Thunder (drafted 2024, NBA debut Feb 12 2026). Position: PG/SG.
