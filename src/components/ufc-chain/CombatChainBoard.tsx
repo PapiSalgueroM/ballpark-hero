@@ -1,29 +1,64 @@
 import { useUfcChain } from '@/hooks/useUfcChain';
 import { UfcChainSearch } from './UfcChainSearch';
 import { ChainTimeline } from './ChainTimeline';
-import { UFC_FIGHTERS } from '@/data/ufcChainData';
+import { ModeSelector } from './ModeSelector';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
+import { getChainLengthMultiplier } from '@/types/ufcChain';
 
 export function CombatChainBoard() {
-  const { gameState, makeGuess, giveUp, resetGame } = useUfcChain();
+  const { gameState, startGame, makeGuess, giveUp, resetGame, getAvailableFighters } = useUfcChain();
 
   const handleFighterSelect = (fighter: { name: string }) => {
     makeGuess(fighter.name);
+  };
+
+  // Mode selection screen
+  if (!gameState) {
+    return (
+      <div className="min-h-screen bg-black text-white">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-red-500 mb-2">🥊 Combat Chain</h1>
+            <p className="text-gray-300">Name a fighter who defeated the current fighter to extend your chain!</p>
+          </div>
+          <ModeSelector onSelectMode={startGame} />
+        </div>
+      </div>
+    );
+  }
+
+  const chainLength = gameState.chain.length - 1;
+  const multiplier = getChainLengthMultiplier(chainLength);
+  const availableFighters = getAvailableFighters();
+
+  const getModeLabel = () => {
+    switch (gameState.mode) {
+      case 'daily': return '🗓️ Daily Mode';
+      case 'unlimited': return '🔄 Unlimited';
+      case 'hall-of-fame': return '🏆 Hall of Fame';
+      case 'weight-class': return `⚖️ ${gameState.selectedWeightClass}`;
+      default: return '';
+    }
   };
 
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <h1 className="text-4xl font-bold text-red-500 mb-2">🥊 Combat Chain</h1>
-          <p className="text-gray-300">Name a fighter who defeated the current fighter to extend your chain!</p>
+          <p className="text-sm text-gray-400">{getModeLabel()}</p>
         </div>
 
-        {/* Score */}
+        {/* Score with multiplier indicator */}
         <div className="text-center mb-6">
           <div className="text-2xl font-bold text-red-400">Score: {gameState.score}</div>
+          {multiplier > 1 && (
+            <div className="text-sm text-green-400">
+              x{multiplier} Chain Bonus Active!
+            </div>
+          )}
         </div>
 
         {/* Chain Timeline */}
@@ -37,6 +72,9 @@ export function CombatChainBoard() {
                 <h2 className="text-xl font-bold text-red-400 mb-2">Current Fighter</h2>
                 <div className="text-2xl font-bold text-white mb-2">
                   {gameState.currentFighter.name}
+                  {gameState.currentFighter.isHallOfFamer && (
+                    <span className="ml-2 text-yellow-400 text-sm">⭐ HOF</span>
+                  )}
                 </div>
                 <div className="text-gray-300">
                   {gameState.currentFighter.weightClass} • {gameState.currentFighter.record}
@@ -52,7 +90,7 @@ export function CombatChainBoard() {
             {/* Search Input */}
             <div className="mb-8">
               <UfcChainSearch
-                fighters={UFC_FIGHTERS}
+                fighters={availableFighters}
                 usedFighters={gameState.usedFighters}
                 onSelect={handleFighterSelect}
                 disabled={gameState.currentFighter.losses === 0}
@@ -77,6 +115,19 @@ export function CombatChainBoard() {
               <h2 className="text-2xl font-bold text-red-400 mb-4">Game Over!</h2>
               <p className="text-gray-300 mb-4">{gameState.gameOverReason}</p>
               
+              {/* Badge Display */}
+              {gameState.earnedBadge && (
+                <div className="mb-6 p-4 bg-gradient-to-r from-red-900/50 to-yellow-900/50 rounded-lg border border-yellow-600">
+                  <div className="text-3xl mb-2">{gameState.earnedBadge.emoji}</div>
+                  <div className="text-xl font-bold text-yellow-400">
+                    {gameState.earnedBadge.name}
+                  </div>
+                  <div className="text-sm text-gray-400">
+                    Chain of {chainLength}!
+                  </div>
+                </div>
+              )}
+              
               {gameState.correctAnswer && (
                 <div className="mb-4">
                   <p className="text-gray-400 mb-2">Correct answer was:</p>
@@ -89,12 +140,18 @@ export function CombatChainBoard() {
                 </div>
               )}
 
-              <div className="text-xl text-red-400 font-bold mb-4">
+              <div className="text-xl text-red-400 font-bold mb-2">
                 Final Score: {gameState.score}
               </div>
+              
+              {multiplier > 1 && (
+                <div className="text-sm text-green-400 mb-4">
+                  Includes x{multiplier} chain bonus!
+                </div>
+              )}
 
               <div className="text-lg text-red-300 mb-6">
-                Chain Length: {gameState.chain.length - 1}
+                Chain Length: {chainLength}
               </div>
 
               <div className="space-y-4">
@@ -106,7 +163,7 @@ export function CombatChainBoard() {
                 </Button>
                 
                 <ShareButtons 
-                  score={`${gameState.score} points • Chain of ${gameState.chain.length - 1}`}
+                  score={`${gameState.score} points • Chain of ${chainLength}${gameState.earnedBadge ? ` • ${gameState.earnedBadge.emoji} ${gameState.earnedBadge.name}` : ''}`}
                   gameName="Combat Chain"
                   gamePath="/ufc-chain"
                 />
