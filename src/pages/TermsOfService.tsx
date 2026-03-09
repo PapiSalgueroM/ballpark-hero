@@ -28,7 +28,7 @@ const TermsOfService = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">2. Description of Service</h2>
           <p>DoUKnowBall is a free, independent fan site and browser-based entertainment platform that provides sports-themed trivia and guessing games. The Site is operated for entertainment purposes only and is not an official product of any sports league, players' association, or governing body.</p>
-          <p className="mt-2">Current game categories include soccer, pro football (NFL), college football, basketball (NBA), baseball (MLB), hockey (NHL), combat sports (UFC), and multi-sport trivia. The Site is provided "as is" and "as available" without any warranties of any kind.</p>
+          <p className="mt-2">Current game categories include pro football (NFL), college football, pro basketball (NBA), college basketball, baseball (MLB), hockey (NHL), soccer (including World Cup and Champions League), Formula 1, tennis, golf, NASCAR, combat sports (UFC), and multi-sport trivia covering the Olympics and international competitions. The Site is provided "as is" and "as available" without any warranties of any kind.</p>
         </div>
 
         <div>
@@ -40,7 +40,7 @@ const TermsOfService = () => {
           <h2 className="text-lg font-semibold text-foreground mb-2">4. Intellectual Property &amp; Trademarks</h2>
           <p>All original content, game designs, features, and functionality of DoUKnowBall are owned by DoUKnowBall and are protected by international copyright and intellectual property laws.</p>
           <p className="mt-2">All team names, player names, league names, logos, and trademarks referenced on this Site are the property of their respective owners and are used solely for identification and informational purposes.</p>
-          <p className="mt-2"><strong>DoUKnowBall is not affiliated with, endorsed by, or sponsored by the NFL, NFLPA, NBA, NBPA, UFC, NHL, NHLPA, MLB, MLBPA, FIFA, IOC, NCAA, or any team, club, or sports governing body.</strong></p>
+          <p className="mt-2"><strong>DoUKnowBall is not affiliated with, endorsed by, or sponsored by the NFL, NFLPA, NBA, NBPA, UFC, NHL, NHLPA, MLB, MLBPA, FIFA, IOC, NCAA, FIA (Formula 1), PGA Tour, NASCAR, ATP, WTA, or any team, club, or sports governing body.</strong></p>
           <p className="mt-2">The Olympic name, Olympic rings, and related marks are trademarks of the International Olympic Committee (IOC). DoUKnowBall makes no claim to these marks and does not use any official Olympic branding.</p>
         </div>
 
@@ -99,7 +99,7 @@ const TermsOfService = () => {
       </section>
 
       <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
-        <p>All team names, logos and trademarks are property of their respective owners and used for identification purposes only. DoUKnowBall is not affiliated with the NFL, NBA, UFC, NHL, MLB, FIFA, IOC or NCAA. © 2026 DoUKnowBall</p>
+        <p>All team names, logos and trademarks are property of their respective owners. DoUKnowBall is not affiliated with the NFL, NBA, UFC, NHL, MLB, FIFA, IOC, NCAA, F1, PGA Tour, NASCAR, ATP or WTA. © 2026 DoUKnowBall</p>
         <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>
       </div>
     </div>

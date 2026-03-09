@@ -83,7 +83,7 @@ const PrivacyPolicy = () => {
       </section>
 
       <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
-        <p>All team names, logos and trademarks are property of their respective owners and used for identification purposes only. DoUKnowBall is not affiliated with the NFL, NBA, UFC, NHL, MLB, FIFA, IOC or NCAA. © 2026 DoUKnowBall</p>
+        <p>All team names, logos and trademarks are property of their respective owners. DoUKnowBall is not affiliated with the NFL, NBA, UFC, NHL, MLB, FIFA, IOC, NCAA, F1, PGA Tour, NASCAR, ATP or WTA. © 2026 DoUKnowBall</p>
         <Link to="/terms" className="underline hover:text-foreground transition-colors">Terms of Service</Link>
       </div>
     </div>
