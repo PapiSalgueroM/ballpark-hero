@@ -4,7 +4,7 @@ import { TennisChainSearch } from './TennisChainSearch';
 import { TennisChainTimeline } from './TennisChainTimeline';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
-import { getTennisChainMultiplier, TennisChainMode } from '@/types/tennisChain';
+import { getTennisChainMultiplier } from '@/types/tennisChain';
 import { supabase } from '@/integrations/supabase/client';
 import { GameNav } from '@/components/game/GameNav';
 import { Loader2 } from 'lucide-react';

@@ -81,6 +81,7 @@ const CATEGORIES: { title: string; games: GameLink[] }[] = [
     title: 'Tennis',
     games: [
       { path: '/guess-tennis-player', label: '🎾 Guess The Tennis Player', description: 'Guess the mystery tennis player', daily: true },
+      { path: '/tennis-chain', label: '🎾 Tennis Chain', description: 'Build a chain of Grand Slam defeats' },
     ],
   },
   {
