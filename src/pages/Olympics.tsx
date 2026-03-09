@@ -62,6 +62,7 @@ export default function Olympics() {
 
   return (
     <>
+      <GameNavbar />
       <PageSeo
         title="The Medal Games — DoUKnowBall"
         description="Guess the mystery athlete from progressive clues about their career at the Games. Daily challenge on DoUKnowBall."

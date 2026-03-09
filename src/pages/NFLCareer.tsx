@@ -67,6 +67,7 @@ const NFLCareer = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="NFL Career Path – Guess the NFL Player | DoUKnowBall"
         description="Can you identify the NFL player from progressive career clues? Draft info, college, teams, stats and more. Free daily trivia — no signup needed."

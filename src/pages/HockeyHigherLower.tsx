@@ -28,6 +28,7 @@ const HockeyHigherLower = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Hockey Higher or Lower – Career Points | DoUKnowBall"
         description="Which hockey player has more career points? Compare players side by side in this daily challenge with streak bonuses."

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import PageSeo from '@/components/seo/PageSeo';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import ShareButtons from '@/components/game/ShareButtons';
 import GuessCollegeHowToPlay from '@/components/guess-college/GuessCollegeHowToPlay';
