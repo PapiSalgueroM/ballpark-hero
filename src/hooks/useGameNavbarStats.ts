@@ -6,6 +6,7 @@ interface GameNavbarStats {
   gamesPlayedToday: number;
   totalPointsToday: number;
   dailyRank: number | null;
+  currentStreak: number;
   loading: boolean;
 }
 
