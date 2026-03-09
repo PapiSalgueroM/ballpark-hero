@@ -112,7 +112,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
   {
     id: 'bconn-012',
     groups: [
-      { theme: 'Pitchers who won a batting title... just kidding — pitchers with 3000+ K', players: ['Nolan Ryan', 'Randy Johnson', 'Roger Clemens', 'Justin Verlander', 'Max Scherzer'], difficulty: 'yellow' },
+      { theme: 'Pitchers with 3000+ strikeouts', players: ['Nolan Ryan', 'Randy Johnson', 'Roger Clemens', 'Justin Verlander', 'Max Scherzer'], difficulty: 'yellow' },
       { theme: 'Played for the Minnesota Twins', players: ['Joe Mauer', 'Justin Morneau', 'Torii Hunter', 'David Ortiz', 'Johan Santana'], difficulty: 'green' },
       { theme: 'Won batting title (2010s–2020s)', players: ['Jose Altuve', 'DJ LeMahieu', 'Luis Arraez', 'Tim Anderson', 'Miguel Cabrera'], difficulty: 'blue' },
       { theme: 'Played college baseball at LSU', players: ['Alex Bregman', 'DJ LeMahieu', 'Aaron Nola', 'Kevin Gausman', 'Alex Lange'], difficulty: 'purple' },
@@ -139,10 +139,19 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
   {
     id: 'bconn-015',
     groups: [
-      { theme: 'NL MVP winners (2015–2024)', players: ['Bryce Harper', 'Kris Bryant', 'Cody Bellinger', 'Freddie Freeman', 'Shohei Ohtani'], difficulty: 'yellow' },
+      { theme: 'NL MVP winners (2015–2025)', players: ['Bryce Harper', 'Kris Bryant', 'Cody Bellinger', 'Freddie Freeman', 'Shohei Ohtani'], difficulty: 'yellow' },
       { theme: 'Played for the Detroit Tigers', players: ['Miguel Cabrera', 'Justin Verlander', 'Prince Fielder', 'Max Scherzer', 'Curtis Granderson'], difficulty: 'green' },
       { theme: 'Switch-hitting shortstops', players: ['Carlos Correa', 'Tim Anderson', 'Jose Reyes', 'Jimmy Rollins', 'Ozzie Smith'], difficulty: 'blue' },
       { theme: 'Went undrafted then became All-Stars', players: ['Jose Bautista', 'Justin Turner', 'Paul Goldschmidt', 'Max Muncy', 'J.D. Martinez'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-016',
+    groups: [
+      { theme: 'Signed $300M+ contracts', players: ['Juan Soto', 'Shohei Ohtani', 'Mike Trout', 'Bryce Harper', 'Mookie Betts'], difficulty: 'yellow' },
+      { theme: 'Played for the New York Mets', players: ['Juan Soto', 'Francisco Lindor', 'Pete Alonso', 'Jacob deGrom', 'David Wright'], difficulty: 'green' },
+      { theme: '2025 season 30+ HR hitters', players: ['Aaron Judge', 'Shohei Ohtani', 'Vladimir Guerrero Jr.', 'Juan Soto', 'Gunnar Henderson'], difficulty: 'blue' },
+      { theme: 'Father-son MLB players', players: ['Vladimir Guerrero Jr.', 'Fernando Tatis Jr.', 'Ken Griffey Jr.', 'Prince Fielder', 'Cavan Biggio'], difficulty: 'purple' },
     ],
   },
 ];
