@@ -46,6 +46,7 @@ import F1Constructor from "./pages/F1Constructor";
 import GuessCbbTeam from "./pages/GuessCbbTeam";
 import GuessTennisPlayer from "./pages/GuessTennisPlayer";
 import TennisChain from "./pages/TennisChain";
+import GuessNascarDriver from "./pages/GuessNascarDriver";
 
 const queryClient = new QueryClient();
 
