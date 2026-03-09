@@ -127,23 +127,37 @@ export default function Leaderboard() {
     }
 
     // === Streak leaderboard ===
-    const { data: streakData } = await supabase
-      .from('profiles')
-      .select('user_id, display_name, username, current_streak')
+    const { data: streakScores } = await supabase
+      .from('user_scores')
+      .select('user_id, current_streak')
       .gt('current_streak', 0)
       .order('current_streak', { ascending: false })
       .limit(50);
 
-    if (streakData) {
+    if (streakScores && streakScores.length > 0) {
+      const streakUserIds = streakScores.map((s) => s.user_id);
+      const { data: streakProfiles } = await supabase
+        .from('profiles')
+        .select('user_id, display_name, username')
+        .in('user_id', streakUserIds);
+
+      const spMap = new Map<string, { display_name: string | null; username: string | null }>();
+      streakProfiles?.forEach((p: any) => spMap.set(p.user_id, p));
+
       setStreakLeaderboard(
-        streakData.map((entry, i) => ({
-          rank: i + 1,
-          user_id: entry.user_id,
-          display_name: entry.display_name,
-          username: entry.username,
-          streak: entry.current_streak,
-        }))
+        streakScores.map((entry, i) => {
+          const p = spMap.get(entry.user_id);
+          return {
+            rank: i + 1,
+            user_id: entry.user_id,
+            display_name: p?.display_name || null,
+            username: p?.username || null,
+            streak: (entry as any).current_streak || 0,
+          };
+        })
       );
+    } else {
+      setStreakLeaderboard([]);
     }
 
     setLoading(false);
