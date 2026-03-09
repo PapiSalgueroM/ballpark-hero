@@ -3,6 +3,7 @@ import { useConnections } from '@/hooks/useConnections';
 import { ConnectionsBoard } from '@/components/connections/ConnectionsBoard';
 import { ConnectionsHowToPlay } from '@/components/connections/ConnectionsHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight, Shuffle, Flame } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';

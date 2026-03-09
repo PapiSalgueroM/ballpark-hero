@@ -37,6 +37,7 @@ const UfcGame = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="UFC Guesser – Combat Sports Trivia Game | DoUKnowBall"
         description="Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia game — no login required."

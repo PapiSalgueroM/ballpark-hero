@@ -42,6 +42,7 @@ const HigherLowerGame = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Higher or Lower – Soccer Stats Comparison Game | DoUKnowBall"
         description="Compare soccer player stats and guess who's higher! Pick the right stat to build your streak. Free sports trivia game — no login required."

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS, type Formation } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import FormationPitch from '@/components/lineup/FormationPitch';
 import PlayerSuggestions from '@/components/lineup/PlayerSuggestions';

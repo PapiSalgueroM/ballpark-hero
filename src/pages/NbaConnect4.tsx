@@ -50,6 +50,7 @@ const NbaConnect4 = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="NBA Connect 4 – Basketball Trivia Grid Game | DoUKnowBall"
         description="Play Connect 4 with NBA trivia! Name players matching team and stat criteria to claim cells. Free basketball puzzle game — no login required."
