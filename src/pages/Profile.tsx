@@ -63,6 +63,8 @@ export default function Profile() {
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({ display_name: '', username: '' });
   const [saving, setSaving] = useState(false);
+  const [legendStreak, setLegendStreak] = useState<number>(0);
+  const [legendBadgeCount, setLegendBadgeCount] = useState<number>(0);
 
   const isOwnProfile = !username || (profile?.username === username);
 
