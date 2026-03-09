@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { TennisChainState, TennisChainMode, getTennisChainMultiplier, getTennisEarnedBadge, TENNIS_CHAIN_STARTERS } from '@/types/tennisChain';
 import { supabase } from '@/integrations/supabase/client';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDailyStarter(): string {
   const today = new Date().toISOString().slice(0, 10);
