@@ -50,7 +50,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
       'Won eight consecutive Constructors\' Championships from 2014 to 2021',
       'Won 8 Constructors\' Championships',
       'Famous for their all-silver livery, earning the nickname "Silver Arrows"',
-      'Lewis Hamilton won six of his seven titles driving for this team',
+      'Lewis Hamilton won six of his seven titles driving for this team before moving to Ferrari in 2025',
     ],
   },
   {

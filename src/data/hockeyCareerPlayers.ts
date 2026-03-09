@@ -50,8 +50,8 @@ export const hockeyCareerPuzzles: HockeyCareerPuzzle[] = [
       countryFlag: '🇷🇺',
       draftInfo: '1st Round, 1st Pick (2004)',
       teams: ['Washington Capitals'],
-      stats: ['868 G', '680 A', '1,548 Pts'],
-      awards: ['3× Hart Trophy', 'Stanley Cup Champion (2018)', '9× Maurice Richard Trophy', 'Conn Smythe Trophy (2018)'],
+      stats: ['895+ G', '700+ A', '1,595+ Pts'],
+      awards: ['3× Hart Trophy', 'Stanley Cup Champion (2018)', '9× Maurice Richard Trophy', 'Chasing Gretzky\'s 894-goal record'],
     },
   },
   {

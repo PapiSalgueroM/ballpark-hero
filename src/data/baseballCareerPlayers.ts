@@ -70,8 +70,8 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       draftInfo: 'International Free Agent (2017)',
       firstTeam: 'Los Angeles Angels',
       teams: ['Los Angeles Angels', 'Los Angeles Dodgers'],
-      stats: ['.275 AVG', '225 HR', '38 W', '3.01 ERA'],
-      awards: ['2× AL MVP', '2024 NL MVP', '4× All-Star', '2024 World Series Champion'],
+      stats: ['.280 AVG', '250+ HR', '38 W', '3.01 ERA'],
+      awards: ['2× AL MVP', '2024 NL MVP', '4× All-Star', '2× World Series Champion (2024, 2025)'],
     },
   },
   {
@@ -94,8 +94,8 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       draftInfo: '5th Round, 172nd Pick (2011)',
       firstTeam: 'Boston Red Sox',
       teams: ['Boston Red Sox', 'Los Angeles Dodgers'],
-      stats: ['.292 AVG', '260 HR', '775 RBI'],
-      awards: ['AL MVP (2018)', '2× World Series Champion', '6× Gold Glove', '8× All-Star'],
+      stats: ['.290 AVG', '275+ HR', '800+ RBI'],
+      awards: ['AL MVP (2018)', '3× World Series Champion (2018, 2024, 2025)', '6× Gold Glove', '9× All-Star'],
     },
   },
   {
