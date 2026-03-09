@@ -172,6 +172,30 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_badges: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          streak_days: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          id?: string
+          streak_days?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          streak_days?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       daily_completions: {
         Row: {
           completed_at: string
