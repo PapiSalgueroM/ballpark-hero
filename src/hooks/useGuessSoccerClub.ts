@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
   GuessSoccerClubState,
   GameMode,
