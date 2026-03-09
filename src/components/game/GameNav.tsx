@@ -75,6 +75,7 @@ const CATEGORIES: { title: string; games: GameLink[] }[] = [
     games: [
       { path: '/f1-driver', label: '🏎️ Guess The F1 Driver', description: 'Guess the mystery F1 driver', daily: true },
       { path: '/f1-constructor', label: '🏗️ Guess The F1 Constructor', description: 'Guess the mystery F1 team', daily: true },
+      { path: '/guess-nascar-driver', label: '🏁 Guess The NASCAR Driver', description: 'Guess the mystery NASCAR driver', daily: true },
     ],
   },
   {
