@@ -427,7 +427,11 @@ export function resolveF1Driver(input: string): F1DriverPuzzle | undefined {
   );
 }
 
-/** All driver names for autocomplete */
-export function getAllF1DriverNames(): { name: string; id: string }[] {
-  return F1_DRIVERS.map(d => ({ name: d.driverName, id: d.id }));
+/** All driver names for autocomplete — ensures current puzzle answer is included */
+export function getAllF1DriverNames(currentPuzzle?: F1DriverPuzzle): { name: string; id: string }[] {
+  const names = F1_DRIVERS.map(d => ({ name: d.driverName, id: d.id }));
+  if (currentPuzzle && !names.some(n => n.id === currentPuzzle.id)) {
+    names.push({ name: currentPuzzle.driverName, id: currentPuzzle.id });
+  }
+  return names;
 }

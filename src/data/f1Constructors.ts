@@ -425,6 +425,10 @@ export function resolveF1Constructor(input: string): F1ConstructorPuzzle | undef
   );
 }
 
-export function getAllF1ConstructorNames(): { name: string; id: string }[] {
-  return F1_CONSTRUCTORS.map(c => ({ name: c.constructorName, id: c.id }));
+export function getAllF1ConstructorNames(currentPuzzle?: F1ConstructorPuzzle): { name: string; id: string }[] {
+  const names = F1_CONSTRUCTORS.map(c => ({ name: c.constructorName, id: c.id }));
+  if (currentPuzzle && !names.some(n => n.id === currentPuzzle.id)) {
+    names.push({ name: currentPuzzle.constructorName, id: currentPuzzle.id });
+  }
+  return names;
 }
