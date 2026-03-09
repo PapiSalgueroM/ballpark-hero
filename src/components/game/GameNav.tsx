@@ -38,6 +38,7 @@ const CATEGORIES: { title: string; games: GameLink[] }[] = [
     games: [
       { path: '/college-grid', label: '🎓 College Grid', description: 'College football 3×3 grid puzzle', daily: true },
       { path: '/guess-the-college', label: '🎓 Guess The College', description: 'Guess the D1 school from clues', daily: true },
+      { path: '/guess-cbb-team', label: '🏀 Guess The CBB Program', description: 'Guess the college basketball program', daily: true },
     ],
   },
   {
