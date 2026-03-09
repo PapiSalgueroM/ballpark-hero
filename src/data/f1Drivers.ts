@@ -8,7 +8,7 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
     clues: [
       'Dominant',
       'British driver who debuted in the late 2000s and competed through the 2020s',
-      'Drove for a legendary British constructor for over a decade, recently moved to an iconic Italian team',
+      'Drove for a legendary British constructor for over a decade, moved to an iconic Italian team in 2025',
       'Won more than 100 races',
       'Won the championship 7 times, tying the all-time record',
       'Lost the 2021 title on the last lap of the final race in controversial circumstances',
