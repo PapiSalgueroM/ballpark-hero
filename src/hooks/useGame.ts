@@ -3,6 +3,7 @@ import { Player, Difficulty, GuessResult } from '@/types/game';
 import { players } from '@/data/players';
 import { compareGuess } from '@/lib/gameLogic';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const MAX_GUESSES = 8;
 
