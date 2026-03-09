@@ -223,6 +223,27 @@ export type Database = {
         }
         Relationships: []
       }
+      fantasy_draft_votes: {
+        Row: {
+          created_at: string
+          id: string
+          puzzle_date: string
+          voted_team: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          puzzle_date?: string
+          voted_team: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          puzzle_date?: string
+          voted_team?: string
+        }
+        Relationships: []
+      }
       football_grid_selections: {
         Row: {
           cell_index: number
