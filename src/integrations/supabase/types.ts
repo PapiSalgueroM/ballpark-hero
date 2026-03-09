@@ -593,6 +593,30 @@ export type Database = {
         }
         Relationships: []
       }
+      soccer_grid_selections: {
+        Row: {
+          cell_index: number
+          created_at: string
+          id: string
+          player_name: string
+          puzzle_id: string
+        }
+        Insert: {
+          cell_index: number
+          created_at?: string
+          id?: string
+          player_name: string
+          puzzle_id: string
+        }
+        Update: {
+          cell_index?: number
+          created_at?: string
+          id?: string
+          player_name?: string
+          puzzle_id?: string
+        }
+        Relationships: []
+      }
       tennis_chain_scores: {
         Row: {
           chain_length: number
