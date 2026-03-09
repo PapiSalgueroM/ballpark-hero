@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { nflCareerPlayers } from '@/data/nflCareerPlayers';
 import { NFLCareerPlayer } from '@/types/nflCareer';
+import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { toast } from 'sonner';
 
 const TOTAL_CLUES = 6;
