@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import {
   NationPuzzle,
@@ -7,6 +7,7 @@ import {
   MAX_CLUES,
   STREAK_BADGES,
 } from '@/types/guessTheNation';
+import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 
 const STORAGE_KEY = 'guess-nation';
 
@@ -245,8 +246,14 @@ export function useGuessTheNation() {
     ? POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0
     : 0;
 
+  // Ensure current puzzle answer is always in the selectable countries
+  const validatedCountries = useMemo(() => {
+    if (!gameState?.puzzle) return countries;
+    return ensureAnswerInList(countries, gameState.puzzle.countryName, c => c.countryName, gameState.puzzle);
+  }, [countries, gameState?.puzzle]);
+
   return {
-    countries,
+    countries: validatedCountries,
     loading,
     gameState,
     streak,

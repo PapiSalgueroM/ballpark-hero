@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { olympicAthletes } from '@/data/olympicsAthletes';
 import { OlympicAthlete } from '@/types/olympics';
 import { supabase } from '@/integrations/supabase/client';
+import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { toast } from 'sonner';
 
 const TOTAL_CLUES = 7;
@@ -114,7 +115,7 @@ export function useOlympics() {
     return `I couldn't guess today's athlete on DoUKnowBall 😞 — douknowball.com/olympics`;
   }, [status, clueLevel, score]);
 
-  const athleteNames = useMemo(() => olympicAthletes.map(a => a.name), []);
+  const athleteNames = useMemo(() => ensureAnswerInOptions(olympicAthletes.map(a => a.name), athlete.name), [athlete]);
 
   return {
     athlete,

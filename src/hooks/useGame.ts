@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { Player, Difficulty, GuessResult } from '@/types/game';
 import { players } from '@/data/players';
 import { compareGuess } from '@/lib/gameLogic';
+import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 
 const MAX_GUESSES = 8;
 
@@ -25,10 +26,12 @@ export function useGame() {
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
 
   const availablePlayers = useMemo(() => {
-    if (difficulty === 'easy') return players.filter(p => p.difficulty === 'easy');
-    if (difficulty === 'hard') return players.filter(p => p.difficulty === 'easy' || p.difficulty === 'hard');
-    return players;
-  }, [difficulty]);
+    let pool: Player[];
+    if (difficulty === 'easy') pool = players.filter(p => p.difficulty === 'easy');
+    else if (difficulty === 'hard') pool = players.filter(p => p.difficulty === 'easy' || p.difficulty === 'hard');
+    else pool = players;
+    return ensureAnswerInList(pool, targetPlayer.name, p => p.name, targetPlayer);
+  }, [difficulty, targetPlayer]);
 
   const resetGame = useCallback((diff?: Difficulty) => {
     const d = diff || difficulty;

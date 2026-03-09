@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { UfcFighter, UfcGuessResult } from '@/types/ufc';
 import { uniqueUfcFighters } from '@/data/ufcFighters';
 import { compareUfcGuess } from '@/lib/ufcGameLogic';
+import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 
 const MAX_GUESSES = 8;
 
@@ -35,6 +36,7 @@ export function useUfcGame() {
   }, [gameStatus, targetFighter]);
 
   const guessedFighterNames = useMemo(() => guesses.map(g => g.fighterName), [guesses]);
+  const validatedFighters = useMemo(() => ensureAnswerInList(uniqueUfcFighters, targetFighter.name, f => f.name, targetFighter), [targetFighter]);
 
   return {
     targetFighter,
@@ -42,7 +44,7 @@ export function useUfcGame() {
     gameStatus,
     makeGuess,
     resetGame,
-    fighters: uniqueUfcFighters,
+    fighters: validatedFighters,
     guessedFighterNames,
     maxGuesses: MAX_GUESSES,
   };

@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { baseballCareerPuzzles } from '@/data/baseballCareerPlayers';
+import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 
 function getDailyIndex(): number {
   const now = new Date();
@@ -90,6 +91,8 @@ export function useBaseballCareer() {
     save(maxClue, 'revealed');
   }, [maxClue, save]);
 
+  const playerNames = useMemo(() => ensureAnswerInOptions(baseballCareerPuzzles.map(p => p.player.name), player.name), [player]);
+
   return {
     puzzle,
     player,
@@ -104,5 +107,6 @@ export function useBaseballCareer() {
     giveUp,
     wrongGuess,
     maxClue,
+    playerNames,
   };
 }

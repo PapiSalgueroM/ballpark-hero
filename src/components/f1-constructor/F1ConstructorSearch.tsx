@@ -1,17 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
 import { getAllF1ConstructorNames } from '@/data/f1Constructors';
+import { F1ConstructorPuzzle } from '@/types/f1Constructor';
 
 interface Props {
   onGuess: (name: string) => void;
   disabled?: boolean;
   guesses: string[];
+  currentPuzzle?: F1ConstructorPuzzle;
 }
 
-export function F1ConstructorSearch({ onGuess, disabled, guesses }: Props) {
+export function F1ConstructorSearch({ onGuess, disabled, guesses, currentPuzzle }: Props) {
   const [input, setInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const allConstructors = getAllF1ConstructorNames();
+  const allConstructors = getAllF1ConstructorNames(currentPuzzle);
 
   const filtered = input.length >= 2
     ? allConstructors.filter(c =>

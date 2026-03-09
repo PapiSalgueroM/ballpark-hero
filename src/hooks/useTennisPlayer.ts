@@ -1,6 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { TennisPlayerPuzzle, TennisPlayerState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/tennisPlayer';
 import { supabase } from '@/integrations/supabase/client';
+import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 
 function mapRow(row: any): TennisPlayerPuzzle {
   return {
@@ -118,5 +119,10 @@ export function useTennisPlayer() {
   const pointsForCurrentClue =
     gameState ? (POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0) : POINTS_BY_CLUE[0];
 
-  return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPlayers, loading };
+  const validatedPlayers = useMemo(() => {
+    if (!gameState?.puzzle) return allPlayers;
+    return ensureAnswerInList(allPlayers, gameState.puzzle.player_name, p => p.player_name, gameState.puzzle);
+  }, [allPlayers, gameState?.puzzle]);
+
+  return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPlayers: validatedPlayers, loading };
 }

@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { nflCareerPlayers } from '@/data/nflCareerPlayers';
 import { NFLCareerPlayer } from '@/types/nflCareer';
+import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { toast } from 'sonner';
 
 const TOTAL_CLUES = 6;
@@ -79,7 +80,7 @@ export function useNFLCareer() {
     return `NFL Career Path ${boxes} — couldn't get it 😞\n\nhttps://douknowball.com/nfl-career`;
   }, [gameStatus, cluesRevealed]);
 
-  const playerNames = useMemo(() => nflCareerPlayers.map(p => p.name), []);
+  const playerNames = useMemo(() => ensureAnswerInOptions(nflCareerPlayers.map(p => p.name), targetPlayer.name), [targetPlayer]);
 
   return {
     targetPlayer,

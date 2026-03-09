@@ -1,6 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { NascarDriverPuzzle, NascarDriverState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/nascarDriver';
 import { supabase } from '@/integrations/supabase/client';
+import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 
 function mapRow(row: any): NascarDriverPuzzle {
   return {
@@ -117,5 +118,11 @@ export function useNascarDriver() {
   const pointsForCurrentClue =
     gameState ? (POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0) : POINTS_BY_CLUE[0];
 
-  return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allDrivers, loading };
+  // Ensure current puzzle answer is always in the selectable options
+  const validatedDrivers = useMemo(() => {
+    if (!gameState?.puzzle) return allDrivers;
+    return ensureAnswerInList(allDrivers, gameState.puzzle.driver_name, d => d.driver_name, gameState.puzzle);
+  }, [allDrivers, gameState?.puzzle]);
+
+  return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allDrivers: validatedDrivers, loading };
 }
