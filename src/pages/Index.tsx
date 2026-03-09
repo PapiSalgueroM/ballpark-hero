@@ -96,6 +96,13 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     ],
   },
   {
+    title: 'Tennis',
+    emoji: '🎾',
+    games: [
+      { path: '/guess-tennis-player', label: 'Guess The Tennis Player', emoji: '🎾', description: 'Guess the mystery tennis player from clues', daily: true, isNew: true },
+    ],
+  },
+  {
     title: 'Multi-Sport',
     emoji: '🏅',
     games: [
