@@ -100,6 +100,7 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     emoji: '🎾',
     games: [
       { path: '/guess-tennis-player', label: 'Guess The Tennis Player', emoji: '🎾', description: 'Guess the mystery tennis player from clues', daily: true, isNew: true },
+      { path: '/tennis-chain', label: 'Tennis Chain', emoji: '🔗', description: 'Build a chain of Grand Slam defeats', isNew: true },
     ],
   },
   {

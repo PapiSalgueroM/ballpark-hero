@@ -45,6 +45,7 @@ import F1Driver from "./pages/F1Driver";
 import F1Constructor from "./pages/F1Constructor";
 import GuessCbbTeam from "./pages/GuessCbbTeam";
 import GuessTennisPlayer from "./pages/GuessTennisPlayer";
+import TennisChain from "./pages/TennisChain";
 
 const queryClient = new QueryClient();
 
@@ -97,6 +98,7 @@ const App = () => (
             <Route path="/f1-constructor" element={<F1Constructor />} />
             <Route path="/guess-cbb-team" element={<GuessCbbTeam />} />
             <Route path="/guess-tennis-player" element={<GuessTennisPlayer />} />
+            <Route path="/tennis-chain" element={<TennisChain />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
