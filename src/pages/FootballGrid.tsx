@@ -4,6 +4,7 @@ import { GridBoard } from '@/components/football-grid/GridBoard';
 import { GridPlayerSearch } from '@/components/football-grid/GridPlayerSearch';
 import { FootballGridHowToPlay } from '@/components/football-grid/FootballGridHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
