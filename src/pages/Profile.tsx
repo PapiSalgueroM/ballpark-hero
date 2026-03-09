@@ -59,6 +59,7 @@ export default function Profile() {
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({ display_name: '', username: '' });
   const [saving, setSaving] = useState(false);
+  const [userScoreData, setUserScoreData] = useState<{ current_streak: number; longest_streak: number } | null>(null);
   const [legendStreak, setLegendStreak] = useState<number>(0);
   const [legendBadgeCount, setLegendBadgeCount] = useState<number>(0);
   const [badgeDates, setBadgeDates] = useState<{ firstDate: string | null; streak3Date: string | null; streak7Date: string | null; streak30Date: string | null; streak100Date: string | null }>({
