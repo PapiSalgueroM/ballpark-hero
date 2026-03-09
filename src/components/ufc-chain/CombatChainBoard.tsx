@@ -292,6 +292,9 @@ export function CombatChainBoard() {
             </div>
           </div>
         )}
+
+        {/* Other Games Navigation */}
+        <GameNav />
       </div>
     </div>
   );
