@@ -324,7 +324,7 @@ export default function Profile() {
             <Card>
               <CardContent className="pt-4 text-center">
                 <Trophy className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-                <p className="text-3xl font-bold">{viewingProfile.longest_streak}</p>
+                <p className="text-3xl font-bold">{userScoreData?.longest_streak ?? viewingProfile.longest_streak ?? 0}</p>
                 <p className="text-sm text-muted-foreground">Best Streak</p>
               </CardContent>
             </Card>
