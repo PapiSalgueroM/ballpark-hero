@@ -84,6 +84,7 @@ const App = () => (
             <Route path="/profile/:username" element={<Profile />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/guess-the-year" element={<GuessTheYear />} />
+            <Route path="/guess-nfl-team" element={<GuessNflTeam />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
