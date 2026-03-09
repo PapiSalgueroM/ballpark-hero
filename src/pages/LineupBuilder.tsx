@@ -72,6 +72,7 @@ const LineupBuilder = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Build Your XI – Soccer Lineup Builder Game | DoUKnowBall"
         description="Spin a random challenge, get two soccer teams, and build the ultimate starting XI. AI validates your picks. Free lineup-building game — no login needed."

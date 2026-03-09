@@ -56,6 +56,7 @@ const Connections = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Connections – Soccer Player Grouping Puzzle | DoUKnowBall"
         description="Group 16 soccer players into 4 secret categories. Can you crack the connection? A free puzzle game inspired by NYT Connections for soccer fans."

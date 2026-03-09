@@ -77,6 +77,7 @@ const BlurredFace = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Guess the Face – Blurred Soccer Player Game | DoUKnowBall"
         description="Can you identify the soccer player from a blurred photo? Each wrong guess reveals more of the face. Free sports trivia — no signup required."
