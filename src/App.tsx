@@ -50,6 +50,7 @@ import TennisChain from "./pages/TennisChain";
 import GuessNascarDriver from "./pages/GuessNascarDriver";
 import NascarChain from "./pages/NascarChain";
 import SoccerGrid from "./pages/SoccerGrid";
+import FantasyDraft from "./pages/FantasyDraft";
 
 const queryClient = new QueryClient();
 
