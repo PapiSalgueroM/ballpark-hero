@@ -91,6 +91,7 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     emoji: '🏎️',
     games: [
       { path: '/f1-driver', label: 'Guess The F1 Driver', emoji: '🏎️', description: 'Guess the mystery F1 driver from clues', daily: true, isNew: true },
+      { path: '/f1-constructor', label: 'Guess The F1 Constructor', emoji: '🏗️', description: 'Guess the mystery F1 team from clues', daily: true, isNew: true },
     ],
   },
   {
