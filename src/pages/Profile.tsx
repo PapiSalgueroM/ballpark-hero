@@ -320,6 +320,31 @@ export default function Profile() {
             </Card>
           </div>
 
+          {/* Daily Legend Streak */}
+          {isOwnProfile && (legendStreak > 0 || legendBadgeCount > 0) && (
+            <Card className="mb-6 border-[hsl(var(--ft-gold)/0.3)] bg-gradient-to-r from-card to-secondary/30">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-4xl">🏆</span>
+                    <div>
+                      <h3 className="text-lg font-bold font-display text-[hsl(var(--ft-gold))]">Daily Legend</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Completed all 37 games in a day — {legendBadgeCount} {legendBadgeCount === 1 ? 'time' : 'times'}
+                      </p>
+                    </div>
+                  </div>
+                  {legendStreak > 0 && (
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-foreground">🔥 {legendStreak} day{legendStreak !== 1 ? 's' : ''}</p>
+                      <p className="text-xs text-muted-foreground">streak</p>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Favourite Game */}
           {getFavouriteGame() && (
             <Card className="mb-6">
