@@ -8,6 +8,7 @@ import {
   STREAK_BADGES,
 } from '@/types/guessTheNation';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const STORAGE_KEY = 'guess-nation';
 
