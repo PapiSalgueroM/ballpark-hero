@@ -359,6 +359,48 @@ export default function Profile() {
             </Card>
           )}
 
+          {/* My Badges */}
+          {isOwnProfile && (
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="text-lg">🏅 My Badges</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                  {[
+                    { key: 'firstDate' as const, emoji: '⭐', name: 'First Timer', desc: 'Complete all 37 games in a day' },
+                    { key: 'streak3Date' as const, emoji: '🔥', name: 'On A Roll', desc: '3 day streak' },
+                    { key: 'streak7Date' as const, emoji: '⚔️', name: 'Week Warrior', desc: '7 day streak' },
+                    { key: 'streak30Date' as const, emoji: '💪', name: 'Unstoppable', desc: '30 day streak' },
+                    { key: 'streak100Date' as const, emoji: '👑', name: 'DoUKnowBall Legend', desc: '100 day streak' },
+                  ].map((badge) => {
+                    const earned = badgeDates[badge.key];
+                    return (
+                      <div
+                        key={badge.key}
+                        className={`relative flex flex-col items-center text-center p-4 rounded-xl border transition-all ${
+                          earned
+                            ? 'border-[hsl(var(--ft-gold)/0.4)] bg-secondary/50'
+                            : 'border-border bg-muted/30 opacity-50 grayscale'
+                        }`}
+                      >
+                        <span className="text-3xl mb-2">{earned ? badge.emoji : '🔒'}</span>
+                        <p className="text-xs sm:text-sm font-bold text-foreground leading-tight">{badge.name}</p>
+                        {earned ? (
+                          <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                            {format(new Date(earned), 'MMM d, yyyy')}
+                          </p>
+                        ) : (
+                          <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">{badge.desc}</p>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Favourite Game */}
           {getFavouriteGame() && (
             <Card className="mb-6">
