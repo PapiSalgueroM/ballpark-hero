@@ -14,6 +14,110 @@ export type Database = {
   }
   public: {
     Tables: {
+      cbb_daily: {
+        Row: {
+          created_at: string
+          difficulty: string
+          id: string
+          program_id: string
+          puzzle_date: string
+        }
+        Insert: {
+          created_at?: string
+          difficulty?: string
+          id?: string
+          program_id: string
+          puzzle_date: string
+        }
+        Update: {
+          created_at?: string
+          difficulty?: string
+          id?: string
+          program_id?: string
+          puzzle_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cbb_daily_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "cbb_programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cbb_programs: {
+        Row: {
+          championships_hint: string
+          common_names: string[]
+          conference_hint: string
+          created_at: string
+          difficulty: string
+          id: string
+          mascot_hint: string
+          region_hint: string
+          school_name: string
+          tournament_hint: string
+          vibe_word: string
+        }
+        Insert: {
+          championships_hint: string
+          common_names?: string[]
+          conference_hint: string
+          created_at?: string
+          difficulty?: string
+          id?: string
+          mascot_hint: string
+          region_hint: string
+          school_name: string
+          tournament_hint: string
+          vibe_word: string
+        }
+        Update: {
+          championships_hint?: string
+          common_names?: string[]
+          conference_hint?: string
+          created_at?: string
+          difficulty?: string
+          id?: string
+          mascot_hint?: string
+          region_hint?: string
+          school_name?: string
+          tournament_hint?: string
+          vibe_word?: string
+        }
+        Relationships: []
+      }
+      cbb_scores: {
+        Row: {
+          clues_used: number
+          created_at: string
+          guessed: boolean
+          id: string
+          mode: string
+          puzzle_date: string
+          score: number
+        }
+        Insert: {
+          clues_used: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date: string
+          score: number
+        }
+        Update: {
+          clues_used?: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date?: string
+          score?: number
+        }
+        Relationships: []
+      }
       college_grid_selections: {
         Row: {
           cell_index: number

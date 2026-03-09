@@ -51,6 +51,7 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     games: [
       { path: '/college-grid', label: 'College Grid', emoji: '🎓', description: 'College football 3×3 grid puzzle', daily: true },
       { path: '/guess-the-college', label: 'Guess The College', emoji: '🏫', description: 'Guess the D1 school from clues', daily: true, isNew: true },
+      { path: '/guess-cbb-team', label: 'Guess The CBB Program', emoji: '🏀', description: 'Guess the college basketball program', daily: true, isNew: true },
     ],
   },
   {
