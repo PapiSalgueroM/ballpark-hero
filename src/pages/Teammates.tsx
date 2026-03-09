@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTeammates } from '@/hooks/useTeammates';
 import { TeammatesHowToPlay } from '@/components/teammates/TeammatesHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { HelpCircle, RotateCcw, User, ArrowRight } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
