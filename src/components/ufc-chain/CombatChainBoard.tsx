@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
 import { getChainLengthMultiplier } from '@/types/ufcChain';
 import { supabase } from '@/integrations/supabase/client';
+import { GameNav } from '@/components/game/GameNav';
 
 interface LeaderboardEntry {
   nickname: string;
@@ -291,6 +292,9 @@ export function CombatChainBoard() {
             </div>
           </div>
         )}
+
+        {/* Other Games Navigation */}
+        <GameNav />
       </div>
     </div>
   );
