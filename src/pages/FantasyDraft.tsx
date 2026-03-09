@@ -8,6 +8,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { PlayerPool, type DraftPlayer } from '@/components/fantasy-draft/PlayerPool';
 import { DraftRoster } from '@/components/fantasy-draft/DraftRoster';
 import { SeasonStory } from '@/components/fantasy-draft/SeasonStory';
+import { TeamAnalysis } from '@/components/fantasy-draft/TeamAnalysis';
+import { VoteWinner } from '@/components/fantasy-draft/VoteWinner';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
@@ -20,6 +22,11 @@ function getPickOwner(pickIndex: number, userFirst: boolean): 'user' | 'ai' {
   const roundStarts = round % 2 === 0 ? (userFirst ? 'user' : 'ai') : (userFirst ? 'ai' : 'user');
   if (posInRound === 0) return roundStarts;
   return roundStarts === 'user' ? 'ai' : 'user';
+}
+
+interface AnalysisData {
+  strengths: string[];
+  weaknesses: string[];
 }
 
 const FantasyDraft = () => {
@@ -44,6 +51,15 @@ const FantasyDraft = () => {
   const [teamAStory, setTeamAStory] = useState<string | null>(null);
   const [teamBStory, setTeamBStory] = useState<string | null>(null);
 
+  // Analysis state
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [analysisA, setAnalysisA] = useState<AnalysisData | null>(null);
+  const [analysisB, setAnalysisB] = useState<AnalysisData | null>(null);
+
+  // Vote state
+  const [voted, setVoted] = useState<'user' | 'ai' | null>(null);
+  const [voteCounts, setVoteCounts] = useState({ user: 0, ai: 0 });
+
   const draftComplete = pickIndex >= TOTAL_PICKS;
   const currentTurn = draftComplete ? 'user' : getPickOwner(pickIndex, userFirst);
   const seasonSimulated = teamAStory !== null && teamBStory !== null;
@@ -60,7 +76,7 @@ const FantasyDraft = () => {
     fetchCriteria();
   }, []);
 
-  // Fetch players when draft starts & randomize first pick
+  // Fetch players when draft starts
   useEffect(() => {
     if (!started) return;
     const fetchPlayers = async () => {
@@ -114,12 +130,49 @@ const FantasyDraft = () => {
       } else {
         setTeamAStory(data.teamAStory);
         setTeamBStory(data.teamBStory);
+        // Auto-trigger analysis after season story
+        fetchAnalysis();
       }
-    } catch (e) {
+    } catch {
       toast({ title: 'Error', description: 'Could not simulate the season. Please try again.', variant: 'destructive' });
     } finally {
       setSimulating(false);
     }
+  };
+
+  // Fetch analysis
+  const fetchAnalysis = async () => {
+    setAnalysisLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('analyze-squads', {
+        body: { userTeam, aiTeam },
+      });
+      if (!error && data?.teamA && data?.teamB) {
+        setAnalysisA(data.teamA);
+        setAnalysisB(data.teamB);
+      }
+    } catch {
+      // silent — analysis is supplementary
+    } finally {
+      setAnalysisLoading(false);
+    }
+  };
+
+  // Vote handler
+  const handleVote = async (team: 'user' | 'ai') => {
+    setVoted(team);
+    // Save to Supabase
+    await supabase.from('fantasy_draft_votes').insert({ voted_team: team });
+    // Fetch counts
+    const { count: userVotes } = await supabase
+      .from('fantasy_draft_votes')
+      .select('*', { count: 'exact', head: true })
+      .eq('voted_team', 'user');
+    const { count: aiVotes } = await supabase
+      .from('fantasy_draft_votes')
+      .select('*', { count: 'exact', head: true })
+      .eq('voted_team', 'ai');
+    setVoteCounts({ user: userVotes || 0, ai: aiVotes || 0 });
   };
 
   return (
@@ -139,7 +192,7 @@ const FantasyDraft = () => {
           </div>
 
           <div className="relative z-10 w-full max-w-4xl mx-auto space-y-6 text-center">
-            {/* Pre-draft landing */}
+            {/* Pre-draft */}
             {!started && (
               <>
                 <div className="flex items-center justify-center gap-3 text-primary">
@@ -180,7 +233,6 @@ const FantasyDraft = () => {
             {/* Draft phase */}
             {started && (
               <>
-                {/* Turn indicator */}
                 {!draftComplete ? (
                   <div className={cn(
                     'inline-flex items-center gap-2 px-5 py-2.5 rounded-full border text-sm font-bold uppercase tracking-wider animate-pulse',
@@ -235,7 +287,7 @@ const FantasyDraft = () => {
                       )}
                     </div>
 
-                    {/* Simulate Season button */}
+                    {/* Simulate button */}
                     {draftComplete && !seasonSimulated && (
                       <Button
                         size="lg"
@@ -244,15 +296,9 @@ const FantasyDraft = () => {
                         className="text-lg px-10 py-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-105"
                       >
                         {simulating ? (
-                          <>
-                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                            Simulating Season...
-                          </>
+                          <><Loader2 className="w-5 h-5 mr-2 animate-spin" />Simulating Season...</>
                         ) : (
-                          <>
-                            <Zap className="w-5 h-5 mr-2" />
-                            Simulate Season
-                          </>
+                          <><Zap className="w-5 h-5 mr-2" />Simulate Season</>
                         )}
                       </Button>
                     )}
@@ -260,6 +306,22 @@ const FantasyDraft = () => {
                     {/* Season stories */}
                     {seasonSimulated && teamAStory && teamBStory && (
                       <SeasonStory teamAStory={teamAStory} teamBStory={teamBStory} />
+                    )}
+
+                    {/* Team analysis */}
+                    {seasonSimulated && (
+                      <TeamAnalysis teamA={analysisA} teamB={analysisB} loading={analysisLoading} />
+                    )}
+
+                    {/* Vote section */}
+                    {seasonSimulated && !analysisLoading && (analysisA || !analysisLoading) && (
+                      <VoteWinner
+                        userTeam={userTeam}
+                        aiTeam={aiTeam}
+                        onVote={handleVote}
+                        voted={voted}
+                        voteCounts={voteCounts}
+                      />
                     )}
                   </>
                 )}
