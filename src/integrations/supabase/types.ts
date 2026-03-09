@@ -149,6 +149,36 @@ export type Database = {
         }
         Relationships: []
       }
+      ufc_chain_scores: {
+        Row: {
+          chain_length: number
+          created_at: string
+          id: string
+          mode: string
+          nickname: string
+          puzzle_date: string
+          score: number
+        }
+        Insert: {
+          chain_length: number
+          created_at?: string
+          id?: string
+          mode?: string
+          nickname: string
+          puzzle_date?: string
+          score: number
+        }
+        Update: {
+          chain_length?: number
+          created_at?: string
+          id?: string
+          mode?: string
+          nickname?: string
+          puzzle_date?: string
+          score?: number
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
