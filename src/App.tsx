@@ -37,6 +37,7 @@ import AdminReports from "./pages/AdminReports";
 import UfcChain from "./pages/UfcChain";
 import Profile from "./pages/Profile";
 import Leaderboard from "./pages/Leaderboard";
+import GuessTheYear from "./pages/GuessTheYear";
 
 const queryClient = new QueryClient();
 
