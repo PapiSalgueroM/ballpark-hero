@@ -57,7 +57,7 @@ export const blurredFacePlayers: BlurredFacePlayer[] = [
   { name: "Steven Gerrard", wikipediaSlug: "Steven_Gerrard", nationality: "England", position: "CM", club: "Liverpool", age: 46, kitNumber: 8, isActive: false, league: "Premier League" },
   { name: "Frank Lampard", wikipediaSlug: "Frank_Lampard", nationality: "England", position: "CM", club: "Chelsea", age: 47, kitNumber: 8, isActive: false, league: "Premier League" },
   { name: "Sergio Agüero", wikipediaSlug: "Sergio_Agüero", nationality: "Argentina", position: "ST", club: "Manchester City", age: 37, kitNumber: 10, isActive: false, league: "Premier League" },
-  { name: "Luis Suárez", wikipediaSlug: "Luis_Suárez", nationality: "Uruguay", position: "ST", club: "Inter Miami", age: 39, kitNumber: 9, isActive: false, league: "MLS" },
+  { name: "Luis Suárez", wikipediaSlug: "Luis_Suárez", nationality: "Uruguay", position: "ST", club: "Inter Miami", age: 39, kitNumber: 9, isActive: true, league: "MLS" },
   { name: "Samuel Eto'o", wikipediaSlug: "Samuel_Eto%27o", nationality: "Cameroon", position: "ST", club: "Barcelona", age: 45, kitNumber: 9, isActive: false, league: "La Liga" },
   { name: "Roberto Baggio", wikipediaSlug: "Roberto_Baggio", nationality: "Italy", position: "ST", club: "Juventus", age: 59, kitNumber: 10, isActive: false, league: "Serie A" },
   { name: "Dennis Bergkamp", wikipediaSlug: "Dennis_Bergkamp", nationality: "Netherlands", position: "ST", club: "Arsenal", age: 56, kitNumber: 10, isActive: false, league: "Premier League" },
