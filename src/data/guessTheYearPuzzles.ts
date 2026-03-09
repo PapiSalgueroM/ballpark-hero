@@ -221,6 +221,29 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
       "Miami won the national championship behind Bernie Kosar"
     ]
   },
+  // NEW — 2024 and 2025 puzzles
+  {
+    year: 2024,
+    clues: [
+      "A French swimmer won 4 individual gold medals at his home Olympics in Paris",
+      "The Chiefs became the first team to win three straight Super Bowls (LVIII)",
+      "Caitlin Clark shattered NCAA scoring records and was drafted #1 in the WNBA",
+      "Real Madrid signed Kylian Mbappé on a free transfer from PSG",
+      "The Dodgers won the World Series with Shohei Ohtani in his first NL season",
+      "Novak Djokovic won his first Olympic gold at age 37 in Paris"
+    ]
+  },
+  {
+    year: 2025,
+    clues: [
+      "Alexander Ovechkin broke Wayne Gretzky's all-time NHL goal record",
+      "The Kansas City Chiefs won an unprecedented third consecutive Super Bowl (LIX)",
+      "A generational NBA trade sent Luka Dončić to the Los Angeles Lakers",
+      "The Seattle Seahawks won Super Bowl LX, their second franchise title",
+      "The Oklahoma City Thunder won their first NBA Championship",
+      "The Milan-Cortina Winter Olympics were held in Italy for the first time since 2006"
+    ]
+  },
 ];
 
 export function getDailyGuessTheYearPuzzle(): YearPuzzle {
