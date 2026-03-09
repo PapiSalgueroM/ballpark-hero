@@ -37,6 +37,7 @@ import AdminReports from "./pages/AdminReports";
 import UfcChain from "./pages/UfcChain";
 import Profile from "./pages/Profile";
 import Leaderboard from "./pages/Leaderboard";
+import GuessTheYear from "./pages/GuessTheYear";
 
 const queryClient = new QueryClient();
 
@@ -81,6 +82,7 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/:username" element={<Profile />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/guess-the-year" element={<GuessTheYear />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
