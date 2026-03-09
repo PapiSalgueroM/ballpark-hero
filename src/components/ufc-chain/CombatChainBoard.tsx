@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import ShareButtons from '@/components/game/ShareButtons';
 import { getChainLengthMultiplier } from '@/types/ufcChain';
 import { supabase } from '@/integrations/supabase/client';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 interface LeaderboardEntry {
   nickname: string;
