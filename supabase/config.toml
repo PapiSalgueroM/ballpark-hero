@@ -29,3 +29,6 @@ verify_jwt = false
 
 [functions.nascar-chain-validate]
 verify_jwt = false
+
+[functions.soccer-grid-validate]
+verify_jwt = false

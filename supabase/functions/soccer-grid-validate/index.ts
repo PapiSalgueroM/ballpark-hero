@@ -1,0 +1,118 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
+};
+
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 });
+    return false;
+  }
+  entry.count++;
+  return entry.count > 20;
+}
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  if (isRateLimited(ip)) {
+    return new Response(
+      JSON.stringify({ valid: false, error: 'Too many requests' }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 429 }
+    );
+  }
+
+  try {
+    const { playerName, rowAttribute, colAttribute } = await req.json();
+
+    if (!playerName || !rowAttribute || !colAttribute) {
+      return new Response(
+        JSON.stringify({ valid: false, error: 'Missing required fields' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const sanitized = {
+      player: playerName.slice(0, 80).replace(/[\n\r]/g, ''),
+      row: rowAttribute.slice(0, 100).replace(/[\n\r]/g, ''),
+      col: colAttribute.slice(0, 100).replace(/[\n\r]/g, ''),
+    };
+
+    const apiKey = Deno.env.get('LOVABLE_API_KEY');
+    if (!apiKey) {
+      return new Response(
+        JSON.stringify({ valid: false, error: 'Server configuration error' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+      );
+    }
+
+    const prompt = `You are a professional soccer/football trivia expert. Determine if the player "${sanitized.player}" satisfies BOTH of these criteria:
+
+1. Row attribute: "${sanitized.row}"
+2. Column attribute: "${sanitized.col}"
+
+Consider the player's entire career including all clubs played for, nationality, international team, league appearances, and achievements.
+
+For club criteria like "Played for Barcelona", the player must have been on that club's first team roster at some point (including loans).
+For nationality criteria like "Brazilian", "French", "Argentine", etc., the player must be of that nationality.
+For position criteria: GK = Goalkeeper, DEF = Defender/Centre-back/Full-back, MID = Midfielder, FWD = Forward/Striker/Winger.
+For "Champions League Winner", the player won the UEFA Champions League (or European Cup).
+For "World Cup Winner", the player was in the squad that won the FIFA World Cup.
+For "Golden Boot Winner", the player won a league Golden Boot/top scorer award in a major European league OR the World Cup Golden Boot.
+For "Played in Premier League/La Liga/Serie A/Bundesliga/Ligue 1", the player appeared in that league.
+For "Over 100 International Caps", the player earned 100+ caps for their national team.
+For "Played in MLS", the player appeared in Major League Soccer.
+
+Respond with ONLY a JSON object: {"valid": true} or {"valid": false, "reason": "brief explanation"}`;
+
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-2.5-flash',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.1,
+        max_tokens: 150,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`AI API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const content = data.choices?.[0]?.message?.content?.trim() || '';
+
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return new Response(
+        JSON.stringify({ valid: false, error: 'Could not validate' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const result = JSON.parse(jsonMatch[0]);
+
+    return new Response(
+      JSON.stringify({ valid: !!result.valid, reason: result.reason || null }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ valid: false, error: 'Validation failed' }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+    );
+  }
+});
