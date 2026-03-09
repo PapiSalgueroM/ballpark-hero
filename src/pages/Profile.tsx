@@ -111,6 +111,17 @@ export default function Profile() {
 
         setBestScores(scores || []);
 
+        // Load streak data from user_scores
+        const { data: scoreRow } = await supabase
+          .from('user_scores')
+          .select('current_streak, longest_streak')
+          .eq('user_id', user.id)
+          .single();
+        
+        if (scoreRow) {
+          setUserScoreData(scoreRow as any);
+        }
+
         // Load daily legend badges
         const { data: badges } = await supabase
           .from('daily_badges')
