@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useCareerGame } from '@/hooks/useCareerGame';
 import { CareerBoard } from '@/components/career/CareerBoard';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { getClubLogoUrl } from '@/lib/clubData';
 import { RotateCcw, Flag, Search, Lightbulb, HelpCircle } from 'lucide-react';
