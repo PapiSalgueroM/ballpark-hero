@@ -3,6 +3,7 @@ import { useOlympics } from '@/hooks/useOlympics';
 import OlympicsHowToPlay from '@/components/olympics/OlympicsHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { shareResult } from '@/lib/share';
 import PageSeo from '@/components/seo/PageSeo';
 import { Trophy, ChevronDown, Award } from 'lucide-react';
