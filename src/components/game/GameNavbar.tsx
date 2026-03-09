@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { Trophy, Gamepad2, Medal } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
+import { useDailyLegend } from '@/hooks/useDailyLegend';
+import { DailyLegendOverlay } from '@/components/game/DailyLegendOverlay';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { AuthModal } from '@/components/auth/AuthModal';
@@ -9,6 +11,7 @@ import { AuthModal } from '@/components/auth/AuthModal';
 export function GameNavbar() {
   const { user, profile, loading: authLoading } = useAuth();
   const { gamesPlayedToday, totalPointsToday, dailyRank, totalGames, loading: statsLoading } = useGameNavbarStats();
+  const { showCelebration, streakDays, dismissCelebration } = useDailyLegend();
   const [authModal, setAuthModal] = useState(false);
 
   const getUserInitial = () => {
@@ -118,6 +121,10 @@ export function GameNavbar() {
         onClose={() => setAuthModal(false)}
         defaultTab="login"
       />
+
+      {showCelebration && (
+        <DailyLegendOverlay streakDays={streakDays} onDismiss={dismissCelebration} />
+      )}
     </>
   );
 }
