@@ -132,6 +132,8 @@ export default function Profile() {
             setLegendStreak(0);
           }
         }
+      } else if (!user) {
+        navigate('/');
         toast.error('Please sign in to view your profile');
       }
 
