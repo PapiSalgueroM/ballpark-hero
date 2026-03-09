@@ -75,6 +75,7 @@ const CATEGORIES: { title: string; games: GameLink[] }[] = [
       { path: '/teammates', label: '🤝 Teammates or Not?', description: 'Were they ever teammates?' },
       { path: '/olympics', label: '🏅 The Medal Games', description: 'Guess the mystery athlete', daily: true },
       { path: '/guess-the-year', label: '📅 Guess The Year', description: 'What year did these happen?', daily: true },
+      { path: '/guess-the-nation', label: '🌍 Guess The Nation', description: 'Identify the mystery sporting nation', daily: true },
     ],
   },
 ];

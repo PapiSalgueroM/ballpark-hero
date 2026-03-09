@@ -92,6 +92,137 @@ export type Database = {
         }
         Relationships: []
       }
+      guess_nation_countries: {
+        Row: {
+          best_sport_hint: string
+          common_names: string[]
+          continent: string
+          continent_hint: string
+          country_name: string
+          country_size_hint: string
+          created_at: string
+          difficulty: string
+          famous_moment_hint: string
+          flag_colors_hint: string
+          flag_emoji: string
+          games_attended_hint: string
+          gold_medal_hint: string
+          iconic_moment: string
+          id: string
+          population_hint: string
+          season_focus: string
+          total_medals_hint: string
+          vibe_word: string
+          winter_history_hint: string
+        }
+        Insert: {
+          best_sport_hint: string
+          common_names?: string[]
+          continent: string
+          continent_hint: string
+          country_name: string
+          country_size_hint: string
+          created_at?: string
+          difficulty?: string
+          famous_moment_hint: string
+          flag_colors_hint: string
+          flag_emoji?: string
+          games_attended_hint: string
+          gold_medal_hint: string
+          iconic_moment: string
+          id?: string
+          population_hint: string
+          season_focus?: string
+          total_medals_hint: string
+          vibe_word: string
+          winter_history_hint: string
+        }
+        Update: {
+          best_sport_hint?: string
+          common_names?: string[]
+          continent?: string
+          continent_hint?: string
+          country_name?: string
+          country_size_hint?: string
+          created_at?: string
+          difficulty?: string
+          famous_moment_hint?: string
+          flag_colors_hint?: string
+          flag_emoji?: string
+          games_attended_hint?: string
+          gold_medal_hint?: string
+          iconic_moment?: string
+          id?: string
+          population_hint?: string
+          season_focus?: string
+          total_medals_hint?: string
+          vibe_word?: string
+          winter_history_hint?: string
+        }
+        Relationships: []
+      }
+      guess_nation_daily: {
+        Row: {
+          country_id: string
+          created_at: string
+          difficulty: string
+          id: string
+          puzzle_date: string
+        }
+        Insert: {
+          country_id: string
+          created_at?: string
+          difficulty?: string
+          id?: string
+          puzzle_date: string
+        }
+        Update: {
+          country_id?: string
+          created_at?: string
+          difficulty?: string
+          id?: string
+          puzzle_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guess_nation_daily_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "guess_nation_countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guess_nation_scores: {
+        Row: {
+          clues_used: number
+          created_at: string
+          guessed: boolean
+          id: string
+          mode: string
+          puzzle_date: string
+          score: number
+        }
+        Insert: {
+          clues_used: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date: string
+          score: number
+        }
+        Update: {
+          clues_used?: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date?: string
+          score?: number
+        }
+        Relationships: []
+      }
       medal_games_scores: {
         Row: {
           clues_used: number
