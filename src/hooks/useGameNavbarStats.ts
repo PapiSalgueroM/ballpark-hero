@@ -18,6 +18,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
     gamesPlayedToday: 0,
     totalPointsToday: 0,
     dailyRank: null,
+    currentStreak: 0,
     loading: true,
   });
 
