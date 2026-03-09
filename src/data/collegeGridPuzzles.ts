@@ -160,8 +160,8 @@ export const collegeGridPuzzles: GridPuzzle[] = [
   {
     id: 'cgrid-013',
     rows: [
-      { label: 'Pac-12 Conference', type: 'misc' },
       { label: 'Big 12 Conference', type: 'misc' },
+      { label: 'Big Ten Conference', type: 'misc' },
       { label: 'SEC Conference', type: 'misc' },
     ],
     cols: [
