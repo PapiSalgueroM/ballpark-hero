@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { Trophy, Gamepad2, Medal } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
+import { useDailyLegend } from '@/hooks/useDailyLegend';
+import { DailyLegendOverlay } from '@/components/game/DailyLegendOverlay';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { AuthModal } from '@/components/auth/AuthModal';
