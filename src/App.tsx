@@ -108,6 +108,7 @@ const App = () => (
             <Route path="/guess-nascar-driver" element={<GuessNascarDriver />} />
             <Route path="/nascar-chain" element={<NascarChain />} />
             <Route path="/soccer-grid" element={<SoccerGrid />} />
+            <Route path="/fantasy-draft" element={<FantasyDraft />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
