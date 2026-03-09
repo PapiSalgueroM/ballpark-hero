@@ -82,7 +82,7 @@ export function useGameScore() {
       }
 
       // Update streak and stats
-      const today = new Date().toISOString().split('T')[0];
+      const lastPlayed = profile?.last_played_date;
       const lastPlayed = profile?.last_played_date;
       
       let newStreak = profile?.current_streak || 0;
