@@ -64,9 +64,9 @@ export function F1DriverBoard() {
   const { puzzle, revealedClues, guesses, gameStatus, score } = gameState;
   const isOver = gameStatus !== 'playing';
 
-  const shareText = gameStatus === 'won'
-    ? `I guessed today's F1 Driver in ${revealedClues} clue${revealedClues > 1 ? 's' : ''}!\nScore: ${score} 🏎️ douknowball.com/f1-driver`
-    : `I couldn't guess today's F1 Driver 😤\n🏎️ douknowball.com/f1-driver`;
+  const shareScore = gameStatus === 'won'
+    ? `I guessed today's F1 Driver in ${revealedClues} clue${revealedClues > 1 ? 's' : ''}!\nScore: ${score} 🏎️`
+    : `I couldn't guess today's F1 Driver 😤 🏎️`;
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
