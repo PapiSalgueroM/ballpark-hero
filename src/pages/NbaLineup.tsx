@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNbaLineup } from '@/hooks/useNbaLineup';
 import { NBA_POSITIONS } from '@/types/nba';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import NbaCourtLayout from '@/components/nba/NbaCourtLayout';
 import NbaTeamSpinner from '@/components/nba/NbaTeamSpinner';
