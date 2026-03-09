@@ -61,6 +61,9 @@ export default function Profile() {
   const [saving, setSaving] = useState(false);
   const [legendStreak, setLegendStreak] = useState<number>(0);
   const [legendBadgeCount, setLegendBadgeCount] = useState<number>(0);
+  const [badgeDates, setBadgeDates] = useState<{ firstDate: string | null; streak3Date: string | null; streak7Date: string | null; streak30Date: string | null; streak100Date: string | null }>({
+    firstDate: null, streak3Date: null, streak7Date: null, streak30Date: null, streak100Date: null,
+  });
 
   const isOwnProfile = !username || (profile?.username === username);
 
@@ -127,6 +130,21 @@ export default function Profile() {
           } else {
             setLegendStreak(0);
           }
+
+          // Compute badge milestone dates (badges sorted desc by date)
+          const sortedAsc = [...badges].reverse(); // oldest first
+          const firstDate = sortedAsc[0]?.date || null;
+          let streak3Date: string | null = null;
+          let streak7Date: string | null = null;
+          let streak30Date: string | null = null;
+          let streak100Date: string | null = null;
+          for (const b of sortedAsc) {
+            if (!streak3Date && b.streak_days >= 3) streak3Date = b.date;
+            if (!streak7Date && b.streak_days >= 7) streak7Date = b.date;
+            if (!streak30Date && b.streak_days >= 30) streak30Date = b.date;
+            if (!streak100Date && b.streak_days >= 100) streak100Date = b.date;
+          }
+          setBadgeDates({ firstDate, streak3Date, streak7Date, streak30Date, streak100Date });
         }
       } else if (!user) {
         navigate('/');
@@ -336,6 +354,48 @@ export default function Profile() {
                       <p className="text-xs text-muted-foreground">streak</p>
                     </div>
                   )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* My Badges */}
+          {isOwnProfile && (
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="text-lg">🏅 My Badges</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                  {[
+                    { key: 'firstDate' as const, emoji: '⭐', name: 'First Timer', desc: 'Complete all 37 games in a day' },
+                    { key: 'streak3Date' as const, emoji: '🔥', name: 'On A Roll', desc: '3 day streak' },
+                    { key: 'streak7Date' as const, emoji: '⚔️', name: 'Week Warrior', desc: '7 day streak' },
+                    { key: 'streak30Date' as const, emoji: '💪', name: 'Unstoppable', desc: '30 day streak' },
+                    { key: 'streak100Date' as const, emoji: '👑', name: 'DoUKnowBall Legend', desc: '100 day streak' },
+                  ].map((badge) => {
+                    const earned = badgeDates[badge.key];
+                    return (
+                      <div
+                        key={badge.key}
+                        className={`relative flex flex-col items-center text-center p-4 rounded-xl border transition-all ${
+                          earned
+                            ? 'border-[hsl(var(--ft-gold)/0.4)] bg-secondary/50'
+                            : 'border-border bg-muted/30 opacity-50 grayscale'
+                        }`}
+                      >
+                        <span className="text-3xl mb-2">{earned ? badge.emoji : '🔒'}</span>
+                        <p className="text-xs sm:text-sm font-bold text-foreground leading-tight">{badge.name}</p>
+                        {earned ? (
+                          <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                            {format(new Date(earned), 'MMM d, yyyy')}
+                          </p>
+                        ) : (
+                          <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">{badge.desc}</p>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
