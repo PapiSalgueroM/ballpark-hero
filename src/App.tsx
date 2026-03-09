@@ -43,6 +43,7 @@ import GuessSoccerClub from "./pages/GuessSoccerClub";
 import GuessTheNation from "./pages/GuessTheNation";
 import F1Driver from "./pages/F1Driver";
 import F1Constructor from "./pages/F1Constructor";
+import GuessCbbTeam from "./pages/GuessCbbTeam";
 
 const queryClient = new QueryClient();
 
