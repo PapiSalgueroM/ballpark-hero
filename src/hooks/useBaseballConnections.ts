@@ -23,7 +23,12 @@ export function useBaseballConnections() {
 
   // Flatten and shuffle all players
   const allPlayers = useMemo(() => {
-    const players = puzzle.groups.flatMap((g) => g.players);
+    const seen = new Set<string>();
+    const players = puzzle.groups.flatMap((g) => g.players).filter((p) => {
+      if (seen.has(p)) return false;
+      seen.add(p);
+      return true;
+    });
     // Deterministic daily shuffle using puzzle id
     const seed = puzzle.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
     const shuffled = [...players];

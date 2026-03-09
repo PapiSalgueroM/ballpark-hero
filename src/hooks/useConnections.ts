@@ -13,7 +13,12 @@ export function useConnections() {
   const puzzle = useMemo(() => connectionsPuzzles[puzzleIndex % connectionsPuzzles.length], [puzzleIndex]);
 
   const allPlayers = useMemo(() => {
-    const players = puzzle.groups.flatMap((g) => g.players);
+    const seen = new Set<string>();
+    const players = puzzle.groups.flatMap((g) => g.players).filter((p) => {
+      if (seen.has(p)) return false;
+      seen.add(p);
+      return true;
+    });
     const seed = puzzle.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
     return players
       .map((p, i) => ({ p, sort: Math.sin(seed * (i + 1)) }))
