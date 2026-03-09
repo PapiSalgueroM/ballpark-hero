@@ -354,6 +354,110 @@ export type Database = {
         }
         Relationships: []
       }
+      nascar_daily: {
+        Row: {
+          created_at: string
+          difficulty: string
+          driver_id: string
+          id: string
+          puzzle_date: string
+        }
+        Insert: {
+          created_at?: string
+          difficulty?: string
+          driver_id: string
+          id?: string
+          puzzle_date: string
+        }
+        Update: {
+          created_at?: string
+          difficulty?: string
+          driver_id?: string
+          id?: string
+          puzzle_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nascar_daily_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "nascar_drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nascar_drivers: {
+        Row: {
+          car_number_hint: string
+          championship_hint: string
+          common_names: string[]
+          created_at: string
+          difficulty: string
+          driver_name: string
+          era_hint: string
+          famous_moment_hint: string
+          id: string
+          vibe_word: string
+          wins_hint: string
+        }
+        Insert: {
+          car_number_hint: string
+          championship_hint: string
+          common_names?: string[]
+          created_at?: string
+          difficulty?: string
+          driver_name: string
+          era_hint: string
+          famous_moment_hint: string
+          id?: string
+          vibe_word: string
+          wins_hint: string
+        }
+        Update: {
+          car_number_hint?: string
+          championship_hint?: string
+          common_names?: string[]
+          created_at?: string
+          difficulty?: string
+          driver_name?: string
+          era_hint?: string
+          famous_moment_hint?: string
+          id?: string
+          vibe_word?: string
+          wins_hint?: string
+        }
+        Relationships: []
+      }
+      nascar_scores: {
+        Row: {
+          clues_used: number
+          created_at: string
+          guessed: boolean
+          id: string
+          mode: string
+          puzzle_date: string
+          score: number
+        }
+        Insert: {
+          clues_used: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date: string
+          score: number
+        }
+        Update: {
+          clues_used?: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date?: string
+          score?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
