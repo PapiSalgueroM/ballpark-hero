@@ -186,11 +186,16 @@ export default function Index() {
         }
         setTotalPlayed(total);
 
-        // Total unique players (profiles created)
-        const { count: profileCount } = await supabase
-          .from('profiles')
-          .select('*', { count: 'exact', head: true });
-        setTotalPlayers(profileCount);
+        // Active players today (unique users who completed a game today)
+        const today = new Date().toISOString().slice(0, 10);
+        const { data: activeData } = await supabase
+          .from('daily_completions')
+          .select('user_id')
+          .eq('date', today);
+        if (activeData) {
+          const uniqueUsers = new Set(activeData.map(r => r.user_id));
+          setTotalPlayers(uniqueUsers.size);
+        }
       } catch { /* silent */ }
     })();
   }, []);
@@ -231,7 +236,7 @@ export default function Index() {
               {totalPlayers !== null && totalPlayers > 0 && (
                 <div className="flex items-center gap-1.5 text-muted-foreground">
                   <Users className="w-4 h-4 text-primary" />
-                  <span><strong className="text-foreground">{totalPlayers.toLocaleString()}</strong> players</span>
+                  <span><strong className="text-foreground">{totalPlayers.toLocaleString()}</strong> playing today</span>
                 </div>
               )}
               <div className="flex items-center gap-1.5 text-muted-foreground">
