@@ -32,12 +32,13 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
       // Fetch user's own score from user_scores
       const { data: userScore } = await supabase
         .from('user_scores')
-        .select('total_points, games_played_today')
+        .select('total_points, games_played_today, current_streak')
         .eq('user_id', user.id)
         .single();
 
       const totalPoints = userScore?.total_points || 0;
       const gamesPlayed = userScore?.games_played_today || 0;
+      const streak = (userScore as any)?.current_streak || 0;
 
       // Fetch all scores for rank calculation
       const { data: allScores } = await supabase
