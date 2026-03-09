@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { CareerPlayer } from '@/types/career';
 import { careerPlayers } from '@/data/careerPlayers';
 import { toast } from 'sonner';
+import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 
 const MAX_GUESSES = 8;
 
