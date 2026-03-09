@@ -7,7 +7,7 @@ import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Flame, Trophy, Calendar, Gamepad2, Share2, Edit2, Check, X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';

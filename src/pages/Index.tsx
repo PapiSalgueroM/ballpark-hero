@@ -198,6 +198,8 @@ export default function Index() {
 
         {/* ─── GAME CATEGORIES ─── */}
         <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
+          <StreakReminder />
+          
           {CATEGORIES.map(cat => (
             <section key={cat.title}>
               <h2 className="flex items-center gap-2 text-lg font-display font-bold text-foreground mb-4">

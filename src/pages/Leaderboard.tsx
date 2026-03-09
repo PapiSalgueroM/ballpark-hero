@@ -31,7 +31,7 @@ const GAME_OPTIONS = [
 ];
 
 export default function Leaderboard() {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('daily');
   const [gameFilter, setGameFilter] = useState('all');
   const [loading, setLoading] = useState(true);
