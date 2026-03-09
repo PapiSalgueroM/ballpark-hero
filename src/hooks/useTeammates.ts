@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { teammatesPairs } from '@/data/teammatesPairs';
 import { TeammatesPair } from '@/types/teammates';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const ROUNDS = 10;
 
@@ -54,6 +55,8 @@ export function useTeammates() {
     const emoji = score >= 8 ? '🔥' : score >= 5 ? '👍' : '😅';
     return `Teammates or Not? ${emoji} ${score}/${ROUNDS}\n\nhttps://douknowball.com/teammates`;
   }, [gameOver, score]);
+
+  useGameCompletion('teammates', gameOver, score * 100);
 
   return {
     currentPair,

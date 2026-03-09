@@ -3,6 +3,7 @@ import { Player, Difficulty, GuessResult } from '@/types/game';
 import { players } from '@/data/players';
 import { compareGuess } from '@/lib/gameLogic';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const MAX_GUESSES = 8;
 
@@ -64,6 +65,9 @@ export function useGame() {
   }, [gameStatus, targetPlayer]);
 
   const guessedPlayerNames = useMemo(() => guesses.map(g => g.playerName), [guesses]);
+
+  const completionScore = gameStatus === 'won' ? Math.max(100, (MAX_GUESSES - guesses.length) * 100) : 0;
+  useGameCompletion('footle', gameStatus !== 'playing', completionScore);
 
   return {
     difficulty,

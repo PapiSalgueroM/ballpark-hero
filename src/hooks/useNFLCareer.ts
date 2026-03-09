@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { nflCareerPlayers } from '@/data/nflCareerPlayers';
 import { NFLCareerPlayer } from '@/types/nflCareer';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { toast } from 'sonner';
 
 const TOTAL_CLUES = 6;
@@ -81,6 +82,8 @@ export function useNFLCareer() {
   }, [gameStatus, cluesRevealed]);
 
   const playerNames = useMemo(() => ensureAnswerInOptions(nflCareerPlayers.map(p => p.name), targetPlayer.name), [targetPlayer]);
+
+  useGameCompletion('nfl-career', gameStatus !== 'playing', score);
 
   return {
     targetPlayer,

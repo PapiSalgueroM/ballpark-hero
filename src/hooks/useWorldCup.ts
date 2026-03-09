@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { worldCupPuzzles } from '@/data/worldCupPuzzles';
 import { WorldCupPuzzle, WorldCupClue, WorldCupGameStatus } from '@/types/worldCup';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const TOTAL_CLUES = 7;
 
@@ -90,6 +91,8 @@ export function useWorldCup() {
       setRevealedCount((c) => c + 1);
     }
   };
+
+  useGameCompletion('world-cup', gameStatus !== 'playing', score);
 
   return {
     puzzle,

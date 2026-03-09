@@ -3,6 +3,7 @@ import { CareerPlayer } from '@/types/career';
 import { careerPlayers } from '@/data/careerPlayers';
 import { toast } from 'sonner';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const MAX_GUESSES = 8;
 
@@ -94,6 +95,9 @@ export function useCareerGame() {
   }, []);
 
   const playerNames = useMemo(() => ensureAnswerInOptions(careerPlayers.map(p => p.name), targetPlayer.name), [targetPlayer]);
+
+  const completionScore = gameStatus === 'won' ? Math.max(100, (MAX_GUESSES - guessesUsed) * 100) : 0;
+  useGameCompletion('career-path', gameStatus !== 'playing', completionScore);
 
   return {
     targetPlayer,

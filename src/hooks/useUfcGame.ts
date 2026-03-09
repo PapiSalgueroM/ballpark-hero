@@ -3,6 +3,7 @@ import { UfcFighter, UfcGuessResult } from '@/types/ufc';
 import { uniqueUfcFighters } from '@/data/ufcFighters';
 import { compareUfcGuess } from '@/lib/ufcGameLogic';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const MAX_GUESSES = 8;
 
@@ -37,6 +38,9 @@ export function useUfcGame() {
 
   const guessedFighterNames = useMemo(() => guesses.map(g => g.fighterName), [guesses]);
   const validatedFighters = useMemo(() => ensureAnswerInList(uniqueUfcFighters, targetFighter.name, f => f.name, targetFighter), [targetFighter]);
+
+  const completionScore = gameStatus === 'won' ? Math.max(100, (MAX_GUESSES - guesses.length) * 100) : 0;
+  useGameCompletion('ufc-game', gameStatus !== 'playing', completionScore);
 
   return {
     targetFighter,

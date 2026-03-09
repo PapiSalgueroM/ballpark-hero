@@ -3,6 +3,7 @@ import { olympicAthletes } from '@/data/olympicsAthletes';
 import { OlympicAthlete } from '@/types/olympics';
 import { supabase } from '@/integrations/supabase/client';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { toast } from 'sonner';
 
 const TOTAL_CLUES = 7;
@@ -116,6 +117,8 @@ export function useOlympics() {
   }, [status, clueLevel, score]);
 
   const athleteNames = useMemo(() => ensureAnswerInOptions(olympicAthletes.map(a => a.name), athlete.name), [athlete]);
+
+  useGameCompletion('olympics', status !== 'playing', score);
 
   return {
     athlete,
