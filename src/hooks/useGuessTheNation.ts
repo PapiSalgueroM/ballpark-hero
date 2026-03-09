@@ -246,8 +246,14 @@ export function useGuessTheNation() {
     ? POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0
     : 0;
 
+  // Ensure current puzzle answer is always in the selectable countries
+  const validatedCountries = useMemo(() => {
+    if (!gameState?.puzzle) return countries;
+    return ensureAnswerInList(countries, gameState.puzzle.countryName, c => c.countryName, gameState.puzzle);
+  }, [countries, gameState?.puzzle]);
+
   return {
-    countries,
+    countries: validatedCountries,
     loading,
     gameState,
     streak,

@@ -80,8 +80,10 @@ export function useHockeyCareer() {
     save(maxClue, 'revealed');
   }, [maxClue, save]);
 
+  const playerNames = useMemo(() => ensureAnswerInOptions(hockeyCareerPuzzles.map(p => p.player.name), player.name), [player]);
+
   return {
     puzzle, player, clueLevel, visibleClues, status, score,
-    guessInput, setGuessInput, submitGuess, revealNextClue, giveUp, wrongGuess, maxClue,
+    guessInput, setGuessInput, submitGuess, revealNextClue, giveUp, wrongGuess, maxClue, playerNames,
   };
 }

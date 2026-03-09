@@ -91,6 +91,8 @@ export function useBaseballCareer() {
     save(maxClue, 'revealed');
   }, [maxClue, save]);
 
+  const playerNames = useMemo(() => ensureAnswerInOptions(baseballCareerPuzzles.map(p => p.player.name), player.name), [player]);
+
   return {
     puzzle,
     player,
@@ -105,5 +107,6 @@ export function useBaseballCareer() {
     giveUp,
     wrongGuess,
     maxClue,
+    playerNames,
   };
 }

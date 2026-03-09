@@ -121,16 +121,18 @@ export function useGuessTheCollege() {
   const pointsAvailable = SCORE_MAP[revealedClues] || 0;
 
   const suggestions = useMemo(() => {
-    if (searchQuery.length < 2) return [];
+    if (searchQuery.length < 2 || !currentCollege) return [];
     const q = searchQuery.toLowerCase();
-    return colleges
+    // Ensure current answer is always findable
+    const pool = ensureAnswerInList(colleges, currentCollege.name, c => c.name, currentCollege);
+    return pool
       .filter(c => {
         return c.name.toLowerCase().includes(q) ||
           c.nicknames.some(n => n.toLowerCase().includes(q)) ||
           c.mascot.toLowerCase().includes(q);
       })
       .slice(0, 8);
-  }, [searchQuery]);
+  }, [searchQuery, currentCollege]);
 
   const saveDailyResult = useCallback((isWon: boolean, earnedScore: number, cluesUsed: number, history: string[]) => {
     const dailyKey = `guess-college-daily-${getDateStr()}-${difficulty}`;
