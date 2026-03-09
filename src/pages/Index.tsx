@@ -188,11 +188,14 @@ export default function Index() {
 
         // Active players today (unique users who completed a game today)
         const today = new Date().toISOString().slice(0, 10);
-        const { count: activeCount } = await supabase
+        const { data: activeData } = await supabase
           .from('daily_completions')
-          .select('*', { count: 'exact', head: true })
+          .select('user_id')
           .eq('date', today);
-        setTotalPlayers(activeCount);
+        if (activeData) {
+          const uniqueUsers = new Set(activeData.map(r => r.user_id));
+          setTotalPlayers(uniqueUsers.size);
+        }
       } catch { /* silent */ }
     })();
   }, []);
