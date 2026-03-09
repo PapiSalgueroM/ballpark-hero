@@ -1,5 +1,6 @@
 import { useHigherLower } from '@/hooks/useHigherLower';
 import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { HigherLowerHowToPlay } from '@/components/higher-lower/HigherLowerHowToPlay';
 import { RotateCcw, HelpCircle } from 'lucide-react';
