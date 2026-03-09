@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { CHAIN_STARTERS } from '@/types/nbaChain';
 import type { ChainLink, ChainGamePhase } from '@/types/nbaChain';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getRandomStarter(): string {
   return CHAIN_STARTERS[Math.floor(Math.random() * CHAIN_STARTERS.length)];
