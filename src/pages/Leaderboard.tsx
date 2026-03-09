@@ -208,7 +208,7 @@ export default function Leaderboard() {
                     </CardHeader>
                     <CardContent>
                       {dailyLeaderboard.length === 0 ? (
-                        <p className="text-center text-muted-foreground py-12">No one has completed a game yet today. Be the first!</p>
+                        <p className="text-center text-muted-foreground py-12">No games played yet today — be the first!</p>
                       ) : (
                         <>
                           {/* Table header */}
