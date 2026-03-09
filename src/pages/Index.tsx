@@ -236,7 +236,7 @@ export default function Index() {
               {totalPlayers !== null && totalPlayers > 0 && (
                 <div className="flex items-center gap-1.5 text-muted-foreground">
                   <Users className="w-4 h-4 text-primary" />
-                  <span><strong className="text-foreground">{totalPlayers.toLocaleString()}</strong> players</span>
+                  <span><strong className="text-foreground">{totalPlayers.toLocaleString()}</strong> playing today</span>
                 </div>
               )}
               <div className="flex items-center gap-1.5 text-muted-foreground">
