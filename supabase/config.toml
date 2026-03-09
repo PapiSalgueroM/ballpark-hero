@@ -26,3 +26,6 @@ verify_jwt = false
 
 [functions.nascar-daily]
 verify_jwt = false
+
+[functions.nascar-chain-validate]
+verify_jwt = false

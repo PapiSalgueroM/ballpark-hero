@@ -354,6 +354,36 @@ export type Database = {
         }
         Relationships: []
       }
+      nascar_chain_scores: {
+        Row: {
+          chain_length: number
+          created_at: string
+          id: string
+          mode: string
+          nickname: string
+          puzzle_date: string
+          score: number
+        }
+        Insert: {
+          chain_length: number
+          created_at?: string
+          id?: string
+          mode?: string
+          nickname: string
+          puzzle_date?: string
+          score: number
+        }
+        Update: {
+          chain_length?: number
+          created_at?: string
+          id?: string
+          mode?: string
+          nickname?: string
+          puzzle_date?: string
+          score?: number
+        }
+        Relationships: []
+      }
       nascar_daily: {
         Row: {
           created_at: string
