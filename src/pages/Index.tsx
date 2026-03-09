@@ -186,18 +186,21 @@ export default function Index() {
         }
         setTotalPlayed(total);
 
-        // Active players today (unique users who completed a game today)
-        const today = new Date().toISOString().slice(0, 10);
+        // Active players in last 24 hours from user_scores
+        const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
         const { data: activeData } = await supabase
-          .from('daily_completions')
+          .from('user_scores')
           .select('user_id')
-          .eq('date', today);
+          .gte('last_played_at', cutoff);
         if (activeData) {
-          const uniqueUsers = new Set(activeData.map(r => r.user_id));
-          setTotalPlayers(uniqueUsers.size);
+          setTotalPlayers(activeData.length);
         }
       } catch { /* silent */ }
-    })();
+    };
+
+    fetchStats();
+    const interval = setInterval(fetchStats, 5 * 60 * 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
