@@ -1,9 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Flame, TrendingUp, CheckCircle2, Sparkles } from 'lucide-react';
+import { Trophy, Flame, TrendingUp, Sparkles } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
+import { Header } from '@/components/layout/Header';
+import { StreakReminder } from '@/components/game/StreakReminder';
 
 // ─── game registry ───
 interface GameDef {
