@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useF1Driver } from '@/hooks/useF1Driver';
 import { F1DriverSearch } from './F1DriverSearch';
 import { F1DriverHowToPlay } from './F1DriverHowToPlay';
-import { ShareButtons } from '@/components/game/ShareButtons';
+import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
-import { MAX_CLUES, POINTS_BY_CLUE } from '@/types/f1Driver';
+import { MAX_CLUES } from '@/types/f1Driver';
 
 const CLUE_LABELS = ['Vibe', 'Era & Nationality', 'Teams', 'Race Wins', 'Championships', 'Famous Moment'];
 
