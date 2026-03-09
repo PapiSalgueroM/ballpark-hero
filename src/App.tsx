@@ -48,6 +48,7 @@ import GuessTennisPlayer from "./pages/GuessTennisPlayer";
 import TennisChain from "./pages/TennisChain";
 import GuessNascarDriver from "./pages/GuessNascarDriver";
 import NascarChain from "./pages/NascarChain";
+import SoccerGrid from "./pages/SoccerGrid";
 
 const queryClient = new QueryClient();
 
