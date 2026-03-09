@@ -48,64 +48,56 @@ export default function Leaderboard() {
 
   useEffect(() => {
     loadLeaderboards();
+
+    // Auto-refresh every 60 seconds
+    const interval = setInterval(loadLeaderboards, 60_000);
+    return () => clearInterval(interval);
   }, [user]);
 
   const loadLeaderboards = async () => {
     setLoading(true);
-    const today = new Date().toISOString().split('T')[0];
 
-    // === Daily leaderboard from daily_completions + user_game_scores ===
-    // Get all completions for today
-    const { data: completions } = await supabase
-      .from('daily_completions')
-      .select('user_id, game_slug')
-      .eq('date', today);
+    // === Daily leaderboard from user_scores ===
+    const { data: userScores } = await supabase
+      .from('user_scores')
+      .select('user_id, games_played_today, total_points, current_streak')
+      .gt('games_played_today', 0)
+      .order('games_played_today', { ascending: false })
+      .order('total_points', { ascending: false })
+      .limit(50);
 
-    // Get all scores for today
-    const { data: scores } = await supabase
-      .from('user_game_scores')
-      .select('user_id, score')
-      .eq('puzzle_date', today);
+    if (userScores && userScores.length > 0) {
+      // Sort client-side for tiebreaker (Supabase may not guarantee multi-column order)
+      const sorted = [...userScores].sort(
+        (a, b) => b.games_played_today - a.games_played_today || b.total_points - a.total_points
+      );
 
-    // Aggregate per user
-    const userMap = new Map<string, { games: Set<string>; points: number }>();
-    completions?.forEach((c) => {
-      if (!userMap.has(c.user_id)) userMap.set(c.user_id, { games: new Set(), points: 0 });
-      userMap.get(c.user_id)!.games.add(c.game_slug);
-    });
-    scores?.forEach((s) => {
-      if (!userMap.has(s.user_id)) userMap.set(s.user_id, { games: new Set(), points: 0 });
-      userMap.get(s.user_id)!.points += s.score;
-    });
+      const userIds = sorted.map((s) => s.user_id);
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('user_id, display_name, username')
+        .in('user_id', userIds);
 
-    // Sort by games desc, then points desc
-    const sorted = Array.from(userMap.entries())
-      .map(([uid, data]) => ({ user_id: uid, games_completed: data.games.size, total_points: data.points }))
-      .sort((a, b) => b.games_completed - a.games_completed || b.total_points - a.total_points)
-      .slice(0, 50);
+      const profileMap = new Map<string, { display_name: string | null; username: string | null }>();
+      profiles?.forEach((p: any) => profileMap.set(p.user_id, p));
 
-    // Fetch profiles for these users
-    const userIds = sorted.map((s) => s.user_id);
-    const { data: profiles } = userIds.length > 0
-      ? await supabase.from('profiles').select('user_id, display_name, username, current_streak').in('user_id', userIds)
-      : { data: [] as any[] };
-
-    const profileMap = new Map<string, { display_name: string | null; username: string | null; current_streak: number }>();
-    profiles?.forEach((p: any) => profileMap.set(p.user_id, p));
-
-    const dailyEntries: DailyLeaderboardEntry[] = sorted.map((entry, i) => {
-      const p = profileMap.get(entry.user_id);
-      return {
-        rank: i + 1,
-        user_id: entry.user_id,
-        display_name: p?.display_name || null,
-        username: p?.username || null,
-        games_completed: entry.games_completed,
-        total_points: entry.total_points,
-        current_streak: p?.current_streak || 0,
-      };
-    });
-    setDailyLeaderboard(dailyEntries);
+      setDailyLeaderboard(
+        sorted.map((entry, i) => {
+          const p = profileMap.get(entry.user_id);
+          return {
+            rank: i + 1,
+            user_id: entry.user_id,
+            display_name: p?.display_name || null,
+            username: p?.username || null,
+            games_completed: entry.games_played_today,
+            total_points: entry.total_points,
+            current_streak: (entry as any).current_streak || 0,
+          };
+        })
+      );
+    } else {
+      setDailyLeaderboard([]);
+    }
 
     // === All-time best scores ===
     const { data: allTimeData } = await supabase
