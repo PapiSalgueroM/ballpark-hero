@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Flame, Trophy, Calendar, Gamepad2, Share2, Edit2, Check, X, Loader2 } from 'lucide-react';
+import { Flame, Trophy, Calendar, Gamepad2, Share2, Edit2, Check, X, Loader2, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
