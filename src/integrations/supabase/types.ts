@@ -172,6 +172,30 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_completions: {
+        Row: {
+          completed_at: string
+          date: string
+          game_slug: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          date?: string
+          game_slug: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          date?: string
+          game_slug?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       fantasy_draft_daily: {
         Row: {
           created_at: string
