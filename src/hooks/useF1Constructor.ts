@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { F1ConstructorState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/f1Constructor';
 import { getDailyF1ConstructorPuzzle, getRandomF1ConstructorPuzzle, resolveF1Constructor } from '@/data/f1Constructors';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 export function useF1Constructor() {
   const [gameState, setGameState] = useState<F1ConstructorState | null>(null);
