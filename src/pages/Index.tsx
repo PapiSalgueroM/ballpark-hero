@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Flame, TrendingUp, Sparkles } from 'lucide-react';
+import { Trophy, Flame, TrendingUp, Sparkles, Users } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
@@ -15,26 +15,9 @@ interface GameDef {
   description: string;
   daily?: boolean;
   isNew?: boolean;
-  storageKey?: string; // localStorage key pattern to check "played today"
 }
 
 const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
-  {
-    title: 'Soccer',
-    emoji: '⚽',
-    games: [
-      { path: '/footle', label: 'Footle', emoji: '🎯', description: 'Guess the soccer player from stats', storageKey: 'footle' },
-      { path: '/career', label: 'Career Quiz', emoji: '📜', description: 'Guess from career history', storageKey: 'career-game' },
-      { path: '/higher-lower', label: 'Higher or Lower', emoji: '📊', description: 'Compare all-time career stats' },
-      { path: '/connections', label: 'Connections', emoji: '🔗', description: 'Find groups of 4 connected players' },
-      { path: '/build-your-xi', label: 'Build Your XI', emoji: '⚽', description: 'Create a lineup, get AI rated' },
-      { path: '/guess-the-face', label: 'Guess the Face', emoji: '🖼️', description: 'Unblur the soccer player' },
-      { path: '/football-connect-4', label: 'Connect 4', emoji: '🔴', description: 'Soccer trivia meets Connect 4' },
-      { path: '/world-cup', label: 'World Cup', emoji: '🏆', description: 'Guess the World Cup legend', daily: true },
-      { path: '/guess-soccer-club', label: 'Guess The Club', emoji: '🏟️', description: 'Identify the mystery football club', daily: true, isNew: true },
-      { path: '/soccer-grid', label: 'Soccer Grid', emoji: '⚽', description: '3×3 grid puzzle with rarity scores', daily: true, isNew: true },
-    ],
-  },
   {
     title: 'Pro Football',
     emoji: '🏈',
@@ -47,12 +30,11 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     ],
   },
   {
-    title: 'College',
-    emoji: '🎓',
+    title: 'College Football',
+    emoji: '🏈',
     games: [
       { path: '/college-grid', label: 'College Grid', emoji: '🎓', description: 'College football 3×3 grid puzzle', daily: true },
-      { path: '/guess-the-college', label: 'Guess The College', emoji: '🏫', description: 'Guess the D1 school from clues', daily: true, isNew: true },
-      { path: '/guess-cbb-team', label: 'Guess The CBB Program', emoji: '🏀', description: 'Guess the college basketball program', daily: true, isNew: true },
+      { path: '/guess-the-college', label: 'Guess The College', emoji: '🏫', description: 'Guess the D1 school from clues', daily: true },
     ],
   },
   {
@@ -62,6 +44,13 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
       { path: '/nba-starting-5', label: 'NBA Starting 5', emoji: '🏀', description: 'Build a lineup with stat challenges' },
       { path: '/nba-connect-4', label: 'NBA Connect 4', emoji: '🏀', description: 'NBA trivia meets Connect 4' },
       { path: '/nba-chain', label: 'NBA Chain', emoji: '🔗', description: 'Build a chain of connected players' },
+    ],
+  },
+  {
+    title: 'College Basketball',
+    emoji: '🏀',
+    games: [
+      { path: '/guess-cbb-team', label: 'Guess The CBB Program', emoji: '🏀', description: 'Guess the college basketball program', daily: true, isNew: true },
     ],
   },
   {
@@ -81,6 +70,51 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     ],
   },
   {
+    title: 'Soccer',
+    emoji: '⚽',
+    games: [
+      { path: '/footle', label: 'Footle', emoji: '🎯', description: 'Guess the soccer player from stats' },
+      { path: '/career', label: 'Career Quiz', emoji: '📜', description: 'Guess from career history' },
+      { path: '/higher-lower', label: 'Higher or Lower', emoji: '📊', description: 'Compare all-time career stats' },
+      { path: '/connections', label: 'Connections', emoji: '🔗', description: 'Find groups of 4 connected players' },
+      { path: '/build-your-xi', label: 'Build Your XI', emoji: '⚽', description: 'Create a lineup, get AI rated' },
+      { path: '/guess-the-face', label: 'Guess the Face', emoji: '🖼️', description: 'Unblur the soccer player' },
+      { path: '/football-connect-4', label: 'Connect 4', emoji: '🔴', description: 'Soccer trivia meets Connect 4' },
+      { path: '/world-cup', label: 'World Cup', emoji: '🏆', description: 'Guess the World Cup legend', daily: true },
+      { path: '/guess-soccer-club', label: 'Guess The Club', emoji: '🏟️', description: 'Identify the mystery football club', daily: true, isNew: true },
+      { path: '/soccer-grid', label: 'Soccer Grid', emoji: '⚽', description: '3×3 grid puzzle with rarity scores', daily: true, isNew: true },
+    ],
+  },
+  {
+    title: 'Formula 1',
+    emoji: '🏎️',
+    games: [
+      { path: '/f1-driver', label: 'Guess The F1 Driver', emoji: '🏎️', description: 'Guess the mystery F1 driver from clues', daily: true, isNew: true },
+      { path: '/f1-constructor', label: 'Guess The Constructor', emoji: '🏗️', description: 'Guess the mystery F1 team from clues', daily: true, isNew: true },
+    ],
+  },
+  {
+    title: 'Tennis',
+    emoji: '🎾',
+    games: [
+      { path: '/guess-tennis-player', label: 'Guess The Player', emoji: '🎾', description: 'Guess the mystery tennis player from clues', daily: true, isNew: true },
+      { path: '/tennis-chain', label: 'Tennis Chain', emoji: '🔗', description: 'Build a chain of Grand Slam defeats', isNew: true },
+    ],
+  },
+  {
+    title: 'Golf',
+    emoji: '🏌️',
+    games: [],
+  },
+  {
+    title: 'NASCAR',
+    emoji: '🏁',
+    games: [
+      { path: '/guess-nascar-driver', label: 'Guess The Driver', emoji: '🏁', description: 'Guess the mystery NASCAR driver from clues', daily: true, isNew: true },
+      { path: '/nascar-chain', label: 'NASCAR Chain', emoji: '🔗', description: 'Build a chain of Cup champions', isNew: true },
+    ],
+  },
+  {
     title: 'Combat Sports',
     emoji: '🥊',
     games: [
@@ -89,26 +123,8 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
     ],
   },
   {
-    title: 'Motorsport',
-    emoji: '🏎️',
-    games: [
-      { path: '/f1-driver', label: 'Guess The F1 Driver', emoji: '🏎️', description: 'Guess the mystery F1 driver from clues', daily: true, isNew: true },
-      { path: '/f1-constructor', label: 'Guess The F1 Constructor', emoji: '🏗️', description: 'Guess the mystery F1 team from clues', daily: true, isNew: true },
-      { path: '/guess-nascar-driver', label: 'Guess The NASCAR Driver', emoji: '🏁', description: 'Guess the mystery NASCAR driver from clues', daily: true, isNew: true },
-      { path: '/nascar-chain', label: 'NASCAR Chain', emoji: '🔗', description: 'Build a chain of Cup champions', isNew: true },
-    ],
-  },
-  {
-    title: 'Tennis',
-    emoji: '🎾',
-    games: [
-      { path: '/guess-tennis-player', label: 'Guess The Tennis Player', emoji: '🎾', description: 'Guess the mystery tennis player from clues', daily: true, isNew: true },
-      { path: '/tennis-chain', label: 'Tennis Chain', emoji: '🔗', description: 'Build a chain of Grand Slam defeats', isNew: true },
-    ],
-  },
-  {
-    title: 'Multi-Sport',
-    emoji: '🏅',
+    title: 'World & Olympic Games',
+    emoji: '🌍',
     games: [
       { path: '/teammates', label: 'Teammates or Not?', emoji: '🤝', description: 'Were they ever teammates?', isNew: true },
       { path: '/olympics', label: 'The Medal Games', emoji: '🏅', description: 'Guess the mystery athlete from clues', daily: true, isNew: true },
@@ -118,9 +134,10 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
   },
 ];
 
+// Filter out empty categories for display
+const VISIBLE_CATEGORIES = CATEGORIES.filter(c => c.games.length > 0);
 const ALL_GAMES = CATEGORIES.flatMap(c => c.games);
 const TOTAL_GAMES = ALL_GAMES.length;
-
 
 function countPlayedGames(): number {
   const today = new Date().toISOString().slice(0, 10);
@@ -143,26 +160,37 @@ function countPlayedGames(): number {
 export default function Index() {
   const [playedCount, setPlayedCount] = useState(0);
   const [totalPlayed, setTotalPlayed] = useState<number | null>(null);
+  const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
 
   useEffect(() => {
     setPlayedCount(countPlayedGames());
   }, []);
 
-  // Fetch total scores from Supabase as social proof
   useEffect(() => {
     (async () => {
       try {
-        const { count } = await supabase
-          .from('medal_games_scores')
+        // Games played today from multiple score tables
+        const tables = [
+          'medal_games_scores', 'football_grid_selections', 'college_grid_selections',
+          'soccer_grid_selections', 'nascar_scores', 'tennis_scores', 'cbb_scores',
+          'college_guess_scores', 'guess_nation_scores', 'soccer_club_guess_scores',
+          'nascar_chain_scores', 'tennis_chain_scores', 'ufc_chain_scores',
+        ] as const;
+
+        let total = 0;
+        for (const table of tables) {
+          const { count } = await supabase
+            .from(table)
+            .select('*', { count: 'exact', head: true });
+          total += count ?? 0;
+        }
+        setTotalPlayed(total);
+
+        // Total unique players (profiles created)
+        const { count: profileCount } = await supabase
+          .from('profiles')
           .select('*', { count: 'exact', head: true });
-        // Combine with grid selections for a bigger number
-        const { count: fgCount } = await supabase
-          .from('football_grid_selections')
-          .select('*', { count: 'exact', head: true });
-        const { count: cgCount } = await supabase
-          .from('college_grid_selections')
-          .select('*', { count: 'exact', head: true });
-        setTotalPlayed((count ?? 0) + (fgCount ?? 0) + (cgCount ?? 0));
+        setTotalPlayers(profileCount);
       } catch { /* silent */ }
     })();
   }, []);
@@ -171,7 +199,7 @@ export default function Index() {
     <>
       <PageSeo
         title="DoUKnowBall — The Ultimate Sports Trivia Hub"
-        description="20+ free sports trivia games covering soccer, NFL, NBA, MLB, NHL, UFC and more. Daily challenges, no login required. How well do you know ball?"
+        description="30+ free sports trivia games covering NFL, NBA, MLB, NHL, UFC, F1, Tennis, NASCAR, Soccer and more. Daily challenges, no login required."
         path="/"
       />
       <div className="min-h-screen bg-background text-foreground">
@@ -197,7 +225,13 @@ export default function Index() {
               {totalPlayed !== null && totalPlayed > 0 && (
                 <div className="flex items-center gap-1.5 text-muted-foreground">
                   <TrendingUp className="w-4 h-4 text-primary" />
-                  <span><strong className="text-foreground">{totalPlayed.toLocaleString()}</strong> rounds played</span>
+                  <span><strong className="text-foreground">{totalPlayed.toLocaleString()}</strong> games played today</span>
+                </div>
+              )}
+              {totalPlayers !== null && totalPlayers > 0 && (
+                <div className="flex items-center gap-1.5 text-muted-foreground">
+                  <Users className="w-4 h-4 text-primary" />
+                  <span><strong className="text-foreground">{totalPlayers.toLocaleString()}</strong> players</span>
                 </div>
               )}
               <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -212,7 +246,7 @@ export default function Index() {
         <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
           <StreakReminder />
           
-          {CATEGORIES.map(cat => (
+          {VISIBLE_CATEGORIES.map(cat => (
             <section key={cat.title}>
               <h2 className="flex items-center gap-2 text-lg font-display font-bold text-foreground mb-4">
                 <span className="text-xl">{cat.emoji}</span>
@@ -228,6 +262,18 @@ export default function Index() {
               </div>
             </section>
           ))}
+
+          {/* Coming Soon placeholder for Golf */}
+          <section>
+            <h2 className="flex items-center gap-2 text-lg font-display font-bold text-foreground mb-4">
+              <span className="text-xl">🏌️</span>
+              Golf
+              <span className="text-xs font-normal text-muted-foreground ml-1">Coming Soon</span>
+            </h2>
+            <div className="rounded-xl border border-dashed border-border bg-card/50 p-6 text-center text-sm text-muted-foreground">
+              Golf trivia games are coming soon! Stay tuned.
+            </div>
+          </section>
 
           {/* ─── SOCIAL PROOF ─── */}
           {totalPlayed !== null && totalPlayed > 0 && (
