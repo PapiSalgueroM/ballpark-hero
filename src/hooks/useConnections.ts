@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { connectionsPuzzles } from '@/data/connectionsPuzzles';
 import type { ConnectionGroup, ConnectionDifficulty } from '@/types/connections';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 export function useConnections() {
   const [puzzleIndex, setPuzzleIndex] = useState(() => Math.floor(Math.random() * connectionsPuzzles.length));
