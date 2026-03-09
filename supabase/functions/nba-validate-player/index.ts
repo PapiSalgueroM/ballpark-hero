@@ -100,7 +100,7 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are an NBA database with comprehensive knowledge up to February 2026. Answer ONLY with a JSON object.
+              content: `You are an NBA database with comprehensive knowledge up to March 2026. Answer ONLY with a JSON object.
 
 GROUND TRUTH – 2025-26 SEASON ROSTER UPDATES (use these over any older data):
 - Nikola Topić: Oklahoma City Thunder (drafted 2024, NBA debut Feb 12 2026). Position: PG/SG.
@@ -114,6 +114,12 @@ GROUND TRUTH – 2025-26 SEASON ROSTER UPDATES (use these over any older data):
 - DeMar DeRozan: Sacramento Kings (signed 2024 from Chicago Bulls).
 - Dejounte Murray: New Orleans Pelicans (traded 2024 from Atlanta Hawks).
 - Mikal Bridges: New York Knicks (traded 2024 from Brooklyn Nets).
+- Karl-Anthony Towns: New York Knicks (traded 2024 from Minnesota Timberwolves).
+- Lauri Markkanen: Still on Utah Jazz (2025-26 season).
+- Victor Wembanyama: San Antonio Spurs (drafted 2023, 2025-26 sophomore season).
+- Chet Holmgren: Oklahoma City Thunder (drafted 2022).
+- Paolo Banchero: Orlando Magic (drafted 2022).
+- Zion Williamson: New Orleans Pelicans (drafted 2019).
 - Karl-Anthony Towns: New York Knicks (traded 2024 from Minnesota Timberwolves).
 
 IMPORTANT RULES:

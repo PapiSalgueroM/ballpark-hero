@@ -93,7 +93,7 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are a strict NBA roster verifier. You must determine if two NBA players were EVER on the same NBA team roster at the same time during any season through February 10, 2026.
+              content: `You are a strict NBA roster verifier. You must determine if two NBA players were EVER on the same NBA team roster at the same time during any season through March 2026.
 
 CRITICAL RULES:
 1. ONLY mark valid:true if you are 100% CERTAIN they shared a roster. When in doubt, say false.
@@ -121,9 +121,17 @@ VERIFIED CAREER HISTORIES (reference these to avoid mistakes):
 - Anthony Davis: New Orleans Pelicans (2012-2019), LA Lakers (2019-present)
 - Kyrie Irving: Cleveland Cavaliers (2011-2017), Boston Celtics (2017-2019), Brooklyn Nets (2019-2023), Dallas Mavericks (2023-present)
 - Carmelo Anthony: Denver Nuggets (2003-2011), New York Knicks (2011-2017), OKC Thunder (2017-2018), Houston Rockets (2018-2019), Portland Trail Blazers (2019-2021), LA Lakers (2021-2022)
-- Dwight Howard: Orlando Magic (2004-2012), LA Lakers (2012-2013), Houston Rockets (2013-2016), Atlanta Hawks (2016-2017), Charlotte Hornets (2017-2018), Washington Wizards (2018-2019), LA Lakers (2019-2021), Philadelphia 76ers (2021-2022), Taoyuan Leopards (2022-present)
-- Joel Embiid: Philadelphia 76ers (2014-present). ONLY TEAM EVER (through Feb 2026).
+- Dwight Howard: Orlando Magic (2004-2012), LA Lakers (2012-2013), Houston Rockets (2013-2016), Atlanta Hawks (2016-2017), Charlotte Hornets (2017-2018), Washington Wizards (2018-2019), LA Lakers (2019-2021), Philadelphia 76ers (2021-2022)
+- Joel Embiid: Philadelphia 76ers (2014-present). ONLY TEAM EVER (through March 2026).
 - Jayson Tatum: Boston Celtics (2017-present). ONLY TEAM EVER.
+- Karl-Anthony Towns: Minnesota Timberwolves (2015-2024), New York Knicks (2024-present)
+- Mikal Bridges: Phoenix Suns (2018-2023), Brooklyn Nets (2023-2024), New York Knicks (2024-present)
+- Klay Thompson: Golden State Warriors (2011-2024), Dallas Mavericks (2024-present)
+- Paul George: Indiana Pacers (2010-2017), OKC Thunder (2017-2019), LA Clippers (2019-2024), Philadelphia 76ers (2024-present)
+- DeMar DeRozan: Toronto Raptors (2009-2018), San Antonio Spurs (2018-2021), Chicago Bulls (2021-2024), Sacramento Kings (2024-present)
+- Dejounte Murray: San Antonio Spurs (2016-2022), Atlanta Hawks (2022-2024), New Orleans Pelicans (2024-present)
+- Victor Wembanyama: San Antonio Spurs (2023-present)
+- Nikola Topić: Oklahoma City Thunder (2024-present, NBA debut Feb 2026)
 
 Also resolve nicknames/partial names (e.g., "KD" = Kevin Durant, "Bron" = LeBron James, "Wemby" = Victor Wembanyama, "Shaq" = Shaquille O'Neal, "AI" = Allen Iverson, "The Answer" = Allen Iverson).
 

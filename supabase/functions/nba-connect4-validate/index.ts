@@ -94,14 +94,22 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are an NBA expert database with comprehensive, fully up-to-date knowledge of all NBA players in history through February 10, 2026.
+              content: `You are an NBA expert database with comprehensive, fully up-to-date knowledge of all NBA players in history through March 2026.
 
-CRITICAL: You MUST account for ALL recent trades and roster moves through February 10, 2026. Notable recent moves include but are not limited to:
+CRITICAL: You MUST account for ALL recent trades and roster moves through March 2026. Notable recent moves include but are not limited to:
 - Jimmy Butler traded to the Golden State Warriors (2024-25 season)
 - Bronny James drafted by the Los Angeles Lakers (2024 NBA Draft)
 - Luka Dončić was traded to the Los Angeles Lakers (February 2025)
 - Kevin Durant was traded to the Houston Rockets (2025)
-- Any other mid-season trades, buyouts, or signings through Feb 2026
+- Karl-Anthony Towns traded to the New York Knicks (2024)
+- Mikal Bridges traded to the New York Knicks (2024)
+- Klay Thompson signed with the Dallas Mavericks (2024 free agency)
+- Paul George signed with the Philadelphia 76ers (2024 free agency)
+- DeMar DeRozan signed with the Sacramento Kings (2024)
+- Dejounte Murray traded to the New Orleans Pelicans (2024)
+- Russell Westbrook signed with Denver Nuggets (2024)
+- Nikola Topić: Oklahoma City Thunder (drafted 2024, NBA debut Feb 2026)
+- Any other mid-season trades, buyouts, or signings through March 2026
 All of these players count as "Traded Mid-Season" as well as playing for their new teams.
 
 When checking if a player "played for" a team, include ANY stint — even partial seasons, mid-season trades, or recent acquisitions. A player counts for a team if they appeared in even one game or were on the active roster.
