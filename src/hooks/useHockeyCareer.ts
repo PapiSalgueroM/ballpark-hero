@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { hockeyCareerPuzzles } from '@/data/hockeyCareerPlayers';
+import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 
 function getDailyIndex(): number {
   const now = new Date();
