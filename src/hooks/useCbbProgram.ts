@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import { CbbProgramPuzzle, CbbProgramState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/cbbProgram';
 import { supabase } from '@/integrations/supabase/client';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function mapRow(row: any): CbbProgramPuzzle {
   return {
@@ -128,6 +129,8 @@ export function useCbbProgram() {
     if (!gameState?.puzzle) return allPrograms;
     return ensureAnswerInList(allPrograms, gameState.puzzle.school_name, p => p.school_name, gameState.puzzle);
   }, [allPrograms, gameState?.puzzle]);
+
+  useGameCompletion('cbb-program', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
   return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPrograms: validatedPrograms, loading };
 }

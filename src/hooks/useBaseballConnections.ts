@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { baseballConnectionsPuzzles } from '@/data/baseballConnectionsPuzzles';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDailyIndex(): number {
   const now = new Date();
@@ -110,6 +111,9 @@ export function useBaseballConnections() {
   }, [selected, gameStatus, puzzle.groups, solvedGroups, lives, save]);
 
   const deselectAll = useCallback(() => setSelected([]), []);
+
+  const completionScore = gameStatus === 'complete' ? (lives * 250) : 0;
+  useGameCompletion('baseball-connections', gameStatus === 'complete', completionScore);
 
   return {
     puzzle,

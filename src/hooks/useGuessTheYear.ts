@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { GuessTheYearState, POINTS_BY_CLUE } from '@/types/guessTheYear';
 import { getDailyGuessTheYearPuzzle } from '@/data/guessTheYearPuzzles';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const MAX_CLUES = 6;
 const YEAR_RANGE = { min: 1980, max: 2026 };
@@ -69,6 +70,8 @@ export function useGuessTheYear() {
     const decade = Math.floor(year / 10) * 10;
     return `${decade}s`;
   }, [gameState.puzzle]);
+
+  useGameCompletion('guess-the-year', gameState.gameStatus !== 'playing', gameState.score);
 
   return {
     gameState,

@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { soccerGridPuzzles } from '@/data/soccerGridPuzzles';
 import { SoccerGridCell, SoccerGridGameStatus, SoccerGridPuzzle } from '@/types/soccerGrid';
 import { supabase } from '@/integrations/supabase/client';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDailyIndex(): number {
   const now = new Date();
@@ -135,6 +136,8 @@ export function useSoccerGrid() {
       setActiveCell(null);
     }
   }, [activeCell, gameStatus, validating, cells, puzzle.id, fetchRarity]);
+
+  useGameCompletion('soccer-grid', gameStatus === 'complete', correctCount * 100);
 
   return {
     puzzle, cells, activeCell, setActiveCell, submitGuess,

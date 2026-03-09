@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { timelinePuzzles, TimelinePlayer } from '@/data/timelinePlayers';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDailyIndex(): number {
   const now = new Date();
@@ -83,6 +84,8 @@ export function useFootballTimeline() {
       localStorage.setItem(storageKey, JSON.stringify({ order, status }));
     }
   }, [order, status, storageKey]);
+
+  useGameCompletion('football-timeline', status === 'submitted', score * 100);
 
   return {
     puzzle,

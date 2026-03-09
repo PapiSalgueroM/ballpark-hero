@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import { NascarDriverPuzzle, NascarDriverState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/nascarDriver';
 import { supabase } from '@/integrations/supabase/client';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function mapRow(row: any): NascarDriverPuzzle {
   return {
@@ -123,6 +124,8 @@ export function useNascarDriver() {
     if (!gameState?.puzzle) return allDrivers;
     return ensureAnswerInList(allDrivers, gameState.puzzle.driver_name, d => d.driver_name, gameState.puzzle);
   }, [allDrivers, gameState?.puzzle]);
+
+  useGameCompletion('nascar-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
   return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allDrivers: validatedDrivers, loading };
 }

@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { getRandomConnect4Board } from '@/data/nbaConnect4Boards';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 import type {
   Connect4Team,
   Connect4Grid,
@@ -207,6 +208,8 @@ export function useNbaConnect4() {
     setSelectedCol(null);
     setUsedPlayers(new Set());
   }, []);
+
+  useGameCompletion('nba-connect4', phase === 'won' || phase === 'draw', phase === 'won' ? 500 : 200);
 
   return {
     board,

@@ -3,6 +3,7 @@ import { getRandomNbaTeams, NBA_TEAMS, type NbaTeam } from '@/data/nbaTeams';
 import { getRandomStatChallenge } from '@/data/nbaStats';
 import type { NbaFilledSlot, NbaGamePhase, NbaAIVerdict, StatChallenge } from '@/types/nba';
 import { NBA_POSITIONS } from '@/types/nba';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const STORAGE_KEY = 'nba-lineup-state';
 
@@ -288,6 +289,8 @@ export function useNbaLineup() {
       setTeamAssignments(getRandomNbaTeams(5));
     }, 100);
   }, []);
+
+  useGameCompletion('nba-lineup', phase === 'result', verdict ? 500 : 0);
 
   return {
     phase,

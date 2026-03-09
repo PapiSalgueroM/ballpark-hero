@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { NascarChainState, NascarChainMode, getNascarChainMultiplier, getNascarEarnedBadge, NASCAR_CHAIN_STARTERS } from '@/types/nascarChain';
 import { supabase } from '@/integrations/supabase/client';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDailyStarter(): string {
   const today = new Date().toISOString().slice(0, 10);
@@ -125,6 +126,8 @@ export function useNascarChain() {
   }, [gameState]);
 
   const resetGame = useCallback(() => setGameState(null), []);
+
+  useGameCompletion('nascar-chain', gameState?.gameStatus === 'ended', gameState?.score ?? 0);
 
   return { gameState, startGame, makeGuess, giveUp, resetGame, validating };
 }

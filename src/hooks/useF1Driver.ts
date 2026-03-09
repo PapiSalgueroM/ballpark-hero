@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { F1DriverState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/f1Driver';
 import { getDailyF1Puzzle, getRandomF1Puzzle, resolveF1Driver } from '@/data/f1Drivers';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 export function useF1Driver() {
   const [gameState, setGameState] = useState<F1DriverState | null>(null);
@@ -50,6 +51,8 @@ export function useF1Driver() {
 
   const pointsForCurrentClue =
     gameState ? (POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0) : POINTS_BY_CLUE[0];
+
+  useGameCompletion('f1-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
   return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue };
 }

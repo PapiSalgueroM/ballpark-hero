@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { CHAIN_STARTERS } from '@/types/nbaChain';
 import type { ChainLink, ChainGamePhase } from '@/types/nbaChain';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getRandomStarter(): string {
   return CHAIN_STARTERS[Math.floor(Math.random() * CHAIN_STARTERS.length)];
@@ -155,6 +156,8 @@ export function useNbaChain() {
     const names = chain.map((l) => l.playerName);
     return `🏀 NBA Chain Game\n🔗 Chain of ${score}: ${names.join(' → ')}\n\nPlay at douknowball.lovable.app/nba-chain`;
   }, [chain, score]);
+
+  useGameCompletion('nba-chain', phase === 'ended', score * 100);
 
   return {
     chain,

@@ -3,6 +3,7 @@ import { colleges } from '@/data/colleges';
 import { College, CollegeGameMode, CollegeDifficulty, CollegeClue } from '@/types/guessTheCollege';
 import { supabase } from '@/integrations/supabase/client';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const SCORE_MAP: Record<number, number> = {
   1: 1200, 2: 1000, 3: 900, 4: 800, 5: 700,
@@ -244,6 +245,8 @@ export function useGuessTheCollege() {
     const clueCount = won ? guessHistory.length : 'X';
     return `I guessed today's college in ${clueCount} ${won && guessHistory.length === 1 ? 'try' : 'tries'} on DoUKnowBall! Score: ${score} 🎓 Can you beat me? douknowball.com/guess-the-college`;
   }, [currentCollege, won, guessHistory, score]);
+
+  useGameCompletion('guess-the-college', gameOver, score);
 
   return {
     mode, setMode,

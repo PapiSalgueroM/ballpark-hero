@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { draftGuesserPuzzles, DraftGuesserPlayer } from '@/data/draftGuesserPlayers';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDailyIndex(): number {
   const now = new Date();
@@ -102,6 +103,8 @@ export function useFootballDraft() {
   useMemo(() => {
     localStorage.setItem(storageKey, JSON.stringify({ currentIndex, guesses, revealLevel }));
   }, [currentIndex, guesses, revealLevel, storageKey]);
+
+  useGameCompletion('football-draft', gameStatus === 'complete', totalPoints * 10);
 
   return {
     puzzle,

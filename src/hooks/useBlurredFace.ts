@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { BlurredFacePlayer, BlurredFaceGameStatus, BlurredFaceHint } from '@/types/blurredFace';
 import { blurredFacePlayers } from '@/data/blurredFacePlayers';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const MAX_GUESSES = 6;
 const BLUR_LEVELS = [30, 24, 18, 12, 7, 3, 0]; // index = number of wrong guesses
@@ -97,6 +98,9 @@ export function useBlurredFace() {
   const giveUp = useCallback(() => {
     setGameStatus('gave-up');
   }, []);
+
+  const completionScore = gameStatus === 'won' ? Math.max(100, (MAX_GUESSES - wrongGuesses.length) * 150) : 0;
+  useGameCompletion('blurred-face', gameStatus === 'won' || gameStatus === 'lost' || gameStatus === 'gave-up', completionScore);
 
   return {
     targetPlayer,

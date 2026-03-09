@@ -8,6 +8,7 @@ import {
   STREAK_BADGES,
 } from '@/types/guessTheNation';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const STORAGE_KEY = 'guess-nation';
 
@@ -251,6 +252,8 @@ export function useGuessTheNation() {
     if (!gameState?.puzzle) return countries;
     return ensureAnswerInList(countries, gameState.puzzle.countryName, c => c.countryName, gameState.puzzle);
   }, [countries, gameState?.puzzle]);
+
+  useGameCompletion('guess-the-nation', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
   return {
     countries: validatedCountries,

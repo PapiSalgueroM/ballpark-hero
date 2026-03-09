@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { GuessNflTeamState, GameMode, Difficulty, POINTS_BY_CLUE } from '@/types/guessNflTeam';
 import { getDailyNflTeamPuzzle, getRandomNflTeamPuzzle, nflTeamPuzzles } from '@/data/nflTeamPuzzles';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const MAX_CLUES = 11;
 
@@ -110,6 +111,8 @@ export function useGuessNflTeam() {
     
     return [...new Set(allTeams)].sort();
   }, [gameState]);
+
+  useGameCompletion('guess-nfl-team', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
   return {
     gameState,

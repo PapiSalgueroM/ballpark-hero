@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { hockeyHLPlayers, HockeyHLPlayer } from '@/data/hockeyHLPlayers';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDailySeed(): number {
   const now = new Date();
@@ -115,6 +116,8 @@ export function useHockeyHL() {
     setStreak(0);
     setShowingResult(false);
   }, []);
+
+  useGameCompletion('hockey-higher-lower', gameStatus === 'complete', totalScore);
 
   return {
     mode, switchMode, currentPair, currentRound, results,

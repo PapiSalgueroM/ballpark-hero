@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import { TennisPlayerPuzzle, TennisPlayerState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/tennisPlayer';
 import { supabase } from '@/integrations/supabase/client';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function mapRow(row: any): TennisPlayerPuzzle {
   return {
@@ -123,6 +124,8 @@ export function useTennisPlayer() {
     if (!gameState?.puzzle) return allPlayers;
     return ensureAnswerInList(allPlayers, gameState.puzzle.player_name, p => p.player_name, gameState.puzzle);
   }, [allPlayers, gameState?.puzzle]);
+
+  useGameCompletion('tennis-player', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
   return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPlayers: validatedPlayers, loading };
 }
