@@ -97,18 +97,6 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
 const ALL_GAMES = CATEGORIES.flatMap(c => c.games);
 const TOTAL_GAMES = ALL_GAMES.length;
 
-function getPlayedToday(): Set<string> {
-  const played = new Set<string>();
-  const today = new Date().toISOString().slice(0, 10);
-  // Check common storage patterns
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.includes(today)) {
-      played.add(key);
-    }
-  }
-  return played;
-}
 
 function countPlayedGames(): number {
   const today = new Date().toISOString().slice(0, 10);
