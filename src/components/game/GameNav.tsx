@@ -70,6 +70,12 @@ const CATEGORIES: { title: string; games: GameLink[] }[] = [
     ],
   },
   {
+    title: 'Motorsport',
+    games: [
+      { path: '/f1-driver', label: '🏎️ Guess The F1 Driver', description: 'Guess the mystery F1 driver', daily: true },
+    ],
+  },
+  {
     title: 'Multi-Sport',
     games: [
       { path: '/teammates', label: '🤝 Teammates or Not?', description: 'Were they ever teammates?' },

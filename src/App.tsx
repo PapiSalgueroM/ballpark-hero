@@ -41,6 +41,7 @@ import GuessTheYear from "./pages/GuessTheYear";
 import GuessNflTeam from "./pages/GuessNflTeam";
 import GuessSoccerClub from "./pages/GuessSoccerClub";
 import GuessTheNation from "./pages/GuessTheNation";
+import F1Driver from "./pages/F1Driver";
 
 const queryClient = new QueryClient();
 
@@ -89,6 +90,7 @@ const App = () => (
             <Route path="/guess-nfl-team" element={<GuessNflTeam />} />
             <Route path="/guess-soccer-club" element={<GuessSoccerClub />} />
             <Route path="/guess-the-nation" element={<GuessTheNation />} />
+            <Route path="/f1-driver" element={<F1Driver />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
