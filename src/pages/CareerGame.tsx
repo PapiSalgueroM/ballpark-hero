@@ -94,6 +94,7 @@ const CareerGame = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Career Path – Soccer Career Guessing Game | DoUKnowBall"
         description="Can you identify the soccer player from their career history? Reveal clubs one by one and guess the mystery player. Free trivia game — no signup needed."

@@ -64,6 +64,7 @@ const NbaLineup = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="NBA Starting 5 – Basketball Lineup Builder Game | DoUKnowBall"
         description="Spin a stat challenge, get random NBA teams, and build the ultimate starting five. AI validates your picks. Free NBA trivia game — no signup needed."

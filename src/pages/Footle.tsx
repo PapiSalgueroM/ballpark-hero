@@ -41,6 +41,7 @@ const Index = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <GameNavbar />
       <PageSeo
         title="Footle – Soccer Player Guessing Game | DoUKnowBall"
         description="Guess the soccer player in 8 tries using clues like club, league, nationality, and age. One of 10+ free sports trivia games on DoUKnowBall. No login required."
