@@ -186,11 +186,13 @@ export default function Index() {
         }
         setTotalPlayed(total);
 
-        // Total unique players (profiles created)
-        const { count: profileCount } = await supabase
-          .from('profiles')
-          .select('*', { count: 'exact', head: true });
-        setTotalPlayers(profileCount);
+        // Active players today (unique users who completed a game today)
+        const today = new Date().toISOString().slice(0, 10);
+        const { count: activeCount } = await supabase
+          .from('daily_completions')
+          .select('*', { count: 'exact', head: true })
+          .eq('date', today);
+        setTotalPlayers(activeCount);
       } catch { /* silent */ }
     })();
   }, []);
