@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { GuessTheYearState, POINTS_BY_CLUE } from '@/types/guessTheYear';
 import { getDailyGuessTheYearPuzzle } from '@/data/guessTheYearPuzzles';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const MAX_CLUES = 6;
 const YEAR_RANGE = { min: 1980, max: 2026 };
