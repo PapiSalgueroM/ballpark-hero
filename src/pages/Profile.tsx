@@ -61,6 +61,9 @@ export default function Profile() {
   const [saving, setSaving] = useState(false);
   const [legendStreak, setLegendStreak] = useState<number>(0);
   const [legendBadgeCount, setLegendBadgeCount] = useState<number>(0);
+  const [badgeDates, setBadgeDates] = useState<{ firstDate: string | null; streak3Date: string | null; streak7Date: string | null; streak30Date: string | null; streak100Date: string | null }>({
+    firstDate: null, streak3Date: null, streak7Date: null, streak30Date: null, streak100Date: null,
+  });
 
   const isOwnProfile = !username || (profile?.username === username);
 
