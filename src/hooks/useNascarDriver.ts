@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import { NascarDriverPuzzle, NascarDriverState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/nascarDriver';
 import { supabase } from '@/integrations/supabase/client';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function mapRow(row: any): NascarDriverPuzzle {
   return {
