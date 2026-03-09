@@ -193,6 +193,36 @@ export type Database = {
         }
         Relationships: []
       }
+      fantasy_draft_players: {
+        Row: {
+          created_at: string
+          dominant_foot: string
+          id: string
+          market_value_millions: number
+          name: string
+          nationality: string
+          position: string
+        }
+        Insert: {
+          created_at?: string
+          dominant_foot: string
+          id?: string
+          market_value_millions?: number
+          name: string
+          nationality: string
+          position: string
+        }
+        Update: {
+          created_at?: string
+          dominant_foot?: string
+          id?: string
+          market_value_millions?: number
+          name?: string
+          nationality?: string
+          position?: string
+        }
+        Relationships: []
+      }
       football_grid_selections: {
         Row: {
           cell_index: number
