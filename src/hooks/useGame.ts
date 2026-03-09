@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { Player, Difficulty, GuessResult } from '@/types/game';
 import { players } from '@/data/players';
 import { compareGuess } from '@/lib/gameLogic';
+import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 
 const MAX_GUESSES = 8;
 
