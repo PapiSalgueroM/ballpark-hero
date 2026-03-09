@@ -110,8 +110,28 @@ export default function Profile() {
           .order('best_score', { ascending: false });
 
         setBestScores(scores || []);
-      } else if (!user) {
-        navigate('/');
+
+        // Load daily legend badges
+        const { data: badges } = await supabase
+          .from('daily_badges')
+          .select('date, streak_days')
+          .eq('user_id', user.id)
+          .order('date', { ascending: false });
+
+        if (badges && badges.length > 0) {
+          setLegendBadgeCount(badges.length);
+          // Calculate current streak from most recent badge
+          const today = new Date().toISOString().split('T')[0];
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          const yesterdayStr = yesterday.toISOString().split('T')[0];
+          
+          if (badges[0].date === today || badges[0].date === yesterdayStr) {
+            setLegendStreak(badges[0].streak_days);
+          } else {
+            setLegendStreak(0);
+          }
+        }
         toast.error('Please sign in to view your profile');
       }
 
