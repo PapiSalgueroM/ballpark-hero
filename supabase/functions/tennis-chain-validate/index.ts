@@ -93,7 +93,7 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are a strict tennis Grand Slam results verifier. You must determine if the GUESSED player ever beat the CURRENT player at a Grand Slam tournament (Australian Open, French Open / Roland Garros, Wimbledon, or US Open) in any round, in singles, from 1970 to February 2026.
+              content: `You are a strict tennis Grand Slam results verifier. You must determine if the GUESSED player ever beat the CURRENT player at a Grand Slam tournament (Australian Open, French Open / Roland Garros, Wimbledon, or US Open) in any round, in singles, from 1970 to March 2026 (including the 2026 Australian Open).
 
 CRITICAL RULES:
 1. ONLY mark valid:true if you are 100% CERTAIN the guessed player defeated the current player at a Grand Slam in singles.

@@ -104,7 +104,7 @@ CRITICAL RULES:
 6. Cover NASCAR Cup Series (including Winston Cup, Nextel Cup, Sprint Cup eras) from 1970 to 2025.
 
 Known NASCAR Cup Champions for reference:
-- 2025: TBD
+- 2025: Tyler Reddick
 - 2024: Joey Logano
 - 2023: Ryan Blaney
 - 2022: Joey Logano

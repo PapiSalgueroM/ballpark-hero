@@ -255,10 +255,23 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
     clues: [
       'Entertaining',
       'British driver who debuted in the late 2010s, one of the youngest on the grid',
-      'Has spent his entire career with a famous British constructor based in Woking',
-      'Won multiple races starting from 2024',
-      'Finished runner-up in the championship, challenging for the title',
+      'Has spent his entire career with a famous British constructor based in Woking that won the 2024 Constructors\' title',
+      'Won multiple races in 2024 and 2025',
+      'Finished runner-up in the Drivers\' Championship to Verstappen in 2024',
       'Known for his streaming, humor, and close friendship with other young drivers on the grid',
+    ],
+  },
+  {
+    id: 'piastri',
+    driverName: 'Oscar Piastri',
+    commonNames: ['Piastri', 'Oscar Piastri', 'Oscar'],
+    clues: [
+      'Composed',
+      'Australian driver who debuted in the early 2020s after winning F3 and F2 back-to-back',
+      'Drives for a famous British constructor based in Woking alongside a close rival',
+      'Won multiple races in 2024 including his maiden victory at the Hungarian Grand Prix',
+      'Was at the center of a dramatic contract dispute between two teams before even racing in F1',
+      'Won F3, F2, and scored F1 victories in consecutive years — a remarkably rapid rise through the ranks',
     ],
   },
   {

@@ -21,8 +21,8 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
     clues: [
       'Prestigious',
       'United Kingdom',
-      'Dominated the late 1980s and late 1990s with multiple title doubles',
-      'Won 8 Constructors\' Championships',
+      'Dominated the late 1980s and late 1990s, then won the Constructors\' title again in 2024',
+      'Won 9 Constructors\' Championships',
       'Historically raced in papaya orange, then red and white, now back to papaya',
       'Ayrton Senna won all three of his championships with this team',
     ],
@@ -389,6 +389,19 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
       'Won 0 Constructors\' Championships',
       'Raced in dark green livery reflecting their British heritage',
       'The team was purchased by Red Bull at the end of 2004 and transformed into Red Bull Racing',
+    ],
+  },
+  {
+    id: 'cadillac',
+    constructorName: 'Cadillac',
+    commonNames: ['Cadillac', 'GM', 'General Motors', 'Cadillac F1'],
+    clues: [
+      'Bold',
+      'United States',
+      'Set to join the grid in 2026 as a new American manufacturer entry backed by General Motors',
+      'Won 0 Constructors\' Championships (has not yet competed)',
+      'Expected to race in a livery reflecting their luxury American brand heritage',
+      'Became the 11th team on the grid after years of negotiations, marking GM\'s return to top-level open-wheel racing',
     ],
   },
 ];
