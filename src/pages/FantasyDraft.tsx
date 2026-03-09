@@ -3,30 +3,27 @@ import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Shield, Trophy, Target, Loader2, User, Bot, CheckCircle2 } from 'lucide-react';
+import { Sparkles, Shield, Trophy, Target, Loader2, User, Bot, CheckCircle2, Zap } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { PlayerPool, type DraftPlayer } from '@/components/fantasy-draft/PlayerPool';
 import { DraftRoster } from '@/components/fantasy-draft/DraftRoster';
+import { SeasonStory } from '@/components/fantasy-draft/SeasonStory';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 const TEAM_SIZE = 11;
-const TOTAL_PICKS = TEAM_SIZE * 2; // 22 picks total
+const TOTAL_PICKS = TEAM_SIZE * 2;
 
-/**
- * Snake draft order: round alternates who picks.
- * If userFirst, picks 0-based: even rounds user picks, odd rounds AI picks — but it snakes.
- * Round = Math.floor(pickIndex / 2), within each round both pick once.
- * Snake: R0 → user,ai  R1 → ai,user  R2 → user,ai ...
- */
 function getPickOwner(pickIndex: number, userFirst: boolean): 'user' | 'ai' {
   const round = Math.floor(pickIndex / 2);
-  const posInRound = pickIndex % 2; // 0 = first pick, 1 = second pick
+  const posInRound = pickIndex % 2;
   const roundStarts = round % 2 === 0 ? (userFirst ? 'user' : 'ai') : (userFirst ? 'ai' : 'user');
   if (posInRound === 0) return roundStarts;
   return roundStarts === 'user' ? 'ai' : 'user';
 }
 
 const FantasyDraft = () => {
+  const { toast } = useToast();
   const [started, setStarted] = useState(false);
   const [criteria, setCriteria] = useState<string | null>(null);
   const [loadingCriteria, setLoadingCriteria] = useState(true);
@@ -42,8 +39,14 @@ const FantasyDraft = () => {
   const [lastPickId, setLastPickId] = useState<string | null>(null);
   const aiTimerRef = useRef<number | null>(null);
 
+  // Season simulation state
+  const [simulating, setSimulating] = useState(false);
+  const [teamAStory, setTeamAStory] = useState<string | null>(null);
+  const [teamBStory, setTeamBStory] = useState<string | null>(null);
+
   const draftComplete = pickIndex >= TOTAL_PICKS;
   const currentTurn = draftComplete ? 'user' : getPickOwner(pickIndex, userFirst);
+  const seasonSimulated = teamAStory !== null && teamBStory !== null;
 
   // Fetch daily criteria
   useEffect(() => {
@@ -73,7 +76,6 @@ const FantasyDraft = () => {
     fetchPlayers();
   }, [started]);
 
-  // Draft a player for a side
   const draftPlayer = useCallback((player: DraftPlayer, side: 'user' | 'ai') => {
     if (side === 'user') setUserTeam((prev) => [...prev, player]);
     else setAiTeam((prev) => [...prev, player]);
@@ -82,7 +84,6 @@ const FantasyDraft = () => {
     setPickIndex((prev) => prev + 1);
   }, []);
 
-  // User picks
   const handleUserPick = useCallback((player: DraftPlayer) => {
     if (currentTurn !== 'user' || draftComplete) return;
     draftPlayer(player, 'user');
@@ -91,18 +92,35 @@ const FantasyDraft = () => {
   // AI auto-pick
   useEffect(() => {
     if (draftComplete || currentTurn !== 'ai' || players.length === 0) return;
-
     aiTimerRef.current = window.setTimeout(() => {
       const available = players.filter((p) => !draftedIds.has(p.id));
       if (available.length === 0) return;
       const pick = available[Math.floor(Math.random() * available.length)];
       draftPlayer(pick, 'ai');
     }, 2000);
-
-    return () => {
-      if (aiTimerRef.current) clearTimeout(aiTimerRef.current);
-    };
+    return () => { if (aiTimerRef.current) clearTimeout(aiTimerRef.current); };
   }, [currentTurn, draftComplete, players, draftedIds, draftPlayer]);
+
+  // Simulate season
+  const handleSimulate = async () => {
+    setSimulating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('simulate-season', {
+        body: { userTeam, aiTeam },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: 'Simulation failed', description: data.error, variant: 'destructive' });
+      } else {
+        setTeamAStory(data.teamAStory);
+        setTeamBStory(data.teamBStory);
+      }
+    } catch (e) {
+      toast({ title: 'Error', description: 'Could not simulate the season. Please try again.', variant: 'destructive' });
+    } finally {
+      setSimulating(false);
+    }
+  };
 
   return (
     <>
@@ -115,7 +133,6 @@ const FantasyDraft = () => {
         <Header />
 
         <main className="flex-1 flex flex-col items-center px-4 py-6 sm:py-10 relative overflow-hidden">
-          {/* Pitch lines decoration */}
           <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] rounded-full border-2 border-foreground" />
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-foreground" />
@@ -184,7 +201,6 @@ const FantasyDraft = () => {
                   </div>
                 )}
 
-                {/* Criteria pill */}
                 {criteria && (
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card/60 border border-border">
                     <Target className="w-3.5 h-3.5 text-primary" />
@@ -197,27 +213,55 @@ const FantasyDraft = () => {
                     <Loader2 className="w-8 h-8 animate-spin text-primary" />
                   </div>
                 ) : (
-                  <div className="flex flex-col lg:flex-row gap-4 w-full">
-                    {/* Rosters */}
-                    <div className="w-full lg:w-[380px] shrink-0 order-2 lg:order-1">
-                      <DraftRoster
-                        userTeam={userTeam}
-                        aiTeam={aiTeam}
-                        currentTurn={currentTurn}
-                        lastPickId={lastPickId}
-                      />
+                  <>
+                    <div className="flex flex-col lg:flex-row gap-4 w-full">
+                      <div className="w-full lg:w-[380px] shrink-0 order-2 lg:order-1">
+                        <DraftRoster
+                          userTeam={userTeam}
+                          aiTeam={aiTeam}
+                          currentTurn={currentTurn}
+                          lastPickId={lastPickId}
+                        />
+                      </div>
+                      {!draftComplete && (
+                        <div className="flex-1 order-1 lg:order-2">
+                          <PlayerPool
+                            players={players}
+                            draftedIds={draftedIds}
+                            onSelect={handleUserPick}
+                            disabled={currentTurn !== 'user' || draftComplete}
+                          />
+                        </div>
+                      )}
                     </div>
 
-                    {/* Player pool */}
-                    <div className="flex-1 order-1 lg:order-2">
-                      <PlayerPool
-                        players={players}
-                        draftedIds={draftedIds}
-                        onSelect={handleUserPick}
-                        disabled={currentTurn !== 'user' || draftComplete}
-                      />
-                    </div>
-                  </div>
+                    {/* Simulate Season button */}
+                    {draftComplete && !seasonSimulated && (
+                      <Button
+                        size="lg"
+                        onClick={handleSimulate}
+                        disabled={simulating}
+                        className="text-lg px-10 py-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-105"
+                      >
+                        {simulating ? (
+                          <>
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                            Simulating Season...
+                          </>
+                        ) : (
+                          <>
+                            <Zap className="w-5 h-5 mr-2" />
+                            Simulate Season
+                          </>
+                        )}
+                      </Button>
+                    )}
+
+                    {/* Season stories */}
+                    {seasonSimulated && teamAStory && teamBStory && (
+                      <SeasonStory teamAStory={teamAStory} teamBStory={teamBStory} />
+                    )}
+                  </>
                 )}
               </>
             )}
