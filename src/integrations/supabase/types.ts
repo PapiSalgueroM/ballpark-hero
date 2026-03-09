@@ -973,6 +973,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_scores: {
+        Row: {
+          games_played_today: number
+          id: string
+          last_played_at: string
+          total_points: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          games_played_today?: number
+          id?: string
+          last_played_at?: string
+          total_points?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          games_played_today?: number
+          id?: string
+          last_played_at?: string
+          total_points?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
