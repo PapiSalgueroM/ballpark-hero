@@ -1,13 +1,69 @@
+import { useState, useEffect } from 'react';
 import { useUfcChain } from '@/hooks/useUfcChain';
 import { UfcChainSearch } from './UfcChainSearch';
 import { ChainTimeline } from './ChainTimeline';
 import { ModeSelector } from './ModeSelector';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import ShareButtons from '@/components/game/ShareButtons';
 import { getChainLengthMultiplier } from '@/types/ufcChain';
+import { supabase } from '@/integrations/supabase/client';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
+interface LeaderboardEntry {
+  nickname: string;
+  chain_length: number;
+  score: number;
+}
 
 export function CombatChainBoard() {
   const { gameState, startGame, makeGuess, giveUp, resetGame, getAvailableFighters } = useUfcChain();
+  const [nickname, setNickname] = useState('');
+  const [scoreSubmitted, setScoreSubmitted] = useState(false);
+  const [playerRank, setPlayerRank] = useState<number | null>(null);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [saving, setSaving] = useState(false);
+
+  const fetchLeaderboard = async () => {
+    const { data } = await supabase
+      .from('ufc_chain_scores')
+      .select('nickname, chain_length, score')
+      .order('chain_length', { ascending: false })
+      .order('score', { ascending: false })
+      .limit(10);
+    if (data) setLeaderboard(data);
+  };
+
+  useEffect(() => {
+    if (gameState?.gameStatus === 'ended') {
+      fetchLeaderboard();
+    }
+  }, [gameState?.gameStatus]);
+
+  const handleSaveScore = async () => {
+    if (!gameState || !nickname.trim() || saving) return;
+    setSaving(true);
+    const chainLength = gameState.chain.length - 1;
+    
+    const { error } = await supabase.from('ufc_chain_scores').insert({
+      nickname: nickname.trim(),
+      score: gameState.score,
+      chain_length: chainLength,
+      mode: gameState.mode,
+    });
+
+    if (!error) {
+      // Calculate rank
+      const { count } = await supabase
+        .from('ufc_chain_scores')
+        .select('*', { count: 'exact', head: true })
+        .gt('chain_length', chainLength);
+      setPlayerRank((count ?? 0) + 1);
+      setScoreSubmitted(true);
+      fetchLeaderboard();
+    }
+    setSaving(false);
+  };
 
   const handleFighterSelect = (fighter: { name: string }) => {
     makeGuess(fighter.name);
