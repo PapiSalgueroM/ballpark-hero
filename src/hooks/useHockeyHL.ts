@@ -117,6 +117,8 @@ export function useHockeyHL() {
     setShowingResult(false);
   }, []);
 
+  useGameCompletion('hockey-higher-lower', gameStatus === 'complete', totalScore);
+
   return {
     mode, switchMode, currentPair, currentRound, results,
     showingResult, streak, gameStatus, correctCount, totalScore,

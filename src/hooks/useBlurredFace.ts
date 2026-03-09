@@ -99,6 +99,9 @@ export function useBlurredFace() {
     setGameStatus('gave-up');
   }, []);
 
+  const completionScore = gameStatus === 'won' ? Math.max(100, (MAX_GUESSES - wrongGuesses.length) * 150) : 0;
+  useGameCompletion('blurred-face', gameStatus === 'won' || gameStatus === 'lost' || gameStatus === 'gave-up', completionScore);
+
   return {
     targetPlayer,
     imageUrl,

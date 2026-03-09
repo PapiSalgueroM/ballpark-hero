@@ -135,6 +135,8 @@ export function useCollegeGrid() {
     }
   }, [activeCell, gameStatus, validating, cells, puzzle, fetchRarity]);
 
+  useGameCompletion('college-grid', gameStatus === 'complete', correctCount * 100);
+
   return {
     puzzle,
     cells,

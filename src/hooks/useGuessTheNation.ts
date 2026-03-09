@@ -253,6 +253,8 @@ export function useGuessTheNation() {
     return ensureAnswerInList(countries, gameState.puzzle.countryName, c => c.countryName, gameState.puzzle);
   }, [countries, gameState?.puzzle]);
 
+  useGameCompletion('guess-the-nation', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+
   return {
     countries: validatedCountries,
     loading,

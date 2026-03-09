@@ -85,6 +85,8 @@ export function useFootballTimeline() {
     }
   }, [order, status, storageKey]);
 
+  useGameCompletion('football-timeline', status === 'submitted', score * 100);
+
   return {
     puzzle,
     order,

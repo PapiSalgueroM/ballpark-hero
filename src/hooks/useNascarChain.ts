@@ -127,5 +127,7 @@ export function useNascarChain() {
 
   const resetGame = useCallback(() => setGameState(null), []);
 
+  useGameCompletion('nascar-chain', gameState?.gameStatus === 'ended', gameState?.score ?? 0);
+
   return { gameState, startGame, makeGuess, giveUp, resetGame, validating };
 }

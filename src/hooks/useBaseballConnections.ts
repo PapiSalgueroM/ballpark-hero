@@ -112,6 +112,9 @@ export function useBaseballConnections() {
 
   const deselectAll = useCallback(() => setSelected([]), []);
 
+  const completionScore = gameStatus === 'complete' ? (lives * 250) : 0;
+  useGameCompletion('baseball-connections', gameStatus === 'complete', completionScore);
+
   return {
     puzzle,
     remainingPlayers,

@@ -246,6 +246,8 @@ export function useGuessTheCollege() {
     return `I guessed today's college in ${clueCount} ${won && guessHistory.length === 1 ? 'try' : 'tries'} on DoUKnowBall! Score: ${score} 🎓 Can you beat me? douknowball.com/guess-the-college`;
   }, [currentCollege, won, guessHistory, score]);
 
+  useGameCompletion('guess-the-college', gameOver, score);
+
   return {
     mode, setMode,
     difficulty, setDifficulty,

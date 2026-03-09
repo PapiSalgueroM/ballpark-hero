@@ -104,6 +104,8 @@ export function useFootballDraft() {
     localStorage.setItem(storageKey, JSON.stringify({ currentIndex, guesses, revealLevel }));
   }, [currentIndex, guesses, revealLevel, storageKey]);
 
+  useGameCompletion('football-draft', gameStatus === 'complete', totalPoints * 10);
+
   return {
     puzzle,
     currentPlayer,

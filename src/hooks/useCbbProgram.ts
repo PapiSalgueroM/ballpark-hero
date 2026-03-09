@@ -130,5 +130,7 @@ export function useCbbProgram() {
     return ensureAnswerInList(allPrograms, gameState.puzzle.school_name, p => p.school_name, gameState.puzzle);
   }, [allPrograms, gameState?.puzzle]);
 
+  useGameCompletion('cbb-program', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+
   return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPrograms: validatedPrograms, loading };
 }

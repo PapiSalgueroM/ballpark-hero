@@ -99,6 +99,8 @@ export function useHigherLower() {
   const streakReaction = useMemo(() => getStreakReaction(streak), [streak]);
   const lossReaction = useMemo(() => getStreakReaction(streak), [streak]);
 
+  useGameCompletion('higher-lower', gameStatus === 'lost', streak * 100);
+
   return {
     currentPlayer,
     nextPlayer,

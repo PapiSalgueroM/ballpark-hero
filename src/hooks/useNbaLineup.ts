@@ -290,6 +290,8 @@ export function useNbaLineup() {
     }, 100);
   }, []);
 
+  useGameCompletion('nba-lineup', phase === 'result', verdict ? 500 : 0);
+
   return {
     phase,
     challenge,

@@ -112,6 +112,8 @@ export function useGuessNflTeam() {
     return [...new Set(allTeams)].sort();
   }, [gameState]);
 
+  useGameCompletion('guess-nfl-team', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+
   return {
     gameState,
     startGame,

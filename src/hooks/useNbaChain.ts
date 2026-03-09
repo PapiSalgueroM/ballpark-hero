@@ -157,6 +157,8 @@ export function useNbaChain() {
     return `🏀 NBA Chain Game\n🔗 Chain of ${score}: ${names.join(' → ')}\n\nPlay at douknowball.lovable.app/nba-chain`;
   }, [chain, score]);
 
+  useGameCompletion('nba-chain', phase === 'ended', score * 100);
+
   return {
     chain,
     phase,

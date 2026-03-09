@@ -71,6 +71,8 @@ export function useGuessTheYear() {
     return `${decade}s`;
   }, [gameState.puzzle]);
 
+  useGameCompletion('guess-the-year', gameState.gameStatus !== 'playing', gameState.score);
+
   return {
     gameState,
     makeGuess,

@@ -125,5 +125,7 @@ export function useNascarDriver() {
     return ensureAnswerInList(allDrivers, gameState.puzzle.driver_name, d => d.driver_name, gameState.puzzle);
   }, [allDrivers, gameState?.puzzle]);
 
+  useGameCompletion('nascar-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+
   return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allDrivers: validatedDrivers, loading };
 }

@@ -146,6 +146,8 @@ export function useFootballGrid() {
     }
   }, [activeCell, gameStatus, validating, cells, puzzle.id, fetchRarity]);
 
+  useGameCompletion('football-grid', gameStatus === 'complete', correctCount * 100);
+
   return {
     puzzle,
     cells,

@@ -130,5 +130,7 @@ export function useTennisChain() {
     setGameState(null);
   }, []);
 
+  useGameCompletion('tennis-chain', gameState?.gameStatus === 'ended', gameState?.score ?? 0);
+
   return { gameState, startGame, makeGuess, giveUp, resetGame, validating };
 }

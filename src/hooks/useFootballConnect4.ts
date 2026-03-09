@@ -205,6 +205,8 @@ export function useFootballConnect4() {
     return `⚽ Soccer Connect 4\n${result}\n\n${grid}\n\nPlay at douknowball.lovable.app/football-connect-4`;
   }, [board, winner, isDraw]);
 
+  useGameCompletion('football-connect4', phase === 'won', winner ? 500 : 0);
+
   return {
     boardConfig,
     board,

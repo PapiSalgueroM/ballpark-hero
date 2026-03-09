@@ -125,5 +125,7 @@ export function useTennisPlayer() {
     return ensureAnswerInList(allPlayers, gameState.puzzle.player_name, p => p.player_name, gameState.puzzle);
   }, [allPlayers, gameState?.puzzle]);
 
+  useGameCompletion('tennis-player', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+
   return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPlayers: validatedPlayers, loading };
 }

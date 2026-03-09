@@ -137,6 +137,8 @@ export function useSoccerGrid() {
     }
   }, [activeCell, gameStatus, validating, cells, puzzle.id, fetchRarity]);
 
+  useGameCompletion('soccer-grid', gameStatus === 'complete', correctCount * 100);
+
   return {
     puzzle, cells, activeCell, setActiveCell, submitGuess,
     validating, gameStatus, guessesLeft, correctCount, rarityScore, getRowCol,
