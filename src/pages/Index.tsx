@@ -167,7 +167,7 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    (async () => {
+    const fetchStats = async () => {
       try {
         // Games played today from multiple score tables
         const tables = [
