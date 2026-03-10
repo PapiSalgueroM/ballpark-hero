@@ -107,7 +107,9 @@ export function useWorldCup() {
     if (!trimmed || gameStatus !== 'playing') return;
 
     const correct = isGuessCorrect(trimmed, puzzle);
-    setAttempts((prev) => [...prev, trimmed]);
+    // Display the full official name when correct, otherwise show what user typed
+    const displayName = correct ? puzzle.answer : trimmed;
+    setAttempts((prev) => [...prev, displayName]);
 
     if (correct) {
       setGameStatus('won');
