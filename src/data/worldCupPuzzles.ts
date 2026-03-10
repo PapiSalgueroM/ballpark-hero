@@ -106,7 +106,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Real Madrid',
     achievement: 'Won the Golden Boot with 8 goals and led Brazil to the title',
     answer: 'Ronaldo',
-  },
+    aliases: ['Ronaldo Nazario', 'R9', 'Ronaldo Luis Nazario', 'O Fenomeno', 'Ronaldo Nazário'],
   {
     id: 'zidane-2006',
     year: 2006,
