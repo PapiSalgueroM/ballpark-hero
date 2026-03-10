@@ -28,7 +28,7 @@ export interface SolvedGroup {
 }
 
 export function useBaseballConnections() {
-  const puzzle = useMemo(() => baseballConnectionsPuzzles[getDailyIndex()], []);
+  const puzzle = useMemo(() => fallbackBBPuzzles[getDailyIndex()], []);
   const storageKey = `bbconn-daily-${puzzle.id}`;
 
   // Flatten and shuffle all players
