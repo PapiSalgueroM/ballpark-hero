@@ -186,7 +186,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Real Madrid',
     achievement: 'Won the Golden Ball, led Croatia to the final',
     answer: 'Luka Modrić',
-  },
+    aliases: ['Modric', 'Luka Modric'],
   {
     id: 'messi-2022',
     year: 2022,
