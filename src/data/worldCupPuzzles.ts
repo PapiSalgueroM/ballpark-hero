@@ -84,7 +84,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Barcelona',
     achievement: 'Won the Golden Ball, scored 5 goals to lead Brazil to the title',
     answer: 'Romário',
-  },
+    aliases: ['Romario'],
   {
     id: 'zidane-1998',
     year: 1998,
