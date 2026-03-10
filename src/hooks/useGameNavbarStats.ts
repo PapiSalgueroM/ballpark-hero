@@ -97,6 +97,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
           filter: `user_id=eq.${user.id}`,
         },
         () => {
+          console.log('[NavbarStats] 📡 Realtime update received');
           fetchStats();
         }
       )
