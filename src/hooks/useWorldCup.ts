@@ -34,6 +34,41 @@ function getClues(puzzle: WorldCupPuzzle): WorldCupClue[] {
   ];
 }
 
+/** Normalize accented characters for comparison */
+function normalize(str: string): string {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+/** Check if a guess matches the answer using flexible matching */
+function isGuessCorrect(guess: string, puzzle: WorldCupPuzzle): boolean {
+  const g = normalize(guess);
+  if (!g) return false;
+
+  const answer = puzzle.answer;
+  const answerNorm = normalize(answer);
+
+  // Exact match (accent-insensitive)
+  if (g === answerNorm) return true;
+
+  // Check explicit aliases
+  if (puzzle.aliases?.some(alias => normalize(alias) === g)) return true;
+
+  // Split answer into name parts
+  const answerParts = answerNorm.split(/\s+/);
+
+  // Match on last name alone (e.g. "Maradona" for "Diego Maradona")
+  if (answerParts.length > 1 && answerParts[answerParts.length - 1] === g) return true;
+
+  // Match on first name alone (e.g. "Diego" for "Diego Maradona") — only if first name is 4+ chars to avoid false positives
+  if (answerParts.length > 1 && answerParts[0] === g && g.length >= 4) return true;
+
+  // Match if guess contains all parts of the answer or answer contains all parts of the guess
+  const guessParts = g.split(/\s+/);
+  if (guessParts.length >= 2 && answerParts.every(part => guessParts.includes(part))) return true;
+
+  return false;
+}
+
 export function useWorldCup() {
   const puzzle = useMemo(() => worldCupPuzzles[getDailyIndex()], []);
   const clues = useMemo(() => getClues(puzzle), [puzzle]);
@@ -71,10 +106,10 @@ export function useWorldCup() {
     const trimmed = value.trim();
     if (!trimmed || gameStatus !== 'playing') return;
 
-    const isCorrect = trimmed.toLowerCase() === puzzle.answer.toLowerCase();
+    const correct = isGuessCorrect(trimmed, puzzle);
     setAttempts((prev) => [...prev, trimmed]);
 
-    if (isCorrect) {
+    if (correct) {
       setGameStatus('won');
     } else if (revealedCount >= TOTAL_CLUES) {
       setGameStatus('lost');

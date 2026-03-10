@@ -9,6 +9,7 @@ export interface WorldCupPuzzle {
   clubAtTime: string;
   achievement: string;
   answer: string;
+  aliases?: string[];
 }
 
 export interface WorldCupClue {

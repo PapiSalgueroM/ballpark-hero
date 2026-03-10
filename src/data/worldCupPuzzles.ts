@@ -12,6 +12,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Santos',
     achievement: 'Won his 3rd World Cup, scored 4 goals',
     answer: 'Pelé',
+    aliases: ['Pele', 'Edson Arantes'],
   },
   {
     id: 'beckenbauer-1974',
@@ -84,6 +85,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Barcelona',
     achievement: 'Won the Golden Ball, scored 5 goals to lead Brazil to the title',
     answer: 'Romário',
+    aliases: ['Romario'],
   },
   {
     id: 'zidane-1998',
@@ -96,6 +98,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Juventus',
     achievement: 'Scored twice in the final to win the World Cup for the hosts',
     answer: 'Zinedine Zidane',
+    aliases: ['Zizou'],
   },
   {
     id: 'ronaldo-2002',
@@ -108,6 +111,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Real Madrid',
     achievement: 'Won the Golden Boot with 8 goals and led Brazil to the title',
     answer: 'Ronaldo',
+    aliases: ['Ronaldo Nazario', 'R9', 'Ronaldo Luis Nazario', 'O Fenomeno', 'Ronaldo Nazário'],
   },
   {
     id: 'zidane-2006',
@@ -120,6 +124,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Real Madrid',
     achievement: 'Won the Golden Ball but was sent off in the final for a headbutt',
     answer: 'Zinedine Zidane',
+    aliases: ['Zizou'],
   },
   {
     id: 'forlan-2010',
@@ -132,6 +137,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Atlético Madrid',
     achievement: 'Won the Golden Ball as the tournament\'s best player',
     answer: 'Diego Forlán',
+    aliases: ['Forlan', 'Diego Forlan'],
   },
   {
     id: 'iniesta-2010',
@@ -144,6 +150,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Barcelona',
     achievement: 'Scored the winning goal in the World Cup final',
     answer: 'Andrés Iniesta',
+    aliases: ['Andres Iniesta'],
   },
   {
     id: 'james-2014',
@@ -156,6 +163,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Monaco',
     achievement: 'Won the Golden Boot with 6 goals',
     answer: 'James Rodríguez',
+    aliases: ['James Rodriguez', 'James'],
   },
   {
     id: 'messi-2014',
@@ -180,6 +188,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Paris Saint-Germain',
     achievement: 'Won the Best Young Player award, scored in the final',
     answer: 'Kylian Mbappé',
+    aliases: ['Mbappe', 'Kylian Mbappe'],
   },
   {
     id: 'modric-2018',
@@ -192,6 +201,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Real Madrid',
     achievement: 'Won the Golden Ball, led Croatia to the final',
     answer: 'Luka Modrić',
+    aliases: ['Modric', 'Luka Modric'],
   },
   {
     id: 'messi-2022',
@@ -216,6 +226,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Paris Saint-Germain',
     achievement: 'Won the Golden Boot with 8 goals, scored a hat-trick in the final',
     answer: 'Kylian Mbappé',
+    aliases: ['Mbappe', 'Kylian Mbappe'],
   },
   {
     id: 'mueller-1970',
@@ -228,6 +239,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Bayern Munich',
     achievement: 'Won the Golden Boot with 10 goals',
     answer: 'Gerd Müller',
+    aliases: ['Gerd Muller', 'Mueller', 'Gerd Mueller', 'Muller'],
   },
   {
     id: 'cruyff-1974',
@@ -252,6 +264,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Inter Milan',
     achievement: 'Captained West Germany to win the World Cup',
     answer: 'Lothar Matthäus',
+    aliases: ['Matthaus', 'Lothar Matthaus', 'Matthaeus', 'Lothar Matthaeus'],
   },
   {
     id: 'klose-2006',
@@ -288,6 +301,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Bayern Munich',
     achievement: 'Won the Golden Boot and Best Young Player award with 5 goals',
     answer: 'Thomas Müller',
+    aliases: ['Thomas Muller', 'Mueller', 'Thomas Mueller', 'Muller'],
   },
   {
     id: 'goetze-2014',
@@ -300,6 +314,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Bayern Munich',
     achievement: 'Scored the winning goal in the World Cup final',
     answer: 'Mario Götze',
+    aliases: ['Gotze', 'Mario Gotze', 'Goetze', 'Mario Goetze'],
   },
   {
     id: 'ronaldo-1998',
@@ -312,6 +327,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Inter Milan',
     achievement: 'Reached the final but had a mysterious seizure before the match',
     answer: 'Ronaldo',
+    aliases: ['Ronaldo Nazario', 'R9', 'Ronaldo Luis Nazario', 'O Fenomeno', 'Ronaldo Nazário'],
   },
   {
     id: 'kahn-2002',
@@ -360,6 +376,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Barcelona',
     achievement: 'Scored 4 goals before a back injury ended his tournament in the quarter-finals',
     answer: 'Neymar',
+    aliases: ['Neymar Jr', 'Neymar Junior'],
   },
   {
     id: 'martinez-2022',
@@ -372,6 +389,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Aston Villa',
     achievement: 'Won the Golden Glove, saved a penalty in the shootout to win the World Cup',
     answer: 'Emiliano Martínez',
+    aliases: ['Martinez', 'Emiliano Martinez', 'Emi Martinez', 'Dibu', 'Dibu Martinez'],
   },
   {
     id: 'mbappe-2026',
@@ -384,5 +402,6 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Real Madrid',
     achievement: 'Led France\'s attack in their title defense campaign',
     answer: 'Kylian Mbappé',
+    aliases: ['Mbappe', 'Kylian Mbappe'],
   },
 ];
