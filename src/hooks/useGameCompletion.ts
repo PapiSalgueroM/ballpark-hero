@@ -60,6 +60,15 @@ export function useGameCompletion(
           .single();
         console.log(`[GameCompletion] 3/5 user_scores fetch:`, fetchErr ? `⚠️ ${fetchErr.message}` : '✅', existing);
 
+        // Count distinct games completed today from daily_completions (source of truth)
+        const { count: distinctGamesToday } = await supabase
+          .from('daily_completions')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .eq('date', today);
+
+        const gamesPlayedToday = distinctGamesToday || 1;
+
         const lastDate = existing?.last_played_at
           ? new Date(existing.last_played_at).toISOString().split('T')[0]
           : null;
@@ -70,7 +79,7 @@ export function useGameCompletion(
           const { error: insertErr } = await supabase.from('user_scores').insert({
             user_id: user.id,
             total_points: score,
-            games_played_today: 1,
+            games_played_today: gamesPlayedToday,
             last_played_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
             current_streak: 1,
@@ -89,7 +98,7 @@ export function useGameCompletion(
 
           const updatePayload = {
               total_points: existing.total_points + score,
-              games_played_today: isSameDay ? existing.games_played_today + 1 : 1,
+              games_played_today: gamesPlayedToday,
               last_played_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
               current_streak: newStreak,
