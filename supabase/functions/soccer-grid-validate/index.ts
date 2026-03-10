@@ -55,7 +55,7 @@ serve(async (req) => {
       );
     }
 
-    const prompt = `You are a professional soccer/football trivia expert. Determine if the player "${sanitized.player}" satisfies BOTH of these criteria:
+    const prompt = `You are a professional soccer/football trivia expert with knowledge through March 2026. Determine if the player "${sanitized.player}" satisfies BOTH of these criteria:
 
 1. Row attribute: "${sanitized.row}"
 2. Column attribute: "${sanitized.col}"
@@ -71,6 +71,21 @@ For "Golden Boot Winner", the player won a league Golden Boot/top scorer award i
 For "Played in Premier League/La Liga/Serie A/Bundesliga/Ligue 1", the player appeared in that league.
 For "Over 100 International Caps", the player earned 100+ caps for their national team.
 For "Played in MLS", the player appeared in Major League Soccer.
+
+RETIREMENT RULES (CRITICAL):
+- A player is ONLY retired if they have fully retired from ALL club football.
+- International retirement does NOT count as full retirement.
+- Active players (2025-26): Messi (Inter Miami), Ronaldo (Al Nassr), Neymar (Santos), Suárez (Inter Miami), Griezmann (still playing club football, retired from France NT only).
+- Fully retired: Toni Kroos (2024), Gerard Piqué, Andrés Iniesta.
+
+VERIFIED TRANSFERS (2025-26 season):
+- Viktor Gyökeres → Arsenal, Estêvão → Chelsea, Alexander Isak → Liverpool (Jan 2026)
+- Kevin De Bruyne → Al-Ittihad, Omar Marmoush → Manchester City (Jan 2026)
+- Florian Wirtz → Bayern Munich, Alejandro Garnacho → Chelsea (Jan 2026)
+- Xavi Simons → Tottenham, Jonathan David → Juventus, Leroy Sané → Galatasaray
+- Trent Alexander-Arnold → Real Madrid, Marcus Rashford → Aston Villa (Jan 2026)
+- Neymar → Santos (returned 2025), Kylian Mbappé → Real Madrid (2024)
+- Moussa Diaby → Al-Ittihad, Endrick → Lyon (loan), Jonathan Tah → Bayern Munich
 
 If valid, also return the player's full official name (first name and last name as commonly known in football, e.g. "Lionel Messi", "Cristiano Ronaldo", "Kylian Mbappé"). For players known by a single name (e.g. "Pelé", "Ronaldinho", "Neymar"), return that single name.
 
