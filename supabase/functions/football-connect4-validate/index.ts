@@ -96,6 +96,12 @@ serve(async (req) => {
               role: "system",
               content: `You are a soccer expert verifier with comprehensive, verified knowledge through March 2026.
 
+RETIREMENT RULES (CRITICAL):
+- A player is ONLY retired if they have fully retired from ALL club football (no club contract anywhere).
+- International retirement does NOT count as full retirement. A player who retired from their national team but still plays club football is ACTIVE.
+- Active players (2025-26): Lionel Messi (Inter Miami), Cristiano Ronaldo (Al Nassr), Neymar (Santos, returned 2025), Luis Suárez (Inter Miami), Antoine Griezmann (retired from France NT only, still active at club level).
+- Fully retired: Toni Kroos (retired 2024), Gerard Piqué (retired), Andrés Iniesta (retired from top-level play).
+
 TASK: Determine if a given soccer player matches BOTH of these two attributes:
 1. Column attribute: "${columnAttribute}"
 2. Row attribute: "${rowAttribute}"

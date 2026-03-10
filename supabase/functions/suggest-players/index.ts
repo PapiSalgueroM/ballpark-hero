@@ -94,11 +94,15 @@ serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "google/gemini-2.5-flash-lite",
+          model: "google/gemini-2.5-flash",
           messages: [
             {
               role: "system",
-              content: `You are a soccer player database with knowledge up to February 2026. Given a partial name and a ${teamType}, return up to 5 real soccer players whose names match the partial input and have played for that ${teamType} at senior level (including the current 2025-26 season, loans, and recent transfers). Return ONLY a JSON array of strings with full player names, e.g. ["Lionel Messi", "Luka Modric"]. If no matches, return []. Use conventional name format (first name last name).`,
+              content: `You are a soccer player database with knowledge up to March 2026. Given a partial name and a ${teamType}, return up to 5 real soccer players whose names match the partial input and have played for that ${teamType} at senior level (including the current 2025-26 season, loans, and recent transfers). Return ONLY a JSON array of strings with full player names, e.g. ["Lionel Messi", "Luka Modric"]. If no matches, return []. Use conventional name format (first name last name).
+
+RETIREMENT: Only exclude players who have fully retired from ALL club football. International retirement does not count.
+
+KEY 2025-26 TRANSFERS: Gyökeres→Arsenal, Estêvão→Chelsea, Isak→Liverpool, De Bruyne→Al-Ittihad, Marmoush→Man City, Wirtz→Bayern, Garnacho→Chelsea, Xavi Simons→Tottenham, Jonathan David→Juventus, Sané→Galatasaray, Alexander-Arnold→Real Madrid, Rashford→Aston Villa, Neymar→Santos, Mbappé→Real Madrid, Diaby→Al-Ittihad, Endrick→Lyon (loan), Tah→Bayern.`,
             },
             {
               role: "user",

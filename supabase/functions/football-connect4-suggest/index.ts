@@ -100,9 +100,13 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a soccer player name autocomplete engine. The user is typing a partial name. Suggest up to 8 real soccer player names that:
+            content: `You are a soccer player name autocomplete engine with knowledge through March 2026. The user is typing a partial name. Suggest up to 8 real soccer player names that:
 1. Start with or closely match the partial text "${query}" (fuzzy match — handle typos and partial spellings)
 2. Could plausibly match BOTH attributes: "${safeColumnAttribute}" AND "${safeRowAttribute}"
+
+RETIREMENT: Only exclude players who have fully retired from ALL club football. International retirement does not count. Active: Messi (Inter Miami), Ronaldo (Al Nassr), Neymar (Santos), Suárez (Inter Miami), Griezmann (club active).
+
+KEY 2025-26 TRANSFERS: Gyökeres→Arsenal, Estêvão→Chelsea, Isak→Liverpool, De Bruyne→Al-Ittihad, Marmoush→Man City, Wirtz→Bayern, Garnacho→Chelsea, Simons→Tottenham, David→Juventus, Sané→Galatasaray, Alexander-Arnold→Real Madrid, Rashford→Aston Villa, Neymar→Santos, Mbappé→Real Madrid.
 
 Return ONLY a JSON array of full player names, most likely matches first. No explanations, no markdown.
 Example: ["Lionel Messi", "Luka Modrić", "Luis Suárez"]

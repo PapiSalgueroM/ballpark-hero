@@ -95,13 +95,43 @@ serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "google/gemini-2.5-flash-lite",
+          model: "google/gemini-2.5-flash",
           messages: [
             {
               role: "system",
-              content: `You are a soccer database with knowledge up to February 2026. Answer ONLY with a JSON object: {"valid": true/false, "reason": "short explanation", "fullName": "Player's Full First and Last Name"}.
+              content: `You are a soccer database with knowledge up to March 2026. Answer ONLY with a JSON object: {"valid": true/false, "reason": "short explanation", "fullName": "Player's Full First and Last Name"}.
 The "fullName" field MUST always contain the player's commonly known full name (first name and last name). For example: "Messi" → "Lionel Messi", "James" → "James Rodríguez", "CR7" or "Ronaldo" → "Cristiano Ronaldo", "Neymar" → "Neymar Jr", "Vini" → "Vinícius Júnior".
-A player is valid if they have EVER played for the given ${teamType} in a competitive match at senior level, including the current 2025-26 season. Youth/academy doesn't count unless they also played for the senior team. Include loan spells. Be accurate but give benefit of the doubt for recent transfers.`,
+A player is valid if they have EVER played for the given ${teamType} in a competitive match at senior level, including the current 2025-26 season. Youth/academy doesn't count unless they also played for the senior team. Include loan spells. Be accurate but give benefit of the doubt for recent transfers.
+
+RETIREMENT RULES (CRITICAL):
+- A player is ONLY retired if they have fully retired from ALL club football (no club contract anywhere).
+- International retirement does NOT count as full retirement. A player who retired from their national team but still plays club football is ACTIVE.
+- Examples: Lionel Messi (active at Inter Miami), Cristiano Ronaldo (active at Al Nassr), Neymar (active at Santos after returning in 2025), Luis Suárez (active at Inter Miami), Antoine Griezmann (active, retired from France NT only), Toni Kroos (FULLY RETIRED from all football in 2024), Gerard Piqué (FULLY RETIRED).
+
+VERIFIED TRANSFERS & CLUBS (January 2026 window / 2025-26 season):
+- Viktor Gyökeres → Arsenal (2025)
+- Estêvão → Chelsea (2025)
+- Alexander Isak → Liverpool (Jan 2026)
+- Kevin De Bruyne → Al-Ittihad (2025)
+- Omar Marmoush → Manchester City (Jan 2026)
+- Florian Wirtz → Bayern Munich (2025)
+- Alejandro Garnacho → Chelsea (Jan 2026)
+- Xavi Simons → Tottenham (2025)
+- Jonathan David → Juventus (2025)
+- Leroy Sané → Galatasaray (2025)
+- Jonathan Tah → Bayern Munich (2025)
+- Trent Alexander-Arnold → Real Madrid (2025)
+- Marcus Rashford → Aston Villa (Jan 2026)
+- Neymar → Santos (returned 2025)
+- Moussa Diaby → Al-Ittihad (2025)
+- Endrick → Lyon (loan from Real Madrid)
+- Alphonso Davies → Bayern Munich (renewed)
+- Juan Musso → Atlético Madrid (backup GK, Argentina international)
+- Luis Suárez → Inter Miami (active)
+- Lamine Yamal → Barcelona
+- Jude Bellingham → Real Madrid
+- Erling Haaland → Manchester City
+- Kylian Mbappé → Real Madrid (2024)`,
             },
             {
               role: "user",
