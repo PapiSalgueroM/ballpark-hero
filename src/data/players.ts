@@ -217,7 +217,7 @@ export const players: Player[] = [
   { name: "João Félix", club: "Chelsea", nationality: "Portugal", league: "Premier League", goals: 5, assists: 3, position: "CF", kitNumber: 14, age: 26, marketValue: 30, difficulty: "hard" },
 
   // Manchester United
-  { name: "Alejandro Garnacho", club: "Manchester United", nationality: "Argentina", league: "Premier League", goals: 5, assists: 4, position: "LW", kitNumber: 17, age: 21, marketValue: 45, difficulty: "hard" },
+  { name: "Antony", club: "Manchester United", nationality: "Brazil", league: "Premier League", goals: 3, assists: 2, position: "RW", kitNumber: 21, age: 26, marketValue: 15, difficulty: "hard" },
   { name: "Kobbie Mainoo", club: "Manchester United", nationality: "England", league: "Premier League", goals: 2, assists: 3, position: "CM", kitNumber: 37, age: 20, marketValue: 45, difficulty: "hard" },
   { name: "Diogo Dalot", club: "Manchester United", nationality: "Portugal", league: "Premier League", goals: 1, assists: 3, position: "RB", kitNumber: 20, age: 27, marketValue: 35, difficulty: "hard" },
   { name: "Luke Shaw", club: "Manchester United", nationality: "England", league: "Premier League", goals: 0, assists: 2, position: "LB", kitNumber: 23, age: 30, marketValue: 18, difficulty: "hard" },
