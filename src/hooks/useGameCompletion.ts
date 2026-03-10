@@ -66,7 +66,8 @@ export function useGameCompletion(
         const isSameDay = lastDate === today;
 
         if (!existing) {
-          await supabase.from('user_scores').insert({
+          console.log(`[GameCompletion] No existing user_scores row, inserting new...`);
+          const { error: insertErr } = await supabase.from('user_scores').insert({
             user_id: user.id,
             total_points: score,
             games_played_today: 1,
@@ -75,6 +76,7 @@ export function useGameCompletion(
             current_streak: 1,
             longest_streak: 1,
           });
+          console.log(`[GameCompletion] user_scores insert:`, insertErr ? `❌ ${insertErr.message}` : '✅');
         } else {
           let newStreak = existing.current_streak || 0;
           if (!isSameDay) {
