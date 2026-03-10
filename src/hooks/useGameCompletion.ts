@@ -87,17 +87,20 @@ export function useGameCompletion(
           }
           const newLongest = Math.max(newStreak, existing.longest_streak || 0);
 
-          await supabase
-            .from('user_scores')
-            .update({
+          const updatePayload = {
               total_points: existing.total_points + score,
               games_played_today: isSameDay ? existing.games_played_today + 1 : 1,
               last_played_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
               current_streak: newStreak,
               longest_streak: newLongest,
-            })
+            };
+          console.log(`[GameCompletion] Updating user_scores:`, updatePayload);
+          const { error: updateErr } = await supabase
+            .from('user_scores')
+            .update(updatePayload)
             .eq('user_id', user.id);
+          console.log(`[GameCompletion] user_scores update:`, updateErr ? `❌ ${updateErr.message}` : '✅');
         }
 
         // 4. Update best score
