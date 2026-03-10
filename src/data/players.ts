@@ -13,7 +13,7 @@ export const players: Player[] = [
   { name: "Son Heung-min", club: "Tottenham", nationality: "South Korea", league: "Premier League", goals: 12, assists: 4, position: "LW", kitNumber: 7, age: 34, marketValue: 28, difficulty: "easy" },
   { name: "Declan Rice", club: "Arsenal", nationality: "England", league: "Premier League", goals: 3, assists: 4, position: "CDM", kitNumber: 41, age: 27, marketValue: 110, difficulty: "easy" },
   { name: "Phil Foden", club: "Manchester City", nationality: "England", league: "Premier League", goals: 8, assists: 5, position: "LW", kitNumber: 47, age: 26, marketValue: 120, difficulty: "easy" },
-  { name: "Alexander Isak", club: "Newcastle", nationality: "Sweden", league: "Premier League", goals: 18, assists: 3, position: "ST", kitNumber: 14, age: 27, marketValue: 110, difficulty: "easy" },
+  { name: "Alexander Isak", club: "Liverpool", nationality: "Sweden", league: "Premier League", goals: 18, assists: 3, position: "ST", kitNumber: 14, age: 27, marketValue: 120, difficulty: "easy" },
   { name: "Virgil van Dijk", club: "Liverpool", nationality: "Netherlands", league: "Premier League", goals: 2, assists: 1, position: "CB", kitNumber: 4, age: 35, marketValue: 22, difficulty: "easy" },
   { name: "Martin Ødegaard", club: "Arsenal", nationality: "Norway", league: "Premier League", goals: 7, assists: 10, position: "CAM", kitNumber: 8, age: 27, marketValue: 110, difficulty: "easy" },
   { name: "William Saliba", club: "Arsenal", nationality: "France", league: "Premier League", goals: 2, assists: 1, position: "CB", kitNumber: 2, age: 25, marketValue: 110, difficulty: "easy" },
