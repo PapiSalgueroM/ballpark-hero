@@ -67,7 +67,7 @@ export const players: Player[] = [
 
   // === BUNDESLIGA ===
   { name: "Harry Kane", club: "Bayern Munich", nationality: "England", league: "Bundesliga", goals: 22, assists: 6, position: "ST", kitNumber: 9, age: 33, marketValue: 65, difficulty: "easy" },
-  { name: "Florian Wirtz", club: "Bayer Leverkusen", nationality: "Germany", league: "Bundesliga", goals: 12, assists: 10, position: "CAM", kitNumber: 10, age: 23, marketValue: 150, difficulty: "easy" },
+  { name: "Florian Wirtz", club: "Bayern Munich", nationality: "Germany", league: "Bundesliga", goals: 14, assists: 12, position: "CAM", kitNumber: 10, age: 23, marketValue: 170, difficulty: "easy" },
   { name: "Jamal Musiala", club: "Bayern Munich", nationality: "Germany", league: "Bundesliga", goals: 12, assists: 8, position: "CAM", kitNumber: 42, age: 23, marketValue: 150, difficulty: "easy" },
   { name: "Joshua Kimmich", club: "Bayern Munich", nationality: "Germany", league: "Bundesliga", goals: 2, assists: 5, position: "CDM", kitNumber: 6, age: 31, marketValue: 45, difficulty: "easy" },
   { name: "Alphonso Davies", club: "Bayern Munich", nationality: "Canada", league: "Bundesliga", goals: 1, assists: 4, position: "LB", kitNumber: 19, age: 25, marketValue: 55, difficulty: "easy" },
