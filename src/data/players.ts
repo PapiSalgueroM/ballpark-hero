@@ -184,7 +184,7 @@ export const players: Player[] = [
   { name: "Nathan Aké", club: "Manchester City", nationality: "Netherlands", league: "Premier League", goals: 1, assists: 1, position: "CB", kitNumber: 6, age: 31, marketValue: 30, difficulty: "hard" },
   { name: "Jeremy Doku", club: "Manchester City", nationality: "Belgium", league: "Premier League", goals: 4, assists: 6, position: "LW", kitNumber: 11, age: 23, marketValue: 55, difficulty: "hard" },
   { name: "Rúben Dias", club: "Manchester City", nationality: "Portugal", league: "Premier League", goals: 1, assists: 0, position: "CB", kitNumber: 3, age: 28, marketValue: 65, difficulty: "hard" },
-  { name: "Kyle Walker", club: "Manchester City", nationality: "England", league: "Premier League", goals: 0, assists: 2, position: "RB", kitNumber: 2, age: 36, marketValue: 5, difficulty: "hard" },
+  { name: "Kyle Walker", club: "AC Milan", nationality: "England", league: "Serie A", goals: 0, assists: 2, position: "RB", kitNumber: 2, age: 36, marketValue: 3, difficulty: "hard" },
   { name: "Rico Lewis", club: "Manchester City", nationality: "England", league: "Premier League", goals: 2, assists: 3, position: "RB", kitNumber: 82, age: 21, marketValue: 35, difficulty: "hard" },
   { name: "Savinho", club: "Manchester City", nationality: "Brazil", league: "Premier League", goals: 3, assists: 5, position: "RW", kitNumber: 26, age: 21, marketValue: 50, difficulty: "hard" },
   { name: "Joško Gvardiol", club: "Manchester City", nationality: "Croatia", league: "Premier League", goals: 3, assists: 2, position: "LB", kitNumber: 24, age: 24, marketValue: 65, difficulty: "hard" },
