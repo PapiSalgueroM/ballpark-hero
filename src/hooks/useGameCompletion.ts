@@ -53,11 +53,12 @@ export function useGameCompletion(
         console.log(`[GameCompletion] 2/5 daily_completions insert:`, completionErr ? `⚠️ ${completionErr.message}` : '✅');
 
         // 3. Upsert user_scores for navbar
-        const { data: existing } = await supabase
+        const { data: existing, error: fetchErr } = await supabase
           .from('user_scores')
           .select('total_points, games_played_today, last_played_at, current_streak, longest_streak')
           .eq('user_id', user.id)
           .single();
+        console.log(`[GameCompletion] 3/5 user_scores fetch:`, fetchErr ? `⚠️ ${fetchErr.message}` : '✅', existing);
 
         const lastDate = existing?.last_played_at
           ? new Date(existing.last_played_at).toISOString().split('T')[0]
