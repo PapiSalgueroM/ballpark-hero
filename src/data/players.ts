@@ -485,7 +485,7 @@ export const players: Player[] = [
   { name: "Edinson Cavani", club: "Boca Juniors", nationality: "Uruguay", league: "Argentine Primera División", goals: 5, assists: 2, position: "ST", kitNumber: 10, age: 39, marketValue: 2, difficulty: "hard" },
   { name: "Ángel Correa", club: "Atlético Madrid", nationality: "Argentina", league: "La Liga", goals: 4, assists: 3, position: "CF", kitNumber: 10, age: 30, marketValue: 18, difficulty: "hard" },
   { name: "Marcos Acuña", club: "Sevilla", nationality: "Argentina", league: "La Liga", goals: 1, assists: 3, position: "LB", kitNumber: 19, age: 34, marketValue: 3, difficulty: "hard" },
-  { name: "Wissam Ben Yedder", club: "Free Agent", nationality: "France", league: "Ligue 1", goals: 0, assists: 0, position: "ST", kitNumber: 9, age: 36, marketValue: 1, difficulty: "hard" },
+  { name: "Randal Kolo Muani", club: "Juventus", nationality: "France", league: "Serie A", goals: 5, assists: 3, position: "ST", kitNumber: 23, age: 27, marketValue: 30, difficulty: "hard" },
   { name: "Wilfried Zaha", club: "Galatasaray", nationality: "Ivory Coast", league: "Turkish Süper Lig", goals: 3, assists: 2, position: "LW", kitNumber: 11, age: 33, marketValue: 5, difficulty: "hard" },
   { name: "Paul Pogba", club: "OM", nationality: "France", league: "Ligue 1", goals: 1, assists: 2, position: "CM", kitNumber: 6, age: 33, marketValue: 3, difficulty: "hard" },
   { name: "Keylor Navas", club: "Newell's Old Boys", nationality: "Costa Rica", league: "Argentine Primera División", goals: 0, assists: 0, position: "GK", kitNumber: 1, age: 39, marketValue: 1, difficulty: "hard" },
