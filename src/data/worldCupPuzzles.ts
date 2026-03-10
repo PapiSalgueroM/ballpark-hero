@@ -96,9 +96,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Juventus',
     achievement: 'Scored twice in the final to win the World Cup for the hosts',
     answer: 'Zinedine Zidane',
-  },
-  {
-    id: 'ronaldo-2002',
+    aliases: ['Zizou'],
     year: 2002,
     hostCountry: 'South Korea / Japan',
     hostFlag: '🇰🇷🇯🇵',
