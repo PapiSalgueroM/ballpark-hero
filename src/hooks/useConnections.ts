@@ -158,7 +158,7 @@ export function useConnections() {
     setPuzzleIndex((prev) => prev + 1);
   }, [resetState]);
 
-  const totalPuzzles = connectionsPuzzles.length;
+  const totalPuzzles = fallbackPuzzles.length;
 
   const completionScore = gameStatus === 'won' ? (lives * 250) : 0;
   useGameCompletion('connections', gameStatus !== 'playing', completionScore);

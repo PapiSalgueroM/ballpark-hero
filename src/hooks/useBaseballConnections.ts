@@ -2,11 +2,21 @@ import { useState, useMemo, useCallback } from 'react';
 import { baseballConnectionsPuzzles } from '@/data/baseballConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
+function isValidBBPuzzle(p: { groups: { players: string[] }[] }): boolean {
+  const all = p.groups.flatMap((g) => g.players);
+  const unique = new Set(all);
+  const expectedPerGroup = p.groups[0]?.players.length ?? 5;
+  return p.groups.length === 4 && p.groups.every((g) => g.players.length === expectedPerGroup) && unique.size === p.groups.length * expectedPerGroup;
+}
+
+const validBBPuzzles = baseballConnectionsPuzzles.filter(isValidBBPuzzle);
+const fallbackBBPuzzles = validBBPuzzles.length > 0 ? validBBPuzzles : baseballConnectionsPuzzles;
+
 function getDailyIndex(): number {
   const now = new Date();
   const start = new Date('2026-01-01');
   const diffDays = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-  return Math.abs(diffDays) % baseballConnectionsPuzzles.length;
+  return Math.abs(diffDays) % fallbackBBPuzzles.length;
 }
 
 export type BBConnStatus = 'playing' | 'complete';
