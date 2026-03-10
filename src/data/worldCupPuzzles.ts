@@ -280,7 +280,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Bayern Munich',
     achievement: 'Won the Golden Boot and Best Young Player award with 5 goals',
     answer: 'Thomas Müller',
-  },
+    aliases: ['Thomas Muller', 'Mueller', 'Thomas Mueller', 'Muller'],
   {
     id: 'goetze-2014',
     year: 2014,
