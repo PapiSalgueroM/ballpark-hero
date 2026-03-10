@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -21,20 +21,29 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
     currentStreak: 0,
     loading: true,
   });
+  const fetchingRef = useRef(false);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     if (!user) {
       setStats({ gamesPlayedToday: 0, totalPointsToday: 0, dailyRank: null, currentStreak: 0, loading: false });
       return;
     }
 
+    // Prevent concurrent fetches
+    if (fetchingRef.current) return;
+    fetchingRef.current = true;
+
     try {
       // Fetch user's own score from user_scores
-      const { data: userScore } = await supabase
+      const { data: userScore, error: scoreError } = await supabase
         .from('user_scores')
         .select('total_points, games_played_today, current_streak')
         .eq('user_id', user.id)
         .single();
+
+      if (scoreError && scoreError.code !== 'PGRST116') {
+        console.error('Failed to fetch user score:', scoreError);
+      }
 
       const totalPoints = userScore?.total_points || 0;
       const gamesPlayed = userScore?.games_played_today || 0;
@@ -60,8 +69,10 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
     } catch (error) {
       console.error('Failed to fetch game navbar stats:', error);
       setStats(prev => ({ ...prev, loading: false }));
+    } finally {
+      fetchingRef.current = false;
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     fetchStats();
@@ -85,10 +96,38 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
       )
       .subscribe();
 
+    // Refetch when app comes back to foreground (critical for mobile)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchStats();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Refetch on window focus (covers tab switching on desktop too)
+    const handleFocus = () => {
+      fetchStats();
+    };
+    window.addEventListener('focus', handleFocus);
+
+    // Listen for custom game-completion events from useGameCompletion
+    const handleGameComplete = () => {
+      // Small delay to let DB writes complete
+      setTimeout(fetchStats, 500);
+    };
+    window.addEventListener('game-completion-saved', handleGameComplete);
+
+    // Periodic polling fallback every 30s (realtime can drop on mobile)
+    const pollInterval = setInterval(fetchStats, 30_000);
+
     return () => {
       supabase.removeChannel(channel);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('game-completion-saved', handleGameComplete);
+      clearInterval(pollInterval);
     };
-  }, [user]);
+  }, [user, fetchStats]);
 
   return { ...stats, totalGames: TOTAL_GAMES };
 }

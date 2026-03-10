@@ -137,6 +137,9 @@ export function useGameCompletion(
 
           refreshProfile();
         }
+
+        // Dispatch custom event so navbar stats refresh immediately
+        window.dispatchEvent(new Event('game-completion-saved'));
       } catch (error) {
         console.error('Failed to save game completion:', error);
       }
