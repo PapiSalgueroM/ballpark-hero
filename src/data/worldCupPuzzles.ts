@@ -140,7 +140,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Barcelona',
     achievement: 'Scored the winning goal in the World Cup final',
     answer: 'Andrés Iniesta',
-  },
+    aliases: ['Andres Iniesta'],
   {
     id: 'james-2014',
     year: 2014,
