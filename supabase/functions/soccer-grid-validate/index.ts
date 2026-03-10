@@ -72,7 +72,9 @@ For "Played in Premier League/La Liga/Serie A/Bundesliga/Ligue 1", the player ap
 For "Over 100 International Caps", the player earned 100+ caps for their national team.
 For "Played in MLS", the player appeared in Major League Soccer.
 
-Respond with ONLY a JSON object: {"valid": true} or {"valid": false, "reason": "brief explanation"}`;
+If valid, also return the player's full official name (first name and last name as commonly known in football, e.g. "Lionel Messi", "Cristiano Ronaldo", "Kylian Mbappé"). For players known by a single name (e.g. "Pelé", "Ronaldinho", "Neymar"), return that single name.
+
+Respond with ONLY a JSON object: {"valid": true, "fullName": "First Last"} or {"valid": false, "reason": "brief explanation"}`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -106,7 +108,7 @@ Respond with ONLY a JSON object: {"valid": true} or {"valid": false, "reason": "
     const result = JSON.parse(jsonMatch[0]);
 
     return new Response(
-      JSON.stringify({ valid: !!result.valid, reason: result.reason || null }),
+      JSON.stringify({ valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {

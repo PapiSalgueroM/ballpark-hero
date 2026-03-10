@@ -98,19 +98,20 @@ export function useSoccerGrid() {
 
       if (error) throw error;
       const isValid = data?.valid === true;
+      const displayName = data?.fullName || playerName;
 
       if (isValid) {
         await supabase.from('soccer_grid_selections').insert({
           puzzle_id: puzzle.id,
           cell_index: activeCell,
-          player_name: playerName.toLowerCase(),
+          player_name: displayName.toLowerCase(),
         });
 
-        const rarity = await fetchRarity(puzzle.id, activeCell, playerName);
+        const rarity = await fetchRarity(puzzle.id, activeCell, displayName);
 
         setCells((prev) =>
           prev.map((c, i) =>
-            i === activeCell ? { ...c, playerName, status: 'correct', rarity } : c
+            i === activeCell ? { ...c, playerName: displayName, status: 'correct', rarity } : c
           )
         );
       } else {
