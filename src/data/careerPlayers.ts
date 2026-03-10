@@ -268,7 +268,8 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2021-2022", club: "Real Madrid", goals: 44, assists: 15, appearances: 46, marketValue: 30 },
       { season: "2022-2023", club: "Real Madrid", goals: 19, assists: 6, appearances: 32, marketValue: 25 },
       { season: "2023-2024", club: "Al-Ittihad", goals: 12, assists: 4, appearances: 28, marketValue: 10 },
-    ],
+      { season: "2024-2025", club: "Al-Ittihad", goals: 9, assists: 3, appearances: 25, marketValue: 8 },
+      { season: "2025-2026", club: "Al-Ittihad", goals: 8, assists: 3, appearances: 22, marketValue: 5 },
   },
   {
     name: "Zlatan Ibrahimović",
