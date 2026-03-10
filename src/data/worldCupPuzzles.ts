@@ -364,7 +364,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Aston Villa',
     achievement: 'Won the Golden Glove, saved a penalty in the shootout to win the World Cup',
     answer: 'Emiliano Martínez',
-  },
+    aliases: ['Martinez', 'Emiliano Martinez', 'Emi Martinez', 'Dibu', 'Dibu Martinez'],
   {
     id: 'mbappe-2026',
     year: 2026,
