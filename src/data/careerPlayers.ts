@@ -1064,6 +1064,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2023-2024", club: "Al-Ittihad", goals: 2, assists: 4, appearances: 31, marketValue: 10 },
       { season: "2024-2025", club: "Al-Ittihad", goals: 1, assists: 3, appearances: 28, marketValue: 8 },
       { season: "2025-2026", club: "Al-Ittihad", goals: 1, assists: 3, appearances: 22, marketValue: 6 },
+    ],
   },
   {
     name: "Pierre-Emerick Aubameyang",
