@@ -609,7 +609,7 @@ export const players: Player[] = [
   { name: "Antonio Sanabria", club: "Torino", nationality: "Paraguay", league: "Serie A", goals: 4, assists: 1, position: "ST", kitNumber: 9, age: 29, marketValue: 5, difficulty: "insane" },
   { name: "Andrea Belotti", club: "Como", nationality: "Italy", league: "Serie A", goals: 3, assists: 1, position: "ST", kitNumber: 9, age: 32, marketValue: 3, difficulty: "insane" },
   { name: "Patrick Cutrone", club: "Como", nationality: "Italy", league: "Serie A", goals: 4, assists: 1, position: "ST", kitNumber: 63, age: 28, marketValue: 3, difficulty: "insane" },
-  { name: "Raphaël Varane", club: "Como", nationality: "France", league: "Serie A", goals: 0, assists: 0, position: "CB", kitNumber: 5, age: 33, marketValue: 3, difficulty: "insane" },
+  { name: "Casemiro", club: "Galatasaray", nationality: "Brazil", league: "Turkish Süper Lig", goals: 2, assists: 1, position: "CDM", kitNumber: 18, age: 34, marketValue: 5, difficulty: "insane" },
   { name: "Matteo Darmian", club: "Inter Milan", nationality: "Italy", league: "Serie A", goals: 0, assists: 1, position: "RB", kitNumber: 36, age: 36, marketValue: 1, difficulty: "insane" },
   { name: "Marko Arnautović", club: "Inter Milan", nationality: "Austria", league: "Serie A", goals: 2, assists: 1, position: "ST", kitNumber: 8, age: 37, marketValue: 2, difficulty: "insane" },
   { name: "Youssouf Fofana", club: "AC Milan", nationality: "France", league: "Serie A", goals: 2, assists: 3, position: "CDM", kitNumber: 29, age: 26, marketValue: 25, difficulty: "insane" },
