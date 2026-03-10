@@ -106,6 +106,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
     // Refetch when app comes back to foreground (critical for mobile)
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
+        console.log('[NavbarStats] 👁️ Visibility change: visible — refetching');
         fetchStats();
       }
     };
