@@ -26,34 +26,39 @@ export function useGameCompletion(
 
   useEffect(() => {
     if (!isComplete || !user || savedRef.current) return;
+    console.log(`[GameCompletion] 🎮 Game "${gameSlug}" complete. Score: ${score}, User: ${user.id}`);
     savedRef.current = true;
 
     const save = async () => {
       try {
         const today = new Date().toISOString().split('T')[0];
+        console.log(`[GameCompletion] 📅 Saving for date: ${today}`);
 
         // 1. Insert game score
-        await supabase.from('user_game_scores').insert({
+        const { error: gameScoreErr } = await supabase.from('user_game_scores').insert({
           user_id: user.id,
           game_type: gameSlug,
           score,
           correct_answers: correctAnswers,
           puzzle_date: today,
         });
+        console.log(`[GameCompletion] 1/5 user_game_scores insert:`, gameScoreErr ? `❌ ${gameScoreErr.message}` : '✅');
 
         // 2. Insert daily completion (unique constraint prevents duplicates)
-        await supabase.from('daily_completions').insert({
+        const { error: completionErr } = await supabase.from('daily_completions').insert({
           user_id: user.id,
           game_slug: gameSlug,
           date: today,
         });
+        console.log(`[GameCompletion] 2/5 daily_completions insert:`, completionErr ? `⚠️ ${completionErr.message}` : '✅');
 
         // 3. Upsert user_scores for navbar
-        const { data: existing } = await supabase
+        const { data: existing, error: fetchErr } = await supabase
           .from('user_scores')
           .select('total_points, games_played_today, last_played_at, current_streak, longest_streak')
           .eq('user_id', user.id)
           .single();
+        console.log(`[GameCompletion] 3/5 user_scores fetch:`, fetchErr ? `⚠️ ${fetchErr.message}` : '✅', existing);
 
         const lastDate = existing?.last_played_at
           ? new Date(existing.last_played_at).toISOString().split('T')[0]
@@ -61,7 +66,8 @@ export function useGameCompletion(
         const isSameDay = lastDate === today;
 
         if (!existing) {
-          await supabase.from('user_scores').insert({
+          console.log(`[GameCompletion] No existing user_scores row, inserting new...`);
+          const { error: insertErr } = await supabase.from('user_scores').insert({
             user_id: user.id,
             total_points: score,
             games_played_today: 1,
@@ -70,6 +76,7 @@ export function useGameCompletion(
             current_streak: 1,
             longest_streak: 1,
           });
+          console.log(`[GameCompletion] user_scores insert:`, insertErr ? `❌ ${insertErr.message}` : '✅');
         } else {
           let newStreak = existing.current_streak || 0;
           if (!isSameDay) {
@@ -80,17 +87,20 @@ export function useGameCompletion(
           }
           const newLongest = Math.max(newStreak, existing.longest_streak || 0);
 
-          await supabase
-            .from('user_scores')
-            .update({
+          const updatePayload = {
               total_points: existing.total_points + score,
               games_played_today: isSameDay ? existing.games_played_today + 1 : 1,
               last_played_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
               current_streak: newStreak,
               longest_streak: newLongest,
-            })
+            };
+          console.log(`[GameCompletion] Updating user_scores:`, updatePayload);
+          const { error: updateErr } = await supabase
+            .from('user_scores')
+            .update(updatePayload)
             .eq('user_id', user.id);
+          console.log(`[GameCompletion] user_scores update:`, updateErr ? `❌ ${updateErr.message}` : '✅');
         }
 
         // 4. Update best score
@@ -139,9 +149,10 @@ export function useGameCompletion(
         }
 
         // Dispatch custom event so navbar stats refresh immediately
+        console.log(`[GameCompletion] ✅ All saves complete. Dispatching game-completion-saved event.`);
         window.dispatchEvent(new Event('game-completion-saved'));
       } catch (error) {
-        console.error('Failed to save game completion:', error);
+        console.error('[GameCompletion] ❌ Failed to save game completion:', error);
       }
     };
 

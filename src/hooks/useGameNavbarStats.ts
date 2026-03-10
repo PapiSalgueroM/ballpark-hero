@@ -25,6 +25,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
 
   const fetchStats = useCallback(async () => {
     if (!user) {
+      console.log('[NavbarStats] No user, resetting stats');
       setStats({ gamesPlayedToday: 0, totalPointsToday: 0, dailyRank: null, currentStreak: 0, loading: false });
       return;
     }
@@ -32,6 +33,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
     // Prevent concurrent fetches
     if (fetchingRef.current) return;
     fetchingRef.current = true;
+    console.log('[NavbarStats] 🔄 Fetching stats for user:', user.id);
 
     try {
       // Fetch user's own score from user_scores
@@ -42,8 +44,10 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
         .single();
 
       if (scoreError && scoreError.code !== 'PGRST116') {
-        console.error('Failed to fetch user score:', scoreError);
+        console.error('[NavbarStats] ❌ Failed to fetch user score:', scoreError);
       }
+
+      console.log('[NavbarStats] user_scores data:', userScore);
 
       const totalPoints = userScore?.total_points || 0;
       const gamesPlayed = userScore?.games_played_today || 0;
@@ -59,6 +63,8 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
         ? allScores.findIndex(s => s.user_id === user.id) + 1
         : null;
 
+      console.log(`[NavbarStats] ✅ Games: ${gamesPlayed}, Points: ${totalPoints}, Rank: ${rank}, Streak: ${streak}`);
+
       setStats({
         gamesPlayedToday: gamesPlayed,
         totalPointsToday: totalPoints,
@@ -67,7 +73,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
         loading: false,
       });
     } catch (error) {
-      console.error('Failed to fetch game navbar stats:', error);
+      console.error('[NavbarStats] ❌ Failed to fetch game navbar stats:', error);
       setStats(prev => ({ ...prev, loading: false }));
     } finally {
       fetchingRef.current = false;
@@ -91,6 +97,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
           filter: `user_id=eq.${user.id}`,
         },
         () => {
+          console.log('[NavbarStats] 📡 Realtime update received');
           fetchStats();
         }
       )
@@ -99,6 +106,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
     // Refetch when app comes back to foreground (critical for mobile)
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
+        console.log('[NavbarStats] 👁️ Visibility change: visible — refetching');
         fetchStats();
       }
     };
@@ -112,6 +120,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
 
     // Listen for custom game-completion events from useGameCompletion
     const handleGameComplete = () => {
+      console.log('[NavbarStats] 🎯 game-completion-saved event received — refetching in 500ms');
       // Small delay to let DB writes complete
       setTimeout(fetchStats, 500);
     };
