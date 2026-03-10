@@ -1078,7 +1078,9 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2020-2021", club: "Arsenal", goals: 15, assists: 3, appearances: 39, marketValue: 30 },
       { season: "2021-2022", club: "Barcelona", goals: 13, assists: 1, appearances: 24, marketValue: 10 },
       { season: "2022-2023", club: "Chelsea", goals: 4, assists: 2, appearances: 22, marketValue: 5 },
-    ],
+      { season: "2023-2024", club: "Marseille", goals: 8, assists: 3, appearances: 30, marketValue: 5 },
+      { season: "2024-2025", club: "Marseille", goals: 6, assists: 2, appearances: 22, marketValue: 3 },
+      { season: "2025-2026", club: "Marseille", goals: 5, assists: 2, appearances: 18, marketValue: 2 },
   },
   {
     name: "Raphaël Varane",
