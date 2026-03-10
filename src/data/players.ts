@@ -900,5 +900,5 @@ export const players: Player[] = [
   // === MISCELLANEOUS ===
   { name: "Andriy Yarmolenko", club: "Dynamo Kyiv", nationality: "Ukraine", league: "Ukrainian Premier League", goals: 4, assists: 2, position: "RW", kitNumber: 7, age: 36, marketValue: 1, difficulty: "insane" },
   { name: "Josip Iličić", club: "Maribor", nationality: "Slovenia", league: "Austrian Bundesliga", goals: 4, assists: 3, position: "CF", kitNumber: 72, age: 37, marketValue: 1, difficulty: "insane" },
-  { name: "Guillermo Ochoa", club: "Salernitana", nationality: "Mexico", league: "Serie A", goals: 0, assists: 0, position: "GK", kitNumber: 13, age: 40, marketValue: 1, difficulty: "insane" },
+  { name: "Guillermo Ochoa", club: "América", nationality: "Mexico", league: "Liga MX", goals: 0, assists: 0, position: "GK", kitNumber: 13, age: 40, marketValue: 1, difficulty: "insane" },
 ];
