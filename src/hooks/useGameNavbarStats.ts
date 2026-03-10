@@ -36,10 +36,12 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
     console.log('[NavbarStats] 🔄 Fetching stats for user:', user.id);
 
     try {
+      const today = new Date().toISOString().split('T')[0];
+
       // Fetch user's own score from user_scores
       const { data: userScore, error: scoreError } = await supabase
         .from('user_scores')
-        .select('total_points, games_played_today, current_streak')
+        .select('total_points, current_streak')
         .eq('user_id', user.id)
         .single();
 
@@ -47,10 +49,19 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
         console.error('[NavbarStats] ❌ Failed to fetch user score:', scoreError);
       }
 
-      console.log('[NavbarStats] user_scores data:', userScore);
+      // Count distinct games completed today from daily_completions
+      const { count: gamesPlayedCount, error: completionsError } = await supabase
+        .from('daily_completions')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .eq('date', today);
+
+      if (completionsError) {
+        console.error('[NavbarStats] ❌ Failed to fetch daily completions:', completionsError);
+      }
 
       const totalPoints = userScore?.total_points || 0;
-      const gamesPlayed = userScore?.games_played_today || 0;
+      const gamesPlayed = gamesPlayedCount || 0;
       const streak = (userScore as any)?.current_streak || 0;
 
       // Fetch all scores for rank calculation
