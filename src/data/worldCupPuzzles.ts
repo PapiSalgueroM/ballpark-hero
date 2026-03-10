@@ -118,9 +118,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Real Madrid',
     achievement: 'Won the Golden Ball but was sent off in the final for a headbutt',
     answer: 'Zinedine Zidane',
-  },
-  {
-    id: 'forlan-2010',
+    aliases: ['Zizou'],
     year: 2010,
     hostCountry: 'South Africa',
     hostFlag: '🇿🇦',
