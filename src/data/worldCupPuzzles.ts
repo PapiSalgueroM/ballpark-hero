@@ -152,7 +152,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Monaco',
     achievement: 'Won the Golden Boot with 6 goals',
     answer: 'James Rodríguez',
-  },
+    aliases: ['James Rodriguez', 'James'],
   {
     id: 'messi-2014',
     year: 2014,
