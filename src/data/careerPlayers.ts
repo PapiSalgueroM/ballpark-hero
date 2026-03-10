@@ -243,7 +243,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "Manchester City", goals: 8, assists: 16, appearances: 32, marketValue: 80 },
       { season: "2023-2024", club: "Manchester City", goals: 4, assists: 10, appearances: 18, marketValue: 45 },
       { season: "2024-2025", club: "Manchester City", goals: 3, assists: 7, appearances: 20, marketValue: 30 },
-      { season: "2025-2026", club: "Manchester City", goals: 3, assists: 6, appearances: 18, marketValue: 25 },
+      { season: "2025-2026", club: "Al-Ittihad", goals: 5, assists: 8, appearances: 22, marketValue: 18 },
     ],
   },
   {
@@ -268,6 +268,8 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2021-2022", club: "Real Madrid", goals: 44, assists: 15, appearances: 46, marketValue: 30 },
       { season: "2022-2023", club: "Real Madrid", goals: 19, assists: 6, appearances: 32, marketValue: 25 },
       { season: "2023-2024", club: "Al-Ittihad", goals: 12, assists: 4, appearances: 28, marketValue: 10 },
+      { season: "2024-2025", club: "Al-Ittihad", goals: 9, assists: 3, appearances: 25, marketValue: 8 },
+      { season: "2025-2026", club: "Al-Ittihad", goals: 8, assists: 3, appearances: 22, marketValue: 5 },
     ],
   },
   {
@@ -359,6 +361,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "Roma", goals: 18, assists: 7, appearances: 39, marketValue: 25 },
       { season: "2023-2024", club: "Roma", goals: 16, assists: 10, appearances: 35, marketValue: 18 },
       { season: "2024-2025", club: "Roma", goals: 8, assists: 4, appearances: 22, marketValue: 12 },
+      { season: "2025-2026", club: "Roma", goals: 6, assists: 4, appearances: 18, marketValue: 8 },
     ],
   },
   {
@@ -914,6 +917,9 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2020-2021", club: "PSG", goals: 5, assists: 11, appearances: 32, marketValue: 15 },
       { season: "2021-2022", club: "Juventus", goals: 5, assists: 7, appearances: 32, marketValue: 8 },
       { season: "2022-2023", club: "Benfica", goals: 7, assists: 12, appearances: 36, marketValue: 5 },
+      { season: "2023-2024", club: "Benfica", goals: 6, assists: 9, appearances: 32, marketValue: 4 },
+      { season: "2024-2025", club: "Benfica", goals: 4, assists: 6, appearances: 25, marketValue: 3 },
+      { season: "2025-2026", club: "Benfica", goals: 3, assists: 5, appearances: 20, marketValue: 2 },
     ],
   },
   {
@@ -959,6 +965,8 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2019-2020", club: "Barcelona", goals: 21, assists: 8, appearances: 36, marketValue: 30 },
       { season: "2020-2021", club: "Atlético Madrid", goals: 21, assists: 3, appearances: 34, marketValue: 10 },
       { season: "2023-2024", club: "Inter Miami", goals: 25, assists: 12, appearances: 28, marketValue: 3 },
+      { season: "2024-2025", club: "Inter Miami", goals: 10, assists: 5, appearances: 22, marketValue: 3 },
+      { season: "2025-2026", club: "Inter Miami", goals: 8, assists: 4, appearances: 18, marketValue: 2 },
     ],
   },
   {
@@ -1055,6 +1063,8 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2021-2022", club: "Chelsea", goals: 2, assists: 3, appearances: 28, marketValue: 45 },
       { season: "2022-2023", club: "Chelsea", goals: 1, assists: 1, appearances: 20, marketValue: 30 },
       { season: "2023-2024", club: "Al-Ittihad", goals: 2, assists: 4, appearances: 31, marketValue: 10 },
+      { season: "2024-2025", club: "Al-Ittihad", goals: 1, assists: 3, appearances: 28, marketValue: 8 },
+      { season: "2025-2026", club: "Al-Ittihad", goals: 1, assists: 3, appearances: 22, marketValue: 6 },
     ],
   },
   {
@@ -1074,6 +1084,9 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2020-2021", club: "Arsenal", goals: 15, assists: 3, appearances: 39, marketValue: 30 },
       { season: "2021-2022", club: "Barcelona", goals: 13, assists: 1, appearances: 24, marketValue: 10 },
       { season: "2022-2023", club: "Chelsea", goals: 4, assists: 2, appearances: 22, marketValue: 5 },
+      { season: "2023-2024", club: "Marseille", goals: 8, assists: 3, appearances: 30, marketValue: 5 },
+      { season: "2024-2025", club: "Marseille", goals: 6, assists: 2, appearances: 22, marketValue: 3 },
+      { season: "2025-2026", club: "Marseille", goals: 5, assists: 2, appearances: 18, marketValue: 2 },
     ],
   },
   {
@@ -1113,6 +1126,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "Manchester City", goals: 8, assists: 11, appearances: 52, marketValue: 80 },
       { season: "2023-2024", club: "Manchester City", goals: 6, assists: 12, appearances: 53, marketValue: 80 },
       { season: "2024-2025", club: "Manchester City", goals: 3, assists: 5, appearances: 25, marketValue: 70 },
+      { season: "2025-2026", club: "Manchester City", goals: 5, assists: 6, appearances: 22, marketValue: 60 },
     ],
   },
   {
@@ -1128,6 +1142,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "West Ham", goals: 4, assists: 5, appearances: 48, marketValue: 80 },
       { season: "2023-2024", club: "Arsenal", goals: 8, assists: 9, appearances: 51, marketValue: 110 },
       { season: "2024-2025", club: "Arsenal", goals: 4, assists: 5, appearances: 28, marketValue: 100 },
+      { season: "2025-2026", club: "Arsenal", goals: 3, assists: 4, appearances: 22, marketValue: 110 },
     ],
   },
   {
@@ -1153,6 +1168,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "Bayer Leverkusen", goals: 2, assists: 2, appearances: 12, marketValue: 40 },
       { season: "2023-2024", club: "Bayer Leverkusen", goals: 18, assists: 20, appearances: 49, marketValue: 130 },
       { season: "2024-2025", club: "Bayer Leverkusen", goals: 12, assists: 9, appearances: 28, marketValue: 150 },
+      { season: "2025-2026", club: "Bayern Munich", goals: 14, assists: 12, appearances: 25, marketValue: 170 },
     ],
   },
   {
@@ -1183,6 +1199,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "Manchester United", goals: 9, assists: 6, appearances: 46, marketValue: 55 },
       { season: "2023-2024", club: "Manchester United", goals: 15, assists: 13, appearances: 48, marketValue: 55 },
       { season: "2024-2025", club: "Manchester United", goals: 8, assists: 6, appearances: 28, marketValue: 45 },
+      { season: "2025-2026", club: "Manchester United", goals: 6, assists: 7, appearances: 22, marketValue: 40 },
     ],
   },
   {
@@ -1242,6 +1259,8 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2021-2022", club: "Manchester City", goals: 24, assists: 9, appearances: 47, marketValue: 50 },
       { season: "2022-2023", club: "Manchester City", goals: 8, assists: 5, appearances: 36, marketValue: 30 },
       { season: "2023-2024", club: "Al-Ahli", goals: 9, assists: 7, appearances: 30, marketValue: 12 },
+      { season: "2024-2025", club: "Al-Ahli", goals: 5, assists: 4, appearances: 25, marketValue: 8 },
+      { season: "2025-2026", club: "Al-Ahli", goals: 4, assists: 3, appearances: 20, marketValue: 5 },
     ],
   },
   {
@@ -1259,6 +1278,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "Barcelona", goals: 8, assists: 6, appearances: 44, marketValue: 50 },
       { season: "2023-2024", club: "PSG", goals: 6, assists: 14, appearances: 43, marketValue: 50 },
       { season: "2024-2025", club: "PSG", goals: 9, assists: 7, appearances: 25, marketValue: 50 },
+      { season: "2025-2026", club: "PSG", goals: 10, assists: 8, appearances: 22, marketValue: 55 },
     ],
   },
   {
@@ -1274,7 +1294,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "Newcastle", goals: 10, assists: 2, appearances: 28, marketValue: 55 },
       { season: "2023-2024", club: "Newcastle", goals: 25, assists: 4, appearances: 40, marketValue: 80 },
       { season: "2024-2025", club: "Newcastle", goals: 18, assists: 3, appearances: 25, marketValue: 90 },
-      { season: "2025-2026", club: "Newcastle", goals: 18, assists: 3, appearances: 25, marketValue: 110 },
+      { season: "2025-2026", club: "Liverpool", goals: 18, assists: 4, appearances: 25, marketValue: 120 },
     ],
   },
   {
@@ -1290,6 +1310,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "PSG", goals: 5, assists: 7, appearances: 44, marketValue: 60 },
       { season: "2023-2024", club: "PSG", goals: 6, assists: 8, appearances: 40, marketValue: 65 },
       { season: "2024-2025", club: "PSG", goals: 3, assists: 6, appearances: 28, marketValue: 60 },
+      { season: "2025-2026", club: "PSG", goals: 4, assists: 5, appearances: 22, marketValue: 55 },
     ],
   },
   {
@@ -1345,6 +1366,8 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2021-2022", club: "Barcelona", goals: 0, assists: 3, appearances: 40, marketValue: 8 },
       { season: "2022-2023", club: "Barcelona", goals: 1, assists: 2, appearances: 40, marketValue: 5 },
       { season: "2023-2024", club: "Inter Miami", goals: 1, assists: 3, appearances: 30, marketValue: 3 },
+      { season: "2024-2025", club: "Inter Miami", goals: 1, assists: 4, appearances: 25, marketValue: 2 },
+      { season: "2025-2026", club: "Inter Miami", goals: 1, assists: 3, appearances: 20, marketValue: 2 },
     ],
   },
   {
@@ -1365,6 +1388,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "PSG", goals: 3, assists: 3, appearances: 47, marketValue: 55 },
       { season: "2023-2024", club: "PSG", goals: 3, assists: 1, appearances: 45, marketValue: 40 },
       { season: "2024-2025", club: "PSG", goals: 2, assists: 1, appearances: 25, marketValue: 35 },
+      { season: "2025-2026", club: "PSG", goals: 2, assists: 1, appearances: 22, marketValue: 25 },
     ],
   },
   {
@@ -1394,6 +1418,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "Liverpool", goals: 0, assists: 0, appearances: 37, marketValue: 50 },
       { season: "2023-2024", club: "Liverpool", goals: 0, assists: 0, appearances: 41, marketValue: 45 },
       { season: "2024-2025", club: "Liverpool", goals: 0, assists: 0, appearances: 28, marketValue: 40 },
+      { season: "2025-2026", club: "Liverpool", goals: 0, assists: 0, appearances: 22, marketValue: 30 },
     ],
   },
   {
@@ -2438,6 +2463,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2020-2021", club: "Porto", goals: 2, assists: 0, appearances: 37, marketValue: 2 },
       { season: "2021-2022", club: "Porto", goals: 1, assists: 0, appearances: 34, marketValue: 2 },
       { season: "2022-2023", club: "Porto", goals: 1, assists: 0, appearances: 42, marketValue: 1 },
+      { season: "2023-2024", club: "Porto", goals: 0, assists: 0, appearances: 18, marketValue: 1 },
     ],
   },
   {
