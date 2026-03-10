@@ -304,7 +304,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Inter Milan',
     achievement: 'Reached the final but had a mysterious seizure before the match',
     answer: 'Ronaldo',
-  },
+    aliases: ['Ronaldo Nazario', 'R9', 'Ronaldo Luis Nazario', 'O Fenomeno', 'Ronaldo Nazário'],
   {
     id: 'kahn-2002',
     year: 2002,
