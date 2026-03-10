@@ -2438,7 +2438,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2020-2021", club: "Porto", goals: 2, assists: 0, appearances: 37, marketValue: 2 },
       { season: "2021-2022", club: "Porto", goals: 1, assists: 0, appearances: 34, marketValue: 2 },
       { season: "2022-2023", club: "Porto", goals: 1, assists: 0, appearances: 42, marketValue: 1 },
-    ],
+      { season: "2023-2024", club: "Porto", goals: 0, assists: 0, appearances: 18, marketValue: 1 },
   },
   {
     name: "Mesut Özil",
