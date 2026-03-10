@@ -32,7 +32,7 @@ export const players: Player[] = [
   { name: "Viktor Gyökeres", club: "Arsenal", nationality: "Sweden", league: "Premier League", goals: 14, assists: 4, position: "ST", kitNumber: 9, age: 28, marketValue: 90, difficulty: "easy" },
   { name: "Estêvão", club: "Chelsea", nationality: "Brazil", league: "Premier League", goals: 6, assists: 7, position: "RW", kitNumber: 41, age: 19, marketValue: 60, difficulty: "easy" },
   { name: "Xavi Simons", club: "Tottenham", nationality: "Netherlands", league: "Premier League", goals: 10, assists: 8, position: "CAM", kitNumber: 7, age: 23, marketValue: 110, difficulty: "easy" },
-  { name: "Paul Pogba", club: "Manchester United", nationality: "France", league: "Premier League", goals: 1, assists: 2, position: "CM", kitNumber: 6, age: 33, marketValue: 5, difficulty: "easy" },
+  { name: "Omar Marmoush", club: "Manchester City", nationality: "Egypt", league: "Premier League", goals: 15, assists: 8, position: "ST", kitNumber: 7, age: 27, marketValue: 75, difficulty: "easy" },
 
   // === LA LIGA ===
   { name: "Kylian Mbappé", club: "Real Madrid", nationality: "France", league: "La Liga", goals: 19, assists: 5, position: "ST", kitNumber: 9, age: 27, marketValue: 180, difficulty: "easy" },
