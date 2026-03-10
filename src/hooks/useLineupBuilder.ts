@@ -235,13 +235,34 @@ export function useLineupBuilder() {
           body: JSON.stringify({ formation, players: filledSlotsArray }),
         }
       );
-      if (!resp.ok) throw new Error('Failed to evaluate');
       const data = await resp.json();
-      setVerdict(data);
+      
+      if (!resp.ok) {
+        // Use server error message if available, otherwise generic
+        const errorMsg = data?.error || data?.analysis || 'Something went wrong. Please try again.';
+        setVerdict({
+          rating: 'Error',
+          headline: 'Could not evaluate',
+          analysis: errorMsg,
+        });
+        setPhase('result');
+        return;
+      }
+      
+      // Validate the response has the expected fields
+      if (!data.rating || !data.analysis) {
+        setVerdict({
+          rating: data.rating || 'Mid-Table 😐',
+          headline: data.headline || 'Squad evaluated',
+          analysis: data.analysis || 'Your squad has been evaluated.',
+        });
+      } else {
+        setVerdict(data);
+      }
       setPhase('result');
     } catch (err) {
       console.error('Evaluation error:', err);
-      setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Something went wrong. Please try again.' });
+      setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Network error — please check your connection and try again.' });
       setPhase('result');
     } finally {
       setIsEvaluating(false);
