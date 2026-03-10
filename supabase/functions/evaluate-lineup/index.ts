@@ -132,57 +132,89 @@ Respond with ONLY a JSON object with these fields:
 - "headline": A punchy one-liner about the team (max 10 words)
 - "analysis": A 3-4 sentence detailed analysis explaining your verdict`;
 
-    const response = await fetch(
-      "https://ai.gateway.lovable.dev/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-3-flash-preview",
-          messages: [
-            { role: "system", content: systemPrompt },
-            {
-              role: "user",
-              content: `Here is my ${formation} starting XI:\n\n${playerList}\n\nEvaluate this team.`,
-            },
-          ],
-        }),
-      }
-    );
+    let aiResponse;
+    let retries = 0;
+    const maxRetries = 2;
 
-    if (!response.ok) {
-      if (response.status === 429) {
+    while (retries <= maxRetries) {
+      aiResponse = await fetch(
+        "https://ai.gateway.lovable.dev/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "google/gemini-2.5-flash",
+            messages: [
+              { role: "system", content: systemPrompt },
+              {
+                role: "user",
+                content: `Here is my ${formation} starting XI:\n\n${playerList}\n\nEvaluate this team. Respond with ONLY valid JSON, no markdown fences.`,
+              },
+            ],
+          }),
+        }
+      );
+
+      if (aiResponse.ok) break;
+
+      if (aiResponse.status === 429) {
+        if (retries < maxRetries) {
+          retries++;
+          console.log(`Rate limited, retry ${retries}/${maxRetries}...`);
+          await new Promise((r) => setTimeout(r, 2000 * retries));
+          continue;
+        }
         return new Response(
           JSON.stringify({ error: "Rate limit exceeded. Please try again shortly." }),
           { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      if (response.status === 402) {
+      if (aiResponse.status === 402) {
         return new Response(
           JSON.stringify({ error: "AI credits exhausted. Please add credits." }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      const t = await response.text();
-      console.error("AI gateway error:", response.status, t);
-      throw new Error("AI gateway error");
+      const t = await aiResponse.text();
+      console.error("AI gateway error:", aiResponse.status, t);
+      if (retries < maxRetries) {
+        retries++;
+        console.log(`AI error, retry ${retries}/${maxRetries}...`);
+        await new Promise((r) => setTimeout(r, 1500 * retries));
+        continue;
+      }
+      throw new Error(`AI gateway error: ${aiResponse.status}`);
     }
 
-    const data = await response.json();
+    const data = await aiResponse!.json();
     const content = data.choices?.[0]?.message?.content || "";
+    console.log("AI raw response:", content.substring(0, 500));
 
     let parsed;
     try {
-      const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/) || [null, content];
-      parsed = JSON.parse(jsonMatch[1].trim());
-    } catch {
+      // Try to extract JSON from various formats
+      let jsonStr = content;
+      const fenceMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (fenceMatch) {
+        jsonStr = fenceMatch[1].trim();
+      } else {
+        // Try to find a JSON object directly
+        const objMatch = content.match(/\{[\s\S]*\}/);
+        if (objMatch) {
+          jsonStr = objMatch[0];
+        }
+      }
+      parsed = JSON.parse(jsonStr);
+    } catch (parseErr) {
+      console.error("JSON parse failed:", parseErr, "Raw:", content.substring(0, 300));
+      // Fallback: extract what we can
       parsed = {
-        rating: "Mid-Table 😐",
+        rating: "Top 4 Finish 📈",
         headline: "Interesting squad choices",
-        analysis: content,
+        analysis: content.replace(/```json|```/g, '').trim() || "Your squad has been evaluated but we couldn't parse the detailed analysis.",
       };
     }
 
