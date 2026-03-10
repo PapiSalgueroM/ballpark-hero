@@ -1352,7 +1352,8 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2021-2022", club: "Barcelona", goals: 0, assists: 3, appearances: 40, marketValue: 8 },
       { season: "2022-2023", club: "Barcelona", goals: 1, assists: 2, appearances: 40, marketValue: 5 },
       { season: "2023-2024", club: "Inter Miami", goals: 1, assists: 3, appearances: 30, marketValue: 3 },
-    ],
+      { season: "2024-2025", club: "Inter Miami", goals: 1, assists: 4, appearances: 25, marketValue: 2 },
+      { season: "2025-2026", club: "Inter Miami", goals: 1, assists: 3, appearances: 20, marketValue: 2 },
   },
   {
     name: "Marquinhos",
