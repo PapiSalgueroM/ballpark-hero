@@ -108,7 +108,7 @@ Respond with ONLY a JSON object: {"valid": true, "fullName": "First Last"} or {"
     const result = JSON.parse(jsonMatch[0]);
 
     return new Response(
-      JSON.stringify({ valid: !!result.valid, reason: result.reason || null }),
+      JSON.stringify({ valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
