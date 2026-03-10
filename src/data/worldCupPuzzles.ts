@@ -220,7 +220,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Bayern Munich',
     achievement: 'Won the Golden Boot with 10 goals',
     answer: 'Gerd Müller',
-  },
+    aliases: ['Gerd Muller', 'Mueller', 'Gerd Mueller', 'Muller'],
   {
     id: 'cruyff-1974',
     year: 1974,
