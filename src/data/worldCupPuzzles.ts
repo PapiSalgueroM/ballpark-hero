@@ -12,7 +12,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Santos',
     achievement: 'Won his 3rd World Cup, scored 4 goals',
     answer: 'Pelé',
-  },
+    aliases: ['Pele', 'Edson Arantes'],
   {
     id: 'beckenbauer-1974',
     year: 1974,
