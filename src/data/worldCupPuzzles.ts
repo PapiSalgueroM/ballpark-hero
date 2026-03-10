@@ -210,9 +210,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Paris Saint-Germain',
     achievement: 'Won the Golden Boot with 8 goals, scored a hat-trick in the final',
     answer: 'Kylian Mbappé',
-  },
-  {
-    id: 'mueller-1970',
+    aliases: ['Mbappe', 'Kylian Mbappe'],
     year: 1970,
     hostCountry: 'Mexico',
     hostFlag: '🇲🇽',
