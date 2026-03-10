@@ -120,6 +120,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
 
     // Listen for custom game-completion events from useGameCompletion
     const handleGameComplete = () => {
+      console.log('[NavbarStats] 🎯 game-completion-saved event received — refetching in 500ms');
       // Small delay to let DB writes complete
       setTimeout(fetchStats, 500);
     };
