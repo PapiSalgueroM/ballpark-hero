@@ -1249,7 +1249,8 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2021-2022", club: "Manchester City", goals: 24, assists: 9, appearances: 47, marketValue: 50 },
       { season: "2022-2023", club: "Manchester City", goals: 8, assists: 5, appearances: 36, marketValue: 30 },
       { season: "2023-2024", club: "Al-Ahli", goals: 9, assists: 7, appearances: 30, marketValue: 12 },
-    ],
+      { season: "2024-2025", club: "Al-Ahli", goals: 5, assists: 4, appearances: 25, marketValue: 8 },
+      { season: "2025-2026", club: "Al-Ahli", goals: 4, assists: 3, appearances: 20, marketValue: 5 },
   },
   {
     name: "Ousmane Dembélé",
