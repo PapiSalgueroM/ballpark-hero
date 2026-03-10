@@ -292,7 +292,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Bayern Munich',
     achievement: 'Scored the winning goal in the World Cup final',
     answer: 'Mario Götze',
-  },
+    aliases: ['Gotze', 'Mario Gotze', 'Goetze', 'Mario Goetze'],
   {
     id: 'ronaldo-1998',
     year: 1998,
