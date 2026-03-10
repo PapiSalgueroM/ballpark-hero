@@ -962,7 +962,8 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2019-2020", club: "Barcelona", goals: 21, assists: 8, appearances: 36, marketValue: 30 },
       { season: "2020-2021", club: "Atlético Madrid", goals: 21, assists: 3, appearances: 34, marketValue: 10 },
       { season: "2023-2024", club: "Inter Miami", goals: 25, assists: 12, appearances: 28, marketValue: 3 },
-    ],
+      { season: "2024-2025", club: "Inter Miami", goals: 10, assists: 5, appearances: 22, marketValue: 3 },
+      { season: "2025-2026", club: "Inter Miami", goals: 8, assists: 4, appearances: 18, marketValue: 2 },
   },
   {
     name: "Paul Pogba",
