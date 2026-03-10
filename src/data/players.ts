@@ -656,7 +656,7 @@ export const players: Player[] = [
   { name: "Saúl Ñíguez", club: "Sevilla", nationality: "Spain", league: "La Liga", goals: 2, assists: 2, position: "CM", kitNumber: 17, age: 31, marketValue: 3, difficulty: "insane" },
   { name: "Nico Williams", club: "Athletic Club", nationality: "Spain", league: "La Liga", goals: 7, assists: 6, position: "LW", kitNumber: 10, age: 23, marketValue: 70, difficulty: "insane" },
   { name: "Thomas Lemar", club: "Atlético Madrid", nationality: "France", league: "La Liga", goals: 1, assists: 3, position: "LW", kitNumber: 11, age: 30, marketValue: 8, difficulty: "insane" },
-  { name: "Ilkay Gündoğan", club: "Barcelona", nationality: "Germany", league: "La Liga", goals: 3, assists: 5, position: "CM", kitNumber: 22, age: 35, marketValue: 8, difficulty: "insane" },
+  { name: "Ilkay Gündoğan", club: "Manchester City", nationality: "Germany", league: "Premier League", goals: 2, assists: 3, position: "CM", kitNumber: 19, age: 35, marketValue: 5, difficulty: "insane" },
   { name: "Wojciech Szczęsny", club: "Barcelona", nationality: "Poland", league: "La Liga", goals: 0, assists: 0, position: "GK", kitNumber: 25, age: 36, marketValue: 2, difficulty: "insane" },
 
   // === BUNDESLIGA — deeper squads ===
