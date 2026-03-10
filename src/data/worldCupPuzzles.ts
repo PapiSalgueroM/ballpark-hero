@@ -176,9 +176,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Paris Saint-Germain',
     achievement: 'Won the Best Young Player award, scored in the final',
     answer: 'Kylian Mbappé',
-  },
-  {
-    id: 'modric-2018',
+    aliases: ['Mbappe', 'Kylian Mbappe'],
     year: 2018,
     hostCountry: 'Russia',
     hostFlag: '🇷🇺',
