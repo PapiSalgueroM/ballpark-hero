@@ -128,7 +128,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Atlético Madrid',
     achievement: 'Won the Golden Ball as the tournament\'s best player',
     answer: 'Diego Forlán',
-  },
+    aliases: ['Forlan', 'Diego Forlan'],
   {
     id: 'iniesta-2010',
     year: 2010,
