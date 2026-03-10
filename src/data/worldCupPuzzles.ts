@@ -244,7 +244,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Inter Milan',
     achievement: 'Captained West Germany to win the World Cup',
     answer: 'Lothar Matthäus',
-  },
+    aliases: ['Matthaus', 'Lothar Matthaus', 'Matthaeus', 'Lothar Matthaeus'],
   {
     id: 'klose-2006',
     year: 2006,
