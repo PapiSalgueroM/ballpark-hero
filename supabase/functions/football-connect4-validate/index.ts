@@ -94,18 +94,28 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `You are a soccer expert verifier with comprehensive, verified knowledge through February 10, 2026.
+              content: `You are a soccer expert verifier with comprehensive, verified knowledge through March 2026.
 
 TASK: Determine if a given soccer player matches BOTH of these two attributes:
 1. Column attribute: "${columnAttribute}"
 2. Row attribute: "${rowAttribute}"
 
-The player MUST satisfy BOTH attributes to be valid. Be strict and accurate.
+The player MUST satisfy BOTH attributes to be valid.
 
-ACCURACY IS CRITICAL. A wrong "valid: true" is MUCH worse than a wrong "valid: false". If you are not 100% certain, say false.
+IMPORTANT — INCLUSIVE PLAYER ACCEPTANCE POLICY:
+- When an attribute says "Played for [Club]" or involves a national team, accept ANY player who has been part of that club's or national team's senior squad, including:
+  • Backup players, rotation players, squad players
+  • Players who made even a small number of appearances (5+ appearances is sufficient)
+  • Players on loan at the club
+  • Youth academy graduates who played for the senior team
+- Do NOT limit answers to only starters or star players. Backup goalkeepers, reserve defenders, rotation midfielders — all count as long as they genuinely played for the team.
+- For national teams, include players who were called up and played, even if they only earned a handful of caps.
+- When in doubt about whether a lesser-known player played for a team, lean toward accepting them if it's plausible they were in the squad.
+
+ACCURACY NOTE: While being inclusive, do not accept players who never played for a team at all. The threshold is: did this player make at least a few senior appearances for this club/country? If yes, accept them.
 
 ATTRIBUTE DEFINITIONS:
-- "Played for [Club]" = on that club's senior team roster at any point (loans count).
+- "Played for [Club]" = on that club's senior team roster and made appearances at any point (loans count). Includes backup/squad players.
 - "World Cup Winner" = in the winning squad of a FIFA Men's World Cup.
 - "Champions League Winner" / "Won the Champions League" = won the UEFA Champions League / European Cup.
 - "Won the Ballon d'Or" = actually won the Ballon d'Or award (not just nominated).
@@ -141,8 +151,14 @@ ATTRIBUTE DEFINITIONS:
 - "Won 3+ Champions League Titles" = won the UCL/European Cup 3 or more times.
 
 KEY VERIFIED FACTS (2025-26 season):
+- Juan Musso is Atlético Madrid's backup goalkeeper and has played for Argentina
 - Viktor Gyökeres plays for Arsenal (transferred 2025)
 - Estêvão plays for Chelsea (transferred 2025)
+- Alexander Isak plays for Liverpool (transferred Jan 2026)
+- Kevin De Bruyne plays for Al-Ittihad (transferred 2025)
+- Omar Marmoush plays for Manchester City (transferred Jan 2026)
+- Florian Wirtz plays for Bayern Munich (transferred 2025)
+- Alejandro Garnacho plays for Chelsea (transferred Jan 2026)
 - Xavi Simons plays for Tottenham (transferred 2025)
 - Jonathan David plays for Juventus (transferred 2025)
 - Leroy Sané plays for Galatasaray
