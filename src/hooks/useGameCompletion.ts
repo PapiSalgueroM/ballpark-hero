@@ -26,27 +26,31 @@ export function useGameCompletion(
 
   useEffect(() => {
     if (!isComplete || !user || savedRef.current) return;
+    console.log(`[GameCompletion] 🎮 Game "${gameSlug}" complete. Score: ${score}, User: ${user.id}`);
     savedRef.current = true;
 
     const save = async () => {
       try {
         const today = new Date().toISOString().split('T')[0];
+        console.log(`[GameCompletion] 📅 Saving for date: ${today}`);
 
         // 1. Insert game score
-        await supabase.from('user_game_scores').insert({
+        const { error: gameScoreErr } = await supabase.from('user_game_scores').insert({
           user_id: user.id,
           game_type: gameSlug,
           score,
           correct_answers: correctAnswers,
           puzzle_date: today,
         });
+        console.log(`[GameCompletion] 1/5 user_game_scores insert:`, gameScoreErr ? `❌ ${gameScoreErr.message}` : '✅');
 
         // 2. Insert daily completion (unique constraint prevents duplicates)
-        await supabase.from('daily_completions').insert({
+        const { error: completionErr } = await supabase.from('daily_completions').insert({
           user_id: user.id,
           game_slug: gameSlug,
           date: today,
         });
+        console.log(`[GameCompletion] 2/5 daily_completions insert:`, completionErr ? `⚠️ ${completionErr.message}` : '✅');
 
         // 3. Upsert user_scores for navbar
         const { data: existing } = await supabase
