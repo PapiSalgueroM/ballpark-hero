@@ -3,14 +3,24 @@ import { connectionsPuzzles } from '@/data/connectionsPuzzles';
 import type { ConnectionGroup, ConnectionDifficulty } from '@/types/connections';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
+function isValidPuzzle(p: { groups: { players: string[] }[] }): boolean {
+  const all = p.groups.flatMap((g) => g.players);
+  const unique = new Set(all);
+  return p.groups.length === 4 && p.groups.every((g) => g.players.length === 4) && unique.size === 16;
+}
+
+// Pre-filter valid puzzles
+const validConnectionsPuzzles = connectionsPuzzles.filter(isValidPuzzle);
+const fallbackPuzzles = validConnectionsPuzzles.length > 0 ? validConnectionsPuzzles : connectionsPuzzles;
+
 export function useConnections() {
-  const [puzzleIndex, setPuzzleIndex] = useState(() => Math.floor(Math.random() * connectionsPuzzles.length));
+  const [puzzleIndex, setPuzzleIndex] = useState(() => Math.floor(Math.random() * fallbackPuzzles.length));
   const [streak, setStreak] = useState(() => {
     const saved = localStorage.getItem('connections-streak');
     return saved ? parseInt(saved, 10) : 0;
   });
 
-  const puzzle = useMemo(() => connectionsPuzzles[puzzleIndex % connectionsPuzzles.length], [puzzleIndex]);
+  const puzzle = useMemo(() => fallbackPuzzles[puzzleIndex % fallbackPuzzles.length], [puzzleIndex]);
 
   const allPlayers = useMemo(() => {
     const seen = new Set<string>();
