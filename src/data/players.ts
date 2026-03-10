@@ -17,7 +17,7 @@ export const players: Player[] = [
   { name: "Virgil van Dijk", club: "Liverpool", nationality: "Netherlands", league: "Premier League", goals: 2, assists: 1, position: "CB", kitNumber: 4, age: 35, marketValue: 22, difficulty: "easy" },
   { name: "Martin Ødegaard", club: "Arsenal", nationality: "Norway", league: "Premier League", goals: 7, assists: 10, position: "CAM", kitNumber: 8, age: 27, marketValue: 110, difficulty: "easy" },
   { name: "William Saliba", club: "Arsenal", nationality: "France", league: "Premier League", goals: 2, assists: 1, position: "CB", kitNumber: 2, age: 25, marketValue: 110, difficulty: "easy" },
-  { name: "Kevin De Bruyne", club: "Manchester City", nationality: "Belgium", league: "Premier League", goals: 3, assists: 6, position: "CAM", kitNumber: 17, age: 35, marketValue: 25, difficulty: "easy" },
+  { name: "Kevin De Bruyne", club: "Al-Ittihad", nationality: "Belgium", league: "Saudi Pro League", goals: 5, assists: 8, position: "CAM", kitNumber: 17, age: 35, marketValue: 18, difficulty: "easy" },
   { name: "Alisson", club: "Liverpool", nationality: "Brazil", league: "Premier League", goals: 0, assists: 0, position: "GK", kitNumber: 1, age: 34, marketValue: 30, difficulty: "easy" },
   { name: "Rodri", club: "Manchester City", nationality: "Spain", league: "Premier League", goals: 1, assists: 2, position: "CDM", kitNumber: 16, age: 30, marketValue: 120, difficulty: "easy" },
   { name: "Ollie Watkins", club: "Aston Villa", nationality: "England", league: "Premier League", goals: 11, assists: 5, position: "ST", kitNumber: 11, age: 30, marketValue: 60, difficulty: "easy" },
