@@ -919,6 +919,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2023-2024", club: "Benfica", goals: 6, assists: 9, appearances: 32, marketValue: 4 },
       { season: "2024-2025", club: "Benfica", goals: 4, assists: 6, appearances: 25, marketValue: 3 },
       { season: "2025-2026", club: "Benfica", goals: 3, assists: 5, appearances: 20, marketValue: 2 },
+    ],
   },
   {
     name: "Gareth Bale",
