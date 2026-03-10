@@ -376,5 +376,5 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     clubAtTime: 'Real Madrid',
     achievement: 'Led France\'s attack in their title defense campaign',
     answer: 'Kylian Mbappé',
-  },
+    aliases: ['Mbappe', 'Kylian Mbappe'],
 ];
