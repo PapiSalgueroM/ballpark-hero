@@ -149,9 +149,10 @@ export function useGameCompletion(
         }
 
         // Dispatch custom event so navbar stats refresh immediately
+        console.log(`[GameCompletion] ✅ All saves complete. Dispatching game-completion-saved event.`);
         window.dispatchEvent(new Event('game-completion-saved'));
       } catch (error) {
-        console.error('Failed to save game completion:', error);
+        console.error('[GameCompletion] ❌ Failed to save game completion:', error);
       }
     };
 
