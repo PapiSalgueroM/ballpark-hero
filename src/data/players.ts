@@ -405,7 +405,7 @@ export const players: Player[] = [
 
   // === LIGUE 1 — Bench & Rotation ===
   // PSG
-  { name: "Randal Kolo Muani", club: "PSG", nationality: "France", league: "Ligue 1", goals: 3, assists: 2, position: "ST", kitNumber: 23, age: 27, marketValue: 35, difficulty: "hard" },
+  { name: "Mauro Icardi", club: "PSG", nationality: "Argentina", league: "Ligue 1", goals: 4, assists: 2, position: "ST", kitNumber: 9, age: 33, marketValue: 8, difficulty: "hard" },
   { name: "Nuno Mendes", club: "PSG", nationality: "Portugal", league: "Ligue 1", goals: 0, assists: 3, position: "LB", kitNumber: 25, age: 23, marketValue: 40, difficulty: "hard" },
   { name: "Presnel Kimpembe", club: "PSG", nationality: "France", league: "Ligue 1", goals: 0, assists: 0, position: "CB", kitNumber: 3, age: 30, marketValue: 8, difficulty: "hard" },
   { name: "Fabian Ruiz", club: "PSG", nationality: "Spain", league: "Ligue 1", goals: 3, assists: 4, position: "CM", kitNumber: 8, age: 30, marketValue: 25, difficulty: "hard" },
