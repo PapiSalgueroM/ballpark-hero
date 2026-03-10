@@ -1199,6 +1199,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "Manchester United", goals: 9, assists: 6, appearances: 46, marketValue: 55 },
       { season: "2023-2024", club: "Manchester United", goals: 15, assists: 13, appearances: 48, marketValue: 55 },
       { season: "2024-2025", club: "Manchester United", goals: 8, assists: 6, appearances: 28, marketValue: 45 },
+      { season: "2025-2026", club: "Manchester United", goals: 6, assists: 7, appearances: 22, marketValue: 40 },
     ],
   },
   {
