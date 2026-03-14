@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useConquest } from '@/hooks/useConquest';
 import ConquestMap from './ConquestMap';
-import { NFL_TEAMS, TEAM_MAP, DIRECTIONS, DIR_LABELS } from '@/data/conquestData';
+import { TEAM_MAP, DIRECTIONS, DIR_LABELS } from '@/data/conquestData';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 function useSpinner(items: string[], isSpinning: boolean, finalValue: string): string {
