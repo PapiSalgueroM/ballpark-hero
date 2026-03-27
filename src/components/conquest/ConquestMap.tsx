@@ -1,4 +1,5 @@
-import { STATE_POSITIONS, TEAM_MAP, POWER_UP_STATES, TILE_W, TILE_H, isLightColor } from '@/data/conquestData';
+import { US_STATES } from '@/data/usStatesPaths';
+import { TEAM_MAP, POWER_UP_STATES, isLightColor } from '@/data/conquestData';
 import { useState } from 'react';
 
 interface ConquestMapProps {
@@ -13,8 +14,8 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
 
   const getColor = (stateId: string) => {
     const teamId = territories[stateId];
-    if (!teamId) return '#111827';
-    return TEAM_MAP.get(teamId)?.color || '#111827';
+    if (!teamId) return '#4a4a4a';
+    return TEAM_MAP.get(teamId)?.color || '#4a4a4a';
   };
 
   const isActive = (stateId: string) => {
@@ -26,7 +27,13 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
     return false;
   };
 
-  const hoveredState = hovered ? STATE_POSITIONS.find(s => s.id === hovered) : null;
+  const getTeamAbbr = (stateId: string) => {
+    const teamId = territories[stateId];
+    if (!teamId) return '';
+    return teamId;
+  };
+
+  const hoveredState = hovered ? US_STATES.find(s => s.id === hovered) : null;
   const hoveredTeam = hovered && territories[hovered] ? TEAM_MAP.get(territories[hovered]!) : null;
   const hoveredTerrCount = hoveredTeam
     ? Object.values(territories).filter(t => t === hoveredTeam.id).length
@@ -34,46 +41,58 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
 
   return (
     <div className="relative w-full">
-      <svg viewBox="0 0 580 360" className="w-full h-auto rounded-xl border border-border bg-[#0a0f1a]">
-        {STATE_POSITIONS.map(state => {
+      <svg
+        viewBox="0 0 600 340"
+        className="w-full h-auto rounded-xl border border-border bg-[#0a0f1a]"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        {US_STATES.map(state => {
           const color = getColor(state.id);
           const teamId = territories[state.id];
-          const isPowerUp = !teamId && POWER_UP_STATES.has(state.id);
-          const light = teamId ? isLightColor(color) : false;
           const active = isActive(state.id);
+          const light = teamId ? isLightColor(color) : false;
+          const abbr = getTeamAbbr(state.id);
+          const isPowerUp = !teamId && POWER_UP_STATES.has(state.id);
 
           return (
-            <g key={state.id}
+            <g
+              key={state.id}
               onMouseEnter={() => setHovered(state.id)}
               onMouseLeave={() => setHovered(null)}
+              className="cursor-pointer"
             >
-              <rect
-                x={state.x} y={state.y}
-                width={TILE_W} height={TILE_H}
-                rx={3}
+              <path
+                d={state.path}
                 fill={color}
-                stroke={active ? '#ffffff' : hovered === state.id ? '#ffffff44' : '#ffffff11'}
-                strokeWidth={active ? 2 : 1}
-                className="transition-colors duration-300"
-                style={active ? { filter: 'brightness(1.3)' } : undefined}
+                stroke={active ? '#ffffff' : hovered === state.id ? '#ffffff66' : '#ffffff22'}
+                strokeWidth={active ? 2 : 0.5}
+                style={{
+                  transition: 'fill 0.8s ease-in-out, stroke 0.2s, stroke-width 0.2s',
+                  filter: active ? 'brightness(1.3) drop-shadow(0 0 4px rgba(255,255,255,0.4))' : undefined,
+                }}
               />
-              <text
-                x={state.x + TILE_W / 2}
-                y={state.y + TILE_H / 2 + (isPowerUp ? -2 : 1)}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fontSize={isPowerUp ? 7 : 8}
-                fontWeight="bold"
-                fill={teamId ? (light ? '#111' : '#fff') : '#555'}
-                style={{ pointerEvents: 'none' }}
-              >
-                {state.id}
-              </text>
+              {/* Team abbreviation label */}
+              {abbr && (
+                <text
+                  x={state.labelX}
+                  y={state.labelY}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontSize={state.id === 'AK' || state.id === 'HI' ? 6 : 7}
+                  fontWeight="bold"
+                  fill={light ? '#111' : '#fff'}
+                  style={{ pointerEvents: 'none', textShadow: '0 0 2px rgba(0,0,0,0.6)' }}
+                >
+                  {abbr}
+                </text>
+              )}
+              {/* Power-up indicator for unclaimed states */}
               {isPowerUp && (
                 <text
-                  x={state.x + TILE_W / 2}
-                  y={state.y + TILE_H / 2 + 7}
+                  x={state.labelX}
+                  y={state.labelY}
                   textAnchor="middle"
+                  dominantBaseline="central"
                   fontSize={8}
                   style={{ pointerEvents: 'none' }}
                 >
