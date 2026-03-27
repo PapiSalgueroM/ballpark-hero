@@ -53,7 +53,7 @@ function getAliveTeamsFrom(territories: Record<string, string | null>): string[]
   return Array.from(s);
 }
 
-function findTarget(teamId: string, direction: string, territories: Record<string, string | null>): string {
+function findTarget(teamId: string, direction: string, territories: Record<string, string | null>): string | null {
   const center = getTeamCenter(teamId, territories);
   const dirAngle = DIR_ANGLES[direction];
   const alive = getAliveTeamsFrom(territories).filter(t => t !== teamId);
@@ -61,7 +61,7 @@ function findTarget(teamId: string, direction: string, territories: Record<strin
   let best: string | null = null;
   let bestDist = Infinity;
 
-  // Try within 67.5° cone
+  // Only consider enemies within 67.5° cone — no fallback
   for (const enemy of alive) {
     const ec = getTeamCenter(enemy, territories);
     const dx = ec.x - center.x, dy = ec.y - center.y;
@@ -73,18 +73,7 @@ function findTarget(teamId: string, direction: string, territories: Record<strin
     }
   }
 
-  // Fallback: closest overall
-  if (!best) {
-    bestDist = Infinity;
-    for (const enemy of alive) {
-      const ec = getTeamCenter(enemy, territories);
-      const dx = ec.x - center.x, dy = ec.y - center.y;
-      const dist = dx * dx + dy * dy;
-      if (dist < bestDist) { bestDist = dist; best = enemy; }
-    }
-  }
-
-  return best || alive[0];
+  return best;
 }
 
 function simulateBattle(
@@ -124,6 +113,7 @@ export function useConquest() {
   const [battleResult, setBattleResult] = useState<BattleResult | null>(null);
   const [gameLog, setGameLog] = useState<LogEntry[]>([]);
   const [animStartTime, setAnimStartTime] = useState(0);
+  const [noEnemyMsg, setNoEnemyMsg] = useState<string | null>(null);
 
   const timeoutsRef = useRef<number[]>([]);
   const clearTimeouts = () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
