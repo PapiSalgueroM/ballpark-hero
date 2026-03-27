@@ -65,7 +65,13 @@ export function useWorldCup() {
     else { setRevealedCount((c) => c + 1); }
   };
 
+  const giveUp = () => {
+    if (gameStatus !== 'playing') return;
+    setGameStatus('lost');
+    setRevealedCount(TOTAL_CLUES);
+  };
+
   useGameCompletion('world-cup', gameStatus !== 'playing', score);
 
-  return { puzzle, clues, revealedClues, revealedCount, totalClues: TOTAL_CLUES, guess, setGuess, attempts, submitGuess, skipClue, gameStatus, score };
+  return { puzzle, clues, revealedClues, revealedCount, totalClues: TOTAL_CLUES, guess, setGuess, attempts, submitGuess, skipClue, giveUp, gameStatus, score };
 }
