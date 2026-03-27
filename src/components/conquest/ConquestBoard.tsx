@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useConquest } from '@/hooks/useConquest';
 import ConquestMap from './ConquestMap';
-import { TEAM_MAP, DIRECTIONS, DIR_LABELS } from '@/data/conquestData';
+import { TEAM_MAP, DIRECTIONS, DIR_LABELS, ConquestPlayer } from '@/data/conquestData';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 function useSpinner(items: string[], isSpinning: boolean, finalValue: string): string {
@@ -22,6 +22,44 @@ function useSpinner(items: string[], isSpinning: boolean, finalValue: string): s
   }, [isSpinning, finalValue, items.length]);
 
   return display;
+}
+
+function RosterTable({ title, color, rosterNames, teamId }: { title: string; color: string; rosterNames: string[]; teamId: string }) {
+  const team = TEAM_MAP.get(teamId);
+  const playerMap = new Map((team?.players || []).map(p => [p.name, p]));
+
+  return (
+    <div className="rounded-lg border border-border overflow-hidden">
+      <div className="px-3 py-1.5 text-xs font-bold text-white text-center" style={{ backgroundColor: color }}>
+        {title}
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-[11px]">
+          <thead>
+            <tr className="border-b border-border bg-muted/50">
+              <th className="px-2 py-1 text-left font-semibold text-muted-foreground">Name</th>
+              <th className="px-2 py-1 text-left font-semibold text-muted-foreground">Pos</th>
+              <th className="px-2 py-1 text-center font-semibold text-muted-foreground">OVR</th>
+              <th className="px-2 py-1 text-right font-semibold text-muted-foreground">Key Stat</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rosterNames.map(name => {
+              const p = playerMap.get(name);
+              return (
+                <tr key={name} className="border-b border-border/50 last:border-0">
+                  <td className="px-2 py-1 font-medium text-foreground truncate max-w-[120px]">{name}</td>
+                  <td className="px-2 py-1 text-muted-foreground">{p?.position || '—'}</td>
+                  <td className="px-2 py-1 text-center font-bold text-foreground">{p?.overall || '—'}</td>
+                  <td className="px-2 py-1 text-right text-muted-foreground whitespace-nowrap">{p?.keyStat || '—'}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
 
 export default function ConquestBoard() {
@@ -171,7 +209,7 @@ export default function ConquestBoard() {
 
       {/* Steal Modal */}
       <Dialog open={game.phase === 'steal'} onOpenChange={() => {}}>
-        <DialogContent className="max-w-sm bg-card border-border text-foreground">
+        <DialogContent className="max-w-4xl bg-card border-border text-foreground overflow-y-auto max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-center text-lg">🏈 Steal a Player!</DialogTitle>
           </DialogHeader>
@@ -180,16 +218,45 @@ export default function ConquestBoard() {
             <span className="font-bold text-foreground">{loseTeam?.name}</span>!
             <br />Choose a player to add to {winTeam?.name}'s roster:
           </p>
-          <div className="space-y-2 mt-2 max-h-60 overflow-y-auto">
-            {(game.rosters[game.battleResult?.loser || ''] || []).map(player => (
-              <button
-                key={player}
-                onClick={() => game.stealPlayer(player)}
-                className="w-full px-4 py-3 rounded-lg border border-border hover:bg-primary/20 transition-colors text-left font-medium text-sm text-foreground"
-              >
-                {player}
-              </button>
-            ))}
+
+          {/* Player selection buttons */}
+          <div className="space-y-2 mt-2 max-h-48 overflow-y-auto">
+            {(game.rosters[game.battleResult?.loser || ''] || []).map(player => {
+              const loserTeam = TEAM_MAP.get(game.battleResult?.loser || '');
+              const playerData = loserTeam?.players?.find(p => p.name === player);
+              return (
+                <button
+                  key={player}
+                  onClick={() => game.stealPlayer(player)}
+                  className="w-full px-4 py-3 rounded-lg border border-border hover:bg-primary/20 transition-colors text-left text-sm text-foreground flex items-center justify-between gap-2"
+                >
+                  <span className="font-medium">{player}</span>
+                  {playerData && (
+                    <span className="text-xs text-muted-foreground">
+                      {playerData.position} · {playerData.overall} OVR · {playerData.keyStat}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Roster comparison tables */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+            {/* Winner's roster */}
+            <RosterTable
+              title={`${winTeam?.name || 'Winner'}'s Roster`}
+              color={winTeam?.color || '#333'}
+              rosterNames={game.rosters[game.battleResult?.winner || ''] || []}
+              teamId={game.battleResult?.winner || ''}
+            />
+            {/* Loser's roster */}
+            <RosterTable
+              title={`${loseTeam?.name || 'Loser'}'s Roster`}
+              color={loseTeam?.color || '#333'}
+              rosterNames={game.rosters[game.battleResult?.loser || ''] || []}
+              teamId={game.battleResult?.loser || ''}
+            />
           </div>
         </DialogContent>
       </Dialog>
