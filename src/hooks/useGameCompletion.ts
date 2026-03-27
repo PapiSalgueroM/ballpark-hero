@@ -134,28 +134,32 @@ export function useGameCompletion(
             .eq('game_type', gameSlug);
         }
 
-        // 5. Update profile stats
+        // 5. Update profile stats (always add score to all_time_score)
         const lastPlayed = profile?.last_played_date;
         let newStreak = profile?.current_streak || 0;
+        const profileUpdate: Record<string, any> = {
+          all_time_score: ((profile as any)?.all_time_score || 0) + score,
+        };
+
         if (lastPlayed !== today) {
           const yesterday = new Date();
           yesterday.setDate(yesterday.getDate() - 1);
           const yesterdayStr = yesterday.toISOString().split('T')[0];
           newStreak = lastPlayed === yesterdayStr ? newStreak + 1 : 1;
 
-          await supabase
-            .from('profiles')
-            .update({
-              current_streak: newStreak,
-              longest_streak: Math.max(newStreak, profile?.longest_streak || 0),
-              last_played_date: today,
-              total_games_played: (profile?.total_games_played || 0) + 1,
-              total_correct_answers: (profile?.total_correct_answers || 0) + correctAnswers,
-            })
-            .eq('user_id', user.id);
-
-          refreshProfile();
+          profileUpdate.current_streak = newStreak;
+          profileUpdate.longest_streak = Math.max(newStreak, profile?.longest_streak || 0);
+          profileUpdate.last_played_date = today;
+          profileUpdate.total_games_played = (profile?.total_games_played || 0) + 1;
+          profileUpdate.total_correct_answers = (profile?.total_correct_answers || 0) + correctAnswers;
         }
+
+        await supabase
+          .from('profiles')
+          .update(profileUpdate)
+          .eq('user_id', user.id);
+
+        refreshProfile();
 
         // Dispatch custom event so navbar stats refresh immediately
         console.log(`[GameCompletion] ✅ All saves complete. Dispatching game-completion-saved event.`);

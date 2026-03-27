@@ -313,7 +313,14 @@ export default function Profile() {
           </Card>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+            <Card>
+              <CardContent className="pt-4 text-center">
+                <Trophy className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
+                <p className="text-3xl font-bold">{(viewingProfile.all_time_score ?? 0).toLocaleString()}</p>
+                <p className="text-sm text-muted-foreground">All-Time Score</p>
+              </CardContent>
+            </Card>
             <Card>
               <CardContent className="pt-4 text-center">
                 <Flame className="w-8 h-8 text-orange-500 mx-auto mb-2" />
@@ -323,7 +330,7 @@ export default function Profile() {
             </Card>
             <Card>
               <CardContent className="pt-4 text-center">
-                <Trophy className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
+                <Trophy className="w-8 h-8 text-amber-600 mx-auto mb-2" />
                 <p className="text-3xl font-bold">{userScoreData?.longest_streak ?? viewingProfile.longest_streak ?? 0}</p>
                 <p className="text-sm text-muted-foreground">Best Streak</p>
               </CardContent>
