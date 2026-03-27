@@ -77,7 +77,7 @@ export interface NFLTeam {
   rating: number;
   color: string;
   roster: string[];
-  players: ConquestPlayer[];
+  players?: ConquestPlayer[];
 }
 
 export const NFL_TEAMS: NFLTeam[] = [
