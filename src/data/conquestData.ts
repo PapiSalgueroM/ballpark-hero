@@ -63,6 +63,13 @@ export const STATE_POSITIONS: StatePos[] = [
   { id: 'FL', name: 'Florida', x: c(8,7)[0], y: c(8,7)[1] },
 ];
 
+export interface ConquestPlayer {
+  name: string;
+  position: string;
+  overall: number;
+  keyStat: string;
+}
+
 export interface NFLTeam {
   id: string;
   name: string;
@@ -70,6 +77,7 @@ export interface NFLTeam {
   rating: number;
   color: string;
   roster: string[];
+  players: ConquestPlayer[];
 }
 
 export const NFL_TEAMS: NFLTeam[] = [
