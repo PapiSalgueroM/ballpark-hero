@@ -120,6 +120,11 @@ export function useCbbProgram() {
     }
   }, [gameState]);
 
+  const giveUp = useCallback(() => {
+    if (!gameState || gameState.gameStatus !== 'playing') return;
+    setGameState(prev => prev ? { ...prev, gameStatus: 'lost', score: 0 } : null);
+  }, [gameState]);
+
   const resetGame = useCallback(() => setGameState(null), []);
 
   const pointsForCurrentClue =
@@ -132,5 +137,5 @@ export function useCbbProgram() {
 
   useGameCompletion('cbb-program', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
-  return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPrograms: validatedPrograms, loading };
+  return { gameState, startGame, makeGuess, giveUp, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPrograms: validatedPrograms, loading };
 }

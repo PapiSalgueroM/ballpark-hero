@@ -55,6 +55,11 @@ export function useGuessTheYear() {
     }));
   }, [gameState]);
 
+  const giveUp = useCallback(() => {
+    if (gameState.gameStatus !== 'playing') return;
+    setGameState(prev => ({ ...prev, gameStatus: 'lost', score: 0 }));
+  }, [gameState]);
+
   const resetGame = useCallback(() => {
     setGameState({
       puzzle: getDailyGuessTheYearPuzzle(),
@@ -76,6 +81,7 @@ export function useGuessTheYear() {
   return {
     gameState,
     makeGuess,
+    giveUp,
     revealNextClue,
     resetGame,
     getHint,

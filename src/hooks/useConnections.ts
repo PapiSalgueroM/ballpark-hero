@@ -138,6 +138,11 @@ export function useConnections() {
     }
   }, [hintsUsed, puzzle, solvedGroups, gameStatus, hintCategories]);
 
+  const giveUp = useCallback(() => {
+    if (gameStatus !== 'playing') return;
+    setLives(0);
+  }, [gameStatus]);
+
   const resetState = useCallback(() => {
     setSelected([]);
     setSolvedGroups([]);
@@ -181,6 +186,7 @@ export function useConnections() {
     submitGuess,
     useHint,
     shufflePlayers,
+    giveUp,
     resetGame,
     nextPuzzle,
   };

@@ -11,7 +11,7 @@ import { MAX_CLUES } from '@/types/f1Driver';
 const CLUE_LABELS = ['Vibe', 'Era & Nationality', 'Teams', 'Race Wins', 'Championships', 'Famous Moment'];
 
 export function F1DriverBoard() {
-  const { gameState, startGame, makeGuess, resetGame, pointsForCurrentClue } = useF1Driver();
+  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue } = useF1Driver();
   const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
 
@@ -123,7 +123,17 @@ export function F1DriverBoard() {
 
         {/* Guess input */}
         {!isOver && (
-          <F1DriverSearch onGuess={handleGuess} guesses={guesses} currentPuzzle={gameState?.puzzle} />
+          <>
+            <F1DriverSearch onGuess={handleGuess} guesses={guesses} currentPuzzle={gameState?.puzzle} />
+            <div className="flex justify-center">
+              <button
+                onClick={giveUp}
+                className="px-4 py-2 text-sm rounded-lg border border-zinc-700 text-zinc-500 hover:text-red-400 hover:border-red-500/30 transition-colors"
+              >
+                🏳️ Give Up
+              </button>
+            </div>
+          </>
         )}
 
         {/* Previous guesses */}

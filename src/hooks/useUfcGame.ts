@@ -36,6 +36,11 @@ export function useUfcGame() {
     });
   }, [gameStatus, targetFighter]);
 
+  const giveUp = useCallback(() => {
+    if (gameStatus !== 'playing') return;
+    setGameStatus('lost');
+  }, [gameStatus]);
+
   const guessedFighterNames = useMemo(() => guesses.map(g => g.fighterName), [guesses]);
   const validatedFighters = useMemo(() => ensureAnswerInList(uniqueUfcFighters, targetFighter.name, f => f.name, targetFighter), [targetFighter]);
 
@@ -47,6 +52,7 @@ export function useUfcGame() {
     guesses,
     gameStatus,
     makeGuess,
+    giveUp,
     resetGame,
     fighters: validatedFighters,
     guessedFighterNames,

@@ -20,7 +20,7 @@ const leagueEmoji: Record<string, string> = {
 };
 
 export function GuessSoccerClubBoard() {
-  const { gameState, startGame, makeGuess, resetGame, pointsForCurrentClue } =
+  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue } =
     useGuessSoccerClub();
   const gameRef = useScrollToGame(gameState);
 
@@ -205,6 +205,15 @@ export function GuessSoccerClubBoard() {
         {isPlaying && (
           <div className="space-y-4">
             <ClubSearch usedGuesses={gameState.guesses} onGuess={makeGuess} />
+
+            <div className="flex justify-center">
+              <button
+                onClick={giveUp}
+                className="px-4 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-colors"
+              >
+                🏳️ Give Up
+              </button>
+            </div>
 
             {gameState.guesses.length > 0 && (
               <div className="text-center">

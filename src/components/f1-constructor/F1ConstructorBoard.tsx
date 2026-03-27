@@ -11,7 +11,7 @@ import { MAX_CLUES } from '@/types/f1Constructor';
 const CLUE_LABELS = ['Vibe', 'Country', 'Era', 'Championships', 'Livery', 'Famous Driver'];
 
 export function F1ConstructorBoard() {
-  const { gameState, startGame, makeGuess, resetGame, pointsForCurrentClue } = useF1Constructor();
+  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue } = useF1Constructor();
   const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
 
@@ -115,7 +115,17 @@ export function F1ConstructorBoard() {
         )}
 
         {!isOver && (
-          <F1ConstructorSearch onGuess={handleGuess} guesses={guesses} currentPuzzle={gameState?.puzzle} />
+          <>
+            <F1ConstructorSearch onGuess={handleGuess} guesses={guesses} currentPuzzle={gameState?.puzzle} />
+            <div className="flex justify-center">
+              <button
+                onClick={giveUp}
+                className="px-4 py-2 text-sm rounded-lg border border-zinc-700 text-zinc-500 hover:text-red-400 hover:border-red-500/30 transition-colors"
+              >
+                🏳️ Give Up
+              </button>
+            </div>
+          </>
         )}
 
         {guesses.length > 0 && !isOver && (

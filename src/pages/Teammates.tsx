@@ -23,6 +23,7 @@ const Teammates = () => {
     gameOver,
     answer,
     nextQuestion,
+    giveUp,
     resetGame,
     shareText,
   } = useTeammates();
@@ -101,19 +102,29 @@ const Teammates = () => {
 
             {/* Answer buttons */}
             {!answered && (
-              <div className="flex justify-center gap-4">
-                <button
-                  onClick={() => answer(true)}
-                  className="px-8 py-3 rounded-xl bg-correct text-white font-bold text-lg hover:opacity-90 transition-opacity"
-                >
-                  ✅ YES
-                </button>
-                <button
-                  onClick={() => answer(false)}
-                  className="px-8 py-3 rounded-xl bg-destructive text-white font-bold text-lg hover:opacity-90 transition-opacity"
-                >
-                  ❌ NO
-                </button>
+              <div className="space-y-3">
+                <div className="flex justify-center gap-4">
+                  <button
+                    onClick={() => answer(true)}
+                    className="px-8 py-3 rounded-xl bg-correct text-white font-bold text-lg hover:opacity-90 transition-opacity"
+                  >
+                    ✅ YES
+                  </button>
+                  <button
+                    onClick={() => answer(false)}
+                    className="px-8 py-3 rounded-xl bg-destructive text-white font-bold text-lg hover:opacity-90 transition-opacity"
+                  >
+                    ❌ NO
+                  </button>
+                </div>
+                <div className="flex justify-center">
+                  <button
+                    onClick={giveUp}
+                    className="px-4 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-colors"
+                  >
+                    🏳️ Give Up
+                  </button>
+                </div>
               </div>
             )}
 

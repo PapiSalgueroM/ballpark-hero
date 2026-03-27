@@ -75,6 +75,11 @@ export function useGuessNflTeam() {
     } : null);
   }, [gameState]);
 
+  const giveUp = useCallback(() => {
+    if (!gameState || gameState.gameStatus !== 'playing') return;
+    setGameState(prev => prev ? { ...prev, gameStatus: 'lost', score: 0, revealedClues: MAX_CLUES + 1 } : null);
+  }, [gameState]);
+
   const resetGame = useCallback(() => {
     setGameState(null);
   }, []);
@@ -118,6 +123,7 @@ export function useGuessNflTeam() {
     gameState,
     startGame,
     makeGuess,
+    giveUp,
     revealNextClue,
     resetGame,
     getClueText,

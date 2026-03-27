@@ -12,6 +12,7 @@ export function GuessTheYearBoard() {
   const {
     gameState,
     makeGuess,
+    giveUp,
     revealNextClue,
     resetGame,
     yearRange,
@@ -186,9 +187,9 @@ export function GuessTheYearBoard() {
               </div>
             )}
 
-            {/* Skip clue button */}
-            {gameState.revealedClues < maxClues && (
-              <div className="text-center">
+            {/* Skip clue / Give Up */}
+            <div className="flex items-center justify-center gap-3">
+              {gameState.revealedClues < maxClues && (
                 <Button
                   variant="ghost"
                   size="sm"
@@ -197,8 +198,16 @@ export function GuessTheYearBoard() {
                 >
                   Reveal next clue (−{POINTS_BY_CLUE[gameState.revealedClues - 1] - POINTS_BY_CLUE[gameState.revealedClues]} pts)
                 </Button>
-              </div>
-            )}
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={giveUp}
+                className="text-muted-foreground"
+              >
+                🏳️ Give Up
+              </Button>
+            </div>
           </div>
         )}
 

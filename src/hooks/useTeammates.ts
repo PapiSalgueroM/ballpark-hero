@@ -41,6 +41,11 @@ export function useTeammates() {
     }
   }, [currentIdx]);
 
+  const giveUp = useCallback(() => {
+    if (gameOver) return;
+    setGameOver(true);
+  }, [gameOver]);
+
   const resetGame = useCallback(() => {
     setPairs(buildRound());
     setCurrentIdx(0);
@@ -68,6 +73,7 @@ export function useTeammates() {
     gameOver,
     answer,
     nextQuestion,
+    giveUp,
     resetGame,
     shareText,
   };

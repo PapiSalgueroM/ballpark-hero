@@ -64,6 +64,11 @@ export function useGame() {
     });
   }, [gameStatus, targetPlayer]);
 
+  const giveUp = useCallback(() => {
+    if (gameStatus !== 'playing') return;
+    setGameStatus('lost');
+  }, [gameStatus]);
+
   const guessedPlayerNames = useMemo(() => guesses.map(g => g.playerName), [guesses]);
 
   const completionScore = gameStatus === 'won' ? Math.max(100, (MAX_GUESSES - guesses.length) * 100) : 0;
@@ -76,6 +81,7 @@ export function useGame() {
     guesses,
     gameStatus,
     makeGuess,
+    giveUp,
     resetGame,
     availablePlayers,
     guessedPlayerNames,

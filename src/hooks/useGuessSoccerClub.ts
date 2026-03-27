@@ -65,6 +65,11 @@ export function useGuessSoccerClub() {
     [gameState]
   );
 
+  const giveUp = useCallback(() => {
+    if (!gameState || gameState.gameStatus !== 'playing') return;
+    setGameState(prev => prev ? { ...prev, gameStatus: 'lost', score: 0 } : null);
+  }, [gameState]);
+
   const resetGame = useCallback(() => setGameState(null), []);
 
   const pointsForCurrentClue =
@@ -76,6 +81,7 @@ export function useGuessSoccerClub() {
     gameState,
     startGame,
     makeGuess,
+    giveUp,
     resetGame,
     maxClues: MAX_CLUES,
     pointsForCurrentClue,

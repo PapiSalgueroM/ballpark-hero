@@ -23,6 +23,7 @@ const WorldCup = () => {
     attempts,
     submitGuess,
     skipClue,
+    giveUp,
     gameStatus,
     score,
   } = useWorldCup();
@@ -107,31 +108,41 @@ const WorldCup = () => {
 
         {/* Input area */}
         {gameStatus === 'playing' && (
-          <form onSubmit={handleSubmit} className="flex gap-2 mb-4">
-            <input
-              type="text"
-              value={guess}
-              onChange={(e) => setGuess(e.target.value)}
-              placeholder="Type your guess…"
-              className="flex-1 rounded-full border border-border bg-card px-5 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--wc-green))]/50"
-            />
-            <button
-              type="submit"
-              disabled={!guess.trim()}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm bg-[hsl(var(--wc-green))] text-white hover:opacity-90 transition-opacity disabled:opacity-40"
-            >
-              <Send className="w-4 h-4" />
-              Guess
-            </button>
-            <button
-              type="button"
-              onClick={skipClue}
-              className="inline-flex items-center gap-1 px-4 py-3 rounded-full font-semibold text-sm bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all"
-            >
-              <SkipForward className="w-4 h-4" />
-              Skip
-            </button>
-          </form>
+          <div className="space-y-3 mb-4">
+            <form onSubmit={handleSubmit} className="flex gap-2">
+              <input
+                type="text"
+                value={guess}
+                onChange={(e) => setGuess(e.target.value)}
+                placeholder="Type your guess…"
+                className="flex-1 rounded-full border border-border bg-card px-5 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--wc-green))]/50"
+              />
+              <button
+                type="submit"
+                disabled={!guess.trim()}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm bg-[hsl(var(--wc-green))] text-white hover:opacity-90 transition-opacity disabled:opacity-40"
+              >
+                <Send className="w-4 h-4" />
+                Guess
+              </button>
+              <button
+                type="button"
+                onClick={skipClue}
+                className="inline-flex items-center gap-1 px-4 py-3 rounded-full font-semibold text-sm bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all"
+              >
+                <SkipForward className="w-4 h-4" />
+                Skip
+              </button>
+            </form>
+            <div className="flex justify-center">
+              <button
+                onClick={giveUp}
+                className="px-4 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-colors"
+              >
+                🏳️ Give Up
+              </button>
+            </div>
+          </div>
         )}
 
         {/* Wrong attempts */}
