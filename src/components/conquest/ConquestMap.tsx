@@ -42,7 +42,7 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
   return (
     <div className="relative w-full">
       <svg
-        viewBox="0 0 600 340"
+        viewBox="0 0 590 540"
         className="w-full h-auto rounded-xl border border-border bg-[#0a0f1a]"
         preserveAspectRatio="xMidYMid meet"
       >
