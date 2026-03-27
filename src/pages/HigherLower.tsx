@@ -33,6 +33,7 @@ const HigherLowerGame = () => {
     lastChoice,
     revealedStats,
     chooseStat,
+    giveUp,
     resetGame,
     lossReaction,
     statLabels,
@@ -71,35 +72,45 @@ const HigherLowerGame = () => {
         </header>
 
         {gameStatus === 'playing' && (
-          <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-stretch justify-center">
-            {/* Current Player - Revealed */}
-            <PlayerCard
-              player={currentPlayer}
-              revealed
-              statKeys={STAT_KEYS}
-              statEmojis={STAT_EMOJIS}
-              statLabels={statLabels}
-              onChooseStat={chooseStat}
-              interactive={!revealedStats}
-              lastChoice={lastChoice}
-              nextPlayerStats={revealedStats ? nextPlayer.stats : undefined}
-            />
+          <>
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-stretch justify-center">
+              {/* Current Player - Revealed */}
+              <PlayerCard
+                player={currentPlayer}
+                revealed
+                statKeys={STAT_KEYS}
+                statEmojis={STAT_EMOJIS}
+                statLabels={statLabels}
+                onChooseStat={chooseStat}
+                interactive={!revealedStats}
+                lastChoice={lastChoice}
+                nextPlayerStats={revealedStats ? nextPlayer.stats : undefined}
+              />
 
-            <div className="flex items-center justify-center text-2xl font-bold text-muted-foreground">
-              VS
+              <div className="flex items-center justify-center text-2xl font-bold text-muted-foreground">
+                VS
+              </div>
+
+              {/* Next Player - Hidden/Revealing */}
+              <PlayerCard
+                player={nextPlayer}
+                revealed={revealedStats}
+                statKeys={STAT_KEYS}
+                statEmojis={STAT_EMOJIS}
+                statLabels={statLabels}
+                interactive={false}
+                lastChoice={null}
+              />
             </div>
-
-            {/* Next Player - Hidden/Revealing */}
-            <PlayerCard
-              player={nextPlayer}
-              revealed={revealedStats}
-              statKeys={STAT_KEYS}
-              statEmojis={STAT_EMOJIS}
-              statLabels={statLabels}
-              interactive={false}
-              lastChoice={null}
-            />
-          </div>
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={giveUp}
+                className="px-4 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-colors"
+              >
+                🏳️ Give Up
+              </button>
+            </div>
+          </>
         )}
 
         {gameStatus === 'lost' && (

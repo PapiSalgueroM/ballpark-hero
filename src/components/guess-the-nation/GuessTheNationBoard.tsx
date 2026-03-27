@@ -18,7 +18,7 @@ const continentEmoji: Record<string, string> = {
 export function GuessTheNationBoard() {
   const {
     countries, loading, gameState, streak, currentBadge,
-    pointsForCurrentClue, startGame, makeGuess, resetGame,
+    pointsForCurrentClue, startGame, makeGuess, giveUp, resetGame,
   } = useGuessTheNation();
 
   const gameRef = useScrollToGame(gameState);
@@ -245,6 +245,16 @@ export function GuessTheNationBoard() {
         {isPlaying && (
           <div className="space-y-4">
             <NationSearch countries={countries} usedGuesses={gameState.guesses} onGuess={makeGuess} />
+
+            <div className="flex justify-center">
+              <button
+                onClick={giveUp}
+                className="px-4 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-colors"
+              >
+                🏳️ Give Up
+              </button>
+            </div>
+
             {gameState.guesses.length > 0 && (
               <div className="text-center">
                 <p className="text-xs text-muted-foreground mb-2">Wrong guesses:</p>

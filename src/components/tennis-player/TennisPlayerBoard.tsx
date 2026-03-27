@@ -11,7 +11,7 @@ import { MAX_CLUES } from '@/types/tennisPlayer';
 const CLUE_LABELS = ['Vibe', 'Nationality & Era', 'Tour', 'Grand Slam Wins', 'Slams Won', 'Famous Moment'];
 
 export function TennisPlayerBoard() {
-  const { gameState, startGame, makeGuess, resetGame, pointsForCurrentClue, allPlayers, loading } = useTennisPlayer();
+  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue, allPlayers, loading } = useTennisPlayer();
   const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
 
@@ -125,7 +125,17 @@ export function TennisPlayerBoard() {
         )}
 
         {!isOver && (
-          <TennisPlayerSearch onGuess={handleGuess} guesses={guesses} players={allPlayers} />
+          <>
+            <TennisPlayerSearch onGuess={handleGuess} guesses={guesses} players={allPlayers} />
+            <div className="flex justify-center">
+              <button
+                onClick={giveUp}
+                className="px-4 py-2 text-sm rounded-lg border border-green-800 text-green-700 hover:text-purple-400 hover:border-purple-500/30 transition-colors"
+              >
+                🏳️ Give Up
+              </button>
+            </div>
+          </>
         )}
 
         {guesses.length > 0 && !isOver && (

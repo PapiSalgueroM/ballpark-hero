@@ -15,6 +15,7 @@ export function GuessNflTeamBoard() {
     gameState,
     startGame,
     makeGuess,
+    giveUp,
     revealNextClue,
     resetGame,
     getClueText,
@@ -164,9 +165,9 @@ export function GuessNflTeamBoard() {
               </div>
             )}
 
-            {/* Skip clue button */}
-            {gameState.revealedClues < maxClues && (
-              <div className="text-center">
+            {/* Skip clue / Give Up buttons */}
+            <div className="flex items-center justify-center gap-3">
+              {gameState.revealedClues < maxClues && (
                 <Button
                   variant="ghost"
                   size="sm"
@@ -175,8 +176,16 @@ export function GuessNflTeamBoard() {
                 >
                   Skip to next clue
                 </Button>
-              </div>
-            )}
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={giveUp}
+                className="text-muted-foreground"
+              >
+                🏳️ Give Up
+              </Button>
+            </div>
           </div>
         )}
 

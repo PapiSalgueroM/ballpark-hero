@@ -38,6 +38,7 @@ const Connections = () => {
     submitGuess,
     useHint,
     shufflePlayers,
+    giveUp,
     resetGame,
     nextPuzzle,
     puzzleIndex,
@@ -140,7 +141,7 @@ const Connections = () => {
 
         {/* Actions */}
         {gameStatus === 'playing' && (
-          <div className="flex items-center justify-center gap-3 mt-6">
+          <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
             <button
               onClick={shufflePlayers}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all bg-secondary text-secondary-foreground hover:bg-secondary/80"
@@ -173,6 +174,12 @@ const Connections = () => {
             >
               <Lightbulb className="w-4 h-4" />
               Hint ({4 - hintsUsed})
+            </button>
+            <button
+              onClick={giveUp}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30"
+            >
+              🏳️ Give Up
             </button>
           </div>
         )}

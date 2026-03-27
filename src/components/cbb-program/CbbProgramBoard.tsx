@@ -11,7 +11,7 @@ import { MAX_CLUES } from '@/types/cbbProgram';
 const CLUE_LABELS = ['Vibe', 'Region & State', 'Conference', 'Tournament History', 'Championships', 'Mascot'];
 
 export function CbbProgramBoard() {
-  const { gameState, startGame, makeGuess, resetGame, pointsForCurrentClue, allPrograms, loading } = useCbbProgram();
+  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue, allPrograms, loading } = useCbbProgram();
   const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
 
@@ -125,7 +125,17 @@ export function CbbProgramBoard() {
         )}
 
         {!isOver && (
-          <CbbProgramSearch onGuess={handleGuess} guesses={guesses} programs={allPrograms} />
+          <>
+            <CbbProgramSearch onGuess={handleGuess} guesses={guesses} programs={allPrograms} />
+            <div className="flex justify-center">
+              <button
+                onClick={giveUp}
+                className="px-4 py-2 text-sm rounded-lg border border-slate-700 text-slate-500 hover:text-amber-400 hover:border-amber-500/30 transition-colors"
+              >
+                🏳️ Give Up
+              </button>
+            </div>
+          </>
         )}
 
         {guesses.length > 0 && !isOver && (

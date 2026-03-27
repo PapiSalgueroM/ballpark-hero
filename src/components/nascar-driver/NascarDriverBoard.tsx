@@ -11,7 +11,7 @@ import { MAX_CLUES } from '@/types/nascarDriver';
 const CLUE_LABELS = ['Vibe', 'Era', 'Car Number', 'Cup Series Wins', 'Championships', 'Famous Moment'];
 
 export function NascarDriverBoard() {
-  const { gameState, startGame, makeGuess, resetGame, pointsForCurrentClue, allDrivers, loading } = useNascarDriver();
+  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue, allDrivers, loading } = useNascarDriver();
   const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
 
@@ -125,7 +125,17 @@ export function NascarDriverBoard() {
         )}
 
         {!isOver && (
-          <NascarDriverSearch onGuess={handleGuess} guesses={guesses} drivers={allDrivers} />
+          <>
+            <NascarDriverSearch onGuess={handleGuess} guesses={guesses} drivers={allDrivers} />
+            <div className="flex justify-center">
+              <button
+                onClick={giveUp}
+                className="px-4 py-2 text-sm rounded-lg border border-neutral-700 text-neutral-500 hover:text-red-400 hover:border-red-500/30 transition-colors"
+              >
+                🏳️ Give Up
+              </button>
+            </div>
+          </>
         )}
 
         {guesses.length > 0 && !isOver && (
