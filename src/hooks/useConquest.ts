@@ -297,7 +297,7 @@ export function useConquest() {
   return {
     territories, rosters, eliminated, turn, phase,
     attackingTeam, direction, defendingTeam, battleResult, gameLog,
-    animStartTime,
+    animStartTime, noEnemyMsg,
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,
   };
 }
