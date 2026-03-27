@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { useTennisPlayer } from '@/hooks/useTennisPlayer';
 import { TennisPlayerSearch } from './TennisPlayerSearch';
 import { TennisPlayerHowToPlay } from './TennisPlayerHowToPlay';

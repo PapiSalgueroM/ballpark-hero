@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { useNascarDriver } from '@/hooks/useNascarDriver';
 import { NascarDriverSearch } from './NascarDriverSearch';
 import { NascarDriverHowToPlay } from './NascarDriverHowToPlay';

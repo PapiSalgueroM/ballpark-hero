@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useGuessNflTeam } from '@/hooks/useGuessNflTeam';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { Button } from '@/components/ui/button';
 import { GuessNflTeamHowToPlay } from './GuessNflTeamHowToPlay';
 import { NflTeamModeSelector } from './NflTeamModeSelector';

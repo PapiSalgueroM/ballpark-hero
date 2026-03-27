@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useGuessTheNation } from '@/hooks/useGuessTheNation';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { NationSearch } from './NationSearch';
 import GuessTheNationHowToPlay from './GuessTheNationHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';

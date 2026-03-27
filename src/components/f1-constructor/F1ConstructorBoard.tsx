@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useF1Constructor } from '@/hooks/useF1Constructor';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { F1ConstructorSearch } from './F1ConstructorSearch';
 import { F1ConstructorHowToPlay } from './F1ConstructorHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';

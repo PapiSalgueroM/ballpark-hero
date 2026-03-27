@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { useGuessTheYear } from '@/hooks/useGuessTheYear';
 import { Button } from '@/components/ui/button';
 import { GuessTheYearHowToPlay } from './GuessTheYearHowToPlay';

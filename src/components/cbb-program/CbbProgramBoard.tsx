@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useCbbProgram } from '@/hooks/useCbbProgram';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { CbbProgramSearch } from './CbbProgramSearch';
 import { CbbProgramHowToPlay } from './CbbProgramHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';

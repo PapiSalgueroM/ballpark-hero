@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useGuessSoccerClub, MAX_CLUES } from '@/hooks/useGuessSoccerClub';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { Button } from '@/components/ui/button';
 import { ClubSearch } from './ClubSearch';
 import ShareButtons from '@/components/game/ShareButtons';
