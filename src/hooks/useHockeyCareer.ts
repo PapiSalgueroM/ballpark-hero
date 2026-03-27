@@ -3,33 +3,15 @@ import { hockeyCareerPuzzles } from '@/data/hockeyCareerPlayers';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
-function getDailyIndex(): number {
-  const now = new Date();
-  const start = new Date('2026-01-01');
-  const diffDays = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-  return Math.abs(diffDays) % hockeyCareerPuzzles.length;
-}
-
 export type HockeyCareerStatus = 'playing' | 'guessed' | 'revealed';
 
 const CLUE_SCORES = [1000, 850, 700, 550, 400, 250, 100];
 
 export function useHockeyCareer() {
-  const puzzle = useMemo(() => hockeyCareerPuzzles[getDailyIndex()], []);
-  const storageKey = `hkc-daily-${puzzle.id}`;
+  const puzzle = useMemo(() => hockeyCareerPuzzles[Math.floor(Math.random() * hockeyCareerPuzzles.length)], []);
 
-  const [clueLevel, setClueLevel] = useState<number>(() => {
-    const saved = localStorage.getItem(storageKey);
-    if (saved) { try { return JSON.parse(saved).clueLevel ?? 0; } catch { /* */ } }
-    return 0;
-  });
-
-  const [status, setStatus] = useState<HockeyCareerStatus>(() => {
-    const saved = localStorage.getItem(storageKey);
-    if (saved) { try { return JSON.parse(saved).status ?? 'playing'; } catch { /* */ } }
-    return 'playing';
-  });
-
+  const [clueLevel, setClueLevel] = useState(0);
+  const [status, setStatus] = useState<HockeyCareerStatus>('playing');
   const [guessInput, setGuessInput] = useState('');
   const [wrongGuess, setWrongGuess] = useState(false);
 
@@ -51,16 +33,10 @@ export function useHockeyCareer() {
     return clues;
   }, [clueLevel, player]);
 
-  const save = useCallback((cl: number, st: HockeyCareerStatus) => {
-    localStorage.setItem(storageKey, JSON.stringify({ clueLevel: cl, status: st }));
-  }, [storageKey]);
-
   const revealNextClue = useCallback(() => {
     if (status !== 'playing' || clueLevel >= maxClue) return;
-    const next = clueLevel + 1;
-    setClueLevel(next);
-    save(next, 'playing');
-  }, [clueLevel, status, maxClue, save]);
+    setClueLevel((prev) => prev + 1);
+  }, [clueLevel, status, maxClue]);
 
   const submitGuess = useCallback((guess: string) => {
     if (status !== 'playing') return;
@@ -68,18 +44,16 @@ export function useHockeyCareer() {
     const target = player.name.toLowerCase();
     if (normalized === target || normalized === target.split(' ').pop()) {
       setStatus('guessed');
-      save(clueLevel, 'guessed');
     } else {
       setWrongGuess(true);
       setTimeout(() => setWrongGuess(false), 1500);
     }
-  }, [status, player.name, clueLevel, save]);
+  }, [status, player.name]);
 
   const giveUp = useCallback(() => {
     setStatus('revealed');
     setClueLevel(maxClue);
-    save(maxClue, 'revealed');
-  }, [maxClue, save]);
+  }, [maxClue]);
 
   const playerNames = useMemo(() => ensureAnswerInOptions(hockeyCareerPuzzles.map(p => p.player.name), player.name), [player]);
 

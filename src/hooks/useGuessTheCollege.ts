@@ -6,23 +6,7 @@ import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const SCORE_MAP: Record<number, number> = {
-  1: 1200, 2: 1000, 3: 900, 4: 800, 5: 700,
-  6: 600, 7: 500, 8: 400, 9: 300, 10: 200, 11: 100,
-};
-
-const getDateStr = () => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-};
-
-const getDailyIndex = (poolSize: number) => {
-  const dateStr = getDateStr();
-  let hash = 0;
-  for (let i = 0; i < dateStr.length; i++) {
-    hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash) % poolSize;
+  1: 1200, 2: 1000, 3: 900, 4: 800, 5: 700, 6: 600, 7: 500, 8: 400, 9: 300, 10: 200, 11: 100,
 };
 
 const generateClues = (college: College): CollegeClue[] => [
@@ -49,22 +33,15 @@ export function useGuessTheCollege() {
   const [gameOver, setGameOver] = useState(false);
   const [won, setWon] = useState(false);
   const [score, setScore] = useState(0);
-  const [streak, setStreak] = useState(() => {
-    const saved = localStorage.getItem('guess-college-streak');
-    return saved ? parseInt(saved, 10) : 0;
-  });
+  const [streak, setStreak] = useState(0);
   const [guessHistory, setGuessHistory] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [dailyCompleted, setDailyCompleted] = useState(false);
 
   const getPool = useCallback((diff: CollegeDifficulty, conf: string | null, m: CollegeGameMode) => {
     let pool = colleges;
-    if (diff === 'easy') {
-      pool = pool.filter(c => c.conferenceType === 'power4');
-    }
-    if (m === 'conference' && conf) {
-      pool = pool.filter(c => c.conference === conf);
-    }
+    if (diff === 'easy') pool = pool.filter(c => c.conferenceType === 'power4');
+    if (m === 'conference' && conf) pool = pool.filter(c => c.conference === conf);
     return pool;
   }, []);
 
@@ -76,29 +53,10 @@ export function useGuessTheCollege() {
   const pickCollege = useCallback((m: CollegeGameMode, diff: CollegeDifficulty, conf: string | null) => {
     const pool = getPool(diff, conf, m);
     if (pool.length === 0) return null;
-    if (m === 'daily') {
-      return pool[getDailyIndex(pool.length)];
-    }
     return pool[Math.floor(Math.random() * pool.length)];
   }, [getPool]);
 
   const initGame = useCallback((m: CollegeGameMode, diff: CollegeDifficulty, conf: string | null) => {
-    if (m === 'daily') {
-      const dailyKey = `guess-college-daily-${getDateStr()}-${diff}`;
-      const saved = localStorage.getItem(dailyKey);
-      if (saved) {
-        const data = JSON.parse(saved);
-        const college = pickCollege(m, diff, conf);
-        setCurrentCollege(college);
-        setGameOver(true);
-        setWon(data.won);
-        setScore(data.score);
-        setRevealedClues(12);
-        setGuessHistory(data.guessHistory || []);
-        setDailyCompleted(true);
-        return;
-      }
-    }
     const college = pickCollege(m, diff, conf);
     setCurrentCollege(college);
     setRevealedClues(1);
@@ -124,42 +82,14 @@ export function useGuessTheCollege() {
   const suggestions = useMemo(() => {
     if (searchQuery.length < 2 || !currentCollege) return [];
     const q = searchQuery.toLowerCase();
-    // Ensure current answer is always findable
     const pool = ensureAnswerInList(colleges, currentCollege.name, c => c.name, currentCollege);
-    return pool
-      .filter(c => {
-        return c.name.toLowerCase().includes(q) ||
-          c.nicknames.some(n => n.toLowerCase().includes(q)) ||
-          c.mascot.toLowerCase().includes(q);
-      })
-      .slice(0, 8);
+    return pool.filter(c => c.name.toLowerCase().includes(q) || c.nicknames.some(n => n.toLowerCase().includes(q)) || c.mascot.toLowerCase().includes(q)).slice(0, 8);
   }, [searchQuery, currentCollege]);
-
-  const saveDailyResult = useCallback((isWon: boolean, earnedScore: number, cluesUsed: number, history: string[]) => {
-    const dailyKey = `guess-college-daily-${getDateStr()}-${difficulty}`;
-    localStorage.setItem(dailyKey, JSON.stringify({
-      won: isWon,
-      score: earnedScore,
-      cluesUsed,
-      guessHistory: history,
-    }));
-    setDailyCompleted(true);
-    // Save to Supabase
-    supabase.from('college_guess_scores' as any).insert({
-      puzzle_date: getDateStr(),
-      clues_used: cluesUsed,
-      score: earnedScore,
-      guessed: isWon,
-      mode: 'daily',
-    }).then(() => {});
-  }, [difficulty]);
 
   const submitGuess = useCallback((collegeName: string) => {
     if (!currentCollege || gameOver) return;
-
     const normalizedGuess = collegeName.toLowerCase().trim();
-    const isCorrect =
-      currentCollege.name.toLowerCase() === normalizedGuess ||
+    const isCorrect = currentCollege.name.toLowerCase() === normalizedGuess ||
       currentCollege.nicknames.some(n => n.toLowerCase() === normalizedGuess) ||
       currentCollege.mascot.toLowerCase() === normalizedGuess;
 
@@ -173,65 +103,37 @@ export function useGuessTheCollege() {
       setWon(true);
       setGameOver(true);
       setRevealedClues(12);
-
-      if (mode === 'unlimited') {
-        const newStreak = streak + 1;
-        setStreak(newStreak);
-        localStorage.setItem('guess-college-streak', String(newStreak));
-      }
-      if (mode === 'daily') {
-        saveDailyResult(true, earnedScore, revealedClues, newHistory);
-      }
+      setStreak((s) => s + 1);
     } else if (revealedClues >= 11) {
       setGameOver(true);
       setWon(false);
       setScore(0);
       setRevealedClues(12);
-
-      if (mode === 'unlimited') {
-        setStreak(0);
-        localStorage.setItem('guess-college-streak', '0');
-      }
-      if (mode === 'daily') {
-        saveDailyResult(false, 0, 12, newHistory);
-      }
+      setStreak(0);
     } else {
       setRevealedClues(prev => prev + 1);
     }
-  }, [currentCollege, gameOver, revealedClues, mode, streak, guessHistory, saveDailyResult]);
+  }, [currentCollege, gameOver, revealedClues, guessHistory]);
 
   const skipClue = useCallback(() => {
     if (gameOver) return;
     if (revealedClues >= 11) {
-      // Give up
       setGameOver(true);
       setWon(false);
       setScore(0);
       setRevealedClues(12);
-      if (mode === 'unlimited') {
-        setStreak(0);
-        localStorage.setItem('guess-college-streak', '0');
-      }
-      if (mode === 'daily') {
-        saveDailyResult(false, 0, 12, guessHistory);
-      }
+      setStreak(0);
       return;
     }
     setRevealedClues(prev => prev + 1);
-  }, [gameOver, revealedClues, mode, guessHistory, saveDailyResult]);
+  }, [gameOver, revealedClues]);
 
   const playAgain = useCallback(() => {
-    if (mode === 'daily') return;
     initGame(mode, difficulty, selectedConference);
   }, [mode, difficulty, selectedConference, initGame]);
 
-  const setMode = useCallback((m: CollegeGameMode) => {
-    setModeState(m);
-  }, []);
-
-  const setDifficulty = useCallback((d: CollegeDifficulty) => {
-    setDifficultyState(d);
-  }, []);
+  const setMode = useCallback((m: CollegeGameMode) => setModeState(m), []);
+  const setDifficulty = useCallback((d: CollegeDifficulty) => setDifficultyState(d), []);
 
   const getStreakBadge = useCallback(() => {
     if (streak >= 10) return '🎓 Superfan';
@@ -249,26 +151,9 @@ export function useGuessTheCollege() {
   useGameCompletion('guess-the-college', gameOver, score);
 
   return {
-    mode, setMode,
-    difficulty, setDifficulty,
-    selectedConference, setSelectedConference,
-    currentCollege,
-    revealedClues,
-    clues,
-    gameOver,
-    won,
-    score,
-    streak,
-    guessHistory,
-    searchQuery, setSearchQuery,
-    suggestions,
-    pointsAvailable,
-    conferences,
-    submitGuess,
-    skipClue,
-    playAgain,
-    getStreakBadge,
-    getShareText,
-    dailyCompleted,
+    mode, setMode, difficulty, setDifficulty, selectedConference, setSelectedConference,
+    currentCollege, revealedClues, clues, gameOver, won, score, streak, guessHistory,
+    searchQuery, setSearchQuery, suggestions, pointsAvailable, conferences,
+    submitGuess, skipClue, playAgain, getStreakBadge, getShareText, dailyCompleted,
   };
 }

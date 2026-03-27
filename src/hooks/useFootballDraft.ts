@@ -2,25 +2,18 @@ import { useState, useMemo, useCallback } from 'react';
 import { draftGuesserPuzzles, DraftGuesserPlayer } from '@/data/draftGuesserPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
-function getDailyIndex(): number {
-  const now = new Date();
-  const start = new Date('2026-01-01');
-  const diffDays = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-  return Math.abs(diffDays) % draftGuesserPuzzles.length;
-}
-
 export type DraftGameStatus = 'playing' | 'complete';
 
 export interface PlayerGuess {
-  guessedRound: number | null; // null = undrafted, 1-7 = round
+  guessedRound: number | null;
   points: number;
   submitted: boolean;
 }
 
-const ROUND_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 0]; // 0 = undrafted
+const ROUND_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 0];
 
 function calcPoints(actual: number | null, guessed: number | null): number {
-  const a = actual ?? 0; // 0 = undrafted
+  const a = actual ?? 0;
   const g = guessed ?? 0;
   if (a === g) return 10;
   const diff = Math.abs(a - g);
@@ -30,46 +23,16 @@ function calcPoints(actual: number | null, guessed: number | null): number {
 }
 
 export function useFootballDraft() {
-  const puzzle = useMemo(() => draftGuesserPuzzles[getDailyIndex()], []);
-  const storageKey = `fd-daily-${puzzle.id}`;
+  const puzzle = useMemo(() => draftGuesserPuzzles[Math.floor(Math.random() * draftGuesserPuzzles.length)], []);
 
-  const [currentIndex, setCurrentIndex] = useState<number>(() => {
-    const saved = localStorage.getItem(storageKey);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        return parsed.currentIndex ?? 0;
-      } catch { /* ignore */ }
-    }
-    return 0;
-  });
-
-  const [guesses, setGuesses] = useState<PlayerGuess[]>(() => {
-    const saved = localStorage.getItem(storageKey);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (parsed.guesses) return parsed.guesses;
-      } catch { /* ignore */ }
-    }
-    return puzzle.players.map(() => ({ guessedRound: null, points: 0, submitted: false }));
-  });
-
-  const [revealLevel, setRevealLevel] = useState<number>(() => {
-    const saved = localStorage.getItem(storageKey);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        return parsed.revealLevel ?? 0;
-      } catch { /* ignore */ }
-    }
-    return 0;
-  });
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [guesses, setGuesses] = useState<PlayerGuess[]>(() =>
+    puzzle.players.map(() => ({ guessedRound: null, points: 0, submitted: false }))
+  );
+  const [revealLevel, setRevealLevel] = useState(0);
 
   const currentPlayer: DraftGuesserPlayer | null = currentIndex < puzzle.players.length ? puzzle.players[currentIndex] : null;
-
   const gameStatus: DraftGameStatus = guesses.every((g) => g.submitted) ? 'complete' : 'playing';
-
   const totalPoints = guesses.reduce((sum, g) => sum + g.points, 0);
   const maxPoints = puzzle.players.length * 10;
 
@@ -79,7 +42,6 @@ export function useFootballDraft() {
 
   const submitGuess = useCallback((roundGuess: number) => {
     if (!currentPlayer) return;
-    const actualRound = currentPlayer.draftRound ?? 0;
     const guessValue = roundGuess === 0 ? null : roundGuess;
     const points = calcPoints(currentPlayer.draftRound, guessValue);
 
@@ -89,34 +51,17 @@ export function useFootballDraft() {
       return next;
     });
 
-    // Save and move to next after a delay
     setTimeout(() => {
-      setCurrentIndex((prev) => {
-        const next = prev + 1;
-        return next;
-      });
+      setCurrentIndex((prev) => prev + 1);
       setRevealLevel(0);
     }, 2000);
   }, [currentIndex, currentPlayer]);
 
-  // Persist state
-  useMemo(() => {
-    localStorage.setItem(storageKey, JSON.stringify({ currentIndex, guesses, revealLevel }));
-  }, [currentIndex, guesses, revealLevel, storageKey]);
-
   useGameCompletion('football-draft', gameStatus === 'complete', totalPoints * 10);
 
   return {
-    puzzle,
-    currentPlayer,
-    currentIndex,
-    guesses,
-    revealLevel,
-    revealMore,
-    submitGuess,
-    gameStatus,
-    totalPoints,
-    maxPoints,
+    puzzle, currentPlayer, currentIndex, guesses, revealLevel,
+    revealMore, submitGuess, gameStatus, totalPoints, maxPoints,
     roundOptions: ROUND_OPTIONS,
   };
 }
