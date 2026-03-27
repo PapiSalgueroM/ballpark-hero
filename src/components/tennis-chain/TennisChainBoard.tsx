@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTennisChain } from '@/hooks/useTennisChain';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { TennisChainSearch } from './TennisChainSearch';
 import { TennisChainTimeline } from './TennisChainTimeline';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,7 @@ interface LeaderboardEntry {
 
 export function TennisChainBoard() {
   const { gameState, startGame, makeGuess, giveUp, resetGame, validating } = useTennisChain();
+  const gameRef = useScrollToGame(gameState);
   const [nickname, setNickname] = useState('');
   const [scoreSubmitted, setScoreSubmitted] = useState(false);
   const [playerRank, setPlayerRank] = useState<number | null>(null);
@@ -113,7 +115,7 @@ export function TennisChainBoard() {
   const multiplier = getTennisChainMultiplier(chainLength);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div ref={gameRef} className="min-h-screen bg-gray-950 text-white">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-4xl font-bold text-emerald-400 mb-2">🎾 Tennis Chain</h1>

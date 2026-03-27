@@ -21,6 +21,7 @@ export function GuessTheNationBoard() {
     pointsForCurrentClue, startGame, makeGuess, resetGame,
   } = useGuessTheNation();
 
+  const gameRef = useScrollToGame(gameState);
   const [difficulty, setDifficulty] = useState<'easy' | 'hard'>('easy');
 
   if (loading) {
@@ -170,7 +171,7 @@ export function GuessTheNationBoard() {
     : `I couldn't guess today's Nation — it was ${gameState.puzzle.flagEmoji} ${gameState.puzzle.countryName} 🌍`;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div ref={gameRef} className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-4 py-8 max-w-xl">
         {/* Header */}
         <div className="text-center mb-6">

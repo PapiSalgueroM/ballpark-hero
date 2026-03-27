@@ -12,6 +12,7 @@ const CLUE_LABELS = ['Vibe', 'Country', 'Era', 'Championships', 'Livery', 'Famou
 
 export function F1ConstructorBoard() {
   const { gameState, startGame, makeGuess, resetGame, pointsForCurrentClue } = useF1Constructor();
+  const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
 
   const handleGuess = (name: string) => {
@@ -68,7 +69,7 @@ export function F1ConstructorBoard() {
     : `I couldn't guess today's F1 Constructor 😤 🏎️`;
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
+    <div ref={gameRef} className="min-h-screen bg-zinc-950 text-white">
       <div className="max-w-xl mx-auto px-4 py-8 space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-display font-bold text-red-500">Guess The F1 Constructor</h1>

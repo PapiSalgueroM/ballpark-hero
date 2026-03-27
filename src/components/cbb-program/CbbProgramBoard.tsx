@@ -12,6 +12,7 @@ const CLUE_LABELS = ['Vibe', 'Region & State', 'Conference', 'Tournament History
 
 export function CbbProgramBoard() {
   const { gameState, startGame, makeGuess, resetGame, pointsForCurrentClue, allPrograms, loading } = useCbbProgram();
+  const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
 
   const handleGuess = (name: string) => {
@@ -75,7 +76,7 @@ export function CbbProgramBoard() {
     : `I couldn't guess today's CBB Program 😤 🏀`;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div ref={gameRef} className="min-h-screen bg-slate-950 text-white">
       <div className="max-w-xl mx-auto px-4 py-8 space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-display font-bold">

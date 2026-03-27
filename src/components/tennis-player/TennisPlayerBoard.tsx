@@ -12,6 +12,7 @@ const CLUE_LABELS = ['Vibe', 'Nationality & Era', 'Tour', 'Grand Slam Wins', 'Sl
 
 export function TennisPlayerBoard() {
   const { gameState, startGame, makeGuess, resetGame, pointsForCurrentClue, allPlayers, loading } = useTennisPlayer();
+  const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
 
   const handleGuess = (name: string) => {
@@ -75,7 +76,7 @@ export function TennisPlayerBoard() {
     : `I couldn't guess today's Tennis Player 😤 🎾`;
 
   return (
-    <div className="min-h-screen bg-green-950 text-white">
+    <div ref={gameRef} className="min-h-screen bg-green-950 text-white">
       <div className="max-w-xl mx-auto px-4 py-8 space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-display font-bold">

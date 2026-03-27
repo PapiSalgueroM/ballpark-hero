@@ -22,6 +22,7 @@ const leagueEmoji: Record<string, string> = {
 export function GuessSoccerClubBoard() {
   const { gameState, startGame, makeGuess, resetGame, pointsForCurrentClue } =
     useGuessSoccerClub();
+  const gameRef = useScrollToGame(gameState);
 
   const [showHelp, setShowHelp] = useState(false);
 
@@ -128,7 +129,7 @@ export function GuessSoccerClubBoard() {
     : `I couldn't guess today's Football Club — it was ${gameState.puzzle.fullName} ⚽`;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div ref={gameRef} className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-4 py-8 max-w-xl">
         {/* Header */}
         <div className="text-center mb-6">

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useUfcChain } from '@/hooks/useUfcChain';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { UfcChainSearch } from './UfcChainSearch';
 import { ChainTimeline } from './ChainTimeline';
 import { ModeSelector } from './ModeSelector';
@@ -17,6 +18,7 @@ interface LeaderboardEntry {
 
 export function CombatChainBoard() {
   const { gameState, startGame, makeGuess, giveUp, resetGame, getAvailableFighters } = useUfcChain();
+  const gameRef = useScrollToGame(gameState);
   const [nickname, setNickname] = useState('');
   const [scoreSubmitted, setScoreSubmitted] = useState(false);
   const [playerRank, setPlayerRank] = useState<number | null>(null);
@@ -108,7 +110,7 @@ export function CombatChainBoard() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div ref={gameRef} className="min-h-screen bg-black text-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-6">
