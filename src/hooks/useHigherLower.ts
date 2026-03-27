@@ -85,6 +85,11 @@ export function useHigherLower() {
     }
   }, [gameStatus, currentPlayer, nextPlayer, streak, bestStreak, revealedStats]);
 
+  const giveUp = useCallback(() => {
+    if (gameStatus !== 'playing') return;
+    setGameStatus('lost');
+  }, [gameStatus]);
+
   const resetGame = useCallback(() => {
     const p1 = getRandomPlayer([]);
     const p2 = getRandomPlayer([p1.name], p1);
@@ -110,6 +115,7 @@ export function useHigherLower() {
     lastChoice,
     revealedStats,
     chooseStat,
+    giveUp,
     resetGame,
     streakReaction,
     lossReaction,

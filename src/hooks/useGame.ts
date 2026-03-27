@@ -76,6 +76,7 @@ export function useGame() {
     guesses,
     gameStatus,
     makeGuess,
+    giveUp,
     resetGame,
     availablePlayers,
     guessedPlayerNames,

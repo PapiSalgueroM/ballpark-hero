@@ -47,6 +47,7 @@ export function useUfcGame() {
     guesses,
     gameStatus,
     makeGuess,
+    giveUp,
     resetGame,
     fighters: validatedFighters,
     guessedFighterNames,

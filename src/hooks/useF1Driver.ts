@@ -47,6 +47,11 @@ export function useF1Driver() {
     }
   }, [gameState]);
 
+  const giveUp = useCallback(() => {
+    if (!gameState || gameState.gameStatus !== 'playing') return;
+    setGameState(prev => prev ? { ...prev, gameStatus: 'lost', score: 0 } : null);
+  }, [gameState]);
+
   const resetGame = useCallback(() => setGameState(null), []);
 
   const pointsForCurrentClue =
@@ -54,5 +59,5 @@ export function useF1Driver() {
 
   useGameCompletion('f1-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
-  return { gameState, startGame, makeGuess, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue };
+  return { gameState, startGame, makeGuess, giveUp, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue };
 }
