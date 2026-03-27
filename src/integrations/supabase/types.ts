@@ -610,6 +610,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          all_time_score: number
           avatar_url: string | null
           created_at: string
           current_streak: number
@@ -624,6 +625,7 @@ export type Database = {
           username: string | null
         }
         Insert: {
+          all_time_score?: number
           avatar_url?: string | null
           created_at?: string
           current_streak?: number
@@ -638,6 +640,7 @@ export type Database = {
           username?: string | null
         }
         Update: {
+          all_time_score?: number
           avatar_url?: string | null
           created_at?: string
           current_streak?: number

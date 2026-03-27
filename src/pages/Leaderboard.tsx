@@ -25,7 +25,6 @@ interface AllTimeEntry {
   display_name: string | null;
   username: string | null;
   score: number;
-  game_type?: string;
 }
 
 interface StreakEntry {
@@ -99,29 +98,22 @@ export default function Leaderboard() {
       setDailyLeaderboard([]);
     }
 
-    // === All-time best scores ===
+    // === All-time accumulated scores from profiles ===
     const { data: allTimeData } = await supabase
-      .from('user_best_scores')
-      .select('user_id, best_score, game_type')
-      .order('best_score', { ascending: false })
+      .from('profiles')
+      .select('user_id, display_name, username, all_time_score')
+      .gt('all_time_score', 0)
+      .order('all_time_score', { ascending: false })
       .limit(50);
 
     if (allTimeData) {
-      const atUserIds = [...new Set(allTimeData.map((d) => d.user_id))];
-      const { data: atProfiles } = atUserIds.length > 0
-        ? await supabase.from('profiles').select('user_id, display_name, username').in('user_id', atUserIds)
-        : { data: [] as any[] };
-      const atMap = new Map<string, { display_name: string | null; username: string | null }>();
-      atProfiles?.forEach((p: any) => atMap.set(p.user_id, p));
-
       setAllTimeLeaderboard(
-        allTimeData.map((entry, i) => ({
+        allTimeData.map((entry: any, i: number) => ({
           rank: i + 1,
           user_id: entry.user_id,
-          display_name: atMap.get(entry.user_id)?.display_name || null,
-          username: atMap.get(entry.user_id)?.username || null,
-          score: entry.best_score,
-          game_type: entry.game_type,
+          display_name: entry.display_name || null,
+          username: entry.username || null,
+          score: entry.all_time_score,
         }))
       );
     }
@@ -307,7 +299,7 @@ export default function Leaderboard() {
                 <TabsContent value="alltime">
                   <Card>
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg">All-Time Best Scores</CardTitle>
+                     <CardTitle className="text-lg">All-Time Total Scores</CardTitle>
                     </CardHeader>
                     <CardContent>
                       {allTimeLeaderboard.length === 0 ? (
@@ -316,7 +308,7 @@ export default function Leaderboard() {
                         <div className="space-y-1">
                           {allTimeLeaderboard.map((entry) => (
                             <div
-                              key={`${entry.user_id}-${entry.game_type}`}
+                              key={entry.user_id}
                               className={`flex items-center gap-3 p-3 rounded-lg border ${
                                 entry.user_id === user?.id ? 'border-green-500/40 bg-green-500/10' : 'border-border'
                               }`}
@@ -324,9 +316,8 @@ export default function Leaderboard() {
                               <div className="flex items-center justify-center w-6">{getRankDisplay(entry.rank)}</div>
                               <div className="flex-1 min-w-0">
                                 <UserName entry={entry} />
-                                {entry.game_type && <p className="text-xs text-muted-foreground">{entry.game_type}</p>}
                               </div>
-                              <span className="text-lg font-bold text-primary">{entry.score}</span>
+                              <span className="text-lg font-bold text-primary">{entry.score.toLocaleString()}</span>
                             </div>
                           ))}
                         </div>

@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN all_time_score bigint NOT NULL DEFAULT 0;
