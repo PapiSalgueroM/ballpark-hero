@@ -18,8 +18,7 @@ export function PlayerSearch({ players, guessedNames, onSelect }: PlayerSearchPr
     if (!query.trim()) return [];
     return players
       .filter(p => !guessedNames.includes(p.name))
-      .filter(p => p.name.toLowerCase().includes(query.toLowerCase()))
-      .slice(0, 8);
+      .filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
   }, [query, players, guessedNames]);
 
   useEffect(() => {

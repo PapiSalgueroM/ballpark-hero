@@ -18,8 +18,7 @@ export function UfcFighterSearch({ fighters, guessedNames, onSelect }: UfcFighte
     if (!query.trim()) return [];
     return fighters
       .filter(f => !guessedNames.includes(f.name))
-      .filter(f => f.name.toLowerCase().includes(query.toLowerCase()))
-      .slice(0, 8);
+      .filter(f => f.name.toLowerCase().includes(query.toLowerCase()));
   }, [query, fighters, guessedNames]);
 
   useEffect(() => {

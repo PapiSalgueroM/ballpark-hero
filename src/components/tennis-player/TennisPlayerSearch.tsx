@@ -17,7 +17,7 @@ export function TennisPlayerSearch({ onGuess, guesses, players }: Props) {
         (p.player_name.toLowerCase().includes(input.toLowerCase()) ||
          p.common_names.some(n => n.toLowerCase().includes(input.toLowerCase()))) &&
         !guesses.some(g => g.toLowerCase() === p.player_name.toLowerCase())
-      ).slice(0, 6)
+      )
     : [];
 
   const submit = (name: string) => {

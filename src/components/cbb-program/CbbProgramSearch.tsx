@@ -17,7 +17,7 @@ export function CbbProgramSearch({ onGuess, guesses, programs }: Props) {
         (p.school_name.toLowerCase().includes(input.toLowerCase()) ||
          p.common_names.some(n => n.toLowerCase().includes(input.toLowerCase()))) &&
         !guesses.some(g => g.toLowerCase() === p.school_name.toLowerCase())
-      ).slice(0, 6)
+      )
     : [];
 
   const submit = (name: string) => {

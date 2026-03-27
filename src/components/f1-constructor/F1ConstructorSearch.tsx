@@ -19,7 +19,7 @@ export function F1ConstructorSearch({ onGuess, disabled, guesses, currentPuzzle 
     ? allConstructors.filter(c =>
         c.name.toLowerCase().includes(input.toLowerCase()) &&
         !guesses.some(g => g.toLowerCase() === c.name.toLowerCase())
-      ).slice(0, 6)
+      )
     : [];
 
   const submit = (name: string) => {

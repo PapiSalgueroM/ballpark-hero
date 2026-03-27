@@ -17,7 +17,7 @@ export function NascarDriverSearch({ onGuess, guesses, drivers }: Props) {
         (d.driver_name.toLowerCase().includes(input.toLowerCase()) ||
          d.common_names.some(n => n.toLowerCase().includes(input.toLowerCase()))) &&
         !guesses.some(g => g.toLowerCase() === d.driver_name.toLowerCase())
-      ).slice(0, 6)
+      )
     : [];
 
   const submit = (name: string) => {

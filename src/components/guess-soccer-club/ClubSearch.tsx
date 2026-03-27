@@ -69,7 +69,7 @@ export function ClubSearch({ usedGuesses, onGuess, disabled }: Props) {
 
       {open && filtered.length > 0 && (
         <div className="absolute z-50 w-full mt-1 bg-card border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
-          {filtered.slice(0, 8).map(name => (
+          {filtered.map(name => (
             <button
               key={name}
               onMouseDown={e => e.preventDefault()}
