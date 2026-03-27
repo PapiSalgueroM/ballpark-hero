@@ -152,12 +152,12 @@ export function useConquest() {
     setPhase('animating');
     setAnimStartTime(Date.now());
 
-    // After 4s animation → show battle result
+    // After 6s animation → show battle result
     addTimeout(() => {
       setBattleResult(result);
       setPhase('battle');
 
-      // After 2.5s → apply results
+      // After 4.5s → apply results
       addTimeout(() => {
         const newTerr = { ...territories };
         Object.keys(newTerr).forEach(s => {
@@ -183,8 +183,8 @@ export function useConquest() {
         } else {
           setPhase('ready');
         }
-      }, 2500);
-    }, 4000);
+      }, 4500);
+    }, 6000);
   }, [territories, rosters]);
 
   const stealPlayer = useCallback((playerName: string) => {
