@@ -468,11 +468,19 @@ export const NFL_TEAMS: NFLTeam[] = [
 export const TEAM_MAP = new Map(NFL_TEAMS.map(t => [t.id, t]));
 
 // Initial territory assignments — 32 teams each get 1 home state
+// Shared-state teams get nearest neighboring state:
+// CA: SF (primary), LAR → OR, LAC → UT
+// TX: DAL (primary), HOU → OK
+// OH: CLE (primary), CIN → KY
+// PA: PIT (primary), PHI → DE
+// NJ: NYG (primary), NYJ → CT
+// FL: MIA (primary), TB → AL, JAX → SC
 export const INITIAL_TERRITORIES: Record<string, string> = {
-  WA: 'SEA', CA: 'SF', NV: 'LV', AZ: 'ARI', CO: 'DEN',
-  MO: 'KC', TX: 'DAL', MN: 'MIN', WI: 'GB', IL: 'CHI',
-  MI: 'DET', OH: 'CLE', PA: 'PIT', NJ: 'NYG', MA: 'NE',
-  NY: 'BUF', FL: 'MIA', GA: 'ATL', NC: 'CAR', LA: 'NO',
+  WA: 'SEA', CA: 'SF', OR: 'LAR', UT: 'LAC', NV: 'LV', AZ: 'ARI', CO: 'DEN',
+  MO: 'KC', TX: 'DAL', OK: 'HOU', MN: 'MIN', WI: 'GB', IL: 'CHI',
+  MI: 'DET', OH: 'CLE', KY: 'CIN', PA: 'PIT', DE: 'PHI',
+  NJ: 'NYG', CT: 'NYJ', MA: 'NE', NY: 'BUF',
+  FL: 'MIA', AL: 'TB', SC: 'JAX', GA: 'ATL', NC: 'CAR', LA: 'NO',
   TN: 'TEN', IN: 'IND', MD: 'BAL', VA: 'WAS',
 };
 
