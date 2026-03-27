@@ -116,45 +116,56 @@ export default function ConquestBoard() {
 
       {/* Animation / Battle display */}
       {(game.phase === 'animating' || game.phase === 'battle') && (
-        <div className="flex items-center justify-center gap-2 flex-wrap">
-          {/* Attacker */}
-          <div className="text-center min-w-[100px]">
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Attacker</div>
-            <div
-              className="px-3 py-2 rounded-lg font-bold text-xs text-white transition-all"
-              style={{ backgroundColor: activeTeam?.color || '#333' }}
-            >
-              {activeTeam?.name || '...'}
+        <div className="space-y-2">
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            {/* Attacker */}
+            <div className="text-center min-w-[100px]">
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Attacker</div>
+              <div
+                className="px-3 py-2 rounded-lg font-bold text-xs text-white transition-all"
+                style={{ backgroundColor: activeTeam?.color || '#333' }}
+              >
+                {activeTeam?.name || '...'}
+              </div>
             </div>
+
+            {/* Direction */}
+            {(teamRevealed || game.phase === 'battle') && (
+              <>
+                <div className="text-lg">→</div>
+                <div className="text-center min-w-[80px]">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Direction</div>
+                  <div className="px-3 py-2 rounded-lg font-bold text-xs bg-card border border-border">
+                    {activeDirDisplay ? DIR_LABELS[activeDirDisplay] || activeDirDisplay : '...'}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Defender */}
+            {((dirRevealed && game.phase === 'animating' && game.defendingTeam) || game.phase === 'battle') && defTeam && (
+              <>
+                <div className="text-lg">⚔️</div>
+                <div className="text-center min-w-[100px]">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Defender</div>
+                  <div
+                    className="px-3 py-2 rounded-lg font-bold text-xs text-white"
+                    style={{ backgroundColor: defTeam.color }}
+                  >
+                    {defTeam.name}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
-          {/* Direction */}
-          {(teamRevealed || game.phase === 'battle') && (
-            <>
-              <div className="text-lg">→</div>
-              <div className="text-center min-w-[80px]">
-                <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Direction</div>
-                <div className="px-3 py-2 rounded-lg font-bold text-xs bg-card border border-border">
-                  {activeDirDisplay ? DIR_LABELS[activeDirDisplay] || activeDirDisplay : '...'}
-                </div>
+          {/* No enemy in direction message */}
+          {game.noEnemyMsg && (
+            <div className="text-center animate-in fade-in zoom-in-95">
+              <div className="inline-block px-4 py-2 rounded-lg bg-destructive/15 border border-destructive/30 text-destructive text-sm font-semibold">
+                🚫 {game.noEnemyMsg} Re-routing...
               </div>
-            </>
-          )}
-
-          {/* Defender */}
-          {((dirRevealed && game.phase === 'animating') || game.phase === 'battle') && defTeam && (
-            <>
-              <div className="text-lg">⚔️</div>
-              <div className="text-center min-w-[100px]">
-                <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Defender</div>
-                <div
-                  className="px-3 py-2 rounded-lg font-bold text-xs text-white"
-                  style={{ backgroundColor: defTeam.color }}
-                >
-                  {defTeam.name}
-                </div>
-              </div>
-            </>
+            </div>
           )}
         </div>
       )}
