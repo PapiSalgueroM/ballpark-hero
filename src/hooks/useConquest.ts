@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import {
   NFL_TEAMS, TEAM_MAP, INITIAL_TERRITORIES, STATE_POSITIONS,
-  DIRECTIONS, DIR_ANGLES, POWER_UP_STATES,
+  DIRECTIONS, DIR_ANGLES, DIR_LABELS, POWER_UP_STATES,
 } from '@/data/conquestData';
 
 export type Phase = 'ready' | 'animating' | 'battle' | 'steal' | 'gameover';
