@@ -1,6 +1,6 @@
 import { US_STATES } from '@/data/usStatesPaths';
 import { TEAM_MAP, POWER_UP_STATES, isLightColor } from '@/data/conquestData';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 interface ConquestMapProps {
   territories: Record<string, string | null>;
@@ -27,16 +27,34 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
     return false;
   };
 
-  const getTeamAbbr = (stateId: string) => {
-    const teamId = territories[stateId];
-    if (!teamId) return '';
-    return teamId;
-  };
+  // Compute one centered label per team across all their territories
+  const teamLabels = useMemo(() => {
+    const teamStates: Record<string, { xs: number[]; ys: number[]; color: string }> = {};
+    for (const state of US_STATES) {
+      const teamId = territories[state.id];
+      if (!teamId) continue;
+      if (!teamStates[teamId]) {
+        const color = TEAM_MAP.get(teamId)?.color || '#4a4a4a';
+        teamStates[teamId] = { xs: [], ys: [], color };
+      }
+      teamStates[teamId].xs.push(state.labelX);
+      teamStates[teamId].ys.push(state.labelY);
+    }
+    return Object.entries(teamStates).map(([teamId, { xs, ys, color }]) => ({
+      teamId,
+      x: xs.reduce((a, b) => a + b, 0) / xs.length,
+      y: ys.reduce((a, b) => a + b, 0) / ys.length,
+      light: isLightColor(color),
+      active: (phase === 'battle' || phase === 'animating') && (teamId === attackingTeam || teamId === defendingTeam),
+    }));
+  }, [territories, phase, attackingTeam, defendingTeam]);
 
+  // Determine which team the hovered state belongs to
+  const hoveredTeamId = hovered ? territories[hovered] : null;
   const hoveredState = hovered ? US_STATES.find(s => s.id === hovered) : null;
-  const hoveredTeam = hovered && territories[hovered] ? TEAM_MAP.get(territories[hovered]!) : null;
+  const hoveredTeam = hoveredTeamId ? TEAM_MAP.get(hoveredTeamId) : null;
   const hoveredTerrCount = hoveredTeam
-    ? Object.values(territories).filter(t => t === hoveredTeam.id).length
+    ? Object.values(territories).filter(t => t === hoveredTeamId).length
     : 0;
 
   return (
@@ -46,62 +64,103 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
         className="w-full h-auto rounded-xl border border-border bg-[#0a0f1a]"
         preserveAspectRatio="xMidYMid meet"
       >
+        {/* Layer 1: Fill states with team color, stroke = team color to merge same-team territories */}
         {US_STATES.map(state => {
           const color = getColor(state.id);
           const teamId = territories[state.id];
           const active = isActive(state.id);
-          const light = teamId ? isLightColor(color) : false;
-          const abbr = getTeamAbbr(state.id);
-          const isPowerUp = !teamId && POWER_UP_STATES.has(state.id);
 
           return (
-            <g
-              key={state.id}
-              onMouseEnter={() => setHovered(state.id)}
-              onMouseLeave={() => setHovered(null)}
-              className="cursor-pointer"
-            >
-              <path
-                d={state.path}
-                fill={color}
-                stroke={active ? '#ffffff' : hovered === state.id ? '#ffffff66' : '#ffffff22'}
-                strokeWidth={active ? 2 : 0.5}
-                style={{
-                  transition: 'fill 0.8s ease-in-out, stroke 0.2s, stroke-width 0.2s',
-                  filter: active ? 'brightness(1.3) drop-shadow(0 0 4px rgba(255,255,255,0.4))' : undefined,
-                }}
-              />
-              {/* Team abbreviation label */}
-              {abbr && (
-                <text
-                  x={state.labelX}
-                  y={state.labelY}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fontSize={7}
-                  fontWeight="bold"
-                  fill={light ? '#111' : '#fff'}
-                  style={{ pointerEvents: 'none', textShadow: '0 0 2px rgba(0,0,0,0.6)' }}
-                >
-                  {abbr}
-                </text>
-              )}
-              {/* Power-up indicator for unclaimed states */}
-              {isPowerUp && (
-                <text
-                  x={state.labelX}
-                  y={state.labelY}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fontSize={8}
-                  style={{ pointerEvents: 'none' }}
-                >
-                  ⚡
-                </text>
-              )}
-            </g>
+            <path
+              key={`fill-${state.id}`}
+              d={state.path}
+              fill={color}
+              stroke={color}
+              strokeWidth={1.5}
+              strokeLinejoin="round"
+              style={{
+                transition: 'fill 0.8s ease-in-out, stroke 0.8s ease-in-out',
+                filter: active ? 'brightness(1.3) drop-shadow(0 0 4px rgba(255,255,255,0.4))' : undefined,
+              }}
+            />
           );
         })}
+
+        {/* Layer 2: Border overlay — only visible between different teams/unclaimed */}
+        {US_STATES.map(state => {
+          const teamId = territories[state.id];
+          const isHoveredTerritory = hovered && hoveredTeamId && teamId === hoveredTeamId;
+          const active = isActive(state.id);
+
+          return (
+            <path
+              key={`border-${state.id}`}
+              d={state.path}
+              fill="transparent"
+              stroke={active ? '#ffffff' : isHoveredTerritory ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.35)'}
+              strokeWidth={active ? 2 : 0.4}
+              strokeLinejoin="round"
+              style={{
+                transition: 'stroke 0.2s, stroke-width 0.2s',
+                // Use the team color as a mask — matching strokes on adjacent same-team states cancel out visually
+                // because the fill layer beneath is the same color
+              }}
+            />
+          );
+        })}
+
+        {/* Layer 3: Interaction layer (invisible, for mouse events) */}
+        {US_STATES.map(state => (
+          <path
+            key={`interact-${state.id}`}
+            d={state.path}
+            fill="transparent"
+            stroke="none"
+            onMouseEnter={() => setHovered(state.id)}
+            onMouseLeave={() => setHovered(null)}
+            className="cursor-pointer"
+          />
+        ))}
+
+        {/* Layer 4: Power-up indicators for unclaimed states */}
+        {US_STATES.map(state => {
+          const teamId = territories[state.id];
+          if (teamId || !POWER_UP_STATES.has(state.id)) return null;
+          return (
+            <text
+              key={`powerup-${state.id}`}
+              x={state.labelX}
+              y={state.labelY}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fontSize={8}
+              style={{ pointerEvents: 'none' }}
+            >
+              ⚡
+            </text>
+          );
+        })}
+
+        {/* Layer 5: One label per team, centered across all their territories */}
+        {teamLabels.map(({ teamId, x, y, light, active: isActiveTeam }) => (
+          <text
+            key={`label-${teamId}`}
+            x={x}
+            y={y}
+            textAnchor="middle"
+            dominantBaseline="central"
+            fontSize={8}
+            fontWeight="bold"
+            fill={light ? '#111' : '#fff'}
+            style={{
+              pointerEvents: 'none',
+              textShadow: '0 0 3px rgba(0,0,0,0.7)',
+              filter: isActiveTeam ? 'drop-shadow(0 0 3px rgba(255,255,255,0.6))' : undefined,
+            }}
+          >
+            {teamId}
+          </text>
+        ))}
       </svg>
 
       {/* Tooltip */}
