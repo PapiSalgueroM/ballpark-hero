@@ -42,7 +42,7 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
   return (
     <div className="relative w-full">
       <svg
-        viewBox="0 0 590 540"
+        viewBox="0 0 590 310"
         className="w-full h-auto rounded-xl border border-border bg-[#0a0f1a]"
         preserveAspectRatio="xMidYMid meet"
       >
@@ -78,7 +78,7 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
                   y={state.labelY}
                   textAnchor="middle"
                   dominantBaseline="central"
-                  fontSize={state.id === 'AK' || state.id === 'HI' ? 6 : 7}
+                  fontSize={7}
                   fontWeight="bold"
                   fill={light ? '#111' : '#fff'}
                   style={{ pointerEvents: 'none', textShadow: '0 0 2px rgba(0,0,0,0.6)' }}
