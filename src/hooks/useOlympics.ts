@@ -9,13 +9,6 @@ import { toast } from 'sonner';
 const TOTAL_CLUES = 7;
 const CLUE_SCORES = [1000, 850, 700, 550, 400, 250, 100];
 
-function getDailyIndex(): number {
-  const now = new Date();
-  const start = new Date('2026-01-01');
-  const diffDays = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-  return Math.abs(diffDays) % olympicAthletes.length;
-}
-
 function getTodayDate(): string {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -25,26 +18,11 @@ export type OlympicsStatus = 'playing' | 'guessed' | 'revealed';
 
 export function useOlympics() {
   const todayDate = getTodayDate();
-  const storageKey = `medal-games-${todayDate}`;
 
-  const athlete = useMemo<OlympicAthlete>(() => olympicAthletes[getDailyIndex()], []);
+  const athlete = useMemo<OlympicAthlete>(() => olympicAthletes[Math.floor(Math.random() * olympicAthletes.length)], []);
 
-  const [clueLevel, setClueLevel] = useState<number>(() => {
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) return JSON.parse(saved).clueLevel ?? 0;
-    } catch { /* */ }
-    return 0;
-  });
-
-  const [status, setStatus] = useState<OlympicsStatus>(() => {
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) return JSON.parse(saved).status ?? 'playing';
-    } catch { /* */ }
-    return 'playing';
-  });
-
+  const [clueLevel, setClueLevel] = useState(0);
+  const [status, setStatus] = useState<OlympicsStatus>('playing');
   const [guessInput, setGuessInput] = useState('');
   const [wrongGuess, setWrongGuess] = useState(false);
 
@@ -61,10 +39,6 @@ export function useOlympics() {
     return clues;
   }, [clueLevel, athlete]);
 
-  const save = useCallback((cl: number, st: OlympicsStatus) => {
-    localStorage.setItem(storageKey, JSON.stringify({ clueLevel: cl, status: st }));
-  }, [storageKey]);
-
   const logScore = useCallback(async (cluesUsed: number, finalScore: number, guessed: boolean) => {
     try {
       await supabase.from('medal_games_scores').insert({
@@ -78,10 +52,8 @@ export function useOlympics() {
 
   const revealNextClue = useCallback(() => {
     if (status !== 'playing' || clueLevel >= TOTAL_CLUES - 1) return;
-    const next = clueLevel + 1;
-    setClueLevel(next);
-    save(next, 'playing');
-  }, [clueLevel, status, save]);
+    setClueLevel((prev) => prev + 1);
+  }, [clueLevel, status]);
 
   const submitGuess = useCallback((guess: string) => {
     if (status !== 'playing') return;
@@ -90,7 +62,6 @@ export function useOlympics() {
     const lastName = target.split(' ').pop() ?? '';
     if (normalized === target || normalized === lastName) {
       setStatus('guessed');
-      save(clueLevel, 'guessed');
       const finalScore = CLUE_SCORES[Math.min(clueLevel, CLUE_SCORES.length - 1)];
       toast.success(`🏅 Correct! You scored ${finalScore} points!`);
       logScore(clueLevel + 1, finalScore, true);
@@ -99,14 +70,13 @@ export function useOlympics() {
       toast.error(`❌ Not correct`);
       setTimeout(() => setWrongGuess(false), 1500);
     }
-  }, [status, athlete.name, clueLevel, save, logScore]);
+  }, [status, athlete.name, clueLevel, logScore]);
 
   const giveUp = useCallback(() => {
     setStatus('revealed');
     setClueLevel(TOTAL_CLUES - 1);
-    save(TOTAL_CLUES - 1, 'revealed');
     logScore(TOTAL_CLUES, 0, false);
-  }, [save, logScore]);
+  }, [logScore]);
 
   const shareText = useMemo(() => {
     if (status === 'playing') return '';
@@ -121,19 +91,8 @@ export function useOlympics() {
   useGameCompletion('olympics', status !== 'playing', score);
 
   return {
-    athlete,
-    clueLevel,
-    visibleClues,
-    totalClues: TOTAL_CLUES,
-    status,
-    score,
-    guessInput,
-    setGuessInput,
-    submitGuess,
-    revealNextClue,
-    giveUp,
-    wrongGuess,
-    shareText,
-    athleteNames,
+    athlete, clueLevel, visibleClues, totalClues: TOTAL_CLUES, status, score,
+    guessInput, setGuessInput, submitGuess, revealNextClue, giveUp, wrongGuess,
+    shareText, athleteNames,
   };
 }
