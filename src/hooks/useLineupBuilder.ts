@@ -4,73 +4,21 @@ import type { Formation, FilledSlot, GamePhase, AIVerdict, TeamAssignment } from
 import { FORMATIONS } from '@/types/lineupBuilder';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
-const STORAGE_KEY = 'lineup-builder-state';
-
-function loadSavedState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    // Restore filledSlots from array back to Map
-    const filledSlots = new Map<number, FilledSlot>(parsed.filledSlots ?? []);
-    return { ...parsed, filledSlots };
-  } catch {
-    return null;
-  }
-}
-
-function saveState(state: {
-  formation: Formation | null;
-  phase: GamePhase;
-  filledSlots: Map<number, FilledSlot>;
-  teamAssignments: TeamAssignment[];
-  verdict: AIVerdict | null;
-}) {
-  try {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        formation: state.formation,
-        phase: state.phase,
-        filledSlots: Array.from(state.filledSlots.entries()),
-        teamAssignments: state.teamAssignments,
-        verdict: state.verdict,
-      })
-    );
-  } catch {}
-}
-
-function clearSavedState() {
-  localStorage.removeItem(STORAGE_KEY);
-}
-
 export function useLineupBuilder() {
-  const saved = useMemo(() => loadSavedState(), []);
-
-  const [formation, setFormation] = useState<Formation | null>(saved?.formation ?? null);
-  const [phase, setPhase] = useState<GamePhase>(saved?.phase ?? 'formation');
+  const [formation, setFormation] = useState<Formation | null>(null);
+  const [phase, setPhase] = useState<GamePhase>('formation');
   const [selectedPositionIndex, setSelectedPositionIndex] = useState<number | null>(null);
-  const [filledSlots, setFilledSlots] = useState<Map<number, FilledSlot>>(saved?.filledSlots ?? new Map());
-  const [teamAssignments, setTeamAssignments] = useState<TeamAssignment[]>(saved?.teamAssignments ?? []);
-  const [verdict, setVerdict] = useState<AIVerdict | null>(saved?.verdict ?? null);
+  const [filledSlots, setFilledSlots] = useState<Map<number, FilledSlot>>(new Map());
+  const [teamAssignments, setTeamAssignments] = useState<TeamAssignment[]>([]);
+  const [verdict, setVerdict] = useState<AIVerdict | null>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [spinTeamIndex, setSpinTeamIndex] = useState(0);
 
-  // Persist state on changes
-  useEffect(() => {
-    if (phase === 'formation') {
-      clearSavedState();
-    } else {
-      saveState({ formation, phase, filledSlots, teamAssignments, verdict });
-    }
-  }, [formation, phase, filledSlots, teamAssignments, verdict]);
-
   const positions = useMemo(() => (formation ? FORMATIONS[formation] : []), [formation]);
 
-  // Current team is based on how many slots have been filled
   const filledCount = filledSlots.size;
   const currentTeam = useMemo(() => teamAssignments[filledCount] ?? null, [teamAssignments, filledCount]);
 
@@ -85,7 +33,7 @@ export function useLineupBuilder() {
   }, []);
 
   const selectPosition = useCallback((index: number) => {
-    if (filledSlots.has(index)) return; // already filled
+    if (filledSlots.has(index)) return;
     setSelectedPositionIndex(index);
     setValidationError(null);
   }, [filledSlots]);
@@ -100,7 +48,6 @@ export function useLineupBuilder() {
   }, []);
 
   const rerollTeam = useCallback(() => {
-    // Replace the current team assignment with a new random one
     setTeamAssignments((prev) => {
       const usedNames = new Set(prev.filter((_, i) => i !== filledCount).map((t) => t.name));
       const allClubs = [
@@ -141,7 +88,6 @@ export function useLineupBuilder() {
       const position = positions[selectedPositionIndex];
       if (!position) return;
 
-      // Check for duplicate players
       const trimmedName = playerName.trim().toLowerCase();
       const isDuplicate = Array.from(filledSlots.values()).some(
         (slot) => slot.playerName.toLowerCase() === trimmedName
@@ -179,7 +125,6 @@ export function useLineupBuilder() {
           return;
         }
 
-        // Use the full name returned by AI if available
         if (result.fullName && typeof result.fullName === 'string') {
           playerName = result.fullName;
         }
@@ -203,11 +148,9 @@ export function useLineupBuilder() {
       setSelectedPositionIndex(null);
       setIsValidating(false);
 
-      // Check if all 11 filled
       if (filledCount + 1 >= 11) {
         setPhase('reviewing');
       } else {
-        // Trigger spin for next team
         startSpin();
       }
     },
@@ -238,18 +181,12 @@ export function useLineupBuilder() {
       const data = await resp.json();
       
       if (!resp.ok) {
-        // Use server error message if available, otherwise generic
         const errorMsg = data?.error || data?.analysis || 'Something went wrong. Please try again.';
-        setVerdict({
-          rating: 'Error',
-          headline: 'Could not evaluate',
-          analysis: errorMsg,
-        });
+        setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: errorMsg });
         setPhase('result');
         return;
       }
       
-      // Validate the response has the expected fields
       if (!data.rating || !data.analysis) {
         setVerdict({
           rating: data.rating || 'Mid-Table 😐',
@@ -270,7 +207,6 @@ export function useLineupBuilder() {
   }, [filledSlotsArray, formation]);
 
   const resetGame = useCallback(() => {
-    clearSavedState();
     setFormation(null);
     setPhase('formation');
     setSelectedPositionIndex(null);
@@ -284,29 +220,10 @@ export function useLineupBuilder() {
   useGameCompletion('lineup-builder', phase === 'result', verdict ? 500 : 0);
 
   return {
-    formation,
-    phase,
-    selectedPositionIndex,
-    currentTeam,
-    positions,
-    filledSlots,
-    filledSlotsArray,
-    filledCount,
-    verdict,
-    isEvaluating,
-    isValidating,
-    validationError,
-    isSpinning,
-    spinTeamIndex,
-    setSpinTeamIndex,
-    selectFormation,
-    selectPosition,
-    submitPlayer,
-    evaluateTeam,
-    resetGame,
-    startSpin,
-    finishSpin,
-    rerollTeam,
-    teamAssignments,
+    formation, phase, selectedPositionIndex, currentTeam, positions,
+    filledSlots, filledSlotsArray, filledCount, verdict, isEvaluating,
+    isValidating, validationError, isSpinning, spinTeamIndex, setSpinTeamIndex,
+    selectFormation, selectPosition, submitPlayer, evaluateTeam, resetGame,
+    startSpin, finishSpin, rerollTeam, teamAssignments,
   };
 }

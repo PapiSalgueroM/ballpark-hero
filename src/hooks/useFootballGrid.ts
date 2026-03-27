@@ -4,45 +4,21 @@ import { CellState, FootballGridGameStatus, GridPuzzle } from '@/types/footballG
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
-function getDailyIndex(): number {
-  const now = new Date();
-  const start = new Date('2026-01-01');
-  const diffDays = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-  return Math.abs(diffDays) % footballGridPuzzles.length;
-}
-
 export function useFootballGrid() {
-  const puzzle: GridPuzzle = useMemo(() => footballGridPuzzles[getDailyIndex()], []);
-  const storageKey = `fg-daily-${puzzle.id}`;
+  const puzzle: GridPuzzle = useMemo(() => footballGridPuzzles[Math.floor(Math.random() * footballGridPuzzles.length)], []);
 
-  const [cells, setCells] = useState<CellState[]>(() => {
-    const saved = localStorage.getItem(storageKey);
-    if (saved) {
-      try { return JSON.parse(saved); } catch { /* ignore */ }
-    }
-    return Array.from({ length: 9 }, (_, i) => ({
+  const [cells, setCells] = useState<CellState[]>(() =>
+    Array.from({ length: 9 }, (_, i) => ({
       index: i,
       playerName: null,
       status: 'empty' as const,
       rarity: null,
-    }));
-  });
+    }))
+  );
 
   const [activeCell, setActiveCell] = useState<number | null>(null);
   const [validating, setValidating] = useState(false);
-  const [guessesLeft, setGuessesLeft] = useState(() => {
-    const saved = localStorage.getItem(`${storageKey}-guesses`);
-    return saved ? parseInt(saved, 10) : 15;
-  });
-
-  // Persist state
-  useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(cells));
-  }, [cells, storageKey]);
-
-  useEffect(() => {
-    localStorage.setItem(`${storageKey}-guesses`, String(guessesLeft));
-  }, [guessesLeft, storageKey]);
+  const [guessesLeft, setGuessesLeft] = useState(15);
 
   const correctCount = cells.filter((c) => c.status === 'correct').length;
   const gameStatus: FootballGridGameStatus =
@@ -63,14 +39,12 @@ export function useFootballGrid() {
 
   const fetchRarity = useCallback(async (puzzleId: string, cellIndex: number, playerName: string): Promise<number> => {
     try {
-      // Get total selections for this cell
       const { count: totalCount } = await supabase
         .from('football_grid_selections')
         .select('*', { count: 'exact', head: true })
         .eq('puzzle_id', puzzleId)
         .eq('cell_index', cellIndex);
 
-      // Get selections for this specific player in this cell
       const { count: playerCount } = await supabase
         .from('football_grid_selections')
         .select('*', { count: 'exact', head: true })
@@ -78,11 +52,11 @@ export function useFootballGrid() {
         .eq('cell_index', cellIndex)
         .eq('player_name', playerName.toLowerCase());
 
-      const total = (totalCount ?? 0) + 1; // +1 for current selection
+      const total = (totalCount ?? 0) + 1;
       const player = (playerCount ?? 0) + 1;
       return Math.round((player / total) * 100);
     } catch {
-      return 50; // fallback
+      return 50;
     }
   }, []);
 
@@ -103,11 +77,9 @@ export function useFootballGrid() {
       });
 
       if (error) throw error;
-
       const isValid = data?.valid === true;
 
       if (isValid) {
-        // Record selection in DB
         await supabase.from('football_grid_selections').insert({
           puzzle_id: puzzle.id,
           cell_index: activeCell,
@@ -127,7 +99,6 @@ export function useFootballGrid() {
             i === activeCell ? { ...c, playerName, status: 'wrong' } : c
           )
         );
-        // Reset wrong cell after a delay
         setTimeout(() => {
           setCells((prev) =>
             prev.map((c, i) =>
