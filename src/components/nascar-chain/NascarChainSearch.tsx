@@ -22,8 +22,7 @@ export function NascarChainSearch({ usedDrivers, onSelect, disabled }: Props) {
         if (name.toLowerCase().includes(q)) return true;
         const aliases = NASCAR_DRIVER_ALIASES[name] || [];
         return aliases.some(a => a.toLowerCase().includes(q));
-      })
-      .slice(0, 8);
+      });
   }, [query, usedDrivers]);
 
   useEffect(() => {

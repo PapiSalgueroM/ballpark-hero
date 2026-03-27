@@ -57,7 +57,7 @@ const BlurredFace = () => {
     ? allPlayerNames.filter(name =>
         name.toLowerCase().includes(query.toLowerCase()) &&
         !wrongGuesses.map(g => g.toLowerCase()).includes(name.toLowerCase())
-      ).slice(0, 8)
+      )
     : [];
 
   const handleSelect = (name: string) => {

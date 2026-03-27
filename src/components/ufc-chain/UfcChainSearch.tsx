@@ -19,8 +19,7 @@ export function UfcChainSearch({ fighters, usedFighters, onSelect, disabled }: U
     if (!query.trim() || query.length < 2) return [];
     return fighters
       .filter(f => !usedFighters.has(f.name))
-      .filter(f => f.name.toLowerCase().includes(query.toLowerCase()))
-      .slice(0, 8);
+      .filter(f => f.name.toLowerCase().includes(query.toLowerCase()));
   }, [query, fighters, usedFighters]);
 
   useEffect(() => {

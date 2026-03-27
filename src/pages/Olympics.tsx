@@ -30,7 +30,7 @@ export default function Olympics() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const filtered = guessInput.trim().length >= 2
-    ? athleteNames.filter(n => n.toLowerCase().includes(guessInput.toLowerCase())).slice(0, 6)
+    ? athleteNames.filter(n => n.toLowerCase().includes(guessInput.toLowerCase()))
     : [];
 
   const handleSelect = (name: string) => {

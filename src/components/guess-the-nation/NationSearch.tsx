@@ -33,7 +33,6 @@ export function NationSearch({ countries, usedGuesses, onGuess }: Props) {
               [c.countryName, ...c.commonNames].some((n) => normalize(n).includes(q))
             );
           })
-          .slice(0, 8)
       : [];
 
   const handleSelect = (name: string) => {

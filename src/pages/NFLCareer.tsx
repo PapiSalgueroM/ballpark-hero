@@ -33,7 +33,7 @@ const NFLCareer = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const filtered = input.length >= 2
-    ? playerNames.filter(n => n.toLowerCase().includes(input.toLowerCase())).slice(0, 8)
+    ? playerNames.filter(n => n.toLowerCase().includes(input.toLowerCase()))
     : [];
 
   const handleSelect = (name: string) => {

@@ -83,7 +83,7 @@ export function useGuessTheCollege() {
     if (searchQuery.length < 2 || !currentCollege) return [];
     const q = searchQuery.toLowerCase();
     const pool = ensureAnswerInList(colleges, currentCollege.name, c => c.name, currentCollege);
-    return pool.filter(c => c.name.toLowerCase().includes(q) || c.nicknames.some(n => n.toLowerCase().includes(q)) || c.mascot.toLowerCase().includes(q)).slice(0, 8);
+    return pool.filter(c => c.name.toLowerCase().includes(q) || c.nicknames.some(n => n.toLowerCase().includes(q)) || c.mascot.toLowerCase().includes(q));
   }, [searchQuery, currentCollege]);
 
   const submitGuess = useCallback((collegeName: string) => {

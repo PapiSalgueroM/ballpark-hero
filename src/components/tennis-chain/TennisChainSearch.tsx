@@ -22,8 +22,7 @@ export function TennisChainSearch({ usedPlayers, onSelect, disabled }: TennisCha
         if (name.toLowerCase().includes(q)) return true;
         const aliases = TENNIS_PLAYER_ALIASES[name] || [];
         return aliases.some(a => a.toLowerCase().includes(q));
-      })
-      .slice(0, 8);
+      });
   }, [query, usedPlayers]);
 
   useEffect(() => {
