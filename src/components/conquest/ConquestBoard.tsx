@@ -171,7 +171,7 @@ export default function ConquestBoard() {
 
       {/* Steal Modal */}
       <Dialog open={game.phase === 'steal'} onOpenChange={() => {}}>
-        <DialogContent className="max-w-sm bg-card border-border text-foreground">
+        <DialogContent className="max-w-4xl bg-card border-border text-foreground overflow-y-auto max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-center text-lg">🏈 Steal a Player!</DialogTitle>
           </DialogHeader>
@@ -180,16 +180,45 @@ export default function ConquestBoard() {
             <span className="font-bold text-foreground">{loseTeam?.name}</span>!
             <br />Choose a player to add to {winTeam?.name}'s roster:
           </p>
-          <div className="space-y-2 mt-2 max-h-60 overflow-y-auto">
-            {(game.rosters[game.battleResult?.loser || ''] || []).map(player => (
-              <button
-                key={player}
-                onClick={() => game.stealPlayer(player)}
-                className="w-full px-4 py-3 rounded-lg border border-border hover:bg-primary/20 transition-colors text-left font-medium text-sm text-foreground"
-              >
-                {player}
-              </button>
-            ))}
+
+          {/* Player selection buttons */}
+          <div className="space-y-2 mt-2 max-h-48 overflow-y-auto">
+            {(game.rosters[game.battleResult?.loser || ''] || []).map(player => {
+              const loserTeam = TEAM_MAP.get(game.battleResult?.loser || '');
+              const playerData = loserTeam?.players?.find(p => p.name === player);
+              return (
+                <button
+                  key={player}
+                  onClick={() => game.stealPlayer(player)}
+                  className="w-full px-4 py-3 rounded-lg border border-border hover:bg-primary/20 transition-colors text-left text-sm text-foreground flex items-center justify-between gap-2"
+                >
+                  <span className="font-medium">{player}</span>
+                  {playerData && (
+                    <span className="text-xs text-muted-foreground">
+                      {playerData.position} · {playerData.overall} OVR · {playerData.keyStat}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Roster comparison tables */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+            {/* Winner's roster */}
+            <RosterTable
+              title={`${winTeam?.name || 'Winner'}'s Roster`}
+              color={winTeam?.color || '#333'}
+              rosterNames={game.rosters[game.battleResult?.winner || ''] || []}
+              teamId={game.battleResult?.winner || ''}
+            />
+            {/* Loser's roster */}
+            <RosterTable
+              title={`${loseTeam?.name || 'Loser'}'s Roster`}
+              color={loseTeam?.color || '#333'}
+              rosterNames={game.rosters[game.battleResult?.loser || ''] || []}
+              teamId={game.battleResult?.loser || ''}
+            />
           </div>
         </DialogContent>
       </Dialog>
