@@ -24,6 +24,44 @@ function useSpinner(items: string[], isSpinning: boolean, finalValue: string): s
   return display;
 }
 
+function RosterTable({ title, color, rosterNames, teamId }: { title: string; color: string; rosterNames: string[]; teamId: string }) {
+  const team = TEAM_MAP.get(teamId);
+  const playerMap = new Map((team?.players || []).map(p => [p.name, p]));
+
+  return (
+    <div className="rounded-lg border border-border overflow-hidden">
+      <div className="px-3 py-1.5 text-xs font-bold text-white text-center" style={{ backgroundColor: color }}>
+        {title}
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-[11px]">
+          <thead>
+            <tr className="border-b border-border bg-muted/50">
+              <th className="px-2 py-1 text-left font-semibold text-muted-foreground">Name</th>
+              <th className="px-2 py-1 text-left font-semibold text-muted-foreground">Pos</th>
+              <th className="px-2 py-1 text-center font-semibold text-muted-foreground">OVR</th>
+              <th className="px-2 py-1 text-right font-semibold text-muted-foreground">Key Stat</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rosterNames.map(name => {
+              const p = playerMap.get(name);
+              return (
+                <tr key={name} className="border-b border-border/50 last:border-0">
+                  <td className="px-2 py-1 font-medium text-foreground truncate max-w-[120px]">{name}</td>
+                  <td className="px-2 py-1 text-muted-foreground">{p?.position || '—'}</td>
+                  <td className="px-2 py-1 text-center font-bold text-foreground">{p?.overall || '—'}</td>
+                  <td className="px-2 py-1 text-right text-muted-foreground whitespace-nowrap">{p?.keyStat || '—'}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 export default function ConquestBoard() {
   const game = useConquest();
   const [now, setNow] = useState(Date.now());
