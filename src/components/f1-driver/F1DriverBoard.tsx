@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useF1Driver } from '@/hooks/useF1Driver';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { F1DriverSearch } from './F1DriverSearch';
 import { F1DriverHowToPlay } from './F1DriverHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -11,6 +12,7 @@ const CLUE_LABELS = ['Vibe', 'Era & Nationality', 'Teams', 'Race Wins', 'Champio
 
 export function F1DriverBoard() {
   const { gameState, startGame, makeGuess, resetGame, pointsForCurrentClue } = useF1Driver();
+  const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
 
   const handleGuess = (name: string) => {
@@ -69,7 +71,7 @@ export function F1DriverBoard() {
     : `I couldn't guess today's F1 Driver 😤 🏎️`;
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
+    <div ref={gameRef} className="min-h-screen bg-zinc-950 text-white">
       <div className="max-w-xl mx-auto px-4 py-8 space-y-6">
         {/* Header */}
         <div className="text-center">

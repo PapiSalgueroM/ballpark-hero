@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { useNascarDriver } from '@/hooks/useNascarDriver';
 import { NascarDriverSearch } from './NascarDriverSearch';
 import { NascarDriverHowToPlay } from './NascarDriverHowToPlay';
@@ -11,6 +12,7 @@ const CLUE_LABELS = ['Vibe', 'Era', 'Car Number', 'Cup Series Wins', 'Championsh
 
 export function NascarDriverBoard() {
   const { gameState, startGame, makeGuess, resetGame, pointsForCurrentClue, allDrivers, loading } = useNascarDriver();
+  const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
 
   const handleGuess = (name: string) => {
@@ -74,7 +76,7 @@ export function NascarDriverBoard() {
     : `I couldn't guess today's NASCAR Driver 😤 🏁`;
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white">
+    <div ref={gameRef} className="min-h-screen bg-neutral-950 text-white">
       <div className="max-w-xl mx-auto px-4 py-8 space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-display font-bold">

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { useGuessTheYear } from '@/hooks/useGuessTheYear';
 import { Button } from '@/components/ui/button';
 import { GuessTheYearHowToPlay } from './GuessTheYearHowToPlay';
@@ -18,6 +19,7 @@ export function GuessTheYearBoard() {
     maxClues,
   } = useGuessTheYear();
 
+  const gameRef = useScrollToGame(gameState);
   const [showHelp, setShowHelp] = useState(false);
   const [selectedYear, setSelectedYear] = useState(2000);
 
@@ -37,7 +39,7 @@ export function GuessTheYearBoard() {
   const isLost = gameState.gameStatus === 'lost';
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div ref={gameRef} className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         {/* Header */}
         <div className="text-center mb-8">

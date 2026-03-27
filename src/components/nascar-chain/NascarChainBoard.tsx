@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNascarChain } from '@/hooks/useNascarChain';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { NascarChainSearch } from './NascarChainSearch';
 import { NascarChainTimeline } from './NascarChainTimeline';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ interface LeaderboardEntry {
 
 export function NascarChainBoard() {
   const { gameState, startGame, makeGuess, giveUp, resetGame, validating } = useNascarChain();
+  const gameRef = useScrollToGame(gameState);
   const [nickname, setNickname] = useState('');
   const [scoreSubmitted, setScoreSubmitted] = useState(false);
   const [playerRank, setPlayerRank] = useState<number | null>(null);
@@ -119,7 +121,7 @@ export function NascarChainBoard() {
   const shareScore = `I built a NASCAR Chain of ${chainLength} champions!\nScore: ${gameState.score} 🏁`;
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white">
+    <div ref={gameRef} className="min-h-screen bg-neutral-950 text-white">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold text-red-500 mb-2">🏁 NASCAR Chain</h1>

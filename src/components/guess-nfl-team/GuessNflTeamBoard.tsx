@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useGuessNflTeam } from '@/hooks/useGuessNflTeam';
+import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { Button } from '@/components/ui/button';
 import { GuessNflTeamHowToPlay } from './GuessNflTeamHowToPlay';
 import { NflTeamModeSelector } from './NflTeamModeSelector';
@@ -22,6 +23,7 @@ export function GuessNflTeamBoard() {
     pointsForCurrentClue,
   } = useGuessNflTeam();
 
+  const gameRef = useScrollToGame(gameState);
   const [showHelp, setShowHelp] = useState(false);
 
   const isPlaying = gameState?.gameStatus === 'playing';
@@ -69,7 +71,7 @@ export function GuessNflTeamBoard() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div ref={gameRef} className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         {/* Header */}
         <div className="text-center mb-6">
