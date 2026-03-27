@@ -30,7 +30,11 @@ function buildInitialTerritories(): Record<string, string | null> {
 
 function buildInitialRosters(): Record<string, string[]> {
   const r: Record<string, string[]> = {};
-  NFL_TEAMS.forEach(t => { r[t.id] = [...t.roster]; });
+  NFL_TEAMS.forEach(t => {
+    r[t.id] = t.players && t.players.length > 0
+      ? t.players.map(p => p.name)
+      : [...t.roster];
+  });
   return r;
 }
 
