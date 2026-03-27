@@ -19,7 +19,7 @@ export function F1DriverSearch({ onGuess, disabled, guesses, currentPuzzle }: Pr
     ? allDrivers.filter(d =>
         d.name.toLowerCase().includes(input.toLowerCase()) &&
         !guesses.some(g => g.toLowerCase() === d.name.toLowerCase())
-      ).slice(0, 6)
+      )
     : [];
 
   const submit = (name: string) => {
