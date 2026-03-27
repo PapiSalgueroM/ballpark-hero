@@ -1,4 +1,4 @@
-export const POWER_UP_STATES = new Set(['WY', 'MT', 'ND', 'SD', 'VT', 'NH', 'AK']);
+export const POWER_UP_STATES = new Set(['WY', 'MT', 'ND', 'SD', 'VT', 'NH']);
 
 export interface StatePos {
   id: string;
@@ -11,7 +11,6 @@ export interface StatePos {
 const c = (col: number, row: number): [number, number] => [col * 46 + 10, row * 34 + 10];
 
 export const STATE_POSITIONS: StatePos[] = [
-  { id: 'AK', name: 'Alaska', x: c(0,0)[0], y: c(0,0)[1] },
   { id: 'ME', name: 'Maine', x: c(11,0)[0], y: c(11,0)[1] },
   { id: 'VT', name: 'Vermont', x: c(9,1)[0], y: c(9,1)[1] },
   { id: 'NH', name: 'New Hampshire', x: c(10,1)[0], y: c(10,1)[1] },
@@ -58,7 +57,6 @@ export const STATE_POSITIONS: StatePos[] = [
   { id: 'MS', name: 'Mississippi', x: c(5,6)[0], y: c(5,6)[1] },
   { id: 'AL', name: 'Alabama', x: c(6,6)[0], y: c(6,6)[1] },
   { id: 'GA', name: 'Georgia', x: c(7,6)[0], y: c(7,6)[1] },
-  { id: 'HI', name: 'Hawaii', x: c(0,7)[0], y: c(0,7)[1] },
   { id: 'TX', name: 'Texas', x: c(3,7)[0], y: c(3,7)[1] },
   { id: 'FL', name: 'Florida', x: c(8,7)[0], y: c(8,7)[1] },
 ];
@@ -469,14 +467,21 @@ export const NFL_TEAMS: NFLTeam[] = [
 
 export const TEAM_MAP = new Map(NFL_TEAMS.map(t => [t.id, t]));
 
-// Initial territory assignments — 32 teams each get 1 state, rest unclaimed
+// Initial territory assignments — 32 teams each get 1 home state
+// Shared-state teams get nearest neighboring state:
+// CA: SF (primary), LAR → OR, LAC → UT
+// TX: DAL (primary), HOU → OK
+// OH: CLE (primary), CIN → KY
+// PA: PIT (primary), PHI → DE
+// NJ: NYG (primary), NYJ → CT
+// FL: MIA (primary), TB → AL, JAX → SC
 export const INITIAL_TERRITORIES: Record<string, string> = {
-  WA: 'SEA', MA: 'NE', MD: 'BAL', IN: 'IND', CO: 'DEN', NV: 'LV',
-  MI: 'DET', WI: 'GB', MN: 'MIN', LA: 'NO', TN: 'TEN', AZ: 'ARI',
-  OH: 'CLE', NY: 'BUF', TX: 'DAL', CA: 'LAR', FL: 'JAX', PA: 'PHI',
-  MO: 'KC', NC: 'CAR', VA: 'WAS', NJ: 'NYG', IL: 'CHI', GA: 'ATL',
-  KY: 'CIN', CT: 'NYJ', OR: 'SF', UT: 'LAC', SC: 'MIA', AL: 'TB',
-  WV: 'PIT', MS: 'HOU',
+  WA: 'SEA', CA: 'SF', OR: 'LAR', UT: 'LAC', NV: 'LV', AZ: 'ARI', CO: 'DEN',
+  MO: 'KC', TX: 'DAL', OK: 'HOU', MN: 'MIN', WI: 'GB', IL: 'CHI',
+  MI: 'DET', OH: 'CLE', KY: 'CIN', PA: 'PIT', DE: 'PHI',
+  NJ: 'NYG', CT: 'NYJ', MA: 'NE', NY: 'BUF',
+  FL: 'MIA', AL: 'TB', SC: 'JAX', GA: 'ATL', NC: 'CAR', LA: 'NO',
+  TN: 'TEN', IN: 'IND', MD: 'BAL', VA: 'WAS',
 };
 
 export const DIRECTIONS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'] as const;
