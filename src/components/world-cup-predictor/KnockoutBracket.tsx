@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Trophy } from "lucide-react";
+import { getFlag } from "@/pages/WorldCupPredictor";
 
 /* ───── types ───── */
 
@@ -204,11 +205,11 @@ const KnockoutBracket = ({ seeds, bestThirds }: KnockoutBracketProps) => {
             Your Predicted Champion
           </p>
           <p className="text-2xl sm:text-3xl font-extrabold text-white">
-            🏆 {champion} 🏆
+            🏆 {getFlag(champion)} {champion} 🏆
           </p>
           {thirdPlace && (
             <p className="text-sm text-[hsl(150,15%,55%)] mt-2">
-              🥉 Third Place: <span className="font-bold text-white">{thirdPlace}</span>
+              🥉 Third Place: <span className="font-bold text-white">{getFlag(thirdPlace)} {thirdPlace}</span>
             </p>
           )}
         </div>
@@ -272,7 +273,9 @@ const MatchCard = ({ match, onScore }: MatchCardProps) => {
 
   const shortName = (name: string) => {
     if (!name) return "—";
-    return name.length > 14 ? name.slice(0, 12) + "…" : name;
+    const flag = getFlag(name);
+    const display = name.length > 12 ? name.slice(0, 10) + "…" : name;
+    return flag ? `${flag} ${display}` : display;
   };
 
   return (
