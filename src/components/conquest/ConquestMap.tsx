@@ -154,15 +154,15 @@ export default function ConquestMap({
           );
         })}
 
-        {/* Team labels + invincibility shield icons */}
-        {teamLabels.map(({ teamId, x, y, light, active: isActiveTeam, invincible }) => (
-          <g key={`label-${teamId}`}>
+        {/* Team labels centered in each territory */}
+        {stateLabels.map(({ teamId, stateId, x, y, light, active: isActiveTeam, invincible }) => (
+          <g key={`label-${stateId}`}>
             <text
               x={x}
               y={y}
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize={8}
+              fontSize={7}
               fontWeight="bold"
               fill={light ? '#111' : '#fff'}
               style={{
@@ -175,11 +175,11 @@ export default function ConquestMap({
             </text>
             {invincible && (
               <text
-                x={x + 14}
-                y={y - 4}
+                x={x + 12}
+                y={y - 3}
                 textAnchor="middle"
                 dominantBaseline="central"
-                fontSize={7}
+                fontSize={6}
                 style={{ pointerEvents: 'none' }}
               >
                 🛡️
