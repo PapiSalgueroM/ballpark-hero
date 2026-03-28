@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2 } from "lucide-react";
+import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import PageSeo from "@/components/seo/PageSeo";
