@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import {
   NFL_TEAMS, TEAM_MAP, INITIAL_TERRITORIES, STATE_POSITIONS,
-  DIRECTIONS, DIR_ANGLES, DIR_LABELS,
+  DIRECTIONS, DIR_ANGLES, DIR_LABELS, STATE_GEO_COORDS,
 } from '@/data/conquestData';
 import { US_STATES } from '@/data/usStatesPaths';
 import {
