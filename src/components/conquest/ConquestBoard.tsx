@@ -76,6 +76,14 @@ function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
 export default function ConquestBoard() {
   const game = useConquest();
   const [now, setNow] = useState(Date.now());
+  const playLogRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll play log
+  useEffect(() => {
+    if (playLogRef.current && game.visiblePlays.length > 0) {
+      playLogRef.current.scrollTop = playLogRef.current.scrollHeight;
+    }
+  }, [game.visiblePlays.length]);
 
   useEffect(() => {
     if (game.phase === 'animating') {
