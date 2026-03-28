@@ -19,12 +19,15 @@ import {
   type RivalPlayer, type RivalryEvent, type RivalrySummary,
   type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,
   type UCLResult, type UCLKnockoutMatch, type Award,
+  type LegacyResult, type LegacyTier, type PostRetirementChoice, type ManagerState,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
-  dismissBallonDor,
+  dismissBallonDor, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
+  generateShareText,
   getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
 } from "@/lib/soccerCareerEngine";
+import { shareResult } from "@/lib/share";
 
 /* ─── Constants ─── */
 const NATIONALITIES = [
@@ -316,6 +319,31 @@ export default function SoccerCareer() {
     setCareer(dismissBallonDor(career, clubs));
   };
 
+  const handleManualRetire = () => {
+    if (!career) return;
+    setCareer(manualRetire(career));
+  };
+
+  const handlePostRetirement = (choice: PostRetirementChoice) => {
+    if (!career) return;
+    setCareer(choosePostRetirement(career, choice, clubs));
+  };
+
+  const handleAdvanceManager = () => {
+    if (!career) return;
+    setCareer(advanceManagerSeason(career, clubs));
+  };
+
+  const handleEndManager = () => {
+    if (!career) return;
+    setCareer(endManagerCareer(career));
+  };
+
+  const handleShare = () => {
+    if (!career) return;
+    shareResult(generateShareText(career));
+  };
+
   const handleNewCareer = () => {
     setCareer(null);
     setPreviewStats(null);
@@ -359,6 +387,11 @@ export default function SoccerCareer() {
               onRetireInternational={handleRetireInternational}
               onDismissRivalryEvent={handleDismissRivalryEvent}
               onDismissBallonDor={handleDismissBallonDor}
+              onManualRetire={handleManualRetire}
+              onPostRetirement={handlePostRetirement}
+              onAdvanceManager={handleAdvanceManager}
+              onEndManager={handleEndManager}
+              onShare={handleShare}
               onNewCareer={handleNewCareer}
               timelineRef={timelineRef}
             />
@@ -988,8 +1021,217 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss }: { bdor: BallonDorRes
   );
 }
 
+/* ─── Retirement Ceremony Card ─── */
+function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: CareerState; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice) => void }) {
+  const legacy = career.legacy!;
+  const tierColors: Record<LegacyTier, string> = { "GOAT": "text-amber-400", "LEGEND": "text-purple-400", "GREAT": "text-emerald-400", "SOLID PRO": "text-blue-400", "JOURNEYMAN": "text-muted-foreground" };
+  const tierEmoji: Record<LegacyTier, string> = { "GOAT": "🐐", "LEGEND": "🏛️", "GREAT": "⭐", "SOLID PRO": "💪", "JOURNEYMAN": "🎒" };
+  
+  // All clubs played for
+  const clubHistory = career.seasons.filter(s => s.type === "playing").reduce<string[]>((acc, s) => {
+    if (!acc.includes(s.club)) acc.push(s.club);
+    return acc;
+  }, []);
+
+  return (
+    <div className="rounded-xl border-2 border-amber-400/40 bg-gradient-to-b from-amber-500/10 to-transparent p-5 space-y-4">
+      <div className="text-center space-y-2">
+        <div className="text-5xl">👋</div>
+        <h3 className="text-xl font-black tracking-tight">RETIREMENT</h3>
+        <p className="text-sm text-muted-foreground">{getFlag(career.nationality)} {career.playerName} retires at age {career.age}</p>
+      </div>
+
+      {/* Career summary grid */}
+      <div className="grid grid-cols-3 gap-2 text-center">
+        {[
+          { l: "Apps", v: totals.apps }, { l: "Goals", v: totals.goals }, { l: "Assists", v: totals.assists },
+          { l: "Trophies", v: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups },
+          { l: "Ballon d'Or", v: totals.ballonDors }, { l: "Int'l Caps", v: career.intStats.caps },
+        ].map(s => (
+          <div key={s.l} className="bg-muted/20 rounded-lg p-2">
+            <div className="text-lg font-black">{s.v}</div>
+            <div className="text-[9px] text-muted-foreground">{s.l}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Clubs played for */}
+      <div className="text-center">
+        <div className="text-[10px] text-muted-foreground uppercase font-bold mb-1">Clubs</div>
+        <div className="flex flex-wrap justify-center gap-1">
+          {clubHistory.map(c => (
+            <span key={c} className="text-[10px] px-2 py-0.5 rounded-full bg-muted/30 text-foreground">{c}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Financial summary */}
+      <div className="grid grid-cols-2 gap-2 text-center text-xs">
+        <div className="bg-muted/20 rounded-lg p-2">
+          <div className="font-black text-emerald-400">{formatNetWorth(career.netWorth)}</div>
+          <div className="text-[9px] text-muted-foreground">Net Worth</div>
+        </div>
+        <div className="bg-muted/20 rounded-lg p-2">
+          <div className="font-black">{formatFollowers(career.socialMediaFollowers)}</div>
+          <div className="text-[9px] text-muted-foreground">Followers</div>
+        </div>
+      </div>
+
+      {/* Legacy score */}
+      <div className="text-center space-y-1 py-2">
+        <div className="text-3xl">{tierEmoji[legacy.tier]}</div>
+        <div className={`text-2xl font-black ${tierColors[legacy.tier]}`}>{legacy.tier}</div>
+        <div className="text-4xl font-black">{legacy.score}<span className="text-lg text-muted-foreground">/100</span></div>
+      </div>
+
+      {/* Post-retirement choices */}
+      <div className="space-y-2">
+        <div className="text-xs text-center text-muted-foreground font-bold uppercase">What's Next?</div>
+        <Button onClick={() => onPostRetirement("retire")} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+          🏖️ Retire and Enjoy Life
+        </Button>
+        <Button onClick={() => onPostRetirement("manager")} variant="outline" className="w-full h-11 text-sm font-bold">
+          📋 Become a Manager
+        </Button>
+        <Button onClick={() => onPostRetirement("pundit")} variant="outline" className="w-full h-11 text-sm font-bold">
+          🎙️ Become a TV Pundit (+5 Legacy)
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Post-Retirement Card (unused since choices are in ceremony, but kept for direct phase) ─── */
+function PostRetirementCard({ career, onChoice }: { career: CareerState; onChoice: (c: PostRetirementChoice) => void }) {
+  return (
+    <div className="rounded-xl border border-border p-5 space-y-3 text-center">
+      <h3 className="text-lg font-black">What's Next?</h3>
+      <Button onClick={() => onChoice("retire")} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">🏖️ Retire and Enjoy Life</Button>
+      <Button onClick={() => onChoice("manager")} variant="outline" className="w-full h-11 text-sm font-bold">📋 Become a Manager</Button>
+      <Button onClick={() => onChoice("pundit")} variant="outline" className="w-full h-11 text-sm font-bold">🎙️ Become a TV Pundit</Button>
+    </div>
+  );
+}
+
+/* ─── Manager Panel ─── */
+function ManagerPanel({ manager, career, onAdvance, onEnd }: { manager: ManagerState; career: CareerState; onAdvance: () => void; onEnd: () => void }) {
+  return (
+    <div className="rounded-xl border border-border bg-card p-4 space-y-3">
+      <div className="text-center space-y-1">
+        <h3 className="text-lg font-black">📋 Manager Career</h3>
+        <p className="text-xs text-muted-foreground">Managing {manager.club} (Tier {manager.clubTier}) · Season {manager.season}</p>
+      </div>
+
+      {manager.seasonResults.length > 0 && (
+        <div className="space-y-1">
+          {manager.seasonResults.slice(-5).map((r, i) => (
+            <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
+              <span className="text-muted-foreground">S{r.year}</span>
+              <span className="font-semibold">{r.club}</span>
+              <span className={`text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{r.result}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="grid grid-cols-3 gap-2 text-center text-xs">
+        <div className="bg-muted/20 rounded-lg p-2">
+          <div className="font-black">{manager.trophies}</div>
+          <div className="text-[9px] text-muted-foreground">Trophies</div>
+        </div>
+        <div className="bg-muted/20 rounded-lg p-2">
+          <div className="font-black">{manager.promotions}</div>
+          <div className="text-[9px] text-muted-foreground">Promotions</div>
+        </div>
+        <div className="bg-muted/20 rounded-lg p-2">
+          <div className="font-black">{manager.managingNationalTeam ? "Yes" : "No"}</div>
+          <div className="text-[9px] text-muted-foreground">Nat'l Team</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Legacy Card (shown on final retirement screen) ─── */
+function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: ReturnType<typeof getCareerTotals>; onShare: () => void }) {
+  if (!career.legacy) return null;
+  const legacy = career.legacy;
+  const tierColors: Record<LegacyTier, string> = { "GOAT": "text-amber-400", "LEGEND": "text-purple-400", "GREAT": "text-emerald-400", "SOLID PRO": "text-blue-400", "JOURNEYMAN": "text-muted-foreground" };
+  const tierEmoji: Record<LegacyTier, string> = { "GOAT": "🐐", "LEGEND": "🏛️", "GREAT": "⭐", "SOLID PRO": "💪", "JOURNEYMAN": "🎒" };
+  const tierBorder: Record<LegacyTier, string> = { "GOAT": "border-amber-400/50", "LEGEND": "border-purple-400/40", "GREAT": "border-emerald-400/40", "SOLID PRO": "border-blue-400/30", "JOURNEYMAN": "border-border" };
+
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups;
+
+  return (
+    <div className={`rounded-xl border-2 ${tierBorder[legacy.tier]} bg-card p-5 space-y-4`}>
+      <div className="text-center space-y-1">
+        <div className="text-4xl">{tierEmoji[legacy.tier]}</div>
+        <div className={`text-2xl font-black ${tierColors[legacy.tier]}`}>{legacy.tier}</div>
+        <div className="text-4xl font-black">{legacy.score}<span className="text-base text-muted-foreground">/100</span></div>
+        <p className="text-xs text-muted-foreground">{getFlag(career.nationality)} {career.playerName} · {career.position}</p>
+      </div>
+
+      {/* Breakdown */}
+      <div className="space-y-1">
+        {legacy.breakdown.filter(b => b.points > 0).map(b => (
+          <div key={b.label} className="flex items-center justify-between text-xs">
+            <span className="text-muted-foreground">{b.label}</span>
+            <span className="font-bold text-foreground">+{b.points}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Key stats */}
+      <div className="grid grid-cols-4 gap-2 text-center text-[10px]">
+        <div className="bg-muted/20 rounded-lg p-1.5">
+          <div className="font-black text-sm">{totals.goals}</div>
+          <div className="text-muted-foreground">Goals</div>
+        </div>
+        <div className="bg-muted/20 rounded-lg p-1.5">
+          <div className="font-black text-sm">{totalTrophies}</div>
+          <div className="text-muted-foreground">Trophies</div>
+        </div>
+        <div className="bg-muted/20 rounded-lg p-1.5">
+          <div className="font-black text-sm">{totals.ballonDors}</div>
+          <div className="text-muted-foreground">Ballon d'Or</div>
+        </div>
+        <div className="bg-muted/20 rounded-lg p-1.5">
+          <div className="font-black text-sm">{career.intStats.caps}</div>
+          <div className="text-muted-foreground">Caps</div>
+        </div>
+      </div>
+
+      {/* Rival result */}
+      {career.rivalrySummary && (
+        <div className="text-center text-xs">
+          <span className="text-muted-foreground">Rivalry vs {career.rival?.name}: </span>
+          <span className={`font-bold ${career.rivalrySummary.overallWinner === "player" ? "text-emerald-400" : career.rivalrySummary.overallWinner === "rival" ? "text-red-400" : "text-amber-400"}`}>
+            {career.rivalrySummary.overallWinner === "player" ? "YOU WON" : career.rivalrySummary.overallWinner === "rival" ? "RIVAL WON" : "DRAW"}
+          </span>
+        </div>
+      )}
+
+      {/* Pundit bonus */}
+      {career.isPundit && (
+        <div className="text-center text-xs text-muted-foreground">🎙️ TV Pundit career · Legacy +5</div>
+      )}
+
+      {/* Manager results */}
+      {career.managerState && career.managerState.seasonResults.length > 0 && (
+        <div className="text-center text-xs text-muted-foreground">
+          📋 Manager: {career.managerState.trophies} trophies, {career.managerState.promotions} promotions in {career.managerState.season} seasons
+        </div>
+      )}
+
+      <Button onClick={onShare} className="w-full h-10 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+        📤 Share Your Legacy
+      </Button>
+    </div>
+  );
+}
+
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onNewCareer, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -1004,6 +1246,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onRetireInternational: () => void;
   onDismissRivalryEvent: () => void;
   onDismissBallonDor: () => void;
+  onManualRetire: () => void;
+  onPostRetirement: (choice: PostRetirementChoice) => void;
+  onAdvanceManager: () => void;
+  onEndManager: () => void;
+  onShare: () => void;
   onNewCareer: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
@@ -1028,7 +1275,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         { l: "Physical", v: career.physical, c: "bg-orange-500" },
       ];
 
-  const showActionButton = career.phase === "youth" || career.phase === "playing";
+  const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season";
 
   return (
     <div className="space-y-3">
@@ -1047,6 +1294,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           <div className="text-[10px] text-muted-foreground uppercase tracking-widest">OVR</div>
         </div>
       </div>
+
+      {/* FINAL SEASON BANNER */}
+      {career.isFinalSeason && !career.retired && (
+        <div className="bg-amber-500/15 border-2 border-amber-500/40 rounded-xl p-3 text-center animate-pulse">
+          <span className="text-sm font-black text-amber-400 uppercase tracking-widest">⚠️ FINAL SEASON</span>
+          <p className="text-[10px] text-muted-foreground mt-0.5">This will be your last season as a professional footballer</p>
+        </div>
+      )}
 
       {/* Main panels */}
       <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-3">
@@ -1112,7 +1367,20 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             />
            )}
 
-          {/* OVERLAY: Ballon d'Or Ceremony */}
+          {/* OVERLAY: Retirement Ceremony */}
+          {career.phase === "retirement_ceremony" && career.legacy && (
+            <RetirementCeremonyCard career={career} totals={totals} onPostRetirement={onPostRetirement} />
+          )}
+
+          {/* OVERLAY: Post-Retirement Choice */}
+          {career.phase === "post_retirement" && (
+            <PostRetirementCard career={career} onChoice={onPostRetirement} />
+          )}
+
+          {/* OVERLAY: Manager Season */}
+          {career.phase === "manager_season" && career.managerState && (
+            <ManagerPanel manager={career.managerState} career={career} onAdvance={onAdvanceManager} onEnd={onEndManager} />
+          )}
           {career.phase === "ballon_dor" && career.pendingBallonDor && (
             <BallonDorCeremonyCard bdor={career.pendingBallonDor} career={career} onDismiss={onDismissBallonDor} />
           )}
@@ -1279,19 +1547,45 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       {/* Action bar */}
       <div className="flex items-center gap-3">
         {career.phase === "retired" ? (
-          <Button onClick={onNewCareer} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
-            ⚽ New Career
-          </Button>
+          <div className="flex-1 flex gap-2">
+            <Button onClick={onShare} variant="outline" className="flex-1 h-12 text-sm font-bold">
+              📤 Share Legacy
+            </Button>
+            <Button onClick={onNewCareer} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+              ⚽ New Career
+            </Button>
+          </div>
+        ) : career.phase === "manager_season" ? (
+          <div className="flex-1 flex gap-2">
+            <Button onClick={onAdvanceManager} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
+              Next Manager Season <ChevronRight className="w-5 h-5" />
+            </Button>
+            <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold">
+              Retire
+            </Button>
+          </div>
         ) : showActionButton ? (
-          <Button onClick={onNextSeason} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
-            {career.phase === "youth" ? "Next Year" : "Next Season"} <ChevronRight className="w-5 h-5" />
-          </Button>
+          <div className="flex-1 flex gap-2">
+            <Button onClick={onNextSeason} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
+              {career.phase === "youth" ? "Next Year" : "Next Season"} <ChevronRight className="w-5 h-5" />
+            </Button>
+            {career.phase === "playing" && career.age >= 30 && (
+              <Button onClick={onManualRetire} variant="outline" className="h-12 text-xs font-bold text-red-400 border-red-400/30 hover:bg-red-500/10">
+                Retire
+              </Button>
+            )}
+          </div>
         ) : null}
         <div className="bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0">
           <div className="text-lg font-black">{career.age}</div>
           <div className="text-[9px] text-muted-foreground uppercase">Age</div>
         </div>
       </div>
+
+      {/* Legacy card (shown when retired) */}
+      {career.phase === "retired" && career.legacy && (
+        <LegacyCard career={career} totals={totals} onShare={onShare} />
+      )}
     </div>
   );
 }
