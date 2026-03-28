@@ -61,7 +61,9 @@ export const STATE_POSITIONS: StatePos[] = [
   { id: 'GA', name: 'Georgia', x: c(7,6)[0], y: c(7,6)[1] },
   { id: 'TX_N', name: 'North Texas', x: c(3,6)[0], y: c(3,6)[1] },
   { id: 'TX_S', name: 'South Texas', x: c(3,7)[0], y: c(3,7)[1] },
-  { id: 'FL', name: 'Florida', x: c(8,7)[0], y: c(8,7)[1] },
+  { id: 'FL_N', name: 'North Florida', x: c(8,6)[0], y: c(8,6)[1] },
+  { id: 'FL_W', name: 'Central Florida', x: c(8,7)[0], y: c(8,7)[1] },
+  { id: 'FL_S', name: 'South Florida', x: c(9,7)[0], y: c(9,7)[1] },
 ];
 
 export interface ConquestPlayer {
