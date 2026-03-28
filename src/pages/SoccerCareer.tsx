@@ -897,6 +897,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               ))}
             </div>
           </div>
+
+          {/* International Stats */}
+          <InternationalStatsPanel career={career} onRetire={onRetireInternational} />
         </div>
       </div>
 
