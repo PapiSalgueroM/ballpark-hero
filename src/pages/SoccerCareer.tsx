@@ -662,55 +662,63 @@ function InternationalDebutCard({ career, onDismiss }: { career: CareerState; on
 /* ─── World Cup Result Screen ─── */
 function WorldCupResultCard({ wc, career, onDismiss }: { wc: WorldCupResult; career: CareerState; onDismiss: () => void }) {
   const isWinner = wc.result === "Winner";
-  const borderColor = isWinner ? "border-amber-400/60" : "border-blue-500/40";
-  const bgGrad = isWinner ? "from-amber-500/15 to-transparent" : "from-blue-500/10 to-transparent";
+  const didNotQualify = wc.result === "Did Not Qualify";
+  const borderColor = isWinner ? "border-amber-400/60" : didNotQualify ? "border-red-500/40" : "border-blue-500/40";
+  const bgGrad = isWinner ? "from-amber-500/15 to-transparent" : didNotQualify ? "from-red-500/10 to-transparent" : "from-blue-500/10 to-transparent";
   return (
     <div className={`rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4`}>
       <div className="text-center space-y-2">
-        <div className="text-4xl">{isWinner ? "🏆" : "🌍"}</div>
-        <h3 className="text-xl font-black">{isWinner ? "WORLD CUP WINNER!" : `World Cup ${wc.year}`}</h3>
+        <div className="text-4xl">{isWinner ? "🏆" : didNotQualify ? "😞" : "🌍"}</div>
+        <h3 className="text-xl font-black">{isWinner ? "WORLD CUP WINNER!" : didNotQualify ? "World Cup Qualifiers" : `World Cup ${wc.year}`}</h3>
         <p className="text-sm font-bold">{getFlag(wc.nation)} {wc.nation} — {wc.result}</p>
+        {didNotQualify && (
+          <p className="text-xs text-muted-foreground">Your nation failed to qualify for the tournament this time.</p>
+        )}
       </div>
-      {/* Match results */}
-      <div className="space-y-1.5 max-h-[200px] overflow-y-auto">
-        {wc.matches.map((m, i) => (
-          <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
-            <span className="text-[10px] text-muted-foreground w-12">{m.round}</span>
-            <span className={`font-semibold ${m.teamA === wc.nation ? "text-foreground" : "text-muted-foreground"}`}>
-              {getFlag(m.teamA)} {m.teamA}
-            </span>
-            <span className="font-black text-sm mx-2">{m.scoreA} - {m.scoreB}</span>
-            <span className={`font-semibold ${m.teamB === wc.nation ? "text-foreground" : "text-muted-foreground"}`}>
-              {m.teamB} {getFlag(m.teamB)}
-            </span>
+      {!didNotQualify && (
+        <>
+          {/* Match results */}
+          <div className="space-y-1.5 max-h-[200px] overflow-y-auto">
+            {wc.matches.map((m, i) => (
+              <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
+                <span className="text-[10px] text-muted-foreground w-12">{m.round}</span>
+                <span className={`font-semibold ${m.teamA === wc.nation ? "text-foreground" : "text-muted-foreground"}`}>
+                  {getFlag(m.teamA)} {m.teamA}
+                </span>
+                <span className="font-black text-sm mx-2">{m.scoreA} - {m.scoreB}</span>
+                <span className={`font-semibold ${m.teamB === wc.nation ? "text-foreground" : "text-muted-foreground"}`}>
+                  {m.teamB} {getFlag(m.teamB)}
+                </span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      {/* Player stats */}
-      <div className="grid grid-cols-4 gap-2">
-        {[
-          { l: "Apps", v: wc.playerApps },
-          { l: "Goals", v: wc.playerGoals },
-          { l: "Assists", v: wc.playerAssists },
-          { l: "Avg Rating", v: wc.playerAvgRating.toFixed(1) },
-        ].map(s => (
-          <div key={s.l} className="text-center bg-muted/20 rounded-lg p-2">
-            <div className="text-lg font-black">{s.v}</div>
-            <div className="text-[9px] text-muted-foreground">{s.l}</div>
+          {/* Player stats */}
+          <div className="grid grid-cols-4 gap-2">
+            {[
+              { l: "Apps", v: wc.playerApps },
+              { l: "Goals", v: wc.playerGoals },
+              { l: "Assists", v: wc.playerAssists },
+              { l: "Avg Rating", v: wc.playerAvgRating.toFixed(1) },
+            ].map(s => (
+              <div key={s.l} className="text-center bg-muted/20 rounded-lg p-2">
+                <div className="text-lg font-black">{s.v}</div>
+                <div className="text-[9px] text-muted-foreground">{s.l}</div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      {wc.bestPlayer && (
-        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center">
-          <span className="text-sm font-bold">🌟 Named Best Player of the Tournament!</span>
-        </div>
+          {wc.bestPlayer && (
+            <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center">
+              <span className="text-sm font-bold">🌟 Named Best Player of the Tournament!</span>
+            </div>
+          )}
+          {isWinner && (
+            <div className="bg-amber-500/15 border border-amber-400/30 rounded-lg p-3 text-center">
+              <span className="text-sm font-bold text-amber-300">🏆 WORLD CUP CHAMPION! Legacy cemented forever.</span>
+            </div>
+          )}
+        </>
       )}
-      {isWinner && (
-        <div className="bg-amber-500/15 border border-amber-400/30 rounded-lg p-3 text-center">
-          <span className="text-sm font-bold text-amber-300">🏆 WORLD CUP CHAMPION! Legacy cemented forever.</span>
-        </div>
-      )}
-      <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-white ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-blue-600 hover:bg-blue-500"}`}>
+      <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-white ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
         Continue →
       </Button>
     </div>
