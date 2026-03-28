@@ -932,7 +932,7 @@ function FinancialPanel({ career }: { career: CareerState }) {
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onNewCareer, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onNewCareer, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -1053,6 +1053,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               career={career}
               onDismiss={onDismissRivalryEvent}
             />
+           )}
+
+          {/* OVERLAY: Ballon d'Or Ceremony */}
+          {career.phase === "ballon_dor" && career.pendingBallonDor && (
+            <BallonDorCeremonyCard bdor={career.pendingBallonDor} career={career} onDismiss={onDismissBallonDor} />
           )}
 
           {/* OVERLAY: Transfer Window */}
@@ -1121,21 +1126,71 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* Trophies */}
           <div className="bg-card border border-border rounded-xl p-4">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Trophy Cabinet</span>
-            <div className="grid grid-cols-4 gap-3 mt-3">
+            <div className="grid grid-cols-5 gap-2 mt-3">
               {[
                 { emoji: "🏆", l: "Leagues", v: totals.leagueTitles },
+                { emoji: "🏆", l: "Cups", v: totals.domesticCups },
                 { emoji: "⭐", l: "UCL", v: totals.championsLeagues },
                 { emoji: "🌍", l: "World Cup", v: totals.worldCups },
                 { emoji: "🏅", l: "Ballon d'Or", v: totals.ballonDors },
               ].map(t => (
                 <div key={t.l} className={`text-center rounded-lg p-2 ${t.v > 0 ? 'bg-amber-500/10 border border-amber-500/20' : 'bg-muted/20 opacity-40'}`}>
-                  <div className="text-xl">{t.emoji}</div>
+                  <div className="text-lg">{t.emoji}</div>
                   <div className="text-sm font-black">{t.v}</div>
                   <div className="text-[9px] text-muted-foreground">{t.l}</div>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* UCL Result (latest) */}
+          {career.lastUCLResult && career.lastUCLResult.qualified && (
+            <div className="bg-card border border-border rounded-xl p-4 space-y-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">⭐ Champions League</span>
+              <div className="text-xs text-muted-foreground text-center font-semibold">
+                {career.lastUCLResult.result === "Winner" ? "🏆 WINNER!" : career.lastUCLResult.result}
+                {career.lastUCLResult.isTopScorer && " · 👟 Top Scorer"}
+              </div>
+              <div className="space-y-1">
+                {career.lastUCLResult.matches.map((m, i) => (
+                  <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
+                    <span className="text-[10px] text-muted-foreground w-10">{m.round}</span>
+                    <span className="font-semibold text-foreground">{career.currentClub}</span>
+                    <span className="font-black mx-2">{m.goalsFor} - {m.goalsAgainst}</span>
+                    <span className="text-muted-foreground">{m.opponent}</span>
+                    <span className={`text-[10px] ml-1 ${m.won ? "text-emerald-400" : "text-red-400"}`}>{m.won ? "W" : "L"}</span>
+                  </div>
+                ))}
+              </div>
+              {career.lastUCLResult.playerGoals > 0 && (
+                <div className="text-[10px] text-center text-muted-foreground">
+                  ⚽ {career.lastUCLResult.playerGoals} goal{career.lastUCLResult.playerGoals > 1 ? "s" : ""} in tournament
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Awards */}
+          {career.awards.length > 0 && (
+            <div className="bg-card border border-border rounded-xl p-4 space-y-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">🏆 Awards</span>
+              <div className="flex flex-wrap gap-1.5">
+                {(() => {
+                  // Group awards by name and count them
+                  const awardCounts: Record<string, { emoji: string; count: number }> = {};
+                  career.awards.forEach(a => {
+                    if (!awardCounts[a.name]) awardCounts[a.name] = { emoji: a.emoji, count: 0 };
+                    awardCounts[a.name].count += 1;
+                  });
+                  return Object.entries(awardCounts).map(([name, { emoji, count }]) => (
+                    <span key={name} className="text-[10px] px-2 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 font-semibold">
+                      {emoji} {name} {count > 1 ? `×${count}` : ""}
+                    </span>
+                  ));
+                })()}
+              </div>
+            </div>
+          )}
 
           {/* International Stats */}
           <InternationalStatsPanel career={career} onRetire={onRetireInternational} />
