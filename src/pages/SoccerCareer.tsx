@@ -311,6 +311,11 @@ export default function SoccerCareer() {
     setCareer(dismissRivalryEvent(career, clubs));
   };
 
+  const handleDismissBallonDor = () => {
+    if (!career) return;
+    setCareer(dismissBallonDor(career, clubs));
+  };
+
   const handleNewCareer = () => {
     setCareer(null);
     setPreviewStats(null);
