@@ -14,9 +14,10 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { toast } from "sonner";
 import { ChevronRight } from "lucide-react";
 import {
-  type CareerState, type SeasonRecord, type ClubData, type ContractOffer,
+  type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
-  dismissSummary, stayAtClub, getCareerTotals, getFlag, calcOverall,
+  dismissSummary, stayAtClub, signExtension, requestTransfer,
+  getCareerTotals, getFlag, calcOverall, formatWage,
 } from "@/lib/soccerCareerEngine";
 
 /* ─── Constants ─── */
