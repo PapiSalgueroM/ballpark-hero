@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, X, Save, Link2, Eye } from "lucide-react";
+import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, X, Save, Link2, Eye, Loader2, Zap } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -154,6 +154,26 @@ const FIFA_RANKINGS: { rank: number; team: string }[] = [
   { rank: 46, team: "Kosovo" }, { rank: 47, team: "Haiti" }, { rank: 48, team: "Curaçao" },
 ];
 
+// Rank lookup: team name → rank number (lower = better)
+export const FIFA_RANK: Record<string, number> = {};
+FIFA_RANKINGS.forEach((r) => { FIFA_RANK[r.team] = r.rank; });
+
+// Also add playoff teams that aren't in top 48 with high rank numbers
+const EXTRA_RANKS: Record<string, number> = {
+  "Bosnia & Herzegovina": 60, "Czech Republic": 55, "Jamaica": 65, "DR Congo": 62, "Bolivia": 70, "Iraq": 68,
+};
+Object.entries(EXTRA_RANKS).forEach(([t, r]) => { if (!FIFA_RANK[t]) FIFA_RANK[t] = r; });
+
+/** Get FIFA rank for a team (lower = better). Returns 999 for unknown. */
+export function getFifaRank(team: string): number {
+  return FIFA_RANK[team] || 999;
+}
+
+/** Pick higher-ranked team */
+export function rankWinner(a: string, b: string): string {
+  return getFifaRank(a) <= getFifaRank(b) ? a : b;
+}
+
 const TEAM_GROUP: Record<string, string> = {};
 groups.forEach((g) => g.teams.forEach((t) => { if (!t.isTBD) TEAM_GROUP[t.name] = g.letter; }));
 playoffMatchups.forEach((m) => { TEAM_GROUP[m.teamA] = m.group; TEAM_GROUP[m.teamB] = m.group; });
@@ -296,15 +316,54 @@ function loadPredictions(): Predictions {
   }
 }
 
+/* ───── small auto-fill button component ───── */
+
+function SmallAutoButton({ label, onClick, loading }: { label: string; onClick: () => void; loading?: boolean }) {
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); onClick(); }}
+      disabled={loading}
+      className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(220,20%,18%)] hover:bg-[hsl(220,20%,22%)] text-[hsl(45,80%,60%)] border border-[hsl(220,20%,28%)] transition-colors disabled:opacity-50"
+    >
+      {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Zap className="w-3 h-3" />}
+      {label}
+    </button>
+  );
+}
+
+/* ───── ranking-based auto-fill for a single group ───── */
+
+function rankBasedScoresForGroup(group: Group): Predictions {
+  const matchups = getMatchups(group.teams);
+  const result: Predictions = {};
+  matchups.forEach(([hi, ai], idx) => {
+    const home = group.teams[hi].name;
+    const away = group.teams[ai].name;
+    const homeRank = getFifaRank(home);
+    const awayRank = getFifaRank(away);
+    const key = `${group.letter}-${idx}`;
+    if (homeRank < awayRank) {
+      result[key] = { homeGoals: 2, awayGoals: 1 };
+    } else if (awayRank < homeRank) {
+      result[key] = { homeGoals: 1, awayGoals: 2 };
+    } else {
+      result[key] = { homeGoals: 1, awayGoals: 1 };
+    }
+  });
+  return result;
+}
+
 /* ───── sub-components ───── */
 
 interface PlayoffSlotsPanelProps {
   picks: Record<string, string>;
   onPick: (slot: string, winner: string) => void;
+  onAutoPickPlayoffs: () => void;
 }
 
-const PlayoffSlotsPanel = ({ picks, onPick }: PlayoffSlotsPanelProps) => {
+const PlayoffSlotsPanel = ({ picks, onPick, onAutoPickPlayoffs }: PlayoffSlotsPanelProps) => {
   const [open, setOpen] = useState(false);
+  const [autoLoading, setAutoLoading] = useState(false);
   const pickedCount = Object.keys(picks).length;
 
   return (
@@ -321,9 +380,21 @@ const PlayoffSlotsPanel = ({ picks, onPick }: PlayoffSlotsPanelProps) => {
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className="mt-3 rounded-lg bg-[hsl(150,15%,10%)] border border-[hsl(150,20%,18%)] p-4 space-y-4">
-          <p className="text-[hsl(150,15%,55%)] text-xs sm:text-sm text-center">
-            Pick the winner of each playoff — they'll replace the TBD slot in their group.
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="text-[hsl(150,15%,55%)] text-xs sm:text-sm">
+              Pick the winner of each playoff — they'll replace the TBD slot in their group.
+            </p>
+            {pickedCount < 6 && (
+              <SmallAutoButton
+                label="Auto Pick"
+                loading={autoLoading}
+                onClick={() => {
+                  setAutoLoading(true);
+                  setTimeout(() => { onAutoPickPlayoffs(); setAutoLoading(false); }, 1000);
+                }}
+              />
+            )}
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {playoffMatchups.map((m) => {
               const picked = picks[m.slot];
@@ -385,11 +456,13 @@ interface GroupPredictionCardProps {
   predictions: Predictions;
   onScoreChange: (key: string, field: "homeGoals" | "awayGoals", val: number | "") => void;
   onAutoFillGroup: (letter: string) => void;
+  onRankFillGroup: (letter: string) => void;
   onResetGroup: (letter: string) => void;
 }
 
-const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGroup, onResetGroup }: GroupPredictionCardProps) => {
+const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGroup, onRankFillGroup, onResetGroup }: GroupPredictionCardProps) => {
   const [expanded, setExpanded] = useState(true);
+  const [rankLoading, setRankLoading] = useState(false);
   const matchups = getMatchups(group.teams);
 
   const standings = useMemo(() => computeStandings(group, predictions), [group, predictions]);
@@ -454,15 +527,25 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
             <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: colors.accentDim }}>
               Predict Scores
             </p>
-            <div className="flex gap-1.5">
+            <div className="flex gap-1.5 flex-wrap">
               {!allFilled && (
-                <button
-                  onClick={(e) => { e.stopPropagation(); onAutoFillGroup(group.letter); }}
-                  className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(150,12%,20%)] hover:bg-[hsl(150,12%,25%)] text-[hsl(150,15%,60%)] transition-colors"
-                  title="Auto-fill random scores"
-                >
-                  <Shuffle className="w-3 h-3" /> Fill
-                </button>
+                <>
+                  <SmallAutoButton
+                    label="By Rank"
+                    loading={rankLoading}
+                    onClick={() => {
+                      setRankLoading(true);
+                      setTimeout(() => { onRankFillGroup(group.letter); setRankLoading(false); }, 1000);
+                    }}
+                  />
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onAutoFillGroup(group.letter); }}
+                    className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(150,12%,20%)] hover:bg-[hsl(150,12%,25%)] text-[hsl(150,15%,60%)] transition-colors"
+                    title="Auto-fill random scores"
+                  >
+                    <Shuffle className="w-3 h-3" /> Random
+                  </button>
+                </>
               )}
               {hasAnyScore && (
                 <button
@@ -847,6 +930,26 @@ const WorldCupPredictor = () => {
     });
   }, []);
 
+  // Ranking-based auto-fill for a single group
+  const handleRankFillGroup = useCallback((letter: string) => {
+    const group = resolvedGroups.find((g) => g.letter === letter);
+    if (!group) return;
+    const scores = rankBasedScoresForGroup(group);
+    setPredictions((prev) => ({ ...prev, ...scores }));
+  }, [resolvedGroups]);
+
+  // Ranking-based auto-fill for ALL groups
+  const handleRankFillAllGroups = useCallback(() => {
+    setPredictions((prev) => {
+      const next = { ...prev };
+      for (const group of resolvedGroups) {
+        const scores = rankBasedScoresForGroup(group);
+        Object.assign(next, scores);
+      }
+      return next;
+    });
+  }, [resolvedGroups]);
+
   const handleAutoFillAll = useCallback(() => {
     setPredictions((prev) => {
       const next = { ...prev };
@@ -865,6 +968,27 @@ const WorldCupPredictor = () => {
       return next;
     });
   }, []);
+
+  // Auto-pick all playoff slots by FIFA ranking
+  const handleAutoPickPlayoffs = useCallback(() => {
+    const newPicks: Record<string, string> = {};
+    playoffMatchups.forEach((m) => {
+      newPicks[m.slot] = rankWinner(m.teamA, m.teamB);
+    });
+    setPlayoffPicks((prev) => ({ ...prev, ...newPicks }));
+  }, []);
+
+  // Auto-pick 8 best third-place teams (by pts then FIFA ranking tiebreak)
+  const handleAutoPickThirds = useCallback(() => {
+    // Sort bestThirds by pts desc, then by FIFA rank asc (lower = better)
+    const sorted = [...bestThirds].sort((a, b) => {
+      if (b.pts !== a.pts) return b.pts - a.pts;
+      if (b.gd !== a.gd) return b.gd - a.gd;
+      if (b.gf !== a.gf) return b.gf - a.gf;
+      return getFifaRank(a.team) - getFifaRank(b.team);
+    });
+    setSelectedThirds(sorted.slice(0, 8).map((t) => t.team));
+  }, [bestThirds]);
 
   const handleResetGroup = useCallback((letter: string) => {
     setPredictions((prev) => {
@@ -886,6 +1010,79 @@ const WorldCupPredictor = () => {
     localStorage.removeItem("wc2026-playoff-picks");
   }, []);
 
+  // Ref for bracket auto-fill
+  const bracketAutoFillRef = useRef<{ autoFillAllRounds: () => void } | null>(null);
+
+  // "Auto Fill Everything" — runs all steps sequentially with delays
+  const [autoFillEverythingLoading, setAutoFillEverythingLoading] = useState(false);
+  const handleAutoFillEverything = useCallback(() => {
+    setAutoFillEverythingLoading(true);
+    // Step 1: Auto-pick playoffs
+    const newPlayoffPicks: Record<string, string> = {};
+    playoffMatchups.forEach((m) => {
+      newPlayoffPicks[m.slot] = rankWinner(m.teamA, m.teamB);
+    });
+    setPlayoffPicks((prev) => ({ ...prev, ...newPlayoffPicks }));
+
+    setTimeout(() => {
+      // Step 2: After playoffs resolved, fill all groups with rankings
+      // Need to build resolved groups with the new playoff picks
+      const resolvedForFill = groups.map((g) => ({
+        ...g,
+        teams: g.teams.map((t) => {
+          if (t.isTBD && newPlayoffPicks[t.name]) {
+            return { name: newPlayoffPicks[t.name], isTBD: false };
+          }
+          return t;
+        }),
+      }));
+      setPredictions((prev) => {
+        const next = { ...prev };
+        for (const group of resolvedForFill) {
+          const scores = rankBasedScoresForGroup(group);
+          Object.assign(next, scores);
+        }
+        return next;
+      });
+
+      setTimeout(() => {
+        // Step 3: Auto pick thirds (will be calculated from new predictions)
+        // We need to trigger this after predictions have been set
+        // Use a flag to trigger in next render
+        setAutoFillStep(3);
+      }, 500);
+    }, 500);
+  }, []);
+
+  const [autoFillStep, setAutoFillStep] = useState(0);
+
+  useEffect(() => {
+    if (autoFillStep === 3) {
+      // Auto-pick 8 best thirds
+      const sorted = [...bestThirds].sort((a, b) => {
+        if (b.pts !== a.pts) return b.pts - a.pts;
+        if (b.gd !== a.gd) return b.gd - a.gd;
+        if (b.gf !== a.gf) return b.gf - a.gf;
+        return getFifaRank(a.team) - getFifaRank(b.team);
+      });
+      setSelectedThirds(sorted.slice(0, 8).map((t) => t.team));
+      setAutoFillStep(4);
+    } else if (autoFillStep === 4) {
+      // Show bracket
+      setShowBracket(true);
+      setTimeout(() => {
+        setAutoFillStep(5);
+      }, 500);
+    } else if (autoFillStep === 5) {
+      // Auto-fill all knockout rounds
+      setTimeout(() => {
+        bracketAutoFillRef.current?.autoFillAllRounds();
+        setAutoFillEverythingLoading(false);
+        setAutoFillStep(0);
+      }, 500);
+    }
+  }, [autoFillStep, bestThirds]);
+
   const handleToggleThird = useCallback((teamName: string) => {
     setSelectedThirds((prev) => {
       if (prev.includes(teamName)) {
@@ -895,6 +1092,9 @@ const WorldCupPredictor = () => {
       return [...prev, teamName];
     });
   }, []);
+
+  const [rankFillAllLoading, setRankFillAllLoading] = useState(false);
+  const [autoPickThirdsLoading, setAutoPickThirdsLoading] = useState(false);
 
   // Build the user-selected thirds list for the bracket (ordered by bestThirds ranking)
   const userSelectedThirdsForBracket = useMemo(() => {
@@ -1054,7 +1254,7 @@ const WorldCupPredictor = () => {
 
         {/* Playoff Slots Panel */}
         {!viewingSharedBracket && (
-          <PlayoffSlotsPanel picks={playoffPicks} onPick={handlePlayoffPick} />
+          <PlayoffSlotsPanel picks={playoffPicks} onPick={handlePlayoffPick} onAutoPickPlayoffs={handleAutoPickPlayoffs} />
         )}
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
@@ -1068,12 +1268,17 @@ const WorldCupPredictor = () => {
             </p>
           </div>
           {!viewingSharedBracket && (
-            <div className="flex gap-2 flex-shrink-0">
+            <div className="flex gap-2 flex-shrink-0 flex-wrap">
+              <SmallAutoButton
+                label="Fill by Rank"
+                loading={rankFillAllLoading}
+                onClick={() => { setRankFillAllLoading(true); setTimeout(() => { handleRankFillAllGroups(); setRankFillAllLoading(false); }, 1000); }}
+              />
               <button
                 onClick={handleAutoFillAll}
                 className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(150,12%,18%)] hover:bg-[hsl(150,12%,22%)] text-[hsl(150,15%,60%)] border border-[hsl(150,20%,25%)] transition-colors"
               >
-                <Shuffle className="w-3.5 h-3.5" /> Auto-Fill All
+                <Shuffle className="w-3.5 h-3.5" /> Random All
               </button>
               <button
                 onClick={handleResetEverything}
@@ -1094,6 +1299,7 @@ const WorldCupPredictor = () => {
               predictions={predictions}
               onScoreChange={handleScoreChange}
               onAutoFillGroup={handleAutoFillGroup}
+              onRankFillGroup={handleRankFillGroup}
               onResetGroup={handleResetGroup}
             />
           ))}
@@ -1109,15 +1315,24 @@ const WorldCupPredictor = () => {
                   Select exactly 8 of the 12 third-place teams to advance to the Round of 32.
                 </p>
               </div>
-              <Badge
-                className={`text-sm px-3 py-1.5 self-start ${
-                  selectedThirds.length === 8
-                    ? "bg-[hsl(140,60%,30%)] text-[hsl(140,80%,90%)]"
-                    : "bg-[hsl(150,12%,20%)] text-[hsl(45,90%,55%)]"
-                }`}
-              >
-                {selectedThirds.length} / 8 selected
-              </Badge>
+              <div className="flex items-center gap-2 self-start">
+                {selectedThirds.length < 8 && (
+                  <SmallAutoButton
+                    label="Auto Pick"
+                    loading={autoPickThirdsLoading}
+                    onClick={() => { setAutoPickThirdsLoading(true); setTimeout(() => { handleAutoPickThirds(); setAutoPickThirdsLoading(false); }, 1000); }}
+                  />
+                )}
+                <Badge
+                  className={`text-sm px-3 py-1.5 ${
+                    selectedThirds.length === 8
+                      ? "bg-[hsl(140,60%,30%)] text-[hsl(140,80%,90%)]"
+                      : "bg-[hsl(150,12%,20%)] text-[hsl(45,90%,55%)]"
+                  }`}
+                >
+                  {selectedThirds.length} / 8 selected
+                </Badge>
+              </div>
             </div>
             <Card className="bg-[hsl(150,15%,12%)] border-[hsl(150,20%,20%)] shadow-lg overflow-hidden">
               <CardContent className="p-0">
@@ -1221,12 +1436,31 @@ const WorldCupPredictor = () => {
         {/* Knockout Bracket */}
         {showBracket && allGroupsFilled && selectedThirds.length === 8 && (
           <div ref={bracketRef}>
-            <KnockoutBracket seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} onChampionChange={setChampion} />
+            <KnockoutBracket seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} onChampionChange={setChampion} autoFillRef={bracketAutoFillRef} />
           </div>
         )}
 
         {/* Awards Predictor */}
         <AwardsPredictor champion={champion} />
+
+        {/* Fixed "Auto Fill Everything" button */}
+        {!viewingSharedBracket && (
+          <button
+            onClick={handleAutoFillEverything}
+            disabled={autoFillEverythingLoading}
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm
+              bg-gradient-to-r from-[hsl(45,90%,45%)] to-[hsl(35,90%,50%)] hover:from-[hsl(45,90%,50%)] hover:to-[hsl(35,90%,55%)]
+              text-[hsl(220,20%,8%)] shadow-xl shadow-[hsl(45,90%,45%)]/30
+              disabled:opacity-60 transition-all transform hover:scale-105"
+          >
+            {autoFillEverythingLoading ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <span className="text-lg">⚡</span>
+            )}
+            {autoFillEverythingLoading ? "Filling..." : "Auto Fill Everything"}
+          </button>
+        )}
       </div>
     </div>
   );
