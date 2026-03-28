@@ -424,7 +424,7 @@ export default function ConquestBoard() {
       )}
 
       {/* Steal Modal */}
-      <Dialog open={game.phase === 'steal'} onOpenChange={() => {}}>
+      <Dialog open={game.stealModalOpen} onOpenChange={(open) => { if (!open) game.closeStealModal(); }}>
         <DialogContent className="max-w-4xl bg-card border-border text-foreground overflow-y-auto max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-center text-lg">🏈 Steal a Player!</DialogTitle>
