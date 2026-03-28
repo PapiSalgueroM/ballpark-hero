@@ -76,6 +76,14 @@ function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
 export default function ConquestBoard() {
   const game = useConquest();
   const [now, setNow] = useState(Date.now());
+  const playLogRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll play log
+  useEffect(() => {
+    if (playLogRef.current && game.visiblePlays.length > 0) {
+      playLogRef.current.scrollTop = playLogRef.current.scrollHeight;
+    }
+  }, [game.visiblePlays.length]);
 
   useEffect(() => {
     if (game.phase === 'animating') {
@@ -181,19 +189,94 @@ export default function ConquestBoard() {
         </div>
       )}
 
-      {/* Battle result */}
+      {/* Play-by-play and Battle result */}
       {game.battleResult && game.phase === 'battle' && (
-        <div className="text-center p-4 rounded-xl bg-card border border-border animate-in fade-in zoom-in-95">
-          <div className="text-2xl mb-1">🏈</div>
-          <div className="font-bold text-lg text-foreground">
-            {winTeam?.city} {winTeam?.name} win!
+        <div className="space-y-3 animate-in fade-in zoom-in-95">
+          {/* Live Score */}
+          <div className="flex items-center justify-center gap-4 p-3 rounded-xl bg-card border border-border">
+            <div className="text-center">
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                {t(game.attackingTeam)?.name}
+              </div>
+              <div className="text-2xl font-bold text-foreground">
+                {game.visiblePlays.length > 0 ? game.visiblePlays[game.visiblePlays.length - 1].attScore : 0}
+              </div>
+            </div>
+            <div className="text-muted-foreground text-sm font-bold">vs</div>
+            <div className="text-center">
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                {defTeam?.name}
+              </div>
+              <div className="text-2xl font-bold text-foreground">
+                {game.visiblePlays.length > 0 ? game.visiblePlays[game.visiblePlays.length - 1].defScore : 0}
+              </div>
+            </div>
           </div>
-          <div className="text-2xl font-bold text-primary my-1">
-            {game.battleResult.winScore} - {game.battleResult.loseScore}
+
+          {/* Play-by-play log */}
+          <div ref={playLogRef} className="rounded-xl border border-border p-3 bg-card max-h-52 overflow-y-auto">
+            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 text-center">
+              {game.playByPlayActive ? '🔴 LIVE' : '📋 Plays'}
+            </h4>
+            <div className="space-y-1.5">
+              {game.visiblePlays.map((play, i) => (
+                <div
+                  key={i}
+                  className={`text-[11px] px-2 py-1.5 rounded-lg border border-border/50 animate-in fade-in slide-in-from-bottom-2 ${
+                    play.team === 'att' ? 'bg-primary/5 border-l-2 border-l-primary' : 'bg-accent/5 border-l-2 border-l-accent'
+                  } ${i === game.visiblePlays.length - 1 && game.playByPlayActive ? 'ring-1 ring-primary/30' : ''}`}
+                >
+                  <span className="text-foreground">{play.description}</span>
+                  {i > 0 && (play.attScore > game.visiblePlays[i-1].attScore || play.defScore > game.visiblePlays[i-1].defScore) && (
+                    <span className="ml-2 text-primary font-bold">SCORE!</span>
+                  )}
+                  {i === 0 && (play.attScore > 0 || play.defScore > 0) && (
+                    <span className="ml-2 text-primary font-bold">SCORE!</span>
+                  )}
+                </div>
+              ))}
+              {game.playByPlayActive && game.visiblePlays.length === 0 && (
+                <div className="text-center text-xs text-muted-foreground py-2">Kickoff...</div>
+              )}
+            </div>
           </div>
-          <div className="text-sm text-muted-foreground">
-            {loseTeam?.city} {loseTeam?.name} eliminated — all territory conquered
-          </div>
+
+          {/* Box Score - shown after all plays */}
+          {game.boxScore && !game.playByPlayActive && (
+            <div className="rounded-xl border border-border p-3 bg-card animate-in fade-in zoom-in-95">
+              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 text-center">
+                📊 Final Box Score
+              </h4>
+              <div className="grid grid-cols-3 gap-1 text-[11px] text-center">
+                <div className="font-bold text-foreground">{t(game.attackingTeam)?.name}</div>
+                <div className="text-muted-foreground font-semibold">Stat</div>
+                <div className="font-bold text-foreground">{defTeam?.name}</div>
+
+                <div className="text-foreground">{game.boxScore.attPassYds}</div>
+                <div className="text-muted-foreground">Pass Yds</div>
+                <div className="text-foreground">{game.boxScore.defPassYds}</div>
+
+                <div className="text-foreground">{game.boxScore.attRushYds}</div>
+                <div className="text-muted-foreground">Rush Yds</div>
+                <div className="text-foreground">{game.boxScore.defRushYds}</div>
+
+                <div className="text-primary text-[10px]">{game.boxScore.attTopPerformer}</div>
+                <div className="text-muted-foreground">⭐ MVP</div>
+                <div className="text-primary text-[10px]">{game.boxScore.defTopPerformer}</div>
+              </div>
+              <div className="mt-3 text-center">
+                <div className="font-bold text-lg text-foreground">
+                  {winTeam?.city} {winTeam?.name} win!
+                </div>
+                <div className="text-2xl font-bold text-primary my-1">
+                  {game.battleResult.winScore} - {game.battleResult.loseScore}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {loseTeam?.city} {loseTeam?.name} eliminated — all territory conquered
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

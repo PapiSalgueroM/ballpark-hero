@@ -8,6 +8,7 @@ import {
   PowerupId, PowerupDef, POWERUPS, getRandomPowerup,
   FREE_AGENTS, TEAM_LEGENDS, FreeAgent,
 } from '@/data/conquestPowerups';
+import { simulateDetailedBattle, BattleSimulation, PlayEvent, BoxScore } from '@/lib/conquestBattle';
 
 export type Phase =
   | 'ready' | 'animating' | 'battle' | 'steal' | 'gameover'
@@ -19,6 +20,7 @@ export interface BattleResult {
   loser: string;
   winScore: number;
   loseScore: number;
+  simulation?: BattleSimulation;
 }
 
 export interface LogEntry {
@@ -37,7 +39,7 @@ export interface SavedPowerup {
 }
 
 // Re-export for consumers
-export type { PowerupId, PowerupDef, FreeAgent };
+export type { PowerupId, PowerupDef, FreeAgent, BattleSimulation, PlayEvent, BoxScore };
 export { POWERUPS, FREE_AGENTS, TEAM_LEGENDS };
 
 // Build a lookup from state ID → geographic center (from SVG paths)
@@ -129,26 +131,19 @@ function simulateBattle(
   territories: Record<string, string | null>,
   rosters: Record<string, string[]>,
   upgradeTeam?: string | null,
+  upgradedPlayer?: string | null,
 ): BattleResult {
-  const at = TEAM_MAP.get(attacker)!, dt = TEAM_MAP.get(defender)!;
-  const aTerr = Object.values(territories).filter(t => t === attacker).length;
-  const dTerr = Object.values(territories).filter(t => t === defender).length;
+  const sim = simulateDetailedBattle(attacker, defender, territories, rosters, upgradeTeam || null, upgradedPlayer || null);
 
-  let aPower = at.rating + aTerr * 0.5 + (rosters[attacker]?.length || 0) * 0.3;
-  let dPower = dt.rating + dTerr * 0.5 + (rosters[defender]?.length || 0) * 0.3;
-
-  // Upgrade powerup: +10 to the team that has an active upgrade
-  if (upgradeTeam === attacker) aPower += 10;
-  if (upgradeTeam === defender) dPower += 10;
-
-  const attackerWins = Math.random() < aPower / (aPower + dPower);
-  const winScore = Math.floor(Math.random() * 25) + 17;
-  const loseScore = Math.floor(Math.random() * Math.min(winScore, 24));
+  const winnerId = sim.winner === 'att' ? attacker : defender;
+  const loserId = sim.winner === 'att' ? defender : attacker;
 
   return {
-    winner: attackerWins ? attacker : defender,
-    loser: attackerWins ? defender : attacker,
-    winScore, loseScore,
+    winner: winnerId,
+    loser: loserId,
+    winScore: sim.winner === 'att' ? sim.finalAttScore : sim.finalDefScore,
+    loseScore: sim.winner === 'att' ? sim.finalDefScore : sim.finalAttScore,
+    simulation: sim,
   };
 }
 
@@ -200,6 +195,11 @@ export function useConquest() {
   const [powerupUseType, setPowerupUseType] = useState<PowerupId | null>(null);
   const [freeAgentList, setFreeAgentList] = useState<FreeAgent[]>([]);
   const [territoryStolenState, setTerritoryStolenState] = useState<string | null>(null);
+  
+  // Play-by-play state
+  const [visiblePlays, setVisiblePlays] = useState<PlayEvent[]>([]);
+  const [playByPlayActive, setPlayByPlayActive] = useState(false);
+  const [boxScore, setBoxScore] = useState<BoxScore | null>(null);
 
   const timeoutsRef = useRef<number[]>([]);
   const clearTimeouts = () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
@@ -470,28 +470,49 @@ export function useConquest() {
       }
     } else {
       const enemyId = target.id;
-      const result = simulateBattle(team, enemyId, territories, rosters, upgradeActiveTeam);
+      const result = simulateBattle(team, enemyId, territories, rosters, upgradeActiveTeam, upgradedPlayer);
+
+      const startPlayByPlay = () => {
+        setBattleResult(result);
+        setPhase('battle');
+        setVisiblePlays([]);
+        setBoxScore(null);
+        setPlayByPlayActive(true);
+
+        const sim = result.simulation;
+        if (!sim) {
+          addTimeout(() => applyBattleResult(team, enemyId, result), 4500);
+          return;
+        }
+
+        // Reveal plays one at a time with 1.5s delay
+        sim.plays.forEach((play, idx) => {
+          addTimeout(() => {
+            setVisiblePlays(prev => [...prev, play]);
+          }, idx * 1500);
+        });
+
+        // After all plays, show box score, then apply result
+        const totalPlayTime = sim.plays.length * 1500;
+        addTimeout(() => {
+          setBoxScore(sim.boxScore);
+          setPlayByPlayActive(false);
+        }, totalPlayTime);
+        addTimeout(() => applyBattleResult(team, enemyId, result), totalPlayTime + 3000);
+      };
 
       if (missedFirst) {
         addTimeout(() => setNoEnemyMsg(`No target ${DIR_LABELS[firstAttemptDir] || firstAttemptDir}!`), 3600);
         addTimeout(() => { setNoEnemyMsg(null); setDirection(chosenDir!); }, 5000);
         addTimeout(() => setDefendingTeam(enemyId), 6200);
-        addTimeout(() => {
-          setBattleResult(result);
-          setPhase('battle');
-          addTimeout(() => applyBattleResult(team, enemyId, result), 4500);
-        }, 8000);
+        addTimeout(startPlayByPlay, 8000);
       } else {
         setDirection(chosenDir);
         addTimeout(() => setDefendingTeam(enemyId), 3800);
-        addTimeout(() => {
-          setBattleResult(result);
-          setPhase('battle');
-          addTimeout(() => applyBattleResult(team, enemyId, result), 4500);
-        }, 6000);
+        addTimeout(startPlayByPlay, 6000);
       }
     }
-  }, [territories, rosters, powerupStates, upgradeActiveTeam]);
+  }, [territories, rosters, powerupStates, upgradeActiveTeam, upgradedPlayer]);
 
   const applyBattleResult = useCallback((attacker: string, defender: string, result: BattleResult) => {
     const loserIsInvincible = invincibleTeams.has(result.loser);
@@ -579,6 +600,9 @@ export function useConquest() {
     setPendingPowerup(null);
     setPowerupUseType(null);
     setTerritoryStolenState(null);
+    setVisiblePlays([]);
+    setPlayByPlayActive(false);
+    setBoxScore(null);
   }, []);
 
   return {
@@ -588,6 +612,8 @@ export function useConquest() {
     // Powerup system
     teamSavedPowerups, invincibleTeams, upgradeActiveTeam, upgradedPlayer,
     pendingPowerup, powerupUseType, freeAgentList, territoryStolenState,
+    // Play-by-play
+    visiblePlays, playByPlayActive, boxScore,
     // Actions
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,
     usePowerupNow, savePowerupForLater, useSavedPowerup, signFreeAgent,
