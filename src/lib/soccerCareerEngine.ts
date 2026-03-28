@@ -152,6 +152,14 @@ export interface LegacyResult {
 
 export type PostRetirementChoice = "retire" | "manager" | "pundit";
 
+/* ─── Newspaper Article System ─── */
+export interface NewsArticle {
+  newspaper: string;
+  headline: string;
+  body: string;
+  type: "positive" | "negative" | "transfer" | "milestone";
+}
+
 export interface ManagerState {
   club: string;
   clubTier: number;
@@ -252,7 +260,8 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "retired";
+  pendingNews: NewsArticle[];
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
   transferSituation: TransferSituation | null;
