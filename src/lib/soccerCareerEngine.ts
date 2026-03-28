@@ -1030,7 +1030,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.seasons = [...s.seasons, {
       year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
       apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
-      leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "retired",
+      leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "retired",
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }];
     if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
