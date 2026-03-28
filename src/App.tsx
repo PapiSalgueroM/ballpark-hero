@@ -114,7 +114,8 @@ const App = () => (
             <Route path="/soccer-grid" element={<SoccerGrid />} />
             <Route path="/fantasy-draft" element={<FantasyDraft />} />
             <Route path="/conquest" element={<Conquest />} />
-            <Route path="/world-cup-predictor" element={<WorldCupPredictor />} />
+            <Route path="/world-cup-bracket" element={<WorldCupPredictor />} />
+            <Route path="/world-cup-predictor" element={<Navigate to="/world-cup-bracket" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
