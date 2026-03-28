@@ -1659,6 +1659,13 @@ export function dismissSummary(prev: CareerState, clubs: ClubData[]): CareerStat
   return advanceToNextPhase(s, clubs);
 }
 
+/* ─── Dismiss Ballon d'Or screen ─── */
+export function dismissBallonDor(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  s.pendingBallonDor = null;
+  return advanceToNextPhase(s, clubs);
+}
+
 /* ─── Dismiss international debut screen ─── */
 export function dismissDebut(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev };
@@ -1951,7 +1958,8 @@ export function getCareerTotals(seasons: SeasonRecord[]) {
   return seasons.reduce((t, s) => ({
     apps: t.apps + s.apps, goals: t.goals + s.goals, assists: t.assists + s.assists,
     cleanSheets: t.cleanSheets + s.cleanSheets, yellowCards: t.yellowCards + s.yellowCards, redCards: t.redCards + s.redCards,
-    leagueTitles: t.leagueTitles + (s.leagueTitle ? 1 : 0), championsLeagues: t.championsLeagues + (s.championsLeague ? 1 : 0),
+    leagueTitles: t.leagueTitles + (s.leagueTitle ? 1 : 0), domesticCups: t.domesticCups + (s.domesticCup ? 1 : 0),
+    championsLeagues: t.championsLeagues + (s.championsLeague ? 1 : 0),
     worldCups: t.worldCups + (s.worldCup ? 1 : 0), ballonDors: t.ballonDors + (s.ballonDor ? 1 : 0),
-  }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0 });
+  }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, domesticCups: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0 });
 }
