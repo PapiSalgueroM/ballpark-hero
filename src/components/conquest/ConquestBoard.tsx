@@ -214,7 +214,7 @@ export default function ConquestBoard() {
           </div>
 
           {/* Play-by-play log */}
-          <div className="rounded-xl border border-border p-3 bg-card max-h-52 overflow-y-auto">
+          <div ref={playLogRef} className="rounded-xl border border-border p-3 bg-card max-h-52 overflow-y-auto">
             <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 text-center">
               {game.playByPlayActive ? '🔴 LIVE' : '📋 Plays'}
             </h4>
