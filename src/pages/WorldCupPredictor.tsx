@@ -456,11 +456,13 @@ interface GroupPredictionCardProps {
   predictions: Predictions;
   onScoreChange: (key: string, field: "homeGoals" | "awayGoals", val: number | "") => void;
   onAutoFillGroup: (letter: string) => void;
+  onRankFillGroup: (letter: string) => void;
   onResetGroup: (letter: string) => void;
 }
 
-const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGroup, onResetGroup }: GroupPredictionCardProps) => {
+const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGroup, onRankFillGroup, onResetGroup }: GroupPredictionCardProps) => {
   const [expanded, setExpanded] = useState(true);
+  const [rankLoading, setRankLoading] = useState(false);
   const matchups = getMatchups(group.teams);
 
   const standings = useMemo(() => computeStandings(group, predictions), [group, predictions]);
