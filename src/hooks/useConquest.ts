@@ -43,6 +43,14 @@ function buildInitialTerritories(): Record<string, string | null> {
   return t;
 }
 
+function pickRandomPowerupStates(): Set<string> {
+  const terr = buildInitialTerritories();
+  const neutralIds = Object.keys(terr).filter(id => terr[id] === null);
+  const count = 4 + Math.floor(Math.random() * 4); // 4-7
+  const shuffled = neutralIds.sort(() => Math.random() - 0.5);
+  return new Set(shuffled.slice(0, count));
+}
+
 function buildInitialRosters(): Record<string, string[]> {
   const r: Record<string, string[]> = {};
   NFL_TEAMS.forEach(t => {
