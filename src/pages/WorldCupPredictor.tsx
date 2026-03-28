@@ -799,7 +799,7 @@ const WorldCupPredictor = () => {
             <Trophy className="w-8 h-8 text-[hsl(45,90%,55%)]" />
           </div>
           <p className="text-[hsl(150,15%,60%)] text-sm sm:text-base">
-            USA 🇺🇸 · Mexico 🇲🇽 · Canada 🇨🇦 — 48 Teams · 12 Groups
+            USA <FlagImg name="USA" /> · Mexico <FlagImg name="Mexico" /> · Canada <FlagImg name="Canada" /> — 48 Teams · 12 Groups
           </p>
         </div>
 
