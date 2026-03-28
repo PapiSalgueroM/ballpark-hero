@@ -1158,7 +1158,20 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             />
            )}
 
-          {/* OVERLAY: Ballon d'Or Ceremony */}
+          {/* OVERLAY: Retirement Ceremony */}
+          {career.phase === "retirement_ceremony" && career.legacy && (
+            <RetirementCeremonyCard career={career} totals={totals} onPostRetirement={onPostRetirement} />
+          )}
+
+          {/* OVERLAY: Post-Retirement Choice */}
+          {career.phase === "post_retirement" && (
+            <PostRetirementCard career={career} onChoice={onPostRetirement} />
+          )}
+
+          {/* OVERLAY: Manager Season */}
+          {career.phase === "manager_season" && career.managerState && (
+            <ManagerPanel manager={career.managerState} career={career} onAdvance={onAdvanceManager} onEnd={onEndManager} />
+          )}
           {career.phase === "ballon_dor" && career.pendingBallonDor && (
             <BallonDorCeremonyCard bdor={career.pendingBallonDor} career={career} onDismiss={onDismissBallonDor} />
           )}
