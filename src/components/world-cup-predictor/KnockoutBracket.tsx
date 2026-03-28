@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Trophy } from "lucide-react";
-import { getFlag } from "@/pages/WorldCupPredictor";
+import { FlagImg } from "@/pages/WorldCupPredictor";
 
 /* ───── types ───── */
 
@@ -183,11 +183,11 @@ const KnockoutBracket = ({ seeds, bestThirds }: KnockoutBracketProps) => {
             🏆 Your Predicted Champion 🏆
           </p>
           <p className="text-3xl sm:text-4xl font-black text-white drop-shadow-lg">
-            {getFlag(champion)} {champion}
+            <FlagImg name={champion} size={32} />{champion}
           </p>
           {thirdPlace && (
             <p className="text-sm text-[hsl(150,15%,55%)] mt-3">
-              🥉 Third Place: <span className="font-bold text-white">{getFlag(thirdPlace)} {thirdPlace}</span>
+              🥉 Third Place: <span className="font-bold text-white"><FlagImg name={thirdPlace} />{thirdPlace}</span>
             </p>
           )}
         </div>
@@ -289,10 +289,9 @@ const MatchCard = ({ match, onPick, isFinal }: MatchCardProps) => {
   const bothTeams = !!teamA && !!teamB;
 
   const shortName = (name: string) => {
-    if (!name) return "—";
-    const flag = getFlag(name);
+    if (!name) return <span>—</span>;
     const display = name.length > 12 ? name.slice(0, 10) + "…" : name;
-    return flag ? `${flag} ${display}` : display;
+    return <><FlagImg name={name} />{display}</>;
   };
 
   const teamRow = (team: string, isWinner: boolean) => {
