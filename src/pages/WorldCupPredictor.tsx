@@ -153,6 +153,35 @@ export function getFlag(name: string): string {
   return FLAG[name] || "";
 }
 
+/* ───── group colors ───── */
+
+const GROUP_COLORS: Record<string, { h: number; s: number; l: number }> = {
+  A: { h: 0, s: 75, l: 55 },      // red
+  B: { h: 220, s: 75, l: 55 },    // blue
+  C: { h: 145, s: 70, l: 45 },    // green
+  D: { h: 280, s: 65, l: 55 },    // purple
+  E: { h: 28, s: 90, l: 55 },     // orange
+  F: { h: 175, s: 70, l: 45 },    // teal
+  G: { h: 348, s: 80, l: 45 },    // crimson
+  H: { h: 225, s: 60, l: 35 },    // navy
+  I: { h: 45, s: 90, l: 55 },     // gold
+  J: { h: 16, s: 80, l: 60 },     // coral
+  K: { h: 90, s: 70, l: 50 },     // lime
+  L: { h: 260, s: 70, l: 50 },    // indigo
+};
+
+function gc(letter: string) {
+  const c = GROUP_COLORS[letter] || { h: 0, s: 0, l: 50 };
+  return {
+    accent: `hsl(${c.h}, ${c.s}%, ${c.l}%)`,
+    accentDim: `hsl(${c.h}, ${c.s - 20}%, ${c.l - 15}%)`,
+    headerBg: `hsl(${c.h}, ${c.s - 10}%, ${Math.max(c.l - 30, 12)}%)`,
+    border: `hsl(${c.h}, ${c.s - 15}%, ${c.l - 20}%)`,
+    inputBorder: `hsl(${c.h}, ${c.s - 10}%, ${c.l - 10}%)`,
+    glow: `0 0 20px hsla(${c.h}, ${c.s}%, ${c.l}%, 0.15)`,
+  };
+}
+
 /* ───── helpers ───── */
 
 /** Generate the 3 round-robin matchups for a 4-team group (0v1, 2v3, 0v2, 1v3, 0v3, 1v2) — FIFA standard pairing */
@@ -293,18 +322,26 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
     return s && s.homeGoals !== "" && s.awayGoals !== "";
   });
 
+  const colors = gc(group.letter);
+
   return (
-    <Card className="bg-[hsl(150,15%,12%)] border-[hsl(150,20%,20%)] shadow-lg">
+    <Card
+      className="border shadow-lg overflow-hidden"
+      style={{ backgroundColor: "hsl(220, 15%, 10%)", borderColor: colors.border, boxShadow: colors.glow }}
+    >
       <CardHeader
         className="pb-2 pt-4 px-4 cursor-pointer select-none"
         onClick={() => setExpanded(!expanded)}
+        style={{ background: `linear-gradient(135deg, ${colors.headerBg}, hsl(220, 15%, 10%))` }}
       >
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-bold text-[hsl(45,90%,55%)] tracking-wide">
+          <CardTitle className="text-lg font-bold tracking-wide" style={{ color: colors.accent }}>
             Group {group.letter}
           </CardTitle>
           <ChevronDown
-            className={`w-4 h-4 text-[hsl(150,15%,50%)] transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+            className={`w-4 h-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+            style={{ color: colors.accentDim }}
+          />
           />
         </div>
       </CardHeader>
@@ -315,9 +352,8 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
           {group.teams.map((team, idx) => (
             <li
               key={idx}
-              className={`flex items-center justify-between rounded-md px-3 py-1.5 ${
-                team.isTBD ? "bg-[hsl(150,10%,16%)]" : "bg-[hsl(150,12%,18%)]"
-              }`}
+              className={`flex items-center justify-between rounded-md px-3 py-1.5`}
+              style={{ backgroundColor: team.isTBD ? "hsl(220, 12%, 14%)" : "hsl(220, 12%, 16%)" }}
             >
               <span className={team.isTBD ? "italic text-[hsl(0,0%,55%)] text-sm" : "font-bold text-white text-sm"}>
                 {getFlag(team.name)} {team.name}
@@ -334,9 +370,9 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
 
       {/* Expanded: matchups + standings */}
       {expanded && (
-        <CardContent className="px-4 pb-4 pt-2 border-t border-[hsl(150,15%,18%)]">
+        <CardContent className="px-4 pb-4 pt-2" style={{ borderTopColor: colors.border, borderTopWidth: 1 }}>
           <div className="flex items-center justify-between mb-2">
-            <p className="text-[hsl(150,15%,50%)] text-[10px] uppercase tracking-wider font-semibold">
+            <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: colors.accentDim }}>
               Predict Scores
             </p>
             <div className="flex gap-1.5">
@@ -371,7 +407,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
               const shortAway = awayName.length > 16 ? awayName.slice(0, 14) + "…" : awayName;
 
               return (
-                <div key={key} className="flex items-center gap-1.5 bg-[hsl(150,10%,14%)] rounded-md px-2 py-1.5">
+                <div key={key} className="flex items-center gap-1.5 rounded-md px-2 py-1.5" style={{ backgroundColor: "hsl(220, 12%, 12%)" }}>
                   <span className="text-white text-[11px] font-semibold flex-1 text-right truncate" title={homeName}>
                     {getFlag(homeName)} {shortHome}
                   </span>
@@ -384,9 +420,10 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                       const v = e.target.value;
                       onScoreChange(key, "homeGoals", v === "" ? "" : Math.min(9, Math.max(0, Number(v))));
                     }}
-                    className="w-8 h-7 text-center text-sm font-bold rounded bg-[hsl(150,12%,20%)] border border-[hsl(150,20%,28%)] text-white focus:outline-none focus:border-[hsl(45,90%,55%)] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="w-8 h-7 text-center text-sm font-bold rounded text-white focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    style={{ backgroundColor: "hsl(220, 15%, 15%)", borderWidth: 2, borderColor: colors.inputBorder }}
                   />
-                  <span className="text-[hsl(0,0%,40%)] text-[10px]">–</span>
+                  <span className="text-[hsl(0,0%,40%)] text-[10px] font-bold">vs</span>
                   <input
                     type="number"
                     min={0}
@@ -396,7 +433,8 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                       const v = e.target.value;
                       onScoreChange(key, "awayGoals", v === "" ? "" : Math.min(9, Math.max(0, Number(v))));
                     }}
-                    className="w-8 h-7 text-center text-sm font-bold rounded bg-[hsl(150,12%,20%)] border border-[hsl(150,20%,28%)] text-white focus:outline-none focus:border-[hsl(45,90%,55%)] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="w-8 h-7 text-center text-sm font-bold rounded text-white focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    style={{ backgroundColor: "hsl(220, 15%, 15%)", borderWidth: 2, borderColor: colors.inputBorder }}
                   />
                   <span className="text-white text-[11px] font-semibold flex-1 truncate" title={awayName}>
                     {getFlag(awayName)} {shortAway}
@@ -409,7 +447,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
           {/* Standings table */}
           {hasAnyScore && (
             <div className="mt-3">
-              <p className="text-[hsl(150,15%,50%)] text-[10px] uppercase tracking-wider font-semibold mb-1.5">
+              <p className="text-[10px] uppercase tracking-wider font-semibold mb-1.5" style={{ color: colors.accentDim }}>
                 Standings
               </p>
               <div className="overflow-x-auto">
@@ -429,13 +467,14 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                   </thead>
                   <tbody>
                     {standings.map((s, pos) => {
-                      let rowClass = "";
-                      if (pos === 0 || pos === 1) rowClass = "bg-[hsl(140,50%,18%)]"; // green — qualified
-                      else if (pos === 2) rowClass = "bg-[hsl(50,60%,20%)]"; // yellow — wildcard
+                      let rowBg = "";
+                      if (pos === 0 || pos === 1) rowBg = "hsl(140, 55%, 16%)";  // green — qualified
+                      else if (pos === 2) rowBg = "hsl(48, 65%, 18%)";          // yellow — wildcard
+                      else rowBg = "hsl(220, 10%, 13%)";                        // grey — eliminated
 
                       const shortTeam = s.team.length > 14 ? s.team.slice(0, 12) + "…" : s.team;
                       return (
-                        <tr key={s.team} className={`${rowClass} border-b border-[hsl(150,10%,16%)]`}>
+                        <tr key={s.team} className="border-b border-[hsl(220,10%,15%)]" style={{ backgroundColor: rowBg }}>
                           <td className="py-1 pr-1 text-[hsl(0,0%,50%)]">{pos + 1}</td>
                           <td className={`py-1 pr-1 font-semibold truncate max-w-[100px] ${s.isTBD ? "italic text-[hsl(0,0%,50%)]" : "text-white"}`} title={s.team}>
                             {getFlag(s.team)} {shortTeam}
@@ -656,7 +695,7 @@ const WorldCupPredictor = () => {
   }, [bestThirds]);
 
   return (
-    <div className="min-h-screen bg-[hsl(150,20%,8%)] text-white">
+    <div className="min-h-screen text-white" style={{ background: "linear-gradient(180deg, hsl(220, 20%, 8%) 0%, hsl(230, 18%, 6%) 50%, hsl(220, 20%, 8%) 100%)" }}>
       <PageSeo
         title="World Cup 2026 Predictor | Sports Trivia Games"
         description="Explore all 12 groups for the FIFA World Cup 2026 hosted in USA, Mexico & Canada."
