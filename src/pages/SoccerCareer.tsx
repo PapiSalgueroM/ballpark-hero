@@ -20,10 +20,12 @@ import {
   type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,
   type UCLResult, type UCLKnockoutMatch, type Award,
   type LegacyResult, type LegacyTier, type PostRetirementChoice, type ManagerState,
+  type NewsArticle,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
+  dismissNewspaper,
   generateShareText, getYouthAcademyClub,
   getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
 } from "@/lib/soccerCareerEngine";
@@ -149,6 +151,62 @@ function OfferCard({ offer, onAccept, actionLabel }: { offer: ContractOffer; onA
   );
 }
 
+/* ─── Newspaper Card ─── */
+function NewspaperCard({ articles, onContinue }: { articles: NewsArticle[]; onContinue: () => void }) {
+  const typeColor = (t: string) => {
+    switch (t) {
+      case "positive": return "text-emerald-400";
+      case "negative": return "text-red-400";
+      case "transfer": return "text-blue-400";
+      case "milestone": return "text-amber-400";
+      default: return "text-foreground";
+    }
+  };
+  const typeLabel = (t: string) => {
+    switch (t) {
+      case "positive": return "📰";
+      case "negative": return "⚠️";
+      case "transfer": return "💼";
+      case "milestone": return "🏆";
+      default: return "📰";
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="text-center py-2">
+        <span className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">📰 In The Headlines</span>
+      </div>
+      {articles.map((article, i) => (
+        <div key={i} className="bg-card border-2 border-border rounded-xl overflow-hidden">
+          {/* Newspaper masthead */}
+          <div className="bg-muted/30 border-b border-border px-4 py-2 flex items-center justify-between">
+            <span className="text-[11px] font-black uppercase tracking-[0.15em] text-muted-foreground italic">{article.newspaper}</span>
+            <span className="text-[10px] text-muted-foreground">{typeLabel(article.type)}</span>
+          </div>
+          {/* Headline */}
+          <div className="px-4 pt-4 pb-2">
+            <h3 className={`text-base sm:text-lg font-black leading-tight ${typeColor(article.type)}`} style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+              {article.headline}
+            </h3>
+          </div>
+          {/* Separator */}
+          <div className="mx-4 border-t border-border" />
+          {/* Body */}
+          <div className="px-4 pt-2 pb-4">
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+              {article.body}
+            </p>
+          </div>
+        </div>
+      ))}
+      <Button onClick={onContinue} className="w-full h-10 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+        Continue to Season Summary →
+      </Button>
+    </div>
+  );
+}
+
 /* ─── Season Summary Card ─── */
 function SeasonSummaryCard({ season, position, onContinue }: { season: SeasonRecord; position: string; onContinue: () => void }) {
   const isGK = position === "GK";
@@ -259,6 +317,11 @@ export default function SoccerCareer() {
   const handleDismissSummary = () => {
     if (!career) return;
     setCareer(dismissSummary(career, clubs));
+  };
+
+  const handleDismissNewspaper = () => {
+    if (!career) return;
+    setCareer(dismissNewspaper(career));
   };
 
   const handleStay = () => {
@@ -381,6 +444,7 @@ export default function SoccerCareer() {
               onNextSeason={handleNextSeason}
               onAcceptOffer={handleAcceptOffer}
               onDismissSummary={handleDismissSummary}
+              onDismissNewspaper={handleDismissNewspaper}
               onStay={handleStay}
               onSignExtension={handleSignExtension}
               onRequestTransfer={handleRequestTransfer}
@@ -1336,12 +1400,13 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
   onAcceptOffer: (offer: ContractOffer) => void;
   onDismissSummary: () => void;
+  onDismissNewspaper: () => void;
   onStay: () => void;
   onSignExtension: () => void;
   onRequestTransfer: () => void;
@@ -1424,6 +1489,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
         {/* RIGHT — Stats & Overlays */}
         <div className="space-y-3 order-1 md:order-2">
+
+          {/* OVERLAY: Newspaper Articles */}
+          {career.phase === "newspaper" && career.pendingNews.length > 0 && (
+            <NewspaperCard articles={career.pendingNews} onContinue={onDismissNewspaper} />
+          )}
 
           {/* OVERLAY: Season Summary */}
           {career.phase === "season_summary" && career.pendingSummary && (

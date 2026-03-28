@@ -152,6 +152,14 @@ export interface LegacyResult {
 
 export type PostRetirementChoice = "retire" | "manager" | "pundit";
 
+/* ─── Newspaper Article System ─── */
+export interface NewsArticle {
+  newspaper: string;
+  headline: string;
+  body: string;
+  type: "positive" | "negative" | "transfer" | "milestone";
+}
+
 export interface ManagerState {
   club: string;
   clubTier: number;
@@ -252,7 +260,8 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "retired";
+  pendingNews: NewsArticle[];
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
   transferSituation: TransferSituation | null;
@@ -830,7 +839,7 @@ export function initCareer(
     }],
     events: [`📋 Joined ${academyClub.name} Youth Academy aged 16`],
     retired: false, phase: "youth", pendingOffers: [], pendingSummary: null, transferSituation: null,
-    pendingEvents: [], lastEventId: null, statBoostNextSeason: {},
+    pendingEvents: [], lastEventId: null, statBoostNextSeason: {}, pendingNews: [],
     internationalCareer: false, sponsorDeal: null, totalEarnings: 0,
     popularity: 10, morale: 70, isLeader: false, hasRelationship: false,
     intStats: {
@@ -1337,7 +1346,11 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   if (totalGoals >= 500 && totalGoals - season.goals < 500) s.events.push("👑 Reached 500 career goals!");
   if (totalApps >= 500 && totalApps - season.apps < 500) s.events.push("🎖️ Made 500th career appearance!");
   s.seasons = [...s.seasons, season];
-  s.pendingSummary = season; s.phase = "season_summary";
+  s.pendingSummary = season;
+  // Generate newspaper articles
+  const news = generateNewsArticles(s, season, totalGoals, totalApps);
+  s.pendingNews = news;
+  s.phase = news.length > 0 ? "newspaper" : "season_summary";
   // Financial simulation
   simulateSeasonFinances(s, season);
   if (s.contractYearsLeft <= 1) s.events.push("⚠️ Your contract is expiring!");
@@ -1397,6 +1410,157 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   }
 
   if (s.events.length === 0) s.events.push(`⚽ Solid season at ${s.currentClub}`);
+  return s;
+}
+
+/* ─── Newspaper Article Generation ─── */
+const NEWSPAPERS = ["The Daily Sport", "Football Weekly", "The Global Game", "Soccer Times", "The Beautiful Game Report"];
+
+function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: number, totalApps: number): NewsArticle[] {
+  const articles: NewsArticle[] = [];
+  const name = s.playerName;
+  const club = s.currentClub;
+  const pos = s.position;
+  const ovr = s.overall;
+  const yearsPlaying = s.seasons.filter(ss => ss.type === "playing").length;
+  const firstClub = s.seasons.find(ss => ss.type === "playing")?.club || club;
+  const seasonsAtClub = s.seasons.filter(ss => ss.club === club && ss.type === "playing").length;
+
+  type Template = { weight: number; check: () => boolean; gen: () => NewsArticle };
+
+  const templates: Template[] = [
+    { weight: 1, check: () => season.goals >= 2 && season.rating >= 7.5,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `${name} Silences Critics With Stunning Performance`,
+        body: `${name} put in an outstanding display for ${club} this season, netting ${season.goals} goals and reminding the world of their immense talent. Pundits are running out of superlatives.` }) },
+    { weight: 1, check: () => ovr >= 88,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `Is ${name} The Best ${pos} In The World Right Now?`,
+        body: `With an overall rating of ${ovr}, ${name} continues to operate at a level few can match. Experts across the globe are debating whether the ${s.nationality} star has now surpassed every rival at ${pos}.` }) },
+    { weight: 1, check: () => season.rating >= 7.8,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `${name} Named In Team Of The Season`,
+        body: `After averaging a ${season.rating.toFixed(1)} rating across ${season.apps} appearances, ${name} has been selected in the official Team of the Season. A thoroughly deserved recognition.` }) },
+    { weight: 1, check: () => s.marketValue >= 50 && s.currentClubTier > 1,
+      gen: () => {
+        const elites = ["Real Madrid", "Barcelona", "Manchester City", "Bayern Munich", "PSG", "Liverpool"];
+        return { newspaper: pick(NEWSPAPERS), type: "transfer",
+          headline: `Transfer Rumours: ${pick(elites)} Eyeing ${name} In Summer Window`,
+          body: `Sources close to the deal suggest a bid of €${Math.round(s.marketValue)}M is being prepared. The ${s.nationality} international has been in outstanding form and could be set for a big move.` };
+      } },
+    { weight: 1, check: () => totalGoals > 0 && (totalGoals === 100 || totalGoals === 200 || totalGoals === 300 || totalGoals === 500),
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "milestone",
+        headline: `${name} Breaks Club Record For Goals`,
+        body: `With ${totalGoals} career goals to their name, ${name} has written themselves into the history books. An emotional moment at ${club} as teammates and fans celebrate the milestone.` }) },
+    { weight: 1, check: () => yearsPlaying >= 5 && s.currentClubTier <= 2 && ovr >= 78,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `FROM ZERO TO HERO: ${name}'s Incredible Rise From ${firstClub} To The Top`,
+        body: `${yearsPlaying} years ago, ${name} was an unknown prospect at ${firstClub}. Now at ${club}, the ${s.nationality} star has become one of football's most remarkable success stories. "I never gave up," they revealed.` }) },
+    { weight: 1, check: () => seasonsAtClub >= 2 && s.popularity >= 50,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `${name} Voted Fan Favourite At ${club}`,
+        body: `After ${seasonsAtClub} seasons of dedication, the ${club} faithful have spoken — ${name} is their Player of the Year. The bond between player and fans has become something truly special.` }) },
+    { weight: 1, check: () => s.isLeader && (season.leagueTitle || season.domesticCup || season.championsLeague),
+      gen: () => {
+        const trophy = season.championsLeague ? "Champions League" : season.leagueTitle ? "League Title" : "Domestic Cup";
+        return { newspaper: pick(NEWSPAPERS), type: "positive",
+          headline: `CAPTAIN FANTASTIC: ${name} Leads ${club} To ${trophy} Glory`,
+          body: `Wearing the armband with pride, ${name} delivered when it mattered most. A season that will live long in the memory of every ${club} supporter.` };
+      } },
+    { weight: 0.5, check: () => ovr >= 80 && s.popularity >= 60,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `${name} Reveals Secret To Success In Exclusive Interview: 'I Never Stopped Believing'`,
+        body: `In a rare sit-down interview, ${name} opened up about the sacrifices, the doubts, and the determination that drove them to the top. "Every setback was a lesson," the ${pos} reflected.` }) },
+    { weight: 0.5, check: () => s.socialMediaFollowers >= 1000000,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `SOCIAL MEDIA SENSATION: ${name} Hits ${formatFollowers(s.socialMediaFollowers)} Followers After Viral Moment`,
+        body: `${name} broke the internet this week after a viral clip racked up millions of views. The ${club} star's social media presence continues to grow at a staggering pace.` }) },
+    { weight: 1, check: () => season.rating < 6.3 && season.apps < 20,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `CRISIS AT ${club.toUpperCase()}: ${name} Dropped From Squad After Poor Run Of Form`,
+        body: `Sources inside the dressing room confirm that ${name} has been left out of the matchday squad following a disappointing spell. With just ${season.apps} appearances and a ${season.rating.toFixed(1)} average rating, questions are mounting.` }) },
+    { weight: 0.7, check: () => season.rating < 6.0,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `${name} Booed By Own Fans After Another Disappointing Display`,
+        body: `Ugly scenes at ${club} as sections of the crowd turned on ${name} after another below-par performance. The ${s.nationality} international looked visibly shaken as boos rang around the stadium.` }) },
+    { weight: 0.5, check: () => s.contractYearsLeft <= 1 && s.morale < 50,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `TRANSFER SAGA: ${name} Wants Out As Contract Talks Collapse`,
+        body: `Negotiations between ${name}'s representatives and ${club} have broken down completely. With just ${s.contractYearsLeft} year${s.contractYearsLeft !== 1 ? "s" : ""} remaining, the club face losing their star for a cut-price fee.` }) },
+    { weight: 0.5, check: () => season.apps < 15 && s.age < 34,
+      gen: () => {
+        const injuries = ["knee ligament damage", "hamstring tear", "ankle fracture", "groin injury", "shoulder dislocation"];
+        return { newspaper: pick(NEWSPAPERS), type: "negative",
+          headline: `INJURY BLOW: ${name} Could Miss Months With Serious ${pick(injuries).split(" ").map(w => w[0].toUpperCase() + w.slice(1)).join(" ")}`,
+          body: `${club} have been dealt a devastating blow after scans confirmed ${name} faces an extended spell on the sidelines. The ${pos} managed only ${season.apps} appearances this season.` };
+      } },
+    { weight: 0.3, check: () => s.morale < 40,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `CONTROVERSY: ${name} Hits Out At Manager In Shock Interview`,
+        body: `In a bombshell interview, ${name} publicly criticised the management at ${club}, claiming they have been "disrespected and undervalued." The fallout is expected to dominate headlines for weeks.` }) },
+    { weight: 1, check: () => s.age >= 30 && ovr < 75 && season.rating < 6.5,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `HAS ${name.toUpperCase()} LOST IT? Former Star Struggles At ${club}`,
+        body: `Once one of football's brightest talents, ${name} is now a shadow of their former self. At ${s.age}, the ${pos} averaged just ${season.rating.toFixed(1)} this campaign. Time may finally be catching up.` }) },
+    { weight: 0.4, check: () => s.weeklyWage > 200000 && s.contractYearsLeft <= 2,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `WAGE DEMANDS SHOCK ${club.toUpperCase()} As ${name} Agent Demands Record Deal`,
+        body: `${name}'s agent has reportedly demanded a staggering ${formatWage(Math.round(s.weeklyWage * 1.5))} weekly wage to extend their stay at ${club}. Board members are said to be "stunned" by the figures.` }) },
+    { weight: 0.5, check: () => s.rival !== null && !s.rival.retired && s.rival.ballonDors > 0,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `RIVALS TAUNT ${name.toUpperCase()} After ${s.rival!.name} Wins Ballon d'Or Again`,
+        body: `Social media erupted as ${s.rival!.name} claimed another Ballon d'Or, with fans of the ${s.rival!.nationality} star flooding ${name}'s channels with taunts. The rivalry shows no signs of cooling down.` }) },
+    { weight: 0.7, check: () => s.marketValue >= 30,
+      gen: () => {
+        const bidders = ["Real Madrid", "Barcelona", "Manchester City", "PSG", "Chelsea", "Bayern Munich"];
+        const bidClub = pick(bidders.filter(b => b !== club));
+        return { newspaper: pick(NEWSPAPERS), type: "transfer",
+          headline: `${bidClub} Launch Stunning €${Math.round(s.marketValue * 1.2)}M Bid For ${name}`,
+          body: `${bidClub} have made an audacious move for ${name}, tabling a bid that would smash the ${pos} transfer record. ${club} are yet to respond but are understood to be reluctant to sell.` };
+      } },
+    { weight: 1, check: () => {
+        const playingSzns = s.seasons.filter(ss => ss.type === "playing");
+        return playingSzns.length >= 2 && playingSzns[playingSzns.length - 1].club !== playingSzns[playingSzns.length - 2]?.club;
+      },
+      gen: () => {
+        const prev = s.seasons.filter(ss => ss.type === "playing");
+        const oldClub = prev.length >= 2 ? prev[prev.length - 2].club : "Unknown";
+        return { newspaper: pick(NEWSPAPERS), type: "transfer",
+          headline: `DONE DEAL: ${name} Signs For ${club} In Record Breaking Move`,
+          body: `${name} has completed their move from ${oldClub} to ${club} in a deal worth €${Math.round(s.marketValue)}M. The ${s.nationality} ${pos} is expected to make an immediate impact.` };
+      } },
+    { weight: 0.5, check: () => s.contractYearsLeft === 0,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "transfer",
+        headline: `FREE AGENT FRENZY: ${name} Available On Free Transfer`,
+        body: `${name} is officially a free agent after their contract at ${club} expired. Multiple top clubs are reportedly circling for what could be the bargain of the window.` }) },
+    { weight: 1, check: () => totalGoals >= 100 && totalGoals - season.goals < 100,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "milestone",
+        headline: `${name} Scores 100th Career Goal In Emotional Moment`,
+        body: `There were tears of joy as ${name} reached the magical 100-goal mark for their career. The ${club} star celebrated with teammates and fans in an unforgettable moment.` }) },
+    { weight: 1, check: () => s.intStats.caps >= 100 && (s.intStats.caps - (season.intApps || 0)) < 100,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "milestone",
+        headline: `CENTURION: ${name} Earns 100th International Cap`,
+        body: `${name} was given a guard of honour by teammates before earning their 100th cap for ${s.nationality}. An incredible achievement for the veteran ${pos}.` }) },
+    { weight: 1, check: () => s.isFinalSeason,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "milestone",
+        headline: `LEGEND STATUS: ${name} Announces Retirement After ${yearsPlaying} Year Career`,
+        body: `In an emotional press conference, ${name} confirmed this will be their final season as a professional footballer. ${yearsPlaying} years, ${totalGoals} goals, and countless memories. A true legend of the game.` }) },
+  ];
+
+  const eligible = templates.filter(t => t.check());
+  if (eligible.length === 0) return [];
+
+  const count = eligible.length >= 2 && Math.random() < 0.5 ? 2 : 1;
+  const shuffled = eligible.sort(() => Math.random() - 0.5).sort((a, b) => b.weight - a.weight);
+  const selected = shuffled.slice(0, count);
+  return selected.map(t => t.gen());
+}
+
+/* ─── Dismiss newspaper ─── */
+export function dismissNewspaper(prev: CareerState): CareerState {
+  const s = { ...prev };
+  s.pendingNews = [];
+  s.phase = "season_summary";
   return s;
 }
 
