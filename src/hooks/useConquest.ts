@@ -607,6 +607,7 @@ export function useConquest() {
     setTerritoryStolenState(null);
     setVisiblePlays([]);
     setPlayByPlayActive(false);
+    setSimulatingRemainder(false);
     setBoxScore(null);
   }, []);
 
@@ -618,7 +619,7 @@ export function useConquest() {
     teamSavedPowerups, invincibleTeams, upgradeActiveTeam, upgradedPlayer,
     pendingPowerup, powerupUseType, freeAgentList, territoryStolenState,
     // Play-by-play
-    visiblePlays, playByPlayActive, boxScore,
+    visiblePlays, playByPlayActive, simulatingRemainder, boxScore,
     // Actions
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,
     usePowerupNow, savePowerupForLater, useSavedPowerup, signFreeAgent,
