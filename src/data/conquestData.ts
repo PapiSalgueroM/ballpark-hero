@@ -34,7 +34,8 @@ export const STATE_POSITIONS: StatePos[] = [
   { id: 'OH_SW', name: 'Southwest Ohio', x: c(7,4)[0], y: c(7,4)[1] },
   { id: 'PA_W', name: 'West Pennsylvania', x: c(8,3)[0], y: c(8,3)[1] },
   { id: 'PA_E', name: 'East Pennsylvania', x: c(9,3)[0] - 10, y: c(9,3)[1] },
-  { id: 'NJ', name: 'New Jersey', x: c(9,3)[0], y: c(9,3)[1] },
+  { id: 'NJ_N', name: 'North New Jersey', x: c(9,3)[0], y: c(9,3)[1] },
+  { id: 'NJ_S', name: 'South New Jersey', x: c(9,4)[0], y: c(9,4)[1] },
   { id: 'CT', name: 'Connecticut', x: c(10,3)[0], y: c(10,3)[1] },
   { id: 'RI', name: 'Rhode Island', x: c(11,3)[0], y: c(11,3)[1] },
   { id: 'CA_N', name: 'Northern California', x: c(0,3)[0], y: c(0,3)[1] - 10 },
@@ -486,7 +487,7 @@ export const INITIAL_TERRITORIES: Record<string, string> = {
   WA: 'SEA', OR: 'SEA', CA_N: 'SF', CA_S: 'LAR', CA_SC: 'LAC', NV: 'LV', AZ: 'ARI', CO: 'DEN',
   MO: 'KC', TX_N: 'DAL', TX_S: 'HOU', MN: 'MIN', WI: 'GB', IL: 'CHI',
   MI: 'DET', OH_NE: 'CLE', OH_SW: 'CIN', PA_W: 'PIT', PA_E: 'PHI',
-  NJ: 'NYG', CT: 'NYJ', MA: 'NE', NY: 'BUF',
+  NJ_N: 'NYG', NJ_S: 'NYJ', MA: 'NE', NY: 'BUF',
   FL_N: 'JAX', FL_W: 'TB', FL_S: 'MIA', GA: 'ATL', NC: 'CAR', LA: 'NO',
   TN: 'TEN', IN: 'IND', MD: 'BAL', VA: 'WAS',
 };
