@@ -317,7 +317,7 @@ const PlayoffSlotsPanel = ({ picks, onPick }: PlayoffSlotsPanelProps) => {
                           : "bg-[hsl(220,12%,18%)] text-white border-2 border-[hsl(220,12%,28%)] hover:border-[hsl(140,40%,40%)] hover:bg-[hsl(220,12%,22%)] cursor-pointer"
                       }`}
                     >
-                      {getFlag(m.teamA)} {m.teamA}
+                      <FlagImg name={m.teamA} />{m.teamA}
                     </button>
                     <span className="text-[hsl(0,0%,35%)] text-xs font-semibold">vs</span>
                     <button
@@ -330,13 +330,13 @@ const PlayoffSlotsPanel = ({ picks, onPick }: PlayoffSlotsPanelProps) => {
                           : "bg-[hsl(220,12%,18%)] text-white border-2 border-[hsl(220,12%,28%)] hover:border-[hsl(140,40%,40%)] hover:bg-[hsl(220,12%,22%)] cursor-pointer"
                       }`}
                     >
-                      {getFlag(m.teamB)} {m.teamB}
+                      <FlagImg name={m.teamB} />{m.teamB}
                     </button>
                   </div>
                   {picked && (
                     <div className="flex items-center justify-center gap-1 mt-2">
                       <Check className="w-3 h-3 text-[hsl(140,60%,50%)]" />
-                      <span className="text-[hsl(140,60%,50%)] text-[10px] font-semibold">Winner: {getFlag(picked)} {picked}</span>
+                      <span className="text-[hsl(140,60%,50%)] text-[10px] font-semibold">Winner: <FlagImg name={picked} />{picked}</span>
                     </div>
                   )}
                 </div>
@@ -406,7 +406,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
               style={{ backgroundColor: team.isTBD ? "hsl(220, 12%, 14%)" : "hsl(220, 12%, 16%)" }}
             >
               <span className={team.isTBD ? "italic text-[hsl(0,0%,55%)] text-sm" : "font-bold text-white text-sm"}>
-                {getFlag(team.name)} {team.name}
+                <FlagImg name={team.name} />{team.name}
               </span>
               {team.isTBD && (
                 <Badge variant="outline" className="text-[10px] border-[hsl(0,0%,40%)] text-[hsl(0,0%,50%)] px-1.5 py-0">
@@ -459,7 +459,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
               return (
                 <div key={key} className="flex items-center gap-1.5 rounded-md px-2 py-1.5" style={{ backgroundColor: "hsl(220, 12%, 12%)" }}>
                   <span className="text-white text-[11px] font-semibold flex-1 text-right truncate" title={homeName}>
-                    {getFlag(homeName)} {shortHome}
+                    <FlagImg name={homeName} />{shortHome}
                   </span>
                   <input
                     type="number"
@@ -487,7 +487,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                     style={{ backgroundColor: "hsl(220, 15%, 15%)", borderWidth: 2, borderColor: colors.inputBorder }}
                   />
                   <span className="text-white text-[11px] font-semibold flex-1 truncate" title={awayName}>
-                    {getFlag(awayName)} {shortAway}
+                    <FlagImg name={awayName} />{shortAway}
                   </span>
                 </div>
               );
@@ -527,7 +527,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                         <tr key={s.team} className="border-b border-[hsl(220,10%,15%)]" style={{ backgroundColor: rowBg }}>
                           <td className="py-1 pr-1 text-[hsl(0,0%,50%)]">{pos + 1}</td>
                           <td className={`py-1 pr-1 font-semibold truncate max-w-[100px] ${s.isTBD ? "italic text-[hsl(0,0%,50%)]" : "text-white"}`} title={s.team}>
-                            {getFlag(s.team)} {shortTeam}
+                            <FlagImg name={s.team} />{shortTeam}
                           </td>
                           <td className="text-center py-1 px-1 text-[hsl(0,0%,60%)]">{s.played}</td>
                           <td className="text-center py-1 px-1 text-[hsl(0,0%,60%)]">{s.won}</td>
@@ -909,7 +909,7 @@ const WorldCupPredictor = () => {
                             </td>
                             <td className="py-2.5 px-2 font-bold text-[hsl(0,0%,50%)]">{idx + 1}</td>
                             <td className={`py-2.5 px-2 font-semibold ${isSelected ? "text-white" : "text-[hsl(0,0%,55%)]"}`}>
-                              {getFlag(t.team)} {t.team}
+                              <FlagImg name={t.team} />{t.team}
                             </td>
                             <td className="py-2.5 px-2 text-center text-[hsl(45,90%,55%)] font-semibold">{t.group}</td>
                             <td className="py-2.5 px-2 text-center font-bold text-white">{t.pts}</td>
