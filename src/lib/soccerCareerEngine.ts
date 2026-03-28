@@ -1095,6 +1095,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   if (totalApps >= 500 && totalApps - season.apps < 500) s.events.push("🎖️ Made 500th career appearance!");
   s.seasons = [...s.seasons, season];
   s.pendingSummary = season; s.phase = "season_summary";
+  // Financial simulation
+  simulateSeasonFinances(s, season);
   if (s.contractYearsLeft <= 1) s.events.push("⚠️ Your contract is expiring!");
 
   // World Cup year — trigger after summary
