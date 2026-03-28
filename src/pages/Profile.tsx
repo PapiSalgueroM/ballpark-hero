@@ -117,6 +117,8 @@ export default function Profile() {
   const isOwnProfile = !username || (profile?.username === username);
 
   useEffect(() => {
+    if (authLoading) return; // Wait for auth to finish
+
     const loadProfile = async () => {
       setLoading(true);
       let targetUserId: string | null = null;
