@@ -73,6 +73,28 @@ function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
   );
 }
 
+function StatCategory({ label, attLine, defLine, attColor, defColor }: {
+  label: string; attLine: string; defLine: string; attColor?: string; defColor?: string;
+}) {
+  return (
+    <div className="rounded-lg border border-border/50 overflow-hidden">
+      <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider px-2 py-1 bg-muted/50 text-center">
+        {label}
+      </div>
+      <div className="grid grid-cols-1 divide-y divide-border/30">
+        <div className="flex items-center gap-1.5 px-2 py-1.5 text-[11px]">
+          <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: attColor || '#333' }} />
+          <span className="text-foreground">{attLine}</span>
+        </div>
+        <div className="flex items-center gap-1.5 px-2 py-1.5 text-[11px]">
+          <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: defColor || '#333' }} />
+          <span className="text-foreground">{defLine}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ConquestBoard() {
   const game = useConquest();
   const [now, setNow] = useState(Date.now());
@@ -194,21 +216,29 @@ export default function ConquestBoard() {
         <div className="space-y-3 animate-in fade-in zoom-in-95">
           {/* Live Score */}
           <div className="flex items-center justify-center gap-4 p-3 rounded-xl bg-card border border-border">
-            <div className="text-center">
+            <div className="text-center min-w-[80px]">
               <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
                 {t(game.attackingTeam)?.name}
               </div>
               <div className="text-2xl font-bold text-foreground">
-                {game.visiblePlays.length > 0 ? game.visiblePlays[game.visiblePlays.length - 1].attScore : 0}
+                {game.boxScore
+                  ? game.battleResult.simulation?.finalAttScore ?? 0
+                  : game.visiblePlays.length > 0
+                    ? game.visiblePlays[game.visiblePlays.length - 1].attScore
+                    : 0}
               </div>
             </div>
             <div className="text-muted-foreground text-sm font-bold">vs</div>
-            <div className="text-center">
+            <div className="text-center min-w-[80px]">
               <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
                 {defTeam?.name}
               </div>
               <div className="text-2xl font-bold text-foreground">
-                {game.visiblePlays.length > 0 ? game.visiblePlays[game.visiblePlays.length - 1].defScore : 0}
+                {game.boxScore
+                  ? game.battleResult.simulation?.finalDefScore ?? 0
+                  : game.visiblePlays.length > 0
+                    ? game.visiblePlays[game.visiblePlays.length - 1].defScore
+                    : 0}
               </div>
             </div>
           </div>
@@ -241,39 +271,87 @@ export default function ConquestBoard() {
             </div>
           </div>
 
-          {/* Box Score - shown after all plays */}
-          {game.boxScore && !game.playByPlayActive && (
-            <div className="rounded-xl border border-border p-3 bg-card animate-in fade-in zoom-in-95">
-              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 text-center">
-                📊 Final Box Score
-              </h4>
-              <div className="grid grid-cols-3 gap-1 text-[11px] text-center">
-                <div className="font-bold text-foreground">{t(game.attackingTeam)?.name}</div>
-                <div className="text-muted-foreground font-semibold">Stat</div>
-                <div className="font-bold text-foreground">{defTeam?.name}</div>
-
-                <div className="text-foreground">{game.boxScore.attPassYds}</div>
-                <div className="text-muted-foreground">Pass Yds</div>
-                <div className="text-foreground">{game.boxScore.defPassYds}</div>
-
-                <div className="text-foreground">{game.boxScore.attRushYds}</div>
-                <div className="text-muted-foreground">Rush Yds</div>
-                <div className="text-foreground">{game.boxScore.defRushYds}</div>
-
-                <div className="text-primary text-[10px]">{game.boxScore.attTopPerformer}</div>
-                <div className="text-muted-foreground">⭐ MVP</div>
-                <div className="text-primary text-[10px]">{game.boxScore.defTopPerformer}</div>
+          {/* Simulating remainder message */}
+          {game.simulatingRemainder && (
+            <div className="text-center py-4 animate-in fade-in zoom-in-95">
+              <div className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-muted border border-border">
+                <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                <span className="text-sm font-semibold text-foreground">Simulating remainder of game...</span>
+                <div className="w-2 h-2 rounded-full bg-primary animate-pulse" style={{ animationDelay: '0.3s' }} />
               </div>
-              <div className="mt-3 text-center">
-                <div className="font-bold text-lg text-foreground">
+            </div>
+          )}
+
+          {/* Full Box Score */}
+          {game.boxScore && !game.simulatingRemainder && (
+            <div className="rounded-xl border border-border p-4 bg-card animate-in fade-in zoom-in-95 space-y-3">
+              {/* Final Score Header */}
+              <div className="text-center space-y-1">
+                <div className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Final Score</div>
+                <div className="flex items-center justify-center gap-4">
+                  <div className="text-center">
+                    <div
+                      className="px-3 py-1 rounded-lg text-white text-xs font-bold mb-1"
+                      style={{ backgroundColor: t(game.attackingTeam)?.color || '#333' }}
+                    >
+                      {t(game.attackingTeam)?.name}
+                    </div>
+                    <div className="text-3xl font-black text-foreground">
+                      {game.battleResult.simulation?.finalAttScore}
+                    </div>
+                  </div>
+                  <div className="text-muted-foreground text-lg font-bold">—</div>
+                  <div className="text-center">
+                    <div
+                      className="px-3 py-1 rounded-lg text-white text-xs font-bold mb-1"
+                      style={{ backgroundColor: defTeam?.color || '#333' }}
+                    >
+                      {defTeam?.name}
+                    </div>
+                    <div className="text-3xl font-black text-foreground">
+                      {game.battleResult.simulation?.finalDefScore}
+                    </div>
+                  </div>
+                </div>
+                <div className="font-bold text-sm text-primary">
                   {winTeam?.city} {winTeam?.name} win!
                 </div>
-                <div className="text-2xl font-bold text-primary my-1">
-                  {game.battleResult.winScore} - {game.battleResult.loseScore}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {loseTeam?.city} {loseTeam?.name} eliminated — all territory conquered
-                </div>
+              </div>
+
+              {/* Stat Lines */}
+              <div className="space-y-2">
+                {/* Passing */}
+                <StatCategory label="📊 Passing" 
+                  attLine={`${game.boxScore.attStats.passingQb}: ${game.boxScore.attStats.passingComp}/${game.boxScore.attStats.passingAtt}, ${game.boxScore.attStats.passingYds} yds, ${game.boxScore.attStats.passingTds} TD, ${game.boxScore.attStats.passingInts} INT`}
+                  defLine={`${game.boxScore.defStats.passingQb}: ${game.boxScore.defStats.passingComp}/${game.boxScore.defStats.passingAtt}, ${game.boxScore.defStats.passingYds} yds, ${game.boxScore.defStats.passingTds} TD, ${game.boxScore.defStats.passingInts} INT`}
+                  attColor={t(game.attackingTeam)?.color}
+                  defColor={defTeam?.color}
+                />
+                {/* Rushing */}
+                <StatCategory label="🏃 Rushing"
+                  attLine={`${game.boxScore.attStats.rushingName}: ${game.boxScore.attStats.rushingCarries} car, ${game.boxScore.attStats.rushingYds} yds, ${game.boxScore.attStats.rushingTds} TD`}
+                  defLine={`${game.boxScore.defStats.rushingName}: ${game.boxScore.defStats.rushingCarries} car, ${game.boxScore.defStats.rushingYds} yds, ${game.boxScore.defStats.rushingTds} TD`}
+                  attColor={t(game.attackingTeam)?.color}
+                  defColor={defTeam?.color}
+                />
+                {/* Receiving */}
+                <StatCategory label="🎯 Receiving"
+                  attLine={`${game.boxScore.attStats.receivingName}: ${game.boxScore.attStats.receivingCatches} rec, ${game.boxScore.attStats.receivingYds} yds, ${game.boxScore.attStats.receivingTds} TD`}
+                  defLine={`${game.boxScore.defStats.receivingName}: ${game.boxScore.defStats.receivingCatches} rec, ${game.boxScore.defStats.receivingYds} yds, ${game.boxScore.defStats.receivingTds} TD`}
+                  attColor={t(game.attackingTeam)?.color}
+                  defColor={defTeam?.color}
+                />
+                {/* Defense */}
+                <StatCategory label="🛡️ Defense"
+                  attLine={`${game.boxScore.attStats.defenseName}: ${game.boxScore.attStats.defenseStat}`}
+                  defLine={`${game.boxScore.defStats.defenseName}: ${game.boxScore.defStats.defenseStat}`}
+                  attColor={t(game.attackingTeam)?.color}
+                  defColor={defTeam?.color}
+                />
+              </div>
+
+              <div className="text-center text-sm text-muted-foreground pt-1">
+                {loseTeam?.city} {loseTeam?.name} eliminated — all territory conquered
               </div>
             </div>
           )}

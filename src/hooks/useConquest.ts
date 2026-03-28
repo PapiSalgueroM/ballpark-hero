@@ -8,7 +8,7 @@ import {
   PowerupId, PowerupDef, POWERUPS, getRandomPowerup,
   FREE_AGENTS, TEAM_LEGENDS, FreeAgent,
 } from '@/data/conquestPowerups';
-import { simulateDetailedBattle, BattleSimulation, PlayEvent, BoxScore } from '@/lib/conquestBattle';
+import { simulateDetailedBattle, BattleSimulation, PlayEvent, BoxScore, TeamStatLine } from '@/lib/conquestBattle';
 
 export type Phase =
   | 'ready' | 'animating' | 'battle' | 'steal' | 'gameover'
@@ -39,7 +39,7 @@ export interface SavedPowerup {
 }
 
 // Re-export for consumers
-export type { PowerupId, PowerupDef, FreeAgent, BattleSimulation, PlayEvent, BoxScore };
+export type { PowerupId, PowerupDef, FreeAgent, BattleSimulation, PlayEvent, BoxScore, TeamStatLine };
 export { POWERUPS, FREE_AGENTS, TEAM_LEGENDS };
 
 // Build a lookup from state ID → geographic center (from SVG paths)
@@ -199,6 +199,7 @@ export function useConquest() {
   // Play-by-play state
   const [visiblePlays, setVisiblePlays] = useState<PlayEvent[]>([]);
   const [playByPlayActive, setPlayByPlayActive] = useState(false);
+  const [simulatingRemainder, setSimulatingRemainder] = useState(false);
   const [boxScore, setBoxScore] = useState<BoxScore | null>(null);
 
   const timeoutsRef = useRef<number[]>([]);
@@ -492,13 +493,17 @@ export function useConquest() {
           }, idx * 1500);
         });
 
-        // After all plays, show box score, then apply result
+        // After all plays: show "Simulating remainder..." for 2s, then box score
         const totalPlayTime = sim.plays.length * 1500;
         addTimeout(() => {
-          setBoxScore(sim.boxScore);
           setPlayByPlayActive(false);
+          setSimulatingRemainder(true);
         }, totalPlayTime);
-        addTimeout(() => applyBattleResult(team, enemyId, result), totalPlayTime + 3000);
+        addTimeout(() => {
+          setSimulatingRemainder(false);
+          setBoxScore(sim.boxScore);
+        }, totalPlayTime + 2000);
+        addTimeout(() => applyBattleResult(team, enemyId, result), totalPlayTime + 6000);
       };
 
       if (missedFirst) {
@@ -602,6 +607,7 @@ export function useConquest() {
     setTerritoryStolenState(null);
     setVisiblePlays([]);
     setPlayByPlayActive(false);
+    setSimulatingRemainder(false);
     setBoxScore(null);
   }, []);
 
@@ -613,7 +619,7 @@ export function useConquest() {
     teamSavedPowerups, invincibleTeams, upgradeActiveTeam, upgradedPlayer,
     pendingPowerup, powerupUseType, freeAgentList, territoryStolenState,
     // Play-by-play
-    visiblePlays, playByPlayActive, boxScore,
+    visiblePlays, playByPlayActive, simulatingRemainder, boxScore,
     // Actions
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,
     usePowerupNow, savePowerupForLater, useSavedPowerup, signFreeAgent,
