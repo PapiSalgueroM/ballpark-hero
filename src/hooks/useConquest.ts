@@ -368,12 +368,14 @@ export function useConquest() {
     setDefendingTeam(null);
     setBattleResult(null);
     setGameLog([]);
+    setPowerupStates(pickRandomPowerupStates());
+    setTeamPowerups({});
   }, []);
 
   return {
     territories, rosters, eliminated, turn, phase,
     attackingTeam, direction, defendingTeam, battleResult, gameLog,
-    animStartTime, noEnemyMsg,
+    animStartTime, noEnemyMsg, powerupStates, teamPowerups,
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,
   };
 }
