@@ -594,6 +594,10 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
 const GROUPS_LETTERS = ["A","B","C","D","E","F","G","H","I","J","K","L"];
 
 const WorldCupPredictor = () => {
+  const [searchParams] = useSearchParams();
+  const sharedBracketId = searchParams.get("bracket");
+  const { user, profile } = useAuth();
+
   const [predictions, setPredictions] = useState<Predictions>(loadPredictions);
   const [showBracket, setShowBracket] = useState(() => {
     try { return localStorage.getItem("wc2026-show-bracket") === "true"; } catch { return false; }
@@ -612,6 +616,99 @@ const WorldCupPredictor = () => {
     } catch { return {}; }
   });
   const [champion, setChampion] = useState("");
+
+  // Save bracket state
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authDefaultTab, setAuthDefaultTab] = useState<"login" | "signup">("signup");
+  const [saving, setSaving] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
+
+  // Shared bracket viewing state
+  const [viewingSharedBracket, setViewingSharedBracket] = useState(false);
+  const [sharedOwnerName, setSharedOwnerName] = useState("");
+  const [sharedBracketData, setSharedBracketData] = useState<any>(null);
+
+  // Load shared bracket if URL has ?bracket=xxx
+  useEffect(() => {
+    if (!sharedBracketId) return;
+    const loadShared = async () => {
+      const { data, error } = await supabase
+        .from("saved_brackets" as any)
+        .select("*")
+        .eq("id", sharedBracketId)
+        .single();
+      if (error || !data) {
+        toast.error("Bracket not found");
+        return;
+      }
+      const bracketRow = data as any;
+      const bd = bracketRow.bracket_data;
+      // Load bracket data into state
+      setPredictions(bd.predictions || {});
+      setPlayoffPicks(bd.playoffPicks || {});
+      setSelectedThirds(bd.selectedThirds || []);
+      setShowBracket(true);
+      setSharedBracketData(bd);
+      setViewingSharedBracket(true);
+      // Fetch owner display name
+      const { data: ownerProfile } = await supabase
+        .from("profiles")
+        .select("display_name, username")
+        .eq("user_id", bracketRow.user_id)
+        .single();
+      if (ownerProfile) {
+        setSharedOwnerName(ownerProfile.display_name || ownerProfile.username || "Someone");
+      } else {
+        setSharedOwnerName("Someone");
+      }
+    };
+    loadShared();
+  }, [sharedBracketId]);
+
+  // Generate unique bracket ID
+  const generateBracketId = () => {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "";
+    for (let i = 0; i < 8; i++) id += chars[Math.floor(Math.random() * chars.length)];
+    return id;
+  };
+
+  const handleSaveBracket = async () => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    setSaving(true);
+    try {
+      const bracketId = generateBracketId();
+      const bracketData = {
+        predictions,
+        playoffPicks,
+        selectedThirds,
+        knockoutPicks: (() => { try { return JSON.parse(localStorage.getItem("wc2026-knockout") || "{}"); } catch { return {}; } })(),
+        awards: (() => { try { return JSON.parse(localStorage.getItem("wc2026-awards") || "{}"); } catch { return {}; } })(),
+        champion,
+      };
+      const { error } = await supabase.from("saved_brackets" as any).insert({
+        id: bracketId,
+        user_id: user.id,
+        bracket_data: bracketData,
+      } as any);
+      if (error) {
+        toast.error("Failed to save bracket");
+        console.error(error);
+        return;
+      }
+      const url = `${window.location.origin}/world-cup-predictor?bracket=${bracketId}`;
+      setShareUrl(url);
+      await navigator.clipboard.writeText(url).catch(() => {});
+      toast.success("Bracket saved! Link copied to clipboard.");
+    } catch (err) {
+      toast.error("Something went wrong");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   // persist to localStorage
   useEffect(() => {
