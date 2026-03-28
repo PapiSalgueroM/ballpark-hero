@@ -931,6 +931,63 @@ function FinancialPanel({ career }: { career: CareerState }) {
   );
 }
 
+/* ─── Ballon d'Or Ceremony Screen ─── */
+function BallonDorCeremonyCard({ bdor, career, onDismiss }: { bdor: BallonDorResult; career: CareerState; onDismiss: () => void }) {
+  const isWinner = bdor.playerRank === 1;
+  const isPodium = bdor.playerRank !== null && bdor.playerRank <= 3;
+  const borderColor = isWinner ? "border-amber-400/60" : isPodium ? "border-amber-500/30" : "border-border";
+  const bgGrad = isWinner ? "from-amber-500/20 to-transparent" : isPodium ? "from-amber-500/10 to-transparent" : "from-transparent to-transparent";
+  
+  const rankEmoji = (rank: number) => rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `${rank}.`;
+  
+  return (
+    <div className={`rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4`}>
+      <div className="text-center space-y-2">
+        <div className="text-5xl">{isWinner ? "🏅" : "⭐"}</div>
+        <h3 className="text-xl font-black tracking-tight">
+          {isWinner ? "BALLON D'OR WINNER!" : `Ballon d'Or ${bdor.year}`}
+        </h3>
+        {isWinner && (
+          <p className="text-sm text-amber-300 font-bold">The best player in the world! Legacy +20, Market Value +€15M</p>
+        )}
+        {!isWinner && bdor.playerRank !== null && bdor.playerRank <= 3 && (
+          <p className="text-sm text-muted-foreground">You finished {bdor.playerRank === 2 ? "2nd" : "3rd"}! Legacy +5</p>
+        )}
+        {bdor.playerRank !== null && bdor.playerRank > 3 && (
+          <p className="text-sm text-muted-foreground">You finished {bdor.playerRank}th — close but not enough this year</p>
+        )}
+      </div>
+      
+      {/* Top 5 nominees */}
+      <div className="space-y-1.5">
+        {bdor.nominees.map((n, i) => (
+          <div key={i} className={`flex items-center justify-between text-xs rounded-lg px-3 py-2 ${
+            n.isPlayer ? (i === 0 ? "bg-amber-500/20 border border-amber-500/30" : "bg-emerald-500/10 border border-emerald-500/20") : "bg-muted/20"
+          }`}>
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <span className="text-sm font-black w-6">{rankEmoji(i + 1)}</span>
+              <div className="min-w-0">
+                <span className={`font-bold truncate block ${n.isPlayer ? "text-foreground" : "text-muted-foreground"}`}>
+                  {getFlag(n.nationality)} {n.name}
+                </span>
+                <span className="text-[10px] text-muted-foreground">{n.club}</span>
+              </div>
+            </div>
+            <div className="text-right shrink-0">
+              <div className="font-bold">{n.points}pts</div>
+              <div className="text-[9px] text-muted-foreground">{n.goals}G{n.trophies.length > 0 ? ` · ${n.trophies.join(", ")}` : ""}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-white ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
+        Continue →
+      </Button>
+    </div>
+  );
+}
+
 /* ─── Game Screen ─── */
 function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onNewCareer, timelineRef }: {
   career: CareerState;
