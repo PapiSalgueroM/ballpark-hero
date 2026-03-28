@@ -53,7 +53,15 @@ const KO_STORAGE_KEY = "wc2026-knockout";
 function loadPicks(): KnockoutPicks {
   try {
     const raw = localStorage.getItem(KO_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    // Migration: old format stored {scoreA, scoreB} objects — clear if detected
+    const firstVal = Object.values(parsed)[0];
+    if (firstVal && typeof firstVal === "object") {
+      localStorage.removeItem(KO_STORAGE_KEY);
+      return {};
+    }
+    return parsed;
   } catch {
     return {};
   }
