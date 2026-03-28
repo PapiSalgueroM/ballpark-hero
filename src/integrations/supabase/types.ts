@@ -686,6 +686,27 @@ export type Database = {
         }
         Relationships: []
       }
+      saved_brackets: {
+        Row: {
+          bracket_data: Json
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          bracket_data?: Json
+          created_at?: string
+          id: string
+          user_id: string
+        }
+        Update: {
+          bracket_data?: Json
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       soccer_club_guess_scores: {
         Row: {
           clues_used: number
