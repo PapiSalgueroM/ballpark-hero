@@ -33,26 +33,23 @@ export default function ConquestMap({
     return false;
   };
 
-  const teamLabels = useMemo(() => {
-    const teamStates: Record<string, { xs: number[]; ys: number[]; color: string }> = {};
-    for (const state of US_STATES) {
-      const teamId = territories[state.id];
-      if (!teamId) continue;
-      if (!teamStates[teamId]) {
+  // Build per-territory labels: place team abbreviation centered in each owned state
+  const stateLabels = useMemo(() => {
+    return US_STATES
+      .filter(state => territories[state.id])
+      .map(state => {
+        const teamId = territories[state.id]!;
         const color = TEAM_MAP.get(teamId)?.color || '#4a4a4a';
-        teamStates[teamId] = { xs: [], ys: [], color };
-      }
-      teamStates[teamId].xs.push(state.labelX);
-      teamStates[teamId].ys.push(state.labelY);
-    }
-    return Object.entries(teamStates).map(([teamId, { xs, ys, color }]) => ({
-      teamId,
-      x: xs.reduce((a, b) => a + b, 0) / xs.length,
-      y: ys.reduce((a, b) => a + b, 0) / ys.length,
-      light: isLightColor(color),
-      active: (phase === 'battle' || phase === 'animating') && (teamId === attackingTeam || teamId === defendingTeam),
-      invincible: invincibleTeams.has(teamId),
-    }));
+        return {
+          teamId,
+          stateId: state.id,
+          x: state.labelX,
+          y: state.labelY,
+          light: isLightColor(color),
+          active: (phase === 'battle' || phase === 'animating') && (teamId === attackingTeam || teamId === defendingTeam),
+          invincible: invincibleTeams.has(teamId),
+        };
+      });
   }, [territories, phase, attackingTeam, defendingTeam, invincibleTeams]);
 
   const hoveredTeamId = hovered ? territories[hovered] : null;
