@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { Trophy } from "lucide-react";
-import { FlagImg } from "@/pages/WorldCupPredictor";
+import { useState, useEffect, useCallback, useMemo, MutableRefObject } from "react";
+import { Trophy, Zap, Loader2 } from "lucide-react";
+import { FlagImg, getFifaRank, rankWinner } from "@/pages/WorldCupPredictor";
 
 /* ───── types ───── */
 
@@ -69,13 +69,18 @@ function loadPicks(): KnockoutPicks {
 
 /* ───── component ───── */
 
+export interface AutoFillHandle {
+  autoFillAllRounds: () => void;
+}
+
 interface KnockoutBracketProps {
   seeds: Record<string, GroupSeed>;
   bestThirds: { team: string }[];
   onChampionChange?: (champion: string) => void;
+  autoFillRef?: MutableRefObject<AutoFillHandle | null>;
 }
 
-const KnockoutBracket = ({ seeds, bestThirds, onChampionChange }: KnockoutBracketProps) => {
+const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, autoFillRef }: KnockoutBracketProps) => {
   const [picks, setPicks] = useState<KnockoutPicks>(loadPicks);
 
   useEffect(() => {
@@ -172,12 +177,122 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange }: KnockoutBracke
     return allRounds;
   }, [resolveSeed, picks]);
 
+  // Auto-fill a specific round by FIFA rank
+  const autoFillRound = useCallback((roundIdx: number) => {
+    setPicks((prev) => {
+      const next = { ...prev };
+      // Rebuild rounds with current picks to get correct teams
+      const allRounds: BracketMatch[][] = [];
+      const r32: BracketMatch[] = R32_TEMPLATE.map(([a, b], i) => {
+        const id = `r32-${i}`;
+        return { id, teamA: resolveSeed(a), teamB: resolveSeed(b), winner: next[id] || "" };
+      });
+      allRounds.push(r32);
+      for (let r = 1; r <= 3; r++) {
+        const prevRound = allRounds[r - 1];
+        const round: BracketMatch[] = [];
+        for (let i = 0; i < prevRound.length; i += 2) {
+          const id = `${ROUND_PREFIXES[r]}-${i / 2}`;
+          const teamA = prevRound[i].winner || "";
+          const teamB = prevRound[i + 1]?.winner || "";
+          round.push({ id, teamA, teamB, winner: (teamA && teamB) ? (next[id] || "") : "" });
+        }
+        allRounds.push(round);
+      }
+      // SF losers → tp, SF winners → final
+      const sf = allRounds[3];
+      const sfLoserA = sf[0]?.winner ? (sf[0].winner === sf[0].teamA ? sf[0].teamB : sf[0].teamA) : "";
+      const sfLoserB = sf[1]?.winner ? (sf[1].winner === sf[1].teamA ? sf[1].teamB : sf[1].teamA) : "";
+      allRounds.push([{ id: "tp-0", teamA: sfLoserA, teamB: sfLoserB, winner: (sfLoserA && sfLoserB) ? (next["tp-0"] || "") : "" }]);
+      allRounds.push([{ id: "f-0", teamA: sf[0]?.winner || "", teamB: sf[1]?.winner || "", winner: (sf[0]?.winner && sf[1]?.winner) ? (next["f-0"] || "") : "" }]);
+
+      const round = allRounds[roundIdx];
+      if (round) {
+        for (const m of round) {
+          if (m.teamA && m.teamB && !next[m.id]) {
+            next[m.id] = rankWinner(m.teamA, m.teamB);
+          }
+        }
+      }
+      return next;
+    });
+  }, [resolveSeed]);
+
+  // Auto-fill ALL rounds sequentially
+  const autoFillAllRounds = useCallback(() => {
+    setPicks((prev) => {
+      const next = { ...prev };
+
+      // R32
+      const r32: BracketMatch[] = R32_TEMPLATE.map(([a, b], i) => {
+        const id = `r32-${i}`;
+        const tA = resolveSeed(a);
+        const tB = resolveSeed(b);
+        if (tA && tB && !next[id]) next[id] = rankWinner(tA, tB);
+        return { id, teamA: tA, teamB: tB, winner: next[id] || "" };
+      });
+
+      // R16, QF, SF
+      let prevRound = r32;
+      for (let r = 1; r <= 3; r++) {
+        const round: BracketMatch[] = [];
+        for (let i = 0; i < prevRound.length; i += 2) {
+          const id = `${ROUND_PREFIXES[r]}-${i / 2}`;
+          const tA = prevRound[i].winner || "";
+          const tB = prevRound[i + 1]?.winner || "";
+          if (tA && tB && !next[id]) next[id] = rankWinner(tA, tB);
+          round.push({ id, teamA: tA, teamB: tB, winner: next[id] || "" });
+        }
+        prevRound = round;
+      }
+
+      // SF = prevRound at this point
+      const sf = prevRound;
+      // Third place
+      const sfLoserA = sf[0]?.winner ? (sf[0].winner === sf[0].teamA ? sf[0].teamB : sf[0].teamA) : "";
+      const sfLoserB = sf[1]?.winner ? (sf[1].winner === sf[1].teamA ? sf[1].teamB : sf[1].teamA) : "";
+      if (sfLoserA && sfLoserB && !next["tp-0"]) next["tp-0"] = rankWinner(sfLoserA, sfLoserB);
+
+      // Final
+      const fA = sf[0]?.winner || "";
+      const fB = sf[1]?.winner || "";
+      if (fA && fB && !next["f-0"]) next["f-0"] = rankWinner(fA, fB);
+
+      return next;
+    });
+  }, [resolveSeed]);
+
+  // Expose auto-fill to parent via ref
+  useEffect(() => {
+    if (autoFillRef) {
+      autoFillRef.current = { autoFillAllRounds };
+    }
+  }, [autoFillRef, autoFillAllRounds]);
+
   const champion = rounds[5]?.[0]?.winner || "";
   const thirdPlace = rounds[4]?.[0]?.winner || "";
 
   useEffect(() => {
     onChampionChange?.(champion);
   }, [champion, onChampionChange]);
+
+  // Per-round loading state
+  const [roundLoading, setRoundLoading] = useState<number | null>(null);
+
+  const handleAutoFillRound = (rIdx: number) => {
+    setRoundLoading(rIdx);
+    setTimeout(() => {
+      autoFillRound(rIdx);
+      setRoundLoading(null);
+    }, 1000);
+  };
+
+  // Check if a round has unfilled matches
+  const roundHasUnfilled = (rIdx: number): boolean => {
+    const round = rounds[rIdx];
+    if (!round) return false;
+    return round.some((m) => m.teamA && m.teamB && !m.winner);
+  };
 
   return (
     <div className="mt-10">
@@ -218,6 +333,19 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange }: KnockoutBracke
                 <span className="block text-[hsl(150,15%,40%)] text-[9px]">
                   {ROUND_MATCH_COUNTS[rIdx]} match{ROUND_MATCH_COUNTS[rIdx] > 1 ? "es" : ""}
                 </span>
+                {/* Per-round auto-fill button */}
+                {roundHasUnfilled(rIdx) && (
+                  <button
+                    onClick={() => handleAutoFillRound(rIdx)}
+                    disabled={roundLoading === rIdx}
+                    className="mt-1 inline-flex items-center gap-1 text-[9px] px-2 py-0.5 rounded
+                      bg-[hsl(220,20%,18%)] hover:bg-[hsl(220,20%,22%)] text-[hsl(45,80%,60%)]
+                      border border-[hsl(220,20%,28%)] transition-colors disabled:opacity-50"
+                  >
+                    {roundLoading === rIdx ? <Loader2 className="w-2.5 h-2.5 animate-spin" /> : <Zap className="w-2.5 h-2.5" />}
+                    Auto Fill
+                  </button>
+                )}
               </div>
 
               <div
@@ -256,25 +384,18 @@ function clearDownstream(picks: KnockoutPicks, matchId: string) {
   const rIdx = roundOrder.indexOf(prefix);
   if (rIdx < 0) return;
 
-  // For rounds 0-3 (r32→sf), the match feeds into the next round
-  // Match i in round r feeds into match floor(i/2) in round r+1
-  // Also clear tp and f which depend on sf
   const toClear: string[] = [];
 
   if (rIdx <= 2) {
-    // Regular advancement: r32→r16→qf→sf
     let currentIdx = idx;
     for (let r = rIdx + 1; r <= 3; r++) {
       currentIdx = Math.floor(currentIdx / 2);
       toClear.push(`${roundOrder[r]}-${currentIdx}`);
     }
-    // SF feeds into tp and f
     toClear.push("tp-0", "f-0");
   } else if (rIdx === 3) {
-    // SF → tp and f
     toClear.push("tp-0", "f-0");
   }
-  // tp and f don't feed further
 
   for (const id of toClear) {
     delete picks[id];
