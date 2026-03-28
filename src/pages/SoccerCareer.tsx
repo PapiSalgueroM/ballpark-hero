@@ -86,7 +86,7 @@ function StatBarGame({ label, value, color }: { label: string; value: number; co
 /* ─── Timeline Entry ─── */
 function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; isCurrent: boolean; isLast: boolean }) {
   const label = season.type === "youth" ? "A" : season.type === "retired" ? "R" : null;
-  const trophies = [season.leagueTitle && "🏆", season.championsLeague && "⭐", season.worldCup && "🌍", season.ballonDor && "🏅"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.worldCup && "🌍", season.ballonDor && "🏅"].filter(Boolean);
 
   return (
     <div className={`relative flex items-start gap-3 py-2 px-3 rounded-lg transition-colors ${isCurrent ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`}>
@@ -149,7 +149,7 @@ function OfferCard({ offer, onAccept, actionLabel }: { offer: ContractOffer; onA
 /* ─── Season Summary Card ─── */
 function SeasonSummaryCard({ season, position, onContinue }: { season: SeasonRecord; position: string; onContinue: () => void }) {
   const isGK = position === "GK";
-  const trophies = [season.leagueTitle && "🏆 League", season.championsLeague && "⭐ UCL", season.worldCup && "🌍 World Cup", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.worldCup && "🌍 World Cup", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
 
   return (
     <div className="bg-card border-2 border-emerald-500/30 rounded-xl p-5 space-y-4">
