@@ -635,7 +635,7 @@ const WorldCupPredictor = () => {
     const seeds: Record<string, GroupSeed> = {};
     const allThirds: { team: string; group: string; pts: number; gd: number; gf: number; played: number }[] = [];
 
-    for (const group of groups) {
+    for (const group of resolvedGroups) {
       const standings = computeStandings(group, predictions);
       seeds[group.letter] = {
         first: standings[0]?.team || "TBD",
@@ -737,8 +737,10 @@ const WorldCupPredictor = () => {
     setPredictions({});
     setShowBracket(false);
     setSelectedThirds([]);
+    setPlayoffPicks({});
     localStorage.removeItem("wc2026-knockout");
     localStorage.removeItem("wc2026-selected-thirds");
+    localStorage.removeItem("wc2026-playoff-picks");
   }, []);
 
   const handleToggleThird = useCallback((teamName: string) => {
@@ -786,7 +788,7 @@ const WorldCupPredictor = () => {
         </div>
 
         {/* Playoff Slots Panel */}
-        <PlayoffSlotsPanel />
+        <PlayoffSlotsPanel picks={playoffPicks} onPick={handlePlayoffPick} />
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
           <div>
