@@ -488,7 +488,7 @@ const WorldCupPredictor = () => {
   // Compute seeds from group standings
   const { groupSeeds, bestThirds } = useMemo(() => {
     const seeds: Record<string, GroupSeed> = {};
-    const allThirds: { team: string; pts: number; gd: number; gf: number }[] = [];
+    const allThirds: { team: string; group: string; pts: number; gd: number; gf: number; played: number }[] = [];
 
     for (const group of groups) {
       const standings = computeStandings(group, predictions);
@@ -503,9 +503,11 @@ const WorldCupPredictor = () => {
       if (standings[2]) {
         allThirds.push({
           team: standings[2].team,
+          group: group.letter,
           pts: standings[2].pts,
           gd: standings[2].gd,
           gf: standings[2].gf,
+          played: standings[2].played,
         });
       }
     }
@@ -514,9 +516,8 @@ const WorldCupPredictor = () => {
     const sorted = [...allThirds].sort(
       (a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf,
     );
-    const best8 = sorted.slice(0, 8);
 
-    return { groupSeeds: seeds, bestThirds: best8 };
+    return { groupSeeds: seeds, bestThirds: sorted };
   }, [predictions]);
 
   // Count filled groups
@@ -658,6 +659,68 @@ const WorldCupPredictor = () => {
             />
           ))}
         </div>
+
+        {/* Best Third Place Teams */}
+        {bestThirds.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Best Third-Place Teams</h2>
+            <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm mb-4">
+              Top 8 third-place teams advance to the Round of 32. Ranked by points, goal difference, then goals scored.
+            </p>
+            <Card className="bg-[hsl(150,15%,12%)] border-[hsl(150,20%,20%)] shadow-lg overflow-hidden">
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-[hsl(150,15%,18%)] text-[hsl(150,15%,45%)] text-xs">
+                        <th className="text-left py-3 px-4">#</th>
+                        <th className="text-left py-3 px-2">Team</th>
+                        <th className="text-center py-3 px-2">Group</th>
+                        <th className="text-center py-3 px-2">P</th>
+                        <th className="text-center py-3 px-2">Pts</th>
+                        <th className="text-center py-3 px-2">GD</th>
+                        <th className="text-center py-3 px-2">GF</th>
+                        <th className="text-right py-3 px-4">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {bestThirds.map((t, idx) => {
+                        const qualified = idx < 8;
+                        return (
+                          <tr
+                            key={t.team + t.group}
+                            className={`border-b border-[hsl(150,10%,16%)] ${
+                              qualified ? "bg-[hsl(140,50%,18%)]" : "bg-[hsl(0,0%,15%)]"
+                            }`}
+                          >
+                            <td className="py-2.5 px-4 font-bold text-[hsl(0,0%,50%)]">{idx + 1}</td>
+                            <td className="py-2.5 px-2 font-semibold text-white">{t.team}</td>
+                            <td className="py-2.5 px-2 text-center text-[hsl(45,90%,55%)] font-semibold">{t.group}</td>
+                            <td className="py-2.5 px-2 text-center text-[hsl(0,0%,60%)]">{t.played}</td>
+                            <td className="py-2.5 px-2 text-center font-bold text-white">{t.pts}</td>
+                            <td className={`py-2.5 px-2 text-center ${t.gd > 0 ? "text-[hsl(140,60%,55%)]" : t.gd < 0 ? "text-[hsl(0,60%,55%)]" : "text-[hsl(0,0%,50%)]"}`}>
+                              {t.gd > 0 ? `+${t.gd}` : t.gd}
+                            </td>
+                            <td className="py-2.5 px-2 text-center text-[hsl(0,0%,60%)]">{t.gf}</td>
+                            <td className="py-2.5 px-4 text-right">
+                              <Badge className={`text-[10px] ${
+                                qualified
+                                  ? "bg-[hsl(140,60%,30%)] text-[hsl(140,80%,90%)] hover:bg-[hsl(140,60%,35%)]"
+                                  : "bg-[hsl(0,0%,25%)] text-[hsl(0,0%,55%)] hover:bg-[hsl(0,0%,30%)]"
+                              }`}>
+                                {qualified ? "Qualified" : "Eliminated"}
+                              </Badge>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Generate Bracket Button */}
         {allGroupsFilled && !showBracket && (
