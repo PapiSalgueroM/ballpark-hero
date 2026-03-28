@@ -484,6 +484,7 @@ export default function SoccerCareer() {
               isFormValid={isFormValid && clubs.length > 0} saving={saving}
               user={user} onBegin={handleBeginCareer} onShowAuth={() => setShowAuth(true)}
               clubs={clubs} onRolledOvr={setRolledOvr}
+              onStatsGenerated={(stats: Stats, ovr: number) => { setPreviewStats(stats); setPreviewOvr(ovr); }}
             />
           ) : (
             <GameScreen
