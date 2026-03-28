@@ -601,8 +601,31 @@ const WorldCupPredictor = () => {
   const handleResetEverything = useCallback(() => {
     setPredictions({});
     setShowBracket(false);
+    setSelectedThirds([]);
     localStorage.removeItem("wc2026-knockout");
+    localStorage.removeItem("wc2026-selected-thirds");
   }, []);
+
+  const handleToggleThird = useCallback((teamName: string) => {
+    setSelectedThirds((prev) => {
+      if (prev.includes(teamName)) {
+        return prev.filter((t) => t !== teamName);
+      }
+      if (prev.length >= 8) return prev;
+      return [...prev, teamName];
+    });
+  }, []);
+
+  // Build the user-selected thirds list for the bracket (ordered by bestThirds ranking)
+  const userSelectedThirdsForBracket = useMemo(() => {
+    return bestThirds.filter((t) => selectedThirds.includes(t.team));
+  }, [bestThirds, selectedThirds]);
+
+  // Clean up selectedThirds when third-place teams change (e.g. scores edited)
+  useEffect(() => {
+    const validTeams = bestThirds.map((t) => t.team);
+    setSelectedThirds((prev) => prev.filter((t) => validTeams.includes(t)));
+  }, [bestThirds]);
 
   return (
     <div className="min-h-screen bg-[hsl(150,20%,8%)] text-white">
