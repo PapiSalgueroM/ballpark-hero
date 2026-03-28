@@ -114,88 +114,199 @@ export function calcOverall(s: { pace: number; shooting: number; passing: number
   return Math.round((s.pace + s.shooting + s.passing + s.dribbling + s.defending + s.physical) / 6);
 }
 
-function growStat(current: number, age: number, isYouth: boolean): number {
+/* ─── Stat progression per user spec ─── */
+function growStat(current: number, age: number, isYouth: boolean, isPace: boolean): number {
   let growth: number;
   if (isYouth) {
     growth = rand(2, 4);
-  } else if (age <= 22) {
-    growth = rand(1, 3);
-  } else if (age <= 26) {
-    growth = rand(1, 3);
+  } else if (age <= 23) {
+    growth = rand(1, 4); // Growth phase
   } else if (age <= 29) {
-    growth = rand(-1, 2);
-  } else if (age <= 32) {
-    growth = rand(-3, 0);
-  } else if (age <= 35) {
-    growth = rand(-5, -1);
+    growth = rand(0, 2); // Peak phase
+  } else if (age <= 33) {
+    growth = rand(-2, -1); // Decline begins
   } else {
-    growth = rand(-7, -2);
+    growth = rand(-4, -2); // Sharp decline
+  }
+  // Pace always declines 1 extra from age 28+
+  if (isPace && age >= 28 && !isYouth) {
+    growth -= 1;
   }
   return clamp(current + growth, 20, 99);
 }
 
-function growStatByApps(current: number, apps: number): number {
-  // More appearances = better growth (1-3 pts)
-  const bonus = apps >= 25 ? rand(1, 3) : apps >= 15 ? rand(1, 2) : rand(0, 1);
-  return clamp(current + bonus, 20, 99);
+/* ─── Club average rating by tier ─── */
+function clubAverageRating(tier: number): number {
+  switch (tier) {
+    case 1: return 80;
+    case 2: return 72;
+    case 3: return 62;
+    case 4: return 55;
+    default: return 60;
+  }
 }
 
+/* ─── Market value per user spec ─── */
 function calcMarketValue(overall: number, age: number, position: string): number {
-  let base = Math.pow(Math.max(0, overall - 50), 2) * 0.02;
-  if (age <= 22) base *= 1.4;
-  else if (age <= 26) base *= 1.2;
-  else if (age >= 30) base *= 0.7;
-  else if (age >= 33) base *= 0.3;
-  if (["ST", "LW", "RW"].includes(position)) base *= 1.15;
-  if (position === "GK") base *= 0.7;
+  // Base from overall (exponential curve)
+  let base = Math.pow(Math.max(0, overall - 45), 2.2) * 0.005;
+
+  // Age multiplier — peak at 26-28
+  if (age <= 21) base *= 0.8;
+  else if (age <= 25) base *= 1.1;
+  else if (age <= 28) base *= 1.3; // Peak
+  else if (age <= 30) base *= 1.0;
+  else if (age <= 33) base *= 0.55;
+  else base *= 0.2;
+
+  // Position multiplier
+  if (["ST", "CAM", "LW", "RW"].includes(position)) base *= 1.2;
+  else if (position === "GK") base *= 0.85;
+
   return Math.max(0.1, Math.round(base * 10) / 10);
+}
+
+/* ─── Appearances per user spec ─── */
+function calcAppearances(overall: number, clubTier: number, age: number): { apps: number; injured: boolean; injuryWeeks: number } {
+  const clubAvg = clubAverageRating(clubTier);
+  const diff = overall - clubAvg;
+
+  let baseMin: number, baseMax: number;
+  if (diff >= 15) { baseMin = 30; baseMax = 38; }
+  else if (diff >= 5) { baseMin = 25; baseMax = 32; }
+  else if (diff >= -5) { baseMin = 18; baseMax = 28; }
+  else { baseMin = 8; baseMax = 18; }
+
+  let apps = rand(baseMin, baseMax);
+
+  // 20% injury chance
+  let injured = false;
+  let injuryWeeks = 0;
+  if (Math.random() < 0.20) {
+    injured = true;
+    injuryWeeks = rand(2, 8);
+    const missedApps = Math.round(injuryWeeks * 38 / 46); // ~38 apps in 46 weeks
+    apps = Math.max(1, apps - clamp(missedApps, 0, 8));
+  }
+
+  return { apps, injured, injuryWeeks };
+}
+
+/* ─── Goals per 38 apps by position ─── */
+function calcGoals(position: string, apps: number): number {
+  const per38: Record<string, [number, number]> = {
+    ST: [15, 28], LW: [8, 18], RW: [8, 18], CAM: [6, 14],
+    CM: [3, 8], CDM: [1, 4], CB: [0, 3], LB: [0, 3], RB: [0, 3], GK: [0, 0],
+  };
+  const [lo, hi] = per38[position] || [0, 3];
+  return Math.max(0, Math.round(rand(lo, hi) * apps / 38));
+}
+
+/* ─── Assists per 38 apps by position ─── */
+function calcAssists(position: string, apps: number): number {
+  const per38: Record<string, [number, number]> = {
+    CAM: [10, 18], LW: [8, 15], RW: [8, 15], CM: [5, 10],
+    ST: [3, 8], CDM: [2, 6], CB: [1, 4], LB: [1, 4], RB: [1, 4], GK: [0, 0],
+  };
+  const [lo, hi] = per38[position] || [1, 4];
+  return Math.max(0, Math.round(rand(lo, hi) * apps / 38));
+}
+
+/* ─── Season rating 1-10 ─── */
+function calcSeasonRating(position: string, apps: number, goals: number, assists: number, cleanSheets: number, overall: number, clubTier: number): number {
+  const clubAvg = clubAverageRating(clubTier);
+  const diff = overall - clubAvg;
+
+  // Base rating from overall advantage
+  let base = 6.0 + diff * 0.06;
+
+  // Bonus from output
+  if (position === "GK") {
+    base += cleanSheets * 0.08;
+  } else if (["ST", "LW", "RW", "CAM"].includes(position)) {
+    base += goals * 0.04 + assists * 0.03;
+  } else {
+    base += goals * 0.06 + assists * 0.04;
+  }
+
+  // Apps bonus/penalty
+  if (apps >= 30) base += 0.3;
+  else if (apps < 15) base -= 0.4;
+
+  // Random variance
+  base += (Math.random() - 0.5) * 0.8;
+
+  return clamp(parseFloat(base.toFixed(1)), 3.0, 10.0);
+}
+
+/* ─── Season simulation ─── */
+function generateSeasonStats(state: CareerState): SeasonRecord {
+  const { position, age, overall, currentClubTier } = state;
+  const isGK = position === "GK";
+  const lastYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year : 0;
+
+  // Appearances
+  const { apps, injured, injuryWeeks } = calcAppearances(overall, currentClubTier, age);
+
+  // Goals & assists
+  const goals = calcGoals(position, apps);
+  const assists = calcAssists(position, apps);
+  const cleanSheets = isGK ? Math.round(apps * rand(20, 45) / 100) : 0;
+
+  const yellowCards = rand(0, Math.min(8, Math.round(apps * 0.25)));
+  const redCards = Math.random() < 0.08 ? 1 : 0;
+
+  const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier);
+
+  // Trophies
+  const winLeague = currentClubTier <= 2 && Math.random() < (0.25 / currentClubTier);
+  const winCL = currentClubTier === 1 && overall >= 78 && Math.random() < 0.07;
+  const isWCYear = (lastYear + 1) % 4 === 2;
+  const winWC = isWCYear && overall >= 80 && Math.random() < 0.05;
+  const winBdor = overall >= 88 && Math.random() < 0.10;
+
+  return {
+    year: lastYear + 1, age,
+    club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
+    apps, goals, assists, cleanSheets, yellowCards, redCards, rating,
+    leagueTitle: winLeague, championsLeague: winCL, worldCup: winWC, ballonDor: winBdor,
+    type: "playing",
+  };
 }
 
 /* ─── Generate contract offers ─── */
 export function generateContractOffers(clubs: ClubData[], overall: number, age: number): ContractOffer[] {
   let targetTiers: number[];
-
-  if (overall >= 66) {
-    targetTiers = [2, 2, 3]; // Higher league clubs
-  } else if (overall >= 56) {
-    targetTiers = [3, 3, 3]; // Mid-table lower
-  } else {
-    targetTiers = [3, 4, 4]; // Lower league
-  }
+  if (overall >= 66) targetTiers = [2, 2, 3];
+  else if (overall >= 56) targetTiers = [3, 3, 3];
+  else targetTiers = [3, 4, 4];
 
   const offers: ContractOffer[] = [];
   const usedNames = new Set<string>();
-
   for (const tier of targetTiers) {
     const candidates = getClubsByTier(clubs, tier).filter(c => !usedNames.has(c.name));
     if (candidates.length === 0) continue;
     const club = pick(candidates);
     usedNames.add(club.name);
     offers.push({
-      club,
-      contractYears: rand(2, 4),
+      club, contractYears: rand(2, 4),
       wage: tier === 1 ? rand(40, 120) : tier === 2 ? rand(15, 50) : tier === 3 ? rand(3, 15) : rand(1, 5),
     });
   }
-
   return offers;
 }
 
-/* ─── Generate transfer offers for established players ─── */
+/* ─── Generate transfer offers ─── */
 export function generateTransferOffers(clubs: ClubData[], state: CareerState): ContractOffer[] {
   const { overall, age, currentClub, currentClubTier } = state;
   const offers: ContractOffer[] = [];
   const usedNames = new Set<string>([currentClub]);
-
-  // Determine target tiers based on overall
-  let targetTiers: number[] = [];
+  let targetTiers: number[];
   if (overall >= 82 && currentClubTier > 1) targetTiers = [1, 1, 2];
   else if (overall >= 75 && currentClubTier > 1) targetTiers = [1, 2, 2];
   else if (overall >= 70) targetTiers = [Math.max(1, currentClubTier - 1), currentClubTier, currentClubTier];
   else if (overall >= 60) targetTiers = [currentClubTier, currentClubTier, Math.min(4, currentClubTier + 1)];
   else targetTiers = [Math.min(4, currentClubTier + 1), Math.min(4, currentClubTier + 1), currentClubTier];
-
-  // Declining older player
   if (age >= 33 && overall < 70) targetTiers = [Math.min(4, currentClubTier + 1), Math.min(4, currentClubTier + 1), Math.min(4, currentClubTier + 1)];
 
   for (const tier of targetTiers) {
@@ -204,73 +315,11 @@ export function generateTransferOffers(clubs: ClubData[], state: CareerState): C
     const club = pick(candidates);
     usedNames.add(club.name);
     offers.push({
-      club,
-      contractYears: rand(2, 5),
+      club, contractYears: rand(2, 5),
       wage: tier === 1 ? rand(50, 200) : tier === 2 ? rand(20, 80) : tier === 3 ? rand(5, 25) : rand(1, 8),
     });
   }
-
   return offers;
-}
-
-/* ─── Season simulation ─── */
-function generateSeasonStats(state: CareerState, isFirstSeason: boolean): SeasonRecord {
-  const { position, age, overall, currentClubTier } = state;
-  const isGK = position === "GK";
-  const qualityMult = overall / 75;
-  const lastYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year : 0;
-
-  // Appearances
-  let apps: number;
-  if (isFirstSeason) {
-    // First pro season: 5-20 based on rating vs club level
-    const ratingAdvantage = overall - (70 - currentClubTier * 5); // Higher = more advantage
-    apps = clamp(rand(5, 12) + Math.round(ratingAdvantage / 5), 5, 20);
-  } else {
-    const ageMult = age <= 20 ? 0.75 : age <= 30 ? 1 : age <= 34 ? 0.85 : 0.65;
-    apps = Math.round(rand(22, 38) * ageMult);
-    if (age <= 20) apps = rand(12, 28);
-  }
-
-  let goals = 0, assists = 0, cleanSheets = 0;
-  if (isGK) {
-    cleanSheets = Math.round(apps * rand(15, 40) / 100 * qualityMult);
-    assists = rand(0, 2);
-  } else if (["ST", "LW", "RW", "CAM"].includes(position)) {
-    goals = Math.max(0, Math.round(apps * rand(18, 50) / 100 * qualityMult));
-    assists = Math.max(0, Math.round(apps * rand(8, 28) / 100 * qualityMult));
-  } else if (["CM", "CDM"].includes(position)) {
-    goals = Math.max(0, Math.round(apps * rand(4, 14) / 100 * qualityMult));
-    assists = Math.max(0, Math.round(apps * rand(6, 22) / 100 * qualityMult));
-  } else {
-    goals = Math.max(0, Math.round(apps * rand(2, 8) / 100 * qualityMult));
-    assists = Math.max(0, Math.round(apps * rand(4, 18) / 100 * qualityMult));
-  }
-
-  const yellowCards = rand(0, Math.min(10, apps));
-  const redCards = Math.random() < 0.1 ? rand(1, 2) : 0;
-  const rating = clamp(parseFloat((5.5 + (overall - 50) / 18 + (Math.random() - 0.5) * 1.2).toFixed(1)), 4.0, 9.8);
-
-  // Trophies
-  const winLeague = currentClubTier <= 2 && Math.random() < (0.3 / currentClubTier);
-  const winCL = currentClubTier === 1 && overall >= 78 && Math.random() < 0.07;
-  const isWCYear = (lastYear + 1) % 4 === 2;
-  const winWC = isWCYear && overall >= 80 && Math.random() < 0.05;
-  const winBdor = overall >= 88 && Math.random() < 0.12;
-
-  return {
-    year: lastYear + 1,
-    age,
-    club: state.currentClub,
-    clubCountry: state.currentClubCountry,
-    clubTier: currentClubTier,
-    apps, goals, assists, cleanSheets, yellowCards, redCards, rating,
-    leagueTitle: winLeague,
-    championsLeague: winCL,
-    worldCup: winWC,
-    ballonDor: winBdor,
-    type: "playing",
-  };
 }
 
 /* ─── Init career ─── */
@@ -280,30 +329,18 @@ export function initCareer(
   overall: number, startYear: number, clubs: ClubData[],
 ): CareerState {
   const academyClub = getYouthAcademyClub(clubs, nationality);
-
   return {
-    playerName, nationality, position, era,
-    age: 16,
-    currentClub: `${academyClub.name} Youth`,
-    currentClubCountry: academyClub.country,
-    currentClubTier: academyClub.tier,
-    currentClubColor: academyClub.color,
-    currentLeague: academyClub.league,
-    contractYearsLeft: 2,
-    marketValue: 0.1,
-    ...stats, overall,
+    playerName, nationality, position, era, age: 16,
+    currentClub: `${academyClub.name} Youth`, currentClubCountry: academyClub.country,
+    currentClubTier: academyClub.tier, currentClubColor: academyClub.color, currentLeague: academyClub.league,
+    contractYearsLeft: 2, marketValue: 0.1, ...stats, overall,
     seasons: [{
-      year: startYear, age: 16,
-      club: `${academyClub.name} Youth`, clubCountry: academyClub.country, clubTier: academyClub.tier,
+      year: startYear, age: 16, club: `${academyClub.name} Youth`, clubCountry: academyClub.country, clubTier: academyClub.tier,
       apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
-      leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false,
-      type: "youth",
+      leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "youth",
     }],
     events: [`📋 Joined ${academyClub.name} Youth Academy aged 16`],
-    retired: false,
-    phase: "youth",
-    pendingOffers: [],
-    pendingSummary: null,
+    retired: false, phase: "youth", pendingOffers: [], pendingSummary: null,
   };
 }
 
@@ -313,37 +350,29 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
   s.age += 1;
   s.events = [];
 
-  // Youth academy stat growth: 2-4 points
-  s.pace = growStat(s.pace, s.age, true);
-  s.shooting = growStat(s.shooting, s.age, true);
-  s.passing = growStat(s.passing, s.age, true);
-  s.dribbling = growStat(s.dribbling, s.age, true);
-  s.defending = growStat(s.defending, s.age, true);
-  s.physical = growStat(s.physical, s.age, true);
-  s.reflexes = growStat(s.reflexes, s.age, true);
+  s.pace = growStat(s.pace, s.age, true, true);
+  s.shooting = growStat(s.shooting, s.age, true, false);
+  s.passing = growStat(s.passing, s.age, true, false);
+  s.dribbling = growStat(s.dribbling, s.age, true, false);
+  s.defending = growStat(s.defending, s.age, true, false);
+  s.physical = growStat(s.physical, s.age, true, false);
+  s.reflexes = growStat(s.reflexes, s.age, true, false);
   s.overall = calcOverall(s, s.position);
 
-  // Add youth season
   const lastYear = s.seasons[s.seasons.length - 1].year;
   s.seasons = [...s.seasons, {
-    year: lastYear + 1, age: s.age,
-    club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
+    year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
     apps: rand(10, 25), goals: s.position === "GK" ? 0 : rand(0, 8), assists: rand(0, 5),
-    cleanSheets: s.position === "GK" ? rand(2, 8) : 0,
-    yellowCards: rand(0, 4), redCards: 0, rating: 0,
-    leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false,
-    type: "youth",
+    cleanSheets: s.position === "GK" ? rand(2, 8) : 0, yellowCards: rand(0, 4), redCards: 0, rating: 0,
+    leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "youth",
   }];
 
   s.events.push(`📈 Stats improved during youth development (OVR ${s.overall})`);
-
-  // At age 17, offer professional contract
   if (s.age >= 17) {
     s.events.push("📩 Professional contract offers received!");
     s.pendingOffers = generateContractOffers(clubs, s.overall, s.age);
     s.phase = "contract_offer";
   }
-
   s.marketValue = calcMarketValue(s.overall, s.age, s.position);
   return s;
 }
@@ -357,8 +386,7 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   s.currentClubColor = offer.club.color;
   s.currentLeague = offer.club.league;
   s.contractYearsLeft = offer.contractYears;
-  s.phase = "playing";
-  s.pendingOffers = [];
+  s.phase = "playing"; s.pendingOffers = [];
   s.events = [`✍️ Signed professional contract with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, €${offer.wage}k/wk)`];
   return s;
 }
@@ -369,37 +397,30 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   s.age += 1;
   s.events = [];
 
-  // Retirement
-  if (s.age >= 38 || (s.age >= 34 && s.overall < 58 && Math.random() < 0.5)) {
-    s.retired = true;
-    s.phase = "retired";
+  // Retirement: overall < 60 or age 38
+  if (s.age >= 38 || (s.overall < 60 && s.age >= 30)) {
+    s.retired = true; s.phase = "retired";
     s.events.push("👋 Announced retirement from professional football");
     const lastYear = s.seasons[s.seasons.length - 1].year;
     s.seasons = [...s.seasons, {
-      year: lastYear + 1, age: s.age,
-      club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
+      year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
       apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
-      leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false,
-      type: "retired",
+      leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "retired",
     }];
     return s;
   }
 
-  // Check if this is the first pro season
-  const playingSeasons = s.seasons.filter(ss => ss.type === "playing");
-  const isFirstSeason = playingSeasons.length === 0;
+  // Generate season BEFORE stat growth (season uses current stats)
+  const season = generateSeasonStats(s);
 
-  // Generate season
-  const season = generateSeasonStats(s, isFirstSeason);
-
-  // Stat growth based on appearances
-  s.pace = growStatByApps(growStat(s.pace, s.age, false), season.apps);
-  s.shooting = growStatByApps(growStat(s.shooting, s.age, false), season.apps);
-  s.passing = growStatByApps(growStat(s.passing, s.age, false), season.apps);
-  s.dribbling = growStatByApps(growStat(s.dribbling, s.age, false), season.apps);
-  s.defending = growStatByApps(growStat(s.defending, s.age, false), season.apps);
-  s.physical = growStatByApps(growStat(s.physical, s.age, false), season.apps);
-  s.reflexes = growStatByApps(growStat(s.reflexes, s.age, false), season.apps);
+  // Stat progression per spec
+  s.pace = growStat(s.pace, s.age, false, true);
+  s.shooting = growStat(s.shooting, s.age, false, false);
+  s.passing = growStat(s.passing, s.age, false, false);
+  s.dribbling = growStat(s.dribbling, s.age, false, false);
+  s.defending = growStat(s.defending, s.age, false, false);
+  s.physical = growStat(s.physical, s.age, false, false);
+  s.reflexes = growStat(s.reflexes, s.age, false, false);
   s.overall = calcOverall(s, s.position);
 
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
@@ -410,22 +431,20 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   if (season.championsLeague) s.events.push(`⭐ Won the Champions League!`);
   if (season.worldCup) s.events.push(`🌍 Won the World Cup with ${s.nationality}!`);
   if (season.ballonDor) s.events.push(`🏅 Won the Ballon d'Or!`);
-  if (Math.random() < 0.12) s.events.push(`🤕 Missed ${rand(2, 10)} weeks with injury`);
 
   // Milestone events
   const totalGoals = s.seasons.reduce((sum, ss) => sum + ss.goals, 0) + season.goals;
   const totalApps = s.seasons.reduce((sum, ss) => sum + ss.apps, 0) + season.apps;
   if (totalGoals >= 100 && totalGoals - season.goals < 100) s.events.push("💯 Reached 100 career goals!");
   if (totalGoals >= 200 && totalGoals - season.goals < 200) s.events.push("🔥 Reached 200 career goals!");
+  if (totalGoals >= 500 && totalGoals - season.goals < 500) s.events.push("👑 Reached 500 career goals!");
   if (totalApps >= 500 && totalApps - season.apps < 500) s.events.push("🎖️ Made 500th career appearance!");
 
   s.seasons = [...s.seasons, season];
-
-  // Show season summary, then check for transfer
   s.pendingSummary = season;
   s.phase = "season_summary";
 
-  // Check if transfer offer comes
+  // Transfer logic
   const shouldTransfer = s.contractYearsLeft <= 0 ||
     (s.overall >= 75 && s.currentClubTier > 1 && Math.random() < 0.4) ||
     (s.overall >= 82 && s.currentClubTier > 1 && Math.random() < 0.6) ||
@@ -433,18 +452,13 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
 
   if (shouldTransfer) {
     s.pendingOffers = generateTransferOffers(clubs, s);
-    if (s.pendingOffers.length > 0) {
-      s.events.push("📩 Transfer offers received!");
-    }
-  } else if (s.contractYearsLeft <= 1 && !shouldTransfer) {
+    if (s.pendingOffers.length > 0) s.events.push("📩 Transfer offers received!");
+  } else if (s.contractYearsLeft <= 1) {
     s.contractYearsLeft = rand(2, 4);
     s.events.push(`📝 Renewed contract with ${s.currentClub} for ${s.contractYearsLeft} years`);
   }
 
-  if (s.events.length === 0) {
-    s.events.push(`⚽ Solid season at ${s.currentClub}`);
-  }
-
+  if (s.events.length === 0) s.events.push(`⚽ Solid season at ${s.currentClub}`);
   return s;
 }
 
