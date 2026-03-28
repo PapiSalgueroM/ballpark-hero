@@ -35,7 +35,9 @@ export const STATE_POSITIONS: StatePos[] = [
   { id: 'NJ', name: 'New Jersey', x: c(9,3)[0], y: c(9,3)[1] },
   { id: 'CT', name: 'Connecticut', x: c(10,3)[0], y: c(10,3)[1] },
   { id: 'RI', name: 'Rhode Island', x: c(11,3)[0], y: c(11,3)[1] },
-  { id: 'CA', name: 'California', x: c(0,4)[0], y: c(0,4)[1] },
+  { id: 'CA_N', name: 'Northern California', x: c(0,3)[0], y: c(0,3)[1] - 10 },
+  { id: 'CA_S', name: 'Southern California', x: c(0,4)[0], y: c(0,4)[1] },
+  { id: 'CA_SC', name: 'SoCal Coast', x: c(0,5)[0], y: c(0,5)[1] - 10 },
   { id: 'UT', name: 'Utah', x: c(1,4)[0], y: c(1,4)[1] },
   { id: 'CO', name: 'Colorado', x: c(2,4)[0], y: c(2,4)[1] },
   { id: 'NE', name: 'Nebraska', x: c(3,4)[0], y: c(3,4)[1] },
@@ -469,14 +471,14 @@ export const TEAM_MAP = new Map(NFL_TEAMS.map(t => [t.id, t]));
 
 // Initial territory assignments — 32 teams each get 1 home state
 // Shared-state teams get nearest neighboring state:
-// CA: SF (primary), LAR → OR, LAC → UT
+// CA split: SF → CA_N, LAR → CA_S, LAC → CA_SC
 // TX: DAL (primary), HOU → OK
 // OH: CLE (primary), CIN → KY
 // PA: PIT (primary), PHI → DE
 // NJ: NYG (primary), NYJ → CT
 // FL: MIA (primary), TB → AL, JAX → SC
 export const INITIAL_TERRITORIES: Record<string, string> = {
-  WA: 'SEA', CA: 'SF', OR: 'LAR', UT: 'LAC', NV: 'LV', AZ: 'ARI', CO: 'DEN',
+  WA: 'SEA', OR: 'SEA', CA_N: 'SF', CA_S: 'LAR', CA_SC: 'LAC', NV: 'LV', AZ: 'ARI', CO: 'DEN',
   MO: 'KC', TX: 'DAL', OK: 'HOU', MN: 'MIN', WI: 'GB', IL: 'CHI',
   MI: 'DET', OH: 'CLE', KY: 'CIN', PA: 'PIT', DE: 'PHI',
   NJ: 'NYG', CT: 'NYJ', MA: 'NE', NY: 'BUF',
