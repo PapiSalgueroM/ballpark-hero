@@ -1291,6 +1291,7 @@ const WorldCupPredictor = () => {
               predictions={predictions}
               onScoreChange={handleScoreChange}
               onAutoFillGroup={handleAutoFillGroup}
+              onRankFillGroup={handleRankFillGroup}
               onResetGroup={handleResetGroup}
             />
           ))}
