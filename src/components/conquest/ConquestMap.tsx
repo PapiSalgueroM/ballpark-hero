@@ -135,7 +135,7 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
         {/* Layer 4: Power-up indicators for unclaimed states */}
         {US_STATES.map(state => {
           const teamId = territories[state.id];
-          if (teamId || !POWER_UP_STATES.has(state.id)) return null;
+          if (teamId || !powerupStates.has(state.id)) return null;
           return (
             <text
               key={`powerup-${state.id}`}
@@ -186,7 +186,7 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
               <div className="text-muted-foreground mt-0.5">{hoveredTerrCount} territories</div>
             </>
           ) : (
-            <div className="text-muted-foreground">Unclaimed{POWER_UP_STATES.has(hovered) ? ' ⚡ Power-Up' : ''}</div>
+            <div className="text-muted-foreground">Unclaimed{powerupStates.has(hovered) ? ' ⚡ Power-Up' : ''}</div>
           )}
         </div>
       )}
