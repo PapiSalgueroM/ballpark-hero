@@ -1312,25 +1312,31 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     const wcResult = simulateWorldCup(s);
     wcResult.year = thisYear;
     s.pendingWorldCup = wcResult;
-    s.intStats = { ...s.intStats,
-      caps: s.intStats.caps + wcResult.playerApps,
-      goals: s.intStats.goals + wcResult.playerGoals,
-      assists: s.intStats.assists + wcResult.playerAssists,
-      tournaments: s.intStats.tournaments + 1,
-      worldCups: s.intStats.worldCups + 1,
-    };
-    if (wcResult.result === "Winner") {
-      s.intStats = { ...s.intStats, worldCupWins: s.intStats.worldCupWins + 1 };
-      season.worldCup = true;
-    }
-    if (wcResult.bestPlayer) {
-      s.events.push(`🌟 Named Best Player of the World Cup!`);
-      s.awards = [...s.awards, { year: thisYear, name: "World Cup Best Player", emoji: "🌟" }];
-    }
-    // World Cup Golden Boot
-    if (wcResult.playerGoals >= 4 && Math.random() < 0.4) {
-      s.awards = [...s.awards, { year: thisYear, name: "World Cup Golden Boot", emoji: "👟" }];
-      s.events.push(`👟 Won the World Cup Golden Boot!`);
+    
+    if (wcResult.result === "Did Not Qualify") {
+      s.events.push(`😞 ${s.nationality} failed to qualify for the World Cup`);
+      s.intStats = { ...s.intStats, tournaments: s.intStats.tournaments + 1, worldCups: s.intStats.worldCups + 1 };
+    } else {
+      s.intStats = { ...s.intStats,
+        caps: s.intStats.caps + wcResult.playerApps,
+        goals: s.intStats.goals + wcResult.playerGoals,
+        assists: s.intStats.assists + wcResult.playerAssists,
+        tournaments: s.intStats.tournaments + 1,
+        worldCups: s.intStats.worldCups + 1,
+      };
+      if (wcResult.result === "Winner") {
+        s.intStats = { ...s.intStats, worldCupWins: s.intStats.worldCupWins + 1 };
+        season.worldCup = true;
+      }
+      if (wcResult.bestPlayer) {
+        s.events.push(`🌟 Named Best Player of the World Cup!`);
+        s.awards = [...s.awards, { year: thisYear, name: "World Cup Best Player", emoji: "🌟" }];
+      }
+      // World Cup Golden Boot
+      if (wcResult.playerGoals >= 4 && Math.random() < 0.4) {
+        s.awards = [...s.awards, { year: thisYear, name: "World Cup Golden Boot", emoji: "👟" }];
+        s.events.push(`👟 Won the World Cup Golden Boot!`);
+      }
     }
     s.intStats = { ...s.intStats, worldCupResults: [...s.intStats.worldCupResults, wcResult] };
   }
