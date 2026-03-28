@@ -24,7 +24,7 @@ import {
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
-  generateShareText,
+  generateShareText, getYouthAcademyClub,
   getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
 } from "@/lib/soccerCareerEngine";
 import { shareResult } from "@/lib/share";
@@ -207,6 +207,7 @@ export default function SoccerCareer() {
   const [saving, setSaving] = useState(false);
   const [career, setCareer] = useState<CareerState | null>(null);
   const [clubs, setClubs] = useState<ClubData[]>([]);
+  const [rolledOvr, setRolledOvr] = useState<number | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
 
   // Load clubs from Supabase
@@ -233,7 +234,7 @@ export default function SoccerCareer() {
 
   const handleBeginCareer = () => {
     if (!user) { setShowAuth(true); return; }
-    if (!previewStats || !isFormValid || clubs.length === 0) return;
+    if (!previewStats || !isFormValid || clubs.length === 0 || rolledOvr === null) return;
     const startYear = ERAS.find(e => e.value === era)?.startYear ?? 2020;
     const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, previewOvr, startYear, clubs);
     setCareer(newCareer);
@@ -347,6 +348,7 @@ export default function SoccerCareer() {
   const handleNewCareer = () => {
     setCareer(null);
     setPreviewStats(null);
+    setRolledOvr(null);
     setPlayerName(""); setNationality(""); setPosition(""); setEra("");
   };
 
@@ -370,6 +372,7 @@ export default function SoccerCareer() {
               previewStats={previewStats} previewOvr={previewOvr}
               isFormValid={isFormValid && clubs.length > 0} saving={saving}
               user={user} onBegin={handleBeginCareer} onShowAuth={() => setShowAuth(true)}
+              clubs={clubs} onRolledOvr={setRolledOvr}
             />
           ) : (
             <GameScreen
@@ -404,8 +407,50 @@ export default function SoccerCareer() {
   );
 }
 
+/* ─── Overall tier info ─── */
+function getOverallTier(ovr: number): { label: string; color: string; bgColor: string } {
+  if (ovr >= 75) return { label: "Exceptional — Born Winner", color: "text-purple-400", bgColor: "bg-purple-500/15 border-purple-500/30" };
+  if (ovr >= 66) return { label: "Gifted — High Ceiling", color: "text-amber-400", bgColor: "bg-amber-500/15 border-amber-500/30" };
+  if (ovr >= 55) return { label: "Solid Foundation — Good Potential", color: "text-emerald-400", bgColor: "bg-emerald-500/15 border-emerald-500/30" };
+  if (ovr >= 40) return { label: "Promising — Hard Work Ahead", color: "text-blue-400", bgColor: "bg-blue-500/15 border-blue-500/30" };
+  return { label: "Raw Talent — Rough Around the Edges", color: "text-muted-foreground", bgColor: "bg-muted/20 border-border" };
+}
+
 /* ─── Creation Screen ─── */
-function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth }: any) {
+function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, onRolledOvr }: any) {
+  const [rolledOvr, setRolledOvr] = useState<number | null>(null);
+  const [isRolling, setIsRolling] = useState(false);
+  const [displayOvr, setDisplayOvr] = useState(0);
+  const [academyClub, setAcademyClub] = useState<ClubData | null>(null);
+
+  const canGenerate = playerName.trim().length > 0 && nationality && position && era;
+
+  const doRoll = useCallback(() => {
+    if (!canGenerate || clubs.length === 0) return;
+    setIsRolling(true);
+    setAcademyClub(null);
+    // Slot machine animation: cycle through random numbers
+    let ticks = 0;
+    const totalTicks = 18;
+    const interval = setInterval(() => {
+      ticks++;
+      setDisplayOvr(rand(25, 78));
+      if (ticks >= totalTicks) {
+        clearInterval(interval);
+        const finalOvr = rand(25, 78);
+        setDisplayOvr(finalOvr);
+        setRolledOvr(finalOvr);
+        onRolledOvr?.(finalOvr);
+        setIsRolling(false);
+        // Preview academy
+        const club = getYouthAcademyClub(clubs, nationality, finalOvr);
+        setAcademyClub(club);
+      }
+    }, 60);
+  }, [canGenerate, clubs, nationality]);
+
+  const tier = rolledOvr !== null ? getOverallTier(rolledOvr) : (isRolling ? getOverallTier(displayOvr) : null);
+
   return (
     <div className="max-w-xl mx-auto space-y-5">
       <div className="text-center space-y-1">
@@ -441,6 +486,53 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         </div>
       </div>
 
+      {/* Generate Starting Potential */}
+      {canGenerate && (
+        <div className="bg-card border border-border rounded-xl p-4 sm:p-5 space-y-4">
+          <h2 className="text-base font-bold text-center">Starting Potential</h2>
+
+          {(rolledOvr !== null || isRolling) && (
+            <div className={`rounded-xl border p-5 text-center space-y-2 transition-all ${tier ? tier.bgColor : "bg-muted/20 border-border"}`}>
+              <div className={`text-6xl font-black tabular-nums transition-all ${isRolling ? "animate-pulse" : "animate-scale-in"} ${tier ? tier.color : "text-foreground"}`}>
+                {isRolling ? displayOvr : rolledOvr}
+              </div>
+              <div className={`text-sm font-bold ${tier ? tier.color : "text-muted-foreground"}`}>
+                {isRolling ? "Rolling..." : tier?.label}
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-2">
+            <Button
+              onClick={doRoll}
+              disabled={isRolling}
+              className={`flex-1 h-11 text-sm font-bold text-white ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
+              variant={rolledOvr !== null ? "outline" : "default"}
+            >
+              {isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Reroll" : "🎲 Generate Starting Potential"}
+            </Button>
+          </div>
+
+          {/* Academy preview */}
+          {academyClub && !isRolling && (
+            <div className="rounded-xl border border-border bg-muted/10 p-4 space-y-2 animate-fade-in">
+              <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground text-center">Academy Placement</div>
+              <div className="flex items-center justify-center gap-3">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-black shrink-0"
+                  style={{ backgroundColor: academyClub.color + "22", color: academyClub.color, border: `2px solid ${academyClub.color}44` }}>
+                  {academyClub.name.slice(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <div className="font-bold text-sm">{getFlag(academyClub.country)} {academyClub.name} Youth</div>
+                  <div className="text-[11px] text-muted-foreground">{academyClub.league} · Tier {academyClub.tier}</div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Stats preview */}
       {previewStats && (
         <div className="bg-card border border-border rounded-xl p-4 space-y-3">
           <div className="flex items-center justify-between">
@@ -460,10 +552,11 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         </div>
       )}
 
-      <Button onClick={onBegin} disabled={!isFormValid || saving}
+      <Button onClick={onBegin} disabled={!isFormValid || saving || rolledOvr === null}
         className="w-full h-12 text-lg font-bold bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-40">
         {saving ? "Creating..." : "⚽ Begin Career"}
       </Button>
+      {rolledOvr === null && canGenerate && <p className="text-xs text-muted-foreground text-center">Generate your starting potential to begin</p>}
       {!user && <p className="text-xs text-muted-foreground text-center">Sign in to save your career</p>}
     </div>
   );
