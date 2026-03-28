@@ -591,16 +591,29 @@ export default function ConquestBoard() {
           <div className="space-y-1">
             {game.gameLog.slice().reverse().map((entry, i) => {
               const winner = TEAM_MAP.get(entry.winner);
-              const loser = TEAM_MAP.get(entry.winner === entry.attacker ? entry.defender : entry.attacker);
+              const loserKey = entry.winner === entry.attacker ? entry.defender : entry.attacker;
+              const loser = TEAM_MAP.get(loserKey);
               return (
-                <div key={i} className="text-[11px] text-muted-foreground">
-                  <span className="font-bold text-foreground">#{entry.turn}</span>{' '}
-                  <span style={{ color: winner?.color }}>{winner?.name}</span>{' '}
+                <div key={i} className="text-[11px] text-muted-foreground flex items-center gap-1 flex-wrap">
+                  <span className="font-bold text-foreground">#{entry.turn}</span>
+                  <span
+                    className="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold text-white leading-tight"
+                    style={{ backgroundColor: winner?.color || '#333' }}
+                  >
+                    {winner?.name}
+                  </span>
                   {entry.defender === 'neutral' || entry.defender === 'powerup' ? (
                     <span>{entry.score}</span>
                   ) : (
                     <>
-                      def. <span style={{ color: loser?.color }}>{loser?.name}</span> {entry.score}
+                      <span>def.</span>
+                      <span
+                        className="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold text-white leading-tight"
+                        style={{ backgroundColor: loser?.color || '#333' }}
+                      >
+                        {loser?.name}
+                      </span>
+                      <span>{entry.score}</span>
                     </>
                   )}
                   {entry.stolenPlayer && (
