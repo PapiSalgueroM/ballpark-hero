@@ -27,6 +27,13 @@ export interface SeasonRecord {
   worldCup: boolean;
   ballonDor: boolean;
   type: "youth" | "playing" | "retired" | "manager";
+  // International stats for this season
+  intApps: number;
+  intGoals: number;
+  intAssists: number;
+  intRating: number;
+  tournament: string | null; // "World Cup", "Continental", or null
+  tournamentResult: string | null; // "Winner", "Runner-up", "Semi-final", "Quarter-final", "Group Stage", "Best Player"
 }
 
 export interface ContractOffer {
