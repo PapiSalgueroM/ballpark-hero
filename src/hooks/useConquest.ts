@@ -23,6 +23,10 @@ export interface LogEntry {
   stolenPlayer?: string;
 }
 
+// Build a lookup from state ID → geographic center (from SVG paths)
+const GEO_CENTERS = new Map<string, { x: number; y: number }>();
+US_STATES.forEach(s => GEO_CENTERS.set(s.id, { x: s.labelX, y: s.labelY }));
+
 function buildInitialTerritories(): Record<string, string | null> {
   const t: Record<string, string | null> = {};
   STATE_POSITIONS.forEach(s => { t[s.id] = INITIAL_TERRITORIES[s.id] || null; });
@@ -39,13 +43,16 @@ function buildInitialRosters(): Record<string, string[]> {
   return r;
 }
 
-function getTeamCenter(teamId: string, territories: Record<string, string | null>): { x: number; y: number } {
-  const states = STATE_POSITIONS.filter(s => territories[s.id] === teamId);
-  if (states.length === 0) return { x: 290, y: 180 };
-  return {
-    x: states.reduce((s, st) => s + st.x, 0) / states.length,
-    y: states.reduce((s, st) => s + st.y, 0) / states.length,
-  };
+function getTeamGeoCenter(teamId: string, territories: Record<string, string | null>): { x: number; y: number } {
+  const stateIds = Object.keys(territories).filter(s => territories[s] === teamId);
+  if (stateIds.length === 0) return { x: 290, y: 180 };
+  let sumX = 0, sumY = 0, count = 0;
+  for (const sid of stateIds) {
+    const geo = GEO_CENTERS.get(sid);
+    if (geo) { sumX += geo.x; sumY += geo.y; count++; }
+  }
+  if (count === 0) return { x: 290, y: 180 };
+  return { x: sumX / count, y: sumY / count };
 }
 
 function getAliveTeamsFrom(territories: Record<string, string | null>): string[] {
@@ -54,23 +61,40 @@ function getAliveTeamsFrom(territories: Record<string, string | null>): string[]
   return Array.from(s);
 }
 
-function findTarget(teamId: string, direction: string, territories: Record<string, string | null>): string | null {
-  const center = getTeamCenter(teamId, territories);
-  const dirAngle = DIR_ANGLES[direction];
-  const alive = getAliveTeamsFrom(territories).filter(t => t !== teamId);
+export type TargetResult = { type: 'team'; id: string } | { type: 'neutral'; stateId: string };
 
-  let best: string | null = null;
+function findTarget(teamId: string, direction: string, territories: Record<string, string | null>): TargetResult | null {
+  const center = getTeamGeoCenter(teamId, territories);
+  const dirAngle = DIR_ANGLES[direction];
+  const coneHalf = Math.PI * 3 / 8; // 67.5° half-cone
+
+  let best: TargetResult | null = null;
   let bestDist = Infinity;
 
-  // Only consider enemies within 67.5° cone — no fallback
+  // Check enemy teams
+  const alive = getAliveTeamsFrom(territories).filter(t => t !== teamId);
   for (const enemy of alive) {
-    const ec = getTeamCenter(enemy, territories);
+    const ec = getTeamGeoCenter(enemy, territories);
     const dx = ec.x - center.x, dy = ec.y - center.y;
     let diff = Math.abs(Math.atan2(dy, dx) - dirAngle);
     if (diff > Math.PI) diff = 2 * Math.PI - diff;
-    if (diff <= Math.PI * 3 / 8) {
+    if (diff <= coneHalf) {
       const dist = dx * dx + dy * dy;
-      if (dist < bestDist) { bestDist = dist; best = enemy; }
+      if (dist < bestDist) { bestDist = dist; best = { type: 'team', id: enemy }; }
+    }
+  }
+
+  // Check neutral (unclaimed) states — they could be closer
+  for (const [sid, owner] of Object.entries(territories)) {
+    if (owner !== null) continue; // owned, skip
+    const geo = GEO_CENTERS.get(sid);
+    if (!geo) continue;
+    const dx = geo.x - center.x, dy = geo.y - center.y;
+    let diff = Math.abs(Math.atan2(dy, dx) - dirAngle);
+    if (diff > Math.PI) diff = 2 * Math.PI - diff;
+    if (diff <= coneHalf) {
+      const dist = dx * dx + dy * dy;
+      if (dist < bestDist) { bestDist = dist; best = { type: 'neutral', stateId: sid }; }
     }
   }
 
