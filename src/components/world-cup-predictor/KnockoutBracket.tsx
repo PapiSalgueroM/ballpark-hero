@@ -174,6 +174,10 @@ const KnockoutBracket = ({ seeds, bestThirds }: KnockoutBracketProps) => {
   const champion = rounds[5]?.[0]?.winner || "";
   const thirdPlace = rounds[4]?.[0]?.winner || "";
 
+  useEffect(() => {
+    onChampionChange?.(champion);
+  }, [champion, onChampionChange]);
+
   return (
     <div className="mt-10">
       {/* Champion banner */}
