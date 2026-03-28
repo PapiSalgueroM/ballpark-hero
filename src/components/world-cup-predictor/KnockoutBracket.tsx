@@ -51,9 +51,9 @@ const R32_TEMPLATE: [string, string][] = [
   ["1L", "2K"],     // M15
 ];
 
-const ROUND_NAMES = ["Round of 32", "Round of 16", "Quarter-finals", "Semi-finals", "Final"];
-const ROUND_PREFIXES = ["r32", "r16", "qf", "sf", "f"];
-const ROUND_MATCH_COUNTS = [16, 8, 4, 2, 1];
+const ROUND_NAMES = ["Round of 32", "Round of 16", "Quarter-finals", "Semi-finals", "Third Place", "Final"];
+const ROUND_PREFIXES = ["r32", "r16", "qf", "sf", "tp", "f"];
+const ROUND_MATCH_COUNTS = [16, 8, 4, 2, 1, 1];
 
 const KO_STORAGE_KEY = "wc2026-knockout";
 
@@ -136,8 +136,8 @@ const KnockoutBracket = ({ seeds, bestThirds }: KnockoutBracketProps) => {
     });
     allRounds.push(r32);
 
-    // Subsequent rounds
-    for (let r = 1; r < ROUND_PREFIXES.length; r++) {
+    // Subsequent rounds up to SF (index 3)
+    for (let r = 1; r <= 3; r++) {
       const prev = allRounds[r - 1];
       const round: BracketMatchData[] = [];
       for (let i = 0; i < prev.length; i += 2) {
@@ -157,11 +157,43 @@ const KnockoutBracket = ({ seeds, bestThirds }: KnockoutBracketProps) => {
       allRounds.push(round);
     }
 
+    // Third Place Play-off (losers of SF)
+    const sf = allRounds[3]; // semi-finals
+    const sfLoserA = sf[0] ? (sf[0].winner ? (sf[0].winner === sf[0].teamA ? sf[0].teamB : sf[0].teamA) : "") : "";
+    const sfLoserB = sf[1] ? (sf[1].winner ? (sf[1].winner === sf[1].teamA ? sf[1].teamB : sf[1].teamA) : "") : "";
+    const tpId = "tp-0";
+    const tpSc = scores[tpId] || { scoreA: "", scoreB: "" };
+    const tpTeamA = sfLoserA || "";
+    const tpTeamB = sfLoserB || "";
+    allRounds.push([{
+      id: tpId,
+      teamA: tpTeamA,
+      teamB: tpTeamB,
+      scoreA: tpTeamA && tpTeamB ? tpSc.scoreA : "",
+      scoreB: tpTeamA && tpTeamB ? tpSc.scoreB : "",
+      winner: tpTeamA && tpTeamB ? getWinner(tpTeamA, tpTeamB, tpSc.scoreA, tpSc.scoreB) : "",
+    }]);
+
+    // Final (winners of SF)
+    const fId = "f-0";
+    const fSc = scores[fId] || { scoreA: "", scoreB: "" };
+    const fTeamA = sf[0]?.winner || "";
+    const fTeamB = sf[1]?.winner || "";
+    allRounds.push([{
+      id: fId,
+      teamA: fTeamA,
+      teamB: fTeamB,
+      scoreA: fTeamA && fTeamB ? fSc.scoreA : "",
+      scoreB: fTeamA && fTeamB ? fSc.scoreB : "",
+      winner: fTeamA && fTeamB ? getWinner(fTeamA, fTeamB, fSc.scoreA, fSc.scoreB) : "",
+    }]);
+
     return allRounds;
   }, [resolveSeed, scores]);
 
-  // Champion
-  const champion = rounds[4]?.[0]?.winner || "";
+  // Champion is from the Final (index 5)
+  const champion = rounds[5]?.[0]?.winner || "";
+  const thirdPlace = rounds[4]?.[0]?.winner || "";
 
   return (
     <div className="mt-10">
@@ -174,6 +206,11 @@ const KnockoutBracket = ({ seeds, bestThirds }: KnockoutBracketProps) => {
           <p className="text-2xl sm:text-3xl font-extrabold text-white">
             🏆 {champion} 🏆
           </p>
+          {thirdPlace && (
+            <p className="text-sm text-[hsl(150,15%,55%)] mt-2">
+              🥉 Third Place: <span className="font-bold text-white">{thirdPlace}</span>
+            </p>
+          )}
         </div>
       )}
 
