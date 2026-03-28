@@ -693,23 +693,36 @@ const WorldCupPredictor = () => {
           ))}
         </div>
 
-        {/* Best Third Place Teams */}
-        {bestThirds.length > 0 && (
+        {/* Pick Your Third Place Qualifiers */}
+        {bestThirds.length > 0 && allGroupsFilled && (
           <div className="mt-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Best Third-Place Teams</h2>
-            <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm mb-4">
-              Top 8 third-place teams advance to the Round of 32. Ranked by points, goal difference, then goals scored.
-            </p>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Pick Your Third-Place Qualifiers</h2>
+                <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm">
+                  Select exactly 8 of the 12 third-place teams to advance to the Round of 32.
+                </p>
+              </div>
+              <Badge
+                className={`text-sm px-3 py-1.5 self-start ${
+                  selectedThirds.length === 8
+                    ? "bg-[hsl(140,60%,30%)] text-[hsl(140,80%,90%)]"
+                    : "bg-[hsl(150,12%,20%)] text-[hsl(45,90%,55%)]"
+                }`}
+              >
+                {selectedThirds.length} / 8 selected
+              </Badge>
+            </div>
             <Card className="bg-[hsl(150,15%,12%)] border-[hsl(150,20%,20%)] shadow-lg overflow-hidden">
               <CardContent className="p-0">
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-[hsl(150,15%,18%)] text-[hsl(150,15%,45%)] text-xs">
-                        <th className="text-left py-3 px-4">#</th>
+                        <th className="text-center py-3 px-3 w-10"></th>
+                        <th className="text-left py-3 px-2">#</th>
                         <th className="text-left py-3 px-2">Team</th>
                         <th className="text-center py-3 px-2">Group</th>
-                        <th className="text-center py-3 px-2">P</th>
                         <th className="text-center py-3 px-2">Pts</th>
                         <th className="text-center py-3 px-2">GD</th>
                         <th className="text-center py-3 px-2">GF</th>
@@ -718,18 +731,34 @@ const WorldCupPredictor = () => {
                     </thead>
                     <tbody>
                       {bestThirds.map((t, idx) => {
-                        const qualified = idx < 8;
+                        const isSelected = selectedThirds.includes(t.team);
+                        const isDisabled = !isSelected && selectedThirds.length >= 8;
                         return (
                           <tr
                             key={t.team + t.group}
-                            className={`border-b border-[hsl(150,10%,16%)] ${
-                              qualified ? "bg-[hsl(140,50%,18%)]" : "bg-[hsl(0,0%,15%)]"
-                            }`}
+                            onClick={() => !isDisabled && handleToggleThird(t.team)}
+                            className={`border-b border-[hsl(150,10%,16%)] transition-colors ${
+                              isDisabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer hover:bg-[hsl(150,12%,16%)]"
+                            } ${isSelected ? "bg-[hsl(140,50%,18%)]" : "bg-transparent"}`}
                           >
-                            <td className="py-2.5 px-4 font-bold text-[hsl(0,0%,50%)]">{idx + 1}</td>
-                            <td className="py-2.5 px-2 font-semibold text-white">{t.team}</td>
+                            <td className="py-2.5 px-3 text-center">
+                              <div
+                                className={`w-5 h-5 rounded border-2 flex items-center justify-center mx-auto transition-colors ${
+                                  isSelected
+                                    ? "bg-[hsl(140,60%,40%)] border-[hsl(140,60%,50%)]"
+                                    : isDisabled
+                                    ? "border-[hsl(0,0%,25%)] bg-transparent"
+                                    : "border-[hsl(150,20%,30%)] bg-transparent hover:border-[hsl(150,20%,40%)]"
+                                }`}
+                              >
+                                {isSelected && <Check className="w-3 h-3 text-white" />}
+                              </div>
+                            </td>
+                            <td className="py-2.5 px-2 font-bold text-[hsl(0,0%,50%)]">{idx + 1}</td>
+                            <td className={`py-2.5 px-2 font-semibold ${isSelected ? "text-white" : "text-[hsl(0,0%,55%)]"}`}>
+                              {t.team}
+                            </td>
                             <td className="py-2.5 px-2 text-center text-[hsl(45,90%,55%)] font-semibold">{t.group}</td>
-                            <td className="py-2.5 px-2 text-center text-[hsl(0,0%,60%)]">{t.played}</td>
                             <td className="py-2.5 px-2 text-center font-bold text-white">{t.pts}</td>
                             <td className={`py-2.5 px-2 text-center ${t.gd > 0 ? "text-[hsl(140,60%,55%)]" : t.gd < 0 ? "text-[hsl(0,60%,55%)]" : "text-[hsl(0,0%,50%)]"}`}>
                               {t.gd > 0 ? `+${t.gd}` : t.gd}
@@ -737,11 +766,11 @@ const WorldCupPredictor = () => {
                             <td className="py-2.5 px-2 text-center text-[hsl(0,0%,60%)]">{t.gf}</td>
                             <td className="py-2.5 px-4 text-right">
                               <Badge className={`text-[10px] ${
-                                qualified
+                                isSelected
                                   ? "bg-[hsl(140,60%,30%)] text-[hsl(140,80%,90%)] hover:bg-[hsl(140,60%,35%)]"
                                   : "bg-[hsl(0,0%,25%)] text-[hsl(0,0%,55%)] hover:bg-[hsl(0,0%,30%)]"
                               }`}>
-                                {qualified ? "Qualified" : "Eliminated"}
+                                {isSelected ? "Qualified" : "Eliminated"}
                               </Badge>
                             </td>
                           </tr>
@@ -756,7 +785,7 @@ const WorldCupPredictor = () => {
         )}
 
         {/* Generate Bracket Button */}
-        {allGroupsFilled && !showBracket && (
+        {allGroupsFilled && selectedThirds.length === 8 && !showBracket && (
           <div className="text-center mt-8">
             <button
               onClick={handleGenerateBracket}
@@ -764,6 +793,14 @@ const WorldCupPredictor = () => {
             >
               🏆 Generate My Bracket
             </button>
+          </div>
+        )}
+
+        {allGroupsFilled && selectedThirds.length < 8 && !showBracket && (
+          <div className="text-center mt-6">
+            <p className="text-[hsl(150,15%,40%)] text-sm">
+              Select 8 third-place teams to unlock the knockout bracket ({selectedThirds.length}/8)
+            </p>
           </div>
         )}
 
@@ -776,9 +813,9 @@ const WorldCupPredictor = () => {
         )}
 
         {/* Knockout Bracket */}
-        {showBracket && allGroupsFilled && (
+        {showBracket && allGroupsFilled && selectedThirds.length === 8 && (
           <div ref={bracketRef}>
-            <KnockoutBracket seeds={groupSeeds} bestThirds={bestThirds} />
+            <KnockoutBracket seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} />
           </div>
         )}
       </div>
