@@ -533,39 +533,75 @@ export function formatFollowers(m: number): string {
   return `${Math.round(m * 1000)}`;
 }
 
-/* ─── Appearances per user spec ─── */
-function calcAppearances(overall: number, clubTier: number, age: number): { apps: number; injured: boolean; injuryWeeks: number } {
+/* ─── Elite clubs that dominate domestically ─── */
+const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
+
+/* ─── Appearances — squad player logic for elite clubs ─── */
+function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState): { apps: number; injured: boolean; injuryWeeks: number } {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
 
+  const isEliteClub = state ? ELITE_CLUBS.includes(state.currentClub) : false;
+  const seasonsAtClub = state ? state.seasons.filter(s => s.club === state.currentClub && s.type === "playing").length : 0;
+
   let baseMin: number, baseMax: number;
-  if (diff >= 15) { baseMin = 30; baseMax = 38; }
-  else if (diff >= 5) { baseMin = 25; baseMax = 32; }
-  else if (diff >= -5) { baseMin = 18; baseMax = 28; }
-  else { baseMin = 8; baseMax = 18; }
+
+  if (isEliteClub && diff <= -10) {
+    if (seasonsAtClub === 0) { baseMin = 8; baseMax = 18; }
+    else if (seasonsAtClub === 1) { baseMin = 15; baseMax = 25; }
+    else { baseMin = 12; baseMax = 22; }
+  } else if (isEliteClub && diff <= -5) {
+    if (seasonsAtClub === 0) { baseMin = 15; baseMax = 25; }
+    else { baseMin = 22; baseMax = 30; }
+  } else if (diff >= 15) { baseMin = 33; baseMax = 38; }
+  else if (diff >= 5) { baseMin = 28; baseMax = 35; }
+  else if (diff >= -5) { baseMin = 22; baseMax = 32; }
+  else { baseMin = 10; baseMax = 20; }
 
   let apps = rand(baseMin, baseMax);
 
-  // 20% injury chance
   let injured = false;
   let injuryWeeks = 0;
   if (Math.random() < 0.20) {
     injured = true;
     injuryWeeks = rand(2, 8);
-    const missedApps = Math.round(injuryWeeks * 38 / 46); // ~38 apps in 46 weeks
+    const missedApps = Math.round(injuryWeeks * 38 / 46);
     apps = Math.max(1, apps - clamp(missedApps, 0, 8));
   }
 
   return { apps, injured, injuryWeeks };
 }
 
-/* ─── Goals per 38 apps by position ─── */
-function calcGoals(position: string, apps: number): number {
-  const per38: Record<string, [number, number]> = {
-    ST: [15, 28], LW: [8, 18], RW: [8, 18], CAM: [6, 14],
-    CM: [3, 8], CDM: [1, 4], CB: [0, 3], LB: [0, 3], RB: [0, 3], GK: [0, 0],
-  };
-  const [lo, hi] = per38[position] || [0, 3];
+/* ─── Goals per 38 apps by position & overall rating ─── */
+function calcGoals(position: string, apps: number, overall?: number): number {
+  const ovr = overall ?? 75;
+  let lo: number, hi: number;
+
+  switch (position) {
+    case "ST":
+      if (ovr >= 85) { lo = 20; hi = 32; }
+      else if (ovr >= 75) { lo = 12; hi = 22; }
+      else if (ovr >= 65) { lo = 6; hi = 14; }
+      else { lo = 3; hi = 8; }
+      break;
+    case "LW": case "RW":
+      if (ovr >= 85) { lo = 14; hi = 24; }
+      else if (ovr >= 75) { lo = 8; hi = 16; }
+      else if (ovr >= 65) { lo = 4; hi = 10; }
+      else { lo = 2; hi = 6; }
+      break;
+    case "CAM":
+      if (ovr >= 85) { lo = 10; hi = 18; }
+      else if (ovr >= 75) { lo = 6; hi = 12; }
+      else { lo = 3; hi = 8; }
+      break;
+    case "CM": lo = 3; hi = 8; break;
+    case "CDM": lo = 1; hi = 4; break;
+    case "CB": case "LB": case "RB": lo = 0; hi = 3; break;
+    case "GK": return 0;
+    default: lo = 0; hi = 3;
+  }
+
   return Math.max(0, Math.round(rand(lo, hi) * apps / 38));
 }
 
@@ -583,26 +619,13 @@ function calcAssists(position: string, apps: number): number {
 function calcSeasonRating(position: string, apps: number, goals: number, assists: number, cleanSheets: number, overall: number, clubTier: number): number {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
-
-  // Base rating from overall advantage
   let base = 6.0 + diff * 0.06;
-
-  // Bonus from output
-  if (position === "GK") {
-    base += cleanSheets * 0.08;
-  } else if (["ST", "LW", "RW", "CAM"].includes(position)) {
-    base += goals * 0.04 + assists * 0.03;
-  } else {
-    base += goals * 0.06 + assists * 0.04;
-  }
-
-  // Apps bonus/penalty
+  if (position === "GK") { base += cleanSheets * 0.08; }
+  else if (["ST", "LW", "RW", "CAM"].includes(position)) { base += goals * 0.04 + assists * 0.03; }
+  else { base += goals * 0.06 + assists * 0.04; }
   if (apps >= 30) base += 0.3;
   else if (apps < 15) base -= 0.4;
-
-  // Random variance
   base += (Math.random() - 0.5) * 0.8;
-
   return clamp(parseFloat(base.toFixed(1)), 3.0, 10.0);
 }
 
@@ -612,27 +635,31 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
   const isGK = position === "GK";
   const lastYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year : 0;
 
-  // Appearances
-  const { apps, injured, injuryWeeks } = calcAppearances(overall, currentClubTier, age);
-
-  // Goals & assists
-  const goals = calcGoals(position, apps);
+  const { apps, injured, injuryWeeks } = calcAppearances(overall, currentClubTier, age, state);
+  const goals = calcGoals(position, apps, overall);
   const assists = calcAssists(position, apps);
   const cleanSheets = isGK ? Math.round(apps * rand(20, 45) / 100) : 0;
-
   const yellowCards = rand(0, Math.min(8, Math.round(apps * 0.25)));
   const redCards = Math.random() < 0.08 ? 1 : 0;
-
   const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier);
 
-  // Trophies — proper simulation
-  const leagueChance = currentClubTier === 1 ? (overall >= 85 ? 0.35 : overall >= 78 ? 0.20 : 0.10) :
-                        currentClubTier === 2 ? (overall >= 78 ? 0.25 : 0.15) : 0;
+  // --- Trophy realism ---
+  const isElite = ELITE_CLUBS.includes(state.currentClub);
+  const performanceBoost = (overall >= 85 && rating >= 7.5) ? 0.15 :
+                           (overall >= 80 && rating >= 7.0) ? 0.10 :
+                           (overall >= 75 && rating >= 6.8) ? 0.05 : 0;
+
+  let leagueChance: number, cupChance: number;
+  if (isElite) { leagueChance = 0.65; cupChance = 0.35; }
+  else if (currentClubTier === 1) { leagueChance = 0.25; cupChance = 0.20; }
+  else if (currentClubTier === 2) { leagueChance = 0.10; cupChance = 0.15; }
+  else { leagueChance = 0.03; cupChance = 0.05; }
+
+  leagueChance = Math.min(0.85, leagueChance + performanceBoost);
+  cupChance = Math.min(0.60, cupChance + performanceBoost);
+
   const winLeague = Math.random() < leagueChance;
-  const cupChance = currentClubTier === 1 ? 0.25 : currentClubTier === 2 ? 0.20 : currentClubTier === 3 ? 0.15 : 0;
   const winCup = Math.random() < cupChance;
-  // UCL and WC/BdO are handled separately in advanceProSeason now
-  const isWCYear = (lastYear + 1) % 4 === 2;
 
   return {
     year: lastYear + 1, age,
