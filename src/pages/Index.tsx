@@ -27,6 +27,7 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
       { path: '/football-draft', label: 'Draft Guesser', emoji: '🎰', description: 'Guess the draft round', daily: true },
       { path: '/nfl-career', label: 'NFL Career Path', emoji: '🏈', description: 'Guess the NFL player from clues', daily: true },
       { path: '/guess-nfl-team', label: 'Guess The Team', emoji: '🏈', description: 'Identify the NFL franchise', daily: true, isNew: true },
+      { path: '/conquest', label: 'NFL Conquest', emoji: '🗺️', description: '32 teams, 50 states. One champion.', daily: true },
     ],
   },
   {
