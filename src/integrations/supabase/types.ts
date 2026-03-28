@@ -707,6 +707,78 @@ export type Database = {
         }
         Relationships: []
       }
+      soccer_careers: {
+        Row: {
+          age: number
+          career_history: Json
+          created_at: string
+          current_club: string | null
+          defending: number
+          dribbling: number
+          id: string
+          is_active: boolean
+          nationality: string
+          overall_rating: number
+          pace: number
+          passing: number
+          physical: number
+          player_name: string
+          position: string
+          reflexes: number
+          season_year: number
+          shooting: number
+          starting_era: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          age?: number
+          career_history?: Json
+          created_at?: string
+          current_club?: string | null
+          defending?: number
+          dribbling?: number
+          id?: string
+          is_active?: boolean
+          nationality: string
+          overall_rating?: number
+          pace?: number
+          passing?: number
+          physical?: number
+          player_name: string
+          position: string
+          reflexes?: number
+          season_year: number
+          shooting?: number
+          starting_era: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          age?: number
+          career_history?: Json
+          created_at?: string
+          current_club?: string | null
+          defending?: number
+          dribbling?: number
+          id?: string
+          is_active?: boolean
+          nationality?: string
+          overall_rating?: number
+          pace?: number
+          passing?: number
+          physical?: number
+          player_name?: string
+          position?: string
+          reflexes?: number
+          season_year?: number
+          shooting?: number
+          starting_era?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       soccer_club_guess_scores: {
         Row: {
           clues_used: number
