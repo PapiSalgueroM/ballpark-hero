@@ -1522,7 +1522,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </h1>
           <p className="text-xs text-muted-foreground">{career.position} · Age {career.age} · {career.nationality}</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          {career.phase !== "retired" && career.phase !== "retirement_ceremony" && career.phase !== "post_retirement" && (
+            <Button onClick={() => setShowRetireConfirm(true)} variant="ghost" className="text-[10px] text-muted-foreground hover:text-red-400 px-2 h-7">
+              🚪 Retire
+            </Button>
+          )}
           <Button onClick={onNewCareer} variant="ghost" className="text-[10px] text-muted-foreground hover:text-red-400 px-2 h-7">
             🔄 New Career
           </Button>
@@ -1814,8 +1819,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <Button onClick={onNextSeason} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
               {career.phase === "youth" ? "Next Year" : "Next Season"} <ChevronRight className="w-5 h-5" />
             </Button>
-            {career.phase === "playing" && career.age >= 30 && (
-              <Button onClick={onManualRetire} variant="outline" className="h-12 text-xs font-bold text-red-400 border-red-400/30 hover:bg-red-500/10">
+            {career.phase !== "retired" && career.phase !== "retirement_ceremony" && (
+              <Button onClick={() => setShowRetireConfirm(true)} variant="outline" className="h-12 text-xs font-bold text-red-400 border-red-400/30 hover:bg-red-500/10">
                 Retire
               </Button>
             )}
