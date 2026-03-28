@@ -14,9 +14,10 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { toast } from "sonner";
 import { ChevronRight } from "lucide-react";
 import {
-  type CareerState, type SeasonRecord, type ClubData, type ContractOffer,
+  type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
-  dismissSummary, stayAtClub, getCareerTotals, getFlag, calcOverall,
+  dismissSummary, stayAtClub, signExtension, requestTransfer,
+  getCareerTotals, getFlag, calcOverall, formatWage,
 } from "@/lib/soccerCareerEngine";
 
 /* ─── Constants ─── */
@@ -110,7 +111,7 @@ function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; is
 }
 
 /* ─── Contract Offer Card ─── */
-function OfferCard({ offer, onAccept }: { offer: ContractOffer; onAccept: () => void }) {
+function OfferCard({ offer, onAccept, actionLabel }: { offer: ContractOffer; onAccept: () => void; actionLabel?: string }) {
   return (
     <div className="bg-card border border-border rounded-xl p-4 space-y-3">
       <div className="flex items-center gap-3">
@@ -122,14 +123,18 @@ function OfferCard({ offer, onAccept }: { offer: ContractOffer; onAccept: () => 
           <div className="font-bold text-sm truncate">{getFlag(offer.club.country)} {offer.club.name}</div>
           <div className="text-[11px] text-muted-foreground">{offer.club.league}</div>
         </div>
+        {offer.isDreamClub && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">⭐ Dream Club</span>}
       </div>
-      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-        <span>📋 {offer.contractYears}yr contract</span>
-        <span>💰 €{offer.wage}k/wk</span>
+      <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
+        <span>📋 {offer.contractYears}yr</span>
+        <span>💰 {formatWage(offer.wage)}</span>
+        {offer.transferFee > 0 && <span>🏷️ €{offer.transferFee.toFixed(1)}M fee</span>}
+        {offer.transferFee === 0 && offer.contractYears > 0 && <span className="text-emerald-400 font-semibold">Free transfer</span>}
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40">Tier {offer.club.tier}</span>
       </div>
+      {offer.isPayCut && <div className="text-[11px] text-amber-400">⚠️ Lower wages — but it's a dream move</div>}
       <Button onClick={onAccept} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
-        Sign Contract ✍️
+        {actionLabel || "Sign Contract ✍️"}
       </Button>
     </div>
   );
@@ -243,13 +248,31 @@ export default function SoccerCareer() {
 
   const handleDismissSummary = () => {
     if (!career) return;
-    setCareer(dismissSummary(career));
+    setCareer(dismissSummary(career, clubs));
   };
 
   const handleStay = () => {
     if (!career) return;
     setCareer(stayAtClub(career));
     toast("Staying at " + career.currentClub);
+  };
+
+  const handleSignExtension = () => {
+    if (!career) return;
+    setCareer(signExtension(career));
+    toast.success("Contract extended!");
+  };
+
+  const handleRequestTransfer = () => {
+    if (!career) return;
+    const result = requestTransfer(career, clubs);
+    const s = { ...career, transferSituation: result };
+    if (result.type === "request_result" && !result.offer) {
+      toast.error("No clubs are interested right now. You must stay.");
+      s.phase = "playing" as const;
+      s.transferSituation = null;
+    }
+    setCareer(s);
   };
 
   const handleNewCareer = () => {
@@ -282,10 +305,13 @@ export default function SoccerCareer() {
           ) : (
             <GameScreen
               career={career}
+              clubs={clubs}
               onNextSeason={handleNextSeason}
               onAcceptOffer={handleAcceptOffer}
               onDismissSummary={handleDismissSummary}
               onStay={handleStay}
+              onSignExtension={handleSignExtension}
+              onRequestTransfer={handleRequestTransfer}
               onNewCareer={handleNewCareer}
               timelineRef={timelineRef}
             />
@@ -363,13 +389,136 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
   );
 }
 
-/* ─── Game Screen ─── */
-function GameScreen({ career, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onNewCareer, timelineRef }: {
+/* ─── Transfer Window Card ─── */
+function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignExtension, onRequestTransfer }: {
+  situation: TransferSituation;
   career: CareerState;
+  onAcceptOffer: (offer: ContractOffer) => void;
+  onStay: () => void;
+  onSignExtension: () => void;
+  onRequestTransfer: () => void;
+}) {
+  const isExpiring = career.contractYearsLeft <= 1;
+
+  return (
+    <div className="space-y-3">
+      <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 text-center">
+        <h3 className="text-lg font-black">🔄 Transfer Window</h3>
+        <p className="text-xs text-muted-foreground mt-1">
+          {isExpiring ? "⚠️ Your contract is expiring — decide your future" : "End of season — review your options"}
+        </p>
+        <div className="flex items-center justify-center gap-3 mt-2 text-xs text-muted-foreground">
+          <span>📋 {career.contractYearsLeft}yr left</span>
+          <span>💰 {formatWage(career.weeklyWage)}</span>
+          <span>🏷️ €{career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M value</span>
+        </div>
+      </div>
+
+      {/* Situation: No Interest */}
+      {situation.type === "no_interest" && (
+        <div className="bg-card border border-border rounded-xl p-4 space-y-3">
+          <p className="text-sm text-center">No clubs have made an offer. Your club wants to keep you.</p>
+          <div className="flex gap-2">
+            <Button onClick={onStay} className="flex-1 h-9 text-sm bg-emerald-600 hover:bg-emerald-500 text-white">
+              Stay and fight for place 💪
+            </Button>
+            <Button variant="outline" onClick={onRequestTransfer} className="flex-1 h-9 text-sm">
+              Request transfer 📤
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Situation: One Offer */}
+      {situation.type === "one_offer" && (
+        <div className="space-y-3">
+          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} actionLabel="Accept Offer ✍️" />
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={onStay} className="flex-1 h-9 text-sm">
+              Reject & Stay
+            </Button>
+            <Button variant="outline" onClick={onRequestTransfer} className="flex-1 h-9 text-sm">
+              Reject & Request Transfer 📤
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Situation: Bidding War */}
+      {situation.type === "bidding_war" && (
+        <div className="space-y-3">
+          <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-center">
+            <span className="text-sm font-bold">🔥 Bidding War! Two clubs competing for your signature</span>
+          </div>
+          <OfferCard offer={situation.offerA} onAccept={() => onAcceptOffer(situation.offerA)} actionLabel="Join Club A ✍️" />
+          <OfferCard offer={situation.offerB} onAccept={() => onAcceptOffer(situation.offerB)} actionLabel="Join Club B ✍️" />
+          <Button variant="outline" onClick={onStay} className="w-full h-9 text-sm">
+            Stay at {career.currentClub}
+          </Button>
+        </div>
+      )}
+
+      {/* Situation: Dream Club */}
+      {situation.type === "dream_club" && (
+        <div className="space-y-3">
+          <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-center">
+            <span className="text-sm font-bold">⭐ Dream Club Interest!</span>
+            <p className="text-xs text-muted-foreground mt-1">A top club wants you — but they're offering below market value</p>
+          </div>
+          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} actionLabel="Accept pay cut for dream move ⭐" />
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={onStay} className="flex-1 h-9 text-sm">
+              Stay for better money 💰
+            </Button>
+            <Button variant="outline" onClick={onRequestTransfer} className="flex-1 h-9 text-sm">
+              Wait for better offer 🔍
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Situation: Contract Expiry */}
+      {situation.type === "contract_expiry" && (
+        <div className="space-y-3">
+          <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-center">
+            <span className="text-sm font-bold">⚠️ Contract Expiring!</span>
+            <p className="text-xs text-muted-foreground mt-1">You can sign an extension or leave on a free transfer</p>
+          </div>
+          <Button onClick={onSignExtension} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+            Sign Extension with {career.currentClub} 📝
+          </Button>
+          {situation.offers.map((offer) => (
+            <OfferCard key={offer.club.name} offer={offer} onAccept={() => onAcceptOffer(offer)} actionLabel="Leave on free transfer ✍️" />
+          ))}
+        </div>
+      )}
+
+      {/* Situation: Request Result */}
+      {situation.type === "request_result" && situation.offer && (
+        <div className="space-y-3">
+          <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-center">
+            <span className="text-sm font-bold">📩 A club has responded to your transfer request!</span>
+          </div>
+          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} />
+          <Button variant="outline" onClick={onStay} className="w-full h-9 text-sm">
+            Changed my mind — stay at {career.currentClub}
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Game Screen ─── */
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onNewCareer, timelineRef }: {
+  career: CareerState;
+  clubs: ClubData[];
   onNextSeason: () => void;
   onAcceptOffer: (offer: ContractOffer) => void;
   onDismissSummary: () => void;
   onStay: () => void;
+  onSignExtension: () => void;
+  onRequestTransfer: () => void;
   onNewCareer: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
@@ -436,24 +585,29 @@ function GameScreen({ career, onNextSeason, onAcceptOffer, onDismissSummary, onS
             <SeasonSummaryCard season={career.pendingSummary} position={career.position} onContinue={onDismissSummary} />
           )}
 
-          {/* OVERLAY: Contract Offers */}
+          {/* OVERLAY: Contract Offers (youth → pro) */}
           {career.phase === "contract_offer" && career.pendingOffers.length > 0 && (
             <div className="space-y-3">
               <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 text-center">
                 <h3 className="text-lg font-black">📩 Contract Offers</h3>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {career.age <= 18 ? "Choose a club to start your professional career" : "Transfer offers from interested clubs"}
-                </p>
+                <p className="text-xs text-muted-foreground mt-1">Choose a club to start your professional career</p>
               </div>
-              {career.pendingOffers.map((offer, i) => (
+              {career.pendingOffers.map((offer) => (
                 <OfferCard key={offer.club.name} offer={offer} onAccept={() => onAcceptOffer(offer)} />
               ))}
-              {career.age > 18 && (
-                <Button variant="outline" onClick={onStay} className="w-full h-9 text-sm">
-                  Stay at {career.currentClub}
-                </Button>
-              )}
             </div>
+          )}
+
+          {/* OVERLAY: Transfer Window */}
+          {career.phase === "transfer_window" && career.transferSituation && (
+            <TransferWindowCard
+              situation={career.transferSituation}
+              career={career}
+              onAcceptOffer={onAcceptOffer}
+              onStay={onStay}
+              onSignExtension={onSignExtension}
+              onRequestTransfer={onRequestTransfer}
+            />
           )}
 
           {/* Club card */}
@@ -466,7 +620,7 @@ function GameScreen({ career, onNextSeason, onAcceptOffer, onDismissSummary, onS
               <div className="flex-1 min-w-0">
                 <div className="font-bold text-sm truncate">{getFlag(career.currentClubCountry)} {career.currentClub}</div>
                 <div className="text-xs text-muted-foreground">
-                  {career.retired ? "Retired" : career.phase === "youth" ? "Youth Academy" : `${career.currentLeague} · ${career.contractYearsLeft}yr left · €${career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M`}
+                  {career.retired ? "Retired" : career.phase === "youth" ? "Youth Academy" : `${career.currentLeague} · ${career.contractYearsLeft}yr left · ${formatWage(career.weeklyWage)} · €${career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M`}
                 </div>
               </div>
               <div className="text-right shrink-0">
