@@ -316,6 +316,43 @@ function loadPredictions(): Predictions {
   }
 }
 
+/* ───── small auto-fill button component ───── */
+
+function SmallAutoButton({ label, onClick, loading }: { label: string; onClick: () => void; loading?: boolean }) {
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); onClick(); }}
+      disabled={loading}
+      className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(220,20%,18%)] hover:bg-[hsl(220,20%,22%)] text-[hsl(45,80%,60%)] border border-[hsl(220,20%,28%)] transition-colors disabled:opacity-50"
+    >
+      {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Zap className="w-3 h-3" />}
+      {label}
+    </button>
+  );
+}
+
+/* ───── ranking-based auto-fill for a single group ───── */
+
+function rankBasedScoresForGroup(group: Group): Predictions {
+  const matchups = getMatchups(group.teams);
+  const result: Predictions = {};
+  matchups.forEach(([hi, ai], idx) => {
+    const home = group.teams[hi].name;
+    const away = group.teams[ai].name;
+    const homeRank = getFifaRank(home);
+    const awayRank = getFifaRank(away);
+    const key = `${group.letter}-${idx}`;
+    if (homeRank < awayRank) {
+      result[key] = { homeGoals: 2, awayGoals: 1 };
+    } else if (awayRank < homeRank) {
+      result[key] = { homeGoals: 1, awayGoals: 2 };
+    } else {
+      result[key] = { homeGoals: 1, awayGoals: 1 };
+    }
+  });
+  return result;
+}
+
 /* ───── sub-components ───── */
 
 interface PlayoffSlotsPanelProps {
