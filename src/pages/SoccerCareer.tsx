@@ -388,6 +388,7 @@ export default function SoccerCareer() {
               onNextSeason={handleNextSeason}
               onAcceptOffer={handleAcceptOffer}
               onDismissSummary={handleDismissSummary}
+              onDismissNewspaper={handleDismissNewspaper}
               onStay={handleStay}
               onSignExtension={handleSignExtension}
               onRequestTransfer={handleRequestTransfer}
