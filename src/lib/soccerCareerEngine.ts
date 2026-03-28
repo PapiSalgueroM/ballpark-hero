@@ -332,7 +332,7 @@ export function getClubsByTier(clubs: ClubData[], tier: number): ClubData[] {
   return clubs.filter(c => c.tier === tier);
 }
 
-function getYouthAcademyClub(clubs: ClubData[], nationality: string, overall?: number): ClubData {
+export function getYouthAcademyClub(clubs: ClubData[], nationality: string, overall?: number): ClubData {
   const ovr = overall ?? 50;
   
   if (ovr >= 75) {
