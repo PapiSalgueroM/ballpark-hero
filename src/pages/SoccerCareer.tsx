@@ -829,6 +829,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <WorldCupResultCard wc={career.pendingWorldCup} career={career} onDismiss={onDismissWorldCup} />
           )}
 
+          {/* OVERLAY: Rivalry Event */}
+          {career.phase === "rivalry_event" && career.pendingRivalryEvent && (
+            <RivalryEventCard
+              event={career.pendingRivalryEvent}
+              rival={career.rival!}
+              career={career}
+              onDismiss={onDismissRivalryEvent}
+            />
+          )}
+
           {/* OVERLAY: Transfer Window */}
           {career.phase === "transfer_window" && career.transferSituation && (
             <TransferWindowCard
