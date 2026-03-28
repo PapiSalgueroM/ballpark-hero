@@ -1346,7 +1346,11 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   if (totalGoals >= 500 && totalGoals - season.goals < 500) s.events.push("👑 Reached 500 career goals!");
   if (totalApps >= 500 && totalApps - season.apps < 500) s.events.push("🎖️ Made 500th career appearance!");
   s.seasons = [...s.seasons, season];
-  s.pendingSummary = season; s.phase = "season_summary";
+  s.pendingSummary = season;
+  // Generate newspaper articles
+  const news = generateNewsArticles(s, season, totalGoals, totalApps);
+  s.pendingNews = news;
+  s.phase = news.length > 0 ? "newspaper" : "season_summary";
   // Financial simulation
   simulateSeasonFinances(s, season);
   if (s.contractYearsLeft <= 1) s.events.push("⚠️ Your contract is expiring!");
