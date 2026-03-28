@@ -806,30 +806,34 @@ function getInterestedTiers(overall: number): number[] {
 function realisticTransferFee(overall: number, age: number): number {
   let minFee: number, maxFee: number;
   if (overall >= 95) {
-    if (age <= 21) { minFee = 180; maxFee = 250; }
-    else if (age <= 25) { minFee = 200; maxFee = 280; }
-    else if (age <= 29) { minFee = 160; maxFee = 230; }
-    else { minFee = 60; maxFee = 120; }
+    if (age <= 22) { minFee = 220; maxFee = 300; }
+    else if (age <= 26) { minFee = 250; maxFee = 320; }
+    else if (age <= 29) { minFee = 190; maxFee = 260; }
+    else if (age <= 32) { minFee = 80; maxFee = 140; }
+    else { minFee = 30; maxFee = 70; }
   } else if (overall >= 90) {
-    if (age <= 21) { minFee = 120; maxFee = 180; }
-    else if (age <= 25) { minFee = 130; maxFee = 200; }
-    else if (age <= 29) { minFee = 100; maxFee = 160; }
-    else { minFee = 35; maxFee = 70; }
-  } else if (overall >= 85) {
-    if (age <= 21) { minFee = 70; maxFee = 110; }
-    else if (age <= 25) { minFee = 90; maxFee = 140; }
-    else if (age <= 29) { minFee = 60; maxFee = 100; }
+    if (age <= 22) { minFee = 150; maxFee = 220; }
+    else if (age <= 26) { minFee = 170; maxFee = 240; }
+    else if (age <= 29) { minFee = 120; maxFee = 180; }
+    else if (age <= 32) { minFee = 50; maxFee = 90; }
     else { minFee = 20; maxFee = 45; }
+  } else if (overall >= 85) {
+    if (age <= 22) { minFee = 80; maxFee = 130; }
+    else if (age <= 26) { minFee = 100; maxFee = 160; }
+    else if (age <= 29) { minFee = 70; maxFee = 110; }
+    else if (age <= 32) { minFee = 25; maxFee = 55; }
+    else { minFee = 10; maxFee = 30; }
   } else if (overall >= 80) {
-    if (age <= 21) { minFee = 35; maxFee = 65; }
-    else if (age <= 25) { minFee = 50; maxFee = 85; }
-    else if (age <= 29) { minFee = 30; maxFee = 55; }
-    else { minFee = 10; maxFee = 25; }
-  } else if (overall >= 75) {
-    if (age <= 21) { minFee = 15; maxFee = 35; }
-    else if (age <= 25) { minFee = 20; maxFee = 45; }
-    else if (age <= 29) { minFee = 12; maxFee = 28; }
+    if (age <= 22) { minFee = 40; maxFee = 75; }
+    else if (age <= 26) { minFee = 55; maxFee = 90; }
+    else if (age <= 29) { minFee = 35; maxFee = 65; }
+    else if (age <= 32) { minFee = 12; maxFee = 30; }
     else { minFee = 5; maxFee = 15; }
+  } else if (overall >= 75) {
+    if (age <= 22) { minFee = 20; maxFee = 45; }
+    else if (age <= 26) { minFee = 28; maxFee = 55; }
+    else if (age <= 29) { minFee = 15; maxFee = 35; }
+    else { minFee = 5; maxFee = 18; }
   } else if (overall >= 65) { minFee = 1; maxFee = 8; }
   else { minFee = 0.1; maxFee = 1; }
   return Math.round((minFee + Math.random() * (maxFee - minFee)) * 10) / 10;
