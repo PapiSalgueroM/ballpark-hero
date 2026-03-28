@@ -206,6 +206,11 @@ const KnockoutBracket = ({ seeds, bestThirds }: KnockoutBracketProps) => {
           <p className="text-2xl sm:text-3xl font-extrabold text-white">
             🏆 {champion} 🏆
           </p>
+          {thirdPlace && (
+            <p className="text-sm text-[hsl(150,15%,55%)] mt-2">
+              🥉 Third Place: <span className="font-bold text-white">{thirdPlace}</span>
+            </p>
+          )}
         </div>
       )}
 
