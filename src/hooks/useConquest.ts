@@ -119,11 +119,9 @@ function simulateBattle(
   const at = TEAM_MAP.get(attacker)!, dt = TEAM_MAP.get(defender)!;
   const aTerr = Object.values(territories).filter(t => t === attacker).length;
   const dTerr = Object.values(territories).filter(t => t === defender).length;
-  const aPU = STATE_POSITIONS.filter(s => territories[s.id] === attacker && POWER_UP_STATES.has(s.id)).length;
-  const dPU = STATE_POSITIONS.filter(s => territories[s.id] === defender && POWER_UP_STATES.has(s.id)).length;
 
-  const aPower = at.rating + aTerr * 0.5 + aPU * 3 + (rosters[attacker]?.length || 0) * 0.3;
-  const dPower = dt.rating + dTerr * 0.5 + dPU * 3 + (rosters[defender]?.length || 0) * 0.3;
+  const aPower = at.rating + aTerr * 0.5 + (rosters[attacker]?.length || 0) * 0.3;
+  const dPower = dt.rating + dTerr * 0.5 + (rosters[defender]?.length || 0) * 0.3;
 
   const attackerWins = Math.random() < aPower / (aPower + dPower);
   const winScore = Math.floor(Math.random() * 25) + 17;
