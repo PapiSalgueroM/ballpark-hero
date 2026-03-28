@@ -1,12 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, X } from "lucide-react";
+import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, X, Save, Link2, Eye } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import PageSeo from "@/components/seo/PageSeo";
 import KnockoutBracket, { type GroupSeed } from "@/components/world-cup-predictor/KnockoutBracket";
 import ShareButtons from "@/components/game/ShareButtons";
 import AwardsPredictor from "@/components/world-cup-predictor/AwardsPredictor";
+import { useAuth } from "@/contexts/AuthContext";
+import { AuthModal } from "@/components/auth/AuthModal";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 /* ───── types ───── */
 
