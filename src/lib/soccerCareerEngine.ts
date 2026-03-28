@@ -149,6 +149,16 @@ export interface InternationalStats {
   worldCupResults: WorldCupResult[];
 }
 
+export type LifestyleLevel = "Humble" | "Comfortable" | "Wealthy" | "Superstar" | "Billionaire";
+
+export interface FamilyStatus {
+  isMarried: boolean;
+  marriedAge: number | null;
+  children: number;
+  isDivorced: boolean;
+  divorceAge: number | null;
+}
+
 export interface CareerState {
   playerName: string;
   nationality: string;
@@ -198,6 +208,17 @@ export interface CareerState {
   pendingRivalryEvent: RivalryEvent | null;
   lastRivalryEventId: number | null;
   rivalrySummary: RivalrySummary | null;
+  // Financial & Lifestyle
+  netWorth: number; // in millions
+  lifestyleLevel: LifestyleLevel;
+  lifestyleCostPerYear: number; // in millions
+  socialMediaFollowers: number; // in millions (e.g. 1.5 = 1.5M)
+  sponsorshipIncome: number; // in millions per year
+  properties: string[];
+  investments: string[];
+  consecutiveDeficitYears: number;
+  agentFeesPaid: number; // total in millions
+  family: FamilyStatus;
 }
 
 /* ─── Flags ─── */
