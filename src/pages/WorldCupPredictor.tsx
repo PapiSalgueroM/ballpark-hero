@@ -1142,6 +1142,7 @@ const WorldCupPredictor = () => {
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden" style={{ background: "linear-gradient(180deg, hsl(220, 20%, 8%) 0%, hsl(230, 18%, 6%) 50%, hsl(220, 20%, 8%) 100%)" }}>
+      <GameNavbar />
       <PageSeo
         title="World Cup 2026 Predictor | Sports Trivia Games"
         description="Explore all 12 groups for the FIFA World Cup 2026 hosted in USA, Mexico & Canada."
