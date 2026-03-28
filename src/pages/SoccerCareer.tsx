@@ -348,6 +348,7 @@ export default function SoccerCareer() {
   const handleNewCareer = () => {
     setCareer(null);
     setPreviewStats(null);
+    setRolledOvr(null);
     setPlayerName(""); setNationality(""); setPosition(""); setEra("");
   };
 
