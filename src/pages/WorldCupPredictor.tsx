@@ -516,9 +516,8 @@ const WorldCupPredictor = () => {
     const sorted = [...allThirds].sort(
       (a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf,
     );
-    const best8 = sorted.slice(0, 8);
 
-    return { groupSeeds: seeds, bestThirds: best8 };
+    return { groupSeeds: seeds, bestThirds: sorted };
   }, [predictions]);
 
   // Count filled groups
