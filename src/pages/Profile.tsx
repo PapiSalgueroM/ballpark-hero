@@ -181,7 +181,7 @@ export default function Profile() {
     };
 
     loadProfile();
-  }, [username, user, profile, navigate]);
+  }, [username, user, profile, authLoading, navigate]);
 
   const handleSave = async () => {
     setSaving(true);
