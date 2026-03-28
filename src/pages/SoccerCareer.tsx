@@ -583,8 +583,134 @@ function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; r
   );
 }
 
+/* ─── International Debut Screen ─── */
+function InternationalDebutCard({ career, onDismiss }: { career: CareerState; onDismiss: () => void }) {
+  return (
+    <div className="rounded-xl border-2 border-amber-500/50 bg-gradient-to-b from-amber-500/10 to-transparent p-6 space-y-4 text-center">
+      <div className="text-5xl">🇺🇳</div>
+      <h3 className="text-2xl font-black tracking-tight">INTERNATIONAL DEBUT</h3>
+      <p className="text-sm text-muted-foreground">
+        {career.playerName} has been called up to the <strong>{career.nationality}</strong> national team!
+      </p>
+      <div className="flex items-center justify-center gap-3 text-sm">
+        <span>{getFlag(career.nationality)}</span>
+        <span className="font-bold">{career.nationality}</span>
+        <span className="text-muted-foreground">·</span>
+        <span className="text-muted-foreground">Age {career.age}</span>
+        <span className="text-muted-foreground">·</span>
+        <span className="text-muted-foreground">OVR {career.overall}</span>
+      </div>
+      <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
+        <p className="text-xs text-amber-300">🎉 Massive morale boost! Your international journey begins.</p>
+      </div>
+      <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-amber-600 hover:bg-amber-500 text-white">
+        Continue →
+      </Button>
+    </div>
+  );
+}
+
+/* ─── World Cup Result Screen ─── */
+function WorldCupResultCard({ wc, career, onDismiss }: { wc: WorldCupResult; career: CareerState; onDismiss: () => void }) {
+  const isWinner = wc.result === "Winner";
+  const borderColor = isWinner ? "border-amber-400/60" : "border-blue-500/40";
+  const bgGrad = isWinner ? "from-amber-500/15 to-transparent" : "from-blue-500/10 to-transparent";
+  return (
+    <div className={`rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4`}>
+      <div className="text-center space-y-2">
+        <div className="text-4xl">{isWinner ? "🏆" : "🌍"}</div>
+        <h3 className="text-xl font-black">{isWinner ? "WORLD CUP WINNER!" : `World Cup ${wc.year}`}</h3>
+        <p className="text-sm font-bold">{getFlag(wc.nation)} {wc.nation} — {wc.result}</p>
+      </div>
+      {/* Match results */}
+      <div className="space-y-1.5 max-h-[200px] overflow-y-auto">
+        {wc.matches.map((m, i) => (
+          <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
+            <span className="text-[10px] text-muted-foreground w-12">{m.round}</span>
+            <span className={`font-semibold ${m.teamA === wc.nation ? "text-foreground" : "text-muted-foreground"}`}>
+              {getFlag(m.teamA)} {m.teamA}
+            </span>
+            <span className="font-black text-sm mx-2">{m.scoreA} - {m.scoreB}</span>
+            <span className={`font-semibold ${m.teamB === wc.nation ? "text-foreground" : "text-muted-foreground"}`}>
+              {m.teamB} {getFlag(m.teamB)}
+            </span>
+          </div>
+        ))}
+      </div>
+      {/* Player stats */}
+      <div className="grid grid-cols-4 gap-2">
+        {[
+          { l: "Apps", v: wc.playerApps },
+          { l: "Goals", v: wc.playerGoals },
+          { l: "Assists", v: wc.playerAssists },
+          { l: "Avg Rating", v: wc.playerAvgRating.toFixed(1) },
+        ].map(s => (
+          <div key={s.l} className="text-center bg-muted/20 rounded-lg p-2">
+            <div className="text-lg font-black">{s.v}</div>
+            <div className="text-[9px] text-muted-foreground">{s.l}</div>
+          </div>
+        ))}
+      </div>
+      {wc.bestPlayer && (
+        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center">
+          <span className="text-sm font-bold">🌟 Named Best Player of the Tournament!</span>
+        </div>
+      )}
+      {isWinner && (
+        <div className="bg-amber-500/15 border border-amber-400/30 rounded-lg p-3 text-center">
+          <span className="text-sm font-bold text-amber-300">🏆 WORLD CUP CHAMPION! Legacy cemented forever.</span>
+        </div>
+      )}
+      <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-white ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-blue-600 hover:bg-blue-500"}`}>
+        Continue →
+      </Button>
+    </div>
+  );
+}
+
+/* ─── International Stats Panel ─── */
+function InternationalStatsPanel({ career, onRetire }: { career: CareerState; onRetire: () => void }) {
+  const is = career.intStats;
+  if (!career.internationalCareer && !is.isRetired && is.caps === 0) return null;
+  const isLegend = is.caps >= 100;
+  return (
+    <div className={`bg-card border rounded-xl p-4 space-y-3 ${isLegend ? "border-amber-500/30" : "border-border"}`}>
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+          {getFlag(career.nationality)} International Career {isLegend && "⭐ LEGEND"}
+        </span>
+        {is.isCaptain && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">©️ Captain</span>}
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        {[
+          { l: "Caps", v: is.caps },
+          { l: "Goals", v: is.goals },
+          { l: "Assists", v: is.assists },
+        ].map(s => (
+          <div key={s.l} className="text-center bg-muted/20 rounded-lg p-2">
+            <div className="text-lg font-black">{s.v}</div>
+            <div className="text-[9px] text-muted-foreground">{s.l}</div>
+          </div>
+        ))}
+      </div>
+      {(is.worldCups > 0 || is.continentals > 0) && (
+        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          {is.worldCups > 0 && <span>🌍 {is.worldCups} World Cup{is.worldCups > 1 ? "s" : ""} ({is.worldCupWins} won)</span>}
+          {is.continentals > 0 && <span>🏆 {is.continentals} Continental ({is.continentalWins} won)</span>}
+        </div>
+      )}
+      {is.isRetired && <div className="text-[11px] text-muted-foreground italic">Retired from international football</div>}
+      {career.internationalCareer && !is.isRetired && (
+        <Button variant="outline" onClick={onRetire} className="w-full h-8 text-xs">
+          Retire from International Football 🚶
+        </Button>
+      )}
+    </div>
+  );
+}
+
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onNewCareer, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onNewCareer, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -594,6 +720,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onSignExtension: () => void;
   onRequestTransfer: () => void;
   onEventChoice: (choiceIndex: number) => void;
+  onDismissDebut: () => void;
+  onDismissWorldCup: () => void;
+  onRetireInternational: () => void;
   onNewCareer: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
