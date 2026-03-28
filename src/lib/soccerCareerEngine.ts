@@ -759,6 +759,37 @@ function getInterestedTiers(overall: number): number[] {
   return [3, 4];
 }
 
+/* ─── Realistic Transfer Fee ─── */
+function realisticTransferFee(overall: number, age: number): number {
+  let minFee: number, maxFee: number;
+  if (overall >= 95) { minFee = 130; maxFee = 250; }
+  else if (overall >= 90) { minFee = 80; maxFee = 150; }
+  else if (overall >= 85) { minFee = 45; maxFee = 90; }
+  else if (overall >= 80) { minFee = 20; maxFee = 55; }
+  else if (overall >= 75) { minFee = 8; maxFee = 25; }
+  else if (overall >= 70) { minFee = 3; maxFee = 12; }
+  else if (overall >= 65) { minFee = 1; maxFee = 5; }
+  else { minFee = 0.1; maxFee = 1; }
+  let fee = minFee + Math.random() * (maxFee - minFee);
+  // Age adjustments: peak 24-28, discount over 30/33
+  if (age >= 34) fee *= 0.4;
+  else if (age >= 30) fee *= 0.7;
+  else if (age < 24) fee *= 0.85;
+  return Math.round(fee * 10) / 10;
+}
+
+function feeDescription(feeMillions: number): string {
+  if (feeMillions > 200) return pick(["record breaking transfer", "the most expensive signing in football history"]);
+  if (feeMillions >= 150) return pick(["extraordinary transfer fee", "among the most expensive moves in history"]);
+  if (feeMillions >= 100) return pick(["mega money move", "one of the biggest deals of the season"]);
+  if (feeMillions >= 60) return pick(["huge transfer", "blockbuster deal"]);
+  if (feeMillions >= 30) return pick(["big money move", "major signing"]);
+  if (feeMillions >= 15) return pick(["significant transfer", "notable signing"]);
+  if (feeMillions >= 5) return pick(["decent transfer fee", "solid investment"]);
+  if (feeMillions >= 1) return pick(["modest fee", "reasonable deal", "solid signing"]);
+  return pick(["budget signing", "low cost move", "bargain deal"]);
+}
+
 /* ─── Make a single offer ─── */
 function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number, exclude: Set<string>, marketValue: number, isDream = false): ContractOffer | null {
   const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
@@ -767,7 +798,8 @@ function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number
   exclude.add(club.name);
   let wage = wageForTier(tier, overall);
   if (isDream) wage = Math.round(wage * 0.65);
-  return { club, contractYears: rand(1, 5), wage, transferFee: Math.round(marketValue * rand(70, 110) / 100 * 10) / 10, isDreamClub: isDream, isPayCut: isDream };
+  const fee = realisticTransferFee(overall, age);
+  return { club, contractYears: rand(1, 5), wage, transferFee: fee, isDreamClub: isDream, isPayCut: isDream };
 }
 
 /* ─── Determine transfer situation ─── */
@@ -1514,9 +1546,11 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
       gen: () => {
         const bidders = ["Real Madrid", "Barcelona", "Manchester City", "PSG", "Chelsea", "Bayern Munich"];
         const bidClub = pick(bidders.filter(b => b !== club));
+        const bidFee = realisticTransferFee(ovr, s.age);
+        const desc = feeDescription(bidFee);
         return { newspaper: pick(NEWSPAPERS), type: "transfer",
-          headline: `${bidClub} Launch Stunning €${Math.round(s.marketValue * 1.2)}M Bid For ${name}`,
-          body: `${bidClub} have made an audacious move for ${name}, tabling a bid that would smash the ${pos} transfer record. ${club} are yet to respond but are understood to be reluctant to sell.` };
+          headline: `${bidClub} Launch €${Math.round(bidFee)}M Bid For ${name} In ${desc.charAt(0).toUpperCase() + desc.slice(1)}`,
+          body: `${bidClub} have made an audacious move for ${name}, tabling a ${desc} worth €${bidFee.toFixed(1)}M. ${club} are yet to respond but are understood to be reluctant to sell.` };
       } },
     { weight: 1, check: () => {
         const playingSzns = s.seasons.filter(ss => ss.type === "playing");
@@ -1525,9 +1559,11 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
       gen: () => {
         const prev = s.seasons.filter(ss => ss.type === "playing");
         const oldClub = prev.length >= 2 ? prev[prev.length - 2].club : "Unknown";
+        const fee = realisticTransferFee(ovr, s.age);
+        const desc = feeDescription(fee);
         return { newspaper: pick(NEWSPAPERS), type: "transfer",
-          headline: `DONE DEAL: ${name} Signs For ${club} In Record Breaking Move`,
-          body: `${name} has completed their move from ${oldClub} to ${club} in a deal worth €${Math.round(s.marketValue)}M. The ${s.nationality} ${pos} is expected to make an immediate impact.` };
+          headline: `DONE DEAL: ${name} Signs For ${club} In ${desc.charAt(0).toUpperCase() + desc.slice(1)}`,
+          body: `${name} has completed their move from ${oldClub} to ${club} in a ${desc} worth €${fee.toFixed(1)}M. The ${s.nationality} ${pos} is expected to make an immediate impact.` };
       } },
     { weight: 0.5, check: () => s.contractYearsLeft === 0,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "transfer",
