@@ -125,6 +125,34 @@ const playoffMatchups = [
   { slot: "Inter-Playoff 2 Winner", group: "I", teamA: "Bolivia", teamB: "Iraq" },
 ];
 
+/* ───── flag map ───── */
+
+const FLAG: Record<string, string> = {
+  "Mexico": "🇲🇽", "South Korea": "🇰🇷", "South Africa": "🇿🇦",
+  "Canada": "🇨🇦", "Switzerland": "🇨🇭", "Qatar": "🇶🇦",
+  "Brazil": "🇧🇷", "Morocco": "🇲🇦", "Scotland": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "Haiti": "🇭🇹",
+  "USA": "🇺🇸", "Paraguay": "🇵🇾", "Australia": "🇦🇺",
+  "Germany": "🇩🇪", "Ivory Coast": "🇨🇮", "Ecuador": "🇪🇨", "Curaçao": "🇨🇼",
+  "Netherlands": "🇳🇱", "Japan": "🇯🇵", "Tunisia": "🇹🇳",
+  "Belgium": "🇧🇪", "Egypt": "🇪🇬", "Iran": "🇮🇷", "New Zealand": "🇳🇿",
+  "Spain": "🇪🇸", "Uruguay": "🇺🇾", "Saudi Arabia": "🇸🇦", "Cape Verde": "🇨🇻",
+  "France": "🇫🇷", "Senegal": "🇸🇳", "Norway": "🇳🇴",
+  "Argentina": "🇦🇷", "Chile": "🇨🇱", "Nigeria": "🇳🇬", "Algeria": "🇩🇿",
+  "Portugal": "🇵🇹", "Colombia": "🇨🇴", "Uzbekistan": "🇺🇿",
+  "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "Croatia": "🇭🇷", "Ghana": "🇬🇭", "Panama": "🇵🇦",
+  // Playoff teams
+  "Italy": "🇮🇹", "Bosnia & Herzegovina": "🇧🇦",
+  "Sweden": "🇸🇪", "Poland": "🇵🇱",
+  "Kosovo": "🇽🇰", "Turkey": "🇹🇷",
+  "Denmark": "🇩🇰", "Czech Republic": "🇨🇿",
+  "Jamaica": "🇯🇲", "DR Congo": "🇨🇩",
+  "Bolivia": "🇧🇴", "Iraq": "🇮🇶",
+};
+
+export function getFlag(name: string): string {
+  return FLAG[name] || "";
+}
+
 /* ───── helpers ───── */
 
 /** Generate the 3 round-robin matchups for a 4-team group (0v1, 2v3, 0v2, 1v3, 0v3, 1v2) — FIFA standard pairing */
@@ -224,9 +252,9 @@ const PlayoffSlotsPanel = () => {
                   </Badge>
                 </div>
                 <div className="flex items-center justify-center gap-2 text-sm">
-                  <span className="font-bold text-white">{m.teamA}</span>
-                  <span className="text-[hsl(0,0%,45%)] text-xs">vs</span>
-                  <span className="font-bold text-white">{m.teamB}</span>
+                   <span className="font-bold text-white">{getFlag(m.teamA)} {m.teamA}</span>
+                   <span className="text-[hsl(0,0%,45%)] text-xs">vs</span>
+                   <span className="font-bold text-white">{getFlag(m.teamB)} {m.teamB}</span>
                 </div>
                 <div className="flex items-center justify-center gap-1 mt-2">
                   <CalendarClock className="w-3 h-3 text-[hsl(150,15%,45%)]" />
@@ -292,7 +320,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
               }`}
             >
               <span className={team.isTBD ? "italic text-[hsl(0,0%,55%)] text-sm" : "font-bold text-white text-sm"}>
-                {team.name}
+                {getFlag(team.name)} {team.name}
               </span>
               {team.isTBD && (
                 <Badge variant="outline" className="text-[10px] border-[hsl(0,0%,40%)] text-[hsl(0,0%,50%)] px-1.5 py-0">
@@ -345,7 +373,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
               return (
                 <div key={key} className="flex items-center gap-1.5 bg-[hsl(150,10%,14%)] rounded-md px-2 py-1.5">
                   <span className="text-white text-[11px] font-semibold flex-1 text-right truncate" title={homeName}>
-                    {shortHome}
+                    {getFlag(homeName)} {shortHome}
                   </span>
                   <input
                     type="number"
@@ -371,7 +399,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                     className="w-8 h-7 text-center text-sm font-bold rounded bg-[hsl(150,12%,20%)] border border-[hsl(150,20%,28%)] text-white focus:outline-none focus:border-[hsl(45,90%,55%)] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                   <span className="text-white text-[11px] font-semibold flex-1 truncate" title={awayName}>
-                    {shortAway}
+                    {getFlag(awayName)} {shortAway}
                   </span>
                 </div>
               );
@@ -409,8 +437,8 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                       return (
                         <tr key={s.team} className={`${rowClass} border-b border-[hsl(150,10%,16%)]`}>
                           <td className="py-1 pr-1 text-[hsl(0,0%,50%)]">{pos + 1}</td>
-                          <td className={`py-1 pr-1 font-semibold truncate max-w-[80px] ${s.isTBD ? "italic text-[hsl(0,0%,50%)]" : "text-white"}`} title={s.team}>
-                            {shortTeam}
+                          <td className={`py-1 pr-1 font-semibold truncate max-w-[100px] ${s.isTBD ? "italic text-[hsl(0,0%,50%)]" : "text-white"}`} title={s.team}>
+                            {getFlag(s.team)} {shortTeam}
                           </td>
                           <td className="text-center py-1 px-1 text-[hsl(0,0%,60%)]">{s.played}</td>
                           <td className="text-center py-1 px-1 text-[hsl(0,0%,60%)]">{s.won}</td>
@@ -756,7 +784,7 @@ const WorldCupPredictor = () => {
                             </td>
                             <td className="py-2.5 px-2 font-bold text-[hsl(0,0%,50%)]">{idx + 1}</td>
                             <td className={`py-2.5 px-2 font-semibold ${isSelected ? "text-white" : "text-[hsl(0,0%,55%)]"}`}>
-                              {t.team}
+                              {getFlag(t.team)} {t.team}
                             </td>
                             <td className="py-2.5 px-2 text-center text-[hsl(45,90%,55%)] font-semibold">{t.group}</td>
                             <td className="py-2.5 px-2 text-center font-bold text-white">{t.pts}</td>
