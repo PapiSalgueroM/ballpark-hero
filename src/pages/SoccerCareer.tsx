@@ -234,7 +234,7 @@ export default function SoccerCareer() {
 
   const handleBeginCareer = () => {
     if (!user) { setShowAuth(true); return; }
-    if (!previewStats || !isFormValid || clubs.length === 0) return;
+    if (!previewStats || !isFormValid || clubs.length === 0 || rolledOvr === null) return;
     const startYear = ERAS.find(e => e.value === era)?.startYear ?? 2020;
     const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, previewOvr, startYear, clubs);
     setCareer(newCareer);
@@ -371,6 +371,7 @@ export default function SoccerCareer() {
               previewStats={previewStats} previewOvr={previewOvr}
               isFormValid={isFormValid && clubs.length > 0} saving={saving}
               user={user} onBegin={handleBeginCareer} onShowAuth={() => setShowAuth(true)}
+              clubs={clubs} onRolledOvr={setRolledOvr}
             />
           ) : (
             <GameScreen
