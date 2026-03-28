@@ -72,9 +72,10 @@ function loadPicks(): KnockoutPicks {
 interface KnockoutBracketProps {
   seeds: Record<string, GroupSeed>;
   bestThirds: { team: string }[];
+  onChampionChange?: (champion: string) => void;
 }
 
-const KnockoutBracket = ({ seeds, bestThirds }: KnockoutBracketProps) => {
+const KnockoutBracket = ({ seeds, bestThirds, onChampionChange }: KnockoutBracketProps) => {
   const [picks, setPicks] = useState<KnockoutPicks>(loadPicks);
 
   useEffect(() => {
@@ -173,6 +174,10 @@ const KnockoutBracket = ({ seeds, bestThirds }: KnockoutBracketProps) => {
 
   const champion = rounds[5]?.[0]?.winner || "";
   const thirdPlace = rounds[4]?.[0]?.winner || "";
+
+  useEffect(() => {
+    onChampionChange?.(champion);
+  }, [champion, onChampionChange]);
 
   return (
     <div className="mt-10">
