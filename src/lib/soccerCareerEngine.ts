@@ -888,6 +888,36 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   season.tournament = intSeason.tournament;
   season.tournamentResult = intSeason.tournamentResult;
 
+  // Rival system: create rival at age 19-21
+  if (!s.rivalCreated && s.age >= 19 && s.age <= 21 && Math.random() < 0.6) {
+    s.rival = createRival(s, clubs);
+    s.rivalCreated = true;
+    s.events.push(`😤 A new rival emerges: ${s.rival.name} (${getFlag(s.rival.nationality)} ${s.rival.nationality})`);
+  } else if (!s.rivalCreated && s.age === 21) {
+    // Force creation at 21 if not yet created
+    s.rival = createRival(s, clubs);
+    s.rivalCreated = true;
+    s.events.push(`😤 A new rival emerges: ${s.rival.name} (${getFlag(s.rival.nationality)} ${s.rival.nationality})`);
+  }
+  
+  // Simulate rival's season
+  if (s.rival && !s.rival.retired) {
+    s.rival = simulateRivalSeason(s.rival, clubs);
+  }
+  
+  // Rivalry event (1 per year)
+  if (s.rival && !s.rival.retired && Math.random() < 0.5) {
+    const rivalEvents = getRivalryEvents(s).filter(e => e.id !== s.lastRivalryEventId);
+    if (rivalEvents.length > 0) {
+      s.pendingRivalryEvent = pick(rivalEvents);
+    }
+  }
+  // Rival just retired — show retirement event
+  if (s.rival?.retired && s.lastRivalryEventId !== 105) {
+    const retireEvt = getRivalryEvents(s).find(e => e.id === 105);
+    if (retireEvt) s.pendingRivalryEvent = retireEvt;
+  }
+
   if (season.leagueTitle) s.events.push(`🏆 Won the league with ${s.currentClub}!`);
   if (season.championsLeague) s.events.push(`⭐ Won the Champions League!`);
   if (season.worldCup) s.events.push(`🌍 Won the World Cup with ${s.nationality}!`);
