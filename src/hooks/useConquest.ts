@@ -1,9 +1,19 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import {
   NFL_TEAMS, TEAM_MAP, INITIAL_TERRITORIES, STATE_POSITIONS,
-  DIRECTIONS, DIR_ANGLES, DIR_LABELS, POWER_UP_STATES,
+  DIRECTIONS, DIR_ANGLES, DIR_LABELS,
 } from '@/data/conquestData';
 import { US_STATES } from '@/data/usStatesPaths';
+
+export const POWERUP_TYPES = [
+  { id: 'blitz', label: '⚡ Blitz', description: '+5 power for next battle' },
+  { id: 'shield', label: '🛡️ Shield', description: 'Survive one loss' },
+  { id: 'scout', label: '🔭 Scout', description: 'Choose your next direction' },
+  { id: 'rally', label: '📣 Rally', description: '+2 roster bonus' },
+  { id: 'ambush', label: '🎯 Ambush', description: 'Auto-win next neutral claim' },
+] as const;
+
+export type PowerupType = typeof POWERUP_TYPES[number]['id'];
 
 export type Phase = 'ready' | 'animating' | 'battle' | 'steal' | 'gameover';
 
