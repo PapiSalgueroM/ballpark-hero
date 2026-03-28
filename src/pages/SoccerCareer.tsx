@@ -301,10 +301,13 @@ export default function SoccerCareer() {
           ) : (
             <GameScreen
               career={career}
+              clubs={clubs}
               onNextSeason={handleNextSeason}
               onAcceptOffer={handleAcceptOffer}
               onDismissSummary={handleDismissSummary}
               onStay={handleStay}
+              onSignExtension={handleSignExtension}
+              onRequestTransfer={handleRequestTransfer}
               onNewCareer={handleNewCareer}
               timelineRef={timelineRef}
             />
