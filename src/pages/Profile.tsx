@@ -290,7 +290,7 @@ export default function Profile() {
     }
   }
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="w-10 h-10 animate-spin text-primary" />
@@ -298,7 +298,13 @@ export default function Profile() {
     );
   }
 
-  if (!viewingProfile) return null;
+  if (!viewingProfile) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">Could not load profile. Please try again.</p>
+      </div>
+    );
+  }
 
   return (
     <>
