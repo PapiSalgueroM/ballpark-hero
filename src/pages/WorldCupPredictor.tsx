@@ -1053,7 +1053,9 @@ const WorldCupPredictor = () => {
         </div>
 
         {/* Playoff Slots Panel */}
-        <PlayoffSlotsPanel picks={playoffPicks} onPick={handlePlayoffPick} />
+        {!viewingSharedBracket && (
+          <PlayoffSlotsPanel picks={playoffPicks} onPick={handlePlayoffPick} />
+        )}
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
           <div>
