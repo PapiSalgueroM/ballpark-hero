@@ -783,6 +783,12 @@ export function initCareer(
     awards: [],
     pendingBallonDor: null,
     lastUCLResult: null,
+    legacy: null,
+    postRetirementChoice: null,
+    managerState: null,
+    isFinalSeason: false,
+    isPundit: false,
+    punditEvents: [],
   };
 }
 
