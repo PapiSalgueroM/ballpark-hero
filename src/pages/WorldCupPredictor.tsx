@@ -1315,15 +1315,24 @@ const WorldCupPredictor = () => {
                   Select exactly 8 of the 12 third-place teams to advance to the Round of 32.
                 </p>
               </div>
-              <Badge
-                className={`text-sm px-3 py-1.5 self-start ${
-                  selectedThirds.length === 8
-                    ? "bg-[hsl(140,60%,30%)] text-[hsl(140,80%,90%)]"
-                    : "bg-[hsl(150,12%,20%)] text-[hsl(45,90%,55%)]"
-                }`}
-              >
-                {selectedThirds.length} / 8 selected
-              </Badge>
+              <div className="flex items-center gap-2 self-start">
+                {selectedThirds.length < 8 && (
+                  <SmallAutoButton
+                    label="Auto Pick"
+                    loading={autoPickThirdsLoading}
+                    onClick={() => { setAutoPickThirdsLoading(true); setTimeout(() => { handleAutoPickThirds(); setAutoPickThirdsLoading(false); }, 1000); }}
+                  />
+                )}
+                <Badge
+                  className={`text-sm px-3 py-1.5 ${
+                    selectedThirds.length === 8
+                      ? "bg-[hsl(140,60%,30%)] text-[hsl(140,80%,90%)]"
+                      : "bg-[hsl(150,12%,20%)] text-[hsl(45,90%,55%)]"
+                  }`}
+                >
+                  {selectedThirds.length} / 8 selected
+                </Badge>
+              </div>
             </div>
             <Card className="bg-[hsl(150,15%,12%)] border-[hsl(150,20%,20%)] shadow-lg overflow-hidden">
               <CardContent className="p-0">
