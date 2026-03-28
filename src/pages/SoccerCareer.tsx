@@ -946,6 +946,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onDismissWorldCup: () => void;
   onRetireInternational: () => void;
   onDismissRivalryEvent: () => void;
+  onDismissBallonDor: () => void;
   onNewCareer: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
