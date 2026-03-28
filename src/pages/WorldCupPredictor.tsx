@@ -1269,16 +1269,11 @@ const WorldCupPredictor = () => {
           </div>
           {!viewingSharedBracket && (
             <div className="flex gap-2 flex-shrink-0 flex-wrap">
-              {(() => {
-                const [rl, setRl] = useState(false);
-                return (
-                  <SmallAutoButton
-                    label="Fill by Rank"
-                    loading={rl}
-                    onClick={() => { setRl(true); setTimeout(() => { handleRankFillAllGroups(); setRl(false); }, 1000); }}
-                  />
-                );
-              })()}
+              <SmallAutoButton
+                label="Fill by Rank"
+                loading={rankFillAllLoading}
+                onClick={() => { setRankFillAllLoading(true); setTimeout(() => { handleRankFillAllGroups(); setRankFillAllLoading(false); }, 1000); }}
+              />
               <button
                 onClick={handleAutoFillAll}
                 className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(150,12%,18%)] hover:bg-[hsl(150,12%,22%)] text-[hsl(150,15%,60%)] border border-[hsl(150,20%,25%)] transition-colors"
