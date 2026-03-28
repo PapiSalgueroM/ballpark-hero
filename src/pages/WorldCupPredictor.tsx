@@ -169,9 +169,13 @@ export function getFifaRank(team: string): number {
   return FIFA_RANK[team] || 999;
 }
 
-/** Pick higher-ranked team */
+/** Pick winner with weighted randomness — higher ranked wins 65%, lower 35% */
 export function rankWinner(a: string, b: string): string {
-  return getFifaRank(a) <= getFifaRank(b) ? a : b;
+  const rankA = getFifaRank(a);
+  const rankB = getFifaRank(b);
+  const higher = rankA <= rankB ? a : b;
+  const lower = rankA <= rankB ? b : a;
+  return Math.random() < 0.65 ? higher : lower;
 }
 
 const TEAM_GROUP: Record<string, string> = {};
@@ -331,7 +335,17 @@ function SmallAutoButton({ label, onClick, loading }: { label: string; onClick: 
   );
 }
 
-/* ───── ranking-based auto-fill for a single group ───── */
+/* ───── ranking-based auto-fill for a single group (weighted random) ───── */
+
+function randomWinnerScore(): { w: number; l: number } {
+  const w = 1 + Math.floor(Math.random() * 3); // 1-3
+  const l = Math.floor(Math.random() * Math.min(3, w)); // 0 to min(2, w-1)
+  return { w, l };
+}
+
+function randomDrawScore(): number {
+  return [0, 1, 2][Math.floor(Math.random() * 3)];
+}
 
 function rankBasedScoresForGroup(group: Group): Predictions {
   const matchups = getMatchups(group.teams);
@@ -342,12 +356,21 @@ function rankBasedScoresForGroup(group: Group): Predictions {
     const homeRank = getFifaRank(home);
     const awayRank = getFifaRank(away);
     const key = `${group.letter}-${idx}`;
-    if (homeRank < awayRank) {
-      result[key] = { homeGoals: 2, awayGoals: 1 };
-    } else if (awayRank < homeRank) {
-      result[key] = { homeGoals: 1, awayGoals: 2 };
+    const roll = Math.random();
+    // Higher ranked team: 65% win, lower: 20% win, draw: 15%
+    const higherIsHome = homeRank <= awayRank;
+    if (roll < 0.65) {
+      // Higher ranked wins
+      const { w, l } = randomWinnerScore();
+      result[key] = higherIsHome ? { homeGoals: w, awayGoals: l } : { homeGoals: l, awayGoals: w };
+    } else if (roll < 0.85) {
+      // Lower ranked wins (upset)
+      const { w, l } = randomWinnerScore();
+      result[key] = higherIsHome ? { homeGoals: l, awayGoals: w } : { homeGoals: w, awayGoals: l };
     } else {
-      result[key] = { homeGoals: 1, awayGoals: 1 };
+      // Draw
+      const d = randomDrawScore();
+      result[key] = { homeGoals: d, awayGoals: d };
     }
   });
   return result;
@@ -1017,41 +1040,46 @@ const WorldCupPredictor = () => {
   const [autoFillEverythingLoading, setAutoFillEverythingLoading] = useState(false);
   const handleAutoFillEverything = useCallback(() => {
     setAutoFillEverythingLoading(true);
-    // Step 1: Auto-pick playoffs
-    const newPlayoffPicks: Record<string, string> = {};
-    playoffMatchups.forEach((m) => {
-      newPlayoffPicks[m.slot] = rankWinner(m.teamA, m.teamB);
-    });
-    setPlayoffPicks((prev) => ({ ...prev, ...newPlayoffPicks }));
 
+    // Clear everything first so there's no bleed from previous predictions
+    setPredictions({});
+    setShowBracket(false);
+    setSelectedThirds([]);
+    setPlayoffPicks({});
+    localStorage.removeItem("wc2026-knockout");
+    localStorage.removeItem("wc2026-selected-thirds");
+    localStorage.removeItem("wc2026-playoff-picks");
+
+    // Step 1: Auto-pick playoffs (after a tick to let state clear)
     setTimeout(() => {
-      // Step 2: After playoffs resolved, fill all groups with rankings
-      // Need to build resolved groups with the new playoff picks
-      const resolvedForFill = groups.map((g) => ({
-        ...g,
-        teams: g.teams.map((t) => {
-          if (t.isTBD && newPlayoffPicks[t.name]) {
-            return { name: newPlayoffPicks[t.name], isTBD: false };
-          }
-          return t;
-        }),
-      }));
-      setPredictions((prev) => {
-        const next = { ...prev };
-        for (const group of resolvedForFill) {
-          const scores = rankBasedScoresForGroup(group);
-          Object.assign(next, scores);
-        }
-        return next;
+      const newPlayoffPicks: Record<string, string> = {};
+      playoffMatchups.forEach((m) => {
+        newPlayoffPicks[m.slot] = rankWinner(m.teamA, m.teamB);
       });
+      setPlayoffPicks(newPlayoffPicks);
 
       setTimeout(() => {
-        // Step 3: Auto pick thirds (will be calculated from new predictions)
-        // We need to trigger this after predictions have been set
-        // Use a flag to trigger in next render
-        setAutoFillStep(3);
+        // Step 2: Fill all groups with weighted random scores
+        const resolvedForFill = groups.map((g) => ({
+          ...g,
+          teams: g.teams.map((t) => {
+            if (t.isTBD && newPlayoffPicks[t.name]) {
+              return { name: newPlayoffPicks[t.name], isTBD: false };
+            }
+            return t;
+          }),
+        }));
+        const freshScores: Predictions = {};
+        for (const group of resolvedForFill) {
+          Object.assign(freshScores, rankBasedScoresForGroup(group));
+        }
+        setPredictions(freshScores);
+
+        setTimeout(() => {
+          setAutoFillStep(3);
+        }, 500);
       }, 500);
-    }, 500);
+    }, 100);
   }, []);
 
   const [autoFillStep, setAutoFillStep] = useState(0);
