@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy } from "lucide-react";
+import { Trophy, ChevronDown, Swords, CalendarClock } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useState } from "react";
 import PageSeo from "@/components/seo/PageSeo";
 
 interface TeamSlot {
@@ -111,6 +113,9 @@ const WorldCupPredictor = () => {
             USA 🇺🇸 · Mexico 🇲🇽 · Canada 🇨🇦 — 48 Teams · 12 Groups
           </p>
         </div>
+
+        {/* Playoff Slots Panel */}
+        <PlayoffSlotsPanel />
 
         {/* Group Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
