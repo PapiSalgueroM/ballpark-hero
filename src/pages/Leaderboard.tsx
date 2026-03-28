@@ -179,7 +179,7 @@ export default function Leaderboard() {
         path="/leaderboard"
       />
       <div className="min-h-screen bg-background">
-        <Header />
+        
 
         <main className="max-w-4xl mx-auto px-4 py-8">
           <h1 className="text-3xl md:text-4xl font-display font-bold mb-6 text-center">🏆 Leaderboard</h1>
