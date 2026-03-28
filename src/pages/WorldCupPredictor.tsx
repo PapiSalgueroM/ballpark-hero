@@ -252,7 +252,7 @@ interface GroupPredictionCardProps {
 }
 
 const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGroup, onResetGroup }: GroupPredictionCardProps) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const matchups = getMatchups(group.teams);
 
   const standings = useMemo(() => computeStandings(group, predictions), [group, predictions]);
@@ -623,7 +623,7 @@ const WorldCupPredictor = () => {
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Predict Group Stage</h2>
             <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm">
-              Tap a group to expand, enter match scores, and watch the standings update live.
+              Enter match scores and watch the standings update live.
               <span className="ml-2 text-[hsl(45,80%,55%)]">
                 {filledGroupCount}/12 groups complete
               </span>
