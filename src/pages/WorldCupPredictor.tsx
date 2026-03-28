@@ -1093,6 +1093,9 @@ const WorldCupPredictor = () => {
     });
   }, []);
 
+  const [rankFillAllLoading, setRankFillAllLoading] = useState(false);
+  const [autoPickThirdsLoading, setAutoPickThirdsLoading] = useState(false);
+
   // Build the user-selected thirds list for the bracket (ordered by bestThirds ranking)
   const userSelectedThirdsForBracket = useMemo(() => {
     return bestThirds.filter((t) => selectedThirds.includes(t.team));
