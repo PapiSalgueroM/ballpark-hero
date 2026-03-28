@@ -751,7 +751,14 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   s.currentClubTier = offer.club.tier; s.currentClubColor = offer.club.color; s.currentLeague = offer.club.league;
   s.contractYearsLeft = offer.contractYears; s.weeklyWage = offer.wage;
   s.phase = "playing"; s.pendingOffers = []; s.transferSituation = null;
-  s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(offer.wage)})`];
+  // Agent fee: 10% of transfer fee
+  if (offer.transferFee > 0) {
+    const agentFee = Math.round(offer.transferFee * 0.1 * 100) / 100;
+    s.agentFeesPaid = Math.round((s.agentFeesPaid + agentFee) * 100) / 100;
+    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(offer.wage)}) · Agent fee: €${agentFee.toFixed(1)}M`];
+  } else {
+    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(offer.wage)})`];
+  }
   return s;
 }
 
