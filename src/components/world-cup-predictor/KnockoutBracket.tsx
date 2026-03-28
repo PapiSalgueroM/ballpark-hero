@@ -51,9 +51,9 @@ const R32_TEMPLATE: [string, string][] = [
   ["1L", "2K"],     // M15
 ];
 
-const ROUND_NAMES = ["Round of 32", "Round of 16", "Quarter-finals", "Semi-finals", "Final"];
-const ROUND_PREFIXES = ["r32", "r16", "qf", "sf", "f"];
-const ROUND_MATCH_COUNTS = [16, 8, 4, 2, 1];
+const ROUND_NAMES = ["Round of 32", "Round of 16", "Quarter-finals", "Semi-finals", "Third Place", "Final"];
+const ROUND_PREFIXES = ["r32", "r16", "qf", "sf", "tp", "f"];
+const ROUND_MATCH_COUNTS = [16, 8, 4, 2, 1, 1];
 
 const KO_STORAGE_KEY = "wc2026-knockout";
 
