@@ -231,7 +231,7 @@ export default function SoccerCareer() {
       </Helmet>
 
       <div className="min-h-screen bg-background text-foreground flex flex-col">
-        <GameNavbar gameType="soccer-career" />
+        <GameNavbar />
 
         <main className="flex-1 w-full max-w-xl mx-auto px-4 py-6 space-y-6">
           {!careerStarted ? (
