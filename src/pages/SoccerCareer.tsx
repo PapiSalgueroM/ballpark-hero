@@ -17,10 +17,12 @@ import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
   type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,
   type RivalPlayer, type RivalryEvent, type RivalrySummary,
-  type LifestyleLevel, type FamilyStatus,
+  type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,
+  type UCLResult, type UCLKnockoutMatch, type Award,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
+  dismissBallonDor,
   getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
 } from "@/lib/soccerCareerEngine";
 
