@@ -1039,6 +1039,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* International Stats */}
           <InternationalStatsPanel career={career} onRetire={onRetireInternational} />
+
+          {/* Rival Comparison */}
+          <RivalComparisonPanel career={career} />
+
+          {/* Rivalry Summary (on retirement) */}
+          {career.retired && career.rivalrySummary && (
+            <RivalrySummaryCard summary={career.rivalrySummary} career={career} />
+          )}
         </div>
       </div>
 
