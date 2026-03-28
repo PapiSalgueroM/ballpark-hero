@@ -276,6 +276,15 @@ export default function SoccerCareer() {
     setCareer(s);
   };
 
+  const handleEventChoice = (choiceIndex: number) => {
+    if (!career) return;
+    const event = career.pendingEvents[0];
+    if (!event) return;
+    const result = applyEventChoice(career, choiceIndex, clubs);
+    setCareer(result);
+    toast(event.choices[choiceIndex].consequence);
+  };
+
   const handleNewCareer = () => {
     setCareer(null);
     setPreviewStats(null);
