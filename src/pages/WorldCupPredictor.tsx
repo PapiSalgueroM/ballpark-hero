@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, X, Save, Link2, Eye } from "lucide-react";
+import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, X, Save, Link2, Eye, Loader2, Zap } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
