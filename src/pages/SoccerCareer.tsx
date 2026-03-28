@@ -19,12 +19,15 @@ import {
   type RivalPlayer, type RivalryEvent, type RivalrySummary,
   type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,
   type UCLResult, type UCLKnockoutMatch, type Award,
+  type LegacyResult, type LegacyTier, type PostRetirementChoice, type ManagerState,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
-  dismissBallonDor,
+  dismissBallonDor, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
+  generateShareText,
   getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
 } from "@/lib/soccerCareerEngine";
+import { shareResult } from "@/lib/share";
 
 /* ─── Constants ─── */
 const NATIONALITIES = [
@@ -314,6 +317,31 @@ export default function SoccerCareer() {
   const handleDismissBallonDor = () => {
     if (!career) return;
     setCareer(dismissBallonDor(career, clubs));
+  };
+
+  const handleManualRetire = () => {
+    if (!career) return;
+    setCareer(manualRetire(career));
+  };
+
+  const handlePostRetirement = (choice: PostRetirementChoice) => {
+    if (!career) return;
+    setCareer(choosePostRetirement(career, choice, clubs));
+  };
+
+  const handleAdvanceManager = () => {
+    if (!career) return;
+    setCareer(advanceManagerSeason(career, clubs));
+  };
+
+  const handleEndManager = () => {
+    if (!career) return;
+    setCareer(endManagerCareer(career));
+  };
+
+  const handleShare = () => {
+    if (!career) return;
+    shareResult(generateShareText(career));
   };
 
   const handleNewCareer = () => {
