@@ -302,8 +302,8 @@ function clubAverageRating(tier: number): number {
   }
 }
 
-/* ─── Market value per user spec ─── */
-function calcMarketValue(overall: number, age: number, position: string): number {
+/* ─── Market value per user spec (with social media boost) ─── */
+function calcMarketValue(overall: number, age: number, position: string, socialMediaFollowers?: number): number {
   // Base from overall (exponential curve)
   let base = Math.pow(Math.max(0, overall - 45), 2.2) * 0.005;
 
@@ -319,7 +319,139 @@ function calcMarketValue(overall: number, age: number, position: string): number
   if (["ST", "CAM", "LW", "RW"].includes(position)) base *= 1.2;
   else if (position === "GK") base *= 0.85;
 
+  // Social media boost: +5% per 10M followers
+  if (socialMediaFollowers && socialMediaFollowers > 0) {
+    base *= 1 + (socialMediaFollowers / 10) * 0.05;
+  }
+
   return Math.max(0.1, Math.round(base * 10) / 10);
+}
+
+/* ─── Financial helpers ─── */
+const BIG_NATIONS = ["England", "Spain", "France", "Germany", "Brazil", "Argentina", "USA", "Mexico", "Japan", "Italy"];
+
+function calcLifestyleLevel(netWorth: number): LifestyleLevel {
+  if (netWorth >= 500) return "Billionaire";
+  if (netWorth >= 50) return "Superstar";
+  if (netWorth >= 10) return "Wealthy";
+  if (netWorth >= 2) return "Comfortable";
+  return "Humble";
+}
+
+function calcLifestyleCost(level: LifestyleLevel): number {
+  switch (level) {
+    case "Billionaire": return 5;
+    case "Superstar": return 2;
+    case "Wealthy": return 0.8;
+    case "Comfortable": return 0.2;
+    case "Humble": return 0.05;
+  }
+}
+
+function calcSponsorshipIncome(popularity: number, socialMediaFollowers: number, sponsorDeal: string | null): number {
+  let income = 0;
+  // Base sponsorship from popularity
+  if (popularity >= 80) income += 2;
+  else if (popularity >= 60) income += 1;
+  else if (popularity >= 40) income += 0.3;
+  // Social media income
+  income += socialMediaFollowers * 0.1; // €100k per 1M followers
+  // Named sponsor deal
+  if (sponsorDeal === "Nike") income += 2;
+  else if (sponsorDeal === "Adidas") income += 1.5;
+  return Math.round(income * 100) / 100;
+}
+
+function growSocialMedia(state: CareerState, season: SeasonRecord): number {
+  let growth = 0;
+  // Goals contribute
+  growth += season.goals * 0.02; // 20k per goal
+  // Trophies
+  if (season.leagueTitle) growth += 0.5;
+  if (season.championsLeague) growth += 1;
+  if (season.worldCup) growth += 3;
+  if (season.ballonDor) growth += 5;
+  // Big nation bonus
+  if (BIG_NATIONS.includes(state.nationality)) growth *= 1.5;
+  // Base organic growth from fame
+  growth += state.popularity * 0.005;
+  // Random viral moment
+  if (Math.random() < 0.05) growth += rand(1, 5);
+  return Math.round(growth * 100) / 100;
+}
+
+function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
+  // Wage income (52 weeks, in millions)
+  const wageIncome = (s.weeklyWage * 52) / 1_000_000;
+  // Sponsorship income
+  s.sponsorshipIncome = calcSponsorshipIncome(s.popularity, s.socialMediaFollowers, s.sponsorDeal);
+  const totalIncome = wageIncome + s.sponsorshipIncome;
+  // Lifestyle cost
+  s.lifestyleLevel = calcLifestyleLevel(s.netWorth);
+  s.lifestyleCostPerYear = calcLifestyleCost(s.lifestyleLevel);
+  // Net
+  const netThisYear = totalIncome - s.lifestyleCostPerYear;
+  s.netWorth = Math.round((s.netWorth + netThisYear) * 100) / 100;
+  s.totalEarnings = Math.round((s.totalEarnings + totalIncome) * 100) / 100;
+  // Social media
+  const smGrowth = growSocialMedia(s, season);
+  s.socialMediaFollowers = Math.round((s.socialMediaFollowers + smGrowth) * 100) / 100;
+  // Deficit tracking
+  if (netThisYear < 0) {
+    s.consecutiveDeficitYears += 1;
+  } else {
+    s.consecutiveDeficitYears = 0;
+  }
+  // Financial crisis
+  if (s.consecutiveDeficitYears >= 3) {
+    s.events.push("💸 FINANCIAL CRISIS — Spending exceeds income for 3 years! Forced to sell assets.");
+    s.netWorth = Math.max(0, s.netWorth);
+    s.lifestyleLevel = "Humble";
+    s.lifestyleCostPerYear = 0.05;
+    s.properties = [];
+    s.consecutiveDeficitYears = 0;
+    s.morale = clamp(s.morale - 20, 0, 100);
+  }
+  // Family life events
+  simulateFamilyLife(s);
+}
+
+function simulateFamilyLife(s: CareerState): void {
+  // Marriage
+  if (s.hasRelationship && !s.family.isMarried && !s.family.isDivorced && s.age >= 22 && s.age <= 28 && Math.random() < 0.25) {
+    s.family = { ...s.family, isMarried: true, marriedAge: s.age };
+    s.morale = clamp(s.morale + 5, 0, 100);
+    s.events.push("💍 Got married! Permanent morale boost.");
+    s.netWorth -= 0.5; // Wedding cost
+  }
+  // Children
+  if (s.family.isMarried && !s.family.isDivorced && s.family.children < 3 && Math.random() < 0.2) {
+    s.family = { ...s.family, children: s.family.children + 1 };
+    s.morale = clamp(s.morale + 3, 0, 100);
+    s.socialMediaFollowers += 0.5;
+    s.events.push(`👶 Had a child! (${s.family.children} total) Morale +3`);
+  }
+  // Divorce risk: 15% if morale low
+  if (s.family.isMarried && !s.family.isDivorced && s.morale < 40 && Math.random() < 0.15) {
+    s.family = { ...s.family, isDivorced: true, isMarried: false, divorceAge: s.age };
+    s.netWorth = Math.max(0, s.netWorth - 3);
+    s.morale = clamp(s.morale - 15, 0, 100);
+    s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) - 2, dribbling: (s.statBoostNextSeason.dribbling || 0) - 2 };
+    s.events.push("💔 Divorce! Settlement costs €3M. Performance dip next season.");
+  }
+}
+
+export function formatNetWorth(nw: number): string {
+  if (nw >= 1000) return `€${(nw / 1000).toFixed(1)}B`;
+  if (nw >= 1) return `€${nw.toFixed(1)}M`;
+  return `€${Math.round(nw * 1000)}k`;
+}
+
+export function formatFollowers(m: number): string {
+  if (m >= 100) return `${m.toFixed(0)}M`;
+  if (m >= 1) return `${m.toFixed(1)}M`;
+  if (m >= 0.01) return `${Math.round(m * 1000)}k`;
+  return `${Math.round(m * 1000)}`;
 }
 
 /* ─── Appearances per user spec ─── */
