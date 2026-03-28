@@ -98,7 +98,7 @@ const SPORT_LABELS: Record<string, string> = {
 };
 
 export default function Profile() {
-  const { user, profile, refreshProfile, updateProfile } = useAuth();
+  const { user, profile, loading: authLoading, refreshProfile, updateProfile } = useAuth();
   const { username } = useParams<{ username?: string }>();
   const navigate = useNavigate();
 
