@@ -4,7 +4,7 @@ import { Trophy, Flame, TrendingUp, Sparkles, Users } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
-import { Header } from '@/components/layout/Header';
+
 import { StreakReminder } from '@/components/game/StreakReminder';
 
 // ─── game registry ───
@@ -213,7 +213,7 @@ export default function Index() {
         path="/"
       />
       <div className="min-h-screen bg-background text-foreground">
-        <Header />
+        
         
         {/* ─── HERO ─── */}
         <section className="relative overflow-hidden border-b border-border">
