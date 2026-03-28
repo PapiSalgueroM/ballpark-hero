@@ -174,7 +174,7 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "retired";
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
   transferSituation: TransferSituation | null;
