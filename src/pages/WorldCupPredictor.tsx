@@ -560,6 +560,12 @@ const WorldCupPredictor = () => {
       return raw ? JSON.parse(raw) : [];
     } catch { return []; }
   });
+  const [playoffPicks, setPlayoffPicks] = useState<Record<string, string>>(() => {
+    try {
+      const raw = localStorage.getItem("wc2026-playoff-picks");
+      return raw ? JSON.parse(raw) : {};
+    } catch { return {}; }
+  });
 
   // persist to localStorage
   useEffect(() => {
@@ -573,6 +579,34 @@ const WorldCupPredictor = () => {
   useEffect(() => {
     localStorage.setItem("wc2026-selected-thirds", JSON.stringify(selectedThirds));
   }, [selectedThirds]);
+
+  useEffect(() => {
+    localStorage.setItem("wc2026-playoff-picks", JSON.stringify(playoffPicks));
+  }, [playoffPicks]);
+
+  // Resolve TBD slots with playoff picks
+  const resolvedGroups = useMemo(() => {
+    return groups.map((g) => ({
+      ...g,
+      teams: g.teams.map((t) => {
+        if (t.isTBD && playoffPicks[t.name]) {
+          return { name: playoffPicks[t.name], isTBD: false };
+        }
+        return t;
+      }),
+    }));
+  }, [playoffPicks]);
+
+  const handlePlayoffPick = useCallback((slot: string, winner: string) => {
+    setPlayoffPicks((prev) => {
+      if (prev[slot] === winner) {
+        const next = { ...prev };
+        delete next[slot];
+        return next;
+      }
+      return { ...prev, [slot]: winner };
+    });
+  }, []);
 
   const handleScoreChange = useCallback(
     (key: string, field: "homeGoals" | "awayGoals", val: number | "") => {
