@@ -1011,14 +1011,43 @@ const WorldCupPredictor = () => {
           <p className="text-[hsl(150,15%,60%)] text-sm sm:text-base">
            USA <FlagImg name="USA" /> · Mexico <FlagImg name="Mexico" /> · Canada <FlagImg name="Canada" /> — 48 Teams · 12 Groups
           </p>
-          {champion && (
-            <div className="mt-4">
+          {champion && !viewingSharedBracket && (
+            <div className="mt-4 space-y-3">
               <ShareButtons
                 score=""
                 gameName="World Cup 2026 Predictor"
                 gamePath="/world-cup-predictor"
                 customText={`🏆 My World Cup 2026 prediction — I've got ${champion} winning it all! Make yours at douknowball.com/world-cup-predictor`}
               />
+              <button
+                onClick={handleSaveBracket}
+                disabled={saving}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[hsl(220,60%,45%)] hover:bg-[hsl(220,60%,50%)] disabled:opacity-50 text-white font-bold text-sm transition-colors shadow-lg"
+              >
+                <Save className="w-4 h-4" />
+                {saving ? "Saving..." : "Save & Share My Bracket"}
+              </button>
+              {shareUrl && (
+                <div className="flex flex-col items-center gap-1.5 mt-2">
+                  <div className="flex items-center gap-2 bg-[hsl(220,15%,15%)] border border-[hsl(220,15%,25%)] rounded-lg px-3 py-2 text-xs max-w-md w-full">
+                    <Link2 className="w-3.5 h-3.5 text-[hsl(45,90%,55%)] flex-shrink-0" />
+                    <span className="text-[hsl(150,15%,60%)] truncate flex-1">{shareUrl}</span>
+                    <button
+                      onClick={() => { navigator.clipboard.writeText(shareUrl); toast.success("Copied!"); }}
+                      className="text-[hsl(45,90%,55%)] text-[10px] font-bold hover:underline flex-shrink-0"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Auth prompt modal content */}
+          {showAuthModal && (
+            <div className="mt-3 text-center text-[hsl(150,15%,50%)] text-xs">
+              Create a free account to save and share your bracket prediction
             </div>
           )}
         </div>
