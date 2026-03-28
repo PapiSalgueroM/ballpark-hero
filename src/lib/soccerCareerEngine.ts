@@ -1087,22 +1087,67 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
   return shuffled.slice(0, count);
 }
 
-/* ─── Dismiss summary → random events → transfer window ─── */
-export function dismissSummary(prev: CareerState, clubs: ClubData[]): CareerState {
-  const s = { ...prev }; s.pendingSummary = null;
-  if (s.retired) { s.phase = "retired"; return s; }
-  // Generate random events for this season
+/* ─── Flow helper: advance to next phase ─── */
+function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
+  // Check for international debut screen
+  const lastSeason = s.seasons[s.seasons.length - 1];
+  if (s.intStats.debutYear === lastSeason?.year && s.phase !== "international_debut" && s.phase !== "world_cup") {
+    s.phase = "international_debut";
+    return s;
+  }
+  // Check for World Cup result screen
+  if (s.pendingWorldCup && s.phase !== "world_cup") {
+    s.phase = "world_cup";
+    return s;
+  }
+  // Random events
   const events = generateRandomEvents(s);
   if (events.length > 0) {
     s.pendingEvents = events;
     s.phase = "random_events";
     return s;
   }
-  // No events, go to transfer window
+  // Transfer window
   if (s.age >= 18) {
     s.transferSituation = determineTransferSituation(s, clubs);
     s.phase = "transfer_window";
   } else { s.phase = "playing"; }
+  return s;
+}
+
+/* ─── Dismiss summary ─── */
+export function dismissSummary(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev }; s.pendingSummary = null;
+  if (s.retired) { s.phase = "retired"; return s; }
+  return advanceToNextPhase(s, clubs);
+}
+
+/* ─── Dismiss international debut screen ─── */
+export function dismissDebut(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  // Clear the debut trigger by nullifying it so we don't re-show
+  s.intStats = { ...s.intStats, debutYear: -1 };
+  // Check for World Cup
+  if (s.pendingWorldCup) {
+    s.phase = "world_cup";
+    return s;
+  }
+  return advanceToNextPhase(s, clubs);
+}
+
+/* ─── Dismiss World Cup screen ─── */
+export function dismissWorldCup(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  s.pendingWorldCup = null;
+  return advanceToNextPhase(s, clubs);
+}
+
+/* ─── Retire from international football ─── */
+export function retireFromInternational(prev: CareerState): CareerState {
+  const s = { ...prev };
+  s.intStats = { ...s.intStats, isRetired: true };
+  s.internationalCareer = false;
+  s.events = [...s.events, `🇺🇳 Retired from international football (${s.intStats.caps} caps, ${s.intStats.goals} goals)`];
   return s;
 }
 
