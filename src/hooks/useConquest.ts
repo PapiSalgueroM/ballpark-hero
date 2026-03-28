@@ -201,6 +201,9 @@ export function useConquest() {
   const [playByPlayActive, setPlayByPlayActive] = useState(false);
   const [simulatingRemainder, setSimulatingRemainder] = useState(false);
   const [boxScore, setBoxScore] = useState<BoxScore | null>(null);
+  const [stealModalOpen, setStealModalOpen] = useState(false);
+  const [pendingBattleApply, setPendingBattleApply] = useState<{ attacker: string; defender: string; result: BattleResult } | null>(null);
+  const [playerConfirmed, setPlayerConfirmed] = useState<string | null>(null);
 
   const timeoutsRef = useRef<number[]>([]);
   const clearTimeouts = () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
@@ -502,8 +505,9 @@ export function useConquest() {
         addTimeout(() => {
           setSimulatingRemainder(false);
           setBoxScore(sim.boxScore);
+          // Store pending battle info so user can trigger steal when ready
+          setPendingBattleApply({ attacker: team, defender: enemyId, result });
         }, totalPlayTime + 2000);
-        addTimeout(() => applyBattleResult(team, enemyId, result), totalPlayTime + 6000);
       };
 
       if (missedFirst) {
