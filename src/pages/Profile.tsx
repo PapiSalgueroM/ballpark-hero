@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -8,65 +8,40 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select';
+import {
   Flame, Trophy, Calendar, Gamepad2, Share2, Edit2, Check, X, Loader2,
-  Star, Target, Crown, Zap, Award, TrendingUp, Medal
+  Star, Target, Crown, Zap, TrendingUp, Medal, Clock, Copy,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
-interface BestScore {
-  game_type: string;
-  best_score: number;
-  achieved_at: string;
-}
+/* ────────────────────── Constants ────────────────────── */
 
-interface RecentGame {
-  game_type: string;
-  score: number;
-  played_at: string;
-}
+interface BestScore { game_type: string; best_score: number; achieved_at: string; }
+interface RecentGame { game_type: string; score: number; played_at: string; }
 
 const GAME_LABELS: Record<string, string> = {
-  'footle': '🎯 Footle',
-  'career': '📜 Career Quiz',
-  'higher-lower': '📊 Higher/Lower',
-  'connections': '🔗 Connections',
-  'build-your-xi': '⚽ Build Your XI',
-  'guess-the-face': '🖼️ Guess the Face',
-  'football-connect-4': '🔴 Connect 4',
-  'world-cup': '🏆 World Cup',
-  'football-grid': '🏈 Football Grid',
-  'football-timeline': '📅 Timeline',
-  'football-draft': '🎰 Draft Guesser',
-  'nfl-career': '🏈 NFL Career',
-  'college-grid': '🎓 College Grid',
-  'guess-the-college': '🎓 Guess College',
-  'nba-starting-5': '🏀 NBA Starting 5',
-  'nba-connect-4': '🏀 NBA Connect 4',
-  'nba-chain': '🔗 NBA Chain',
-  'baseball-career': '⚾ Baseball Career',
-  'baseball-connections': '⚾ Baseball Connections',
-  'hockey-career': '🏒 Hockey Career',
-  'hockey-higher-lower': '🏒 Hockey H/L',
-  'ufc': '🥊 UFC Guesser',
-  'ufc-chain': '🔗 Combat Chain',
-  'teammates': '🤝 Teammates',
-  'olympics': '🏅 Olympics',
-  'guess-soccer-club': '⚽ Guess the Club',
-  'soccer-grid': '⚽ Soccer Grid',
-  'f1-driver': '🏎️ F1 Driver',
-  'f1-constructor': '🏎️ F1 Constructor',
-  'tennis-player': '🎾 Tennis Player',
-  'tennis-chain': '🎾 Tennis Chain',
-  'nascar-driver': '🏁 NASCAR Driver',
-  'nascar-chain': '🏁 NASCAR Chain',
-  'guess-the-nation': '🌍 Guess the Nation',
-  'cbb-program': '🏀 CBB Program',
-  'conquest': '🗺️ Conquest',
-  'guess-the-year': '📆 Guess the Year',
-  'nba-lineup': '🏀 NBA Lineup',
-  'guess-nfl-team': '🏈 Guess NFL Team',
-  'fantasy-draft': '⚽ Fantasy Draft',
+  'footle': '🎯 Footle', 'career': '📜 Career Quiz', 'higher-lower': '📊 Higher/Lower',
+  'connections': '🔗 Connections', 'build-your-xi': '⚽ Build Your XI',
+  'guess-the-face': '🖼️ Guess the Face', 'football-connect-4': '🔴 Connect 4',
+  'world-cup': '🏆 World Cup', 'football-grid': '🏈 Football Grid',
+  'football-timeline': '📅 Timeline', 'football-draft': '🎰 Draft Guesser',
+  'nfl-career': '🏈 NFL Career', 'college-grid': '🎓 College Grid',
+  'guess-the-college': '🎓 Guess College', 'nba-starting-5': '🏀 NBA Starting 5',
+  'nba-connect-4': '🏀 NBA Connect 4', 'nba-chain': '🔗 NBA Chain',
+  'baseball-career': '⚾ Baseball Career', 'baseball-connections': '⚾ Baseball Connections',
+  'hockey-career': '🏒 Hockey Career', 'hockey-higher-lower': '🏒 Hockey H/L',
+  'ufc': '🥊 UFC Guesser', 'ufc-chain': '🔗 Combat Chain', 'teammates': '🤝 Teammates',
+  'olympics': '🏅 Olympics', 'guess-soccer-club': '⚽ Guess the Club',
+  'soccer-grid': '⚽ Soccer Grid', 'f1-driver': '🏎️ F1 Driver',
+  'f1-constructor': '🏎️ F1 Constructor', 'tennis-player': '🎾 Tennis Player',
+  'tennis-chain': '🎾 Tennis Chain', 'nascar-driver': '🏁 NASCAR Driver',
+  'nascar-chain': '🏁 NASCAR Chain', 'guess-the-nation': '🌍 Guess the Nation',
+  'cbb-program': '🏀 CBB Program', 'conquest': '🗺️ Conquest',
+  'guess-the-year': '📆 Guess the Year', 'nba-lineup': '🏀 NBA Lineup',
+  'guess-nfl-team': '🏈 Guess NFL Team', 'fantasy-draft': '⚽ Fantasy Draft',
   'blurred-face': '🖼️ Blurred Face',
 };
 
@@ -97,6 +72,10 @@ const SPORT_LABELS: Record<string, string> = {
   tennis: '🎾 Tennis', general: '🧩 General',
 };
 
+const ALL_GAME_OPTIONS = Object.entries(GAME_LABELS).map(([key, label]) => ({ value: key, label }));
+
+/* ────────────────────── Component ────────────────────── */
+
 export default function Profile() {
   const { user, profile, loading: authLoading, refreshProfile, updateProfile } = useAuth();
   const { username } = useParams<{ username?: string }>();
@@ -114,10 +93,18 @@ export default function Profile() {
   const [savedBracket, setSavedBracket] = useState<any>(null);
   const [dailyGameSlugs, setDailyGameSlugs] = useState<string[]>([]);
 
+  // Personal info (from user_preferences)
+  const [favouriteGame, setFavouriteGame] = useState<string>('');
+  const [favouriteTeam, setFavouriteTeam] = useState('');
+  const [favouritePlayer, setFavouritePlayer] = useState('');
+  const [timeSpent, setTimeSpent] = useState(0);
+  const [prefsSaving, setPrefsSaving] = useState(false);
+
   const isOwnProfile = !username || (profile?.username === username);
 
+  /* ── Data loading ── */
   useEffect(() => {
-    if (authLoading) return; // Wait for auth to finish
+    if (authLoading) return;
 
     const loadProfile = async () => {
       setLoading(true);
@@ -125,11 +112,7 @@ export default function Profile() {
 
       if (username) {
         const { data: profileData } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('username', username)
-          .maybeSingle();
-
+          .from('profiles').select('*').eq('username', username).maybeSingle();
         if (profileData) {
           setViewingProfile(profileData);
           targetUserId = profileData.user_id;
@@ -141,38 +124,22 @@ export default function Profile() {
         }
       } else if (user) {
         targetUserId = user.id;
-        // Try profile from context first, then fetch directly
         if (profile) {
           setViewingProfile(profile);
-          setEditForm({
-            display_name: profile.display_name || '',
-            username: profile.username || '',
-          });
+          setEditForm({ display_name: profile.display_name || '', username: profile.username || '' });
         } else {
-          const { data: fetchedProfile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('user_id', user.id)
-            .maybeSingle();
-          if (fetchedProfile) {
-            setViewingProfile(fetchedProfile);
-            setEditForm({
-              display_name: (fetchedProfile as any).display_name || '',
-              username: (fetchedProfile as any).username || '',
-            });
+          const { data: fp } = await supabase.from('profiles').select('*').eq('user_id', user.id).maybeSingle();
+          if (fp) {
+            setViewingProfile(fp);
+            setEditForm({ display_name: (fp as any).display_name || '', username: (fp as any).username || '' });
           } else {
-            // No profile row yet — build a minimal placeholder from auth user
             setViewingProfile({
               user_id: user.id,
               display_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
               username: null,
               avatar_url: user.user_metadata?.avatar_url || null,
-              current_streak: 0,
-              longest_streak: 0,
-              total_games_played: 0,
-              total_correct_answers: 0,
-              all_time_score: 0,
-              created_at: user.created_at,
+              current_streak: 0, longest_streak: 0, total_games_played: 0,
+              total_correct_answers: 0, all_time_score: 0, created_at: user.created_at,
             });
           }
         }
@@ -185,23 +152,31 @@ export default function Profile() {
 
       if (!targetUserId) { setLoading(false); return; }
 
-      // Parallel fetches — use maybeSingle() to avoid errors when no row exists
-      const [scoresRes, recentRes, userScoreRes, rankRes, bracketRes, todayCompletionsRes] = await Promise.all([
+      const [scoresRes, recentRes, userScoreRes, rankRes, bracketRes, todayRes, prefsRes] = await Promise.all([
         supabase.from('user_best_scores').select('*').eq('user_id', targetUserId).order('best_score', { ascending: false }),
         supabase.from('user_game_scores').select('game_type, score, played_at').eq('user_id', targetUserId).order('played_at', { ascending: false }).limit(5),
         supabase.from('user_scores').select('current_streak, longest_streak, total_points').eq('user_id', targetUserId).maybeSingle(),
         supabase.from('profiles').select('user_id').order('all_time_score', { ascending: false }),
         supabase.from('saved_brackets').select('id, bracket_data').eq('user_id', targetUserId).limit(1),
         supabase.from('daily_completions').select('game_slug').eq('user_id', targetUserId).eq('date', new Date().toISOString().split('T')[0]),
+        supabase.from('user_preferences').select('*').eq('user_id', targetUserId).maybeSingle(),
       ]);
 
       setBestScores(scoresRes.data || []);
       setRecentGames((recentRes.data || []) as RecentGame[]);
       if (userScoreRes.data) setUserScoreData(userScoreRes.data as any);
       if (bracketRes.data && bracketRes.data.length > 0) setSavedBracket(bracketRes.data[0]);
-      if (todayCompletionsRes.data) setDailyGameSlugs(todayCompletionsRes.data.map((c: any) => c.game_slug));
+      if (todayRes.data) setDailyGameSlugs(todayRes.data.map((c: any) => c.game_slug));
 
-      // Calculate rank
+      // Preferences
+      if (prefsRes.data) {
+        const p = prefsRes.data as any;
+        setFavouriteGame(p.favourite_game || '');
+        setFavouriteTeam(p.favourite_team || '');
+        setFavouritePlayer(p.favourite_player || '');
+        setTimeSpent(p.time_spent_minutes || 0);
+      }
+
       if (rankRes.data) {
         const idx = rankRes.data.findIndex((p: any) => p.user_id === targetUserId);
         setLeaderboardRank(idx >= 0 ? idx + 1 : null);
@@ -213,6 +188,38 @@ export default function Profile() {
     loadProfile();
   }, [username, user, profile, authLoading, navigate]);
 
+  /* ── Time tracking (increment every minute while page is visible) ── */
+  useEffect(() => {
+    if (!user || !isOwnProfile) return;
+    const interval = setInterval(async () => {
+      if (document.visibilityState === 'visible') {
+        setTimeSpent(prev => prev + 1);
+        // Fire-and-forget time update
+        try {
+          await supabase.from('user_preferences').upsert(
+            { user_id: user.id, time_spent_minutes: timeSpent + 1, updated_at: new Date().toISOString() } as any,
+            { onConflict: 'user_id' }
+          );
+        } catch (_) { /* ignore */ }
+      }
+    }, 60_000);
+    return () => clearInterval(interval);
+  }, [user, isOwnProfile, timeSpent]);
+
+  /* ── Save personal info ── */
+  const savePreferences = useCallback(async (field: string, value: string) => {
+    if (!user) return;
+    setPrefsSaving(true);
+    const { error } = await supabase.from('user_preferences').upsert(
+      { user_id: user.id, [field]: value, updated_at: new Date().toISOString() } as any,
+      { onConflict: 'user_id' }
+    );
+    if (error) toast.error('Failed to save');
+    else toast.success('Saved!');
+    setPrefsSaving(false);
+  }, [user]);
+
+  /* ── Save profile edits ── */
   const handleSave = async () => {
     setSaving(true);
     if (editForm.username && !/^[a-zA-Z0-9_]{3,20}$/.test(editForm.username)) {
@@ -234,29 +241,28 @@ export default function Profile() {
     setSaving(false);
   };
 
-  const handleShare = () => {
+  const copyProfileUrl = () => {
     const url = `${window.location.origin}/profile/${viewingProfile?.username || ''}`;
     navigator.clipboard.writeText(url);
-    toast.success('Profile link copied to clipboard!');
+    toast.success('Profile URL copied!');
   };
 
-  // Computed stats
+  /* ── Computed stats ── */
   const totalPoints = userScoreData?.total_points ?? viewingProfile?.all_time_score ?? 0;
   const totalGames = viewingProfile?.total_games_played ?? 0;
   const currentStreak = userScoreData?.current_streak ?? viewingProfile?.current_streak ?? 0;
   const longestStreak = userScoreData?.longest_streak ?? viewingProfile?.longest_streak ?? 0;
   const averageScore = totalGames > 0 ? Math.round(totalPoints / totalGames) : 0;
 
-  // Favourite sport
   const sportCounts: Record<string, number> = {};
   bestScores.forEach(s => {
     const sport = SPORT_CATEGORIES[s.game_type] || 'general';
     sportCounts[sport] = (sportCounts[sport] || 0) + 1;
   });
-  const favouriteSport = Object.entries(sportCounts).sort((a, b) => b[1] - a[1])[0];
+  const favouriteSportEntry = Object.entries(sportCounts).sort((a, b) => b[1] - a[1])[0];
 
-  // Badge calculations
-  const allSports = new Set(Object.values(SPORT_CATEGORIES));
+  /* ── Badge calculations ── */
+  const allSportSet = new Set(Object.values(SPORT_CATEGORIES));
   const playedSports = new Set(bestScores.map(s => SPORT_CATEGORIES[s.game_type]).filter(Boolean));
   const has900Plus = bestScores.filter(s => s.best_score >= 900).length;
   const hasPerfect = bestScores.some(s => s.best_score >= 1000);
@@ -265,31 +271,27 @@ export default function Profile() {
   const badges = [
     { emoji: '🔥', name: 'On Fire', desc: '7 day streak', earned: longestStreak >= 7 },
     { emoji: '🏆', name: 'Century Club', desc: '100 games played', earned: totalGames >= 100 },
-    { emoji: '🎯', name: 'Perfect Score', desc: 'Scored 1000 on any game', earned: hasPerfect },
-    { emoji: '⚽', name: 'World Cup Prophet', desc: 'Completed WC predictor', earned: !!savedBracket },
-    { emoji: '🌍', name: 'All Rounder', desc: 'Played every sport', earned: playedSports.size >= allSports.size },
-    { emoji: '🧠', name: 'Big Brain', desc: 'Scored 900+ on 10 games', earned: has900Plus >= 10 },
+    { emoji: '🎯', name: 'Perfect Score', desc: 'Score 1000 on any game', earned: hasPerfect },
+    { emoji: '⚽', name: 'World Cup Prophet', desc: 'Complete WC predictor', earned: !!savedBracket },
+    { emoji: '🌍', name: 'All Rounder', desc: 'Play every sport category', earned: playedSports.size >= allSportSet.size },
+    { emoji: '🧠', name: 'Big Brain', desc: 'Score 900+ on 10 games', earned: has900Plus >= 10 },
     { emoji: '👑', name: 'GOAT', desc: '30 day streak', earned: longestStreak >= 30 },
-    { emoji: '⚡', name: 'Speed Demon', desc: 'Complete a game in <30s', earned: false }, // TODO: needs timing data
+    { emoji: '⚡', name: 'Speed Demon', desc: 'Complete game in <30s', earned: false },
     { emoji: '🎪', name: 'Variety Pack', desc: '5 game types in one day', earned: todaySportTypes.size >= 5 },
   ];
+  const earnedCount = badges.filter(b => b.earned).length;
 
-  // Avatar
   const avatarUrl = viewingProfile?.avatar_url || user?.user_metadata?.avatar_url;
 
-  // WC bracket champion
+  /* ── WC champion ── */
   let wcChampion: string | null = null;
-  let wcChampionFlag: string | null = null;
   if (savedBracket?.bracket_data) {
     const bd = typeof savedBracket.bracket_data === 'string' ? JSON.parse(savedBracket.bracket_data) : savedBracket.bracket_data;
-    if (bd.knockoutWinners?.final) {
-      wcChampion = bd.knockoutWinners.final;
-    }
-    if (bd.awards?.champion) {
-      wcChampion = bd.awards.champion;
-    }
+    if (bd.knockoutWinners?.final) wcChampion = bd.knockoutWinners.final;
+    if (bd.awards?.champion) wcChampion = bd.awards.champion;
   }
 
+  /* ── Loading states ── */
   if (loading || authLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -300,8 +302,9 @@ export default function Profile() {
 
   if (!viewingProfile) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">Could not load profile. Please try again.</p>
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
+        <p className="text-muted-foreground">Could not load profile.</p>
+        <Button variant="outline" onClick={() => navigate('/')}>Go Home</Button>
       </div>
     );
   }
@@ -309,47 +312,35 @@ export default function Profile() {
   return (
     <>
       <PageSeo
-        title={`${viewingProfile.display_name || viewingProfile.username || 'User'}'s Profile | DoUKnowBall`}
-        description="View player stats, streaks, and best scores on DoUKnowBall"
+        title={`${viewingProfile.display_name || viewingProfile.username || 'Player'}'s Profile | DoUKnowBall`}
+        description="View player stats, streaks, and badges on DoUKnowBall"
         path={username ? `/profile/${username}` : '/profile'}
       />
       <div className="min-h-screen bg-background">
         <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
 
-          {/* ===== 1. Profile Header ===== */}
-          <Card className="border-border/60">
+          {/* ═══════════════ 1. PROFILE HEADER ═══════════════ */}
+          <Card className="border-border/60 overflow-hidden">
+            {/* Decorative top stripe */}
+            <div className="h-1.5 bg-gradient-to-r from-primary via-primary/60 to-primary/20" />
             <CardContent className="pt-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                {/* Avatar + info */}
                 <div className="flex items-center gap-4">
                   {avatarUrl ? (
-                    <img
-                      src={avatarUrl}
-                      alt="Avatar"
-                      className="h-16 w-16 rounded-full object-cover border-2 border-primary/40"
-                      referrerPolicy="no-referrer"
-                    />
+                    <img src={avatarUrl} alt="Avatar" className="h-18 w-18 rounded-full object-cover border-2 border-primary/40" referrerPolicy="no-referrer" style={{ width: 72, height: 72 }} />
                   ) : (
-                    <div className="h-16 w-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold">
+                    <div className="rounded-full bg-primary text-primary-foreground flex items-center justify-center text-3xl font-bold" style={{ width: 72, height: 72 }}>
                       {(viewingProfile.display_name || user?.email || 'U').charAt(0).toUpperCase()}
                     </div>
                   )}
-                  <div>
+                  <div className="space-y-1">
                     {editing ? (
                       <div className="space-y-2">
-                        <Input
-                          value={editForm.display_name}
-                          onChange={(e) => setEditForm({ ...editForm, display_name: e.target.value })}
-                          placeholder="Display name"
-                          className="h-8"
-                        />
+                        <Input value={editForm.display_name} onChange={e => setEditForm({ ...editForm, display_name: e.target.value })} placeholder="Display name" className="h-8 w-48" />
                         <div className="flex items-center gap-1">
                           <span className="text-muted-foreground">@</span>
-                          <Input
-                            value={editForm.username}
-                            onChange={(e) => setEditForm({ ...editForm, username: e.target.value.toLowerCase() })}
-                            placeholder="username"
-                            className="h-8"
-                          />
+                          <Input value={editForm.username} onChange={e => setEditForm({ ...editForm, username: e.target.value.toLowerCase() })} placeholder="username" className="h-8 w-40" />
                         </div>
                       </div>
                     ) : (
@@ -357,33 +348,22 @@ export default function Profile() {
                         <h1 className="text-2xl font-display font-bold text-foreground">
                           {viewingProfile.display_name || 'Anonymous Player'}
                         </h1>
-                        {viewingProfile.username && (
-                          <p className="text-muted-foreground text-sm">@{viewingProfile.username}</p>
-                        )}
-                        <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            Joined {format(new Date(viewingProfile.created_at), 'MMM yyyy')}
-                          </span>
-                          {leaderboardRank && (
-                            <span className="flex items-center gap-1">
-                              <Medal className="w-3 h-3 text-primary" />
-                              Rank #{leaderboardRank}
-                            </span>
-                          )}
+                        {viewingProfile.username && <p className="text-muted-foreground text-sm">@{viewingProfile.username}</p>}
+                        <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                          <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> Joined {format(new Date(viewingProfile.created_at), 'MMM yyyy')}</span>
+                          {leaderboardRank && <span className="flex items-center gap-1"><Medal className="w-3.5 h-3.5 text-primary" /> Rank #{leaderboardRank}</span>}
                         </div>
                       </>
                     )}
                   </div>
                 </div>
 
+                {/* Action buttons */}
                 <div className="flex items-center gap-2 flex-shrink-0">
                   {isOwnProfile && (
                     editing ? (
                       <>
-                        <Button size="sm" variant="ghost" onClick={() => setEditing(false)}>
-                          <X className="w-4 h-4" />
-                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => setEditing(false)}><X className="w-4 h-4" /></Button>
                         <Button size="sm" onClick={handleSave} disabled={saving}>
                           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                         </Button>
@@ -395,8 +375,8 @@ export default function Profile() {
                     )
                   )}
                   {viewingProfile.username && (
-                    <Button size="sm" variant="outline" onClick={handleShare}>
-                      <Share2 className="w-4 h-4 mr-1" /> Share
+                    <Button size="sm" variant="outline" onClick={copyProfileUrl}>
+                      <Copy className="w-4 h-4 mr-1" /> Copy URL
                     </Button>
                   )}
                 </div>
@@ -404,52 +384,115 @@ export default function Profile() {
             </CardContent>
           </Card>
 
-          {/* ===== 2. Stats Row ===== */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {/* ═══════════════ 2. PERSONAL INFO ═══════════════ */}
+          {isOwnProfile && (
+            <Card className="border-border/60">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg font-display flex items-center gap-2">
+                  <Star className="w-5 h-5 text-primary" /> Personal Info
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {/* Favourite Game */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Favourite Game</label>
+                    <Select
+                      value={favouriteGame}
+                      onValueChange={val => { setFavouriteGame(val); savePreferences('favourite_game', val); }}
+                    >
+                      <SelectTrigger className="h-9"><SelectValue placeholder="Pick a game..." /></SelectTrigger>
+                      <SelectContent className="max-h-60">
+                        {ALL_GAME_OPTIONS.map(g => (
+                          <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  {/* Favourite Team */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Favourite Team</label>
+                    <Input
+                      value={favouriteTeam}
+                      onChange={e => setFavouriteTeam(e.target.value)}
+                      onBlur={() => savePreferences('favourite_team', favouriteTeam)}
+                      placeholder="e.g. Real Madrid"
+                      className="h-9"
+                    />
+                  </div>
+                  {/* Favourite Player */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Favourite Player</label>
+                    <Input
+                      value={favouritePlayer}
+                      onChange={e => setFavouritePlayer(e.target.value)}
+                      onBlur={() => savePreferences('favourite_player', favouritePlayer)}
+                      placeholder="e.g. Messi"
+                      className="h-9"
+                    />
+                  </div>
+                </div>
+                {prefsSaving && <p className="text-xs text-muted-foreground mt-2 animate-pulse">Saving…</p>}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* ═══════════════ 3. STATS ═══════════════ */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
             {[
-              { icon: <Gamepad2 className="w-6 h-6 text-primary" />, value: totalGames, label: 'Games Played' },
-              { icon: <Trophy className="w-6 h-6 text-yellow-500" />, value: totalPoints.toLocaleString(), label: 'Total Points' },
-              { icon: <Flame className="w-6 h-6 text-orange-500" />, value: currentStreak, label: 'Current Streak 🔥' },
-              { icon: <TrendingUp className="w-6 h-6 text-amber-500" />, value: longestStreak, label: 'Longest Streak' },
-              { icon: <Star className="w-6 h-6 text-purple-400" />, value: favouriteSport ? SPORT_LABELS[favouriteSport[0]] || favouriteSport[0] : '—', label: 'Fav Sport', small: true },
-              { icon: <Target className="w-6 h-6 text-sky-400" />, value: averageScore, label: 'Avg Score' },
+              { icon: <Gamepad2 className="w-5 h-5 text-primary" />, value: totalGames, label: 'Games Played' },
+              { icon: <Trophy className="w-5 h-5 text-yellow-500" />, value: totalPoints.toLocaleString(), label: 'Total Points' },
+              { icon: <Flame className="w-5 h-5 text-orange-500" />, value: currentStreak, label: 'Streak 🔥' },
+              { icon: <TrendingUp className="w-5 h-5 text-amber-500" />, value: longestStreak, label: 'Best Streak' },
+              { icon: <Star className="w-5 h-5 text-purple-400" />, value: favouriteSportEntry ? SPORT_LABELS[favouriteSportEntry[0]] || '—' : '—', label: 'Fav Sport', small: true },
+              { icon: <Target className="w-5 h-5 text-sky-400" />, value: averageScore, label: 'Avg Score' },
+              { icon: <Clock className="w-5 h-5 text-emerald-400" />, value: timeSpent > 60 ? `${Math.floor(timeSpent / 60)}h ${timeSpent % 60}m` : `${timeSpent}m`, label: 'Time Played' },
             ].map((stat, i) => (
               <Card key={i} className="border-border/40">
-                <CardContent className="pt-4 pb-3 text-center space-y-1">
-                  <div className="mx-auto">{stat.icon}</div>
-                  <p className={`font-bold ${stat.small ? 'text-sm' : 'text-2xl'} text-foreground`}>{stat.value}</p>
-                  <p className="text-[11px] text-muted-foreground leading-tight">{stat.label}</p>
+                <CardContent className="pt-3 pb-2 text-center space-y-0.5">
+                  <div className="mx-auto w-fit">{stat.icon}</div>
+                  <p className={`font-bold text-foreground ${stat.small ? 'text-xs' : 'text-xl'}`}>{stat.value}</p>
+                  <p className="text-[10px] text-muted-foreground leading-tight">{stat.label}</p>
                 </CardContent>
               </Card>
             ))}
           </div>
 
-          {/* ===== 3. Badges Section ===== */}
+          {/* ═══════════════ 4. BADGES ═══════════════ */}
           <Card className="border-border/60">
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg font-display">🏅 Badges</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg font-display">🏅 Badges</CardTitle>
+                <span className="text-sm font-semibold text-primary">{earnedCount} / {badges.length} earned</span>
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-2">
+              <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-3">
                 {badges.map((badge) => (
                   <div
                     key={badge.name}
-                    className={`flex flex-col items-center text-center p-3 rounded-xl border transition-all ${
+                    className={`relative flex flex-col items-center text-center p-3 rounded-xl border-2 transition-all ${
                       badge.earned
-                        ? 'border-primary/30 bg-primary/5'
-                        : 'border-border/30 bg-muted/20 opacity-40 grayscale'
+                        ? 'border-primary/50 bg-primary/5 shadow-[0_0_12px_hsl(var(--primary)/0.25)]'
+                        : 'border-border/20 bg-muted/10 opacity-50'
                     }`}
+                    style={badge.earned ? {} : { filter: 'blur(0.5px) grayscale(0.8)' }}
                   >
-                    <span className="text-2xl mb-1">{badge.earned ? badge.emoji : '🔒'}</span>
+                    <span className="text-3xl mb-1.5">{badge.emoji}</span>
                     <p className="text-[10px] font-bold text-foreground leading-tight">{badge.name}</p>
                     <p className="text-[9px] text-muted-foreground mt-0.5 leading-tight">{badge.desc}</p>
+                    {badge.earned && (
+                      <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center">
+                        <Check className="w-2.5 h-2.5 text-primary-foreground" />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
             </CardContent>
           </Card>
 
-          {/* ===== 4. World Cup Predictor Card ===== */}
+          {/* ═══════════════ WC Predictor Card ═══════════════ */}
           {savedBracket && (
             <Card className="border-border/60 bg-gradient-to-r from-card to-secondary/30">
               <CardContent className="pt-5 pb-4">
@@ -458,13 +501,9 @@ export default function Profile() {
                     <span className="text-4xl">🏆</span>
                     <div>
                       <h3 className="text-base font-bold font-display text-foreground">World Cup 2026 Prediction</h3>
-                      {wcChampion ? (
-                        <p className="text-sm text-muted-foreground">
-                          Champion: <span className="text-primary font-semibold">{wcChampion}</span>
-                        </p>
-                      ) : (
-                        <p className="text-sm text-muted-foreground">Bracket saved</p>
-                      )}
+                      <p className="text-sm text-muted-foreground">
+                        {wcChampion ? <>Champion: <span className="text-primary font-semibold">{wcChampion}</span></> : 'Bracket saved'}
+                      </p>
                     </div>
                   </div>
                   <Link to={`/world-cup-predictor?bracket=${savedBracket.id}`}>
@@ -475,7 +514,7 @@ export default function Profile() {
             </Card>
           )}
 
-          {/* ===== 5. Recently Played ===== */}
+          {/* ═══════════════ Recently Played ═══════════════ */}
           <Card className="border-border/60">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg font-display">🕹️ Recently Played</CardTitle>
@@ -488,12 +527,8 @@ export default function Profile() {
                   {recentGames.map((game, i) => (
                     <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-border/40 bg-muted/10">
                       <div>
-                        <p className="font-medium text-sm text-foreground">
-                          {GAME_LABELS[game.game_type] || game.game_type}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {format(new Date(game.played_at), 'MMM d, yyyy')}
-                        </p>
+                        <p className="font-medium text-sm text-foreground">{GAME_LABELS[game.game_type] || game.game_type}</p>
+                        <p className="text-xs text-muted-foreground">{format(new Date(game.played_at), 'MMM d, yyyy')}</p>
                       </div>
                       <span className="text-lg font-bold text-primary">{game.score}</span>
                     </div>
@@ -503,7 +538,7 @@ export default function Profile() {
             </CardContent>
           </Card>
 
-          {/* ===== Best Scores ===== */}
+          {/* ═══════════════ Best Scores ═══════════════ */}
           <Card className="border-border/60">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg font-display">🏆 Best Scores</CardTitle>
