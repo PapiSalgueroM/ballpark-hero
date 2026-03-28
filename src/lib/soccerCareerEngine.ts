@@ -95,6 +95,44 @@ export interface WorldCupResult {
   bestPlayer: boolean;
 }
 
+/* ─── Rivalry System ─── */
+export interface RivalPlayer {
+  name: string;
+  nationality: string;
+  position: string;
+  club: string;
+  clubTier: number;
+  overall: number;
+  careerGoals: number;
+  careerAssists: number;
+  careerApps: number;
+  leagueTitles: number;
+  championsLeagues: number;
+  worldCups: number;
+  ballonDors: number;
+  intCaps: number;
+  intGoals: number;
+  marketValue: number;
+  age: number;
+  retired: boolean;
+}
+
+export interface RivalryEvent {
+  id: number;
+  emoji: string;
+  title: string;
+  description: string;
+  consequence: string;
+}
+
+export interface RivalrySummary {
+  playerWins: number;
+  rivalWins: number;
+  categories: { label: string; playerVal: string; rivalVal: string; winner: "player" | "rival" | "tie" }[];
+  overallWinner: "player" | "rival" | "tie";
+  legacyBonus: number;
+}
+
 export interface InternationalStats {
   caps: number;
   goals: number;
@@ -136,7 +174,7 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "retired";
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
   transferSituation: TransferSituation | null;
@@ -154,6 +192,12 @@ export interface CareerState {
   // International career
   intStats: InternationalStats;
   pendingWorldCup: WorldCupResult | null;
+  // Rivalry system
+  rival: RivalPlayer | null;
+  rivalCreated: boolean;
+  pendingRivalryEvent: RivalryEvent | null;
+  lastRivalryEventId: number | null;
+  rivalrySummary: RivalrySummary | null;
 }
 
 /* ─── Flags ─── */
@@ -499,6 +543,11 @@ export function initCareer(
       debutYear: null, debutAge: null, worldCupResults: [],
     },
     pendingWorldCup: null,
+    rival: null,
+    rivalCreated: false,
+    pendingRivalryEvent: null,
+    lastRivalryEventId: null,
+    rivalrySummary: null,
   };
 }
 
@@ -770,6 +819,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "retired",
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }];
+    if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
     return s;
   }
   const season = generateSeasonStats(s);
@@ -838,6 +888,36 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   season.intRating = intSeason.intRating;
   season.tournament = intSeason.tournament;
   season.tournamentResult = intSeason.tournamentResult;
+
+  // Rival system: create rival at age 19-21
+  if (!s.rivalCreated && s.age >= 19 && s.age <= 21 && Math.random() < 0.6) {
+    s.rival = createRival(s, clubs);
+    s.rivalCreated = true;
+    s.events.push(`😤 A new rival emerges: ${s.rival.name} (${getFlag(s.rival.nationality)} ${s.rival.nationality})`);
+  } else if (!s.rivalCreated && s.age === 21) {
+    // Force creation at 21 if not yet created
+    s.rival = createRival(s, clubs);
+    s.rivalCreated = true;
+    s.events.push(`😤 A new rival emerges: ${s.rival.name} (${getFlag(s.rival.nationality)} ${s.rival.nationality})`);
+  }
+  
+  // Simulate rival's season
+  if (s.rival && !s.rival.retired) {
+    s.rival = simulateRivalSeason(s.rival, clubs);
+  }
+  
+  // Rivalry event (1 per year)
+  if (s.rival && !s.rival.retired && Math.random() < 0.5) {
+    const rivalEvents = getRivalryEvents(s).filter(e => e.id !== s.lastRivalryEventId);
+    if (rivalEvents.length > 0) {
+      s.pendingRivalryEvent = pick(rivalEvents);
+    }
+  }
+  // Rival just retired — show retirement event
+  if (s.rival?.retired && s.lastRivalryEventId !== 105) {
+    const retireEvt = getRivalryEvents(s).find(e => e.id === 105);
+    if (retireEvt) s.pendingRivalryEvent = retireEvt;
+  }
 
   if (season.leagueTitle) s.events.push(`🏆 Won the league with ${s.currentClub}!`);
   if (season.championsLeague) s.events.push(`⭐ Won the Champions League!`);
@@ -1100,6 +1180,11 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
     s.phase = "world_cup";
     return s;
   }
+  // Rivalry event
+  if (s.pendingRivalryEvent) {
+    s.phase = "rivalry_event";
+    return s;
+  }
   // Random events
   const events = generateRandomEvents(s);
   if (events.length > 0) {
@@ -1190,6 +1275,223 @@ export function signExtension(prev: CareerState): CareerState {
   s.transferSituation = null; s.phase = "playing";
   s.events = [...s.events, `📝 Signed ${extraYears}-year extension with ${s.currentClub} (${formatWage(s.weeklyWage)})`];
   return s;
+}
+
+/* ─── Rivalry System Functions ─── */
+
+const RIVAL_FIRST_NAMES = ["Marco","Lucas","João","Karim","Antoine","Jamal","Kylian","Erling","Lamine","Rodri","Phil","Jude","Bukayo","Florian","Rafael","Dušan","Álvaro","Leroy","Ousmane","Federico"];
+const RIVAL_LAST_NAMES = ["Silva","Fernandez","Müller","Santos","Rossi","Andersen","Johansson","López","Martínez","Hernández","Dubois","Weber","Petrov","Nielsen","Eriksen","Moreno","Torres","Schmidt","Costa","Bernard"];
+
+function generateRivalName(): string {
+  return `${pick(RIVAL_FIRST_NAMES)} ${pick(RIVAL_LAST_NAMES)}`;
+}
+
+function createRival(state: CareerState, clubs: ClubData[]): RivalPlayer {
+  const ovrDiff = rand(-5, 5);
+  const rivalOvr = clamp(state.overall + ovrDiff, 45, 95);
+  // Pick a different club at appropriate tier
+  const tiers = rivalOvr >= 80 ? [1] : rivalOvr >= 70 ? [1, 2] : rivalOvr >= 60 ? [2, 3] : [3, 4];
+  const candidates = clubs.filter(c => tiers.includes(c.tier) && c.name !== state.currentClub);
+  const rivalClub = candidates.length > 0 ? pick(candidates) : { name: "Unknown FC", tier: 2 };
+  // Pick nationality — prefer same region
+  const sameNatChance = Math.random();
+  const rivalNat = sameNatChance < 0.3 ? state.nationality : pick(Object.keys(FLAG_MAP));
+  return {
+    name: generateRivalName(),
+    nationality: rivalNat,
+    position: state.position,
+    club: rivalClub.name,
+    clubTier: rivalClub.tier,
+    overall: rivalOvr,
+    careerGoals: 0,
+    careerAssists: 0,
+    careerApps: 0,
+    leagueTitles: 0,
+    championsLeagues: 0,
+    worldCups: 0,
+    ballonDors: 0,
+    intCaps: 0,
+    intGoals: 0,
+    marketValue: calcMarketValue(rivalOvr, state.age, state.position),
+    age: state.age + rand(-1, 1),
+    retired: false,
+  };
+}
+
+function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[]): RivalPlayer {
+  const r = { ...rival };
+  if (r.retired) return r;
+  r.age += 1;
+  // Stat growth similar to player
+  if (r.age <= 23) r.overall = clamp(r.overall + rand(1, 3), 45, 95);
+  else if (r.age <= 29) r.overall = clamp(r.overall + rand(0, 2), 45, 95);
+  else if (r.age <= 33) r.overall = clamp(r.overall + rand(-2, 0), 45, 95);
+  else r.overall = clamp(r.overall + rand(-3, -1), 45, 95);
+  
+  // Club movement
+  if (Math.random() < 0.15) {
+    const tiers = r.overall >= 82 ? [1] : r.overall >= 72 ? [1, 2] : r.overall >= 62 ? [2, 3] : [3, 4];
+    const candidates = clubs.filter(c => tiers.includes(c.tier) && c.name !== r.club);
+    if (candidates.length > 0) r.club = pick(candidates).name;
+  }
+  
+  // Season stats
+  const apps = rand(20, 36);
+  const goals = calcGoals(r.position, apps);
+  const assists = calcAssists(r.position, apps);
+  r.careerApps += apps;
+  r.careerGoals += goals;
+  r.careerAssists += assists;
+  
+  // Trophies
+  const clubTier = r.clubTier;
+  if (clubTier <= 2 && Math.random() < 0.2 / clubTier) r.leagueTitles += 1;
+  if (clubTier === 1 && r.overall >= 78 && Math.random() < 0.06) r.championsLeagues += 1;
+  if (r.overall >= 80 && Math.random() < 0.04) r.worldCups += 1;
+  if (r.overall >= 88 && Math.random() < 0.08) r.ballonDors += 1;
+  
+  // International
+  if (r.overall >= 72 && r.age <= 33) {
+    const intApps = rand(4, 10);
+    r.intCaps += intApps;
+    r.intGoals += calcGoals(r.position, intApps);
+  }
+  
+  r.marketValue = calcMarketValue(r.overall, r.age, r.position);
+  
+  // Retirement
+  if ((r.overall < 60 && r.age >= 30) || r.age >= 37) r.retired = true;
+  
+  return r;
+}
+
+function getRivalryEvents(state: CareerState): RivalryEvent[] {
+  if (!state.rival) return [];
+  const r = state.rival;
+  const events: RivalryEvent[] = [];
+  
+  if (r.ballonDors > 0) {
+    events.push({ id: 101, emoji: "🏅", title: "Rival Wins Ballon d'Or", description: `${r.name} won the Ballon d'Or. You finished 3rd.`, consequence: "Motivation boost: stats +1 next season" });
+  }
+  events.push({ id: 102, emoji: "🏠", title: "Transfer Battle", description: `You and ${r.name} both want to sign for the same club. The club chose your rival.`, consequence: "Morale -5" });
+  events.push({ id: 103, emoji: "🤝", title: "Rival Shows Respect", description: `${r.name} publicly says he respects you as the best player in the world.`, consequence: "Popularity +5, Morale +5" });
+  events.push({ id: 104, emoji: "⚽", title: "Head to Head Victory!", description: `In a head-to-head match you scored twice against ${r.name}'s team.`, consequence: "Popularity +5, Confidence boost" });
+  if (r.retired) {
+    events.push({ id: 105, emoji: "👋", title: "Rival Retires", description: `${r.name} announces retirement. He calls you the greatest rival of his career.`, consequence: "Legacy +10, End of an era" });
+  }
+  if (state.internationalCareer) {
+    events.push({ id: 106, emoji: "🇺🇳", title: "National Team Battle", description: `Both you and ${r.name} are on the same national team. The manager must pick one to start.`, consequence: "50/50 outcome" });
+  }
+  if (r.championsLeagues > 0) {
+    events.push({ id: 107, emoji: "⭐", title: "Rival Wins Champions League", description: `${r.name} wins the Champions League. You were eliminated in the semis.`, consequence: "Morale -5, Motivation boost" });
+  }
+  if (state.overall > r.overall && state.overall - r.overall >= 2) {
+    events.push({ id: 108, emoji: "📈", title: "Surpassed Your Rival!", description: `For the first time in your career, your overall rating (${state.overall}) has surpassed ${r.name}'s (${r.overall}).`, consequence: "Morale +10, Legacy boost" });
+  }
+  
+  return events;
+}
+
+function applyRivalryEvent(state: CareerState, event: RivalryEvent): CareerState {
+  const s = { ...state };
+  switch (event.id) {
+    case 101:
+      s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1, dribbling: (s.statBoostNextSeason.dribbling || 0) + 1 };
+      s.morale = clamp(s.morale - 5, 0, 100);
+      break;
+    case 102:
+      s.morale = clamp(s.morale - 5, 0, 100);
+      break;
+    case 103:
+      s.popularity = clamp(s.popularity + 5, 0, 100);
+      s.morale = clamp(s.morale + 5, 0, 100);
+      break;
+    case 104:
+      s.popularity = clamp(s.popularity + 5, 0, 100);
+      s.morale = clamp(s.morale + 5, 0, 100);
+      break;
+    case 105:
+      s.popularity = clamp(s.popularity + 10, 0, 100);
+      break;
+    case 106:
+      if (Math.random() < 0.5) {
+        s.morale = clamp(s.morale + 5, 0, 100);
+        s.events = [...s.events, `🇺🇳 Manager chose you over ${s.rival?.name}!`];
+      } else {
+        s.morale = clamp(s.morale - 5, 0, 100);
+        s.events = [...s.events, `🇺🇳 Manager chose ${s.rival?.name} over you.`];
+      }
+      break;
+    case 107:
+      s.morale = clamp(s.morale - 5, 0, 100);
+      s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 };
+      break;
+    case 108:
+      s.morale = clamp(s.morale + 10, 0, 100);
+      break;
+  }
+  s.events = [...s.events, `${event.emoji} ${event.title}`];
+  return s;
+}
+
+export function dismissRivalryEvent(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  if (s.pendingRivalryEvent) {
+    const applied = applyRivalryEvent(s, s.pendingRivalryEvent);
+    Object.assign(s, applied);
+    s.lastRivalryEventId = s.pendingRivalryEvent.id;
+    s.pendingRivalryEvent = null;
+  }
+  // Continue to next phase after rivalry event
+  return advanceToNextPhaseAfterRivalry(s, clubs);
+}
+
+function advanceToNextPhaseAfterRivalry(s: CareerState, clubs: ClubData[]): CareerState {
+  // Check for international debut screen
+  const lastSeason = s.seasons[s.seasons.length - 1];
+  if (s.intStats.debutYear === lastSeason?.year && s.phase !== "international_debut" && s.phase !== "world_cup") {
+    s.phase = "international_debut";
+    return s;
+  }
+  if (s.pendingWorldCup && s.phase !== "world_cup") {
+    s.phase = "world_cup";
+    return s;
+  }
+  const events = generateRandomEvents(s);
+  if (events.length > 0) {
+    s.pendingEvents = events;
+    s.phase = "random_events";
+    return s;
+  }
+  if (s.age >= 18) {
+    s.transferSituation = determineTransferSituation(s, clubs);
+    s.phase = "transfer_window";
+  } else { s.phase = "playing"; }
+  return s;
+}
+
+export function generateRivalrySummary(state: CareerState): RivalrySummary | null {
+  if (!state.rival) return null;
+  const r = state.rival;
+  const totals = getCareerTotals(state.seasons);
+  
+  const categories: RivalrySummary["categories"] = [
+    { label: "Career Goals", playerVal: `${totals.goals}`, rivalVal: `${r.careerGoals}`, winner: totals.goals > r.careerGoals ? "player" : totals.goals < r.careerGoals ? "rival" : "tie" },
+    { label: "Career Assists", playerVal: `${totals.assists}`, rivalVal: `${r.careerAssists}`, winner: totals.assists > r.careerAssists ? "player" : totals.assists < r.careerAssists ? "rival" : "tie" },
+    { label: "League Titles", playerVal: `${totals.leagueTitles}`, rivalVal: `${r.leagueTitles}`, winner: totals.leagueTitles > r.leagueTitles ? "player" : totals.leagueTitles < r.leagueTitles ? "rival" : "tie" },
+    { label: "Champions League", playerVal: `${totals.championsLeagues}`, rivalVal: `${r.championsLeagues}`, winner: totals.championsLeagues > r.championsLeagues ? "player" : totals.championsLeagues < r.championsLeagues ? "rival" : "tie" },
+    { label: "Ballon d'Or", playerVal: `${totals.ballonDors}`, rivalVal: `${r.ballonDors}`, winner: totals.ballonDors > r.ballonDors ? "player" : totals.ballonDors < r.ballonDors ? "rival" : "tie" },
+    { label: "Int'l Caps", playerVal: `${state.intStats.caps}`, rivalVal: `${r.intCaps}`, winner: state.intStats.caps > r.intCaps ? "player" : state.intStats.caps < r.intCaps ? "rival" : "tie" },
+    { label: "Int'l Goals", playerVal: `${state.intStats.goals}`, rivalVal: `${r.intGoals}`, winner: state.intStats.goals > r.intGoals ? "player" : state.intStats.goals < r.intGoals ? "rival" : "tie" },
+    { label: "Market Value", playerVal: `€${state.marketValue.toFixed(0)}M`, rivalVal: `€${r.marketValue.toFixed(0)}M`, winner: state.marketValue > r.marketValue ? "player" : state.marketValue < r.marketValue ? "rival" : "tie" },
+  ];
+  
+  const playerWins = categories.filter(c => c.winner === "player").length;
+  const rivalWins = categories.filter(c => c.winner === "rival").length;
+  const overallWinner = playerWins > rivalWins ? "player" as const : playerWins < rivalWins ? "rival" as const : "tie" as const;
+  const legacyBonus = overallWinner === "player" ? 15 : overallWinner === "tie" ? 5 : -5;
+  
+  return { playerWins, rivalWins, categories, overallWinner, legacyBonus };
 }
 
 /* ─── Totals ─── */

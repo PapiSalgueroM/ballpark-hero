@@ -16,9 +16,10 @@ import { ChevronRight } from "lucide-react";
 import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
   type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,
+  type RivalPlayer, type RivalryEvent, type RivalrySummary,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
-  dismissDebut, dismissWorldCup, retireFromInternational,
+  dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   getCareerTotals, getFlag, calcOverall, formatWage,
 } from "@/lib/soccerCareerEngine";
 
@@ -302,6 +303,11 @@ export default function SoccerCareer() {
     toast("Retired from international football");
   };
 
+  const handleDismissRivalryEvent = () => {
+    if (!career) return;
+    setCareer(dismissRivalryEvent(career, clubs));
+  };
+
   const handleNewCareer = () => {
     setCareer(null);
     setPreviewStats(null);
@@ -343,6 +349,7 @@ export default function SoccerCareer() {
               onDismissDebut={handleDismissDebut}
               onDismissWorldCup={handleDismissWorldCup}
               onRetireInternational={handleRetireInternational}
+              onDismissRivalryEvent={handleDismissRivalryEvent}
               onNewCareer={handleNewCareer}
               timelineRef={timelineRef}
             />
@@ -709,8 +716,129 @@ function InternationalStatsPanel({ career, onRetire }: { career: CareerState; on
   );
 }
 
+/* ─── Rivalry Event Card ─── */
+function RivalryEventCard({ event, rival, career, onDismiss }: { event: RivalryEvent; rival: RivalPlayer; career: CareerState; onDismiss: () => void }) {
+  return (
+    <div className="rounded-xl border-2 border-orange-500/40 bg-gradient-to-b from-orange-500/10 to-transparent p-5 space-y-4">
+      <div className="text-center space-y-2">
+        <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">😤 Rivalry Event</span>
+        <div className="text-4xl">{event.emoji}</div>
+        <h3 className="text-lg font-black">{event.title}</h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">{event.description}</p>
+      </div>
+      <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-3 text-center">
+        <p className="text-xs text-orange-300">⚡ {event.consequence}</p>
+      </div>
+      <div className="flex items-center justify-between bg-muted/20 rounded-lg p-3">
+        <div className="text-center flex-1">
+          <div className="text-sm font-bold">{career.playerName}</div>
+          <div className="text-2xl font-black text-emerald-400">{career.overall}</div>
+        </div>
+        <div className="text-lg font-black text-muted-foreground">VS</div>
+        <div className="text-center flex-1">
+          <div className="text-sm font-bold">{rival.name}</div>
+          <div className="text-2xl font-black text-orange-400">{rival.overall}</div>
+        </div>
+      </div>
+      <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-orange-600 hover:bg-orange-500 text-white">
+        Continue →
+      </Button>
+    </div>
+  );
+}
+
+/* ─── Rival Comparison Panel ─── */
+function RivalComparisonPanel({ career }: { career: CareerState }) {
+  const rival = career.rival;
+  if (!rival) return null;
+  const totals = getCareerTotals(career.seasons);
+  
+  const rows = [
+    { l: "Overall", p: career.overall, r: rival.overall },
+    { l: "Career Goals", p: totals.goals, r: rival.careerGoals },
+    { l: "Career Assists", p: totals.assists, r: rival.careerAssists },
+    { l: "League Titles", p: totals.leagueTitles, r: rival.leagueTitles },
+    { l: "UCL", p: totals.championsLeagues, r: rival.championsLeagues },
+    { l: "Ballon d'Or", p: totals.ballonDors, r: rival.ballonDors },
+    { l: "Market Value", p: career.marketValue, r: rival.marketValue },
+  ];
+  
+  const playerWins = rows.filter(r => r.p > r.r).length;
+  const rivalWins = rows.filter(r => r.r > r.p).length;
+  const leader = playerWins > rivalWins ? "player" : playerWins < rivalWins ? "rival" : "tie";
+
+  return (
+    <div className={`bg-card border rounded-xl p-4 space-y-3 ${leader === "player" ? "border-emerald-500/30" : leader === "rival" ? "border-orange-500/30" : "border-border"}`}>
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">😤 Rivalry</span>
+        {rival.retired && <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40 text-muted-foreground">Retired</span>}
+      </div>
+      <div className="flex items-center justify-between text-xs mb-2">
+        <span className="font-bold text-emerald-400">{career.playerName}</span>
+        <span className="text-muted-foreground">vs</span>
+        <span className="font-bold text-orange-400">{getFlag(rival.nationality)} {rival.name}</span>
+      </div>
+      <div className="text-[10px] text-center text-muted-foreground mb-1">
+        {rival.club} · OVR {rival.overall} · Age {rival.age}
+      </div>
+      {rows.map(r => (
+        <div key={r.l} className="flex items-center justify-between text-xs">
+          <span className={`font-bold w-12 text-right ${r.p > r.r ? "text-emerald-400" : r.p < r.r ? "text-muted-foreground" : "text-foreground"}`}>
+            {r.l === "Market Value" ? `€${(r.p as number).toFixed(0)}M` : r.p}
+          </span>
+          <span className="text-[10px] text-muted-foreground flex-1 text-center">{r.l}</span>
+          <span className={`font-bold w-12 text-left ${r.r > r.p ? "text-orange-400" : r.r < r.p ? "text-muted-foreground" : "text-foreground"}`}>
+            {r.l === "Market Value" ? `€${(r.r as number).toFixed(0)}M` : r.r}
+          </span>
+        </div>
+      ))}
+      <div className="text-center mt-2">
+        <span className={`text-[11px] font-bold ${leader === "player" ? "text-emerald-400" : leader === "rival" ? "text-orange-400" : "text-muted-foreground"}`}>
+          {leader === "player" ? "✅ You're ahead!" : leader === "rival" ? `❌ ${rival.name} leads` : "🤝 Dead even"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Rivalry Summary Card (End of Career) ─── */
+function RivalrySummaryCard({ summary, career }: { summary: RivalrySummary; career: CareerState }) {
+  const rival = career.rival;
+  if (!rival) return null;
+  const winnerColor = summary.overallWinner === "player" ? "border-emerald-500/50 from-emerald-500/10" : summary.overallWinner === "rival" ? "border-orange-500/50 from-orange-500/10" : "border-amber-500/50 from-amber-500/10";
+  
+  return (
+    <div className={`rounded-xl border-2 ${winnerColor} bg-gradient-to-b to-transparent p-5 space-y-4`}>
+      <div className="text-center space-y-2">
+        <div className="text-4xl">{summary.overallWinner === "player" ? "👑" : summary.overallWinner === "rival" ? "😔" : "🤝"}</div>
+        <h3 className="text-xl font-black">
+          {summary.overallWinner === "player" ? "RIVALRY WON!" : summary.overallWinner === "rival" ? "RIVALRY LOST" : "RIVALRY TIED"}
+        </h3>
+        <p className="text-sm text-muted-foreground">{career.playerName} vs {rival.name} — Career Rivalry</p>
+      </div>
+      <div className="space-y-1.5">
+        {summary.categories.map(c => (
+          <div key={c.label} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
+            <span className={`font-bold w-14 text-right ${c.winner === "player" ? "text-emerald-400" : "text-muted-foreground"}`}>{c.playerVal}</span>
+            <span className="text-[10px] text-muted-foreground flex-1 text-center">{c.label}</span>
+            <span className={`font-bold w-14 text-left ${c.winner === "rival" ? "text-orange-400" : "text-muted-foreground"}`}>{c.rivalVal}</span>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center justify-center gap-6 text-sm font-bold">
+        <span className="text-emerald-400">{summary.playerWins} Won</span>
+        <span className="text-muted-foreground">{summary.categories.length - summary.playerWins - summary.rivalWins} Tied</span>
+        <span className="text-orange-400">{summary.rivalWins} Won</span>
+      </div>
+      <div className={`text-center text-xs ${summary.legacyBonus > 0 ? "text-emerald-400" : summary.legacyBonus < 0 ? "text-red-400" : "text-muted-foreground"}`}>
+        Legacy bonus: {summary.legacyBonus > 0 ? "+" : ""}{summary.legacyBonus} points
+      </div>
+    </div>
+  );
+}
+
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onNewCareer, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onNewCareer, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -723,6 +851,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onDismissDebut: () => void;
   onDismissWorldCup: () => void;
   onRetireInternational: () => void;
+  onDismissRivalryEvent: () => void;
   onNewCareer: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
@@ -821,6 +950,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <WorldCupResultCard wc={career.pendingWorldCup} career={career} onDismiss={onDismissWorldCup} />
           )}
 
+          {/* OVERLAY: Rivalry Event */}
+          {career.phase === "rivalry_event" && career.pendingRivalryEvent && (
+            <RivalryEventCard
+              event={career.pendingRivalryEvent}
+              rival={career.rival!}
+              career={career}
+              onDismiss={onDismissRivalryEvent}
+            />
+          )}
+
           {/* OVERLAY: Transfer Window */}
           {career.phase === "transfer_window" && career.transferSituation && (
             <TransferWindowCard
@@ -900,6 +1039,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* International Stats */}
           <InternationalStatsPanel career={career} onRetire={onRetireInternational} />
+
+          {/* Rival Comparison */}
+          <RivalComparisonPanel career={career} />
+
+          {/* Rivalry Summary (on retirement) */}
+          {career.retired && career.rivalrySummary && (
+            <RivalrySummaryCard summary={career.rivalrySummary} career={career} />
+          )}
         </div>
       </div>
 
