@@ -1002,7 +1002,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   s.reflexes = growStat(s.reflexes, s.age, false, false);
   s.overall = calcOverall(s, s.position);
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
-  s.marketValue = calcMarketValue(s.overall, s.age, s.position);
+  s.marketValue = calcMarketValue(s.overall, s.age, s.position, s.socialMediaFollowers);
 
   // International career check — first call-up
   if (!s.internationalCareer && !s.intStats.isRetired && shouldGetCallUp(s)) {
