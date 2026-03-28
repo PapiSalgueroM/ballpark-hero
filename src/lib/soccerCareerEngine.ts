@@ -717,14 +717,25 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
 
 /* ─── Wage by tier (euros per week) ─── */
 function wageForTier(tier: number, overall: number): number {
-  if (tier === 1 && overall >= 86) return rand(200000, 600000);
-  switch (tier) {
-    case 1: return rand(50000, 300000);
-    case 2: return rand(10000, 50000);
-    case 3: return rand(2000, 10000);
-    case 4: return rand(500, 2000);
-    default: return rand(1000, 5000);
+  if (tier === 1) {
+    if (overall >= 95) return rand(380000, 550000);
+    if (overall >= 90) return rand(250000, 380000);
+    if (overall >= 85) return rand(150000, 250000);
+    if (overall >= 80) return rand(80000, 150000);
+    return rand(30000, 80000);
   }
+  if (tier === 2) {
+    if (overall >= 85) return rand(70000, 120000);
+    if (overall >= 80) return rand(40000, 80000);
+    if (overall >= 75) return rand(20000, 50000);
+    return rand(8000, 20000);
+  }
+  if (tier === 3) {
+    if (overall >= 75) return rand(10000, 25000);
+    return rand(5000, 15000);
+  }
+  // Tier 4
+  return rand(500, 5000);
 }
 
 export function formatWage(wage: number): string {
@@ -762,20 +773,34 @@ function getInterestedTiers(overall: number): number[] {
 /* ─── Realistic Transfer Fee ─── */
 function realisticTransferFee(overall: number, age: number): number {
   let minFee: number, maxFee: number;
-  if (overall >= 95) { minFee = 130; maxFee = 250; }
-  else if (overall >= 90) { minFee = 80; maxFee = 150; }
-  else if (overall >= 85) { minFee = 45; maxFee = 90; }
-  else if (overall >= 80) { minFee = 20; maxFee = 55; }
-  else if (overall >= 75) { minFee = 8; maxFee = 25; }
-  else if (overall >= 70) { minFee = 3; maxFee = 12; }
-  else if (overall >= 65) { minFee = 1; maxFee = 5; }
+  if (overall >= 95) {
+    if (age <= 21) { minFee = 180; maxFee = 250; }
+    else if (age <= 25) { minFee = 200; maxFee = 280; }
+    else if (age <= 29) { minFee = 160; maxFee = 230; }
+    else { minFee = 60; maxFee = 120; }
+  } else if (overall >= 90) {
+    if (age <= 21) { minFee = 120; maxFee = 180; }
+    else if (age <= 25) { minFee = 130; maxFee = 200; }
+    else if (age <= 29) { minFee = 100; maxFee = 160; }
+    else { minFee = 35; maxFee = 70; }
+  } else if (overall >= 85) {
+    if (age <= 21) { minFee = 70; maxFee = 110; }
+    else if (age <= 25) { minFee = 90; maxFee = 140; }
+    else if (age <= 29) { minFee = 60; maxFee = 100; }
+    else { minFee = 20; maxFee = 45; }
+  } else if (overall >= 80) {
+    if (age <= 21) { minFee = 35; maxFee = 65; }
+    else if (age <= 25) { minFee = 50; maxFee = 85; }
+    else if (age <= 29) { minFee = 30; maxFee = 55; }
+    else { minFee = 10; maxFee = 25; }
+  } else if (overall >= 75) {
+    if (age <= 21) { minFee = 15; maxFee = 35; }
+    else if (age <= 25) { minFee = 20; maxFee = 45; }
+    else if (age <= 29) { minFee = 12; maxFee = 28; }
+    else { minFee = 5; maxFee = 15; }
+  } else if (overall >= 65) { minFee = 1; maxFee = 8; }
   else { minFee = 0.1; maxFee = 1; }
-  let fee = minFee + Math.random() * (maxFee - minFee);
-  // Age adjustments: peak 24-28, discount over 30/33
-  if (age >= 34) fee *= 0.4;
-  else if (age >= 30) fee *= 0.7;
-  else if (age < 24) fee *= 0.85;
-  return Math.round(fee * 10) / 10;
+  return Math.round((minFee + Math.random() * (maxFee - minFee)) * 10) / 10;
 }
 
 function feeDescription(feeMillions: number): string {
