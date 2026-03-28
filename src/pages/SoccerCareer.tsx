@@ -653,6 +653,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             </div>
           )}
 
+          {/* OVERLAY: Random Events */}
+          {career.phase === "random_events" && career.pendingEvents.length > 0 && (
+            <RandomEventCard
+              event={career.pendingEvents[0]}
+              remaining={career.pendingEvents.length}
+              onChoice={onEventChoice}
+            />
+          )}
+
           {/* OVERLAY: Transfer Window */}
           {career.phase === "transfer_window" && career.transferSituation && (
             <TransferWindowCard
