@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CookieConsent } from "@/components/CookieConsent";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { Header } from "@/components/layout/Header";
 import Index from "./pages/Index";
 import Footle from "./pages/Footle";
 import CareerGame from "./pages/CareerGame";
@@ -64,6 +65,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <CookieConsent />
+          <Header />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/footle" element={<Footle />} />
