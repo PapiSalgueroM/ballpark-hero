@@ -73,6 +73,28 @@ function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
   );
 }
 
+function StatCategory({ label, attLine, defLine, attColor, defColor }: {
+  label: string; attLine: string; defLine: string; attColor?: string; defColor?: string;
+}) {
+  return (
+    <div className="rounded-lg border border-border/50 overflow-hidden">
+      <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider px-2 py-1 bg-muted/50 text-center">
+        {label}
+      </div>
+      <div className="grid grid-cols-1 divide-y divide-border/30">
+        <div className="flex items-center gap-1.5 px-2 py-1.5 text-[11px]">
+          <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: attColor || '#333' }} />
+          <span className="text-foreground">{attLine}</span>
+        </div>
+        <div className="flex items-center gap-1.5 px-2 py-1.5 text-[11px]">
+          <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: defColor || '#333' }} />
+          <span className="text-foreground">{defLine}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ConquestBoard() {
   const game = useConquest();
   const [now, setNow] = useState(Date.now());
