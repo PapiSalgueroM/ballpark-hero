@@ -52,6 +52,7 @@ import NascarChain from "./pages/NascarChain";
 import SoccerGrid from "./pages/SoccerGrid";
 import FantasyDraft from "./pages/FantasyDraft";
 import Conquest from "./pages/Conquest";
+import WorldCupPredictor from "./pages/WorldCupPredictor";
 
 const queryClient = new QueryClient();
 
