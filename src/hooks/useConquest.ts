@@ -195,6 +195,11 @@ export function useConquest() {
   const [powerupUseType, setPowerupUseType] = useState<PowerupId | null>(null);
   const [freeAgentList, setFreeAgentList] = useState<FreeAgent[]>([]);
   const [territoryStolenState, setTerritoryStolenState] = useState<string | null>(null);
+  
+  // Play-by-play state
+  const [visiblePlays, setVisiblePlays] = useState<PlayEvent[]>([]);
+  const [playByPlayActive, setPlayByPlayActive] = useState(false);
+  const [boxScore, setBoxScore] = useState<BoxScore | null>(null);
 
   const timeoutsRef = useRef<number[]>([]);
   const clearTimeouts = () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
