@@ -131,26 +131,19 @@ function simulateBattle(
   territories: Record<string, string | null>,
   rosters: Record<string, string[]>,
   upgradeTeam?: string | null,
+  upgradedPlayer?: string | null,
 ): BattleResult {
-  const at = TEAM_MAP.get(attacker)!, dt = TEAM_MAP.get(defender)!;
-  const aTerr = Object.values(territories).filter(t => t === attacker).length;
-  const dTerr = Object.values(territories).filter(t => t === defender).length;
+  const sim = simulateDetailedBattle(attacker, defender, territories, rosters, upgradeTeam || null, upgradedPlayer || null);
 
-  let aPower = at.rating + aTerr * 0.5 + (rosters[attacker]?.length || 0) * 0.3;
-  let dPower = dt.rating + dTerr * 0.5 + (rosters[defender]?.length || 0) * 0.3;
-
-  // Upgrade powerup: +10 to the team that has an active upgrade
-  if (upgradeTeam === attacker) aPower += 10;
-  if (upgradeTeam === defender) dPower += 10;
-
-  const attackerWins = Math.random() < aPower / (aPower + dPower);
-  const winScore = Math.floor(Math.random() * 25) + 17;
-  const loseScore = Math.floor(Math.random() * Math.min(winScore, 24));
+  const winnerId = sim.winner === 'att' ? attacker : defender;
+  const loserId = sim.winner === 'att' ? defender : attacker;
 
   return {
-    winner: attackerWins ? attacker : defender,
-    loser: attackerWins ? defender : attacker,
-    winScore, loseScore,
+    winner: winnerId,
+    loser: loserId,
+    winScore: sim.winner === 'att' ? sim.finalAttScore : sim.finalDefScore,
+    loseScore: sim.winner === 'att' ? sim.finalDefScore : sim.finalAttScore,
+    simulation: sim,
   };
 }
 
