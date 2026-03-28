@@ -808,7 +808,7 @@ const WorldCupPredictor = () => {
         console.error(error);
         return;
       }
-      const url = `${window.location.origin}/world-cup-predictor?bracket=${bracketId}`;
+      const url = `${window.location.origin}/world-cup-bracket?bracket=${bracketId}`;
       setShareUrl(url);
       await navigator.clipboard.writeText(url).catch(() => {});
       toast.success("Bracket saved! Link copied to clipboard.");
@@ -1144,9 +1144,9 @@ const WorldCupPredictor = () => {
     <div className="min-h-screen text-white overflow-x-hidden" style={{ background: "linear-gradient(180deg, hsl(220, 20%, 8%) 0%, hsl(230, 18%, 6%) 50%, hsl(220, 20%, 8%) 100%)" }}>
       <GameNavbar />
       <PageSeo
-        title="World Cup 2026 Predictor | Sports Trivia Games"
-        description="Explore all 12 groups for the FIFA World Cup 2026 hosted in USA, Mexico & Canada."
-        path="/world-cup-predictor"
+        title="World Cup 2026 Bracket | Sports Trivia Games"
+        description="Build your World Cup 2026 bracket — predict every match from groups to the final."
+        path="/world-cup-bracket"
       />
 
       {/* Auth Modal */}
@@ -1162,7 +1162,7 @@ const WorldCupPredictor = () => {
             </span>
           </div>
           <a
-            href="/world-cup-predictor"
+            href="/world-cup-bracket"
             className="px-4 py-1.5 rounded-lg bg-[hsl(45,90%,45%)] hover:bg-[hsl(45,90%,50%)] text-[hsl(220,20%,8%)] text-sm font-bold transition-colors"
           >
             Make Your Own
@@ -1236,7 +1236,7 @@ const WorldCupPredictor = () => {
           <div className="flex items-center justify-center gap-3 mb-2">
             <Trophy className="w-8 h-8 text-[hsl(45,90%,55%)]" />
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[hsl(45,90%,55%)]">
-              World Cup 2026 Predictor
+              World Cup 2026 Bracket
             </h1>
             <Trophy className="w-8 h-8 text-[hsl(45,90%,55%)]" />
           </div>
@@ -1247,9 +1247,9 @@ const WorldCupPredictor = () => {
             <div className="mt-4 space-y-3">
               <ShareButtons
                 score=""
-                gameName="World Cup 2026 Predictor"
-                gamePath="/world-cup-predictor"
-                customText={`🏆 My World Cup 2026 prediction — I've got ${champion} winning it all! Make yours at douknowball.com/world-cup-predictor`}
+                gameName="World Cup 2026 Bracket"
+                gamePath="/world-cup-bracket"
+                customText={`🏆 My World Cup 2026 prediction — I've got ${champion} winning it all! Make yours at douknowball.com/world-cup-bracket`}
               />
               <button
                 onClick={handleSaveBracket}

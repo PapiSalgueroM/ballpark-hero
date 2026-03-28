@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CookieConsent } from "@/components/CookieConsent";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
 import Index from "./pages/Index";
@@ -114,7 +114,8 @@ const App = () => (
             <Route path="/soccer-grid" element={<SoccerGrid />} />
             <Route path="/fantasy-draft" element={<FantasyDraft />} />
             <Route path="/conquest" element={<Conquest />} />
-            <Route path="/world-cup-predictor" element={<WorldCupPredictor />} />
+            <Route path="/world-cup-bracket" element={<WorldCupPredictor />} />
+            <Route path="/world-cup-predictor" element={<Navigate to="/world-cup-bracket" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

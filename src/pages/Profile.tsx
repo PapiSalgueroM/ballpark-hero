@@ -506,7 +506,7 @@ export default function Profile() {
                       </p>
                     </div>
                   </div>
-                  <Link to={`/world-cup-predictor?bracket=${savedBracket.id}`}>
+                  <Link to={`/world-cup-bracket?bracket=${savedBracket.id}`}>
                     <Button size="sm" variant="outline">View Bracket</Button>
                   </Link>
                 </div>
