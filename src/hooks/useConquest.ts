@@ -39,7 +39,7 @@ export interface SavedPowerup {
 }
 
 // Re-export for consumers
-export type { PowerupId, PowerupDef, FreeAgent };
+export type { PowerupId, PowerupDef, FreeAgent, BattleSimulation, PlayEvent, BoxScore };
 export { POWERUPS, FREE_AGENTS, TEAM_LEGENDS };
 
 // Build a lookup from state ID → geographic center (from SVG paths)
