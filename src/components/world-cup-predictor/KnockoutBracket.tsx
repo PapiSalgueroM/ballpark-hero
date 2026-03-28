@@ -72,9 +72,10 @@ function loadPicks(): KnockoutPicks {
 interface KnockoutBracketProps {
   seeds: Record<string, GroupSeed>;
   bestThirds: { team: string }[];
+  onChampionChange?: (champion: string) => void;
 }
 
-const KnockoutBracket = ({ seeds, bestThirds }: KnockoutBracketProps) => {
+const KnockoutBracket = ({ seeds, bestThirds, onChampionChange }: KnockoutBracketProps) => {
   const [picks, setPicks] = useState<KnockoutPicks>(loadPicks);
 
   useEffect(() => {
