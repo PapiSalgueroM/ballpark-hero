@@ -42,7 +42,7 @@ export interface SavedPowerup {
 export type { PowerupId, PowerupDef, FreeAgent, BattleSimulation, PlayEvent, BoxScore, TeamStatLine };
 export { POWERUPS, FREE_AGENTS, TEAM_LEGENDS };
 
-// Build a lookup from state ID → geographic center (from SVG paths)
+// Build a lookup from state ID → geographic center (from SVG paths) - kept for map rendering
 const GEO_CENTERS = new Map<string, { x: number; y: number }>();
 US_STATES.forEach(s => GEO_CENTERS.set(s.id, { x: s.labelX, y: s.labelY }));
 
@@ -70,16 +70,41 @@ function buildInitialRosters(): Record<string, string[]> {
   return r;
 }
 
-function getTeamGeoCenter(teamId: string, territories: Record<string, string | null>): { x: number; y: number } {
+// Get team's geographic center using real lat/lon coordinates
+function getTeamGeoCenter(teamId: string, territories: Record<string, string | null>): { lat: number; lon: number } {
   const stateIds = Object.keys(territories).filter(s => territories[s] === teamId);
-  if (stateIds.length === 0) return { x: 290, y: 180 };
-  let sumX = 0, sumY = 0, count = 0;
+  if (stateIds.length === 0) return { lat: 39.0, lon: -98.0 }; // center of US fallback
+  let sumLat = 0, sumLon = 0, count = 0;
   for (const sid of stateIds) {
-    const geo = GEO_CENTERS.get(sid);
-    if (geo) { sumX += geo.x; sumY += geo.y; count++; }
+    const geo = STATE_GEO_COORDS[sid];
+    if (geo) { sumLat += geo.lat; sumLon += geo.lon; count++; }
   }
-  if (count === 0) return { x: 290, y: 180 };
-  return { x: sumX / count, y: sumY / count };
+  if (count === 0) return { lat: 39.0, lon: -98.0 };
+  return { lat: sumLat / count, lon: sumLon / count };
+}
+
+// Calculate compass bearing from point A to point B (in radians, 0=N, PI/2=E, PI=S, 3PI/2=W)
+function compassBearing(fromLat: number, fromLon: number, toLat: number, toLon: number): number {
+  const dLat = toLat - fromLat; // positive = north
+  const dLon = toLon - fromLon; // positive = east
+  // atan2(east, north) gives bearing from north clockwise
+  let bearing = Math.atan2(dLon, dLat);
+  if (bearing < 0) bearing += 2 * Math.PI;
+  return bearing;
+}
+
+// Angular difference (smallest angle between two bearings)
+function angleDiff(a: number, b: number): number {
+  let diff = Math.abs(a - b);
+  if (diff > Math.PI) diff = 2 * Math.PI - diff;
+  return diff;
+}
+
+// Haversine-like distance (simplified, using lat/lon degree differences)
+function geoDist(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const dLat = lat2 - lat1;
+  const dLon = (lon2 - lon1) * Math.cos(((lat1 + lat2) / 2) * Math.PI / 180);
+  return dLat * dLat + dLon * dLon;
 }
 
 function getAliveTeamsFrom(territories: Record<string, string | null>): string[] {
@@ -92,33 +117,33 @@ export type TargetResult = { type: 'team'; id: string } | { type: 'neutral'; sta
 
 function findTarget(teamId: string, direction: string, territories: Record<string, string | null>): TargetResult | null {
   const center = getTeamGeoCenter(teamId, territories);
-  const dirAngle = DIR_ANGLES[direction];
-  const coneHalf = Math.PI * 3 / 8;
+  const dirAngle = DIR_ANGLES[direction]; // compass bearing in radians
+  const coneHalf = (67 / 2) * Math.PI / 180; // 33.5 degrees half-cone
 
   let best: TargetResult | null = null;
   let bestDist = Infinity;
 
+  // Check enemy teams
   const alive = getAliveTeamsFrom(territories).filter(t => t !== teamId);
   for (const enemy of alive) {
     const ec = getTeamGeoCenter(enemy, territories);
-    const dx = ec.x - center.x, dy = ec.y - center.y;
-    let diff = Math.abs(Math.atan2(dy, dx) - dirAngle);
-    if (diff > Math.PI) diff = 2 * Math.PI - diff;
+    const bearing = compassBearing(center.lat, center.lon, ec.lat, ec.lon);
+    const diff = angleDiff(bearing, dirAngle);
     if (diff <= coneHalf) {
-      const dist = dx * dx + dy * dy;
+      const dist = geoDist(center.lat, center.lon, ec.lat, ec.lon);
       if (dist < bestDist) { bestDist = dist; best = { type: 'team', id: enemy }; }
     }
   }
 
+  // Check neutral territories
   for (const [sid, owner] of Object.entries(territories)) {
     if (owner !== null) continue;
-    const geo = GEO_CENTERS.get(sid);
+    const geo = STATE_GEO_COORDS[sid];
     if (!geo) continue;
-    const dx = geo.x - center.x, dy = geo.y - center.y;
-    let diff = Math.abs(Math.atan2(dy, dx) - dirAngle);
-    if (diff > Math.PI) diff = 2 * Math.PI - diff;
+    const bearing = compassBearing(center.lat, center.lon, geo.lat, geo.lon);
+    const diff = angleDiff(bearing, dirAngle);
     if (diff <= coneHalf) {
-      const dist = dx * dx + dy * dy;
+      const dist = geoDist(center.lat, center.lon, geo.lat, geo.lon);
       if (dist < bestDist) { bestDist = dist; best = { type: 'neutral', stateId: sid }; }
     }
   }
