@@ -1906,27 +1906,7 @@ export function dismissRivalryEvent(prev: CareerState, clubs: ClubData[]): Caree
 }
 
 function advanceToNextPhaseAfterRivalry(s: CareerState, clubs: ClubData[]): CareerState {
-  // Check for international debut screen
-  const lastSeason = s.seasons[s.seasons.length - 1];
-  if (s.intStats.debutYear === lastSeason?.year && s.phase !== "international_debut" && s.phase !== "world_cup") {
-    s.phase = "international_debut";
-    return s;
-  }
-  if (s.pendingWorldCup && s.phase !== "world_cup") {
-    s.phase = "world_cup";
-    return s;
-  }
-  const events = generateRandomEvents(s);
-  if (events.length > 0) {
-    s.pendingEvents = events;
-    s.phase = "random_events";
-    return s;
-  }
-  if (s.age >= 18) {
-    s.transferSituation = determineTransferSituation(s, clubs);
-    s.phase = "transfer_window";
-  } else { s.phase = "playing"; }
-  return s;
+  return advanceToNextPhase(s, clubs);
 }
 
 export function generateRivalrySummary(state: CareerState): RivalrySummary | null {
