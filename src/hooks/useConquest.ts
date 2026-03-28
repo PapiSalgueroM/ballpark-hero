@@ -562,8 +562,6 @@ export function useConquest() {
 
       if (aliveAfter.length <= 1) {
         setPhase('gameover');
-      } else if (loserRoster.length > 0) {
-        setPhase('steal');
       } else {
         setPhase('ready');
       }
