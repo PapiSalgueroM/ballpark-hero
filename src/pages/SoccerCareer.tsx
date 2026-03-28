@@ -253,6 +253,8 @@ function SeasonSummaryCard({ season, position, onContinue }: { season: SeasonRec
 }
 
 /* ─── Main Component ─── */
+const SAVE_KEY = "soccerCareerSave";
+
 export default function SoccerCareer() {
   const { user } = useAuth();
   const [showAuth, setShowAuth] = useState(false);
@@ -263,9 +265,16 @@ export default function SoccerCareer() {
   const [previewStats, setPreviewStats] = useState<Stats | null>(null);
   const [previewOvr, setPreviewOvr] = useState(0);
   const [saving, setSaving] = useState(false);
-  const [career, setCareer] = useState<CareerState | null>(null);
+  const [career, setCareer] = useState<CareerState | null>(() => {
+    try {
+      const saved = localStorage.getItem(SAVE_KEY);
+      if (saved) return JSON.parse(saved) as CareerState;
+    } catch {}
+    return null;
+  });
   const [clubs, setClubs] = useState<ClubData[]>([]);
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
+  const [showNewCareerConfirm, setShowNewCareerConfirm] = useState(false);
   const timelineRef = useRef<HTMLDivElement>(null);
 
   // Load clubs from Supabase
@@ -274,6 +283,13 @@ export default function SoccerCareer() {
       if (data) setClubs(data as unknown as ClubData[]);
     });
   }, []);
+
+  // Save career to localStorage whenever it changes
+  useEffect(() => {
+    if (career) {
+      try { localStorage.setItem(SAVE_KEY, JSON.stringify(career)); } catch {}
+    }
+  }, [career]);
 
   const isFormValid = playerName.trim().length > 0 && nationality && position && era;
 
@@ -409,10 +425,16 @@ export default function SoccerCareer() {
   };
 
   const handleNewCareer = () => {
+    setShowNewCareerConfirm(true);
+  };
+
+  const handleConfirmNewCareer = () => {
+    localStorage.removeItem(SAVE_KEY);
     setCareer(null);
     setPreviewStats(null);
     setRolledOvr(null);
     setPlayerName(""); setNationality(""); setPosition(""); setEra("");
+    setShowNewCareerConfirm(false);
   };
 
   return (
@@ -467,6 +489,19 @@ export default function SoccerCareer() {
         <Footer />
       </div>
       <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
+      {/* New Career Confirmation Dialog */}
+      {showNewCareerConfirm && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setShowNewCareerConfirm(false)}>
+          <div className="bg-card border-2 border-border rounded-xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
+            <h3 className="text-lg font-black text-center">⚠️ Start New Career?</h3>
+            <p className="text-sm text-muted-foreground text-center">Are you sure? This will delete your current career. All progress will be lost forever.</p>
+            <div className="flex gap-3">
+              <Button onClick={() => setShowNewCareerConfirm(false)} variant="outline" className="flex-1 h-10 font-bold">Cancel</Button>
+              <Button onClick={handleConfirmNewCareer} className="flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-white">Delete & Start Over</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
@@ -1457,11 +1492,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </h1>
           <p className="text-xs text-muted-foreground">{career.position} · Age {career.age} · {career.nationality}</p>
         </div>
-        <div className="text-center">
-          <div className={`text-3xl sm:text-4xl font-black ${career.overall >= 80 ? 'text-green-400' : career.overall >= 65 ? 'text-emerald-400' : career.overall >= 50 ? 'text-yellow-400' : 'text-red-400'}`}>
-            {career.overall}
+        <div className="flex items-center gap-3">
+          <Button onClick={onNewCareer} variant="ghost" className="text-[10px] text-muted-foreground hover:text-red-400 px-2 h-7">
+            🔄 New Career
+          </Button>
+          <div className="text-center">
+            <div className={`text-3xl sm:text-4xl font-black ${career.overall >= 80 ? 'text-green-400' : career.overall >= 65 ? 'text-emerald-400' : career.overall >= 50 ? 'text-yellow-400' : 'text-red-400'}`}>
+              {career.overall}
+            </div>
+            <div className="text-[10px] text-muted-foreground uppercase tracking-widest">OVR</div>
           </div>
-          <div className="text-[10px] text-muted-foreground uppercase tracking-widest">OVR</div>
         </div>
       </div>
 
