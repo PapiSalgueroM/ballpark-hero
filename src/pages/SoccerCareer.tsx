@@ -24,7 +24,7 @@ import {
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
-  generateShareText,
+  generateShareText, getYouthAcademyClub,
   getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
 } from "@/lib/soccerCareerEngine";
 import { shareResult } from "@/lib/share";
