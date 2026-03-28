@@ -15,9 +15,10 @@ import { toast } from "sonner";
 import { ChevronRight } from "lucide-react";
 import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
-  type RandomEvent, type EventChoice,
+  type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
+  dismissDebut, dismissWorldCup, retireFromInternational,
   getCareerTotals, getFlag, calcOverall, formatWage,
 } from "@/lib/soccerCareerEngine";
 
