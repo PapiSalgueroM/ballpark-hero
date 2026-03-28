@@ -20,6 +20,7 @@ export interface BattleResult {
   loser: string;
   winScore: number;
   loseScore: number;
+  simulation?: BattleSimulation;
 }
 
 export interface LogEntry {
