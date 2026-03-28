@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, ChevronDown, Swords, CalendarClock } from "lucide-react";
+import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import PageSeo from "@/components/seo/PageSeo";
@@ -247,14 +247,20 @@ interface GroupPredictionCardProps {
   group: Group;
   predictions: Predictions;
   onScoreChange: (key: string, field: "homeGoals" | "awayGoals", val: number | "") => void;
+  onAutoFillGroup: (letter: string) => void;
+  onResetGroup: (letter: string) => void;
 }
 
-const GroupPredictionCard = ({ group, predictions, onScoreChange }: GroupPredictionCardProps) => {
+const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGroup, onResetGroup }: GroupPredictionCardProps) => {
   const [expanded, setExpanded] = useState(false);
   const matchups = getMatchups(group.teams);
 
   const standings = useMemo(() => computeStandings(group, predictions), [group, predictions]);
   const hasAnyScore = matchups.some((_, idx) => {
+    const s = predictions[`${group.letter}-${idx}`];
+    return s && s.homeGoals !== "" && s.awayGoals !== "";
+  });
+  const allFilled = matchups.every((_, idx) => {
     const s = predictions[`${group.letter}-${idx}`];
     return s && s.homeGoals !== "" && s.awayGoals !== "";
   });
@@ -301,9 +307,31 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange }: GroupPredict
       {/* Expanded: matchups + standings */}
       {expanded && (
         <CardContent className="px-4 pb-4 pt-2 border-t border-[hsl(150,15%,18%)]">
-          <p className="text-[hsl(150,15%,50%)] text-[10px] uppercase tracking-wider font-semibold mb-2">
-            Predict Scores
-          </p>
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[hsl(150,15%,50%)] text-[10px] uppercase tracking-wider font-semibold">
+              Predict Scores
+            </p>
+            <div className="flex gap-1.5">
+              {!allFilled && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); onAutoFillGroup(group.letter); }}
+                  className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(150,12%,20%)] hover:bg-[hsl(150,12%,25%)] text-[hsl(150,15%,60%)] transition-colors"
+                  title="Auto-fill random scores"
+                >
+                  <Shuffle className="w-3 h-3" /> Fill
+                </button>
+              )}
+              {hasAnyScore && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); onResetGroup(group.letter); }}
+                  className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(0,40%,20%)] hover:bg-[hsl(0,40%,25%)] text-[hsl(0,60%,65%)] transition-colors"
+                  title="Reset group scores"
+                >
+                  <RotateCcw className="w-3 h-3" /> Reset
+                </button>
+              )}
+            </div>
+          </div>
           <div className="space-y-2">
             {matchups.map(([hi, ai], idx) => {
               const key = `${group.letter}-${idx}`;
@@ -513,6 +541,58 @@ const WorldCupPredictor = () => {
     }, 100);
   };
 
+  const handleAutoFillGroup = useCallback((letter: string) => {
+    setPredictions((prev) => {
+      const next = { ...prev };
+      for (let i = 0; i < 6; i++) {
+        const key = `${letter}-${i}`;
+        const existing = next[key];
+        if (!existing || existing.homeGoals === "" || existing.awayGoals === "") {
+          next[key] = {
+            homeGoals: Math.floor(Math.random() * 4),
+            awayGoals: Math.floor(Math.random() * 4),
+          };
+        }
+      }
+      return next;
+    });
+  }, []);
+
+  const handleAutoFillAll = useCallback(() => {
+    setPredictions((prev) => {
+      const next = { ...prev };
+      for (const letter of GROUPS_LETTERS) {
+        for (let i = 0; i < 6; i++) {
+          const key = `${letter}-${i}`;
+          const existing = next[key];
+          if (!existing || existing.homeGoals === "" || existing.awayGoals === "") {
+            next[key] = {
+              homeGoals: Math.floor(Math.random() * 4),
+              awayGoals: Math.floor(Math.random() * 4),
+            };
+          }
+        }
+      }
+      return next;
+    });
+  }, []);
+
+  const handleResetGroup = useCallback((letter: string) => {
+    setPredictions((prev) => {
+      const next = { ...prev };
+      for (let i = 0; i < 6; i++) {
+        delete next[`${letter}-${i}`];
+      }
+      return next;
+    });
+  }, []);
+
+  const handleResetEverything = useCallback(() => {
+    setPredictions({});
+    setShowBracket(false);
+    localStorage.removeItem("wc2026-knockout");
+  }, []);
+
   return (
     <div className="min-h-screen bg-[hsl(150,20%,8%)] text-white">
       <PageSeo
@@ -539,14 +619,31 @@ const WorldCupPredictor = () => {
         {/* Playoff Slots Panel */}
         <PlayoffSlotsPanel />
 
-        {/* Section heading */}
-        <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Predict Group Stage</h2>
-        <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm mb-5">
-          Tap a group to expand, enter match scores, and watch the standings update live.
-          <span className="ml-2 text-[hsl(45,80%,55%)]">
-            {filledGroupCount}/12 groups complete
-          </span>
-        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Predict Group Stage</h2>
+            <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm">
+              Tap a group to expand, enter match scores, and watch the standings update live.
+              <span className="ml-2 text-[hsl(45,80%,55%)]">
+                {filledGroupCount}/12 groups complete
+              </span>
+            </p>
+          </div>
+          <div className="flex gap-2 flex-shrink-0">
+            <button
+              onClick={handleAutoFillAll}
+              className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(150,12%,18%)] hover:bg-[hsl(150,12%,22%)] text-[hsl(150,15%,60%)] border border-[hsl(150,20%,25%)] transition-colors"
+            >
+              <Shuffle className="w-3.5 h-3.5" /> Auto-Fill All
+            </button>
+            <button
+              onClick={handleResetEverything}
+              className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(0,40%,15%)] hover:bg-[hsl(0,40%,20%)] text-[hsl(0,60%,65%)] border border-[hsl(0,30%,25%)] transition-colors"
+            >
+              <Trash2 className="w-3.5 h-3.5" /> Reset All
+            </button>
+          </div>
+        </div>
 
         {/* Group Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -556,6 +653,8 @@ const WorldCupPredictor = () => {
               group={group}
               predictions={predictions}
               onScoreChange={handleScoreChange}
+              onAutoFillGroup={handleAutoFillGroup}
+              onResetGroup={handleResetGroup}
             />
           ))}
         </div>
