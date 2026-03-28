@@ -102,6 +102,7 @@ export interface BallonDorNominee {
   name: string;
   nationality: string;
   club: string;
+  position: string;
   points: number;
   goals: number;
   trophies: string[];
@@ -111,8 +112,9 @@ export interface BallonDorNominee {
 export interface BallonDorResult {
   year: number;
   nominees: BallonDorNominee[];
-  playerRank: number | null; // 1-5 if nominated, null if not
+  playerRank: number | null; // 1-10 if nominated, null if not
   playerPoints: number;
+  playerNominated: boolean;
 }
 
 /* ─── UCL Knockout Result ─── */
@@ -1578,90 +1580,174 @@ function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult {
 }
 
 /* ─── Ballon d'Or Calculation ─── */
-const FAKE_PLAYER_NAMES = [
-  "Kylian Dubois", "Erling Andersen", "Jude Martinez", "Vinicius Santos", "Rodri Hernández",
-  "Mohamed Salah", "Harry Kane", "Lautaro López", "Bernardo Costa", "Phil Johansson",
-  "Bukayo Moreno", "Florian Weber", "Rafael Petrov", "Federico Torres", "Jamal Schmidt",
+
+interface RealContender {
+  name: string;
+  nationality: string;
+  position: string;
+  club: string;
+  baseGoals: [number, number]; // min/max goals range
+  startAge: number; // age in 2024
+}
+
+const REAL_CONTENDERS: RealContender[] = [
+  { name: "Erling Haaland", nationality: "Norway", position: "ST", club: "Man City", baseGoals: [25, 45], startAge: 24 },
+  { name: "Kylian Mbappé", nationality: "France", position: "ST", club: "Real Madrid", baseGoals: [20, 40], startAge: 25 },
+  { name: "Vinícius Jr", nationality: "Brazil", position: "LW", club: "Real Madrid", baseGoals: [15, 30], startAge: 24 },
+  { name: "Jude Bellingham", nationality: "England", position: "CAM", club: "Real Madrid", baseGoals: [12, 25], startAge: 21 },
+  { name: "Mohamed Salah", nationality: "Egypt", position: "RW", club: "Liverpool", baseGoals: [18, 32], startAge: 32 },
+  { name: "Lamine Yamal", nationality: "Spain", position: "RW", club: "Barcelona", baseGoals: [8, 20], startAge: 17 },
+  { name: "Florian Wirtz", nationality: "Germany", position: "CAM", club: "Bayern Munich", baseGoals: [10, 22], startAge: 21 },
+  { name: "Bukayo Saka", nationality: "England", position: "RW", club: "Arsenal", baseGoals: [12, 24], startAge: 23 },
+  { name: "Pedri", nationality: "Spain", position: "CM", club: "Barcelona", baseGoals: [5, 15], startAge: 22 },
+  { name: "Gavi", nationality: "Spain", position: "CM", club: "Barcelona", baseGoals: [4, 12], startAge: 20 },
+  { name: "Phil Foden", nationality: "England", position: "CAM", club: "Man City", baseGoals: [10, 22], startAge: 24 },
+  { name: "Rodri", nationality: "Spain", position: "CDM", club: "Man City", baseGoals: [3, 10], startAge: 28 },
+  { name: "Federico Valverde", nationality: "Uruguay", position: "CM", club: "Real Madrid", baseGoals: [5, 15], startAge: 26 },
+  { name: "Raphinha", nationality: "Brazil", position: "RW", club: "Barcelona", baseGoals: [10, 22], startAge: 27 },
+  { name: "Rúben Dias", nationality: "Portugal", position: "CB", club: "Man City", baseGoals: [1, 5], startAge: 27 },
+  { name: "Declan Rice", nationality: "England", position: "CDM", club: "Arsenal", baseGoals: [3, 10], startAge: 25 },
+  { name: "Harry Kane", nationality: "England", position: "ST", club: "Bayern Munich", baseGoals: [22, 40], startAge: 31 },
+  { name: "Roberto Firmino", nationality: "Brazil", position: "ST", club: "Al-Ahli", baseGoals: [10, 22], startAge: 33 },
+  { name: "Antoine Griezmann", nationality: "France", position: "CAM", club: "Atletico Madrid", baseGoals: [12, 24], startAge: 33 },
+  { name: "Bernardo Silva", nationality: "Portugal", position: "CAM", club: "Man City", baseGoals: [8, 18], startAge: 30 },
 ];
 
-function calculateBallonDor(state: CareerState, season: SeasonRecord, year: number): BallonDorResult {
-  const isAttacker = ["ST", "CAM", "LW", "RW"].includes(state.position);
-  const isMid = ["CM", "CDM"].includes(state.position);
-  
-  // Calculate player points
-  let playerPoints = 0;
-  // Goals (most weight for attackers)
-  playerPoints += season.goals * (isAttacker ? 3 : isMid ? 2 : 1);
-  // Assists
-  playerPoints += season.assists * 1.5;
+const REPLACEMENT_YOUNG_PLAYERS: RealContender[] = [
+  { name: "Endrick", nationality: "Brazil", position: "ST", club: "Real Madrid", baseGoals: [10, 25], startAge: 18 },
+  { name: "Alejandro Garnacho", nationality: "Argentina", position: "LW", club: "Man United", baseGoals: [8, 20], startAge: 20 },
+  { name: "Mathys Tel", nationality: "France", position: "ST", club: "Bayern Munich", baseGoals: [8, 20], startAge: 19 },
+  { name: "Kobbie Mainoo", nationality: "England", position: "CM", club: "Man United", baseGoals: [3, 12], startAge: 19 },
+  { name: "Warren Zaïre-Emery", nationality: "France", position: "CM", club: "PSG", baseGoals: [4, 14], startAge: 18 },
+  { name: "Pau Cubarsí", nationality: "Spain", position: "CB", club: "Barcelona", baseGoals: [1, 5], startAge: 17 },
+  { name: "Nico Williams", nationality: "Spain", position: "LW", club: "Athletic Bilbao", baseGoals: [10, 22], startAge: 22 },
+  { name: "Xavi Simons", nationality: "Netherlands", position: "CAM", club: "PSG", baseGoals: [10, 20], startAge: 21 },
+];
+
+const TOP_6_CLUBS = ["Real Madrid", "Man City", "Barcelona", "Bayern Munich", "Arsenal", "Liverpool"];
+
+function calcBdorPoints(goals: number, assists: number, overall: number, clubTier: number, trophies: string[], club: string): number {
+  let pts = 0;
+  // Goals: 1pt each, max 40
+  pts += Math.min(goals, 40);
+  // Assists: 0.5 each, max 15
+  pts += Math.min(assists * 0.5, 15);
   // Trophies
-  if (season.leagueTitle) playerPoints += 15;
-  if (season.domesticCup) playerPoints += 5;
-  if (season.championsLeague) playerPoints += 25;
-  if (season.worldCup) playerPoints += 30;
-  // International performance
-  playerPoints += season.intGoals * 2;
-  if (season.tournamentResult === "Winner") playerPoints += 10;
-  // Overall rating
-  playerPoints += Math.max(0, (state.overall - 75)) * 2;
-  // Season rating
-  playerPoints += (season.rating - 6) * 5;
-  // Media/fame
-  playerPoints += state.socialMediaFollowers * 0.5;
-  playerPoints += state.popularity * 0.2;
-  // Random variance
-  playerPoints += (Math.random() - 0.3) * 15;
-  playerPoints = Math.round(Math.max(0, playerPoints));
+  if (trophies.includes("UCL")) pts += 25;
+  if (trophies.includes("World Cup")) pts += 30;
+  if (trophies.includes("League")) pts += 15;
+  if (trophies.includes("Cup")) pts += 5;
+  // Overall 90+ bonus
+  if (overall >= 90) pts += 10;
+  // Top 6 club bonus
+  if (TOP_6_CLUBS.includes(club)) pts += 10;
+  return Math.round(pts);
+}
 
-  // Generate 4 AI nominees with points
-  const nominees: BallonDorNominee[] = [];
-  const usedNames = new Set<string>([state.playerName]);
-  for (let i = 0; i < 4; i++) {
-    const available = FAKE_PLAYER_NAMES.filter(n => !usedNames.has(n));
-    if (available.length === 0) break;
-    const name = pick(available);
-    usedNames.add(name);
-    const aiOvr = rand(82, 93);
-    const aiGoals = rand(15, 35);
-    const trophies: string[] = [];
-    if (Math.random() < 0.3) trophies.push("League");
-    if (Math.random() < 0.15) trophies.push("UCL");
-    if (Math.random() < 0.05) trophies.push("World Cup");
-    let aiPoints = aiGoals * 2.5 + (aiOvr - 75) * 2 + trophies.length * 15 + (Math.random() - 0.3) * 20;
-    // Make 1st nominee strong competition
-    if (i === 0) aiPoints += rand(5, 15);
-    aiPoints = Math.round(Math.max(0, aiPoints));
-    const nat = pick(Object.keys(FLAG_MAP));
-    nominees.push({
-      name, nationality: nat, club: pick(["Real Madrid", "Man City", "Barcelona", "Bayern Munich", "PSG", "Liverpool", "Arsenal", "Inter Milan"]),
-      points: aiPoints, goals: aiGoals, trophies, isPlayer: false,
-    });
-  }
+function calculateBallonDor(state: CareerState, season: SeasonRecord, year: number): BallonDorResult {
+  // Determine which year offset from 2024
+  const yearOffset = year - 2024;
 
-  // Add player
+  // --- Player eligibility ---
+  const isLowTierClub = state.currentClubTier >= 3;
+  const hasMajorTrophy = season.leagueTitle || season.championsLeague || season.worldCup;
+  // Tier 3/4 players need 40+ goals AND a major trophy
+  const playerEligible = !isLowTierClub || (season.goals >= 40 && hasMajorTrophy);
+  // Must be at tier 1 or 2 to realistically contend (with the exception above)
+  const playerCanContend = (state.currentClubTier <= 2) || (isLowTierClub && season.goals >= 40 && hasMajorTrophy);
+
+  // Calculate player points
   const playerTrophies: string[] = [];
   if (season.leagueTitle) playerTrophies.push("League");
   if (season.championsLeague) playerTrophies.push("UCL");
   if (season.domesticCup) playerTrophies.push("Cup");
   if (season.worldCup) playerTrophies.push("World Cup");
-  nominees.push({
-    name: state.playerName, nationality: state.nationality, club: state.currentClub,
-    points: playerPoints, goals: season.goals, trophies: playerTrophies, isPlayer: true,
+
+  let playerPoints = 0;
+  if (playerCanContend) {
+    playerPoints = calcBdorPoints(season.goals, season.assists, state.overall, state.currentClubTier, playerTrophies, state.currentClub);
+  }
+  const playerNominated = playerCanContend && playerPoints > 45;
+
+  // --- Generate real contender nominees ---
+  const nominees: BallonDorNominee[] = [];
+  const activeContenders = REAL_CONTENDERS.filter(c => {
+    const age = c.startAge + yearOffset;
+    return age <= 36 && age >= 17;
   });
 
-  // Sort by points descending
-  nominees.sort((a, b) => b.points - a.points);
-  const top5 = nominees.slice(0, 5);
-  const playerRankInTop5 = top5.findIndex(n => n.isPlayer);
-  const playerRank = playerRankInTop5 >= 0 ? playerRankInTop5 + 1 : null;
+  // Fill retired spots with young replacements
+  const retiredCount = REAL_CONTENDERS.length - activeContenders.length;
+  const replacements = REPLACEMENT_YOUNG_PLAYERS.filter(c => {
+    const age = c.startAge + yearOffset;
+    return age >= 17 && age <= 36;
+  }).slice(0, retiredCount);
 
-  return { year, nominees: top5, playerRank, playerPoints };
+  const allContenders = [...activeContenders, ...replacements];
+  const usedNames = new Set<string>([state.playerName]);
+  // Also exclude rival name
+  if (state.rival) usedNames.add(state.rival.name);
+
+  for (const contender of allContenders) {
+    if (usedNames.has(contender.name)) continue;
+    usedNames.add(contender.name);
+    const age = contender.startAge + yearOffset;
+    // Generate seasonal stats
+    const ageFactor = age <= 28 ? 1.0 : age <= 32 ? 0.85 : 0.65;
+    const goals = Math.round(rand(contender.baseGoals[0], contender.baseGoals[1]) * ageFactor);
+    const assists = rand(3, 18);
+    const trophies: string[] = [];
+    if (Math.random() < 0.3) trophies.push("League");
+    if (Math.random() < 0.12) trophies.push("UCL");
+    if (year % 4 === 2 && Math.random() < 0.06) trophies.push("World Cup");
+    if (Math.random() < 0.2) trophies.push("Cup");
+    const overall = clamp(rand(83, 93) + (age <= 28 ? 2 : age >= 33 ? -3 : 0), 75, 95);
+    const pts = calcBdorPoints(goals, assists, overall, 1, trophies, contender.club);
+    if (pts > 45) {
+      nominees.push({
+        name: contender.name, nationality: contender.nationality, position: contender.position,
+        club: contender.club, points: pts, goals, trophies, isPlayer: false,
+      });
+    }
+  }
+
+  // Add rival as fictional contender (if exists and at a good club)
+  if (state.rival && !state.rival.retired && state.rival.clubTier <= 2) {
+    const rivalGoals = state.rival.careerGoals > 0 ? rand(12, 30) : rand(5, 15);
+    const rivalAssists = rand(3, 12);
+    const rivalTrophies: string[] = [];
+    if (state.rival.leagueTitles > 0 && Math.random() < 0.3) rivalTrophies.push("League");
+    if (state.rival.championsLeagues > 0 && Math.random() < 0.15) rivalTrophies.push("UCL");
+    const rivalPts = calcBdorPoints(rivalGoals, rivalAssists, state.rival.overall, state.rival.clubTier, rivalTrophies, state.rival.club);
+    if (rivalPts > 45) {
+      nominees.push({
+        name: state.rival.name, nationality: state.rival.nationality, position: state.rival.position,
+        club: state.rival.club, points: rivalPts, goals: rivalGoals, trophies: rivalTrophies, isPlayer: false,
+      });
+    }
+  }
+
+  // Add player if nominated
+  if (playerNominated) {
+    nominees.push({
+      name: state.playerName, nationality: state.nationality, position: state.position,
+      club: state.currentClub, points: playerPoints, goals: season.goals, trophies: playerTrophies, isPlayer: true,
+    });
+  }
+
+  // Sort by points descending, take top 10
+  nominees.sort((a, b) => b.points - a.points);
+  const top10 = nominees.slice(0, 10);
+  const playerRankIdx = top10.findIndex(n => n.isPlayer);
+  const playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
+
+  return { year, nominees: top10, playerRank, playerPoints, playerNominated };
 }
 
 /* ─── Flow helper: advance to next phase ─── */
 function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
-  // Check for Ballon d'Or ceremony
-  if (s.pendingBallonDor && s.pendingBallonDor.playerRank !== null) {
+  // Check for Ballon d'Or ceremony — always show it
+  if (s.pendingBallonDor) {
     s.phase = "ballon_dor";
     return s;
   }
