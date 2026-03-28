@@ -1179,6 +1179,11 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
     s.phase = "world_cup";
     return s;
   }
+  // Rivalry event
+  if (s.pendingRivalryEvent) {
+    s.phase = "rivalry_event";
+    return s;
+  }
   // Random events
   const events = generateRandomEvents(s);
   if (events.length > 0) {
