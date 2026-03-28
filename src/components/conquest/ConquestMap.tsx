@@ -1,5 +1,5 @@
 import { US_STATES } from '@/data/usStatesPaths';
-import { TEAM_MAP, POWER_UP_STATES, isLightColor } from '@/data/conquestData';
+import { TEAM_MAP, isLightColor } from '@/data/conquestData';
 import { useState, useMemo } from 'react';
 
 interface ConquestMapProps {
@@ -7,9 +7,10 @@ interface ConquestMapProps {
   attackingTeam: string | null;
   defendingTeam: string | null;
   phase: string;
+  powerupStates: Set<string>;
 }
 
-export default function ConquestMap({ territories, attackingTeam, defendingTeam, phase }: ConquestMapProps) {
+export default function ConquestMap({ territories, attackingTeam, defendingTeam, phase, powerupStates }: ConquestMapProps) {
   const [hovered, setHovered] = useState<string | null>(null);
 
   const getColor = (stateId: string) => {
@@ -134,7 +135,7 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
         {/* Layer 4: Power-up indicators for unclaimed states */}
         {US_STATES.map(state => {
           const teamId = territories[state.id];
-          if (teamId || !POWER_UP_STATES.has(state.id)) return null;
+          if (teamId || !powerupStates.has(state.id)) return null;
           return (
             <text
               key={`powerup-${state.id}`}
@@ -185,7 +186,7 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
               <div className="text-muted-foreground mt-0.5">{hoveredTerrCount} territories</div>
             </>
           ) : (
-            <div className="text-muted-foreground">Unclaimed{POWER_UP_STATES.has(hovered) ? ' ⚡ Power-Up' : ''}</div>
+            <div className="text-muted-foreground">Unclaimed{powerupStates.has(hovered) ? ' ⚡ Power-Up' : ''}</div>
           )}
         </div>
       )}

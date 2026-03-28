@@ -1,9 +1,19 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import {
   NFL_TEAMS, TEAM_MAP, INITIAL_TERRITORIES, STATE_POSITIONS,
-  DIRECTIONS, DIR_ANGLES, DIR_LABELS, POWER_UP_STATES,
+  DIRECTIONS, DIR_ANGLES, DIR_LABELS,
 } from '@/data/conquestData';
 import { US_STATES } from '@/data/usStatesPaths';
+
+export const POWERUP_TYPES = [
+  { id: 'blitz', label: '⚡ Blitz', description: '+5 power for next battle' },
+  { id: 'shield', label: '🛡️ Shield', description: 'Survive one loss' },
+  { id: 'scout', label: '🔭 Scout', description: 'Choose your next direction' },
+  { id: 'rally', label: '📣 Rally', description: '+2 roster bonus' },
+  { id: 'ambush', label: '🎯 Ambush', description: 'Auto-win next neutral claim' },
+] as const;
+
+export type PowerupType = typeof POWERUP_TYPES[number]['id'];
 
 export type Phase = 'ready' | 'animating' | 'battle' | 'steal' | 'gameover';
 
@@ -31,6 +41,14 @@ function buildInitialTerritories(): Record<string, string | null> {
   const t: Record<string, string | null> = {};
   STATE_POSITIONS.forEach(s => { t[s.id] = INITIAL_TERRITORIES[s.id] || null; });
   return t;
+}
+
+function pickRandomPowerupStates(): Set<string> {
+  const terr = buildInitialTerritories();
+  const neutralIds = Object.keys(terr).filter(id => terr[id] === null);
+  const count = 4 + Math.floor(Math.random() * 4); // 4-7
+  const shuffled = neutralIds.sort(() => Math.random() - 0.5);
+  return new Set(shuffled.slice(0, count));
 }
 
 function buildInitialRosters(): Record<string, string[]> {
@@ -109,11 +127,9 @@ function simulateBattle(
   const at = TEAM_MAP.get(attacker)!, dt = TEAM_MAP.get(defender)!;
   const aTerr = Object.values(territories).filter(t => t === attacker).length;
   const dTerr = Object.values(territories).filter(t => t === defender).length;
-  const aPU = STATE_POSITIONS.filter(s => territories[s.id] === attacker && POWER_UP_STATES.has(s.id)).length;
-  const dPU = STATE_POSITIONS.filter(s => territories[s.id] === defender && POWER_UP_STATES.has(s.id)).length;
 
-  const aPower = at.rating + aTerr * 0.5 + aPU * 3 + (rosters[attacker]?.length || 0) * 0.3;
-  const dPower = dt.rating + dTerr * 0.5 + dPU * 3 + (rosters[defender]?.length || 0) * 0.3;
+  const aPower = at.rating + aTerr * 0.5 + (rosters[attacker]?.length || 0) * 0.3;
+  const dPower = dt.rating + dTerr * 0.5 + (rosters[defender]?.length || 0) * 0.3;
 
   const attackerWins = Math.random() < aPower / (aPower + dPower);
   const winScore = Math.floor(Math.random() * 25) + 17;
@@ -139,6 +155,8 @@ export function useConquest() {
   const [gameLog, setGameLog] = useState<LogEntry[]>([]);
   const [animStartTime, setAnimStartTime] = useState(0);
   const [noEnemyMsg, setNoEnemyMsg] = useState<string | null>(null);
+  const [powerupStates, setPowerupStates] = useState<Set<string>>(() => pickRandomPowerupStates());
+  const [teamPowerups, setTeamPowerups] = useState<Record<string, PowerupType[]>>({});
 
   const timeoutsRef = useRef<number[]>([]);
   const clearTimeouts = () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
@@ -214,6 +232,36 @@ export function useConquest() {
       // Claiming a neutral state — no battle needed
       const stateId = target.stateId;
       const stateName = STATE_POSITIONS.find(s => s.id === stateId)?.name || stateId;
+      const isPowerup = powerupStates.has(stateId);
+
+      const claimState = () => {
+        setTerritories(prev => ({ ...prev, [stateId]: team }));
+        setTurn(t => t + 1);
+        // Award random powerup if this was a powerup state
+        if (isPowerup) {
+          const randomPU = POWERUP_TYPES[Math.floor(Math.random() * POWERUP_TYPES.length)];
+          setTeamPowerups(prev => ({
+            ...prev,
+            [team]: [...(prev[team] || []), randomPU.id],
+          }));
+          setGameLog(prev => [...prev, {
+            turn: prev.length + 1,
+            attacker: team,
+            defender: 'neutral',
+            winner: team,
+            score: `claimed ${stateName} ⚡ ${randomPU.label}`,
+          }]);
+        } else {
+          setGameLog(prev => [...prev, {
+            turn: prev.length + 1,
+            attacker: team,
+            defender: 'neutral',
+            winner: team,
+            score: `claimed ${stateName}`,
+          }]);
+        }
+        setPhase('ready');
+      };
 
       if (missedFirst) {
         addTimeout(() => {
@@ -223,33 +271,10 @@ export function useConquest() {
           setNoEnemyMsg(null);
           setDirection(chosenDir!);
         }, 5000);
-        addTimeout(() => {
-          // Claim the neutral state
-          setTerritories(prev => ({ ...prev, [stateId]: team }));
-          setTurn(t => t + 1);
-          setGameLog(prev => [...prev, {
-            turn: prev.length + 1,
-            attacker: team,
-            defender: 'neutral',
-            winner: team,
-            score: `claimed ${stateName}`,
-          }]);
-          setPhase('ready');
-        }, 6500);
+        addTimeout(claimState, 6500);
       } else {
         setDirection(chosenDir);
-        addTimeout(() => {
-          setTerritories(prev => ({ ...prev, [stateId]: team }));
-          setTurn(t => t + 1);
-          setGameLog(prev => [...prev, {
-            turn: prev.length + 1,
-            attacker: team,
-            defender: 'neutral',
-            winner: team,
-            score: `claimed ${stateName}`,
-          }]);
-          setPhase('ready');
-        }, 4000);
+        addTimeout(claimState, 4000);
       }
     } else {
       // Battle against enemy team
@@ -343,12 +368,14 @@ export function useConquest() {
     setDefendingTeam(null);
     setBattleResult(null);
     setGameLog([]);
+    setPowerupStates(pickRandomPowerupStates());
+    setTeamPowerups({});
   }, []);
 
   return {
     territories, rosters, eliminated, turn, phase,
     attackingTeam, direction, defendingTeam, battleResult, gameLog,
-    animStartTime, noEnemyMsg,
+    animStartTime, noEnemyMsg, powerupStates, teamPowerups,
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,
   };
 }
