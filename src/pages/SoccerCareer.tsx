@@ -15,8 +15,9 @@ import { toast } from "sonner";
 import { ChevronRight } from "lucide-react";
 import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
+  type RandomEvent, type EventChoice,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
-  dismissSummary, stayAtClub, signExtension, requestTransfer,
+  dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   getCareerTotals, getFlag, calcOverall, formatWage,
 } from "@/lib/soccerCareerEngine";
 
@@ -275,6 +276,15 @@ export default function SoccerCareer() {
     setCareer(s);
   };
 
+  const handleEventChoice = (choiceIndex: number) => {
+    if (!career) return;
+    const event = career.pendingEvents[0];
+    if (!event) return;
+    const result = applyEventChoice(career, choiceIndex, clubs);
+    setCareer(result);
+    toast(event.choices[choiceIndex].consequence);
+  };
+
   const handleNewCareer = () => {
     setCareer(null);
     setPreviewStats(null);
@@ -312,6 +322,7 @@ export default function SoccerCareer() {
               onStay={handleStay}
               onSignExtension={handleSignExtension}
               onRequestTransfer={handleRequestTransfer}
+              onEventChoice={handleEventChoice}
               onNewCareer={handleNewCareer}
               timelineRef={timelineRef}
             />
@@ -509,8 +520,51 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
   );
 }
 
+/* ─── Random Event Card ─── */
+function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; remaining: number; onChoice: (idx: number) => void }) {
+  const categoryColors: Record<string, string> = {
+    positive: "border-emerald-500/40 bg-emerald-500/5",
+    negative: "border-red-500/40 bg-red-500/5",
+    international: "border-blue-500/40 bg-blue-500/5",
+    life: "border-purple-500/40 bg-purple-500/5",
+  };
+  const categoryLabels: Record<string, string> = {
+    positive: "⚡ Positive Event",
+    negative: "⚠️ Challenge",
+    international: "🌍 International",
+    life: "🏠 Life Event",
+  };
+  return (
+    <div className={`rounded-xl border-2 p-5 space-y-4 ${categoryColors[event.category] || "border-border bg-card"}`}>
+      <div className="text-center space-y-2">
+        <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">
+          {categoryLabels[event.category]} · {remaining} event{remaining !== 1 ? "s" : ""} remaining
+        </span>
+        <div className="text-4xl">{event.emoji}</div>
+        <h3 className="text-lg font-black">{event.title}</h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">{event.description}</p>
+      </div>
+      <div className="space-y-2">
+        {event.choices.map((choice, idx) => (
+          <button
+            key={idx}
+            onClick={() => onChoice(idx)}
+            className={`w-full rounded-xl p-3 text-left transition-all hover:scale-[1.02] active:scale-[0.98] border border-border/50 ${choice.color} text-white`}
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-lg">{choice.emoji}</span>
+              <span className="font-bold text-sm">{choice.label}</span>
+            </div>
+            <div className="text-[11px] mt-1 opacity-80 ml-8">{choice.consequence}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onNewCareer, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onNewCareer, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -519,6 +573,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onStay: () => void;
   onSignExtension: () => void;
   onRequestTransfer: () => void;
+  onEventChoice: (choiceIndex: number) => void;
   onNewCareer: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
@@ -596,6 +651,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 <OfferCard key={offer.club.name} offer={offer} onAccept={() => onAcceptOffer(offer)} />
               ))}
             </div>
+          )}
+
+          {/* OVERLAY: Random Events */}
+          {career.phase === "random_events" && career.pendingEvents.length > 0 && (
+            <RandomEventCard
+              event={career.pendingEvents[0]}
+              remaining={career.pendingEvents.length}
+              onChoice={onEventChoice}
+            />
           )}
 
           {/* OVERLAY: Transfer Window */}
