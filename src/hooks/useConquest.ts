@@ -572,22 +572,50 @@ export function useConquest() {
     });
   }, [rosters, invincibleTeams]);
 
+  const openStealModal = useCallback(() => {
+    setStealModalOpen(true);
+  }, []);
+
+  const closeStealModal = useCallback(() => {
+    setStealModalOpen(false);
+  }, []);
+
   const stealPlayer = useCallback((playerName: string) => {
-    if (!battleResult) return;
-    setRosters(prev => {
-      const next = { ...prev };
-      next[battleResult.loser] = (next[battleResult.loser] || []).filter(p => p !== playerName);
-      next[battleResult.winner] = [...(next[battleResult.winner] || []), playerName];
-      return next;
-    });
-    setGameLog(prev => {
-      const u = [...prev];
-      if (u.length > 0) u[u.length - 1].stolenPlayer = playerName;
-      return u;
-    });
-    const alive = getAliveTeamsFrom(territories);
-    setPhase(alive.length <= 1 ? 'gameover' : 'ready');
-  }, [battleResult, territories]);
+    if (!battleResult || !pendingBattleApply) return;
+    setPlayerConfirmed(playerName);
+    setStealModalOpen(false);
+
+    // Brief confirmation animation, then apply
+    setTimeout(() => {
+      setRosters(prev => {
+        const next = { ...prev };
+        next[battleResult.loser] = (next[battleResult.loser] || []).filter(p => p !== playerName);
+        next[battleResult.winner] = [...(next[battleResult.winner] || []), playerName];
+        return next;
+      });
+      setGameLog(prev => {
+        const u = [...prev];
+        if (u.length > 0) u[u.length - 1].stolenPlayer = playerName;
+        return u;
+      });
+
+      // Now apply the battle result (territory transfer, elimination)
+      applyBattleResult(pendingBattleApply.attacker, pendingBattleApply.defender, pendingBattleApply.result);
+      setPendingBattleApply(null);
+      setPlayerConfirmed(null);
+      setBoxScore(null);
+      setVisiblePlays([]);
+    }, 1200);
+  }, [battleResult, pendingBattleApply, applyBattleResult]);
+
+  // Skip steal (if loser has no roster)
+  const skipSteal = useCallback(() => {
+    if (!pendingBattleApply) return;
+    applyBattleResult(pendingBattleApply.attacker, pendingBattleApply.defender, pendingBattleApply.result);
+    setPendingBattleApply(null);
+    setBoxScore(null);
+    setVisiblePlays([]);
+  }, [pendingBattleApply, applyBattleResult]);
 
   const reset = useCallback(() => {
     clearTimeouts();
