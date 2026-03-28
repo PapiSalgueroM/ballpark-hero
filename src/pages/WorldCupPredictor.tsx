@@ -380,9 +380,21 @@ const PlayoffSlotsPanel = ({ picks, onPick, onAutoPickPlayoffs }: PlayoffSlotsPa
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className="mt-3 rounded-lg bg-[hsl(150,15%,10%)] border border-[hsl(150,20%,18%)] p-4 space-y-4">
-          <p className="text-[hsl(150,15%,55%)] text-xs sm:text-sm text-center">
-            Pick the winner of each playoff — they'll replace the TBD slot in their group.
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="text-[hsl(150,15%,55%)] text-xs sm:text-sm">
+              Pick the winner of each playoff — they'll replace the TBD slot in their group.
+            </p>
+            {pickedCount < 6 && (
+              <SmallAutoButton
+                label="Auto Pick"
+                loading={autoLoading}
+                onClick={() => {
+                  setAutoLoading(true);
+                  setTimeout(() => { onAutoPickPlayoffs(); setAutoLoading(false); }, 1000);
+                }}
+              />
+            )}
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {playoffMatchups.map((m) => {
               const picked = picks[m.slot];
