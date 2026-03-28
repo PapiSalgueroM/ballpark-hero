@@ -140,6 +140,27 @@ export interface Award {
   emoji: string;
 }
 
+/* ─── Legacy System ─── */
+export type LegacyTier = "GOAT" | "LEGEND" | "GREAT" | "SOLID PRO" | "JOURNEYMAN";
+export interface LegacyResult {
+  score: number;
+  tier: LegacyTier;
+  breakdown: { label: string; points: number }[];
+}
+
+export type PostRetirementChoice = "retire" | "manager" | "pundit";
+
+export interface ManagerState {
+  club: string;
+  clubTier: number;
+  season: number;
+  trophies: number;
+  promotions: number;
+  seasonResults: { year: number; club: string; tier: number; result: string; trophy: boolean }[];
+  nationalTeamOffer: boolean;
+  managingNationalTeam: boolean;
+}
+
 /* ─── Rivalry System ─── */
 export interface RivalPlayer {
   name: string;
@@ -229,7 +250,7 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "retired";
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
   transferSituation: TransferSituation | null;
@@ -268,6 +289,13 @@ export interface CareerState {
   awards: Award[];
   pendingBallonDor: BallonDorResult | null;
   lastUCLResult: UCLResult | null;
+  // Retirement & Legacy
+  legacy: LegacyResult | null;
+  postRetirementChoice: PostRetirementChoice | null;
+  managerState: ManagerState | null;
+  isFinalSeason: boolean;
+  isPundit: boolean;
+  punditEvents: string[];
 }
 
 /* ─── Flags ─── */
