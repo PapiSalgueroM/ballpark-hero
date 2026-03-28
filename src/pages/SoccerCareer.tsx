@@ -286,6 +286,22 @@ export default function SoccerCareer() {
     toast(event.choices[choiceIndex].consequence);
   };
 
+  const handleDismissDebut = () => {
+    if (!career) return;
+    setCareer(dismissDebut(career, clubs));
+  };
+
+  const handleDismissWorldCup = () => {
+    if (!career) return;
+    setCareer(dismissWorldCup(career, clubs));
+  };
+
+  const handleRetireInternational = () => {
+    if (!career) return;
+    setCareer(retireFromInternational(career));
+    toast("Retired from international football");
+  };
+
   const handleNewCareer = () => {
     setCareer(null);
     setPreviewStats(null);
