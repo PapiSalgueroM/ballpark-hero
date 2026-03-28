@@ -1338,19 +1338,45 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       {/* Action bar */}
       <div className="flex items-center gap-3">
         {career.phase === "retired" ? (
-          <Button onClick={onNewCareer} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
-            ⚽ New Career
-          </Button>
+          <div className="flex-1 flex gap-2">
+            <Button onClick={onShare} variant="outline" className="flex-1 h-12 text-sm font-bold">
+              📤 Share Legacy
+            </Button>
+            <Button onClick={onNewCareer} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+              ⚽ New Career
+            </Button>
+          </div>
+        ) : career.phase === "manager_season" ? (
+          <div className="flex-1 flex gap-2">
+            <Button onClick={onAdvanceManager} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
+              Next Manager Season <ChevronRight className="w-5 h-5" />
+            </Button>
+            <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold">
+              Retire
+            </Button>
+          </div>
         ) : showActionButton ? (
-          <Button onClick={onNextSeason} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
-            {career.phase === "youth" ? "Next Year" : "Next Season"} <ChevronRight className="w-5 h-5" />
-          </Button>
+          <div className="flex-1 flex gap-2">
+            <Button onClick={onNextSeason} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
+              {career.phase === "youth" ? "Next Year" : "Next Season"} <ChevronRight className="w-5 h-5" />
+            </Button>
+            {career.phase === "playing" && career.age >= 30 && (
+              <Button onClick={onManualRetire} variant="outline" className="h-12 text-xs font-bold text-red-400 border-red-400/30 hover:bg-red-500/10">
+                Retire
+              </Button>
+            )}
+          </div>
         ) : null}
         <div className="bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0">
           <div className="text-lg font-black">{career.age}</div>
           <div className="text-[9px] text-muted-foreground uppercase">Age</div>
         </div>
       </div>
+
+      {/* Legacy card (shown when retired) */}
+      {career.phase === "retired" && career.legacy && (
+        <LegacyCard career={career} totals={totals} onShare={onShare} />
+      )}
     </div>
   );
 }
