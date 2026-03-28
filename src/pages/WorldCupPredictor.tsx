@@ -154,6 +154,26 @@ const FIFA_RANKINGS: { rank: number; team: string }[] = [
   { rank: 46, team: "Kosovo" }, { rank: 47, team: "Haiti" }, { rank: 48, team: "Curaçao" },
 ];
 
+// Rank lookup: team name → rank number (lower = better)
+export const FIFA_RANK: Record<string, number> = {};
+FIFA_RANKINGS.forEach((r) => { FIFA_RANK[r.team] = r.rank; });
+
+// Also add playoff teams that aren't in top 48 with high rank numbers
+const EXTRA_RANKS: Record<string, number> = {
+  "Bosnia & Herzegovina": 60, "Czech Republic": 55, "Jamaica": 65, "DR Congo": 62, "Bolivia": 70, "Iraq": 68,
+};
+Object.entries(EXTRA_RANKS).forEach(([t, r]) => { if (!FIFA_RANK[t]) FIFA_RANK[t] = r; });
+
+/** Get FIFA rank for a team (lower = better). Returns 999 for unknown. */
+export function getFifaRank(team: string): number {
+  return FIFA_RANK[team] || 999;
+}
+
+/** Pick higher-ranked team */
+export function rankWinner(a: string, b: string): string {
+  return getFifaRank(a) <= getFifaRank(b) ? a : b;
+}
+
 const TEAM_GROUP: Record<string, string> = {};
 groups.forEach((g) => g.teams.forEach((t) => { if (!t.isTBD) TEAM_GROUP[t.name] = g.letter; }));
 playoffMatchups.forEach((m) => { TEAM_GROUP[m.teamA] = m.group; TEAM_GROUP[m.teamB] = m.group; });
