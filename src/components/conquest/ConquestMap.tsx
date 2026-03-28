@@ -86,25 +86,36 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
           );
         })}
 
-        {/* Layer 2: Border overlay — only visible between different teams/unclaimed */}
+        {/* Layer 2: Border overlay — only on unclaimed states or between different teams */}
         {US_STATES.map(state => {
           const teamId = territories[state.id];
-          const isHoveredTerritory = hovered && hoveredTeamId && teamId === hoveredTeamId;
           const active = isActive(state.id);
+
+          // For owned states: use team color as stroke so internal borders disappear
+          // Only show visible borders on unclaimed states
+          if (teamId) {
+            const teamColor = TEAM_MAP.get(teamId)?.color || '#4a4a4a';
+            return (
+              <path
+                key={`border-${state.id}`}
+                d={state.path}
+                fill="transparent"
+                stroke={active ? '#ffffff' : teamColor}
+                strokeWidth={active ? 2 : 1.5}
+                strokeLinejoin="round"
+                style={{ transition: 'stroke 0.2s, stroke-width 0.2s' }}
+              />
+            );
+          }
 
           return (
             <path
               key={`border-${state.id}`}
               d={state.path}
               fill="transparent"
-              stroke={active ? '#ffffff' : isHoveredTerritory ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.35)'}
-              strokeWidth={active ? 2 : 0.4}
+              stroke="rgba(0,0,0,0.35)"
+              strokeWidth={0.4}
               strokeLinejoin="round"
-              style={{
-                transition: 'stroke 0.2s, stroke-width 0.2s',
-                // Use the team color as a mask — matching strokes on adjacent same-team states cancel out visually
-                // because the fill layer beneath is the same color
-              }}
             />
           );
         })}
