@@ -493,13 +493,17 @@ export function useConquest() {
           }, idx * 1500);
         });
 
-        // After all plays, show box score, then apply result
+        // After all plays: show "Simulating remainder..." for 2s, then box score
         const totalPlayTime = sim.plays.length * 1500;
         addTimeout(() => {
-          setBoxScore(sim.boxScore);
           setPlayByPlayActive(false);
+          setSimulatingRemainder(true);
         }, totalPlayTime);
-        addTimeout(() => applyBattleResult(team, enemyId, result), totalPlayTime + 3000);
+        addTimeout(() => {
+          setSimulatingRemainder(false);
+          setBoxScore(sim.boxScore);
+        }, totalPlayTime + 2000);
+        addTimeout(() => applyBattleResult(team, enemyId, result), totalPlayTime + 6000);
       };
 
       if (missedFirst) {
