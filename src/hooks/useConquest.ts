@@ -155,6 +155,8 @@ export function useConquest() {
   const [gameLog, setGameLog] = useState<LogEntry[]>([]);
   const [animStartTime, setAnimStartTime] = useState(0);
   const [noEnemyMsg, setNoEnemyMsg] = useState<string | null>(null);
+  const [powerupStates, setPowerupStates] = useState<Set<string>>(() => pickRandomPowerupStates());
+  const [teamPowerups, setTeamPowerups] = useState<Record<string, PowerupType[]>>({});
 
   const timeoutsRef = useRef<number[]>([]);
   const clearTimeouts = () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
