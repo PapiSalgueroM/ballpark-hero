@@ -220,8 +220,11 @@ export default function ConquestBoard() {
                   } ${i === game.visiblePlays.length - 1 && game.playByPlayActive ? 'ring-1 ring-primary/30' : ''}`}
                 >
                   <span className="text-foreground">{play.description}</span>
-                  {play.points > 0 && (
-                    <span className="ml-2 text-primary font-bold">+{play.points}</span>
+                  {i > 0 && (play.attScore > game.visiblePlays[i-1].attScore || play.defScore > game.visiblePlays[i-1].defScore) && (
+                    <span className="ml-2 text-primary font-bold">SCORE!</span>
+                  )}
+                  {i === 0 && (play.attScore > 0 || play.defScore > 0) && (
+                    <span className="ml-2 text-primary font-bold">SCORE!</span>
                   )}
                 </div>
               ))}
