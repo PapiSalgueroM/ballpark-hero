@@ -332,11 +332,46 @@ export function getClubsByTier(clubs: ClubData[], tier: number): ClubData[] {
   return clubs.filter(c => c.tier === tier);
 }
 
-function getYouthAcademyClub(clubs: ClubData[], nationality: string): ClubData {
-  // Try to find tier 3-4 club from same country
-  const homeClubs = clubs.filter(c => c.country === nationality && c.tier >= 3);
-  if (homeClubs.length > 0) return pick(homeClubs);
-  // Fallback to any tier 4, then tier 3
+function getYouthAcademyClub(clubs: ClubData[], nationality: string, overall?: number): ClubData {
+  const ovr = overall ?? 50;
+  
+  if (ovr >= 75) {
+    // Elite: top 6 club from player's country, or any elite club
+    const eliteFromHome = clubs.filter(c => c.country === nationality && c.tier === 1 && ELITE_CLUBS.includes(c.name));
+    if (eliteFromHome.length > 0) return pick(eliteFromHome);
+    const anyT1Home = clubs.filter(c => c.country === nationality && c.tier === 1);
+    if (anyT1Home.length > 0) return pick(anyT1Home);
+    const anyElite = clubs.filter(c => ELITE_CLUBS.includes(c.name));
+    if (anyElite.length > 0) return pick(anyElite);
+    return pick(getClubsByTier(clubs, 1));
+  }
+  if (ovr >= 66) {
+    // Good club academy (Tier 1-2)
+    const homeTiers = clubs.filter(c => c.country === nationality && (c.tier === 1 || c.tier === 2));
+    if (homeTiers.length > 0) return pick(homeTiers);
+    const anyT1T2 = clubs.filter(c => c.tier === 1 || c.tier === 2);
+    if (anyT1T2.length > 0) return pick(anyT1T2);
+    return pick(getClubsByTier(clubs, 2));
+  }
+  if (ovr >= 55) {
+    // Mid league academy (Tier 2-3)
+    const homeTiers = clubs.filter(c => c.country === nationality && (c.tier === 2 || c.tier === 3));
+    if (homeTiers.length > 0) return pick(homeTiers);
+    const anyT2T3 = clubs.filter(c => c.tier === 2 || c.tier === 3);
+    if (anyT2T3.length > 0) return pick(anyT2T3);
+    return pick(getClubsByTier(clubs, 3));
+  }
+  if (ovr >= 40) {
+    // Lower league (Tier 3-4)
+    const homeClubs = clubs.filter(c => c.country === nationality && c.tier >= 3);
+    if (homeClubs.length > 0) return pick(homeClubs);
+    const anyT3T4 = clubs.filter(c => c.tier >= 3);
+    if (anyT3T4.length > 0) return pick(anyT3T4);
+    return pick(getClubsByTier(clubs, 4));
+  }
+  // 25-39: Tiny non-league (Tier 4)
+  const homeT4 = clubs.filter(c => c.country === nationality && c.tier === 4);
+  if (homeT4.length > 0) return pick(homeT4);
   const t4 = getClubsByTier(clubs, 4);
   if (t4.length > 0) return pick(t4);
   return pick(getClubsByTier(clubs, 3));
@@ -781,7 +816,7 @@ export function initCareer(
   stats: { pace: number; shooting: number; passing: number; dribbling: number; defending: number; physical: number; reflexes: number },
   overall: number, startYear: number, clubs: ClubData[],
 ): CareerState {
-  const academyClub = getYouthAcademyClub(clubs, nationality);
+  const academyClub = getYouthAcademyClub(clubs, nationality, overall);
   return {
     playerName, nationality, position, era, age: 16,
     currentClub: `${academyClub.name} Youth`, currentClubCountry: academyClub.country,
