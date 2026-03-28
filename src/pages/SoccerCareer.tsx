@@ -1022,7 +1022,7 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss }: { bdor: BallonDorRes
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onNewCareer, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -1037,6 +1037,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onRetireInternational: () => void;
   onDismissRivalryEvent: () => void;
   onDismissBallonDor: () => void;
+  onManualRetire: () => void;
+  onPostRetirement: (choice: PostRetirementChoice) => void;
+  onAdvanceManager: () => void;
+  onEndManager: () => void;
+  onShare: () => void;
   onNewCareer: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
