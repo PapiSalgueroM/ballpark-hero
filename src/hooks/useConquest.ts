@@ -232,6 +232,36 @@ export function useConquest() {
       // Claiming a neutral state — no battle needed
       const stateId = target.stateId;
       const stateName = STATE_POSITIONS.find(s => s.id === stateId)?.name || stateId;
+      const isPowerup = powerupStates.has(stateId);
+
+      const claimState = () => {
+        setTerritories(prev => ({ ...prev, [stateId]: team }));
+        setTurn(t => t + 1);
+        // Award random powerup if this was a powerup state
+        if (isPowerup) {
+          const randomPU = POWERUP_TYPES[Math.floor(Math.random() * POWERUP_TYPES.length)];
+          setTeamPowerups(prev => ({
+            ...prev,
+            [team]: [...(prev[team] || []), randomPU.id],
+          }));
+          setGameLog(prev => [...prev, {
+            turn: prev.length + 1,
+            attacker: team,
+            defender: 'neutral',
+            winner: team,
+            score: `claimed ${stateName} ⚡ ${randomPU.label}`,
+          }]);
+        } else {
+          setGameLog(prev => [...prev, {
+            turn: prev.length + 1,
+            attacker: team,
+            defender: 'neutral',
+            winner: team,
+            score: `claimed ${stateName}`,
+          }]);
+        }
+        setPhase('ready');
+      };
 
       if (missedFirst) {
         addTimeout(() => {
@@ -241,33 +271,10 @@ export function useConquest() {
           setNoEnemyMsg(null);
           setDirection(chosenDir!);
         }, 5000);
-        addTimeout(() => {
-          // Claim the neutral state
-          setTerritories(prev => ({ ...prev, [stateId]: team }));
-          setTurn(t => t + 1);
-          setGameLog(prev => [...prev, {
-            turn: prev.length + 1,
-            attacker: team,
-            defender: 'neutral',
-            winner: team,
-            score: `claimed ${stateName}`,
-          }]);
-          setPhase('ready');
-        }, 6500);
+        addTimeout(claimState, 6500);
       } else {
         setDirection(chosenDir);
-        addTimeout(() => {
-          setTerritories(prev => ({ ...prev, [stateId]: team }));
-          setTurn(t => t + 1);
-          setGameLog(prev => [...prev, {
-            turn: prev.length + 1,
-            attacker: team,
-            defender: 'neutral',
-            winner: team,
-            score: `claimed ${stateName}`,
-          }]);
-          setPhase('ready');
-        }, 4000);
+        addTimeout(claimState, 4000);
       }
     } else {
       // Battle against enemy team
