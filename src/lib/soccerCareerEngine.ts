@@ -46,6 +46,24 @@ export type TransferSituation =
   | { type: "contract_expiry"; offers: ContractOffer[] }
   | { type: "request_result"; offer: ContractOffer | null };
 
+/* ─── Random Event System ─── */
+export interface EventChoice {
+  label: string;
+  emoji: string;
+  color: string; // tailwind bg class
+  consequence: string; // human-readable
+  apply: (s: CareerState) => CareerState;
+}
+
+export interface RandomEvent {
+  id: number;
+  emoji: string;
+  title: string;
+  description: string;
+  category: "positive" | "negative" | "international" | "life";
+  choices: EventChoice[];
+}
+
 export interface CareerState {
   playerName: string;
   nationality: string;
@@ -58,7 +76,7 @@ export interface CareerState {
   currentClubColor: string;
   currentLeague: string;
   contractYearsLeft: number;
-  weeklyWage: number; // euros per week
+  weeklyWage: number;
   marketValue: number;
   pace: number;
   shooting: number;
@@ -71,10 +89,21 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "retired";
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
   transferSituation: TransferSituation | null;
+  // Random events
+  pendingEvents: RandomEvent[];
+  lastEventId: number | null;
+  statBoostNextSeason: Partial<Record<"pace"|"shooting"|"passing"|"dribbling"|"defending"|"physical"|"reflexes", number>>;
+  internationalCareer: boolean;
+  sponsorDeal: string | null;
+  totalEarnings: number;
+  popularity: number; // 0-100
+  morale: number; // 0-100
+  isLeader: boolean;
+  hasRelationship: boolean;
 }
 
 /* ─── Flags ─── */
