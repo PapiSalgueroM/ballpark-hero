@@ -172,20 +172,19 @@ function simulateBattle(
   };
 }
 
-// Find states owned by enemies that border a team's territory
+// Find states owned by enemies that border a team's territory (using real geo coords)
 function findBorderEnemyStates(teamId: string, territories: Record<string, string | null>): string[] {
-  // Use geographic proximity: find enemy states whose SVG center is within ~60px of any team state
   const teamStates = Object.keys(territories).filter(s => territories[s] === teamId);
-  const teamCenters = teamStates.map(s => GEO_CENTERS.get(s)).filter(Boolean) as { x: number; y: number }[];
+  const teamCoords = teamStates.map(s => STATE_GEO_COORDS[s]).filter(Boolean);
   const results: string[] = [];
   
   for (const [sid, owner] of Object.entries(territories)) {
     if (!owner || owner === teamId) continue;
-    const geo = GEO_CENTERS.get(sid);
+    const geo = STATE_GEO_COORDS[sid];
     if (!geo) continue;
-    for (const tc of teamCenters) {
-      const dx = geo.x - tc.x, dy = geo.y - tc.y;
-      if (Math.sqrt(dx * dx + dy * dy) < 80) {
+    for (const tc of teamCoords) {
+      const dist = geoDist(tc.lat, tc.lon, geo.lat, geo.lon);
+      if (dist < 36) { // ~6 degrees proximity
         results.push(sid);
         break;
       }
@@ -436,19 +435,17 @@ export function useConquest() {
       let fallbackEnemy: string | null = null;
       for (const enemy of alive.filter(t => t !== team)) {
         const ec = getTeamGeoCenter(enemy, territories);
-        const dx = ec.x - center.x, dy = ec.y - center.y;
-        const dist = dx * dx + dy * dy;
+        const dist = geoDist(center.lat, center.lon, ec.lat, ec.lon);
         if (dist < bestDist) { bestDist = dist; fallbackEnemy = enemy; }
       }
       if (!fallbackEnemy) return;
       target = { type: 'team', id: fallbackEnemy };
       const ec = getTeamGeoCenter(fallbackEnemy, territories);
-      const angle = Math.atan2(ec.y - center.y, ec.x - center.x);
+      const bearing = compassBearing(center.lat, center.lon, ec.lat, ec.lon);
       let bestDirDiff = Infinity;
       chosenDir = 'E';
       for (const d of DIRECTIONS) {
-        let diff = Math.abs(angle - DIR_ANGLES[d]);
-        if (diff > Math.PI) diff = 2 * Math.PI - diff;
+        const diff = angleDiff(bearing, DIR_ANGLES[d]);
         if (diff < bestDirDiff) { bestDirDiff = diff; chosenDir = d; }
       }
     }
