@@ -244,13 +244,31 @@ export default function SoccerCareer() {
 
   const handleDismissSummary = () => {
     if (!career) return;
-    setCareer(dismissSummary(career));
+    setCareer(dismissSummary(career, clubs));
   };
 
   const handleStay = () => {
     if (!career) return;
     setCareer(stayAtClub(career));
     toast("Staying at " + career.currentClub);
+  };
+
+  const handleSignExtension = () => {
+    if (!career) return;
+    setCareer(signExtension(career));
+    toast.success("Contract extended!");
+  };
+
+  const handleRequestTransfer = () => {
+    if (!career) return;
+    const result = requestTransfer(career, clubs);
+    const s = { ...career, transferSituation: result };
+    if (result.type === "request_result" && !result.offer) {
+      toast.error("No clubs are interested right now. You must stay.");
+      s.phase = "playing" as const;
+      s.transferSituation = null;
+    }
+    setCareer(s);
   };
 
   const handleNewCareer = () => {
