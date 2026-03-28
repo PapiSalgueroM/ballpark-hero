@@ -1479,11 +1479,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </h1>
           <p className="text-xs text-muted-foreground">{career.position} · Age {career.age} · {career.nationality}</p>
         </div>
-        <div className="text-center">
-          <div className={`text-3xl sm:text-4xl font-black ${career.overall >= 80 ? 'text-green-400' : career.overall >= 65 ? 'text-emerald-400' : career.overall >= 50 ? 'text-yellow-400' : 'text-red-400'}`}>
-            {career.overall}
+        <div className="flex items-center gap-3">
+          <Button onClick={onNewCareer} variant="ghost" className="text-[10px] text-muted-foreground hover:text-red-400 px-2 h-7">
+            🔄 New Career
+          </Button>
+          <div className="text-center">
+            <div className={`text-3xl sm:text-4xl font-black ${career.overall >= 80 ? 'text-green-400' : career.overall >= 65 ? 'text-emerald-400' : career.overall >= 50 ? 'text-yellow-400' : 'text-red-400'}`}>
+              {career.overall}
+            </div>
+            <div className="text-[10px] text-muted-foreground uppercase tracking-widest">OVR</div>
           </div>
-          <div className="text-[10px] text-muted-foreground uppercase tracking-widest">OVR</div>
         </div>
       </div>
 
