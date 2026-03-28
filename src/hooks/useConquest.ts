@@ -199,6 +199,7 @@ export function useConquest() {
   // Play-by-play state
   const [visiblePlays, setVisiblePlays] = useState<PlayEvent[]>([]);
   const [playByPlayActive, setPlayByPlayActive] = useState(false);
+  const [simulatingRemainder, setSimulatingRemainder] = useState(false);
   const [boxScore, setBoxScore] = useState<BoxScore | null>(null);
 
   const timeoutsRef = useRef<number[]>([]);
