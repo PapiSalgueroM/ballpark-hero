@@ -811,6 +811,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             />
           )}
 
+          {/* OVERLAY: International Debut */}
+          {career.phase === "international_debut" && (
+            <InternationalDebutCard career={career} onDismiss={onDismissDebut} />
+          )}
+
+          {/* OVERLAY: World Cup */}
+          {career.phase === "world_cup" && career.pendingWorldCup && (
+            <WorldCupResultCard wc={career.pendingWorldCup} career={career} onDismiss={onDismissWorldCup} />
+          )}
+
           {/* OVERLAY: Transfer Window */}
           {career.phase === "transfer_window" && career.transferSituation && (
             <TransferWindowCard
