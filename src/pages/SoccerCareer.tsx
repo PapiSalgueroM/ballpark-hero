@@ -16,9 +16,10 @@ import { ChevronRight } from "lucide-react";
 import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
   type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,
+  type RivalPlayer, type RivalryEvent, type RivalrySummary,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
-  dismissDebut, dismissWorldCup, retireFromInternational,
+  dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   getCareerTotals, getFlag, calcOverall, formatWage,
 } from "@/lib/soccerCareerEngine";
 
