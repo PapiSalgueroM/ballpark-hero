@@ -216,7 +216,7 @@ const KnockoutBracket = ({ seeds, bestThirds }: KnockoutBracketProps) => {
               </div>
 
               <div
-                className="flex flex-col justify-around flex-1"
+                className={`flex flex-col flex-1 ${rIdx === 0 ? "gap-3" : "justify-around"}`}
                 style={{ minHeight: `${16 * 62}px` }}
               >
                 {round.map((match, mIdx) => (
