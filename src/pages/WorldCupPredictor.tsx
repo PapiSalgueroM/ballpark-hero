@@ -918,6 +918,26 @@ const WorldCupPredictor = () => {
     });
   }, []);
 
+  // Ranking-based auto-fill for a single group
+  const handleRankFillGroup = useCallback((letter: string) => {
+    const group = resolvedGroups.find((g) => g.letter === letter);
+    if (!group) return;
+    const scores = rankBasedScoresForGroup(group);
+    setPredictions((prev) => ({ ...prev, ...scores }));
+  }, [resolvedGroups]);
+
+  // Ranking-based auto-fill for ALL groups
+  const handleRankFillAllGroups = useCallback(() => {
+    setPredictions((prev) => {
+      const next = { ...prev };
+      for (const group of resolvedGroups) {
+        const scores = rankBasedScoresForGroup(group);
+        Object.assign(next, scores);
+      }
+      return next;
+    });
+  }, [resolvedGroups]);
+
   const handleAutoFillAll = useCallback(() => {
     setPredictions((prev) => {
       const next = { ...prev };
@@ -936,6 +956,27 @@ const WorldCupPredictor = () => {
       return next;
     });
   }, []);
+
+  // Auto-pick all playoff slots by FIFA ranking
+  const handleAutoPickPlayoffs = useCallback(() => {
+    const newPicks: Record<string, string> = {};
+    playoffMatchups.forEach((m) => {
+      newPicks[m.slot] = rankWinner(m.teamA, m.teamB);
+    });
+    setPlayoffPicks((prev) => ({ ...prev, ...newPicks }));
+  }, []);
+
+  // Auto-pick 8 best third-place teams (by pts then FIFA ranking tiebreak)
+  const handleAutoPickThirds = useCallback(() => {
+    // Sort bestThirds by pts desc, then by FIFA rank asc (lower = better)
+    const sorted = [...bestThirds].sort((a, b) => {
+      if (b.pts !== a.pts) return b.pts - a.pts;
+      if (b.gd !== a.gd) return b.gd - a.gd;
+      if (b.gf !== a.gf) return b.gf - a.gf;
+      return getFifaRank(a.team) - getFifaRank(b.team);
+    });
+    setSelectedThirds(sorted.slice(0, 8).map((t) => t.team));
+  }, [bestThirds]);
 
   const handleResetGroup = useCallback((letter: string) => {
     setPredictions((prev) => {
@@ -956,6 +997,79 @@ const WorldCupPredictor = () => {
     localStorage.removeItem("wc2026-selected-thirds");
     localStorage.removeItem("wc2026-playoff-picks");
   }, []);
+
+  // Ref for bracket auto-fill
+  const bracketAutoFillRef = useRef<{ autoFillAllRounds: () => void } | null>(null);
+
+  // "Auto Fill Everything" — runs all steps sequentially with delays
+  const [autoFillEverythingLoading, setAutoFillEverythingLoading] = useState(false);
+  const handleAutoFillEverything = useCallback(() => {
+    setAutoFillEverythingLoading(true);
+    // Step 1: Auto-pick playoffs
+    const newPlayoffPicks: Record<string, string> = {};
+    playoffMatchups.forEach((m) => {
+      newPlayoffPicks[m.slot] = rankWinner(m.teamA, m.teamB);
+    });
+    setPlayoffPicks((prev) => ({ ...prev, ...newPlayoffPicks }));
+
+    setTimeout(() => {
+      // Step 2: After playoffs resolved, fill all groups with rankings
+      // Need to build resolved groups with the new playoff picks
+      const resolvedForFill = groups.map((g) => ({
+        ...g,
+        teams: g.teams.map((t) => {
+          if (t.isTBD && newPlayoffPicks[t.name]) {
+            return { name: newPlayoffPicks[t.name], isTBD: false };
+          }
+          return t;
+        }),
+      }));
+      setPredictions((prev) => {
+        const next = { ...prev };
+        for (const group of resolvedForFill) {
+          const scores = rankBasedScoresForGroup(group);
+          Object.assign(next, scores);
+        }
+        return next;
+      });
+
+      setTimeout(() => {
+        // Step 3: Auto pick thirds (will be calculated from new predictions)
+        // We need to trigger this after predictions have been set
+        // Use a flag to trigger in next render
+        setAutoFillStep(3);
+      }, 500);
+    }, 500);
+  }, []);
+
+  const [autoFillStep, setAutoFillStep] = useState(0);
+
+  useEffect(() => {
+    if (autoFillStep === 3) {
+      // Auto-pick 8 best thirds
+      const sorted = [...bestThirds].sort((a, b) => {
+        if (b.pts !== a.pts) return b.pts - a.pts;
+        if (b.gd !== a.gd) return b.gd - a.gd;
+        if (b.gf !== a.gf) return b.gf - a.gf;
+        return getFifaRank(a.team) - getFifaRank(b.team);
+      });
+      setSelectedThirds(sorted.slice(0, 8).map((t) => t.team));
+      setAutoFillStep(4);
+    } else if (autoFillStep === 4) {
+      // Show bracket
+      setShowBracket(true);
+      setTimeout(() => {
+        setAutoFillStep(5);
+      }, 500);
+    } else if (autoFillStep === 5) {
+      // Auto-fill all knockout rounds
+      setTimeout(() => {
+        bracketAutoFillRef.current?.autoFillAllRounds();
+        setAutoFillEverythingLoading(false);
+        setAutoFillStep(0);
+      }, 500);
+    }
+  }, [autoFillStep, bestThirds]);
 
   const handleToggleThird = useCallback((teamName: string) => {
     setSelectedThirds((prev) => {
