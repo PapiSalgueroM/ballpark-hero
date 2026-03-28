@@ -117,6 +117,32 @@ const groups: Group[] = [
   ]},
 ];
 
+/* ───── FIFA rankings ───── */
+
+const FIFA_RANKINGS: { rank: number; team: string }[] = [
+  { rank: 1, team: "France" }, { rank: 2, team: "Spain" }, { rank: 3, team: "England" },
+  { rank: 4, team: "Brazil" }, { rank: 5, team: "Portugal" }, { rank: 6, team: "Argentina" },
+  { rank: 7, team: "Belgium" }, { rank: 8, team: "Netherlands" }, { rank: 9, team: "Germany" },
+  { rank: 10, team: "Colombia" }, { rank: 11, team: "Italy" }, { rank: 12, team: "Morocco" },
+  { rank: 13, team: "USA" }, { rank: 14, team: "Mexico" }, { rank: 15, team: "Japan" },
+  { rank: 16, team: "Croatia" }, { rank: 17, team: "Senegal" }, { rank: 18, team: "Ecuador" },
+  { rank: 19, team: "Australia" }, { rank: 20, team: "Switzerland" }, { rank: 21, team: "Norway" },
+  { rank: 22, team: "Denmark" }, { rank: 23, team: "Uruguay" }, { rank: 24, team: "South Korea" },
+  { rank: 25, team: "Saudi Arabia" }, { rank: 26, team: "Turkey" }, { rank: 27, team: "Iran" },
+  { rank: 28, team: "Egypt" }, { rank: 29, team: "Ghana" }, { rank: 30, team: "Chile" },
+  { rank: 31, team: "Nigeria" }, { rank: 32, team: "Canada" }, { rank: 33, team: "Scotland" },
+  { rank: 34, team: "Algeria" }, { rank: 35, team: "Ivory Coast" }, { rank: 36, team: "Paraguay" },
+  { rank: 37, team: "Poland" }, { rank: 38, team: "Uzbekistan" }, { rank: 39, team: "South Africa" },
+  { rank: 40, team: "Cape Verde" }, { rank: 41, team: "Qatar" }, { rank: 42, team: "New Zealand" },
+  { rank: 43, team: "Panama" }, { rank: 44, team: "Tunisia" }, { rank: 45, team: "Sweden" },
+  { rank: 46, team: "Kosovo" }, { rank: 47, team: "Haiti" }, { rank: 48, team: "Curaçao" },
+];
+
+// Build team→group lookup from groups + playoffs
+const TEAM_GROUP: Record<string, string> = {};
+groups.forEach((g) => g.teams.forEach((t) => { if (!t.isTBD) TEAM_GROUP[t.name] = g.letter; }));
+playoffMatchups.forEach((m) => { TEAM_GROUP[m.teamA] = m.group; TEAM_GROUP[m.teamB] = m.group; });
+
 const playoffMatchups = [
   { slot: "UEFA Path A Winner", group: "B", teamA: "Italy", teamB: "Bosnia & Herzegovina" },
   { slot: "UEFA Path B Winner", group: "F", teamA: "Sweden", teamB: "Poland" },
