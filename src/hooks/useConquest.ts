@@ -470,28 +470,49 @@ export function useConquest() {
       }
     } else {
       const enemyId = target.id;
-      const result = simulateBattle(team, enemyId, territories, rosters, upgradeActiveTeam);
+      const result = simulateBattle(team, enemyId, territories, rosters, upgradeActiveTeam, upgradedPlayer);
+
+      const startPlayByPlay = () => {
+        setBattleResult(result);
+        setPhase('battle');
+        setVisiblePlays([]);
+        setBoxScore(null);
+        setPlayByPlayActive(true);
+
+        const sim = result.simulation;
+        if (!sim) {
+          addTimeout(() => applyBattleResult(team, enemyId, result), 4500);
+          return;
+        }
+
+        // Reveal plays one at a time with 1.5s delay
+        sim.plays.forEach((play, idx) => {
+          addTimeout(() => {
+            setVisiblePlays(prev => [...prev, play]);
+          }, idx * 1500);
+        });
+
+        // After all plays, show box score, then apply result
+        const totalPlayTime = sim.plays.length * 1500;
+        addTimeout(() => {
+          setBoxScore(sim.boxScore);
+          setPlayByPlayActive(false);
+        }, totalPlayTime);
+        addTimeout(() => applyBattleResult(team, enemyId, result), totalPlayTime + 3000);
+      };
 
       if (missedFirst) {
         addTimeout(() => setNoEnemyMsg(`No target ${DIR_LABELS[firstAttemptDir] || firstAttemptDir}!`), 3600);
         addTimeout(() => { setNoEnemyMsg(null); setDirection(chosenDir!); }, 5000);
         addTimeout(() => setDefendingTeam(enemyId), 6200);
-        addTimeout(() => {
-          setBattleResult(result);
-          setPhase('battle');
-          addTimeout(() => applyBattleResult(team, enemyId, result), 4500);
-        }, 8000);
+        addTimeout(startPlayByPlay, 8000);
       } else {
         setDirection(chosenDir);
         addTimeout(() => setDefendingTeam(enemyId), 3800);
-        addTimeout(() => {
-          setBattleResult(result);
-          setPhase('battle');
-          addTimeout(() => applyBattleResult(team, enemyId, result), 4500);
-        }, 6000);
+        addTimeout(startPlayByPlay, 6000);
       }
     }
-  }, [territories, rosters, powerupStates, upgradeActiveTeam]);
+  }, [territories, rosters, powerupStates, upgradeActiveTeam, upgradedPlayer]);
 
   const applyBattleResult = useCallback((attacker: string, defender: string, result: BattleResult) => {
     const loserIsInvincible = invincibleTeams.has(result.loser);
