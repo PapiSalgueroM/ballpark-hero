@@ -194,11 +194,17 @@ export default function Profile() {
     const interval = setInterval(async () => {
       if (document.visibilityState === 'visible') {
         setTimeSpent(prev => prev + 1);
-        await supabase.rpc('increment_time_spent' as any, { uid: user.id }).catch(() => {});
+        // Fire-and-forget time update
+        try {
+          await supabase.from('user_preferences').upsert(
+            { user_id: user.id, time_spent_minutes: timeSpent + 1, updated_at: new Date().toISOString() } as any,
+            { onConflict: 'user_id' }
+          );
+        } catch (_) { /* ignore */ }
       }
     }, 60_000);
     return () => clearInterval(interval);
-  }, [user, isOwnProfile]);
+  }, [user, isOwnProfile, timeSpent]);
 
   /* ── Save personal info ── */
   const savePreferences = useCallback(async (field: string, value: string) => {
