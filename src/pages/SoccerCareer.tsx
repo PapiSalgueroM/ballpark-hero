@@ -303,6 +303,11 @@ export default function SoccerCareer() {
     toast("Retired from international football");
   };
 
+  const handleDismissRivalryEvent = () => {
+    if (!career) return;
+    setCareer(dismissRivalryEvent(career, clubs));
+  };
+
   const handleNewCareer = () => {
     setCareer(null);
     setPreviewStats(null);
