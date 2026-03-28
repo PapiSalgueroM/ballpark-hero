@@ -819,6 +819,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "retired",
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }];
+    if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
     return s;
   }
   const season = generateSeasonStats(s);
