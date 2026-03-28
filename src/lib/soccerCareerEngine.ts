@@ -590,7 +590,11 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
 
   let baseMin: number, baseMax: number;
 
-  if (isEliteClub && diff <= -10) {
+  // High overall floors — untouchable starters
+  if (overall >= 95) { baseMin = 36; baseMax = 38; }
+  else if (overall >= 90) { baseMin = 34; baseMax = 38; }
+  else if (overall >= 85 && clubTier <= 2) { baseMin = 32; baseMax = 38; }
+  else if (isEliteClub && diff <= -10) {
     if (seasonsAtClub === 0) { baseMin = 8; baseMax = 18; }
     else if (seasonsAtClub === 1) { baseMin = 15; baseMax = 25; }
     else { baseMin = 12; baseMax = 22; }
@@ -623,39 +627,67 @@ function calcGoals(position: string, apps: number, overall?: number): number {
 
   switch (position) {
     case "ST":
-      if (ovr >= 85) { lo = 20; hi = 32; }
+      if (ovr >= 96) { lo = 35; hi = 48; }
+      else if (ovr >= 93) { lo = 30; hi = 42; }
+      else if (ovr >= 90) { lo = 25; hi = 35; }
+      else if (ovr >= 85) { lo = 20; hi = 32; }
       else if (ovr >= 75) { lo = 12; hi = 22; }
       else if (ovr >= 65) { lo = 6; hi = 14; }
       else { lo = 3; hi = 8; }
       break;
     case "LW": case "RW":
-      if (ovr >= 85) { lo = 14; hi = 24; }
+      if (ovr >= 96) { lo = 32; hi = 45; }
+      else if (ovr >= 93) { lo = 28; hi = 38; }
+      else if (ovr >= 90) { lo = 22; hi = 32; }
+      else if (ovr >= 85) { lo = 16; hi = 26; }
       else if (ovr >= 75) { lo = 8; hi = 16; }
       else if (ovr >= 65) { lo = 4; hi = 10; }
       else { lo = 2; hi = 6; }
       break;
     case "CAM":
-      if (ovr >= 85) { lo = 10; hi = 18; }
+      if (ovr >= 90) { lo = 14; hi = 22; }
+      else if (ovr >= 85) { lo = 10; hi = 18; }
       else if (ovr >= 75) { lo = 6; hi = 12; }
       else { lo = 3; hi = 8; }
       break;
-    case "CM": lo = 3; hi = 8; break;
+    case "CM":
+      if (ovr >= 90) { lo = 6; hi = 12; }
+      else { lo = 3; hi = 8; }
+      break;
     case "CDM": lo = 1; hi = 4; break;
     case "CB": case "LB": case "RB": lo = 0; hi = 3; break;
     case "GK": return 0;
     default: lo = 0; hi = 3;
   }
 
-  return Math.max(0, Math.round(rand(lo, hi) * apps / 38));
+  const rawGoals = Math.max(0, Math.round(rand(lo, hi) * apps / 38));
+
+  // Floor for 90+ attackers in a full season (20+ apps)
+  if (ovr >= 90 && apps >= 20 && ["ST", "LW", "RW", "CAM"].includes(position)) {
+    return Math.max(15, rawGoals);
+  }
+  return rawGoals;
 }
 
 /* ─── Assists per 38 apps by position ─── */
-function calcAssists(position: string, apps: number): number {
-  const per38: Record<string, [number, number]> = {
-    CAM: [10, 18], LW: [8, 15], RW: [8, 15], CM: [5, 10],
-    ST: [3, 8], CDM: [2, 6], CB: [1, 4], LB: [1, 4], RB: [1, 4], GK: [0, 0],
-  };
-  const [lo, hi] = per38[position] || [1, 4];
+function calcAssists(position: string, apps: number, overall?: number): number {
+  const ovr = overall ?? 75;
+  let lo: number, hi: number;
+
+  if (ovr >= 90) {
+    switch (position) {
+      case "CAM": case "CM": lo = 15; hi = 22; break;
+      case "LW": case "RW": lo = 12; hi = 18; break;
+      case "ST": lo = 8; hi = 13; break;
+      default: lo = 2; hi = 6;
+    }
+  } else {
+    const per38: Record<string, [number, number]> = {
+      CAM: [10, 18], LW: [8, 15], RW: [8, 15], CM: [5, 10],
+      ST: [3, 8], CDM: [2, 6], CB: [1, 4], LB: [1, 4], RB: [1, 4], GK: [0, 0],
+    };
+    [lo, hi] = per38[position] || [1, 4];
+  }
   return Math.max(0, Math.round(rand(lo, hi) * apps / 38));
 }
 
@@ -681,7 +713,7 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
 
   const { apps, injured, injuryWeeks } = calcAppearances(overall, currentClubTier, age, state);
   const goals = calcGoals(position, apps, overall);
-  const assists = calcAssists(position, apps);
+  const assists = calcAssists(position, apps, overall);
   const cleanSheets = isGK ? Math.round(apps * rand(20, 45) / 100) : 0;
   const yellowCards = rand(0, Math.min(8, Math.round(apps * 0.25)));
   const redCards = Math.random() < 0.08 ? 1 : 0;
