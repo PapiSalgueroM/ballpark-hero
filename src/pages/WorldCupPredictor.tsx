@@ -527,15 +527,25 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
             <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: colors.accentDim }}>
               Predict Scores
             </p>
-            <div className="flex gap-1.5">
+            <div className="flex gap-1.5 flex-wrap">
               {!allFilled && (
-                <button
-                  onClick={(e) => { e.stopPropagation(); onAutoFillGroup(group.letter); }}
-                  className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(150,12%,20%)] hover:bg-[hsl(150,12%,25%)] text-[hsl(150,15%,60%)] transition-colors"
-                  title="Auto-fill random scores"
-                >
-                  <Shuffle className="w-3 h-3" /> Fill
-                </button>
+                <>
+                  <SmallAutoButton
+                    label="By Rank"
+                    loading={rankLoading}
+                    onClick={() => {
+                      setRankLoading(true);
+                      setTimeout(() => { onRankFillGroup(group.letter); setRankLoading(false); }, 1000);
+                    }}
+                  />
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onAutoFillGroup(group.letter); }}
+                    className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(150,12%,20%)] hover:bg-[hsl(150,12%,25%)] text-[hsl(150,15%,60%)] transition-colors"
+                    title="Auto-fill random scores"
+                  >
+                    <Shuffle className="w-3 h-3" /> Random
+                  </button>
+                </>
               )}
               {hasAnyScore && (
                 <button
