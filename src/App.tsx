@@ -54,6 +54,7 @@ import SoccerGrid from "./pages/SoccerGrid";
 import FantasyDraft from "./pages/FantasyDraft";
 import Conquest from "./pages/Conquest";
 import WorldCupPredictor from "./pages/WorldCupPredictor";
+import SoccerCareer from "./pages/SoccerCareer";
 
 const queryClient = new QueryClient();
 
@@ -114,6 +115,7 @@ const App = () => (
             <Route path="/soccer-grid" element={<SoccerGrid />} />
             <Route path="/fantasy-draft" element={<FantasyDraft />} />
             <Route path="/conquest" element={<Conquest />} />
+            <Route path="/soccer-career" element={<SoccerCareer />} />
             <Route path="/world-cup-bracket" element={<WorldCupPredictor />} />
             <Route path="/world-cup-predictor" element={<Navigate to="/world-cup-bracket" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
