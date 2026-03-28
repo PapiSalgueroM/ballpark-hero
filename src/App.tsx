@@ -52,6 +52,7 @@ import NascarChain from "./pages/NascarChain";
 import SoccerGrid from "./pages/SoccerGrid";
 import FantasyDraft from "./pages/FantasyDraft";
 import Conquest from "./pages/Conquest";
+import WorldCupPredictor from "./pages/WorldCupPredictor";
 
 const queryClient = new QueryClient();
 
@@ -111,6 +112,7 @@ const App = () => (
             <Route path="/soccer-grid" element={<SoccerGrid />} />
             <Route path="/fantasy-draft" element={<FantasyDraft />} />
             <Route path="/conquest" element={<Conquest />} />
+            <Route path="/world-cup-predictor" element={<WorldCupPredictor />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
