@@ -14,8 +14,8 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
 
   const getColor = (stateId: string) => {
     const teamId = territories[stateId];
-    if (!teamId) return '#4a4a4a';
-    return TEAM_MAP.get(teamId)?.color || '#4a4a4a';
+    if (!teamId) return '#2a3040';
+    return TEAM_MAP.get(teamId)?.color || '#2a3040';
   };
 
   const isActive = (stateId: string) => {
