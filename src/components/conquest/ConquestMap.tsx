@@ -33,26 +33,23 @@ export default function ConquestMap({
     return false;
   };
 
-  const teamLabels = useMemo(() => {
-    const teamStates: Record<string, { xs: number[]; ys: number[]; color: string }> = {};
-    for (const state of US_STATES) {
-      const teamId = territories[state.id];
-      if (!teamId) continue;
-      if (!teamStates[teamId]) {
+  // Build per-territory labels: place team abbreviation centered in each owned state
+  const stateLabels = useMemo(() => {
+    return US_STATES
+      .filter(state => territories[state.id])
+      .map(state => {
+        const teamId = territories[state.id]!;
         const color = TEAM_MAP.get(teamId)?.color || '#4a4a4a';
-        teamStates[teamId] = { xs: [], ys: [], color };
-      }
-      teamStates[teamId].xs.push(state.labelX);
-      teamStates[teamId].ys.push(state.labelY);
-    }
-    return Object.entries(teamStates).map(([teamId, { xs, ys, color }]) => ({
-      teamId,
-      x: xs.reduce((a, b) => a + b, 0) / xs.length,
-      y: ys.reduce((a, b) => a + b, 0) / ys.length,
-      light: isLightColor(color),
-      active: (phase === 'battle' || phase === 'animating') && (teamId === attackingTeam || teamId === defendingTeam),
-      invincible: invincibleTeams.has(teamId),
-    }));
+        return {
+          teamId,
+          stateId: state.id,
+          x: state.labelX,
+          y: state.labelY,
+          light: isLightColor(color),
+          active: (phase === 'battle' || phase === 'animating') && (teamId === attackingTeam || teamId === defendingTeam),
+          invincible: invincibleTeams.has(teamId),
+        };
+      });
   }, [territories, phase, attackingTeam, defendingTeam, invincibleTeams]);
 
   const hoveredTeamId = hovered ? territories[hovered] : null;
@@ -157,15 +154,15 @@ export default function ConquestMap({
           );
         })}
 
-        {/* Team labels + invincibility shield icons */}
-        {teamLabels.map(({ teamId, x, y, light, active: isActiveTeam, invincible }) => (
-          <g key={`label-${teamId}`}>
+        {/* Team labels centered in each territory */}
+        {stateLabels.map(({ teamId, stateId, x, y, light, active: isActiveTeam, invincible }) => (
+          <g key={`label-${stateId}`}>
             <text
               x={x}
               y={y}
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize={8}
+              fontSize={7}
               fontWeight="bold"
               fill={light ? '#111' : '#fff'}
               style={{
@@ -178,11 +175,11 @@ export default function ConquestMap({
             </text>
             {invincible && (
               <text
-                x={x + 14}
-                y={y - 4}
+                x={x + 12}
+                y={y - 3}
                 textAnchor="middle"
                 dominantBaseline="central"
-                fontSize={7}
+                fontSize={6}
                 style={{ pointerEvents: 'none' }}
               >
                 🛡️
