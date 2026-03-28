@@ -869,28 +869,69 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
 }
 
 /* ─── Nation strength tiers for World Cup ─── */
-const TOP_SEEDS = ["Brazil", "Argentina", "France", "Spain", "Germany"];
-const STRONG_NATIONS = ["England", "Portugal", "Italy", "Netherlands", "Belgium", "Croatia", "Uruguay"];
-const MID_NATIONS = ["Denmark", "Switzerland", "Colombia", "Mexico", "USA", "Japan", "South Korea", "Senegal", "Morocco", "Poland", "Austria", "Sweden", "Turkey", "Nigeria", "Ukraine"];
-const WEAK_NATIONS = ["Ghana", "Cameroon", "Ecuador", "Peru", "Chile", "Norway", "Scotland", "Wales", "Ireland", "Czech Republic", "Serbia", "Romania", "Greece", "Russia", "Australia", "New Zealand", "Canada", "Jamaica", "Costa Rica", "Ivory Coast", "Egypt", "Algeria", "Tunisia"];
+const TOP_NATIONS_WC = ["Brazil", "France", "Argentina", "Germany", "Spain", "England", "Portugal", "Netherlands", "Belgium", "Italy", "Croatia", "Uruguay"];
+const STRONG_NATIONS_WC = ["USA", "Mexico", "Colombia", "Senegal", "Morocco", "Japan", "South Korea", "Denmark", "Switzerland", "Austria", "Poland", "Serbia", "Ecuador", "Peru", "Chile", "Nigeria", "Ghana", "Ivory Coast", "Egypt", "Algeria"];
+const ALL_WC_POOL = [...TOP_NATIONS_WC, ...STRONG_NATIONS_WC, "Norway", "Sweden", "Turkey", "Scotland", "Wales", "Ireland", "Czech Republic", "Romania", "Greece", "Russia", "Ukraine", "Cameroon", "Tunisia", "Australia", "New Zealand", "Canada", "Jamaica", "Costa Rica"];
 
 function getNationStrength(nation: string): number {
-  if (TOP_SEEDS.includes(nation)) return rand(85, 92);
-  if (STRONG_NATIONS.includes(nation)) return rand(78, 86);
-  if (MID_NATIONS.includes(nation)) return rand(70, 80);
-  return rand(60, 72);
+  if (TOP_NATIONS_WC.includes(nation)) return rand(85, 92);
+  if (STRONG_NATIONS_WC.includes(nation)) return rand(78, 86);
+  return rand(60, 74);
 }
 
-const ALL_WC_NATIONS = [...TOP_SEEDS, ...STRONG_NATIONS, ...MID_NATIONS, ...WEAK_NATIONS];
+/* ─── Qualification chance by nation tier + player boost ─── */
+function getQualificationChance(nation: string, playerOverall: number, isPlayerNation: boolean): number {
+  let base: number;
+  if (TOP_NATIONS_WC.includes(nation)) {
+    base = 0.90;
+  } else if (STRONG_NATIONS_WC.includes(nation)) {
+    base = 0.70;
+  } else {
+    base = 0.25;
+    // Player carrying a weaker nation
+    if (isPlayerNation) {
+      if (playerOverall >= 90) base = 0.75;
+      else if (playerOverall >= 80) base = 0.55;
+    }
+  }
+  return base;
+}
 
-function get32WCTeams(playerNation: string): string[] {
-  // Player's nation always qualifies
-  const teams = [playerNation];
-  const pool = ALL_WC_NATIONS.filter(n => n !== playerNation);
-  // Weighted selection: stronger nations more likely
-  const weighted = pool.map(n => ({ n, w: getNationStrength(n) + rand(0, 15) }))
-    .sort((a, b) => b.w - a.w).slice(0, 31).map(x => x.n);
-  teams.push(...weighted);
+function get32WCTeams(playerNation: string, playerOverall: number): string[] {
+  const teams: string[] = [];
+  
+  // Check if player's nation qualifies
+  const playerQualChance = getQualificationChance(playerNation, playerOverall, true);
+  const playerQualified = Math.random() < playerQualChance;
+  if (playerQualified) teams.push(playerNation);
+  
+  // Fill remaining spots from pool
+  const pool = ALL_WC_POOL.filter(n => n !== playerNation);
+  const qualifiedFromPool: string[] = [];
+  
+  for (const nation of pool) {
+    const chance = getQualificationChance(nation, 0, false);
+    if (Math.random() < chance) qualifiedFromPool.push(nation);
+  }
+  
+  // Shuffle qualified nations and take enough to fill 32
+  const needed = 32 - teams.length;
+  const shuffled = qualifiedFromPool.sort(() => Math.random() - 0.5);
+  
+  if (shuffled.length >= needed) {
+    teams.push(...shuffled.slice(0, needed));
+  } else {
+    // Not enough qualified — fill remainder from pool by strength
+    teams.push(...shuffled);
+    const remaining = pool.filter(n => !teams.includes(n))
+      .map(n => ({ n, w: getNationStrength(n) + rand(0, 15) }))
+      .sort((a, b) => b.w - a.w);
+    for (const r of remaining) {
+      if (teams.length >= 32) break;
+      teams.push(r.n);
+    }
+  }
+  
   return teams.slice(0, 32);
 }
 
