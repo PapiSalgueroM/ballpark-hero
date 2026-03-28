@@ -340,6 +340,9 @@ export default function SoccerCareer() {
               onSignExtension={handleSignExtension}
               onRequestTransfer={handleRequestTransfer}
               onEventChoice={handleEventChoice}
+              onDismissDebut={handleDismissDebut}
+              onDismissWorldCup={handleDismissWorldCup}
+              onRetireInternational={handleRetireInternational}
               onNewCareer={handleNewCareer}
               timelineRef={timelineRef}
             />
