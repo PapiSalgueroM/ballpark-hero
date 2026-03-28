@@ -1746,8 +1746,8 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
 
 /* ─── Flow helper: advance to next phase ─── */
 function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
-  // Check for Ballon d'Or ceremony
-  if (s.pendingBallonDor && s.pendingBallonDor.playerRank !== null) {
+  // Check for Ballon d'Or ceremony — always show it
+  if (s.pendingBallonDor) {
     s.phase = "ballon_dor";
     return s;
   }
