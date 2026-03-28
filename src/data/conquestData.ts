@@ -487,7 +487,7 @@ export const INITIAL_TERRITORIES: Record<string, string> = {
   WA: 'SEA', OR: 'SEA', CA_N: 'SF', CA_S: 'LAR', CA_SC: 'LAC', NV: 'LV', AZ: 'ARI', CO: 'DEN',
   MO: 'KC', TX_N: 'DAL', TX_S: 'HOU', MN: 'MIN', WI: 'GB', IL: 'CHI',
   MI: 'DET', OH_NE: 'CLE', OH_SW: 'CIN', PA_W: 'PIT', PA_E: 'PHI',
-  NJ: 'NYG', CT: 'NYJ', MA: 'NE', NY: 'BUF',
+  NJ_N: 'NYG', NJ_S: 'NYJ', MA: 'NE', NY: 'BUF',
   FL_N: 'JAX', FL_W: 'TB', FL_S: 'MIA', GA: 'ATL', NC: 'CAR', LA: 'NO',
   TN: 'TEN', IN: 'IND', MD: 'BAL', VA: 'WAS',
 };
