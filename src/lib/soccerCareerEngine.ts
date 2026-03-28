@@ -1580,9 +1580,11 @@ function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult {
     const opponent = available.length > 0 ? pick(available) : "Unknown FC";
     usedOpponents.add(opponent);
 
-    // Win probability: higher for better players/clubs, decreasing per round
-    const roundDifficulty = rounds.indexOf(round) * 0.05;
-    const winChance = clamp(0.3 + (state.overall - 75) * 0.015 + (tier === 1 ? 0.1 : 0) - roundDifficulty, 0.15, 0.75);
+    // Win probability: elite clubs get a significant boost
+    const isEliteUCL = ELITE_CLUBS.includes(state.currentClub);
+    const roundDifficulty = rounds.indexOf(round) * 0.04;
+    const eliteBonus = isEliteUCL ? 0.15 : (tier === 1 ? 0.08 : 0);
+    const winChance = clamp(0.3 + (state.overall - 75) * 0.012 + eliteBonus - roundDifficulty, 0.15, 0.75);
     const won = Math.random() < winChance;
     const goalsFor = won ? rand(1, 4) : rand(0, 2);
     const goalsAgainst = won ? rand(0, goalsFor - 1 < 0 ? 0 : goalsFor - 1) : rand(goalsFor + 1, goalsFor + 3);
