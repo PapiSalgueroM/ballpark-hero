@@ -59,18 +59,43 @@ const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min
 
 type Stats = { pace: number; shooting: number; passing: number; dribbling: number; defending: number; physical: number; reflexes: number };
 
-function generateStats(position: string): Stats {
-  const s: Stats = { pace: rand(45, 62), shooting: rand(45, 62), passing: rand(45, 62), dribbling: rand(45, 62), defending: rand(45, 62), physical: rand(45, 62), reflexes: rand(45, 62) };
-  switch (position) {
-    case "GK": s.reflexes = rand(55, 62); s.shooting = rand(20, 35); s.defending = rand(50, 60); break;
-    case "CB": s.defending = rand(55, 62); s.physical = rand(52, 62); break;
-    case "LB": case "RB": s.pace = rand(52, 62); s.defending = rand(50, 60); break;
-    case "CDM": s.defending = rand(52, 62); s.passing = rand(50, 60); break;
-    case "CM": s.passing = rand(52, 62); s.dribbling = rand(48, 58); break;
-    case "CAM": s.passing = rand(52, 62); s.dribbling = rand(52, 62); s.shooting = rand(48, 58); break;
-    case "LW": case "RW": s.pace = rand(55, 62); s.dribbling = rand(52, 62); break;
-    case "ST": s.shooting = rand(55, 62); s.pace = rand(50, 60); break;
+function generateStatsFromOverall(overall: number, position: string): Stats {
+  // Position-specific offsets: [pace, shooting, passing, dribbling, defending, physical, reflexes]
+  const offsets: Record<string, number[]> = {
+    ST:  [+5, +8, -3, +2, -10, +3, -5],
+    LW:  [+8, +3, 0, +6, -10, -2, -5],
+    RW:  [+8, +3, 0, +6, -10, -2, -5],
+    CAM: [+2, +3, +6, +6, -12, 0, -5],
+    CM:  [-4, -3, +6, +3, 0, +3, -5],
+    CDM: [-1, -8, +3, -3, +8, +6, -5],
+    CB:  [-2, -10, 0, -6, +10, +8, 0],
+    LB:  [+5, -8, +3, -4, +6, +2, -4],
+    RB:  [+5, -8, +3, -4, +6, +2, -4],
+    GK:  [-4, -14, 0, -8, 0, +4, +12],
+  };
+  const o = offsets[position] || [0, 0, 0, 0, 0, 0, 0];
+  const clamp = (v: number) => Math.max(25, Math.min(99, v));
+  const keys: (keyof Stats)[] = ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"];
+  const vals = o.map(off => clamp(overall + off));
+
+  // Adjust so the average equals exactly the rolled overall
+  let avg = Math.round(vals.reduce((a, b) => a + b, 0) / 7);
+  while (avg !== overall) {
+    if (avg < overall) {
+      // Find the largest stat that can go up
+      let idx = vals.indexOf(Math.max(...vals.filter(v => v < 99)));
+      if (idx === -1) idx = 0;
+      vals[idx] = Math.min(99, vals[idx] + 1);
+    } else {
+      // Find the largest stat that can go down
+      let idx = vals.indexOf(Math.max(...vals.filter(v => v > 25)));
+      if (idx === -1) idx = 0;
+      vals[idx] = Math.max(25, vals[idx] - 1);
+    }
+    avg = Math.round(vals.reduce((a, b) => a + b, 0) / 7);
   }
+
+  const s: Stats = { pace: vals[0], shooting: vals[1], passing: vals[2], dribbling: vals[3], defending: vals[4], physical: vals[5], reflexes: vals[6] };
   return s;
 }
 
@@ -295,9 +320,10 @@ export default function SoccerCareer() {
 
   const handlePositionChange = useCallback((pos: string) => {
     setPosition(pos);
-    const s = generateStats(pos);
-    setPreviewStats(s);
-    setPreviewOvr(calcOverall(s, pos));
+    // Clear preview stats — they'll be regenerated when the player rolls
+    setPreviewStats(null);
+    setPreviewOvr(0);
+    setRolledOvr(null);
   }, []);
 
   useEffect(() => {
@@ -540,6 +566,9 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         setDisplayOvr(finalOvr);
         setRolledOvr(finalOvr);
         onRolledOvr?.(finalOvr);
+        // Generate stats that average to exactly this overall
+        const stats = generateStatsFromOverall(finalOvr, position);
+        onStatsGenerated?.(stats, finalOvr);
         setIsRolling(false);
         // Preview academy
         const club = getYouthAcademyClub(clubs, nationality, finalOvr);
