@@ -498,6 +498,12 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     return s;
   }
   const season = generateSeasonStats(s);
+  // Apply stat boosts from previous season's events
+  for (const [key, val] of Object.entries(s.statBoostNextSeason)) {
+    const k = key as keyof typeof s.statBoostNextSeason;
+    if (k in s) (s as any)[k] = clamp((s as any)[k] + (val || 0), 20, 99);
+  }
+  s.statBoostNextSeason = {};
   s.pace = growStat(s.pace, s.age, false, true);
   s.shooting = growStat(s.shooting, s.age, false, false);
   s.passing = growStat(s.passing, s.age, false, false);
