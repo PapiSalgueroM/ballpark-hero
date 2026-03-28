@@ -1068,6 +1068,9 @@ const WorldCupPredictor = () => {
             <KnockoutBracket seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} onChampionChange={setChampion} />
           </div>
         )}
+
+        {/* Awards Predictor */}
+        <AwardsPredictor champion={champion} />
       </div>
     </div>
   );
