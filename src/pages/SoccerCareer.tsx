@@ -1066,7 +1066,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         { l: "Physical", v: career.physical, c: "bg-orange-500" },
       ];
 
-  const showActionButton = career.phase === "youth" || career.phase === "playing";
+  const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season";
 
   return (
     <div className="space-y-3">
