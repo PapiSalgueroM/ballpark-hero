@@ -839,7 +839,7 @@ export function initCareer(
     }],
     events: [`📋 Joined ${academyClub.name} Youth Academy aged 16`],
     retired: false, phase: "youth", pendingOffers: [], pendingSummary: null, transferSituation: null,
-    pendingEvents: [], lastEventId: null, statBoostNextSeason: {},
+    pendingEvents: [], lastEventId: null, statBoostNextSeason: {}, pendingNews: [],
     internationalCareer: false, sponsorDeal: null, totalEarnings: 0,
     popularity: 10, morale: 70, isLeader: false, hasRelationship: false,
     intStats: {
