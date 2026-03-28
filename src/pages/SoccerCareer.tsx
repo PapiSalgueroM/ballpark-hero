@@ -358,6 +358,7 @@ export default function SoccerCareer() {
               onDismissWorldCup={handleDismissWorldCup}
               onRetireInternational={handleRetireInternational}
               onDismissRivalryEvent={handleDismissRivalryEvent}
+              onDismissBallonDor={handleDismissBallonDor}
               onNewCareer={handleNewCareer}
               timelineRef={timelineRef}
             />
