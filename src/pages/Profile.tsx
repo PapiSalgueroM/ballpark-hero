@@ -128,7 +128,7 @@ export default function Profile() {
           .from('profiles')
           .select('*')
           .eq('username', username)
-          .single();
+          .maybeSingle();
 
         if (profileData) {
           setViewingProfile(profileData);
@@ -140,7 +140,8 @@ export default function Profile() {
           return;
         }
       } else if (user) {
-        // Profile may not be loaded yet from AuthContext, fetch directly
+        targetUserId = user.id;
+        // Try profile from context first, then fetch directly
         if (profile) {
           setViewingProfile(profile);
           setEditForm({
@@ -152,16 +153,29 @@ export default function Profile() {
             .from('profiles')
             .select('*')
             .eq('user_id', user.id)
-            .single();
+            .maybeSingle();
           if (fetchedProfile) {
             setViewingProfile(fetchedProfile);
             setEditForm({
-              display_name: fetchedProfile.display_name || '',
-              username: fetchedProfile.username || '',
+              display_name: (fetchedProfile as any).display_name || '',
+              username: (fetchedProfile as any).username || '',
+            });
+          } else {
+            // No profile row yet — build a minimal placeholder from auth user
+            setViewingProfile({
+              user_id: user.id,
+              display_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+              username: null,
+              avatar_url: user.user_metadata?.avatar_url || null,
+              current_streak: 0,
+              longest_streak: 0,
+              total_games_played: 0,
+              total_correct_answers: 0,
+              all_time_score: 0,
+              created_at: user.created_at,
             });
           }
         }
-        targetUserId = user.id;
       } else {
         navigate('/');
         toast.error('Please sign in to view your profile');
@@ -171,11 +185,11 @@ export default function Profile() {
 
       if (!targetUserId) { setLoading(false); return; }
 
-      // Parallel fetches
+      // Parallel fetches — use maybeSingle() to avoid errors when no row exists
       const [scoresRes, recentRes, userScoreRes, rankRes, bracketRes, todayCompletionsRes] = await Promise.all([
         supabase.from('user_best_scores').select('*').eq('user_id', targetUserId).order('best_score', { ascending: false }),
         supabase.from('user_game_scores').select('game_type, score, played_at').eq('user_id', targetUserId).order('played_at', { ascending: false }).limit(5),
-        supabase.from('user_scores').select('current_streak, longest_streak, total_points').eq('user_id', targetUserId).single(),
+        supabase.from('user_scores').select('current_streak, longest_streak, total_points').eq('user_id', targetUserId).maybeSingle(),
         supabase.from('profiles').select('user_id').order('all_time_score', { ascending: false }),
         supabase.from('saved_brackets').select('id, bracket_data').eq('user_id', targetUserId).limit(1),
         supabase.from('daily_completions').select('game_slug').eq('user_id', targetUserId).eq('date', new Date().toISOString().split('T')[0]),
@@ -276,7 +290,7 @@ export default function Profile() {
     }
   }
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="w-10 h-10 animate-spin text-primary" />
@@ -284,7 +298,13 @@ export default function Profile() {
     );
   }
 
-  if (!viewingProfile) return null;
+  if (!viewingProfile) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">Could not load profile. Please try again.</p>
+      </div>
+    );
+  }
 
   return (
     <>
