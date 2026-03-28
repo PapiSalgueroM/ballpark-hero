@@ -917,6 +917,27 @@ const WorldCupPredictor = () => {
         path="/world-cup-predictor"
       />
 
+      {/* Auth Modal */}
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} defaultTab={authDefaultTab} />
+
+      {/* Shared bracket banner */}
+      {viewingSharedBracket && (
+        <div className="sticky top-0 z-[60] flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 px-4 py-3 bg-[hsl(220,40%,20%)] border-b border-[hsl(220,40%,30%)] text-center">
+          <div className="flex items-center gap-2">
+            <Eye className="w-4 h-4 text-[hsl(45,90%,60%)]" />
+            <span className="text-white text-sm font-semibold">
+              You're viewing <span className="text-[hsl(45,90%,60%)]">{sharedOwnerName}'s</span> bracket
+            </span>
+          </div>
+          <a
+            href="/world-cup-predictor"
+            className="px-4 py-1.5 rounded-lg bg-[hsl(45,90%,45%)] hover:bg-[hsl(45,90%,50%)] text-[hsl(220,20%,8%)] text-sm font-bold transition-colors"
+          >
+            Make Your Own
+          </a>
+        </div>
+      )}
+
       {/* FIFA Rankings Sidebar — Desktop: fixed right panel, Mobile: slide-over */}
       {/* Toggle button */}
       {!rankingsOpen && (
