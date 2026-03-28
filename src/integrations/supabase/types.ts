@@ -707,6 +707,36 @@ export type Database = {
         }
         Relationships: []
       }
+      soccer_career_clubs: {
+        Row: {
+          color: string
+          country: string
+          created_at: string
+          id: string
+          league: string
+          name: string
+          tier: number
+        }
+        Insert: {
+          color?: string
+          country: string
+          created_at?: string
+          id?: string
+          league?: string
+          name: string
+          tier: number
+        }
+        Update: {
+          color?: string
+          country?: string
+          created_at?: string
+          id?: string
+          league?: string
+          name?: string
+          tier?: number
+        }
+        Relationships: []
+      }
       soccer_careers: {
         Row: {
           age: number
