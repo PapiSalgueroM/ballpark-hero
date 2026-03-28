@@ -322,6 +322,7 @@ export default function SoccerCareer() {
               onStay={handleStay}
               onSignExtension={handleSignExtension}
               onRequestTransfer={handleRequestTransfer}
+              onEventChoice={handleEventChoice}
               onNewCareer={handleNewCareer}
               timelineRef={timelineRef}
             />
