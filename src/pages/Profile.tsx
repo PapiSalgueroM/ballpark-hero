@@ -98,7 +98,7 @@ const SPORT_LABELS: Record<string, string> = {
 };
 
 export default function Profile() {
-  const { user, profile, refreshProfile, updateProfile } = useAuth();
+  const { user, profile, loading: authLoading, refreshProfile, updateProfile } = useAuth();
   const { username } = useParams<{ username?: string }>();
   const navigate = useNavigate();
 
@@ -117,6 +117,8 @@ export default function Profile() {
   const isOwnProfile = !username || (profile?.username === username);
 
   useEffect(() => {
+    if (authLoading) return; // Wait for auth to finish
+
     const loadProfile = async () => {
       setLoading(true);
       let targetUserId: string | null = null;
@@ -137,14 +139,30 @@ export default function Profile() {
           setLoading(false);
           return;
         }
-      } else if (user && profile) {
-        setViewingProfile(profile);
-        setEditForm({
-          display_name: profile.display_name || '',
-          username: profile.username || '',
-        });
+      } else if (user) {
+        // Profile may not be loaded yet from AuthContext, fetch directly
+        if (profile) {
+          setViewingProfile(profile);
+          setEditForm({
+            display_name: profile.display_name || '',
+            username: profile.username || '',
+          });
+        } else {
+          const { data: fetchedProfile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('user_id', user.id)
+            .single();
+          if (fetchedProfile) {
+            setViewingProfile(fetchedProfile);
+            setEditForm({
+              display_name: fetchedProfile.display_name || '',
+              username: fetchedProfile.username || '',
+            });
+          }
+        }
         targetUserId = user.id;
-      } else if (!user) {
+      } else {
         navigate('/');
         toast.error('Please sign in to view your profile');
         setLoading(false);
@@ -179,7 +197,7 @@ export default function Profile() {
     };
 
     loadProfile();
-  }, [username, user, profile, navigate]);
+  }, [username, user, profile, authLoading, navigate]);
 
   const handleSave = async () => {
     setSaving(true);
