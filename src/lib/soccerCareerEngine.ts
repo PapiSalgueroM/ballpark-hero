@@ -569,6 +569,17 @@ export function initCareer(
     pendingRivalryEvent: null,
     lastRivalryEventId: null,
     rivalrySummary: null,
+    // Financial & Lifestyle
+    netWorth: 0,
+    lifestyleLevel: "Humble" as LifestyleLevel,
+    lifestyleCostPerYear: 0.02, // €20k/year as youth
+    socialMediaFollowers: 0,
+    sponsorshipIncome: 0,
+    properties: [],
+    investments: [],
+    consecutiveDeficitYears: 0,
+    agentFeesPaid: 0,
+    family: { isMarried: false, marriedAge: null, children: 0, isDivorced: false, divorceAge: null },
   };
 }
 
