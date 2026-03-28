@@ -425,10 +425,16 @@ export default function SoccerCareer() {
   };
 
   const handleNewCareer = () => {
+    setShowNewCareerConfirm(true);
+  };
+
+  const handleConfirmNewCareer = () => {
+    localStorage.removeItem(SAVE_KEY);
     setCareer(null);
     setPreviewStats(null);
     setRolledOvr(null);
     setPlayerName(""); setNationality(""); setPosition(""); setEra("");
+    setShowNewCareerConfirm(false);
   };
 
   return (
