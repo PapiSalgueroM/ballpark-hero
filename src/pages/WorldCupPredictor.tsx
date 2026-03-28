@@ -253,8 +253,14 @@ function loadPredictions(): Predictions {
 
 /* ───── sub-components ───── */
 
-const PlayoffSlotsPanel = () => {
+interface PlayoffSlotsPanelProps {
+  picks: Record<string, string>;
+  onPick: (slot: string, winner: string) => void;
+}
+
+const PlayoffSlotsPanel = ({ picks, onPick }: PlayoffSlotsPanelProps) => {
   const [open, setOpen] = useState(false);
+  const pickedCount = Object.keys(picks).length;
 
   return (
     <Collapsible open={open} onOpenChange={setOpen} className="mb-8">
@@ -262,35 +268,64 @@ const PlayoffSlotsPanel = () => {
         <div className="flex items-center gap-2">
           <Swords className="w-5 h-5 text-[hsl(45,90%,55%)]" />
           <span className="font-bold text-[hsl(45,90%,55%)] text-sm sm:text-base">Playoff Slots</span>
-          <Badge variant="outline" className="text-[10px] border-[hsl(0,0%,40%)] text-[hsl(0,0%,55%)] ml-1">6 TBD</Badge>
+          <Badge variant="outline" className={`text-[10px] ml-1 ${pickedCount === 6 ? "border-[hsl(140,60%,40%)] text-[hsl(140,60%,55%)]" : "border-[hsl(0,0%,40%)] text-[hsl(0,0%,55%)]"}`}>
+            {pickedCount}/6 picked
+          </Badge>
         </div>
         <ChevronDown className={`w-5 h-5 text-[hsl(150,15%,60%)] transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className="mt-3 rounded-lg bg-[hsl(150,15%,10%)] border border-[hsl(150,20%,18%)] p-4 space-y-4">
           <p className="text-[hsl(150,15%,55%)] text-xs sm:text-sm text-center">
-            6 spots still being decided — winners announced March 31, 2026
+            Pick the winner of each playoff — they'll replace the TBD slot in their group.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {playoffMatchups.map((m) => (
-              <div key={m.slot} className="rounded-md bg-[hsl(150,12%,14%)] border border-[hsl(150,15%,20%)] p-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[hsl(45,90%,55%)] text-xs font-semibold">{m.slot}</span>
-                  <Badge variant="outline" className="text-[9px] border-[hsl(150,20%,30%)] text-[hsl(150,15%,50%)] px-1.5 py-0">
-                    Group {m.group}
-                  </Badge>
+            {playoffMatchups.map((m) => {
+              const picked = picks[m.slot];
+              return (
+                <div key={m.slot} className="rounded-md bg-[hsl(150,12%,14%)] border border-[hsl(150,15%,20%)] p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[hsl(45,90%,55%)] text-xs font-semibold">{m.slot}</span>
+                    <Badge variant="outline" className="text-[9px] border-[hsl(150,20%,30%)] text-[hsl(150,15%,50%)] px-1.5 py-0">
+                      Group {m.group}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-center gap-2 mt-2">
+                    <button
+                      onClick={() => onPick(m.slot, m.teamA)}
+                      className={`flex-1 text-sm font-bold py-2 px-2 rounded-md transition-all ${
+                        picked === m.teamA
+                          ? "bg-[hsl(140,55%,25%)] text-white border-2 border-[hsl(140,60%,45%)] shadow-md shadow-[hsl(140,60%,40%)]/20"
+                          : picked === m.teamB
+                          ? "bg-[hsl(220,10%,18%)] text-[hsl(0,0%,40%)] border-2 border-transparent cursor-pointer hover:bg-[hsl(220,10%,22%)]"
+                          : "bg-[hsl(220,12%,18%)] text-white border-2 border-[hsl(220,12%,28%)] hover:border-[hsl(140,40%,40%)] hover:bg-[hsl(220,12%,22%)] cursor-pointer"
+                      }`}
+                    >
+                      {getFlag(m.teamA)} {m.teamA}
+                    </button>
+                    <span className="text-[hsl(0,0%,35%)] text-xs font-semibold">vs</span>
+                    <button
+                      onClick={() => onPick(m.slot, m.teamB)}
+                      className={`flex-1 text-sm font-bold py-2 px-2 rounded-md transition-all ${
+                        picked === m.teamB
+                          ? "bg-[hsl(140,55%,25%)] text-white border-2 border-[hsl(140,60%,45%)] shadow-md shadow-[hsl(140,60%,40%)]/20"
+                          : picked === m.teamA
+                          ? "bg-[hsl(220,10%,18%)] text-[hsl(0,0%,40%)] border-2 border-transparent cursor-pointer hover:bg-[hsl(220,10%,22%)]"
+                          : "bg-[hsl(220,12%,18%)] text-white border-2 border-[hsl(220,12%,28%)] hover:border-[hsl(140,40%,40%)] hover:bg-[hsl(220,12%,22%)] cursor-pointer"
+                      }`}
+                    >
+                      {getFlag(m.teamB)} {m.teamB}
+                    </button>
+                  </div>
+                  {picked && (
+                    <div className="flex items-center justify-center gap-1 mt-2">
+                      <Check className="w-3 h-3 text-[hsl(140,60%,50%)]" />
+                      <span className="text-[hsl(140,60%,50%)] text-[10px] font-semibold">Winner: {getFlag(picked)} {picked}</span>
+                    </div>
+                  )}
                 </div>
-                <div className="flex items-center justify-center gap-2 text-sm">
-                   <span className="font-bold text-white">{getFlag(m.teamA)} {m.teamA}</span>
-                   <span className="text-[hsl(0,0%,45%)] text-xs">vs</span>
-                   <span className="font-bold text-white">{getFlag(m.teamB)} {m.teamB}</span>
-                </div>
-                <div className="flex items-center justify-center gap-1 mt-2">
-                  <CalendarClock className="w-3 h-3 text-[hsl(150,15%,45%)]" />
-                  <span className="text-[hsl(150,15%,45%)] text-[10px]">Final: March 31</span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </CollapsibleContent>
@@ -525,6 +560,12 @@ const WorldCupPredictor = () => {
       return raw ? JSON.parse(raw) : [];
     } catch { return []; }
   });
+  const [playoffPicks, setPlayoffPicks] = useState<Record<string, string>>(() => {
+    try {
+      const raw = localStorage.getItem("wc2026-playoff-picks");
+      return raw ? JSON.parse(raw) : {};
+    } catch { return {}; }
+  });
 
   // persist to localStorage
   useEffect(() => {
@@ -538,6 +579,34 @@ const WorldCupPredictor = () => {
   useEffect(() => {
     localStorage.setItem("wc2026-selected-thirds", JSON.stringify(selectedThirds));
   }, [selectedThirds]);
+
+  useEffect(() => {
+    localStorage.setItem("wc2026-playoff-picks", JSON.stringify(playoffPicks));
+  }, [playoffPicks]);
+
+  // Resolve TBD slots with playoff picks
+  const resolvedGroups = useMemo(() => {
+    return groups.map((g) => ({
+      ...g,
+      teams: g.teams.map((t) => {
+        if (t.isTBD && playoffPicks[t.name]) {
+          return { name: playoffPicks[t.name], isTBD: false };
+        }
+        return t;
+      }),
+    }));
+  }, [playoffPicks]);
+
+  const handlePlayoffPick = useCallback((slot: string, winner: string) => {
+    setPlayoffPicks((prev) => {
+      if (prev[slot] === winner) {
+        const next = { ...prev };
+        delete next[slot];
+        return next;
+      }
+      return { ...prev, [slot]: winner };
+    });
+  }, []);
 
   const handleScoreChange = useCallback(
     (key: string, field: "homeGoals" | "awayGoals", val: number | "") => {
@@ -566,7 +635,7 @@ const WorldCupPredictor = () => {
     const seeds: Record<string, GroupSeed> = {};
     const allThirds: { team: string; group: string; pts: number; gd: number; gf: number; played: number }[] = [];
 
-    for (const group of groups) {
+    for (const group of resolvedGroups) {
       const standings = computeStandings(group, predictions);
       seeds[group.letter] = {
         first: standings[0]?.team || "TBD",
@@ -594,7 +663,7 @@ const WorldCupPredictor = () => {
     );
 
     return { groupSeeds: seeds, bestThirds: sorted };
-  }, [predictions]);
+  }, [predictions, resolvedGroups]);
 
   // Count filled groups
   const filledGroupCount = useMemo(() => {
@@ -668,8 +737,10 @@ const WorldCupPredictor = () => {
     setPredictions({});
     setShowBracket(false);
     setSelectedThirds([]);
+    setPlayoffPicks({});
     localStorage.removeItem("wc2026-knockout");
     localStorage.removeItem("wc2026-selected-thirds");
+    localStorage.removeItem("wc2026-playoff-picks");
   }, []);
 
   const handleToggleThird = useCallback((teamName: string) => {
@@ -717,7 +788,7 @@ const WorldCupPredictor = () => {
         </div>
 
         {/* Playoff Slots Panel */}
-        <PlayoffSlotsPanel />
+        <PlayoffSlotsPanel picks={playoffPicks} onPick={handlePlayoffPick} />
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
           <div>
@@ -747,7 +818,7 @@ const WorldCupPredictor = () => {
 
         {/* Group Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {groups.map((group) => (
+          {resolvedGroups.map((group) => (
             <GroupPredictionCard
               key={group.letter}
               group={group}
