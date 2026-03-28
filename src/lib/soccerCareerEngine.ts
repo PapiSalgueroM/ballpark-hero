@@ -543,6 +543,11 @@ export function initCareer(
       debutYear: null, debutAge: null, worldCupResults: [],
     },
     pendingWorldCup: null,
+    rival: null,
+    rivalCreated: false,
+    pendingRivalryEvent: null,
+    lastRivalryEventId: null,
+    rivalrySummary: null,
   };
 }
 
