@@ -294,7 +294,7 @@ export default function SoccerCareer() {
     if (!user) { setShowAuth(true); return; }
     if (!previewStats || !isFormValid || clubs.length === 0 || rolledOvr === null) return;
     const startYear = ERAS.find(e => e.value === era)?.startYear ?? 2020;
-    const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, previewOvr, startYear, clubs);
+    const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs);
     setCareer(newCareer);
     toast.success(`Joined ${newCareer.currentClub}!`);
   };
