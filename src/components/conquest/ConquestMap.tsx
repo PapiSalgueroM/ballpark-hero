@@ -1,5 +1,5 @@
 import { US_STATES } from '@/data/usStatesPaths';
-import { TEAM_MAP, POWER_UP_STATES, isLightColor } from '@/data/conquestData';
+import { TEAM_MAP, isLightColor } from '@/data/conquestData';
 import { useState, useMemo } from 'react';
 
 interface ConquestMapProps {
@@ -7,9 +7,10 @@ interface ConquestMapProps {
   attackingTeam: string | null;
   defendingTeam: string | null;
   phase: string;
+  powerupStates: Set<string>;
 }
 
-export default function ConquestMap({ territories, attackingTeam, defendingTeam, phase }: ConquestMapProps) {
+export default function ConquestMap({ territories, attackingTeam, defendingTeam, phase, powerupStates }: ConquestMapProps) {
   const [hovered, setHovered] = useState<string | null>(null);
 
   const getColor = (stateId: string) => {
