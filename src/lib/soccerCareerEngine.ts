@@ -1057,8 +1057,16 @@ function generateIntSeasonStats(state: CareerState, year: number): { intApps: nu
 /* ─── Advance pro season ─── */
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev }; s.age += 1; s.events = [];
-  if (s.age >= 38 || (s.overall < 60 && s.age >= 30)) {
-    s.retired = true; s.phase = "retired";
+  
+  // Detect "FINAL SEASON" — will retire next year
+  const projectedOvr = s.overall - (s.age >= 34 ? 3 : s.age >= 30 ? 1 : 0);
+  if (s.age >= 37 || (projectedOvr < 58 && s.age >= 30)) {
+    s.isFinalSeason = true;
+  }
+  
+  // Retirement check
+  if (s.age >= 38 || (s.overall < 58 && s.age >= 30)) {
+    s.retired = true;
     s.events.push("👋 Announced retirement from professional football");
     const lastYear = s.seasons[s.seasons.length - 1].year;
     s.seasons = [...s.seasons, {
@@ -1068,6 +1076,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }];
     if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
+    s.legacy = calculateLegacy(s);
+    s.phase = "retirement_ceremony";
     return s;
   }
   const season = generateSeasonStats(s);
