@@ -973,7 +973,17 @@ function playerMatchStats(overall: number, position: string, isWinner: boolean):
 /* ─── Simulate full World Cup tournament ─── */
 export function simulateWorldCup(state: CareerState): WorldCupResult {
   const nation = state.nationality;
-  const teams = get32WCTeams(nation);
+  const teams = get32WCTeams(nation, state.overall);
+  
+  // Check if player's nation didn't qualify
+  if (!teams.includes(nation)) {
+    const year = state.seasons[state.seasons.length - 1]?.year + 1 || 2022;
+    return {
+      year, nation, matches: [], playerApps: 0, playerGoals: 0, playerAssists: 0,
+      playerAvgRating: 0, result: "Did Not Qualify", bestPlayer: false,
+    };
+  }
+  
   const strengths: Record<string, number> = {};
   teams.forEach(t => strengths[t] = getNationStrength(t));
   // Player boosts own nation
