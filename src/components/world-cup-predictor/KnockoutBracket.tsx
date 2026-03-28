@@ -206,8 +206,8 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange }: KnockoutBracke
         Click a team to pick them as the winner. They'll auto-advance to the next round.
       </p>
 
-      {/* Bracket — horizontally scrollable */}
-      <div className="overflow-x-auto pb-4">
+      {/* Bracket — horizontally scrollable with snap on mobile */}
+      <div className="overflow-x-auto pb-4 -mx-4 px-4 snap-x snap-mandatory md:snap-none md:mx-0 md:px-0">
         <div className="flex gap-2 sm:gap-3" style={{ minWidth: "1100px" }}>
           {rounds.map((round, rIdx) => (
             <div key={rIdx} className="flex flex-col" style={{ width: rIdx === 0 ? "200px" : "185px" }}>
