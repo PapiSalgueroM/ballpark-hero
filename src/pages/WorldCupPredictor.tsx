@@ -663,7 +663,7 @@ const WorldCupPredictor = () => {
     );
 
     return { groupSeeds: seeds, bestThirds: sorted };
-  }, [predictions]);
+  }, [predictions, resolvedGroups]);
 
   // Count filled groups
   const filledGroupCount = useMemo(() => {
