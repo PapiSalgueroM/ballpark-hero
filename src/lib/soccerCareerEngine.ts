@@ -1133,10 +1133,44 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     if (retireEvt) s.pendingRivalryEvent = retireEvt;
   }
 
+  // UCL Simulation
+  const uclResult = simulateUCL(s, season);
+  s.lastUCLResult = uclResult;
+  if (uclResult.qualified) {
+    season.championsLeague = uclResult.result === "Winner";
+    if (season.championsLeague) s.events.push(`⭐ Won the Champions League!`);
+    else if (uclResult.result === "Final") s.events.push(`⭐ Reached the Champions League Final`);
+    if (uclResult.isTopScorer) {
+      s.awards = [...s.awards, { year: thisYear, name: "UCL Top Scorer", emoji: "⚽" }];
+      s.events.push(`⚽ Won the Champions League Golden Boot!`);
+    }
+  }
+
   if (season.leagueTitle) s.events.push(`🏆 Won the league with ${s.currentClub}!`);
-  if (season.championsLeague) s.events.push(`⭐ Won the Champions League!`);
-  if (season.worldCup) s.events.push(`🌍 Won the World Cup with ${s.nationality}!`);
-  if (season.ballonDor) s.events.push(`🏅 Won the Ballon d'Or!`);
+  if (season.domesticCup) s.events.push(`🏆 Won the Domestic Cup with ${s.currentClub}!`);
+
+  // Awards: Player of the Month (random, based on rating)
+  if (season.rating >= 7.5 && Math.random() < 0.3) {
+    const potmCount = rand(1, 3);
+    for (let i = 0; i < potmCount; i++) {
+      s.awards = [...s.awards, { year: thisYear, name: "Player of the Month", emoji: "🏆" }];
+    }
+    s.events.push(`🏆 Won Player of the Month ${potmCount} time${potmCount > 1 ? "s" : ""}!`);
+  }
+  
+  // Player of the Year (domestic)
+  if (season.rating >= 8.0 && s.overall >= 82 && Math.random() < 0.25) {
+    s.awards = [...s.awards, { year: thisYear, name: "Player of the Year", emoji: "🌟" }];
+    s.events.push(`🌟 Won Domestic Player of the Year!`);
+    s.popularity = clamp(s.popularity + 10, 0, 100);
+  }
+
+  // International Player of the Year
+  if (s.internationalCareer && season.intApps >= 6 && season.intRating >= 7.5 && s.overall >= 83 && Math.random() < 0.15) {
+    s.awards = [...s.awards, { year: thisYear, name: "International Player of the Year", emoji: "🌍" }];
+    s.events.push(`🌍 Named International Player of the Year!`);
+  }
+
   const totalGoals = s.seasons.reduce((sum, ss) => sum + ss.goals, 0) + season.goals;
   const totalApps = s.seasons.reduce((sum, ss) => sum + ss.apps, 0) + season.apps;
   if (totalGoals >= 100 && totalGoals - season.goals < 100) s.events.push("💯 Reached 100 career goals!");
@@ -1154,7 +1188,6 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     const wcResult = simulateWorldCup(s);
     wcResult.year = thisYear;
     s.pendingWorldCup = wcResult;
-    // Update int stats from WC
     s.intStats = { ...s.intStats,
       caps: s.intStats.caps + wcResult.playerApps,
       goals: s.intStats.goals + wcResult.playerGoals,
@@ -1168,8 +1201,29 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     }
     if (wcResult.bestPlayer) {
       s.events.push(`🌟 Named Best Player of the World Cup!`);
+      s.awards = [...s.awards, { year: thisYear, name: "World Cup Best Player", emoji: "🌟" }];
+    }
+    // World Cup Golden Boot
+    if (wcResult.playerGoals >= 4 && Math.random() < 0.4) {
+      s.awards = [...s.awards, { year: thisYear, name: "World Cup Golden Boot", emoji: "👟" }];
+      s.events.push(`👟 Won the World Cup Golden Boot!`);
     }
     s.intStats = { ...s.intStats, worldCupResults: [...s.intStats.worldCupResults, wcResult] };
+  }
+
+  // Ballon d'Or calculation
+  const bdorResult = calculateBallonDor(s, season, thisYear);
+  s.pendingBallonDor = bdorResult;
+  if (bdorResult.playerRank !== null) {
+    season.ballonDorRank = bdorResult.playerRank;
+    if (bdorResult.playerRank === 1) {
+      season.ballonDor = true;
+      s.awards = [...s.awards, { year: thisYear, name: "Ballon d'Or", emoji: "🏅" }];
+      s.marketValue = Math.round((s.marketValue + 15) * 10) / 10;
+      s.popularity = clamp(s.popularity + 20, 0, 100);
+    } else if (bdorResult.playerRank <= 3) {
+      s.popularity = clamp(s.popularity + 5, 0, 100);
+    }
   }
 
   // International debut event
