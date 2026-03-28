@@ -1987,3 +1987,209 @@ export function getCareerTotals(seasons: SeasonRecord[]) {
     worldCups: t.worldCups + (s.worldCup ? 1 : 0), ballonDors: t.ballonDors + (s.ballonDor ? 1 : 0),
   }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, domesticCups: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0 });
 }
+
+/* ─── Legacy Calculation ─── */
+function getLegacyTier(score: number): LegacyTier {
+  if (score >= 90) return "GOAT";
+  if (score >= 80) return "LEGEND";
+  if (score >= 70) return "GREAT";
+  if (score >= 60) return "SOLID PRO";
+  return "JOURNEYMAN";
+}
+
+function calculateLegacy(state: CareerState): LegacyResult {
+  const totals = getCareerTotals(state.seasons);
+  const breakdown: { label: string; points: number }[] = [];
+  let score = 0;
+
+  // Goals & assists relative to position
+  const isAttacker = ["ST", "CAM", "LW", "RW"].includes(state.position);
+  const isMid = ["CM", "CDM"].includes(state.position);
+  const isDefender = ["CB", "LB", "RB"].includes(state.position);
+  const isGK = state.position === "GK";
+  
+  let goalPoints = 0;
+  if (isAttacker) goalPoints = Math.min(25, totals.goals * 0.08);
+  else if (isMid) goalPoints = Math.min(20, totals.goals * 0.15);
+  else if (isDefender) goalPoints = Math.min(15, totals.goals * 0.3);
+  else if (isGK) goalPoints = Math.min(15, totals.cleanSheets * 0.15);
+  breakdown.push({ label: isGK ? "Clean Sheets" : "Goals", points: Math.round(goalPoints) });
+  score += goalPoints;
+
+  const assistPoints = Math.min(10, totals.assists * 0.05);
+  breakdown.push({ label: "Assists", points: Math.round(assistPoints) });
+  score += assistPoints;
+
+  // Trophies
+  const uclPoints = Math.min(20, totals.championsLeagues * 8);
+  breakdown.push({ label: "Champions League", points: Math.round(uclPoints) });
+  score += uclPoints;
+
+  const leaguePoints = Math.min(10, totals.leagueTitles * 3);
+  breakdown.push({ label: "League Titles", points: Math.round(leaguePoints) });
+  score += leaguePoints;
+
+  const cupPoints = Math.min(5, totals.domesticCups * 1.5);
+  breakdown.push({ label: "Domestic Cups", points: Math.round(cupPoints) });
+  score += cupPoints;
+
+  // Ballon d'Ors
+  const bdorPoints = Math.min(15, totals.ballonDors * 5);
+  breakdown.push({ label: "Ballon d'Or", points: Math.round(bdorPoints) });
+  score += bdorPoints;
+
+  // International trophies
+  const intTrophyPoints = Math.min(10, (state.intStats.worldCupWins * 6) + (state.intStats.continentalWins * 3));
+  breakdown.push({ label: "International Trophies", points: Math.round(intTrophyPoints) });
+  score += intTrophyPoints;
+
+  // Club loyalty (bonus for 5+ years at one club)
+  const clubYears: Record<string, number> = {};
+  state.seasons.filter(s => s.type === "playing").forEach(s => {
+    clubYears[s.club] = (clubYears[s.club] || 0) + 1;
+  });
+  const maxYears = Math.max(0, ...Object.values(clubYears));
+  const loyaltyPoints = maxYears >= 10 ? 8 : maxYears >= 7 ? 5 : maxYears >= 5 ? 3 : 0;
+  breakdown.push({ label: "Club Loyalty", points: loyaltyPoints });
+  score += loyaltyPoints;
+
+  // Longevity
+  const careerLength = state.seasons.filter(s => s.type === "playing").length;
+  const longevityPoints = careerLength >= 18 ? 7 : careerLength >= 15 ? 5 : careerLength >= 12 ? 3 : 0;
+  breakdown.push({ label: "Longevity", points: longevityPoints });
+  score += longevityPoints;
+
+  // Rivalry result
+  if (state.rivalrySummary) {
+    const rivalPoints = state.rivalrySummary.legacyBonus > 0 ? Math.min(5, state.rivalrySummary.legacyBonus / 3) : 0;
+    breakdown.push({ label: "Rivalry", points: Math.round(rivalPoints) });
+    score += rivalPoints;
+  }
+
+  // Pundit bonus
+  if (state.isPundit) {
+    breakdown.push({ label: "TV Pundit", points: 5 });
+    score += 5;
+  }
+
+  score = Math.round(clamp(score, 0, 100));
+  return { score, tier: getLegacyTier(score), breakdown };
+}
+
+/* ─── Manual Retirement ─── */
+export function manualRetire(prev: CareerState): CareerState {
+  const s = { ...prev };
+  s.retired = true;
+  s.events = [...s.events, "👋 Announced retirement from professional football"];
+  if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
+  s.legacy = calculateLegacy(s);
+  s.phase = "retirement_ceremony";
+  return s;
+}
+
+/* ─── Post-retirement choices ─── */
+export function choosePostRetirement(prev: CareerState, choice: PostRetirementChoice, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  s.postRetirementChoice = choice;
+  
+  if (choice === "retire") {
+    s.phase = "retired";
+    return s;
+  }
+  
+  if (choice === "pundit") {
+    s.isPundit = true;
+    s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 5) * 10) / 10;
+    s.legacy = calculateLegacy(s); // recalculate with pundit bonus
+    s.punditEvents = [
+      "🎙️ Made your debut as a TV pundit on Match of the Day!",
+      "📱 Social media followers surging from your punditry career!",
+    ];
+    s.phase = "retired";
+    return s;
+  }
+  
+  if (choice === "manager") {
+    // Start as manager of a tier 3-4 club
+    const managerClubs = clubs.filter(c => c.tier >= 3);
+    const club = managerClubs.length > 0 ? pick(managerClubs) : { name: "Unknown FC", tier: 3 };
+    s.managerState = {
+      club: club.name,
+      clubTier: club.tier,
+      season: 0,
+      trophies: 0,
+      promotions: 0,
+      seasonResults: [],
+      nationalTeamOffer: false,
+      managingNationalTeam: false,
+    };
+    s.phase = "manager_season";
+    return s;
+  }
+  
+  return s;
+}
+
+/* ─── Manager Career ─── */
+export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  if (!s.managerState) return s;
+  const ms = { ...s.managerState };
+  ms.season += 1;
+  
+  // Simulate season result
+  const promotionChance = ms.clubTier >= 3 ? 0.30 : ms.clubTier === 2 ? 0.20 : 0.15;
+  const trophyChance = ms.clubTier <= 2 ? 0.20 : 0.10;
+  const promoted = ms.clubTier > 1 && Math.random() < promotionChance;
+  const wonTrophy = Math.random() < trophyChance;
+  
+  let result = "";
+  if (promoted) {
+    ms.promotions += 1;
+    ms.clubTier -= 1;
+    const newClubs = clubs.filter(c => c.tier === ms.clubTier);
+    if (newClubs.length > 0) ms.club = pick(newClubs).name;
+    result = `Promoted! Now managing in Tier ${ms.clubTier}`;
+  } else if (wonTrophy) {
+    ms.trophies += 1;
+    result = `Won the league trophy!`;
+  } else {
+    const positions = ["1st (missed promotion on GD)", "2nd", "3rd", "4th", "mid-table", "lower half"];
+    result = `Finished ${pick(positions)}`;
+  }
+  
+  ms.seasonResults = [...ms.seasonResults, { year: ms.season, club: ms.club, tier: ms.clubTier, result, trophy: wonTrophy }];
+  
+  // National team offer after 3+ seasons and success
+  if (ms.season >= 3 && ms.clubTier <= 2 && !ms.nationalTeamOffer && Math.random() < 0.3) {
+    ms.nationalTeamOffer = true;
+    ms.managingNationalTeam = true;
+    result += ` · 🇺🇳 Called to manage ${s.nationality} national team!`;
+  }
+  
+  s.managerState = ms;
+  s.events = [...s.events, `📋 Manager Season ${ms.season}: ${result}`];
+  
+  // After 5 seasons or reaching tier 1, can end
+  if (ms.season >= 8 || (ms.clubTier === 1 && ms.season >= 3)) {
+    s.legacy = calculateLegacy(s);
+    s.phase = "retired";
+  }
+  
+  return s;
+}
+
+export function endManagerCareer(prev: CareerState): CareerState {
+  const s = { ...prev };
+  s.legacy = calculateLegacy(s);
+  s.phase = "retired";
+  return s;
+}
+
+/* ─── Share text ─── */
+export function generateShareText(state: CareerState): string {
+  const totals = getCareerTotals(state.seasons);
+  const tier = state.legacy?.tier || "JOURNEYMAN";
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups;
+  return `⚽ I finished my Soccer Career as a ${tier} with ${totals.goals} goals and ${totalTrophies} trophies!\n\n${getFlag(state.nationality)} ${state.playerName} · ${state.position}\nCan you beat me? douknowball.com/soccer-career`;
+}
