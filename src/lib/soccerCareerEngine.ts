@@ -32,8 +32,19 @@ export interface SeasonRecord {
 export interface ContractOffer {
   club: ClubData;
   contractYears: number;
-  wage: number; // weekly wage in thousands
+  wage: number; // weekly wage in euros (not thousands)
+  transferFee: number; // in millions
+  isDreamClub?: boolean;
+  isPayCut?: boolean;
 }
+
+export type TransferSituation =
+  | { type: "no_interest" }
+  | { type: "one_offer"; offer: ContractOffer }
+  | { type: "bidding_war"; offerA: ContractOffer; offerB: ContractOffer }
+  | { type: "dream_club"; offer: ContractOffer }
+  | { type: "contract_expiry"; offers: ContractOffer[] }
+  | { type: "request_result"; offer: ContractOffer | null };
 
 export interface CareerState {
   playerName: string;
@@ -47,6 +58,7 @@ export interface CareerState {
   currentClubColor: string;
   currentLeague: string;
   contractYearsLeft: number;
+  weeklyWage: number; // euros per week
   marketValue: number;
   pace: number;
   shooting: number;
@@ -59,10 +71,10 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  // UI flow state
-  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "retired";
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
+  transferSituation: TransferSituation | null;
 }
 
 /* ─── Flags ─── */
