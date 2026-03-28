@@ -207,6 +207,7 @@ export default function SoccerCareer() {
   const [saving, setSaving] = useState(false);
   const [career, setCareer] = useState<CareerState | null>(null);
   const [clubs, setClubs] = useState<ClubData[]>([]);
+  const [rolledOvr, setRolledOvr] = useState<number | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
 
   // Load clubs from Supabase
