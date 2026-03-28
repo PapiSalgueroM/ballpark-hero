@@ -362,6 +362,7 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
     apps, goals, assists, cleanSheets, yellowCards, redCards, rating,
     leagueTitle: winLeague, championsLeague: winCL, worldCup: winWC, ballonDor: winBdor,
     type: "playing",
+    intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   };
 }
 
@@ -485,12 +486,19 @@ export function initCareer(
       year: startYear, age: 16, club: `${academyClub.name} Youth`, clubCountry: academyClub.country, clubTier: academyClub.tier,
       apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
       leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "youth",
+      intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }],
     events: [`📋 Joined ${academyClub.name} Youth Academy aged 16`],
     retired: false, phase: "youth", pendingOffers: [], pendingSummary: null, transferSituation: null,
     pendingEvents: [], lastEventId: null, statBoostNextSeason: {},
     internationalCareer: false, sponsorDeal: null, totalEarnings: 0,
     popularity: 10, morale: 70, isLeader: false, hasRelationship: false,
+    intStats: {
+      caps: 0, goals: 0, assists: 0, tournaments: 0, worldCups: 0, continentals: 0,
+      worldCupWins: 0, continentalWins: 0, isCaptain: false, isRetired: false,
+      debutYear: null, debutAge: null, worldCupResults: [],
+    },
+    pendingWorldCup: null,
   };
 }
 
@@ -511,6 +519,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
     apps: rand(10, 25), goals: s.position === "GK" ? 0 : rand(0, 8), assists: rand(0, 5),
     cleanSheets: s.position === "GK" ? rand(2, 8) : 0, yellowCards: rand(0, 4), redCards: 0, rating: 0,
     leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "youth",
+    intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   }];
   s.events.push(`📈 Stats improved during youth development (OVR ${s.overall})`);
   if (s.age >= 17) {
@@ -544,6 +553,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
       apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
       leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "retired",
+      intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }];
     return s;
   }
