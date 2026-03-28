@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Flame, Trophy, Calendar, Gamepad2, Share2, Edit2, Check, X, Loader2 } from 'lucide-react';
+import {
+  Flame, Trophy, Calendar, Gamepad2, Share2, Edit2, Check, X, Loader2,
+  Star, Target, Crown, Zap, Award, TrendingUp, Medal
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
@@ -19,6 +20,11 @@ interface BestScore {
   achieved_at: string;
 }
 
+interface RecentGame {
+  game_type: string;
+  score: number;
+  played_at: string;
+}
 
 const GAME_LABELS: Record<string, string> = {
   'footle': '🎯 Footle',
@@ -46,34 +52,76 @@ const GAME_LABELS: Record<string, string> = {
   'ufc-chain': '🔗 Combat Chain',
   'teammates': '🤝 Teammates',
   'olympics': '🏅 Olympics',
+  'guess-soccer-club': '⚽ Guess the Club',
+  'soccer-grid': '⚽ Soccer Grid',
+  'f1-driver': '🏎️ F1 Driver',
+  'f1-constructor': '🏎️ F1 Constructor',
+  'tennis-player': '🎾 Tennis Player',
+  'tennis-chain': '🎾 Tennis Chain',
+  'nascar-driver': '🏁 NASCAR Driver',
+  'nascar-chain': '🏁 NASCAR Chain',
+  'guess-the-nation': '🌍 Guess the Nation',
+  'cbb-program': '🏀 CBB Program',
+  'conquest': '🗺️ Conquest',
+  'guess-the-year': '📆 Guess the Year',
+  'nba-lineup': '🏀 NBA Lineup',
+  'guess-nfl-team': '🏈 Guess NFL Team',
+  'fantasy-draft': '⚽ Fantasy Draft',
+  'blurred-face': '🖼️ Blurred Face',
+};
+
+const SPORT_CATEGORIES: Record<string, string> = {
+  'footle': 'soccer', 'career': 'soccer', 'higher-lower': 'soccer', 'connections': 'soccer',
+  'build-your-xi': 'soccer', 'guess-the-face': 'soccer', 'football-connect-4': 'soccer',
+  'world-cup': 'soccer', 'teammates': 'soccer', 'guess-soccer-club': 'soccer',
+  'soccer-grid': 'soccer', 'fantasy-draft': 'soccer', 'blurred-face': 'soccer',
+  'football-grid': 'football', 'football-timeline': 'football', 'football-draft': 'football',
+  'nfl-career': 'football', 'guess-nfl-team': 'football', 'conquest': 'football',
+  'college-grid': 'college', 'guess-the-college': 'college', 'cbb-program': 'college',
+  'nba-starting-5': 'basketball', 'nba-connect-4': 'basketball', 'nba-chain': 'basketball',
+  'nba-lineup': 'basketball',
+  'baseball-career': 'baseball', 'baseball-connections': 'baseball',
+  'hockey-career': 'hockey', 'hockey-higher-lower': 'hockey',
+  'ufc': 'combat', 'ufc-chain': 'combat',
+  'olympics': 'olympics', 'guess-the-nation': 'olympics',
+  'f1-driver': 'motorsport', 'f1-constructor': 'motorsport',
+  'nascar-driver': 'motorsport', 'nascar-chain': 'motorsport',
+  'tennis-player': 'tennis', 'tennis-chain': 'tennis',
+  'guess-the-year': 'general',
+};
+
+const SPORT_LABELS: Record<string, string> = {
+  soccer: '⚽ Soccer', football: '🏈 Football', college: '🎓 College',
+  basketball: '🏀 Basketball', baseball: '⚾ Baseball', hockey: '🏒 Hockey',
+  combat: '🥊 Combat', olympics: '🏅 Olympics', motorsport: '🏎️ Motorsport',
+  tennis: '🎾 Tennis', general: '🧩 General',
 };
 
 export default function Profile() {
   const { user, profile, refreshProfile, updateProfile } = useAuth();
   const { username } = useParams<{ username?: string }>();
   const navigate = useNavigate();
-  
+
   const [viewingProfile, setViewingProfile] = useState<any>(null);
   const [bestScores, setBestScores] = useState<BestScore[]>([]);
+  const [recentGames, setRecentGames] = useState<RecentGame[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({ display_name: '', username: '' });
   const [saving, setSaving] = useState(false);
-  const [userScoreData, setUserScoreData] = useState<{ current_streak: number; longest_streak: number } | null>(null);
-  const [legendStreak, setLegendStreak] = useState<number>(0);
-  const [legendBadgeCount, setLegendBadgeCount] = useState<number>(0);
-  const [badgeDates, setBadgeDates] = useState<{ firstDate: string | null; streak3Date: string | null; streak7Date: string | null; streak30Date: string | null; streak100Date: string | null }>({
-    firstDate: null, streak3Date: null, streak7Date: null, streak30Date: null, streak100Date: null,
-  });
+  const [userScoreData, setUserScoreData] = useState<{ current_streak: number; longest_streak: number; total_points: number } | null>(null);
+  const [leaderboardRank, setLeaderboardRank] = useState<number | null>(null);
+  const [savedBracket, setSavedBracket] = useState<any>(null);
+  const [dailyGameSlugs, setDailyGameSlugs] = useState<string[]>([]);
 
   const isOwnProfile = !username || (profile?.username === username);
 
   useEffect(() => {
     const loadProfile = async () => {
       setLoading(true);
+      let targetUserId: string | null = null;
 
       if (username) {
-        // Viewing someone else's profile by username
         const { data: profileData } = await supabase
           .from('profiles')
           .select('*')
@@ -82,85 +130,49 @@ export default function Profile() {
 
         if (profileData) {
           setViewingProfile(profileData);
-          
-          // Load their best scores
-          const { data: scores } = await supabase
-            .from('user_best_scores')
-            .select('*')
-            .eq('user_id', profileData.user_id)
-            .order('best_score', { ascending: false });
-
-          setBestScores(scores || []);
+          targetUserId = profileData.user_id;
         } else {
           navigate('/');
           toast.error('Profile not found');
+          setLoading(false);
+          return;
         }
       } else if (user && profile) {
-        // Viewing own profile
         setViewingProfile(profile);
         setEditForm({
           display_name: profile.display_name || '',
           username: profile.username || '',
         });
-
-        const { data: scores } = await supabase
-          .from('user_best_scores')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('best_score', { ascending: false });
-
-        setBestScores(scores || []);
-
-        // Load streak data from user_scores
-        const { data: scoreRow } = await supabase
-          .from('user_scores')
-          .select('current_streak, longest_streak')
-          .eq('user_id', user.id)
-          .single();
-        
-        if (scoreRow) {
-          setUserScoreData(scoreRow as any);
-        }
-
-        // Load daily legend badges
-        const { data: badges } = await supabase
-          .from('daily_badges')
-          .select('date, streak_days')
-          .eq('user_id', user.id)
-          .order('date', { ascending: false });
-
-        if (badges && badges.length > 0) {
-          setLegendBadgeCount(badges.length);
-          // Calculate current streak from most recent badge
-          const today = new Date().toISOString().split('T')[0];
-          const yesterday = new Date();
-          yesterday.setDate(yesterday.getDate() - 1);
-          const yesterdayStr = yesterday.toISOString().split('T')[0];
-          
-          if (badges[0].date === today || badges[0].date === yesterdayStr) {
-            setLegendStreak(badges[0].streak_days);
-          } else {
-            setLegendStreak(0);
-          }
-
-          // Compute badge milestone dates (badges sorted desc by date)
-          const sortedAsc = [...badges].reverse(); // oldest first
-          const firstDate = sortedAsc[0]?.date || null;
-          let streak3Date: string | null = null;
-          let streak7Date: string | null = null;
-          let streak30Date: string | null = null;
-          let streak100Date: string | null = null;
-          for (const b of sortedAsc) {
-            if (!streak3Date && b.streak_days >= 3) streak3Date = b.date;
-            if (!streak7Date && b.streak_days >= 7) streak7Date = b.date;
-            if (!streak30Date && b.streak_days >= 30) streak30Date = b.date;
-            if (!streak100Date && b.streak_days >= 100) streak100Date = b.date;
-          }
-          setBadgeDates({ firstDate, streak3Date, streak7Date, streak30Date, streak100Date });
-        }
+        targetUserId = user.id;
       } else if (!user) {
         navigate('/');
         toast.error('Please sign in to view your profile');
+        setLoading(false);
+        return;
+      }
+
+      if (!targetUserId) { setLoading(false); return; }
+
+      // Parallel fetches
+      const [scoresRes, recentRes, userScoreRes, rankRes, bracketRes, todayCompletionsRes] = await Promise.all([
+        supabase.from('user_best_scores').select('*').eq('user_id', targetUserId).order('best_score', { ascending: false }),
+        supabase.from('user_game_scores').select('game_type, score, played_at').eq('user_id', targetUserId).order('played_at', { ascending: false }).limit(5),
+        supabase.from('user_scores').select('current_streak, longest_streak, total_points').eq('user_id', targetUserId).single(),
+        supabase.from('profiles').select('user_id').order('all_time_score', { ascending: false }),
+        supabase.from('saved_brackets').select('id, bracket_data').eq('user_id', targetUserId).limit(1),
+        supabase.from('daily_completions').select('game_slug').eq('user_id', targetUserId).eq('date', new Date().toISOString().split('T')[0]),
+      ]);
+
+      setBestScores(scoresRes.data || []);
+      setRecentGames((recentRes.data || []) as RecentGame[]);
+      if (userScoreRes.data) setUserScoreData(userScoreRes.data as any);
+      if (bracketRes.data && bracketRes.data.length > 0) setSavedBracket(bracketRes.data[0]);
+      if (todayCompletionsRes.data) setDailyGameSlugs(todayCompletionsRes.data.map((c: any) => c.game_slug));
+
+      // Calculate rank
+      if (rankRes.data) {
+        const idx = rankRes.data.findIndex((p: any) => p.user_id === targetUserId);
+        setLeaderboardRank(idx >= 0 ? idx + 1 : null);
       }
 
       setLoading(false);
@@ -171,65 +183,90 @@ export default function Profile() {
 
   const handleSave = async () => {
     setSaving(true);
-
-    // Validate username
     if (editForm.username && !/^[a-zA-Z0-9_]{3,20}$/.test(editForm.username)) {
       toast.error('Username must be 3-20 characters, letters, numbers and underscores only');
       setSaving(false);
       return;
     }
-
     const { error } = await updateProfile({
       display_name: editForm.display_name || null,
       username: editForm.username || null,
     });
-
     if (error) {
-      if (error.message.includes('duplicate')) {
-        toast.error('Username is already taken');
-      } else {
-        toast.error('Failed to update profile');
-      }
+      toast.error(error.message.includes('duplicate') ? 'Username is already taken' : 'Failed to update profile');
     } else {
       toast.success('Profile updated!');
       setEditing(false);
       await refreshProfile();
     }
-
     setSaving(false);
   };
 
   const handleShare = () => {
-    const shareText = `Check out my DoUKnowBall stats!\n🔥 Streak: ${viewingProfile?.current_streak || 0} days | 🏆 Games: ${viewingProfile?.total_games_played || 0}\n${window.location.origin}/profile/${viewingProfile?.username || ''}`;
-    
-    if (navigator.share) {
-      navigator.share({ text: shareText });
-    } else {
-      navigator.clipboard.writeText(shareText);
-      toast.success('Profile link copied!');
-    }
+    const url = `${window.location.origin}/profile/${viewingProfile?.username || ''}`;
+    navigator.clipboard.writeText(url);
+    toast.success('Profile link copied to clipboard!');
   };
 
-  const getFavouriteGame = () => {
-    if (bestScores.length === 0) return null;
-    // For now, return the game with highest score
-    const best = bestScores[0];
-    return GAME_LABELS[best.game_type] || best.game_type;
-  };
+  // Computed stats
+  const totalPoints = userScoreData?.total_points ?? viewingProfile?.all_time_score ?? 0;
+  const totalGames = viewingProfile?.total_games_played ?? 0;
+  const currentStreak = userScoreData?.current_streak ?? viewingProfile?.current_streak ?? 0;
+  const longestStreak = userScoreData?.longest_streak ?? viewingProfile?.longest_streak ?? 0;
+  const averageScore = totalGames > 0 ? Math.round(totalPoints / totalGames) : 0;
+
+  // Favourite sport
+  const sportCounts: Record<string, number> = {};
+  bestScores.forEach(s => {
+    const sport = SPORT_CATEGORIES[s.game_type] || 'general';
+    sportCounts[sport] = (sportCounts[sport] || 0) + 1;
+  });
+  const favouriteSport = Object.entries(sportCounts).sort((a, b) => b[1] - a[1])[0];
+
+  // Badge calculations
+  const allSports = new Set(Object.values(SPORT_CATEGORIES));
+  const playedSports = new Set(bestScores.map(s => SPORT_CATEGORIES[s.game_type]).filter(Boolean));
+  const has900Plus = bestScores.filter(s => s.best_score >= 900).length;
+  const hasPerfect = bestScores.some(s => s.best_score >= 1000);
+  const todaySportTypes = new Set(dailyGameSlugs);
+
+  const badges = [
+    { emoji: '🔥', name: 'On Fire', desc: '7 day streak', earned: longestStreak >= 7 },
+    { emoji: '🏆', name: 'Century Club', desc: '100 games played', earned: totalGames >= 100 },
+    { emoji: '🎯', name: 'Perfect Score', desc: 'Scored 1000 on any game', earned: hasPerfect },
+    { emoji: '⚽', name: 'World Cup Prophet', desc: 'Completed WC predictor', earned: !!savedBracket },
+    { emoji: '🌍', name: 'All Rounder', desc: 'Played every sport', earned: playedSports.size >= allSports.size },
+    { emoji: '🧠', name: 'Big Brain', desc: 'Scored 900+ on 10 games', earned: has900Plus >= 10 },
+    { emoji: '👑', name: 'GOAT', desc: '30 day streak', earned: longestStreak >= 30 },
+    { emoji: '⚡', name: 'Speed Demon', desc: 'Complete a game in <30s', earned: false }, // TODO: needs timing data
+    { emoji: '🎪', name: 'Variety Pack', desc: '5 game types in one day', earned: todaySportTypes.size >= 5 },
+  ];
+
+  // Avatar
+  const avatarUrl = viewingProfile?.avatar_url || user?.user_metadata?.avatar_url;
+
+  // WC bracket champion
+  let wcChampion: string | null = null;
+  let wcChampionFlag: string | null = null;
+  if (savedBracket?.bracket_data) {
+    const bd = typeof savedBracket.bracket_data === 'string' ? JSON.parse(savedBracket.bracket_data) : savedBracket.bracket_data;
+    if (bd.knockoutWinners?.final) {
+      wcChampion = bd.knockoutWinners.final;
+    }
+    if (bd.awards?.champion) {
+      wcChampion = bd.awards.champion;
+    }
+  }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-10 h-10 animate-spin text-primary" />
       </div>
     );
   }
 
-  if (!viewingProfile) {
-    return null;
-  }
+  if (!viewingProfile) return null;
 
   return (
     <>
@@ -239,16 +276,25 @@ export default function Profile() {
         path={username ? `/profile/${username}` : '/profile'}
       />
       <div className="min-h-screen bg-background">
-        
-        <main className="max-w-4xl mx-auto px-4 py-8">
-          {/* Profile Header */}
-          <Card className="mb-6">
+        <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+
+          {/* ===== 1. Profile Header ===== */}
+          <Card className="border-border/60">
             <CardContent className="pt-6">
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="h-16 w-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold">
-                    {(viewingProfile.display_name || user?.email || 'U').charAt(0).toUpperCase()}
-                  </div>
+                  {avatarUrl ? (
+                    <img
+                      src={avatarUrl}
+                      alt="Avatar"
+                      className="h-16 w-16 rounded-full object-cover border-2 border-primary/40"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="h-16 w-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold">
+                      {(viewingProfile.display_name || user?.email || 'U').charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <div>
                     {editing ? (
                       <div className="space-y-2">
@@ -270,18 +316,30 @@ export default function Profile() {
                       </div>
                     ) : (
                       <>
-                        <h1 className="text-2xl font-display font-bold">
+                        <h1 className="text-2xl font-display font-bold text-foreground">
                           {viewingProfile.display_name || 'Anonymous Player'}
                         </h1>
                         {viewingProfile.username && (
-                          <p className="text-muted-foreground">@{viewingProfile.username}</p>
+                          <p className="text-muted-foreground text-sm">@{viewingProfile.username}</p>
                         )}
+                        <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            Joined {format(new Date(viewingProfile.created_at), 'MMM yyyy')}
+                          </span>
+                          {leaderboardRank && (
+                            <span className="flex items-center gap-1">
+                              <Medal className="w-3 h-3 text-primary" />
+                              Rank #{leaderboardRank}
+                            </span>
+                          )}
+                        </div>
                       </>
                     )}
                   </div>
                 </div>
-                
-                <div className="flex items-center gap-2">
+
+                <div className="flex items-center gap-2 flex-shrink-0">
                   {isOwnProfile && (
                     editing ? (
                       <>
@@ -294,15 +352,13 @@ export default function Profile() {
                       </>
                     ) : (
                       <Button size="sm" variant="outline" onClick={() => setEditing(true)}>
-                        <Edit2 className="w-4 h-4 mr-2" />
-                        Edit
+                        <Edit2 className="w-4 h-4 mr-1" /> Edit
                       </Button>
                     )
                   )}
                   {viewingProfile.username && (
                     <Button size="sm" variant="outline" onClick={handleShare}>
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Share
+                      <Share2 className="w-4 h-4 mr-1" /> Share
                     </Button>
                   )}
                 </div>
@@ -310,146 +366,118 @@ export default function Profile() {
             </CardContent>
           </Card>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-            <Card>
-              <CardContent className="pt-4 text-center">
-                <Trophy className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-                <p className="text-3xl font-bold">{(viewingProfile.all_time_score ?? 0).toLocaleString()}</p>
-                <p className="text-sm text-muted-foreground">All-Time Score</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-4 text-center">
-                <Flame className="w-8 h-8 text-orange-500 mx-auto mb-2" />
-                <p className="text-3xl font-bold">{userScoreData?.current_streak ?? viewingProfile.current_streak ?? 0}</p>
-                <p className="text-sm text-muted-foreground">Current Streak</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-4 text-center">
-                <Trophy className="w-8 h-8 text-amber-600 mx-auto mb-2" />
-                <p className="text-3xl font-bold">{userScoreData?.longest_streak ?? viewingProfile.longest_streak ?? 0}</p>
-                <p className="text-sm text-muted-foreground">Best Streak</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-4 text-center">
-                <Gamepad2 className="w-8 h-8 text-primary mx-auto mb-2" />
-                <p className="text-3xl font-bold">{viewingProfile.total_games_played}</p>
-                <p className="text-sm text-muted-foreground">Games Played</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-4 text-center">
-                <Calendar className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm font-medium">
-                  {format(new Date(viewingProfile.created_at), 'MMM d, yyyy')}
-                </p>
-                <p className="text-sm text-muted-foreground">Member Since</p>
-              </CardContent>
-            </Card>
+          {/* ===== 2. Stats Row ===== */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {[
+              { icon: <Gamepad2 className="w-6 h-6 text-primary" />, value: totalGames, label: 'Games Played' },
+              { icon: <Trophy className="w-6 h-6 text-yellow-500" />, value: totalPoints.toLocaleString(), label: 'Total Points' },
+              { icon: <Flame className="w-6 h-6 text-orange-500" />, value: currentStreak, label: 'Current Streak 🔥' },
+              { icon: <TrendingUp className="w-6 h-6 text-amber-500" />, value: longestStreak, label: 'Longest Streak' },
+              { icon: <Star className="w-6 h-6 text-purple-400" />, value: favouriteSport ? SPORT_LABELS[favouriteSport[0]] || favouriteSport[0] : '—', label: 'Fav Sport', small: true },
+              { icon: <Target className="w-6 h-6 text-sky-400" />, value: averageScore, label: 'Avg Score' },
+            ].map((stat, i) => (
+              <Card key={i} className="border-border/40">
+                <CardContent className="pt-4 pb-3 text-center space-y-1">
+                  <div className="mx-auto">{stat.icon}</div>
+                  <p className={`font-bold ${stat.small ? 'text-sm' : 'text-2xl'} text-foreground`}>{stat.value}</p>
+                  <p className="text-[11px] text-muted-foreground leading-tight">{stat.label}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
-          {/* Daily Legend Streak */}
-          {isOwnProfile && (legendStreak > 0 || legendBadgeCount > 0) && (
-            <Card className="mb-6 border-[hsl(var(--ft-gold)/0.3)] bg-gradient-to-r from-card to-secondary/30">
-              <CardContent className="pt-6">
+          {/* ===== 3. Badges Section ===== */}
+          <Card className="border-border/60">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg font-display">🏅 Badges</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-2">
+                {badges.map((badge) => (
+                  <div
+                    key={badge.name}
+                    className={`flex flex-col items-center text-center p-3 rounded-xl border transition-all ${
+                      badge.earned
+                        ? 'border-primary/30 bg-primary/5'
+                        : 'border-border/30 bg-muted/20 opacity-40 grayscale'
+                    }`}
+                  >
+                    <span className="text-2xl mb-1">{badge.earned ? badge.emoji : '🔒'}</span>
+                    <p className="text-[10px] font-bold text-foreground leading-tight">{badge.name}</p>
+                    <p className="text-[9px] text-muted-foreground mt-0.5 leading-tight">{badge.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* ===== 4. World Cup Predictor Card ===== */}
+          {savedBracket && (
+            <Card className="border-border/60 bg-gradient-to-r from-card to-secondary/30">
+              <CardContent className="pt-5 pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="text-4xl">🏆</span>
                     <div>
-                      <h3 className="text-lg font-bold font-display text-[hsl(var(--ft-gold))]">Daily Legend</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Completed all 37 games in a day — {legendBadgeCount} {legendBadgeCount === 1 ? 'time' : 'times'}
-                      </p>
+                      <h3 className="text-base font-bold font-display text-foreground">World Cup 2026 Prediction</h3>
+                      {wcChampion ? (
+                        <p className="text-sm text-muted-foreground">
+                          Champion: <span className="text-primary font-semibold">{wcChampion}</span>
+                        </p>
+                      ) : (
+                        <p className="text-sm text-muted-foreground">Bracket saved</p>
+                      )}
                     </div>
                   </div>
-                  {legendStreak > 0 && (
-                    <div className="text-right">
-                      <p className="text-2xl font-bold text-foreground">🔥 {legendStreak} day{legendStreak !== 1 ? 's' : ''}</p>
-                      <p className="text-xs text-muted-foreground">streak</p>
-                    </div>
-                  )}
+                  <Link to={`/world-cup-predictor?bracket=${savedBracket.id}`}>
+                    <Button size="sm" variant="outline">View Bracket</Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
           )}
 
-          {/* My Badges */}
-          {isOwnProfile && (
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="text-lg">🏅 My Badges</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                  {[
-                    { key: 'firstDate' as const, emoji: '⭐', name: 'First Timer', desc: 'Complete all 37 games in a day' },
-                    { key: 'streak3Date' as const, emoji: '🔥', name: 'On A Roll', desc: '3 day streak' },
-                    { key: 'streak7Date' as const, emoji: '⚔️', name: 'Week Warrior', desc: '7 day streak' },
-                    { key: 'streak30Date' as const, emoji: '💪', name: 'Unstoppable', desc: '30 day streak' },
-                    { key: 'streak100Date' as const, emoji: '👑', name: 'DoUKnowBall Legend', desc: '100 day streak' },
-                  ].map((badge) => {
-                    const earned = badgeDates[badge.key];
-                    return (
-                      <div
-                        key={badge.key}
-                        className={`relative flex flex-col items-center text-center p-4 rounded-xl border transition-all ${
-                          earned
-                            ? 'border-[hsl(var(--ft-gold)/0.4)] bg-secondary/50'
-                            : 'border-border bg-muted/30 opacity-50 grayscale'
-                        }`}
-                      >
-                        <span className="text-3xl mb-2">{earned ? badge.emoji : '🔒'}</span>
-                        <p className="text-xs sm:text-sm font-bold text-foreground leading-tight">{badge.name}</p>
-                        {earned ? (
-                          <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
-                            {format(new Date(earned), 'MMM d, yyyy')}
-                          </p>
-                        ) : (
-                          <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">{badge.desc}</p>
-                        )}
+          {/* ===== 5. Recently Played ===== */}
+          <Card className="border-border/60">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg font-display">🕹️ Recently Played</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {recentGames.length === 0 ? (
+                <p className="text-muted-foreground text-center py-6 text-sm">No games played yet. Start playing to see your history!</p>
+              ) : (
+                <div className="space-y-2">
+                  {recentGames.map((game, i) => (
+                    <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-border/40 bg-muted/10">
+                      <div>
+                        <p className="font-medium text-sm text-foreground">
+                          {GAME_LABELS[game.game_type] || game.game_type}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {format(new Date(game.played_at), 'MMM d, yyyy')}
+                        </p>
                       </div>
-                    );
-                  })}
+                      <span className="text-lg font-bold text-primary">{game.score}</span>
+                    </div>
+                  ))}
                 </div>
-              </CardContent>
-            </Card>
-          )}
+              )}
+            </CardContent>
+          </Card>
 
-          {/* Favourite Game */}
-          {getFavouriteGame() && (
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="text-lg">⭐ Favourite Game</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-xl font-display">{getFavouriteGame()}</p>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Best Scores */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">🏆 Best Scores</CardTitle>
+          {/* ===== Best Scores ===== */}
+          <Card className="border-border/60">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg font-display">🏆 Best Scores</CardTitle>
             </CardHeader>
             <CardContent>
               {bestScores.length === 0 ? (
-                <p className="text-muted-foreground text-center py-8">
-                  No scores yet. Start playing to track your best!
-                </p>
+                <p className="text-muted-foreground text-center py-6 text-sm">No scores yet. Start playing to track your best!</p>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {bestScores.map((score) => (
-                    <div
-                      key={score.game_type}
-                      className="flex items-center justify-between p-3 rounded-lg border border-border"
-                    >
-                      <span className="font-medium">
-                        {GAME_LABELS[score.game_type] || score.game_type}
-                      </span>
+                    <div key={score.game_type} className="flex items-center justify-between p-3 rounded-lg border border-border/40">
+                      <span className="font-medium text-sm">{GAME_LABELS[score.game_type] || score.game_type}</span>
                       <span className="text-lg font-bold text-primary">{score.best_score}</span>
                     </div>
                   ))}
@@ -457,6 +485,7 @@ export default function Profile() {
               )}
             </CardContent>
           </Card>
+
         </main>
 
         <div className="max-w-4xl mx-auto px-4">
