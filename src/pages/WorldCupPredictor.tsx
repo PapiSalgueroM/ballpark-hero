@@ -342,7 +342,6 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
             className={`w-4 h-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
             style={{ color: colors.accentDim }}
           />
-          />
         </div>
       </CardHeader>
 
