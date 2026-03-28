@@ -192,6 +192,12 @@ export interface CareerState {
   // International career
   intStats: InternationalStats;
   pendingWorldCup: WorldCupResult | null;
+  // Rivalry system
+  rival: RivalPlayer | null;
+  rivalCreated: boolean;
+  pendingRivalryEvent: RivalryEvent | null;
+  lastRivalryEventId: number | null;
+  rivalrySummary: RivalrySummary | null;
 }
 
 /* ─── Flags ─── */
