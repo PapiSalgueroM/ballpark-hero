@@ -17,10 +17,11 @@ import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
   type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,
   type RivalPlayer, type RivalryEvent, type RivalrySummary,
+  type LifestyleLevel, type FamilyStatus,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
-  getCareerTotals, getFlag, calcOverall, formatWage,
+  getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
 } from "@/lib/soccerCareerEngine";
 
 /* ─── Constants ─── */
@@ -837,6 +838,91 @@ function RivalrySummaryCard({ summary, career }: { summary: RivalrySummary; care
   );
 }
 
+/* ─── Financial & Lifestyle Panel ─── */
+function FinancialPanel({ career }: { career: CareerState }) {
+  const lifestyleEmoji: Record<string, string> = {
+    "Humble": "🏚️", "Comfortable": "🏡", "Wealthy": "🏰", "Superstar": "✨", "Billionaire": "👑",
+  };
+  const lifestyleColor: Record<string, string> = {
+    "Humble": "text-muted-foreground", "Comfortable": "text-blue-400", "Wealthy": "text-emerald-400", "Superstar": "text-amber-400", "Billionaire": "text-yellow-300",
+  };
+  const nwColor = career.netWorth >= 50 ? "text-yellow-300" : career.netWorth >= 10 ? "text-emerald-400" : career.netWorth >= 1 ? "text-blue-400" : career.netWorth < 0 ? "text-red-400" : "text-muted-foreground";
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-4 space-y-3">
+      <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">💰 Finances & Lifestyle</span>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="text-center bg-muted/20 rounded-lg p-2">
+          <div className={`text-lg font-black ${nwColor}`}>{formatNetWorth(career.netWorth)}</div>
+          <div className="text-[9px] text-muted-foreground">Net Worth</div>
+        </div>
+        <div className="text-center bg-muted/20 rounded-lg p-2">
+          <div className={`text-sm font-black ${lifestyleColor[career.lifestyleLevel]}`}>
+            {lifestyleEmoji[career.lifestyleLevel]} {career.lifestyleLevel}
+          </div>
+          <div className="text-[9px] text-muted-foreground">Lifestyle</div>
+        </div>
+        <div className="text-center bg-muted/20 rounded-lg p-2">
+          <div className="text-lg font-black text-blue-400">
+            {formatFollowers(career.socialMediaFollowers)}
+          </div>
+          <div className="text-[9px] text-muted-foreground">📱 Followers</div>
+        </div>
+        <div className="text-center bg-muted/20 rounded-lg p-2">
+          <div className="text-lg font-black text-emerald-400">{formatWage(career.weeklyWage)}</div>
+          <div className="text-[9px] text-muted-foreground">Weekly Wage</div>
+        </div>
+      </div>
+
+      {/* Financial details row */}
+      <div className="flex items-center gap-3 text-[10px] text-muted-foreground flex-wrap">
+        {career.sponsorshipIncome > 0 && <span>🤝 Sponsor: €{career.sponsorshipIncome.toFixed(1)}M/yr</span>}
+        {career.lifestyleCostPerYear > 0 && <span>💸 Costs: €{career.lifestyleCostPerYear.toFixed(1)}M/yr</span>}
+        {career.agentFeesPaid > 0 && <span>🕴️ Agent fees: €{career.agentFeesPaid.toFixed(1)}M total</span>}
+      </div>
+
+      {/* Properties & Investments */}
+      {(career.properties.length > 0 || career.investments.length > 0) && (
+        <div className="flex items-center gap-2 text-[10px] flex-wrap">
+          {career.properties.map((p, i) => (
+            <span key={`p${i}`} className="px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-400">🏠 {p}</span>
+          ))}
+          {career.investments.map((inv, i) => (
+            <span key={`i${i}`} className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400">📈 {inv}</span>
+          ))}
+        </div>
+      )}
+
+      {/* Family Status */}
+      {(career.family.isMarried || career.family.isDivorced || career.family.children > 0) && (
+        <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+          {career.family.isMarried && <span className="text-pink-400">💍 Married</span>}
+          {career.family.isDivorced && <span className="text-red-400">💔 Divorced</span>}
+          {career.family.children > 0 && <span>👶 {career.family.children} child{career.family.children > 1 ? "ren" : ""}</span>}
+        </div>
+      )}
+
+      {/* Popularity & Morale bars */}
+      <div className="space-y-1.5">
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] text-muted-foreground w-14">Morale</span>
+          <div className="flex-1 h-1.5 rounded-full bg-muted/40 overflow-hidden">
+            <div className={`h-full rounded-full transition-all ${career.morale >= 60 ? 'bg-emerald-500' : career.morale >= 30 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${career.morale}%` }} />
+          </div>
+          <span className="text-[10px] font-bold w-6 text-right">{career.morale}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] text-muted-foreground w-14">Popularity</span>
+          <div className="flex-1 h-1.5 rounded-full bg-muted/40 overflow-hidden">
+            <div className="h-full rounded-full bg-blue-500 transition-all" style={{ width: `${career.popularity}%` }} />
+          </div>
+          <span className="text-[10px] font-bold w-6 text-right">{career.popularity}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Game Screen ─── */
 function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onNewCareer, timelineRef }: {
   career: CareerState;
@@ -990,6 +1076,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 <div className="text-[10px] text-muted-foreground">{currentSeason.year}/{(currentSeason.year + 1).toString().slice(-2)}</div>
               </div>
             </div>
+          )}
+
+          {/* Financial & Lifestyle Panel */}
+          {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (
+            <FinancialPanel career={career} />
           )}
 
           {/* Stats */}

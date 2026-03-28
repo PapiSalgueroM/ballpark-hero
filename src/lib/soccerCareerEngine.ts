@@ -149,6 +149,16 @@ export interface InternationalStats {
   worldCupResults: WorldCupResult[];
 }
 
+export type LifestyleLevel = "Humble" | "Comfortable" | "Wealthy" | "Superstar" | "Billionaire";
+
+export interface FamilyStatus {
+  isMarried: boolean;
+  marriedAge: number | null;
+  children: number;
+  isDivorced: boolean;
+  divorceAge: number | null;
+}
+
 export interface CareerState {
   playerName: string;
   nationality: string;
@@ -198,6 +208,17 @@ export interface CareerState {
   pendingRivalryEvent: RivalryEvent | null;
   lastRivalryEventId: number | null;
   rivalrySummary: RivalrySummary | null;
+  // Financial & Lifestyle
+  netWorth: number; // in millions
+  lifestyleLevel: LifestyleLevel;
+  lifestyleCostPerYear: number; // in millions
+  socialMediaFollowers: number; // in millions (e.g. 1.5 = 1.5M)
+  sponsorshipIncome: number; // in millions per year
+  properties: string[];
+  investments: string[];
+  consecutiveDeficitYears: number;
+  agentFeesPaid: number; // total in millions
+  family: FamilyStatus;
 }
 
 /* ─── Flags ─── */
@@ -281,8 +302,8 @@ function clubAverageRating(tier: number): number {
   }
 }
 
-/* ─── Market value per user spec ─── */
-function calcMarketValue(overall: number, age: number, position: string): number {
+/* ─── Market value per user spec (with social media boost) ─── */
+function calcMarketValue(overall: number, age: number, position: string, socialMediaFollowers?: number): number {
   // Base from overall (exponential curve)
   let base = Math.pow(Math.max(0, overall - 45), 2.2) * 0.005;
 
@@ -298,7 +319,139 @@ function calcMarketValue(overall: number, age: number, position: string): number
   if (["ST", "CAM", "LW", "RW"].includes(position)) base *= 1.2;
   else if (position === "GK") base *= 0.85;
 
+  // Social media boost: +5% per 10M followers
+  if (socialMediaFollowers && socialMediaFollowers > 0) {
+    base *= 1 + (socialMediaFollowers / 10) * 0.05;
+  }
+
   return Math.max(0.1, Math.round(base * 10) / 10);
+}
+
+/* ─── Financial helpers ─── */
+const BIG_NATIONS = ["England", "Spain", "France", "Germany", "Brazil", "Argentina", "USA", "Mexico", "Japan", "Italy"];
+
+function calcLifestyleLevel(netWorth: number): LifestyleLevel {
+  if (netWorth >= 500) return "Billionaire";
+  if (netWorth >= 50) return "Superstar";
+  if (netWorth >= 10) return "Wealthy";
+  if (netWorth >= 2) return "Comfortable";
+  return "Humble";
+}
+
+function calcLifestyleCost(level: LifestyleLevel): number {
+  switch (level) {
+    case "Billionaire": return 5;
+    case "Superstar": return 2;
+    case "Wealthy": return 0.8;
+    case "Comfortable": return 0.2;
+    case "Humble": return 0.05;
+  }
+}
+
+function calcSponsorshipIncome(popularity: number, socialMediaFollowers: number, sponsorDeal: string | null): number {
+  let income = 0;
+  // Base sponsorship from popularity
+  if (popularity >= 80) income += 2;
+  else if (popularity >= 60) income += 1;
+  else if (popularity >= 40) income += 0.3;
+  // Social media income
+  income += socialMediaFollowers * 0.1; // €100k per 1M followers
+  // Named sponsor deal
+  if (sponsorDeal === "Nike") income += 2;
+  else if (sponsorDeal === "Adidas") income += 1.5;
+  return Math.round(income * 100) / 100;
+}
+
+function growSocialMedia(state: CareerState, season: SeasonRecord): number {
+  let growth = 0;
+  // Goals contribute
+  growth += season.goals * 0.02; // 20k per goal
+  // Trophies
+  if (season.leagueTitle) growth += 0.5;
+  if (season.championsLeague) growth += 1;
+  if (season.worldCup) growth += 3;
+  if (season.ballonDor) growth += 5;
+  // Big nation bonus
+  if (BIG_NATIONS.includes(state.nationality)) growth *= 1.5;
+  // Base organic growth from fame
+  growth += state.popularity * 0.005;
+  // Random viral moment
+  if (Math.random() < 0.05) growth += rand(1, 5);
+  return Math.round(growth * 100) / 100;
+}
+
+function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
+  // Wage income (52 weeks, in millions)
+  const wageIncome = (s.weeklyWage * 52) / 1_000_000;
+  // Sponsorship income
+  s.sponsorshipIncome = calcSponsorshipIncome(s.popularity, s.socialMediaFollowers, s.sponsorDeal);
+  const totalIncome = wageIncome + s.sponsorshipIncome;
+  // Lifestyle cost
+  s.lifestyleLevel = calcLifestyleLevel(s.netWorth);
+  s.lifestyleCostPerYear = calcLifestyleCost(s.lifestyleLevel);
+  // Net
+  const netThisYear = totalIncome - s.lifestyleCostPerYear;
+  s.netWorth = Math.round((s.netWorth + netThisYear) * 100) / 100;
+  s.totalEarnings = Math.round((s.totalEarnings + totalIncome) * 100) / 100;
+  // Social media
+  const smGrowth = growSocialMedia(s, season);
+  s.socialMediaFollowers = Math.round((s.socialMediaFollowers + smGrowth) * 100) / 100;
+  // Deficit tracking
+  if (netThisYear < 0) {
+    s.consecutiveDeficitYears += 1;
+  } else {
+    s.consecutiveDeficitYears = 0;
+  }
+  // Financial crisis
+  if (s.consecutiveDeficitYears >= 3) {
+    s.events.push("💸 FINANCIAL CRISIS — Spending exceeds income for 3 years! Forced to sell assets.");
+    s.netWorth = Math.max(0, s.netWorth);
+    s.lifestyleLevel = "Humble";
+    s.lifestyleCostPerYear = 0.05;
+    s.properties = [];
+    s.consecutiveDeficitYears = 0;
+    s.morale = clamp(s.morale - 20, 0, 100);
+  }
+  // Family life events
+  simulateFamilyLife(s);
+}
+
+function simulateFamilyLife(s: CareerState): void {
+  // Marriage
+  if (s.hasRelationship && !s.family.isMarried && !s.family.isDivorced && s.age >= 22 && s.age <= 28 && Math.random() < 0.25) {
+    s.family = { ...s.family, isMarried: true, marriedAge: s.age };
+    s.morale = clamp(s.morale + 5, 0, 100);
+    s.events.push("💍 Got married! Permanent morale boost.");
+    s.netWorth -= 0.5; // Wedding cost
+  }
+  // Children
+  if (s.family.isMarried && !s.family.isDivorced && s.family.children < 3 && Math.random() < 0.2) {
+    s.family = { ...s.family, children: s.family.children + 1 };
+    s.morale = clamp(s.morale + 3, 0, 100);
+    s.socialMediaFollowers += 0.5;
+    s.events.push(`👶 Had a child! (${s.family.children} total) Morale +3`);
+  }
+  // Divorce risk: 15% if morale low
+  if (s.family.isMarried && !s.family.isDivorced && s.morale < 40 && Math.random() < 0.15) {
+    s.family = { ...s.family, isDivorced: true, isMarried: false, divorceAge: s.age };
+    s.netWorth = Math.max(0, s.netWorth - 3);
+    s.morale = clamp(s.morale - 15, 0, 100);
+    s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) - 2, dribbling: (s.statBoostNextSeason.dribbling || 0) - 2 };
+    s.events.push("💔 Divorce! Settlement costs €3M. Performance dip next season.");
+  }
+}
+
+export function formatNetWorth(nw: number): string {
+  if (nw >= 1000) return `€${(nw / 1000).toFixed(1)}B`;
+  if (nw >= 1) return `€${nw.toFixed(1)}M`;
+  return `€${Math.round(nw * 1000)}k`;
+}
+
+export function formatFollowers(m: number): string {
+  if (m >= 100) return `${m.toFixed(0)}M`;
+  if (m >= 1) return `${m.toFixed(1)}M`;
+  if (m >= 0.01) return `${Math.round(m * 1000)}k`;
+  return `${Math.round(m * 1000)}`;
 }
 
 /* ─── Appearances per user spec ─── */
@@ -548,6 +701,17 @@ export function initCareer(
     pendingRivalryEvent: null,
     lastRivalryEventId: null,
     rivalrySummary: null,
+    // Financial & Lifestyle
+    netWorth: 0,
+    lifestyleLevel: "Humble" as LifestyleLevel,
+    lifestyleCostPerYear: 0.02, // €20k/year as youth
+    socialMediaFollowers: 0,
+    sponsorshipIncome: 0,
+    properties: [],
+    investments: [],
+    consecutiveDeficitYears: 0,
+    agentFeesPaid: 0,
+    family: { isMarried: false, marriedAge: null, children: 0, isDivorced: false, divorceAge: null },
   };
 }
 
@@ -587,7 +751,14 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   s.currentClubTier = offer.club.tier; s.currentClubColor = offer.club.color; s.currentLeague = offer.club.league;
   s.contractYearsLeft = offer.contractYears; s.weeklyWage = offer.wage;
   s.phase = "playing"; s.pendingOffers = []; s.transferSituation = null;
-  s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(offer.wage)})`];
+  // Agent fee: 10% of transfer fee
+  if (offer.transferFee > 0) {
+    const agentFee = Math.round(offer.transferFee * 0.1 * 100) / 100;
+    s.agentFeesPaid = Math.round((s.agentFeesPaid + agentFee) * 100) / 100;
+    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(offer.wage)}) · Agent fee: €${agentFee.toFixed(1)}M`];
+  } else {
+    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(offer.wage)})`];
+  }
   return s;
 }
 
@@ -838,7 +1009,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   s.reflexes = growStat(s.reflexes, s.age, false, false);
   s.overall = calcOverall(s, s.position);
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
-  s.marketValue = calcMarketValue(s.overall, s.age, s.position);
+  s.marketValue = calcMarketValue(s.overall, s.age, s.position, s.socialMediaFollowers);
 
   // International career check — first call-up
   if (!s.internationalCareer && !s.intStats.isRetired && shouldGetCallUp(s)) {
@@ -931,6 +1102,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   if (totalApps >= 500 && totalApps - season.apps < 500) s.events.push("🎖️ Made 500th career appearance!");
   s.seasons = [...s.seasons, season];
   s.pendingSummary = season; s.phase = "season_summary";
+  // Financial simulation
+  simulateSeasonFinances(s, season);
   if (s.contractYearsLeft <= 1) s.events.push("⚠️ Your contract is expiring!");
 
   // World Cup year — trigger after summary
@@ -1118,26 +1291,69 @@ function getAllEvents(state: CareerState): RandomEvent[] {
         { label: "Fly home between matches", emoji: "🛫", color: "bg-emerald-600", consequence: "Morale -8, Physical -1 from travel",
           apply: s => { s.morale = clamp(s.morale - 8, 0, 100); s.physical = clamp(s.physical - 1, 20, 99); s.events = [...s.events, "🏥💔 Flew home between matches for family"]; return s; } },
       ] },
-    { id: 22, emoji: "💼", title: "Business Venture", description: "You invest €500k in a business venture.",
+    { id: 22, emoji: "💼", title: "Business Venture", description: "Your agent suggests investing in a restaurant chain. €500k investment.",
       category: "life", choices: [
-        { label: "Invest", emoji: "💰", color: "bg-emerald-600", consequence: "Random: +€1M profit or -€500k loss",
-          apply: s => { if (Math.random() < 0.5) { s.totalEarnings += 1; s.events = [...s.events, "💼 Business venture succeeded! +€1M"]; } else { s.totalEarnings -= 0.5; s.events = [...s.events, "💼 Business venture failed — lost €500k"]; } return s; } },
+        { label: "Invest €500k", emoji: "💰", color: "bg-emerald-600", consequence: "Random: +€1M profit or -€500k loss",
+          apply: s => { if (Math.random() < 0.5) { s.netWorth += 1; s.investments = [...s.investments, "Restaurant Chain ✅"]; s.events = [...s.events, "💼 Restaurant investment succeeded! +€1M"]; } else { s.netWorth -= 0.5; s.investments = [...s.investments, "Restaurant Chain ❌"]; s.events = [...s.events, "💼 Restaurant investment failed — lost €500k"]; } return s; } },
         { label: "Pass on it", emoji: "✋", color: "bg-muted", consequence: "No risk, no reward",
-          apply: s => { s.events = [...s.events, "💼 Passed on business venture"]; return s; } },
+          apply: s => { s.events = [...s.events, "💼 Passed on restaurant investment"]; return s; } },
       ] },
-    { id: 23, emoji: "🏠", title: "Luxury Mansion!", description: "You buy a luxury mansion.",
+    { id: 23, emoji: "🏠", title: "Property Opportunity!", description: `Buy a house in ${state.currentClubCountry} for €2M?`,
       category: "life", choices: [
-        { label: "Buy it", emoji: "🏠", color: "bg-emerald-600", consequence: "Lifestyle upgrade, Morale +5",
-          apply: s => { s.morale = clamp(s.morale + 5, 0, 100); s.totalEarnings -= 2; s.events = [...s.events, "🏠 Bought a luxury mansion"]; return s; } },
+        { label: "Buy it — €2M", emoji: "🏠", color: "bg-emerald-600", consequence: "Property added, Lifestyle upgrade, Morale +5",
+          apply: s => { s.netWorth -= 2; s.properties = [...s.properties, `House in ${s.currentClubCountry}`]; s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "🏠 Bought a property"]; return s; } },
         { label: "Save the money", emoji: "💰", color: "bg-muted", consequence: "Smart financial decision",
           apply: s => { s.events = [...s.events, "🏠 Decided to save money instead"]; return s; } },
       ] },
     { id: 24, emoji: "🌍", title: "Brand Ambassador!", description: "You are offered a role as brand ambassador for your country.",
       category: "life", choices: [
-        { label: "Accept the role", emoji: "✔️", color: "bg-emerald-600", consequence: "Social media +200k, Income +€1M/year",
-          apply: s => { s.popularity = clamp(s.popularity + 20, 0, 100); s.totalEarnings += 1; s.events = [...s.events, "🌍 Became brand ambassador for your country"]; return s; } },
+        { label: "Accept the role", emoji: "✔️", color: "bg-emerald-600", consequence: "Followers +2M, Sponsorship income boost",
+          apply: s => { s.popularity = clamp(s.popularity + 20, 0, 100); s.socialMediaFollowers += 2; s.sponsorshipIncome += 1; s.events = [...s.events, "🌍 Became brand ambassador"]; return s; } },
         { label: "Decline — too distracting", emoji: "✋", color: "bg-muted", consequence: "Focus on football",
           apply: s => { s.events = [...s.events, "🌍 Declined brand ambassador role"]; return s; } },
+      ] },
+    // Financial events (25-30)
+    { id: 25, emoji: "🚗", title: "Supercar Fleet!", description: "You buy a fleet of supercars. Cost: €800k.",
+      category: "life", choices: [
+        { label: "Buy the fleet 🚗", emoji: "🏎️", color: "bg-red-600", consequence: "Net worth -€800k, Lifestyle upgrade, Followers +500k",
+          apply: s => { s.netWorth -= 0.8; s.socialMediaFollowers += 0.5; s.popularity = clamp(s.popularity + 3, 0, 100); s.events = [...s.events, "🚗 Bought a supercar fleet — €800k"]; return s; } },
+        { label: "Keep it humble", emoji: "✋", color: "bg-muted", consequence: "Save the money",
+          apply: s => { s.events = [...s.events, "🚗 Decided not to buy supercars"]; return s; } },
+      ] },
+    { id: 26, emoji: "📈", title: "Crypto Tip!", description: "A friend tips you on a crypto investment. High risk, high reward.",
+      category: "life", choices: [
+        { label: "Invest €200k", emoji: "🪙", color: "bg-amber-600", consequence: "Could 10x or lose everything",
+          apply: s => { const roll = Math.random(); if (roll < 0.15) { s.netWorth += 2; s.investments = [...s.investments, "Crypto 10x 🚀"]; s.events = [...s.events, "📈 Crypto went 10x! +€2M!"]; } else if (roll < 0.5) { s.netWorth += 0.2; s.investments = [...s.investments, "Crypto 2x"]; s.events = [...s.events, "📈 Crypto doubled — +€200k"]; } else { s.netWorth -= 0.2; s.investments = [...s.investments, "Crypto ❌"]; s.events = [...s.events, "📈 Crypto crashed — lost €200k"]; } return s; } },
+        { label: "Stay away from crypto", emoji: "✋", color: "bg-muted", consequence: "Smart move? Or missed opportunity?",
+          apply: s => { s.events = [...s.events, "📈 Avoided crypto investment"]; return s; } },
+      ] },
+    { id: 27, emoji: "🎬", title: "Movie Cameo!", description: "A Hollywood director wants you for a cameo in a blockbuster film.",
+      category: "life", choices: [
+        { label: "Accept — €500k fee", emoji: "🎬", color: "bg-emerald-600", consequence: "Net worth +€500k, Followers +3M",
+          apply: s => { s.netWorth += 0.5; s.socialMediaFollowers += 3; s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "🎬 Appeared in a blockbuster film!"]; return s; } },
+        { label: "Decline — focus on football", emoji: "⚽", color: "bg-muted", consequence: "Stay professional",
+          apply: s => { s.events = [...s.events, "🎬 Declined movie cameo"]; return s; } },
+      ] },
+    { id: 28, emoji: "🏦", title: "Financial Advisor", description: "Your financial advisor recommends diversifying into real estate funds.",
+      category: "life", choices: [
+        { label: "Invest €1M", emoji: "🏦", color: "bg-blue-600", consequence: "Steady returns: +€150k/year",
+          apply: s => { s.netWorth -= 1; s.investments = [...s.investments, "Real Estate Fund"]; s.sponsorshipIncome += 0.15; s.events = [...s.events, "🏦 Invested in real estate fund"]; return s; } },
+        { label: "Keep cash liquid", emoji: "💵", color: "bg-muted", consequence: "No investment made",
+          apply: s => { s.events = [...s.events, "🏦 Kept cash instead of investing"]; return s; } },
+      ] },
+    { id: 29, emoji: "💎", title: "Luxury Watch Collection!", description: "A limited edition watch collection is available. €400k for a set of three.",
+      category: "life", choices: [
+        { label: "Buy them — €400k", emoji: "⌚", color: "bg-amber-600", consequence: "Net worth -€400k, Status symbol, Followers +200k",
+          apply: s => { s.netWorth -= 0.4; s.socialMediaFollowers += 0.2; s.events = [...s.events, "💎 Bought luxury watch collection"]; return s; } },
+        { label: "Not worth it", emoji: "✋", color: "bg-muted", consequence: "Save the money",
+          apply: s => { s.events = [...s.events, "💎 Declined watch collection"]; return s; } },
+      ] },
+    { id: 30, emoji: "🎮", title: "Gaming Brand Deal!", description: "A gaming company offers you a brand deal to stream and promote their games.",
+      category: "life", choices: [
+        { label: "Sign the deal — €300k/year", emoji: "🎮", color: "bg-purple-600", consequence: "Income +€300k, Followers +1M",
+          apply: s => { s.sponsorshipIncome += 0.3; s.socialMediaFollowers += 1; s.events = [...s.events, "🎮 Signed gaming brand deal"]; return s; } },
+        { label: "Not my thing", emoji: "✋", color: "bg-muted", consequence: "Stay focused on football",
+          apply: s => { s.events = [...s.events, "🎮 Declined gaming brand deal"]; return s; } },
       ] },
   ];
 }
@@ -1160,6 +1376,13 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
     if (e.id === 7 && state.overall < 70) return false;
     if (e.id === 24 && state.overall < 78) return false;
     if (e.id === 17 && state.overall < 68) return false;
+    // Financial events need enough net worth
+    if (e.id === 23 && state.netWorth < 2.5) return false; // Property
+    if (e.id === 25 && state.netWorth < 1) return false; // Supercars
+    if (e.id === 28 && state.netWorth < 1.5) return false; // Real estate fund
+    if (e.id === 29 && state.netWorth < 0.5) return false; // Watch collection
+    if (e.id === 27 && state.popularity < 50) return false; // Movie cameo
+    if (e.id === 30 && state.socialMediaFollowers < 1) return false; // Gaming deal
     return true;
   });
   const count = rand(1, 3);
