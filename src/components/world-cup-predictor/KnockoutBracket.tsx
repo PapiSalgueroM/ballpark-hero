@@ -216,16 +216,22 @@ const KnockoutBracket = ({ seeds, bestThirds }: KnockoutBracketProps) => {
               </div>
 
               <div
-                className="flex flex-col justify-around flex-1"
+                className={`flex flex-col flex-1 ${rIdx === 0 ? "gap-3" : "justify-around"}`}
                 style={{ minHeight: `${16 * 62}px` }}
               >
-                {round.map((match) => (
-                  <MatchCard
-                    key={match.id}
-                    match={match}
-                    onPick={handlePick}
-                    isFinal={rIdx === 5}
-                  />
+                {round.map((match, mIdx) => (
+                  <div key={match.id} className="flex flex-col">
+                    {rIdx === 0 && (
+                      <span className="text-[9px] font-bold text-[hsl(150,15%,40%)] uppercase tracking-wider mb-1 text-center">
+                        Match {mIdx + 1}
+                      </span>
+                    )}
+                    <MatchCard
+                      match={match}
+                      onPick={handlePick}
+                      isFinal={rIdx === 5}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
