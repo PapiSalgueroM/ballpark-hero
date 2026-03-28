@@ -494,7 +494,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                       const v = e.target.value;
                       onScoreChange(key, "homeGoals", v === "" ? "" : Math.min(9, Math.max(0, Number(v))));
                     }}
-                    className="w-8 h-7 text-center text-sm font-bold rounded text-white focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="w-11 h-11 sm:w-8 sm:h-7 text-center text-sm font-bold rounded text-white focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     style={{ backgroundColor: "hsl(220, 15%, 15%)", borderWidth: 2, borderColor: colors.inputBorder }}
                   />
                   <span className="text-[hsl(0,0%,40%)] text-[10px] font-bold">vs</span>
@@ -507,7 +507,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                       const v = e.target.value;
                       onScoreChange(key, "awayGoals", v === "" ? "" : Math.min(9, Math.max(0, Number(v))));
                     }}
-                    className="w-8 h-7 text-center text-sm font-bold rounded text-white focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="w-11 h-11 sm:w-8 sm:h-7 text-center text-sm font-bold rounded text-white focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     style={{ backgroundColor: "hsl(220, 15%, 15%)", borderWidth: 2, borderColor: colors.inputBorder }}
                   />
                   <span className="text-white text-[11px] font-semibold flex-1 truncate" title={awayName}>
@@ -808,7 +808,7 @@ const WorldCupPredictor = () => {
   const [rankingsOpen, setRankingsOpen] = useState(false);
 
   return (
-    <div className="min-h-screen text-white" style={{ background: "linear-gradient(180deg, hsl(220, 20%, 8%) 0%, hsl(230, 18%, 6%) 50%, hsl(220, 20%, 8%) 100%)" }}>
+    <div className="min-h-screen text-white overflow-x-hidden" style={{ background: "linear-gradient(180deg, hsl(220, 20%, 8%) 0%, hsl(230, 18%, 6%) 50%, hsl(220, 20%, 8%) 100%)" }}>
       <PageSeo
         title="World Cup 2026 Predictor | Sports Trivia Games"
         description="Explore all 12 groups for the FIFA World Cup 2026 hosted in USA, Mexico & Canada."

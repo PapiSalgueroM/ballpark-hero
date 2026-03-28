@@ -129,7 +129,7 @@ export function GameNav() {
             <h3 className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
               {cat.title}
             </h3>
-            <div className="grid grid-cols-2 gap-3 max-w-xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto">
               {cat.games.map(g => (
                 <Link
                   key={g.path}

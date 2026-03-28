@@ -65,12 +65,12 @@ const ShareButtons = ({ score, gameName, gamePath, customText }: ShareButtonsPro
     window.open(`sms:?body=${encodeURIComponent(shareText)}`, '_self');
   };
 
-  const btnBase = "inline-flex items-center justify-center w-11 h-11 rounded-full transition-all shadow-md hover:scale-110 hover:shadow-lg";
+  const btnBase = "inline-flex items-center justify-center w-11 h-11 min-w-[44px] min-h-[44px] rounded-full transition-all shadow-md hover:scale-110 hover:shadow-lg";
 
   return (
     <div className="flex flex-col items-center gap-3 mt-5">
       <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Share your result</p>
-      <div className="flex items-center justify-center gap-3 relative">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 relative">
         {/* X / Twitter */}
         <button
           onClick={handleX}
