@@ -543,7 +543,7 @@ function getOverallTier(ovr: number): { label: string; color: string; bgColor: s
 }
 
 /* ─── Creation Screen ─── */
-function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, onRolledOvr }: any) {
+function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, onRolledOvr, onStatsGenerated }: any) {
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
   const [isRolling, setIsRolling] = useState(false);
   const [displayOvr, setDisplayOvr] = useState(0);
