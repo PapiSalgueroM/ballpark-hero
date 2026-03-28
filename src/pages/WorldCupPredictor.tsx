@@ -453,6 +453,12 @@ const WorldCupPredictor = () => {
     try { return localStorage.getItem("wc2026-show-bracket") === "true"; } catch { return false; }
   });
   const bracketRef = useRef<HTMLDivElement>(null);
+  const [selectedThirds, setSelectedThirds] = useState<string[]>(() => {
+    try {
+      const raw = localStorage.getItem("wc2026-selected-thirds");
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  });
 
   // persist to localStorage
   useEffect(() => {
@@ -462,6 +468,10 @@ const WorldCupPredictor = () => {
   useEffect(() => {
     localStorage.setItem("wc2026-show-bracket", String(showBracket));
   }, [showBracket]);
+
+  useEffect(() => {
+    localStorage.setItem("wc2026-selected-thirds", JSON.stringify(selectedThirds));
+  }, [selectedThirds]);
 
   const handleScoreChange = useCallback(
     (key: string, field: "homeGoals" | "awayGoals", val: number | "") => {
