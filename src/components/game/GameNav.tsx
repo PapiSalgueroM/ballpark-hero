@@ -68,6 +68,7 @@ const CATEGORIES: { title: string; games: GameLink[] }[] = [
       { path: '/world-cup', label: '🏆 World Cup', description: 'Guess the World Cup legend', daily: true },
       { path: '/guess-soccer-club', label: '🏟️ Guess The Club', description: 'Identify the mystery football club', daily: true },
       { path: '/soccer-grid', label: '⚽ Soccer Grid', description: '3×3 grid puzzle with rarity scores', daily: true },
+      { path: '/world-cup-predictor', label: '🌍 2026 Predictor', description: 'Predict every World Cup 2026 match' },
     ],
   },
   {

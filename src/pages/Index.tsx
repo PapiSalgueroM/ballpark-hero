@@ -84,6 +84,7 @@ const CATEGORIES: { title: string; emoji: string; games: GameDef[] }[] = [
       { path: '/world-cup', label: 'World Cup', emoji: '🏆', description: 'Guess the World Cup legend', daily: true },
       { path: '/guess-soccer-club', label: 'Guess The Club', emoji: '🏟️', description: 'Identify the mystery football club', daily: true, isNew: true },
       { path: '/soccer-grid', label: 'Soccer Grid', emoji: '⚽', description: '3×3 grid puzzle with rarity scores', daily: true, isNew: true },
+      { path: '/world-cup-predictor', label: '2026 Predictor', emoji: '🌍', description: 'Predict every World Cup 2026 match', isNew: true },
     ],
   },
   {
