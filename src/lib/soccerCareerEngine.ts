@@ -1376,6 +1376,13 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
     if (e.id === 7 && state.overall < 70) return false;
     if (e.id === 24 && state.overall < 78) return false;
     if (e.id === 17 && state.overall < 68) return false;
+    // Financial events need enough net worth
+    if (e.id === 23 && state.netWorth < 2.5) return false; // Property
+    if (e.id === 25 && state.netWorth < 1) return false; // Supercars
+    if (e.id === 28 && state.netWorth < 1.5) return false; // Real estate fund
+    if (e.id === 29 && state.netWorth < 0.5) return false; // Watch collection
+    if (e.id === 27 && state.popularity < 50) return false; // Movie cameo
+    if (e.id === 30 && state.socialMediaFollowers < 1) return false; // Gaming deal
     return true;
   });
   const count = rand(1, 3);
