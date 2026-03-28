@@ -95,6 +95,44 @@ export interface WorldCupResult {
   bestPlayer: boolean;
 }
 
+/* ─── Rivalry System ─── */
+export interface RivalPlayer {
+  name: string;
+  nationality: string;
+  position: string;
+  club: string;
+  clubTier: number;
+  overall: number;
+  careerGoals: number;
+  careerAssists: number;
+  careerApps: number;
+  leagueTitles: number;
+  championsLeagues: number;
+  worldCups: number;
+  ballonDors: number;
+  intCaps: number;
+  intGoals: number;
+  marketValue: number;
+  age: number;
+  retired: boolean;
+}
+
+export interface RivalryEvent {
+  id: number;
+  emoji: string;
+  title: string;
+  description: string;
+  consequence: string;
+}
+
+export interface RivalrySummary {
+  playerWins: number;
+  rivalWins: number;
+  categories: { label: string; playerVal: string; rivalVal: string; winner: "player" | "rival" | "tie" }[];
+  overallWinner: "player" | "rival" | "tie";
+  legacyBonus: number;
+}
+
 export interface InternationalStats {
   caps: number;
   goals: number;
