@@ -2034,11 +2034,12 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // Also exclude rival name
   if (state.rival) usedNames.add(state.rival.name);
 
+  // Generate stats for all contenders (no points threshold — collect everyone)
+  const allNomineeData: BallonDorNominee[] = [];
   for (const contender of allContenders) {
     if (usedNames.has(contender.name)) continue;
     usedNames.add(contender.name);
     const age = contender.startAge + yearOffset;
-    // Generate seasonal stats
     const ageFactor = age <= 28 ? 1.0 : age <= 32 ? 0.85 : 0.65;
     const goals = Math.round(rand(contender.baseGoals[0], contender.baseGoals[1]) * ageFactor);
     const assists = rand(3, 18);
@@ -2049,12 +2050,10 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     if (Math.random() < 0.2) trophies.push("Cup");
     const overall = clamp(rand(83, 93) + (age <= 28 ? 2 : age >= 33 ? -3 : 0), 75, 95);
     const pts = calcBdorPoints(goals, assists, overall, 1, trophies, contender.club);
-    if (pts > 45) {
-      nominees.push({
-        name: contender.name, nationality: contender.nationality, position: contender.position,
-        club: contender.club, points: pts, goals, trophies, isPlayer: false,
-      });
-    }
+    allNomineeData.push({
+      name: contender.name, nationality: contender.nationality, position: contender.position,
+      club: contender.club, points: pts, goals, trophies, isPlayer: false,
+    });
   }
 
   // Add rival as fictional contender (if exists and at a good club)
@@ -2065,25 +2064,55 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     if (state.rival.leagueTitles > 0 && Math.random() < 0.3) rivalTrophies.push("League");
     if (state.rival.championsLeagues > 0 && Math.random() < 0.15) rivalTrophies.push("UCL");
     const rivalPts = calcBdorPoints(rivalGoals, rivalAssists, state.rival.overall, state.rival.clubTier, rivalTrophies, state.rival.club);
-    if (rivalPts > 45) {
-      nominees.push({
-        name: state.rival.name, nationality: state.rival.nationality, position: state.rival.position,
-        club: state.rival.club, points: rivalPts, goals: rivalGoals, trophies: rivalTrophies, isPlayer: false,
-      });
-    }
+    allNomineeData.push({
+      name: state.rival.name, nationality: state.rival.nationality, position: state.rival.position,
+      club: state.rival.club, points: rivalPts, goals: rivalGoals, trophies: rivalTrophies, isPlayer: false,
+    });
+  }
+
+  // Sort all contenders by points descending
+  allNomineeData.sort((a, b) => b.points - a.points);
+
+  // Determine how many NPC spots we need (9 if player nominated, 10 if not)
+  const npcSpotsNeeded = playerNominated ? 9 : 10;
+  const topNPCs = allNomineeData.slice(0, npcSpotsNeeded);
+
+  // If we still don't have enough, generate filler nominees
+  const fillerNames = [
+    { name: "Lucas Hernández", nationality: "France", position: "CB", club: "PSG" },
+    { name: "Jadon Sancho", nationality: "England", position: "RW", club: "Manchester United" },
+    { name: "Federico Valverde", nationality: "Uruguay", position: "CM", club: "Real Madrid" },
+    { name: "Bernardo Silva", nationality: "Portugal", position: "CAM", club: "Manchester City" },
+    { name: "Martin Ødegaard", nationality: "Norway", position: "CAM", club: "Arsenal" },
+    { name: "Declan Rice", nationality: "England", position: "CDM", club: "Arsenal" },
+    { name: "Aurélien Tchouaméni", nationality: "France", position: "CDM", club: "Real Madrid" },
+    { name: "Rodri", nationality: "Spain", position: "CDM", club: "Manchester City" },
+    { name: "Bruno Fernandes", nationality: "Portugal", position: "CAM", club: "Manchester United" },
+    { name: "Khvicha Kvaratskhelia", nationality: "Georgia", position: "LW", club: "PSG" },
+  ];
+  let fillerIdx = 0;
+  while (topNPCs.length < npcSpotsNeeded && fillerIdx < fillerNames.length) {
+    const f = fillerNames[fillerIdx++];
+    if (usedNames.has(f.name)) continue;
+    usedNames.add(f.name);
+    const pts = rand(30, 50);
+    topNPCs.push({
+      name: f.name, nationality: f.nationality, position: f.position,
+      club: f.club, points: pts, goals: rand(5, 15), trophies: [], isPlayer: false,
+    });
   }
 
   // Add player if nominated
   if (playerNominated) {
-    nominees.push({
+    topNPCs.push({
       name: state.playerName, nationality: state.nationality, position: state.position,
       club: state.currentClub, points: playerPoints, goals: season.goals, trophies: playerTrophies, isPlayer: true,
     });
   }
 
-  // Sort by points descending, take top 10
-  nominees.sort((a, b) => b.points - a.points);
-  const top10 = nominees.slice(0, 10);
+  // Sort final list and take exactly 10
+  topNPCs.sort((a, b) => b.points - a.points);
+  const top10 = topNPCs.slice(0, 10);
   const playerRankIdx = top10.findIndex(n => n.isPlayer);
   const playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
 
