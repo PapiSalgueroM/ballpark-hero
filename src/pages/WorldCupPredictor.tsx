@@ -1,12 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, X } from "lucide-react";
+import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, X, Save, Link2, Eye } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import PageSeo from "@/components/seo/PageSeo";
 import KnockoutBracket, { type GroupSeed } from "@/components/world-cup-predictor/KnockoutBracket";
 import ShareButtons from "@/components/game/ShareButtons";
 import AwardsPredictor from "@/components/world-cup-predictor/AwardsPredictor";
+import { useAuth } from "@/contexts/AuthContext";
+import { AuthModal } from "@/components/auth/AuthModal";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 /* ───── types ───── */
 
@@ -589,6 +594,10 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
 const GROUPS_LETTERS = ["A","B","C","D","E","F","G","H","I","J","K","L"];
 
 const WorldCupPredictor = () => {
+  const [searchParams] = useSearchParams();
+  const sharedBracketId = searchParams.get("bracket");
+  const { user, profile } = useAuth();
+
   const [predictions, setPredictions] = useState<Predictions>(loadPredictions);
   const [showBracket, setShowBracket] = useState(() => {
     try { return localStorage.getItem("wc2026-show-bracket") === "true"; } catch { return false; }
@@ -607,6 +616,99 @@ const WorldCupPredictor = () => {
     } catch { return {}; }
   });
   const [champion, setChampion] = useState("");
+
+  // Save bracket state
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authDefaultTab, setAuthDefaultTab] = useState<"login" | "signup">("signup");
+  const [saving, setSaving] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
+
+  // Shared bracket viewing state
+  const [viewingSharedBracket, setViewingSharedBracket] = useState(false);
+  const [sharedOwnerName, setSharedOwnerName] = useState("");
+  const [sharedBracketData, setSharedBracketData] = useState<any>(null);
+
+  // Load shared bracket if URL has ?bracket=xxx
+  useEffect(() => {
+    if (!sharedBracketId) return;
+    const loadShared = async () => {
+      const { data, error } = await supabase
+        .from("saved_brackets" as any)
+        .select("*")
+        .eq("id", sharedBracketId)
+        .single();
+      if (error || !data) {
+        toast.error("Bracket not found");
+        return;
+      }
+      const bracketRow = data as any;
+      const bd = bracketRow.bracket_data;
+      // Load bracket data into state
+      setPredictions(bd.predictions || {});
+      setPlayoffPicks(bd.playoffPicks || {});
+      setSelectedThirds(bd.selectedThirds || []);
+      setShowBracket(true);
+      setSharedBracketData(bd);
+      setViewingSharedBracket(true);
+      // Fetch owner display name
+      const { data: ownerProfile } = await supabase
+        .from("profiles")
+        .select("display_name, username")
+        .eq("user_id", bracketRow.user_id)
+        .single();
+      if (ownerProfile) {
+        setSharedOwnerName(ownerProfile.display_name || ownerProfile.username || "Someone");
+      } else {
+        setSharedOwnerName("Someone");
+      }
+    };
+    loadShared();
+  }, [sharedBracketId]);
+
+  // Generate unique bracket ID
+  const generateBracketId = () => {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "";
+    for (let i = 0; i < 8; i++) id += chars[Math.floor(Math.random() * chars.length)];
+    return id;
+  };
+
+  const handleSaveBracket = async () => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    setSaving(true);
+    try {
+      const bracketId = generateBracketId();
+      const bracketData = {
+        predictions,
+        playoffPicks,
+        selectedThirds,
+        knockoutPicks: (() => { try { return JSON.parse(localStorage.getItem("wc2026-knockout") || "{}"); } catch { return {}; } })(),
+        awards: (() => { try { return JSON.parse(localStorage.getItem("wc2026-awards") || "{}"); } catch { return {}; } })(),
+        champion,
+      };
+      const { error } = await supabase.from("saved_brackets" as any).insert({
+        id: bracketId,
+        user_id: user.id,
+        bracket_data: bracketData,
+      } as any);
+      if (error) {
+        toast.error("Failed to save bracket");
+        console.error(error);
+        return;
+      }
+      const url = `${window.location.origin}/world-cup-predictor?bracket=${bracketId}`;
+      setShareUrl(url);
+      await navigator.clipboard.writeText(url).catch(() => {});
+      toast.success("Bracket saved! Link copied to clipboard.");
+    } catch (err) {
+      toast.error("Something went wrong");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   // persist to localStorage
   useEffect(() => {
@@ -815,6 +917,27 @@ const WorldCupPredictor = () => {
         path="/world-cup-predictor"
       />
 
+      {/* Auth Modal */}
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} defaultTab={authDefaultTab} />
+
+      {/* Shared bracket banner */}
+      {viewingSharedBracket && (
+        <div className="sticky top-0 z-[60] flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 px-4 py-3 bg-[hsl(220,40%,20%)] border-b border-[hsl(220,40%,30%)] text-center">
+          <div className="flex items-center gap-2">
+            <Eye className="w-4 h-4 text-[hsl(45,90%,60%)]" />
+            <span className="text-white text-sm font-semibold">
+              You're viewing <span className="text-[hsl(45,90%,60%)]">{sharedOwnerName}'s</span> bracket
+            </span>
+          </div>
+          <a
+            href="/world-cup-predictor"
+            className="px-4 py-1.5 rounded-lg bg-[hsl(45,90%,45%)] hover:bg-[hsl(45,90%,50%)] text-[hsl(220,20%,8%)] text-sm font-bold transition-colors"
+          >
+            Make Your Own
+          </a>
+        </div>
+      )}
+
       {/* FIFA Rankings Sidebar — Desktop: fixed right panel, Mobile: slide-over */}
       {/* Toggle button */}
       {!rankingsOpen && (
@@ -888,20 +1011,51 @@ const WorldCupPredictor = () => {
           <p className="text-[hsl(150,15%,60%)] text-sm sm:text-base">
            USA <FlagImg name="USA" /> · Mexico <FlagImg name="Mexico" /> · Canada <FlagImg name="Canada" /> — 48 Teams · 12 Groups
           </p>
-          {champion && (
-            <div className="mt-4">
+          {champion && !viewingSharedBracket && (
+            <div className="mt-4 space-y-3">
               <ShareButtons
                 score=""
                 gameName="World Cup 2026 Predictor"
                 gamePath="/world-cup-predictor"
                 customText={`🏆 My World Cup 2026 prediction — I've got ${champion} winning it all! Make yours at douknowball.com/world-cup-predictor`}
               />
+              <button
+                onClick={handleSaveBracket}
+                disabled={saving}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[hsl(220,60%,45%)] hover:bg-[hsl(220,60%,50%)] disabled:opacity-50 text-white font-bold text-sm transition-colors shadow-lg"
+              >
+                <Save className="w-4 h-4" />
+                {saving ? "Saving..." : "Save & Share My Bracket"}
+              </button>
+              {shareUrl && (
+                <div className="flex flex-col items-center gap-1.5 mt-2">
+                  <div className="flex items-center gap-2 bg-[hsl(220,15%,15%)] border border-[hsl(220,15%,25%)] rounded-lg px-3 py-2 text-xs max-w-md w-full">
+                    <Link2 className="w-3.5 h-3.5 text-[hsl(45,90%,55%)] flex-shrink-0" />
+                    <span className="text-[hsl(150,15%,60%)] truncate flex-1">{shareUrl}</span>
+                    <button
+                      onClick={() => { navigator.clipboard.writeText(shareUrl); toast.success("Copied!"); }}
+                      className="text-[hsl(45,90%,55%)] text-[10px] font-bold hover:underline flex-shrink-0"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Auth prompt modal content */}
+          {showAuthModal && (
+            <div className="mt-3 text-center text-[hsl(150,15%,50%)] text-xs">
+              Create a free account to save and share your bracket prediction
             </div>
           )}
         </div>
 
         {/* Playoff Slots Panel */}
-        <PlayoffSlotsPanel picks={playoffPicks} onPick={handlePlayoffPick} />
+        {!viewingSharedBracket && (
+          <PlayoffSlotsPanel picks={playoffPicks} onPick={handlePlayoffPick} />
+        )}
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
           <div>
@@ -913,20 +1067,22 @@ const WorldCupPredictor = () => {
               </span>
             </p>
           </div>
-          <div className="flex gap-2 flex-shrink-0">
-            <button
-              onClick={handleAutoFillAll}
-              className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(150,12%,18%)] hover:bg-[hsl(150,12%,22%)] text-[hsl(150,15%,60%)] border border-[hsl(150,20%,25%)] transition-colors"
-            >
-              <Shuffle className="w-3.5 h-3.5" /> Auto-Fill All
-            </button>
-            <button
-              onClick={handleResetEverything}
-              className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(0,40%,15%)] hover:bg-[hsl(0,40%,20%)] text-[hsl(0,60%,65%)] border border-[hsl(0,30%,25%)] transition-colors"
-            >
-              <Trash2 className="w-3.5 h-3.5" /> Reset All
-            </button>
-          </div>
+          {!viewingSharedBracket && (
+            <div className="flex gap-2 flex-shrink-0">
+              <button
+                onClick={handleAutoFillAll}
+                className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(150,12%,18%)] hover:bg-[hsl(150,12%,22%)] text-[hsl(150,15%,60%)] border border-[hsl(150,20%,25%)] transition-colors"
+              >
+                <Shuffle className="w-3.5 h-3.5" /> Auto-Fill All
+              </button>
+              <button
+                onClick={handleResetEverything}
+                className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(0,40%,15%)] hover:bg-[hsl(0,40%,20%)] text-[hsl(0,60%,65%)] border border-[hsl(0,30%,25%)] transition-colors"
+              >
+                <Trash2 className="w-3.5 h-3.5" /> Reset All
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Group Grid */}
