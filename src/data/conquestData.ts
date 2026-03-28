@@ -61,7 +61,9 @@ export const STATE_POSITIONS: StatePos[] = [
   { id: 'GA', name: 'Georgia', x: c(7,6)[0], y: c(7,6)[1] },
   { id: 'TX_N', name: 'North Texas', x: c(3,6)[0], y: c(3,6)[1] },
   { id: 'TX_S', name: 'South Texas', x: c(3,7)[0], y: c(3,7)[1] },
-  { id: 'FL', name: 'Florida', x: c(8,7)[0], y: c(8,7)[1] },
+  { id: 'FL_N', name: 'North Florida', x: c(8,6)[0], y: c(8,6)[1] },
+  { id: 'FL_W', name: 'Central Florida', x: c(8,7)[0], y: c(8,7)[1] },
+  { id: 'FL_S', name: 'South Florida', x: c(9,7)[0], y: c(9,7)[1] },
 ];
 
 export interface ConquestPlayer {
@@ -483,7 +485,7 @@ export const INITIAL_TERRITORIES: Record<string, string> = {
   MO: 'KC', TX_N: 'DAL', TX_S: 'HOU', MN: 'MIN', WI: 'GB', IL: 'CHI',
   MI: 'DET', OH: 'CLE', KY: 'CIN', PA: 'PIT', DE: 'PHI',
   NJ: 'NYG', CT: 'NYJ', MA: 'NE', NY: 'BUF',
-  FL: 'MIA', AL: 'TB', SC: 'JAX', GA: 'ATL', NC: 'CAR', LA: 'NO',
+  FL_N: 'JAX', FL_W: 'TB', FL_S: 'MIA', GA: 'ATL', NC: 'CAR', LA: 'NO',
   TN: 'TEN', IN: 'IND', MD: 'BAL', VA: 'WAS',
 };
 
