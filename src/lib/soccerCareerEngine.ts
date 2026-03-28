@@ -531,10 +531,38 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   return s;
 }
 
-/* ─── Dismiss summary → transfer window ─── */
+/* ─── Dismiss summary → random events → transfer window ─── */
 export function dismissSummary(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev }; s.pendingSummary = null;
   if (s.retired) { s.phase = "retired"; return s; }
+  // Generate random events for this season
+  const events = generateRandomEvents(s);
+  if (events.length > 0) {
+    s.pendingEvents = events;
+    s.phase = "random_events";
+    return s;
+  }
+  // No events, go to transfer window
+  if (s.age >= 18) {
+    s.transferSituation = determineTransferSituation(s, clubs);
+    s.phase = "transfer_window";
+  } else { s.phase = "playing"; }
+  return s;
+}
+
+/* ─── Apply event choice and advance to next event or transfer window ─── */
+export function applyEventChoice(prev: CareerState, choiceIndex: number, clubs: ClubData[]): CareerState {
+  const event = prev.pendingEvents[0];
+  if (!event) return prev;
+  let s = event.choices[choiceIndex].apply({ ...prev });
+  s.lastEventId = event.id;
+  s.pendingEvents = s.pendingEvents.slice(1);
+  s.overall = calcOverall(s, s.position);
+  if (s.pendingEvents.length > 0) {
+    s.phase = "random_events";
+    return s;
+  }
+  // All events processed → transfer window
   if (s.age >= 18) {
     s.transferSituation = determineTransferSituation(s, clubs);
     s.phase = "transfer_window";
