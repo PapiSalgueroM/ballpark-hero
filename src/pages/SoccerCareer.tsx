@@ -1510,6 +1510,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         { l: "Physical", v: career.physical, c: "bg-orange-500" },
       ];
 
+  const [showRetireConfirm, setShowRetireConfirm] = useState(false);
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season";
 
   return (
@@ -1819,7 +1820,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <Button onClick={onNextSeason} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
               {career.phase === "youth" ? "Next Year" : "Next Season"} <ChevronRight className="w-5 h-5" />
             </Button>
-            {career.phase !== "retired" && career.phase !== "retirement_ceremony" && (
+            {(career.phase === "youth" || career.phase === "playing") && (
               <Button onClick={() => setShowRetireConfirm(true)} variant="outline" className="h-12 text-xs font-bold text-red-400 border-red-400/30 hover:bg-red-500/10">
                 Retire
               </Button>
@@ -1835,6 +1836,20 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       {/* Legacy card (shown when retired) */}
       {career.phase === "retired" && career.legacy && (
         <LegacyCard career={career} totals={totals} onShare={onShare} />
+      )}
+
+      {/* Retire Confirmation Dialog */}
+      {showRetireConfirm && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setShowRetireConfirm(false)}>
+          <div className="bg-card border-2 border-border rounded-xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
+            <h3 className="text-lg font-black text-center">🚪 Retire?</h3>
+            <p className="text-sm text-muted-foreground text-center">Are you sure you want to retire? Your career will end here.</p>
+            <div className="flex gap-3">
+              <Button onClick={() => setShowRetireConfirm(false)} variant="outline" className="flex-1 h-10 font-bold">Cancel</Button>
+              <Button onClick={() => { setShowRetireConfirm(false); onManualRetire(); }} className="flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-white">Confirm Retirement</Button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
