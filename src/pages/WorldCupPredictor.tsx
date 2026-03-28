@@ -358,10 +358,12 @@ function rankBasedScoresForGroup(group: Group): Predictions {
 interface PlayoffSlotsPanelProps {
   picks: Record<string, string>;
   onPick: (slot: string, winner: string) => void;
+  onAutoPickPlayoffs: () => void;
 }
 
-const PlayoffSlotsPanel = ({ picks, onPick }: PlayoffSlotsPanelProps) => {
+const PlayoffSlotsPanel = ({ picks, onPick, onAutoPickPlayoffs }: PlayoffSlotsPanelProps) => {
   const [open, setOpen] = useState(false);
+  const [autoLoading, setAutoLoading] = useState(false);
   const pickedCount = Object.keys(picks).length;
 
   return (
