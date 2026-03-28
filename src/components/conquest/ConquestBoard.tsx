@@ -105,6 +105,7 @@ export default function ConquestBoard() {
         attackingTeam={game.attackingTeam}
         defendingTeam={game.defendingTeam}
         phase={game.phase}
+        powerupStates={game.powerupStates}
       />
 
       {/* Stats bar */}
