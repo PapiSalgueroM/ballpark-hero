@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check } from "lucide-react";
+import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, X } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import PageSeo from "@/components/seo/PageSeo";
@@ -804,6 +804,8 @@ const WorldCupPredictor = () => {
     setSelectedThirds((prev) => prev.filter((t) => validTeams.includes(t)));
   }, [bestThirds]);
 
+  const [rankingsOpen, setRankingsOpen] = useState(false);
+
   return (
     <div className="min-h-screen text-white" style={{ background: "linear-gradient(180deg, hsl(220, 20%, 8%) 0%, hsl(230, 18%, 6%) 50%, hsl(220, 20%, 8%) 100%)" }}>
       <PageSeo
@@ -811,6 +813,66 @@ const WorldCupPredictor = () => {
         description="Explore all 12 groups for the FIFA World Cup 2026 hosted in USA, Mexico & Canada."
         path="/world-cup-predictor"
       />
+
+      {/* FIFA Rankings Sidebar — Desktop: fixed right panel, Mobile: slide-over */}
+      {/* Toggle button */}
+      {!rankingsOpen && (
+        <button
+          onClick={() => setRankingsOpen(true)}
+          className="fixed top-4 right-4 z-50 flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold
+            bg-[hsl(220,15%,15%)] border border-[hsl(220,15%,25%)] text-[hsl(45,90%,60%)]
+            hover:bg-[hsl(220,15%,20%)] transition-colors shadow-lg"
+        >
+          🌍 FIFA Rankings <ChevronRight className="w-3.5 h-3.5" />
+        </button>
+      )}
+
+      {/* Rankings panel */}
+      {rankingsOpen && (
+        <div className="fixed top-0 right-0 z-50 h-full w-72 bg-[hsl(220,18%,10%)] border-l border-[hsl(220,15%,20%)] shadow-2xl flex flex-col animate-fade-in">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-[hsl(220,15%,20%)]">
+            <h3 className="text-sm font-bold text-[hsl(45,90%,60%)]">🌍 FIFA World Rankings</h3>
+            <button
+              onClick={() => setRankingsOpen(false)}
+              className="p-1 rounded hover:bg-[hsl(220,15%,20%)] text-[hsl(150,15%,50%)] transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            <table className="w-full text-xs">
+              <thead className="sticky top-0 bg-[hsl(220,18%,10%)]">
+                <tr className="text-[hsl(150,15%,45%)] border-b border-[hsl(220,15%,18%)]">
+                  <th className="text-left py-2 px-3 font-semibold">#</th>
+                  <th className="text-left py-2 font-semibold">Team</th>
+                  <th className="text-center py-2 px-3 font-semibold">Grp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {FIFA_RANKINGS.map((r) => (
+                  <tr
+                    key={r.rank}
+                    className="border-b border-[hsl(220,12%,14%)] hover:bg-[hsl(220,15%,14%)] transition-colors"
+                  >
+                    <td className="py-1.5 px-3 text-[hsl(45,80%,55%)] font-bold">{r.rank}</td>
+                    <td className="py-1.5">
+                      <span className="flex items-center gap-1.5">
+                        <FlagImg name={r.team} size={20} />
+                        <span className="text-white">{r.team}</span>
+                      </span>
+                    </td>
+                    <td className="py-1.5 px-3 text-center">
+                      <span className="inline-block w-5 h-5 rounded text-[10px] font-bold leading-5 text-center bg-[hsl(220,15%,20%)] text-[hsl(150,15%,60%)]">
+                        {TEAM_GROUP[r.team] || "–"}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
