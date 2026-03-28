@@ -1067,20 +1067,22 @@ const WorldCupPredictor = () => {
               </span>
             </p>
           </div>
-          <div className="flex gap-2 flex-shrink-0">
-            <button
-              onClick={handleAutoFillAll}
-              className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(150,12%,18%)] hover:bg-[hsl(150,12%,22%)] text-[hsl(150,15%,60%)] border border-[hsl(150,20%,25%)] transition-colors"
-            >
-              <Shuffle className="w-3.5 h-3.5" /> Auto-Fill All
-            </button>
-            <button
-              onClick={handleResetEverything}
-              className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(0,40%,15%)] hover:bg-[hsl(0,40%,20%)] text-[hsl(0,60%,65%)] border border-[hsl(0,30%,25%)] transition-colors"
-            >
-              <Trash2 className="w-3.5 h-3.5" /> Reset All
-            </button>
-          </div>
+          {!viewingSharedBracket && (
+            <div className="flex gap-2 flex-shrink-0">
+              <button
+                onClick={handleAutoFillAll}
+                className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(150,12%,18%)] hover:bg-[hsl(150,12%,22%)] text-[hsl(150,15%,60%)] border border-[hsl(150,20%,25%)] transition-colors"
+              >
+                <Shuffle className="w-3.5 h-3.5" /> Auto-Fill All
+              </button>
+              <button
+                onClick={handleResetEverything}
+                className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(0,40%,15%)] hover:bg-[hsl(0,40%,20%)] text-[hsl(0,60%,65%)] border border-[hsl(0,30%,25%)] transition-colors"
+              >
+                <Trash2 className="w-3.5 h-3.5" /> Reset All
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Group Grid */}
