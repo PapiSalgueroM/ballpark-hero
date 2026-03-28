@@ -71,6 +71,46 @@ export interface RandomEvent {
   choices: EventChoice[];
 }
 
+/* ─── World Cup Types ─── */
+export interface WCMatch {
+  teamA: string;
+  teamB: string;
+  scoreA: number;
+  scoreB: number;
+  playerGoals: number;
+  playerAssists: number;
+  playerRating: number;
+  round: string; // "Group A", "R16", "QF", "SF", "Final"
+}
+
+export interface WorldCupResult {
+  year: number;
+  nation: string;
+  matches: WCMatch[];
+  playerApps: number;
+  playerGoals: number;
+  playerAssists: number;
+  playerAvgRating: number;
+  result: string; // "Winner", "Runner-up", "Semi-final", "Quarter-final", "Group Stage"
+  bestPlayer: boolean;
+}
+
+export interface InternationalStats {
+  caps: number;
+  goals: number;
+  assists: number;
+  tournaments: number;
+  worldCups: number;
+  continentals: number;
+  worldCupWins: number;
+  continentalWins: number;
+  isCaptain: boolean;
+  isRetired: boolean;
+  debutYear: number | null;
+  debutAge: number | null;
+  worldCupResults: WorldCupResult[];
+}
+
 export interface CareerState {
   playerName: string;
   nationality: string;
@@ -96,7 +136,7 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "retired";
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
   transferSituation: TransferSituation | null;
@@ -107,14 +147,14 @@ export interface CareerState {
   internationalCareer: boolean;
   sponsorDeal: string | null;
   totalEarnings: number;
-  popularity: number; // 0-100
-  morale: number; // 0-100
+  popularity: number;
+  morale: number;
   isLeader: boolean;
   hasRelationship: boolean;
+  // International career
+  intStats: InternationalStats;
+  pendingWorldCup: WorldCupResult | null;
 }
-
-/* ─── Flags ─── */
-const FLAG_MAP: Record<string, string> = {
   "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "Spain": "🇪🇸", "France": "🇫🇷", "Germany": "🇩🇪",
   "Brazil": "🇧🇷", "Argentina": "🇦🇷", "Portugal": "🇵🇹", "Italy": "🇮🇹",
   "Netherlands": "🇳🇱", "USA": "🇺🇸", "Mexico": "🇲🇽", "Japan": "🇯🇵",
