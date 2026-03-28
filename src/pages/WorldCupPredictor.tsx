@@ -8,6 +8,9 @@ import PageSeo from "@/components/seo/PageSeo";
 import KnockoutBracket, { type GroupSeed } from "@/components/world-cup-predictor/KnockoutBracket";
 import ShareButtons from "@/components/game/ShareButtons";
 import AwardsPredictor from "@/components/world-cup-predictor/AwardsPredictor";
+import { GameNav } from "@/components/game/GameNav";
+import { GameNavbar } from "@/components/game/GameNavbar";
+import { Footer } from "@/components/game/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { supabase } from "@/integrations/supabase/client";
@@ -1489,6 +1492,10 @@ const WorldCupPredictor = () => {
             {autoFillEverythingLoading ? "Filling..." : "Auto Fill Everything"}
           </button>
         )}
+      </div>
+      <div className="max-w-5xl mx-auto px-4">
+        <GameNav />
+        <Footer />
       </div>
     </div>
   );
