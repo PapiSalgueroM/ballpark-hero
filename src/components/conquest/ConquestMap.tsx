@@ -75,8 +75,8 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
               key={`fill-${state.id}`}
               d={state.path}
               fill={color}
-              stroke={color}
-              strokeWidth={1.5}
+              stroke={teamId ? color : 'rgba(255,255,255,0.12)'}
+              strokeWidth={teamId ? 1.5 : 0.8}
               strokeLinejoin="round"
               style={{
                 transition: 'fill 0.8s ease-in-out, stroke 0.8s ease-in-out',
@@ -86,15 +86,13 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
           );
         })}
 
-        {/* Layer 2: Border overlay — only on unclaimed states or between different teams */}
+        {/* Layer 2: Border overlay — highlight active states */}
         {US_STATES.map(state => {
           const teamId = territories[state.id];
           const active = isActive(state.id);
 
-          // For owned states: use team color as stroke so internal borders disappear
-          // Only show visible borders on unclaimed states
           if (teamId) {
-            const teamColor = TEAM_MAP.get(teamId)?.color || '#4a4a4a';
+            const teamColor = TEAM_MAP.get(teamId)?.color || '#2a3040';
             return (
               <path
                 key={`border-${state.id}`}
@@ -113,8 +111,8 @@ export default function ConquestMap({ territories, attackingTeam, defendingTeam,
               key={`border-${state.id}`}
               d={state.path}
               fill="transparent"
-              stroke="rgba(0,0,0,0.35)"
-              strokeWidth={0.4}
+              stroke="rgba(255,255,255,0.12)"
+              strokeWidth={0.8}
               strokeLinejoin="round"
             />
           );
