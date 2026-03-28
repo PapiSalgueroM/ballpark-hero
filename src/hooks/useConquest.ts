@@ -3,6 +3,7 @@ import {
   NFL_TEAMS, TEAM_MAP, INITIAL_TERRITORIES, STATE_POSITIONS,
   DIRECTIONS, DIR_ANGLES, DIR_LABELS, POWER_UP_STATES,
 } from '@/data/conquestData';
+import { US_STATES } from '@/data/usStatesPaths';
 
 export type Phase = 'ready' | 'animating' | 'battle' | 'steal' | 'gameover';
 
