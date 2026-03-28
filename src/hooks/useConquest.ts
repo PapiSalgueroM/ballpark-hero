@@ -3,6 +3,7 @@ import {
   NFL_TEAMS, TEAM_MAP, INITIAL_TERRITORIES, STATE_POSITIONS,
   DIRECTIONS, DIR_ANGLES, DIR_LABELS, POWER_UP_STATES,
 } from '@/data/conquestData';
+import { US_STATES } from '@/data/usStatesPaths';
 
 export type Phase = 'ready' | 'animating' | 'battle' | 'steal' | 'gameover';
 
@@ -22,6 +23,10 @@ export interface LogEntry {
   stolenPlayer?: string;
 }
 
+// Build a lookup from state ID → geographic center (from SVG paths)
+const GEO_CENTERS = new Map<string, { x: number; y: number }>();
+US_STATES.forEach(s => GEO_CENTERS.set(s.id, { x: s.labelX, y: s.labelY }));
+
 function buildInitialTerritories(): Record<string, string | null> {
   const t: Record<string, string | null> = {};
   STATE_POSITIONS.forEach(s => { t[s.id] = INITIAL_TERRITORIES[s.id] || null; });
@@ -38,13 +43,16 @@ function buildInitialRosters(): Record<string, string[]> {
   return r;
 }
 
-function getTeamCenter(teamId: string, territories: Record<string, string | null>): { x: number; y: number } {
-  const states = STATE_POSITIONS.filter(s => territories[s.id] === teamId);
-  if (states.length === 0) return { x: 290, y: 180 };
-  return {
-    x: states.reduce((s, st) => s + st.x, 0) / states.length,
-    y: states.reduce((s, st) => s + st.y, 0) / states.length,
-  };
+function getTeamGeoCenter(teamId: string, territories: Record<string, string | null>): { x: number; y: number } {
+  const stateIds = Object.keys(territories).filter(s => territories[s] === teamId);
+  if (stateIds.length === 0) return { x: 290, y: 180 };
+  let sumX = 0, sumY = 0, count = 0;
+  for (const sid of stateIds) {
+    const geo = GEO_CENTERS.get(sid);
+    if (geo) { sumX += geo.x; sumY += geo.y; count++; }
+  }
+  if (count === 0) return { x: 290, y: 180 };
+  return { x: sumX / count, y: sumY / count };
 }
 
 function getAliveTeamsFrom(territories: Record<string, string | null>): string[] {
@@ -53,23 +61,40 @@ function getAliveTeamsFrom(territories: Record<string, string | null>): string[]
   return Array.from(s);
 }
 
-function findTarget(teamId: string, direction: string, territories: Record<string, string | null>): string | null {
-  const center = getTeamCenter(teamId, territories);
-  const dirAngle = DIR_ANGLES[direction];
-  const alive = getAliveTeamsFrom(territories).filter(t => t !== teamId);
+export type TargetResult = { type: 'team'; id: string } | { type: 'neutral'; stateId: string };
 
-  let best: string | null = null;
+function findTarget(teamId: string, direction: string, territories: Record<string, string | null>): TargetResult | null {
+  const center = getTeamGeoCenter(teamId, territories);
+  const dirAngle = DIR_ANGLES[direction];
+  const coneHalf = Math.PI * 3 / 8; // 67.5° half-cone
+
+  let best: TargetResult | null = null;
   let bestDist = Infinity;
 
-  // Only consider enemies within 67.5° cone — no fallback
+  // Check enemy teams
+  const alive = getAliveTeamsFrom(territories).filter(t => t !== teamId);
   for (const enemy of alive) {
-    const ec = getTeamCenter(enemy, territories);
+    const ec = getTeamGeoCenter(enemy, territories);
     const dx = ec.x - center.x, dy = ec.y - center.y;
     let diff = Math.abs(Math.atan2(dy, dx) - dirAngle);
     if (diff > Math.PI) diff = 2 * Math.PI - diff;
-    if (diff <= Math.PI * 3 / 8) {
+    if (diff <= coneHalf) {
       const dist = dx * dx + dy * dy;
-      if (dist < bestDist) { bestDist = dist; best = enemy; }
+      if (dist < bestDist) { bestDist = dist; best = { type: 'team', id: enemy }; }
+    }
+  }
+
+  // Check neutral (unclaimed) states — they could be closer
+  for (const [sid, owner] of Object.entries(territories)) {
+    if (owner !== null) continue; // owned, skip
+    const geo = GEO_CENTERS.get(sid);
+    if (!geo) continue;
+    const dx = geo.x - center.x, dy = geo.y - center.y;
+    let diff = Math.abs(Math.atan2(dy, dx) - dirAngle);
+    if (diff > Math.PI) diff = 2 * Math.PI - diff;
+    if (diff <= coneHalf) {
+      const dist = dx * dx + dy * dy;
+      if (dist < bestDist) { bestDist = dist; best = { type: 'neutral', stateId: sid }; }
     }
   }
 
@@ -137,11 +162,10 @@ export function useConquest() {
 
     const team = alive[Math.floor(Math.random() * alive.length)];
 
-    // Try directions — pick a random one, but retry if no enemy found
+    // Pick a random direction first for the spinner
     const shuffledDirs = [...DIRECTIONS].sort(() => Math.random() - 0.5);
     let chosenDir: string | null = null;
-    let target: string | null = null;
-    const triedDirs: string[] = [];
+    let target: TargetResult | null = null;
 
     for (const dir of shuffledDirs) {
       const t = findTarget(team, dir, territories);
@@ -150,25 +174,23 @@ export function useConquest() {
         target = t;
         break;
       }
-      triedDirs.push(dir);
     }
 
-    // Should always find someone if >1 alive, but guard anyway
+    // Fallback: find closest enemy regardless of direction
     if (!chosenDir || !target) {
-      // Absolute fallback: find closest enemy regardless of direction
-      const center = getTeamCenter(team, territories);
+      const center = getTeamGeoCenter(team, territories);
       let bestDist = Infinity;
+      let fallbackEnemy: string | null = null;
       for (const enemy of alive.filter(t => t !== team)) {
-        const ec = getTeamCenter(enemy, territories);
+        const ec = getTeamGeoCenter(enemy, territories);
         const dx = ec.x - center.x, dy = ec.y - center.y;
         const dist = dx * dx + dy * dy;
-        if (dist < bestDist) { bestDist = dist; target = enemy; }
+        if (dist < bestDist) { bestDist = dist; fallbackEnemy = enemy; }
       }
-      if (!target) return;
-      // Determine actual direction to this enemy
-      const ec = getTeamCenter(target, territories);
+      if (!fallbackEnemy) return;
+      target = { type: 'team', id: fallbackEnemy };
+      const ec = getTeamGeoCenter(fallbackEnemy, territories);
       const angle = Math.atan2(ec.y - center.y, ec.x - center.x);
-      // Find closest cardinal/ordinal direction
       let bestDirDiff = Infinity;
       chosenDir = 'E';
       for (const d of DIRECTIONS) {
@@ -178,11 +200,8 @@ export function useConquest() {
       }
     }
 
-    // Show brief "no enemy" flash if first pick missed
     const firstAttemptDir = shuffledDirs[0];
     const missedFirst = firstAttemptDir !== chosenDir;
-
-    const result = simulateBattle(team, target, territories, rosters);
 
     setAttackingTeam(team);
     setDirection(firstAttemptDir);
@@ -191,43 +210,75 @@ export function useConquest() {
     setPhase('animating');
     setAnimStartTime(Date.now());
 
-    if (missedFirst) {
-      // Show "no enemy" after direction reveal, then re-spin to correct direction
-      addTimeout(() => {
-        setNoEnemyMsg(`No enemy ${DIR_LABELS[firstAttemptDir] || firstAttemptDir}!`);
-      }, 3600);
+    if (target.type === 'neutral') {
+      // Claiming a neutral state — no battle needed
+      const stateId = target.stateId;
+      const stateName = STATE_POSITIONS.find(s => s.id === stateId)?.name || stateId;
 
-      addTimeout(() => {
-        setNoEnemyMsg(null);
-        setDirection(chosenDir!);
-      }, 5000);
-
-      addTimeout(() => {
-        setDefendingTeam(target!);
-      }, 6200);
-
-      addTimeout(() => {
-        setBattleResult(result);
-        setPhase('battle');
-
+      if (missedFirst) {
         addTimeout(() => {
-          applyBattleResult(team, target!, result);
-        }, 4500);
-      }, 8000);
+          setNoEnemyMsg(`No target ${DIR_LABELS[firstAttemptDir] || firstAttemptDir}!`);
+        }, 3600);
+        addTimeout(() => {
+          setNoEnemyMsg(null);
+          setDirection(chosenDir!);
+        }, 5000);
+        addTimeout(() => {
+          // Claim the neutral state
+          setTerritories(prev => ({ ...prev, [stateId]: team }));
+          setTurn(t => t + 1);
+          setGameLog(prev => [...prev, {
+            turn: prev.length + 1,
+            attacker: team,
+            defender: 'neutral',
+            winner: team,
+            score: `claimed ${stateName}`,
+          }]);
+          setPhase('ready');
+        }, 6500);
+      } else {
+        setDirection(chosenDir);
+        addTimeout(() => {
+          setTerritories(prev => ({ ...prev, [stateId]: team }));
+          setTurn(t => t + 1);
+          setGameLog(prev => [...prev, {
+            turn: prev.length + 1,
+            attacker: team,
+            defender: 'neutral',
+            winner: team,
+            score: `claimed ${stateName}`,
+          }]);
+          setPhase('ready');
+        }, 4000);
+      }
     } else {
-      setDirection(chosenDir);
-      addTimeout(() => {
-        setDefendingTeam(target!);
-      }, 3800);
+      // Battle against enemy team
+      const enemyId = target.id;
+      const result = simulateBattle(team, enemyId, territories, rosters);
 
-      addTimeout(() => {
-        setBattleResult(result);
-        setPhase('battle');
-
+      if (missedFirst) {
         addTimeout(() => {
-          applyBattleResult(team, target!, result);
-        }, 4500);
-      }, 6000);
+          setNoEnemyMsg(`No target ${DIR_LABELS[firstAttemptDir] || firstAttemptDir}!`);
+        }, 3600);
+        addTimeout(() => {
+          setNoEnemyMsg(null);
+          setDirection(chosenDir!);
+        }, 5000);
+        addTimeout(() => { setDefendingTeam(enemyId); }, 6200);
+        addTimeout(() => {
+          setBattleResult(result);
+          setPhase('battle');
+          addTimeout(() => { applyBattleResult(team, enemyId, result); }, 4500);
+        }, 8000);
+      } else {
+        setDirection(chosenDir);
+        addTimeout(() => { setDefendingTeam(enemyId); }, 3800);
+        addTimeout(() => {
+          setBattleResult(result);
+          setPhase('battle');
+          addTimeout(() => { applyBattleResult(team, enemyId, result); }, 4500);
+        }, 6000);
+      }
     }
   }, [territories, rosters]);
 
