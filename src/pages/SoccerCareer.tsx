@@ -520,6 +520,49 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
   );
 }
 
+/* ─── Random Event Card ─── */
+function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; remaining: number; onChoice: (idx: number) => void }) {
+  const categoryColors: Record<string, string> = {
+    positive: "border-emerald-500/40 bg-emerald-500/5",
+    negative: "border-red-500/40 bg-red-500/5",
+    international: "border-blue-500/40 bg-blue-500/5",
+    life: "border-purple-500/40 bg-purple-500/5",
+  };
+  const categoryLabels: Record<string, string> = {
+    positive: "⚡ Positive Event",
+    negative: "⚠️ Challenge",
+    international: "🌍 International",
+    life: "🏠 Life Event",
+  };
+  return (
+    <div className={`rounded-xl border-2 p-5 space-y-4 ${categoryColors[event.category] || "border-border bg-card"}`}>
+      <div className="text-center space-y-2">
+        <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">
+          {categoryLabels[event.category]} · {remaining} event{remaining !== 1 ? "s" : ""} remaining
+        </span>
+        <div className="text-4xl">{event.emoji}</div>
+        <h3 className="text-lg font-black">{event.title}</h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">{event.description}</p>
+      </div>
+      <div className="space-y-2">
+        {event.choices.map((choice, idx) => (
+          <button
+            key={idx}
+            onClick={() => onChoice(idx)}
+            className={`w-full rounded-xl p-3 text-left transition-all hover:scale-[1.02] active:scale-[0.98] border border-border/50 ${choice.color} text-white`}
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-lg">{choice.emoji}</span>
+              <span className="font-bold text-sm">{choice.label}</span>
+            </div>
+            <div className="text-[11px] mt-1 opacity-80 ml-8">{choice.consequence}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ─── Game Screen ─── */
 function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onEventChoice, onNewCareer, timelineRef }: {
   career: CareerState;
