@@ -155,6 +155,9 @@ export interface CareerState {
   intStats: InternationalStats;
   pendingWorldCup: WorldCupResult | null;
 }
+
+/* ─── Flags ─── */
+const FLAG_MAP: Record<string, string> = {
   "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "Spain": "🇪🇸", "France": "🇫🇷", "Germany": "🇩🇪",
   "Brazil": "🇧🇷", "Argentina": "🇦🇷", "Portugal": "🇵🇹", "Italy": "🇮🇹",
   "Netherlands": "🇳🇱", "USA": "🇺🇸", "Mexico": "🇲🇽", "Japan": "🇯🇵",
