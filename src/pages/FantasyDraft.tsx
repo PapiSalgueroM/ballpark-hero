@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
-import { Header } from '@/components/layout/Header';
+
 import { Button } from '@/components/ui/button';
 import { Sparkles, Shield, Trophy, Target, Loader2, User, Bot, CheckCircle2, Zap } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';

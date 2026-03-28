@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Header } from '@/components/layout/Header';
+
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 import { Button } from '@/components/ui/button';
@@ -220,7 +220,6 @@ export default function Profile() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
-        <Header />
         <div className="flex items-center justify-center py-20">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
@@ -240,7 +239,6 @@ export default function Profile() {
         path={username ? `/profile/${username}` : '/profile'}
       />
       <div className="min-h-screen bg-background">
-        <Header />
         
         <main className="max-w-4xl mx-auto px-4 py-8">
           {/* Profile Header */}
