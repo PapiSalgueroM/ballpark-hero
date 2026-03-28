@@ -4,6 +4,7 @@ import ConquestMap from './ConquestMap';
 import { TEAM_MAP, DIRECTIONS, DIR_LABELS } from '@/data/conquestData';
 import { TEAM_LEGENDS } from '@/data/conquestPowerups';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import type { PlayEvent } from '@/lib/conquestBattle';
 
 function useSpinner(items: string[], isSpinning: boolean, finalValue: string): string {
   const [display, setDisplay] = useState(items[0] || '');
