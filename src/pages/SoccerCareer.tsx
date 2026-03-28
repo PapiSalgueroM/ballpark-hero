@@ -390,12 +390,15 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onNewCareer, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onStay, onSignExtension, onRequestTransfer, onNewCareer, timelineRef }: {
   career: CareerState;
+  clubs: ClubData[];
   onNextSeason: () => void;
   onAcceptOffer: (offer: ContractOffer) => void;
   onDismissSummary: () => void;
   onStay: () => void;
+  onSignExtension: () => void;
+  onRequestTransfer: () => void;
   onNewCareer: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
@@ -462,24 +465,29 @@ function GameScreen({ career, onNextSeason, onAcceptOffer, onDismissSummary, onS
             <SeasonSummaryCard season={career.pendingSummary} position={career.position} onContinue={onDismissSummary} />
           )}
 
-          {/* OVERLAY: Contract Offers */}
+          {/* OVERLAY: Contract Offers (youth → pro) */}
           {career.phase === "contract_offer" && career.pendingOffers.length > 0 && (
             <div className="space-y-3">
               <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 text-center">
                 <h3 className="text-lg font-black">📩 Contract Offers</h3>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {career.age <= 18 ? "Choose a club to start your professional career" : "Transfer offers from interested clubs"}
-                </p>
+                <p className="text-xs text-muted-foreground mt-1">Choose a club to start your professional career</p>
               </div>
-              {career.pendingOffers.map((offer, i) => (
+              {career.pendingOffers.map((offer) => (
                 <OfferCard key={offer.club.name} offer={offer} onAccept={() => onAcceptOffer(offer)} />
               ))}
-              {career.age > 18 && (
-                <Button variant="outline" onClick={onStay} className="w-full h-9 text-sm">
-                  Stay at {career.currentClub}
-                </Button>
-              )}
             </div>
+          )}
+
+          {/* OVERLAY: Transfer Window */}
+          {career.phase === "transfer_window" && career.transferSituation && (
+            <TransferWindowCard
+              situation={career.transferSituation}
+              career={career}
+              onAcceptOffer={onAcceptOffer}
+              onStay={onStay}
+              onSignExtension={onSignExtension}
+              onRequestTransfer={onRequestTransfer}
+            />
           )}
 
           {/* Club card */}
