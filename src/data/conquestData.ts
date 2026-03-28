@@ -59,7 +59,8 @@ export const STATE_POSITIONS: StatePos[] = [
   { id: 'MS', name: 'Mississippi', x: c(5,6)[0], y: c(5,6)[1] },
   { id: 'AL', name: 'Alabama', x: c(6,6)[0], y: c(6,6)[1] },
   { id: 'GA', name: 'Georgia', x: c(7,6)[0], y: c(7,6)[1] },
-  { id: 'TX', name: 'Texas', x: c(3,7)[0], y: c(3,7)[1] },
+  { id: 'TX_N', name: 'North Texas', x: c(3,6)[0], y: c(3,6)[1] },
+  { id: 'TX_S', name: 'South Texas', x: c(3,7)[0], y: c(3,7)[1] },
   { id: 'FL', name: 'Florida', x: c(8,7)[0], y: c(8,7)[1] },
 ];
 
