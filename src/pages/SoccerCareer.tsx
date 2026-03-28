@@ -1434,6 +1434,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         {/* RIGHT — Stats & Overlays */}
         <div className="space-y-3 order-1 md:order-2">
 
+          {/* OVERLAY: Newspaper Articles */}
+          {career.phase === "newspaper" && career.pendingNews.length > 0 && (
+            <NewspaperCard articles={career.pendingNews} onContinue={onDismissNewspaper} />
+          )}
+
           {/* OVERLAY: Season Summary */}
           {career.phase === "season_summary" && career.pendingSummary && (
             <SeasonSummaryCard season={career.pendingSummary} position={career.position} onContinue={onDismissSummary} />
