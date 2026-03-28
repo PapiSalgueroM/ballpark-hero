@@ -8,7 +8,7 @@ import {
   PowerupId, PowerupDef, POWERUPS, getRandomPowerup,
   FREE_AGENTS, TEAM_LEGENDS, FreeAgent,
 } from '@/data/conquestPowerups';
-import { simulateDetailedBattle, BattleSimulation, PlayEvent, BoxScore } from '@/lib/conquestBattle';
+import { simulateDetailedBattle, BattleSimulation, PlayEvent, BoxScore, TeamStatLine } from '@/lib/conquestBattle';
 
 export type Phase =
   | 'ready' | 'animating' | 'battle' | 'steal' | 'gameover'
