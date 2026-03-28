@@ -473,14 +473,14 @@ export const TEAM_MAP = new Map(NFL_TEAMS.map(t => [t.id, t]));
 // Initial territory assignments — 32 teams each get 1 home state
 // Shared-state teams get nearest neighboring state:
 // CA split: SF → CA_N, LAR → CA_S, LAC → CA_SC
-// TX: DAL (primary), HOU → OK
+// TX split: DAL → TX_N, HOU → TX_S
 // OH: CLE (primary), CIN → KY
 // PA: PIT (primary), PHI → DE
 // NJ: NYG (primary), NYJ → CT
 // FL: MIA (primary), TB → AL, JAX → SC
 export const INITIAL_TERRITORIES: Record<string, string> = {
   WA: 'SEA', OR: 'SEA', CA_N: 'SF', CA_S: 'LAR', CA_SC: 'LAC', NV: 'LV', AZ: 'ARI', CO: 'DEN',
-  MO: 'KC', TX: 'DAL', OK: 'HOU', MN: 'MIN', WI: 'GB', IL: 'CHI',
+  MO: 'KC', TX_N: 'DAL', TX_S: 'HOU', MN: 'MIN', WI: 'GB', IL: 'CHI',
   MI: 'DET', OH: 'CLE', KY: 'CIN', PA: 'PIT', DE: 'PHI',
   NJ: 'NYG', CT: 'NYJ', MA: 'NE', NY: 'BUF',
   FL: 'MIA', AL: 'TB', SC: 'JAX', GA: 'ATL', NC: 'CAR', LA: 'NO',
