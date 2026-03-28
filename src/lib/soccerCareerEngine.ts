@@ -1487,8 +1487,140 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
   return shuffled.slice(0, count);
 }
 
+/* ─── UCL Simulation ─── */
+function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult {
+  const tier = state.currentClubTier;
+  // Only T1-T2 clubs qualify
+  if (tier > 2) return { qualified: false, matches: [], result: "N/A", playerGoals: 0, isTopScorer: false };
+  // Qualification chance
+  const qualChance = tier === 1 ? 0.85 : 0.35;
+  if (Math.random() > qualChance) return { qualified: false, matches: [], result: "N/A", playerGoals: 0, isTopScorer: false };
+
+  const rounds = ["R16", "QF", "SF", "Final"];
+  const opponents = ["Bayern Munich", "Real Madrid", "Barcelona", "Man City", "PSG", "Juventus", "AC Milan", "Liverpool", "Inter Milan", "Dortmund", "Atletico Madrid", "Chelsea", "Arsenal", "Porto", "Ajax", "Benfica"];
+  const matches: UCLKnockoutMatch[] = [];
+  let totalPlayerGoals = 0;
+  const usedOpponents = new Set<string>([state.currentClub]);
+
+  for (const round of rounds) {
+    const available = opponents.filter(o => !usedOpponents.has(o));
+    const opponent = available.length > 0 ? pick(available) : "Unknown FC";
+    usedOpponents.add(opponent);
+
+    // Win probability: higher for better players/clubs, decreasing per round
+    const roundDifficulty = rounds.indexOf(round) * 0.05;
+    const winChance = clamp(0.3 + (state.overall - 75) * 0.015 + (tier === 1 ? 0.1 : 0) - roundDifficulty, 0.15, 0.75);
+    const won = Math.random() < winChance;
+    const goalsFor = won ? rand(1, 4) : rand(0, 2);
+    const goalsAgainst = won ? rand(0, goalsFor - 1 < 0 ? 0 : goalsFor - 1) : rand(goalsFor + 1, goalsFor + 3);
+    const isAttacker = ["ST", "CAM", "LW", "RW"].includes(state.position);
+    const playerGoals = isAttacker ? (Math.random() < 0.4 ? rand(1, 2) : 0) :
+                        state.position === "GK" ? 0 : (Math.random() < 0.1 ? 1 : 0);
+    totalPlayerGoals += playerGoals;
+    matches.push({ opponent, round, goalsFor, goalsAgainst: Math.max(0, goalsAgainst), playerGoals, won });
+    if (!won) break;
+  }
+
+  const lastMatch = matches[matches.length - 1];
+  const result = lastMatch.won && lastMatch.round === "Final" ? "Winner" :
+                 lastMatch.round === "Final" ? "Final" :
+                 lastMatch.round === "SF" ? "Semi-final" :
+                 lastMatch.round === "QF" ? "Quarter-final" : "R16";
+  
+  // Top scorer if 6+ goals
+  const isTopScorer = totalPlayerGoals >= 6 && Math.random() < 0.5;
+
+  return { qualified: true, matches, result, playerGoals: totalPlayerGoals, isTopScorer };
+}
+
+/* ─── Ballon d'Or Calculation ─── */
+const FAKE_PLAYER_NAMES = [
+  "Kylian Dubois", "Erling Andersen", "Jude Martinez", "Vinicius Santos", "Rodri Hernández",
+  "Mohamed Salah", "Harry Kane", "Lautaro López", "Bernardo Costa", "Phil Johansson",
+  "Bukayo Moreno", "Florian Weber", "Rafael Petrov", "Federico Torres", "Jamal Schmidt",
+];
+
+function calculateBallonDor(state: CareerState, season: SeasonRecord, year: number): BallonDorResult {
+  const isAttacker = ["ST", "CAM", "LW", "RW"].includes(state.position);
+  const isMid = ["CM", "CDM"].includes(state.position);
+  
+  // Calculate player points
+  let playerPoints = 0;
+  // Goals (most weight for attackers)
+  playerPoints += season.goals * (isAttacker ? 3 : isMid ? 2 : 1);
+  // Assists
+  playerPoints += season.assists * 1.5;
+  // Trophies
+  if (season.leagueTitle) playerPoints += 15;
+  if (season.domesticCup) playerPoints += 5;
+  if (season.championsLeague) playerPoints += 25;
+  if (season.worldCup) playerPoints += 30;
+  // International performance
+  playerPoints += season.intGoals * 2;
+  if (season.tournamentResult === "Winner") playerPoints += 10;
+  // Overall rating
+  playerPoints += Math.max(0, (state.overall - 75)) * 2;
+  // Season rating
+  playerPoints += (season.rating - 6) * 5;
+  // Media/fame
+  playerPoints += state.socialMediaFollowers * 0.5;
+  playerPoints += state.popularity * 0.2;
+  // Random variance
+  playerPoints += (Math.random() - 0.3) * 15;
+  playerPoints = Math.round(Math.max(0, playerPoints));
+
+  // Generate 4 AI nominees with points
+  const nominees: BallonDorNominee[] = [];
+  const usedNames = new Set<string>([state.playerName]);
+  for (let i = 0; i < 4; i++) {
+    const available = FAKE_PLAYER_NAMES.filter(n => !usedNames.has(n));
+    if (available.length === 0) break;
+    const name = pick(available);
+    usedNames.add(name);
+    const aiOvr = rand(82, 93);
+    const aiGoals = rand(15, 35);
+    const trophies: string[] = [];
+    if (Math.random() < 0.3) trophies.push("League");
+    if (Math.random() < 0.15) trophies.push("UCL");
+    if (Math.random() < 0.05) trophies.push("World Cup");
+    let aiPoints = aiGoals * 2.5 + (aiOvr - 75) * 2 + trophies.length * 15 + (Math.random() - 0.3) * 20;
+    // Make 1st nominee strong competition
+    if (i === 0) aiPoints += rand(5, 15);
+    aiPoints = Math.round(Math.max(0, aiPoints));
+    const nat = pick(Object.keys(FLAG_MAP));
+    nominees.push({
+      name, nationality: nat, club: pick(["Real Madrid", "Man City", "Barcelona", "Bayern Munich", "PSG", "Liverpool", "Arsenal", "Inter Milan"]),
+      points: aiPoints, goals: aiGoals, trophies, isPlayer: false,
+    });
+  }
+
+  // Add player
+  const playerTrophies: string[] = [];
+  if (season.leagueTitle) playerTrophies.push("League");
+  if (season.championsLeague) playerTrophies.push("UCL");
+  if (season.domesticCup) playerTrophies.push("Cup");
+  if (season.worldCup) playerTrophies.push("World Cup");
+  nominees.push({
+    name: state.playerName, nationality: state.nationality, club: state.currentClub,
+    points: playerPoints, goals: season.goals, trophies: playerTrophies, isPlayer: true,
+  });
+
+  // Sort by points descending
+  nominees.sort((a, b) => b.points - a.points);
+  const top5 = nominees.slice(0, 5);
+  const playerRankInTop5 = top5.findIndex(n => n.isPlayer);
+  const playerRank = playerRankInTop5 >= 0 ? playerRankInTop5 + 1 : null;
+
+  return { year, nominees: top5, playerRank, playerPoints };
+}
+
 /* ─── Flow helper: advance to next phase ─── */
 function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
+  // Check for Ballon d'Or ceremony
+  if (s.pendingBallonDor && s.pendingBallonDor.playerRank !== null) {
+    s.phase = "ballon_dor";
+    return s;
+  }
   // Check for international debut screen
   const lastSeason = s.seasons[s.seasons.length - 1];
   if (s.intStats.debutYear === lastSeason?.year && s.phase !== "international_debut" && s.phase !== "world_cup") {
