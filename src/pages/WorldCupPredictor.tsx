@@ -127,30 +127,46 @@ const playoffMatchups = [
 
 /* ───── flag map ───── */
 
-const FLAG: Record<string, string> = {
-  "Mexico": "🇲🇽", "South Korea": "🇰🇷", "South Africa": "🇿🇦",
-  "Canada": "🇨🇦", "Switzerland": "🇨🇭", "Qatar": "🇶🇦",
-  "Brazil": "🇧🇷", "Morocco": "🇲🇦", "Scotland": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "Haiti": "🇭🇹",
-  "USA": "🇺🇸", "Paraguay": "🇵🇾", "Australia": "🇦🇺",
-  "Germany": "🇩🇪", "Ivory Coast": "🇨🇮", "Ecuador": "🇪🇨", "Curaçao": "🇨🇼",
-  "Netherlands": "🇳🇱", "Japan": "🇯🇵", "Tunisia": "🇹🇳",
-  "Belgium": "🇧🇪", "Egypt": "🇪🇬", "Iran": "🇮🇷", "New Zealand": "🇳🇿",
-  "Spain": "🇪🇸", "Uruguay": "🇺🇾", "Saudi Arabia": "🇸🇦", "Cape Verde": "🇨🇻",
-  "France": "🇫🇷", "Senegal": "🇸🇳", "Norway": "🇳🇴",
-  "Argentina": "🇦🇷", "Chile": "🇨🇱", "Nigeria": "🇳🇬", "Algeria": "🇩🇿",
-  "Portugal": "🇵🇹", "Colombia": "🇨🇴", "Uzbekistan": "🇺🇿",
-  "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "Croatia": "🇭🇷", "Ghana": "🇬🇭", "Panama": "🇵🇦",
+const FLAG_CODES: Record<string, string> = {
+  "Mexico": "mx", "South Korea": "kr", "South Africa": "za",
+  "Canada": "ca", "Switzerland": "ch", "Qatar": "qa",
+  "Brazil": "br", "Morocco": "ma", "Scotland": "gb-sct", "Haiti": "ht",
+  "USA": "us", "Paraguay": "py", "Australia": "au",
+  "Germany": "de", "Ivory Coast": "ci", "Ecuador": "ec", "Curaçao": "cw",
+  "Netherlands": "nl", "Japan": "jp", "Tunisia": "tn",
+  "Belgium": "be", "Egypt": "eg", "Iran": "ir", "New Zealand": "nz",
+  "Spain": "es", "Uruguay": "uy", "Saudi Arabia": "sa", "Cape Verde": "cv",
+  "France": "fr", "Senegal": "sn", "Norway": "no",
+  "Argentina": "ar", "Chile": "cl", "Nigeria": "ng", "Algeria": "dz",
+  "Portugal": "pt", "Colombia": "co", "Uzbekistan": "uz",
+  "England": "gb-eng", "Croatia": "hr", "Ghana": "gh", "Panama": "pa",
   // Playoff teams
-  "Italy": "🇮🇹", "Bosnia & Herzegovina": "🇧🇦",
-  "Sweden": "🇸🇪", "Poland": "🇵🇱",
-  "Kosovo": "🇽🇰", "Turkey": "🇹🇷",
-  "Denmark": "🇩🇰", "Czech Republic": "🇨🇿",
-  "Jamaica": "🇯🇲", "DR Congo": "🇨🇩",
-  "Bolivia": "🇧🇴", "Iraq": "🇮🇶",
+  "Italy": "it", "Bosnia & Herzegovina": "ba",
+  "Sweden": "se", "Poland": "pl",
+  "Kosovo": "xk", "Turkey": "tr",
+  "Denmark": "dk", "Czech Republic": "cz",
+  "Jamaica": "jm", "DR Congo": "cd",
+  "Bolivia": "bo", "Iraq": "iq",
 };
 
-export function getFlag(name: string): string {
-  return FLAG[name] || "";
+export function FlagImg({ name, size = 24 }: { name: string; size?: number }) {
+  const code = FLAG_CODES[name];
+  if (!code) return null;
+  const h = Math.round(size * 0.75);
+  return (
+    <img
+      src={`https://flagcdn.com/${size}x${h}/${code}.png`}
+      alt={name}
+      style={{ display: "inline", marginRight: "4px", verticalAlign: "middle" }}
+      width={size}
+      height={h}
+    />
+  );
+}
+
+// Keep getFlag for backwards compat (returns empty string now, use FlagImg instead)
+export function getFlag(_name: string): string {
+  return "";
 }
 
 /* ───── group colors ───── */
