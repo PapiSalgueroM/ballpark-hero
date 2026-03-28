@@ -229,7 +229,7 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retired";
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
   transferSituation: TransferSituation | null;
@@ -254,16 +254,20 @@ export interface CareerState {
   lastRivalryEventId: number | null;
   rivalrySummary: RivalrySummary | null;
   // Financial & Lifestyle
-  netWorth: number; // in millions
+  netWorth: number;
   lifestyleLevel: LifestyleLevel;
-  lifestyleCostPerYear: number; // in millions
-  socialMediaFollowers: number; // in millions (e.g. 1.5 = 1.5M)
-  sponsorshipIncome: number; // in millions per year
+  lifestyleCostPerYear: number;
+  socialMediaFollowers: number;
+  sponsorshipIncome: number;
   properties: string[];
   investments: string[];
   consecutiveDeficitYears: number;
-  agentFeesPaid: number; // total in millions
+  agentFeesPaid: number;
   family: FamilyStatus;
+  // Ballon d'Or & Awards
+  awards: Award[];
+  pendingBallonDor: BallonDorResult | null;
+  lastUCLResult: UCLResult | null;
 }
 
 /* ─── Flags ─── */
@@ -591,18 +595,20 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
 
   const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier);
 
-  // Trophies
-  const winLeague = currentClubTier <= 2 && Math.random() < (0.25 / currentClubTier);
-  const winCL = currentClubTier === 1 && overall >= 78 && Math.random() < 0.07;
+  // Trophies — proper simulation
+  const leagueChance = currentClubTier === 1 ? (overall >= 85 ? 0.35 : overall >= 78 ? 0.20 : 0.10) :
+                        currentClubTier === 2 ? (overall >= 78 ? 0.25 : 0.15) : 0;
+  const winLeague = Math.random() < leagueChance;
+  const cupChance = currentClubTier === 1 ? 0.25 : currentClubTier === 2 ? 0.20 : currentClubTier === 3 ? 0.15 : 0;
+  const winCup = Math.random() < cupChance;
+  // UCL and WC/BdO are handled separately in advanceProSeason now
   const isWCYear = (lastYear + 1) % 4 === 2;
-  const winWC = isWCYear && overall >= 80 && Math.random() < 0.05;
-  const winBdor = overall >= 88 && Math.random() < 0.10;
 
   return {
     year: lastYear + 1, age,
     club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
     apps, goals, assists, cleanSheets, yellowCards, redCards, rating,
-    leagueTitle: winLeague, championsLeague: winCL, worldCup: winWC, ballonDor: winBdor,
+    leagueTitle: winLeague, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
     type: "playing",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   };
@@ -727,7 +733,7 @@ export function initCareer(
     seasons: [{
       year: startYear, age: 16, club: `${academyClub.name} Youth`, clubCountry: academyClub.country, clubTier: academyClub.tier,
       apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
-      leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "youth",
+      leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "youth",
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }],
     events: [`📋 Joined ${academyClub.name} Youth Academy aged 16`],
@@ -741,22 +747,14 @@ export function initCareer(
       debutYear: null, debutAge: null, worldCupResults: [],
     },
     pendingWorldCup: null,
-    rival: null,
-    rivalCreated: false,
-    pendingRivalryEvent: null,
-    lastRivalryEventId: null,
-    rivalrySummary: null,
-    // Financial & Lifestyle
-    netWorth: 0,
-    lifestyleLevel: "Humble" as LifestyleLevel,
-    lifestyleCostPerYear: 0.02, // €20k/year as youth
-    socialMediaFollowers: 0,
-    sponsorshipIncome: 0,
-    properties: [],
-    investments: [],
-    consecutiveDeficitYears: 0,
-    agentFeesPaid: 0,
+    rival: null, rivalCreated: false, pendingRivalryEvent: null, lastRivalryEventId: null, rivalrySummary: null,
+    netWorth: 0, lifestyleLevel: "Humble" as LifestyleLevel, lifestyleCostPerYear: 0.02,
+    socialMediaFollowers: 0, sponsorshipIncome: 0, properties: [], investments: [],
+    consecutiveDeficitYears: 0, agentFeesPaid: 0,
     family: { isMarried: false, marriedAge: null, children: 0, isDivorced: false, divorceAge: null },
+    awards: [],
+    pendingBallonDor: null,
+    lastUCLResult: null,
   };
 }
 
@@ -776,7 +774,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
     year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
     apps: rand(10, 25), goals: s.position === "GK" ? 0 : rand(0, 8), assists: rand(0, 5),
     cleanSheets: s.position === "GK" ? rand(2, 8) : 0, yellowCards: rand(0, 4), redCards: 0, rating: 0,
-    leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "youth",
+    leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "youth",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   }];
   s.events.push(`📈 Stats improved during youth development (OVR ${s.overall})`);
