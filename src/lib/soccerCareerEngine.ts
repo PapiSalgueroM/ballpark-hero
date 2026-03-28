@@ -23,9 +23,11 @@ export interface SeasonRecord {
   redCards: number;
   rating: number;
   leagueTitle: boolean;
+  domesticCup: boolean;
   championsLeague: boolean;
   worldCup: boolean;
   ballonDor: boolean;
+  ballonDorRank: number | null; // 1-5 if nominated, null otherwise
   type: "youth" | "playing" | "retired" | "manager";
   // International stats for this season
   intApps: number;
@@ -93,6 +95,49 @@ export interface WorldCupResult {
   playerAvgRating: number;
   result: string; // "Winner", "Runner-up", "Semi-final", "Quarter-final", "Group Stage"
   bestPlayer: boolean;
+}
+
+/* ─── Ballon d'Or System ─── */
+export interface BallonDorNominee {
+  name: string;
+  nationality: string;
+  club: string;
+  points: number;
+  goals: number;
+  trophies: string[];
+  isPlayer: boolean;
+}
+
+export interface BallonDorResult {
+  year: number;
+  nominees: BallonDorNominee[];
+  playerRank: number | null; // 1-5 if nominated, null if not
+  playerPoints: number;
+}
+
+/* ─── UCL Knockout Result ─── */
+export interface UCLKnockoutMatch {
+  opponent: string;
+  round: string; // "R16", "QF", "SF", "Final"
+  goalsFor: number;
+  goalsAgainst: number;
+  playerGoals: number;
+  won: boolean;
+}
+
+export interface UCLResult {
+  qualified: boolean;
+  matches: UCLKnockoutMatch[];
+  result: string; // "Winner", "Final", "Semi-final", "Quarter-final", "R16", "Group Stage", "N/A"
+  playerGoals: number;
+  isTopScorer: boolean;
+}
+
+/* ─── Individual Awards ─── */
+export interface Award {
+  year: number;
+  name: string;
+  emoji: string;
 }
 
 /* ─── Rivalry System ─── */
