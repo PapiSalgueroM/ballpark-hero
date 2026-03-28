@@ -111,7 +111,7 @@ function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; is
 }
 
 /* ─── Contract Offer Card ─── */
-function OfferCard({ offer, onAccept }: { offer: ContractOffer; onAccept: () => void }) {
+function OfferCard({ offer, onAccept, actionLabel }: { offer: ContractOffer; onAccept: () => void; actionLabel?: string }) {
   return (
     <div className="bg-card border border-border rounded-xl p-4 space-y-3">
       <div className="flex items-center gap-3">
@@ -123,14 +123,18 @@ function OfferCard({ offer, onAccept }: { offer: ContractOffer; onAccept: () => 
           <div className="font-bold text-sm truncate">{getFlag(offer.club.country)} {offer.club.name}</div>
           <div className="text-[11px] text-muted-foreground">{offer.club.league}</div>
         </div>
+        {offer.isDreamClub && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">⭐ Dream Club</span>}
       </div>
-      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-        <span>📋 {offer.contractYears}yr contract</span>
-        <span>💰 €{offer.wage}k/wk</span>
+      <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
+        <span>📋 {offer.contractYears}yr</span>
+        <span>💰 {formatWage(offer.wage)}</span>
+        {offer.transferFee > 0 && <span>🏷️ €{offer.transferFee.toFixed(1)}M fee</span>}
+        {offer.transferFee === 0 && offer.contractYears > 0 && <span className="text-emerald-400 font-semibold">Free transfer</span>}
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40">Tier {offer.club.tier}</span>
       </div>
+      {offer.isPayCut && <div className="text-[11px] text-amber-400">⚠️ Lower wages — but it's a dream move</div>}
       <Button onClick={onAccept} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
-        Sign Contract ✍️
+        {actionLabel || "Sign Contract ✍️"}
       </Button>
     </div>
   );
