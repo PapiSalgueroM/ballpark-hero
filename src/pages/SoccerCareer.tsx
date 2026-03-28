@@ -253,6 +253,8 @@ function SeasonSummaryCard({ season, position, onContinue }: { season: SeasonRec
 }
 
 /* ─── Main Component ─── */
+const SAVE_KEY = "soccerCareerSave";
+
 export default function SoccerCareer() {
   const { user } = useAuth();
   const [showAuth, setShowAuth] = useState(false);
@@ -263,9 +265,16 @@ export default function SoccerCareer() {
   const [previewStats, setPreviewStats] = useState<Stats | null>(null);
   const [previewOvr, setPreviewOvr] = useState(0);
   const [saving, setSaving] = useState(false);
-  const [career, setCareer] = useState<CareerState | null>(null);
+  const [career, setCareer] = useState<CareerState | null>(() => {
+    try {
+      const saved = localStorage.getItem(SAVE_KEY);
+      if (saved) return JSON.parse(saved) as CareerState;
+    } catch {}
+    return null;
+  });
   const [clubs, setClubs] = useState<ClubData[]>([]);
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
+  const [showNewCareerConfirm, setShowNewCareerConfirm] = useState(false);
   const timelineRef = useRef<HTMLDivElement>(null);
 
   // Load clubs from Supabase
@@ -274,6 +283,13 @@ export default function SoccerCareer() {
       if (data) setClubs(data as unknown as ClubData[]);
     });
   }, []);
+
+  // Save career to localStorage whenever it changes
+  useEffect(() => {
+    if (career) {
+      try { localStorage.setItem(SAVE_KEY, JSON.stringify(career)); } catch {}
+    }
+  }, [career]);
 
   const isFormValid = playerName.trim().length > 0 && nationality && position && era;
 
