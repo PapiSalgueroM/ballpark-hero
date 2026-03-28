@@ -164,10 +164,6 @@ export function FlagImg({ name, size = 24 }: { name: string; size?: number }) {
   );
 }
 
-// Keep getFlag for backwards compat (returns empty string now, use FlagImg instead)
-export function getFlag(_name: string): string {
-  return "";
-}
 
 /* ───── group colors ───── */
 
