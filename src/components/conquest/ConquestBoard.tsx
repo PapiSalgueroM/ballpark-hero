@@ -353,6 +353,39 @@ export default function ConquestBoard() {
               <div className="text-center text-sm text-muted-foreground pt-1">
                 {loseTeam?.city} {loseTeam?.name} eliminated — all territory conquered
               </div>
+
+              {/* Player Confirmed Animation */}
+              {game.playerConfirmed && (
+                <div className="text-center py-3 animate-in fade-in zoom-in-95">
+                  <div className="inline-block px-5 py-3 rounded-xl bg-primary/20 border border-primary/40">
+                    <span className="text-lg font-bold text-primary">✅ {game.playerConfirmed} acquired!</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Choose Your Player button */}
+              {game.pendingBattleApply && !game.playerConfirmed && (game.rosters[game.battleResult?.loser || ''] || []).length > 0 && (
+                <div className="flex justify-center pt-2">
+                  <button
+                    onClick={game.openStealModal}
+                    className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 transition-opacity active:scale-95"
+                  >
+                    🏈 Choose Your Player
+                  </button>
+                </div>
+              )}
+
+              {/* Skip if no roster to steal from */}
+              {game.pendingBattleApply && !game.playerConfirmed && (game.rosters[game.battleResult?.loser || ''] || []).length === 0 && (
+                <div className="flex justify-center pt-2">
+                  <button
+                    onClick={game.skipSteal}
+                    className="px-6 py-3 bg-muted text-foreground rounded-xl font-bold text-sm hover:opacity-90 transition-opacity border border-border"
+                  >
+                    Continue →
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -391,7 +424,7 @@ export default function ConquestBoard() {
       )}
 
       {/* Steal Modal */}
-      <Dialog open={game.phase === 'steal'} onOpenChange={() => {}}>
+      <Dialog open={game.stealModalOpen} onOpenChange={(open) => { if (!open) game.closeStealModal(); }}>
         <DialogContent className="max-w-4xl bg-card border-border text-foreground overflow-y-auto max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-center text-lg">🏈 Steal a Player!</DialogTitle>

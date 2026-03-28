@@ -201,6 +201,9 @@ export function useConquest() {
   const [playByPlayActive, setPlayByPlayActive] = useState(false);
   const [simulatingRemainder, setSimulatingRemainder] = useState(false);
   const [boxScore, setBoxScore] = useState<BoxScore | null>(null);
+  const [stealModalOpen, setStealModalOpen] = useState(false);
+  const [pendingBattleApply, setPendingBattleApply] = useState<{ attacker: string; defender: string; result: BattleResult } | null>(null);
+  const [playerConfirmed, setPlayerConfirmed] = useState<string | null>(null);
 
   const timeoutsRef = useRef<number[]>([]);
   const clearTimeouts = () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
@@ -502,8 +505,9 @@ export function useConquest() {
         addTimeout(() => {
           setSimulatingRemainder(false);
           setBoxScore(sim.boxScore);
+          // Store pending battle info so user can trigger steal when ready
+          setPendingBattleApply({ attacker: team, defender: enemyId, result });
         }, totalPlayTime + 2000);
-        addTimeout(() => applyBattleResult(team, enemyId, result), totalPlayTime + 6000);
       };
 
       if (missedFirst) {
@@ -558,8 +562,6 @@ export function useConquest() {
 
       if (aliveAfter.length <= 1) {
         setPhase('gameover');
-      } else if (loserRoster.length > 0) {
-        setPhase('steal');
       } else {
         setPhase('ready');
       }
@@ -568,22 +570,50 @@ export function useConquest() {
     });
   }, [rosters, invincibleTeams]);
 
+  const openStealModal = useCallback(() => {
+    setStealModalOpen(true);
+  }, []);
+
+  const closeStealModal = useCallback(() => {
+    setStealModalOpen(false);
+  }, []);
+
   const stealPlayer = useCallback((playerName: string) => {
-    if (!battleResult) return;
-    setRosters(prev => {
-      const next = { ...prev };
-      next[battleResult.loser] = (next[battleResult.loser] || []).filter(p => p !== playerName);
-      next[battleResult.winner] = [...(next[battleResult.winner] || []), playerName];
-      return next;
-    });
-    setGameLog(prev => {
-      const u = [...prev];
-      if (u.length > 0) u[u.length - 1].stolenPlayer = playerName;
-      return u;
-    });
-    const alive = getAliveTeamsFrom(territories);
-    setPhase(alive.length <= 1 ? 'gameover' : 'ready');
-  }, [battleResult, territories]);
+    if (!battleResult || !pendingBattleApply) return;
+    setPlayerConfirmed(playerName);
+    setStealModalOpen(false);
+
+    // Brief confirmation animation, then apply
+    setTimeout(() => {
+      setRosters(prev => {
+        const next = { ...prev };
+        next[battleResult.loser] = (next[battleResult.loser] || []).filter(p => p !== playerName);
+        next[battleResult.winner] = [...(next[battleResult.winner] || []), playerName];
+        return next;
+      });
+      setGameLog(prev => {
+        const u = [...prev];
+        if (u.length > 0) u[u.length - 1].stolenPlayer = playerName;
+        return u;
+      });
+
+      // Now apply the battle result (territory transfer, elimination)
+      applyBattleResult(pendingBattleApply.attacker, pendingBattleApply.defender, pendingBattleApply.result);
+      setPendingBattleApply(null);
+      setPlayerConfirmed(null);
+      setBoxScore(null);
+      setVisiblePlays([]);
+    }, 1200);
+  }, [battleResult, pendingBattleApply, applyBattleResult]);
+
+  // Skip steal (if loser has no roster)
+  const skipSteal = useCallback(() => {
+    if (!pendingBattleApply) return;
+    applyBattleResult(pendingBattleApply.attacker, pendingBattleApply.defender, pendingBattleApply.result);
+    setPendingBattleApply(null);
+    setBoxScore(null);
+    setVisiblePlays([]);
+  }, [pendingBattleApply, applyBattleResult]);
 
   const reset = useCallback(() => {
     clearTimeouts();
@@ -609,6 +639,9 @@ export function useConquest() {
     setPlayByPlayActive(false);
     setSimulatingRemainder(false);
     setBoxScore(null);
+    setStealModalOpen(false);
+    setPendingBattleApply(null);
+    setPlayerConfirmed(null);
   }, []);
 
   return {
@@ -620,8 +653,10 @@ export function useConquest() {
     pendingPowerup, powerupUseType, freeAgentList, territoryStolenState,
     // Play-by-play
     visiblePlays, playByPlayActive, simulatingRemainder, boxScore,
+    stealModalOpen, pendingBattleApply, playerConfirmed,
     // Actions
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,
     usePowerupNow, savePowerupForLater, useSavedPowerup, signFreeAgent,
+    openStealModal, closeStealModal, skipSteal,
   };
 }
