@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import PageSeo from "@/components/seo/PageSeo";
 import KnockoutBracket, { type GroupSeed } from "@/components/world-cup-predictor/KnockoutBracket";
 import ShareButtons from "@/components/game/ShareButtons";
+import AwardsPredictor from "@/components/world-cup-predictor/AwardsPredictor";
 
 /* ───── types ───── */
 
