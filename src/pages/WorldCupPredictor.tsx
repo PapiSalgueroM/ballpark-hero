@@ -417,13 +417,23 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange }: GroupPredict
 
 /* ───── main page ───── */
 
+const GROUPS_LETTERS = ["A","B","C","D","E","F","G","H","I","J","K","L"];
+
 const WorldCupPredictor = () => {
   const [predictions, setPredictions] = useState<Predictions>(loadPredictions);
+  const [showBracket, setShowBracket] = useState(() => {
+    try { return localStorage.getItem("wc2026-show-bracket") === "true"; } catch { return false; }
+  });
+  const bracketRef = useRef<HTMLDivElement>(null);
 
   // persist to localStorage
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(predictions));
   }, [predictions]);
+
+  useEffect(() => {
+    localStorage.setItem("wc2026-show-bracket", String(showBracket));
+  }, [showBracket]);
 
   const handleScoreChange = useCallback(
     (key: string, field: "homeGoals" | "awayGoals", val: number | "") => {
@@ -434,6 +444,74 @@ const WorldCupPredictor = () => {
     },
     [],
   );
+
+  // Check if all group matches are filled (12 groups × 6 matches = 72)
+  const allGroupsFilled = useMemo(() => {
+    for (const g of GROUPS_LETTERS) {
+      for (let i = 0; i < 6; i++) {
+        const key = `${g}-${i}`;
+        const s = predictions[key];
+        if (!s || s.homeGoals === "" || s.awayGoals === "") return false;
+      }
+    }
+    return true;
+  }, [predictions]);
+
+  // Compute seeds from group standings
+  const { groupSeeds, bestThirds } = useMemo(() => {
+    const seeds: Record<string, GroupSeed> = {};
+    const allThirds: { team: string; pts: number; gd: number; gf: number }[] = [];
+
+    for (const group of groups) {
+      const standings = computeStandings(group, predictions);
+      seeds[group.letter] = {
+        first: standings[0]?.team || "TBD",
+        second: standings[1]?.team || "TBD",
+        third: standings[2]?.team || "TBD",
+        thirdPts: standings[2]?.pts || 0,
+        thirdGD: standings[2]?.gd || 0,
+        thirdGF: standings[2]?.gf || 0,
+      };
+      if (standings[2]) {
+        allThirds.push({
+          team: standings[2].team,
+          pts: standings[2].pts,
+          gd: standings[2].gd,
+          gf: standings[2].gf,
+        });
+      }
+    }
+
+    // Sort thirds and take best 8
+    const sorted = [...allThirds].sort(
+      (a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf,
+    );
+    const best8 = sorted.slice(0, 8);
+
+    return { groupSeeds: seeds, bestThirds: best8 };
+  }, [predictions]);
+
+  // Count filled groups
+  const filledGroupCount = useMemo(() => {
+    let count = 0;
+    for (const g of GROUPS_LETTERS) {
+      let filled = true;
+      for (let i = 0; i < 6; i++) {
+        const key = `${g}-${i}`;
+        const s = predictions[key];
+        if (!s || s.homeGoals === "" || s.awayGoals === "") { filled = false; break; }
+      }
+      if (filled) count++;
+    }
+    return count;
+  }, [predictions]);
+
+  const handleGenerateBracket = () => {
+    setShowBracket(true);
+    setTimeout(() => {
+      bracketRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  };
 
   return (
     <div className="min-h-screen bg-[hsl(150,20%,8%)] text-white">
@@ -465,6 +543,9 @@ const WorldCupPredictor = () => {
         <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Predict Group Stage</h2>
         <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm mb-5">
           Tap a group to expand, enter match scores, and watch the standings update live.
+          <span className="ml-2 text-[hsl(45,80%,55%)]">
+            {filledGroupCount}/12 groups complete
+          </span>
         </p>
 
         {/* Group Grid */}
@@ -478,6 +559,33 @@ const WorldCupPredictor = () => {
             />
           ))}
         </div>
+
+        {/* Generate Bracket Button */}
+        {allGroupsFilled && !showBracket && (
+          <div className="text-center mt-8">
+            <button
+              onClick={handleGenerateBracket}
+              className="px-8 py-3 rounded-lg bg-[hsl(45,90%,45%)] hover:bg-[hsl(45,90%,50%)] text-[hsl(150,20%,8%)] font-bold text-base sm:text-lg transition-colors shadow-lg shadow-[hsl(45,90%,45%)]/20"
+            >
+              🏆 Generate My Bracket
+            </button>
+          </div>
+        )}
+
+        {!allGroupsFilled && (
+          <div className="text-center mt-6">
+            <p className="text-[hsl(150,15%,40%)] text-sm">
+              Fill in all group match scores to unlock the knockout bracket
+            </p>
+          </div>
+        )}
+
+        {/* Knockout Bracket */}
+        {showBracket && allGroupsFilled && (
+          <div ref={bracketRef}>
+            <KnockoutBracket seeds={groupSeeds} bestThirds={bestThirds} />
+          </div>
+        )}
       </div>
     </div>
   );
