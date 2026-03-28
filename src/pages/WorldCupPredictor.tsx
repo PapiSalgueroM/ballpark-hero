@@ -818,7 +818,7 @@ const WorldCupPredictor = () => {
 
         {/* Group Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {groups.map((group) => (
+          {resolvedGroups.map((group) => (
             <GroupPredictionCard
               key={group.letter}
               group={group}
