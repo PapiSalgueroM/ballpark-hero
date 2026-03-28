@@ -27,6 +27,13 @@ export interface SeasonRecord {
   worldCup: boolean;
   ballonDor: boolean;
   type: "youth" | "playing" | "retired" | "manager";
+  // International stats for this season
+  intApps: number;
+  intGoals: number;
+  intAssists: number;
+  intRating: number;
+  tournament: string | null; // "World Cup", "Continental", or null
+  tournamentResult: string | null; // "Winner", "Runner-up", "Semi-final", "Quarter-final", "Group Stage", "Best Player"
 }
 
 export interface ContractOffer {
@@ -64,6 +71,46 @@ export interface RandomEvent {
   choices: EventChoice[];
 }
 
+/* ─── World Cup Types ─── */
+export interface WCMatch {
+  teamA: string;
+  teamB: string;
+  scoreA: number;
+  scoreB: number;
+  playerGoals: number;
+  playerAssists: number;
+  playerRating: number;
+  round: string; // "Group A", "R16", "QF", "SF", "Final"
+}
+
+export interface WorldCupResult {
+  year: number;
+  nation: string;
+  matches: WCMatch[];
+  playerApps: number;
+  playerGoals: number;
+  playerAssists: number;
+  playerAvgRating: number;
+  result: string; // "Winner", "Runner-up", "Semi-final", "Quarter-final", "Group Stage"
+  bestPlayer: boolean;
+}
+
+export interface InternationalStats {
+  caps: number;
+  goals: number;
+  assists: number;
+  tournaments: number;
+  worldCups: number;
+  continentals: number;
+  worldCupWins: number;
+  continentalWins: number;
+  isCaptain: boolean;
+  isRetired: boolean;
+  debutYear: number | null;
+  debutAge: number | null;
+  worldCupResults: WorldCupResult[];
+}
+
 export interface CareerState {
   playerName: string;
   nationality: string;
@@ -89,7 +136,7 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "retired";
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
   transferSituation: TransferSituation | null;
@@ -100,10 +147,13 @@ export interface CareerState {
   internationalCareer: boolean;
   sponsorDeal: string | null;
   totalEarnings: number;
-  popularity: number; // 0-100
-  morale: number; // 0-100
+  popularity: number;
+  morale: number;
   isLeader: boolean;
   hasRelationship: boolean;
+  // International career
+  intStats: InternationalStats;
+  pendingWorldCup: WorldCupResult | null;
 }
 
 /* ─── Flags ─── */
@@ -312,6 +362,7 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
     apps, goals, assists, cleanSheets, yellowCards, redCards, rating,
     leagueTitle: winLeague, championsLeague: winCL, worldCup: winWC, ballonDor: winBdor,
     type: "playing",
+    intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   };
 }
 
@@ -435,12 +486,19 @@ export function initCareer(
       year: startYear, age: 16, club: `${academyClub.name} Youth`, clubCountry: academyClub.country, clubTier: academyClub.tier,
       apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
       leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "youth",
+      intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }],
     events: [`📋 Joined ${academyClub.name} Youth Academy aged 16`],
     retired: false, phase: "youth", pendingOffers: [], pendingSummary: null, transferSituation: null,
     pendingEvents: [], lastEventId: null, statBoostNextSeason: {},
     internationalCareer: false, sponsorDeal: null, totalEarnings: 0,
     popularity: 10, morale: 70, isLeader: false, hasRelationship: false,
+    intStats: {
+      caps: 0, goals: 0, assists: 0, tournaments: 0, worldCups: 0, continentals: 0,
+      worldCupWins: 0, continentalWins: 0, isCaptain: false, isRetired: false,
+      debutYear: null, debutAge: null, worldCupResults: [],
+    },
+    pendingWorldCup: null,
   };
 }
 
@@ -461,6 +519,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
     apps: rand(10, 25), goals: s.position === "GK" ? 0 : rand(0, 8), assists: rand(0, 5),
     cleanSheets: s.position === "GK" ? rand(2, 8) : 0, yellowCards: rand(0, 4), redCards: 0, rating: 0,
     leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "youth",
+    intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   }];
   s.events.push(`📈 Stats improved during youth development (OVR ${s.overall})`);
   if (s.age >= 17) {
@@ -483,6 +542,221 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   return s;
 }
 
+/* ─── Nation strength tiers for World Cup ─── */
+const TOP_SEEDS = ["Brazil", "Argentina", "France", "Spain", "Germany"];
+const STRONG_NATIONS = ["England", "Portugal", "Italy", "Netherlands", "Belgium", "Croatia", "Uruguay"];
+const MID_NATIONS = ["Denmark", "Switzerland", "Colombia", "Mexico", "USA", "Japan", "South Korea", "Senegal", "Morocco", "Poland", "Austria", "Sweden", "Turkey", "Nigeria", "Ukraine"];
+const WEAK_NATIONS = ["Ghana", "Cameroon", "Ecuador", "Peru", "Chile", "Norway", "Scotland", "Wales", "Ireland", "Czech Republic", "Serbia", "Romania", "Greece", "Russia", "Australia", "New Zealand", "Canada", "Jamaica", "Costa Rica", "Ivory Coast", "Egypt", "Algeria", "Tunisia"];
+
+function getNationStrength(nation: string): number {
+  if (TOP_SEEDS.includes(nation)) return rand(85, 92);
+  if (STRONG_NATIONS.includes(nation)) return rand(78, 86);
+  if (MID_NATIONS.includes(nation)) return rand(70, 80);
+  return rand(60, 72);
+}
+
+const ALL_WC_NATIONS = [...TOP_SEEDS, ...STRONG_NATIONS, ...MID_NATIONS, ...WEAK_NATIONS];
+
+function get32WCTeams(playerNation: string): string[] {
+  // Player's nation always qualifies
+  const teams = [playerNation];
+  const pool = ALL_WC_NATIONS.filter(n => n !== playerNation);
+  // Weighted selection: stronger nations more likely
+  const weighted = pool.map(n => ({ n, w: getNationStrength(n) + rand(0, 15) }))
+    .sort((a, b) => b.w - a.w).slice(0, 31).map(x => x.n);
+  teams.push(...weighted);
+  return teams.slice(0, 32);
+}
+
+function simulateMatch(teamA: string, teamB: string, strA: number, strB: number, isKnockout: boolean): { scoreA: number; scoreB: number } {
+  const diff = (strA - strB) / 100;
+  const baseA = 1.2 + diff * 2;
+  const baseB = 1.2 - diff * 2;
+  let scoreA = Math.max(0, Math.round(baseA + (Math.random() - 0.4) * 2));
+  let scoreB = Math.max(0, Math.round(baseB + (Math.random() - 0.4) * 2));
+  if (isKnockout && scoreA === scoreB) {
+    // Penalties — 50/50 weighted by strength
+    if (Math.random() < 0.5 + diff * 0.15) scoreA += 1;
+    else scoreB += 1;
+  }
+  return { scoreA, scoreB };
+}
+
+function playerMatchStats(overall: number, position: string, isWinner: boolean): { goals: number; assists: number; rating: number } {
+  const isAttacker = ["ST", "CAM", "LW", "RW"].includes(position);
+  const isMid = ["CM", "CDM"].includes(position);
+  const bonus = isWinner ? 0.3 : 0;
+  let goals = 0, assists = 0;
+  if (isAttacker) {
+    goals = Math.random() < (0.3 + overall / 300) ? rand(1, 2) : 0;
+    assists = Math.random() < 0.25 ? 1 : 0;
+  } else if (isMid) {
+    goals = Math.random() < 0.12 ? 1 : 0;
+    assists = Math.random() < 0.3 ? 1 : 0;
+  } else if (position === "GK") {
+    goals = 0; assists = 0;
+  } else {
+    goals = Math.random() < 0.08 ? 1 : 0;
+    assists = Math.random() < 0.15 ? 1 : 0;
+  }
+  const rating = clamp(parseFloat((6.0 + (overall - 70) * 0.05 + bonus + (Math.random() - 0.3) * 1.5 + goals * 0.5 + assists * 0.3).toFixed(1)), 4.0, 10.0);
+  return { goals, assists, rating };
+}
+
+/* ─── Simulate full World Cup tournament ─── */
+export function simulateWorldCup(state: CareerState): WorldCupResult {
+  const nation = state.nationality;
+  const teams = get32WCTeams(nation);
+  const strengths: Record<string, number> = {};
+  teams.forEach(t => strengths[t] = getNationStrength(t));
+  // Player boosts own nation
+  strengths[nation] = Math.min(95, strengths[nation] + Math.round((state.overall - 75) * 0.3));
+
+  // Group stage: 8 groups of 4
+  const shuffled = [...teams].sort(() => Math.random() - 0.5);
+  const groups: string[][] = [];
+  for (let i = 0; i < 8; i++) groups.push(shuffled.slice(i * 4, i * 4 + 4));
+
+  const matches: WCMatch[] = [];
+  const groupPoints: Record<string, number> = {};
+  teams.forEach(t => groupPoints[t] = 0);
+
+  // Find player's group
+  const playerGroupIdx = groups.findIndex(g => g.includes(nation));
+  const playerGroup = groups[playerGroupIdx];
+
+  // Simulate group stage
+  for (const group of groups) {
+    const groupLabel = `Group ${String.fromCharCode(65 + groups.indexOf(group))}`;
+    for (let i = 0; i < group.length; i++) {
+      for (let j = i + 1; j < group.length; j++) {
+        const { scoreA, scoreB } = simulateMatch(group[i], group[j], strengths[group[i]], strengths[group[j]], false);
+        const isPlayerMatch = group === playerGroup && (group[i] === nation || group[j] === nation);
+        const playerWon = isPlayerMatch && ((group[i] === nation && scoreA > scoreB) || (group[j] === nation && scoreB > scoreA));
+        const ps = isPlayerMatch ? playerMatchStats(state.overall, state.position, playerWon) : { goals: 0, assists: 0, rating: 0 };
+        if (isPlayerMatch) {
+          matches.push({
+            teamA: group[i], teamB: group[j], scoreA, scoreB,
+            playerGoals: ps.goals, playerAssists: ps.assists, playerRating: ps.rating, round: groupLabel,
+          });
+        }
+        if (scoreA > scoreB) { groupPoints[group[i]] += 3; }
+        else if (scoreA < scoreB) { groupPoints[group[j]] += 3; }
+        else { groupPoints[group[i]] += 1; groupPoints[group[j]] += 1; }
+      }
+    }
+  }
+
+  // Top 2 from each group advance
+  const r16Teams: string[] = [];
+  for (const group of groups) {
+    const sorted = [...group].sort((a, b) => groupPoints[b] - groupPoints[a] || Math.random() - 0.5);
+    r16Teams.push(sorted[0], sorted[1]);
+  }
+
+  if (!r16Teams.includes(nation)) {
+    const totalApps = matches.length;
+    const totalGoals = matches.reduce((s, m) => s + m.playerGoals, 0);
+    const totalAssists = matches.reduce((s, m) => s + m.playerAssists, 0);
+    const avgRating = totalApps > 0 ? parseFloat((matches.reduce((s, m) => s + m.playerRating, 0) / totalApps).toFixed(1)) : 0;
+    return {
+      year: state.seasons[state.seasons.length - 1]?.year + 1 || 2022,
+      nation, matches, playerApps: totalApps, playerGoals: totalGoals, playerAssists: totalAssists,
+      playerAvgRating: avgRating, result: "Group Stage", bestPlayer: false,
+    };
+  }
+
+  // Knockout rounds
+  const roundNames = ["R16", "QF", "SF", "Final"];
+  let currentTeams = [...r16Teams];
+
+  for (let roundIdx = 0; roundIdx < 4; roundIdx++) {
+    const roundName = roundNames[roundIdx];
+    const nextRound: string[] = [];
+    for (let i = 0; i < currentTeams.length; i += 2) {
+      const tA = currentTeams[i], tB = currentTeams[i + 1];
+      if (!tA || !tB) { if (tA) nextRound.push(tA); continue; }
+      const { scoreA, scoreB } = simulateMatch(tA, tB, strengths[tA] || 70, strengths[tB] || 70, true);
+      const isPlayerMatch = tA === nation || tB === nation;
+      const playerWon = isPlayerMatch && ((tA === nation && scoreA > scoreB) || (tB === nation && scoreB > scoreA));
+      if (isPlayerMatch) {
+        const ps = playerMatchStats(state.overall, state.position, playerWon);
+        matches.push({ teamA: tA, teamB: tB, scoreA, scoreB, playerGoals: ps.goals, playerAssists: ps.assists, playerRating: ps.rating, round: roundName });
+      }
+      nextRound.push(scoreA > scoreB ? tA : tB);
+    }
+    currentTeams = nextRound;
+
+    // Check if player eliminated
+    if (!currentTeams.includes(nation) && roundIdx < 3) {
+      const resultMap: Record<string, string> = { "R16": "Round of 16", "QF": "Quarter-final", "SF": "Semi-final" };
+      const totalApps = matches.length;
+      const totalGoals = matches.reduce((s, m) => s + m.playerGoals, 0);
+      const totalAssists = matches.reduce((s, m) => s + m.playerAssists, 0);
+      const avgRating = totalApps > 0 ? parseFloat((matches.reduce((s, m) => s + m.playerRating, 0) / totalApps).toFixed(1)) : 0;
+      return {
+        year: state.seasons[state.seasons.length - 1]?.year + 1 || 2022,
+        nation, matches, playerApps: totalApps, playerGoals: totalGoals, playerAssists: totalAssists,
+        playerAvgRating: avgRating, result: resultMap[roundName] || roundName, bestPlayer: false,
+      };
+    }
+  }
+
+  // Final result
+  const won = currentTeams[0] === nation;
+  const totalApps = matches.length;
+  const totalGoals = matches.reduce((s, m) => s + m.playerGoals, 0);
+  const totalAssists = matches.reduce((s, m) => s + m.playerAssists, 0);
+  const avgRating = totalApps > 0 ? parseFloat((matches.reduce((s, m) => s + m.playerRating, 0) / totalApps).toFixed(1)) : 0;
+  const bestPlayer = avgRating >= 7.5 && totalGoals >= 3;
+
+  return {
+    year: state.seasons[state.seasons.length - 1]?.year + 1 || 2022,
+    nation, matches, playerApps: totalApps, playerGoals: totalGoals, playerAssists: totalAssists,
+    playerAvgRating: avgRating, result: won ? "Winner" : "Runner-up", bestPlayer,
+  };
+}
+
+/* ─── International call-up check ─── */
+function shouldGetCallUp(state: CareerState): boolean {
+  if (state.intStats.isRetired) return false;
+  if (state.age < 18 || state.age > 33) return false;
+  const threshold = state.currentClubTier <= 2 ? 70 : 72;
+  return state.overall >= threshold;
+}
+
+/* ─── International season stats ─── */
+function generateIntSeasonStats(state: CareerState, year: number): { intApps: number; intGoals: number; intAssists: number; intRating: number; tournament: string | null; tournamentResult: string | null } {
+  if (!state.internationalCareer || state.intStats.isRetired) {
+    return { intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null };
+  }
+  const apps = rand(6, 10);
+  const goals = calcGoals(state.position, apps);
+  const assists = calcAssists(state.position, apps);
+  const rating = clamp(parseFloat((6.5 + (state.overall - 72) * 0.06 + (Math.random() - 0.3) * 1.0).toFixed(1)), 4.0, 10.0);
+
+  // Tournament detection
+  const isWCYear = year % 4 === 2; // 2022, 2026, 2030...
+  const isContinental = year % 2 === 0 && !isWCYear; // even non-WC years
+  let tournament: string | null = null;
+  let tournamentResult: string | null = null;
+
+  if (isContinental) {
+    tournament = "Continental Championship";
+    const nationStr = getNationStrength(state.nationality);
+    if (Math.random() < 0.08 + (nationStr - 70) * 0.005) {
+      tournamentResult = "Winner";
+    } else if (Math.random() < 0.15) {
+      tournamentResult = "Semi-final";
+    } else {
+      tournamentResult = Math.random() < 0.5 ? "Quarter-final" : "Group Stage";
+    }
+  }
+  // WC handled separately via simulateWorldCup
+
+  return { intApps: apps, intGoals: goals, intAssists: assists, intRating: rating, tournament, tournamentResult };
+}
+
 /* ─── Advance pro season ─── */
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev }; s.age += 1; s.events = [];
@@ -494,6 +768,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
       apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
       leagueTitle: false, championsLeague: false, worldCup: false, ballonDor: false, type: "retired",
+      intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }];
     return s;
   }
@@ -514,6 +789,56 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   s.overall = calcOverall(s, s.position);
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
   s.marketValue = calcMarketValue(s.overall, s.age, s.position);
+
+  // International career check — first call-up
+  if (!s.internationalCareer && !s.intStats.isRetired && shouldGetCallUp(s)) {
+    s.internationalCareer = true;
+    s.intStats = { ...s.intStats, debutYear: season.year, debutAge: s.age };
+    // Don't set phase yet — show in season summary, debut screen comes after
+  }
+
+  // International season stats
+  const lastYear = s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year : season.year - 1;
+  const thisYear = lastYear + 1;
+  const isWCYear = thisYear % 4 === 2;
+  const intSeason = generateIntSeasonStats(s, thisYear);
+
+  // Update international totals
+  if (intSeason.intApps > 0) {
+    s.intStats = { ...s.intStats,
+      caps: s.intStats.caps + intSeason.intApps,
+      goals: s.intStats.goals + intSeason.intGoals,
+      assists: s.intStats.assists + intSeason.intAssists,
+    };
+    // Captain check: 30+ caps and overall 80+
+    if (!s.intStats.isCaptain && s.intStats.caps >= 30 && s.overall >= 80 && Math.random() < 0.25) {
+      s.intStats = { ...s.intStats, isCaptain: true };
+      s.events.push(`©️ Named captain of ${s.nationality}! Legacy +15`);
+      s.popularity = clamp(s.popularity + 15, 0, 100);
+    }
+    // Continental tournament
+    if (intSeason.tournament && intSeason.tournamentResult) {
+      s.intStats = { ...s.intStats, tournaments: s.intStats.tournaments + 1, continentals: s.intStats.continentals + 1 };
+      if (intSeason.tournamentResult === "Winner") {
+        s.intStats = { ...s.intStats, continentalWins: s.intStats.continentalWins + 1 };
+        s.events.push(`🏆 Won the Continental Championship with ${s.nationality}!`);
+      }
+    }
+    // 100 caps milestone
+    const prevCaps = s.intStats.caps - intSeason.intApps;
+    if (s.intStats.caps >= 100 && prevCaps < 100) {
+      s.events.push(`🎖️ INTERNATIONAL LEGEND — reached 100 caps for ${s.nationality}!`);
+    }
+  }
+
+  // Merge international stats into season record
+  season.intApps = intSeason.intApps;
+  season.intGoals = intSeason.intGoals;
+  season.intAssists = intSeason.intAssists;
+  season.intRating = intSeason.intRating;
+  season.tournament = intSeason.tournament;
+  season.tournamentResult = intSeason.tournamentResult;
+
   if (season.leagueTitle) s.events.push(`🏆 Won the league with ${s.currentClub}!`);
   if (season.championsLeague) s.events.push(`⭐ Won the Champions League!`);
   if (season.worldCup) s.events.push(`🌍 Won the World Cup with ${s.nationality}!`);
@@ -527,6 +852,35 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   s.seasons = [...s.seasons, season];
   s.pendingSummary = season; s.phase = "season_summary";
   if (s.contractYearsLeft <= 1) s.events.push("⚠️ Your contract is expiring!");
+
+  // World Cup year — trigger after summary
+  if (isWCYear && s.internationalCareer && !s.intStats.isRetired) {
+    const wcResult = simulateWorldCup(s);
+    wcResult.year = thisYear;
+    s.pendingWorldCup = wcResult;
+    // Update int stats from WC
+    s.intStats = { ...s.intStats,
+      caps: s.intStats.caps + wcResult.playerApps,
+      goals: s.intStats.goals + wcResult.playerGoals,
+      assists: s.intStats.assists + wcResult.playerAssists,
+      tournaments: s.intStats.tournaments + 1,
+      worldCups: s.intStats.worldCups + 1,
+    };
+    if (wcResult.result === "Winner") {
+      s.intStats = { ...s.intStats, worldCupWins: s.intStats.worldCupWins + 1 };
+      season.worldCup = true;
+    }
+    if (wcResult.bestPlayer) {
+      s.events.push(`🌟 Named Best Player of the World Cup!`);
+    }
+    s.intStats = { ...s.intStats, worldCupResults: [...s.intStats.worldCupResults, wcResult] };
+  }
+
+  // International debut event
+  if (s.intStats.debutYear === thisYear) {
+    s.events.push(`🇺🇳 First international call-up for ${s.nationality}!`);
+  }
+
   if (s.events.length === 0) s.events.push(`⚽ Solid season at ${s.currentClub}`);
   return s;
 }
@@ -733,22 +1087,67 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
   return shuffled.slice(0, count);
 }
 
-/* ─── Dismiss summary → random events → transfer window ─── */
-export function dismissSummary(prev: CareerState, clubs: ClubData[]): CareerState {
-  const s = { ...prev }; s.pendingSummary = null;
-  if (s.retired) { s.phase = "retired"; return s; }
-  // Generate random events for this season
+/* ─── Flow helper: advance to next phase ─── */
+function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
+  // Check for international debut screen
+  const lastSeason = s.seasons[s.seasons.length - 1];
+  if (s.intStats.debutYear === lastSeason?.year && s.phase !== "international_debut" && s.phase !== "world_cup") {
+    s.phase = "international_debut";
+    return s;
+  }
+  // Check for World Cup result screen
+  if (s.pendingWorldCup && s.phase !== "world_cup") {
+    s.phase = "world_cup";
+    return s;
+  }
+  // Random events
   const events = generateRandomEvents(s);
   if (events.length > 0) {
     s.pendingEvents = events;
     s.phase = "random_events";
     return s;
   }
-  // No events, go to transfer window
+  // Transfer window
   if (s.age >= 18) {
     s.transferSituation = determineTransferSituation(s, clubs);
     s.phase = "transfer_window";
   } else { s.phase = "playing"; }
+  return s;
+}
+
+/* ─── Dismiss summary ─── */
+export function dismissSummary(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev }; s.pendingSummary = null;
+  if (s.retired) { s.phase = "retired"; return s; }
+  return advanceToNextPhase(s, clubs);
+}
+
+/* ─── Dismiss international debut screen ─── */
+export function dismissDebut(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  // Clear the debut trigger by nullifying it so we don't re-show
+  s.intStats = { ...s.intStats, debutYear: -1 };
+  // Check for World Cup
+  if (s.pendingWorldCup) {
+    s.phase = "world_cup";
+    return s;
+  }
+  return advanceToNextPhase(s, clubs);
+}
+
+/* ─── Dismiss World Cup screen ─── */
+export function dismissWorldCup(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  s.pendingWorldCup = null;
+  return advanceToNextPhase(s, clubs);
+}
+
+/* ─── Retire from international football ─── */
+export function retireFromInternational(prev: CareerState): CareerState {
+  const s = { ...prev };
+  s.intStats = { ...s.intStats, isRetired: true };
+  s.internationalCareer = false;
+  s.events = [...s.events, `🇺🇳 Retired from international football (${s.intStats.caps} caps, ${s.intStats.goals} goals)`];
   return s;
 }
 
