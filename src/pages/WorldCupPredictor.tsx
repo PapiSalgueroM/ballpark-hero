@@ -5,6 +5,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import PageSeo from "@/components/seo/PageSeo";
 import KnockoutBracket, { type GroupSeed } from "@/components/world-cup-predictor/KnockoutBracket";
+import ShareButtons from "@/components/game/ShareButtons";
 
 /* ───── types ───── */
 
@@ -578,6 +579,7 @@ const WorldCupPredictor = () => {
       return raw ? JSON.parse(raw) : {};
     } catch { return {}; }
   });
+  const [champion, setChampion] = useState("");
 
   // persist to localStorage
   useEffect(() => {
@@ -795,8 +797,18 @@ const WorldCupPredictor = () => {
             <Trophy className="w-8 h-8 text-[hsl(45,90%,55%)]" />
           </div>
           <p className="text-[hsl(150,15%,60%)] text-sm sm:text-base">
-            USA <FlagImg name="USA" /> · Mexico <FlagImg name="Mexico" /> · Canada <FlagImg name="Canada" /> — 48 Teams · 12 Groups
+           USA <FlagImg name="USA" /> · Mexico <FlagImg name="Mexico" /> · Canada <FlagImg name="Canada" /> — 48 Teams · 12 Groups
           </p>
+          {champion && (
+            <div className="mt-4">
+              <ShareButtons
+                score=""
+                gameName="World Cup 2026 Predictor"
+                gamePath="/world-cup-predictor"
+                customText={`🏆 My World Cup 2026 prediction — I've got ${champion} winning it all! Make yours at douknowball.com/world-cup-predictor`}
+              />
+            </div>
+          )}
         </div>
 
         {/* Playoff Slots Panel */}
@@ -964,7 +976,7 @@ const WorldCupPredictor = () => {
         {/* Knockout Bracket */}
         {showBracket && allGroupsFilled && selectedThirds.length === 8 && (
           <div ref={bracketRef}>
-            <KnockoutBracket seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} />
+            <KnockoutBracket seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} onChampionChange={setChampion} />
           </div>
         )}
       </div>
