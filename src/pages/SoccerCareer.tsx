@@ -263,6 +263,11 @@ export default function SoccerCareer() {
     setCareer(dismissSummary(career, clubs));
   };
 
+  const handleDismissNewspaper = () => {
+    if (!career) return;
+    setCareer(dismissNewspaper(career));
+  };
+
   const handleStay = () => {
     if (!career) return;
     setCareer(stayAtClub(career));
