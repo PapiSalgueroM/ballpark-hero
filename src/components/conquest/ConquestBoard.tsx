@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useConquest } from '@/hooks/useConquest';
 import ConquestMap from './ConquestMap';
-import { TEAM_MAP, DIRECTIONS, DIR_LABELS, ConquestPlayer } from '@/data/conquestData';
+import { TEAM_MAP, DIRECTIONS, DIR_LABELS } from '@/data/conquestData';
+import { TEAM_LEGENDS } from '@/data/conquestPowerups';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 function useSpinner(items: string[], isSpinning: boolean, finalValue: string): string {
@@ -24,9 +25,12 @@ function useSpinner(items: string[], isSpinning: boolean, finalValue: string): s
   return display;
 }
 
-function RosterTable({ title, color, rosterNames, teamId }: { title: string; color: string; rosterNames: string[]; teamId: string }) {
+function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
+  title: string; color: string; rosterNames: string[]; teamId: string; upgradedPlayer?: string | null;
+}) {
   const team = TEAM_MAP.get(teamId);
   const playerMap = new Map((team?.players || []).map(p => [p.name, p]));
+  const legend = TEAM_LEGENDS[teamId];
 
   return (
     <div className="rounded-lg border border-border overflow-hidden">
@@ -46,12 +50,19 @@ function RosterTable({ title, color, rosterNames, teamId }: { title: string; col
           <tbody>
             {rosterNames.map(name => {
               const p = playerMap.get(name);
+              const isLegend = legend && name === legend.name;
+              const isUpgraded = name === upgradedPlayer;
+              const ovr = isUpgraded ? 99 : (isLegend ? 99 : p?.overall);
               return (
-                <tr key={name} className="border-b border-border/50 last:border-0">
-                  <td className="px-2 py-1 font-medium text-foreground truncate max-w-[120px]">{name}</td>
-                  <td className="px-2 py-1 text-muted-foreground">{p?.position || '—'}</td>
-                  <td className="px-2 py-1 text-center font-bold text-foreground">{p?.overall || '—'}</td>
-                  <td className="px-2 py-1 text-right text-muted-foreground whitespace-nowrap">{p?.keyStat || '—'}</td>
+                <tr key={name} className={`border-b border-border/50 last:border-0 ${isUpgraded ? 'bg-yellow-500/10' : ''} ${isLegend ? 'bg-amber-500/10' : ''}`}>
+                  <td className="px-2 py-1 font-medium text-foreground truncate max-w-[120px]">
+                    {isLegend && <span className="mr-0.5">🐐</span>}
+                    {isUpgraded && <span className="mr-0.5">⬆️</span>}
+                    {name}
+                  </td>
+                  <td className="px-2 py-1 text-muted-foreground">{isLegend ? legend.position : (p?.position || '—')}</td>
+                  <td className={`px-2 py-1 text-center font-bold ${isUpgraded || isLegend ? 'text-yellow-400' : 'text-foreground'}`}>{ovr || '—'}</td>
+                  <td className="px-2 py-1 text-right text-muted-foreground whitespace-nowrap">{isLegend ? 'Legend' : (p?.keyStat || '—')}</td>
                 </tr>
               );
             })}
@@ -96,6 +107,7 @@ export default function ConquestBoard() {
   const defTeam = t(game.defendingTeam);
   const winTeam = game.battleResult ? t(game.battleResult.winner) : null;
   const loseTeam = game.battleResult ? t(game.battleResult.loser) : null;
+  const pendingTeam = game.pendingPowerup ? t(game.pendingPowerup.teamId) : null;
 
   return (
     <div className="space-y-4 max-w-2xl mx-auto">
@@ -106,6 +118,8 @@ export default function ConquestBoard() {
         defendingTeam={game.defendingTeam}
         phase={game.phase}
         powerupStates={game.powerupStates}
+        invincibleTeams={game.invincibleTeams}
+        territoryStolenState={game.territoryStolenState}
       />
 
       {/* Stats bar */}
@@ -119,7 +133,6 @@ export default function ConquestBoard() {
       {(game.phase === 'animating' || game.phase === 'battle') && (
         <div className="space-y-2">
           <div className="flex items-center justify-center gap-2 flex-wrap">
-            {/* Attacker */}
             <div className="text-center min-w-[100px]">
               <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Attacker</div>
               <div
@@ -130,7 +143,6 @@ export default function ConquestBoard() {
               </div>
             </div>
 
-            {/* Direction */}
             {(teamRevealed || game.phase === 'battle') && (
               <>
                 <div className="text-lg">→</div>
@@ -143,7 +155,6 @@ export default function ConquestBoard() {
               </>
             )}
 
-            {/* Defender */}
             {((dirRevealed && game.phase === 'animating' && game.defendingTeam) || game.phase === 'battle') && defTeam && (
               <>
                 <div className="text-lg">⚔️</div>
@@ -160,7 +171,6 @@ export default function ConquestBoard() {
             )}
           </div>
 
-          {/* No enemy in direction message */}
           {game.noEnemyMsg && (
             <div className="text-center animate-in fade-in zoom-in-95">
               <div className="inline-block px-4 py-2 rounded-lg bg-destructive/15 border border-destructive/30 text-destructive text-sm font-semibold">
@@ -231,11 +241,10 @@ export default function ConquestBoard() {
             <br />Choose a player to add to {winTeam?.name}'s roster:
           </p>
 
-          {/* Player selection buttons */}
           <div className="space-y-2 mt-2 max-h-48 overflow-y-auto">
             {(game.rosters[game.battleResult?.loser || ''] || []).map(player => {
-              const loserTeam = TEAM_MAP.get(game.battleResult?.loser || '');
-              const playerData = loserTeam?.players?.find(p => p.name === player);
+              const loserTeamData = TEAM_MAP.get(game.battleResult?.loser || '');
+              const playerData = loserTeamData?.players?.find(p => p.name === player);
               return (
                 <button
                   key={player}
@@ -253,16 +262,14 @@ export default function ConquestBoard() {
             })}
           </div>
 
-          {/* Roster comparison tables */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-            {/* Winner's roster */}
             <RosterTable
               title={`${winTeam?.name || 'Winner'}'s Roster`}
               color={winTeam?.color || '#333'}
               rosterNames={game.rosters[game.battleResult?.winner || ''] || []}
               teamId={game.battleResult?.winner || ''}
+              upgradedPlayer={game.upgradedPlayer}
             />
-            {/* Loser's roster */}
             <RosterTable
               title={`${loseTeam?.name || 'Loser'}'s Roster`}
               color={loseTeam?.color || '#333'}
@@ -273,24 +280,110 @@ export default function ConquestBoard() {
         </DialogContent>
       </Dialog>
 
-      {/* Territory leaderboard */}
+      {/* Powerup Received Modal */}
+      <Dialog open={game.phase === 'powerup_received' && !!game.pendingPowerup} onOpenChange={() => {}}>
+        <DialogContent className="max-w-md bg-card border-border text-foreground">
+          <DialogHeader>
+            <DialogTitle className="text-center text-lg">⚡ Power-Up Found!</DialogTitle>
+          </DialogHeader>
+          {game.pendingPowerup && (
+            <div className="text-center space-y-4">
+              <div className="text-5xl animate-in zoom-in-50">{game.pendingPowerup.powerup.icon}</div>
+              <div>
+                <div className="font-bold text-lg text-foreground">{game.pendingPowerup.powerup.label}</div>
+                <div className="text-sm text-muted-foreground mt-1">{game.pendingPowerup.powerup.description}</div>
+              </div>
+              <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+                <span>Awarded to</span>
+                <span
+                  className="px-2 py-0.5 rounded text-white font-bold"
+                  style={{ backgroundColor: pendingTeam?.color || '#333' }}
+                >
+                  {pendingTeam?.name}
+                </span>
+              </div>
+              <div className="flex gap-3 justify-center pt-2">
+                <button
+                  onClick={game.usePowerupNow}
+                  className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg font-bold hover:opacity-90 transition-opacity"
+                >
+                  ⚡ Use Now
+                </button>
+                <button
+                  onClick={game.savePowerupForLater}
+                  className="px-6 py-2.5 bg-muted text-foreground rounded-lg font-bold hover:bg-muted/80 transition-colors border border-border"
+                >
+                  💾 Save for Later
+                </button>
+              </div>
+              {(game.teamSavedPowerups[game.pendingPowerup.teamId] || []).length >= 2 && (
+                <p className="text-xs text-destructive">⚠️ Team already has 2 saved — oldest will be replaced</p>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Free Agent Signing Modal */}
+      <Dialog open={game.phase === 'powerup_use' && game.powerupUseType === 'free_agent'} onOpenChange={() => {}}>
+        <DialogContent className="max-w-lg bg-card border-border text-foreground overflow-y-auto max-h-[90vh]">
+          <DialogHeader>
+            <DialogTitle className="text-center text-lg">✍️ Sign a Free Agent</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground text-center mb-2">
+            Choose a player to add to your roster:
+          </p>
+          <div className="space-y-1.5 max-h-80 overflow-y-auto">
+            {game.freeAgentList.map(fa => (
+              <button
+                key={fa.name}
+                onClick={() => game.signFreeAgent(fa.name)}
+                className="w-full px-4 py-2.5 rounded-lg border border-border hover:bg-primary/20 transition-colors text-left text-sm text-foreground flex items-center justify-between gap-2"
+              >
+                <span className="font-medium">{fa.name}</span>
+                <span className="text-xs text-muted-foreground">
+                  {fa.position} · {fa.overall} OVR
+                </span>
+              </button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Saved Powerups Display (per team, top 10 territory leaders) */}
       {aliveIds.length > 1 && game.turn > 0 && (
         <div className="rounded-xl border border-border p-3 bg-card">
           <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 text-center">
             Territory Leaders
           </h4>
-          <div className="grid grid-cols-2 gap-1 max-h-32 overflow-y-auto text-xs">
+          <div className="grid grid-cols-2 gap-1 max-h-40 overflow-y-auto text-xs">
             {aliveIds
               .map(id => ({ id, count: game.getTeamTerritoryCount(id), team: TEAM_MAP.get(id)! }))
               .sort((a, b) => b.count - a.count)
               .slice(0, 10)
-              .map(({ id, count, team }) => (
-                <div key={id} className="flex items-center gap-1.5 px-2 py-1 rounded">
-                  <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: team.color }} />
-                  <span className="text-foreground font-medium truncate">{team.name}</span>
-                  <span className="text-muted-foreground ml-auto">{count}</span>
-                </div>
-              ))}
+              .map(({ id, count, team }) => {
+                const saved = game.teamSavedPowerups[id] || [];
+                return (
+                  <div key={id} className="flex items-center gap-1.5 px-2 py-1 rounded">
+                    <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: team.color }} />
+                    <span className="text-foreground font-medium truncate">{team.name}</span>
+                    {game.invincibleTeams.has(id) && <span className="text-[10px]">🛡️</span>}
+                    {saved.map((pu, i) => (
+                      <span key={i} className="text-[10px]" title={pu.label}>{pu.icon}</span>
+                    ))}
+                    <span className="text-muted-foreground ml-auto">{count}</span>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+      )}
+
+      {/* Upgrade active indicator */}
+      {game.upgradeActiveTeam && game.upgradedPlayer && (
+        <div className="text-center animate-in fade-in">
+          <div className="inline-block px-4 py-2 rounded-lg bg-yellow-500/15 border border-yellow-500/30 text-yellow-300 text-xs font-semibold">
+            ⬆️ {game.upgradedPlayer} boosted to 99 OVR for {TEAM_MAP.get(game.upgradeActiveTeam)?.name}'s next battle
           </div>
         </div>
       )}
@@ -308,9 +401,14 @@ export default function ConquestBoard() {
               return (
                 <div key={i} className="text-[11px] text-muted-foreground">
                   <span className="font-bold text-foreground">#{entry.turn}</span>{' '}
-                  <span style={{ color: winner?.color }}>{winner?.name}</span> def.{' '}
-                  <span style={{ color: loser?.color }}>{loser?.name}</span>{' '}
-                  {entry.score}
+                  <span style={{ color: winner?.color }}>{winner?.name}</span>{' '}
+                  {entry.defender === 'neutral' || entry.defender === 'powerup' ? (
+                    <span>{entry.score}</span>
+                  ) : (
+                    <>
+                      def. <span style={{ color: loser?.color }}>{loser?.name}</span> {entry.score}
+                    </>
+                  )}
                   {entry.stolenPlayer && (
                     <span className="text-primary"> → Stole {entry.stolenPlayer}</span>
                   )}
