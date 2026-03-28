@@ -639,6 +639,9 @@ export function useConquest() {
     setPlayByPlayActive(false);
     setSimulatingRemainder(false);
     setBoxScore(null);
+    setStealModalOpen(false);
+    setPendingBattleApply(null);
+    setPlayerConfirmed(null);
   }, []);
 
   return {
@@ -650,8 +653,10 @@ export function useConquest() {
     pendingPowerup, powerupUseType, freeAgentList, territoryStolenState,
     // Play-by-play
     visiblePlays, playByPlayActive, simulatingRemainder, boxScore,
+    stealModalOpen, pendingBattleApply, playerConfirmed,
     // Actions
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,
     usePowerupNow, savePowerupForLater, useSavedPowerup, signFreeAgent,
+    openStealModal, closeStealModal, skipSteal,
   };
 }
