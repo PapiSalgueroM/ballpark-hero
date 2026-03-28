@@ -139,14 +139,30 @@ export default function Profile() {
           setLoading(false);
           return;
         }
-      } else if (user && profile) {
-        setViewingProfile(profile);
-        setEditForm({
-          display_name: profile.display_name || '',
-          username: profile.username || '',
-        });
+      } else if (user) {
+        // Profile may not be loaded yet from AuthContext, fetch directly
+        if (profile) {
+          setViewingProfile(profile);
+          setEditForm({
+            display_name: profile.display_name || '',
+            username: profile.username || '',
+          });
+        } else {
+          const { data: fetchedProfile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('user_id', user.id)
+            .single();
+          if (fetchedProfile) {
+            setViewingProfile(fetchedProfile);
+            setEditForm({
+              display_name: fetchedProfile.display_name || '',
+              username: fetchedProfile.username || '',
+            });
+          }
+        }
         targetUserId = user.id;
-      } else if (!user) {
+      } else {
         navigate('/');
         toast.error('Please sign in to view your profile');
         setLoading(false);
