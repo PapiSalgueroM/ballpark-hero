@@ -117,6 +117,16 @@ const groups: Group[] = [
   ]},
 ];
 
+
+const playoffMatchups = [
+  { slot: "UEFA Path A Winner", group: "B", teamA: "Italy", teamB: "Bosnia & Herzegovina" },
+  { slot: "UEFA Path B Winner", group: "F", teamA: "Sweden", teamB: "Poland" },
+  { slot: "UEFA Path C Winner", group: "D", teamA: "Kosovo", teamB: "Turkey" },
+  { slot: "UEFA Path D Winner", group: "A", teamA: "Denmark", teamB: "Czech Republic" },
+  { slot: "Inter-Playoff 1 Winner", group: "K", teamA: "Jamaica", teamB: "DR Congo" },
+  { slot: "Inter-Playoff 2 Winner", group: "I", teamA: "Bolivia", teamB: "Iraq" },
+];
+
 /* ───── FIFA rankings ───── */
 
 const FIFA_RANKINGS: { rank: number; team: string }[] = [
@@ -138,12 +148,9 @@ const FIFA_RANKINGS: { rank: number; team: string }[] = [
   { rank: 46, team: "Kosovo" }, { rank: 47, team: "Haiti" }, { rank: 48, team: "Curaçao" },
 ];
 
-// Build team→group lookup from groups + playoffs
 const TEAM_GROUP: Record<string, string> = {};
 groups.forEach((g) => g.teams.forEach((t) => { if (!t.isTBD) TEAM_GROUP[t.name] = g.letter; }));
 playoffMatchups.forEach((m) => { TEAM_GROUP[m.teamA] = m.group; TEAM_GROUP[m.teamB] = m.group; });
-
-const playoffMatchups = [
   { slot: "UEFA Path A Winner", group: "B", teamA: "Italy", teamB: "Bosnia & Herzegovina" },
   { slot: "UEFA Path B Winner", group: "F", teamA: "Sweden", teamB: "Poland" },
   { slot: "UEFA Path C Winner", group: "D", teamA: "Kosovo", teamB: "Turkey" },
