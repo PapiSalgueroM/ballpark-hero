@@ -1436,12 +1436,31 @@ const WorldCupPredictor = () => {
         {/* Knockout Bracket */}
         {showBracket && allGroupsFilled && selectedThirds.length === 8 && (
           <div ref={bracketRef}>
-            <KnockoutBracket seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} onChampionChange={setChampion} />
+            <KnockoutBracket seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} onChampionChange={setChampion} autoFillRef={bracketAutoFillRef} />
           </div>
         )}
 
         {/* Awards Predictor */}
         <AwardsPredictor champion={champion} />
+
+        {/* Fixed "Auto Fill Everything" button */}
+        {!viewingSharedBracket && (
+          <button
+            onClick={handleAutoFillEverything}
+            disabled={autoFillEverythingLoading}
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm
+              bg-gradient-to-r from-[hsl(45,90%,45%)] to-[hsl(35,90%,50%)] hover:from-[hsl(45,90%,50%)] hover:to-[hsl(35,90%,55%)]
+              text-[hsl(220,20%,8%)] shadow-xl shadow-[hsl(45,90%,45%)]/30
+              disabled:opacity-60 transition-all transform hover:scale-105"
+          >
+            {autoFillEverythingLoading ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <span className="text-lg">⚡</span>
+            )}
+            {autoFillEverythingLoading ? "Filling..." : "Auto Fill Everything"}
+          </button>
+        )}
       </div>
     </div>
   );
