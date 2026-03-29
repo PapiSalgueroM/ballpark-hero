@@ -492,6 +492,16 @@ export default function SoccerCareer() {
     setCareer(dismissSocialMediaPhase(career, clubs));
   };
 
+  const handleMoralDilemmaChoice = (choiceIndex: number) => {
+    if (!career) return;
+    setCareer(applyMoralDilemmaChoice(career, choiceIndex));
+  };
+
+  const handleDismissMoralDilemma = () => {
+    if (!career) return;
+    setCareer(dismissMoralDilemma(career, clubs));
+  };
+
   const handleNewCareer = () => {
     setShowNewCareerConfirm(true);
   };
