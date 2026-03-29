@@ -2687,6 +2687,71 @@ function getAllEvents(state: CareerState): RandomEvent[] {
         { label: "Not my thing", emoji: "✋", color: "bg-muted", consequence: "Stay focused on football",
           apply: s => { s.events = [...s.events, "🎮 Declined gaming brand deal"]; return s; } },
       ] },
+    // New life events (31-40)
+    { id: 31, emoji: "👗", title: "Met Gala Invitation!", description: "You are invited to the Met Gala — the most exclusive fashion event in the world.",
+      category: "life", choices: [
+        { label: "Attend in style", emoji: "✨", color: "bg-pink-600", consequence: "Followers +500k, Lifestyle upgrade",
+          apply: s => { s.socialMediaFollowers += 0.5; s.popularity = clamp(s.popularity + 8, 0, 100); s.events = [...s.events, "👗 Attended the Met Gala — went viral"]; return s; } },
+        { label: "Skip it — not my scene", emoji: "✋", color: "bg-muted", consequence: "Stay low-key",
+          apply: s => { s.events = [...s.events, "👗 Declined Met Gala invitation"]; return s; } },
+      ] },
+    { id: 32, emoji: "🎥", title: "Documentary Crew!", description: "A documentary crew wants to follow your entire season for a Netflix-style series.",
+      category: "life", choices: [
+        { label: "Let them in", emoji: "📹", color: "bg-emerald-600", consequence: "Followers +2M, Legacy +5",
+          apply: s => { s.socialMediaFollowers += 2; s.integrityBonus += 5; s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "🎥 Documentary aired — massive following boost"]; return s; } },
+        { label: "Too much pressure", emoji: "🚫", color: "bg-muted", consequence: "Privacy maintained",
+          apply: s => { s.events = [...s.events, "🎥 Declined documentary crew"]; return s; } },
+      ] },
+    { id: 33, emoji: "📺", title: "TV Show Appearance!", description: "You are invited to appear on a popular late-night talk show.",
+      category: "life", choices: [
+        { label: "Go on the show", emoji: "🎤", color: "bg-blue-600", consequence: "Followers +1M, Fun appearance",
+          apply: s => { s.socialMediaFollowers += 1; s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, "📺 Appeared on a popular TV show"]; return s; } },
+        { label: "Decline — camera shy", emoji: "✋", color: "bg-muted", consequence: "No change",
+          apply: s => { s.events = [...s.events, "📺 Declined TV show appearance"]; return s; } },
+      ] },
+    { id: 34, emoji: "🛣️", title: "Street Named After You!", description: "Your hometown council wants to name a street after you.",
+      category: "life", choices: [
+        { label: "Attend the ceremony", emoji: "🎉", color: "bg-amber-600", consequence: "Legacy +8, Emotional moment",
+          apply: s => { s.integrityBonus += 8; s.morale = clamp(s.morale + 10, 0, 100); s.events = [...s.events, "🛣️ Your hometown named a street after you!"]; return s; } },
+      ] },
+    { id: 35, emoji: "🏅", title: "National Honour!", description: `You are awarded a national honour (MBE/equivalent) by ${state.nationality} for services to sport.`,
+      category: "life", choices: [
+        { label: "Accept with pride", emoji: "👑", color: "bg-amber-600", consequence: "Legacy +10, Prestige boost",
+          apply: s => { s.integrityBonus += 10; s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, `🏅 Awarded national honour by ${s.nationality}`]; return s; } },
+      ] },
+    { id: 36, emoji: "💰", title: "Forbes Top 10!", description: "Forbes lists you in the top 10 highest-paid athletes in the world.",
+      category: "life", choices: [
+        { label: "Celebrate the milestone", emoji: "🥂", color: "bg-emerald-600", consequence: "Followers +1M, Net worth milestone",
+          apply: s => { s.socialMediaFollowers += 1; s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "💰 Forbes Top 10 highest-paid athletes!"]; return s; } },
+      ] },
+    { id: 37, emoji: "⚽🏫", title: "Football Academy!", description: "You have the opportunity to launch your own football academy for kids in your hometown. Cost: €2M.",
+      category: "life", choices: [
+        { label: "Launch the academy — €2M", emoji: "🎓", color: "bg-emerald-600", consequence: "Cost €2M, Legacy +15, Giving back",
+          apply: s => { s.netWorth -= 2; s.integrityBonus += 15; s.popularity = clamp(s.popularity + 15, 0, 100); s.events = [...s.events, "⚽🏫 Launched football academy for kids — Legacy +15"]; return s; } },
+        { label: "Maybe when I retire", emoji: "⏳", color: "bg-muted", consequence: "Postpone the dream",
+          apply: s => { s.events = [...s.events, "⚽🏫 Postponed football academy plans"]; return s; } },
+      ] },
+    { id: 38, emoji: "😂", title: "Fan Tattoo Goes Viral!", description: "A fan gets a tattoo of your face. The internet explodes.",
+      category: "life", choices: [
+        { label: "Repost it — legendary", emoji: "📱", color: "bg-purple-600", consequence: "Followers +500k, Goes viral",
+          apply: s => { s.socialMediaFollowers += 0.5; s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, "😂 Fan face tattoo went viral — +500k followers"]; return s; } },
+        { label: "Pretend you didn't see it", emoji: "🙈", color: "bg-muted", consequence: "It still goes viral anyway",
+          apply: s => { s.socialMediaFollowers += 0.2; s.events = [...s.events, "😂 Fan tattoo went viral without your help"]; return s; } },
+      ] },
+    { id: 39, emoji: "🏛️", title: "Meet the Head of State!", description: `You are invited to meet the President/Prime Minister of ${state.nationality}.`,
+      category: "life", choices: [
+        { label: "It would be an honour", emoji: "🤝", color: "bg-blue-600", consequence: "Legacy +5, Prestige moment",
+          apply: s => { s.integrityBonus += 5; s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, `🏛️ Met the head of state of ${s.nationality}`]; return s; } },
+        { label: "Politely decline", emoji: "✋", color: "bg-muted", consequence: "Stay out of politics",
+          apply: s => { s.events = [...s.events, "🏛️ Declined meeting head of state"]; return s; } },
+      ] },
+    { id: 40, emoji: "🎬⭐", title: "Movie Star Cameo!", description: "A blockbuster director wants you for a speaking role in their new film. Not just a cameo — actual lines.",
+      category: "life", choices: [
+        { label: "Lights, camera, action!", emoji: "🎬", color: "bg-emerald-600", consequence: "Followers +3M, Major exposure",
+          apply: s => { s.socialMediaFollowers += 3; s.netWorth += 0.8; s.popularity = clamp(s.popularity + 12, 0, 100); s.events = [...s.events, "🎬⭐ Starred in a blockbuster movie!"]; return s; } },
+        { label: "I'm a footballer, not an actor", emoji: "⚽", color: "bg-muted", consequence: "Focus on football",
+          apply: s => { s.events = [...s.events, "🎬⭐ Declined movie role"]; return s; } },
+      ] },
   ];
 }
 
