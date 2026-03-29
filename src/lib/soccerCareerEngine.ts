@@ -315,7 +315,7 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "social_media_action" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "social_media_action" | "moral_dilemma" | "retired";
   pendingNews: NewsArticle[];
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
@@ -374,6 +374,217 @@ export interface CareerState {
   pendingFifaCoverEvent: boolean;
   fifaCoverAccepted: boolean;
   activeSponsorship: SponsorshipTier | null;
+  // Moral dilemma system
+  moralDilemmasTriggered: string[];
+  pendingMoralDilemma: MoralDilemma | null;
+  pedSeasonsRemaining: number;
+  pedActive: boolean;
+  matchFixBanned: number;
+  divingActive: boolean;
+  integrityBonus: number;
+}
+
+/* ─── Moral Dilemma System ─── */
+export interface MoralDilemmaChoice {
+  label: string;
+  emoji: string;
+  consequence: string;
+  risk?: string; // e.g. "30% chance of getting caught"
+}
+
+export interface MoralDilemma {
+  id: string;
+  emoji: string;
+  title: string;
+  description: string;
+  choices: MoralDilemmaChoice[];
+}
+
+export const MORAL_DILEMMAS: MoralDilemma[] = [
+  {
+    id: "match_fixing",
+    emoji: "🎰",
+    title: "MATCH FIXING",
+    description: "A mysterious figure approaches you before a big match. He offers €5M to intentionally perform poorly. The money would be untraceable. No one would ever know... probably.",
+    choices: [
+      { label: "Accept the money", emoji: "💰", consequence: "€5M added to your accounts", risk: "30% chance of investigation" },
+      { label: "Refuse and report it", emoji: "🛡️", consequence: "Reputation +20, Legacy +10, Fair Play Award" },
+      { label: "Refuse silently", emoji: "🤐", consequence: "Walk away. Nothing happens." },
+    ],
+  },
+  {
+    id: "ped_offer",
+    emoji: "💉",
+    title: "PERFORMANCE ENHANCING DRUGS",
+    description: "Your fitness coach pulls you aside after training. He offers you an 'undetectable' substance that will boost all your stats by +5 for 3 seasons. \"Every top player does it,\" he whispers.",
+    choices: [
+      { label: "Take the substance", emoji: "💊", consequence: "All stats +5 for 3 seasons", risk: "20% chance of failed test each season" },
+      { label: "Refuse", emoji: "✋", consequence: "Morale -5, but integrity +10 legacy bonus at retirement" },
+    ],
+  },
+  {
+    id: "diving_reputation",
+    emoji: "🤿",
+    title: "DIVING REPUTATION",
+    description: "You've developed a reputation for simulation. Journalists are running front-page stories about your theatrical falls in the box. Pundits are calling you 'the greatest actor in football.'",
+    choices: [
+      { label: "Embrace the dark arts", emoji: "🎭", consequence: "+2 goals per season from penalties, but reputation -15" },
+      { label: "Clean up your game", emoji: "🤝", consequence: "Reputation +10, eligible for Fair Play Award" },
+      { label: "Ignore the noise", emoji: "🔇", consequence: "No change — let them talk" },
+    ],
+  },
+  {
+    id: "agent_corruption",
+    emoji: "🕴️",
+    title: "AGENT CORRUPTION",
+    description: "Your accountant discovers your agent has been taking 20% commission instead of the agreed 10% for the last 3 years. That's millions stolen from you. He's sitting in your living room, sweating.",
+    choices: [
+      { label: "Fire him and sue", emoji: "⚖️", consequence: "Legal costs €500k, but recover the stolen money" },
+      { label: "Keep him — he gets results", emoji: "🤝", consequence: "Accept the loss, maintain relationship" },
+      { label: "Renegotiate to 12%", emoji: "📝", consequence: "Agent stays at 12%, partial money back" },
+    ],
+  },
+];
+
+export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number): CareerState {
+  const s = { ...prev };
+  const dilemma = s.pendingMoralDilemma;
+  if (!dilemma) return s;
+
+  s.pendingMoralDilemma = null;
+
+  switch (dilemma.id) {
+    case "match_fixing": {
+      if (choiceIndex === 0) {
+        // Accept
+        s.netWorth = Math.round((s.netWorth + 5) * 100) / 100;
+        s.events = [...s.events, "🎰 Accepted €5M to fix a match..."];
+        if (Math.random() < 0.30) {
+          // Caught!
+          s.matchFixBanned = 2;
+          s.popularity = clamp(s.popularity - 40, 0, 100);
+          s.morale = clamp(s.morale - 30, 0, 100);
+          s.integrityBonus -= 30;
+          s.netWorth = Math.round((s.netWorth - 5) * 100) / 100; // fine
+          s.events = [...s.events, "🚨 CAUGHT! Match-fixing investigation found you guilty. 2-season ban! Legacy -30, reputation destroyed."];
+          s.socialMediaFollowers = Math.max(0, s.socialMediaFollowers - 5);
+        } else {
+          s.events = [...s.events, "💰 The money arrived. No one suspects a thing... for now."];
+        }
+      } else if (choiceIndex === 1) {
+        // Report
+        s.popularity = clamp(s.popularity + 20, 0, 100);
+        s.integrityBonus += 10;
+        s.morale = clamp(s.morale + 10, 0, 100);
+        s.awards = [...s.awards, { year: s.seasons[s.seasons.length - 1]?.year || 2024, name: "Fair Play Award", emoji: "🛡️" }];
+        s.events = [...s.events, "🛡️ Reported the match fixers. Awarded the Fair Play Award! Reputation +20, Legacy +10"];
+      } else {
+        // Silent
+        s.events = [...s.events, "🤐 Walked away from the offer silently."];
+      }
+      break;
+    }
+    case "ped_offer": {
+      if (choiceIndex === 0) {
+        // Take PEDs
+        s.pedActive = true;
+        s.pedSeasonsRemaining = 3;
+        for (const k of ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"] as const) {
+          (s as any)[k] = clamp((s as any)[k] + 5, 20, 99);
+        }
+        s.overall = calcOverall(s, s.position);
+        s.events = [...s.events, "💊 Started taking performance enhancing substances. All stats +5."];
+      } else {
+        // Refuse
+        s.morale = clamp(s.morale - 5, 0, 100);
+        s.integrityBonus += 10;
+        s.events = [...s.events, "✋ Refused performance enhancing drugs. Integrity preserved. Legacy +10 at retirement."];
+      }
+      break;
+    }
+    case "diving_reputation": {
+      if (choiceIndex === 0) {
+        // Embrace
+        s.divingActive = true;
+        s.popularity = clamp(s.popularity - 15, 0, 100);
+        s.events = [...s.events, "🎭 Embraced diving. +2 goals/season from penalties, but reputation -15."];
+      } else if (choiceIndex === 1) {
+        // Clean up
+        s.popularity = clamp(s.popularity + 10, 0, 100);
+        s.integrityBonus += 5;
+        s.events = [...s.events, "🤝 Cleaned up your game. Reputation +10, Fair Play eligible."];
+      } else {
+        // Ignore
+        s.events = [...s.events, "🔇 Ignored the diving allegations. Business as usual."];
+      }
+      break;
+    }
+    case "agent_corruption": {
+      const stolenAmount = Math.round((s.totalEarnings * 0.10) * 100) / 100; // 10% of career earnings stolen
+      const recoveredAmount = Math.min(stolenAmount, 3); // cap at 3M
+      if (choiceIndex === 0) {
+        // Fire and sue
+        s.netWorth = Math.round((s.netWorth - 0.5 + recoveredAmount) * 100) / 100;
+        s.events = [...s.events, `⚖️ Fired agent and sued! Legal costs €500k, recovered €${recoveredAmount.toFixed(1)}M.`];
+        s.morale = clamp(s.morale + 5, 0, 100);
+      } else if (choiceIndex === 1) {
+        // Keep him
+        s.events = [...s.events, "🤝 Kept the agent despite the theft. He does get results..."];
+        s.morale = clamp(s.morale - 5, 0, 100);
+      } else {
+        // Renegotiate
+        s.netWorth = Math.round((s.netWorth + recoveredAmount * 0.3) * 100) / 100;
+        s.events = [...s.events, `📝 Renegotiated agent deal to 12%. Recovered €${(recoveredAmount * 0.3).toFixed(1)}M.`];
+      }
+      break;
+    }
+  }
+
+  // Stay on moral_dilemma phase — UI calls dismissMoralDilemma to continue
+  s.phase = "moral_dilemma";
+  return s;
+}
+
+export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  s.pendingMoralDilemma = null;
+  // Continue to random events → transfer window
+  const events = generateRandomEvents(s);
+  if (events.length > 0) {
+    s.pendingEvents = events;
+    s.phase = "random_events";
+    return s;
+  }
+  if (s.age >= 18) {
+    s.transferSituation = determineTransferSituation(s, clubs);
+    s.phase = "transfer_window";
+  } else { s.phase = "playing"; }
+  return s;
+}
+
+function tryTriggerMoralDilemma(s: CareerState): boolean {
+  if (s.age < 20 || s.retired) return false;
+  // Max 2 dilemmas per career
+  if (s.moralDilemmasTriggered.length >= 2) return false;
+  // ~12% chance per season after age 20 (gets ~1-2 over a 15-year career)
+  if (Math.random() > 0.12) return false;
+  
+  const available = MORAL_DILEMMAS.filter(d => !s.moralDilemmasTriggered.includes(d.id));
+  if (available.length === 0) return false;
+  
+  // Filter contextually
+  const eligible = available.filter(d => {
+    if (d.id === "match_fixing" && s.currentClubTier > 2) return false; // only big clubs
+    if (d.id === "ped_offer" && s.overall > 90) return false; // already elite
+    if (d.id === "diving_reputation" && s.position === "GK") return false;
+    if (d.id === "agent_corruption" && s.totalEarnings < 5) return false; // need some earnings
+    return true;
+  });
+  if (eligible.length === 0) return false;
+
+  s.pendingMoralDilemma = pick(eligible);
+  s.moralDilemmasTriggered = [...s.moralDilemmasTriggered, s.pendingMoralDilemma.id];
+  return true;
 }
 
 /* ─── Social Media Action System ─── */
@@ -1142,7 +1353,9 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
   const lastYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year : 0;
 
   const { apps, injured, injuryWeeks } = calcAppearances(overall, currentClubTier, age, state);
-  const goals = calcGoals(position, apps, overall);
+  let goals = calcGoals(position, apps, overall);
+  // Diving reputation: +2 goals from penalties
+  if (state.divingActive && !isGK) goals += 2;
   const assists = calcAssists(position, apps, overall);
   const cleanSheets = isGK ? Math.round(apps * rand(20, 45) / 100) : 0;
   const yellowCards = rand(0, Math.min(8, Math.round(apps * 0.25)));
@@ -1392,6 +1605,13 @@ export function initCareer(
     pendingFifaCoverEvent: false,
     fifaCoverAccepted: false,
     activeSponsorship: null,
+    moralDilemmasTriggered: [],
+    pendingMoralDilemma: null,
+    pedSeasonsRemaining: 0,
+    pedActive: false,
+    matchFixBanned: 0,
+    divingActive: false,
+    integrityBonus: 0,
   };
 }
 
@@ -1720,6 +1940,66 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     }
     s.socialMediaFocusBoost = false;
     s.events.push("🧘 Social media detox paid off — +2 to all stats!");
+  }
+
+  // Match fix ban — skip season
+  if (s.matchFixBanned > 0) {
+    s.matchFixBanned -= 1;
+    s.events.push(`🚫 Serving match-fixing ban (${s.matchFixBanned > 0 ? s.matchFixBanned + " season(s) remaining" : "ban lifted!"})`);
+    if (s.matchFixBanned > 0) {
+      // Skip season entirely — add empty record
+      const lastYear = s.seasons[s.seasons.length - 1].year;
+      s.seasons = [...s.seasons, {
+        year: lastYear + 1, age: s.age, club: "BANNED", clubCountry: "", clubTier: 99,
+        apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
+        leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
+        intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
+      }];
+      s.pendingSummary = s.seasons[s.seasons.length - 1];
+      s.phase = "season_summary";
+      simulateSeasonFinances(s, s.pendingSummary);
+      return s;
+    }
+  }
+
+  // PED tracking — check for failed test
+  if (s.pedActive && s.pedSeasonsRemaining > 0) {
+    s.pedSeasonsRemaining -= 1;
+    if (Math.random() < 0.20) {
+      // Failed test!
+      s.pedActive = false;
+      s.pedSeasonsRemaining = 0;
+      // Remove PED stat boost
+      for (const k of ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"] as const) {
+        (s as any)[k] = clamp((s as any)[k] - 5, 20, 99);
+      }
+      s.matchFixBanned = 1; // 1 year ban
+      s.integrityBonus -= 25;
+      s.popularity = clamp(s.popularity - 30, 0, 100);
+      s.morale = clamp(s.morale - 25, 0, 100);
+      s.socialMediaFollowers = Math.max(0, s.socialMediaFollowers - 3);
+      s.events.push("🚨 FAILED DRUG TEST! Banned for 1 season. Legacy -25, reputation destroyed.");
+      // Skip rest of season
+      const lastYear = s.seasons[s.seasons.length - 1].year;
+      s.seasons = [...s.seasons, {
+        year: lastYear + 1, age: s.age, club: "BANNED (PED)", clubCountry: "", clubTier: 99,
+        apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
+        leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
+        intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
+      }];
+      s.pendingSummary = s.seasons[s.seasons.length - 1];
+      s.phase = "season_summary";
+      simulateSeasonFinances(s, s.pendingSummary);
+      return s;
+    }
+    if (s.pedSeasonsRemaining === 0) {
+      // PED wore off
+      s.pedActive = false;
+      for (const k of ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"] as const) {
+        (s as any)[k] = clamp((s as any)[k] - 5, 20, 99);
+      }
+      s.events.push("💊 The substance wore off. Stats returned to normal.");
+    }
   }
   
   // Detect "FINAL SEASON" — will retire next year
@@ -2723,6 +3003,11 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
   if (s.pendingFifaCoverEvent) {
     // handled in UI as a special overlay within social_media_action flow
   }
+  // Moral dilemma — triggered before random events
+  if (tryTriggerMoralDilemma(s)) {
+    s.phase = "moral_dilemma";
+    return s;
+  }
   // Random events
   const events = generateRandomEvents(s);
   if (events.length > 0) {
@@ -3135,6 +3420,13 @@ function calculateLegacy(state: CareerState): LegacyResult {
   if (state.fifaCoverAccepted) {
     breakdown.push({ label: "FIFA Cover Athlete", points: 10 });
     score += 10;
+  }
+
+  // Integrity bonus from moral dilemmas
+  if (state.integrityBonus !== 0) {
+    const intPts = clamp(state.integrityBonus, -30, 20);
+    breakdown.push({ label: state.integrityBonus > 0 ? "Integrity" : "Scandal", points: intPts });
+    score += intPts;
   }
 
   score = Math.round(clamp(score, 0, 100));

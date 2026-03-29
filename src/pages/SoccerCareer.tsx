@@ -22,12 +22,14 @@ import {
   type LegacyResult, type LegacyTier, type PostRetirementChoice, type ManagerState,
   type NewsArticle, type SpendingItem, type SpendingCategory,
   type SocialMediaAction, type SponsorshipTier,
+  type MoralDilemma, type MoralDilemmaChoice,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
   applySocialMediaAction, handleFifaCoverDecision, dismissSocialMediaPhase,
+  applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
   SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS,
   generateShareText, getYouthAcademyClub,
   getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
@@ -490,6 +492,16 @@ export default function SoccerCareer() {
     setCareer(dismissSocialMediaPhase(career, clubs));
   };
 
+  const handleMoralDilemmaChoice = (choiceIndex: number) => {
+    if (!career) return;
+    setCareer(applyMoralDilemmaChoice(career, choiceIndex));
+  };
+
+  const handleDismissMoralDilemma = () => {
+    if (!career) return;
+    setCareer(dismissMoralDilemma(career, clubs));
+  };
+
   const handleNewCareer = () => {
     setShowNewCareerConfirm(true);
   };
@@ -553,6 +565,8 @@ export default function SoccerCareer() {
               onSocialMediaAction={handleSocialMediaAction}
               onFifaCover={handleFifaCover}
               onDismissSocialMedia={handleDismissSocialMedia}
+              onMoralDilemmaChoice={handleMoralDilemmaChoice}
+              onDismissMoralDilemma={handleDismissMoralDilemma}
               timelineRef={timelineRef}
             />
           )}
@@ -1624,6 +1638,77 @@ function MyLifePanel({ career, onPurchase }: { career: CareerState; onPurchase: 
   );
 }
 
+/* ─── Moral Dilemma Card ─── */
+function MoralDilemmaCard({ career, onChoice, onDismiss }: {
+  career: CareerState;
+  onChoice: (choiceIndex: number) => void;
+  onDismiss: () => void;
+}) {
+  const [chosen, setChosen] = useState(false);
+  const dilemma = career.pendingMoralDilemma;
+
+  if (!dilemma && chosen) {
+    return (
+      <div className="rounded-xl border-2 border-red-500/40 bg-gradient-to-b from-red-500/10 to-transparent p-6 space-y-4">
+        <div className="text-center space-y-2">
+          <div className="text-3xl">⚠️</div>
+          <h3 className="text-lg font-black">Decision Made</h3>
+          <p className="text-xs text-muted-foreground">The consequences of your choice will unfold...</p>
+        </div>
+        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-red-600 hover:bg-red-500 text-white">
+          Continue →
+        </Button>
+      </div>
+    );
+  }
+
+  if (!dilemma) return null;
+
+  return (
+    <div className="rounded-xl border-2 border-red-500/60 bg-gradient-to-b from-red-900/30 via-red-500/5 to-transparent p-6 space-y-5 shadow-[0_0_40px_rgba(239,68,68,0.15)]">
+      {/* Warning header */}
+      <div className="flex items-center justify-center gap-2">
+        <div className="h-px flex-1 bg-red-500/30" />
+        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-red-400 px-2">⚠️ MORAL DILEMMA ⚠️</span>
+        <div className="h-px flex-1 bg-red-500/30" />
+      </div>
+
+      <div className="text-center space-y-3">
+        <div className="text-5xl">{dilemma.emoji}</div>
+        <h3 className="text-xl font-black tracking-tight text-red-300">{dilemma.title}</h3>
+        <p className="text-sm text-foreground/80 leading-relaxed max-w-md mx-auto">{dilemma.description}</p>
+      </div>
+
+      <div className="space-y-2.5">
+        {dilemma.choices.map((choice, i) => (
+          <button
+            key={i}
+            onClick={() => { onChoice(i); setChosen(true); }}
+            className="w-full rounded-xl border-2 border-red-500/20 bg-red-500/5 p-4 text-left hover:bg-red-500/15 hover:border-red-500/40 transition-all active:scale-[0.98] group"
+          >
+            <div className="flex items-start gap-3">
+              <span className="text-2xl shrink-0 mt-0.5">{choice.emoji}</span>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-bold text-foreground group-hover:text-red-300 transition-colors">{choice.label}</div>
+                <div className="text-[11px] text-muted-foreground mt-1">{choice.consequence}</div>
+                {choice.risk && (
+                  <div className="text-[10px] text-red-400 font-bold mt-1.5 flex items-center gap-1">
+                    <span>⚠️</span> {choice.risk}
+                  </div>
+                )}
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      <div className="text-center text-[9px] text-red-400/60 font-semibold uppercase tracking-wider">
+        Your choice will have lasting consequences
+      </div>
+    </div>
+  );
+}
+
 /* ─── Social Media Action Card ─── */
 function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
   career: CareerState;
@@ -1767,7 +1852,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -1793,6 +1878,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onSocialMediaAction: (actionId: string) => void;
   onFifaCover: (accept: boolean) => void;
   onDismissSocialMedia: () => void;
+  onMoralDilemmaChoice: (choiceIndex: number) => void;
+  onDismissMoralDilemma: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
   const totals = getCareerTotals(career.seasons);
@@ -1958,6 +2045,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               onDismiss={onDismissRivalryEvent}
             />
            )}
+
+          {/* OVERLAY: Moral Dilemma */}
+          {career.phase === "moral_dilemma" && (
+            <MoralDilemmaCard
+              career={career}
+              onChoice={onMoralDilemmaChoice}
+              onDismiss={onDismissMoralDilemma}
+            />
+          )}
 
           {/* OVERLAY: Social Media Action */}
           {career.phase === "social_media_action" && (
