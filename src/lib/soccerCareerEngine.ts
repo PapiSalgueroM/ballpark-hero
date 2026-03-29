@@ -1620,6 +1620,10 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   s.dribbling = growStat(s.dribbling, s.age, false, false, s.primeType);
   s.defending = growStat(s.defending, s.age, false, false, s.primeType);
   s.physical = growStat(s.physical, s.age, false, false, s.primeType);
+  // Personal trainer: +1 physical per season
+  if (s.purchasedItems.includes("personal_trainer")) {
+    s.physical = clamp(s.physical + 1, 20, 99);
+  }
   s.reflexes = growStat(s.reflexes, s.age, false, false, s.primeType);
   s.overall = calcOverall(s, s.position);
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
