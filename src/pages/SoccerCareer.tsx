@@ -565,6 +565,8 @@ export default function SoccerCareer() {
               onSocialMediaAction={handleSocialMediaAction}
               onFifaCover={handleFifaCover}
               onDismissSocialMedia={handleDismissSocialMedia}
+              onMoralDilemmaChoice={handleMoralDilemmaChoice}
+              onDismissMoralDilemma={handleDismissMoralDilemma}
               timelineRef={timelineRef}
             />
           )}
