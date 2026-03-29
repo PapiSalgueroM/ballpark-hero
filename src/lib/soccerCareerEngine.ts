@@ -2070,38 +2070,59 @@ const REPLACEMENT_YOUNG_PLAYERS: RealContender[] = [
 ];
 
 const TOP_6_CLUBS = ["Real Madrid", "Man City", "Barcelona", "Bayern Munich", "Arsenal", "Liverpool"];
+const LEAGUE_CLUBS: Record<string, string[]> = {
+  "Premier League": ["Man City", "Arsenal", "Liverpool", "Man United", "Chelsea", "Tottenham"],
+  "La Liga": ["Real Madrid", "Barcelona", "Atletico Madrid"],
+  "Bundesliga": ["Bayern Munich", "Dortmund", "Leverkusen"],
+  "Serie A": ["Inter Milan", "AC Milan", "Napoli", "Juventus"],
+  "Ligue 1": ["PSG"],
+};
+
+function getClubLeague(club: string): string | null {
+  for (const [league, clubs] of Object.entries(LEAGUE_CLUBS)) {
+    if (clubs.includes(club)) return league;
+  }
+  return null;
+}
 
 function calcBdorPoints(goals: number, assists: number, overall: number, clubTier: number, trophies: string[], club: string): number {
   let pts = 0;
-  // Goals: 1pt each, max 40
-  pts += Math.min(goals, 40);
-  // Assists: 0.5 each, max 15
-  pts += Math.min(assists * 0.5, 15);
+  // Goals: 0.7pt each, max 28 (reduced from 1pt/max 40)
+  pts += Math.min(goals * 0.7, 28);
+  // Assists: 0.3 each, max 8 (reduced from 0.5/max 15)
+  pts += Math.min(assists * 0.3, 8);
   // Trophies
   if (trophies.includes("UCL")) pts += 25;
   if (trophies.includes("World Cup")) pts += 30;
-  if (trophies.includes("League")) pts += 15;
-  if (trophies.includes("Cup")) pts += 5;
-  // Overall 90+ bonus
-  if (overall >= 90) pts += 10;
-  // Top 6 club bonus
-  if (TOP_6_CLUBS.includes(club)) pts += 10;
+  if (trophies.includes("League")) pts += 12;
+  if (trophies.includes("Cup")) pts += 3;
+  // Overall 92+ bonus (raised from 90)
+  if (overall >= 92) pts += 8;
+  else if (overall >= 88) pts += 4;
+  // Top 6 club bonus (reduced from 10)
+  if (TOP_6_CLUBS.includes(club)) pts += 5;
   return Math.round(pts);
 }
 
 function calculateBallonDor(state: CareerState, season: SeasonRecord, year: number): BallonDorResult {
-  // Determine which year offset from 2024
   const yearOffset = year - 2024;
+
+  // --- Determine season's trophy winners (one club per competition) ---
+  const uclWinnerClub = pick(["Real Madrid", "Man City", "Barcelona", "Bayern Munich", "Liverpool", "Inter Milan", "Arsenal", "PSG", "Dortmund", "Atletico Madrid"]);
+  // One league winner per league
+  const leagueWinners: Record<string, string> = {};
+  for (const [league, clubs] of Object.entries(LEAGUE_CLUBS)) {
+    leagueWinners[league] = pick(clubs);
+  }
+  const isWorldCupYear = year % 4 === 2;
 
   // --- Player eligibility ---
   const isLowTierClub = state.currentClubTier >= 3;
   const hasMajorTrophy = season.leagueTitle || season.championsLeague || season.worldCup;
-  // Tier 3/4 players need 40+ goals AND a major trophy
   const playerEligible = !isLowTierClub || (season.goals >= 40 && hasMajorTrophy);
-  // Must be at tier 1 or 2 to realistically contend (with the exception above)
   const playerCanContend = (state.currentClubTier <= 2) || (isLowTierClub && season.goals >= 40 && hasMajorTrophy);
 
-  // Calculate player points
+  // Calculate player points (reduced scaling)
   const playerTrophies: string[] = [];
   if (season.leagueTitle) playerTrophies.push("League");
   if (season.championsLeague) playerTrophies.push("UCL");
@@ -2114,26 +2135,20 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   }
   const playerNominated = playerCanContend && playerPoints > 45;
 
-  // --- Generate real contender nominees ---
-  const nominees: BallonDorNominee[] = [];
+  // --- Generate real contender nominees with consistent trophies ---
   const activeContenders = REAL_CONTENDERS.filter(c => {
     const age = c.startAge + yearOffset;
     return age <= 36 && age >= 17;
   });
-
-  // Fill retired spots with young replacements
   const retiredCount = REAL_CONTENDERS.length - activeContenders.length;
   const replacements = REPLACEMENT_YOUNG_PLAYERS.filter(c => {
     const age = c.startAge + yearOffset;
     return age >= 17 && age <= 36;
   }).slice(0, retiredCount);
-
   const allContenders = [...activeContenders, ...replacements];
   const usedNames = new Set<string>([state.playerName]);
-  // Also exclude rival name
   if (state.rival) usedNames.add(state.rival.name);
 
-  // Generate stats for all contenders (no points threshold — collect everyone)
   const allNomineeData: BallonDorNominee[] = [];
   for (const contender of allContenders) {
     if (usedNames.has(contender.name)) continue;
@@ -2142,11 +2157,15 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     const ageFactor = age <= 28 ? 1.0 : age <= 32 ? 0.85 : 0.65;
     const goals = Math.round(rand(contender.baseGoals[0], contender.baseGoals[1]) * ageFactor);
     const assists = rand(3, 18);
+
+    // Assign trophies based on actual season winners — no conflicts
     const trophies: string[] = [];
-    if (Math.random() < 0.3) trophies.push("League");
-    if (Math.random() < 0.12) trophies.push("UCL");
-    if (year % 4 === 2 && Math.random() < 0.06) trophies.push("World Cup");
-    if (Math.random() < 0.2) trophies.push("Cup");
+    if (contender.club === uclWinnerClub && Math.random() < 0.85) trophies.push("UCL");
+    const contenderLeague = getClubLeague(contender.club);
+    if (contenderLeague && leagueWinners[contenderLeague] === contender.club && Math.random() < 0.8) trophies.push("League");
+    if (isWorldCupYear && Math.random() < 0.04) trophies.push("World Cup");
+    if (Math.random() < 0.15) trophies.push("Cup");
+
     const overall = clamp(rand(83, 93) + (age <= 28 ? 2 : age >= 33 ? -3 : 0), 75, 95);
     const pts = calcBdorPoints(goals, assists, overall, 1, trophies, contender.club);
     allNomineeData.push({
@@ -2155,13 +2174,15 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     });
   }
 
-  // Add rival as fictional contender (if exists and at a good club)
+  // Add rival
   if (state.rival && !state.rival.retired && state.rival.clubTier <= 2) {
     const rivalGoals = state.rival.careerGoals > 0 ? rand(12, 30) : rand(5, 15);
     const rivalAssists = rand(3, 12);
     const rivalTrophies: string[] = [];
-    if (state.rival.leagueTitles > 0 && Math.random() < 0.3) rivalTrophies.push("League");
-    if (state.rival.championsLeagues > 0 && Math.random() < 0.15) rivalTrophies.push("UCL");
+    // Check if rival's club won trophies this season
+    if (state.rival.club === uclWinnerClub && Math.random() < 0.8) rivalTrophies.push("UCL");
+    const rivalLeague = getClubLeague(state.rival.club);
+    if (rivalLeague && leagueWinners[rivalLeague] === state.rival.club && Math.random() < 0.75) rivalTrophies.push("League");
     const rivalPts = calcBdorPoints(rivalGoals, rivalAssists, state.rival.overall, state.rival.clubTier, rivalTrophies, state.rival.club);
     allNomineeData.push({
       name: state.rival.name, nationality: state.rival.nationality, position: state.rival.position,
@@ -2172,11 +2193,18 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // Sort all contenders by points descending
   allNomineeData.sort((a, b) => b.points - a.points);
 
-  // Determine how many NPC spots we need (9 if player nominated, 10 if not)
+  // DIFFICULTY: Boost top NPC so there's always a strong rival for the award
+  // Ensure at least 1-2 NPCs have very competitive scores
+  if (allNomineeData.length >= 2) {
+    // Give the top NPC a random bonus to make winning harder
+    allNomineeData[0].points += rand(5, 15);
+    if (allNomineeData[1]) allNomineeData[1].points += rand(2, 8);
+  }
+
   const npcSpotsNeeded = playerNominated ? 9 : 10;
   const topNPCs = allNomineeData.slice(0, npcSpotsNeeded);
 
-  // If we still don't have enough, generate filler nominees
+  // Filler nominees
   const fillerNames = [
     { name: "Lucas Hernández", nationality: "France", position: "CB", club: "PSG" },
     { name: "Jadon Sancho", nationality: "England", position: "RW", club: "Manchester United" },
@@ -2212,8 +2240,30 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // Sort final list and take exactly 10
   topNPCs.sort((a, b) => b.points - a.points);
   const top10 = topNPCs.slice(0, 10);
-  const playerRankIdx = top10.findIndex(n => n.isPlayer);
-  const playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
+  let playerRankIdx = top10.findIndex(n => n.isPlayer);
+  let playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
+
+  // STRICT WIN CONDITIONS: Player can only win (rank 1) if they meet elite criteria
+  if (playerRank === 1) {
+    const hasUCLAndLeague = season.championsLeague && season.leagueTitle;
+    const hasWorldCup = season.worldCup;
+    const has30PlusGoals = season.goals >= 30;
+    const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup;
+    if (!meetsWinCondition) {
+      // Demote player to 2nd — they weren't dominant enough
+      const playerEntry = top10.find(n => n.isPlayer);
+      if (playerEntry && top10.length >= 2) {
+        // Swap with the top NPC
+        const topNPC = top10.find(n => !n.isPlayer);
+        if (topNPC) {
+          topNPC.points = Math.max(topNPC.points, playerEntry.points + rand(2, 6));
+          top10.sort((a, b) => b.points - a.points);
+          playerRankIdx = top10.findIndex(n => n.isPlayer);
+          playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
+        }
+      }
+    }
+  }
 
   return { year, nominees: top10, playerRank, playerPoints, playerNominated };
 }
