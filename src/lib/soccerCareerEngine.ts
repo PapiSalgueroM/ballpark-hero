@@ -374,6 +374,14 @@ export interface CareerState {
   pendingFifaCoverEvent: boolean;
   fifaCoverAccepted: boolean;
   activeSponsorship: SponsorshipTier | null;
+  // Moral dilemma system
+  moralDilemmasTriggered: string[];
+  pendingMoralDilemma: MoralDilemma | null;
+  pedSeasonsRemaining: number;
+  pedActive: boolean;
+  matchFixBanned: number;
+  divingActive: boolean;
+  integrityBonus: number;
 }
 
 /* ─── Social Media Action System ─── */
