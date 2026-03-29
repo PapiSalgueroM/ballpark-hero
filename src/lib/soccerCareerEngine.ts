@@ -315,7 +315,7 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "social_media_action" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "social_media_action" | "moral_dilemma" | "retired";
   pendingNews: NewsArticle[];
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
