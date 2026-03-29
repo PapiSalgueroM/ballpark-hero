@@ -1195,6 +1195,10 @@ function FinancialPanel({ career }: { career: CareerState }) {
         {career.sponsorshipIncome > 0 && <span>🤝 Sponsor: €{career.sponsorshipIncome.toFixed(1)}M/yr</span>}
         {career.lifestyleCostPerYear > 0 && <span>💸 Costs: €{career.lifestyleCostPerYear.toFixed(1)}M/yr</span>}
         {career.agentFeesPaid > 0 && <span>🕴️ Agent fees: €{career.agentFeesPaid.toFixed(1)}M total</span>}
+        {career.activeSponsorship && (() => {
+          const tier = SPONSORSHIP_TIERS.find(t => t.tier === career.activeSponsorship);
+          return tier ? <span className="text-blue-400">{tier.emoji} {tier.name}: €{tier.income}M/yr</span> : null;
+        })()}
       </div>
 
       {/* Properties & Investments */}
