@@ -1781,7 +1781,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
