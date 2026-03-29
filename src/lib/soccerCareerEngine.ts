@@ -1473,13 +1473,48 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   if (season.leagueTitle) s.events.push(`🏆 Won the league with ${s.currentClub}!`);
   if (season.domesticCup) s.events.push(`🏆 Won the Domestic Cup with ${s.currentClub}!`);
 
-  // Awards: Player of the Month (random, based on rating)
-  if (season.rating >= 7.5 && Math.random() < 0.3) {
-    const potmCount = rand(1, 3);
-    for (let i = 0; i < potmCount; i++) {
-      s.awards = [...s.awards, { year: thisYear, name: "Player of the Month", emoji: "🏆" }];
+  // Awards: Player of the Month — simulate month-by-month based on goals
+  const MONTHS = ["August", "September", "October", "November", "December", "January", "February", "March", "April", "May"];
+  const totalGoals = season.goals;
+  const totalApps = season.apps;
+  // Distribute goals roughly across 10 months proportional to apps
+  let potmCount = 0;
+  const potmMonths: string[] = [];
+  for (const month of MONTHS) {
+    // Each month gets roughly 1/10 of total goals with some variance
+    const monthGoals = Math.max(0, Math.round((totalGoals / 10) + (Math.random() * 2 - 1)));
+    let chance = 0.02;
+    if (monthGoals >= 4) chance = 0.75;
+    else if (monthGoals >= 3) chance = 0.50;
+    else if (monthGoals >= 2) chance = 0.25;
+    else if (monthGoals >= 1) chance = 0.10;
+    if (Math.random() < chance) {
+      potmCount++;
+      potmMonths.push(month);
     }
-    s.events.push(`🏆 Won Player of the Month ${potmCount} time${potmCount > 1 ? "s" : ""}!`);
+  }
+  // Guarantee high POTM count for Ballon d'Or caliber seasons
+  if (totalGoals >= 30 && potmCount < 6) {
+    const remaining = MONTHS.filter(m => !potmMonths.includes(m));
+    while (potmCount < 6 && remaining.length > 0) {
+      const idx = rand(0, remaining.length - 1);
+      potmMonths.push(remaining.splice(idx, 1)[0]);
+      potmCount++;
+    }
+  }
+  if (totalGoals >= 35 && potmCount < 7) {
+    const remaining = MONTHS.filter(m => !potmMonths.includes(m));
+    while (potmCount < 7 && remaining.length > 0) {
+      const idx = rand(0, remaining.length - 1);
+      potmMonths.push(remaining.splice(idx, 1)[0]);
+      potmCount++;
+    }
+  }
+  if (potmCount > 0) {
+    for (const month of potmMonths) {
+      s.awards = [...s.awards, { year: thisYear, name: "Player of the Month", emoji: "🏆" }];
+      s.events.push(`🏆 Won Player of the Month (${month} ${thisYear})!`);
+    }
   }
   
   // Player of the Year (domestic)
