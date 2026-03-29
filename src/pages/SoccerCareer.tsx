@@ -2427,9 +2427,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <Button onClick={onAdvanceManager} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
               Next Manager Season <ChevronRight className="w-5 h-5" />
             </Button>
-            <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold">
-              Retire
+            <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold">Retire</Button>
+          </div>
+        ) : career.phase === "owner_season" ? (
+          <div className="flex-1 flex gap-2">
+            <Button onClick={onAdvanceOwner} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
+              Next Owner Season <ChevronRight className="w-5 h-5" />
             </Button>
+            <Button onClick={onEndOwner} variant="outline" className="h-12 text-sm font-bold">Sell Club</Button>
           </div>
         ) : showActionButton ? (
           <div className="flex-1 flex gap-2">
