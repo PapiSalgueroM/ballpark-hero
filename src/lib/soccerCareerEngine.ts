@@ -540,7 +540,25 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
     }
   }
 
-  s.phase = "playing";
+  // Stay on moral_dilemma phase — UI calls dismissMoralDilemma to continue
+  s.phase = "moral_dilemma";
+  return s;
+}
+
+export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  s.pendingMoralDilemma = null;
+  // Continue to random events → transfer window
+  const events = generateRandomEvents(s);
+  if (events.length > 0) {
+    s.pendingEvents = events;
+    s.phase = "random_events";
+    return s;
+  }
+  if (s.age >= 18) {
+    s.transferSituation = determineTransferSituation(s, clubs);
+    s.phase = "transfer_window";
+  } else { s.phase = "playing"; }
   return s;
 }
 
