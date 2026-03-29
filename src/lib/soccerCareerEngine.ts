@@ -917,6 +917,10 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
   if (Math.random() < 0.20) {
     injured = true;
     injuryWeeks = rand(2, 8);
+    // Elite recovery clinic halves injury time
+    if (state?.purchasedItems?.includes("elite_recovery")) {
+      injuryWeeks = Math.max(1, Math.round(injuryWeeks * 0.5));
+    }
     const missedApps = Math.round(injuryWeeks * apps / 46);
     apps = Math.max(1, apps - clamp(missedApps, 0, 12));
   }
