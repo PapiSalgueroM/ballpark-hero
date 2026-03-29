@@ -609,6 +609,12 @@ export default function SoccerCareer() {
               onMoralDilemmaChoice={handleMoralDilemmaChoice}
               onDismissMoralDilemma={handleDismissMoralDilemma}
               onDismissAppeal={handleDismissAppeal}
+              onAcceptRetirement={handleAcceptRetirement}
+              onDeclineRetirement={handleDeclineRetirement}
+              onPunditAction={handlePunditAction}
+              onEndPundit={handleEndPundit}
+              onAdvanceOwner={handleAdvanceOwner}
+              onEndOwner={handleEndOwner}
               timelineRef={timelineRef}
             />
           )}
