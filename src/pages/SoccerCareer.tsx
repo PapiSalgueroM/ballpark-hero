@@ -31,6 +31,7 @@ import {
   applySocialMediaAction, handleFifaCoverDecision, dismissSocialMediaPhase,
   applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
   SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS,
+  dismissAppealResult,
   generateShareText, getYouthAcademyClub,
   getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
 } from "@/lib/soccerCareerEngine";
