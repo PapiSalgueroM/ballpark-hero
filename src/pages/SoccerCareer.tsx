@@ -1459,6 +1459,9 @@ function PostRetirementCard({ career, onChoice }: { career: CareerState; onChoic
       <Button onClick={() => onChoice("retire")} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">🏖️ Retire and Enjoy Life</Button>
       <Button onClick={() => onChoice("manager")} variant="outline" className="w-full h-11 text-sm font-bold">📋 Become a Manager</Button>
       <Button onClick={() => onChoice("pundit")} variant="outline" className="w-full h-11 text-sm font-bold">🎙️ Become a TV Pundit</Button>
+      {career.netWorth >= 200 && (
+        <Button onClick={() => onChoice("owner")} variant="outline" className="w-full h-11 text-sm font-bold">🏟️ Buy a Football Club</Button>
+      )}
     </div>
   );
 }
