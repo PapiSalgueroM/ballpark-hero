@@ -1101,6 +1101,7 @@ export function initCareer(
     socialMediaFollowers: 0, sponsorshipIncome: 0, properties: [], investments: [],
     consecutiveDeficitYears: 0, agentFeesPaid: 0,
     family: { isMarried: false, marriedAge: null, children: 0, isDivorced: false, divorceAge: null },
+    purchasedItems: [], investmentHoldings: [], totalAssetValue: 0, customYearlyCosts: 0,
     awards: [],
     pendingBallonDor: null,
     lastUCLResult: null,
