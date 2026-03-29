@@ -2985,6 +2985,11 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
   if (s.pendingFifaCoverEvent) {
     // handled in UI as a special overlay within social_media_action flow
   }
+  // Moral dilemma — triggered before random events
+  if (tryTriggerMoralDilemma(s)) {
+    s.phase = "moral_dilemma";
+    return s;
+  }
   // Random events
   const events = generateRandomEvents(s);
   if (events.length > 0) {
@@ -3397,6 +3402,13 @@ function calculateLegacy(state: CareerState): LegacyResult {
   if (state.fifaCoverAccepted) {
     breakdown.push({ label: "FIFA Cover Athlete", points: 10 });
     score += 10;
+  }
+
+  // Integrity bonus from moral dilemmas
+  if (state.integrityBonus !== 0) {
+    const intPts = clamp(state.integrityBonus, -30, 20);
+    breakdown.push({ label: state.integrityBonus > 0 ? "Integrity" : "Scandal", points: intPts });
+    score += intPts;
   }
 
   score = Math.round(clamp(score, 0, 100));
