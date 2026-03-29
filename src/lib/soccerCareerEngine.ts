@@ -315,7 +315,8 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "social_media_action" | "moral_dilemma" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "social_media_action" | "moral_dilemma" | "red_card_appeal_result" | "retired";
+  pendingAppealResult: { success: boolean; banLength: number } | null;
   pendingNews: NewsArticle[];
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
@@ -2487,8 +2488,14 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       category: "negative", choices: [
         { label: "Accept the ban", emoji: "😔", color: "bg-red-600", consequence: "Red cards +1, Reputation -5",
           apply: s => { s.popularity = clamp(s.popularity - 5, 0, 100); s.events = [...s.events, "🟥 Banned 3 matches for violent foul"]; return s; } },
-        { label: "Appeal the decision", emoji: "⚖️", color: "bg-amber-600", consequence: "50% chance ban is reduced",
-          apply: s => { if (Math.random() < 0.5) { s.events = [...s.events, "🟥 Ban reduced on appeal"]; } else { s.popularity = clamp(s.popularity - 5, 0, 100); s.events = [...s.events, "🟥 Appeal rejected — ban stands"]; } return s; } },
+        { label: "Appeal the decision", emoji: "⚖️", color: "bg-amber-600", consequence: "Appeal submitted — result in 3-5 days",
+          apply: s => {
+            const success = Math.random() < 0.5;
+            const banLength = success ? 0 : rand(2, 4);
+            s.pendingAppealResult = { success, banLength };
+            s.phase = "red_card_appeal_result" as any;
+            return s;
+          } },
       ] },
     { id: 10, emoji: "💉", title: "False Doping Accusation", description: "A journalist publishes a story claiming you failed a doping test. It is later proven false but damage is done.",
       category: "negative", choices: [
