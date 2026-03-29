@@ -1585,6 +1585,13 @@ export function initCareer(
     pendingFifaCoverEvent: false,
     fifaCoverAccepted: false,
     activeSponsorship: null,
+    moralDilemmasTriggered: [],
+    pendingMoralDilemma: null,
+    pedSeasonsRemaining: 0,
+    pedActive: false,
+    matchFixBanned: 0,
+    divingActive: false,
+    integrityBonus: 0,
   };
 }
 
