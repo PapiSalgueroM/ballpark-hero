@@ -528,6 +528,7 @@ export default function SoccerCareer() {
               onEndManager={handleEndManager}
               onShare={handleShare}
               onNewCareer={handleNewCareer}
+              onPurchase={handlePurchase}
               timelineRef={timelineRef}
             />
           )}
