@@ -458,6 +458,17 @@ export default function SoccerCareer() {
     shareResult(generateShareText(career));
   };
 
+  const handlePurchase = (itemId: string) => {
+    if (!career) return;
+    const result = purchaseSpendingItem(career, itemId);
+    if (result !== career) {
+      setCareer(result);
+      toast.success("Purchase complete!");
+    } else {
+      toast.error("Can't purchase this item right now");
+    }
+  };
+
   const handleNewCareer = () => {
     setShowNewCareerConfirm(true);
   };
