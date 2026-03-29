@@ -1167,6 +1167,7 @@ function FinancialPanel({ career }: { career: CareerState }) {
 
       {/* Financial details row */}
       <div className="flex items-center gap-3 text-[10px] text-muted-foreground flex-wrap">
+        {(career.totalAssetValue || 0) > 0 && <span>🏠 Assets: €{(career.totalAssetValue || 0).toFixed(1)}M</span>}
         {career.sponsorshipIncome > 0 && <span>🤝 Sponsor: €{career.sponsorshipIncome.toFixed(1)}M/yr</span>}
         {career.lifestyleCostPerYear > 0 && <span>💸 Costs: €{career.lifestyleCostPerYear.toFixed(1)}M/yr</span>}
         {career.agentFeesPaid > 0 && <span>🕴️ Agent fees: €{career.agentFeesPaid.toFixed(1)}M total</span>}
