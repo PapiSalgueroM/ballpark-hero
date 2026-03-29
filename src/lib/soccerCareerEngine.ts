@@ -235,6 +235,8 @@ export interface FamilyStatus {
   divorceAge: number | null;
 }
 
+export type PrimeType = "early" | "normal" | "late" | "extended";
+
 export interface CareerState {
   playerName: string;
   nationality: string;
@@ -307,6 +309,7 @@ export interface CareerState {
   isFinalSeason: boolean;
   isPundit: boolean;
   punditEvents: string[];
+  primeType: PrimeType;
 }
 
 /* ─── Flags ─── */
@@ -393,19 +396,54 @@ export function calcOverall(s: { pace: number; shooting: number; passing: number
   return Math.round((s.pace + s.shooting + s.passing + s.dribbling + s.defending + s.physical) / 6);
 }
 
-/* ─── Stat progression per user spec ─── */
-function growStat(current: number, age: number, isYouth: boolean, isPace: boolean): number {
+/* ─── Prime window helpers ─── */
+function rollPrimeType(): PrimeType {
+  const r = Math.random();
+  if (r < 0.25) return "early";
+  if (r < 0.65) return "normal";
+  if (r < 0.90) return "late";
+  return "extended";
+}
+
+function isInPrime(age: number, primeType: PrimeType): boolean {
+  switch (primeType) {
+    case "early": return age >= 22 && age <= 26;
+    case "normal": return age >= 24 && age <= 28;
+    case "late": return age >= 27 && age <= 31;
+    case "extended": return age >= 23 && age <= 32;
+  }
+}
+
+function isPastPrime(age: number, primeType: PrimeType): boolean {
+  switch (primeType) {
+    case "early": return age > 26;
+    case "normal": return age > 28;
+    case "late": return age > 31;
+    case "extended": return age > 32;
+  }
+}
+
+/* ─── Stat progression with prime system ─── */
+function growStat(current: number, age: number, isYouth: boolean, isPace: boolean, primeType: PrimeType): number {
   let growth: number;
   if (isYouth) {
     growth = rand(2, 4);
-  } else if (age <= 23) {
-    growth = rand(1, 4); // Growth phase
-  } else if (age <= 29) {
-    growth = rand(0, 2); // Peak phase
-  } else if (age <= 33) {
-    growth = rand(-2, -1); // Decline begins
+  } else if (isInPrime(age, primeType)) {
+    growth = rand(2, 4); // Prime phase — strong growth
+  } else if (!isPastPrime(age, primeType)) {
+    // Pre-prime professional years — moderate growth
+    growth = rand(1, 3);
   } else {
-    growth = rand(-4, -2); // Sharp decline
+    // Post-prime — gradual decline based on how far past prime
+    const primeEnd = primeType === "early" ? 26 : primeType === "normal" ? 28 : primeType === "late" ? 31 : 32;
+    const yearsPost = age - primeEnd;
+    if (yearsPost <= 2) {
+      growth = rand(-2, 0); // Gentle decline
+    } else if (yearsPost <= 4) {
+      growth = rand(-3, -1); // Moderate decline
+    } else {
+      growth = rand(-4, -2); // Sharp decline
+    }
   }
   // Pace always declines 1 extra from age 28+
   if (isPace && age >= 28 && !isYouth) {
@@ -425,29 +463,53 @@ function clubAverageRating(tier: number): number {
   }
 }
 
-/* ─── Market value per user spec (with social media boost) ─── */
-function calcMarketValue(overall: number, age: number, position: string, socialMediaFollowers?: number): number {
-  // Base from overall (exponential curve)
-  let base = Math.pow(Math.max(0, overall - 45), 2.2) * 0.005;
+/* ─── Market value per exact user table ─── */
+function calcMarketValue(overall: number, age: number, _position: string, _socialMediaFollowers?: number): number {
+  let minVal: number, maxVal: number;
 
-  // Age multiplier — peak at 26-28
-  if (age <= 21) base *= 0.8;
-  else if (age <= 25) base *= 1.1;
-  else if (age <= 28) base *= 1.3; // Peak
-  else if (age <= 30) base *= 1.0;
-  else if (age <= 33) base *= 0.55;
-  else base *= 0.2;
-
-  // Position multiplier
-  if (["ST", "CAM", "LW", "RW"].includes(position)) base *= 1.2;
-  else if (position === "GK") base *= 0.85;
-
-  // Social media boost: +5% per 10M followers
-  if (socialMediaFollowers && socialMediaFollowers > 0) {
-    base *= 1 + (socialMediaFollowers / 10) * 0.05;
+  if (overall >= 95) {
+    if (age >= 20 && age <= 28) { minVal = 280; maxVal = 400; }
+    else if (age >= 29 && age <= 31) { minVal = 180; maxVal = 280; }
+    else if (age >= 32 && age <= 34) { minVal = 80; maxVal = 150; }
+    else if (age >= 35) { minVal = 20; maxVal = 60; }
+    else { minVal = 100; maxVal = 200; } // Under 20
+  } else if (overall >= 90) {
+    if (age >= 20 && age <= 28) { minVal = 160; maxVal = 260; }
+    else if (age >= 29 && age <= 31) { minVal = 100; maxVal = 180; }
+    else if (age >= 32 && age <= 34) { minVal = 40; maxVal = 90; }
+    else if (age >= 35) { minVal = 10; maxVal = 35; }
+    else { minVal = 60; maxVal = 120; }
+  } else if (overall >= 85) {
+    if (age >= 20 && age <= 28) { minVal = 80; maxVal = 140; }
+    else if (age >= 29 && age <= 31) { minVal = 50; maxVal = 100; }
+    else if (age >= 32 && age <= 34) { minVal = 20; maxVal = 55; }
+    else if (age >= 35) { minVal = 5; maxVal = 20; }
+    else { minVal = 30; maxVal = 70; }
+  } else if (overall >= 80) {
+    if (age >= 20 && age <= 28) { minVal = 40; maxVal = 80; }
+    else if (age >= 29 && age <= 31) { minVal = 25; maxVal = 55; }
+    else if (age >= 32 && age <= 34) { minVal = 10; maxVal = 30; }
+    else if (age >= 35) { minVal = 3; maxVal = 12; }
+    else { minVal = 15; maxVal = 40; }
+  } else if (overall >= 75) {
+    if (age >= 20 && age <= 28) { minVal = 20; maxVal = 45; }
+    else if (age >= 29 && age <= 31) { minVal = 10; maxVal = 25; }
+    else if (age >= 32 && age <= 34) { minVal = 5; maxVal = 15; }
+    else if (age >= 35) { minVal = 1; maxVal = 8; }
+    else { minVal = 8; maxVal = 25; }
+  } else if (overall >= 70) {
+    if (age <= 28) { minVal = 8; maxVal = 25; }
+    else if (age <= 31) { minVal = 4; maxVal = 14; }
+    else { minVal = 1; maxVal = 6; }
+  } else if (overall >= 65) {
+    if (age <= 28) { minVal = 3; maxVal = 12; }
+    else { minVal = 0.5; maxVal = 5; }
+  } else {
+    minVal = 0.1; maxVal = Math.max(0.5, overall * 0.05);
   }
 
-  return Math.max(0.1, Math.round(base * 10) / 10);
+  const value = minVal + Math.random() * (maxVal - minVal);
+  return Math.max(0.1, Math.round(value * 10) / 10);
 }
 
 /* ─── Financial helpers ─── */
@@ -955,19 +1017,20 @@ export function initCareer(
     isFinalSeason: false,
     isPundit: false,
     punditEvents: [],
+    primeType: rollPrimeType(),
   };
 }
 
 /* ─── Advance youth year ─── */
 export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev }; s.age += 1; s.events = [];
-  s.pace = growStat(s.pace, s.age, true, true);
-  s.shooting = growStat(s.shooting, s.age, true, false);
-  s.passing = growStat(s.passing, s.age, true, false);
-  s.dribbling = growStat(s.dribbling, s.age, true, false);
-  s.defending = growStat(s.defending, s.age, true, false);
-  s.physical = growStat(s.physical, s.age, true, false);
-  s.reflexes = growStat(s.reflexes, s.age, true, false);
+  s.pace = growStat(s.pace, s.age, true, true, s.primeType);
+  s.shooting = growStat(s.shooting, s.age, true, false, s.primeType);
+  s.passing = growStat(s.passing, s.age, true, false, s.primeType);
+  s.dribbling = growStat(s.dribbling, s.age, true, false, s.primeType);
+  s.defending = growStat(s.defending, s.age, true, false, s.primeType);
+  s.physical = growStat(s.physical, s.age, true, false, s.primeType);
+  s.reflexes = growStat(s.reflexes, s.age, true, false, s.primeType);
   s.overall = calcOverall(s, s.position);
   const lastYear = s.seasons[s.seasons.length - 1].year;
   s.seasons = [...s.seasons, {
@@ -1304,13 +1367,13 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     if (k in s) (s as any)[k] = clamp((s as any)[k] + (val || 0), 20, 99);
   }
   s.statBoostNextSeason = {};
-  s.pace = growStat(s.pace, s.age, false, true);
-  s.shooting = growStat(s.shooting, s.age, false, false);
-  s.passing = growStat(s.passing, s.age, false, false);
-  s.dribbling = growStat(s.dribbling, s.age, false, false);
-  s.defending = growStat(s.defending, s.age, false, false);
-  s.physical = growStat(s.physical, s.age, false, false);
-  s.reflexes = growStat(s.reflexes, s.age, false, false);
+  s.pace = growStat(s.pace, s.age, false, true, s.primeType);
+  s.shooting = growStat(s.shooting, s.age, false, false, s.primeType);
+  s.passing = growStat(s.passing, s.age, false, false, s.primeType);
+  s.dribbling = growStat(s.dribbling, s.age, false, false, s.primeType);
+  s.defending = growStat(s.defending, s.age, false, false, s.primeType);
+  s.physical = growStat(s.physical, s.age, false, false, s.primeType);
+  s.reflexes = growStat(s.reflexes, s.age, false, false, s.primeType);
   s.overall = calcOverall(s, s.position);
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
   s.marketValue = calcMarketValue(s.overall, s.age, s.position, s.socialMediaFollowers);
