@@ -315,7 +315,7 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "social_media_action" | "retired";
   pendingNews: NewsArticle[];
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
@@ -368,6 +368,119 @@ export interface CareerState {
   isPundit: boolean;
   punditEvents: string[];
   primeType: PrimeType;
+  // Social media action system
+  socialMediaActionUsedThisSeason: boolean;
+  socialMediaFocusBoost: boolean; // "Stay off social media" gives +2 all stats next season
+  pendingFifaCoverEvent: boolean;
+  fifaCoverAccepted: boolean;
+  activeSponsorship: SponsorshipTier | null;
+}
+
+/* ─── Social Media Action System ─── */
+export interface SocialMediaAction {
+  id: string;
+  label: string;
+  emoji: string;
+  description: string;
+  followerGain: [number, number]; // [min, max] in raw followers
+  reputationChange: number;
+  extraEffect?: string;
+}
+
+export type SponsorshipTier = "local_brand" | "nike_adidas" | "global_ambassador" | "merchandise_line" | "fifa_cover";
+
+export const SOCIAL_MEDIA_ACTIONS: SocialMediaAction[] = [
+  { id: "training_video", label: "Post training video", emoji: "🏋️", description: "Show off your skills in the gym", followerGain: [50_000, 200_000], reputationChange: 0 },
+  { id: "viral_celebration", label: "Go viral with celebration clip", emoji: "🎬", description: "Post an iconic goal celebration", followerGain: [500_000, 2_000_000], reputationChange: 0 },
+  { id: "controversial_opinion", label: "Post controversial opinion", emoji: "🔥", description: "Share a hot take about football", followerGain: [1_000_000, 1_000_000], reputationChange: -10, extraEffect: "Reputation -10" },
+  { id: "charity_work", label: "Announce charity work", emoji: "❤️", description: "Highlight your philanthropic efforts", followerGain: [200_000, 200_000], reputationChange: 15, extraEffect: "Reputation +15" },
+  { id: "personal_life", label: "Post about personal life", emoji: "📸", description: "Share a glimpse into your life off the pitch", followerGain: [300_000, 300_000], reputationChange: 0 },
+  { id: "troll_rival", label: "Troll your rival on social media", emoji: "😈", description: "Take a shot at your rival online", followerGain: [800_000, 800_000], reputationChange: 0, extraEffect: "Rivalry intensity increases" },
+  { id: "stay_off", label: "Stay off social media", emoji: "🧘", description: "Focus on football — no distractions", followerGain: [0, 0], reputationChange: 0, extraEffect: "+2 to all stats next season" },
+];
+
+export const SPONSORSHIP_TIERS: { tier: SponsorshipTier; name: string; emoji: string; minFollowers: number; income: number }[] = [
+  { tier: "local_brand", name: "Local Brand Deal", emoji: "🏪", minFollowers: 1_000_000, income: 0.5 },
+  { tier: "nike_adidas", name: "Nike / Adidas Deal", emoji: "👟", minFollowers: 5_000_000, income: 3 },
+  { tier: "global_ambassador", name: "Global Brand Ambassador", emoji: "🌍", minFollowers: 15_000_000, income: 8 },
+  { tier: "merchandise_line", name: "Own Merchandise Line", emoji: "👕", minFollowers: 30_000_000, income: 15 },
+  { tier: "fifa_cover", name: "FIFA Cover Athlete", emoji: "🎮", minFollowers: 50_000_000, income: 25 },
+];
+
+function getActiveSponsorshipTier(followers: number): SponsorshipTier | null {
+  let best: SponsorshipTier | null = null;
+  for (const t of SPONSORSHIP_TIERS) {
+    if (followers >= t.minFollowers) best = t.tier;
+  }
+  return best;
+}
+
+function getSponsorshipIncome(tier: SponsorshipTier | null): number {
+  if (!tier) return 0;
+  const t = SPONSORSHIP_TIERS.find(s => s.tier === tier);
+  return t?.income || 0;
+}
+
+export function applySocialMediaAction(prev: CareerState, actionId: string): CareerState {
+  const s = { ...prev };
+  const action = SOCIAL_MEDIA_ACTIONS.find(a => a.id === actionId);
+  if (!action || s.socialMediaActionUsedThisSeason) return s;
+
+  s.socialMediaActionUsedThisSeason = true;
+
+  if (actionId === "stay_off") {
+    s.socialMediaFocusBoost = true;
+    s.events = [...s.events, "🧘 Stayed off social media — focus boost for next season (+2 all stats)"];
+  } else {
+    const gain = action.followerGain[0] === action.followerGain[1]
+      ? action.followerGain[0]
+      : rand(action.followerGain[0], action.followerGain[1]);
+    s.socialMediaFollowers = Math.round((s.socialMediaFollowers + gain / 1_000_000) * 100) / 100;
+    s.events = [...s.events, `📱 ${action.emoji} ${action.label} — gained ${(gain / 1_000_000).toFixed(1)}M followers!`];
+
+    if (action.reputationChange !== 0) {
+      s.popularity = clamp(s.popularity + action.reputationChange, 0, 100);
+      if (action.reputationChange > 0) s.events = [...s.events, `✨ Reputation +${action.reputationChange}`];
+      else s.events = [...s.events, `⚠️ Reputation ${action.reputationChange}`];
+    }
+
+    if (actionId === "troll_rival" && s.rival && !s.rival.retired) {
+      s.events = [...s.events, `😤 Rivalry with ${s.rival.name} intensifies!`];
+    }
+  }
+
+  // Update sponsorship tier
+  const newTier = getActiveSponsorshipTier(s.socialMediaFollowers * 1_000_000);
+  if (newTier && newTier !== s.activeSponsorship) {
+    const tierInfo = SPONSORSHIP_TIERS.find(t => t.tier === newTier)!;
+    s.activeSponsorship = newTier;
+    s.events = [...s.events, `${tierInfo.emoji} NEW SPONSORSHIP: ${tierInfo.name} — €${tierInfo.income}M/year!`];
+  }
+
+  // FIFA Cover event check
+  if (s.socialMediaFollowers * 1_000_000 >= 50_000_000 && s.overall >= 90 && !s.fifaCoverAccepted && !s.pendingFifaCoverEvent) {
+    s.pendingFifaCoverEvent = true;
+  }
+
+  s.phase = "playing";
+  return s;
+}
+
+export function handleFifaCoverDecision(prev: CareerState, accept: boolean): CareerState {
+  const s = { ...prev };
+  s.pendingFifaCoverEvent = false;
+  if (accept) {
+    s.fifaCoverAccepted = true;
+    s.netWorth = Math.round((s.netWorth + 25) * 100) / 100;
+    s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 5) * 100) / 100;
+    s.events = [...s.events, "🎮 Became the FIFA Cover Athlete! €25M + 5M followers + Legacy +10"];
+    s.awards = [...s.awards, { year: s.seasons[s.seasons.length - 1]?.year || 2024, name: "FIFA Cover Athlete", emoji: "🎮" }];
+  } else {
+    s.popularity = clamp(s.popularity + 5, 0, 100);
+    s.events = [...s.events, "🎮 Declined FIFA cover — gained respect for being selective. Reputation +5"];
+  }
+  s.phase = "playing";
+  return s;
 }
 
 /* ─── Flags ─── */
