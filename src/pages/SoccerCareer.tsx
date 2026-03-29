@@ -1729,6 +1729,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <FinancialPanel career={career} />
           )}
 
+          {/* My Life — Spending & Lifestyle */}
+          {(career.phase === "playing") && (
+            <MyLifePanel career={career} onPurchase={onPurchase} />
+          )}
+
           {/* Stats */}
           <div className="bg-card border border-border rounded-xl p-4 space-y-2.5">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Attributes</span>
