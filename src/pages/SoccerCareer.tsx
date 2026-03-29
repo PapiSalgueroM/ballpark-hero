@@ -1813,6 +1813,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             />
            )}
 
+          {/* OVERLAY: Social Media Action */}
+          {career.phase === "social_media_action" && (
+            <SocialMediaActionCard
+              career={career}
+              onAction={onSocialMediaAction}
+              onFifaCover={onFifaCover}
+              onDismiss={onDismissSocialMedia}
+            />
+          )}
+
           {/* OVERLAY: Retirement Ceremony */}
           {career.phase === "retirement_ceremony" && career.legacy && (
             <RetirementCeremonyCard career={career} totals={totals} onPostRetirement={onPostRetirement} />
