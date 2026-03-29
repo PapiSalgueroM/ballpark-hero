@@ -1020,12 +1020,43 @@ function simulateFamilyLife(s: CareerState): void {
     s.events.push("💍 Got married! Permanent morale boost.");
     s.netWorth -= 0.5; // Wedding cost
   }
-  // Children
-  if (s.family.isMarried && !s.family.isDivorced && s.family.children < 3 && Math.random() < 0.2) {
+  // Pregnancy announcement (ages 23-30, in a relationship)
+  if ((s.hasRelationship || s.family.isMarried) && !s.family.isDivorced && !s.pregnancyAnnounced && s.family.children < 3 && s.age >= 23 && s.age <= 30 && Math.random() < 0.2) {
+    s.pregnancyAnnounced = true;
+    s.morale = clamp(s.morale + 5, 0, 100);
+    s.events.push("🤰 Your partner is pregnant. You are going to be a parent!");
+    s.socialMediaFollowers += 0.3;
+  }
+  // Birth (season after pregnancy announced)
+  else if (s.pregnancyAnnounced) {
+    s.pregnancyAnnounced = false;
     s.family = { ...s.family, children: s.family.children + 1 };
-    s.morale = clamp(s.morale + 3, 0, 100);
+    s.morale = clamp(s.morale + 10, 0, 100);
     s.socialMediaFollowers += 0.5;
-    s.events.push(`👶 Had a child! (${s.family.children} total) Morale +3`);
+    s.events.push(`👶 Your child is born. Congratulations! (${s.family.children} total) Morale +10, Legacy +5`);
+    // Legacy +5 added via integrityBonus as a proxy
+    s.integrityBonus += 5;
+  }
+  // Follow-up child events
+  if (s.family.children >= 1 && Math.random() < 0.2) {
+    const childEvents = [
+      { id: "first_steps", emoji: "👣", text: "Your child's first steps! A moment you'll never forget.", morale: 3 },
+      { id: "follow_footsteps", emoji: "⚽", text: "Your child wants to follow in your footsteps and become a footballer.", morale: 5 },
+      { id: "watches_trophy", emoji: "🏆", text: "Your child watches you win a trophy — pure joy on their face!", morale: 8 },
+    ];
+    const available = childEvents.filter(e => !s.childEventsSeen.includes(e.id));
+    if (available.length > 0) {
+      const ev = available[Math.floor(Math.random() * available.length)];
+      s.childEventsSeen = [...s.childEventsSeen, ev.id];
+      s.morale = clamp(s.morale + ev.morale, 0, 100);
+      s.events.push(`${ev.emoji} ${ev.text} Morale +${ev.morale}`);
+    }
+  }
+  // Multiple children event
+  if (s.family.children >= 2 && Math.random() < 0.15 && !s.childEventsSeen.includes("juggling_family")) {
+    s.childEventsSeen = [...s.childEventsSeen, "juggling_family"];
+    s.morale = clamp(s.morale + 3, 0, 100);
+    s.events.push("👨‍👩‍👧‍👦 Juggling family life and football is tough but rewarding. Morale +3");
   }
   // Divorce risk: 15% if morale low
   if (s.family.isMarried && !s.family.isDivorced && s.morale < 40 && Math.random() < 0.15) {
