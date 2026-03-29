@@ -1900,7 +1900,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -1929,6 +1929,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onMoralDilemmaChoice: (choiceIndex: number) => void;
   onDismissMoralDilemma: () => void;
   onDismissAppeal: () => void;
+  onAcceptRetirement: () => void;
+  onDeclineRetirement: () => void;
+  onPunditAction: (action: PunditAction) => void;
+  onEndPundit: () => void;
+  onAdvanceOwner: () => void;
+  onEndOwner: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
   const totals = getCareerTotals(career.seasons);
