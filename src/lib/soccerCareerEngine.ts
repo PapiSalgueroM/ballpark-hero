@@ -1335,7 +1335,9 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
   const lastYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year : 0;
 
   const { apps, injured, injuryWeeks } = calcAppearances(overall, currentClubTier, age, state);
-  const goals = calcGoals(position, apps, overall);
+  let goals = calcGoals(position, apps, overall);
+  // Diving reputation: +2 goals from penalties
+  if (state.divingActive && !isGK) goals += 2;
   const assists = calcAssists(position, apps, overall);
   const cleanSheets = isGK ? Math.round(apps * rand(20, 45) / 100) : 0;
   const yellowCards = rand(0, Math.min(8, Math.round(apps * 0.25)));
