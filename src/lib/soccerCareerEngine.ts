@@ -642,7 +642,7 @@ export function formatFollowers(m: number): string {
 /* ─── Elite clubs that dominate domestically ─── */
 const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
 
-/* ─── Appearances — squad player logic for elite clubs ─── */
+/* ─── Appearances — league + UCL + cups for realistic totals ─── */
 function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState): { apps: number; injured: boolean; injuryWeeks: number } {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
@@ -650,33 +650,68 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
   const isEliteClub = state ? ELITE_CLUBS.includes(state.currentClub) : false;
   const seasonsAtClub = state ? state.seasons.filter(s => s.club === state.currentClub && s.type === "playing").length : 0;
 
-  let baseMin: number, baseMax: number;
-
-  // High overall floors — untouchable starters
-  if (overall >= 95) { baseMin = 36; baseMax = 38; }
-  else if (overall >= 90) { baseMin = 34; baseMax = 38; }
-  else if (overall >= 85 && clubTier <= 2) { baseMin = 32; baseMax = 38; }
+  // --- League appearances (out of 38) ---
+  let leagueMin: number, leagueMax: number;
+  if (overall >= 95) { leagueMin = 34; leagueMax = 38; }
+  else if (overall >= 90) { leagueMin = 32; leagueMax = 38; }
+  else if (overall >= 85 && clubTier <= 2) { leagueMin = 30; leagueMax = 36; }
   else if (isEliteClub && diff <= -10) {
-    if (seasonsAtClub === 0) { baseMin = 8; baseMax = 18; }
-    else if (seasonsAtClub === 1) { baseMin = 15; baseMax = 25; }
-    else { baseMin = 12; baseMax = 22; }
+    if (seasonsAtClub === 0) { leagueMin = 8; leagueMax = 16; }
+    else if (seasonsAtClub === 1) { leagueMin = 14; leagueMax = 22; }
+    else { leagueMin = 12; leagueMax = 20; }
   } else if (isEliteClub && diff <= -5) {
-    if (seasonsAtClub === 0) { baseMin = 15; baseMax = 25; }
-    else { baseMin = 22; baseMax = 30; }
-  } else if (diff >= 15) { baseMin = 33; baseMax = 38; }
-  else if (diff >= 5) { baseMin = 28; baseMax = 35; }
-  else if (diff >= -5) { baseMin = 22; baseMax = 32; }
-  else { baseMin = 10; baseMax = 20; }
+    if (seasonsAtClub === 0) { leagueMin = 14; leagueMax = 22; }
+    else { leagueMin = 20; leagueMax = 28; }
+  } else if (diff >= 15) { leagueMin = 32; leagueMax = 38; }
+  else if (diff >= 5) { leagueMin = 26; leagueMax = 34; }
+  else if (diff >= -5) { leagueMin = 20; leagueMax = 30; }
+  else { leagueMin = 8; leagueMax = 18; }
 
-  let apps = rand(baseMin, baseMax);
+  let leagueApps = rand(leagueMin, leagueMax);
+
+  // --- UCL appearances (0-13) — only Tier 1-2 clubs qualify ---
+  let uclApps = 0;
+  if (clubTier <= 2) {
+    // Group stage: 6-8 games, knockouts add more
+    const qualifies = clubTier === 1 ? true : Math.random() < 0.5;
+    if (qualifies) {
+      const groupApps = rand(6, 8);
+      // Higher OVR players at top clubs go deeper
+      const deepRunChance = overall >= 90 ? 0.7 : overall >= 85 ? 0.5 : 0.3;
+      if (Math.random() < deepRunChance) {
+        // Deep run: R16 + QF + SF + possibly Final = 4-5 more
+        uclApps = groupApps + rand(3, 5);
+      } else {
+        // Group exit or R16 exit
+        uclApps = groupApps + rand(0, 2);
+      }
+      // Reduce UCL apps for squad players
+      if (leagueApps < 20) {
+        uclApps = Math.round(uclApps * 0.5);
+      }
+    }
+  }
+
+  // --- Domestic cup appearances (0-7) ---
+  let cupApps = 0;
+  if (leagueApps >= 20) {
+    // Starters play cups too
+    cupApps = rand(3, 7);
+  } else if (leagueApps >= 10) {
+    cupApps = rand(2, 5);
+  } else {
+    cupApps = rand(1, 3);
+  }
+
+  let apps = leagueApps + uclApps + cupApps;
 
   let injured = false;
   let injuryWeeks = 0;
   if (Math.random() < 0.20) {
     injured = true;
     injuryWeeks = rand(2, 8);
-    const missedApps = Math.round(injuryWeeks * 38 / 46);
-    apps = Math.max(1, apps - clamp(missedApps, 0, 8));
+    const missedApps = Math.round(injuryWeeks * apps / 46);
+    apps = Math.max(1, apps - clamp(missedApps, 0, 12));
   }
 
   return { apps, injured, injuryWeeks };
