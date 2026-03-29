@@ -1439,8 +1439,13 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
           📋 Become a Manager
         </Button>
         <Button onClick={() => onPostRetirement("pundit")} variant="outline" className="w-full h-11 text-sm font-bold">
-          🎙️ Become a TV Pundit (+5 Legacy)
+          🎙️ Become a TV Pundit
         </Button>
+        {career.netWorth >= 200 && (
+          <Button onClick={() => onPostRetirement("owner")} variant="outline" className="w-full h-11 text-sm font-bold">
+            🏟️ Buy a Football Club ({formatNetWorth(career.netWorth)} net worth)
+          </Button>
+        )}
       </div>
     </div>
   );
