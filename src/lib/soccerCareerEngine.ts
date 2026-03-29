@@ -2067,28 +2067,17 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     }
   }
   
-  // Detect "FINAL SEASON" — will retire next year
-  const projectedOvr = s.overall - (s.age >= 34 ? 3 : s.age >= 30 ? 1 : 0);
-  if (s.age >= 37 || (projectedOvr < 58 && s.age >= 30)) {
-    s.isFinalSeason = true;
-  }
+  // Track peak overall
+  if (s.overall > s.peakOverall) s.peakOverall = s.overall;
   
-  // Retirement check
-  if (s.age >= 38 || (s.overall < 58 && s.age >= 30)) {
-    s.retired = true;
-    s.events.push("👋 Announced retirement from professional football");
-    const lastYear = s.seasons[s.seasons.length - 1].year;
-    s.seasons = [...s.seasons, {
-      year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
-      apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
-      leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "retired",
-      intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
-    }];
-    if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
-    s.legacy = calculateLegacy(s);
-    s.phase = "retirement_ceremony";
-    return s;
-  }
+  // Retirement suggestion — when overall drops 10+ from peak OR drops to 75 or below (age 30+)
+  if (!s.retirementSuggested && s.age >= 30) {
+    const dropFromPeak = s.peakOverall - s.overall;
+    if (dropFromPeak >= 10 || s.overall <= 75) {
+      s.retirementSuggested = true;
+      s.phase = "retirement_suggestion";
+      // Still generate the season stats — they've already been applied
+      const season = generateSeasonStats(s);
   const season = generateSeasonStats(s);
   // Apply stat boosts from previous season's events
   for (const [key, val] of Object.entries(s.statBoostNextSeason)) {
