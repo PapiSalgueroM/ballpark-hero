@@ -2707,6 +2707,15 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
     s.phase = "rivalry_event";
     return s;
   }
+  // Social media action — once per season, only during playing phase for pro players
+  if (!s.socialMediaActionUsedThisSeason && s.age >= 18 && !s.retired) {
+    s.phase = "social_media_action";
+    return s;
+  }
+  // FIFA cover event
+  if (s.pendingFifaCoverEvent) {
+    // handled in UI as a special overlay within social_media_action flow
+  }
   // Random events
   const events = generateRandomEvents(s);
   if (events.length > 0) {
