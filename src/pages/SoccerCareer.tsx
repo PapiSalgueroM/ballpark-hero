@@ -503,6 +503,11 @@ export default function SoccerCareer() {
     setCareer(dismissMoralDilemma(career, clubs));
   };
 
+  const handleDismissAppeal = () => {
+    if (!career) return;
+    setCareer(dismissAppealResult(career, clubs));
+  };
+
   const handleNewCareer = () => {
     setShowNewCareerConfirm(true);
   };
@@ -568,6 +573,7 @@ export default function SoccerCareer() {
               onDismissSocialMedia={handleDismissSocialMedia}
               onMoralDilemmaChoice={handleMoralDilemmaChoice}
               onDismissMoralDilemma={handleDismissMoralDilemma}
+              onDismissAppeal={handleDismissAppeal}
               timelineRef={timelineRef}
             />
           )}
