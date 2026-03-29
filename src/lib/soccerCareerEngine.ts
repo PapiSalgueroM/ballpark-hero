@@ -1673,6 +1673,10 @@ export function initCareer(
     pendingAppealResult: null,
     childEventsSeen: [],
     pregnancyAnnounced: false,
+    punditState: null,
+    ownerState: null,
+    peakOverall: overall,
+    retirementSuggested: false,
   };
 }
 
