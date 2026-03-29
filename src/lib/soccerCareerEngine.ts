@@ -2745,6 +2745,23 @@ export function dismissSummary(prev: CareerState, clubs: ClubData[]): CareerStat
   return advanceToNextPhase(s, clubs);
 }
 
+/* ─── Dismiss Social Media Action phase ─── */
+export function dismissSocialMediaPhase(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  // Continue to random events → transfer window
+  const events = generateRandomEvents(s);
+  if (events.length > 0) {
+    s.pendingEvents = events;
+    s.phase = "random_events";
+    return s;
+  }
+  if (s.age >= 18) {
+    s.transferSituation = determineTransferSituation(s, clubs);
+    s.phase = "transfer_window";
+  } else { s.phase = "playing"; }
+  return s;
+}
+
 /* ─── Dismiss Ballon d'Or screen ─── */
 export function dismissBallonDor(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev };
