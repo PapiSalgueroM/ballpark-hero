@@ -20,6 +20,7 @@ import {
   type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,
   type UCLResult, type UCLKnockoutMatch, type Award,
   type LegacyResult, type LegacyTier, type PostRetirementChoice, type ManagerState,
+  type PunditState, type OwnerState, type PunditAction,
   type NewsArticle, type SpendingItem, type SpendingCategory,
   type SocialMediaAction, type SponsorshipTier,
   type MoralDilemma, type MoralDilemmaChoice,
@@ -27,6 +28,9 @@ import {
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
+  acceptRetirementSuggestion, declineRetirementSuggestion,
+  advancePunditSeason, endPunditCareer,
+  advanceOwnerSeason, endOwnerCareer,
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
   applySocialMediaAction, handleFifaCoverDecision, dismissSocialMediaPhase,
   applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
@@ -35,6 +39,7 @@ import {
   generateShareText, getYouthAcademyClub,
   getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
 } from "@/lib/soccerCareerEngine";
+import { ShareButtons } from "@/components/game/ShareButtons";
 import { shareResult } from "@/lib/share";
 
 /* ─── Constants ─── */
