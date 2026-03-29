@@ -1921,6 +1921,66 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.socialMediaFocusBoost = false;
     s.events.push("🧘 Social media detox paid off — +2 to all stats!");
   }
+
+  // Match fix ban — skip season
+  if (s.matchFixBanned > 0) {
+    s.matchFixBanned -= 1;
+    s.events.push(`🚫 Serving match-fixing ban (${s.matchFixBanned > 0 ? s.matchFixBanned + " season(s) remaining" : "ban lifted!"})`);
+    if (s.matchFixBanned > 0) {
+      // Skip season entirely — add empty record
+      const lastYear = s.seasons[s.seasons.length - 1].year;
+      s.seasons = [...s.seasons, {
+        year: lastYear + 1, age: s.age, club: "BANNED", clubCountry: "", clubTier: 99,
+        apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
+        leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
+        intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
+      }];
+      s.pendingSummary = s.seasons[s.seasons.length - 1];
+      s.phase = "season_summary";
+      simulateSeasonFinances(s, s.pendingSummary);
+      return s;
+    }
+  }
+
+  // PED tracking — check for failed test
+  if (s.pedActive && s.pedSeasonsRemaining > 0) {
+    s.pedSeasonsRemaining -= 1;
+    if (Math.random() < 0.20) {
+      // Failed test!
+      s.pedActive = false;
+      s.pedSeasonsRemaining = 0;
+      // Remove PED stat boost
+      for (const k of ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"] as const) {
+        (s as any)[k] = clamp((s as any)[k] - 5, 20, 99);
+      }
+      s.matchFixBanned = 1; // 1 year ban
+      s.integrityBonus -= 25;
+      s.popularity = clamp(s.popularity - 30, 0, 100);
+      s.morale = clamp(s.morale - 25, 0, 100);
+      s.socialMediaFollowers = Math.max(0, s.socialMediaFollowers - 3);
+      s.events.push("🚨 FAILED DRUG TEST! Banned for 1 season. Legacy -25, reputation destroyed.");
+      // Skip rest of season
+      const lastYear = s.seasons[s.seasons.length - 1].year;
+      s.seasons = [...s.seasons, {
+        year: lastYear + 1, age: s.age, club: "BANNED (PED)", clubCountry: "", clubTier: 99,
+        apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
+        leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
+        intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
+      }];
+      s.pendingSummary = s.seasons[s.seasons.length - 1];
+      s.phase = "season_summary";
+      simulateSeasonFinances(s, s.pendingSummary);
+      return s;
+    }
+    if (s.pedSeasonsRemaining === 0) {
+      // PED wore off
+      s.pedActive = false;
+      for (const k of ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"] as const) {
+        (s as any)[k] = clamp((s as any)[k] - 5, 20, 99);
+      }
+      s.events.push("💊 The substance wore off. Stats returned to normal.");
+    }
+  }
   
   // Detect "FINAL SEASON" — will retire next year
   const projectedOvr = s.overall - (s.age >= 34 ? 3 : s.age >= 30 ? 1 : 0);
