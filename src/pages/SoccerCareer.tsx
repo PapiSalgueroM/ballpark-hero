@@ -1512,9 +1512,22 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
   const [showRetireConfirm, setShowRetireConfirm] = useState(false);
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season";
+  const [isActionBarSticky, setIsActionBarSticky] = useState(true);
+  const actionBarSentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const sentinel = actionBarSentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { setIsActionBarSticky(!entry.isIntersecting); },
+      { threshold: 0.1 }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 pb-20">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -1540,6 +1553,28 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
         </div>
       </div>
+
+      {/* Finances Bar — always visible */}
+      {!career.retired && (
+        <div className="bg-card/90 backdrop-blur border border-border rounded-xl px-3 py-2 flex items-center justify-between gap-2">
+          <div className="text-center flex-1">
+            <div className={`text-sm sm:text-base font-black ${career.netWorth >= 50 ? "text-yellow-300" : career.netWorth >= 10 ? "text-emerald-400" : career.netWorth >= 1 ? "text-blue-400" : career.netWorth < 0 ? "text-red-400" : "text-muted-foreground"}`}>
+              {formatNetWorth(career.netWorth)}
+            </div>
+            <div className="text-[9px] text-muted-foreground">Net Worth</div>
+          </div>
+          <div className="w-px h-6 bg-border" />
+          <div className="text-center flex-1">
+            <div className="text-sm sm:text-base font-black text-emerald-400">{formatWage(career.weeklyWage)}</div>
+            <div className="text-[9px] text-muted-foreground">Wage</div>
+          </div>
+          <div className="w-px h-6 bg-border" />
+          <div className="text-center flex-1">
+            <div className="text-sm sm:text-base font-black text-blue-400">€{career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M</div>
+            <div className="text-[9px] text-muted-foreground">Value</div>
+          </div>
+        </div>
+      )}
 
       {/* FINAL SEASON BANNER */}
       {career.isFinalSeason && !career.retired && (
@@ -1795,8 +1830,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
 
+      {/* Sentinel — when this is visible, unstick the action bar */}
+      <div ref={actionBarSentinelRef} className="h-1" />
+
       {/* Action bar */}
-      <div className="flex items-center gap-3">
+      <div className={`flex items-center gap-3 ${isActionBarSticky ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 sm:px-4 py-3 max-w-5xl mx-auto' : ''}`}>
         {career.phase === "retired" ? (
           <div className="flex-1 flex gap-2">
             <Button onClick={onShare} variant="outline" className="flex-1 h-12 text-sm font-bold">
