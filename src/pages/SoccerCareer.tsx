@@ -1959,7 +1959,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       ];
 
   const [showRetireConfirm, setShowRetireConfirm] = useState(false);
-  const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season";
+  const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
   const [isActionBarSticky, setIsActionBarSticky] = useState(true);
   const actionBarSentinelRef = useRef<HTMLDivElement>(null);
 
@@ -2151,6 +2151,31 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <RetirementCeremonyCard career={career} totals={totals} onPostRetirement={onPostRetirement} />
           )}
 
+          {/* OVERLAY: Retirement Suggestion */}
+          {career.phase === "retirement_suggestion" && (
+            <div className="rounded-xl border-2 border-amber-500/50 bg-gradient-to-b from-amber-500/10 to-transparent p-6 space-y-4 text-center">
+              <div className="text-5xl">⚠️</div>
+              <h3 className="text-xl font-black tracking-tight">YOUR BODY IS SHOWING SIGNS OF WEAR</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                At age {career.age}, your overall has dropped to <strong>{career.overall}</strong> (peak: {career.peakOverall}).
+                {career.overall <= 75 ? " Many players retire at this level." : ` That's a ${career.peakOverall - career.overall}-point decline from your prime.`}
+                <br/>Consider retirement?
+              </p>
+              <div className="grid grid-cols-2 gap-2 text-center text-xs">
+                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black text-lg">{career.peakOverall}</div><div className="text-muted-foreground">Peak OVR</div></div>
+                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black text-lg text-amber-400">{career.overall}</div><div className="text-muted-foreground">Current OVR</div></div>
+              </div>
+              <div className="space-y-2">
+                <Button onClick={onAcceptRetirement} className="w-full h-11 text-sm font-bold bg-amber-600 hover:bg-amber-500 text-white">
+                  👋 Hang Up the Boots — Retire
+                </Button>
+                <Button onClick={onDeclineRetirement} variant="outline" className="w-full h-11 text-sm font-bold">
+                  💪 Not Done Yet — Keep Playing
+                </Button>
+              </div>
+            </div>
+          )}
+
           {/* OVERLAY: Post-Retirement Choice */}
           {career.phase === "post_retirement" && (
             <PostRetirementCard career={career} onChoice={onPostRetirement} />
@@ -2159,6 +2184,61 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* OVERLAY: Manager Season */}
           {career.phase === "manager_season" && career.managerState && (
             <ManagerPanel manager={career.managerState} career={career} onAdvance={onAdvanceManager} onEnd={onEndManager} />
+          )}
+
+          {/* OVERLAY: Pundit Season */}
+          {career.phase === "pundit_season" && career.punditState && (
+            <div className="rounded-xl border border-border bg-card p-4 space-y-3">
+              <div className="text-center space-y-1">
+                <h3 className="text-lg font-black">🎙️ TV Pundit Career</h3>
+                <p className="text-xs text-muted-foreground">Season {career.punditState.season} · {formatFollowers(career.socialMediaFollowers)} followers</p>
+              </div>
+              {career.punditEvents.length > 0 && (
+                <div className="space-y-1 max-h-32 overflow-y-auto">
+                  {career.punditEvents.slice(-4).map((e, i) => (
+                    <div key={i} className="text-xs bg-muted/20 rounded-lg px-3 py-1.5">{e}</div>
+                  ))}
+                </div>
+              )}
+              <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{career.punditState.predictions.filter(p => p.cameTrue).length}</div><div className="text-[9px] text-muted-foreground">Predictions ✓</div></div>
+                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{career.punditState.controversies}</div><div className="text-[9px] text-muted-foreground">Controversies</div></div>
+                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">+{career.punditState.legacyBonus}</div><div className="text-[9px] text-muted-foreground">Legacy Bonus</div></div>
+              </div>
+              <div className="text-xs text-center text-muted-foreground font-bold uppercase mt-2">Choose your action this season</div>
+              <div className="space-y-2">
+                <Button onClick={() => onPunditAction("praise_player")} variant="outline" className="w-full h-10 text-sm font-bold">⭐ Praise a Rising Star</Button>
+                <Button onClick={() => onPunditAction("criticise_manager")} variant="outline" className="w-full h-10 text-sm font-bold">🔥 Criticise a Manager</Button>
+                <Button onClick={() => onPunditAction("bold_prediction")} variant="outline" className="w-full h-10 text-sm font-bold">🎯 Make a Bold Prediction</Button>
+              </div>
+              <Button onClick={onEndPundit} variant="ghost" className="w-full h-8 text-xs text-muted-foreground">🚪 Retire from Punditry</Button>
+            </div>
+          )}
+
+          {/* OVERLAY: Owner Season */}
+          {career.phase === "owner_season" && career.ownerState && (
+            <div className="rounded-xl border border-border bg-card p-4 space-y-3">
+              <div className="text-center space-y-1">
+                <h3 className="text-lg font-black">🏟️ Club Owner</h3>
+                <p className="text-xs text-muted-foreground">Owning {career.ownerState.club} (Tier {career.ownerState.clubTier}) · Season {career.ownerState.season}</p>
+              </div>
+              {career.ownerState.seasonResults.length > 0 && (
+                <div className="space-y-1">
+                  {career.ownerState.seasonResults.slice(-5).map((r, i) => (
+                    <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
+                      <span className="text-muted-foreground">S{r.year}</span>
+                      <span className="font-semibold">{r.club}</span>
+                      <span className={`text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{r.result}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{career.ownerState.trophies}</div><div className="text-[9px] text-muted-foreground">Trophies</div></div>
+                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{career.ownerState.promotions}</div><div className="text-[9px] text-muted-foreground">Promotions</div></div>
+                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">€{career.ownerState.budget.toFixed(0)}M</div><div className="text-[9px] text-muted-foreground">Budget</div></div>
+              </div>
+            </div>
           )}
           {career.phase === "ballon_dor" && career.pendingBallonDor && (
             <BallonDorCeremonyCard bdor={career.pendingBallonDor} career={career} onDismiss={onDismissBallonDor} />
