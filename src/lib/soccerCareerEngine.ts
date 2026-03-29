@@ -237,6 +237,59 @@ export interface FamilyStatus {
 
 export type PrimeType = "early" | "normal" | "late" | "extended";
 
+/* ─── Spending & Lifestyle System ─── */
+export type SpendingCategory = "property" | "vehicle" | "investment" | "lifestyle";
+
+export interface SpendingItem {
+  id: string;
+  name: string;
+  emoji: string;
+  category: SpendingCategory;
+  cost: number; // in millions
+  monthlyCost?: number; // in millions per year (ongoing)
+  description: string;
+  oneTime: boolean; // can only buy once?
+  minNetWorth?: number; // minimum net worth to unlock
+  effect?: string; // description of gameplay effect
+}
+
+export interface InvestmentHolding {
+  id: string;
+  name: string;
+  invested: number; // in millions
+  yearPurchased: number;
+  resolved: boolean;
+  returnAmount: number; // in millions (0 if not resolved)
+}
+
+export const SPENDING_ITEMS: SpendingItem[] = [
+  // Properties
+  { id: "rent_apartment", name: "Rent Apartment", emoji: "🏢", category: "property", cost: 0, monthlyCost: 0.024, description: "Basic city apartment — €2k/month", oneTime: true },
+  { id: "city_apartment", name: "City Apartment", emoji: "🏙️", category: "property", cost: 0.8, description: "Buy a stylish city apartment — €800k", oneTime: true, minNetWorth: 0.5 },
+  { id: "luxury_house", name: "Luxury House", emoji: "🏠", category: "property", cost: 3, description: "Buy a luxury house — €3M", oneTime: true, minNetWorth: 2 },
+  { id: "mansion", name: "Mansion", emoji: "🏰", category: "property", cost: 8, description: "Buy a sprawling mansion — €8M", oneTime: true, minNetWorth: 5 },
+  { id: "private_island", name: "Private Island", emoji: "🏝️", category: "property", cost: 25, description: "Buy your own private island — €25M", oneTime: true, minNetWorth: 20 },
+  // Vehicles
+  { id: "sports_car", name: "Sports Car", emoji: "🏎️", category: "vehicle", cost: 0.15, description: "Buy a sports car — €150k", oneTime: false },
+  { id: "supercar_collection", name: "Supercar Collection", emoji: "🚗", category: "vehicle", cost: 0.8, description: "Build a supercar collection — €800k", oneTime: true, minNetWorth: 1 },
+  { id: "private_jet", name: "Private Jet", emoji: "✈️", category: "vehicle", cost: 15, monthlyCost: 0.5, description: "Buy a private jet — €15M + €500k/yr upkeep", oneTime: true, minNetWorth: 12 },
+  { id: "yacht", name: "Yacht", emoji: "🛥️", category: "vehicle", cost: 8, monthlyCost: 0.3, description: "Buy a luxury yacht — €8M + €300k/yr upkeep", oneTime: true, minNetWorth: 6 },
+  // Investments
+  { id: "restaurant_chain", name: "Restaurant Chain", emoji: "🍽️", category: "investment", cost: 0.5, description: "30% chance profit €1.5M, 70% break even or loss", oneTime: false },
+  { id: "crypto", name: "Crypto", emoji: "₿", category: "investment", cost: 0.2, description: "50% chance 3x return, 50% lose it all", oneTime: false },
+  { id: "football_shares", name: "Football Club Shares", emoji: "⚽", category: "investment", cost: 5, description: "Steady 8% return per year", oneTime: true, minNetWorth: 4 },
+  { id: "tech_startup", name: "Tech Startup", emoji: "💻", category: "investment", cost: 1, description: "20% chance 10x return, 80% lose it", oneTime: false },
+  // Lifestyle upgrades
+  { id: "personal_chef", name: "Personal Chef", emoji: "👨‍🍳", category: "lifestyle", cost: 0, monthlyCost: 0.05, description: "Hire a personal chef — €50k/year", oneTime: true, effect: "Better nutrition, +2 morale per season" },
+  { id: "personal_trainer", name: "Personal Trainer", emoji: "💪", category: "lifestyle", cost: 0, monthlyCost: 0.08, description: "Private trainer — €80k/year", oneTime: true, effect: "+1 Physical stat per season" },
+  { id: "sports_psychologist", name: "Sports Psychologist", emoji: "🧠", category: "lifestyle", cost: 0, monthlyCost: 0.06, description: "Mental coach — €60k/year", oneTime: true, effect: "+5 Morale permanently on hire" },
+  { id: "elite_recovery", name: "Elite Recovery Clinic", emoji: "🏥", category: "lifestyle", cost: 0, monthlyCost: 0.1, description: "Top recovery tech — €100k/year", oneTime: true, effect: "Reduces injury recovery time by 50%" },
+];
+
+export function getSpendingItem(id: string): SpendingItem | undefined {
+  return SPENDING_ITEMS.find(i => i.id === id);
+}
+
 export interface CareerState {
   playerName: string;
   nationality: string;
@@ -298,6 +351,11 @@ export interface CareerState {
   consecutiveDeficitYears: number;
   agentFeesPaid: number;
   family: FamilyStatus;
+  // Spending system
+  purchasedItems: string[]; // item IDs that have been bought
+  investmentHoldings: InvestmentHolding[];
+  totalAssetValue: number; // value of all owned properties + vehicles + investments
+  customYearlyCosts: number; // yearly costs from purchased lifestyle items
   // Ballon d'Or & Awards
   awards: Award[];
   pendingBallonDor: BallonDorResult | null;
@@ -571,29 +629,46 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
   // Sponsorship income
   s.sponsorshipIncome = calcSponsorshipIncome(s.popularity, s.socialMediaFollowers, s.sponsorDeal);
   const totalIncome = wageIncome + s.sponsorshipIncome;
-  // Lifestyle cost
-  s.lifestyleLevel = calcLifestyleLevel(s.netWorth);
-  s.lifestyleCostPerYear = calcLifestyleCost(s.lifestyleLevel);
+  // Lifestyle cost (auto + custom spending)
+  s.lifestyleLevel = calcLifestyleLevel(s.netWorth + (s.totalAssetValue || 0));
+  s.lifestyleCostPerYear = calcLifestyleCost(s.lifestyleLevel) + (s.customYearlyCosts || 0);
   // Net
   const netThisYear = totalIncome - s.lifestyleCostPerYear;
   s.netWorth = Math.round((s.netWorth + netThisYear) * 100) / 100;
   s.totalEarnings = Math.round((s.totalEarnings + totalIncome) * 100) / 100;
+  // Resolve investments
+  resolveInvestments(s);
+  // Update total assets
+  s.totalAssetValue = calcTotalAssets(s);
   // Social media
   const smGrowth = growSocialMedia(s, season);
   s.socialMediaFollowers = Math.round((s.socialMediaFollowers + smGrowth) * 100) / 100;
+  // Lifestyle effects: personal chef gives morale
+  if (s.purchasedItems.includes("personal_chef")) {
+    s.morale = clamp(s.morale + 2, 0, 100);
+  }
   // Deficit tracking
   if (netThisYear < 0) {
     s.consecutiveDeficitYears += 1;
   } else {
     s.consecutiveDeficitYears = 0;
   }
-  // Financial crisis
-  if (s.consecutiveDeficitYears >= 3) {
-    s.events.push("💸 FINANCIAL CRISIS — Spending exceeds income for 3 years! Forced to sell assets.");
+  // Financial crisis — also triggered by negative net worth
+  if (s.consecutiveDeficitYears >= 3 || s.netWorth < -2) {
+    s.events.push("💸 FINANCIAL CRISIS — Spending exceeds income! Forced to sell assets.");
     s.netWorth = Math.max(0, s.netWorth);
     s.lifestyleLevel = "Humble";
     s.lifestyleCostPerYear = 0.05;
     s.properties = [];
+    s.purchasedItems = s.purchasedItems.filter(id => {
+      const item = getSpendingItem(id);
+      return item?.category === "lifestyle"; // keep lifestyle upgrades
+    });
+    s.customYearlyCosts = s.purchasedItems.reduce((sum, id) => {
+      const item = getSpendingItem(id);
+      return sum + (item?.monthlyCost || 0);
+    }, 0);
+    s.totalAssetValue = 0;
     s.consecutiveDeficitYears = 0;
     s.morale = clamp(s.morale - 20, 0, 100);
   }
@@ -639,7 +714,139 @@ export function formatFollowers(m: number): string {
   return `${Math.round(m * 1000)}`;
 }
 
-/* ─── Elite clubs that dominate domestically ─── */
+/* ─── Purchase spending item ─── */
+export function purchaseSpendingItem(prev: CareerState, itemId: string): CareerState {
+  const item = getSpendingItem(itemId);
+  if (!item) return prev;
+  const s = { ...prev, events: [...prev.events], purchasedItems: [...prev.purchasedItems], properties: [...prev.properties], investments: [...prev.investments], investmentHoldings: [...prev.investmentHoldings] };
+  
+  // Check if already owned (one-time items)
+  if (item.oneTime && s.purchasedItems.includes(itemId)) return prev;
+  
+  // Check if can afford
+  if (item.cost > 0 && s.netWorth < item.cost * 0.5) return prev; // need at least half net worth
+  
+  // Deduct cost
+  s.netWorth = Math.round((s.netWorth - item.cost) * 100) / 100;
+  s.purchasedItems.push(itemId);
+  
+  // Track in properties/investments arrays for display
+  if (item.category === "property" || item.category === "vehicle") {
+    s.properties.push(item.name);
+  }
+  if (item.category === "investment") {
+    s.investments.push(item.name);
+    const lastYear = s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year : 2020;
+    s.investmentHoldings.push({
+      id: itemId + "_" + Date.now(),
+      name: item.name,
+      invested: item.cost,
+      yearPurchased: lastYear,
+      resolved: false,
+      returnAmount: 0,
+    });
+  }
+  
+  // Add ongoing costs
+  if (item.monthlyCost) {
+    s.customYearlyCosts = Math.round((s.customYearlyCosts + item.monthlyCost) * 1000) / 1000;
+  }
+  
+  // Lifestyle effects
+  if (itemId === "sports_psychologist") {
+    s.morale = clamp(s.morale + 5, 0, 100);
+    s.events.push("🧠 Hired a Sports Psychologist! +5 Morale permanently.");
+  } else if (itemId === "personal_trainer") {
+    s.events.push("💪 Hired a Personal Trainer! +1 Physical per season.");
+  } else if (itemId === "elite_recovery") {
+    s.events.push("🏥 Signed up for Elite Recovery Clinic! Injury recovery -50%.");
+  } else if (itemId === "personal_chef") {
+    s.events.push("👨‍🍳 Hired a Personal Chef! +2 Morale per season.");
+  } else if (itemId === "rent_apartment" && item.cost === 0) {
+    s.events.push("🏢 Renting a city apartment.");
+  } else {
+    s.events.push(`${item.emoji} Purchased ${item.name}! (€${item.cost >= 1 ? item.cost.toFixed(0) + "M" : Math.round(item.cost * 1000) + "k"})`);
+  }
+  
+  // Update total asset value
+  s.totalAssetValue = calcTotalAssets(s);
+  s.lifestyleLevel = calcLifestyleLevel(s.netWorth + s.totalAssetValue);
+  
+  return s;
+}
+
+function calcTotalAssets(s: CareerState): number {
+  let total = 0;
+  // Properties & vehicles — appreciate/depreciate
+  const propertyValues: Record<string, number> = {
+    "city_apartment": 0.85, "luxury_house": 3.2, "mansion": 8.5, "private_island": 27,
+    "sports_car": 0.1, "supercar_collection": 0.6, "private_jet": 10, "yacht": 5,
+  };
+  for (const id of s.purchasedItems) {
+    if (propertyValues[id]) total += propertyValues[id];
+  }
+  // Unresolved investments at face value
+  for (const h of s.investmentHoldings) {
+    if (!h.resolved) total += h.invested;
+  }
+  return Math.round(total * 100) / 100;
+}
+
+function resolveInvestments(s: CareerState): void {
+  for (let i = 0; i < s.investmentHoldings.length; i++) {
+    const h = s.investmentHoldings[i];
+    if (h.resolved) continue;
+    const currentYear = s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year : 2020;
+    const yearsHeld = currentYear - h.yearPurchased;
+    
+    if (h.name === "Football Club Shares") {
+      // Steady 8% return per year — resolve as income, keep holding
+      const yearlyReturn = h.invested * 0.08;
+      s.netWorth = Math.round((s.netWorth + yearlyReturn) * 100) / 100;
+      if (yearsHeld > 0 && yearsHeld % 1 === 0) {
+        s.events.push(`⚽ Football Club Shares returned €${(yearlyReturn).toFixed(1)}M this year`);
+      }
+      continue; // never resolves — keeps paying
+    }
+    
+    // Other investments resolve after 1-2 years
+    if (yearsHeld < 1) continue;
+    
+    h.resolved = true;
+    if (h.name === "Restaurant Chain") {
+      if (Math.random() < 0.30) {
+        h.returnAmount = 1.5;
+        s.netWorth = Math.round((s.netWorth + h.returnAmount) * 100) / 100;
+        s.events.push(`🍽️ Restaurant chain is thriving! Earned €${h.returnAmount.toFixed(1)}M profit!`);
+      } else if (Math.random() < 0.5) {
+        s.events.push("🍽️ Restaurant chain broke even. No profit, no loss.");
+      } else {
+        const loss = h.invested * 0.5;
+        s.events.push(`🍽️ Restaurant chain struggling. Lost €${loss.toFixed(1)}M.`);
+      }
+    } else if (h.name === "Crypto") {
+      if (Math.random() < 0.50) {
+        h.returnAmount = h.invested * 3;
+        s.netWorth = Math.round((s.netWorth + h.returnAmount) * 100) / 100;
+        s.events.push(`₿ Crypto investment 3x'd! Earned €${h.returnAmount.toFixed(1)}M!`);
+      } else {
+        s.events.push("₿ Crypto investment crashed! Lost everything.");
+      }
+    } else if (h.name === "Tech Startup") {
+      if (Math.random() < 0.20) {
+        h.returnAmount = h.invested * 10;
+        s.netWorth = Math.round((s.netWorth + h.returnAmount) * 100) / 100;
+        s.events.push(`💻 Tech startup went viral! 10x return — €${h.returnAmount.toFixed(1)}M!`);
+      } else {
+        s.events.push("💻 Tech startup failed. Investment lost.");
+      }
+    }
+  }
+  // Remove old non-football resolved investments from the investments display
+  s.investmentHoldings = s.investmentHoldings.filter(h => !h.resolved || h.name === "Football Club Shares");
+}
+
+
 const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
 
 /* ─── Appearances — league + UCL + cups for realistic totals ─── */
@@ -710,6 +917,10 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
   if (Math.random() < 0.20) {
     injured = true;
     injuryWeeks = rand(2, 8);
+    // Elite recovery clinic halves injury time
+    if (state?.purchasedItems?.includes("elite_recovery")) {
+      injuryWeeks = Math.max(1, Math.round(injuryWeeks * 0.5));
+    }
     const missedApps = Math.round(injuryWeeks * apps / 46);
     apps = Math.max(1, apps - clamp(missedApps, 0, 12));
   }
@@ -1043,6 +1254,7 @@ export function initCareer(
     socialMediaFollowers: 0, sponsorshipIncome: 0, properties: [], investments: [],
     consecutiveDeficitYears: 0, agentFeesPaid: 0,
     family: { isMarried: false, marriedAge: null, children: 0, isDivorced: false, divorceAge: null },
+    purchasedItems: [], investmentHoldings: [], totalAssetValue: 0, customYearlyCosts: 0,
     awards: [],
     pendingBallonDor: null,
     lastUCLResult: null,
@@ -1408,6 +1620,10 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   s.dribbling = growStat(s.dribbling, s.age, false, false, s.primeType);
   s.defending = growStat(s.defending, s.age, false, false, s.primeType);
   s.physical = growStat(s.physical, s.age, false, false, s.primeType);
+  // Personal trainer: +1 physical per season
+  if (s.purchasedItems.includes("personal_trainer")) {
+    s.physical = clamp(s.physical + 1, 20, 99);
+  }
   s.reflexes = growStat(s.reflexes, s.age, false, false, s.primeType);
   s.overall = calcOverall(s, s.position);
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);

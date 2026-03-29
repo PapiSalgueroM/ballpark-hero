@@ -20,12 +20,12 @@ import {
   type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,
   type UCLResult, type UCLKnockoutMatch, type Award,
   type LegacyResult, type LegacyTier, type PostRetirementChoice, type ManagerState,
-  type NewsArticle,
+  type NewsArticle, type SpendingItem, type SpendingCategory,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
-  dismissNewspaper,
+  dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
   generateShareText, getYouthAcademyClub,
   getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
 } from "@/lib/soccerCareerEngine";
@@ -458,6 +458,17 @@ export default function SoccerCareer() {
     shareResult(generateShareText(career));
   };
 
+  const handlePurchase = (itemId: string) => {
+    if (!career) return;
+    const result = purchaseSpendingItem(career, itemId);
+    if (result !== career) {
+      setCareer(result);
+      toast.success("Purchase complete!");
+    } else {
+      toast.error("Can't purchase this item right now");
+    }
+  };
+
   const handleNewCareer = () => {
     setShowNewCareerConfirm(true);
   };
@@ -517,6 +528,7 @@ export default function SoccerCareer() {
               onEndManager={handleEndManager}
               onShare={handleShare}
               onNewCareer={handleNewCareer}
+              onPurchase={handlePurchase}
               timelineRef={timelineRef}
             />
           )}
@@ -1155,6 +1167,7 @@ function FinancialPanel({ career }: { career: CareerState }) {
 
       {/* Financial details row */}
       <div className="flex items-center gap-3 text-[10px] text-muted-foreground flex-wrap">
+        {(career.totalAssetValue || 0) > 0 && <span>🏠 Assets: €{(career.totalAssetValue || 0).toFixed(1)}M</span>}
         {career.sponsorshipIncome > 0 && <span>🤝 Sponsor: €{career.sponsorshipIncome.toFixed(1)}M/yr</span>}
         {career.lifestyleCostPerYear > 0 && <span>💸 Costs: €{career.lifestyleCostPerYear.toFixed(1)}M/yr</span>}
         {career.agentFeesPaid > 0 && <span>🕴️ Agent fees: €{career.agentFeesPaid.toFixed(1)}M total</span>}
@@ -1472,8 +1485,119 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
   );
 }
 
+/* ─── My Life Panel — Spending & Lifestyle ─── */
+function MyLifePanel({ career, onPurchase }: { career: CareerState; onPurchase: (id: string) => void }) {
+  const [activeTab, setActiveTab] = useState<SpendingCategory>("property");
+  const categories: { key: SpendingCategory; label: string; emoji: string }[] = [
+    { key: "property", label: "Property", emoji: "🏠" },
+    { key: "vehicle", label: "Vehicles", emoji: "🏎️" },
+    { key: "investment", label: "Invest", emoji: "📈" },
+    { key: "lifestyle", label: "Lifestyle", emoji: "✨" },
+  ];
+
+  const items = SPENDING_ITEMS.filter(i => i.category === activeTab);
+  const owned = career.purchasedItems || [];
+  const totalAssets = career.totalAssetValue || 0;
+  const monthlyCosts = career.customYearlyCosts || 0;
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-4 space-y-3">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">🏠 My Life</span>
+        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+          <span>Assets: <strong className="text-emerald-400">{formatNetWorth(totalAssets)}</strong></span>
+          {monthlyCosts > 0 && <span>· Costs: <strong className="text-red-400">€{(monthlyCosts * 1000).toFixed(0)}k/yr</strong></span>}
+        </div>
+      </div>
+
+      {/* Category tabs */}
+      <div className="flex gap-1">
+        {categories.map(c => (
+          <button
+            key={c.key}
+            onClick={() => setActiveTab(c.key)}
+            className={`flex-1 text-[10px] sm:text-xs font-bold py-1.5 rounded-lg transition-all ${
+              activeTab === c.key
+                ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                : "bg-muted/20 text-muted-foreground hover:bg-muted/40"
+            }`}
+          >
+            {c.emoji} {c.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Items */}
+      <div className="space-y-2">
+        {items.map(item => {
+          const isOwned = item.oneTime && owned.includes(item.id);
+          const canAfford = item.cost === 0 || career.netWorth >= item.cost * 0.5;
+          const meetsMin = !item.minNetWorth || career.netWorth >= item.minNetWorth;
+          const disabled = isOwned || !canAfford || !meetsMin;
+
+          return (
+            <div key={item.id} className={`rounded-lg border p-3 transition-all ${
+              isOwned ? "border-emerald-500/30 bg-emerald-500/5" :
+              disabled ? "border-border/50 bg-muted/10 opacity-50" :
+              "border-border bg-muted/20 hover:border-emerald-500/30"
+            }`}>
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm">{item.emoji}</span>
+                    <span className="text-xs font-bold truncate">{item.name}</span>
+                    {isOwned && <span className="text-[9px] px-1 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold">OWNED</span>}
+                  </div>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">{item.description}</p>
+                  {item.effect && <p className="text-[10px] text-amber-400 mt-0.5">⚡ {item.effect}</p>}
+                </div>
+                {!isOwned && (
+                  <button
+                    onClick={() => onPurchase(item.id)}
+                    disabled={disabled}
+                    className={`shrink-0 text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all ${
+                      disabled
+                        ? "bg-muted/30 text-muted-foreground cursor-not-allowed"
+                        : "bg-emerald-600 hover:bg-emerald-500 text-white active:scale-95"
+                    }`}
+                  >
+                    {item.cost > 0 ? (item.cost >= 1 ? `€${item.cost.toFixed(0)}M` : `€${Math.round(item.cost * 1000)}k`) : "Hire"}
+                  </button>
+                )}
+              </div>
+              {item.monthlyCost && item.monthlyCost > 0 && !isOwned && (
+                <div className="text-[9px] text-muted-foreground mt-1">
+                  + €{(item.monthlyCost * 1000).toFixed(0)}k/year ongoing
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Owned items summary */}
+      {owned.length > 0 && (
+        <div className="border-t border-border pt-2">
+          <div className="text-[10px] text-muted-foreground font-bold mb-1">Owned ({owned.length})</div>
+          <div className="flex flex-wrap gap-1">
+            {owned.map((id, i) => {
+              const item = SPENDING_ITEMS.find(si => si.id === id);
+              if (!item) return null;
+              return (
+                <span key={`${id}_${i}`} className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400">
+                  {item.emoji} {item.name}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -1495,6 +1619,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onEndManager: () => void;
   onShare: () => void;
   onNewCareer: () => void;
+  onPurchase: (itemId: string) => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
   const totals = getCareerTotals(career.seasons);
@@ -1714,6 +1839,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* Financial & Lifestyle Panel */}
           {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (
             <FinancialPanel career={career} />
+          )}
+
+          {/* My Life — Spending & Lifestyle */}
+          {(career.phase === "playing") && (
+            <MyLifePanel career={career} onPurchase={onPurchase} />
           )}
 
           {/* Stats */}
