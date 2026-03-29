@@ -513,6 +513,36 @@ export default function SoccerCareer() {
     setCareer(dismissAppealResult(career, clubs));
   };
 
+  const handleAcceptRetirement = () => {
+    if (!career) return;
+    setCareer(acceptRetirementSuggestion(career));
+  };
+
+  const handleDeclineRetirement = () => {
+    if (!career) return;
+    setCareer(declineRetirementSuggestion(career));
+  };
+
+  const handlePunditAction = (action: PunditAction) => {
+    if (!career) return;
+    setCareer(advancePunditSeason(career, action));
+  };
+
+  const handleEndPundit = () => {
+    if (!career) return;
+    setCareer(endPunditCareer(career));
+  };
+
+  const handleAdvanceOwner = () => {
+    if (!career) return;
+    setCareer(advanceOwnerSeason(career));
+  };
+
+  const handleEndOwner = () => {
+    if (!career) return;
+    setCareer(endOwnerCareer(career));
+  };
+
   const handleNewCareer = () => {
     setShowNewCareerConfirm(true);
   };
