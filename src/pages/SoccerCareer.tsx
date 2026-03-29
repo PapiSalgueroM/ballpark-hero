@@ -39,7 +39,7 @@ import {
   generateShareText, getYouthAcademyClub,
   getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
 } from "@/lib/soccerCareerEngine";
-import { ShareButtons } from "@/components/game/ShareButtons";
+import ShareButtons from "@/components/game/ShareButtons";
 import { shareResult } from "@/lib/share";
 
 /* ─── Constants ─── */
