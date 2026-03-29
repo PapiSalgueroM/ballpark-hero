@@ -1620,6 +1620,148 @@ function MyLifePanel({ career, onPurchase }: { career: CareerState; onPurchase: 
   );
 }
 
+/* ─── Social Media Action Card ─── */
+function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
+  career: CareerState;
+  onAction: (actionId: string) => void;
+  onFifaCover: (accept: boolean) => void;
+  onDismiss: () => void;
+}) {
+  const hasActed = career.socialMediaActionUsedThisSeason;
+  const showFifaCover = career.pendingFifaCoverEvent && hasActed;
+  const currentFollowers = career.socialMediaFollowers;
+  const activeTier = career.activeSponsorship;
+  const activeTierInfo = SPONSORSHIP_TIERS.find(t => t.tier === activeTier);
+  const nextTier = SPONSORSHIP_TIERS.find(t => currentFollowers * 1_000_000 < t.minFollowers);
+
+  // FIFA Cover special event
+  if (showFifaCover) {
+    return (
+      <div className="rounded-xl border-2 border-amber-400/60 bg-gradient-to-b from-amber-500/20 to-transparent p-5 space-y-4">
+        <div className="text-center space-y-2">
+          <div className="text-5xl">🎮</div>
+          <h3 className="text-xl font-black tracking-tight">EA SPORTS FIFA COVER</h3>
+          <p className="text-sm text-amber-300 font-bold">EA Sports wants YOU as the FIFA cover athlete!</p>
+          <p className="text-xs text-muted-foreground">With {formatFollowers(currentFollowers)} followers and {career.overall} OVR, you're the perfect choice.</p>
+        </div>
+        <div className="space-y-2">
+          <button
+            onClick={() => onFifaCover(true)}
+            className="w-full rounded-lg border-2 border-amber-500/40 bg-amber-500/15 p-3 text-left hover:bg-amber-500/25 transition-all active:scale-[0.98]"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-sm font-bold text-amber-300">✅ Accept — Become the Cover Star</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">€25M payment · +5M followers · Legacy +10</div>
+              </div>
+              <span className="text-lg">🌟</span>
+            </div>
+          </button>
+          <button
+            onClick={() => onFifaCover(false)}
+            className="w-full rounded-lg border border-border bg-muted/20 p-3 text-left hover:bg-muted/40 transition-all active:scale-[0.98]"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-sm font-bold text-foreground">❌ Decline — Stay Selective</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">Reputation +5 for being humble</div>
+              </div>
+              <span className="text-lg">🧘</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // After action chosen (no FIFA cover), show continue button
+  if (hasActed) {
+    return (
+      <div className="rounded-xl border border-blue-500/30 bg-gradient-to-b from-blue-500/10 to-transparent p-5 space-y-4">
+        <div className="text-center space-y-2">
+          <div className="text-3xl">📱</div>
+          <h3 className="text-lg font-black">Social Media Update</h3>
+          <div className="text-lg font-black text-blue-400">{formatFollowers(currentFollowers)} followers</div>
+          {activeTierInfo && (
+            <div className="text-xs text-emerald-400 font-bold">{activeTierInfo.emoji} {activeTierInfo.name} — €{activeTierInfo.income}M/year</div>
+          )}
+        </div>
+        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white">
+          Continue →
+        </Button>
+      </div>
+    );
+  }
+
+  // Show action choices
+  return (
+    <div className="rounded-xl border border-blue-500/30 bg-gradient-to-b from-blue-500/10 to-transparent p-5 space-y-4">
+      <div className="text-center space-y-2">
+        <div className="text-3xl">📱</div>
+        <h3 className="text-lg font-black">Social Media</h3>
+        <p className="text-xs text-muted-foreground">Choose one action this season to manage your online presence</p>
+        <div className="text-sm font-black text-blue-400">{formatFollowers(currentFollowers)} followers</div>
+        {activeTierInfo && (
+          <div className="text-[10px] text-emerald-400 font-semibold">{activeTierInfo.emoji} Active: {activeTierInfo.name} (€{activeTierInfo.income}M/yr)</div>
+        )}
+        {nextTier && (
+          <div className="text-[10px] text-muted-foreground">Next unlock: {nextTier.emoji} {nextTier.name} at {(nextTier.minFollowers / 1_000_000).toFixed(0)}M followers</div>
+        )}
+      </div>
+
+      {/* Sponsorship milestones */}
+      <div className="flex flex-wrap gap-1 justify-center">
+        {SPONSORSHIP_TIERS.map(t => {
+          const unlocked = currentFollowers * 1_000_000 >= t.minFollowers;
+          return (
+            <span key={t.tier} className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold ${
+              unlocked ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20" : "bg-muted/20 text-muted-foreground/50"
+            }`}>
+              {t.emoji} {(t.minFollowers / 1_000_000).toFixed(0)}M
+            </span>
+          );
+        })}
+      </div>
+
+      <div className="space-y-2">
+        {SOCIAL_MEDIA_ACTIONS.map(action => (
+          <button
+            key={action.id}
+            onClick={() => onAction(action.id)}
+            className="w-full rounded-lg border border-border bg-muted/20 p-3 text-left hover:bg-blue-500/10 hover:border-blue-500/30 transition-all active:scale-[0.98]"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex-1 min-w-0">
+                <div className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <span>{action.emoji}</span>
+                  <span>{action.label}</span>
+                </div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">{action.description}</div>
+                <div className="flex items-center gap-2 mt-1">
+                  {action.followerGain[0] > 0 && (
+                    <span className="text-[9px] text-blue-400 font-semibold">
+                      +{action.followerGain[0] === action.followerGain[1]
+                        ? `${(action.followerGain[0] / 1_000_000).toFixed(1)}M`
+                        : `${(action.followerGain[0] / 1_000_000).toFixed(1)}-${(action.followerGain[1] / 1_000_000).toFixed(1)}M`
+                      } followers
+                    </span>
+                  )}
+                  {action.extraEffect && (
+                    <span className={`text-[9px] font-semibold ${action.reputationChange < 0 ? "text-red-400" : "text-amber-400"}`}>
+                      ⚡ {action.extraEffect}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ─── Game Screen ─── */
 function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, timelineRef }: {
   career: CareerState;
