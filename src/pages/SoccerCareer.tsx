@@ -1576,9 +1576,19 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
         </div>
       )}
 
-      <Button onClick={onShare} className="w-full h-10 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
-        📤 Share Your Legacy
-      </Button>
+      {/* Owner results */}
+      {career.ownerState && career.ownerState.seasonResults.length > 0 && (
+        <div className="text-center text-xs text-muted-foreground">
+          🏟️ Owner: {career.ownerState.trophies} trophies, {career.ownerState.promotions} promotions in {career.ownerState.season} seasons
+        </div>
+      )}
+
+      <ShareButtons
+        score={`${legacy.tier} — ${legacy.score}/100`}
+        gameName="Soccer Career"
+        gamePath="/soccer-career"
+        customText={generateShareText(career)}
+      />
     </div>
   );
 }
