@@ -383,6 +383,8 @@ export interface CareerState {
   matchFixBanned: number;
   divingActive: boolean;
   integrityBonus: number;
+  childEventsSeen: string[]; // track which child follow-up events have been shown
+  pregnancyAnnounced: boolean;
 }
 
 /* ─── Moral Dilemma System ─── */
@@ -1613,6 +1615,9 @@ export function initCareer(
     matchFixBanned: 0,
     divingActive: false,
     integrityBonus: 0,
+    pendingAppealResult: null,
+    childEventsSeen: [],
+    pregnancyAnnounced: false,
   };
 }
 
