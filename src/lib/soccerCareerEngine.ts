@@ -1378,6 +1378,11 @@ export function initCareer(
     isPundit: false,
     punditEvents: [],
     primeType: rollPrimeType(),
+    socialMediaActionUsedThisSeason: false,
+    socialMediaFocusBoost: false,
+    pendingFifaCoverEvent: false,
+    fifaCoverAccepted: false,
+    activeSponsorship: null,
   };
 }
 
