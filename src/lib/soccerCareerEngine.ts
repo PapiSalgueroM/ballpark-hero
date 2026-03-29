@@ -2070,14 +2070,38 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   // Track peak overall
   if (s.overall > s.peakOverall) s.peakOverall = s.overall;
   
+  // Forced retirement only if overall drops below 50 AND age 33+ (body can't cope)
+  if (s.overall < 50 && s.age >= 33) {
+    s.retired = true;
+    s.events.push("👋 Body can no longer keep up — forced retirement");
+    const lastYr = s.seasons[s.seasons.length - 1].year;
+    s.seasons = [...s.seasons, {
+      year: lastYr + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
+      apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
+      leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "retired",
+      intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
+    }];
+    if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
+    s.legacy = calculateLegacy(s);
+    s.phase = "retirement_ceremony";
+    return s;
+  }
+  
   // Retirement suggestion — when overall drops 10+ from peak OR drops to 75 or below (age 30+)
   if (!s.retirementSuggested && s.age >= 30) {
     const dropFromPeak = s.peakOverall - s.overall;
     if (dropFromPeak >= 10 || s.overall <= 75) {
       s.retirementSuggested = true;
       s.phase = "retirement_suggestion";
-      // Still generate the season stats — they've already been applied
-      const season = generateSeasonStats(s);
+      return s;
+    }
+  }
+  // Also show suggestion again each season if OVR <=65 and age >=34 (body wearing out)
+  if (s.age >= 34 && s.overall <= 65 && Math.random() < 0.4) {
+    s.phase = "retirement_suggestion";
+    return s;
+  }
+  
   const season = generateSeasonStats(s);
   // Apply stat boosts from previous season's events
   for (const [key, val] of Object.entries(s.statBoostNextSeason)) {
