@@ -3131,6 +3131,12 @@ function calculateLegacy(state: CareerState): LegacyResult {
     score += 5;
   }
 
+  // FIFA Cover Athlete bonus
+  if (state.fifaCoverAccepted) {
+    breakdown.push({ label: "FIFA Cover Athlete", points: 10 });
+    score += 10;
+  }
+
   score = Math.round(clamp(score, 0, 100));
   return { score, tier: getLegacyTier(score), breakdown };
 }
