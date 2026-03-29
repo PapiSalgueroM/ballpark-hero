@@ -384,6 +384,191 @@ export interface CareerState {
   integrityBonus: number;
 }
 
+/* ─── Moral Dilemma System ─── */
+export interface MoralDilemmaChoice {
+  label: string;
+  emoji: string;
+  consequence: string;
+  risk?: string; // e.g. "30% chance of getting caught"
+}
+
+export interface MoralDilemma {
+  id: string;
+  emoji: string;
+  title: string;
+  description: string;
+  choices: MoralDilemmaChoice[];
+}
+
+export const MORAL_DILEMMAS: MoralDilemma[] = [
+  {
+    id: "match_fixing",
+    emoji: "🎰",
+    title: "MATCH FIXING",
+    description: "A mysterious figure approaches you before a big match. He offers €5M to intentionally perform poorly. The money would be untraceable. No one would ever know... probably.",
+    choices: [
+      { label: "Accept the money", emoji: "💰", consequence: "€5M added to your accounts", risk: "30% chance of investigation" },
+      { label: "Refuse and report it", emoji: "🛡️", consequence: "Reputation +20, Legacy +10, Fair Play Award" },
+      { label: "Refuse silently", emoji: "🤐", consequence: "Walk away. Nothing happens." },
+    ],
+  },
+  {
+    id: "ped_offer",
+    emoji: "💉",
+    title: "PERFORMANCE ENHANCING DRUGS",
+    description: "Your fitness coach pulls you aside after training. He offers you an 'undetectable' substance that will boost all your stats by +5 for 3 seasons. \"Every top player does it,\" he whispers.",
+    choices: [
+      { label: "Take the substance", emoji: "💊", consequence: "All stats +5 for 3 seasons", risk: "20% chance of failed test each season" },
+      { label: "Refuse", emoji: "✋", consequence: "Morale -5, but integrity +10 legacy bonus at retirement" },
+    ],
+  },
+  {
+    id: "diving_reputation",
+    emoji: "🤿",
+    title: "DIVING REPUTATION",
+    description: "You've developed a reputation for simulation. Journalists are running front-page stories about your theatrical falls in the box. Pundits are calling you 'the greatest actor in football.'",
+    choices: [
+      { label: "Embrace the dark arts", emoji: "🎭", consequence: "+2 goals per season from penalties, but reputation -15" },
+      { label: "Clean up your game", emoji: "🤝", consequence: "Reputation +10, eligible for Fair Play Award" },
+      { label: "Ignore the noise", emoji: "🔇", consequence: "No change — let them talk" },
+    ],
+  },
+  {
+    id: "agent_corruption",
+    emoji: "🕴️",
+    title: "AGENT CORRUPTION",
+    description: "Your accountant discovers your agent has been taking 20% commission instead of the agreed 10% for the last 3 years. That's millions stolen from you. He's sitting in your living room, sweating.",
+    choices: [
+      { label: "Fire him and sue", emoji: "⚖️", consequence: "Legal costs €500k, but recover the stolen money" },
+      { label: "Keep him — he gets results", emoji: "🤝", consequence: "Accept the loss, maintain relationship" },
+      { label: "Renegotiate to 12%", emoji: "📝", consequence: "Agent stays at 12%, partial money back" },
+    ],
+  },
+];
+
+export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number): CareerState {
+  const s = { ...prev };
+  const dilemma = s.pendingMoralDilemma;
+  if (!dilemma) return s;
+
+  s.pendingMoralDilemma = null;
+
+  switch (dilemma.id) {
+    case "match_fixing": {
+      if (choiceIndex === 0) {
+        // Accept
+        s.netWorth = Math.round((s.netWorth + 5) * 100) / 100;
+        s.events = [...s.events, "🎰 Accepted €5M to fix a match..."];
+        if (Math.random() < 0.30) {
+          // Caught!
+          s.matchFixBanned = 2;
+          s.popularity = clamp(s.popularity - 40, 0, 100);
+          s.morale = clamp(s.morale - 30, 0, 100);
+          s.integrityBonus -= 30;
+          s.netWorth = Math.round((s.netWorth - 5) * 100) / 100; // fine
+          s.events = [...s.events, "🚨 CAUGHT! Match-fixing investigation found you guilty. 2-season ban! Legacy -30, reputation destroyed."];
+          s.socialMediaFollowers = Math.max(0, s.socialMediaFollowers - 5);
+        } else {
+          s.events = [...s.events, "💰 The money arrived. No one suspects a thing... for now."];
+        }
+      } else if (choiceIndex === 1) {
+        // Report
+        s.popularity = clamp(s.popularity + 20, 0, 100);
+        s.integrityBonus += 10;
+        s.morale = clamp(s.morale + 10, 0, 100);
+        s.awards = [...s.awards, { year: s.seasons[s.seasons.length - 1]?.year || 2024, name: "Fair Play Award", emoji: "🛡️" }];
+        s.events = [...s.events, "🛡️ Reported the match fixers. Awarded the Fair Play Award! Reputation +20, Legacy +10"];
+      } else {
+        // Silent
+        s.events = [...s.events, "🤐 Walked away from the offer silently."];
+      }
+      break;
+    }
+    case "ped_offer": {
+      if (choiceIndex === 0) {
+        // Take PEDs
+        s.pedActive = true;
+        s.pedSeasonsRemaining = 3;
+        for (const k of ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"] as const) {
+          (s as any)[k] = clamp((s as any)[k] + 5, 20, 99);
+        }
+        s.overall = calcOverall(s, s.position);
+        s.events = [...s.events, "💊 Started taking performance enhancing substances. All stats +5."];
+      } else {
+        // Refuse
+        s.morale = clamp(s.morale - 5, 0, 100);
+        s.integrityBonus += 10;
+        s.events = [...s.events, "✋ Refused performance enhancing drugs. Integrity preserved. Legacy +10 at retirement."];
+      }
+      break;
+    }
+    case "diving_reputation": {
+      if (choiceIndex === 0) {
+        // Embrace
+        s.divingActive = true;
+        s.popularity = clamp(s.popularity - 15, 0, 100);
+        s.events = [...s.events, "🎭 Embraced diving. +2 goals/season from penalties, but reputation -15."];
+      } else if (choiceIndex === 1) {
+        // Clean up
+        s.popularity = clamp(s.popularity + 10, 0, 100);
+        s.integrityBonus += 5;
+        s.events = [...s.events, "🤝 Cleaned up your game. Reputation +10, Fair Play eligible."];
+      } else {
+        // Ignore
+        s.events = [...s.events, "🔇 Ignored the diving allegations. Business as usual."];
+      }
+      break;
+    }
+    case "agent_corruption": {
+      const stolenAmount = Math.round((s.totalEarnings * 0.10) * 100) / 100; // 10% of career earnings stolen
+      const recoveredAmount = Math.min(stolenAmount, 3); // cap at 3M
+      if (choiceIndex === 0) {
+        // Fire and sue
+        s.netWorth = Math.round((s.netWorth - 0.5 + recoveredAmount) * 100) / 100;
+        s.events = [...s.events, `⚖️ Fired agent and sued! Legal costs €500k, recovered €${recoveredAmount.toFixed(1)}M.`];
+        s.morale = clamp(s.morale + 5, 0, 100);
+      } else if (choiceIndex === 1) {
+        // Keep him
+        s.events = [...s.events, "🤝 Kept the agent despite the theft. He does get results..."];
+        s.morale = clamp(s.morale - 5, 0, 100);
+      } else {
+        // Renegotiate
+        s.netWorth = Math.round((s.netWorth + recoveredAmount * 0.3) * 100) / 100;
+        s.events = [...s.events, `📝 Renegotiated agent deal to 12%. Recovered €${(recoveredAmount * 0.3).toFixed(1)}M.`];
+      }
+      break;
+    }
+  }
+
+  s.phase = "playing";
+  return s;
+}
+
+function tryTriggerMoralDilemma(s: CareerState): boolean {
+  if (s.age < 20 || s.retired) return false;
+  // Max 2 dilemmas per career
+  if (s.moralDilemmasTriggered.length >= 2) return false;
+  // ~12% chance per season after age 20 (gets ~1-2 over a 15-year career)
+  if (Math.random() > 0.12) return false;
+  
+  const available = MORAL_DILEMMAS.filter(d => !s.moralDilemmasTriggered.includes(d.id));
+  if (available.length === 0) return false;
+  
+  // Filter contextually
+  const eligible = available.filter(d => {
+    if (d.id === "match_fixing" && s.currentClubTier > 2) return false; // only big clubs
+    if (d.id === "ped_offer" && s.overall > 90) return false; // already elite
+    if (d.id === "diving_reputation" && s.position === "GK") return false;
+    if (d.id === "agent_corruption" && s.totalEarnings < 5) return false; // need some earnings
+    return true;
+  });
+  if (eligible.length === 0) return false;
+
+  s.pendingMoralDilemma = pick(eligible);
+  s.moralDilemmasTriggered = [...s.moralDilemmasTriggered, s.pendingMoralDilemma.id];
+  return true;
+}
+
 /* ─── Social Media Action System ─── */
 export interface SocialMediaAction {
   id: string;
