@@ -1017,19 +1017,20 @@ export function initCareer(
     isFinalSeason: false,
     isPundit: false,
     punditEvents: [],
+    primeType: rollPrimeType(),
   };
 }
 
 /* ─── Advance youth year ─── */
 export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev }; s.age += 1; s.events = [];
-  s.pace = growStat(s.pace, s.age, true, true);
-  s.shooting = growStat(s.shooting, s.age, true, false);
-  s.passing = growStat(s.passing, s.age, true, false);
-  s.dribbling = growStat(s.dribbling, s.age, true, false);
-  s.defending = growStat(s.defending, s.age, true, false);
-  s.physical = growStat(s.physical, s.age, true, false);
-  s.reflexes = growStat(s.reflexes, s.age, true, false);
+  s.pace = growStat(s.pace, s.age, true, true, s.primeType);
+  s.shooting = growStat(s.shooting, s.age, true, false, s.primeType);
+  s.passing = growStat(s.passing, s.age, true, false, s.primeType);
+  s.dribbling = growStat(s.dribbling, s.age, true, false, s.primeType);
+  s.defending = growStat(s.defending, s.age, true, false, s.primeType);
+  s.physical = growStat(s.physical, s.age, true, false, s.primeType);
+  s.reflexes = growStat(s.reflexes, s.age, true, false, s.primeType);
   s.overall = calcOverall(s, s.position);
   const lastYear = s.seasons[s.seasons.length - 1].year;
   s.seasons = [...s.seasons, {
@@ -1366,13 +1367,13 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     if (k in s) (s as any)[k] = clamp((s as any)[k] + (val || 0), 20, 99);
   }
   s.statBoostNextSeason = {};
-  s.pace = growStat(s.pace, s.age, false, true);
-  s.shooting = growStat(s.shooting, s.age, false, false);
-  s.passing = growStat(s.passing, s.age, false, false);
-  s.dribbling = growStat(s.dribbling, s.age, false, false);
-  s.defending = growStat(s.defending, s.age, false, false);
-  s.physical = growStat(s.physical, s.age, false, false);
-  s.reflexes = growStat(s.reflexes, s.age, false, false);
+  s.pace = growStat(s.pace, s.age, false, true, s.primeType);
+  s.shooting = growStat(s.shooting, s.age, false, false, s.primeType);
+  s.passing = growStat(s.passing, s.age, false, false, s.primeType);
+  s.dribbling = growStat(s.dribbling, s.age, false, false, s.primeType);
+  s.defending = growStat(s.defending, s.age, false, false, s.primeType);
+  s.physical = growStat(s.physical, s.age, false, false, s.primeType);
+  s.reflexes = growStat(s.reflexes, s.age, false, false, s.primeType);
   s.overall = calcOverall(s, s.position);
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
   s.marketValue = calcMarketValue(s.overall, s.age, s.position, s.socialMediaFollowers);
