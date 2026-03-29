@@ -150,7 +150,27 @@ export interface LegacyResult {
   breakdown: { label: string; points: number }[];
 }
 
-export type PostRetirementChoice = "retire" | "manager" | "pundit";
+export type PostRetirementChoice = "retire" | "manager" | "pundit" | "owner";
+
+/* ─── Pundit System ─── */
+export interface PunditState {
+  season: number;
+  predictions: { season: number; prediction: string; cameTrue: boolean }[];
+  controversies: number;
+  legacyBonus: number;
+  followerGains: number;
+}
+
+/* ─── Club Owner System ─── */
+export interface OwnerState {
+  club: string;
+  clubTier: number;
+  season: number;
+  budget: number; // in millions
+  trophies: number;
+  promotions: number;
+  seasonResults: { year: number; club: string; tier: number; result: string; trophy: boolean }[];
+}
 
 /* ─── Newspaper Article System ─── */
 export interface NewsArticle {
@@ -315,7 +335,7 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "social_media_action" | "moral_dilemma" | "red_card_appeal_result" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "retirement_suggestion" | "post_retirement" | "manager_season" | "pundit_season" | "owner_season" | "social_media_action" | "moral_dilemma" | "red_card_appeal_result" | "retired";
   pendingAppealResult: { success: boolean; banLength: number } | null;
   pendingNews: NewsArticle[];
   pendingOffers: ContractOffer[];
@@ -365,10 +385,14 @@ export interface CareerState {
   legacy: LegacyResult | null;
   postRetirementChoice: PostRetirementChoice | null;
   managerState: ManagerState | null;
+  punditState: PunditState | null;
+  ownerState: OwnerState | null;
   isFinalSeason: boolean;
   isPundit: boolean;
   punditEvents: string[];
   primeType: PrimeType;
+  peakOverall: number;
+  retirementSuggested: boolean; // has the player been shown the retirement suggestion
   // Social media action system
   socialMediaActionUsedThisSeason: boolean;
   socialMediaFocusBoost: boolean; // "Stay off social media" gives +2 all stats next season
@@ -1649,6 +1673,10 @@ export function initCareer(
     pendingAppealResult: null,
     childEventsSeen: [],
     pregnancyAnnounced: false,
+    punditState: null,
+    ownerState: null,
+    peakOverall: overall,
+    retirementSuggested: false,
   };
 }
 
@@ -2039,19 +2067,16 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     }
   }
   
-  // Detect "FINAL SEASON" — will retire next year
-  const projectedOvr = s.overall - (s.age >= 34 ? 3 : s.age >= 30 ? 1 : 0);
-  if (s.age >= 37 || (projectedOvr < 58 && s.age >= 30)) {
-    s.isFinalSeason = true;
-  }
+  // Track peak overall
+  if (s.overall > s.peakOverall) s.peakOverall = s.overall;
   
-  // Retirement check
-  if (s.age >= 38 || (s.overall < 58 && s.age >= 30)) {
+  // Forced retirement only if overall drops below 50 AND age 33+ (body can't cope)
+  if (s.overall < 50 && s.age >= 33) {
     s.retired = true;
-    s.events.push("👋 Announced retirement from professional football");
-    const lastYear = s.seasons[s.seasons.length - 1].year;
+    s.events.push("👋 Body can no longer keep up — forced retirement");
+    const lastYr = s.seasons[s.seasons.length - 1].year;
     s.seasons = [...s.seasons, {
-      year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
+      year: lastYr + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
       apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
       leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "retired",
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
@@ -2061,6 +2086,22 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.phase = "retirement_ceremony";
     return s;
   }
+  
+  // Retirement suggestion — when overall drops 10+ from peak OR drops to 75 or below (age 30+)
+  if (!s.retirementSuggested && s.age >= 30) {
+    const dropFromPeak = s.peakOverall - s.overall;
+    if (dropFromPeak >= 10 || s.overall <= 75) {
+      s.retirementSuggested = true;
+      s.phase = "retirement_suggestion";
+      return s;
+    }
+  }
+  // Also show suggestion again each season if OVR <=65 and age >=34 (body wearing out)
+  if (s.age >= 34 && s.overall <= 65 && Math.random() < 0.4) {
+    s.phase = "retirement_suggestion";
+    return s;
+  }
+  
   const season = generateSeasonStats(s);
   // Apply stat boosts from previous season's events
   for (const [key, val] of Object.entries(s.statBoostNextSeason)) {
@@ -3602,18 +3643,20 @@ export function choosePostRetirement(prev: CareerState, choice: PostRetirementCh
   
   if (choice === "pundit") {
     s.isPundit = true;
-    s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 5) * 10) / 10;
-    s.legacy = calculateLegacy(s); // recalculate with pundit bonus
-    s.punditEvents = [
-      "🎙️ Made your debut as a TV pundit on Match of the Day!",
-      "📱 Social media followers surging from your punditry career!",
-    ];
-    s.phase = "retired";
+    s.punditState = {
+      season: 0,
+      predictions: [],
+      controversies: 0,
+      legacyBonus: 0,
+      followerGains: 0,
+    };
+    s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 2) * 10) / 10;
+    s.punditEvents = ["🎙️ Made your debut as a TV pundit!"];
+    s.phase = "pundit_season";
     return s;
   }
   
   if (choice === "manager") {
-    // Start as manager of a tier 3-4 club
     const managerClubs = clubs.filter(c => c.tier >= 3);
     const club = managerClubs.length > 0 ? pick(managerClubs) : { name: "Unknown FC", tier: 3 };
     s.managerState = {
@@ -3630,6 +3673,51 @@ export function choosePostRetirement(prev: CareerState, choice: PostRetirementCh
     return s;
   }
   
+  if (choice === "owner") {
+    // Buy a lower-league club
+    const ownerClubs = clubs.filter(c => c.tier >= 3);
+    const club = ownerClubs.length > 0 ? pick(ownerClubs) : { name: "Unknown FC", tier: 4 };
+    const purchasePrice = club.tier >= 4 ? 50 : 100; // €50-100M
+    s.netWorth -= purchasePrice;
+    s.ownerState = {
+      club: club.name,
+      clubTier: club.tier,
+      season: 0,
+      budget: 5, // €5M starting transfer budget
+      trophies: 0,
+      promotions: 0,
+      seasonResults: [],
+    };
+    s.events = [...s.events, `🏟️ Purchased ${club.name} for €${purchasePrice}M!`];
+    s.phase = "owner_season";
+    return s;
+  }
+  
+  return s;
+}
+
+/* ─── Retirement Suggestion — player can choose to continue or retire ─── */
+export function acceptRetirementSuggestion(prev: CareerState): CareerState {
+  const s = { ...prev };
+  s.retired = true;
+  s.events = [...s.events, "👋 Announced retirement from professional football"];
+  const lastYear = s.seasons[s.seasons.length - 1].year;
+  s.seasons = [...s.seasons, {
+    year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
+    apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
+    leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "retired",
+    intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
+  }];
+  if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
+  s.legacy = calculateLegacy(s);
+  s.phase = "retirement_ceremony";
+  return s;
+}
+
+export function declineRetirementSuggestion(prev: CareerState): CareerState {
+  const s = { ...prev };
+  s.events = [...s.events, "💪 Decided to push on — not ready to hang up the boots yet"];
+  s.phase = "playing";
   return s;
 }
 
@@ -3640,30 +3728,55 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
   const ms = { ...s.managerState };
   ms.season += 1;
   
-  // Simulate season result
   const promotionChance = ms.clubTier >= 3 ? 0.30 : ms.clubTier === 2 ? 0.20 : 0.15;
   const trophyChance = ms.clubTier <= 2 ? 0.20 : 0.10;
-  const promoted = ms.clubTier > 1 && Math.random() < promotionChance;
-  const wonTrophy = Math.random() < trophyChance;
+  const sacked = ms.season >= 2 && Math.random() < 0.15; // 15% sack chance
+  const promoted = !sacked && ms.clubTier > 1 && Math.random() < promotionChance;
+  const wonTrophy = !sacked && Math.random() < trophyChance;
+  const scoutInterest = ms.season >= 2 && ms.clubTier >= 2 && Math.random() < 0.25;
   
   let result = "";
-  if (promoted) {
+  if (sacked) {
+    result = `Sacked after poor results!`;
+    // Get new job at same or lower tier
+    const newClubs = clubs.filter(c => c.tier >= ms.clubTier && c.name !== ms.club);
+    if (newClubs.length > 0) {
+      const newClub = pick(newClubs);
+      ms.club = newClub.name;
+      ms.clubTier = newClub.tier;
+      result += ` Hired by ${newClub.name} (Tier ${newClub.tier})`;
+    }
+  } else if (promoted) {
     ms.promotions += 1;
     ms.clubTier -= 1;
     const newClubs = clubs.filter(c => c.tier === ms.clubTier);
     if (newClubs.length > 0) ms.club = pick(newClubs).name;
-    result = `Promoted! Now managing in Tier ${ms.clubTier}`;
+    result = `Promoted! Now managing ${ms.club} in Tier ${ms.clubTier}`;
   } else if (wonTrophy) {
     ms.trophies += 1;
-    result = `Won the league trophy!`;
+    result = `Won the league trophy! 🏆`;
   } else {
-    const positions = ["1st (missed promotion on GD)", "2nd", "3rd", "4th", "mid-table", "lower half"];
+    const positions = ["2nd", "3rd", "4th", "mid-table", "lower half"];
     result = `Finished ${pick(positions)}`;
+  }
+  
+  if (scoutInterest && !sacked) {
+    const biggerClubs = clubs.filter(c => c.tier < ms.clubTier && c.tier >= 1);
+    if (biggerClubs.length > 0) {
+      const offer = pick(biggerClubs);
+      result += ` · 👀 Scouts from ${offer.name} watching your sessions`;
+      // Auto-move if tier 1-2 offer
+      if (offer.tier <= 2 && Math.random() < 0.5) {
+        ms.club = offer.name;
+        ms.clubTier = offer.tier;
+        result += ` → HIRED by ${offer.name}!`;
+      }
+    }
   }
   
   ms.seasonResults = [...ms.seasonResults, { year: ms.season, club: ms.club, tier: ms.clubTier, result, trophy: wonTrophy }];
   
-  // National team offer after 3+ seasons and success
+  // National team offer
   if (ms.season >= 3 && ms.clubTier <= 2 && !ms.nationalTeamOffer && Math.random() < 0.3) {
     ms.nationalTeamOffer = true;
     ms.managingNationalTeam = true;
@@ -3672,12 +3785,6 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
   
   s.managerState = ms;
   s.events = [...s.events, `📋 Manager Season ${ms.season}: ${result}`];
-  
-  // After 5 seasons or reaching tier 1, can end
-  if (ms.season >= 8 || (ms.clubTier === 1 && ms.season >= 3)) {
-    s.legacy = calculateLegacy(s);
-    s.phase = "retired";
-  }
   
   return s;
 }
@@ -3689,10 +3796,140 @@ export function endManagerCareer(prev: CareerState): CareerState {
   return s;
 }
 
+/* ─── Pundit Career ─── */
+export type PunditAction = "praise_player" | "criticise_manager" | "bold_prediction";
+
+export function advancePunditSeason(prev: CareerState, action: PunditAction): CareerState {
+  const s = { ...prev };
+  if (!s.punditState) return s;
+  const ps = { ...s.punditState };
+  ps.season += 1;
+  
+  let eventText = "";
+  switch (action) {
+    case "praise_player": {
+      s.socialMediaFollowers += 0.5;
+      s.popularity = clamp(s.popularity + 3, 0, 100);
+      ps.followerGains += 0.5;
+      eventText = "🎙️ Praised a rising star — fans loved your insight. Followers +500k";
+      break;
+    }
+    case "criticise_manager": {
+      if (Math.random() < 0.4) {
+        // Controversy!
+        ps.controversies += 1;
+        s.socialMediaFollowers += 2;
+        s.popularity = clamp(s.popularity - 5, 0, 100);
+        ps.followerGains += 2;
+        eventText = "🔥 Your criticism went viral! Controversy but +2M followers";
+      } else {
+        s.socialMediaFollowers += 0.8;
+        s.popularity = clamp(s.popularity + 2, 0, 100);
+        ps.followerGains += 0.8;
+        eventText = "🎙️ Constructive criticism well received. Followers +800k";
+      }
+      break;
+    }
+    case "bold_prediction": {
+      const cameTrue = Math.random() < 0.35;
+      ps.predictions.push({ season: ps.season, prediction: "Bold prediction", cameTrue });
+      if (cameTrue) {
+        ps.legacyBonus += 3;
+        s.socialMediaFollowers += 1.5;
+        s.popularity = clamp(s.popularity + 8, 0, 100);
+        ps.followerGains += 1.5;
+        eventText = "🎯 Your bold prediction came TRUE! Legacy +3, Followers +1.5M";
+      } else {
+        s.socialMediaFollowers += 0.3;
+        ps.followerGains += 0.3;
+        eventText = "❌ Bold prediction was wrong — but people remember you said it. +300k followers";
+      }
+      break;
+    }
+  }
+  
+  // Build media empire milestones
+  if (ps.season === 3) eventText += " · 📺 Offered your own weekly show!";
+  if (ps.season === 5) eventText += " · 🏢 You've built a media empire!";
+  
+  s.punditState = ps;
+  s.punditEvents = [...s.punditEvents, eventText];
+  s.events = [...s.events, eventText];
+  
+  return s;
+}
+
+export function endPunditCareer(prev: CareerState): CareerState {
+  const s = { ...prev };
+  if (s.punditState) {
+    s.integrityBonus += s.punditState.legacyBonus;
+  }
+  s.isPundit = true;
+  s.legacy = calculateLegacy(s);
+  s.phase = "retired";
+  return s;
+}
+
+/* ─── Club Owner Career ─── */
+export function advanceOwnerSeason(prev: CareerState): CareerState {
+  const s = { ...prev };
+  if (!s.ownerState) return s;
+  const os = { ...s.ownerState };
+  os.season += 1;
+  
+  // Transfer budget grows with success
+  os.budget = Math.round((os.budget + rand(1, 3)) * 10) / 10;
+  
+  const promoted = os.clubTier > 1 && Math.random() < 0.25;
+  const wonTrophy = Math.random() < (os.clubTier <= 2 ? 0.15 : 0.10);
+  const relegated = !promoted && os.clubTier < 4 && Math.random() < 0.1;
+  
+  let result = "";
+  if (promoted) {
+    os.promotions += 1;
+    os.clubTier -= 1;
+    result = `🎉 Promoted to Tier ${os.clubTier}!`;
+    os.budget += 5;
+  } else if (relegated) {
+    os.clubTier += 1;
+    result = `📉 Relegated to Tier ${os.clubTier}`;
+    os.budget = Math.max(1, os.budget - 3);
+  } else if (wonTrophy) {
+    os.trophies += 1;
+    result = `🏆 Won the league!`;
+    os.budget += 3;
+  } else {
+    const positions = ["3rd", "5th", "8th", "mid-table", "lower half"];
+    result = `Finished ${pick(positions)}`;
+  }
+  
+  // Revenue from ownership
+  const revenue = os.clubTier === 1 ? 20 : os.clubTier === 2 ? 8 : os.clubTier === 3 ? 3 : 1;
+  s.netWorth += revenue;
+  result += ` · Revenue: €${revenue}M`;
+  
+  os.seasonResults = [...os.seasonResults, { year: os.season, club: os.club, tier: os.clubTier, result, trophy: wonTrophy }];
+  s.ownerState = os;
+  s.events = [...s.events, `🏟️ Owner Season ${os.season} at ${os.club}: ${result}`];
+  
+  return s;
+}
+
+export function endOwnerCareer(prev: CareerState): CareerState {
+  const s = { ...prev };
+  if (s.ownerState) {
+    // Owner gets legacy bonus
+    s.integrityBonus += s.ownerState.promotions * 3 + s.ownerState.trophies * 5;
+  }
+  s.legacy = calculateLegacy(s);
+  s.phase = "retired";
+  return s;
+}
+
 /* ─── Share text ─── */
 export function generateShareText(state: CareerState): string {
   const totals = getCareerTotals(state.seasons);
   const tier = state.legacy?.tier || "JOURNEYMAN";
   const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups;
-  return `⚽ I finished my Soccer Career as a ${tier} with ${totals.goals} goals and ${totalTrophies} trophies!\n\n${getFlag(state.nationality)} ${state.playerName} · ${state.position}\nCan you beat me? douknowball.com/soccer-career`;
+  return `I finished my Soccer Career as a ${tier} — ${totals.goals} goals, ${totalTrophies} trophies, ${totals.ballonDors} Ballon d'Ors. Can you beat me? douknowball.com/soccer-career`;
 }
