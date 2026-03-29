@@ -37,9 +37,10 @@ import {
   SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS,
   dismissAppealResult,
   generateShareText, getYouthAcademyClub,
-  getCareerTotals, getFlag, calcOverall, formatWage, formatNetWorth, formatFollowers,
+  getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,
 } from "@/lib/soccerCareerEngine";
 import ShareButtons from "@/components/game/ShareButtons";
+import { FlagImg } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
 
 /* ─── Constants ─── */
@@ -142,7 +143,7 @@ function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; is
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
           <span className="text-[11px] text-muted-foreground">{season.age}y</span>
-          <span className="text-xs font-semibold truncate">{getFlag(season.clubCountry)} {season.club}</span>
+          <span className="text-xs font-semibold truncate flex items-center gap-1"><FlagImg name={season.clubCountry} size={16} />{season.club}</span>
         </div>
         {season.type === "playing" && (
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
@@ -167,7 +168,7 @@ function OfferCard({ offer, onAccept, actionLabel }: { offer: ContractOffer; onA
           {offer.club.name.slice(0, 2).toUpperCase()}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="font-bold text-sm truncate">{getFlag(offer.club.country)} {offer.club.name}</div>
+          <div className="font-bold text-sm truncate flex items-center gap-1"><FlagImg name={offer.club.country} size={16} />{offer.club.name}</div>
           <div className="text-[11px] text-muted-foreground">{offer.club.league}</div>
         </div>
         {offer.isDreamClub && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">⭐ Dream Club</span>}
@@ -252,7 +253,7 @@ function SeasonSummaryCard({ season, position, onContinue }: { season: SeasonRec
     <div className="bg-card border-2 border-emerald-500/30 rounded-xl p-5 space-y-4">
       <div className="text-center">
         <h3 className="text-lg font-black">Season Summary</h3>
-        <p className="text-xs text-muted-foreground">{getFlag(season.clubCountry)} {season.club} · {season.year}/{(season.year + 1).toString().slice(-2)}</p>
+        <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={season.clubCountry} size={14} />{season.club} · {season.year}/{(season.year + 1).toString().slice(-2)}</p>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
@@ -702,7 +703,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
           <Label>Nationality</Label>
           <Select value={nationality} onValueChange={setNationality}>
             <SelectTrigger className="bg-muted/30"><SelectValue placeholder="Choose nationality" /></SelectTrigger>
-            <SelectContent>{NATIONALITIES.map(n => <SelectItem key={n} value={n}>{getFlag(n)} {n}</SelectItem>)}</SelectContent>
+            <SelectContent>{NATIONALITIES.map(n => <SelectItem key={n} value={n}><span className="flex items-center gap-1.5"><FlagImg name={n} size={18} />{n}</span></SelectItem>)}</SelectContent>
           </Select>
         </div>
         <div className="space-y-1.5">
@@ -758,7 +759,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
                   {academyClub.name.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
-                  <div className="font-bold text-sm">{getFlag(academyClub.country)} {academyClub.name} Youth</div>
+                  <div className="font-bold text-sm flex items-center gap-1"><FlagImg name={academyClub.country} size={16} />{academyClub.name} Youth</div>
                   <div className="text-[11px] text-muted-foreground">{academyClub.league} · Tier {academyClub.tier}</div>
                 </div>
               </div>
@@ -970,7 +971,7 @@ function InternationalDebutCard({ career, onDismiss }: { career: CareerState; on
         {career.playerName} has been called up to the <strong>{career.nationality}</strong> national team!
       </p>
       <div className="flex items-center justify-center gap-3 text-sm">
-        <span>{getFlag(career.nationality)}</span>
+        <span><FlagImg name={career.nationality} size={24} /></span>
         <span className="font-bold">{career.nationality}</span>
         <span className="text-muted-foreground">·</span>
         <span className="text-muted-foreground">Age {career.age}</span>
@@ -998,7 +999,7 @@ function WorldCupResultCard({ wc, career, onDismiss }: { wc: WorldCupResult; car
       <div className="text-center space-y-2">
         <div className="text-4xl">{isWinner ? "🏆" : didNotQualify ? "😞" : "🌍"}</div>
         <h3 className="text-xl font-black">{isWinner ? "WORLD CUP WINNER!" : didNotQualify ? "World Cup Qualifiers" : `World Cup ${wc.year}`}</h3>
-        <p className="text-sm font-bold">{getFlag(wc.nation)} {wc.nation} — {wc.result}</p>
+        <p className="text-sm font-bold flex items-center justify-center gap-1"><FlagImg name={wc.nation} />{wc.nation} — {wc.result}</p>
         {didNotQualify && (
           <p className="text-xs text-muted-foreground">Your nation failed to qualify for the tournament this time.</p>
         )}
@@ -1011,11 +1012,11 @@ function WorldCupResultCard({ wc, career, onDismiss }: { wc: WorldCupResult; car
               <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
                 <span className="text-[10px] text-muted-foreground w-12">{m.round}</span>
                 <span className={`font-semibold ${m.teamA === wc.nation ? "text-foreground" : "text-muted-foreground"}`}>
-                  {getFlag(m.teamA)} {m.teamA}
+                  <FlagImg name={m.teamA} size={16} />{m.teamA}
                 </span>
                 <span className="font-black text-sm mx-2">{m.scoreA} - {m.scoreB}</span>
                 <span className={`font-semibold ${m.teamB === wc.nation ? "text-foreground" : "text-muted-foreground"}`}>
-                  {m.teamB} {getFlag(m.teamB)}
+                  {m.teamB} <FlagImg name={m.teamB} size={16} />
                 </span>
               </div>
             ))}
@@ -1062,7 +1063,7 @@ function InternationalStatsPanel({ career, onRetire }: { career: CareerState; on
     <div className={`bg-card border rounded-xl p-4 space-y-3 ${isLegend ? "border-amber-500/30" : "border-border"}`}>
       <div className="flex items-center justify-between">
         <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          {getFlag(career.nationality)} International Career {isLegend && "⭐ LEGEND"}
+          <FlagImg name={career.nationality} size={16} /> International Career {isLegend && "⭐ LEGEND"}
         </span>
         {is.isCaptain && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">©️ Captain</span>}
       </div>
@@ -1154,7 +1155,7 @@ function RivalComparisonPanel({ career }: { career: CareerState }) {
       <div className="flex items-center justify-between text-xs mb-2">
         <span className="font-bold text-emerald-400">{career.playerName}</span>
         <span className="text-muted-foreground">vs</span>
-        <span className="font-bold text-orange-400">{getFlag(rival.nationality)} {rival.name}</span>
+        <span className="font-bold text-orange-400 inline-flex items-center gap-1"><FlagImg name={rival.nationality} size={16} />{rival.name}</span>
       </div>
       <div className="text-[10px] text-center text-muted-foreground mb-1">
         {rival.club} · OVR {rival.overall} · Age {rival.age}
@@ -1346,7 +1347,7 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss }: { bdor: BallonDorRes
               <span className="text-sm font-black w-6 shrink-0">{rankEmoji(i + 1)}</span>
               <div className="min-w-0 flex-1">
                 <span className={`font-bold truncate block text-[11px] ${n.isPlayer ? "text-foreground" : "text-muted-foreground"}`}>
-                  {getFlag(n.nationality)} {n.name}
+                  <FlagImg name={n.nationality} size={14} />{n.name}
                 </span>
                 <span className="text-[9px] text-muted-foreground">{n.position} · {n.club}</span>
               </div>
@@ -1383,7 +1384,7 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
       <div className="text-center space-y-2">
         <div className="text-5xl">👋</div>
         <h3 className="text-xl font-black tracking-tight">RETIREMENT</h3>
-        <p className="text-sm text-muted-foreground">{getFlag(career.nationality)} {career.playerName} retires at age {career.age}</p>
+        <p className="text-sm text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={career.nationality} />{career.playerName} retires at age {career.age}</p>
       </div>
 
       {/* Career summary grid */}
@@ -1521,7 +1522,7 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
         <div className="text-4xl">{tierEmoji[legacy.tier]}</div>
         <div className={`text-2xl font-black ${tierColors[legacy.tier]}`}>{legacy.tier}</div>
         <div className="text-4xl font-black">{legacy.score}<span className="text-base text-muted-foreground">/100</span></div>
-        <p className="text-xs text-muted-foreground">{getFlag(career.nationality)} {career.playerName} · {career.position}</p>
+        <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={career.nationality} size={16} />{career.playerName} · {career.position}</p>
       </div>
 
       {/* Breakdown */}
@@ -1998,7 +1999,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl sm:text-2xl font-black flex items-center gap-2">
-            {getFlag(career.nationality)} {career.playerName}
+            <FlagImg name={career.nationality} size={24} />{career.playerName}
           </h1>
           <p className="text-xs text-muted-foreground">{career.position} · Age {career.age} · {career.nationality}</p>
         </div>
@@ -2282,7 +2283,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 {career.currentClub.includes("Youth") ? "YA" : career.currentClub.slice(0, 2).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-bold text-sm truncate">{getFlag(career.currentClubCountry)} {career.currentClub}</div>
+                <div className="font-bold text-sm truncate flex items-center gap-1"><FlagImg name={career.currentClubCountry} size={16} />{career.currentClub}</div>
                 <div className="text-xs text-muted-foreground">
                   {career.retired ? "Retired" : career.phase === "youth" ? "Youth Academy" : `${career.currentLeague} · ${career.contractYearsLeft}yr left · ${formatWage(career.weeklyWage)} · €${career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M`}
                 </div>
