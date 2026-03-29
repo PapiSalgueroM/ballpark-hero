@@ -2780,6 +2780,17 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
     if (e.id === 29 && state.netWorth < 0.5) return false; // Watch collection
     if (e.id === 27 && state.popularity < 50) return false; // Movie cameo
     if (e.id === 30 && state.socialMediaFollowers < 1) return false; // Gaming deal
+    // New events eligibility
+    if (e.id === 31 && state.popularity < 60) return false; // Met Gala needs fame
+    if (e.id === 32 && state.popularity < 50) return false; // Documentary needs fame
+    if (e.id === 33 && state.popularity < 40) return false; // TV show
+    if (e.id === 34 && (state.overall < 85 || state.age < 28)) return false; // Street naming — legend status
+    if (e.id === 35 && (state.overall < 88 || state.age < 30)) return false; // National honour
+    if (e.id === 36 && state.netWorth < 50) return false; // Forbes top 10
+    if (e.id === 37 && state.netWorth < 3) return false; // Academy needs €2M+
+    if (e.id === 38 && state.socialMediaFollowers < 5) return false; // Fan tattoo needs fame
+    if (e.id === 39 && (state.popularity < 70 || state.overall < 85)) return false; // Meet head of state
+    if (e.id === 40 && state.popularity < 55) return false; // Movie role
     return true;
   });
   const count = rand(1, 3);
