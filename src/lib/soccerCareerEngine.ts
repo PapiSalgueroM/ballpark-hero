@@ -3107,7 +3107,34 @@ export function applyEventChoice(prev: CareerState, choiceIndex: number, clubs: 
     s.phase = "random_events";
     return s;
   }
+  // If phase was set to red_card_appeal_result by the event, don't override
+  if (s.phase === "red_card_appeal_result" as any) return s;
   // All events processed → transfer window
+  if (s.age >= 18) {
+    s.transferSituation = determineTransferSituation(s, clubs);
+    s.phase = "transfer_window";
+  } else { s.phase = "playing"; }
+  return s;
+}
+
+/* ─── Dismiss appeal result and continue ─── */
+export function dismissAppealResult(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  const result = s.pendingAppealResult;
+  if (result) {
+    if (result.success) {
+      s.events = [...s.events, "⚖️ Appeal Successful — Ban Overturned! Free to play."];
+    } else {
+      s.popularity = clamp(s.popularity - 5, 0, 100);
+      s.events = [...s.events, `⚖️ Appeal Rejected — Must serve ${result.banLength}-match ban.`];
+    }
+  }
+  s.pendingAppealResult = null;
+  // Continue to remaining events or transfer window
+  if (s.pendingEvents.length > 0) {
+    s.phase = "random_events";
+    return s;
+  }
   if (s.age >= 18) {
     s.transferSituation = determineTransferSituation(s, clubs);
     s.phase = "transfer_window";
