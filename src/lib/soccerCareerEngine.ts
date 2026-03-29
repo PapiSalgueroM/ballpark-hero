@@ -629,29 +629,46 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
   // Sponsorship income
   s.sponsorshipIncome = calcSponsorshipIncome(s.popularity, s.socialMediaFollowers, s.sponsorDeal);
   const totalIncome = wageIncome + s.sponsorshipIncome;
-  // Lifestyle cost
-  s.lifestyleLevel = calcLifestyleLevel(s.netWorth);
-  s.lifestyleCostPerYear = calcLifestyleCost(s.lifestyleLevel);
+  // Lifestyle cost (auto + custom spending)
+  s.lifestyleLevel = calcLifestyleLevel(s.netWorth + (s.totalAssetValue || 0));
+  s.lifestyleCostPerYear = calcLifestyleCost(s.lifestyleLevel) + (s.customYearlyCosts || 0);
   // Net
   const netThisYear = totalIncome - s.lifestyleCostPerYear;
   s.netWorth = Math.round((s.netWorth + netThisYear) * 100) / 100;
   s.totalEarnings = Math.round((s.totalEarnings + totalIncome) * 100) / 100;
+  // Resolve investments
+  resolveInvestments(s);
+  // Update total assets
+  s.totalAssetValue = calcTotalAssets(s);
   // Social media
   const smGrowth = growSocialMedia(s, season);
   s.socialMediaFollowers = Math.round((s.socialMediaFollowers + smGrowth) * 100) / 100;
+  // Lifestyle effects: personal chef gives morale
+  if (s.purchasedItems.includes("personal_chef")) {
+    s.morale = clamp(s.morale + 2, 0, 100);
+  }
   // Deficit tracking
   if (netThisYear < 0) {
     s.consecutiveDeficitYears += 1;
   } else {
     s.consecutiveDeficitYears = 0;
   }
-  // Financial crisis
-  if (s.consecutiveDeficitYears >= 3) {
-    s.events.push("💸 FINANCIAL CRISIS — Spending exceeds income for 3 years! Forced to sell assets.");
+  // Financial crisis — also triggered by negative net worth
+  if (s.consecutiveDeficitYears >= 3 || s.netWorth < -2) {
+    s.events.push("💸 FINANCIAL CRISIS — Spending exceeds income! Forced to sell assets.");
     s.netWorth = Math.max(0, s.netWorth);
     s.lifestyleLevel = "Humble";
     s.lifestyleCostPerYear = 0.05;
     s.properties = [];
+    s.purchasedItems = s.purchasedItems.filter(id => {
+      const item = getSpendingItem(id);
+      return item?.category === "lifestyle"; // keep lifestyle upgrades
+    });
+    s.customYearlyCosts = s.purchasedItems.reduce((sum, id) => {
+      const item = getSpendingItem(id);
+      return sum + (item?.monthlyCost || 0);
+    }, 0);
+    s.totalAssetValue = 0;
     s.consecutiveDeficitYears = 0;
     s.morale = clamp(s.morale - 20, 0, 100);
   }
