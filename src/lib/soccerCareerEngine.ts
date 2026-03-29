@@ -315,7 +315,8 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "social_media_action" | "moral_dilemma" | "retired";
+  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "post_retirement" | "manager_season" | "social_media_action" | "moral_dilemma" | "red_card_appeal_result" | "retired";
+  pendingAppealResult: { success: boolean; banLength: number } | null;
   pendingNews: NewsArticle[];
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
@@ -382,6 +383,8 @@ export interface CareerState {
   matchFixBanned: number;
   divingActive: boolean;
   integrityBonus: number;
+  childEventsSeen: string[]; // track which child follow-up events have been shown
+  pregnancyAnnounced: boolean;
 }
 
 /* ─── Moral Dilemma System ─── */
@@ -1017,12 +1020,43 @@ function simulateFamilyLife(s: CareerState): void {
     s.events.push("💍 Got married! Permanent morale boost.");
     s.netWorth -= 0.5; // Wedding cost
   }
-  // Children
-  if (s.family.isMarried && !s.family.isDivorced && s.family.children < 3 && Math.random() < 0.2) {
+  // Pregnancy announcement (ages 23-30, in a relationship)
+  if ((s.hasRelationship || s.family.isMarried) && !s.family.isDivorced && !s.pregnancyAnnounced && s.family.children < 3 && s.age >= 23 && s.age <= 30 && Math.random() < 0.2) {
+    s.pregnancyAnnounced = true;
+    s.morale = clamp(s.morale + 5, 0, 100);
+    s.events.push("🤰 Your partner is pregnant. You are going to be a parent!");
+    s.socialMediaFollowers += 0.3;
+  }
+  // Birth (season after pregnancy announced)
+  else if (s.pregnancyAnnounced) {
+    s.pregnancyAnnounced = false;
     s.family = { ...s.family, children: s.family.children + 1 };
-    s.morale = clamp(s.morale + 3, 0, 100);
+    s.morale = clamp(s.morale + 10, 0, 100);
     s.socialMediaFollowers += 0.5;
-    s.events.push(`👶 Had a child! (${s.family.children} total) Morale +3`);
+    s.events.push(`👶 Your child is born. Congratulations! (${s.family.children} total) Morale +10, Legacy +5`);
+    // Legacy +5 added via integrityBonus as a proxy
+    s.integrityBonus += 5;
+  }
+  // Follow-up child events
+  if (s.family.children >= 1 && Math.random() < 0.2) {
+    const childEvents = [
+      { id: "first_steps", emoji: "👣", text: "Your child's first steps! A moment you'll never forget.", morale: 3 },
+      { id: "follow_footsteps", emoji: "⚽", text: "Your child wants to follow in your footsteps and become a footballer.", morale: 5 },
+      { id: "watches_trophy", emoji: "🏆", text: "Your child watches you win a trophy — pure joy on their face!", morale: 8 },
+    ];
+    const available = childEvents.filter(e => !s.childEventsSeen.includes(e.id));
+    if (available.length > 0) {
+      const ev = available[Math.floor(Math.random() * available.length)];
+      s.childEventsSeen = [...s.childEventsSeen, ev.id];
+      s.morale = clamp(s.morale + ev.morale, 0, 100);
+      s.events.push(`${ev.emoji} ${ev.text} Morale +${ev.morale}`);
+    }
+  }
+  // Multiple children event
+  if (s.family.children >= 2 && Math.random() < 0.15 && !s.childEventsSeen.includes("juggling_family")) {
+    s.childEventsSeen = [...s.childEventsSeen, "juggling_family"];
+    s.morale = clamp(s.morale + 3, 0, 100);
+    s.events.push("👨‍👩‍👧‍👦 Juggling family life and football is tough but rewarding. Morale +3");
   }
   // Divorce risk: 15% if morale low
   if (s.family.isMarried && !s.family.isDivorced && s.morale < 40 && Math.random() < 0.15) {
@@ -1612,6 +1646,9 @@ export function initCareer(
     matchFixBanned: 0,
     divingActive: false,
     integrityBonus: 0,
+    pendingAppealResult: null,
+    childEventsSeen: [],
+    pregnancyAnnounced: false,
   };
 }
 
@@ -2487,8 +2524,14 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       category: "negative", choices: [
         { label: "Accept the ban", emoji: "😔", color: "bg-red-600", consequence: "Red cards +1, Reputation -5",
           apply: s => { s.popularity = clamp(s.popularity - 5, 0, 100); s.events = [...s.events, "🟥 Banned 3 matches for violent foul"]; return s; } },
-        { label: "Appeal the decision", emoji: "⚖️", color: "bg-amber-600", consequence: "50% chance ban is reduced",
-          apply: s => { if (Math.random() < 0.5) { s.events = [...s.events, "🟥 Ban reduced on appeal"]; } else { s.popularity = clamp(s.popularity - 5, 0, 100); s.events = [...s.events, "🟥 Appeal rejected — ban stands"]; } return s; } },
+        { label: "Appeal the decision", emoji: "⚖️", color: "bg-amber-600", consequence: "Appeal submitted — result in 3-5 days",
+          apply: s => {
+            const success = Math.random() < 0.5;
+            const banLength = success ? 0 : rand(2, 4);
+            s.pendingAppealResult = { success, banLength };
+            s.phase = "red_card_appeal_result" as any;
+            return s;
+          } },
       ] },
     { id: 10, emoji: "💉", title: "False Doping Accusation", description: "A journalist publishes a story claiming you failed a doping test. It is later proven false but damage is done.",
       category: "negative", choices: [
@@ -2644,6 +2687,71 @@ function getAllEvents(state: CareerState): RandomEvent[] {
         { label: "Not my thing", emoji: "✋", color: "bg-muted", consequence: "Stay focused on football",
           apply: s => { s.events = [...s.events, "🎮 Declined gaming brand deal"]; return s; } },
       ] },
+    // New life events (31-40)
+    { id: 31, emoji: "👗", title: "Met Gala Invitation!", description: "You are invited to the Met Gala — the most exclusive fashion event in the world.",
+      category: "life", choices: [
+        { label: "Attend in style", emoji: "✨", color: "bg-pink-600", consequence: "Followers +500k, Lifestyle upgrade",
+          apply: s => { s.socialMediaFollowers += 0.5; s.popularity = clamp(s.popularity + 8, 0, 100); s.events = [...s.events, "👗 Attended the Met Gala — went viral"]; return s; } },
+        { label: "Skip it — not my scene", emoji: "✋", color: "bg-muted", consequence: "Stay low-key",
+          apply: s => { s.events = [...s.events, "👗 Declined Met Gala invitation"]; return s; } },
+      ] },
+    { id: 32, emoji: "🎥", title: "Documentary Crew!", description: "A documentary crew wants to follow your entire season for a Netflix-style series.",
+      category: "life", choices: [
+        { label: "Let them in", emoji: "📹", color: "bg-emerald-600", consequence: "Followers +2M, Legacy +5",
+          apply: s => { s.socialMediaFollowers += 2; s.integrityBonus += 5; s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "🎥 Documentary aired — massive following boost"]; return s; } },
+        { label: "Too much pressure", emoji: "🚫", color: "bg-muted", consequence: "Privacy maintained",
+          apply: s => { s.events = [...s.events, "🎥 Declined documentary crew"]; return s; } },
+      ] },
+    { id: 33, emoji: "📺", title: "TV Show Appearance!", description: "You are invited to appear on a popular late-night talk show.",
+      category: "life", choices: [
+        { label: "Go on the show", emoji: "🎤", color: "bg-blue-600", consequence: "Followers +1M, Fun appearance",
+          apply: s => { s.socialMediaFollowers += 1; s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, "📺 Appeared on a popular TV show"]; return s; } },
+        { label: "Decline — camera shy", emoji: "✋", color: "bg-muted", consequence: "No change",
+          apply: s => { s.events = [...s.events, "📺 Declined TV show appearance"]; return s; } },
+      ] },
+    { id: 34, emoji: "🛣️", title: "Street Named After You!", description: "Your hometown council wants to name a street after you.",
+      category: "life", choices: [
+        { label: "Attend the ceremony", emoji: "🎉", color: "bg-amber-600", consequence: "Legacy +8, Emotional moment",
+          apply: s => { s.integrityBonus += 8; s.morale = clamp(s.morale + 10, 0, 100); s.events = [...s.events, "🛣️ Your hometown named a street after you!"]; return s; } },
+      ] },
+    { id: 35, emoji: "🏅", title: "National Honour!", description: `You are awarded a national honour (MBE/equivalent) by ${state.nationality} for services to sport.`,
+      category: "life", choices: [
+        { label: "Accept with pride", emoji: "👑", color: "bg-amber-600", consequence: "Legacy +10, Prestige boost",
+          apply: s => { s.integrityBonus += 10; s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, `🏅 Awarded national honour by ${s.nationality}`]; return s; } },
+      ] },
+    { id: 36, emoji: "💰", title: "Forbes Top 10!", description: "Forbes lists you in the top 10 highest-paid athletes in the world.",
+      category: "life", choices: [
+        { label: "Celebrate the milestone", emoji: "🥂", color: "bg-emerald-600", consequence: "Followers +1M, Net worth milestone",
+          apply: s => { s.socialMediaFollowers += 1; s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "💰 Forbes Top 10 highest-paid athletes!"]; return s; } },
+      ] },
+    { id: 37, emoji: "⚽🏫", title: "Football Academy!", description: "You have the opportunity to launch your own football academy for kids in your hometown. Cost: €2M.",
+      category: "life", choices: [
+        { label: "Launch the academy — €2M", emoji: "🎓", color: "bg-emerald-600", consequence: "Cost €2M, Legacy +15, Giving back",
+          apply: s => { s.netWorth -= 2; s.integrityBonus += 15; s.popularity = clamp(s.popularity + 15, 0, 100); s.events = [...s.events, "⚽🏫 Launched football academy for kids — Legacy +15"]; return s; } },
+        { label: "Maybe when I retire", emoji: "⏳", color: "bg-muted", consequence: "Postpone the dream",
+          apply: s => { s.events = [...s.events, "⚽🏫 Postponed football academy plans"]; return s; } },
+      ] },
+    { id: 38, emoji: "😂", title: "Fan Tattoo Goes Viral!", description: "A fan gets a tattoo of your face. The internet explodes.",
+      category: "life", choices: [
+        { label: "Repost it — legendary", emoji: "📱", color: "bg-purple-600", consequence: "Followers +500k, Goes viral",
+          apply: s => { s.socialMediaFollowers += 0.5; s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, "😂 Fan face tattoo went viral — +500k followers"]; return s; } },
+        { label: "Pretend you didn't see it", emoji: "🙈", color: "bg-muted", consequence: "It still goes viral anyway",
+          apply: s => { s.socialMediaFollowers += 0.2; s.events = [...s.events, "😂 Fan tattoo went viral without your help"]; return s; } },
+      ] },
+    { id: 39, emoji: "🏛️", title: "Meet the Head of State!", description: `You are invited to meet the President/Prime Minister of ${state.nationality}.`,
+      category: "life", choices: [
+        { label: "It would be an honour", emoji: "🤝", color: "bg-blue-600", consequence: "Legacy +5, Prestige moment",
+          apply: s => { s.integrityBonus += 5; s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, `🏛️ Met the head of state of ${s.nationality}`]; return s; } },
+        { label: "Politely decline", emoji: "✋", color: "bg-muted", consequence: "Stay out of politics",
+          apply: s => { s.events = [...s.events, "🏛️ Declined meeting head of state"]; return s; } },
+      ] },
+    { id: 40, emoji: "🎬⭐", title: "Movie Star Cameo!", description: "A blockbuster director wants you for a speaking role in their new film. Not just a cameo — actual lines.",
+      category: "life", choices: [
+        { label: "Lights, camera, action!", emoji: "🎬", color: "bg-emerald-600", consequence: "Followers +3M, Major exposure",
+          apply: s => { s.socialMediaFollowers += 3; s.netWorth += 0.8; s.popularity = clamp(s.popularity + 12, 0, 100); s.events = [...s.events, "🎬⭐ Starred in a blockbuster movie!"]; return s; } },
+        { label: "I'm a footballer, not an actor", emoji: "⚽", color: "bg-muted", consequence: "Focus on football",
+          apply: s => { s.events = [...s.events, "🎬⭐ Declined movie role"]; return s; } },
+      ] },
   ];
 }
 
@@ -2672,6 +2780,17 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
     if (e.id === 29 && state.netWorth < 0.5) return false; // Watch collection
     if (e.id === 27 && state.popularity < 50) return false; // Movie cameo
     if (e.id === 30 && state.socialMediaFollowers < 1) return false; // Gaming deal
+    // New events eligibility
+    if (e.id === 31 && state.popularity < 60) return false; // Met Gala needs fame
+    if (e.id === 32 && state.popularity < 50) return false; // Documentary needs fame
+    if (e.id === 33 && state.popularity < 40) return false; // TV show
+    if (e.id === 34 && (state.overall < 85 || state.age < 28)) return false; // Street naming — legend status
+    if (e.id === 35 && (state.overall < 88 || state.age < 30)) return false; // National honour
+    if (e.id === 36 && state.netWorth < 50) return false; // Forbes top 10
+    if (e.id === 37 && state.netWorth < 3) return false; // Academy needs €2M+
+    if (e.id === 38 && state.socialMediaFollowers < 5) return false; // Fan tattoo needs fame
+    if (e.id === 39 && (state.popularity < 70 || state.overall < 85)) return false; // Meet head of state
+    if (e.id === 40 && state.popularity < 55) return false; // Movie role
     return true;
   });
   const count = rand(1, 3);
@@ -3095,7 +3214,34 @@ export function applyEventChoice(prev: CareerState, choiceIndex: number, clubs: 
     s.phase = "random_events";
     return s;
   }
+  // If phase was set to red_card_appeal_result by the event, don't override
+  if (s.phase === "red_card_appeal_result" as any) return s;
   // All events processed → transfer window
+  if (s.age >= 18) {
+    s.transferSituation = determineTransferSituation(s, clubs);
+    s.phase = "transfer_window";
+  } else { s.phase = "playing"; }
+  return s;
+}
+
+/* ─── Dismiss appeal result and continue ─── */
+export function dismissAppealResult(prev: CareerState, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  const result = s.pendingAppealResult;
+  if (result) {
+    if (result.success) {
+      s.events = [...s.events, "⚖️ Appeal Successful — Ban Overturned! Free to play."];
+    } else {
+      s.popularity = clamp(s.popularity - 5, 0, 100);
+      s.events = [...s.events, `⚖️ Appeal Rejected — Must serve ${result.banLength}-match ban.`];
+    }
+  }
+  s.pendingAppealResult = null;
+  // Continue to remaining events or transfer window
+  if (s.pendingEvents.length > 0) {
+    s.phase = "random_events";
+    return s;
+  }
   if (s.age >= 18) {
     s.transferSituation = determineTransferSituation(s, clubs);
     s.phase = "transfer_window";
