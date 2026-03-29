@@ -293,7 +293,15 @@ export default function SoccerCareer() {
   const [career, setCareer] = useState<CareerState | null>(() => {
     try {
       const saved = localStorage.getItem(SAVE_KEY);
-      if (saved) return JSON.parse(saved) as CareerState;
+      if (saved) {
+        const parsed = JSON.parse(saved) as CareerState;
+        // Migrate old saves missing primeType
+        if (!parsed.primeType) {
+          const primeTypes: Array<"early" | "normal" | "late" | "extended"> = ["early", "normal", "late", "extended"];
+          parsed.primeType = primeTypes[Math.floor(Math.random() * 4)] as any;
+        }
+        return parsed;
+      }
     } catch {}
     return null;
   });
