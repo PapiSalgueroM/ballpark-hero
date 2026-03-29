@@ -697,7 +697,139 @@ export function formatFollowers(m: number): string {
   return `${Math.round(m * 1000)}`;
 }
 
-/* ─── Elite clubs that dominate domestically ─── */
+/* ─── Purchase spending item ─── */
+export function purchaseSpendingItem(prev: CareerState, itemId: string): CareerState {
+  const item = getSpendingItem(itemId);
+  if (!item) return prev;
+  const s = { ...prev, events: [...prev.events], purchasedItems: [...prev.purchasedItems], properties: [...prev.properties], investments: [...prev.investments], investmentHoldings: [...prev.investmentHoldings] };
+  
+  // Check if already owned (one-time items)
+  if (item.oneTime && s.purchasedItems.includes(itemId)) return prev;
+  
+  // Check if can afford
+  if (item.cost > 0 && s.netWorth < item.cost * 0.5) return prev; // need at least half net worth
+  
+  // Deduct cost
+  s.netWorth = Math.round((s.netWorth - item.cost) * 100) / 100;
+  s.purchasedItems.push(itemId);
+  
+  // Track in properties/investments arrays for display
+  if (item.category === "property" || item.category === "vehicle") {
+    s.properties.push(item.name);
+  }
+  if (item.category === "investment") {
+    s.investments.push(item.name);
+    const lastYear = s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year : 2020;
+    s.investmentHoldings.push({
+      id: itemId + "_" + Date.now(),
+      name: item.name,
+      invested: item.cost,
+      yearPurchased: lastYear,
+      resolved: false,
+      returnAmount: 0,
+    });
+  }
+  
+  // Add ongoing costs
+  if (item.monthlyCost) {
+    s.customYearlyCosts = Math.round((s.customYearlyCosts + item.monthlyCost) * 1000) / 1000;
+  }
+  
+  // Lifestyle effects
+  if (itemId === "sports_psychologist") {
+    s.morale = clamp(s.morale + 5, 0, 100);
+    s.events.push("🧠 Hired a Sports Psychologist! +5 Morale permanently.");
+  } else if (itemId === "personal_trainer") {
+    s.events.push("💪 Hired a Personal Trainer! +1 Physical per season.");
+  } else if (itemId === "elite_recovery") {
+    s.events.push("🏥 Signed up for Elite Recovery Clinic! Injury recovery -50%.");
+  } else if (itemId === "personal_chef") {
+    s.events.push("👨‍🍳 Hired a Personal Chef! +2 Morale per season.");
+  } else if (itemId === "rent_apartment" && item.cost === 0) {
+    s.events.push("🏢 Renting a city apartment.");
+  } else {
+    s.events.push(`${item.emoji} Purchased ${item.name}! (€${item.cost >= 1 ? item.cost.toFixed(0) + "M" : Math.round(item.cost * 1000) + "k"})`);
+  }
+  
+  // Update total asset value
+  s.totalAssetValue = calcTotalAssets(s);
+  s.lifestyleLevel = calcLifestyleLevel(s.netWorth + s.totalAssetValue);
+  
+  return s;
+}
+
+function calcTotalAssets(s: CareerState): number {
+  let total = 0;
+  // Properties & vehicles — appreciate/depreciate
+  const propertyValues: Record<string, number> = {
+    "city_apartment": 0.85, "luxury_house": 3.2, "mansion": 8.5, "private_island": 27,
+    "sports_car": 0.1, "supercar_collection": 0.6, "private_jet": 10, "yacht": 5,
+  };
+  for (const id of s.purchasedItems) {
+    if (propertyValues[id]) total += propertyValues[id];
+  }
+  // Unresolved investments at face value
+  for (const h of s.investmentHoldings) {
+    if (!h.resolved) total += h.invested;
+  }
+  return Math.round(total * 100) / 100;
+}
+
+function resolveInvestments(s: CareerState): void {
+  for (let i = 0; i < s.investmentHoldings.length; i++) {
+    const h = s.investmentHoldings[i];
+    if (h.resolved) continue;
+    const currentYear = s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year : 2020;
+    const yearsHeld = currentYear - h.yearPurchased;
+    
+    if (h.name === "Football Club Shares") {
+      // Steady 8% return per year — resolve as income, keep holding
+      const yearlyReturn = h.invested * 0.08;
+      s.netWorth = Math.round((s.netWorth + yearlyReturn) * 100) / 100;
+      if (yearsHeld > 0 && yearsHeld % 1 === 0) {
+        s.events.push(`⚽ Football Club Shares returned €${(yearlyReturn).toFixed(1)}M this year`);
+      }
+      continue; // never resolves — keeps paying
+    }
+    
+    // Other investments resolve after 1-2 years
+    if (yearsHeld < 1) continue;
+    
+    h.resolved = true;
+    if (h.name === "Restaurant Chain") {
+      if (Math.random() < 0.30) {
+        h.returnAmount = 1.5;
+        s.netWorth = Math.round((s.netWorth + h.returnAmount) * 100) / 100;
+        s.events.push(`🍽️ Restaurant chain is thriving! Earned €${h.returnAmount.toFixed(1)}M profit!`);
+      } else if (Math.random() < 0.5) {
+        s.events.push("🍽️ Restaurant chain broke even. No profit, no loss.");
+      } else {
+        const loss = h.invested * 0.5;
+        s.events.push(`🍽️ Restaurant chain struggling. Lost €${loss.toFixed(1)}M.`);
+      }
+    } else if (h.name === "Crypto") {
+      if (Math.random() < 0.50) {
+        h.returnAmount = h.invested * 3;
+        s.netWorth = Math.round((s.netWorth + h.returnAmount) * 100) / 100;
+        s.events.push(`₿ Crypto investment 3x'd! Earned €${h.returnAmount.toFixed(1)}M!`);
+      } else {
+        s.events.push("₿ Crypto investment crashed! Lost everything.");
+      }
+    } else if (h.name === "Tech Startup") {
+      if (Math.random() < 0.20) {
+        h.returnAmount = h.invested * 10;
+        s.netWorth = Math.round((s.netWorth + h.returnAmount) * 100) / 100;
+        s.events.push(`💻 Tech startup went viral! 10x return — €${h.returnAmount.toFixed(1)}M!`);
+      } else {
+        s.events.push("💻 Tech startup failed. Investment lost.");
+      }
+    }
+  }
+  // Remove old non-football resolved investments from the investments display
+  s.investmentHoldings = s.investmentHoldings.filter(h => !h.resolved || h.name === "Football Club Shares");
+}
+
+
 const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
 
 /* ─── Appearances — league + UCL + cups for realistic totals ─── */
