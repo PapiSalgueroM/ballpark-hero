@@ -237,6 +237,59 @@ export interface FamilyStatus {
 
 export type PrimeType = "early" | "normal" | "late" | "extended";
 
+/* ─── Spending & Lifestyle System ─── */
+export type SpendingCategory = "property" | "vehicle" | "investment" | "lifestyle";
+
+export interface SpendingItem {
+  id: string;
+  name: string;
+  emoji: string;
+  category: SpendingCategory;
+  cost: number; // in millions
+  monthlyCost?: number; // in millions per year (ongoing)
+  description: string;
+  oneTime: boolean; // can only buy once?
+  minNetWorth?: number; // minimum net worth to unlock
+  effect?: string; // description of gameplay effect
+}
+
+export interface InvestmentHolding {
+  id: string;
+  name: string;
+  invested: number; // in millions
+  yearPurchased: number;
+  resolved: boolean;
+  returnAmount: number; // in millions (0 if not resolved)
+}
+
+export const SPENDING_ITEMS: SpendingItem[] = [
+  // Properties
+  { id: "rent_apartment", name: "Rent Apartment", emoji: "🏢", category: "property", cost: 0, monthlyCost: 0.024, description: "Basic city apartment — €2k/month", oneTime: true },
+  { id: "city_apartment", name: "City Apartment", emoji: "🏙️", category: "property", cost: 0.8, description: "Buy a stylish city apartment — €800k", oneTime: true, minNetWorth: 0.5 },
+  { id: "luxury_house", name: "Luxury House", emoji: "🏠", category: "property", cost: 3, description: "Buy a luxury house — €3M", oneTime: true, minNetWorth: 2 },
+  { id: "mansion", name: "Mansion", emoji: "🏰", category: "property", cost: 8, description: "Buy a sprawling mansion — €8M", oneTime: true, minNetWorth: 5 },
+  { id: "private_island", name: "Private Island", emoji: "🏝️", category: "property", cost: 25, description: "Buy your own private island — €25M", oneTime: true, minNetWorth: 20 },
+  // Vehicles
+  { id: "sports_car", name: "Sports Car", emoji: "🏎️", category: "vehicle", cost: 0.15, description: "Buy a sports car — €150k", oneTime: false },
+  { id: "supercar_collection", name: "Supercar Collection", emoji: "🚗", category: "vehicle", cost: 0.8, description: "Build a supercar collection — €800k", oneTime: true, minNetWorth: 1 },
+  { id: "private_jet", name: "Private Jet", emoji: "✈️", category: "vehicle", cost: 15, monthlyCost: 0.5, description: "Buy a private jet — €15M + €500k/yr upkeep", oneTime: true, minNetWorth: 12 },
+  { id: "yacht", name: "Yacht", emoji: "🛥️", category: "vehicle", cost: 8, monthlyCost: 0.3, description: "Buy a luxury yacht — €8M + €300k/yr upkeep", oneTime: true, minNetWorth: 6 },
+  // Investments
+  { id: "restaurant_chain", name: "Restaurant Chain", emoji: "🍽️", category: "investment", cost: 0.5, description: "30% chance profit €1.5M, 70% break even or loss", oneTime: false },
+  { id: "crypto", name: "Crypto", emoji: "₿", category: "investment", cost: 0.2, description: "50% chance 3x return, 50% lose it all", oneTime: false },
+  { id: "football_shares", name: "Football Club Shares", emoji: "⚽", category: "investment", cost: 5, description: "Steady 8% return per year", oneTime: true, minNetWorth: 4 },
+  { id: "tech_startup", name: "Tech Startup", emoji: "💻", category: "investment", cost: 1, description: "20% chance 10x return, 80% lose it", oneTime: false },
+  // Lifestyle upgrades
+  { id: "personal_chef", name: "Personal Chef", emoji: "👨‍🍳", category: "lifestyle", cost: 0, monthlyCost: 0.05, description: "Hire a personal chef — €50k/year", oneTime: true, effect: "Better nutrition, +2 morale per season" },
+  { id: "personal_trainer", name: "Personal Trainer", emoji: "💪", category: "lifestyle", cost: 0, monthlyCost: 0.08, description: "Private trainer — €80k/year", oneTime: true, effect: "+1 Physical stat per season" },
+  { id: "sports_psychologist", name: "Sports Psychologist", emoji: "🧠", category: "lifestyle", cost: 0, monthlyCost: 0.06, description: "Mental coach — €60k/year", oneTime: true, effect: "+5 Morale permanently on hire" },
+  { id: "elite_recovery", name: "Elite Recovery Clinic", emoji: "🏥", category: "lifestyle", cost: 0, monthlyCost: 0.1, description: "Top recovery tech — €100k/year", oneTime: true, effect: "Reduces injury recovery time by 50%" },
+];
+
+export function getSpendingItem(id: string): SpendingItem | undefined {
+  return SPENDING_ITEMS.find(i => i.id === id);
+}
+
 export interface CareerState {
   playerName: string;
   nationality: string;
