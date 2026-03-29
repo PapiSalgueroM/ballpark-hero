@@ -1807,6 +1807,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onSocialMediaAction: (actionId: string) => void;
   onFifaCover: (accept: boolean) => void;
   onDismissSocialMedia: () => void;
+  onMoralDilemmaChoice: (choiceIndex: number) => void;
+  onDismissMoralDilemma: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
   const totals = getCareerTotals(career.seasons);
