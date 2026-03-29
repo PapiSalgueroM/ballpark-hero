@@ -150,7 +150,27 @@ export interface LegacyResult {
   breakdown: { label: string; points: number }[];
 }
 
-export type PostRetirementChoice = "retire" | "manager" | "pundit";
+export type PostRetirementChoice = "retire" | "manager" | "pundit" | "owner";
+
+/* ─── Pundit System ─── */
+export interface PunditState {
+  season: number;
+  predictions: { season: number; prediction: string; cameTrue: boolean }[];
+  controversies: number;
+  legacyBonus: number;
+  followerGains: number;
+}
+
+/* ─── Club Owner System ─── */
+export interface OwnerState {
+  club: string;
+  clubTier: number;
+  season: number;
+  budget: number; // in millions
+  trophies: number;
+  promotions: number;
+  seasonResults: { year: number; club: string; tier: number; result: string; trophy: boolean }[];
+}
 
 /* ─── Newspaper Article System ─── */
 export interface NewsArticle {
