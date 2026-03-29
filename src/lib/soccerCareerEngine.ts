@@ -704,7 +704,7 @@ function calcLifestyleCost(level: LifestyleLevel): number {
   }
 }
 
-function calcSponsorshipIncome(popularity: number, socialMediaFollowers: number, sponsorDeal: string | null): number {
+function calcSponsorshipIncome(popularity: number, socialMediaFollowers: number, sponsorDeal: string | null, activeSponsorship?: SponsorshipTier | null): number {
   let income = 0;
   // Base sponsorship from popularity
   if (popularity >= 80) income += 2;
@@ -712,9 +712,11 @@ function calcSponsorshipIncome(popularity: number, socialMediaFollowers: number,
   else if (popularity >= 40) income += 0.3;
   // Social media income
   income += socialMediaFollowers * 0.1; // €100k per 1M followers
-  // Named sponsor deal
+  // Named sponsor deal (legacy)
   if (sponsorDeal === "Nike") income += 2;
   else if (sponsorDeal === "Adidas") income += 1.5;
+  // Tiered sponsorship from social media actions
+  income += getSponsorshipIncome(activeSponsorship || null);
   return Math.round(income * 100) / 100;
 }
 
@@ -740,7 +742,7 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
   // Wage income (52 weeks, in millions)
   const wageIncome = (s.weeklyWage * 52) / 1_000_000;
   // Sponsorship income
-  s.sponsorshipIncome = calcSponsorshipIncome(s.popularity, s.socialMediaFollowers, s.sponsorDeal);
+  s.sponsorshipIncome = calcSponsorshipIncome(s.popularity, s.socialMediaFollowers, s.sponsorDeal, s.activeSponsorship);
   const totalIncome = wageIncome + s.sponsorshipIncome;
   // Lifestyle cost (auto + custom spending)
   s.lifestyleLevel = calcLifestyleLevel(s.netWorth + (s.totalAssetValue || 0));
@@ -1702,6 +1704,16 @@ function generateIntSeasonStats(state: CareerState, year: number): { intApps: nu
 /* ─── Advance pro season ─── */
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev }; s.age += 1; s.events = [];
+  // Reset social media action for new season
+  s.socialMediaActionUsedThisSeason = false;
+  // Apply focus boost from "stay off social media" last season
+  if (s.socialMediaFocusBoost) {
+    for (const k of ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"] as const) {
+      (s as any)[k] = clamp((s as any)[k] + 2, 20, 99);
+    }
+    s.socialMediaFocusBoost = false;
+    s.events.push("🧘 Social media detox paid off — +2 to all stats!");
+  }
   
   // Detect "FINAL SEASON" — will retire next year
   const projectedOvr = s.overall - (s.age >= 34 ? 3 : s.age >= 30 ? 1 : 0);
