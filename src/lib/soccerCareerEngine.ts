@@ -351,6 +351,11 @@ export interface CareerState {
   consecutiveDeficitYears: number;
   agentFeesPaid: number;
   family: FamilyStatus;
+  // Spending system
+  purchasedItems: string[]; // item IDs that have been bought
+  investmentHoldings: InvestmentHolding[];
+  totalAssetValue: number; // value of all owned properties + vehicles + investments
+  customYearlyCosts: number; // yearly costs from purchased lifestyle items
   // Ballon d'Or & Awards
   awards: Award[];
   pendingBallonDor: BallonDorResult | null;
