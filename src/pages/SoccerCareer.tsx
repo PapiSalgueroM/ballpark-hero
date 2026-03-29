@@ -550,6 +550,9 @@ export default function SoccerCareer() {
               onShare={handleShare}
               onNewCareer={handleNewCareer}
               onPurchase={handlePurchase}
+              onSocialMediaAction={handleSocialMediaAction}
+              onFifaCover={handleFifaCover}
+              onDismissSocialMedia={handleDismissSocialMedia}
               timelineRef={timelineRef}
             />
           )}
