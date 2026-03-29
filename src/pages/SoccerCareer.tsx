@@ -472,6 +472,24 @@ export default function SoccerCareer() {
     }
   };
 
+  const handleSocialMediaAction = (actionId: string) => {
+    if (!career) return;
+    const result = applySocialMediaAction(career, actionId);
+    setCareer(result);
+    const action = SOCIAL_MEDIA_ACTIONS.find(a => a.id === actionId);
+    if (action) toast(action.emoji + " " + action.label);
+  };
+
+  const handleFifaCover = (accept: boolean) => {
+    if (!career) return;
+    setCareer(handleFifaCoverDecision(career, accept));
+  };
+
+  const handleDismissSocialMedia = () => {
+    if (!career) return;
+    setCareer(dismissSocialMediaPhase(career, clubs));
+  };
+
   const handleNewCareer = () => {
     setShowNewCareerConfirm(true);
   };
