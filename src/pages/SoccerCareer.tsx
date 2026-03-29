@@ -2046,6 +2046,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             />
            )}
 
+          {/* OVERLAY: Moral Dilemma */}
+          {career.phase === "moral_dilemma" && (
+            <MoralDilemmaCard
+              career={career}
+              onChoice={onMoralDilemmaChoice}
+              onDismiss={onDismissMoralDilemma}
+            />
+          )}
+
           {/* OVERLAY: Social Media Action */}
           {career.phase === "social_media_action" && (
             <SocialMediaActionCard
