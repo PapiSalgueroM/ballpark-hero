@@ -462,7 +462,13 @@ export function applySocialMediaAction(prev: CareerState, actionId: string): Car
     s.pendingFifaCoverEvent = true;
   }
 
-  s.phase = "playing";
+  // If FIFA cover event triggered, stay on social media action phase to show it
+  if (s.pendingFifaCoverEvent) {
+    s.phase = "social_media_action";
+  } else {
+    // Mark as needing to continue via dismissSocialMediaPhase
+    s.phase = "social_media_action";
+  }
   return s;
 }
 
@@ -479,7 +485,8 @@ export function handleFifaCoverDecision(prev: CareerState, accept: boolean): Car
     s.popularity = clamp(s.popularity + 5, 0, 100);
     s.events = [...s.events, "🎮 Declined FIFA cover — gained respect for being selective. Reputation +5"];
   }
-  s.phase = "playing";
+  // Will continue via dismissSocialMediaPhase
+  s.phase = "social_media_action";
   return s;
 }
 
