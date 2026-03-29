@@ -2063,6 +2063,32 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             />
           )}
 
+          {/* OVERLAY: Red Card Appeal Result */}
+          {career.phase === "red_card_appeal_result" && career.pendingAppealResult && (
+            <div className="rounded-xl border-2 border-red-500/60 bg-gradient-to-b from-red-500/15 to-transparent p-6 space-y-4 text-center">
+              <div className="text-5xl">{career.pendingAppealResult.success ? "✅" : "❌"}</div>
+              <h3 className="text-xl font-black tracking-tight">
+                {career.pendingAppealResult.success ? "APPEAL SUCCESSFUL" : "APPEAL REJECTED"}
+              </h3>
+              <div className={`rounded-lg p-4 border ${career.pendingAppealResult.success ? "bg-emerald-500/10 border-emerald-500/30" : "bg-red-500/10 border-red-500/30"}`}>
+                <p className="text-sm font-bold">
+                  {career.pendingAppealResult.success
+                    ? "🎉 Ban Overturned — You are free to play!"
+                    : `⚠️ You must serve the ${career.pendingAppealResult.banLength}-match ban.`}
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  {career.pendingAppealResult.success
+                    ? "The disciplinary committee reviewed the footage and decided the red card was unjust. No further action will be taken."
+                    : "After reviewing all available evidence, the committee upheld the original decision. The ban remains in effect."}
+                </p>
+              </div>
+              <p className="text-[10px] text-muted-foreground">Result delivered after 3-5 day review period</p>
+              <Button onClick={onDismissAppeal} className="w-full h-10 text-sm font-bold">
+                Continue →
+              </Button>
+            </div>
+          )}
+
           {/* OVERLAY: Social Media Action */}
           {career.phase === "social_media_action" && (
             <SocialMediaActionCard
