@@ -57,6 +57,8 @@ export function useHockeyCareer() {
 
   const playerNames = useMemo(() => ensureAnswerInOptions(hockeyCareerPuzzles.map(p => p.player.name), player.name), [player]);
 
+  useGameCompletion('hockey-career', status !== 'playing', score);
+
   return {
     puzzle, player, clueLevel, visibleClues, status, score,
     guessInput, setGuessInput, submitGuess, revealNextClue, giveUp, wrongGuess, maxClue, playerNames,

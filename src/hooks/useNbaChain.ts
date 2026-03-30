@@ -154,7 +154,7 @@ export function useNbaChain() {
 
   const getShareText = useCallback(() => {
     const names = chain.map((l) => l.playerName);
-    return `🏀 NBA Chain Game\n🔗 Chain of ${score}: ${names.join(' → ')}\n\nPlay at douknowball.lovable.app/nba-chain`;
+    return `🏀 NBA Chain Game\n🔗 Chain of ${score}: ${names.join(' → ')}\n\nPlay at douknowball.com/nba-chain`;
   }, [chain, score]);
 
   useGameCompletion('nba-chain', phase === 'ended', score * 100);
