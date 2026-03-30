@@ -6,6 +6,7 @@
 /build-your-xi/ /build-your-xi 301
 /guess-the-face/ /guess-the-face 301
 /ufc/ /ufc 301
+/ufc-chain/ /ufc-chain 301
 /nba-starting-5/ /nba-starting-5 301
 /nba-connect-4/ /nba-connect-4 301
 /nba-chain/ /nba-chain 301
@@ -25,7 +26,26 @@
 /teammates/ /teammates 301
 /olympics/ /olympics 301
 /guess-the-college/ /guess-the-college 301
+/guess-the-year/ /guess-the-year 301
+/guess-nfl-team/ /guess-nfl-team 301
+/guess-soccer-club/ /guess-soccer-club 301
+/guess-the-nation/ /guess-the-nation 301
+/f1-driver/ /f1-driver 301
+/f1-constructor/ /f1-constructor 301
+/guess-cbb-team/ /guess-cbb-team 301
+/guess-tennis-player/ /guess-tennis-player 301
+/tennis-chain/ /tennis-chain 301
+/guess-nascar-driver/ /guess-nascar-driver 301
+/nascar-chain/ /nascar-chain 301
+/soccer-grid/ /soccer-grid 301
+/fantasy-draft/ /fantasy-draft 301
+/conquest/ /conquest 301
+/soccer-career/ /soccer-career 301
+/world-cup-bracket/ /world-cup-bracket 301
+/leaderboard/ /leaderboard 301
+/profile/ /profile 301
 
+# Legacy path redirect
 /world-cup-predictor/ /world-cup-bracket 301
 /world-cup-predictor /world-cup-bracket 301
 
