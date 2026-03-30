@@ -6,6 +6,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { shareResult } from '@/lib/share';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 import { Trophy, ChevronDown, Award } from 'lucide-react';
 
 export default function Olympics() {
@@ -180,6 +181,15 @@ export default function Olympics() {
             </div>
           )}
 
+          <GameSeoContent
+            title="Olympic Athlete Trivia | DoUKnowBall"
+            description="Guess the mystery Olympic athlete from progressive clues about their sport, medal count, nationality, and iconic moments. Covers Summer and Winter Games."
+            howToPlay={[
+              "Clues are revealed one at a time about the mystery Olympic athlete — sport, medals, era, and country.",
+              "Submit your guess when you think you know who it is. Fewer clues means more points.",
+              "Give up to reveal the answer if you're stuck. A new athlete is featured daily."
+            ]}
+          />
           <GameNav />
         </div>
       </div>

@@ -349,6 +349,15 @@ const GuessTheCollege = () => {
         </main>
 
         <div className="container max-w-2xl mx-auto px-4">
+          <GameSeoContent
+            title="Guess The College — D1 Trivia | DoUKnowBall"
+            description="Guess the Division 1 college from progressive clues about their conference, mascot, location, and athletic history. Covers all Power 4 and Group of 5 schools."
+            howToPlay={[
+              "Read each clue about the mystery college — region, conference, mascot, and tournament history.",
+              "Type your guess at any time. Fewer clues used means a higher score.",
+              "Play daily mode, unlimited mode, or filter by specific conference."
+            ]}
+          />
           <GameNav />
           <Footer />
         </div>
