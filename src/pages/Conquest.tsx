@@ -3,6 +3,7 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import ConquestBoard from '@/components/conquest/ConquestBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 import { Footer } from '@/components/game/Footer';
 import { ConquestHowToPlay } from '@/components/conquest/ConquestHowToPlay';
 import { HelpCircle } from 'lucide-react';
