@@ -1,4 +1,5 @@
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 import { NascarDriverBoard } from '@/components/nascar-driver/NascarDriverBoard';
 
 export default function GuessNascarDriver() {
@@ -10,6 +11,15 @@ export default function GuessNascarDriver() {
         path="/guess-nascar-driver"
       />
       <NascarDriverBoard />
+      <GameSeoContent
+        title="Guess The NASCAR Driver | DoUKnowBall"
+        description="Identify the mystery NASCAR Cup Series driver from progressive clues about their era, wins, car number, championships, and famous moments."
+        howToPlay={[
+          "Clues are revealed progressively — era, win count, car number, and iconic career moments.",
+          "Submit your guess when you know the driver. Fewer clues means a higher score.",
+          "Play daily for the shared puzzle or switch to unlimited for more NASCAR trivia."
+        ]}
+      />
     </>
   );
 }

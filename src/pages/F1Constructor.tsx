@@ -1,4 +1,5 @@
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 import { F1ConstructorBoard } from '@/components/f1-constructor/F1ConstructorBoard';
 
 export default function F1Constructor() {
@@ -10,6 +11,15 @@ export default function F1Constructor() {
         path="/f1-constructor"
       />
       <F1ConstructorBoard />
+      <GameSeoContent
+        title="Guess The F1 Constructor | DoUKnowBall"
+        description="Identify the mystery Formula 1 constructor from progressive clues about their championship history, drivers, and iconic moments."
+        howToPlay={[
+          "Each clue reveals something about the constructor — era, championship count, famous drivers, and key moments.",
+          "Guess the constructor at any time. The fewer clues you need, the higher your score.",
+          "Try the daily challenge or play unlimited mode for more practice."
+        ]}
+      />
     </>
   );
 }
