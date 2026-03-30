@@ -5,6 +5,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import PageSeo from "@/components/seo/PageSeo";
+import GameSeoContent from "@/components/seo/GameSeoContent";
 import KnockoutBracket, { type GroupSeed } from "@/components/world-cup-predictor/KnockoutBracket";
 import ShareButtons from "@/components/game/ShareButtons";
 import AwardsPredictor from "@/components/world-cup-predictor/AwardsPredictor";
