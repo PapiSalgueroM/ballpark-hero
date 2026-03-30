@@ -608,6 +608,57 @@ export type Database = {
         }
         Relationships: []
       }
+      nfl_players: {
+        Row: {
+          awards: string[]
+          career_stats_summary: string | null
+          college: string | null
+          common_nicknames: string[]
+          created_at: string
+          draft_round: number | null
+          draft_year: number | null
+          full_name: string
+          hall_of_fame: boolean
+          hof_year: number | null
+          id: string
+          is_active: boolean
+          position: string
+          teams: Json
+        }
+        Insert: {
+          awards?: string[]
+          career_stats_summary?: string | null
+          college?: string | null
+          common_nicknames?: string[]
+          created_at?: string
+          draft_round?: number | null
+          draft_year?: number | null
+          full_name: string
+          hall_of_fame?: boolean
+          hof_year?: number | null
+          id?: string
+          is_active?: boolean
+          position: string
+          teams?: Json
+        }
+        Update: {
+          awards?: string[]
+          career_stats_summary?: string | null
+          college?: string | null
+          common_nicknames?: string[]
+          created_at?: string
+          draft_round?: number | null
+          draft_year?: number | null
+          full_name?: string
+          hall_of_fame?: boolean
+          hof_year?: number | null
+          id?: string
+          is_active?: boolean
+          position?: string
+          teams?: Json
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           all_time_score: number
