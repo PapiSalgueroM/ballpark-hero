@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 
 import { Button } from '@/components/ui/button';
 import { Sparkles, Shield, Trophy, Target, Loader2, User, Bot, CheckCircle2, Zap } from 'lucide-react';
@@ -330,6 +331,15 @@ const FantasyDraft = () => {
           </div>
         </main>
 
+        <GameSeoContent
+          title="Fantasy Draft — Soccer Team Builder | DoUKnowBall"
+          description="Draft your ultimate soccer squad against an AI opponent. Pick 11 players in a snake draft, then simulate a full season to see who built the better team."
+          howToPlay={[
+            "Take turns drafting soccer players with the AI in a snake draft format (you pick, AI picks, repeat).",
+            "Build a balanced squad of 11 players across all positions within the daily criteria.",
+            "After drafting, simulate a full season and vote on whose team performed better."
+          ]}
+        />
         <Footer />
       </div>
     </>
