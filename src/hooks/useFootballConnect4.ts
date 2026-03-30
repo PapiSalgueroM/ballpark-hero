@@ -202,7 +202,7 @@ export function useFootballConnect4() {
       )
       .join('\n');
     const result = isDraw ? "It's a draw!" : `${winner === 'blue' ? '🔵 Blue' : '🔴 Red'} wins!`;
-    return `⚽ Soccer Connect 4\n${result}\n\n${grid}\n\nPlay at douknowball.lovable.app/football-connect-4`;
+    return `⚽ Soccer Connect 4\n${result}\n\n${grid}\n\nPlay at douknowball.com/football-connect-4`;
   }, [board, winner, isDraw]);
 
   useGameCompletion('football-connect4', phase === 'won', winner ? 500 : 0);
