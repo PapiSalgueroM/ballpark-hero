@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
