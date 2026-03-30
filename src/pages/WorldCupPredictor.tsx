@@ -5,6 +5,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import PageSeo from "@/components/seo/PageSeo";
+import GameSeoContent from "@/components/seo/GameSeoContent";
 import KnockoutBracket, { type GroupSeed } from "@/components/world-cup-predictor/KnockoutBracket";
 import ShareButtons from "@/components/game/ShareButtons";
 import AwardsPredictor from "@/components/world-cup-predictor/AwardsPredictor";
@@ -1495,6 +1496,15 @@ const WorldCupPredictor = () => {
         )}
       </div>
       <div className="max-w-5xl mx-auto px-4">
+        <GameSeoContent
+          title="World Cup 2026 Bracket Builder | DoUKnowBall"
+          description="Build your complete World Cup 2026 bracket — predict every match from the group stage through the knockout rounds to the final. Share your bracket with friends and compare predictions."
+          howToPlay={[
+            "Pick winners for each group stage match to determine which teams advance to the knockouts.",
+            "Fill in the knockout bracket from the Round of 32 all the way to the Final.",
+            "Share your completed bracket with friends, save it to your account, and see how others predicted."
+          ]}
+        />
         <GameNav />
         <Footer />
       </div>

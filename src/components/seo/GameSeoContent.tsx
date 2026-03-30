@@ -6,9 +6,9 @@ interface GameSeoContentProps {
 
 const GameSeoContent = ({ title, description, howToPlay }: GameSeoContentProps) => (
   <section className="max-w-2xl mx-auto mt-12 mb-8 px-4 text-center">
-    <h2 className="text-lg font-semibold text-muted-foreground/70 font-display mb-2">
+    <h1 className="text-lg font-semibold text-muted-foreground/70 font-display mb-2">
       {title}
-    </h2>
+    </h1>
     <p className="text-sm text-muted-foreground/60 leading-relaxed mb-4">
       {description}
     </p>

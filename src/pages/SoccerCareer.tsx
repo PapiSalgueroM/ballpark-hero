@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
+import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from "@/components/game/GameNavbar";
 import { Footer } from "@/components/game/Footer";
 import { Button } from "@/components/ui/button";
@@ -620,6 +621,15 @@ export default function SoccerCareer() {
             />
           )}
         </main>
+        <GameSeoContent
+          title="Soccer Career Simulator | DoUKnowBall"
+          description="Live out your soccer dream in this BitLife-style career simulator. Create a player, join a youth academy, develop skills, sign contracts, win trophies, and compete for the Ballon d'Or."
+          howToPlay={[
+            "Create your player — choose name, nationality, position, and starting era to begin your career.",
+            "Each season, develop your skills through training, handle contract offers, and compete for trophies.",
+            "Win the Ballon d'Or, lead your team to World Cup glory, and build a legendary career timeline."
+          ]}
+        />
         <Footer />
       </div>
       <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />

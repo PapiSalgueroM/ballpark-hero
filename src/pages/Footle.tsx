@@ -13,6 +13,7 @@ import { Footer } from '@/components/game/Footer';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const Index = () => {
   const {
@@ -223,6 +224,15 @@ const Index = () => {
         </div>
 
         {/* Game Navigation */}
+        <GameSeoContent
+          title="Footle — Soccer Player Guessing Game"
+          description="Guess the mystery soccer player in 8 tries. Each guess reveals clues about the player's club, league, nationality, position, and age. One of 30+ free daily sports trivia games."
+          howToPlay={[
+            "Type a soccer player's name and submit your guess. You get 8 attempts.",
+            "After each guess, colored tiles show how close you are — green means correct, yellow means close.",
+            "Use the clues to narrow down the mystery player. A new puzzle is available every day."
+          ]}
+        />
         <GameNav />
         <Footer />
       </div>

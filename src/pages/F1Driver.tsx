@@ -1,4 +1,5 @@
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 import { F1DriverBoard } from '@/components/f1-driver/F1DriverBoard';
 
 export default function F1Driver() {
@@ -10,6 +11,15 @@ export default function F1Driver() {
         path="/f1-driver"
       />
       <F1DriverBoard />
+      <GameSeoContent
+        title="Guess The F1 Driver | DoUKnowBall"
+        description="Identify the mystery Formula 1 driver from progressive clues about their career, nationality, teams, and race wins. Daily and unlimited modes available."
+        howToPlay={[
+          "Read each clue carefully — they reveal details about the driver's career era, nationality, and achievements.",
+          "Submit your guess at any time. Fewer clues used means a higher score.",
+          "Play the daily challenge for a shared puzzle, or switch to unlimited for endless practice."
+        ]}
+      />
     </>
   );
 }

@@ -3,6 +3,7 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import ConquestBoard from '@/components/conquest/ConquestBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 import { Footer } from '@/components/game/Footer';
 import { ConquestHowToPlay } from '@/components/conquest/ConquestHowToPlay';
 import { HelpCircle } from 'lucide-react';
@@ -42,6 +43,15 @@ const Conquest = () => {
             </button>
           </div>
           <ConquestBoard />
+          <GameSeoContent
+            title="NFL Conquest — Territory Domination Game"
+            description="Watch 32 NFL teams battle across the US map for total domination. Spin the wheel, simulate realistic play-by-play games, steal players, and conquer every state."
+            howToPlay={[
+              "Watch NFL teams battle for control of US states in simulated play-by-play matchups.",
+              "After each battle, steal a player from the losing team to strengthen your roster.",
+              "The last team standing wins. Use power-ups and strategy to dominate the map."
+            ]}
+          />
           <GameNav />
         </main>
         <Footer />

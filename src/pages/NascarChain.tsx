@@ -1,15 +1,25 @@
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 import { NascarChainBoard } from '@/components/nascar-chain/NascarChainBoard';
 
 export default function NascarChain() {
   return (
     <>
       <PageSeo
-        title="NASCAR Chain — Build a Chain of Cup Champions"
+        title="NASCAR Chain — Cup Champion Chain Game"
         description="Name drivers who beat each other to the NASCAR Cup Series championship. Build the longest chain and compete on the daily leaderboard!"
         path="/nascar-chain"
       />
       <NascarChainBoard />
+      <GameSeoContent
+        title="NASCAR Chain Game | DoUKnowBall"
+        description="Build the longest chain of NASCAR Cup Series drivers by naming someone who raced against the current driver. Test your knowledge of stock car racing history."
+        howToPlay={[
+          "Start with a given NASCAR driver. Name another driver who competed against them.",
+          "Each valid connection extends your chain. Keep going as long as you can.",
+          "Compete on the daily leaderboard or play unlimited mode for practice."
+        ]}
+      />
     </>
   );
 }
