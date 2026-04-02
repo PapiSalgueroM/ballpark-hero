@@ -258,7 +258,7 @@ export interface FamilyStatus {
 export type PrimeType = "early" | "normal" | "late" | "extended";
 
 /* ─── Spending & Lifestyle System ─── */
-export type SpendingCategory = "property" | "vehicle" | "investment" | "lifestyle";
+export type SpendingCategory = "property" | "vehicle" | "investment" | "lifestyle" | "performance";
 
 export interface SpendingItem {
   id: string;
