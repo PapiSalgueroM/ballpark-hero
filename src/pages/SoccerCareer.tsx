@@ -1685,6 +1685,7 @@ function MyLifePanel({ career, onPurchase }: { career: CareerState; onPurchase: 
     { key: "vehicle", label: "Vehicles", emoji: "🏎️" },
     { key: "investment", label: "Invest", emoji: "📈" },
     { key: "lifestyle", label: "Lifestyle", emoji: "✨" },
+    { key: "performance", label: "Performance", emoji: "⚡" },
   ];
 
   const items = SPENDING_ITEMS.filter(i => i.category === activeTab);

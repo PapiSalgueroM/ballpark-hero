@@ -258,7 +258,7 @@ export interface FamilyStatus {
 export type PrimeType = "early" | "normal" | "late" | "extended";
 
 /* ─── Spending & Lifestyle System ─── */
-export type SpendingCategory = "property" | "vehicle" | "investment" | "lifestyle";
+export type SpendingCategory = "property" | "vehicle" | "investment" | "lifestyle" | "performance";
 
 export interface SpendingItem {
   id: string;
@@ -304,6 +304,17 @@ export const SPENDING_ITEMS: SpendingItem[] = [
   { id: "personal_trainer", name: "Personal Trainer", emoji: "💪", category: "lifestyle", cost: 0, monthlyCost: 0.08, description: "Private trainer — €80k/year", oneTime: true, effect: "+1 Physical stat per season" },
   { id: "sports_psychologist", name: "Sports Psychologist", emoji: "🧠", category: "lifestyle", cost: 0, monthlyCost: 0.06, description: "Mental coach — €60k/year", oneTime: true, effect: "+5 Morale permanently on hire" },
   { id: "elite_recovery", name: "Elite Recovery Clinic", emoji: "🏥", category: "lifestyle", cost: 0, monthlyCost: 0.1, description: "Top recovery tech — €100k/year", oneTime: true, effect: "Reduces injury recovery time by 50%" },
+  // Performance upgrades
+  { id: "perf_chef", name: "Private Chef", emoji: "🥗", category: "performance", cost: 2, description: "Elite nutrition plan — €2M", oneTime: true, effect: "+2 Physical, +2 Stamina" },
+  { id: "perf_psychologist", name: "Sports Psychologist", emoji: "🧠", category: "performance", cost: 1.5, description: "Mental performance coach — €1.5M", oneTime: true, effect: "+3 Composure" },
+  { id: "perf_cryo", name: "Cryotherapy Suite", emoji: "🧊", category: "performance", cost: 3, description: "Home cryo chamber — €3M", oneTime: true, effect: "Reduces injury risk by 15%" },
+  { id: "perf_trainer", name: "Elite Personal Trainer", emoji: "🏋️", category: "performance", cost: 2.5, description: "World-class trainer — €2.5M", oneTime: true, effect: "+2 Pace, +2 Physical" },
+  { id: "perf_biomech", name: "Biomechanics Coach", emoji: "🔬", category: "performance", cost: 2, description: "Technique specialist — €2M", oneTime: true, effect: "+2 Shooting, +2 Passing" },
+  { id: "perf_altitude", name: "Altitude Training Camp", emoji: "⛰️", category: "performance", cost: 1, description: "High-altitude camp — €1M", oneTime: true, effect: "+3 Stamina" },
+  { id: "perf_sleep", name: "Sleep Optimization Clinic", emoji: "😴", category: "performance", cost: 1.5, description: "Sleep science program — €1.5M", oneTime: true, effect: "Faster injury recovery" },
+  { id: "perf_vr", name: "VR Training System", emoji: "🥽", category: "performance", cost: 2, description: "Virtual training tech — €2M", oneTime: true, effect: "+2 Decision Making" },
+  { id: "perf_vision", name: "Vision Training Clinic", emoji: "👁️", category: "performance", cost: 1.5, description: "Visual processing training — €1.5M", oneTime: true, effect: "+2 Passing, better assist rate" },
+  { id: "perf_setpiece", name: "Set Piece Coach", emoji: "🎯", category: "performance", cost: 1, description: "Dead ball specialist — €1M", oneTime: true, effect: "+3 Free Kick accuracy" },
 ];
 
 export function getSpendingItem(id: string): SpendingItem | undefined {
@@ -1164,6 +1175,36 @@ export function purchaseSpendingItem(prev: CareerState, itemId: string): CareerS
     s.events.push("👨‍🍳 Hired a Personal Chef! +2 Morale per season.");
   } else if (itemId === "rent_apartment" && item.cost === 0) {
     s.events.push("🏢 Renting a city apartment.");
+  } else if (itemId === "perf_chef") {
+    s.physical = clamp(s.physical + 2, 20, 99);
+    s.events.push("🥗 Hired a Private Chef! +2 Physical, +2 Stamina.");
+  } else if (itemId === "perf_psychologist") {
+    s.reflexes = clamp(s.reflexes + 3, 20, 99); // composure mapped to reflexes
+    s.events.push("🧠 Hired a Sports Psychologist! +3 Composure.");
+  } else if (itemId === "perf_cryo") {
+    s.events.push("🧊 Installed a Cryotherapy Suite! Injury risk reduced by 15%.");
+  } else if (itemId === "perf_trainer") {
+    s.pace = clamp(s.pace + 2, 20, 99);
+    s.physical = clamp(s.physical + 2, 20, 99);
+    s.events.push("🏋️ Hired an Elite Personal Trainer! +2 Pace, +2 Physical.");
+  } else if (itemId === "perf_biomech") {
+    s.shooting = clamp(s.shooting + 2, 20, 99);
+    s.passing = clamp(s.passing + 2, 20, 99);
+    s.events.push("🔬 Hired a Biomechanics Coach! +2 Shooting, +2 Passing.");
+  } else if (itemId === "perf_altitude") {
+    s.physical = clamp(s.physical + 3, 20, 99);
+    s.events.push("⛰️ Completed Altitude Training Camp! +3 Stamina.");
+  } else if (itemId === "perf_sleep") {
+    s.events.push("😴 Started Sleep Optimization Clinic! Faster injury recovery.");
+  } else if (itemId === "perf_vr") {
+    s.passing = clamp(s.passing + 2, 20, 99); // decision making mapped to passing
+    s.events.push("🥽 Installed VR Training System! +2 Decision Making.");
+  } else if (itemId === "perf_vision") {
+    s.passing = clamp(s.passing + 2, 20, 99);
+    s.events.push("👁️ Started Vision Training! +2 Passing, better assist rate.");
+  } else if (itemId === "perf_setpiece") {
+    s.shooting = clamp(s.shooting + 3, 20, 99);
+    s.events.push("🎯 Hired a Set Piece Coach! +3 Free Kick accuracy.");
   } else {
     s.events.push(`${item.emoji} Purchased ${item.name}! (€${item.cost >= 1 ? item.cost.toFixed(0) + "M" : Math.round(item.cost * 1000) + "k"})`);
   }
@@ -1171,6 +1212,10 @@ export function purchaseSpendingItem(prev: CareerState, itemId: string): CareerS
   // Update total asset value
   s.totalAssetValue = calcTotalAssets(s);
   s.lifestyleLevel = calcLifestyleLevel(s.netWorth + s.totalAssetValue);
+  // Recalculate overall if performance item changed stats
+  if (item.category === "performance") {
+    s.overall = calcOverall(s, s.position);
+  }
   
   return s;
 }
@@ -1314,12 +1359,19 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
 
   let injured = false;
   let injuryWeeks = 0;
-  if (Math.random() < 0.20) {
+  let injuryChance = 0.20;
+  // Cryotherapy reduces injury risk by 15%
+  if (state?.purchasedItems?.includes("perf_cryo")) injuryChance -= 0.03;
+  if (Math.random() < injuryChance) {
     injured = true;
     injuryWeeks = rand(2, 8);
     // Elite recovery clinic halves injury time
     if (state?.purchasedItems?.includes("elite_recovery")) {
       injuryWeeks = Math.max(1, Math.round(injuryWeeks * 0.5));
+    }
+    // Sleep optimization clinic reduces recovery further
+    if (state?.purchasedItems?.includes("perf_sleep")) {
+      injuryWeeks = Math.max(1, injuryWeeks - 1);
     }
     const missedApps = Math.round(injuryWeeks * apps / 46);
     apps = Math.max(1, apps - clamp(missedApps, 0, 12));
