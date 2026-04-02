@@ -2293,7 +2293,88 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.events.push(`🌍 Named International Player of the Year!`);
   }
 
-  const totalGoals = s.seasons.reduce((sum, ss) => sum + ss.goals, 0) + season.goals;
+  // --- NEW AWARDS ---
+
+  // Puskás Award (best goal of the year) — random chance for high-performing attackers
+  if (season.goals >= 15 && s.overall >= 80 && Math.random() < 0.08) {
+    s.awards = [...s.awards, { year: thisYear, name: "Puskás Award", emoji: "🎯" }];
+    s.events.push(`🎯 Won the Puskás Award for Goal of the Year!`);
+  }
+
+  // Golden Boot (top league scorer) — must be top scorer caliber
+  if (season.goals >= 25 && s.currentClubTier <= 2 && Math.random() < 0.3) {
+    s.awards = [...s.awards, { year: thisYear, name: "Golden Boot", emoji: "👟" }];
+    s.events.push(`👟 Won the League Golden Boot with ${season.goals} goals!`);
+  }
+
+  // Golden Glove (goalkeeper of the year) — GK only
+  if (s.position === "GK" && season.cleanSheets >= 12 && season.rating >= 7.5 && Math.random() < 0.3) {
+    s.awards = [...s.awards, { year: thisYear, name: "Golden Glove", emoji: "🧤" }];
+    s.events.push(`🧤 Won the Golden Glove Award!`);
+  }
+
+  // Young Player of the Year — under 23 only
+  if (s.age < 23 && season.rating >= 7.5 && s.overall >= 75 && Math.random() < 0.2) {
+    s.awards = [...s.awards, { year: thisYear, name: "Young Player of the Year", emoji: "⭐" }];
+    s.events.push(`⭐ Named Young Player of the Year!`);
+    s.popularity = clamp(s.popularity + 5, 0, 100);
+  }
+
+  // UEFA Player of the Year — elite performances in European competition
+  if (season.championsLeague && season.rating >= 8.0 && s.overall >= 85 && Math.random() < 0.25) {
+    s.awards = [...s.awards, { year: thisYear, name: "UEFA Player of the Year", emoji: "🇪🇺" }];
+    s.events.push(`🇪🇺 Named UEFA Player of the Year!`);
+  }
+
+  // Comeback Player of the Year — significant OVR recovery after a dip
+  const prevSeasons = s.seasons.filter(ss => ss.type === "playing");
+  if (prevSeasons.length >= 2) {
+    const prevRating = prevSeasons[prevSeasons.length - 1]?.rating || 0;
+    if (prevRating <= 6.5 && season.rating >= 7.8 && Math.random() < 0.3) {
+      s.awards = [...s.awards, { year: thisYear, name: "Comeback Player of the Year", emoji: "💪" }];
+      s.events.push(`💪 Won Comeback Player of the Year!`);
+    }
+  }
+
+  // Club Legend status — 300+ appearances for one club
+  const clubAppsMap: Record<string, number> = {};
+  for (const ss of s.seasons) {
+    if (ss.type === "playing") clubAppsMap[ss.club] = (clubAppsMap[ss.club] || 0) + ss.apps;
+  }
+  clubAppsMap[s.currentClub] = (clubAppsMap[s.currentClub] || 0) + season.apps;
+  const alreadyClubLegend = s.awards.some(a => a.name === "Club Legend");
+  if (!alreadyClubLegend && clubAppsMap[s.currentClub] >= 300) {
+    s.awards = [...s.awards, { year: thisYear, name: "Club Legend", emoji: "🏛️" }];
+    s.events.push(`🏛️ Granted Club Legend status at ${s.currentClub}! (300+ appearances)`);
+    s.popularity = clamp(s.popularity + 15, 0, 100);
+  }
+
+  // All Time Top Scorer for country — international goals record
+  const INT_RECORDS: Record<string, number> = {
+    Brazil: 77, France: 57, Argentina: 106, Germany: 71, Spain: 29, England: 66,
+    Portugal: 135, Netherlands: 50, Italy: 35, Belgium: 68, Croatia: 35, Uruguay: 36,
+    Norway: 33, Egypt: 51, Colombia: 25, Nigeria: 28, Senegal: 35, Japan: 55, "South Korea": 36,
+  };
+  if (s.internationalCareer) {
+    const intGoals = s.intStats.goals;
+    const record = INT_RECORDS[s.nationality] || 40;
+    const alreadyTopScorer = s.awards.some(a => a.name === "All Time Top Scorer");
+    if (!alreadyTopScorer && intGoals > record) {
+      s.awards = [...s.awards, { year: thisYear, name: "All Time Top Scorer", emoji: "👑" }];
+      s.events.push(`👑 Became ${s.nationality}'s All Time Top International Scorer with ${intGoals} goals!`);
+    }
+  }
+
+  // Fair Play Award — good conduct season (low cards, high rating)
+  if (season.yellowCards <= 1 && season.redCards === 0 && season.rating >= 7.5 && season.apps >= 25 && Math.random() < 0.1) {
+    const alreadyFairPlayThisYear = s.awards.some(a => a.name === "Fair Play Award" && a.year === thisYear);
+    if (!alreadyFairPlayThisYear) {
+      s.awards = [...s.awards, { year: thisYear, name: "Fair Play Award", emoji: "🤝" }];
+      s.events.push(`🤝 Won the Fair Play Award for exemplary conduct!`);
+    }
+  }
+
+
   const totalApps = s.seasons.reduce((sum, ss) => sum + ss.apps, 0) + season.apps;
   if (totalGoals >= 100 && totalGoals - season.goals < 100) s.events.push("💯 Reached 100 career goals!");
   if (totalGoals >= 200 && totalGoals - season.goals < 200) s.events.push("🔥 Reached 200 career goals!");
