@@ -153,7 +153,7 @@ export function GuessTheNationBoard() {
       case 8: return clues.goldMedalHint;
       case 9: return clues.flagColorsHint;
       case 10: return clues.countrySizeHint;
-      case 11: return `${gameState.puzzle.flagEmoji} ${gameState.puzzle.countryName}`;
+      case 11: return gameState.puzzle.countryName;
       default: return '';
     }
   };
