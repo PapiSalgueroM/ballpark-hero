@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { FlagImg } from '@/components/FlagImg';
 import { useHockeyHL } from '@/hooks/useHockeyHL';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';

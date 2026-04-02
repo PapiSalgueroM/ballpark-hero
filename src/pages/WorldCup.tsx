@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { FlagImg } from '@/components/FlagImg';
 import { useWorldCup } from '@/hooks/useWorldCup';
 import { WorldCupHowToPlay } from '@/components/world-cup/WorldCupHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
