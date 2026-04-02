@@ -304,6 +304,17 @@ export const SPENDING_ITEMS: SpendingItem[] = [
   { id: "personal_trainer", name: "Personal Trainer", emoji: "💪", category: "lifestyle", cost: 0, monthlyCost: 0.08, description: "Private trainer — €80k/year", oneTime: true, effect: "+1 Physical stat per season" },
   { id: "sports_psychologist", name: "Sports Psychologist", emoji: "🧠", category: "lifestyle", cost: 0, monthlyCost: 0.06, description: "Mental coach — €60k/year", oneTime: true, effect: "+5 Morale permanently on hire" },
   { id: "elite_recovery", name: "Elite Recovery Clinic", emoji: "🏥", category: "lifestyle", cost: 0, monthlyCost: 0.1, description: "Top recovery tech — €100k/year", oneTime: true, effect: "Reduces injury recovery time by 50%" },
+  // Performance upgrades
+  { id: "perf_chef", name: "Private Chef", emoji: "🥗", category: "performance", cost: 2, description: "Elite nutrition plan — €2M", oneTime: true, effect: "+2 Physical, +2 Stamina" },
+  { id: "perf_psychologist", name: "Sports Psychologist", emoji: "🧠", category: "performance", cost: 1.5, description: "Mental performance coach — €1.5M", oneTime: true, effect: "+3 Composure" },
+  { id: "perf_cryo", name: "Cryotherapy Suite", emoji: "🧊", category: "performance", cost: 3, description: "Home cryo chamber — €3M", oneTime: true, effect: "Reduces injury risk by 15%" },
+  { id: "perf_trainer", name: "Elite Personal Trainer", emoji: "🏋️", category: "performance", cost: 2.5, description: "World-class trainer — €2.5M", oneTime: true, effect: "+2 Pace, +2 Physical" },
+  { id: "perf_biomech", name: "Biomechanics Coach", emoji: "🔬", category: "performance", cost: 2, description: "Technique specialist — €2M", oneTime: true, effect: "+2 Shooting, +2 Passing" },
+  { id: "perf_altitude", name: "Altitude Training Camp", emoji: "⛰️", category: "performance", cost: 1, description: "High-altitude camp — €1M", oneTime: true, effect: "+3 Stamina" },
+  { id: "perf_sleep", name: "Sleep Optimization Clinic", emoji: "😴", category: "performance", cost: 1.5, description: "Sleep science program — €1.5M", oneTime: true, effect: "Faster injury recovery" },
+  { id: "perf_vr", name: "VR Training System", emoji: "🥽", category: "performance", cost: 2, description: "Virtual training tech — €2M", oneTime: true, effect: "+2 Decision Making" },
+  { id: "perf_vision", name: "Vision Training Clinic", emoji: "👁️", category: "performance", cost: 1.5, description: "Visual processing training — €1.5M", oneTime: true, effect: "+2 Passing, better assist rate" },
+  { id: "perf_setpiece", name: "Set Piece Coach", emoji: "🎯", category: "performance", cost: 1, description: "Dead ball specialist — €1M", oneTime: true, effect: "+3 Free Kick accuracy" },
 ];
 
 export function getSpendingItem(id: string): SpendingItem | undefined {
