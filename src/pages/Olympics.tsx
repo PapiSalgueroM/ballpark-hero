@@ -113,7 +113,11 @@ export default function Olympics() {
                 <div className="text-xs font-semibold uppercase tracking-wider text-[hsl(43,85%,55%)] mb-1">
                   {clue.label}
                 </div>
-                <div className="text-foreground text-sm">{clue.value}</div>
+                <div className="text-foreground text-sm">
+                  {clue.label === 'Country' && EMOJI_TO_COUNTRY[clue.value]
+                    ? <span className="inline-flex items-center gap-1"><FlagImg name={EMOJI_TO_COUNTRY[clue.value]} size={18} />{EMOJI_TO_COUNTRY[clue.value]}</span>
+                    : clue.value}
+                </div>
               </div>
             ))}
           </div>
