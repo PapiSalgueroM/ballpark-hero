@@ -3081,17 +3081,33 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   }
   const playerNominated = playerCanContend && playerPoints > 45;
 
-  // --- Generate real contender nominees with consistent trophies ---
-  const activeContenders = REAL_CONTENDERS.filter(c => {
-    const age = c.startAge + yearOffset;
-    return age <= 36 && age >= 17;
-  });
-  const retiredCount = REAL_CONTENDERS.length - activeContenders.length;
-  const replacements = REPLACEMENT_YOUNG_PLAYERS.filter(c => {
-    const age = c.startAge + yearOffset;
-    return age >= 17 && age <= 36;
-  }).slice(0, retiredCount);
-  const allContenders = [...activeContenders, ...replacements];
+  // --- Generate contender nominees ---
+  // Use real players for first 15 years, then switch to generated names
+  const useRealPlayers = yearOffset <= 15;
+  const usedNames = new Set<string>([state.playerName]);
+  if (state.rival) usedNames.add(state.rival.name);
+
+  let allContenders: RealContender[];
+  if (useRealPlayers) {
+    const activeContenders = REAL_CONTENDERS.filter(c => {
+      const age = c.startAge + yearOffset;
+      return age <= 36 && age >= 17;
+    });
+    const retiredCount = REAL_CONTENDERS.length - activeContenders.length;
+    const replacements = REPLACEMENT_YOUNG_PLAYERS.filter(c => {
+      const age = c.startAge + yearOffset;
+      return age >= 17 && age <= 36;
+    }).slice(0, retiredCount);
+    allContenders = [...activeContenders, ...replacements];
+  } else {
+    // Generate 15 fictional contenders
+    allContenders = [];
+    for (let i = 0; i < 15; i++) {
+      const gen = generateContender(usedNames, yearOffset * 100 + i);
+      usedNames.add(gen.name);
+      allContenders.push(gen);
+    }
+  }
   const usedNames = new Set<string>([state.playerName]);
   if (state.rival) usedNames.add(state.rival.name);
 
