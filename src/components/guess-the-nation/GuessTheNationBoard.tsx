@@ -8,6 +8,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { Button } from '@/components/ui/button';
 import { POINTS_BY_CLUE, CLUE_LABELS, MAX_CLUES } from '@/types/guessTheNation';
 import { Trophy, Loader2 } from 'lucide-react';
+import { FlagImg } from '@/components/FlagImg';
 
 const CONTINENTS = ['Europe', 'Asia', 'North America', 'South America', 'Africa', 'Oceania'];
 const continentEmoji: Record<string, string> = {
