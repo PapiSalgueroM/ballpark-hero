@@ -3108,8 +3108,6 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       allContenders.push(gen);
     }
   }
-  const usedNames = new Set<string>([state.playerName]);
-  if (state.rival) usedNames.add(state.rival.name);
 
   const allNomineeData: BallonDorNominee[] = [];
   for (const contender of allContenders) {
