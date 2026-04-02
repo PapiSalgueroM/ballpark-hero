@@ -2375,6 +2375,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   }
 
 
+  const totalGoals = s.seasons.reduce((sum, ss) => sum + ss.goals, 0) + season.goals;
   const totalApps = s.seasons.reduce((sum, ss) => sum + ss.apps, 0) + season.apps;
   if (totalGoals >= 100 && totalGoals - season.goals < 100) s.events.push("💯 Reached 100 career goals!");
   if (totalGoals >= 200 && totalGoals - season.goals < 200) s.events.push("🔥 Reached 200 career goals!");
