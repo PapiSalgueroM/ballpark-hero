@@ -1585,7 +1585,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
   const { overall, age, currentClub, currentClubTier, marketValue, contractYearsLeft } = state;
   const lastSeason = state.seasons[state.seasons.length - 1];
   const exclude = new Set<string>([currentClub]);
-  const interestedTiers = getInterestedTiers(overall);
+  const interestedTiers = getInterestedTiers(overall, age);
 
   if (contractYearsLeft <= 1) {
     const offers: ContractOffer[] = [];
