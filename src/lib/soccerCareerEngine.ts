@@ -1212,6 +1212,10 @@ export function purchaseSpendingItem(prev: CareerState, itemId: string): CareerS
   // Update total asset value
   s.totalAssetValue = calcTotalAssets(s);
   s.lifestyleLevel = calcLifestyleLevel(s.netWorth + s.totalAssetValue);
+  // Recalculate overall if performance item changed stats
+  if (item.category === "performance") {
+    s.overall = calcOverall(s, s.position);
+  }
   
   return s;
 }
