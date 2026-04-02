@@ -8,6 +8,15 @@ import { shareResult } from '@/lib/share';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { Trophy, ChevronDown, Award } from 'lucide-react';
+import { FlagImg } from '@/components/FlagImg';
+
+const EMOJI_TO_COUNTRY: Record<string, string> = {
+  '🇺🇸': 'USA', '🇦🇷': 'Argentina', '🇯🇲': 'Jamaica', '🇷🇸': 'Serbia',
+  '🇰🇷': 'South Korea', '🇮🇹': 'Italy', '🇫🇷': 'France', '🇬🇧': 'England',
+  '🇩🇪': 'Germany', '🇧🇷': 'Brazil', '🇪🇸': 'Spain', '🇳🇱': 'Netherlands',
+  '🇯🇵': 'Japan', '🇨🇦': 'Canada', '🇦🇺': 'Australia', '🇨🇳': 'China',
+  '🇷🇺': 'Russia', '🇸🇪': 'Sweden', '🇳🇴': 'Norway', '🇨🇿': 'Czech Republic',
+};
 
 export default function Olympics() {
   const {

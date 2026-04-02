@@ -100,7 +100,9 @@ const WorldCup = () => {
                     ? 'text-2xl md:text-3xl font-bold text-[hsl(var(--wc-gold))] font-display'
                     : 'text-foreground text-lg font-medium'
                 )}>
-                  {clue.value}
+                  {(clue.label === 'Country' || clue.label === 'Host Country') ? (
+                    <span className="inline-flex items-center gap-2"><FlagImg name={clue.value} size={24} />{clue.value}</span>
+                  ) : clue.value}
                 </p>
               </div>
             );
