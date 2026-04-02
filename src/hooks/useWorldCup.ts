@@ -27,9 +27,9 @@ function isGuessCorrect(guess: string, puzzle: WorldCupPuzzle): boolean {
 function getClues(puzzle: WorldCupPuzzle): WorldCupClue[] {
   return [
     { label: 'Year', value: String(puzzle.year) },
-    { label: 'Host Country', value: `${puzzle.hostFlag} ${puzzle.hostCountry}` },
+    { label: 'Host Country', value: puzzle.hostCountry },
     { label: 'Position', value: puzzle.position },
-    { label: 'Country', value: `${puzzle.countryFlag} ${puzzle.country}` },
+    { label: 'Country', value: puzzle.country },
     { label: 'Club at the Time', value: puzzle.clubAtTime },
     { label: 'Achievement', value: puzzle.achievement },
     { label: 'Answer', value: puzzle.answer },

@@ -8,6 +8,15 @@ import { shareResult } from '@/lib/share';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { Trophy, ChevronDown, Award } from 'lucide-react';
+import { FlagImg } from '@/components/FlagImg';
+
+const EMOJI_TO_COUNTRY: Record<string, string> = {
+  '🇺🇸': 'USA', '🇦🇷': 'Argentina', '🇯🇲': 'Jamaica', '🇷🇸': 'Serbia',
+  '🇰🇷': 'South Korea', '🇮🇹': 'Italy', '🇫🇷': 'France', '🇬🇧': 'England',
+  '🇩🇪': 'Germany', '🇧🇷': 'Brazil', '🇪🇸': 'Spain', '🇳🇱': 'Netherlands',
+  '🇯🇵': 'Japan', '🇨🇦': 'Canada', '🇦🇺': 'Australia', '🇨🇳': 'China',
+  '🇷🇺': 'Russia', '🇸🇪': 'Sweden', '🇳🇴': 'Norway', '🇨🇿': 'Czech Republic',
+};
 
 export default function Olympics() {
   const {
@@ -104,7 +113,11 @@ export default function Olympics() {
                 <div className="text-xs font-semibold uppercase tracking-wider text-[hsl(43,85%,55%)] mb-1">
                   {clue.label}
                 </div>
-                <div className="text-foreground text-sm">{clue.value}</div>
+                <div className="text-foreground text-sm">
+                  {clue.label === 'Country' && EMOJI_TO_COUNTRY[clue.value]
+                    ? <span className="inline-flex items-center gap-1"><FlagImg name={EMOJI_TO_COUNTRY[clue.value]} size={18} />{EMOJI_TO_COUNTRY[clue.value]}</span>
+                    : clue.value}
+                </div>
               </div>
             ))}
           </div>
@@ -114,7 +127,7 @@ export default function Olympics() {
             <div className="rounded-2xl border border-[hsl(43,85%,55%)/0.3] bg-card p-6 text-center mb-6 animate-cell-reveal">
               <Award className="w-10 h-10 text-[hsl(43,85%,55%)] mx-auto mb-3" />
               <p className="text-3xl font-display font-bold text-[hsl(43,85%,55%)] mb-1">{athlete.name}</p>
-              <p className="text-sm text-muted-foreground mb-1">{athlete.sport} — {athlete.country}</p>
+              <p className="text-sm text-muted-foreground mb-1 inline-flex items-center justify-center gap-1">{athlete.sport} — <FlagImg name={EMOJI_TO_COUNTRY[athlete.country] || ''} size={16} />{EMOJI_TO_COUNTRY[athlete.country] || athlete.country}</p>
               <p className="text-xs text-muted-foreground mb-4">{athlete.gamesYear} {athlete.hostCity}</p>
               {status === 'guessed' ? (
                 <p className="text-lg font-bold text-primary">Score: {score} 🏅</p>

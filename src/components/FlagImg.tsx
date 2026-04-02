@@ -25,17 +25,23 @@ const FLAG_CODES: Record<string, string> = {
   "Soviet Union": "ru", "Yugoslavia": "rs",
 };
 
-export function FlagImg({ name, size = 20 }: { name: string; size?: number }) {
+export function FlagImg({ name, size = 20, showLabel = false }: { name: string; size?: number; showLabel?: boolean }) {
   const code = FLAG_CODES[name];
-  if (!code) return <span className="inline-block" style={{ width: size, height: Math.round(size * 0.75) }} />;
+  if (!code) return <span className="inline-block align-middle text-xs">{name}</span>;
   const h = Math.round(size * 0.75);
   return (
-    <img
-      src={`https://flagcdn.com/${size * 2}x${h * 2}/${code}.png`}
-      alt={name}
-      className="inline-block align-middle"
-      style={{ marginRight: 3, width: size, height: h }}
-      loading="lazy"
-    />
+    <span className="inline-flex items-center gap-1 align-middle">
+      <img
+        src={`https://flagcdn.com/${size * 2}x${h * 2}/${code}.png`}
+        alt={name}
+        className="inline-block align-middle"
+        style={{ width: size, height: h }}
+        loading="lazy"
+        onError={(e) => {
+          (e.target as HTMLImageElement).style.display = 'none';
+        }}
+      />
+      {showLabel && <span className="text-inherit">{name}</span>}
+    </span>
   );
 }

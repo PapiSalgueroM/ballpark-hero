@@ -8,6 +8,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { Button } from '@/components/ui/button';
 import { POINTS_BY_CLUE, CLUE_LABELS, MAX_CLUES } from '@/types/guessTheNation';
 import { Trophy, Loader2 } from 'lucide-react';
+import { FlagImg } from '@/components/FlagImg';
 
 const CONTINENTS = ['Europe', 'Asia', 'North America', 'South America', 'Africa', 'Oceania'];
 const continentEmoji: Record<string, string> = {
@@ -153,7 +154,7 @@ export function GuessTheNationBoard() {
       case 8: return clues.goldMedalHint;
       case 9: return clues.flagColorsHint;
       case 10: return clues.countrySizeHint;
-      case 11: return `${gameState.puzzle.flagEmoji} ${gameState.puzzle.countryName}`;
+      case 11: return gameState.puzzle.countryName;
       default: return '';
     }
   };
@@ -168,7 +169,7 @@ export function GuessTheNationBoard() {
 
   const shareScore = isWon
     ? `I guessed today's Nation in ${gameState.revealedClues} clue${gameState.revealedClues !== 1 ? 's' : ''} on DoUKnowBall!\nScore: ${gameState.score} 🌍`
-    : `I couldn't guess today's Nation — it was ${gameState.puzzle.flagEmoji} ${gameState.puzzle.countryName} 🌍`;
+    : `I couldn't guess today's Nation — it was ${gameState.puzzle.countryName} 🌍`;
 
   return (
     <div ref={gameRef} className="min-h-screen bg-background text-foreground">
@@ -226,7 +227,9 @@ export function GuessTheNationBoard() {
                             isFinal ? 'text-2xl font-bold text-amber-400' : ''
                           }`}
                         >
-                          {getClueContent(i)}
+                          {isFinal ? (
+                            <span className="inline-flex items-center gap-2"><FlagImg name={getClueContent(i)} size={28} />{getClueContent(i)}</span>
+                          ) : getClueContent(i)}
                         </p>
                       </>
                     ) : (
