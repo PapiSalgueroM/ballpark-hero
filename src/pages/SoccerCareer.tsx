@@ -2334,18 +2334,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             {statBars.map(s => <StatBarGame key={s.l} label={s.l} value={s.v} color={s.c} />)}
           </div>
 
-          {/* Career totals */}
+          {/* Career totals — position-specific */}
           <div className="bg-card border border-border rounded-xl p-4">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Stats</span>
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mt-3">
-              {[
-                { l: "Apps", v: totals.apps },
-                { l: "Goals", v: totals.goals },
-                { l: "Assists", v: totals.assists },
-                ...(career.position === "GK" ? [{ l: "CS", v: totals.cleanSheets }] : []),
-                { l: "🟨", v: totals.yellowCards },
-                { l: "🟥", v: totals.redCards },
-              ].map(s => (
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-3">
+              {getPositionCareerStats(career.position, totals).map(s => (
                 <div key={s.l} className="text-center">
                   <div className="text-lg sm:text-xl font-black">{s.v}</div>
                   <div className="text-[10px] text-muted-foreground">{s.l}</div>
