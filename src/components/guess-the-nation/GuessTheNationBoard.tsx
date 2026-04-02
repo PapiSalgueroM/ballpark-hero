@@ -168,7 +168,7 @@ export function GuessTheNationBoard() {
 
   const shareScore = isWon
     ? `I guessed today's Nation in ${gameState.revealedClues} clue${gameState.revealedClues !== 1 ? 's' : ''} on DoUKnowBall!\nScore: ${gameState.score} 🌍`
-    : `I couldn't guess today's Nation — it was ${gameState.puzzle.flagEmoji} ${gameState.puzzle.countryName} 🌍`;
+    : `I couldn't guess today's Nation — it was ${gameState.puzzle.countryName} 🌍`;
 
   return (
     <div ref={gameRef} className="min-h-screen bg-background text-foreground">
