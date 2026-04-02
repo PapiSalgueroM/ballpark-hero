@@ -3015,6 +3015,7 @@ function generateContender(usedNames: Set<string>, seed: number): RealContender 
   const club = GEN_CLUBS[(seed * 13 + 2) % GEN_CLUBS.length];
   return { name, nationality: nat, position: p.pos, club, baseGoals: p.goals, startAge: rand(19, 28) };
 }
+const TOP_6_CLUBS = ["Real Madrid", "Man City", "Barcelona", "Bayern Munich", "Arsenal", "Liverpool"];
 const LEAGUE_CLUBS: Record<string, string[]> = {
   "Premier League": ["Man City", "Arsenal", "Liverpool", "Man United", "Chelsea", "Tottenham"],
   "La Liga": ["Real Madrid", "Barcelona", "Atletico Madrid"],
