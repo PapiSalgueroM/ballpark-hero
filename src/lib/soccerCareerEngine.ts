@@ -850,20 +850,29 @@ function growStat(current: number, age: number, isYouth: boolean, isPace: boolea
     // Pre-prime professional years — moderate growth
     growth = rand(1, 3);
   } else {
-    // Post-prime — gradual decline based on how far past prime
-    const primeEnd = primeType === "early" ? 26 : primeType === "normal" ? 28 : primeType === "late" ? 31 : 32;
-    const yearsPost = age - primeEnd;
-    if (yearsPost <= 2) {
-      growth = rand(-2, 0); // Gentle decline
-    } else if (yearsPost <= 4) {
-      growth = rand(-3, -1); // Moderate decline
+    // Post-prime — decline starts at 32, accelerates after 35
+    if (age >= 40) {
+      growth = rand(-7, -4); // Extreme decline 40+
+    } else if (age >= 38) {
+      growth = rand(-6, -3); // Very sharp decline 38-39
+    } else if (age >= 35) {
+      growth = rand(-5, -2); // Accelerated decline 35-37
+    } else if (age >= 32) {
+      growth = rand(-3, -1); // Natural decline begins 32-34
     } else {
-      growth = rand(-4, -2); // Sharp decline
+      const primeEnd = primeType === "early" ? 26 : primeType === "normal" ? 28 : primeType === "late" ? 31 : 32;
+      const yearsPost = age - primeEnd;
+      if (yearsPost <= 2) {
+        growth = rand(-2, 0); // Gentle decline
+      } else {
+        growth = rand(-3, -1); // Moderate decline
+      }
     }
   }
-  // Pace always declines 1 extra from age 28+
+  // Pace always declines 1 extra from age 28+, and additional penalty at 35+
   if (isPace && age >= 28 && !isYouth) {
     growth -= 1;
+    if (age >= 35) growth -= 1; // Extra pace loss after 35
   }
   return clamp(current + growth, 20, 99);
 }
@@ -1496,7 +1505,14 @@ export function generateContractOffers(clubs: ClubData[], overall: number, age: 
 }
 
 /* ─── Interested tiers by rating ─── */
-function getInterestedTiers(overall: number): number[] {
+function getInterestedTiers(overall: number, age?: number): number[] {
+  // Age-based restrictions: 40+ only lower league/amateur, 38+ rarely top clubs
+  if (age && age >= 40) return [3, 4];
+  if (age && age >= 38) {
+    if (overall >= 86) return [2, 3]; // No tier 1 for 38+
+    if (overall >= 76) return [2, 3];
+    return [3, 4];
+  }
   if (overall >= 86) return [1];
   if (overall >= 76) return [1, 2];
   if (overall >= 66) return [2, 3];
@@ -1569,7 +1585,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
   const { overall, age, currentClub, currentClubTier, marketValue, contractYearsLeft } = state;
   const lastSeason = state.seasons[state.seasons.length - 1];
   const exclude = new Set<string>([currentClub]);
-  const interestedTiers = getInterestedTiers(overall);
+  const interestedTiers = getInterestedTiers(overall, age);
 
   if (contractYearsLeft <= 1) {
     const offers: ContractOffer[] = [];
@@ -1607,7 +1623,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
 export function requestTransfer(state: CareerState, clubs: ClubData[]): TransferSituation {
   if (Math.random() < 0.5) {
     const exclude = new Set<string>([state.currentClub]);
-    const offer = makeOffer(clubs, pick(getInterestedTiers(state.overall)), state.overall, state.age, exclude, state.marketValue);
+    const offer = makeOffer(clubs, pick(getInterestedTiers(state.overall, state.age)), state.overall, state.age, exclude, state.marketValue);
     return { type: "request_result", offer };
   }
   return { type: "request_result", offer: null };
@@ -2070,10 +2086,11 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   // Track peak overall
   if (s.overall > s.peakOverall) s.peakOverall = s.overall;
   
-  // Forced retirement only if overall drops below 50 AND age 33+ (body can't cope)
-  if (s.overall < 50 && s.age >= 33) {
+  // Forced retirement: overall below 50 at 33+, OR absolute max age 45
+  if ((s.overall < 50 && s.age >= 33) || s.age >= 45) {
     s.retired = true;
-    s.events.push("👋 Body can no longer keep up — forced retirement");
+    const reason = s.age >= 45 ? "👋 Hung up the boots at 45 — an incredible career!" : "👋 Body can no longer keep up — forced retirement";
+    s.events.push(reason);
     const lastYr = s.seasons[s.seasons.length - 1].year;
     s.seasons = [...s.seasons, {
       year: lastYr + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
