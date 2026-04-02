@@ -786,14 +786,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
             <span className={`text-2xl font-black ${previewOvr >= 55 ? 'text-green-400' : 'text-yellow-400'}`}>{previewOvr}</span>
           </div>
           <div className="space-y-2">
-            {[
-              { l: "Pace", v: previewStats.pace, c: "bg-emerald-500" },
-              { l: position === "GK" ? "Reflexes" : "Shooting", v: position === "GK" ? previewStats.reflexes : previewStats.shooting, c: "bg-red-500" },
-              { l: "Passing", v: previewStats.passing, c: "bg-blue-500" },
-              { l: "Dribbling", v: previewStats.dribbling, c: "bg-yellow-500" },
-              { l: "Defending", v: previewStats.defending, c: "bg-purple-500" },
-              { l: "Physical", v: previewStats.physical, c: "bg-orange-500" },
-            ].map(s => <StatBarGame key={s.l} label={s.l} value={s.v} color={s.c} />)}
+            {getPositionStatBars(position, previewStats).map(s => <StatBarGame key={s.l} label={s.l} value={s.v} color={s.c} />)}
           </div>
         </div>
       )}
