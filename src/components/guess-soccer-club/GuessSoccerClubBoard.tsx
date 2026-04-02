@@ -122,7 +122,7 @@ export function GuessSoccerClubBoard() {
     gameState.mode === 'daily'
       ? '🗓️ Daily Challenge'
       : gameState.mode === 'league'
-      ? `${leagueEmoji[gameState.leagueFilter ?? '']} ${gameState.leagueFilter}`
+      ? `${gameState.leagueFilter}`
       : '🔄 Unlimited';
 
   const shareScore = isWon
