@@ -2086,10 +2086,11 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   // Track peak overall
   if (s.overall > s.peakOverall) s.peakOverall = s.overall;
   
-  // Forced retirement only if overall drops below 50 AND age 33+ (body can't cope)
-  if (s.overall < 50 && s.age >= 33) {
+  // Forced retirement: overall below 50 at 33+, OR absolute max age 45
+  if ((s.overall < 50 && s.age >= 33) || s.age >= 45) {
     s.retired = true;
-    s.events.push("👋 Body can no longer keep up — forced retirement");
+    const reason = s.age >= 45 ? "👋 Hung up the boots at 45 — an incredible career!" : "👋 Body can no longer keep up — forced retirement";
+    s.events.push(reason);
     const lastYr = s.seasons[s.seasons.length - 1].year;
     s.seasons = [...s.seasons, {
       year: lastYr + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
