@@ -7,16 +7,17 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { POINTS_BY_CLUE, CLUE_LABELS } from '@/types/guessSoccerClub';
 import { Trophy, HelpCircle } from 'lucide-react';
+import { FlagImg } from '@/components/FlagImg';
 
 const LEAGUES = ['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1', 'MLS'];
 
-const leagueEmoji: Record<string, string> = {
-  'Premier League': '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
-  'La Liga': '🇪🇸',
-  'Serie A': '🇮🇹',
-  'Bundesliga': '🇩🇪',
-  'Ligue 1': '🇫🇷',
-  'MLS': '🇺🇸',
+const leagueCountry: Record<string, string> = {
+  'Premier League': 'England',
+  'La Liga': 'Spain',
+  'Serie A': 'Italy',
+  'Bundesliga': 'Germany',
+  'Ligue 1': 'France',
+  'MLS': 'USA',
 };
 
 export function GuessSoccerClubBoard() {
@@ -84,7 +85,7 @@ export function GuessSoccerClubBoard() {
                     className="h-11 text-sm"
                     onClick={() => startGame('league', league)}
                   >
-                    {leagueEmoji[league]} {league}
+                    <span className="inline-flex items-center gap-1"><FlagImg name={leagueCountry[league]} size={16} /> {league}</span>
                   </Button>
                 ))}
               </div>
@@ -121,7 +122,7 @@ export function GuessSoccerClubBoard() {
     gameState.mode === 'daily'
       ? '🗓️ Daily Challenge'
       : gameState.mode === 'league'
-      ? `${leagueEmoji[gameState.leagueFilter ?? '']} ${gameState.leagueFilter}`
+      ? `${gameState.leagueFilter}`
       : '🔄 Unlimited';
 
   const shareScore = isWon

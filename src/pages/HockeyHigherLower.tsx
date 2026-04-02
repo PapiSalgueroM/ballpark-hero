@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { FlagImg } from '@/components/FlagImg';
 import { useHockeyHL } from '@/hooks/useHockeyHL';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
@@ -98,7 +99,7 @@ const HockeyHigherLower = () => {
                       : 'bg-card border-border hover:border-[hsl(var(--hk-silver)/0.5)] hover:scale-[1.02] cursor-pointer'
                   )}
                 >
-                  <span className="text-3xl">{player.countryFlag}</span>
+                  <FlagImg name={player.country} size={36} />
                   <span className="text-lg font-bold text-foreground font-display">{player.name}</span>
                   <span className="text-xs text-muted-foreground">{player.position}</span>
                   <span className="text-xs text-muted-foreground">{player.teams}</span>

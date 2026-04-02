@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Space Grotesk", "system-ui", "sans-serif"],
-        body: ["Inter", "system-ui", "sans-serif"],
+        display: ["Space Grotesk", "system-ui", "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "sans-serif"],
+        body: ["Inter", "system-ui", "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
