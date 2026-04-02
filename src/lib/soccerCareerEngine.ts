@@ -850,20 +850,29 @@ function growStat(current: number, age: number, isYouth: boolean, isPace: boolea
     // Pre-prime professional years — moderate growth
     growth = rand(1, 3);
   } else {
-    // Post-prime — gradual decline based on how far past prime
-    const primeEnd = primeType === "early" ? 26 : primeType === "normal" ? 28 : primeType === "late" ? 31 : 32;
-    const yearsPost = age - primeEnd;
-    if (yearsPost <= 2) {
-      growth = rand(-2, 0); // Gentle decline
-    } else if (yearsPost <= 4) {
-      growth = rand(-3, -1); // Moderate decline
+    // Post-prime — decline starts at 32, accelerates after 35
+    if (age >= 40) {
+      growth = rand(-7, -4); // Extreme decline 40+
+    } else if (age >= 38) {
+      growth = rand(-6, -3); // Very sharp decline 38-39
+    } else if (age >= 35) {
+      growth = rand(-5, -2); // Accelerated decline 35-37
+    } else if (age >= 32) {
+      growth = rand(-3, -1); // Natural decline begins 32-34
     } else {
-      growth = rand(-4, -2); // Sharp decline
+      const primeEnd = primeType === "early" ? 26 : primeType === "normal" ? 28 : primeType === "late" ? 31 : 32;
+      const yearsPost = age - primeEnd;
+      if (yearsPost <= 2) {
+        growth = rand(-2, 0); // Gentle decline
+      } else {
+        growth = rand(-3, -1); // Moderate decline
+      }
     }
   }
-  // Pace always declines 1 extra from age 28+
+  // Pace always declines 1 extra from age 28+, and additional penalty at 35+
   if (isPace && age >= 28 && !isYouth) {
     growth -= 1;
+    if (age >= 35) growth -= 1; // Extra pace loss after 35
   }
   return clamp(current + growth, 20, 99);
 }
