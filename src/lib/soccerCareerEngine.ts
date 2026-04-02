@@ -1175,6 +1175,36 @@ export function purchaseSpendingItem(prev: CareerState, itemId: string): CareerS
     s.events.push("👨‍🍳 Hired a Personal Chef! +2 Morale per season.");
   } else if (itemId === "rent_apartment" && item.cost === 0) {
     s.events.push("🏢 Renting a city apartment.");
+  } else if (itemId === "perf_chef") {
+    s.physical = clamp(s.physical + 2, 20, 99);
+    s.events.push("🥗 Hired a Private Chef! +2 Physical, +2 Stamina.");
+  } else if (itemId === "perf_psychologist") {
+    s.reflexes = clamp(s.reflexes + 3, 20, 99); // composure mapped to reflexes
+    s.events.push("🧠 Hired a Sports Psychologist! +3 Composure.");
+  } else if (itemId === "perf_cryo") {
+    s.events.push("🧊 Installed a Cryotherapy Suite! Injury risk reduced by 15%.");
+  } else if (itemId === "perf_trainer") {
+    s.pace = clamp(s.pace + 2, 20, 99);
+    s.physical = clamp(s.physical + 2, 20, 99);
+    s.events.push("🏋️ Hired an Elite Personal Trainer! +2 Pace, +2 Physical.");
+  } else if (itemId === "perf_biomech") {
+    s.shooting = clamp(s.shooting + 2, 20, 99);
+    s.passing = clamp(s.passing + 2, 20, 99);
+    s.events.push("🔬 Hired a Biomechanics Coach! +2 Shooting, +2 Passing.");
+  } else if (itemId === "perf_altitude") {
+    s.physical = clamp(s.physical + 3, 20, 99);
+    s.events.push("⛰️ Completed Altitude Training Camp! +3 Stamina.");
+  } else if (itemId === "perf_sleep") {
+    s.events.push("😴 Started Sleep Optimization Clinic! Faster injury recovery.");
+  } else if (itemId === "perf_vr") {
+    s.passing = clamp(s.passing + 2, 20, 99); // decision making mapped to passing
+    s.events.push("🥽 Installed VR Training System! +2 Decision Making.");
+  } else if (itemId === "perf_vision") {
+    s.passing = clamp(s.passing + 2, 20, 99);
+    s.events.push("👁️ Started Vision Training! +2 Passing, better assist rate.");
+  } else if (itemId === "perf_setpiece") {
+    s.shooting = clamp(s.shooting + 3, 20, 99);
+    s.events.push("🎯 Hired a Set Piece Coach! +3 Free Kick accuracy.");
   } else {
     s.events.push(`${item.emoji} Purchased ${item.name}! (€${item.cost >= 1 ? item.cost.toFixed(0) + "M" : Math.round(item.cost * 1000) + "k"})`);
   }
