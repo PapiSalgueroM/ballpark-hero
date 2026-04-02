@@ -85,7 +85,7 @@ export function GuessSoccerClubBoard() {
                     className="h-11 text-sm"
                     onClick={() => startGame('league', league)}
                   >
-                    {leagueEmoji[league]} {league}
+                    <span className="inline-flex items-center gap-1"><FlagImg name={leagueCountry[league]} size={16} /> {league}</span>
                   </Button>
                 ))}
               </div>
