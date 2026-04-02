@@ -227,7 +227,9 @@ export function GuessTheNationBoard() {
                             isFinal ? 'text-2xl font-bold text-amber-400' : ''
                           }`}
                         >
-                          {getClueContent(i)}
+                          {isFinal ? (
+                            <span className="inline-flex items-center gap-2"><FlagImg name={getClueContent(i)} size={28} />{getClueContent(i)}</span>
+                          ) : getClueContent(i)}
                         </p>
                       </>
                     ) : (
