@@ -1969,23 +1969,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const totals = getCareerTotals(career.seasons);
   const currentSeason = career.seasons[career.seasons.length - 1];
 
-  const statBars = career.position === "GK"
-    ? [
-        { l: "Reflexes", v: career.reflexes, c: "bg-cyan-500" },
-        { l: "Pace", v: career.pace, c: "bg-emerald-500" },
-        { l: "Passing", v: career.passing, c: "bg-blue-500" },
-        { l: "Dribbling", v: career.dribbling, c: "bg-yellow-500" },
-        { l: "Defending", v: career.defending, c: "bg-purple-500" },
-        { l: "Physical", v: career.physical, c: "bg-orange-500" },
-      ]
-    : [
-        { l: "Pace", v: career.pace, c: "bg-emerald-500" },
-        { l: "Shooting", v: career.shooting, c: "bg-red-500" },
-        { l: "Passing", v: career.passing, c: "bg-blue-500" },
-        { l: "Dribbling", v: career.dribbling, c: "bg-yellow-500" },
-        { l: "Defending", v: career.defending, c: "bg-purple-500" },
-        { l: "Physical", v: career.physical, c: "bg-orange-500" },
-      ];
+  const statBars = getPositionStatBars(career.position, career);
 
   const [showRetireConfirm, setShowRetireConfirm] = useState(false);
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
