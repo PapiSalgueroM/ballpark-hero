@@ -1623,7 +1623,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
 export function requestTransfer(state: CareerState, clubs: ClubData[]): TransferSituation {
   if (Math.random() < 0.5) {
     const exclude = new Set<string>([state.currentClub]);
-    const offer = makeOffer(clubs, pick(getInterestedTiers(state.overall)), state.overall, state.age, exclude, state.marketValue);
+    const offer = makeOffer(clubs, pick(getInterestedTiers(state.overall, state.age)), state.overall, state.age, exclude, state.marketValue);
     return { type: "request_result", offer };
   }
   return { type: "request_result", offer: null };
