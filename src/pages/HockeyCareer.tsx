@@ -101,7 +101,7 @@ const HockeyCareer = () => {
           {(status === 'guessed' || status === 'revealed') && (
             <div className="text-center mt-4 py-4 rounded-xl bg-[hsl(var(--hk-blue)/0.3)] border border-[hsl(var(--hk-silver)/0.3)] animate-cell-reveal">
               <p className="text-4xl font-bold text-[hsl(var(--hk-silver))] font-display mb-1">{player.name}</p>
-              <p className="text-muted-foreground text-sm">{player.countryFlag} {player.position}</p>
+              <p className="text-muted-foreground text-sm flex items-center justify-center gap-1"><FlagImg name={player.country} size={16} /> {player.position}</p>
               {status === 'guessed' && (
                 <div className="flex items-center justify-center gap-2 mt-3">
                   <Trophy className="w-5 h-5 text-[hsl(var(--hk-silver))]" />

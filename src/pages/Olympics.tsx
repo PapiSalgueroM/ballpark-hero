@@ -114,7 +114,7 @@ export default function Olympics() {
             <div className="rounded-2xl border border-[hsl(43,85%,55%)/0.3] bg-card p-6 text-center mb-6 animate-cell-reveal">
               <Award className="w-10 h-10 text-[hsl(43,85%,55%)] mx-auto mb-3" />
               <p className="text-3xl font-display font-bold text-[hsl(43,85%,55%)] mb-1">{athlete.name}</p>
-              <p className="text-sm text-muted-foreground mb-1">{athlete.sport} — {athlete.country}</p>
+              <p className="text-sm text-muted-foreground mb-1">{athlete.sport} — <FlagImg name={athlete.countryName || ''} size={16} /></p>
               <p className="text-xs text-muted-foreground mb-4">{athlete.gamesYear} {athlete.hostCity}</p>
               {status === 'guessed' ? (
                 <p className="text-lg font-bold text-primary">Score: {score} 🏅</p>

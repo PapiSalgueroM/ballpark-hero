@@ -185,7 +185,7 @@ const WorldCup = () => {
                     <span className="font-bold text-[hsl(var(--wc-gold))]">{puzzle.answer}</span>
                   </p>
                   <p className="text-muted-foreground text-sm mt-1">
-                    {puzzle.countryFlag} {puzzle.country} · {puzzle.year}
+                    <FlagImg name={puzzle.country} size={16} /> {puzzle.country} · {puzzle.year}
                   </p>
                 </>
               )}
