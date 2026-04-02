@@ -192,7 +192,8 @@ function getPositionCareerStats(pos: string, totals: { apps: number; goals: numb
   ];
 }
 
-
+/* ─── Stat Bar ─── */
+function StatBarGame({ label, value, color }: { label: string; value: number; color: string }) {
   const rc = value >= 80 ? "text-green-400" : value >= 65 ? "text-emerald-400" : value >= 50 ? "text-yellow-400" : "text-red-400";
   return (
     <div className="flex items-center gap-2">
