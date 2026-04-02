@@ -1505,7 +1505,14 @@ export function generateContractOffers(clubs: ClubData[], overall: number, age: 
 }
 
 /* ─── Interested tiers by rating ─── */
-function getInterestedTiers(overall: number): number[] {
+function getInterestedTiers(overall: number, age?: number): number[] {
+  // Age-based restrictions: 40+ only lower league/amateur, 38+ rarely top clubs
+  if (age && age >= 40) return [3, 4];
+  if (age && age >= 38) {
+    if (overall >= 86) return [2, 3]; // No tier 1 for 38+
+    if (overall >= 76) return [2, 3];
+    return [3, 4];
+  }
   if (overall >= 86) return [1];
   if (overall >= 76) return [1, 2];
   if (overall >= 66) return [2, 3];
