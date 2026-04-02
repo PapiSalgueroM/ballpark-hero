@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { NationPuzzle } from '@/types/guessTheNation';
+import { FlagImg } from '@/components/FlagImg';
 
 interface Props {
   countries: NationPuzzle[];
