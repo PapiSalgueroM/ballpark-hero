@@ -112,7 +112,43 @@ function generateStatsFromOverall(overall: number, position: string): Stats {
   return s;
 }
 
-/* ─── Stat Bar ─── */
+/* ─── Position-specific attribute display ─── */
+function getPositionStatBars(pos: string, s: { pace: number; shooting: number; passing: number; dribbling: number; defending: number; physical: number; reflexes: number }) {
+  if (pos === "GK") return [
+    { l: "Reflexes", v: s.reflexes, c: "bg-cyan-500" },
+    { l: "Positioning", v: s.defending, c: "bg-purple-500" },
+    { l: "Shot Stopping", v: s.shooting, c: "bg-red-500" },
+    { l: "Distribution", v: s.passing, c: "bg-blue-500" },
+    { l: "Aerial Ability", v: s.physical, c: "bg-orange-500" },
+    { l: "Penalty Saving", v: s.dribbling, c: "bg-yellow-500" },
+  ];
+  if (["CB", "LB", "RB"].includes(pos)) return [
+    { l: "Tackling", v: s.defending, c: "bg-purple-500" },
+    { l: "Interceptions", v: s.passing, c: "bg-blue-500" },
+    { l: "Heading", v: s.shooting, c: "bg-red-500" },
+    { l: "Positioning", v: s.dribbling, c: "bg-yellow-500" },
+    { l: "Pace", v: s.pace, c: "bg-emerald-500" },
+    { l: "Physical", v: s.physical, c: "bg-orange-500" },
+  ];
+  if (["CDM", "CM", "CAM"].includes(pos)) return [
+    { l: "Passing", v: s.passing, c: "bg-blue-500" },
+    { l: "Vision", v: s.dribbling, c: "bg-yellow-500" },
+    { l: "Stamina", v: s.physical, c: "bg-orange-500" },
+    { l: "Pressing", v: s.defending, c: "bg-purple-500" },
+    { l: "Dribbling", v: s.shooting, c: "bg-red-500" },
+    { l: "Composure", v: s.reflexes, c: "bg-cyan-500" },
+  ];
+  // Forwards: ST, LW, RW
+  return [
+    { l: "Finishing", v: s.shooting, c: "bg-red-500" },
+    { l: "Pace", v: s.pace, c: "bg-emerald-500" },
+    { l: "Dribbling", v: s.dribbling, c: "bg-yellow-500" },
+    { l: "Shot Power", v: s.physical, c: "bg-orange-500" },
+    { l: "Off The Ball", v: s.defending, c: "bg-purple-500" },
+    { l: "Composure", v: s.passing, c: "bg-blue-500" },
+  ];
+}
+
 function StatBarGame({ label, value, color }: { label: string; value: number; color: string }) {
   const rc = value >= 80 ? "text-green-400" : value >= 65 ? "text-emerald-400" : value >= 50 ? "text-yellow-400" : "text-red-400";
   return (
@@ -786,14 +822,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
             <span className={`text-2xl font-black ${previewOvr >= 55 ? 'text-green-400' : 'text-yellow-400'}`}>{previewOvr}</span>
           </div>
           <div className="space-y-2">
-            {[
-              { l: "Pace", v: previewStats.pace, c: "bg-emerald-500" },
-              { l: position === "GK" ? "Reflexes" : "Shooting", v: position === "GK" ? previewStats.reflexes : previewStats.shooting, c: "bg-red-500" },
-              { l: "Passing", v: previewStats.passing, c: "bg-blue-500" },
-              { l: "Dribbling", v: previewStats.dribbling, c: "bg-yellow-500" },
-              { l: "Defending", v: previewStats.defending, c: "bg-purple-500" },
-              { l: "Physical", v: previewStats.physical, c: "bg-orange-500" },
-            ].map(s => <StatBarGame key={s.l} label={s.l} value={s.v} color={s.c} />)}
+            {getPositionStatBars(position, previewStats).map(s => <StatBarGame key={s.l} label={s.l} value={s.v} color={s.c} />)}
           </div>
         </div>
       )}
@@ -1969,23 +1998,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const totals = getCareerTotals(career.seasons);
   const currentSeason = career.seasons[career.seasons.length - 1];
 
-  const statBars = career.position === "GK"
-    ? [
-        { l: "Reflexes", v: career.reflexes, c: "bg-cyan-500" },
-        { l: "Pace", v: career.pace, c: "bg-emerald-500" },
-        { l: "Passing", v: career.passing, c: "bg-blue-500" },
-        { l: "Dribbling", v: career.dribbling, c: "bg-yellow-500" },
-        { l: "Defending", v: career.defending, c: "bg-purple-500" },
-        { l: "Physical", v: career.physical, c: "bg-orange-500" },
-      ]
-    : [
-        { l: "Pace", v: career.pace, c: "bg-emerald-500" },
-        { l: "Shooting", v: career.shooting, c: "bg-red-500" },
-        { l: "Passing", v: career.passing, c: "bg-blue-500" },
-        { l: "Dribbling", v: career.dribbling, c: "bg-yellow-500" },
-        { l: "Defending", v: career.defending, c: "bg-purple-500" },
-        { l: "Physical", v: career.physical, c: "bg-orange-500" },
-      ];
+  const statBars = getPositionStatBars(career.position, career);
 
   const [showRetireConfirm, setShowRetireConfirm] = useState(false);
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
