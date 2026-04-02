@@ -1091,7 +1091,7 @@ function InternationalStatsPanel({ career, onRetire }: { career: CareerState; on
       </div>
       {(is.worldCups > 0 || is.continentals > 0) && (
         <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          {is.worldCups > 0 && <span>🌍 {is.worldCups} World Cup{is.worldCups > 1 ? "s" : ""} ({is.worldCupWins} won)</span>}
+          {is.worldCups > 0 && <span>🌍 Competed in {is.worldCups} | Won {is.worldCupWins}</span>}
           {is.continentals > 0 && <span>🏆 {is.continentals} Continental ({is.continentalWins} won)</span>}
         </div>
       )}
