@@ -2292,8 +2292,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   simulateSeasonFinances(s, season);
   if (s.contractYearsLeft <= 1) s.events.push("⚠️ Your contract is expiring!");
 
-  // World Cup year — trigger after summary
-  if (isWCYear && s.internationalCareer && !s.intStats.isRetired) {
+  // World Cup year — trigger after summary (hard cap: 5 World Cups per career)
+  if (isWCYear && s.internationalCareer && !s.intStats.isRetired && s.intStats.worldCups < 5) {
     const wcResult = simulateWorldCup(s);
     wcResult.year = thisYear;
     s.pendingWorldCup = wcResult;
