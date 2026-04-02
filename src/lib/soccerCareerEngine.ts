@@ -1355,12 +1355,19 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
 
   let injured = false;
   let injuryWeeks = 0;
-  if (Math.random() < 0.20) {
+  let injuryChance = 0.20;
+  // Cryotherapy reduces injury risk by 15%
+  if (state?.purchasedItems?.includes("perf_cryo")) injuryChance -= 0.03;
+  if (Math.random() < injuryChance) {
     injured = true;
     injuryWeeks = rand(2, 8);
     // Elite recovery clinic halves injury time
     if (state?.purchasedItems?.includes("elite_recovery")) {
       injuryWeeks = Math.max(1, Math.round(injuryWeeks * 0.5));
+    }
+    // Sleep optimization clinic reduces recovery further
+    if (state?.purchasedItems?.includes("perf_sleep")) {
+      injuryWeeks = Math.max(1, injuryWeeks - 1);
     }
     const missedApps = Math.round(injuryWeeks * apps / 46);
     apps = Math.max(1, apps - clamp(missedApps, 0, 12));
