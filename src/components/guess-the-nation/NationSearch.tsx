@@ -63,7 +63,7 @@ export function NationSearch({ countries, usedGuesses, onGuess }: Props) {
               onClick={() => handleSelect(c.countryName)}
               className="w-full px-4 py-2.5 text-left hover:bg-amber-500/10 transition-colors flex items-center gap-2"
             >
-              <span className="text-lg">{c.flagEmoji}</span>
+              <FlagImg name={c.countryName} size={20} />
               <span className="text-foreground">{c.countryName}</span>
             </button>
           ))}
