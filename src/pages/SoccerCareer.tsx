@@ -149,7 +149,50 @@ function getPositionStatBars(pos: string, s: { pace: number; shooting: number; p
   ];
 }
 
-function StatBarGame({ label, value, color }: { label: string; value: number; color: string }) {
+/* ─── Position-specific career stats display ─── */
+function getPositionCareerStats(pos: string, totals: { apps: number; goals: number; assists: number; cleanSheets: number; leagueTitles: number; domesticCups: number; championsLeagues: number; worldCups: number; yellowCards: number; redCards: number }) {
+  const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups;
+  // Derive approximate stats from existing data
+  const saves = totals.cleanSheets * 4 + Math.round(totals.apps * 2.5); // ~estimated saves
+  const pensSaved = Math.max(0, Math.floor(totals.cleanSheets / 5)); // ~1 per 5 clean sheets
+  const tackles = Math.round(totals.apps * 2.8); // ~2.8 tackles per game for defenders
+  const interceptions = Math.round(totals.apps * 1.6); // ~1.6 per game
+  const keyPasses = Math.round(totals.assists * 3.2 + totals.apps * 0.8); // derived from assists
+  const hatTricks = Math.max(0, Math.floor(totals.goals / 15)); // ~1 hat trick per 15 goals
+
+  if (pos === "GK") return [
+    { l: "Apps", v: totals.apps },
+    { l: "Clean Sheets", v: totals.cleanSheets },
+    { l: "Saves", v: saves },
+    { l: "Pens Saved", v: pensSaved },
+    { l: "Trophies", v: trophies },
+  ];
+  if (["CB", "LB", "RB"].includes(pos)) return [
+    { l: "Apps", v: totals.apps },
+    { l: "Tackles", v: tackles },
+    { l: "Interceptions", v: interceptions },
+    { l: "Goals", v: totals.goals },
+    { l: "Clean Sheets", v: totals.cleanSheets },
+    { l: "Trophies", v: trophies },
+  ];
+  if (["CDM", "CM", "CAM"].includes(pos)) return [
+    { l: "Apps", v: totals.apps },
+    { l: "Goals", v: totals.goals },
+    { l: "Assists", v: totals.assists },
+    { l: "Key Passes", v: keyPasses },
+    { l: "Trophies", v: trophies },
+  ];
+  // Forwards: ST, LW, RW
+  return [
+    { l: "Apps", v: totals.apps },
+    { l: "Goals", v: totals.goals },
+    { l: "Assists", v: totals.assists },
+    { l: "Hat Tricks", v: hatTricks },
+    { l: "Trophies", v: trophies },
+  ];
+}
+
+
   const rc = value >= 80 ? "text-green-400" : value >= 65 ? "text-emerald-400" : value >= 50 ? "text-yellow-400" : "text-red-400";
   return (
     <div className="flex items-center gap-2">
