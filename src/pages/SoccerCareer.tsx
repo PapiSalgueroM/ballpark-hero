@@ -2409,6 +2409,36 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 </div>
               ))}
             </div>
+            {/* Individual Awards from career */}
+            {(() => {
+              const individualAwards = [
+                { name: "Golden Boot", emoji: "👟" },
+                { name: "Golden Glove", emoji: "🧤" },
+                { name: "Puskás Award", emoji: "🎯" },
+                { name: "UEFA Player of the Year", emoji: "🇪🇺" },
+                { name: "Young Player of the Year", emoji: "⭐" },
+                { name: "Comeback Player of the Year", emoji: "💪" },
+                { name: "Club Legend", emoji: "🏛️" },
+                { name: "All Time Top Scorer", emoji: "👑" },
+                { name: "Fair Play Award", emoji: "🤝" },
+              ];
+              const awardItems = individualAwards.map(a => ({
+                ...a,
+                count: career.awards.filter(ca => ca.name === a.name).length,
+              })).filter(a => a.count > 0);
+              if (awardItems.length === 0) return null;
+              return (
+                <div className="grid grid-cols-3 gap-1.5 mt-2">
+                  {awardItems.map(a => (
+                    <div key={a.name} className="text-center rounded-lg p-1.5 bg-amber-500/10 border border-amber-500/20">
+                      <div className="text-base">{a.emoji}</div>
+                      <div className="text-xs font-black">{a.count > 1 ? `×${a.count}` : ""}</div>
+                      <div className="text-[8px] text-muted-foreground leading-tight">{a.name}</div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
           </div>
 
           {/* UCL Result (latest) */}
