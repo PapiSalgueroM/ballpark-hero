@@ -172,6 +172,14 @@ const FootballTimeline = () => {
             'Lock in your order and see how many you got right',
             'New challenge every day — share your score with friends',
           ]}
+          examples={[
+            "Tom Brady (2000) → Peyton Manning (1998) → Patrick Mahomes (2017)",
+            "Jerry Rice (1985) → Randy Moss (1998) → Calvin Johnson (2007)",
+            "Lawrence Taylor (1981) → Ray Lewis (1996) → Aaron Donald (2014)",
+            "Walter Payton (1975) → Barry Sanders (1989) → Adrian Peterson (2007)",
+            "Joe Montana (1979) → John Elway (1983) → Dan Marino (1983)",
+            "Deion Sanders (1989) → Charles Woodson (1998) → Darrelle Revis (2007)"
+          ]}
         />
 
         <AdBanner slot="1234567901" format="horizontal" className="mt-8" />

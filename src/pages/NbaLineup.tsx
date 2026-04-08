@@ -404,6 +404,14 @@ const NbaLineup = () => {
             "Name a player from that team to fill the slot",
             "Submit your lineup for an AI evaluation and rating",
           ]}
+          examples={[
+            "PG from Celtics = Jrue Holiday, Rajon Rondo",
+            "SG from Bulls = Michael Jordan, Zach LaVine",
+            "SF from Lakers = LeBron James, Kobe Bryant",
+            "PF from Bucks = Giannis Antetokounmpo, Bobby Portis",
+            "C from Nuggets = Nikola Jokić, Dikembe Mutombo",
+            "Challenge: Build lineup with highest combined PPG"
+          ]}
         />
 
         <AdBanner slot="1234567897" format="horizontal" className="mt-8" />

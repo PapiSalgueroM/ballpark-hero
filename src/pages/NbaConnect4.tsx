@@ -299,6 +299,14 @@ const NbaConnect4 = () => {
             "Valid answers place your piece — first to get 4 in a row wins",
             "Each player can only be used once per game",
           ]}
+          examples={[
+            "Lakers + MVP = LeBron James, Kobe Bryant, Shaquille O'Neal",
+            "Duke + Point Guard = Kyrie Irving, Chris Paul (Wake Forest corrected)",
+            "30+ PPG Season + Western Conference = Stephen Curry, Kevin Durant",
+            "All-Star + Center = Nikola Jokić, Joel Embiid, Anthony Davis",
+            "Kentucky + 1st Overall Pick = Karl-Anthony Towns, Anthony Davis",
+            "6th Man Award + Guard = Jamal Crawford, Lou Williams"
+          ]}
         />
 
         <AdBanner slot="1234567898" format="horizontal" className="mt-8" />
