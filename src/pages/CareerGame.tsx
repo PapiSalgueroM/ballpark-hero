@@ -248,6 +248,14 @@ const CareerGame = () => {
             "Use hints to reveal additional boxes automatically",
             "The fewer boxes and guesses you use, the better your score",
           ]}
+          examples={[
+            "Cristiano Ronaldo — Sporting → Man United → Real Madrid → Juventus → Man United → Al Nassr",
+            "Zlatan Ibrahimović — Ajax → Juventus → Inter → Barcelona → AC Milan → PSG → Man United → LA Galaxy → AC Milan",
+            "Thierry Henry — Monaco → Juventus → Arsenal → Barcelona → New York Red Bulls",
+            "David Beckham — Man United → Real Madrid → LA Galaxy → AC Milan → PSG",
+            "Ronaldinho — Grêmio → PSG → Barcelona → AC Milan → Flamengo",
+            "Samuel Eto'o — Real Madrid → Mallorca → Barcelona → Inter → Chelsea"
+          ]}
         />
 
         <AdBanner slot="1234567891" format="horizontal" className="mt-8" />

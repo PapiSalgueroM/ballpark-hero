@@ -195,6 +195,14 @@ const Teammates = () => {
             "Tap YES or NO to answer",
             "Learn fun facts after each answer — 10 questions per round",
           ]}
+          examples={[
+            "Messi & Neymar — YES (Barcelona, PSG)",
+            "LeBron James & Kyrie Irving — YES (Cleveland Cavaliers)",
+            "Tom Brady & Peyton Manning — NO (rivals, never teammates)",
+            "Ronaldo & Rooney — YES (Manchester United)",
+            "Kobe Bryant & Shaquille O'Neal — YES (LA Lakers)",
+            "Zidane & Ronaldinho — NO (never played on the same club)"
+          ]}
         />
 
         <AdBanner slot="1234567891" format="horizontal" className="mt-8" />

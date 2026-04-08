@@ -270,6 +270,14 @@ const Connections = () => {
             "Use hints to reveal a group's category name",
             "You have 4 lives — lose one for each wrong guess",
           ]}
+          examples={[
+            "Players who played for AC Milan — Kaká, Maldini, Van Basten, Gullit",
+            "Ballon d'Or winners — Messi, Ronaldo, Modrić, Benzema",
+            "Brazilian World Cup winners — Ronaldo, Rivaldo, Cafu, Roberto Carlos",
+            "Premier League Golden Boot — Salah, Kane, Henry, Van Persie",
+            "Players who wore #10 — Zidane, Pelé, Maradona, Ronaldinho",
+            "Left-footed legends — Messi, Maradona, Nedvěd, Robben"
+          ]}
         />
 
         <AdBanner slot="1234567893" format="horizontal" className="mt-8" />

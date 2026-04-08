@@ -162,6 +162,14 @@ const HigherLowerGame = () => {
             "Pick a stat where the left player has a higher value",
             "Correct picks extend your streak — wrong picks end the game",
           ]}
+          examples={[
+            "Messi vs Ronaldo — Who has more goals?",
+            "Neymar vs Salah — Who has more assists?",
+            "Mbappé vs Haaland — Who has more trophies?",
+            "Modric vs De Bruyne — Who has more appearances?",
+            "Kane vs Lewandowski — Who has more international caps?",
+            "Benzema vs Suárez — Who has more career goals?"
+          ]}
         />
 
         <AdBanner slot="1234567894" format="horizontal" className="mt-8" />
