@@ -2,9 +2,10 @@ interface GameSeoContentProps {
   title: string;
   description: string;
   howToPlay: string[];
+  examples?: string[];
 }
 
-const GameSeoContent = ({ title, description, howToPlay }: GameSeoContentProps) => (
+const GameSeoContent = ({ title, description, howToPlay, examples }: GameSeoContentProps) => (
   <section className="max-w-2xl mx-auto mt-12 mb-8 px-4 text-center">
     <h1 className="text-lg font-semibold text-muted-foreground/70 font-display mb-2">
       {title}
@@ -21,6 +22,18 @@ const GameSeoContent = ({ title, description, howToPlay }: GameSeoContentProps) 
           <li key={i}>{step}</li>
         ))}
       </ul>
+      {examples && examples.length > 0 && (
+        <div className="mt-4">
+          <h3 className="text-xs font-semibold text-muted-foreground/50 uppercase tracking-wider mb-2">
+            Examples
+          </h3>
+          <ul className="list-disc list-inside space-y-1 text-xs text-muted-foreground/50">
+            {examples.map((example, i) => (
+              <li key={i}>{example}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   </section>
 );
