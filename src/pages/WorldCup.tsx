@@ -210,6 +210,15 @@ const WorldCup = () => {
             'Wrong guesses or skips reveal the next clue',
             'A new daily challenge drops at midnight — same puzzle for all players',
           ]}
+          examples={[
+            "Pelé — Brazil, 3× World Cup Winner (1958, 1962, 1970)",
+            "Diego Maradona — Argentina, 1986 Hand of God & Goal of the Century",
+            "Zinedine Zidane — France, 1998 & 2006 Finals, headbutt in Berlin",
+            "Ronaldo Nazário — Brazil, 2002 Golden Boot, 15 World Cup goals",
+            "Lionel Messi — Argentina, 2022 World Cup Winner, Golden Ball",
+            "Miroslav Klose — Germany, All-time WC top scorer with 16 goals",
+            "Kylian Mbappé — France, 2018 Winner, 2022 Final hat trick"
+          ]}
         />
 
         <AdBanner slot="1234567899" format="horizontal" className="mt-8" />

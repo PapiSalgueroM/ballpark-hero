@@ -19,6 +19,14 @@ export default function UfcChain() {
           "Each valid win connection extends your chain. Keep the streak going as long as you can.",
           "Compete on the daily leaderboard or play unlimited and weight-class modes."
         ]}
+        examples={[
+          "Conor McGregor → Khabib Nurmagomedov → Justin Gaethje → Charles Oliveira",
+          "Ronda Rousey → Holly Holm → Miesha Tate → Amanda Nunes",
+          "Anderson Silva → Chris Weidman → Luke Rockhold → Michael Bisping",
+          "Georges St-Pierre → Matt Serra → Matt Hughes → BJ Penn",
+          "Jon Jones → Alexander Gustafsson → Daniel Cormier",
+          "Max Holloway → Alexander Volkanovski → Islam Makhachev"
+        ]}
       />
     </>
   );

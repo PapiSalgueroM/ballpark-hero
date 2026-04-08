@@ -202,6 +202,14 @@ export default function Olympics() {
               "Submit your guess when you think you know who it is. Fewer clues means more points.",
               "Give up to reveal the answer if you're stuck. A new athlete is featured daily."
             ]}
+            examples={[
+              "Usain Bolt — Track & Field, Jamaica, 8 Gold Medals, 100m/200m",
+              "Michael Phelps — Swimming, USA, 23 Gold Medals, Most Decorated Olympian",
+              "Simone Biles — Gymnastics, USA, 7 Gold Medals, GOAT of gymnastics",
+              "Nadia Comăneci — Gymnastics, Romania, First Perfect 10, 1976 Montreal",
+              "Carl Lewis — Track & Field, USA, 9 Gold, Long Jump & 100m",
+              "Marit Bjørgen — Cross-Country Skiing, Norway, 8 Gold, Winter Games legend"
+            ]}
           />
           <GameNav />
         </div>
