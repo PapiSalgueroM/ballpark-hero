@@ -126,6 +126,14 @@ const SoccerGrid = () => {
             'Correct answers show a rarity percentage — rarer picks earn a better score',
             'You have 15 guesses to complete the grid. Wrong answers cost a guess.',
           ]}
+          examples={[
+            "Real Madrid + France = Karim Benzema, Zinedine Zidane",
+            "Barcelona + Brazil = Neymar, Ronaldinho, Rivaldo",
+            "Premier League + Golden Boot = Mohamed Salah, Harry Kane",
+            "Serie A + Goalkeeper = Gianluigi Buffon, Alisson",
+            "Bundesliga + Netherlands = Arjen Robben, Memphis Depay",
+            "Champions League Winner + Argentina = Lionel Messi, Di María"
+          ]}
         />
 
         <AdBanner slot="1234567900" format="horizontal" className="mt-8" />

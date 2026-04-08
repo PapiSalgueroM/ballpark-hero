@@ -1504,6 +1504,14 @@ const WorldCupPredictor = () => {
             "Fill in the knockout bracket from the Round of 32 all the way to the Final.",
             "Share your completed bracket with friends, save it to your account, and see how others predicted."
           ]}
+          examples={[
+            "Group A — USA, Mexico, Morocco, and more competing for Round of 32 spots",
+            "Group B — France, Argentina, Brazil among the favorites",
+            "Round of 32 — First knockout stage with 32 teams advancing",
+            "Quarter-finals — Eight teams battle for a semi-final spot",
+            "Predict the Golden Boot winner, Best Young Player, and Golden Glove",
+            "Final at MetLife Stadium, New Jersey — July 19, 2026"
+          ]}
         />
         <GameNav />
         <Footer />

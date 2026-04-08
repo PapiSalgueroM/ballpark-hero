@@ -231,6 +231,14 @@ const NFLCareer = () => {
             "Clues progress: Draft → College → First Team → Stats → Teams → Jersey #",
             "The fewer clues you need, the higher your score!",
           ]}
+          examples={[
+            "Tom Brady — 6th Round, Michigan, Patriots → Buccaneers, 7× Super Bowl Champion",
+            "Patrick Mahomes — 1st Round, Texas Tech, Chiefs, 3× Super Bowl MVP",
+            "Aaron Donald — 1st Round, Pitt, Rams, 3× DPOY",
+            "Derrick Henry — 2nd Round, Alabama, Titans → Ravens, 2,000-yard rusher",
+            "Justin Jefferson — 1st Round, LSU, Vikings, 3× Pro Bowl",
+            "Travis Kelce — 3rd Round, Cincinnati, Chiefs, All-time TE receiving leader"
+          ]}
         />
 
         <AdBanner slot="1234567891" format="horizontal" className="mt-8" />

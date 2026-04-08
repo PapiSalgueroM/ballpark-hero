@@ -19,6 +19,14 @@ export default function NascarChain() {
           "Each valid connection extends your chain. Keep going as long as you can.",
           "Compete on the daily leaderboard or play unlimited mode for practice."
         ]}
+        examples={[
+          "Dale Earnhardt → Jeff Gordon (1990s rivals)",
+          "Richard Petty → David Pearson (1970s duels)",
+          "Jimmie Johnson → Tony Stewart (2000s championship battles)",
+          "Kyle Busch → Kevin Harvick (2010s competition)",
+          "Chase Elliott → Ryan Blaney (current era)",
+          "Dale Earnhardt Jr. → Matt Kenseth (2000s contemporaries)"
+        ]}
       />
     </>
   );

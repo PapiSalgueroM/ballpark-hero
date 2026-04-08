@@ -138,6 +138,14 @@ const CollegeGrid = () => {
             'Correct answers show a rarity percentage — rarer picks earn a better overall score',
             'New grid at midnight — same challenge for everyone. 15 guesses to complete it.',
           ]}
+          examples={[
+            "Alabama + Heisman Winner = Derrick Henry, Mark Ingram",
+            "Ohio State + 1st Round Pick = Chase Young, Joey Bosa",
+            "SEC + Quarterback = Tim Tebow, Joe Burrow",
+            "Clemson + Wide Receiver = DeAndre Hopkins, Sammy Watkins",
+            "Big Ten + Running Back = Saquon Barkley, Jonathan Taylor",
+            "Notre Dame + Linebacker = Manti Te'o, Jeremiah Owusu-Koramoah"
+          ]}
         />
 
         <AdBanner slot="1234567901" format="horizontal" className="mt-8" />

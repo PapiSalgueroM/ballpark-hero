@@ -296,6 +296,14 @@ const FootballDraft = () => {
             'Exact round = 10 pts, one off = 5 pts, two off = 2 pts',
             'Play 5 players per game — new challenge daily',
           ]}
+          examples={[
+            "Quarterback, Michigan, 6'4\", 4.90 40-yard dash — 6th Round (Tom Brady)",
+            "Defensive End, Ohio State, 6'5\", 4.67 40 — 1st Round (Chase Young)",
+            "Wide Receiver, Alabama, 6'1\", 4.27 40 — 1st Round (Henry Ruggs III)",
+            "Linebacker, Penn State, 6'2\", 4.39 40 — 1st Round (Micah Parsons)",
+            "Running Back, LSU, 5'11\", 4.40 40 — Undrafted (Darrel Williams)",
+            "Tight End, Iowa, 6'5\", 4.87 40 — 2nd Round (T.J. Hockenson)"
+          ]}
         />
 
         <AdBanner slot="1234567901" format="horizontal" className="mt-8" />

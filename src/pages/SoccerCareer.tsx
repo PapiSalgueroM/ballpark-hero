@@ -709,6 +709,15 @@ export default function SoccerCareer() {
             "Each season, develop your skills through training, handle contract offers, and compete for trophies.",
             "Win the Ballon d'Or, lead your team to World Cup glory, and build a legendary career timeline."
           ]}
+          examples={[
+            "Start at La Masia (Barcelona academy) as a Spanish midfielder",
+            "Transfer from Ajax to Premier League for a big contract",
+            "Win the Champions League and earn a Ballon d'Or nomination",
+            "Buy a Private Chef upgrade (+2 Physical, +2 Stamina)",
+            "Break your country's all-time scoring record",
+            "Earn Club Legend status with 300+ appearances at one club",
+            "Retire after 20 seasons with a legendary career score"
+          ]}
         />
         <Footer />
       </div>

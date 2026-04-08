@@ -19,6 +19,14 @@ export default function F1Driver() {
           "Submit your guess at any time. Fewer clues used means a higher score.",
           "Play the daily challenge for a shared puzzle, or switch to unlimited for endless practice."
         ]}
+        examples={[
+          "Lewis Hamilton — Mercedes/McLaren, British, 7× World Champion, 100+ wins",
+          "Max Verstappen — Red Bull, Dutch, 4× World Champion",
+          "Ayrton Senna — McLaren/Lotus, Brazilian, 3× World Champion, Imola 1994",
+          "Michael Schumacher — Ferrari/Benetton, German, 7× World Champion, 91 wins",
+          "Sebastian Vettel — Red Bull/Ferrari, German, 4× World Champion",
+          "Niki Lauda — Ferrari/McLaren, Austrian, 3× Champion, 1976 crash survivor"
+        ]}
       />
     </>
   );

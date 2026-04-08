@@ -358,6 +358,14 @@ const GuessTheCollege = () => {
               "Type your guess at any time. Fewer clues used means a higher score.",
               "Play daily mode, unlimited mode, or filter by specific conference."
             ]}
+            examples={[
+              "Alabama Crimson Tide — SEC, Tuscaloosa, 18× National Football Champions",
+              "Ohio State Buckeyes — Big Ten, Columbus, 'THE' Ohio State University",
+              "Clemson Tigers — ACC, Death Valley, 3× Football National Champions",
+              "Michigan Wolverines — Big Ten, Ann Arbor, Winningest program in CFB",
+              "LSU Tigers — SEC, Baton Rouge, Death Valley, 2019 Perfect Season",
+              "Notre Dame Fighting Irish — Independent, South Bend, Touchdown Jesus"
+            ]}
           />
           <GameNav />
           <Footer />

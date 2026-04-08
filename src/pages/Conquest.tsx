@@ -51,6 +51,14 @@ const Conquest = () => {
               "After each battle, steal a player from the losing team to strengthen your roster.",
               "The last team standing wins. Use power-ups and strategy to dominate the map."
             ]}
+            examples={[
+              "Kansas City Chiefs start in Missouri and expand westward",
+              "Dallas Cowboys control Texas and push into the South",
+              "New England Patriots dominate the Northeast corridor",
+              "San Francisco 49ers battle for the Pacific Coast",
+              "Green Bay Packers defend the Midwest against the Bears",
+              "Power-ups: Draft Pick, Trade Block, Home Field Advantage"
+            ]}
           />
           <GameNav />
         </main>

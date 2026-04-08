@@ -264,13 +264,18 @@ const BlurredFace = () => {
         )}
 
         <GameSeoContent
-          title="Guess The Player | DoUKnowBall"
-          description="Clues are revealed one by one — position, college, draft info, teams, stats and awards. Guess the mystery player before all clues run out."
+          title="Guess The Face — Blurred Soccer Player | DoUKnowBall"
+          description="Identify the mystery soccer player from a blurred photo. Each wrong guess unblurs the image and reveals a hint. Can you guess before running out of attempts?"
           howToPlay={[
             "A blurred photo of a soccer player is shown",
             "Each wrong guess slightly unblurs the image and reveals a hint",
             "Use the hints (nationality, club, position) to narrow it down",
             "Guess correctly before running out of attempts to win",
+          ]}
+          examples={[
+            "Lionel Messi", "Cristiano Ronaldo", "Neymar Jr.", "Mohamed Salah",
+            "Kevin De Bruyne", "Robert Lewandowski", "Luka Modrić",
+            "Kylian Mbappé", "Erling Haaland", "Vinícius Júnior"
           ]}
         />
 

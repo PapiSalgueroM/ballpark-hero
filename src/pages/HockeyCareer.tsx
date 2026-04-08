@@ -135,6 +135,14 @@ const HockeyCareer = () => {
             'Each clue costs 150 points',
             'New player every day — share your score!',
           ]}
+          examples={[
+            "Wayne Gretzky — Oilers → Kings → Blues → Rangers, C, 2,857 points",
+            "Sidney Crosby — Penguins, C, 3× Stanley Cup, 2× MVP",
+            "Alexander Ovechkin — Capitals, LW, 800+ goals, Hart Trophy",
+            "Connor McDavid — Oilers, C, 4× Art Ross, 3× Hart Trophy",
+            "Mario Lemieux — Penguins, C, 2× Stanley Cup, 690 goals",
+            "Patrick Roy — Canadiens → Avalanche, G, 4× Stanley Cup"
+          ]}
         />
 
         <AdBanner slot="1234567901" format="horizontal" className="mt-8" />

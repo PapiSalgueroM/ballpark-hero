@@ -19,6 +19,14 @@ export default function GuessSoccerClub() {
           "Submit your guess when you think you know the club. Fewer clues equals a higher score.",
           "Choose from daily, unlimited, league-specific, or Big 6 modes."
         ]}
+        examples={[
+          "Real Madrid — La Liga, Santiago Bernabéu, 15× Champions League",
+          "Liverpool — Premier League, Anfield, 6× Champions League",
+          "Bayern Munich — Bundesliga, Allianz Arena, 6× Champions League",
+          "AC Milan — Serie A, San Siro, 7× Champions League",
+          "Barcelona — La Liga, Spotify Camp Nou, Messi, Xavi, Iniesta",
+          "Inter Miami — MLS, Chase Stadium, Messi, Busquets, Alba"
+        ]}
       />
     </>
   );

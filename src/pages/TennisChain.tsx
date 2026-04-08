@@ -19,6 +19,14 @@ export default function TennisChain() {
           "Each valid defeat connection extends your chain. Keep going as long as you can.",
           "Compete on the daily leaderboard or play unlimited for practice."
         ]}
+        examples={[
+          "Federer → Nadal (multiple Roland Garros finals)",
+          "Nadal → Djokovic (Australian Open, Wimbledon)",
+          "Serena Williams → Angelique Kerber (Australian Open 2016)",
+          "Djokovic → Medvedev (US Open 2021)",
+          "Murray → Wawrinka (French Open 2017)",
+          "Osaka → Brady (Australian Open 2021)"
+        ]}
       />
     </>
   );

@@ -157,6 +157,14 @@ const UfcGame = () => {
             "Green means correct, yellow means close, red means wrong",
             "Use the higher/lower arrows to narrow down numeric stats",
           ]}
+          examples={[
+            "Conor McGregor — Featherweight/Lightweight, Ireland, 22-6",
+            "Khabib Nurmagomedov — Lightweight, Russia, 29-0",
+            "Jon Jones — Light Heavyweight/Heavyweight, USA, 27-1",
+            "Amanda Nunes — Bantamweight/Featherweight, Brazil, 21-5",
+            "Israel Adesanya — Middleweight, Nigeria/New Zealand, 24-3",
+            "Charles Oliveira — Lightweight, Brazil, 34-10"
+          ]}
         />
 
         <AdBanner slot="1234567892" format="horizontal" className="mt-8" />

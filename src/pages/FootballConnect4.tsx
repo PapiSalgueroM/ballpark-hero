@@ -243,6 +243,14 @@ const FootballConnect4 = () => {
             "Name a soccer player who matches both the column and row criteria",
             "First to connect 4 in a row (horizontal, vertical or diagonal) wins",
           ]}
+          examples={[
+            "Premier League + Forward = Harry Kane, Mohamed Salah",
+            "La Liga + Midfielder = Luka Modrić, Pedri",
+            "Serie A + Defender = Giorgio Chiellini, Alessandro Nesta",
+            "Bundesliga + Goalkeeper = Manuel Neuer, Marc-André ter Stegen",
+            "French + Champions League Winner = Zinedine Zidane, Karim Benzema",
+            "Brazilian + World Cup = Ronaldo, Cafu, Ronaldinho"
+          ]}
         />
 
         <AdBanner slot="1234567898" format="horizontal" className="mt-8" />

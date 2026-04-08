@@ -339,6 +339,14 @@ const FantasyDraft = () => {
             "Build a balanced squad of 11 players across all positions within the daily criteria.",
             "After drafting, simulate a full season and vote on whose team performed better."
           ]}
+          examples={[
+            "Draft Mbappé as your striker — 95 pace, 91 shooting",
+            "Pick Rodri for midfield stability — 89 passing, 87 defending",
+            "Grab Virgil van Dijk for defense — 90 defending, 86 physical",
+            "Select Alisson for goalkeeper — 89 reflexes, 88 diving",
+            "Criteria: Best Under-25 Squad, Highest Market Value XI",
+            "Snake draft: You pick 1st, AI picks 2nd & 3rd, you pick 4th & 5th..."
+          ]}
         />
         <Footer />
       </div>

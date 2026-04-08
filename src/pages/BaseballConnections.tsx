@@ -184,6 +184,13 @@ const BaseballConnections = () => {
             'You have 4 lives — wrong guesses cost a life',
             'New puzzle daily — share your results!',
           ]}
+          examples={[
+            "2024 All-Stars — Aaron Judge, Shohei Ohtani, Mookie Betts, Ronald Acuña Jr.",
+            "500+ Home Run Club — Barry Bonds, Hank Aaron, Babe Ruth, Alex Rodriguez",
+            "Yankees Legends — Derek Jeter, Mariano Rivera, Mickey Mantle, Babe Ruth",
+            "Cy Young Award Winners — Clayton Kershaw, Jacob deGrom, Max Scherzer, Greg Maddux",
+            "Dominican Republic Stars — David Ortiz, Pedro Martínez, Manny Ramírez, Sammy Sosa"
+          ]}
         />
 
         <AdBanner slot="1234567901" format="horizontal" className="mt-8" />

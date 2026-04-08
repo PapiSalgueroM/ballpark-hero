@@ -232,6 +232,16 @@ const Index = () => {
             "After each guess, colored tiles show how close you are — green means correct, yellow means close.",
             "Use the clues to narrow down the mystery player. A new puzzle is available every day."
           ]}
+          examples={[
+            "Lionel Messi — Inter Miami, MLS, Argentina, Forward",
+            "Erling Haaland — Manchester City, Premier League, Norway, Forward",
+            "Jude Bellingham — Real Madrid, La Liga, England, Midfielder",
+            "Kylian Mbappé — Real Madrid, La Liga, France, Forward",
+            "Bukayo Saka — Arsenal, Premier League, England, Winger",
+            "Vinícius Júnior — Real Madrid, La Liga, Brazil, Forward",
+            "Pedri — Barcelona, La Liga, Spain, Midfielder",
+            "Florian Wirtz — Bayer Leverkusen, Bundesliga, Germany, Midfielder"
+          ]}
         />
         <GameNav />
         <Footer />

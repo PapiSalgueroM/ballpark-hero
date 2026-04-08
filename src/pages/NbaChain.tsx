@@ -222,6 +222,14 @@ const NbaChain = () => {
             "Keep the chain going as long as you can — no repeats allowed",
             "Your best streak is saved locally so you can beat your record",
           ]}
+          examples={[
+            "LeBron James → Kyrie Irving (Cavaliers) → Kevin Durant (Nets)",
+            "Kobe Bryant → Shaquille O'Neal (Lakers) → Dwyane Wade (Heat)",
+            "Stephen Curry → Kevin Durant (Warriors) → James Harden (Nets)",
+            "Michael Jordan → Scottie Pippen (Bulls) → Hakeem Olajuwon (Rockets/Trail Blazers)",
+            "Tim Duncan → Manu Ginóbili (Spurs) → Carmelo Anthony (Nuggets era overlap)",
+            "Magic Johnson → Kareem Abdul-Jabbar (Lakers) → Oscar Robertson (Bucks)"
+          ]}
         />
 
         <AdBanner slot="1234567898" format="horizontal" className="mt-8" />
