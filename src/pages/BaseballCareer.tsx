@@ -186,6 +186,14 @@ const BaseballCareer = () => {
             'Maximum 1000 points (clue 1), decreasing by 150 per clue revealed',
             'New player every day — share your score with friends',
           ]}
+          examples={[
+            "Mike Trout — Angels, CF, 3× MVP, 2012 Rookie of the Year",
+            "Derek Jeter — Yankees, SS, 5× World Series Champion, 3,465 hits",
+            "Ken Griffey Jr. — Mariners → Reds → White Sox → Mariners, CF, 630 HR",
+            "Clayton Kershaw — Dodgers, LHP, 3× Cy Young, 2020 World Series",
+            "Albert Pujols — Cardinals → Angels → Dodgers, 1B, 703 HR",
+            "Shohei Ohtani — Angels → Dodgers, DH/P, 2× MVP"
+          ]}
         />
 
         <AdBanner slot="1234567901" format="horizontal" className="mt-8" />

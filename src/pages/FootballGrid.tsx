@@ -140,6 +140,14 @@ const FootballGrid = () => {
             'You have 15 guesses to complete the grid. Wrong answers cost a guess.',
             'A new grid drops at midnight — same challenge for everyone',
           ]}
+          examples={[
+            "Dallas Cowboys + Quarterback = Tony Romo, Troy Aikman, Dak Prescott",
+            "New England Patriots + Wide Receiver = Randy Moss, Julian Edelman",
+            "AFC + MVP = Peyton Manning, Lamar Jackson, Patrick Mahomes",
+            "1st Round Pick + Running Back = Saquon Barkley, Adrian Peterson",
+            "NFC North + Linebacker = Brian Urlacher, Ray Nitschke",
+            "Pro Bowl + Safety = Ed Reed, Troy Polamalu, Derwin James"
+          ]}
         />
 
         <AdBanner slot="1234567900" format="horizontal" className="mt-8" />

@@ -160,6 +160,14 @@ const HockeyHigherLower = () => {
             'Build a streak for bonus points (+5 per consecutive correct)',
             'Daily challenge or unlimited random mode',
           ]}
+          examples={[
+            "Gretzky (2,857 pts) vs Lemieux (1,723 pts)",
+            "Crosby vs Ovechkin — Who has more points?",
+            "McDavid vs Draisaitl — Who has more points?",
+            "Jagr (1,921 pts) vs Howe (1,850 pts)",
+            "Malkin vs Stamkos — Who has more career points?",
+            "Kane vs Toews — Who finished with more?"
+          ]}
         />
 
         <AdBanner slot="1234567901" format="horizontal" className="mt-8" />
