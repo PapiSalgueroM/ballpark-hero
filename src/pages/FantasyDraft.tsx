@@ -13,6 +13,7 @@ import { TeamAnalysis } from '@/components/fantasy-draft/TeamAnalysis';
 import { VoteWinner } from '@/components/fantasy-draft/VoteWinner';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 const TEAM_SIZE = 11;
 const TOTAL_PICKS = TEAM_SIZE * 2;
@@ -32,6 +33,7 @@ interface AnalysisData {
 
 const FantasyDraft = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [started, setStarted] = useState(false);
   const [criteria, setCriteria] = useState<string | null>(null);
   const [loadingCriteria, setLoadingCriteria] = useState(true);
@@ -161,9 +163,13 @@ const FantasyDraft = () => {
 
   // Vote handler
   const handleVote = async (team: 'user' | 'ai') => {
+    if (!user) {
+      toast({ title: 'Sign in required', description: 'Please sign in to vote.', variant: 'destructive' });
+      return;
+    }
     setVoted(team);
-    // Save to Supabase
-    await supabase.from('fantasy_draft_votes').insert({ voted_team: team });
+    // Save to Supabase with user_id for per-user deduplication
+    await supabase.from('fantasy_draft_votes').insert({ voted_team: team, user_id: user.id } as any);
     // Fetch counts
     const { count: userVotes } = await supabase
       .from('fantasy_draft_votes')
