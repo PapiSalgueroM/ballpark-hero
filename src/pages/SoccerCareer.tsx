@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import PageSeo from "@/components/seo/PageSeo";
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from "@/components/game/GameNavbar";
 import { Footer } from "@/components/game/Footer";
@@ -640,11 +640,11 @@ export default function SoccerCareer() {
 
   return (
     <>
-      <Helmet>
-        <title>Soccer Career Simulator | douknowball</title>
-        <meta name="description" content="Live out your soccer dream in this BitLife-style career simulator. Create a player, join a youth academy, and build your legend." />
-        <link rel="canonical" href="https://douknowball.com/soccer-career" />
-      </Helmet>
+      <PageSeo
+        title="Soccer Career Simulator | douknowball"
+        description="Live out your soccer dream in this BitLife-style career simulator. Create a player, join a youth academy, and build your legend."
+        path="/soccer-career"
+      />
 
       <div className="min-h-screen bg-background text-foreground flex flex-col">
         <GameNavbar />
