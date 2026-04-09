@@ -276,18 +276,21 @@ export type Database = {
           created_at: string
           id: string
           puzzle_date: string
+          user_id: string | null
           voted_team: string
         }
         Insert: {
           created_at?: string
           id?: string
           puzzle_date?: string
+          user_id?: string | null
           voted_team: string
         }
         Update: {
           created_at?: string
           id?: string
           puzzle_date?: string
+          user_id?: string | null
           voted_team?: string
         }
         Relationships: []
