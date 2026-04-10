@@ -62,7 +62,93 @@ import TransferPath from "./pages/TransferPath";
 
 const queryClient = new QueryClient();
 
+const HEADER_PATHS = ['/', '/leaderboard', '/privacy', '/terms'];
+
+const shouldShowHeader = (pathname: string) =>
+  HEADER_PATHS.includes(pathname) || pathname.startsWith('/profile') || pathname.startsWith('/admin');
+
+const AppContent = () => {
+  const { pathname } = useLocation();
+  return (
+    <>
+      <CookieConsent />
+      {shouldShowHeader(pathname) && <Header />}
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/footle" element={<Footle />} />
+        <Route path="/career" element={<CareerGame />} />
+        <Route path="/higher-lower" element={<HigherLower />} />
+        <Route path="/connections" element={<Connections />} />
+        <Route path="/build-your-xi" element={<LineupBuilder />} />
+        <Route path="/ufc" element={<UfcGame />} />
+        <Route path="/nba-starting-5" element={<NbaLineup />} />
+        <Route path="/nba-connect-4" element={<NbaConnect4 />} />
+        <Route path="/nba-chain" element={<NbaChain />} />
+        <Route path="/football-connect-4" element={<FootballConnect4 />} />
+        <Route path="/world-cup" element={<WorldCup />} />
+        <Route path="/football-grid" element={<FootballGrid />} />
+        <Route path="/college-grid" element={<CollegeGrid />} />
+        <Route path="/football-timeline" element={<FootballTimeline />} />
+        <Route path="/football-draft" element={<FootballDraft />} />
+        <Route path="/baseball-career" element={<BaseballCareer />} />
+        <Route path="/baseball-connections" element={<BaseballConnections />} />
+        <Route path="/hockey-career" element={<HockeyCareer />} />
+        <Route path="/hockey-higher-lower" element={<HockeyHigherLower />} />
+        <Route path="/nfl-career" element={<NFLCareer />} />
+        <Route path="/teammates" element={<Teammates />} />
+        <Route path="/olympics" element={<Olympics />} />
+        <Route path="/guess-the-college" element={<GuessTheCollege />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/reports" element={<AdminReports />} />
+        <Route path="/ufc-chain" element={<UfcChain />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:username" element={<Profile />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/guess-the-year" element={<GuessTheYear />} />
+        <Route path="/guess-nfl-team" element={<GuessNflTeam />} />
+        <Route path="/guess-soccer-club" element={<GuessSoccerClub />} />
+        <Route path="/guess-the-nation" element={<GuessTheNation />} />
+        <Route path="/f1-driver" element={<F1Driver />} />
+        <Route path="/f1-constructor" element={<F1Constructor />} />
+        <Route path="/guess-cbb-team" element={<GuessCbbTeam />} />
+        <Route path="/guess-tennis-player" element={<GuessTennisPlayer />} />
+        <Route path="/tennis-chain" element={<TennisChain />} />
+        <Route path="/guess-nascar-driver" element={<GuessNascarDriver />} />
+        <Route path="/nascar-chain" element={<NascarChain />} />
+        <Route path="/soccer-grid" element={<SoccerGrid />} />
+        <Route path="/fantasy-draft" element={<FantasyDraft />} />
+        <Route path="/conquest" element={<Conquest />} />
+        <Route path="/soccer-career" element={<SoccerCareer />} />
+        <Route path="/world-cup-bracket" element={<WorldCupPredictor />} />
+        <Route path="/shirt-number" element={<ShirtNumber />} />
+        <Route path="/hof-or-bust" element={<HofOrBust />} />
+        <Route path="/score-predictor" element={<ScorePredictor />} />
+        <Route path="/transfer-path" element={<TransferPath />} />
+        <Route path="/world-cup-predictor" element={<Navigate to="/world-cup-bracket" replace />} />
+        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
+  );
+};
+
 const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
+  </QueryClientProvider>
+);
+
+export default App;
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TooltipProvider>
