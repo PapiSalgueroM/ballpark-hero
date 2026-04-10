@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { TOTAL_GAMES } from '@/data/gameRegistry';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -10,7 +11,7 @@ interface GameNavbarStats {
   loading: boolean;
 }
 
-const TOTAL_GAMES = 37;
+
 
 export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
   const { user } = useAuth();
