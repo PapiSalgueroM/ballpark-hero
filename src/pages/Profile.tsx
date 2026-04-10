@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import html2canvas from 'html2canvas';
 
 /* ────────────────────── Constants ────────────────────── */
 
