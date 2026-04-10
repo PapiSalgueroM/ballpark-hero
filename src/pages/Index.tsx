@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { Trophy, Flame, TrendingUp, Sparkles, Users, Search, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -29,11 +30,12 @@ function countPlayedGames(): number {
 }
 
 export default function Index() {
+  const { user } = useAuth();
   const [playedCount, setPlayedCount] = useState(0);
   const [totalPlayed, setTotalPlayed] = useState<number | null>(null);
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const [bestScores, setBestScores] = useState<Record<string, number>>({});
   const query = searchQuery.toLowerCase().trim();
   const isSearching = query.length > 0;
 
@@ -87,6 +89,25 @@ export default function Index() {
     const interval = setInterval(fetchStats, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
+
+  // Fetch user best scores
+  useEffect(() => {
+    if (!user) { setBestScores({}); return; }
+    const fetchBest = async () => {
+      try {
+        const { data } = await supabase
+          .from('user_best_scores')
+          .select('game_type, best_score')
+          .eq('user_id', user.id);
+        if (data) {
+          const map: Record<string, number> = {};
+          data.forEach(r => { map[r.game_type] = r.best_score; });
+          setBestScores(map);
+        }
+      } catch { /* silent */ }
+    };
+    fetchBest();
+  }, [user]);
 
   return (
     <>
@@ -170,7 +191,7 @@ export default function Index() {
             filteredGames.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {filteredGames.map(game => (
-                  <GameCard key={game.path} game={game} />
+                  <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} />
                 ))}
               </div>
             ) : (
@@ -191,7 +212,7 @@ export default function Index() {
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {cat.games.map(game => (
-                      <GameCard key={game.path} game={game} />
+                      <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} />
                     ))}
                   </div>
                 </section>
@@ -232,7 +253,7 @@ export default function Index() {
 }
 
 /* ─── GAME CARD ─── */
-function GameCard({ game }: { game: GameDef }) {
+function GameCard({ game, bestScore }: { game: GameDef; bestScore?: number }) {
   return (
     <Link
       to={game.path}
@@ -257,6 +278,9 @@ function GameCard({ game }: { game: GameDef }) {
           )}
         </div>
         <p className="text-xs text-muted-foreground mt-0.5 leading-snug">{game.description}</p>
+        {bestScore != null && bestScore > 0 && (
+          <span className="text-[10px] text-[hsl(43,85%,55%)]/70 mt-0.5 block">PB: {bestScore}</span>
+        )}
       </div>
     </Link>
   );
