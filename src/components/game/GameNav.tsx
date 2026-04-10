@@ -1,22 +1,28 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { CATEGORIES } from '@/data/gameRegistry';
 import { ArrowRight } from 'lucide-react';
 
 interface GameNavProps {
-  currentPath: string;
-  sportCategory: string;
+  currentPath?: string;
+  sportCategory?: string;
 }
 
-export function GameNav({ currentPath, sportCategory }: GameNavProps) {
-  // Find the category matching the sport
-  const category = CATEGORIES.find(c => c.title === sportCategory);
-  
+export function GameNav({ currentPath, sportCategory }: GameNavProps = {}) {
+  const location = useLocation();
+  const path = currentPath || location.pathname;
+
+  // Auto-detect category from path
+  const detectedCategory = sportCategory
+    || CATEGORIES.find(c => c.games.some(g => g.path === path))?.title;
+
+  const category = CATEGORIES.find(c => c.title === detectedCategory);
+
   // Pick the first game in the same category that isn't the current one
-  const nextGame = category?.games.find(g => g.path !== currentPath);
+  const nextGame = category?.games.find(g => g.path !== path);
 
   // Fallback: pick any game from another category
   const fallbackGame = !nextGame
-    ? CATEGORIES.flatMap(c => c.games).find(g => g.path !== currentPath)
+    ? CATEGORIES.flatMap(c => c.games).find(g => g.path !== path)
     : null;
 
   const game = nextGame || fallbackGame;
