@@ -93,18 +93,17 @@ export function TransferPathBoard() {
         </div>
 
         {/* Chain built so far */}
-        <div className="space-y-1">
+        <div className="space-y-0">
           {chain.map((player, i) => (
-            <div key={i} className="flex items-center gap-2">
+            <div key={i}>
               {i > 0 && (
-                <div className="flex items-center gap-1 ml-4 text-[10px] text-muted-foreground -mt-1 mb-0.5">
-                  <span className="w-px h-3 bg-border inline-block" />
-                  <span className="italic">{connections[i]}</span>
+                <div className="flex items-center gap-1.5 ml-5 py-1">
+                  <span className="w-px h-4 bg-border inline-block" />
+                  <span className="text-[10px] text-muted-foreground italic">{connections[i]}</span>
                 </div>
               )}
-              {i > 0 && null}
               <div className={cn(
-                'flex items-center gap-2 rounded-lg px-3 py-2 text-sm w-full',
+                'flex items-center gap-2 rounded-lg px-3 py-2 text-sm',
                 i === 0 ? 'bg-primary/10 border border-primary/20' :
                 i === chain.length - 1 && isWon ? 'bg-primary/10 border border-primary/20' :
                 'bg-card border border-border'
@@ -119,8 +118,6 @@ export function TransferPathBoard() {
             </div>
           ))}
         </div>
-
-        {/* Connection labels between chain nodes */}
 
         {/* Input */}
         {!isWon && (
