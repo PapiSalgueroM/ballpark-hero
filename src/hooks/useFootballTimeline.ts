@@ -14,7 +14,11 @@ function shuffle<T>(arr: T[]): T[] {
 export type TimelineStatus = 'playing' | 'submitted';
 
 export function useFootballTimeline() {
-  const puzzle = useMemo(() => timelinePuzzles[Math.floor(Math.random() * timelinePuzzles.length)], []);
+  const puzzle = useMemo(() => {
+    const dateStr = new Date().toISOString().slice(0, 10);
+    const seed = dateStr.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+    return timelinePuzzles[seed % timelinePuzzles.length];
+  }, []);
 
   const [order, setOrder] = useState<TimelinePlayer[]>(() => {
     let shuffled = shuffle(puzzle.players);
