@@ -1,4 +1,5 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
+import { useGameCompletion } from "@/hooks/useGameCompletion";
 import PageSeo from "@/components/seo/PageSeo";
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from "@/components/game/GameNavbar";
@@ -402,6 +403,17 @@ export default function SoccerCareer() {
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
   const [showNewCareerConfirm, setShowNewCareerConfirm] = useState(false);
   const timelineRef = useRef<HTMLDivElement>(null);
+
+  // Score tracking on retirement
+  const isRetired = career?.retired === true && career?.phase === "retired";
+  const legacyScore = useMemo(() => {
+    if (!isRetired || !career) return 0;
+    const totals = getCareerTotals(career.seasons);
+    return Math.min(1000, Math.round(
+      (totals.ballonDors * 200) + (totals.championsLeagues * 150) + (totals.worldCups * 150) + (totals.leagueTitles * 50)
+    ));
+  }, [isRetired, career]);
+  useGameCompletion('soccer-career', isRetired, legacyScore);
 
   // Load clubs from Supabase
   useEffect(() => {
