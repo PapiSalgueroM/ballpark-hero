@@ -148,7 +148,7 @@ const CollegeGrid = () => {
           ]}
         />
 
-        <p className="text-sm text-gray-500 mt-4 max-w-2xl mx-auto">
+        <p className="text-sm text-muted-foreground mt-4 max-w-2xl mx-auto">
           DoUKnowBall's College Football Grid is a free daily CFB puzzle game where you name NFL players who attended a given college program and meet a second criteria like position, draft round, or award. Similar to the NFL Immaculate Grid, this college football version tests your knowledge of players from Alabama, Ohio State, Clemson, Georgia, and dozens more programs. A new grid is available every day.
         </p>
 
