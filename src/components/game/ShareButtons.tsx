@@ -42,13 +42,7 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
 
   const shareText = customText || `I scored ${score} on ${gameName} at DoUKnowBall! Can you beat me? douknowball.com${gamePath}`;
 
-  // Find game emoji from registry
-  const gameEmoji = (() => {
-    try {
-      const allGames = require('@/data/gameRegistry').ALL_GAMES;
-      return allGames.find((g: any) => g.path === gamePath)?.emoji || '🏆';
-    } catch { return '🏆'; }
-  })();
+  const gameEmoji = ALL_GAMES.find(g => g.path === gamePath)?.emoji || '🏆';
 
   const todayStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
