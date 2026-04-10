@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import html2canvas from 'html2canvas';
 
 /* ────────────────────── Constants ────────────────────── */
 
@@ -247,6 +248,35 @@ export default function Profile() {
     toast.success('Profile URL copied!');
   };
 
+  const shareCardRef = useRef<HTMLDivElement>(null);
+
+  const handleShareCard = async () => {
+    const el = shareCardRef.current;
+    if (!el) return;
+    try {
+      const canvas = await html2canvas(el, { backgroundColor: null, scale: 2 });
+      canvas.toBlob(async (blob) => {
+        if (!blob) { toast.error('Failed to generate image'); return; }
+        const file = new File([blob], 'douknowball-card.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file], title: 'My DoUKnowBall Stats' });
+        } else {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'douknowball-card.png';
+          a.click();
+          URL.revokeObjectURL(a.href);
+          toast.success('Card downloaded!');
+        }
+      }, 'image/png');
+    } catch {
+      const top3Text = bestScores.slice(0, 3).map(s => `${GAME_LABELS[s.game_type] || s.game_type}: ${s.best_score}`).join(', ');
+      const text = `🏆 ${viewingProfile?.display_name || 'Player'} on DoUKnowBall\n🔥 Streak: ${currentStreak} | 🎮 Games: ${totalGames} | ⭐ Points: ${totalPoints}\nTop: ${top3Text}\n🏅 ${earnedCount}/${badges.length} badges\ndouknowball.com`;
+      navigator.clipboard.writeText(text);
+      toast.success('Stats copied to clipboard!');
+    }
+  };
+
   /* ── Computed stats ── */
   const totalPoints = userScoreData?.total_points ?? viewingProfile?.all_time_score ?? 0;
   const totalGames = viewingProfile?.total_games_played ?? 0;
@@ -395,10 +425,54 @@ export default function Profile() {
                       <Copy className="w-4 h-4 mr-1" /> Copy URL
                     </Button>
                   )}
+                  <Button size="sm" variant="outline" onClick={handleShareCard}>
+                    📸 Share Card
+                  </Button>
                 </div>
               </div>
             </CardContent>
           </Card>
+
+          {/* Hidden share card for html2canvas */}
+          <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+            <div
+              ref={shareCardRef}
+              style={{
+                width: 600, height: 300, padding: 32,
+                background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+                borderRadius: 16, fontFamily: 'system-ui, sans-serif',
+                color: '#e2e8f0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+                border: '2px solid hsl(142, 76%, 36%)',
+              }}
+            >
+              <div>
+                <div style={{ fontSize: 24, fontWeight: 800, marginBottom: 2 }}>
+                  {viewingProfile?.display_name || 'Anonymous Player'}
+                </div>
+                {viewingProfile?.username && (
+                  <div style={{ fontSize: 13, color: '#94a3b8', marginBottom: 12 }}>@{viewingProfile.username}</div>
+                )}
+                <div style={{ display: 'flex', gap: 24, fontSize: 14, marginBottom: 16 }}>
+                  <span>🔥 {currentStreak} streak</span>
+                  <span>🎮 {totalGames} games</span>
+                  <span>⭐ {totalPoints.toLocaleString()} pts</span>
+                  <span>🏅 {earnedCount}/{badges.length} badges</span>
+                </div>
+              </div>
+              <div>
+                <div style={{ fontSize: 11, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>Top Scores</div>
+                <div style={{ display: 'flex', gap: 16 }}>
+                  {bestScores.slice(0, 3).map((s) => (
+                    <div key={s.game_type} style={{ background: 'rgba(255,255,255,0.07)', borderRadius: 8, padding: '6px 12px' }}>
+                      <div style={{ fontSize: 12, color: '#94a3b8' }}>{GAME_LABELS[s.game_type]?.replace(/^[^\s]+\s/, '') || s.game_type}</div>
+                      <div style={{ fontSize: 18, fontWeight: 700, color: 'hsl(142, 76%, 46%)' }}>{s.best_score}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div style={{ fontSize: 11, color: '#64748b', textAlign: 'right' }}>douknowball.com</div>
+            </div>
+          </div>
 
           {/* ═══════════════ 2. PERSONAL INFO ═══════════════ */}
           {isOwnProfile && (
