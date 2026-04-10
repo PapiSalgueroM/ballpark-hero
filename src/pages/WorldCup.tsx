@@ -160,6 +160,8 @@ const WorldCup = () => {
                 </div>
               </div>
             )}
+          </div>
+        )}
 
         {/* Wrong attempts */}
         {attempts.length > 0 && gameStatus === 'playing' && (
