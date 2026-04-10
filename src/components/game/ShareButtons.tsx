@@ -8,6 +8,8 @@ interface ShareButtonsProps {
   gamePath: string;
   /** Override the entire share text (e.g. for World Cup predictor) */
   customText?: string;
+  /** Optional pre-built emoji grid for the score card */
+  emojiGrid?: string;
 }
 
 const XIcon = ({ className }: { className?: string }) => (
