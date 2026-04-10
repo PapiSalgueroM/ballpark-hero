@@ -11,9 +11,11 @@ import { MAX_CLUES } from '@/types/tennisPlayer';
 const CLUE_LABELS = ['Vibe', 'Nationality & Era', 'Tour', 'Grand Slam Wins', 'Slams Won', 'Famous Moment'];
 
 export function TennisPlayerBoard() {
-  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue, allPlayers, loading } = useTennisPlayer();
+  const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue, allPlayers, loading } = useTennisPlayer();
   const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
+  const [hintsUsed, setHintsUsed] = useState(0);
+  const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false);
 
   const handleGuess = (name: string) => {
     const prevClues = gameState?.revealedClues ?? 0;
@@ -24,6 +26,16 @@ export function TennisPlayerBoard() {
         setTimeout(() => setWrongFlash(false), 500);
       }
     }, 50);
+  };
+
+  const handleHint = () => {
+    revealHint();
+    setHintsUsed(h => h + 1);
+  };
+
+  const handleGiveUp = () => {
+    giveUp();
+    setShowGiveUpConfirm(false);
   };
 
   if (!gameState) {
@@ -42,14 +54,14 @@ export function TennisPlayerBoard() {
 
           <div className="space-y-3 max-w-xs mx-auto">
             <button
-              onClick={() => startGame('daily')}
+              onClick={() => { startGame('daily'); setHintsUsed(0); }}
               disabled={loading || allPlayers.length === 0}
               className="w-full py-3 rounded-xl bg-purple-700 hover:bg-purple-800 font-bold text-white transition-colors disabled:opacity-50"
             >
               🎾 Daily Challenge
             </button>
             <button
-              onClick={() => startGame('unlimited')}
+              onClick={() => { startGame('unlimited'); setHintsUsed(0); }}
               disabled={loading || allPlayers.length === 0}
               className="w-full py-3 rounded-xl border border-green-800 hover:bg-green-900 font-bold text-green-300 transition-colors disabled:opacity-50"
             >
@@ -70,6 +82,8 @@ export function TennisPlayerBoard() {
 
   const { puzzle, revealedClues, guesses, gameStatus, score } = gameState;
   const isOver = gameStatus !== 'playing';
+  const hasGuessed = guesses.length > 0;
+  const canHint = revealedClues < MAX_CLUES;
 
   const shareScore = gameStatus === 'won'
     ? `I guessed today's Tennis Player in ${revealedClues} clue${revealedClues > 1 ? 's' : ''}!\nScore: ${score} 🎾`
@@ -127,14 +141,42 @@ export function TennisPlayerBoard() {
         {!isOver && (
           <>
             <TennisPlayerSearch onGuess={handleGuess} guesses={guesses} players={allPlayers} />
-            <div className="flex justify-center">
-              <button
-                onClick={giveUp}
-                className="px-4 py-2 text-sm rounded-lg border border-green-800 text-green-700 hover:text-purple-400 hover:border-purple-500/30 transition-colors"
-              >
-                🏳️ Give Up
-              </button>
+
+            <div className="flex items-center justify-center gap-4">
+              {canHint && (
+                <button
+                  onClick={handleHint}
+                  className="text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors"
+                >
+                  💡 Hint (-100 pts)
+                </button>
+              )}
+              {hasGuessed && !showGiveUpConfirm && (
+                <button
+                  onClick={() => setShowGiveUpConfirm(true)}
+                  className="text-sm text-green-800 hover:text-red-400 transition-colors"
+                >
+                  🏳️ Give Up
+                </button>
+              )}
             </div>
+            {hintsUsed > 0 && (
+              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used (-{hintsUsed * 100} pts)</p>
+            )}
+
+            {showGiveUpConfirm && (
+              <div className="text-center space-y-2 p-3 rounded-xl border border-red-500/20 bg-green-900">
+                <p className="text-sm text-green-400">Are you sure? You'll reveal the answer and score 0 points.</p>
+                <div className="flex justify-center gap-3">
+                  <button onClick={handleGiveUp} className="px-4 py-1.5 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-colors">
+                    Yes, Give Up
+                  </button>
+                  <button onClick={() => setShowGiveUpConfirm(false)} className="px-4 py-1.5 rounded-lg border border-green-800 text-green-400 text-sm hover:bg-green-900 transition-colors">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
           </>
         )}
 

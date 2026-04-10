@@ -114,6 +114,11 @@ export function useNascarDriver() {
     }
   }, [gameState]);
 
+  const revealHint = useCallback(() => {
+    if (!gameState || gameState.gameStatus !== 'playing' || gameState.revealedClues >= MAX_CLUES) return;
+    setGameState(prev => prev ? { ...prev, revealedClues: prev.revealedClues + 1 } : null);
+  }, [gameState]);
+
   const giveUp = useCallback(() => {
     if (!gameState || gameState.gameStatus !== 'playing') return;
     setGameState(prev => prev ? { ...prev, gameStatus: 'lost', score: 0 } : null);
@@ -132,5 +137,5 @@ export function useNascarDriver() {
 
   useGameCompletion('nascar-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
-  return { gameState, startGame, makeGuess, giveUp, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allDrivers: validatedDrivers, loading };
+  return { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allDrivers: validatedDrivers, loading };
 }

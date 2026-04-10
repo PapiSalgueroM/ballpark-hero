@@ -11,9 +11,11 @@ import { MAX_CLUES } from '@/types/f1Constructor';
 const CLUE_LABELS = ['Vibe', 'Country', 'Era', 'Championships', 'Livery', 'Famous Driver'];
 
 export function F1ConstructorBoard() {
-  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue } = useF1Constructor();
+  const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue } = useF1Constructor();
   const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
+  const [hintsUsed, setHintsUsed] = useState(0);
+  const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false);
 
   const handleGuess = (name: string) => {
     const prevClues = gameState?.revealedClues ?? 0;
@@ -24,6 +26,16 @@ export function F1ConstructorBoard() {
         setTimeout(() => setWrongFlash(false), 500);
       }
     }, 50);
+  };
+
+  const handleHint = () => {
+    revealHint();
+    setHintsUsed(h => h + 1);
+  };
+
+  const handleGiveUp = () => {
+    giveUp();
+    setShowGiveUpConfirm(false);
   };
 
   if (!gameState) {
@@ -41,13 +53,13 @@ export function F1ConstructorBoard() {
 
           <div className="space-y-3 max-w-xs mx-auto">
             <button
-              onClick={() => startGame('daily')}
+              onClick={() => { startGame('daily'); setHintsUsed(0); }}
               className="w-full py-3 rounded-xl bg-red-600 hover:bg-red-700 font-bold text-white transition-colors"
             >
               🏁 Daily Challenge
             </button>
             <button
-              onClick={() => startGame('unlimited')}
+              onClick={() => { startGame('unlimited'); setHintsUsed(0); }}
               className="w-full py-3 rounded-xl border border-zinc-700 hover:bg-zinc-800 font-bold text-zinc-300 transition-colors"
             >
               🔄 Unlimited Mode
@@ -63,6 +75,8 @@ export function F1ConstructorBoard() {
 
   const { puzzle, revealedClues, guesses, gameStatus, score } = gameState;
   const isOver = gameStatus !== 'playing';
+  const hasGuessed = guesses.length > 0;
+  const canHint = revealedClues < MAX_CLUES;
 
   const shareScore = gameStatus === 'won'
     ? `I guessed today's F1 Constructor in ${revealedClues} clue${revealedClues > 1 ? 's' : ''}!\nScore: ${score} 🏎️`
@@ -117,14 +131,42 @@ export function F1ConstructorBoard() {
         {!isOver && (
           <>
             <F1ConstructorSearch onGuess={handleGuess} guesses={guesses} currentPuzzle={gameState?.puzzle} />
-            <div className="flex justify-center">
-              <button
-                onClick={giveUp}
-                className="px-4 py-2 text-sm rounded-lg border border-zinc-700 text-zinc-500 hover:text-red-400 hover:border-red-500/30 transition-colors"
-              >
-                🏳️ Give Up
-              </button>
+
+            <div className="flex items-center justify-center gap-4">
+              {canHint && (
+                <button
+                  onClick={handleHint}
+                  className="text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors"
+                >
+                  💡 Hint (-100 pts)
+                </button>
+              )}
+              {hasGuessed && !showGiveUpConfirm && (
+                <button
+                  onClick={() => setShowGiveUpConfirm(true)}
+                  className="text-sm text-zinc-600 hover:text-red-400 transition-colors"
+                >
+                  🏳️ Give Up
+                </button>
+              )}
             </div>
+            {hintsUsed > 0 && (
+              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used (-{hintsUsed * 100} pts)</p>
+            )}
+
+            {showGiveUpConfirm && (
+              <div className="text-center space-y-2 p-3 rounded-xl border border-red-500/20 bg-zinc-900">
+                <p className="text-sm text-zinc-400">Are you sure? You'll reveal the answer and score 0 points.</p>
+                <div className="flex justify-center gap-3">
+                  <button onClick={handleGiveUp} className="px-4 py-1.5 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-colors">
+                    Yes, Give Up
+                  </button>
+                  <button onClick={() => setShowGiveUpConfirm(false)} className="px-4 py-1.5 rounded-lg border border-zinc-700 text-zinc-400 text-sm hover:bg-zinc-800 transition-colors">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
           </>
         )}
 

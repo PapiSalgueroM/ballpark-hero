@@ -30,7 +30,7 @@ const WorldCup = () => {
   } = useWorldCup();
 
   const [showRules, setShowRules] = useState(false);
-
+  const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false);
   useEffect(() => {
     const seen = localStorage.getItem('wc-rules-seen');
     if (!seen) {
@@ -137,14 +137,29 @@ const WorldCup = () => {
                 Skip
               </button>
             </form>
-            <div className="flex justify-center">
-              <button
-                onClick={giveUp}
-                className="px-4 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-colors"
-              >
-                🏳️ Give Up
-              </button>
-            </div>
+            {attempts.length > 0 && !showGiveUpConfirm && (
+              <div className="flex justify-center">
+                <button
+                  onClick={() => setShowGiveUpConfirm(true)}
+                  className="text-sm text-muted-foreground hover:text-destructive transition-colors"
+                >
+                  🏳️ Give Up
+                </button>
+              </div>
+            )}
+            {showGiveUpConfirm && (
+              <div className="text-center space-y-2 p-3 rounded-xl border border-destructive/20 bg-card">
+                <p className="text-sm text-muted-foreground">Are you sure? You'll reveal the answer and score 0 points.</p>
+                <div className="flex justify-center gap-3">
+                  <button onClick={() => { giveUp(); setShowGiveUpConfirm(false); }} className="px-4 py-1.5 rounded-lg bg-destructive text-destructive-foreground text-sm font-semibold hover:opacity-90 transition-colors">
+                    Yes, Give Up
+                  </button>
+                  <button onClick={() => setShowGiveUpConfirm(false)} className="px-4 py-1.5 rounded-lg border border-border text-muted-foreground text-sm hover:bg-accent transition-colors">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
