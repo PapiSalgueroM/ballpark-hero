@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCollegeGrid } from '@/hooks/useCollegeGrid';
 import { GridBoard } from '@/components/football-grid/GridBoard';
-import { GridPlayerSearch } from '@/components/football-grid/GridPlayerSearch';
+import { CollegeGridSearch } from '@/components/college-grid/CollegeGridSearch';
 import { CollegeGridHowToPlay } from '@/components/college-grid/CollegeGridHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
@@ -86,7 +86,7 @@ const CollegeGrid = () => {
               Find a player who: <span className="text-[hsl(var(--cg-green))] font-semibold">{puzzle.rows[Math.floor(activeCell / 3)].label}</span>{' '}
               + <span className="text-[hsl(var(--cg-green))] font-semibold">{puzzle.cols[activeCell % 3].label}</span>
             </p>
-            <GridPlayerSearch onSelect={submitGuess} disabled={validating} />
+            <CollegeGridSearch onSelect={submitGuess} disabled={validating} />
           </div>
         )}
 

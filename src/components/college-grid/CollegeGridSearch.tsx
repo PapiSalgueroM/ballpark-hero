@@ -7,7 +7,7 @@ interface Props {
   disabled: boolean;
 }
 
-export function GridPlayerSearch({ onSelect, disabled }: Props) {
+export function CollegeGridSearch({ onSelect, disabled }: Props) {
   const [query, setQuery] = useState('');
   const [highlightIndex, setHighlightIndex] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -29,7 +29,6 @@ export function GridPlayerSearch({ onSelect, disabled }: Props) {
     setShowDropdown(suggestions.length > 0);
   }, [query]);
 
-  // scroll highlighted item into view
   useEffect(() => {
     listRef.current?.children[highlightIndex]?.scrollIntoView({ block: 'nearest' });
   }, [highlightIndex]);
@@ -94,7 +93,7 @@ export function GridPlayerSearch({ onSelect, disabled }: Props) {
                 }`}
               >
                 <span className="font-medium">{p.name}</span>
-                <span className="text-xs text-muted-foreground truncate ml-2">{p.teams[0]}</span>
+                <span className="text-xs text-muted-foreground truncate ml-2">{p.college}</span>
               </li>
             ))}
           </ul>
