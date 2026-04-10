@@ -54,8 +54,8 @@ const BaseballConnections = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Baseball Connections – Group 5 Players | DoUKnowBall"
-        description="Find four groups of 5 baseball players that share a connection. Same team, award, country, or era. Daily challenge with 4 lives."
+        title="Baseball Connections - MLB Player Grouping Puzzle | DoUKnowBall"
+        description="Find four groups of 5 baseball players that share a connection. Same team, award, or era. Daily challenge."
         path="/baseball-connections"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">

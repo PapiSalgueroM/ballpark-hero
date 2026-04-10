@@ -42,8 +42,8 @@ const FootballTimeline = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Pro Football Timeline – Draft Order Puzzle | DoUKnowBall"
-        description="Put 5 NFL players in the correct chronological order by their draft year. Daily challenge with scoring and sharing."
+        title="NFL Timeline - Drag and Drop Draft Year Puzzle | DoUKnowBall"
+        description="Put NFL players in order by their draft year. Free daily NFL trivia puzzle."
         path="/football-timeline"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">

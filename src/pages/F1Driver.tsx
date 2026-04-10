@@ -6,8 +6,8 @@ export default function F1Driver() {
   return (
     <>
       <PageSeo
-        title="Guess The F1 Driver — DoUKnowBall"
-        description="Can you identify the mystery F1 driver from progressive clues? Test your motorsport knowledge with daily challenges."
+        title="Guess the F1 Driver - Formula 1 Puzzle Game | DoUKnowBall"
+        description="Guess the Formula 1 driver from progressive clues. Daily F1 trivia game."
         path="/f1-driver"
       />
       <F1DriverBoard />

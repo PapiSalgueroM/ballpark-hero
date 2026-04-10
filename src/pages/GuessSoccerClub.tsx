@@ -6,8 +6,8 @@ export default function GuessSoccerClub() {
   return (
     <>
       <PageSeo
-        title="Guess The Football Club — DoUKnowBall"
-        description="Identify the mystery football club from progressive clues! Covers Premier League, La Liga, Serie A, Bundesliga, Ligue 1, and MLS."
+        title="Guess the Football Club - Soccer Club Trivia | DoUKnowBall"
+        description="Identify the mystery football club from progressive clues. Premier League, La Liga, Serie A, and more."
         path="/guess-soccer-club"
       />
       <GuessSoccerClubBoard />

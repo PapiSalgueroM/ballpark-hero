@@ -57,8 +57,8 @@ const NbaChain = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="NBA Chain Game – Basketball Player Connection Game | DoUKnowBall"
-        description="Build the longest chain of connected NBA players by naming teammates. Each link must share a team. Free basketball trivia — no signup needed."
+        title="NBA Chain - Basketball Player Connection Game | DoUKnowBall"
+        description="Build the longest chain of connected NBA players by naming teammates. Free basketball trivia game."
         path="/nba-chain"
       />
       <div className="max-w-3xl mx-auto px-4 py-6 md:py-10">

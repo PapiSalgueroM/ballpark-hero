@@ -79,8 +79,8 @@ const BlurredFace = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Guess the Face – Blurred Soccer Player Game | DoUKnowBall"
-        description="Can you identify the soccer player from a blurred photo? Each wrong guess reveals more of the face. Free sports trivia — no signup required."
+        title="Guess the Face - Blurred Soccer Player Photo Game | DoUKnowBall"
+        description="Identify the soccer player from a blurred photo. Each wrong guess reveals more. Free daily football puzzle."
         path="/guess-the-face"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">

@@ -6,8 +6,8 @@ export default function GuessTennisPlayer() {
   return (
     <>
       <PageSeo
-        title="Guess The Tennis Player — DoUKnowBall"
-        description="Can you identify the mystery tennis player from clues about their career? Test your knowledge of ATP and WTA legends from 1970 to 2025!"
+        title="Guess the Tennis Player - ATP and WTA Trivia | DoUKnowBall"
+        description="Identify the mystery tennis player from career clues. ATP and WTA legends from 1970 to 2025. Daily puzzle."
         path="/guess-tennis-player"
       />
       <TennisPlayerBoard />

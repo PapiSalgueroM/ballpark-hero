@@ -59,8 +59,8 @@ const Connections = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Connections – Soccer Player Grouping Puzzle | DoUKnowBall"
-        description="Group 16 soccer players into 4 secret categories. Can you crack the connection? A free puzzle game inspired by NYT Connections for soccer fans."
+        title="Soccer Connections - Football Trivia Puzzle | DoUKnowBall"
+        description="Group 16 soccer players into 4 categories. Daily football connections puzzle."
         path="/connections"
       />
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">

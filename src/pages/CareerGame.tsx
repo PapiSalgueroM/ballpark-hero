@@ -96,8 +96,8 @@ const CareerGame = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Career Path – Soccer Career Guessing Game | DoUKnowBall"
-        description="Can you identify the soccer player from their career history? Reveal clubs one by one and guess the mystery player. Free trivia game — no signup needed."
+        title="Soccer Career Path - Guess the Player from Transfers | DoUKnowBall"
+        description="Identify the soccer player from their career history. Clubs revealed one by one. Free football trivia game."
         path="/career"
       />
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-10">

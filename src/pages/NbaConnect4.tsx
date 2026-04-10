@@ -52,8 +52,8 @@ const NbaConnect4 = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="NBA Connect 4 – Basketball Trivia Grid Game | DoUKnowBall"
-        description="Play Connect 4 with NBA trivia! Name players matching team and stat criteria to claim cells. Free basketball puzzle game — no login required."
+        title="NBA Connect 4 - Basketball Trivia Grid Game | DoUKnowBall"
+        description="Play Connect 4 with NBA trivia. Name players matching team and stat criteria to claim cells."
         path="/nba-connect-4"
       />
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">

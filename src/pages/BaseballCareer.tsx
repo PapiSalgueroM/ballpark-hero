@@ -48,8 +48,8 @@ const BaseballCareer = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Baseball Career Path – Guess the Player | DoUKnowBall"
-        description="Progressive clues reveal a mystery baseball player. Guess from position, draft, teams, stats, and awards. Daily challenge with scoring."
+        title="Baseball Career Path - Guess the MLB Player | DoUKnowBall"
+        description="Progressive clues reveal a mystery baseball player. Guess from position, draft, teams, and stats. Daily challenge."
         path="/baseball-career"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">

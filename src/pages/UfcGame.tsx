@@ -40,8 +40,8 @@ const UfcGame = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="UFC Guesser – Combat Sports Trivia Game | DoUKnowBall"
-        description="Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia game — no login required."
+        title="UFC Fighter Guesser - MMA Trivia Game | DoUKnowBall"
+        description="Guess the UFC fighter from clues about their record, weight class, and career highlights."
         path="/ufc"
       />
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">

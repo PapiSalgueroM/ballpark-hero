@@ -6,8 +6,8 @@ export default function GuessNflTeam() {
   return (
     <>
       <PageSeo
-        title="Guess The NFL Team — DoUKnowBall"
-        description="Can you identify the mystery NFL team from progressive clues? Test your football knowledge with hints about history, stadium, colors, and more!"
+        title="Guess the NFL Team - Daily Football Puzzle | DoUKnowBall"
+        description="Guess the NFL team from clues about their city, stadium, players, and history."
         path="/guess-nfl-team"
       />
       <GuessNflTeamBoard />

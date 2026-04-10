@@ -69,8 +69,8 @@ const NFLCareer = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="NFL Career Path – Guess the NFL Player | DoUKnowBall"
-        description="Can you identify the NFL player from progressive career clues? Draft info, college, teams, stats and more. Free daily trivia — no signup needed."
+        title="NFL Career Path - Guess the NFL Player | DoUKnowBall"
+        description="Identify the NFL player from progressive career clues. Draft info, teams, stats, and awards. Free daily trivia."
         path="/nfl-career"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">

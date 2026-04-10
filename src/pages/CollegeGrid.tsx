@@ -41,8 +41,8 @@ const CollegeGrid = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="College Football Grid – 3x3 Trivia Puzzle | DoUKnowBall"
-        description="Fill the 3x3 grid with college football players who match both row and column criteria. Heisman winners, All-Americans, and more. Daily challenge with rarity scoring."
+        title="College Football Grid Game - CFB Immaculate Grid | DoUKnowBall"
+        description="The college football grid game. Name players who attended each school and match NFL criteria. Free daily CFB puzzle."
         path="/college-grid"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">

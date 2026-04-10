@@ -64,8 +64,8 @@ const FootballConnect4 = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Soccer Connect 4 – Soccer Trivia Grid Game | DoUKnowBall"
-        description="Play Connect 4 with soccer trivia! Name players matching club and league criteria to claim cells. Free soccer puzzle game — no login required."
+        title="Soccer Connect 4 - Football Trivia Grid Game | DoUKnowBall"
+        description="Play Connect 4 with soccer trivia. Name players matching club and league criteria to claim cells."
         path="/football-connect-4"
       />
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-10">

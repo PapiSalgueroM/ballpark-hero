@@ -61,8 +61,8 @@ const FootballDraft = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Pro Football Draft Guesser – Guess the Round | DoUKnowBall"
-        description="A player's college, position, and combine stats are progressively revealed. Guess what round they were drafted in. Daily challenge with scoring."
+        title="NFL Draft Guesser - Guess the Draft Round | DoUKnowBall"
+        description="A player's college, position, and combine stats are revealed. Guess what round they were drafted. Daily NFL trivia."
         path="/football-draft"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">

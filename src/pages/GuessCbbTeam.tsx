@@ -6,8 +6,8 @@ export default function GuessCbbTeam() {
   return (
     <>
       <PageSeo
-        title="Guess The CBB Program — DoUKnowBall"
-        description="Can you identify the mystery college basketball program from progressive clues? Test your CBB knowledge with daily challenges."
+        title="Guess the College Basketball Program - CBB Trivia | DoUKnowBall"
+        description="Identify the mystery college basketball program from progressive clues. Daily CBB trivia challenge."
         path="/guess-cbb-team"
       />
       <CbbProgramBoard />

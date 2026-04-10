@@ -6,8 +6,8 @@ export default function TennisChain() {
   return (
     <>
       <PageSeo
-        title="Tennis Chain — Grand Slam Chain Game"
-        description="Build the longest chain of tennis players! Name someone who beat the current player at a Grand Slam. Covers ATP and WTA from 1970 to 2025."
+        title="Tennis Chain - Grand Slam Defeat Chain Game | DoUKnowBall"
+        description="Build the longest chain of tennis players. Name someone who beat the current player at a Grand Slam."
         path="/tennis-chain"
       />
       <TennisChainBoard />

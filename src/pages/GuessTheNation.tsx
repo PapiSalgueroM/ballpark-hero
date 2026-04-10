@@ -6,8 +6,8 @@ export default function GuessTheNation() {
   return (
     <>
       <PageSeo
-        title="Guess The Nation — DoUKnowBall"
-        description="Can you identify the mystery nation from clues about their sporting history? Test your knowledge of the world's greatest sporting nations!"
+        title="Guess the Nation - Sporting Nation Trivia | DoUKnowBall"
+        description="Identify the mystery nation from clues about their sporting history. Daily world sports trivia challenge."
         path="/guess-the-nation"
       />
       <GuessTheNationBoard />

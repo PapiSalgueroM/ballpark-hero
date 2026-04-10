@@ -6,8 +6,8 @@ export default function NascarChain() {
   return (
     <>
       <PageSeo
-        title="NASCAR Chain — Cup Champion Chain Game"
-        description="Name drivers who beat each other to the NASCAR Cup Series championship. Build the longest chain and compete on the daily leaderboard!"
+        title="NASCAR Chain - Cup Champion Chain Game | DoUKnowBall"
+        description="Name drivers who beat each other to the NASCAR Cup Series championship. Build the longest chain."
         path="/nascar-chain"
       />
       <NascarChainBoard />

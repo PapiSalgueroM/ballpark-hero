@@ -45,8 +45,8 @@ const HigherLowerGame = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Higher or Lower – Soccer Stats Comparison Game | DoUKnowBall"
-        description="Compare soccer player stats and guess who's higher! Pick the right stat to build your streak. Free sports trivia game — no login required."
+        title="Higher or Lower - Soccer Stats Comparison Game | DoUKnowBall"
+        description="Compare soccer player career stats and guess who has more. Build your streak in this free football trivia game."
         path="/higher-lower"
       />
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-10">
