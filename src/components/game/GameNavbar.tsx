@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Trophy, Gamepad2, Medal, Flame } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
@@ -14,8 +15,15 @@ export function GameNavbar() {
   return (
     <>
       <nav className="w-full bg-background/95 border-b border-border/40">
-        <div className="container max-w-4xl mx-auto px-3 py-2">
-          <div className="flex items-center justify-center gap-3 sm:gap-5">
+        <div className="flex items-center justify-between">
+          {/* Logo — left */}
+          <Link to="/" className="shrink-0 font-display font-bold text-primary hover:opacity-80 transition-opacity">
+            <span className="hidden sm:inline text-sm">DoUKnowBall</span>
+            <span className="sm:hidden text-sm">🏠</span>
+          </Link>
+
+          {/* Stats — center */}
+          <div className="flex items-center justify-center gap-3 sm:gap-5 flex-1">
             {/* Games Played Today */}
             <div className="flex items-center gap-1 text-xs sm:text-sm">
               <Gamepad2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground" />
@@ -79,6 +87,9 @@ export function GameNavbar() {
               </span>
             </div>
           </div>
+
+          {/* Empty — right (balance the logo) */}
+          <div className="shrink-0 w-[4.5rem] sm:w-[6.5rem]" />
         </div>
       </nav>
 
