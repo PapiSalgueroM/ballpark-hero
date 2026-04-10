@@ -450,6 +450,27 @@ export type Database = {
         }
         Relationships: []
       }
+      hof_votes: {
+        Row: {
+          created_at: string
+          id: string
+          player_id: string
+          vote: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          player_id: string
+          vote: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          player_id?: string
+          vote?: string
+        }
+        Relationships: []
+      }
       medal_games_scores: {
         Row: {
           clues_used: number
