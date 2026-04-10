@@ -186,6 +186,11 @@ const Index = () => {
                 gameName="Footle"
                 gamePath="/"
               />
+              <PostGameStats
+                gameSlug="footle"
+                userScore={gameStatus === 'won' ? Math.max(0, 1000 - (guesses.length - 1) * 125) : 0}
+                isVisible={true}
+              />
               <button
                 onClick={() => resetGame()}
                 className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
