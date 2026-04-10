@@ -23,7 +23,7 @@ export const players: Player[] = [
   { name: "Ollie Watkins", club: "Aston Villa", nationality: "England", league: "Premier League", goals: 11, assists: 5, position: "ST", kitNumber: 11, age: 30, marketValue: 60, difficulty: "easy" },
   { name: "Trent Alexander-Arnold", club: "Real Madrid", nationality: "England", league: "La Liga", goals: 1, assists: 8, position: "RB", kitNumber: 66, age: 27, marketValue: 70, difficulty: "easy" },
   { name: "Marcus Rashford", club: "Barcelona", nationality: "England", league: "La Liga", goals: 5, assists: 3, position: "LW", kitNumber: 14, age: 28, marketValue: 35, difficulty: "easy" },
-  { name: "Raheem Sterling", club: "Crystal Palace", nationality: "England", league: "Premier League", goals: 4, assists: 3, position: "LW", kitNumber: 7, age: 31, marketValue: 10, difficulty: "easy" },
+  { name: "Raheem Sterling", club: "Feyenoord", nationality: "England", league: "Eredivisie", goals: 4, assists: 3, position: "LW", kitNumber: 19, age: 31, marketValue: 10, difficulty: "easy" },
   { name: "Alejandro Garnacho", club: "Chelsea", nationality: "Argentina", league: "Premier League", goals: 7, assists: 5, position: "LW", kitNumber: 17, age: 21, marketValue: 50, difficulty: "easy" },
   { name: "Bernardo Silva", club: "Manchester City", nationality: "Portugal", league: "Premier League", goals: 5, assists: 6, position: "CAM", kitNumber: 20, age: 31, marketValue: 60, difficulty: "easy" },
   { name: "Luis Díaz", club: "Liverpool", nationality: "Colombia", league: "Premier League", goals: 9, assists: 4, position: "LW", kitNumber: 7, age: 29, marketValue: 55, difficulty: "easy" },
