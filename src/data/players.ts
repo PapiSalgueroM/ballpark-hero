@@ -679,7 +679,7 @@ export const players: Player[] = [
   { name: "Nathan Tella", club: "Bayer Leverkusen", nationality: "England", league: "Bundesliga", goals: 3, assists: 2, position: "RW", kitNumber: 27, age: 26, marketValue: 8, difficulty: "insane" },
   { name: "Adam Hložek", club: "Hoffenheim", nationality: "Czech Republic", league: "Bundesliga", goals: 5, assists: 3, position: "ST", kitNumber: 9, age: 23, marketValue: 15, difficulty: "insane" },
   { name: "Andrej Kramarić", club: "Hoffenheim", nationality: "Croatia", league: "Bundesliga", goals: 6, assists: 3, position: "CF", kitNumber: 27, age: 34, marketValue: 5, difficulty: "insane" },
-  { name: "Tim Kleindienst", club: "Borussia Mönchengladbach", nationality: "Germany", league: "Bundesliga", goals: 8, assists: 3, position: "ST", kitNumber: 9, age: 30, marketValue: 12, difficulty: "insane" },
+  
   { name: "Kevin Stöger", club: "Borussia Mönchengladbach", nationality: "Austria", league: "Bundesliga", goals: 3, assists: 5, position: "CAM", kitNumber: 10, age: 31, marketValue: 3, difficulty: "insane" },
   { name: "Robin Hack", club: "Borussia Mönchengladbach", nationality: "Germany", league: "Bundesliga", goals: 4, assists: 2, position: "RW", kitNumber: 7, age: 27, marketValue: 5, difficulty: "insane" },
   { name: "Robin Koch", club: "Eintracht Frankfurt", nationality: "Germany", league: "Bundesliga", goals: 2, assists: 1, position: "CB", kitNumber: 4, age: 29, marketValue: 8, difficulty: "insane" },
