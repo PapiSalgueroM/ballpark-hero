@@ -14,6 +14,27 @@ const PageSeo = ({ title, description, path, ogImage }: PageSeoProps) => {
   const canonicalUrl = `${BASE_URL}${path}`;
   const image = ogImage || DEFAULT_OG_IMAGE;
 
+  const jsonLd = path === '/'
+    ? {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "DoUKnowBall",
+        "url": "https://douknowball.com",
+        "description": "Free daily sports trivia games covering NFL, NBA, Soccer, MLB, NHL, UFC, F1, Tennis, NASCAR and more.",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    : {
+        "@context": "https://schema.org",
+        "@type": "Game",
+        "name": title,
+        "description": description,
+        "url": canonicalUrl,
+        "isAccessibleForFree": true,
+        "gamePlatform": "Web Browser"
+      };
+
   return (
     <Helmet>
       <title>{title}</title>
@@ -28,6 +49,7 @@ const PageSeo = ({ title, description, path, ogImage }: PageSeoProps) => {
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
+      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
     </Helmet>
   );
 };
