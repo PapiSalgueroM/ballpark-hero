@@ -45,6 +45,11 @@ export function StreakReminder() {
           <p className="text-sm text-muted-foreground">
             Play today's daily challenge to keep it going 🔥
           </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            {profile.streak_freezes > 0
+              ? `You have ${profile.streak_freezes} streak freeze${profile.streak_freezes > 1 ? 's' : ''} available 🛡️`
+              : 'Earn a freeze by playing every day this week'}
+          </p>
         </div>
       </div>
     </div>
