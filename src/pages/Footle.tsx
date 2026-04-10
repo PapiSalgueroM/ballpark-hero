@@ -12,6 +12,7 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PostGameStats from '@/components/game/PostGameStats';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 
@@ -184,6 +185,11 @@ const Index = () => {
                 score={gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`}
                 gameName="Footle"
                 gamePath="/"
+              />
+              <PostGameStats
+                gameSlug="footle"
+                userScore={gameStatus === 'won' ? Math.max(0, 1000 - (guesses.length - 1) * 125) : 0}
+                isVisible={true}
               />
               <button
                 onClick={() => resetGame()}
