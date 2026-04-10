@@ -268,16 +268,32 @@ export default function Profile() {
   const hasPerfect = bestScores.some(s => s.best_score >= 1000);
   const todaySportTypes = new Set(dailyGameSlugs);
 
+  const sport900 = (sport: string) =>
+    bestScores.filter(s => SPORT_CATEGORIES[s.game_type] === sport && s.best_score >= 900).length;
+
   const badges = [
-    { emoji: '🔥', name: 'On Fire', desc: '7 day streak', earned: longestStreak >= 7 },
+    // Streak badges (tiered)
+    { emoji: '🔥', name: 'Streak Starter', desc: '3 day streak', earned: longestStreak >= 3 },
+    { emoji: '🔥🔥', name: 'On Fire', desc: '7 day streak', earned: longestStreak >= 7 },
+    { emoji: '👑', name: 'Streak King', desc: '30 day streak', earned: longestStreak >= 30 },
+    // Games played badges (tiered)
+    { emoji: '🎮', name: 'Rookie', desc: '10 games played', earned: totalGames >= 10 },
+    { emoji: '🎮🎮', name: 'Veteran', desc: '50 games played', earned: totalGames >= 50 },
     { emoji: '🏆', name: 'Century Club', desc: '100 games played', earned: totalGames >= 100 },
-    { emoji: '🎯', name: 'Perfect Score', desc: 'Score 1000 on any game', earned: hasPerfect },
-    { emoji: '⚽', name: 'World Cup Prophet', desc: 'Complete WC predictor', earned: !!savedBracket },
+    // Score badges
+    { emoji: '🎯', name: 'Sharp Shooter', desc: 'Score 900+ on any game', earned: has900Plus >= 1 },
+    { emoji: '🎯🎯', name: 'Perfect', desc: 'Score 1000 on any game', earned: hasPerfect },
+    { emoji: '🧠', name: 'Big Brain', desc: '900+ on 10 different games', earned: has900Plus >= 10 },
+    // Sport master badges
+    { emoji: '⚽', name: 'Soccer Master', desc: '900+ on 3 soccer games', earned: sport900('soccer') >= 3 },
+    { emoji: '🏈', name: 'Football Master', desc: '900+ on 3 football games', earned: sport900('football') >= 3 },
+    { emoji: '🏀', name: 'Hoops Master', desc: '900+ on 3 basketball games', earned: sport900('basketball') >= 3 },
+    // Special badges
     { emoji: '🌍', name: 'All Rounder', desc: 'Play every sport category', earned: playedSports.size >= allSportSet.size },
-    { emoji: '🧠', name: 'Big Brain', desc: 'Score 900+ on 10 games', earned: has900Plus >= 10 },
-    { emoji: '👑', name: 'GOAT', desc: '30 day streak', earned: longestStreak >= 30 },
-    { emoji: '⚡', name: 'Speed Demon', desc: 'Complete game in <30s', earned: false },
-    { emoji: '🎪', name: 'Variety Pack', desc: '5 game types in one day', earned: todaySportTypes.size >= 5 },
+    { emoji: '⚡', name: 'Variety Pack', desc: '5 game types in one day', earned: todaySportTypes.size >= 5 },
+    { emoji: '🔮', name: 'Prophet', desc: 'Complete WC 2026 bracket', earned: !!savedBracket },
+    { emoji: '💎', name: 'Diamond', desc: '500+ total games played', earned: totalGames >= 500 },
+    { emoji: '🐐', name: 'GOAT', desc: '100 day streak', earned: longestStreak >= 100 },
   ];
   const earnedCount = badges.filter(b => b.earned).length;
 
