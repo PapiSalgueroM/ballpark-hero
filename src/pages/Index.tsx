@@ -258,6 +258,74 @@ export default function Index() {
   );
 }
 
+const TABLE_GAME_MAP: Record<string, { label: string; path: string; emoji: string }> = {
+  medal_games_scores: { label: 'Olympics', path: '/olympics', emoji: '🏅' },
+  football_grid_selections: { label: 'Pro Football Grid', path: '/football-grid', emoji: '🏈' },
+  college_grid_selections: { label: 'College Grid', path: '/college-grid', emoji: '🎓' },
+  soccer_grid_selections: { label: 'Soccer Grid', path: '/soccer-grid', emoji: '⚽' },
+  nascar_scores: { label: 'Guess NASCAR Driver', path: '/guess-nascar-driver', emoji: '🏁' },
+  tennis_scores: { label: 'Guess Tennis Player', path: '/guess-tennis-player', emoji: '🎾' },
+  cbb_scores: { label: 'Guess CBB Team', path: '/guess-cbb-team', emoji: '🏀' },
+  college_guess_scores: { label: 'Guess The College', path: '/guess-the-college', emoji: '🎓' },
+  guess_nation_scores: { label: 'Guess The Nation', path: '/guess-the-nation', emoji: '🌍' },
+  soccer_club_guess_scores: { label: 'Guess The Club', path: '/guess-soccer-club', emoji: '🏟️' },
+  nascar_chain_scores: { label: 'NASCAR Chain', path: '/nascar-chain', emoji: '🔗' },
+  tennis_chain_scores: { label: 'Tennis Chain', path: '/tennis-chain', emoji: '🎾' },
+  ufc_chain_scores: { label: 'UFC Chain', path: '/ufc-chain', emoji: '🥊' },
+};
+
+function formatPlays(n: number): string {
+  if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k plays`;
+  return `${n} plays`;
+}
+
+function MostPlayedToday({ tableCounts }: { tableCounts: { table: string; count: number }[] | null }) {
+  // Loading state
+  if (tableCounts === null) {
+    return (
+      <section>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">🔥 Most Played Today</p>
+        <div className="flex gap-2">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="flex-1 h-14 rounded-lg bg-muted/30 animate-pulse" />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  const top3 = [...tableCounts]
+    .filter(t => t.count > 0 && TABLE_GAME_MAP[t.table])
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 3);
+
+  if (top3.length === 0) return null;
+
+  return (
+    <section>
+      <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">🔥 Most Played Today</p>
+      <div className="flex gap-2">
+        {top3.map(({ table, count }) => {
+          const game = TABLE_GAME_MAP[table];
+          return (
+            <Link
+              key={table}
+              to={game.path}
+              className="flex-1 flex items-center gap-2 rounded-lg border border-border bg-card/80 px-3 py-2.5 hover:border-primary/40 transition-colors"
+            >
+              <span className="text-lg shrink-0">{game.emoji}</span>
+              <div className="min-w-0">
+                <span className="text-xs font-bold text-foreground block truncate">{game.label}</span>
+                <span className="text-[10px] text-muted-foreground">{formatPlays(count)}</span>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 /* ─── GAME CARD ─── */
 function GameCard({ game, bestScore }: { game: GameDef; bestScore?: number }) {
   return (
