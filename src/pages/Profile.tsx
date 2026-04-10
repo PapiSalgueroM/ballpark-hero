@@ -248,6 +248,35 @@ export default function Profile() {
     toast.success('Profile URL copied!');
   };
 
+  const shareCardRef = useRef<HTMLDivElement>(null);
+
+  const handleShareCard = async () => {
+    const el = shareCardRef.current;
+    if (!el) return;
+    try {
+      const canvas = await html2canvas(el, { backgroundColor: null, scale: 2 });
+      canvas.toBlob(async (blob) => {
+        if (!blob) { toast.error('Failed to generate image'); return; }
+        const file = new File([blob], 'douknowball-card.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file], title: 'My DoUKnowBall Stats' });
+        } else {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'douknowball-card.png';
+          a.click();
+          URL.revokeObjectURL(a.href);
+          toast.success('Card downloaded!');
+        }
+      }, 'image/png');
+    } catch {
+      const top3Text = bestScores.slice(0, 3).map(s => `${GAME_LABELS[s.game_type] || s.game_type}: ${s.best_score}`).join(', ');
+      const text = `🏆 ${viewingProfile?.display_name || 'Player'} on DoUKnowBall\n🔥 Streak: ${currentStreak} | 🎮 Games: ${totalGames} | ⭐ Points: ${totalPoints}\nTop: ${top3Text}\n🏅 ${earnedCount}/${badges.length} badges\ndouknowball.com`;
+      navigator.clipboard.writeText(text);
+      toast.success('Stats copied to clipboard!');
+    }
+  };
+
   /* ── Computed stats ── */
   const totalPoints = userScoreData?.total_points ?? viewingProfile?.all_time_score ?? 0;
   const totalGames = viewingProfile?.total_games_played ?? 0;
