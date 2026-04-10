@@ -91,6 +91,7 @@ export function GameNavbar() {
           {/* Empty — right (balance the logo) */}
           <div className="shrink-0 w-[4.5rem] sm:w-[6.5rem]" />
         </div>
+      </nav>
 
       {showCelebration && (
         <DailyLegendOverlay streakDays={streakDays} onDismiss={dismissCelebration} />
