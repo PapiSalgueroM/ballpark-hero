@@ -122,6 +122,7 @@ const App = () => (
             <Route path="/world-cup-bracket" element={<WorldCupPredictor />} />
             <Route path="/shirt-number" element={<ShirtNumber />} />
             <Route path="/hof-or-bust" element={<HofOrBust />} />
+            <Route path="/score-predictor" element={<ScorePredictor />} />
             <Route path="/world-cup-predictor" element={<Navigate to="/world-cup-bracket" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
