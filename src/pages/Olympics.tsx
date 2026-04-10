@@ -206,7 +206,7 @@ export default function Olympics() {
                     </button>
                   </div>
                 </div>
-              )
+              )}
             </div>
           )}
 
