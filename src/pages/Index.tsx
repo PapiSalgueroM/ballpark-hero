@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Flame, TrendingUp, Sparkles, Users } from 'lucide-react';
+import { Trophy, Flame, TrendingUp, Sparkles, Users, Search, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
@@ -32,6 +32,20 @@ export default function Index() {
   const [playedCount, setPlayedCount] = useState(0);
   const [totalPlayed, setTotalPlayed] = useState<number | null>(null);
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const query = searchQuery.toLowerCase().trim();
+  const isSearching = query.length > 0;
+
+  const filteredGames = isSearching
+    ? VISIBLE_CATEGORIES.flatMap(cat =>
+        cat.games.filter(g =>
+          g.label.toLowerCase().includes(query) ||
+          g.description.toLowerCase().includes(query) ||
+          cat.title.toLowerCase().includes(query)
+        )
+      )
+    : [];
 
   useEffect(() => {
     setPlayedCount(countPlayedGames());
@@ -129,23 +143,61 @@ export default function Index() {
         <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
           <DailyChecklist />
           <StreakReminder />
-          
-          {VISIBLE_CATEGORIES.map(cat => (
-            <section key={cat.title}>
-              <h2 className="flex items-center gap-2 text-lg font-display font-bold text-foreground mb-4">
-                <span className="text-xl">{cat.emoji}</span>
-                {cat.title}
-                <span className="text-xs font-normal text-muted-foreground ml-1">
-                  ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
-                </span>
-              </h2>
+
+          {/* Search bar */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder='Search games... e.g. soccer, grid, NBA'
+              className="w-full pl-10 pr-10 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all"
+            />
+            {isSearching && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Clear search"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Search results or categorized layout */}
+          {isSearching ? (
+            filteredGames.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {cat.games.map(game => (
+                {filteredGames.map(game => (
                   <GameCard key={game.path} game={game} />
                 ))}
               </div>
-            </section>
-          ))}
+            ) : (
+              <div className="rounded-xl border border-dashed border-border bg-card/50 p-8 text-center text-sm text-muted-foreground">
+                No games found for "{searchQuery}"
+              </div>
+            )
+          ) : (
+            <>
+              {VISIBLE_CATEGORIES.map(cat => (
+                <section key={cat.title}>
+                  <h2 className="flex items-center gap-2 text-lg font-display font-bold text-foreground mb-4">
+                    <span className="text-xl">{cat.emoji}</span>
+                    {cat.title}
+                    <span className="text-xs font-normal text-muted-foreground ml-1">
+                      ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
+                    </span>
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {cat.games.map(game => (
+                      <GameCard key={game.path} game={game} />
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </>
+          )}
 
           {/* Coming Soon placeholder for Golf */}
           <section>
