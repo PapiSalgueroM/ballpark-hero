@@ -12,7 +12,7 @@ import CareerGame from "./pages/CareerGame";
 import HigherLower from "./pages/HigherLower";
 import Connections from "./pages/Connections";
 import LineupBuilder from "./pages/LineupBuilder";
-import BlurredFace from "./pages/BlurredFace";
+
 import UfcGame from "./pages/UfcGame";
 import NbaLineup from "./pages/NbaLineup";
 import NbaConnect4 from "./pages/NbaConnect4";
