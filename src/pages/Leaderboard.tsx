@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { TOTAL_GAMES } from '@/data/gameRegistry';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -35,7 +36,7 @@ interface StreakEntry {
   streak: number;
 }
 
-const TOTAL_GAMES = 37;
+
 
 export default function Leaderboard() {
   const { user } = useAuth();
