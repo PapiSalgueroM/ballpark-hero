@@ -185,13 +185,28 @@ export default function Olympics() {
                     Next Clue
                   </button>
                 )}
-                <button
-                  onClick={giveUp}
-                  className="flex-1 px-4 py-3 rounded-xl border border-border text-muted-foreground text-sm font-semibold hover:bg-card transition-all"
-                >
-                  Give Up
-                </button>
+                {attempts.length > 0 && !showGiveUpConfirm && (
+                  <button
+                    onClick={() => setShowGiveUpConfirm(true)}
+                    className="text-sm text-muted-foreground hover:text-destructive transition-colors px-4 py-3"
+                  >
+                    🏳️ Give Up
+                  </button>
+                )}
               </div>
+              {showGiveUpConfirm && (
+                <div className="text-center space-y-2 p-3 rounded-xl border border-destructive/20 bg-card">
+                  <p className="text-sm text-muted-foreground">Are you sure? You'll reveal the answer and score 0 points.</p>
+                  <div className="flex justify-center gap-3">
+                    <button onClick={() => { giveUp(); setShowGiveUpConfirm(false); }} className="px-4 py-1.5 rounded-lg bg-destructive text-destructive-foreground text-sm font-semibold hover:opacity-90 transition-colors">
+                      Yes, Give Up
+                    </button>
+                    <button onClick={() => setShowGiveUpConfirm(false)} className="px-4 py-1.5 rounded-lg border border-border text-muted-foreground text-sm hover:bg-accent transition-colors">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )
             </div>
           )}
 
