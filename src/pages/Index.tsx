@@ -36,6 +36,7 @@ export default function Index() {
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
+  const [tableCounts, setTableCounts] = useState<{ table: string; count: number }[] | null>(null);
   const query = searchQuery.toLowerCase().trim();
   const isSearching = query.length > 0;
 
@@ -65,13 +66,17 @@ export default function Index() {
         ] as const;
 
         let total = 0;
+        const counts: { table: string; count: number }[] = [];
         for (const table of tables) {
           const { count } = await supabase
             .from(table)
             .select('*', { count: 'exact', head: true });
-          total += count ?? 0;
+          const c = count ?? 0;
+          total += c;
+          counts.push({ table, count: c });
         }
         setTotalPlayed(total);
+        setTableCounts(counts);
 
         // Active players in last 24 hours from user_scores
         const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
@@ -162,6 +167,7 @@ export default function Index() {
 
         {/* ─── GAME CATEGORIES ─── */}
         <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
+          <MostPlayedToday tableCounts={tableCounts} />
           <DailyChecklist />
           <StreakReminder />
 
