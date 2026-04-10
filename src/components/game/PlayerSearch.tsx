@@ -1,6 +1,7 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Player } from '@/types/game';
 import { Search } from 'lucide-react';
+import { smartMatch, smartScore, highlightMatches } from '@/lib/smartSearch';
 
 interface PlayerSearchProps {
   players: Player[];
@@ -11,15 +12,20 @@ interface PlayerSearchProps {
 export function PlayerSearch({ players, guessedNames, onSelect }: PlayerSearchProps) {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [highlightIndex, setHighlightIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const filtered = useMemo(() => {
-    if (!query.trim()) return [];
+    if (!query.trim() || query.trim().length < 2) return [];
     return players
       .filter(p => !guessedNames.includes(p.name))
-      .filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
+      .filter(p => smartMatch(p.name, query))
+      .sort((a, b) => smartScore(a.name, query) - smartScore(b.name, query))
+      .slice(0, 10);
   }, [query, players, guessedNames]);
+
+  useEffect(() => setHighlightIndex(0), [filtered]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -31,21 +37,35 @@ export function PlayerSearch({ players, guessedNames, onSelect }: PlayerSearchPr
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSelect = (player: Player) => {
+  const handleSelect = useCallback((player: Player) => {
     onSelect(player);
     setQuery('');
     setIsOpen(false);
     inputRef.current?.focus();
-  };
+  }, [onSelect]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       setIsOpen(false);
-    }
-    if (e.key === 'Enter' && filtered.length > 0) {
+    } else if (e.key === 'ArrowDown') {
       e.preventDefault();
-      handleSelect(filtered[0]);
+      setHighlightIndex(i => Math.min(i + 1, filtered.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setHighlightIndex(i => Math.max(i - 1, 0));
+    } else if (e.key === 'Enter' && filtered.length > 0) {
+      e.preventDefault();
+      handleSelect(filtered[highlightIndex]);
     }
+  };
+
+  const renderName = (name: string) => {
+    const segments = highlightMatches(name, query);
+    return segments.map((seg, i) =>
+      seg.highlight
+        ? <mark key={i} className="bg-primary/30 text-foreground rounded-sm px-0.5">{seg.text}</mark>
+        : <span key={i}>{seg.text}</span>
+    );
   };
 
   return (
@@ -67,20 +87,20 @@ export function PlayerSearch({ players, guessedNames, onSelect }: PlayerSearchPr
 
       {isOpen && filtered.length > 0 && (
         <div className="absolute top-full mt-2 w-full bg-card border border-border rounded-xl shadow-2xl z-50 max-h-64 overflow-y-auto">
-          {filtered.map((player) => (
+          {filtered.map((player, idx) => (
             <button
               key={player.name}
               onClick={() => handleSelect(player)}
-              className="w-full text-left px-5 py-3 hover:bg-secondary transition-colors flex items-center justify-between first:rounded-t-xl last:rounded-b-xl"
+              className={`w-full text-left px-5 py-3 transition-colors flex items-center justify-between first:rounded-t-xl last:rounded-b-xl ${idx === highlightIndex ? 'bg-secondary' : 'hover:bg-secondary'}`}
             >
-              <span className="font-medium text-foreground">{player.name}</span>
+              <span className="font-medium text-foreground">{renderName(player.name)}</span>
               <span className="text-xs text-muted-foreground ml-2">{player.club} · {player.league}</span>
             </button>
           ))}
         </div>
       )}
 
-      {isOpen && query.trim() && filtered.length === 0 && (
+      {isOpen && query.trim().length >= 3 && filtered.length === 0 && (
         <div className="absolute top-full mt-2 w-full bg-card border border-border rounded-xl shadow-2xl z-50 p-4 text-center text-muted-foreground text-sm">
           No players found
         </div>
