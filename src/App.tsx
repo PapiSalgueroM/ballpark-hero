@@ -56,6 +56,7 @@ import Conquest from "./pages/Conquest";
 import WorldCupPredictor from "./pages/WorldCupPredictor";
 import SoccerCareer from "./pages/SoccerCareer";
 import ShirtNumber from "./pages/ShirtNumber";
+import HofOrBust from "./pages/HofOrBust";
 
 const queryClient = new QueryClient();
 
