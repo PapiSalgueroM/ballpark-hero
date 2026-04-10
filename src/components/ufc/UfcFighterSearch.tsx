@@ -1,6 +1,7 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { UfcFighter } from '@/types/ufc';
 import { Search } from 'lucide-react';
+import { smartMatch, smartScore, highlightMatches } from '@/lib/smartSearch';
 
 interface UfcFighterSearchProps {
   fighters: UfcFighter[];
@@ -11,39 +12,48 @@ interface UfcFighterSearchProps {
 export function UfcFighterSearch({ fighters, guessedNames, onSelect }: UfcFighterSearchProps) {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [highlightIndex, setHighlightIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const filtered = useMemo(() => {
-    if (!query.trim()) return [];
+    if (!query.trim() || query.trim().length < 2) return [];
     return fighters
       .filter(f => !guessedNames.includes(f.name))
-      .filter(f => f.name.toLowerCase().includes(query.toLowerCase()));
+      .filter(f => smartMatch(f.name, query))
+      .sort((a, b) => smartScore(a.name, query) - smartScore(b.name, query))
+      .slice(0, 10);
   }, [query, fighters, guessedNames]);
+
+  useEffect(() => setHighlightIndex(0), [filtered]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) setIsOpen(false);
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSelect = (fighter: UfcFighter) => {
+  const handleSelect = useCallback((fighter: UfcFighter) => {
     onSelect(fighter);
     setQuery('');
     setIsOpen(false);
     inputRef.current?.focus();
-  };
+  }, [onSelect]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') setIsOpen(false);
-    if (e.key === 'Enter' && filtered.length > 0) {
-      e.preventDefault();
-      handleSelect(filtered[0]);
-    }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); setHighlightIndex(i => Math.min(i + 1, filtered.length - 1)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightIndex(i => Math.max(i - 1, 0)); }
+    else if (e.key === 'Enter' && filtered.length > 0) { e.preventDefault(); handleSelect(filtered[highlightIndex]); }
+  };
+
+  const renderName = (name: string) => {
+    const segments = highlightMatches(name, query);
+    return segments.map((seg, i) =>
+      seg.highlight ? <mark key={i} className="bg-primary/30 text-foreground rounded-sm px-0.5">{seg.text}</mark> : <span key={i}>{seg.text}</span>
+    );
   };
 
   return (
@@ -65,20 +75,20 @@ export function UfcFighterSearch({ fighters, guessedNames, onSelect }: UfcFighte
 
       {isOpen && filtered.length > 0 && (
         <div className="absolute top-full mt-2 w-full bg-card border border-border rounded-xl shadow-2xl z-50 max-h-64 overflow-y-auto">
-          {filtered.map((fighter) => (
+          {filtered.map((fighter, idx) => (
             <button
               key={fighter.name}
               onClick={() => handleSelect(fighter)}
-              className="w-full text-left px-5 py-3 hover:bg-secondary transition-colors flex items-center justify-between first:rounded-t-xl last:rounded-b-xl"
+              className={`w-full text-left px-5 py-3 transition-colors flex items-center justify-between first:rounded-t-xl last:rounded-b-xl ${idx === highlightIndex ? 'bg-secondary' : 'hover:bg-secondary'}`}
             >
-              <span className="font-medium text-foreground">{fighter.name}</span>
+              <span className="font-medium text-foreground">{renderName(fighter.name)}</span>
               <span className="text-xs text-muted-foreground ml-2">{fighter.weightClass} · {fighter.nationality}</span>
             </button>
           ))}
         </div>
       )}
 
-      {isOpen && query.trim() && filtered.length === 0 && (
+      {isOpen && query.trim().length >= 3 && filtered.length === 0 && (
         <div className="absolute top-full mt-2 w-full bg-card border border-border rounded-xl shadow-2xl z-50 p-4 text-center text-muted-foreground text-sm">
           No fighters found
         </div>
