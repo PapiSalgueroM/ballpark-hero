@@ -672,6 +672,7 @@ export type Database = {
           id: string
           last_played_date: string | null
           longest_streak: number
+          streak_freezes: number
           total_correct_answers: number
           total_games_played: number
           updated_at: string
@@ -687,6 +688,7 @@ export type Database = {
           id?: string
           last_played_date?: string | null
           longest_streak?: number
+          streak_freezes?: number
           total_correct_answers?: number
           total_games_played?: number
           updated_at?: string
@@ -702,6 +704,7 @@ export type Database = {
           id?: string
           last_played_date?: string | null
           longest_streak?: number
+          streak_freezes?: number
           total_correct_answers?: number
           total_games_played?: number
           updated_at?: string
