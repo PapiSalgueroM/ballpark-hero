@@ -6,6 +6,7 @@ import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 
 import { StreakReminder } from '@/components/game/StreakReminder';
+import { DailyChecklist } from '@/components/game/DailyChecklist';
 
 import { CATEGORIES, VISIBLE_CATEGORIES, TOTAL_GAMES, type GameDef } from '@/data/gameRegistry';
 
@@ -126,6 +127,7 @@ export default function Index() {
 
         {/* ─── GAME CATEGORIES ─── */}
         <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
+          <DailyChecklist />
           <StreakReminder />
           
           {VISIBLE_CATEGORIES.map(cat => (
