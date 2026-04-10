@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Flame, TrendingUp, Sparkles, Users } from 'lucide-react';
+import { Trophy, Flame, TrendingUp, Sparkles, Users, Search, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
