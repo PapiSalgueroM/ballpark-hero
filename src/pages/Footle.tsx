@@ -12,6 +12,7 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import PostGameStats from '@/components/game/PostGameStats';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 
