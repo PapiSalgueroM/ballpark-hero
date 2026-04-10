@@ -185,7 +185,7 @@ export default function Olympics() {
                     Next Clue
                   </button>
                 )}
-                {attempts.length > 0 && !showGiveUpConfirm && (
+                {clueLevel > 0 && !showGiveUpConfirm && (
                   <button
                     onClick={() => setShowGiveUpConfirm(true)}
                     className="text-sm text-muted-foreground hover:text-destructive transition-colors px-4 py-3"
