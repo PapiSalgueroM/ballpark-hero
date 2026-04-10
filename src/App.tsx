@@ -56,6 +56,7 @@ import Conquest from "./pages/Conquest";
 import WorldCupPredictor from "./pages/WorldCupPredictor";
 import SoccerCareer from "./pages/SoccerCareer";
 import ShirtNumber from "./pages/ShirtNumber";
+import HofOrBust from "./pages/HofOrBust";
 
 const queryClient = new QueryClient();
 
@@ -119,6 +120,7 @@ const App = () => (
             <Route path="/soccer-career" element={<SoccerCareer />} />
             <Route path="/world-cup-bracket" element={<WorldCupPredictor />} />
             <Route path="/shirt-number" element={<ShirtNumber />} />
+            <Route path="/hof-or-bust" element={<HofOrBust />} />
             <Route path="/world-cup-predictor" element={<Navigate to="/world-cup-bracket" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

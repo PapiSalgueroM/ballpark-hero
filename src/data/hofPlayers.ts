@@ -1,0 +1,248 @@
+export interface HofPlayer {
+  id: string;
+  sport: 'soccer' | 'nfl' | 'nba' | 'baseball' | 'hockey';
+  anonymizedStats: string[];
+  hints: string[];
+  answer: string;
+  verdict: 'hof' | 'borderline' | 'bust';
+  funFact: string;
+}
+
+const hofPlayers: HofPlayer[] = [
+  // ── SOCCER ──
+  {
+    id: 'soc-1',
+    sport: 'soccer',
+    anonymizedStats: ['672 career club goals', '8 domestic league titles', '4 Champions League trophies', '7 Ballon d\'Or awards', '1 World Cup'],
+    hints: ['Left-footed forward', 'Played in Spain for over a decade', 'Argentinian'],
+    answer: 'Lionel Messi',
+    verdict: 'hof',
+    funFact: 'The most decorated player in football history with 45+ senior trophies.',
+  },
+  {
+    id: 'soc-2',
+    sport: 'soccer',
+    anonymizedStats: ['311 career club goals', '6 league titles across 4 countries', '1 Champions League', '1 World Cup Golden Ball'],
+    hints: ['Known for incredible speed', 'French international', 'Won trophies in France, Spain, Italy and England'],
+    answer: 'Thierry Henry',
+    verdict: 'hof',
+    funFact: 'Arsenal\'s all-time leading scorer and an invincible.',
+  },
+  {
+    id: 'soc-3',
+    sport: 'soccer',
+    anonymizedStats: ['118 career goals', '9 league titles', '5 Champions League trophies', '18 seasons at one club'],
+    hints: ['Defensive midfielder', 'Spanish international', 'One-club man in La Liga'],
+    answer: 'Sergio Busquets',
+    verdict: 'borderline',
+    funFact: 'The invisible metronome — you don\'t notice him until he\'s gone.',
+  },
+  {
+    id: 'soc-4',
+    sport: 'soccer',
+    anonymizedStats: ['186 career goals', '2 Premier League titles', '0 Champions League trophies', 'Played 13 top-flight seasons'],
+    hints: ['English striker', 'Known for pace and finishing', 'Played for two rival clubs in the same city'],
+    answer: 'Michael Owen',
+    verdict: 'bust',
+    funFact: 'Won the Ballon d\'Or at 22 but injuries derailed his career trajectory.',
+  },
+  {
+    id: 'soc-5',
+    sport: 'soccer',
+    anonymizedStats: ['450+ career club goals', '4 league titles', '1 Champions League', '5 Ballon d\'Or awards'],
+    hints: ['Portuguese forward', 'Played in 4 different leagues', 'Iconic header and free-kick taker'],
+    answer: 'Cristiano Ronaldo',
+    verdict: 'hof',
+    funFact: 'All-time top scorer in men\'s international football history.',
+  },
+
+  // ── NFL ──
+  {
+    id: 'nfl-1',
+    sport: 'nfl',
+    anonymizedStats: ['89,214 career passing yards', '649 passing touchdowns', '7 Super Bowl wins', '3 MVP awards'],
+    hints: ['Quarterback drafted in the 6th round', 'Played until age 45', 'New England and Tampa Bay'],
+    answer: 'Tom Brady',
+    verdict: 'hof',
+    funFact: 'The 199th overall pick became the greatest winner in NFL history.',
+  },
+  {
+    id: 'nfl-2',
+    sport: 'nfl',
+    anonymizedStats: ['32,942 career rushing yards (combined)', '175 total touchdowns', '6× All-Pro', '2 MVP awards'],
+    hints: ['Running back who also returned kicks', 'Played in the 2000s and 2010s', 'Spent most of career in Minnesota'],
+    answer: 'Adrian Peterson',
+    verdict: 'hof',
+    funFact: 'Rushed for 2,097 yards in 2012, just 8 shy of the all-time record.',
+  },
+  {
+    id: 'nfl-3',
+    sport: 'nfl',
+    anonymizedStats: ['14,580 career passing yards', '89 touchdowns', '58 interceptions', '4 seasons as a starter'],
+    hints: ['First overall draft pick', 'Won a national championship in college', 'Career cut short by poor play and injuries'],
+    answer: 'JaMarcus Russell',
+    verdict: 'bust',
+    funFact: 'Considered one of the biggest draft busts in NFL history — out of the league by age 25.',
+  },
+  {
+    id: 'nfl-4',
+    sport: 'nfl',
+    anonymizedStats: ['71,940 career passing yards', '539 touchdowns', '2 Super Bowl wins', '3 MVP awards'],
+    hints: ['Son of an NFL quarterback', 'Played for 2 teams in his career', 'Known for audibles at the line'],
+    answer: 'Peyton Manning',
+    verdict: 'hof',
+    funFact: 'Retired with the most passing touchdowns in NFL history at the time.',
+  },
+  {
+    id: 'nfl-5',
+    sport: 'nfl',
+    anonymizedStats: ['22,895 career receiving yards', '197 touchdowns', '13× Pro Bowl', 'Played 20 NFL seasons'],
+    hints: ['Wide receiver known for celebrations', 'Spent prime years in San Francisco', 'Set the all-time TD record'],
+    answer: 'Jerry Rice',
+    verdict: 'hof',
+    funFact: 'His records are considered virtually unbreakable in modern football.',
+  },
+
+  // ── NBA ──
+  {
+    id: 'nba-1',
+    sport: 'nba',
+    anonymizedStats: ['33,643 career points', '6 NBA championships', '5 MVP awards', '10 scoring titles'],
+    hints: ['Shooting guard', 'Played in the 1990s dynasty', 'Won two three-peats'],
+    answer: 'Michael Jordan',
+    verdict: 'hof',
+    funFact: 'Perfect 6-0 in NBA Finals — never lost a championship series.',
+  },
+  {
+    id: 'nba-2',
+    sport: 'nba',
+    anonymizedStats: ['17,287 career points', '4,228 assists', '0 All-Star selections', '12 NBA seasons'],
+    hints: ['Point guard from the 2010s', 'Known for deep three-pointers', 'Played in the Pacific Northwest'],
+    answer: 'Damian Lillard',
+    verdict: 'borderline',
+    funFact: 'Famous for multiple series-ending buzzer-beaters in the playoffs.',
+  },
+  {
+    id: 'nba-3',
+    sport: 'nba',
+    anonymizedStats: ['5,667 career points', '2,079 rebounds', '3 seasons played', '#1 overall pick'],
+    hints: ['Center from China', 'Massive marketing draw', 'Injuries ended career early'],
+    answer: 'Yao Ming',
+    verdict: 'borderline',
+    funFact: 'Inducted into the Hall of Fame largely for his cultural impact on basketball globally.',
+  },
+  {
+    id: 'nba-4',
+    sport: 'nba',
+    anonymizedStats: ['40,474 career points', '4 NBA championships', '2 Finals MVPs', '20 All-Star selections'],
+    hints: ['Forward who entered the draft from high school', 'Played for 4 teams', 'Born in Akron, Ohio'],
+    answer: 'LeBron James',
+    verdict: 'hof',
+    funFact: 'The NBA\'s all-time leading scorer, surpassing Kareem Abdul-Jabbar.',
+  },
+  {
+    id: 'nba-5',
+    sport: 'nba',
+    anonymizedStats: ['3,798 career points', '1,338 rebounds', '4 seasons played', '#2 overall pick'],
+    hints: ['Big man drafted in 2007', 'Struggled with weight and motivation', 'Played for Portland'],
+    answer: 'Greg Oden',
+    verdict: 'bust',
+    funFact: 'Drafted ahead of Kevin Durant — injuries made it one of the biggest what-ifs ever.',
+  },
+
+  // ── BASEBALL ──
+  {
+    id: 'mlb-1',
+    sport: 'baseball',
+    anonymizedStats: ['762 career home runs', '1,996 RBIs', '7 MVP awards', '14 All-Star selections'],
+    hints: ['Left fielder', 'Career clouded by controversy', 'Played for Pittsburgh and San Francisco'],
+    answer: 'Barry Bonds',
+    verdict: 'borderline',
+    funFact: 'The all-time home run king has never been inducted into the Hall of Fame.',
+  },
+  {
+    id: 'mlb-2',
+    sport: 'baseball',
+    anonymizedStats: ['3,465 career hits', '609 home runs', '1,831 RBIs', '21 seasons played'],
+    hints: ['Dominican outfielder', 'Played in the AL East', 'Known as "Big Papi"'],
+    answer: 'David Ortiz',
+    verdict: 'hof',
+    funFact: 'Inducted on his first ballot despite being a designated hitter for most of his career.',
+  },
+  {
+    id: 'mlb-3',
+    sport: 'baseball',
+    anonymizedStats: ['4,256 career hits', '.303 batting average', '3 batting titles', '17 All-Star selections'],
+    hints: ['Switch hitter who played 24 seasons', 'Managed after playing', 'Banned from baseball'],
+    answer: 'Pete Rose',
+    verdict: 'borderline',
+    funFact: 'Baseball\'s all-time hits leader is permanently banned for gambling on games.',
+  },
+  {
+    id: 'mlb-4',
+    sport: 'baseball',
+    anonymizedStats: ['56 career wins', '4.65 ERA', '#1 overall draft pick', '6 MLB seasons'],
+    hints: ['Pitcher drafted in 2001', 'Highly touted prospect', 'Never lived up to expectations'],
+    answer: 'Mark Prior',
+    verdict: 'bust',
+    funFact: 'Was considered a can\'t-miss prospect but injuries destroyed a promising career.',
+  },
+  {
+    id: 'mlb-5',
+    sport: 'baseball',
+    anonymizedStats: ['696 career home runs', '2,086 RBIs', '3 MVP awards', '14 All-Star selections'],
+    hints: ['Shortstop turned third baseman', 'Played for 3 AL teams', 'Career overshadowed by PED suspension'],
+    answer: 'Alex Rodriguez',
+    verdict: 'borderline',
+    funFact: 'One of the most talented players ever, but PED scandals may keep him out of Cooperstown.',
+  },
+
+  // ── HOCKEY ──
+  {
+    id: 'nhl-1',
+    sport: 'hockey',
+    anonymizedStats: ['894 career goals', '2,857 career points', '4 Stanley Cups', '9 Hart Trophies'],
+    hints: ['Center from Canada', 'Known as "The Great One"', 'Played in the 1980s-90s'],
+    answer: 'Wayne Gretzky',
+    verdict: 'hof',
+    funFact: 'Holds or shares 61 NHL records — his number 99 is retired league-wide.',
+  },
+  {
+    id: 'nhl-2',
+    sport: 'hockey',
+    anonymizedStats: ['402 career goals', '1,249 career points', '0 Stanley Cups', '6 Art Ross Trophies'],
+    hints: ['Center known for playmaking', 'Czech-born player', 'Played mostly in Pittsburgh'],
+    answer: 'Jaromir Jagr',
+    verdict: 'hof',
+    funFact: 'Played professionally until age 49 across multiple leagues worldwide.',
+  },
+  {
+    id: 'nhl-3',
+    sport: 'hockey',
+    anonymizedStats: ['44 career goals', '65 career points', '#1 overall pick', '3 NHL seasons'],
+    hints: ['Russian forward drafted in 2012', 'Played for a struggling expansion-era team', 'Returned to the KHL'],
+    answer: 'Nail Yakupov',
+    verdict: 'bust',
+    funFact: 'The top pick ahead of a stacked 2012 draft class — never found his NHL footing.',
+  },
+  {
+    id: 'nhl-4',
+    sport: 'hockey',
+    anonymizedStats: ['801 career goals', '1,887 career points', '2 Hart Trophies', '0 Stanley Cups'],
+    hints: ['Right wing from Canada', 'Played 26 NHL seasons', 'Known as "Mr. Hockey"'],
+    answer: 'Gordie Howe',
+    verdict: 'hof',
+    funFact: 'Played in the NHL across five different decades — from the 1940s to the 1980s.',
+  },
+  {
+    id: 'nhl-5',
+    sport: 'hockey',
+    anonymizedStats: ['319 career goals', '506 assists', '3 Stanley Cups', '1 Conn Smythe Trophy'],
+    hints: ['Center from Canada', 'Wore #87', 'Drafted first overall in 2005'],
+    answer: 'Sidney Crosby',
+    verdict: 'hof',
+    funFact: 'Won back-to-back Stanley Cups and is considered the best player of his generation.',
+  },
+];
+
+export default hofPlayers;
