@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Copy, Mail } from 'lucide-react';
 import { toast } from 'sonner';
+import { ALL_GAMES } from '@/data/gameRegistry';
 
 interface ShareButtonsProps {
   score: string;
