@@ -6,6 +6,7 @@ import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 
 import { StreakReminder } from '@/components/game/StreakReminder';
+import { DailyChecklist } from '@/components/game/DailyChecklist';
 
 import { CATEGORIES, VISIBLE_CATEGORIES, TOTAL_GAMES, type GameDef } from '@/data/gameRegistry';
 
