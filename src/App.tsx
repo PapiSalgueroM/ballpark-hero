@@ -58,6 +58,7 @@ import SoccerCareer from "./pages/SoccerCareer";
 import ShirtNumber from "./pages/ShirtNumber";
 import HofOrBust from "./pages/HofOrBust";
 import ScorePredictor from "./pages/ScorePredictor";
+import TransferPath from "./pages/TransferPath";
 
 const queryClient = new QueryClient();
 
@@ -123,6 +124,7 @@ const App = () => (
             <Route path="/shirt-number" element={<ShirtNumber />} />
             <Route path="/hof-or-bust" element={<HofOrBust />} />
             <Route path="/score-predictor" element={<ScorePredictor />} />
+            <Route path="/transfer-path" element={<TransferPath />} />
             <Route path="/world-cup-predictor" element={<Navigate to="/world-cup-bracket" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
