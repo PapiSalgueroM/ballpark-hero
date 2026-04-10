@@ -170,10 +170,12 @@ export function useGameCompletion(
           profileUpdate.total_correct_answers = (profile?.total_correct_answers || 0) + correctAnswers;
         }
 
-        await supabase
-          .from('profiles')
-          .update(profileUpdate)
-          .eq('user_id', user.id);
+        if (Object.keys(profileUpdate).length > 0) {
+          await supabase
+            .from('profiles')
+            .update(profileUpdate)
+            .eq('user_id', user.id);
+        }
 
         refreshProfile();
 
