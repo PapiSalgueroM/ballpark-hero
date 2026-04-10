@@ -1142,7 +1142,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-83',
     groups: [
-      { category: 'Bundesliga stars (2025-26)', players: ['Florian Wirtz', 'Jamal Musiala', 'Harry Kane', 'Xavi Simons'], difficulty: 'easy' },
+      { category: 'Bundesliga stars (2025-26)', players: ['Jamal Musiala', 'Harry Kane', 'Leroy Sané', 'Serge Gnabry'], difficulty: 'easy' },
       { category: 'From Uruguay', players: ['Darwin Núñez', 'Edinson Cavani', 'Luis Suárez', 'Diego Godín'], difficulty: 'medium' },
       { category: 'Played for Chelsea and Arsenal', players: ['Cesc Fàbregas', 'Olivier Giroud', 'Ashley Cole', 'David Luiz'], difficulty: 'hard' },
       { category: 'Scored in 4+ consecutive World Cups', players: ['Cristiano Ronaldo', 'Miroslav Klose', 'Pelé', 'Uwe Seeler'], difficulty: 'insane' },
