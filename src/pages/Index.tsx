@@ -127,6 +127,7 @@ export default function Index() {
 
         {/* ─── GAME CATEGORIES ─── */}
         <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
+          <DailyChecklist />
           <StreakReminder />
           
           {VISIBLE_CATEGORIES.map(cat => (
