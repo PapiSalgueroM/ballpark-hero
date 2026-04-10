@@ -36,10 +36,36 @@ const MessagesIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const ShareButtons = ({ score, gameName, gamePath, customText }: ShareButtonsProps) => {
+const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: ShareButtonsProps) => {
   const [igTooltip, setIgTooltip] = useState(false);
 
   const shareText = customText || `I scored ${score} on ${gameName} at DoUKnowBall! Can you beat me? douknowball.com${gamePath}`;
+
+  // Find game emoji from registry
+  const gameEmoji = (() => {
+    try {
+      const allGames = require('@/data/gameRegistry').ALL_GAMES;
+      return allGames.find((g: any) => g.path === gamePath)?.emoji || '🏆';
+    } catch { return '🏆'; }
+  })();
+
+  const todayStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+  const scoreCard = [
+    `${gameEmoji} ${gameName} — ${todayStr}`,
+    ...(emojiGrid ? [emojiGrid] : []),
+    `Score: ${score}`,
+    `douknowball.com${gamePath}`,
+  ].join('\n');
+
+  const handleCopyCard = async () => {
+    try {
+      await navigator.clipboard.writeText(scoreCard);
+      toast.success('Score card copied!');
+    } catch {
+      toast.error('Could not copy to clipboard');
+    }
+  };
 
   const handleX = () => {
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank', 'noopener,noreferrer');
@@ -71,6 +97,15 @@ const ShareButtons = ({ score, gameName, gamePath, customText }: ShareButtonsPro
 
   return (
     <div className="flex flex-col items-center gap-3 mt-5">
+      {/* Copy Score Card — primary action */}
+      <button
+        onClick={handleCopyCard}
+        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-semibold hover:bg-accent hover:border-primary/30 transition-all shadow-sm"
+      >
+        <Copy className="w-4 h-4" />
+        📋 Copy Score Card
+      </button>
+
       <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Share your result</p>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3 relative">
         {/* X / Twitter */}
