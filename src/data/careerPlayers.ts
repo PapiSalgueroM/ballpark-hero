@@ -638,20 +638,6 @@ export const careerPlayers: CareerPlayer[] = [
     ],
   },
   {
-    name: "Florian Wirtz",
-    nationality: "Germany",
-    position: "CAM",
-    career: [
-      { season: "2019-2020", club: "Bayer Leverkusen", goals: 0, assists: 2, appearances: 7, marketValue: 3 },
-      { season: "2020-2021", club: "Bayer Leverkusen", goals: 8, assists: 8, appearances: 38, marketValue: 25 },
-      { season: "2021-2022", club: "Bayer Leverkusen", goals: 10, assists: 12, appearances: 31, marketValue: 60 },
-      { season: "2022-2023", club: "Bayer Leverkusen", goals: 4, assists: 3, appearances: 23, marketValue: 50 },
-      { season: "2023-2024", club: "Bayer Leverkusen", goals: 18, assists: 20, appearances: 49, marketValue: 130 },
-      { season: "2024-2025", club: "Bayer Leverkusen", goals: 14, assists: 10, appearances: 28, marketValue: 150 },
-      { season: "2025-2026", club: "Bayer Leverkusen", goals: 13, assists: 11, appearances: 25, marketValue: 150 },
-    ],
-  },
-  {
     name: "Declan Rice",
     nationality: "England",
     position: "CDM",
