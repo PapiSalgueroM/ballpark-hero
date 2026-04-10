@@ -19,11 +19,23 @@ const continentEmoji: Record<string, string> = {
 export function GuessTheNationBoard() {
   const {
     countries, loading, gameState, streak, currentBadge,
-    pointsForCurrentClue, startGame, makeGuess, giveUp, resetGame,
+    pointsForCurrentClue, startGame, makeGuess, giveUp, revealHint, resetGame,
   } = useGuessTheNation();
 
   const gameRef = useScrollToGame(gameState);
   const [difficulty, setDifficulty] = useState<'easy' | 'hard'>('easy');
+  const [hintsUsed, setHintsUsed] = useState(0);
+  const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false);
+
+  const handleHint = () => {
+    revealHint();
+    setHintsUsed(h => h + 1);
+  };
+
+  const handleGiveUp = () => {
+    giveUp();
+    setShowGiveUpConfirm(false);
+  };
 
   if (loading) {
     return (
