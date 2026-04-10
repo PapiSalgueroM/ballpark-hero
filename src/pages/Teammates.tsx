@@ -34,8 +34,8 @@ const Teammates = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Teammates or Not? – Sports Trivia | DoUKnowBall"
-        description="Were these two athletes ever on the same team? Test your sports knowledge across NFL, NBA, and soccer. 10 questions, fun facts, and shareable scores."
+        title="Teammates or Not? - Sports Trivia Quiz | DoUKnowBall"
+        description="Were these two athletes ever on the same team? Test your sports knowledge across NFL, NBA, and soccer."
         path="/teammates"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">

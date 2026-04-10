@@ -185,8 +185,8 @@ const FantasyDraft = () => {
   return (
     <>
       <PageSeo
-        title="Fantasy Draft Showdown | DoUKnowBall"
-        description="Draft your Starting XI, simulate a full season, and vote for the winner in Fantasy Draft Showdown."
+        title="Fantasy Draft Showdown - Soccer Draft Game | DoUKnowBall"
+        description="Draft your Starting XI, simulate a full season, and vote for the winner. Daily fantasy football challenge."
         path="/fantasy-draft"
       />
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(145 40% 8%) 0%, hsl(152 35% 6%) 50%, hsl(225 25% 6%) 100%)' }}>

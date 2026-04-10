@@ -568,7 +568,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                   <button
                     onClick={(e) => { e.stopPropagation(); onAutoFillGroup(group.letter); }}
                     className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(150,12%,20%)] hover:bg-[hsl(150,12%,25%)] text-[hsl(150,15%,60%)] transition-colors"
-                    title="Auto-fill random scores"
+                    title="World Cup 2026 Bracket Predictor | DoUKnowBall"
                   >
                     <Shuffle className="w-3 h-3" /> Random
                   </button>
@@ -1146,7 +1146,7 @@ const WorldCupPredictor = () => {
       <GameNavbar />
       <PageSeo
         title="World Cup 2026 Bracket | Sports Trivia Games"
-        description="Build your World Cup 2026 bracket — predict every match from groups to the final."
+        description="Build your World Cup 2026 bracket. Predict every match from groups to the final. Share your predictions."
         path="/world-cup-bracket"
       />
 

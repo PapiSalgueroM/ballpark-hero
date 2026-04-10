@@ -35,8 +35,8 @@ const HockeyCareer = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Hockey Career Path – Guess the Player | DoUKnowBall"
-        description="Progressive clues reveal a mystery hockey player. Guess from position, country, draft, teams, stats, and awards. Daily challenge."
+        title="Hockey Career Path - Guess the NHL Player | DoUKnowBall"
+        description="Progressive clues reveal a mystery hockey player. Guess from position, draft, teams, and stats. Daily challenge."
         path="/hockey-career"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">

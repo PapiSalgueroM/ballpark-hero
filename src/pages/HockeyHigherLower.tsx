@@ -31,8 +31,8 @@ const HockeyHigherLower = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Hockey Higher or Lower – Career Points | DoUKnowBall"
-        description="Which hockey player has more career points? Compare players side by side in this daily challenge with streak bonuses."
+        title="Hockey Higher or Lower - NHL Career Points Game | DoUKnowBall"
+        description="Which hockey player has more career points? Compare players side by side in this daily NHL trivia challenge."
         path="/hockey-higher-lower"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">

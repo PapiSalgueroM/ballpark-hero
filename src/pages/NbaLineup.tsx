@@ -66,8 +66,8 @@ const NbaLineup = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="NBA Starting 5 – Basketball Lineup Builder Game | DoUKnowBall"
-        description="Spin a stat challenge, get random NBA teams, and build the ultimate starting five. AI validates your picks. Free NBA trivia game — no signup needed."
+        title="NBA Starting 5 - Basketball Lineup Builder Game | DoUKnowBall"
+        description="Spin a stat challenge, pick NBA teams, and build the ultimate starting five. AI validates your picks."
         path="/nba-starting-5"
       />
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">

@@ -6,8 +6,8 @@ export default function GuessTheYear() {
   return (
     <>
       <PageSeo
-        title="Guess The Year — Sports Trivia | DoUKnowBall"
-        description="Can you guess what year these famous sports moments happened? Test your sports history knowledge with clues from NFL, NBA, MLB, NHL, UFC, College Football, and more!"
+        title="Guess the Year - Sports History Trivia Game | DoUKnowBall"
+        description="Guess what year famous sports moments happened. NFL, NBA, MLB, NHL, UFC, and more. Daily trivia challenge."
         path="/guess-the-year"
       />
       <GuessTheYearBoard />

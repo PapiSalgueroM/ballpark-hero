@@ -6,8 +6,8 @@ export default function GuessNascarDriver() {
   return (
     <>
       <PageSeo
-        title="Guess The NASCAR Driver — DoUKnowBall"
-        description="Can you identify the mystery NASCAR Cup Series driver from progressive clues? Test your motorsport knowledge with daily challenges."
+        title="Guess the NASCAR Driver - Cup Series Trivia Game | DoUKnowBall"
+        description="Identify the mystery NASCAR Cup Series driver from progressive clues. Daily motorsport trivia challenge."
         path="/guess-nascar-driver"
       />
       <NascarDriverBoard />

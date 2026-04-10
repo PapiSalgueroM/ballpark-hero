@@ -31,8 +31,8 @@ const SoccerGrid = () => {
   return (
     <main className="min-h-screen bg-background">
       <PageSeo
-        title="Soccer Grid – 3x3 Football Trivia Puzzle | DoUKnowBall"
-        description="Fill the 3x3 grid with soccer players who match both row and column criteria. Daily challenge with rarity scoring. Free football trivia."
+        title="Soccer Grid - Football Immaculate Grid Game | DoUKnowBall"
+        description="Fill the 3x3 soccer grid by naming players who match two criteria. Daily football trivia grid game."
         path="/soccer-grid"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">

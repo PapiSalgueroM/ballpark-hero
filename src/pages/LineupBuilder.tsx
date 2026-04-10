@@ -74,8 +74,8 @@ const LineupBuilder = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Build Your XI – Soccer Lineup Builder Game | DoUKnowBall"
-        description="Spin a random challenge, get two soccer teams, and build the ultimate starting XI. AI validates your picks. Free lineup-building game — no login needed."
+        title="Build Your XI - Soccer Lineup Builder Game | DoUKnowBall"
+        description="Spin a random challenge, pick two teams, and build the ultimate starting XI. AI rates your lineup."
         path="/build-your-xi"
       />
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">

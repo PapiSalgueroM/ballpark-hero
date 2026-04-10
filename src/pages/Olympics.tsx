@@ -74,8 +74,8 @@ export default function Olympics() {
     <>
       <GameNavbar />
       <PageSeo
-        title="The Medal Games — DoUKnowBall"
-        description="Guess the mystery athlete from progressive clues about their career at the Games. Daily challenge on DoUKnowBall."
+        title="The Medal Games - Olympic Athlete Trivia | DoUKnowBall"
+        description="Guess the mystery Olympic athlete from progressive clues about their career at the Games. Daily challenge."
         path="/olympics"
       />
       <div className="min-h-screen bg-background text-foreground">

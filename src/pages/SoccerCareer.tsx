@@ -641,8 +641,8 @@ export default function SoccerCareer() {
   return (
     <>
       <PageSeo
-        title="Soccer Career Simulator | douknowball"
-        description="Live out your soccer dream in this BitLife-style career simulator. Create a player, join a youth academy, and build your legend."
+        title="Soccer Career Simulator - Football Career Game | DoUKnowBall"
+        description="Simulate your soccer career from youth academy to retirement. Make transfers, win trophies, become a legend."
         path="/soccer-career"
       />
 

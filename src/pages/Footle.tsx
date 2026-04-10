@@ -45,9 +45,9 @@ const Index = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Footle – Soccer Player Guessing Game | DoUKnowBall"
-        description="Guess the soccer player in 8 tries using clues like club, league, nationality, and age. One of 10+ free sports trivia games on DoUKnowBall. No login required."
-        path="/"
+        title="Footle - Daily Soccer Player Guessing Game | DoUKnowBall"
+        description="Guess the mystery soccer player in 8 tries. New player every day. Free daily football puzzle game."
+        path="/footle"
       />
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
         {/* Header */}
