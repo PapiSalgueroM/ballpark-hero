@@ -13,6 +13,7 @@ interface Profile {
   last_played_date: string | null;
   total_games_played: number;
   total_correct_answers: number;
+  streak_freezes: number;
   created_at: string;
   updated_at: string;
 }

@@ -55,6 +55,9 @@ export function Header() {
                   <div className="flex items-center gap-1 text-sm font-medium">
                     <Flame className="w-4 h-4 text-orange-500" />
                     <span>{profile.current_streak}</span>
+                    {profile.streak_freezes > 0 && (
+                      <span className="text-sm" title="Streak Freeze available">🛡️{profile.streak_freezes}</span>
+                    )}
                   </div>
                 )}
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 
 /**
  * Automatically saves game completion data to user_scores, user_game_scores,
@@ -147,6 +148,7 @@ export function useGameCompletion(
 
         const lastPlayed = profile?.last_played_date;
         let newStreak = profile?.current_streak || 0;
+        let freezes = (profile as any)?.streak_freezes ?? 1;
         const profileUpdate: Record<string, any> = {};
 
         // Only add to all_time_score on first daily completion (not replays)
@@ -154,11 +156,32 @@ export function useGameCompletion(
           profileUpdate.all_time_score = ((profile as any)?.all_time_score || 0) + score;
         }
 
+        // Award weekly streak freeze on Monday (max 2)
+        const dayOfWeek = new Date().getDay(); // 0=Sun, 1=Mon
+        if (dayOfWeek === 1 && lastPlayed !== today && freezes < 2) {
+          freezes = Math.min(2, freezes + 1);
+          profileUpdate.streak_freezes = freezes;
+        }
+
         if (lastPlayed !== today) {
           const yesterday = new Date();
           yesterday.setDate(yesterday.getDate() - 1);
           const yesterdayStr = yesterday.toISOString().split('T')[0];
-          newStreak = lastPlayed === yesterdayStr ? newStreak + 1 : 1;
+
+          if (lastPlayed === yesterdayStr) {
+            // Consecutive day
+            newStreak = newStreak + 1;
+          } else {
+            // Missed a day — try to use a freeze
+            if (freezes > 0 && newStreak > 0) {
+              freezes -= 1;
+              profileUpdate.streak_freezes = freezes;
+              toast('🛡️ Streak saved! Your freeze was used.');
+              // Keep newStreak as-is
+            } else {
+              newStreak = 1;
+            }
+          }
 
           profileUpdate.current_streak = newStreak;
           profileUpdate.longest_streak = Math.max(newStreak, profile?.longest_streak || 0);
