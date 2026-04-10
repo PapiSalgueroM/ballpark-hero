@@ -12,7 +12,7 @@ import CareerGame from "./pages/CareerGame";
 import HigherLower from "./pages/HigherLower";
 import Connections from "./pages/Connections";
 import LineupBuilder from "./pages/LineupBuilder";
-import BlurredFace from "./pages/BlurredFace";
+
 import UfcGame from "./pages/UfcGame";
 import NbaLineup from "./pages/NbaLineup";
 import NbaConnect4 from "./pages/NbaConnect4";
@@ -74,7 +74,7 @@ const App = () => (
             <Route path="/higher-lower" element={<HigherLower />} />
             <Route path="/connections" element={<Connections />} />
             <Route path="/build-your-xi" element={<LineupBuilder />} />
-            <Route path="/guess-the-face" element={<BlurredFace />} />
+            
             <Route path="/ufc" element={<UfcGame />} />
             <Route path="/nba-starting-5" element={<NbaLineup />} />
             <Route path="/nba-connect-4" element={<NbaConnect4 />} />
