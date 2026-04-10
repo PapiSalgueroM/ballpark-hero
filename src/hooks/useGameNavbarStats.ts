@@ -10,7 +10,7 @@ interface GameNavbarStats {
   loading: boolean;
 }
 
-const TOTAL_GAMES = 37;
+
 
 export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
   const { user } = useAuth();
