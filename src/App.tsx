@@ -57,6 +57,7 @@ import WorldCupPredictor from "./pages/WorldCupPredictor";
 import SoccerCareer from "./pages/SoccerCareer";
 import ShirtNumber from "./pages/ShirtNumber";
 import HofOrBust from "./pages/HofOrBust";
+import ScorePredictor from "./pages/ScorePredictor";
 
 const queryClient = new QueryClient();
 
