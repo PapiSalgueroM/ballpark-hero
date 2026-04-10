@@ -1430,7 +1430,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-115',
     groups: [
-      { category: 'Current Cadillac F1 and football crossover', players: ['Florian Wirtz', 'Jamal Musiala', 'Bukayo Saka', 'Jude Bellingham'], difficulty: 'easy' },
+      { category: 'Top young European stars (2025-26)', players: ['Florian Wirtz', 'Jamal Musiala', 'Bukayo Saka', 'Jude Bellingham'], difficulty: 'easy' },
       { category: 'From Peru', players: ['Paolo Guerrero', 'Claudio Pizarro', 'Jefferson Farfán', 'André Carrillo'], difficulty: 'medium' },
       { category: 'Won the Champions League with Chelsea', players: ['Kai Havertz', 'Mason Mount', 'N\'Golo Kanté', 'Thiago Silva'], difficulty: 'hard' },
       { category: 'Played in 6+ major international tournaments', players: ['Cristiano Ronaldo', 'Lionel Messi', 'Gianluigi Buffon', 'Lothar Matthäus'], difficulty: 'insane' },
