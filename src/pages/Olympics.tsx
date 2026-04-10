@@ -37,6 +37,7 @@ export default function Olympics() {
   } = useOlympics();
 
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const filtered = guessInput.trim().length >= 2
