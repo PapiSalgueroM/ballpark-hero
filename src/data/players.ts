@@ -59,7 +59,7 @@ export const players: Player[] = [
   { name: "Marcus Thuram", club: "Inter Milan", nationality: "France", league: "Serie A", goals: 12, assists: 4, position: "ST", kitNumber: 9, age: 28, marketValue: 80, difficulty: "easy" },
   { name: "Nicolò Barella", club: "Inter Milan", nationality: "Italy", league: "Serie A", goals: 4, assists: 7, position: "CM", kitNumber: 23, age: 28, marketValue: 90, difficulty: "easy" },
   { name: "Paulo Dybala", club: "Roma", nationality: "Argentina", league: "Serie A", goals: 6, assists: 4, position: "CF", kitNumber: 21, age: 32, marketValue: 12, difficulty: "easy" },
-  { name: "Romelu Lukaku", club: "Napoli", nationality: "Belgium", league: "Serie A", goals: 8, assists: 3, position: "ST", kitNumber: 11, age: 32, marketValue: 15, difficulty: "easy" },
+  { name: "Romelu Lukaku", club: "Napoli", nationality: "Belgium", league: "Serie A", goals: 8, assists: 3, position: "ST", kitNumber: 9, age: 32, marketValue: 15, difficulty: "easy" },
   { name: "Theo Hernández", club: "AC Milan", nationality: "France", league: "Serie A", goals: 3, assists: 4, position: "LB", kitNumber: 19, age: 28, marketValue: 45, difficulty: "easy" },
   { name: "Ademola Lookman", club: "Atalanta", nationality: "Nigeria", league: "Serie A", goals: 9, assists: 4, position: "RW", kitNumber: 11, age: 28, marketValue: 55, difficulty: "easy" },
   { name: "Mike Maignan", club: "AC Milan", nationality: "France", league: "Serie A", goals: 0, assists: 0, position: "GK", kitNumber: 16, age: 30, marketValue: 40, difficulty: "easy" },
