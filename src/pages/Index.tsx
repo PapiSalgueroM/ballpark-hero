@@ -32,6 +32,20 @@ export default function Index() {
   const [playedCount, setPlayedCount] = useState(0);
   const [totalPlayed, setTotalPlayed] = useState<number | null>(null);
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const query = searchQuery.toLowerCase().trim();
+  const isSearching = query.length > 0;
+
+  const filteredGames = isSearching
+    ? VISIBLE_CATEGORIES.flatMap(cat =>
+        cat.games.filter(g =>
+          g.label.toLowerCase().includes(query) ||
+          g.description.toLowerCase().includes(query) ||
+          cat.title.toLowerCase().includes(query)
+        )
+      )
+    : [];
 
   useEffect(() => {
     setPlayedCount(countPlayedGames());
