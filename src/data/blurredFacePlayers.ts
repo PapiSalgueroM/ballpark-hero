@@ -12,7 +12,7 @@ export const blurredFacePlayers: BlurredFacePlayer[] = [
   { name: "Lamine Yamal", wikipediaSlug: "Lamine_Yamal", nationality: "Spain", position: "RW", club: "Barcelona", age: 18, kitNumber: 19, isActive: true, league: "La Liga" },
   { name: "Jude Bellingham", wikipediaSlug: "Jude_Bellingham", nationality: "England", position: "CAM", club: "Real Madrid", age: 22, kitNumber: 5, isActive: true, league: "La Liga" },
   { name: "Robert Lewandowski", wikipediaSlug: "Robert_Lewandowski", nationality: "Poland", position: "ST", club: "Barcelona", age: 38, kitNumber: 9, isActive: true, league: "La Liga" },
-  { name: "Kevin De Bruyne", wikipediaSlug: "Kevin_De_Bruyne", nationality: "Belgium", position: "CAM", club: "Manchester City", age: 35, kitNumber: 17, isActive: true, league: "Premier League" },
+  { name: "Kevin De Bruyne", wikipediaSlug: "Kevin_De_Bruyne", nationality: "Belgium", position: "CAM", club: "Napoli", age: 35, kitNumber: 11, isActive: true, league: "Serie A" },
   { name: "Harry Kane", wikipediaSlug: "Harry_Kane", nationality: "England", position: "ST", club: "Bayern Munich", age: 33, kitNumber: 9, isActive: true, league: "Bundesliga" },
   { name: "Bukayo Saka", wikipediaSlug: "Bukayo_Saka", nationality: "England", position: "RW", club: "Arsenal", age: 24, kitNumber: 7, isActive: true, league: "Premier League" },
   { name: "Cole Palmer", wikipediaSlug: "Cole_Palmer", nationality: "England", position: "CAM", club: "Chelsea", age: 24, kitNumber: 20, isActive: true, league: "Premier League" },
