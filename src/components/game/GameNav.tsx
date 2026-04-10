@@ -1,45 +1,55 @@
-import { Link, useLocation } from 'react-router-dom';
-import { VISIBLE_CATEGORIES } from '@/data/gameRegistry';
+import { Link } from 'react-router-dom';
+import { CATEGORIES } from '@/data/gameRegistry';
+import { ArrowRight } from 'lucide-react';
 
-export function GameNav() {
-  const location = useLocation();
+interface GameNavProps {
+  currentPath: string;
+  sportCategory: string;
+}
 
-  const visibleCategories = VISIBLE_CATEGORIES
-    .map(cat => ({
-      ...cat,
-      games: cat.games.filter(g => g.path !== location.pathname),
-    }))
-    .filter(cat => cat.games.length > 0);
+export function GameNav({ currentPath, sportCategory }: GameNavProps) {
+  // Find the category matching the sport
+  const category = CATEGORIES.find(c => c.title === sportCategory);
+  
+  // Pick the first game in the same category that isn't the current one
+  const nextGame = category?.games.find(g => g.path !== currentPath);
+
+  // Fallback: pick any game from another category
+  const fallbackGame = !nextGame
+    ? CATEGORIES.flatMap(c => c.games).find(g => g.path !== currentPath)
+    : null;
+
+  const game = nextGame || fallbackGame;
+
+  if (!game) return null;
 
   return (
     <div className="mt-12 mb-6">
-      <div className="border-t border-border/50 pt-8 space-y-8">
-        {visibleCategories.map(cat => (
-          <div key={cat.title}>
-            <h3 className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-              {cat.title}
+      <div className="border-t border-border/50 pt-8">
+        <p className="text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+          Play Next
+        </p>
+        <Link
+          to={game.path}
+          className="block max-w-md mx-auto rounded-2xl border border-border bg-card p-6 hover:border-primary/40 hover:shadow-lg transition-all group"
+        >
+          <div className="text-center">
+            <span className="text-4xl mb-3 block">{game.emoji}</span>
+            <h3 className="text-lg font-display font-bold text-foreground group-hover:text-primary transition-colors mb-1">
+              {game.label}
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto">
-              {cat.games.map(g => (
-                <Link
-                  key={g.path}
-                  to={g.path}
-                  className="flex flex-col items-center justify-center gap-1 px-6 py-4 rounded-xl border border-border bg-card hover:bg-card/80 transition-all hover:scale-105 text-center"
-                >
-                  <span className="text-xl font-bold text-primary font-display">
-                    {g.emoji} {g.label}
-                  </span>
-                  <span className="text-xs text-muted-foreground text-center">{g.description}</span>
-                  {g.daily && (
-                    <span className="inline-flex items-center text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-primary/15 text-primary mt-1">
-                      Daily
-                    </span>
-                  )}
-                </Link>
-              ))}
-            </div>
+            <p className="text-sm text-muted-foreground mb-4">{game.description}</p>
+            <span className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity">
+              Play Now
+              <ArrowRight className="w-4 h-4" />
+            </span>
           </div>
-        ))}
+        </Link>
+        <p className="text-center mt-4">
+          <Link to="/" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+            See all games →
+          </Link>
+        </p>
       </div>
     </div>
   );
