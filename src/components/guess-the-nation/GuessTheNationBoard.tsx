@@ -261,14 +261,41 @@ export function GuessTheNationBoard() {
           <div className="space-y-4">
             <NationSearch countries={countries} usedGuesses={gameState.guesses} onGuess={makeGuess} />
 
-            <div className="flex justify-center">
-              <button
-                onClick={giveUp}
-                className="px-4 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-colors"
-              >
-                🏳️ Give Up
-              </button>
+            <div className="flex items-center justify-center gap-4">
+              {gameState.revealedClues < MAX_CLUES && (
+                <button
+                  onClick={handleHint}
+                  className="text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors"
+                >
+                  💡 Hint (-100 pts)
+                </button>
+              )}
+              {gameState.guesses.length > 0 && !showGiveUpConfirm && (
+                <button
+                  onClick={() => setShowGiveUpConfirm(true)}
+                  className="text-sm text-muted-foreground hover:text-destructive transition-colors"
+                >
+                  🏳️ Give Up
+                </button>
+              )}
             </div>
+            {hintsUsed > 0 && (
+              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used (-{hintsUsed * 100} pts)</p>
+            )}
+
+            {showGiveUpConfirm && (
+              <div className="text-center space-y-2 p-3 rounded-xl border border-destructive/20 bg-card">
+                <p className="text-sm text-muted-foreground">Are you sure? You'll reveal the answer and score 0 points.</p>
+                <div className="flex justify-center gap-3">
+                  <button onClick={handleGiveUp} className="px-4 py-1.5 rounded-lg bg-destructive text-destructive-foreground text-sm font-semibold hover:opacity-90 transition-colors">
+                    Yes, Give Up
+                  </button>
+                  <button onClick={() => setShowGiveUpConfirm(false)} className="px-4 py-1.5 rounded-lg border border-border text-muted-foreground text-sm hover:bg-accent transition-colors">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
 
             {gameState.guesses.length > 0 && (
               <div className="text-center">
