@@ -16,7 +16,7 @@ export const blurredFacePlayers: BlurredFacePlayer[] = [
   { name: "Harry Kane", wikipediaSlug: "Harry_Kane", nationality: "England", position: "ST", club: "Bayern Munich", age: 33, kitNumber: 9, isActive: true, league: "Bundesliga" },
   { name: "Bukayo Saka", wikipediaSlug: "Bukayo_Saka", nationality: "England", position: "RW", club: "Arsenal", age: 24, kitNumber: 7, isActive: true, league: "Premier League" },
   { name: "Cole Palmer", wikipediaSlug: "Cole_Palmer", nationality: "England", position: "CAM", club: "Chelsea", age: 24, kitNumber: 20, isActive: true, league: "Premier League" },
-  { name: "Florian Wirtz", wikipediaSlug: "Florian_Wirtz", nationality: "Germany", position: "CAM", club: "Bayer Leverkusen", age: 23, kitNumber: 10, isActive: true, league: "Bundesliga" },
+  { name: "Florian Wirtz", wikipediaSlug: "Florian_Wirtz", nationality: "Germany", position: "CAM", club: "Bayern Munich", age: 23, kitNumber: 10, isActive: true, league: "Bundesliga" },
 
   // More Active Players
   { name: "Bruno Fernandes", wikipediaSlug: "Bruno_Fernandes_(footballer,_born_1994)", nationality: "Portugal", position: "CAM", club: "Manchester United", age: 31, kitNumber: 8, isActive: true, league: "Premier League" },
