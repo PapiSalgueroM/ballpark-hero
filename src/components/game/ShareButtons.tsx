@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Copy, Mail } from 'lucide-react';
 import { toast } from 'sonner';
+import { ALL_GAMES } from '@/data/gameRegistry';
 
 interface ShareButtonsProps {
   score: string;
@@ -8,6 +9,8 @@ interface ShareButtonsProps {
   gamePath: string;
   /** Override the entire share text (e.g. for World Cup predictor) */
   customText?: string;
+  /** Optional pre-built emoji grid for the score card */
+  emojiGrid?: string;
 }
 
 const XIcon = ({ className }: { className?: string }) => (
@@ -34,10 +37,30 @@ const MessagesIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const ShareButtons = ({ score, gameName, gamePath, customText }: ShareButtonsProps) => {
+const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: ShareButtonsProps) => {
   const [igTooltip, setIgTooltip] = useState(false);
 
   const shareText = customText || `I scored ${score} on ${gameName} at DoUKnowBall! Can you beat me? douknowball.com${gamePath}`;
+
+  const gameEmoji = ALL_GAMES.find(g => g.path === gamePath)?.emoji || '🏆';
+
+  const todayStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+  const scoreCard = [
+    `${gameEmoji} ${gameName} — ${todayStr}`,
+    ...(emojiGrid ? [emojiGrid] : []),
+    `Score: ${score}`,
+    `douknowball.com${gamePath}`,
+  ].join('\n');
+
+  const handleCopyCard = async () => {
+    try {
+      await navigator.clipboard.writeText(scoreCard);
+      toast.success('Score card copied!');
+    } catch {
+      toast.error('Could not copy to clipboard');
+    }
+  };
 
   const handleX = () => {
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank', 'noopener,noreferrer');
@@ -69,6 +92,15 @@ const ShareButtons = ({ score, gameName, gamePath, customText }: ShareButtonsPro
 
   return (
     <div className="flex flex-col items-center gap-3 mt-5">
+      {/* Copy Score Card — primary action */}
+      <button
+        onClick={handleCopyCard}
+        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-semibold hover:bg-accent hover:border-primary/30 transition-all shadow-sm"
+      >
+        <Copy className="w-4 h-4" />
+        📋 Copy Score Card
+      </button>
+
       <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Share your result</p>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3 relative">
         {/* X / Twitter */}
