@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useShirtNumber } from '@/hooks/useShirtNumber';
 import { GameNavbar } from '@/components/game/GameNavbar';
-import { ShareButtons } from '@/components/game/ShareButtons';
-import { ReportQuestion } from '@/components/game/ReportQuestion';
+import ShareButtons from '@/components/game/ShareButtons';
+import ReportQuestion from '@/components/game/ReportQuestion';
 import { ArrowUp, ArrowDown, Check, X, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

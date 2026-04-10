@@ -82,6 +82,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/soccer-grid', label: 'Soccer Grid', emoji: '⚽', description: '3×3 grid puzzle with rarity scores', daily: true, isNew: true },
       { path: '/world-cup-bracket', label: '2026 Bracket', emoji: '🌍', description: 'Predict every World Cup 2026 match', isNew: true },
       { path: '/soccer-career', label: 'Soccer Career', emoji: '⚽', description: 'Build your career from youth academy to legend. BitLife meets football.', isNew: true },
+      { path: '/shirt-number', label: 'Shirt Number', emoji: '👕', description: 'Guess the kit number a player wears', daily: true, isNew: true },
     ],
   },
   {
