@@ -62,10 +62,10 @@ import TransferPath from "./pages/TransferPath";
 
 const queryClient = new QueryClient();
 
-const HEADER_PATHS = ['/', '/leaderboard', '/privacy', '/terms'];
+const HEADER_PATHS = ['/', '/leaderboard', '/profile'];
 
 const shouldShowHeader = (pathname: string) =>
-  HEADER_PATHS.includes(pathname) || pathname.startsWith('/profile') || pathname.startsWith('/admin');
+  HEADER_PATHS.includes(pathname) || pathname.startsWith('/profile/');
 
 const AppContent = () => {
   const { pathname } = useLocation();
