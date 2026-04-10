@@ -134,12 +134,25 @@ export function useGameCompletion(
             .eq('game_type', gameSlug);
         }
 
-        // 5. Update profile stats (always add score to all_time_score)
+        // 5. Update profile stats
+        // Check if this is the first completion of this game today (not a replay)
+        const { count: gameCompletionsToday } = await supabase
+          .from('daily_completions')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .eq('game_slug', gameSlug)
+          .eq('date', today);
+
+        const isFirstCompletion = (gameCompletionsToday || 0) <= 1;
+
         const lastPlayed = profile?.last_played_date;
         let newStreak = profile?.current_streak || 0;
-        const profileUpdate: Record<string, any> = {
-          all_time_score: ((profile as any)?.all_time_score || 0) + score,
-        };
+        const profileUpdate: Record<string, any> = {};
+
+        // Only add to all_time_score on first daily completion (not replays)
+        if (isFirstCompletion) {
+          profileUpdate.all_time_score = ((profile as any)?.all_time_score || 0) + score;
+        }
 
         if (lastPlayed !== today) {
           const yesterday = new Date();
@@ -150,7 +163,10 @@ export function useGameCompletion(
           profileUpdate.current_streak = newStreak;
           profileUpdate.longest_streak = Math.max(newStreak, profile?.longest_streak || 0);
           profileUpdate.last_played_date = today;
-          profileUpdate.total_games_played = (profile?.total_games_played || 0) + 1;
+          // Only increment total_games_played on first completion
+          if (isFirstCompletion) {
+            profileUpdate.total_games_played = (profile?.total_games_played || 0) + 1;
+          }
           profileUpdate.total_correct_answers = (profile?.total_correct_answers || 0) + correctAnswers;
         }
 
