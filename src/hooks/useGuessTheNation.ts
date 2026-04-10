@@ -94,6 +94,11 @@ export function useGuessTheNation() {
     [gameState]
   );
 
+  const revealHint = useCallback(() => {
+    if (!gameState || gameState.gameStatus !== 'playing' || gameState.revealedClues >= MAX_CLUES) return;
+    setGameState(prev => prev ? { ...prev, revealedClues: (prev.revealedClues ?? 0) + 1 } : null);
+  }, [gameState]);
+
   const giveUp = useCallback(() => {
     if (!gameState || gameState.gameStatus !== 'playing') return;
     setGameState({ ...gameState, gameStatus: 'lost', score: 0, revealedClues: MAX_CLUES });
@@ -112,5 +117,5 @@ export function useGuessTheNation() {
 
   useGameCompletion('guess-the-nation', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
-  return { countries: validatedCountries, loading, gameState, streak, currentBadge, pointsForCurrentClue, startGame, makeGuess, giveUp, resetGame };
+  return { countries: validatedCountries, loading, gameState, streak, currentBadge, pointsForCurrentClue, startGame, makeGuess, giveUp, revealHint, resetGame };
 }
