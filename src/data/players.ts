@@ -401,7 +401,7 @@ export const players: Player[] = [
   { name: "Loïs Openda", club: "RB Leipzig", nationality: "Belgium", league: "Bundesliga", goals: 10, assists: 4, position: "ST", kitNumber: 11, age: 26, marketValue: 55, difficulty: "hard" },
   { name: "Deniz Undav", club: "VfB Stuttgart", nationality: "Germany", league: "Bundesliga", goals: 9, assists: 5, position: "ST", kitNumber: 17, age: 29, marketValue: 30, difficulty: "hard" },
   { name: "Tim Kleindienst", club: "Borussia Mönchengladbach", nationality: "Germany", league: "Bundesliga", goals: 8, assists: 3, position: "ST", kitNumber: 9, age: 30, marketValue: 12, difficulty: "hard" },
-  { name: "Florian Wirtz", club: "Bayern Munich", nationality: "Germany", league: "Bundesliga", goals: 14, assists: 12, position: "CAM", kitNumber: 10, age: 23, marketValue: 170, difficulty: "hard" },
+  
 
   // === LIGUE 1 — Bench & Rotation ===
   // PSG
