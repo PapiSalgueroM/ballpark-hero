@@ -84,8 +84,16 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
     window.open(`https://mail.google.com/mail/?view=cm&body=${encodeURIComponent(shareText)}&su=${encodeURIComponent(`My ${gameName} Score on DoUKnowBall`)}`, '_blank', 'noopener,noreferrer');
   };
 
-  const handleMessages = () => {
-    window.open(`sms:?body=${encodeURIComponent(shareText)}`, '_self');
+  const handleMessages = async () => {
+    const smsUrl = `sms:?body=${encodeURIComponent(shareText)}`;
+    const link = document.createElement('a');
+    link.href = smsUrl;
+    link.click();
+    try {
+      await navigator.clipboard.writeText(shareText);
+    } catch {
+      // silent - SMS may have worked
+    }
   };
 
   const btnBase = "inline-flex items-center justify-center w-11 h-11 min-w-[44px] min-h-[44px] rounded-full transition-all shadow-md hover:scale-110 hover:shadow-lg";
