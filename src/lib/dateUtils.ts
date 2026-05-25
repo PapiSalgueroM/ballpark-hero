@@ -31,3 +31,25 @@ export function getTodayET(): string {
 export function dateSeed(dateStr: string): number {
   return parseInt(dateStr.replace(/-/g, ''), 10);
 }
+
+/**
+ * Returns today's deterministic difficulty tier for Footle's daily puzzle.
+ * Every user on the same ET date gets the same tier.
+ *
+ * Distribution: ~55% Hard, ~40% Easy, ~5% Insane.
+ *
+ * Uses a djb2-style polynomial hash of the date string rather than a simple
+ * dateSeed() modulo, which would produce a predictable +N-per-day pattern
+ * across consecutive dates and could be easily reverse-engineered by players.
+ */
+export function getDailyTier(dateStr: string): 'easy' | 'hard' | 'insane' {
+  let hash = 0;
+  for (let i = 0; i < dateStr.length; i++) {
+    hash = (hash << 5) - hash + dateStr.charCodeAt(i);
+    hash |= 0; // keep as signed 32-bit integer
+  }
+  const tierValue = Math.abs(hash) % 100;
+  if (tierValue < 5) return 'insane';  //  5%
+  if (tierValue < 60) return 'hard';   // 55%
+  return 'easy';                        // 40%
+}
