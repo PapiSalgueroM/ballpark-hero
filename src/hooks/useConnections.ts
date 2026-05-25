@@ -1,7 +1,8 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { connectionsPuzzles } from '@/data/connectionsPuzzles';
 import type { ConnectionGroup, ConnectionDifficulty } from '@/types/connections';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 
 function isValidPuzzle(p: { groups: { players: string[] }[] }): boolean {
   const all = p.groups.flatMap((g) => g.players);
@@ -9,18 +10,124 @@ function isValidPuzzle(p: { groups: { players: string[] }[] }): boolean {
   return p.groups.length === 4 && p.groups.every((g) => g.players.length === 4) && unique.size === 16;
 }
 
-// Pre-filter valid puzzles
 const validConnectionsPuzzles = connectionsPuzzles.filter(isValidPuzzle);
 const fallbackPuzzles = validConnectionsPuzzles.length > 0 ? validConnectionsPuzzles : connectionsPuzzles;
 
+export type ConnectionsMode = 'daily' | 'unlimited';
+
+type ConnAction =
+  | { t: 'ok'; cat: string }
+  | { t: 'x' }
+  | { t: 'hint'; cat: string }
+  | { t: 'give' };
+
+// Stable seeded shuffle of puzzle players (same result for same puzzle id)
+function seedShuffle(players: string[], seed: number): string[] {
+  return players
+    .map((p, i) => ({ p, sort: Math.sin(seed * (i + 1)) }))
+    .sort((a, b) => a.sort - b.sort)
+    .map((x) => x.p);
+}
+
 export function useConnections() {
-  const [puzzleIndex, setPuzzleIndex] = useState(() => Math.floor(Math.random() * fallbackPuzzles.length));
+  const [mode, setMode] = useState<ConnectionsMode>('daily');
+  const switchMode = useCallback((m: ConnectionsMode) => setMode(m), []);
+
+  // ── Daily ──────────────────────────────────────────────────────────────────
+  const {
+    puzzle: dailyPuzzle,
+    guesses: dailyActions,
+    addGuess: addDailyAction,
+    gameStatus: rawDailyStatus,
+    isLoading,
+  } = useDailyPuzzle<(typeof fallbackPuzzles)[0], ConnAction>({
+    gameSlug: 'connections',
+    puzzles: fallbackPuzzles,
+    maxGuesses: 999,
+    isWon: (g, puzzle) => g.filter((a) => a.t === 'ok').length >= puzzle.groups.length,
+    isLost: (g) =>
+      g.some((a) => a.t === 'give') || 4 - g.filter((a) => a.t === 'x').length <= 0,
+    deserializeGuesses: (raw) => raw as ConnAction[],
+  });
+
+  const dailySolvedGroups = useMemo<ConnectionGroup[]>(() => {
+    if (!dailyPuzzle) return [];
+    return dailyActions
+      .filter((a): a is { t: 'ok'; cat: string } => a.t === 'ok')
+      .map((a) => dailyPuzzle.groups.find((g) => g.category === a.cat))
+      .filter((g): g is ConnectionGroup => g != null);
+  }, [dailyActions, dailyPuzzle]);
+
+  const dailyLives = useMemo(() => {
+    if (dailyActions.some((a) => a.t === 'give')) return 0;
+    return 4 - dailyActions.filter((a) => a.t === 'x').length;
+  }, [dailyActions]);
+
+  const dailyHintCats = useMemo(
+    () => dailyActions.filter((a): a is { t: 'hint'; cat: string } => a.t === 'hint').map((a) => a.cat),
+    [dailyActions],
+  );
+
+  // ── Unlimited ──────────────────────────────────────────────────────────────
+  const [unlimitedIndex, setUnlimitedIndex] = useState(
+    () => Math.floor(Math.random() * fallbackPuzzles.length),
+  );
+  const [solvedGroupsUnlimited, setSolvedGroupsUnlimited] = useState<ConnectionGroup[]>([]);
+  const [livesUnlimited, setLivesUnlimited] = useState(4);
+  const [hintsUsedUnlimited, setHintsUsedUnlimited] = useState(0);
+  const [hintCategoriesUnlimited, setHintCategoriesUnlimited] = useState<string[]>([]);
+
+  // ── Shared local state (neither persisted nor mode-split) ─────────────────
+  const [selected, setSelected] = useState<string[]>([]);
+  const [lastIncorrect, setLastIncorrect] = useState<string[] | null>(null);
+  const [oneAway, setOneAway] = useState(false);
+  const [shuffleKey, setShuffleKey] = useState(0);
+
   const [streak, setStreak] = useState(() => {
     const saved = localStorage.getItem('connections-streak');
     return saved ? parseInt(saved, 10) : 0;
   });
 
-  const puzzle = useMemo(() => fallbackPuzzles[puzzleIndex % fallbackPuzzles.length], [puzzleIndex]);
+  // ── Active (mode-dependent) values ────────────────────────────────────────
+  const puzzle =
+    mode === 'daily'
+      ? (dailyPuzzle ?? fallbackPuzzles[0])
+      : fallbackPuzzles[unlimitedIndex % fallbackPuzzles.length];
+
+  const activeSolvedGroups = mode === 'daily' ? dailySolvedGroups : solvedGroupsUnlimited;
+  const activeLives = mode === 'daily' ? dailyLives : livesUnlimited;
+  const activeHintCats = mode === 'daily' ? dailyHintCats : hintCategoriesUnlimited;
+  const activeHintsUsed = activeHintCats.length;
+
+  const gameStatus = useMemo(() => {
+    if (mode === 'daily') {
+      if (rawDailyStatus === 'won') return 'won' as const;
+      if (rawDailyStatus === 'lost') return 'lost' as const;
+      return 'playing' as const;
+    }
+    if (solvedGroupsUnlimited.length >= 4) return 'won' as const;
+    if (livesUnlimited <= 0) return 'lost' as const;
+    return 'playing' as const;
+  }, [mode, rawDailyStatus, solvedGroupsUnlimited, livesUnlimited]);
+
+  // Streak: only fire when the user actually plays (wasPlaying guard)
+  const wasPlayingRef = useRef(false);
+  useEffect(() => {
+    if (isLoading) return;
+    if (gameStatus === 'playing') { wasPlayingRef.current = true; return; }
+    if (!wasPlayingRef.current) return;
+    wasPlayingRef.current = false;
+    if (gameStatus === 'won') {
+      setStreak((prev) => {
+        const next = prev + 1;
+        localStorage.setItem('connections-streak', String(next));
+        return next;
+      });
+    } else {
+      setStreak(0);
+      localStorage.setItem('connections-streak', '0');
+    }
+  }, [gameStatus, isLoading]);
 
   const allPlayers = useMemo(() => {
     const seen = new Set<string>();
@@ -30,58 +137,22 @@ export function useConnections() {
       return true;
     });
     const seed = puzzle.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-    return players
-      .map((p, i) => ({ p, sort: Math.sin(seed * (i + 1)) }))
-      .sort((a, b) => a.sort - b.sort)
-      .map((x) => x.p);
+    return seedShuffle(players, seed);
   }, [puzzle]);
 
-  const [selected, setSelected] = useState<string[]>([]);
-  const [solvedGroups, setSolvedGroups] = useState<ConnectionGroup[]>([]);
-  const [lives, setLives] = useState(4);
-  const [hintsUsed, setHintsUsed] = useState(0);
-  const [hintCategories, setHintCategories] = useState<string[]>([]);
-  const [lastIncorrect, setLastIncorrect] = useState<string[] | null>(null);
-  const [oneAway, setOneAway] = useState(false);
-
-  const gameStatus = useMemo(() => {
-    if (solvedGroups.length === 4) return 'won' as const;
-    if (lives <= 0) return 'lost' as const;
-    return 'playing' as const;
-  }, [solvedGroups, lives]);
-
-  // Update streak when game ends
-  useEffect(() => {
-    if (gameStatus === 'won') {
-      setStreak((prev) => {
-        const next = prev + 1;
-        localStorage.setItem('connections-streak', String(next));
-        return next;
-      });
-    } else if (gameStatus === 'lost') {
-      setStreak(0);
-      localStorage.setItem('connections-streak', '0');
-    }
-  }, [gameStatus]);
-
-  const [shuffleKey, setShuffleKey] = useState(0);
-
   const remainingPlayers = useMemo(() => {
-    const solved = new Set(solvedGroups.flatMap((g) => g.players));
+    const solved = new Set(activeSolvedGroups.flatMap((g) => g.players));
     const remaining = allPlayers.filter((p) => !solved.has(p));
     if (shuffleKey === 0) return remaining;
-    // Fisher-Yates shuffle using shuffleKey as seed
     const arr = [...remaining];
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.abs(Math.sin(shuffleKey * (i + 1) * 9301 + 49297) * 233280) % (i + 1) | 0;
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr;
-  }, [allPlayers, solvedGroups, shuffleKey]);
+  }, [allPlayers, activeSolvedGroups, shuffleKey]);
 
-  const shufflePlayers = useCallback(() => {
-    setShuffleKey((prev) => prev + 1);
-  }, []);
+  const shufflePlayers = useCallback(() => setShuffleKey((k) => k + 1), []);
 
   const togglePlayer = useCallback(
     (player: string) => {
@@ -94,7 +165,7 @@ export function useConnections() {
         return [...prev, player];
       });
     },
-    [gameStatus]
+    [gameStatus],
   );
 
   const submitGuess = useCallback(() => {
@@ -102,84 +173,100 @@ export function useConnections() {
 
     const match = puzzle.groups.find(
       (g) =>
-        !solvedGroups.includes(g) &&
+        !activeSolvedGroups.includes(g) &&
         selected.every((p) => g.players.includes(p)) &&
-        g.players.every((p) => selected.includes(p))
+        g.players.every((p) => selected.includes(p)),
     );
 
     if (match) {
-      setSolvedGroups((prev) => [...prev, match]);
+      if (mode === 'daily') {
+        addDailyAction({ t: 'ok', cat: match.category });
+      } else {
+        setSolvedGroupsUnlimited((prev) => [...prev, match]);
+      }
       setSelected([]);
       setLastIncorrect(null);
     } else {
       const isOneAway = puzzle.groups.some(
         (g) =>
-          !solvedGroups.includes(g) &&
-          selected.filter((p) => g.players.includes(p)).length === 3
+          !activeSolvedGroups.includes(g) &&
+          selected.filter((p) => g.players.includes(p)).length === 3,
       );
       setOneAway(isOneAway);
-      setLives((prev) => prev - 1);
+      if (mode === 'daily') {
+        addDailyAction({ t: 'x' });
+      } else {
+        setLivesUnlimited((prev) => prev - 1);
+      }
       setLastIncorrect([...selected]);
       setSelected([]);
     }
-  }, [selected, puzzle, solvedGroups, gameStatus]);
+  }, [mode, selected, puzzle, activeSolvedGroups, gameStatus, addDailyAction]);
 
   const useHint = useCallback(() => {
-    if (hintsUsed >= 4 || gameStatus !== 'playing') return;
+    if (activeHintsUsed >= 4 || gameStatus !== 'playing') return;
     const difficultyOrder: ConnectionDifficulty[] = ['easy', 'medium', 'hard', 'insane'];
-    const unsolved = puzzle.groups.filter((g) => !solvedGroups.includes(g));
-    unsolved.sort(
-      (a, b) => difficultyOrder.indexOf(a.difficulty) - difficultyOrder.indexOf(b.difficulty)
-    );
-    const unhinted = unsolved.filter((g) => !hintCategories.includes(g.category));
-    if (unhinted.length > 0) {
-      setHintCategories((prev) => [...prev, unhinted[0].category]);
-      setHintsUsed((prev) => prev + 1);
+    const unsolved = puzzle.groups.filter((g) => !activeSolvedGroups.includes(g));
+    unsolved.sort((a, b) => difficultyOrder.indexOf(a.difficulty) - difficultyOrder.indexOf(b.difficulty));
+    const unhinted = unsolved.filter((g) => !activeHintCats.includes(g.category));
+    if (unhinted.length === 0) return;
+    const cat = unhinted[0].category;
+    if (mode === 'daily') {
+      addDailyAction({ t: 'hint', cat });
+    } else {
+      setHintCategoriesUnlimited((prev) => [...prev, cat]);
+      setHintsUsedUnlimited((prev) => prev + 1);
     }
-  }, [hintsUsed, puzzle, solvedGroups, gameStatus, hintCategories]);
+  }, [mode, activeHintsUsed, puzzle, activeSolvedGroups, gameStatus, activeHintCats, addDailyAction]);
 
   const giveUp = useCallback(() => {
     if (gameStatus !== 'playing') return;
-    setLives(0);
-  }, [gameStatus]);
+    if (mode === 'daily') {
+      addDailyAction({ t: 'give' });
+    } else {
+      setLivesUnlimited(0);
+    }
+  }, [mode, gameStatus, addDailyAction]);
 
-  const resetState = useCallback(() => {
+  const resetUnlimitedState = useCallback(() => {
     setSelected([]);
-    setSolvedGroups([]);
-    setLives(4);
-    setHintsUsed(0);
-    setHintCategories([]);
+    setSolvedGroupsUnlimited([]);
+    setLivesUnlimited(4);
+    setHintsUsedUnlimited(0);
+    setHintCategoriesUnlimited([]);
     setLastIncorrect(null);
     setOneAway(false);
     setShuffleKey(0);
   }, []);
 
   const resetGame = useCallback(() => {
-    resetState();
-  }, [resetState]);
+    if (mode !== 'unlimited') return;
+    resetUnlimitedState();
+  }, [mode, resetUnlimitedState]);
 
   const nextPuzzle = useCallback(() => {
-    resetState();
-    setPuzzleIndex((prev) => prev + 1);
-  }, [resetState]);
+    if (mode !== 'unlimited') return;
+    resetUnlimitedState();
+    setUnlimitedIndex((prev) => prev + 1);
+  }, [mode, resetUnlimitedState]);
 
   const totalPuzzles = fallbackPuzzles.length;
-
-  const completionScore = gameStatus === 'won' ? (lives * 250) : 0;
-  useGameCompletion('connections', gameStatus !== 'playing', completionScore);
+  const completionScore = gameStatus === 'won' ? activeLives * 250 : 0;
+  useGameCompletion('connections', rawDailyStatus !== 'playing', completionScore);
 
   return {
+    mode, switchMode,
     puzzle,
-    puzzleIndex,
+    puzzleIndex: unlimitedIndex,
     totalPuzzles,
     streak,
     selected,
-    solvedGroups,
-    lives,
+    solvedGroups: activeSolvedGroups,
+    lives: activeLives,
     gameStatus,
     remainingPlayers,
-    hintsUsed,
-    hintCategories,
+    hintsUsed: activeHintsUsed,
+    hintCategories: activeHintCats,
     lastIncorrect,
     oneAway,
     togglePlayer,
@@ -189,5 +276,6 @@ export function useConnections() {
     giveUp,
     resetGame,
     nextPuzzle,
+    isLoading,
   };
 }

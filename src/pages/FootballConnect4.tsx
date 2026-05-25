@@ -23,6 +23,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const FootballConnect4 = () => {
   const {
+    mode, switchMode,
     boardConfig,
     board,
     currentTurn,
@@ -38,7 +39,7 @@ const FootballConnect4 = () => {
     submitPlayer,
     skipTurn,
     resetGame,
-    
+    isLoading,
   } = useFootballConnect4();
 
   const [playerInput, setPlayerInput] = useState('');
@@ -83,155 +84,185 @@ const FootballConnect4 = () => {
           >
             <HelpCircle className="w-6 h-6" />
           </button>
+
+          {/* Daily / Unlimited toggle */}
+          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+            {(['daily', 'unlimited'] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => switchMode(m)}
+                className={cn(
+                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                  mode === m
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+              </button>
+            ))}
+          </div>
         </header>
 
         <FootballConnect4HowToPlay open={showHowToPlay} onOpenChange={setShowHowToPlay} />
 
-        {/* Turn indicator */}
-        {phase === 'playing' && (
-          <div className="flex justify-center mb-4">
-            <div
-              className={cn(
-                'inline-flex items-center gap-2 px-5 py-2 rounded-full font-bold text-sm transition-all',
-                currentTurn === 'blue'
-                  ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                  : 'bg-red-500/20 text-red-400 border border-red-500/30'
-              )}
-            >
-              <div
-                className={cn(
-                  'w-3 h-3 rounded-full',
-                  currentTurn === 'blue' ? 'bg-blue-500' : 'bg-red-500'
-                )}
-              />
-              {currentTurn === 'blue' ? 'Blue' : 'Red'}'s Turn
-            </div>
-            <button
-              onClick={skipTurn}
-              disabled={isValidating}
-              className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-xs font-semibold bg-secondary text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <SkipForward className="w-3 h-3" />
-              Skip Turn
-            </button>
+        {isLoading ? (
+          <div className="flex justify-center py-10">
+            <p className="text-muted-foreground text-sm animate-pulse">Loading today's board…</p>
           </div>
-        )}
-
-        {/* Board */}
-        <FootballConnect4Board
-          boardConfig={boardConfig}
-          board={board}
-          currentTurn={currentTurn}
-          selectedColumn={selectedColumn}
-          targetRow={targetRow}
-          onSelectColumn={selectColumn}
-          disabled={phase !== 'playing' || isValidating}
-        />
-
-        {/* Player input (when a column is selected) */}
-        {phase === 'playing' && selectedColumn !== null && targetRow !== null && (
-          <div className="mt-4 space-y-3 animate-fade-in max-w-lg mx-auto">
-            <p className="text-sm text-center text-muted-foreground">
-              Name a player who matches{' '}
-              <span className="font-bold text-primary">"{colAttr}"</span> and{' '}
-              <span className="font-bold text-primary">"{rowAttr}"</span>
-            </p>
-            <div className="flex gap-2">
-              <div className="flex-1 relative">
-                <input
-                  type="text"
-                  value={playerInput}
-                  onChange={(e) => { setPlayerInput(e.target.value); setShowSuggestions(true); }}
-                  onFocus={() => playerInput.trim().length >= 2 && setShowSuggestions(true)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-                  placeholder="Enter soccer player name..."
-                  className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                  autoFocus
-                  disabled={isValidating}
-                />
-                <div className="absolute top-full left-0 right-0 z-50 mt-1">
-                  <FootballConnect4Suggestions
-                    query={playerInput}
-                    columnAttribute={colAttr}
-                    rowAttribute={rowAttr}
-                    onSelect={handleSelectSuggestion}
-                    visible={showSuggestions && !isValidating}
+        ) : (
+          <>
+            {/* Turn indicator */}
+            {phase === 'playing' && (
+              <div className="flex justify-center mb-4">
+                <div
+                  className={cn(
+                    'inline-flex items-center gap-2 px-5 py-2 rounded-full font-bold text-sm transition-all',
+                    currentTurn === 'blue'
+                      ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                      : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'w-3 h-3 rounded-full',
+                      currentTurn === 'blue' ? 'bg-blue-500' : 'bg-red-500'
+                    )}
                   />
+                  {currentTurn === 'blue' ? 'Blue' : 'Red'}'s Turn
                 </div>
-              </div>
-              <button
-                onClick={handleSubmit}
-                disabled={!playerInput.trim() || isValidating}
-                className={cn(
-                  'rounded-xl px-5 py-3 font-semibold transition-all inline-flex items-center gap-2',
-                  playerInput.trim() && !isValidating
-                    ? 'bg-primary text-primary-foreground hover:opacity-90'
-                    : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
-                )}
-              >
-                {isValidating ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Submit'}
-              </button>
-              <button
-                onClick={cancelSelection}
-                className="rounded-xl px-3 py-3 bg-secondary text-muted-foreground hover:text-foreground transition-colors"
-                title="Cancel"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            {validationError && (
-              <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
-                <AlertCircle className="w-4 h-4 shrink-0" />
-                <span>{validationError}</span>
+                <button
+                  onClick={skipTurn}
+                  disabled={isValidating}
+                  className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-xs font-semibold bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <SkipForward className="w-3 h-3" />
+                  Skip Turn
+                </button>
               </div>
             )}
-          </div>
-        )}
 
-        {/* Show validation error even without selection */}
-        {phase === 'playing' && selectedColumn === null && validationError && (
-          <div className="mt-4 max-w-lg mx-auto">
-            <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>{validationError}</span>
-            </div>
-          </div>
-        )}
-
-        {/* Game over */}
-        {phase === 'won' && (
-          <div className="text-center space-y-4 mt-6 animate-fade-in">
-            <div
-              className={cn(
-                'inline-flex items-center gap-3 px-6 py-3 rounded-xl border',
-                isDraw
-                  ? 'bg-secondary border-border'
-                  : winner === 'blue'
-                    ? 'bg-blue-500/10 border-blue-500/30'
-                    : 'bg-red-500/10 border-red-500/30'
-              )}
-            >
-              <span className="text-xl font-bold font-display">
-                {isDraw
-                  ? "🤝 It's a Draw!"
-                  : `${winner === 'blue' ? '🔵 Blue' : '🔴 Red'} Wins! 🎉`}
-              </span>
-            </div>
-            <ShareButtons
-              score={isDraw ? 'Draw' : `${winner === 'blue' ? 'Blue' : 'Red'} wins`}
-              gameName="Soccer Connect 4"
-              gamePath="/football-connect-4"
+            {/* Board */}
+            <FootballConnect4Board
+              boardConfig={boardConfig}
+              board={board}
+              currentTurn={currentTurn}
+              selectedColumn={selectedColumn}
+              targetRow={targetRow}
+              onSelectColumn={selectColumn}
+              disabled={phase !== 'playing' || isValidating}
             />
-            <div className="flex items-center justify-center gap-3 mt-4">
-              <button
-                onClick={resetGame}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
-            </div>
-          </div>
+
+            {/* Player input (when a column is selected) */}
+            {phase === 'playing' && selectedColumn !== null && targetRow !== null && (
+              <div className="mt-4 space-y-3 animate-fade-in max-w-lg mx-auto">
+                <p className="text-sm text-center text-muted-foreground">
+                  Name a player who matches{' '}
+                  <span className="font-bold text-primary">"{colAttr}"</span> and{' '}
+                  <span className="font-bold text-primary">"{rowAttr}"</span>
+                </p>
+                <div className="flex gap-2">
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      value={playerInput}
+                      onChange={(e) => { setPlayerInput(e.target.value); setShowSuggestions(true); }}
+                      onFocus={() => playerInput.trim().length >= 2 && setShowSuggestions(true)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                      placeholder="Enter soccer player name..."
+                      className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      autoFocus
+                      disabled={isValidating}
+                    />
+                    <div className="absolute top-full left-0 right-0 z-50 mt-1">
+                      <FootballConnect4Suggestions
+                        query={playerInput}
+                        columnAttribute={colAttr}
+                        rowAttribute={rowAttr}
+                        onSelect={handleSelectSuggestion}
+                        visible={showSuggestions && !isValidating}
+                      />
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!playerInput.trim() || isValidating}
+                    className={cn(
+                      'rounded-xl px-5 py-3 font-semibold transition-all inline-flex items-center gap-2',
+                      playerInput.trim() && !isValidating
+                        ? 'bg-primary text-primary-foreground hover:opacity-90'
+                        : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
+                    )}
+                  >
+                    {isValidating ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Submit'}
+                  </button>
+                  <button
+                    onClick={cancelSelection}
+                    className="rounded-xl px-3 py-3 bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+                    title="Cancel"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                {validationError && (
+                  <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>{validationError}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Show validation error even without selection */}
+            {phase === 'playing' && selectedColumn === null && validationError && (
+              <div className="mt-4 max-w-lg mx-auto">
+                <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{validationError}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Game over */}
+            {phase === 'won' && (
+              <div className="text-center space-y-4 mt-6 animate-fade-in">
+                <div
+                  className={cn(
+                    'inline-flex items-center gap-3 px-6 py-3 rounded-xl border',
+                    isDraw
+                      ? 'bg-secondary border-border'
+                      : winner === 'blue'
+                        ? 'bg-blue-500/10 border-blue-500/30'
+                        : 'bg-red-500/10 border-red-500/30'
+                  )}
+                >
+                  <span className="text-xl font-bold font-display">
+                    {isDraw
+                      ? "🤝 It's a Draw!"
+                      : `${winner === 'blue' ? '🔵 Blue' : '🔴 Red'} Wins! 🎉`}
+                  </span>
+                </div>
+                <ShareButtons
+                  score={isDraw ? 'Draw' : `${winner === 'blue' ? 'Blue' : 'Red'} wins`}
+                  gameName="Soccer Connect 4"
+                  gamePath="/football-connect-4"
+                />
+                <div className="flex items-center justify-center gap-3 mt-4">
+                  {mode === 'unlimited' ? (
+                    <button
+                      onClick={resetGame}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
+                    >
+                      <RotateCcw className="w-4 h-4" />
+                      Play Again
+                    </button>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Come back tomorrow for a new board!</p>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
         )}
 
         <GameSeoContent

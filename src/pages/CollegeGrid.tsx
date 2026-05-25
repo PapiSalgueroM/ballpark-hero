@@ -25,6 +25,7 @@ const CollegeGrid = () => {
     guessesLeft,
     correctCount,
     rarityScore,
+    isLoading,
   } = useCollegeGrid();
 
   const [showRules, setShowRules] = useState(false);
@@ -71,62 +72,71 @@ const CollegeGrid = () => {
           </div>
         </header>
 
-        <GridBoard
-          puzzle={puzzle}
-          cells={cells}
-          activeCell={activeCell}
-          onCellClick={setActiveCell}
-          accentVar="--cg-green"
-          headerBgVar="--cg-header"
-        />
-
-        {activeCell !== null && gameStatus === 'playing' && (
-          <div className="mt-6">
-            <p className="text-center text-xs text-muted-foreground mb-2">
-              Find a player who: <span className="text-[hsl(var(--cg-green))] font-semibold">{puzzle.rows[Math.floor(activeCell / 3)].label}</span>{' '}
-              + <span className="text-[hsl(var(--cg-green))] font-semibold">{puzzle.cols[activeCell % 3].label}</span>
-            </p>
-            <CollegeGridSearch onSelect={submitGuess} disabled={validating} />
+        {isLoading ? (
+          <div className="flex justify-center py-10">
+            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
           </div>
-        )}
+        ) : (
+          <>
+            <GridBoard
+              puzzle={puzzle}
+              cells={cells}
+              activeCell={activeCell}
+              onCellClick={setActiveCell}
+              accentVar="--cg-green"
+              headerBgVar="--cg-header"
+            />
 
-        {gameStatus === 'complete' && (
-          <div className="mt-8 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              {correctCount === 9 ? (
-                <>
-                  <div className="text-5xl mb-3">🏆</div>
-                  <h2 className="text-2xl font-bold text-[hsl(var(--cg-green))] font-display mb-2">
-                    Grid Complete!
-                  </h2>
-                </>
-              ) : (
-                <>
-                  <div className="text-5xl mb-3">⏱️</div>
-                  <h2 className="text-2xl font-bold text-destructive font-display mb-2">
-                    Out of Guesses!
-                  </h2>
-                </>
-              )}
-              <p className="text-foreground">
-                You filled <span className="font-bold text-[hsl(var(--cg-green))]">{correctCount}</span>/9 cells
-              </p>
-              {rarityScore !== null && (
-                <div className="flex items-center justify-center gap-2 mt-2">
-                  <Trophy className="w-5 h-5 text-[hsl(var(--cg-green))]" />
-                  <span className="text-lg font-bold text-[hsl(var(--cg-green))]">
-                    Rarity Score: {rarityScore}%
-                  </span>
+            {activeCell !== null && gameStatus === 'playing' && (
+              <div className="mt-6">
+                <p className="text-center text-xs text-muted-foreground mb-2">
+                  Find a player who: <span className="text-[hsl(var(--cg-green))] font-semibold">{puzzle.rows[Math.floor(activeCell / 3)].label}</span>{' '}
+                  + <span className="text-[hsl(var(--cg-green))] font-semibold">{puzzle.cols[activeCell % 3].label}</span>
+                </p>
+                <CollegeGridSearch onSelect={submitGuess} disabled={validating} />
+              </div>
+            )}
+
+            {gameStatus === 'complete' && (
+              <div className="mt-8 flex justify-center">
+                <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
+                  {correctCount === 9 ? (
+                    <>
+                      <div className="text-5xl mb-3">🏆</div>
+                      <h2 className="text-2xl font-bold text-[hsl(var(--cg-green))] font-display mb-2">
+                        Grid Complete!
+                      </h2>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-5xl mb-3">⏱️</div>
+                      <h2 className="text-2xl font-bold text-destructive font-display mb-2">
+                        Out of Guesses!
+                      </h2>
+                    </>
+                  )}
+                  <p className="text-foreground">
+                    You filled <span className="font-bold text-[hsl(var(--cg-green))]">{correctCount}</span>/9 cells
+                  </p>
+                  {rarityScore !== null && (
+                    <div className="flex items-center justify-center gap-2 mt-2">
+                      <Trophy className="w-5 h-5 text-[hsl(var(--cg-green))]" />
+                      <span className="text-lg font-bold text-[hsl(var(--cg-green))]">
+                        Rarity Score: {rarityScore}%
+                      </span>
+                    </div>
+                  )}
+                  <p className="text-xs text-muted-foreground mt-1">Lower rarity = more impressive picks!</p>
+                  <ShareButtons
+                    score={rarityScore !== null ? `a Rarity Score of ${rarityScore}% (${correctCount}/9)` : `${correctCount}/9 cells`}
+                    gameName="College Football Grid"
+                    gamePath="/college-grid"
+                  />
+                  <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
                 </div>
-              )}
-              <p className="text-xs text-muted-foreground mt-1">Lower rarity = more impressive picks!</p>
-              <ShareButtons
-                score={rarityScore !== null ? `a Rarity Score of ${rarityScore}% (${correctCount}/9)` : `${correctCount}/9 cells`}
-                gameName="College Football Grid"
-                gamePath="/college-grid"
-              />
-            </div>
-          </div>
+              </div>
+            )}
+          </>
         )}
 
         <GameSeoContent

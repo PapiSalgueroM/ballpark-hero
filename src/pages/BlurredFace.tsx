@@ -11,9 +11,12 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { cn } from '@/lib/utils';
 
 const BlurredFace = () => {
   const {
+    mode,
+    switchMode,
     targetPlayer,
     imageUrl,
     gameStatus,
@@ -24,6 +27,7 @@ const BlurredFace = () => {
     makeGuess,
     giveUp,
     resetGame,
+    isLoading,
   } = useBlurredFace();
 
   const [showRules, setShowRules] = useState(false);
@@ -32,7 +36,6 @@ const BlurredFace = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  // Show rules on first visit
   useEffect(() => {
     const seen = localStorage.getItem('blurred-face-rules-seen');
     if (!seen) {
@@ -41,7 +44,6 @@ const BlurredFace = () => {
     }
   }, []);
 
-  // Close suggestions on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (suggestionsRef.current && !suggestionsRef.current.contains(e.target as Node) &&
@@ -54,9 +56,9 @@ const BlurredFace = () => {
   }, []);
 
   const filteredNames = query.length >= 1
-    ? allPlayerNames.filter(name =>
+    ? allPlayerNames.filter((name) =>
         name.toLowerCase().includes(query.toLowerCase()) &&
-        !wrongGuesses.map(g => g.toLowerCase()).includes(name.toLowerCase())
+        !wrongGuesses.map((g) => g.toLowerCase()).includes(name.toLowerCase()),
       )
     : [];
 
@@ -73,7 +75,6 @@ const BlurredFace = () => {
   };
 
   const isGameOver = gameStatus === 'won' || gameStatus === 'lost' || gameStatus === 'gave-up';
-
 
   return (
     <main className="min-h-screen bg-background">
@@ -100,6 +101,24 @@ const BlurredFace = () => {
           <p className="text-muted-foreground text-sm md:text-base">
             Can you identify the soccer player from a blurred photo? Each wrong guess reveals more of the face. Test your knowledge in {maxGuesses} tries.
           </p>
+
+          {/* Daily / Unlimited toggle */}
+          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+            {(['daily', 'unlimited'] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => switchMode(m)}
+                className={cn(
+                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                  mode === m
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+              </button>
+            ))}
+          </div>
 
           <p className="text-sm text-muted-foreground mt-4">
             Guesses: <span className="text-foreground font-semibold">{wrongGuesses.length}</span> / {maxGuesses}
@@ -167,7 +186,6 @@ const BlurredFace = () => {
               />
             </div>
 
-            {/* Suggestions Dropdown */}
             {showSuggestions && filteredNames.length > 0 && (
               <div
                 ref={suggestionsRef}
@@ -252,13 +270,17 @@ const BlurredFace = () => {
                 gameName="Guess the Face"
                 gamePath="/guess-the-face"
               />
-              <button
-                onClick={resetGame}
-                className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
+              {mode === 'unlimited' ? (
+                <button
+                  onClick={resetGame}
+                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Play Again
+                </button>
+              ) : (
+                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
+              )}
             </div>
           </div>
         )}
@@ -267,15 +289,15 @@ const BlurredFace = () => {
           title="Guess The Face — Blurred Soccer Player | DoUKnowBall"
           description="Identify the mystery soccer player from a blurred photo. Each wrong guess unblurs the image and reveals a hint. Can you guess before running out of attempts?"
           howToPlay={[
-            "A blurred photo of a soccer player is shown",
-            "Each wrong guess slightly unblurs the image and reveals a hint",
-            "Use the hints (nationality, club, position) to narrow it down",
-            "Guess correctly before running out of attempts to win",
+            'A blurred photo of a soccer player is shown',
+            'Each wrong guess slightly unblurs the image and reveals a hint',
+            'Use the hints (nationality, club, position) to narrow it down',
+            'Guess correctly before running out of attempts to win',
           ]}
           examples={[
-            "Lionel Messi", "Cristiano Ronaldo", "Neymar Jr.", "Mohamed Salah",
-            "Kevin De Bruyne", "Robert Lewandowski", "Luka Modrić",
-            "Kylian Mbappé", "Erling Haaland", "Vinícius Júnior"
+            'Lionel Messi', 'Cristiano Ronaldo', 'Neymar Jr.', 'Mohamed Salah',
+            'Kevin De Bruyne', 'Robert Lewandowski', 'Luka Modrić',
+            'Kylian Mbappé', 'Erling Haaland', 'Vinícius Júnior',
           ]}
         />
 

@@ -4,102 +4,187 @@ import { careerPlayers } from '@/data/careerPlayers';
 import { toast } from 'sonner';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 
 const MAX_GUESSES = 8;
+const COLS = ['club', 'appearances', 'goals', 'assists', 'marketValue'] as const;
+
+export type CareerGameMode = 'daily' | 'unlimited';
+
+type CareerAction =
+  | { t: 'cell'; key: string }
+  | { t: 'won' }
+  | { t: 'wrong' }
+  | { t: 'give' };
+
+function getCoverableCells(player: CareerPlayer): string[] {
+  const keys: string[] = [];
+  player.career.forEach((_, rowIdx) => {
+    COLS.forEach((col) => keys.push(`${rowIdx}-${col}`));
+  });
+  return keys;
+}
 
 export function useCareerGame() {
-  const [targetPlayer, setTargetPlayer] = useState<CareerPlayer>(() =>
-    careerPlayers[Math.floor(Math.random() * careerPlayers.length)]
+  const [mode, setMode] = useState<CareerGameMode>('daily');
+  const switchMode = useCallback((m: CareerGameMode) => setMode(m), []);
+
+  // ── Daily ──────────────────────────────────────────────────────────────────
+  const {
+    puzzle: dailyPuzzle,
+    guesses: dailyActions,
+    addGuess: addDailyAction,
+    gameStatus: rawDailyStatus,
+    isLoading,
+  } = useDailyPuzzle<CareerPlayer, CareerAction>({
+    gameSlug: 'career-path',
+    puzzles: careerPlayers,
+    maxGuesses: 999,
+    isWon: (g) => g.some((a) => a.t === 'won'),
+    isLost: (g) =>
+      g.some((a) => a.t === 'give') || g.filter((a) => a.t === 'wrong').length >= MAX_GUESSES,
+    deserializeGuesses: (raw) => raw as CareerAction[],
+  });
+
+  const dailyRevealedCells = useMemo(
+    () => new Set(dailyActions.filter((a): a is { t: 'cell'; key: string } => a.t === 'cell').map((a) => a.key)),
+    [dailyActions],
   );
-  const [revealedCells, setRevealedCells] = useState<Set<string>>(new Set());
-  const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
-  const [boxesUsed, setBoxesUsed] = useState(0);
-  const [guessesUsed, setGuessesUsed] = useState(0);
+  const dailyWrongCount = dailyActions.filter((a) => a.t === 'wrong').length;
+  const dailyHasWon = dailyActions.some((a) => a.t === 'won');
+  const dailyGuessesUsed = dailyWrongCount + (dailyHasWon ? 1 : 0);
+  const dailyBoxesUsed = dailyRevealedCells.size;
 
-  // Get all coverable cell keys (everything except season column)
-  const getAllCoverableCells = useCallback(() => {
-    const cols = ['club', 'appearances', 'goals', 'assists', 'marketValue'];
-    const keys: string[] = [];
-    targetPlayer.career.forEach((_, rowIdx) => {
-      cols.forEach(col => keys.push(`${rowIdx}-${col}`));
-    });
-    return keys;
-  }, [targetPlayer]);
+  const dailyGameStatus = useMemo((): 'playing' | 'won' | 'lost' => {
+    if (rawDailyStatus === 'won') return 'won';
+    if (rawDailyStatus === 'lost') return 'lost';
+    return 'playing';
+  }, [rawDailyStatus]);
 
+  // ── Unlimited ──────────────────────────────────────────────────────────────
+  const [unlimitedPlayer, setUnlimitedPlayer] = useState<CareerPlayer>(
+    () => careerPlayers[Math.floor(Math.random() * careerPlayers.length)],
+  );
+  const [unlimitedRevealedCells, setUnlimitedRevealedCells] = useState<Set<string>>(new Set());
+  const [unlimitedGameStatus, setUnlimitedGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
+  const [unlimitedBoxesUsed, setUnlimitedBoxesUsed] = useState(0);
+  const [unlimitedGuessesUsed, setUnlimitedGuessesUsed] = useState(0);
+
+  // ── Active (mode-dependent) values ────────────────────────────────────────
+  const targetPlayer = mode === 'daily' ? (dailyPuzzle ?? careerPlayers[0]) : unlimitedPlayer;
+  const revealedCells = mode === 'daily' ? dailyRevealedCells : unlimitedRevealedCells;
+  const gameStatus = mode === 'daily' ? dailyGameStatus : unlimitedGameStatus;
+  const boxesUsed = mode === 'daily' ? dailyBoxesUsed : unlimitedBoxesUsed;
+  const guessesUsed = mode === 'daily' ? dailyGuessesUsed : unlimitedGuessesUsed;
+
+  // ── Actions ────────────────────────────────────────────────────────────────
   const revealCell = useCallback((key: string) => {
     if (gameStatus !== 'playing') return;
-    setRevealedCells(prev => {
-      if (prev.has(key)) return prev;
-      const next = new Set(prev);
-      next.add(key);
-      setBoxesUsed(b => b + 1);
-      return next;
-    });
-  }, [gameStatus]);
+    if (mode === 'daily') {
+      if (dailyRevealedCells.has(key)) return;
+      addDailyAction({ t: 'cell', key });
+    } else {
+      setUnlimitedRevealedCells((prev) => {
+        if (prev.has(key)) return prev;
+        const next = new Set(prev);
+        next.add(key);
+        setUnlimitedBoxesUsed((b) => b + 1);
+        return next;
+      });
+    }
+  }, [mode, gameStatus, dailyRevealedCells, addDailyAction]);
 
   const giveHint = useCallback(() => {
     if (gameStatus !== 'playing') return;
-    setRevealedCells(prev => {
-      const allCells = getAllCoverableCells();
-      const unrevealed = allCells.filter(k => !prev.has(k));
-      if (unrevealed.length === 0) return prev;
+    const allCells = getCoverableCells(targetPlayer);
+    const unrevealed = allCells.filter((k) => !revealedCells.has(k));
+    if (unrevealed.length === 0) return;
+    const toReveal = Math.min(4, unrevealed.length);
+    const shuffled = [...unrevealed].sort(() => Math.random() - 0.5);
+    const chosen = shuffled.slice(0, toReveal);
 
-      // Pick up to 4 random unrevealed cells
-      const toReveal = Math.min(4, unrevealed.length);
-      const shuffled = [...unrevealed].sort(() => Math.random() - 0.5);
-      const next = new Set(prev);
-      for (let i = 0; i < toReveal; i++) {
-        next.add(shuffled[i]);
-      }
-      setBoxesUsed(b => b + toReveal);
-      return next;
-    });
-  }, [gameStatus, getAllCoverableCells]);
+    if (mode === 'daily') {
+      chosen.forEach((key) => addDailyAction({ t: 'cell', key }));
+    } else {
+      setUnlimitedRevealedCells((prev) => {
+        const next = new Set(prev);
+        chosen.forEach((k) => next.add(k));
+        setUnlimitedBoxesUsed((b) => b + chosen.length);
+        return next;
+      });
+    }
+  }, [mode, gameStatus, targetPlayer, revealedCells, addDailyAction]);
 
   const allRevealed = useMemo(() => {
-    const allCells = getAllCoverableCells();
-    return allCells.every(k => revealedCells.has(k));
-  }, [revealedCells, getAllCoverableCells]);
+    const allCells = getCoverableCells(targetPlayer);
+    return allCells.every((k) => revealedCells.has(k));
+  }, [revealedCells, targetPlayer]);
 
   const makeGuess = useCallback((name: string): boolean => {
     if (gameStatus !== 'playing') return false;
-    const newCount = guessesUsed + 1;
-    setGuessesUsed(newCount);
 
     if (name.toLowerCase().trim() === targetPlayer.name.toLowerCase().trim()) {
-      setGameStatus('won');
+      if (mode === 'daily') {
+        addDailyAction({ t: 'won' });
+      } else {
+        setUnlimitedGuessesUsed((c) => c + 1);
+        setUnlimitedGameStatus('won');
+      }
       return true;
     }
 
-    if (newCount >= MAX_GUESSES) {
-      setGameStatus('lost');
-      toast.error(`No more guesses! The player was ${targetPlayer.name}`);
-      return false;
+    // Wrong guess
+    if (mode === 'daily') {
+      const newWrongCount = dailyWrongCount + 1;
+      addDailyAction({ t: 'wrong' });
+      if (newWrongCount >= MAX_GUESSES) {
+        toast.error(`No more guesses! The player was ${targetPlayer.name}`);
+      } else {
+        toast.error(`❌ Not ${name}. ${MAX_GUESSES - newWrongCount} guess${MAX_GUESSES - newWrongCount === 1 ? '' : 'es'} remaining!`);
+      }
+    } else {
+      const newCount = unlimitedGuessesUsed + 1;
+      setUnlimitedGuessesUsed(newCount);
+      if (newCount >= MAX_GUESSES) {
+        setUnlimitedGameStatus('lost');
+        toast.error(`No more guesses! The player was ${targetPlayer.name}`);
+      } else {
+        toast.error(`❌ Not ${name}. ${MAX_GUESSES - newCount} guess${MAX_GUESSES - newCount === 1 ? '' : 'es'} remaining!`);
+      }
     }
-
-    toast.error(`❌ Not ${name}. ${MAX_GUESSES - newCount} guess${MAX_GUESSES - newCount === 1 ? '' : 'es'} remaining!`);
     return false;
-  }, [gameStatus, targetPlayer, guessesUsed]);
+  }, [mode, gameStatus, targetPlayer, dailyWrongCount, unlimitedGuessesUsed, addDailyAction]);
 
   const giveUp = useCallback(() => {
     if (gameStatus !== 'playing') return;
-    setGameStatus('lost');
-  }, [gameStatus]);
+    if (mode === 'daily') {
+      addDailyAction({ t: 'give' });
+    } else {
+      setUnlimitedGameStatus('lost');
+    }
+  }, [mode, gameStatus, addDailyAction]);
 
   const resetGame = useCallback(() => {
-    setTargetPlayer(careerPlayers[Math.floor(Math.random() * careerPlayers.length)]);
-    setRevealedCells(new Set());
-    setGameStatus('playing');
-    setBoxesUsed(0);
-    setGuessesUsed(0);
-  }, []);
+    if (mode !== 'unlimited') return;
+    setUnlimitedPlayer(careerPlayers[Math.floor(Math.random() * careerPlayers.length)]);
+    setUnlimitedRevealedCells(new Set());
+    setUnlimitedGameStatus('playing');
+    setUnlimitedBoxesUsed(0);
+    setUnlimitedGuessesUsed(0);
+  }, [mode]);
 
-  const playerNames = useMemo(() => ensureAnswerInOptions(careerPlayers.map(p => p.name), targetPlayer.name), [targetPlayer]);
+  const playerNames = useMemo(
+    () => ensureAnswerInOptions(careerPlayers.map((p) => p.name), targetPlayer.name),
+    [targetPlayer],
+  );
 
-  const completionScore = gameStatus === 'won' ? Math.max(100, (MAX_GUESSES - guessesUsed) * 100) : 0;
-  useGameCompletion('career-path', gameStatus !== 'playing', completionScore);
+  const completionScore = dailyGameStatus === 'won'
+    ? Math.max(100, (MAX_GUESSES - dailyGuessesUsed) * 100)
+    : 0;
+  useGameCompletion('career-path', rawDailyStatus !== 'playing', completionScore);
 
   return {
+    mode, switchMode,
     targetPlayer,
     revealedCells,
     revealCell,
@@ -113,5 +198,6 @@ export function useCareerGame() {
     maxGuesses: MAX_GUESSES,
     playerNames,
     allRevealed,
+    isLoading,
   };
 }

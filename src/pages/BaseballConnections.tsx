@@ -28,6 +28,8 @@ const DIFFICULTY_HEADER: Record<string, string> = {
 
 const BaseballConnections = () => {
   const {
+    mode,
+    switchMode,
     puzzle,
     remainingPlayers,
     selected,
@@ -38,6 +40,8 @@ const BaseballConnections = () => {
     lives,
     gameStatus,
     shakeWrong,
+    resetGame,
+    isLoading,
   } = useBaseballConnections();
 
   const [showRules, setShowRules] = useState(false);
@@ -74,6 +78,25 @@ const BaseballConnections = () => {
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
             Find four groups of 5 baseball players that share a connection
           </p>
+
+          {/* Daily / Unlimited toggle */}
+          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+            {(['daily', 'unlimited'] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => switchMode(m)}
+                className={cn(
+                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                  mode === m
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
+              >
+                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+              </button>
+            ))}
+          </div>
+
           <div className="flex items-center justify-center gap-4 mt-3 text-sm">
             <span className="text-muted-foreground">
               Groups found: <span className="font-semibold text-[hsl(var(--bb-red))]">{solvedGroups.length}</span>/4
@@ -84,8 +107,15 @@ const BaseballConnections = () => {
           </div>
         </header>
 
+        {/* Loading guard */}
+        {isLoading && (
+          <div className="flex justify-center py-10">
+            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+          </div>
+        )}
+
         {/* Solved groups */}
-        {solvedGroups.length > 0 && (
+        {!isLoading && solvedGroups.length > 0 && (
           <div className="space-y-3 mb-6">
             {solvedGroups.map((group) => (
               <div
@@ -112,7 +142,7 @@ const BaseballConnections = () => {
         )}
 
         {/* Remaining player grid */}
-        {gameStatus === 'playing' && remainingPlayers.length > 0 && (
+        {!isLoading && gameStatus === 'playing' && remainingPlayers.length > 0 && (
           <div className={cn('mb-6', shakeWrong && 'animate-pulse')}>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {remainingPlayers.map((name) => (
@@ -134,7 +164,7 @@ const BaseballConnections = () => {
         )}
 
         {/* Action buttons */}
-        {gameStatus === 'playing' && (
+        {!isLoading && gameStatus === 'playing' && (
           <div className="flex items-center justify-center gap-3">
             <button
               onClick={deselectAll}
@@ -154,7 +184,7 @@ const BaseballConnections = () => {
         )}
 
         {/* Game complete */}
-        {gameStatus === 'complete' && (
+        {!isLoading && gameStatus === 'complete' && (
           <div className="mt-6 flex justify-center">
             <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
               <div className="text-5xl mb-3">{lives > 0 ? '🏆' : '⚾'}</div>
@@ -170,6 +200,16 @@ const BaseballConnections = () => {
                 gameName="Baseball Connections"
                 gamePath="/baseball-connections"
               />
+              {mode === 'unlimited' ? (
+                <button
+                  onClick={resetGame}
+                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-[hsl(var(--bb-navy))] text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
+                >
+                  Play Again
+                </button>
+              ) : (
+                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
+              )}
             </div>
           </div>
         )}

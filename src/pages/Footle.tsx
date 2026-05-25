@@ -6,7 +6,6 @@ import { HowToPlay } from '@/components/game/HowToPlay';
 import { cn } from '@/lib/utils';
 import { RotateCcw, HelpCircle } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
-import { getClubLogoUrl } from '@/lib/clubData';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
@@ -18,6 +17,9 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const Index = () => {
   const {
+    mode,
+    switchMode,
+    dailyTier,
     difficulty,
     changeDifficulty,
     guesses,
@@ -29,6 +31,7 @@ const Index = () => {
     guessedPlayerNames,
     maxGuesses,
     targetPlayer,
+    isLoading,
   } = useGame();
 
   const [showRules, setShowRules] = useState(false);
@@ -69,27 +72,59 @@ const Index = () => {
             Guess the soccer player in 8 tries — one of 10+ free sports trivia games across soccer, NBA &amp; UFC. No login. No tracking. Just play.
           </p>
 
-          {/* Mode Toggle */}
-          <div className="flex items-center justify-center gap-2 mt-6">
-            {(['easy', 'hard', 'insane'] as const).map((mode) => (
+          {/* Daily / Unlimited toggle */}
+          <div className="flex items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
+            {(['daily', 'unlimited'] as const).map((m) => (
               <button
-                key={mode}
-                onClick={() => changeDifficulty(mode)}
+                key={m}
+                onClick={() => switchMode(m)}
                 className={cn(
-                  'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
-                  difficulty === mode
-                    ? mode === 'easy'
-                      ? 'bg-correct text-correct-foreground'
-                      : mode === 'hard'
-                        ? 'bg-yellow-500 text-white'
-                        : 'bg-destructive text-destructive-foreground'
-                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                  mode === m
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
                 )}
               >
-                {mode}
+                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
               </button>
             ))}
           </div>
+
+          {/* Daily tier banner — visible before first guess and throughout */}
+          {mode === 'daily' && (
+            <div className={cn(
+              'inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold mt-3',
+              dailyTier === 'easy' && 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
+              dailyTier === 'hard' && 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
+              dailyTier === 'insane' && 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
+            )}>
+              Today's Daily: {dailyTier.toUpperCase()} MODE
+            </div>
+          )}
+
+          {/* Difficulty selector — unlimited mode only */}
+          {mode === 'unlimited' && (
+            <div className="flex items-center justify-center gap-2 mt-3">
+              {(['easy', 'hard', 'insane'] as const).map((d) => (
+                <button
+                  key={d}
+                  onClick={() => changeDifficulty(d)}
+                  className={cn(
+                    'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
+                    difficulty === d
+                      ? d === 'easy'
+                        ? 'bg-correct text-correct-foreground'
+                        : d === 'hard'
+                          ? 'bg-yellow-500 text-white'
+                          : 'bg-destructive text-destructive-foreground'
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                  )}
+                >
+                  {d}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Guess Counter */}
           <p className="text-sm text-muted-foreground mt-4">
@@ -102,7 +137,11 @@ const Index = () => {
         </header>
 
         {/* Search */}
-        {gameStatus === 'playing' && (
+        {isLoading ? (
+          <div className="mb-8 flex justify-center">
+            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+          </div>
+        ) : gameStatus === 'playing' ? (
           <div className="mb-8 space-y-3">
             <PlayerSearch
               players={availablePlayers}
@@ -118,7 +157,7 @@ const Index = () => {
               </button>
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* Game Board */}
         <GameBoard guesses={guesses} maxGuesses={maxGuesses} />
@@ -127,23 +166,6 @@ const Index = () => {
         {gameStatus !== 'playing' && (
           <div className="mt-8 flex justify-center">
             <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              {/* Player image */}
-              {targetPlayer && (
-                <div className="flex justify-center mb-4">
-                  <img
-                    src={`https://img.a]sports.com/tiny-image/player-search/${encodeURIComponent(targetPlayer.name.toLowerCase().replace(/ /g, '-'))}`}
-                    alt={targetPlayer.name}
-                    className="w-24 h-24 rounded-full object-cover bg-secondary border-2 border-primary/30"
-                    onError={(e) => {
-                      const clubLogo = getClubLogoUrl(targetPlayer.club);
-                      if (clubLogo) {
-                        e.currentTarget.src = clubLogo;
-                        e.currentTarget.className = "w-24 h-24 rounded-full object-contain bg-secondary border-2 border-primary/30 p-3";
-                      }
-                    }}
-                  />
-                </div>
-              )}
               {gameStatus === 'won' ? (
                 <>
                   <div className="text-5xl mb-3">🎉</div>
@@ -171,14 +193,9 @@ const Index = () => {
                       {targetPlayer?.name}
                     </span>
                   </p>
-                  <div className="flex items-center justify-center gap-2 mt-1">
-                    {getClubLogoUrl(targetPlayer?.club || '') && (
-                      <img src={getClubLogoUrl(targetPlayer?.club || '')} alt={targetPlayer?.club} className="w-5 h-5 object-contain" />
-                    )}
-                    <p className="text-muted-foreground text-sm">
-                      {targetPlayer?.club} · {targetPlayer?.league}
-                    </p>
-                  </div>
+                  <p className="text-muted-foreground text-sm mt-1">
+                    {targetPlayer?.club} · {targetPlayer?.league}
+                  </p>
                 </>
               )}
               <ShareButtons
@@ -191,13 +208,17 @@ const Index = () => {
                 userScore={gameStatus === 'won' ? Math.max(0, 1000 - (guesses.length - 1) * 125) : 0}
                 isVisible={true}
               />
-              <button
-                onClick={() => resetGame()}
-                className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
+              {mode === 'unlimited' ? (
+                <button
+                  onClick={() => resetGame()}
+                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Play Again
+                </button>
+              ) : (
+                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
+              )}
             </div>
           </div>
         )}

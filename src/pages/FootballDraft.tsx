@@ -25,6 +25,8 @@ const ROUND_LABELS: Record<number, string> = {
 
 const FootballDraft = () => {
   const {
+    mode,
+    switchMode,
     puzzle,
     currentPlayer,
     currentIndex,
@@ -32,10 +34,12 @@ const FootballDraft = () => {
     revealLevel,
     revealMore,
     submitGuess,
+    resetGame,
     gameStatus,
     totalPoints,
     maxPoints,
     roundOptions,
+    isLoading,
   } = useFootballDraft();
 
   const [showRules, setShowRules] = useState(false);
@@ -81,6 +85,25 @@ const FootballDraft = () => {
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
             Guess what round each player was drafted — reveal clues progressively
           </p>
+
+          {/* Daily / Unlimited toggle */}
+          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+            {(['daily', 'unlimited'] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => switchMode(m)}
+                className={cn(
+                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                  mode === m
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
+              >
+                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+              </button>
+            ))}
+          </div>
+
           <div className="flex items-center justify-center gap-4 mt-3 text-sm">
             <span className="text-muted-foreground">
               Player: <span className="font-semibold text-foreground">{Math.min(currentIndex + 1, 5)}</span>/5
@@ -91,8 +114,15 @@ const FootballDraft = () => {
           </div>
         </header>
 
+        {/* Loading guard */}
+        {isLoading && (
+          <div className="flex justify-center py-10">
+            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+          </div>
+        )}
+
         {/* Current player card */}
-        {gameStatus === 'playing' && currentPlayer && (
+        {!isLoading && gameStatus === 'playing' && currentPlayer && (
           <div className="bg-card border border-border rounded-2xl p-6 shadow-lg">
             {/* Progress dots */}
             <div className="flex items-center justify-center gap-2 mb-6">
@@ -243,7 +273,7 @@ const FootballDraft = () => {
         )}
 
         {/* Game complete */}
-        {gameStatus === 'complete' && (
+        {!isLoading && gameStatus === 'complete' && (
           <div className="mt-4 flex justify-center">
             <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
               <div className="text-5xl mb-3">{totalPoints >= 40 ? '🏆' : totalPoints >= 25 ? '🎯' : '🏈'}</div>
@@ -282,6 +312,16 @@ const FootballDraft = () => {
                 gameName="Pro Football Draft Guesser"
                 gamePath="/football-draft"
               />
+              {mode === 'unlimited' ? (
+                <button
+                  onClick={resetGame}
+                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-[hsl(var(--ft-navy))] text-[hsl(var(--ft-gold))] rounded-full font-semibold hover:opacity-90 transition-opacity border border-[hsl(var(--ft-gold)/0.3)]"
+                >
+                  Play Again
+                </button>
+              ) : (
+                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
+              )}
             </div>
           </div>
         )}

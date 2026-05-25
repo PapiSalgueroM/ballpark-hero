@@ -23,6 +23,8 @@ const difficultyColors: Record<ConnectionDifficulty, string> = {
 
 const Connections = () => {
   const {
+    mode,
+    switchMode,
     puzzle,
     selected,
     solvedGroups,
@@ -43,6 +45,7 @@ const Connections = () => {
     nextPuzzle,
     puzzleIndex,
     totalPuzzles,
+    isLoading,
   } = useConnections();
 
   const [showRules, setShowRules] = useState(false);
@@ -80,9 +83,29 @@ const Connections = () => {
           <p className="text-muted-foreground text-sm md:text-base">
             Group 16 soccer players into 4 secret categories — can you crack the connection?
           </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            Puzzle {(puzzleIndex % totalPuzzles) + 1} of {totalPuzzles}
-          </p>
+          {mode === 'unlimited' && (
+            <p className="text-xs text-muted-foreground mt-1">
+              Puzzle {(puzzleIndex % totalPuzzles) + 1} of {totalPuzzles}
+            </p>
+          )}
+
+          {/* Daily / Unlimited toggle */}
+          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+            {(['daily', 'unlimited'] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => switchMode(m)}
+                className={cn(
+                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                  mode === m
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+              </button>
+            ))}
+          </div>
 
           {/* Lives & Streak */}
           <div className="flex items-center justify-center gap-4 mt-5">
@@ -93,7 +116,7 @@ const Connections = () => {
                   key={i}
                   className={cn(
                     'w-3 h-3 rounded-full transition-all',
-                    i < lives ? 'bg-primary' : 'bg-secondary'
+                    i < lives ? 'bg-primary' : 'bg-secondary',
                   )}
                 />
               ))}
@@ -107,150 +130,163 @@ const Connections = () => {
           </div>
         </header>
 
-        {/* One Away */}
-        {oneAway && (
-          <div className="max-w-xl mx-auto mb-4 bg-destructive/10 border border-destructive/30 rounded-xl px-4 py-3 text-center animate-cell-reveal">
-            <p className="text-sm font-semibold text-destructive">
-              🔥 One away!
-            </p>
+        {/* Loading guard */}
+        {isLoading && (
+          <div className="flex justify-center py-10">
+            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
           </div>
         )}
 
-        {/* Hint */}
-        {hintCategories.length > 0 && (
-          <div className="max-w-xl mx-auto mb-4 space-y-2">
-            {hintCategories.map((cat) => (
-              <div key={cat} className="bg-accent/50 border border-accent rounded-xl px-4 py-3 text-center">
-                <p className="text-sm text-accent-foreground">
-                  <Lightbulb className="w-4 h-4 inline mr-1.5 -mt-0.5" />
-                  Hint: <strong>{cat}</strong>
-                </p>
+        {!isLoading && (
+          <>
+            {/* One Away */}
+            {oneAway && (
+              <div className="max-w-xl mx-auto mb-4 bg-destructive/10 border border-destructive/30 rounded-xl px-4 py-3 text-center animate-cell-reveal">
+                <p className="text-sm font-semibold text-destructive">🔥 One away!</p>
               </div>
-            ))}
-          </div>
-        )}
+            )}
 
-        {/* Board */}
-        <ConnectionsBoard
-          remainingPlayers={remainingPlayers}
-          selected={selected}
-          solvedGroups={solvedGroups}
-          lastIncorrect={lastIncorrect}
-          onToggle={togglePlayer}
-        />
-
-        {/* Actions */}
-        {gameStatus === 'playing' && (
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
-            <button
-              onClick={shufflePlayers}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            >
-              <Shuffle className="w-4 h-4" />
-              Shuffle
-            </button>
-            <button
-              onClick={submitGuess}
-              disabled={selected.length !== 4}
-              className={cn(
-                'inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold transition-all',
-                selected.length === 4
-                  ? 'bg-primary text-primary-foreground hover:opacity-90'
-                  : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
-              )}
-            >
-              <Send className="w-4 h-4" />
-              Submit
-            </button>
-            <button
-              onClick={useHint}
-              disabled={hintsUsed >= 4}
-              className={cn(
-                'inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all',
-                hintsUsed >= 4
-                  ? 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
-                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-              )}
-            >
-              <Lightbulb className="w-4 h-4" />
-              Hint ({4 - hintsUsed})
-            </button>
-            <button
-              onClick={giveUp}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30"
-            >
-              🏳️ Give Up
-            </button>
-          </div>
-        )}
-
-        {/* Game Over */}
-        {gameStatus !== 'playing' && (
-          <div className="mt-8 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              {gameStatus === 'won' ? (
-                <>
-                  <div className="text-5xl mb-3">🎉</div>
-                  <h2 className="text-2xl font-bold text-correct font-display mb-2">
-                    You found all connections!
-                  </h2>
-                  <p className="text-muted-foreground text-sm">
-                    Solved with {lives} {lives === 1 ? 'life' : 'lives'} remaining
-                  </p>
-                </>
-              ) : (
-                <>
-                  <div className="text-5xl mb-3">😞</div>
-                  <h2 className="text-2xl font-bold text-destructive font-display mb-2">
-                    Game Over
-                  </h2>
-                  <p className="text-muted-foreground text-sm mb-4">
-                    Here are the groups you missed:
-                  </p>
-                  <div className="space-y-2">
-                    {puzzle.groups
-                      .filter((g) => !solvedGroups.includes(g))
-                      .map((g) => (
-                        <div
-                          key={g.category}
-                          className={cn(
-                            'rounded-lg p-3 text-center',
-                            difficultyColors[g.difficulty],
-                            g.difficulty === 'easy' || g.difficulty === 'hard' || g.difficulty === 'insane'
-                              ? 'text-white'
-                              : 'text-close-foreground'
-                          )}
-                        >
-                          <p className="font-bold text-xs uppercase">{g.category}</p>
-                          <p className="text-xs mt-0.5 opacity-90">{g.players.join(', ')}</p>
-                        </div>
-                      ))}
+            {/* Hint */}
+            {hintCategories.length > 0 && (
+              <div className="max-w-xl mx-auto mb-4 space-y-2">
+                {hintCategories.map((cat) => (
+                  <div key={cat} className="bg-accent/50 border border-accent rounded-xl px-4 py-3 text-center">
+                    <p className="text-sm text-accent-foreground">
+                      <Lightbulb className="w-4 h-4 inline mr-1.5 -mt-0.5" />
+                      Hint: <strong>{cat}</strong>
+                    </p>
                   </div>
-                </>
-              )}
-              <ShareButtons
-                score={gameStatus === 'won' ? `${solvedGroups.length}/4 groups, ${lives} lives left` : `${solvedGroups.length}/4 groups`}
-                gameName="Connections"
-                gamePath="/connections"
-              />
-              <div className="mt-4 flex items-center gap-3 justify-center flex-wrap">
+                ))}
+              </div>
+            )}
+
+            {/* Board */}
+            <ConnectionsBoard
+              remainingPlayers={remainingPlayers}
+              selected={selected}
+              solvedGroups={solvedGroups}
+              lastIncorrect={lastIncorrect}
+              onToggle={togglePlayer}
+            />
+
+            {/* Actions */}
+            {gameStatus === 'playing' && (
+              <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
                 <button
-                  onClick={resetGame}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
+                  onClick={shufflePlayers}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all bg-secondary text-secondary-foreground hover:bg-secondary/80"
                 >
-                  <RotateCcw className="w-4 h-4" />
-                  Retry
+                  <Shuffle className="w-4 h-4" />
+                  Shuffle
                 </button>
                 <button
-                  onClick={nextPuzzle}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+                  onClick={submitGuess}
+                  disabled={selected.length !== 4}
+                  className={cn(
+                    'inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold transition-all',
+                    selected.length === 4
+                      ? 'bg-primary text-primary-foreground hover:opacity-90'
+                      : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50',
+                  )}
                 >
-                  Next Puzzle
-                  <ArrowRight className="w-4 h-4" />
+                  <Send className="w-4 h-4" />
+                  Submit
+                </button>
+                <button
+                  onClick={useHint}
+                  disabled={hintsUsed >= 4}
+                  className={cn(
+                    'inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all',
+                    hintsUsed >= 4
+                      ? 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+                  )}
+                >
+                  <Lightbulb className="w-4 h-4" />
+                  Hint ({4 - hintsUsed})
+                </button>
+                <button
+                  onClick={giveUp}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30"
+                >
+                  🏳️ Give Up
                 </button>
               </div>
-            </div>
-          </div>
+            )}
+
+            {/* Game Over */}
+            {gameStatus !== 'playing' && (
+              <div className="mt-8 flex justify-center">
+                <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
+                  {gameStatus === 'won' ? (
+                    <>
+                      <div className="text-5xl mb-3">🎉</div>
+                      <h2 className="text-2xl font-bold text-correct font-display mb-2">
+                        You found all connections!
+                      </h2>
+                      <p className="text-muted-foreground text-sm">
+                        Solved with {lives} {lives === 1 ? 'life' : 'lives'} remaining
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-5xl mb-3">😞</div>
+                      <h2 className="text-2xl font-bold text-destructive font-display mb-2">
+                        Game Over
+                      </h2>
+                      <p className="text-muted-foreground text-sm mb-4">
+                        Here are the groups you missed:
+                      </p>
+                      <div className="space-y-2">
+                        {puzzle.groups
+                          .filter((g) => !solvedGroups.includes(g))
+                          .map((g) => (
+                            <div
+                              key={g.category}
+                              className={cn(
+                                'rounded-lg p-3 text-center',
+                                difficultyColors[g.difficulty],
+                                g.difficulty === 'easy' || g.difficulty === 'hard' || g.difficulty === 'insane'
+                                  ? 'text-white'
+                                  : 'text-close-foreground',
+                              )}
+                            >
+                              <p className="font-bold text-xs uppercase">{g.category}</p>
+                              <p className="text-xs mt-0.5 opacity-90">{g.players.join(', ')}</p>
+                            </div>
+                          ))}
+                      </div>
+                    </>
+                  )}
+                  <ShareButtons
+                    score={gameStatus === 'won' ? `${solvedGroups.length}/4 groups, ${lives} lives left` : `${solvedGroups.length}/4 groups`}
+                    gameName="Connections"
+                    gamePath="/connections"
+                  />
+                  {mode === 'unlimited' ? (
+                    <div className="mt-4 flex items-center gap-3 justify-center flex-wrap">
+                      <button
+                        onClick={resetGame}
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                        Retry
+                      </button>
+                      <button
+                        onClick={nextPuzzle}
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+                      >
+                        Next Puzzle
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
         )}
 
         {/* Legend */}
@@ -265,18 +301,18 @@ const Connections = () => {
           title="Sports Connections Game | DoUKnowBall"
           description="Find the four groups of connected sports players. Each group shares something in common — a team, award, position or era."
           howToPlay={[
-            "Select four players you think belong to the same group",
-            "Hit Submit to check your guess — correct groups are revealed",
-            "Use hints to reveal a group's category name",
-            "You have 4 lives — lose one for each wrong guess",
+            'Select four players you think belong to the same group',
+            'Hit Submit to check your guess — correct groups are revealed',
+            'Use hints to reveal a group\'s category name',
+            'You have 4 lives — lose one for each wrong guess',
           ]}
           examples={[
-            "Players who played for AC Milan — Kaká, Maldini, Van Basten, Gullit",
-            "Ballon d'Or winners — Messi, Ronaldo, Modrić, Benzema",
-            "Brazilian World Cup winners — Ronaldo, Rivaldo, Cafu, Roberto Carlos",
-            "Premier League Golden Boot — Salah, Kane, Henry, Van Persie",
-            "Players who wore #10 — Zidane, Pelé, Maradona, Ronaldinho",
-            "Left-footed legends — Messi, Maradona, Nedvěd, Robben"
+            'Players who played for AC Milan — Kaká, Maldini, Van Basten, Gullit',
+            'Ballon d\'Or winners — Messi, Ronaldo, Modrić, Benzema',
+            'Brazilian World Cup winners — Ronaldo, Rivaldo, Cafu, Roberto Carlos',
+            'Premier League Golden Boot — Salah, Kane, Henry, Van Persie',
+            'Players who wore #10 — Zidane, Pelé, Maradona, Ronaldinho',
+            'Left-footed legends — Messi, Maradona, Nedvěd, Robben',
           ]}
         />
 
