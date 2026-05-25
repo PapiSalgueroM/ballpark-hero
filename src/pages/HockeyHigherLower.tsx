@@ -138,13 +138,15 @@ const HockeyHigherLower = () => {
                 gamePath="/hockey-higher-lower"
               />
 
-              {mode === 'unlimited' && (
+              {mode === 'unlimited' ? (
                 <button
                   onClick={() => switchMode('unlimited')}
                   className="mt-4 px-6 py-2.5 rounded-xl bg-[hsl(var(--hk-blue))] text-[hsl(var(--hk-silver))] font-bold border border-[hsl(var(--hk-silver)/0.2)] hover:opacity-90 transition-opacity"
                 >
                   Play Again
                 </button>
+              ) : (
+                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new challenge!</p>
               )}
             </div>
           </div>

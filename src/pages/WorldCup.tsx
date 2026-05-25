@@ -15,6 +15,8 @@ import { cn } from '@/lib/utils';
 
 const WorldCup = () => {
   const {
+    mode,
+    switchMode,
     puzzle,
     revealedClues,
     revealedCount,
@@ -25,8 +27,10 @@ const WorldCup = () => {
     submitGuess,
     skipClue,
     giveUp,
+    resetGame,
     gameStatus,
     score,
+    isLoading,
   } = useWorldCup();
 
   const [showRules, setShowRules] = useState(false);
@@ -70,6 +74,25 @@ const WorldCup = () => {
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
             Guess the mystery World Cup player from progressive clues. A new challenge every day!
           </p>
+
+          {/* Daily / Unlimited toggle */}
+          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+            {(['daily', 'unlimited'] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => switchMode(m)}
+                className={cn(
+                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                  mode === m
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
+              >
+                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+              </button>
+            ))}
+          </div>
+
           <p className="text-sm text-muted-foreground mt-3">
             Clue{' '}
             <span className="font-semibold text-foreground">{Math.min(revealedCount, totalClues)}</span>{' '}
@@ -77,40 +100,49 @@ const WorldCup = () => {
           </p>
         </header>
 
+        {/* Loading guard */}
+        {isLoading && (
+          <div className="mb-8 flex justify-center">
+            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+          </div>
+        )}
+
         {/* Clues */}
-        <div className="space-y-3 mb-8">
-          {revealedClues.map((clue, i) => {
-            const isFinalReveal = clue.label === 'Answer' && gameStatus !== 'playing';
-            return (
-              <div
-                key={i}
-                className={cn(
-                  'rounded-xl border p-4 transition-all animate-in fade-in slide-in-from-top-2 duration-300',
-                  isFinalReveal
-                    ? 'border-[hsl(var(--wc-gold))]/50 bg-[hsl(var(--wc-gold))]/10'
-                    : 'border-border bg-card'
-                )}
-              >
-                <span className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--wc-green))]">
-                  {clue.label}
-                </span>
-                <p className={cn(
-                  'mt-1',
-                  isFinalReveal
-                    ? 'text-2xl md:text-3xl font-bold text-[hsl(var(--wc-gold))] font-display'
-                    : 'text-foreground text-lg font-medium'
-                )}>
-                  {(clue.label === 'Country' || clue.label === 'Host Country') ? (
-                    <span className="inline-flex items-center gap-2"><FlagImg name={clue.value} size={24} />{clue.value}</span>
-                  ) : clue.value}
-                </p>
-              </div>
-            );
-          })}
-        </div>
+        {!isLoading && (
+          <div className="space-y-3 mb-8">
+            {revealedClues.map((clue, i) => {
+              const isFinalReveal = clue.label === 'Answer' && gameStatus !== 'playing';
+              return (
+                <div
+                  key={i}
+                  className={cn(
+                    'rounded-xl border p-4 transition-all animate-in fade-in slide-in-from-top-2 duration-300',
+                    isFinalReveal
+                      ? 'border-[hsl(var(--wc-gold))]/50 bg-[hsl(var(--wc-gold))]/10'
+                      : 'border-border bg-card'
+                  )}
+                >
+                  <span className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--wc-green))]">
+                    {clue.label}
+                  </span>
+                  <p className={cn(
+                    'mt-1',
+                    isFinalReveal
+                      ? 'text-2xl md:text-3xl font-bold text-[hsl(var(--wc-gold))] font-display'
+                      : 'text-foreground text-lg font-medium'
+                  )}>
+                    {(clue.label === 'Country' || clue.label === 'Host Country') ? (
+                      <span className="inline-flex items-center gap-2"><FlagImg name={clue.value} size={24} />{clue.value}</span>
+                    ) : clue.value}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         {/* Input area */}
-        {gameStatus === 'playing' && (
+        {!isLoading && gameStatus === 'playing' && (
           <div className="space-y-3 mb-4">
             <form onSubmit={handleSubmit} className="flex gap-2">
               <input
@@ -164,7 +196,7 @@ const WorldCup = () => {
         )}
 
         {/* Wrong attempts */}
-        {attempts.length > 0 && gameStatus === 'playing' && (
+        {!isLoading && attempts.length > 0 && gameStatus === 'playing' && (
           <div className="flex flex-wrap gap-2 mb-6 justify-center">
             {attempts.map((a, i) => (
               <span key={i} className="px-3 py-1 rounded-full bg-destructive/15 text-destructive text-xs font-medium">
@@ -175,7 +207,7 @@ const WorldCup = () => {
         )}
 
         {/* Result */}
-        {gameStatus !== 'playing' && (
+        {!isLoading && gameStatus !== 'playing' && (
           <div className="flex justify-center mb-8">
             <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
               {gameStatus === 'won' ? (
@@ -212,6 +244,16 @@ const WorldCup = () => {
                 gameName="World Cup"
                 gamePath="/world-cup"
               />
+              {mode === 'unlimited' ? (
+                <button
+                  onClick={resetGame}
+                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-[hsl(var(--wc-green))] text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
+                >
+                  Play Again
+                </button>
+              ) : (
+                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
+              )}
             </div>
           </div>
         )}

@@ -1,124 +1,139 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { soccerGridPuzzles } from '@/data/soccerGridPuzzles';
 import { SoccerGridCell, SoccerGridGameStatus, SoccerGridPuzzle } from '@/types/soccerGrid';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+
+type GridAction =
+  | { t: 'ok'; cellIndex: number; playerName: string; rarity: number }
+  | { t: 'x' };
 
 export function useSoccerGrid() {
-  const puzzle: SoccerGridPuzzle = useMemo(() => soccerGridPuzzles[Math.floor(Math.random() * soccerGridPuzzles.length)], []);
+  const {
+    puzzle: dailyPuzzle,
+    guesses: dailyActions,
+    addGuess: addDailyGuess,
+    gameStatus: rawDailyStatus,
+    isLoading,
+  } = useDailyPuzzle<SoccerGridPuzzle, GridAction>({
+    gameSlug: 'soccer-grid',
+    puzzles: soccerGridPuzzles,
+    maxGuesses: 15,
+    isWon: (g) => g.filter((a) => a.t === 'ok').length >= 9,
+    deserializeGuesses: (raw) => raw as GridAction[],
+  });
 
-  const [cells, setCells] = useState<SoccerGridCell[]>(() =>
-    Array.from({ length: 9 }, (_, i) => ({
-      index: i, playerName: null, status: 'empty' as const, rarity: null,
-    }))
-  );
+  const puzzle = dailyPuzzle ?? soccerGridPuzzles[0];
 
   const [activeCell, setActiveCell] = useState<number | null>(null);
   const [validating, setValidating] = useState(false);
-  const [guessesLeft, setGuessesLeft] = useState(15);
+  const [wrongFlash, setWrongFlash] = useState<{ cellIndex: number; playerName: string } | null>(null);
 
-  const correctCount = cells.filter((c) => c.status === 'correct').length;
-  const gameStatus: SoccerGridGameStatus =
-    correctCount === 9 || guessesLeft <= 0 ? 'complete' : 'playing';
+  const correctActions = useMemo(
+    () => dailyActions.filter((a): a is { t: 'ok'; cellIndex: number; playerName: string; rarity: number } => a.t === 'ok'),
+    [dailyActions],
+  );
+
+  const cells = useMemo<SoccerGridCell[]>(
+    () =>
+      Array.from({ length: 9 }, (_, i) => {
+        const ok = correctActions.find((a) => a.cellIndex === i);
+        if (ok) return { index: i, playerName: ok.playerName, status: 'correct' as const, rarity: ok.rarity };
+        if (wrongFlash?.cellIndex === i)
+          return { index: i, playerName: wrongFlash.playerName, status: 'wrong' as const, rarity: null };
+        return { index: i, playerName: null, status: 'empty' as const, rarity: null };
+      }),
+    [correctActions, wrongFlash],
+  );
+
+  const correctCount = correctActions.length;
+  const guessesLeft = Math.max(0, 15 - dailyActions.length);
+  const gameStatus: SoccerGridGameStatus = rawDailyStatus !== 'playing' ? 'complete' : 'playing';
 
   const rarityScore = useMemo(() => {
-    const correctCells = cells.filter((c) => c.status === 'correct' && c.rarity !== null);
-    if (correctCells.length === 0) return null;
-    const avg = correctCells.reduce((sum, c) => sum + (c.rarity ?? 0), 0) / correctCells.length;
+    if (correctActions.length === 0) return null;
+    const avg = correctActions.reduce((sum, a) => sum + a.rarity, 0) / correctActions.length;
     return Math.round(avg);
-  }, [cells]);
+  }, [correctActions]);
 
-  const getRowCol = (cellIndex: number) => {
-    const row = Math.floor(cellIndex / 3);
-    const col = cellIndex % 3;
-    return { row, col, rowAttr: puzzle.rows[row], colAttr: puzzle.cols[col] };
-  };
+  const getRowCol = useCallback(
+    (cellIndex: number) => {
+      const row = Math.floor(cellIndex / 3);
+      const col = cellIndex % 3;
+      return { row, col, rowAttr: puzzle.rows[row], colAttr: puzzle.cols[col] };
+    },
+    [puzzle],
+  );
 
-  const fetchRarity = useCallback(async (puzzleId: string, cellIndex: number, playerName: string): Promise<number> => {
-    try {
-      const { count: totalCount } = await supabase
-        .from('soccer_grid_selections')
-        .select('*', { count: 'exact', head: true })
-        .eq('puzzle_id', puzzleId)
-        .eq('cell_index', cellIndex);
-
-      const { count: playerCount } = await supabase
-        .from('soccer_grid_selections')
-        .select('*', { count: 'exact', head: true })
-        .eq('puzzle_id', puzzleId)
-        .eq('cell_index', cellIndex)
-        .eq('player_name', playerName.toLowerCase());
-
-      const total = (totalCount ?? 0) + 1;
-      const player = (playerCount ?? 0) + 1;
-      return Math.round((player / total) * 100);
-    } catch {
-      return 50;
-    }
-  }, []);
-
-  const submitGuess = useCallback(async (playerName: string) => {
-    if (activeCell === null || gameStatus !== 'playing' || validating) return;
-    if (cells[activeCell].status === 'correct') return;
-
-    setValidating(true);
-    const { rowAttr, colAttr } = getRowCol(activeCell);
-
-    try {
-      const { data, error } = await supabase.functions.invoke('soccer-grid-validate', {
-        body: {
-          playerName,
-          rowAttribute: rowAttr.label,
-          colAttribute: colAttr.label,
-        },
-      });
-
-      if (error) throw error;
-      const isValid = data?.valid === true;
-      const displayName = data?.fullName || playerName;
-
-      if (isValid) {
-        await supabase.from('soccer_grid_selections').insert({
-          puzzle_id: puzzle.id,
-          cell_index: activeCell,
-          player_name: displayName.toLowerCase(),
-        });
-
-        const rarity = await fetchRarity(puzzle.id, activeCell, displayName);
-
-        setCells((prev) =>
-          prev.map((c, i) =>
-            i === activeCell ? { ...c, playerName: displayName, status: 'correct', rarity } : c
-          )
-        );
-      } else {
-        setCells((prev) =>
-          prev.map((c, i) =>
-            i === activeCell ? { ...c, playerName, status: 'wrong' } : c
-          )
-        );
-        setTimeout(() => {
-          setCells((prev) =>
-            prev.map((c, i) =>
-              i === activeCell && c.status === 'wrong' ? { ...c, playerName: null, status: 'empty' } : c
-            )
-          );
-        }, 1500);
+  const fetchRarity = useCallback(
+    async (puzzleId: string, cellIndex: number, playerName: string): Promise<number> => {
+      try {
+        const { count: totalCount } = await supabase
+          .from('soccer_grid_selections')
+          .select('*', { count: 'exact', head: true })
+          .eq('puzzle_id', puzzleId)
+          .eq('cell_index', cellIndex);
+        const { count: playerCount } = await supabase
+          .from('soccer_grid_selections')
+          .select('*', { count: 'exact', head: true })
+          .eq('puzzle_id', puzzleId)
+          .eq('cell_index', cellIndex)
+          .eq('player_name', playerName.toLowerCase());
+        const total = (totalCount ?? 0) + 1;
+        const player = (playerCount ?? 0) + 1;
+        return Math.round((player / total) * 100);
+      } catch {
+        return 50;
       }
+    },
+    [],
+  );
 
-      setGuessesLeft((g) => g - 1);
-    } catch {
-      // On error, don't count the guess
-    } finally {
-      setValidating(false);
-      setActiveCell(null);
-    }
-  }, [activeCell, gameStatus, validating, cells, puzzle.id, fetchRarity]);
+  const submitGuess = useCallback(
+    async (playerName: string) => {
+      if (activeCell === null || gameStatus !== 'playing' || validating) return;
+      if (cells[activeCell].status === 'correct') return;
 
-  useGameCompletion('soccer-grid', gameStatus === 'complete', correctCount * 100);
+      setValidating(true);
+      const { rowAttr, colAttr } = getRowCol(activeCell);
+      const capturedCell = activeCell;
+
+      try {
+        const { data, error } = await supabase.functions.invoke('soccer-grid-validate', {
+          body: { playerName, rowAttribute: rowAttr.label, colAttribute: colAttr.label },
+        });
+        if (error) throw error;
+        const isValid = data?.valid === true;
+        const displayName = data?.fullName || playerName;
+
+        if (isValid) {
+          await supabase.from('soccer_grid_selections').insert({
+            puzzle_id: puzzle.id,
+            cell_index: capturedCell,
+            player_name: displayName.toLowerCase(),
+          });
+          const rarity = await fetchRarity(puzzle.id, capturedCell, displayName);
+          addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: displayName, rarity });
+        } else {
+          setWrongFlash({ cellIndex: capturedCell, playerName });
+          setTimeout(() => setWrongFlash(null), 1500);
+          addDailyGuess({ t: 'x' });
+        }
+      } catch {
+        // Network error — don't count the guess
+      } finally {
+        setValidating(false);
+        setActiveCell(null);
+      }
+    },
+    [activeCell, gameStatus, validating, cells, puzzle, getRowCol, fetchRarity, addDailyGuess],
+  );
+
+  useGameCompletion('soccer-grid', rawDailyStatus !== 'playing', correctCount * 100);
 
   return {
     puzzle, cells, activeCell, setActiveCell, submitGuess,
-    validating, gameStatus, guessesLeft, correctCount, rarityScore, getRowCol,
+    validating, gameStatus, guessesLeft, correctCount, rarityScore, getRowCol, isLoading,
   };
 }

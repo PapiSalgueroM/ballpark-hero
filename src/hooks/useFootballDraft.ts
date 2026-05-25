@@ -1,8 +1,11 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { draftGuesserPuzzles, DraftGuesserPlayer } from '@/data/draftGuesserPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 
 export type DraftGameStatus = 'playing' | 'complete';
+
+export type FootballDraftMode = 'daily' | 'unlimited';
 
 export interface PlayerGuess {
   guessedRound: number | null;
@@ -22,46 +25,142 @@ function calcPoints(actual: number | null, guessed: number | null): number {
   return 0;
 }
 
-export function useFootballDraft() {
-  const puzzle = useMemo(() => draftGuesserPuzzles[Math.floor(Math.random() * draftGuesserPuzzles.length)], []);
+type Puzzle = (typeof draftGuesserPuzzles)[number];
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [guesses, setGuesses] = useState<PlayerGuess[]>(() =>
-    puzzle.players.map(() => ({ guessedRound: null, points: 0, submitted: false }))
+export function useFootballDraft() {
+  // ---- MODE ----------------------------------------------------------------
+  const [mode, setMode] = useState<FootballDraftMode>('daily');
+
+  // ---- DAILY ---------------------------------------------------------------
+  const {
+    puzzle: dailyPuzzle,
+    guesses: dailyGuesses,
+    addGuess: addDailyGuess,
+    gameStatus: rawDailyStatus,
+    isLoading,
+    reset: resetDailyHook,
+  } = useDailyPuzzle<Puzzle, PlayerGuess>({
+    gameSlug: 'football-draft',
+    puzzles: draftGuesserPuzzles,
+    maxGuesses: 50, // well above any puzzle's player count
+    isWon: (g, puzzle) => g.length >= puzzle.players.length,
+    deserializeGuesses: (raw) => raw as PlayerGuess[],
+  });
+
+  // ---- UNLIMITED -----------------------------------------------------------
+  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<Puzzle>(
+    () => draftGuesserPuzzles[Math.floor(Math.random() * draftGuesserPuzzles.length)]
   );
+  const [unlimitedGuesses, setUnlimitedGuesses] = useState<PlayerGuess[]>(
+    () => (unlimitedPuzzle as Puzzle).players.map(() => ({ guessedRound: null, points: 0, submitted: false }))
+  );
+  const [unlimitedCurrentIndex, setUnlimitedCurrentIndex] = useState(0);
+
+  // ---- SHARED LOCAL STATE --------------------------------------------------
   const [revealLevel, setRevealLevel] = useState(0);
 
-  const currentPlayer: DraftGuesserPlayer | null = currentIndex < puzzle.players.length ? puzzle.players[currentIndex] : null;
-  const gameStatus: DraftGameStatus = guesses.every((g) => g.submitted) ? 'complete' : 'playing';
+  // currentIndex in daily mode is tracked locally (to allow the 2-second result display)
+  const [dailyCurrentIndex, setDailyCurrentIndex] = useState(0);
+  const indexSynced = useRef(false);
+
+  // After daily puzzle loads, initialize currentIndex to the number of already-submitted guesses
+  useEffect(() => {
+    if (!isLoading && !indexSynced.current && mode === 'daily') {
+      setDailyCurrentIndex(dailyGuesses.length);
+      indexSynced.current = true;
+    }
+  }, [isLoading, dailyGuesses.length, mode]);
+
+  // ---- ACTIVE VALUES -------------------------------------------------------
+  const puzzle       = mode === 'daily' ? dailyPuzzle : unlimitedPuzzle;
+  const guesses      = mode === 'daily' ? dailyGuesses : unlimitedGuesses;
+  const currentIndex = mode === 'daily' ? dailyCurrentIndex : unlimitedCurrentIndex;
+
+  const currentPlayer: DraftGuesserPlayer | null =
+    puzzle && currentIndex < puzzle.players.length ? puzzle.players[currentIndex] : null;
+
+  const gameStatus: DraftGameStatus = mode === 'daily'
+    ? (rawDailyStatus !== 'playing' ? 'complete' : 'playing')
+    : (unlimitedGuesses.every(g => g.submitted) ? 'complete' : 'playing');
+
   const totalPoints = guesses.reduce((sum, g) => sum + g.points, 0);
-  const maxPoints = puzzle.players.length * 10;
+  const maxPoints   = puzzle ? puzzle.players.length * 10 : 0;
+
+  // ---- CALLBACKS -----------------------------------------------------------
+  const switchMode = useCallback((newMode: FootballDraftMode) => {
+    setMode(newMode);
+    setRevealLevel(0);
+    if (newMode === 'unlimited') {
+      setUnlimitedCurrentIndex(0);
+    } else {
+      // Will be re-synced by the useEffect on next render
+      indexSynced.current = false;
+      setDailyCurrentIndex(0);
+    }
+  }, []);
 
   const revealMore = useCallback(() => {
-    setRevealLevel((prev) => Math.min(prev + 1, 3));
+    setRevealLevel(prev => Math.min(prev + 1, 3));
   }, []);
 
   const submitGuess = useCallback((roundGuess: number) => {
-    if (!currentPlayer) return;
+    if (!currentPlayer || gameStatus !== 'playing') return;
     const guessValue = roundGuess === 0 ? null : roundGuess;
     const points = calcPoints(currentPlayer.draftRound, guessValue);
+    const playerGuess: PlayerGuess = { guessedRound: roundGuess, points, submitted: true };
 
-    setGuesses((prev) => {
-      const next = [...prev];
-      next[currentIndex] = { guessedRound: roundGuess, points, submitted: true };
-      return next;
-    });
+    if (mode === 'daily') {
+      addDailyGuess(playerGuess);
+      setTimeout(() => {
+        setDailyCurrentIndex(prev => prev + 1);
+        setRevealLevel(0);
+      }, 2000);
+    } else {
+      setUnlimitedGuesses(prev => {
+        const next = [...prev];
+        next[currentIndex] = playerGuess;
+        return next;
+      });
+      setTimeout(() => {
+        setUnlimitedCurrentIndex(prev => prev + 1);
+        setRevealLevel(0);
+      }, 2000);
+    }
+  }, [mode, currentPlayer, currentIndex, gameStatus, addDailyGuess]);
 
-    setTimeout(() => {
-      setCurrentIndex((prev) => prev + 1);
-      setRevealLevel(0);
-    }, 2000);
-  }, [currentIndex, currentPlayer]);
+  const resetGame = useCallback(() => {
+    if (mode === 'daily') {
+      indexSynced.current = false;
+      setDailyCurrentIndex(0);
+      resetDailyHook();
+    } else {
+      const next = draftGuesserPuzzles[Math.floor(Math.random() * draftGuesserPuzzles.length)];
+      setUnlimitedPuzzle(next);
+      setUnlimitedGuesses((next as Puzzle).players.map(() => ({ guessedRound: null, points: 0, submitted: false })));
+      setUnlimitedCurrentIndex(0);
+    }
+    setRevealLevel(0);
+  }, [mode, resetDailyHook]);
 
-  useGameCompletion('football-draft', gameStatus === 'complete', totalPoints * 10);
+  // ---- COMPLETION ----------------------------------------------------------
+  const dailyScore = rawDailyStatus === 'won' ? dailyGuesses.reduce((sum, g) => sum + g.points, 0) * 10 : 0;
+  useGameCompletion('football-draft', rawDailyStatus !== 'playing', dailyScore);
 
   return {
-    puzzle, currentPlayer, currentIndex, guesses, revealLevel,
-    revealMore, submitGuess, gameStatus, totalPoints, maxPoints,
+    mode,
+    switchMode,
+    puzzle,
+    currentPlayer,
+    currentIndex,
+    guesses,
+    revealLevel,
+    revealMore,
+    submitGuess,
+    resetGame,
+    gameStatus,
+    totalPoints,
+    maxPoints,
     roundOptions: ROUND_OPTIONS,
+    isLoading: mode === 'daily' ? isLoading : false,
   };
 }

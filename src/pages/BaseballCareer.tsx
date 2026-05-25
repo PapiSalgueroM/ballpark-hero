@@ -8,12 +8,14 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { HelpCircle, Eye, Trophy } from 'lucide-react';
+import { HelpCircle, Eye, Trophy, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { BaseballCareerHowToPlay } from '@/components/baseball-career/BaseballCareerHowToPlay';
 
 const BaseballCareer = () => {
   const {
+    mode,
+    switchMode,
     puzzle,
     player,
     clueLevel,
@@ -25,8 +27,10 @@ const BaseballCareer = () => {
     submitGuess,
     revealNextClue,
     giveUp,
+    resetGame,
     wrongGuess,
     maxClue,
+    isLoading,
   } = useBaseballCareer();
 
   const [showRules, setShowRules] = useState(false);
@@ -68,9 +72,32 @@ const BaseballCareer = () => {
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
             Guess the mystery baseball player from progressive clues
           </p>
+
+          {/* Daily / Unlimited toggle */}
+          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+            {(['daily', 'unlimited'] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => switchMode(m)}
+                className={cn(
+                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                  mode === m
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
+              >
+                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+              </button>
+            ))}
+          </div>
         </header>
 
         {/* Clue card */}
+        {isLoading ? (
+          <div className="flex justify-center py-10">
+            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+          </div>
+        ) : (
         <div className="bg-card border border-border rounded-2xl p-6 shadow-lg">
           {/* Score indicator */}
           {status === 'playing' && (
@@ -148,23 +175,21 @@ const BaseballCareer = () => {
           {(status === 'guessed' || status === 'revealed') && (
             <div className="text-center mt-4 py-4 rounded-xl bg-[hsl(var(--bb-navy)/0.2)] border border-[hsl(var(--bb-red)/0.3)] animate-cell-reveal">
               <p className="text-4xl font-bold text-[hsl(var(--bb-red))] font-display mb-1">
-                {player.name}
+                {player!.name}
               </p>
-              <p className="text-muted-foreground text-sm">{player.position}</p>
+              <p className="text-muted-foreground text-sm">{player!.position}</p>
               {status === 'guessed' && (
                 <div className="flex items-center justify-center gap-2 mt-3">
                   <Trophy className="w-5 h-5 text-[hsl(var(--bb-red))]" />
                   <span className="text-lg font-bold text-[hsl(var(--bb-red))]">{score} points!</span>
                 </div>
               )}
-              {status === 'revealed' && (
-                <p className="text-muted-foreground text-sm mt-2">Better luck tomorrow!</p>
-              )}
             </div>
           )}
         </div>
+        )}
 
-        {/* Share */}
+        {/* Share + replay */}
         {(status === 'guessed' || status === 'revealed') && (
           <div className="mt-6 flex justify-center">
             <div className="bg-card border border-border rounded-2xl p-6 max-w-md w-full text-center shadow-lg">
@@ -173,6 +198,17 @@ const BaseballCareer = () => {
                 gameName="Baseball Career Path"
                 gamePath="/baseball-career"
               />
+              {mode === 'unlimited' ? (
+                <button
+                  onClick={resetGame}
+                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-[hsl(var(--bb-red))] text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Play Again
+                </button>
+              ) : (
+                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
+              )}
             </div>
           </div>
         )}

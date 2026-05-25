@@ -15,7 +15,7 @@ import { HelpCircle, Trophy } from 'lucide-react';
 const SoccerGrid = () => {
   const {
     puzzle, cells, activeCell, setActiveCell, submitGuess,
-    validating, gameStatus, guessesLeft, correctCount, rarityScore,
+    validating, gameStatus, guessesLeft, correctCount, rarityScore, isLoading,
   } = useSoccerGrid();
 
   const [showRules, setShowRules] = useState(false);
@@ -61,60 +61,69 @@ const SoccerGrid = () => {
           </div>
         </header>
 
-        <SoccerGridBoard
-          puzzle={puzzle}
-          cells={cells}
-          activeCell={activeCell}
-          onCellClick={setActiveCell}
-        />
-
-        {activeCell !== null && gameStatus === 'playing' && (
-          <div className="mt-6">
-            <p className="text-center text-xs text-muted-foreground mb-2">
-              Find a player who: <span className="text-[hsl(var(--sg-accent))] font-semibold">{puzzle.rows[Math.floor(activeCell / 3)].label}</span>{' '}
-              + <span className="text-[hsl(var(--sg-accent))] font-semibold">{puzzle.cols[activeCell % 3].label}</span>
-            </p>
-            <SoccerGridSearch onSelect={submitGuess} disabled={validating} />
+        {isLoading ? (
+          <div className="flex justify-center py-10">
+            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
           </div>
-        )}
+        ) : (
+          <>
+            <SoccerGridBoard
+              puzzle={puzzle}
+              cells={cells}
+              activeCell={activeCell}
+              onCellClick={setActiveCell}
+            />
 
-        {gameStatus === 'complete' && (
-          <div className="mt-8 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              {correctCount === 9 ? (
-                <>
-                  <div className="text-5xl mb-3">🏆</div>
-                  <h2 className="text-2xl font-bold text-[hsl(var(--sg-accent))] font-display mb-2">
-                    Grid Complete!
-                  </h2>
-                </>
-              ) : (
-                <>
-                  <div className="text-5xl mb-3">⏱️</div>
-                  <h2 className="text-2xl font-bold text-destructive font-display mb-2">
-                    Out of Guesses!
-                  </h2>
-                </>
-              )}
-              <p className="text-foreground">
-                You filled <span className="font-bold text-[hsl(var(--sg-accent))]">{correctCount}</span>/9 cells
-              </p>
-              {rarityScore !== null && (
-                <div className="flex items-center justify-center gap-2 mt-2">
-                  <Trophy className="w-5 h-5 text-[hsl(var(--sg-accent))]" />
-                  <span className="text-lg font-bold text-[hsl(var(--sg-accent))]">
-                    Rarity Score: {rarityScore}%
-                  </span>
+            {activeCell !== null && gameStatus === 'playing' && (
+              <div className="mt-6">
+                <p className="text-center text-xs text-muted-foreground mb-2">
+                  Find a player who: <span className="text-[hsl(var(--sg-accent))] font-semibold">{puzzle.rows[Math.floor(activeCell / 3)].label}</span>{' '}
+                  + <span className="text-[hsl(var(--sg-accent))] font-semibold">{puzzle.cols[activeCell % 3].label}</span>
+                </p>
+                <SoccerGridSearch onSelect={submitGuess} disabled={validating} />
+              </div>
+            )}
+
+            {gameStatus === 'complete' && (
+              <div className="mt-8 flex justify-center">
+                <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
+                  {correctCount === 9 ? (
+                    <>
+                      <div className="text-5xl mb-3">🏆</div>
+                      <h2 className="text-2xl font-bold text-[hsl(var(--sg-accent))] font-display mb-2">
+                        Grid Complete!
+                      </h2>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-5xl mb-3">⏱️</div>
+                      <h2 className="text-2xl font-bold text-destructive font-display mb-2">
+                        Out of Guesses!
+                      </h2>
+                    </>
+                  )}
+                  <p className="text-foreground">
+                    You filled <span className="font-bold text-[hsl(var(--sg-accent))]">{correctCount}</span>/9 cells
+                  </p>
+                  {rarityScore !== null && (
+                    <div className="flex items-center justify-center gap-2 mt-2">
+                      <Trophy className="w-5 h-5 text-[hsl(var(--sg-accent))]" />
+                      <span className="text-lg font-bold text-[hsl(var(--sg-accent))]">
+                        Rarity Score: {rarityScore}%
+                      </span>
+                    </div>
+                  )}
+                  <p className="text-xs text-muted-foreground mt-1">Lower rarity = more impressive picks!</p>
+                  <ShareButtons
+                    score={rarityScore !== null ? `a Rarity Score of ${rarityScore}% (${correctCount}/9)` : `${correctCount}/9 cells`}
+                    gameName="Soccer Grid"
+                    gamePath="/soccer-grid"
+                  />
+                  <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
                 </div>
-              )}
-              <p className="text-xs text-muted-foreground mt-1">Lower rarity = more impressive picks!</p>
-              <ShareButtons
-                score={rarityScore !== null ? `a Rarity Score of ${rarityScore}% (${correctCount}/9)` : `${correctCount}/9 cells`}
-                gameName="Soccer Grid"
-                gamePath="/soccer-grid"
-              />
-            </div>
-          </div>
+              </div>
+            )}
+          </>
         )}
 
         <GameSeoContent

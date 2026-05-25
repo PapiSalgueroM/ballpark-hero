@@ -12,9 +12,12 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { cn } from '@/lib/utils';
 
 const UfcGame = () => {
   const {
+    mode,
+    switchMode,
     guesses,
     gameStatus,
     makeGuess,
@@ -24,6 +27,7 @@ const UfcGame = () => {
     guessedFighterNames,
     maxGuesses,
     targetFighter,
+    isLoading,
   } = useUfcGame();
 
   const [showRules, setShowRules] = useState(false);
@@ -61,13 +65,35 @@ const UfcGame = () => {
             Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia — no login needed.
           </p>
 
+          {/* Daily / Unlimited toggle */}
+          <div className="flex items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
+            {(['daily', 'unlimited'] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => switchMode(m)}
+                className={cn(
+                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                  mode === m
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                )}
+              >
+                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+              </button>
+            ))}
+          </div>
+
           <p className="text-sm text-muted-foreground mt-4">
             Guesses:{' '}
             <span className="text-foreground font-semibold">{guesses.length}</span> / {maxGuesses}
           </p>
         </header>
 
-        {gameStatus === 'playing' && (
+        {isLoading ? (
+          <div className="mb-8 flex justify-center">
+            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+          </div>
+        ) : gameStatus === 'playing' ? (
           <div className="mb-8 space-y-3">
             <UfcFighterSearch
               fighters={fighters}
@@ -83,7 +109,7 @@ const UfcGame = () => {
               </button>
             </div>
           </div>
-        )}
+        ) : null}
 
         <UfcGameBoard guesses={guesses} maxGuesses={maxGuesses} />
 
@@ -118,13 +144,17 @@ const UfcGame = () => {
                 gameName="UFC Guesser"
                 gamePath="/ufc"
               />
-              <button
-                onClick={resetGame}
-                className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
+              {mode === 'unlimited' ? (
+                <button
+                  onClick={resetGame}
+                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Play Again
+                </button>
+              ) : (
+                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
+              )}
             </div>
           </div>
         )}

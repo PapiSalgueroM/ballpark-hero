@@ -1,6 +1,8 @@
 import { useState, useMemo, useCallback } from 'react';
 import { hockeyHLPlayers, HockeyHLPlayer } from '@/data/hockeyHLPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { dateSeed } from '@/lib/dateUtils';
 
 function seededShuffle<T>(arr: T[], seed: number): T[] {
   const a = [...arr];
@@ -22,63 +24,148 @@ interface RoundResult {
   correct: boolean;
 }
 
+type HLAction = { t: 'result'; correct: boolean };
+
 const ROUNDS = 10;
+// Sentinel puzzle array — useDailyPuzzle needs at least one element.
+// The hook ignores the puzzle data and uses todayStr for seeding instead.
+const SENTINEL_PUZZLES = [{ id: 'hkhl-daily' }];
+
+function getDailyPairs(todayStr: string): [HockeyHLPlayer, HockeyHLPlayer][] {
+  const seed = dateSeed(todayStr);
+  const shuffled = seededShuffle(hockeyHLPlayers, seed);
+  const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
+  for (let i = 0; i < ROUNDS * 2 && i + 1 < shuffled.length; i += 2) {
+    result.push([shuffled[i], shuffled[i + 1]]);
+  }
+  return result;
+}
+
+function getRandomPairs(): [HockeyHLPlayer, HockeyHLPlayer][] {
+  const seed = Math.floor(Math.random() * 100000);
+  const shuffled = seededShuffle(hockeyHLPlayers, seed);
+  const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
+  for (let i = 0; i < ROUNDS * 2 && i + 1 < shuffled.length; i += 2) {
+    result.push([shuffled[i], shuffled[i + 1]]);
+  }
+  return result;
+}
 
 export function useHockeyHL() {
   const [mode, setMode] = useState<HockeyHLMode>('daily');
 
-  const pairs = useMemo(() => {
-    const seed = Math.floor(Math.random() * 100000);
-    const shuffled = seededShuffle(hockeyHLPlayers, seed);
-    const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
-    for (let i = 0; i < ROUNDS * 2 && i + 1 < shuffled.length; i += 2) {
-      result.push([shuffled[i], shuffled[i + 1]]);
-    }
-    return result;
-  }, [mode]);
+  // Daily persistence — sentinel puzzle, we only use todayStr + guesses
+  const {
+    guesses: dailyActions,
+    addGuess: addDailyAction,
+    gameStatus: rawDailyStatus,
+    isLoading,
+    todayStr,
+  } = useDailyPuzzle<{ id: string }, HLAction>({
+    gameSlug: 'hockey-hl',
+    puzzles: SENTINEL_PUZZLES,
+    maxGuesses: ROUNDS,
+    isWon: (g) => g.length >= ROUNDS,
+    deserializeGuesses: (raw) => raw as HLAction[],
+  });
 
-  const [currentRound, setCurrentRound] = useState(0);
-  const [results, setResults] = useState<RoundResult[]>([]);
+  const dailyPairs = useMemo(() => getDailyPairs(todayStr), [todayStr]);
+
+  // currentResult: the in-progress round shown during the 2-second reveal window
+  // Not persisted — purely local UX state that disappears on reload (which is fine)
+  const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
-  const [streak, setStreak] = useState(0);
 
-  const gameStatus: HockeyHLStatus = currentRound >= pairs.length || currentRound >= ROUNDS ? 'complete' : 'playing';
-  const currentPair = gameStatus === 'playing' ? pairs[currentRound] : null;
+  // Unlimited local state
+  const [unlimitedPairs, setUnlimitedPairs] = useState<[HockeyHLPlayer, HockeyHLPlayer][]>(getRandomPairs);
+  const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
+  const [unlimitedRound, setUnlimitedRound] = useState(0);
 
-  const correctCount = results.filter((r) => r.correct).length;
-  const streakBonus = results.reduce((sum, r, i) => {
+  // Derived daily state
+  const dailyCurrentRound = dailyActions.length;
+  const dailyResults: RoundResult[] = useMemo(
+    () =>
+      dailyActions.map((a, i) => ({
+        player1: dailyPairs[i]?.[0] ?? hockeyHLPlayers[0],
+        player2: dailyPairs[i]?.[1] ?? hockeyHLPlayers[1],
+        correct: a.correct,
+      })),
+    [dailyActions, dailyPairs],
+  );
+
+  // Active values — append currentResult during reveal window so page UI is consistent
+  const pairs = mode === 'daily' ? dailyPairs : unlimitedPairs;
+  const currentRound = mode === 'daily' ? dailyCurrentRound : unlimitedRound;
+  const baseResults = mode === 'daily' ? dailyResults : unlimitedResults;
+  const results: RoundResult[] = useMemo(
+    () => (currentResult ? [...baseResults, currentResult] : baseResults),
+    [baseResults, currentResult],
+  );
+
+  const gameStatus: HockeyHLStatus = mode === 'daily'
+    ? (rawDailyStatus !== 'playing' ? 'complete' : 'playing')
+    : (unlimitedRound >= ROUNDS ? 'complete' : 'playing');
+
+  const currentPair = gameStatus === 'playing' ? pairs[currentRound] ?? null : null;
+
+  const correctCount = baseResults.filter((r) => r.correct).length;
+  const streakBonus = baseResults.reduce((sum, r, i) => {
     if (!r.correct) return sum;
     let s = 0;
-    for (let j = i; j >= 0 && results[j].correct; j--) s++;
+    for (let j = i; j >= 0 && baseResults[j].correct; j--) s++;
     return sum + Math.max(0, s - 1);
   }, 0);
   const totalScore = correctCount * 10 + streakBonus * 5;
 
-  const makeGuess = useCallback((choice: 'left' | 'right') => {
-    if (!currentPair || showingResult || gameStatus !== 'playing') return;
-    const [p1, p2] = currentPair;
-    const leftHigher = p1.careerPoints >= p2.careerPoints;
-    const correct = (choice === 'left' && leftHigher) || (choice === 'right' && !leftHigher);
-    const result: RoundResult = { player1: p1, player2: p2, correct };
-    const newResults = [...results, result];
-    setResults(newResults);
-    setShowingResult(true);
-    if (correct) { setStreak((s) => s + 1); } else { setStreak(0); }
-    setTimeout(() => {
-      setCurrentRound((prev) => prev + 1);
-      setShowingResult(false);
-    }, 2000);
-  }, [currentPair, showingResult, gameStatus, results, currentRound]);
+  // Current streak (computed from baseResults so it's consistent after reload)
+  const streak = useMemo(() => {
+    let s = 0;
+    for (let i = baseResults.length - 1; i >= 0; i--) {
+      if (!baseResults[i].correct) break;
+      s++;
+    }
+    return s;
+  }, [baseResults]);
+
+  const makeGuess = useCallback(
+    (choice: 'left' | 'right') => {
+      if (!currentPair || showingResult || gameStatus !== 'playing') return;
+      const [p1, p2] = currentPair;
+      const leftHigher = p1.careerPoints >= p2.careerPoints;
+      const correct = (choice === 'left' && leftHigher) || (choice === 'right' && !leftHigher);
+
+      setCurrentResult({ player1: p1, player2: p2, correct });
+      setShowingResult(true);
+
+      setTimeout(() => {
+        if (mode === 'daily') {
+          addDailyAction({ t: 'result', correct });
+        } else {
+          setUnlimitedResults((prev) => [...prev, { player1: p1, player2: p2, correct }]);
+          setUnlimitedRound((prev) => prev + 1);
+        }
+        setCurrentResult(null);
+        setShowingResult(false);
+      }, 2000);
+    },
+    [currentPair, showingResult, gameStatus, mode, addDailyAction],
+  );
 
   const switchMode = useCallback((m: HockeyHLMode) => {
+    if (m === 'unlimited') {
+      setUnlimitedPairs(getRandomPairs());
+      setUnlimitedResults([]);
+      setUnlimitedRound(0);
+    }
     setMode(m);
-    setCurrentRound(0);
-    setResults([]);
-    setStreak(0);
+    setCurrentResult(null);
     setShowingResult(false);
   }, []);
 
-  useGameCompletion('hockey-higher-lower', gameStatus === 'complete', totalScore);
+  useGameCompletion('hockey-higher-lower', rawDailyStatus !== 'playing', totalScore);
 
-  return { mode, switchMode, currentPair, currentRound, results, showingResult, streak, gameStatus, correctCount, totalScore, makeGuess, totalRounds: ROUNDS };
+  return {
+    mode, switchMode, currentPair, currentRound, results, showingResult, streak,
+    gameStatus, correctCount, totalScore, makeGuess, totalRounds: ROUNDS, isLoading,
+  };
 }

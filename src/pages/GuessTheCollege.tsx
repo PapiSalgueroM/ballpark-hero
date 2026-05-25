@@ -43,6 +43,7 @@ const GuessTheCollege = () => {
     getStreakBadge,
     getShareText,
     dailyCompleted,
+    isLoading,
   } = useGuessTheCollege();
 
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -163,8 +164,15 @@ const GuessTheCollege = () => {
             </div>
           )}
 
+          {/* Loading guard for daily mode */}
+          {isLoading && (
+            <div className="flex justify-center py-10">
+              <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+            </div>
+          )}
+
           {/* Progress indicator */}
-          {!gameOver && currentCollege && (
+          {!isLoading && !gameOver && currentCollege && (
             <div className="text-center mb-4">
               <p className="text-sm text-muted-foreground mb-2">
                 Clue {Math.min(revealedClues, 11)} of 11 —{' '}
@@ -175,44 +183,46 @@ const GuessTheCollege = () => {
           )}
 
           {/* Clue cards */}
-          <div className="space-y-3 mb-5">
-            {clues.slice(0, Math.min(revealedClues, gameOver ? 12 : 11)).map((clue, i) => (
-              <div
-                key={clue.number}
-                className={cn(
-                  "p-4 rounded-xl border transition-all",
-                  clue.number === 12
-                    ? "bg-primary/10 border-primary shadow-lg"
-                    : "bg-card border-border",
-                )}
-                style={{
-                  animation: 'slideInUp 0.4s ease-out',
-                  animationFillMode: 'both',
-                  animationDelay: i === (gameOver ? Math.min(revealedClues, 12) : revealedClues) - 1 ? '0ms' : '0ms',
-                }}
-              >
-                <div className="flex items-start gap-3">
-                  <span className="text-xl flex-shrink-0 mt-0.5">{clue.icon}</span>
-                  <div className="min-w-0">
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-                      {clue.label}
-                    </p>
-                    <p className={cn(
-                      "mt-1 leading-relaxed",
-                      clue.number === 12 ? "text-2xl font-bold text-primary" : "text-sm"
-                    )}>
-                      {clue.text}
-                    </p>
-                    {clue.number === 12 && currentCollege && (
-                      <p className="text-sm text-muted-foreground mt-2 italic">
-                        💡 {currentCollege.funFact}
+          {!isLoading && (
+            <div className="space-y-3 mb-5">
+              {clues.slice(0, Math.min(revealedClues, gameOver ? 12 : 11)).map((clue, i) => (
+                <div
+                  key={clue.number}
+                  className={cn(
+                    "p-4 rounded-xl border transition-all",
+                    clue.number === 12
+                      ? "bg-primary/10 border-primary shadow-lg"
+                      : "bg-card border-border",
+                  )}
+                  style={{
+                    animation: 'slideInUp 0.4s ease-out',
+                    animationFillMode: 'both',
+                    animationDelay: i === (gameOver ? Math.min(revealedClues, 12) : revealedClues) - 1 ? '0ms' : '0ms',
+                  }}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-xl flex-shrink-0 mt-0.5">{clue.icon}</span>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                        {clue.label}
                       </p>
-                    )}
+                      <p className={cn(
+                        "mt-1 leading-relaxed",
+                        clue.number === 12 ? "text-2xl font-bold text-primary" : "text-sm"
+                      )}>
+                        {clue.text}
+                      </p>
+                      {clue.number === 12 && currentCollege && (
+                        <p className="text-sm text-muted-foreground mt-2 italic">
+                          💡 {currentCollege.funFact}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Search input */}
           {!gameOver && currentCollege && (
