@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useTransferPath, getAllPlayerNames, getPlayerNationality, getPlayerClubs } from '@/hooks/useTransferPath';
+import { useTransferPath } from '@/hooks/useTransferPath';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import ShareButtons from '@/components/game/ShareButtons';
 import ReportQuestion from '@/components/game/ReportQuestion';
@@ -23,15 +23,25 @@ function flag(nationality: string) {
 
 export function TransferPathBoard() {
   const {
-    puzzle, chain, connections, status, score, mode,
-    addPlayer, switchToUnlimited, nextPuzzle, unlimitedIndex,
+    puzzle, chain, connections, status, score, mode, unlimitedIndex,
+    addPlayer, switchToUnlimited, nextPuzzle,
+    getAllPlayerNames, getPlayerNationality, getPlayerClubs,
+    isLoadingPool, isLoading,
   } = useTransferPath();
+
+  if (isLoadingPool || isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground text-sm">Loading Transfer Path…</p>
+      </div>
+    );
+  }
 
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
   const [showHint, setShowHint] = useState(false);
 
-  const allNames = useMemo(() => getAllPlayerNames(), []);
+  const allNames = useMemo(() => getAllPlayerNames(), [getAllPlayerNames]);
   const query = input.toLowerCase().trim();
   const suggestions = query.length >= 2
     ? allNames.filter(n =>

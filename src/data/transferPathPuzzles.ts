@@ -3,7 +3,7 @@ export interface TransferPathPuzzle {
   playerA: string;
   playerB: string;
   minSteps: number;
-  oneOptimalPath: string[];
+  oneOptimalPath?: string[];
   hint: string;
 }
 

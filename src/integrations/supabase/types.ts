@@ -1386,6 +1386,39 @@ export type Database = {
         }
         Relationships: []
       }
+      transfer_path_puzzles: {
+        Row: {
+          id: string
+          puzzle_id: string
+          player_a: string
+          player_b: string
+          min_steps: number
+          hint: string
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          puzzle_id: string
+          player_a: string
+          player_b: string
+          min_steps: number
+          hint: string
+          sort_order: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          puzzle_id?: string
+          player_a?: string
+          player_b?: string
+          min_steps?: number
+          hint?: string
+          sort_order?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
