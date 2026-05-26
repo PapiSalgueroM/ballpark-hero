@@ -74,7 +74,7 @@ function comparePosition(guess: string, target: string): CellResult {
 export function compareGuess(guess: Player, target: Player): GuessResult {
   return {
     playerName: guess.name,
-    isCorrect: guess.name === target.name,
+    isCorrect: guess.name.trim().toLowerCase() === target.name.trim().toLowerCase(),
     cells: {
       nationality: compareNationality(guess.nationality, target.nationality),
       club: compareClub(guess.club, target.club, guess.league, target.league),

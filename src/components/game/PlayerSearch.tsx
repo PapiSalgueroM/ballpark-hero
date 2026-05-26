@@ -19,7 +19,7 @@ export function PlayerSearch({ players, guessedNames, onSelect }: PlayerSearchPr
   const filtered = useMemo(() => {
     if (!query.trim() || query.trim().length < 2) return [];
     return players
-      .filter(p => !guessedNames.includes(p.name))
+      .filter(p => !guessedNames.some(g => g.toLowerCase() === p.name.toLowerCase()))
       .filter(p => smartMatch(p.name, query))
       .sort((a, b) => smartScore(a.name, query) - smartScore(b.name, query))
       .slice(0, 10);

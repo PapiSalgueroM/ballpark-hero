@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Loader2 } from 'lucide-react';
 import { nflCareerPlayers } from '@/data/nflCareerPlayers';
+import { toTitleCase } from '@/lib/smartSearch';
 
 interface Props {
   onSelect: (name: string) => void;
@@ -59,7 +60,7 @@ export function GridPlayerSearch({ onSelect, disabled }: Props) {
     if (showDropdown && suggestions.length > 0) {
       submit(suggestions[highlightIndex].name);
     } else if (query.trim().length >= 2) {
-      submit(query.trim());
+      submit(toTitleCase(query.trim()));
     }
   };
 

@@ -110,7 +110,7 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
       </button>
 
       <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Share your result</p>
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 relative">
+      <div className="flex flex-row flex-wrap items-center justify-center gap-3 relative">
         {/* X / Twitter */}
         <button
           onClick={handleX}

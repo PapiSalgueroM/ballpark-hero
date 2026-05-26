@@ -9,12 +9,13 @@ interface Props {
 }
 
 function RarityBadge({ rarity }: { rarity: number }) {
-  if (rarity < 5) {
-    return <span className="text-[10px] font-bold text-amber-400">Rare Pick 🔥</span>;
-  }
-  if (rarity <= 25) {
-    return <span className="text-[10px] font-bold text-blue-400">Uncommon</span>;
-  }
+  if (rarity < 2)  return <span className="text-[10px] font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">🔥 Phoenix</span>;
+  if (rarity < 5)  return <span className="text-[10px] font-bold text-cyan-400">💎 Diamond</span>;
+  if (rarity < 10) return <span className="text-[10px] font-bold text-emerald-400">✦ Emerald</span>;
+  if (rarity < 20) return <span className="text-[10px] font-bold text-rose-400">♦ Ruby</span>;
+  if (rarity < 35) return <span className="text-[10px] font-bold text-amber-400">★ Gold</span>;
+  if (rarity < 50) return <span className="text-[10px] font-bold text-slate-400">◈ Silver</span>;
+  if (rarity < 70) return <span className="text-[10px] font-bold text-orange-700">◉ Bronze</span>;
   return null;
 }
 

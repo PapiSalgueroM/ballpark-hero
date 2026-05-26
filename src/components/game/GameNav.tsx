@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CATEGORIES } from '@/data/gameRegistry';
 import { ArrowRight } from 'lucide-react';
@@ -5,6 +6,11 @@ import { ArrowRight } from 'lucide-react';
 interface GameNavProps {
   currentPath?: string;
   sportCategory?: string;
+}
+
+function pickRandom<T>(arr: T[]): T | undefined {
+  if (arr.length === 0) return undefined;
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 export function GameNav({ currentPath, sportCategory }: GameNavProps = {}) {
@@ -17,13 +23,21 @@ export function GameNav({ currentPath, sportCategory }: GameNavProps = {}) {
 
   const category = CATEGORIES.find(c => c.title === detectedCategory);
 
-  // Pick the first game in the same category that isn't the current one
-  const nextGame = category?.games.find(g => g.path !== path);
+  // Pick a random game in the same category that isn't the current one
+  // useMemo ensures the same game is shown for the full session (stable across re-renders)
+  const nextGame = useMemo(() => {
+    const pool = category?.games.filter(g => g.path !== path) ?? [];
+    return pickRandom(pool);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path]);
 
-  // Fallback: pick any game from another category
-  const fallbackGame = !nextGame
-    ? CATEGORIES.flatMap(c => c.games).find(g => g.path !== path)
-    : null;
+  // Fallback: pick a random game from another category
+  const fallbackGame = useMemo(() => {
+    if (nextGame) return null;
+    const pool = CATEGORIES.flatMap(c => c.games).filter(g => g.path !== path);
+    return pickRandom(pool);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path, nextGame]);
 
   const game = nextGame || fallbackGame;
 

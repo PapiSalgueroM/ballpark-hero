@@ -78,15 +78,15 @@ export default function Index() {
         setTotalPlayed(total);
         setTableCounts(counts);
 
-        // Active players in last 24 hours from user_scores
-        const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-        const { data: activeData } = await supabase
-          .from('user_scores')
-          .select('user_id')
-          .gte('last_played_at', cutoff);
-        if (activeData) {
-          setTotalPlayers(activeData.length);
-        }
+        // Players who completed a game today from daily_completions
+        // TODO Round 3: daily_completions only counts logged-in users.
+        // Add anonymous_play_counter table for full play count including anonymous visitors.
+        const today = new Date().toISOString().slice(0, 10);
+        const { count: dailyPlayers } = await supabase
+          .from('daily_completions')
+          .select('user_id', { count: 'exact', head: true })
+          .eq('date', today);
+        setTotalPlayers(dailyPlayers ?? 0);
       } catch { /* silent */ }
     };
 
