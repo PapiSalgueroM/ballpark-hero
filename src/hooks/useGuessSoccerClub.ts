@@ -1,37 +1,88 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
   GuessSoccerClubState,
   GameMode,
   POINTS_BY_CLUE,
+  SoccerClubPuzzle,
 } from '@/types/guessSoccerClub';
-import {
-  getDailySoccerClubPuzzle,
-  getRandomSoccerClubPuzzle,
-  resolvePuzzleByName,
-} from '@/data/soccerClubPuzzles';
+import { soccerClubPuzzles } from '@/data/soccerClubPuzzles';
+import { fetchSoccerClubPuzzles } from '@/lib/fetchSoccerClubPuzzles';
+import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
 export const MAX_CLUES = 5;
 
 export function useGuessSoccerClub() {
+  // ── Pool state (Supabase fetch, falls back to hardcoded soccerClubPuzzles) ──
+  const [puzzlePool, setPuzzlePool]       = useState<SoccerClubPuzzle[]>(soccerClubPuzzles);
+  const [isLoadingPool, setIsLoadingPool] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchSoccerClubPuzzles().then(pool => {
+      if (cancelled) return;
+      if (pool.length > 0) setPuzzlePool(pool);
+      setIsLoadingPool(false);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  // ── allClubNames: flat sorted list of fullName + all aliases, for autocomplete ──
+  const allClubNames = useMemo(
+    () =>
+      Array.from(
+        new Set(puzzlePool.flatMap(p => [p.fullName, ...p.commonNames]))
+      ).sort(),
+    [puzzlePool]
+  );
+
+  // ── Hook-internal helpers (closures over puzzlePool, replace module-level imports) ──
+  const resolvePuzzleByName = useCallback(
+    (input: string): SoccerClubPuzzle | undefined => {
+      const lower = input.toLowerCase().trim();
+      return puzzlePool.find(
+        p =>
+          p.fullName.toLowerCase() === lower ||
+          p.commonNames.some(alias => alias.toLowerCase() === lower)
+      );
+    },
+    [puzzlePool]
+  );
+
+  const getDailyPuzzle = useCallback((): SoccerClubPuzzle => {
+    // UTC-safe: all users share same rollover at midnight ET
+    const idx = dateSeed(getTodayET()) % puzzlePool.length;
+    return puzzlePool[idx];
+  }, [puzzlePool]);
+
+  const getRandomPuzzle = useCallback(
+    (leagueFilter?: string): SoccerClubPuzzle => {
+      let pool = puzzlePool;
+      if (leagueFilter) pool = pool.filter(p => p.league === leagueFilter);
+      if (!pool.length) pool = puzzlePool;
+      return pool[Math.floor(Math.random() * pool.length)];
+    },
+    [puzzlePool]
+  );
+
+  // ── Game state ────────────────────────────────────────────────────────────────
   const [gameState, setGameState] = useState<GuessSoccerClubState | null>(null);
 
-  const startGame = useCallback((mode: GameMode, leagueFilter?: string) => {
-    const puzzle =
-      mode === 'daily'
-        ? getDailySoccerClubPuzzle()
-        : getRandomSoccerClubPuzzle(leagueFilter);
-
-    setGameState({
-      puzzle,
-      revealedClues: 1,
-      guesses: [],
-      gameStatus: 'playing',
-      score: 0,
-      mode,
-      leagueFilter,
-    });
-  }, []);
+  const startGame = useCallback(
+    (mode: GameMode, leagueFilter?: string) => {
+      const puzzle = mode === 'daily' ? getDailyPuzzle() : getRandomPuzzle(leagueFilter);
+      setGameState({
+        puzzle,
+        revealedClues: 1,
+        guesses: [],
+        gameStatus: 'playing',
+        score: 0,
+        mode,
+        leagueFilter,
+      });
+    },
+    [getDailyPuzzle, getRandomPuzzle]
+  );
 
   const makeGuess = useCallback(
     (input: string) => {
@@ -62,7 +113,7 @@ export function useGuessSoccerClub() {
         );
       }
     },
-    [gameState]
+    [gameState, resolvePuzzleByName]
   );
 
   const giveUp = useCallback(() => {
@@ -75,7 +126,11 @@ export function useGuessSoccerClub() {
   const pointsForCurrentClue =
     gameState ? (POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0) : POINTS_BY_CLUE[0];
 
-  useGameCompletion('guess-soccer-club', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+  useGameCompletion(
+    'guess-soccer-club',
+    gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost',
+    gameState?.score ?? 0
+  );
 
   return {
     gameState,
@@ -85,5 +140,7 @@ export function useGuessSoccerClub() {
     resetGame,
     maxClues: MAX_CLUES,
     pointsForCurrentClue,
+    allClubNames,
+    isLoadingPool,
   };
 }

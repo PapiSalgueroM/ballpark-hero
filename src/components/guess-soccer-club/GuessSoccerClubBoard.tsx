@@ -21,7 +21,8 @@ const leagueCountry: Record<string, string> = {
 };
 
 export function GuessSoccerClubBoard() {
-  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue } =
+  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue,
+          allClubNames, isLoadingPool } =
     useGuessSoccerClub();
   const gameRef = useScrollToGame(gameState);
 
@@ -29,6 +30,13 @@ export function GuessSoccerClubBoard() {
 
   /* ─── Mode selection ─── */
   if (!gameState) {
+    if (isLoadingPool) {
+      return (
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <p className="text-muted-foreground">Loading…</p>
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen bg-background text-foreground">
         <div className="container mx-auto px-4 py-8 max-w-xl">
@@ -205,7 +213,7 @@ export function GuessSoccerClubBoard() {
         {/* Playing state */}
         {isPlaying && (
           <div className="space-y-4">
-            <ClubSearch usedGuesses={gameState.guesses} onGuess={makeGuess} />
+            <ClubSearch usedGuesses={gameState.guesses} onGuess={makeGuess} allClubNames={allClubNames} />
 
             <div className="flex justify-center">
               <button

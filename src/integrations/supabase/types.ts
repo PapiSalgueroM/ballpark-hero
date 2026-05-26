@@ -988,6 +988,54 @@ export type Database = {
         }
         Relationships: []
       }
+      soccer_club_puzzles: {
+        Row: {
+          id: string
+          puzzle_id: string
+          full_name: string
+          common_names: string[]
+          country: string
+          league: string
+          vibe: string
+          league_hint: string
+          league_titles: number
+          kit_colors: string
+          fun_fact: string
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          puzzle_id: string
+          full_name: string
+          common_names: string[]
+          country: string
+          league: string
+          vibe: string
+          league_hint: string
+          league_titles: number
+          kit_colors: string
+          fun_fact: string
+          sort_order: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          puzzle_id?: string
+          full_name?: string
+          common_names?: string[]
+          country?: string
+          league?: string
+          vibe?: string
+          league_hint?: string
+          league_titles?: number
+          kit_colors?: string
+          fun_fact?: string
+          sort_order?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
       soccer_grid_selections: {
         Row: {
           cell_index: number

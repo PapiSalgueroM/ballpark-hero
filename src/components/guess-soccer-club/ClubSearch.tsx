@@ -1,15 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-import { allClubNames } from '@/data/soccerClubPuzzles';
 
 interface Props {
   usedGuesses: string[];
   onGuess: (name: string) => void;
+  allClubNames: string[];
   disabled?: boolean;
 }
 
-export function ClubSearch({ usedGuesses, onGuess, disabled }: Props) {
+export function ClubSearch({ usedGuesses, onGuess, allClubNames, disabled }: Props) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
