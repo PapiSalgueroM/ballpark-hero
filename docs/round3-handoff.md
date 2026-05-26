@@ -4,7 +4,7 @@ Date: 2026-05-25
 ## Round 2 summary (last commit before Round 3: 7a36a64)
 See docs/round2-handoff.md for full Round 2 details. Key points carried forward:
 - Total games: 38. Already wired to Supabase: 9. Needs wiring: 27. Partially wired: 5.
-- Locked files (do NOT touch): src/hooks/useDailyPuzzle.ts, src/lib/dateUtils.ts, src/hooks/useShirtNumber.ts, src/hooks/useCareerGame.ts, src/hooks/useTransferPath.ts, src/hooks/useGuessSoccerClub.ts, src/hooks/useSoccerGrid.ts, the 17 Phase B migrated hooks.
+- Locked files (do NOT touch): src/hooks/useDailyPuzzle.ts, src/lib/dateUtils.ts, src/hooks/useShirtNumber.ts, src/hooks/useCareerGame.ts, src/hooks/useTransferPath.ts, src/hooks/useGuessSoccerClub.ts, src/hooks/useSoccerGrid.ts, src/hooks/useConnections.ts, the 17 Phase B migrated hooks.
 
 ---
 
@@ -429,10 +429,73 @@ SoccerGrid is now genuinely live on Supabase data. 6 games genuinely wired: Foot
 
 ---
 
-## Next: Round 3 Session 1g — useConnections
+## Round 3 Session 1g — Connections wired (commit 3b360be)
+Date: 2026-05-26
 
-Remaining soccer hooks:
-1. **useConnections** (Session 1g) — ⬅ next, ~1,799 lines, puzzle-list pattern with 4-groups-of-4 NYT Connections-style grouping structure. **Largest hook in the Round 3 queue — start in a fresh session context, not immediately after another session.**
+### Result
+Connections is now genuinely live on Supabase data. ALL soccer hooks in the Round 3 queue are complete. 7 games genuinely wired: Footle, Shirt Number, CareerGame, TransferPath, GuessSoccerClub, SoccerGrid, Connections.
+
+### Supabase migration applied
+- `supabase/migrations/20260526000004_connections_puzzles.sql` — schema + RLS public-read + indexes on `puzzle_id` and `sort_order` + 155-row seed in 4 chunks of ~40 puzzles each, all in one file. Uses Postgres JSONB for `groups_json` (read-whole pattern, no JOIN needed). **Applied manually in Supabase SQL Editor. Confirmed: 155 rows live, `groups_json` verified parsing as JS array, last `puzzle_id` is `puzzle-155`.**
+- Seed verification: `SELECT COUNT(*)` → 155; `SELECT groups_json WHERE puzzle_id = 'puzzle-1'` → parsed JSON array with 4 groups (first group category: "Won the Ballon d'Or"); `SELECT puzzle_id ORDER BY sort_order DESC LIMIT 1` → `puzzle-155`.
+
+### Key design notes
+- **Approach B** — `supabasePuzzle` + `getPuzzleId` override on `useDailyPuzzle`. Consistent with Session 1f (SoccerGrid). Future-proofs rotation for Round 4 puzzle expansion: new puzzles added to Supabase automatically enter the rotation.
+- `todaysPuzzle` computed in `useMemo` over `puzzlePool` using `dateSeed(getTodayET()) % puzzlePool.length`. Passed as `supabasePuzzle` to `useDailyPuzzle`.
+- `puzzles: fallbackPuzzles` still passed as the stable module-level ref required by `useDailyPuzzle`'s dep array constraint. Code comment in the hook explains why, so future maintainers don't remove it.
+- `getPuzzleId: (p) => p.id` enables value-based identity lookup when Supabase-deserialized object replaces hardcoded reference.
+- `isValidPuzzle` filter applied to fetched pool BEFORE `setPuzzlePool` — drops any malformed Supabase rows, falls back to hardcoded if all rows fail validation.
+- **Unlimited mode** — switched from `fallbackPuzzles` to `puzzlePool` in all three places: `useState` initializer, active puzzle computation, `totalPuzzles`.
+- **Split-conditional loading guards** in `Connections.tsx` — both updated: `(isLoading || isLoadingPool)` and `(!isLoading && !isLoadingPool)`.
+- All existing functionality preserved: streak, hints, lives, oneAway detection, `useGameCompletion`.
+
+### Execution issues (for future migration reference)
+- **API socket timeouts on single-shot generation**: Generating all 155 puzzles in one file write caused socket timeouts. Resolved by splitting into 4 chunked write operations (~40 puzzles each) with user checkpoint verification between each chunk.
+- **Drift after chunks 1–2**: Unauthorized `::jsonb` explicit casts (after every JSON string literal) and `ON CONFLICT (puzzle_id) DO NOTHING` clauses added without Phase B authorization. Caught during review. `::jsonb` breaks consistency with existing `soccer_grid_puzzles` migration; `ON CONFLICT` silently skips rows on re-run, preventing migration-based typo fixes from landing. Fix: `str_replace` with `replace_all: true` removed both from chunks 1–2; chunks 3–4 written clean.
+
+### Apostrophe escaping (for future JSONB seed migrations)
+SQL string literals use single-quote delimiters — every `'` inside must be doubled. Key patterns audited per chunk:
+- `Eto''o` (Samuel Eto'o — multiple occurrences across chunks 1–4)
+- `N''Golo Kanté` (multiple occurrences)
+- `Ballon d''Or` (category names)
+- `Côte d''Ivoire` (category/country names)
+- `Barcelona''s` (puzzle-150 category name)
+
+### Files changed (commit 3b360be)
+- `supabase/migrations/20260526000004_connections_puzzles.sql` (**new**, 191 lines)
+- `src/lib/fetchConnectionsPuzzles.ts` (**new**) — SELECT ORDER BY sort_order, JSONB cast to `ConnectionGroup[]`, applies `isValidPuzzle` filter, returns `[]` on error
+- `src/integrations/supabase/types.ts` — `connections_puzzles` table definition added (`groups_json` typed as `Json`), inserted alphabetically between `college_guess_scores` and `daily_badges`
+- `src/hooks/useConnections.ts` — pool state + `isLoadingPool`, fetch on mount with `cancelled` cleanup, `todaysPuzzle` memo, Approach B wiring (`supabasePuzzle` + `getPuzzleId`), unlimited mode migrated to `puzzlePool`, `isLoadingPool` added to return
+- `src/pages/Connections.tsx` — `isLoadingPool` destructured, both split-conditional loading guards updated
+
+### Locked files updated
+`src/hooks/useConnections.ts` is now locked — **do NOT re-migrate.**
+
+### 7 games live on Supabase
+| Game | Table(s) | Session |
+|---|---|---|
+| Footle | `player_market_values` | 1a |
+| Shirt Number | `shirt_number_puzzles` | 1b |
+| CareerGame | `career_players`, `career_seasons` | 1c |
+| TransferPath | `transfer_path_puzzles` + reuses career tables | 1d |
+| GuessSoccerClub | `soccer_club_puzzles` | 1e |
+| SoccerGrid | `soccer_grid_puzzles` | 1f |
+| Connections | `connections_puzzles` | 1g |
+
+---
+
+## Next: Round 3 cleanup + Round 4
+
+ALL soccer hooks in the Round 3 queue are now complete.
+
+### Round 3 cleanup queue (deferred items)
+- **SoccerGridSearch.tsx** — still imports `careerPlayers` from hardcoded data for autocomplete. Wire via `fetchCareerPlayers()` with the same prop-passing pattern used for `allClubNames` in GuessSoccerClub. Autocomplete is UX-only (validation is the AI edge function), so the static import works fine today.
+- Any other non-soccer hooks identified as needing Supabase wiring.
+
+### Round 4: Puzzle generators
+Expand each `{game}_puzzles` table from its initial seed to 50–200+ puzzles per game. Connections and SoccerGrid will automatically benefit from Approach B: new rows added to Supabase enter the rotation without any code deploy.
+
+### Round 5: New puzzle types / game redesigns
 
 ---
 
@@ -456,7 +519,7 @@ Revisit these in a dedicated bug-fix round (Round 4 or 5) after data wiring is c
 - No AI attribution in commits (no "Co-Authored-By", no "Generated with Claude")
 - Bun is the package manager, path: `/c/Users/antho/.bun/bin/bun`
 - Always run TSC after edits: `/c/Users/antho/.bun/bin/bun x tsc --noEmit`
-- Locked files (do NOT touch): `src/hooks/useDailyPuzzle.ts`, `src/lib/dateUtils.ts`, the 17 Phase B migrated hooks, `src/hooks/useShirtNumber.ts`, `src/hooks/useCareerGame.ts`, `src/hooks/useTransferPath.ts`, `src/hooks/useGuessSoccerClub.ts`, `src/hooks/useSoccerGrid.ts`
+- Locked files (do NOT touch): `src/hooks/useDailyPuzzle.ts`, `src/lib/dateUtils.ts`, the 17 Phase B migrated hooks, `src/hooks/useShirtNumber.ts`, `src/hooks/useCareerGame.ts`, `src/hooks/useTransferPath.ts`, `src/hooks/useGuessSoccerClub.ts`, `src/hooks/useSoccerGrid.ts`, `src/hooks/useConnections.ts`
 - Phase workflow: A (read/investigate) → B (design, stop and report) → C (implement, one file at a time with TSC) → D (final TSC + git status/diff + STOP for commit approval)
 - DO NOT commit until user explicitly approves
 
