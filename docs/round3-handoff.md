@@ -58,16 +58,53 @@ Lionel Messi, Cristiano Ronaldo, Neymar, Zlatan Ibrahimovic, Karim Benzema, Andr
 
 ---
 
-## Next: Round 3 Session 1b — remaining soccer hooks
+## Round 3 Session 1b — Shirt Number wired (commit 053a9bb)
+Date: 2026-05-25
 
-Apply the Phase A→B→C→D process for each. Note: not all of these fit the Footle player-pool pattern — some involve career history or transfer data and will need a custom design in Phase B.
+### Files changed
+- `supabase/migrations/20260525000001_shirt_number_puzzles.sql` (**new**) — CREATE TABLE + RLS public-read + 32 seed INSERTs. **Applied successfully in Supabase dashboard — 32 rows confirmed.**
+- `src/integrations/supabase/types.ts` — added `shirt_number_puzzles` table definition
+- `src/lib/fetchShirtNumberPuzzles.ts` (**new**) — SELECT all rows, snake_case → camelCase mapping, returns `[]` on error
+- `src/hooks/useShirtNumber.ts` — migrated to `useDailyPuzzle` (kills UTC timezone bug), `puzzlePool` state + `isLoadingPool`, `ShirtGuess` type carries correctness, derived hint and score from guesses array
+- `src/components/shirt-number/ShirtNumberBoard.tsx` — loading early-return gate on `(isLoadingPool || isLoading || !puzzle)`
 
-1. **useCareerGame** — `src/data/careerPlayers.ts`, 2,874 lines. Biggest file. Career history data (clubs played for, in order) — likely needs a different Supabase table (not just player_market_values). Phase A should clarify what data exists.
-2. **useConnections** — `src/data/connectionsPuzzles.ts`, 1,799 lines. Puzzle/grouping data, not a player pool. Each puzzle is 4 groups of 4 items with a theme. Very different pattern — may need a `connections_puzzles` Supabase table.
-3. **useGuessSoccerClub** — guess-soccer-club data, 1,151 lines. Closer to Footle pattern (club attributes to guess), but clubs not players.
-4. **useShirtNumber** — unknown line count. Investigate in Phase A.
-5. **useTransferPath** — unknown line count. Likely transfer history data. Investigate in Phase A.
-6. **useSoccerGrid** — puzzles hardcoded, partially wired (user selections already in Supabase). Different pattern: puzzle grid content needs wiring, not a player pool.
+### Pattern established for puzzle-list games (different from Footle's player-pool pattern)
+
+Use this pattern for Connections, any other curated puzzle lists.
+
+1. **New Supabase table `{game}_puzzles`** — same shape as existing hardcoded data file
+2. **SQL migration file** — `supabase/migrations/YYYYMMDDHHMMSS_{game}_puzzles.sql` with:
+   - `CREATE TABLE` + `ENABLE ROW LEVEL SECURITY` + public-read SELECT policy
+   - Seed `INSERT` from existing hardcoded data
+   - **Apply manually in Supabase dashboard SQL editor** (no CLI)
+3. **New `src/lib/fetch{Game}Puzzles.ts`** — `SELECT *`, `ORDER BY created_at ASC`, snake_case → camelCase mapping, returns `[]` on error
+4. **Modify the hook**:
+   - Replace custom date-seeding + custom localStorage with `useDailyPuzzle` (fixes timezone bugs)
+   - Add `const [puzzlePool, setPuzzlePool] = useState<T[]>(hardcodedFallback)`
+   - Add `const [isLoadingPool, setIsLoadingPool] = useState(true)`
+   - `useEffect` fetch on mount with `cancelled` cleanup flag
+   - If guess type needs custom logic, define a local `XxxGuess` type that carries its own correctness so `isWon` stays pure
+5. **Modify board/page component** — loading early-return: `if (isLoadingPool || isLoading || !puzzle) return <loading>`
+6. **Keep `src/data/{game}.ts` as runtime fallback — do NOT delete**
+7. **Add hook to locked-files list after migration**
+
+### Locked files updated
+`src/hooks/useShirtNumber.ts` is now locked — **do NOT re-migrate**. Uses `useDailyPuzzle` internally.
+
+### Pool size
+32 seed puzzles. Anthony can add more rows via Supabase admin dashboard at any time — no code deploy needed.
+
+---
+
+## Next: Round 3 Session 1c — remaining soccer hooks
+
+Recommended order (Phase A→B→C→D for each, separate sessions for the big ones):
+
+1. **useTransferPath** — unknown size. Quick Phase A to determine data shape and pattern before committing to design. Start here.
+2. **useGuessSoccerClub** — 1,151 lines. Closer to Footle player-pool pattern but clubs not players. Dedicated session.
+3. **useCareerGame** — 2,874 lines (biggest). Career history pattern TBD — needs its own session. Likely needs a career-history Supabase table, not `player_market_values`.
+4. **useConnections** — 1,799 lines. Puzzle-list pattern like ShirtNumber but with 4-groups-of-4 grouping structure. Dedicated session.
+5. **useSoccerGrid** — partially wired (user selections already in Supabase). Puzzle grid content needs wiring. Dedicated session.
 
 ---
 
@@ -91,7 +128,7 @@ Revisit these in a dedicated bug-fix round (Round 4 or 5) after data wiring is c
 - No AI attribution in commits (no "Co-Authored-By", no "Generated with Claude")
 - Bun is the package manager, path: `/c/Users/antho/.bun/bin/bun`
 - Always run TSC after edits: `/c/Users/antho/.bun/bin/bun x tsc --noEmit`
-- Locked files (do NOT touch): `src/hooks/useDailyPuzzle.ts`, `src/lib/dateUtils.ts`, the 17 Phase B migrated hooks
+- Locked files (do NOT touch): `src/hooks/useDailyPuzzle.ts`, `src/lib/dateUtils.ts`, the 17 Phase B migrated hooks, `src/hooks/useShirtNumber.ts`
 - Phase workflow: A (read/investigate) → B (design, stop and report) → C (implement, one file at a time with TSC) → D (final TSC + git status/diff + STOP for commit approval)
 - DO NOT commit until user explicitly approves
 
