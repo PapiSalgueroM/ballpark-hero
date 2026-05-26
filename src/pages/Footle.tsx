@@ -32,6 +32,7 @@ const Index = () => {
     maxGuesses,
     targetPlayer,
     isLoading,
+    isLoadingPool,
   } = useGame();
 
   const [showRules, setShowRules] = useState(false);
@@ -137,7 +138,7 @@ const Index = () => {
         </header>
 
         {/* Search */}
-        {isLoading ? (
+        {(isLoadingPool || isLoading) ? (
           <div className="mb-8 flex justify-center">
             <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
           </div>

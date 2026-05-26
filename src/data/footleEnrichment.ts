@@ -1,0 +1,336 @@
+import type { League } from '@/types/game';
+
+// ---------------------------------------------------------------------------
+// Kit-number + league enrichment for players expected in the Supabase
+// player_market_values top-150 (year = 2026).
+//
+// Source: extracted from src/data/players.ts (marketValue >= 5).
+// When a player is NOT in this map the CLUB_TO_LEAGUE fallback is used for
+// league and kitNumber defaults to 0.
+//
+// TODO Round 3+: migrate this to a Supabase player_enrichment table so kit
+//                numbers stay current without code deploys.
+// ---------------------------------------------------------------------------
+
+export const footleEnrichment: Record<string, { kitNumber: number; league: League }> = {
+  // ── Premier League ──────────────────────────────────────────────────────
+  'Erling Haaland':         { kitNumber: 9,  league: 'Premier League' },
+  'Mohamed Salah':          { kitNumber: 11, league: 'Premier League' },
+  'Bukayo Saka':            { kitNumber: 7,  league: 'Premier League' },
+  'Cole Palmer':            { kitNumber: 20, league: 'Premier League' },
+  'Bruno Fernandes':        { kitNumber: 8,  league: 'Premier League' },
+  'Son Heung-min':          { kitNumber: 7,  league: 'Premier League' },
+  'Declan Rice':            { kitNumber: 41, league: 'Premier League' },
+  'Phil Foden':             { kitNumber: 47, league: 'Premier League' },
+  'Alexander Isak':         { kitNumber: 14, league: 'Premier League' },
+  'Virgil van Dijk':        { kitNumber: 4,  league: 'Premier League' },
+  'Martin Ødegaard':        { kitNumber: 8,  league: 'Premier League' },
+  'William Saliba':         { kitNumber: 12, league: 'Premier League' },
+  'Alisson':                { kitNumber: 1,  league: 'Premier League' },
+  'Rodri':                  { kitNumber: 16, league: 'Premier League' },
+  'Ollie Watkins':          { kitNumber: 11, league: 'Premier League' },
+  'Alejandro Garnacho':     { kitNumber: 17, league: 'Premier League' },
+  'Bernardo Silva':         { kitNumber: 20, league: 'Premier League' },
+  'Luis Díaz':              { kitNumber: 7,  league: 'Premier League' },
+  'Cody Gakpo':             { kitNumber: 18, league: 'Premier League' },
+  'Enzo Fernández':         { kitNumber: 8,  league: 'Premier League' },
+  'Viktor Gyökeres':        { kitNumber: 9,  league: 'Premier League' },
+  'Estêvão':                { kitNumber: 22, league: 'Premier League' },
+  'Xavi Simons':            { kitNumber: 7,  league: 'Premier League' },
+  'Omar Marmoush':          { kitNumber: 9,  league: 'Premier League' },
+  'Florian Wirtz':          { kitNumber: 7,  league: 'Premier League' },
+  'Moises Caicedo':         { kitNumber: 25, league: 'Premier League' },
+  'Moisés Caicedo':         { kitNumber: 25, league: 'Premier League' },
+  'Pedro Neto':             { kitNumber: 7,  league: 'Premier League' },
+  'Micky van de Ven':       { kitNumber: 37, league: 'Premier League' },
+  'Sandro Tonali':          { kitNumber: 8,  league: 'Premier League' },
+  'Leandro Trossard':       { kitNumber: 19, league: 'Premier League' },
+  'Anthony Gordon':         { kitNumber: 10, league: 'Premier League' },
+  'Bruno Guimarães':        { kitNumber: 39, league: 'Premier League' },
+  'Rasmus Højlund':         { kitNumber: 11, league: 'Premier League' },
+  'Lisandro Martínez':      { kitNumber: 6,  league: 'Premier League' },
+  'Dominic Solanke':        { kitNumber: 19, league: 'Premier League' },
+  'Morgan Gibbs-White':     { kitNumber: 10, league: 'Premier League' },
+  'Chris Wood':             { kitNumber: 11, league: 'Premier League' },
+  'Mateo Kovačić':          { kitNumber: 8,  league: 'Premier League' },
+  'Morgan Rogers':          { kitNumber: 10, league: 'Premier League' },
+  'Emiliano Martínez':      { kitNumber: 1,  league: 'Premier League' },
+  'Nicolas Jackson':        { kitNumber: 15, league: 'Premier League' },
+  'Ryan Gravenberch':       { kitNumber: 38, league: 'Premier League' },
+  'Dominik Szoboszlai':     { kitNumber: 8,  league: 'Premier League' },
+  'Gabriel Magalhães':      { kitNumber: 6,  league: 'Premier League' },
+  'Kai Havertz':            { kitNumber: 29, league: 'Premier League' },
+  'Gabriel Jesus':          { kitNumber: 9,  league: 'Premier League' },
+  'Ben White':              { kitNumber: 4,  league: 'Premier League' },
+  'Jurriën Timber':         { kitNumber: 12, league: 'Premier League' },
+  'Thomas Partey':          { kitNumber: 5,  league: 'Premier League' },
+  'Riccardo Calafiori':     { kitNumber: 33, league: 'Premier League' },
+  'Jack Grealish':          { kitNumber: 10, league: 'Premier League' },
+  'John Stones':            { kitNumber: 5,  league: 'Premier League' },
+  'Nathan Aké':             { kitNumber: 6,  league: 'Premier League' },
+  'Jeremy Doku':            { kitNumber: 11, league: 'Premier League' },
+  'Rúben Dias':             { kitNumber: 3,  league: 'Premier League' },
+  'Rico Lewis':             { kitNumber: 82, league: 'Premier League' },
+  'Savinho':                { kitNumber: 26, league: 'Premier League' },
+  'Joško Gvardiol':         { kitNumber: 24, league: 'Premier League' },
+  'Darwin Núñez':           { kitNumber: 9,  league: 'Premier League' },
+  'Diogo Jota':             { kitNumber: 20, league: 'Premier League' },
+  'Alexis Mac Allister':    { kitNumber: 10, league: 'Premier League' },
+  'Ibrahima Konaté':        { kitNumber: 5,  league: 'Premier League' },
+  'Andy Robertson':         { kitNumber: 26, league: 'Premier League' },
+  'Federico Chiesa':        { kitNumber: 14, league: 'Premier League' },
+  'Jeremie Frimpong':       { kitNumber: 66, league: 'Premier League' },
+  'Milos Kerkez':           { kitNumber: 26, league: 'Premier League' },
+  'Noni Madueke':           { kitNumber: 11, league: 'Premier League' },
+  'Reece James':            { kitNumber: 24, league: 'Premier League' },
+  'Levi Colwill':           { kitNumber: 6,  league: 'Premier League' },
+  'Romeo Lavia':            { kitNumber: 45, league: 'Premier League' },
+  'Marc Cucurella':         { kitNumber: 3,  league: 'Premier League' },
+  'Christopher Nkunku':     { kitNumber: 18, league: 'Premier League' },
+  'João Félix':             { kitNumber: 14, league: 'Premier League' },
+  'Kobbie Mainoo':          { kitNumber: 37, league: 'Premier League' },
+  'Diogo Dalot':            { kitNumber: 20, league: 'Premier League' },
+  'Manuel Ugarte':          { kitNumber: 25, league: 'Premier League' },
+  'Matthijs de Ligt':       { kitNumber: 4,  league: 'Premier League' },
+  'Joshua Zirkzee':         { kitNumber: 11, league: 'Premier League' },
+  'Amad Diallo':            { kitNumber: 16, league: 'Premier League' },
+  'James Maddison':         { kitNumber: 10, league: 'Premier League' },
+  'Cristian Romero':        { kitNumber: 17, league: 'Premier League' },
+  'Dejan Kulusevski':       { kitNumber: 21, league: 'Premier League' },
+  'Pedro Porro':            { kitNumber: 23, league: 'Premier League' },
+  'Brennan Johnson':        { kitNumber: 19, league: 'Premier League' },
+  'David Raya':             { kitNumber: 22, league: 'Premier League' },
+  'Ederson':                { kitNumber: 31, league: 'Premier League' },
+  'Matt O\'Riley':          { kitNumber: 20, league: 'Premier League' },
+  'Bryan Mbeumo':           { kitNumber: 19, league: 'Premier League' },
+  'Mikel Merino':           { kitNumber: 23, league: 'Premier League' },
+  'Eberechi Eze':           { kitNumber: 10, league: 'Premier League' },
+  'Amadou Onana':           { kitNumber: 24, league: 'Premier League' },
+  'Mohammed Kudus':         { kitNumber: 14, league: 'Premier League' },
+  // ── La Liga ─────────────────────────────────────────────────────────────
+  'Kylian Mbappé':          { kitNumber: 9,  league: 'La Liga' },
+  'Vinícius Júnior':        { kitNumber: 7,  league: 'La Liga' },
+  'Jude Bellingham':        { kitNumber: 5,  league: 'La Liga' },
+  'Robert Lewandowski':     { kitNumber: 9,  league: 'La Liga' },
+  'Lamine Yamal':           { kitNumber: 19, league: 'La Liga' },
+  'Pedri':                  { kitNumber: 8,  league: 'La Liga' },
+  'Raphinha':               { kitNumber: 11, league: 'La Liga' },
+  'Antoine Griezmann':      { kitNumber: 7,  league: 'La Liga' },
+  'Federico Valverde':      { kitNumber: 8,  league: 'La Liga' },
+  'Luka Modrić':            { kitNumber: 10, league: 'La Liga' },
+  'Gavi':                   { kitNumber: 6,  league: 'La Liga' },
+  'Julián Álvarez':         { kitNumber: 19, league: 'La Liga' },
+  'Arda Güler':             { kitNumber: 15, league: 'La Liga' },
+  'Aurélien Tchouaméni':    { kitNumber: 18, league: 'La Liga' },
+  'Antonio Rüdiger':        { kitNumber: 22, league: 'La Liga' },
+  'Alejandro Balde':        { kitNumber: 3,  league: 'La Liga' },
+  'Trent Alexander-Arnold': { kitNumber: 66, league: 'La Liga' },
+  'Marcus Rashford':        { kitNumber: 14, league: 'La Liga' },
+  'Eduardo Camavinga':      { kitNumber: 12, league: 'La Liga' },
+  'Rodrygo':                { kitNumber: 11, league: 'La Liga' },
+  'Éder Militão':           { kitNumber: 3,  league: 'La Liga' },
+  'Ferland Mendy':          { kitNumber: 23, league: 'La Liga' },
+  'Dani Carvajal':          { kitNumber: 2,  league: 'La Liga' },
+  'Brahim Díaz':            { kitNumber: 21, league: 'La Liga' },
+  'Thibaut Courtois':       { kitNumber: 1,  league: 'La Liga' },
+  'Dani Olmo':              { kitNumber: 20, league: 'La Liga' },
+  'Jules Koundé':           { kitNumber: 23, league: 'La Liga' },
+  'Pau Cubarsí':            { kitNumber: 4,  league: 'La Liga' },
+  'Fermín López':           { kitNumber: 16, league: 'La Liga' },
+  'Frenkie de Jong':        { kitNumber: 21, league: 'La Liga' },
+  'Ronald Araújo':          { kitNumber: 4,  league: 'La Liga' },
+  'Marc-André ter Stegen':  { kitNumber: 1,  league: 'La Liga' },
+  'Jan Oblak':              { kitNumber: 13, league: 'La Liga' },
+  'Julián Quiñones':        { kitNumber: 33, league: 'La Liga' },
+  'Takefusa Kubo':          { kitNumber: 14, league: 'La Liga' },
+  'Nico Williams':          { kitNumber: 10, league: 'La Liga' },
+  'Martín Zubimendi':       { kitNumber: 4,  league: 'La Liga' },
+  // ── Serie A ─────────────────────────────────────────────────────────────
+  'Lautaro Martínez':       { kitNumber: 10, league: 'Serie A' },
+  'Rafael Leão':            { kitNumber: 10, league: 'Serie A' },
+  'Dušan Vlahović':         { kitNumber: 9,  league: 'Serie A' },
+  'Marcus Thuram':          { kitNumber: 9,  league: 'Serie A' },
+  'Nicolò Barella':         { kitNumber: 23, league: 'Serie A' },
+  'Paulo Dybala':           { kitNumber: 21, league: 'Serie A' },
+  'Romelu Lukaku':          { kitNumber: 9,  league: 'Serie A' },
+  'Theo Hernández':         { kitNumber: 19, league: 'Serie A' },
+  'Ademola Lookman':        { kitNumber: 11, league: 'Serie A' },
+  'Mike Maignan':           { kitNumber: 16, league: 'Serie A' },
+  'Jonathan David':         { kitNumber: 9,  league: 'Serie A' },
+  'Kevin De Bruyne':        { kitNumber: 11, league: 'Serie A' },
+  'Hakan Çalhanoğlu':       { kitNumber: 20, league: 'Serie A' },
+  'Federico Dimarco':       { kitNumber: 32, league: 'Serie A' },
+  'Alessandro Bastoni':     { kitNumber: 95, league: 'Serie A' },
+  'Denzel Dumfries':        { kitNumber: 2,  league: 'Serie A' },
+  'Mateo Retegui':          { kitNumber: 32, league: 'Serie A' },
+  'Davide Frattesi':        { kitNumber: 16, league: 'Serie A' },
+  'Khéphren Thuram':        { kitNumber: 8,  league: 'Serie A' },
+  'Gleison Bremer':         { kitNumber: 3,  league: 'Serie A' },
+  'Teun Koopmeiners':       { kitNumber: 8,  league: 'Serie A' },
+  'Randal Kolo Muani':      { kitNumber: 23, league: 'Serie A' },
+  'Kenan Yıldız':           { kitNumber: 10, league: 'Serie A' },
+  'Christian Pulisic':      { kitNumber: 11, league: 'Serie A' },
+  'Tijjani Reijnders':      { kitNumber: 14, league: 'Serie A' },
+  'Fikayo Tomori':          { kitNumber: 23, league: 'Serie A' },
+  'Moise Kean':             { kitNumber: 18, league: 'Serie A' },
+  'Charles De Ketelaere':   { kitNumber: 17, league: 'Serie A' },
+  'Artem Dovbyk':           { kitNumber: 11, league: 'Serie A' },
+  'Benjamin Šeško':         { kitNumber: 14, league: 'Bundesliga' },  // at RB Leipzig
+  // ── Bundesliga ──────────────────────────────────────────────────────────
+  'Harry Kane':             { kitNumber: 9,  league: 'Bundesliga' },
+  'Jamal Musiala':          { kitNumber: 42, league: 'Bundesliga' },
+  'Joshua Kimmich':         { kitNumber: 6,  league: 'Bundesliga' },
+  'Alphonso Davies':        { kitNumber: 19, league: 'Bundesliga' },
+  'Jonathan Tah':           { kitNumber: 4,  league: 'Bundesliga' },
+  'Manuel Neuer':           { kitNumber: 1,  league: 'Bundesliga' },
+  'Granit Xhaka':           { kitNumber: 34, league: 'Bundesliga' },
+  'Michael Olise':          { kitNumber: 11, league: 'Bundesliga' },
+  'Min-jae Kim':            { kitNumber: 3,  league: 'Bundesliga' },
+  'João Palhinha':          { kitNumber: 6,  league: 'Bundesliga' },
+  'Dayot Upamecano':        { kitNumber: 2,  league: 'Bundesliga' },
+  'Thomas Müller':          { kitNumber: 25, league: 'Bundesliga' },
+  'Serge Gnabry':           { kitNumber: 7,  league: 'Bundesliga' },
+  'Serhou Guirassy':        { kitNumber: 9,  league: 'Bundesliga' },
+  'Alejandro Grimaldo':     { kitNumber: 20, league: 'Bundesliga' },
+  'Karim Adeyemi':          { kitNumber: 27, league: 'Bundesliga' },
+  'Gregor Kobel':           { kitNumber: 1,  league: 'Bundesliga' },
+  'Jamie Gittens':          { kitNumber: 43, league: 'Bundesliga' },
+  'Nico Schlotterbeck':     { kitNumber: 4,  league: 'Bundesliga' },
+  'Julian Brandt':          { kitNumber: 10, league: 'Bundesliga' },
+  'Loïs Openda':            { kitNumber: 11, league: 'Bundesliga' },
+  'Jeremie Frimpong (BL)':  { kitNumber: 30, league: 'Bundesliga' }, // at Bayer Leverkusen before Liverpool
+  'Patrik Schick':          { kitNumber: 14, league: 'Bundesliga' },
+  // ── Ligue 1 ─────────────────────────────────────────────────────────────
+  'Ousmane Dembélé':        { kitNumber: 10, league: 'Ligue 1' },
+  'Bradley Barcola':        { kitNumber: 29, league: 'Ligue 1' },
+  'Khvicha Kvaratskhelia':  { kitNumber: 7,  league: 'Ligue 1' },
+  'Achraf Hakimi':          { kitNumber: 2,  league: 'Ligue 1' },
+  'Gianluigi Donnarumma':   { kitNumber: 99, league: 'Ligue 1' },
+  'Marquinhos':             { kitNumber: 5,  league: 'Ligue 1' },
+  'Mason Greenwood':        { kitNumber: 10, league: 'Ligue 1' },
+  'Warren Zaïre-Emery':     { kitNumber: 33, league: 'Ligue 1' },
+  'Gonçalo Ramos':          { kitNumber: 9,  league: 'Ligue 1' },
+  'Lee Kang-in':            { kitNumber: 19, league: 'Ligue 1' },
+  'Vitinha':                { kitNumber: 17, league: 'Ligue 1' },
+  'Endrick':                { kitNumber: 16, league: 'Ligue 1' },
+  'João Neves':             { kitNumber: 87, league: 'Ligue 1' },
+  'Désiré Doué':            { kitNumber: 14, league: 'Ligue 1' },
+  'Willian Pacho':          { kitNumber: 51, league: 'Ligue 1' },
+  // ── Saudi Pro League ────────────────────────────────────────────────────
+  'Cristiano Ronaldo':      { kitNumber: 7,  league: 'Saudi Pro League' },
+  'Karim Benzema':          { kitNumber: 9,  league: 'Saudi Pro League' },
+  'Sadio Mané':             { kitNumber: 10, league: 'Saudi Pro League' },
+  "N'Golo Kanté":           { kitNumber: 7,  league: 'Saudi Pro League' },
+  'Riyad Mahrez':           { kitNumber: 26, league: 'Saudi Pro League' },
+  'Aleksandar Mitrović':    { kitNumber: 9,  league: 'Saudi Pro League' },
+  'Roberto Firmino':        { kitNumber: 9,  league: 'Saudi Pro League' },
+  'Ivan Toney':             { kitNumber: 18, league: 'Saudi Pro League' },
+  // ── MLS ─────────────────────────────────────────────────────────────────
+  'Lionel Messi':           { kitNumber: 10, league: 'MLS' },
+  'Luis Suárez':            { kitNumber: 9,  league: 'MLS' },
+  'Riqui Puig':             { kitNumber: 6,  league: 'MLS' },
+  // ── Brazilian Série A ───────────────────────────────────────────────────
+  'Neymar':                 { kitNumber: 10, league: 'Brazilian Série A' },
+  'Luiz Henrique':          { kitNumber: 7,  league: 'Brazilian Série A' },
+  // ── Turkish Süper Lig ───────────────────────────────────────────────────
+  'Victor Osimhen':         { kitNumber: 45, league: 'Turkish Süper Lig' },
+  'Leroy Sané':             { kitNumber: 10, league: 'Turkish Süper Lig' },
+  // ── Liga Portugal ───────────────────────────────────────────────────────
+  'Samu Omorodion':         { kitNumber: 9,  league: 'Liga Portugal' },
+  'Vangelis Pavlidis':      { kitNumber: 9,  league: 'Liga Portugal' },
+  'Pedro Gonçalves':        { kitNumber: 28, league: 'Liga Portugal' },
+  // ── Eredivisie ──────────────────────────────────────────────────────────
+  'Brian Brobbey':          { kitNumber: 9,  league: 'Eredivisie' },
+  'Santiago Giménez':       { kitNumber: 29, league: 'Eredivisie' },
+  // ── Scottish Premiership ────────────────────────────────────────────────
+  'Kyogo Furuhashi':        { kitNumber: 8,  league: 'Scottish Premiership' },
+  // ── Austrian Bundesliga ─────────────────────────────────────────────────
+  'Oscar Gloukh':           { kitNumber: 10, league: 'Austrian Bundesliga' },
+  // ── Greek Super League ──────────────────────────────────────────────────
+  'Ayoub El Kaabi':         { kitNumber: 9,  league: 'Greek Super League' },
+};
+
+// ---------------------------------------------------------------------------
+// Club → League fallback (for Supabase players not in the enrichment map)
+// ---------------------------------------------------------------------------
+const CLUB_TO_LEAGUE: Partial<Record<string, League>> = {
+  // Premier League
+  'Manchester City': 'Premier League', 'Arsenal': 'Premier League',
+  'Liverpool': 'Premier League', 'Chelsea': 'Premier League',
+  'Tottenham': 'Premier League', 'Manchester United': 'Premier League',
+  'Newcastle': 'Premier League', 'Aston Villa': 'Premier League',
+  'West Ham': 'Premier League', 'Brighton': 'Premier League',
+  'Brentford': 'Premier League', 'Wolverhampton': 'Premier League',
+  'Nottingham Forest': 'Premier League', 'Fulham': 'Premier League',
+  'Everton': 'Premier League', 'Crystal Palace': 'Premier League',
+  'Bournemouth': 'Premier League', 'Leicester': 'Premier League',
+  'Ipswich Town': 'Premier League', 'Southampton': 'Premier League',
+  // La Liga
+  'Real Madrid': 'La Liga', 'Barcelona': 'La Liga',
+  'Atlético Madrid': 'La Liga', 'Athletic Club': 'La Liga',
+  'Real Sociedad': 'La Liga', 'Villarreal': 'La Liga',
+  'Real Betis': 'La Liga', 'Sevilla': 'La Liga', 'Valencia': 'La Liga',
+  'Rayo Vallecano': 'La Liga', 'Girona': 'La Liga', 'Celta Vigo': 'La Liga',
+  'Osasuna': 'La Liga', 'Mallorca': 'La Liga', 'Alavés': 'La Liga',
+  'Getafe': 'La Liga', 'Las Palmas': 'La Liga', 'Leganés': 'La Liga',
+  // Serie A
+  'Inter Milan': 'Serie A', 'AC Milan': 'Serie A', 'Juventus': 'Serie A',
+  'Napoli': 'Serie A', 'Roma': 'Serie A', 'Lazio': 'Serie A',
+  'Fiorentina': 'Serie A', 'Atalanta': 'Serie A', 'Torino': 'Serie A',
+  'Bologna': 'Serie A', 'Udinese': 'Serie A', 'Empoli': 'Serie A',
+  'Como': 'Serie A', 'Cagliari': 'Serie A', 'Genoa': 'Serie A',
+  'Verona': 'Serie A',
+  // Bundesliga
+  'Bayern Munich': 'Bundesliga', 'Borussia Dortmund': 'Bundesliga',
+  'Bayer Leverkusen': 'Bundesliga', 'RB Leipzig': 'Bundesliga',
+  'VfB Stuttgart': 'Bundesliga', 'Wolfsburg': 'Bundesliga',
+  'SC Freiburg': 'Bundesliga', 'Eintracht Frankfurt': 'Bundesliga',
+  'Hoffenheim': 'Bundesliga', 'Borussia Mönchengladbach': 'Bundesliga',
+  'Mainz 05': 'Bundesliga', 'Augsburg': 'Bundesliga', 'Werder Bremen': 'Bundesliga',
+  // Ligue 1
+  'PSG': 'Ligue 1', 'Marseille': 'Ligue 1', 'Lyon': 'Ligue 1',
+  'Monaco': 'Ligue 1', 'Lille': 'Ligue 1', 'Rennes': 'Ligue 1',
+  'Nice': 'Ligue 1', 'Lens': 'Ligue 1', 'Nantes': 'Ligue 1',
+  // Liga Portugal
+  'Benfica': 'Liga Portugal', 'Porto': 'Liga Portugal', 'Sporting CP': 'Liga Portugal',
+  // Eredivisie
+  'Ajax': 'Eredivisie', 'Feyenoord': 'Eredivisie', 'PSV': 'Eredivisie',
+  // Saudi Pro League
+  'Al-Hilal': 'Saudi Pro League', 'Al-Nassr': 'Saudi Pro League',
+  'Al-Ittihad': 'Saudi Pro League', 'Al-Ahli': 'Saudi Pro League',
+  'Al-Shabab': 'Saudi Pro League', 'Al-Ettifaq': 'Saudi Pro League',
+  // MLS
+  'Inter Miami': 'MLS', 'LA Galaxy': 'MLS', 'LAFC': 'MLS',
+  'Columbus Crew': 'MLS', 'Nashville SC': 'MLS', 'Portland Timbers': 'MLS',
+  'FC Cincinnati': 'MLS', 'Houston Dynamo': 'MLS', 'Toronto FC': 'MLS',
+  // Turkish Süper Lig
+  'Galatasaray': 'Turkish Süper Lig', 'Fenerbahçe': 'Turkish Süper Lig',
+  'Besiktas': 'Turkish Süper Lig', 'Trabzonspor': 'Turkish Süper Lig',
+  // Brazilian Série A
+  'Flamengo': 'Brazilian Série A', 'Corinthians': 'Brazilian Série A',
+  'Botafogo': 'Brazilian Série A', 'Fluminense': 'Brazilian Série A',
+  'Atlético Mineiro': 'Brazilian Série A', 'Santos': 'Brazilian Série A',
+  // Argentine Primera División
+  'River Plate': 'Argentine Primera División', 'Boca Juniors': 'Argentine Primera División',
+  'Racing Club': 'Argentine Primera División',
+  // Scottish Premiership
+  'Celtic': 'Scottish Premiership', 'Rangers': 'Scottish Premiership',
+  // Austrian Bundesliga
+  'RB Salzburg': 'Austrian Bundesliga', 'Rapid Wien': 'Austrian Bundesliga',
+  // Greek Super League
+  'Olympiacos': 'Greek Super League', 'AEK Athens': 'Greek Super League',
+};
+
+/**
+ * Returns kit number and league for a player fetched from Supabase.
+ * Falls back to club-derived league and kitNumber=0 for unknowns.
+ */
+export function getEnrichment(
+  playerName: string,
+  club: string
+): { kitNumber: number; league: League } {
+  const direct = footleEnrichment[playerName];
+  if (direct) return direct;
+  const leagueFromClub = CLUB_TO_LEAGUE[club] ?? 'Premier League';
+  return { kitNumber: 0, league: leagueFromClub };
+}

@@ -1243,6 +1243,45 @@ export type Database = {
         }
         Relationships: []
       }
+      player_market_values: {
+        Row: {
+          rank: number
+          player_name: string
+          position: string
+          age: number
+          nationality: string
+          club: string
+          market_value_usd: number
+          goals: number | null
+          assists: number | null
+          year: number
+        }
+        Insert: {
+          rank: number
+          player_name: string
+          position: string
+          age: number
+          nationality: string
+          club: string
+          market_value_usd: number
+          goals?: number | null
+          assists?: number | null
+          year: number
+        }
+        Update: {
+          rank?: number
+          player_name?: string
+          position?: string
+          age?: number
+          nationality?: string
+          club?: string
+          market_value_usd?: number
+          goals?: number | null
+          assists?: number | null
+          year?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

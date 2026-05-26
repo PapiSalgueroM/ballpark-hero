@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { Player, Difficulty, GuessResult } from '@/types/game';
 import { players } from '@/data/players';
 import { compareGuess } from '@/lib/gameLogic';
@@ -6,6 +6,7 @@ import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { getTodayET, getDailyTier } from '@/lib/dateUtils';
+import { fetchFootlePlayerPool } from '@/lib/fetchFootlePlayerPool';
 
 const MAX_GUESSES = 8;
 
@@ -15,15 +16,15 @@ export type FootleMode = 'daily' | 'unlimited';
 // Module-level helpers (stable references — not recreated on render)
 // ---------------------------------------------------------------------------
 
-function buildPool(tier: Difficulty): Player[] {
-  if (tier === 'easy') return players.filter(p => p.difficulty === 'easy');
-  if (tier === 'hard') return players.filter(p => p.difficulty === 'easy' || p.difficulty === 'hard');
-  return players; // insane: all players
+function buildPool(tier: Difficulty, pool: Player[]): Player[] {
+  if (tier === 'easy') return pool.filter(p => p.difficulty === 'easy');
+  if (tier === 'hard') return pool.filter(p => p.difficulty === 'easy' || p.difficulty === 'hard');
+  return pool; // insane: all players
 }
 
-function selectRandomPlayer(diff: Difficulty): Player {
-  const pool = buildPool(diff);
-  return pool[Math.floor(Math.random() * pool.length)];
+function selectRandomPlayer(diff: Difficulty, pool: Player[]): Player {
+  const filtered = buildPool(diff, pool);
+  return filtered[Math.floor(Math.random() * filtered.length)];
 }
 
 // ---------------------------------------------------------------------------
@@ -34,12 +35,34 @@ export function useGame() {
   // ---- MODE ----------------------------------------------------------------
   const [mode, setMode] = useState<FootleMode>('daily');
 
+  // ---- PLAYER POOL ---------------------------------------------------------
+  // Starts as the hardcoded fallback (players.ts). Replaced by Supabase data
+  // once the async fetch completes. isLoadingPool gates the UI so the user
+  // cannot interact until the correct pool is ready.
+  const [playerPool, setPlayerPool] = useState<Player[]>(players);
+  const [isLoadingPool, setIsLoadingPool] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchFootlePlayerPool().then(pool => {
+      if (cancelled) return;
+      if (pool.length > 0) {
+        setPlayerPool(pool);
+      }
+      // On empty result (error path), playerPool stays as players.ts fallback
+      setIsLoadingPool(false);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
   // ---- DAILY: tier + pool (computed once on mount from today's ET date) ----
-  // Refs ensure these never change during a session, matching useDailyPuzzle's
-  // todayStr-on-mount semantics (see Known Behavior in design spec).
+  // todayStr/dailyTier are captured once via ref — matching useDailyPuzzle's
+  // todayStr-on-mount semantics. dailyPool re-derives when playerPool updates
+  // (which happens exactly once, before the user can interact).
   const todayStr = useRef(getTodayET()).current;
   const dailyTier = useRef(getDailyTier(todayStr)).current;
-  const dailyPool = useRef(buildPool(dailyTier)).current;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const dailyPool = useMemo(() => buildPool(dailyTier, playerPool), [dailyTier, playerPool]);
 
   // ---- DAILY: useDailyPuzzle -----------------------------------------------
   // Always called unconditionally (React rules). Values are only used when
@@ -72,7 +95,8 @@ export function useGame() {
 
   // ---- UNLIMITED: original Math.random() logic (unchanged) -----------------
   const [difficulty, setDifficultyState] = useState<Difficulty>('easy');
-  const [unlimitedTarget, setUnlimitedTarget] = useState<Player>(() => selectRandomPlayer('easy'));
+  // Initial unlimited target uses players.ts fallback (playerPool not yet ready at init time)
+  const [unlimitedTarget, setUnlimitedTarget] = useState<Player>(() => selectRandomPlayer('easy', players));
   const [unlimitedGuesses, setUnlimitedGuesses] = useState<GuessResult[]>([]);
   const [unlimitedStatus, setUnlimitedStatus] = useState<'playing' | 'won' | 'lost'>('playing');
 
@@ -135,21 +159,21 @@ export function useGame() {
       setForfeited(false);
       resetDailyHook();
     } else {
-      setUnlimitedTarget(selectRandomPlayer(difficulty));
+      setUnlimitedTarget(selectRandomPlayer(difficulty, playerPool));
       setUnlimitedGuesses([]);
       setUnlimitedStatus('playing');
     }
-  }, [mode, difficulty, resetDailyHook]);
+  }, [mode, difficulty, playerPool, resetDailyHook]);
 
   const changeDifficulty = useCallback((newDiff: Difficulty) => {
     // Difficulty selection only applies in unlimited mode — daily tier is locked
     if (mode === 'daily') return;
     if (newDiff === difficulty) return;
     setDifficultyState(newDiff);
-    setUnlimitedTarget(selectRandomPlayer(newDiff));
+    setUnlimitedTarget(selectRandomPlayer(newDiff, playerPool));
     setUnlimitedGuesses([]);
     setUnlimitedStatus('playing');
-  }, [mode, difficulty]);
+  }, [mode, difficulty, playerPool]);
 
   // ---- AUTOCOMPLETE --------------------------------------------------------
 
@@ -159,9 +183,9 @@ export function useGame() {
       if (!dailyTarget) return dailyPool;
       return ensureAnswerInList(dailyPool, dailyTarget.name, p => p.name, dailyTarget);
     }
-    const pool = buildPool(difficulty);
+    const pool = buildPool(difficulty, playerPool);
     return ensureAnswerInList(pool, unlimitedTarget.name, p => p.name, unlimitedTarget);
-  }, [mode, difficulty, dailyPool, dailyTarget, unlimitedTarget]);
+  }, [mode, difficulty, playerPool, dailyPool, dailyTarget, unlimitedTarget]);
 
   const guessedPlayerNames = useMemo(() => guesses.map(g => g.playerName), [guesses]);
 
@@ -196,5 +220,6 @@ export function useGame() {
     guessedPlayerNames,
     maxGuesses: MAX_GUESSES,
     isLoading: mode === 'daily' ? isLoading : false,
+    isLoadingPool,
   };
 }
