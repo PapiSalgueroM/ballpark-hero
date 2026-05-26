@@ -96,15 +96,192 @@ Use this pattern for Connections, any other curated puzzle lists.
 
 ---
 
-## Next: Round 3 Session 1c — remaining soccer hooks
+## Round 3 Session 1c — Phase A complete, Phase B APPROVED, Phase C deferred
+Date: 2026-05-25
 
-Recommended order (Phase A→B→C→D for each, separate sessions for the big ones):
+### Phase A findings (read-only)
 
-1. **useTransferPath** — unknown size. Quick Phase A to determine data shape and pattern before committing to design. Start here.
-2. **useGuessSoccerClub** — 1,151 lines. Closer to Footle player-pool pattern but clubs not players. Dedicated session.
-3. **useCareerGame** — 2,874 lines (biggest). Career history pattern TBD — needs its own session. Likely needs a career-history Supabase table, not `player_market_values`.
-4. **useConnections** — 1,799 lines. Puzzle-list pattern like ShirtNumber but with 4-groups-of-4 grouping structure. Dedicated session.
-5. **useSoccerGrid** — partially wired (user selections already in Supabase). Puzzle grid content needs wiring. Dedicated session.
+**TransferPath Phase A** (completed first):
+- `src/data/transferPathPuzzles.ts` — 118 lines, **20 puzzles** (4 one-step, 10 two-step, 6 three-step)
+- Each puzzle: `{ id, playerA, playerB, minSteps, oneOptimalPath, hint }` — `oneOptimalPath` stored but NOT used at runtime (documentation only)
+- Hook also imports `careerPlayers` from `src/data/careerPlayers.ts` and builds a module-level `PLAYER_CLUBS` map for validation
+- Custom `getDateSeed()` — UTC timezone bug present, no `useDailyPuzzle`
+- Pattern: **"puzzle list + validation graph"** — neither Footle nor ShirtNumber; needs BOTH puzzle list AND career data in Supabase
+
+**CareerGame Phase A** (redirected — wire CareerGame first since it owns the shared career data):
+- `useCareerGame.ts` — **already uses `useDailyPuzzle`** (one of the 17 Phase B hooks). No date-seeding migration needed.
+- `src/data/careerPlayers.ts` — 2,874 lines, **158 players**, **1,764 total career season rows**, avg **11.2 seasons/player**
+- `CareerPlayer` fields: `name`, `nationality`, `position`, `career: CareerSeason[]`
+- `CareerSeason` fields: `season`, `club`, `goals`, `assists`, `appearances`, `marketValue` — **no `league`, `image`, `logo`, `difficulty`, or `tier` fields**
+- `careerPlayers` is imported by 3 consumers: `useCareerGame`, `useTransferPath`, `SoccerGridSearch` — all will eventually share the same Supabase fetch
+- `CareerGame.tsx` already has a loading guard (`isLoading`). No IP issues — all club data is plain text strings, no logos or photos.
+- `soccerCareerEngine.ts` (4,166 lines) is a separate career *simulation* game — NOT in scope
+
+### Phase B design — APPROVED verbatim
+
+#### Two migration files (reserved filenames)
+- `supabase/migrations/20260525000002_career_tables.sql` — ~50 lines, schema + RLS + indexes only
+- `supabase/migrations/20260525000003_career_seed.sql` — ~1,940 lines, seed data only
+- **Apply schema FIRST, seed SECOND** — seed references player UUIDs defined in schema migration
+
+#### CREATE TABLE — career_players
+```sql
+CREATE TABLE public.career_players (
+  id          UUID                     NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  player_name TEXT                     NOT NULL UNIQUE,
+  nationality TEXT                     NOT NULL,
+  position    TEXT                     NOT NULL,
+  created_at  TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+
+ALTER TABLE public.career_players ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can read career players"
+  ON public.career_players FOR SELECT
+  TO public USING (true);
+
+CREATE INDEX career_players_name_idx ON public.career_players (player_name);
+```
+
+#### CREATE TABLE — career_seasons
+```sql
+CREATE TABLE public.career_seasons (
+  id           UUID     NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  player_id    UUID     NOT NULL REFERENCES public.career_players(id) ON DELETE CASCADE,
+  season       TEXT     NOT NULL,
+  club         TEXT     NOT NULL,
+  goals        INTEGER  NOT NULL DEFAULT 0,
+  assists      INTEGER  NOT NULL DEFAULT 0,
+  appearances  INTEGER  NOT NULL DEFAULT 0,
+  market_value INTEGER  NOT NULL DEFAULT 0,
+  sort_order   SMALLINT NOT NULL,
+  created_at   TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+
+ALTER TABLE public.career_seasons ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can read career seasons"
+  ON public.career_seasons FOR SELECT
+  TO public USING (true);
+
+CREATE INDEX career_seasons_player_id_idx ON public.career_seasons (player_id);
+CREATE INDEX career_seasons_sort_order_idx ON public.career_seasons (player_id, sort_order);
+```
+
+**Why `sort_order`?** Some players have two entries for the same season string (e.g. Enzo Fernández: `"2022-2023"` at Benfica AND `"2022-2023"` at Chelsea after a January transfer). `ORDER BY season` alone cannot break this tie correctly. `sort_order` is the 0-indexed position in the original `career[]` array — the only reliable ordering key.
+
+**Why `UNIQUE` on `player_name`?** Seed uses pre-assigned UUIDs so no sub-SELECT needed, but uniqueness prevents accidental duplicates.
+
+#### Seed file strategy — pre-assigned sequential UUIDs
+```sql
+-- career_players (158 rows, pre-assigned UUIDs)
+INSERT INTO public.career_players (id, player_name, nationality, position) VALUES
+  ('a0000001-0000-0000-0000-000000000001', 'Cristiano Ronaldo', 'Portugal', 'ST'),
+  ('a0000001-0000-0000-0000-000000000002', 'Lionel Messi',      'Argentina', 'RW'),
+  ... -- 158 rows
+;
+
+-- career_seasons (1,764 rows, player_id = matching literal UUID — NO sub-SELECT)
+INSERT INTO public.career_seasons (player_id, season, club, goals, assists, appearances, market_value, sort_order) VALUES
+  ('a0000001-0000-0000-0000-000000000001', '2003-2004', 'Manchester United', 6, 8, 40, 8, 0),
+  ('a0000001-0000-0000-0000-000000000001', '2004-2005', 'Manchester United', 9, 5, 50, 15, 1),
+  ... -- 1,764 rows grouped by player
+;
+```
+**Claude Code generates inline from `careerPlayers.ts` in Phase C — no external script.**
+
+#### fetchCareerPlayers.ts — two parallel queries, join in TypeScript
+```ts
+// src/lib/fetchCareerPlayers.ts
+const [playersResult, seasonsResult] = await Promise.all([
+  supabase
+    .from('career_players')
+    .select('id, player_name, nationality, position')
+    .order('player_name', { ascending: true }),
+  supabase
+    .from('career_seasons')
+    .select('player_id, season, club, goals, assists, appearances, market_value, sort_order')
+    .order('player_id', { ascending: true })
+    .order('sort_order', { ascending: true }),
+]);
+
+// Group seasons by player_id, map to CareerPlayer[]
+const seasonsByPlayer = new Map<string, CareerSeason[]>();
+for (const s of seasonsResult.data) {
+  if (!seasonsByPlayer.has(s.player_id)) seasonsByPlayer.set(s.player_id, []);
+  seasonsByPlayer.get(s.player_id)!.push({
+    season: s.season, club: s.club, goals: s.goals, assists: s.assists,
+    appearances: s.appearances, marketValue: s.market_value,
+  });
+}
+return playersResult.data.map(p => ({
+  name: p.player_name, nationality: p.nationality, position: p.position,
+  career: seasonsByPlayer.get(p.id) ?? [],
+}));
+// Returns [] on any error — caller falls back to careerPlayers.ts
+```
+
+#### useCareerGame.ts — 5 call sites to update + new state
+New state (same pattern as Footle/ShirtNumber):
+```ts
+const [playerPool, setPlayerPool] = useState<CareerPlayer[]>(fallbackPlayers);
+const [isLoadingPool, setIsLoadingPool] = useState(true);
+useEffect(() => {
+  let cancelled = false;
+  fetchCareerPlayers().then(pool => {
+    if (cancelled) return;
+    if (pool.length > 0) setPlayerPool(pool);
+    setIsLoadingPool(false);
+  });
+  return () => { cancelled = true; };
+}, []);
+```
+
+The 5 `careerPlayers` → `playerPool` substitutions:
+1. `useDailyPuzzle({ puzzles: careerPlayers, ... })` → `puzzles: playerPool`
+2. `useState<CareerPlayer>(() => careerPlayers[Math.floor(...)])` → `fallbackPlayers[Math.floor(...)]` (init runs before fetch, fallback is correct)
+3. `targetPlayer = dailyPuzzle ?? careerPlayers[0]` → `?? playerPool[0]`
+4. `setUnlimitedPlayer(careerPlayers[Math.floor(...)])` in `resetGame` → `playerPool[Math.floor(...)]`
+5. `ensureAnswerInOptions(careerPlayers.map(p => p.name), ...)` in `playerNames` → `playerPool.map(...)`
+
+Return: add `isLoadingPool` to returned object.
+
+#### CareerGame.tsx — one guard update
+```tsx
+// Destructure: add isLoadingPool
+// Loading guard line ~133:
+{(isLoadingPool || isLoading) ? (   // was: isLoading
+```
+
+#### types.ts additions
+Add `career_players` (Relationships: []) and `career_seasons` (Relationships: with `career_seasons_player_id_fkey` → `career_players`) to `Database["public"]["Tables"]`. See Phase B report for full verbatim type definitions.
+
+#### Phase C order
+1. Write `20260525000002_career_tables.sql` (no TSC)
+2. Write `20260525000003_career_seed.sql` (no TSC) — ⚠️ **1,940 lines, generated inline from careerPlayers.ts**
+3. Remind Anthony: apply schema migration first, seed migration second in Supabase dashboard
+4. `types.ts` → TSC
+5. `src/lib/fetchCareerPlayers.ts` → TSC
+6. `src/hooks/useCareerGame.ts` → TSC
+7. `src/pages/CareerGame.tsx` → TSC
+8. Final TSC + git status/diff + STOP
+
+#### After CareerGame is wired (Session 1d+)
+- `useTransferPath` reuses `fetchCareerPlayers()` directly — only needs `name`, `nationality`, `career[].club`
+- `SoccerGridSearch` reuses `fetchCareerPlayers()` — only needs `name`
+- No additional Supabase tables needed for either
+
+---
+
+## Next: Round 3 Session 1c Phase C — CareerGame implementation
+
+**Start here next session.** Design is fully approved. Jump straight to Phase C step 1.
+
+Remaining soccer hooks after CareerGame:
+1. **useTransferPath** (Session 1d) — reuses `fetchCareerPlayers()`, needs `transfer_path_puzzles` table for its 20 puzzles, `useDailyPuzzle` migration
+2. **useGuessSoccerClub** (Session 1e) — 1,151 lines, Footle-like pattern but clubs not players
+3. **useConnections** (Session 1f) — 1,799 lines, puzzle-list pattern with grouping structure
+4. **useSoccerGrid** (Session 1g) — partially wired, puzzle grid content needs wiring
 
 ---
 
