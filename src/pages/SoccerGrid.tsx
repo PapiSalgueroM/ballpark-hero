@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSoccerGrid } from '@/hooks/useSoccerGrid';
+import { fetchCareerPlayers } from '@/lib/fetchCareerPlayers';
 import { SoccerGridBoard } from '@/components/soccer-grid/SoccerGridBoard';
 import { SoccerGridSearch } from '@/components/soccer-grid/SoccerGridSearch';
 import { SoccerGridHowToPlay } from '@/components/soccer-grid/SoccerGridHowToPlay';
@@ -17,6 +18,18 @@ const SoccerGrid = () => {
     puzzle, cells, activeCell, setActiveCell, submitGuess,
     validating, gameStatus, guessesLeft, correctCount, rarityScore, isLoading, isLoadingPool,
   } = useSoccerGrid();
+
+  type CareerPlayerSlim = { name: string; nationality: string; position: string };
+  const [careerPlayerList, setCareerPlayerList] = useState<CareerPlayerSlim[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchCareerPlayers().then((pool) => {
+      if (cancelled) return;
+      setCareerPlayerList(pool.map(p => ({ name: p.name, nationality: p.nationality, position: p.position })));
+    });
+    return () => { cancelled = true; };
+  }, []);
 
   const [showRules, setShowRules] = useState(false);
 
@@ -80,7 +93,7 @@ const SoccerGrid = () => {
                   Find a player who: <span className="text-[hsl(var(--sg-accent))] font-semibold">{puzzle.rows[Math.floor(activeCell / 3)].label}</span>{' '}
                   + <span className="text-[hsl(var(--sg-accent))] font-semibold">{puzzle.cols[activeCell % 3].label}</span>
                 </p>
-                <SoccerGridSearch onSelect={submitGuess} disabled={validating} />
+                <SoccerGridSearch onSelect={submitGuess} disabled={validating} players={careerPlayerList} />
               </div>
             )}
 

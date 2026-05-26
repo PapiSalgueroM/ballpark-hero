@@ -1,14 +1,20 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Loader2 } from 'lucide-react';
-import { careerPlayers } from '@/data/careerPlayers';
 import { toTitleCase } from '@/lib/smartSearch';
+
+interface PlayerSuggestion {
+  name: string;
+  nationality: string;
+  position: string;
+}
 
 interface Props {
   onSelect: (name: string) => void;
   disabled: boolean;
+  players: PlayerSuggestion[];
 }
 
-export function SoccerGridSearch({ onSelect, disabled }: Props) {
+export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
   const [query, setQuery] = useState('');
   const [highlightIndex, setHighlightIndex] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -16,7 +22,7 @@ export function SoccerGridSearch({ onSelect, disabled }: Props) {
   const listRef = useRef<HTMLUListElement>(null);
 
   const suggestions = query.length >= 2
-    ? careerPlayers
+    ? players
         .filter(p => p.name.toLowerCase().includes(query.toLowerCase()))
         .slice(0, 8)
     : [];
