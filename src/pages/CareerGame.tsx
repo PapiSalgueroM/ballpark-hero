@@ -31,6 +31,7 @@ const CareerGame = () => {
     playerNames,
     allRevealed,
     isLoading,
+    isLoadingPool,
   } = useCareerGame();
 
   const [showHelp, setShowHelp] = useState(false);
@@ -130,7 +131,7 @@ const CareerGame = () => {
         </header>
 
         {/* Loading guard */}
-        {isLoading ? (
+        {(isLoadingPool || isLoading) ? (
           <div className="flex justify-center py-10">
             <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
           </div>

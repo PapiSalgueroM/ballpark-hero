@@ -14,6 +14,77 @@ export type Database = {
   }
   public: {
     Tables: {
+      career_players: {
+        Row: {
+          id: string
+          player_name: string
+          nationality: string
+          position: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          player_name: string
+          nationality: string
+          position: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          player_name?: string
+          nationality?: string
+          position?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      career_seasons: {
+        Row: {
+          id: string
+          player_id: string
+          season: string
+          club: string
+          goals: number
+          assists: number
+          appearances: number
+          market_value: number
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          player_id: string
+          season: string
+          club: string
+          goals?: number
+          assists?: number
+          appearances?: number
+          market_value?: number
+          sort_order: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          player_id?: string
+          season?: string
+          club?: string
+          goals?: number
+          assists?: number
+          appearances?: number
+          market_value?: number
+          sort_order?: number
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "career_seasons_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "career_players"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cbb_daily: {
         Row: {
           created_at: string

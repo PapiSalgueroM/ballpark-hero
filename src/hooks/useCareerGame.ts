@@ -1,6 +1,7 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { CareerPlayer } from '@/types/career';
-import { careerPlayers } from '@/data/careerPlayers';
+import { careerPlayers as fallbackPlayers } from '@/data/careerPlayers';
+import { fetchCareerPlayers } from '@/lib/fetchCareerPlayers';
 import { toast } from 'sonner';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -26,6 +27,18 @@ function getCoverableCells(player: CareerPlayer): string[] {
 }
 
 export function useCareerGame() {
+  const [playerPool, setPlayerPool] = useState<CareerPlayer[]>(fallbackPlayers);
+  const [isLoadingPool, setIsLoadingPool] = useState(true);
+  useEffect(() => {
+    let cancelled = false;
+    fetchCareerPlayers().then(pool => {
+      if (cancelled) return;
+      if (pool.length > 0) setPlayerPool(pool);
+      setIsLoadingPool(false);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
   const [mode, setMode] = useState<CareerGameMode>('daily');
   const switchMode = useCallback((m: CareerGameMode) => setMode(m), []);
 
@@ -38,7 +51,7 @@ export function useCareerGame() {
     isLoading,
   } = useDailyPuzzle<CareerPlayer, CareerAction>({
     gameSlug: 'career-path',
-    puzzles: careerPlayers,
+    puzzles: playerPool,
     maxGuesses: 999,
     isWon: (g) => g.some((a) => a.t === 'won'),
     isLost: (g) =>
@@ -63,7 +76,7 @@ export function useCareerGame() {
 
   // ── Unlimited ──────────────────────────────────────────────────────────────
   const [unlimitedPlayer, setUnlimitedPlayer] = useState<CareerPlayer>(
-    () => careerPlayers[Math.floor(Math.random() * careerPlayers.length)],
+    () => fallbackPlayers[Math.floor(Math.random() * fallbackPlayers.length)],
   );
   const [unlimitedRevealedCells, setUnlimitedRevealedCells] = useState<Set<string>>(new Set());
   const [unlimitedGameStatus, setUnlimitedGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
@@ -71,7 +84,7 @@ export function useCareerGame() {
   const [unlimitedGuessesUsed, setUnlimitedGuessesUsed] = useState(0);
 
   // ── Active (mode-dependent) values ────────────────────────────────────────
-  const targetPlayer = mode === 'daily' ? (dailyPuzzle ?? careerPlayers[0]) : unlimitedPlayer;
+  const targetPlayer = mode === 'daily' ? (dailyPuzzle ?? playerPool[0]) : unlimitedPlayer;
   const revealedCells = mode === 'daily' ? dailyRevealedCells : unlimitedRevealedCells;
   const gameStatus = mode === 'daily' ? dailyGameStatus : unlimitedGameStatus;
   const boxesUsed = mode === 'daily' ? dailyBoxesUsed : unlimitedBoxesUsed;
@@ -166,16 +179,16 @@ export function useCareerGame() {
 
   const resetGame = useCallback(() => {
     if (mode !== 'unlimited') return;
-    setUnlimitedPlayer(careerPlayers[Math.floor(Math.random() * careerPlayers.length)]);
+    setUnlimitedPlayer(playerPool[Math.floor(Math.random() * playerPool.length)]);
     setUnlimitedRevealedCells(new Set());
     setUnlimitedGameStatus('playing');
     setUnlimitedBoxesUsed(0);
     setUnlimitedGuessesUsed(0);
-  }, [mode]);
+  }, [mode, playerPool]);
 
   const playerNames = useMemo(
-    () => ensureAnswerInOptions(careerPlayers.map((p) => p.name), targetPlayer.name),
-    [targetPlayer],
+    () => ensureAnswerInOptions(playerPool.map((p) => p.name), targetPlayer.name),
+    [playerPool, targetPlayer],
   );
 
   const completionScore = dailyGameStatus === 'won'
@@ -199,5 +212,6 @@ export function useCareerGame() {
     playerNames,
     allRevealed,
     isLoading,
+    isLoadingPool,
   };
 }
