@@ -1282,6 +1282,39 @@ export type Database = {
         }
         Relationships: []
       }
+      shirt_number_puzzles: {
+        Row: {
+          id: string
+          player_name: string
+          club: string
+          league: string
+          nationality: string
+          kit_number: number
+          fun_fact: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          player_name: string
+          club: string
+          league: string
+          nationality: string
+          kit_number: number
+          fun_fact: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          player_name?: string
+          club?: string
+          league?: string
+          nationality?: string
+          kit_number?: number
+          fun_fact?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

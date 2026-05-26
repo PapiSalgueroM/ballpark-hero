@@ -9,10 +9,23 @@ import { cn } from '@/lib/utils';
 export function ShirtNumberBoard() {
   const {
     puzzle, attempts, maxAttempts, status, score, hint, mode,
+    isLoading, isLoadingPool,
     submitGuess, switchToUnlimited, nextPuzzle, unlimitedIndex,
   } = useShirtNumber();
 
   const [input, setInput] = useState('');
+
+  // Show loading state until puzzle pool and daily puzzle are both ready
+  if (isLoadingPool || isLoading || !puzzle) {
+    return (
+      <div className="min-h-screen bg-background text-foreground">
+        <GameNavbar />
+        <div className="max-w-md mx-auto px-4 py-6 flex justify-center">
+          <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
