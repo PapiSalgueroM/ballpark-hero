@@ -3,6 +3,8 @@ import { connectionsPuzzles } from '@/data/connectionsPuzzles';
 import type { ConnectionGroup, ConnectionDifficulty } from '@/types/connections';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { fetchConnectionsPuzzles } from '@/lib/fetchConnectionsPuzzles';
+import { dateSeed, getTodayET } from '@/lib/dateUtils';
 
 function isValidPuzzle(p: { groups: { players: string[] }[] }): boolean {
   const all = p.groups.flatMap((g) => g.players);
@@ -33,6 +35,25 @@ export function useConnections() {
   const [mode, setMode] = useState<ConnectionsMode>('daily');
   const switchMode = useCallback((m: ConnectionsMode) => setMode(m), []);
 
+  // ── Supabase puzzle pool ───────────────────────────────────────────────────
+  const [puzzlePool, setPuzzlePool] = useState(fallbackPuzzles);
+  const [isLoadingPool, setIsLoadingPool] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchConnectionsPuzzles().then((pool) => {
+      if (cancelled) return;
+      if (pool.length > 0) setPuzzlePool(pool as typeof fallbackPuzzles);
+      setIsLoadingPool(false);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  const todaysPuzzle = useMemo(() => {
+    const seed = dateSeed(getTodayET());
+    return puzzlePool.length > 0 ? puzzlePool[seed % puzzlePool.length] : null;
+  }, [puzzlePool]);
+
   // ── Daily ──────────────────────────────────────────────────────────────────
   const {
     puzzle: dailyPuzzle,
@@ -42,7 +63,12 @@ export function useConnections() {
     isLoading,
   } = useDailyPuzzle<(typeof fallbackPuzzles)[0], ConnAction>({
     gameSlug: 'connections',
+    // connectionsPuzzles is the stable module-level ref required by useDailyPuzzle's
+    // dep array (puzzles is intentionally excluded from its useMemo deps). The actual
+    // puzzle selection comes from supabasePuzzle below — this is just the fallback pool.
     puzzles: fallbackPuzzles,
+    supabasePuzzle: todaysPuzzle,
+    getPuzzleId: (p) => p.id,
     maxGuesses: 999,
     isWon: (g, puzzle) => g.filter((a) => a.t === 'ok').length >= puzzle.groups.length,
     isLost: (g) =>
@@ -70,7 +96,7 @@ export function useConnections() {
 
   // ── Unlimited ──────────────────────────────────────────────────────────────
   const [unlimitedIndex, setUnlimitedIndex] = useState(
-    () => Math.floor(Math.random() * fallbackPuzzles.length),
+    () => Math.floor(Math.random() * puzzlePool.length),
   );
   const [solvedGroupsUnlimited, setSolvedGroupsUnlimited] = useState<ConnectionGroup[]>([]);
   const [livesUnlimited, setLivesUnlimited] = useState(4);
@@ -92,7 +118,7 @@ export function useConnections() {
   const puzzle =
     mode === 'daily'
       ? (dailyPuzzle ?? fallbackPuzzles[0])
-      : fallbackPuzzles[unlimitedIndex % fallbackPuzzles.length];
+      : puzzlePool[unlimitedIndex % puzzlePool.length];
 
   const activeSolvedGroups = mode === 'daily' ? dailySolvedGroups : solvedGroupsUnlimited;
   const activeLives = mode === 'daily' ? dailyLives : livesUnlimited;
@@ -250,7 +276,7 @@ export function useConnections() {
     setUnlimitedIndex((prev) => prev + 1);
   }, [mode, resetUnlimitedState]);
 
-  const totalPuzzles = fallbackPuzzles.length;
+  const totalPuzzles = puzzlePool.length;
   const completionScore = gameStatus === 'won' ? activeLives * 250 : 0;
   useGameCompletion('connections', rawDailyStatus !== 'playing', completionScore);
 
@@ -277,5 +303,6 @@ export function useConnections() {
     resetGame,
     nextPuzzle,
     isLoading,
+    isLoadingPool,
   };
 }

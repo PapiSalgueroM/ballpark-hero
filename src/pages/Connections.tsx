@@ -46,6 +46,7 @@ const Connections = () => {
     puzzleIndex,
     totalPuzzles,
     isLoading,
+    isLoadingPool,
   } = useConnections();
 
   const [showRules, setShowRules] = useState(false);
@@ -131,13 +132,13 @@ const Connections = () => {
         </header>
 
         {/* Loading guard */}
-        {isLoading && (
+        {(isLoading || isLoadingPool) && (
           <div className="flex justify-center py-10">
             <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
           </div>
         )}
 
-        {!isLoading && (
+        {!isLoading && !isLoadingPool && (
           <>
             {/* One Away */}
             {oneAway && (

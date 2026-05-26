@@ -243,6 +243,30 @@ export type Database = {
         }
         Relationships: []
       }
+      connections_puzzles: {
+        Row: {
+          id: string
+          puzzle_id: string
+          groups_json: Json
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          puzzle_id: string
+          groups_json: Json
+          sort_order: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          puzzle_id?: string
+          groups_json?: Json
+          sort_order?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
       daily_badges: {
         Row: {
           created_at: string
