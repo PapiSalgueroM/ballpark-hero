@@ -35,19 +35,7 @@ function CellComponent({ cell, animDelay }: { cell: CellResult; animDelay: numbe
       )}
       style={{ animationDelay: `${animDelay}ms` }}
     >
-      {cell.imageUrl ? (
-        <div className="flex flex-col items-center gap-0.5">
-          <img
-            src={cell.imageUrl}
-            alt={cell.value}
-            className="w-7 h-7 object-contain"
-            onError={(e) => { e.currentTarget.style.display = 'none'; }}
-          />
-          <span className="leading-tight text-center px-1 text-[10px]">{cell.value}</span>
-        </div>
-      ) : (
-        <span className="leading-tight text-center px-1">{cell.value}</span>
-      )}
+      <span className="leading-tight text-center px-1">{cell.value}</span>
       {cell.arrow && (
         <span className="text-[10px] mt-0.5 opacity-80">
           {cell.arrow === 'up' ? '▲' : '▼'}

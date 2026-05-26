@@ -1,5 +1,4 @@
 import { Player, CellResult, CellStatus, ArrowDirection, GuessResult } from '@/types/game';
-import { getClubLogoUrl } from '@/lib/clubData';
 
 const continentMap: Record<string, string> = {
   'England': 'Europe', 'France': 'Europe', 'Germany': 'Europe',
@@ -44,14 +43,13 @@ function compareNationality(guess: string, target: string): CellResult {
 }
 
 function compareClub(guessClub: string, targetClub: string, guessLeague: string, targetLeague: string): CellResult {
-  const logoUrl = getClubLogoUrl(guessClub);
   if (guessClub === targetClub) {
-    return { value: guessClub, status: 'correct', imageUrl: logoUrl };
+    return { value: guessClub, status: 'correct' };
   }
   if (guessLeague === targetLeague) {
-    return { value: guessClub, status: 'close', imageUrl: logoUrl };
+    return { value: guessClub, status: 'close' };
   }
-  return { value: guessClub, status: 'incorrect', imageUrl: logoUrl };
+  return { value: guessClub, status: 'incorrect' };
 }
 
 function compareNumeric(guessVal: number, targetVal: number, threshold: number, displayValue?: string): CellResult {

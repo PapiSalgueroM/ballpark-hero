@@ -53,7 +53,7 @@ export function useSoccerGrid() {
 
   const rarityScore = useMemo(() => {
     if (correctActions.length === 0) return null;
-    const avg = correctActions.reduce((sum, a) => sum + a.rarity, 0) / correctActions.length;
+    const avg = correctActions.reduce((sum, a) => sum + Math.min(a.rarity, 100), 0) / correctActions.length;
     return Math.round(avg);
   }, [correctActions]);
 
@@ -80,7 +80,8 @@ export function useSoccerGrid() {
           .eq('puzzle_id', puzzleId)
           .eq('cell_index', cellIndex)
           .eq('player_name', playerName.toLowerCase());
-        const total = (totalCount ?? 0) + 1;
+        if (!totalCount) return 101; // unicorn — first pick for this cell
+        const total = totalCount + 1;
         const player = (playerCount ?? 0) + 1;
         return Math.round((player / total) * 100);
       } catch {

@@ -43,14 +43,13 @@ const GAME_LABELS: Record<string, string> = {
   'cbb-program': '🏀 CBB Program', 'conquest': '🗺️ Conquest',
   'guess-the-year': '📆 Guess the Year', 'nba-lineup': '🏀 NBA Lineup',
   'guess-nfl-team': '🏈 Guess NFL Team', 'fantasy-draft': '⚽ Fantasy Draft',
-  'blurred-face': '🖼️ Blurred Face',
 };
 
 const SPORT_CATEGORIES: Record<string, string> = {
   'footle': 'soccer', 'career': 'soccer', 'higher-lower': 'soccer', 'connections': 'soccer',
   'build-your-xi': 'soccer', 'guess-the-face': 'soccer', 'football-connect-4': 'soccer',
   'world-cup': 'soccer', 'teammates': 'soccer', 'guess-soccer-club': 'soccer',
-  'soccer-grid': 'soccer', 'fantasy-draft': 'soccer', 'blurred-face': 'soccer',
+  'soccer-grid': 'soccer', 'fantasy-draft': 'soccer',
   'football-grid': 'football', 'football-timeline': 'football', 'football-draft': 'football',
   'nfl-career': 'football', 'guess-nfl-team': 'football', 'conquest': 'football',
   'college-grid': 'college', 'guess-the-college': 'college', 'cbb-program': 'college',

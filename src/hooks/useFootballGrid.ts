@@ -53,7 +53,7 @@ export function useFootballGrid() {
 
   const rarityScore = useMemo(() => {
     if (correctActions.length === 0) return null;
-    const avg = correctActions.reduce((sum, a) => sum + a.rarity, 0) / correctActions.length;
+    const avg = correctActions.reduce((sum, a) => sum + Math.min(a.rarity, 100), 0) / correctActions.length;
     return Math.round(avg);
   }, [correctActions]);
 
@@ -80,7 +80,8 @@ export function useFootballGrid() {
           .eq('puzzle_id', puzzleId)
           .eq('cell_index', cellIndex)
           .eq('player_name', playerName.toLowerCase());
-        const total = (totalCount ?? 0) + 1;
+        if (!totalCount) return 101; // unicorn — first pick for this cell
+        const total = totalCount + 1;
         const player = (playerCount ?? 0) + 1;
         return Math.round((player / total) * 100);
       } catch {
@@ -105,15 +106,16 @@ export function useFootballGrid() {
         });
         if (error) throw error;
         const isValid = data?.valid === true;
+        const displayName = data?.fullName || playerName;
 
         if (isValid) {
           await supabase.from('football_grid_selections').insert({
             puzzle_id: puzzle.id,
             cell_index: capturedCell,
-            player_name: playerName.toLowerCase(),
+            player_name: displayName.toLowerCase(),
           });
-          const rarity = await fetchRarity(puzzle.id, capturedCell, playerName);
-          addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName, rarity });
+          const rarity = await fetchRarity(puzzle.id, capturedCell, displayName);
+          addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: displayName, rarity });
         } else {
           setWrongFlash({ cellIndex: capturedCell, playerName });
           setTimeout(() => setWrongFlash(null), 1500);

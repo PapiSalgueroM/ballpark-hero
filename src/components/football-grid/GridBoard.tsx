@@ -11,6 +11,7 @@ interface Props {
 }
 
 function RarityBadge({ rarity }: { rarity: number }) {
+  if (rarity > 100) return <span className="text-[10px] font-bold text-purple-400">🦄 Unicorn</span>;
   if (rarity < 2)  return <span className="text-[10px] font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">🔥 Phoenix</span>;
   if (rarity < 5)  return <span className="text-[10px] font-bold text-cyan-400">💎 Diamond</span>;
   if (rarity < 10) return <span className="text-[10px] font-bold text-emerald-400">✦ Emerald</span>;
@@ -89,7 +90,7 @@ export function GridBoard({ puzzle, cells, activeCell, onCellClick, accentVar = 
                       {cell.rarity !== null && (
                         <>
                           <span className="text-[9px] text-muted-foreground">
-                            {cell.rarity}% of players
+                            {cell.rarity > 100 ? 'Only you!' : `${cell.rarity}% picked this`}
                           </span>
                           <RarityBadge rarity={cell.rarity} />
                         </>

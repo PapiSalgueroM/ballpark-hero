@@ -83,6 +83,8 @@ serve(async (req) => {
 1. Row attribute: "${sanitized.row}"
 2. Column attribute: "${sanitized.col}"
 
+IMPORTANT NAME MATCHING: Be lenient with name spelling. If the input name is a plausible spelling variation, nickname, or partial name of a real NFL player, identify that player and validate against their actual career. For example, "Treveyon Henderson" and "TreVeyon Henderson" refer to the same player. Accept last-name-only if unambiguous (e.g. "Mahomes" = Patrick Mahomes).
+
 Consider the player's entire NFL career including all teams played for, college attended, draft status, awards won, Pro Bowl selections, Super Bowl appearances and wins, and statistical achievements.
 
 For team criteria like "Played for Patriots", the player must have been on that team's roster at some point in their career (including practice squad or mid-season trades).
@@ -97,7 +99,9 @@ For "Won Super Bowl", the player was on a Super Bowl winning roster.
 For "2+ Super Bowl Wins", the player won 2 or more Super Bowls.
 For Pro Bowl criteria like "3+ Pro Bowls", "5+ Pro Bowls", "10+ Pro Bowls", the player was selected to that many Pro Bowls.
 
-Respond with ONLY a JSON object: {"valid": true} or {"valid": false, "reason": "brief explanation"}`;
+Also return the player's full official name as "fullName" so the UI can display the correct spelling.
+
+Respond with ONLY a JSON object: {"valid": true, "fullName": "First Last"} or {"valid": false, "reason": "brief explanation"}`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -132,7 +136,7 @@ Respond with ONLY a JSON object: {"valid": true} or {"valid": false, "reason": "
     const result = JSON.parse(jsonMatch[0]);
 
     return new Response(
-      JSON.stringify({ valid: !!result.valid, reason: result.reason || null }),
+      JSON.stringify({ valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {

@@ -82,6 +82,8 @@ serve(async (req) => {
 1. Row attribute: "${sanitized.row}"
 2. Column attribute: "${sanitized.col}"
 
+IMPORTANT NAME MATCHING: Be lenient with name spelling. If the input name is a plausible variation or partial name of a real college football player, identify that player and validate against their actual career. Accept last-name-only if unambiguous.
+
 Consider the player's college football career including school attended, position played, awards won, draft status, and conference.
 
 For school criteria like "Alabama", the player must have played college football at that school.

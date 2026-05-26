@@ -1,5 +1,4 @@
 import { CareerSeason } from '@/types/career';
-import { getClubLogoUrl } from '@/lib/clubData';
 import { cn } from '@/lib/utils';
 import { Eye } from 'lucide-react';
 
@@ -30,17 +29,10 @@ function CoveredCell({ onClick }: { onClick: () => void }) {
   );
 }
 
-function RevealedCell({ value, imageUrl }: { value: string; imageUrl?: string }) {
+function RevealedCell({ value }: { value: string }) {
   return (
     <div className="flex flex-col items-center justify-center rounded-lg h-14 bg-card border border-border/30 font-semibold text-sm animate-cell-reveal">
-      {imageUrl ? (
-        <div className="flex flex-col items-center gap-0.5">
-          <img src={imageUrl} alt={value} className="w-6 h-6 object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-          <span className="text-[10px] leading-tight text-center px-1">{value}</span>
-        </div>
-      ) : (
-        <span className="leading-tight text-center px-1">{value}</span>
-      )}
+      <span className="leading-tight text-center px-1">{value}</span>
     </div>
   );
 }
@@ -78,7 +70,6 @@ export function CareerBoard({ career, revealedCells, onReveal, gameOver }: Caree
               }
 
               let value = '';
-              let imageUrl: string | undefined;
 
               switch (col.key) {
                 case 'season':
@@ -86,7 +77,6 @@ export function CareerBoard({ career, revealedCells, onReveal, gameOver }: Caree
                   break;
                 case 'club':
                   value = s.club;
-                  imageUrl = getClubLogoUrl(s.club);
                   break;
                 case 'appearances':
                   value = String(s.appearances);
@@ -102,7 +92,7 @@ export function CareerBoard({ career, revealedCells, onReveal, gameOver }: Caree
                   break;
               }
 
-              return <RevealedCell key={col.key} value={value} imageUrl={imageUrl} />;
+              return <RevealedCell key={col.key} value={value} />;
             })}
           </div>
         ))}
