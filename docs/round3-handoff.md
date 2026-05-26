@@ -1,6 +1,8 @@
 # DoUKnowBall — Round 3 Handoff
 Date: 2026-05-25
 
+> **Round 3 status: ALL soccer hooks wired to Supabase + cleanup queue clear. 7 games live on Supabase. Round 4 (puzzle generators) is the next major phase.**
+
 ## Round 2 summary (last commit before Round 3: 7a36a64)
 See docs/round2-handoff.md for full Round 2 details. Key points carried forward:
 - Total games: 38. Already wired to Supabase: 9. Needs wiring: 27. Partially wired: 5.
@@ -484,18 +486,40 @@ SQL string literals use single-quote delimiters — every `'` inside must be dou
 
 ---
 
-## Next: Round 3 cleanup + Round 4
+## Round 3 Cleanup — SoccerGridSearch wired (commit 7c82f54)
+Date: 2026-05-26
 
-ALL soccer hooks in the Round 3 queue are now complete.
+### Result
+Deferred from Session 1f (SoccerGrid). The last hardcoded data import flagged during the soccer hook migrations is now removed. Round 3 cleanup queue is clear.
 
-### Round 3 cleanup queue (deferred items)
-- **SoccerGridSearch.tsx** — still imports `careerPlayers` from hardcoded data for autocomplete. Wire via `fetchCareerPlayers()` with the same prop-passing pattern used for `allClubNames` in GuessSoccerClub. Autocomplete is UX-only (validation is the AI edge function), so the static import works fine today.
-- Any other non-soccer hooks identified as needing Supabase wiring.
+### Files changed (commit 7c82f54)
+- `src/components/soccer-grid/SoccerGridSearch.tsx` — removed static `careerPlayers` import from hardcoded data. Added `PlayerSuggestion` interface (`{ name: string; nationality: string; position: string }`). Added `players: PlayerSuggestion[]` prop. Filter now sources from `players` prop instead of module-level data. Dropdown subtitle (`nationality · position`) preserved (Option B).
+- `src/pages/SoccerGrid.tsx` — added `fetchCareerPlayers` import. Added `careerPlayerList` state initialized to `[]`. Added `useEffect` fetch on mount with `cancelled` cleanup (same pattern as puzzle pool fetches). Slims `CareerPlayer[]` to `PlayerSuggestion[]` before storing. Passes `players={careerPlayerList}` to `SoccerGridSearch`.
+
+### Key design notes
+- `useSoccerGrid` stays **locked — no change needed**. Render site is `SoccerGrid.tsx` directly; no intermediate board component for SoccerGrid.
+- No Supabase schema changes, no migration, no `types.ts` edit. Pure component-level wiring.
+- No loading gate change needed — existing `(isLoadingPool || isLoading)` gate already hides `SoccerGridSearch` while puzzle loads. Career fetch decouples from that gate; `[]` while loading is acceptable (user must click a cell + type 2+ chars before seeing suggestions, by which time the fetch has completed).
+
+---
+
+## Next: Round 4
+
+Round 3 is fully complete. All 7 soccer games are live on Supabase and the cleanup queue is clear.
+
+### Round 3 cleanup queue — DONE ✅
+- ~~**SoccerGridSearch.tsx**~~ — wired in commit 7c82f54 (see section above)
 
 ### Round 4: Puzzle generators
-Expand each `{game}_puzzles` table from its initial seed to 50–200+ puzzles per game. Connections and SoccerGrid will automatically benefit from Approach B: new rows added to Supabase enter the rotation without any code deploy.
+Expand each `{game}_puzzles` table from its initial seed to 50–200+ puzzles per game.
+- **Approach B games (SoccerGrid, Connections)** — new rows added to Supabase automatically enter the rotation via `dateSeed % puzzlePool.length`. No code deploy needed.
+- **Approach A games (Footle, Shirt Number, CareerGame, TransferPath, GuessSoccerClub)** — rotation is not dynamic; would need retrofitting if pool expansion ever requires dynamic rotation. That's a Round 5 concern, not Round 4 — initial seeds are sufficient for now.
 
 ### Round 5: New puzzle types / game redesigns
+- NBA Chain golf mode
+- Higher/Lower stat-based game
+- NFL Conquest state-splitting
+- Deferred Round 2 bug-fix pass (see "Outstanding from Round 2 user testing" below)
 
 ---
 
