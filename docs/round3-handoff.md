@@ -4,7 +4,7 @@ Date: 2026-05-25
 ## Round 2 summary (last commit before Round 3: 7a36a64)
 See docs/round2-handoff.md for full Round 2 details. Key points carried forward:
 - Total games: 38. Already wired to Supabase: 9. Needs wiring: 27. Partially wired: 5.
-- Locked files (do NOT touch): src/hooks/useDailyPuzzle.ts, src/lib/dateUtils.ts, src/hooks/useShirtNumber.ts, src/hooks/useCareerGame.ts, src/hooks/useTransferPath.ts, src/hooks/useGuessSoccerClub.ts, the 17 Phase B migrated hooks.
+- Locked files (do NOT touch): src/hooks/useDailyPuzzle.ts, src/lib/dateUtils.ts, src/hooks/useShirtNumber.ts, src/hooks/useCareerGame.ts, src/hooks/useTransferPath.ts, src/hooks/useGuessSoccerClub.ts, src/hooks/useSoccerGrid.ts, the 17 Phase B migrated hooks.
 
 ---
 
@@ -394,14 +394,45 @@ GuessSoccerClub is now live on Supabase data. 5 games genuinely wired: Footle, S
 | CareerGame | `career_players`, `career_seasons` | 1c |
 | TransferPath | `transfer_path_puzzles` + reuses career tables | 1d |
 | GuessSoccerClub | `soccer_club_puzzles` | 1e |
+| SoccerGrid | `soccer_grid_puzzles` | 1f |
 
 ---
 
-## Next: Round 3 Session 1f — useSoccerGrid
+## Round 3 Session 1f — SoccerGrid wired (commit 11d3895)
+Date: 2026-05-27
+
+### Result
+SoccerGrid is now genuinely live on Supabase data. 6 games genuinely wired: Footle, Shirt Number, CareerGame, TransferPath, GuessSoccerClub, SoccerGrid.
+
+### Supabase migration applied
+- `supabase/migrations/20260526000003_soccer_grid_puzzles.sql` — schema + RLS public-read + indexes on `puzzle_id` and `sort_order` + 15-row seed, all in one file. Uses Postgres JSONB for `rows_json`/`cols_json` (each puzzle is always read whole — JSONB avoids a JOIN and child table). **Applied manually in Supabase SQL Editor. Confirmed: 15 rows live, `rows_json` verified parsing as JS array (not raw string).**
+
+### Key design notes
+- **Approach B** — `supabasePuzzle` + `getPuzzleId` override on `useDailyPuzzle`. Future-proofs rotation for Round 4 puzzle expansion: new puzzles added to Supabase automatically enter the rotation via `dateSeed % puzzlePool.length`. Approach A would have locked the rotation to the initial 15 hardcoded puzzles forever.
+- `todaysPuzzle` computed in `useMemo` over `puzzlePool` using `dateSeed(getTodayET()) % puzzlePool.length`. Passed as `supabasePuzzle` to `useDailyPuzzle`.
+- `puzzles: soccerGridPuzzles` still passed as the stable module-level ref required by `useDailyPuzzle`'s dep array constraint (the `puzzles` param is intentionally excluded from its `useMemo` deps). Code comments in the hook explain why so future maintainers don't remove it.
+- `isLoadingPool` gate added — prevents Round 4 mid-game puzzle resets: without it, if Supabase loads a larger pool and `puzzleIndex` changes, `useDailyPuzzle` would reset mid-game guesses.
+- All existing functionality preserved: rarity queries against `soccer_grid_selections`, `soccer-grid-validate` edge function invocation, `soccer_grid_selections` insert on correct answer, `useGameCompletion`.
+
+### Files changed (commit 11d3895)
+- `supabase/migrations/20260526000003_soccer_grid_puzzles.sql` (**new**)
+- `src/lib/fetchSoccerGridPuzzles.ts` (**new**) — SELECT ORDER BY sort_order, JSONB cast to `SoccerGridAttribute[]`, returns `[]` on error
+- `src/integrations/supabase/types.ts` — `soccer_grid_puzzles` table definition added (`rows_json`/`cols_json` typed as `Json`)
+- `src/hooks/useSoccerGrid.ts` — pool state + `isLoadingPool`, fetch on mount with `cancelled` cleanup, `todaysPuzzle` memo, Approach B wiring, `isLoadingPool` added to return
+- `src/pages/SoccerGrid.tsx` — loading gate updated from `isLoading` to `(isLoadingPool || isLoading)`
+
+### Locked files updated
+`src/hooks/useSoccerGrid.ts` is now locked — **do NOT re-migrate.**
+
+### Round 3 cleanup queue (deferred items)
+- **SoccerGridSearch.tsx** — still imports `careerPlayers` from hardcoded data for autocomplete. The autocomplete is UX-only (validation is the AI edge function), so the static import works fine today. Wire in a later session via `fetchCareerPlayers()` with the same prop-passing pattern as `allClubNames` in GuessSoccerClub.
+
+---
+
+## Next: Round 3 Session 1g — useConnections
 
 Remaining soccer hooks:
-1. **useSoccerGrid** (Session 1f) — ⬅ next, partially wired (user selections already in Supabase), puzzle grid content needs wiring, can reuse `fetchCareerPlayers()`
-2. **useConnections** (Session 1g) — ~1,799 lines, puzzle-list with grouping structure
+1. **useConnections** (Session 1g) — ⬅ next, ~1,799 lines, puzzle-list pattern with 4-groups-of-4 NYT Connections-style grouping structure. **Largest hook in the Round 3 queue — start in a fresh session context, not immediately after another session.**
 
 ---
 
@@ -425,7 +456,7 @@ Revisit these in a dedicated bug-fix round (Round 4 or 5) after data wiring is c
 - No AI attribution in commits (no "Co-Authored-By", no "Generated with Claude")
 - Bun is the package manager, path: `/c/Users/antho/.bun/bin/bun`
 - Always run TSC after edits: `/c/Users/antho/.bun/bin/bun x tsc --noEmit`
-- Locked files (do NOT touch): `src/hooks/useDailyPuzzle.ts`, `src/lib/dateUtils.ts`, the 17 Phase B migrated hooks, `src/hooks/useShirtNumber.ts`, `src/hooks/useCareerGame.ts`, `src/hooks/useTransferPath.ts`, `src/hooks/useGuessSoccerClub.ts`
+- Locked files (do NOT touch): `src/hooks/useDailyPuzzle.ts`, `src/lib/dateUtils.ts`, the 17 Phase B migrated hooks, `src/hooks/useShirtNumber.ts`, `src/hooks/useCareerGame.ts`, `src/hooks/useTransferPath.ts`, `src/hooks/useGuessSoccerClub.ts`, `src/hooks/useSoccerGrid.ts`
 - Phase workflow: A (read/investigate) → B (design, stop and report) → C (implement, one file at a time with TSC) → D (final TSC + git status/diff + STOP for commit approval)
 - DO NOT commit until user explicitly approves
 
