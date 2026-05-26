@@ -3,8 +3,9 @@ Date: 2026-05-26
 
 ## Status
 - Batch 2A target: **15 puzzles** (sg-016 through sg-030)
-- Batch 2A current approved count: **0 / 15**
-- Next action: Run 1 (5 candidates) in separate Claude.ai chat
+- Batch 2A current approved count: **15 / 15 ✅ COMPLETE**
+- Migration applied: `20260526000005_soccer_grid_puzzles_batch2a.sql` — Supabase confirmed COUNT(*) = 30
+- Next action: Batch 2B (sg-031 through sg-050, 20 puzzles) — unblocked at 100% pass rate
 
 ---
 
@@ -279,23 +280,23 @@ Updated after each run. Status values: `pending` / `approved` / `rejected` / `ap
 
 | puzzle_id | rows summary | cols summary | run # | status | notes |
 |---|---|---|---|---|---|
-| sg-016 | — | — | 1 | pending | |
-| sg-017 | — | — | 1 | pending | |
-| sg-018 | — | — | 1 | pending | |
-| sg-019 | — | — | 1 | pending | |
-| sg-020 | — | — | 1 | pending | |
-| sg-021 | — | — | 2 | pending | |
-| sg-022 | — | — | 2 | pending | |
-| sg-023 | — | — | 2 | pending | |
-| sg-024 | — | — | 2 | pending | |
-| sg-025 | — | — | 2 | pending | |
-| sg-026 | — | — | 3 | pending | |
-| sg-027 | — | — | 3 | pending | |
-| sg-028 | — | — | 3 | pending | |
-| sg-029 | — | — | 3 | pending | |
-| sg-030 | — | — | 3 | pending | |
+| sg-016 | Ajax / Porto / Benfica | Premier League / FWD / CL Winner | 1 | approved | |
+| sg-017 | Sevilla / Marseille / Galatasaray | Premier League / FWD / French | 1 | approved | |
+| sg-018 | Bayer Leverkusen / Lazio / Sporting CP | MID / Premier League / CL Winner | 1 | approved | |
+| sg-019 | Colombian / Uruguayan / Chilean | Barcelona / Premier League / Copa América Winner | 1 | approved | |
+| sg-020 | Boca Juniors / River Plate / Croatian | Serie A / MID / La Liga | 1 | approved | |
+| sg-021 | Fiorentina / Valencia / Villarreal | Argentine / La Liga / MID | 2 | approved | Argentine used as col (previously row in sg-006) |
+| sg-022 | Celtic / PSV / Feyenoord | DEF / Premier League / Dutch | 2 | approved | Dutch used as col (previously row in sg-013) |
+| sg-023 | Lyon / Monaco / Lille | DEF / Ligue 1 / Serie A | 2 | approved | |
+| sg-024 | Belgian / Polish / Norwegian | Borussia Dortmund / Ligue 1 / GK | 2 | approved | |
+| sg-025 | Man United / Bayern Munich / Juventus | Ballon d'Or Winner / WC Winner / 100 Caps | 2 | approved | First use of Ballon d'Or Winner |
+| sg-026 | Newcastle / Everton / West Ham | Eredivisie / DEF / Serie A | 3 | approved | First use of Eredivisie |
+| sg-027 | Eintracht Frankfurt / Schalke / Beşiktaş | Premier League / Süper Lig / MID | 3 | approved | First use of Süper Lig; ş/ü UTF-8 verified |
+| sg-028 | Senegalese / Ivorian / Cameroonian | AFCON Winner / Ligue 1 / Chelsea | 3 | approved | First use of African Cup of Nations Winner |
+| sg-029 | Real Madrid / Bayern Munich / Inter Milan | WC Winner / UEFA Euro Winner / Europa League Winner | 3 | approved | First use of UEFA Euro Winner + Europa League Winner |
+| sg-030 | Liverpool / Chelsea / Man City | Saudi Pro League / GK / Brazilian | 3 | approved | First use of Saudi Pro League; Brazilian used as col |
 
-**Batch 2A result:** __ / 15 approved &nbsp;|&nbsp; Pass rate: __%  &nbsp;|&nbsp; Decision: __
+**Batch 2A result:** 15 / 15 approved &nbsp;|&nbsp; Pass rate: **100%** &nbsp;|&nbsp; Decision: **Proceed to Batch 2B**
 
 ---
 
@@ -305,19 +306,19 @@ Updated as each puzzle is approved. Hard limits are for the full 35-puzzle expan
 
 | Attribute | Batch 2A approved | Batch 2A budget | Full-35 limit | Remaining for 2B |
 |---|---|---|---|---|
-| Champions League Winner | 0 | ≤ 2 | ≤ 5 | — |
-| World Cup Winner | 0 | ≤ 3 | ≤ 6 | — |
-| Forward (FWD) | 0 | ≤ 4 | ≤ 8 | — |
-| Played for Real Madrid (row or col) | 0 | ≤ 1 | ≤ 2 | — |
-| Ballon d'Or Winner | 0 | 1–2 | 2–4 | — |
-| Europa League Winner | 0 | 1 | 1–3 | — |
-| Copa América Winner | 0 | 1 | 1–2 | — |
-| UEFA Euro Winner | 0 | 0–1 | 1–2 | — |
-| African Cup of Nations Winner | 0 | 0–1 | 1–2 | — |
-| Played in Eredivisie | 0 | 1–2 | 2–3 | — |
-| Played in Primeira Liga | 0 | 1 | 1–2 | — |
-| Played in Süper Lig | 0 | 0–1 | 1 | — |
-| Played in Saudi Pro League | 0 | 0–1 | 1 | — |
+| Champions League Winner | **2** (sg-016, sg-018) | ≤ 2 ✅ | ≤ 5 | 3 |
+| World Cup Winner | **2** (sg-025, sg-029) | ≤ 3 ✅ | ≤ 6 | 4 |
+| Forward (FWD) | **2** (sg-016, sg-017) | ≤ 4 ✅ | ≤ 8 | 6 |
+| Played for Real Madrid (row or col) | **1** (sg-029 row) | ≤ 1 ✅ | ≤ 2 | 1 |
+| Ballon d'Or Winner | **1** (sg-025) | 1–2 ✅ | 2–4 | 1–3 |
+| Europa League Winner | **1** (sg-029) | 1 ✅ | 1–3 | 0–2 |
+| Copa América Winner | **1** (sg-019) | 1 ✅ | 1–2 | 0–1 |
+| UEFA Euro Winner | **1** (sg-029) | 0–1 ✅ | 1–2 | 0–1 |
+| African Cup of Nations Winner | **1** (sg-028) | 0–1 ✅ | 1–2 | 0–1 |
+| Played in Eredivisie | **1** (sg-026) | 1–2 ✅ | 2–3 | 1–2 |
+| Played in Primeira Liga | **0** ⚠️ not introduced | 1 | 1–2 | 1–2 (must add in 2B) |
+| Played in Süper Lig | **1** (sg-027) | 0–1 ✅ | 1 | **0 — AT FULL CAP** |
+| Played in Saudi Pro League | **1** (sg-030) | 0–1 ✅ | 1 | **0 — AT FULL CAP** |
 
 ---
 
@@ -326,41 +327,47 @@ Updated as each puzzle is approved. Hard limits are for the full 35-puzzle expan
 Track which new clubs and nationalities have been introduced. Update as puzzles are approved.
 
 **New clubs introduced (target: cover most high-priority clubs across all 35):**
-- [ ] Ajax
-- [ ] Porto
-- [ ] Benfica
-- [ ] Sevilla
-- [ ] Lyon
-- [ ] Marseille
-- [ ] Galatasaray
-- [ ] Boca Juniors
-- [ ] River Plate
-- [ ] Flamengo
-- [ ] Bayer Leverkusen
-- [ ] Lazio
-- [ ] Fiorentina
-- [ ] Sporting CP
-- [ ] PSV
-- [ ] Feyenoord
-- [ ] Celtic
-- [ ] Inter Miami
+- [x] Ajax (sg-016)
+- [x] Porto (sg-016)
+- [x] Benfica (sg-016)
+- [x] Sevilla (sg-017)
+- [x] Lyon (sg-023)
+- [x] Marseille (sg-017)
+- [x] Galatasaray (sg-017)
+- [x] Boca Juniors (sg-020)
+- [x] River Plate (sg-020)
+- [ ] Flamengo — not yet introduced, candidate for Batch 2B
+- [x] Bayer Leverkusen (sg-018)
+- [x] Lazio (sg-018)
+- [x] Fiorentina (sg-021)
+- [x] Sporting CP (sg-018)
+- [x] PSV (sg-022)
+- [x] Feyenoord (sg-022)
+- [x] Celtic (sg-022)
+- [ ] Inter Miami — not yet introduced, candidate for Batch 2B
+
+Additional clubs introduced (not in original checklist): Valencia (sg-021), Villarreal (sg-021), Monaco (sg-023), Lille (sg-023), Newcastle (sg-026), Everton (sg-026), West Ham (sg-026), Eintracht Frankfurt (sg-027), Schalke (sg-027), Beşiktaş (sg-027)
 
 **New nationalities introduced (target: cover most high-priority nationalities across all 35):**
-- [ ] Colombian
-- [ ] Uruguayan
-- [ ] Belgian
-- [ ] Croatian
-- [ ] Senegalese
-- [ ] Ivorian
-- [ ] Polish
-- [ ] Norwegian
-- [ ] Welsh
-- [ ] Egyptian
-- [ ] Cameroonian
-- [ ] Moroccan
-- [ ] Serbian
-- [ ] Japanese
-- [ ] South Korean
+- [x] Colombian (sg-019)
+- [x] Uruguayan (sg-019)
+- [x] Belgian (sg-024)
+- [x] Croatian (sg-020)
+- [x] Senegalese (sg-028)
+- [x] Ivorian (sg-028)
+- [x] Polish (sg-024)
+- [x] Norwegian (sg-024)
+- [ ] Welsh — not yet introduced, candidate for Batch 2B
+- [ ] Egyptian — not yet introduced, candidate for Batch 2B
+- [x] Cameroonian (sg-028)
+- [ ] Moroccan — not yet introduced, candidate for Batch 2B
+- [ ] Serbian — not yet introduced, candidate for Batch 2B
+- [ ] Japanese — not yet introduced, candidate for Batch 2B
+- [ ] South Korean — not yet introduced, candidate for Batch 2B
+
+Additional nationality: Chilean (sg-019, not in original list but valid addition)
+
+Previously-seen nationalities used as col attributes for the first time: Argentine (sg-021), Dutch (sg-022), Brazilian (sg-030)
 
 ---
 
@@ -394,13 +401,12 @@ The `soccer-grid-validate` function sends `rowAttribute` and `colAttribute` as r
 
 ## Lessons Learned
 
-*(To be filled in after Batch 2A generation and review is complete.)*
-
-- **Prompt template issues:** —
-- **Most common failure mode:** —
-- **Attribute combinations to avoid in Batch 2B:** —
-- **New attributes that worked well:** —
-- **New attributes that caused problems:** —
-- **Factual errors caught in spot-check:** —
-- **Batch 2A final pass rate:** — / 15 (—%)
-- **Decision on Batch 2B:** —
+- **Prompt template issues:** None. Template performed well across all 3 runs. No reformatting needed for Batch 2B.
+- **Most common failure mode:** None — 15/15 pass rate. No dead cells, no near-duplicates, no cap violations caught in QC.
+- **Attribute combinations to avoid in Batch 2B:** Süper Lig and Saudi Pro League are at their full-35 cap (1/1 each) — do NOT reuse. Played in Primeira Liga was skipped entirely in Batch 2A — must be introduced in Batch 2B.
+- **New attributes that worked well:** All new attributes (Ballon d'Or Winner, Copa América Winner, UEFA Euro Winner, African Cup of Nations Winner, Europa League Winner, Eredivisie, Süper Lig, Saudi Pro League) introduced cleanly with no validator issues.
+- **New attributes that caused problems:** None.
+- **Factual errors caught in spot-check:** None flagged.
+- **Batch 2A final pass rate:** 15 / 15 (100%)
+- **Decision on Batch 2B:** ✅ Unblocked. Target: sg-031 through sg-050 (20 puzzles). Priorities: introduce Flamengo, Inter Miami, Primeira Liga, Welsh, Japanese, South Korean, Moroccan; add second Eredivisie puzzle; continue adding Ballon d'Or Winner (1–3 remaining budget).
+- **File write issue (critical lesson for future sessions):** The Write tool (Claude Code) mangled the absolute Windows path `C:\Users\antho\ballpark-hero\supabase\migrations\...` into a single filename string at the repo root, producing a 0-byte garbage file (`Usersanthoballpark-herosupabasemigrations...sql`). The actual migration file was subsequently written correctly via Bash heredoc with relative path. **Rule going forward: use Bash heredoc for migration files, always verify with `wc -c` immediately after creation, and treat any Write tool output as unverified until byte count is confirmed non-zero.**
