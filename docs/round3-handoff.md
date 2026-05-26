@@ -4,7 +4,7 @@ Date: 2026-05-25
 ## Round 2 summary (last commit before Round 3: 7a36a64)
 See docs/round2-handoff.md for full Round 2 details. Key points carried forward:
 - Total games: 38. Already wired to Supabase: 9. Needs wiring: 27. Partially wired: 5.
-- Locked files (do NOT touch): src/hooks/useDailyPuzzle.ts, src/lib/dateUtils.ts, src/hooks/useShirtNumber.ts, src/hooks/useCareerGame.ts, the 17 Phase B migrated hooks.
+- Locked files (do NOT touch): src/hooks/useDailyPuzzle.ts, src/lib/dateUtils.ts, src/hooks/useShirtNumber.ts, src/hooks/useCareerGame.ts, src/hooks/useTransferPath.ts, the 17 Phase B migrated hooks.
 
 ---
 
@@ -314,24 +314,61 @@ Added to `career_seasons` to handle mid-season transfer rows (e.g. Enzo Fernánd
 
 ---
 
-## Next: Round 3 Session 1d — TransferPath
+## Round 3 Session 1d — TransferPath wired (commit 1264103)
+Date: 2026-05-26
 
-**Session 1d is the next target.** Should be significantly faster than 1c — no bulk data generation required.
+### Result
+TransferPath is now live on Supabase data. 4 games genuinely wired: Footle, Shirt Number, CareerGame, TransferPath.
 
-### What TransferPath needs
-1. `transfer_path_puzzles` Supabase table (20 puzzles from `src/data/transferPathPuzzles.ts`) — puzzle-list pattern (same as ShirtNumber)
-2. `fetchTransferPathPuzzles.ts` — SELECT all, snake_case → camelCase, returns `[]` on error
-3. `useTransferPath.ts` — migrate to `useDailyPuzzle` (fixes UTC timezone bug), add puzzle pool state + fetch, reuse `fetchCareerPlayers()` for the career validation graph (replaces module-level `PLAYER_CLUBS` map)
-4. Board/page component — gate on `(isLoadingPool || isLoading)`
+### Supabase migration applied
+- `supabase/migrations/20260526000001_transfer_path_puzzles.sql` — schema + 20-row seed in a single file, RLS public-read, indexes on `puzzle_id` and `sort_order`. **Applied manually via Supabase SQL Editor. Confirmed: 20 rows live.**
+- Reuses `career_players` + `career_seasons` from Session 1c — no new career schema needed.
 
-### TransferPath puzzle shape (20 puzzles)
-`{ id, playerA, playerB, minSteps, oneOptimalPath, hint }` — `oneOptimalPath` is stored but NOT used at runtime (documentation only). The validation graph built from career data is what matters at runtime.
+### Files changed (commit 1264103)
+- `supabase/migrations/20260526000001_transfer_path_puzzles.sql` (**new**)
+- `src/lib/fetchTransferPathPuzzles.ts` (**new**) — SELECT ORDER BY sort_order, snake→camel, returns `[]` on error. `oneOptimalPath` intentionally omitted (unused at runtime).
+- `src/integrations/supabase/types.ts` — `transfer_path_puzzles` table definition added
+- `src/data/transferPathPuzzles.ts` — `oneOptimalPath` made optional (`oneOptimalPath?: string[]`), kept as runtime fallback
+- `src/hooks/useTransferPath.ts` — full rewrite:
+  - Dual fetch on mount via `Promise.all(fetchTransferPathPuzzles, fetchCareerPlayers)` — single combined `isLoadingPool`
+  - Migrated to `useDailyPuzzle` (kills custom `getDateSeed` UTC bug)
+  - Action-based event log: `{t:'step',player,club} | {t:'won'}` — same pattern as CareerGame
+  - `getAllPlayerNames`, `getPlayerNationality`, `getPlayerClubs` moved from module-level exports to memoized closures returned from the hook (Option A from Phase B design)
+  - `addPlayer` unified handler preserves auto-completion (when user adds a player who connects directly to playerB, playerB auto-appended)
+  - Removed: `buildClubIndex`, `PLAYER_CLUBS`, `getDateSeed`, `loadDaily`, `saveDaily`
+- `src/components/transfer-path/TransferPathBoard.tsx` — removed named helper imports, destructures helpers from hook return, added loading gate, fixed stale `allNames` `useMemo` dep (was `[]`, now `[getAllPlayerNames]`)
 
-Remaining soccer hooks after TransferPath:
-1. **useTransferPath** (Session 1d) — ⬅ next
-2. **useGuessSoccerClub** (Session 1e) — 1,151 lines, Footle-like pattern but clubs not players
-3. **useConnections** (Session 1f) — 1,799 lines, puzzle-list pattern with grouping structure
-4. **useSoccerGrid** (Session 1g) — partially wired, puzzle grid content needs wiring
+### Locked files updated
+`src/hooks/useTransferPath.ts` is now locked — **do NOT re-migrate.**
+
+### 4 games live on Supabase
+| Game | Table(s) | Session |
+|---|---|---|
+| Footle | `player_market_values` | 1a |
+| Shirt Number | `shirt_number_puzzles` | 1b |
+| CareerGame | `career_players`, `career_seasons` | 1c |
+| TransferPath | `transfer_path_puzzles` + reuses career tables | 1d |
+
+### Career schema templating
+`career_players` + `career_seasons` ready to template:
+- Hockey Career (`hockeyCareerPlayers.ts`)
+- Baseball Career (`baseballCareerPlayers.ts`)
+- NFL Career Path (`nflCareer.ts`)
+
+---
+
+## Next: Round 3 Session 1e — useGuessSoccerClub
+
+**Session 1e is the next target.** Footle-like player-pool pattern but for clubs instead of players.
+
+- `src/hooks/useGuessSoccerClub.ts` — ~1,151 lines, Footle-like pattern
+- Will need Phase A investigation before design (clubs may have different data shape than players)
+- Likely reuses `player_market_values` table already in Supabase, or needs a `clubs` table
+
+Remaining soccer hooks after Session 1e:
+1. **useGuessSoccerClub** (Session 1e) — ⬅ next, ~1,151 lines, Footle-like but clubs
+2. **useSoccerGrid** (Session 1f) — partially wired, puzzle grid content needs wiring
+3. **useConnections** (Session 1g) — ~1,799 lines, puzzle-list with grouping structure
 
 ---
 
