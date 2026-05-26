@@ -1,15 +1,39 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { soccerGridPuzzles } from '@/data/soccerGridPuzzles';
 import { SoccerGridCell, SoccerGridGameStatus, SoccerGridPuzzle } from '@/types/soccerGrid';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { fetchSoccerGridPuzzles } from '@/lib/fetchSoccerGridPuzzles';
+import { dateSeed, getTodayET } from '@/lib/dateUtils';
 
 type GridAction =
   | { t: 'ok'; cellIndex: number; playerName: string; rarity: number }
   | { t: 'x' };
 
 export function useSoccerGrid() {
+  const [puzzlePool, setPuzzlePool] = useState<SoccerGridPuzzle[]>(soccerGridPuzzles);
+  const [isLoadingPool, setIsLoadingPool] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchSoccerGridPuzzles().then((pool) => {
+      if (cancelled) return;
+      if (pool.length > 0) setPuzzlePool(pool);
+      setIsLoadingPool(false);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  // Compute today's puzzle from the live pool using the same date-seed formula as
+  // useDailyPuzzle. Passed as supabasePuzzle so the selection dynamically reflects
+  // the full Supabase pool (including puzzles added in Round 4+), not just the
+  // initial 15 in the hardcoded fallback.
+  const todaysPuzzle = useMemo(() => {
+    const seed = dateSeed(getTodayET());
+    return puzzlePool.length > 0 ? puzzlePool[seed % puzzlePool.length] : null;
+  }, [puzzlePool]);
+
   const {
     puzzle: dailyPuzzle,
     guesses: dailyActions,
@@ -18,7 +42,12 @@ export function useSoccerGrid() {
     isLoading,
   } = useDailyPuzzle<SoccerGridPuzzle, GridAction>({
     gameSlug: 'soccer-grid',
+    // soccerGridPuzzles is the stable module-level ref required by useDailyPuzzle's
+    // dep array (puzzles is intentionally excluded from its useMemo deps). The actual
+    // puzzle selection comes from supabasePuzzle below — this is just the fallback pool.
     puzzles: soccerGridPuzzles,
+    supabasePuzzle: todaysPuzzle,
+    getPuzzleId: (p) => p.id,
     maxGuesses: 15,
     isWon: (g) => g.filter((a) => a.t === 'ok').length >= 9,
     deserializeGuesses: (raw) => raw as GridAction[],
@@ -135,6 +164,7 @@ export function useSoccerGrid() {
 
   return {
     puzzle, cells, activeCell, setActiveCell, submitGuess,
-    validating, gameStatus, guessesLeft, correctCount, rarityScore, getRowCol, isLoading,
+    validating, gameStatus, guessesLeft, correctCount, rarityScore, getRowCol,
+    isLoading, isLoadingPool,
   };
 }

@@ -1036,6 +1036,33 @@ export type Database = {
         }
         Relationships: []
       }
+      soccer_grid_puzzles: {
+        Row: {
+          id: string
+          puzzle_id: string
+          rows_json: Json
+          cols_json: Json
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          puzzle_id: string
+          rows_json: Json
+          cols_json: Json
+          sort_order: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          puzzle_id?: string
+          rows_json?: Json
+          cols_json?: Json
+          sort_order?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
       soccer_grid_selections: {
         Row: {
           cell_index: number
