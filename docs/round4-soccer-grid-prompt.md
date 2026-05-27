@@ -717,21 +717,38 @@ sg-044 rows: Played for Tottenham, Played for AS Roma, Played for Werder Bremen
 sg-045 rows: Played for Atlético Madrid, Played for Sevilla, Uruguayan
        cols: Europa League Winner, Played in Serie A, Defender (DEF)
 
+sg-046 rows: Played for Real Sociedad, Played for Real Betis, Played for Celta Vigo
+       cols: Played in Premier League, Midfielder (MID), Mexican
+
+sg-047 rows: Played for RB Leipzig, Played for Bayer Leverkusen, Played for Udinese
+       cols: Played in Ligue 1, Forward (FWD), French
+
+sg-048 rows: Czech, Greek, American
+       cols: Played in Serie A, Goalkeeper (GK), Played in Bundesliga
+
+sg-049 rows: Played for Bayern Munich, Played for Inter Milan, Played for Chelsea
+       cols: Champions League Winner, Played in Primeira Liga, Defender (DEF)
+
+sg-050 rows: Played for Arsenal, Played for Lyon, German
+       cols: World Cup Winner, Played in La Liga, Forward (FWD)
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CONSTRAINTS FOR THIS BATCH
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-PER-RUN ATTRIBUTE CAPS — RUN 4 (batch totals consumed after Run 3):
-- "Champions League Winner":           max 1 across these 5 puzzles  (1 / 3 batch-used)
-- "World Cup Winner":                  max 1 across these 5 puzzles  (2 / 4 batch-used)
-- "Forward (FWD)":                     max 2 across these 5 puzzles  (4 / 6 batch-used)
-- "Played in Premier League":          max 1 across these 5 puzzles  ← STRICTLY ENFORCED (2 / 4 batch-used)
-- "Played for Real Madrid" (row/col):  max 0 across these 5 puzzles  ← DO NOT USE — MAXED (1/1 used in sg-041)
-- "Played in Serie A":                 max 1 across these 5 puzzles  (1 / 3 batch-used)
-- "Played in La Liga":                 max 1 across these 5 puzzles  (2 / 3 batch-used — 1 remaining total)
-- "Played in Ligue 1":                 max 1 across these 5 puzzles  (2 / 3 batch-used — 1 remaining total)
-- "Ballon d'Or Winner":                max 1 across these 5 puzzles  (1 / 3 batch-used)
-- "Europa League Winner":              max 0 — DO NOT USE (MAXED — 2/2 used in sg-035, sg-045)
+PER-RUN ATTRIBUTE CAPS — RUN 4 ✅ COMPLETE — BATCH 2B FINAL:
+Final run consumption:
+- "Champions League Winner":           1 used (sg-049) — batch total 2/3
+- "World Cup Winner":                  1 used (sg-050) — batch total 3/4
+- "Forward (FWD)":                     2 used (sg-047, sg-050) — batch total 6/6 MAXED
+- "Played in Premier League":          1 used (sg-046) — batch total 3/4
+- "Played for Real Madrid" (row/col):  0 used — MAXED since Run 3 (1/1 in sg-041)
+- "Played in Serie A":                 1 used (sg-048) — batch total 2/3
+- "Played in La Liga":                 1 used (sg-050) — batch total 3/3 MAXED
+- "Played in Ligue 1":                 1 used (sg-047) — batch total 3/3 MAXED
+- "Ballon d'Or Winner":                0 used — batch total 1/3
+- "Played in Primeira Liga":           1 used (sg-049) — batch total 2/2 MAXED
+- "Europa League Winner":              0 used — MAXED since Run 3 (2/2)
 
 BATCH-WIDE HARD STOPS (never use in any run):
 - "Played in Super Lig":               DO NOT USE — at full lifetime cap
@@ -771,17 +788,21 @@ DO NOT USE — at full batch cap:
   African Cup of Nations Winner — 1/1 used in sg-043
   Europa League Winner — 2/2 used in sg-035, sg-045
   Real Madrid — 1/1 used in sg-041
+  Forward (FWD) — 6/6 MAXED (sg-032, sg-033, sg-037, sg-042, sg-047, sg-050)
+  Played in La Liga — 3/3 MAXED (sg-034, sg-039, sg-050)
+  Played in Ligue 1 — 3/3 MAXED (sg-034, sg-043, sg-047)
+  Played in Primeira Liga — 2/2 MAXED (sg-035, sg-049)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 PUZZLE TYPES FOR THIS RUN
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[CURRENT: Run 4 — copy the line below when pasting to Claude.ai.]
+ALL 4 RUNS COMPLETE — BATCH 2B FINAL
 
 Run 1 ✅ COMPLETE (sg-031–sg-035)
 Run 2 ✅ COMPLETE (sg-036–sg-040)
 Run 3 ✅ COMPLETE (sg-041–sg-045)
-Run 4: 3 three-club-rows + 1 three-nationality-rows + 1 mixed-rows  (IDs: sg-046 to sg-050)  ← USE THIS
+Run 4 ✅ COMPLETE (sg-046–sg-050)
 
 Row type definitions:
 - three-club-rows:       all 3 row attributes are clubs
@@ -906,13 +927,13 @@ Apply per 5-puzzle run before adding candidates to the tracking table.
 
 ## Batch 2B Attribute Cap Table
 
-Updated after each run is approved. Runs 1–3 (sg-031–sg-045) complete.
+Updated after each run is approved. ALL RUNS COMPLETE — Batch 2B FINAL (sg-031–sg-050).
 
 | Attribute | 2B max | Used in 2B | Remaining |
 |---|---|---|---|
-| Champions League Winner | 3 | **1** (sg-040) | 2 |
-| World Cup Winner | 4 | **2** (sg-035, sg-036) | 2 |
-| Forward (FWD) | 6 | **4** (sg-032, sg-033, sg-037, sg-042) | 2 |
+| Champions League Winner | 3 | **2** (sg-040, sg-049) | 1 |
+| World Cup Winner | 4 | **3** (sg-035, sg-036, sg-050) | 1 |
+| Forward (FWD) | 6 | **6** (sg-032, sg-033, sg-037, sg-042, sg-047, sg-050) | **0 — MAXED** |
 | Played for Real Madrid (row or col) | 1 | **1** (sg-041) | **0 — DO NOT USE** |
 | Ballon d'Or Winner | 3 | **1** (sg-041) | 2 |
 | Europa League Winner | 2 | **2** (sg-035, sg-045) | **0 — DO NOT USE** |
@@ -920,12 +941,12 @@ Updated after each run is approved. Runs 1–3 (sg-031–sg-045) complete.
 | UEFA Euro Winner | 1 | **1** (sg-041) | **0 — DO NOT USE** |
 | African Cup of Nations Winner | 1 | **1** (sg-043) | **0 — DO NOT USE** |
 | Played in Eredivisie | 2 (min 1) ✅ | **2** (sg-033, sg-044) | **0 — MAXED** |
-| Played in Primeira Liga | 2 (min 1) ✅ | **1** (sg-035) | 1 |
-| Played in Premier League | 4 | **2** (sg-032, sg-041) | 2 |
-| Played in Serie A | 3 | **1** (sg-045) | 2 |
-| Played in La Liga | 3 | **2** (sg-034, sg-039) | 1 |
-| Played in Ligue 1 | 3 | **2** (sg-034, sg-043) | 1 |
-| Played in Bundesliga (uncapped) | — | **3** (sg-037, sg-038, sg-039) | — |
+| Played in Primeira Liga | 2 (min 1) ✅ | **2** (sg-035, sg-049) | **0 — MAXED** |
+| Played in Premier League | 4 | **3** (sg-032, sg-041, sg-046) | 1 |
+| Played in Serie A | 3 | **2** (sg-045, sg-048) | 1 |
+| Played in La Liga | 3 | **3** (sg-034, sg-039, sg-050) | **0 — MAXED** |
+| Played in Ligue 1 | 3 | **3** (sg-034, sg-043, sg-047) | **0 — MAXED** |
+| Played in Bundesliga (uncapped) | — | **4** (sg-037, sg-038, sg-039, sg-048) | — |
 | Played in Süper Lig | 0 — DO NOT USE | — | 0 |
 | Played in Saudi Pro League | 0 — DO NOT USE | — | 0 |
 
@@ -940,6 +961,8 @@ Must be fully satisfied before migration is applied.
 - [x] **Played for Flamengo** — ✅ sg-036
 - [x] **Played for Inter Miami** — ✅ sg-042 (cap-MAXED at 1/1 — do not add more)
 - [x] **New nationalities (6/6):** Welsh ✅ sg-032 · Egyptian ✅ sg-032 · Moroccan ✅ sg-034 · Serbian ✅ sg-032 · Japanese ✅ sg-037 · South Korean ✅ sg-037
+
+**ALL MANDATORIES SATISFIED ✅ — batch is clear to migrate.**
 
 ---
 
@@ -964,13 +987,27 @@ Updated after each run. Status values: `pending` / `approved` / `rejected` / `ap
 | sg-043 | Nigerian / Algerian / Tunisian | AFCON Winner / Ligue 1 / MID | 3 | approved | 3 bonus African nationalities; AFCON Winner MAXED |
 | sg-044 | Tottenham / AS Roma / Werder Bremen | Eredivisie / DEF / Brazilian | 3 | approved | 2nd Eredivisie ✅ now MAXED (2/2); Werder Bremen bonus club; 1 TOO BROAD cell accepted |
 | sg-045 | Atlético Madrid / Sevilla / Uruguayan | Europa League Winner / Serie A / DEF | 3 | approved | Mixed-rows; Europa League Winner MAXED (2/2); 2 TOO BROAD cells accepted (Sevilla × EL structural feature) |
-| sg-046 | | | 4 | pending | |
-| sg-047 | | | 4 | pending | |
-| sg-048 | | | 4 | pending | |
-| sg-049 | | | 4 | pending | |
-| sg-050 | | | 4 | pending | |
+| sg-046 | Real Sociedad / Real Betis / Celta Vigo | Premier League / MID / Mexican | 4 | approved | First use of Real Sociedad, Real Betis, Celta Vigo; Mexican nationality introduced |
+| sg-047 | RB Leipzig / Bayer Leverkusen / Udinese | Ligue 1 / FWD / French | 4 | approved | First use of RB Leipzig, Udinese; French as col; Ligue 1 MAXED (3/3); FWD run-4 use 1/2 |
+| sg-048 | Czech / Greek / American | Serie A / GK / Bundesliga | 4 | approved | Czech, Greek, American nationalities introduced; Bundesliga 4th use |
+| sg-049 | Bayern Munich / Inter Milan / Chelsea | CL Winner / Primeira Liga / DEF | 4 | approved | Primeira Liga MAXED (2/2) ✅; CL Winner 2nd use (2/3); career timing audited per Constraint 5 |
+| sg-050 | Arsenal / Lyon / German | WC Winner / La Liga / FWD | 4 | approved | La Liga MAXED (3/3); FWD MAXED (6/6); WC Winner 3rd use (3/4); mixed-rows (2 clubs + 1 nat) |
 
-**Batch 2B result:** 15 / 20 approved (Run 1: 5/5, Run 2: 5/5, Run 3: 5/5 — all 100%) &nbsp;|&nbsp; Pass rate: batch TBD &nbsp;|&nbsp; Decision: —
+**Batch 2B result:** 20 / 20 approved (Run 1: 5/5, Run 2: 5/5, Run 3: 5/5, Run 4: 5/5 — all 100%) &nbsp;|&nbsp; Pass rate: **100%** &nbsp;|&nbsp; Decision: **PROCEED TO MIGRATION**
+
+---
+
+## BATCH 2B COMPLETE — READY FOR MIGRATION
+
+All 20/20 puzzles approved across 4 runs. Mandatories satisfied. Caps respected. No rejected puzzles.
+
+**Next step:** Write `supabase/migrations/20260526000006_soccer_grid_puzzles_batch2b.sql` via Bash heredoc.
+Follow the protocol in Migration Plan — Batch 2B above.
+
+- File must be ≥7,000 bytes (`wc -c` check)
+- Apply manually via Supabase SQL Editor
+- Verify `SELECT COUNT(*) FROM soccer_grid_puzzles` → expect **50**
+- Commit doc + migration after COUNT confirmed
 
 ---
 
