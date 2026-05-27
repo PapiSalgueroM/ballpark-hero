@@ -11,7 +11,7 @@
 
 | Run | Puzzles            | Sort order  | Status     |
 |-----|--------------------|-------------|------------|
-| 1   | puzzle-156 to 160  | 155-159     | pending    |
+| 1   | puzzle-156 to 160  | 155-159     | approved   |
 | 2   | puzzle-161 to 165  | 160-164     | pending    |
 | 3   | puzzle-166 to 170  | 165-169     | pending    |
 | 4   | puzzle-171 to 175  | 170-174     | pending    |
@@ -223,3 +223,4 @@ Adding rows to Supabase via migration = fine. Modifying these hooks = NO.
 ## Session log
 
 - **2026-05-27** — Phase B framework doc created. Run 1 pending.
+- **2026-05-27** — Run 1 approved (puzzle-156 to 160). 5/5 passed QC. 20 categories added to baseline. 90 puzzles remaining.
