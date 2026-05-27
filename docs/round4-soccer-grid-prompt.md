@@ -997,17 +997,11 @@ Updated after each run. Status values: `pending` / `approved` / `rejected` / `ap
 
 ---
 
-## BATCH 2B COMPLETE — READY FOR MIGRATION
+## BATCH 2B COMPLETE — MIGRATION APPLIED
 
 All 20/20 puzzles approved across 4 runs. Mandatories satisfied. Caps respected. No rejected puzzles.
 
-**Next step:** Write `supabase/migrations/20260526000006_soccer_grid_puzzles_batch2b.sql` via Bash heredoc.
-Follow the protocol in Migration Plan — Batch 2B above.
-
-- File must be ≥7,000 bytes (`wc -c` check)
-- Apply manually via Supabase SQL Editor
-- Verify `SELECT COUNT(*) FROM soccer_grid_puzzles` → expect **50**
-- Commit doc + migration after COUNT confirmed
+Applied to Supabase 2026-05-27. SELECT COUNT(*) confirmed 50. sg-001 through sg-050 in production with sort_order 0-49 intact.
 
 ---
 
