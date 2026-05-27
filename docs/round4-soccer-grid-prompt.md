@@ -410,3 +410,583 @@ The `soccer-grid-validate` function sends `rowAttribute` and `colAttribute` as r
 - **Batch 2A final pass rate:** 15 / 15 (100%)
 - **Decision on Batch 2B:** ✅ Unblocked. Target: sg-031 through sg-050 (20 puzzles). Priorities: introduce Flamengo, Inter Miami, Primeira Liga, Welsh, Japanese, South Korean, Moroccan; add second Eredivisie puzzle; continue adding Ballon d'Or Winner (1–3 remaining budget).
 - **File write issue (critical lesson for future sessions):** The Write tool (Claude Code) mangled the absolute Windows path `C:\Users\antho\ballpark-hero\supabase\migrations\...` into a single filename string at the repo root, producing a 0-byte garbage file (`Usersanthoballpark-herosupabasemigrations...sql`). The actual migration file was subsequently written correctly via Bash heredoc with relative path. **Rule going forward: use Bash heredoc for migration files, always verify with `wc -c` immediately after creation, and treat any Write tool output as unverified until byte count is confirmed non-zero.**
+
+---
+
+# Round 4 — SoccerGrid Batch 2B: Generation Prompt + Tracking Doc
+Date: 2026-05-26 (approved after Batch 2A completion)
+
+## Status
+- Batch 2B target: **20 puzzles** (sg-031 through sg-050)
+- Batch 2B current approved count: **0 / 20**
+- Migration applied: pending — `20260526000006_soccer_grid_puzzles_batch2b.sql` (planned)
+- Prerequisite: Batch 2A ✅ complete — sg-016 through sg-030, COUNT(*) = 30 confirmed
+- Next action: Run 1 (sg-031 through sg-035)
+
+---
+
+## Run Plan
+
+| Run | IDs | Row-type composition | Real Madrid rule |
+|---|---|---|---|
+| Run 1 | sg-031–035 | 2 three-club + 1 three-nationality + 1 mixed + 1 achievement-heavy | DO NOT USE — reserved for Run 3 |
+| Run 2 | sg-036–040 | 2 three-club + 2 three-nationality + 1 mixed | DO NOT USE — reserved for Run 3 |
+| Run 3 | sg-041–045 | 2 three-club + 1 three-nationality + 1 mixed + 1 achievement-heavy | ✅ USE HERE — achievement-heavy slot only |
+| Run 4 | sg-046–050 | 3 three-club + 1 three-nationality + 1 mixed | DO NOT USE — consumed in Run 3 |
+
+**Structural distribution:** 9 three-club / 5 three-nationality / 4 mixed / 2 achievement-heavy = 20 total
+
+Row type definitions:
+- **three-club-rows:** all 3 row attributes are clubs
+- **three-nationality-rows:** all 3 row attributes are nationalities
+- **mixed-rows:** 2 clubs + 1 nationality, OR 2 nationalities + 1 club
+- **achievement-heavy:** 0 position cols — all 3 cols are leagues, awards, or achievement misc
+
+---
+
+## 5 New Constraints (Batch 2B — All Hard Rules)
+
+These apply to every puzzle in every run. Violations are grounds for immediate rejection regardless of cell quality.
+
+### Constraint 1 — BANNED TRIPLE
+The column set `{Forward (FWD), Played in Premier League, Champions League Winner}` must NEVER all appear together in any single puzzle. Already saturates sg-013 and sg-016.
+
+### Constraint 2 — PRIMEIRA LIGA TAUTOLOGY BAN
+If `Played in Primeira Liga` appears as a col, NONE of the row attributes may be Porto, Benfica, Sporting CP, or any other Portuguese club. Trivially obvious intersection. Safe: use with nationality rows or non-Portuguese club rows.
+
+### Constraint 3 — FLAMENGO RESTRICTION
+`Played for Flamengo` cannot appear in the same puzzle as `Champions League Winner`. Flamengo has never competed in the UEFA Champions League — structural dead cell.
+
+### Constraint 4 — INTER MIAMI DEPTH WARNING
+`Played for Inter Miami` must NOT appear in achievement-heavy puzzles (all 3 cols as achievements). Founded 2020; alumni pool thin. Safe cols: World Cup Winner, Ballon d'Or Winner, position. Max 1 Inter Miami puzzle across all 20 Batch 2B puzzles.
+
+### Constraint 5 — CAREER TIMING
+For any club-row × achievement-col cell, the named player must have won the achievement while AT or AFTER that club. Canonical negative example: Ballack at Chelsea (left 2010, Chelsea won UCL 2012 — does NOT count).
+
+---
+
+## Generation Prompt Template
+
+Copy everything between the triple-dashes below and paste into a separate Claude.ai chat.
+Before each run, fill in: **PUZZLE TYPES FOR THIS RUN** and **ALREADY APPROVED IN BATCH 2B**.
+Update per-run caps if any batch totals have been consumed by prior runs.
+
+---
+
+```
+SOCCER GRID PUZZLE GENERATION — BATCH 2B
+
+You are generating new puzzles for a daily sports trivia game called Soccer Grid. The game shows
+a 3x3 grid. Players name a soccer/football player who satisfies BOTH the row attribute AND the
+column attribute for each cell.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCHEMA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each puzzle has:
+- puzzle_id: "sg-NNN" (specified below)
+- rows: exactly 3 attributes (the row headers)
+- cols: exactly 3 attributes (the column headers)
+
+Each attribute:
+- label: display text shown to users (see conventions below)
+- type: MUST be one of exactly 8 values:
+    club | nationality | league | award | position | champions_league | world_cup | misc
+
+Label conventions (follow exactly):
+- club        → "Played for [Club Name]"
+- nationality → "[Nationality adjective]"  (e.g. "Brazilian", "Welsh", "South Korean")
+- league      → "Played in [League Name]"  (e.g. "Played in Eredivisie", "Played in Primeira Liga")
+- position    → use ONLY these four exact strings:
+                  "Forward (FWD)"  |  "Midfielder (MID)"  |  "Defender (DEF)"  |  "Goalkeeper (GK)"
+- champions_league → "Champions League Winner"
+- world_cup        → "World Cup Winner"
+- award       → "Golden Boot Winner"  OR  "Ballon d'Or Winner"  OR  "Europa League Winner"
+- misc        → "Over 100 International Caps"  |  "Copa America Winner"  |  "UEFA Euro Winner"
+                "African Cup of Nations Winner"  |  other milestones
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY: CELL VALIDATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For EVERY puzzle, produce a 3x3 cell validation table. Name AT LEAST 2 real players per cell.
+
+Rules:
+- The player must have actually played for the club, hold the nationality, played in the league,
+  or won the award — no guesses.
+- CAREER TIMING RULE: For every club-row x achievement-col cell, state the player's club tenure
+  years and the achievement year.
+  Example: "De Bruyne (Man City 2015–present, UCL 2023 ok)"
+  Ballack left Chelsea in 2010; Chelsea won the UCL in 2012 — Ballack does NOT satisfy
+  Chelsea + Champions League Winner. Apply this check to every such cell without exception.
+- If you cannot name 2 players for a cell:
+    → Mark "THIN (1 only): [name]" ONLY IF:
+       (a) single player is globally recognized (top historical / current top-100 active), AND
+       (b) no more than 2 THIN cells exist in this puzzle's 9-cell grid.
+    → If either condition fails → puzzle fails cell validation → propose replacement attribute.
+- If you cannot name any player → mark "DEAD CELL" → do NOT include that puzzle.
+- Mark "TOO BROAD (100+)" if answer pool is trivially large → replace that attribute pair.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CRITICAL CONSTRAINTS — ALL 5 ARE HARD RULES, NOT SUGGESTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CONSTRAINT 1 — BANNED TRIPLE:
+Cols {Forward (FWD), Played in Premier League, Champions League Winner} must NEVER all appear
+together in one puzzle. Saturates sg-013 and sg-016. Violation = immediate rejection.
+
+CONSTRAINT 2 — PRIMEIRA LIGA TAUTOLOGY BAN:
+If "Played in Primeira Liga" is a col, no row may be Porto, Benfica, Sporting CP, or any
+Portuguese club. Safe: nationality rows or non-Portuguese club rows.
+
+CONSTRAINT 3 — FLAMENGO RESTRICTION:
+"Played for Flamengo" cannot be in the same puzzle as "Champions League Winner". Structural
+dead cell — Flamengo has never played in the UEFA Champions League.
+
+CONSTRAINT 4 — INTER MIAMI DEPTH WARNING:
+"Played for Inter Miami" must NOT appear in achievement-heavy puzzles. Founded 2020, pool thin.
+Safe cols: World Cup Winner, Ballon d'Or Winner, position. Avoid: Copa America Winner, UEFA
+Euro Winner, AFCON Winner, Europa League Winner. Max 1 Inter Miami puzzle across all of Batch 2B.
+
+CONSTRAINT 5 — CAREER TIMING:
+For all club-row x achievement-col cells, state player tenure years + achievement year.
+Do not skip for "obvious" cells — written audit trail is required.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PREMIER LEAGUE SATURATION — MOST IMPORTANT CONSTRAINT IN BATCH 2B
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"Played in Premier League" currently appears in 9 of 30 existing puzzles (30% of the pool).
+This is the single most overused attribute in the entire set.
+
+Hard rule: max 1 use per run, max 4 uses across all 20 Batch 2B puzzles.
+
+Quality rule: if "Played in Premier League" IS used, the other two col attributes must be
+high-variety (a new achievement, a rare nationality, a non-standard league) — NOT generic
+position or common league fillers. Premier League must justify its appearance.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXISTING PUZZLES — DO NOT DUPLICATE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The following 30 puzzles already exist. No new puzzle may:
+(a) repeat an identical 6-attribute set (order-insensitive), OR
+(b) share 3 or more attributes with any of these puzzles (order-insensitive).
+
+IMPORTANT: Check every candidate against ALL 30 puzzles individually. In your NEAR-DUPLICATE
+CHECK output, list every puzzle sharing exactly 2 attributes with your candidate (high-risk
+neighbors). Immediately reject any candidate with 3+ overlap against ANY existing puzzle.
+
+sg-001 rows: Played for Barcelona, Played for Real Madrid, Played for Manchester United
+       cols: Forward (FWD), Champions League Winner, World Cup Winner
+
+sg-002 rows: Played for Chelsea, Played for AC Milan, Played for Bayern Munich
+       cols: Midfielder (MID), Played in Premier League, Golden Boot Winner
+
+sg-003 rows: Played for Liverpool, Played for Juventus, Played for PSG
+       cols: Defender (DEF), Played in La Liga, Over 100 International Caps
+
+sg-004 rows: Played for Arsenal, Played for Inter Milan, Played for Manchester City
+       cols: Forward (FWD), Played in Serie A, Champions League Winner
+
+sg-005 rows: Played for Atletico Madrid, Played for Borussia Dortmund, Played for Tottenham
+       cols: Goalkeeper (GK), World Cup Winner, Played in Bundesliga
+
+sg-006 rows: Brazilian, French, Argentine
+       cols: Played for Real Madrid, Champions League Winner, Played in Ligue 1
+
+sg-007 rows: Played for Roma, Played for Napoli, Played for AC Milan
+       cols: Forward (FWD), Played in Serie A, Over 100 International Caps
+
+sg-008 rows: Played for Barcelona, Played for Chelsea, Played for Bayern Munich
+       cols: Midfielder (MID), World Cup Winner, Played in Premier League
+
+sg-009 rows: German, Spanish, Italian
+       cols: Defender (DEF), Champions League Winner, World Cup Winner
+
+sg-010 rows: Played for Manchester City, Played for Liverpool, Played for Real Madrid
+       cols: Forward (FWD), Played in La Liga, Golden Boot Winner
+
+sg-011 rows: Played for PSG, Played for Juventus, Played for Arsenal
+       cols: Midfielder (MID), Played in Ligue 1, Over 100 International Caps
+
+sg-012 rows: Played for Tottenham, Played for Inter Milan, Played for Borussia Dortmund
+       cols: Goalkeeper (GK), Champions League Winner, Played in Bundesliga
+
+sg-013 rows: Portuguese, Dutch, English
+       cols: Forward (FWD), Played in Premier League, Champions League Winner
+
+sg-014 rows: Played for Barcelona, Played for Manchester United, Played for AC Milan
+       cols: Defender (DEF), World Cup Winner, Played in Serie A
+
+sg-015 rows: Played for Real Madrid, Played for Chelsea, Played for Liverpool
+       cols: Played in MLS, Champions League Winner, Over 100 International Caps
+
+sg-016 rows: Played for Ajax, Played for Porto, Played for Benfica
+       cols: Played in Premier League, Forward (FWD), Champions League Winner
+
+sg-017 rows: Played for Sevilla, Played for Marseille, Played for Galatasaray
+       cols: Played in Premier League, Forward (FWD), French
+
+sg-018 rows: Played for Bayer Leverkusen, Played for Lazio, Played for Sporting CP
+       cols: Midfielder (MID), Played in Premier League, Champions League Winner
+
+sg-019 rows: Colombian, Uruguayan, Chilean
+       cols: Played for Barcelona, Played in Premier League, Copa America Winner
+
+sg-020 rows: Played for Boca Juniors, Played for River Plate, Croatian
+       cols: Played in Serie A, Midfielder (MID), Played in La Liga
+
+sg-021 rows: Played for Fiorentina, Played for Valencia, Played for Villarreal
+       cols: Argentine, Played in La Liga, Midfielder (MID)
+
+sg-022 rows: Played for Celtic, Played for PSV, Played for Feyenoord
+       cols: Defender (DEF), Played in Premier League, Dutch
+
+sg-023 rows: Played for Lyon, Played for Monaco, Played for Lille
+       cols: Defender (DEF), Played in Ligue 1, Played in Serie A
+
+sg-024 rows: Belgian, Polish, Norwegian
+       cols: Played for Borussia Dortmund, Played in Ligue 1, Goalkeeper (GK)
+
+sg-025 rows: Played for Manchester United, Played for Bayern Munich, Played for Juventus
+       cols: Ballon d'Or Winner, World Cup Winner, Over 100 International Caps
+
+sg-026 rows: Played for Newcastle, Played for Everton, Played for West Ham
+       cols: Played in Eredivisie, Defender (DEF), Played in Serie A
+
+sg-027 rows: Played for Eintracht Frankfurt, Played for Schalke, Played for Besiktas
+       cols: Played in Premier League, Played in Super Lig, Midfielder (MID)
+
+sg-028 rows: Senegalese, Ivorian, Cameroonian
+       cols: African Cup of Nations Winner, Played in Ligue 1, Played for Chelsea
+
+sg-029 rows: Played for Real Madrid, Played for Bayern Munich, Played for Inter Milan
+       cols: World Cup Winner, UEFA Euro Winner, Europa League Winner
+
+sg-030 rows: Played for Liverpool, Played for Chelsea, Played for Manchester City
+       cols: Played in Saudi Pro League, Goalkeeper (GK), Brazilian
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ALREADY APPROVED IN BATCH 2B
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[PASTE PREVIOUSLY APPROVED BATCH 2B PUZZLES HERE BEFORE RUNNING — same format as above.
+Leave blank for Run 1. Apply the same ≤2 overlap rule against these too.]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONSTRAINTS FOR THIS BATCH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PER-RUN ATTRIBUTE CAPS (update before each run based on batch totals consumed):
+- "Champions League Winner":           max 1 across these 5 puzzles
+- "World Cup Winner":                  max 1 across these 5 puzzles
+- "Forward (FWD)":                     max 2 across these 5 puzzles
+- "Played in Premier League":          max 1 across these 5 puzzles  ← STRICTLY ENFORCED
+- "Played for Real Madrid" (row/col):  max [1 if not yet used in 2B; 0 if already used]
+    NOTE: Only 1 Real Madrid use allowed across ALL 20 Batch 2B puzzles.
+          Runs 1 and 2 SHOULD NOT use Real Madrid. Reserve for Run 3 achievement-heavy slot.
+- "Played in Serie A":                 max 1 across these 5 puzzles
+- "Played in La Liga":                 max 1 across these 5 puzzles
+- "Played in Ligue 1":                 max 1 across these 5 puzzles
+- "Ballon d'Or Winner":                max 1 across these 5 puzzles
+- "Europa League Winner":              max 1 across these 5 puzzles
+
+BATCH-WIDE HARD STOPS (never use in any run):
+- "Played in Super Lig":               DO NOT USE — at full lifetime cap
+- "Played in Saudi Pro League":        DO NOT USE — at full lifetime cap
+- Banned triple cols: {FWD + Premier League + CL Winner} all together — NEVER
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PRIORITY ATTRIBUTES FOR BATCH 2B
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MANDATORY across all 20 Batch 2B puzzles (must appear at least once):
+  → "Played in Primeira Liga" (type: league)
+    Safe as a col with NON-Portuguese club rows or nationality rows. See Constraint 2.
+  → Second use of "Played in Eredivisie" — sg-026 used first; need ≥1 more in 2B
+
+HIGH PRIORITY — nationalities not yet used in 30 existing puzzles:
+  Welsh, Egyptian, Moroccan, Serbian, Japanese, South Korean
+  Target: introduce ≥4 of these 6 across the 5 three-nationality-row puzzles
+
+HIGH PRIORITY — clubs not yet used:
+  Played for Flamengo (see Constraint 3), Played for Inter Miami (max 1 — see Constraint 4),
+  Played for Wolfsburg, Played for Atletico Mineiro, Played for Santos,
+  Played for Red Bull Salzburg, Played for Shakhtar Donetsk
+
+MEDIUM PRIORITY — used once in 2A, room for more:
+  Ballon d'Or Winner (budget: up to 3 more in 2B)
+  Europa League Winner (budget: up to 2 more in 2B)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PUZZLE TYPES FOR THIS RUN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[FILL IN BEFORE EACH RUN — copy the appropriate line from the run schedule below:]
+
+Run 1: 2 three-club-rows + 1 three-nationality-rows + 1 mixed-rows + 1 achievement-heavy  (IDs: sg-031 to sg-035)
+Run 2: 2 three-club-rows + 2 three-nationality-rows + 1 mixed-rows                        (IDs: sg-036 to sg-040)
+Run 3: 2 three-club-rows + 1 three-nationality-rows + 1 mixed-rows + 1 achievement-heavy  (IDs: sg-041 to sg-045)
+Run 4: 3 three-club-rows + 1 three-nationality-rows + 1 mixed-rows                        (IDs: sg-046 to sg-050)
+
+Row type definitions:
+- three-club-rows:       all 3 row attributes are clubs
+- three-nationality-rows: all 3 row attributes are nationalities
+- mixed-rows:            2 clubs + 1 nationality, OR 2 nationalities + 1 club
+- achievement-heavy:     0 position cols — all 3 cols are leagues, awards, or misc
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For each puzzle, output ALL five sections in order:
+
+1. PUZZLE [puzzle_id]  — row type: [three-club-rows | three-nationality-rows | mixed-rows | achievement-heavy]
+   rows:
+     [row 1 label]  (type: [type])
+     [row 2 label]  (type: [type])
+     [row 3 label]  (type: [type])
+   cols:
+     [col 1 label]  (type: [type])
+     [col 2 label]  (type: [type])
+     [col 3 label]  (type: [type])
+
+2. CELL VALIDATION TABLE
+   3x3 grid labeled by row and col attributes.
+   Each cell: 2+ player names, or THIN (1 only): [name], or DEAD CELL, or TOO BROAD (100+).
+   For every club-row x achievement-col cell: include tenure dates + achievement year.
+   Example: "De Bruyne (Man City 2015–present, UCL 2023 ok), Haaland (Man City 2022–present, UCL 2023 ok)"
+   THIN rules: (a) globally recognized player, AND (b) ≤2 THIN cells per puzzle.
+
+3. NEAR-DUPLICATE CHECK
+   Check against ALL 30 existing puzzles + all approved Batch 2B puzzles.
+   List every puzzle sharing exactly 2 attributes: "sg-NNN: shares [attr1], [attr2]"
+   Confirm: "All share ≤2 attributes. ✓" — or — "REJECT: 3+ overlap with sg-NNN."
+
+4. CAP COMPLIANCE — RUNNING TALLY (update after each puzzle)
+   Champions League Winner:     [n] / 1 max this run
+   World Cup Winner:            [n] / 1 max this run
+   Forward (FWD):               [n] / 2 max this run
+   Played in Premier League:    [n] / 1 max this run
+   Played for Real Madrid:      [n] / [0 or 1] max this run
+   Played in Serie A:           [n] / 1 max this run
+   Played in La Liga:           [n] / 1 max this run
+   Played in Ligue 1:           [n] / 1 max this run
+   Ballon d'Or Winner:          [n] / 1 max this run
+   Europa League Winner:        [n] / 1 max this run
+
+5. CONSTRAINT VIOLATIONS CHECK
+   [ ] BANNED TRIPLE: cols do NOT contain all of {FWD, Premier League, CL Winner}
+   [ ] PRIMEIRA LIGA TAUTOLOGY: if Primeira Liga used, no Portuguese clubs in rows
+   [ ] FLAMENGO RESTRICTION: Flamengo not paired with Champions League Winner
+   [ ] INTER MIAMI DEPTH: Inter Miami not in achievement-heavy puzzle
+   [ ] CAREER TIMING: all club x achievement cells show tenure + achievement year
+
+Generate [N] puzzles now.
+```
+
+---
+
+## QC Checklist for Batch 2B
+
+Apply per 5-puzzle run before adding candidates to the tracking table.
+
+### Structural validation
+- [ ] Exactly 3 rows and 3 cols per puzzle
+- [ ] Each attribute has `label` (non-empty string) and `type`
+- [ ] `type` is one of the 8 valid values: `club` `nationality` `league` `award` `position` `champions_league` `world_cup` `misc`
+- [ ] Label follows exact format convention: `"Played for X"` for club, `"[Adjective]"` for nationality, `"Played in X"` for league, exact strings for position
+- [ ] `puzzle_id` is in the correct range for this run
+- [ ] Declared row type matches actual row composition (mixed-rows must be 2+1 or 1+2, not 3 clubs)
+
+### Cell validation
+- [ ] All 9 cells have ≥2 named players, OR valid THIN status, OR flagged for rejection
+- [ ] THIN cells: (a) single player is globally recognized (top historical / current top-100 active)
+- [ ] THIN cells: (b) no more than 2 THIN cells in any single puzzle — reject if 3+
+- [ ] No DEAD CELLs
+- [ ] No TOO BROAD cells (trivially large answer pool)
+
+### ★ Cross-puzzle 3-overlap check (new in 2B — catches the sg-013/sg-016 QC miss)
+- [ ] For each candidate, assemble its 6 attribute labels as a set
+- [ ] Check against ALL 30 existing puzzles (sg-001 through sg-030) + all approved Batch 2B puzzles
+- [ ] Any candidate sharing 3+ attributes with ANY existing puzzle → immediate rejection, do not migrate
+- [ ] Log all 2-overlap pairs in the notes column (high-risk neighbors)
+- [ ] Apply intra-batch too: new candidates checked against already-approved 2B puzzles
+
+### ★ Banned triple check (new in 2B)
+- [ ] Scan each candidate's col set for {Forward (FWD), Played in Premier League, Champions League Winner} all three together → reject immediately
+
+### ★ Primeira Liga tautology check (new in 2B)
+- [ ] If Played in Primeira Liga is a col, verify no row attributes are Porto, Benfica, Sporting CP, or any other Portuguese club → reject if tautology found
+
+### ★ Flamengo + CL Winner check (new in 2B)
+- [ ] Scan for Played for Flamengo paired with Champions League Winner in any puzzle → reject (structural dead cell)
+
+### ★ Career-timing spot-check (strengthened from 2A)
+- [ ] For ≥30% of club-row × achievement-col cells per run (~4–5 cells per run of 5 puzzles), verify player tenure dates vs. achievement date
+- [ ] Always spot-check THIN cells first — single named player must definitively satisfy both
+- [ ] Document: "[Player] at [Club] [year–year], won [achievement] [year] pass/fail"
+- [ ] Cell failure → reject that puzzle → log failure type for template diagnosis
+- [ ] If ≥2 cells fail in a single run → treat as batch signal, review prompt before next run
+
+### Near-duplicate check (tightened from 2A)
+- [ ] Attributes shared with sg-001 through sg-030 + approved 2B: ≤2 per puzzle (order-insensitive)
+
+### Attribute cap check — per-run running tallies (from prompt output section 4)
+- [ ] Champions League Winner: ≤1 this run
+- [ ] World Cup Winner: ≤1 this run
+- [ ] Forward (FWD): ≤2 this run
+- [ ] Played in Premier League: ≤1 this run
+- [ ] Played for Real Madrid: ≤1 this run (and ≤1 total in all 20 Batch 2B puzzles; 0 in Runs 1–2)
+- [ ] Played in Serie A: ≤1 this run
+- [ ] Played in La Liga: ≤1 this run
+- [ ] Played in Ligue 1: ≤1 this run
+
+### Factual spot-check (~4–5 cells per run, ~16–20 cells total across Batch 2B)
+- [ ] Prioritize: THIN cells, first use of new attributes (Primeira Liga, Welsh, Flamengo, etc.)
+- [ ] Verify against Wikipedia career history, Transfermarkt, or equivalent
+- [ ] Log each spot-checked cell and result in tracking table notes column
+- [ ] If a spot-checked cell fails → reject that puzzle → note failure type for template diagnosis
+
+---
+
+## Batch 2B Attribute Cap Table
+
+Updated after each run is approved. All "Used in 2B" counts start at 0.
+
+| Attribute | 2B max | Used in 2B | Remaining |
+|---|---|---|---|
+| Champions League Winner | 3 | 0 | 3 |
+| World Cup Winner | 4 | 0 | 4 |
+| Forward (FWD) | 6 | 0 | 6 |
+| Played for Real Madrid (row or col) | 1 | 0 | 1 |
+| Ballon d'Or Winner | 3 | 0 | 3 |
+| Europa League Winner | 2 | 0 | 2 |
+| Copa América Winner | 1 | 0 | 1 |
+| UEFA Euro Winner | 1 | 0 | 1 |
+| African Cup of Nations Winner | 1 | 0 | 1 |
+| Played in Eredivisie | 2 (min 1) | 0 | 2 |
+| Played in Primeira Liga | 2 (min 1) | 0 | 2 |
+| Played in Premier League | 4 | 0 | 4 |
+| Played in Serie A | 3 | 0 | 3 |
+| Played in La Liga | 3 | 0 | 3 |
+| Played in Ligue 1 | 3 | 0 | 3 |
+| Played in Süper Lig | 0 — DO NOT USE | — | 0 |
+| Played in Saudi Pro League | 0 — DO NOT USE | — | 0 |
+
+---
+
+## Mandatory Attributes Checklist
+
+Must be fully satisfied before migration is applied.
+
+- [ ] **Played in Primeira Liga** — ≥1 puzzle in 2B (HARD REQUIREMENT — block migration if missing)
+- [ ] **Played in Eredivisie** — ≥1 puzzle in 2B (total ≥2 including sg-026 from Batch 2A)
+- [ ] **Played for Flamengo** — ≥1 puzzle in 2B
+- [ ] **Played for Inter Miami** — ≤1 puzzle in 2B (cap, not minimum)
+- [ ] **New nationalities (≥4 of 6):** Welsh ☐ · Egyptian ☐ · Moroccan ☐ · Serbian ☐ · Japanese ☐ · South Korean ☐
+
+---
+
+## Batch 2B Tracking Table
+
+Updated after each run. Status values: `pending` / `approved` / `rejected` / `approved-marginal`
+
+| puzzle_id | rows summary | cols summary | run # | status | notes |
+|---|---|---|---|---|---|
+| sg-031 | | | 1 | pending | |
+| sg-032 | | | 1 | pending | |
+| sg-033 | | | 1 | pending | |
+| sg-034 | | | 1 | pending | |
+| sg-035 | | | 1 | pending | |
+| sg-036 | | | 2 | pending | |
+| sg-037 | | | 2 | pending | |
+| sg-038 | | | 2 | pending | |
+| sg-039 | | | 2 | pending | |
+| sg-040 | | | 2 | pending | |
+| sg-041 | | | 3 | pending | |
+| sg-042 | | | 3 | pending | |
+| sg-043 | | | 3 | pending | |
+| sg-044 | | | 3 | pending | |
+| sg-045 | | | 3 | pending | |
+| sg-046 | | | 4 | pending | |
+| sg-047 | | | 4 | pending | |
+| sg-048 | | | 4 | pending | |
+| sg-049 | | | 4 | pending | |
+| sg-050 | | | 4 | pending | |
+
+**Batch 2B result:** — / 20 approved &nbsp;|&nbsp; Pass rate: — &nbsp;|&nbsp; Decision: —
+
+---
+
+## Acceptance Criteria — Batch 2B
+
+### Per-run pass thresholds
+
+| Pass rate | Action |
+|---|---|
+| **≥70% (≥4 of 5 pass QC)** | ✅ Proceed to next run |
+| **60% (3 of 5 pass)** | Identify failure pattern → revise prompt → regenerate failed candidates before next run |
+| **<60% (<3 of 5 pass)** | 🛑 Apply stop-on-failure rule — do not start next run |
+
+**Stop-on-first-run-failure rule:** If a single run of 5 produces ≥2 failures (>30% rework), treat as a batch failure signal. Do not start the next run until the failure pattern is identified and the prompt is revised.
+
+### Batch-total thresholds
+
+| Pass rate | Action |
+|---|---|
+| **≥70% (≥14 of 20 pass QC)** | ✅ Proceed to migration |
+| **50–69% (10–13 pass)** | Identify failure pattern → revise prompt → Run 5 to regenerate failed candidates |
+| **<50% (<10 pass)** | 🛑 STOP — full framework review before any further generation |
+
+### Failure pattern taxonomy
+
+| Failure type | Diagnosis | Fix |
+|---|---|---|
+| Dead cells | Cell validation instruction too weak | Strengthen DEAD CELL definition; require 2+ answers per cell |
+| Near-duplicate violations | 30-puzzle list not scanned fully | Add per-puzzle overlap count to output format |
+| Cap violations | Model not tracking running tally | Require RUNNING TALLY after every puzzle, not at end |
+| Career timing errors | Tenure dates not checked vs award dates | Add more counter-examples (Ballack) to Constraint 5 |
+| Too-broad cells | Attribute pair too permissive | Add TOO BROAD rejection criterion more prominently |
+| Primeira Liga tautology | Constraint 2 not followed | Move tautology ban to top of schema section |
+| Structural type mismatch | Mixed-rows ends up three-club | Require row-type declaration in header; reject if mismatch |
+| THIN threshold exceeded | ≥3 THIN cells in one puzzle | Tighten floor; require 2 players minimum for next batch |
+
+---
+
+## Migration Plan — Batch 2B
+
+**File:** `supabase/migrations/20260526000006_soccer_grid_puzzles_batch2b.sql`
+
+Rules:
+- INSERT only — table already exists, no DDL, no CREATE TABLE
+- Plain string literals for JSONB columns — **no `::jsonb` explicit casts**
+- **No `ON CONFLICT` clause**
+- sort_order: sg-031 = 30, sg-032 = 31, … sg-050 = 49
+- Apostrophes inside SQL strings doubled: `Eto''o`, `N''Golo`, `d''Or`, `d''Ivoire`
+- Apply manually via Supabase SQL Editor
+- Verify: `SELECT COUNT(*) FROM soccer_grid_puzzles` → expect **50** after apply
+
+**File write protocol (enforced strictly — lesson from Batch 2A):**
+1. Write via Bash heredoc with **relative path** — NOT the Write tool, NOT an absolute Windows path
+2. Immediately verify: `wc -c supabase/migrations/20260526000006_soccer_grid_puzzles_batch2b.sql` — must show ≥7,000 bytes
+3. If 0 bytes → retry; do not proceed to Supabase application
+4. Open in WordPad (not Notepad) to visually confirm first 3–4 INSERT rows render correctly
+5. Do not commit until Supabase application is confirmed and COUNT(*) = 50
+
+---
+
+## Lessons Learned — Batch 2B
+
+*(Fill after batch completes)*
+
+- **Prompt template issues:**
+- **Most common failure mode:**
+- **Attribute combinations to avoid in Batch 2C (if needed):**
+- **New attributes that worked well:**
+- **New attributes that caused problems:**
+- **Factual errors caught in spot-check:**
+- **Batch 2B final pass rate:**
+- **Decision on Batch 2C:**
