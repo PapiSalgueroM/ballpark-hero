@@ -682,15 +682,7 @@ def main():
     log("Wrote docs/AUTOPILOT_STATUS.md")
 
 
-if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        log(f"FATAL: {e}")
-        log(traceback.format_exc())
-        flush_log()
-        flush_blockers()
-        sys.exit(1)
+
 
 
 
@@ -1282,3 +1274,12 @@ def generate_college_candidates():
     log("Guess The College: wrote " + str(len(items)) + " school candidates")
     return len(items)
 
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        log(f"FATAL: {e}")
+        log(traceback.format_exc())
+        flush_log()
+        flush_blockers()
+        sys.exit(1)

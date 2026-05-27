@@ -1,0 +1,96 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 15,
+  "items": [
+    {
+      "name": "Mike Trout",
+      "teams": "Angels (2011-present)",
+      "primary_position": "CF",
+      "milestones": "3x MVP, 11x All-Star"
+    },
+    {
+      "name": "Aaron Judge",
+      "teams": "Yankees (2016-present)",
+      "primary_position": "RF",
+      "milestones": "62 HR in 2022 season"
+    },
+    {
+      "name": "Shohei Ohtani",
+      "teams": "Angels 2018-2023, Dodgers 2024-present",
+      "primary_position": "DH/P",
+      "milestones": "Won MVPs in both leagues"
+    },
+    {
+      "name": "Mookie Betts",
+      "teams": "Red Sox 2014-2019, Dodgers 2020-present",
+      "primary_position": "RF/2B",
+      "milestones": "2018 MVP, 2x WS champion"
+    },
+    {
+      "name": "Freddie Freeman",
+      "teams": "Braves 2010-2021, Dodgers 2022-present",
+      "primary_position": "1B",
+      "milestones": "2020 MVP, 2x WS champion"
+    },
+    {
+      "name": "Jose Altuve",
+      "teams": "Astros (2011-present)",
+      "primary_position": "2B",
+      "milestones": "2017 MVP, 2x WS champion"
+    },
+    {
+      "name": "Ronald Acuna Jr",
+      "teams": "Braves (2018-present)",
+      "primary_position": "RF",
+      "milestones": "2023 NL MVP, 40-70 season"
+    },
+    {
+      "name": "Bryce Harper",
+      "teams": "Nationals 2012-2018, Phillies 2019-present",
+      "primary_position": "RF/1B",
+      "milestones": "2x MVP"
+    },
+    {
+      "name": "Juan Soto",
+      "teams": "Nationals 2018-2022, Padres 2022-2023, Yankees 2024, Mets 2025-present",
+      "primary_position": "RF",
+      "milestones": "2019 WS champion at 20 years old"
+    },
+    {
+      "name": "Fernando Tatis Jr",
+      "teams": "Padres (2019-present)",
+      "primary_position": "SS/RF",
+      "milestones": "First in MLB to sign 14-year deal"
+    },
+    {
+      "name": "Vladimir Guerrero Jr",
+      "teams": "Blue Jays (2019-present)",
+      "primary_position": "1B",
+      "milestones": "2021 HR derby champion"
+    },
+    {
+      "name": "Yordan Alvarez",
+      "teams": "Astros (2019-present)",
+      "primary_position": "LF/DH",
+      "milestones": "2022 WS champion, ALCS MVP"
+    },
+    {
+      "name": "Trea Turner",
+      "teams": "Nationals 2015-2021, Dodgers 2021, Phillies 2023-present",
+      "primary_position": "SS",
+      "milestones": "Cycle hit and stolen base champ"
+    },
+    {
+      "name": "Manny Machado",
+      "teams": "Orioles 2012-2018, Dodgers 2018, Padres 2019-present",
+      "primary_position": "3B",
+      "milestones": "11-year $350M contract with Padres"
+    },
+    {
+      "name": "Francisco Lindor",
+      "teams": "Cleveland 2015-2020, Mets 2021-present",
+      "primary_position": "SS",
+      "milestones": "All-Star at multiple positions"
+    }
+  ]
+}

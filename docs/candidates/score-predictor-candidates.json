@@ -1,0 +1,106 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 10,
+  "items": [
+    {
+      "match": "Argentina vs France WC 2022 Final",
+      "score": "3-3 Argentina won 4-2 on penalties",
+      "clues": [
+        "Played in Qatar",
+        "Messi scored twice",
+        "Mbappe hat-trick",
+        "Decided on penalties"
+      ]
+    },
+    {
+      "match": "Liverpool vs AC Milan UCL 2005 Final",
+      "score": "3-3 Liverpool won 3-2 on penalties",
+      "clues": [
+        "Played in Istanbul",
+        "Liverpool down 3-0 at half",
+        "Steven Gerrard inspired comeback",
+        "Penalty shootout"
+      ]
+    },
+    {
+      "match": "Man Utd vs Bayern UCL 1999 Final",
+      "score": "2-1 Man Utd",
+      "clues": [
+        "Played in Barcelona",
+        "Bayern led 1-0 until 90th minute",
+        "Sheringham and Solskjaer late goals",
+        "Treble for Man Utd"
+      ]
+    },
+    {
+      "match": "Brazil vs Germany WC 2014 Semifinal",
+      "score": "7-1 Germany",
+      "clues": [
+        "Played in Belo Horizonte",
+        "5 goals in first half",
+        "Mineirazo nickname",
+        "Germany went on to win WC"
+      ]
+    },
+    {
+      "match": "Spain vs Italy Euro 2012 Final",
+      "score": "4-0 Spain",
+      "clues": [
+        "Played in Kyiv",
+        "Torres scored twice",
+        "Spain third consecutive major",
+        "First team to win consecutive Euros"
+      ]
+    },
+    {
+      "match": "Italy vs England Euro 2020 Final",
+      "score": "1-1 Italy won 3-2 on penalties",
+      "clues": [
+        "Played at Wembley",
+        "Shaw scored early for England",
+        "Bonucci equalized",
+        "Saka missed final penalty"
+      ]
+    },
+    {
+      "match": "Real Madrid vs Liverpool UCL 2022 Final",
+      "score": "1-0 Real Madrid",
+      "clues": [
+        "Played in Paris",
+        "Vinicius scored",
+        "Courtois MOTM 9 saves",
+        "14th UCL for Real"
+      ]
+    },
+    {
+      "match": "Man City vs Inter UCL 2023 Final",
+      "score": "1-0 Man City",
+      "clues": [
+        "Played in Istanbul",
+        "Rodri scored 68th minute",
+        "First City UCL",
+        "Completed treble"
+      ]
+    },
+    {
+      "match": "France vs Croatia WC 2018 Final",
+      "score": "4-2 France",
+      "clues": [
+        "Played in Moscow",
+        "Mbappe scored at 19",
+        "Mandzukic own goal opener",
+        "France second WC"
+      ]
+    },
+    {
+      "match": "Germany vs Argentina WC 2014 Final",
+      "score": "1-0 Germany AET",
+      "clues": [
+        "Played in Rio",
+        "Gotze scored extra time",
+        "Higuain missed sitter",
+        "Germany fourth WC"
+      ]
+    }
+  ]
+}

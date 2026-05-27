@@ -1,0 +1,156 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 25,
+  "items": [
+    {
+      "name": "Connor McDavid",
+      "goals": 359,
+      "assists": 638,
+      "games": 660
+    },
+    {
+      "name": "Sidney Crosby",
+      "goals": 592,
+      "assists": 1057,
+      "games": 1278
+    },
+    {
+      "name": "Alex Ovechkin",
+      "goals": 875,
+      "assists": 731,
+      "games": 1466
+    },
+    {
+      "name": "Nathan MacKinnon",
+      "goals": 379,
+      "assists": 595,
+      "games": 850
+    },
+    {
+      "name": "Auston Matthews",
+      "goals": 401,
+      "assists": 280,
+      "games": 627
+    },
+    {
+      "name": "Leon Draisaitl",
+      "goals": 348,
+      "assists": 569,
+      "games": 749
+    },
+    {
+      "name": "David Pastrnak",
+      "goals": 354,
+      "assists": 412,
+      "games": 743
+    },
+    {
+      "name": "Mitch Marner",
+      "goals": 234,
+      "assists": 535,
+      "games": 681
+    },
+    {
+      "name": "Mikko Rantanen",
+      "goals": 295,
+      "assists": 410,
+      "games": 645
+    },
+    {
+      "name": "Patrick Kane",
+      "goals": 472,
+      "assists": 819,
+      "games": 1244
+    },
+    {
+      "name": "Steven Stamkos",
+      "goals": 568,
+      "assists": 612,
+      "games": 1182
+    },
+    {
+      "name": "Evgeni Malkin",
+      "goals": 481,
+      "assists": 824,
+      "games": 1239
+    },
+    {
+      "name": "Jonathan Toews",
+      "goals": 372,
+      "assists": 511,
+      "games": 1067
+    },
+    {
+      "name": "John Tavares",
+      "goals": 491,
+      "assists": 614,
+      "games": 1187
+    },
+    {
+      "name": "Brad Marchand",
+      "goals": 422,
+      "assists": 547,
+      "games": 1085
+    },
+    {
+      "name": "Artemi Panarin",
+      "goals": 271,
+      "assists": 480,
+      "games": 658
+    },
+    {
+      "name": "Cale Makar",
+      "goals": 92,
+      "assists": 285,
+      "games": 391
+    },
+    {
+      "name": "Quinn Hughes",
+      "goals": 71,
+      "assists": 366,
+      "games": 428
+    },
+    {
+      "name": "Adam Fox",
+      "goals": 64,
+      "assists": 285,
+      "games": 394
+    },
+    {
+      "name": "Igor Shesterkin",
+      "goals": 0,
+      "assists": 12,
+      "games": 252
+    },
+    {
+      "name": "Andrei Vasilevskiy",
+      "goals": 0,
+      "assists": 16,
+      "games": 568
+    },
+    {
+      "name": "Connor Hellebuyck",
+      "goals": 0,
+      "assists": 14,
+      "games": 593
+    },
+    {
+      "name": "Linus Ullmark",
+      "goals": 0,
+      "assists": 9,
+      "games": 322
+    },
+    {
+      "name": "Jake Oettinger",
+      "goals": 0,
+      "assists": 8,
+      "games": 263
+    },
+    {
+      "name": "Jeremy Swayman",
+      "goals": 0,
+      "assists": 6,
+      "games": 173
+    }
+  ]
+}

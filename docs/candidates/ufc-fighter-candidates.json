@@ -1,0 +1,96 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 10,
+  "items": [
+    {
+      "fighter": "Jon Jones",
+      "clues": [
+        "Heavyweight champion since 2023",
+        "Considered GOAT light heavyweight",
+        "American fighter from Endicott NY",
+        "Bones is his nickname"
+      ]
+    },
+    {
+      "fighter": "Islam Makhachev",
+      "clues": [
+        "Lightweight champion 2022-2025",
+        "Dagestani fighter, Khabib protege",
+        "Trained by Khabib Nurmagomedov",
+        "Sambo background"
+      ]
+    },
+    {
+      "fighter": "Alex Pereira",
+      "clues": [
+        "Light heavyweight champion 2023-2024",
+        "Brazilian kickboxer turned MMA",
+        "Beat Israel Adesanya in kickboxing AND MMA",
+        "Poatan nickname"
+      ]
+    },
+    {
+      "fighter": "Ilia Topuria",
+      "clues": [
+        "Featherweight champion 2024",
+        "Knocked out Alexander Volkanovski",
+        "Spanish-Georgian fighter",
+        "Born in Germany"
+      ]
+    },
+    {
+      "fighter": "Sean O Malley",
+      "clues": [
+        "Bantamweight champion 2023-2024",
+        "American bantamweight star",
+        "Suga is his nickname",
+        "Lost title to Merab Dvalishvili"
+      ]
+    },
+    {
+      "fighter": "Dricus du Plessis",
+      "clues": [
+        "Middleweight champion since 2024",
+        "South African fighter",
+        "Beat Israel Adesanya",
+        "Stillknocks nickname"
+      ]
+    },
+    {
+      "fighter": "Leon Edwards",
+      "clues": [
+        "Welterweight champion 2022-2024",
+        "Jamaican-born British fighter",
+        "Knocked out Kamaru Usman",
+        "Rocky nickname"
+      ]
+    },
+    {
+      "fighter": "Khabib Nurmagomedov",
+      "clues": [
+        "Lightweight champion 2018-2020",
+        "29-0 career record",
+        "Retired undefeated",
+        "Dagestani sambo legend"
+      ]
+    },
+    {
+      "fighter": "Conor McGregor",
+      "clues": [
+        "First simultaneous 2-division champion",
+        "Featherweight and Lightweight titles",
+        "Irish southpaw striker",
+        "Notorious nickname"
+      ]
+    },
+    {
+      "fighter": "Israel Adesanya",
+      "clues": [
+        "2-time Middleweight champion",
+        "Nigerian-born New Zealander",
+        "Last Stylebender nickname",
+        "Lost to Pereira and du Plessis"
+      ]
+    }
+  ]
+}

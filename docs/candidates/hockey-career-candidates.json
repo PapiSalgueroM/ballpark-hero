@@ -1,0 +1,96 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 15,
+  "items": [
+    {
+      "name": "Connor McDavid",
+      "teams": "Edmonton Oilers (2015-present)",
+      "position": "C",
+      "milestones": "3x Hart Trophy, 5x Art Ross"
+    },
+    {
+      "name": "Nathan MacKinnon",
+      "teams": "Colorado Avalanche (2013-present)",
+      "position": "C",
+      "milestones": "2022 Stanley Cup, 2024 Hart"
+    },
+    {
+      "name": "Auston Matthews",
+      "teams": "Toronto Maple Leafs (2016-present)",
+      "position": "C",
+      "milestones": "60-goal season 2021-22"
+    },
+    {
+      "name": "Sidney Crosby",
+      "teams": "Pittsburgh Penguins (2005-present)",
+      "position": "C",
+      "milestones": "3x Stanley Cup, 2x Olympic gold"
+    },
+    {
+      "name": "Alex Ovechkin",
+      "teams": "Washington Capitals (2005-present)",
+      "position": "LW",
+      "milestones": "All-time goals leader 2025"
+    },
+    {
+      "name": "Leon Draisaitl",
+      "teams": "Edmonton Oilers (2014-present)",
+      "position": "C",
+      "milestones": "2020 Hart Trophy"
+    },
+    {
+      "name": "David Pastrnak",
+      "teams": "Boston Bruins (2014-present)",
+      "position": "RW",
+      "milestones": "60-goal scorer"
+    },
+    {
+      "name": "Cale Makar",
+      "teams": "Colorado Avalanche (2019-present)",
+      "position": "D",
+      "milestones": "Norris Trophy, Conn Smythe 2022"
+    },
+    {
+      "name": "Igor Shesterkin",
+      "teams": "New York Rangers (2019-present)",
+      "position": "G",
+      "milestones": "2022 Vezina Trophy"
+    },
+    {
+      "name": "Patrick Kane",
+      "teams": "Chicago Blackhawks 2007-2023, Detroit Red Wings 2023-present",
+      "position": "RW",
+      "milestones": "3x Stanley Cup"
+    },
+    {
+      "name": "Jonathan Toews",
+      "teams": "Chicago Blackhawks (2007-2023)",
+      "position": "C",
+      "milestones": "3x Stanley Cup captain"
+    },
+    {
+      "name": "Mark Stone",
+      "teams": "Senators 2012-2019, Golden Knights 2019-present",
+      "position": "RW",
+      "milestones": "2023 Stanley Cup captain"
+    },
+    {
+      "name": "Mikko Rantanen",
+      "teams": "Colorado 2015-2025, Carolina 2025, Dallas 2025-present",
+      "position": "RW",
+      "milestones": "2022 Stanley Cup"
+    },
+    {
+      "name": "Mitch Marner",
+      "teams": "Toronto Maple Leafs (2016-present)",
+      "position": "RW",
+      "milestones": "100-point seasons"
+    },
+    {
+      "name": "Quinn Hughes",
+      "teams": "Vancouver Canucks (2018-present)",
+      "position": "D",
+      "milestones": "2024 Norris Trophy"
+    }
+  ]
+}

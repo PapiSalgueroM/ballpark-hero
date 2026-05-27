@@ -1,0 +1,141 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 3,
+  "items": [
+    {
+      "puzzle_id": "bb-conn-81",
+      "groups": [
+        {
+          "category": "Born in Venezuela",
+          "players": [
+            "Miguel Cabrera",
+            "Felix Hernandez",
+            "Jose Altuve",
+            "Ronald Acuna Jr"
+          ],
+          "difficulty": "medium"
+        },
+        {
+          "category": "Won the Cy Young 3+ times",
+          "players": [
+            "Roger Clemens",
+            "Randy Johnson",
+            "Greg Maddux",
+            "Max Scherzer"
+          ],
+          "difficulty": "hard"
+        },
+        {
+          "category": "Giants legends",
+          "players": [
+            "Willie Mays",
+            "Barry Bonds",
+            "Buster Posey",
+            "Willie McCovey"
+          ],
+          "difficulty": "easy"
+        },
+        {
+          "category": "Hit 4 home runs in a single game",
+          "players": [
+            "Mike Schmidt",
+            "Lou Gehrig",
+            "Mark Whiten",
+            "Carlos Delgado"
+          ],
+          "difficulty": "insane"
+        }
+      ]
+    },
+    {
+      "puzzle_id": "bb-conn-82",
+      "groups": [
+        {
+          "category": "Won the Triple Crown",
+          "players": [
+            "Miguel Cabrera",
+            "Carl Yastrzemski",
+            "Mickey Mantle",
+            "Ted Williams"
+          ],
+          "difficulty": "insane"
+        },
+        {
+          "category": "Won an MVP and a World Series",
+          "players": [
+            "Mookie Betts",
+            "Bryce Harper",
+            "Aaron Judge",
+            "Jose Altuve"
+          ],
+          "difficulty": "hard"
+        },
+        {
+          "category": "Yankees Hall of Famers",
+          "players": [
+            "Derek Jeter",
+            "Mariano Rivera",
+            "Babe Ruth",
+            "Lou Gehrig"
+          ],
+          "difficulty": "easy"
+        },
+        {
+          "category": "Threw a perfect game",
+          "players": [
+            "Sandy Koufax",
+            "Felix Hernandez",
+            "Roy Halladay",
+            "Don Larsen"
+          ],
+          "difficulty": "insane"
+        }
+      ]
+    },
+    {
+      "puzzle_id": "bb-conn-83",
+      "groups": [
+        {
+          "category": "500+ career home runs",
+          "players": [
+            "Albert Pujols",
+            "Alex Rodriguez",
+            "Jim Thome",
+            "David Ortiz"
+          ],
+          "difficulty": "hard"
+        },
+        {
+          "category": "Dodgers legends",
+          "players": [
+            "Clayton Kershaw",
+            "Sandy Koufax",
+            "Jackie Robinson",
+            "Mookie Betts"
+          ],
+          "difficulty": "easy"
+        },
+        {
+          "category": "Born in Dominican Republic",
+          "players": [
+            "David Ortiz",
+            "Albert Pujols",
+            "Pedro Martinez",
+            "Manny Ramirez"
+          ],
+          "difficulty": "medium"
+        },
+        {
+          "category": "Red Sox Hall of Famers",
+          "players": [
+            "David Ortiz",
+            "Pedro Martinez",
+            "Ted Williams",
+            "Carl Yastrzemski"
+          ],
+          "difficulty": "easy"
+        }
+      ]
+    }
+  ]
+}

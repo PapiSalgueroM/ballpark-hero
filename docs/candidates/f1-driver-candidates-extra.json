@@ -1,0 +1,133 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 14,
+  "items": [
+    {
+      "driver": "Kimi Raikkonen",
+      "clues": [
+        "2007 World Champion with Ferrari",
+        "Iceman nickname",
+        "Finnish driver",
+        "Longest career in F1"
+      ]
+    },
+    {
+      "driver": "Daniel Ricciardo",
+      "clues": [
+        "Shoey celebration",
+        "Australian driver",
+        "Won races for Red Bull and McLaren",
+        "Retired end of 2024"
+      ]
+    },
+    {
+      "driver": "Valtteri Bottas",
+      "clues": [
+        "10x Grand Prix winner",
+        "Finnish driver",
+        "Mercedes 2017-2021",
+        "Alfa Romeo Sauber 2022-2024"
+      ]
+    },
+    {
+      "driver": "Sergio Perez",
+      "clues": [
+        "Mexican driver",
+        "Red Bull 2021-2024",
+        "Won home GP cancelled in 2020",
+        "Checo nickname"
+      ]
+    },
+    {
+      "driver": "Pierre Gasly",
+      "clues": [
+        "French driver",
+        "Won Italian GP 2020 for AlphaTauri",
+        "Alpine since 2023",
+        "Drove for Toro Rosso AlphaTauri"
+      ]
+    },
+    {
+      "driver": "Esteban Ocon",
+      "clues": [
+        "French driver",
+        "Won Hungarian GP 2021",
+        "Alpine 2020-2024",
+        "Haas since 2025"
+      ]
+    },
+    {
+      "driver": "Lance Stroll",
+      "clues": [
+        "Canadian driver",
+        "Father owns Aston Martin team",
+        "Drove for Williams Racing Point Aston Martin",
+        "Active 2017-present"
+      ]
+    },
+    {
+      "driver": "Yuki Tsunoda",
+      "clues": [
+        "Japanese driver",
+        "AlphaTauri RB driver",
+        "First Japanese F1 driver since Kobayashi",
+        "Active since 2021"
+      ]
+    },
+    {
+      "driver": "Alexander Albon",
+      "clues": [
+        "Thai-British driver",
+        "Returned to F1 with Williams 2022",
+        "Red Bull 2019-2020",
+        "Active 2019-present"
+      ]
+    },
+    {
+      "driver": "Nico Hulkenberg",
+      "clues": [
+        "German driver",
+        "Never on F1 podium until 2025",
+        "Won Le Mans 2015",
+        "Haas 2023-2024 Sauber 2025"
+      ]
+    },
+    {
+      "driver": "Gabriel Bortoleto",
+      "clues": [
+        "Brazilian driver",
+        "F3 2023 champion F2 2024 champion",
+        "Sauber Audi 2025 debut",
+        "Managed by Fernando Alonso"
+      ]
+    },
+    {
+      "driver": "Kimi Antonelli",
+      "clues": [
+        "Italian driver born 2006",
+        "Mercedes 2025 debut",
+        "Replaced Lewis Hamilton at Mercedes",
+        "Andrea Kimi nickname"
+      ]
+    },
+    {
+      "driver": "Liam Lawson",
+      "clues": [
+        "New Zealand driver",
+        "AlphaTauri reserve then RB",
+        "Red Bull 2025 promotion",
+        "Replaced Sergio Perez"
+      ]
+    },
+    {
+      "driver": "Jack Doohan",
+      "clues": [
+        "Australian driver",
+        "Father is MotoGP legend Mick Doohan",
+        "Alpine 2025 debut",
+        "F2 frontrunner"
+      ]
+    }
+  ],
+  "source": "EXTRA"
+}

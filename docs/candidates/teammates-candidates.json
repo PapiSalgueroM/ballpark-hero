@@ -1,0 +1,125 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 17,
+  "items": [
+    {
+      "player_a": "Lionel Messi",
+      "player_b": "Luis Suarez",
+      "club": "Barcelona",
+      "era": "2014-2020",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Lionel Messi",
+      "player_b": "Neymar",
+      "club": "Barcelona",
+      "era": "2013-2017",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Cristiano Ronaldo",
+      "player_b": "Karim Benzema",
+      "club": "Real Madrid",
+      "era": "2009-2018",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Cristiano Ronaldo",
+      "player_b": "Gareth Bale",
+      "club": "Real Madrid",
+      "era": "2013-2018",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Erling Haaland",
+      "player_b": "Jude Bellingham",
+      "club": "Borussia Dortmund",
+      "era": "2022-2023",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Kevin De Bruyne",
+      "player_b": "Vincent Kompany",
+      "club": "Man City",
+      "era": "2015-2019",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Mohamed Salah",
+      "player_b": "Sadio Mane",
+      "club": "Liverpool",
+      "era": "2017-2022",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Mohamed Salah",
+      "player_b": "Roberto Firmino",
+      "club": "Liverpool",
+      "era": "2017-2023",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Kylian Mbappe",
+      "player_b": "Neymar",
+      "club": "PSG",
+      "era": "2017-2023",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Sergio Aguero",
+      "player_b": "Yaya Toure",
+      "club": "Man City",
+      "era": "2011-2018",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Frank Lampard",
+      "player_b": "John Terry",
+      "club": "Chelsea",
+      "era": "2004-2014",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Steven Gerrard",
+      "player_b": "Fernando Torres",
+      "club": "Liverpool",
+      "era": "2007-2011",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Wayne Rooney",
+      "player_b": "Cristiano Ronaldo",
+      "club": "Man Utd",
+      "era": "2004-2009",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Thierry Henry",
+      "player_b": "Patrick Vieira",
+      "club": "Arsenal",
+      "era": "1999-2005",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Andres Iniesta",
+      "player_b": "Xavi Hernandez",
+      "club": "Barcelona",
+      "era": "2003-2015",
+      "were_teammates": true
+    },
+    {
+      "player_a": "Lionel Messi",
+      "player_b": "Cristiano Ronaldo",
+      "club": "any",
+      "era": "never",
+      "were_teammates": false
+    },
+    {
+      "player_a": "Erling Haaland",
+      "player_b": "Kylian Mbappe",
+      "club": "any",
+      "era": "never",
+      "were_teammates": false
+    }
+  ]
+}

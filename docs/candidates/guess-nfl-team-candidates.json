@@ -1,0 +1,78 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 8,
+  "items": [
+    {
+      "team": "Patriots",
+      "clues": [
+        "Won 6 Super Bowls in the Brady era",
+        "Drafted Tom Brady in 2000 round 6",
+        "Home stadium opened in 2002",
+        "Coached by Bill Belichick 2000-2023"
+      ]
+    },
+    {
+      "team": "Chiefs",
+      "clues": [
+        "Won SB LIV LVII LVIII",
+        "Patrick Mahomes drafted 10th overall 2017",
+        "Arrowhead Stadium is one of the loudest in the NFL",
+        "Coached by Andy Reid"
+      ]
+    },
+    {
+      "team": "Cowboys",
+      "clues": [
+        "Won 5 Super Bowls historically",
+        "Owner Jerry Jones bought team in 1989",
+        "Home games at ATT Stadium",
+        "Last SB appearance 1995"
+      ]
+    },
+    {
+      "team": "49ers",
+      "clues": [
+        "Won 5 Super Bowls in the 80s and 90s",
+        "Joe Montana led 4 SB wins",
+        "Coached by Kyle Shanahan",
+        "Levis Stadium opened 2014"
+      ]
+    },
+    {
+      "team": "Packers",
+      "clues": [
+        "Only publicly owned team in major US sports",
+        "Won SB I and II under Lombardi",
+        "Aaron Rodgers MVP 4 times",
+        "Lambeau Field opened 1957"
+      ]
+    },
+    {
+      "team": "Steelers",
+      "clues": [
+        "Won 6 Super Bowls tied for most",
+        "Steel Curtain defense of the 70s",
+        "Mike Tomlin coach since 2007",
+        "Heinz Field renamed Acrisure Stadium"
+      ]
+    },
+    {
+      "team": "Eagles",
+      "clues": [
+        "Won SB LII over Patriots",
+        "Drafted Jalen Hurts 53rd overall 2020",
+        "Lincoln Financial Field opened 2003",
+        "First SB win 2018"
+      ]
+    },
+    {
+      "team": "Bills",
+      "clues": [
+        "Lost 4 consecutive Super Bowls 1991-1994",
+        "Josh Allen drafted 7th overall 2018",
+        "Home in Orchard Park",
+        "Founded 1960 AFL"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 20,
+  "items": [
+    {
+      "club": "Real Madrid",
+      "clues": [
+        "Founded in 1902",
+        "Plays in La Liga",
+        "Home colors: White",
+        "Based in Madrid",
+        "Famous for: Cristiano Ronaldo Bellingham Mbappe",
+        "Notable: 15 UCL titles"
+      ]
+    },
+    {
+      "club": "Barcelona",
+      "clues": [
+        "Founded in 1899",
+        "Plays in La Liga",
+        "Home colors: Blue and red stripes",
+        "Based in Barcelona",
+        "Famous for: Messi spent 21 years here",
+        "Notable: 5 UCL titles"
+      ]
+    },
+    {
+      "club": "Bayern Munich",
+      "clues": [
+        "Founded in 1900",
+        "Plays in Bundesliga",
+        "Home colors: Red and white",
+        "Based in Munich",
+        "Famous for: Robert Lewandowski 41 goals in a season",
+        "Notable: 33 Bundesliga titles"
+      ]
+    },
+    {
+      "club": "Manchester United",
+      "clues": [
+        "Founded in 1878",
+        "Plays in Premier League",
+        "Home colors: Red and white",
+        "Based in Manchester",
+        "Famous for: Sir Alex Ferguson 26 years as manager",
+        "Notable: 20 league titles"
+      ]
+    },
+    {
+      "club": "Manchester City",
+      "clues": [
+        "Founded in 1880",
+        "Plays in Premier League",
+        "Home colors: Sky blue",
+        "Based in Manchester",
+        "Famous for: Pep Guardiola era",
+        "Notable: Treble in 2023"
+      ]
+    },
+    {
+      "club": "Liverpool",
+      "clues": [
+        "Founded in 1892",
+        "Plays in Premier League",
+        "Home colors: Red",
+        "Based in Liverpool",
+        "Famous for: Mohamed Salah Anfield",
+        "Notable: 6 UCL titles"
+      ]
+    },
+    {
+      "club": "Arsenal",
+      "clues": [
+        "Founded in 1886",
+        "Plays in Premier League",
+        "Home colors: Red and white",
+        "Based in London",
+        "Famous for: Invincibles 2003-04 unbeaten season",
+        "Notable: 13 league titles"
+      ]
+    },
+    {
+      "club": "Chelsea",
+      "clues": [
+        "Founded in 1905",
+        "Plays in Premier League",
+        "Home colors: Blue",
+        "Based in London",
+        "Famous for: Roman Abramovich era",
+        "Notable: 2 UCL titles 2012 and 2021"
+      ]
+    },
+    {
+      "club": "Tottenham",
+      "clues": [
+        "Founded in 1882",
+        "Plays in Premier League",
+        "Home colors: White and navy",
+        "Based in London",
+        "Famous for: Harry Kane all-time top scorer",
+        "Notable: Reached 2019 UCL final"
+      ]
+    },
+    {
+      "club": "PSG",
+      "clues": [
+        "Founded in 1970",
+        "Plays in Ligue 1",
+        "Home colors: Blue and red",
+        "Based in Paris",
+        "Famous for: Mbappe Neymar Messi trio",
+        "Notable: 11 Ligue 1 titles"
+      ]
+    },
+    {
+      "club": "Juventus",
+      "clues": [
+        "Founded in 1897",
+        "Plays in Serie A",
+        "Home colors: Black and white",
+        "Based in Turin",
+        "Famous for: Stripes from Notts County",
+        "Notable: 9 consecutive league titles 2012-2020"
+      ]
+    },
+    {
+      "club": "AC Milan",
+      "clues": [
+        "Founded in 1899",
+        "Plays in Serie A",
+        "Home colors: Red and black stripes",
+        "Based in Milan",
+        "Famous for: 7 UCL titles second most ever",
+        "Notable: Rossoneri nickname"
+      ]
+    },
+    {
+      "club": "Inter Milan",
+      "clues": [
+        "Founded in 1908",
+        "Plays in Serie A",
+        "Home colors: Blue and black stripes",
+        "Based in Milan",
+        "Famous for: Nerazzurri nickname",
+        "Notable: 20 Serie A titles"
+      ]
+    },
+    {
+      "club": "Atletico Madrid",
+      "clues": [
+        "Founded in 1903",
+        "Plays in La Liga",
+        "Home colors: Red and white stripes",
+        "Based in Madrid",
+        "Famous for: Diego Simeone since 2011",
+        "Notable: Won La Liga 2014 and 2021"
+      ]
+    },
+    {
+      "club": "Borussia Dortmund",
+      "clues": [
+        "Founded in 1909",
+        "Plays in Bundesliga",
+        "Home colors: Yellow and black",
+        "Based in Dortmund",
+        "Famous for: Yellow Wall fan section",
+        "Notable: Won UCL 1997"
+      ]
+    },
+    {
+      "club": "Ajax",
+      "clues": [
+        "Founded in 1900",
+        "Plays in Eredivisie",
+        "Home colors: Red and white",
+        "Based in Amsterdam",
+        "Famous for: Cruyff developed Total Football here",
+        "Notable: 4 UCL titles"
+      ]
+    },
+    {
+      "club": "Porto",
+      "clues": [
+        "Founded in 1893",
+        "Plays in Primeira Liga",
+        "Home colors: Blue and white",
+        "Based in Porto",
+        "Famous for: Won UCL 2004 under Mourinho",
+        "Notable: 2 UCL titles"
+      ]
+    },
+    {
+      "club": "Benfica",
+      "clues": [
+        "Founded in 1904",
+        "Plays in Primeira Liga",
+        "Home colors: Red and white",
+        "Based in Lisbon",
+        "Famous for: Eusebio club legend",
+        "Notable: 2 UCL titles in early 60s"
+      ]
+    },
+    {
+      "club": "Celtic",
+      "clues": [
+        "Founded in 1887",
+        "Plays in Scottish Premiership",
+        "Home colors: Green and white hoops",
+        "Based in Glasgow",
+        "Famous for: Lisbon Lions won UCL 1967",
+        "Notable: First British UCL winners"
+      ]
+    },
+    {
+      "club": "Rangers",
+      "clues": [
+        "Founded in 1872",
+        "Plays in Scottish Premiership",
+        "Home colors: Blue",
+        "Based in Glasgow",
+        "Famous for: Old Firm rivalry with Celtic",
+        "Notable: 55 league titles"
+      ]
+    }
+  ]
+}

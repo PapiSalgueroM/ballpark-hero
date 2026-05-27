@@ -1,0 +1,117 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 10,
+  "items": [
+    {
+      "club": "Napoli",
+      "clues": [
+        "Founded in 1926",
+        "Plays in Serie A",
+        "Home colors: Sky blue",
+        "Based in Naples",
+        "Famous for: Maradona era 1984-1991",
+        "Notable: Won Serie A 2023 first since 1990"
+      ]
+    },
+    {
+      "club": "Roma",
+      "clues": [
+        "Founded in 1927",
+        "Plays in Serie A",
+        "Home colors: Crimson and gold",
+        "Based in Rome",
+        "Famous for: Francesco Totti club legend",
+        "Notable: Won Conference League 2022"
+      ]
+    },
+    {
+      "club": "Lazio",
+      "clues": [
+        "Founded in 1900",
+        "Plays in Serie A",
+        "Home colors: Sky blue and white",
+        "Based in Rome",
+        "Famous for: Eagles nickname",
+        "Notable: Won Serie A 2000"
+      ]
+    },
+    {
+      "club": "Atalanta",
+      "clues": [
+        "Founded in 1907",
+        "Plays in Serie A",
+        "Home colors: Black and blue stripes",
+        "Based in Bergamo",
+        "Famous for: Won Europa League 2024",
+        "Notable: Gasperini transformation"
+      ]
+    },
+    {
+      "club": "Newcastle",
+      "clues": [
+        "Founded in 1892",
+        "Plays in Premier League",
+        "Home colors: Black and white stripes",
+        "Based in Newcastle",
+        "Famous for: Saudi PIF takeover 2021",
+        "Notable: St James Park stadium"
+      ]
+    },
+    {
+      "club": "Aston Villa",
+      "clues": [
+        "Founded in 1874",
+        "Plays in Premier League",
+        "Home colors: Claret and blue",
+        "Based in Birmingham",
+        "Famous for: Won European Cup 1982",
+        "Notable: Founding PL member"
+      ]
+    },
+    {
+      "club": "Brighton",
+      "clues": [
+        "Founded in 1901",
+        "Plays in Premier League",
+        "Home colors: Blue and white stripes",
+        "Based in Brighton",
+        "Famous for: Sold Caicedo Mac Allister Mitoma",
+        "Notable: First top flight in 1980s then 2017"
+      ]
+    },
+    {
+      "club": "West Ham",
+      "clues": [
+        "Founded in 1895",
+        "Plays in Premier League",
+        "Home colors: Claret and sky blue",
+        "Based in London",
+        "Famous for: Won Conference League 2023",
+        "Notable: Bobby Moore 1966 captain"
+      ]
+    },
+    {
+      "club": "Galatasaray",
+      "clues": [
+        "Founded in 1905",
+        "Plays in Super Lig",
+        "Home colors: Red and yellow",
+        "Based in Istanbul",
+        "Famous for: Won UEFA Cup 2000",
+        "Notable: Big Three Turkish club"
+      ]
+    },
+    {
+      "club": "Fenerbahce",
+      "clues": [
+        "Founded in 1907",
+        "Plays in Super Lig",
+        "Home colors: Yellow and navy",
+        "Based in Istanbul",
+        "Famous for: Mourinho appointed 2024",
+        "Notable: Big Three Turkish club"
+      ]
+    }
+  ],
+  "source": "EXTRA"
+}

@@ -1,0 +1,114 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 12,
+  "items": [
+    {
+      "driver": "Lewis Hamilton",
+      "clues": [
+        "7-time World Champion",
+        "Mercedes 2013-2024, Ferrari 2025-present",
+        "Most pole positions in F1 history",
+        "British driver, debuted 2007"
+      ]
+    },
+    {
+      "driver": "Max Verstappen",
+      "clues": [
+        "4-time World Champion 2021-2024",
+        "Red Bull driver since 2016",
+        "Youngest F1 race winner in history",
+        "Dutch driver"
+      ]
+    },
+    {
+      "driver": "Charles Leclerc",
+      "clues": [
+        "Ferrari driver since 2019",
+        "From Monaco",
+        "Won home GP in 2024",
+        "Younger brother is also a racing driver"
+      ]
+    },
+    {
+      "driver": "Lando Norris",
+      "clues": [
+        "McLaren driver since 2019",
+        "British driver",
+        "First F1 win 2024 Miami GP",
+        "Father is wealthy businessman"
+      ]
+    },
+    {
+      "driver": "Fernando Alonso",
+      "clues": [
+        "2x World Champion 2005-2006 with Renault",
+        "Spanish driver",
+        "Returned to F1 in 2021",
+        "Won Indy500 categories"
+      ]
+    },
+    {
+      "driver": "Sebastian Vettel",
+      "clues": [
+        "4-time World Champion 2010-2013",
+        "Drove for Red Bull and Ferrari",
+        "Retired end of 2022",
+        "German driver"
+      ]
+    },
+    {
+      "driver": "Michael Schumacher",
+      "clues": [
+        "7-time World Champion",
+        "Drove for Benetton, Ferrari, Mercedes",
+        "Suffered ski accident 2013",
+        "German driver, retired 2012"
+      ]
+    },
+    {
+      "driver": "Ayrton Senna",
+      "clues": [
+        "3-time World Champion",
+        "Died at Imola 1994",
+        "Brazilian icon",
+        "McLaren driver in dominant era"
+      ]
+    },
+    {
+      "driver": "Niki Lauda",
+      "clues": [
+        "3-time World Champion",
+        "Survived 1976 Nurburgring fire",
+        "Austrian driver",
+        "Rush movie depicted his rivalry with Hunt"
+      ]
+    },
+    {
+      "driver": "George Russell",
+      "clues": [
+        "Mercedes driver since 2022",
+        "British driver",
+        "Debuted with Williams 2019",
+        "Junior champion before F1"
+      ]
+    },
+    {
+      "driver": "Oscar Piastri",
+      "clues": [
+        "McLaren driver since 2023",
+        "Australian driver",
+        "F2 and F3 champion",
+        "Mark Webber is his manager"
+      ]
+    },
+    {
+      "driver": "Carlos Sainz",
+      "clues": [
+        "Father is rally legend Carlos Sainz Sr",
+        "Drove for Ferrari 2021-2024",
+        "Williams since 2025",
+        "Spanish driver"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "generated": "2026-05-27_05-36",
+  "count": 10,
+  "items": [
+    {
+      "year": 1930,
+      "host": "Uruguay",
+      "winner": "Uruguay",
+      "clues": [
+        "First-ever World Cup",
+        "Hosted in South America",
+        "Final 4-2",
+        "Hosts won the trophy"
+      ]
+    },
+    {
+      "year": 1950,
+      "host": "Brazil",
+      "winner": "Uruguay",
+      "clues": [
+        "Maracanazo upset",
+        "Brazil hosted but lost final",
+        "Decided in final group game",
+        "Uruguay shocked the world"
+      ]
+    },
+    {
+      "year": 1958,
+      "host": "Sweden",
+      "winner": "Brazil",
+      "clues": [
+        "Pele debut WC at 17",
+        "First Brazilian title",
+        "Hosted in Scandinavia",
+        "Brazil 5-2 Sweden"
+      ]
+    },
+    {
+      "year": 1962,
+      "host": "Chile",
+      "winner": "Brazil",
+      "clues": [
+        "Brazil back-to-back champions",
+        "Garrincha tournament star",
+        "Pele injured early",
+        "Hosted in South America"
+      ]
+    },
+    {
+      "year": 1966,
+      "host": "England",
+      "winner": "England",
+      "clues": [
+        "Only English WC win",
+        "Bobby Moore captained",
+        "Hurst hat-trick in final",
+        "3-2 over Germany"
+      ]
+    },
+    {
+      "year": 1970,
+      "host": "Mexico",
+      "winner": "Brazil",
+      "clues": [
+        "Greatest WC team ever debated",
+        "Pele third title",
+        "First color TV broadcast",
+        "Brazil 4-1 Italy"
+      ]
+    },
+    {
+      "year": 1974,
+      "host": "West Germany",
+      "winner": "West Germany",
+      "clues": [
+        "Beckenbauer captained the hosts",
+        "Cruyff led Netherlands",
+        "Cruyff turn invented",
+        "West Germany 2-1 Netherlands"
+      ]
+    },
+    {
+      "year": 1978,
+      "host": "Argentina",
+      "winner": "Argentina",
+      "clues": [
+        "First Argentine title",
+        "Kempes top scorer",
+        "Hosted in Buenos Aires",
+        "Argentina 3-1 Netherlands"
+      ]
+    },
+    {
+      "year": 1982,
+      "host": "Spain",
+      "winner": "Italy",
+      "clues": [
+        "Paolo Rossi top scorer",
+        "Italy third title",
+        "Hosted in Iberia",
+        "Italy 3-1 West Germany"
+      ]
+    },
+    {
+      "year": 2026,
+      "host": "USA Canada Mexico",
+      "winner": "TBD",
+      "clues": [
+        "Three-nation hosting",
+        "First 48-team World Cup",
+        "Final at MetLife Stadium",
+        "Largest WC ever"
+      ]
+    }
+  ]
+}
