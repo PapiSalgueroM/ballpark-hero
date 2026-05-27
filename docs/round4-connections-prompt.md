@@ -15,7 +15,7 @@
 | 2   | puzzle-161 to 165  | 160-164     | approved   |
 | 3   | puzzle-166 to 170  | 165-169     | approved   |
 | 4   | puzzle-171 to 175  | 170-174     | approved   |
-| 5   | puzzle-176 to 180  | 175-179     | pending    |
+| 5   | puzzle-176 to 180  | 175-179     | approved   |
 | 6   | puzzle-181 to 185  | 180-184     | pending    |
 | 7   | puzzle-186 to 190  | 185-189     | pending    |
 | 8   | puzzle-191 to 195  | 190-194     | pending    |
@@ -227,3 +227,4 @@ Adding rows to Supabase via migration = fine. Modifying these hooks = NO.
 - **2026-05-27** — Run 2 approved (puzzle-161 to 165). 5/5 passed QC (3 v2/v3 iterations needed). 20 categories added to baseline. 85 puzzles remaining.
 - **2026-05-27** — Run 3 approved (puzzle-166 to 170). 5/5 passed QC (3 v2/v3 iterations needed). 20 categories added to baseline. 80 puzzles remaining.
 - **2026-05-27** — Run 4 approved (puzzle-171 to 175). 5/5 passed QC on v1 (first single-pass run). 20 categories added to baseline. 75 puzzles remaining.
+- **2026-05-27** — Run 5 approved (puzzle-176 to 180). 5/5 passed QC (v4 iteration). 20 categories added to baseline. 70 puzzles remaining.
