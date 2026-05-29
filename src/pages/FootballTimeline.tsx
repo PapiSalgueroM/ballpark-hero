@@ -60,7 +60,7 @@ const FootballTimeline = () => {
             🏈 PRO FOOTBALL TIMELINE
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Order these players by their NFL Draft year — earliest to latest
+            Order these players by NFL Draft year — earliest at the top, most recent at the bottom
           </p>
         </header>
 
@@ -113,7 +113,7 @@ const FootballTimeline = () => {
                 {status === 'submitted' && (
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold text-[hsl(var(--ft-gold))]">
-                      {correctOrder[index].draftYear}
+                      {player.draftYear}
                     </span>
                     {isCorrect ? (
                       <Check className="w-5 h-5 text-correct" />
