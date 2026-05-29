@@ -24,16 +24,25 @@ export function useCbbProgram() {
   const [gameState, setGameState] = useState<CbbProgramState | null>(null);
   const [allPrograms, setAllPrograms] = useState<CbbProgramPuzzle[]>([]);
   const [loading, setLoading] = useState(false);
+  const [programsStatus, setProgramsStatus] = useState<'loading' | 'ready' | 'error'>('loading');
 
-  // Load all programs on mount for autocomplete
-  useEffect(() => {
-    (async () => {
-      const { data } = await supabase
-        .from('cbb_programs')
-        .select('*');
-      if (data) setAllPrograms(data.map(mapRow));
-    })();
+  // Load all programs on mount (for autocomplete + puzzle selection).
+  const loadPrograms = useCallback(async () => {
+    setProgramsStatus('loading');
+    const { data, error } = await supabase
+      .from('cbb_programs')
+      .select('*');
+    if (error) {
+      setProgramsStatus('error');
+      return;
+    }
+    setAllPrograms((data ?? []).map(mapRow));
+    setProgramsStatus('ready');
   }, []);
+
+  useEffect(() => {
+    loadPrograms();
+  }, [loadPrograms]);
 
   const startGame = useCallback(async (mode: 'daily' | 'unlimited') => {
     setLoading(true);
@@ -137,5 +146,5 @@ export function useCbbProgram() {
 
   useGameCompletion('cbb-program', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
-  return { gameState, startGame, makeGuess, giveUp, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPrograms: validatedPrograms, loading };
+  return { gameState, startGame, makeGuess, giveUp, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPrograms: validatedPrograms, loading, programsStatus, reloadPrograms: loadPrograms };
 }

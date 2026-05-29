@@ -11,7 +11,7 @@ import { MAX_CLUES } from '@/types/cbbProgram';
 const CLUE_LABELS = ['Vibe', 'Region & State', 'Conference', 'Tournament History', 'Championships', 'Mascot'];
 
 export function CbbProgramBoard() {
-  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue, allPrograms, loading } = useCbbProgram();
+  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue, allPrograms, loading, programsStatus, reloadPrograms } = useCbbProgram();
   const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
 
@@ -57,8 +57,22 @@ export function CbbProgramBoard() {
             </button>
           </div>
 
-          {allPrograms.length === 0 && (
+          {programsStatus === 'loading' && (
             <p className="text-sm text-slate-500">Loading programs...</p>
+          )}
+          {programsStatus === 'error' && (
+            <div className="space-y-2">
+              <p className="text-sm text-red-400">Couldn't load programs. Please try again.</p>
+              <button
+                onClick={reloadPrograms}
+                className="px-4 py-2 text-sm rounded-lg border border-slate-700 text-slate-300 hover:text-amber-400 hover:border-amber-500/30 transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          )}
+          {programsStatus === 'ready' && allPrograms.length === 0 && (
+            <p className="text-sm text-slate-500">No programs available yet — check back soon.</p>
           )}
 
           <GameNav />
