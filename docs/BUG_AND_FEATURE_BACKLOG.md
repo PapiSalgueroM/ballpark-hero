@@ -173,7 +173,11 @@ Complexity estimates:
 ---
 
 ### P0-6: Report buttons site-wide — owner cannot view submitted reports
-**Game:** All games (site-wide) | **Complexity:** M | **Status:** TODO
+**Game:** All games (site-wide) | **Complexity:** M | **Status:** DONE (code) — already fully implemented and wired, no new change needed. src/pages/AdminReports.tsx + AdminLogin.tsx; routes /admin/login and /admin/reports registered in App.tsx. Uses the real role system (user_roles + has_role admin), better than the email-env-var approach. Has newest-first list, open/resolved/all filter tabs, and a mark-resolved toggle (updates resolved + resolved_at, columns already exist). OPERATIONAL STEP FOR ANTHONY (only he can do this): create an auth account, then grant it admin in Supabase SQL editor:
+  INSERT INTO public.user_roles (user_id, role)
+  SELECT id, 'admin' FROM auth.users WHERE email = '<your-email>'
+  ON CONFLICT (user_id, role) DO NOTHING;
+Then log in at /admin/login. Without this row the login correctly rejects with "You do not have admin access."
 
 **Problem:** Users submit reports but Anthony has no admin view to read them.
 

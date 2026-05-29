@@ -8,4 +8,10 @@ Format: date | track | item | result | commit
 ## 2026-05-29
 
 - 2026-05-29 | setup | START SEQUENCE 2 | Created `docs/staged-migrations/`, `docs/audits/`, `docs/EXECUTION_LOG.md`, `docs/staged-migrations/MANIFEST.md` | (pending commit)
-- 2026-05-29 | safety | START SEQUENCE 3 | Quarantined broken Connections autopilot migration (renamed to `_DO_NOT_APPLY_..._.bak`) | (pending commit)
+- 2026-05-29 | safety | START SEQUENCE 3 | Quarantined broken Connections autopilot migration (renamed to `_DO_NOT_APPLY_..._.bak`) | 4c89ec2
+- 2026-05-29 | A | P0-1 Football Grid autocomplete | Already implemented (GridPlayerSearch substring autocomplete). No change; status reconciled | n/a (prior 3455989/e5a382f)
+- 2026-05-29 | A | P0-3 Football Grid persistence | Already implemented via useDailyPuzzle (date-seed + localStorage). No change; status reconciled | n/a (prior 0b1020f)
+- 2026-05-29 | A | P0-2 Football Grid guess registration | Flow already wired; added toast on edge-function failure (was silent). Typecheck OK. Live re-test of football-grid-validate recommended | 768d993
+- 2026-05-29 | A | P0-4 CBB Program loading | Root cause: cbb_programs created but never seeded. Fixed infinite spinner -> loading/error/empty states + Retry. Typecheck OK. Seed is Track B (staged, awaiting Anthony) | 982c7cb
+- 2026-05-29 | A | P0-5 NBA lineup evaluation error | Failure now preserves lineup + inline retry (was: dead-end Error card with full-reset only). Added malformed-verdict guard. Typecheck OK. Flagged edge-fn model gemini-3-flash-preview vs working 2.5-flash | 7b3d74b
+- 2026-05-29 | A | P0-6 Admin reports view | Already fully implemented + wired (AdminReports/AdminLogin, routes in App.tsx, role-gated, mark-resolved). No code change. Operational: Anthony must grant himself admin in user_roles | n/a (prior work)
