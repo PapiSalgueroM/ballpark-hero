@@ -12,5 +12,7 @@ its status here is moved to `verified` by Anthony / his chat assistant. Then Ant
 |---|---|---|---|---|---|
 | Guess The Year | `src/data/guessTheYearPuzzles.ts` (STATIC, no table) | TS merge | `docs/audits/guess_year_audit.md` | 28 (only 12 non-dup) | drafted (audit) — needs format decision + fact-check |
 | Guess The College | UNDECIDED (not colleges.ts, not cbb_programs) | — | `docs/audits/guess_college_audit.md` | 20 (all already in colleges.ts) | audit only — target undecided; no SQL (won't guess schema) |
+| Connections fix (4.2) | `connections_puzzles` (broken batch quarantined) | analysis | `docs/audits/connections_fix_audit.md` | — | diagnosed — soccer-data.json tournament_winners mis-keyed (6/8). Not regenerated. |
+| Connections 30 "good" (4.3) | — | locate | `docs/audits/connections_fix_audit.md` | 0 found | puzzle-156→185 DO NOT EXIST in repo (max present = 155). Need reconstruction. |
 
 Status values: `drafted` → `verified` → `applied`
