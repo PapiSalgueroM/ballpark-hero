@@ -20,4 +20,5 @@ Format: date | track | item | result | commit
 - 2026-05-29 | A | P1-3 Football Grid rarity tiers | Already done — RarityBadge has 8 color-coded tiers shown per correct cell. No change | n/a
 - 2026-05-29 | A | P1-5 Share buttons horizontal | Already done — share icons in flex-row flex-wrap. No change | n/a
 - 2026-05-29 | A | P1-4 Football Timeline wording/year | Real bug fixed: row shows player.draftYear not slot's expected year; tightened instruction. Typecheck OK | 5943bec
-- 2026-05-29 | A | P1-6 Draft Guesser tiered scoring | Scoring scales with clues (30/25/20/15 exact); updated max + color thresholds + emoji. Exact-pick bonus N/A (guesses round). Typecheck OK | (this commit)
+- 2026-05-29 | A | P1-6 Draft Guesser tiered scoring | Scoring scales with clues (30/25/20/15 exact); updated max + color thresholds + emoji. Exact-pick bonus N/A (guesses round). Typecheck OK | 2f042bd
+- 2026-05-29 | A | P1-12 Football Grid unlimited guesses | Added localStorage-persisted toggle; dynamic maxGuesses to useDailyPuzzle (locked, untouched); guessesLeft shows infinity. Typecheck OK | (this commit)

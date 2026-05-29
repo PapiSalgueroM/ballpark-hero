@@ -385,6 +385,8 @@ Bonus: exact pick number (not just round) = +20 pts.
 ### P1-12: Football Grid — unlimited guesses toggle
 **Game:** Football Grid | **Complexity:** S | **Status:** TODO
 
+**Status:** DONE — added an "Unlimited guesses" toggle to Football Grid. useFootballGrid reads the setting from localStorage (football-grid-unlimited), passes maxGuesses = unlimited ? Infinity : 15 to the (untouched, LOCKED) useDailyPuzzle, and guessesLeft shows ∞ when on. Default off; persists. P0-3 persistence already in place.
+
 **Problem:** Limited guesses prevent score-chasing. Depends on P0-3.
 
 **Fix:** After P0-3 ships, add settings toggle "Unlimited guesses mode" — disables guess counter. Default off; users opt in. Persists in localStorage.

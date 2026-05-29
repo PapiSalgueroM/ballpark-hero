@@ -26,6 +26,8 @@ const FootballGrid = () => {
     correctCount,
     rarityScore,
     isLoading,
+    unlimited,
+    toggleUnlimited,
   } = useFootballGrid();
 
   const [showRules, setShowRules] = useState(false);
@@ -68,8 +70,17 @@ const FootballGrid = () => {
               Correct: <span className="font-semibold text-correct">{correctCount}</span>/9
             </span>
             <span className="text-muted-foreground">
-              Guesses left: <span className="font-semibold text-foreground">{guessesLeft}</span>
+              Guesses left: <span className="font-semibold text-foreground">{guessesLeft === null ? '∞' : guessesLeft}</span>
             </span>
+          </div>
+          <div className="flex items-center justify-center mt-2">
+            <button
+              onClick={toggleUnlimited}
+              className="text-xs px-3 py-1 rounded-full border border-border text-muted-foreground hover:text-foreground transition-colors"
+              aria-pressed={unlimited}
+            >
+              {unlimited ? '∞ Unlimited guesses: ON' : 'Unlimited guesses: OFF'}
+            </button>
           </div>
         </header>
 

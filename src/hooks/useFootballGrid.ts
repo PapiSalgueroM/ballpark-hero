@@ -10,7 +10,21 @@ type GridAction =
   | { t: 'ok'; cellIndex: number; playerName: string; rarity: number }
   | { t: 'x' };
 
+const GUESS_LIMIT = 15;
+
 export function useFootballGrid() {
+  const [unlimited, setUnlimited] = useState<boolean>(() => {
+    try { return localStorage.getItem('football-grid-unlimited') === '1'; } catch { return false; }
+  });
+
+  const toggleUnlimited = useCallback(() => {
+    setUnlimited((prev) => {
+      const next = !prev;
+      try { localStorage.setItem('football-grid-unlimited', next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  }, []);
+
   const {
     puzzle: dailyPuzzle,
     guesses: dailyActions,
@@ -20,7 +34,7 @@ export function useFootballGrid() {
   } = useDailyPuzzle<GridPuzzle, GridAction>({
     gameSlug: 'football-grid',
     puzzles: footballGridPuzzles,
-    maxGuesses: 15,
+    maxGuesses: unlimited ? Infinity : GUESS_LIMIT,
     isWon: (g) => g.filter((a) => a.t === 'ok').length >= 9,
     deserializeGuesses: (raw) => raw as GridAction[],
   });
@@ -49,7 +63,7 @@ export function useFootballGrid() {
   );
 
   const correctCount = correctActions.length;
-  const guessesLeft = Math.max(0, 15 - dailyActions.length);
+  const guessesLeft = unlimited ? null : Math.max(0, GUESS_LIMIT - dailyActions.length);
   const gameStatus: FootballGridGameStatus = rawDailyStatus !== 'playing' ? 'complete' : 'playing';
 
   const rarityScore = useMemo(() => {
@@ -139,5 +153,6 @@ export function useFootballGrid() {
   return {
     puzzle, cells, activeCell, setActiveCell, submitGuess,
     validating, gameStatus, guessesLeft, correctCount, rarityScore, getRowCol, isLoading,
+    unlimited, toggleUnlimited,
   };
 }
