@@ -15,3 +15,7 @@ Format: date | track | item | result | commit
 - 2026-05-29 | A | P0-4 CBB Program loading | Root cause: cbb_programs created but never seeded. Fixed infinite spinner -> loading/error/empty states + Retry. Typecheck OK. Seed is Track B (staged, awaiting Anthony) | 982c7cb
 - 2026-05-29 | A | P0-5 NBA lineup evaluation error | Failure now preserves lineup + inline retry (was: dead-end Error card with full-reset only). Added malformed-verdict guard. Typecheck OK. Flagged edge-fn model gemini-3-flash-preview vs working 2.5-flash | 7b3d74b
 - 2026-05-29 | A | P0-6 Admin reports view | Already fully implemented + wired (AdminReports/AdminLogin, routes in App.tsx, role-gated, mark-resolved). No code change. Operational: Anthony must grant himself admin in user_roles | n/a (prior work)
+- 2026-05-29 | A | P1-1 Home "be the first" misleading | Gated the message on totalPlayed (anonymous-inclusive) so it only shows at zero activity. Typecheck OK | caa6cd3
+- 2026-05-29 | A | P1-2 Home rotate suggested game | OBSOLETE — static suggestion no longer exists; replaced by dynamic Most Played Today. No change | n/a
+- 2026-05-29 | A | P1-3 Football Grid rarity tiers | Already done — RarityBadge has 8 color-coded tiers shown per correct cell. No change | n/a
+- 2026-05-29 | A | P1-5 Share buttons horizontal | Already done — share icons in flex-row flex-wrap. No change | n/a

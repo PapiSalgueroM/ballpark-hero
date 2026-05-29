@@ -238,6 +238,8 @@ Then log in at /admin/login. Without this row the login correctly rejects with "
 **Complexity:** S
 **Status:** TODO
 
+**Status:** DONE — already implemented. GridBoard.tsx `RarityBadge` renders 8 thematic, color-coded tiers on each correct cell: Unicorn (only-you), Phoenix, Diamond, Emerald, Ruby, Gold, Silver, Bronze, bucketed by the cell's real pick-rate %. Matches the requirement; no change needed.
+
 **Problem:** Rarity tiers: rare/uncommon/standard. Should be 6-7 tiers with cooler names.
 
 **Fix:** Implement tier hierarchy (from rarest to most common):
@@ -277,6 +279,8 @@ Pick a color for each. Update the rarity calc to bucket by percent of users who 
 **Status:** TODO
 
 **Problem:** Share buttons stacked vertically. Should be horizontal.
+
+**Status:** OBSOLETE — ShareButtons.tsx already lays the share icons out in `flex flex-row flex-wrap items-center justify-center` (a horizontal, wrapping row). The only flex-col is the outer stack of three distinct blocks (Copy-card button / label / icon row), which is intended. No change needed (the vertical-stacking issue was resolved in the earlier share round).
 
 **Fix:** Change container from flex-col to flex-row gap-2 (Tailwind). Wrap to 2 rows if too wide on narrow screens.
 
