@@ -202,7 +202,7 @@ Then log in at /admin/login. Without this row the login correctly rejects with "
 ### P1-1: Home Screen — "be the first to play today" is misleading
 **Game:** Home / landing page
 **Complexity:** M
-**Status:** TODO
+**Status:** DONE — root cause: the "playing today"/"Be the first" line used totalPlayers (daily_completions = LOGGED-IN only), while totalPlayed ("games played today") already aggregates the per-game score tables and DOES include anonymous plays. Fix: only show "Be the first to play today!" when totalPlayed is also 0 (genuinely no activity); when anonymous games exist the "X games played today" line carries the signal. No new table/migration needed. (Optional future: a dedicated play_events table would enable a true 5-min "active now" count — not required for correctness.)
 
 **Problem:** Home shows "be the first to play today" even when many users have played. Likely because the counter only includes signed-in users. Anthony also sees this in incognito while logged in elsewhere — suggests it is not tracking anonymous sessions properly.
 
@@ -224,6 +224,8 @@ Then log in at /admin/login. Without this row the login correctly rejects with "
 **Status:** TODO
 
 **Problem:** "Suggested game" always defaults to the same one.
+
+**Status:** OBSOLETE — the static "suggested game" element no longer exists on the home page (src/pages/Index.tsx). It was replaced by the dynamic "Most Played Today" section (top 3 games by real, anonymous-inclusive play counts from the score tables), which inherently rotates with actual usage. A repo-wide search for suggestion logic found none. Nothing to fix; if a separate date-seeded "Featured game today" is wanted, that's the P2-6 feature, not a bug.
 
 **Fix:** Rotate suggestion based on date-seed OR random selection from games not played today by this session. Use localStorage to track today's plays.
 
