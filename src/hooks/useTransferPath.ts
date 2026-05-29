@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import transferPathPuzzles as fallbackPuzzles from '@/data/transferPathPuzzles';
+import fallbackPuzzles from '@/data/transferPathPuzzles';
 import type { TransferPathPuzzle } from '@/data/transferPathPuzzles';
 import { careerPlayers as fallbackPlayers } from '@/data/careerPlayers';
 import type { CareerPlayer } from '@/types/career';
