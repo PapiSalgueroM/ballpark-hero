@@ -139,6 +139,15 @@ export default function ConquestBoard() {
   const loseTeam = game.battleResult ? t(game.battleResult.loser) : null;
   const pendingTeam = game.pendingPowerup ? t(game.pendingPowerup.teamId) : null;
 
+  // Battle wins per team (real battles only — neutral/powerup claims don't count).
+  // In this elimination game a "loss" removes the team, so wins are the live record.
+  const winsByTeam = new Map<string, number>();
+  for (const e of game.gameLog) {
+    if (e.defender !== 'neutral' && e.defender !== 'powerup') {
+      winsByTeam.set(e.winner, (winsByTeam.get(e.winner) || 0) + 1);
+    }
+  }
+
   return (
     <div className="space-y-4 max-w-2xl mx-auto">
       {/* Map */}
@@ -544,18 +553,17 @@ export default function ConquestBoard() {
         </DialogContent>
       </Dialog>
 
-      {/* Saved Powerups Display (per team, top 10 territory leaders) */}
+      {/* Standings: remaining teams sorted by territory then wins, + collapsible eliminated list */}
       {aliveIds.length > 1 && game.turn > 0 && (
         <div className="rounded-xl border border-border p-3 bg-card">
           <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 text-center">
-            Territory Leaders
+            Standings <span className="normal-case font-normal text-[10px]">· 🗺️ territories · ✅ wins</span>
           </h4>
-          <div className="grid grid-cols-2 gap-1 max-h-40 overflow-y-auto text-xs">
+          <div className="grid grid-cols-2 gap-1 max-h-48 overflow-y-auto text-xs">
             {aliveIds
-              .map(id => ({ id, count: game.getTeamTerritoryCount(id), team: TEAM_MAP.get(id)! }))
-              .sort((a, b) => b.count - a.count)
-              .slice(0, 10)
-              .map(({ id, count, team }) => {
+              .map(id => ({ id, count: game.getTeamTerritoryCount(id), wins: winsByTeam.get(id) || 0, team: TEAM_MAP.get(id)! }))
+              .sort((a, b) => b.count - a.count || b.wins - a.wins)
+              .map(({ id, count, wins, team }) => {
                 const saved = game.teamSavedPowerups[id] || [];
                 return (
                   <div key={id} className="flex items-center gap-1.5 px-2 py-1 rounded">
@@ -565,12 +573,35 @@ export default function ConquestBoard() {
                     {saved.map((pu, i) => (
                       <span key={i} className="text-[10px]" title={pu.label}>{pu.icon}</span>
                     ))}
-                    <span className="text-muted-foreground ml-auto">{count}</span>
+                    <span className="text-muted-foreground ml-auto whitespace-nowrap" title="Territories · battle wins">
+                      🗺️{count} ✅{wins}
+                    </span>
                   </div>
                 );
               })}
           </div>
         </div>
+      )}
+
+      {/* Eliminated teams (collapsed by default) */}
+      {game.eliminated.length > 0 && (
+        <details className="rounded-xl border border-border bg-card">
+          <summary className="cursor-pointer select-none px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
+            💀 Eliminated ({game.eliminated.length})
+          </summary>
+          <div className="grid grid-cols-2 gap-1 px-3 pb-3 text-xs">
+            {game.eliminated.map((id, i) => {
+              const team = TEAM_MAP.get(id);
+              return (
+                <div key={id} className="flex items-center gap-1.5 px-2 py-1">
+                  <span className="text-[10px] text-muted-foreground w-4 text-right">{i + 1}.</span>
+                  <div className="w-2 h-2 rounded-sm flex-shrink-0 opacity-60" style={{ backgroundColor: team?.color || '#333' }} />
+                  <span className="text-muted-foreground line-through truncate">{team?.name || id}</span>
+                </div>
+              );
+            })}
+          </div>
+        </details>
       )}
 
       {/* Upgrade active indicator */}

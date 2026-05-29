@@ -23,7 +23,7 @@ Format: date | track | item | result | commit
 - 2026-05-29 | A | P1-6 Draft Guesser tiered scoring | Scoring scales with clues (30/25/20/15 exact); updated max + color thresholds + emoji. Exact-pick bonus N/A (guesses round). Typecheck OK | 2f042bd
 - 2026-05-29 | A | P1-12 Football Grid unlimited guesses | Added localStorage-persisted toggle; dynamic maxGuesses to useDailyPuzzle (locked, untouched); guessesLeft shows infinity. Typecheck OK | 30852d2
 - 2026-05-29 | A | P1-7 Conquest Voronoi map | Assessed: not implemented; XL (needs geo lib + city coords). Recommend attended. Documented, not started | n/a
-- 2026-05-29 | A | P1-8 Conquest standings panel | Assessed: only an eliminated count exists, no remaining-teams panel. Tractable M; recommended next Track-A win. Documented, not started | n/a
+- 2026-05-29 | A | P1-8 Conquest standings panel | Built: Standings (territories + wins, all remaining teams sorted) + collapsible Eliminated list. Adapted rating/W-L to this battle-royale. Typecheck OK | (this commit)
 - 2026-05-29 | A | P1-9 Guess The College hints | Already done — colleges.ts has 70 schools with rich specific hints. No change (content worth spot-checking) | n/a
 - 2026-05-29 | A | P1-10 Guess NFL Team hints | Assessed: no nflTeamFacts.ts; needs curated facts = content -> Track B staging. Documented, not started | n/a
 - 2026-05-29 | A | P1-11 NBA usability | Mostly already done (autocomplete/reset/roster+position validation/cased names). Remaining bits are minor UX prefs. No change | n/a

@@ -333,7 +333,7 @@ Bonus: exact pick number (not just round) = +20 pts.
 ---
 
 ### P1-8: NFL Conquest — add side panel for team standings
-**Game:** NFL Conquest | **Complexity:** M | **Status:** TODO (genuinely remaining) — currently the board shows only an eliminated COUNT ("💀 N eliminated"), not a side panel listing remaining teams sorted by rating with W-L and an eliminated list. The data (team ratings, eliminated[]) exists in the conquest game state, so this is a tractable frontend panel — recommended as the next concrete Track-A win. Not started.
+**Game:** NFL Conquest | **Complexity:** M | **Status:** DONE — turned the existing "Territory Leaders" strip into a full Standings panel: all remaining teams sorted by territory count then battle wins, each row showing 🗺️ territories and ✅ wins (plus the existing invincibility/saved-powerup icons). Added a collapsible "💀 Eliminated (N)" list (was only a count before) showing eliminated teams in order with strikethrough. ADAPTED: this game is a map-control battle royale, not a W-L season — there is no per-team "rating", so territory count is the standing and battle wins are the record (a loss = elimination).
 
 **Problem:** No visible standings during gameplay.
 
