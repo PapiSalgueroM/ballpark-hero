@@ -28,7 +28,8 @@ Format: date | track | item | result | commit
 ## Overnight staging run (Track B) — 2026-05-29
 GLOBAL DECISION: many games are static TS data, not Supabase tables. For static games I produce the AUDIT (the key deliverable) + flag the .ts merge target, and do NOT fabricate a SQL table that doesn't exist. SQL drafts only for real tables. Nothing applied/pushed.
 
-- 2026-05-29 | B | 3.1 Guess The Year | STATIC (guessTheYearPuzzles.ts). Audit done. CRITICAL: 16/28 candidates duplicate existing years; all soccer-only vs existing 6-clue multi-sport; 2020/Euro-2020 ambiguous year. Only 12 new-year items viable. No SQL (no table) | (this commit)
+- 2026-05-29 | B | 3.1 Guess The Year | STATIC (guessTheYearPuzzles.ts). Audit done. CRITICAL: 16/28 candidates duplicate existing years; all soccer-only vs existing 6-clue multi-sport; 2020/Euro-2020 ambiguous year. Only 12 new-year items viable. No SQL (no table) | c70235b
+- 2026-05-29 | B | 3.2 Guess The College | Audit done. Candidate {school,clues[]} fits NEITHER colleges.ts (rich struct) NOR cbb_programs (basketball-only); likely belongs to a NEW P2-5 hub table. All 20 already in colleges.ts. Flags: LSU basketball title likely wrong, year-convention inconsistency, claimed CFB titles. Target undecided -> no SQL | (this commit)
 - 2026-05-29 | A | P1-9 Guess The College hints | Already done — colleges.ts has 70 schools with rich specific hints. No change (content worth spot-checking) | n/a
 - 2026-05-29 | A | P1-10 Guess NFL Team hints | Assessed: no nflTeamFacts.ts; needs curated facts = content -> Track B staging. Documented, not started | n/a
 - 2026-05-29 | A | P1-11 NBA usability | Mostly already done (autocomplete/reset/roster+position validation/cased names). Remaining bits are minor UX prefs. No change | n/a

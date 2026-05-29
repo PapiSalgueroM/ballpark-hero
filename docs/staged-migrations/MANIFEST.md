@@ -11,5 +11,6 @@ its status here is moved to `verified` by Anthony / his chat assistant. Then Ant
 | Game | Target | Format | Audit / draft | Rows in candidates | Status |
 |---|---|---|---|---|---|
 | Guess The Year | `src/data/guessTheYearPuzzles.ts` (STATIC, no table) | TS merge | `docs/audits/guess_year_audit.md` | 28 (only 12 non-dup) | drafted (audit) — needs format decision + fact-check |
+| Guess The College | UNDECIDED (not colleges.ts, not cbb_programs) | — | `docs/audits/guess_college_audit.md` | 20 (all already in colleges.ts) | audit only — target undecided; no SQL (won't guess schema) |
 
 Status values: `drafted` → `verified` → `applied`
