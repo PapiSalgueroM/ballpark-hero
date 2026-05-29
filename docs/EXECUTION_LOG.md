@@ -23,7 +23,12 @@ Format: date | track | item | result | commit
 - 2026-05-29 | A | P1-6 Draft Guesser tiered scoring | Scoring scales with clues (30/25/20/15 exact); updated max + color thresholds + emoji. Exact-pick bonus N/A (guesses round). Typecheck OK | 2f042bd
 - 2026-05-29 | A | P1-12 Football Grid unlimited guesses | Added localStorage-persisted toggle; dynamic maxGuesses to useDailyPuzzle (locked, untouched); guessesLeft shows infinity. Typecheck OK | 30852d2
 - 2026-05-29 | A | P1-7 Conquest Voronoi map | Assessed: not implemented; XL (needs geo lib + city coords). Recommend attended. Documented, not started | n/a
-- 2026-05-29 | A | P1-8 Conquest standings panel | Built: Standings (territories + wins, all remaining teams sorted) + collapsible Eliminated list. Adapted rating/W-L to this battle-royale. Typecheck OK | (this commit)
+- 2026-05-29 | A | P1-8 Conquest standings panel | Built: Standings (territories + wins, all remaining teams sorted) + collapsible Eliminated list. Adapted rating/W-L to this battle-royale. Typecheck OK | c932548
+
+## Overnight staging run (Track B) — 2026-05-29
+GLOBAL DECISION: many games are static TS data, not Supabase tables. For static games I produce the AUDIT (the key deliverable) + flag the .ts merge target, and do NOT fabricate a SQL table that doesn't exist. SQL drafts only for real tables. Nothing applied/pushed.
+
+- 2026-05-29 | B | 3.1 Guess The Year | STATIC (guessTheYearPuzzles.ts). Audit done. CRITICAL: 16/28 candidates duplicate existing years; all soccer-only vs existing 6-clue multi-sport; 2020/Euro-2020 ambiguous year. Only 12 new-year items viable. No SQL (no table) | (this commit)
 - 2026-05-29 | A | P1-9 Guess The College hints | Already done — colleges.ts has 70 schools with rich specific hints. No change (content worth spot-checking) | n/a
 - 2026-05-29 | A | P1-10 Guess NFL Team hints | Assessed: no nflTeamFacts.ts; needs curated facts = content -> Track B staging. Documented, not started | n/a
 - 2026-05-29 | A | P1-11 NBA usability | Mostly already done (autocomplete/reset/roster+position validation/cased names). Remaining bits are minor UX prefs. No change | n/a
