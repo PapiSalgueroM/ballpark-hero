@@ -14,5 +14,6 @@ its status here is moved to `verified` by Anthony / his chat assistant. Then Ant
 | Guess The College | UNDECIDED (not colleges.ts, not cbb_programs) | — | `docs/audits/guess_college_audit.md` | 20 (all already in colleges.ts) | audit only — target undecided; no SQL (won't guess schema) |
 | Connections fix (4.2) | `connections_puzzles` (broken batch quarantined) | analysis | `docs/audits/connections_fix_audit.md` | — | diagnosed — soccer-data.json tournament_winners mis-keyed (6/8). Not regenerated. |
 | Connections 30 "good" (4.3) | — | locate | `docs/audits/connections_fix_audit.md` | 0 found | puzzle-156→185 DO NOT EXIST in repo (max present = 155). Need reconstruction. |
+| CBB Programs (3.16) | `cbb_programs` (TABLE) | `DRAFT_cbb_programs.sql` + `docs/audits/cbb_programs_audit.md` | 24 | drafted — ALL facts generated; verify champ counts + realignment before apply. Unblocks P0-4. |
 
 Status values: `drafted` → `verified` → `applied`
