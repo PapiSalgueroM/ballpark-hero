@@ -1,12 +1,11 @@
--- DRAFT — NOT FACT-VERIFIED — DO NOT APPLY UNTIL SIGNED OFF
+-- VERIFIED 2026-05-29 by Anthony — CLEARED TO APPLY. 24 programs.
 -- Target table: public.cbb_programs
 -- Schema (from migration 20260309020228): school_name text, common_names text[],
 --   vibe_word text, region_hint text, conference_hint text, tournament_hint text,
 --   championships_hint text, mascot_hint text, difficulty text
--- Unblocks P0-4 (CBB game is code-fixed but has zero rows). EVERY value below is a
--- fact Claude generated from memory — see docs/audits/cbb_programs_audit.md and
--- verify before applying. Championship counts (esp. vacated titles) and 2024-25
--- conference realignment are the highest-risk fields.
+-- Unblocks P0-4 (CBB game is code-fixed but had zero rows). Facts fact-checked by Anthony:
+-- 23/24 rows correct as drafted; Michigan corrected to 2 titles (1989, 2026) after the
+-- 2026 championship (post knowledge-cutoff). See docs/audits/cbb_programs_audit.md.
 
 INSERT INTO public.cbb_programs (school_name, common_names, vibe_word, region_hint, conference_hint, tournament_hint, championships_hint, mascot_hint, difficulty) VALUES
 ('Duke', ARRAY['Duke','Blue Devils'], 'Blue-blood', 'Durham, North Carolina (Southeast)', 'ACC', 'Perennial Final Four team; Coach K era 1980-2022, now Jon Scheyer', '5 national titles (1991, 1992, 2001, 2010, 2015)', 'Blue Devils; home is Cameron Indoor Stadium', 'easy'),
@@ -20,7 +19,7 @@ INSERT INTO public.cbb_programs (school_name, common_names, vibe_word, region_hi
 ('Louisville', ARRAY['Louisville','Cardinals','Cards'], 'Controversial', 'Louisville, Kentucky (Southeast)', 'ACC', 'Denny Crum era; 2013 title later VACATED by the NCAA', '2 recognized national titles (1980, 1986); 2013 vacated', 'Cardinals', 'medium'),
 ('Florida', ARRAY['Florida','Gators','UF'], 'Resurgent', 'Gainesville, Florida (Southeast)', 'SEC', 'Billy Donovan back-to-back 2006-07; won again in 2025', '3 national titles (2006, 2007, 2025)', 'Gators', 'medium'),
 ('Michigan State', ARRAY['Michigan State','Sparty','Spartans','MSU'], 'Consistent', 'East Lansing, Michigan (Midwest)', 'Big Ten', 'Tom Izzo era; frequent Final Fours', '2 national titles (1979, 2000)', 'Spartans', 'medium'),
-('Michigan', ARRAY['Michigan','Wolverines'], 'Fab Five', 'Ann Arbor, Michigan (Midwest)', 'Big Ten', 'Fab Five of the early 1990s', '1 national title (1989)', 'Wolverines', 'medium'),
+('Michigan', ARRAY['Michigan','Wolverines'], 'Fab Five', 'Ann Arbor, Michigan (Midwest)', 'Big Ten', 'Fab Five of the early 1990s; cut down the nets again in 2026', '2 national titles (1989, 2026)', 'Wolverines', 'medium'),
 ('Arizona', ARRAY['Arizona','Wildcats','Zona'], 'West-coast power', 'Tucson, Arizona (Southwest)', 'Big 12 (since 2024)', 'Lute Olson era; 1997 title run', '1 national title (1997)', 'Wildcats', 'medium'),
 ('Syracuse', ARRAY['Syracuse','Cuse','Orange'], '2-3 zone', 'Syracuse, New York (Northeast)', 'ACC', 'Jim Boeheim era and signature 2-3 zone', '1 national title (2003)', 'Orange; home is the JMA Wireless Dome', 'medium'),
 ('Georgetown', ARRAY['Georgetown','Hoyas'], 'Big East classic', 'Washington, D.C. (Northeast)', 'Big East', 'John Thompson / Ewing 1980s era', '1 national title (1984)', 'Hoyas', 'medium'),
