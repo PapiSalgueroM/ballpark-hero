@@ -4,6 +4,7 @@ import { CellState, FootballGridGameStatus, GridPuzzle } from '@/types/footballG
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { toast } from 'sonner';
 
 type GridAction =
   | { t: 'ok'; cellIndex: number; playerName: string; rarity: number }
@@ -122,7 +123,9 @@ export function useFootballGrid() {
           addDailyGuess({ t: 'x' });
         }
       } catch {
-        // Network error — don't count the guess
+        // Validation request failed (network / edge function / AI gateway).
+        // Don't count the guess, but tell the user instead of failing silently.
+        toast.error('Could not check that answer — please try again.');
       } finally {
         setValidating(false);
         setActiveCell(null);

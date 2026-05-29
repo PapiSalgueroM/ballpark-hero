@@ -71,7 +71,7 @@ Complexity estimates:
 ## P0 — BROKEN (must fix to make site usable)
 
 ### P0-1: Football Grid — autocomplete missing on player name input
-**Game:** Football Grid | **Complexity:** M | **Status:** TODO
+**Game:** Football Grid | **Complexity:** M | **Status:** DONE — already implemented. GridPlayerSearch.tsx has substring autocomplete (>=2 chars, top 8, keyboard nav, click-to-fill) over nflCareerPlayers. Landed in commits 3455989 / e5a382f, predating this backlog. No new change needed.
 
 **Problem:** No suggestions appear when user types a player name. Users must type exact full name.
 
@@ -92,7 +92,7 @@ Complexity estimates:
 ---
 
 ### P0-2: Football Grid — guessing does not register correct OR incorrect answers
-**Game:** Football Grid | **Complexity:** L | **Status:** TODO
+**Game:** Football Grid | **Complexity:** L | **Status:** PARTIAL — guess flow already implemented (functional state via useDailyPuzzle.addGuess, normalized server-side validation, green/red/counter all wired). The one code-level gap was that submitGuess swallowed edge-function failures silently (spinner stops, nothing happens) — now surfaces a toast. NOTE: if guesses still don't register on the live site, the cause is the football-grid-validate edge function / LOVABLE_API_KEY / deploy, NOT frontend logic — needs Anthony's live re-test.
 
 **Problem:** Submitting any answer consumes a guess but does not update cell state. Game is completely broken.
 
@@ -113,6 +113,8 @@ Complexity estimates:
 
 ### P0-3: Football Grid — board resets on browser refresh
 **Game:** Football Grid | **Complexity:** S | **Status:** TODO
+
+**Status update:** DONE — already implemented via useDailyPuzzle (commit 0b1020f). Board is date-seeded (dateSeed(todayStr) % puzzles.length, no Math.random), and guesses + completion persist to localStorage key football-grid-daily-YYYY-MM-DD on every addGuess, restored on mount. Old days auto-cleaned. No new change needed.
 
 **Problem:** Daily game gives a new board on every refresh and erases progress.
 
