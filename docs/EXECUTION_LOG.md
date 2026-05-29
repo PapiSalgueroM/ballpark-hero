@@ -21,4 +21,9 @@ Format: date | track | item | result | commit
 - 2026-05-29 | A | P1-5 Share buttons horizontal | Already done — share icons in flex-row flex-wrap. No change | n/a
 - 2026-05-29 | A | P1-4 Football Timeline wording/year | Real bug fixed: row shows player.draftYear not slot's expected year; tightened instruction. Typecheck OK | 5943bec
 - 2026-05-29 | A | P1-6 Draft Guesser tiered scoring | Scoring scales with clues (30/25/20/15 exact); updated max + color thresholds + emoji. Exact-pick bonus N/A (guesses round). Typecheck OK | 2f042bd
-- 2026-05-29 | A | P1-12 Football Grid unlimited guesses | Added localStorage-persisted toggle; dynamic maxGuesses to useDailyPuzzle (locked, untouched); guessesLeft shows infinity. Typecheck OK | (this commit)
+- 2026-05-29 | A | P1-12 Football Grid unlimited guesses | Added localStorage-persisted toggle; dynamic maxGuesses to useDailyPuzzle (locked, untouched); guessesLeft shows infinity. Typecheck OK | 30852d2
+- 2026-05-29 | A | P1-7 Conquest Voronoi map | Assessed: not implemented; XL (needs geo lib + city coords). Recommend attended. Documented, not started | n/a
+- 2026-05-29 | A | P1-8 Conquest standings panel | Assessed: only an eliminated count exists, no remaining-teams panel. Tractable M; recommended next Track-A win. Documented, not started | n/a
+- 2026-05-29 | A | P1-9 Guess The College hints | Already done — colleges.ts has 70 schools with rich specific hints. No change (content worth spot-checking) | n/a
+- 2026-05-29 | A | P1-10 Guess NFL Team hints | Assessed: no nflTeamFacts.ts; needs curated facts = content -> Track B staging. Documented, not started | n/a
+- 2026-05-29 | A | P1-11 NBA usability | Mostly already done (autocomplete/reset/roster+position validation/cased names). Remaining bits are minor UX prefs. No change | n/a

@@ -310,7 +310,7 @@ Bonus: exact pick number (not just round) = +20 pts.
 
 
 ### P1-7: NFL Conquest — map territory needs city-coordinate splitting
-**Game:** NFL Conquest | **Complexity:** XL | **Status:** TODO
+**Game:** NFL Conquest | **Complexity:** XL | **Status:** TODO (genuinely remaining, XL) — not implemented. Needs a geo dependency (d3-geo-voronoi or similar) + per-city coordinates to split multi-team states. Large, design-heavy, and benefits from visual iteration; recommend doing this attended rather than unattended. Not started.
 
 **Problem:** States with multiple NFL teams need city-based splitting (NY/NJ has Giants+Jets, CA has 49ers+Rams+Chargers, TX has Cowboys+Texans, OH has Bengals+Browns, FL has Dolphins+Jaguars+Buccaneers, PA has Eagles+Steelers).
 
@@ -333,7 +333,7 @@ Bonus: exact pick number (not just round) = +20 pts.
 ---
 
 ### P1-8: NFL Conquest — add side panel for team standings
-**Game:** NFL Conquest | **Complexity:** M | **Status:** TODO
+**Game:** NFL Conquest | **Complexity:** M | **Status:** TODO (genuinely remaining) — currently the board shows only an eliminated COUNT ("💀 N eliminated"), not a side panel listing remaining teams sorted by rating with W-L and an eliminated list. The data (team ratings, eliminated[]) exists in the conquest game state, so this is a tractable frontend panel — recommended as the next concrete Track-A win. Not started.
 
 **Problem:** No visible standings during gameplay.
 
@@ -344,7 +344,7 @@ Bonus: exact pick number (not just round) = +20 pts.
 ---
 
 ### P1-9: Guess The College — hints are too vague
-**Game:** Guess The College | **Complexity:** M | **Status:** TODO
+**Game:** Guess The College | **Complexity:** M | **Status:** DONE (data exists) — src/data/colleges.ts already holds 70 schools with specific, progressive hint fields: basketballHistory, cfbHistory, olympicAthletes, nflDraftHistory, famousAlumniHint, mascot, conference, colors, funFact, plus vibeWord/region. This is far richer than the "vibe: southern / region: southeast" the backlog complained about. No code change. NOTE: these are factual claims (content) — worth a spot fact-check, but the mechanic and specific-hint data are present.
 
 **Problem:** Hints like "vibe: southern" then "region: southeast" are not useful.
 
@@ -355,7 +355,7 @@ Bonus: exact pick number (not just round) = +20 pts.
 ---
 
 ### P1-10: Guess NFL Team — hints too easy/vague
-**Game:** Guess NFL Team | **Complexity:** M | **Status:** TODO
+**Game:** Guess NFL Team | **Complexity:** M | **Status:** TODO (genuinely remaining, content) — no src/data/nflTeamFacts.ts exists; the game needs a curated set of specific, difficulty-ordered facts per team (e.g. "Drafted Tom Brady in 2000"). That's factual content, so under the firewall it should be drafted + staged + fact-checked, not hardcoded blind. Recommend handling as a Track B content item. Not started.
 
 **Problem:** Hint 2 reveals region — too easy. Need specific year/opponent-style hints.
 
@@ -366,7 +366,7 @@ Bonus: exact pick number (not just round) = +20 pts.
 ---
 
 ### P1-11: NBA Build Your Starting 5 — multiple usability issues
-**Game:** NBA Starting 5 | **Complexity:** M | **Status:** TODO
+**Game:** NBA Starting 5 | **Complexity:** M | **Status:** MOSTLY DONE — verified in NbaLineup.tsx/useNbaLineup.ts: autocomplete (NbaPlayerSuggestions) ✓, input resets on submit + on position change ✓, roster + position enforced server-side via nba-validate-player ✓, names use the validator's fullName (correct casing) ✓, duplicate-player guard ✓. REMAINING (minor UX, not broken): the court circles (NbaCourtLayout) are display-only — selection is via the position-button row, which works; making the court circles themselves clickable is a preference, not a bug. A blanket toTitleCase was deliberately NOT applied (would corrupt names like "LeBron"/"DeMar").
 
 **Problems:** Can not click court positions to add players; players placed in invalid positions; no autocomplete; previous name lingers in input; allows any player not just roster-eligible; names not capitalized.
 
