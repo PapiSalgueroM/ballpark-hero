@@ -132,7 +132,7 @@ const FootballDraft = () => {
                   className={cn(
                     'w-3 h-3 rounded-full transition-all',
                     i < currentIndex && guesses[i].submitted
-                      ? guesses[i].points === 10
+                      ? guesses[i].points >= 15
                         ? 'bg-correct'
                         : guesses[i].points > 0
                           ? 'bg-[hsl(var(--ft-gold))]'
@@ -225,9 +225,8 @@ const FootballDraft = () => {
                 </p>
                 <p className={cn(
                   'text-sm font-bold mt-1',
-                  currentGuess.points === 10 && 'text-correct',
-                  currentGuess.points === 5 && 'text-[hsl(var(--ft-gold))]',
-                  currentGuess.points === 2 && 'text-muted-foreground',
+                  currentGuess.points >= 15 && 'text-correct',
+                  currentGuess.points > 0 && currentGuess.points < 15 && 'text-[hsl(var(--ft-gold))]',
                   currentGuess.points === 0 && 'text-destructive',
                 )}>
                   +{currentGuess.points} points
@@ -276,7 +275,7 @@ const FootballDraft = () => {
         {!isLoading && gameStatus === 'complete' && (
           <div className="mt-4 flex justify-center">
             <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              <div className="text-5xl mb-3">{totalPoints >= 40 ? '🏆' : totalPoints >= 25 ? '🎯' : '🏈'}</div>
+              <div className="text-5xl mb-3">{totalPoints >= maxPoints * 0.7 ? '🏆' : totalPoints >= maxPoints * 0.4 ? '🎯' : '🏈'}</div>
               <h2 className="text-2xl font-bold text-[hsl(var(--ft-gold))] font-display mb-2">
                 {totalPoints}/{maxPoints} Points!
               </h2>
@@ -295,9 +294,8 @@ const FootballDraft = () => {
                       </div>
                       <span className={cn(
                         'font-bold',
-                        g.points === 10 && 'text-correct',
-                        g.points === 5 && 'text-[hsl(var(--ft-gold))]',
-                        g.points === 2 && 'text-muted-foreground',
+                        g.points >= 15 && 'text-correct',
+                        g.points > 0 && g.points < 15 && 'text-[hsl(var(--ft-gold))]',
                         g.points === 0 && 'text-destructive',
                       )}>
                         +{g.points}
@@ -333,7 +331,7 @@ const FootballDraft = () => {
             'Each round shows a mystery NFL player with their position and college',
             'Reveal additional clues: size, 40-yard dash, bench press, and vertical jump',
             'Guess the draft round: 1st through 7th, or Undrafted',
-            'Exact round = 10 pts, one off = 5 pts, two off = 2 pts',
+            'Guess early for more: exact round = 30 pts with no clues, down to 15 after all clues; one off = 8, two off = 3',
             'Play 5 players per game — new challenge daily',
           ]}
           examples={[

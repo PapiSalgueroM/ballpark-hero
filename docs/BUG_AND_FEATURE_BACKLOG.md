@@ -261,7 +261,7 @@ Pick a color for each. Update the rarity calc to bucket by percent of users who 
 ### P1-4: Football Timeline — confusing wording on ordering task
 **Game:** Football Timeline
 **Complexity:** S
-**Status:** TODO
+**Status:** DONE — fixed the real bug (each row now shows the displayed player's own draftYear instead of the slot's expected year) and tightened the ordering instruction to "earliest at the top, most recent at the bottom". commit 5943bec
 
 **Problem:** Users mix up the ordering direction. Also: when user gets order wrong, the year shown next to a player is the year of the player who should be in that slot, not the actual draft year of the player there.
 
@@ -291,7 +291,7 @@ Pick a color for each. Update the rarity calc to bucket by percent of users who 
 ### P1-6: Football Draft Guesser — flat scoring removes incentive
 **Game:** Football Draft Guesser
 **Complexity:** M
-**Status:** TODO
+**Status:** DONE (adapted) — scoring now scales with clues used (revealLevel 0-3): exact round = 30/25/20/15 pts, one off = 8, two off = 3, miss = 0; maxPoints and all point-color thresholds + result emoji updated to match. DEVIATION FROM SPEC: the backlog's "+20 exact pick bonus" does not apply — this game asks for the draft ROUND, not the exact pick number, so there is no pick guess to bonus. Tiers adapted to the game's 4 reveal levels rather than the spec's 6.
 
 **Problem:** Get the round right = 10 points regardless of clues used. No incentive to guess early.
 

@@ -15,13 +15,18 @@ export interface PlayerGuess {
 
 const ROUND_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 0];
 
-function calcPoints(actual: number | null, guessed: number | null): number {
+const MAX_PER_PLAYER = 30;
+
+// Exact round earns more the fewer clues were revealed first (incentive to guess
+// early). cluesUsed is the reveal level (0-3). Close guesses keep modest partial
+// credit. The game guesses round (not pick), so there is no exact-pick bonus.
+function calcPoints(actual: number | null, guessed: number | null, cluesUsed: number): number {
   const a = actual ?? 0;
   const g = guessed ?? 0;
-  if (a === g) return 10;
+  if (a === g) return Math.max(15, MAX_PER_PLAYER - cluesUsed * 5); // 30/25/20/15 for 0..3 clues
   const diff = Math.abs(a - g);
-  if (diff === 1) return 5;
-  if (diff === 2) return 2;
+  if (diff === 1) return 8;
+  if (diff === 2) return 3;
   return 0;
 }
 
@@ -84,7 +89,7 @@ export function useFootballDraft() {
     : (unlimitedGuesses.every(g => g.submitted) ? 'complete' : 'playing');
 
   const totalPoints = guesses.reduce((sum, g) => sum + g.points, 0);
-  const maxPoints   = puzzle ? puzzle.players.length * 10 : 0;
+  const maxPoints   = puzzle ? puzzle.players.length * MAX_PER_PLAYER : 0;
 
   // ---- CALLBACKS -----------------------------------------------------------
   const switchMode = useCallback((newMode: FootballDraftMode) => {
@@ -106,7 +111,7 @@ export function useFootballDraft() {
   const submitGuess = useCallback((roundGuess: number) => {
     if (!currentPlayer || gameStatus !== 'playing') return;
     const guessValue = roundGuess === 0 ? null : roundGuess;
-    const points = calcPoints(currentPlayer.draftRound, guessValue);
+    const points = calcPoints(currentPlayer.draftRound, guessValue, revealLevel);
     const playerGuess: PlayerGuess = { guessedRound: roundGuess, points, submitted: true };
 
     if (mode === 'daily') {
@@ -126,7 +131,7 @@ export function useFootballDraft() {
         setRevealLevel(0);
       }, 2000);
     }
-  }, [mode, currentPlayer, currentIndex, gameStatus, addDailyGuess]);
+  }, [mode, currentPlayer, currentIndex, gameStatus, addDailyGuess, revealLevel]);
 
   const resetGame = useCallback(() => {
     if (mode === 'daily') {
