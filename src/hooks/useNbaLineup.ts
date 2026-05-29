@@ -13,6 +13,7 @@ export function useNbaLineup() {
   const [verdict, setVerdict] = useState<NbaAIVerdict | null>(null);
   const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
+  const [evaluationError, setEvaluationError] = useState<string | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isStatSpinning, setIsStatSpinning] = useState(false);
@@ -35,6 +36,7 @@ export function useNbaLineup() {
     setFilledSlots(new Map());
     setVerdict(null);
     setValidationError(null);
+    setEvaluationError(null);
     setSelectedPosition(null);
   }, []);
 
@@ -185,6 +187,7 @@ export function useNbaLineup() {
   const evaluateTeam = useCallback(async () => {
     if (filledSlotsArray.length !== 5 || !challenge) return;
     setIsEvaluating(true);
+    setEvaluationError(null);
     try {
       const resp = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nba-evaluate-lineup`,
@@ -197,14 +200,17 @@ export function useNbaLineup() {
           body: JSON.stringify({ players: filledSlotsArray, challenge }),
         }
       );
-      if (!resp.ok) throw new Error('Failed to evaluate');
+      if (!resp.ok) throw new Error(`Evaluation request failed (${resp.status})`);
       const data = await resp.json();
+      // Guard against a malformed/empty body so we never land on a blank result.
+      if (!data || typeof data.rating !== 'string') throw new Error('Malformed verdict');
       setVerdict(data);
       setPhase('result');
     } catch (err) {
+      // Stay in the reviewing phase so the built lineup is preserved and the
+      // user can simply retry, instead of being dumped into a dead-end result.
       console.error('Evaluation error:', err);
-      setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Something went wrong. Please try again.' });
-      setPhase('result');
+      setEvaluationError('Could not evaluate your lineup. Please try again.');
     } finally {
       setIsEvaluating(false);
     }
@@ -217,6 +223,7 @@ export function useNbaLineup() {
     setTeamAssignments([]);
     setVerdict(null);
     setValidationError(null);
+    setEvaluationError(null);
     setIsStatSpinning(false);
     setIsTeamSpinning(false);
     setSelectedPosition(null);
@@ -232,7 +239,7 @@ export function useNbaLineup() {
 
   return {
     phase, challenge, selectedPosition, currentTeam, filledSlots, filledSlotsArray,
-    filledCount, verdict, isEvaluating, isValidating, validationError, isStatSpinning,
+    filledCount, verdict, isEvaluating, evaluationError, isValidating, validationError, isStatSpinning,
     isTeamSpinning, teamAssignments, availablePositions, totalStat, startGame,
     finishStatSpin, beginBuilding, finishTeamSpin, selectPosition, rerollTeam,
     submitPlayer, evaluateTeam, resetGame,

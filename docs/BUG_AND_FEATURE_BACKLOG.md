@@ -153,7 +153,7 @@ Complexity estimates:
 ---
 
 ### P0-5: NBA Build Your Starting 5 — error on lineup evaluation
-**Game:** NBA Starting 5 | **Complexity:** M | **Status:** TODO
+**Game:** NBA Starting 5 | **Complexity:** M | **Status:** PARTIAL — hook already try/caught errors, but on failure it dumped the user into the result phase with an "Error" card whose only action was "Play Again" (full reset, losing the lineup). FIXED: on failure the hook now stays in the reviewing phase, sets evaluationError, and the page shows an inline error so the user can retry the SAME lineup. Also added a malformed/null-verdict guard. FLAG FOR ANTHONY: the underlying evaluation failure is almost certainly the nba-evaluate-lineup edge function — it calls model "google/gemini-3-flash-preview" while the working football-grid-validate uses "google/gemini-2.5-flash". If evaluation still fails live, that model name is the prime suspect (needs gateway-side verification; not changed here since I can't test the gateway).
 
 **Problem:** After all 5 players submitted, evaluation step throws an error.
 

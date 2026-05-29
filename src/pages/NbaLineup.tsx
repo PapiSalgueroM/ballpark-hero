@@ -28,6 +28,7 @@ const NbaLineup = () => {
     filledCount,
     verdict,
     isEvaluating,
+    evaluationError,
     isValidating,
     validationError,
     isStatSpinning,
@@ -329,6 +330,13 @@ const NbaLineup = () => {
                 {isEvaluating ? 'Evaluating...' : 'Submit Lineup'}
               </button>
             </div>
+
+            {evaluationError && (
+              <div className="flex items-center justify-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{evaluationError}</span>
+              </div>
+            )}
           </div>
         )}
 
