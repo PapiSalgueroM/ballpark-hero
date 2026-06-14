@@ -199,6 +199,11 @@ const Index = () => {
                   </p>
                 </>
               )}
+              {targetPlayer && (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  💡 Did you know? {targetPlayer.name} plays as a {targetPlayer.position} and is valued at €{targetPlayer.marketValue}M.
+                </p>
+              )}
               <ShareButtons
                 score={gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`}
                 gameName="Footle"
