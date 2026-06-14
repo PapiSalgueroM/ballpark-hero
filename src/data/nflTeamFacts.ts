@@ -1,0 +1,38 @@
+// Specific, difficulty-ordered franchise facts per NFL team (P1-10).
+// Sourced from docs/candidates/guess-nfl-team-candidates*.json (Giants/Commanders authored).
+// Ordered hardest (most obscure) first so they reveal progressively.
+
+export const nflTeamFacts: Record<string, string[]> = {
+  "cardinals": ["Oldest NFL franchise founded 1898", "Larry Fitzgerald WR legend", "State Farm Stadium home", "Moved from St Louis 1988"],
+  "falcons": ["Lost SB LI to Patriots from 28-3 up", "Michael Vick and Matt Ryan eras", "Mercedes-Benz Stadium home", "Founded 1965 expansion"],
+  "ravens": ["Won SB XXXV and SB XLVII", "Lamar Jackson 2x MVP", "Founded 1996 from Cleveland Browns move", "Edgar Allan Poe inspired name"],
+  "bills": ["Lost 4 consecutive Super Bowls 1991-1994", "Josh Allen drafted 7th overall 2018", "Home in Orchard Park", "Founded 1960 AFL"],
+  "panthers": ["Lost SB XXXVIII to Patriots", "Cam Newton 2015 MVP", "Bank of America Stadium home", "Founded 1995 expansion"],
+  "bears": ["Won SB XX with 1985 Bears defense", "Founded 1920 originally Decatur Staleys", "Soldier Field oldest stadium", "Walter Payton legend"],
+  "bengals": ["Reached SB LVI lost to Rams", "Joe Burrow drafted 1st overall 2020", "Stripes on helmet", "Founded 1968 in Cincinnati"],
+  "browns": ["Founded 1944 by Paul Brown", "Never reached a Super Bowl", "Returned to NFL in 1999", "Home stadium opened 1999"],
+  "cowboys": ["Won 5 Super Bowls historically", "Owner Jerry Jones bought team in 1989", "Home games at ATT Stadium", "Last SB appearance 1995"],
+  "broncos": ["Won SB XXXII XXXIII XXX", "John Elway and Peyton Manning eras", "Mile High Stadium home", "First SB win 1998 vs Packers"],
+  "lions": ["Drought of championships since 1957", "Barry Sanders RB legend", "Ford Field home", "Reached 2024 NFC Championship"],
+  "packers": ["Only publicly owned team in major US sports", "Won SB I and II under Lombardi", "Aaron Rodgers MVP 4 times", "Lambeau Field opened 1957"],
+  "texans": ["Newest NFL franchise founded 2002", "CJ Stroud 2023 Rookie of Year", "NRG Stadium home", "Have never reached SB"],
+  "colts": ["Won SB V SB XLI", "Peyton Manning 1998-2010", "Andrew Luck unexpected retirement 2019", "Moved from Baltimore 1984"],
+  "jaguars": ["Trevor Lawrence drafted 1st overall 2021", "Founded 1995 expansion", "EverBank Stadium home", "Reached only one AFC title game"],
+  "chiefs": ["Won SB LIV LVII LVIII", "Patrick Mahomes drafted 10th overall 2017", "Arrowhead Stadium is one of the loudest in the NFL", "Coached by Andy Reid"],
+  "raiders": ["Moved from Oakland to Las Vegas 2020", "Won SB XI XV XVIII", "Silver and black with pirate logo", "Al Davis longtime owner"],
+  "chargers": ["Moved from San Diego to LA 2017", "Justin Herbert quarterback", "Lost SB XXIX vs 49ers", "Share SoFi with Rams"],
+  "rams": ["Won SB XXXIV SB LVI", "Moved from St Louis back to LA 2016", "Cooper Kupp triple crown 2021", "Sean McVay youngest SB winning coach"],
+  "dolphins": ["Only undefeated team in NFL history 1972", "Don Shula winningest coach", "Tua Tagovailoa current QB", "Home in Miami Gardens"],
+  "vikings": ["4-time SB losers", "Justin Jefferson WR star", "US Bank Stadium home", "Founded 1961 expansion"],
+  "patriots": ["Won 6 Super Bowls in the Brady era", "Drafted Tom Brady in 2000 round 6", "Home stadium opened in 2002", "Coached by Bill Belichick 2000-2023"],
+  "saints": ["Won SB XLIV with Drew Brees", "Hurricane Katrina symbol", "Caesars Superdome home", "Drew Brees passed for over 80000 yards"],
+  "giants": ["Won SB XLII and SB XLVI, both upsetting the Patriots", "Eli Manning was twice named Super Bowl MVP", "Share MetLife Stadium with the Jets", "Founded in 1925, one of the NFL oldest teams"],
+  "jets": ["Joe Namath guaranteed and won SB III", "Aaron Rodgers acquired 2023", "Share MetLife with Giants", "Founded 1959 AFL"],
+  "eagles": ["Won SB LII over Patriots", "Drafted Jalen Hurts 53rd overall 2020", "Lincoln Financial Field opened 2003", "First SB win 2018"],
+  "steelers": ["Won 6 Super Bowls tied for most", "Steel Curtain defense of the 70s", "Mike Tomlin coach since 2007", "Heinz Field renamed Acrisure Stadium"],
+  "49ers": ["Won 5 Super Bowls in the 80s and 90s", "Joe Montana led 4 SB wins", "Coached by Kyle Shanahan", "Levis Stadium opened 2014"],
+  "seahawks": ["Won SB XLVIII Legion of Boom", "Lost SB XLIX to Patriots", "Lumen Field one of loudest", "Founded 1976 expansion"],
+  "buccaneers": ["Won SB XXXVII SB LV", "Tom Brady won final SB here", "Pewter and red kit", "Raymond James Stadium home"],
+  "titans": ["Music City Miracle 2000 SB run", "Earl Campbell legend", "Founded 1960 as Houston Oilers", "Moved to Tennessee 1997"],
+  "commanders": ["Won SB XVII, XXII, and XXVI as Washington", "Joe Gibbs coached all three Super Bowl titles", "Rebranded from Redskins to Football Team to Commanders by 2022", "Play in the Maryland suburbs of Washington DC"],
+};

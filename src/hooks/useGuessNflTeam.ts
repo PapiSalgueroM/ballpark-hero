@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { GuessNflTeamState, GameMode, Difficulty, POINTS_BY_CLUE } from '@/types/guessNflTeam';
 import { getDailyNflTeamPuzzle, getRandomNflTeamPuzzle, nflTeamPuzzles } from '@/data/nflTeamPuzzles';
+import { nflTeamFacts } from '@/data/nflTeamFacts';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const MAX_CLUES = 11;
@@ -89,16 +90,18 @@ export function useGuessNflTeam() {
     const { puzzle } = gameState;
     const { clues } = puzzle;
 
+    const facts = nflTeamFacts[puzzle.id] ?? [];
+
     switch (index) {
-      case 0: return `"${clues.vibe}"`;
-      case 1: return clues.region;
+      case 0: return facts[0] ?? `"${clues.vibe}"`;
+      case 1: return facts[1] ?? clues.region;
       case 2: return `Stadium capacity: ~${clues.stadiumCapacity.toLocaleString()}`;
       case 3: return `${puzzle.conference} ${puzzle.division}`;
       case 4: return `Has appeared in ${clues.superBowlAppearances} Super Bowl${clues.superBowlAppearances !== 1 ? 's' : ''}`;
       case 5: return `Won ${clues.superBowlWins} championship${clues.superBowlWins !== 1 ? 's' : ''}`;
-      case 6: return clues.famousPlayerHint;
+      case 6: return facts[2] ?? clues.famousPlayerHint;
       case 7: return clues.colors;
-      case 8: return clues.stadiumHint;
+      case 8: return facts[3] ?? clues.stadiumHint;
       case 9: return clues.nicknameHint;
       case 10: return `Based in ${puzzle.city}`;
       default: return '';

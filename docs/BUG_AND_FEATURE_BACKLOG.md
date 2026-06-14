@@ -355,7 +355,7 @@ Bonus: exact pick number (not just round) = +20 pts.
 ---
 
 ### P1-10: Guess NFL Team — hints too easy/vague
-**Game:** Guess NFL Team | **Complexity:** M | **Status:** TODO (genuinely remaining, content) — no src/data/nflTeamFacts.ts exists; the game needs a curated set of specific, difficulty-ordered facts per team (e.g. "Drafted Tom Brady in 2000"). That's factual content, so under the firewall it should be drafted + staged + fact-checked, not hardcoded blind. Recommend handling as a Track B content item. Not started.
+**Game:** Guess NFL Team | **Complexity:** M | **Status:** DONE — built src/data/nflTeamFacts.ts with 4 specific, difficulty-ordered facts per team for all 32 teams (30 from the staged docs/candidates/guess-nfl-team-candidates*.json, Giants + Commanders authored). useGuessNflTeam.getClueText now renders these facts in place of the four vaguest clues (Vibe, Region, Famous Player Era, Stadium Name → all relabeled "Franchise Fact"), so the early hints are specific franchise facts like "Drafted Tom Brady in 2000 round 6" instead of "vibe: Desert" / "region: Southwest". Structured clues (capacity, conf/div, SB counts, colors, nickname, city) still fill the easier later slots. NOTE: facts are sourced from drafted candidates — worth a spot fact-check, but they are standard, well-known NFL facts. tsc + build pass.
 
 **Problem:** Hint 2 reveals region — too easy. Need specific year/opponent-style hints.
 

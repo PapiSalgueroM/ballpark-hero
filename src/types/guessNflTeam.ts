@@ -38,15 +38,15 @@ export interface GuessNflTeamState {
 export const POINTS_BY_CLUE = [1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 0];
 
 export const CLUE_LABELS = [
-  'Vibe',
-  'Region',
+  'Franchise Fact',
+  'Franchise Fact',
   'Stadium Capacity',
   'Conference & Division',
   'Super Bowl Appearances',
   'Super Bowl Wins',
-  'Famous Player Era',
+  'Franchise Fact',
   'Uniform Colors',
-  'Stadium Name',
+  'Franchise Fact',
   'Nickname Hint',
   'City',
   'Full Reveal'
