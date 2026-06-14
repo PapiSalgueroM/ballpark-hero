@@ -5,6 +5,46 @@ myself (they need the Supabase dashboard, SQL editor, or AI-gateway/edge access)
 
 ---
 
+## ⭐ P0 GAMES — exact steps to make the 3 known-broken games work
+All three are **code-solid** (re-verified in docs/GAME_HEALTH_AUDIT.md). Each needs one
+Supabase/edge action:
+
+### P0-4 — Guess CBB Program → seed the table (see section 1 below for the full steps)
+Run the 24-row INSERT from `docs/staged-migrations/DRAFT_cbb_programs.sql`. Verify
+`SELECT count(*) FROM public.cbb_programs;` = 24. Done.
+
+### P0-5 — NBA Build Your Starting 5 → fix the eval edge function model id
+Symptom: lineup evaluation fails (now caught — the lineup is preserved and an error shows,
+but it still can't score). Cause: the `nba-evaluate-lineup` edge function calls model
+**`google/gemini-3-flash-preview`**, while the working `football-grid-validate` uses
+**`google/gemini-2.5-flash`**.
+Steps:
+1. Supabase dashboard → Edge Functions → `nba-evaluate-lineup` → open the source.
+2. Find the model string `google/gemini-3-flash-preview` and change it to a valid model
+   the gateway serves (match `football-grid-validate`: `google/gemini-2.5-flash`).
+3. Redeploy the function. Confirm `LOVABLE_API_KEY` is set in the function's secrets.
+4. Play /nba-starting-5, submit a 5-player lineup → it should score without the error card.
+
+### P0-2 — Football Grid → verify the validate edge function + deploy
+Symptom: guesses may not register on the live site (frontend is functional and now toasts on
+failure). Cause is server-side, not the React code.
+Steps:
+1. Supabase dashboard → Edge Functions → `football-grid-validate` → check it's deployed and
+   `LOVABLE_API_KEY` is present in secrets.
+2. Open /football-grid, submit a known-correct cell answer, and watch the Network tab: the
+   `football-grid-validate` call should return 200 with a match result (not 401/500).
+3. If it 401s → the API key/secret is missing or wrong. If it 500s → check the function logs.
+
+### Also: NASCAR Driver & Tennis Player tables (same pattern as CBB)
+I made both games degrade gracefully this session (no more infinite "Loading…"), but if they
+show **"No drivers/players available yet"**, their tables are unseeded like CBB was:
+- `SELECT count(*) FROM nascar_drivers;` and `SELECT count(*) FROM tennis_players;`
+- If 0, they need seeding. There's no staged INSERT for these yet — tell me and I'll draft
+  fact-checked candidates (notes exist at docs/candidates/nascar-driver-notes.md /
+  tennis-player-notes.md) for your fact-check, same flow as CBB.
+
+---
+
 ## 1. Seed CBB programs (unblocks P0-4 — Guess CBB Program)
 **Status:** ready to apply. Table `public.cbb_programs` exists with public-read RLS but 0 rows,
 so the game shows the empty/error state. Paste the fact-checked 24-row INSERT from
