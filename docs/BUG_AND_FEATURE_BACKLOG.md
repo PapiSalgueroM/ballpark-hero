@@ -516,7 +516,7 @@ After P1-10 hint quality fix, generate batch using team facts. **Status:** TODO
 Use tournament winner rosters + curated facts. **Status:** TODO
 
 ### P3-9: Baseball Connections — 80 to 130 (+50 candidates)
-Use Lahman MLB tables. Same generator pattern as soccer Connections. **Status:** TODO
+Use Lahman MLB tables. Same generator pattern as soccer Connections. **Status:** PARTIAL — NOTE: the backlog's "80" was wrong; the file actually held **16** puzzles (and 9 of those were silently broken — see below). Added 16 new, fully-validated puzzles (bconn-017..032), so the file is now **32 valid puzzles**. Each new puzzle uses collision-proof templates (birthplaces and primary positions are mutually exclusive; franchise-legend groups individually checked) — every player verified, every puzzle is 4 groups × 5 players with 20 unique. Also FIXED 9 pre-existing puzzles (bconn-001/002/003/005/007/008/010/012/016) that listed the same player in two groups, which the game's validator (`isValidBBPuzzle`, requires 20 unique) was silently dropping. Reaching 130 from a true base of 16 (+114) is a much larger authored-content effort; flagged for a future pass. tsc + build pass; a programmatic validator confirms all 32 puzzles are collision-free.
 
 ### P3-10: World Cup — 32 to 60 (+28)
 Curated WC facts. Output candidates file. **Status:** DONE — authored 28 new "guess the World Cup legend" puzzles directly in src/data/worldCupPuzzles.ts (now 60, no duplicate ids), spanning 1958-2022. Each fact (player, year, host, position, nationality, club at the time, achievement) was individually verified; no events past the knowledge cutoff (no new 2026 entries). tsc + build pass.
