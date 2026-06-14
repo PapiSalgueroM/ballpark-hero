@@ -29,7 +29,7 @@ table + logging to compute "X% of players also guessed this" — needs Supabase,
 | Guess The College | ✅ Already shown | `currentCollege.funFact` rendered on win (GuessTheCollege.tsx:217). |
 | Guess The NFL Team, Guess The Club, HoF or Bust, Score Predictor, Shirt Number | ✅ Yes | Each board surfaces a fact/`funFact` field from its puzzle data. |
 | **Career Path (soccer)** | ➕ **Added this session** | No fact field existed, but `careerPlayers[].career` has season-by-season clubs + market values. Now derives a "Did you know?" line on the reveal (distinct clubs + peak valuation) — no new data, no locked-hook change. |
-| NFL Career, Baseball Career, Hockey Career | ❌ Gap (derivable) | Same pattern as soccer Career Path applies if their player data carries clubs/teams + a metric. Recommended follow-up: replicate the derived-fact block per game (each has a different data shape/hook; do attended or in a focused pass). |
+| NFL Career, Baseball Career, Hockey Career | ✅ Added this session | Derived "Did you know?" now on each reveal: NFL uses draft round/year + college + careerStat; Baseball uses team count + first award; Hockey uses country + club count + honors. All from existing data, no locked-hook changes. |
 
 ## Implemented this session
 - **Career Path (`/career`)**: derived "💡 Did you know?" on the reveal screen (won or lost),

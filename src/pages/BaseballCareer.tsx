@@ -178,6 +178,9 @@ const BaseballCareer = () => {
                 {player!.name}
               </p>
               <p className="text-muted-foreground text-sm">{player!.position}</p>
+              <p className="mt-2 text-xs text-muted-foreground px-3">
+                💡 Did you know? {player!.name} suited up for {player!.teams.length} {player!.teams.length === 1 ? 'team' : 'teams'}{player!.awards.length ? ` — ${player!.awards[0]}` : ''}.
+              </p>
               {status === 'guessed' && (
                 <div className="flex items-center justify-center gap-2 mt-3">
                   <Trophy className="w-5 h-5 text-[hsl(var(--bb-red))]" />

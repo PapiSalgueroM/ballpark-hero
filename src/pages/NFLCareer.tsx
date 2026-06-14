@@ -206,6 +206,9 @@ const NFLCareer = () => {
                   </p>
                 </>
               )}
+              <p className="mt-3 text-sm text-muted-foreground">
+                💡 Did you know? {targetPlayer.name} was drafted in round {targetPlayer.draftRound} ({targetPlayer.draftYear}) out of {targetPlayer.college}{targetPlayer.careerStat ? `, known for ${targetPlayer.careerStat}` : ''}.
+              </p>
               <ShareButtons
                 score={gameStatus === 'won' ? `${score} pts (${cluesRevealed} clues)` : '0 pts'}
                 gameName="NFL Career Path"
