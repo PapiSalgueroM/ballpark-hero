@@ -133,7 +133,7 @@ Complexity estimates:
 
 
 ### P0-4: Guess CBB Program — game never loads, stuck on "Loading program"
-**Game:** Guess CBB Team / Program | **Complexity:** M | **Status:** PARTIAL — root cause found: migration 20260309020228 creates cbb_programs/cbb_daily/cbb_scores (public-read RLS) but seeds ZERO rows, and no seed migration exists. Empty fetch => infinite "Loading programs...". FIXED frontend: hook now tracks loading/ready/error, board shows error+Retry or "No programs available yet" instead of a permanent spinner. STILL NEEDED to be playable: seed cbb_programs (factual content) — staged at docs/staged-migrations/DRAFT_cbb_programs.sql for fact-check + manual apply by Anthony (firewall).
+**Game:** Guess CBB Team / Program | **Complexity:** M | **Status:** DONE (2026-06-14) — root cause was that migration 20260309020228 created cbb_programs/cbb_daily/cbb_scores (public-read RLS) but seeded ZERO rows → infinite "Loading programs...". Frontend was hardened (hook tracks loading/ready/error; board shows error+Retry or "No programs available yet" instead of a permanent spinner), AND the 24-program seed (docs/staged-migrations/DRAFT_cbb_programs.sql, fact-checked) has now been applied by Anthony. /guess-cbb-team confirmed loading and playable. (Daily falls back to a date-seeded pick; no cbb_daily seed required.)
 
 **Problem:** /guess-cbb-team shows permanent "Loading program..." — game never appears.
 

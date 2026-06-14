@@ -2,7 +2,7 @@
 
 **Draft:** `docs/staged-migrations/DRAFT_cbb_programs.sql` (24 programs)
 **Target table:** `public.cbb_programs` (confirmed: `useCbbProgram` queries it). Unblocks P0-4.
-**Status:** drafted — **ALL values are Claude-generated facts; verify before applying.** Nothing applied.
+**Status:** ✅ APPLIED 2026-06-14 — 24 rows seeded into `public.cbb_programs`; `/guess-cbb-team` confirmed loading and playable. Two wording fixes were applied vs the original draft (Kansas: "Birthplace of the coach (Naismith)" → "James Naismith, inventor of basketball, was the first coach here"; Cincinnati: "Oscar Robertson era titles" → "Oscar Robertson starred around 1960; won back-to-back titles just after"). Michigan kept at 2 titles (1989, 2026) — the 2026 confirmed by Anthony. P0-4 is DONE.
 
 ## 1. Real schema (read from migration 20260309020228)
 `cbb_programs (id uuid, school_name text NOT NULL, common_names text[] NOT NULL, vibe_word text NOT NULL, region_hint text NOT NULL, conference_hint text NOT NULL, tournament_hint text NOT NULL, championships_hint text NOT NULL, mascot_hint text NOT NULL, difficulty text NOT NULL default 'easy', created_at)`. The 6 clues the game shows (`useCbbProgram.mapRow`) are: vibe_word, region_hint, conference_hint, tournament_hint, championships_hint, mascot_hint. The draft fills all required columns. ✓ schema-fit.

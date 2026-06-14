@@ -9,9 +9,8 @@ myself (they need the Supabase dashboard, SQL editor, or AI-gateway/edge access)
 All three are **code-solid** (re-verified in docs/GAME_HEALTH_AUDIT.md). Each needs one
 Supabase/edge action:
 
-### P0-4 — Guess CBB Program → seed the table (see section 1 below for the full steps)
-Run the 24-row INSERT from `docs/staged-migrations/DRAFT_cbb_programs.sql`. Verify
-`SELECT count(*) FROM public.cbb_programs;` = 24. Done.
+### P0-4 — Guess CBB Program → ✅ DONE (2026-06-14)
+24 rows seeded into `public.cbb_programs`; /guess-cbb-team confirmed working. No further action.
 
 ### P0-5 — NBA Build Your Starting 5 → fix the eval edge function model id
 Symptom: lineup evaluation fails (now caught — the lineup is preserved and an error shows,
@@ -45,8 +44,8 @@ show **"No drivers/players available yet"**, their tables are unseeded like CBB 
 
 ---
 
-## 1. Seed CBB programs (unblocks P0-4 — Guess CBB Program)
-**Status:** ready to apply. Table `public.cbb_programs` exists with public-read RLS but 0 rows,
+## 1. Seed CBB programs (unblocks P0-4 — Guess CBB Program) — ✅ DONE 2026-06-14 (24 rows applied)
+**Status:** done — left here for the record. Table `public.cbb_programs` exists with public-read RLS but 0 rows,
 so the game shows the empty/error state. Paste the fact-checked 24-row INSERT from
 `docs/staged-migrations/DRAFT_cbb_programs.sql` into the Supabase SQL editor.
 
