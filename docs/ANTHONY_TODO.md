@@ -34,8 +34,19 @@ Until then v1 stands on its own and needs nothing.
 
 ---
 
-## 3. Perfect Lineup — NBA version (TASK 2, next)
-**Status:** investigating. Planning a starting-5 NBA variant with team/era constraints.
-If `src/data/nbaStats.ts` lacks a per-player position or a usable power metric, I'll either
-derive a proxy from available stats (no Supabase) or, if the local data is too thin, log the
-exact missing fields here for you to add. No action needed from you yet.
+## 3. Perfect Lineup — NBA version (TASK 2) — BLOCKED on Supabase data
+**Status:** needs your access. I checked the local data and there is **no NBA player pool in the
+bundle**: `src/data/nbaStats.ts` only defines stat-challenge types, `src/data/nbaTeams.ts` is
+just the 30 team names. The existing NBA games (Starting 5, etc.) fetch players from the
+**edge functions** `nba-validate-player` / `nba-suggest-players` — i.e. NBA player data lives
+server-side, not in the client. So the NBA Perfect Lineup variant can't be built client-side
+the way the soccer one was.
+
+To unblock, I need one of:
+- **(a)** A readable Supabase table of NBA players with at least: `name`, `position`
+  (PG/SG/SF/PF/C), a `team`, and a power metric (PER, BPM, or even PPG) — tell me the table
+  name + columns and I'll build it. Or
+- **(b)** Confirm I may author a curated local pool (~80 notable players with positions +
+  approximate ratings) and ship that with no Supabase dependency. Lower fidelity but immediate.
+
+The soccer version is complete and unaffected.

@@ -219,6 +219,15 @@ const CareerGame = () => {
                       </p>
                     </>
                   )}
+                  {(() => {
+                    const clubs = Array.from(new Set(targetPlayer.career.map((s) => s.club)));
+                    const peak = targetPlayer.career.reduce((a, b) => (b.marketValue > a.marketValue ? b : a));
+                    return (
+                      <p className="mt-3 text-sm text-muted-foreground">
+                        💡 Did you know? {targetPlayer.name} played for {clubs.length} {clubs.length === 1 ? 'club' : 'clubs'} and peaked at a €{peak.marketValue}M valuation.
+                      </p>
+                    );
+                  })()}
                   <ShareButtons
                     score={gameStatus === 'won' ? `${guessesUsed} guesses, ${boxesUsed} boxes` : `0/${maxGuesses}`}
                     gameName="Career Quiz"
