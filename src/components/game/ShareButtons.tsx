@@ -1,7 +1,9 @@
-import { useState } from 'react';
-import { Copy, Mail } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Copy, Mail, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
+import html2canvas from 'html2canvas';
 import { ALL_GAMES } from '@/data/gameRegistry';
+import ShareCard from '@/components/game/ShareCard';
 
 interface ShareButtonsProps {
   score: string;
@@ -39,6 +41,8 @@ const MessagesIcon = ({ className }: { className?: string }) => (
 
 const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: ShareButtonsProps) => {
   const [igTooltip, setIgTooltip] = useState(false);
+  const [savingImage, setSavingImage] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const shareText = customText || `I scored ${score} on ${gameName} at DoUKnowBall! Can you beat me? douknowball.com${gamePath}`;
 
@@ -80,6 +84,29 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
     }
   };
 
+  const handleSaveImage = async () => {
+    if (!cardRef.current || savingImage) return;
+    setSavingImage(true);
+    try {
+      const canvas = await html2canvas(cardRef.current, { backgroundColor: null, scale: 2 });
+      const blob: Blob | null = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+      if (!blob) throw new Error('no blob');
+
+      const fileName = `douknowball-${gamePath.replace(/\//g, '') || 'result'}.png`;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      URL.revokeObjectURL(url);
+      toast.success('Image card saved!');
+    } catch {
+      toast.error('Could not generate image');
+    } finally {
+      setSavingImage(false);
+    }
+  };
+
   const handleGmail = () => {
     window.open(`https://mail.google.com/mail/?view=cm&body=${encodeURIComponent(shareText)}&su=${encodeURIComponent(`My ${gameName} Score on DoUKnowBall`)}`, '_blank', 'noopener,noreferrer');
   };
@@ -100,14 +127,37 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
 
   return (
     <div className="flex flex-col items-center gap-3 mt-5">
-      {/* Copy Score Card — primary action */}
-      <button
-        onClick={handleCopyCard}
-        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-semibold hover:bg-accent hover:border-primary/30 transition-all shadow-sm"
-      >
-        <Copy className="w-4 h-4" />
-        📋 Copy Score Card
-      </button>
+      {/* Off-screen card used only for html2canvas image capture */}
+      <div aria-hidden="true" style={{ position: 'fixed', left: -99999, top: 0, pointerEvents: 'none', opacity: 0 }}>
+        <ShareCard
+          ref={cardRef}
+          gameName={gameName}
+          gameEmoji={gameEmoji}
+          dateStr={todayStr}
+          score={score}
+          emojiGrid={emojiGrid}
+          gamePath={gamePath}
+        />
+      </div>
+
+      {/* Primary actions: copy text card + save image card */}
+      <div className="flex flex-row flex-wrap items-center justify-center gap-2">
+        <button
+          onClick={handleCopyCard}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-semibold hover:bg-accent hover:border-primary/30 transition-all shadow-sm"
+        >
+          <Copy className="w-4 h-4" />
+          📋 Copy Score Card
+        </button>
+        <button
+          onClick={handleSaveImage}
+          disabled={savingImage}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-semibold hover:bg-accent hover:border-primary/30 transition-all shadow-sm disabled:opacity-60"
+        >
+          <ImageIcon className="w-4 h-4" />
+          {savingImage ? 'Saving…' : '🖼️ Save Image'}
+        </button>
+      </div>
 
       <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Share your result</p>
       <div className="flex flex-row flex-wrap items-center justify-center gap-3 relative">
