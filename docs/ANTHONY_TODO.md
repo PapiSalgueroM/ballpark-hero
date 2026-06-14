@@ -50,3 +50,31 @@ To unblock, I need one of:
   approximate ratings) and ship that with no Supabase dependency. Lower fidelity but immediate.
 
 The soccer version is complete and unaffected.
+
+---
+
+## 4. P2 features that need Supabase (logged, not built)
+These were in the autonomous P2 batch but genuinely require your Supabase/edge access:
+
+- **P2-1 NBA Connect 4 — multiplayer + category expansion.** Real-time 2-player needs
+  Supabase Realtime channels (new tables for game rooms + presence). Expanding to 50+
+  categories needs validation against NBA player data, which lives in the
+  `nba-connect4-validate` / `nba-suggest-players` edge functions, not in the client.
+  Need: confirm I can add Realtime tables + tell me the NBA player source for validation.
+- **P2-2 NBA Chain — golf-style year-selection rewrite.** Requires NBA rosters by season
+  (which players shared a team in which exact year). That data isn't in the bundle; needs a
+  Supabase table (player, team, season) or an edge function. Tell me the source and I'll build
+  the year-overlap validation + golf scoring.
+- **P2-4 Footle — restrict to top-150 pool + tiers.** Reads `player_market_values` (Supabase,
+  176k rows). I can write the pool-build query + tier logic, but I can't run it. Confirm the
+  table/columns (rank, year=2026, market value) and whether to regenerate `src/data/` from it.
+- **P2-6 Home activity counters.** "X playing now / X plays today" needs a `play_events`
+  table (anonymous session id, game, timestamp) + inserts on game start and a count query.
+  This is the same infrastructure flagged for P1-1/P1-2. Need the table created (RLS:
+  anon insert, public count) — then I'll wire the client.
+
+## 5. P2-3 / rarity for career games (partial)
+Share cards (TASK 1) and "did you know" facts (NFL/Baseball/Hockey career) are done client-side.
+The remaining parity item — **pick-rate rarity on career games** — needs per-answer guess
+logging (a `career_path_guesses` table + edge logging) to compute "X% also guessed this".
+Lower priority; only build if you want it. See docs/RARITY_AUDIT.md.
