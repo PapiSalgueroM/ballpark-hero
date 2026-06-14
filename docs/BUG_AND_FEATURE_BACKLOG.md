@@ -310,7 +310,7 @@ Bonus: exact pick number (not just round) = +20 pts.
 
 
 ### P1-7: NFL Conquest — map territory needs city-coordinate splitting
-**Game:** NFL Conquest | **Complexity:** XL | **Status:** TODO (genuinely remaining, XL) — not implemented. Needs a geo dependency (d3-geo-voronoi or similar) + per-city coordinates to split multi-team states. Large, design-heavy, and benefits from visual iteration; recommend doing this attended rather than unattended. Not started.
+**Game:** NFL Conquest | **Complexity:** XL | **Status:** DONE — already implemented (verified, no new change needed). Every multi-team state the spec lists is split into geographic sub-regions with hand-authored SVG paths in src/data/usStatesPaths.ts and team assignments in conquestData.ts INITIAL_TERRITORIES: CA → CA_N (49ers) / CA_S (Rams) / CA_SC (Chargers); TX → TX_N (Cowboys) / TX_S (Texans); OH → OH_NE (Browns) / OH_SW (Bengals); PA → PA_W (Steelers) / PA_E (Eagles); NJ → NJ_N (Giants) / NJ_S (Jets), with NY → Bills; FL → FL_N (Jaguars) / FL_W (Buccaneers) / FL_S (Dolphins). ConquestMap renders each path in the owning team's color with a centered, contrast-corrected label (isLightColor), and useConquest keys territories + geo-adjacency off the split ids. No d3 dependency was needed — the splits are baked into the SVG path data. (The prior "not started" note was stale.)
 
 **Problem:** States with multiple NFL teams need city-based splitting (NY/NJ has Giants+Jets, CA has 49ers+Rams+Chargers, TX has Cowboys+Texans, OH has Bengals+Browns, FL has Dolphins+Jaguars+Buccaneers, PA has Eagles+Steelers).
 
