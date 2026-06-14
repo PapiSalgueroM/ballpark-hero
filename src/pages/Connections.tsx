@@ -7,6 +7,7 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight, Shuffle, Flame } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
+import { connectionsGroupsToEmoji } from '@/lib/shareGrids';
 import { cn } from '@/lib/utils';
 import { ConnectionDifficulty } from '@/types/connections';
 import AdBanner from '@/components/ads/AdBanner';
@@ -263,6 +264,7 @@ const Connections = () => {
                     score={gameStatus === 'won' ? `${solvedGroups.length}/4 groups, ${lives} lives left` : `${solvedGroups.length}/4 groups`}
                     gameName="Connections"
                     gamePath="/connections"
+                    emojiGrid={connectionsGroupsToEmoji(solvedGroups)}
                   />
                   {mode === 'unlimited' ? (
                     <div className="mt-4 flex items-center gap-3 justify-center flex-wrap">

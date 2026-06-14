@@ -7,6 +7,7 @@ import { SoccerGridHowToPlay } from '@/components/soccer-grid/SoccerGridHowToPla
 import { GameNav } from '@/components/game/GameNav';
 import { Footer } from '@/components/game/Footer';
 import ShareButtons from '@/components/game/ShareButtons';
+import { gridCellsToEmoji } from '@/lib/shareGrids';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -131,6 +132,7 @@ const SoccerGrid = () => {
                     score={rarityScore !== null ? `a Rarity Score of ${rarityScore}% (${correctCount}/9)` : `${correctCount}/9 cells`}
                     gameName="Soccer Grid"
                     gamePath="/soccer-grid"
+                    emojiGrid={gridCellsToEmoji(cells)}
                   />
                   <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
                 </div>
