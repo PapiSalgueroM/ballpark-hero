@@ -687,19 +687,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2019-2020", club: "Real Madrid", goals: 1, assists: 2, appearances: 14, marketValue: 20 },
       { season: "2020-2021", club: "Everton", goals: 6, assists: 9, appearances: 26, marketValue: 12 },
     ],
-  },
-  {
-    name: "Gavi",
-    nationality: "Spain",
-    position: "CM",
-    career: [
-      { season: "2020-2021", club: "Barcelona", goals: 0, assists: 0, appearances: 3, marketValue: 5 },
-      { season: "2021-2022", club: "Barcelona", goals: 2, assists: 6, appearances: 47, marketValue: 40 },
-      { season: "2022-2023", club: "Barcelona", goals: 3, assists: 5, appearances: 51, marketValue: 60 },
-      { season: "2023-2024", club: "Barcelona", goals: 1, assists: 2, appearances: 13, marketValue: 50 },
-      { season: "2024-2025", club: "Barcelona", goals: 1, assists: 2, appearances: 12, marketValue: 40 },
-    ],
-  },
+  },
   {
     name: "Achraf Hakimi",
     nationality: "Morocco",
@@ -2691,31 +2679,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2024-2025", club: "Al-Ittihad", goals: 7, assists: 5, appearances: 22, marketValue: 25 },
       { season: "2025-2026", club: "Al-Ittihad", goals: 8, assists: 6, appearances: 20, marketValue: 22 },
     ],
-  },
-  {
-    name: "Lamine Yamal",
-    nationality: "Spain",
-    position: "RW",
-    career: [
-      { season: "2023-2024", club: "Barcelona", goals: 7, assists: 10, appearances: 50, marketValue: 90 },
-      { season: "2024-2025", club: "Barcelona", goals: 12, assists: 14, appearances: 47, marketValue: 150 },
-      { season: "2025-2026", club: "Barcelona", goals: 14, assists: 12, appearances: 38, marketValue: 180 },
-    ],
-  },
-  {
-    name: "Pedri",
-    nationality: "Spain",
-    position: "CM",
-    career: [
-      { season: "2019-2020", club: "Las Palmas", goals: 4, assists: 6, appearances: 36, marketValue: 5 },
-      { season: "2020-2021", club: "Barcelona", goals: 4, assists: 6, appearances: 52, marketValue: 60 },
-      { season: "2021-2022", club: "Barcelona", goals: 5, assists: 5, appearances: 22, marketValue: 70 },
-      { season: "2022-2023", club: "Barcelona", goals: 3, assists: 5, appearances: 24, marketValue: 80 },
-      { season: "2023-2024", club: "Barcelona", goals: 5, assists: 8, appearances: 42, marketValue: 100 },
-      { season: "2024-2025", club: "Barcelona", goals: 6, assists: 10, appearances: 44, marketValue: 100 },
-      { season: "2025-2026", club: "Barcelona", goals: 5, assists: 7, appearances: 35, marketValue: 100 },
-    ],
-  },
+  },
   {
     name: "Gavi",
     nationality: "Spain",
@@ -2750,18 +2714,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2024-2025", club: "Manchester United", goals: 4, assists: 5, appearances: 38, marketValue: 55 },
       { season: "2025-2026", club: "Manchester United", goals: 3, assists: 4, appearances: 30, marketValue: 60 },
     ],
-  },
-  {
-    name: "Alejandro Garnacho",
-    nationality: "Argentina",
-    position: "RW",
-    career: [
-      { season: "2022-2023", club: "Manchester United", goals: 3, assists: 3, appearances: 29, marketValue: 15 },
-      { season: "2023-2024", club: "Manchester United", goals: 10, assists: 5, appearances: 50, marketValue: 40 },
-      { season: "2024-2025", club: "Manchester United", goals: 8, assists: 7, appearances: 42, marketValue: 45 },
-      { season: "2025-2026", club: "Manchester United", goals: 9, assists: 6, appearances: 35, marketValue: 50 },
-    ],
-  },
+  },
   {
     name: "Rasmus Højlund",
     nationality: "Denmark",
@@ -2773,21 +2726,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2024-2025", club: "Manchester United", goals: 12, assists: 4, appearances: 38, marketValue: 50 },
       { season: "2025-2026", club: "Manchester United", goals: 14, assists: 5, appearances: 33, marketValue: 55 },
     ],
-  },
-  {
-    name: "Jude Bellingham",
-    nationality: "England",
-    position: "CAM",
-    career: [
-      { season: "2019-2020", club: "Birmingham City", goals: 4, assists: 3, appearances: 41, marketValue: 15 },
-      { season: "2020-2021", club: "Borussia Dortmund", goals: 4, assists: 4, appearances: 46, marketValue: 30 },
-      { season: "2021-2022", club: "Borussia Dortmund", goals: 6, assists: 14, appearances: 44, marketValue: 60 },
-      { season: "2022-2023", club: "Borussia Dortmund", goals: 14, assists: 7, appearances: 42, marketValue: 100 },
-      { season: "2023-2024", club: "Real Madrid", goals: 23, assists: 11, appearances: 42, marketValue: 180 },
-      { season: "2024-2025", club: "Real Madrid", goals: 12, assists: 8, appearances: 40, marketValue: 150 },
-      { season: "2025-2026", club: "Real Madrid", goals: 15, assists: 10, appearances: 36, marketValue: 150 },
-    ],
-  },
+  },
   {
     name: "Pau Cubarsí",
     nationality: "Spain",
@@ -2832,33 +2771,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2024-2025", club: "Chelsea", goals: 3, assists: 5, appearances: 42, marketValue: 90 },
       { season: "2025-2026", club: "Chelsea", goals: 2, assists: 3, appearances: 34, marketValue: 90 },
     ],
-  },
-  {
-    name: "Cole Palmer",
-    nationality: "England",
-    position: "CAM",
-    career: [
-      { season: "2020-2021", club: "Manchester City", goals: 0, assists: 0, appearances: 3, marketValue: 2 },
-      { season: "2021-2022", club: "Manchester City", goals: 2, assists: 1, appearances: 12, marketValue: 10 },
-      { season: "2022-2023", club: "Manchester City", goals: 1, assists: 1, appearances: 14, marketValue: 15 },
-      { season: "2023-2024", club: "Chelsea", goals: 22, assists: 11, appearances: 45, marketValue: 90 },
-      { season: "2024-2025", club: "Chelsea", goals: 18, assists: 14, appearances: 43, marketValue: 120 },
-      { season: "2025-2026", club: "Chelsea", goals: 16, assists: 10, appearances: 36, marketValue: 120 },
-    ],
-  },
-  {
-    name: "Enzo Fernández",
-    nationality: "Argentina",
-    position: "CM",
-    career: [
-      { season: "2021-2022", club: "River Plate", goals: 6, assists: 4, appearances: 28, marketValue: 10 },
-      { season: "2022-2023", club: "Benfica", goals: 4, assists: 5, appearances: 24, marketValue: 55 },
-      { season: "2022-2023", club: "Chelsea", goals: 0, assists: 2, appearances: 16, marketValue: 80 },
-      { season: "2023-2024", club: "Chelsea", goals: 4, assists: 5, appearances: 46, marketValue: 70 },
-      { season: "2024-2025", club: "Chelsea", goals: 5, assists: 7, appearances: 42, marketValue: 75 },
-      { season: "2025-2026", club: "Chelsea", goals: 4, assists: 5, appearances: 34, marketValue: 75 },
-    ],
-  },
+  },
   {
     name: "Arda Güler",
     nationality: "Turkey",
