@@ -41,6 +41,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/nba-starting-5', label: 'NBA Starting 5', emoji: '🏀', description: 'Build a lineup with stat challenges' },
       { path: '/nba-connect-4', label: 'NBA Connect 4', emoji: '🏀', description: 'NBA trivia meets Connect 4' },
       { path: '/nba-chain', label: 'NBA Chain', emoji: '🔗', description: 'Build a chain of connected players' },
+      { path: '/perfect-lineup-nba', label: 'Perfect Lineup: NBA', emoji: '🏀', description: 'Build a starting 5 under random team & era constraints, then simulate', daily: true, isNew: true },
     ],
   },
   {
@@ -94,6 +95,7 @@ export const CATEGORIES: GameCategory[] = [
     games: [
       { path: '/f1-driver', label: 'Guess The F1 Driver', emoji: '🏎️', description: 'Guess the mystery F1 driver from clues', daily: true, isNew: true },
       { path: '/f1-constructor', label: 'Guess The Constructor', emoji: '🏗️', description: 'Guess the mystery F1 team from clues', daily: true, isNew: true },
+      { path: '/perfect-lineup-f1', label: 'Perfect Lineup: F1', emoji: '🏎️', description: 'Build a 5-driver dream squad under random team/era/country constraints', daily: true, isNew: true },
     ],
   },
   {
