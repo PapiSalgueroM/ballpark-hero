@@ -298,4 +298,256 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
       { theme: 'Tampa Bay Rays legends', players: ['Evan Longoria', 'Carl Crawford', 'David Price', 'Ben Zobrist', 'Kevin Kiermaier'], difficulty: 'purple' },
     ],
   },
+  {
+    id: 'bconn-033',
+    groups: [
+      { theme: 'Born in the Dominican Republic', players: ['Sandy Alcantara', 'Framber Valdez', 'Teoscar Hernandez', 'Eloy Jimenez', 'Cristian Javier'], difficulty: 'yellow' },
+      { theme: 'Born in Venezuela', players: ['Andres Gimenez', 'Ranger Suarez', 'Pablo Lopez', 'Avisail Garcia', 'Rougned Odor'], difficulty: 'green' },
+      { theme: 'Born in Puerto Rico', players: ['Enrique Hernandez', 'Christian Vazquez', 'Eddie Rosario', 'Jose Berrios', 'Emmanuel Rivera'], difficulty: 'blue' },
+      { theme: 'Born in Cuba', players: ['Yasmani Grandal', 'Adolis Garcia', 'Yuli Gurriel', 'Raisel Iglesias', 'Yandy Diaz'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-034',
+    groups: [
+      { theme: 'Born in Japan', players: ['Shohei Ohtani', 'Seiya Suzuki', 'Masataka Yoshida', 'Yoshinobu Yamamoto', 'Shota Imanaga'], difficulty: 'yellow' },
+      { theme: 'Born in Mexico', players: ['Roberto Osuna', 'Isaac Paredes', 'Alejandro Kirk', 'Luis Urias', 'Julio Urias'], difficulty: 'green' },
+      { theme: 'Born in Canada', players: ['Joey Votto', 'Larry Walker', 'Russell Martin', 'Justin Morneau', 'James Paxton'], difficulty: 'blue' },
+      { theme: 'Born in Colombia', players: ['Edgar Renteria', 'Orlando Cabrera', 'Jose Quintana', 'Julio Teheran', 'Donovan Solano'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-035',
+    groups: [
+      { theme: 'Hall of Fame first basemen', players: ['Lou Gehrig', 'Jimmie Foxx', 'Willie McCovey', 'Eddie Murray', 'Harmon Killebrew'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame left fielders', players: ['Ted Williams', 'Stan Musial', 'Rickey Henderson', 'Carl Yastrzemski', 'Billy Williams'], difficulty: 'green' },
+      { theme: 'Hall of Fame right fielders', players: ['Hank Aaron', 'Roberto Clemente', 'Frank Robinson', 'Reggie Jackson', 'Al Kaline'], difficulty: 'blue' },
+      { theme: 'Hall of Fame center fielders', players: ['Willie Mays', 'Mickey Mantle', 'Joe DiMaggio', 'Ty Cobb', 'Duke Snider'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-036',
+    groups: [
+      { theme: 'Hall of Fame catchers', players: ['Johnny Bench', 'Carlton Fisk', 'Gary Carter', 'Yogi Berra', 'Roy Campanella'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame shortstops', players: ['Cal Ripken Jr.', 'Ozzie Smith', 'Robin Yount', 'Alan Trammell', 'Luis Aparicio'], difficulty: 'green' },
+      { theme: 'Hall of Fame second basemen', players: ['Joe Morgan', 'Rogers Hornsby', 'Nap Lajoie', 'Craig Biggio', 'Ryne Sandberg'], difficulty: 'blue' },
+      { theme: 'Hall of Fame third basemen', players: ['Mike Schmidt', 'George Brett', 'Wade Boggs', 'Brooks Robinson', 'Eddie Mathews'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-037',
+    groups: [
+      { theme: 'Born in the Dominican Republic', players: ['Juan Marichal', 'Sammy Sosa', 'Vladimir Guerrero', 'David Ortiz', 'Pedro Martinez'], difficulty: 'yellow' },
+      { theme: 'Born in Venezuela', players: ['Luis Aparicio', 'Dave Concepcion', 'Ozzie Guillen', 'Andres Galarraga', 'Bobby Abreu'], difficulty: 'green' },
+      { theme: 'Born in Puerto Rico', players: ['Roberto Clemente', 'Orlando Cepeda', 'Ivan Rodriguez', 'Roberto Alomar', 'Carlos Beltran'], difficulty: 'blue' },
+      { theme: 'Born in Cuba', players: ['Tony Perez', 'Tony Oliva', 'Minnie Minoso', 'Jose Canseco', 'Rafael Palmeiro'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-038',
+    groups: [
+      { theme: 'Hall of Fame starting pitchers', players: ['Tom Seaver', 'Bob Gibson', 'Nolan Ryan', 'Christy Mathewson', 'Cy Young'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame left-handed pitchers', players: ['Sandy Koufax', 'Steve Carlton', 'Warren Spahn', 'Whitey Ford', 'Lefty Grove'], difficulty: 'green' },
+      { theme: 'Hall of Fame relief pitchers', players: ['Mariano Rivera', 'Trevor Hoffman', 'Dennis Eckersley', 'Rollie Fingers', 'Bruce Sutter'], difficulty: 'blue' },
+      { theme: 'Hall of Fame designated hitters / sluggers', players: ['Frank Thomas', 'Edgar Martinez', 'David Ortiz', 'Harold Baines', 'Jim Thome'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-039',
+    groups: [
+      { theme: 'Born in the Dominican Republic', players: ['Vladimir Guerrero', 'Albert Pujols', 'Robinson Cano', 'Adrian Beltre', 'Manny Ramirez'], difficulty: 'yellow' },
+      { theme: 'Born in Venezuela', players: ['Miguel Cabrera', 'Jose Altuve', 'Felix Hernandez', 'Omar Vizquel', 'Johan Santana'], difficulty: 'green' },
+      { theme: 'Born in Japan', players: ['Ichiro Suzuki', 'Hideki Matsui', 'Hideo Nomo', 'Yu Darvish', 'Daisuke Matsuzaka'], difficulty: 'blue' },
+      { theme: 'Born in South Korea', players: ['Chan Ho Park', 'Hyun-Jin Ryu', 'Shin-Soo Choo', 'Jung Hoo Lee', 'Ha-Seong Kim'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-040',
+    groups: [
+      { theme: 'Won a Gold Glove at shortstop', players: ['Ozzie Smith', 'Omar Vizquel', 'Andrelton Simmons', 'Mark Belanger', 'Nomar Garciaparra'], difficulty: 'yellow' },
+      { theme: 'Won a Gold Glove in the outfield', players: ['Ken Griffey Jr.', 'Andruw Jones', 'Ichiro Suzuki', 'Kevin Kiermaier', 'Jim Edmonds'], difficulty: 'green' },
+      { theme: 'Won a Gold Glove at first base', players: ['Keith Hernandez', 'Don Mattingly', 'Albert Pujols', 'Anthony Rizzo', 'J.T. Snow'], difficulty: 'blue' },
+      { theme: 'Won a Gold Glove at catcher', players: ['Ivan Rodriguez', 'Yadier Molina', 'Bob Boone', 'Salvador Perez', 'Johnny Bench'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-041',
+    groups: [
+      { theme: 'Hall of Fame catchers', players: ['Mike Piazza', 'Ivan Rodriguez', 'Bill Dickey', 'Mickey Cochrane', 'Gabby Hartnett'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame shortstops', players: ['Derek Jeter', 'Barry Larkin', 'Ernie Banks', 'Honus Wagner', 'Pee Wee Reese'], difficulty: 'green' },
+      { theme: 'Hall of Fame second basemen', players: ['Jackie Robinson', 'Bill Mazeroski', 'Roberto Alomar', 'Rod Carew', 'Frankie Frisch'], difficulty: 'blue' },
+      { theme: 'Hall of Fame third basemen', players: ['Chipper Jones', 'Paul Molitor', 'Pie Traynor', 'Ron Santo', 'Scott Rolen'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-042',
+    groups: [
+      { theme: 'Born in Cuba', players: ['Jose Abreu', 'Aroldis Chapman', 'Yoenis Cespedes', 'Kendrys Morales', 'Jose Contreras'], difficulty: 'yellow' },
+      { theme: 'Born in Puerto Rico', players: ['Yadier Molina', 'Francisco Lindor', 'Carlos Correa', 'Javier Baez', 'Carlos Delgado'], difficulty: 'green' },
+      { theme: 'Born in Venezuela', players: ['Salvador Perez', 'Ronald Acuna Jr.', 'Pablo Sandoval', 'Asdrubal Cabrera', 'Magglio Ordonez'], difficulty: 'blue' },
+      { theme: 'Born in the Dominican Republic', players: ['Juan Soto', 'Rafael Devers', 'Jose Ramirez', 'Starling Marte', 'Jose Bautista'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-043',
+    groups: [
+      { theme: 'Won a Silver Slugger at catcher', players: ['Mike Piazza', 'Ivan Rodriguez', 'Buster Posey', 'Salvador Perez', 'J.T. Realmuto'], difficulty: 'yellow' },
+      { theme: 'Won a Silver Slugger at shortstop', players: ['Cal Ripken Jr.', 'Alex Rodriguez', 'Derek Jeter', 'Francisco Lindor', 'Trea Turner'], difficulty: 'green' },
+      { theme: 'Won a Silver Slugger at second base', players: ['Robinson Cano', 'Jeff Kent', 'Ryne Sandberg', 'Jose Altuve', 'Dustin Pedroia'], difficulty: 'blue' },
+      { theme: 'Won a Silver Slugger at third base', players: ['Mike Schmidt', 'Wade Boggs', 'Adrian Beltre', 'Nolan Arenado', 'Manny Machado'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-044',
+    groups: [
+      { theme: 'Born in the Dominican Republic', players: ['Nelson Cruz', 'Edwin Encarnacion', 'Hanley Ramirez', 'Aramis Ramirez', 'Melky Cabrera'], difficulty: 'yellow' },
+      { theme: 'Born in Venezuela', players: ['Carlos Gonzalez', 'Victor Martinez', 'Freddy Garcia', 'Carlos Carrasco', 'Gleyber Torres'], difficulty: 'green' },
+      { theme: 'Born in Mexico', players: ['Fernando Valenzuela', 'Vinny Castilla', 'Adrian Gonzalez', 'Joakim Soria', 'Jorge De La Rosa'], difficulty: 'blue' },
+      { theme: 'Born in Curacao', players: ['Andruw Jones', 'Andrelton Simmons', 'Kenley Jansen', 'Jurickson Profar', 'Ozzie Albies'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-045',
+    groups: [
+      { theme: 'Hall of Fame left fielders', players: ['Lou Brock', 'Willie Stargell', 'Ralph Kiner', 'Al Simmons', 'Goose Goslin'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame right fielders', players: ['Tony Gwynn', 'Dave Winfield', 'Vladimir Guerrero', 'Paul Waner', 'Harry Heilmann'], difficulty: 'green' },
+      { theme: 'Hall of Fame first basemen', players: ['Jeff Bagwell', 'Frank Thomas', 'Tony Perez', 'Orlando Cepeda', 'George Sisler'], difficulty: 'blue' },
+      { theme: 'Hall of Fame center fielders', players: ['Ken Griffey Jr.', 'Kirby Puckett', 'Andre Dawson', 'Richie Ashburn', 'Larry Doby'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-046',
+    groups: [
+      { theme: 'Born in the Dominican Republic', players: ['Felipe Alou', 'George Bell', 'Tony Fernandez', 'Pedro Guerrero', 'Julio Franco'], difficulty: 'yellow' },
+      { theme: 'Born in Venezuela', players: ['Wilson Ramos', 'Elvis Andrus', 'Martin Prado', 'Eugenio Suarez', 'Cesar Hernandez'], difficulty: 'green' },
+      { theme: 'Born in Puerto Rico', players: ['Sandy Alomar Jr.', 'Bernie Williams', 'Jorge Posada', 'Carlos Baerga', 'Ruben Sierra'], difficulty: 'blue' },
+      { theme: 'Born in Panama', players: ['Mariano Rivera', 'Rod Carew', 'Carlos Lee', 'Manny Sanguillen', 'Ben Oglivie'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-047',
+    groups: [
+      { theme: 'Won a Gold Glove at third base', players: ['Brooks Robinson', 'Mike Schmidt', 'Nolan Arenado', 'Scott Rolen', 'Adrian Beltre'], difficulty: 'yellow' },
+      { theme: 'Won a Gold Glove at second base', players: ['Roberto Alomar', 'Ryne Sandberg', 'Bill Mazeroski', 'Craig Biggio', 'Dustin Pedroia'], difficulty: 'green' },
+      { theme: 'Won a Gold Glove in center field', players: ['Willie Mays', 'Andruw Jones', 'Ken Griffey Jr.', 'Kevin Kiermaier', 'Devon White'], difficulty: 'blue' },
+      { theme: 'Won a Gold Glove as a pitcher', players: ['Greg Maddux', 'Jim Kaat', 'Bob Gibson', 'Mark Buehrle', 'Zack Greinke'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-048',
+    groups: [
+      { theme: 'Born in the Dominican Republic', players: ['Juan Soto', 'Julio Rodriguez', 'Wander Franco', 'Eloy Jimenez', 'Gregory Polanco'], difficulty: 'yellow' },
+      { theme: 'Born in Venezuela', players: ['Jose Altuve', 'Ronald Acuna Jr.', 'Luis Arraez', 'Willson Contreras', 'Salvador Perez'], difficulty: 'green' },
+      { theme: 'Born in Cuba', players: ['Yordan Alvarez', 'Randy Arozarena', 'Luis Robert', 'Jorge Soler', 'Yoenis Cespedes'], difficulty: 'blue' },
+      { theme: 'Born in Japan', players: ['Masahiro Tanaka', 'Kenta Maeda', 'Koji Uehara', 'Kodai Senga', 'Kazuo Matsui'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-049',
+    groups: [
+      { theme: 'Hall of Fame starting pitchers', players: ['Greg Maddux', 'Pedro Martinez', 'Randy Johnson', 'Roger Clemens', 'John Smoltz'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame relief pitchers', players: ['Lee Smith', 'Goose Gossage', 'Hoyt Wilhelm', 'Rich Gossage', 'Billy Wagner'], difficulty: 'green' },
+      { theme: 'Hall of Fame catchers', players: ['Yogi Berra', 'Roy Campanella', 'Gary Carter', 'Carlton Fisk', 'Ernie Lombardi'], difficulty: 'blue' },
+      { theme: 'Hall of Fame shortstops', players: ['Ozzie Smith', 'Luis Aparicio', 'Robin Yount', 'Joe Cronin', 'Travis Jackson'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-050',
+    groups: [
+      { theme: 'Born in Japan', players: ['Hideki Matsui', 'Hideo Nomo', 'Norichika Aoki', 'Kosuke Fukudome', 'So Taguchi'], difficulty: 'yellow' },
+      { theme: 'Born in Puerto Rico', players: ['Juan Gonzalez', 'Edgar Martinez', 'Benito Santiago', 'Jose Cruz', 'Felix Millan'], difficulty: 'green' },
+      { theme: 'Born in Mexico', players: ['Bobby Avila', 'Aurelio Rodriguez', 'Teddy Higuera', 'Esteban Loaiza', 'Yovani Gallardo'], difficulty: 'blue' },
+      { theme: 'Born in Australia', players: ['Liam Hendriks', 'Grant Balfour', 'Dave Nilsson', 'Travis Blackley', 'Peter Moylan'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-051',
+    groups: [
+      { theme: 'Won a Silver Slugger in the outfield', players: ['Barry Bonds', 'Tony Gwynn', 'Sammy Sosa', 'Vladimir Guerrero', 'Mike Trout'], difficulty: 'yellow' },
+      { theme: 'Won a Silver Slugger at first base', players: ['Albert Pujols', 'Mark McGwire', 'Todd Helton', 'Freddie Freeman', 'Paul Goldschmidt'], difficulty: 'green' },
+      { theme: 'Won a Silver Slugger at designated hitter', players: ['David Ortiz', 'Edgar Martinez', 'Frank Thomas', 'Nelson Cruz', 'Shohei Ohtani'], difficulty: 'blue' },
+      { theme: 'Won a Silver Slugger at catcher', players: ['Mike Piazza', 'Ivan Rodriguez', 'Salvador Perez', 'Buster Posey', 'Will Smith'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-052',
+    groups: [
+      { theme: 'Born in the Dominican Republic', players: ['Bartolo Colon', 'Johnny Cueto', 'Marcell Ozuna', 'Carlos Santana', 'Jose Reyes'], difficulty: 'yellow' },
+      { theme: 'Born in Venezuela', players: ['Omar Infante', 'Gerardo Parra', 'Marwin Gonzalez', 'Henderson Alvarez', 'Avisail Garcia'], difficulty: 'green' },
+      { theme: 'Born in Puerto Rico', players: ['Enrique Hernandez', 'Eddie Rosario', 'Christian Vazquez', 'Jose Berrios', 'Carlos Correa'], difficulty: 'blue' },
+      { theme: 'Born in Cuba', players: ['Aroldis Chapman', 'Yuli Gurriel', 'Adolis Garcia', 'Yandy Diaz', 'Luis Robert'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-053',
+    groups: [
+      { theme: 'Hall of Fame third basemen', players: ['Mike Schmidt', 'George Brett', 'Eddie Mathews', 'Brooks Robinson', 'Wade Boggs'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame first basemen', players: ['Lou Gehrig', 'Jimmie Foxx', 'Hank Greenberg', 'Willie McCovey', 'Bill Terry'], difficulty: 'green' },
+      { theme: 'Hall of Fame second basemen', players: ['Joe Morgan', 'Rogers Hornsby', 'Eddie Collins', 'Charlie Gehringer', 'Ryne Sandberg'], difficulty: 'blue' },
+      { theme: 'Hall of Fame shortstops', players: ['Cal Ripken Jr.', 'Ernie Banks', 'Honus Wagner', 'Barry Larkin', 'Ozzie Smith'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-054',
+    groups: [
+      { theme: 'Born in the Dominican Republic', players: ['Robinson Cano', 'Starling Marte', 'Jose Ramirez', 'Rafael Devers', 'Teoscar Hernandez'], difficulty: 'yellow' },
+      { theme: 'Born in Venezuela', players: ['Andres Gimenez', 'Pablo Lopez', 'Ranger Suarez', 'Eugenio Suarez', 'Gleyber Torres'], difficulty: 'green' },
+      { theme: 'Born in Colombia', players: ['Edgar Renteria', 'Orlando Cabrera', 'Giovanny Urshela', 'Jose Quintana', 'Donovan Solano'], difficulty: 'blue' },
+      { theme: 'Born in Curacao', players: ['Andruw Jones', 'Kenley Jansen', 'Ozzie Albies', 'Andrelton Simmons', 'Jurickson Profar'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-055',
+    groups: [
+      { theme: 'Won a Gold Glove in the outfield', players: ['Roberto Clemente', 'Willie Mays', 'Al Kaline', 'Dwight Evans', 'Torii Hunter'], difficulty: 'yellow' },
+      { theme: 'Won a Gold Glove at first base', players: ['Keith Hernandez', 'Wes Parker', 'George Scott', 'Mark Grace', 'Vic Power'], difficulty: 'green' },
+      { theme: 'Won a Gold Glove at second base', players: ['Bill Mazeroski', 'Joe Morgan', 'Frank White', 'Roberto Alomar', 'Ian Kinsler'], difficulty: 'blue' },
+      { theme: 'Won a Gold Glove at shortstop', players: ['Ozzie Smith', 'Mark Belanger', 'Omar Vizquel', 'Dave Concepcion', 'Rey Ordonez'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-056',
+    groups: [
+      { theme: 'Born in Japan', players: ['Shohei Ohtani', 'Seiya Suzuki', 'Yu Darvish', 'Yoshinobu Yamamoto', 'Masataka Yoshida'], difficulty: 'yellow' },
+      { theme: 'Born in the Dominican Republic', players: ['Sandy Alcantara', 'Framber Valdez', 'Cristian Javier', 'Eloy Jimenez', 'Gregory Polanco'], difficulty: 'green' },
+      { theme: 'Born in Venezuela', players: ['Luis Arraez', 'Salvador Perez', 'Ronald Acuna Jr.', 'Andres Gimenez', 'Willson Contreras'], difficulty: 'blue' },
+      { theme: 'Born in Cuba', players: ['Yordan Alvarez', 'Luis Robert', 'Randy Arozarena', 'Yandy Diaz', 'Adolis Garcia'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-057',
+    groups: [
+      { theme: 'Hall of Fame center fielders', players: ['Ty Cobb', 'Tris Speaker', 'Willie Mays', 'Mickey Mantle', 'Joe DiMaggio'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame right fielders', players: ['Babe Ruth', 'Hank Aaron', 'Mel Ott', 'Frank Robinson', 'Reggie Jackson'], difficulty: 'green' },
+      { theme: 'Hall of Fame left fielders', players: ['Ted Williams', 'Stan Musial', 'Rickey Henderson', 'Carl Yastrzemski', 'Lou Brock'], difficulty: 'blue' },
+      { theme: 'Hall of Fame catchers', players: ['Johnny Bench', 'Yogi Berra', 'Carlton Fisk', 'Gary Carter', 'Mike Piazza'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-058',
+    groups: [
+      { theme: 'Born in the Dominican Republic', players: ['Pedro Martinez', 'Vladimir Guerrero', 'Sammy Sosa', 'Juan Marichal', 'David Ortiz'], difficulty: 'yellow' },
+      { theme: 'Born in Puerto Rico', players: ['Roberto Clemente', 'Ivan Rodriguez', 'Orlando Cepeda', 'Roberto Alomar', 'Carlos Beltran'], difficulty: 'green' },
+      { theme: 'Born in Venezuela', players: ['Luis Aparicio', 'Miguel Cabrera', 'Jose Altuve', 'Omar Vizquel', 'Bobby Abreu'], difficulty: 'blue' },
+      { theme: 'Born in Mexico', players: ['Fernando Valenzuela', 'Vinny Castilla', 'Adrian Gonzalez', 'Yovani Gallardo', 'Roberto Osuna'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-059',
+    groups: [
+      { theme: 'Hall of Fame starting pitchers', players: ['Walter Johnson', 'Christy Mathewson', 'Bob Feller', 'Jim Palmer', 'Phil Niekro'], difficulty: 'yellow' },
+      { theme: 'Hall of Fame left-handed pitchers', players: ['Lefty Grove', 'Sandy Koufax', 'Steve Carlton', 'Warren Spahn', 'Tom Glavine'], difficulty: 'green' },
+      { theme: 'Hall of Fame relief pitchers', players: ['Mariano Rivera', 'Trevor Hoffman', 'Rollie Fingers', 'Bruce Sutter', 'Goose Gossage'], difficulty: 'blue' },
+      { theme: 'Hall of Fame third basemen', players: ['Mike Schmidt', 'George Brett', 'Brooks Robinson', 'Chipper Jones', 'Eddie Mathews'], difficulty: 'purple' },
+    ],
+  },
+  {
+    id: 'bconn-060',
+    groups: [
+      { theme: 'Born in the Dominican Republic', players: ['Albert Pujols', 'Adrian Beltre', 'Robinson Cano', 'Manny Ramirez', 'Bartolo Colon'], difficulty: 'yellow' },
+      { theme: 'Born in Venezuela', players: ['Felix Hernandez', 'Johan Santana', 'Andres Galarraga', 'Pablo Sandoval', 'Carlos Gonzalez'], difficulty: 'green' },
+      { theme: 'Born in Cuba', players: ['Jose Abreu', 'Rafael Palmeiro', 'Jose Canseco', 'Yoenis Cespedes', 'Kendrys Morales'], difficulty: 'blue' },
+      { theme: 'Born in Puerto Rico', players: ['Carlos Delgado', 'Juan Gonzalez', 'Bernie Williams', 'Javier Baez', 'Francisco Lindor'], difficulty: 'purple' },
+    ],
+  },
 ];
