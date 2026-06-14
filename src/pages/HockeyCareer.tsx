@@ -18,10 +18,21 @@ const HockeyCareer = () => {
     mode, switchMode,
     puzzle, player, clueLevel, visibleClues, status, score,
     guessInput, setGuessInput, submitGuess, revealNextClue, giveUp, resetGame, wrongGuess, maxClue,
-    isLoading,
+    isLoading, playerNames,
   } = useHockeyCareer();
 
   const [showRules, setShowRules] = useState(false);
+
+  const suggestions =
+    guessInput.trim().length >= 2
+      ? playerNames
+          .filter(
+            (n) =>
+              n.toLowerCase().includes(guessInput.trim().toLowerCase()) &&
+              n.toLowerCase() !== guessInput.trim().toLowerCase(),
+          )
+          .slice(0, 8)
+      : [];
 
   useEffect(() => {
     const seen = localStorage.getItem('hkc-rules-seen');
@@ -108,6 +119,7 @@ const HockeyCareer = () => {
           )}
 
           {status === 'playing' && (
+            <div className="relative">
             <form onSubmit={handleSubmit} className="flex gap-2">
               <input
                 type="text" value={guessInput} onChange={(e) => setGuessInput(e.target.value)}
@@ -121,6 +133,21 @@ const HockeyCareer = () => {
                 Guess
               </button>
             </form>
+            {suggestions.length > 0 && (
+              <div className="absolute z-20 left-0 right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden max-h-60 overflow-y-auto">
+                {suggestions.map((name) => (
+                  <button
+                    key={name}
+                    type="button"
+                    onClick={() => submitGuess(name)}
+                    className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent transition-colors"
+                  >
+                    {name}
+                  </button>
+                ))}
+              </div>
+            )}
+            </div>
           )}
           {wrongGuess && <p className="text-destructive text-sm text-center mt-2 animate-cell-reveal">Wrong guess — try again!</p>}
 

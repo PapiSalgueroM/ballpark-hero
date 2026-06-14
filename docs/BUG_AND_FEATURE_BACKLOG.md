@@ -427,7 +427,7 @@ Bonus: exact pick number (not just round) = +20 pts.
 ---
 
 ### P2-3: Hockey + Baseball games — match soccer/NFL/NBA format
-**Game:** Hockey Career, Baseball Career, Hockey HL, Baseball Connections | **Complexity:** L | **Status:** TODO
+**Game:** Hockey Career, Baseball Career, Hockey HL, Baseball Connections | **Complexity:** L | **Status:** MOSTLY DONE (client-side). Hockey Career & Baseball Career now have: horizontal share + image card (TASK 1), a derived "did you know" fact on reveal, and click-to-guess autocomplete suggestions (the playerNames the hooks already exposed, just unrendered). Report button was already present. Daily/unlimited persistence already existed. REMAINING: pick-rate rarity badges on these guess games need per-answer guess logging (Supabase) — logged in docs/ANTHONY_TODO.md. Hockey HL and Baseball Connections are different game types (already have share + their own formats); no parity gap found beyond the shared share/image card now in place.
 
 **Fix:** Apply the same UX patterns now used in soccer/NFL/NBA equivalents to all 4 games:
 - Autocomplete suggestions on inputs
