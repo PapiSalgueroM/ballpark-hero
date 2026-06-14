@@ -75,6 +75,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/higher-lower', label: 'Higher or Lower', emoji: '📊', description: 'Compare all-time career stats' },
       { path: '/connections', label: 'Connections', emoji: '🔗', description: 'Find groups of 4 connected players' },
       { path: '/build-your-xi', label: 'Build Your XI', emoji: '⚽', description: 'Create a lineup, get AI rated' },
+      { path: '/perfect-lineup', label: 'Perfect Lineup', emoji: '⚽', description: 'Build an XI under random league & country constraints, then simulate', daily: true, isNew: true },
       
       { path: '/football-connect-4', label: 'Connect 4', emoji: '🔴', description: 'Soccer trivia meets Connect 4' },
       { path: '/world-cup', label: 'World Cup', emoji: '🏆', description: 'Guess the World Cup legend', daily: true },
