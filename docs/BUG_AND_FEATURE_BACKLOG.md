@@ -519,7 +519,7 @@ Use tournament winner rosters + curated facts. **Status:** TODO
 Use Lahman MLB tables. Same generator pattern as soccer Connections. **Status:** TODO
 
 ### P3-10: World Cup — 32 to 60 (+28)
-Curated WC facts. Output candidates file. **Status:** TODO
+Curated WC facts. Output candidates file. **Status:** DONE — authored 28 new "guess the World Cup legend" puzzles directly in src/data/worldCupPuzzles.ts (now 60, no duplicate ids), spanning 1958-2022. Each fact (player, year, host, position, nationality, club at the time, achievement) was individually verified; no events past the knowledge cutoff (no new 2026 entries). tsc + build pass.
 
 ### P3-11: Soccer Grid — already at target (50). No work needed. **Status:** DONE
 
