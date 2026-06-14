@@ -11,7 +11,7 @@ import { MAX_CLUES } from '@/types/tennisPlayer';
 const CLUE_LABELS = ['Vibe', 'Nationality & Era', 'Tour', 'Grand Slam Wins', 'Slams Won', 'Famous Moment'];
 
 export function TennisPlayerBoard() {
-  const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue, allPlayers, loading } = useTennisPlayer();
+  const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue, allPlayers, loading, status, reloadPlayers } = useTennisPlayer();
   const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
   const [hintsUsed, setHintsUsed] = useState(0);
@@ -69,8 +69,16 @@ export function TennisPlayerBoard() {
             </button>
           </div>
 
-          {allPlayers.length === 0 && (
+          {status === 'loading' && (
             <p className="text-sm text-green-700">Loading players...</p>
+          )}
+          {status === 'error' && (
+            <button onClick={reloadPlayers} className="text-sm text-red-400 underline">
+              Couldn't load players. Tap to retry.
+            </button>
+          )}
+          {status === 'ready' && allPlayers.length === 0 && (
+            <p className="text-sm text-green-700">No players available yet — check back soon.</p>
           )}
 
           <GameNav />

@@ -24,13 +24,22 @@ export function useNascarDriver() {
   const [gameState, setGameState] = useState<NascarDriverState | null>(null);
   const [allDrivers, setAllDrivers] = useState<NascarDriverPuzzle[]>([]);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+
+  const loadDrivers = useCallback(async () => {
+    setStatus('loading');
+    const { data, error } = await supabase.from('nascar_drivers').select('*');
+    if (error) {
+      setStatus('error');
+      return;
+    }
+    setAllDrivers((data ?? []).map(mapRow));
+    setStatus('ready');
+  }, []);
 
   useEffect(() => {
-    (async () => {
-      const { data } = await supabase.from('nascar_drivers').select('*');
-      if (data) setAllDrivers(data.map(mapRow));
-    })();
-  }, []);
+    loadDrivers();
+  }, [loadDrivers]);
 
   const startGame = useCallback(async (mode: 'daily' | 'unlimited') => {
     setLoading(true);
@@ -137,5 +146,5 @@ export function useNascarDriver() {
 
   useGameCompletion('nascar-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
-  return { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allDrivers: validatedDrivers, loading };
+  return { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allDrivers: validatedDrivers, loading, status, reloadDrivers: loadDrivers };
 }

@@ -24,13 +24,22 @@ export function useTennisPlayer() {
   const [gameState, setGameState] = useState<TennisPlayerState | null>(null);
   const [allPlayers, setAllPlayers] = useState<TennisPlayerPuzzle[]>([]);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+
+  const loadPlayers = useCallback(async () => {
+    setStatus('loading');
+    const { data, error } = await supabase.from('tennis_players').select('*');
+    if (error) {
+      setStatus('error');
+      return;
+    }
+    setAllPlayers((data ?? []).map(mapRow));
+    setStatus('ready');
+  }, []);
 
   useEffect(() => {
-    (async () => {
-      const { data } = await supabase.from('tennis_players').select('*');
-      if (data) setAllPlayers(data.map(mapRow));
-    })();
-  }, []);
+    loadPlayers();
+  }, [loadPlayers]);
 
   const startGame = useCallback(async (mode: 'daily' | 'unlimited') => {
     setLoading(true);
@@ -137,5 +146,5 @@ export function useTennisPlayer() {
 
   useGameCompletion('tennis-player', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
-  return { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPlayers: validatedPlayers, loading };
+  return { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPlayers: validatedPlayers, loading, status, reloadPlayers: loadPlayers };
 }

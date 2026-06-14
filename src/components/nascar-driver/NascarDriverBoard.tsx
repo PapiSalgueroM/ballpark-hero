@@ -11,7 +11,7 @@ import { MAX_CLUES } from '@/types/nascarDriver';
 const CLUE_LABELS = ['Vibe', 'Era', 'Car Number', 'Cup Series Wins', 'Championships', 'Famous Moment'];
 
 export function NascarDriverBoard() {
-  const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue, allDrivers, loading } = useNascarDriver();
+  const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue, allDrivers, loading, status, reloadDrivers } = useNascarDriver();
   const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
   const [hintsUsed, setHintsUsed] = useState(0);
@@ -69,8 +69,16 @@ export function NascarDriverBoard() {
             </button>
           </div>
 
-          {allDrivers.length === 0 && (
+          {status === 'loading' && (
             <p className="text-sm text-neutral-700">Loading drivers...</p>
+          )}
+          {status === 'error' && (
+            <button onClick={reloadDrivers} className="text-sm text-red-400 underline">
+              Couldn't load drivers. Tap to retry.
+            </button>
+          )}
+          {status === 'ready' && allDrivers.length === 0 && (
+            <p className="text-sm text-neutral-700">No drivers available yet — check back soon.</p>
           )}
 
           <GameNav />
