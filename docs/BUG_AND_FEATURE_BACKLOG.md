@@ -505,7 +505,9 @@ Generate candidates from career_seasons table. Human verification needed. Output
 Pull top 500 from player_market_values. Output: regenerated src/data/higherLowerPlayers.ts. **Status:** TODO
 
 ### P3-6: Guess The Year — 22 to 50 (+28)
-Curated famous events list. Output: candidates file for review. **Status:** TODO
+Curated famous events list. Output: candidates file for review. **Status:** DONE (commit 3ad5bcb) — authored 28 new 6-clue puzzles for distinct unused years 1972-2023 directly in src/data/guessTheYearPuzzles.ts (now 50, no duplicate years), iconic well-known facts, hardest-to-easiest order. Skipped 2026+ (past knowledge cutoff). Also fixed a stale clue in the existing 2025 puzzle (Milan-Cortina, a 2026 event → Super Bowl LIX).
+
+**Remaining purely-local content scaling (next candidates, large factual-authoring batches):** P3-2 Connections (185→300, uses docs/data/soccer-data.json), P3-9 Baseball Connections (80→130, candidates staged), P3-10 World Cup (32→60). Each is a sizable authored-content task best done as its own focused pass.
 
 ### P3-7: Guess NFL Team — 32 to 75 (+43)
 After P1-10 hint quality fix, generate batch using team facts. **Status:** TODO
