@@ -198,7 +198,6 @@ export const higherLowerPlayers: HigherLowerPlayer[] = [
   { name: "João Félix", nationality: "Portugal", isIcon: false, stats: { appearances: 325, goals: 78, assists: 38, trophies: 2, internationalCaps: 35 } },
   { name: "Álvaro Morata", nationality: "Spain", isIcon: false, stats: { appearances: 530, goals: 195, assists: 52, trophies: 14, internationalCaps: 86 } },
   { name: "Ángel Di María", nationality: "Argentina", isIcon: false, stats: { appearances: 780, goals: 165, assists: 210, trophies: 24, internationalCaps: 145 } },
-  { name: "Sergio Busquets", nationality: "Spain", isIcon: false, stats: { appearances: 782, goals: 18, assists: 45, trophies: 32, internationalCaps: 143 } },
   { name: "Ivan Perišić", nationality: "Croatia", isIcon: false, stats: { appearances: 620, goals: 120, assists: 118, trophies: 11, internationalCaps: 120 } },
   { name: "David Alaba", nationality: "Austria", isIcon: false, stats: { appearances: 515, goals: 40, assists: 62, trophies: 28, internationalCaps: 105 } },
   { name: "Marco Reus", nationality: "Germany", isIcon: false, stats: { appearances: 528, goals: 170, assists: 131, trophies: 4, internationalCaps: 48 } },
