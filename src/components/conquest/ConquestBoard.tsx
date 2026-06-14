@@ -4,6 +4,7 @@ import ConquestMap from './ConquestMap';
 import { TEAM_MAP, DIRECTIONS, DIR_LABELS } from '@/data/conquestData';
 import { TEAM_LEGENDS } from '@/data/conquestPowerups';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import ShareButtons from '@/components/game/ShareButtons';
 
 function useSpinner(items: string[], isSpinning: boolean, finalValue: string): string {
   const [display, setDisplay] = useState(items[0] || '');
@@ -429,6 +430,11 @@ export default function ConquestBoard() {
           >
             🔄 Play Again
           </button>
+          <ShareButtons
+            gameName="NFL Conquest"
+            gamePath="/conquest"
+            score={`${t(aliveIds[0])?.city} ${t(aliveIds[0])?.name} conquered all 50 states in ${game.turn} battles`}
+          />
         </div>
       )}
 

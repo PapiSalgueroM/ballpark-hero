@@ -11,6 +11,7 @@ import { DraftRoster } from '@/components/fantasy-draft/DraftRoster';
 import { SeasonStory } from '@/components/fantasy-draft/SeasonStory';
 import { TeamAnalysis } from '@/components/fantasy-draft/TeamAnalysis';
 import { VoteWinner } from '@/components/fantasy-draft/VoteWinner';
+import ShareButtons from '@/components/game/ShareButtons';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
@@ -328,6 +329,15 @@ const FantasyDraft = () => {
                         onVote={handleVote}
                         voted={voted}
                         voteCounts={voteCounts}
+                      />
+                    )}
+
+                    {seasonSimulated && (
+                      <ShareButtons
+                        gameName="Fantasy Draft"
+                        gamePath="/fantasy-draft"
+                        score="Drafted my XI and simulated a full season"
+                        customText="I drafted my Starting XI and simulated a full season on Fantasy Draft at DoUKnowBall! Can you build a better squad? douknowball.com/fantasy-draft"
                       />
                     )}
                   </>
