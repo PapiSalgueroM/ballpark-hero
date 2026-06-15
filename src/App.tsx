@@ -33,6 +33,7 @@ import PerfectLineup from "./pages/PerfectLineup";
 import CollegeHub from "./pages/CollegeHub";
 import PerfectLineupNba from "./pages/PerfectLineupNba";
 import PerfectLineupF1 from "./pages/PerfectLineupF1";
+import PerfectLineupNhl from "./pages/PerfectLineupNhl";
 import Olympics from "./pages/Olympics";
 import GuessTheCollege from "./pages/GuessTheCollege";
 import NotFound from "./pages/NotFound";
@@ -134,6 +135,7 @@ const AppContent = () => {
         <Route path="/college" element={<CollegeHub />} />
         <Route path="/perfect-lineup-nba" element={<PerfectLineupNba />} />
         <Route path="/perfect-lineup-f1" element={<PerfectLineupF1 />} />
+        <Route path="/perfect-lineup-nhl" element={<PerfectLineupNhl />} />
         <Route path="/world-cup-predictor" element={<Navigate to="/world-cup-bracket" replace />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
