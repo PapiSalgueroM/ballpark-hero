@@ -133,7 +133,10 @@ export async function fetchFootlePlayerPool(): Promise<Player[]> {
       .from('player_market_values')
       .select('rank, player_name, position, age, nationality, club, market_value_usd, goals, assists')
       .eq('year', 2026)
-      .order('rank', { ascending: true })
+      // Order by real market value (global), not `rank` — `rank` is per-position,
+      // so ordering by it returns rank-1..N of every position, not the top 150
+      // most valuable players. The 2026 rows are also deduped to one per player.
+      .order('market_value_usd', { ascending: false })
       .limit(150);
 
     if (error || !data || data.length === 0) {

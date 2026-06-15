@@ -1,7 +1,9 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { baseballConnectionsPuzzles } from '@/data/baseballConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { fetchBaseballConnectionsPuzzles } from '@/lib/fetchBaseballConnectionsPuzzles';
+import { dateSeed, getTodayET } from '@/lib/dateUtils';
 
 function isValidBBPuzzle(p: { groups: { players: string[] }[] }): boolean {
   const all = p.groups.flatMap((g) => g.players);
@@ -43,6 +45,27 @@ export function useBaseballConnections() {
   // ---- MODE ----------------------------------------------------------------
   const [mode, setMode] = useState<BBConnMode>('daily');
 
+  // ---- SUPABASE POOL -------------------------------------------------------
+  // Cloud is source of truth (baseball_connections_puzzles); the hardcoded
+  // fallbackBBPuzzles is the offline/error fallback. Mirrors useConnections.
+  const [puzzlePool, setPuzzlePool] = useState<Puzzle[]>(fallbackBBPuzzles);
+  const [isLoadingPool, setIsLoadingPool] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchBaseballConnectionsPuzzles().then((pool) => {
+      if (cancelled) return;
+      if (pool.length > 0) setPuzzlePool(pool as Puzzle[]);
+      setIsLoadingPool(false);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  const todaysPuzzle = useMemo(
+    () => (puzzlePool.length > 0 ? puzzlePool[dateSeed(getTodayET()) % puzzlePool.length] : null),
+    [puzzlePool],
+  );
+
   // ---- DAILY ---------------------------------------------------------------
   const {
     puzzle: dailyPuzzle,
@@ -54,6 +77,8 @@ export function useBaseballConnections() {
   } = useDailyPuzzle<Puzzle, BBConnAction>({
     gameSlug: 'baseball-connections',
     puzzles: fallbackBBPuzzles,
+    supabasePuzzle: todaysPuzzle,
+    getPuzzleId: (p) => p.id,
     maxGuesses: 999, // ends via isWon / isLost only
     isWon: (g, puzzle) => g.filter(a => a.t === 'ok').length >= puzzle.groups.length,
     isLost: (g) => 4 - g.filter(a => a.t === 'x').length <= 0,
@@ -79,9 +104,10 @@ export function useBaseballConnections() {
   }, [dailyLives, dailySolvedGroups, dailyPuzzle]);
 
   // ---- UNLIMITED -----------------------------------------------------------
-  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<Puzzle>(
-    () => fallbackBBPuzzles[Math.floor(Math.random() * fallbackBBPuzzles.length)]
+  const [unlimitedIndex, setUnlimitedIndex] = useState(
+    () => Math.floor(Math.random() * fallbackBBPuzzles.length)
   );
+  const unlimitedPuzzle = puzzlePool[unlimitedIndex % puzzlePool.length];
   const [unlimitedSolvedGroups, setUnlimitedSolvedGroups] = useState<SolvedGroup[]>([]);
   const [unlimitedLives, setUnlimitedLives] = useState(4);
 
@@ -175,12 +201,12 @@ export function useBaseballConnections() {
     if (mode === 'daily') {
       resetDailyHook();
     } else {
-      setUnlimitedPuzzle(fallbackBBPuzzles[Math.floor(Math.random() * fallbackBBPuzzles.length)]);
+      setUnlimitedIndex(Math.floor(Math.random() * puzzlePool.length));
       setUnlimitedSolvedGroups([]);
       setUnlimitedLives(4);
     }
     setSelected([]);
-  }, [mode, resetDailyHook]);
+  }, [mode, resetDailyHook, puzzlePool]);
 
   // ---- COMPLETION ----------------------------------------------------------
   const dailyWon = rawDailyStatus === 'won';
@@ -202,5 +228,6 @@ export function useBaseballConnections() {
     shakeWrong,
     resetGame,
     isLoading: mode === 'daily' ? isLoading : false,
+    isLoadingPool,
   };
 }
