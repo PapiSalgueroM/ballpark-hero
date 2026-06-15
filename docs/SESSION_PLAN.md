@@ -20,8 +20,18 @@ Repo `.env` (`VITE_SUPABASE_URL`) and `supabase/config.toml` (`project_id`) poin
 3. **Create + seed missing tables** — ✅ DONE (tennis) / ⚠️ PARTIAL (nation, fantasy)
    - `tennis_players` created + seeded 40 players (+ `tennis_daily`, `tennis_scores`, RLS). Verified 40 rows → Guess Tennis Player now loads.
    - `guess_nation_countries` (+ daily/scores) and `fantasy_draft_players` schemas created (RLS public-read) so queries no longer error. **Seed gap:** no row data exists anywhere in the repo (13 NOT-NULL factual Olympic-hint columns; fantasy `dominant_foot` NOT-NULL CHECK). Not fabricating factual datasets — see Blockers.
-4. **Re-sync games where local fix never reached cloud** — IN PROGRESS
-5. **Remaining client-side TODOs in docs/BUG_AND_FEATURE_BACKLOG.md** — PENDING
+4. **Re-sync games where local fix never reached cloud** — ✅ DONE (no further action)
+   - Per CLOUD_BREAKAGE_AUDIT, every other content table already matches local post-fix state (career_players/seasons, soccer grids/clubs/transfer, shirt_number base, nascar, cbb). The only out-of-sync items were the four already handled above (connections [operator], baseball-connections, footle, tennis).
+   - `20260527_shirt_number_batch_autopilot.sql` (+65 rows) is **unverified autopilot content expansion** (backlog P3-1, still TODO) — NOT a verified fix, and its sibling connections autopilot batch was quarantined as `_DO_NOT_APPLY`. Left unapplied pending verification. Cloud `shirt_number_puzzles` stays at 32.
+5. **Remaining client-side TODOs in docs/BUG_AND_FEATURE_BACKLOG.md** — ⚠️ ASSESSED; nothing cleanly auto-executable without fabrication or design
+   - Most P0/P1 items are already DONE or OBSOLETE per the backlog's own status notes.
+   - **P2-4 Footle pool restrict/tiers** — partially satisfied by step 2 (pool is now true top-150 by value, tiered per position group).
+   - **Not auto-executable (reasons):**
+     - P2-1 (NBA Connect4 categories+multiplayer), P2-2 (NBA Chain golf rewrite), P2-5 (college hub), P2-6 (active-player counts): XL features needing design/brainstorming + new data/tables/realtime.
+     - P3-3/P3-7 (soccer-club / NFL-team content), P3-8 (nation 80): factual content authoring — would require fabrication or sourcing.
+     - **P3-5 (Higher or Lower → 500):** backlog says pull from `player_market_values`, but `higherLowerPlayers.ts` uses career totals (appearances/trophies/caps) that table does not have. Regeneration would require fabricated career stats. Skipped.
+     - P3-1 (shirt 32→100): unverified autopilot batch — see step 4.
+     - P3-4 (transfer path): candidates need human verification.
 
 ## Blockers (need operator/data)
 - **`guess_nation_countries` seed** — schema live, 0 rows. Data (country Olympic-hint columns) was never committed to repo (only `UPDATE`s exist in migration `20260309185614`). Needs export from old project `pzzadswiradjnvvfybol` or authored dataset. Game loads but cannot start until seeded.
