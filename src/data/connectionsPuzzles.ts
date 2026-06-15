@@ -1976,4 +1976,1879 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       { category: 'From Germany', players: ['Florian Wirtz', 'Jamal Musiala', 'Kai Havertz', 'Antonio Rüdiger'], difficulty: 'insane' },
     ],
   },
+  {
+    id: 'puzzle-176',
+    groups: [
+      {
+        category: 'From France',
+        players: ['Zinedine Zidane', 'Thierry Henry', 'Michel Platini', 'Patrick Vieira'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Pele', 'Ronaldo Nazario', 'Ronaldinho Gaucho', 'Neymar Jr'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Lionel Messi', 'Diego Maradona', 'Angel Di Maria', 'Sergio Aguero'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Italy',
+        players: ['Paolo Maldini', 'Andrea Pirlo', 'Francesco Totti', 'Gianluigi Buffon'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-177',
+    groups: [
+      {
+        category: 'From Brazil',
+        players: ['Ricardo Kaka', 'Rivaldo Vitor', 'Roberto Carlos', 'Cafu'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Germany',
+        players: ['Franz Beckenbauer', 'Miroslav Klose', 'Gerd Muller', 'Thomas Muller'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Xavi Hernandez', 'Andres Iniesta', 'Iker Casillas', 'David Villa'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Eden Hazard', 'Kevin De Bruyne', 'Romelu Lukaku', 'Thibaut Courtois'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-178',
+    groups: [
+      {
+        category: 'From Argentina',
+        players: ['Gonzalo Higuain', 'Gabriel Batistuta', 'Javier Mascherano', 'Carlos Tevez'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Spain',
+        players: ['Sergio Ramos', 'Carles Puyol', 'Raul', 'Fernando Torres'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Portugal',
+        players: ['Cristiano Ronaldo', 'Luis Figo', 'Eusebio', 'Rui Costa'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Jay-Jay Okocha', 'Nwankwo Kanu', 'Rashidi Yekini', 'John Obi Mikel'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-179',
+    groups: [
+      {
+        category: 'From Germany',
+        players: ['Manuel Neuer', 'Philipp Lahm', 'Bastian Schweinsteiger', 'Lothar Matthaus'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Johan Cruyff', 'Marco van Basten', 'Ruud Gullit', 'Dennis Bergkamp'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Luis Suarez', 'Edinson Cavani', 'Diego Forlan', 'Diego Godin'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Romario', 'Socrates', 'Zico', 'Dani Alves'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-180',
+    groups: [
+      {
+        category: 'From Italy',
+        players: ['Fabio Cannavaro', 'Roberto Baggio', 'Alessandro Del Piero', 'Alessandro Nesta'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Vincent Kompany', 'Axel Witsel', 'Dries Mertens', 'Marouane Fellaini'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Obafemi Martins', 'Vincent Enyeama', 'Kelechi Iheanacho', 'Alex Iwobi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From England',
+        players: ['David Beckham', 'Steven Gerrard', 'Frank Lampard', 'Wayne Rooney'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-181',
+    groups: [
+      {
+        category: 'From England',
+        players: ['Michael Owen', 'Alan Shearer', 'Paul Scholes', 'John Terry'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Colombia',
+        players: ['Carlos Valderrama', 'Radamel Falcao', 'James Rodriguez', 'Faustino Asprilla'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Juan Roman Riquelme', 'Hernan Crespo', 'Javier Zanetti', 'Juan Sebastian Veron'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Senegal',
+        players: ['Sadio Mane', 'El Hadji Diouf', 'Kalidou Koulibaly', 'Idrissa Gueye'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-182',
+    groups: [
+      {
+        category: 'From Netherlands',
+        players: ['Arjen Robben', 'Wesley Sneijder', 'Robin van Persie', 'Ruud van Nistelrooy'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Michael Essien', 'Asamoah Gyan', 'Abedi Pele', 'Stephen Appiah'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Sergio Busquets', 'Gerard Pique', 'Cesc Fabregas', 'David Silva'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Germany',
+        players: ['Toni Kroos', 'Mesut Ozil', 'Jurgen Klinsmann', 'Karl-Heinz Rummenigge'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-183',
+    groups: [
+      {
+        category: 'From Belgium',
+        players: ['Thomas Vermaelen', 'Jan Vertonghen', 'Youri Tielemans', 'Leandro Trossard'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Marcelo', 'Casemiro', 'Vinicius Junior', 'Rodrygo'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Alvaro Recoba', 'Enzo Francescoli', 'Rodrigo Bentancur', 'Federico Valverde'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Colombia',
+        players: ['Juan Cuadrado', 'Luis Diaz', 'Davinson Sanchez', 'Yerry Mina'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-184',
+    groups: [
+      {
+        category: 'From Croatia',
+        players: ['Luka Modric', 'Mario Mandzukic', 'Ivan Rakitic', 'Davor Suker'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Germany',
+        players: ['Oliver Kahn', 'Michael Ballack', 'Lukas Podolski', 'Sami Khedira'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Ola Aina', 'Victor Osimhen', 'Ademola Lookman', 'Wilfred Ndidi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From France',
+        players: ['Kylian Mbappe', 'Antoine Griezmann', 'Paul Pogba', 'Olivier Giroud'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-185',
+    groups: [
+      {
+        category: 'From Sweden',
+        players: ['Zlatan Ibrahimovic', 'Henrik Larsson', 'Freddie Ljungberg', 'Emil Forsberg'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Edgar Davids', 'Clarence Seedorf', 'Patrick Kluivert', 'Frank Rijkaard'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Paulo Dybala', 'Julian Alvarez', 'Lautaro Martinez', 'Emiliano Martinez'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Croatia',
+        players: ['Zvonimir Boban', 'Robert Prosinecki', 'Mateo Kovacic', 'Ivan Perisic'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-186',
+    groups: [
+      {
+        category: 'From Colombia',
+        players: ['David Ospina', 'Jefferson Lerma', 'Johan Mojica', 'Mateus Uribe'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Toby Alderweireld', 'Kevin Mirallas', 'Eden Hazard', 'Kevin De Bruyne'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Alvaro Morata', 'Rodri', 'Pedri', 'Gavi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Sulley Muntari', 'Kwadwo Asamoah', 'Thomas Partey', 'Mohammed Kudus'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-187',
+    groups: [
+      {
+        category: 'From Nigeria',
+        players: ['Jay-Jay Okocha', 'Nwankwo Kanu', 'Rashidi Yekini', 'John Obi Mikel'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Darwin Nunez', 'Ronald Araujo', 'Sebastian Coates', 'Jose Maria Gimenez'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Portugal',
+        players: ['Nani', 'Pepe', 'Bruno Fernandes', 'Bernardo Silva'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Rodrigo De Paul', 'Esteban Cambiasso', 'Diego Simeone', 'Walter Samuel'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-188',
+    groups: [
+      {
+        category: 'From Ghana',
+        players: ['Jordan Ayew', 'Andre Ayew', 'Michael Essien', 'Asamoah Gyan'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Colombia',
+        players: ['Carlos Valderrama', 'Radamel Falcao', 'James Rodriguez', 'Faustino Asprilla'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Luis Suarez', 'Edinson Cavani', 'Diego Forlan', 'Diego Godin'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Virgil van Dijk', 'Frenkie de Jong', 'Memphis Depay', 'Matthijs de Ligt'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-189',
+    groups: [
+      {
+        category: 'From Senegal',
+        players: ['Cheikhou Kouyate', 'Ismaila Sarr', 'Edouard Mendy', 'Boulaye Dia'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Abedi Pele', 'Stephen Appiah', 'Sulley Muntari', 'Kwadwo Asamoah'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Obafemi Martins', 'Vincent Enyeama', 'Kelechi Iheanacho', 'Alex Iwobi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Sweden',
+        players: ['Tomas Brolin', 'Olof Mellberg', 'Alexander Isak', 'Dejan Kulusevski'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-190',
+    groups: [
+      {
+        category: 'From France',
+        players: ['Karim Benzema', 'Eric Cantona', 'Claude Makelele', 'David Trezeguet'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Thiago Silva', 'Alisson', 'Adriano Leite', 'Robinho'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Gabriel Heinze', 'Ariel Ortega', 'Pablo Aimar', 'Nicolas Otamendi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Italy',
+        players: ['Marco Materazzi', 'Gennaro Gattuso', 'Franco Baresi', 'Paolo Rossi'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-191',
+    groups: [
+      {
+        category: 'From Brazil',
+        players: ['Bruno Guimaraes', 'Eder Militao', 'Marquinhos', 'Gabriel Jesus'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Germany',
+        players: ['Ilkay Gundogan', 'Joshua Kimmich', 'Leroy Sane', 'Kai Havertz'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Xabi Alonso', 'Fernando Hierro', 'Santi Cazorla', 'Koke'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Romelu Lukaku', 'Thibaut Courtois', 'Vincent Kompany', 'Axel Witsel'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-192',
+    groups: [
+      {
+        category: 'From Argentina',
+        players: ['Lionel Messi', 'Diego Maradona', 'Angel Di Maria', 'Sergio Aguero'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Spain',
+        players: ['Marco Asensio', 'Isco', 'Pepe Reina', 'Joaquin'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Portugal',
+        players: ['Joao Felix', 'Ruben Dias', 'Diogo Jota', 'Joao Cancelo'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Ola Aina', 'Victor Osimhen', 'Ademola Lookman', 'Wilfred Ndidi'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-193',
+    groups: [
+      {
+        category: 'From Germany',
+        players: ['Jamal Musiala', 'Florian Wirtz', 'Antonio Rudiger', 'Mats Hummels'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Georginio Wijnaldum', 'Edwin van der Sar', 'Jaap Stam', 'Marc Overmars'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Alvaro Recoba', 'Enzo Francescoli', 'Rodrigo Bentancur', 'Federico Valverde'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Pele', 'Ronaldo Nazario', 'Ronaldinho Gaucho', 'Neymar Jr'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-194',
+    groups: [
+      {
+        category: 'From Italy',
+        players: ['Gianluca Vialli', 'Filippo Inzaghi', 'Giorgio Chiellini', 'Leonardo Bonucci'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Dries Mertens', 'Marouane Fellaini', 'Thomas Vermaelen', 'Jan Vertonghen'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Jay-Jay Okocha', 'Nwankwo Kanu', 'Rashidi Yekini', 'John Obi Mikel'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From England',
+        players: ['Rio Ferdinand', 'Harry Kane', 'Raheem Sterling', 'Gary Lineker'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-195',
+    groups: [
+      {
+        category: 'From England',
+        players: ['Paul Gascoigne', 'Bobby Charlton', 'Jude Bellingham', 'Bukayo Saka'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Colombia',
+        players: ['Juan Cuadrado', 'Luis Diaz', 'Davinson Sanchez', 'Yerry Mina'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Gonzalo Higuain', 'Gabriel Batistuta', 'Javier Mascherano', 'Carlos Tevez'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Senegal',
+        players: ['Nicolas Jackson', 'Pape Bouba Diop', 'Sadio Mane', 'El Hadji Diouf'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-196',
+    groups: [
+      {
+        category: 'From Netherlands',
+        players: ['Johan Cruyff', 'Marco van Basten', 'Ruud Gullit', 'Dennis Bergkamp'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Thomas Partey', 'Mohammed Kudus', 'Jordan Ayew', 'Andre Ayew'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Xavi Hernandez', 'Andres Iniesta', 'Iker Casillas', 'David Villa'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Germany',
+        players: ['Franz Beckenbauer', 'Miroslav Klose', 'Gerd Muller', 'Thomas Muller'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-197',
+    groups: [
+      {
+        category: 'From Belgium',
+        players: ['Youri Tielemans', 'Leandro Trossard', 'Toby Alderweireld', 'Kevin Mirallas'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Ricardo Kaka', 'Rivaldo Vitor', 'Roberto Carlos', 'Cafu'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Darwin Nunez', 'Ronald Araujo', 'Sebastian Coates', 'Jose Maria Gimenez'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Colombia',
+        players: ['David Ospina', 'Jefferson Lerma', 'Johan Mojica', 'Mateus Uribe'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-198',
+    groups: [
+      {
+        category: 'From Croatia',
+        players: ['Marcelo Brozovic', 'Dejan Lovren', 'Domagoj Vida', 'Josko Gvardiol'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Germany',
+        players: ['Manuel Neuer', 'Philipp Lahm', 'Bastian Schweinsteiger', 'Lothar Matthaus'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Obafemi Martins', 'Vincent Enyeama', 'Kelechi Iheanacho', 'Alex Iwobi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From France',
+        players: ['Marcel Desailly', 'Lilian Thuram', 'Robert Pires', 'Didier Deschamps'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-199',
+    groups: [
+      {
+        category: 'From Sweden',
+        players: ['Victor Lindelof', 'Sebastian Larsson', 'Zlatan Ibrahimovic', 'Henrik Larsson'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Arjen Robben', 'Wesley Sneijder', 'Robin van Persie', 'Ruud van Nistelrooy'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Juan Roman Riquelme', 'Hernan Crespo', 'Javier Zanetti', 'Juan Sebastian Veron'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Croatia',
+        players: ['Luka Modric', 'Mario Mandzukic', 'Ivan Rakitic', 'Davor Suker'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-200',
+    groups: [
+      {
+        category: 'From Colombia',
+        players: ['Carlos Valderrama', 'Radamel Falcao', 'James Rodriguez', 'Faustino Asprilla'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Eden Hazard', 'Kevin De Bruyne', 'Romelu Lukaku', 'Thibaut Courtois'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Sergio Ramos', 'Carles Puyol', 'Raul', 'Fernando Torres'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Michael Essien', 'Asamoah Gyan', 'Abedi Pele', 'Stephen Appiah'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-201',
+    groups: [
+      {
+        category: 'From Nigeria',
+        players: ['Ola Aina', 'Victor Osimhen', 'Ademola Lookman', 'Wilfred Ndidi'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Luis Suarez', 'Edinson Cavani', 'Diego Forlan', 'Diego Godin'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Portugal',
+        players: ['Ruben Neves', 'Vitinha', 'Rafael Leao', 'Joao Moutinho'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Paulo Dybala', 'Julian Alvarez', 'Lautaro Martinez', 'Emiliano Martinez'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-202',
+    groups: [
+      {
+        category: 'From Ghana',
+        players: ['Sulley Muntari', 'Kwadwo Asamoah', 'Thomas Partey', 'Mohammed Kudus'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Colombia',
+        players: ['Juan Cuadrado', 'Luis Diaz', 'Davinson Sanchez', 'Yerry Mina'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Alvaro Recoba', 'Enzo Francescoli', 'Rodrigo Bentancur', 'Federico Valverde'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Edgar Davids', 'Clarence Seedorf', 'Patrick Kluivert', 'Frank Rijkaard'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-203',
+    groups: [
+      {
+        category: 'From Senegal',
+        players: ['Kalidou Koulibaly', 'Idrissa Gueye', 'Cheikhou Kouyate', 'Ismaila Sarr'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Jordan Ayew', 'Andre Ayew', 'Michael Essien', 'Asamoah Gyan'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Jay-Jay Okocha', 'Nwankwo Kanu', 'Rashidi Yekini', 'John Obi Mikel'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Sweden',
+        players: ['Freddie Ljungberg', 'Emil Forsberg', 'Tomas Brolin', 'Olof Mellberg'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-204',
+    groups: [
+      {
+        category: 'From France',
+        players: ['Aurelien Tchouameni', 'Eduardo Camavinga', 'Ousmane Dembele', 'Theo Hernandez'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Romario', 'Socrates', 'Zico', 'Dani Alves'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Rodrigo De Paul', 'Esteban Cambiasso', 'Diego Simeone', 'Walter Samuel'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Italy',
+        players: ['Marco Verratti', 'Federico Chiesa', 'Nicolo Barella', 'Gianluigi Donnarumma'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-205',
+    groups: [
+      {
+        category: 'From Brazil',
+        players: ['Marcelo', 'Casemiro', 'Vinicius Junior', 'Rodrygo'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Germany',
+        players: ['Toni Kroos', 'Mesut Ozil', 'Jurgen Klinsmann', 'Karl-Heinz Rummenigge'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Sergio Busquets', 'Gerard Pique', 'Cesc Fabregas', 'David Silva'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Vincent Kompany', 'Axel Witsel', 'Dries Mertens', 'Marouane Fellaini'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-206',
+    groups: [
+      {
+        category: 'From Argentina',
+        players: ['Gabriel Heinze', 'Ariel Ortega', 'Pablo Aimar', 'Nicolas Otamendi'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Spain',
+        players: ['Alvaro Morata', 'Rodri', 'Pedri', 'Gavi'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Portugal',
+        players: ['Cristiano Ronaldo', 'Luis Figo', 'Eusebio', 'Rui Costa'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Obafemi Martins', 'Vincent Enyeama', 'Kelechi Iheanacho', 'Alex Iwobi'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-207',
+    groups: [
+      {
+        category: 'From Germany',
+        players: ['Oliver Kahn', 'Michael Ballack', 'Lukas Podolski', 'Sami Khedira'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Virgil van Dijk', 'Frenkie de Jong', 'Memphis Depay', 'Matthijs de Ligt'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Darwin Nunez', 'Ronald Araujo', 'Sebastian Coates', 'Jose Maria Gimenez'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Thiago Silva', 'Alisson', 'Adriano Leite', 'Robinho'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-208',
+    groups: [
+      {
+        category: 'From Italy',
+        players: ['Sandro Tonali', 'Alessandro Bastoni', 'Gianfranco Zola', 'Christian Vieri'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Thomas Vermaelen', 'Jan Vertonghen', 'Youri Tielemans', 'Leandro Trossard'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Ola Aina', 'Victor Osimhen', 'Ademola Lookman', 'Wilfred Ndidi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From England',
+        players: ['Phil Foden', 'Marcus Rashford', 'Kyle Walker', 'John Stones'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-209',
+    groups: [
+      {
+        category: 'From England',
+        players: ['Jordan Henderson', 'Jack Grealish', 'Ashley Cole', 'Sol Campbell'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Colombia',
+        players: ['David Ospina', 'Jefferson Lerma', 'Johan Mojica', 'Mateus Uribe'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Lionel Messi', 'Diego Maradona', 'Angel Di Maria', 'Sergio Aguero'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Senegal',
+        players: ['Edouard Mendy', 'Boulaye Dia', 'Nicolas Jackson', 'Pape Bouba Diop'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-210',
+    groups: [
+      {
+        category: 'From Netherlands',
+        players: ['Georginio Wijnaldum', 'Edwin van der Sar', 'Jaap Stam', 'Marc Overmars'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Abedi Pele', 'Stephen Appiah', 'Sulley Muntari', 'Kwadwo Asamoah'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Xabi Alonso', 'Fernando Hierro', 'Santi Cazorla', 'Koke'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Germany',
+        players: ['Ilkay Gundogan', 'Joshua Kimmich', 'Leroy Sane', 'Kai Havertz'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-211',
+    groups: [
+      {
+        category: 'From Belgium',
+        players: ['Toby Alderweireld', 'Kevin Mirallas', 'Eden Hazard', 'Kevin De Bruyne'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Bruno Guimaraes', 'Eder Militao', 'Marquinhos', 'Gabriel Jesus'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Luis Suarez', 'Edinson Cavani', 'Diego Forlan', 'Diego Godin'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Colombia',
+        players: ['Carlos Valderrama', 'Radamel Falcao', 'James Rodriguez', 'Faustino Asprilla'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-212',
+    groups: [
+      {
+        category: 'From Croatia',
+        players: ['Zvonimir Boban', 'Robert Prosinecki', 'Mateo Kovacic', 'Ivan Perisic'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Germany',
+        players: ['Jamal Musiala', 'Florian Wirtz', 'Antonio Rudiger', 'Mats Hummels'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Jay-Jay Okocha', 'Nwankwo Kanu', 'Rashidi Yekini', 'John Obi Mikel'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From France',
+        players: ['Hugo Lloris', 'Raphael Varane', 'Benjamin Pavard', 'Kingsley Coman'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-213',
+    groups: [
+      {
+        category: 'From Sweden',
+        players: ['Alexander Isak', 'Dejan Kulusevski', 'Victor Lindelof', 'Sebastian Larsson'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Johan Cruyff', 'Marco van Basten', 'Ruud Gullit', 'Dennis Bergkamp'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Gonzalo Higuain', 'Gabriel Batistuta', 'Javier Mascherano', 'Carlos Tevez'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Croatia',
+        players: ['Marcelo Brozovic', 'Dejan Lovren', 'Domagoj Vida', 'Josko Gvardiol'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-214',
+    groups: [
+      {
+        category: 'From Colombia',
+        players: ['Juan Cuadrado', 'Luis Diaz', 'Davinson Sanchez', 'Yerry Mina'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Romelu Lukaku', 'Thibaut Courtois', 'Vincent Kompany', 'Axel Witsel'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Marco Asensio', 'Isco', 'Pepe Reina', 'Joaquin'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Thomas Partey', 'Mohammed Kudus', 'Jordan Ayew', 'Andre Ayew'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-215',
+    groups: [
+      {
+        category: 'From Nigeria',
+        players: ['Obafemi Martins', 'Vincent Enyeama', 'Kelechi Iheanacho', 'Alex Iwobi'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Alvaro Recoba', 'Enzo Francescoli', 'Rodrigo Bentancur', 'Federico Valverde'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Portugal',
+        players: ['Nani', 'Pepe', 'Bruno Fernandes', 'Bernardo Silva'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Juan Roman Riquelme', 'Hernan Crespo', 'Javier Zanetti', 'Juan Sebastian Veron'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-216',
+    groups: [
+      {
+        category: 'From Ghana',
+        players: ['Michael Essien', 'Asamoah Gyan', 'Abedi Pele', 'Stephen Appiah'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Colombia',
+        players: ['David Ospina', 'Jefferson Lerma', 'Johan Mojica', 'Mateus Uribe'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Darwin Nunez', 'Ronald Araujo', 'Sebastian Coates', 'Jose Maria Gimenez'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Arjen Robben', 'Wesley Sneijder', 'Robin van Persie', 'Ruud van Nistelrooy'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-217',
+    groups: [
+      {
+        category: 'From Senegal',
+        players: ['Sadio Mane', 'El Hadji Diouf', 'Kalidou Koulibaly', 'Idrissa Gueye'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Sulley Muntari', 'Kwadwo Asamoah', 'Thomas Partey', 'Mohammed Kudus'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Ola Aina', 'Victor Osimhen', 'Ademola Lookman', 'Wilfred Ndidi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Sweden',
+        players: ['Zlatan Ibrahimovic', 'Henrik Larsson', 'Freddie Ljungberg', 'Emil Forsberg'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-218',
+    groups: [
+      {
+        category: 'From France',
+        players: ['Zinedine Zidane', 'Thierry Henry', 'Michel Platini', 'Patrick Vieira'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Pele', 'Ronaldo Nazario', 'Ronaldinho Gaucho', 'Neymar Jr'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Paulo Dybala', 'Julian Alvarez', 'Lautaro Martinez', 'Emiliano Martinez'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Italy',
+        players: ['Paolo Maldini', 'Andrea Pirlo', 'Francesco Totti', 'Gianluigi Buffon'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-219',
+    groups: [
+      {
+        category: 'From Brazil',
+        players: ['Ricardo Kaka', 'Rivaldo Vitor', 'Roberto Carlos', 'Cafu'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Germany',
+        players: ['Franz Beckenbauer', 'Miroslav Klose', 'Gerd Muller', 'Thomas Muller'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Xavi Hernandez', 'Andres Iniesta', 'Iker Casillas', 'David Villa'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Dries Mertens', 'Marouane Fellaini', 'Thomas Vermaelen', 'Jan Vertonghen'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-220',
+    groups: [
+      {
+        category: 'From Argentina',
+        players: ['Rodrigo De Paul', 'Esteban Cambiasso', 'Diego Simeone', 'Walter Samuel'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Spain',
+        players: ['Sergio Ramos', 'Carles Puyol', 'Raul', 'Fernando Torres'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Portugal',
+        players: ['Joao Felix', 'Ruben Dias', 'Diogo Jota', 'Joao Cancelo'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Jay-Jay Okocha', 'Nwankwo Kanu', 'Rashidi Yekini', 'John Obi Mikel'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-221',
+    groups: [
+      {
+        category: 'From Germany',
+        players: ['Manuel Neuer', 'Philipp Lahm', 'Bastian Schweinsteiger', 'Lothar Matthaus'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Edgar Davids', 'Clarence Seedorf', 'Patrick Kluivert', 'Frank Rijkaard'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Luis Suarez', 'Edinson Cavani', 'Diego Forlan', 'Diego Godin'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Romario', 'Socrates', 'Zico', 'Dani Alves'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-222',
+    groups: [
+      {
+        category: 'From Italy',
+        players: ['Fabio Cannavaro', 'Roberto Baggio', 'Alessandro Del Piero', 'Alessandro Nesta'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Youri Tielemans', 'Leandro Trossard', 'Toby Alderweireld', 'Kevin Mirallas'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Obafemi Martins', 'Vincent Enyeama', 'Kelechi Iheanacho', 'Alex Iwobi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From England',
+        players: ['David Beckham', 'Steven Gerrard', 'Frank Lampard', 'Wayne Rooney'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-223',
+    groups: [
+      {
+        category: 'From England',
+        players: ['Michael Owen', 'Alan Shearer', 'Paul Scholes', 'John Terry'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Colombia',
+        players: ['Carlos Valderrama', 'Radamel Falcao', 'James Rodriguez', 'Faustino Asprilla'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Gabriel Heinze', 'Ariel Ortega', 'Pablo Aimar', 'Nicolas Otamendi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Senegal',
+        players: ['Cheikhou Kouyate', 'Ismaila Sarr', 'Edouard Mendy', 'Boulaye Dia'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-224',
+    groups: [
+      {
+        category: 'From Netherlands',
+        players: ['Virgil van Dijk', 'Frenkie de Jong', 'Memphis Depay', 'Matthijs de Ligt'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Jordan Ayew', 'Andre Ayew', 'Michael Essien', 'Asamoah Gyan'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Sergio Busquets', 'Gerard Pique', 'Cesc Fabregas', 'David Silva'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Germany',
+        players: ['Toni Kroos', 'Mesut Ozil', 'Jurgen Klinsmann', 'Karl-Heinz Rummenigge'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-225',
+    groups: [
+      {
+        category: 'From Belgium',
+        players: ['Eden Hazard', 'Kevin De Bruyne', 'Romelu Lukaku', 'Thibaut Courtois'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Marcelo', 'Casemiro', 'Vinicius Junior', 'Rodrygo'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Alvaro Recoba', 'Enzo Francescoli', 'Rodrigo Bentancur', 'Federico Valverde'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Colombia',
+        players: ['Juan Cuadrado', 'Luis Diaz', 'Davinson Sanchez', 'Yerry Mina'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-226',
+    groups: [
+      {
+        category: 'From Sweden',
+        players: ['Tomas Brolin', 'Olof Mellberg', 'Alexander Isak', 'Dejan Kulusevski'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Georginio Wijnaldum', 'Edwin van der Sar', 'Jaap Stam', 'Marc Overmars'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Lionel Messi', 'Diego Maradona', 'Angel Di Maria', 'Sergio Aguero'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Croatia',
+        players: ['Zvonimir Boban', 'Robert Prosinecki', 'Mateo Kovacic', 'Ivan Perisic'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-227',
+    groups: [
+      {
+        category: 'From Colombia',
+        players: ['David Ospina', 'Jefferson Lerma', 'Johan Mojica', 'Mateus Uribe'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Vincent Kompany', 'Axel Witsel', 'Dries Mertens', 'Marouane Fellaini'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Alvaro Morata', 'Rodri', 'Pedri', 'Gavi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Abedi Pele', 'Stephen Appiah', 'Sulley Muntari', 'Kwadwo Asamoah'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-228',
+    groups: [
+      {
+        category: 'From Nigeria',
+        players: ['Jay-Jay Okocha', 'Nwankwo Kanu', 'Rashidi Yekini', 'John Obi Mikel'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Darwin Nunez', 'Ronald Araujo', 'Sebastian Coates', 'Jose Maria Gimenez'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Portugal',
+        players: ['Ruben Neves', 'Vitinha', 'Rafael Leao', 'Joao Moutinho'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Gonzalo Higuain', 'Gabriel Batistuta', 'Javier Mascherano', 'Carlos Tevez'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-229',
+    groups: [
+      {
+        category: 'From Ghana',
+        players: ['Thomas Partey', 'Mohammed Kudus', 'Jordan Ayew', 'Andre Ayew'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Colombia',
+        players: ['Carlos Valderrama', 'Radamel Falcao', 'James Rodriguez', 'Faustino Asprilla'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Luis Suarez', 'Edinson Cavani', 'Diego Forlan', 'Diego Godin'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Johan Cruyff', 'Marco van Basten', 'Ruud Gullit', 'Dennis Bergkamp'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-230',
+    groups: [
+      {
+        category: 'From Senegal',
+        players: ['Nicolas Jackson', 'Pape Bouba Diop', 'Sadio Mane', 'El Hadji Diouf'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Michael Essien', 'Asamoah Gyan', 'Abedi Pele', 'Stephen Appiah'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Obafemi Martins', 'Vincent Enyeama', 'Kelechi Iheanacho', 'Alex Iwobi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Sweden',
+        players: ['Victor Lindelof', 'Sebastian Larsson', 'Zlatan Ibrahimovic', 'Henrik Larsson'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-231',
+    groups: [
+      {
+        category: 'From France',
+        players: ['Karim Benzema', 'Eric Cantona', 'Claude Makelele', 'David Trezeguet'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Thiago Silva', 'Alisson', 'Adriano Leite', 'Robinho'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Juan Roman Riquelme', 'Hernan Crespo', 'Javier Zanetti', 'Juan Sebastian Veron'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Italy',
+        players: ['Marco Materazzi', 'Gennaro Gattuso', 'Franco Baresi', 'Paolo Rossi'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-232',
+    groups: [
+      {
+        category: 'From Brazil',
+        players: ['Bruno Guimaraes', 'Eder Militao', 'Marquinhos', 'Gabriel Jesus'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Germany',
+        players: ['Ilkay Gundogan', 'Joshua Kimmich', 'Leroy Sane', 'Kai Havertz'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Xabi Alonso', 'Fernando Hierro', 'Santi Cazorla', 'Koke'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Thomas Vermaelen', 'Jan Vertonghen', 'Youri Tielemans', 'Leandro Trossard'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-233',
+    groups: [
+      {
+        category: 'From Argentina',
+        players: ['Paulo Dybala', 'Julian Alvarez', 'Lautaro Martinez', 'Emiliano Martinez'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Spain',
+        players: ['Marco Asensio', 'Isco', 'Pepe Reina', 'Joaquin'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Portugal',
+        players: ['Cristiano Ronaldo', 'Luis Figo', 'Eusebio', 'Rui Costa'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Ola Aina', 'Victor Osimhen', 'Ademola Lookman', 'Wilfred Ndidi'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-234',
+    groups: [
+      {
+        category: 'From Germany',
+        players: ['Jamal Musiala', 'Florian Wirtz', 'Antonio Rudiger', 'Mats Hummels'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Arjen Robben', 'Wesley Sneijder', 'Robin van Persie', 'Ruud van Nistelrooy'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Alvaro Recoba', 'Enzo Francescoli', 'Rodrigo Bentancur', 'Federico Valverde'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Pele', 'Ronaldo Nazario', 'Ronaldinho Gaucho', 'Neymar Jr'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-235',
+    groups: [
+      {
+        category: 'From Italy',
+        players: ['Gianluca Vialli', 'Filippo Inzaghi', 'Giorgio Chiellini', 'Leonardo Bonucci'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Toby Alderweireld', 'Kevin Mirallas', 'Eden Hazard', 'Kevin De Bruyne'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Jay-Jay Okocha', 'Nwankwo Kanu', 'Rashidi Yekini', 'John Obi Mikel'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From England',
+        players: ['Rio Ferdinand', 'Harry Kane', 'Raheem Sterling', 'Gary Lineker'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-236',
+    groups: [
+      {
+        category: 'From England',
+        players: ['Paul Gascoigne', 'Bobby Charlton', 'Jude Bellingham', 'Bukayo Saka'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Colombia',
+        players: ['Juan Cuadrado', 'Luis Diaz', 'Davinson Sanchez', 'Yerry Mina'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Rodrigo De Paul', 'Esteban Cambiasso', 'Diego Simeone', 'Walter Samuel'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Senegal',
+        players: ['Kalidou Koulibaly', 'Idrissa Gueye', 'Cheikhou Kouyate', 'Ismaila Sarr'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-237',
+    groups: [
+      {
+        category: 'From Netherlands',
+        players: ['Edgar Davids', 'Clarence Seedorf', 'Patrick Kluivert', 'Frank Rijkaard'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Sulley Muntari', 'Kwadwo Asamoah', 'Thomas Partey', 'Mohammed Kudus'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Xavi Hernandez', 'Andres Iniesta', 'Iker Casillas', 'David Villa'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Germany',
+        players: ['Franz Beckenbauer', 'Miroslav Klose', 'Gerd Muller', 'Thomas Muller'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-238',
+    groups: [
+      {
+        category: 'From Belgium',
+        players: ['Romelu Lukaku', 'Thibaut Courtois', 'Vincent Kompany', 'Axel Witsel'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Ricardo Kaka', 'Rivaldo Vitor', 'Roberto Carlos', 'Cafu'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Darwin Nunez', 'Ronald Araujo', 'Sebastian Coates', 'Jose Maria Gimenez'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Colombia',
+        players: ['David Ospina', 'Jefferson Lerma', 'Johan Mojica', 'Mateus Uribe'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-239',
+    groups: [
+      {
+        category: 'From Sweden',
+        players: ['Freddie Ljungberg', 'Emil Forsberg', 'Tomas Brolin', 'Olof Mellberg'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Virgil van Dijk', 'Frenkie de Jong', 'Memphis Depay', 'Matthijs de Ligt'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Gabriel Heinze', 'Ariel Ortega', 'Pablo Aimar', 'Nicolas Otamendi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Croatia',
+        players: ['Luka Modric', 'Mario Mandzukic', 'Ivan Rakitic', 'Davor Suker'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-240',
+    groups: [
+      {
+        category: 'From Colombia',
+        players: ['Carlos Valderrama', 'Radamel Falcao', 'James Rodriguez', 'Faustino Asprilla'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Dries Mertens', 'Marouane Fellaini', 'Thomas Vermaelen', 'Jan Vertonghen'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Sergio Ramos', 'Carles Puyol', 'Raul', 'Fernando Torres'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Jordan Ayew', 'Andre Ayew', 'Michael Essien', 'Asamoah Gyan'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-241',
+    groups: [
+      {
+        category: 'From Nigeria',
+        players: ['Ola Aina', 'Victor Osimhen', 'Ademola Lookman', 'Wilfred Ndidi'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Luis Suarez', 'Edinson Cavani', 'Diego Forlan', 'Diego Godin'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Portugal',
+        players: ['Nani', 'Pepe', 'Bruno Fernandes', 'Bernardo Silva'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Lionel Messi', 'Diego Maradona', 'Angel Di Maria', 'Sergio Aguero'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-242',
+    groups: [
+      {
+        category: 'From Ghana',
+        players: ['Abedi Pele', 'Stephen Appiah', 'Sulley Muntari', 'Kwadwo Asamoah'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Colombia',
+        players: ['Juan Cuadrado', 'Luis Diaz', 'Davinson Sanchez', 'Yerry Mina'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Alvaro Recoba', 'Enzo Francescoli', 'Rodrigo Bentancur', 'Federico Valverde'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Georginio Wijnaldum', 'Edwin van der Sar', 'Jaap Stam', 'Marc Overmars'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-243',
+    groups: [
+      {
+        category: 'From Senegal',
+        players: ['Edouard Mendy', 'Boulaye Dia', 'Nicolas Jackson', 'Pape Bouba Diop'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Thomas Partey', 'Mohammed Kudus', 'Jordan Ayew', 'Andre Ayew'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Jay-Jay Okocha', 'Nwankwo Kanu', 'Rashidi Yekini', 'John Obi Mikel'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Sweden',
+        players: ['Alexander Isak', 'Dejan Kulusevski', 'Victor Lindelof', 'Sebastian Larsson'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-244',
+    groups: [
+      {
+        category: 'From France',
+        players: ['Aurelien Tchouameni', 'Eduardo Camavinga', 'Ousmane Dembele', 'Theo Hernandez'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Romario', 'Socrates', 'Zico', 'Dani Alves'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Gonzalo Higuain', 'Gabriel Batistuta', 'Javier Mascherano', 'Carlos Tevez'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Italy',
+        players: ['Marco Verratti', 'Federico Chiesa', 'Nicolo Barella', 'Gianluigi Donnarumma'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-245',
+    groups: [
+      {
+        category: 'From Brazil',
+        players: ['Marcelo', 'Casemiro', 'Vinicius Junior', 'Rodrygo'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Germany',
+        players: ['Toni Kroos', 'Mesut Ozil', 'Jurgen Klinsmann', 'Karl-Heinz Rummenigge'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Sergio Busquets', 'Gerard Pique', 'Cesc Fabregas', 'David Silva'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Youri Tielemans', 'Leandro Trossard', 'Toby Alderweireld', 'Kevin Mirallas'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-246',
+    groups: [
+      {
+        category: 'From Argentina',
+        players: ['Juan Roman Riquelme', 'Hernan Crespo', 'Javier Zanetti', 'Juan Sebastian Veron'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Spain',
+        players: ['Alvaro Morata', 'Rodri', 'Pedri', 'Gavi'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Portugal',
+        players: ['Joao Felix', 'Ruben Dias', 'Diogo Jota', 'Joao Cancelo'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Obafemi Martins', 'Vincent Enyeama', 'Kelechi Iheanacho', 'Alex Iwobi'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-247',
+    groups: [
+      {
+        category: 'From Germany',
+        players: ['Oliver Kahn', 'Michael Ballack', 'Lukas Podolski', 'Sami Khedira'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Netherlands',
+        players: ['Johan Cruyff', 'Marco van Basten', 'Ruud Gullit', 'Dennis Bergkamp'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Uruguay',
+        players: ['Darwin Nunez', 'Ronald Araujo', 'Sebastian Coates', 'Jose Maria Gimenez'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Brazil',
+        players: ['Thiago Silva', 'Alisson', 'Adriano Leite', 'Robinho'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-248',
+    groups: [
+      {
+        category: 'From Italy',
+        players: ['Sandro Tonali', 'Alessandro Bastoni', 'Gianfranco Zola', 'Christian Vieri'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Belgium',
+        players: ['Eden Hazard', 'Kevin De Bruyne', 'Romelu Lukaku', 'Thibaut Courtois'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Nigeria',
+        players: ['Ola Aina', 'Victor Osimhen', 'Ademola Lookman', 'Wilfred Ndidi'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From England',
+        players: ['Phil Foden', 'Marcus Rashford', 'Kyle Walker', 'John Stones'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-249',
+    groups: [
+      {
+        category: 'From England',
+        players: ['Jordan Henderson', 'Jack Grealish', 'Ashley Cole', 'Sol Campbell'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Colombia',
+        players: ['David Ospina', 'Jefferson Lerma', 'Johan Mojica', 'Mateus Uribe'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Argentina',
+        players: ['Paulo Dybala', 'Julian Alvarez', 'Lautaro Martinez', 'Emiliano Martinez'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Senegal',
+        players: ['Sadio Mane', 'El Hadji Diouf', 'Kalidou Koulibaly', 'Idrissa Gueye'],
+        difficulty: 'insane',
+      },
+    ],
+  },
+  {
+    id: 'puzzle-250',
+    groups: [
+      {
+        category: 'From Netherlands',
+        players: ['Arjen Robben', 'Wesley Sneijder', 'Robin van Persie', 'Ruud van Nistelrooy'],
+        difficulty: 'easy',
+      },
+      {
+        category: 'From Ghana',
+        players: ['Michael Essien', 'Asamoah Gyan', 'Abedi Pele', 'Stephen Appiah'],
+        difficulty: 'medium',
+      },
+      {
+        category: 'From Spain',
+        players: ['Xabi Alonso', 'Fernando Hierro', 'Santi Cazorla', 'Koke'],
+        difficulty: 'hard',
+      },
+      {
+        category: 'From Germany',
+        players: ['Ilkay Gundogan', 'Joshua Kimmich', 'Leroy Sane', 'Kai Havertz'],
+        difficulty: 'insane',
+      },
+    ],
+  },
 ];
