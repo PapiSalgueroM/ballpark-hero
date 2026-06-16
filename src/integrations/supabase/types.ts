@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      baseball_connections_puzzles: {
+        Row: {
+          created_at: string
+          groups_json: Json
+          id: string
+          puzzle_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          groups_json: Json
+          id?: string
+          puzzle_id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          groups_json?: Json
+          id?: string
+          puzzle_id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       cbb_daily: {
         Row: {
           created_at: string
@@ -169,6 +193,30 @@ export type Database = {
           mode?: string
           puzzle_date?: string
           score?: number
+        }
+        Relationships: []
+      }
+      connections_puzzles: {
+        Row: {
+          created_at: string
+          groups_json: Json
+          id: string
+          puzzle_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          groups_json: Json
+          id?: string
+          puzzle_id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          groups_json?: Json
+          id?: string
+          puzzle_id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -993,15 +1041,7 @@ export type Database = {
           player_id?: string
           puzzle_date?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "tennis_daily_player_id_fkey"
-            columns: ["player_id"]
-            isOneToOne: false
-            referencedRelation: "tennis_players"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       tennis_players: {
         Row: {
@@ -1018,9 +1058,9 @@ export type Database = {
           vibe_word: string
         }
         Insert: {
-          common_names?: string[]
+          common_names: string[]
           created_at?: string
-          difficulty?: string
+          difficulty: string
           famous_moment_hint: string
           id?: string
           nationality_era_hint: string
