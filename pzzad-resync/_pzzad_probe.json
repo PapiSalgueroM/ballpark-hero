@@ -1,0 +1,1133 @@
+{
+  "probed": 188,
+  "results": [
+    {
+      "table": "all_star_selections",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "ballon_dor",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "baseball_connections_puzzles",
+      "inFlawu": true,
+      "status": 200,
+      "count": 60
+    },
+    {
+      "table": "boxing_career_records",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "boxing_champions",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "boxing_champions_v2",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "boxing_major_fights",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "boxing_title_fights",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "bref_nba_player_seasons",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "career_players",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "career_records",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "career_seasons",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cbb_awards",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cbb_conference_tournament_champions",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cbb_naismith_winners",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cbb_programs",
+      "inFlawu": true,
+      "status": 200,
+      "count": 24
+    },
+    {
+      "table": "cbb_wooden_award",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cfb_all_americans",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cfb_ap_poll_final",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cfb_awards",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cfb_bowl_games",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cfb_bowl_results",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cfb_champions",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cfb_heisman_winners",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cfb_national_champions",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cfb_qb_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cfb_rankings",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cfb_rb_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "college_athletic_facts",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "conference_championships",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "connections_puzzles",
+      "inFlawu": true,
+      "status": 200,
+      "count": 250
+    },
+    {
+      "table": "cricket_championships",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "esports_championships",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "f1_constructors",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "f1_constructors_full",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "f1_driver_standings",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "f1_drivers",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "f1_drivers_full",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "f1_race_results",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "fantasy_draft_players",
+      "inFlawu": true,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "golf_awards",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "golf_major_results",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "golf_majors",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "golf_team_events",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "guess_nation_countries",
+      "inFlawu": true,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "guess_nation_daily",
+      "inFlawu": true,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "guess_nation_scores",
+      "inFlawu": true,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "hall_of_fame",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "halls_of_fame",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "href_nhl_player_seasons",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "individual_awards_v2",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_allstar",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_appearances",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_awards_managers",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_awards_players",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_awards_share_managers",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_awards_share_players",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_batting",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_batting_post",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_college_playing",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_fielding",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_fielding_of",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_fielding_of_split",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_fielding_post",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_hof",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_home_games",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_managers",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_managers_half",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_parks",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_people",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_pitching",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_pitching_post",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_salaries",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_schools",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_series_post",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_team_franchises",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_teams",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "lahman_teams_half",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "league_champions",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "mlb_batting_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "mlb_draft_picks",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "mlb_pitching_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "mlb_players",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "mma_fighter_careers",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nascar_champions",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nascar_cup_races",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nascar_driver_careers",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nascar_drivers",
+      "inFlawu": true,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "nascar_race_results",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nascar_teams",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "national_team_squads",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nba_all_star_rosters",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nba_draft_picks",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nba_finals",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nba_player_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nba_player_team_seasons",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nba_players_extended",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nba_players_extended_v2",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "ncaa_basketball_champions",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "ncaa_player_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "ncaa_tournament_games",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "ncaa_tournament_results",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nfl_defense_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nfl_draft_picks",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nfl_qb_passing_leaders",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nfl_rb_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nfl_team_achievements",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nfl_team_metadata",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nfl_team_seasons",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nfl_wr_te_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nflfastr_player_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nflfastr_rosters",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nflfastr_team_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nhl_draft",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nhl_draft_picks",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nhl_player_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "nhl_players",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "olympic_medalists",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "olympic_medals",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "player_market_values",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "question_reports",
+      "inFlawu": true,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "rugby_championships",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "shirt_number_puzzles",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "soccer_awards",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "soccer_club_puzzles",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "soccer_continental_finals",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "soccer_domestic_cup_finals",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "soccer_grid_puzzles",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "soccer_league_champions",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "soccer_league_top_scorers",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "soccer_player_career_paths",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "soccer_player_careers_expanded",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "soccer_player_facts",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "sports_awards",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "stanley_cup_finals",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "stanley_cup_finals_v2",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "stat_leaders",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "super_bowls",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "tennis_career_titles",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "tennis_daily",
+      "inFlawu": true,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "tennis_grand_slam_winners",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "tennis_grand_slams",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "tennis_players",
+      "inFlawu": true,
+      "status": 200,
+      "count": 40
+    },
+    {
+      "table": "tennis_scores",
+      "inFlawu": true,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "tennis_tour_winners",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "tennis_year_end_no1",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "tennis_year_end_rankings",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "transfer_path_puzzles",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "trophy_winners",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "ucl_top_scorers_by_season",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "ufc_champions",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "ufc_fights",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "ufc_fights_v2",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "user_roles",
+      "inFlawu": true,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "wnba_draft_picks",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "wnba_finals",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "world_cup_matches",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "world_cup_player_stats",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "world_cup_players",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "world_records",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "world_series",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "world_series_v2",
+      "inFlawu": true,
+      "status": 404,
+      "count": null
+    },
+    {
+      "table": "cbb_daily",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "cbb_scores",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "college_grid_selections",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "college_guess_scores",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "daily_badges",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "daily_completions",
+      "inFlawu": false,
+      "status": 200,
+      "count": 8
+    },
+    {
+      "table": "fantasy_draft_daily",
+      "inFlawu": false,
+      "status": 200,
+      "count": 51
+    },
+    {
+      "table": "fantasy_draft_votes",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "football_grid_selections",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "hof_votes",
+      "inFlawu": false,
+      "status": 200,
+      "count": 103
+    },
+    {
+      "table": "medal_games_scores",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "nascar_chain_scores",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "nascar_daily",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "nascar_scores",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "profiles",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "saved_brackets",
+      "inFlawu": false,
+      "status": 200,
+      "count": 5
+    },
+    {
+      "table": "soccer_career_clubs",
+      "inFlawu": false,
+      "status": 200,
+      "count": 81
+    },
+    {
+      "table": "soccer_careers",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "soccer_club_guess_scores",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "soccer_grid_selections",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "tennis_chain_scores",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "ufc_chain_scores",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "user_best_scores",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "user_game_scores",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "user_preferences",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    },
+    {
+      "table": "user_scores",
+      "inFlawu": false,
+      "status": 200,
+      "count": 0
+    }
+  ]
+}

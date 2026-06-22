@@ -1,0 +1,69 @@
+create table if not exists public.tennis_players (
+  id                   uuid        primary key default gen_random_uuid(),
+  player_name          text        not null unique,
+  common_names         text[]      not null,
+  vibe_word            text        not null,
+  nationality_era_hint text        not null,
+  tour_hint            text        not null,
+  slam_count_hint      text        not null,
+  slam_detail_hint     text        not null,
+  famous_moment_hint   text        not null,
+  difficulty           text        not null,
+  created_at           timestamptz not null default now()
+);
+alter table public.tennis_players enable row level security;
+do $$ begin
+  if not exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'tennis_players' and policyname = 'Public read-only') then
+    create policy "Public read-only" on public.tennis_players for select to anon, authenticated using (true);
+  end if;
+end $$;
+insert into public.tennis_players (player_name, common_names, vibe_word, nationality_era_hint, tour_hint, slam_count_hint, slam_detail_hint, famous_moment_hint, difficulty) values
+('Amelie Mauresmo', ARRAY['Mauresmo']::text[], 'Graceful', 'French player who peaked in the mid-2000s', 'Competed on the WTA Tour', 'Won 2 Grand Slams', 'Won the Australian Open once and Wimbledon once', 'Known for a serve-and-volley style rare in the modern women''s game', 'easy'),
+('Andre Agassi', ARRAY['Agassi']::text[], 'Showman', 'American player who peaked in the 1990s and early 2000s', 'Competed on the ATP Tour', 'Won 8 Grand Slams', 'Won the Australian Open 4 times, the US Open 2 times, the French Open once, and Wimbledon once', 'One of only two male players to achieve a Career Golden Slam', 'easy'),
+('Andy Murray', ARRAY['Murray']::text[], 'Resilient', 'British player who peaked in the 2010s', 'Competed on the ATP Tour', 'Won 3 Grand Slams', 'Won Wimbledon 2 times and the US Open once', 'Became the first British man to win Wimbledon in 77 years', 'easy'),
+('Andy Roddick', ARRAY['Roddick','A-Rod Tennis']::text[], 'Thunderous', 'American player who peaked in the 2000s', 'Competed on the ATP Tour', 'Won 1 Grand Slam', 'Won the US Open once', 'Known for one of the fastest serves ever and multiple heartbreaking Wimbledon finals', 'easy'),
+('Angelique Kerber', ARRAY['Kerber']::text[], 'Steady', 'German player who peaked in the mid-2010s', 'Competed on the WTA Tour', 'Won 3 Grand Slams', 'Won the Australian Open once, the US Open once, and Wimbledon once', 'Defeated the world No. 1 in two Grand Slam finals in a single year', 'easy'),
+('Arthur Ashe', ARRAY['Ashe']::text[], 'Dignified', 'American player who peaked in the 1970s', 'Competed on the ATP Tour', 'Won 3 Grand Slams', 'Won the Australian Open once, Wimbledon once, and the US Open once', 'The first Black man to win a Grand Slam singles title and a civil rights icon', 'easy'),
+('Ash Barty', ARRAY['Barty']::text[], 'Calm', 'Australian player who peaked in the early 2020s', 'Competed on the WTA Tour', 'Won 3 Grand Slams', 'Won the French Open once, Wimbledon once, and the Australian Open once', 'Retired at world No. 1 at just 25 years old after winning her home Grand Slam', 'easy'),
+('Billie Jean King', ARRAY['BJK','King']::text[], 'Revolutionary', 'American player who peaked in the late 1960s and 1970s', 'Competed on the WTA Tour', 'Won 12 Grand Slams', 'Won Wimbledon 6 times, the US Open 4 times, the Australian Open once, and the French Open once', 'Famous for winning the Battle of the Sexes exhibition match', 'easy'),
+('Bjorn Borg', ARRAY['Borg']::text[], 'Cool', 'Swedish player who dominated the late 1970s and early 1980s', 'Competed on the ATP Tour', 'Won 11 Grand Slams', 'Won the French Open 6 times and Wimbledon 5 times', 'Famous for retiring at just 26 years old at the peak of his career', 'easy'),
+('Boris Becker', ARRAY['Becker']::text[], 'Fearless', 'German player who peaked in the mid-1980s to 1990s', 'Competed on the ATP Tour', 'Won 6 Grand Slams', 'Won Wimbledon 3 times, the US Open once, and the Australian Open 2 times', 'Became the youngest ever Wimbledon champion at age 17', 'easy'),
+('Carlos Alcaraz', ARRAY['Alcaraz','Carlitos']::text[], 'Electric', 'Spanish player who burst onto the scene in the early 2020s', 'Competed on the ATP Tour', 'Won 4 Grand Slams', 'Won Wimbledon 2 times, the French Open once, and the US Open once', 'Became the youngest world No. 1 in ATP history', 'easy'),
+('Chris Evert', ARRAY['Evert','Chrissie']::text[], 'Poised', 'American player who dominated the 1970s and 1980s', 'Competed on the WTA Tour', 'Won 18 Grand Slams', 'Won the French Open 7 times, the US Open 6 times, the Australian Open 2 times, and Wimbledon 3 times', 'Had a legendary rivalry with another all-time great that elevated the sport', 'easy'),
+('Coco Gauff', ARRAY['Gauff','Coco']::text[], 'Rising Star', 'American player who rose to prominence in the early 2020s', 'Competed on the WTA Tour', 'Won 1 Grand Slam', 'Won the US Open once', 'Burst onto the scene as a teenager at Wimbledon before winning her first major', 'easy'),
+('Daniil Medvedev', ARRAY['Medvedev']::text[], 'Unorthodox', 'Russian player who peaked in the early 2020s', 'Competed on the ATP Tour', 'Won 1 Grand Slam', 'Won the US Open once', 'Known for a unique playing style and epic five-set battles in Grand Slam finals', 'easy'),
+('Gustavo Kuerten', ARRAY['Kuerten','Guga']::text[], 'Charismatic', 'Brazilian player who peaked in the late 1990s and early 2000s', 'Competed on the ATP Tour', 'Won 3 Grand Slams', 'Won the French Open 3 times', 'Famous for drawing a heart on the clay after winning a title', 'easy'),
+('Iga Swiatek', ARRAY['Swiatek']::text[], 'Dominant', 'Polish player who dominated from the early 2020s', 'Competed on the WTA Tour', 'Won 5 Grand Slams', 'Won the French Open 4 times and the US Open once', 'Known for an extraordinary winning streak on clay courts', 'easy'),
+('Ivan Lendl', ARRAY['Lendl']::text[], 'Methodical', 'Czech-American player who dominated the mid-1980s', 'Competed on the ATP Tour', 'Won 8 Grand Slams', 'Won the French Open 3 times, the Australian Open 2 times, and the US Open 3 times', 'Appeared in 8 consecutive US Open finals', 'easy'),
+('Jannik Sinner', ARRAY['Sinner']::text[], 'Relentless', 'Italian player who rose to the top in the mid-2020s', 'Competed on the ATP Tour', 'Won 3 Grand Slams', 'Won the Australian Open 2 times and the US Open once', 'Became the first Italian man to reach world No. 1', 'easy'),
+('Jennifer Capriati', ARRAY['Capriati']::text[], 'Redemption', 'American player who peaked in the early 2000s', 'Competed on the WTA Tour', 'Won 3 Grand Slams', 'Won the Australian Open 2 times and the French Open once', 'A former teen prodigy who overcame personal struggles to reach the top', 'easy'),
+('Jim Courier', ARRAY['Courier']::text[], 'Powerful', 'American player who peaked in the early 1990s', 'Competed on the ATP Tour', 'Won 4 Grand Slams', 'Won the French Open 2 times and the Australian Open 2 times', 'Reached No. 1 through sheer power and aggressive baseline play', 'easy'),
+('Jimmy Connors', ARRAY['Connors','Jimbo']::text[], 'Gritty', 'American player who peaked in the 1970s and 1980s', 'Competed on the ATP Tour', 'Won 8 Grand Slams', 'Won the US Open 5 times, Wimbledon 2 times, and the Australian Open once', 'Known for a legendary run at the US Open at age 39', 'easy'),
+('John McEnroe', ARRAY['McEnroe','Mac']::text[], 'Volatile', 'American player who peaked in the late 1970s and 1980s', 'Competed on the ATP Tour', 'Won 7 Grand Slams', 'Won the US Open 4 times and Wimbledon 3 times', 'Known for fiery on-court outbursts and the famous phrase directed at umpires', 'easy'),
+('Juan Martin del Potro', ARRAY['Del Potro','Delpo']::text[], 'Giant', 'Argentine player who peaked in the late 2000s and 2010s', 'Competed on the ATP Tour', 'Won 1 Grand Slam', 'Won the US Open once', 'Famous for a thunderous forehand and overcoming multiple wrist injuries', 'easy'),
+('Justine Henin', ARRAY['Henin']::text[], 'Warrior', 'Belgian player who peaked in the 2000s', 'Competed on the WTA Tour', 'Won 7 Grand Slams', 'Won the French Open 4 times, the US Open 2 times, and the Australian Open once', 'Known for a brilliant one-handed backhand rare in women''s tennis', 'easy'),
+('Kim Clijsters', ARRAY['Clijsters']::text[], 'Joyful', 'Belgian player who peaked in the 2000s and 2010s', 'Competed on the WTA Tour', 'Won 4 Grand Slams', 'Won the US Open 3 times and the Australian Open once', 'Made a remarkable comeback from retirement to win more Grand Slams', 'easy'),
+('Lindsay Davenport', ARRAY['Davenport']::text[], 'Powerful', 'American player who peaked in the late 1990s and 2000s', 'Competed on the WTA Tour', 'Won 3 Grand Slams', 'Won the US Open once, Wimbledon once, and the Australian Open once', 'Known for overpowering opponents with her size and groundstrokes', 'easy'),
+('Lleyton Hewitt', ARRAY['Hewitt']::text[], 'Fighter', 'Australian player who peaked in the early 2000s', 'Competed on the ATP Tour', 'Won 2 Grand Slams', 'Won the US Open once and Wimbledon once', 'Became the youngest year-end No. 1 in ATP history at age 20', 'easy'),
+('Maria Sharapova', ARRAY['Sharapova']::text[], 'Fierce', 'Russian player who peaked in the 2000s and 2010s', 'Competed on the WTA Tour', 'Won 5 Grand Slams', 'Won the French Open 2 times, the Australian Open once, Wimbledon once, and the US Open once', 'One of a select few to achieve the Career Grand Slam in women''s tennis', 'easy'),
+('Martina Navratilova', ARRAY['Navratilova']::text[], 'Tenacious', 'Czech-American player who dominated from the late 1970s to the 1990s', 'Competed on the WTA Tour', 'Won 18 Grand Slams', 'Won Wimbledon 9 times, the US Open 4 times, the Australian Open 3 times, and the French Open 2 times', 'Holds the record for most Wimbledon singles titles', 'easy'),
+('Mats Wilander', ARRAY['Wilander']::text[], 'Versatile', 'Swedish player who peaked in the 1980s', 'Competed on the ATP Tour', 'Won 7 Grand Slams', 'Won the Australian Open 3 times, the French Open 3 times, and the US Open once', 'Won three Grand Slams in a single calendar year', 'easy'),
+('Monica Seles', ARRAY['Seles']::text[], 'Explosive', 'Yugoslav-American player who peaked in the early 1990s', 'Competed on the WTA Tour', 'Won 9 Grand Slams', 'Won the Australian Open 4 times, the French Open 3 times, and the US Open 2 times', 'Career was tragically interrupted by an on-court stabbing incident', 'easy'),
+('Naomi Osaka', ARRAY['Osaka']::text[], 'Fearless', 'Japanese player who rose to prominence in the late 2010s', 'Competed on the WTA Tour', 'Won 4 Grand Slams', 'Won the US Open 2 times and the Australian Open 2 times', 'Became an icon for mental health advocacy in professional sports', 'easy'),
+('Novak Djokovic', ARRAY['Djokovic','Nole','Djoker']::text[], 'Dominant', 'Serbian player who peaked from the 2010s onward', 'Competed on the ATP Tour', 'Won 24 Grand Slams', 'Won the Australian Open 10 times, Wimbledon 7 times, the US Open 4 times, and the French Open 3 times', 'Holds the record for most weeks at world No. 1', 'easy'),
+('Pete Sampras', ARRAY['Sampras']::text[], 'Clinical', 'American player who dominated the 1990s', 'Competed on the ATP Tour', 'Won 14 Grand Slams', 'Won Wimbledon 7 times, the US Open 5 times, and the Australian Open 2 times', 'Held the Grand Slam record for nearly a decade before it was broken', 'easy'),
+('Rafael Nadal', ARRAY['Nadal','Rafa']::text[], 'Relentless', 'Spanish player who dominated from the mid-2000s onwards', 'Competed on the ATP Tour', 'Won 22 Grand Slams', 'Won the French Open a record 14 times, the US Open 4 times, the Australian Open 2 times, and Wimbledon 2 times', 'Considered the greatest clay court player of all time', 'easy'),
+('Roger Federer', ARRAY['Federer','Fed','RF']::text[], 'Elegant', 'Swiss player who dominated from the early 2000s to the 2020s', 'Competed on the ATP Tour', 'Won 20 Grand Slams', 'Won Wimbledon 8 times, the Australian Open 6 times, the US Open 5 times, and the French Open once', 'Known for an iconic rivalry with two other greats that defined modern tennis', 'easy'),
+('Serena Williams', ARRAY['Serena','S. Williams']::text[], 'Fierce', 'American player who dominated from the late 1990s to the 2020s', 'Competed on the WTA Tour', 'Won 23 Grand Slams', 'Won the Australian Open 7 times, Wimbledon 7 times, the US Open 6 times, and the French Open 3 times', 'Widely regarded as the greatest female tennis player ever', 'easy'),
+('Stan Wawrinka', ARRAY['Wawrinka','Stan the Man']::text[], 'Clutch', 'Swiss player who peaked in the mid-2010s', 'Competed on the ATP Tour', 'Won 3 Grand Slams', 'Won the Australian Open once, the French Open once, and the US Open once', 'Known for producing his best tennis in Grand Slam finals against top rivals', 'easy'),
+('Steffi Graf', ARRAY['Graf']::text[], 'Supreme', 'German player who dominated the late 1980s and 1990s', 'Competed on the WTA Tour', 'Won 22 Grand Slams', 'Won the French Open 6 times, Wimbledon 7 times, the US Open 5 times, and the Australian Open 4 times', 'The only player to achieve the Calendar Year Golden Slam', 'easy'),
+('Venus Williams', ARRAY['Venus','V. Williams']::text[], 'Pioneer', 'American player who rose to prominence in the late 1990s', 'Competed on the WTA Tour', 'Won 7 Grand Slams', 'Won Wimbledon 5 times and the US Open 2 times', 'Known for paving the way alongside her sister and changing the sport', 'easy')
+on conflict (player_name) do update set
+  common_names = excluded.common_names,
+  vibe_word = excluded.vibe_word,
+  nationality_era_hint = excluded.nationality_era_hint,
+  tour_hint = excluded.tour_hint,
+  slam_count_hint = excluded.slam_count_hint,
+  slam_detail_hint = excluded.slam_detail_hint,
+  famous_moment_hint = excluded.famous_moment_hint,
+  difficulty = excluded.difficulty;

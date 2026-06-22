@@ -1,0 +1,656 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e4]:
+    - paragraph [ref=e5]:
+      - text: We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy.
+      - link "Learn More" [ref=e6] [cursor=pointer]:
+        - /url: /privacy
+    - button "Accept" [ref=e7] [cursor=pointer]
+  - banner [ref=e8]:
+    - generic [ref=e9]:
+      - link "DoUKnowBall" [ref=e10] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e11]: DoUKnowBall
+      - generic [ref=e12]:
+        - button "Log In" [ref=e13] [cursor=pointer]
+        - button "Sign Up" [ref=e14] [cursor=pointer]
+    - paragraph [ref=e16]: Create a free account to save your scores and track your streak! 🔥
+  - generic [ref=e17]:
+    - generic [ref=e20]:
+      - heading "DoUKnowBall" [level=1] [ref=e21]
+      - paragraph [ref=e22]: The Ultimate Sports Trivia Hub
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - img [ref=e25]
+          - generic [ref=e27]:
+            - strong [ref=e28]: "44"
+            - text: games to play
+        - generic [ref=e29]:
+          - img [ref=e30]
+          - generic [ref=e36]:
+            - text: You've played
+            - strong [ref=e37]: 0/44
+            - text: today
+    - generic [ref=e38]:
+      - paragraph [ref=e40]: 🔥 Most Played Today
+      - generic [ref=e45]:
+        - generic [ref=e46]:
+          - heading "Today's Daily Games" [level=2] [ref=e47]
+          - generic [ref=e48]: 0/27 completed
+        - generic [ref=e49]:
+          - link "🏈 Pro Football Grid" [ref=e50] [cursor=pointer]:
+            - /url: /football-grid
+            - generic [ref=e51]: 🏈
+            - generic [ref=e52]: Pro Football Grid
+            - img [ref=e53]
+          - link "📅 Timeline" [ref=e55] [cursor=pointer]:
+            - /url: /football-timeline
+            - generic [ref=e56]: 📅
+            - generic [ref=e57]: Timeline
+            - img [ref=e58]
+          - link "🎰 Draft Guesser" [ref=e60] [cursor=pointer]:
+            - /url: /football-draft
+            - generic [ref=e61]: 🎰
+            - generic [ref=e62]: Draft Guesser
+            - img [ref=e63]
+          - link "🏈 NFL Career Path" [ref=e65] [cursor=pointer]:
+            - /url: /nfl-career
+            - generic [ref=e66]: 🏈
+            - generic [ref=e67]: NFL Career Path
+            - img [ref=e68]
+          - link "🏈 Guess The Team" [ref=e70] [cursor=pointer]:
+            - /url: /guess-nfl-team
+            - generic [ref=e71]: 🏈
+            - generic [ref=e72]: Guess The Team
+            - img [ref=e73]
+          - link "🗺️ NFL Conquest" [ref=e75] [cursor=pointer]:
+            - /url: /conquest
+            - generic [ref=e76]: 🗺️
+            - generic [ref=e77]: NFL Conquest
+            - img [ref=e78]
+          - link "🎓 College Grid" [ref=e80] [cursor=pointer]:
+            - /url: /college-grid
+            - generic [ref=e81]: 🎓
+            - generic [ref=e82]: College Grid
+            - img [ref=e83]
+          - link "🏫 Guess The College" [ref=e85] [cursor=pointer]:
+            - /url: /guess-the-college
+            - generic [ref=e86]: 🏫
+            - generic [ref=e87]: Guess The College
+            - img [ref=e88]
+          - link "🏀 Guess The CBB Program" [ref=e90] [cursor=pointer]:
+            - /url: /guess-cbb-team
+            - generic [ref=e91]: 🏀
+            - generic [ref=e92]: Guess The CBB Program
+            - img [ref=e93]
+          - link "⚾ Career Path" [ref=e95] [cursor=pointer]:
+            - /url: /baseball-career
+            - generic [ref=e96]: ⚾
+            - generic [ref=e97]: Career Path
+            - img [ref=e98]
+          - link "⚾ Connections" [ref=e100] [cursor=pointer]:
+            - /url: /baseball-connections
+            - generic [ref=e101]: ⚾
+            - generic [ref=e102]: Connections
+            - img [ref=e103]
+          - link "🏒 Career Path" [ref=e105] [cursor=pointer]:
+            - /url: /hockey-career
+            - generic [ref=e106]: 🏒
+            - generic [ref=e107]: Career Path
+            - img [ref=e108]
+          - link "🏒 Higher / Lower" [ref=e110] [cursor=pointer]:
+            - /url: /hockey-higher-lower
+            - generic [ref=e111]: 🏒
+            - generic [ref=e112]: Higher / Lower
+            - img [ref=e113]
+          - link "🏆 World Cup" [ref=e115] [cursor=pointer]:
+            - /url: /world-cup
+            - generic [ref=e116]: 🏆
+            - generic [ref=e117]: World Cup
+            - img [ref=e118]
+          - link "🏟️ Guess The Club" [ref=e120] [cursor=pointer]:
+            - /url: /guess-soccer-club
+            - generic [ref=e121]: 🏟️
+            - generic [ref=e122]: Guess The Club
+            - img [ref=e123]
+          - link "⚽ Soccer Grid" [ref=e125] [cursor=pointer]:
+            - /url: /soccer-grid
+            - generic [ref=e126]: ⚽
+            - generic [ref=e127]: Soccer Grid
+            - img [ref=e128]
+          - link "👕 Shirt Number" [ref=e130] [cursor=pointer]:
+            - /url: /shirt-number
+            - generic [ref=e131]: 👕
+            - generic [ref=e132]: Shirt Number
+            - img [ref=e133]
+          - link "🔄 Transfer Path" [ref=e135] [cursor=pointer]:
+            - /url: /transfer-path
+            - generic [ref=e136]: 🔄
+            - generic [ref=e137]: Transfer Path
+            - img [ref=e138]
+          - link "🏎️ Guess The F1 Driver" [ref=e140] [cursor=pointer]:
+            - /url: /f1-driver
+            - generic [ref=e141]: 🏎️
+            - generic [ref=e142]: Guess The F1 Driver
+            - img [ref=e143]
+          - link "🏗️ Guess The Constructor" [ref=e145] [cursor=pointer]:
+            - /url: /f1-constructor
+            - generic [ref=e146]: 🏗️
+            - generic [ref=e147]: Guess The Constructor
+            - img [ref=e148]
+          - link "🎾 Guess The Player" [ref=e150] [cursor=pointer]:
+            - /url: /guess-tennis-player
+            - generic [ref=e151]: 🎾
+            - generic [ref=e152]: Guess The Player
+            - img [ref=e153]
+          - link "🏁 Guess The Driver" [ref=e155] [cursor=pointer]:
+            - /url: /guess-nascar-driver
+            - generic [ref=e156]: 🏁
+            - generic [ref=e157]: Guess The Driver
+            - img [ref=e158]
+          - link "🏅 The Medal Games" [ref=e160] [cursor=pointer]:
+            - /url: /olympics
+            - generic [ref=e161]: 🏅
+            - generic [ref=e162]: The Medal Games
+            - img [ref=e163]
+          - link "📅 Guess The Year" [ref=e165] [cursor=pointer]:
+            - /url: /guess-the-year
+            - generic [ref=e166]: 📅
+            - generic [ref=e167]: Guess The Year
+            - img [ref=e168]
+          - link "🌍 Guess The Nation" [ref=e170] [cursor=pointer]:
+            - /url: /guess-the-nation
+            - generic [ref=e171]: 🌍
+            - generic [ref=e172]: Guess The Nation
+            - img [ref=e173]
+          - link "🏆 Hall of Fame or Bust?" [ref=e175] [cursor=pointer]:
+            - /url: /hof-or-bust
+            - generic [ref=e176]: 🏆
+            - generic [ref=e177]: Hall of Fame or Bust?
+            - img [ref=e178]
+          - link "📊 Score Predictor" [ref=e180] [cursor=pointer]:
+            - /url: /score-predictor
+            - generic [ref=e181]: 📊
+            - generic [ref=e182]: Score Predictor
+            - img [ref=e183]
+      - generic [ref=e185]:
+        - img
+        - textbox "Search games... e.g. soccer, grid, NBA" [ref=e186]
+      - generic [ref=e187]:
+        - heading "🏈 Pro Football (6 games)" [level=2] [ref=e188]:
+          - generic [ref=e189]: 🏈
+          - text: Pro Football
+          - generic [ref=e190]: (6 games)
+        - generic [ref=e191]:
+          - link "🏈 Pro Football Grid Daily 3×3 grid puzzle with rarity scores" [ref=e192] [cursor=pointer]:
+            - /url: /football-grid
+            - generic [ref=e193]: 🏈
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - generic [ref=e196]: Pro Football Grid
+                - generic [ref=e197]: Daily
+              - paragraph [ref=e198]: 3×3 grid puzzle with rarity scores
+          - link "📅 Timeline Daily Order players by draft year" [ref=e199] [cursor=pointer]:
+            - /url: /football-timeline
+            - generic [ref=e200]: 📅
+            - generic [ref=e201]:
+              - generic [ref=e202]:
+                - generic [ref=e203]: Timeline
+                - generic [ref=e204]: Daily
+              - paragraph [ref=e205]: Order players by draft year
+          - link "🎰 Draft Guesser Daily Guess the draft round" [ref=e206] [cursor=pointer]:
+            - /url: /football-draft
+            - generic [ref=e207]: 🎰
+            - generic [ref=e208]:
+              - generic [ref=e209]:
+                - generic [ref=e210]: Draft Guesser
+                - generic [ref=e211]: Daily
+              - paragraph [ref=e212]: Guess the draft round
+          - link "🏈 NFL Career Path Daily Guess the NFL player from clues" [ref=e213] [cursor=pointer]:
+            - /url: /nfl-career
+            - generic [ref=e214]: 🏈
+            - generic [ref=e215]:
+              - generic [ref=e216]:
+                - generic [ref=e217]: NFL Career Path
+                - generic [ref=e218]: Daily
+              - paragraph [ref=e219]: Guess the NFL player from clues
+          - link "🏈 Guess The Team Daily New Identify the NFL franchise" [ref=e220] [cursor=pointer]:
+            - /url: /guess-nfl-team
+            - generic [ref=e221]: 🏈
+            - generic [ref=e222]:
+              - generic [ref=e223]:
+                - generic [ref=e224]: Guess The Team
+                - generic [ref=e225]: Daily
+                - generic [ref=e226]:
+                  - img [ref=e227]
+                  - text: New
+              - paragraph [ref=e229]: Identify the NFL franchise
+          - link "🗺️ NFL Conquest Daily 32 teams, 50 states. One champion." [ref=e230] [cursor=pointer]:
+            - /url: /conquest
+            - generic [ref=e231]: 🗺️
+            - generic [ref=e232]:
+              - generic [ref=e233]:
+                - generic [ref=e234]: NFL Conquest
+                - generic [ref=e235]: Daily
+              - paragraph [ref=e236]: 32 teams, 50 states. One champion.
+      - generic [ref=e237]:
+        - heading "🏈 College Football (2 games)" [level=2] [ref=e238]:
+          - generic [ref=e239]: 🏈
+          - text: College Football
+          - generic [ref=e240]: (2 games)
+        - generic [ref=e241]:
+          - link "🎓 College Grid Daily College football 3×3 grid puzzle" [ref=e242] [cursor=pointer]:
+            - /url: /college-grid
+            - generic [ref=e243]: 🎓
+            - generic [ref=e244]:
+              - generic [ref=e245]:
+                - generic [ref=e246]: College Grid
+                - generic [ref=e247]: Daily
+              - paragraph [ref=e248]: College football 3×3 grid puzzle
+          - link "🏫 Guess The College Daily Guess the D1 school from clues" [ref=e249] [cursor=pointer]:
+            - /url: /guess-the-college
+            - generic [ref=e250]: 🏫
+            - generic [ref=e251]:
+              - generic [ref=e252]:
+                - generic [ref=e253]: Guess The College
+                - generic [ref=e254]: Daily
+              - paragraph [ref=e255]: Guess the D1 school from clues
+      - generic [ref=e256]:
+        - heading "🏀 Pro Basketball (3 games)" [level=2] [ref=e257]:
+          - generic [ref=e258]: 🏀
+          - text: Pro Basketball
+          - generic [ref=e259]: (3 games)
+        - generic [ref=e260]:
+          - link "🏀 NBA Starting 5 Build a lineup with stat challenges" [ref=e261] [cursor=pointer]:
+            - /url: /nba-starting-5
+            - generic [ref=e262]: 🏀
+            - generic [ref=e263]:
+              - generic [ref=e265]: NBA Starting 5
+              - paragraph [ref=e266]: Build a lineup with stat challenges
+          - link "🏀 NBA Connect 4 NBA trivia meets Connect 4" [ref=e267] [cursor=pointer]:
+            - /url: /nba-connect-4
+            - generic [ref=e268]: 🏀
+            - generic [ref=e269]:
+              - generic [ref=e271]: NBA Connect 4
+              - paragraph [ref=e272]: NBA trivia meets Connect 4
+          - link "🔗 NBA Chain Build a chain of connected players" [ref=e273] [cursor=pointer]:
+            - /url: /nba-chain
+            - generic [ref=e274]: 🔗
+            - generic [ref=e275]:
+              - generic [ref=e277]: NBA Chain
+              - paragraph [ref=e278]: Build a chain of connected players
+      - generic [ref=e279]:
+        - heading "🏀 College Basketball (1 game)" [level=2] [ref=e280]:
+          - generic [ref=e281]: 🏀
+          - text: College Basketball
+          - generic [ref=e282]: (1 game)
+        - link "🏀 Guess The CBB Program Daily New Guess the college basketball program" [ref=e284] [cursor=pointer]:
+          - /url: /guess-cbb-team
+          - generic [ref=e285]: 🏀
+          - generic [ref=e286]:
+            - generic [ref=e287]:
+              - generic [ref=e288]: Guess The CBB Program
+              - generic [ref=e289]: Daily
+              - generic [ref=e290]:
+                - img [ref=e291]
+                - text: New
+            - paragraph [ref=e293]: Guess the college basketball program
+      - generic [ref=e294]:
+        - heading "⚾ Baseball (2 games)" [level=2] [ref=e295]:
+          - generic [ref=e296]: ⚾
+          - text: Baseball
+          - generic [ref=e297]: (2 games)
+        - generic [ref=e298]:
+          - link "⚾ Career Path Daily Guess the baseball player" [ref=e299] [cursor=pointer]:
+            - /url: /baseball-career
+            - generic [ref=e300]: ⚾
+            - generic [ref=e301]:
+              - generic [ref=e302]:
+                - generic [ref=e303]: Career Path
+                - generic [ref=e304]: Daily
+              - paragraph [ref=e305]: Guess the baseball player
+          - link "⚾ Connections Daily Group baseball players" [ref=e306] [cursor=pointer]:
+            - /url: /baseball-connections
+            - generic [ref=e307]: ⚾
+            - generic [ref=e308]:
+              - generic [ref=e309]:
+                - generic [ref=e310]: Connections
+                - generic [ref=e311]: Daily
+              - paragraph [ref=e312]: Group baseball players
+      - generic [ref=e313]:
+        - heading "🏒 Hockey (2 games)" [level=2] [ref=e314]:
+          - generic [ref=e315]: 🏒
+          - text: Hockey
+          - generic [ref=e316]: (2 games)
+        - generic [ref=e317]:
+          - link "🏒 Career Path Daily Guess the hockey player" [ref=e318] [cursor=pointer]:
+            - /url: /hockey-career
+            - generic [ref=e319]: 🏒
+            - generic [ref=e320]:
+              - generic [ref=e321]:
+                - generic [ref=e322]: Career Path
+                - generic [ref=e323]: Daily
+              - paragraph [ref=e324]: Guess the hockey player
+          - link "🏒 Higher / Lower Daily Compare career points" [ref=e325] [cursor=pointer]:
+            - /url: /hockey-higher-lower
+            - generic [ref=e326]: 🏒
+            - generic [ref=e327]:
+              - generic [ref=e328]:
+                - generic [ref=e329]: Higher / Lower
+                - generic [ref=e330]: Daily
+              - paragraph [ref=e331]: Compare career points
+      - generic [ref=e332]:
+        - heading "⚽ Soccer (14 games)" [level=2] [ref=e333]:
+          - generic [ref=e334]: ⚽
+          - text: Soccer
+          - generic [ref=e335]: (14 games)
+        - generic [ref=e336]:
+          - link "🎯 Footle Guess the soccer player from stats" [ref=e337] [cursor=pointer]:
+            - /url: /footle
+            - generic [ref=e338]: 🎯
+            - generic [ref=e339]:
+              - generic [ref=e341]: Footle
+              - paragraph [ref=e342]: Guess the soccer player from stats
+          - link "📜 Career Quiz Guess from career history" [ref=e343] [cursor=pointer]:
+            - /url: /career
+            - generic [ref=e344]: 📜
+            - generic [ref=e345]:
+              - generic [ref=e347]: Career Quiz
+              - paragraph [ref=e348]: Guess from career history
+          - link "📊 Higher or Lower Compare all-time career stats" [ref=e349] [cursor=pointer]:
+            - /url: /higher-lower
+            - generic [ref=e350]: 📊
+            - generic [ref=e351]:
+              - generic [ref=e353]: Higher or Lower
+              - paragraph [ref=e354]: Compare all-time career stats
+          - link "🔗 Connections Find groups of 4 connected players" [ref=e355] [cursor=pointer]:
+            - /url: /connections
+            - generic [ref=e356]: 🔗
+            - generic [ref=e357]:
+              - generic [ref=e359]: Connections
+              - paragraph [ref=e360]: Find groups of 4 connected players
+          - link "⚽ Build Your XI Create a lineup, get AI rated" [ref=e361] [cursor=pointer]:
+            - /url: /build-your-xi
+            - generic [ref=e362]: ⚽
+            - generic [ref=e363]:
+              - generic [ref=e365]: Build Your XI
+              - paragraph [ref=e366]: Create a lineup, get AI rated
+          - link "🔴 Connect 4 Soccer trivia meets Connect 4" [ref=e367] [cursor=pointer]:
+            - /url: /football-connect-4
+            - generic [ref=e368]: 🔴
+            - generic [ref=e369]:
+              - generic [ref=e371]: Connect 4
+              - paragraph [ref=e372]: Soccer trivia meets Connect 4
+          - link "🏆 World Cup Daily Guess the World Cup legend" [ref=e373] [cursor=pointer]:
+            - /url: /world-cup
+            - generic [ref=e374]: 🏆
+            - generic [ref=e375]:
+              - generic [ref=e376]:
+                - generic [ref=e377]: World Cup
+                - generic [ref=e378]: Daily
+              - paragraph [ref=e379]: Guess the World Cup legend
+          - link "🏟️ Guess The Club Daily New Identify the mystery football club" [ref=e380] [cursor=pointer]:
+            - /url: /guess-soccer-club
+            - generic [ref=e381]: 🏟️
+            - generic [ref=e382]:
+              - generic [ref=e383]:
+                - generic [ref=e384]: Guess The Club
+                - generic [ref=e385]: Daily
+                - generic [ref=e386]:
+                  - img [ref=e387]
+                  - text: New
+              - paragraph [ref=e389]: Identify the mystery football club
+          - link "⚽ Soccer Grid Daily New 3×3 grid puzzle with rarity scores" [ref=e390] [cursor=pointer]:
+            - /url: /soccer-grid
+            - generic [ref=e391]: ⚽
+            - generic [ref=e392]:
+              - generic [ref=e393]:
+                - generic [ref=e394]: Soccer Grid
+                - generic [ref=e395]: Daily
+                - generic [ref=e396]:
+                  - img [ref=e397]
+                  - text: New
+              - paragraph [ref=e399]: 3×3 grid puzzle with rarity scores
+          - link "🌍 2026 Bracket New Predict every World Cup 2026 match" [ref=e400] [cursor=pointer]:
+            - /url: /world-cup-bracket
+            - generic [ref=e401]: 🌍
+            - generic [ref=e402]:
+              - generic [ref=e403]:
+                - generic [ref=e404]: 2026 Bracket
+                - generic [ref=e405]:
+                  - img [ref=e406]
+                  - text: New
+              - paragraph [ref=e408]: Predict every World Cup 2026 match
+          - link "⚽ Soccer Career New Build your career from youth academy to legend. BitLife meets football." [ref=e409] [cursor=pointer]:
+            - /url: /soccer-career
+            - generic [ref=e410]: ⚽
+            - generic [ref=e411]:
+              - generic [ref=e412]:
+                - generic [ref=e413]: Soccer Career
+                - generic [ref=e414]:
+                  - img [ref=e415]
+                  - text: New
+              - paragraph [ref=e417]: Build your career from youth academy to legend. BitLife meets football.
+          - link "🧑‍💼 Fantasy Draft New Draft your ultimate XI against an AI opponent" [ref=e418] [cursor=pointer]:
+            - /url: /fantasy-draft
+            - generic [ref=e419]: 🧑‍💼
+            - generic [ref=e420]:
+              - generic [ref=e421]:
+                - generic [ref=e422]: Fantasy Draft
+                - generic [ref=e423]:
+                  - img [ref=e424]
+                  - text: New
+              - paragraph [ref=e426]: Draft your ultimate XI against an AI opponent
+          - link "👕 Shirt Number Daily New Guess the kit number a player wears" [ref=e427] [cursor=pointer]:
+            - /url: /shirt-number
+            - generic [ref=e428]: 👕
+            - generic [ref=e429]:
+              - generic [ref=e430]:
+                - generic [ref=e431]: Shirt Number
+                - generic [ref=e432]: Daily
+                - generic [ref=e433]:
+                  - img [ref=e434]
+                  - text: New
+              - paragraph [ref=e436]: Guess the kit number a player wears
+          - link "🔄 Transfer Path Daily New Connect two players through shared clubs" [ref=e437] [cursor=pointer]:
+            - /url: /transfer-path
+            - generic [ref=e438]: 🔄
+            - generic [ref=e439]:
+              - generic [ref=e440]:
+                - generic [ref=e441]: Transfer Path
+                - generic [ref=e442]: Daily
+                - generic [ref=e443]:
+                  - img [ref=e444]
+                  - text: New
+              - paragraph [ref=e446]: Connect two players through shared clubs
+      - generic [ref=e447]:
+        - heading "🏎️ Formula 1 (2 games)" [level=2] [ref=e448]:
+          - generic [ref=e449]: 🏎️
+          - text: Formula 1
+          - generic [ref=e450]: (2 games)
+        - generic [ref=e451]:
+          - link "🏎️ Guess The F1 Driver Daily New Guess the mystery F1 driver from clues" [ref=e452] [cursor=pointer]:
+            - /url: /f1-driver
+            - generic [ref=e453]: 🏎️
+            - generic [ref=e454]:
+              - generic [ref=e455]:
+                - generic [ref=e456]: Guess The F1 Driver
+                - generic [ref=e457]: Daily
+                - generic [ref=e458]:
+                  - img [ref=e459]
+                  - text: New
+              - paragraph [ref=e461]: Guess the mystery F1 driver from clues
+          - link "🏗️ Guess The Constructor Daily New Guess the mystery F1 team from clues" [ref=e462] [cursor=pointer]:
+            - /url: /f1-constructor
+            - generic [ref=e463]: 🏗️
+            - generic [ref=e464]:
+              - generic [ref=e465]:
+                - generic [ref=e466]: Guess The Constructor
+                - generic [ref=e467]: Daily
+                - generic [ref=e468]:
+                  - img [ref=e469]
+                  - text: New
+              - paragraph [ref=e471]: Guess the mystery F1 team from clues
+      - generic [ref=e472]:
+        - heading "🎾 Tennis (2 games)" [level=2] [ref=e473]:
+          - generic [ref=e474]: 🎾
+          - text: Tennis
+          - generic [ref=e475]: (2 games)
+        - generic [ref=e476]:
+          - link "🎾 Guess The Player Daily New Guess the mystery tennis player from clues" [ref=e477] [cursor=pointer]:
+            - /url: /guess-tennis-player
+            - generic [ref=e478]: 🎾
+            - generic [ref=e479]:
+              - generic [ref=e480]:
+                - generic [ref=e481]: Guess The Player
+                - generic [ref=e482]: Daily
+                - generic [ref=e483]:
+                  - img [ref=e484]
+                  - text: New
+              - paragraph [ref=e486]: Guess the mystery tennis player from clues
+          - link "🔗 Tennis Chain New Build a chain of Grand Slam defeats" [ref=e487] [cursor=pointer]:
+            - /url: /tennis-chain
+            - generic [ref=e488]: 🔗
+            - generic [ref=e489]:
+              - generic [ref=e490]:
+                - generic [ref=e491]: Tennis Chain
+                - generic [ref=e492]:
+                  - img [ref=e493]
+                  - text: New
+              - paragraph [ref=e495]: Build a chain of Grand Slam defeats
+      - generic [ref=e496]:
+        - heading "🏁 NASCAR (2 games)" [level=2] [ref=e497]:
+          - generic [ref=e498]: 🏁
+          - text: NASCAR
+          - generic [ref=e499]: (2 games)
+        - generic [ref=e500]:
+          - link "🏁 Guess The Driver Daily New Guess the mystery NASCAR driver from clues" [ref=e501] [cursor=pointer]:
+            - /url: /guess-nascar-driver
+            - generic [ref=e502]: 🏁
+            - generic [ref=e503]:
+              - generic [ref=e504]:
+                - generic [ref=e505]: Guess The Driver
+                - generic [ref=e506]: Daily
+                - generic [ref=e507]:
+                  - img [ref=e508]
+                  - text: New
+              - paragraph [ref=e510]: Guess the mystery NASCAR driver from clues
+          - link "🔗 NASCAR Chain New Build a chain of Cup champions" [ref=e511] [cursor=pointer]:
+            - /url: /nascar-chain
+            - generic [ref=e512]: 🔗
+            - generic [ref=e513]:
+              - generic [ref=e514]:
+                - generic [ref=e515]: NASCAR Chain
+                - generic [ref=e516]:
+                  - img [ref=e517]
+                  - text: New
+              - paragraph [ref=e519]: Build a chain of Cup champions
+      - generic [ref=e520]:
+        - heading "🥊 Combat Sports (2 games)" [level=2] [ref=e521]:
+          - generic [ref=e522]: 🥊
+          - text: Combat Sports
+          - generic [ref=e523]: (2 games)
+        - generic [ref=e524]:
+          - link "🥊 UFC Guesser Guess the UFC fighter" [ref=e525] [cursor=pointer]:
+            - /url: /ufc
+            - generic [ref=e526]: 🥊
+            - generic [ref=e527]:
+              - generic [ref=e529]: UFC Guesser
+              - paragraph [ref=e530]: Guess the UFC fighter
+          - link "🔗 Combat Chain New Build a chain of fighters who beat each other" [ref=e531] [cursor=pointer]:
+            - /url: /ufc-chain
+            - generic [ref=e532]: 🔗
+            - generic [ref=e533]:
+              - generic [ref=e534]:
+                - generic [ref=e535]: Combat Chain
+                - generic [ref=e536]:
+                  - img [ref=e537]
+                  - text: New
+              - paragraph [ref=e539]: Build a chain of fighters who beat each other
+      - generic [ref=e540]:
+        - heading "🌍 World & Olympic Games (6 games)" [level=2] [ref=e541]:
+          - generic [ref=e542]: 🌍
+          - text: World & Olympic Games
+          - generic [ref=e543]: (6 games)
+        - generic [ref=e544]:
+          - link "🤝 Teammates or Not? New Were they ever teammates?" [ref=e545] [cursor=pointer]:
+            - /url: /teammates
+            - generic [ref=e546]: 🤝
+            - generic [ref=e547]:
+              - generic [ref=e548]:
+                - generic [ref=e549]: Teammates or Not?
+                - generic [ref=e550]:
+                  - img [ref=e551]
+                  - text: New
+              - paragraph [ref=e553]: Were they ever teammates?
+          - link "🏅 The Medal Games Daily New Guess the mystery athlete from clues" [ref=e554] [cursor=pointer]:
+            - /url: /olympics
+            - generic [ref=e555]: 🏅
+            - generic [ref=e556]:
+              - generic [ref=e557]:
+                - generic [ref=e558]: The Medal Games
+                - generic [ref=e559]: Daily
+                - generic [ref=e560]:
+                  - img [ref=e561]
+                  - text: New
+              - paragraph [ref=e563]: Guess the mystery athlete from clues
+          - link "📅 Guess The Year Daily New What year did these happen?" [ref=e564] [cursor=pointer]:
+            - /url: /guess-the-year
+            - generic [ref=e565]: 📅
+            - generic [ref=e566]:
+              - generic [ref=e567]:
+                - generic [ref=e568]: Guess The Year
+                - generic [ref=e569]: Daily
+                - generic [ref=e570]:
+                  - img [ref=e571]
+                  - text: New
+              - paragraph [ref=e573]: What year did these happen?
+          - link "🌍 Guess The Nation Daily New Identify the mystery sporting nation" [ref=e574] [cursor=pointer]:
+            - /url: /guess-the-nation
+            - generic [ref=e575]: 🌍
+            - generic [ref=e576]:
+              - generic [ref=e577]:
+                - generic [ref=e578]: Guess The Nation
+                - generic [ref=e579]: Daily
+                - generic [ref=e580]:
+                  - img [ref=e581]
+                  - text: New
+              - paragraph [ref=e583]: Identify the mystery sporting nation
+          - link "🏆 Hall of Fame or Bust? Daily New Is this player a legend or a letdown?" [ref=e584] [cursor=pointer]:
+            - /url: /hof-or-bust
+            - generic [ref=e585]: 🏆
+            - generic [ref=e586]:
+              - generic [ref=e587]:
+                - generic [ref=e588]: Hall of Fame or Bust?
+                - generic [ref=e589]: Daily
+                - generic [ref=e590]:
+                  - img [ref=e591]
+                  - text: New
+              - paragraph [ref=e593]: Is this player a legend or a letdown?
+          - link "📊 Score Predictor Daily New Predict the final score of famous matches" [ref=e594] [cursor=pointer]:
+            - /url: /score-predictor
+            - generic [ref=e595]: 📊
+            - generic [ref=e596]:
+              - generic [ref=e597]:
+                - generic [ref=e598]: Score Predictor
+                - generic [ref=e599]: Daily
+                - generic [ref=e600]:
+                  - img [ref=e601]
+                  - text: New
+              - paragraph [ref=e603]: Predict the final score of famous matches
+      - generic [ref=e604]:
+        - heading "🏌️ Golf Coming Soon" [level=2] [ref=e605]:
+          - generic [ref=e606]: 🏌️
+          - text: Golf
+          - generic [ref=e607]: Coming Soon
+        - generic [ref=e608]: Golf trivia games are coming soon! Stay tuned.
+      - contentinfo [ref=e609]:
+        - paragraph [ref=e610]: All team names, logos and trademarks are property of their respective owners. DoUKnowBall is not affiliated with the NFL, NBA, UFC, NHL, MLB, FIFA, IOC, NCAA, F1, PGA Tour, NASCAR, ATP or WTA. © 2026 DoUKnowBall
+        - generic [ref=e611]:
+          - link "Privacy Policy" [ref=e612] [cursor=pointer]:
+            - /url: /privacy
+          - generic [ref=e613]: ·
+          - link "Terms of Service" [ref=e614] [cursor=pointer]:
+            - /url: /terms
