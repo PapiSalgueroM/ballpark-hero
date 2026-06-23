@@ -64,6 +64,7 @@ import ShirtNumber from "./pages/ShirtNumber";
 import HofOrBust from "./pages/HofOrBust";
 import ScorePredictor from "./pages/ScorePredictor";
 import TransferPath from "./pages/TransferPath";
+import GuessTransferValue from "./pages/GuessTransferValue";
 
 const queryClient = new QueryClient();
 
@@ -131,6 +132,7 @@ const AppContent = () => {
         <Route path="/hof-or-bust" element={<HofOrBust />} />
         <Route path="/score-predictor" element={<ScorePredictor />} />
         <Route path="/transfer-path" element={<TransferPath />} />
+        <Route path="/guess-transfer-value" element={<GuessTransferValue />} />
         <Route path="/perfect-lineup" element={<PerfectLineup />} />
         <Route path="/college" element={<CollegeHub />} />
         <Route path="/perfect-lineup-nba" element={<PerfectLineupNba />} />
