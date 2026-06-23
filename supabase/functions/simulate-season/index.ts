@@ -37,7 +37,7 @@ Write a fun, dramatic football season story for these two teams. Include injurie
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: "You are a football pundit writing entertaining season recaps. Be vivid, dramatic, and fun." },
           { role: "user", content: prompt },
