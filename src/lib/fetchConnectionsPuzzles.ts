@@ -33,7 +33,7 @@ export async function fetchConnectionsPuzzles(): Promise<ConnectionsPuzzle[]> {
 
     const puzzles = data.map((row) => ({
       id: row.puzzle_id,
-      groups: row.groups_json as ConnectionGroup[],
+      groups: row.groups_json as unknown as ConnectionGroup[],
     }));
 
     return puzzles.filter(isValidPuzzle);
