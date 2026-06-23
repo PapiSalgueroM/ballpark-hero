@@ -19,8 +19,8 @@ export async function fetchSoccerGridPuzzles(): Promise<SoccerGridPuzzle[]> {
 
     return data.map((row) => ({
       id: row.puzzle_id,
-      rows: row.rows_json as SoccerGridAttribute[],
-      cols: row.cols_json as SoccerGridAttribute[],
+      rows: row.rows_json as unknown as SoccerGridAttribute[],
+      cols: row.cols_json as unknown as SoccerGridAttribute[],
     }));
   } catch {
     return [];

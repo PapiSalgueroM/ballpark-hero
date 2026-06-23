@@ -88,6 +88,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/fantasy-draft', label: 'Fantasy Draft', emoji: '🧑‍💼', description: 'Draft your ultimate XI against an AI opponent', isNew: true },
       { path: '/shirt-number', label: 'Shirt Number', emoji: '👕', description: 'Guess the kit number a player wears', daily: true, isNew: true },
       { path: '/transfer-path', label: 'Transfer Path', emoji: '🔄', description: 'Connect two players through shared clubs', daily: true, isNew: true },
+      { path: '/guess-transfer-value', label: 'Guess The Value', emoji: '💰', description: 'Guess a player\u2019s transfer market value', daily: true, isNew: true },
     ],
   },
   {
