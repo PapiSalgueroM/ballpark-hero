@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      baseball_career_players: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       baseball_connections_puzzles: {
         Row: {
           created_at: string
@@ -37,6 +58,77 @@ export type Database = {
           sort_order?: number
         }
         Relationships: []
+      }
+      career_players: {
+        Row: {
+          created_at: string
+          id: string
+          nationality: string
+          player_name: string
+          position: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nationality: string
+          player_name: string
+          position: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nationality?: string
+          player_name?: string
+          position?: string
+        }
+        Relationships: []
+      }
+      career_seasons: {
+        Row: {
+          appearances: number
+          assists: number
+          club: string
+          created_at: string
+          goals: number
+          id: string
+          market_value: number
+          player_id: string
+          season: string
+          sort_order: number
+        }
+        Insert: {
+          appearances: number
+          assists: number
+          club: string
+          created_at?: string
+          goals: number
+          id?: string
+          market_value: number
+          player_id: string
+          season: string
+          sort_order: number
+        }
+        Update: {
+          appearances?: number
+          assists?: number
+          club?: string
+          created_at?: string
+          goals?: number
+          id?: string
+          market_value?: number
+          player_id?: string
+          season?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "career_seasons_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "career_players"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cbb_daily: {
         Row: {
@@ -142,6 +234,27 @@ export type Database = {
         }
         Relationships: []
       }
+      college_grid_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       college_grid_selections: {
         Row: {
           cell_index: number
@@ -196,6 +309,27 @@ export type Database = {
         }
         Relationships: []
       }
+      colleges_pool: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       connections_puzzles: {
         Row: {
           created_at: string
@@ -216,6 +350,48 @@ export type Database = {
           groups_json?: Json
           id?: string
           puzzle_id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      conquest_free_agents: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      conquest_nfl_teams: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
           sort_order?: number
         }
         Relationships: []
@@ -265,6 +441,90 @@ export type Database = {
           game_slug?: string
           id?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      draft_guesser_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      f1_constructor_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      f1_driver_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      f1_perfect_lineup_pool: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -340,6 +600,27 @@ export type Database = {
           puzzle_date?: string
           user_id?: string | null
           voted_team?: string
+        }
+        Relationships: []
+      }
+      football_grid_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -495,6 +776,90 @@ export type Database = {
           mode?: string
           puzzle_date?: string
           score?: number
+        }
+        Relationships: []
+      }
+      guess_the_year_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      higher_lower_players: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      hockey_career_players: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      hockey_hl_players: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -680,6 +1045,69 @@ export type Database = {
         }
         Relationships: []
       }
+      nba_perfect_lineup_pool: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      nba_teams_pool: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      nfl_career_players: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       nfl_players: {
         Row: {
           awards: string[]
@@ -728,6 +1156,120 @@ export type Database = {
           is_active?: boolean
           position?: string
           teams?: Json
+        }
+        Relationships: []
+      }
+      nfl_team_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      nhl_perfect_lineup_pool: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      olympics_athletes: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      player_market_values: {
+        Row: {
+          age: number | null
+          assists: number | null
+          club: string | null
+          goals: number | null
+          id: number
+          market_value_usd: number | null
+          matches: number | null
+          nationality: string | null
+          player_name: string | null
+          position: string | null
+          rank: number | null
+          red_cards: number | null
+          year: number | null
+          yellow_cards: number | null
+        }
+        Insert: {
+          age?: number | null
+          assists?: number | null
+          club?: string | null
+          goals?: number | null
+          id: number
+          market_value_usd?: number | null
+          matches?: number | null
+          nationality?: string | null
+          player_name?: string | null
+          position?: string | null
+          rank?: number | null
+          red_cards?: number | null
+          year?: number | null
+          yellow_cards?: number | null
+        }
+        Update: {
+          age?: number | null
+          assists?: number | null
+          club?: string | null
+          goals?: number | null
+          id?: number
+          market_value_usd?: number | null
+          matches?: number | null
+          nationality?: string | null
+          player_name?: string | null
+          position?: string | null
+          rank?: number | null
+          red_cards?: number | null
+          year?: number | null
+          yellow_cards?: number | null
         }
         Relationships: []
       }
@@ -830,6 +1372,39 @@ export type Database = {
           created_at?: string
           id?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      shirt_number_puzzles: {
+        Row: {
+          club: string
+          created_at: string
+          fun_fact: string
+          id: string
+          kit_number: number
+          league: string
+          nationality: string
+          player_name: string
+        }
+        Insert: {
+          club: string
+          created_at?: string
+          fun_fact: string
+          id?: string
+          kit_number: number
+          league: string
+          nationality: string
+          player_name: string
+        }
+        Update: {
+          club?: string
+          created_at?: string
+          fun_fact?: string
+          id?: string
+          kit_number?: number
+          league?: string
+          nationality?: string
+          player_name?: string
         }
         Relationships: []
       }
@@ -965,6 +1540,81 @@ export type Database = {
         }
         Relationships: []
       }
+      soccer_club_puzzles: {
+        Row: {
+          common_names: string[]
+          country: string
+          created_at: string
+          full_name: string
+          fun_fact: string
+          id: string
+          kit_colors: string
+          league: string
+          league_hint: string
+          league_titles: number
+          puzzle_id: string
+          sort_order: number
+          vibe: string
+        }
+        Insert: {
+          common_names: string[]
+          country: string
+          created_at?: string
+          full_name: string
+          fun_fact: string
+          id?: string
+          kit_colors: string
+          league: string
+          league_hint: string
+          league_titles: number
+          puzzle_id: string
+          sort_order: number
+          vibe: string
+        }
+        Update: {
+          common_names?: string[]
+          country?: string
+          created_at?: string
+          full_name?: string
+          fun_fact?: string
+          id?: string
+          kit_colors?: string
+          league?: string
+          league_hint?: string
+          league_titles?: number
+          puzzle_id?: string
+          sort_order?: number
+          vibe?: string
+        }
+        Relationships: []
+      }
+      soccer_grid_puzzles: {
+        Row: {
+          cols_json: Json
+          created_at: string
+          id: string
+          puzzle_id: string
+          rows_json: Json
+          sort_order: number
+        }
+        Insert: {
+          cols_json: Json
+          created_at?: string
+          id?: string
+          puzzle_id: string
+          rows_json: Json
+          sort_order: number
+        }
+        Update: {
+          cols_json?: Json
+          created_at?: string
+          id?: string
+          puzzle_id?: string
+          rows_json?: Json
+          sort_order?: number
+        }
+        Relationships: []
+      }
       soccer_grid_selections: {
         Row: {
           cell_index: number
@@ -986,6 +1636,27 @@ export type Database = {
           id?: string
           player_name?: string
           puzzle_id?: string
+        }
+        Relationships: []
+      }
+      teammates_pairs: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -1115,6 +1786,81 @@ export type Database = {
         }
         Relationships: []
       }
+      timeline_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      transfer_path_puzzles: {
+        Row: {
+          created_at: string
+          hint: string
+          id: string
+          min_steps: number
+          player_a: string
+          player_b: string
+          puzzle_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          hint: string
+          id?: string
+          min_steps: number
+          player_a: string
+          player_b: string
+          puzzle_id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          hint?: string
+          id?: string
+          min_steps?: number
+          player_a?: string
+          player_b?: string
+          puzzle_id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      ufc_chain_fighters: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       ufc_chain_scores: {
         Row: {
           chain_length: number
@@ -1142,6 +1888,27 @@ export type Database = {
           nickname?: string
           puzzle_date?: string
           score?: number
+        }
+        Relationships: []
+      }
+      ufc_fighters_pool: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -1280,6 +2047,27 @@ export type Database = {
           total_points?: number
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      world_cup_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
