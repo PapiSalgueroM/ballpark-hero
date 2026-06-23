@@ -141,6 +141,14 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/score-predictor', label: 'Score Predictor', emoji: '📊', description: 'Predict the final score of famous matches', daily: true, isNew: true },
     ],
   },
+  {
+    title: 'Game Shows',
+    emoji: '🎲',
+    games: [
+      { path: '/deal-or-no-deal', label: 'Deal or No Deal', emoji: '💼', description: 'Bank or gamble against the Banker', isNew: true },
+      { path: '/squad-deal', label: 'Squad Deal', emoji: '🏟️', description: 'Build an XI, Deal or No Deal style', isNew: true },
+    ],
+  },
 ];
 
 export const VISIBLE_CATEGORIES = CATEGORIES.filter(c => c.games.length > 0);

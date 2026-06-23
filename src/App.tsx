@@ -65,6 +65,8 @@ import HofOrBust from "./pages/HofOrBust";
 import ScorePredictor from "./pages/ScorePredictor";
 import TransferPath from "./pages/TransferPath";
 import GuessTransferValue from "./pages/GuessTransferValue";
+import DealOrNoDeal from "./pages/DealOrNoDeal";
+import SquadDeal from "./pages/SquadDeal";
 
 const queryClient = new QueryClient();
 
@@ -140,6 +142,8 @@ const AppContent = () => {
         <Route path="/perfect-lineup-nhl" element={<PerfectLineupNhl />} />
         <Route path="/world-cup-predictor" element={<Navigate to="/world-cup-bracket" replace />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+        <Route path="/deal-or-no-deal" element={<DealOrNoDeal />} />
+        <Route path="/squad-deal" element={<SquadDeal />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
