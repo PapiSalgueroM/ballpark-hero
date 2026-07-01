@@ -29,6 +29,14 @@ export function TransferPathBoard() {
     isLoadingPool, isLoading,
   } = useTransferPath();
 
+  const [input, setInput] = useState('');
+  const [error, setError] = useState('');
+  const [showHint, setShowHint] = useState(false);
+
+  const allNames = useMemo(() => getAllPlayerNames(), [getAllPlayerNames]);
+
+  // This check must live BELOW every hook. Returning early above the hooks
+  // changes the hook count between renders and crashes with React error #310.
   if (isLoadingPool || isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -36,12 +44,6 @@ export function TransferPathBoard() {
       </div>
     );
   }
-
-  const [input, setInput] = useState('');
-  const [error, setError] = useState('');
-  const [showHint, setShowHint] = useState(false);
-
-  const allNames = useMemo(() => getAllPlayerNames(), [getAllPlayerNames]);
   const query = input.toLowerCase().trim();
   const suggestions = query.length >= 2
     ? allNames.filter(n =>
