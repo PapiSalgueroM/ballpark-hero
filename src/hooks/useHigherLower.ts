@@ -34,13 +34,42 @@ function getRandomPlayer(exclude: string[], currentPlayer?: HigherLowerPlayer): 
 }
 
 function getStreakReaction(streak: number): { emoji: string; message: string } {
-  if (streak === 0) return { emoji: '😬', message: "Yikes... not a single one? That's rough." };
-  if (streak <= 2) return { emoji: '😐', message: "Meh. My nan could do better." };
-  if (streak <= 5) return { emoji: '🙂', message: "Not bad, but nothing to brag about." };
-  if (streak <= 10) return { emoji: '😊', message: "Decent run! You know your stuff." };
-  if (streak <= 19) return { emoji: '🔥', message: "On fire! Proper soccer brain." };
-  if (streak <= 29) return { emoji: '🌟', message: "Incredible! You're a walking encyclopedia." };
-  return { emoji: '🏆', message: "LEGENDARY! You absolute soccer genius!" };
+  const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+  if (streak === 0) return { emoji: '😬', message: pick([
+    "Zero on the board. We all start somewhere.",
+    "Not a single one. The comeback begins now.",
+    "Rough start. Shake it off and run it back.",
+  ]) };
+  if (streak <= 2) return { emoji: '😐', message: pick([
+    "A couple in the bag. Warm-up is over.",
+    "Just getting loose. Let's see a real streak.",
+    "Baby steps. Go again and cook.",
+  ]) };
+  if (streak <= 5) return { emoji: '🙂', message: pick([
+    "Solid start. You've clearly watched a game or two.",
+    "Respectable. Double digits are right there.",
+    "Decent. Now push it and don't blink.",
+  ]) };
+  if (streak <= 10) return { emoji: '😊', message: pick([
+    "Now we're talking. You know your stuff.",
+    "Clean run. The homework shows.",
+    "Double digits in sight. Real knowledge on display.",
+  ]) };
+  if (streak <= 19) return { emoji: '🔥', message: pick([
+    "On fire. The football brain is strong.",
+    "Locked in. This is a proper streak.",
+    "You're cooking. Do not stop now.",
+  ]) };
+  if (streak <= 29) return { emoji: '🌟', message: pick([
+    "Incredible run. You're a walking stat sheet.",
+    "Elite. Most people tapped out 20 ago.",
+    "Seriously impressive. Keep it rolling.",
+  ]) };
+  return { emoji: '🏆', message: pick([
+    "Legendary. Bow to the football genius.",
+    "Untouchable. Are you even human?",
+    "Hall of Fame stuff. Screenshot this one.",
+  ]) };
 }
 
 export function useHigherLower() {

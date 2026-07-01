@@ -66,9 +66,14 @@ export function Header() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="relative h-9 w-9 rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+                      className="flex items-center gap-2 h-9 pl-3 pr-1 rounded-full hover:bg-accent"
                     >
-                      <span className="font-semibold text-sm">{getUserInitial()}</span>
+                      <span className="hidden sm:inline max-w-[120px] truncate text-sm font-medium">
+                        {profile?.display_name || user.email?.split('@')[0]}
+                      </span>
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold text-sm">
+                        {getUserInitial()}
+                      </span>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">

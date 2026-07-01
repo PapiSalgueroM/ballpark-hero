@@ -3,7 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CookieConsent } from "@/components/CookieConsent";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
 import Index from "./pages/Index";
@@ -75,10 +76,25 @@ const HEADER_PATHS = ['/', '/leaderboard', '/profile'];
 const shouldShowHeader = (pathname: string) =>
   HEADER_PATHS.includes(pathname) || pathname.startsWith('/profile/');
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  const navigationType = useNavigationType();
+  useEffect(() => {
+    // New navigations (clicking into a game) start at the top of the page.
+    // On POP (browser Back/Forward) we leave scroll alone so the player returns
+    // to the exact spot they left in the games list.
+    if (navigationType !== "POP") {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, navigationType]);
+  return null;
+};
+
 const AppContent = () => {
   const { pathname } = useLocation();
   return (
     <>
+      <ScrollToTop />
       <CookieConsent />
       {shouldShowHeader(pathname) && <Header />}
       <Routes>

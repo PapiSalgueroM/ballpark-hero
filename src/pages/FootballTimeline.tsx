@@ -60,7 +60,7 @@ const FootballTimeline = () => {
             🏈 PRO FOOTBALL TIMELINE
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Order these players by NFL Draft year — earliest at the top, most recent at the bottom
+            Put the players in NFL Draft order: the earliest draft year goes at the top, the most recent at the bottom.
           </p>
         </header>
 

@@ -1,11 +1,12 @@
-import { Link } from 'react-router-dom';
-import { Trophy, Gamepad2, Medal, Flame } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Trophy, Gamepad2, Medal, Flame, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
 import { useDailyLegend } from '@/hooks/useDailyLegend';
 import { DailyLegendOverlay } from '@/components/game/DailyLegendOverlay';
 
 export function GameNavbar() {
+  const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { gamesPlayedToday, totalPointsToday, dailyRank, currentStreak, totalGames, loading: statsLoading } = useGameNavbarStats();
   const { showCelebration, streakDays, dismissCelebration } = useDailyLegend();
@@ -88,8 +89,15 @@ export function GameNavbar() {
             </div>
           </div>
 
-          {/* Empty — right (balance the logo) */}
-          <div className="shrink-0 w-[4.5rem] sm:w-[6.5rem]" />
+          {/* Back to previous page — right */}
+          <button
+            onClick={() => navigate(-1)}
+            aria-label="Go back"
+            className="shrink-0 inline-flex items-center gap-1 text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">Back</span>
+          </button>
         </div>
       </nav>
 

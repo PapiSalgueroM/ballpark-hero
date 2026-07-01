@@ -26,7 +26,7 @@ const NbaTeamSpinner = ({ teams, targetIndex, isSpinning, onFinish }: NbaTeamSpi
     setSpeed(60);
 
     let elapsed = 0;
-    const totalDuration = 2000;
+    const totalDuration = 1000;
     let frame: number;
 
     const tick = () => {

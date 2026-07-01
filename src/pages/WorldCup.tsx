@@ -11,7 +11,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { HelpCircle, SkipForward, Send, Trophy } from 'lucide-react';
+import { HelpCircle, Lightbulb, Send, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const WorldCup = () => {
@@ -228,8 +228,8 @@ const WorldCup = () => {
                 onClick={skipClue}
                 className="inline-flex items-center gap-1 px-4 py-3 rounded-full font-semibold text-sm bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all"
               >
-                <SkipForward className="w-4 h-4" />
-                Skip
+                <Lightbulb className="w-4 h-4" />
+                Hint
               </button>
             </form>
             {attempts.length > 0 && !showGiveUpConfirm && (

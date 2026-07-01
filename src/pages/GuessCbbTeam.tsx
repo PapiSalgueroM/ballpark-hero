@@ -1,5 +1,6 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { CbbProgramBoard } from '@/components/cbb-program/CbbProgramBoard';
 
 export default function GuessCbbTeam() {
@@ -10,6 +11,7 @@ export default function GuessCbbTeam() {
         description="Identify the mystery college basketball program from progressive clues. Daily CBB trivia challenge."
         path="/guess-cbb-team"
       />
+      <GameNavbar />
       <CbbProgramBoard />
       <GameSeoContent
         title="Guess The College Basketball Program | DoUKnowBall"

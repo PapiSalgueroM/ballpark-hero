@@ -27,21 +27,21 @@ export function HowToPlay({ open, onOpenChange }: HowToPlayProps) {
                 <div className="w-10 h-10 rounded-lg bg-correct flex-shrink-0" />
                 <div>
                   <span className="font-semibold text-correct-foreground">Green</span>
-                  <span className="text-muted-foreground"> — Exact match!</span>
+                  <span className="text-muted-foreground">: Exact match!</span>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-close flex-shrink-0" />
                 <div>
                   <span className="font-semibold">Yellow</span>
-                  <span className="text-muted-foreground"> — Close! See thresholds below.</span>
+                  <span className="text-muted-foreground">: Close, see thresholds below.</span>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-incorrect flex-shrink-0" />
                 <div>
                   <span className="font-semibold">White</span>
-                  <span className="text-muted-foreground"> — Not a match.</span>
+                  <span className="text-muted-foreground">: Not a match.</span>
                 </div>
               </div>
             </div>

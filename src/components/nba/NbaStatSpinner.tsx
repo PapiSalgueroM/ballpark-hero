@@ -23,7 +23,7 @@ const NbaStatSpinner = ({ challenge, isSpinning, onFinish }: NbaStatSpinnerProps
     setSpeed(60);
 
     let elapsed = 0;
-    const totalDuration = 2500;
+    const totalDuration = 1200;
     let frame: number;
 
     const tick = () => {
