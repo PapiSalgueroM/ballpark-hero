@@ -19,6 +19,7 @@ export const CATEGORIES: GameCategory[] = [
     emoji: '⚽',
     games: [
       { path: '/higher-lower-transfers', label: 'Transfer Market', emoji: '📈', description: 'Higher or lower on real market values', isNew: true },
+      { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', isNew: true },
       { path: '/footle', label: 'Footle', emoji: '🎯', description: 'Guess the soccer player from stats' },
       { path: '/career', label: 'Career Quiz', emoji: '📜', description: 'Guess from career history' },
       { path: '/higher-lower', label: 'Higher or Lower', emoji: '📊', description: 'Compare all-time career stats' },
@@ -87,6 +88,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Hockey',
     emoji: '🏒',
     games: [
+      { path: '/perfect-season-nhl', label: '82-0 Perfect Season', emoji: '🏆', description: 'Spin franchises and eras, chase 82-0', isNew: true },
       { path: '/hockey-career', label: 'Career Path', emoji: '🏒', description: 'Guess the hockey player', daily: true },
       { path: '/hockey-higher-lower', label: 'Higher / Lower', emoji: '🏒', description: 'Compare career points', daily: true },
       { path: '/perfect-lineup-nhl', label: 'Perfect Lineup: NHL', emoji: '🏒', description: 'Build a dream line under random team & era constraints, then simulate', daily: true, isNew: true },

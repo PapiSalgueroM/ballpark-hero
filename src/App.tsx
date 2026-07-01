@@ -71,6 +71,8 @@ import SquadDeal from "./pages/SquadDeal";
 import ListQuiz from "./pages/ListQuiz";
 import PerfectSeasonMlb from "./pages/PerfectSeasonMlb";
 import HigherLowerTransfers from "./pages/HigherLowerTransfers";
+import PerfectSeasonNhl from "./pages/PerfectSeasonNhl";
+import CareerLadder from "./pages/CareerLadder";
 
 const queryClient = new QueryClient();
 
@@ -166,6 +168,8 @@ const AppContent = () => {
         <Route path="/list-quiz" element={<ListQuiz />} />
         <Route path="/perfect-season-mlb" element={<PerfectSeasonMlb />} />
         <Route path="/higher-lower-transfers" element={<HigherLowerTransfers />} />
+        <Route path="/perfect-season-nhl" element={<PerfectSeasonNhl />} />
+        <Route path="/career-ladder" element={<CareerLadder />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
