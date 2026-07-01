@@ -185,12 +185,12 @@ export function useFootballConnect4() {
 
       try {
         const resp = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/football-connect4-validate`,
+          `${"https://flawuiqbvjobmkfkauhw.supabase.co"}/functions/v1/football-connect4-validate`,
           {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+              Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
             },
             body: JSON.stringify({ playerName: trimmed, columnAttribute: colAttr, rowAttribute: rowAttr }),
           },

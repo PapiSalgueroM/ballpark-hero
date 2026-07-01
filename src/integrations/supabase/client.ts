@@ -2,13 +2,13 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-// Fall back to the public project URL + anon key when build-time env vars are missing.
-// These are safe to ship in the client bundle: the anon key is public by design and
-// every table is protected by row-level security. Without this fallback, a deploy that
-// lacks the VITE_ vars makes createClient() point at undefined, which is exactly what
-// shows up as "Failed to fetch" on login and every data request.
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://flawuiqbvjobmkfkauhw.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y";
+// Hardcoded on purpose. The Lovable build injects VITE_ env vars that point at a
+// DELETED Supabase project (pzzadswiradjnvvfybol), which made every request fail
+// with "Failed to fetch". Live data is in flawuiqbvjobmkfkauhw, so we pin it here
+// and ignore env vars entirely. This is safe to ship in the client bundle: the anon
+// key is public by design and every table is protected by row-level security.
+export const SUPABASE_URL = "https://flawuiqbvjobmkfkauhw.supabase.co";
+export const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y";
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";

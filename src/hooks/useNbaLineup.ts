@@ -109,12 +109,12 @@ export function useNbaLineup() {
 
       try {
         const resp = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nba-validate-player`,
+          `${"https://flawuiqbvjobmkfkauhw.supabase.co"}/functions/v1/nba-validate-player`,
           {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+              Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
             },
             body: JSON.stringify({
               playerName: playerName.trim(),
@@ -190,12 +190,12 @@ export function useNbaLineup() {
     setEvaluationError(null);
     try {
       const resp = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nba-evaluate-lineup`,
+        `${"https://flawuiqbvjobmkfkauhw.supabase.co"}/functions/v1/nba-evaluate-lineup`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
           },
           body: JSON.stringify({ players: filledSlotsArray, challenge }),
         }
