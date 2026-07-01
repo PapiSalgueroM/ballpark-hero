@@ -68,6 +68,9 @@ import TransferPath from "./pages/TransferPath";
 import GuessTransferValue from "./pages/GuessTransferValue";
 import DealOrNoDeal from "./pages/DealOrNoDeal";
 import SquadDeal from "./pages/SquadDeal";
+import ListQuiz from "./pages/ListQuiz";
+import PerfectSeasonMlb from "./pages/PerfectSeasonMlb";
+import HigherLowerTransfers from "./pages/HigherLowerTransfers";
 
 const queryClient = new QueryClient();
 
@@ -160,6 +163,9 @@ const AppContent = () => {
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="/deal-or-no-deal" element={<DealOrNoDeal />} />
         <Route path="/squad-deal" element={<SquadDeal />} />
+        <Route path="/list-quiz" element={<ListQuiz />} />
+        <Route path="/perfect-season-mlb" element={<PerfectSeasonMlb />} />
+        <Route path="/higher-lower-transfers" element={<HigherLowerTransfers />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

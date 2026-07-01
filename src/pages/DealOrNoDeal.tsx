@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Briefcase, RotateCcw, Phone, Check, X } from 'lucide-react';
+import { Briefcase, RotateCcw, Phone, Check, X, ArrowLeftRight, Loader2 } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
@@ -9,16 +9,18 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { DealPlayer, fetchDealPlayers, pickSpread, flagFor, shortName, fmtCompactUsd } from '@/lib/dealPlayers';
 
 const VALUE_LADDER = [
   1, 5, 50, 100, 500, 1000, 5000, 10000,
   25000, 50000, 100000, 250000, 500000, 1000000, 5000000, 10000000,
 ];
 
-// cases to open each round (sums to 15 = all cases except the player's own)
-const ROUND_SCHEDULE = [5, 4, 3, 2, 1];
-// banker generosity ramps up each round
-const ROUND_FACTORS = [0.35, 0.5, 0.65, 0.8, 1];
+// Cases to open each round. Sums to 14, which leaves one rival case for the
+// final offer and the classic keep-or-swap decision.
+const ROUND_SCHEDULE = [5, 4, 3, 1, 1];
+// Banker generosity ramps up each round
+const ROUND_FACTORS = [0.32, 0.45, 0.6, 0.78, 0.92];
 
 const fmtUsd = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
 
@@ -26,8 +28,42 @@ interface CaseBox {
   id: number;
   value: number;
   opened: boolean;
+  player?: DealPlayer;
 }
-type Phase = 'pick' | 'opening' | 'offer' | 'done';
+type Phase = 'pick' | 'opening' | 'offer' | 'swap' | 'done';
+type Mode = 'cash' | 'players';
+
+interface GameResult {
+  amount: number;
+  dealt: boolean;
+  swapped?: boolean;
+  gaveUpValue?: number;
+}
+
+interface LifetimeStats {
+  plays: number;
+  best: number;
+  totalWon: number;
+  dealsTaken: number;
+}
+
+const STATS_KEY = 'dond_stats_v1';
+
+function loadStats(): LifetimeStats {
+  try {
+    const raw = localStorage.getItem(STATS_KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      return {
+        plays: Number(s.plays) || 0,
+        best: Number(s.best) || 0,
+        totalWon: Number(s.totalWon) || 0,
+        dealsTaken: Number(s.dealsTaken) || 0,
+      };
+    }
+  } catch { /* fresh stats */ }
+  return { plays: 0, best: 0, totalWon: 0, dealsTaken: 0 };
+}
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -44,66 +80,116 @@ function cleanRound(n: number): number {
   return Math.max(1, Math.round(n));
 }
 
+function bankerOffer(remaining: number[], roundIdx: number): number {
+  const ev = remaining.reduce((a, b) => a + b, 0) / Math.max(1, remaining.length);
+  const factor = ROUND_FACTORS[Math.min(roundIdx, ROUND_FACTORS.length - 1)];
+  const noise = 0.93 + Math.random() * 0.14; // the Banker has moods
+  return cleanRound(ev * factor * noise);
+}
+
 const DealOrNoDeal = () => {
+  const [mode, setMode] = useState<Mode>('cash');
+  const [playerPool, setPlayerPool] = useState<DealPlayer[] | null>(null);
+  const [poolStatus, setPoolStatus] = useState<'idle' | 'loading' | 'ready' | 'failed'>('idle');
   const [cases, setCases] = useState<CaseBox[]>([]);
   const [phase, setPhase] = useState<Phase>('pick');
   const [myCaseId, setMyCaseId] = useState<number | null>(null);
   const [roundIdx, setRoundIdx] = useState(0);
   const [offer, setOffer] = useState<number | null>(null);
+  const [offerHistory, setOfferHistory] = useState<number[]>([]);
   const [bankerCalling, setBankerCalling] = useState(false);
-  const [result, setResult] = useState<{ amount: number; dealt: boolean } | null>(null);
-  const [best, setBest] = useState(0);
+  const [result, setResult] = useState<GameResult | null>(null);
+  const [stats, setStats] = useState<LifetimeStats>(() => loadStats());
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const init = useCallback(() => {
+  const buildBoard = useCallback((m: Mode, pool: DealPlayer[] | null) => {
+    if (m === 'players' && pool && pool.length >= 16) {
+      const picks = pickSpread(pool, 16);
+      const order = shuffle(picks);
+      return order.map((p, i) => ({ id: i + 1, value: p.value, opened: false, player: p }));
+    }
+    return shuffle(VALUE_LADDER).map((v, i) => ({ id: i + 1, value: v, opened: false }));
+  }, []);
+
+  const init = useCallback((m: Mode, pool: DealPlayer[] | null) => {
     if (timer.current) clearTimeout(timer.current);
-    const shuffled = shuffle(VALUE_LADDER);
-    setCases(shuffled.map((v, i) => ({ id: i + 1, value: v, opened: false })));
+    setCases(buildBoard(m, pool));
     setPhase('pick');
     setMyCaseId(null);
     setRoundIdx(0);
     setOffer(null);
+    setOfferHistory([]);
     setBankerCalling(false);
     setResult(null);
-  }, []);
+  }, [buildBoard]);
 
   useEffect(() => {
-    init();
+    init('cash', null);
     return () => { if (timer.current) clearTimeout(timer.current); };
   }, [init]);
+
+  const switchMode = async (m: Mode) => {
+    if (phase !== 'pick' || m === mode) return;
+    if (m === 'cash') {
+      setMode('cash');
+      init('cash', null);
+      return;
+    }
+    if (playerPool) {
+      setMode('players');
+      init('players', playerPool);
+      return;
+    }
+    setPoolStatus('loading');
+    const pool = await fetchDealPlayers();
+    if (pool) {
+      setPlayerPool(pool);
+      setPoolStatus('ready');
+      setMode('players');
+      init('players', pool);
+    } else {
+      setPoolStatus('failed');
+    }
+  };
 
   const myCase = cases.find(c => c.id === myCaseId) || null;
   const openedCount = cases.filter(c => c.opened).length;
   const cumTarget = ROUND_SCHEDULE.slice(0, roundIdx + 1).reduce((a, b) => a + b, 0);
   const opensThisRound = Math.max(0, cumTarget - openedCount);
-  const remainingValues = useMemo(
-    () => cases.filter(c => !c.opened).map(c => c.value),
-    [cases]
+  const lastRivalCase = useMemo(
+    () => cases.find(c => !c.opened && c.id !== myCaseId) || null,
+    [cases, myCaseId]
   );
 
-  // Round transition: once enough cases are opened, the Banker calls (or final reveal)
+  const finishGame = useCallback((r: GameResult) => {
+    setPhase('done');
+    setResult(r);
+    setStats(prev => {
+      const next: LifetimeStats = {
+        plays: prev.plays + 1,
+        best: Math.max(prev.best, r.amount),
+        totalWon: prev.totalWon + r.amount,
+        dealsTaken: prev.dealsTaken + (r.dealt ? 1 : 0),
+      };
+      try { localStorage.setItem(STATS_KEY, JSON.stringify(next)); } catch { /* private mode */ }
+      return next;
+    });
+  }, []);
+
+  // Round transition: once enough cases are opened, the Banker calls
   useEffect(() => {
     if (phase !== 'opening' || cases.length === 0 || myCaseId == null) return;
     if (openedCount < cumTarget) return;
-    const remainingNonMine = cases.filter(c => !c.opened && c.id !== myCaseId).length;
-    if (remainingNonMine <= 0) {
-      const won = myCase ? myCase.value : 0;
-      setPhase('done');
-      setResult({ amount: won, dealt: false });
-      setBest(b => Math.max(b, won));
-      return;
-    }
     const remaining = cases.filter(c => !c.opened).map(c => c.value);
-    const avg = remaining.reduce((a, b) => a + b, 0) / remaining.length;
-    const factor = ROUND_FACTORS[Math.min(roundIdx, ROUND_FACTORS.length - 1)];
-    const o = cleanRound(avg * factor);
+    const o = bankerOffer(remaining, roundIdx);
     setBankerCalling(true);
     setPhase('offer');
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       setOffer(o);
+      setOfferHistory(h => [...h, o]);
       setBankerCalling(false);
-    }, 1300);
+    }, 1200);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openedCount, phase, cases, myCaseId, roundIdx, cumTarget]);
 
@@ -120,34 +206,49 @@ const DealOrNoDeal = () => {
 
   const acceptDeal = () => {
     if (phase !== 'offer' || offer == null) return;
-    setPhase('done');
-    setResult({ amount: offer, dealt: true });
-    setBest(b => Math.max(b, offer));
+    finishGame({ amount: offer, dealt: true });
   };
 
   const rejectDeal = () => {
     if (phase !== 'offer') return;
     setOffer(null);
-    setRoundIdx(r => r + 1);
-    setPhase('opening');
+    if (roundIdx + 1 >= ROUND_SCHEDULE.length) {
+      // Only your case and one rival case remain: the classic final decision
+      setPhase('swap');
+    } else {
+      setRoundIdx(r => r + 1);
+      setPhase('opening');
+    }
   };
 
+  const resolveSwap = (swap: boolean) => {
+    if (phase !== 'swap' || !myCase || !lastRivalCase) return;
+    const kept = swap ? lastRivalCase : myCase;
+    const gaveUp = swap ? myCase : lastRivalCase;
+    finishGame({ amount: kept.value, dealt: false, swapped: swap, gaveUpValue: gaveUp.value });
+  };
+
+  const caseLabel = (c: CaseBox | null) =>
+    c?.player ? `${flagFor(c.player.nationality)} ${c.player.name}` : c ? fmtUsd(c.value) : '';
+
   const emojiGrid = result
-    ? (result.dealt ? '🤝💼 ' : '💼✨ ') + fmtUsd(result.amount)
+    ? (result.dealt ? '🤝💼 ' : result.swapped ? '🔄💼 ' : '💼✨ ')
+      + fmtUsd(result.amount)
+      + (mode === 'players' ? ' ⚽ Player Edition' : '')
     : '';
 
-  const half = Math.ceil(VALUE_LADDER.length / 2);
-  const ladderSorted = [...VALUE_LADDER].sort((a, b) => a - b);
-  const leftLadder = ladderSorted.slice(0, half);
-  const rightLadder = ladderSorted.slice(half);
-  const isLive = (v: number) => remainingValues.includes(v);
+  const ladder = useMemo(() => [...cases].sort((a, b) => a.value - b.value), [cases]);
+  const half = Math.ceil(ladder.length / 2);
+  const ladderCols = [ladder.slice(0, half), ladder.slice(half)];
+
+  const avgWon = stats.plays > 0 ? stats.totalWon / stats.plays : 0;
 
   return (
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
         title="Deal or No Deal — Bank or Gamble Against the Banker | DoUKnowBall"
-        description="Play Deal or No Deal: pick your case, open the rest, and decide whether to take the Banker's offer or risk it all. Free arcade game."
+        description="Play Deal or No Deal free: classic cash mode or Player Edition, where every case hides a real footballer's market value. Beat the Banker."
         path="/deal-or-no-deal"
       />
       <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">
@@ -158,32 +259,82 @@ const DealOrNoDeal = () => {
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
             Pick your case, eliminate the rest, and decide: take the Banker's offer, or hold out for what's in your case?
           </p>
-          {best > 0 && (
+          {stats.plays > 0 && (
             <p className="text-xs text-muted-foreground mt-3">
-              Best winnings this session: <span className="text-primary font-semibold">{fmtUsd(best)}</span>
+              {stats.plays} game{stats.plays === 1 ? '' : 's'} played · Best <span className="text-primary font-semibold">{fmtUsd(stats.best)}</span> · Avg {fmtUsd(avgWon)}
             </p>
           )}
         </header>
 
-        <div className="grid grid-cols-2 gap-2 max-w-md mx-auto mb-6">
-          {[leftLadder, rightLadder].map((col, ci) => (
+        {phase === 'pick' && (
+          <div className="flex flex-col items-center gap-2 mb-6">
+            <div className="inline-flex rounded-full border border-border bg-card p-1">
+              <button
+                onClick={() => switchMode('cash')}
+                className={cn(
+                  'px-4 py-1.5 rounded-full text-sm font-semibold transition-colors',
+                  mode === 'cash' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+                )}
+              >
+                💵 Classic Cash
+              </button>
+              <button
+                onClick={() => switchMode('players')}
+                disabled={poolStatus === 'loading'}
+                className={cn(
+                  'px-4 py-1.5 rounded-full text-sm font-semibold transition-colors inline-flex items-center gap-1.5',
+                  mode === 'players' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+                )}
+              >
+                {poolStatus === 'loading' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                ⚽ Player Edition
+              </button>
+            </div>
+            {mode === 'players' && (
+              <p className="text-xs text-muted-foreground">Every case hides a real footballer. You win their market value.</p>
+            )}
+            {poolStatus === 'failed' && (
+              <p className="text-xs text-destructive">Player data is unavailable right now, so Cash mode it is.</p>
+            )}
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-2 max-w-xl mx-auto mb-6">
+          {ladderCols.map((col, ci) => (
             <div key={ci} className="space-y-1">
-              {col.map(v => (
+              {col.map(c => (
                 <div
-                  key={v}
+                  key={c.id}
                   className={cn(
-                    'px-3 py-1.5 rounded-md text-sm font-semibold text-center transition-all',
-                    isLive(v)
+                    'px-2.5 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition-all flex items-center justify-between gap-2',
+                    !c.opened
                       ? 'bg-primary/15 text-primary border border-primary/30'
                       : 'bg-secondary/40 text-muted-foreground/40 line-through'
                   )}
                 >
-                  {fmtUsd(v)}
+                  {c.player ? (
+                    <>
+                      <span className="truncate">{flagFor(c.player.nationality)} {shortName(c.player.name)}</span>
+                      <span className="shrink-0">{fmtCompactUsd(c.value)}</span>
+                    </>
+                  ) : (
+                    <span className="w-full text-center">{fmtUsd(c.value)}</span>
+                  )}
                 </div>
               ))}
             </div>
           ))}
         </div>
+
+        {offerHistory.length > 0 && phase !== 'done' && (
+          <div className="flex flex-wrap justify-center gap-1.5 mb-4">
+            {offerHistory.map((o, i) => (
+              <span key={i} className="text-[11px] px-2 py-0.5 rounded-full bg-secondary/60 text-muted-foreground">
+                Offer {i + 1}: {fmtUsd(o)}
+              </span>
+            ))}
+          </div>
+        )}
 
         <div className="text-center mb-5 min-h-[28px]">
           {phase === 'pick' && (
@@ -199,9 +350,12 @@ const DealOrNoDeal = () => {
               <Phone className="w-4 h-4" /> The Banker is calling…
             </p>
           )}
+          {phase === 'swap' && (
+            <p className="text-foreground font-semibold">Two cases left. Trust your gut or trade it away?</p>
+          )}
         </div>
 
-        {phase !== 'done' && (
+        {(phase === 'pick' || phase === 'opening' || phase === 'offer') && (
           <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 md:gap-3 max-w-3xl mx-auto">
             {cases.map(c => {
               const isMine = c.id === myCaseId;
@@ -211,7 +365,7 @@ const DealOrNoDeal = () => {
                   onClick={() => (phase === 'pick' ? pickMyCase(c.id) : openCase(c.id))}
                   disabled={c.opened || isMine || phase === 'offer'}
                   className={cn(
-                    'aspect-[3/4] rounded-xl flex flex-col items-center justify-center font-bold transition-all border',
+                    'aspect-[3/4] rounded-xl flex flex-col items-center justify-center font-bold transition-all border px-0.5',
                     c.opened
                       ? 'bg-secondary/30 border-border text-muted-foreground/50'
                       : isMine
@@ -220,7 +374,15 @@ const DealOrNoDeal = () => {
                   )}
                 >
                   {c.opened ? (
-                    <span className="text-[10px] md:text-xs px-1 text-center leading-tight">{fmtUsd(c.value)}</span>
+                    c.player ? (
+                      <span className="text-[9px] md:text-[11px] px-0.5 text-center leading-tight">
+                        {shortName(c.player.name)}
+                        <br />
+                        <span className="opacity-80">{fmtCompactUsd(c.value)}</span>
+                      </span>
+                    ) : (
+                      <span className="text-[10px] md:text-xs px-1 text-center leading-tight">{fmtUsd(c.value)}</span>
+                    )
                   ) : (
                     <>
                       <Briefcase className="w-5 h-5 md:w-6 md:h-6 mb-1" />
@@ -255,28 +417,91 @@ const DealOrNoDeal = () => {
           </div>
         )}
 
+        {phase === 'swap' && myCase && lastRivalCase && (
+          <div className="mt-4 bg-card border border-primary/40 rounded-2xl p-6 md:p-8 max-w-md mx-auto text-center shadow-xl">
+            <div className="flex justify-center gap-6 mb-6">
+              {[{ c: myCase, label: 'Your case' }, { c: lastRivalCase, label: 'Last case' }].map(({ c, label }) => (
+                <div key={c.id} className="flex flex-col items-center gap-1">
+                  <div className="w-20 h-24 rounded-xl bg-primary/15 border border-primary/40 flex flex-col items-center justify-center">
+                    <Briefcase className="w-7 h-7 text-primary mb-1" />
+                    <span className="font-bold text-primary">{c.id}</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground">{label}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => resolveSwap(false)}
+                className="flex-1 px-5 py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity"
+              >
+                Keep mine
+              </button>
+              <button
+                onClick={() => resolveSwap(true)}
+                className="flex-1 px-5 py-3 bg-secondary text-foreground rounded-xl font-bold hover:bg-secondary/70 transition-colors inline-flex items-center justify-center gap-2"
+              >
+                <ArrowLeftRight className="w-4 h-4" /> Swap
+              </button>
+            </div>
+          </div>
+        )}
+
         {phase === 'done' && result && (
           <div className="mt-4 flex justify-center">
             <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              <div className="text-5xl mb-3">{result.amount >= 100000 ? '🤑' : result.amount >= 1000 ? '🎉' : '😬'}</div>
+              <div className="text-5xl mb-3">{result.amount >= 1000000 ? '🤑' : result.amount >= 10000 ? '🎉' : '😬'}</div>
               <h2 className="text-2xl font-bold text-primary font-display mb-2">
                 You won {fmtUsd(result.amount)}
               </h2>
-              <p className="text-muted-foreground text-sm">
-                {result.dealt
-                  ? 'You took the deal. Your case held ' + fmtUsd(myCase ? myCase.value : 0) + '.'
-                  : 'You held your case all the way!'}
-              </p>
+
               {result.dealt && myCase && (
-                <p className={cn(
-                  'text-sm font-semibold mt-1',
-                  myCase.value > result.amount ? 'text-destructive' : 'text-correct'
-                )}>
-                  {myCase.value > result.amount ? 'The Banker won that round 😈' : 'Great deal! 🎯'}
-                </p>
+                <>
+                  <p className="text-muted-foreground text-sm">
+                    You took the deal. Your case held {caseLabel(myCase)}{myCase.player ? ` (${fmtUsd(myCase.value)})` : ''}.
+                  </p>
+                  <p className={cn(
+                    'text-sm font-semibold mt-1',
+                    myCase.value > result.amount ? 'text-destructive' : 'text-correct'
+                  )}>
+                    {myCase.value > result.amount ? 'The Banker won that round 😈' : 'Great deal! 🎯'}
+                  </p>
+                </>
               )}
 
-              {emojiGrid && <pre className="mt-4 text-base tracking-wide">{emojiGrid}</pre>}
+              {!result.dealt && result.gaveUpValue != null && (
+                <>
+                  <p className="text-muted-foreground text-sm">
+                    {result.swapped ? 'You swapped at the death.' : 'You kept your case all the way.'}
+                    {' '}The other case held {fmtUsd(result.gaveUpValue)}.
+                  </p>
+                  <p className={cn(
+                    'text-sm font-semibold mt-1',
+                    result.amount >= result.gaveUpValue ? 'text-correct' : 'text-destructive'
+                  )}>
+                    {result.amount >= result.gaveUpValue ? 'Right call! 🎯' : 'Ouch. Wrong case 😈'}
+                  </p>
+                </>
+              )}
+
+              {mode === 'players' && (() => {
+                const wonCase = result.dealt ? null : cases.find(c => !result.swapped ? c.id === myCaseId : (c.id !== myCaseId && c.id === lastRivalCase?.id));
+                const p = wonCase?.player;
+                return p ? (
+                  <div className="mt-3 rounded-xl bg-primary/10 border border-primary/30 px-4 py-3 text-sm">
+                    <span className="font-semibold text-primary">{flagFor(p.nationality)} {p.name}</span>
+                    <span className="text-muted-foreground"> · {p.club} · {fmtCompactUsd(p.value)}</span>
+                  </div>
+                ) : null;
+              })()}
+
+              {offerHistory.length > 0 && (
+                <div className="mt-4 text-xs text-muted-foreground">
+                  Offers: {offerHistory.map(o => fmtUsd(o)).join(' → ')}
+                </div>
+              )}
+
+              {emojiGrid && <pre className="mt-4 text-base tracking-wide whitespace-pre-wrap">{emojiGrid}</pre>}
 
               <ShareButtons
                 score={fmtUsd(result.amount)}
@@ -286,7 +511,7 @@ const DealOrNoDeal = () => {
               />
 
               <button
-                onClick={init}
+                onClick={() => init(mode, playerPool)}
                 className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
               >
                 <RotateCcw className="w-4 h-4" /> Play Again
@@ -303,16 +528,17 @@ const DealOrNoDeal = () => {
 
         <GameSeoContent
           title="Deal or No Deal — The Banker Game"
-          description="A football-flavored take on the classic Deal or No Deal. Pick a case, eliminate the others, and weigh the Banker's offers against the mystery value in your own case."
+          description="A sports take on the classic Deal or No Deal. Play for cash, or switch to Player Edition where every case hides a real footballer and you win their market value."
           howToPlay={[
             'Pick one case to keep as your own.',
             'Open the other cases to eliminate their hidden amounts.',
-            'After each round the Banker offers to buy your case — take the DEAL or say NO DEAL and keep going.',
-            'Hold out to the end to win whatever is in your case.',
+            'After each round the Banker offers to buy your case. Take the DEAL or say NO DEAL and keep going.',
+            'Reject every offer and you reach the final two cases, where you can keep yours or swap.',
+            'Try Player Edition: every case hides a real footballer and their market value.',
           ]}
           examples={[
             'Open low amounts early to push the Banker offers higher.',
-            'A big offer late is the Banker hedging against a huge case.',
+            'A big offer late means the Banker is scared of your case.',
           ]}
         />
         <GameNav />
