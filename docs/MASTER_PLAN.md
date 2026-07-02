@@ -108,13 +108,13 @@ Box2Box Show formats that convert: Footy Tic Tac Toe (adversarial grid, blocking
 ### F. New games (from research, ranked)
 45. [BUILT] Name Them All list quiz, 15 lists across 10 sports, relaxed and timed modes.
 46. [BUILT] Perfect Season engine v1 for MLB (162-0): spin team plus era wheel with no dead spins, draft by position with season ratings, animated sim with skip, share card. White space nobody owns.
-47. [PENDING] Perfect Season NHL (82-0) reusing the same engine.
+47. [LIVE] Perfect Season NHL 82-0 on the shared engine: franchise plus decade wheel (222 entries), skater ratings from points per game, goalies from draft pedigree (no goalie stats exist in our data), verified live at /perfect-season-nhl.
 48. [PENDING] Perfect Season NBA and NFL variants (differentiate from 82-0.com and 20-0.com with cross-era spins and our rarity data).
 49. [PENDING] Soccer Grid upgrade toward Futbol11 Grid: difficulty modes, choose-cell-on-multi-fit, rarity scores from a guess-log table.
 50. [PENDING] Build-a-XI: 11 random countries, place one valid player per country into a formation, timer options. Reuses FORMATIONS from squadDeal.
 51. [PENDING] Sports Bingo: 12-criteria board, random players revealed one at a time, place or skip.
 52. [PENDING] Goltexto-style similarity guesser: similarity score from club history, league, position, age, nationality overlap. Few clones exist, high wow factor.
-53. [PENDING] Career Path Ladder daily (soccer first): reveal transfer history step by step, fewer clues means more points.
+53. [LIVE] Career Ladder (soccer): career revealed stint by stint, suggestion-only guessing so invalid names are impossible, 1000 point scoring, verified live at /career-ladder. Daily-seed mode still to add.
 54. [PENDING] Guess the Value, Sign the Player: guess market value within a band to add the player to your XI, 11 rounds, rate the squad.
 55. [BUILT] Higher/Lower: Transfer Market (endless streak on market values, best streak saved on device).
 56. [PENDING] Stat Detective daily (NBA, NFL, MLB): anonymized stat line plus era hints, Poeltl-style attribute feedback arrows.

@@ -73,6 +73,8 @@ import PerfectSeasonMlb from "./pages/PerfectSeasonMlb";
 import HigherLowerTransfers from "./pages/HigherLowerTransfers";
 import PerfectSeasonNhl from "./pages/PerfectSeasonNhl";
 import CareerLadder from "./pages/CareerLadder";
+import PerfectSeasonNba from "./pages/PerfectSeasonNba";
+import PerfectSeasonNfl from "./pages/PerfectSeasonNfl";
 
 const queryClient = new QueryClient();
 
@@ -170,6 +172,8 @@ const AppContent = () => {
         <Route path="/higher-lower-transfers" element={<HigherLowerTransfers />} />
         <Route path="/perfect-season-nhl" element={<PerfectSeasonNhl />} />
         <Route path="/career-ladder" element={<CareerLadder />} />
+        <Route path="/perfect-season-nba" element={<PerfectSeasonNba />} />
+        <Route path="/perfect-season-nfl" element={<PerfectSeasonNfl />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

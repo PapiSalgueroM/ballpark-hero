@@ -42,6 +42,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Pro Football',
     emoji: '🏈',
     games: [
+      { path: '/perfect-season-nfl', label: '17-0 Perfect Season', emoji: '🏆', description: 'Draft an offense across eras, run the table', isNew: true },
       { path: '/football-grid', label: 'Pro Football Grid', emoji: '🏈', description: '3×3 grid puzzle with rarity scores', daily: true },
       { path: '/football-timeline', label: 'Timeline', emoji: '📅', description: 'Order players by draft year', daily: true },
       { path: '/football-draft', label: 'Draft Guesser', emoji: '🎰', description: 'Guess the draft round', daily: true },
@@ -62,6 +63,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Pro Basketball',
     emoji: '🏀',
     games: [
+      { path: '/perfect-season-nba', label: '82-0 Perfect Season', emoji: '🏆', description: 'Spin team seasons, draft a six man rotation', isNew: true },
       { path: '/nba-starting-5', label: 'NBA Starting 5', emoji: '🏀', description: 'Build a lineup with stat challenges' },
       { path: '/nba-connect-4', label: 'NBA Connect 4', emoji: '🏀', description: 'NBA trivia meets Connect 4' },
       { path: '/nba-chain', label: 'NBA Chain', emoji: '🔗', description: 'Build a chain of connected players' },
