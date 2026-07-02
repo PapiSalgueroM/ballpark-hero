@@ -67,6 +67,7 @@ export const CATEGORIES: GameCategory[] = [
     emoji: '🏀',
     games: [
       { path: '/perfect-season-nba', label: '82-0 Perfect Season', emoji: '🏆', description: 'Spin team seasons, draft a six man rotation', isNew: true },
+      { path: '/stat-detective', label: 'Stat Detective', emoji: '🔎', description: 'Name the player behind the mystery stat line', isNew: true },
       { path: '/nba-starting-5', label: 'NBA Starting 5', emoji: '🏀', description: 'Build a lineup with stat challenges' },
       { path: '/nba-connect-4', label: 'NBA Connect 4', emoji: '🏀', description: 'NBA trivia meets Connect 4' },
       { path: '/nba-chain', label: 'NBA Chain', emoji: '🔗', description: 'Build a chain of connected players' },
