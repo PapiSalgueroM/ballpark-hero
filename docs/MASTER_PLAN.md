@@ -109,7 +109,7 @@ Box2Box Show formats that convert: Footy Tic Tac Toe (adversarial grid, blocking
 45. [BUILT] Name Them All list quiz, 15 lists across 10 sports, relaxed and timed modes.
 46. [BUILT] Perfect Season engine v1 for MLB (162-0): spin team plus era wheel with no dead spins, draft by position with season ratings, animated sim with skip, share card. White space nobody owns.
 47. [LIVE] Perfect Season NHL 82-0 on the shared engine: franchise plus decade wheel (222 entries), skater ratings from points per game, goalies from draft pedigree (no goalie stats exist in our data), verified live at /perfect-season-nhl.
-48. [PENDING] Perfect Season NBA and NFL variants (differentiate from 82-0.com and 20-0.com with cross-era spins and our rarity data).
+48. [SHIPPED] Perfect Season NBA (82-0, per-36 ratings, six man rotation, 1616 team-season wheel) and NFL (17-0, offense draft, perfection tuned to ~12 percent for god teams). Pushed in 02e8c9f, build clean, published. Spot-check /perfect-season-nba and /perfect-season-nfl in a browser next session (extension was offline at ship time).
 49. [PENDING] Soccer Grid upgrade toward Futbol11 Grid: difficulty modes, choose-cell-on-multi-fit, rarity scores from a guess-log table.
 50. [PENDING] Build-a-XI: 11 random countries, place one valid player per country into a formation, timer options. Reuses FORMATIONS from squadDeal.
 51. [PENDING] Sports Bingo: 12-criteria board, random players revealed one at a time, place or skip.
