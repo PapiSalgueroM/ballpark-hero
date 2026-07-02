@@ -1,0 +1,299 @@
+import { supabase } from '@/integrations/supabase/client';
+import { Position } from '@/types/game';
+import { Formation, FormationSlot, normalizePosition } from '@/lib/squadDeal';
+import { normalizeName } from '@/lib/whoAmI';
+
+/**
+ * World XI (futbol11-style Build-a-XI)
+ *
+ * Pick a formation, get 11 random countries (one per slot, revealed in random
+ * order), and name a real footballer of that nationality who can play the slot.
+ *
+ * POOL DESIGN (verified in SQL on flawuiqbvjobmkfkauhw, 2026-07-02):
+ *   - Every row from the current season snapshot (year = 2026, 5393 rows, all
+ *     positions down to about $1M value), paged 1000 at a time by id.
+ *   - Plus the top 1000 rows of 2025 by market value, so recently faded or
+ *     transferred stars stay guessable.
+ *   - Deduped by player name keeping the newest year (value breaks ties),
+ *     positions mapped through normalizePosition, primary nationality only.
+ *   - Result: about 5,405 unique players.
+ *
+ * COUNTRY ELIGIBILITY (same thresholds as the verification SQL):
+ *   at least 2 GK, 2 CB, 3 defenders, 3 central or wide midfielders and
+ *   2 out-and-out forwards (ST or CF). 39 countries qualified on the live
+ *   data, e.g. Brazil (31 GK), England (26 ST or CF), Japan (5 CB),
+ *   Morocco (4 GK). The list is recomputed from the fetched pool at runtime,
+ *   so it heals itself as the data grows.
+ *
+ * DRAW: 11 distinct countries, one per formation slot. Slots are matched in
+ * scarcity order and a country is only assigned to a slot it can actually
+ * fill from the pool; if a shuffle cannot cover every slot we redraw.
+ */
+
+export interface WxPlayer {
+  name: string;
+  country: string; // primary nationality, e.g. "France" from "France / Algeria"
+  position: Position;
+  club: string;
+  value: number; // market value in USD from the row we kept
+}
+
+export interface WorldXiData {
+  players: WxPlayer[];
+  byCountry: Map<string, WxPlayer[]>; // value-sorted per country
+  countries: string[]; // qualifying countries, alphabetical
+}
+
+export interface TimerMode {
+  key: 'none' | '90' | '60';
+  label: string;
+  seconds: number;
+  hint: string;
+}
+
+export const TIMER_MODES: TimerMode[] = [
+  { key: 'none', label: 'No timer', seconds: 0, hint: 'Take your time' },
+  { key: '90', label: '90 seconds', seconds: 90, hint: 'A proper rush' },
+  { key: '60', label: '60 seconds', seconds: 60, hint: 'Blitz football' },
+];
+
+/* ---------------- Pool fetch constants ---------------- */
+const CURRENT_YEAR = 2026; // full season snapshot (same convention as squadDeal)
+const PREV_YEAR = 2025; // top-value extras only
+const PAGE = 1000; // PostgREST per-request row cap
+const CURRENT_PAGES = 8; // 8000-row capacity for the current-year snapshot
+const PREV_STARS = 1000;
+const MIN_POOL = 800; // sanity floor before we trust the pool
+const MIN_COUNTRIES = 12;
+
+/* ---------------- Eligibility thresholds (SQL-verified) ---------------- */
+const GK_MIN = 2; // goalkeepers are the scarce resource
+const CB_MIN = 2; // every formation has 2 or 3 pure CB slots
+const DEF_MIN = 3;
+const MID_MIN = 3;
+const FW_MIN = 2; // every formation has at least one ST slot
+
+const DEF_SET = new Set<Position>(['CB', 'LB', 'RB', 'LWB', 'RWB']);
+const MID_SET = new Set<Position>(['CDM', 'CM', 'CAM', 'LM', 'RM']);
+const FW_SET = new Set<Position>(['ST', 'CF']);
+
+/* ---------------- Small helpers ---------------- */
+
+/**
+ * First nationality only. Splits on "/" (dual style "France / Algeria") but
+ * NOT on commas, because the table stores "Korea, South" as a single country.
+ */
+export function primaryCountry(nationality: string): string {
+  return (nationality || '').split('/')[0].trim();
+}
+
+const DISPLAY_NAME: Record<string, string> = {
+  'Korea, South': 'South Korea',
+};
+
+/** Human-friendly country label for headers and messages. */
+export function displayCountry(country: string): string {
+  return DISPLAY_NAME[country] ?? country;
+}
+
+export function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+export function fitsSlot(p: WxPlayer, slot: FormationSlot): boolean {
+  return slot.allowed.includes(p.position);
+}
+
+/** "ST / CF" style summary of what a slot accepts. */
+export function allowedLabel(slot: FormationSlot): string {
+  return slot.allowed.join(' / ');
+}
+
+/** Friendly rejection line for a player who is real but plays elsewhere. */
+export function wrongPositionMessage(p: WxPlayer, slot: FormationSlot): string {
+  return `${p.name} plays ${p.position}. This ${slot.label} slot needs ${allowedLabel(slot)}. Try a different player.`;
+}
+
+/* ---------------- Country eligibility ---------------- */
+
+export function countryQualifies(players: WxPlayer[]): boolean {
+  let gk = 0;
+  let cb = 0;
+  let def = 0;
+  let mid = 0;
+  let fw = 0;
+  for (const p of players) {
+    if (p.position === 'GK') gk++;
+    if (p.position === 'CB') cb++;
+    if (DEF_SET.has(p.position)) def++;
+    else if (MID_SET.has(p.position)) mid++;
+    else if (FW_SET.has(p.position)) fw++;
+  }
+  return gk >= GK_MIN && cb >= CB_MIN && def >= DEF_MIN && mid >= MID_MIN && fw >= FW_MIN;
+}
+
+/* ---------------- Pool fetch ---------------- */
+
+interface PoolRow {
+  player_name: string | null;
+  nationality: string | null;
+  position: string | null;
+  club: string | null;
+  market_value_usd: number | null;
+  year: number | null;
+}
+
+/**
+ * Boot fetch. Returns null on any failure or on a suspiciously small pool so
+ * the page can show an error state with retry.
+ */
+export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
+  try {
+    const cols = 'player_name, nationality, position, club, market_value_usd, year';
+    const pageRequests = Array.from({ length: CURRENT_PAGES }, (_, i) =>
+      supabase
+        .from('player_market_values')
+        .select(cols)
+        .eq('year', CURRENT_YEAR)
+        .gt('market_value_usd', 0)
+        .order('id', { ascending: true })
+        .range(i * PAGE, i * PAGE + PAGE - 1),
+    );
+    const prevRequest = supabase
+      .from('player_market_values')
+      .select(cols)
+      .eq('year', PREV_YEAR)
+      .gt('market_value_usd', 0)
+      .order('market_value_usd', { ascending: false })
+      .limit(PREV_STARS);
+
+    const results = await Promise.all([...pageRequests, prevRequest]);
+    const rows: PoolRow[] = [];
+    for (const r of results) {
+      if (!r.error && r.data) rows.push(...(r.data as PoolRow[]));
+    }
+    if (rows.length === 0) return null;
+
+    // Dedupe by name keeping the newest year; higher value breaks ties.
+    const byName = new Map<string, { player: WxPlayer; year: number }>();
+    for (const r of rows) {
+      const name = (r.player_name ?? '').trim();
+      const country = primaryCountry(r.nationality ?? '');
+      const position = normalizePosition((r.position ?? '').trim());
+      const value = Number(r.market_value_usd) || 0;
+      const year = Number(r.year) || 0;
+      if (!name || !country || !position || value <= 0) continue;
+      const prev = byName.get(name);
+      if (!prev || year > prev.year || (year === prev.year && value > prev.player.value)) {
+        byName.set(name, {
+          player: { name, country, position, club: (r.club ?? '').trim(), value },
+          year,
+        });
+      }
+    }
+
+    const players = [...byName.values()].map(e => e.player);
+    if (players.length < MIN_POOL) return null;
+
+    const byCountry = new Map<string, WxPlayer[]>();
+    for (const p of players) {
+      const list = byCountry.get(p.country);
+      if (list) list.push(p);
+      else byCountry.set(p.country, [p]);
+    }
+    for (const list of byCountry.values()) list.sort((a, b) => b.value - a.value);
+
+    const countries = [...byCountry.entries()]
+      .filter(([, list]) => countryQualifies(list))
+      .map(([country]) => country)
+      .sort((a, b) => a.localeCompare(b));
+    if (countries.length < MIN_COUNTRIES) return null;
+
+    return { players, byCountry, countries };
+  } catch {
+    return null;
+  }
+}
+
+/* ---------------- Country draw ---------------- */
+
+const DRAW_ATTEMPTS = 40;
+
+/**
+ * Draws 11 distinct countries, one per formation slot, validating at draw
+ * time that each country can fill its assigned slot from the pool. Slots are
+ * processed hardest-first (fewest eligible countries) and each pick scans a
+ * shuffled deck, which is equivalent to redrawing until the country fits.
+ * Returns countries indexed by slot position, or null if no cover exists
+ * (practically impossible with 25+ qualifying countries).
+ */
+export function drawCountries(formation: Formation, data: WorldXiData): string[] | null {
+  const eligibleSets = formation.slots.map(slot => {
+    const set = new Set<string>();
+    for (const country of data.countries) {
+      const list = data.byCountry.get(country) ?? [];
+      if (list.some(p => fitsSlot(p, slot))) set.add(country);
+    }
+    return set;
+  });
+  const order = formation.slots
+    .map((_, i) => i)
+    .sort((a, b) => eligibleSets[a].size - eligibleSets[b].size);
+
+  for (let attempt = 0; attempt < DRAW_ATTEMPTS; attempt++) {
+    const deck = shuffle(data.countries);
+    const picked: (string | null)[] = new Array(formation.slots.length).fill(null);
+    const used = new Set<string>();
+    let ok = true;
+    for (const slotIndex of order) {
+      const country = deck.find(c => !used.has(c) && eligibleSets[slotIndex].has(c));
+      if (!country) {
+        ok = false;
+        break;
+      }
+      used.add(country);
+      picked[slotIndex] = country;
+    }
+    if (ok) return picked as string[];
+  }
+  return null;
+}
+
+/* ---------------- Suggestions ---------------- */
+
+/**
+ * Accent-insensitive suggestions restricted to one country (same tiering as
+ * whoAmI: full-name prefix, then word prefix, then substring; each country
+ * list is value-sorted so famous names float up). Requires 2+ letters.
+ * Any position is suggested on purpose: picking a wrong-position player is
+ * how the friendly rejection message gets triggered.
+ */
+export function suggestCountryPlayers(
+  data: WorldXiData,
+  country: string,
+  query: string,
+  exclude?: Set<string>,
+  limit = 8,
+): WxPlayer[] {
+  const q = normalizeName(query);
+  if (q.length < 2) return [];
+  const list = data.byCountry.get(country) ?? [];
+  const starts: WxPlayer[] = [];
+  const wordStarts: WxPlayer[] = [];
+  const contains: WxPlayer[] = [];
+  for (const p of list) {
+    if (exclude && exclude.has(p.name)) continue;
+    const n = normalizeName(p.name);
+    if (!n.includes(q)) continue;
+    if (n.startsWith(q)) starts.push(p);
+    else if (n.split(' ').some(w => w.startsWith(q))) wordStarts.push(p);
+    else contains.push(p);
+    if (starts.length >= limit) break;
+  }
+  return [...starts, ...wordStarts, ...contains].slice(0, limit);
+}

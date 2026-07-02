@@ -76,6 +76,7 @@ import CareerLadder from "./pages/CareerLadder";
 import PerfectSeasonNba from "./pages/PerfectSeasonNba";
 import PerfectSeasonNfl from "./pages/PerfectSeasonNfl";
 import WhoAmI from "./pages/WhoAmI";
+import WorldXi from "./pages/WorldXi";
 
 const queryClient = new QueryClient();
 
@@ -176,6 +177,7 @@ const AppContent = () => {
         <Route path="/perfect-season-nba" element={<PerfectSeasonNba />} />
         <Route path="/perfect-season-nfl" element={<PerfectSeasonNfl />} />
         <Route path="/who-am-i" element={<WhoAmI />} />
+        <Route path="/world-xi" element={<WorldXi />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
