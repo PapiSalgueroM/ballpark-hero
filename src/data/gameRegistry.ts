@@ -23,6 +23,8 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', isNew: true },
       { path: '/world-xi', label: 'World XI', emoji: '🌍', description: 'Pick a formation, fill 11 random countries', isNew: true },
       { path: '/player-bingo', label: 'Player Bingo', emoji: '🎱', description: 'Fill 12 criteria tiles as players are revealed', isNew: true },
+      { path: '/alphabet-sprint', label: 'Alphabet Sprint', emoji: '⚡', description: 'Name a player per letter against the clock', isNew: true },
+      { path: '/clue-auction', label: 'Clue Auction', emoji: '💰', description: 'Buy clues, save points, name the secret player', isNew: true },
       { path: '/footle', label: 'Footle', emoji: '🎯', description: 'Guess the soccer player from stats' },
       { path: '/career', label: 'Career Quiz', emoji: '📜', description: 'Guess from career history' },
       { path: '/higher-lower', label: 'Higher or Lower', emoji: '📊', description: 'Compare all-time career stats' },

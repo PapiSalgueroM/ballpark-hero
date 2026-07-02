@@ -79,6 +79,8 @@ import WhoAmI from "./pages/WhoAmI";
 import WorldXi from "./pages/WorldXi";
 import PlayerBingo from "./pages/PlayerBingo";
 import StatDetective from "./pages/StatDetective";
+import AlphabetSprint from "./pages/AlphabetSprint";
+import ClueAuction from "./pages/ClueAuction";
 
 const queryClient = new QueryClient();
 
@@ -182,6 +184,8 @@ const AppContent = () => {
         <Route path="/world-xi" element={<WorldXi />} />
         <Route path="/player-bingo" element={<PlayerBingo />} />
         <Route path="/stat-detective" element={<StatDetective />} />
+        <Route path="/alphabet-sprint" element={<AlphabetSprint />} />
+        <Route path="/clue-auction" element={<ClueAuction />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
