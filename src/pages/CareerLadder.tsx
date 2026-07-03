@@ -9,9 +9,12 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import {
   CareerPlayer,
   CareerStint,
+  LadderAction,
   MAX_GUESSES,
   MIN_STINTS,
   REVEAL_PENALTY,
@@ -21,9 +24,11 @@ import {
   flagForNationality,
   fmtMarketValue,
   normalizeName,
+  pickDailyPlayer,
 } from '@/lib/careerLadder';
 
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
+type LadderMode = 'daily' | 'unlimited';
 
 function stintStats(s: CareerStint): string {
   const bits: string[] = [];
@@ -46,6 +51,65 @@ const CareerLadder = () => {
   const [input, setInput] = useState('');
   const [finalScore, setFinalScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
+
+  // ---- Daily / Unlimited toggle, same convention as Footle / Career Quiz ----
+  const [mode, setMode] = useState<LadderMode>('daily');
+  const switchMode = useCallback((m: LadderMode) => setMode(m), []);
+
+  // ---- Daily: target player is date-seeded once the pool has loaded -------
+  const dailyPlayer = useMemo(() => (pool.length > 0 ? pickDailyPlayer(pool) : null), [pool]);
+
+  // dailyPlayer resolves asynchronously (Supabase fetch via boot()), so it is
+  // passed as supabasePuzzle rather than via the static puzzles array.
+  // useDailyPuzzle's internal selection memo only re-evaluates on
+  // supabasePuzzle transitioning null -> value (see its own doc comment),
+  // not on puzzles array content changing after mount.
+  //
+  // maxGuesses is set high (never auto-triggers) and loss is instead decided
+  // by a custom isLost that counts only 'wrong' actions. Otherwise the
+  // hook's built-in "array length >= maxGuesses" check would count reveal
+  // clicks toward the guess limit too, since reveals share the same action
+  // log. Mirrors useCareerGame.ts's identical maxGuesses:999 + custom isLost
+  // pattern for the sibling Career Path game.
+  const {
+    guesses: dailyActions,
+    addGuess: addDailyAction,
+    isLoading: isDailyLoading,
+  } = useDailyPuzzle<CareerPlayer, LadderAction>({
+    gameSlug: 'career-ladder',
+    puzzles: [],
+    supabasePuzzle: dailyPlayer,
+    getPuzzleId: (p) => p.id,
+    maxGuesses: 999,
+    isWon: (g) => g.some((a) => a.t === 'won'),
+    isLost: (g) => g.filter((a) => a.t === 'wrong').length >= MAX_GUESSES,
+    deserializeGuesses: (raw) => raw as LadderAction[],
+  });
+
+  const dailyRevealed = useMemo(
+    () => 1 + dailyActions.filter((a) => a.t === 'reveal' || a.t === 'wrong').length,
+    [dailyActions],
+  );
+  const dailyWrongGuesses = useMemo(
+    () => dailyActions.filter((a): a is { t: 'wrong'; name: string } => a.t === 'wrong').map((a) => a.name),
+    [dailyActions],
+  );
+  const dailyWonAction = dailyActions.find((a): a is { t: 'won'; score: number } => a.t === 'won');
+  const dailyPhase: Phase = !dailyPlayer
+    ? 'boot'
+    : dailyWonAction
+      ? 'won'
+      : dailyWrongGuesses.length >= MAX_GUESSES
+        ? 'lost'
+        : 'playing';
+  const dailyFinalScore = dailyWonAction?.score ?? 0;
+
+  // ---- Active (mode-switched) values ---------------------------------------
+  const activePhase = mode === 'daily' ? dailyPhase : phase;
+  const activePlayer = mode === 'daily' ? dailyPlayer : player;
+  const activeRevealed = mode === 'daily' ? dailyRevealed : revealed;
+  const activeWrongGuesses = mode === 'daily' ? dailyWrongGuesses : wrongGuesses;
+  const activeFinalScore = mode === 'daily' ? dailyFinalScore : finalScore;
 
   const startRound = useCallback((available: CareerPlayer[], used: string[]) => {
     const eligible = available.filter(p => p.seasons.length >= MIN_STINTS);
@@ -85,19 +149,19 @@ const CareerLadder = () => {
 
   const allNames = useMemo(() => pool.map(p => p.name), [pool]);
 
-  const ended = phase === 'won' || phase === 'lost';
-  const total = player ? player.seasons.length : 0;
-  const shown = player ? (ended ? total : Math.min(revealed, total)) : 0;
-  const visibleStints = player ? player.seasons.slice(0, shown) : [];
+  const ended = activePhase === 'won' || activePhase === 'lost';
+  const total = activePlayer ? activePlayer.seasons.length : 0;
+  const shown = activePlayer ? (ended ? total : Math.min(activeRevealed, total)) : 0;
+  const visibleStints = activePlayer ? activePlayer.seasons.slice(0, shown) : [];
   const hiddenCount = total - shown;
-  const flagUnlocked = player !== null && revealed * 2 >= total;
-  const guessesLeft = MAX_GUESSES - wrongGuesses.length;
-  const potential = careerScore(Math.max(1, Math.min(revealed, total)), wrongGuesses.length);
+  const flagUnlocked = activePlayer !== null && activeRevealed * 2 >= total;
+  const guessesLeft = MAX_GUESSES - activeWrongGuesses.length;
+  const potential = careerScore(Math.max(1, Math.min(activeRevealed, total)), activeWrongGuesses.length);
 
   const query = normalizeName(input);
-  const wrongNorms = wrongGuesses.map(normalizeName);
+  const wrongNorms = activeWrongGuesses.map(normalizeName);
   const suggestions =
-    phase === 'playing' && query.length >= 2
+    activePhase === 'playing' && query.length >= 2
       ? allNames
           .filter(n => {
             const norm = normalizeName(n);
@@ -107,23 +171,37 @@ const CareerLadder = () => {
       : [];
 
   const handleGuess = (name: string) => {
-    if (phase !== 'playing' || !player) return;
+    if (activePhase !== 'playing' || !activePlayer) return;
     setInput('');
     const norm = normalizeName(name);
     if (wrongNorms.includes(norm)) return;
-    if (norm === normalizeName(player.name)) {
-      const score = careerScore(Math.min(revealed, total), wrongGuesses.length);
-      setFinalScore(score);
-      setBestScore(b => Math.max(b, score));
-      setPhase('won');
+
+    if (norm === normalizeName(activePlayer.name)) {
+      const score = careerScore(Math.min(activeRevealed, total), activeWrongGuesses.length);
+      if (mode === 'daily') {
+        addDailyAction({ t: 'won', score });
+      } else {
+        setFinalScore(score);
+        setBestScore(b => Math.max(b, score));
+        setPhase('won');
+      }
       return;
     }
-    const nextWrong = [...wrongGuesses, name];
-    setWrongGuesses(nextWrong);
-    if (nextWrong.length >= MAX_GUESSES) {
-      setPhase('lost');
+
+    if (mode === 'daily') {
+      // A single action; isLost (wrong-count >= MAX_GUESSES) derives the loss
+      // state from the updated log, so no separate 'lost' dispatch is needed
+      // (and dispatching two actions here would race against addGuess's
+      // stale-closure-per-call read of guesses, see useDailyPuzzle.ts).
+      addDailyAction({ t: 'wrong', name });
     } else {
-      setRevealed(r => Math.min(total, r + 1));
+      const nextWrong = [...wrongGuesses, name];
+      setWrongGuesses(nextWrong);
+      if (nextWrong.length >= MAX_GUESSES) {
+        setPhase('lost');
+      } else {
+        setRevealed(r => Math.min(total, r + 1));
+      }
     }
   };
 
@@ -137,22 +215,36 @@ const CareerLadder = () => {
   };
 
   const revealNext = () => {
-    if (phase !== 'playing' || revealed >= total) return;
-    setRevealed(r => Math.min(total, r + 1));
+    if (activePhase !== 'playing' || activeRevealed >= total) return;
+    if (mode === 'daily') {
+      addDailyAction({ t: 'reveal' });
+    } else {
+      setRevealed(r => Math.min(total, r + 1));
+    }
   };
 
-  const cluesUsed = Math.max(1, Math.min(revealed, total));
+  const cluesUsed = Math.max(1, Math.min(activeRevealed, total));
   const emojiGrid =
-    phase === 'won'
-      ? `🪜 got it in ${cluesUsed} ${cluesUsed === 1 ? 'clue' : 'clues'} · ${finalScore} pts`
+    activePhase === 'won'
+      ? `🪜 got it in ${cluesUsed} ${cluesUsed === 1 ? 'clue' : 'clues'} · ${activeFinalScore} pts`
       : `🪜 stumped after ${MAX_GUESSES} guesses`;
+
+  // ---- Completion tracking (daily only, mirrors Footle/Career Quiz) -------
+  const dailyCompletionScore = dailyPhase === 'won' ? dailyFinalScore : 0;
+  useGameCompletion('career-ladder', dailyPhase !== 'playing' && dailyPhase !== 'boot', dailyCompletionScore);
+
+  // phase tracks the single shared pool fetch (boot()), so an error there
+  // means neither mode has data. Surface it regardless of which mode the
+  // user currently has selected.
+  const isBooting = phase !== 'error' && (mode === 'daily' ? (phase === 'boot' || isDailyLoading || !dailyPlayer) : phase === 'boot');
+  const showError = phase === 'error';
 
   return (
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
         title="Career Ladder: Guess the Footballer | DoUKnowBall"
-        description="A mystery footballer's career appears one stint at a time. Name the player within 6 guesses. Fewer clues means more points. Free and unlimited."
+        description="A mystery footballer's career appears one stint at a time. Name the player within 6 guesses. Fewer clues means more points. Daily challenge or unlimited free play."
         path="/career-ladder"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
@@ -163,18 +255,37 @@ const CareerLadder = () => {
           <p className="text-muted-foreground text-sm md:text-base">
             One career, revealed stint by stint. Name the player before the ladder runs out.
           </p>
-          {bestScore > 0 && (
+
+          {/* Daily / Unlimited toggle */}
+          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+            {(['daily', 'unlimited'] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => switchMode(m)}
+                className={cn(
+                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                  mode === m
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+              </button>
+            ))}
+          </div>
+
+          {mode === 'unlimited' && bestScore > 0 && (
             <p className="text-xs text-muted-foreground mt-2">
               Session best <span className="text-primary font-bold">{bestScore} pts</span>
             </p>
           )}
         </header>
 
-        {phase === 'boot' && (
+        {isBooting && (
           <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
         )}
 
-        {phase === 'error' && (
+        {showError && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't load the career data right now.</p>
             <button onClick={boot} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
@@ -183,13 +294,13 @@ const CareerLadder = () => {
           </div>
         )}
 
-        {(phase === 'playing' || ended) && player && (
+        {!isBooting && (activePhase === 'playing' || ended) && activePlayer && (
           <>
             <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
               <span>
                 Stints <span className="text-primary font-bold">{shown}</span> / {total}
               </span>
-              {phase === 'playing' && (
+              {activePhase === 'playing' && (
                 <span>
                   Worth <span className="text-primary font-bold">{potential} pts</span>
                 </span>
@@ -229,14 +340,14 @@ const CareerLadder = () => {
               )}
             </div>
 
-            {phase === 'playing' && flagUnlocked && (
+            {activePhase === 'playing' && flagUnlocked && (
               <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground mb-4">
                 Nationality hint
-                <span className="text-2xl leading-none">{flagForNationality(player.nationality)}</span>
+                <span className="text-2xl leading-none">{flagForNationality(activePlayer.nationality)}</span>
               </div>
             )}
 
-            {phase === 'playing' && (
+            {activePhase === 'playing' && (
               <div className="space-y-2">
                 <form onSubmit={handleSubmit} className="relative">
                   <input
@@ -264,18 +375,18 @@ const CareerLadder = () => {
                 <p className="text-[10px] text-center text-muted-foreground">
                   Pick a name from the list to lock in a guess. Wrong guesses cost {WRONG_GUESS_PENALTY} pts and reveal the next stint.
                 </p>
-                {wrongGuesses.length > 0 && (
+                {activeWrongGuesses.length > 0 && (
                   <p className="text-xs text-destructive text-center">
-                    Not {wrongGuesses.join(', not ')}
+                    Not {activeWrongGuesses.join(', not ')}
                   </p>
                 )}
                 <button
                   onClick={revealNext}
-                  disabled={revealed >= total}
+                  disabled={activeRevealed >= total}
                   className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-secondary text-foreground text-xs font-semibold hover:bg-secondary/70 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ChevronDown className="w-4 h-4" />
-                  {revealed >= total
+                  {activeRevealed >= total
                     ? 'The whole career is on the board'
                     : `Reveal next stint · costs ${REVEAL_PENALTY} pts`}
                 </button>
@@ -284,33 +395,33 @@ const CareerLadder = () => {
 
             {ended && (
               <div className="bg-card border border-border rounded-2xl p-6 text-center mt-2">
-                <div className="text-4xl mb-2">{phase === 'won' ? '🪜' : '🙈'}</div>
+                <div className="text-4xl mb-2">{activePhase === 'won' ? '🪜' : '🙈'}</div>
                 <h2
                   className={cn(
                     'text-2xl font-bold font-display mb-3',
-                    phase === 'won' ? 'text-correct' : 'text-destructive',
+                    activePhase === 'won' ? 'text-correct' : 'text-destructive',
                   )}
                 >
-                  {phase === 'won' ? 'You know ball' : 'Out of guesses'}
+                  {activePhase === 'won' ? 'You know ball' : 'Out of guesses'}
                 </h2>
 
                 <div className="bg-secondary rounded-xl px-4 py-3 inline-flex items-center gap-3 mb-3">
-                  <span className="text-3xl">{flagForNationality(player.nationality)}</span>
+                  <span className="text-3xl">{flagForNationality(activePlayer.nationality)}</span>
                   <span className="text-left">
-                    <span className="block font-bold text-foreground">{player.name}</span>
+                    <span className="block font-bold text-foreground">{activePlayer.name}</span>
                     <span className="block text-xs text-muted-foreground">
-                      {player.position} · {player.nationality} · {total} stints
+                      {activePlayer.position} · {activePlayer.nationality} · {total} stints
                     </span>
                   </span>
                 </div>
 
-                {phase === 'won' ? (
+                {activePhase === 'won' ? (
                   <>
                     <p className="text-sm text-muted-foreground mb-1">
                       Named after {cluesUsed} {cluesUsed === 1 ? 'clue' : 'clues'} and{' '}
-                      {wrongGuesses.length} wrong {wrongGuesses.length === 1 ? 'guess' : 'guesses'}.
+                      {activeWrongGuesses.length} wrong {activeWrongGuesses.length === 1 ? 'guess' : 'guesses'}.
                     </p>
-                    <p className="text-3xl font-bold text-primary font-display mb-3">{finalScore} pts</p>
+                    <p className="text-3xl font-bold text-primary font-display mb-3">{activeFinalScore} pts</p>
                   </>
                 ) : (
                   <p className="text-sm text-muted-foreground mb-3">
@@ -319,17 +430,21 @@ const CareerLadder = () => {
                 )}
 
                 <ShareButtons
-                  score={phase === 'won' ? `${finalScore} pts` : '0 pts'}
+                  score={activePhase === 'won' ? `${activeFinalScore} pts` : '0 pts'}
                   gameName="Career Ladder"
                   gamePath="/career-ladder"
                   emojiGrid={emojiGrid}
                 />
-                <button
-                  onClick={() => startRound(pool, usedIds)}
-                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  <RotateCcw className="w-4 h-4" /> Next player
-                </button>
+                {mode === 'unlimited' ? (
+                  <button
+                    onClick={() => startRound(pool, usedIds)}
+                    className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+                  >
+                    <RotateCcw className="w-4 h-4" /> Next player
+                  </button>
+                ) : (
+                  <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new ladder!</p>
+                )}
               </div>
             )}
           </>
@@ -340,7 +455,7 @@ const CareerLadder = () => {
         <div className="flex justify-center mt-6">
           <ReportQuestion
             gameType="career-ladder"
-            gameContext={player ? { playerId: player.id, playerName: player.name } : {}}
+            gameContext={activePlayer ? { playerId: activePlayer.id, playerName: activePlayer.name } : {}}
           />
         </div>
 
@@ -348,6 +463,7 @@ const CareerLadder = () => {
           title="Career Ladder: Guess the Footballer from Their Career"
           description="Every round hides a real footballer behind their career ladder. You start with a single early stint, just a club, a season and a stat line, and work out who climbed it. The fewer clues you need, the bigger your score."
           howToPlay={[
+            'Play Daily for one shared ladder per day, or Unlimited for endless rounds.',
             'A mystery player starts with only their earliest career stint showing.',
             'Type at least 2 letters and pick a name from the list. You get 6 guesses.',
             'Every wrong guess reveals the next stint. You can also reveal one on purpose.',

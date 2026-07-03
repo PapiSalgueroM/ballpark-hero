@@ -45,11 +45,25 @@ function CellComponent({ cell, animDelay }: { cell: CellResult; animDelay: numbe
   );
 }
 
-function GuessRow({ guess }: { guess: GuessResult }) {
+function GuessRow({ guess, isLatest }: { guess: GuessResult; isLatest: boolean }) {
+  // Newest row briefly pops (correct) or shakes (wrong) once its cells finish
+  // flipping in. Reuses the shared feedback keyframes from index.css (already
+  // reduced-motion safe via the prefers-reduced-motion block there) instead of
+  // introducing new animation rules. Delay lets the per-cell reveal read first.
+  const feedbackClass = isLatest
+    ? guess.isCorrect
+      ? 'animate-pop-correct'
+      : 'animate-shake-wrong'
+    : '';
+  const feedbackDelay = isLatest ? `${(cellKeys.length + 1) * 80}ms` : undefined;
+
   return (
     <div
-      className="grid gap-1.5 mb-1.5"
-      style={{ gridTemplateColumns: '130px repeat(8, minmax(85px, 1fr))' }}
+      className={cn('grid gap-1.5 mb-1.5', feedbackClass)}
+      style={{
+        gridTemplateColumns: '130px repeat(8, minmax(85px, 1fr))',
+        animationDelay: feedbackDelay,
+      }}
     >
       <div
         className={cn(
@@ -112,7 +126,7 @@ export function GameBoard({ guesses, maxGuesses }: GameBoardProps) {
         </div>
 
         {guesses.map((guess, i) => (
-          <GuessRow key={i} guess={guess} />
+          <GuessRow key={i} guess={guess} isLatest={i === guesses.length - 1} />
         ))}
 
         {Array.from({ length: emptyRows }).map((_, i) => (

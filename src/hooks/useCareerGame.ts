@@ -12,11 +12,38 @@ const COLS = ['club', 'appearances', 'goals', 'assists', 'marketValue'] as const
 
 export type CareerGameMode = 'daily' | 'unlimited';
 
-type CareerAction =
-  | { t: 'cell'; key: string }
-  | { t: 'won' }
-  | { t: 'wrong' }
-  | { t: 'give' };
+// #78: prominence tiers for unlimited/practice play. Daily mode always draws
+// from the full pool (unaffected by this setting). Verified via read-only SQL
+// against career_players/career_seasons (151 players): splitting by peak
+// per-player market value into thirds gives 51/50/50. Easy is the most
+// famous third, Hard the most obscure third, Normal is everyone.
+export type CareerDifficulty = 'easy' | 'normal' | 'hard';
+const DIFFICULTY_STORAGE_KEY = 'career-quiz-difficulty';
+
+function loadStoredDifficulty(): CareerDifficulty {
+  try {
+    const raw = localStorage.getItem(DIFFICULTY_STORAGE_KEY);
+    if (raw === 'easy' || raw === 'normal' || raw === 'hard') return raw;
+  } catch { /* localStorage unavailable, fall back to default */ }
+  return 'normal';
+}
+
+function peakMarketValue(player: CareerPlayer): number {
+  return player.career.reduce((max, s) => Math.max(max, s.marketValue ?? 0), 0);
+}
+
+/**
+ * Splits the pool into thirds by peak career market value (highest = most
+ * prominent). Easy = top third, Hard = bottom third, Normal = full pool.
+ * Falls back to the full pool if there are too few players to split sanely
+ * (guards the tiny fallbackPlayers array before Supabase data loads).
+ */
+function buildCareerPool(difficulty: CareerDifficulty, pool: CareerPlayer[]): CareerPlayer[] {
+  if (difficulty === 'normal' || pool.length < 9) return pool;
+  const sorted = [...pool].sort((a, b) => peakMarketValue(b) - peakMarketValue(a));
+  const third = Math.ceil(sorted.length / 3);
+  return difficulty === 'easy' ? sorted.slice(0, third) : sorted.slice(sorted.length - third);
+}
 
 function getCoverableCells(player: CareerPlayer): string[] {
   const keys: string[] = [];
@@ -41,6 +68,13 @@ export function useCareerGame() {
 
   const [mode, setMode] = useState<CareerGameMode>('daily');
   const switchMode = useCallback((m: CareerGameMode) => setMode(m), []);
+
+  // #78: unlimited-only difficulty tier, remembered across sessions.
+  const [difficulty, setDifficulty] = useState<CareerDifficulty>(loadStoredDifficulty);
+  const unlimitedPool = useMemo(
+    () => buildCareerPool(difficulty, playerPool),
+    [difficulty, playerPool],
+  );
 
   // ── Daily ──────────────────────────────────────────────────────────────────
   const {
@@ -75,9 +109,12 @@ export function useCareerGame() {
   }, [rawDailyStatus]);
 
   // ── Unlimited ──────────────────────────────────────────────────────────────
-  const [unlimitedPlayer, setUnlimitedPlayer] = useState<CareerPlayer>(
-    () => fallbackPlayers[Math.floor(Math.random() * fallbackPlayers.length)],
-  );
+  // Initial pick uses the tier-filtered fallback pool so a stored Easy/Hard
+  // preference is respected even before the Supabase pool has loaded.
+  const [unlimitedPlayer, setUnlimitedPlayer] = useState<CareerPlayer>(() => {
+    const initialPool = buildCareerPool(loadStoredDifficulty(), fallbackPlayers);
+    return initialPool[Math.floor(Math.random() * initialPool.length)];
+  });
   const [unlimitedRevealedCells, setUnlimitedRevealedCells] = useState<Set<string>>(new Set());
   const [unlimitedGameStatus, setUnlimitedGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
   const [unlimitedBoxesUsed, setUnlimitedBoxesUsed] = useState(0);
@@ -179,17 +216,36 @@ export function useCareerGame() {
 
   const resetGame = useCallback(() => {
     if (mode !== 'unlimited') return;
-    setUnlimitedPlayer(playerPool[Math.floor(Math.random() * playerPool.length)]);
+    setUnlimitedPlayer(unlimitedPool[Math.floor(Math.random() * unlimitedPool.length)]);
     setUnlimitedRevealedCells(new Set());
     setUnlimitedGameStatus('playing');
     setUnlimitedBoxesUsed(0);
     setUnlimitedGuessesUsed(0);
+  }, [mode, unlimitedPool]);
+
+  // #78: changing tier only applies in unlimited mode and starts a fresh
+  // round (mirrors Footle's changeDifficulty convention in useGame.ts).
+  const changeDifficulty = useCallback((next: CareerDifficulty) => {
+    if (mode === 'daily') return;
+    setDifficulty((prev) => {
+      if (prev === next) return prev;
+      try { localStorage.setItem(DIFFICULTY_STORAGE_KEY, next); } catch { /* ignore */ }
+      const nextPool = buildCareerPool(next, playerPool);
+      setUnlimitedPlayer(nextPool[Math.floor(Math.random() * nextPool.length)]);
+      setUnlimitedRevealedCells(new Set());
+      setUnlimitedGameStatus('playing');
+      setUnlimitedBoxesUsed(0);
+      setUnlimitedGuessesUsed(0);
+      return next;
+    });
   }, [mode, playerPool]);
 
-  const playerNames = useMemo(
-    () => ensureAnswerInOptions(playerPool.map((p) => p.name), targetPlayer.name),
-    [playerPool, targetPlayer],
-  );
+  // Autocomplete pool mirrors the active tier in unlimited mode (same
+  // convention as Footle's availablePlayers), full pool for daily.
+  const playerNames = useMemo(() => {
+    const source = mode === 'unlimited' ? unlimitedPool : playerPool;
+    return ensureAnswerInOptions(source.map((p) => p.name), targetPlayer.name);
+  }, [mode, unlimitedPool, playerPool, targetPlayer]);
 
   const completionScore = dailyGameStatus === 'won'
     ? Math.max(100, (MAX_GUESSES - dailyGuessesUsed) * 100)
@@ -198,6 +254,7 @@ export function useCareerGame() {
 
   return {
     mode, switchMode,
+    difficulty, changeDifficulty,
     targetPlayer,
     revealedCells,
     revealCell,

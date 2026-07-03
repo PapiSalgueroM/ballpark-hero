@@ -17,6 +17,8 @@ const CareerGame = () => {
   const {
     mode,
     switchMode,
+    difficulty,
+    changeDifficulty,
     targetPlayer,
     revealedCells,
     revealCell,
@@ -123,6 +125,31 @@ const CareerGame = () => {
               </button>
             ))}
           </div>
+
+          {/* #78: difficulty tiers, unlimited mode only. Easy = biggest stars by
+              peak career market value, Hard = deepest cuts, Normal = full pool. */}
+          {mode === 'unlimited' && (
+            <div className="flex items-center justify-center gap-2 mt-3">
+              {(['easy', 'normal', 'hard'] as const).map((d) => (
+                <button
+                  key={d}
+                  onClick={() => changeDifficulty(d)}
+                  className={cn(
+                    'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
+                    difficulty === d
+                      ? d === 'easy'
+                        ? 'bg-correct text-correct-foreground'
+                        : d === 'hard'
+                          ? 'bg-destructive text-destructive-foreground'
+                          : 'bg-primary text-primary-foreground'
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                  )}
+                >
+                  {d}
+                </button>
+              ))}
+            </div>
+          )}
 
           <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
             <span>Boxes: <span className="text-foreground font-semibold">{boxesUsed}</span></span>

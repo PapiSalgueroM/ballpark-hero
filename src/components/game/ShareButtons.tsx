@@ -44,12 +44,23 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
   const [savingImage, setSavingImage] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const shareText = customText || `I scored ${score} on ${gameName} at DoUKnowBall! Can you beat me? douknowball.com${gamePath}`;
+  // Default share text (used by X, WhatsApp, Instagram-copy, Gmail, Messages).
+  // Always ends with the site URL + game path, and includes the emoji grid
+  // when the caller supplied one. `customText` is a full override, authored
+  // by the calling page, so it is trusted as-is and not re-wrapped here; every
+  // existing customText call site already ends with its own douknowball.com URL.
+  const shareText = customText || [
+    `I scored ${score} on ${gameName} at DoUKnowBall! Can you beat me?`,
+    ...(emojiGrid ? [emojiGrid] : []),
+    `douknowball.com${gamePath}`,
+  ].join('\n');
 
   const gameEmoji = ALL_GAMES.find(g => g.path === gamePath)?.emoji || '🏆';
 
   const todayStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
+  // Copy Score Card text: same shape as the image card (ShareCard.tsx) so
+  // both outputs agree. Always ends with douknowball.com + the game path.
   const scoreCard = [
     `${gameEmoji} ${gameName}: ${todayStr}`,
     ...(emojiGrid ? [emojiGrid] : []),
