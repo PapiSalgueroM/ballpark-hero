@@ -158,17 +158,17 @@ const HockeyHigherLower = () => {
           howToPlay={[
             'Two players shown side by side with name, position, and country',
             'Tap the player you think has MORE career points',
-            '10 rounds per game — 10 points per correct answer',
+            '10 rounds per game: 10 points per correct answer',
             'Build a streak for bonus points (+5 per consecutive correct)',
             'Daily challenge or unlimited random mode',
           ]}
           examples={[
             "Gretzky (2,857 pts) vs Lemieux (1,723 pts)",
-            "Crosby vs Ovechkin — Who has more points?",
-            "McDavid vs Draisaitl — Who has more points?",
+            "Crosby vs Ovechkin: Who has more points?",
+            "McDavid vs Draisaitl: Who has more points?",
             "Jagr (1,921 pts) vs Howe (1,850 pts)",
-            "Malkin vs Stamkos — Who has more career points?",
-            "Kane vs Toews — Who finished with more?"
+            "Malkin vs Stamkos: Who has more career points?",
+            "Kane vs Toews: Who finished with more?"
           ]}
         />
 

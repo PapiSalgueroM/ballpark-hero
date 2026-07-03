@@ -61,9 +61,9 @@ function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
                     {isUpgraded && <span className="mr-0.5">⬆️</span>}
                     {name}
                   </td>
-                  <td className="px-2 py-1 text-muted-foreground">{isLegend ? legend.position : (p?.position || '—')}</td>
-                  <td className={`px-2 py-1 text-center font-bold ${isUpgraded || isLegend ? 'text-yellow-400' : 'text-foreground'}`}>{ovr || '—'}</td>
-                  <td className="px-2 py-1 text-right text-muted-foreground whitespace-nowrap">{isLegend ? 'Legend' : (p?.keyStat || '—')}</td>
+                  <td className="px-2 py-1 text-muted-foreground">{isLegend ? legend.position : (p?.position || '-')}</td>
+                  <td className={`px-2 py-1 text-center font-bold ${isUpgraded || isLegend ? 'text-yellow-400' : 'text-foreground'}`}>{ovr || '-'}</td>
+                  <td className="px-2 py-1 text-right text-muted-foreground whitespace-nowrap">{isLegend ? 'Legend' : (p?.keyStat || '-')}</td>
                 </tr>
               );
             })}
@@ -310,7 +310,7 @@ export default function ConquestBoard() {
                       {game.battleResult.simulation?.finalAttScore}
                     </div>
                   </div>
-                  <div className="text-muted-foreground text-lg font-bold">—</div>
+                  <div className="text-muted-foreground text-lg font-bold">-</div>
                   <div className="text-center">
                     <div
                       className="px-3 py-1 rounded-lg text-white text-xs font-bold mb-1"
@@ -361,7 +361,7 @@ export default function ConquestBoard() {
               </div>
 
               <div className="text-center text-sm text-muted-foreground pt-1">
-                {loseTeam?.city} {loseTeam?.name} eliminated — all territory conquered
+                {loseTeam?.city} {loseTeam?.name} eliminated, all territory conquered
               </div>
 
               {/* Player Confirmed Animation */}
@@ -526,7 +526,7 @@ export default function ConquestBoard() {
                 </button>
               </div>
               {(game.teamSavedPowerups[game.pendingPowerup.teamId] || []).length >= 2 && (
-                <p className="text-xs text-destructive">⚠️ Team already has 2 saved — oldest will be replaced</p>
+                <p className="text-xs text-destructive">⚠️ Team already has 2 saved, oldest will be replaced</p>
               )}
             </div>
           )}

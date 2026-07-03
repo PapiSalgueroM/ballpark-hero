@@ -21,7 +21,7 @@ export function ConnectionsHowToPlay({ open, onOpenChange }: ConnectionsHowToPla
         </DialogHeader>
         <div className="space-y-4 text-sm text-foreground">
           <p>
-            <strong>Soccer Connections</strong> — 16 soccer players, 4 hidden categories.
+            <strong>Soccer Connections</strong>: 16 soccer players, 4 hidden categories.
             Select 4 players you think belong together and hit Submit. Crack all 4 groups before your lives run out!
           </p>
           <ul className="list-disc pl-5 space-y-1.5 text-muted-foreground">
@@ -54,7 +54,7 @@ export function ConnectionsHowToPlay({ open, onOpenChange }: ConnectionsHowToPla
           </div>
 
           <p className="text-xs text-muted-foreground">
-            Watch out for players that seem to belong to multiple categories — there is only 1 acceptable solution.
+            Watch out for players that seem to belong to multiple categories, there is only 1 acceptable solution.
             Use the <strong className="text-foreground">Hint</strong> button (up to 4 times) to reveal unsolved category names, starting from the easiest.
           </p>
 

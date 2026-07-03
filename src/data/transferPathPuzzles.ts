@@ -54,7 +54,7 @@ const transferPathPuzzles: TransferPathPuzzle[] = [
   {
     id: 'tp-9', playerA: 'Samuel Eto\'o', playerB: 'Sergio Ramos', minSteps: 2,
     oneOptimalPath: ['Samuel Eto\'o', 'Lionel Messi', 'Sergio Ramos'],
-    hint: 'The GOAT connects them — Barcelona then Paris.',
+    hint: 'The GOAT connects them: Barcelona then Paris.',
   },
   {
     id: 'tp-10', playerA: 'Didier Drogba', playerB: 'Neymar', minSteps: 2,
@@ -64,7 +64,7 @@ const transferPathPuzzles: TransferPathPuzzle[] = [
   {
     id: 'tp-11', playerA: 'Luis Suárez', playerB: 'Eden Hazard', minSteps: 2,
     oneOptimalPath: ['Luis Suárez', 'Antoine Griezmann', 'Eden Hazard'],
-    hint: 'An Atlético/Barça connection — via a French striker.',
+    hint: 'An Atlético/Barça connection, via a French striker.',
   },
   {
     id: 'tp-12', playerA: 'Arjen Robben', playerB: 'Paul Pogba', minSteps: 2,

@@ -211,11 +211,11 @@ export const EXTRAS: ExtraCategory[] = [
   { key: 'fanbase', title: 'Fan Base', emoji: '📣', options: [
     { id: 'ultras', label: 'The Ultras', emoji: '🎺', desc: 'Never stop singing', ratingMod: 2, chemMod: 8, fact: 'The Ultras carried the team through every minute.' },
     { id: 'loyal', label: 'Loyal Locals', emoji: '🧣', desc: 'Through thick and thin', ratingMod: 1, chemMod: 10, fact: 'The Loyal Locals stuck by the badge all season.' },
-    { id: 'glory', label: 'Glory Hunters', emoji: '🏆', desc: 'Demand trophies now', ratingMod: 3, chemMod: 2, fact: 'The Glory Hunters demanded — and got — silverware.' },
+    { id: 'glory', label: 'Glory Hunters', emoji: '🏆', desc: 'Demand trophies now', ratingMod: 3, chemMod: 2, fact: 'The Glory Hunters demanded, and got, silverware.' },
     { id: 'fairweather', label: 'Fair-Weather', emoji: '☂️', desc: 'Show up when winning', ratingMod: 0, chemMod: 3, fact: 'The fair-weather crowd only roared on the good days.' },
   ]},
   { key: 'budget', title: 'Transfer Budget', emoji: '💰', options: [
-    { id: 'galacticos', label: 'Galácticos (€500M)', emoji: '💎', desc: 'Spend it all', ratingMod: 4, chemMod: -4, fact: 'The Galáctico budget bought stars — but egos clashed.' },
+    { id: 'galacticos', label: 'Galácticos (€500M)', emoji: '💎', desc: 'Spend it all', ratingMod: 4, chemMod: -4, fact: 'The Galáctico budget bought stars, but egos clashed.' },
     { id: 'balanced', label: 'Balanced (€150M)', emoji: '⚖️', desc: 'Smart spending', ratingMod: 2, chemMod: 5, fact: 'A balanced budget built a well-rounded side.' },
     { id: 'moneyball', label: 'Moneyball (€30M)', emoji: '📊', desc: 'Hidden gems', ratingMod: 1, chemMod: 8, fact: 'Moneyball scouting unearthed bargain gems.' },
     { id: 'academy', label: 'Youth Academy (€0)', emoji: '🌱', desc: 'Homegrown only', ratingMod: -1, chemMod: 12, fact: 'A homegrown academy core played as one.' },
@@ -254,7 +254,7 @@ export function simulateSquad(picks: Player[], extras: ExtraOption[] = []): Squa
   else if (rating >= 82) facts.push('🏆 League champions with games to spare.');
   else if (rating >= 72) facts.push('🥈 A strong runner-up finish.');
   else if (rating >= 60) facts.push('⚽ A solid mid-table campaign.');
-  else facts.push('😬 A relegation battle — the Banker won this one.');
+  else facts.push('😬 A relegation battle. The Banker won this one.');
   const inj = picks[Math.floor(Math.random() * picks.length)];
   if (inj) facts.push('🩹 Injury news: ' + inj.name + ' has a slight knock but should be fine.');
   return { rating, chemistry, grade, facts };

@@ -106,7 +106,7 @@ export default function Index() {
   return (
     <>
       <PageSeo
-        title="DoUKnowBall — The Ultimate Sports Trivia Hub"
+        title="DoUKnowBall: The Ultimate Sports Trivia Hub"
         description="30+ free sports trivia games covering NFL, NBA, MLB, NHL, UFC, F1, Tennis, NASCAR, Soccer and more. Daily challenges, no login required."
         path="/"
       />

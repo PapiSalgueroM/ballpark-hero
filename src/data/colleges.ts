@@ -728,7 +728,7 @@ export const colleges: College[] = [
     nflDraftHistory: "Has produced a legendary running back widely considered the greatest college football player ever",
     famousAlumniHint: "Alumni include the greatest college running back of all time and a famous country music singer",
     colors: "orange and black",
-    funFact: "Pistol Pete, the school's mascot, is based on a real person — Frank Eaton, who became a U.S. Marshal at age 15",
+    funFact: "Pistol Pete, the school's mascot, is based on a real person: Frank Eaton, who became a U.S. Marshal at age 15",
   },
   {
     name: "Texas Christian University",

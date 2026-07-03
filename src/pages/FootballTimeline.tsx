@@ -178,9 +178,9 @@ const FootballTimeline = () => {
           description="A daily puzzle where you order 5 NFL players by the year they were drafted. Test your football knowledge with this chronological challenge."
           howToPlay={[
             'You are shown 5 NFL players with their name and position',
-            'Use the arrows to reorder them by draft year — earliest at the top',
+            'Use the arrows to reorder them by draft year, earliest at the top',
             'Lock in your order and see how many you got right',
-            'New challenge every day — share your score with friends',
+            'New challenge every day. Share your score with friends',
           ]}
           examples={[
             "Tom Brady (2000) → Peyton Manning (1998) → Patrick Mahomes (2017)",

@@ -196,7 +196,7 @@ const BaseballCareer = () => {
             </div>
           )}
           {wrongGuess && (
-            <p className="text-destructive text-sm text-center mt-2 animate-cell-reveal">Wrong guess — try again!</p>
+            <p className="text-destructive text-sm text-center mt-2 animate-cell-reveal">Wrong guess. Try again!</p>
           )}
 
           {/* Result */}
@@ -207,7 +207,7 @@ const BaseballCareer = () => {
               </p>
               <p className="text-muted-foreground text-sm">{player!.position}</p>
               <p className="mt-2 text-xs text-muted-foreground px-3">
-                💡 Did you know? {player!.name} suited up for {player!.teams.length} {player!.teams.length === 1 ? 'team' : 'teams'}{player!.awards.length ? ` — ${player!.awards[0]}` : ''}.
+                💡 Did you know? {player!.name} suited up for {player!.teams.length} {player!.teams.length === 1 ? 'team' : 'teams'}{player!.awards.length ? `, including ${player!.awards[0]}` : ''}.
               </p>
               {status === 'guessed' && (
                 <div className="flex items-center justify-center gap-2 mt-3">
@@ -246,20 +246,20 @@ const BaseballCareer = () => {
 
         <GameSeoContent
           title="Baseball Career Path | DoUKnowBall"
-          description="A daily game where you guess a mystery baseball player from progressive clues — position, draft info, teams, stats, and awards."
+          description="A daily game where you guess a mystery baseball player from progressive clues: position, draft info, teams, stats, and awards."
           howToPlay={[
             'Clues are revealed one at a time: position, draft, first team, career teams, stats, and awards',
-            'Guess the player at any point — earlier guesses earn more points',
+            'Guess the player at any point. Earlier guesses earn more points',
             'Maximum 1000 points (clue 1), decreasing by 150 per clue revealed',
-            'New player every day — share your score with friends',
+            'New player every day. Share your score with friends',
           ]}
           examples={[
-            "Mike Trout — Angels, CF, 3× MVP, 2012 Rookie of the Year",
-            "Derek Jeter — Yankees, SS, 5× World Series Champion, 3,465 hits",
-            "Ken Griffey Jr. — Mariners → Reds → White Sox → Mariners, CF, 630 HR",
-            "Clayton Kershaw — Dodgers, LHP, 3× Cy Young, 2020 World Series",
-            "Albert Pujols — Cardinals → Angels → Dodgers, 1B, 703 HR",
-            "Shohei Ohtani — Angels → Dodgers, DH/P, 2× MVP"
+            "Mike Trout: Angels, CF, 3× MVP, 2012 Rookie of the Year",
+            "Derek Jeter: Yankees, SS, 5× World Series Champion, 3,465 hits",
+            "Ken Griffey Jr.: Mariners → Reds → White Sox → Mariners, CF, 630 HR",
+            "Clayton Kershaw: Dodgers, LHP, 3× Cy Young, 2020 World Series",
+            "Albert Pujols: Cardinals → Angels → Dodgers, 1B, 703 HR",
+            "Shohei Ohtani: Angels → Dodgers, DH/P, 2× MVP"
           ]}
         />
 

@@ -62,7 +62,7 @@ const UfcGame = () => {
             UFC GUESSER
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">
-            Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia — no login needed.
+            Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia, no login needed.
           </p>
 
           {/* Daily / Unlimited toggle */}
@@ -182,18 +182,18 @@ const UfcGame = () => {
           title="Combat Sports Trivia Game | DoUKnowBall"
           description="Test your UFC and MMA knowledge with daily trivia puzzles covering fighters, records, weight classes and championship history."
           howToPlay={[
-            "A mystery UFC fighter is selected — guess who it is in 8 tries",
+            "A mystery UFC fighter is selected. Guess who it is in 8 tries",
             "Each guess reveals clues: weight class, record, nationality and more",
             "Green means correct, yellow means close, red means wrong",
             "Use the higher/lower arrows to narrow down numeric stats",
           ]}
           examples={[
-            "Conor McGregor — Featherweight/Lightweight, Ireland, 22-6",
-            "Khabib Nurmagomedov — Lightweight, Russia, 29-0",
-            "Jon Jones — Light Heavyweight/Heavyweight, USA, 27-1",
-            "Amanda Nunes — Bantamweight/Featherweight, Brazil, 21-5",
-            "Israel Adesanya — Middleweight, Nigeria/New Zealand, 24-3",
-            "Charles Oliveira — Lightweight, Brazil, 34-10"
+            "Conor McGregor: Featherweight/Lightweight, Ireland, 22-6",
+            "Khabib Nurmagomedov: Lightweight, Russia, 29-0",
+            "Jon Jones: Light Heavyweight/Heavyweight, USA, 27-1",
+            "Amanda Nunes: Bantamweight/Featherweight, Brazil, 21-5",
+            "Israel Adesanya: Middleweight, Nigeria/New Zealand, 24-3",
+            "Charles Oliveira: Lightweight, Brazil, 34-10"
           ]}
         />
 

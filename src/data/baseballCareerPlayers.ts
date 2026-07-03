@@ -383,7 +383,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       firstTeam: 'New York Mets',
       teams: ['New York Mets', 'California Angels', 'Houston Astros', 'Texas Rangers'],
       stats: ['324 W', '3.19 ERA', '5,714 K'],
-      awards: ['7 No-Hitters — all-time record', '8× All-Star', '5,714 strikeouts — all-time record', 'Hall of Fame (1999)'],
+      awards: ['7 No-Hitters, all-time record', '8× All-Star', '5,714 strikeouts, all-time record', 'Hall of Fame (1999)'],
     },
   },
   {
@@ -419,7 +419,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       firstTeam: 'Baltimore Orioles',
       teams: ['Baltimore Orioles'],
       stats: ['.276 AVG', '431 HR', '3,184 Hits'],
-      awards: ['2× AL MVP', '19× All-Star', '2,632 consecutive games — "Iron Man"', 'Hall of Fame (2007)'],
+      awards: ['2× AL MVP', '19× All-Star', '2,632 consecutive games, "Iron Man"', 'Hall of Fame (2007)'],
     },
   },
   {

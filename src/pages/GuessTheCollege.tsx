@@ -175,7 +175,7 @@ const GuessTheCollege = () => {
           {!isLoading && !gameOver && currentCollege && (
             <div className="text-center mb-4">
               <p className="text-sm text-muted-foreground mb-2">
-                Clue {Math.min(revealedClues, 11)} of 11 —{' '}
+                Clue {Math.min(revealedClues, 11)} of 11:{' '}
                 <span className="font-bold text-primary">{pointsAvailable} points</span> available
               </p>
               <Progress value={(Math.min(revealedClues, 11) / 11) * 100} className="h-2" />
@@ -361,20 +361,20 @@ const GuessTheCollege = () => {
 
         <div className="container max-w-2xl mx-auto px-4">
           <GameSeoContent
-            title="Guess The College — D1 Trivia | DoUKnowBall"
+            title="Guess The College: D1 Trivia | DoUKnowBall"
             description="Guess the Division 1 college from progressive clues about their conference, mascot, location, and athletic history. Covers all Power 4 and Group of 5 schools."
             howToPlay={[
-              "Read each clue about the mystery college — region, conference, mascot, and tournament history.",
+              "Read each clue about the mystery college: region, conference, mascot, and tournament history.",
               "Type your guess at any time. Fewer clues used means a higher score.",
               "Play daily mode, unlimited mode, or filter by specific conference."
             ]}
             examples={[
-              "Alabama Crimson Tide — SEC, Tuscaloosa, 18× National Football Champions",
-              "Ohio State Buckeyes — Big Ten, Columbus, 'THE' Ohio State University",
-              "Clemson Tigers — ACC, Death Valley, 3× Football National Champions",
-              "Michigan Wolverines — Big Ten, Ann Arbor, Winningest program in CFB",
-              "LSU Tigers — SEC, Baton Rouge, Death Valley, 2019 Perfect Season",
-              "Notre Dame Fighting Irish — Independent, South Bend, Touchdown Jesus"
+              "Alabama Crimson Tide: SEC, Tuscaloosa, 18× National Football Champions",
+              "Ohio State Buckeyes: Big Ten, Columbus, 'THE' Ohio State University",
+              "Clemson Tigers: ACC, Death Valley, 3× Football National Champions",
+              "Michigan Wolverines: Big Ten, Ann Arbor, Winningest program in CFB",
+              "LSU Tigers: SEC, Baton Rouge, Death Valley, 2019 Perfect Season",
+              "Notre Dame Fighting Irish: Independent, South Bend, Touchdown Jesus"
             ]}
           />
           <GameNav />

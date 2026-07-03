@@ -338,7 +338,7 @@ export const worldCupPuzzles: WorldCupPuzzle[] = [
     country: 'Germany',
     countryFlag: '🇩🇪',
     clubAtTime: 'Bayern Munich',
-    achievement: 'Won the Golden Ball as best player — the only goalkeeper ever to win it',
+    achievement: 'Won the Golden Ball as best player, the only goalkeeper ever to win it',
     answer: 'Oliver Kahn',
   },
   {

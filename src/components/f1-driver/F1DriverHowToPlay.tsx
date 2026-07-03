@@ -4,7 +4,7 @@ import { HelpCircle } from 'lucide-react';
 
 const RULES = [
   'A mystery F1 driver is chosen each round.',
-  'Clues are revealed one at a time — from a vibe word to a famous moment.',
+  'Clues are revealed one at a time, from a vibe word to a famous moment.',
   "Type the driver's name to guess after each clue.",
   'Fewer clues used = higher score (max 1,000 points).',
   'Daily challenge gives everyone the same driver.',

@@ -78,7 +78,7 @@ export function NascarDriverBoard() {
             </button>
           )}
           {status === 'ready' && allDrivers.length === 0 && (
-            <p className="text-sm text-neutral-700">No drivers available yet — check back soon.</p>
+            <p className="text-sm text-neutral-700">No drivers available yet. Check back soon.</p>
           )}
 
           <GameNav />
@@ -205,7 +205,7 @@ export function NascarDriverBoard() {
                 <p className="text-3xl">🏆</p>
                 <p className="text-xl font-bold text-red-400">{puzzle.driver_name}</p>
                 <p className="text-neutral-400">
-                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''} — <span className="text-red-400 font-bold">{score} pts</span>
+                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-red-400 font-bold">{score} pts</span>
                 </p>
               </>
             ) : (

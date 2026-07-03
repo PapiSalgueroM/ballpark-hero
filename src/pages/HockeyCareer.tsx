@@ -149,7 +149,7 @@ const HockeyCareer = () => {
             )}
             </div>
           )}
-          {wrongGuess && <p className="text-destructive text-sm text-center mt-2 animate-cell-reveal">Wrong guess — try again!</p>}
+          {wrongGuess && <p className="text-destructive text-sm text-center mt-2 animate-cell-reveal">Wrong guess. Try again!</p>}
 
           {(status === 'guessed' || status === 'revealed') && (
             <div className="text-center mt-4 py-4 rounded-xl bg-[hsl(var(--hk-blue)/0.3)] border border-[hsl(var(--hk-silver)/0.3)] animate-cell-reveal">
@@ -194,20 +194,20 @@ const HockeyCareer = () => {
 
         <GameSeoContent
           title="Hockey Career Path | DoUKnowBall"
-          description="A daily game where you guess a mystery hockey player from progressive clues — position, country, draft, teams, stats, and awards."
+          description="A daily game where you guess a mystery hockey player from progressive clues: position, country, draft, teams, stats, and awards."
           howToPlay={[
             'Clues revealed: position, country, draft, teams, stats, awards',
-            'Guess at any point — earlier guesses earn more points (max 1000)',
+            'Guess at any point. Earlier guesses earn more points (max 1000)',
             'Each clue costs 150 points',
-            'New player every day — share your score!',
+            'New player every day. Share your score!',
           ]}
           examples={[
-            "Wayne Gretzky — Oilers → Kings → Blues → Rangers, C, 2,857 points",
-            "Sidney Crosby — Penguins, C, 3× Stanley Cup, 2× MVP",
-            "Alexander Ovechkin — Capitals, LW, 800+ goals, Hart Trophy",
-            "Connor McDavid — Oilers, C, 4× Art Ross, 3× Hart Trophy",
-            "Mario Lemieux — Penguins, C, 2× Stanley Cup, 690 goals",
-            "Patrick Roy — Canadiens → Avalanche, G, 4× Stanley Cup"
+            "Wayne Gretzky: Oilers → Kings → Blues → Rangers, C, 2,857 points",
+            "Sidney Crosby: Penguins, C, 3× Stanley Cup, 2× MVP",
+            "Alexander Ovechkin: Capitals, LW, 800+ goals, Hart Trophy",
+            "Connor McDavid: Oilers, C, 4× Art Ross, 3× Hart Trophy",
+            "Mario Lemieux: Penguins, C, 2× Stanley Cup, 690 goals",
+            "Patrick Roy: Canadiens → Avalanche, G, 4× Stanley Cup"
           ]}
         />
 

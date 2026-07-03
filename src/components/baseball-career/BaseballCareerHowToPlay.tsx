@@ -45,7 +45,7 @@ export function BaseballCareerHowToPlay({ open, onOpenChange }: Props) {
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--bb-red))]">Daily Challenge</p>
-            <p className="text-muted-foreground">New player at midnight. Same challenge for everyone — share your score!</p>
+            <p className="text-muted-foreground">New player at midnight. Same challenge for everyone, share your score!</p>
           </div>
         </div>
       </DialogContent>

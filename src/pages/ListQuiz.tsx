@@ -133,7 +133,7 @@ const ListQuiz = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="List Quiz — Name Them All | DoUKnowBall"
+        title="List Quiz: Name Them All | DoUKnowBall"
         description="How many can you name? Champions, MVPs, and legends across NFL, NBA, MLB, NHL, soccer, F1 and more. Free list quizzes with no sign-up."
         path="/list-quiz"
       />
@@ -337,7 +337,7 @@ const ListQuiz = () => {
         </div>
 
         <GameSeoContent
-          title="Name Them All — Sports List Quizzes"
+          title="Name Them All: Sports List Quizzes"
           description="Sporcle-style recall quizzes built on real records: champions, MVPs and title winners across ten sports. Play relaxed or race a three minute clock."
           howToPlay={[
             'Pick a list, like every Super Bowl MVP or every F1 world champion.',

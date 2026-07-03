@@ -26,10 +26,10 @@ export default function GuessTheNationHowToPlay() {
           </ul>
           <p className="font-medium text-foreground">Streak Badges:</p>
           <ul className="list-none space-y-0.5">
-            <li>🥉 Bronze Medalist — 3 streak</li>
-            <li>🥈 Silver Medalist — 5 streak</li>
-            <li>🥇 Gold Medalist — 10 streak</li>
-            <li>🐐 All Time Great — 15 streak</li>
+            <li>🥉 Bronze Medalist, 3 streak</li>
+            <li>🥈 Silver Medalist, 5 streak</li>
+            <li>🥇 Gold Medalist, 10 streak</li>
+            <li>🐐 All Time Great, 15 streak</li>
           </ul>
           <p className="text-xs text-muted-foreground/60">Covers nations from the world's greatest sporting competitions, 1896–2024.</p>
         </div>

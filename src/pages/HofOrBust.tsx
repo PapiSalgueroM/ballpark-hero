@@ -15,7 +15,7 @@ export default function HofOrBust() {
         title="Hall of Fame or Bust? | DoUKnowBall"
         description="Review anonymized career stats from players across NFL, NBA, MLB, NHL, and Soccer. Decide if they're a Hall of Famer or a bust, then see the community consensus."
         howToPlay={[
-          "You're shown anonymized career stats for a mystery player — no name, just numbers.",
+          "You're shown anonymized career stats for a mystery player: no name, just numbers.",
           "Optionally reveal up to 3 hints (each costs 100 points).",
           "Vote: is this player a Hall of Famer or a Bust?",
           "After voting, the player is revealed along with community vote percentages and the official verdict."

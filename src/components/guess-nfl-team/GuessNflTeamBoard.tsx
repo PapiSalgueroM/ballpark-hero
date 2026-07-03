@@ -129,7 +129,7 @@ export function GuessNflTeamBoard() {
                       </div>
                     ) : (
                       <p className="text-muted-foreground italic text-sm">
-                        {CLUE_LABELS[index]} — {POINTS_BY_CLUE[index]} pts
+                        {CLUE_LABELS[index]} - {POINTS_BY_CLUE[index]} pts
                       </p>
                     )}
                   </div>

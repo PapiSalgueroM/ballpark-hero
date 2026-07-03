@@ -80,7 +80,7 @@ export function TennisChainSearch({ usedPlayers, onSelect, disabled }: TennisCha
 
       {isOpen && query.length >= 2 && filtered.length === 0 && !disabled && (
         <div className="absolute top-full mt-2 w-full bg-gray-900 border border-emerald-600 rounded-xl shadow-2xl z-50 p-4 text-center text-gray-400 text-sm">
-          No players found — you can still type any name and press Enter
+          No players found. You can still type any name and press Enter
         </div>
       )}
     </div>

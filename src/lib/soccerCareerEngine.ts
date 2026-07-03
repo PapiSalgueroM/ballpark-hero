@@ -284,37 +284,37 @@ export interface InvestmentHolding {
 
 export const SPENDING_ITEMS: SpendingItem[] = [
   // Properties
-  { id: "rent_apartment", name: "Rent Apartment", emoji: "🏢", category: "property", cost: 0, monthlyCost: 0.024, description: "Basic city apartment — €2k/month", oneTime: true },
-  { id: "city_apartment", name: "City Apartment", emoji: "🏙️", category: "property", cost: 0.8, description: "Buy a stylish city apartment — €800k", oneTime: true, minNetWorth: 0.5 },
-  { id: "luxury_house", name: "Luxury House", emoji: "🏠", category: "property", cost: 3, description: "Buy a luxury house — €3M", oneTime: true, minNetWorth: 2 },
-  { id: "mansion", name: "Mansion", emoji: "🏰", category: "property", cost: 8, description: "Buy a sprawling mansion — €8M", oneTime: true, minNetWorth: 5 },
-  { id: "private_island", name: "Private Island", emoji: "🏝️", category: "property", cost: 25, description: "Buy your own private island — €25M", oneTime: true, minNetWorth: 20 },
+  { id: "rent_apartment", name: "Rent Apartment", emoji: "🏢", category: "property", cost: 0, monthlyCost: 0.024, description: "Basic city apartment, €2k/month", oneTime: true },
+  { id: "city_apartment", name: "City Apartment", emoji: "🏙️", category: "property", cost: 0.8, description: "Buy a stylish city apartment, €800k", oneTime: true, minNetWorth: 0.5 },
+  { id: "luxury_house", name: "Luxury House", emoji: "🏠", category: "property", cost: 3, description: "Buy a luxury house, €3M", oneTime: true, minNetWorth: 2 },
+  { id: "mansion", name: "Mansion", emoji: "🏰", category: "property", cost: 8, description: "Buy a sprawling mansion, €8M", oneTime: true, minNetWorth: 5 },
+  { id: "private_island", name: "Private Island", emoji: "🏝️", category: "property", cost: 25, description: "Buy your own private island, €25M", oneTime: true, minNetWorth: 20 },
   // Vehicles
-  { id: "sports_car", name: "Sports Car", emoji: "🏎️", category: "vehicle", cost: 0.15, description: "Buy a sports car — €150k", oneTime: false },
-  { id: "supercar_collection", name: "Supercar Collection", emoji: "🚗", category: "vehicle", cost: 0.8, description: "Build a supercar collection — €800k", oneTime: true, minNetWorth: 1 },
-  { id: "private_jet", name: "Private Jet", emoji: "✈️", category: "vehicle", cost: 15, monthlyCost: 0.5, description: "Buy a private jet — €15M + €500k/yr upkeep", oneTime: true, minNetWorth: 12 },
-  { id: "yacht", name: "Yacht", emoji: "🛥️", category: "vehicle", cost: 8, monthlyCost: 0.3, description: "Buy a luxury yacht — €8M + €300k/yr upkeep", oneTime: true, minNetWorth: 6 },
+  { id: "sports_car", name: "Sports Car", emoji: "🏎️", category: "vehicle", cost: 0.15, description: "Buy a sports car, €150k", oneTime: false },
+  { id: "supercar_collection", name: "Supercar Collection", emoji: "🚗", category: "vehicle", cost: 0.8, description: "Build a supercar collection, €800k", oneTime: true, minNetWorth: 1 },
+  { id: "private_jet", name: "Private Jet", emoji: "✈️", category: "vehicle", cost: 15, monthlyCost: 0.5, description: "Buy a private jet, €15M + €500k/yr upkeep", oneTime: true, minNetWorth: 12 },
+  { id: "yacht", name: "Yacht", emoji: "🛥️", category: "vehicle", cost: 8, monthlyCost: 0.3, description: "Buy a luxury yacht, €8M + €300k/yr upkeep", oneTime: true, minNetWorth: 6 },
   // Investments
   { id: "restaurant_chain", name: "Restaurant Chain", emoji: "🍽️", category: "investment", cost: 0.5, description: "30% chance profit €1.5M, 70% break even or loss", oneTime: false },
   { id: "crypto", name: "Crypto", emoji: "₿", category: "investment", cost: 0.2, description: "50% chance 3x return, 50% lose it all", oneTime: false },
   { id: "football_shares", name: "Football Club Shares", emoji: "⚽", category: "investment", cost: 5, description: "Steady 8% return per year", oneTime: true, minNetWorth: 4 },
   { id: "tech_startup", name: "Tech Startup", emoji: "💻", category: "investment", cost: 1, description: "20% chance 10x return, 80% lose it", oneTime: false },
   // Lifestyle upgrades
-  { id: "personal_chef", name: "Personal Chef", emoji: "👨‍🍳", category: "lifestyle", cost: 0, monthlyCost: 0.05, description: "Hire a personal chef — €50k/year", oneTime: true, effect: "Better nutrition, +2 morale per season" },
-  { id: "personal_trainer", name: "Personal Trainer", emoji: "💪", category: "lifestyle", cost: 0, monthlyCost: 0.08, description: "Private trainer — €80k/year", oneTime: true, effect: "+1 Physical stat per season" },
-  { id: "sports_psychologist", name: "Sports Psychologist", emoji: "🧠", category: "lifestyle", cost: 0, monthlyCost: 0.06, description: "Mental coach — €60k/year", oneTime: true, effect: "+5 Morale permanently on hire" },
-  { id: "elite_recovery", name: "Elite Recovery Clinic", emoji: "🏥", category: "lifestyle", cost: 0, monthlyCost: 0.1, description: "Top recovery tech — €100k/year", oneTime: true, effect: "Reduces injury recovery time by 50%" },
+  { id: "personal_chef", name: "Personal Chef", emoji: "👨‍🍳", category: "lifestyle", cost: 0, monthlyCost: 0.05, description: "Hire a personal chef, €50k/year", oneTime: true, effect: "Better nutrition, +2 morale per season" },
+  { id: "personal_trainer", name: "Personal Trainer", emoji: "💪", category: "lifestyle", cost: 0, monthlyCost: 0.08, description: "Private trainer, €80k/year", oneTime: true, effect: "+1 Physical stat per season" },
+  { id: "sports_psychologist", name: "Sports Psychologist", emoji: "🧠", category: "lifestyle", cost: 0, monthlyCost: 0.06, description: "Mental coach, €60k/year", oneTime: true, effect: "+5 Morale permanently on hire" },
+  { id: "elite_recovery", name: "Elite Recovery Clinic", emoji: "🏥", category: "lifestyle", cost: 0, monthlyCost: 0.1, description: "Top recovery tech, €100k/year", oneTime: true, effect: "Reduces injury recovery time by 50%" },
   // Performance upgrades
-  { id: "perf_chef", name: "Private Chef", emoji: "🥗", category: "performance", cost: 2, description: "Elite nutrition plan — €2M", oneTime: true, effect: "+2 Physical, +2 Stamina" },
-  { id: "perf_psychologist", name: "Sports Psychologist", emoji: "🧠", category: "performance", cost: 1.5, description: "Mental performance coach — €1.5M", oneTime: true, effect: "+3 Composure" },
-  { id: "perf_cryo", name: "Cryotherapy Suite", emoji: "🧊", category: "performance", cost: 3, description: "Home cryo chamber — €3M", oneTime: true, effect: "Reduces injury risk by 15%" },
-  { id: "perf_trainer", name: "Elite Personal Trainer", emoji: "🏋️", category: "performance", cost: 2.5, description: "World-class trainer — €2.5M", oneTime: true, effect: "+2 Pace, +2 Physical" },
-  { id: "perf_biomech", name: "Biomechanics Coach", emoji: "🔬", category: "performance", cost: 2, description: "Technique specialist — €2M", oneTime: true, effect: "+2 Shooting, +2 Passing" },
-  { id: "perf_altitude", name: "Altitude Training Camp", emoji: "⛰️", category: "performance", cost: 1, description: "High-altitude camp — €1M", oneTime: true, effect: "+3 Stamina" },
-  { id: "perf_sleep", name: "Sleep Optimization Clinic", emoji: "😴", category: "performance", cost: 1.5, description: "Sleep science program — €1.5M", oneTime: true, effect: "Faster injury recovery" },
-  { id: "perf_vr", name: "VR Training System", emoji: "🥽", category: "performance", cost: 2, description: "Virtual training tech — €2M", oneTime: true, effect: "+2 Decision Making" },
-  { id: "perf_vision", name: "Vision Training Clinic", emoji: "👁️", category: "performance", cost: 1.5, description: "Visual processing training — €1.5M", oneTime: true, effect: "+2 Passing, better assist rate" },
-  { id: "perf_setpiece", name: "Set Piece Coach", emoji: "🎯", category: "performance", cost: 1, description: "Dead ball specialist — €1M", oneTime: true, effect: "+3 Free Kick accuracy" },
+  { id: "perf_chef", name: "Private Chef", emoji: "🥗", category: "performance", cost: 2, description: "Elite nutrition plan, €2M", oneTime: true, effect: "+2 Physical, +2 Stamina" },
+  { id: "perf_psychologist", name: "Sports Psychologist", emoji: "🧠", category: "performance", cost: 1.5, description: "Mental performance coach, €1.5M", oneTime: true, effect: "+3 Composure" },
+  { id: "perf_cryo", name: "Cryotherapy Suite", emoji: "🧊", category: "performance", cost: 3, description: "Home cryo chamber, €3M", oneTime: true, effect: "Reduces injury risk by 15%" },
+  { id: "perf_trainer", name: "Elite Personal Trainer", emoji: "🏋️", category: "performance", cost: 2.5, description: "World-class trainer, €2.5M", oneTime: true, effect: "+2 Pace, +2 Physical" },
+  { id: "perf_biomech", name: "Biomechanics Coach", emoji: "🔬", category: "performance", cost: 2, description: "Technique specialist, €2M", oneTime: true, effect: "+2 Shooting, +2 Passing" },
+  { id: "perf_altitude", name: "Altitude Training Camp", emoji: "⛰️", category: "performance", cost: 1, description: "High-altitude camp, €1M", oneTime: true, effect: "+3 Stamina" },
+  { id: "perf_sleep", name: "Sleep Optimization Clinic", emoji: "😴", category: "performance", cost: 1.5, description: "Sleep science program, €1.5M", oneTime: true, effect: "Faster injury recovery" },
+  { id: "perf_vr", name: "VR Training System", emoji: "🥽", category: "performance", cost: 2, description: "Virtual training tech, €2M", oneTime: true, effect: "+2 Decision Making" },
+  { id: "perf_vision", name: "Vision Training Clinic", emoji: "👁️", category: "performance", cost: 1.5, description: "Visual processing training, €1.5M", oneTime: true, effect: "+2 Passing, better assist rate" },
+  { id: "perf_setpiece", name: "Set Piece Coach", emoji: "🎯", category: "performance", cost: 1, description: "Dead ball specialist, €1M", oneTime: true, effect: "+3 Free Kick accuracy" },
 ];
 
 export function getSpendingItem(id: string): SpendingItem | undefined {
@@ -468,7 +468,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     choices: [
       { label: "Embrace the dark arts", emoji: "🎭", consequence: "+2 goals per season from penalties, but reputation -15" },
       { label: "Clean up your game", emoji: "🤝", consequence: "Reputation +10, eligible for Fair Play Award" },
-      { label: "Ignore the noise", emoji: "🔇", consequence: "No change — let them talk" },
+      { label: "Ignore the noise", emoji: "🔇", consequence: "No change, let them talk" },
     ],
   },
   {
@@ -478,7 +478,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     description: "Your accountant discovers your agent has been taking 20% commission instead of the agreed 10% for the last 3 years. That's millions stolen from you. He's sitting in your living room, sweating.",
     choices: [
       { label: "Fire him and sue", emoji: "⚖️", consequence: "Legal costs €500k, but recover the stolen money" },
-      { label: "Keep him — he gets results", emoji: "🤝", consequence: "Accept the loss, maintain relationship" },
+      { label: "Keep him: he gets results", emoji: "🤝", consequence: "Accept the loss, maintain relationship" },
       { label: "Renegotiate to 12%", emoji: "📝", consequence: "Agent stays at 12%, partial money back" },
     ],
   },
@@ -645,7 +645,7 @@ export const SOCIAL_MEDIA_ACTIONS: SocialMediaAction[] = [
   { id: "charity_work", label: "Announce charity work", emoji: "❤️", description: "Highlight your philanthropic efforts", followerGain: [200_000, 200_000], reputationChange: 15, extraEffect: "Reputation +15" },
   { id: "personal_life", label: "Post about personal life", emoji: "📸", description: "Share a glimpse into your life off the pitch", followerGain: [300_000, 300_000], reputationChange: 0 },
   { id: "troll_rival", label: "Troll your rival on social media", emoji: "😈", description: "Take a shot at your rival online", followerGain: [800_000, 800_000], reputationChange: 0, extraEffect: "Rivalry intensity increases" },
-  { id: "stay_off", label: "Stay off social media", emoji: "🧘", description: "Focus on football — no distractions", followerGain: [0, 0], reputationChange: 0, extraEffect: "+2 to all stats next season" },
+  { id: "stay_off", label: "Stay off social media", emoji: "🧘", description: "Focus on football, no distractions", followerGain: [0, 0], reputationChange: 0, extraEffect: "+2 to all stats next season" },
 ];
 
 export const SPONSORSHIP_TIERS: { tier: SponsorshipTier; name: string; emoji: string; minFollowers: number; income: number }[] = [
@@ -679,13 +679,13 @@ export function applySocialMediaAction(prev: CareerState, actionId: string): Car
 
   if (actionId === "stay_off") {
     s.socialMediaFocusBoost = true;
-    s.events = [...s.events, "🧘 Stayed off social media — focus boost for next season (+2 all stats)"];
+    s.events = [...s.events, "🧘 Stayed off social media: focus boost for next season (+2 all stats)"];
   } else {
     const gain = action.followerGain[0] === action.followerGain[1]
       ? action.followerGain[0]
       : rand(action.followerGain[0], action.followerGain[1]);
     s.socialMediaFollowers = Math.round((s.socialMediaFollowers + gain / 1_000_000) * 100) / 100;
-    s.events = [...s.events, `📱 ${action.emoji} ${action.label} — gained ${(gain / 1_000_000).toFixed(1)}M followers!`];
+    s.events = [...s.events, `📱 ${action.emoji} ${action.label}: gained ${(gain / 1_000_000).toFixed(1)}M followers!`];
 
     if (action.reputationChange !== 0) {
       s.popularity = clamp(s.popularity + action.reputationChange, 0, 100);
@@ -703,7 +703,7 @@ export function applySocialMediaAction(prev: CareerState, actionId: string): Car
   if (newTier && newTier !== s.activeSponsorship) {
     const tierInfo = SPONSORSHIP_TIERS.find(t => t.tier === newTier)!;
     s.activeSponsorship = newTier;
-    s.events = [...s.events, `${tierInfo.emoji} NEW SPONSORSHIP: ${tierInfo.name} — €${tierInfo.income}M/year!`];
+    s.events = [...s.events, `${tierInfo.emoji} NEW SPONSORSHIP: ${tierInfo.name}, €${tierInfo.income}M/year!`];
   }
 
   // FIFA Cover event check
@@ -732,7 +732,7 @@ export function handleFifaCoverDecision(prev: CareerState, accept: boolean): Car
     s.awards = [...s.awards, { year: s.seasons[s.seasons.length - 1]?.year || 2024, name: "FIFA Cover Athlete", emoji: "🎮" }];
   } else {
     s.popularity = clamp(s.popularity + 5, 0, 100);
-    s.events = [...s.events, "🎮 Declined FIFA cover — gained respect for being selective. Reputation +5"];
+    s.events = [...s.events, "🎮 Declined FIFA cover: gained respect for being selective. Reputation +5"];
   }
   // Will continue via dismissSocialMediaPhase
   s.phase = "social_media_action";
@@ -1035,7 +1035,7 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
   }
   // Financial crisis — also triggered by negative net worth
   if (s.consecutiveDeficitYears >= 3 || s.netWorth < -2) {
-    s.events.push("💸 FINANCIAL CRISIS — Spending exceeds income! Forced to sell assets.");
+    s.events.push("💸 FINANCIAL CRISIS: Spending exceeds income! Forced to sell assets.");
     s.netWorth = Math.max(0, s.netWorth);
     s.lifestyleLevel = "Humble";
     s.lifestyleCostPerYear = 0.05;
@@ -1086,7 +1086,7 @@ function simulateFamilyLife(s: CareerState): void {
     const childEvents = [
       { id: "first_steps", emoji: "👣", text: "Your child's first steps! A moment you'll never forget.", morale: 3 },
       { id: "follow_footsteps", emoji: "⚽", text: "Your child wants to follow in your footsteps and become a footballer.", morale: 5 },
-      { id: "watches_trophy", emoji: "🏆", text: "Your child watches you win a trophy — pure joy on their face!", morale: 8 },
+      { id: "watches_trophy", emoji: "🏆", text: "Your child watches you win a trophy, pure joy on their face!", morale: 8 },
     ];
     const available = childEvents.filter(e => !s.childEventsSeen.includes(e.id));
     if (available.length > 0) {
@@ -1281,7 +1281,7 @@ function resolveInvestments(s: CareerState): void {
       if (Math.random() < 0.20) {
         h.returnAmount = h.invested * 10;
         s.netWorth = Math.round((s.netWorth + h.returnAmount) * 100) / 100;
-        s.events.push(`💻 Tech startup went viral! 10x return — €${h.returnAmount.toFixed(1)}M!`);
+        s.events.push(`💻 Tech startup went viral! 10x return: €${h.returnAmount.toFixed(1)}M!`);
       } else {
         s.events.push("💻 Tech startup failed. Investment lost.");
       }
@@ -2072,7 +2072,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       (s as any)[k] = clamp((s as any)[k] + 2, 20, 99);
     }
     s.socialMediaFocusBoost = false;
-    s.events.push("🧘 Social media detox paid off — +2 to all stats!");
+    s.events.push("🧘 Social media detox paid off: +2 to all stats!");
   }
 
   // Match fix ban — skip season
@@ -2141,7 +2141,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   // Forced retirement: overall below 50 at 33+, OR absolute max age 45
   if ((s.overall < 50 && s.age >= 33) || s.age >= 45) {
     s.retired = true;
-    const reason = s.age >= 45 ? "👋 Hung up the boots at 45 — an incredible career!" : "👋 Body can no longer keep up — forced retirement";
+    const reason = s.age >= 45 ? "👋 Hung up the boots at 45. An incredible career!" : "👋 Body can no longer keep up. Forced retirement";
     s.events.push(reason);
     const lastYr = s.seasons[s.seasons.length - 1].year;
     s.seasons = [...s.seasons, {
@@ -2230,7 +2230,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     // 100 caps milestone
     const prevCaps = s.intStats.caps - intSeason.intApps;
     if (s.intStats.caps >= 100 && prevCaps < 100) {
-      s.events.push(`🎖️ INTERNATIONAL LEGEND — reached 100 caps for ${s.nationality}!`);
+      s.events.push(`🎖️ INTERNATIONAL LEGEND: reached 100 caps for ${s.nationality}!`);
     }
   }
 
@@ -2547,7 +2547,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
     { weight: 1, check: () => seasonsAtClub >= 2 && s.popularity >= 50,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
         headline: `${name} Voted Fan Favourite At ${club}`,
-        body: `After ${seasonsAtClub} seasons of dedication, the ${club} faithful have spoken — ${name} is their Player of the Year. The bond between player and fans has become something truly special.` }) },
+        body: `After ${seasonsAtClub} seasons of dedication, the ${club} faithful have spoken: ${name} is their Player of the Year. The bond between player and fans has become something truly special.` }) },
     { weight: 1, check: () => s.isLeader && (season.leagueTitle || season.domesticCup || season.championsLeague),
       gen: () => {
         const trophy = season.championsLeague ? "Champions League" : season.leagueTitle ? "League Title" : "Domestic Cup";
@@ -2666,12 +2666,12 @@ function getAllEvents(state: CareerState): RandomEvent[] {
         { label: "Celebrate wildly", emoji: "🎉", color: "bg-emerald-600", consequence: "Popularity +10, Social media +50k",
           apply: s => { s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "⚽ Scored a derby winner! Popularity soared"]; return s; } },
         { label: "Stay humble", emoji: "🤝", color: "bg-blue-600", consequence: "Morale +10, Team chemistry boost",
-          apply: s => { s.morale = clamp(s.morale + 10, 0, 100); s.events = [...s.events, "⚽ Scored a derby winner — stayed humble"]; return s; } },
+          apply: s => { s.morale = clamp(s.morale + 10, 0, 100); s.events = [...s.events, "⚽ Scored a derby winner, stayed humble"]; return s; } },
       ] },
     { id: 2, emoji: "🎙️", title: "Manager Praise", description: "A top manager says in an interview you are one of the best players in your position in the world.",
       category: "positive", choices: [
         { label: "Use it as motivation", emoji: "💪", color: "bg-emerald-600", consequence: "Market value +€5M, All stats +2 next season",
-          apply: s => { s.marketValue += 5; s.statBoostNextSeason = { pace: 2, shooting: 2, passing: 2, dribbling: 2, defending: 2, physical: 2 }; s.events = [...s.events, "🎙️ Top manager praised you — confidence boosted"]; return s; } },
+          apply: s => { s.marketValue += 5; s.statBoostNextSeason = { pace: 2, shooting: 2, passing: 2, dribbling: 2, defending: 2, physical: 2 }; s.events = [...s.events, "🎙️ Top manager praised you, confidence boosted"]; return s; } },
       ] },
     { id: 3, emoji: "©️", title: "Club Captain!", description: "You are voted captain of your club.",
       category: "positive", choices: [
@@ -2689,7 +2689,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.sponsorDeal = "Nike"; s.totalEarnings += 2; s.events = [...s.events, "👟 Signed Nike sponsorship deal"]; return s; } },
         { label: "Sign with Adidas", emoji: "✔️", color: "bg-blue-600", consequence: "+€1.5M/year income",
           apply: s => { s.sponsorDeal = "Adidas"; s.totalEarnings += 1.5; s.events = [...s.events, "👟 Signed Adidas sponsorship deal"]; return s; } },
-        { label: "Reject all offers", emoji: "✋", color: "bg-muted", consequence: "No deal — stay independent",
+        { label: "Reject all offers", emoji: "✋", color: "bg-muted", consequence: "No deal, stay independent",
           apply: s => { s.events = [...s.events, "👟 Rejected sponsorship offers"]; return s; } },
       ] },
     { id: 6, emoji: "👶", title: "Youth Mentor", description: "You mentor a 16-year-old youth player at your club who shows incredible promise.",
@@ -2716,7 +2716,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       category: "negative", choices: [
         { label: "Accept the ban", emoji: "😔", color: "bg-red-600", consequence: "Red cards +1, Reputation -5",
           apply: s => { s.popularity = clamp(s.popularity - 5, 0, 100); s.events = [...s.events, "🟥 Banned 3 matches for violent foul"]; return s; } },
-        { label: "Appeal the decision", emoji: "⚖️", color: "bg-amber-600", consequence: "Appeal submitted — result in 3-5 days",
+        { label: "Appeal the decision", emoji: "⚖️", color: "bg-amber-600", consequence: "Appeal submitted, result in 3-5 days",
           apply: s => {
             const success = Math.random() < 0.5;
             const banLength = success ? 0 : rand(2, 4);
@@ -2728,57 +2728,57 @@ function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 10, emoji: "💉", title: "False Doping Accusation", description: "A journalist publishes a story claiming you failed a doping test. It is later proven false but damage is done.",
       category: "negative", choices: [
         { label: "Speak out publicly", emoji: "🎙️", color: "bg-blue-600", consequence: "Market value -€1M but popularity +5",
-          apply: s => { s.marketValue = Math.max(0.1, s.marketValue - 1); s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, "💉 Fought doping accusation publicly — cleared"]; return s; } },
+          apply: s => { s.marketValue = Math.max(0.1, s.marketValue - 1); s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, "💉 Fought doping accusation publicly, cleared"]; return s; } },
         { label: "Stay silent, let lawyers handle it", emoji: "🤫", color: "bg-muted", consequence: "Market value -€2M",
-          apply: s => { s.marketValue = Math.max(0.1, s.marketValue - 2); s.events = [...s.events, "💉 Doping accusation — stayed silent"]; return s; } },
+          apply: s => { s.marketValue = Math.max(0.1, s.marketValue - 2); s.events = [...s.events, "💉 Doping accusation, stayed silent"]; return s; } },
         { label: "Hold press conference", emoji: "📺", color: "bg-emerald-600", consequence: "Market value +€1M, popularity +10",
-          apply: s => { s.marketValue += 1; s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "💉 Press conference — cleared name completely"]; return s; } },
+          apply: s => { s.marketValue += 1; s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "💉 Press conference, cleared name completely"]; return s; } },
       ] },
     { id: 11, emoji: "🏥", title: "Serious Injury!", description: "You pick up a serious hamstring injury.",
       category: "negative", choices: [
         { label: "Focus on recovery", emoji: "🏥", color: "bg-red-600", consequence: "Pace -2 permanently, miss apps next season",
-          apply: s => { s.pace = clamp(s.pace - 2, 20, 99); s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "🏥 Serious hamstring injury — Pace -2"]; return s; } },
+          apply: s => { s.pace = clamp(s.pace - 2, 20, 99); s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "🏥 Serious hamstring injury: Pace -2"]; return s; } },
         { label: "Rush back early", emoji: "⚡", color: "bg-amber-600", consequence: "Pace -1 but 30% chance of reinjury (Pace -3)",
-          apply: s => { if (Math.random() < 0.3) { s.pace = clamp(s.pace - 3, 20, 99); s.events = [...s.events, "🏥 Rushed back — reinjured! Pace -3"]; } else { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "🏥 Rushed back successfully — Pace -1"]; } return s; } },
+          apply: s => { if (Math.random() < 0.3) { s.pace = clamp(s.pace - 3, 20, 99); s.events = [...s.events, "🏥 Rushed back, reinjured! Pace -3"]; } else { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "🏥 Rushed back successfully: Pace -1"]; } return s; } },
       ] },
     { id: 12, emoji: "👔", title: "New Manager!", description: "Your manager is sacked. The new manager does not rate you.",
       category: "negative", choices: [
         { label: "Prove yourself in training", emoji: "💪", color: "bg-emerald-600", consequence: "Morale -5 but possible stat boost",
-          apply: s => { s.morale = clamp(s.morale - 5, 0, 100); s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 }; s.events = [...s.events, "👔 New manager — training harder"]; return s; } },
+          apply: s => { s.morale = clamp(s.morale - 5, 0, 100); s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 }; s.events = [...s.events, "👔 New manager, training harder"]; return s; } },
         { label: "Accept reduced role", emoji: "😔", color: "bg-muted", consequence: "Morale -10, fewer appearances",
-          apply: s => { s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "👔 New manager doesn't rate you — reduced role"]; return s; } },
+          apply: s => { s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "👔 New manager doesn't rate you, reduced role"]; return s; } },
       ] },
     { id: 13, emoji: "📸", title: "Party Scandal!", description: "You are photographed at a party the night before a big match. The media goes wild.",
       category: "negative", choices: [
         { label: "Apologize publicly", emoji: "😔", color: "bg-blue-600", consequence: "Popularity -3, Manager relationship saved",
-          apply: s => { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "📸 Party scandal — apologized publicly"]; return s; } },
+          apply: s => { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "📸 Party scandal, apologized publicly"]; return s; } },
         { label: "Deny it", emoji: "🤷", color: "bg-muted", consequence: "50/50: believed or more backlash",
-          apply: s => { if (Math.random() < 0.5) { s.events = [...s.events, "📸 Denied party — public believed you"]; } else { s.popularity = clamp(s.popularity - 8, 0, 100); s.events = [...s.events, "📸 Denied party — backlash got worse"]; } return s; } },
+          apply: s => { if (Math.random() < 0.5) { s.events = [...s.events, "📸 Denied party, public believed you"]; } else { s.popularity = clamp(s.popularity - 8, 0, 100); s.events = [...s.events, "📸 Denied party, backlash got worse"]; } return s; } },
         { label: "Laugh it off on social media", emoji: "😂", color: "bg-amber-600", consequence: "Popularity +5 with fans, -5 with manager",
-          apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "📸 Laughed off party scandal — fans loved it"]; return s; } },
+          apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "📸 Laughed off party scandal, fans loved it"]; return s; } },
       ] },
     { id: 14, emoji: "😤", title: "Rival Provocation!", description: "A rival player publicly claims he is better than you in a magazine interview.",
       category: "negative", choices: [
         { label: "Let your feet do the talking", emoji: "⚽", color: "bg-emerald-600", consequence: "Motivation boost: all stats +1 next season",
-          apply: s => { s.statBoostNextSeason = { pace: 1, shooting: 1, passing: 1, dribbling: 1, defending: 1, physical: 1 }; s.events = [...s.events, "😤 Rival provoked you — used it as motivation"]; return s; } },
+          apply: s => { s.statBoostNextSeason = { pace: 1, shooting: 1, passing: 1, dribbling: 1, defending: 1, physical: 1 }; s.events = [...s.events, "😤 Rival provoked you, used it as motivation"]; return s; } },
         { label: "Fire back in the media", emoji: "🎙️", color: "bg-red-600", consequence: "Popularity +5 but rivalry intensifies",
           apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, "😤 Fired back at rival in media"]; return s; } },
       ] },
     { id: 15, emoji: "📋", title: "Dropped!", description: "You are dropped from the starting lineup without explanation.",
       category: "negative", choices: [
         { label: "Demand explanation", emoji: "😠", color: "bg-red-600", consequence: "Morale -5, 50% chance manager explains",
-          apply: s => { s.morale = clamp(s.morale - 5, 0, 100); if (Math.random() < 0.5) { s.events = [...s.events, "📋 Demanded explanation — manager understood"]; } else { s.events = [...s.events, "📋 Demanded explanation — relationship worsened"]; } return s; } },
+          apply: s => { s.morale = clamp(s.morale - 5, 0, 100); if (Math.random() < 0.5) { s.events = [...s.events, "📋 Demanded explanation, manager understood"]; } else { s.events = [...s.events, "📋 Demanded explanation, relationship worsened"]; } return s; } },
         { label: "Train harder, fight for place", emoji: "💪", color: "bg-emerald-600", consequence: "Physical +1, Morale +5",
-          apply: s => { s.physical = clamp(s.physical + 1, 20, 99); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "📋 Dropped — trained harder to fight back"]; return s; } },
+          apply: s => { s.physical = clamp(s.physical + 1, 20, 99); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "📋 Dropped, trained harder to fight back"]; return s; } },
       ] },
     { id: 16, emoji: "📝", title: "Contract Breakdown!", description: "Contract talks break down. Club offers less than expected.",
       category: "negative", choices: [
         { label: "Accept lower wage, stay loyal", emoji: "🤝", color: "bg-blue-600", consequence: "Wage -15%, Morale +5",
-          apply: s => { s.weeklyWage = Math.round(s.weeklyWage * 0.85); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "📝 Accepted lower wage — stayed loyal"]; return s; } },
+          apply: s => { s.weeklyWage = Math.round(s.weeklyWage * 0.85); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "📝 Accepted lower wage, stayed loyal"]; return s; } },
         { label: "Push for more money", emoji: "💰", color: "bg-amber-600", consequence: "50% chance: Wage +20% or relationship damaged",
-          apply: s => { if (Math.random() < 0.5) { s.weeklyWage = Math.round(s.weeklyWage * 1.2); s.events = [...s.events, "📝 Pushed for more — got a raise!"]; } else { s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "📝 Pushed too hard — relationship damaged"]; } return s; } },
+          apply: s => { if (Math.random() < 0.5) { s.weeklyWage = Math.round(s.weeklyWage * 1.2); s.events = [...s.events, "📝 Pushed for more, got a raise!"]; } else { s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "📝 Pushed too hard, relationship damaged"]; } return s; } },
         { label: "Walk away when contract expires", emoji: "🚶", color: "bg-red-600", consequence: "Contract not renewed, become free agent sooner",
-          apply: s => { s.contractYearsLeft = Math.min(s.contractYearsLeft, 1); s.events = [...s.events, "📝 Walking away — will leave on free"]; return s; } },
+          apply: s => { s.contractYearsLeft = Math.min(s.contractYearsLeft, 1); s.events = [...s.events, "📝 Walking away, will leave on free"]; return s; } },
       ] },
     { id: 17, emoji: "🇺🇳", title: "International Call-Up!", description: "You receive your first call-up to the national team.",
       category: "international", choices: [
@@ -2793,7 +2793,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 19, emoji: "🏆❌", title: "World Cup Snub!", description: "You are left out of the World Cup squad despite a great season.",
       category: "international", choices: [
         { label: "Accept decision gracefully", emoji: "😔", color: "bg-blue-600", consequence: "Morale -5, Respect +5",
-          apply: s => { s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🏆❌ Left out of World Cup — accepted it"]; return s; } },
+          apply: s => { s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🏆❌ Left out of World Cup, accepted it"]; return s; } },
         { label: "Publicly question manager", emoji: "🎙️", color: "bg-amber-600", consequence: "Popularity +5, International career at risk",
           apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "🏆❌ Publicly questioned World Cup snub"]; return s; } },
         { label: "Retire from internationals", emoji: "🚶", color: "bg-red-600", consequence: "International career ends",
@@ -2803,7 +2803,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       category: "life", choices: [
         { label: "Start dating", emoji: "💕", color: "bg-pink-600", consequence: "Morale +10, Stability boost",
           apply: s => { s.hasRelationship = true; s.morale = clamp(s.morale + 10, 0, 100); s.events = [...s.events, "❤️ Started a relationship"]; return s; } },
-        { label: "Focus on football", emoji: "⚽", color: "bg-muted", consequence: "No change — stay focused",
+        { label: "Focus on football", emoji: "⚽", color: "bg-muted", consequence: "No change, stay focused",
           apply: s => { s.events = [...s.events, "❤️ Chose to focus on football"]; return s; } },
       ] },
     { id: 21, emoji: "🏥💔", title: "Family Emergency", description: "A family member is seriously ill.",
@@ -2818,13 +2818,13 @@ function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 22, emoji: "💼", title: "Business Venture", description: "Your agent suggests investing in a restaurant chain. €500k investment.",
       category: "life", choices: [
         { label: "Invest €500k", emoji: "💰", color: "bg-emerald-600", consequence: "Random: +€1M profit or -€500k loss",
-          apply: s => { if (Math.random() < 0.5) { s.netWorth += 1; s.investments = [...s.investments, "Restaurant Chain ✅"]; s.events = [...s.events, "💼 Restaurant investment succeeded! +€1M"]; } else { s.netWorth -= 0.5; s.investments = [...s.investments, "Restaurant Chain ❌"]; s.events = [...s.events, "💼 Restaurant investment failed — lost €500k"]; } return s; } },
+          apply: s => { if (Math.random() < 0.5) { s.netWorth += 1; s.investments = [...s.investments, "Restaurant Chain ✅"]; s.events = [...s.events, "💼 Restaurant investment succeeded! +€1M"]; } else { s.netWorth -= 0.5; s.investments = [...s.investments, "Restaurant Chain ❌"]; s.events = [...s.events, "💼 Restaurant investment failed, lost €500k"]; } return s; } },
         { label: "Pass on it", emoji: "✋", color: "bg-muted", consequence: "No risk, no reward",
           apply: s => { s.events = [...s.events, "💼 Passed on restaurant investment"]; return s; } },
       ] },
     { id: 23, emoji: "🏠", title: "Property Opportunity!", description: `Buy a house in ${state.currentClubCountry} for €2M?`,
       category: "life", choices: [
-        { label: "Buy it — €2M", emoji: "🏠", color: "bg-emerald-600", consequence: "Property added, Lifestyle upgrade, Morale +5",
+        { label: "Buy it: €2M", emoji: "🏠", color: "bg-emerald-600", consequence: "Property added, Lifestyle upgrade, Morale +5",
           apply: s => { s.netWorth -= 2; s.properties = [...s.properties, `House in ${s.currentClubCountry}`]; s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "🏠 Bought a property"]; return s; } },
         { label: "Save the money", emoji: "💰", color: "bg-muted", consequence: "Smart financial decision",
           apply: s => { s.events = [...s.events, "🏠 Decided to save money instead"]; return s; } },
@@ -2833,29 +2833,29 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       category: "life", choices: [
         { label: "Accept the role", emoji: "✔️", color: "bg-emerald-600", consequence: "Followers +2M, Sponsorship income boost",
           apply: s => { s.popularity = clamp(s.popularity + 20, 0, 100); s.socialMediaFollowers += 2; s.sponsorshipIncome += 1; s.events = [...s.events, "🌍 Became brand ambassador"]; return s; } },
-        { label: "Decline — too distracting", emoji: "✋", color: "bg-muted", consequence: "Focus on football",
+        { label: "Decline: too distracting", emoji: "✋", color: "bg-muted", consequence: "Focus on football",
           apply: s => { s.events = [...s.events, "🌍 Declined brand ambassador role"]; return s; } },
       ] },
     // Financial events (25-30)
     { id: 25, emoji: "🚗", title: "Supercar Fleet!", description: "You buy a fleet of supercars. Cost: €800k.",
       category: "life", choices: [
         { label: "Buy the fleet 🚗", emoji: "🏎️", color: "bg-red-600", consequence: "Net worth -€800k, Lifestyle upgrade, Followers +500k",
-          apply: s => { s.netWorth -= 0.8; s.socialMediaFollowers += 0.5; s.popularity = clamp(s.popularity + 3, 0, 100); s.events = [...s.events, "🚗 Bought a supercar fleet — €800k"]; return s; } },
+          apply: s => { s.netWorth -= 0.8; s.socialMediaFollowers += 0.5; s.popularity = clamp(s.popularity + 3, 0, 100); s.events = [...s.events, "🚗 Bought a supercar fleet, €800k"]; return s; } },
         { label: "Keep it humble", emoji: "✋", color: "bg-muted", consequence: "Save the money",
           apply: s => { s.events = [...s.events, "🚗 Decided not to buy supercars"]; return s; } },
       ] },
     { id: 26, emoji: "📈", title: "Crypto Tip!", description: "A friend tips you on a crypto investment. High risk, high reward.",
       category: "life", choices: [
         { label: "Invest €200k", emoji: "🪙", color: "bg-amber-600", consequence: "Could 10x or lose everything",
-          apply: s => { const roll = Math.random(); if (roll < 0.15) { s.netWorth += 2; s.investments = [...s.investments, "Crypto 10x 🚀"]; s.events = [...s.events, "📈 Crypto went 10x! +€2M!"]; } else if (roll < 0.5) { s.netWorth += 0.2; s.investments = [...s.investments, "Crypto 2x"]; s.events = [...s.events, "📈 Crypto doubled — +€200k"]; } else { s.netWorth -= 0.2; s.investments = [...s.investments, "Crypto ❌"]; s.events = [...s.events, "📈 Crypto crashed — lost €200k"]; } return s; } },
+          apply: s => { const roll = Math.random(); if (roll < 0.15) { s.netWorth += 2; s.investments = [...s.investments, "Crypto 10x 🚀"]; s.events = [...s.events, "📈 Crypto went 10x! +€2M!"]; } else if (roll < 0.5) { s.netWorth += 0.2; s.investments = [...s.investments, "Crypto 2x"]; s.events = [...s.events, "📈 Crypto doubled, +€200k"]; } else { s.netWorth -= 0.2; s.investments = [...s.investments, "Crypto ❌"]; s.events = [...s.events, "📈 Crypto crashed, lost €200k"]; } return s; } },
         { label: "Stay away from crypto", emoji: "✋", color: "bg-muted", consequence: "Smart move? Or missed opportunity?",
           apply: s => { s.events = [...s.events, "📈 Avoided crypto investment"]; return s; } },
       ] },
     { id: 27, emoji: "🎬", title: "Movie Cameo!", description: "A Hollywood director wants you for a cameo in a blockbuster film.",
       category: "life", choices: [
-        { label: "Accept — €500k fee", emoji: "🎬", color: "bg-emerald-600", consequence: "Net worth +€500k, Followers +3M",
+        { label: "Accept: €500k fee", emoji: "🎬", color: "bg-emerald-600", consequence: "Net worth +€500k, Followers +3M",
           apply: s => { s.netWorth += 0.5; s.socialMediaFollowers += 3; s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "🎬 Appeared in a blockbuster film!"]; return s; } },
-        { label: "Decline — focus on football", emoji: "⚽", color: "bg-muted", consequence: "Stay professional",
+        { label: "Decline: focus on football", emoji: "⚽", color: "bg-muted", consequence: "Stay professional",
           apply: s => { s.events = [...s.events, "🎬 Declined movie cameo"]; return s; } },
       ] },
     { id: 28, emoji: "🏦", title: "Financial Advisor", description: "Your financial advisor recommends diversifying into real estate funds.",
@@ -2867,30 +2867,30 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       ] },
     { id: 29, emoji: "💎", title: "Luxury Watch Collection!", description: "A limited edition watch collection is available. €400k for a set of three.",
       category: "life", choices: [
-        { label: "Buy them — €400k", emoji: "⌚", color: "bg-amber-600", consequence: "Net worth -€400k, Status symbol, Followers +200k",
+        { label: "Buy them: €400k", emoji: "⌚", color: "bg-amber-600", consequence: "Net worth -€400k, Status symbol, Followers +200k",
           apply: s => { s.netWorth -= 0.4; s.socialMediaFollowers += 0.2; s.events = [...s.events, "💎 Bought luxury watch collection"]; return s; } },
         { label: "Not worth it", emoji: "✋", color: "bg-muted", consequence: "Save the money",
           apply: s => { s.events = [...s.events, "💎 Declined watch collection"]; return s; } },
       ] },
     { id: 30, emoji: "🎮", title: "Gaming Brand Deal!", description: "A gaming company offers you a brand deal to stream and promote their games.",
       category: "life", choices: [
-        { label: "Sign the deal — €300k/year", emoji: "🎮", color: "bg-purple-600", consequence: "Income +€300k, Followers +1M",
+        { label: "Sign the deal: €300k/year", emoji: "🎮", color: "bg-purple-600", consequence: "Income +€300k, Followers +1M",
           apply: s => { s.sponsorshipIncome += 0.3; s.socialMediaFollowers += 1; s.events = [...s.events, "🎮 Signed gaming brand deal"]; return s; } },
         { label: "Not my thing", emoji: "✋", color: "bg-muted", consequence: "Stay focused on football",
           apply: s => { s.events = [...s.events, "🎮 Declined gaming brand deal"]; return s; } },
       ] },
     // New life events (31-40)
-    { id: 31, emoji: "👗", title: "Met Gala Invitation!", description: "You are invited to the Met Gala — the most exclusive fashion event in the world.",
+    { id: 31, emoji: "👗", title: "Met Gala Invitation!", description: "You are invited to the Met Gala, the most exclusive fashion event in the world.",
       category: "life", choices: [
         { label: "Attend in style", emoji: "✨", color: "bg-pink-600", consequence: "Followers +500k, Lifestyle upgrade",
-          apply: s => { s.socialMediaFollowers += 0.5; s.popularity = clamp(s.popularity + 8, 0, 100); s.events = [...s.events, "👗 Attended the Met Gala — went viral"]; return s; } },
-        { label: "Skip it — not my scene", emoji: "✋", color: "bg-muted", consequence: "Stay low-key",
+          apply: s => { s.socialMediaFollowers += 0.5; s.popularity = clamp(s.popularity + 8, 0, 100); s.events = [...s.events, "👗 Attended the Met Gala, went viral"]; return s; } },
+        { label: "Skip it: not my scene", emoji: "✋", color: "bg-muted", consequence: "Stay low-key",
           apply: s => { s.events = [...s.events, "👗 Declined Met Gala invitation"]; return s; } },
       ] },
     { id: 32, emoji: "🎥", title: "Documentary Crew!", description: "A documentary crew wants to follow your entire season for a Netflix-style series.",
       category: "life", choices: [
         { label: "Let them in", emoji: "📹", color: "bg-emerald-600", consequence: "Followers +2M, Legacy +5",
-          apply: s => { s.socialMediaFollowers += 2; s.integrityBonus += 5; s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "🎥 Documentary aired — massive following boost"]; return s; } },
+          apply: s => { s.socialMediaFollowers += 2; s.integrityBonus += 5; s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "🎥 Documentary aired, massive following boost"]; return s; } },
         { label: "Too much pressure", emoji: "🚫", color: "bg-muted", consequence: "Privacy maintained",
           apply: s => { s.events = [...s.events, "🎥 Declined documentary crew"]; return s; } },
       ] },
@@ -2898,7 +2898,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       category: "life", choices: [
         { label: "Go on the show", emoji: "🎤", color: "bg-blue-600", consequence: "Followers +1M, Fun appearance",
           apply: s => { s.socialMediaFollowers += 1; s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, "📺 Appeared on a popular TV show"]; return s; } },
-        { label: "Decline — camera shy", emoji: "✋", color: "bg-muted", consequence: "No change",
+        { label: "Decline: camera shy", emoji: "✋", color: "bg-muted", consequence: "No change",
           apply: s => { s.events = [...s.events, "📺 Declined TV show appearance"]; return s; } },
       ] },
     { id: 34, emoji: "🛣️", title: "Street Named After You!", description: "Your hometown council wants to name a street after you.",
@@ -2918,15 +2918,15 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       ] },
     { id: 37, emoji: "⚽🏫", title: "Football Academy!", description: "You have the opportunity to launch your own football academy for kids in your hometown. Cost: €2M.",
       category: "life", choices: [
-        { label: "Launch the academy — €2M", emoji: "🎓", color: "bg-emerald-600", consequence: "Cost €2M, Legacy +15, Giving back",
-          apply: s => { s.netWorth -= 2; s.integrityBonus += 15; s.popularity = clamp(s.popularity + 15, 0, 100); s.events = [...s.events, "⚽🏫 Launched football academy for kids — Legacy +15"]; return s; } },
+        { label: "Launch the academy: €2M", emoji: "🎓", color: "bg-emerald-600", consequence: "Cost €2M, Legacy +15, Giving back",
+          apply: s => { s.netWorth -= 2; s.integrityBonus += 15; s.popularity = clamp(s.popularity + 15, 0, 100); s.events = [...s.events, "⚽🏫 Launched football academy for kids, Legacy +15"]; return s; } },
         { label: "Maybe when I retire", emoji: "⏳", color: "bg-muted", consequence: "Postpone the dream",
           apply: s => { s.events = [...s.events, "⚽🏫 Postponed football academy plans"]; return s; } },
       ] },
     { id: 38, emoji: "😂", title: "Fan Tattoo Goes Viral!", description: "A fan gets a tattoo of your face. The internet explodes.",
       category: "life", choices: [
-        { label: "Repost it — legendary", emoji: "📱", color: "bg-purple-600", consequence: "Followers +500k, Goes viral",
-          apply: s => { s.socialMediaFollowers += 0.5; s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, "😂 Fan face tattoo went viral — +500k followers"]; return s; } },
+        { label: "Repost it: legendary", emoji: "📱", color: "bg-purple-600", consequence: "Followers +500k, Goes viral",
+          apply: s => { s.socialMediaFollowers += 0.5; s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, "😂 Fan face tattoo went viral, +500k followers"]; return s; } },
         { label: "Pretend you didn't see it", emoji: "🙈", color: "bg-muted", consequence: "It still goes viral anyway",
           apply: s => { s.socialMediaFollowers += 0.2; s.events = [...s.events, "😂 Fan tattoo went viral without your help"]; return s; } },
       ] },
@@ -2937,7 +2937,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
         { label: "Politely decline", emoji: "✋", color: "bg-muted", consequence: "Stay out of politics",
           apply: s => { s.events = [...s.events, "🏛️ Declined meeting head of state"]; return s; } },
       ] },
-    { id: 40, emoji: "🎬⭐", title: "Movie Star Cameo!", description: "A blockbuster director wants you for a speaking role in their new film. Not just a cameo — actual lines.",
+    { id: 40, emoji: "🎬⭐", title: "Movie Star Cameo!", description: "A blockbuster director wants you for a speaking role in their new film. Not just a cameo: actual lines.",
       category: "life", choices: [
         { label: "Lights, camera, action!", emoji: "🎬", color: "bg-emerald-600", consequence: "Followers +3M, Major exposure",
           apply: s => { s.socialMediaFollowers += 3; s.netWorth += 0.8; s.popularity = clamp(s.popularity + 12, 0, 100); s.events = [...s.events, "🎬⭐ Starred in a blockbuster movie!"]; return s; } },
@@ -3502,10 +3502,10 @@ export function dismissAppealResult(prev: CareerState, clubs: ClubData[]): Caree
   const result = s.pendingAppealResult;
   if (result) {
     if (result.success) {
-      s.events = [...s.events, "⚖️ Appeal Successful — Ban Overturned! Free to play."];
+      s.events = [...s.events, "⚖️ Appeal Successful. Ban Overturned! Free to play."];
     } else {
       s.popularity = clamp(s.popularity - 5, 0, 100);
-      s.events = [...s.events, `⚖️ Appeal Rejected — Must serve ${result.banLength}-match ban.`];
+      s.events = [...s.events, `⚖️ Appeal Rejected. Must serve ${result.banLength}-match ban.`];
     }
   }
   s.pendingAppealResult = null;
@@ -3947,7 +3947,7 @@ export function acceptRetirementSuggestion(prev: CareerState): CareerState {
 
 export function declineRetirementSuggestion(prev: CareerState): CareerState {
   const s = { ...prev };
-  s.events = [...s.events, "💪 Decided to push on — not ready to hang up the boots yet"];
+  s.events = [...s.events, "💪 Decided to push on, not ready to hang up the boots yet"];
   s.phase = "playing";
   return s;
 }
@@ -4042,7 +4042,7 @@ export function advancePunditSeason(prev: CareerState, action: PunditAction): Ca
       s.socialMediaFollowers += 0.5;
       s.popularity = clamp(s.popularity + 3, 0, 100);
       ps.followerGains += 0.5;
-      eventText = "🎙️ Praised a rising star — fans loved your insight. Followers +500k";
+      eventText = "🎙️ Praised a rising star. Fans loved your insight. Followers +500k";
       break;
     }
     case "criticise_manager": {
@@ -4073,7 +4073,7 @@ export function advancePunditSeason(prev: CareerState, action: PunditAction): Ca
       } else {
         s.socialMediaFollowers += 0.3;
         ps.followerGains += 0.3;
-        eventText = "❌ Bold prediction was wrong — but people remember you said it. +300k followers";
+        eventText = "❌ Bold prediction was wrong, but people remember you said it. +300k followers";
       }
       break;
     }
@@ -4162,5 +4162,5 @@ export function generateShareText(state: CareerState): string {
   const totals = getCareerTotals(state.seasons);
   const tier = state.legacy?.tier || "JOURNEYMAN";
   const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups;
-  return `I finished my Soccer Career as a ${tier} — ${totals.goals} goals, ${totalTrophies} trophies, ${totals.ballonDors} Ballon d'Ors. Can you beat me? douknowball.com/soccer-career`;
+  return `I finished my Soccer Career as a ${tier}: ${totals.goals} goals, ${totalTrophies} trophies, ${totals.ballonDors} Ballon d'Ors. Can you beat me? douknowball.com/soccer-career`;
 }

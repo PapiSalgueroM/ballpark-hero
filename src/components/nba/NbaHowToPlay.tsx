@@ -11,7 +11,7 @@ export function NbaHowToPlay({ open, onOpenChange }: NbaHowToPlayProps) {
       <DialogContent className="max-w-md bg-card border-border text-foreground max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-display text-primary text-center">
-            How to Play — Build Your Starting 5
+            How to Play: Build Your Starting 5
           </DialogTitle>
         </DialogHeader>
 
@@ -23,7 +23,7 @@ export function NbaHowToPlay({ open, onOpenChange }: NbaHowToPlayProps) {
           <section>
             <h3 className="font-bold text-foreground mb-2">🎰 The Challenge</h3>
             <p className="text-muted-foreground">
-              A random stat is spun (PPG, RPG, Championships, Height, etc.) along with a direction —
+              A random stat is spun (PPG, RPG, Championships, Height, etc.) along with a direction:
               find the <span className="text-green-400 font-semibold">HIGHEST</span> or{' '}
               <span className="text-blue-400 font-semibold">LOWEST</span> combined total.
             </p>
@@ -32,10 +32,10 @@ export function NbaHowToPlay({ open, onOpenChange }: NbaHowToPlayProps) {
           <section>
             <h3 className="font-bold text-foreground mb-2">🏀 Building Your Lineup</h3>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>• Pick any open position (PG, SG, SF, PF, C) — <span className="text-foreground font-semibold">you choose the order</span></li>
+              <li>• Pick any open position (PG, SG, SF, PF, C): <span className="text-foreground font-semibold">you choose the order</span></li>
               <li>• A <span className="text-orange-400 font-semibold">random NBA team</span> is assigned for each pick</li>
               <li>• You can only select players who have <span className="text-foreground font-semibold">played for that team</span></li>
-              <li>• Players must match the <span className="text-primary font-semibold">position you selected</span> — no out-of-position picks</li>
+              <li>• Players must match the <span className="text-primary font-semibold">position you selected</span>: no out-of-position picks</li>
               <li>• Each player and position can only be used <span className="text-foreground font-semibold">once</span></li>
             </ul>
           </section>

@@ -21,7 +21,7 @@ export function TeammatesHowToPlay({ open, onOpenChange }: Props) {
           <p>Were these two athletes ever teammates?</p>
           <ol className="list-decimal list-inside space-y-1.5">
             <li>Two player names are shown from NFL, NBA, or Soccer</li>
-            <li>Tap <strong>YES</strong> or <strong>NO</strong> — did they play on the same team?</li>
+            <li>Tap <strong>YES</strong> or <strong>NO</strong>: did they play on the same team?</li>
             <li>After answering, a fun fact reveals the truth</li>
             <li>10 questions per round, difficulty increases</li>
           </ol>

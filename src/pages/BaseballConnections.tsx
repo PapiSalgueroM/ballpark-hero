@@ -216,20 +216,20 @@ const BaseballConnections = () => {
 
         <GameSeoContent
           title="Baseball Connections | DoUKnowBall"
-          description="A daily puzzle where you group baseball players by what connects them — same team, same award, same country, or same era."
+          description="A daily puzzle where you group baseball players by what connects them: same team, same award, same country, or same era."
           howToPlay={[
             'Find four groups of 5 baseball players that share a connection',
-            'Select 5 players and submit — if they form a group, it locks in',
+            'Select 5 players and submit. If they form a group, it locks in',
             'Groups are color-coded: yellow (easiest) to purple (hardest)',
-            'You have 4 lives — wrong guesses cost a life',
-            'New puzzle daily — share your results!',
+            'You have 4 lives. Wrong guesses cost a life',
+            'New puzzle daily. Share your results!',
           ]}
           examples={[
-            "2024 All-Stars — Aaron Judge, Shohei Ohtani, Mookie Betts, Ronald Acuña Jr.",
-            "500+ Home Run Club — Barry Bonds, Hank Aaron, Babe Ruth, Alex Rodriguez",
-            "Yankees Legends — Derek Jeter, Mariano Rivera, Mickey Mantle, Babe Ruth",
-            "Cy Young Award Winners — Clayton Kershaw, Jacob deGrom, Max Scherzer, Greg Maddux",
-            "Dominican Republic Stars — David Ortiz, Pedro Martínez, Manny Ramírez, Sammy Sosa"
+            "2024 All-Stars: Aaron Judge, Shohei Ohtani, Mookie Betts, Ronald Acuña Jr.",
+            "500+ Home Run Club: Barry Bonds, Hank Aaron, Babe Ruth, Alex Rodriguez",
+            "Yankees Legends: Derek Jeter, Mariano Rivera, Mickey Mantle, Babe Ruth",
+            "Cy Young Award Winners: Clayton Kershaw, Jacob deGrom, Max Scherzer, Greg Maddux",
+            "Dominican Republic Stars: David Ortiz, Pedro Martínez, Manny Ramírez, Sammy Sosa"
           ]}
         />
 

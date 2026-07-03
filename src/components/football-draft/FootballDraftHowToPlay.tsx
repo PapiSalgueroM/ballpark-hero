@@ -49,7 +49,7 @@ export function FootballDraftHowToPlay({ open, onOpenChange }: Props) {
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--ft-gold))]">Daily Challenge</p>
-            <p className="text-muted-foreground">5 players per game. New challenge at midnight — share your score!</p>
+            <p className="text-muted-foreground">5 players per game. New challenge at midnight, share your score!</p>
           </div>
         </div>
       </DialogContent>

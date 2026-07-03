@@ -11,13 +11,13 @@ export function CareerHowToPlay({ open, onOpenChange }: CareerHowToPlayProps) {
       <DialogContent className="max-w-md bg-card border-border text-foreground max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-display text-primary text-center">
-            How to Play — Career Quiz
+            How to Play: Career Quiz
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-5 text-sm">
           <p className="text-muted-foreground text-center">
-            A player's career is laid out season by season — figure out who it is!
+            A player's career is laid out season by season. Figure out who it is!
           </p>
 
           <section>
@@ -42,14 +42,14 @@ export function CareerHowToPlay({ open, onOpenChange }: CareerHowToPlayProps) {
             <ul className="space-y-1.5 text-muted-foreground">
               <li>• Type a player name in the search bar and select from suggestions</li>
               <li>• You have <span className="text-primary font-semibold">8 guesses</span> to identify the player</li>
-              <li>• You can guess at any time — even before uncovering any boxes!</li>
+              <li>• You can guess at any time, even before uncovering any boxes!</li>
             </ul>
           </section>
 
           <section>
             <h3 className="font-bold text-foreground mb-2">🏆 Strategy Tips</h3>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>• Club names are the biggest clue — a unique transfer history narrows it down fast</li>
+              <li>• Club names are the biggest clue: a unique transfer history narrows it down fast</li>
               <li>• Goal-heavy seasons can identify prolific strikers</li>
               <li>• Market value peaks hint at a player's prime years</li>
               <li>• The fewer boxes you use, the more impressive your solve!</li>

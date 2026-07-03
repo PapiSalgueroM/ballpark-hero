@@ -199,7 +199,7 @@ export function useLineupBuilder() {
       setPhase('result');
     } catch (err) {
       console.error('Evaluation error:', err);
-      setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Network error — please check your connection and try again.' });
+      setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Network error. Please check your connection and try again.' });
       setPhase('result');
     } finally {
       setIsEvaluating(false);

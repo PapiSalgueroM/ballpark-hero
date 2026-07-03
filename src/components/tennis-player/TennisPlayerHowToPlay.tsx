@@ -17,7 +17,7 @@ export function TennisPlayerHowToPlay() {
         </DialogHeader>
         <div className="space-y-3 text-sm text-green-300">
           <p>A mystery tennis player is hidden behind <strong className="text-purple-400">6 clues</strong>.</p>
-          <p>Clues are revealed one at a time — guess after each one!</p>
+          <p>Clues are revealed one at a time. Guess after each one!</p>
           <ol className="list-decimal list-inside space-y-1 text-green-400">
             <li>Vibe word</li>
             <li>Nationality & era</li>

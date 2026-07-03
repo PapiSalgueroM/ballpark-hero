@@ -26,7 +26,7 @@ export function FootballTimelineHowToPlay({ open, onOpenChange }: Props) {
         <div className="space-y-4 text-sm text-foreground">
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--ft-gold))]">Goal</p>
-            <p>Order 5 NFL players chronologically by the year they were drafted — earliest at the top.</p>
+            <p>Order 5 NFL players chronologically by the year they were drafted, earliest at the top.</p>
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--ft-gold))]">How it works</p>
@@ -44,7 +44,7 @@ export function FootballTimelineHowToPlay({ open, onOpenChange }: Props) {
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--ft-gold))]">Daily Challenge</p>
-            <p className="text-muted-foreground">New puzzle at midnight. Same challenge for everyone — share your score!</p>
+            <p className="text-muted-foreground">New puzzle at midnight. Same challenge for everyone, share your score!</p>
           </div>
         </div>
       </DialogContent>

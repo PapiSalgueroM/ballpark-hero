@@ -56,7 +56,7 @@ export const soccerClubPuzzles: SoccerClubPuzzle[] = [
       leagueTitles: 13,
       kitColors: 'Red and white shirts, white shorts',
     },
-    funFact: 'Arsenal went the entire 2003–04 Premier League season unbeaten — earning the nickname "The Invincibles".',
+    funFact: 'Arsenal went the entire 2003–04 Premier League season unbeaten, earning the nickname "The Invincibles".',
   },
   {
     id: 'chelsea',
@@ -140,7 +140,7 @@ export const soccerClubPuzzles: SoccerClubPuzzle[] = [
       leagueTitles: 9,
       kitColors: 'Royal blue shirts and shorts, white socks',
     },
-    funFact: 'Everton have never been relegated from the top flight — one of the longest runs in English football history.',
+    funFact: 'Everton have never been relegated from the top flight, one of the longest runs in English football history.',
   },
   {
     id: 'wolves',
@@ -352,7 +352,7 @@ export const soccerClubPuzzles: SoccerClubPuzzle[] = [
       leagueTitles: 2,
       kitColors: 'Sky blue shirts and shorts with white socks',
     },
-    funFact: 'Lazio\'s fierce derby against Roma — the Derby della Capitale — is one of the most intense in football.',
+    funFact: 'Lazio\'s fierce derby against Roma, the Derby della Capitale, is one of the most intense in football.',
   },
   // === BUNDESLIGA ===
   {
@@ -381,7 +381,7 @@ export const soccerClubPuzzles: SoccerClubPuzzle[] = [
       leagueTitles: 8,
       kitColors: 'Yellow shirts, black shorts and yellow socks',
     },
-    funFact: 'Dortmund\'s Yellow Wall — the Südtribüne — holds 25,000 standing fans and is the largest terrace in Europe.',
+    funFact: 'Dortmund\'s Yellow Wall, the Südtribüne, holds 25,000 standing fans and is the largest terrace in Europe.',
   },
   {
     id: 'rb-leipzig',
@@ -409,7 +409,7 @@ export const soccerClubPuzzles: SoccerClubPuzzle[] = [
       leagueTitles: 1,
       kitColors: 'Red shirts, black shorts and red socks',
     },
-    funFact: 'Bayer Leverkusen won their first ever Bundesliga title in 2024 — going the entire season unbeaten.',
+    funFact: 'Bayer Leverkusen won their first ever Bundesliga title in 2024, going the entire season unbeaten.',
   },
   {
     id: 'gladbach',
@@ -466,7 +466,7 @@ export const soccerClubPuzzles: SoccerClubPuzzle[] = [
       leagueTitles: 7,
       kitColors: 'White shirts, red shorts and socks',
     },
-    funFact: 'Lyon won seven consecutive Ligue 1 titles from 2002 to 2008 — a French record.',
+    funFact: 'Lyon won seven consecutive Ligue 1 titles from 2002 to 2008, a French record.',
   },
   {
     id: 'monaco',
@@ -887,7 +887,7 @@ export const soccerClubPuzzles: SoccerClubPuzzle[] = [
       leagueTitles: 1,
       kitColors: 'Red shirts with grey shorts',
     },
-    funFact: 'Toronto FC won the treble in 2017 — MLS Cup, Supporters\' Shield, and Canadian Championship.',
+    funFact: 'Toronto FC won the treble in 2017: MLS Cup, Supporters\' Shield, and Canadian Championship.',
   },
   {
     id: 'vancouver-whitecaps',

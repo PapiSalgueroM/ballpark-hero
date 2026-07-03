@@ -78,7 +78,7 @@ export function TennisPlayerBoard() {
             </button>
           )}
           {status === 'ready' && allPlayers.length === 0 && (
-            <p className="text-sm text-green-700">No players available yet — check back soon.</p>
+            <p className="text-sm text-green-700">No players available yet. Check back soon.</p>
           )}
 
           <GameNav />
@@ -205,7 +205,7 @@ export function TennisPlayerBoard() {
                 <p className="text-3xl">🏆</p>
                 <p className="text-xl font-bold text-purple-400">{puzzle.player_name}</p>
                 <p className="text-green-400">
-                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''} — <span className="text-purple-400 font-bold">{score} pts</span>
+                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-purple-400 font-bold">{score} pts</span>
                 </p>
               </>
             ) : (

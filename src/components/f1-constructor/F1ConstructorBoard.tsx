@@ -187,7 +187,7 @@ export function F1ConstructorBoard() {
                 <p className="text-3xl">🏆</p>
                 <p className="text-xl font-bold text-red-400">{puzzle.constructorName}</p>
                 <p className="text-zinc-400">
-                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''} — <span className="text-red-400 font-bold">{score} pts</span>
+                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-red-400 font-bold">{score} pts</span>
                 </p>
               </>
             ) : (

@@ -28,7 +28,7 @@ export function FootballConnect4HowToPlay({ open, onOpenChange }: Props) {
             <h4 className="font-semibold text-primary">Rules:</h4>
             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
               <li>🔵 Blue and 🔴 Red take turns</li>
-              <li>Pick a column to drop your piece — it falls to the lowest empty row</li>
+              <li>Pick a column to drop your piece, it falls to the lowest empty row</li>
               <li>
                 Name a soccer player who matches <strong>both</strong> the column attribute
                 (top) and the row attribute (left side)

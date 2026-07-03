@@ -83,7 +83,7 @@ const Connections = () => {
             CONNECTIONS
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">
-            Group 16 soccer players into 4 secret categories — can you crack the connection?
+            Group 16 soccer players into 4 secret categories. Can you crack the connection?
           </p>
           {mode === 'unlimited' && (
             <p className="text-xs text-muted-foreground mt-1">
@@ -302,20 +302,20 @@ const Connections = () => {
 
         <GameSeoContent
           title="Sports Connections Game | DoUKnowBall"
-          description="Find the four groups of connected sports players. Each group shares something in common — a team, award, position or era."
+          description="Find the four groups of connected sports players. Each group shares something in common: a team, award, position or era."
           howToPlay={[
             'Select four players you think belong to the same group',
-            'Hit Submit to check your guess — correct groups are revealed',
+            'Hit Submit to check your guess. Correct groups are revealed',
             'Use hints to reveal a group\'s category name',
-            'You have 4 lives — lose one for each wrong guess',
+            'You have 4 lives. Lose one for each wrong guess',
           ]}
           examples={[
-            'Players who played for AC Milan — Kaká, Maldini, Van Basten, Gullit',
-            'Ballon d\'Or winners — Messi, Ronaldo, Modrić, Benzema',
-            'Brazilian World Cup winners — Ronaldo, Rivaldo, Cafu, Roberto Carlos',
-            'Premier League Golden Boot — Salah, Kane, Henry, Van Persie',
-            'Players who wore #10 — Zidane, Pelé, Maradona, Ronaldinho',
-            'Left-footed legends — Messi, Maradona, Nedvěd, Robben',
+            'Players who played for AC Milan: Kaká, Maldini, Van Basten, Gullit',
+            'Ballon d\'Or winners: Messi, Ronaldo, Modrić, Benzema',
+            'Brazilian World Cup winners: Ronaldo, Rivaldo, Cafu, Roberto Carlos',
+            'Premier League Golden Boot: Salah, Kane, Henry, Van Persie',
+            'Players who wore #10: Zidane, Pelé, Maradona, Ronaldinho',
+            'Left-footed legends: Messi, Maradona, Nedvěd, Robben',
           ]}
         />
 

@@ -65,13 +65,13 @@ const SquadDeal = () => {
   const shell = (inner: ReactNode) => (
     <main className="min-h-screen bg-background">
       <GameNavbar />
-      <PageSeo title="Squad Deal — Deal or No Deal Team Builder | DoUKnowBall"
+      <PageSeo title="Squad Deal: Deal or No Deal Team Builder | DoUKnowBall"
         description="Build a full XI Deal-or-No-Deal style: pick a case per position, dodge the Banker, add a manager, stadium and fans, then simulate your squad."
         path="/squad-deal" />
       <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">{inner}</div>
       <div className="max-w-4xl mx-auto px-4">
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
-        <GameSeoContent title="Squad Deal — Deal or No Deal Team Builder"
+        <GameSeoContent title="Squad Deal: Deal or No Deal Team Builder"
           description="A Deal or No Deal twist on building your dream team. Each position gives you 10 mystery cases of players tiered from elite to weak. Keep one, eliminate the rest, and weigh the Banker's player offers."
           howToPlay={[
             'Pick a formation, an era (current or all-time legends), and optionally Memes mode.',
@@ -135,7 +135,7 @@ const SquadDeal = () => {
       <div>
         <header className="text-center mb-6">
           <h1 className="text-3xl md:text-4xl font-bold text-primary font-display">FINISHING TOUCHES</h1>
-          <p className="text-muted-foreground text-sm">Pick one of each — they tweak your final rating.</p>
+          <p className="text-muted-foreground text-sm">Pick one of each. They tweak your final rating.</p>
         </header>
         <div className="space-y-5 max-w-2xl mx-auto">
           {EXTRAS.map(cat => (
@@ -232,7 +232,7 @@ const SquadDeal = () => {
       <div className="text-center my-3 min-h-[26px] font-semibold text-foreground">
         {g.slotPhase === 'pickBox' && 'Pick one case to keep 💼'}
         {g.slotPhase === 'selecting' && <>Select <span className="text-primary">{g.opensThisRound}</span> case{g.opensThisRound === 1 ? '' : 's'} to eliminate</>}
-        {g.slotPhase === 'revealed' && 'Cases eliminated — see the Banker’s offer'}
+        {g.slotPhase === 'revealed' && 'Cases eliminated, see the Banker’s offer'}
         {g.slotPhase === 'offer' && g.bankerCalling && <span className="text-primary inline-flex items-center gap-2 animate-pulse"><Phone className="w-4 h-4" /> The Banker is calling…</span>}
         {g.slotPhase === 'final' && 'Your case or the last one?'}
       </div>

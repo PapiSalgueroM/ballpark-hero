@@ -200,7 +200,7 @@ export function F1DriverBoard() {
                   {puzzle.driverName}
                 </p>
                 <p className="text-zinc-400">
-                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''} — <span className="text-red-400 font-bold">{score} pts</span>
+                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-red-400 font-bold">{score} pts</span>
                 </p>
               </>
             ) : (

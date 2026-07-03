@@ -11,7 +11,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
       <DialogContent className="max-w-md bg-card border-border text-foreground max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-display text-primary text-center">
-            How to Play — Build Your XI
+            How to Play: Build Your XI
           </DialogTitle>
         </DialogHeader>
 
@@ -26,7 +26,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
               <li>• Choose one of <span className="text-primary font-semibold">6 formations</span> (4-3-3, 4-4-2, etc.)</li>
               <li>• For each position, a <span className="text-foreground font-semibold">club or nation</span> is randomly assigned via the spinner</li>
               <li>• Type a player who plays (or played) for that team and submit</li>
-              <li>• AI verifies your pick — if valid, the slot is filled!</li>
+              <li>• AI verifies your pick: if valid, the slot is filled!</li>
             </ul>
           </section>
 
@@ -43,7 +43,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
             <h3 className="font-bold text-foreground mb-2">📝 Filling Positions</h3>
             <ul className="space-y-1.5 text-muted-foreground">
               <li>• Tap any empty position on the pitch to select it</li>
-              <li>• Type a player name — suggestions will appear to help</li>
+              <li>• Type a player name. Suggestions will appear to help</li>
               <li>• Each player can only be used <span className="text-primary font-semibold">once</span></li>
               <li>• Fill all 11 spots to complete your squad</li>
             </ul>

@@ -173,7 +173,7 @@ export function getFifaRank(team: string): number {
   return FIFA_RANK[team] || 999;
 }
 
-/** Pick winner with weighted randomness — higher ranked wins 65%, lower 35% */
+/** Pick winner with weighted randomness: higher ranked wins 65%, lower 35% */
 export function rankWinner(a: string, b: string): string {
   const rankA = getFifaRank(a);
   const rankB = getFifaRank(b);
@@ -257,7 +257,7 @@ function gc(letter: string) {
 
 /* ───── helpers ───── */
 
-/** Generate the 3 round-robin matchups for a 4-team group (0v1, 2v3, 0v2, 1v3, 0v3, 1v2) — FIFA standard pairing */
+/** Generate the 3 round-robin matchups for a 4-team group (0v1, 2v3, 0v2, 1v3, 0v3, 1v2): FIFA standard pairing */
 function getMatchups(teams: TeamSlot[]): [number, number][] {
   return [
     [0, 1],
@@ -409,7 +409,7 @@ const PlayoffSlotsPanel = ({ picks, onPick, onAutoPickPlayoffs }: PlayoffSlotsPa
         <div className="mt-3 rounded-lg bg-[hsl(150,15%,10%)] border border-[hsl(150,20%,18%)] p-4 space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-[hsl(150,15%,55%)] text-xs sm:text-sm">
-              Pick the winner of each playoff — they'll replace the TBD slot in their group.
+              Pick the winner of each playoff. They'll replace the TBD slot in their group.
             </p>
             {pickedCount < 6 && (
               <SmallAutoButton
@@ -1242,7 +1242,7 @@ const WorldCupPredictor = () => {
             <Trophy className="w-8 h-8 text-[hsl(45,90%,55%)]" />
           </div>
           <p className="text-[hsl(150,15%,60%)] text-sm sm:text-base">
-           USA <FlagImg name="USA" /> · Mexico <FlagImg name="Mexico" /> · Canada <FlagImg name="Canada" /> — 48 Teams · 12 Groups
+           USA <FlagImg name="USA" /> · Mexico <FlagImg name="Mexico" /> · Canada <FlagImg name="Canada" />, 48 Teams · 12 Groups
           </p>
           {champion && !viewingSharedBracket && (
             <div className="mt-4 space-y-3">
@@ -1250,7 +1250,7 @@ const WorldCupPredictor = () => {
                 score=""
                 gameName="World Cup 2026 Bracket"
                 gamePath="/world-cup-bracket"
-                customText={`🏆 My World Cup 2026 prediction — I've got ${champion} winning it all! Make yours at douknowball.com/world-cup-bracket`}
+                customText={`🏆 My World Cup 2026 prediction: I've got ${champion} winning it all! Make yours at douknowball.com/world-cup-bracket`}
               />
               <button
                 onClick={handleSaveBracket}
@@ -1498,19 +1498,19 @@ const WorldCupPredictor = () => {
       <div className="max-w-5xl mx-auto px-4">
         <GameSeoContent
           title="World Cup 2026 Bracket Builder | DoUKnowBall"
-          description="Build your complete World Cup 2026 bracket — predict every match from the group stage through the knockout rounds to the final. Share your bracket with friends and compare predictions."
+          description="Build your complete World Cup 2026 bracket: predict every match from the group stage through the knockout rounds to the final. Share your bracket with friends and compare predictions."
           howToPlay={[
             "Pick winners for each group stage match to determine which teams advance to the knockouts.",
             "Fill in the knockout bracket from the Round of 32 all the way to the Final.",
             "Share your completed bracket with friends, save it to your account, and see how others predicted."
           ]}
           examples={[
-            "Group A — USA, Mexico, Morocco, and more competing for Round of 32 spots",
-            "Group B — France, Argentina, Brazil among the favorites",
-            "Round of 32 — First knockout stage with 32 teams advancing",
-            "Quarter-finals — Eight teams battle for a semi-final spot",
+            "Group A: USA, Mexico, Morocco, and more competing for Round of 32 spots",
+            "Group B: France, Argentina, Brazil among the favorites",
+            "Round of 32: First knockout stage with 32 teams advancing",
+            "Quarter-finals: Eight teams battle for a semi-final spot",
             "Predict the Golden Boot winner, Best Young Player, and Golden Glove",
-            "Final at MetLife Stadium, New Jersey — July 19, 2026"
+            "Final at MetLife Stadium, New Jersey, July 19, 2026"
           ]}
         />
         <GameNav />

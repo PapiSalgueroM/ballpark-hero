@@ -44,7 +44,7 @@ const Conquest = () => {
           </div>
           <ConquestBoard />
           <GameSeoContent
-            title="NFL Conquest — Territory Domination Game"
+            title="NFL Conquest: Territory Domination Game"
             description="Watch 32 NFL teams battle across the US map for total domination. Spin the wheel, simulate realistic play-by-play games, steal players, and conquer every state."
             howToPlay={[
               "Watch NFL teams battle for control of US states in simulated play-by-play matchups.",

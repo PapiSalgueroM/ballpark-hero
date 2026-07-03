@@ -1,10 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useNFLCareer } from '@/hooks/useNFLCareer';
 import { NFLCareerHowToPlay } from '@/components/nfl-career/NFLCareerHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
-import { Search, Flag, HelpCircle, RotateCcw } from 'lucide-react';
+import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
+import { NFL_ROSTER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
+import { Flag, HelpCircle, RotateCcw } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
@@ -20,50 +22,19 @@ const NFLCareer = () => {
     score,
     gameStatus,
     guessHistory,
+    excludedNames,
     makeGuess,
     giveUp,
     shareText,
-    playerNames,
   } = useNFLCareer();
 
   const [showHelp, setShowHelp] = useState(false);
   const [input, setInput] = useState('');
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedIdx, setSelectedIdx] = useState(-1);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  const filtered = input.length >= 2
-    ? playerNames.filter(n => n.toLowerCase().includes(input.toLowerCase()))
-    : [];
-
-  const handleSelect = (name: string) => {
-    setShowSuggestions(false);
-    setSelectedIdx(-1);
-    makeGuess(name);
+  const handleSelect = (entity: PlayerEntity) => {
+    makeGuess(entity.name);
     setInput('');
   };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') { setShowSuggestions(false); return; }
-    if (e.key === 'ArrowDown') { e.preventDefault(); setSelectedIdx(p => Math.min(p + 1, filtered.length - 1)); return; }
-    if (e.key === 'ArrowUp') { e.preventDefault(); setSelectedIdx(p => Math.max(p - 1, -1)); return; }
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      if (selectedIdx >= 0 && filtered[selectedIdx]) handleSelect(filtered[selectedIdx]);
-      else if (filtered.length > 0) handleSelect(filtered[0]);
-      else if (input.trim()) { makeGuess(input.trim()); setInput(''); }
-    }
-  };
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) setShowSuggestions(false);
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
-
-  useEffect(() => { setSelectedIdx(-1); }, [filtered.length]);
 
   return (
     <main className="min-h-screen bg-background">
@@ -125,37 +96,14 @@ const NFLCareer = () => {
         {/* Guess input */}
         {gameStatus === 'playing' && (
           <div className="mb-8 max-w-md mx-auto">
-            <div ref={containerRef} className="relative">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => { setInput(e.target.value); setShowSuggestions(true); }}
-                  onFocus={() => input.length >= 2 && setShowSuggestions(true)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Type player name to guess..."
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  autoComplete="off"
-                />
-              </div>
-              {showSuggestions && filtered.length > 0 && (
-                <div className="absolute z-50 w-full mt-1 bg-card border border-border rounded-xl shadow-xl max-h-60 overflow-y-auto">
-                  {filtered.map((name, idx) => (
-                    <button
-                      key={name}
-                      type="button"
-                      onClick={() => handleSelect(name)}
-                      className={`w-full text-left px-4 py-2.5 text-sm text-foreground transition-colors first:rounded-t-xl last:rounded-b-xl ${
-                        idx === selectedIdx ? 'bg-secondary' : 'hover:bg-secondary/60'
-                      }`}
-                    >
-                      {name}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <PlayerAutocomplete
+              value={input}
+              onChange={setInput}
+              onSelect={handleSelect}
+              searchOptions={{ source: NFL_ROSTER_SOURCE, exclude: excludedNames }}
+              placeholder="Type player name to guess..."
+              validateOnly
+            />
             <div className="flex justify-center mt-4">
               <button
                 onClick={giveUp}

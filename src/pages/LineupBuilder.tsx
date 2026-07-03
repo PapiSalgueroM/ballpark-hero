@@ -313,12 +313,12 @@ const LineupBuilder = () => {
             "Submit your full XI for an AI-powered evaluation and rating",
           ]}
           examples={[
-            "GK from Real Madrid — Thibaut Courtois",
-            "CB from Barcelona — Ronald Araújo",
-            "LB from Liverpool — Andrew Robertson",
-            "CM from Manchester City — Rodri",
-            "RW from Arsenal — Bukayo Saka",
-            "ST from Bayern Munich — Harry Kane",
+            "GK from Real Madrid: Thibaut Courtois",
+            "CB from Barcelona: Ronald Araújo",
+            "LB from Liverpool: Andrew Robertson",
+            "CM from Manchester City: Rodri",
+            "RW from Arsenal: Bukayo Saka",
+            "ST from Bayern Munich: Harry Kane",
             "Formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1"
           ]}
         />

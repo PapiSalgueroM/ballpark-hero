@@ -181,7 +181,7 @@ export function GuessTheNationBoard() {
 
   const shareScore = isWon
     ? `I guessed today's Nation in ${gameState.revealedClues} clue${gameState.revealedClues !== 1 ? 's' : ''} on DoUKnowBall!\nScore: ${gameState.score} 🌍`
-    : `I couldn't guess today's Nation — it was ${gameState.puzzle.countryName} 🌍`;
+    : `I couldn't guess today's Nation. It was ${gameState.puzzle.countryName} 🌍`;
 
   return (
     <div ref={gameRef} className="min-h-screen bg-background text-foreground">
@@ -246,7 +246,7 @@ export function GuessTheNationBoard() {
                       </>
                     ) : (
                       <p className="text-muted-foreground italic text-sm">
-                        {CLUE_LABELS[i]} — {POINTS_BY_CLUE[i]} pts
+                        {CLUE_LABELS[i]} - {POINTS_BY_CLUE[i]} pts
                       </p>
                     )}
                   </div>

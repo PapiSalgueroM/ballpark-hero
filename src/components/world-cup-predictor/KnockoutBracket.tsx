@@ -415,7 +415,7 @@ const MatchCard = ({ match, onPick, isFinal }: MatchCardProps) => {
   const bothTeams = !!teamA && !!teamB;
 
   const shortName = (name: string) => {
-    if (!name) return <span>—</span>;
+    if (!name) return <span>TBD</span>;
     const display = name.length > 12 ? name.slice(0, 10) + "…" : name;
     return <><FlagImg name={name} />{display}</>;
   };

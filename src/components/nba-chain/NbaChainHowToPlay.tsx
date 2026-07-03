@@ -32,7 +32,7 @@ export function NbaChainHowToPlay({ open, onOpenChange }: NbaChainHowToPlayProps
           <div>
             <h3 className="font-bold mb-1">🔗 Valid Connections</h3>
             <p className="text-muted-foreground">
-              Two players are connected if they played on the same NBA team at any point — even partial seasons, mid-season trades, or short stints count.
+              Two players are connected if they played on the same NBA team at any point: even partial seasons, mid-season trades, or short stints count.
             </p>
           </div>
 

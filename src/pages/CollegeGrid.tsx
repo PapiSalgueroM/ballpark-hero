@@ -143,12 +143,12 @@ const CollegeGrid = () => {
 
         <GameSeoContent
           title="College Football Grid | DoUKnowBall"
-          description="A daily 3×3 grid puzzle where each cell requires a college football player matching both the row and column criteria — schools, Heisman winners, All-Americans, draft picks and more."
+          description="A daily 3×3 grid puzzle where each cell requires a college football player matching both the row and column criteria: schools, Heisman winners, All-Americans, draft picks and more."
           howToPlay={[
             'Each cell requires a college football player who satisfies both the row and column attribute',
             'Attributes include schools, conferences, awards (Heisman, All-American), draft status and positions',
-            'Correct answers show a rarity percentage — rarer picks earn a better overall score',
-            'New grid at midnight — same challenge for everyone. 15 guesses to complete it.',
+            'Correct answers show a rarity percentage. Rarer picks earn a better overall score',
+            'New grid at midnight, same challenge for everyone. 15 guesses to complete it.',
           ]}
           examples={[
             "Alabama + Heisman Winner = Derrick Henry, Mark Ingram",

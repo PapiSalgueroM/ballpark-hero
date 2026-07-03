@@ -32,7 +32,7 @@ export function HockeyCareerHowToPlay({ open, onOpenChange }: Props) {
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--hk-silver))]">Daily Challenge</p>
-            <p className="text-muted-foreground">New player at midnight — share your score!</p>
+            <p className="text-muted-foreground">New player at midnight. Share your score!</p>
           </div>
         </div>
       </DialogContent>

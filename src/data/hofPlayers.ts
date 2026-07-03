@@ -35,7 +35,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Defensive midfielder', 'Spanish international', 'One-club man in La Liga'],
     answer: 'Sergio Busquets',
     verdict: 'borderline',
-    funFact: 'The invisible metronome — you don\'t notice him until he\'s gone.',
+    funFact: 'The invisible metronome, you don\'t notice him until he\'s gone.',
   },
   {
     id: 'soc-4',
@@ -82,7 +82,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['First overall draft pick', 'Won a national championship in college', 'Career cut short by poor play and injuries'],
     answer: 'JaMarcus Russell',
     verdict: 'bust',
-    funFact: 'Considered one of the biggest draft busts in NFL history — out of the league by age 25.',
+    funFact: 'Considered one of the biggest draft busts in NFL history, out of the league by age 25.',
   },
   {
     id: 'nfl-4',
@@ -111,7 +111,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Shooting guard', 'Played in the 1990s dynasty', 'Won two three-peats'],
     answer: 'Michael Jordan',
     verdict: 'hof',
-    funFact: 'Perfect 6-0 in NBA Finals — never lost a championship series.',
+    funFact: 'Perfect 6-0 in NBA Finals, never lost a championship series.',
   },
   {
     id: 'nba-2',
@@ -147,7 +147,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Big man drafted in 2007', 'Struggled with weight and motivation', 'Played for Portland'],
     answer: 'Greg Oden',
     verdict: 'bust',
-    funFact: 'Drafted ahead of Kevin Durant — injuries made it one of the biggest what-ifs ever.',
+    funFact: 'Drafted ahead of Kevin Durant, injuries made it one of the biggest what-ifs ever.',
   },
 
   // ── BASEBALL ──
@@ -205,7 +205,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Center from Canada', 'Known as "The Great One"', 'Played in the 1980s-90s'],
     answer: 'Wayne Gretzky',
     verdict: 'hof',
-    funFact: 'Holds or shares 61 NHL records — his number 99 is retired league-wide.',
+    funFact: 'Holds or shares 61 NHL records, and his number 99 is retired league-wide.',
   },
   {
     id: 'nhl-2',
@@ -223,7 +223,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Russian forward drafted in 2012', 'Played for a struggling expansion-era team', 'Returned to the KHL'],
     answer: 'Nail Yakupov',
     verdict: 'bust',
-    funFact: 'The top pick ahead of a stacked 2012 draft class — never found his NHL footing.',
+    funFact: 'The top pick ahead of a stacked 2012 draft class, never found his NHL footing.',
   },
   {
     id: 'nhl-4',
@@ -232,7 +232,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Right wing from Canada', 'Played 26 NHL seasons', 'Known as "Mr. Hockey"'],
     answer: 'Gordie Howe',
     verdict: 'hof',
-    funFact: 'Played in the NHL across five different decades — from the 1940s to the 1980s.',
+    funFact: 'Played in the NHL across five different decades, from the 1940s to the 1980s.',
   },
   {
     id: 'nhl-5',

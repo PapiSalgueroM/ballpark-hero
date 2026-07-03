@@ -260,7 +260,7 @@ export default function Leaderboard() {
   return (
     <>
       <PageSeo
-        title="Daily Leaderboard — Top Players Today | DoUKnowBall"
+        title="Daily Leaderboard: Top Players Today | DoUKnowBall"
         description="See who's completed the most games today on DoUKnowBall. Compete for the top spot on the daily leaderboard!"
         path="/leaderboard"
       />
@@ -298,11 +298,11 @@ export default function Leaderboard() {
                 <TabsContent value="daily">
                   <Card>
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg">Top 50 — Games Completed Today</CardTitle>
+                      <CardTitle className="text-lg">Top 50: Games Completed Today</CardTitle>
                     </CardHeader>
                     <CardContent>
                       {dailyLeaderboard.length === 0 ? (
-                        <p className="text-center text-muted-foreground py-12">No games played yet today — be the first!</p>
+                        <p className="text-center text-muted-foreground py-12">No games played yet today. Be the first!</p>
                       ) : (
                         <>
                           <div className="hidden sm:grid grid-cols-[2.5rem_1fr_5rem_5rem_4.5rem] gap-2 px-3 pb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider border-b border-border mb-2">
@@ -345,7 +345,7 @@ export default function Leaderboard() {
                                     {entry.current_streak > 0 ? (
                                       <><Flame className="w-3.5 h-3.5 text-orange-500" /><span className="font-medium">{entry.current_streak}</span></>
                                     ) : (
-                                      <span className="text-muted-foreground">—</span>
+                                      <span className="text-muted-foreground">-</span>
                                     )}
                                   </span>
                                   <span className="sm:hidden" />
@@ -423,7 +423,7 @@ export default function Leaderboard() {
                   <Card>
                     <CardHeader className="pb-3">
                       <CardTitle className="text-lg">
-                        Top 25 — {SPORT_FILTERS.find((s) => s.key === selectedSport)?.label}
+                        Top 25: {SPORT_FILTERS.find((s) => s.key === selectedSport)?.label}
                       </CardTitle>
                     </CardHeader>
                     <CardContent>

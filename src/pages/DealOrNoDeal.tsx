@@ -247,7 +247,7 @@ const DealOrNoDeal = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Deal or No Deal — Bank or Gamble Against the Banker | DoUKnowBall"
+        title="Deal or No Deal: Bank or Gamble Against the Banker | DoUKnowBall"
         description="Play Deal or No Deal free: classic cash mode or Player Edition, where every case hides a real footballer's market value. Beat the Banker."
         path="/deal-or-no-deal"
       />
@@ -527,7 +527,7 @@ const DealOrNoDeal = () => {
         </div>
 
         <GameSeoContent
-          title="Deal or No Deal — The Banker Game"
+          title="Deal or No Deal: The Banker Game"
           description="A sports take on the classic Deal or No Deal. Play for cash, or switch to Player Edition where every case hides a real footballer and you win their market value."
           howToPlay={[
             'Pick one case to keep as your own.',

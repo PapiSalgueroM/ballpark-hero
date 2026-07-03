@@ -103,7 +103,7 @@ const CareerGame = () => {
             CAREER QUIZ
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">
-            Uncover boxes to reveal a player's career — then guess who it is!
+            Uncover boxes to reveal a player's career, then guess who it is!
           </p>
 
           {/* Daily / Unlimited toggle */}
@@ -260,12 +260,12 @@ const CareerGame = () => {
             'The fewer boxes and guesses you use, the better your score',
           ]}
           examples={[
-            'Cristiano Ronaldo — Sporting → Man United → Real Madrid → Juventus → Man United → Al Nassr',
-            'Zlatan Ibrahimović — Ajax → Juventus → Inter → Barcelona → AC Milan → PSG → Man United → LA Galaxy → AC Milan',
-            'Thierry Henry — Monaco → Juventus → Arsenal → Barcelona → New York Red Bulls',
-            'David Beckham — Man United → Real Madrid → LA Galaxy → AC Milan → PSG',
-            'Ronaldinho — Grêmio → PSG → Barcelona → AC Milan → Flamengo',
-            'Samuel Eto\'o — Real Madrid → Mallorca → Barcelona → Inter → Chelsea',
+            'Cristiano Ronaldo: Sporting → Man United → Real Madrid → Juventus → Man United → Al Nassr',
+            'Zlatan Ibrahimović: Ajax → Juventus → Inter → Barcelona → AC Milan → PSG → Man United → LA Galaxy → AC Milan',
+            'Thierry Henry: Monaco → Juventus → Arsenal → Barcelona → New York Red Bulls',
+            'David Beckham: Man United → Real Madrid → LA Galaxy → AC Milan → PSG',
+            'Ronaldinho: Grêmio → PSG → Barcelona → AC Milan → Flamengo',
+            'Samuel Eto\'o: Real Madrid → Mallorca → Barcelona → Inter → Chelsea',
           ]}
         />
 

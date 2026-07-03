@@ -9,8 +9,8 @@ const PerfectLineupNhl = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <PageSeo
-        title="Perfect Lineup: NHL — Build a Dream Line Under Random Constraints | DoUKnowBall"
-        description="Build an NHL dream line — three forwards, two defensemen and a goalie — where every slot demands a player from a random team or era, then simulate and share."
+        title="Perfect Lineup: NHL Dream Line Under Random Constraints | DoUKnowBall"
+        description="Build an NHL dream line: three forwards, two defensemen and a goalie, where every slot demands a player from a random team or era, then simulate and share."
         path="/perfect-lineup-nhl"
       />
       <GameNavbar />
@@ -18,7 +18,7 @@ const PerfectLineupNhl = () => {
         <header className="text-center mb-6 px-4">
           <h1 className="text-3xl font-black text-foreground">🏒 Perfect Lineup: NHL</h1>
           <p className="text-muted-foreground mt-1 max-w-xl mx-auto">
-            Build a dream line — LW, C, RW, two defensemen and a goalie — but constrained slots only
+            Build a dream line: LW, C, RW, two defensemen and a goalie, but constrained slots only
             accept a player from that team or era. Then simulate the game and share your result.
           </p>
         </header>
@@ -26,7 +26,7 @@ const PerfectLineupNhl = () => {
         <GenericLineupBoard config={NHL_LINEUP_CONFIG} />
 
         <GameSeoContent
-          title="Perfect Lineup: NHL — Daily Hockey Line Builder"
+          title="Perfect Lineup: NHL Daily Hockey Line Builder"
           description="Perfect Lineup: NHL gives you a six-slot hockey line where most slots are locked to a specific franchise or era. Pick a real eligible player for every position, then run a simulation that scores your line on talent and chemistry and turns it into a shareable result."
           howToPlay={[
             'Each slot shows a position (LW, C, RW, D, D, G) and often a team or era constraint.',

@@ -78,7 +78,7 @@ export interface PowerupDef {
 }
 
 export const POWERUPS: PowerupDef[] = [
-  { id: 'invincibility', label: 'Invincibility', icon: '🛡️', description: 'Survive your next loss — keep all states and stay alive.' },
+  { id: 'invincibility', label: 'Invincibility', icon: '🛡️', description: 'Survive your next loss, keep all states and stay alive.' },
   { id: 'free_agent', label: 'Free Agent Signing', icon: '✍️', description: 'Sign a top free agent or eliminated player to your roster.' },
   { id: 'upgrade', label: 'Upgrade', icon: '⬆️', description: 'Boost a random roster player to 99 OVR for your next battle.' },
   { id: 'legend', label: 'All-Time Great', icon: '🐐', description: 'Add your franchise legend at 99 OVR permanently.' },

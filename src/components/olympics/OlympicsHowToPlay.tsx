@@ -18,7 +18,7 @@ export default function OlympicsHowToPlay() {
         <div className="space-y-3 text-sm text-muted-foreground">
           <p>Guess the mystery athlete from progressive clues about their career at the Games.</p>
           <ul className="list-disc pl-5 space-y-1">
-            <li>Start with the <strong>sport/discipline</strong> — guess early for max points!</li>
+            <li>Start with the <strong>sport/discipline</strong>. Guess early for max points!</li>
             <li>Reveal more clues: country, year, achievements, medals</li>
             <li>Scoring: <strong>1000</strong> → <strong>100</strong> across 7 clue levels</li>
             <li>New challenge every day at midnight</li>

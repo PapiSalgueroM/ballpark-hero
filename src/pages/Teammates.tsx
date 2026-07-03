@@ -188,20 +188,20 @@ const Teammates = () => {
 
         <GameSeoContent
           title="Teammates or Not? | DoUKnowBall"
-          description="Test your sports knowledge — were these two athletes ever on the same team? Covers NFL, NBA, and soccer with fun facts and shareable scores."
+          description="Test your sports knowledge: were these two athletes ever on the same team? Covers NFL, NBA, and soccer with fun facts and shareable scores."
           howToPlay={[
             "Two athlete names are shown from NFL, NBA, or soccer",
             "Decide if they ever played on the same team",
             "Tap YES or NO to answer",
-            "Learn fun facts after each answer — 10 questions per round",
+            "Learn fun facts after each answer: 10 questions per round",
           ]}
           examples={[
-            "Messi & Neymar — YES (Barcelona, PSG)",
-            "LeBron James & Kyrie Irving — YES (Cleveland Cavaliers)",
-            "Tom Brady & Peyton Manning — NO (rivals, never teammates)",
-            "Ronaldo & Rooney — YES (Manchester United)",
-            "Kobe Bryant & Shaquille O'Neal — YES (LA Lakers)",
-            "Zidane & Ronaldinho — NO (never played on the same club)"
+            "Messi & Neymar: YES (Barcelona, PSG)",
+            "LeBron James & Kyrie Irving: YES (Cleveland Cavaliers)",
+            "Tom Brady & Peyton Manning: NO (rivals, never teammates)",
+            "Ronaldo & Rooney: YES (Manchester United)",
+            "Kobe Bryant & Shaquille O'Neal: YES (LA Lakers)",
+            "Zidane & Ronaldinho: NO (never played on the same club)"
           ]}
         />
 

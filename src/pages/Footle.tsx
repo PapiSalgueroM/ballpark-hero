@@ -139,7 +139,7 @@ const Index = () => {
               ))}
             </div>
 
-            {/* Daily tier banner — visible before first guess and throughout */}
+            {/* Daily tier banner: visible before first guess and throughout */}
             {mode === 'daily' && (
               <div className={cn(
                 'inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold mt-3',
@@ -151,7 +151,7 @@ const Index = () => {
               </div>
             )}
 
-            {/* Difficulty selector — unlimited mode only */}
+            {/* Difficulty selector: unlimited mode only */}
             {mode === 'unlimited' && (
               <div className="flex items-center justify-center gap-2 mt-3">
                 {(['easy', 'hard', 'insane'] as const).map((d) => (
@@ -292,22 +292,22 @@ const Index = () => {
 
         {/* Game Navigation */}
         <GameSeoContent
-          title="Footle — Soccer Player Guessing Game"
+          title="Footle: Soccer Player Guessing Game"
           description="Guess the mystery soccer player in 8 tries. Each guess reveals clues about the player's club, league, nationality, position, and age. One of 30+ free daily sports trivia games."
           howToPlay={[
             "Type a soccer player's name and submit your guess. You get 8 attempts.",
-            "After each guess, colored tiles show how close you are — green means correct, yellow means close.",
+            "After each guess, colored tiles show how close you are: green means correct, yellow means close.",
             "Use the clues to narrow down the mystery player. A new puzzle is available every day."
           ]}
           examples={[
-            "Lionel Messi — Inter Miami, MLS, Argentina, Forward",
-            "Erling Haaland — Manchester City, Premier League, Norway, Forward",
-            "Jude Bellingham — Real Madrid, La Liga, England, Midfielder",
-            "Kylian Mbappé — Real Madrid, La Liga, France, Forward",
-            "Bukayo Saka — Arsenal, Premier League, England, Winger",
-            "Vinícius Júnior — Real Madrid, La Liga, Brazil, Forward",
-            "Pedri — Barcelona, La Liga, Spain, Midfielder",
-            "Florian Wirtz — Bayer Leverkusen, Bundesliga, Germany, Midfielder"
+            "Lionel Messi: Inter Miami, MLS, Argentina, Forward",
+            "Erling Haaland: Manchester City, Premier League, Norway, Forward",
+            "Jude Bellingham: Real Madrid, La Liga, England, Midfielder",
+            "Kylian Mbappé: Real Madrid, La Liga, France, Forward",
+            "Bukayo Saka: Arsenal, Premier League, England, Winger",
+            "Vinícius Júnior: Real Madrid, La Liga, Brazil, Forward",
+            "Pedri: Barcelona, La Liga, Spain, Midfielder",
+            "Florian Wirtz: Bayer Leverkusen, Bundesliga, Germany, Midfielder"
           ]}
         />
         <GameNav />

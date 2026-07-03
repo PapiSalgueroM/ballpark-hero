@@ -64,7 +64,7 @@ const NbaConnect4 = () => {
             NBA CONNECT 4
           </h1>
           <p className="text-muted-foreground text-sm">
-            Play Connect 4 with NBA trivia — name players matching team and stat criteria to claim cells and get four in a row.
+            Play Connect 4 with NBA trivia: name players matching team and stat criteria to claim cells and get four in a row.
           </p>
           <button
             onClick={() => setShowHowToPlay(true)}
@@ -274,11 +274,11 @@ const NbaConnect4 = () => {
 
         <GameSeoContent
           title="Pro Basketball Connect 4 | DoUKnowBall"
-          description="Connect four basketball players in a row by finding what links them together — teams, awards, colleges or stats."
+          description="Connect four basketball players in a row by finding what links them together: teams, awards, colleges or stats."
           howToPlay={[
             "Pick a column to drop your piece into the lowest empty row",
             "Name an NBA player who matches both the column and row criteria",
-            "Valid answers place your piece — first to get 4 in a row wins",
+            "Valid answers place your piece. First to get 4 in a row wins",
             "Each player can only be used once per game",
           ]}
           examples={[

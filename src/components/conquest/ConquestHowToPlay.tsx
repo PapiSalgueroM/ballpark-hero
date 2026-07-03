@@ -61,7 +61,7 @@ export function ConquestHowToPlay({ open, onOpenChange }: ConquestHowToPlayProps
           <section>
             <h3 className="font-bold text-foreground mb-2">🗺️ Map Colors</h3>
             <p className="text-muted-foreground">
-              Each team's territory is shown in their team color. Gray states are neutral — claimed automatically when targeted. Watch the map update in real time as teams expand and get eliminated.
+              Each team's territory is shown in their team color. Gray states are neutral, claimed automatically when targeted. Watch the map update in real time as teams expand and get eliminated.
             </p>
           </section>
 

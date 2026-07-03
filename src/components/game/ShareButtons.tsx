@@ -51,7 +51,7 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
   const todayStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
   const scoreCard = [
-    `${gameEmoji} ${gameName} — ${todayStr}`,
+    `${gameEmoji} ${gameName}: ${todayStr}`,
     ...(emojiGrid ? [emojiGrid] : []),
     `Score: ${score}`,
     `douknowball.com${gamePath}`,
@@ -192,7 +192,7 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
           </button>
           {igTooltip && (
             <div className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/90 text-white text-[10px] px-3 py-1.5 rounded-lg shadow-lg z-50 animate-fade-in">
-              Link copied — paste into your Instagram bio or story
+              Link copied, paste into your Instagram bio or story
             </div>
           )}
         </div>

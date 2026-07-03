@@ -91,7 +91,7 @@ export function NascarChainSearch({ usedDrivers, onSelect, disabled }: Props) {
 
       {isOpen && query.length >= 3 && filtered.length === 0 && !disabled && (
         <div className="absolute top-full mt-2 w-full bg-neutral-900 border border-red-600 rounded-xl shadow-2xl z-50 p-4 text-center text-neutral-500 text-sm">
-          No drivers found — you can still type any name and press Enter
+          No drivers found. You can still type any name and press Enter
         </div>
       )}
     </div>

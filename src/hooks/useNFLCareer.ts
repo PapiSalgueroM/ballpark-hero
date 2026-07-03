@@ -3,6 +3,7 @@ import { nflCareerPlayers } from '@/data/nflCareerPlayers';
 import { NFLCareerPlayer } from '@/types/nflCareer';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { normalizeName } from '@/lib/playerSearch';
 import { toast } from 'sonner';
 
 const TOTAL_CLUES = 6;
@@ -83,6 +84,11 @@ export function useNFLCareer() {
 
   const playerNames = useMemo(() => ensureAnswerInOptions(nflCareerPlayers.map(p => p.name), targetPlayer.name), [targetPlayer]);
 
+  // Normalized guesses so far, so the autocomplete can exclude players the
+  // user already tried (matching normalizeName's accent/case-insensitive
+  // rules used throughout the search layer).
+  const excludedNames = useMemo(() => new Set(guessHistory.map(normalizeName)), [guessHistory]);
+
   useGameCompletion('nfl-career', gameStatus !== 'playing', score);
 
   return {
@@ -93,6 +99,7 @@ export function useNFLCareer() {
     score,
     gameStatus,
     guessHistory,
+    excludedNames,
     makeGuess,
     giveUp,
     resetGame,

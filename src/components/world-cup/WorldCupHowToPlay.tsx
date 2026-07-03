@@ -20,7 +20,7 @@ export function WorldCupHowToPlay({ open, onOpenChange }: Props) {
           <DialogDescription>Guess the World Cup player or moment!</DialogDescription>
         </DialogHeader>
         <div className="space-y-4 text-sm text-muted-foreground">
-          <p>Clues are revealed one by one — each clue narrows down the mystery player.</p>
+          <p>Clues are revealed one by one. Each clue narrows down the mystery player.</p>
           <ul className="list-disc list-inside space-y-1">
             <li>Guess early for more points (up to 1,000!)</li>
             <li>Skip a clue to reveal the next one</li>

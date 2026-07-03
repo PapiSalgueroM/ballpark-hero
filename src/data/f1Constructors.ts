@@ -102,7 +102,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
       'Competitive from the 1960s through the 1980s',
       'Won 2 Constructors\' Championships',
       'Raced in various liveries including dark green and later blue',
-      'Founded by Jack Brabham, who won a championship in his own car — a unique achievement',
+      'Founded by Jack Brabham, who won a championship in his own car, a unique achievement',
     ],
   },
   {

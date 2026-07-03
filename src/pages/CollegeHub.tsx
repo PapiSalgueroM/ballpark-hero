@@ -14,7 +14,7 @@ const CollegeHub = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <PageSeo
-        title="College Games Hub — CFB & CBB Trivia | DoUKnowBall"
+        title="College Games Hub: CFB & CBB Trivia | DoUKnowBall"
         description="Every DoUKnowBall college sports game in one place: college football and college basketball grids, program guessers, and more."
         path="/college"
       />
@@ -58,11 +58,11 @@ const CollegeHub = () => {
 
         <GameSeoContent
           title="College Sports Games on DoUKnowBall"
-          description="The College Games Hub gathers every college football and college basketball game on DoUKnowBall into a single entry point — grids, program guessers, and clue games for fans of CFB and CBB."
+          description="The College Games Hub gathers every college football and college basketball game on DoUKnowBall into a single entry point: grids, program guessers, and clue games for fans of CFB and CBB."
           howToPlay={[
             'Pick any college football or college basketball game from the hub.',
             'Each game has its own rules, from 3x3 grids to progressive-clue guessers.',
-            'Come back daily — most college games have a fresh daily puzzle.',
+            'Come back daily. Most college games have a fresh daily puzzle.',
           ]}
         />
       </main>

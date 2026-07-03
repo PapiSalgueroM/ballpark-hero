@@ -156,7 +156,7 @@ const FantasyDraft = () => {
         setAnalysisB(data.teamB);
       }
     } catch {
-      // silent — analysis is supplementary
+      // silent, analysis is supplementary
     } finally {
       setAnalysisLoading(false);
     }
@@ -348,7 +348,7 @@ const FantasyDraft = () => {
         </main>
 
         <GameSeoContent
-          title="Fantasy Draft — Soccer Team Builder | DoUKnowBall"
+          title="Fantasy Draft: Soccer Team Builder | DoUKnowBall"
           description="Draft your ultimate soccer squad against an AI opponent. Pick 11 players in a snake draft, then simulate a full season to see who built the better team."
           howToPlay={[
             "Take turns drafting soccer players with the AI in a snake draft format (you pick, AI picks, repeat).",
@@ -356,10 +356,10 @@ const FantasyDraft = () => {
             "After drafting, simulate a full season and vote on whose team performed better."
           ]}
           examples={[
-            "Draft Mbappé as your striker — 95 pace, 91 shooting",
-            "Pick Rodri for midfield stability — 89 passing, 87 defending",
-            "Grab Virgil van Dijk for defense — 90 defending, 86 physical",
-            "Select Alisson for goalkeeper — 89 reflexes, 88 diving",
+            "Draft Mbappé as your striker: 95 pace, 91 shooting",
+            "Pick Rodri for midfield stability: 89 passing, 87 defending",
+            "Grab Virgil van Dijk for defense: 90 defending, 86 physical",
+            "Select Alisson for goalkeeper: 89 reflexes, 88 diving",
             "Criteria: Best Under-25 Squad, Highest Market Value XI",
             "Snake draft: You pick 1st, AI picks 2nd & 3rd, you pick 4th & 5th..."
           ]}

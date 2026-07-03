@@ -77,7 +77,7 @@ const GuessTransferValue = () => {
     <main className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
-        title="Guess The Transfer Value — Daily Soccer Market Value Game | DoUKnowBall"
+        title="Guess The Transfer Value: Daily Soccer Market Value Game | DoUKnowBall"
         description="Guess a real soccer player's transfer market value in 6 tries. New player every day."
         path="/guess-transfer-value"
       />
@@ -133,7 +133,7 @@ const GuessTransferValue = () => {
 
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-6 text-center">
                 <Stat label="Nationality" value={target.nationality} />
-                <Stat label="Age" value={String(target.age || '—')} />
+                <Stat label="Age" value={String(target.age || '-')} />
                 <Stat label="Matches" value={String(target.matches || 0)} />
                 <Stat label="Goals" value={String(target.goals || 0)} />
                 <Stat label="Assists" value={String(target.assists || 0)} />
@@ -286,7 +286,7 @@ const GuessTransferValue = () => {
         </div>
 
         <GameSeoContent
-          title="Guess The Transfer Value — Daily Soccer Market Value Game"
+          title="Guess The Transfer Value: Daily Soccer Market Value Game"
           description="Read a real soccer player's profile and guess their transfer market value in 6 tries. After each guess, see higher/lower and a hot/cold cue to narrow in."
           howToPlay={[
             'Look at the player profile: club, position, nationality, age, and season stats.',

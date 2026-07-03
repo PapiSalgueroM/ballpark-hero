@@ -83,7 +83,7 @@ const FootballDraft = () => {
             🏈 DRAFT GUESSER
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Guess what round each player was drafted — reveal clues progressively
+            Guess what round each player was drafted. Reveal clues progressively
           </p>
 
           {/* Daily / Unlimited toggle */}
@@ -166,7 +166,7 @@ const FootballDraft = () => {
               ) : (
                 <div className="flex items-center gap-3 text-muted-foreground">
                   <span className="text-xs font-semibold uppercase w-20">Size</span>
-                  <span className="text-sm italic">Hidden — reveal for a clue</span>
+                  <span className="text-sm italic">Hidden, reveal for a clue</span>
                 </div>
               )}
 
@@ -211,7 +211,7 @@ const FootballDraft = () => {
               ) : (
                 <div className="flex items-center gap-3 text-muted-foreground">
                   <span className="text-xs font-semibold uppercase w-20">Draft Year</span>
-                  <span className="text-sm italic">Hidden — reveal for a clue</span>
+                  <span className="text-sm italic">Hidden, reveal for a clue</span>
                 </div>
               )}
             </div>
@@ -339,21 +339,21 @@ const FootballDraft = () => {
 
         <GameSeoContent
           title="Pro Football Draft Guesser | DoUKnowBall"
-          description="A daily game where you guess what round NFL players were drafted based on progressively revealed clues — college, combine stats, and more."
+          description="A daily game where you guess what round NFL players were drafted based on progressively revealed clues: college, combine stats, and more."
           howToPlay={[
             'Each round shows a mystery NFL player with their position and college',
             'Reveal additional clues: size, 40-yard dash, bench press and vertical jump, then draft year',
             'Guess the draft round: 1st through 7th, or Undrafted',
             'Guess early for more: exact round = 30 pts with no clues, down to 15 after all clues; one off = 8, two off = 3',
-            'Play 5 players per game — new challenge daily',
+            'Play 5 players per game. New challenge daily',
           ]}
           examples={[
-            "Quarterback, Michigan, 6'4\", 4.90 40-yard dash — 6th Round (Tom Brady)",
-            "Defensive End, Ohio State, 6'5\", 4.67 40 — 1st Round (Chase Young)",
-            "Wide Receiver, Alabama, 6'1\", 4.27 40 — 1st Round (Henry Ruggs III)",
-            "Linebacker, Penn State, 6'2\", 4.39 40 — 1st Round (Micah Parsons)",
-            "Running Back, LSU, 5'11\", 4.40 40 — Undrafted (Darrel Williams)",
-            "Tight End, Iowa, 6'5\", 4.87 40 — 2nd Round (T.J. Hockenson)"
+            "Quarterback, Michigan, 6'4\", 4.90 40-yard dash: 6th Round (Tom Brady)",
+            "Defensive End, Ohio State, 6'5\", 4.67 40: 1st Round (Chase Young)",
+            "Wide Receiver, Alabama, 6'1\", 4.27 40: 1st Round (Henry Ruggs III)",
+            "Linebacker, Penn State, 6'2\", 4.39 40: 1st Round (Micah Parsons)",
+            "Running Back, LSU, 5'11\", 4.40 40: Undrafted (Darrel Williams)",
+            "Tight End, Iowa, 6'5\", 4.87 40: 2nd Round (T.J. Hockenson)"
           ]}
         />
 

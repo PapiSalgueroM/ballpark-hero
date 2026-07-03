@@ -208,7 +208,7 @@ const NbaChain = () => {
           howToPlay={[
             "Start with a given NBA player",
             "Name a player who was a teammate of the previous player",
-            "Keep the chain going as long as you can — no repeats allowed",
+            "Keep the chain going as long as you can, no repeats allowed",
             "Your best streak is saved locally so you can beat your record",
           ]}
           examples={[

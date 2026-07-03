@@ -161,7 +161,7 @@ export default function Olympics() {
                 <Award className="w-10 h-10 text-[hsl(43,85%,55%)] mx-auto mb-3" />
                 <p className="text-3xl font-display font-bold text-[hsl(43,85%,55%)] mb-1">{athlete.name}</p>
                 <p className="text-sm text-muted-foreground mb-1 inline-flex items-center justify-center gap-1">
-                  {athlete.sport} — <FlagImg name={EMOJI_TO_COUNTRY[athlete.country] || ''} size={16} />{EMOJI_TO_COUNTRY[athlete.country] || athlete.country}
+                  {athlete.sport}, <FlagImg name={EMOJI_TO_COUNTRY[athlete.country] || ''} size={16} />{EMOJI_TO_COUNTRY[athlete.country] || athlete.country}
                 </p>
                 <p className="text-xs text-muted-foreground mb-4">{athlete.gamesYear} {athlete.hostCity}</p>
                 {status === 'guessed' ? (
@@ -261,17 +261,17 @@ export default function Olympics() {
           title="Olympic Athlete Trivia | DoUKnowBall"
           description="Guess the mystery Olympic athlete from progressive clues about their sport, medal count, nationality, and iconic moments. Covers Summer and Winter Games."
           howToPlay={[
-            'Clues are revealed one at a time about the mystery Olympic athlete — sport, medals, era, and country.',
+            'Clues are revealed one at a time about the mystery Olympic athlete: sport, medals, era, and country.',
             'Submit your guess when you think you know who it is. Fewer clues means more points.',
             'Give up to reveal the answer if you\'re stuck. A new athlete is featured daily.',
           ]}
           examples={[
-            'Usain Bolt — Track & Field, Jamaica, 8 Gold Medals, 100m/200m',
-            'Michael Phelps — Swimming, USA, 23 Gold Medals, Most Decorated Olympian',
-            'Simone Biles — Gymnastics, USA, 7 Gold Medals, GOAT of gymnastics',
-            'Nadia Comăneci — Gymnastics, Romania, First Perfect 10, 1976 Montreal',
-            'Carl Lewis — Track & Field, USA, 9 Gold, Long Jump & 100m',
-            'Marit Bjørgen — Cross-Country Skiing, Norway, 8 Gold, Winter Games legend',
+            'Usain Bolt: Track & Field, Jamaica, 8 Gold Medals, 100m/200m',
+            'Michael Phelps: Swimming, USA, 23 Gold Medals, Most Decorated Olympian',
+            'Simone Biles: Gymnastics, USA, 7 Gold Medals, GOAT of gymnastics',
+            'Nadia Comăneci: Gymnastics, Romania, First Perfect 10, 1976 Montreal',
+            'Carl Lewis: Track & Field, USA, 9 Gold, Long Jump & 100m',
+            'Marit Bjørgen: Cross-Country Skiing, Norway, 8 Gold, Winter Games legend',
           ]}
         />
 

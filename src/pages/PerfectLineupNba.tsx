@@ -9,7 +9,7 @@ const PerfectLineupNba = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <PageSeo
-        title="Perfect Lineup: NBA — Build a Starting 5 Under Random Constraints | DoUKnowBall"
+        title="Perfect Lineup: NBA Starting 5 Under Random Constraints | DoUKnowBall"
         description="Build an NBA starting five where every slot demands a player from a random team or era, then simulate the game and share your scoreline."
         path="/perfect-lineup-nba"
       />
@@ -18,7 +18,7 @@ const PerfectLineupNba = () => {
         <header className="text-center mb-6 px-4">
           <h1 className="text-3xl font-black text-foreground">🏀 Perfect Lineup: NBA</h1>
           <p className="text-muted-foreground mt-1 max-w-xl mx-auto">
-            Build the best starting five you can — but constrained slots only accept a player from
+            Build the best starting five you can, but constrained slots only accept a player from
             that team or era. Then simulate the game and share your result.
           </p>
         </header>
@@ -26,7 +26,7 @@ const PerfectLineupNba = () => {
         <GenericLineupBoard config={NBA_LINEUP_CONFIG} />
 
         <GameSeoContent
-          title="Perfect Lineup: NBA — Daily Basketball Squad Builder"
+          title="Perfect Lineup: NBA Daily Basketball Squad Builder"
           description="Perfect Lineup: NBA gives you a starting five where most slots are locked to a specific franchise or era. Pick a real eligible player for every position, then run a simulation that scores your squad on talent and chemistry and turns it into a shareable scoreline."
           howToPlay={[
             'Each slot shows a position and often a team or era constraint.',

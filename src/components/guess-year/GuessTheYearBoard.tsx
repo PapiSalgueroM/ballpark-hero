@@ -101,7 +101,7 @@ export function GuessTheYearBoard() {
                       <p className="text-foreground">{clue}</p>
                     ) : (
                       <p className="text-muted-foreground italic">
-                        {POINTS_BY_CLUE[index]} points — clue locked
+                        {POINTS_BY_CLUE[index]} points, clue locked
                       </p>
                     )}
                   </div>

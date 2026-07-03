@@ -262,7 +262,7 @@ function OfferCard({ offer, onAccept, actionLabel }: { offer: ContractOffer; onA
         {offer.transferFee === 0 && offer.contractYears > 0 && <span className="text-emerald-400 font-semibold">Free transfer</span>}
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40">Tier {offer.club.tier}</span>
       </div>
-      {offer.isPayCut && <div className="text-[11px] text-amber-400">⚠️ Lower wages — but it's a dream move</div>}
+      {offer.isPayCut && <div className="text-[11px] text-amber-400">⚠️ Lower wages, but it's a dream move</div>}
       <Button onClick={onAccept} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
         {actionLabel || "Sign Contract ✍️"}
       </Button>
@@ -433,7 +433,7 @@ export default function SoccerCareer() {
 
   const handlePositionChange = useCallback((pos: string) => {
     setPosition(pos);
-    // Clear preview stats — they'll be regenerated when the player rolls
+    // Clear preview stats; they'll be regenerated when the player rolls
     setPreviewStats(null);
     setPreviewOvr(0);
     setRolledOvr(null);
@@ -717,7 +717,7 @@ export default function SoccerCareer() {
           title="Soccer Career Simulator | DoUKnowBall"
           description="Live out your soccer dream in this BitLife-style career simulator. Create a player, join a youth academy, develop skills, sign contracts, win trophies, and compete for the Ballon d'Or."
           howToPlay={[
-            "Create your player — choose name, nationality, position, and starting era to begin your career.",
+            "Create your player: choose name, nationality, position, and starting era to begin your career.",
             "Each season, develop your skills through training, handle contract offers, and compete for trophies.",
             "Win the Ballon d'Or, lead your team to World Cup glory, and build a legendary career timeline."
           ]}
@@ -753,11 +753,11 @@ export default function SoccerCareer() {
 
 /* ─── Overall tier info ─── */
 function getOverallTier(ovr: number): { label: string; color: string; bgColor: string } {
-  if (ovr >= 75) return { label: "Exceptional — Born Winner", color: "text-purple-400", bgColor: "bg-purple-500/15 border-purple-500/30" };
-  if (ovr >= 66) return { label: "Gifted — High Ceiling", color: "text-amber-400", bgColor: "bg-amber-500/15 border-amber-500/30" };
-  if (ovr >= 55) return { label: "Solid Foundation — Good Potential", color: "text-emerald-400", bgColor: "bg-emerald-500/15 border-emerald-500/30" };
-  if (ovr >= 40) return { label: "Promising — Hard Work Ahead", color: "text-blue-400", bgColor: "bg-blue-500/15 border-blue-500/30" };
-  return { label: "Raw Talent — Rough Around the Edges", color: "text-muted-foreground", bgColor: "bg-muted/20 border-border" };
+  if (ovr >= 75) return { label: "Exceptional: Born Winner", color: "text-purple-400", bgColor: "bg-purple-500/15 border-purple-500/30" };
+  if (ovr >= 66) return { label: "Gifted: High Ceiling", color: "text-amber-400", bgColor: "bg-amber-500/15 border-amber-500/30" };
+  if (ovr >= 55) return { label: "Solid Foundation: Good Potential", color: "text-emerald-400", bgColor: "bg-emerald-500/15 border-emerald-500/30" };
+  if (ovr >= 40) return { label: "Promising: Hard Work Ahead", color: "text-blue-400", bgColor: "bg-blue-500/15 border-blue-500/30" };
+  return { label: "Raw Talent: Rough Around the Edges", color: "text-muted-foreground", bgColor: "bg-muted/20 border-border" };
 }
 
 /* ─── Creation Screen ─── */
@@ -918,7 +918,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
       <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 text-center">
         <h3 className="text-lg font-black">🔄 Transfer Window</h3>
         <p className="text-xs text-muted-foreground mt-1">
-          {isExpiring ? "⚠️ Your contract is expiring — decide your future" : "End of season — review your options"}
+          {isExpiring ? "⚠️ Your contract is expiring. Decide your future" : "End of season. Review your options"}
         </p>
         <div className="flex items-center justify-center gap-3 mt-2 text-xs text-muted-foreground">
           <span>📋 {career.contractYearsLeft}yr left</span>
@@ -976,7 +976,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
         <div className="space-y-3">
           <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-center">
             <span className="text-sm font-bold">⭐ Dream Club Interest!</span>
-            <p className="text-xs text-muted-foreground mt-1">A top club wants you — but they're offering below market value</p>
+            <p className="text-xs text-muted-foreground mt-1">A top club wants you, but they're offering below market value</p>
           </div>
           <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} actionLabel="Accept pay cut for dream move ⭐" />
           <div className="flex gap-2">
@@ -1014,7 +1014,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
           </div>
           <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} />
           <Button variant="outline" onClick={onStay} className="w-full h-9 text-sm">
-            Changed my mind — stay at {career.currentClub}
+            Changed my mind, stay at {career.currentClub}
           </Button>
         </div>
       )}
@@ -1103,7 +1103,7 @@ function WorldCupResultCard({ wc, career, onDismiss }: { wc: WorldCupResult; car
       <div className="text-center space-y-2">
         <div className="text-4xl">{isWinner ? "🏆" : didNotQualify ? "😞" : "🌍"}</div>
         <h3 className="text-xl font-black">{isWinner ? "WORLD CUP WINNER!" : didNotQualify ? "World Cup Qualifiers" : `World Cup ${wc.year}`}</h3>
-        <p className="text-sm font-bold flex items-center justify-center gap-1"><FlagImg name={wc.nation} />{wc.nation} — {wc.result}</p>
+        <p className="text-sm font-bold flex items-center justify-center gap-1"><FlagImg name={wc.nation} />{wc.nation}: {wc.result}</p>
         {didNotQualify && (
           <p className="text-xs text-muted-foreground">Your nation failed to qualify for the tournament this time.</p>
         )}
@@ -1297,7 +1297,7 @@ function RivalrySummaryCard({ summary, career }: { summary: RivalrySummary; care
         <h3 className="text-xl font-black">
           {summary.overallWinner === "player" ? "RIVALRY WON!" : summary.overallWinner === "rival" ? "RIVALRY LOST" : "RIVALRY TIED"}
         </h3>
-        <p className="text-sm text-muted-foreground">{career.playerName} vs {rival.name} — Career Rivalry</p>
+        <p className="text-sm text-muted-foreground">{career.playerName} vs {rival.name}: Career Rivalry</p>
       </div>
       <div className="space-y-1.5">
         {summary.categories.map(c => (
@@ -1434,7 +1434,7 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss }: { bdor: BallonDorRes
           <p className="text-sm text-muted-foreground">You finished {bdor.playerRank === 2 ? "2nd" : "3rd"}! Legacy +5</p>
         )}
         {!isWinner && isNominated && bdor.playerRank !== null && bdor.playerRank > 3 && (
-          <p className="text-sm text-muted-foreground">You finished {bdor.playerRank}th — close but not enough this year</p>
+          <p className="text-sm text-muted-foreground">You finished {bdor.playerRank}th, close but not enough this year</p>
         )}
         {!isNominated && (
           <p className="text-sm text-muted-foreground">You were not nominated this year</p>
@@ -1689,7 +1689,7 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
       )}
 
       <ShareButtons
-        score={`${legacy.tier} — ${legacy.score}/100`}
+        score={`${legacy.tier}: ${legacy.score}/100`}
         gameName="Soccer Career"
         gamePath="/soccer-career"
         customText={generateShareText(career)}
@@ -1912,7 +1912,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
           >
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm font-bold text-amber-300">✅ Accept — Become the Cover Star</div>
+                <div className="text-sm font-bold text-amber-300">✅ Accept: Become the Cover Star</div>
                 <div className="text-[10px] text-muted-foreground mt-0.5">€25M payment · +5M followers · Legacy +10</div>
               </div>
               <span className="text-lg">🌟</span>
@@ -1924,7 +1924,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
           >
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm font-bold text-foreground">❌ Decline — Stay Selective</div>
+                <div className="text-sm font-bold text-foreground">❌ Decline: Stay Selective</div>
                 <div className="text-[10px] text-muted-foreground mt-0.5">Reputation +5 for being humble</div>
               </div>
               <span className="text-lg">🧘</span>
@@ -1944,7 +1944,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
           <h3 className="text-lg font-black">Social Media Update</h3>
           <div className="text-lg font-black text-blue-400">{formatFollowers(currentFollowers)} followers</div>
           {activeTierInfo && (
-            <div className="text-xs text-emerald-400 font-bold">{activeTierInfo.emoji} {activeTierInfo.name} — €{activeTierInfo.income}M/year</div>
+            <div className="text-xs text-emerald-400 font-bold">{activeTierInfo.emoji} {activeTierInfo.name}: €{activeTierInfo.income}M/year</div>
           )}
         </div>
         <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white">
@@ -2228,7 +2228,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               <div className={`rounded-lg p-4 border ${career.pendingAppealResult.success ? "bg-emerald-500/10 border-emerald-500/30" : "bg-red-500/10 border-red-500/30"}`}>
                 <p className="text-sm font-bold">
                   {career.pendingAppealResult.success
-                    ? "🎉 Ban Overturned — You are free to play!"
+                    ? "🎉 Ban Overturned. You are free to play!"
                     : `⚠️ You must serve the ${career.pendingAppealResult.banLength}-match ban.`}
                 </p>
                 <p className="text-xs text-muted-foreground mt-2">
@@ -2275,10 +2275,10 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               </div>
               <div className="space-y-2">
                 <Button onClick={onAcceptRetirement} className="w-full h-11 text-sm font-bold bg-amber-600 hover:bg-amber-500 text-white">
-                  👋 Hang Up the Boots — Retire
+                  👋 Hang Up the Boots: Retire
                 </Button>
                 <Button onClick={onDeclineRetirement} variant="outline" className="w-full h-11 text-sm font-bold">
-                  💪 Not Done Yet — Keep Playing
+                  💪 Not Done Yet: Keep Playing
                 </Button>
               </div>
             </div>

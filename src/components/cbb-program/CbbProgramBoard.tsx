@@ -72,7 +72,7 @@ export function CbbProgramBoard() {
             </div>
           )}
           {programsStatus === 'ready' && allPrograms.length === 0 && (
-            <p className="text-sm text-slate-500">No programs available yet — check back soon.</p>
+            <p className="text-sm text-slate-500">No programs available yet. Check back soon.</p>
           )}
 
           <GameNav />
@@ -169,7 +169,7 @@ export function CbbProgramBoard() {
                 <p className="text-3xl">🏆</p>
                 <p className="text-xl font-bold text-amber-400">{puzzle.school_name}</p>
                 <p className="text-slate-400">
-                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''} — <span className="text-amber-400 font-bold">{score} pts</span>
+                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-amber-400 font-bold">{score} pts</span>
                 </p>
               </>
             ) : (

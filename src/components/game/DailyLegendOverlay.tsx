@@ -33,7 +33,7 @@ export function DailyLegendOverlay({ streakDays, onDismiss }: DailyLegendOverlay
 
         {/* Subtitle */}
         <p className="text-muted-foreground text-sm md:text-base mb-6 leading-relaxed">
-          You completed all 37 games today — come back tomorrow to keep your streak alive!
+          You completed all 37 games today. Come back tomorrow to keep your streak alive!
         </p>
 
         {/* Streak */}

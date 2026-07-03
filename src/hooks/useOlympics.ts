@@ -65,7 +65,7 @@ export function useOlympics() {
     const clues: { label: string; value: string }[] = [];
     if (clueLevel >= 0) clues.push({ label: 'Sport', value: athlete.sport });
     if (clueLevel >= 1) clues.push({ label: 'Country', value: athlete.country });
-    if (clueLevel >= 2) clues.push({ label: 'The Games', value: `${athlete.gamesYear} — ${athlete.hostCity}` });
+    if (clueLevel >= 2) clues.push({ label: 'The Games', value: `${athlete.gamesYear}, ${athlete.hostCity}` });
     if (clueLevel >= 3) clues.push({ label: 'Achievement', value: athlete.achievement });
     if (clueLevel >= 4) clues.push({ label: 'Career Context', value: athlete.careerContext });
     if (clueLevel >= 5) clues.push({ label: 'Medals', value: athlete.medalSummary });
@@ -134,9 +134,9 @@ export function useOlympics() {
   const shareText = useMemo(() => {
     if (status === 'playing') return '';
     if (status === 'guessed') {
-      return `I guessed today's athlete in ${clueLevel + 1} clue${clueLevel > 0 ? 's' : ''} on DoUKnowBall! Score: ${score} — douknowball.com/olympics`;
+      return `I guessed today's athlete in ${clueLevel + 1} clue${clueLevel > 0 ? 's' : ''} on DoUKnowBall! Score: ${score}. douknowball.com/olympics`;
     }
-    return `I couldn't guess today's athlete on DoUKnowBall 😞 — douknowball.com/olympics`;
+    return `I couldn't guess today's athlete on DoUKnowBall 😞 douknowball.com/olympics`;
   }, [status, clueLevel, score]);
 
   const athleteNames = useMemo(

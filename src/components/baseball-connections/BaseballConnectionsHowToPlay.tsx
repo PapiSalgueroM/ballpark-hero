@@ -34,16 +34,16 @@ export function BaseballConnectionsHowToPlay({ open, onOpenChange }: Props) {
               <li>Select 5 players you think belong to the same group</li>
               <li>Tap "Submit" to check your selection</li>
               <li>Correct groups lock in and reveal their connection</li>
-              <li>Wrong guesses cost 1 life — you have 4 lives total</li>
+              <li>Wrong guesses cost 1 life, you have 4 lives total</li>
             </ul>
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--bb-red))]">Difficulty</p>
             <div className="space-y-1 text-muted-foreground">
-              <p><span className="text-yellow-400 font-semibold">🟡 Yellow</span> — Easiest</p>
-              <p><span className="text-emerald-400 font-semibold">🟢 Green</span> — Medium</p>
-              <p><span className="text-blue-400 font-semibold">🔵 Blue</span> — Hard</p>
-              <p><span className="text-purple-400 font-semibold">🟣 Purple</span> — Hardest</p>
+              <p><span className="text-yellow-400 font-semibold">🟡 Yellow</span>: Easiest</p>
+              <p><span className="text-emerald-400 font-semibold">🟢 Green</span>: Medium</p>
+              <p><span className="text-blue-400 font-semibold">🔵 Blue</span>: Hard</p>
+              <p><span className="text-purple-400 font-semibold">🟣 Purple</span>: Hardest</p>
             </div>
           </div>
           <div className="space-y-2">
