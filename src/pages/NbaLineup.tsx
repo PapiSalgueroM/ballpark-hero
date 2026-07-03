@@ -7,10 +7,11 @@ import { Footer } from '@/components/game/Footer';
 import NbaCourtLayout from '@/components/nba/NbaCourtLayout';
 import NbaTeamSpinner from '@/components/nba/NbaTeamSpinner';
 import NbaStatSpinner from '@/components/nba/NbaStatSpinner';
-import NbaPlayerSuggestions from '@/components/nba/NbaPlayerSuggestions';
+import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
+import type { PlayerEntity } from '@/lib/playerSearch';
 import { NbaHowToPlay } from '@/components/nba/NbaHowToPlay';
 import { cn } from '@/lib/utils';
-import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
+import { RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
@@ -36,6 +37,8 @@ const NbaLineup = () => {
     teamAssignments,
     // availablePositions not used in template
     totalStat,
+    currentTeamSource,
+    filledNormalizedNames,
     startGame,
     finishStatSpin,
     beginBuilding,
@@ -50,16 +53,16 @@ const NbaLineup = () => {
   const [playerInput, setPlayerInput] = useState('');
   const [showHowToPlay, setShowHowToPlay] = useState(false);
 
-  const handleSubmitPlayer = async () => {
-    if (!playerInput.trim() || isValidating) return;
-    await submitPlayer(playerInput);
-    if (!validationError) setPlayerInput('');
+  const handleSelectPlayer = async (entity: PlayerEntity) => {
+    if (isValidating) return;
+    await submitPlayer(entity);
   };
 
-  // Clear input when position changes
+  // Clear input when position changes, or after a successful pick (the slot
+  // becomes filled, which changes selectedPosition back to null).
   const [lastPos, setLastPos] = useState<number | null>(null);
   if (selectedPosition !== lastPos) {
-    if (lastPos !== null && selectedPosition !== null) setPlayerInput('');
+    if (lastPos !== null) setPlayerInput('');
     setLastPos(selectedPosition);
   }
 
@@ -189,50 +192,36 @@ const NbaLineup = () => {
               </div>
 
               {/* Input area - only show when position is selected */}
-              {selectedPosition !== null && currentTeam && !isTeamSpinning && (
+              {selectedPosition !== null && currentTeam && currentTeamSource && !isTeamSpinning && (
                 <div className="animate-fade-in space-y-3">
                   <p className="text-sm text-center text-muted-foreground">
                     Filling: <span className="font-bold text-primary">{NBA_POSITIONS[selectedPosition]?.label}</span> from <span className="font-bold text-orange-400">{currentTeam.name}</span>
                   </p>
 
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
+                  <div className="relative">
+                    <PlayerAutocomplete
                       value={playerInput}
-                      onChange={(e) => setPlayerInput(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleSubmitPlayer()}
-                      placeholder="Enter player name..."
-                      className="flex-1 rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      onChange={setPlayerInput}
+                      onSelect={handleSelectPlayer}
+                      searchOptions={{
+                        source: currentTeamSource,
+                        minChars: 2,
+                        limit: 8,
+                        exclude: filledNormalizedNames,
+                      }}
+                      placeholder="Type a player name..."
                       autoFocus
                       disabled={isValidating}
+                      validateOnly
                     />
-                    <button
-                      onClick={handleSubmitPlayer}
-                      disabled={!playerInput.trim() || isValidating}
-                      className={cn(
-                        'rounded-xl px-5 py-3 font-semibold transition-all inline-flex items-center gap-2',
-                        playerInput.trim() && !isValidating
-                          ? 'bg-primary text-primary-foreground hover:opacity-90'
-                          : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
-                      )}
-                    >
-                      {isValidating ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <ArrowRight className="w-4 h-4" />
-                      )}
-                    </button>
+                    {isValidating && (
+                      <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground" />
+                    )}
                   </div>
 
-                  <NbaPlayerSuggestions
-                    query={playerInput}
-                    teamName={currentTeam.name}
-                    visible={!isValidating && !!playerInput.trim()}
-                    onSelect={(name) => {
-                      setPlayerInput(name);
-                      submitPlayer(name);
-                    }}
-                  />
+                  <p className="text-xs text-center text-muted-foreground">
+                    Pick a player from the list, only players who played for the {currentTeam.name} will show up
+                  </p>
 
                   {validationError && (
                     <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
@@ -257,7 +246,7 @@ const NbaLineup = () => {
                 Your Starting 5
                 {totalStat !== null && challenge && (
                   <span className="ml-2 text-primary">
-                    — Total: {Number.isInteger(totalStat) ? totalStat : totalStat.toFixed(1)} {challenge.unit}
+                    Total: {Number.isInteger(totalStat) ? totalStat : totalStat.toFixed(1)} {challenge.unit}
                   </span>
                 )}
               </p>

@@ -1,9 +1,77 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { getRandomNbaTeams, NBA_TEAMS, type NbaTeam } from '@/data/nbaTeams';
 import { getRandomStatChallenge } from '@/data/nbaStats';
-import type { NbaFilledSlot, NbaGamePhase, NbaAIVerdict, StatChallenge } from '@/types/nba';
+import type { NbaFilledSlot, NbaGamePhase, NbaAIVerdict, StatChallenge, NbaPosition } from '@/types/nba';
 import { NBA_POSITIONS } from '@/types/nba';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
+
+/**
+ * NBA player source for the autocomplete/validation layer.
+ *
+ * nba_players_extended_v2 has no `full_name` column (verified via
+ * information_schema on flawuiqbvjobmkfkauhw 2026-07-02): it stores
+ * `first_name` and `last_name` separately. src/lib/playerSearch.ts's
+ * PlayerSourceConfig.nameColumn must be a single real column (it is passed
+ * straight into `.ilike(nameColumn, ...)`, `.order(nameColumn, ...)` and
+ * `row[nameColumn]`), so a computed "first || ' ' || last" expression is not
+ * usable there without a DB view or generated column, and this task is
+ * read-only SQL / no DDL. `last_name` is used instead: it is populated on
+ * all 5135 rows (0 null/empty) and is how players are searched for in
+ * practice (surname or partial surname: "james", "curry", "wemb...").
+ * `first_name` is carried in metaColumns so the suggestion row still shows
+ * full context ("Stephen | G | Golden State Warriors").
+ */
+export const NBA_PLAYER_SOURCE_V2: PlayerSourceConfig = {
+  table: 'nba_players_extended_v2',
+  nameColumn: 'last_name',
+  metaColumns: {
+    firstName: 'first_name',
+    team: 'team',
+    position: 'position',
+  },
+  ilikeLimit: 200,
+  prominenceLimit: 1000,
+};
+
+/**
+ * Builds the per-slot autocomplete source: same table, filtered to the
+ * currently assigned NBA team so the suggestion dropdown only ever offers
+ * players who actually played there. This is what makes bad picks
+ * unselectable at entry time instead of being caught after submit.
+ */
+export function buildTeamFilteredNbaSource(teamName: string): PlayerSourceConfig {
+  return {
+    ...NBA_PLAYER_SOURCE_V2,
+    filters: [{ column: 'team', op: 'eq', value: teamName }],
+  };
+}
+
+/**
+ * Maps a slot's PG/SG/SF/PF/C role to the DB's coarser position codes
+ * (verified distribution on nba_players_extended_v2, 2026-07-02):
+ *   G=687, F=592, C=174, G-F=81, F-C=58, C-F=18, F-G=15, NULL=3510 (68%).
+ * There is no PG/SG/SF/PF granularity in the source data, so eligibility is
+ * necessarily coarse: a Guard fits PG or SG, a Forward fits SF or PF, a
+ * Center fits C, and a combo code (G-F/F-G, F-C/C-F) fits either half.
+ * A NULL position (the majority of rows, mostly older/historical players)
+ * is treated as eligible for every slot rather than excluded, since blocking
+ * on missing data would make most of the table unusable for any slot,
+ * a worse regression than the AI-only gate this replaces.
+ */
+export function isPositionEligibleForSlot(dbPosition: string | null | undefined, slotRole: NbaPosition): boolean {
+  if (!dbPosition) return true;
+  const code = dbPosition.trim().toUpperCase();
+  const codes = code.split('-'); // "G-F" -> ["G", "F"], "F" -> ["F"]
+  const guardSlots: NbaPosition[] = ['PG', 'SG'];
+  const forwardSlots: NbaPosition[] = ['SF', 'PF'];
+  return codes.some((c) => {
+    if (c === 'G') return guardSlots.includes(slotRole);
+    if (c === 'F') return forwardSlots.includes(slotRole);
+    if (c === 'C') return slotRole === 'C';
+    return true; // unrecognized code: do not block entry on it
+  });
+}
 
 export function useNbaLineup() {
   const [phase, setPhase] = useState<NbaGamePhase>('challenge');
@@ -27,6 +95,22 @@ export function useNbaLineup() {
       (_, i) => !filledSlots.has(i)
     );
   }, [filledSlots]);
+
+  // Normalized names already in the lineup, for autocomplete's `exclude` set
+  // and for the duplicate check below. Uses the same normalizeName as
+  // playerSearch.ts / PlayerAutocomplete.tsx so "already picked" comparisons
+  // never drift from what the suggestion list itself considers a match.
+  const filledNormalizedNames = useMemo(
+    () => new Set(Array.from(filledSlots.values()).map((s) => normalizeName(s.playerName))),
+    [filledSlots]
+  );
+
+  // Player source for the currently assigned team, filtered so only players
+  // who played there can ever appear as a suggestion.
+  const currentTeamSource = useMemo(
+    () => (currentTeam ? buildTeamFilteredNbaSource(currentTeam.name) : null),
+    [currentTeam]
+  );
 
   const startGame = useCallback(() => {
     const newChallenge = getRandomStatChallenge();
@@ -80,25 +164,36 @@ export function useNbaLineup() {
     setIsTeamSpinning(true);
   }, [filledCount]);
 
+  /**
+   * Fills the currently selected slot with a player the user picked from the
+   * autocomplete dropdown (a PlayerEntity backed by an actual
+   * nba_players_extended_v2 row for the currently assigned team). Because
+   * the entity's team membership was already enforced by the search filter
+   * and its position eligibility is checked deterministically below (both
+   * against the same row), there is no second, independent AI judgment call
+   * that can disagree with the first. That double-judgment gap is what was
+   * producing false negatives on genuinely valid lineups.
+   *
+   * The AI evaluate/lookup call is kept only to fetch the challenge stat
+   * value for scoring; it is non-blocking, so if it fails or disagrees the
+   * player is still accepted (a stat lookup failure is not a validity
+   * failure).
+   */
   const submitPlayer = useCallback(
-    async (inputName: string) => {
-      let playerName = inputName;
+    async (entity: PlayerEntity) => {
       if (selectedPosition === null || !currentTeam) return;
       const position = NBA_POSITIONS[selectedPosition];
       if (!position) return;
 
-      const nameParts = playerName.trim().split(/\s+/);
-      if (nameParts.length < 2) {
-        setValidationError('Please enter the player\'s full first and last name (e.g. "LeBron James")');
+      const normalized = normalizeName(entity.name);
+      if (filledNormalizedNames.has(normalized)) {
+        setValidationError(`${entity.name} is already in your lineup!`);
         return;
       }
 
-      const trimmedName = playerName.trim().toLowerCase();
-      const isDuplicate = Array.from(filledSlots.values()).some(
-        (slot) => slot.playerName.toLowerCase() === trimmedName
-      );
-      if (isDuplicate) {
-        setValidationError(`${playerName.trim()} is already in your lineup!`);
+      const dbPosition = typeof entity.meta.position === 'string' ? entity.meta.position : null;
+      if (!isPositionEligibleForSlot(dbPosition, position.role)) {
+        setValidationError(`${entity.name} did not primarily play ${position.label}. Try a different position.`);
         return;
       }
 
@@ -107,6 +202,8 @@ export function useNbaLineup() {
 
       let statValue: number | string | undefined;
 
+      // Non-blocking enrichment: look up the challenge stat value for this
+      // already-validated player. A failure here never rejects the pick.
       try {
         const resp = await fetch(
           `${"https://flawuiqbvjobmkfkauhw.supabase.co"}/functions/v1/nba-validate-player`,
@@ -117,7 +214,7 @@ export function useNbaLineup() {
               Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
             },
             body: JSON.stringify({
-              playerName: playerName.trim(),
+              playerName: entity.name,
               teamName: currentTeam.name,
               position: position.role,
               challengeStat: challenge?.stat,
@@ -126,27 +223,16 @@ export function useNbaLineup() {
         );
 
         const result = await resp.json();
-
-        if (!result.valid) {
-          setValidationError(result.reason || `${playerName} is not valid for this pick.`);
-          setIsValidating(false);
-          return;
-        }
-
-        if (result.fullName && typeof result.fullName === 'string') {
-          playerName = result.fullName;
-        }
-
-        if (result.statValue !== undefined && result.statValue !== null) {
+        if (result && result.statValue !== undefined && result.statValue !== null) {
           statValue = result.statValue;
         }
       } catch {
-        // On error allow through
+        // Stat lookup is enrichment only; ignore failures.
       }
 
       const slot: NbaFilledSlot = {
         ...position,
-        playerName: playerName.trim(),
+        playerName: entity.name,
         assignedTeam: currentTeam.name,
         statValue,
       };
@@ -167,7 +253,7 @@ export function useNbaLineup() {
         setIsTeamSpinning(true);
       }
     },
-    [selectedPosition, currentTeam, filledCount, filledSlots, challenge]
+    [selectedPosition, currentTeam, filledCount, filledNormalizedNames, challenge]
   );
 
   const filledSlotsArray = useMemo(() => {
@@ -240,8 +326,8 @@ export function useNbaLineup() {
   return {
     phase, challenge, selectedPosition, currentTeam, filledSlots, filledSlotsArray,
     filledCount, verdict, isEvaluating, evaluationError, isValidating, validationError, isStatSpinning,
-    isTeamSpinning, teamAssignments, availablePositions, totalStat, startGame,
-    finishStatSpin, beginBuilding, finishTeamSpin, selectPosition, rerollTeam,
-    submitPlayer, evaluateTeam, resetGame,
+    isTeamSpinning, teamAssignments, availablePositions, totalStat, currentTeamSource,
+    filledNormalizedNames, startGame, finishStatSpin, beginBuilding, finishTeamSpin, selectPosition,
+    rerollTeam, submitPlayer, evaluateTeam, resetGame,
   };
 }
