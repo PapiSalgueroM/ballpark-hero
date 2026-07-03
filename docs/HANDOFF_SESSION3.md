@@ -52,3 +52,7 @@ Eleven publishes, all verified live in a browser. Last commit: 225ae07. Site wen
 4. Conquest multi-sport (#115) reusing the finished NFL engine.
 5. Remaining per-game fixes (#99-104) and new-game backlog (#94, #96-98).
 6. Tennis pool regression follow-up (tracker #167) and NBA Starting 5 full names (#149).
+
+## 8. Late-session addendum (still 2026-07-03)
+
+Further shipped after this handoff was first written: SEO FAQ schema + sibling links, share text with emoji grid + URL, Play Next variety + midnight countdown, Footle guess animations, Career Quiz tiers, Career Ladder daily, leaderboards (game_completions gained score + player_name columns) + 11 local-first badges + docs/INCENTIVES_SPEC.md, Sign the Player game (/sign-the-player), IP cleanup (ESPN NBA logos and Wikipedia club crests removed from spinners), Connect 4 new boards, NBA Chain round mode, Guess the Club notable-players clue tier, NBA full names, nba-connect4-validate edge function v2. Known flake: one Lovable build served a stale "not built" state ~15 min after push; a 26-file code audit found zero errors; this commit exists to retrigger the build.
