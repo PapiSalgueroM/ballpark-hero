@@ -7,7 +7,7 @@ const TermsOfService = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
-      <PageSeo title="Terms of Service — DoUKnowBall" description="Terms of service for DoUKnowBall sports trivia games." path="/terms" />
+      <PageSeo title="Terms of Service - DoUKnowBall" description="Terms of service for DoUKnowBall sports trivia games." path="/terms" />
       <button
         onClick={() => navigate(-1)}
         className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
@@ -17,7 +17,7 @@ const TermsOfService = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Terms of Service</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: March 8, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: July 2, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -37,7 +37,19 @@ const TermsOfService = () => {
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">4. Intellectual Property &amp; Trademarks</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">4. Accounts</h2>
+          <p>You do not need an account to play any game on the Site. If you choose to create one, you can sign up with an email address and password or sign in with Google. You are responsible for keeping your login details secure and for all activity under your account.</p>
+          <p className="mt-2">You agree to provide accurate information when creating an account and not to create an account using someone else's identity or a name that is offensive or impersonates another person or brand. We may suspend or remove an account that violates these Terms.</p>
+          <p className="mt-2">See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for details on what account data we collect and how to request its deletion.</p>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">5. Advertising</h2>
+          <p>The Site is supported by advertising, including personalized ads served through Google AdSense. By using the Site, you agree to the display of these ads. See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> and cookie banner for more on how ad personalization works and how to opt out.</p>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">6. Intellectual Property &amp; Trademarks</h2>
           <p>All original content, game designs, features, and functionality of DoUKnowBall are owned by DoUKnowBall and are protected by international copyright and intellectual property laws.</p>
           <p className="mt-2">All team names, player names, league names, logos, and trademarks referenced on this Site are the property of their respective owners and are used solely for identification and informational purposes.</p>
           <p className="mt-2"><strong>DoUKnowBall is not affiliated with, endorsed by, or sponsored by the NFL, NFLPA, NBA, NBPA, UFC, NHL, NHLPA, MLB, MLBPA, FIFA, IOC, NCAA, FIA (Formula 1), PGA Tour, NASCAR, ATP, WTA, or any team, club, or sports governing body.</strong></p>
@@ -45,7 +57,7 @@ const TermsOfService = () => {
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">5. User Conduct</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">7. User Conduct</h2>
           <p>You agree not to:</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li>Use the Site for any unlawful purpose or in violation of any applicable laws</li>
@@ -58,42 +70,42 @@ const TermsOfService = () => {
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">6. Content Updates</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">8. Content Updates</h2>
           <p>DoUKnowBall reserves the right to add, modify, or remove games, game content, player data, and features at any time without prior notice. Daily challenges, puzzles, and game data may change at our sole discretion.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">7. Disclaimer of Warranties</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">9. Disclaimer of Warranties</h2>
           <p>The Site is provided on an "as is" and "as available" basis. DoUKnowBall makes no representations or warranties of any kind, express or implied, regarding the accuracy, reliability, completeness, or availability of the Site or its content. Player statistics and data presented in the games are approximations for entertainment purposes and may not reflect exact real-world figures.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">8. Limitation of Liability</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">10. Limitation of Liability</h2>
           <p>To the fullest extent permitted by law, DoUKnowBall and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, arising from your use of or inability to use the Site.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">9. Indemnification</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">11. Indemnification</h2>
           <p>You agree to indemnify, defend, and hold harmless DoUKnowBall and its operators from any claims, liabilities, damages, losses, or expenses arising from your use of the Site or your violation of these Terms.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">10. Age Requirement</h2>
-          <p>The Site is intended for users of all ages. No account creation or personal information is required to use the Site.</p>
+          <h2 className="text-lg font-semibold text-foreground mb-2">12. Age Requirement</h2>
+          <p>The Site is intended for a general audience and can be used without an account or any personal information. Creating an optional account requires an email address; if you are under 13, please only create an account with a parent or guardian's involvement. See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for more on children's privacy.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">11. Modifications to Terms</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">13. Modifications to Terms</h2>
           <p>DoUKnowBall reserves the right to modify these Terms at any time. Changes will be effective immediately upon posting to the Site. Your continued use of the Site after changes are posted constitutes your acceptance of the revised Terms.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">12. Governing Law</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">14. Governing Law</h2>
           <p>These Terms shall be governed by and construed in accordance with the laws of the United States, without regard to conflict of law principles. Any disputes arising under these Terms shall be resolved in the applicable courts.</p>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-2">13. Contact</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-2">15. Contact</h2>
           <p>If you have any questions about these Terms of Service or need to reach us for legal inquiries, please contact us at <a href="mailto:footyfein1@gmail.com" className="underline hover:text-foreground transition-colors">footyfein1@gmail.com</a>.</p>
         </div>
       </section>
