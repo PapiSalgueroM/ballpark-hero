@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { CHAIN_STARTERS } from '@/types/nbaChain';
 import type { ChainLink, ChainGamePhase } from '@/types/nbaChain';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { normalizeName } from '@/lib/playerSearch';
 
 function getRandomStarter(): string {
   return CHAIN_STARTERS[Math.floor(Math.random() * CHAIN_STARTERS.length)];
@@ -30,7 +31,7 @@ export function useNbaChain() {
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [usedPlayers, setUsedPlayers] = useState<Set<string>>(() => {
-    return new Set([initialStarter.toLowerCase()]);
+    return new Set([normalizeName(initialStarter)]);
   });
 
   const score = chain.length - 1;
@@ -43,12 +44,12 @@ export function useNbaChain() {
       const trimmed = playerName.trim();
       if (!trimmed) return;
 
-      const lowerName = trimmed.toLowerCase();
+      const normalized = normalizeName(trimmed);
 
       // Check duplicate — instant game over
-      if (usedPlayers.has(lowerName)) {
+      if (usedPlayers.has(normalized)) {
         setPhase('ended');
-        setGameOverReason(`${trimmed} was already used — game over!`);
+        setGameOverReason(`${trimmed} was already used. Game over!`);
         const finalScore = chain.length - 1;
         if (finalScore > bestStreak) { setBestStreak(finalScore); saveBestStreak(finalScore); }
         return;
@@ -75,20 +76,21 @@ export function useNbaChain() {
 
         const result = await resp.json();
         const displayName = result.fullName || trimmed;
+        const normalizedDisplayName = normalizeName(displayName);
 
         // Check if the resolved full name is a duplicate or self-connection
-        if (usedPlayers.has(displayName.toLowerCase())) {
+        if (usedPlayers.has(normalizedDisplayName)) {
           setPhase('ended');
-          setGameOverReason(`${displayName} was already used — game over!`);
+          setGameOverReason(`${displayName} was already used. Game over!`);
           const finalScore = chain.length - 1;
           if (finalScore > bestStreak) { setBestStreak(finalScore); saveBestStreak(finalScore); }
           setIsValidating(false);
           return;
         }
 
-        if (displayName.toLowerCase() === lastPlayer.toLowerCase()) {
+        if (normalizedDisplayName === normalizeName(lastPlayer)) {
           setPhase('ended');
-          setGameOverReason(`${displayName} is the same as the current player — game over!`);
+          setGameOverReason(`${displayName} is the same as the current player. Game over!`);
           const finalScore = chain.length - 1;
           if (finalScore > bestStreak) { setBestStreak(finalScore); saveBestStreak(finalScore); }
           setIsValidating(false);
@@ -97,7 +99,7 @@ export function useNbaChain() {
 
         if (!result.valid) {
           setPhase('ended');
-          setGameOverReason(result.reason || 'No valid NBA connection found — game over!');
+          setGameOverReason(result.reason || 'No valid NBA connection found. Game over!');
           const finalScore = chain.length - 1;
           if (finalScore > bestStreak) { setBestStreak(finalScore); saveBestStreak(finalScore); }
           setIsValidating(false);
@@ -108,7 +110,7 @@ export function useNbaChain() {
 
         const newLink: ChainLink = { playerName: displayName, connection };
         setChain((prev) => [...prev, newLink]);
-        setUsedPlayers((prev) => new Set(prev).add(displayName.toLowerCase()));
+        setUsedPlayers((prev) => new Set(prev).add(normalizedDisplayName));
 
         // Update best streak
         const newScore = score + 1;
@@ -120,7 +122,7 @@ export function useNbaChain() {
         // Allow on network error
         const newLink: ChainLink = { playerName: trimmed, connection: 'Connection unverified' };
         setChain((prev) => [...prev, newLink]);
-        setUsedPlayers((prev) => new Set(prev).add(lowerName));
+        setUsedPlayers((prev) => new Set(prev).add(normalized));
       }
 
       setIsValidating(false);
@@ -149,7 +151,7 @@ export function useNbaChain() {
     setGameOverReason(null);
     setIsValidating(false);
     setValidationError(null);
-    setUsedPlayers(new Set([starter.toLowerCase()]));
+    setUsedPlayers(new Set([normalizeName(starter)]));
   }, []);
 
   const getShareText = useCallback(() => {

@@ -422,11 +422,22 @@ export const NFL_ROSTER_SOURCE: PlayerSourceConfig = {
   prominenceLimit: 1000,
 };
 
-/** NBA player pool: nba_players_extended_v2 (5.1k rows, verified 2026-07-02, bigger than the older 500-row nba_players_extended). */
+/**
+ * NBA player pool: nba_players_extended_v2 (5.1k rows, verified 2026-07-02,
+ * bigger than the older 500-row nba_players_extended).
+ *
+ * This table has NO `full_name` column (verified via information_schema on
+ * flawuiqbvjobmkfkauhw, 2026-07-02): it stores `first_name` and `last_name`
+ * separately. `last_name` is used as nameColumn (populated on 5134 of 5135
+ * rows) with `first_name` carried in metaColumns, mirroring
+ * NBA_PLAYER_SOURCE_V2 in src/hooks/useNbaLineup.ts so both NBA integrations
+ * agree on how this table is queried.
+ */
 export const NBA_PLAYER_SOURCE: PlayerSourceConfig = {
   table: 'nba_players_extended_v2',
-  nameColumn: 'full_name',
+  nameColumn: 'last_name',
   metaColumns: {
+    firstName: 'first_name',
     team: 'team',
     position: 'position',
   },

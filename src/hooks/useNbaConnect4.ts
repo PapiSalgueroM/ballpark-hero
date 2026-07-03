@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { getRandomConnect4Board } from '@/data/nbaConnect4Boards';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { normalizeName } from '@/lib/playerSearch';
 import type {
   Connect4Team,
   Connect4Grid,
@@ -114,10 +115,10 @@ export function useNbaConnect4() {
       if (targetRow === null) return;
 
       const trimmed = playerName.trim();
-      const lowerName = trimmed.toLowerCase();
+      const normalized = normalizeName(trimmed);
 
       // Check duplicate
-      if (usedPlayers.has(lowerName)) {
+      if (usedPlayers.has(normalized)) {
         setValidationError(`${trimmed} has already been used!`);
         return;
       }
@@ -163,11 +164,20 @@ export function useNbaConnect4() {
         // Allow on error
       }
 
+      // Re-check duplicate against the resolved display name too, in case the
+      // fact-check normalized/corrected it to a name already on the board.
+      const normalizedDisplayName = normalizeName(displayName);
+      if (usedPlayers.has(normalizedDisplayName)) {
+        setValidationError(`${displayName} has already been used!`);
+        setIsValidating(false);
+        return;
+      }
+
       // Place the piece
       const newGrid = grid.map((row) => [...row]);
       newGrid[targetRow][selectedCol] = { team: currentTeam, playerName: displayName };
       setGrid(newGrid);
-      setUsedPlayers((prev) => new Set(prev).add(lowerName));
+      setUsedPlayers((prev) => new Set(prev).add(normalizedDisplayName));
 
       // Check win
       const winCells = checkWin(newGrid, currentTeam);
@@ -220,6 +230,7 @@ export function useNbaConnect4() {
     isValidating,
     validationError,
     selectedCol,
+    usedPlayers,
     getTargetRow,
     selectColumn,
     submitPlayer,

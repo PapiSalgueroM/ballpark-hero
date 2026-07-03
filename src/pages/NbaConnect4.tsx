@@ -4,7 +4,8 @@ import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { NbaConnect4HowToPlay } from '@/components/nba-connect4/NbaConnect4HowToPlay';
-import Connect4Suggestions from '@/components/nba-connect4/Connect4Suggestions';
+import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
+import { NBA_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Loader2, AlertCircle, HelpCircle, SkipForward, ArrowDown } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -26,6 +27,7 @@ const NbaConnect4 = () => {
     isValidating,
     validationError,
     selectedCol,
+    usedPlayers,
     getTargetRow,
     selectColumn,
     submitPlayer,
@@ -36,9 +38,9 @@ const NbaConnect4 = () => {
   const [playerInput, setPlayerInput] = useState('');
   const [showHowToPlay, setShowHowToPlay] = useState(false);
 
-  const handleSubmit = async () => {
-    if (!playerInput.trim() || isValidating) return;
-    await submitPlayer(playerInput);
+  const handleSelectPlayer = async (entity: PlayerEntity) => {
+    if (isValidating) return;
+    await submitPlayer(entity.name);
     setPlayerInput('');
   };
 
@@ -224,45 +226,25 @@ const NbaConnect4 = () => {
               {' + '}
               <span className="font-bold text-primary">"{board.rowAttributes[targetRow]}"</span>
             </p>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={playerInput}
-                onChange={(e) => setPlayerInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-                placeholder="Enter NBA player name..."
-                className="flex-1 rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                autoFocus
-                disabled={isValidating}
-              />
-              <button
-                onClick={handleSubmit}
-                disabled={!playerInput.trim() || isValidating}
-                className={cn(
-                  'rounded-xl px-5 py-3 font-semibold transition-all inline-flex items-center gap-2',
-                  playerInput.trim() && !isValidating
-                    ? 'bg-primary text-primary-foreground hover:opacity-90'
-                    : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
-                )}
-              >
-                {isValidating ? (
+            <div className="flex items-start gap-2">
+              <div className="flex-1">
+                <PlayerAutocomplete
+                  value={playerInput}
+                  onChange={setPlayerInput}
+                  onSelect={handleSelectPlayer}
+                  searchOptions={{ source: NBA_PLAYER_SOURCE, exclude: usedPlayers }}
+                  placeholder="Enter NBA player name..."
+                  disabled={isValidating}
+                  autoFocus
+                  validateOnly
+                />
+              </div>
+              {isValidating && (
+                <div className="rounded-xl px-5 py-3 bg-secondary text-muted-foreground inline-flex items-center">
                   <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  'Drop'
-                )}
-              </button>
+                </div>
+              )}
             </div>
-            <Connect4Suggestions
-              query={playerInput}
-              columnAttribute={board.columnAttributes[selectedCol]}
-              rowAttribute={board.rowAttributes[targetRow]}
-              visible={!isValidating && !!playerInput.trim()}
-              onSelect={async (name) => {
-                setPlayerInput(name);
-                await submitPlayer(name);
-                setPlayerInput('');
-              }}
-            />
             {validationError && (
               <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
                 <AlertCircle className="w-4 h-4 shrink-0" />

@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { normalizeName } from '@/lib/playerSearch';
 import {
   Board,
   Team,
@@ -78,7 +79,7 @@ function replayC4Board(actions: C4Action[]): {
   for (const action of actions) {
     if (action.t === 'move') {
       board[action.row][action.col] = { team: action.team, playerName: action.playerName };
-      usedPlayers.add(action.playerName.toLowerCase());
+      usedPlayers.add(normalizeName(action.playerName));
       if (checkWin(board, action.row, action.col, action.team)) {
         phase = 'won';
         winner = action.team;
@@ -172,7 +173,7 @@ export function useFootballConnect4() {
       const trimmed = playerName.trim();
       if (!trimmed) return;
 
-      if (usedPlayers.has(trimmed.toLowerCase())) {
+      if (usedPlayers.has(normalizeName(trimmed))) {
         setValidationError(`${trimmed} has already been used!`);
         return;
       }
@@ -206,7 +207,7 @@ export function useFootballConnect4() {
 
         const displayName = result.fullName || trimmed;
 
-        if (usedPlayers.has(displayName.toLowerCase())) {
+        if (usedPlayers.has(normalizeName(displayName))) {
           setValidationError(`${displayName} has already been used!`);
           setIsValidating(false);
           return;
@@ -218,7 +219,7 @@ export function useFootballConnect4() {
           const newBoard = unlimitedBoard.map((r) => [...r]);
           newBoard[targetRow][selectedColumn] = { team: currentTurn, playerName: displayName };
           setUnlimitedBoard(newBoard);
-          setUnlimitedUsedPlayers((prev) => new Set(prev).add(displayName.toLowerCase()));
+          setUnlimitedUsedPlayers((prev) => new Set(prev).add(normalizeName(displayName)));
 
           if (checkWin(newBoard, targetRow, selectedColumn, currentTurn)) {
             setUnlimitedPhase('won');
@@ -237,7 +238,7 @@ export function useFootballConnect4() {
         setSelectedColumn(null);
         setTargetRow(null);
       } catch {
-        setValidationError('Network error — please try again.');
+        setValidationError('Network error. Please try again.');
       }
 
       setIsValidating(false);
@@ -302,7 +303,7 @@ export function useFootballConnect4() {
   return {
     mode, switchMode,
     boardConfig, board, currentTurn, phase, winner, isDraw,
-    selectedColumn, targetRow, isValidating, validationError,
+    selectedColumn, targetRow, isValidating, validationError, usedPlayers,
     selectColumn, cancelSelection, submitPlayer, skipTurn, resetGame, getShareText,
     isLoading,
   };

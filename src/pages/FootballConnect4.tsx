@@ -5,7 +5,8 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import { FootballConnect4Board } from '@/components/football-connect4/FootballConnect4Board';
 import { FootballConnect4HowToPlay } from '@/components/football-connect4/FootballConnect4HowToPlay';
-import FootballConnect4Suggestions from '@/components/football-connect4/FootballConnect4Suggestions';
+import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
+import { SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { cn } from '@/lib/utils';
 import {
   RotateCcw,
@@ -34,6 +35,7 @@ const FootballConnect4 = () => {
     targetRow,
     isValidating,
     validationError,
+    usedPlayers,
     selectColumn,
     cancelSelection,
     submitPlayer,
@@ -44,18 +46,11 @@ const FootballConnect4 = () => {
 
   const [playerInput, setPlayerInput] = useState('');
   const [showHowToPlay, setShowHowToPlay] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
 
-  const handleSubmit = async () => {
-    if (!playerInput.trim() || isValidating) return;
-    setShowSuggestions(false);
-    await submitPlayer(playerInput);
+  const handleSelectPlayer = async (entity: PlayerEntity) => {
+    if (isValidating) return;
+    await submitPlayer(entity.name);
     setPlayerInput('');
-  };
-
-  const handleSelectSuggestion = (name: string) => {
-    setPlayerInput(name);
-    setShowSuggestions(false);
   };
 
   const colAttr = selectedColumn !== null ? boardConfig.columnAttributes[selectedColumn] : '';
@@ -161,41 +156,24 @@ const FootballConnect4 = () => {
                   <span className="font-bold text-primary">"{colAttr}"</span> and{' '}
                   <span className="font-bold text-primary">"{rowAttr}"</span>
                 </p>
-                <div className="flex gap-2">
-                  <div className="flex-1 relative">
-                    <input
-                      type="text"
+                <div className="flex items-start gap-2">
+                  <div className="flex-1">
+                    <PlayerAutocomplete
                       value={playerInput}
-                      onChange={(e) => { setPlayerInput(e.target.value); setShowSuggestions(true); }}
-                      onFocus={() => playerInput.trim().length >= 2 && setShowSuggestions(true)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                      onChange={setPlayerInput}
+                      onSelect={handleSelectPlayer}
+                      searchOptions={{ source: SOCCER_MARKET_VALUE_SOURCE, exclude: usedPlayers }}
                       placeholder="Enter soccer player name..."
-                      className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                      autoFocus
                       disabled={isValidating}
+                      autoFocus
+                      validateOnly
                     />
-                    <div className="absolute top-full left-0 right-0 z-50 mt-1">
-                      <FootballConnect4Suggestions
-                        query={playerInput}
-                        columnAttribute={colAttr}
-                        rowAttribute={rowAttr}
-                        onSelect={handleSelectSuggestion}
-                        visible={showSuggestions && !isValidating}
-                      />
-                    </div>
                   </div>
-                  <button
-                    onClick={handleSubmit}
-                    disabled={!playerInput.trim() || isValidating}
-                    className={cn(
-                      'rounded-xl px-5 py-3 font-semibold transition-all inline-flex items-center gap-2',
-                      playerInput.trim() && !isValidating
-                        ? 'bg-primary text-primary-foreground hover:opacity-90'
-                        : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
-                    )}
-                  >
-                    {isValidating ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Submit'}
-                  </button>
+                  {isValidating && (
+                    <div className="rounded-xl px-5 py-3 bg-secondary text-muted-foreground inline-flex items-center">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    </div>
+                  )}
                   <button
                     onClick={cancelSelection}
                     className="rounded-xl px-3 py-3 bg-secondary text-muted-foreground hover:text-foreground transition-colors"
