@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { recordCompletion } from '@/lib/completions';
 
 /**
  * Automatically saves game completion data to user_scores, user_game_scores,
@@ -17,13 +18,25 @@ export function useGameCompletion(
 ) {
   const { user, profile, refreshProfile } = useAuth();
   const savedRef = useRef(false);
+  const trackedRef = useRef(false);
 
   // Reset saved flag when game resets (isComplete goes back to false)
   useEffect(() => {
     if (!isComplete) {
       savedRef.current = false;
+      trackedRef.current = false;
     }
   }, [isComplete]);
+
+  // Wave 3: sitewide anonymous completion tracking (public.game_completions).
+  // Fires for every player, logged in or not, independent of the auth-gated
+  // save flow below. Fire-and-forget, never blocks or breaks gameplay if it
+  // fails — recordCompletion catches and swallows all errors internally.
+  useEffect(() => {
+    if (!isComplete || trackedRef.current) return;
+    trackedRef.current = true;
+    recordCompletion(`/${gameSlug}`);
+  }, [isComplete, gameSlug]);
 
   useEffect(() => {
     if (!isComplete || !user || savedRef.current) return;

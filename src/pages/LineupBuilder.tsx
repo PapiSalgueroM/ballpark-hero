@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS, type Formation } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { Footer } from '@/components/game/Footer';
 import FormationPitch from '@/components/lineup/FormationPitch';
-import PlayerSuggestions from '@/components/lineup/PlayerSuggestions';
+import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
+import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity } from '@/lib/playerSearch';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
-import { ArrowRight, RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
+import { RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { LineupHowToPlay } from '@/components/lineup/LineupHowToPlay';
 import AdBanner from '@/components/ads/AdBanner';
@@ -54,10 +55,15 @@ const LineupBuilder = () => {
     }
   }, []);
 
-  const handleSubmitPlayer = async () => {
-    if (!playerInput.trim() || isValidating) return;
-    await submitPlayer(playerInput);
-    if (!validationError) setPlayerInput('');
+  const excludedPlayers = useMemo(
+    () => new Set(filledSlotsArray.map((slot) => normalizeName(slot.playerName))),
+    [filledSlotsArray]
+  );
+
+  const handleSelectPlayer = async (entity: PlayerEntity) => {
+    if (isValidating) return;
+    await submitPlayer(entity.name);
+    setPlayerInput('');
   };
 
   // Clear input when validation succeeds (position changes)
@@ -163,48 +169,25 @@ const LineupBuilder = () => {
                     Filling: <span className="font-bold text-primary">{positions[selectedPositionIndex]?.label}</span>
                   </p>
 
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={playerInput}
-                      onChange={(e) => {
-                        setPlayerInput(e.target.value);
-                      }}
-                      onKeyDown={(e) => e.key === 'Enter' && handleSubmitPlayer()}
-                      placeholder="Enter player name..."
-                      className="flex-1 rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                      autoFocus
-                      disabled={isValidating}
-                    />
-                    <button
-                      onClick={handleSubmitPlayer}
-                      disabled={!playerInput.trim() || isValidating}
-                      className={cn(
-                        'rounded-xl px-5 py-3 font-semibold transition-all inline-flex items-center gap-2',
-                        playerInput.trim() && !isValidating
-                          ? 'bg-primary text-primary-foreground hover:opacity-90'
-                          : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
-                      )}
-                    >
-                      {isValidating ? (
+                  <div className="flex items-start gap-2">
+                    <div className="flex-1">
+                      <PlayerAutocomplete
+                        value={playerInput}
+                        onChange={setPlayerInput}
+                        onSelect={handleSelectPlayer}
+                        searchOptions={{ source: SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers }}
+                        placeholder="Enter player name..."
+                        disabled={isValidating}
+                        autoFocus
+                        validateOnly
+                      />
+                    </div>
+                    {isValidating && (
+                      <div className="rounded-xl px-5 py-3 bg-secondary text-muted-foreground inline-flex items-center">
                         <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <ArrowRight className="w-4 h-4" />
-                      )}
-                    </button>
+                      </div>
+                    )}
                   </div>
-
-                  {/* Player suggestions */}
-                  <PlayerSuggestions
-                    query={playerInput}
-                    teamName={currentTeam.name}
-                    isNation={currentTeam.isNation}
-                    visible={!isValidating && !!playerInput.trim()}
-                    onSelect={(name) => {
-                      setPlayerInput(name);
-                      submitPlayer(name);
-                    }}
-                  />
 
                   {validationError && (
                     <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">

@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Trophy, Gamepad2, Medal, Flame, ArrowLeft } from 'lucide-react';
+import { Trophy, Star, Medal, Flame, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
 import { useDailyLegend } from '@/hooks/useDailyLegend';
 import { DailyLegendOverlay } from '@/components/game/DailyLegendOverlay';
+import { getLocalTodayCount } from '@/lib/completions';
 
 export function GameNavbar() {
   const navigate = useNavigate();
@@ -12,6 +14,30 @@ export function GameNavbar() {
   const { showCelebration, streakDays, dismissCelebration } = useDailyLegend();
 
   const isLoading = authLoading || statsLoading;
+
+  // Wave 3 / item #16: cross-game daily score chip. Upgrades the old plain
+  // "-/64" progress slot into a gold-token chip per the R5 header spec (3.8),
+  // sitting directly beside the existing "Points Today" slot so together
+  // they read as one daily-score story (completed count + points) without
+  // duplicating the same number twice in one row.
+  //
+  // Completed count: signed-in players get the real distinct-games count
+  // from useGameNavbarStats (gamesPlayedToday, sourced from daily_completions).
+  // Signed-out players get the local, same-browser count that
+  // src/lib/completions.ts increments every time useGameCompletion fires an
+  // anonymous insert into game_completions, since there is no per-visitor
+  // identity to query server-side for them. This is a real behavior change
+  // from before: logged-out players now see their own daily progress instead
+  // of a static "-".
+  const [localCompletedToday, setLocalCompletedToday] = useState(0);
+  useEffect(() => {
+    setLocalCompletedToday(getLocalTodayCount());
+    const onCompletion = () => setLocalCompletedToday(getLocalTodayCount());
+    window.addEventListener('game-completion-saved', onCompletion);
+    return () => window.removeEventListener('game-completion-saved', onCompletion);
+  }, []);
+
+  const dailyCompletedCount = user ? gamesPlayedToday : localCompletedToday;
 
   return (
     <>
@@ -25,19 +51,16 @@ export function GameNavbar() {
 
           {/* Stats — center */}
           <div className="flex items-center justify-center gap-3 sm:gap-5 flex-1">
-            {/* Games Played Today */}
+            {/* Daily Score chip — today's completed-game count, gold token */}
             <div className="flex items-center gap-1 text-xs sm:text-sm">
-              <Gamepad2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground" />
-              <span className="text-muted-foreground">
+              <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold" aria-hidden="true" />
+              <span className="text-muted-foreground" aria-label="Games completed today">
                 {isLoading ? (
                   <span className="inline-block w-8 h-4 bg-muted animate-pulse rounded" />
-                ) : user ? (
-                  <span>
-                    <span className="font-medium text-foreground">{gamesPlayedToday}</span>
-                    /{totalGames}
-                  </span>
                 ) : (
-                  <span>-/{totalGames}</span>
+                  <span>
+                    <span className="font-medium text-gold">{dailyCompletedCount}</span>/{totalGames}
+                  </span>
                 )}
               </span>
             </div>

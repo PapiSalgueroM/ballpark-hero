@@ -49,7 +49,17 @@ export function useGuessTheNation() {
       else if (mode === 'winter') pool = pool.filter((c) => c.seasonFocus !== 'summer');
       if (pool.length === 0) pool = countries;
 
-      const puzzle = pool[Math.floor(Math.random() * pool.length)];
+      let puzzle: NationPuzzle | undefined;
+      if (mode === 'daily') {
+        // Deterministic date-seed pick so every player gets the same daily
+        // puzzle and it only changes at the date boundary, mirroring the
+        // pattern in useTennisPlayer.ts so both games agree on reset timing.
+        const today = getTodayStr();
+        const seed = parseInt(today.replace(/-/g, ''), 10);
+        puzzle = pool[seed % pool.length];
+      } else {
+        puzzle = pool[Math.floor(Math.random() * pool.length)];
+      }
       if (!puzzle) return;
 
       setGameState({

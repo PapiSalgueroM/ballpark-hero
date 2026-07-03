@@ -81,6 +81,7 @@ import PlayerBingo from "./pages/PlayerBingo";
 import StatDetective from "./pages/StatDetective";
 import AlphabetSprint from "./pages/AlphabetSprint";
 import ClueAuction from "./pages/ClueAuction";
+import RarityRound from "./pages/RarityRound";
 
 const queryClient = new QueryClient();
 
@@ -186,6 +187,7 @@ const AppContent = () => {
         <Route path="/stat-detective" element={<StatDetective />} />
         <Route path="/alphabet-sprint" element={<AlphabetSprint />} />
         <Route path="/clue-auction" element={<ClueAuction />} />
+        <Route path="/rarity-round" element={<RarityRound />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

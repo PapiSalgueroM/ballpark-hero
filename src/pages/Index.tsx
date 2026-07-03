@@ -7,7 +7,7 @@ import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 
 import { StreakReminder } from '@/components/game/StreakReminder';
-import { DailyChecklist } from '@/components/game/DailyChecklist';
+import { useMostPlayed } from '@/hooks/useMostPlayed';
 
 import { CATEGORIES, VISIBLE_CATEGORIES, TOTAL_GAMES, type GameDef } from '@/data/gameRegistry';
 
@@ -36,7 +36,6 @@ export default function Index() {
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
-  const [tableCounts, setTableCounts] = useState<{ table: string; count: number }[] | null>(null);
   const query = searchQuery.toLowerCase().trim();
   const isSearching = query.length > 0;
 
@@ -57,31 +56,21 @@ export default function Index() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // Games played today from multiple score tables
-        const tables = [
-          'medal_games_scores', 'football_grid_selections', 'college_grid_selections',
-          'soccer_grid_selections', 'nascar_scores', 'tennis_scores', 'cbb_scores',
-          'college_guess_scores', 'guess_nation_scores', 'soccer_club_guess_scores',
-          'nascar_chain_scores', 'tennis_chain_scores', 'ufc_chain_scores',
-        ] as const;
+        const today = new Date().toISOString().slice(0, 10);
 
-        let total = 0;
-        const counts: { table: string; count: number }[] = [];
-        for (const table of tables) {
-          const { count } = await supabase
-            .from(table)
-            .select('*', { count: 'exact', head: true });
-          const c = count ?? 0;
-          total += c;
-          counts.push({ table, count: c });
-        }
-        setTotalPlayed(total);
-        setTableCounts(counts);
+        // Sitewide games-played-today, now backed by the real, anonymous-
+        // inclusive public.game_completions table instead of summing a
+        // hardcoded list of per-game (mostly auth-only) score tables.
+        // game_completions isn't in the generated Supabase types yet (added
+        // via direct SQL), so it's addressed dynamically here.
+        const { count: completionsToday } = await (supabase.from as any)('game_completions')
+          .select('*', { count: 'exact', head: true })
+          .eq('completed_on', today);
+        setTotalPlayed(completionsToday ?? 0);
 
         // Players who completed a game today from daily_completions
         // TODO Round 3: daily_completions only counts logged-in users.
         // Add anonymous_play_counter table for full play count including anonymous visitors.
-        const today = new Date().toISOString().slice(0, 10);
         const { count: dailyPlayers } = await supabase
           .from('daily_completions')
           .select('user_id', { count: 'exact', head: true })
@@ -167,8 +156,7 @@ export default function Index() {
 
         {/* ─── GAME CATEGORIES ─── */}
         <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
-          <MostPlayedToday tableCounts={tableCounts} />
-          <DailyChecklist />
+          <MostPlayedToday />
           <StreakReminder />
 
           {/* Search bar */}
@@ -258,30 +246,22 @@ export default function Index() {
   );
 }
 
-const TABLE_GAME_MAP: Record<string, { label: string; path: string; emoji: string }> = {
-  medal_games_scores: { label: 'Olympics', path: '/olympics', emoji: '🏅' },
-  football_grid_selections: { label: 'Pro Football Grid', path: '/football-grid', emoji: '🏈' },
-  college_grid_selections: { label: 'College Grid', path: '/college-grid', emoji: '🎓' },
-  soccer_grid_selections: { label: 'Soccer Grid', path: '/soccer-grid', emoji: '⚽' },
-  nascar_scores: { label: 'Guess NASCAR Driver', path: '/guess-nascar-driver', emoji: '🏁' },
-  tennis_scores: { label: 'Guess Tennis Player', path: '/guess-tennis-player', emoji: '🎾' },
-  cbb_scores: { label: 'Guess CBB Team', path: '/guess-cbb-team', emoji: '🏀' },
-  college_guess_scores: { label: 'Guess The College', path: '/guess-the-college', emoji: '🎓' },
-  guess_nation_scores: { label: 'Guess The Nation', path: '/guess-the-nation', emoji: '🌍' },
-  soccer_club_guess_scores: { label: 'Guess The Club', path: '/guess-soccer-club', emoji: '🏟️' },
-  nascar_chain_scores: { label: 'NASCAR Chain', path: '/nascar-chain', emoji: '🔗' },
-  tennis_chain_scores: { label: 'Tennis Chain', path: '/tennis-chain', emoji: '🎾' },
-  ufc_chain_scores: { label: 'UFC Chain', path: '/ufc-chain', emoji: '🥊' },
-};
-
 function formatPlays(n: number): string {
   if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k plays`;
   return `${n} plays`;
 }
 
-function MostPlayedToday({ tableCounts }: { tableCounts: { table: string; count: number }[] | null }) {
-  // Loading state
-  if (tableCounts === null) {
+/**
+ * Wave 3 / item #11: wired to public.game_completions via useMostPlayed.
+ * Renders unconditionally on every breakpoint (no md: hidden class) so it
+ * always shows on mobile. While fewer than 3 games clear the 5-completions
+ * threshold for today, useMostPlayed returns the curated flagship trio so
+ * this section never renders empty or looks broken.
+ */
+function MostPlayedToday() {
+  const { entries, loading } = useMostPlayed();
+
+  if (loading && entries.length === 0) {
     return (
       <section>
         <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">🔥 Most Played Today</p>
@@ -294,33 +274,27 @@ function MostPlayedToday({ tableCounts }: { tableCounts: { table: string; count:
     );
   }
 
-  const top3 = [...tableCounts]
-    .filter(t => t.count > 0 && TABLE_GAME_MAP[t.table])
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 3);
-
-  if (top3.length === 0) return null;
+  if (entries.length === 0) return null;
 
   return (
     <section>
       <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">🔥 Most Played Today</p>
       <div className="flex gap-2">
-        {top3.map(({ table, count }) => {
-          const game = TABLE_GAME_MAP[table];
-          return (
-            <Link
-              key={table}
-              to={game.path}
-              className="flex-1 flex items-center gap-2 rounded-lg border border-border bg-card/80 px-3 py-2.5 hover:border-primary/40 transition-colors"
-            >
-              <span className="text-lg shrink-0">{game.emoji}</span>
-              <div className="min-w-0">
-                <span className="text-xs font-bold text-foreground block truncate">{game.label}</span>
-                <span className="text-[10px] text-muted-foreground">{formatPlays(count)}</span>
-              </div>
-            </Link>
-          );
-        })}
+        {entries.map(({ game, count, isFallback }) => (
+          <Link
+            key={game.path}
+            to={game.path}
+            className="flex-1 flex items-center gap-2 rounded-lg border border-border bg-card/80 px-3 py-2.5 hover:border-primary/40 transition-colors"
+          >
+            <span className="text-lg shrink-0">{game.emoji}</span>
+            <div className="min-w-0">
+              <span className="text-xs font-bold text-foreground block truncate">{game.label}</span>
+              <span className="text-[10px] text-muted-foreground">
+                {isFallback ? 'Popular pick' : formatPlays(count)}
+              </span>
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );
