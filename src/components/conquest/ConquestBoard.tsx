@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { useConquest } from '@/hooks/useConquest';
+import { useConquest, PowerRankEntry } from '@/hooks/useConquest';
 import ConquestMap from './ConquestMap';
-import { TEAM_MAP, DIRECTIONS, DIR_LABELS } from '@/data/conquestData';
+import { TEAM_MAP, DIRECTIONS, DIR_LABELS, isLightColor } from '@/data/conquestData';
 import { TEAM_LEGENDS } from '@/data/conquestPowerups';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -71,6 +71,60 @@ function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
         </table>
       </div>
     </div>
+  );
+}
+
+// Compact ranked list: rank, abbr, overall, W-L from this run's battles.
+// Collapsible on mobile (native <details>, matches the Eliminated section
+// pattern already used below). Rankings use the power-rank-adjusted overall
+// (same value that drives win probability in conquestBattle.ts), so the
+// panel honestly reflects battle odds rather than being purely cosmetic.
+function PowerRankingsPanel({ rankings }: { rankings: PowerRankEntry[] }) {
+  return (
+    <details className="rounded-xl border border-border bg-card" open>
+      <summary className="cursor-pointer select-none px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
+        📊 Power Rankings <span className="normal-case font-normal text-[10px]">· adjusted by in-run form</span>
+      </summary>
+      <div className="px-3 pb-3 max-h-64 overflow-y-auto">
+        <table className="w-full text-[11px]">
+          <thead>
+            <tr className="border-b border-border text-muted-foreground">
+              <th className="py-1 text-left font-semibold w-6">#</th>
+              <th className="py-1 text-left font-semibold">Team</th>
+              <th className="py-1 text-center font-semibold">OVR</th>
+              <th className="py-1 text-right font-semibold">W-L</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rankings.map((r, i) => {
+              const team = TEAM_MAP.get(r.id);
+              if (!team) return null;
+              return (
+                <tr key={r.id} className="border-b border-border/40 last:border-0">
+                  <td className="py-1 text-muted-foreground">{i + 1}</td>
+                  <td className="py-1">
+                    <span
+                      className="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold border"
+                      style={{
+                        backgroundColor: team.color,
+                        color: isLightColor(team.color) ? '#000000' : '#FFFFFF',
+                        borderColor: team.secondaryColor,
+                      }}
+                    >
+                      {r.id}
+                    </span>
+                  </td>
+                  <td className="py-1 text-center font-bold text-foreground">{r.overall}</td>
+                  <td className="py-1 text-right text-muted-foreground whitespace-nowrap">
+                    {r.wins}-{r.losses}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </details>
   );
 }
 
@@ -558,6 +612,9 @@ export default function ConquestBoard() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Power Rankings (item 86): compact ranked list, updates after each battle */}
+      {game.turn > 0 && <PowerRankingsPanel rankings={game.powerRankings()} />}
 
       {/* Standings: remaining teams sorted by territory then wins, + collapsible eliminated list */}
       {aliveIds.length > 1 && game.turn > 0 && (

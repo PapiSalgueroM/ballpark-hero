@@ -8,7 +8,7 @@ import {
   PowerupId, PowerupDef, POWERUPS, getRandomPowerup,
   FREE_AGENTS, TEAM_LEGENDS, FreeAgent,
 } from '@/data/conquestPowerups';
-import { simulateDetailedBattle, BattleSimulation, PlayEvent, BoxScore, TeamStatLine } from '@/lib/conquestBattle';
+import { simulateDetailedBattle, BattleSimulation, PlayEvent, BoxScore, TeamStatLine, TeamRatingOverride } from '@/lib/conquestBattle';
 
 export type Phase =
   | 'ready' | 'animating' | 'battle' | 'steal' | 'gameover'
@@ -38,9 +38,38 @@ export interface SavedPowerup {
   icon: string;
 }
 
+// Power rankings entry (item 86): rank, abbr, adjusted overall, in-run W-L.
+export interface PowerRankEntry {
+  id: string;
+  offense: number;
+  defense: number;
+  overall: number;
+  wins: number;
+  losses: number;
+}
+
 // Re-export for consumers
-export type { PowerupId, PowerupDef, FreeAgent, BattleSimulation, PlayEvent, BoxScore, TeamStatLine };
+export type { PowerupId, PowerupDef, FreeAgent, BattleSimulation, PlayEvent, BoxScore, TeamStatLine, TeamRatingOverride };
 export { POWERUPS, FREE_AGENTS, TEAM_LEGENDS };
+
+// Power rankings tuning (item 86): a win/loss nudges a team's O/D a small
+// amount so the ranked list reflects in-run form, and — critically — the
+// SAME adjusted numbers feed simulateDetailedBattle's win probability, so
+// the panel isn't just cosmetic. Kept small and clamped so a hot streak
+// bends the odds without erasing the underlying talent gap.
+const POWER_RANK_WIN_BUMP = 1.5;
+const POWER_RANK_LOSS_BUMP = -1.5;
+const POWER_RANK_CLAMP = 12; // max total drift from the static base rating
+
+function clampDrift(v: number) {
+  return Math.max(-POWER_RANK_CLAMP, Math.min(POWER_RANK_CLAMP, v));
+}
+
+function buildInitialPowerRankDrift(): Record<string, number> {
+  const d: Record<string, number> = {};
+  NFL_TEAMS.forEach(t => { d[t.id] = 0; });
+  return d;
+}
 
 // Build a lookup from state ID → geographic center (from SVG paths) - kept for map rendering
 const GEO_CENTERS = new Map<string, { x: number; y: number }>();
@@ -157,8 +186,9 @@ function simulateBattle(
   rosters: Record<string, string[]>,
   upgradeTeam?: string | null,
   upgradedPlayer?: string | null,
+  ratingOverrides?: Record<string, TeamRatingOverride>,
 ): BattleResult {
-  const sim = simulateDetailedBattle(attacker, defender, territories, rosters, upgradeTeam || null, upgradedPlayer || null);
+  const sim = simulateDetailedBattle(attacker, defender, territories, rosters, upgradeTeam || null, upgradedPlayer || null, ratingOverrides);
 
   const winnerId = sim.winner === 'att' ? attacker : defender;
   const loserId = sim.winner === 'att' ? defender : attacker;
@@ -229,6 +259,13 @@ export function useConquest() {
   const [pendingBattleApply, setPendingBattleApply] = useState<{ attacker: string; defender: string; result: BattleResult } | null>(null);
   const [playerConfirmed, setPlayerConfirmed] = useState<string | null>(null);
 
+  // Power rankings (item 86): per-team O/D drift from this run's battle
+  // results, plus a battle win/loss tally. The drift feeds BOTH the ranked
+  // panel display and the actual win-probability calculation, so the panel
+  // is never just decorative.
+  const [powerRankDrift, setPowerRankDrift] = useState<Record<string, number>>(() => buildInitialPowerRankDrift());
+  const [powerRankRecord, setPowerRankRecord] = useState<Record<string, { wins: number; losses: number }>>({});
+
   const timeoutsRef = useRef<number[]>([]);
   const clearTimeouts = () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
   const addTimeout = (fn: () => void, ms: number) => { timeoutsRef.current.push(window.setTimeout(fn, ms)); };
@@ -236,6 +273,40 @@ export function useConquest() {
   useEffect(() => () => clearTimeouts(), []);
 
   const aliveTeams = useCallback(() => getAliveTeamsFrom(territories), [territories]);
+
+  // Build the O/D override map that feeds simulateDetailedBattle, applying
+  // each team's current power-rank drift on top of its static base rating.
+  const buildRatingOverrides = useCallback((): Record<string, TeamRatingOverride> => {
+    const overrides: Record<string, TeamRatingOverride> = {};
+    NFL_TEAMS.forEach(t => {
+      const drift = powerRankDrift[t.id] || 0;
+      overrides[t.id] = {
+        offense: Math.max(40, Math.min(99, Math.round(t.offense + drift))),
+        defense: Math.max(40, Math.min(99, Math.round(t.defense + drift))),
+      };
+    });
+    return overrides;
+  }, [powerRankDrift]);
+
+  // Ranked list for the panel: overall = avg of drift-adjusted offense/defense,
+  // sorted descending, ties broken by in-run wins then fewer losses.
+  const powerRankings = useCallback((): PowerRankEntry[] => {
+    const overrides = buildRatingOverrides();
+    return NFL_TEAMS
+      .map(t => {
+        const o = overrides[t.id];
+        const rec = powerRankRecord[t.id] || { wins: 0, losses: 0 };
+        return {
+          id: t.id,
+          offense: o.offense,
+          defense: o.defense,
+          overall: Math.round((o.offense + o.defense) / 2),
+          wins: rec.wins,
+          losses: rec.losses,
+        };
+      })
+      .sort((a, b) => b.overall - a.overall || b.wins - a.wins || a.losses - b.losses);
+  }, [buildRatingOverrides, powerRankRecord]);
 
   const getTeamTerritoryCount = useCallback(
     (teamId: string) => Object.values(territories).filter(t => t === teamId).length,
@@ -496,7 +567,7 @@ export function useConquest() {
       }
     } else {
       const enemyId = target.id;
-      const result = simulateBattle(team, enemyId, territories, rosters, upgradeActiveTeam, upgradedPlayer);
+      const result = simulateBattle(team, enemyId, territories, rosters, upgradeActiveTeam, upgradedPlayer, buildRatingOverrides());
 
       const startPlayByPlay = () => {
         setBattleResult(result);
@@ -543,10 +614,32 @@ export function useConquest() {
         addTimeout(startPlayByPlay, 6000);
       }
     }
-  }, [territories, rosters, powerupStates, upgradeActiveTeam, upgradedPlayer]);
+  }, [territories, rosters, powerupStates, upgradeActiveTeam, upgradedPlayer, buildRatingOverrides]);
+
+  // Power rankings update (item 86): a battle win nudges the winner's O/D up
+  // and the loser's down by a small clamped amount, and both teams' in-run
+  // W-L tally moves. Runs for every real battle, including ones where the
+  // loser survives via invincibility (they still lost the on-field battle).
+  const applyPowerRankUpdate = useCallback((winnerId: string, loserId: string) => {
+    setPowerRankDrift(prev => ({
+      ...prev,
+      [winnerId]: clampDrift((prev[winnerId] || 0) + POWER_RANK_WIN_BUMP),
+      [loserId]: clampDrift((prev[loserId] || 0) + POWER_RANK_LOSS_BUMP),
+    }));
+    setPowerRankRecord(prev => {
+      const w = prev[winnerId] || { wins: 0, losses: 0 };
+      const l = prev[loserId] || { wins: 0, losses: 0 };
+      return {
+        ...prev,
+        [winnerId]: { wins: w.wins + 1, losses: w.losses },
+        [loserId]: { wins: l.wins, losses: l.losses + 1 },
+      };
+    });
+  }, []);
 
   const applyBattleResult = useCallback((attacker: string, defender: string, result: BattleResult) => {
     const loserIsInvincible = invincibleTeams.has(result.loser);
+    applyPowerRankUpdate(result.winner, result.loser);
 
     if (loserIsInvincible) {
       // Invincibility: loser survives, just remove the shield
@@ -590,7 +683,7 @@ export function useConquest() {
 
       return newTerr;
     });
-  }, [rosters, invincibleTeams]);
+  }, [rosters, invincibleTeams, applyPowerRankUpdate]);
 
   const openStealModal = useCallback(() => {
     setStealModalOpen(true);
@@ -664,6 +757,8 @@ export function useConquest() {
     setStealModalOpen(false);
     setPendingBattleApply(null);
     setPlayerConfirmed(null);
+    setPowerRankDrift(buildInitialPowerRankDrift());
+    setPowerRankRecord({});
   }, []);
 
   return {
@@ -676,6 +771,8 @@ export function useConquest() {
     // Play-by-play
     visiblePlays, playByPlayActive, simulatingRemainder, boxScore,
     stealModalOpen, pendingBattleApply, playerConfirmed,
+    // Power rankings (item 86)
+    powerRankings,
     // Actions
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,
     usePowerupNow, savePowerupForLater, useSavedPowerup, signFreeAgent,

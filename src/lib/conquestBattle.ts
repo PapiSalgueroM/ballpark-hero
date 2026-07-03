@@ -1,5 +1,6 @@
 import { TEAM_MAP, ConquestPlayer } from '@/data/conquestData';
 import { TEAM_LEGENDS } from '@/data/conquestPowerups';
+import { winProbability } from '@/lib/perfectSeason';
 
 /* ── Types ── */
 
@@ -202,17 +203,56 @@ function generatePlay(
   };
 }
 
+/* ── Win probability (Wave B: perfectSeason logistic composite) ── */
+
+/**
+ * Composite win probability for the attacker, built from perfectSeason's
+ * winProbability (logistic, clamped .05-.985) applied to two head-to-head
+ * matchups: attacker offense vs defender defense, and defender offense vs
+ * attacker defense. Each matchup is expressed as an "overall" centered the
+ * same way perfectSeason expects (delta added to the 77 baseline it anchors
+ * on), then the two probabilities are combined into one attacker win prob.
+ * Territory counts convert to a modest rating bump rather than a flat power
+ * addition, so a big territorial lead nudges the odds without swamping the
+ * underlying O/D matchup.
+ */
+export function compositeAttackerWinProb(
+  attOffense: number, attDefense: number,
+  defOffense: number, defDefense: number,
+  attTerr: number, defTerr: number,
+): number {
+  // Territory bonus: +1 rating point per 3 states of net lead, capped at +/-6.
+  const terrBump = clamp((attTerr - defTerr) / 3, -6, 6);
+
+  // Matchup 1: attacker's offense driving against defender's defense.
+  // Expressed as an overall centered on 77 (perfectSeason's pivot) plus the
+  // gap between the two ratings, so a bigger gap pushes further from 50/50.
+  const attOffVsDefDef = 77 + (attOffense - defDefense) + terrBump;
+  const attOffenseWinProb = winProbability(attOffVsDefDef);
+
+  // Matchup 2: defender's offense driving against attacker's defense.
+  // This is the probability the DEFENDER wins that half of the exchange,
+  // so we take its complement to get the attacker's side.
+  const defOffVsAttDef = 77 + (defOffense - attDefense) - terrBump;
+  const attDefenseWinProb = 1 - winProbability(defOffVsAttDef);
+
+  // Combine the two halves (average keeps both matchups honest rather than
+  // letting one lopsided side dominate), then re-clamp to perfectSeason's
+  // upset-preserving bounds.
+  const combined = (attOffenseWinProb + attDefenseWinProb) / 2;
+  return clamp(combined, 0.05, 0.985);
+}
+
 /* ── Generate realistic NFL final scores ── */
 
 function generateFinalScore(
   attRating: number, defRating: number,
+  attOffense: number, attDefense: number,
+  defOffense: number, defDefense: number,
   attTerr: number, defTerr: number,
   playByPlayAttScore: number, playByPlayDefScore: number,
 ): { attScore: number; defScore: number } {
-  // Power factor influences who wins
-  const attPower = attRating + attTerr * 0.5;
-  const defPower = defRating + defTerr * 0.5;
-  const attWinProb = attPower / (attPower + defPower);
+  const attWinProb = compositeAttackerWinProb(attOffense, attDefense, defOffense, defDefense, attTerr, defTerr);
 
   const attackerWins = Math.random() < attWinProb;
 
@@ -357,6 +397,11 @@ function generateFullGameStats(
 
 /* ── Main Simulation ── */
 
+export interface TeamRatingOverride {
+  offense: number;
+  defense: number;
+}
+
 export function simulateDetailedBattle(
   attackerId: string,
   defenderId: string,
@@ -364,11 +409,20 @@ export function simulateDetailedBattle(
   rosters: Record<string, string[]>,
   upgradeTeam: string | null,
   upgradedPlayer: string | null,
+  // Power-rankings-adjusted O/D ratings (item 86). When supplied, these
+  // override the static conquestData.ts offense/defense so the panel's
+  // in-run adjustments actually drive the odds instead of just being cosmetic.
+  ratingOverrides?: Record<string, TeamRatingOverride>,
 ): BattleSimulation {
   const attTeam = TEAM_MAP.get(attackerId)!;
   const defTeam = TEAM_MAP.get(defenderId)!;
   const aTerr = Object.values(territories).filter(t => t === attackerId).length;
   const dTerr = Object.values(territories).filter(t => t === defenderId).length;
+
+  const attOffense = ratingOverrides?.[attackerId]?.offense ?? attTeam.offense;
+  const attDefense = ratingOverrides?.[attackerId]?.defense ?? attTeam.defense;
+  const defOffense = ratingOverrides?.[defenderId]?.offense ?? defTeam.offense;
+  const defDefense = ratingOverrides?.[defenderId]?.defense ?? defTeam.defense;
 
   const attRoster = rosters[attackerId] || [];
   const defRoster = rosters[defenderId] || [];
@@ -404,6 +458,7 @@ export function simulateDetailedBattle(
   // Step 2: Generate realistic final scores consistent with PBP
   const { attScore: finalAttScore, defScore: finalDefScore } = generateFinalScore(
     attTeam.rating, defTeam.rating,
+    attOffense, attDefense, defOffense, defDefense,
     aTerr, dTerr,
     pbpAttScore, pbpDefScore,
   );

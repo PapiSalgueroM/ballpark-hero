@@ -1,6 +1,6 @@
 # DoUKnowBall Master Plan
 
-Updated: 2026-07-01. This is the single source of truth for what is done, staged, built, and pending. Statuses: [DONE] live or verified, [STAGED] in batch 1 waiting for Anthony to run PUBLISH_GAMES.bat, [BUILT] code written locally and waiting to be staged in batch 2, [PENDING] not started.
+Updated: 2026-07-03 (session 3). This is the single source of truth for what is done, staged, built, and pending. Statuses: [DONE] live or verified, [STAGED] in batch 1 waiting for Anthony to run PUBLISH_GAMES.bat, [BUILT] code written locally and waiting to be staged in batch 2, [PENDING] not started, [IN PROGRESS] partially done.
 
 ## Ground rules
 
@@ -64,12 +64,12 @@ Box2Box Show formats that convert: Footy Tic Tac Toe (adversarial grid, blocking
 ### B. Home screen
 9. [STAGED] Soccer category ordered first.
 10. [PENDING] Poll of the Day: auto-rotating daily matchup poll (two teams, tap to vote, results bar). Client-side rotation from a curated fixture list; AI-written blurb optional later.
-11. [PENDING] Most Played Today: top 3 games by real completions, pulled from our own analytics table (create game_completions table with RLS-safe insert), must render on mobile.
-12. [PENDING] Games-played-today stat wired to real completions instead of a placeholder.
+11. [DONE] Most Played Today: top 3 games by real completions, pulled from the new game_completions table.
+12. [DONE] Games-played-today stat wired to real completions (count(*) against game_completions).
 13. [PENDING] Replace one hero stat with days-logged-in for signed-in users.
-14. [PENDING] Remove Today's Daily Game section.
+14. [DONE] Removed Today's Daily Game section.
 15. [PENDING] Search stays as is; audit result quality once registry grows past 60 games.
-16. [PENDING] Cross-game daily score in the header, Futbol11 style (X correct, Y games today).
+16. [DONE] Cross-game daily score chip in GameNavbar, gold styling, Futbol11 style (X correct, Y games today).
 
 ### C. Site-wide UX
 17. [STAGED] Scroll to top on every new navigation; Back preserves position.
@@ -86,18 +86,18 @@ Box2Box Show formats that convert: Footy Tic Tac Toe (adversarial grid, blocking
 28. [PENDING] Audit all CTAs for dead buttons and mislabels (Skip vs Hint class of bugs).
 
 ### D. Autocomplete and validation (site-wide)
-29. [PENDING] Shared PlayerAutocomplete component: type 3+ letters, debounced DB search, accent-insensitive, surname matching, centered and capitalized suggestions.
-30. [PENDING] Valid-only guesses: input resolves to a real entity from the game's eligible pool or it cannot be submitted.
-31. [PENDING] Fix suggestion text not matching typed letters (normalization bug).
-32. [PENDING] Build Your 5: court position slots selectable, no full-name requirement, reject invalid players at entry, fix submit-time rejection of valid lineups.
-33. [PENDING] Case and diacritic handling everywhere (Mbappe matches Mbappé).
-34. [PENDING] Names always displayed centered and capitalized.
+29. [DONE] Shared PlayerAutocomplete component + playerSearch, live: type 3+ letters, debounced DB search, accent-insensitive, surname matching, centered and capitalized suggestions.
+30. [IN PROGRESS] Valid-only guesses: input resolves to a real entity from the game's eligible pool or it cannot be submitted. done in the 8 games adopted onto PlayerAutocomplete (NBA Starting 5, NBA Chain, NBA Connect 4, Soccer Connect 4, Build Your XI, NFL Grid, NFL Career, Rarity Round); remaining bespoke inputs: tennis chain, NASCAR chain, and any free-text stragglers.
+31. [IN PROGRESS] Fix suggestion text not matching typed letters (normalization bug). done in the 8 games adopted onto PlayerAutocomplete (NBA Starting 5, NBA Chain, NBA Connect 4, Soccer Connect 4, Build Your XI, NFL Grid, NFL Career, Rarity Round); remaining bespoke inputs: tennis chain, NASCAR chain, and any free-text stragglers.
+32. [DONE] Build Your 5 fixed: team-filtered valid-only picks, position eligibility enforced, no full-name requirement, reject invalid players at entry.
+33. [IN PROGRESS] Case and diacritic handling everywhere (Mbappe matches Mbappé). done in the 8 games adopted onto PlayerAutocomplete (NBA Starting 5, NBA Chain, NBA Connect 4, Soccer Connect 4, Build Your XI, NFL Grid, NFL Career, Rarity Round); remaining bespoke inputs: tennis chain, NASCAR chain, and any free-text stragglers.
+34. [IN PROGRESS] Names always displayed centered and capitalized. done in the 8 games adopted onto PlayerAutocomplete (NBA Starting 5, NBA Chain, NBA Connect 4, Soccer Connect 4, Build Your XI, NFL Grid, NFL Career, Rarity Round); remaining bespoke inputs: tennis chain, NASCAR chain, and any free-text stragglers.
 
 ### E. Data expansion
 35. [DONE] transfer_path_puzzles loaded, then mass-generated to 970 puzzles (104 easy one-step, 710 two-step, 156 hard three-step), every one validated as solvable against the game's own career graph, hints auto-written from real shared clubs. shirt_number_puzzles loaded (32). Live in the database now, no publish needed.
 36. [DONE] Database verified: ~165 tables, roughly 1.3M rows, all game reads healthy.
-37. [PENDING] NFL players and rosters wired for autocomplete (DE for Bears must suggest correctly). nflfastr_rosters has 60K rows; connect it.
-38. [PENDING] Fill or retire empty tables: fantasy_draft_players, ballon_dor, world_records, stat_leaders, all_star_selections, cfb_heisman_winners, world_cup_player_stats, olympic_medalists, nba_player_team_seasons, href_nhl_player_seasons. Retire duplicates superseded by v2 tables (ufc_fights, stanley_cup_finals, halls_of_fame).
+37. [DONE] NFL rosters wired: NFL Grid + NFL Career now query nflfastr_rosters (60K rows) for autocomplete, DE for Bears suggests correctly.
+38. [PENDING] Fill or retire empty tables: fantasy_draft_players, world_records, stat_leaders, all_star_selections, cfb_heisman_winners, world_cup_player_stats, olympic_medalists, nba_player_team_seasons, href_nhl_player_seasons. Retire duplicates superseded by v2 tables (ufc_fights, stanley_cup_finals, halls_of_fame). ballon_dor seeded (76 winners).
 39. [IN PROGRESS] Individual awards: ballon_dor table seeded with 76 clean winner rows (men 1956-2025, women 2018-2025) rescued from misaligned scrape data in individual_awards_v2. Live now. Still to add: Golden Boot, MVPs across sports for Bingo criteria.
 40. [PENDING] Expand beyond big-name players in every game: difficulty tiers driven by market value, career length, or draft round.
 41. [PENDING] Deduplicate player_market_values by player-year on write, add indexes for autocomplete queries (ilike on player_name).
@@ -105,12 +105,14 @@ Box2Box Show formats that convert: Footy Tic Tac Toe (adversarial grid, blocking
 43. [PENDING] England flag emoji fix in shirt_number_puzzles (re-run pzzad-resync/P5_shirt_number.sql if rendering bugs).
 44. [PENDING] NFL play-by-play stays out of scope until a source is found; NFL games that need it stay blocked and hidden.
 
+Data notes (session 3): baseball_connections_puzzles now 188 rows, all live-servable (5-per-group repair done 2026-07-03). soccer_club_puzzles at 252 rows. shirt_number_puzzles at 95 rows, with stale-row corrections (Yamal 10, Mbappe 10, Son to LAFC). guess_nation daily now date-seeded. tennis daily works by designed fallback.
+
 ### F. New games (from research, ranked)
 45. [BUILT] Name Them All list quiz, 15 lists across 10 sports, relaxed and timed modes.
 46. [BUILT] Perfect Season engine v1 for MLB (162-0): spin team plus era wheel with no dead spins, draft by position with season ratings, animated sim with skip, share card. White space nobody owns.
 47. [LIVE] Perfect Season NHL 82-0 on the shared engine: franchise plus decade wheel (222 entries), skater ratings from points per game, goalies from draft pedigree (no goalie stats exist in our data), verified live at /perfect-season-nhl.
 48. [SHIPPED] Perfect Season NBA (82-0, per-36 ratings, six man rotation, 1616 team-season wheel) and NFL (17-0, offense draft, perfection tuned to ~12 percent for god teams). Pushed in 02e8c9f, build clean, published. Spot-check /perfect-season-nba and /perfect-season-nfl in a browser next session (extension was offline at ship time).
-49. [PENDING] Soccer Grid upgrade toward Futbol11 Grid: difficulty modes, choose-cell-on-multi-fit, rarity scores from a guess-log table.
+49. [DONE] Soccer Grid upgrade toward Futbol11 Grid: difficulty selector, timers (40/60/90/unlimited), Overtime, refresh persistence. Note: puzzle pool skews broad, 492 Easy / 8 Normal / 0 Hard; content authoring needed for real tiers.
 50. [PENDING] Build-a-XI: 11 random countries, place one valid player per country into a formation, timer options. Reuses FORMATIONS from squadDeal.
 51. [PENDING] Sports Bingo: 12-criteria board, random players revealed one at a time, place or skip.
 52. [PENDING] Goltexto-style similarity guesser: similarity score from club history, league, position, age, nationality overlap. Few clones exist, high wow factor.
@@ -120,6 +122,7 @@ Box2Box Show formats that convert: Footy Tic Tac Toe (adversarial grid, blocking
 56. [PENDING] Stat Detective daily (NBA, NFL, MLB): anonymized stat line plus era hints, Poeltl-style attribute feedback arrows.
 57. [PENDING] Missing XI: show a famous lineup with one player blanked, name the missing man.
 58. [PENDING] Pointless/Goalless mode: score by rarity, lowest total wins, needs the guess-log table from item 49.
+58b. [DONE] Rarity Round shipped at /rarity-round: Pointless-style rarity scoring + Crowd Says mode, 9 SQL-verified categories, daily seeded.
 59. [PENDING] Alphabet Sprint quickfire: 60 seconds, name a valid player per letter or shirt number.
 60. [PENDING] Clue Auction secret player: start with 100 points, buy clues, guess anytime.
 
@@ -177,7 +180,7 @@ Box2Box Show formats that convert: Footy Tic Tac Toe (adversarial grid, blocking
 
 ### K. Copy and writing
 105. [STAGED] Em dashes removed from HowToPlay component; Higher/Lower and Footle help rewritten.
-106. [PENDING] Full em-dash purge across ~146 files (careful pass, code strings only, never touch logic).
+106. [DONE] Full em-dash purge: 616 replaced across 102 files (careful pass, code strings only, never touch logic). Note: FootballGrid/NFLCareer leftovers tracked separately.
 107. [PENDING] Rewrite every How to Play in plain human language, one pass per game, reviewed against the actual mechanics.
 108. [PENDING] Kill AI-sounding phrasing sitewide (delve, dive, elevate, unleash); punchy short sentences.
 
@@ -193,9 +196,20 @@ Box2Box Show formats that convert: Footy Tic Tac Toe (adversarial grid, blocking
 115. [PENDING] Shareability: every result card includes the site URL and an emoji grid that looks good in a group chat.
 116. [PENDING] TikTok-ready design: results screens legible in a vertical phone screenshot.
 
+## Session 3 additions
+
+- Research docs R1-R6 in docs/research/ (competitor teardowns, UI spec, 15-wave build plan).
+- UI foundation components: GameShell, ResultScreen, StatTile, HowToPlayPopover, new tokens and keyframes.
+- Footle, Transfer Market, and home re-skinned onto the new UI foundation.
+- game_completions table added (RLS: public insert and select), powering Most Played and the community completions stat.
+- pg_trgm and unaccent extensions enabled, plus trigram indexes on player_market_values and nflfastr_rosters.
+- Six publishes this session, last commit e36c568, 65 games live.
+
 ## Next actions, in order
-1. Anthony runs PUBLISH_GAMES.bat (batch 1), reports login result.
-2. Verify batch 1 live, then stage batch 2 (instructions above).
-3. Build Perfect Season MLB engine (items 46, 91-95).
-4. Autocomplete component (items 29-34), then wire NFL rosters (37).
-5. Grid rarity + guess-log table (49), then Bingo (51) and Build-a-XI (50).
+1. Wave 3 remainder (Poll of the Day, days-logged-in stat, search audit).
+2. Conquest overhaul (items 81-90, read Conquest code first, reuse perfectSeason.ts).
+3. Accounts and retention (97-104).
+4. How-to-Play rewrite and AI-phrasing pass (107-108).
+5. Remaining new games per R6 waves 10-11 (Missing XI, NHL pair).
+6. Soccer Grid narrow-type puzzle authoring for Normal/Hard tiers.
+7. Waiting on Anthony: five legal decisions (docs/LEGAL_REVIEW.md), praghify link vetting, account incentives spec (item 97), play-test report.

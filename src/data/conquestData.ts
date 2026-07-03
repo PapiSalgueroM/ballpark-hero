@@ -82,12 +82,26 @@ export interface NFLTeam {
   city: string;
   rating: number;
   color: string;
+  secondaryColor: string;
+  offense: number;
+  defense: number;
+  overall: number;
   roster: string[];
   players?: ConquestPlayer[];
 }
 
+// ── O/D/Overall ratings (Wave B) ──
+// Derivation: z-scores from nflfastr_team_stats 2025 REG season, blended 70/30
+// with the hand-set `rating` field above (the pre-existing judgment component).
+// Offense z-score = 0.30*passing_yards + 0.30*rushing_yards + 0.20*passing_tds + 0.20*rushing_tds
+// Defense z-score = 0.45*def_sacks + 0.40*def_interceptions + 0.15*def_tds
+// z-scores mapped to a 55-95 scale via (z*8 + 75), clamped, then blended:
+// offense = round(0.70*offenseStatRating + 0.30*rating), same for defense.
+// overall = round((offense + defense) / 2). Abbreviations normalized (LA -> LAR)
+// before joining to this table's team ids. Recompute by re-running the same
+// query/script if nflfastr_team_stats is refreshed for a new season.
 export const NFL_TEAMS: NFLTeam[] = [
-  { id: 'KC', name: 'Chiefs', city: 'Kansas City', rating: 99, color: '#E31837', roster: [], players: [
+  { id: 'KC', name: 'Chiefs', city: 'Kansas City', rating: 99, color: '#E31837', secondaryColor: '#FFB81C', offense: 81, defense: 79, overall: 80, roster: [], players: [
     { name: 'Patrick Mahomes', position: 'QB', overall: 97, keyStat: '4,502 pass yds' },
     { name: 'Chris Jones', position: 'DT', overall: 97, keyStat: '11 sacks' },
     { name: 'Trent McDuffie', position: 'CB', overall: 94, keyStat: '5 INTs' },
@@ -99,7 +113,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Jawaan Taylor', position: 'OT', overall: 82, keyStat: 'Pro Bowl blocker' },
     { name: 'Bryan Cook', position: 'S', overall: 81, keyStat: '4 INTs' },
   ]},
-  { id: 'BUF', name: 'Bills', city: 'Buffalo', rating: 96, color: '#00338D', roster: [], players: [
+  { id: 'BUF', name: 'Bills', city: 'Buffalo', rating: 96, color: '#00338D', secondaryColor: '#C60C30', offense: 89, defense: 81, overall: 85, roster: [], players: [
     { name: 'Josh Allen', position: 'QB', overall: 99, keyStat: '3,731 pass yds' },
     { name: 'James Cook', position: 'RB', overall: 91, keyStat: '1,621 rush yds' },
     { name: 'Joey Bosa', position: 'DE', overall: 86, keyStat: '12 sacks' },
@@ -111,7 +125,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Dawson Knox', position: 'TE', overall: 81, keyStat: '580 rec yds' },
     { name: 'Taylor Rapp', position: 'S', overall: 79, keyStat: '3 INTs' },
   ]},
-  { id: 'PHI', name: 'Eagles', city: 'Philadelphia', rating: 96, color: '#004C54', roster: [], players: [
+  { id: 'PHI', name: 'Eagles', city: 'Philadelphia', rating: 96, color: '#004C54', secondaryColor: '#A5ACAF', offense: 81, defense: 82, overall: 82, roster: [], players: [
     { name: 'Saquon Barkley', position: 'RB', overall: 99, keyStat: '2,005 rush yds' },
     { name: 'Lane Johnson', position: 'OT', overall: 98, keyStat: 'Pro Bowl blocker' },
     { name: 'AJ Brown', position: 'WR', overall: 93, keyStat: '1,380 rec yds' },
@@ -123,7 +137,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Jordan Mailata', position: 'OT', overall: 85, keyStat: 'Pro Bowl blocker' },
     { name: 'Reed Blankenship', position: 'S', overall: 82, keyStat: '5 INTs' },
   ]},
-  { id: 'BAL', name: 'Ravens', city: 'Baltimore', rating: 95, color: '#241773', roster: [], players: [
+  { id: 'BAL', name: 'Ravens', city: 'Baltimore', rating: 95, color: '#241773', secondaryColor: '#9E7C0C', offense: 84, defense: 78, overall: 81, roster: [], players: [
     { name: 'Lamar Jackson', position: 'QB', overall: 99, keyStat: '4,172 pass yds' },
     { name: 'Derrick Henry', position: 'RB', overall: 98, keyStat: '2,114 rush yds' },
     { name: 'Roquan Smith', position: 'LB', overall: 94, keyStat: '148 tackles' },
@@ -135,7 +149,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Ronnie Stanley', position: 'OT', overall: 84, keyStat: 'Pro Bowl blocker' },
     { name: 'DeAndre Hopkins', position: 'WR', overall: 82, keyStat: '780 rec yds' },
   ]},
-  { id: 'SF', name: '49ers', city: 'San Francisco', rating: 94, color: '#AA0000', roster: [], players: [
+  { id: 'SF', name: '49ers', city: 'San Francisco', rating: 94, color: '#AA0000', secondaryColor: '#B3995D', offense: 83, defense: 73, overall: 78, roster: [], players: [
     { name: 'Nick Bosa', position: 'DE', overall: 96, keyStat: '12 sacks' },
     { name: 'George Kittle', position: 'TE', overall: 96, keyStat: '988 rec yds' },
     { name: 'Christian McCaffrey', position: 'RB', overall: 95, keyStat: '1,740 rush yds' },
@@ -147,7 +161,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Deebo Samuel', position: 'WR', overall: 85, keyStat: '840 rec yds' },
     { name: 'Talanoa Hufanga', position: 'S', overall: 83, keyStat: '4 INTs' },
   ]},
-  { id: 'DAL', name: 'Cowboys', city: 'Dallas', rating: 93, color: '#003594', roster: [], players: [
+  { id: 'DAL', name: 'Cowboys', city: 'Dallas', rating: 93, color: '#003594', secondaryColor: '#869397', offense: 86, defense: 76, overall: 81, roster: [], players: [
     { name: 'CeeDee Lamb', position: 'WR', overall: 98, keyStat: '1,749 rec yds' },
     { name: 'Zack Martin', position: 'OG', overall: 94, keyStat: 'Pro Bowl blocker' },
     { name: 'Dak Prescott', position: 'QB', overall: 88, keyStat: '3,980 pass yds' },
@@ -159,7 +173,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Osa Odighizuwa', position: 'DT', overall: 82, keyStat: '7 sacks' },
     { name: 'Javonte Williams', position: 'RB', overall: 82, keyStat: '774 rush yds' },
   ]},
-  { id: 'DET', name: 'Lions', city: 'Detroit', rating: 93, color: '#0076B6', roster: [], players: [
+  { id: 'DET', name: 'Lions', city: 'Detroit', rating: 93, color: '#0076B6', secondaryColor: '#B0B7BC', offense: 86, defense: 82, overall: 84, roster: [], players: [
     { name: 'Amon-Ra St. Brown', position: 'WR', overall: 96, keyStat: '1,708 rec yds' },
     { name: 'Penei Sewell', position: 'OT', overall: 95, keyStat: 'Pro Bowl blocker' },
     { name: 'Aidan Hutchinson', position: 'DE', overall: 93, keyStat: '12 sacks' },
@@ -171,7 +185,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'DJ Reed', position: 'CB', overall: 84, keyStat: '4 INTs' },
     { name: 'Alim McNeill', position: 'DT', overall: 83, keyStat: '8 sacks' },
   ]},
-  { id: 'CIN', name: 'Bengals', city: 'Cincinnati', rating: 92, color: '#FB4F14', roster: [], players: [
+  { id: 'CIN', name: 'Bengals', city: 'Cincinnati', rating: 92, color: '#FB4F14', secondaryColor: '#000000', offense: 80, defense: 79, overall: 80, roster: [], players: [
     { name: "Ja'Marr Chase", position: 'WR', overall: 99, keyStat: '1,708 rec yds' },
     { name: 'Joe Burrow', position: 'QB', overall: 95, keyStat: '4,641 pass yds' },
     { name: 'Trey Hendrickson', position: 'DE', overall: 91, keyStat: '17 sacks' },
@@ -183,7 +197,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Ted Karras', position: 'OG', overall: 81, keyStat: 'Pro Bowl blocker' },
     { name: 'Andrei Iosivas', position: 'WR', overall: 80, keyStat: '620 rec yds' },
   ]},
-  { id: 'MIA', name: 'Dolphins', city: 'Miami', rating: 91, color: '#008E97', roster: [], players: [
+  { id: 'MIA', name: 'Dolphins', city: 'Miami', rating: 91, color: '#008E97', secondaryColor: '#FC4C02', offense: 78, defense: 77, overall: 78, roster: [], players: [
     { name: 'Tyreek Hill', position: 'WR', overall: 96, keyStat: '1,590 rec yds' },
     { name: 'Jaylen Waddle', position: 'WR', overall: 90, keyStat: '1,102 rec yds' },
     { name: 'Terron Armstead', position: 'OT', overall: 88, keyStat: 'Pro Bowl blocker' },
@@ -195,7 +209,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Chop Robinson', position: 'DE', overall: 83, keyStat: '9 sacks' },
     { name: 'Jonnu Smith', position: 'TE', overall: 82, keyStat: '710 rec yds' },
   ]},
-  { id: 'NYJ', name: 'Jets', city: 'New York', rating: 88, color: '#125740', roster: [], players: [
+  { id: 'NYJ', name: 'Jets', city: 'New York', rating: 88, color: '#125740', secondaryColor: '#000000', offense: 73, defense: 69, overall: 71, roster: [], players: [
     { name: 'Sauce Gardner', position: 'CB', overall: 95, keyStat: '7 INTs' },
     { name: 'Garrett Wilson', position: 'WR', overall: 91, keyStat: '1,180 rec yds' },
     { name: 'Quinnen Williams', position: 'DT', overall: 90, keyStat: '10 sacks' },
@@ -207,7 +221,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Olu Fashanu', position: 'OT', overall: 80, keyStat: 'Pro Bowl blocker' },
     { name: 'Mason Taylor', position: 'TE', overall: 79, keyStat: '480 rec yds' },
   ]},
-  { id: 'CLE', name: 'Browns', city: 'Cleveland', rating: 87, color: '#311D00', roster: [], players: [
+  { id: 'CLE', name: 'Browns', city: 'Cleveland', rating: 87, color: '#311D00', secondaryColor: '#FF3C00', offense: 72, defense: 84, overall: 78, roster: [], players: [
     { name: 'Myles Garrett', position: 'DE', overall: 99, keyStat: '23 sacks' },
     { name: 'Nick Chubb', position: 'RB', overall: 88, keyStat: '1,201 rush yds' },
     { name: 'Jeremiah Owusu-Koramoah', position: 'LB', overall: 87, keyStat: '122 tackles' },
@@ -219,7 +233,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Grant Delpit', position: 'S', overall: 81, keyStat: '4 INTs' },
     { name: 'Jameis Winston', position: 'QB', overall: 77, keyStat: '2,109 pass yds' },
   ]},
-  { id: 'PIT', name: 'Steelers', city: 'Pittsburgh', rating: 87, color: '#FFB612', roster: [], players: [
+  { id: 'PIT', name: 'Steelers', city: 'Pittsburgh', rating: 87, color: '#FFB612', secondaryColor: '#101820', offense: 76, defense: 82, overall: 79, roster: [], players: [
     { name: 'TJ Watt', position: 'LB', overall: 99, keyStat: '19 sacks' },
     { name: 'Minkah Fitzpatrick', position: 'S', overall: 93, keyStat: '6 INTs' },
     { name: 'DK Metcalf', position: 'WR', overall: 92, keyStat: '1,202 rec yds' },
@@ -231,7 +245,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Kaleb Johnson', position: 'RB', overall: 81, keyStat: '950 rush yds' },
     { name: 'Calvin Austin', position: 'WR', overall: 79, keyStat: '580 rec yds' },
   ]},
-  { id: 'HOU', name: 'Texans', city: 'Houston', rating: 90, color: '#03202F', roster: [], players: [
+  { id: 'HOU', name: 'Texans', city: 'Houston', rating: 90, color: '#03202F', secondaryColor: '#A71930', offense: 77, defense: 85, overall: 81, roster: [], players: [
     { name: 'CJ Stroud', position: 'QB', overall: 90, keyStat: '4,380 pass yds' },
     { name: 'Will Anderson', position: 'DE', overall: 90, keyStat: '12 sacks' },
     { name: 'Nico Collins', position: 'WR', overall: 89, keyStat: '1,297 rec yds' },
@@ -243,7 +257,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'CJ Gardner-Johnson', position: 'S', overall: 83, keyStat: '3 INTs' },
     { name: 'Dalton Schultz', position: 'TE', overall: 82, keyStat: '641 rec yds' },
   ]},
-  { id: 'JAX', name: 'Jaguars', city: 'Jacksonville', rating: 86, color: '#006778', roster: [], players: [
+  { id: 'JAX', name: 'Jaguars', city: 'Jacksonville', rating: 86, color: '#006778', secondaryColor: '#D7A22A', offense: 80, defense: 82, overall: 81, roster: [], players: [
     { name: 'Josh Allen', position: 'LB', overall: 89, keyStat: '11 sacks' },
     { name: 'Foye Oluokun', position: 'LB', overall: 88, keyStat: '172 tackles' },
     { name: 'Travis Etienne', position: 'RB', overall: 87, keyStat: '1,022 rush yds' },
@@ -255,7 +269,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Devin Lloyd', position: 'LB', overall: 82, keyStat: '108 tackles' },
     { name: 'Christian Kirk', position: 'WR', overall: 81, keyStat: '780 rec yds' },
   ]},
-  { id: 'TEN', name: 'Titans', city: 'Tennessee', rating: 78, color: '#0C2340', roster: [], players: [
+  { id: 'TEN', name: 'Titans', city: 'Tennessee', rating: 78, color: '#0C2340', secondaryColor: '#4B92DB', offense: 68, defense: 74, overall: 71, roster: [], players: [
     { name: 'Jeffery Simmons', position: 'DT', overall: 91, keyStat: '11 sacks' },
     { name: 'LJarius Sneed', position: 'CB', overall: 86, keyStat: '5 INTs' },
     { name: 'Tyler Lockett', position: 'WR', overall: 84, keyStat: '920 rec yds' },
@@ -267,7 +281,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Sebastian Joseph-Day', position: 'DT', overall: 80, keyStat: '5 sacks' },
     { name: 'Will Levis', position: 'QB', overall: 79, keyStat: '2,201 pass yds' },
   ]},
-  { id: 'IND', name: 'Colts', city: 'Indianapolis', rating: 84, color: '#002C5F', roster: [], players: [
+  { id: 'IND', name: 'Colts', city: 'Indianapolis', rating: 84, color: '#002C5F', secondaryColor: '#A2AAAD', offense: 80, defense: 78, overall: 79, roster: [], players: [
     { name: 'Jonathan Taylor', position: 'RB', overall: 91, keyStat: '1,810 rush yds' },
     { name: 'DeForest Buckner', position: 'DT', overall: 91, keyStat: '10 sacks' },
     { name: 'Michael Pittman', position: 'WR', overall: 85, keyStat: '1,088 rec yds' },
@@ -279,7 +293,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Bernhard Raimann', position: 'OT', overall: 81, keyStat: 'Pro Bowl blocker' },
     { name: 'Daniel Jones', position: 'QB', overall: 80, keyStat: 'backup' },
   ]},
-  { id: 'NE', name: 'Patriots', city: 'New England', rating: 80, color: '#002244', roster: [], players: [
+  { id: 'NE', name: 'Patriots', city: 'New England', rating: 80, color: '#002244', secondaryColor: '#C60C30', offense: 82, defense: 74, overall: 78, roster: [], players: [
     { name: 'Matthew Judon', position: 'LB', overall: 86, keyStat: '10 sacks' },
     { name: 'Christian Barmore', position: 'DT', overall: 85, keyStat: '9 sacks' },
     { name: 'Kyle Dugger', position: 'S', overall: 85, keyStat: '5 INTs' },
@@ -291,7 +305,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Hunter Henry', position: 'TE', overall: 80, keyStat: '488 rec yds' },
     { name: 'Kendrick Bourne', position: 'WR', overall: 79, keyStat: '640 rec yds' },
   ]},
-  { id: 'LV', name: 'Raiders', city: 'Las Vegas', rating: 75, color: '#000000', roster: [], players: [
+  { id: 'LV', name: 'Raiders', city: 'Las Vegas', rating: 75, color: '#000000', secondaryColor: '#A5ACAF', offense: 67, defense: 72, overall: 70, roster: [], players: [
     { name: 'Maxx Crosby', position: 'DE', overall: 96, keyStat: '14 sacks' },
     { name: 'Davante Adams', position: 'WR', overall: 88, keyStat: '1,012 rec yds' },
     { name: 'Geno Smith', position: 'QB', overall: 83, keyStat: '3,480 pass yds' },
@@ -303,7 +317,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Nakobe Dean', position: 'LB', overall: 79, keyStat: '105 tackles' },
     { name: 'Adam Butler', position: 'DT', overall: 78, keyStat: '5 sacks' },
   ]},
-  { id: 'DEN', name: 'Broncos', city: 'Denver', rating: 83, color: '#FB4F14', roster: [], players: [
+  { id: 'DEN', name: 'Broncos', city: 'Denver', rating: 83, color: '#FB4F14', secondaryColor: '#002244', offense: 78, defense: 84, overall: 81, roster: [], players: [
     { name: 'Pat Surtain', position: 'CB', overall: 96, keyStat: '7 INTs' },
     { name: 'Bo Nix', position: 'QB', overall: 84, keyStat: '3,775 pass yds' },
     { name: 'Talanoa Hufanga', position: 'S', overall: 84, keyStat: '4 INTs' },
@@ -315,7 +329,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Troy Franklin', position: 'WR', overall: 81, keyStat: '720 rec yds' },
     { name: 'Adam Trautman', position: 'TE', overall: 76, keyStat: '340 rec yds' },
   ]},
-  { id: 'LAC', name: 'Chargers', city: 'Los Angeles', rating: 90, color: '#0080C6', roster: [], players: [
+  { id: 'LAC', name: 'Chargers', city: 'Los Angeles', rating: 90, color: '#0080C6', secondaryColor: '#FFC20E', offense: 80, defense: 83, overall: 82, roster: [], players: [
     { name: 'Derwin James', position: 'S', overall: 94, keyStat: '6 INTs' },
     { name: 'Justin Herbert', position: 'QB', overall: 93, keyStat: '4,882 pass yds' },
     { name: 'Rashawn Slater', position: 'OT', overall: 91, keyStat: 'Pro Bowl blocker' },
@@ -327,7 +341,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Sebastian Joseph-Day', position: 'DT', overall: 79, keyStat: '5 sacks' },
     { name: 'Will Dissly', position: 'TE', overall: 78, keyStat: '480 rec yds' },
   ]},
-  { id: 'GB', name: 'Packers', city: 'Green Bay', rating: 89, color: '#203731', roster: [], players: [
+  { id: 'GB', name: 'Packers', city: 'Green Bay', rating: 89, color: '#203731', secondaryColor: '#FFB612', offense: 80, defense: 75, overall: 78, roster: [], players: [
     { name: 'Micah Parsons', position: 'DE', overall: 99, keyStat: '12.5 sacks' },
     { name: 'Jordan Love', position: 'QB', overall: 89, keyStat: '4,012 pass yds' },
     { name: 'Xavier McKinney', position: 'S', overall: 88, keyStat: '6 INTs' },
@@ -339,7 +353,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Tucker Kraft', position: 'TE', overall: 82, keyStat: '598 rec yds' },
     { name: 'Devonte Wyatt', position: 'DT', overall: 80, keyStat: '7 sacks' },
   ]},
-  { id: 'CHI', name: 'Bears', city: 'Chicago', rating: 84, color: '#0B162A', roster: [], players: [
+  { id: 'CHI', name: 'Bears', city: 'Chicago', rating: 84, color: '#0B162A', secondaryColor: '#C83803', offense: 82, defense: 83, overall: 82, roster: [], players: [
     { name: 'Montez Sweat', position: 'DE', overall: 89, keyStat: '11 sacks' },
     { name: 'Kevin Byard', position: 'S', overall: 88, keyStat: '7 INTs' },
     { name: 'DJ Moore', position: 'WR', overall: 87, keyStat: '1,364 rec yds' },
@@ -351,7 +365,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Gervon Dexter', position: 'DT', overall: 81, keyStat: '7 sacks' },
     { name: 'Roschon Johnson', position: 'RB', overall: 78, keyStat: '620 rush yds' },
   ]},
-  { id: 'MIN', name: 'Vikings', city: 'Minnesota', rating: 88, color: '#4F2683', roster: [], players: [
+  { id: 'MIN', name: 'Vikings', city: 'Minnesota', rating: 88, color: '#4F2683', secondaryColor: '#FFC62F', offense: 75, defense: 80, overall: 78, roster: [], players: [
     { name: 'Justin Jefferson', position: 'WR', overall: 99, keyStat: '1,533 rec yds' },
     { name: 'TJ Hockenson', position: 'TE', overall: 88, keyStat: '980 rec yds' },
     { name: "Brian O'Neill", position: 'OT', overall: 87, keyStat: 'Pro Bowl blocker' },
@@ -363,7 +377,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Byron Murphy', position: 'CB', overall: 83, keyStat: '4 INTs' },
     { name: 'Aaron Jones', position: 'RB', overall: 83, keyStat: '940 rush yds' },
   ]},
-  { id: 'LAR', name: 'Rams', city: 'Los Angeles', rating: 86, color: '#003594', roster: [], players: [
+  { id: 'LAR', name: 'Rams', city: 'Los Angeles', rating: 86, color: '#003594', secondaryColor: '#FFA300', offense: 86, defense: 82, overall: 84, roster: [], players: [
     { name: 'Matthew Stafford', position: 'QB', overall: 91, keyStat: '4,707 pass yds' },
     { name: 'Davante Adams', position: 'WR', overall: 91, keyStat: '14 rec TDs' },
     { name: 'Trent McDuffie', position: 'CB', overall: 92, keyStat: '5 INTs' },
@@ -375,7 +389,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Tyler Higbee', position: 'TE', overall: 82, keyStat: '541 rec yds' },
     { name: 'Jordan Fuller', position: 'S', overall: 80, keyStat: '3 INTs' },
   ]},
-  { id: 'SEA', name: 'Seahawks', city: 'Seattle', rating: 85, color: '#002244', roster: [], players: [
+  { id: 'SEA', name: 'Seahawks', city: 'Seattle', rating: 85, color: '#002244', secondaryColor: '#69BE28', offense: 80, defense: 83, overall: 82, roster: [], players: [
     { name: 'Jaxon Smith-Njigba', position: 'WR', overall: 90, keyStat: '1,793 rec yds' },
     { name: 'Bobby Wagner', position: 'LB', overall: 87, keyStat: '138 tackles' },
     { name: 'Cooper Kupp', position: 'WR', overall: 87, keyStat: '1,002 rec yds' },
@@ -387,7 +401,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Noah Fant', position: 'TE', overall: 80, keyStat: '601 rec yds' },
     { name: 'Josh Sweat', position: 'DE', overall: 84, keyStat: '9 sacks' },
   ]},
-  { id: 'ARI', name: 'Cardinals', city: 'Arizona', rating: 82, color: '#97233F', roster: [], players: [
+  { id: 'ARI', name: 'Cardinals', city: 'Arizona', rating: 82, color: '#97233F', secondaryColor: '#000000', offense: 76, defense: 73, overall: 74, roster: [], players: [
     { name: 'Budda Baker', position: 'S', overall: 88, keyStat: '5 INTs' },
     { name: 'Trey McBride', position: 'TE', overall: 87, keyStat: '1,146 rec yds' },
     { name: 'Marvin Harrison Jr', position: 'WR', overall: 87, keyStat: '1,108 rec yds' },
@@ -399,7 +413,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Greg Dortch', position: 'WR', overall: 79, keyStat: '540 rec yds' },
     { name: 'Michael Wilson', position: 'WR', overall: 79, keyStat: '560 rec yds' },
   ]},
-  { id: 'NO', name: 'Saints', city: 'New Orleans', rating: 83, color: '#D3BC8D', roster: [], players: [
+  { id: 'NO', name: 'Saints', city: 'New Orleans', rating: 83, color: '#D3BC8D', secondaryColor: '#101820', offense: 73, defense: 78, overall: 76, roster: [], players: [
     { name: 'Chris Olave', position: 'WR', overall: 88, keyStat: '1,182 rec yds' },
     { name: 'Marshon Lattimore', position: 'CB', overall: 86, keyStat: '4 INTs' },
     { name: 'Travis Etienne', position: 'RB', overall: 86, keyStat: '1,022 rush yds' },
@@ -411,7 +425,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Pete Werner', position: 'LB', overall: 79, keyStat: '102 tackles' },
     { name: 'Juwan Johnson', position: 'TE', overall: 79, keyStat: '510 rec yds' },
   ]},
-  { id: 'TB', name: 'Buccaneers', city: 'Tampa Bay', rating: 85, color: '#D50A0A', roster: [], players: [
+  { id: 'TB', name: 'Buccaneers', city: 'Tampa Bay', rating: 85, color: '#D50A0A', secondaryColor: '#34302B', offense: 77, defense: 79, overall: 78, roster: [], players: [
     { name: 'Antoine Winfield', position: 'S', overall: 91, keyStat: '6 INTs' },
     { name: 'Vita Vea', position: 'DT', overall: 91, keyStat: '9 sacks' },
     { name: 'Mike Evans', position: 'WR', overall: 91, keyStat: '1,180 rec yds' },
@@ -423,7 +437,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Rachaad White', position: 'RB', overall: 83, keyStat: '1,012 rush yds' },
     { name: 'Zyon McCollum', position: 'CB', overall: 79, keyStat: '3 INTs' },
   ]},
-  { id: 'ATL', name: 'Falcons', city: 'Atlanta', rating: 85, color: '#A71930', roster: [], players: [
+  { id: 'ATL', name: 'Falcons', city: 'Atlanta', rating: 85, color: '#A71930', secondaryColor: '#000000', offense: 77, defense: 84, overall: 80, roster: [], players: [
     { name: 'Bijan Robinson', position: 'RB', overall: 91, keyStat: '1,456 rush yds' },
     { name: 'AJ Terrell', position: 'CB', overall: 87, keyStat: '5 INTs' },
     { name: 'Drake London', position: 'WR', overall: 87, keyStat: '1,102 rec yds' },
@@ -435,7 +449,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Troy Andersen', position: 'LB', overall: 81, keyStat: '112 tackles' },
     { name: 'Darnell Mooney', position: 'WR', overall: 80, keyStat: '740 rec yds' },
   ]},
-  { id: 'CAR', name: 'Panthers', city: 'Carolina', rating: 76, color: '#0085CA', roster: [], players: [
+  { id: 'CAR', name: 'Panthers', city: 'Carolina', rating: 76, color: '#0085CA', secondaryColor: '#101820', offense: 72, defense: 75, overall: 74, roster: [], players: [
     { name: 'Brian Burns', position: 'DE', overall: 87, keyStat: '11 sacks' },
     { name: 'Derrick Brown', position: 'DT', overall: 83, keyStat: '8 sacks' },
     { name: 'Jaycee Horn', position: 'CB', overall: 83, keyStat: '4 INTs' },
@@ -447,7 +461,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Bryce Young', position: 'QB', overall: 79, keyStat: '2,877 pass yds' },
     { name: 'Hayden Hurst', position: 'TE', overall: 77, keyStat: '420 rec yds' },
   ]},
-  { id: 'NYG', name: 'Giants', city: 'New York', rating: 77, color: '#0B2265', roster: [], players: [
+  { id: 'NYG', name: 'Giants', city: 'New York', rating: 77, color: '#0B2265', secondaryColor: '#A71930', offense: 77, defense: 73, overall: 75, roster: [], players: [
     { name: 'Dexter Lawrence', position: 'DT', overall: 91, keyStat: '9 sacks' },
     { name: 'Malik Nabers', position: 'WR', overall: 86, keyStat: '1,204 rec yds' },
     { name: 'Kayvon Thibodeaux', position: 'DE', overall: 85, keyStat: '12 sacks' },
@@ -459,7 +473,7 @@ export const NFL_TEAMS: NFLTeam[] = [
     { name: 'Devin Singletary', position: 'RB', overall: 80, keyStat: '912 rush yds' },
     { name: "Adoree' Jackson", position: 'CB', overall: 80, keyStat: '3 INTs' },
   ]},
-  { id: 'WAS', name: 'Commanders', city: 'Washington', rating: 84, color: '#5A1414', roster: [], players: [
+  { id: 'WAS', name: 'Commanders', city: 'Washington', rating: 84, color: '#5A1414', secondaryColor: '#FFB612', offense: 78, defense: 76, overall: 77, roster: [], players: [
     { name: 'Jayden Daniels', position: 'QB', overall: 88, keyStat: '3,568 pass yds' },
     { name: 'Daron Payne', position: 'DT', overall: 87, keyStat: '9 sacks' },
     { name: 'Terry McLaurin', position: 'WR', overall: 87, keyStat: '1,096 rec yds' },

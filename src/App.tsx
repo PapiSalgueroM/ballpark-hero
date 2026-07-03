@@ -82,6 +82,7 @@ import StatDetective from "./pages/StatDetective";
 import AlphabetSprint from "./pages/AlphabetSprint";
 import ClueAuction from "./pages/ClueAuction";
 import RarityRound from "./pages/RarityRound";
+import MissingXi from "./pages/MissingXi";
 
 const queryClient = new QueryClient();
 
@@ -188,6 +189,7 @@ const AppContent = () => {
         <Route path="/alphabet-sprint" element={<AlphabetSprint />} />
         <Route path="/clue-auction" element={<ClueAuction />} />
         <Route path="/rarity-round" element={<RarityRound />} />
+        <Route path="/missing-xi" element={<MissingXi />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
