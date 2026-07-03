@@ -90,11 +90,11 @@ const FootballTimeline = () => {
                 </span>
 
                 {status === 'playing' && (
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-1 shrink-0">
                     <button
                       onClick={() => movePlayer(index, Math.max(0, index - 1))}
                       disabled={index === 0}
-                      className="text-muted-foreground hover:text-[hsl(var(--ft-gold))] disabled:opacity-30 transition-colors"
+                      className="flex items-center justify-center w-10 h-10 -m-1 text-muted-foreground hover:text-[hsl(var(--ft-gold))] disabled:opacity-30 transition-colors"
                       aria-label="Move up"
                     >
                       <ArrowUp className="w-4 h-4" />
@@ -102,7 +102,7 @@ const FootballTimeline = () => {
                     <button
                       onClick={() => movePlayer(index, Math.min(order.length - 1, index + 1))}
                       disabled={index === order.length - 1}
-                      className="text-muted-foreground hover:text-[hsl(var(--ft-gold))] disabled:opacity-30 transition-colors"
+                      className="flex items-center justify-center w-10 h-10 -m-1 text-muted-foreground hover:text-[hsl(var(--ft-gold))] disabled:opacity-30 transition-colors"
                       aria-label="Move down"
                     >
                       <ArrowDown className="w-4 h-4" />

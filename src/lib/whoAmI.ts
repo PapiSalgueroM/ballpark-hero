@@ -10,16 +10,37 @@ import { supabase } from '@/integrations/supabase/client';
  * SIMILARITY SCORING (exact weights, verified in SQL against live rows):
  *   +22  same nationality (primary nationality, accent-insensitive)
  *   +18  same position group (GK / DEF / MID / FWD)
- *   +6   extra when the exact position also matches (so exact position = 24)
+ *   +10  extra when the exact position also matches (so exact position = 28)
  *   +25  same current club, OR
- *   +15  any shared club across full career history (never stacks with +25)
+ *   +10  any shared club across full career history (never stacks with +25)
  *   +15 * max(0, 1 - |ageDiff| / 12)            age closeness, 0 pts at 12+ years apart
  *   +20 * max(0, 1 - |log10(valueRatio)| / 1)   market value closeness on a log scale,
  *                                               0 pts when values are 10x or more apart
- *   Raw maximum is 106; non-exact guesses are capped at 99.
+ *   Raw maximum is 110; non-exact guesses are capped at 99.
  *   Guessing the secret player itself always returns exactly 100.
  *
- * Verified sample pairs (SQL run on flawuiqbvjobmkfkauhw, latest rows, 2026-07-01):
+ * WEIGHT AUDIT (2026-07-03), before -> after, against a ~400 player pool:
+ *   positionExact  +6 -> +10   Going from "same group" (MID is ~120 of 400
+ *     players) to "same exact position" (e.g. just CDMs, ~15-20 players) is
+ *     one of the sharpest single narrows in the whole scorer, yet it was
+ *     worth barely a quarter of nationality's +22 for a similar or tighter
+ *     narrow. Bumped so nailing the exact position is felt, not a rounding
+ *     error next to the group match it sits on top of.
+ *   sharedClub     +15 -> +10  A career-history club link is real signal but
+ *     far noisier than a current club: any well-traveled pro accumulates
+ *     shared ex-clubs with dozens of other pool players, so it does not
+ *     narrow the pool anywhere near as much as sameClub's +25. Dropped from
+ *     60% to 40% of sameClub's weight to match that gap in reliability.
+ *   nationality, positionGroup, sameClub, age, value: left unchanged. Each
+ *     already tracks its real narrowing power: sameClub and nationality both
+ *     cut a 400 pool to a few dozen; value is the strongest continuous
+ *     signal for guessing-game tiering (a 5M squad player is never confused
+ *     for a 180M superstar); age is a fair continuous tiebreaker but rarely
+ *     narrows the pool sharply on its own, hence sitting below value.
+ *
+ * Verified sample pairs (SQL run on flawuiqbvjobmkfkauhw, latest rows, 2026-07-01;
+ * none of the three hit sharedClub or positionExact, so the totals below are
+ * unaffected by the 2026-07-03 reweight above):
  *   Dembele -> Doue (PSG teammates, both France, both FWD):
  *     22 + 18 + 25 + 5.00 + 19.07 = 89
  *   Rice -> Bellingham (both England, both MID, no shared club):
@@ -63,9 +84,9 @@ export interface GuessResult {
 export const WEIGHTS = {
   nationality: 22,
   positionGroup: 18,
-  positionExact: 6,
+  positionExact: 10, // was 6 (2026-07-03 weight audit, see file header)
   sameClub: 25,
-  sharedClub: 15,
+  sharedClub: 10, // was 15 (2026-07-03 weight audit, see file header)
   age: 15,
   value: 20,
 } as const;

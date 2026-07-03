@@ -80,6 +80,9 @@ export function TransferPathBoard() {
         {/* Header */}
         <div className="text-center">
           <h1 className="text-2xl font-display font-bold text-primary">Transfer Path</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Name teammates to connect the two players in as few steps as possible.
+          </p>
           <p className="text-xs text-muted-foreground mt-1">
             {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
           </p>
@@ -120,11 +123,11 @@ export function TransferPathBoard() {
                 i === chain.length - 1 && isWon ? 'bg-primary/10 border border-primary/20' :
                 'bg-card border border-border'
               )}>
-                <span>{flag(getPlayerNationality(player))}</span>
-                <span className="font-semibold text-foreground">{player}</span>
-                {i === 0 && <span className="ml-auto text-[10px] text-primary font-semibold">START</span>}
+                <span className="shrink-0">{flag(getPlayerNationality(player))}</span>
+                <span className="font-semibold text-foreground truncate min-w-0">{player}</span>
+                {i === 0 && <span className="ml-auto shrink-0 text-[10px] text-primary font-semibold">START</span>}
                 {i === chain.length - 1 && isWon && player === puzzle.playerB && (
-                  <span className="ml-auto text-[10px] text-primary font-semibold">END ✓</span>
+                  <span className="ml-auto shrink-0 text-[10px] text-primary font-semibold">END ✓</span>
                 )}
               </div>
             </div>

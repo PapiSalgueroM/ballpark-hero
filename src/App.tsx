@@ -86,6 +86,7 @@ import MissingXi from "./pages/MissingXi";
 import PuckDetective from "./pages/PuckDetective";
 import HockeyGrid from "./pages/HockeyGrid";
 import SignThePlayer from "./pages/SignThePlayer";
+import ConquestNba from "./pages/ConquestNba";
 
 const queryClient = new QueryClient();
 
@@ -196,6 +197,7 @@ const AppContent = () => {
         <Route path="/puck-detective" element={<PuckDetective />} />
         <Route path="/hockey-grid" element={<HockeyGrid />} />
         <Route path="/sign-the-player" element={<SignThePlayer />} />
+        <Route path="/conquest-nba" element={<ConquestNba />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

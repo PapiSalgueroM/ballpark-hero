@@ -90,25 +90,50 @@ interface SeasonTotals {
 }
 
 /**
- * Ratings from per-game rates so 16 and 17 game seasons compare fairly.
- * Anchors verified in SQL: 2007 Brady 99 and Moss 99, 2007 Welker 79,
- * while the 2010 Panthers starters land 44-64.
+ * Era normalization (2026-07-03, #93/94): the nflfastr data here only spans
+ * 1999-2024, too short for decade buckets to make sense (two of them would
+ * barely be used), so this keys off the passing environment's two real
+ * inflection points instead. The 2004 illegal-contact-enforcement crackdown
+ * opened up coverage leaguewide (team pass yds/game rose from ~205 to ~215),
+ * and the 2018+ full adoption of RPOs and spread formations pushed it further
+ * (~237). A QB/receiver/back racking up the same per-game rate in 1999-2003
+ * did it in a tighter coverage environment than one doing it in 2018-2024, so
+ * NFL_ERA_MULT gives the earliest bucket the full conservative +5% (per spec)
+ * and trims the newest bucket slightly for the extra room the modern passing
+ * game provides. Applied to the per-game rate stats before they hit the
+ * qbRating/rbRating/recRating formulas.
+ * Anchors verified in SQL, still hold with the multiplier applied since 2007
+ * falls in the boost bucket (mult >= 1.0 never pulls a score down): 2007
+ * Brady 99 and Moss 99, 2007 Welker 79, while the 2010 Panthers starters
+ * land 44-64.
  */
-function qbRating(t: SeasonTotals): number {
-  const g = Math.max(1, t.weeks.size);
-  return clampRating(31 + 0.13 * (t.pyds / g) + 11 * (t.ptd / g) - 8 * (t.pint / g));
+const NFL_ERA_MULT: { from: number; to: number; mult: number }[] = [
+  { from: 1999, to: 2003, mult: 1.05 },
+  { from: 2004, to: 2009, mult: 1.03 },
+  { from: 2010, to: 2017, mult: 1.0 },
+  { from: 2018, to: 2024, mult: 0.98 },
+];
+function eraMult(year: number): number {
+  const bucket = NFL_ERA_MULT.find(b => year >= b.from && year <= b.to);
+  return bucket ? bucket.mult : 1.0;
 }
 
-function rbRating(t: SeasonTotals): number {
+function qbRating(t: SeasonTotals, year: number): number {
+  const g = Math.max(1, t.weeks.size);
+  const mult = eraMult(year);
+  return clampRating((31 + 0.13 * (t.pyds / g) + 11 * (t.ptd / g) - 8 * (t.pint / g)) * mult);
+}
+
+function rbRating(t: SeasonTotals, year: number): number {
   const g = Math.max(1, t.weeks.size);
   const scrim = t.ryds + t.recyds;
   const tds = t.rtd + t.rectd;
-  return clampRating(42.5 + 0.28 * (scrim / g) + 13 * (tds / g));
+  return clampRating((42.5 + 0.28 * (scrim / g) + 13 * (tds / g)) * eraMult(year));
 }
 
-function recRating(t: SeasonTotals): number {
+function recRating(t: SeasonTotals, year: number): number {
   const g = Math.max(1, t.weeks.size);
-  return clampRating(42.5 + 0.42 * (t.recyds / g) + 12 * (t.rectd / g));
+  return clampRating((42.5 + 0.42 * (t.recyds / g) + 12 * (t.rectd / g)) * eraMult(year));
 }
 
 function detailFor(group: string, t: SeasonTotals): string {
@@ -169,19 +194,19 @@ export async function fetchSquad(entry: TeamSeasonEntry): Promise<SpinSquad | nu
       let eligible: string[] = [];
       if (t.group === 'QB') {
         if (t.att < 100) continue; // volume floors keep mop-up duty out
-        rating = qbRating(t);
+        rating = qbRating(t, entry.year);
         eligible = ['QB'];
       } else if (t.group === 'RB') {
         if (t.car + t.rec < 60) continue;
-        rating = rbRating(t);
+        rating = rbRating(t, entry.year);
         eligible = ['RB', 'FLEX'];
       } else if (t.group === 'WR') {
         if (t.rec < 15) continue;
-        rating = recRating(t);
+        rating = recRating(t, entry.year);
         eligible = ['WR', 'WR2', 'FLEX'];
       } else {
         if (t.rec < 15) continue;
-        rating = recRating(t);
+        rating = recRating(t, entry.year);
         eligible = ['TE', 'FLEX'];
       }
       players.push({

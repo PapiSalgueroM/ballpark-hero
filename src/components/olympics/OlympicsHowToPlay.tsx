@@ -7,7 +7,7 @@ export default function OlympicsHowToPlay() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="text-muted-foreground hover:text-foreground transition-colors" aria-label="How to play">
+        <button className="flex items-center justify-center w-10 h-10 -m-2 text-muted-foreground hover:text-foreground transition-colors" aria-label="How to play">
           <HelpCircle className="w-6 h-6" />
         </button>
       </DialogTrigger>

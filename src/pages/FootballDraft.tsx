@@ -220,7 +220,7 @@ const FootballDraft = () => {
             {revealLevel < 4 && !showingResult && (
               <button
                 onClick={revealMore}
-                className="flex items-center gap-2 mx-auto px-4 py-2 text-sm rounded-lg border border-[hsl(var(--ft-gold)/0.3)] text-[hsl(var(--ft-gold))] hover:bg-[hsl(var(--ft-navy)/0.5)] transition-colors mb-4"
+                className="flex items-center justify-center gap-2 mx-auto min-h-[40px] px-4 py-2.5 text-sm rounded-lg border border-[hsl(var(--ft-gold)/0.3)] text-[hsl(var(--ft-gold))] hover:bg-[hsl(var(--ft-navy)/0.5)] transition-colors mb-4"
               >
                 <Eye className="w-4 h-4" />
                 Reveal Next Clue
@@ -253,13 +253,13 @@ const FootballDraft = () => {
                 <p className="text-center text-xs text-muted-foreground mb-3">
                   What round was this player drafted?
                 </p>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {roundOptions.map((round) => (
                     <button
                       key={round}
                       onClick={() => setSelectedRound(round)}
                       className={cn(
-                        'px-3 py-2.5 rounded-lg text-sm font-semibold border transition-all',
+                        'min-h-[44px] px-3 py-2.5 rounded-lg text-sm font-semibold border transition-all whitespace-nowrap',
                         selectedRound === round
                           ? 'bg-[hsl(var(--ft-navy))] text-[hsl(var(--ft-gold))] border-[hsl(var(--ft-gold))]'
                           : 'bg-secondary text-secondary-foreground border-border hover:border-[hsl(var(--ft-gold)/0.5)]'

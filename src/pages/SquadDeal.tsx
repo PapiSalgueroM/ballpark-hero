@@ -14,10 +14,13 @@ import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 
+// Thresholds track playerRating's 2026-07-03 rescale (curve now spans ~41-85
+// instead of ~52-99), so the top individual-player color band is reachable
+// again by genuine superstars instead of sitting above every possible score.
 function tierColor(r: number): string {
-  if (r >= 88) return 'text-primary';
-  if (r >= 78) return 'text-emerald-400';
-  if (r >= 68) return 'text-yellow-400';
+  if (r >= 78) return 'text-primary';
+  if (r >= 68) return 'text-emerald-400';
+  if (r >= 58) return 'text-yellow-400';
   return 'text-muted-foreground';
 }
 const lastName = (n: string) => n.split(' ').slice(-1)[0];

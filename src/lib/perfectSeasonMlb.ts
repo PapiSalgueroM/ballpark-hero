@@ -63,7 +63,34 @@ interface AppearanceRow {
   g_dh: number; g_p: number;
 }
 
-function batterRating(b: BattingRow): number {
+/**
+ * Era normalization (2026-07-03, #93/94): batterRating and pitcherRating both
+ * read raw OPS/ERA with no adjustment for the offensive environment of the
+ * decade they were posted in, so a .760 OPS in the 1968 "Year of the Pitcher"
+ * season (league OPS ~.685) scored identically to a .760 OPS in 2000 (league
+ * OPS ~.760), even though the first is a much better season relative to its
+ * league. MLB_DECADE_MULT holds each decade's league-average OPS against a
+ * modern (2010s-2020s) ~.720 baseline, clamped conservatively to +-5% per the
+ * spec (raw ratios ran as high as 1.11 for the dead-ball 1900s):
+ *   dead-ball 1900s-10s and the 1960s pitcher's era -> hitters get the full
+ *     +5% boost (their raw OPS understates how good they were)
+ *   1930s peak-offense and the 1990s-2000s steroid era -> hitters get a -5%
+ *     trim (their raw OPS overstates it)
+ *   2010s is the baseline (1.0, no change) since the formula was tuned there.
+ * Pitchers get the inverse: a low ERA in a high-offense decade (1930s, 1990s-
+ * 2000s) is more impressive than the same ERA in a pitcher's era, so pitcher
+ * multipliers mirror the hitting environment rather than opposing it.
+ */
+const MLB_DECADE_MULT: Record<number, number> = {
+  1900: 1.05, 1910: 1.05, 1920: 0.98, 1930: 0.95, 1940: 1.03, 1950: 0.98,
+  1960: 1.05, 1970: 1.03, 1980: 1.03, 1990: 0.95, 2000: 0.95, 2010: 1.0, 2020: 1.0,
+};
+function decadeMult(year: number): number {
+  const decade = Math.floor(year / 10) * 10;
+  return MLB_DECADE_MULT[decade] ?? 1.0;
+}
+
+function batterRating(b: BattingRow, year: number): number {
   const ab = b.ab || 0;
   const hbp = b.hbp ?? 0;
   const sf = b.sf ?? 0;
@@ -73,16 +100,17 @@ function batterRating(b: BattingRow): number {
   const tb = b.h + b.doubles + 2 * b.triples + 3 * b.hr;
   const slg = ab > 0 ? tb / ab : 0;
   const ops = obp + slg;
-  return Math.round(Math.min(99, Math.max(40, 40 + (ops - 0.5) * 100)));
+  const base = 40 + (ops - 0.5) * 100;
+  return Math.round(Math.min(99, Math.max(40, base * decadeMult(year))));
 }
 
-function pitcherRating(p: PitchingRow): number {
+function pitcherRating(p: PitchingRow, year: number): number {
   const ip = (p.ipouts || 0) / 3;
   if (ip < 20) return 40;
   const era = p.era != null && p.era > 0 ? Number(p.era) : (p.er * 9) / Math.max(1, ip);
   const kbb = p.so / Math.max(1, p.bb);
   const base = 42 + (4.8 - era) * 13 + Math.min(14, kbb * 2.5) + Math.min(6, (p.sv || 0) * 0.15);
-  return Math.round(Math.min(99, Math.max(40, base)));
+  return Math.round(Math.min(99, Math.max(40, base * decadeMult(year))));
 }
 
 function batterDetail(b: BattingRow): string {
@@ -141,7 +169,7 @@ export async function fetchSquad(entry: TeamSeasonIndexEntry): Promise<SpinSquad
       players.set(b.playerid, {
         playerId: b.playerid,
         name: b.playerid, // replaced with the real name below
-        rating: batterRating(b),
+        rating: batterRating(b, entry.yearid),
         eligible,
         detail: batterDetail(b),
       });
@@ -159,7 +187,7 @@ export async function fetchSquad(entry: TeamSeasonIndexEntry): Promise<SpinSquad
       players.set(p.playerid, {
         playerId: p.playerid,
         name: p.playerid,
-        rating: pitcherRating(p),
+        rating: pitcherRating(p, entry.yearid),
         eligible,
         detail: pitcherDetail(p),
       });

@@ -143,17 +143,46 @@ export async function fetchTeamEraIndex(): Promise<TeamEraIndexEntry[] | null> {
   }
 }
 
+/**
+ * Era normalization (2026-07-03, #93/94): forwardRating/defenseRating read
+ * career points-per-game with no adjustment for league scoring level, so a
+ * point-per-game player in the 1980s (league averaged ~7.8 goals/game, the
+ * highest-scoring era the NHL has had) rated identically to a point-per-game
+ * player in the 2000s dead-puck era (league averaged ~5.1 goals/game, the
+ * lowest). The second season is clearly the harder one to produce in.
+ * NHL_DECADE_MULT holds each wheel-stop decade's league goals/game against a
+ * ~5.8 modern (2010s-2020s) baseline, clamped to +-5% per the spec:
+ *   2000s dead-puck era -> skaters get the full +5% boost.
+ *   1970s-1990s (expansion through pre-lockout) -> a conservative -5% trim,
+ *     since offense ran ahead of the modern baseline for most of that span.
+ *   1960s and 2020s sit close enough to baseline for a small, real trim/no
+ *     change rather than the full clamp.
+ * A squad's wheel stop is one franchise-decade, but nhl_player_stats only
+ * has career totals (see file header), so the decade of the SPIN is what
+ * gets normalized, treating career ppg as that era's rate. Same reasoning
+ * applies to defensemen; goalieRating is untouched since it is pedigree-
+ * based (draft position), not a scoring-rate stat this bias applies to.
+ */
+const NHL_DECADE_MULT: Record<number, number> = {
+  1960: 0.97, 1970: 0.95, 1980: 0.95, 1990: 0.95, 2000: 1.05, 2010: 1.05, 2020: 0.97,
+};
+function decadeMult(eraStart: number): number {
+  return NHL_DECADE_MULT[eraStart] ?? 1.0;
+}
+
 /** 40-99 from career points per game. Tuned so Gretzky, Lemieux, Crosby and
  *  McDavid pin 99 while checking-line forwards land in the 40s and 50s. */
-function forwardRating(ppg: number): number {
-  return Math.round(Math.min(99, Math.max(40, 40 + (ppg - 0.15) * 58)));
+function forwardRating(ppg: number, eraStart: number): number {
+  const base = 40 + (ppg - 0.15) * 58;
+  return Math.round(Math.min(99, Math.max(40, base * decadeMult(eraStart))));
 }
 
 /** Defensemen score less, so they get a friendlier curve plus a small
  *  plus-minus bonus that rewards the shutdown types. */
-function defenseRating(ppg: number, pmPerGame: number): number {
+function defenseRating(ppg: number, pmPerGame: number, eraStart: number): number {
   const pmBonus = Math.min(6, Math.max(0, pmPerGame * 18));
-  return Math.round(Math.min(99, Math.max(40, 42 + (ppg - 0.05) * 62 + pmBonus)));
+  const base = 42 + (ppg - 0.05) * 62 + pmBonus;
+  return Math.round(Math.min(99, Math.max(40, base * decadeMult(eraStart))));
 }
 
 /** The archive has no goalie stats at all, so goalies rate on draft pedigree:
@@ -226,7 +255,9 @@ export async function fetchSquad(entry: TeamEraIndexEntry): Promise<SpinSquad | 
       const assists = Number(raw.assists) || 0;
       const pm = Number(raw.plus_minus) || 0;
       const ppg = points / games;
-      const rating = eligible[0] === 'D' ? defenseRating(ppg, pm / games) : forwardRating(ppg);
+      const rating = eligible[0] === 'D'
+        ? defenseRating(ppg, pm / games, entry.eraStart)
+        : forwardRating(ppg, entry.eraStart);
       players.set(name, {
         playerId: name,
         name,

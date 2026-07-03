@@ -14,6 +14,13 @@ export function CookieConsent() {
     setVisible(false);
   };
 
+  // "Essential only": AdBanner reads this exact value and renders nothing
+  // when set, so no personalized-ad slot is initialized.
+  const essentialOnly = () => {
+    localStorage.setItem('cookie-consent', 'essential');
+    setVisible(false);
+  };
+
   if (!visible) return null;
 
   return (
@@ -23,12 +30,20 @@ export function CookieConsent() {
           We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy.{' '}
           <Link to="/privacy" className="underline hover:text-foreground font-medium">Learn More</Link>
         </p>
-        <button
-          onClick={accept}
-          className="px-5 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity whitespace-nowrap"
-        >
-          Accept
-        </button>
+        <div className="flex items-center gap-2 whitespace-nowrap">
+          <button
+            onClick={essentialOnly}
+            className="px-4 py-2 rounded-lg bg-transparent border border-border text-foreground font-medium text-sm hover:bg-muted transition-colors"
+          >
+            Essential only
+          </button>
+          <button
+            onClick={accept}
+            className="px-5 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity"
+          >
+            Accept
+          </button>
+        </div>
       </div>
     </div>
   );

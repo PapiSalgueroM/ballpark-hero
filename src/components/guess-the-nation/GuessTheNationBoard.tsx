@@ -18,7 +18,7 @@ const continentEmoji: Record<string, string> = {
 
 export function GuessTheNationBoard() {
   const {
-    countries, loading, gameState, streak, currentBadge,
+    countries, loading, error, retryLoad, gameState, streak, currentBadge,
     pointsForCurrentClue, startGame, makeGuess, giveUp, revealHint, resetGame,
   } = useGuessTheNation();
 
@@ -39,8 +39,24 @@ export function GuessTheNationBoard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center" aria-live="polite" aria-busy="true">
         <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="text-center max-w-sm">
+          <p className="text-destructive font-semibold mb-3">Couldn't load Guess The Nation right now.</p>
+          <button
+            onClick={retryLoad}
+            className="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-black rounded-full font-semibold transition-colors"
+          >
+            Try again
+          </button>
+        </div>
       </div>
     );
   }

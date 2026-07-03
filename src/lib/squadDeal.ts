@@ -45,10 +45,31 @@ export const FORMATIONS: Formation[] = [
 ];
 
 /* ---------------- Rating ---------------- */
+/**
+ * Rating spread audit (2026-07-03): the old curve was 45 + 55 * (log10(mv+1) / log10(231)),
+ * which used log10(231) as its scale ceiling. That saturates hard: a mid-table
+ * squad (marketValue ~20-60) already averaged rating 83, a "good XI" (~60-120)
+ * averaged 91, and near-full Legends squads (~150-230) averaged 98. Everything
+ * above roughly 60 in market value read as 89+, so almost every squad a player
+ * builds landed in the A/A+ verdict bands, and the D band was only reachable by
+ * deliberately drafting the cheapest 1-10 value scrubs at every slot.
+ *
+ * Fix: stretch the curve over a wider ceiling (1000, comfortably above the
+ * highest Legends value of 230) and widen the floor-to-ceiling span (35-99
+ * instead of 45-99) so cheap squads read meaningfully lower and only the very
+ * top of the market pins near 99. New spread, same input data:
+ *   mv=2   -> 46   (was 56)   scrub-tier case
+ *   mv=10  -> 55   (was 69)   squad player
+ *   mv=30  -> 62   (was 80)   solid starter
+ *   mv=60  -> 68   (was 87)   mid-table XI average
+ *   mv=120 -> 75   (was 93)   good XI average
+ *   mv=180 -> 80   (was 98)   star player
+ *   mv=230 -> 83   (was 99)   Messi/Ronaldo-tier ceiling
+ */
 export function playerRating(p: Player): number {
   const mv = Math.max(1, p.marketValue);
-  const r = 45 + 55 * (Math.log10(mv + 1) / Math.log10(231));
-  return Math.max(40, Math.min(99, Math.round(r)));
+  const r = 35 + 64 * (Math.log10(mv + 1) / Math.log10(1001));
+  return Math.max(35, Math.min(99, Math.round(r)));
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -225,6 +246,24 @@ export const EXTRAS: ExtraCategory[] = [
 /* ---------------- Simulation ---------------- */
 export interface SquadResult { rating: number; chemistry: number; grade: string; facts: string[]; }
 
+/**
+ * Verdict tier audit (2026-07-03), run alongside the playerRating fix above.
+ * Final `rating` = round(avgPlayerRating * 0.82 + chemistry * 0.18) + extraRating,
+ * where extraRating sums to roughly -3 (worst extras) to +13 (best extras) and
+ * chemistry (0-100) sums a club/nationality overlap score with extraChem
+ * (roughly +8 to +32). Simulating realistic squads end to end against the new
+ * playerRating curve gives this achievable final-rating distribution:
+ *   11 cheap/scrub picks (mv 2-10)      -> final 45-61
+ *   mid-table current-era XI (mv 20-60) -> final 60-77
+ *   good current-era XI (mv 60-120)     -> final 67-83
+ *   stacked but not legends (mv 120-200)-> final 71-87
+ *   near-full Legends squad (mv 150-230)-> final 72-88
+ *   best-case full elite Legends squad  -> final 73-89, capping out near 90+
+ *     only with an optimal draft plus the best extras and perfect chemistry.
+ * Tiers below are set against that real spread instead of the old 60/72/82/90
+ * cutoffs (which made a mid-table XI a "B" and near-full Legends an "A+" no
+ * matter how the draft or extras went, while "D" needed active sabotage).
+ */
 export function simulateSquad(picks: Player[], extras: ExtraOption[] = []): SquadResult {
   if (!picks.length) return { rating: 0, chemistry: 0, grade: 'D', facts: [] };
   const ratings = picks.map(playerRating);
@@ -240,7 +279,7 @@ export function simulateSquad(picks: Player[], extras: ExtraOption[] = []): Squa
   const extraChem = extras.reduce((s2, e) => s2 + e.chemMod, 0);
   const chemistry = Math.max(0, Math.min(100, Math.round((chemPts / (picks.length * accessors.length)) * 100) + extraChem));
   const rating = Math.max(1, Math.min(100, Math.round(avg * 0.82 + chemistry * 0.18) + extraRating));
-  const grade = rating >= 90 ? 'A+' : rating >= 82 ? 'A' : rating >= 72 ? 'B' : rating >= 60 ? 'C' : 'D';
+  const grade = rating >= 84 ? 'A+' : rating >= 76 ? 'A' : rating >= 66 ? 'B' : rating >= 55 ? 'C' : 'D';
 
   const topScorer = [...picks].sort((a, b) => b.goals - a.goals)[0];
   const star = [...picks].sort((a, b) => b.marketValue - a.marketValue)[0];
@@ -250,10 +289,10 @@ export function simulateSquad(picks: Player[], extras: ExtraOption[] = []): Squa
   if (star) facts.push('Star man: ' + star.name + ' (rated ' + playerRating(star) + ')');
   facts.push('Chemistry ' + chemistry + '% · ' + nations + ' nations');
   for (const e of extras) facts.push(e.emoji + ' ' + e.fact);
-  if (rating >= 90) facts.push('🏆 Won the treble in a dream season.');
-  else if (rating >= 82) facts.push('🏆 League champions with games to spare.');
-  else if (rating >= 72) facts.push('🥈 A strong runner-up finish.');
-  else if (rating >= 60) facts.push('⚽ A solid mid-table campaign.');
+  if (rating >= 84) facts.push('🏆 Won the treble in a dream season.');
+  else if (rating >= 76) facts.push('🏆 League champions with games to spare.');
+  else if (rating >= 66) facts.push('🥈 A strong runner-up finish.');
+  else if (rating >= 55) facts.push('⚽ A solid mid-table campaign.');
   else facts.push('😬 A relegation battle. The Banker won this one.');
   const inj = picks[Math.floor(Math.random() * picks.length)];
   if (inj) facts.push('🩹 Injury news: ' + inj.name + ' has a slight knock but should be fine.');

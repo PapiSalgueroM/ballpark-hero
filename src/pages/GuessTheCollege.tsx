@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { CollegeGameMode } from '@/types/guessTheCollege';
 
@@ -166,8 +167,11 @@ const GuessTheCollege = () => {
 
           {/* Loading guard for daily mode */}
           {isLoading && (
-            <div className="flex justify-center py-10">
-              <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+            <div className="space-y-3 mb-5" aria-live="polite" aria-busy="true">
+              <span className="sr-only">Loading today's puzzle…</span>
+              <Skeleton className="h-16 w-full rounded-xl" />
+              <Skeleton className="h-16 w-full rounded-xl" />
+              <Skeleton className="h-16 w-3/4 rounded-xl" />
             </div>
           )}
 

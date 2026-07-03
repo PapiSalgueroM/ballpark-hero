@@ -58,7 +58,7 @@ const UfcGame = () => {
             <HelpCircle className="w-6 h-6" />
           </button>
 
-          <h1 className="text-5xl md:text-7xl font-bold tracking-[0.25em] text-primary font-display mb-1">
+          <h1 className="text-3xl md:text-7xl font-bold tracking-[0.1em] md:tracking-[0.25em] text-primary font-display mb-1">
             UFC GUESSER
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">

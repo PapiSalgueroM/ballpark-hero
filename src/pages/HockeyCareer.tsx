@@ -12,6 +12,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HelpCircle, Eye, Trophy, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { HockeyCareerHowToPlay } from '@/components/hockey-career/HockeyCareerHowToPlay';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const HockeyCareer = () => {
   const {
@@ -84,8 +85,11 @@ const HockeyCareer = () => {
         </header>
 
         {isLoading ? (
-          <div className="flex justify-center py-10">
-            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+          <div className="bg-card border border-border rounded-2xl p-6 shadow-lg space-y-3" aria-live="polite" aria-busy="true">
+            <span className="sr-only">Loading today's puzzle…</span>
+            <Skeleton className="h-12 w-full rounded-xl" />
+            <Skeleton className="h-12 w-full rounded-xl" />
+            <Skeleton className="h-12 w-3/4 rounded-xl" />
           </div>
         ) : (
         <div className="bg-card border border-border rounded-2xl p-6 shadow-lg">

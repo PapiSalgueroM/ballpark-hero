@@ -59,7 +59,7 @@ const HigherLowerGame = () => {
           >
             <HelpCircle className="w-6 h-6" />
           </button>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.2em] text-primary font-display mb-1">
+          <h1 className="text-3xl md:text-6xl font-bold tracking-[0.1em] md:tracking-[0.2em] text-primary font-display mb-1">
             HIGHER OR LOWER
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">

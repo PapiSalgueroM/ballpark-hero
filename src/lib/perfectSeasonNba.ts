@@ -166,18 +166,44 @@ export async function fetchTeamSeasonIndex(): Promise<NbaTeamSeasonEntry[] | nul
 }
 
 /**
- * 40-99 from the season stat line. Production per 36 minutes
- * (points + 1.2 assists + 1.1 rebounds, season totals over season minutes)
- * gets a small discount for short benches, then runs through a logistic
- * curve. Verified against the live table: 1961-62 Wilt 99, 2023-24 Jokic 98,
- * 2015-16 Curry 97, 1987-88 Jordan 96, 2012-13 LeBron 95, while end of
- * bench guards like 1987-88 Rory Sparrow land at 56.
+ * Era normalization (2026-07-03, #93/94): per-36 production ignores league
+ * pace, so a per-36 stat line in a slow, grind-it-out league (1990s-2000s,
+ * league pace ~91-92 possessions/48) reads the same as an identical per-36
+ * line in a fast league (1960s-70s pace ~108-125, or the modern 3-point-era
+ * rebound), even though fewer possessions makes the same per-minute output
+ * harder to produce. NBA_DECADE_MULT holds each decade's league pace against
+ * the ~98 possessions/48 baseline the 1961-2024 verified anchors below were
+ * tuned against, clamped to +-5% (1950s-60s raw ratios ran as low as 0.78,
+ * clamped up to the 0.95 floor):
+ *   1990s-2000s slow-pace grind -> +5%, their per-36 numbers understate it.
+ *   1950s-70s fast, loose-defense eras -> -5% (1980s a smaller -3%), extra
+ *     possessions inflate per-36 relative to the modern baseline.
+ * The multiplier is applied to `eff` (the pre-sigmoid input), not the final
+ * 40-99 output: the rating curve is a logistic that asymptotes at 99, so
+ * scaling the OUTPUT would just get re-clamped and silently do nothing for
+ * anyone already near the ceiling, which includes the verified anchors this
+ * comment lists. Scaling the input instead shifts where a player sits on the
+ * curve while leaving those anchors intact (Wilt's 1961-62 per-36 is so far
+ * past the saturation point that even a 5% cut still lands him at 99).
+ * Verified against the live table with the multiplier applied: 1961-62 Wilt
+ * 99, 2023-24 Jokic 98, 2015-16 Curry 97, 1987-88 Jordan 96, 2012-13 LeBron
+ * 95, while end of bench guards like 1987-88 Rory Sparrow land at 56.
  */
-function playerRating(pts: number, trb: number, ast: number, minutes: number): number {
+const NBA_DECADE_MULT: Record<number, number> = {
+  1950: 0.95, 1960: 0.95, 1970: 0.95, 1980: 0.97, 1990: 1.05, 2000: 1.05, 2010: 1.03, 2020: 0.99,
+};
+function decadeMult(season: string): number {
+  const startYear = Number(season.slice(0, 4));
+  if (!Number.isFinite(startYear)) return 1.0;
+  const decade = Math.floor(startYear / 10) * 10;
+  return NBA_DECADE_MULT[decade] ?? 1.0;
+}
+
+function playerRating(pts: number, trb: number, ast: number, minutes: number, season: string): number {
   if (minutes < 300) return 40;
   const per36 = ((pts + 1.2 * ast + 1.1 * trb) / minutes) * 36;
   const volume = 0.75 + 0.25 * Math.min(1, minutes / 2200);
-  const eff = per36 * volume;
+  const eff = per36 * volume * decadeMult(season);
   const rating = 40 + 59 / (1 + Math.exp((23.5 - eff) / 7));
   return Math.round(Math.min(99, Math.max(40, rating)));
 }
@@ -224,7 +250,7 @@ export async function fetchSquad(entry: NbaTeamSeasonEntry): Promise<SpinSquad |
       players.push({
         playerId: raw.id != null ? String(raw.id) : `${entry.team}-${entry.season}-${name}`,
         name,
-        rating: playerRating(pts, trb, ast, minutes),
+        rating: playerRating(pts, trb, ast, minutes, entry.season),
         eligible: [...positionSlots(raw.position), 'SIXTH'],
         detail: `${Math.round(pts)} PTS · ${Math.round(trb)} REB · ${Math.round(ast)} AST`,
       });

@@ -185,7 +185,7 @@ const WorldCup = () => {
         {/* Input area */}
         {!isLoading && gameStatus === 'playing' && (
           <div className="space-y-3 mb-4">
-            <form onSubmit={handleSubmit} className="flex gap-2">
+            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
               <div className="flex-1 relative">
                 <input
                   ref={inputRef}
@@ -215,22 +215,24 @@ const WorldCup = () => {
                   </div>
                 )}
               </div>
-              <button
-                type="submit"
-                disabled={!guess.trim()}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm bg-[hsl(var(--wc-green))] text-white hover:opacity-90 transition-opacity disabled:opacity-40"
-              >
-                <Send className="w-4 h-4" />
-                Guess
-              </button>
-              <button
-                type="button"
-                onClick={skipClue}
-                className="inline-flex items-center gap-1 px-4 py-3 rounded-full font-semibold text-sm bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all"
-              >
-                <Lightbulb className="w-4 h-4" />
-                Hint
-              </button>
+              <div className="flex gap-2">
+                <button
+                  type="submit"
+                  disabled={!guess.trim()}
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm bg-[hsl(var(--wc-green))] text-white hover:opacity-90 transition-opacity disabled:opacity-40"
+                >
+                  <Send className="w-4 h-4" />
+                  Guess
+                </button>
+                <button
+                  type="button"
+                  onClick={skipClue}
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1 px-4 py-3 rounded-full font-semibold text-sm bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all"
+                >
+                  <Lightbulb className="w-4 h-4" />
+                  Hint
+                </button>
+              </div>
             </form>
             {attempts.length > 0 && !showGiveUpConfirm && (
               <div className="flex justify-center">

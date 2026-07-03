@@ -39,6 +39,9 @@ export function HofOrBustBoard() {
         {/* Header */}
         <div className="text-center">
           <h1 className="text-2xl font-display font-bold text-primary">Hall of Fame or Bust?</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Look at the anonymized stats and vote: Hall of Famer or bust?
+          </p>
           <p className="text-xs text-muted-foreground mt-1">
             {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
           </p>

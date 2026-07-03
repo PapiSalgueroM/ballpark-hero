@@ -116,7 +116,7 @@ export function GuessTheYearBoard() {
           <div className="space-y-4">
             {/* Year picker */}
             <div className="flex flex-col items-center gap-4">
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
                 <Button
                   variant="outline"
                   size="icon"
@@ -135,7 +135,7 @@ export function GuessTheYearBoard() {
                   <ChevronDown className="w-4 h-4" />
                 </Button>
 
-                <div className="flex items-center gap-2 bg-card border border-border rounded-xl px-6 py-3">
+                <div className="flex items-center gap-2 bg-card border border-border rounded-xl px-4 sm:px-6 py-3 order-first sm:order-none basis-full sm:basis-auto justify-center">
                   <Calendar className="w-5 h-5 text-primary" />
                   <span className="text-3xl font-bold font-display text-primary">
                     {selectedYear}
@@ -188,7 +188,7 @@ export function GuessTheYearBoard() {
             )}
 
             {/* Skip clue / Give Up */}
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-3">
               {gameState.revealedClues < maxClues && (
                 <Button
                   variant="ghost"
@@ -233,7 +233,7 @@ export function GuessTheYearBoard() {
               )}
             </div>
 
-            <div className="space-y-4">
+            <div className="flex flex-col items-center gap-4">
               <ShareButtons
                 score={isWon ? `${gameState.score} points in ${gameState.guesses.length} ${gameState.guesses.length === 1 ? 'guess' : 'guesses'}` : 'Did not guess'}
                 gameName="Guess The Year"

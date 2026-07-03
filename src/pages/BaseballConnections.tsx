@@ -11,6 +11,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { BaseballConnectionsHowToPlay } from '@/components/baseball-connections/BaseballConnectionsHowToPlay';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   yellow: 'bg-yellow-500/20 border-yellow-500/40 text-yellow-200',
@@ -109,8 +110,11 @@ const BaseballConnections = () => {
 
         {/* Loading guard */}
         {isLoading && (
-          <div className="flex justify-center py-10">
-            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2" aria-live="polite" aria-busy="true">
+            <span className="sr-only">Loading today's puzzle…</span>
+            {Array.from({ length: 20 }).map((_, i) => (
+              <Skeleton key={i} className="h-14 w-full rounded-xl" />
+            ))}
           </div>
         )}
 

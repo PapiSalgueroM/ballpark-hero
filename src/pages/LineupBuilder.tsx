@@ -154,7 +154,7 @@ const LineupBuilder = () => {
                 {!isSpinning && currentTeam && (
                   <button
                     onClick={rerollTeam}
-                    className="absolute top-3 right-3 p-2 rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
+                    className="absolute top-2 right-2 flex items-center justify-center w-10 h-10 rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
                     title="Reroll – get a different team"
                   >
                     <Shuffle className="w-4 h-4" />
@@ -231,9 +231,9 @@ const LineupBuilder = () => {
               <div className="space-y-2">
                 {filledSlotsArray.map((slot, i) => (
                   <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-4 py-2.5">
-                    <span className="text-xs font-bold text-primary w-10">{slot.label}</span>
-                    <span className="font-semibold text-foreground flex-1">{slot.playerName}</span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs font-bold text-primary w-10 shrink-0">{slot.label}</span>
+                    <span className="font-semibold text-foreground flex-1 min-w-0 truncate">{slot.playerName}</span>
+                    <span className="text-xs text-muted-foreground shrink-0 max-w-[35%] truncate">
                       {slot.isNation ? '🏳️' : '🏟️'} {slot.assignedTeam}
                     </span>
                   </div>
@@ -241,7 +241,7 @@ const LineupBuilder = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={resetGame}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
@@ -276,9 +276,9 @@ const LineupBuilder = () => {
               <div className="space-y-1.5">
                 {filledSlotsArray.map((slot, i) => (
                   <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-3 py-2 text-sm">
-                    <span className="text-xs font-bold text-primary w-8">{slot.label}</span>
-                    <span className="font-semibold text-foreground flex-1">{slot.playerName}</span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs font-bold text-primary w-8 shrink-0">{slot.label}</span>
+                    <span className="font-semibold text-foreground flex-1 min-w-0 truncate">{slot.playerName}</span>
+                    <span className="text-xs text-muted-foreground shrink-0 max-w-[35%] truncate">
                       {slot.isNation ? '🏳️' : '🏟️'} {slot.assignedTeam}
                     </span>
                   </div>
@@ -291,7 +291,7 @@ const LineupBuilder = () => {
               gameName="Build Your XI"
               gamePath="/build-your-xi"
             />
-            <div className="flex justify-center gap-3 mt-4">
+            <div className="flex flex-wrap justify-center gap-3 mt-4">
               <button
                 onClick={resetGame}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
