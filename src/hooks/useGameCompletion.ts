@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import { recordCompletion } from '@/lib/completions';
+import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { recordGameCompletion as recordStreakCompletion } from '@/lib/streaks';
 
 /**
  * Automatically saves game completion data to user_scores, user_game_scores,
@@ -31,12 +32,13 @@ export function useGameCompletion(
   // Wave 3: sitewide anonymous completion tracking (public.game_completions).
   // Fires for every player, logged in or not, independent of the auth-gated
   // save flow below. Fire-and-forget, never blocks or breaks gameplay if it
-  // fails — recordCompletion catches and swallows all errors internally.
+  // fails - recordCompletion catches and swallows all errors internally.
   useEffect(() => {
     if (!isComplete || trackedRef.current) return;
     trackedRef.current = true;
-    recordCompletion(`/${gameSlug}`);
-  }, [isComplete, gameSlug]);
+    recordCompletion(`/${gameSlug}`, score, getCurrentPlayerName(profile));
+    recordStreakCompletion(gameSlug); // #101: local-first daily streak credit, every player, zero per-game edits needed.
+  }, [isComplete, gameSlug, score, profile]);
 
   useEffect(() => {
     if (!isComplete || !user || savedRef.current) return;
@@ -185,7 +187,7 @@ export function useGameCompletion(
             // Consecutive day
             newStreak = newStreak + 1;
           } else {
-            // Missed a day — try to use a freeze
+            // Missed a day - try to use a freeze
             if (freezes > 0 && newStreak > 0) {
               freezes -= 1;
               profileUpdate.streak_freezes = freezes;

@@ -28,15 +28,33 @@ export function useGuessTheNation() {
   const [countries, setCountries] = useState<NationPuzzle[]>([]);
   const [gameState, setGameState] = useState<GuessTheNationState | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [streak, setStreak] = useState(0);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(false);
     (async () => {
-      const { data } = await (supabase as any).from('guess_nation_countries').select('*');
-      if (data) setCountries(data.map(mapRow));
-      setLoading(false);
+      try {
+        const { data, error: fetchError } = await (supabase as any).from('guess_nation_countries').select('*');
+        if (cancelled) return;
+        if (fetchError || !data) {
+          setError(true);
+        } else {
+          setCountries(data.map(mapRow));
+        }
+      } catch {
+        if (!cancelled) setError(true);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
     })();
-  }, []);
+    return () => { cancelled = true; };
+  }, [retryCount]);
+
+  const retryLoad = useCallback(() => setRetryCount((c) => c + 1), []);
 
   const startGame = useCallback(
     async (mode: GuessTheNationState['mode'], difficulty: 'easy' | 'hard' = 'easy', continentFilter?: string) => {
@@ -127,5 +145,5 @@ export function useGuessTheNation() {
 
   useGameCompletion('guess-the-nation', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
-  return { countries: validatedCountries, loading, gameState, streak, currentBadge, pointsForCurrentClue, startGame, makeGuess, giveUp, revealHint, resetGame };
+  return { countries: validatedCountries, loading, error, retryLoad, gameState, streak, currentBadge, pointsForCurrentClue, startGame, makeGuess, giveUp, revealHint, resetGame };
 }

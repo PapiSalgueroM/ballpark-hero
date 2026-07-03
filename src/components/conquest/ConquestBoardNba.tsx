@@ -10,8 +10,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useConquestNba, PowerRankEntry } from '@/hooks/useConquestNba';
 import ConquestMapNba from './ConquestMapNba';
-import { NBA_TEAM_MAP, NBA_TEAMS, isLightColor, ConquestFreeAgentCandidateNba, CONQUEST_FREE_AGENCY_POOL_NBA, TEAM_LEGENDS_NBA } from '@/data/conquestDataNba';
-import { DIRECTIONS, DIR_LABELS } from '@/data/conquestData';
+import { NBA_TEAM_MAP, NBA_TEAMS, ConquestFreeAgentCandidateNba, CONQUEST_FREE_AGENCY_POOL_NBA, TEAM_LEGENDS_NBA } from '@/data/conquestDataNba';
+import { DIRECTIONS, DIR_LABELS, isLightColor } from '@/data/conquestData';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
 import { HOME_FIELD_BUMP } from '@/lib/conquestBattleNba';
