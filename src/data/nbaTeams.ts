@@ -36,10 +36,6 @@ export const NBA_TEAMS: NbaTeam[] = [
   { name: 'Washington Wizards', abbreviation: 'wsh' },
 ];
 
-export function getNbaTeamLogo(abbreviation: string): string {
-  return `https://a.espncdn.com/i/teamlogos/nba/500/${abbreviation}.png`;
-}
-
 export function getRandomNbaTeams(count: number): NbaTeam[] {
   const shuffled = [...NBA_TEAMS].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);

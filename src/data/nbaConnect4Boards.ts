@@ -49,6 +49,22 @@ const curatedBoards: Connect4Board[] = [
     columnAttributes: ['20000+ Career Points', '10000+ Career Rebounds', '5000+ Career Assists', 'Champion', 'MVP Winner', '500+ Career Blocks', '1000+ Career Steals'],
     rowAttributes: ['Lakers', 'Celtics', 'Spurs', 'Heat', 'Bulls', 'Pistons'],
   },
+  {
+    // New board (2026-07-03): uses two draft-pedigree clue types that no
+    // prior board used. Pool sizes verified on nba_players_extended_v2
+    // (flawuiqbvjobmkfkauhw), distinct player rows:
+    //   Top 5 Pick   -> 364 (draft_round=1, draft_number 1-5; distinct from
+    //                   "#1 Overall Pick" already used in classic-1/modern-1)
+    //   Undrafted    -> 1,842 (draft_round=0 or null; the DB uses 0 as an
+    //                   explicit "not drafted" sentinel, not a missing value)
+    // "Top 5 Pick" is already defined in the nba-connect4-validate system
+    // prompt; "Undrafted" is a new attribute string added to that prompt's
+    // definitions list alongside this board.
+    id: 'draft-1',
+    name: 'Draft Pedigree',
+    columnAttributes: ['Top 5 Pick', 'Undrafted', 'Lakers', 'Warriors', 'Nets', 'Mavericks', 'Nuggets'],
+    rowAttributes: ['All-Star', 'Champion', '20+ PPG Career', 'International Player', 'Played with LeBron', 'MVP Winner'],
+  },
 ];
 
 export function getRandomConnect4Board(): Connect4Board {

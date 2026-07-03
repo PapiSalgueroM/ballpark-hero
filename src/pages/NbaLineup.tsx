@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNbaLineup } from '@/hooks/useNbaLineup';
+import { useNbaLineup, buildFullDisplayName } from '@/hooks/useNbaLineup';
 import { NBA_POSITIONS } from '@/types/nba';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
@@ -55,6 +55,15 @@ const NbaLineup = () => {
 
   const handleSelectPlayer = async (entity: PlayerEntity) => {
     if (isValidating) return;
+    // PlayerAutocomplete's own onSelect->onChange wiring sets the input to
+    // entity.name, which for this game's source is last-name-only (see
+    // NBA_PLAYER_SOURCE_V2's docstring in useNbaLineup.ts). Overriding it
+    // here to the full "First Last" name right after selection means the
+    // brief moment before the position-change effect below clears the field
+    // shows the player's full name instead of a bare surname, without
+    // touching the shared PlayerAutocomplete component or its search/match
+    // behavior at all.
+    setPlayerInput(buildFullDisplayName(entity));
     await submitPlayer(entity);
   };
 

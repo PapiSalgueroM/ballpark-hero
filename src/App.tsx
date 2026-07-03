@@ -85,6 +85,7 @@ import RarityRound from "./pages/RarityRound";
 import MissingXi from "./pages/MissingXi";
 import PuckDetective from "./pages/PuckDetective";
 import HockeyGrid from "./pages/HockeyGrid";
+import SignThePlayer from "./pages/SignThePlayer";
 
 const queryClient = new QueryClient();
 
@@ -194,6 +195,7 @@ const AppContent = () => {
         <Route path="/missing-xi" element={<MissingXi />} />
         <Route path="/puck-detective" element={<PuckDetective />} />
         <Route path="/hockey-grid" element={<HockeyGrid />} />
+        <Route path="/sign-the-player" element={<SignThePlayer />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

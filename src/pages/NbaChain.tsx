@@ -25,6 +25,8 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const NbaChain = () => {
   const {
+    mode,
+    switchMode,
     chain,
     phase,
     score,
@@ -33,10 +35,13 @@ const NbaChain = () => {
     isValidating,
     validationError,
     lastPlayer,
+    roundComplete,
+    scoreVsPar,
+    roundPickCount,
+    roundPar,
     submitPlayer,
     endGame,
     resetGame,
-    
   } = useNbaChain();
 
   const [playerInput, setPlayerInput] = useState('');
@@ -84,6 +89,25 @@ const NbaChain = () => {
           >
             <HelpCircle className="w-6 h-6" />
           </button>
+
+          {/* Endless / Round toggle. Endless is the default mode; switching
+              always starts a fresh chain under the new mode's rules. */}
+          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+            {(['endless', 'round'] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => switchMode(m)}
+                className={cn(
+                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                  mode === m
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                {m === 'endless' ? '∞ Endless' : `🎯 Round (${roundPickCount})`}
+              </button>
+            ))}
+          </div>
         </header>
 
         <NbaChainHowToPlay open={showHowToPlay} onOpenChange={setShowHowToPlay} />
@@ -92,12 +116,21 @@ const NbaChain = () => {
         <div className="flex items-center justify-center gap-6 mb-6">
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary">
             <Link2 className="w-4 h-4 text-primary" />
-            <span className="text-sm font-bold text-foreground">Chain: {score}</span>
+            <span className="text-sm font-bold text-foreground">
+              {mode === 'round' ? `Picks: ${score}/${roundPickCount}` : `Chain: ${score}`}
+            </span>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary">
-            <Trophy className="w-4 h-4 text-yellow-500" />
-            <span className="text-sm font-bold text-foreground">Best: {bestStreak}</span>
-          </div>
+          {mode === 'round' ? (
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary">
+              <Trophy className="w-4 h-4 text-yellow-500" />
+              <span className="text-sm font-bold text-foreground">Par: {roundPar}</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary">
+              <Trophy className="w-4 h-4 text-yellow-500" />
+              <span className="text-sm font-bold text-foreground">Best: {bestStreak}</span>
+            </div>
+          )}
         </div>
 
         {/* The chain */}
@@ -182,11 +215,40 @@ const NbaChain = () => {
                 {score >= 10 ? '🔥' : score >= 5 ? '💪' : '🏀'} Chain of {score}!
               </span>
             </div>
+
+            {/* Round mode: score vs par summary. Only shown when a full
+                round was completed (roundComplete), so ending a round early
+                via "End Game" is reported as an incomplete chain instead of
+                a misleading par comparison. */}
+            {mode === 'round' && roundComplete && scoreVsPar !== null && (
+              <div
+                className={cn(
+                  'inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm border',
+                  scoreVsPar > 0
+                    ? 'bg-green-500/10 text-green-400 border-green-500/30'
+                    : scoreVsPar < 0
+                      ? 'bg-orange-500/10 text-orange-400 border-orange-500/30'
+                      : 'bg-secondary text-foreground border-border',
+                )}
+              >
+                <Trophy className="w-4 h-4" />
+                {scoreVsPar > 0
+                  ? `${scoreVsPar} over par (par ${roundPar})`
+                  : scoreVsPar < 0
+                    ? `${Math.abs(scoreVsPar)} under par (par ${roundPar})`
+                    : `Even par (${roundPar})`}
+              </div>
+            )}
+
             {gameOverReason && (
               <p className="text-sm text-muted-foreground">{gameOverReason}</p>
             )}
             <ShareButtons
-              score={`${score} chain (best: ${bestStreak})`}
+              score={
+                mode === 'round' && roundComplete && scoreVsPar !== null
+                  ? `${score}/${roundPickCount} picks, ${scoreVsPar >= 0 ? '+' : ''}${scoreVsPar} vs par`
+                  : `${score} chain (best: ${bestStreak})`
+              }
               gameName="NBA Chain Game"
               gamePath="/nba-chain"
             />

@@ -6,7 +6,15 @@ export interface NbaPositionSlot {
 }
 
 export interface NbaFilledSlot extends NbaPositionSlot {
+  /** Full "First Last" display name, shown in the court layout, review and result screens. */
   playerName: string;
+  /**
+   * Last-name-only form (nba_players_extended_v2's searched/matched column,
+   * see NBA_PLAYER_SOURCE_V2 in useNbaLineup.ts), kept alongside the full
+   * playerName so the autocomplete's exclude set can stay keyed on the same
+   * shape as entity.name during search. Never rendered directly.
+   */
+  lastNameForExclude: string;
   assignedTeam: string;
   statValue?: number | string;
 }

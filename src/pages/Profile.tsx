@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import html2canvas from 'html2canvas';
 import { useStreaks } from '@/hooks/useStreaks';
+import { getBadgeState, type BadgeState } from '@/lib/badges';
 
 /* ────────────────────── Constants ────────────────────── */
 
@@ -103,6 +104,14 @@ export default function Profile() {
   const [leaderboardRank, setLeaderboardRank] = useState<number | null>(null);
   const [savedBracket, setSavedBracket] = useState<any>(null);
   const [dailyGameSlugs, setDailyGameSlugs] = useState<string[]>([]);
+
+  // #103: local-first badges. Own-profile only (see the load effect below) -
+  // badge rules read this browser's localStorage + this browser's own
+  // game_completions history, which only means something on the profile
+  // owner's own device. Starts empty so the Badges card's "X earned" count
+  // and grid render sanely (all-locked) before the async load resolves,
+  // rather than needing a separate loading flag for one card.
+  const [badges, setBadges] = useState<BadgeState[]>([]);
 
   // Personal info (from user_preferences)
   const [favouriteGame, setFavouriteGame] = useState<string>('');
@@ -198,6 +207,16 @@ export default function Profile() {
 
     loadProfile();
   }, [username, user, profile, authLoading, navigate]);
+
+  /* ── Badges (#103): own-profile only, local-first, loaded once profile/auth is settled ── */
+  useEffect(() => {
+    if (authLoading || !isOwnProfile) { setBadges([]); return; }
+    let cancelled = false;
+    getBadgeState(profile).then(result => {
+      if (!cancelled) setBadges(result);
+    });
+    return () => { cancelled = true; };
+  }, [authLoading, isOwnProfile, profile]);
 
   /* ── Time tracking (increment every minute while page is visible) ── */
   useEffect(() => {
@@ -313,40 +332,6 @@ export default function Profile() {
   });
   const favouriteSportEntry = Object.entries(sportCounts).sort((a, b) => b[1] - a[1])[0];
 
-  /* ── Badge calculations ── */
-  const allSportSet = new Set(Object.values(SPORT_CATEGORIES));
-  const playedSports = new Set(bestScores.map(s => SPORT_CATEGORIES[s.game_type]).filter(Boolean));
-  const has900Plus = bestScores.filter(s => s.best_score >= 900).length;
-  const hasPerfect = bestScores.some(s => s.best_score >= 1000);
-  const todaySportTypes = new Set(dailyGameSlugs);
-
-  const sport900 = (sport: string) =>
-    bestScores.filter(s => SPORT_CATEGORIES[s.game_type] === sport && s.best_score >= 900).length;
-
-  const badges = [
-    // Streak badges (tiered)
-    { emoji: '🔥', name: 'Streak Starter', desc: '3 day streak', earned: longestStreak >= 3 },
-    { emoji: '🔥🔥', name: 'On Fire', desc: '7 day streak', earned: longestStreak >= 7 },
-    { emoji: '👑', name: 'Streak King', desc: '30 day streak', earned: longestStreak >= 30 },
-    // Games played badges (tiered)
-    { emoji: '🎮', name: 'Rookie', desc: '10 games played', earned: totalGames >= 10 },
-    { emoji: '🎮🎮', name: 'Veteran', desc: '50 games played', earned: totalGames >= 50 },
-    { emoji: '🏆', name: 'Century Club', desc: '100 games played', earned: totalGames >= 100 },
-    // Score badges
-    { emoji: '🎯', name: 'Sharp Shooter', desc: 'Score 900+ on any game', earned: has900Plus >= 1 },
-    { emoji: '🎯🎯', name: 'Perfect', desc: 'Score 1000 on any game', earned: hasPerfect },
-    { emoji: '🧠', name: 'Big Brain', desc: '900+ on 10 different games', earned: has900Plus >= 10 },
-    // Sport master badges
-    { emoji: '⚽', name: 'Soccer Master', desc: '900+ on 3 soccer games', earned: sport900('soccer') >= 3 },
-    { emoji: '🏈', name: 'Football Master', desc: '900+ on 3 football games', earned: sport900('football') >= 3 },
-    { emoji: '🏀', name: 'Hoops Master', desc: '900+ on 3 basketball games', earned: sport900('basketball') >= 3 },
-    // Special badges
-    { emoji: '🌍', name: 'All Rounder', desc: 'Play every sport category', earned: playedSports.size >= allSportSet.size },
-    { emoji: '⚡', name: 'Variety Pack', desc: '5 game types in one day', earned: todaySportTypes.size >= 5 },
-    { emoji: '🔮', name: 'Prophet', desc: 'Complete WC 2026 bracket', earned: !!savedBracket },
-    { emoji: '💎', name: 'Diamond', desc: '500+ total games played', earned: totalGames >= 500 },
-    { emoji: '🐐', name: 'GOAT', desc: '100 day streak', earned: longestStreak >= 100 },
-  ];
   const earnedCount = badges.filter(b => b.earned).length;
 
   const avatarUrl = viewingProfile?.avatar_url || user?.user_metadata?.avatar_url;

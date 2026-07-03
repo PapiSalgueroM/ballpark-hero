@@ -4,7 +4,7 @@ import { getRandomStatChallenge } from '@/data/nbaStats';
 import type { NbaFilledSlot, NbaGamePhase, NbaAIVerdict, StatChallenge, NbaPosition } from '@/types/nba';
 import { NBA_POSITIONS } from '@/types/nba';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
+import { normalizeName, displayName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
 
 /**
  * NBA player source for the autocomplete/validation layer.
@@ -73,6 +73,31 @@ export function isPositionEligibleForSlot(dbPosition: string | null | undefined,
   });
 }
 
+/**
+ * Builds "First Last" from a search result whose entity.name is only the
+ * last name (see NBA_PLAYER_SOURCE_V2's docstring above: nba_players_extended_v2
+ * has no full_name column, so last_name is the searchable/matching column
+ * and first_name rides along in entity.meta.firstName). This does not touch
+ * matching/search at all - that already happened against last_name inside
+ * searchPlayers() before this function ever runs; it only changes what text
+ * is shown for an already-selected player.
+ *
+ * displayName() (same title-casing helper playerSearch.ts uses to build
+ * entity.name itself) is reused here so "STEPHEN" -> "Stephen" the same way
+ * "CURRY" -> "Curry" already does, keeping first and last name casing
+ * consistent with each other.
+ *
+ * Falls back to entity.name alone (last name only) when first_name is
+ * missing from the row, which happens for a small minority of the 5135 rows
+ * in nba_players_extended_v2, rather than showing an awkward leading space
+ * or "undefined Curry".
+ */
+export function buildFullDisplayName(entity: PlayerEntity): string {
+  const rawFirst = typeof entity.meta.firstName === 'string' ? entity.meta.firstName.trim() : '';
+  if (!rawFirst) return entity.name;
+  return `${displayName(rawFirst)} ${entity.name}`;
+}
+
 export function useNbaLineup() {
   const [phase, setPhase] = useState<NbaGamePhase>('challenge');
   const [challenge, setChallenge] = useState<StatChallenge | null>(null);
@@ -96,12 +121,18 @@ export function useNbaLineup() {
     );
   }, [filledSlots]);
 
-  // Normalized names already in the lineup, for autocomplete's `exclude` set
-  // and for the duplicate check below. Uses the same normalizeName as
-  // playerSearch.ts / PlayerAutocomplete.tsx so "already picked" comparisons
-  // never drift from what the suggestion list itself considers a match.
+  // Normalized names already in the lineup, for autocomplete's `exclude` set.
+  // This must stay keyed on the same shape as entity.name during search
+  // (last name only, since nba_players_extended_v2 has no full_name column
+  // and last_name is the searched/matched column - see NBA_PLAYER_SOURCE_V2's
+  // docstring), NOT the full "First Last" display name now stored in
+  // NbaFilledSlot.playerName, or the exclude set would stop matching what
+  // searchPlayers() actually compares against and previously-picked players
+  // could reappear in suggestions. lastNameForExclude is carried on the slot
+  // alongside the full playerName precisely so this stays correct without
+  // re-deriving a last name from a full display string.
   const filledNormalizedNames = useMemo(
-    () => new Set(Array.from(filledSlots.values()).map((s) => normalizeName(s.playerName))),
+    () => new Set(Array.from(filledSlots.values()).map((s) => normalizeName(s.lastNameForExclude))),
     [filledSlots]
   );
 
@@ -185,15 +216,17 @@ export function useNbaLineup() {
       const position = NBA_POSITIONS[selectedPosition];
       if (!position) return;
 
+      const fullDisplayName = buildFullDisplayName(entity);
+
       const normalized = normalizeName(entity.name);
       if (filledNormalizedNames.has(normalized)) {
-        setValidationError(`${entity.name} is already in your lineup!`);
+        setValidationError(`${fullDisplayName} is already in your lineup!`);
         return;
       }
 
       const dbPosition = typeof entity.meta.position === 'string' ? entity.meta.position : null;
       if (!isPositionEligibleForSlot(dbPosition, position.role)) {
-        setValidationError(`${entity.name} did not primarily play ${position.label}. Try a different position.`);
+        setValidationError(`${fullDisplayName} did not primarily play ${position.label}. Try a different position.`);
         return;
       }
 
@@ -204,6 +237,10 @@ export function useNbaLineup() {
 
       // Non-blocking enrichment: look up the challenge stat value for this
       // already-validated player. A failure here never rejects the pick.
+      // The lookup itself still sends entity.name (last name, same as what
+      // was matched against the DB during search) plus firstName in case the
+      // edge function wants to disambiguate; only the *display* name changes
+      // in this task, not what gets sent for stat resolution.
       try {
         const resp = await fetch(
           `${"https://flawuiqbvjobmkfkauhw.supabase.co"}/functions/v1/nba-validate-player`,
@@ -214,7 +251,7 @@ export function useNbaLineup() {
               Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
             },
             body: JSON.stringify({
-              playerName: entity.name,
+              playerName: fullDisplayName,
               teamName: currentTeam.name,
               position: position.role,
               challengeStat: challenge?.stat,
@@ -232,7 +269,8 @@ export function useNbaLineup() {
 
       const slot: NbaFilledSlot = {
         ...position,
-        playerName: entity.name,
+        playerName: fullDisplayName,
+        lastNameForExclude: entity.name,
         assignedTeam: currentTeam.name,
         statValue,
       };

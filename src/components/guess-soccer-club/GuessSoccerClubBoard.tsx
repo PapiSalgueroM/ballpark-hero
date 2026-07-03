@@ -57,10 +57,10 @@ export function GuessSoccerClubBoard() {
             {showHelp && (
               <div className="mt-4 p-4 bg-card border border-border rounded-xl text-left text-sm space-y-1 text-muted-foreground max-w-sm mx-auto">
                 <p>🟢 A mystery football club is chosen.</p>
-                <p>🔢 5 clues are revealed one at a time.</p>
+                <p>🔢 6 clues are revealed one at a time: vibe, league, titles, kit colors, notable players, then the name.</p>
                 <p>✅ Guess correctly on clue 1 = 1200 pts</p>
                 <p>📉 Points decrease with each clue used.</p>
-                <p>❌ After 4 wrong guesses the club is revealed.</p>
+                <p>❌ After 5 wrong guesses the club is revealed.</p>
               </div>
             )}
           </div>
@@ -110,7 +110,13 @@ export function GuessSoccerClubBoard() {
   const isWon = gameState.gameStatus === 'won';
   const isLost = gameState.gameStatus === 'lost';
 
-  /* ─── Clue renderer ─── */
+  /* ─── Clue renderer ───
+     6 tiers: vibe, league hint, league titles, kit colors, notable players,
+     full name. "Notable Players" (index 4) is text-only (player names, no
+     crests/photos) and is populated live from player_market_values for
+     clubs with a confident name match (see fetchSoccerClubNotablePlayers.ts
+     and useGuessSoccerClub's enrichment effect); puzzles without a match
+     fall back to a plain-language note instead of an empty reveal. */
   const getClueContent = (index: number): string => {
     const { puzzle } = gameState;
     switch (index) {
@@ -121,7 +127,11 @@ export function GuessSoccerClubBoard() {
           ? 'Has never won the league title'
           : `Has won ${puzzle.clues.leagueTitles} league title${puzzle.clues.leagueTitles !== 1 ? 's' : ''}`;
       case 3: return puzzle.clues.kitColors;
-      case 4: return puzzle.fullName;
+      case 4:
+        return puzzle.notablePlayers && puzzle.notablePlayers.length > 0
+          ? `Notable current players include ${puzzle.notablePlayers.join(', ')}`
+          : 'No standout current player data for this club yet';
+      case 5: return puzzle.fullName;
       default: return '';
     }
   };

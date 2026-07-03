@@ -8,9 +8,10 @@ import {
 } from '@/types/guessSoccerClub';
 import { soccerClubPuzzles } from '@/data/soccerClubPuzzles';
 import { fetchSoccerClubPuzzles } from '@/lib/fetchSoccerClubPuzzles';
+import { fetchNotablePlayersForClubs } from '@/lib/fetchSoccerClubNotablePlayers';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
-export const MAX_CLUES = 5;
+export const MAX_CLUES = 6;
 
 export function useGuessSoccerClub() {
   // ── Pool state (Supabase fetch, falls back to hardcoded soccerClubPuzzles) ──
@@ -26,6 +27,35 @@ export function useGuessSoccerClub() {
     });
     return () => { cancelled = true; };
   }, []);
+
+  // Enriches whichever pool just loaded (DB or hardcoded fallback) with the
+  // "Notable Players" clue tier in one batched request. Runs after the pool
+  // is set so it always targets the real full_name values in play, and is
+  // non-blocking: isLoadingPool is not held up by this second fetch, since a
+  // missing notablePlayers array just means that clue tier is skipped for
+  // that puzzle (see getClueContent in GuessSoccerClubBoard.tsx).
+  useEffect(() => {
+    if (puzzlePool.length === 0) return;
+    let cancelled = false;
+    const names = puzzlePool.map(p => p.fullName);
+    fetchNotablePlayersForClubs(names).then(map => {
+      if (cancelled || map.size === 0) return;
+      setPuzzlePool(prev =>
+        prev.map(p => {
+          const players = map.get(p.fullName);
+          return players && players.length > 0 ? { ...p, notablePlayers: players } : p;
+        })
+      );
+    });
+    return () => { cancelled = true; };
+    // Intentionally keyed off puzzlePool.length rather than the full array:
+    // this effect's own setPuzzlePool call above changes object identities
+    // (via the map/spread) but not the array length, so keying on length
+    // means the effect fires once per real pool swap (hardcoded fallback,
+    // then again once the DB pool replaces it) and never loops on its own
+    // enrichment write.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [puzzlePool.length]);
 
   // ── allClubNames: flat sorted list of fullName + all aliases, for autocomplete ──
   const allClubNames = useMemo(

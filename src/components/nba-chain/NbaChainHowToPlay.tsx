@@ -47,10 +47,19 @@ export function NbaChainHowToPlay({ open, onOpenChange }: NbaChainHowToPlayProps
           </div>
 
           <div>
+            <h3 className="font-bold mb-1">🎯 Two Modes</h3>
+            <ul className="list-disc list-inside text-muted-foreground space-y-1">
+              <li><span className="font-semibold text-foreground">Endless</span> (default): keep going until you get stuck</li>
+              <li><span className="font-semibold text-foreground">Round</span>: exactly 10 picks, scored against a par of 7</li>
+            </ul>
+          </div>
+
+          <div>
             <h3 className="font-bold mb-1">🏆 Scoring</h3>
             <ul className="list-disc list-inside text-muted-foreground space-y-1">
               <li>+1 point per valid connection</li>
-              <li>Your best streak saves on this device</li>
+              <li>Endless mode: your best streak saves on this device</li>
+              <li>Round mode: finishing above par 7 out of 10 picks is a strong round</li>
               <li>Share your chain when you're done</li>
             </ul>
           </div>

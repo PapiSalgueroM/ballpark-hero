@@ -13,9 +13,9 @@ export default function GuessSoccerClub() {
       <GuessSoccerClubBoard />
       <GameSeoContent
         title="Guess The Football Club | DoUKnowBall"
-        description="Identify the mystery soccer club from progressive clues about their league, country, stadium, trophies, and famous players. Covers all major European leagues and MLS."
+        description="Identify the mystery soccer club from progressive text clues about their vibe, league, trophies, kit colors, and notable current players. Covers all major European leagues and MLS."
         howToPlay={[
-          "Clues are revealed one by one: league, country, stadium, trophy count, and iconic players.",
+          "Clues are revealed one by one: vibe, league and country, league titles won, kit colors, notable current players, then the club name.",
           "Submit your guess when you think you know the club. Fewer clues equals a higher score.",
           "Choose from daily, unlimited, league-specific, or Big 6 modes."
         ]}

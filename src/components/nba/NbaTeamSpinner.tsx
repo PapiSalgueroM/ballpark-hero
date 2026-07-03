@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { NbaTeam } from '@/data/nbaTeams';
-import { getNbaTeamLogo, NBA_TEAMS } from '@/data/nbaTeams';
+import { NBA_TEAMS } from '@/data/nbaTeams';
 
 interface NbaTeamSpinnerProps {
   teams: NbaTeam[];
@@ -50,24 +50,11 @@ const NbaTeamSpinner = ({ teams, targetIndex, isSpinning, onFinish }: NbaTeamSpi
   const target = teams[targetIndex];
   const displayName = settled ? target?.name : displayTeams[displayIndex];
 
-  const logoUrl = settled && target ? getNbaTeamLogo(target.abbreviation) : '';
-
   return (
     <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-lg">
       <div className="flex items-center gap-4">
         <div className="w-14 h-14 rounded-xl bg-secondary flex items-center justify-center shrink-0 overflow-hidden">
-          {settled && logoUrl ? (
-            <img
-              src={logoUrl}
-              alt={displayName || ''}
-              className="w-10 h-10 object-contain"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
-            />
-          ) : (
-            <span className="text-2xl">🏀</span>
-          )}
+          <span className="text-2xl">🏀</span>
         </div>
 
         <div className="flex-1 min-w-0">

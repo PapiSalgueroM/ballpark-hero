@@ -128,6 +128,7 @@ Attribute types and what they mean:
 - "Champion": Won at least one NBA championship.
 - "All-Star": Selected to at least one NBA All-Star game.
 - "#1 Overall Pick" or "Top 5 Pick": Drafted at that position.
+- "Undrafted": Entered the NBA without being selected in any NBA draft.
 - "20+ PPG Career", "25+ PPG Career", "30+ PPG Season", etc.: Career average or season average meets threshold.
 - "10+ RPG Career": Career rebounding average meets threshold.
 - "7+ APG Career": Career assist average meets threshold.

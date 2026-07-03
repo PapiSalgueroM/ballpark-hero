@@ -338,4 +338,40 @@ export const FOOTBALL_CONNECT4_BOARDS: FootballConnect4Board[] = [
       'European Championship Winner',
     ],
   },
+  {
+    // New board (2026-07-03): adds clue types not used by any prior board,
+    // each verified against player_market_values / ballon_dor on
+    // flawuiqbvjobmkfkauhw before shipping. Pool sizes (distinct players):
+    //   Won a Domestic League in 3+ Countries -> 44+ (partial club-to-country
+    //     map covering the "Big 5" leagues + Portugal/Netherlands only; the
+    //     true pool is larger since MLS/Turkish/Saudi/South American clubs
+    //     were not mapped for this check)
+    //   Won the Ballon d'Or -> 51 (already used elsewhere, reused here to
+    //     pair with the new column types, not counted as "new")
+    //   Goalkeeper -> 2,321 (position column, already used as a row label in
+    //     classic-7; used here as a column so it can pair with new rows)
+    // Both new-type strings are already defined in the football-connect4
+    // -validate edge function's system prompt (attribute-definitions list),
+    // so the AI verifier already knows how to judge them; this board is the
+    // first to actually use them.
+    id: 'classic-16',
+    name: 'Well Traveled',
+    columnAttributes: [
+      'Won a Domestic League in 3+ Countries',
+      'Played for PSG',
+      'Played for Inter Milan',
+      'Played for Chelsea',
+      'Played for Atletico Madrid',
+      'Goalkeeper',
+      'Won the Ballon d\'Or',
+    ],
+    rowAttributes: [
+      'World Cup Winner',
+      'Portuguese',
+      'Won the Champions League',
+      'Market Value Has Exceeded €100M',
+      'African Nationality',
+      'Played in the Premier League',
+    ],
+  },
 ];
