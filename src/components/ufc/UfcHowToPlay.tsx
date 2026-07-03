@@ -18,8 +18,8 @@ export function UfcHowToPlay({ open, onOpenChange }: UfcHowToPlayProps) {
           <DialogTitle className="text-2xl font-display">How to Play 🥊</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 text-sm text-muted-foreground">
-          <p>Guess the UFC fighter in <strong className="text-foreground">8 tries</strong>.</p>
-          <p>Each guess reveals clues about the mystery fighter:</p>
+          <p>Guess the mystery UFC fighter in <strong className="text-foreground">8 tries</strong>.</p>
+          <p>Every guess colors in clues about the fighter you're chasing:</p>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 rounded bg-correct" />

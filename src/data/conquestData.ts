@@ -489,14 +489,15 @@ export const NFL_TEAMS: NFLTeam[] = [
 
 export const TEAM_MAP = new Map(NFL_TEAMS.map(t => [t.id, t]));
 
-// Initial territory assignments — 32 teams each get 1 home state
-// Shared-state teams get nearest neighboring state:
+// Initial territory assignments — 32 teams each get 1 home state/sub-territory.
+// Shared-state teams get their own real-geography sub-territory (item 83),
+// not a neighboring state stand-in:
 // CA split: SF → CA_N, LAR → CA_S, LAC → CA_SC
 // TX split: DAL → TX_N, HOU → TX_S
-// OH: CLE (primary), CIN → KY
-// PA: PIT (primary), PHI → DE
-// NJ: NYG (primary), NYJ → CT
-// FL: MIA (primary), TB → AL, JAX → SC
+// OH split: CLE → OH_NE, CIN → OH_SW
+// PA split: PIT → PA_W, PHI → PA_E
+// NJ split: NYG → NJ_N, NYJ → NJ_S
+// FL split: JAX → FL_N, TB → FL_W, MIA → FL_S
 export const INITIAL_TERRITORIES: Record<string, string> = {
   // Each team starts with ONLY their home state/region — everything else is neutral
   WA: 'SEA', CA_N: 'SF', CA_S: 'LAR', CA_SC: 'LAC', NV: 'LV', AZ: 'ARI', CO: 'DEN',
@@ -589,3 +590,33 @@ export function isLightColor(hex: string): boolean {
   const b = parseInt(hex.slice(5, 7), 16);
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.5;
 }
+
+// ── Free Agency tab pool (item 87) ──
+// Hand-curated, text-only (no photos), real recent NFL free agents / cut
+// veterans, kept distinct from conquestPowerups.ts's FREE_AGENTS (which
+// feeds the existing "Free Agent Signing" power-up) so the two systems
+// never surface the exact same name in two different flows. This is the
+// pool the docked Free Agency panel offers once every 3 conquests.
+export interface ConquestFreeAgentCandidate {
+  name: string;
+  position: string;
+  overall: number;
+  blurb: string; // one-line "why they're notable" for the panel
+}
+
+export const CONQUEST_FREE_AGENCY_POOL: ConquestFreeAgentCandidate[] = [
+  { name: 'Justin Simmons', position: 'S', overall: 84, blurb: 'Longtime Broncos ballhawk, cut after a decade in Denver' },
+  { name: "Za'Darius Smith", position: 'DE', overall: 82, blurb: 'Veteran edge rusher, journeyman of the last few offseasons' },
+  { name: 'Kareem Hunt', position: 'RB', overall: 80, blurb: 'Former rushing champ, bounced between rosters on short deals' },
+  { name: 'Marcus Peters', position: 'CB', overall: 79, blurb: 'Three-time Pro Bowl corner, still finding a permanent home' },
+  { name: 'Jimmy Garoppolo', position: 'QB', overall: 79, blurb: 'Ex-Super Bowl starter, now a proven backup on the market' },
+  { name: 'Leonard Fournette', position: 'RB', overall: 78, blurb: 'Super Bowl-winning bruiser back, released after a lean stretch' },
+  { name: 'Cam Akers', position: 'RB', overall: 77, blurb: 'Former playoff spark plug, traded and cut multiple times' },
+  { name: 'Robert Quinn', position: 'DE', overall: 80, blurb: 'Ex-sack leader, aging but still gets home on passing downs' },
+  { name: 'Kendall Fuller', position: 'CB', overall: 78, blurb: 'Reliable slot corner, cap casualty after a roster crunch' },
+  { name: 'Blake Martinez', position: 'LB', overall: 76, blurb: 'Former tackle machine, retired then briefly un-retired' },
+  { name: 'Melvin Ingram', position: 'DE', overall: 76, blurb: 'Well-traveled pass rusher, picked up by contenders in-season' },
+  { name: 'Duke Johnson', position: 'RB', overall: 75, blurb: 'Steady third-down back, never stuck on one roster long' },
+  { name: 'Jason Peters', position: 'OT', overall: 77, blurb: 'Future Hall of Fame tackle, still signing prove-it deals' },
+  { name: 'Ezekiel Elliott', position: 'RB', overall: 78, blurb: 'Former rushing champion, let go after his big second contract' },
+];

@@ -119,6 +119,47 @@ export default function ConquestMap({
     ? Object.values(territories).filter(t => t === hoveredTeamId).length
     : 0;
 
+  // Attack arrow (item 89): during a live battle, draw one curved arrow from
+  // the attacker's empire label to the defender's, in the attacker's color.
+  // Reuses the same `stateLabels` blob anchors the team-name text already
+  // renders at, so the arrow always points at exactly where the labels are
+  // (including after the blob's centroid shifts from a territory change).
+  // `active` on a stateLabels entry already means "this blob is the one
+  // fighting right now" (see the stateLabels useMemo above), so filtering on
+  // that instead of just teamId correctly picks the fighting blob even for
+  // a team that owns multiple disconnected empires.
+  const isBattlePhase = phase === 'battle' || phase === 'animating';
+  const attackerAnchor = isBattlePhase
+    ? stateLabels.find(l => l.teamId === attackingTeam && l.active)
+    : undefined;
+  const defenderAnchor = isBattlePhase
+    ? stateLabels.find(l => l.teamId === defendingTeam && l.active)
+    : undefined;
+  const showAttackArrow = isBattlePhase && !!attackerAnchor && !!defenderAnchor && !!attackingTeam;
+  const attackerColor = attackingTeam ? (TEAM_MAP.get(attackingTeam)?.color || '#ffffff') : '#ffffff';
+
+  // Quadratic bezier control point offset perpendicular to the attacker-
+  // defender line, so the arrow curves instead of drawing a straight line
+  // through whatever territory sits between them.
+  const arrowPath = (() => {
+    if (!attackerAnchor || !defenderAnchor) return '';
+    const { x: x1, y: y1 } = attackerAnchor;
+    const { x: x2, y: y2 } = defenderAnchor;
+    const mx = (x1 + x2) / 2;
+    const my = (y1 + y2) / 2;
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const len = Math.hypot(dx, dy) || 1;
+    // Perpendicular unit vector, scaled to a gentle curve (curve amount
+    // capped so very long cross-country attacks don't bow absurdly wide).
+    const curveAmount = Math.min(len * 0.18, 26);
+    const px = -dy / len;
+    const py = dx / len;
+    const cx = mx + px * curveAmount;
+    const cy = my + py * curveAmount;
+    return `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
+  })();
+
   return (
     <div className="relative w-full">
       <svg
@@ -264,6 +305,41 @@ export default function ConquestMap({
             )}
           </g>
         ))}
+
+        {/* Attack arrow (item 89): curved line from the attacker's empire
+            label to the defender's, drawn in the attacker's team color with
+            a subtle pulse so an ongoing battle reads clearly on the map
+            itself, not just in the text panel below it. Purely visual, no
+            pointer events, so it never blocks hovering the underlying
+            states. */}
+        {showAttackArrow && (
+          <g style={{ pointerEvents: 'none' }}>
+            <defs>
+              <marker
+                id="conquest-attack-arrowhead"
+                markerWidth="8"
+                markerHeight="8"
+                refX="6"
+                refY="4"
+                orient="auto-start-reverse"
+              >
+                <path d="M0,0 L8,4 L0,8 Z" fill={attackerColor} />
+              </marker>
+            </defs>
+            <path
+              d={arrowPath}
+              fill="none"
+              stroke={attackerColor}
+              strokeWidth={2}
+              strokeLinecap="round"
+              markerEnd="url(#conquest-attack-arrowhead)"
+              className="conquest-attack-arrow"
+              style={{
+                filter: `drop-shadow(0 0 3px ${attackerColor}aa)`,
+              }}
+            />
+          </g>
+        )}
       </svg>
 
       {/* Scoped pulse for power-up icons; mirrors index.css's simple
@@ -281,6 +357,22 @@ export default function ConquestMap({
           .conquest-powerup-pulse {
             animation-duration: 0.001ms !important;
             animation-iteration-count: 1 !important;
+          }
+        }
+        /* Attack arrow (item 89): a gentle opacity pulse, not a shape/position
+           change, so it reads as "live" without being distracting. Reduced-
+           motion users get the arrow fully visible and static instead. */
+        @keyframes conquest-attack-arrow-pulse {
+          0%, 100% { opacity: 0.55; }
+          50% { opacity: 1; }
+        }
+        .conquest-attack-arrow {
+          animation: conquest-attack-arrow-pulse 1.1s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .conquest-attack-arrow {
+            animation: none;
+            opacity: 0.9;
           }
         }
       `}</style>

@@ -21,17 +21,17 @@ export function ConnectionsHowToPlay({ open, onOpenChange }: ConnectionsHowToPla
         </DialogHeader>
         <div className="space-y-4 text-sm text-foreground">
           <p>
-            <strong>Soccer Connections</strong>: 16 soccer players, 4 hidden categories.
-            Select 4 players you think belong together and hit Submit. Crack all 4 groups before your lives run out!
+            <strong>Soccer Connections</strong>: 16 players, 4 hidden categories.
+            Pick 4 players you think belong together and hit Submit. Find all 4 groups before you run out of lives.
           </p>
           <ul className="list-disc pl-5 space-y-1.5 text-muted-foreground">
-            <li>Select 4 players and press <strong className="text-foreground">Submit</strong> to check if you are correct.</li>
-            <li>Find all 4 groups without using all of your lives!</li>
-            <li>Connections will never be based upon player positions.</li>
+            <li>Select 4 players and press <strong className="text-foreground">Submit</strong> to check your guess</li>
+            <li>You get 4 lives for the round</li>
+            <li>Categories are never based on player position</li>
           </ul>
 
           <div>
-            <p className="font-semibold text-foreground mb-2">Category Examples</p>
+            <p className="font-semibold text-foreground mb-2">Category examples</p>
             <ul className="space-y-1 text-muted-foreground text-xs">
               <li>• Played for Chelsea</li>
               <li>• From France</li>
@@ -41,7 +41,7 @@ export function ConnectionsHowToPlay({ open, onOpenChange }: ConnectionsHowToPla
           </div>
 
           <div>
-            <p className="font-semibold text-foreground mb-2">Difficulty Colors</p>
+            <p className="font-semibold text-foreground mb-2">Difficulty colors</p>
             <div className="flex items-center gap-2 flex-wrap text-xs">
               <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-correct" /> Easy</span>
               <span className="text-muted-foreground">→</span>
@@ -54,12 +54,12 @@ export function ConnectionsHowToPlay({ open, onOpenChange }: ConnectionsHowToPla
           </div>
 
           <p className="text-xs text-muted-foreground">
-            Watch out for players that seem to belong to multiple categories, there is only 1 acceptable solution.
-            Use the <strong className="text-foreground">Hint</strong> button (up to 4 times) to reveal unsolved category names, starting from the easiest.
+            Watch for players who seem to fit more than one category. Only one grouping is correct.
+            Use <strong className="text-foreground">Hint</strong> (up to 4 times) to reveal an unsolved category name, easiest first.
           </p>
 
           <p className="text-xs text-muted-foreground italic">
-            Inspired by New York Times' Connections game.
+            Inspired by the New York Times' Connections game.
           </p>
         </div>
       </DialogContent>

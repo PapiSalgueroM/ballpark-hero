@@ -25,14 +25,14 @@ export function NbaChainHowToPlay({ open, onOpenChange }: NbaChainHowToPlayProps
           <div>
             <h3 className="font-bold mb-1">🎯 Goal</h3>
             <p className="text-muted-foreground">
-              Build the longest chain of NBA players! Each new player must have been a teammate of the previous player on the same NBA team.
+              Build the longest chain of NBA players you can. Each new player must have been a teammate of the last one, on the same NBA team.
             </p>
           </div>
 
           <div>
             <h3 className="font-bold mb-1">🔗 Valid Connections</h3>
             <p className="text-muted-foreground">
-              Two players are connected if they played on the same NBA team at any point: even partial seasons, mid-season trades, or short stints count.
+              Two players connect if they were ever on the same NBA team, even for a partial season, a trade, or a short stint.
             </p>
           </div>
 
@@ -40,9 +40,9 @@ export function NbaChainHowToPlay({ open, onOpenChange }: NbaChainHowToPlayProps
             <h3 className="font-bold mb-1">📋 Rules</h3>
             <ul className="list-disc list-inside text-muted-foreground space-y-1">
               <li>No repeating players in the same chain</li>
-              <li>Only NBA players (past or present)</li>
-              <li>Each player connects to the one immediately before</li>
-              <li>Nicknames & partial names work (e.g. "Bron", "KD")</li>
+              <li>Only NBA players, past or present</li>
+              <li>Each player connects to the one right before it</li>
+              <li>Nicknames and partial names work ("Bron", "KD")</li>
             </ul>
           </div>
 
@@ -50,8 +50,8 @@ export function NbaChainHowToPlay({ open, onOpenChange }: NbaChainHowToPlayProps
             <h3 className="font-bold mb-1">🏆 Scoring</h3>
             <ul className="list-disc list-inside text-muted-foreground space-y-1">
               <li>+1 point per valid connection</li>
-              <li>Your best streak is saved locally</li>
-              <li>Share your chain when done!</li>
+              <li>Your best streak saves on this device</li>
+              <li>Share your chain when you're done</li>
             </ul>
           </div>
 

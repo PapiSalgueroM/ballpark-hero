@@ -17,13 +17,13 @@ export function NbaConnect4HowToPlay({ open, onOpenChange }: NbaConnect4HowToPla
 
         <div className="space-y-5 text-sm">
           <p className="text-muted-foreground text-center">
-            A two-player NBA trivia battle: get 4 in a row to win!
+            A two-player NBA trivia battle. Get 4 in a row to win.
           </p>
 
           <section>
             <h3 className="font-bold text-foreground mb-2">🏀 The Board</h3>
             <p className="text-muted-foreground">
-              A 7×6 grid with <span className="text-primary font-semibold">NBA attributes</span> on each column header and row label. Attributes can be teams, awards, stats, or career traits.
+              A 7×6 grid with an <span className="text-primary font-semibold">NBA attribute</span> on each column and row: teams, awards, stats, career traits.
             </p>
           </section>
 
@@ -32,29 +32,29 @@ export function NbaConnect4HowToPlay({ open, onOpenChange }: NbaConnect4HowToPla
             <ul className="space-y-1.5 text-muted-foreground">
               <li>• <span className="text-red-400 font-semibold">Team Red</span> and <span className="text-blue-400 font-semibold">Team Blue</span> take turns</li>
               <li>• Pick a <span className="text-foreground font-semibold">column</span>. Your piece drops to the lowest empty row</li>
-              <li>• Name an NBA player who matches <span className="text-primary font-semibold">BOTH</span> the column attribute and the row attribute</li>
-              <li>• Each player can only be used <span className="text-foreground font-semibold">once</span> per game</li>
+              <li>• Name an NBA player who matches <span className="text-primary font-semibold">BOTH</span> the column and the row</li>
+              <li>• Each player gets used <span className="text-foreground font-semibold">once</span> per game</li>
             </ul>
           </section>
 
           <section>
             <h3 className="font-bold text-foreground mb-2">⏭️ Skipping</h3>
             <p className="text-muted-foreground">
-              Can't think of anyone? You can <span className="text-foreground font-semibold">skip your turn</span> and let your opponent go.
+              Blanking on a name? <span className="text-foreground font-semibold">Skip your turn</span> and let your opponent go.
             </p>
           </section>
 
           <section>
             <h3 className="font-bold text-foreground mb-2">🏆 Winning</h3>
             <p className="text-muted-foreground">
-              First to get <span className="text-primary font-semibold">4 in a row</span> (horizontal, vertical, or diagonal) wins! If the board fills up, it's a draw.
+              First to <span className="text-primary font-semibold">4 in a row</span> wins, horizontal, vertical, or diagonal. Full board with no winner is a draw.
             </p>
           </section>
 
           <section>
             <h3 className="font-bold text-foreground mb-2">💡 Example</h3>
             <p className="text-muted-foreground">
-              Column says <span className="text-orange-400 font-semibold">"Lakers"</span>, row says <span className="text-orange-400 font-semibold">"MVP Winner"</span> → you need a player who won MVP <em>and</em> played for the Lakers (e.g. LeBron James, Kobe Bryant, Shaquille O'Neal).
+              Column says <span className="text-orange-400 font-semibold">"Lakers"</span>, row says <span className="text-orange-400 font-semibold">"MVP Winner"</span>. You need someone who won MVP <em>and</em> played for the Lakers: LeBron James, Kobe Bryant, Shaquille O'Neal.
             </p>
           </section>
 

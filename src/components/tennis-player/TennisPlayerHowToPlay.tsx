@@ -16,18 +16,17 @@ export function TennisPlayerHowToPlay() {
           <DialogTitle className="text-purple-400 text-xl">How to Play</DialogTitle>
         </DialogHeader>
         <div className="space-y-3 text-sm text-green-300">
-          <p>A mystery tennis player is hidden behind <strong className="text-purple-400">6 clues</strong>.</p>
-          <p>Clues are revealed one at a time. Guess after each one!</p>
+          <p>🎾 We're hiding a tennis player behind <strong className="text-purple-400">6 clues</strong>. Guess who it is.</p>
           <ol className="list-decimal list-inside space-y-1 text-green-400">
             <li>Vibe word</li>
             <li>Nationality & era</li>
-            <li>Tour (ATP / WTA)</li>
+            <li>Tour (ATP or WTA)</li>
             <li>Grand Slam wins</li>
             <li>Which Slams they won</li>
             <li>Famous moment</li>
           </ol>
-          <p>Scoring: <strong className="text-purple-400">1000</strong> for clue 1 down to <strong className="text-purple-400">100</strong> for clue 6.</p>
-          <p>Wrong guesses reveal the next clue.</p>
+          <p>Every wrong guess reveals the next clue.</p>
+          <p>Guess early for more points: <strong className="text-purple-400">1000</strong> on clue 1, down to <strong className="text-purple-400">100</strong> on clue 6.</p>
         </div>
       </DialogContent>
     </Dialog>

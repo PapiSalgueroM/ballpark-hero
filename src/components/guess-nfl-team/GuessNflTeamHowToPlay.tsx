@@ -26,7 +26,7 @@ export function GuessNflTeamHowToPlay({ open, onOpenChange }: Props) {
         <div className="space-y-4 text-sm text-foreground">
           <div className="space-y-2">
             <p className="font-semibold text-primary">Goal</p>
-            <p>Identify the mystery NFL team from progressive clues. The earlier you guess, the more points you earn!</p>
+            <p>Identify the mystery NFL team from clues revealed one at a time. Guess early for more points.</p>
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-primary">Clues (in order)</p>
@@ -46,7 +46,7 @@ export function GuessNflTeamHowToPlay({ open, onOpenChange }: Props) {
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-primary">Scoring</p>
-            <p className="text-muted-foreground">1200 pts → 200 pts as clues reveal. Wrong guess reveals next clue!</p>
+            <p className="text-muted-foreground">Starts at 1200 points, drops to 200 as clues reveal. A wrong guess reveals the next clue.</p>
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-primary">Game Modes</p>

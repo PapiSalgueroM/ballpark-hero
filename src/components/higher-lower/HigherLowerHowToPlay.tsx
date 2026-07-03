@@ -17,15 +17,15 @@ export function HigherLowerHowToPlay({ open, onOpenChange }: HigherLowerHowToPla
 
         <div className="space-y-5 text-sm">
           <p className="text-muted-foreground text-center">
-            Compare all-time career stats between two players and build the longest streak you can!
+            Compare two players' career stats and build the longest streak you can.
           </p>
 
           <section>
             <h3 className="font-bold text-foreground mb-2">🎮 Gameplay</h3>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>• You see <span className="text-foreground font-semibold">Player A</span> with all their career stats revealed</li>
-              <li>• <span className="text-foreground font-semibold">Player B</span> appears next to them with stats hidden</li>
-              <li>• Pick a stat from Player A that you think is <span className="text-primary font-semibold">higher</span> than Player B's same stat</li>
+              <li>• <span className="text-foreground font-semibold">Player A</span> shows all their career stats</li>
+              <li>• <span className="text-foreground font-semibold">Player B</span> shows up next to them with stats hidden</li>
+              <li>• Pick a stat from Player A you think is <span className="text-primary font-semibold">higher</span> than Player B's</li>
             </ul>
           </section>
 

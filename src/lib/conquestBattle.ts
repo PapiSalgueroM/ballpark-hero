@@ -205,6 +205,14 @@ function generatePlay(
 
 /* ── Win probability (Wave B: perfectSeason logistic composite) ── */
 
+// Home-field advantage (item 89): the defender is always defending its own
+// turf in Conquest's attacker-picks-a-direction model, so it gets a flat
+// rating bump in both matchup legs below. Kept small and constant (not
+// territory-scaled) so it reads as a stable "home edge" rather than another
+// version of the territory bump. Exported so any battle-header UI can
+// display the exact number being applied instead of a hardcoded copy of it.
+export const HOME_FIELD_BUMP = 2;
+
 /**
  * Composite win probability for the attacker, built from perfectSeason's
  * winProbability (logistic, clamped .05-.985) applied to two head-to-head
@@ -214,7 +222,9 @@ function generatePlay(
  * on), then the two probabilities are combined into one attacker win prob.
  * Territory counts convert to a modest rating bump rather than a flat power
  * addition, so a big territorial lead nudges the odds without swamping the
- * underlying O/D matchup.
+ * underlying O/D matchup. The defender also gets HOME_FIELD_BUMP added to
+ * both its defense (matchup 1) and its offense (matchup 2), since it is
+ * always the team being attacked on its own turf.
  */
 export function compositeAttackerWinProb(
   attOffense: number, attDefense: number,
@@ -224,16 +234,22 @@ export function compositeAttackerWinProb(
   // Territory bonus: +1 rating point per 3 states of net lead, capped at +/-6.
   const terrBump = clamp((attTerr - defTerr) / 3, -6, 6);
 
-  // Matchup 1: attacker's offense driving against defender's defense.
-  // Expressed as an overall centered on 77 (perfectSeason's pivot) plus the
-  // gap between the two ratings, so a bigger gap pushes further from 50/50.
-  const attOffVsDefDef = 77 + (attOffense - defDefense) + terrBump;
+  // Home edge: defender's ratings get a small bump in both legs below,
+  // modeling "defending home turf" (item 89).
+  const homeDefDefense = defDefense + HOME_FIELD_BUMP;
+  const homeDefOffense = defOffense + HOME_FIELD_BUMP;
+
+  // Matchup 1: attacker's offense driving against defender's (home-boosted)
+  // defense. Expressed as an overall centered on 77 (perfectSeason's pivot)
+  // plus the gap between the two ratings, so a bigger gap pushes further
+  // from 50/50.
+  const attOffVsDefDef = 77 + (attOffense - homeDefDefense) + terrBump;
   const attOffenseWinProb = winProbability(attOffVsDefDef);
 
-  // Matchup 2: defender's offense driving against attacker's defense.
-  // This is the probability the DEFENDER wins that half of the exchange,
-  // so we take its complement to get the attacker's side.
-  const defOffVsAttDef = 77 + (defOffense - attDefense) - terrBump;
+  // Matchup 2: defender's (home-boosted) offense driving against attacker's
+  // defense. This is the probability the DEFENDER wins that half of the
+  // exchange, so we take its complement to get the attacker's side.
+  const defOffVsAttDef = 77 + (homeDefOffense - attDefense) - terrBump;
   const attDefenseWinProb = 1 - winProbability(defOffVsAttDef);
 
   // Combine the two halves (average keeps both matchups honest rather than

@@ -13,10 +13,10 @@ export function HockeyCareerHowToPlay({ open, onOpenChange }: Props) {
         <div className="space-y-4 text-sm text-foreground">
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--hk-silver))]">Goal</p>
-            <p>Guess the mystery hockey player from progressive clues. Earlier guesses earn more points!</p>
+            <p>Guess the mystery hockey player from clues revealed one at a time. Guess early for more points.</p>
           </div>
           <div className="space-y-2">
-            <p className="font-semibold text-[hsl(var(--hk-silver))]">Clues revealed in order</p>
+            <p className="font-semibold text-[hsl(var(--hk-silver))]">Clues, in order</p>
             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
               <li>Position (Forward, Defense, Goalie)</li>
               <li>Country of origin</li>
@@ -28,11 +28,11 @@ export function HockeyCareerHowToPlay({ open, onOpenChange }: Props) {
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--hk-silver))]">Scoring</p>
-            <p className="text-muted-foreground">Start at 1,000 points, −150 per clue. Minimum 100 points.</p>
+            <p className="text-muted-foreground">You start at 1,000 points. Each clue costs 150. Floor is 100.</p>
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--hk-silver))]">Daily Challenge</p>
-            <p className="text-muted-foreground">New player at midnight. Share your score!</p>
+            <p className="text-muted-foreground">New player every midnight. Share your score when you're done.</p>
           </div>
         </div>
       </DialogContent>

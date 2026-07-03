@@ -18,9 +18,9 @@ export function HockeyHLHowToPlay({ open, onOpenChange }: Props) {
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--hk-silver))]">How it works</p>
             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-              <li>Two players shown with name, position, and country flag</li>
-              <li>Tap the player you think has MORE career points</li>
-              <li>Both point totals are revealed after your choice</li>
+              <li>Two players show up with name, position, and country flag</li>
+              <li>Tap the one you think has MORE career points</li>
+              <li>We reveal both totals right after your pick</li>
               <li>10 rounds per game</li>
             </ul>
           </div>
@@ -28,12 +28,12 @@ export function HockeyHLHowToPlay({ open, onOpenChange }: Props) {
             <p className="font-semibold text-[hsl(var(--hk-silver))]">Scoring</p>
             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
               <li><strong>10 points</strong> per correct answer</li>
-              <li><strong>+5 bonus</strong> for each consecutive correct (streak)</li>
+              <li><strong>+5 bonus</strong> for every consecutive correct answer</li>
             </ul>
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--hk-silver))]">Modes</p>
-            <p className="text-muted-foreground"><strong>Daily:</strong> Same matchups for everyone. <strong>Unlimited:</strong> Random matchups, play again anytime.</p>
+            <p className="text-muted-foreground"><strong>Daily:</strong> same matchups for everyone. <strong>Unlimited:</strong> random matchups, play again anytime.</p>
           </div>
         </div>
       </DialogContent>

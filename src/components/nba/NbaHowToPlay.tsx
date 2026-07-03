@@ -17,14 +17,14 @@ export function NbaHowToPlay({ open, onOpenChange }: NbaHowToPlayProps) {
 
         <div className="space-y-5 text-sm">
           <p className="text-muted-foreground text-center">
-            Build the ultimate NBA Starting 5 by optimizing for a random stat challenge!
+            Build a 5-man NBA lineup that hits a random stat target.
           </p>
 
           <section>
             <h3 className="font-bold text-foreground mb-2">🎰 The Challenge</h3>
             <p className="text-muted-foreground">
-              A random stat is spun (PPG, RPG, Championships, Height, etc.) along with a direction:
-              find the <span className="text-green-400 font-semibold">HIGHEST</span> or{' '}
+              Spin for a stat (PPG, RPG, Championships, Height, and more) and a direction:
+              build the <span className="text-green-400 font-semibold">HIGHEST</span> or{' '}
               <span className="text-blue-400 font-semibold">LOWEST</span> combined total.
             </p>
           </section>
@@ -32,36 +32,36 @@ export function NbaHowToPlay({ open, onOpenChange }: NbaHowToPlayProps) {
           <section>
             <h3 className="font-bold text-foreground mb-2">🏀 Building Your Lineup</h3>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>• Pick any open position (PG, SG, SF, PF, C): <span className="text-foreground font-semibold">you choose the order</span></li>
-              <li>• A <span className="text-orange-400 font-semibold">random NBA team</span> is assigned for each pick</li>
-              <li>• You can only select players who have <span className="text-foreground font-semibold">played for that team</span></li>
-              <li>• Players must match the <span className="text-primary font-semibold">position you selected</span>: no out-of-position picks</li>
-              <li>• Each player and position can only be used <span className="text-foreground font-semibold">once</span></li>
+              <li>• Pick any open position (PG, SG, SF, PF, C) in <span className="text-foreground font-semibold">any order you want</span></li>
+              <li>• Each pick gets a <span className="text-orange-400 font-semibold">random NBA team</span> assigned to it</li>
+              <li>• You can only name players who <span className="text-foreground font-semibold">played for that team</span></li>
+              <li>• Players must match the <span className="text-primary font-semibold">position you picked</span>, no out-of-position subs</li>
+              <li>• Each player and position gets used <span className="text-foreground font-semibold">once</span></li>
             </ul>
           </section>
 
           <section>
             <h3 className="font-bold text-foreground mb-2">🔄 Reroll</h3>
             <p className="text-muted-foreground">
-              Don't like your assigned team? Hit the <span className="text-foreground font-semibold">shuffle button</span> to reroll and get a different team.
+              Don't like your team? Hit <span className="text-foreground font-semibold">shuffle</span> for a different one.
             </p>
           </section>
 
           <section>
             <h3 className="font-bold text-foreground mb-2">📊 Stats & Scoring</h3>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>• Each player's <span className="text-orange-400 font-semibold">career stat</span> is shown on the court</li>
-              <li>• A <span className="text-primary font-semibold">running total</span> tracks your combined stat</li>
-              <li>• After filling all 5 positions, AI evaluates how well you optimized</li>
+              <li>• Each player's <span className="text-orange-400 font-semibold">career stat</span> shows on the court</li>
+              <li>• A <span className="text-primary font-semibold">running total</span> tracks your combined number</li>
+              <li>• Fill all 5 spots and an AI rates how well you did</li>
             </ul>
           </section>
 
           <section>
             <h3 className="font-bold text-foreground mb-2">🏆 Strategy Tips</h3>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>• Think about all-time greats and role players for each team</li>
-              <li>• For "lowest" challenges, look for short-career or specialized players</li>
-              <li>• Pick your hardest position first when you have more teams to choose from</li>
+              <li>• Know your all-time greats and role players for each team</li>
+              <li>• For "lowest" challenges, look for short careers or specialists</li>
+              <li>• Fill your hardest position first while you still have picks left</li>
             </ul>
           </section>
 

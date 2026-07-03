@@ -22,22 +22,22 @@ const GuessCollegeHowToPlay = () => {
         </DialogHeader>
         <div className="space-y-4 text-sm text-muted-foreground">
           <p>
-            Guess the mystery Division 1 college or university from progressive clues revealed one at a time.
+            Guess the mystery Division 1 college from clues revealed one at a time.
           </p>
 
           <div>
             <h3 className="font-semibold text-foreground mb-1">🎯 Clue Order</h3>
             <p>
-              Clues go from vague to obvious: vibe → region → size → acceptance rate → conference → basketball → football → Olympics → NFL Draft → alumni → colors → reveal.
+              Clues go from vague to obvious: vibe, region, size, acceptance rate, conference, basketball, football, Olympics, NFL Draft, alumni, colors, reveal.
             </p>
           </div>
 
           <div>
             <h3 className="font-semibold text-foreground mb-1">📊 Scoring</h3>
             <ul className="space-y-0.5 list-disc list-inside">
-              <li>Clue 1: 1200 pts (legendary!)</li>
+              <li>Clue 1: 1200 pts, legendary territory</li>
               <li>Clue 2: 1000 pts</li>
-              <li>Clues 3-11: 900 → 100 pts</li>
+              <li>Clues 3 to 11: drops from 900 to 100 pts</li>
               <li>All clues shown: 0 pts</li>
             </ul>
           </div>

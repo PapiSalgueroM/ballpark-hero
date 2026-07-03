@@ -99,6 +99,8 @@ export const CATEGORIES: GameCategory[] = [
     emoji: '🏒',
     games: [
       { path: '/perfect-season-nhl', label: '82-0 Perfect Season', emoji: '🏆', description: 'Spin franchises and eras, chase 82-0', isNew: true },
+      { path: '/puck-detective', label: 'Puck Detective', emoji: '🏒', description: 'Guess the mystery NHL player with attribute clues', daily: true, isNew: true },
+      { path: '/hockey-grid', label: 'NHL Franchise Grid', emoji: '🥅', description: '3x3 grid with NHL franchises and career milestones', daily: true, isNew: true },
       { path: '/hockey-career', label: 'Career Path', emoji: '🏒', description: 'Guess the hockey player', daily: true },
       { path: '/hockey-higher-lower', label: 'Higher / Lower', emoji: '🏒', description: 'Compare career points', daily: true },
       { path: '/perfect-lineup-nhl', label: 'Perfect Lineup: NHL', emoji: '🏒', description: 'Build a dream line under random team & era constraints, then simulate', daily: true, isNew: true },

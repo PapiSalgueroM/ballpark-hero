@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useConquest, PowerRankEntry } from '@/hooks/useConquest';
 import ConquestMap from './ConquestMap';
-import { TEAM_MAP, DIRECTIONS, DIR_LABELS, isLightColor } from '@/data/conquestData';
+import { TEAM_MAP, NFL_TEAMS, DIRECTIONS, DIR_LABELS, isLightColor, ConquestFreeAgentCandidate, CONQUEST_FREE_AGENCY_POOL } from '@/data/conquestData';
 import { TEAM_LEGENDS } from '@/data/conquestPowerups';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
+import { HOME_FIELD_BUMP } from '@/lib/conquestBattle';
 
 function useSpinner(items: string[], isSpinning: boolean, finalValue: string): string {
   const [display, setDisplay] = useState(items[0] || '');
@@ -123,6 +124,81 @@ function PowerRankingsPanel({ rankings }: { rankings: PowerRankEntry[] }) {
             })}
           </tbody>
         </table>
+      </div>
+    </details>
+  );
+}
+
+// Free Agency panel (item 87): collapsible, same pattern as PowerRankingsPanel.
+// Before a favorite team is chosen, shows a compact 32-team picker. Once a
+// team is picked, lists the CONQUEST_FREE_AGENCY_POOL candidates with a Sign
+// button gated by canSignFreeAgent(); when gated, the button is disabled and
+// shows the cooldown ("Available after N more conquests" using the hook's
+// exposed freeAgencyCooldownRemaining, since the hook doesn't expose a
+// prose reason string).
+function FreeAgencyPanel({
+  favoriteTeam, setFavoriteTeam, canSignFreeAgent, signFreeAgencyCandidate, freeAgencyCooldownRemaining,
+}: {
+  favoriteTeam: string | null;
+  setFavoriteTeam: (teamId: string) => void;
+  canSignFreeAgent: () => boolean;
+  signFreeAgencyCandidate: (candidate: ConquestFreeAgentCandidate) => void;
+  freeAgencyCooldownRemaining: number;
+}) {
+  const canSign = canSignFreeAgent();
+  const cooldownLabel = freeAgencyCooldownRemaining > 0
+    ? `Available after ${freeAgencyCooldownRemaining} more conquest${freeAgencyCooldownRemaining === 1 ? '' : 's'}`
+    : 'Pick a team to unlock signing';
+
+  return (
+    <details className="rounded-xl border border-border bg-card">
+      <summary className="cursor-pointer select-none px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
+        ✍️ Free Agency
+      </summary>
+      <div className="px-3 pb-3">
+        {!favoriteTeam ? (
+          <div className="space-y-2 py-1">
+            <p className="text-[11px] text-muted-foreground text-center">Pick your team to unlock free agency</p>
+            <select
+              defaultValue=""
+              onChange={(e) => { if (e.target.value) setFavoriteTeam(e.target.value); }}
+              className="w-full px-2 py-2 rounded-lg border border-border bg-background text-xs text-foreground"
+            >
+              <option value="" disabled>Select a team...</option>
+              {NFL_TEAMS.map(t => (
+                <option key={t.id} value={t.id}>{t.city} {t.name}</option>
+              ))}
+            </select>
+          </div>
+        ) : (
+          <div className="max-h-64 overflow-y-auto space-y-1.5">
+            {CONQUEST_FREE_AGENCY_POOL.map(candidate => (
+              <div
+                key={candidate.name}
+                className="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-border/50 text-[11px]"
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="font-semibold text-foreground">{candidate.name}</span>
+                    <span className="text-muted-foreground">{candidate.position} · {candidate.overall} OVR</span>
+                  </div>
+                  <div className="text-muted-foreground truncate">{candidate.blurb}</div>
+                </div>
+                <button
+                  onClick={() => signFreeAgencyCandidate(candidate)}
+                  disabled={!canSign}
+                  title={!canSign ? cooldownLabel : undefined}
+                  className="shrink-0 px-2.5 py-1.5 rounded-lg font-bold text-[10px] transition-opacity active:scale-95 bg-primary text-primary-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
+                >
+                  Sign
+                </button>
+              </div>
+            ))}
+            {!canSign && (
+              <p className="text-[10px] text-muted-foreground text-center pt-1">{cooldownLabel}</p>
+            )}
+          </div>
+        )}
       </div>
     </details>
   );
@@ -260,6 +336,9 @@ export default function ConquestBoard() {
                   >
                     {defTeam.name}
                   </div>
+                  <div className="mt-1 inline-block px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-[9px] font-medium">
+                    +{HOME_FIELD_BUMP} home edge
+                  </div>
                 </div>
               </>
             )}
@@ -334,6 +413,18 @@ export default function ConquestBoard() {
               )}
             </div>
           </div>
+
+          {/* Skip to result (item 89): fast-forward the staggered reveal straight to the final box score */}
+          {game.canSkipBattle && (
+            <div className="flex justify-center">
+              <button
+                onClick={game.skipToResult}
+                className="px-4 py-2 bg-muted text-foreground rounded-lg font-semibold text-xs hover:bg-muted/80 transition-colors border border-border active:scale-95"
+              >
+                ⏭️ Skip to result
+              </button>
+            </div>
+          )}
 
           {/* Simulating remainder message */}
           {game.simulatingRemainder && (
@@ -615,6 +706,15 @@ export default function ConquestBoard() {
 
       {/* Power Rankings (item 86): compact ranked list, updates after each battle */}
       {game.turn > 0 && <PowerRankingsPanel rankings={game.powerRankings()} />}
+
+      {/* Free Agency (item 87): team picker until a favorite is chosen, then a signable candidate pool */}
+      <FreeAgencyPanel
+        favoriteTeam={game.favoriteTeam}
+        setFavoriteTeam={game.setFavoriteTeam}
+        canSignFreeAgent={game.canSignFreeAgent}
+        signFreeAgencyCandidate={game.signFreeAgencyCandidate}
+        freeAgencyCooldownRemaining={game.freeAgencyCooldownRemaining}
+      />
 
       {/* Standings: remaining teams sorted by territory then wins, + collapsible eliminated list */}
       {aliveIds.length > 1 && game.turn > 0 && (

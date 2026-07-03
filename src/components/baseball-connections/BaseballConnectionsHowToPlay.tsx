@@ -26,15 +26,15 @@ export function BaseballConnectionsHowToPlay({ open, onOpenChange }: Props) {
         <div className="space-y-4 text-sm text-foreground">
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--bb-red))]">Goal</p>
-            <p>Find four groups of 5 baseball players that share a connection.</p>
+            <p>Find four groups of 5 baseball players who share a connection.</p>
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--bb-red))]">How it works</p>
             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-              <li>Select 5 players you think belong to the same group</li>
-              <li>Tap "Submit" to check your selection</li>
+              <li>Select 5 players you think belong together</li>
+              <li>Tap "Submit" to check your guess</li>
               <li>Correct groups lock in and reveal their connection</li>
-              <li>Wrong guesses cost 1 life, you have 4 lives total</li>
+              <li>Wrong guesses cost a life. You get 4 total</li>
             </ul>
           </div>
           <div className="space-y-2">
