@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { cn } from '@/lib/utils';
-import { RotateCcw, Loader2, TrendingUp, TrendingDown } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { Loader2, TrendingUp, TrendingDown } from 'lucide-react';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -35,6 +34,9 @@ const HigherLowerTransfers = () => {
   const [streak, setStreak] = useState(0);
   const [best, setBest] = useState(() => loadBest());
   const [lastCorrect, setLastCorrect] = useState<boolean | null>(null);
+  // Run history (one entry per resolved guess this run) purely to build the
+  // emoji grid per R5 spec 3.6 item 5. Does not affect scoring or timing.
+  const [runHistory, setRunHistory] = useState<boolean[]>([]);
 
   const boot = useCallback(async () => {
     setPhase('boot');
@@ -47,6 +49,7 @@ const HigherLowerTransfers = () => {
     setPos(0);
     setStreak(0);
     setLastCorrect(null);
+    setRunHistory([]);
     setPhase('playing');
   }, []);
 
@@ -64,6 +67,7 @@ const HigherLowerTransfers = () => {
         ? challenger.value > current.value
         : challenger.value < current.value;
     setLastCorrect(correct);
+    setRunHistory(h => [...h, correct]);
     setPhase('reveal');
     setTimeout(() => {
       if (correct) {
@@ -87,10 +91,21 @@ const HigherLowerTransfers = () => {
     }, 1400);
   };
 
-  const emojiGrid = `📈 Transfer Market streak: ${streak}${streak >= best && streak > 0 ? ' 🏅 new best' : ''}`;
+  // Emoji grid built from the run's full history of correct/incorrect picks,
+  // per R5 spec 3.6 item 5 (always render a styled grid, not a one-line <pre>).
+  const emojiGrid = [
+    `📈 Transfer Market streak: ${streak}${streak >= best && streak > 0 ? ' 🏅 new best' : ''}`,
+    runHistory.map(ok => (ok ? '🟩' : '🟥')).join('') || '⬜',
+  ].join('\n');
 
-  const card = (p: DealPlayer, showValue: boolean, tag: string) => (
-    <div className="bg-card border border-border rounded-2xl p-5 text-center flex-1 min-w-0">
+  const card = (p: DealPlayer, showValue: boolean, tag: string, feedback?: 'correct' | 'wrong') => (
+    <div
+      className={cn(
+        'bg-surface-1 border border-border rounded-2xl p-5 text-center flex-1 min-w-0 transition-all duration-200',
+        feedback === 'correct' && 'animate-pop-correct shadow-[0_0_24px_hsl(var(--success-glow))] border-correct',
+        feedback === 'wrong' && 'animate-shake-wrong border-destructive',
+      )}
+    >
       <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2">{tag}</div>
       <div className="text-3xl mb-1">{flagFor(p.nationality)}</div>
       <div className="font-bold text-foreground text-lg leading-tight mb-0.5 truncate">{p.name}</div>
@@ -105,27 +120,23 @@ const HigherLowerTransfers = () => {
   );
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Higher or Lower: Transfer Market | DoUKnowBall"
         description="Who is worth more? Guess higher or lower on real player market values and build the longest streak you can. Free, endless, no sign-up."
         path="/higher-lower-transfers"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-6">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display mb-1">
-            TRANSFER MARKET
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base">
-            Higher or lower? Real market values, endless deck, one wrong answer ends the run.
-          </p>
+      <GameShell
+        width="narrow"
+        title="TRANSFER MARKET"
+        subtitle="Higher or lower? Real market values, endless deck, one wrong answer ends the run."
+        headerExtra={
           <p className="text-xs text-muted-foreground mt-2">
             Streak <span className="text-primary font-bold">{streak}</span>
             {best > 0 && <> · Best <span className="text-primary font-bold">{best}</span></>}
           </p>
-        </header>
-
+        }
+      >
         {phase === 'boot' && (
           <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
         )}
@@ -141,10 +152,15 @@ const HigherLowerTransfers = () => {
 
         {(phase === 'playing' || phase === 'reveal' || phase === 'done') && current && challenger && (
           <>
-            <div className="flex gap-3 items-stretch mb-5">
+            <div className="flex flex-col sm:flex-row gap-3 items-stretch mb-5">
               {card(current, true, 'Worth')}
               <div className="self-center text-muted-foreground font-bold text-sm shrink-0">VS</div>
-              {card(challenger, phase !== 'playing', 'Higher or lower?')}
+              {card(
+                challenger,
+                phase !== 'playing',
+                'Higher or lower?',
+                phase === 'reveal' ? (lastCorrect ? 'correct' : 'wrong') : undefined
+              )}
             </div>
 
             {phase === 'playing' && (
@@ -174,31 +190,26 @@ const HigherLowerTransfers = () => {
             )}
 
             {phase === 'done' && (
-              <div className="bg-card border border-border rounded-2xl p-6 text-center mt-4">
-                <div className="text-4xl mb-2">{streak >= 15 ? '🐐' : streak >= 8 ? '🔥' : streak >= 4 ? '👏' : '📉'}</div>
-                <h2 className="text-2xl font-bold text-primary font-display mb-1">
-                  Run over at {streak}
-                </h2>
-                <p className="text-sm text-muted-foreground mb-3">
-                  {streak >= best && streak > 0
-                    ? 'New personal best. The scouts are impressed.'
-                    : best > 0
-                    ? `Your best is ${best}. One more go?`
-                    : 'Everyone starts somewhere.'}
-                </p>
-                <pre className="text-sm tracking-wide whitespace-pre-wrap mb-2">{emojiGrid}</pre>
-                <ShareButtons
-                  score={String(streak)}
-                  gameName="Transfer Market Higher or Lower"
-                  gamePath="/higher-lower-transfers"
+              <div className="mt-4">
+                <ResultScreen
+                  outcomeEmoji={streak >= 15 ? '🐐' : streak >= 8 ? '🔥' : streak >= 4 ? '👏' : '📉'}
+                  headline={`Run over at ${streak}`}
+                  statLine={
+                    streak >= best && streak > 0
+                      ? 'New personal best. The scouts are impressed.'
+                      : best > 0
+                      ? `Your best is ${best}. One more go?`
+                      : 'Everyone starts somewhere.'
+                  }
                   emojiGrid={emojiGrid}
+                  share={{
+                    score: String(streak),
+                    gameName: 'Transfer Market Higher or Lower',
+                    gamePath: '/higher-lower-transfers',
+                  }}
+                  onPlayAgain={boot}
+                  playAgainLabel="New run"
                 />
-                <button
-                  onClick={boot}
-                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  <RotateCcw className="w-4 h-4" /> New run
-                </button>
               </div>
             )}
           </>
@@ -225,9 +236,8 @@ const HigherLowerTransfers = () => {
           ]}
         />
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

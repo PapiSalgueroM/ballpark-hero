@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useGame } from '@/hooks/useGame';
+import type { GuessResult } from '@/types/game';
 import { PlayerSearch } from '@/components/game/PlayerSearch';
 import { GameBoard } from '@/components/game/GameBoard';
-import { HowToPlay } from '@/components/game/HowToPlay';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
+import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import { cn } from '@/lib/utils';
-import { RotateCcw, HelpCircle } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PostGameStats from '@/components/game/PostGameStats';
@@ -47,96 +46,146 @@ const Index = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Footle - Daily Soccer Player Guessing Game | DoUKnowBall"
         description="Guess the mystery soccer player in 8 tries. New player every day. Free daily football puzzle game."
         path="/footle"
       />
-      <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
-        {/* Header */}
-        <header className="text-center mb-8 relative">
-          {/* Help button */}
-          <button
-            onClick={() => setShowRules(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
+      <GameShell
+        width="wide"
+        title="FOOTLE"
+        subtitle="Guess the soccer player in 8 tries. One of 10+ free sports trivia games across soccer, NBA and UFC. No login. No tracking. Just play."
+        headerExtra={
+          <>
+            <HowToPlayPopover title="How to Play Footle" open={showRules} onOpenChange={setShowRules}>
+              <p className="text-muted-foreground text-center">
+                Guess the mystery soccer player in 8 tries!
+              </p>
 
-          <h1 className="text-5xl md:text-7xl font-bold tracking-[0.25em] text-primary font-display mb-1">
-            FOOTLE
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-lg mx-auto">
-            Guess the soccer player in 8 tries — one of 10+ free sports trivia games across soccer, NBA &amp; UFC. No login. No tracking. Just play.
-          </p>
+              <section>
+                <h3 className="font-bold text-foreground mb-2">🎨 Color Guide</h3>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-correct flex-shrink-0" />
+                    <div>
+                      <span className="font-semibold text-correct-foreground">Green</span>
+                      <span className="text-muted-foreground">: Exact match!</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-close flex-shrink-0" />
+                    <div>
+                      <span className="font-semibold">Yellow</span>
+                      <span className="text-muted-foreground">: Close, see thresholds below.</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-incorrect flex-shrink-0" />
+                    <div>
+                      <span className="font-semibold">White</span>
+                      <span className="text-muted-foreground">: Not a match.</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
 
-          {/* Daily / Unlimited toggle */}
-          <div className="flex items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-              </button>
-            ))}
-          </div>
+              <section>
+                <h3 className="font-bold text-foreground mb-2">📏 "Close" Thresholds</h3>
+                <ul className="space-y-1.5 text-muted-foreground">
+                  <li>🌍 <span className="text-foreground">Nationality:</span> Same continent</li>
+                  <li>🏟️ <span className="text-foreground">Club:</span> Same league = yellow</li>
+                  <li>⚽ <span className="text-foreground">Goals:</span> Within 3</li>
+                  <li>👟 <span className="text-foreground">Assists:</span> Within 3</li>
+                  <li>📍 <span className="text-foreground">Position:</span> Same group (Def/Mid/Fwd)</li>
+                  <li>👕 <span className="text-foreground">Kit Number:</span> Within 3</li>
+                  <li>📅 <span className="text-foreground">Age:</span> Within 2 years</li>
+                  <li>💰 <span className="text-foreground">Market Value:</span> Within $5M</li>
+                </ul>
+              </section>
 
-          {/* Daily tier banner — visible before first guess and throughout */}
-          {mode === 'daily' && (
-            <div className={cn(
-              'inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold mt-3',
-              dailyTier === 'easy' && 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
-              dailyTier === 'hard' && 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
-              dailyTier === 'insane' && 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-            )}>
-              Today's Daily: {dailyTier.toUpperCase()} MODE
-            </div>
-          )}
+              <section>
+                <h3 className="font-bold text-foreground mb-2">🔼 Arrow Hints</h3>
+                <p className="text-muted-foreground">
+                  ▲ means the answer is <span className="text-foreground font-semibold">higher</span>, ▼ means it's <span className="text-foreground font-semibold">lower</span>.
+                </p>
+              </section>
 
-          {/* Difficulty selector — unlimited mode only */}
-          {mode === 'unlimited' && (
-            <div className="flex items-center justify-center gap-2 mt-3">
-              {(['easy', 'hard', 'insane'] as const).map((d) => (
+              <section>
+                <h3 className="font-bold text-foreground mb-2">⚙️ Difficulty Modes</h3>
+                <ul className="space-y-1.5 text-muted-foreground">
+                  <li><span className="text-foreground font-semibold">Easy:</span> Popular stars from the top 5 leagues</li>
+                  <li><span className="text-foreground font-semibold">Hard:</span> Includes reserves &amp; rotation players</li>
+                  <li><span className="text-foreground font-semibold">Insane:</span> Any player from the top 20 leagues worldwide</li>
+                </ul>
+              </section>
+            </HowToPlayPopover>
+
+            {/* Daily / Unlimited toggle */}
+            <div className="flex items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
                 <button
-                  key={d}
-                  onClick={() => changeDifficulty(d)}
+                  key={m}
+                  onClick={() => switchMode(m)}
                   className={cn(
-                    'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
-                    difficulty === d
-                      ? d === 'easy'
-                        ? 'bg-correct text-correct-foreground'
-                        : d === 'hard'
-                          ? 'bg-yellow-500 text-white'
-                          : 'bg-destructive text-destructive-foreground'
-                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                    'px-5 py-2 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
                   )}
                 >
-                  {d}
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
                 </button>
               ))}
             </div>
-          )}
 
-          {/* Guess Counter */}
-          <p className="text-sm text-muted-foreground mt-4">
-            Guesses:{' '}
-            <span className="text-foreground font-semibold">
-              {guesses.length}
-            </span>{' '}
-            / {maxGuesses}
-          </p>
-        </header>
+            {/* Daily tier banner — visible before first guess and throughout */}
+            {mode === 'daily' && (
+              <div className={cn(
+                'inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold mt-3',
+                dailyTier === 'easy' && 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
+                dailyTier === 'hard' && 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
+                dailyTier === 'insane' && 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
+              )}>
+                Today's Daily: {dailyTier.toUpperCase()} MODE
+              </div>
+            )}
 
+            {/* Difficulty selector — unlimited mode only */}
+            {mode === 'unlimited' && (
+              <div className="flex items-center justify-center gap-2 mt-3">
+                {(['easy', 'hard', 'insane'] as const).map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => changeDifficulty(d)}
+                    className={cn(
+                      'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
+                      difficulty === d
+                        ? d === 'easy'
+                          ? 'bg-correct text-correct-foreground'
+                          : d === 'hard'
+                            ? 'bg-yellow-500 text-white'
+                            : 'bg-destructive text-destructive-foreground'
+                        : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                    )}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Guess Counter */}
+            <p className="text-sm text-muted-foreground mt-4">
+              Guesses:{' '}
+              <span className="text-foreground font-semibold">
+                {guesses.length}
+              </span>{' '}
+              / {maxGuesses}
+            </p>
+          </>
+        }
+      >
         {/* Search */}
         {(isLoadingPool || isLoading) ? (
           <div className="mb-8 flex justify-center">
@@ -166,66 +215,51 @@ const Index = () => {
         {/* Game Over */}
         {gameStatus !== 'playing' && (
           <div className="mt-8 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              {gameStatus === 'won' ? (
-                <>
-                  <div className="text-5xl mb-3">🎉</div>
-                  <h2 className="text-2xl font-bold text-correct font-display mb-2">
-                    Correct!
-                  </h2>
-                  <p className="text-foreground">
+            <ResultScreen
+              won={gameStatus === 'won'}
+              outcomeEmoji={gameStatus === 'won' ? '🎉' : '😞'}
+              headline={gameStatus === 'won' ? 'Correct!' : 'Game Over'}
+              statLine={
+                gameStatus === 'won' ? (
+                  <>
                     You guessed{' '}
-                    <span className="font-bold text-primary">
-                      {targetPlayer?.name}
-                    </span>{' '}
-                    in {guesses.length}{' '}
-                    {guesses.length === 1 ? 'try' : 'tries'}!
-                  </p>
-                </>
-              ) : (
-                <>
-                  <div className="text-5xl mb-3">😞</div>
-                  <h2 className="text-2xl font-bold text-destructive font-display mb-2">
-                    Game Over
-                  </h2>
-                  <p className="text-foreground">
+                    <span className="font-bold text-primary">{targetPlayer?.name}</span>{' '}
+                    in {guesses.length} {guesses.length === 1 ? 'try' : 'tries'}!
+                  </>
+                ) : (
+                  <>
                     The player was{' '}
-                    <span className="font-bold text-primary">
-                      {targetPlayer?.name}
+                    <span className="font-bold text-primary">{targetPlayer?.name}</span>
+                    <span className="block text-muted-foreground text-sm mt-1">
+                      {targetPlayer?.club} · {targetPlayer?.league}
                     </span>
-                  </p>
-                  <p className="text-muted-foreground text-sm mt-1">
-                    {targetPlayer?.club} · {targetPlayer?.league}
-                  </p>
-                </>
-              )}
-              {targetPlayer && (
-                <p className="mt-2 text-sm text-muted-foreground">
-                  💡 Did you know? {targetPlayer.name} plays as a {targetPlayer.position} and is valued at €{targetPlayer.marketValue}M.
-                </p>
-              )}
-              <ShareButtons
-                score={gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`}
-                gameName="Footle"
-                gamePath="/"
-              />
+                  </>
+                )
+              }
+              funFact={
+                targetPlayer
+                  ? `💡 Did you know? ${targetPlayer.name} plays as a ${targetPlayer.position} and is valued at €${targetPlayer.marketValue}M.`
+                  : undefined
+              }
+              emojiGrid={footleEmojiGrid(guesses, maxGuesses)}
+              share={{
+                score: gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`,
+                gameName: 'Footle',
+                gamePath: '/footle',
+              }}
+              onPlayAgain={mode === 'unlimited' ? () => resetGame() : undefined}
+              playNext={
+                mode === 'daily'
+                  ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
+                  : undefined
+              }
+            >
               <PostGameStats
                 gameSlug="footle"
                 userScore={gameStatus === 'won' ? Math.max(0, 1000 - (guesses.length - 1) * 125) : 0}
                 isVisible={true}
               />
-              {mode === 'unlimited' ? (
-                <button
-                  onClick={() => resetGame()}
-                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Play Again
-                </button>
-              ) : (
-                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
-              )}
-            </div>
+            </ResultScreen>
           </div>
         )}
 
@@ -277,13 +311,29 @@ const Index = () => {
           ]}
         />
         <GameNav />
-        <Footer />
-      </div>
-
-      {/* How to Play Modal */}
-      <HowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+      </GameShell>
+    </>
   );
 };
+
+/** Builds a Wordle-style emoji grid from Footle's guess history: one row per
+ *  guess, one colored square per revealed cell. Per R5 spec Problem 6, Footle
+ *  previously sent no emojiGrid to ShareButtons/ResultScreen at all. */
+function footleEmojiGrid(guesses: GuessResult[], maxGuesses: number): string {
+  const resultTag = guesses.length > 0 && guesses[guesses.length - 1].isCorrect
+    ? `${guesses.length}/${maxGuesses}`
+    : `X/${maxGuesses}`;
+  const rows = guesses.map(g =>
+    FOOTLE_CELL_ORDER.map(key => {
+      const status = g.cells[key].status;
+      return status === 'correct' ? '🟩' : status === 'close' ? '🟨' : '⬜';
+    }).join('')
+  );
+  return [`Footle ${resultTag}`, ...rows].join('\n');
+}
+
+const FOOTLE_CELL_ORDER = [
+  'nationality', 'club', 'goals', 'assists', 'position', 'kitNumber', 'age', 'marketValue',
+] as const;
 
 export default Index;

@@ -331,7 +331,7 @@ function GameCard({ game, bestScore }: { game: GameDef; bestScore?: number }) {
   return (
     <Link
       to={game.path}
-      className="group flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/40 hover:bg-card/80 transition-all"
+      className="group flex items-start gap-3 rounded-xl border border-border bg-surface-1 p-4 hover:border-primary/40 hover:bg-surface-2 hover:-translate-y-0.5 transition-all duration-200"
     >
       <span className="text-2xl shrink-0 mt-0.5">{game.emoji}</span>
       <div className="min-w-0 flex-1">
@@ -345,7 +345,7 @@ function GameCard({ game, bestScore }: { game: GameDef; bestScore?: number }) {
             </span>
           )}
           {game.isNew && (
-            <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[hsl(43,85%,55%)]/15 text-[hsl(43,85%,55%)]">
+            <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-gold/15 text-gold">
               <Sparkles className="w-3 h-3" />
               New
             </span>
@@ -353,7 +353,7 @@ function GameCard({ game, bestScore }: { game: GameDef; bestScore?: number }) {
         </div>
         <p className="text-xs text-muted-foreground mt-0.5 leading-snug">{game.description}</p>
         {bestScore != null && bestScore > 0 && (
-          <span className="text-[10px] text-[hsl(43,85%,55%)]/70 mt-0.5 block">PB: {bestScore}</span>
+          <span className="text-[10px] text-gold/70 mt-0.5 block">PB: {bestScore}</span>
         )}
       </div>
     </Link>
