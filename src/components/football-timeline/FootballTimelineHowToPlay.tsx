@@ -36,6 +36,7 @@ export function FootballTimelineHowToPlay({ open, onOpenChange }: Props) {
               <li>When you're confident, tap "Lock In Order"</li>
               <li>The correct draft years are then revealed</li>
             </ul>
+            <p className="text-muted-foreground">Example: a 1998 pick goes above a 2015 pick.</p>
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--ft-gold))]">Scoring</p>

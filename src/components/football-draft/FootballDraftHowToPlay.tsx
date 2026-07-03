@@ -35,6 +35,7 @@ export function FootballDraftHowToPlay({ open, onOpenChange }: Props) {
               <li>Height and weight</li>
               <li>40-yard dash time</li>
               <li>Bench press reps and vertical jump</li>
+              <li>Draft year</li>
             </ul>
           </div>
           <div className="space-y-2">

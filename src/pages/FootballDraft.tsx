@@ -201,10 +201,23 @@ const FootballDraft = () => {
                   <span className="text-sm italic">Hidden</span>
                 </div>
               )}
+
+              {/* Reveal 4: Draft year */}
+              {revealLevel >= 4 ? (
+                <div className="flex items-center gap-3 text-foreground animate-cell-reveal">
+                  <span className="text-xs font-semibold text-[hsl(var(--ft-gold))] uppercase w-20">Draft Year</span>
+                  <span className="font-semibold">{currentPlayer.draftYear}</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 text-muted-foreground">
+                  <span className="text-xs font-semibold uppercase w-20">Draft Year</span>
+                  <span className="text-sm italic">Hidden — reveal for a clue</span>
+                </div>
+              )}
             </div>
 
             {/* Reveal button */}
-            {revealLevel < 3 && !showingResult && (
+            {revealLevel < 4 && !showingResult && (
               <button
                 onClick={revealMore}
                 className="flex items-center gap-2 mx-auto px-4 py-2 text-sm rounded-lg border border-[hsl(var(--ft-gold)/0.3)] text-[hsl(var(--ft-gold))] hover:bg-[hsl(var(--ft-navy)/0.5)] transition-colors mb-4"
@@ -329,7 +342,7 @@ const FootballDraft = () => {
           description="A daily game where you guess what round NFL players were drafted based on progressively revealed clues — college, combine stats, and more."
           howToPlay={[
             'Each round shows a mystery NFL player with their position and college',
-            'Reveal additional clues: size, 40-yard dash, bench press, and vertical jump',
+            'Reveal additional clues: size, 40-yard dash, bench press and vertical jump, then draft year',
             'Guess the draft round: 1st through 7th, or Undrafted',
             'Guess early for more: exact round = 30 pts with no clues, down to 15 after all clues; one off = 8, two off = 3',
             'Play 5 players per game — new challenge daily',

@@ -65,6 +65,11 @@ const FootballTimeline = () => {
         </header>
 
         {/* Player list */}
+        {status === 'playing' && (
+          <p className="text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+            ↑ Earliest draft year first
+          </p>
+        )}
         <div className="space-y-3">
           {order.map((player, index) => {
             const isCorrect = status === 'submitted' && player.name === correctOrder[index].name;
@@ -126,6 +131,11 @@ const FootballTimeline = () => {
             );
           })}
         </div>
+        {status === 'playing' && (
+          <p className="text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground mt-2">
+            Most recent last ↓
+          </p>
+        )}
 
         {/* Submit button */}
         {status === 'playing' && (

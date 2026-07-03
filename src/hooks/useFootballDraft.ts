@@ -18,12 +18,12 @@ const ROUND_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 0];
 const MAX_PER_PLAYER = 30;
 
 // Exact round earns more the fewer clues were revealed first (incentive to guess
-// early). cluesUsed is the reveal level (0-3). Close guesses keep modest partial
+// early). cluesUsed is the reveal level (0-4). Close guesses keep modest partial
 // credit. The game guesses round (not pick), so there is no exact-pick bonus.
 function calcPoints(actual: number | null, guessed: number | null, cluesUsed: number): number {
   const a = actual ?? 0;
   const g = guessed ?? 0;
-  if (a === g) return Math.max(15, MAX_PER_PLAYER - cluesUsed * 5); // 30/25/20/15 for 0..3 clues
+  if (a === g) return Math.max(15, MAX_PER_PLAYER - cluesUsed * 5); // 30/25/20/15/15 for 0..4 clues
   const diff = Math.abs(a - g);
   if (diff === 1) return 8;
   if (diff === 2) return 3;
@@ -105,7 +105,7 @@ export function useFootballDraft() {
   }, []);
 
   const revealMore = useCallback(() => {
-    setRevealLevel(prev => Math.min(prev + 1, 3));
+    setRevealLevel(prev => Math.min(prev + 1, 4));
   }, []);
 
   const submitGuess = useCallback((roundGuess: number) => {
