@@ -77,9 +77,9 @@ export function useNFLCareer() {
       return '⬜';
     }).join('');
     if (gameStatus === 'won') {
-      return `NFL Career Path ${boxes} — got it in ${cluesRevealed}!\n\nhttps://douknowball.com/nfl-career`;
+      return `NFL Career Path ${boxes} got it in ${cluesRevealed}!\n\nhttps://douknowball.com/nfl-career`;
     }
-    return `NFL Career Path ${boxes} — couldn't get it 😞\n\nhttps://douknowball.com/nfl-career`;
+    return `NFL Career Path ${boxes} couldn't get it 😞\n\nhttps://douknowball.com/nfl-career`;
   }, [gameStatus, cluesRevealed]);
 
   const playerNames = useMemo(() => ensureAnswerInOptions(nflCareerPlayers.map(p => p.name), targetPlayer.name), [targetPlayer]);

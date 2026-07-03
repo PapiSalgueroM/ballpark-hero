@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { RotateCcw, Loader2, FastForward, Dices, Trophy } from 'lucide-react';
+import { RotateCcw, Loader2, FastForward, Dices, Trophy, Lock, EyeOff, CalendarClock } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
@@ -10,15 +10,20 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
-  DraftablePlayer, SpinSquad, SimResult,
+  DraftablePlayer, SpinSquad, SimResult, GameMode,
   teamOverall, simulateSeason, randomSeed, ratingTier, squadFillsAny,
+  GAME_MODE_LABELS, GAME_MODE_BLURBS, HIDDEN_RATING_DISPLAY, isRatingHidden,
+  getDailyDateET, makeDailyPicker, loadDailyAttempt, saveDailyAttempt,
+  msUntilNextDailyET, formatCountdown, DailyAttemptRecord,
 } from '@/lib/perfectSeason';
 import {
   MLB_SLOTS, MLB_GAMES, TeamSeasonIndexEntry,
   fetchTeamSeasonIndex, fetchSquad,
 } from '@/lib/perfectSeasonMlb';
 
-type Phase = 'boot' | 'error' | 'spin' | 'spinning' | 'draft' | 'sim' | 'done';
+const SPORT_KEY = 'mlb';
+
+type Phase = 'mode-select' | 'daily-locked' | 'boot' | 'error' | 'spin' | 'spinning' | 'draft' | 'sim' | 'done';
 
 const MAX_REROLLS = 2;
 
@@ -29,8 +34,16 @@ const TIER_CLASSES: Record<string, string> = {
   meh: 'bg-secondary/50 text-muted-foreground border-border',
 };
 
+const MODE_ICONS: Record<GameMode, typeof Dices> = {
+  classic: Dices,
+  hard: EyeOff,
+  daily: CalendarClock,
+};
+
 const PerfectSeasonMlb = () => {
-  const [phase, setPhase] = useState<Phase>('boot');
+  const [mode, setMode] = useState<GameMode>('classic');
+  const [phase, setPhase] = useState<Phase>('mode-select');
+  const [lockedAttempt, setLockedAttempt] = useState<DailyAttemptRecord | null>(null);
   const [index, setIndex] = useState<TeamSeasonIndexEntry[]>([]);
   const [squad, setSquad] = useState<SpinSquad | null>(null);
   const [wheelText, setWheelText] = useState('');
@@ -41,10 +54,15 @@ const PerfectSeasonMlb = () => {
   const [selected, setSelected] = useState<DraftablePlayer | null>(null);
   const [rerolls, setRerolls] = useState(MAX_REROLLS);
   const [spins, setSpins] = useState(0);
+  const [teamNames, setTeamNames] = useState<string[]>([]);
   const [sim, setSim] = useState<SimResult | null>(null);
   const [revealed, setRevealed] = useState(0);
+  const [countdown, setCountdown] = useState('');
   const wheelTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const dailyPicker = useRef<((len: number) => number) | null>(null);
+  const dailySaved = useRef(false);
 
   const openSlots = useMemo(
     () => MLB_SLOTS.filter(s => !picks[s.key]).map(s => s.key),
@@ -52,8 +70,42 @@ const PerfectSeasonMlb = () => {
   );
   const overall = useMemo(() => teamOverall(MLB_SLOTS, picks), [picks]);
   const draftDone = openSlots.length === 0;
+  const ratingsHidden = isRatingHidden(mode, phase === 'done');
+
+  // Countdown ticks while the daily result (or lock screen) is showing.
+  useEffect(() => {
+    if (mode !== 'daily' || (phase !== 'done' && phase !== 'daily-locked')) {
+      if (countdownTimer.current) clearInterval(countdownTimer.current);
+      return;
+    }
+    setCountdown(formatCountdown(msUntilNextDailyET()));
+    countdownTimer.current = setInterval(() => {
+      setCountdown(formatCountdown(msUntilNextDailyET()));
+    }, 1000);
+    return () => { if (countdownTimer.current) clearInterval(countdownTimer.current); };
+  }, [mode, phase]);
+
+  const pickIndex = useCallback((len: number) => {
+    if (mode === 'daily' && dailyPicker.current) return dailyPicker.current(len);
+    return Math.floor(Math.random() * len);
+  }, [mode]);
+
+  const chooseMode = (m: GameMode) => {
+    setMode(m);
+    if (m === 'daily') {
+      const existing = loadDailyAttempt(SPORT_KEY);
+      if (existing) {
+        setLockedAttempt(existing);
+        setPhase('daily-locked');
+        return;
+      }
+      dailyPicker.current = makeDailyPicker(SPORT_KEY);
+    }
+    setPhase('boot');
+  };
 
   useEffect(() => {
+    if (phase !== 'boot') return;
     let alive = true;
     (async () => {
       const idx = await fetchTeamSeasonIndex();
@@ -70,7 +122,7 @@ const PerfectSeasonMlb = () => {
       if (wheelTimer.current) clearInterval(wheelTimer.current);
       if (simTimer.current) clearInterval(simTimer.current);
     };
-  }, []);
+  }, [phase]);
 
   const spin = useCallback(async (isReroll: boolean) => {
     if (index.length === 0) return;
@@ -91,7 +143,7 @@ const PerfectSeasonMlb = () => {
 
     let found: { entry: TeamSeasonIndexEntry; squad: SpinSquad } | null = null;
     for (let attempt = 0; attempt < 6 && !found; attempt++) {
-      const entry = index[Math.floor(Math.random() * index.length)];
+      const entry = index[pickIndex(index.length)];
       const sq = await fetchSquad(entry);
       if (sq && squadFillsAny(sq, MLB_SLOTS.filter(s => !picks[s.key]).map(s => s.key), usedNames)) {
         found = { entry, squad: sq };
@@ -106,8 +158,9 @@ const PerfectSeasonMlb = () => {
     setWheelText(`${found.squad.year} ${found.squad.teamName}`);
     setSquad(found.squad);
     setSpins(s => s + 1);
+    setTeamNames(t => [...t, `${found!.squad.year} ${found!.squad.teamName}`]);
     setPhase('draft');
-  }, [index, picks, usedNames, rerolls]);
+  }, [index, picks, usedNames, rerolls, pickIndex]);
 
   const canDraft = useCallback(
     (p: DraftablePlayer) => !usedNames.has(p.name) && p.eligible.some(e => openSlots.includes(e)),
@@ -136,11 +189,14 @@ const PerfectSeasonMlb = () => {
   // Auto-start the sim once the lineup is complete
   useEffect(() => {
     if (!draftDone || phase === 'sim' || phase === 'done' || sim) return;
-    const result = simulateSeason(overall, MLB_GAMES, randomSeed());
+    const seed = mode === 'daily' && dailyPicker.current
+      ? Math.floor(dailyPicker.current(2 ** 31))
+      : randomSeed();
+    const result = simulateSeason(overall, MLB_GAMES, seed);
     setSim(result);
     setRevealed(0);
     setPhase('sim');
-  }, [draftDone, overall, phase, sim]);
+  }, [draftDone, overall, phase, sim, mode]);
 
   // Progressive reveal
   useEffect(() => {
@@ -155,6 +211,19 @@ const PerfectSeasonMlb = () => {
     return () => { if (simTimer.current) clearInterval(simTimer.current); };
   }, [phase, sim, revealed >= MLB_GAMES]);
 
+  // Lock in the daily attempt exactly once, right when the result lands.
+  useEffect(() => {
+    if (mode !== 'daily' || phase !== 'done' || !sim || dailySaved.current) return;
+    dailySaved.current = true;
+    saveDailyAttempt(SPORT_KEY, {
+      date: getDailyDateET(),
+      sim,
+      overall: Math.round(overall),
+      spins,
+      teamNames,
+    });
+  }, [mode, phase, sim, overall, spins, teamNames]);
+
   const skipSim = () => setRevealed(MLB_GAMES);
 
   const restart = () => {
@@ -166,16 +235,32 @@ const PerfectSeasonMlb = () => {
     setRevealed(0);
     setRerolls(MAX_REROLLS);
     setSpins(0);
+    setTeamNames([]);
     setPhase('spin');
+  };
+
+  const backToModes = () => {
+    dailySaved.current = false;
+    setLockedAttempt(null);
+    restart();
+    setPhase('mode-select');
   };
 
   const winsSoFar = sim ? sim.games.slice(0, revealed).filter(Boolean).length : 0;
   const lossesSoFar = revealed - winsSoFar;
 
+  const dailyTag = mode === 'daily' ? `Daily · ${getDailyDateET()}\n` : '';
+
   const emojiGrid = sim
     ? sim.perfect
-      ? `⚾🏆 162-0 PERFECT SEASON\nTeam overall ${sim.overall} · ${spins} spins`
-      : `⚾ ${sim.wins}-${sim.losses} season\nTeam overall ${sim.overall} · ${spins} spins`
+      ? `⚾🏆 162-0 PERFECT SEASON\n${dailyTag}Team overall ${sim.overall} · ${spins} spins`
+      : `⚾ ${sim.wins}-${sim.losses} season\n${dailyTag}Team overall ${sim.overall} · ${spins} spins`
+    : '';
+
+  const lockedEmojiGrid = lockedAttempt
+    ? lockedAttempt.sim.perfect
+      ? `⚾🏆 162-0 PERFECT SEASON\nDaily · ${lockedAttempt.date}\nTeam overall ${lockedAttempt.overall} · ${lockedAttempt.spins} spins`
+      : `⚾ ${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses} season\nDaily · ${lockedAttempt.date}\nTeam overall ${lockedAttempt.overall} · ${lockedAttempt.spins} spins`
     : '';
 
   return (
@@ -194,7 +279,72 @@ const PerfectSeasonMlb = () => {
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
             Spin the wheel of baseball history, draft one player per stop, and chase the perfect season.
           </p>
+          {phase !== 'mode-select' && (
+            <div className="mt-3 inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-secondary text-muted-foreground font-semibold uppercase tracking-wider">
+              {(() => { const Icon = MODE_ICONS[mode]; return <Icon className="w-3.5 h-3.5" />; })()}
+              {GAME_MODE_LABELS[mode]} mode
+            </div>
+          )}
         </header>
+
+        {phase === 'mode-select' && (
+          <div className="grid sm:grid-cols-3 gap-3 max-w-2xl mx-auto">
+            {(['classic', 'hard', 'daily'] as GameMode[]).map(m => {
+              const Icon = MODE_ICONS[m];
+              return (
+                <button
+                  key={m}
+                  onClick={() => chooseMode(m)}
+                  className="bg-card border border-border rounded-2xl p-4 text-left hover:border-primary transition-colors"
+                >
+                  <Icon className="w-6 h-6 text-primary mb-2" />
+                  <div className="font-bold text-foreground mb-1">{GAME_MODE_LABELS[m]}</div>
+                  <p className="text-xs text-muted-foreground">{GAME_MODE_BLURBS[m]}</p>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {phase === 'daily-locked' && lockedAttempt && (
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-card border border-border rounded-2xl p-6 text-center mb-4">
+              <Lock className="w-6 h-6 text-muted-foreground mx-auto mb-2" />
+              <h2 className="text-xl font-bold text-foreground mb-1">Today's daily is done</h2>
+              <p className="text-sm text-muted-foreground mb-4">
+                One attempt per day. Here's how it went.
+              </p>
+              <div className="text-5xl font-bold font-display mb-2">
+                <span className="text-correct">{lockedAttempt.sim.wins}</span>
+                <span className="text-muted-foreground">-</span>
+                <span className={lockedAttempt.sim.losses > 0 ? 'text-destructive' : 'text-muted-foreground'}>
+                  {lockedAttempt.sim.losses}
+                </span>
+              </div>
+              <p className="text-sm text-muted-foreground mb-3">
+                Team overall {lockedAttempt.overall} · drafted in {lockedAttempt.spins} spin{lockedAttempt.spins === 1 ? '' : 's'}
+              </p>
+              <pre className="text-sm tracking-wide whitespace-pre-wrap mb-3">{lockedEmojiGrid}</pre>
+              <ShareButtons
+                score={`${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses}`}
+                gameName="162-0 Perfect Season (Daily)"
+                gamePath="/perfect-season-mlb"
+                emojiGrid={lockedEmojiGrid}
+              />
+              {countdown && (
+                <p className="text-xs text-muted-foreground mt-4">
+                  Next daily puzzle in <span className="font-mono font-semibold text-foreground">{countdown}</span>
+                </p>
+              )}
+              <button
+                onClick={backToModes}
+                className="mt-4 inline-flex items-center gap-2 px-6 py-2.5 bg-secondary text-foreground rounded-full font-semibold hover:bg-secondary/70"
+              >
+                Play Classic or Hard instead
+              </button>
+            </div>
+          </div>
+        )}
 
         {phase === 'boot' && (
           <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
@@ -268,12 +418,15 @@ const PerfectSeasonMlb = () => {
                             isSelected && 'border-primary ring-1 ring-primary'
                           )}
                         >
-                          <span className={cn('px-2 py-0.5 rounded-md border text-sm font-bold shrink-0', TIER_CLASSES[ratingTier(p.rating)])}>
-                            {p.rating}
+                          <span className={cn(
+                            'px-2 py-0.5 rounded-md border text-sm font-bold shrink-0',
+                            ratingsHidden ? 'bg-secondary/50 text-muted-foreground border-border' : TIER_CLASSES[ratingTier(p.rating)]
+                          )}>
+                            {ratingsHidden ? HIDDEN_RATING_DISPLAY : p.rating}
                           </span>
                           <span className="flex-1 min-w-0">
                             <span className="font-semibold text-foreground block truncate">{p.name}</span>
-                            <span className="text-xs text-muted-foreground">{p.detail}</span>
+                            <span className="text-xs text-muted-foreground">{ratingsHidden ? 'Rating hidden until the sim ends' : p.detail}</span>
                           </span>
                           <span className="flex gap-1 shrink-0">
                             {p.eligible.map(e => (
@@ -316,7 +469,7 @@ const PerfectSeasonMlb = () => {
               <div className="flex items-baseline justify-between mb-3">
                 <h2 className="font-bold text-foreground text-sm uppercase tracking-wider">Your lineup</h2>
                 {overall > 0 && (
-                  <span className="text-sm font-bold text-primary">{Math.round(overall)} OVR</span>
+                  <span className="text-sm font-bold text-primary">{ratingsHidden ? HIDDEN_RATING_DISPLAY : Math.round(overall)} OVR</span>
                 )}
               </div>
               <div className="space-y-1">
@@ -328,7 +481,12 @@ const PerfectSeasonMlb = () => {
                       {p ? (
                         <>
                           <span className="flex-1 truncate font-medium text-foreground">{p.name}</span>
-                          <span className={cn('px-1.5 rounded text-xs font-bold border', TIER_CLASSES[ratingTier(p.rating)])}>{p.rating}</span>
+                          <span className={cn(
+                            'px-1.5 rounded text-xs font-bold border',
+                            ratingsHidden ? 'bg-secondary/50 text-muted-foreground border-border' : TIER_CLASSES[ratingTier(p.rating)]
+                          )}>
+                            {ratingsHidden ? HIDDEN_RATING_DISPLAY : p.rating}
+                          </span>
                         </>
                       ) : (
                         <span className="flex-1 text-muted-foreground/40">empty</span>
@@ -396,6 +554,7 @@ const PerfectSeasonMlb = () => {
                     : 'The wheel giveth, the wheel taketh.'}
                 </h2>
                 <p className="text-sm text-muted-foreground mb-3">
+                  {mode === 'daily' && `Daily · ${getDailyDateET()} · `}
                   Team overall {sim.overall} · drafted in {spins} spin{spins === 1 ? '' : 's'}
                 </p>
                 {sim.perfect && (
@@ -406,16 +565,32 @@ const PerfectSeasonMlb = () => {
                 <pre className="text-sm tracking-wide whitespace-pre-wrap mb-2">{emojiGrid}</pre>
                 <ShareButtons
                   score={`${sim.wins}-${sim.losses}`}
-                  gameName="162-0 Perfect Season"
+                  gameName={mode === 'daily' ? '162-0 Perfect Season (Daily)' : '162-0 Perfect Season'}
                   gamePath="/perfect-season-mlb"
                   emojiGrid={emojiGrid}
                 />
-                <button
-                  onClick={restart}
-                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  <RotateCcw className="w-4 h-4" /> Run it back
-                </button>
+                {mode === 'daily' ? (
+                  <>
+                    {countdown && (
+                      <p className="text-xs text-muted-foreground mt-4">
+                        Next daily puzzle in <span className="font-mono font-semibold text-foreground">{countdown}</span>
+                      </p>
+                    )}
+                    <button
+                      onClick={backToModes}
+                      className="mt-3 inline-flex items-center gap-2 px-8 py-3 bg-secondary text-foreground rounded-full font-semibold hover:bg-secondary/70"
+                    >
+                      Play Classic or Hard
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={restart}
+                    className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+                  >
+                    <RotateCcw className="w-4 h-4" /> Run it back
+                  </button>
+                )}
               </div>
             )}
           </div>

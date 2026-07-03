@@ -139,7 +139,7 @@ export function useFootballGrid() {
       } catch {
         // Validation request failed (network / edge function / AI gateway).
         // Don't count the guess, but tell the user instead of failing silently.
-        toast.error('Could not check that answer — please try again.');
+        toast.error('Could not check that answer. Please try again.');
       } finally {
         setValidating(false);
         setActiveCell(null);

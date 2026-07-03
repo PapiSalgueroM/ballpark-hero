@@ -7,12 +7,71 @@ import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
 import { lovable } from '@/integrations/lovable/index';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, AlertCircle } from 'lucide-react';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   defaultTab?: 'login' | 'signup';
+}
+
+/** Minimum password length. Matches the Input's existing minLength={6} and Supabase project's default minimum. */
+const MIN_PASSWORD_LENGTH = 6;
+
+/** Deliberately simple, permissive shape check (not a full RFC 5322 parser): local@domain.tld, no spaces. Good enough to catch typos before they become a confusing round trip to Supabase. */
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+interface FieldErrors {
+  email?: string;
+  password?: string;
+}
+
+/**
+ * Field-level validation shown before submit (#98). Returns an errors object
+ * with only the fields that are actually invalid; an empty object means the
+ * form is valid to submit. Never silently rejects: every failure path here
+ * has a corresponding message rendered under the field.
+ */
+function validate(email: string, password: string): FieldErrors {
+  const errors: FieldErrors = {};
+
+  if (!email.trim()) {
+    errors.email = 'Email is required';
+  } else if (!EMAIL_PATTERN.test(email.trim())) {
+    errors.email = 'Enter a valid email address';
+  }
+
+  if (!password) {
+    errors.password = 'Password is required';
+  } else if (password.length < MIN_PASSWORD_LENGTH) {
+    errors.password = `Password must be at least ${MIN_PASSWORD_LENGTH} characters`;
+  }
+
+  return errors;
+}
+
+/**
+ * Supabase auth errors come back as terse API strings ("Invalid login
+ * credentials", "User already registered", etc.). Most are already readable
+ * enough to show directly, but a couple of the common ones read better
+ * rephrased for a non-technical player. Unknown messages pass through
+ * unchanged rather than being swallowed, per "never silently reject."
+ */
+function readableAuthError(message: string): string {
+  const lower = message.toLowerCase();
+  if (lower.includes('invalid login credentials')) {
+    return 'Incorrect email or password. Double-check and try again.';
+  }
+  if (lower.includes('user already registered')) {
+    return 'An account with this email already exists. Try logging in instead.';
+  }
+  if (lower.includes('email not confirmed')) {
+    return 'Please confirm your email before logging in. Check your inbox for the confirmation link.';
+  }
+  if (lower.includes('password should be at least')) {
+    return `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`;
+  }
+  return message;
 }
 
 export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalProps) {
@@ -21,30 +80,77 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [formError, setFormError] = useState<string | null>(null);
   const { signIn, signUp } = useAuth();
+
+  // Re-validates a single field on the fly once the form has been submitted
+  // once (touched), so the player gets immediate feedback while fixing a
+  // mistake instead of only finding out again on the next submit attempt.
+  const [touched, setTouched] = useState(false);
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    if (touched) setFieldErrors(prev => ({ ...prev, email: validate(value, password).email }));
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    if (touched) setFieldErrors(prev => ({ ...prev, password: validate(email, value).password }));
+  };
+
+  const switchTab = (next: 'login' | 'signup') => {
+    setTab(next);
+    // Clear stale errors from the previous tab's attempt so switching
+    // login <-> signup never shows a leftover error for a form the player
+    // hasn't touched yet in this mode.
+    setFieldErrors({});
+    setFormError(null);
+    setTouched(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setFormError(null);
+    setTouched(true);
 
+    const errors = validate(email, password);
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      return; // Field-level messages are already visible; no toast needed for this case.
+    }
+
+    setLoading(true);
     try {
       if (tab === 'login') {
-        const { error } = await signIn(email, password);
+        const { error } = await signIn(email.trim(), password);
         if (error) {
-          toast.error(error.message);
+          const readable = readableAuthError(error.message);
+          setFormError(readable);
+          toast.error(readable);
         } else {
           toast.success('Welcome back!');
           onClose();
         }
       } else {
-        const { error } = await signUp(email, password);
+        const { error } = await signUp(email.trim(), password);
         if (error) {
-          toast.error(error.message);
+          const readable = readableAuthError(error.message);
+          setFormError(readable);
+          toast.error(readable);
         } else {
           toast.success('Check your email to confirm your account!');
           onClose();
         }
       }
+    } catch (err) {
+      // Belt-and-suspenders: signIn/signUp already return { error } rather
+      // than throwing, but if something upstream ever does throw (network
+      // failure before Supabase responds, etc.), surface it instead of
+      // failing silently.
+      const message = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      setFormError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -118,7 +224,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
           </div>
 
           {/* Email/Password Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -126,9 +232,16 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
                 type="email"
                 placeholder="you@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
+                onChange={(e) => handleEmailChange(e.target.value)}
+                aria-invalid={!!fieldErrors.email}
+                aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+                className={fieldErrors.email ? 'border-destructive focus-visible:ring-destructive' : undefined}
               />
+              {fieldErrors.email && (
+                <p id="email-error" className="flex items-center gap-1 text-xs text-destructive">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" /> {fieldErrors.email}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
@@ -137,11 +250,25 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
                 type="password"
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
+                onChange={(e) => handlePasswordChange(e.target.value)}
+                aria-invalid={!!fieldErrors.password}
+                aria-describedby={fieldErrors.password ? 'password-error' : undefined}
+                className={fieldErrors.password ? 'border-destructive focus-visible:ring-destructive' : undefined}
               />
+              {fieldErrors.password && (
+                <p id="password-error" className="flex items-center gap-1 text-xs text-destructive">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" /> {fieldErrors.password}
+                </p>
+              )}
+              {tab === 'signup' && !fieldErrors.password && (
+                <p className="text-xs text-muted-foreground">At least {MIN_PASSWORD_LENGTH} characters</p>
+              )}
             </div>
+            {formError && (
+              <p className="flex items-start gap-1.5 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md px-3 py-2">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" /> {formError}
+              </p>
+            )}
             <Button type="submit" className="w-full h-11" disabled={loading}>
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -161,7 +288,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
                 <button
                   type="button"
                   className="text-primary hover:underline font-medium"
-                  onClick={() => setTab('signup')}
+                  onClick={() => switchTab('signup')}
                 >
                   Sign up
                 </button>
@@ -172,7 +299,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
                 <button
                   type="button"
                   className="text-primary hover:underline font-medium"
-                  onClick={() => setTab('login')}
+                  onClick={() => switchTab('login')}
                 >
                   Sign in
                 </button>

@@ -142,7 +142,7 @@ const NFLCareer = () => {
                     The player was <span className="font-bold text-primary">{targetPlayer.name}</span>
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    You got it in {cluesRevealed} clue{cluesRevealed > 1 ? 's' : ''} — {score} points!
+                    You got it in {cluesRevealed} clue{cluesRevealed > 1 ? 's' : ''}, {score} points!
                   </p>
                 </>
               ) : (
@@ -183,12 +183,12 @@ const NFLCareer = () => {
             "The fewer clues you need, the higher your score!",
           ]}
           examples={[
-            "Tom Brady — 6th Round, Michigan, Patriots → Buccaneers, 7× Super Bowl Champion",
-            "Patrick Mahomes — 1st Round, Texas Tech, Chiefs, 3× Super Bowl MVP",
-            "Aaron Donald — 1st Round, Pitt, Rams, 3× DPOY",
-            "Derrick Henry — 2nd Round, Alabama, Titans → Ravens, 2,000-yard rusher",
-            "Justin Jefferson — 1st Round, LSU, Vikings, 3× Pro Bowl",
-            "Travis Kelce — 3rd Round, Cincinnati, Chiefs, All-time TE receiving leader"
+            "Tom Brady: 6th Round, Michigan, Patriots → Buccaneers, 7× Super Bowl Champion",
+            "Patrick Mahomes: 1st Round, Texas Tech, Chiefs, 3× Super Bowl MVP",
+            "Aaron Donald: 1st Round, Pitt, Rams, 3× DPOY",
+            "Derrick Henry: 2nd Round, Alabama, Titans → Ravens, 2,000-yard rusher",
+            "Justin Jefferson: 1st Round, LSU, Vikings, 3× Pro Bowl",
+            "Travis Kelce: 3rd Round, Cincinnati, Chiefs, All-time TE receiving leader"
           ]}
         />
 

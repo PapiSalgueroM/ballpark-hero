@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { GameMode, Difficulty } from '@/types/guessNflTeam';
 import { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 interface Props {
   onStart: (mode: GameMode, difficulty: Difficulty, conference?: 'AFC' | 'NFC', division?: string) => void;
@@ -8,79 +9,103 @@ interface Props {
 
 const DIVISIONS = ['North', 'South', 'East', 'West'];
 
+/** Sentinel for "no division filter, just the whole conference" so a single selectedDivision value can drive the Start button's enabled state and label. */
+const ALL_DIVISIONS = 'All';
+
 export function NflTeamModeSelector({ onStart }: Props) {
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
   const [showConferenceOptions, setShowConferenceOptions] = useState(false);
   const [selectedConference, setSelectedConference] = useState<'AFC' | 'NFC' | null>(null);
+  const [selectedDivision, setSelectedDivision] = useState<string | null>(null);
 
+  // Selecting a conference or division only highlights it; the round begins
+  // only when Start is pressed. This replaces the old behavior where picking
+  // a conference immediately advanced the screen with no way to confirm or
+  // change the pick first (MASTER_PLAN #80: "click highlights but does not
+  // auto-start").
   const handleConferenceSelect = (conf: 'AFC' | 'NFC') => {
     setSelectedConference(conf);
+    setSelectedDivision(null);
   };
 
   const handleDivisionSelect = (division: string) => {
-    onStart('conference', difficulty, selectedConference!, division);
+    setSelectedDivision(division);
   };
 
-  const handleConferenceOnly = () => {
-    onStart('conference', difficulty, selectedConference!);
+  const handleStartConferenceMode = () => {
+    if (!selectedConference) return;
+    const division = selectedDivision && selectedDivision !== ALL_DIVISIONS ? selectedDivision : undefined;
+    onStart('conference', difficulty, selectedConference, division);
   };
 
-  if (showConferenceOptions && !selectedConference) {
+  const handleBackToConference = () => {
+    setSelectedConference(null);
+    setSelectedDivision(null);
+  };
+
+  if (showConferenceOptions) {
     return (
       <div className="space-y-6 max-w-md mx-auto">
         <h3 className="text-xl font-bold text-center text-primary">Select Conference</h3>
         <div className="grid grid-cols-2 gap-4">
           <Button
             onClick={() => handleConferenceSelect('AFC')}
-            className="h-20 text-lg"
-            variant="outline"
+            className={cn('h-20 text-lg', selectedConference === 'AFC' && 'ring-2 ring-primary')}
+            variant={selectedConference === 'AFC' ? 'default' : 'outline'}
+            aria-pressed={selectedConference === 'AFC'}
           >
             AFC
           </Button>
           <Button
             onClick={() => handleConferenceSelect('NFC')}
-            className="h-20 text-lg"
-            variant="outline"
+            className={cn('h-20 text-lg', selectedConference === 'NFC' && 'ring-2 ring-primary')}
+            variant={selectedConference === 'NFC' ? 'default' : 'outline'}
+            aria-pressed={selectedConference === 'NFC'}
           >
             NFC
           </Button>
         </div>
-        <Button
-          variant="ghost"
-          onClick={() => setShowConferenceOptions(false)}
-          className="w-full"
-        >
-          ← Back
-        </Button>
-      </div>
-    );
-  }
 
-  if (showConferenceOptions && selectedConference) {
-    return (
-      <div className="space-y-6 max-w-md mx-auto">
-        <h3 className="text-xl font-bold text-center text-primary">{selectedConference} Division</h3>
-        <div className="grid grid-cols-2 gap-3">
-          {DIVISIONS.map(div => (
+        {selectedConference && (
+          <div className="space-y-3 animate-fade-in">
+            <h4 className="text-sm font-semibold text-muted-foreground text-center uppercase tracking-wide">
+              {selectedConference} Division (optional)
+            </h4>
+            <div className="grid grid-cols-2 gap-3">
+              {DIVISIONS.map(div => (
+                <Button
+                  key={div}
+                  onClick={() => handleDivisionSelect(div)}
+                  variant={selectedDivision === div ? 'default' : 'outline'}
+                  className={cn('h-16', selectedDivision === div && 'ring-2 ring-primary')}
+                  aria-pressed={selectedDivision === div}
+                >
+                  {selectedConference} {div}
+                </Button>
+              ))}
+            </div>
             <Button
-              key={div}
-              onClick={() => handleDivisionSelect(div)}
-              variant="outline"
-              className="h-16"
+              onClick={() => handleDivisionSelect(ALL_DIVISIONS)}
+              variant={selectedDivision === ALL_DIVISIONS ? 'default' : 'outline'}
+              className={cn('w-full', selectedDivision === ALL_DIVISIONS && 'ring-2 ring-primary')}
+              aria-pressed={selectedDivision === ALL_DIVISIONS}
             >
-              {selectedConference} {div}
+              All {selectedConference} Teams
             </Button>
-          ))}
-        </div>
+          </div>
+        )}
+
         <Button
-          onClick={handleConferenceOnly}
-          className="w-full"
+          onClick={handleStartConferenceMode}
+          disabled={!selectedConference || !selectedDivision}
+          className="w-full h-14 text-lg"
         >
-          All {selectedConference} Teams
+          Start
         </Button>
+
         <Button
           variant="ghost"
-          onClick={() => setSelectedConference(null)}
+          onClick={selectedConference ? handleBackToConference : () => setShowConferenceOptions(false)}
           className="w-full"
         >
           ← Back

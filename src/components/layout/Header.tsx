@@ -11,9 +11,17 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { Flame, User, BarChart3, LogOut, Loader2 } from 'lucide-react';
+import { useStreaks } from '@/hooks/useStreaks';
 
 export function Header() {
   const { user, profile, loading, signOut } = useAuth();
+  // #101: global "played anything today" streak, local-first so it renders
+  // for guests too (no login required to play anything, per this app's
+  // guest-first posture). This replaces the old profile.current_streak
+  // check below, which read from the `profiles` table -- confirmed via
+  // direct SQL against the live database to not exist, so that check was
+  // always false in production regardless of how much anyone had played.
+  const { globalCurrentStreak } = useStreaks();
   const [authModal, setAuthModal] = useState<{ open: boolean; tab: 'login' | 'signup' }>({
     open: false,
     tab: 'login',
@@ -46,21 +54,24 @@ export function Header() {
 
           {/* Auth Section */}
           <div className="flex items-center gap-3">
+            {/* #101: global streak flame, local-first, visible whether
+                signed in or not (guest experience must not regress -- see
+                CLAUDE.md guest-first posture). Sits next to the account
+                menu / sign-in buttons since this Header (unlike GameNavbar,
+                which has its own daily-score chip and is out of scope for
+                this change) has no other daily-score element for it to
+                anchor next to. */}
+            {globalCurrentStreak > 0 && (
+              <div className="flex items-center gap-1 text-sm font-medium" title={`${globalCurrentStreak} day streak`}>
+                <Flame className="w-4 h-4 text-orange-500" />
+                <span>{globalCurrentStreak}</span>
+              </div>
+            )}
+
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
             ) : user ? (
               <>
-                {/* Streak Display */}
-                {profile && profile.current_streak > 0 && (
-                  <div className="flex items-center gap-1 text-sm font-medium">
-                    <Flame className="w-4 h-4 text-orange-500" />
-                    <span>{profile.current_streak}</span>
-                    {profile.streak_freezes > 0 && (
-                      <span className="text-sm" title="Streak Freeze available">🛡️{profile.streak_freezes}</span>
-                    )}
-                  </div>
-                )}
-
                 {/* User Menu */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

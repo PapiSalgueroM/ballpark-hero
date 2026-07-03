@@ -2,6 +2,29 @@ import { useState, useCallback } from 'react';
 import { TennisChainState, TennisChainMode, getTennisChainMultiplier, getTennisEarnedBadge, TENNIS_CHAIN_STARTERS } from '@/types/tennisChain';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import type { PlayerSourceConfig } from '@/lib/playerSearch';
+
+/**
+ * Tennis player pool for the shared PlayerAutocomplete input (see
+ * src/components/game/PlayerAutocomplete.tsx and src/lib/playerSearch.ts).
+ * Points at tennis_players (40 rows, verified via information_schema +
+ * row count on flawuiqbvjobmkfkauhw, 2026-07-03). This table is a curated
+ * subset of the names in src/types/tennisChain.ts's ALL_TENNIS_PLAYERS list
+ * (96 names) used only for the starter/timeline copy, not for search, so the
+ * autocomplete's live pool here is intentionally the DB table rather than
+ * that static array. Nickname matching ("Rafa", "Fed", "Nole") that the old
+ * TENNIS_PLAYER_ALIASES map provided client-side is not reproduced here:
+ * searchPlayers() only matches against nameColumn (player_name), not the
+ * common_names array, since PlayerSourceConfig has no alias-list concept.
+ * Fact-checking of a submitted name still happens entirely in makeGuess()
+ * below via the tennis-chain-validate edge function, unchanged by this.
+ */
+export const TENNIS_PLAYER_SOURCE: PlayerSourceConfig = {
+  table: 'tennis_players',
+  nameColumn: 'player_name',
+  ilikeLimit: 200,
+  prominenceLimit: 1000,
+};
 
 function getDailyStarter(): string {
   const today = new Date().toISOString().slice(0, 10);

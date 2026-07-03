@@ -64,7 +64,7 @@ const FootballGrid = () => {
             🏈 PRO FOOTBALL GRID
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Fill the 3×3 grid — each cell needs a player matching both the row and column. Daily challenge!
+            Fill the 3×3 grid. Each cell needs a player matching both the row and column. Daily challenge!
           </p>
           <div className="flex items-center justify-center gap-4 mt-3 text-sm">
             <span className="text-muted-foreground">
@@ -159,9 +159,9 @@ const FootballGrid = () => {
           description="A daily 3×3 grid puzzle where each cell requires a pro football player matching both the row and column criteria. Features a rarity scoring system based on real player selections."
           howToPlay={[
             'Each cell in the 3×3 grid requires a player who satisfies both the row and column attribute',
-            'Correct answers show a rarity percentage — rarer picks earn a better overall score',
+            'Correct answers show a rarity percentage. Rarer picks earn a better overall score',
             'You have 15 guesses to complete the grid. Wrong answers cost a guess.',
-            'A new grid drops at midnight — same challenge for everyone',
+            'A new grid drops at midnight, same challenge for everyone',
           ]}
           examples={[
             "Dallas Cowboys + Quarterback = Tony Romo, Troy Aikman, Dak Prescott",

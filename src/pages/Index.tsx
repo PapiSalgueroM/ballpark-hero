@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
-import { Trophy, Flame, TrendingUp, Sparkles, Users, Search, X } from 'lucide-react';
+import { Trophy, Flame, TrendingUp, Sparkles, Users, Search, X, CalendarCheck } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
@@ -9,6 +9,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import { StreakReminder } from '@/components/game/StreakReminder';
 import { useMostPlayed } from '@/hooks/useMostPlayed';
 import { PollOfTheDay } from '@/components/home/PollOfTheDay';
+import { useStreaks } from '@/hooks/useStreaks';
 
 import { CATEGORIES, VISIBLE_CATEGORIES, TOTAL_GAMES, type GameDef } from '@/data/gameRegistry';
 
@@ -192,6 +193,8 @@ function countPlayedGames(): number {
 
 export default function Index() {
   const { user } = useAuth();
+  // #13: days-visited stat for the hero, local-first (see useStreaks()).
+  const { daysVisited } = useStreaks();
   const [playedCount, setPlayedCount] = useState(0);
   const [totalPlayed, setTotalPlayed] = useState<number | null>(null);
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
@@ -304,10 +307,23 @@ export default function Index() {
                   )}
                 </div>
               )}
-              <div className="flex items-center gap-1.5 text-muted-foreground">
-                <Trophy className="w-4 h-4 text-[hsl(43,85%,55%)]" />
-                <span>You've played <strong className="text-foreground">{playedCount}/{TOTAL_GAMES}</strong> today</span>
-              </div>
+              {/* #13: signed-in players see their days-visited count here
+                  instead of the played-today placeholder, since that
+                  personal daily-progress number is already shown in
+                  GameNavbar's "Daily Score" chip on every game page.
+                  Guests keep the played-today stat, which is the only
+                  personal stat available to them without an account. */}
+              {user ? (
+                <div className="flex items-center gap-1.5 text-muted-foreground">
+                  <CalendarCheck className="w-4 h-4 text-[hsl(43,85%,55%)]" />
+                  <span>You've visited <strong className="text-foreground">{daysVisited}</strong> {daysVisited === 1 ? 'day' : 'days'}</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 text-muted-foreground">
+                  <Trophy className="w-4 h-4 text-[hsl(43,85%,55%)]" />
+                  <span>You've played <strong className="text-foreground">{playedCount}/{TOTAL_GAMES}</strong> today</span>
+                </div>
+              )}
             </div>
           </div>
         </section>

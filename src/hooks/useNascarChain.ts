@@ -2,6 +2,30 @@ import { useState, useCallback } from 'react';
 import { NascarChainState, NascarChainMode, getNascarChainMultiplier, getNascarEarnedBadge, NASCAR_CHAIN_STARTERS } from '@/types/nascarChain';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import type { PlayerSourceConfig } from '@/lib/playerSearch';
+
+/**
+ * NASCAR driver pool for the shared PlayerAutocomplete input (see
+ * src/components/game/PlayerAutocomplete.tsx and src/lib/playerSearch.ts).
+ * Points at nascar_drivers (83 rows, verified via information_schema + row
+ * count on flawuiqbvjobmkfkauhw, 2026-07-03), which is a real stats table
+ * (years_active, total_wins, championships, etc.) and a bigger pool than the
+ * 44-name static ALL_NASCAR_DRIVERS list in src/types/nascarChain.ts, so this
+ * migration is a straightforward win in name coverage, unlike tennis_players
+ * which is smaller than its static counterpart. total_wins is used as the
+ * prominence column so more accomplished drivers surface first.
+ */
+export const NASCAR_DRIVER_SOURCE: PlayerSourceConfig = {
+  table: 'nascar_drivers',
+  nameColumn: 'driver_name',
+  prominenceColumn: 'total_wins',
+  metaColumns: {
+    championships: 'championships',
+    yearsActive: 'years_active',
+  },
+  ilikeLimit: 200,
+  prominenceLimit: 1000,
+};
 
 function getDailyStarter(): string {
   const today = new Date().toISOString().slice(0, 10);

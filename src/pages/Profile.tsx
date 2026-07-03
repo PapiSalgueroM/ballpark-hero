@@ -12,11 +12,12 @@ import {
 } from '@/components/ui/select';
 import {
   Flame, Trophy, Calendar, Gamepad2, Share2, Edit2, Check, X, Loader2,
-  Star, Target, Crown, Zap, TrendingUp, Medal, Clock, Copy,
+  Star, Target, Crown, Zap, TrendingUp, Medal, Clock, Copy, CalendarCheck,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import html2canvas from 'html2canvas';
+import { useStreaks } from '@/hooks/useStreaks';
 
 /* ────────────────────── Constants ────────────────────── */
 
@@ -80,6 +81,16 @@ export default function Profile() {
   const { user, profile, loading: authLoading, refreshProfile, updateProfile } = useAuth();
   const { username } = useParams<{ username?: string }>();
   const navigate = useNavigate();
+
+  // #101/#100: local-first streaks and days-visited. This is deliberately
+  // the primary source for streak/visit numbers on this page rather than
+  // profile.current_streak etc: the `profiles` table those legacy fields
+  // read from does not exist in the live database (verified directly via
+  // SQL against flawuiqbvjobmkfkauhw), so those fields are always 0/null in
+  // production today regardless of how much a player has actually played.
+  const {
+    globalCurrentStreak, globalLongestStreak, topGameStreaks, daysVisited,
+  } = useStreaks();
 
   const [viewingProfile, setViewingProfile] = useState<any>(null);
   const [bestScores, setBestScores] = useState<BestScore[]>([]);
@@ -279,8 +290,20 @@ export default function Profile() {
   /* ── Computed stats ── */
   const totalPoints = userScoreData?.total_points ?? viewingProfile?.all_time_score ?? 0;
   const totalGames = viewingProfile?.total_games_played ?? 0;
-  const currentStreak = userScoreData?.current_streak ?? viewingProfile?.current_streak ?? 0;
-  const longestStreak = userScoreData?.longest_streak ?? viewingProfile?.longest_streak ?? 0;
+  // Local-first (see useStreaks() above), with the legacy DB-backed fields
+  // only as a fallback for the unlikely case they're ever non-zero (e.g.
+  // after the proposed profiles table + sync exists). On isOwnProfile this
+  // is always the local browser's own streak, which is correct since a
+  // player viewing their own profile is on their own device by definition.
+  // On someone else's profile (isOwnProfile false), local streak data is
+  // this visitor's, not the viewed player's, so it's intentionally not
+  // shown there - see the isOwnProfile guard around the streak stats below.
+  const currentStreak = isOwnProfile
+    ? globalCurrentStreak
+    : (userScoreData?.current_streak ?? viewingProfile?.current_streak ?? 0);
+  const longestStreak = isOwnProfile
+    ? globalLongestStreak
+    : (userScoreData?.longest_streak ?? viewingProfile?.longest_streak ?? 0);
   const averageScore = totalGames > 0 ? Math.round(totalPoints / totalGames) : 0;
 
   const sportCounts: Record<string, number> = {};
@@ -536,6 +559,12 @@ export default function Profile() {
               { icon: <Star className="w-5 h-5 text-purple-400" />, value: favouriteSportEntry ? SPORT_LABELS[favouriteSportEntry[0]] || '-' : '-', label: 'Fav Sport', small: true },
               { icon: <Target className="w-5 h-5 text-sky-400" />, value: averageScore, label: 'Avg Score' },
               { icon: <Clock className="w-5 h-5 text-emerald-400" />, value: timeSpent > 60 ? `${Math.floor(timeSpent / 60)}h ${timeSpent % 60}m` : `${timeSpent}m`, label: 'Time Played' },
+              // #13/#100: days-visited stat, local-first (see useStreaks() above).
+              // Own-profile only: this browser's visit history has no meaning
+              // when looking at someone else's profile.
+              ...(isOwnProfile
+                ? [{ icon: <CalendarCheck className="w-5 h-5 text-gold" />, value: daysVisited, label: 'Days Visited' }]
+                : []),
             ].map((stat, i) => (
               <Card key={i} className="border-border/40">
                 <CardContent className="pt-3 pb-2 text-center space-y-0.5">
@@ -546,6 +575,31 @@ export default function Profile() {
               </Card>
             ))}
           </div>
+
+          {/* ═══════════════ 3b. PER-GAME BEST STREAKS (#101/#100) ═══════════════ */}
+          {/* Own-profile only: per-game streaks are local-first and only meaningful for this browser's own history. */}
+          {isOwnProfile && topGameStreaks.length > 0 && (
+            <Card className="border-border/60">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg font-display flex items-center gap-2">
+                  <Flame className="w-5 h-5 text-orange-500" /> Best Streaks by Game
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {topGameStreaks.map(({ gameSlug, current, longest }) => (
+                    <div key={gameSlug} className="flex items-center justify-between p-3 rounded-lg border border-border/40 bg-surface-1">
+                      <span className="font-medium text-sm">{GAME_LABELS[gameSlug] || gameSlug}</span>
+                      <span className="text-sm text-muted-foreground">
+                        <span className="font-bold text-gold">{longest}</span> best
+                        {current > 0 && <span className="ml-2 text-orange-500">🔥 {current} now</span>}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* ═══════════════ 4. BADGES ═══════════════ */}
           <Card className="border-border/60">
