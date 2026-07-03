@@ -166,17 +166,25 @@ export const MIN_POOL_SIZE = 2000;
  */
 export async function fetchHockeyGridData(): Promise<HockeyGridData | null> {
   try {
-    const { data, error } = await supabase
-      .from('nhl_player_stats' as any)
-      .select('player_name, teams, points, goals, assists, games')
-      .not('teams', 'is', null)
-      .limit(8000);
-    if (error || !data) return null;
+    // PostgREST caps every select at 1000 rows regardless of .limit(),
+    // so page through the table with .range() until a short page arrives.
+    const PAGE_SIZE = 1000;
+    const rows: RawStatsRow[] = [];
+    for (let from = 0; ; from += PAGE_SIZE) {
+      const { data, error } = await supabase
+        .from('nhl_player_stats' as any)
+        .select('player_name, teams, points, goals, assists, games')
+        .not('teams', 'is', null)
+        .range(from, from + PAGE_SIZE - 1);
+      if (error || !data) return null;
+      rows.push(...(data as RawStatsRow[]));
+      if (data.length < PAGE_SIZE) break;
+    }
 
     const players: IndexedPlayer[] = [];
     const byNormalizedName = new Map<string, IndexedPlayer>();
 
-    for (const raw of data as RawStatsRow[]) {
+    for (const raw of rows) {
       const name = String(raw.player_name ?? '').trim();
       const teamsStr = String(raw.teams ?? '').trim();
       if (!name || !teamsStr) continue;
