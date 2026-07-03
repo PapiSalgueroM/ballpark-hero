@@ -175,6 +175,7 @@ export async function fetchHockeyGridData(): Promise<HockeyGridData | null> {
         .from('nhl_player_stats' as any)
         .select('player_name, teams, points, goals, assists, games')
         .not('teams', 'is', null)
+        .order('player_name', { ascending: true })
         .range(from, from + PAGE_SIZE - 1);
       if (error || !data) return null;
       rows.push(...(data as RawStatsRow[]));
