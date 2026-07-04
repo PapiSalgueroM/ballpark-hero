@@ -100,3 +100,15 @@ QUEUED (on GitHub, will go live when Anthony unblocks Lovable): Sign the Player 
 5. Edge function review (#152).
 6. Then new content: NHL/MLB Conquest variants (fork pattern proven), College Grid authored puzzles, Hard-tier soccer grid data, next R6 wave games (Chemistry layer, Pack Battle, guided question-tree).
 7. Keep the factory discipline: parallel Sonnet agents, disjoint file scopes, publish in verified batches, update MASTER_PLAN.md at session end.
+
+## 10. FINAL SESSION-3 STATE (written at the very end)
+
+Tracker finished 167 of 168. Everything below is LIVE and verified at commit 28ec0c8: full R5 shell across ~50 pages (10 boards intentionally self-themed), difficulty tiers (Puck Detective 876-pool splits, Who Am I, NHL Grid), navbar on all 16 stragglers, Transfer Path validated autocomplete, consent-gated AdSense (index.html loader + mid-session inject), hardened edge functions v2, and the legal decisions: individual operator d/b/a DoUKnowBall, Massachusetts law + venue, soft COPPA posture, contact = DoUknowBall.com@gmail.com (Anthony must ensure this inbox exists and is monitored).
+
+THE ONLY OPEN ITEM: #126 Supabase auth config. The dashboard serves an EMPTY page to automated tabs (zero DOM, zero console; verified twice), so a human must do it: supabase.com/dashboard > project flawuiqbvjobmkfkauhw > Authentication > URL Configuration > Site URL = https://douknowball.com, add it to redirect allow list, and skim Auth email templates. Two minutes.
+
+## 11. PUBLISH PIPELINE, FINAL FORM (three ghosts, all dead)
+
+1. cmd 8191-char line limit: NEVER extend one git add line; add new short lines (the .bat has a warning comment).
+2. Appends can land inside REM comments if someone restructures the .bat; always Read the .bat before editing the add list.
+3. CLICKING INSIDE A CONSOLE WINDOW FREEZES THE RUNNING SCRIPT (Windows select mode; title becomes "Select cmd.exe"). Never click a console to "check on it". Use the headless flow instead: run PUBLISH_HEADLESS.bat (wraps PUBLISH_GAMES.bat with output to docs/research/publish_out.txt and stdin from nul so pause exits), then Read publish_out.txt for the commit + push lines. Launch it by double-clicking in Explorer or via the Run dialog. publish_out.txt stays untracked scratch.
