@@ -51,6 +51,17 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
  *
  * Every category pool below was run against the live database before this
  * file was written; verified sizes are recorded on each CATEGORY entry.
+ *
+ * CATALOG EXPANSION (2026-07-04): 7 categories added to the original 9
+ * (Chelsea, PSG, Manchester City clubs; Germany, England nationalities;
+ * Right Winger position; a $50M+ value tier alongside the existing $100M+
+ * tier), bringing the total to 16. Every new category reuses the same
+ * fetchClubPool / fetchNationalityPool / fetchPositionPool factories and
+ * player_market_values table as the original set, so scoring, caching, and
+ * autocomplete behave identically. Pool sizes verified live on
+ * flawuiqbvjobmkfkauhw immediately before this expansion: Chelsea FC 200,
+ * Paris Saint-Germain 189, Manchester City 170, Germany 1323, England 1175,
+ * Right Winger 2152, $50M+ 341.
  */
 
 // ---------------------------------------------------------------------------
@@ -273,6 +284,22 @@ async function fetchElitePool(): Promise<PoolEntry[]> {
   return rankPool(rows);
 }
 
+/** Category: players ever worth $50M+ (a wider net than the $100M+ elite category). Verified pool size: 341 distinct players peaked at or above $50,000,000. */
+async function fetchFiftyMillionPool(): Promise<PoolEntry[]> {
+  const { data, error } = await supabase
+    .from('player_market_values')
+    .select('player_name, market_value_usd')
+    .gte('market_value_usd', 50_000_000)
+    .order('market_value_usd', { ascending: false })
+    .limit(1000);
+  if (error || !data) return [];
+  const rows = (data as { player_name: string; market_value_usd: number }[]).map(r => ({
+    name: r.player_name,
+    prominence: r.market_value_usd,
+  }));
+  return rankPool(rows);
+}
+
 // ---------------------------------------------------------------------------
 // Category catalog
 // ---------------------------------------------------------------------------
@@ -380,6 +407,76 @@ export const CATEGORIES: RarityCategory[] = [
     // submitGuess (which only scores a pick found in this pool) rejects a
     // sub-$100M player even if the dropdown offered it as a suggestion.
     sourceConfig: SOCCER_MARKET_VALUE_SOURCE,
+  },
+  {
+    id: 'elite-50m',
+    prompt: 'Name a player who has been worth $50M or more',
+    hint: 'Peak market value, any year. A wider net than the $100M category.',
+    fetchPool: cachedPool('elite-50m', fetchFiftyMillionPool),
+    // Same reasoning as elite-100m above: no "gte" PlayerSourceFilter exists,
+    // so the autocomplete searches the full soccer pool and fetchPool's
+    // pool remains the single source of truth for scoring.
+    sourceConfig: SOCCER_MARKET_VALUE_SOURCE,
+  },
+  {
+    id: 'club-chelsea',
+    prompt: 'Name a player who has played for Chelsea',
+    hint: 'Any season in our records counts.',
+    fetchPool: cachedPool('club-chelsea', fetchClubPool('Chelsea FC')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'club', op: 'eq', value: 'Chelsea FC' }],
+    },
+  },
+  {
+    id: 'club-psg',
+    prompt: 'Name a player who has played for Paris Saint-Germain',
+    hint: 'Any season in our records counts.',
+    fetchPool: cachedPool('club-psg', fetchClubPool('Paris Saint-Germain')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'club', op: 'eq', value: 'Paris Saint-Germain' }],
+    },
+  },
+  {
+    id: 'club-man-city',
+    prompt: 'Name a player who has played for Manchester City',
+    hint: 'Any season in our records counts.',
+    fetchPool: cachedPool('club-man-city', fetchClubPool('Manchester City')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'club', op: 'eq', value: 'Manchester City' }],
+    },
+  },
+  {
+    id: 'nationality-germany',
+    prompt: 'Name a German footballer',
+    hint: 'Current or former, any club.',
+    fetchPool: cachedPool('nationality-germany', fetchNationalityPool('Germany')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'nationality', op: 'eq', value: 'Germany' }],
+    },
+  },
+  {
+    id: 'nationality-england',
+    prompt: 'Name an English footballer',
+    hint: 'Current or former, any club.',
+    fetchPool: cachedPool('nationality-england', fetchNationalityPool('England')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'nationality', op: 'eq', value: 'England' }],
+    },
+  },
+  {
+    id: 'position-right-winger',
+    prompt: 'Name a right winger',
+    hint: 'Any club, any era in our records.',
+    fetchPool: cachedPool('position-right-winger', fetchPositionPool('Right Winger')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'position', op: 'eq', value: 'Right Winger' }],
+    },
   },
 ];
 
