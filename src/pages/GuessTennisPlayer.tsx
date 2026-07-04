@@ -1,6 +1,7 @@
 import { TennisPlayerBoard } from '@/components/tennis-player/TennisPlayerBoard';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 
 export default function GuessTennisPlayer() {
   return (
@@ -10,6 +11,7 @@ export default function GuessTennisPlayer() {
         description="Identify the mystery tennis player from career clues. ATP and WTA legends from 1970 to 2025. Daily puzzle."
         path="/guess-tennis-player"
       />
+      <GameNavbar />
       <TennisPlayerBoard />
       <GameSeoContent
         title="Guess The Tennis Player | DoUKnowBall"

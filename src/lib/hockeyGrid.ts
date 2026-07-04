@@ -253,16 +253,79 @@ function mulberry32(seed: number): () => number {
   };
 }
 
+// #40: prominence tiers for unlimited/practice play only. Daily mode always
+// calls buildGridPuzzle with 'normal' (its historical, unaffected behavior).
+// Grid structure (franchise/achievement categories, cell answer validation
+// against the full nhl_player_stats index) is intentionally NOT changed by
+// tier, since playerMatchesCell's correctness must never depend on
+// difficulty. What varies is which categories a puzzle draws from:
+//   Easy:   both achievement slots used (2 of 6 categories), each an
+//           inherently "big name" milestone filter (500+ points, 300+ goals
+//           or 1000+ games). Verified via SQL on 2026-07-03: every one of the
+//           16 pool franchises clears at least 23 qualifying players on the
+//           worst achievement (goals300), so both achievement slots are
+//           always populated on every franchise pairing.
+//   Normal: unchanged original behavior, exactly 1 achievement placed on a
+//           random axis, 5 franchises fill the rest.
+//   Hard:   0 achievements, all 6 categories are franchises. Verified via SQL
+//           on 2026-07-03: the worst franchise-pair intersection across the
+//           16-franchise pool is EDM x WSH with 35 shared players, so a
+//           pure-franchise grid always clears a healthy minimum too. This is
+//           harder because every cell needs a specific two-franchise career
+//           overlap with no "just name a 500-point scorer" fallback.
+export type GridDifficulty = 'easy' | 'normal' | 'hard';
+const DIFFICULTY_STORAGE_KEY = 'hockey-grid-difficulty';
+
+export function loadGridDifficulty(): GridDifficulty {
+  try {
+    const raw = localStorage.getItem(DIFFICULTY_STORAGE_KEY);
+    if (raw === 'easy' || raw === 'normal' || raw === 'hard') return raw;
+  } catch { /* localStorage unavailable, fall back to default */ }
+  return 'normal';
+}
+
+export function saveGridDifficulty(next: GridDifficulty): void {
+  try { localStorage.setItem(DIFFICULTY_STORAGE_KEY, next); } catch { /* ignore */ }
+}
+
 /**
- * Builds a 3x3 puzzle: 6 categories split into 3 rows + 3 cols, at most one
- * achievement per axis (so a franchise axis category is always available to
- * pair against, keeping every cell franchise-anchored on at least one side).
- * Every possible row/col pairing this can produce was verified in the module
- * docstring to clear a healthy player-count minimum, so no cell can come up
- * empty.
+ * Builds a 3x3 puzzle: 6 categories split into 3 rows + 3 cols. Category mix
+ * depends on difficulty (see #40 note above); axis placement and shuffling
+ * stay seed-deterministic either way, so a daily seed always reproduces the
+ * same grid for every player on the same date.
  */
-export function buildGridPuzzle(seed: number): GridPuzzle {
+export function buildGridPuzzle(seed: number, difficulty: GridDifficulty = 'normal'): GridPuzzle {
   const rng = mulberry32(seed);
+
+  if (difficulty === 'hard') {
+    // All 6 categories are franchises, no achievement slot at all.
+    const franchises = pickN(FRANCHISE_POOL, 6, rng);
+    const rows = franchises.slice(0, 3);
+    const cols = franchises.slice(3);
+    return {
+      id: `grid-${seed}`,
+      rows: pickN(rows, rows.length, rng),
+      cols: pickN(cols, cols.length, rng),
+    };
+  }
+
+  if (difficulty === 'easy') {
+    // Both achievement categories are used (one per axis), 2 franchises fill
+    // out each axis alongside them.
+    const franchises = pickN(FRANCHISE_POOL, 4, rng);
+    const achievements = pickN(ACHIEVEMENT_POOL, 2, rng);
+    const rowFranchises = franchises.slice(0, 2);
+    const colFranchises = franchises.slice(2);
+    const rows: GridCategory[] = [achievements[0], ...rowFranchises];
+    const cols: GridCategory[] = [achievements[1], ...colFranchises];
+    return {
+      id: `grid-${seed}`,
+      rows: pickN(rows, rows.length, rng),
+      cols: pickN(cols, cols.length, rng),
+    };
+  }
+
+  // Normal (default): original behavior, exactly 1 achievement on a random axis.
   const franchises = pickN(FRANCHISE_POOL, 5, rng);
   const achievement = pickN(ACHIEVEMENT_POOL, 1, rng)[0];
 

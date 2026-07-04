@@ -1,15 +1,17 @@
 import { CombatChainBoard } from '@/components/ufc-chain/CombatChainBoard';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 
 export default function UfcChain() {
   return (
     <>
-      <PageSeo 
+      <PageSeo
         title="Combat Chain - MMA Fighter Chain Game | DoUKnowBall"
         description="Build the longest chain of MMA fighters. Name a fighter who defeated the current fighter to extend your chain."
         path="/ufc-chain"
       />
+      <GameNavbar />
       <CombatChainBoard />
       <GameSeoContent
         title="MMA Combat Chain Game | DoUKnowBall"

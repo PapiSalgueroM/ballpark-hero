@@ -41,6 +41,54 @@ export interface PuckDetectivePlayer {
   country: string;
   /** Broad position group used for the "close" (yellow-ish) position feedback tier. */
   group: 'forward' | 'defense' | 'goalie';
+  /** Career points from nhl_player_stats (name-matched), or null if unmatched (see #40 note). */
+  careerPoints: number | null;
+}
+
+// #40: prominence tiers for unlimited/practice play only. Daily mode always
+// draws from the full pool. Verified via read-only SQL against
+// nhl_players/nhl_player_stats on 2026-07-03: nhl_player_stats only
+// name-matches 706 of the 876 deduped nhl_players (the rest are mostly
+// goalies, who have no career "points" stat by definition, plus a handful of
+// recent debuts not yet in the career-totals table). Splitting the 706
+// matched players into thirds by career points gives 236/235/235. Easy pulls
+// the top third (points >= 250, high-profile scorers). Hard pulls the bottom
+// third (points < 75) PLUS all 170 unmatched players (405 total) since a
+// player with no career-points row is, by construction, not a "big name" for
+// a points-based tier. Normal is the untouched full 876-player pool.
+export type PuckDifficulty = 'easy' | 'normal' | 'hard';
+const DIFFICULTY_STORAGE_KEY = 'puck-detective-difficulty';
+const EASY_POINTS_FLOOR = 250;
+const HARD_POINTS_CEILING = 75;
+
+export function loadPuckDifficulty(): PuckDifficulty {
+  try {
+    const raw = localStorage.getItem(DIFFICULTY_STORAGE_KEY);
+    if (raw === 'easy' || raw === 'normal' || raw === 'hard') return raw;
+  } catch { /* localStorage unavailable, fall back to default */ }
+  return 'normal';
+}
+
+export function savePuckDifficulty(next: PuckDifficulty): void {
+  try { localStorage.setItem(DIFFICULTY_STORAGE_KEY, next); } catch { /* ignore */ }
+}
+
+/**
+ * Splits the pool by career points tier (see module note above). Falls back
+ * to the full pool if there are too few players to split sanely, guarding
+ * the brief window before the live pool has loaded.
+ */
+export function buildPuckPool(
+  difficulty: PuckDifficulty,
+  pool: PuckDetectivePlayer[],
+): PuckDetectivePlayer[] {
+  if (difficulty === 'normal' || pool.length < 30) return pool;
+  if (difficulty === 'easy') {
+    const easy = pool.filter((p) => (p.careerPoints ?? -Infinity) >= EASY_POINTS_FLOOR);
+    return easy.length >= 10 ? easy : pool;
+  }
+  const hard = pool.filter((p) => p.careerPoints == null || p.careerPoints < HARD_POINTS_CEILING);
+  return hard.length >= 10 ? hard : pool;
 }
 
 export type MatchTier = 'exact' | 'close' | 'none';
@@ -156,6 +204,42 @@ interface RawNhlPlayerRow {
   birth_country: string | null;
 }
 
+interface RawStatsPointsRow {
+  player_name: string | null;
+  points: number | null;
+}
+
+/**
+ * Fetches career points from nhl_player_stats, keyed by exact player_name,
+ * for use as the #40 difficulty-tier signal. Pages with .range() (ordered by
+ * player_name) since PostgREST caps every response at 1000 rows regardless
+ * of .limit() (6353 total rows here). Returns an empty map on any failure so
+ * a tiering lookup miss just falls back to "unmatched" (Hard tier) rather
+ * than breaking pool fetch entirely.
+ */
+async function fetchCareerPointsByName(): Promise<Map<string, number>> {
+  const map = new Map<string, number>();
+  try {
+    const PAGE_SIZE = 1000;
+    for (let from = 0; ; from += PAGE_SIZE) {
+      const { data, error } = await supabase
+        .from('nhl_player_stats' as any)
+        .select('player_name, points')
+        .order('player_name', { ascending: true })
+        .range(from, from + PAGE_SIZE - 1);
+      if (error || !data) break;
+      for (const row of data as RawStatsPointsRow[]) {
+        const name = String(row.player_name ?? '').trim();
+        if (!name) continue;
+        const pts = Number(row.points);
+        if (Number.isFinite(pts)) map.set(name, pts);
+      }
+      if (data.length < PAGE_SIZE) break;
+    }
+  } catch { /* leave map as-is; tiering treats misses as unmatched */ }
+  return map;
+}
+
 /**
  * Fetches nhl_players, dedupes by player_id (see module docstring), and
  * normalizes into the mystery/guess pool shape. Returns null on any failure
@@ -164,10 +248,13 @@ interface RawNhlPlayerRow {
  */
 export async function fetchPuckDetectivePool(): Promise<PuckDetectivePlayer[] | null> {
   try {
-    const { data, error } = await supabase
-      .from('nhl_players' as any)
-      .select('player_id, full_name, position, team, jersey_number, birth_date, birth_country')
-      .limit(4000);
+    const [{ data, error }, pointsByName] = await Promise.all([
+      supabase
+        .from('nhl_players' as any)
+        .select('player_id, full_name, position, team, jersey_number, birth_date, birth_country')
+        .limit(4000),
+      fetchCareerPointsByName(),
+    ]);
     if (error || !data) return null;
 
     const asOf = new Date();
@@ -195,6 +282,7 @@ export async function fetchPuckDetectivePool(): Promise<PuckDetectivePlayer[] | 
         age: computeAge(birthDate, asOf),
         country,
         group: POSITION_GROUP[pos],
+        careerPoints: pointsByName.has(name) ? pointsByName.get(name)! : null,
       });
     }
 

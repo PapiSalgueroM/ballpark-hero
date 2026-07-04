@@ -3,6 +3,8 @@ import { useTransferPath } from '@/hooks/useTransferPath';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import ShareButtons from '@/components/game/ShareButtons';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
+import { TRANSFER_PATH_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { RotateCcw, ArrowRight, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -25,7 +27,7 @@ export function TransferPathBoard() {
   const {
     puzzle, chain, connections, status, score, mode, unlimitedIndex,
     addPlayer, switchToUnlimited, nextPuzzle,
-    getAllPlayerNames, getPlayerNationality, getPlayerClubs,
+    getAllPlayerNames, getPlayerNationality,
     isLoadingPool, isLoading,
   } = useTransferPath();
 
@@ -34,6 +36,10 @@ export function TransferPathBoard() {
   const [showHint, setShowHint] = useState(false);
 
   const allNames = useMemo(() => getAllPlayerNames(), [getAllPlayerNames]);
+  const excludeNames = useMemo(
+    () => new Set([...chain, puzzle.playerB].map(n => n.toLowerCase())),
+    [chain, puzzle.playerB],
+  );
 
   // This check must live BELOW every hook. Returning early above the hooks
   // changes the hook count between renders and crashes with React error #310.
@@ -44,14 +50,6 @@ export function TransferPathBoard() {
       </div>
     );
   }
-  const query = input.toLowerCase().trim();
-  const suggestions = query.length >= 2
-    ? allNames.filter(n =>
-        n.toLowerCase().includes(query) &&
-        !chain.includes(n) &&
-        n !== puzzle.playerB
-      )
-    : [];
 
   const handleSelect = (name: string) => {
     setInput('');
@@ -62,10 +60,15 @@ export function TransferPathBoard() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const match = allNames.find(n => n.toLowerCase() === query);
-    if (match) handleSelect(match);
+  const handleAutocompleteSelect = (entity: PlayerEntity) => {
+    // The autocomplete's own source (career_players) is broader than the set
+    // of names the currently loaded chain graph knows about (allNames comes
+    // from getAllPlayerNames(), which mirrors the same table but may lag on
+    // a fresh load), so fall back to the entity's own name either way. The
+    // actual club-overlap validity check still happens inside handleSelect via
+    // addPlayer, unchanged from before this migration.
+    const match = allNames.find(n => n.toLowerCase() === entity.name.toLowerCase()) ?? entity.name;
+    handleSelect(match);
   };
 
   const isWon = status === 'won';
@@ -137,37 +140,15 @@ export function TransferPathBoard() {
         {/* Input */}
         {!isWon && (
           <div className="space-y-2">
-            <form onSubmit={handleSubmit} className="relative">
-              <input
-                type="text"
-                value={input}
-                onChange={e => { setInput(e.target.value); setError(''); }}
-                placeholder="Type a player name..."
-                className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-                autoFocus
-              />
-              {suggestions.length > 0 && (
-                <div className="absolute left-0 right-0 top-full mt-1 rounded-xl border border-border bg-card shadow-lg z-20 max-h-48 overflow-y-auto">
-                  {suggestions.map(name => {
-                    const clubs = [...getPlayerClubs(name)];
-                    return (
-                      <button
-                        key={name}
-                        type="button"
-                        onClick={() => handleSelect(name)}
-                        className="w-full text-left px-4 py-2.5 text-sm hover:bg-muted/50 transition-colors flex items-center gap-2 border-b border-border last:border-0"
-                      >
-                        <span>{flag(getPlayerNationality(name))}</span>
-                        <span className="font-semibold text-foreground">{name}</span>
-                        <span className="ml-auto text-[10px] text-muted-foreground truncate max-w-[120px]">
-                          {clubs.slice(0, 3).join(', ')}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </form>
+            <PlayerAutocomplete
+              value={input}
+              onChange={value => { setInput(value); setError(''); }}
+              onSelect={handleAutocompleteSelect}
+              searchOptions={{ source: TRANSFER_PATH_PLAYER_SOURCE, exclude: excludeNames, minChars: 2 }}
+              placeholder="Type a player name..."
+              autoFocus
+              validateOnly
+            />
             {error && (
               <p className="text-xs text-destructive text-center">{error}</p>
             )}

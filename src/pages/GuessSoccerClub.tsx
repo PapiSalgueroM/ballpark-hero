@@ -1,6 +1,7 @@
 import { GuessSoccerClubBoard } from '@/components/guess-soccer-club/GuessSoccerClubBoard';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 
 export default function GuessSoccerClub() {
   return (
@@ -10,6 +11,7 @@ export default function GuessSoccerClub() {
         description="Identify the mystery football club from progressive clues. Premier League, La Liga, Serie A, and more."
         path="/guess-soccer-club"
       />
+      <GameNavbar />
       <GuessSoccerClubBoard />
       <GameSeoContent
         title="Guess The Football Club | DoUKnowBall"

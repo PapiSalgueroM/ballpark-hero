@@ -1,6 +1,7 @@
 import { GuessTheYearBoard } from '@/components/guess-year/GuessTheYearBoard';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 
 export default function GuessTheYear() {
   return (
@@ -10,6 +11,7 @@ export default function GuessTheYear() {
         description="Guess what year famous sports moments happened. NFL, NBA, MLB, NHL, UFC, and more. Daily trivia challenge."
         path="/guess-the-year"
       />
+      <GameNavbar />
       <GuessTheYearBoard />
       <GameSeoContent
         title="Guess The Year | DoUKnowBall"

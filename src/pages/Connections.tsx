@@ -3,10 +3,9 @@ import { useConnections } from '@/hooks/useConnections';
 import { ConnectionsBoard } from '@/components/connections/ConnectionsBoard';
 import { ConnectionsHowToPlay } from '@/components/connections/ConnectionsHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import { HelpCircle, RotateCcw, Lightbulb, Send, ArrowRight, Shuffle, Flame } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
+import { HelpCircle, Lightbulb, Send, ArrowRight, Shuffle, Flame } from 'lucide-react';
 import { connectionsGroupsToEmoji } from '@/lib/shareGrids';
 import { cn } from '@/lib/utils';
 import { ConnectionDifficulty } from '@/types/connections';
@@ -61,77 +60,74 @@ const Connections = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Soccer Connections - Football Trivia Puzzle | DoUKnowBall"
         description="Group 16 soccer players into 4 categories. Daily football connections puzzle."
         path="/connections"
       />
-      <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
-        {/* Header */}
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowRules(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
+      <GameShell
+        width="wide"
+        title="CONNECTIONS"
+        subtitle="Group 16 soccer players into 4 secret categories. Can you crack the connection?"
+        headerExtra={
+          <>
+            {mode === 'unlimited' && (
+              <p className="text-xs text-muted-foreground mt-1">
+                Puzzle {(puzzleIndex % totalPuzzles) + 1} of {totalPuzzles}
+              </p>
+            )}
 
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.15em] text-primary font-display mb-1">
-            CONNECTIONS
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base">
-            Group 16 soccer players into 4 secret categories. Can you crack the connection?
-          </p>
-          {mode === 'unlimited' && (
-            <p className="text-xs text-muted-foreground mt-1">
-              Puzzle {(puzzleIndex % totalPuzzles) + 1} of {totalPuzzles}
-            </p>
-          )}
-
-          {/* Daily / Unlimited toggle */}
-          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground',
-                )}
-              >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-              </button>
-            ))}
-          </div>
-
-          {/* Lives & Streak */}
-          <div className="flex items-center justify-center gap-4 mt-5">
-            <div className="flex items-center gap-1.5">
-              <span className="text-sm text-muted-foreground mr-1">Lives:</span>
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div
-                  key={i}
+            {/* Daily / Unlimited toggle */}
+            <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
                   className={cn(
-                    'w-3 h-3 rounded-full transition-all',
-                    i < lives ? 'bg-primary' : 'bg-secondary',
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground',
                   )}
-                />
+                >
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                </button>
               ))}
             </div>
-            {streak > 0 && (
-              <div className="flex items-center gap-1 text-sm font-semibold text-primary">
-                <Flame className="w-4 h-4" />
-                {streak}
-              </div>
-            )}
-          </div>
-        </header>
 
+            {/* Lives & Streak */}
+            <div className="flex items-center justify-center gap-4 mt-5">
+              <div className="flex items-center gap-1.5">
+                <span className="text-sm text-muted-foreground mr-1">Lives:</span>
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={cn(
+                      'w-3 h-3 rounded-full transition-all',
+                      i < lives ? 'bg-primary' : 'bg-secondary',
+                    )}
+                  />
+                ))}
+              </div>
+              {streak > 0 && (
+                <div className="flex items-center gap-1 text-sm font-semibold text-primary">
+                  <Flame className="w-4 h-4" />
+                  {streak}
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={() => setShowRules(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
+          </>
+        }
+      >
         {/* Loading guard */}
         {(isLoading || isLoadingPool) && (
           <div className="flex justify-center py-10">
@@ -219,74 +215,57 @@ const Connections = () => {
             {/* Game Over */}
             {gameStatus !== 'playing' && (
               <div className="mt-8 flex justify-center">
-                <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-                  {gameStatus === 'won' ? (
-                    <>
-                      <div className="text-5xl mb-3">🎉</div>
-                      <h2 className="text-2xl font-bold text-correct font-display mb-2">
-                        You found all connections!
-                      </h2>
-                      <p className="text-muted-foreground text-sm">
-                        Solved with {lives} {lives === 1 ? 'life' : 'lives'} remaining
-                      </p>
-                    </>
+                <ResultScreen
+                  won={gameStatus === 'won'}
+                  outcomeEmoji={gameStatus === 'won' ? '🎉' : '😞'}
+                  headline={gameStatus === 'won' ? 'You found all connections!' : 'Game Over'}
+                  statLine={
+                    gameStatus === 'won'
+                      ? `Solved with ${lives} ${lives === 1 ? 'life' : 'lives'} remaining`
+                      : 'Here are the groups you missed:'
+                  }
+                  emojiGrid={connectionsGroupsToEmoji(solvedGroups)}
+                  share={{
+                    score: gameStatus === 'won' ? `${solvedGroups.length}/4 groups, ${lives} lives left` : `${solvedGroups.length}/4 groups`,
+                    gameName: 'Connections',
+                    gamePath: '/connections',
+                  }}
+                  onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
+                  playAgainLabel="Retry"
+                  playNext={mode === 'unlimited' ? (
+                    <button
+                      onClick={nextPuzzle}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+                    >
+                      Next Puzzle
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
                   ) : (
-                    <>
-                      <div className="text-5xl mb-3">😞</div>
-                      <h2 className="text-2xl font-bold text-destructive font-display mb-2">
-                        Game Over
-                      </h2>
-                      <p className="text-muted-foreground text-sm mb-4">
-                        Here are the groups you missed:
-                      </p>
-                      <div className="space-y-2">
-                        {puzzle.groups
-                          .filter((g) => !solvedGroups.includes(g))
-                          .map((g) => (
-                            <div
-                              key={g.category}
-                              className={cn(
-                                'rounded-lg p-3 text-center',
-                                difficultyColors[g.difficulty],
-                                g.difficulty === 'easy' || g.difficulty === 'hard' || g.difficulty === 'insane'
-                                  ? 'text-white'
-                                  : 'text-close-foreground',
-                              )}
-                            >
-                              <p className="font-bold text-xs uppercase">{g.category}</p>
-                              <p className="text-xs mt-0.5 opacity-90">{g.players.join(', ')}</p>
-                            </div>
-                          ))}
-                      </div>
-                    </>
+                    <p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
                   )}
-                  <ShareButtons
-                    score={gameStatus === 'won' ? `${solvedGroups.length}/4 groups, ${lives} lives left` : `${solvedGroups.length}/4 groups`}
-                    gameName="Connections"
-                    gamePath="/connections"
-                    emojiGrid={connectionsGroupsToEmoji(solvedGroups)}
-                  />
-                  {mode === 'unlimited' ? (
-                    <div className="mt-4 flex items-center gap-3 justify-center flex-wrap">
-                      <button
-                        onClick={resetGame}
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
-                      >
-                        <RotateCcw className="w-4 h-4" />
-                        Retry
-                      </button>
-                      <button
-                        onClick={nextPuzzle}
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-                      >
-                        Next Puzzle
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
+                >
+                  {gameStatus !== 'won' && (
+                    <div className="space-y-2 mb-2">
+                      {puzzle.groups
+                        .filter((g) => !solvedGroups.includes(g))
+                        .map((g) => (
+                          <div
+                            key={g.category}
+                            className={cn(
+                              'rounded-lg p-3 text-center',
+                              difficultyColors[g.difficulty],
+                              g.difficulty === 'easy' || g.difficulty === 'hard' || g.difficulty === 'insane'
+                                ? 'text-white'
+                                : 'text-close-foreground',
+                            )}
+                          >
+                            <p className="font-bold text-xs uppercase">{g.category}</p>
+                            <p className="text-xs mt-0.5 opacity-90">{g.players.join(', ')}</p>
+                          </div>
+                        ))}
                     </div>
-                  ) : (
-                    <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
                   )}
-                </div>
+                </ResultScreen>
               </div>
             )}
           </>
@@ -325,11 +304,10 @@ const Connections = () => {
           <ReportQuestion gameType="connections" gameContext={{ puzzleId: puzzle?.id }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
 
-      <ConnectionsHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+        <ConnectionsHowToPlay open={showRules} onOpenChange={setShowRules} />
+      </GameShell>
+    </>
   );
 };
 

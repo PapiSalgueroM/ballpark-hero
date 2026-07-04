@@ -1,6 +1,7 @@
 import { TennisChainBoard } from '@/components/tennis-chain/TennisChainBoard';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 
 export default function TennisChain() {
   return (
@@ -10,6 +11,7 @@ export default function TennisChain() {
         description="Build the longest chain of tennis players. Name someone who beat the current player at a Grand Slam."
         path="/tennis-chain"
       />
+      <GameNavbar />
       <TennisChainBoard />
       <GameSeoContent
         title="Tennis Chain Game | DoUKnowBall"

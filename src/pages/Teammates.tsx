@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { useTeammates } from '@/hooks/useTeammates';
 import { TeammatesHowToPlay } from '@/components/teammates/TeammatesHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import { HelpCircle, RotateCcw, User, ArrowRight } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
+import { HelpCircle, User, ArrowRight } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -31,37 +30,34 @@ const Teammates = () => {
   const [showHelp, setShowHelp] = useState(false);
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Teammates or Not? - Sports Trivia Quiz | DoUKnowBall"
         description="Were these two athletes ever on the same team? Test your sports knowledge across NFL, NBA, and soccer."
         path="/teammates"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        {/* Header */}
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowHelp(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.1em] text-primary font-display mb-1">
-            TEAMMATES OR NOT?
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            Did these two players ever play on the same team?
-          </p>
-          {!gameOver && (
-            <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
-              <span>Question <span className="text-foreground font-semibold">{currentIdx + 1}/{totalRounds}</span></span>
-              <span>Score <span className="text-correct font-semibold">{score}</span></span>
-            </div>
-          )}
-        </header>
-
+      <GameShell
+        width="narrow"
+        title="TEAMMATES OR NOT?"
+        subtitle="Did these two players ever play on the same team?"
+        headerExtra={
+          <>
+            {!gameOver && (
+              <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
+                <span>Question <span className="text-foreground font-semibold">{currentIdx + 1}/{totalRounds}</span></span>
+                <span>Score <span className="text-correct font-semibold">{score}</span></span>
+              </div>
+            )}
+            <button
+              onClick={() => setShowHelp(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
+          </>
+        }
+      >
         {/* Game card */}
         {!gameOver && currentPair && (
           <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-xl mb-8">
@@ -159,30 +155,24 @@ const Teammates = () => {
         {/* Game Over */}
         {gameOver && (
           <div className="flex justify-center mb-8">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              <div className="text-5xl mb-3">{score >= 8 ? '🔥' : score >= 5 ? '👍' : '😅'}</div>
-              <h2 className="text-2xl font-bold text-primary font-display mb-2">
-                {score}/{totalRounds}
-              </h2>
-              <p className="text-muted-foreground text-sm mb-2">
-                {score === 10 ? 'Perfect! You know your sports history!' :
-                 score >= 8 ? 'Amazing! You really know your teammates!' :
-                 score >= 5 ? 'Not bad! Keep studying those rosters.' :
-                 'Time to brush up on your sports history!'}
-              </p>
-              <ShareButtons
-                score={`${score}/${totalRounds}`}
-                gameName="Teammates or Not?"
-                gamePath="/teammates"
-              />
-              <button
-                onClick={resetGame}
-                className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
-            </div>
+            <ResultScreen
+              won={score >= 5}
+              outcomeEmoji={score >= 8 ? '🔥' : score >= 5 ? '👍' : '😅'}
+              headline={`${score}/${totalRounds}`}
+              statLine={
+                score === 10 ? 'Perfect! You know your sports history!' :
+                score >= 8 ? 'Amazing! You really know your teammates!' :
+                score >= 5 ? 'Not bad! Keep studying those rosters.' :
+                'Time to brush up on your sports history!'
+              }
+              emojiGrid={`🏆 Teammates or Not?: ${score}/${totalRounds}`}
+              share={{
+                score: `${score}/${totalRounds}`,
+                gameName: 'Teammates or Not?',
+                gamePath: '/teammates',
+              }}
+              onPlayAgain={resetGame}
+            />
           </div>
         )}
 
@@ -208,9 +198,8 @@ const Teammates = () => {
         <AdBanner slot="1234567891" format="horizontal" className="mt-8" />
         <TeammatesHowToPlay open={showHelp} onOpenChange={setShowHelp} />
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

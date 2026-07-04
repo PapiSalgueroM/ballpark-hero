@@ -1,5 +1,6 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { ShirtNumberBoard } from '@/components/shirt-number/ShirtNumberBoard';
 
 export default function ShirtNumber() {
@@ -10,6 +11,7 @@ export default function ShirtNumber() {
         description="Can you guess what shirt number a player wears? 3 attempts, higher or lower hints. Daily and unlimited modes."
         path="/shirt-number"
       />
+      <GameNavbar />
       <ShirtNumberBoard />
       <GameSeoContent
         title="Shirt Number Game | DoUKnowBall"

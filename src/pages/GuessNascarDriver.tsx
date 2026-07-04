@@ -1,5 +1,6 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { NascarDriverBoard } from '@/components/nascar-driver/NascarDriverBoard';
 
 export default function GuessNascarDriver() {
@@ -10,6 +11,7 @@ export default function GuessNascarDriver() {
         description="Identify the mystery NASCAR Cup Series driver from progressive clues. Daily motorsport trivia challenge."
         path="/guess-nascar-driver"
       />
+      <GameNavbar />
       <NascarDriverBoard />
       <GameSeoContent
         title="Guess The NASCAR Driver | DoUKnowBall"

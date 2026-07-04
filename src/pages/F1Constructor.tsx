@@ -1,5 +1,6 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { F1ConstructorBoard } from '@/components/f1-constructor/F1ConstructorBoard';
 
 export default function F1Constructor() {
@@ -10,6 +11,7 @@ export default function F1Constructor() {
         description="Guess the Formula 1 constructor from clues about their history, championships, and famous drivers."
         path="/f1-constructor"
       />
+      <GameNavbar />
       <F1ConstructorBoard />
       <GameSeoContent
         title="Guess The F1 Constructor | DoUKnowBall"

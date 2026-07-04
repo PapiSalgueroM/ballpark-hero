@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import { FlagImg } from '@/components/FlagImg';
 import { useHockeyHL } from '@/hooks/useHockeyHL';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -28,51 +27,54 @@ const HockeyHigherLower = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Hockey Higher or Lower - NHL Career Points Game | DoUKnowBall"
         description="Which hockey player has more career points? Compare players side by side in this daily NHL trivia challenge."
         path="/hockey-higher-lower"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-8 relative">
-          <button onClick={() => setShowRules(true)} className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-[hsl(var(--hk-silver))] transition-colors" aria-label="How to play">
-            <HelpCircle className="w-6 h-6" />
-          </button>
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.15em] font-display mb-1 text-[hsl(var(--hk-silver))]">
-            🏒 HIGHER OR LOWER
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Which player has more career points?
-          </p>
+      <GameShell
+        width="narrow"
+        title="🏒 HIGHER OR LOWER"
+        subtitle="Which player has more career points?"
+        headerExtra={
+          <>
+            {/* Mode toggle */}
+            <div className="flex items-center justify-center gap-2 mt-3">
+              <button
+                onClick={() => switchMode('daily')}
+                className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
+                  mode === 'daily' ? 'bg-[hsl(var(--hk-blue))] text-[hsl(var(--hk-silver))] border-[hsl(var(--hk-silver)/0.3)]' : 'bg-secondary text-muted-foreground border-border'
+                )}
+              >Daily</button>
+              <button
+                onClick={() => switchMode('unlimited')}
+                className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
+                  mode === 'unlimited' ? 'bg-[hsl(var(--hk-blue))] text-[hsl(var(--hk-silver))] border-[hsl(var(--hk-silver)/0.3)]' : 'bg-secondary text-muted-foreground border-border'
+                )}
+              >Unlimited</button>
+            </div>
 
-          {/* Mode toggle */}
-          <div className="flex items-center justify-center gap-2 mt-3">
-            <button
-              onClick={() => switchMode('daily')}
-              className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
-                mode === 'daily' ? 'bg-[hsl(var(--hk-blue))] text-[hsl(var(--hk-silver))] border-[hsl(var(--hk-silver)/0.3)]' : 'bg-secondary text-muted-foreground border-border'
+            <div className="flex items-center justify-center gap-4 mt-3 text-sm">
+              <span className="text-muted-foreground">Round: <span className="font-semibold text-foreground">{Math.min(currentRound + 1, totalRounds)}</span>/{totalRounds}</span>
+              <span className="text-muted-foreground">Score: <span className="font-semibold text-[hsl(var(--hk-silver))]">{totalScore}</span></span>
+              {streak > 1 && (
+                <span className="flex items-center gap-1 text-[hsl(var(--hk-silver))]">
+                  <Flame className="w-4 h-4" /> {streak}🔥
+                </span>
               )}
-            >Daily</button>
-            <button
-              onClick={() => switchMode('unlimited')}
-              className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
-                mode === 'unlimited' ? 'bg-[hsl(var(--hk-blue))] text-[hsl(var(--hk-silver))] border-[hsl(var(--hk-silver)/0.3)]' : 'bg-secondary text-muted-foreground border-border'
-              )}
-            >Unlimited</button>
-          </div>
+            </div>
 
-          <div className="flex items-center justify-center gap-4 mt-3 text-sm">
-            <span className="text-muted-foreground">Round: <span className="font-semibold text-foreground">{Math.min(currentRound + 1, totalRounds)}</span>/{totalRounds}</span>
-            <span className="text-muted-foreground">Score: <span className="font-semibold text-[hsl(var(--hk-silver))]">{totalScore}</span></span>
-            {streak > 1 && (
-              <span className="flex items-center gap-1 text-[hsl(var(--hk-silver))]">
-                <Flame className="w-4 h-4" /> {streak}🔥
-              </span>
-            )}
-          </div>
-        </header>
+            <button
+              onClick={() => setShowRules(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[hsl(var(--hk-silver))] transition-colors"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
+          </>
+        }
+      >
 
         {/* Current matchup */}
         {gameStatus === 'playing' && currentPair && (
@@ -122,33 +124,21 @@ const HockeyHigherLower = () => {
         {/* Game complete */}
         {gameStatus === 'complete' && (
           <div className="mt-4 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              <div className="text-5xl mb-3">{correctCount >= 8 ? '🏆' : correctCount >= 5 ? '🏒' : '❄️'}</div>
-              <h2 className="text-2xl font-bold text-[hsl(var(--hk-silver))] font-display mb-2">
-                {correctCount}/{totalRounds} Correct!
-              </h2>
-              <p className="text-foreground">
-                Total Score: <span className="font-bold text-[hsl(var(--hk-silver))]">{totalScore}</span>
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">({correctCount}×10 base + {totalScore - correctCount * 10} streak bonus)</p>
-
-              <ShareButtons
-                score={`${totalScore} points (${correctCount}/${totalRounds}) on today's Hockey Higher or Lower`}
-                gameName="Hockey Higher or Lower"
-                gamePath="/hockey-higher-lower"
-              />
-
-              {mode === 'unlimited' ? (
-                <button
-                  onClick={() => switchMode('unlimited')}
-                  className="mt-4 px-6 py-2.5 rounded-xl bg-[hsl(var(--hk-blue))] text-[hsl(var(--hk-silver))] font-bold border border-[hsl(var(--hk-silver)/0.2)] hover:opacity-90 transition-opacity"
-                >
-                  Play Again
-                </button>
-              ) : (
-                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new challenge!</p>
-              )}
-            </div>
+            <ResultScreen
+              won={correctCount >= 5}
+              outcomeEmoji={correctCount >= 8 ? '🏆' : correctCount >= 5 ? '🏒' : '❄️'}
+              headline={`${correctCount}/${totalRounds} Correct!`}
+              statLine={<>Total Score: <span className="font-bold text-[hsl(var(--hk-silver))]">{totalScore}</span></>}
+              funFact={`(${correctCount}×10 base + ${totalScore - correctCount * 10} streak bonus)`}
+              emojiGrid={`🏒 Hockey Higher or Lower: ${totalScore} pts (${correctCount}/${totalRounds})`}
+              share={{
+                score: `${totalScore} points (${correctCount}/${totalRounds}) on today's Hockey Higher or Lower`,
+                gameName: 'Hockey Higher or Lower',
+                gamePath: '/hockey-higher-lower',
+              }}
+              onPlayAgain={mode === 'unlimited' ? () => switchMode('unlimited') : undefined}
+              playNext={mode !== 'unlimited' && <p className="text-sm text-muted-foreground">Come back tomorrow for a new challenge!</p>}
+            />
           </div>
         )}
 
@@ -177,10 +167,10 @@ const HockeyHigherLower = () => {
           <ReportQuestion gameType="hockey-higher-lower" gameContext={{ mode }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
-      <HockeyHLHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+
+        <HockeyHLHowToPlay open={showRules} onOpenChange={setShowRules} />
+      </GameShell>
+    </>
   );
 };
 

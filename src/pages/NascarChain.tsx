@@ -1,5 +1,6 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { NascarChainBoard } from '@/components/nascar-chain/NascarChainBoard';
 
 export default function NascarChain() {
@@ -10,6 +11,7 @@ export default function NascarChain() {
         description="Name drivers who beat each other to the NASCAR Cup Series championship. Build the longest chain."
         path="/nascar-chain"
       />
+      <GameNavbar />
       <NascarChainBoard />
       <GameSeoContent
         title="NASCAR Chain Game | DoUKnowBall"

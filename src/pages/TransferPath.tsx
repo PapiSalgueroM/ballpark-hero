@@ -1,5 +1,6 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { TransferPathBoard } from '@/components/transfer-path/TransferPathBoard';
 
 export default function TransferPath() {
@@ -10,6 +11,7 @@ export default function TransferPath() {
         description="Connect two soccer players by naming teammates who played at the same clubs. Like Six Degrees of Kevin Bacon for football transfers."
         path="/transfer-path"
       />
+      <GameNavbar />
       <TransferPathBoard />
       <GameSeoContent
         title="Transfer Path | DoUKnowBall"

@@ -468,3 +468,24 @@ export const MLB_PLAYER_SOURCE: PlayerSourceConfig = {
   ilikeLimit: 200,
   prominenceLimit: 1000,
 };
+
+/**
+ * Transfer Path player pool: career_players. Deliberately NOT
+ * SOCCER_MARKET_VALUE_SOURCE: Transfer Path validates guesses by shared-club
+ * overlap (see useTransferPath's playersShareClub), which requires each
+ * candidate to already have career_seasons rows loaded client-side. A player
+ * from the much larger player_market_values pool with no career_seasons
+ * entry would appear as a valid suggestion but always fail the club-overlap
+ * check, so the searchable set here is intentionally scoped to the same
+ * career_players table the game's chain logic is built from.
+ */
+export const TRANSFER_PATH_PLAYER_SOURCE: PlayerSourceConfig = {
+  table: 'career_players',
+  nameColumn: 'player_name',
+  metaColumns: {
+    nationality: 'nationality',
+    position: 'position',
+  },
+  ilikeLimit: 200,
+  prominenceLimit: 1000,
+};

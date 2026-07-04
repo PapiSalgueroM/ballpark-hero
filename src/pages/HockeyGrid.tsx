@@ -15,13 +15,16 @@ import { dateSeed, getTodayET } from '@/lib/dateUtils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
   CellStatus,
+  GridDifficulty,
   GridPuzzle,
   HockeyGridData,
   NHL_STATS_PLAYER_SOURCE,
   buildGridPuzzle,
   fetchHockeyGridData,
   gridToEmoji,
+  loadGridDifficulty,
   playerMatchesCell,
+  saveGridDifficulty,
 } from '@/lib/hockeyGrid';
 
 type Phase = 'boot' | 'error' | 'playing';
@@ -55,14 +58,20 @@ const HockeyGrid = () => {
 
   useEffect(() => { boot(); }, [boot]);
 
+  // #40: unlimited-only difficulty tier, remembered across sessions. Daily
+  // mode always calls buildGridPuzzle with its default 'normal' behavior,
+  // untouched by this setting.
+  const [difficulty, setDifficulty] = useState<GridDifficulty>(loadGridDifficulty);
+
   // --- Puzzle selection: date-seeded daily, random unlimited -----------------
   const todayStr = useMemo(() => getTodayET(), []);
   const dailyPuzzle = useMemo<GridPuzzle>(() => buildGridPuzzle(dateSeed(todayStr)), [todayStr]);
   const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<GridPuzzle | null>(null);
 
   const newUnlimitedPuzzle = useCallback(() => {
-    setUnlimitedPuzzle(buildGridPuzzle(Math.floor(Math.random() * 1_000_000_000)));
-  }, []);
+    setUnlimitedPuzzle(buildGridPuzzle(Math.floor(Math.random() * 1_000_000_000), difficulty));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [difficulty]);
 
   useEffect(() => {
     if (mode === 'unlimited' && !unlimitedPuzzle) newUnlimitedPuzzle();
@@ -117,6 +126,22 @@ const HockeyGrid = () => {
     setQuery('');
     newUnlimitedPuzzle();
   }, [newUnlimitedPuzzle]);
+
+  // #40: changing tier only applies in unlimited mode and starts a fresh
+  // grid (mirrors Career Quiz's changeDifficulty convention).
+  const changeDifficulty = useCallback((next: GridDifficulty) => {
+    if (mode !== 'unlimited') return;
+    setDifficulty((prev) => {
+      if (prev === next) return prev;
+      saveGridDifficulty(next);
+      setUnlimitedPuzzle(buildGridPuzzle(Math.floor(Math.random() * 1_000_000_000), next));
+      setUnlimitedCells({});
+      setUnlimitedWrongCount(0);
+      setActiveCell(null);
+      setQuery('');
+      return next;
+    });
+  }, [mode]);
 
   const guessedNames = useMemo(
     () => new Set(Object.values(cells).map((c) => normalize(c.playerName))),
@@ -215,6 +240,33 @@ const HockeyGrid = () => {
                 </button>
               ))}
             </div>
+
+            {/* #40: difficulty tiers, unlimited mode only. Easy leans on both
+                milestone-stat categories (500+ points, 300+ goals, 1000+
+                games), Hard drops milestones entirely for franchise-only
+                cells, Normal is the original one-milestone mix. */}
+            {mode === 'unlimited' && (
+              <div className="flex items-center justify-center gap-2 mt-3">
+                {(['easy', 'normal', 'hard'] as GridDifficulty[]).map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => changeDifficulty(d)}
+                    className={cn(
+                      'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
+                      difficulty === d
+                        ? d === 'easy'
+                          ? 'bg-correct text-correct-foreground'
+                          : d === 'hard'
+                            ? 'bg-destructive text-destructive-foreground'
+                            : 'bg-primary text-primary-foreground'
+                        : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                    )}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            )}
 
             <div className="flex items-center justify-center gap-4 mt-3 text-sm">
               <span className="text-muted-foreground">

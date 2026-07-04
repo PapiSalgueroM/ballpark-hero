@@ -4,10 +4,9 @@ import { UfcFighterSearch } from '@/components/ufc/UfcFighterSearch';
 import { UfcGameBoard } from '@/components/ufc/UfcGameBoard';
 import { UfcHowToPlay } from '@/components/ufc/UfcHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import { RotateCcw, HelpCircle } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
+import { HelpCircle } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -41,54 +40,51 @@ const UfcGame = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="UFC Fighter Guesser - MMA Trivia Game | DoUKnowBall"
         description="Guess the UFC fighter from clues about their record, weight class, and career highlights."
         path="/ufc"
       />
-      <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowRules(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
+      <GameShell
+        width="wide"
+        title="UFC GUESSER"
+        subtitle="Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia, no login needed."
+        headerExtra={
+          <>
+            {/* Daily / Unlimited toggle */}
+            <div className="flex items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
+                  className={cn(
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                </button>
+              ))}
+            </div>
 
-          <h1 className="text-3xl md:text-7xl font-bold tracking-[0.1em] md:tracking-[0.25em] text-primary font-display mb-1">
-            UFC GUESSER
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base">
-            Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia, no login needed.
-          </p>
+            <p className="text-sm text-muted-foreground mt-4">
+              Guesses:{' '}
+              <span className="text-foreground font-semibold">{guesses.length}</span> / {maxGuesses}
+            </p>
 
-          {/* Daily / Unlimited toggle */}
-          <div className="flex items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-              </button>
-            ))}
-          </div>
-
-          <p className="text-sm text-muted-foreground mt-4">
-            Guesses:{' '}
-            <span className="text-foreground font-semibold">{guesses.length}</span> / {maxGuesses}
-          </p>
-        </header>
-
+            <button
+              onClick={() => setShowRules(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
+          </>
+        }
+      >
         {isLoading ? (
           <div className="mb-8 flex justify-center">
             <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
@@ -115,47 +111,34 @@ const UfcGame = () => {
 
         {gameStatus !== 'playing' && (
           <div className="mt-8 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              {gameStatus === 'won' ? (
-                <>
-                  <div className="text-5xl mb-3">🏆</div>
-                  <h2 className="text-2xl font-bold text-correct font-display mb-2">Correct!</h2>
-                  <p className="text-foreground">
+            <ResultScreen
+              won={gameStatus === 'won'}
+              outcomeEmoji={gameStatus === 'won' ? '🏆' : '😞'}
+              headline={gameStatus === 'won' ? 'Correct!' : 'Game Over'}
+              statLine={
+                gameStatus === 'won' ? (
+                  <>
                     You guessed{' '}
                     <span className="font-bold text-primary">{targetFighter?.name}</span> in{' '}
                     {guesses.length} {guesses.length === 1 ? 'try' : 'tries'}!
-                  </p>
-                </>
-              ) : (
-                <>
-                  <div className="text-5xl mb-3">😞</div>
-                  <h2 className="text-2xl font-bold text-destructive font-display mb-2">Game Over</h2>
-                  <p className="text-foreground">
+                  </>
+                ) : (
+                  <>
                     The fighter was{' '}
                     <span className="font-bold text-primary">{targetFighter?.name}</span>
-                  </p>
-                  <p className="text-muted-foreground text-sm mt-1">
-                    {targetFighter?.weightClass} · {targetFighter?.record}
-                  </p>
-                </>
-              )}
-              <ShareButtons
-                score={gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`}
-                gameName="UFC Guesser"
-                gamePath="/ufc"
-              />
-              {mode === 'unlimited' ? (
-                <button
-                  onClick={resetGame}
-                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Play Again
-                </button>
-              ) : (
-                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
-              )}
-            </div>
+                  </>
+                )
+              }
+              funFact={gameStatus === 'lost' ? <>{targetFighter?.weightClass} · {targetFighter?.record}</> : undefined}
+              emojiGrid={gameStatus === 'won' ? `🏆 UFC Guesser: ${targetFighter?.name} in ${guesses.length}/${maxGuesses}` : `😞 UFC Guesser: answer was ${targetFighter?.name}`}
+              share={{
+                score: gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`,
+                gameName: 'UFC Guesser',
+                gamePath: '/ufc',
+              }}
+              onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
+              playNext={mode !== 'unlimited' && <p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>}
+            />
           </div>
         )}
 
@@ -203,11 +186,10 @@ const UfcGame = () => {
           <ReportQuestion gameType="ufc" gameContext={{ targetFighter: targetFighter?.name }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
 
-      <UfcHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+        <UfcHowToPlay open={showRules} onOpenChange={setShowRules} />
+      </GameShell>
+    </>
   );
 };
 

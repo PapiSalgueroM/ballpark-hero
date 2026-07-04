@@ -99,6 +99,44 @@ export const VALUE_LOG_RANGE = 1;
 export const POOL_SIZE = 400; // notable current-ish players kept in the guessable pool
 export const SECRET_POOL_SIZE = 200; // the secret is always drawn from the top of the pool
 
+// #40: prominence tiers for the secret pick, unlimited/practice play only
+// (this game has no separate daily mode; Casual/Expert guess budgets are
+// untouched by this setting). Verified via read-only SQL against
+// player_market_values on 2026-07-03: splitting the 200-player secret pool
+// into thirds by peak market value gives 67/67/66. Easy draws the top third
+// (most famous, value >= 65M), Hard draws the bottom third (value < 49M),
+// Normal is the untouched 200-player secret pool.
+export type WhoAmIDifficulty = 'easy' | 'normal' | 'hard';
+const DIFFICULTY_STORAGE_KEY = 'who-am-i-difficulty';
+
+export function loadWhoAmIDifficulty(): WhoAmIDifficulty {
+  try {
+    const raw = localStorage.getItem(DIFFICULTY_STORAGE_KEY);
+    if (raw === 'easy' || raw === 'normal' || raw === 'hard') return raw;
+  } catch { /* localStorage unavailable, fall back to default */ }
+  return 'normal';
+}
+
+export function saveWhoAmIDifficulty(next: WhoAmIDifficulty): void {
+  try { localStorage.setItem(DIFFICULTY_STORAGE_KEY, next); } catch { /* ignore */ }
+}
+
+/**
+ * Splits the secret-eligible pool (top SECRET_POOL_SIZE by value) into
+ * thirds by value. Falls back to the full secret pool if there are too few
+ * players to split sanely.
+ */
+export function buildWhoAmISecretPool(
+  difficulty: WhoAmIDifficulty,
+  pool: WhoAmIPlayer[],
+): WhoAmIPlayer[] {
+  const top = pool.slice(0, Math.min(SECRET_POOL_SIZE, pool.length));
+  if (difficulty === 'normal' || top.length < 9) return top;
+  const sorted = [...top].sort((a, b) => b.value - a.value);
+  const third = Math.ceil(sorted.length / 3);
+  return difficulty === 'easy' ? sorted.slice(0, third) : sorted.slice(sorted.length - third);
+}
+
 const POOL_ROW_FETCH = 1000; // top rows by value from recent years, deduped down to POOL_SIZE
 const POOL_MIN_YEAR = 2024;
 const HISTORY_CHUNK = 80; // names per .in() filter, keeps request URLs comfortably small

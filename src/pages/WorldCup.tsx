@@ -4,9 +4,8 @@ import { useWorldCup } from '@/hooks/useWorldCup';
 import { worldCupPuzzles } from '@/data/worldCupPuzzles';
 import { WorldCupHowToPlay } from '@/components/world-cup/WorldCupHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -91,56 +90,52 @@ const WorldCup = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="World Cup Trivia - Guess the Legend | DoUKnowBall"
         description="Guess the mystery World Cup player from progressive clues. Covers every tournament from 1970 to 2026."
         path="/world-cup"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        {/* Header */}
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowRules(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-[hsl(var(--wc-gold))] transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
+      <GameShell
+        width="narrow"
+        title="⚽ WORLD CUP"
+        subtitle="Guess the mystery World Cup player from progressive clues. A new challenge every day!"
+        headerExtra={
+          <>
+            {/* Daily / Unlimited toggle */}
+            <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
+                  className={cn(
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                </button>
+              ))}
+            </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.2em] font-display mb-1 text-[hsl(var(--wc-green))]">
-            ⚽ WORLD CUP
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Guess the mystery World Cup player from progressive clues. A new challenge every day!
-          </p>
+            <p className="text-sm text-muted-foreground mt-3">
+              Clue{' '}
+              <span className="font-semibold text-foreground">{Math.min(revealedCount, totalClues)}</span>{' '}
+              / {totalClues}
+            </p>
 
-          {/* Daily / Unlimited toggle */}
-          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-              </button>
-            ))}
-          </div>
-
-          <p className="text-sm text-muted-foreground mt-3">
-            Clue{' '}
-            <span className="font-semibold text-foreground">{Math.min(revealedCount, totalClues)}</span>{' '}
-            / {totalClues}
-          </p>
-        </header>
-
+            <button
+              onClick={() => setShowRules(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[hsl(var(--wc-gold))] transition-colors"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
+          </>
+        }
+      >
         {/* Loading guard */}
         {isLoading && (
           <div className="mb-8 flex justify-center">
@@ -274,52 +269,42 @@ const WorldCup = () => {
         {/* Result */}
         {!isLoading && gameStatus !== 'playing' && (
           <div className="flex justify-center mb-8">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              {gameStatus === 'won' ? (
-                <>
-                  <div className="text-5xl mb-3">🏆</div>
-                  <h2 className="text-2xl font-bold text-[hsl(var(--wc-green))] font-display mb-2">
-                    Correct!
-                  </h2>
-                  <p className="text-foreground">
+            <ResultScreen
+              won={gameStatus === 'won'}
+              outcomeEmoji={gameStatus === 'won' ? '🏆' : '😞'}
+              headline={gameStatus === 'won' ? 'Correct!' : 'Game Over'}
+              statLine={
+                gameStatus === 'won' ? (
+                  <>
                     You guessed{' '}
                     <span className="font-bold text-[hsl(var(--wc-gold))]">{puzzle.answer}</span>{' '}
                     in {revealedCount} {revealedCount === 1 ? 'clue' : 'clues'}!
-                  </p>
-                  <div className="flex items-center justify-center gap-2 mt-2">
-                    <Trophy className="w-5 h-5 text-[hsl(var(--wc-gold))]" />
-                    <span className="text-xl font-bold text-[hsl(var(--wc-gold))]">{score} pts</span>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="text-5xl mb-3">😞</div>
-                  <h2 className="text-2xl font-bold text-destructive font-display mb-2">Game Over</h2>
-                  <p className="text-foreground">
+                  </>
+                ) : (
+                  <>
                     The answer was{' '}
                     <span className="font-bold text-[hsl(var(--wc-gold))]">{puzzle.answer}</span>
-                  </p>
-                  <p className="text-muted-foreground text-sm mt-1">
-                    <FlagImg name={puzzle.country} size={16} /> {puzzle.country} · {puzzle.year}
-                  </p>
-                </>
-              )}
-              <ShareButtons
-                score={gameStatus === 'won' ? `${score} points in ${revealedCount} clues` : '0 points'}
-                gameName="World Cup"
-                gamePath="/world-cup"
-              />
-              {mode === 'unlimited' ? (
-                <button
-                  onClick={resetGame}
-                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-[hsl(var(--wc-green))] text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  Play Again
-                </button>
-              ) : (
-                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
-              )}
-            </div>
+                  </>
+                )
+              }
+              funFact={
+                gameStatus === 'won' ? (
+                  <span className="inline-flex items-center gap-2 text-[hsl(var(--wc-gold))] font-bold text-xl">
+                    <Trophy className="w-5 h-5" /> {score} pts
+                  </span>
+                ) : (
+                  <><FlagImg name={puzzle.country} size={16} /> {puzzle.country} · {puzzle.year}</>
+                )
+              }
+              emojiGrid={gameStatus === 'won' ? `🏆 World Cup: ${puzzle.answer} in ${revealedCount} clues (${score} pts)` : `😞 World Cup: answer was ${puzzle.answer}`}
+              share={{
+                score: gameStatus === 'won' ? `${score} points in ${revealedCount} clues` : '0 points',
+                gameName: 'World Cup',
+                gamePath: '/world-cup',
+              }}
+              onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
+              playNext={mode !== 'unlimited' && <p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>}
+            />
           </div>
         )}
 
@@ -349,11 +334,10 @@ const WorldCup = () => {
           <ReportQuestion gameType="world-cup" gameContext={{ answer: puzzle.answer, year: puzzle.year }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
 
-      <WorldCupHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+        <WorldCupHowToPlay open={showRules} onOpenChange={setShowRules} />
+      </GameShell>
+    </>
   );
 };
 

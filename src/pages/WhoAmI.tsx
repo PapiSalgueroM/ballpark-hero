@@ -14,9 +14,13 @@ import { flagFor, fmtCompactUsd } from '@/lib/dealPlayers';
 import {
   WhoAmIData,
   WhoAmIPlayer,
+  WhoAmIDifficulty,
   GuessResult,
+  buildWhoAmISecretPool,
   fetchWhoAmIPool,
+  loadWhoAmIDifficulty,
   pickSecret,
+  saveWhoAmIDifficulty,
   scoreGuess,
   suggestPlayers,
   shortPosition,
@@ -59,6 +63,14 @@ const WhoAmI = () => {
   const [dropOpen, setDropOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // #40: prominence tier for the secret pick, remembered across sessions.
+  // This game has no separate daily mode, so the tier applies to every round.
+  const [difficulty, setDifficulty] = useState<WhoAmIDifficulty>(loadWhoAmIDifficulty);
+  const changeDifficulty = useCallback((next: WhoAmIDifficulty) => {
+    setDifficulty(next);
+    saveWhoAmIDifficulty(next);
+  }, []);
+
   const boot = useCallback(async () => {
     setPhase('boot');
     const d = await fetchWhoAmIPool();
@@ -89,7 +101,7 @@ const WhoAmI = () => {
   const startGame = (guessBudget: number) => {
     if (!data) return;
     setBudget(guessBudget);
-    setSecret(prev => pickSecret(data.pool, prev?.name));
+    setSecret(prev => pickSecret(buildWhoAmISecretPool(difficulty, data.pool), prev?.name));
     setGuesses([]);
     setInput('');
     setDropOpen(false);
@@ -327,6 +339,33 @@ const WhoAmI = () => {
                 <div className="font-bold text-foreground">Expert</div>
                 <div className="text-xs text-muted-foreground">10 guesses</div>
               </button>
+            </div>
+
+            {/* #40: difficulty tiers by peak market value. Easy = most famous
+                third of the secret pool, Hard = least famous third, Normal =
+                the full 200-player secret pool. */}
+            <div className="mt-4 text-center">
+              <p className="text-xs text-muted-foreground mb-2">How famous is the secret player?</p>
+              <div className="flex items-center justify-center gap-2">
+                {(['easy', 'normal', 'hard'] as WhoAmIDifficulty[]).map(d => (
+                  <button
+                    key={d}
+                    onClick={() => changeDifficulty(d)}
+                    className={cn(
+                      'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
+                      difficulty === d
+                        ? d === 'easy'
+                          ? 'bg-correct text-correct-foreground'
+                          : d === 'hard'
+                            ? 'bg-destructive text-destructive-foreground'
+                            : 'bg-primary text-primary-foreground'
+                        : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                    )}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         )}

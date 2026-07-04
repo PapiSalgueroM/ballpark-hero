@@ -1,5 +1,6 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { ScorePredictorBoard } from '@/components/score-predictor/ScorePredictorBoard';
 
 export default function ScorePredictor() {
@@ -10,6 +11,7 @@ export default function ScorePredictor() {
         description="Can you predict the final score of history's most famous matches? Guess soccer, NFL, and NBA scores for points."
         path="/score-predictor"
       />
+      <GameNavbar />
       <ScorePredictorBoard />
       <GameSeoContent
         title="Score Predictor | DoUKnowBall"

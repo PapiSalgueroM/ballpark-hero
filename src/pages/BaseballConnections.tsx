@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useBaseballConnections } from '@/hooks/useBaseballConnections';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -56,58 +55,55 @@ const BaseballConnections = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Baseball Connections - MLB Player Grouping Puzzle | DoUKnowBall"
         description="Find four groups of 5 baseball players that share a connection. Same team, award, or era. Daily challenge."
         path="/baseball-connections"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowRules(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-[hsl(var(--bb-red))] transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
+      <GameShell
+        width="narrow"
+        title="⚾ CONNECTIONS"
+        subtitle="Find four groups of 5 baseball players that share a connection"
+        headerExtra={
+          <>
+            {/* Daily / Unlimited toggle */}
+            <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
+                  className={cn(
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                </button>
+              ))}
+            </div>
 
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.15em] font-display mb-1 text-[hsl(var(--bb-red))]">
-            ⚾ CONNECTIONS
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Find four groups of 5 baseball players that share a connection
-          </p>
+            <div className="flex items-center justify-center gap-4 mt-3 text-sm">
+              <span className="text-muted-foreground">
+                Groups found: <span className="font-semibold text-[hsl(var(--bb-red))]">{solvedGroups.length}</span>/4
+              </span>
+              <span className="text-muted-foreground">
+                Lives: <span className="font-semibold text-foreground">{'❤️'.repeat(lives)}{'🖤'.repeat(Math.max(0, 4 - lives))}</span>
+              </span>
+            </div>
 
-          {/* Daily / Unlimited toggle */}
-          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-center gap-4 mt-3 text-sm">
-            <span className="text-muted-foreground">
-              Groups found: <span className="font-semibold text-[hsl(var(--bb-red))]">{solvedGroups.length}</span>/4
-            </span>
-            <span className="text-muted-foreground">
-              Lives: <span className="font-semibold text-foreground">{'❤️'.repeat(lives)}{'🖤'.repeat(Math.max(0, 4 - lives))}</span>
-            </span>
-          </div>
-        </header>
-
+            <button
+              onClick={() => setShowRules(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[hsl(var(--bb-red))] transition-colors"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
+          </>
+        }
+      >
         {/* Loading guard */}
         {isLoading && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2" aria-live="polite" aria-busy="true">
@@ -190,31 +186,25 @@ const BaseballConnections = () => {
         {/* Game complete */}
         {!isLoading && gameStatus === 'complete' && (
           <div className="mt-6 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              <div className="text-5xl mb-3">{lives > 0 ? '🏆' : '⚾'}</div>
-              <h2 className="text-2xl font-bold text-[hsl(var(--bb-red))] font-display mb-2">
-                {lives > 0 ? 'All Groups Found!' : 'Out of Lives!'}
-              </h2>
-              <p className="text-foreground">
-                Found <span className="font-bold text-[hsl(var(--bb-red))]">{solvedGroups.filter((_, i) => i < puzzle.groups.length && lives > 0 || lives <= 0).length}</span>/4 groups
-                {lives > 0 && ` with ${lives} ${lives === 1 ? 'life' : 'lives'} remaining`}
-              </p>
-              <ShareButtons
-                score={lives > 0 ? `all 4 groups with ${lives} ${lives === 1 ? 'life' : 'lives'} left on today's Baseball Connections` : `today's Baseball Connections`}
-                gameName="Baseball Connections"
-                gamePath="/baseball-connections"
-              />
-              {mode === 'unlimited' ? (
-                <button
-                  onClick={resetGame}
-                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-[hsl(var(--bb-navy))] text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  Play Again
-                </button>
-              ) : (
-                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
-              )}
-            </div>
+            <ResultScreen
+              won={lives > 0}
+              outcomeEmoji={lives > 0 ? '🏆' : '⚾'}
+              headline={lives > 0 ? 'All Groups Found!' : 'Out of Lives!'}
+              statLine={
+                <>
+                  Found <span className="font-bold text-[hsl(var(--bb-red))]">{solvedGroups.filter((_, i) => i < puzzle.groups.length && lives > 0 || lives <= 0).length}</span>/4 groups
+                  {lives > 0 && ` with ${lives} ${lives === 1 ? 'life' : 'lives'} remaining`}
+                </>
+              }
+              emojiGrid={lives > 0 ? `🏆 Baseball Connections: all 4 groups, ${lives} ${lives === 1 ? 'life' : 'lives'} left` : `⚾ Baseball Connections: ${solvedGroups.length}/4 groups`}
+              share={{
+                score: lives > 0 ? `all 4 groups with ${lives} ${lives === 1 ? 'life' : 'lives'} left on today's Baseball Connections` : `today's Baseball Connections`,
+                gameName: 'Baseball Connections',
+                gamePath: '/baseball-connections',
+              }}
+              onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
+              playNext={mode !== 'unlimited' && <p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>}
+            />
           </div>
         )}
 
@@ -243,11 +233,10 @@ const BaseballConnections = () => {
           <ReportQuestion gameType="baseball-connections" gameContext={{ puzzleId: puzzle.id }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
 
-      <BaseballConnectionsHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+        <BaseballConnectionsHowToPlay open={showRules} onOpenChange={setShowRules} />
+      </GameShell>
+    </>
   );
 };
 

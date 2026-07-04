@@ -1,5 +1,6 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { HofOrBustBoard } from '@/components/hof-or-bust/HofOrBustBoard';
 
 export default function HofOrBust() {
@@ -10,6 +11,7 @@ export default function HofOrBust() {
         description="Can you tell a Hall of Famer from a bust using only career stats? Vote, reveal hints, and see how the community voted."
         path="/hof-or-bust"
       />
+      <GameNavbar />
       <HofOrBustBoard />
       <GameSeoContent
         title="Hall of Fame or Bust? | DoUKnowBall"

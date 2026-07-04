@@ -18,16 +18,20 @@ import {
   MatchTier,
   NumericDirection,
   PuckDetectivePlayer,
+  PuckDifficulty,
   PuckGuess,
+  buildPuckPool,
   buildShareGrid,
   countryFlag,
   countryLabel,
   evaluateGuess,
   fetchPuckDetectivePool,
   isCorrectGuess,
+  loadPuckDifficulty,
   pickDailyMystery,
   pickRandomMystery,
   positionLabel,
+  savePuckDifficulty,
   teamLabel,
 } from '@/lib/puckDetective';
 
@@ -126,14 +130,19 @@ const PuckDetective = () => {
   const [streak, setStreak] = useState(0);
   const [best, setBest] = useState(() => loadBestStreak());
 
+  // #40: unlimited-only difficulty tier, remembered across sessions. Daily
+  // mode always uses the full pool untouched.
+  const [difficulty, setDifficulty] = useState<PuckDifficulty>(loadPuckDifficulty);
+
   const startUnlimitedRound = useCallback(() => {
     if (!pool) return;
-    const next = pickRandomMystery(pool, unlimitedMystery?.playerId);
+    const source = buildPuckPool(difficulty, pool);
+    const next = pickRandomMystery(source, unlimitedMystery?.playerId);
     setUnlimitedMystery(next);
     setUnlimitedGuesses([]);
     setUnlimitedStatus('playing');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pool]);
+  }, [pool, difficulty]);
 
   useEffect(() => {
     if (pool && mode === 'unlimited' && !unlimitedMystery) startUnlimitedRound();
@@ -144,6 +153,21 @@ const PuckDetective = () => {
     setMode(m);
     if (m === 'unlimited' && pool && !unlimitedMystery) startUnlimitedRound();
   }, [pool, unlimitedMystery, startUnlimitedRound]);
+
+  // #40: changing tier only applies in unlimited mode and starts a fresh
+  // round (mirrors Career Quiz's changeDifficulty convention).
+  const changeDifficulty = useCallback((next: PuckDifficulty) => {
+    if (mode !== 'unlimited' || !pool) return;
+    setDifficulty((prev) => {
+      if (prev === next) return prev;
+      savePuckDifficulty(next);
+      const nextPool = buildPuckPool(next, pool);
+      setUnlimitedMystery(pickRandomMystery(nextPool));
+      setUnlimitedGuesses([]);
+      setUnlimitedStatus('playing');
+      return next;
+    });
+  }, [mode, pool]);
 
   // --- Derived active state ---------------------------------------------------
   const mystery = mode === 'daily' ? dailyMystery : unlimitedMystery;
@@ -290,6 +314,32 @@ const PuckDetective = () => {
                 </button>
               ))}
             </div>
+
+            {/* #40: difficulty tiers, unlimited mode only. Easy = high-scoring
+                skaters by career points, Hard = low-scoring skaters plus
+                goalies (no career points stat), Normal = full pool. */}
+            {mode === 'unlimited' && (
+              <div className="flex items-center justify-center gap-2 mt-3">
+                {(['easy', 'normal', 'hard'] as PuckDifficulty[]).map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => changeDifficulty(d)}
+                    className={cn(
+                      'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
+                      difficulty === d
+                        ? d === 'easy'
+                          ? 'bg-correct text-correct-foreground'
+                          : d === 'hard'
+                            ? 'bg-destructive text-destructive-foreground'
+                            : 'bg-primary text-primary-foreground'
+                        : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                    )}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {mode === 'unlimited' && (
               <p className="text-xs text-muted-foreground mt-2">

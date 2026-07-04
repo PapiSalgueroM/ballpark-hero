@@ -1,6 +1,7 @@
 import { GuessTheNationBoard } from '@/components/guess-the-nation/GuessTheNationBoard';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 
 export default function GuessTheNation() {
   return (
@@ -10,6 +11,7 @@ export default function GuessTheNation() {
         description="Identify the mystery nation from clues about their sporting history. Daily world sports trivia challenge."
         path="/guess-the-nation"
       />
+      <GameNavbar />
       <GuessTheNationBoard />
       <GameSeoContent
         title="Guess The Sporting Nation | DoUKnowBall"

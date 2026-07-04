@@ -1,10 +1,9 @@
 import { useHigherLower } from '@/hooks/useHigherLower';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { HigherLowerHowToPlay } from '@/components/higher-lower/HigherLowerHowToPlay';
-import { RotateCcw, HelpCircle } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { HelpCircle } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import AdBanner from '@/components/ads/AdBanner';
@@ -42,35 +41,32 @@ const HigherLowerGame = () => {
   const [showHelp, setShowHelp] = useState(false);
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Higher or Lower - Soccer Stats Comparison Game | DoUKnowBall"
         description="Compare soccer player career stats and guess who has more. Build your streak in this free football trivia game."
         path="/higher-lower"
       />
-      <div className="max-w-5xl mx-auto px-4 py-6 md:py-10">
-        {/* Header */}
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowHelp(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
-          <h1 className="text-3xl md:text-6xl font-bold tracking-[0.1em] md:tracking-[0.2em] text-primary font-display mb-1">
-            HIGHER OR LOWER
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base">
-            Pick a stat where the left player is higher. Build your streak!
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
-            <span>Streak: <span className="text-primary font-bold text-base">{streak}</span></span>
-            <span>Best: <span className="text-foreground font-semibold">{bestStreak}</span></span>
-          </div>
-        </header>
-
+      <GameShell
+        width="wide"
+        title="HIGHER OR LOWER"
+        subtitle="Pick a stat where the left player is higher. Build your streak!"
+        headerExtra={
+          <>
+            <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
+              <span>Streak: <span className="text-primary font-bold text-base">{streak}</span></span>
+              <span>Best: <span className="text-foreground font-semibold">{bestStreak}</span></span>
+            </div>
+            <button
+              onClick={() => setShowHelp(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
+          </>
+        }
+      >
         {gameStatus === 'playing' && (
           <>
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-stretch justify-center">
@@ -115,19 +111,22 @@ const HigherLowerGame = () => {
 
         {gameStatus === 'lost' && (
           <div className="mt-8 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              <div className="text-6xl mb-4">{lossReaction.emoji}</div>
-              <h2 className="text-2xl font-bold text-destructive font-display mb-2">Game Over!</h2>
-              <p className="text-foreground text-lg mb-1">{lossReaction.message}</p>
-              <p className="text-muted-foreground text-sm mb-1">
-                Final Streak: <span className="text-primary font-bold text-lg">{streak}</span>
-              </p>
-              <p className="text-muted-foreground text-xs mb-4">
-                Best Ever: <span className="text-foreground font-semibold">{bestStreak}</span>
-              </p>
-
+            <ResultScreen
+              won={false}
+              outcomeEmoji={lossReaction.emoji}
+              headline="Game Over!"
+              statLine={lossReaction.message}
+              funFact={<>Final Streak: <span className="text-primary font-bold">{streak}</span> · Best Ever: <span className="text-foreground font-semibold">{bestStreak}</span></>}
+              emojiGrid={`Higher or Lower streak: ${streak}${streak >= bestStreak && streak > 0 ? ' (new best)' : ''}`}
+              share={{
+                score: `${streak} streak (best: ${bestStreak})`,
+                gameName: 'Higher or Lower',
+                gamePath: '/higher-lower',
+              }}
+              onPlayAgain={resetGame}
+            >
               {lastChoice && (
-                <div className="bg-secondary/50 rounded-xl p-4 mb-6 text-sm text-muted-foreground">
+                <div className="bg-secondary/50 rounded-xl p-4 mb-2 text-sm text-muted-foreground">
                   <p>
                     <span className="text-foreground font-semibold">{currentPlayer.name}</span> had{' '}
                     <span className="text-primary font-semibold">{currentPlayer.stats[lastChoice.stat]}</span>{' '}
@@ -137,20 +136,7 @@ const HigherLowerGame = () => {
                   </p>
                 </div>
               )}
-
-              <ShareButtons
-                score={`${streak} streak (best: ${bestStreak})`}
-                gameName="Higher or Lower"
-                gamePath="/higher-lower"
-              />
-              <button
-                onClick={resetGame}
-                className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
-            </div>
+            </ResultScreen>
           </div>
         )}
 
@@ -179,9 +165,8 @@ const HigherLowerGame = () => {
           <ReportQuestion gameType="higher-lower" gameContext={{ currentPlayer: currentPlayer?.name, nextPlayer: nextPlayer?.name }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

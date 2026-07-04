@@ -1,5 +1,6 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { F1DriverBoard } from '@/components/f1-driver/F1DriverBoard';
 
 export default function F1Driver() {
@@ -10,6 +11,7 @@ export default function F1Driver() {
         description="Guess the Formula 1 driver from progressive clues. Daily F1 trivia game."
         path="/f1-driver"
       />
+      <GameNavbar />
       <F1DriverBoard />
       <GameSeoContent
         title="Guess The F1 Driver | DoUKnowBall"

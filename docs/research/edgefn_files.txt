@@ -1,0 +1,1 @@
+supabase/functions/soccer-grid-validate/index.ts, supabase/functions/analyze-squads/index.ts, supabase/functions/simulate-season/index.ts
