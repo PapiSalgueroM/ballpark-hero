@@ -44,7 +44,15 @@ Terms of Service (`src/pages/TermsOfService.tsx`):
 
 Both pages: confirmed valid JSX after edits (all tags balanced, entities intact), confirmed zero em dashes remain, and confirmed no changes were made outside the text content of these two files (imports, routing, component structure, and the footer/disclaimer block were left untouched).
 
-## Decisions that need the owner or a lawyer, not just a copy fix
+## OWNER DECISIONS MADE (2026-07-03, Anthony via chat)
+
+1. Entity: individual owner doing business as DoUKnowBall. Terms Section 1 now states this.
+2. Governing law: Commonwealth of Massachusetts, exclusive jurisdiction in Massachusetts state/federal courts. Terms Section 14 updated.
+3. COPPA posture: keep the soft policy (option b): no age gate; under-13s asked not to create accounts without a parent; takedown contact provided. Revisit if ad revenue grows.
+4. Deletion/access inbox: DoUknowBall.com@gmail.com (Anthony's update, replacing footyfein1@gmail.com) with the 30-day response promise. Swapped in Privacy Policy and Terms on 2026-07-03.
+5. Ad-tech disclosure upkeep: standing practice adopted: any new ad network, analytics tool, or third-party SDK must be added to Privacy Policy Section 4 in the same publish that ships it.
+
+## Original open questions (resolved above, kept for context)
 
 1. **Formal business name / entity.** The pages currently say "DoUKnowBall" as if it were the operating entity, with no LLC/company name, business address, or registered agent. If DoUKnowBall operates as an individual (not a formal company), the Terms should say so, or the owner should decide whether to form an entity before this matters (e.g., for the indemnification and liability sections to have a real party behind them).
 2. **Governing law and venue.** "Laws of the United States... resolved in the applicable courts" is a vague placeholder inherited from the original draft. It does not name a state or a venue for disputes. A real jurisdiction (the owner's home state, most likely) should be chosen, ideally with a lawyer's input, especially once there is any revenue via AdSense.

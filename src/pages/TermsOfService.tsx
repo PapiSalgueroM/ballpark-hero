@@ -17,12 +17,12 @@ const TermsOfService = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Terms of Service</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: July 2, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: July 3, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">1. Acceptance of Terms</h2>
-          <p>By accessing or using DoUKnowBall ("the Site"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Site.</p>
+          <p>By accessing or using DoUKnowBall ("the Site"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Site. The Site is owned and operated by an individual doing business as DoUKnowBall ("we", "us", "the operator").</p>
         </div>
 
         <div>
@@ -101,12 +101,12 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">14. Governing Law</h2>
-          <p>These Terms shall be governed by and construed in accordance with the laws of the United States, without regard to conflict of law principles. Any disputes arising under these Terms shall be resolved in the applicable courts.</p>
+          <p>These Terms shall be governed by and construed in accordance with the laws of the Commonwealth of Massachusetts and applicable United States federal law, without regard to conflict of law principles. Any disputes arising under these Terms shall be resolved exclusively in the state or federal courts located in Massachusetts, and you consent to the personal jurisdiction of those courts.</p>
         </div>
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">15. Contact</h2>
-          <p>If you have any questions about these Terms of Service or need to reach us for legal inquiries, please contact us at <a href="mailto:footyfein1@gmail.com" className="underline hover:text-foreground transition-colors">footyfein1@gmail.com</a>.</p>
+          <p>If you have any questions about these Terms of Service or need to reach us for legal inquiries, please contact us at <a href="mailto:DoUknowBall.com@gmail.com" className="underline hover:text-foreground transition-colors">DoUknowBall.com@gmail.com</a>.</p>
         </div>
       </section>
 
