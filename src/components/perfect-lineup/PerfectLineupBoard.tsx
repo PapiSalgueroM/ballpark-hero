@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { X, Sparkles } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -6,6 +6,7 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import { usePerfectLineup } from '@/hooks/usePerfectLineup';
 import { describeConstraint, slotGradesToEmoji } from '@/data/perfectLineup';
 import { Player } from '@/types/game';
+import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 
 const LINES: { title: string; ids: number[] }[] = [
   { title: 'Forwards', ids: [10, 9, 8] },
@@ -30,6 +31,19 @@ const PerfectLineupBoard = () => {
     setOpenSlot(null);
     setQuery('');
   };
+
+  const chemistry = useMemo(
+    () =>
+      computeChemistry(
+        Object.values(game.picks).map((p) => ({
+          name: p.name,
+          club: p.club,
+          league: p.league,
+          nationality: p.nationality,
+        })),
+      ),
+    [game.picks]
+  );
 
   return (
     <div className="max-w-3xl mx-auto px-4 pb-16">
@@ -58,10 +72,17 @@ const PerfectLineupBoard = () => {
       </div>
 
       {game.phase === 'picking' && (
-        <p className="text-center text-sm text-muted-foreground mb-4">
-          Fill every slot. Constrained slots only accept players from that league or country.{' '}
-          <span className="font-semibold text-foreground">{game.filledCount}/11</span> picked.
-        </p>
+        <div className="text-center mb-4">
+          <p className="text-sm text-muted-foreground">
+            Fill every slot. Constrained slots only accept players from that league or country.{' '}
+            <span className="font-semibold text-foreground">{game.filledCount}/11</span> picked.
+          </p>
+          {chemistry.totalBonus > 0 && (
+            <span className="inline-flex items-center mt-2 px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
+              {formatChemistry(chemistry)}
+            </span>
+          )}
+        </div>
       )}
 
       {/* Pitch */}
@@ -151,6 +172,7 @@ const PerfectLineupBoard = () => {
               { label: 'Rating', value: game.result.rating },
               { label: 'Chemistry', value: `${game.result.chemistry}%` },
               { label: 'Squad', value: `€${game.result.squadValue}M` },
+              ...(chemistry.totalBonus > 0 ? [{ label: 'Chem. Bonus', value: `+${chemistry.totalBonus}` }] : []),
             ]}
             emojiGrid={slotGradesToEmoji(game.result.slotGrades)}
             share={{

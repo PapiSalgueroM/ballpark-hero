@@ -1,19 +1,43 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { RotateCcw, X, Sparkles } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import ShareButtons from '@/components/game/ShareButtons';
 import { usePerfectLineupGeneric } from '@/hooks/usePerfectLineupGeneric';
 import { LineupConfig, describeConstraint, slotGradesToEmoji } from '@/lib/perfectLineupEngine';
+import { computeChemistry, formatChemistry, ChemistryPlayer } from '@/lib/chemistry';
 
 interface Props<P> {
   config: LineupConfig<P>;
+}
+
+/** Loosely typed so it works across NBA/NHL/F1 pool player shapes (team -> club). */
+type MaybeChemFields = {
+  name: string;
+  team?: string;
+  club?: string;
+  league?: string;
+  nationality?: string;
+};
+
+function toChemistryPlayer(p: MaybeChemFields): ChemistryPlayer {
+  return {
+    name: p.name,
+    club: p.club ?? p.team,
+    league: p.league,
+    nationality: p.nationality,
+  };
 }
 
 function GenericLineupBoard<P>({ config }: Props<P>) {
   const game = usePerfectLineupGeneric(config);
   const [openSlot, setOpenSlot] = useState<number | null>(null);
   const [query, setQuery] = useState('');
+
+  const chemistry = useMemo(
+    () => computeChemistry(Object.values(game.picks).map((p) => toChemistryPlayer(p as unknown as MaybeChemFields))),
+    [game.picks],
+  );
 
   const activeSlot = openSlot !== null ? game.slots.find((s) => s.id === openSlot) : null;
   const options =
@@ -57,13 +81,20 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
       </div>
 
       {game.phase === 'picking' && (
-        <p className="text-center text-sm text-muted-foreground mb-4">
-          Fill every slot. Constrained slots only accept players matching that tag.{' '}
-          <span className="font-semibold text-foreground">
-            {game.filledCount}/{config.formation.length}
-          </span>{' '}
-          picked.
-        </p>
+        <div className="text-center mb-4">
+          <p className="text-sm text-muted-foreground">
+            Fill every slot. Constrained slots only accept players matching that tag.{' '}
+            <span className="font-semibold text-foreground">
+              {game.filledCount}/{config.formation.length}
+            </span>{' '}
+            picked.
+          </p>
+          {chemistry.totalBonus > 0 && (
+            <span className="inline-flex items-center mt-2 px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
+              {formatChemistry(chemistry)}
+            </span>
+          )}
+        </div>
       )}
 
       <div className="flex flex-wrap justify-center gap-3">
@@ -145,7 +176,20 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
             <span>
               Chemistry <b className="text-foreground">{game.result.chemistry}%</b>
             </span>
+            {chemistry.totalBonus > 0 && (
+              <span>
+                Chem. Bonus <b className="text-gold">+{chemistry.totalBonus}</b>
+              </span>
+            )}
           </div>
+
+          {chemistry.totalBonus > 0 && (
+            <div className="flex justify-center">
+              <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
+                {formatChemistry(chemistry)}
+              </span>
+            </div>
+          )}
 
           <ShareButtons
             gameName={config.gameName}

@@ -25,6 +25,7 @@ import {
   displayCountry,
   shuffle,
 } from '@/lib/worldXi';
+import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 
 type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'won' | 'lost';
 
@@ -144,6 +145,15 @@ const WorldXi = () => {
   };
 
   const squadValue = filled.reduce((sum, p) => sum + (p ? p.value : 0), 0);
+  const chemistry = useMemo(
+    () =>
+      computeChemistry(
+        filled
+          .filter((p): p is WxPlayer => p !== null)
+          .map(p => ({ name: p.name, club: p.club, nationality: p.country })),
+      ),
+    [filled],
+  );
   const flagRow = countries.map(c => flagFor(c)).join('');
   const emojiGrid = [
     `🌍 World XI ${formation.name}${timerMode.seconds > 0 ? ' ⏱️ ' + timerMode.label : ''}`,
@@ -381,6 +391,14 @@ const WorldXi = () => {
             </div>
 
             {pitchView}
+
+            {chemistry.totalBonus > 0 && (
+              <div className="mt-4 text-center">
+                <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
+                  {formatChemistry(chemistry)}
+                </span>
+              </div>
+            )}
 
             <div className="mt-4 grid gap-1.5">
               {formation.slots.map((s, i) => {

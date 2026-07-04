@@ -15,6 +15,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -45,6 +46,11 @@ const LineupBuilder = () => {
 
   const [playerInput, setPlayerInput] = useState('');
   const [showRules, setShowRules] = useState(false);
+  // Additive chemistry display only: PlayerAutocomplete's onSelect hands us
+  // club/nationality metadata that useLineupBuilder's FilledSlot never
+  // stores, so it is captured here by normalized name and looked up again
+  // once a slot is confirmed. Existing scoring/verdict logic is untouched.
+  const [pickedMeta, setPickedMeta] = useState<Record<string, { club?: string; nationality?: string }>>({});
 
   useEffect(() => {
     const seen = localStorage.getItem('lineup-rules-seen');
@@ -61,9 +67,24 @@ const LineupBuilder = () => {
 
   const handleSelectPlayer = async (entity: PlayerEntity) => {
     if (isValidating) return;
+    setPickedMeta((prev) => ({
+      ...prev,
+      [normalizeName(entity.name)]: { club: entity.meta.club, nationality: entity.meta.nationality },
+    }));
     await submitPlayer(entity.name);
     setPlayerInput('');
   };
+
+  const chemistry = useMemo(
+    () =>
+      computeChemistry(
+        filledSlotsArray.map((slot) => {
+          const meta = pickedMeta[normalizeName(slot.playerName)];
+          return { name: slot.playerName, club: meta?.club, nationality: meta?.nationality };
+        }),
+      ),
+    [filledSlotsArray, pickedMeta]
+  );
 
   // Clear input when validation succeeds (position changes)
   const [lastPos, setLastPos] = useState<number | null>(null);
@@ -236,6 +257,13 @@ const LineupBuilder = () => {
                   </div>
                 ))}
               </div>
+              {chemistry.totalBonus > 0 && (
+                <div className="mt-4 text-center">
+                  <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
+                    {formatChemistry(chemistry)}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-3">
@@ -287,6 +315,13 @@ const LineupBuilder = () => {
                     </div>
                   ))}
                 </div>
+                {chemistry.totalBonus > 0 && (
+                  <div className="mt-3 text-center">
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
+                      {formatChemistry(chemistry)}
+                    </span>
+                  </div>
+                )}
               </div>
             </ResultScreen>
           </div>

@@ -12,6 +12,7 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 
 // Thresholds track playerRating's 2026-07-03 rescale (curve now spans ~41-85
 // instead of ~52-99), so the top individual-player color band is reachable
@@ -62,6 +63,13 @@ const SquadDeal = () => {
   const poolList = useMemo(
     () => g.candidates.map((p, i) => ({ p, i, r: playerRating(p) })).sort((a, b) => b.r - a.r),
     [g.candidates],
+  );
+  const chemistry = useMemo(
+    () =>
+      computeChemistry(
+        g.squad.filter((p): p is Player => !!p).map((p) => ({ name: p.name, club: p.club, league: p.league, nationality: p.nationality })),
+      ),
+    [g.squad],
   );
 
   const shell = (inner: ReactNode) => (
@@ -173,6 +181,13 @@ const SquadDeal = () => {
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">YOUR SQUAD</h1>
         <p className="text-muted-foreground text-sm mb-5">{g.formation.name} · {g.era === 'legends' ? 'All-Time Legends' : 'Current Era'}{g.memesOn ? ' · Memes' : ''}</p>
         <Pitch formation={g.formation} squad={g.squad} activeIndex={-1} />
+        {chemistry.totalBonus > 0 && (
+          <div className="mt-4 flex justify-center">
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
+              {formatChemistry(chemistry)}
+            </span>
+          </div>
+        )}
         <div className="mt-6">
           <ResultScreen
             outcomeEmoji="🏟️"
@@ -180,6 +195,7 @@ const SquadDeal = () => {
             statRow={[
               { label: 'Rating', value: r.rating },
               { label: 'Grade', value: r.grade },
+              ...(chemistry.totalBonus > 0 ? [{ label: 'Chem. Bonus', value: `+${chemistry.totalBonus}` }] : []),
             ]}
             emojiGrid={'🏟️ ' + g.formation.name + ' · ' + r.grade}
             share={{
