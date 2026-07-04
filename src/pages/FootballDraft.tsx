@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useFootballDraft } from '@/hooks/useFootballDraft';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -62,58 +61,56 @@ const FootballDraft = () => {
   const showingResult = currentGuess?.submitted;
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="NFL Draft Guesser - Guess the Draft Round | DoUKnowBall"
         description="A player's college, position, and combine stats are revealed. Guess what round they were drafted. Daily NFL trivia."
         path="/football-draft"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowRules(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-[hsl(var(--ft-gold))] transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
+      <GameShell
+        width="narrow"
+        emoji="🏈"
+        title="DRAFT GUESSER"
+        subtitle="Guess what round each player was drafted. Reveal clues progressively"
+        headerExtra={
+          <>
+            <button
+              onClick={() => setShowRules(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[hsl(var(--ft-gold))] transition-colors"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
 
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.15em] font-display mb-1 text-[hsl(var(--ft-gold))]">
-            🏈 DRAFT GUESSER
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Guess what round each player was drafted. Reveal clues progressively
-          </p>
+            {/* Daily / Unlimited toggle */}
+            <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
+                  className={cn(
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                </button>
+              ))}
+            </div>
 
-          {/* Daily / Unlimited toggle */}
-          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-center gap-4 mt-3 text-sm">
-            <span className="text-muted-foreground">
-              Player: <span className="font-semibold text-foreground">{Math.min(currentIndex + 1, 5)}</span>/5
-            </span>
-            <span className="text-muted-foreground">
-              Points: <span className="font-semibold text-[hsl(var(--ft-gold))]">{totalPoints}</span>/{maxPoints}
-            </span>
-          </div>
-        </header>
-
+            <div className="flex items-center justify-center gap-4 mt-3 text-sm">
+              <span className="text-muted-foreground">
+                Player: <span className="font-semibold text-foreground">{Math.min(currentIndex + 1, 5)}</span>/5
+              </span>
+              <span className="text-muted-foreground">
+                Points: <span className="font-semibold text-[hsl(var(--ft-gold))]">{totalPoints}</span>/{maxPoints}
+              </span>
+            </div>
+          </>
+        }
+      >
         {/* Loading guard */}
         {isLoading && (
           <div className="flex justify-center py-10">
@@ -287,12 +284,19 @@ const FootballDraft = () => {
         {/* Game complete */}
         {!isLoading && gameStatus === 'complete' && (
           <div className="mt-4 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              <div className="text-5xl mb-3">{totalPoints >= maxPoints * 0.7 ? '🏆' : totalPoints >= maxPoints * 0.4 ? '🎯' : '🏈'}</div>
-              <h2 className="text-2xl font-bold text-[hsl(var(--ft-gold))] font-display mb-2">
-                {totalPoints}/{maxPoints} Points!
-              </h2>
-
+            <ResultScreen
+              won={totalPoints >= maxPoints * 0.4}
+              outcomeEmoji={totalPoints >= maxPoints * 0.7 ? '🏆' : totalPoints >= maxPoints * 0.4 ? '🎯' : '🏈'}
+              headline={`${totalPoints}/${maxPoints} Points!`}
+              emojiGrid={guesses.map(g => g.points >= 15 ? '🟩' : g.points > 0 ? '🟨' : '🟥').join('')}
+              share={{
+                score: `${totalPoints}/${maxPoints} points on today's Draft Guesser`,
+                gameName: 'Pro Football Draft Guesser',
+                gamePath: '/football-draft',
+              }}
+              onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
+              playNext={mode !== 'unlimited' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p> : undefined}
+            >
               {/* Per-player breakdown */}
               <div className="space-y-2 my-4 text-left">
                 {puzzle.players.map((player, i) => {
@@ -317,23 +321,7 @@ const FootballDraft = () => {
                   );
                 })}
               </div>
-
-              <ShareButtons
-                score={`${totalPoints}/${maxPoints} points on today's Draft Guesser`}
-                gameName="Pro Football Draft Guesser"
-                gamePath="/football-draft"
-              />
-              {mode === 'unlimited' ? (
-                <button
-                  onClick={resetGame}
-                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-[hsl(var(--ft-navy))] text-[hsl(var(--ft-gold))] rounded-full font-semibold hover:opacity-90 transition-opacity border border-[hsl(var(--ft-gold)/0.3)]"
-                >
-                  Play Again
-                </button>
-              ) : (
-                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
-              )}
-            </div>
+            </ResultScreen>
           </div>
         )}
 
@@ -363,11 +351,10 @@ const FootballDraft = () => {
           <ReportQuestion gameType="football-draft" gameContext={{ puzzleId: puzzle.id }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
+      </GameShell>
 
       <FootballDraftHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+    </>
   );
 };
 

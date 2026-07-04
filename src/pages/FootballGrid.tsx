@@ -4,9 +4,8 @@ import { GridBoard } from '@/components/football-grid/GridBoard';
 import { GridPlayerSearch } from '@/components/football-grid/GridPlayerSearch';
 import { FootballGridHowToPlay } from '@/components/football-grid/FootballGridHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { gridCellsToEmoji } from '@/lib/shareGrids';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
@@ -42,49 +41,46 @@ const FootballGrid = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="NFL Grid - Football Immaculate Grid Game | DoUKnowBall"
         description="NFL immaculate grid game. Name players who played for each team and match position or award criteria."
         path="/football-grid"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        {/* Header */}
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowRules(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-[hsl(var(--fg-gold))] transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
-
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.15em] font-display mb-1 text-[hsl(var(--fg-gold))]">
-            🏈 PRO FOOTBALL GRID
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Fill the 3×3 grid. Each cell needs a player matching both the row and column. Daily challenge!
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-3 text-sm">
-            <span className="text-muted-foreground">
-              Correct: <span className="font-semibold text-correct">{correctCount}</span>/9
-            </span>
-            <span className="text-muted-foreground">
-              Guesses left: <span className="font-semibold text-foreground">{guessesLeft === null ? '∞' : guessesLeft}</span>
-            </span>
-          </div>
-          <div className="flex items-center justify-center mt-2">
+      <GameShell
+        width="narrow"
+        emoji="🏈"
+        title="PRO FOOTBALL GRID"
+        subtitle="Fill the 3×3 grid. Each cell needs a player matching both the row and column. Daily challenge!"
+        headerExtra={
+          <>
             <button
-              onClick={toggleUnlimited}
-              className="text-xs px-3 py-1 rounded-full border border-border text-muted-foreground hover:text-foreground transition-colors"
-              aria-pressed={unlimited}
+              onClick={() => setShowRules(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[hsl(var(--fg-gold))] transition-colors"
+              aria-label="How to play"
             >
-              {unlimited ? '∞ Unlimited guesses: ON' : 'Unlimited guesses: OFF'}
+              <HelpCircle className="w-4 h-4" /> How to play
             </button>
-          </div>
-        </header>
-
+            <div className="flex items-center justify-center gap-4 mt-3 text-sm">
+              <span className="text-muted-foreground">
+                Correct: <span className="font-semibold text-correct">{correctCount}</span>/9
+              </span>
+              <span className="text-muted-foreground">
+                Guesses left: <span className="font-semibold text-foreground">{guessesLeft === null ? '∞' : guessesLeft}</span>
+              </span>
+            </div>
+            <div className="flex items-center justify-center mt-2">
+              <button
+                onClick={toggleUnlimited}
+                className="text-xs px-3 py-1 rounded-full border border-border text-muted-foreground hover:text-foreground transition-colors"
+                aria-pressed={unlimited}
+              >
+                {unlimited ? '∞ Unlimited guesses: ON' : 'Unlimited guesses: OFF'}
+              </button>
+            </div>
+          </>
+        }
+      >
         {isLoading ? (
           <div className="flex justify-center py-10">
             <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
@@ -113,42 +109,27 @@ const FootballGrid = () => {
             {/* Result */}
             {gameStatus === 'complete' && (
               <div className="mt-8 flex justify-center">
-                <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-                  {correctCount === 9 ? (
-                    <>
-                      <div className="text-5xl mb-3">🏆</div>
-                      <h2 className="text-2xl font-bold text-[hsl(var(--fg-gold))] font-display mb-2">
-                        Grid Complete!
-                      </h2>
-                    </>
-                  ) : (
-                    <>
-                      <div className="text-5xl mb-3">⏱️</div>
-                      <h2 className="text-2xl font-bold text-destructive font-display mb-2">
-                        Out of Guesses!
-                      </h2>
-                    </>
-                  )}
-                  <p className="text-foreground">
-                    You filled <span className="font-bold text-[hsl(var(--fg-gold))]">{correctCount}</span>/9 cells
-                  </p>
-                  {rarityScore !== null && (
-                    <div className="flex items-center justify-center gap-2 mt-2">
-                      <Trophy className="w-5 h-5 text-[hsl(var(--fg-gold))]" />
-                      <span className="text-lg font-bold text-[hsl(var(--fg-gold))]">
-                        Rarity Score: {rarityScore}%
+                <ResultScreen
+                  won={correctCount === 9}
+                  outcomeEmoji={correctCount === 9 ? '🏆' : '⏱️'}
+                  headline={correctCount === 9 ? 'Grid Complete!' : 'Out of Guesses!'}
+                  statLine={<>You filled <span className="font-bold text-[hsl(var(--fg-gold))]">{correctCount}</span>/9 cells</>}
+                  funFact={
+                    rarityScore !== null ? (
+                      <span className="inline-flex items-center justify-center gap-2">
+                        <Trophy className="w-4 h-4 text-[hsl(var(--fg-gold))]" />
+                        Rarity Score: {rarityScore}% (lower rarity = more impressive picks!)
                       </span>
-                    </div>
-                  )}
-                  <p className="text-xs text-muted-foreground mt-1">Lower rarity = more impressive picks!</p>
-                  <ShareButtons
-                    score={rarityScore !== null ? `a Rarity Score of ${rarityScore}% (${correctCount}/9)` : `${correctCount}/9 cells`}
-                    gameName="Pro Football Grid"
-                    gamePath="/football-grid"
-                    emojiGrid={gridCellsToEmoji(cells)}
-                  />
-                  <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
-                </div>
+                    ) : undefined
+                  }
+                  emojiGrid={gridCellsToEmoji(cells)}
+                  share={{
+                    score: rarityScore !== null ? `a Rarity Score of ${rarityScore}% (${correctCount}/9)` : `${correctCount}/9 cells`,
+                    gameName: 'Pro Football Grid',
+                    gamePath: '/football-grid',
+                  }}
+                  playNext={<p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>}
+                />
               </div>
             )}
           </>
@@ -179,11 +160,10 @@ const FootballGrid = () => {
           <ReportQuestion gameType="football-grid" gameContext={{ puzzleId: puzzle.id }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
+      </GameShell>
 
       <FootballGridHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+    </>
   );
 };
 

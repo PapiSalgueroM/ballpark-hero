@@ -4,9 +4,8 @@ import { GridBoard } from '@/components/football-grid/GridBoard';
 import { CollegeGridSearch } from '@/components/college-grid/CollegeGridSearch';
 import { CollegeGridHowToPlay } from '@/components/college-grid/CollegeGridHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { gridCellsToEmoji } from '@/lib/shareGrids';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
@@ -40,39 +39,37 @@ const CollegeGrid = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="College Football Grid Game - CFB Immaculate Grid | DoUKnowBall"
         description="The college football grid game. Name players who attended each school and match NFL criteria. Free daily CFB puzzle."
         path="/college-grid"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowRules(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-[hsl(var(--cg-green))] transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
-
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.15em] font-display mb-1 text-[hsl(var(--cg-green))]">
-            🏈 COLLEGE FOOTBALL GRID
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Fill the 3×3 grid with college football players matching both criteria. Daily challenge!
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-3 text-sm">
-            <span className="text-muted-foreground">
-              Correct: <span className="font-semibold text-correct">{correctCount}</span>/9
-            </span>
-            <span className="text-muted-foreground">
-              Guesses left: <span className="font-semibold text-foreground">{guessesLeft}</span>
-            </span>
-          </div>
-        </header>
-
+      <GameShell
+        width="narrow"
+        emoji="🏈"
+        title="COLLEGE FOOTBALL GRID"
+        subtitle="Fill the 3×3 grid with college football players matching both criteria. Daily challenge!"
+        headerExtra={
+          <>
+            <button
+              onClick={() => setShowRules(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[hsl(var(--cg-green))] transition-colors"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
+            <div className="flex items-center justify-center gap-4 mt-3 text-sm">
+              <span className="text-muted-foreground">
+                Correct: <span className="font-semibold text-correct">{correctCount}</span>/9
+              </span>
+              <span className="text-muted-foreground">
+                Guesses left: <span className="font-semibold text-foreground">{guessesLeft}</span>
+              </span>
+            </div>
+          </>
+        }
+      >
         {isLoading ? (
           <div className="flex justify-center py-10">
             <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
@@ -100,42 +97,27 @@ const CollegeGrid = () => {
 
             {gameStatus === 'complete' && (
               <div className="mt-8 flex justify-center">
-                <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-                  {correctCount === 9 ? (
-                    <>
-                      <div className="text-5xl mb-3">🏆</div>
-                      <h2 className="text-2xl font-bold text-[hsl(var(--cg-green))] font-display mb-2">
-                        Grid Complete!
-                      </h2>
-                    </>
-                  ) : (
-                    <>
-                      <div className="text-5xl mb-3">⏱️</div>
-                      <h2 className="text-2xl font-bold text-destructive font-display mb-2">
-                        Out of Guesses!
-                      </h2>
-                    </>
-                  )}
-                  <p className="text-foreground">
-                    You filled <span className="font-bold text-[hsl(var(--cg-green))]">{correctCount}</span>/9 cells
-                  </p>
-                  {rarityScore !== null && (
-                    <div className="flex items-center justify-center gap-2 mt-2">
-                      <Trophy className="w-5 h-5 text-[hsl(var(--cg-green))]" />
-                      <span className="text-lg font-bold text-[hsl(var(--cg-green))]">
-                        Rarity Score: {rarityScore}%
+                <ResultScreen
+                  won={correctCount === 9}
+                  outcomeEmoji={correctCount === 9 ? '🏆' : '⏱️'}
+                  headline={correctCount === 9 ? 'Grid Complete!' : 'Out of Guesses!'}
+                  statLine={<>You filled <span className="font-bold text-[hsl(var(--cg-green))]">{correctCount}</span>/9 cells</>}
+                  funFact={
+                    rarityScore !== null ? (
+                      <span className="inline-flex items-center justify-center gap-2">
+                        <Trophy className="w-4 h-4 text-[hsl(var(--cg-green))]" />
+                        Rarity Score: {rarityScore}% (lower rarity = more impressive picks!)
                       </span>
-                    </div>
-                  )}
-                  <p className="text-xs text-muted-foreground mt-1">Lower rarity = more impressive picks!</p>
-                  <ShareButtons
-                    score={rarityScore !== null ? `a Rarity Score of ${rarityScore}% (${correctCount}/9)` : `${correctCount}/9 cells`}
-                    gameName="College Football Grid"
-                    gamePath="/college-grid"
-                    emojiGrid={gridCellsToEmoji(cells)}
-                  />
-                  <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
-                </div>
+                    ) : undefined
+                  }
+                  emojiGrid={gridCellsToEmoji(cells)}
+                  share={{
+                    score: rarityScore !== null ? `a Rarity Score of ${rarityScore}% (${correctCount}/9)` : `${correctCount}/9 cells`,
+                    gameName: 'College Football Grid',
+                    gamePath: '/college-grid',
+                  }}
+                  playNext={<p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>}
+                />
               </div>
             )}
           </>
@@ -170,11 +152,10 @@ const CollegeGrid = () => {
           <ReportQuestion gameType="college-grid" gameContext={{ puzzleId: puzzle.id }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
+      </GameShell>
 
       <CollegeGridHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+    </>
   );
 };
 

@@ -1,0 +1,1 @@
+src/pages/CareerGame.tsx, src/pages/CareerLadder.tsx, src/pages/TransferPath.tsx, src/components/transfer-path/TransferPathBoard.tsx, src/pages/ShirtNumber.tsx, src/components/shirt-number/ShirtNumberBoard.tsx, src/pages/GuessTransferValue.tsx, src/pages/LineupBuilder.tsx, src/pages/PerfectLineup.tsx, src/components/perfect-lineup/PerfectLineupBoard.tsx

@@ -3,7 +3,8 @@ import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { useGuessTheYear } from '@/hooks/useGuessTheYear';
 import { Button } from '@/components/ui/button';
 import { GuessTheYearHowToPlay } from './GuessTheYearHowToPlay';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { GameNav } from '@/components/game/GameNav';
 import { HelpCircle, Calendar, ChevronUp, ChevronDown } from 'lucide-react';
 import { POINTS_BY_CLUE } from '@/types/guessTheYear';
@@ -40,16 +41,13 @@ export function GuessTheYearBoard() {
   const isLost = gameState.gameStatus === 'lost';
 
   return (
-    <div ref={gameRef} className="min-h-screen bg-background text-foreground">
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-2 font-display">
-            📅 Guess The Year
-          </h1>
-          <p className="text-muted-foreground">
-            What year did all these sports events happen?
-          </p>
+    <div ref={gameRef}>
+      <GameShell
+        width="narrow"
+        title="Guess The Year"
+        emoji="📅"
+        subtitle="What year did all these sports events happen?"
+        headerExtra={
           <Button
             variant="ghost"
             size="sm"
@@ -59,8 +57,8 @@ export function GuessTheYearBoard() {
             <HelpCircle className="w-4 h-4 mr-1" />
             How to Play
           </Button>
-        </div>
-
+        }
+      >
         {/* Points indicator */}
         {isPlaying && (
           <div className="text-center mb-6">
@@ -213,38 +211,24 @@ export function GuessTheYearBoard() {
 
         {/* Game over */}
         {(isWon || isLost) && (
-          <div className="text-center space-y-6">
-            <div className={`p-6 rounded-xl border ${isWon ? 'bg-green-500/10 border-green-500/30' : 'bg-destructive/10 border-destructive/30'}`}>
-              <h2 className={`text-2xl font-bold mb-2 ${isWon ? 'text-green-500' : 'text-destructive'}`}>
-                {isWon ? '🎉 Correct!' : '😞 Game Over'}
-              </h2>
-              <p className="text-3xl font-bold font-display text-primary mb-2">
-                {gameState.puzzle.year}
-              </p>
-              {isWon && (
-                <p className="text-lg text-muted-foreground">
-                  You scored <span className="text-primary font-bold">{gameState.score}</span> points!
-                </p>
-              )}
-              {isLost && (
-                <p className="text-muted-foreground">
-                  The answer was {gameState.puzzle.year}
-                </p>
-              )}
-            </div>
-
-            <div className="flex flex-col items-center gap-4">
-              <ShareButtons
-                score={isWon ? `${gameState.score} points in ${gameState.guesses.length} ${gameState.guesses.length === 1 ? 'guess' : 'guesses'}` : 'Did not guess'}
-                gameName="Guess The Year"
-                gamePath="/guess-the-year"
-              />
-
-              <Button onClick={resetGame} variant="outline" className="w-full max-w-xs">
-                Play Again
-              </Button>
-            </div>
-          </div>
+          <ResultScreen
+            won={isWon}
+            outcomeEmoji={isWon ? '🎉' : '😞'}
+            headline={isWon ? 'Correct!' : 'Game Over'}
+            statLine={
+              isWon
+                ? <>You scored <span className="text-primary font-bold">{gameState.score}</span> points!</>
+                : <>The answer was {gameState.puzzle.year}</>
+            }
+            funFact={<>The year was <span className="text-primary font-bold">{gameState.puzzle.year}</span></>}
+            emojiGrid={isWon ? `Guessed ${gameState.puzzle.year} for ${gameState.score} points` : `Missed it. The year was ${gameState.puzzle.year}`}
+            share={{
+              score: isWon ? `${gameState.score} points in ${gameState.guesses.length} ${gameState.guesses.length === 1 ? 'guess' : 'guesses'}` : 'Did not guess',
+              gameName: 'Guess The Year',
+              gamePath: '/guess-the-year',
+            }}
+            onPlayAgain={resetGame}
+          />
         )}
 
         {/* How to play modal */}
@@ -252,7 +236,7 @@ export function GuessTheYearBoard() {
 
         {/* Other games */}
         <GameNav />
-      </div>
+      </GameShell>
     </div>
   );
 }

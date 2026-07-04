@@ -2,12 +2,11 @@ import { useState } from 'react';
 import { useNFLCareer } from '@/hooks/useNFLCareer';
 import { NFLCareerHowToPlay } from '@/components/nfl-career/NFLCareerHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { NFL_ROSTER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
-import { Flag, HelpCircle, RotateCcw } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { Flag, HelpCircle } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -37,35 +36,33 @@ const NFLCareer = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="NFL Career Path - Guess the NFL Player | DoUKnowBall"
         description="Identify the NFL player from progressive career clues. Draft info, teams, stats, and awards. Free daily trivia."
         path="/nfl-career"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        {/* Header */}
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowHelp(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-[0.15em] text-primary font-display mb-1">
-            🏈 NFL CAREER PATH
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            Guess the mystery NFL player from career clues!
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
-            <span>Clue <span className="text-foreground font-semibold">{cluesRevealed}/{totalClues}</span></span>
-            <span>Score if correct: <span className="text-correct font-semibold">{score}</span></span>
-          </div>
-        </header>
-
+      <GameShell
+        width="narrow"
+        emoji="🏈"
+        title="NFL CAREER PATH"
+        subtitle="Guess the mystery NFL player from career clues!"
+        headerExtra={
+          <>
+            <button
+              onClick={() => setShowHelp(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
+            <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
+              <span>Clue <span className="text-foreground font-semibold">{cluesRevealed}/{totalClues}</span></span>
+              <span>Score if correct: <span className="text-correct font-semibold">{score}</span></span>
+            </div>
+          </>
+        }
+      >
         {/* Clue cards */}
         <div className="space-y-3 mb-8">
           {clues.map((clue, i) => (
@@ -133,43 +130,31 @@ const NFLCareer = () => {
         {/* Game Over */}
         {gameStatus !== 'playing' && (
           <div className="flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              {gameStatus === 'won' ? (
-                <>
-                  <div className="text-5xl mb-3">🎉</div>
-                  <h2 className="text-2xl font-bold text-correct font-display mb-2">Correct!</h2>
-                  <p className="text-foreground mb-1">
-                    The player was <span className="font-bold text-primary">{targetPlayer.name}</span>
-                  </p>
-                  <p className="text-muted-foreground text-sm">
-                    You got it in {cluesRevealed} clue{cluesRevealed > 1 ? 's' : ''}, {score} points!
-                  </p>
-                </>
-              ) : (
-                <>
-                  <div className="text-5xl mb-3">😞</div>
-                  <h2 className="text-2xl font-bold text-destructive font-display mb-2">Game Over</h2>
-                  <p className="text-foreground">
-                    The player was <span className="font-bold text-primary">{targetPlayer.name}</span>
-                  </p>
-                </>
-              )}
-              <p className="mt-3 text-sm text-muted-foreground">
-                💡 Did you know? {targetPlayer.name} was drafted in round {targetPlayer.draftRound} ({targetPlayer.draftYear}) out of {targetPlayer.college}{targetPlayer.careerStat ? `, known for ${targetPlayer.careerStat}` : ''}.
-              </p>
-              <ShareButtons
-                score={gameStatus === 'won' ? `${score} pts (${cluesRevealed} clues)` : '0 pts'}
-                gameName="NFL Career Path"
-                gamePath="/nfl-career"
-              />
-              <button
-                onClick={() => window.location.reload()}
-                className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
-            </div>
+            <ResultScreen
+              won={gameStatus === 'won'}
+              outcomeEmoji={gameStatus === 'won' ? '🎉' : '😞'}
+              headline={gameStatus === 'won' ? 'Correct!' : 'Game Over'}
+              statLine={
+                gameStatus === 'won' ? (
+                  <>
+                    The player was <span className="font-bold text-primary">{targetPlayer.name}</span>. You got it in{' '}
+                    {cluesRevealed} clue{cluesRevealed > 1 ? 's' : ''}, {score} points!
+                  </>
+                ) : (
+                  <>The player was <span className="font-bold text-primary">{targetPlayer.name}</span></>
+                )
+              }
+              funFact={
+                <>💡 Did you know? {targetPlayer.name} was drafted in round {targetPlayer.draftRound} ({targetPlayer.draftYear}) out of {targetPlayer.college}{targetPlayer.careerStat ? `, known for ${targetPlayer.careerStat}` : ''}.</>
+              }
+              emojiGrid={gameStatus === 'won' ? `NFL Career Path: solved in ${cluesRevealed} clue${cluesRevealed > 1 ? 's' : ''}` : 'NFL Career Path: not solved'}
+              share={{
+                score: gameStatus === 'won' ? `${score} pts (${cluesRevealed} clues)` : '0 pts',
+                gameName: 'NFL Career Path',
+                gamePath: '/nfl-career',
+              }}
+              onPlayAgain={() => window.location.reload()}
+            />
           </div>
         )}
 
@@ -198,9 +183,8 @@ const NFLCareer = () => {
           <ReportQuestion gameType="nfl-career" gameContext={{ targetPlayer: targetPlayer?.name }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

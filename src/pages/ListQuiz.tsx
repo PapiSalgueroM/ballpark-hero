@@ -1,10 +1,9 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { cn } from '@/lib/utils';
-import { Timer, Flag, RotateCcw, Loader2, ListChecks } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { Timer, Flag, Loader2, ListChecks } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -130,23 +129,17 @@ const ListQuiz = () => {
   const fmtClock = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="List Quiz: Name Them All | DoUKnowBall"
         description="How many can you name? Champions, MVPs, and legends across NFL, NBA, MLB, NHL, soccer, F1 and more. Free list quizzes with no sign-up."
         path="/list-quiz"
       />
-      <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-6">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.08em] text-primary font-display mb-1">
-            NAME THEM ALL
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Pick a list and start typing. Surnames and team nicknames count, spelling slips are forgiven.
-          </p>
-        </header>
-
+      <GameShell
+        width="wide"
+        title="NAME THEM ALL"
+        subtitle="Pick a list and start typing. Surnames and team nicknames count, spelling slips are forgiven."
+      >
         {phase === 'pick' && (
           <>
             <div className="space-y-6 max-w-2xl mx-auto">
@@ -287,44 +280,37 @@ const ListQuiz = () => {
             </div>
 
             {phase === 'done' && (
-              <div className="bg-card border border-border rounded-2xl p-6 text-center mb-6">
-                <div className="text-4xl mb-2">{pct === 100 ? '🏆' : pct >= 70 ? '🎉' : pct >= 40 ? '👏' : '📚'}</div>
-                <h3 className="text-xl font-bold text-primary font-display mb-1">
-                  {pct === 100 ? 'Perfect list!' : `You named ${foundCount} of ${total}`}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-3">
-                  {pct === 100
-                    ? 'Every single one. Take a bow.'
-                    : gaveUp
-                    ? 'The ones you missed are shown above.'
-                    : timed && secondsLeft <= 0
-                    ? 'Time! The rest are shown above.'
-                    : 'The full list is shown above.'}
-                </p>
-
-                <pre className="text-sm tracking-wide whitespace-pre-wrap mb-2">{emojiGrid}</pre>
-
-                <ShareButtons
-                  score={`${foundCount}/${total}`}
-                  gameName="Name Them All"
-                  gamePath="/list-quiz"
+              <div className="mb-6">
+                <ResultScreen
+                  won={pct === 100 ? true : pct >= 40 ? undefined : false}
+                  outcomeEmoji={pct === 100 ? '🏆' : pct >= 70 ? '🎉' : pct >= 40 ? '👏' : '📚'}
+                  headline={pct === 100 ? 'Perfect list!' : `You named ${foundCount} of ${total}`}
+                  statLine={
+                    pct === 100
+                      ? 'Every single one. Take a bow.'
+                      : gaveUp
+                      ? 'The ones you missed are shown above.'
+                      : timed && secondsLeft <= 0
+                      ? 'Time! The rest are shown above.'
+                      : 'The full list is shown above.'
+                  }
                   emojiGrid={emojiGrid}
+                  share={{
+                    score: `${foundCount}/${total}`,
+                    gameName: 'Name Them All',
+                    gamePath: '/list-quiz',
+                  }}
+                  onPlayAgain={() => puzzle && startPuzzle(puzzle, timed)}
+                  playAgainLabel="Retry"
+                  playNext={
+                    <button
+                      onClick={backToPicker}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 bg-secondary text-foreground rounded-full font-semibold hover:bg-secondary/70 transition-colors"
+                    >
+                      <ListChecks className="w-4 h-4" /> More lists
+                    </button>
+                  }
                 />
-
-                <div className="flex gap-2 justify-center mt-4">
-                  <button
-                    onClick={() => puzzle && startPuzzle(puzzle, timed)}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-                  >
-                    <RotateCcw className="w-4 h-4" /> Retry
-                  </button>
-                  <button
-                    onClick={backToPicker}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-secondary text-foreground rounded-full font-semibold hover:bg-secondary/70 transition-colors"
-                  >
-                    <ListChecks className="w-4 h-4" /> More lists
-                  </button>
-                </div>
               </div>
             )}
           </div>
@@ -351,9 +337,8 @@ const ListQuiz = () => {
           ]}
         />
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

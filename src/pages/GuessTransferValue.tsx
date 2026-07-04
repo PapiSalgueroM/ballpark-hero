@@ -1,11 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useGuessTransferValue, ValueGuess } from '@/hooks/useGuessTransferValue';
 import { cn } from '@/lib/utils';
-import { RotateCcw, ArrowUp, ArrowDown, Check, Minus, Plus } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { ArrowUp, ArrowDown, Check, Minus, Plus } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PostGameStats from '@/components/game/PostGameStats';
@@ -74,46 +73,43 @@ const GuessTransferValue = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Guess The Transfer Value: Daily Soccer Market Value Game | DoUKnowBall"
         description="Guess a real soccer player's transfer market value in 6 tries. New player every day."
         path="/guess-transfer-value"
       />
-      <div className="max-w-3xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-6">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.15em] text-primary font-display mb-1">
-            GUESS THE VALUE
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-lg mx-auto">
-            Read the player's profile, then guess their transfer market value in 6 tries. Higher/lower & hot/cold feedback after each guess.
-          </p>
+      <GameShell
+        width="wide"
+        title="GUESS THE VALUE"
+        subtitle="Read the player's profile, then guess their transfer market value in 6 tries. Higher/lower & hot/cold feedback after each guess."
+        headerExtra={
+          <>
+            <div className="flex items-center justify-center gap-1 mt-5 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
+                  className={cn(
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                </button>
+              ))}
+            </div>
 
-          <div className="flex items-center justify-center gap-1 mt-5 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-              </button>
-            ))}
-          </div>
-
-          <p className="text-sm text-muted-foreground mt-4">
-            Guesses:{' '}
-            <span className="text-foreground font-semibold">{guesses.length}</span>{' '}
-            / {maxGuesses}
-          </p>
-        </header>
-
+            <p className="text-sm text-muted-foreground mt-4">
+              Guesses:{' '}
+              <span className="text-foreground font-semibold">{guesses.length}</span>{' '}
+              / {maxGuesses}
+            </p>
+          </>
+        }
+      >
         {isLoading || !target ? (
           <div className="text-center py-16 text-muted-foreground animate-pulse">Loading today's player…</div>
         ) : (
@@ -228,52 +224,33 @@ const GuessTransferValue = () => {
             {/* Game over */}
             {gameStatus !== 'playing' && (
               <div className="mt-8 flex justify-center">
-                <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-                  {gameStatus === 'won' ? (
+                <ResultScreen
+                  won={gameStatus === 'won'}
+                  outcomeEmoji={gameStatus === 'won' ? '🎯' : '😞'}
+                  headline={gameStatus === 'won' ? 'Nailed it!' : 'Out of guesses'}
+                  statLine={
                     <>
-                      <div className="text-5xl mb-3">🎯</div>
-                      <h2 className="text-2xl font-bold text-correct font-display mb-2">Nailed it!</h2>
+                      <span className="font-bold text-primary">{target.name}</span> is valued at{' '}
+                      <span className="font-bold text-primary">{fmtUsd(target.marketValue)}</span>
                     </>
-                  ) : (
-                    <>
-                      <div className="text-5xl mb-3">😞</div>
-                      <h2 className="text-2xl font-bold text-destructive font-display mb-2">Out of guesses</h2>
-                    </>
-                  )}
-                  <p className="text-foreground">
-                    <span className="font-bold text-primary">{target.name}</span> is valued at{' '}
-                    <span className="font-bold text-primary">{fmtUsd(target.marketValue)}</span>
-                  </p>
-                  <p className="text-muted-foreground text-sm mt-1">{target.club} · {target.position}</p>
-
-                  {emojiGrid && (
-                    <pre className="mt-4 text-2xl tracking-widest">{emojiGrid}</pre>
-                  )}
-
-                  <ShareButtons
-                    score={gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`}
-                    gameName="Guess The Value"
-                    gamePath="/guess-transfer-value"
-                    emojiGrid={emojiGrid}
-                  />
+                  }
+                  funFact={`${target.club} · ${target.position}`}
+                  emojiGrid={emojiGrid || `${gameStatus === 'won' ? '🎯' : '😞'} ${target.name}`}
+                  share={{
+                    score: gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`,
+                    gameName: 'Guess The Value',
+                    gamePath: '/guess-transfer-value',
+                  }}
+                  onPlayAgain={mode === 'unlimited' ? newUnlimitedPlayer : undefined}
+                  playAgainLabel="New Player"
+                  playNext={mode === 'daily' ? 'Come back tomorrow for a new player!' : undefined}
+                >
                   <PostGameStats
                     gameSlug="guess-transfer-value"
                     userScore={gameStatus === 'won' ? Math.max(100, (maxGuesses - guesses.length + 1) * 150) : 0}
                     isVisible={true}
                   />
-
-                  {mode === 'unlimited' ? (
-                    <button
-                      onClick={newUnlimitedPlayer}
-                      className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-                    >
-                      <RotateCcw className="w-4 h-4" />
-                      New Player
-                    </button>
-                  ) : (
-                    <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new player!</p>
-                  )}
-                </div>
+                </ResultScreen>
               </div>
             )}
           </>
@@ -300,9 +277,8 @@ const GuessTransferValue = () => {
           ]}
         />
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

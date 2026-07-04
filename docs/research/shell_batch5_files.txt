@@ -1,0 +1,1 @@
+src/pages/PerfectLineupNhl.tsx, src/pages/PerfectLineupF1.tsx converted to GameShell; F1Driver.tsx/F1Constructor.tsx/GuessTennisPlayer.tsx/TennisChain.tsx/GuessNascarDriver.tsx skipped (their Board components are self-themed full-screen engines with own dark bg-*-950 palettes, own Footer, own game-over UI — GameShell adoption is a high-risk rewrite, not a wrap)

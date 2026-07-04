@@ -2,9 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import GuessCollegeHowToPlay from '@/components/guess-college/GuessCollegeHowToPlay';
 import { useGuessTheCollege } from '@/hooks/useGuessTheCollege';
 import { Button } from '@/components/ui/button';
@@ -87,24 +86,19 @@ const GuessTheCollege = () => {
 
   return (
     <>
-      <GameNavbar />
       <PageSeo
         title="Guess the College - D1 School Trivia Game | DoUKnowBall"
         description="Guess the Division 1 college from progressive clues. Test your knowledge of D1 schools. Daily challenge."
         path="/guess-the-college"
       />
 
-      <div className="min-h-screen flex flex-col bg-background">
-        <main className="flex-1 container max-w-2xl mx-auto px-4 py-6">
-          {/* Header */}
-          <div className="text-center mb-6">
-            <div className="flex items-center justify-center gap-3 mb-1">
-              <h1 className="text-3xl font-bold font-display text-primary">🎓 Guess The College</h1>
-              <GuessCollegeHowToPlay />
-            </div>
-            <p className="text-sm text-muted-foreground">Identify the D1 school from progressive clues</p>
-          </div>
-
+      <GameShell
+        width="narrow"
+        emoji="🎓"
+        title="GUESS THE COLLEGE"
+        subtitle="Identify the D1 school from progressive clues"
+        headerExtra={<GuessCollegeHowToPlay />}
+      >
           {/* Mode selector */}
           <div className="flex justify-center gap-2 mb-3">
             {MODE_OPTIONS.map(opt => (
@@ -286,68 +280,67 @@ const GuessTheCollege = () => {
 
           {/* Game over */}
           {gameOver && (
-            <div className="text-center space-y-4 py-4">
-              {won ? (
-                <div>
-                  <p className="text-3xl font-bold text-primary mb-1">🎉 Correct!</p>
-                  <p className="text-xl font-semibold">{score} points</p>
-                  <p className="text-muted-foreground">
-                    Guessed in {guessHistory.length} {guessHistory.length === 1 ? 'try' : 'tries'}
-                  </p>
-                  {score >= 1200 && <Badge className="mt-2 bg-amber-500">🏆 Legendary!</Badge>}
-                  {score >= 700 && score < 1200 && <Badge className="mt-2 bg-green-500">🎯 Great job!</Badge>}
-                </div>
-              ) : (
-                <div>
-                  <p className="text-xl font-bold text-destructive mb-1">Better luck next time!</p>
-                  <p className="text-lg text-muted-foreground">The answer was:</p>
-                  <p className="text-2xl font-bold text-primary">{currentCollege?.name}</p>
-                </div>
-              )}
-
-              {guessHistory.length > 0 && (
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Your guesses:</p>
-                  <div className="flex flex-wrap justify-center gap-1.5">
-                    {guessHistory.map((g, i) => {
-                      const isLast = i === guessHistory.length - 1;
-                      const isCorrectGuess = isLast && won;
-                      return (
-                        <Badge
-                          key={i}
-                          variant="outline"
-                          className={cn(
-                            "text-xs",
-                            isCorrectGuess ? "text-green-500 border-green-500/30" : "text-destructive border-destructive/30"
-                          )}
-                        >
-                          {isCorrectGuess ? '✓' : '✗'} {g}
-                        </Badge>
-                      );
-                    })}
+            <div className="flex justify-center py-4">
+              <ResultScreen
+                won={won}
+                outcomeEmoji={won ? '🎉' : '🎓'}
+                headline={won ? 'Correct!' : 'Better luck next time!'}
+                statLine={
+                  won ? (
+                    <>
+                      {score} points. Guessed in {guessHistory.length} {guessHistory.length === 1 ? 'try' : 'tries'}
+                    </>
+                  ) : (
+                    <>The answer was: <span className="font-bold text-primary">{currentCollege?.name}</span></>
+                  )
+                }
+                funFact={
+                  won ? (
+                    score >= 1200 ? '🏆 Legendary!' : score >= 700 ? '🎯 Great job!' : undefined
+                  ) : undefined
+                }
+                emojiGrid={guessHistory.map((g, i) => (i === guessHistory.length - 1 && won) ? '🟩' : '🟥').join('') || (won ? '🟩' : '🟥')}
+                share={{
+                  score: `${score}`,
+                  gameName: 'Guess The College',
+                  gamePath: '/guess-the-college',
+                }}
+                onPlayAgain={mode !== 'daily' ? playAgain : undefined}
+                playNext={
+                  mode === 'daily' && dailyCompleted ? (
+                    <p className="text-sm text-muted-foreground">
+                      Come back tomorrow for a new daily challenge! Or try{' '}
+                      <button className="text-primary underline" onClick={() => setMode('unlimited')}>
+                        Unlimited Mode
+                      </button>
+                    </p>
+                  ) : undefined
+                }
+              >
+                {guessHistory.length > 0 && (
+                  <div className="mb-2">
+                    <p className="text-xs text-muted-foreground mb-1">Your guesses:</p>
+                    <div className="flex flex-wrap justify-center gap-1.5">
+                      {guessHistory.map((g, i) => {
+                        const isLast = i === guessHistory.length - 1;
+                        const isCorrectGuess = isLast && won;
+                        return (
+                          <Badge
+                            key={i}
+                            variant="outline"
+                            className={cn(
+                              "text-xs",
+                              isCorrectGuess ? "text-green-500 border-green-500/30" : "text-destructive border-destructive/30"
+                            )}
+                          >
+                            {isCorrectGuess ? '✓' : '✗'} {g}
+                          </Badge>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              )}
-
-              <ShareButtons
-                score={`${score}`}
-                gameName="Guess The College"
-                gamePath="/guess-the-college"
-              />
-
-              {mode !== 'daily' && (
-                <Button onClick={playAgain} className="mt-2">
-                  🔄 Play Again
-                </Button>
-              )}
-              {mode === 'daily' && dailyCompleted && (
-                <p className="text-sm text-muted-foreground">
-                  Come back tomorrow for a new daily challenge! Or try{' '}
-                  <button className="text-primary underline" onClick={() => setMode('unlimited')}>
-                    Unlimited Mode
-                  </button>
-                </p>
-              )}
+                )}
+              </ResultScreen>
             </div>
           )}
 
@@ -361,9 +354,7 @@ const GuessTheCollege = () => {
               </p>
             </div>
           )}
-        </main>
 
-        <div className="container max-w-2xl mx-auto px-4">
           <GameSeoContent
             title="Guess The College: D1 Trivia | DoUKnowBall"
             description="Guess the Division 1 college from progressive clues about their conference, mascot, location, and athletic history. Covers all Power 4 and Group of 5 schools."
@@ -382,9 +373,7 @@ const GuessTheCollege = () => {
             ]}
           />
           <GameNav />
-          <Footer />
-        </div>
-      </div>
+      </GameShell>
 
       <style>{`
         @keyframes slideInUp {

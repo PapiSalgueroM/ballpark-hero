@@ -2,15 +2,14 @@ import { useState, useEffect, useMemo } from 'react';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS, type Formation } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import FormationPitch from '@/components/lineup/FormationPitch';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity } from '@/lib/playerSearch';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
 import { LineupHowToPlay } from '@/components/lineup/LineupHowToPlay';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
@@ -77,30 +76,28 @@ const LineupBuilder = () => {
   }
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Build Your XI - Soccer Lineup Builder Game | DoUKnowBall"
         description="Spin a random challenge, pick two teams, and build the ultimate starting XI. AI rates your lineup."
         path="/build-your-xi"
       />
-      <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowRules(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.15em] text-primary font-display mb-1">
-            BUILD YOUR XI
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base">
-            Pick a formation, fill each position with a player from the given club or nation
-          </p>
-        </header>
-
+      <GameShell
+        width="wide"
+        title="BUILD YOUR XI"
+        subtitle="Pick a formation, fill each position with a player from the given club or nation"
+        headerExtra={
+          <div className="flex justify-center">
+            <button
+              onClick={() => setShowRules(true)}
+              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors mt-1"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
+          </div>
+        }
+      >
         {/* Formation Selection */}
         {phase === 'formation' && (
           <div className="max-w-lg mx-auto">
@@ -263,43 +260,35 @@ const LineupBuilder = () => {
 
         {/* Result Phase */}
         {phase === 'result' && verdict && (
-          <div className="max-w-xl mx-auto space-y-6">
-            <div className="bg-card border border-border rounded-2xl p-8 text-center shadow-xl">
-              <Trophy className="w-12 h-12 text-primary mx-auto mb-3" />
-              <h2 className="text-3xl font-bold text-primary font-display mb-1">{verdict.rating}</h2>
-              <p className="text-lg font-semibold text-foreground mb-3">{verdict.headline}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{verdict.analysis}</p>
-            </div>
-
-            <div className="bg-card border border-border rounded-2xl p-4">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Your {formation} XI</p>
-              <div className="space-y-1.5">
-                {filledSlotsArray.map((slot, i) => (
-                  <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-3 py-2 text-sm">
-                    <span className="text-xs font-bold text-primary w-8 shrink-0">{slot.label}</span>
-                    <span className="font-semibold text-foreground flex-1 min-w-0 truncate">{slot.playerName}</span>
-                    <span className="text-xs text-muted-foreground shrink-0 max-w-[35%] truncate">
-                      {slot.isNation ? '🏳️' : '🏟️'} {slot.assignedTeam}
-                    </span>
-                  </div>
-                ))}
+          <div className="max-w-xl mx-auto">
+            <ResultScreen
+              outcomeEmoji={<Trophy className="w-12 h-12 text-primary mx-auto" />}
+              headline={verdict.rating}
+              statLine={<span className="font-semibold">{verdict.headline}</span>}
+              funFact={<span className="whitespace-pre-line">{verdict.analysis}</span>}
+              emojiGrid={`Build Your XI: ${formation} rated ${verdict.rating}`}
+              share={{
+                score: verdict.rating,
+                gameName: 'Build Your XI',
+                gamePath: '/build-your-xi',
+              }}
+              onPlayAgain={resetGame}
+            >
+              <div className="bg-secondary/30 rounded-2xl p-4 mb-2 text-left">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Your {formation} XI</p>
+                <div className="space-y-1.5">
+                  {filledSlotsArray.map((slot, i) => (
+                    <div key={i} className="flex items-center gap-3 bg-card/60 rounded-lg px-3 py-2 text-sm">
+                      <span className="text-xs font-bold text-primary w-8 shrink-0">{slot.label}</span>
+                      <span className="font-semibold text-foreground flex-1 min-w-0 truncate">{slot.playerName}</span>
+                      <span className="text-xs text-muted-foreground shrink-0 max-w-[35%] truncate">
+                        {slot.isNation ? '🏳️' : '🏟️'} {slot.assignedTeam}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-
-            <ShareButtons
-              score={verdict.rating}
-              gameName="Build Your XI"
-              gamePath="/build-your-xi"
-            />
-            <div className="flex flex-wrap justify-center gap-3 mt-4">
-              <button
-                onClick={resetGame}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
-            </div>
+            </ResultScreen>
           </div>
         )}
 
@@ -329,11 +318,10 @@ const LineupBuilder = () => {
           <ReportQuestion gameType="build-your-xi" gameContext={{ team: currentTeam, formation }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
 
-      <LineupHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+        <LineupHowToPlay open={showRules} onOpenChange={setShowRules} />
+      </GameShell>
+    </>
   );
 };
 

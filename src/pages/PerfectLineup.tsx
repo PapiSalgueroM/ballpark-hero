@@ -1,27 +1,22 @@
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { GameShell } from '@/components/game/GameShell';
 import PerfectLineupBoard from '@/components/perfect-lineup/PerfectLineupBoard';
 
 const PerfectLineup = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <>
       <PageSeo
         title="Perfect Lineup: Build a Squad Under Random Constraints | DoUKnowBall"
         description="Fill a 4-3-3 where every slot demands a player from a random league or country, then simulate the match and share your scoreline. A daily soccer squad-builder."
         path="/perfect-lineup"
       />
-      <GameNavbar />
-      <main className="flex-1 pt-6">
-        <header className="text-center mb-6 px-4">
-          <h1 className="text-3xl font-black text-foreground">⚽ Perfect Lineup</h1>
-          <p className="text-muted-foreground mt-1 max-w-xl mx-auto">
-            Build the best XI you can, but every constrained slot only accepts a player from that league
-            or country. Then simulate the match and share your result.
-          </p>
-        </header>
-
+      <GameShell
+        width="wide"
+        emoji="⚽"
+        title="PERFECT LINEUP"
+        subtitle="Build the best XI you can, but every constrained slot only accepts a player from that league or country. Then simulate the match and share your result."
+      >
         <PerfectLineupBoard />
 
         <GameSeoContent
@@ -40,9 +35,8 @@ const PerfectLineup = () => {
             'Higher market values and shared leagues/nationalities boost your rating and chemistry.',
           ]}
         />
-      </main>
-      <Footer />
-    </div>
+      </GameShell>
+    </>
   );
 };
 

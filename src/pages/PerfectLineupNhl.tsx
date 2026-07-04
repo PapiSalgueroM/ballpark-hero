@@ -1,28 +1,23 @@
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import GenericLineupBoard from '@/components/perfect-lineup/GenericLineupBoard';
 import { NHL_LINEUP_CONFIG } from '@/data/nhlPerfectLineupPool';
+import { GameShell } from '@/components/game/GameShell';
 
 const PerfectLineupNhl = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <>
       <PageSeo
         title="Perfect Lineup: NHL Dream Line Under Random Constraints | DoUKnowBall"
         description="Build an NHL dream line: three forwards, two defensemen and a goalie, where every slot demands a player from a random team or era, then simulate and share."
         path="/perfect-lineup-nhl"
       />
-      <GameNavbar />
-      <main className="flex-1 pt-6">
-        <header className="text-center mb-6 px-4">
-          <h1 className="text-3xl font-black text-foreground">🏒 Perfect Lineup: NHL</h1>
-          <p className="text-muted-foreground mt-1 max-w-xl mx-auto">
-            Build a dream line: LW, C, RW, two defensemen and a goalie, but constrained slots only
-            accept a player from that team or era. Then simulate the game and share your result.
-          </p>
-        </header>
-
+      <GameShell
+        width="wide"
+        emoji="🏒"
+        title="Perfect Lineup: NHL"
+        subtitle="Build a dream line: LW, C, RW, two defensemen and a goalie, but constrained slots only accept a player from that team or era. Then simulate the game and share your result."
+      >
         <GenericLineupBoard config={NHL_LINEUP_CONFIG} />
 
         <GameSeoContent
@@ -40,9 +35,8 @@ const PerfectLineupNhl = () => {
             'A "1990s" defenseman slot accepts any defenseman from that era.',
           ]}
         />
-      </main>
-      <Footer />
-    </div>
+      </GameShell>
+    </>
   );
 };
 

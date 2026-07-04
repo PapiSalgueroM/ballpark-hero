@@ -1,0 +1,1 @@
+src/pages/NbaLineup.tsx, src/pages/NbaConnect4.tsx, src/pages/NbaChain.tsx, src/pages/PerfectLineupNba.tsx, src/pages/BaseballCareer.tsx, src/pages/HockeyCareer.tsx (GuessCbbTeam.tsx skipped: CbbProgramBoard.tsx uses an intentional hardcoded slate dark theme, not bg-surface tokens, so wrapping it in GameShell would break its visual identity; left untouched)

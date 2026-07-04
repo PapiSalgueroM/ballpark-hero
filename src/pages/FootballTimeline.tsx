@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useFootballTimeline } from '@/hooks/useFootballTimeline';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { HelpCircle, GripVertical, Check, X, ArrowUp, ArrowDown } from 'lucide-react';
+import { HelpCircle, Check, X, ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FootballTimelineHowToPlay } from '@/components/football-timeline/FootballTimelineHowToPlay';
 
@@ -39,31 +38,27 @@ const FootballTimeline = () => {
   }, [order, saveOrder]);
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="NFL Timeline - Drag and Drop Draft Year Puzzle | DoUKnowBall"
         description="Put NFL players in order by their draft year. Free daily NFL trivia puzzle."
         path="/football-timeline"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-8 relative">
+      <GameShell
+        width="narrow"
+        emoji="🏈"
+        title="PRO FOOTBALL TIMELINE"
+        subtitle="Put the players in NFL Draft order: the earliest draft year goes at the top, the most recent at the bottom."
+        headerExtra={
           <button
             onClick={() => setShowRules(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-[hsl(var(--ft-gold))] transition-colors"
+            className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[hsl(var(--ft-gold))] transition-colors"
             aria-label="How to play"
           >
-            <HelpCircle className="w-6 h-6" />
+            <HelpCircle className="w-4 h-4" /> How to play
           </button>
-
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.15em] font-display mb-1 text-[hsl(var(--ft-gold))]">
-            🏈 PRO FOOTBALL TIMELINE
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Put the players in NFL Draft order: the earliest draft year goes at the top, the most recent at the bottom.
-          </p>
-        </header>
-
+        }
+      >
         {/* Player list */}
         {status === 'playing' && (
           <p className="text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
@@ -152,24 +147,24 @@ const FootballTimeline = () => {
         {/* Results */}
         {status === 'submitted' && (
           <div className="mt-8 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              <div className="text-5xl mb-3">{score === 5 ? '🏆' : score >= 3 ? '🎯' : '🏈'}</div>
-              <h2 className="text-2xl font-bold text-[hsl(var(--ft-gold))] font-display mb-2">
-                {score}/5 Correct!
-              </h2>
-              <p className="text-foreground">
-                {score === 5
+            <ResultScreen
+              won={score >= 3}
+              outcomeEmoji={score === 5 ? '🏆' : score >= 3 ? '🎯' : '🏈'}
+              headline={`${score}/5 Correct!`}
+              statLine={
+                score === 5
                   ? 'Perfect! You nailed the draft order!'
                   : score >= 3
                     ? 'Nice work! You know your draft history.'
-                    : 'Keep studying those draft classes!'}
-              </p>
-              <ShareButtons
-                score={`${score}/5 on today's Pro Football Timeline`}
-                gameName="Pro Football Timeline"
-                gamePath="/football-timeline"
-              />
-            </div>
+                    : 'Keep studying those draft classes!'
+              }
+              emojiGrid={order.map((p, i) => p.name === correctOrder[i].name ? '🟩' : '🟥').join('')}
+              share={{
+                score: `${score}/5 on today's Pro Football Timeline`,
+                gameName: 'Pro Football Timeline',
+                gamePath: '/football-timeline',
+              }}
+            />
           </div>
         )}
 
@@ -198,11 +193,10 @@ const FootballTimeline = () => {
           <ReportQuestion gameType="football-timeline" gameContext={{ puzzleId: puzzle.id }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
+      </GameShell>
 
       <FootballTimelineHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+    </>
   );
 };
 

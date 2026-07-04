@@ -1,14 +1,13 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { useNbaChain } from '@/hooks/useNbaChain';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { NbaChainHowToPlay } from '@/components/nba-chain/NbaChainHowToPlay';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { NBA_PLAYER_SOURCE, normalizeName, type PlayerEntity } from '@/lib/playerSearch';
 import { cn } from '@/lib/utils';
 import {
-  RotateCcw,
   Loader2,
   AlertCircle,
   HelpCircle,
@@ -17,7 +16,6 @@ import {
   StopCircle,
   ArrowRight,
 } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -67,49 +65,47 @@ const NbaChain = () => {
   }, [chain.length]);
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="NBA Chain - Basketball Player Connection Game | DoUKnowBall"
         description="Build the longest chain of connected NBA players by naming teammates. Free basketball trivia game."
         path="/nba-chain"
       />
-      <div className="max-w-3xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-6 relative">
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.12em] text-primary font-display mb-1">
-            NBA CHAIN GAME
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            Build the longest chain of connected NBA players by naming teammates. Each new player must have shared a team with the previous one.
-          </p>
-          <button
-            onClick={() => setShowHowToPlay(true)}
-            className="absolute top-0 right-0 p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
-            title="How to Play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
+      <GameShell
+        width="narrow"
+        title="NBA CHAIN GAME"
+        subtitle="Build the longest chain of connected NBA players by naming teammates. Each new player must have shared a team with the previous one."
+        headerExtra={
+          <>
+            <button
+              onClick={() => setShowHowToPlay(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
 
-          {/* Endless / Round toggle. Endless is the default mode; switching
-              always starts a fresh chain under the new mode's rules. */}
-          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['endless', 'round'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground',
-                )}
-              >
-                {m === 'endless' ? '∞ Endless' : `🎯 Round (${roundPickCount})`}
-              </button>
-            ))}
-          </div>
-        </header>
-
+            {/* Endless / Round toggle. Endless is the default mode; switching
+                always starts a fresh chain under the new mode's rules. */}
+            <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['endless', 'round'] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
+                  className={cn(
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  {m === 'endless' ? '∞ Endless' : `🎯 Round (${roundPickCount})`}
+                </button>
+              ))}
+            </div>
+          </>
+        }
+      >
         <NbaChainHowToPlay open={showHowToPlay} onOpenChange={setShowHowToPlay} />
 
         {/* Score bar */}
@@ -209,58 +205,38 @@ const NbaChain = () => {
 
         {/* Game over */}
         {phase === 'ended' && (
-          <div className="text-center space-y-4 animate-fade-in">
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-primary/10 border border-primary/30">
-              <span className="text-xl font-bold text-primary font-display">
-                {score >= 10 ? '🔥' : score >= 5 ? '💪' : '🏀'} Chain of {score}!
-              </span>
-            </div>
-
-            {/* Round mode: score vs par summary. Only shown when a full
-                round was completed (roundComplete), so ending a round early
-                via "End Game" is reported as an incomplete chain instead of
-                a misleading par comparison. */}
-            {mode === 'round' && roundComplete && scoreVsPar !== null && (
-              <div
-                className={cn(
-                  'inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm border',
-                  scoreVsPar > 0
-                    ? 'bg-green-500/10 text-green-400 border-green-500/30'
-                    : scoreVsPar < 0
-                      ? 'bg-orange-500/10 text-orange-400 border-orange-500/30'
-                      : 'bg-secondary text-foreground border-border',
-                )}
-              >
-                <Trophy className="w-4 h-4" />
-                {scoreVsPar > 0
-                  ? `${scoreVsPar} over par (par ${roundPar})`
-                  : scoreVsPar < 0
-                    ? `${Math.abs(scoreVsPar)} under par (par ${roundPar})`
-                    : `Even par (${roundPar})`}
-              </div>
-            )}
-
-            {gameOverReason && (
-              <p className="text-sm text-muted-foreground">{gameOverReason}</p>
-            )}
-            <ShareButtons
-              score={
-                mode === 'round' && roundComplete && scoreVsPar !== null
-                  ? `${score}/${roundPickCount} picks, ${scoreVsPar >= 0 ? '+' : ''}${scoreVsPar} vs par`
-                  : `${score} chain (best: ${bestStreak})`
+          <div className="mt-8 flex justify-center">
+            <ResultScreen
+              outcomeEmoji={score >= 10 ? '🔥' : score >= 5 ? '💪' : '🏀'}
+              headline={`Chain of ${score}!`}
+              statLine={gameOverReason}
+              funFact={
+                mode === 'round' && roundComplete && scoreVsPar !== null ? (
+                  <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm border bg-secondary text-foreground border-border">
+                    <Trophy className="w-4 h-4 inline" />
+                    {scoreVsPar > 0
+                      ? `${scoreVsPar} over par (par ${roundPar})`
+                      : scoreVsPar < 0
+                        ? `${Math.abs(scoreVsPar)} under par (par ${roundPar})`
+                        : `Even par (${roundPar})`}
+                  </span>
+                ) : undefined
               }
-              gameName="NBA Chain Game"
-              gamePath="/nba-chain"
+              emojiGrid={
+                mode === 'round' && roundComplete && scoreVsPar !== null
+                  ? `NBA Chain: ${score}/${roundPickCount} picks, ${scoreVsPar >= 0 ? '+' : ''}${scoreVsPar} vs par`
+                  : `NBA Chain streak: ${score} (best: ${bestStreak})`
+              }
+              share={{
+                score:
+                  mode === 'round' && roundComplete && scoreVsPar !== null
+                    ? `${score}/${roundPickCount} picks, ${scoreVsPar >= 0 ? '+' : ''}${scoreVsPar} vs par`
+                    : `${score} chain (best: ${bestStreak})`,
+                gameName: 'NBA Chain Game',
+                gamePath: '/nba-chain',
+              }}
+              onPlayAgain={resetGame}
             />
-            <div className="flex items-center justify-center gap-3 mt-4">
-              <button
-                onClick={resetGame}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Play Again
-              </button>
-            </div>
           </div>
         )}
 
@@ -289,9 +265,8 @@ const NbaChain = () => {
           <ReportQuestion gameType="nba-chain" gameContext={{ lastPlayer, chainLength: score }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

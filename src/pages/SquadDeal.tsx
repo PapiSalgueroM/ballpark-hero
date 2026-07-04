@@ -1,15 +1,14 @@
 import { useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { Briefcase, Phone, Check, X, RotateCcw, Trophy, ChevronRight, Crown, Zap, Sparkles, Play } from 'lucide-react';
+import { Briefcase, Phone, Check, X, Trophy, ChevronRight, Crown, Zap, Sparkles, Play } from 'lucide-react';
 import { useSquadDeal } from '@/hooks/useSquadDeal';
 import { FORMATIONS, EXTRAS, playerRating } from '@/lib/squadDeal';
 import type { Formation } from '@/lib/squadDeal';
 import type { Player } from '@/types/game';
-import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -66,13 +65,12 @@ const SquadDeal = () => {
   );
 
   const shell = (inner: ReactNode) => (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo title="Squad Deal: Deal or No Deal Team Builder | DoUKnowBall"
         description="Build a full XI Deal-or-No-Deal style: pick a case per position, dodge the Banker, add a manager, stadium and fans, then simulate your squad."
         path="/squad-deal" />
-      <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">{inner}</div>
-      <div className="max-w-4xl mx-auto px-4">
+      <GameShell width="wide">
+        {inner}
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
         <GameSeoContent title="Squad Deal: Deal or No Deal Team Builder"
           description="A Deal or No Deal twist on building your dream team. Each position gives you 10 mystery cases of players tiered from elite to weak. Keep one, eliminate the rest, and weigh the Banker's player offers."
@@ -83,9 +81,8 @@ const SquadDeal = () => {
             'Fill all 11, pick your manager / stadium / fans / budget, then Simulate for a rating and grade.',
           ]} />
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 
   /* ---------- CONFIG ---------- */
@@ -176,17 +173,27 @@ const SquadDeal = () => {
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">YOUR SQUAD</h1>
         <p className="text-muted-foreground text-sm mb-5">{g.formation.name} · {g.era === 'legends' ? 'All-Time Legends' : 'Current Era'}{g.memesOn ? ' · Memes' : ''}</p>
         <Pitch formation={g.formation} squad={g.squad} activeIndex={-1} />
-        <div className="mt-6 bg-card border border-border rounded-2xl p-6 max-w-md mx-auto shadow-xl">
-          <div className="flex items-center justify-center gap-6">
-            <div><div className="text-5xl font-bold text-primary font-display">{r.rating}</div><div className="text-xs text-muted-foreground uppercase tracking-wide">Rating</div></div>
-            <div className="h-12 w-px bg-border" />
-            <div><div className="text-5xl font-bold text-primary font-display">{r.grade}</div><div className="text-xs text-muted-foreground uppercase tracking-wide">Grade</div></div>
-          </div>
-          <div className="mt-5 space-y-1.5 text-left">
-            {r.facts.map((f, i) => <p key={i} className="text-sm text-foreground flex items-start gap-2"><Trophy className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />{f}</p>)}
-          </div>
-          <ShareButtons score={'Grade ' + r.grade + ' (' + r.rating + ')'} gameName="Squad Deal" gamePath="/squad-deal" emojiGrid={'🏟️ ' + g.formation.name + ' · ' + r.grade} />
-          <button onClick={g.restart} className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"><RotateCcw className="w-4 h-4" /> Build Again</button>
+        <div className="mt-6">
+          <ResultScreen
+            outcomeEmoji="🏟️"
+            headline={`Grade ${r.grade}`}
+            statRow={[
+              { label: 'Rating', value: r.rating },
+              { label: 'Grade', value: r.grade },
+            ]}
+            emojiGrid={'🏟️ ' + g.formation.name + ' · ' + r.grade}
+            share={{
+              score: 'Grade ' + r.grade + ' (' + r.rating + ')',
+              gameName: 'Squad Deal',
+              gamePath: '/squad-deal',
+            }}
+            onPlayAgain={g.restart}
+            playAgainLabel="Build Again"
+          >
+            <div className="space-y-1.5 text-left">
+              {r.facts.map((f, i) => <p key={i} className="text-sm text-foreground flex items-start gap-2"><Trophy className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />{f}</p>)}
+            </div>
+          </ResultScreen>
         </div>
         {g.leaderboard.length > 0 && (
           <div className="mt-6 bg-card border border-border rounded-2xl p-5 max-w-md mx-auto text-left">

@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useShirtNumber } from '@/hooks/useShirtNumber';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import ReportQuestion from '@/components/game/ReportQuestion';
-import { ArrowUp, ArrowDown, Check, X, RotateCcw } from 'lucide-react';
+import GameSeoContent from '@/components/seo/GameSeoContent';
+import { ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function ShirtNumberBoard() {
@@ -15,15 +16,14 @@ export function ShirtNumberBoard() {
 
   const [input, setInput] = useState('');
 
-  // Show loading state until puzzle pool and daily puzzle are both ready
+  // Show loading state until puzzle pool and daily puzzle are both ready.
+  // This check must live BELOW every hook. Returning early above the hooks
+  // changes the hook count between renders and crashes with React error #310.
   if (isLoadingPool || isLoading || !puzzle) {
     return (
-      <div className="min-h-screen bg-background text-foreground">
-        <GameNavbar />
-        <div className="max-w-md mx-auto px-4 py-6 flex justify-center">
-          <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
-        </div>
-      </div>
+      <GameShell width="narrow" title="SHIRT NUMBER">
+        <p className="text-muted-foreground text-sm text-center animate-pulse">Loading today's puzzle…</p>
+      </GameShell>
     );
   }
 
@@ -38,24 +38,20 @@ export function ShirtNumberBoard() {
   const isComplete = status === 'won' || status === 'lost';
 
   const emojiResult = attempts.map(a => a === puzzle.kitNumber ? '🟩' : '🟥').join('');
-  const shareScore = status === 'won'
-    ? `${score} pts (${attempts.length}/${maxAttempts})`
-    : `0 pts (missed)`;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <GameNavbar />
-      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
-        {/* Mode indicator */}
-        <div className="text-center">
-          <h1 className="text-2xl font-display font-bold text-primary">Shirt Number</h1>
-          <p className="text-xs text-muted-foreground mt-1">
-            {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
-          </p>
-        </div>
-
+    <GameShell
+      width="narrow"
+      title="SHIRT NUMBER"
+      headerExtra={
+        <p className="text-xs text-muted-foreground mt-1">
+          {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
+        </p>
+      }
+    >
+      <div className="space-y-6">
         {/* Player card */}
-        <div className="rounded-2xl border border-border bg-card p-6 text-center space-y-3">
+        <div className="rounded-2xl border border-border bg-surface-1 p-6 text-center space-y-3">
           <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mx-auto text-2xl">
             {puzzle.nationality}
           </div>
@@ -121,52 +117,29 @@ export function ShirtNumberBoard() {
 
         {/* Result */}
         {isComplete && (
-          <div className="rounded-2xl border border-border bg-card p-6 text-center space-y-3">
-            {status === 'won' ? (
-              <>
-                <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto">
-                  <Check className="w-6 h-6 text-green-400" />
-                </div>
-                <p className="text-lg font-bold text-green-400">Correct! 🎉</p>
-              </>
-            ) : (
-              <>
-                <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mx-auto">
-                  <X className="w-6 h-6 text-red-400" />
-                </div>
-                <p className="text-lg font-bold text-red-400">The answer was #{puzzle.kitNumber}</p>
-              </>
-            )}
-            <p className="text-2xl font-display font-bold text-primary">{score} pts</p>
-            <p className="text-xs text-muted-foreground italic">💡 {puzzle.funFact}</p>
-
-            <ShareButtons
-              score={shareScore}
-              gameName="Shirt Number"
-              gamePath="/shirt-number"
-              emojiGrid={emojiResult}
-            />
-
-            {/* Mode buttons */}
-            <div className="flex flex-col gap-2 pt-2">
-              {mode === 'daily' && (
-                <button
-                  onClick={switchToUnlimited}
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-border bg-card hover:bg-muted/50 text-sm font-semibold transition-colors"
-                >
-                  <RotateCcw className="w-4 h-4" /> Play Unlimited
-                </button>
-              )}
-              {mode === 'unlimited' && (
-                <button
-                  onClick={() => { nextPuzzle(); setInput(''); }}
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold transition-colors"
-                >
-                  Next Puzzle →
-                </button>
-              )}
-            </div>
-          </div>
+          <ResultScreen
+            won={status === 'won'}
+            outcomeEmoji={status === 'won' ? '🎉' : '😞'}
+            headline={status === 'won' ? 'Correct!' : `The answer was #${puzzle.kitNumber}`}
+            statLine={<span className="text-2xl font-display font-bold text-primary">{score} pts</span>}
+            funFact={`💡 ${puzzle.funFact}`}
+            emojiGrid={emojiResult}
+            share={{
+              score: status === 'won' ? `${score} pts (${attempts.length}/${maxAttempts})` : '0 pts (missed)',
+              gameName: 'Shirt Number',
+              gamePath: '/shirt-number',
+            }}
+            onPlayAgain={mode === 'unlimited' ? () => { nextPuzzle(); setInput(''); } : undefined}
+            playAgainLabel="Next Puzzle"
+            playNext={mode === 'daily' ? (
+              <button
+                onClick={switchToUnlimited}
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-border bg-card hover:bg-muted/50 text-sm font-semibold transition-colors"
+              >
+                Play Unlimited
+              </button>
+            ) : undefined}
+          />
         )}
 
         <ReportQuestion
@@ -174,6 +147,24 @@ export function ShirtNumberBoard() {
           gameContext={{ playerName: puzzle.playerName, club: puzzle.club, kitNumber: puzzle.kitNumber }}
         />
       </div>
-    </div>
+
+      <GameSeoContent
+        title="Shirt Number Game | DoUKnowBall"
+        description="Test your football knowledge by guessing the kit number of famous soccer players. You get 3 attempts with higher/lower hints after each wrong guess."
+        howToPlay={[
+          "You're shown a player's name, club, league, and nationality.",
+          "Enter the shirt number you think they wear (1-99).",
+          "If wrong, you'll get a hint: is the real number higher or lower?",
+          "Score 1000 points on your first try, 600 on the second, or 200 on the third."
+        ]}
+        examples={[
+          "Lionel Messi at Inter Miami → #10",
+          "Erling Haaland at Manchester City → #9",
+          "Trent Alexander-Arnold at Liverpool → #66",
+          "Phil Foden at Manchester City → #47",
+          "Jude Bellingham at Real Madrid → #5"
+        ]}
+      />
+    </GameShell>
   );
 }

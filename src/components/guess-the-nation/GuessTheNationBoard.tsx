@@ -3,7 +3,8 @@ import { useGuessTheNation } from '@/hooks/useGuessTheNation';
 import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { NationSearch } from './NationSearch';
 import GuessTheNationHowToPlay from './GuessTheNationHowToPlay';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { GameNav } from '@/components/game/GameNav';
 import { Button } from '@/components/ui/button';
 import { POINTS_BY_CLUE, CLUE_LABELS, MAX_CLUES } from '@/types/guessTheNation';
@@ -200,16 +201,13 @@ export function GuessTheNationBoard() {
     : `I couldn't guess today's Nation. It was ${gameState.puzzle.countryName} 🌍`;
 
   return (
-    <div ref={gameRef} className="min-h-screen bg-background text-foreground">
-      <div className="container mx-auto px-4 py-8 max-w-xl">
-        {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-amber-400 font-display mb-1">
-            🌍 Guess The Nation
-          </h1>
-          <p className="text-sm text-muted-foreground">{modeLabel}</p>
-        </div>
-
+    <div ref={gameRef}>
+      <GameShell
+        width="narrow"
+        title="Guess The Nation"
+        emoji="🌍"
+        subtitle={modeLabel}
+      >
         {/* Points pill */}
         {isPlaying && (
           <div className="flex justify-center mb-6">
@@ -330,41 +328,25 @@ export function GuessTheNationBoard() {
 
         {/* Game over */}
         {(isWon || isLost) && (
-          <div className="space-y-6 text-center">
-            <div
-              className={`p-6 rounded-xl border ${
-                isWon ? 'bg-amber-500/10 border-amber-500/30' : 'bg-destructive/10 border-destructive/30'
-              }`}
-            >
-              <h2 className={`text-2xl font-bold mb-1 ${isWon ? 'text-amber-400' : 'text-destructive'}`}>
-                {isWon ? '🎉 Correct!' : '😞 Game Over'}
-              </h2>
-              {isWon && (
-                <p className="text-muted-foreground mb-1">
-                  You scored <span className="text-amber-400 font-bold text-xl">{gameState.score}</span> points!
-                </p>
-              )}
-              <p className="text-sm text-muted-foreground italic mt-3">
-                {gameState.puzzle.iconicMoment}
-              </p>
-              {currentBadge && (
-                <div className="mt-3 inline-flex items-center gap-1.5 text-sm">
-                  <span>{currentBadge.emoji}</span>
-                  <span className="text-amber-400 font-semibold">{currentBadge.label}</span>
-                </div>
-              )}
-            </div>
-
-            <ShareButtons score={shareScore} gameName="Guess The Nation" gamePath="/guess-the-nation" />
-
-            <Button onClick={resetGame} variant="outline" className="w-full max-w-xs mx-auto border-amber-500/30">
-              Play Again
-            </Button>
-          </div>
+          <ResultScreen
+            won={isWon}
+            outcomeEmoji={isWon ? '🎉' : '😞'}
+            headline={isWon ? 'Correct!' : 'Game Over'}
+            statLine={isWon ? <>You scored <span className="text-amber-400 font-bold text-xl">{gameState.score}</span> points!</> : undefined}
+            funFact={gameState.puzzle.iconicMoment}
+            statRow={currentBadge ? [{ label: 'Badge', value: <>{currentBadge.emoji} {currentBadge.label}</> }] : undefined}
+            emojiGrid={isWon ? `Guessed ${gameState.puzzle.countryName} for ${gameState.score} points` : `Missed it. It was ${gameState.puzzle.countryName}`}
+            share={{
+              score: shareScore,
+              gameName: 'Guess The Nation',
+              gamePath: '/guess-the-nation',
+            }}
+            onPlayAgain={resetGame}
+          />
         )}
 
         <GameNav />
-      </div>
+      </GameShell>
     </div>
   );
 }

@@ -1,22 +1,20 @@
 import { useState } from 'react';
 import { useFootballConnect4 } from '@/hooks/useFootballConnect4';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { FootballConnect4Board } from '@/components/football-connect4/FootballConnect4Board';
 import { FootballConnect4HowToPlay } from '@/components/football-connect4/FootballConnect4HowToPlay';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { cn } from '@/lib/utils';
 import {
-  RotateCcw,
   Loader2,
   AlertCircle,
   HelpCircle,
   X,
   SkipForward,
 } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -57,48 +55,46 @@ const FootballConnect4 = () => {
   const rowAttr = targetRow !== null ? boardConfig.rowAttributes[targetRow] : '';
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Soccer Connect 4 - Football Trivia Grid Game | DoUKnowBall"
         description="Play Connect 4 with soccer trivia. Name players matching club and league criteria to claim cells."
         path="/football-connect-4"
       />
-      <div className="max-w-5xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-6 relative">
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.12em] text-primary font-display mb-1">
-            SOCCER CONNECT 4
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            Two players, trivia, and 4 in a row
-          </p>
-          <button
-            onClick={() => setShowHowToPlay(true)}
-            className="absolute top-0 right-0 p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
-            title="How to Play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
+      <GameShell
+        width="wide"
+        title="SOCCER CONNECT 4"
+        subtitle="Two players, trivia, and 4 in a row"
+        headerExtra={
+          <>
+            <button
+              onClick={() => setShowHowToPlay(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+              title="How to Play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
 
-          {/* Daily / Unlimited toggle */}
-          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground',
-                )}
-              >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-              </button>
-            ))}
-          </div>
-        </header>
-
+            {/* Daily / Unlimited toggle */}
+            <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
+                  className={cn(
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                </button>
+              ))}
+            </div>
+          </>
+        }
+      >
         <FootballConnect4HowToPlay open={showHowToPlay} onOpenChange={setShowHowToPlay} />
 
         {isLoading ? (
@@ -203,41 +199,21 @@ const FootballConnect4 = () => {
 
             {/* Game over */}
             {phase === 'won' && (
-              <div className="text-center space-y-4 mt-6 animate-fade-in">
-                <div
-                  className={cn(
-                    'inline-flex items-center gap-3 px-6 py-3 rounded-xl border',
-                    isDraw
-                      ? 'bg-secondary border-border'
-                      : winner === 'blue'
-                        ? 'bg-blue-500/10 border-blue-500/30'
-                        : 'bg-red-500/10 border-red-500/30'
-                  )}
-                >
-                  <span className="text-xl font-bold font-display">
-                    {isDraw
-                      ? "🤝 It's a Draw!"
-                      : `${winner === 'blue' ? '🔵 Blue' : '🔴 Red'} Wins! 🎉`}
-                  </span>
-                </div>
-                <ShareButtons
-                  score={isDraw ? 'Draw' : `${winner === 'blue' ? 'Blue' : 'Red'} wins`}
-                  gameName="Soccer Connect 4"
-                  gamePath="/football-connect-4"
-                />
-                <div className="flex items-center justify-center gap-3 mt-4">
-                  {mode === 'unlimited' ? (
-                    <button
-                      onClick={resetGame}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-                    >
-                      <RotateCcw className="w-4 h-4" />
-                      Play Again
-                    </button>
-                  ) : (
+              <div className="mt-6">
+                <ResultScreen
+                  outcomeEmoji={isDraw ? '🤝' : winner === 'blue' ? '🔵' : '🔴'}
+                  headline={isDraw ? "It's a Draw!" : `${winner === 'blue' ? 'Blue' : 'Red'} Wins!`}
+                  emojiGrid={isDraw ? "🤝 It's a Draw!" : `${winner === 'blue' ? '🔵 Blue' : '🔴 Red'} Wins! 🎉`}
+                  share={{
+                    score: isDraw ? 'Draw' : `${winner === 'blue' ? 'Blue' : 'Red'} wins`,
+                    gameName: 'Soccer Connect 4',
+                    gamePath: '/football-connect-4',
+                  }}
+                  onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
+                  playNext={mode !== 'unlimited' ? (
                     <p className="text-sm text-muted-foreground">Come back tomorrow for a new board!</p>
-                  )}
-                </div>
+                  ) : undefined}
+                />
               </div>
             )}
           </>
@@ -267,9 +243,8 @@ const FootballConnect4 = () => {
           <ReportQuestion gameType="soccer-connect-4" gameContext={{ boardId: boardConfig?.id }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

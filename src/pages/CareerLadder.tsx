@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { ChevronDown, Loader2, Lock, RotateCcw } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { ChevronDown, Loader2, Lock } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -240,47 +239,44 @@ const CareerLadder = () => {
   const showError = phase === 'error';
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Career Ladder: Guess the Footballer | DoUKnowBall"
         description="A mystery footballer's career appears one stint at a time. Name the player within 6 guesses. Fewer clues means more points. Daily challenge or unlimited free play."
         path="/career-ladder"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-6">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display mb-1">
-            CAREER LADDER
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base">
-            One career, revealed stint by stint. Name the player before the ladder runs out.
-          </p>
+      <GameShell
+        width="narrow"
+        title="CAREER LADDER"
+        subtitle="One career, revealed stint by stint. Name the player before the ladder runs out."
+        headerExtra={
+          <>
+            {/* Daily / Unlimited toggle */}
+            <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
+                  className={cn(
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                </button>
+              ))}
+            </div>
 
-          {/* Daily / Unlimited toggle */}
-          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground',
-                )}
-              >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-              </button>
-            ))}
-          </div>
-
-          {mode === 'unlimited' && bestScore > 0 && (
-            <p className="text-xs text-muted-foreground mt-2">
-              Session best <span className="text-primary font-bold">{bestScore} pts</span>
-            </p>
-          )}
-        </header>
-
+            {mode === 'unlimited' && bestScore > 0 && (
+              <p className="text-xs text-muted-foreground mt-2">
+                Session best <span className="text-primary font-bold">{bestScore} pts</span>
+              </p>
+            )}
+          </>
+        }
+      >
         {isBooting && (
           <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
         )}
@@ -394,57 +390,42 @@ const CareerLadder = () => {
             )}
 
             {ended && (
-              <div className="bg-card border border-border rounded-2xl p-6 text-center mt-2">
-                <div className="text-4xl mb-2">{activePhase === 'won' ? '🪜' : '🙈'}</div>
-                <h2
-                  className={cn(
-                    'text-2xl font-bold font-display mb-3',
-                    activePhase === 'won' ? 'text-correct' : 'text-destructive',
-                  )}
-                >
-                  {activePhase === 'won' ? 'You know ball' : 'Out of guesses'}
-                </h2>
-
-                <div className="bg-secondary rounded-xl px-4 py-3 inline-flex items-center gap-3 mb-3">
-                  <span className="text-3xl">{flagForNationality(activePlayer.nationality)}</span>
-                  <span className="text-left">
-                    <span className="block font-bold text-foreground">{activePlayer.name}</span>
-                    <span className="block text-xs text-muted-foreground">
-                      {activePlayer.position} · {activePlayer.nationality} · {total} stints
-                    </span>
-                  </span>
-                </div>
-
-                {activePhase === 'won' ? (
-                  <>
-                    <p className="text-sm text-muted-foreground mb-1">
-                      Named after {cluesUsed} {cluesUsed === 1 ? 'clue' : 'clues'} and{' '}
-                      {activeWrongGuesses.length} wrong {activeWrongGuesses.length === 1 ? 'guess' : 'guesses'}.
-                    </p>
-                    <p className="text-3xl font-bold text-primary font-display mb-3">{activeFinalScore} pts</p>
-                  </>
-                ) : (
-                  <p className="text-sm text-muted-foreground mb-3">
-                    The full ladder is above. It happens to the best of us.
-                  </p>
-                )}
-
-                <ShareButtons
-                  score={activePhase === 'won' ? `${activeFinalScore} pts` : '0 pts'}
-                  gameName="Career Ladder"
-                  gamePath="/career-ladder"
+              <div className="mt-2">
+                <ResultScreen
+                  won={activePhase === 'won'}
+                  outcomeEmoji={activePhase === 'won' ? '🪜' : '🙈'}
+                  headline={activePhase === 'won' ? 'You know ball' : 'Out of guesses'}
+                  statLine={
+                    activePhase === 'won' ? (
+                      <>
+                        Named after {cluesUsed} {cluesUsed === 1 ? 'clue' : 'clues'} and{' '}
+                        {activeWrongGuesses.length} wrong {activeWrongGuesses.length === 1 ? 'guess' : 'guesses'}.{' '}
+                        <span className="text-primary font-bold">{activeFinalScore} pts</span>
+                      </>
+                    ) : (
+                      'The full ladder is above. It happens to the best of us.'
+                    )
+                  }
                   emojiGrid={emojiGrid}
-                />
-                {mode === 'unlimited' ? (
-                  <button
-                    onClick={() => startRound(pool, usedIds)}
-                    className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-                  >
-                    <RotateCcw className="w-4 h-4" /> Next player
-                  </button>
-                ) : (
-                  <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new ladder!</p>
-                )}
+                  share={{
+                    score: activePhase === 'won' ? `${activeFinalScore} pts` : '0 pts',
+                    gameName: 'Career Ladder',
+                    gamePath: '/career-ladder',
+                  }}
+                  onPlayAgain={mode === 'unlimited' ? () => startRound(pool, usedIds) : undefined}
+                  playAgainLabel="Next player"
+                  playNext={mode === 'daily' ? 'Come back tomorrow for a new ladder!' : undefined}
+                >
+                  <div className="bg-secondary rounded-xl px-4 py-3 inline-flex items-center gap-3 mb-3">
+                    <span className="text-3xl">{flagForNationality(activePlayer.nationality)}</span>
+                    <span className="text-left">
+                      <span className="block font-bold text-foreground">{activePlayer.name}</span>
+                      <span className="block text-xs text-muted-foreground">
+                        {activePlayer.position} · {activePlayer.nationality} · {total} stints
+                      </span>
+                    </span>
+                  </div>
+                </ResultScreen>
               </div>
             )}
           </>
@@ -476,9 +457,8 @@ const CareerLadder = () => {
           ]}
         />
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

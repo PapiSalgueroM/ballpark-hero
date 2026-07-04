@@ -1,10 +1,9 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Briefcase, RotateCcw, Phone, Check, X, ArrowLeftRight, Loader2 } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { Briefcase, Phone, Check, X, ArrowLeftRight, Loader2 } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -244,28 +243,24 @@ const DealOrNoDeal = () => {
   const avgWon = stats.plays > 0 ? stats.totalWon / stats.plays : 0;
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Deal or No Deal: Bank or Gamble Against the Banker | DoUKnowBall"
         description="Play Deal or No Deal free: classic cash mode or Player Edition, where every case hides a real footballer's market value. Beat the Banker."
         path="/deal-or-no-deal"
       />
-      <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-6">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.12em] text-primary font-display mb-1">
-            DEAL OR NO DEAL
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Pick your case, eliminate the rest, and decide: take the Banker's offer, or hold out for what's in your case?
-          </p>
-          {stats.plays > 0 && (
+      <GameShell
+        width="wide"
+        title="DEAL OR NO DEAL"
+        subtitle="Pick your case, eliminate the rest, and decide: take the Banker's offer, or hold out for what's in your case?"
+        headerExtra={
+          stats.plays > 0 && (
             <p className="text-xs text-muted-foreground mt-3">
               {stats.plays} game{stats.plays === 1 ? '' : 's'} played · Best <span className="text-primary font-semibold">{fmtUsd(stats.best)}</span> · Avg {fmtUsd(avgWon)}
             </p>
-          )}
-        </header>
-
+          )
+        }
+      >
         {phase === 'pick' && (
           <div className="flex flex-col items-center gap-2 mb-6">
             <div className="inline-flex rounded-full border border-border bg-card p-1">
@@ -447,78 +442,55 @@ const DealOrNoDeal = () => {
           </div>
         )}
 
-        {phase === 'done' && result && (
-          <div className="mt-4 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-              <div className="text-5xl mb-3">{result.amount >= 1000000 ? '🤑' : result.amount >= 10000 ? '🎉' : '😬'}</div>
-              <h2 className="text-2xl font-bold text-primary font-display mb-2">
-                You won {fmtUsd(result.amount)}
-              </h2>
-
-              {result.dealt && myCase && (
-                <>
-                  <p className="text-muted-foreground text-sm">
-                    You took the deal. Your case held {caseLabel(myCase)}{myCase.player ? ` (${fmtUsd(myCase.value)})` : ''}.
-                  </p>
-                  <p className={cn(
-                    'text-sm font-semibold mt-1',
-                    myCase.value > result.amount ? 'text-destructive' : 'text-correct'
-                  )}>
-                    {myCase.value > result.amount ? 'The Banker won that round 😈' : 'Great deal! 🎯'}
-                  </p>
-                </>
-              )}
-
-              {!result.dealt && result.gaveUpValue != null && (
-                <>
-                  <p className="text-muted-foreground text-sm">
-                    {result.swapped ? 'You swapped at the death.' : 'You kept your case all the way.'}
-                    {' '}The other case held {fmtUsd(result.gaveUpValue)}.
-                  </p>
-                  <p className={cn(
-                    'text-sm font-semibold mt-1',
-                    result.amount >= result.gaveUpValue ? 'text-correct' : 'text-destructive'
-                  )}>
-                    {result.amount >= result.gaveUpValue ? 'Right call! 🎯' : 'Ouch. Wrong case 😈'}
-                  </p>
-                </>
-              )}
-
-              {mode === 'players' && (() => {
-                const wonCase = result.dealt ? null : cases.find(c => !result.swapped ? c.id === myCaseId : (c.id !== myCaseId && c.id === lastRivalCase?.id));
-                const p = wonCase?.player;
-                return p ? (
+        {phase === 'done' && result && (() => {
+          const won = result.dealt
+            ? (myCase ? result.amount >= myCase.value : undefined)
+            : (result.gaveUpValue != null ? result.amount >= result.gaveUpValue : undefined);
+          const wonCase = result.dealt ? null : cases.find(c => !result.swapped ? c.id === myCaseId : (c.id !== myCaseId && c.id === lastRivalCase?.id));
+          const p = mode === 'players' ? wonCase?.player : undefined;
+          return (
+            <div className="mt-4 flex justify-center">
+              <ResultScreen
+                won={won}
+                outcomeEmoji={result.amount >= 1000000 ? '🤑' : result.amount >= 10000 ? '🎉' : '😬'}
+                headline={`You won ${fmtUsd(result.amount)}`}
+                statLine={
+                  result.dealt && myCase ? (
+                    <>You took the deal. Your case held {caseLabel(myCase)}{myCase.player ? ` (${fmtUsd(myCase.value)})` : ''}.</>
+                  ) : !result.dealt && result.gaveUpValue != null ? (
+                    <>{result.swapped ? 'You swapped at the death.' : 'You kept your case all the way.'} The other case held {fmtUsd(result.gaveUpValue)}.</>
+                  ) : undefined
+                }
+                funFact={
+                  result.dealt && myCase ? (
+                    myCase.value > result.amount ? 'The Banker won that round 😈' : 'Great deal! 🎯'
+                  ) : !result.dealt && result.gaveUpValue != null ? (
+                    result.amount >= result.gaveUpValue ? 'Right call! 🎯' : 'Ouch. Wrong case 😈'
+                  ) : undefined
+                }
+                emojiGrid={emojiGrid || `Deal or No Deal: ${fmtUsd(result.amount)}`}
+                share={{
+                  score: fmtUsd(result.amount),
+                  gameName: 'Deal or No Deal',
+                  gamePath: '/deal-or-no-deal',
+                }}
+                onPlayAgain={() => init(mode, playerPool)}
+              >
+                {p && (
                   <div className="mt-3 rounded-xl bg-primary/10 border border-primary/30 px-4 py-3 text-sm">
                     <span className="font-semibold text-primary">{flagFor(p.nationality)} {p.name}</span>
                     <span className="text-muted-foreground"> · {p.club} · {fmtCompactUsd(p.value)}</span>
                   </div>
-                ) : null;
-              })()}
-
-              {offerHistory.length > 0 && (
-                <div className="mt-4 text-xs text-muted-foreground">
-                  Offers: {offerHistory.map(o => fmtUsd(o)).join(' → ')}
-                </div>
-              )}
-
-              {emojiGrid && <pre className="mt-4 text-base tracking-wide whitespace-pre-wrap">{emojiGrid}</pre>}
-
-              <ShareButtons
-                score={fmtUsd(result.amount)}
-                gameName="Deal or No Deal"
-                gamePath="/deal-or-no-deal"
-                emojiGrid={emojiGrid}
-              />
-
-              <button
-                onClick={() => init(mode, playerPool)}
-                className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-              >
-                <RotateCcw className="w-4 h-4" /> Play Again
-              </button>
+                )}
+                {offerHistory.length > 0 && (
+                  <div className="mt-4 text-xs text-muted-foreground">
+                    Offers: {offerHistory.map(o => fmtUsd(o)).join(' → ')}
+                  </div>
+                )}
+              </ResultScreen>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
 
@@ -542,9 +514,8 @@ const DealOrNoDeal = () => {
           ]}
         />
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

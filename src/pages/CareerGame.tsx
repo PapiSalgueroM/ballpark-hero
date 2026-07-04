@@ -2,10 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import { useCareerGame } from '@/hooks/useCareerGame';
 import { CareerBoard } from '@/components/career/CareerBoard';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import { RotateCcw, Flag, Search, Lightbulb, HelpCircle } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
+import { Flag, Search, Lightbulb, HelpCircle } from 'lucide-react';
 import { CareerHowToPlay } from '@/components/career/CareerHowToPlay';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
@@ -84,79 +83,78 @@ const CareerGame = () => {
   useEffect(() => { setSelectedIdx(-1); }, [filtered.length]);
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Soccer Career Path - Guess the Player from Transfers | DoUKnowBall"
         description="Identify the soccer player from their career history. Clubs revealed one by one. Free football trivia game."
         path="/career"
       />
-      <div className="max-w-5xl mx-auto px-4 py-6 md:py-10">
-        {/* Header */}
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowHelp(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.2em] text-primary font-display mb-1">
-            CAREER QUIZ
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base">
-            Uncover boxes to reveal a player's career, then guess who it is!
-          </p>
-
-          {/* Daily / Unlimited toggle */}
-          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
+      <GameShell
+        width="wide"
+        title="CAREER QUIZ"
+        subtitle="Uncover boxes to reveal a player's career, then guess who it is!"
+        headerExtra={
+          <>
+            <div className="flex justify-center">
               <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground',
-                )}
+                onClick={() => setShowHelp(true)}
+                className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors mt-1"
+                aria-label="How to play"
               >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                <HelpCircle className="w-4 h-4" /> How to play
               </button>
-            ))}
-          </div>
+            </div>
 
-          {/* #78: difficulty tiers, unlimited mode only. Easy = biggest stars by
-              peak career market value, Hard = deepest cuts, Normal = full pool. */}
-          {mode === 'unlimited' && (
-            <div className="flex items-center justify-center gap-2 mt-3">
-              {(['easy', 'normal', 'hard'] as const).map((d) => (
+            {/* Daily / Unlimited toggle */}
+            <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
                 <button
-                  key={d}
-                  onClick={() => changeDifficulty(d)}
+                  key={m}
+                  onClick={() => switchMode(m)}
                   className={cn(
-                    'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
-                    difficulty === d
-                      ? d === 'easy'
-                        ? 'bg-correct text-correct-foreground'
-                        : d === 'hard'
-                          ? 'bg-destructive text-destructive-foreground'
-                          : 'bg-primary text-primary-foreground'
-                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
-                  {d}
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
                 </button>
               ))}
             </div>
-          )}
 
-          <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
-            <span>Boxes: <span className="text-foreground font-semibold">{boxesUsed}</span></span>
-            <span>Guesses: <span className="text-foreground font-semibold">{guessesUsed}/{maxGuesses}</span></span>
-          </div>
-        </header>
+            {/* #78: difficulty tiers, unlimited mode only. Easy = biggest stars by
+                peak career market value, Hard = deepest cuts, Normal = full pool. */}
+            {mode === 'unlimited' && (
+              <div className="flex items-center justify-center gap-2 mt-3">
+                {(['easy', 'normal', 'hard'] as const).map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => changeDifficulty(d)}
+                    className={cn(
+                      'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
+                      difficulty === d
+                        ? d === 'easy'
+                          ? 'bg-correct text-correct-foreground'
+                          : d === 'hard'
+                            ? 'bg-destructive text-destructive-foreground'
+                            : 'bg-primary text-primary-foreground'
+                        : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                    )}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            )}
 
+            <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
+              <span>Boxes: <span className="text-foreground font-semibold">{boxesUsed}</span></span>
+              <span>Guesses: <span className="text-foreground font-semibold">{guessesUsed}/{maxGuesses}</span></span>
+            </div>
+          </>
+        }
+      >
         {/* Loading guard */}
         {(isLoadingPool || isLoading) ? (
           <div className="flex justify-center py-10">
@@ -226,54 +224,35 @@ const CareerGame = () => {
             />
 
             {/* Game Over */}
-            {gameStatus !== 'playing' && (
-              <div className="mt-8 flex justify-center">
-                <div className="bg-card border border-border rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
-                  {gameStatus === 'won' ? (
-                    <>
-                      <div className="text-5xl mb-3">🎉</div>
-                      <h2 className="text-2xl font-bold text-correct font-display mb-2">Correct!</h2>
-                      <p className="text-foreground">
-                        You guessed <span className="font-bold text-primary">{targetPlayer.name}</span> in {guessesUsed} {guessesUsed === 1 ? 'guess' : 'guesses'} with {boxesUsed} {boxesUsed === 1 ? 'box' : 'boxes'} uncovered!
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <div className="text-5xl mb-3">😞</div>
-                      <h2 className="text-2xl font-bold text-destructive font-display mb-2">Game Over</h2>
-                      <p className="text-foreground">
-                        The player was <span className="font-bold text-primary">{targetPlayer.name}</span>
-                      </p>
-                    </>
-                  )}
-                  {(() => {
-                    const clubs = Array.from(new Set(targetPlayer.career.map((s) => s.club)));
-                    const peak = targetPlayer.career.reduce((a, b) => (b.marketValue > a.marketValue ? b : a));
-                    return (
-                      <p className="mt-3 text-sm text-muted-foreground">
-                        💡 Did you know? {targetPlayer.name} played for {clubs.length} {clubs.length === 1 ? 'club' : 'clubs'} and peaked at a €{peak.marketValue}M valuation.
-                      </p>
-                    );
-                  })()}
-                  <ShareButtons
-                    score={gameStatus === 'won' ? `${guessesUsed} guesses, ${boxesUsed} boxes` : `0/${maxGuesses}`}
-                    gameName="Career Quiz"
-                    gamePath="/career"
+            {gameStatus !== 'playing' && (() => {
+              const clubs = Array.from(new Set(targetPlayer.career.map((s) => s.club)));
+              const peak = targetPlayer.career.reduce((a, b) => (b.marketValue > a.marketValue ? b : a));
+              return (
+                <div className="mt-8 flex justify-center">
+                  <ResultScreen
+                    won={gameStatus === 'won'}
+                    outcomeEmoji={gameStatus === 'won' ? '🎉' : '😞'}
+                    headline={gameStatus === 'won' ? 'Correct!' : 'Game Over'}
+                    statLine={
+                      gameStatus === 'won' ? (
+                        <>You guessed <span className="font-bold text-primary">{targetPlayer.name}</span> in {guessesUsed} {guessesUsed === 1 ? 'guess' : 'guesses'} with {boxesUsed} {boxesUsed === 1 ? 'box' : 'boxes'} uncovered!</>
+                      ) : (
+                        <>The player was <span className="font-bold text-primary">{targetPlayer.name}</span></>
+                      )
+                    }
+                    funFact={`💡 Did you know? ${targetPlayer.name} played for ${clubs.length} ${clubs.length === 1 ? 'club' : 'clubs'} and peaked at a €${peak.marketValue}M valuation.`}
+                    emojiGrid={gameStatus === 'won' ? `${guessesUsed} guesses, ${boxesUsed} boxes` : `0/${maxGuesses}`}
+                    share={{
+                      score: gameStatus === 'won' ? `${guessesUsed} guesses, ${boxesUsed} boxes` : `0/${maxGuesses}`,
+                      gameName: 'Career Quiz',
+                      gamePath: '/career',
+                    }}
+                    onPlayAgain={mode === 'unlimited' ? () => { resetGame(); setInput(''); } : undefined}
+                    playNext={mode === 'daily' ? 'Come back tomorrow for a new puzzle!' : undefined}
                   />
-                  {mode === 'unlimited' ? (
-                    <button
-                      onClick={() => { resetGame(); setInput(''); }}
-                      className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-                    >
-                      <RotateCcw className="w-4 h-4" />
-                      Play Again
-                    </button>
-                  ) : (
-                    <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
-                  )}
                 </div>
-              </div>
-            )}
+              );
+            })()}
           </>
         )}
 
@@ -303,9 +282,8 @@ const CareerGame = () => {
           <ReportQuestion gameType="career" gameContext={{ targetPlayer: targetPlayer?.name }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

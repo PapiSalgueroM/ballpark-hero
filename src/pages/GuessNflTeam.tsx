@@ -1,7 +1,6 @@
 import { GuessNflTeamBoard } from '@/components/guess-nfl-team/GuessNflTeamBoard';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { GameNavbar } from '@/components/game/GameNavbar';
 
 export default function GuessNflTeam() {
   return (
@@ -11,7 +10,6 @@ export default function GuessNflTeam() {
         description="Guess the NFL team from clues about their city, stadium, players, and history."
         path="/guess-nfl-team"
       />
-      <GameNavbar />
       <GuessNflTeamBoard />
       <GameSeoContent
         title="Guess The Pro Football Team | DoUKnowBall"

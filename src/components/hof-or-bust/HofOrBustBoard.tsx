@@ -1,6 +1,6 @@
 import { useHofOrBust } from '@/hooks/useHofOrBust';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import { Eye, RotateCcw, Trophy, Skull } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -33,20 +33,17 @@ export function HofOrBustBoard() {
     : '';
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <GameNavbar />
-      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-2xl font-display font-bold text-primary">Hall of Fame or Bust?</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Look at the anonymized stats and vote: Hall of Famer or bust?
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
-          </p>
-        </div>
-
+    <GameShell
+      width="narrow"
+      title="Hall of Fame or Bust?"
+      subtitle="Look at the anonymized stats and vote: Hall of Famer or bust?"
+      headerExtra={
+        <p className="text-xs text-muted-foreground mt-1">
+          {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
+        </p>
+      }
+    >
+      <div className="space-y-6">
         {/* Player card */}
         <div className="rounded-2xl border border-border bg-card p-6 space-y-4">
           {/* Sport badge */}
@@ -123,22 +120,40 @@ export function HofOrBustBoard() {
 
         {/* Result */}
         {isRevealed && (
-          <div className="rounded-2xl border border-border bg-card p-6 text-center space-y-4">
-            {/* Your vote vs verdict */}
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">
+          <ResultScreen
+            outcomeEmoji={userVote === 'hof' ? '🏆' : '💀'}
+            headline="Verdict Revealed"
+            statLine={
+              <>
                 You voted: <span className="font-bold text-foreground">{userVote === 'hof' ? '🏆 Hall of Fame' : '💀 Bust'}</span>
-              </p>
-              <p className="text-sm text-muted-foreground">
+                {' · '}
                 Official verdict: <span className={cn('font-bold', verdictInfo.color)}>{verdictInfo.text}</span>
-              </p>
-            </div>
-
-            <p className="text-2xl font-display font-bold text-primary">{score} pts</p>
-
+              </>
+            }
+            funFact={player.funFact}
+            statRow={[{ label: 'Score', value: `${score} pts` }]}
+            emojiGrid={emojiResult}
+            share={{
+              score: shareScore,
+              gameName: 'Hall of Fame or Bust?',
+              gamePath: '/hof-or-bust',
+            }}
+            onPlayAgain={mode === 'unlimited' ? nextPuzzle : undefined}
+            playAgainLabel="Next Player →"
+            playNext={
+              mode === 'daily' ? (
+                <button
+                  onClick={switchToUnlimited}
+                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-border bg-card hover:bg-muted/50 text-sm font-semibold transition-colors"
+                >
+                  <RotateCcw className="w-4 h-4" /> Play Unlimited
+                </button>
+              ) : undefined
+            }
+          >
             {/* Community donut */}
             {communityVotes && (communityVotes.hof + communityVotes.bust) > 0 && (
-              <div className="space-y-2">
+              <div className="space-y-2 mb-4">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Community Vote</p>
                 <div className="flex items-center justify-center gap-4">
                   <div className="relative w-20 h-20">
@@ -163,36 +178,7 @@ export function HofOrBustBoard() {
                 </div>
               </div>
             )}
-
-            {/* Fun fact */}
-            <p className="text-xs text-muted-foreground italic">💡 {player.funFact}</p>
-
-            <ShareButtons
-              score={shareScore}
-              gameName="Hall of Fame or Bust?"
-              gamePath="/hof-or-bust"
-              emojiGrid={emojiResult}
-            />
-
-            <div className="flex flex-col gap-2 pt-2">
-              {mode === 'daily' && (
-                <button
-                  onClick={switchToUnlimited}
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-border bg-card hover:bg-muted/50 text-sm font-semibold transition-colors"
-                >
-                  <RotateCcw className="w-4 h-4" /> Play Unlimited
-                </button>
-              )}
-              {mode === 'unlimited' && (
-                <button
-                  onClick={nextPuzzle}
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold transition-colors"
-                >
-                  Next Player →
-                </button>
-              )}
-            </div>
-          </div>
+          </ResultScreen>
         )}
 
         <ReportQuestion
@@ -200,6 +186,6 @@ export function HofOrBustBoard() {
           gameContext={{ playerId: player.id, answer: player.answer }}
         />
       </div>
-    </div>
+    </GameShell>
   );
 }

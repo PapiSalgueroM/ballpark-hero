@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useScorePredictor } from '@/hooks/useScorePredictor';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import { RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -41,17 +41,16 @@ export function ScorePredictorBoard() {
   const shareScore = isRevealed ? `${score} pts` : '';
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <GameNavbar />
-      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-2xl font-display font-bold text-primary">Score Predictor</h1>
-          <p className="text-xs text-muted-foreground mt-1">
-            {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
-          </p>
-        </div>
-
+    <GameShell
+      width="narrow"
+      title="Score Predictor"
+      headerExtra={
+        <p className="text-xs text-muted-foreground mt-1">
+          {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
+        </p>
+      }
+    >
+      <div className="space-y-6">
         {/* Match card */}
         <div className="rounded-2xl border border-border bg-card p-6 space-y-4">
           {/* Competition & date */}
@@ -133,60 +132,38 @@ export function ScorePredictorBoard() {
 
         {/* Result */}
         {isRevealed && (
-          <div className="rounded-2xl border border-border bg-card p-6 text-center space-y-4">
-            {/* Score comparison */}
-            <div className="space-y-2">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Your Prediction</p>
-              <p className="text-xl font-bold text-muted-foreground">
-                {guessHome} – {guessAway}
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Actual Score</p>
-              <div className={cn(
-                'text-3xl font-display font-bold transition-all',
-                guessHome === puzzle.homeScore && guessAway === puzzle.awayScore
-                  ? 'text-primary'
-                  : 'text-foreground'
-              )}>
-                {puzzle.homeScore} – {puzzle.awayScore}
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <ScoreLabel score={score} />
-              <p className="text-2xl font-display font-bold text-primary">{score} pts</p>
-            </div>
-
-            <p className="text-xs text-muted-foreground italic">💡 {puzzle.funFact}</p>
-
-            <ShareButtons
-              score={shareScore}
-              gameName="Score Predictor"
-              gamePath="/score-predictor"
-              emojiGrid={emojiResult}
-            />
-
-            <div className="flex flex-col gap-2 pt-2">
-              {mode === 'daily' && (
+          <ResultScreen
+            won={guessHome === puzzle.homeScore && guessAway === puzzle.awayScore}
+            outcomeEmoji="⚽"
+            headline="Result Revealed"
+            statLine={
+              <>
+                Your Prediction: <span className="font-bold text-foreground">{guessHome} – {guessAway}</span>
+                {' · '}
+                Actual: <span className={cn('font-bold', guessHome === puzzle.homeScore && guessAway === puzzle.awayScore ? 'text-primary' : 'text-foreground')}>{puzzle.homeScore} – {puzzle.awayScore}</span>
+              </>
+            }
+            funFact={puzzle.funFact}
+            statRow={[{ label: 'Score', value: <ScoreLabel score={score} /> }, { label: 'Points', value: `${score} pts` }]}
+            emojiGrid={emojiResult}
+            share={{
+              score: shareScore,
+              gameName: 'Score Predictor',
+              gamePath: '/score-predictor',
+            }}
+            onPlayAgain={mode === 'unlimited' ? () => { nextPuzzle(); setInputHome(''); setInputAway(''); } : undefined}
+            playAgainLabel="Next Match →"
+            playNext={
+              mode === 'daily' ? (
                 <button
                   onClick={switchToUnlimited}
                   className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-border bg-card hover:bg-muted/50 text-sm font-semibold transition-colors"
                 >
                   <RotateCcw className="w-4 h-4" /> Play Unlimited
                 </button>
-              )}
-              {mode === 'unlimited' && (
-                <button
-                  onClick={() => { nextPuzzle(); setInputHome(''); setInputAway(''); }}
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold transition-colors"
-                >
-                  Next Match →
-                </button>
-              )}
-            </div>
-          </div>
+              ) : undefined
+            }
+          />
         )}
 
         <ReportQuestion
@@ -194,6 +171,6 @@ export function ScorePredictorBoard() {
           gameContext={{ matchId: puzzle.id, homeTeam: puzzle.homeTeam, awayTeam: puzzle.awayTeam }}
         />
       </div>
-    </div>
+    </GameShell>
   );
 }

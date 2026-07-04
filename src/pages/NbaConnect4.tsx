@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNbaConnect4 } from '@/hooks/useNbaConnect4';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
+import { GameShell } from '@/components/game/GameShell';
 import { NbaConnect4HowToPlay } from '@/components/nba-connect4/NbaConnect4HowToPlay';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { NBA_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
@@ -51,30 +50,26 @@ const NbaConnect4 = () => {
   );
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="NBA Connect 4 - Basketball Trivia Grid Game | DoUKnowBall"
         description="Play Connect 4 with NBA trivia. Name players matching team and stat criteria to claim cells."
         path="/nba-connect-4"
       />
-      <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-6 relative">
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.12em] text-primary font-display mb-1">
-            NBA CONNECT 4
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            Play Connect 4 with NBA trivia: name players matching team and stat criteria to claim cells and get four in a row.
-          </p>
+      <GameShell
+        width="wide"
+        title="NBA CONNECT 4"
+        subtitle="Play Connect 4 with NBA trivia: name players matching team and stat criteria to claim cells and get four in a row."
+        headerExtra={
           <button
             onClick={() => setShowHowToPlay(true)}
-            className="absolute top-0 right-0 p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
-            title="How to Play"
+            className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+            aria-label="How to play"
           >
-            <HelpCircle className="w-6 h-6" />
+            <HelpCircle className="w-4 h-4" /> How to play
           </button>
-        </header>
-
+        }
+      >
         <NbaConnect4HowToPlay open={showHowToPlay} onOpenChange={setShowHowToPlay} />
 
         {/* Turn indicator */}
@@ -297,9 +292,8 @@ const NbaConnect4 = () => {
           <ReportQuestion gameType="nba-connect-4" gameContext={{ board: board?.id }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

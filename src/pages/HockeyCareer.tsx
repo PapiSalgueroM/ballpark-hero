@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react';
 import { FlagImg } from '@/components/FlagImg';
 import { useHockeyCareer } from '@/hooks/useHockeyCareer';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { HelpCircle, Eye, Trophy, RotateCcw } from 'lucide-react';
+import { HelpCircle, Eye, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { HockeyCareerHowToPlay } from '@/components/hockey-career/HockeyCareerHowToPlay';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -46,44 +45,42 @@ const HockeyCareer = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Hockey Career Path - Guess the NHL Player | DoUKnowBall"
         description="Progressive clues reveal a mystery hockey player. Guess from position, draft, teams, and stats. Daily challenge."
         path="/hockey-career"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-8 relative">
-          <button onClick={() => setShowRules(true)} className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-[hsl(var(--hk-silver))] transition-colors" aria-label="How to play">
-            <HelpCircle className="w-6 h-6" />
-          </button>
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.15em] font-display mb-1 text-[hsl(var(--hk-silver))]">
-            🏒 CAREER PATH
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Guess the mystery hockey player from progressive clues
-          </p>
+      <GameShell
+        width="narrow"
+        title="🏒 CAREER PATH"
+        subtitle="Guess the mystery hockey player from progressive clues"
+        headerExtra={
+          <>
+            <button onClick={() => setShowRules(true)} className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[hsl(var(--hk-silver))] transition-colors" aria-label="How to play">
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
 
-          {/* Daily / Unlimited toggle */}
-          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-              </button>
-            ))}
-          </div>
-        </header>
-
+            {/* Daily / Unlimited toggle */}
+            <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
+                  className={cn(
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                </button>
+              ))}
+            </div>
+          </>
+        }
+      >
         {isLoading ? (
           <div className="bg-card border border-border rounded-2xl p-6 shadow-lg space-y-3" aria-live="polite" aria-busy="true">
             <span className="sr-only">Loading today's puzzle…</span>
@@ -154,45 +151,31 @@ const HockeyCareer = () => {
             </div>
           )}
           {wrongGuess && <p className="text-destructive text-sm text-center mt-2 animate-cell-reveal">Wrong guess. Try again!</p>}
-
-          {(status === 'guessed' || status === 'revealed') && (
-            <div className="text-center mt-4 py-4 rounded-xl bg-[hsl(var(--hk-blue)/0.3)] border border-[hsl(var(--hk-silver)/0.3)] animate-cell-reveal">
-              <p className="text-4xl font-bold text-[hsl(var(--hk-silver))] font-display mb-1">{player!.name}</p>
-              <p className="text-muted-foreground text-sm flex items-center justify-center gap-1"><FlagImg name={player!.country} size={16} /> {player!.position}</p>
-              <p className="mt-2 text-xs text-muted-foreground px-3">
-                💡 Did you know? {player!.name} ({player!.country}) played for {player!.teams.length} {player!.teams.length === 1 ? 'club' : 'clubs'}{player!.awards.length ? ` and earned ${player!.awards.length} career ${player!.awards.length === 1 ? 'honor' : 'honors'}` : ''}.
-              </p>
-              {status === 'guessed' && (
-                <div className="flex items-center justify-center gap-2 mt-3">
-                  <Trophy className="w-5 h-5 text-[hsl(var(--hk-silver))]" />
-                  <span className="text-lg font-bold text-[hsl(var(--hk-silver))]">{score} points!</span>
-                </div>
-              )}
-            </div>
-          )}
         </div>
         )}
 
         {(status === 'guessed' || status === 'revealed') && (
           <div className="mt-6 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-6 max-w-md w-full text-center shadow-lg">
-              <ShareButtons
-                score={status === 'guessed' ? `${score} points on today's Hockey Career Path` : `today's Hockey Career Path (gave up)`}
-                gameName="Hockey Career Path"
-                gamePath="/hockey-career"
-              />
-              {mode === 'unlimited' ? (
-                <button
-                  onClick={resetGame}
-                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-[hsl(var(--hk-blue))] text-[hsl(var(--hk-silver))] rounded-full font-semibold hover:opacity-90 transition-opacity border border-[hsl(var(--hk-silver)/0.2)]"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Play Again
-                </button>
-              ) : (
-                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
-              )}
-            </div>
+            <ResultScreen
+              won={status === 'guessed'}
+              outcomeEmoji={status === 'guessed' ? '🏒' : '😤'}
+              headline={player!.name}
+              statLine={<span className="inline-flex items-center gap-1"><FlagImg name={player!.country} size={16} /> {player!.position}</span>}
+              funFact={
+                <>
+                  💡 Did you know? {player!.name} ({player!.country}) played for {player!.teams.length} {player!.teams.length === 1 ? 'club' : 'clubs'}{player!.awards.length ? ` and earned ${player!.awards.length} career ${player!.awards.length === 1 ? 'honor' : 'honors'}` : ''}.
+                </>
+              }
+              statRow={status === 'guessed' ? [{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{score}</span> }] : undefined}
+              emojiGrid={status === 'guessed' ? `${score} points on today's Hockey Career Path` : `today's Hockey Career Path (gave up)`}
+              share={{
+                score: status === 'guessed' ? `${score} points on today's Hockey Career Path` : `today's Hockey Career Path (gave up)`,
+                gameName: 'Hockey Career Path',
+                gamePath: '/hockey-career',
+              }}
+              onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
+              playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p> : undefined}
+            />
           </div>
         )}
 
@@ -220,10 +203,9 @@ const HockeyCareer = () => {
           <ReportQuestion gameType="hockey-career" gameContext={{ puzzleId: puzzle.id }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
+      </GameShell>
       <HockeyCareerHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+    </>
   );
 };
 

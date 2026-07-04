@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useBaseballCareer } from '@/hooks/useBaseballCareer';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { HelpCircle, Eye, Trophy, RotateCcw } from 'lucide-react';
+import { HelpCircle, Eye, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { BaseballCareerHowToPlay } from '@/components/baseball-career/BaseballCareerHowToPlay';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -62,49 +61,46 @@ const BaseballCareer = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="Baseball Career Path - Guess the MLB Player | DoUKnowBall"
         description="Progressive clues reveal a mystery baseball player. Guess from position, draft, teams, and stats. Daily challenge."
         path="/baseball-career"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-8 relative">
-          <button
-            onClick={() => setShowRules(true)}
-            className="absolute top-0 right-0 p-2 text-muted-foreground hover:text-[hsl(var(--bb-red))] transition-colors"
-            aria-label="How to play"
-          >
-            <HelpCircle className="w-6 h-6" />
-          </button>
+      <GameShell
+        width="narrow"
+        title="⚾ CAREER PATH"
+        subtitle="Guess the mystery baseball player from progressive clues"
+        headerExtra={
+          <>
+            <button
+              onClick={() => setShowRules(true)}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[hsl(var(--bb-red))] transition-colors"
+              aria-label="How to play"
+            >
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
 
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.15em] font-display mb-1 text-[hsl(var(--bb-red))]">
-            ⚾ CAREER PATH
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
-            Guess the mystery baseball player from progressive clues
-          </p>
-
-          {/* Daily / Unlimited toggle */}
-          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-              </button>
-            ))}
-          </div>
-        </header>
-
+            {/* Daily / Unlimited toggle */}
+            <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
+                  className={cn(
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                </button>
+              ))}
+            </div>
+          </>
+        }
+      >
         {/* Clue card */}
         {isLoading ? (
           <div className="bg-card border border-border rounded-2xl p-6 shadow-lg space-y-3" aria-live="polite" aria-busy="true">
@@ -202,49 +198,32 @@ const BaseballCareer = () => {
           {wrongGuess && (
             <p className="text-destructive text-sm text-center mt-2 animate-cell-reveal">Wrong guess. Try again!</p>
           )}
-
-          {/* Result */}
-          {(status === 'guessed' || status === 'revealed') && (
-            <div className="text-center mt-4 py-4 rounded-xl bg-[hsl(var(--bb-navy)/0.2)] border border-[hsl(var(--bb-red)/0.3)] animate-cell-reveal">
-              <p className="text-4xl font-bold text-[hsl(var(--bb-red))] font-display mb-1">
-                {player!.name}
-              </p>
-              <p className="text-muted-foreground text-sm">{player!.position}</p>
-              <p className="mt-2 text-xs text-muted-foreground px-3">
-                💡 Did you know? {player!.name} suited up for {player!.teams.length} {player!.teams.length === 1 ? 'team' : 'teams'}{player!.awards.length ? `, including ${player!.awards[0]}` : ''}.
-              </p>
-              {status === 'guessed' && (
-                <div className="flex items-center justify-center gap-2 mt-3">
-                  <Trophy className="w-5 h-5 text-[hsl(var(--bb-red))]" />
-                  <span className="text-lg font-bold text-[hsl(var(--bb-red))]">{score} points!</span>
-                </div>
-              )}
-            </div>
-          )}
         </div>
         )}
 
-        {/* Share + replay */}
+        {/* Result + share + replay */}
         {(status === 'guessed' || status === 'revealed') && (
           <div className="mt-6 flex justify-center">
-            <div className="bg-card border border-border rounded-2xl p-6 max-w-md w-full text-center shadow-lg">
-              <ShareButtons
-                score={status === 'guessed' ? `${score} points on today's Baseball Career Path` : `today's Baseball Career Path (gave up)`}
-                gameName="Baseball Career Path"
-                gamePath="/baseball-career"
-              />
-              {mode === 'unlimited' ? (
-                <button
-                  onClick={resetGame}
-                  className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-[hsl(var(--bb-red))] text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Play Again
-                </button>
-              ) : (
-                <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
-              )}
-            </div>
+            <ResultScreen
+              won={status === 'guessed'}
+              outcomeEmoji={status === 'guessed' ? '⚾' : '😤'}
+              headline={player!.name}
+              statLine={player!.position}
+              funFact={
+                <>
+                  💡 Did you know? {player!.name} suited up for {player!.teams.length} {player!.teams.length === 1 ? 'team' : 'teams'}{player!.awards.length ? `, including ${player!.awards[0]}` : ''}.
+                </>
+              }
+              statRow={status === 'guessed' ? [{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{score}</span> }] : undefined}
+              emojiGrid={status === 'guessed' ? `${score} points on today's Baseball Career Path` : `today's Baseball Career Path (gave up)`}
+              share={{
+                score: status === 'guessed' ? `${score} points on today's Baseball Career Path` : `today's Baseball Career Path (gave up)`,
+                gameName: 'Baseball Career Path',
+                gamePath: '/baseball-career',
+              }}
+              onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
+              playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p> : undefined}
+            />
           </div>
         )}
 
@@ -273,11 +252,10 @@ const BaseballCareer = () => {
           <ReportQuestion gameType="baseball-career" gameContext={{ puzzleId: puzzle.id }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
+      </GameShell>
 
       <BaseballCareerHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </main>
+    </>
   );
 };
 

@@ -1,16 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { useOlympics } from '@/hooks/useOlympics';
 import OlympicsHowToPlay from '@/components/olympics/OlympicsHowToPlay';
-import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
-import { shareResult } from '@/lib/share';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
-import { Trophy, ChevronDown, Award, RotateCcw } from 'lucide-react';
+import { ChevronDown, Award } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { cn } from '@/lib/utils';
 
@@ -80,24 +78,19 @@ export default function Olympics() {
   const isGameOver = status !== 'playing';
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="The Medal Games - Olympic Athlete Trivia | DoUKnowBall"
         description="Guess the mystery Olympic athlete from progressive clues about their career at the Games. Daily challenge."
         path="/olympics"
       />
-      <div className="max-w-lg mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <Trophy className="w-7 h-7 text-[hsl(43,85%,55%)]" />
-            <h1 className="text-2xl font-display font-bold text-[hsl(43,85%,55%)]">The Medal Games</h1>
-          </div>
-          <OlympicsHowToPlay />
-        </div>
-        <p className="text-sm text-muted-foreground mb-4">Guess the athlete from progressive clues</p>
-
+      <GameShell
+        width="narrow"
+        title="The Medal Games"
+        emoji="🏆"
+        subtitle="Guess the athlete from progressive clues"
+        headerExtra={<OlympicsHowToPlay />}
+      >
         {/* Daily / Unlimited toggle */}
         <div className="flex items-center justify-center gap-1 mb-6 bg-secondary rounded-full p-1 w-fit mx-auto">
           {(['daily', 'unlimited'] as const).map((m) => (
@@ -157,38 +150,30 @@ export default function Olympics() {
 
             {/* Game Over */}
             {isGameOver && (
-              <div className="rounded-2xl border border-[hsl(43,85%,55%)/0.3] bg-card p-6 text-center mb-6 animate-cell-reveal">
-                <Award className="w-10 h-10 text-[hsl(43,85%,55%)] mx-auto mb-3" />
-                <p className="text-3xl font-display font-bold text-[hsl(43,85%,55%)] mb-1">{athlete.name}</p>
-                <p className="text-sm text-muted-foreground mb-1 inline-flex items-center justify-center gap-1">
-                  {athlete.sport}, <FlagImg name={EMOJI_TO_COUNTRY[athlete.country] || ''} size={16} />{EMOJI_TO_COUNTRY[athlete.country] || athlete.country}
-                </p>
-                <p className="text-xs text-muted-foreground mb-4">{athlete.gamesYear} {athlete.hostCity}</p>
-                {status === 'guessed' ? (
-                  <p className="text-lg font-bold text-primary">Score: {score} 🏅</p>
-                ) : (
-                  <p className="text-sm text-destructive">Better luck tomorrow!</p>
-                )}
-                <div className="mt-4">
-                  <button
-                    onClick={() => shareResult(shareText)}
-                    className="px-5 py-2.5 bg-[hsl(43,85%,55%)] text-background rounded-full text-sm font-semibold hover:opacity-90 transition-all"
-                  >
-                    Share Score
-                  </button>
-                </div>
-                <ShareButtons score={String(score)} gameName="The Medal Games" gamePath="/olympics" />
-                {mode === 'unlimited' ? (
-                  <button
-                    onClick={resetGame}
-                    className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-[hsl(43,85%,55%)] text-background rounded-full font-semibold hover:opacity-90 transition-opacity"
-                  >
-                    <RotateCcw className="w-4 h-4" />
-                    Play Again
-                  </button>
-                ) : (
-                  <p className="mt-4 text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
-                )}
+              <div className="mb-6">
+                <ResultScreen
+                  won={status === 'guessed'}
+                  outcomeEmoji={<Award className="w-10 h-10 text-[hsl(43,85%,55%)] mx-auto" />}
+                  headline={athlete.name}
+                  statLine={
+                    <span className="inline-flex items-center justify-center gap-1">
+                      {athlete.sport}, <FlagImg name={EMOJI_TO_COUNTRY[athlete.country] || ''} size={16} />{EMOJI_TO_COUNTRY[athlete.country] || athlete.country}
+                    </span>
+                  }
+                  funFact={`${athlete.gamesYear} ${athlete.hostCity}`}
+                  statRow={[{
+                    label: 'Result',
+                    value: status === 'guessed' ? `Score: ${score} 🏅` : 'Better luck tomorrow!',
+                  }]}
+                  emojiGrid={shareText}
+                  share={{
+                    score: String(score),
+                    gameName: 'The Medal Games',
+                    gamePath: '/olympics',
+                  }}
+                  onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
+                  playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p> : undefined}
+                />
               </div>
             )}
 
@@ -281,8 +266,7 @@ export default function Olympics() {
           <ReportQuestion gameType="olympics" gameContext={{ athleteName: athlete.name }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 }

@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { useTransferPath } from '@/hooks/useTransferPath';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { TRANSFER_PATH_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { RotateCcw, ArrowRight, Lightbulb } from 'lucide-react';
@@ -41,16 +42,6 @@ export function TransferPathBoard() {
     [chain, puzzle.playerB],
   );
 
-  // This check must live BELOW every hook. Returning early above the hooks
-  // changes the hook count between renders and crashes with React error #310.
-  if (isLoadingPool || isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground text-sm">Loading Transfer Path…</p>
-      </div>
-    );
-  }
-
   const handleSelect = (name: string) => {
     setInput('');
     setError('');
@@ -74,25 +65,31 @@ export function TransferPathBoard() {
   const isWon = status === 'won';
   const steps = chain.length - 1;
   const emojiChain = chain.map(() => '⚽').join('→');
-  const shareScore = isWon ? `${score} pts (${steps} steps)` : '';
+
+  // This check must live BELOW every hook. Returning early above the hooks
+  // changes the hook count between renders and crashes with React error #310.
+  if (isLoadingPool || isLoading) {
+    return (
+      <GameShell width="narrow" title="TRANSFER PATH">
+        <p className="text-muted-foreground text-sm text-center">Loading Transfer Path…</p>
+      </GameShell>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <GameNavbar />
-      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-2xl font-display font-bold text-primary">Transfer Path</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Name teammates to connect the two players in as few steps as possible.
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
-          </p>
-        </div>
-
+    <GameShell
+      width="narrow"
+      title="TRANSFER PATH"
+      subtitle="Name teammates to connect the two players in as few steps as possible."
+      headerExtra={
+        <p className="text-xs text-muted-foreground mt-1">
+          {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
+        </p>
+      }
+    >
+      <div className="space-y-6">
         {/* Target card */}
-        <div className="rounded-2xl border border-border bg-card p-5">
+        <div className="rounded-2xl border border-border bg-surface-1 p-5">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground text-center mb-3">Connect</p>
           <div className="flex items-center justify-between gap-3">
             <div className="flex-1 text-center">
@@ -169,39 +166,29 @@ export function TransferPathBoard() {
 
         {/* Result */}
         {isWon && (
-          <div className="rounded-2xl border border-border bg-card p-6 text-center space-y-3">
-            <p className="text-lg font-bold text-primary">Connected! 🎉</p>
-            <p className="text-2xl font-display font-bold text-primary">{score} pts</p>
-            <p className="text-xs text-muted-foreground">
-              Your path: {steps} step{steps > 1 ? 's' : ''} · Optimal: {puzzle.minSteps}
-            </p>
-
-            <ShareButtons
-              score={`${score} pts (${steps} steps)`}
-              gameName="Transfer Path"
-              gamePath="/transfer-path"
-              emojiGrid={emojiChain}
-            />
-
-            <div className="flex flex-col gap-2 pt-2">
-              {mode === 'daily' && (
-                <button
-                  onClick={switchToUnlimited}
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-border bg-card hover:bg-muted/50 text-sm font-semibold transition-colors"
-                >
-                  <RotateCcw className="w-4 h-4" /> Play Unlimited
-                </button>
-              )}
-              {mode === 'unlimited' && (
-                <button
-                  onClick={() => { nextPuzzle(); setInput(''); setError(''); setShowHint(false); }}
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold transition-colors"
-                >
-                  Next Puzzle →
-                </button>
-              )}
-            </div>
-          </div>
+          <ResultScreen
+            won
+            outcomeEmoji="🎉"
+            headline="Connected!"
+            statLine={<span className="text-2xl font-display font-bold text-primary">{score} pts</span>}
+            funFact={<>Your path: {steps} step{steps > 1 ? 's' : ''} · Optimal: {puzzle.minSteps}</>}
+            emojiGrid={emojiChain}
+            share={{
+              score: `${score} pts (${steps} steps)`,
+              gameName: 'Transfer Path',
+              gamePath: '/transfer-path',
+            }}
+            onPlayAgain={mode === 'unlimited' ? () => { nextPuzzle(); setInput(''); setError(''); setShowHint(false); } : undefined}
+            playAgainLabel="Next Puzzle"
+            playNext={mode === 'daily' ? (
+              <button
+                onClick={switchToUnlimited}
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-border bg-card hover:bg-muted/50 text-sm font-semibold transition-colors"
+              >
+                <RotateCcw className="w-4 h-4" /> Play Unlimited
+              </button>
+            ) : undefined}
+          />
         )}
 
         <ReportQuestion
@@ -209,6 +196,22 @@ export function TransferPathBoard() {
           gameContext={{ puzzleId: puzzle.id, playerA: puzzle.playerA, playerB: puzzle.playerB }}
         />
       </div>
-    </div>
+
+      <GameSeoContent
+        title="Transfer Path | DoUKnowBall"
+        description="Build a chain connecting two football players through shared clubs. Name players who played at the same club to create the shortest transfer path possible."
+        howToPlay={[
+          "You're given two players: a start and an end target.",
+          "Name a player who shared a club with the last player in your chain.",
+          "Keep building the chain until you connect to the target player.",
+          "Score 1000 points for the optimal path. Lose 100 points for each extra step."
+        ]}
+        examples={[
+          "Zlatan → Rooney: Both played at Manchester United (1 step)",
+          "Gerrard → Ronaldo: Gerrard (Liverpool) → Torres (Liverpool & Atlético) → Ronaldo (2 steps)",
+          "Lampard → Messi: Lampard (Chelsea) → Fàbregas (Chelsea & Barcelona) → Messi (2 steps)"
+        ]}
+      />
+    </GameShell>
   );
 }

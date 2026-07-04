@@ -1,0 +1,1 @@
+src/pages/FootballGrid.tsx, src/pages/FootballTimeline.tsx, src/pages/FootballDraft.tsx, src/pages/NFLCareer.tsx, src/pages/GuessNflTeam.tsx (thin wrapper, adopted via src/components/guess-nfl-team/GuessNflTeamBoard.tsx), src/pages/CollegeGrid.tsx, src/pages/GuessTheCollege.tsx

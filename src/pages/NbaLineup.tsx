@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useNbaLineup, buildFullDisplayName } from '@/hooks/useNbaLineup';
 import { NBA_POSITIONS } from '@/types/nba';
 import { GameNav } from '@/components/game/GameNav';
-import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
+import { GameShell } from '@/components/game/GameShell';
 import NbaCourtLayout from '@/components/nba/NbaCourtLayout';
 import NbaTeamSpinner from '@/components/nba/NbaTeamSpinner';
 import NbaStatSpinner from '@/components/nba/NbaStatSpinner';
@@ -76,30 +75,26 @@ const NbaLineup = () => {
   }
 
   return (
-    <main className="min-h-screen bg-background">
-      <GameNavbar />
+    <>
       <PageSeo
         title="NBA Starting 5 - Basketball Lineup Builder Game | DoUKnowBall"
         description="Spin a stat challenge, pick NBA teams, and build the ultimate starting five. AI validates your picks."
         path="/nba-starting-5"
       />
-      <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-8 relative">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.15em] text-primary font-display mb-1">
-            BUILD YOUR STARTING 5
-          </h1>
-          <p className="text-muted-foreground text-sm md:text-base">
-            Spin a stat challenge, get random NBA teams, build the ultimate lineup
-          </p>
+      <GameShell
+        width="wide"
+        title="BUILD YOUR STARTING 5"
+        subtitle="Spin a stat challenge, get random NBA teams, build the ultimate lineup"
+        headerExtra={
           <button
             onClick={() => setShowHowToPlay(true)}
-            className="absolute top-0 right-0 p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
-            title="How to Play"
+            className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+            aria-label="How to play"
           >
-            <HelpCircle className="w-6 h-6" />
+            <HelpCircle className="w-4 h-4" /> How to play
           </button>
-        </header>
-
+        }
+      >
         <NbaHowToPlay open={showHowToPlay} onOpenChange={setShowHowToPlay} />
 
         {/* Challenge Phase - Stat Spinner */}
@@ -426,9 +421,8 @@ const NbaLineup = () => {
           <ReportQuestion gameType="nba-starting-5" gameContext={{ team: currentTeam }} />
         </div>
         <GameNav />
-        <Footer />
-      </div>
-    </main>
+      </GameShell>
+    </>
   );
 };
 

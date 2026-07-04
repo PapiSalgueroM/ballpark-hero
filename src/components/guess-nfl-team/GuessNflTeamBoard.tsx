@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { GuessNflTeamHowToPlay } from './GuessNflTeamHowToPlay';
 import { NflTeamModeSelector } from './NflTeamModeSelector';
 import { NflTeamSearch } from './NflTeamSearch';
-import ShareButtons from '@/components/game/ShareButtons';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { GameNav } from '@/components/game/GameNav';
 import { HelpCircle } from 'lucide-react';
 import { POINTS_BY_CLUE, CLUE_LABELS } from '@/types/guessNflTeam';
@@ -34,27 +35,23 @@ export function GuessNflTeamBoard() {
   // Mode selection screen
   if (!gameState) {
     return (
-      <div className="min-h-screen bg-background text-foreground">
-        <div className="container mx-auto px-4 py-8 max-w-2xl">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-primary mb-2 font-display">
-              🏈 Guess The Pro Football Team
-            </h1>
-            <p className="text-muted-foreground mb-4">
-              Progressive clues reveal the mystery NFL team!
-            </p>
-            <Button variant="ghost" size="sm" onClick={() => setShowHelp(true)}>
-              <HelpCircle className="w-4 h-4 mr-1" />
-              How to Play
-            </Button>
-          </div>
+      <GameShell
+        width="narrow"
+        emoji="🏈"
+        title="GUESS THE PRO FOOTBALL TEAM"
+        subtitle="Progressive clues reveal the mystery NFL team!"
+        headerExtra={
+          <Button variant="ghost" size="sm" onClick={() => setShowHelp(true)} className="mt-2">
+            <HelpCircle className="w-4 h-4 mr-1" />
+            How to Play
+          </Button>
+        }
+      >
+        <NflTeamModeSelector onStart={startGame} />
 
-          <NflTeamModeSelector onStart={startGame} />
-
-          <GuessNflTeamHowToPlay open={showHelp} onOpenChange={setShowHelp} />
-          <GameNav />
-        </div>
-      </div>
+        <GuessNflTeamHowToPlay open={showHelp} onOpenChange={setShowHelp} />
+        <GameNav />
+      </GameShell>
     );
   }
 
@@ -72,20 +69,19 @@ export function GuessNflTeamBoard() {
   };
 
   return (
-    <div ref={gameRef} className="min-h-screen bg-background text-foreground">
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
-        {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-primary mb-2 font-display">
-            🏈 Guess The Pro Football Team
-          </h1>
-          <p className="text-sm text-muted-foreground">{getModeLabel()}</p>
+    <div ref={gameRef}>
+      <GameShell
+        width="narrow"
+        emoji="🏈"
+        title="GUESS THE PRO FOOTBALL TEAM"
+        subtitle={getModeLabel()}
+        headerExtra={
           <Button variant="ghost" size="sm" onClick={() => setShowHelp(true)} className="mt-1">
             <HelpCircle className="w-4 h-4 mr-1" />
             How to Play
           </Button>
-        </div>
-
+        }
+      >
         {/* Points indicator */}
         {isPlaying && (
           <div className="text-center mb-6">
@@ -191,41 +187,36 @@ export function GuessNflTeamBoard() {
 
         {/* Game over */}
         {(isWon || isLost) && (
-          <div className="text-center space-y-6">
-            <div className={`p-6 rounded-xl border ${isWon ? 'bg-green-500/10 border-green-500/30' : 'bg-destructive/10 border-destructive/30'}`}>
-              <h2 className={`text-2xl font-bold mb-2 ${isWon ? 'text-green-500' : 'text-destructive'}`}>
-                {isWon ? '🎉 Correct!' : '😞 Game Over'}
-              </h2>
-              <p className="text-3xl font-bold font-display text-primary mb-2">
-                {gameState.puzzle.fullName}
-              </p>
-              {isWon && (
-                <p className="text-lg text-muted-foreground">
-                  You scored <span className="text-primary font-bold">{gameState.score}</span> points!
-                </p>
-              )}
-              <p className="text-sm text-muted-foreground mt-4 italic">
-                {gameState.puzzle.funFact}
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <ShareButtons
-                score={isWon ? `${gameState.score} points in ${gameState.guesses.length} guess${gameState.guesses.length !== 1 ? 'es' : ''}` : 'Did not guess'}
-                gameName="Guess The Pro Football Team"
-                gamePath="/guess-nfl-team"
-              />
-
-              <Button onClick={resetGame} variant="outline" className="w-full max-w-xs">
-                Play Again
-              </Button>
-            </div>
+          <div className="flex justify-center">
+            <ResultScreen
+              won={isWon}
+              outcomeEmoji={isWon ? '🎉' : '😞'}
+              headline={isWon ? 'Correct!' : 'Game Over'}
+              statLine={
+                <>
+                  <span className="text-2xl font-bold font-display text-primary">{gameState.puzzle.fullName}</span>
+                  {isWon && (
+                    <>
+                      {' '}You scored <span className="text-primary font-bold">{gameState.score}</span> points!
+                    </>
+                  )}
+                </>
+              }
+              funFact={gameState.puzzle.funFact}
+              emojiGrid={isWon ? `Guess The Pro Football Team: solved in ${gameState.guesses.length} guess${gameState.guesses.length !== 1 ? 'es' : ''}` : 'Guess The Pro Football Team: not solved'}
+              share={{
+                score: isWon ? `${gameState.score} points in ${gameState.guesses.length} guess${gameState.guesses.length !== 1 ? 'es' : ''}` : 'Did not guess',
+                gameName: 'Guess The Pro Football Team',
+                gamePath: '/guess-nfl-team',
+              }}
+              onPlayAgain={resetGame}
+            />
           </div>
         )}
 
         <GuessNflTeamHowToPlay open={showHelp} onOpenChange={setShowHelp} />
         <GameNav />
-      </div>
+      </GameShell>
     </div>
   );
 }

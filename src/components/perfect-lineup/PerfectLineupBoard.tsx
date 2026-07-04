@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { RotateCcw, X, Sparkles } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import ShareButtons from '@/components/game/ShareButtons';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { usePerfectLineup } from '@/hooks/usePerfectLineup';
 import { describeConstraint, slotGradesToEmoji } from '@/data/perfectLineup';
 import { Player } from '@/types/game';
@@ -143,31 +143,24 @@ const PerfectLineupBoard = () => {
 
       {/* Result */}
       {game.phase === 'result' && game.result && (
-        <div className="mt-6 text-center p-6 rounded-2xl bg-card border border-border space-y-3 animate-in fade-in zoom-in-95">
-          <div className="text-5xl font-black text-primary">
-            {game.result.goalsFor}-{game.result.goalsAgainst}
-          </div>
-          <div className="text-lg font-bold text-foreground">Grade {game.result.grade}</div>
-          <div className="flex justify-center gap-6 text-sm text-muted-foreground">
-            <span>Rating <b className="text-foreground">{game.result.rating}</b></span>
-            <span>Chemistry <b className="text-foreground">{game.result.chemistry}%</b></span>
-            <span>Squad <b className="text-foreground">€{game.result.squadValue}M</b></span>
-          </div>
-
-          <ShareButtons
-            gameName="Perfect Lineup"
-            gamePath="/perfect-lineup"
-            score={`a ${game.result.goalsFor}-${game.result.goalsAgainst} win (Grade ${game.result.grade}, ${game.result.rating} rating)`}
+        <div className="mt-6">
+          <ResultScreen
+            outcomeEmoji={<span className="text-4xl font-black text-primary">{game.result.goalsFor}-{game.result.goalsAgainst}</span>}
+            headline={`Grade ${game.result.grade}`}
+            statRow={[
+              { label: 'Rating', value: game.result.rating },
+              { label: 'Chemistry', value: `${game.result.chemistry}%` },
+              { label: 'Squad', value: `€${game.result.squadValue}M` },
+            ]}
             emojiGrid={slotGradesToEmoji(game.result.slotGrades)}
+            share={{
+              gameName: 'Perfect Lineup',
+              gamePath: '/perfect-lineup',
+              score: `a ${game.result.goalsFor}-${game.result.goalsAgainst} win (Grade ${game.result.grade}, ${game.result.rating} rating)`,
+            }}
+            onPlayAgain={game.mode === 'daily' ? game.reset : game.rollUnlimited}
+            playAgainLabel={game.mode === 'daily' ? 'Edit Lineup' : 'New Lineup'}
           />
-
-          <button
-            onClick={game.mode === 'daily' ? game.reset : game.rollUnlimited}
-            className="mt-2 inline-flex items-center gap-2 px-6 py-2 rounded-lg border border-border bg-card text-foreground font-semibold hover:bg-accent transition-colors"
-          >
-            <RotateCcw className="w-4 h-4" />
-            {game.mode === 'daily' ? 'Edit Lineup' : 'New Lineup'}
-          </button>
         </div>
       )}
 
