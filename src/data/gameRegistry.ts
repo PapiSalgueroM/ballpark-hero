@@ -44,6 +44,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/shirt-number', label: 'Shirt Number', emoji: '👕', description: 'Guess the kit number a player wears', daily: true, isNew: true },
       { path: '/transfer-path', label: 'Transfer Path', emoji: '🔄', description: 'Connect two players through shared clubs', daily: true, isNew: true },
       { path: '/guess-transfer-value', label: 'Guess The Value', emoji: '💰', description: 'Guess a player’s transfer market value', daily: true, isNew: true },
+      { path: '/pack-battle', label: 'Pack Battle', emoji: '🃏', description: 'Call higher or lower before each card flips. One miss busts the pack', daily: true, isNew: true },
     ],
   },
   {
