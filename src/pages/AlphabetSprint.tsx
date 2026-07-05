@@ -23,6 +23,10 @@ import {
   drawLetter,
   suggestForLetter,
   pointsFor,
+  distinctLettersNamed,
+  sprintTier,
+  SPRINT_TIER_LABEL,
+  SPRINT_TIER_EMOJI,
 } from '@/lib/alphabetSprint';
 
 type Phase = 'boot' | 'error' | 'idle' | 'running' | 'done';
@@ -153,7 +157,10 @@ const AlphabetSprint = () => {
   const suggestions = phase === 'running' && letter ? suggestForLetter(pool, letter, input, used) : [];
   const isNewBest = score > 0 && score >= best[modeId];
   const timePct = mode.seconds > 0 ? Math.max(0, Math.min(100, (timeLeft / mode.seconds) * 100)) : 0;
-  const emojiGrid = `🔠 Alphabet Sprint ${mode.label}: ${score} pts, ${named.length} players in ${mode.seconds}s${isNewBest ? ' 🏅 new best' : ''}`;
+  const lettersNamed = distinctLettersNamed(named);
+  const tier = sprintTier(lettersNamed, playable.size);
+  const tierLine = tier ? `${SPRINT_TIER_EMOJI[tier]} ${SPRINT_TIER_LABEL[tier]}` : null;
+  const emojiGrid = `🔠 Alphabet Sprint ${mode.label}: ${score} pts, ${named.length} players in ${mode.seconds}s${tierLine ? ` ${tierLine}` : ''}${isNewBest ? ' 🏅 new best' : ''}`;
 
   const onInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && suggestions.length > 0) {
@@ -319,13 +326,21 @@ const AlphabetSprint = () => {
 
         {phase === 'done' && (
           <div className="bg-card border border-border rounded-2xl p-6 text-center">
-            <div className="text-4xl mb-2">{score >= 20 ? '🐐' : score >= 12 ? '🔥' : score >= 6 ? '👏' : '🐢'}</div>
+            <div className="text-4xl mb-2">
+              {tier === 'gold' ? '🥇' : tier === 'silver' ? '🥈' : tier === 'bronze' ? '🥉' : score >= 6 ? '👏' : '🐢'}
+            </div>
             <h2 className="text-2xl font-bold text-primary font-display mb-1">
-              {score} pts in {mode.seconds}s
+              {tier ? `${SPRINT_TIER_EMOJI[tier]} ${SPRINT_TIER_LABEL[tier]}: ${score} pts` : `${score} pts in ${mode.seconds}s`}
             </h2>
             <p className="text-sm text-muted-foreground mb-3">
-              {named.length} player{named.length === 1 ? '' : 's'} named on {mode.label}.{' '}
-              {isNewBest
+              {named.length} player{named.length === 1 ? '' : 's'} named across {lettersNamed} letter{lettersNamed === 1 ? '' : 's'} on {mode.label}.{' '}
+              {tier === 'gold'
+                ? 'Every playable letter covered. The alphabet fears you.'
+                : tier === 'silver'
+                ? 'Silver tier. That is strong letter coverage, push for gold next run.'
+                : tier === 'bronze'
+                ? 'Bronze tier. Solid spread across the alphabet, keep going.'
+                : isNewBest
                 ? 'New personal best. The alphabet fears you.'
                 : best[modeId] > 0
                 ? `Your best is ${best[modeId]}. One more go?`
@@ -347,7 +362,7 @@ const AlphabetSprint = () => {
 
             <pre className="text-sm tracking-wide whitespace-pre-wrap mb-2">{emojiGrid}</pre>
             <ShareButtons
-              score={String(score)}
+              score={tier ? `${score} (${SPRINT_TIER_LABEL[tier]})` : String(score)}
               gameName="Alphabet Sprint"
               gamePath="/alphabet-sprint"
               emojiGrid={emojiGrid}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { FlagImg } from '@/components/FlagImg';
-import { useWorldCup } from '@/hooks/useWorldCup';
+import { useWorldCup, FROZEN_ERA_YEARS } from '@/hooks/useWorldCup';
 import { worldCupPuzzles } from '@/data/worldCupPuzzles';
 import { WorldCupHowToPlay } from '@/components/world-cup/WorldCupHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
@@ -31,6 +31,8 @@ const WorldCup = () => {
     gameStatus,
     score,
     isLoading,
+    era,
+    setEra,
   } = useWorldCup();
 
   const [showRules, setShowRules] = useState(false);
@@ -119,6 +121,26 @@ const WorldCup = () => {
                 </button>
               ))}
             </div>
+
+            {/* Frozen Era: lock Unlimited mode to one past World Cup year */}
+            {mode === 'unlimited' && (
+              <div className="flex items-center justify-center gap-2 mt-3">
+                <label htmlFor="wc-frozen-era" className="text-xs text-muted-foreground">
+                  🧊 Frozen Era
+                </label>
+                <select
+                  id="wc-frozen-era"
+                  value={era}
+                  onChange={(e) => setEra(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+                  className="text-xs font-semibold rounded-full border border-border bg-card px-3 py-1 text-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--wc-green))]/50"
+                >
+                  <option value="all">All years</option>
+                  {FROZEN_ERA_YEARS.map((y) => (
+                    <option key={y} value={y}>{y} World Cup</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <p className="text-sm text-muted-foreground mt-3">
               Clue{' '}

@@ -5,11 +5,17 @@ import {
   GameMode,
   POINTS_BY_CLUE,
   SoccerClubPuzzle,
+  QuestionTreeState,
 } from '@/types/guessSoccerClub';
 import { soccerClubPuzzles } from '@/data/soccerClubPuzzles';
 import { fetchSoccerClubPuzzles } from '@/lib/fetchSoccerClubPuzzles';
 import { fetchNotablePlayersForClubs } from '@/lib/fetchSoccerClubNotablePlayers';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import {
+  ClubQuestionId,
+  scoreQuestionTreeRound,
+  getClubQuestion,
+} from '@/lib/clubQuestionTree';
 
 export const MAX_CLUES = 6;
 
@@ -162,6 +168,80 @@ export function useGuessSoccerClub() {
     gameState?.score ?? 0
   );
 
+  // ── Guided question-tree mode ("20 Questions" tab) ──
+  // Fully separate state from classic mode's gameState above; classic
+  // mode's behavior is unchanged by any of this.
+  const [treeState, setTreeState] = useState<QuestionTreeState | null>(null);
+
+  const startQuestionTree = useCallback(
+    (leagueFilter?: string) => {
+      const puzzle = getRandomPuzzle(leagueFilter);
+      setTreeState({
+        puzzle,
+        askedIds: [],
+        guesses: [],
+        status: 'playing',
+        score: 0,
+      });
+    },
+    [getRandomPuzzle]
+  );
+
+  const askQuestion = useCallback(
+    (id: ClubQuestionId) => {
+      if (!treeState || treeState.status !== 'playing') return;
+      if (treeState.askedIds.includes(id)) return;
+      setTreeState(prev =>
+        prev ? { ...prev, askedIds: [...prev.askedIds, id] } : null
+      );
+    },
+    [treeState]
+  );
+
+  const guessClubInTree = useCallback(
+    (input: string) => {
+      if (!treeState || treeState.status !== 'playing') return;
+
+      const resolved = resolvePuzzleByName(input);
+      const isCorrect = resolved?.id === treeState.puzzle.id;
+      const newGuesses = [...treeState.guesses, input];
+
+      if (isCorrect) {
+        const score = scoreQuestionTreeRound(treeState.askedIds, true);
+        setTreeState(prev =>
+          prev ? { ...prev, guesses: newGuesses, status: 'won', score } : null
+        );
+      } else {
+        setTreeState(prev =>
+          prev ? { ...prev, guesses: newGuesses, status: 'lost', score: 0 } : null
+        );
+      }
+    },
+    [treeState, resolvePuzzleByName]
+  );
+
+  const resetQuestionTree = useCallback(() => setTreeState(null), []);
+
+  const questionsRemainingCount = useMemo(() => {
+    if (!treeState) return 0;
+    const term = treeState.puzzle.fullName.toLowerCase();
+    // "Players remaining" narrowing counter: how many pool entries still
+    // share every answered attribute in common with the secret club, purely
+    // for the narrowing-the-field visual (does not affect scoring).
+    return puzzlePool.filter(candidate => {
+      return treeState.askedIds.every(id => {
+        const q = getClubQuestion(id);
+        return q.answer(candidate) === q.answer(treeState.puzzle) || candidate.fullName.toLowerCase() === term;
+      });
+    }).length;
+  }, [treeState, puzzlePool]);
+
+  useGameCompletion(
+    'guess-soccer-club-questions',
+    treeState?.status === 'won' || treeState?.status === 'lost',
+    treeState?.score ?? 0
+  );
+
   return {
     gameState,
     startGame,
@@ -172,5 +252,12 @@ export function useGuessSoccerClub() {
     pointsForCurrentClue,
     allClubNames,
     isLoadingPool,
+    // Question-tree mode
+    treeState,
+    startQuestionTree,
+    askQuestion,
+    guessClubInTree,
+    resetQuestionTree,
+    questionsRemainingCount,
   };
 }

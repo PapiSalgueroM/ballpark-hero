@@ -3,6 +3,7 @@ import { useGuessSoccerClub, MAX_CLUES } from '@/hooks/useGuessSoccerClub';
 import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { Button } from '@/components/ui/button';
 import { ClubSearch } from './ClubSearch';
+import { QuestionTreeBoard } from './QuestionTreeBoard';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { POINTS_BY_CLUE, CLUE_LABELS } from '@/types/guessSoccerClub';
@@ -20,16 +21,22 @@ const leagueCountry: Record<string, string> = {
   'MLS': 'USA',
 };
 
+type TopMode = 'classic' | 'questions';
+
 export function GuessSoccerClubBoard() {
-  const { gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue,
-          allClubNames, isLoadingPool } =
-    useGuessSoccerClub();
-  const gameRef = useScrollToGame(gameState);
+  const {
+    gameState, startGame, makeGuess, giveUp, resetGame, pointsForCurrentClue,
+    allClubNames, isLoadingPool,
+    treeState, startQuestionTree, askQuestion, guessClubInTree, resetQuestionTree,
+    questionsRemainingCount,
+  } = useGuessSoccerClub();
+  const gameRef = useScrollToGame(gameState ?? treeState);
 
   const [showHelp, setShowHelp] = useState(false);
+  const [topMode, setTopMode] = useState<TopMode>('classic');
 
   /* ─── Mode selection ─── */
-  if (!gameState) {
+  if (!gameState && !treeState) {
     if (isLoadingPool) {
       return (
         <div className="min-h-screen bg-background flex items-center justify-center">
@@ -46,7 +53,9 @@ export function GuessSoccerClubBoard() {
               Guess The Football Club
             </h1>
             <p className="text-muted-foreground">
-              Clues reveal one at a time. How quickly can you identify the mystery club?
+              {topMode === 'classic'
+                ? 'Clues reveal one at a time. How quickly can you identify the mystery club?'
+                : 'Pick questions from the menu, pay points for each one, then guess the club.'}
             </p>
             <button
               onClick={() => setShowHelp(v => !v)}
@@ -56,55 +65,136 @@ export function GuessSoccerClubBoard() {
             </button>
             {showHelp && (
               <div className="mt-4 p-4 bg-card border border-border rounded-xl text-left text-sm space-y-1 text-muted-foreground max-w-sm mx-auto">
-                <p>🟢 A mystery football club is chosen.</p>
-                <p>🔢 6 clues are revealed one at a time: vibe, league, titles, kit colors, notable players, then the name.</p>
-                <p>✅ Guess correctly on clue 1 = 1200 pts</p>
-                <p>📉 Points decrease with each clue used.</p>
-                <p>❌ After 5 wrong guesses the club is revealed.</p>
+                {topMode === 'classic' ? (
+                  <>
+                    <p>🟢 A mystery football club is chosen.</p>
+                    <p>🔢 6 clues are revealed one at a time: vibe, league, titles, kit colors, notable players, then the name.</p>
+                    <p>✅ Guess correctly on clue 1 = 1200 pts</p>
+                    <p>📉 Points decrease with each clue used.</p>
+                    <p>❌ After 5 wrong guesses the club is revealed.</p>
+                  </>
+                ) : (
+                  <>
+                    <p>🟢 A mystery football club is chosen.</p>
+                    <p>❓ Pick any question from the menu (country, league, titles, kit colors, and more). Each one costs points.</p>
+                    <p>🔎 Ask as many or as few as you like, then submit your guess.</p>
+                    <p>✅ Fewer questions used means a higher score.</p>
+                    <p>❌ One wrong guess ends the round.</p>
+                  </>
+                )}
               </div>
             )}
           </div>
 
-          {/* Mode buttons */}
-          <div className="space-y-3">
-            <Button
-              className="w-full h-14 text-lg font-semibold"
-              onClick={() => startGame('daily')}
+          {/* Top-level mode tabs */}
+          <div className="flex justify-center gap-2 mb-6">
+            <button
+              onClick={() => setTopMode('classic')}
+              className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${
+                topMode === 'classic'
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'bg-card text-muted-foreground border-border hover:text-foreground'
+              }`}
             >
-              🗓️ Daily Challenge
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full h-14 text-lg font-semibold"
-              onClick={() => startGame('unlimited')}
+              🔢 Classic Clues
+            </button>
+            <button
+              onClick={() => setTopMode('questions')}
+              className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${
+                topMode === 'questions'
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'bg-card text-muted-foreground border-border hover:text-foreground'
+              }`}
             >
-              🔄 Unlimited
-            </Button>
+              ❓ 20 Questions
+            </button>
+          </div>
 
-            <div className="pt-2">
-              <p className="text-center text-sm text-muted-foreground mb-3 font-medium uppercase tracking-wide">
-                Filter by League
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {LEAGUES.map(league => (
-                  <Button
-                    key={league}
-                    variant="outline"
-                    className="h-11 text-sm"
-                    onClick={() => startGame('league', league)}
-                  >
-                    <span className="inline-flex items-center gap-1"><FlagImg name={leagueCountry[league]} size={16} /> {league}</span>
-                  </Button>
-                ))}
+          {topMode === 'classic' ? (
+            <div className="space-y-3">
+              <Button
+                className="w-full h-14 text-lg font-semibold"
+                onClick={() => startGame('daily')}
+              >
+                🗓️ Daily Challenge
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full h-14 text-lg font-semibold"
+                onClick={() => startGame('unlimited')}
+              >
+                🔄 Unlimited
+              </Button>
+
+              <div className="pt-2">
+                <p className="text-center text-sm text-muted-foreground mb-3 font-medium uppercase tracking-wide">
+                  Filter by League
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {LEAGUES.map(league => (
+                    <Button
+                      key={league}
+                      variant="outline"
+                      className="h-11 text-sm"
+                      onClick={() => startGame('league', league)}
+                    >
+                      <span className="inline-flex items-center gap-1"><FlagImg name={leagueCountry[league]} size={16} /> {league}</span>
+                    </Button>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="space-y-3">
+              <Button
+                className="w-full h-14 text-lg font-semibold"
+                onClick={() => startQuestionTree()}
+              >
+                ❓ Start Question Round
+              </Button>
+
+              <div className="pt-2">
+                <p className="text-center text-sm text-muted-foreground mb-3 font-medium uppercase tracking-wide">
+                  Filter by League
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {LEAGUES.map(league => (
+                    <Button
+                      key={league}
+                      variant="outline"
+                      className="h-11 text-sm"
+                      onClick={() => startQuestionTree(league)}
+                    >
+                      <span className="inline-flex items-center gap-1"><FlagImg name={leagueCountry[league]} size={16} /> {league}</span>
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           <GameNav />
         </div>
       </div>
     );
   }
+
+  if (treeState) {
+    return (
+      <div ref={gameRef}>
+        <QuestionTreeBoard
+          treeState={treeState}
+          askQuestion={askQuestion}
+          guessClubInTree={guessClubInTree}
+          resetQuestionTree={resetQuestionTree}
+          allClubNames={allClubNames}
+          questionsRemainingCount={questionsRemainingCount}
+        />
+      </div>
+    );
+  }
+
+  if (!gameState) return null;
 
   const isPlaying = gameState.gameStatus === 'playing';
   const isWon = gameState.gameStatus === 'won';

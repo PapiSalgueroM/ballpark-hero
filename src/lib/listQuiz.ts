@@ -222,3 +222,35 @@ export async function loadPuzzleAnswers(def: ListPuzzleDef): Promise<string[] | 
     return null;
   }
 }
+
+/**
+ * Wave 15: partial-credit tiers so a solid-but-incomplete list still reads as
+ * a win. Gold requires the full list, Silver 80%+, Bronze 60%+, anything below
+ * that stays a non-tiered, encouraging result (no tier name invented for it).
+ */
+export type ListQuizTier = 'gold' | 'silver' | 'bronze' | null;
+
+export const LIST_QUIZ_TIER_THRESHOLDS: Record<'gold' | 'silver' | 'bronze', number> = {
+  gold: 100,
+  silver: 80,
+  bronze: 60,
+};
+
+export function listQuizTier(pct: number): ListQuizTier {
+  if (pct >= LIST_QUIZ_TIER_THRESHOLDS.gold) return 'gold';
+  if (pct >= LIST_QUIZ_TIER_THRESHOLDS.silver) return 'silver';
+  if (pct >= LIST_QUIZ_TIER_THRESHOLDS.bronze) return 'bronze';
+  return null;
+}
+
+export const LIST_QUIZ_TIER_LABEL: Record<'gold' | 'silver' | 'bronze', string> = {
+  gold: 'Gold',
+  silver: 'Silver',
+  bronze: 'Bronze',
+};
+
+export const LIST_QUIZ_TIER_EMOJI: Record<'gold' | 'silver' | 'bronze', string> = {
+  gold: '🥇',
+  silver: '🥈',
+  bronze: '🥉',
+};

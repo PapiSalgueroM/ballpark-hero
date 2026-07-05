@@ -11,6 +11,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
   ListPuzzleDef, LIST_PUZZLES, OFFLINE_PUZZLE,
   loadPuzzleAnswers, buildAliasMap, normalize,
+  listQuizTier, LIST_QUIZ_TIER_LABEL, LIST_QUIZ_TIER_EMOJI,
 } from '@/lib/listQuiz';
 
 type Phase = 'pick' | 'loading' | 'playing' | 'done';
@@ -116,8 +117,10 @@ const ListQuiz = () => {
   };
 
   const pct = total > 0 ? Math.round((foundCount / total) * 100) : 0;
+  const tier = listQuizTier(pct);
+  const tierLine = tier ? `${LIST_QUIZ_TIER_EMOJI[tier]} ${LIST_QUIZ_TIER_LABEL[tier]}` : null;
   const emojiGrid = puzzle
-    ? `${puzzle.emoji} ${puzzle.title}\n📝 ${foundCount}/${total} (${pct}%)${timed ? ' ⏱️' : ''}`
+    ? `${puzzle.emoji} ${puzzle.title}\n📝 ${foundCount}/${total} (${pct}%)${tierLine ? ` ${tierLine}` : ''}${timed ? ' ⏱️' : ''}`
     : '';
 
   const sports = useMemo(() => {
@@ -282,21 +285,25 @@ const ListQuiz = () => {
             {phase === 'done' && (
               <div className="mb-6">
                 <ResultScreen
-                  won={pct === 100 ? true : pct >= 40 ? undefined : false}
-                  outcomeEmoji={pct === 100 ? '🏆' : pct >= 70 ? '🎉' : pct >= 40 ? '👏' : '📚'}
-                  headline={pct === 100 ? 'Perfect list!' : `You named ${foundCount} of ${total}`}
+                  won={tier ? true : pct > 0 ? undefined : false}
+                  outcomeEmoji={tier === 'gold' ? '🏆' : tier === 'silver' ? '🎉' : tier === 'bronze' ? '👏' : '📚'}
+                  headline={tier ? `${LIST_QUIZ_TIER_EMOJI[tier]} ${LIST_QUIZ_TIER_LABEL[tier]}: ${foundCount} of ${total} (${pct}%)` : `You named ${foundCount} of ${total} (${pct}%)`}
                   statLine={
-                    pct === 100
+                    tier === 'gold'
                       ? 'Every single one. Take a bow.'
+                      : tier === 'silver'
+                      ? 'Silver tier. That is a strong list, just a few short of perfect.'
+                      : tier === 'bronze'
+                      ? 'Bronze tier. Solid recall, come back and push for Silver.'
                       : gaveUp
-                      ? 'The ones you missed are shown above.'
+                      ? 'The ones you missed are shown above. Every list gets easier with practice.'
                       : timed && secondsLeft <= 0
-                      ? 'Time! The rest are shown above.'
-                      : 'The full list is shown above.'
+                      ? 'Time! The rest are shown above. Every list gets easier with practice.'
+                      : 'The full list is shown above. Every list gets easier with practice.'
                   }
                   emojiGrid={emojiGrid}
                   share={{
-                    score: `${foundCount}/${total}`,
+                    score: tier ? `${foundCount}/${total} (${LIST_QUIZ_TIER_LABEL[tier]})` : `${foundCount}/${total}`,
                     gameName: 'Name Them All',
                     gamePath: '/list-quiz',
                   }}

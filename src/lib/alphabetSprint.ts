@@ -175,3 +175,46 @@ export function suggestForLetter(
 export function pointsFor(newStreak: number): number {
   return newStreak > 0 && newStreak % STREAK_BONUS_EVERY === 0 ? 2 : 1;
 }
+
+/**
+ * Wave 15: partial-credit tiers for a run's letter coverage. There is no
+ * fixed 26-letter sweep in this timed sprint (letters are drawn and can be
+ * skipped or exhausted), so the denominator is the letters actually playable
+ * this run, the closest real analog to "all 26 letters" once I/Q/U/X/Y/Z-style
+ * thin letters are excluded per playableLetters(). Gold requires clearing
+ * every playable letter, Silver 75%+, Bronze 50%+, anything below stays a
+ * non-tiered, encouraging result.
+ */
+export type SprintTier = 'gold' | 'silver' | 'bronze' | null;
+
+export const SPRINT_TIER_THRESHOLDS: Record<'gold' | 'silver' | 'bronze', number> = {
+  gold: 100,
+  silver: 75,
+  bronze: 50,
+};
+
+/** Distinct letters with at least one named player this run. */
+export function distinctLettersNamed(named: SprintPlayer[]): number {
+  return new Set(named.map(p => p.letter)).size;
+}
+
+export function sprintTier(lettersNamed: number, playableCount: number): SprintTier {
+  if (playableCount <= 0) return null;
+  const pct = (lettersNamed / playableCount) * 100;
+  if (pct >= SPRINT_TIER_THRESHOLDS.gold) return 'gold';
+  if (pct >= SPRINT_TIER_THRESHOLDS.silver) return 'silver';
+  if (pct >= SPRINT_TIER_THRESHOLDS.bronze) return 'bronze';
+  return null;
+}
+
+export const SPRINT_TIER_LABEL: Record<'gold' | 'silver' | 'bronze', string> = {
+  gold: 'Gold',
+  silver: 'Silver',
+  bronze: 'Bronze',
+};
+
+export const SPRINT_TIER_EMOJI: Record<'gold' | 'silver' | 'bronze', string> = {
+  gold: '🥇',
+  silver: '🥈',
+  bronze: '🥉',
+};

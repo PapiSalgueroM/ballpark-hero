@@ -74,6 +74,20 @@ type WCAction =
 
 export type WorldCupMode = 'daily' | 'unlimited';
 
+// Frozen Era: every distinct World Cup year present in the puzzle bank, newest first.
+// 'all' keeps the classic random-any-year behavior in Unlimited mode.
+export const FROZEN_ERA_YEARS: number[] = Array.from(
+  new Set(worldCupPuzzles.map(p => p.year))
+).sort((a, b) => b - a);
+
+export type FrozenEra = 'all' | number;
+
+function poolForEra(era: FrozenEra): WorldCupPuzzle[] {
+  if (era === 'all') return worldCupPuzzles;
+  const filtered = worldCupPuzzles.filter(p => p.year === era);
+  return filtered.length > 0 ? filtered : worldCupPuzzles;
+}
+
 function countProgression(actions: WCAction[]): number {
   // wrong + skip actions each advance the clue
   return actions.filter(a => a.t === 'w' || a.t === 's').length;
@@ -107,6 +121,8 @@ export function useWorldCup() {
   const dailyAttempts = dailyActions.filter(a => a.t === 'w').map(a => a.v);
 
   // ---- UNLIMITED -----------------------------------------------------------
+  // Frozen Era: lock the puzzle pool to one past World Cup year, or 'all' for classic behavior.
+  const [era, setEraState] = useState<FrozenEra>('all');
   const [unlimitedPuzzle, setUnlimitedPuzzle] = useState(
     () => worldCupPuzzles[Math.floor(Math.random() * worldCupPuzzles.length)]
   );
@@ -192,14 +208,28 @@ export function useWorldCup() {
     if (mode === 'daily') {
       resetDailyHook();
     } else {
-      setUnlimitedPuzzle(worldCupPuzzles[Math.floor(Math.random() * worldCupPuzzles.length)]);
+      const pool = poolForEra(era);
+      setUnlimitedPuzzle(pool[Math.floor(Math.random() * pool.length)]);
       setUnlimitedSeed(Math.floor(Math.random() * 1e9));
       setRevealedCount(1);
       setAttempts([]);
       setUnlimitedStatus('playing');
     }
     setGuess('');
-  }, [mode, resetDailyHook]);
+  }, [mode, resetDailyHook, era]);
+
+  // Changing the Frozen Era filter (Unlimited mode only) draws a fresh puzzle
+  // from the newly locked pool and restarts the current round.
+  const setEra = useCallback((newEra: FrozenEra) => {
+    setEraState(newEra);
+    const pool = poolForEra(newEra);
+    setUnlimitedPuzzle(pool[Math.floor(Math.random() * pool.length)]);
+    setUnlimitedSeed(Math.floor(Math.random() * 1e9));
+    setRevealedCount(1);
+    setAttempts([]);
+    setUnlimitedStatus('playing');
+    setGuess('');
+  }, []);
 
   // ---- COMPLETION ----------------------------------------------------------
   const dailyScore = rawDailyStatus === 'won' ? (POINTS_BY_CLUE[dailyRevealedCount] ?? 100) : 0;
@@ -223,5 +253,8 @@ export function useWorldCup() {
     gameStatus,
     score,
     isLoading: mode === 'daily' ? isLoading : false,
+    // Frozen Era: Unlimited-mode-only filter that locks the puzzle pool to one past World Cup year.
+    era,
+    setEra,
   };
 }

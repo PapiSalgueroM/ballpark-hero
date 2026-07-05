@@ -37,6 +37,7 @@ export function WorldCupHowToPlay({ open, onOpenChange }: Props) {
             </div>
           </div>
           <p>New puzzle every day at midnight. Same one for everyone.</p>
+          <p>In Unlimited mode, use Frozen Era to lock every puzzle to one past World Cup year instead of a random one.</p>
         </div>
       </DialogContent>
     </Dialog>

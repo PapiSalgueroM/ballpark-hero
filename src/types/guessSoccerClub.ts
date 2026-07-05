@@ -34,6 +34,22 @@ export interface GuessSoccerClubState {
   leagueFilter?: string;
 }
 
+// ── Guided question-tree mode ("20 Questions" tab) ──
+// A second, opt-in input paradigm on the same page: instead of clue tiers
+// revealing automatically, the player chooses questions from a fixed menu
+// (see src/lib/clubQuestionTree.ts) and pays points per question asked,
+// then makes one final guess via the same ClubSearch autocomplete used by
+// classic mode. Classic mode's state/types above are untouched.
+export type QuestionTreeStatus = 'playing' | 'won' | 'lost';
+
+export interface QuestionTreeState {
+  puzzle: SoccerClubPuzzle;
+  askedIds: import('@/lib/clubQuestionTree').ClubQuestionId[];
+  guesses: string[];
+  status: QuestionTreeStatus;
+  score: number;
+}
+
 // 6 clues -> scores 1200, 960, 720, 480, 240, 0. The added "Notable Players"
 // tier sits between kit colors and the full-name reveal, so the point curve
 // for the pre-existing 5 clues is stretched proportionally rather than
