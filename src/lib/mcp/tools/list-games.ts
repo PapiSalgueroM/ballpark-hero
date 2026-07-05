@@ -1,6 +1,6 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { CATEGORIES } from "@/data/gameRegistry";
+import { CATEGORIES } from "../../../data/gameRegistry";
 
 export default defineTool({
   name: "list_games",

@@ -8,7 +8,169 @@ import { defineMcp } from "npm:@lovable.dev/mcp-js@0.20.0";
 // src/lib/mcp/tools/list-games.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { z } from "npm:zod@^3.25.76";
-import { CATEGORIES } from "npm:@/data/gameRegistry";
+
+// src/data/gameRegistry.ts
+var CATEGORIES = [
+  {
+    title: "Soccer",
+    emoji: "\u26BD",
+    games: [
+      { path: "/higher-lower-transfers", label: "Transfer Market", emoji: "\u{1F4C8}", description: "Higher or lower on real market values", isNew: true },
+      { path: "/career-ladder", label: "Career Ladder", emoji: "\u{1FA9C}", description: "Guess the player, one career stop at a time", isNew: true },
+      { path: "/who-am-i", label: "Who Am I?", emoji: "\u{1F575}\uFE0F", description: "Hunt the secret player with similarity scores", isNew: true },
+      { path: "/world-xi", label: "World XI", emoji: "\u{1F30D}", description: "Pick a formation, fill 11 random countries", isNew: true },
+      { path: "/player-bingo", label: "Player Bingo", emoji: "\u{1F3B1}", description: "Fill 12 criteria tiles as players are revealed", isNew: true },
+      { path: "/alphabet-sprint", label: "Alphabet Sprint", emoji: "\u26A1", description: "Name a player per letter against the clock", isNew: true },
+      { path: "/clue-auction", label: "Clue Auction", emoji: "\u{1F4B0}", description: "Buy clues, save points, name the secret player", isNew: true },
+      { path: "/rarity-round", label: "Rarity Round", emoji: "\u{1F48E}", description: "Valid answers nobody else would think of", daily: true, isNew: true },
+      { path: "/missing-xi", label: "Missing XI", emoji: "\u{1F9E9}", description: "Name the missing player from a famous real lineup", daily: true, isNew: true },
+      { path: "/sign-the-player", label: "Sign the Player", emoji: "\u270D\uFE0F", description: "Guess the market value to sign your XI", daily: true, isNew: true },
+      { path: "/footle", label: "Footle", emoji: "\u{1F3AF}", description: "Guess the soccer player from stats" },
+      { path: "/career", label: "Career Quiz", emoji: "\u{1F4DC}", description: "Guess from career history" },
+      { path: "/higher-lower", label: "Higher or Lower", emoji: "\u{1F4CA}", description: "Compare all-time career stats" },
+      { path: "/connections", label: "Connections", emoji: "\u{1F517}", description: "Find groups of 4 connected players" },
+      { path: "/build-your-xi", label: "Build Your XI", emoji: "\u26BD", description: "Create a lineup, get AI rated" },
+      { path: "/perfect-lineup", label: "Perfect Lineup", emoji: "\u26BD", description: "Build an XI under random league & country constraints, then simulate", daily: true, isNew: true },
+      { path: "/football-connect-4", label: "Connect 4", emoji: "\u{1F534}", description: "Soccer trivia meets Connect 4" },
+      { path: "/world-cup", label: "World Cup", emoji: "\u{1F3C6}", description: "Guess the World Cup legend", daily: true },
+      { path: "/guess-soccer-club", label: "Guess The Club", emoji: "\u{1F3DF}\uFE0F", description: "Identify the mystery football club", daily: true, isNew: true },
+      { path: "/soccer-grid", label: "Soccer Grid", emoji: "\u26BD", description: "3\xD73 grid puzzle with rarity scores", daily: true, isNew: true },
+      { path: "/world-cup-bracket", label: "2026 Bracket", emoji: "\u{1F30D}", description: "Predict every World Cup 2026 match", isNew: true },
+      { path: "/soccer-career", label: "Soccer Career", emoji: "\u26BD", description: "Build your career from youth academy to legend. BitLife meets football.", isNew: true },
+      { path: "/fantasy-draft", label: "Fantasy Draft", emoji: "\u{1F9D1}\u200D\u{1F4BC}", description: "Draft your ultimate XI against an AI opponent", isNew: true },
+      { path: "/shirt-number", label: "Shirt Number", emoji: "\u{1F455}", description: "Guess the kit number a player wears", daily: true, isNew: true },
+      { path: "/transfer-path", label: "Transfer Path", emoji: "\u{1F504}", description: "Connect two players through shared clubs", daily: true, isNew: true },
+      { path: "/guess-transfer-value", label: "Guess The Value", emoji: "\u{1F4B0}", description: "Guess a player\u2019s transfer market value", daily: true, isNew: true },
+      { path: "/pack-battle", label: "Pack Battle", emoji: "\u{1F0CF}", description: "Call higher or lower before each card flips. One miss busts the pack", daily: true, isNew: true }
+    ]
+  },
+  {
+    title: "Pro Football",
+    emoji: "\u{1F3C8}",
+    games: [
+      { path: "/perfect-season-nfl", label: "17-0 Perfect Season", emoji: "\u{1F3C6}", description: "Draft an offense across eras, run the table", isNew: true },
+      { path: "/football-grid", label: "Pro Football Grid", emoji: "\u{1F3C8}", description: "3\xD73 grid puzzle with rarity scores", daily: true },
+      { path: "/football-timeline", label: "Timeline", emoji: "\u{1F4C5}", description: "Order players by draft year", daily: true },
+      { path: "/football-draft", label: "Draft Guesser", emoji: "\u{1F3B0}", description: "Guess the draft round", daily: true },
+      { path: "/nfl-career", label: "NFL Career Path", emoji: "\u{1F3C8}", description: "Guess the NFL player from clues", daily: true },
+      { path: "/guess-nfl-team", label: "Guess The Team", emoji: "\u{1F3C8}", description: "Identify the NFL franchise", daily: true, isNew: true },
+      { path: "/conquest", label: "NFL Conquest", emoji: "\u{1F5FA}\uFE0F", description: "32 teams, 50 states. One champion.", daily: true }
+    ]
+  },
+  {
+    title: "College Football",
+    emoji: "\u{1F3C8}",
+    games: [
+      { path: "/college-grid", label: "College Grid", emoji: "\u{1F393}", description: "College football 3\xD73 grid puzzle", daily: true },
+      { path: "/guess-the-college", label: "Guess The College", emoji: "\u{1F3EB}", description: "Guess the D1 school from clues", daily: true }
+    ]
+  },
+  {
+    title: "Pro Basketball",
+    emoji: "\u{1F3C0}",
+    games: [
+      { path: "/perfect-season-nba", label: "82-0 Perfect Season", emoji: "\u{1F3C6}", description: "Spin team seasons, draft a six man rotation", isNew: true },
+      { path: "/stat-detective", label: "Stat Detective", emoji: "\u{1F50E}", description: "Name the player behind the mystery stat line", isNew: true },
+      { path: "/nba-starting-5", label: "NBA Starting 5", emoji: "\u{1F3C0}", description: "Build a lineup with stat challenges" },
+      { path: "/nba-connect-4", label: "NBA Connect 4", emoji: "\u{1F3C0}", description: "NBA trivia meets Connect 4" },
+      { path: "/nba-chain", label: "NBA Chain", emoji: "\u{1F517}", description: "Build a chain of connected players" },
+      { path: "/perfect-lineup-nba", label: "Perfect Lineup: NBA", emoji: "\u{1F3C0}", description: "Build a starting 5 under random team & era constraints, then simulate", daily: true, isNew: true },
+      { path: "/conquest-nba", label: "NBA Conquest", emoji: "\u{1F5FA}\uFE0F", description: "30 teams, 50 states. One champion.", daily: true, isNew: true }
+    ]
+  },
+  {
+    title: "College Basketball",
+    emoji: "\u{1F3C0}",
+    games: [
+      { path: "/guess-cbb-team", label: "Guess The CBB Program", emoji: "\u{1F3C0}", description: "Guess the college basketball program", daily: true, isNew: true }
+    ]
+  },
+  {
+    title: "Baseball",
+    emoji: "\u26BE",
+    games: [
+      { path: "/perfect-season-mlb", label: "162-0 Perfect Season", emoji: "\u{1F3C6}", description: "Spin, draft across eras, chase perfection", isNew: true },
+      { path: "/baseball-career", label: "Career Path", emoji: "\u26BE", description: "Guess the baseball player", daily: true },
+      { path: "/baseball-connections", label: "Connections", emoji: "\u26BE", description: "Group baseball players", daily: true }
+    ]
+  },
+  {
+    title: "Hockey",
+    emoji: "\u{1F3D2}",
+    games: [
+      { path: "/perfect-season-nhl", label: "82-0 Perfect Season", emoji: "\u{1F3C6}", description: "Spin franchises and eras, chase 82-0", isNew: true },
+      { path: "/puck-detective", label: "Puck Detective", emoji: "\u{1F3D2}", description: "Guess the mystery NHL player with attribute clues", daily: true, isNew: true },
+      { path: "/hockey-grid", label: "NHL Franchise Grid", emoji: "\u{1F945}", description: "3x3 grid with NHL franchises and career milestones", daily: true, isNew: true },
+      { path: "/hockey-career", label: "Career Path", emoji: "\u{1F3D2}", description: "Guess the hockey player", daily: true },
+      { path: "/hockey-higher-lower", label: "Higher / Lower", emoji: "\u{1F3D2}", description: "Compare career points", daily: true },
+      { path: "/perfect-lineup-nhl", label: "Perfect Lineup: NHL", emoji: "\u{1F3D2}", description: "Build a dream line under random team & era constraints, then simulate", daily: true, isNew: true }
+    ]
+  },
+  {
+    title: "Formula 1",
+    emoji: "\u{1F3CE}\uFE0F",
+    games: [
+      { path: "/f1-driver", label: "Guess The F1 Driver", emoji: "\u{1F3CE}\uFE0F", description: "Guess the mystery F1 driver from clues", daily: true, isNew: true },
+      { path: "/f1-constructor", label: "Guess The Constructor", emoji: "\u{1F3D7}\uFE0F", description: "Guess the mystery F1 team from clues", daily: true, isNew: true },
+      { path: "/perfect-lineup-f1", label: "Perfect Lineup: F1", emoji: "\u{1F3CE}\uFE0F", description: "Build a 5-driver dream squad under random team/era/country constraints", daily: true, isNew: true }
+    ]
+  },
+  {
+    title: "Tennis",
+    emoji: "\u{1F3BE}",
+    games: [
+      { path: "/guess-tennis-player", label: "Guess The Player", emoji: "\u{1F3BE}", description: "Guess the mystery tennis player from clues", daily: true, isNew: true },
+      { path: "/tennis-chain", label: "Tennis Chain", emoji: "\u{1F517}", description: "Build a chain of Grand Slam defeats", isNew: true }
+    ]
+  },
+  {
+    title: "Golf",
+    emoji: "\u{1F3CC}\uFE0F",
+    games: []
+  },
+  {
+    title: "NASCAR",
+    emoji: "\u{1F3C1}",
+    games: [
+      { path: "/guess-nascar-driver", label: "Guess The Driver", emoji: "\u{1F3C1}", description: "Guess the mystery NASCAR driver from clues", daily: true, isNew: true },
+      { path: "/nascar-chain", label: "NASCAR Chain", emoji: "\u{1F517}", description: "Build a chain of Cup champions", isNew: true }
+    ]
+  },
+  {
+    title: "Combat Sports",
+    emoji: "\u{1F94A}",
+    games: [
+      { path: "/ufc", label: "UFC Guesser", emoji: "\u{1F94A}", description: "Guess the UFC fighter" },
+      { path: "/ufc-chain", label: "Combat Chain", emoji: "\u{1F517}", description: "Build a chain of fighters who beat each other", isNew: true }
+    ]
+  },
+  {
+    title: "World & Olympic Games",
+    emoji: "\u{1F30D}",
+    games: [
+      { path: "/teammates", label: "Teammates or Not?", emoji: "\u{1F91D}", description: "Were they ever teammates?", isNew: true },
+      { path: "/olympics", label: "The Medal Games", emoji: "\u{1F3C5}", description: "Guess the mystery athlete from clues", daily: true, isNew: true },
+      { path: "/guess-the-year", label: "Guess The Year", emoji: "\u{1F4C5}", description: "What year did these happen?", daily: true, isNew: true },
+      { path: "/guess-the-nation", label: "Guess The Nation", emoji: "\u{1F30D}", description: "Identify the mystery sporting nation", daily: true, isNew: true },
+      { path: "/hof-or-bust", label: "Hall of Fame or Bust?", emoji: "\u{1F3C6}", description: "Is this player a legend or a letdown?", daily: true, isNew: true },
+      { path: "/score-predictor", label: "Score Predictor", emoji: "\u{1F4CA}", description: "Predict the final score of famous matches", daily: true, isNew: true }
+    ]
+  },
+  {
+    title: "Game Shows",
+    emoji: "\u{1F3B2}",
+    games: [
+      { path: "/deal-or-no-deal", label: "Deal or No Deal", emoji: "\u{1F4BC}", description: "Bank or gamble against the Banker", isNew: true },
+      { path: "/list-quiz", label: "Name Them All", emoji: "\u{1F4DD}", description: "How many champions can you name?", isNew: true },
+      { path: "/squad-deal", label: "Squad Deal", emoji: "\u{1F3DF}\uFE0F", description: "Build an XI, Deal or No Deal style", isNew: true }
+    ]
+  }
+];
+var VISIBLE_CATEGORIES = CATEGORIES.filter((c) => c.games.length > 0);
+var ALL_GAMES = CATEGORIES.flatMap((c) => c.games);
+var TOTAL_GAMES = ALL_GAMES.length;
+
+// src/lib/mcp/tools/list-games.ts
 var list_games_default = defineTool({
   name: "list_games",
   title: "List games",
