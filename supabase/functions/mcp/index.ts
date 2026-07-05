@@ -18,10 +18,10 @@ var list_games_default = defineTool({
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: ({ category }) => {
-    const filtered = category ? CATEGORIES.filter((c) => c.name.toLowerCase() === category.toLowerCase()) : CATEGORIES;
+    const filtered = category ? CATEGORIES.filter((c) => c.title.toLowerCase() === category.toLowerCase()) : CATEGORIES;
     const games = filtered.flatMap(
       (c) => c.games.map((g) => ({
-        category: c.name,
+        category: c.title,
         label: g.label,
         path: g.path,
         description: g.description,
