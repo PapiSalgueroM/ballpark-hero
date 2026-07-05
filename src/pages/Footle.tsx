@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useGame } from '@/hooks/useGame';
 import type { GuessResult } from '@/types/game';
 import { PlayerSearch } from '@/components/game/PlayerSearch';
@@ -6,6 +6,7 @@ import { GameBoard } from '@/components/game/GameBoard';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
+import { StatTile } from '@/components/game/StatTile';
 import { cn } from '@/lib/utils';
 import { GameNav } from '@/components/game/GameNav';
 import AdBanner from '@/components/ads/AdBanner';
@@ -44,6 +45,33 @@ const Index = () => {
       localStorage.setItem('footle-rules-seen', '1');
     }
   }, []);
+
+  // ---- Attribute-tile supplementary layer (R6 Wave 14 / Part 1 item 4) -----
+  // Footle's GameBoard already renders a full per-guess attribute-tile row
+  // (nationality/club/goals/assists/position/kitNumber/age/marketValue), so
+  // that row already is the "attribute-tile hybrid guesser" pattern the R6
+  // spec describes. This block adds a genuinely separate, non-duplicative
+  // supplementary signal on top of it: a compact "Best Guess So Far" strip
+  // that surfaces the single closest prior guess (by count of correct/close
+  // cells) so players get an at-a-glance read without rescanning the whole
+  // board. Purely derived from existing guesses state; does not touch
+  // useGame.ts, compareGuess, GameBoard, scoring, or the share grid.
+  const bestGuess = useMemo(() => {
+    if (guesses.length === 0) return null;
+    let best = guesses[0];
+    let bestScore = -1;
+    for (const g of guesses) {
+      const cellScore = FOOTLE_CELL_ORDER.reduce((sum, key) => {
+        const status = g.cells[key].status;
+        return sum + (status === 'correct' ? 2 : status === 'close' ? 1 : 0);
+      }, 0);
+      if (cellScore > bestScore) {
+        bestScore = cellScore;
+        best = g;
+      }
+    }
+    return best;
+  }, [guesses]);
 
   return (
     <>
@@ -209,6 +237,28 @@ const Index = () => {
           </div>
         ) : null}
 
+        {/* Best Guess So Far: supplementary attribute-tile summary, additive
+            only, shown once there are at least 2 guesses to compare. */}
+        {gameStatus === 'playing' && bestGuess && guesses.length > 1 && (
+          <div className="mb-8">
+            <p className="text-xs text-center text-muted-foreground uppercase tracking-wider mb-2">
+              🔥 Best Guess So Far: <span className="text-foreground font-semibold">{bestGuess.playerName}</span>
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {FOOTLE_CELL_ORDER.map((key) => (
+                <StatTile
+                  key={key}
+                  label={FOOTLE_CELL_LABELS[key]}
+                  value={bestGuess.cells[key].value}
+                  state={bestGuess.cells[key].status}
+                  direction={bestGuess.cells[key].arrow ?? null}
+                  className="min-w-[80px]"
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Game Board */}
         <GameBoard guesses={guesses} maxGuesses={maxGuesses} />
 
@@ -335,5 +385,16 @@ function footleEmojiGrid(guesses: GuessResult[], maxGuesses: number): string {
 const FOOTLE_CELL_ORDER = [
   'nationality', 'club', 'goals', 'assists', 'position', 'kitNumber', 'age', 'marketValue',
 ] as const;
+
+const FOOTLE_CELL_LABELS: Record<typeof FOOTLE_CELL_ORDER[number], string> = {
+  nationality: 'Nation',
+  club: 'Club',
+  goals: 'Goals',
+  assists: 'Assists',
+  position: 'Position',
+  kitNumber: 'Kit #',
+  age: 'Age',
+  marketValue: 'Value',
+};
 
 export default Index;

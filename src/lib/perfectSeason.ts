@@ -277,6 +277,7 @@ export interface DailyAttemptRecord {
   overall: number;
   spins: number;
   teamNames: string[];   // squads landed on, for the result recap
+  themeId?: string;      // R6 Wave 13: theme applied to this daily run, if any
 }
 
 /** Namespaced localStorage key: `perfect-season-{sport}-daily-{date}`. */

@@ -20,6 +20,9 @@ import {
   NHL_SLOTS, NHL_GAMES, TeamEraIndexEntry,
   fetchTeamEraIndex, fetchSquad,
 } from '@/lib/perfectSeasonNhl';
+import {
+  PerfectSeasonTheme, getDailyTheme, applyTheme, buildVerificationLine, themesForSport,
+} from '@/lib/perfectSeasonThemes';
 
 const SPORT_KEY = 'nhl';
 
@@ -58,6 +61,7 @@ const PerfectSeasonNhl = () => {
   const [sim, setSim] = useState<SimResult | null>(null);
   const [revealed, setRevealed] = useState(0);
   const [countdown, setCountdown] = useState('');
+  const [dailyTheme, setDailyTheme] = useState<PerfectSeasonTheme | null>(null);
   const wheelTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -111,7 +115,13 @@ const PerfectSeasonNhl = () => {
       const idx = await fetchTeamEraIndex();
       if (!alive) return;
       if (idx) {
-        setIndex(idx);
+        if (mode === 'daily') {
+          const theme = getDailyTheme(SPORT_KEY, getDailyDateET(), idx);
+          setDailyTheme(theme);
+          setIndex(applyTheme(idx, theme));
+        } else {
+          setIndex(idx);
+        }
         setPhase('spin');
       } else {
         setPhase('error');
@@ -122,7 +132,7 @@ const PerfectSeasonNhl = () => {
       if (wheelTimer.current) clearInterval(wheelTimer.current);
       if (simTimer.current) clearInterval(simTimer.current);
     };
-  }, [phase]);
+  }, [phase, mode]);
 
   const spin = useCallback(async (isReroll: boolean) => {
     if (index.length === 0) return;
@@ -221,8 +231,9 @@ const PerfectSeasonNhl = () => {
       overall: Math.round(overall),
       spins,
       teamNames,
+      themeId: dailyTheme?.id,
     });
-  }, [mode, phase, sim, overall, spins, teamNames]);
+  }, [mode, phase, sim, overall, spins, teamNames, dailyTheme]);
 
   const skipSim = () => setRevealed(NHL_GAMES);
 
@@ -242,6 +253,7 @@ const PerfectSeasonNhl = () => {
   const backToModes = () => {
     dailySaved.current = false;
     setLockedAttempt(null);
+    setDailyTheme(null);
     restart();
     setPhase('mode-select');
   };
@@ -249,18 +261,32 @@ const PerfectSeasonNhl = () => {
   const winsSoFar = sim ? sim.games.slice(0, revealed).filter(Boolean).length : 0;
   const lossesSoFar = revealed - winsSoFar;
 
+  // Resolve the locked attempt's theme by id for the "today's daily is done"
+  // recap, since that screen loads from localStorage rather than the live
+  // dailyTheme state (which is only set after a fresh boot fetch).
+  const lockedTheme = lockedAttempt?.themeId
+    ? themesForSport(SPORT_KEY).find(t => t.id === lockedAttempt.themeId) ?? null
+    : null;
+
   const dailyTag = mode === 'daily' ? `Daily · ${getDailyDateET()}\n` : '';
+  const verificationLine = mode === 'daily' && sim
+    ? `\n${buildVerificationLine(SPORT_KEY, getDailyDateET(), dailyTheme?.id ?? null, sim.wins, sim.losses)}`
+    : '';
 
   const emojiGrid = sim
     ? sim.perfect
-      ? `🏒🏆 82-0 PERFECT SEASON\n${dailyTag}Team overall ${sim.overall} · ${spins} spins`
-      : `🏒 ${sim.wins}-${sim.losses} season\n${dailyTag}Team overall ${sim.overall} · ${spins} spins`
+      ? `🏒🏆 82-0 PERFECT SEASON\n${dailyTag}Team overall ${sim.overall} · ${spins} spins${verificationLine}`
+      : `🏒 ${sim.wins}-${sim.losses} season\n${dailyTag}Team overall ${sim.overall} · ${spins} spins${verificationLine}`
+    : '';
+
+  const lockedVerificationLine = lockedAttempt
+    ? `\n${buildVerificationLine(SPORT_KEY, lockedAttempt.date, lockedAttempt.themeId ?? null, lockedAttempt.sim.wins, lockedAttempt.sim.losses)}`
     : '';
 
   const lockedEmojiGrid = lockedAttempt
     ? lockedAttempt.sim.perfect
-      ? `🏒🏆 82-0 PERFECT SEASON\nDaily · ${lockedAttempt.date}\nTeam overall ${lockedAttempt.overall} · ${lockedAttempt.spins} spins`
-      : `🏒 ${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses} season\nDaily · ${lockedAttempt.date}\nTeam overall ${lockedAttempt.overall} · ${lockedAttempt.spins} spins`
+      ? `🏒🏆 82-0 PERFECT SEASON\nDaily · ${lockedAttempt.date}\nTeam overall ${lockedAttempt.overall} · ${lockedAttempt.spins} spins${lockedVerificationLine}`
+      : `🏒 ${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses} season\nDaily · ${lockedAttempt.date}\nTeam overall ${lockedAttempt.overall} · ${lockedAttempt.spins} spins${lockedVerificationLine}`
     : '';
 
   return (
@@ -283,6 +309,14 @@ const PerfectSeasonNhl = () => {
             <div className="mt-3 inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-secondary text-muted-foreground font-semibold uppercase tracking-wider">
               {(() => { const Icon = MODE_ICONS[mode]; return <Icon className="w-3.5 h-3.5" />; })()}
               {GAME_MODE_LABELS[mode]} mode
+            </div>
+          )}
+          {mode === 'daily' && phase !== 'mode-select' && (dailyTheme || lockedTheme) && (
+            <div className="mt-3 max-w-md mx-auto rounded-xl border border-primary/30 bg-primary/5 px-4 py-2">
+              <div className="text-xs font-bold uppercase tracking-wider text-primary">
+                Today's theme: {(dailyTheme ?? lockedTheme)!.label}
+              </div>
+              <p className="text-xs text-muted-foreground mt-0.5">{(dailyTheme ?? lockedTheme)!.description}</p>
             </div>
           )}
         </header>
