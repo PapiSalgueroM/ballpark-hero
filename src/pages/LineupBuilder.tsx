@@ -6,7 +6,8 @@ import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import FormationPitch from '@/components/lineup/FormationPitch';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
-import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity } from '@/lib/playerSearch';
+import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
+import { clubSearchTerm } from '@/data/lineupTeams';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
@@ -64,6 +65,28 @@ const LineupBuilder = () => {
     () => new Set(filledSlotsArray.map((slot) => normalizeName(slot.playerName))),
     [filledSlotsArray]
   );
+
+  // Scope the autocomplete pool to the current slot's assigned club/nation so
+  // it is impossible to select a player who doesn't meet the slot's
+  // constraint (previously the search covered every player in
+  // player_market_values with no team filter, so any real player's name
+  // would show up and be accepted regardless of the assigned team). Filters
+  // on `nationality` (stored as a clean exact value like "Argentina") use an
+  // eq match; `club` is filtered with ilike because the table stores fuller
+  // club names for some entries (e.g. "FC Barcelona", "Real Madrid Castilla"
+  // as a loan/reserve variant) and clubSearchTerm corrects the few clubs
+  // whose short label doesn't substring-match the stored name at all (PSG,
+  // Atlético Madrid, Bayer Leverkusen; verified via execute_sql on
+  // flawuiqbvjobmkfkauhw, 2026-07-06).
+  const teamScopedSource: PlayerSourceConfig | null = useMemo(() => {
+    if (!currentTeam) return null;
+    return {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: currentTeam.isNation
+        ? [{ column: 'nationality', op: 'eq', value: currentTeam.name }]
+        : [{ column: 'club', op: 'ilike', value: clubSearchTerm(currentTeam.name) }],
+    };
+  }, [currentTeam]);
 
   const handleSelectPlayer = async (entity: PlayerEntity) => {
     if (isValidating) return;
@@ -193,8 +216,8 @@ const LineupBuilder = () => {
                         value={playerInput}
                         onChange={setPlayerInput}
                         onSelect={handleSelectPlayer}
-                        searchOptions={{ source: SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers }}
-                        placeholder="Enter player name..."
+                        searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers }}
+                        placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
                         disabled={isValidating}
                         autoFocus
                         validateOnly

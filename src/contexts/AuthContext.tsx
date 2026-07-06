@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .from('profiles')
       .select('*')
       .eq('user_id', userId)
-      .single();
+      .maybeSingle();
 
     if (!error && data) {
       setProfile(data as Profile);
@@ -120,8 +120,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const { error } = await supabase
       .from('profiles')
-      .update(updates)
-      .eq('user_id', user.id);
+      .upsert(
+        { user_id: user.id, ...updates } as any,
+        { onConflict: 'user_id' }
+      );
 
     if (!error) {
       await refreshProfile();

@@ -450,9 +450,9 @@ function MostPlayedToday() {
     return (
       <section>
         <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">🔥 Most Played Today</p>
-        <div className="flex gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           {[1, 2, 3].map(i => (
-            <div key={i} className="flex-1 h-14 rounded-lg bg-muted/30 animate-pulse" />
+            <div key={i} className="h-14 rounded-lg bg-muted/30 animate-pulse" />
           ))}
         </div>
       </section>
@@ -464,12 +464,12 @@ function MostPlayedToday() {
   return (
     <section>
       <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">🔥 Most Played Today</p>
-      <div className="flex gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
         {entries.map(({ game, count, isFallback }) => (
           <Link
             key={game.path}
             to={game.path}
-            className="flex-1 flex items-center gap-2 rounded-lg border border-border bg-card/80 px-3 py-2.5 hover:border-primary/40 transition-colors"
+            className="min-w-0 flex items-center gap-2 rounded-lg border border-border bg-card/80 px-3 py-2.5 hover:border-primary/40 transition-colors"
           >
             <span className="text-lg shrink-0">{game.emoji}</span>
             <div className="min-w-0">

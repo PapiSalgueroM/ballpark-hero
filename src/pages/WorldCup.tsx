@@ -41,6 +41,8 @@ const WorldCup = () => {
   const [highlightIndex, setHighlightIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+  // Guards against double-submits (e.g. mobile double-tap or Enter + tap-select firing together)
+  const submittingRef = useRef(false);
 
   // All player names from puzzle bank for autocomplete
   const allNames = worldCupPuzzles.flatMap(p => [p.answer, ...(p.aliases ?? [])]);
@@ -50,16 +52,21 @@ const WorldCup = () => {
 
   useEffect(() => { setHighlightIndex(0); }, [suggestions.length]);
 
-  // Close on outside click
+  // Close on outside click/tap. Mobile browsers fire touchstart, not always
+  // mousedown, so both are listened for to guarantee the dropdown is dismissible.
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
+    const handler = (e: MouseEvent | TouchEvent) => {
       if (
         suggestionsRef.current && !suggestionsRef.current.contains(e.target as Node) &&
         inputRef.current && !inputRef.current.contains(e.target as Node)
       ) setShowSuggestions(false);
     };
     document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener('touchstart', handler);
+    return () => {
+      document.removeEventListener('mousedown', handler);
+      document.removeEventListener('touchstart', handler);
+    };
   }, []);
 
   useEffect(() => {
@@ -71,9 +78,12 @@ const WorldCup = () => {
   }, []);
 
   const handleSelect = (name: string) => {
-    setGuess(name);
     setShowSuggestions(false);
-    setTimeout(() => { submitGuess(name); }, 0);
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    setGuess('');
+    submitGuess(name);
+    setTimeout(() => { submittingRef.current = false; }, 300);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -87,8 +97,12 @@ const WorldCup = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setShowSuggestions(false);
-    submitGuess(guess);
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    const value = guess;
     setGuess('');
+    submitGuess(value);
+    setTimeout(() => { submittingRef.current = false; }, 300);
   };
 
   return (

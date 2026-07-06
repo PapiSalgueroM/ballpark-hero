@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, X, Save, Link2, Eye, Loader2, Zap } from "lucide-react";
+import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, Save, Link2, Eye, Loader2, Zap } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import PageSeo from "@/components/seo/PageSeo";
@@ -1171,7 +1172,9 @@ const WorldCupPredictor = () => {
         </div>
       )}
 
-      {/* FIFA Rankings Sidebar — Desktop: fixed right panel, Mobile: slide-over */}
+      {/* FIFA Rankings Sidebar — Sheet gives a backdrop, Escape-to-close, and a
+          focus-trapped panel, so there is always a way out on mobile (tap the
+          backdrop, tap the X, or press Escape) instead of a bare fixed div. */}
       {/* Toggle button */}
       {!rankingsOpen && (
         <button
@@ -1185,17 +1188,14 @@ const WorldCupPredictor = () => {
       )}
 
       {/* Rankings panel */}
-      {rankingsOpen && (
-        <div className="fixed top-0 right-0 z-50 h-full w-72 bg-[hsl(220,18%,10%)] border-l border-[hsl(220,15%,20%)] shadow-2xl flex flex-col animate-fade-in">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-[hsl(220,15%,20%)]">
-            <h3 className="text-sm font-bold text-[hsl(45,90%,60%)]">🌍 FIFA World Rankings</h3>
-            <button
-              onClick={() => setRankingsOpen(false)}
-              className="p-1 rounded hover:bg-[hsl(220,15%,20%)] text-[hsl(150,15%,50%)] transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+      <Sheet open={rankingsOpen} onOpenChange={setRankingsOpen}>
+        <SheetContent
+          side="right"
+          className="w-3/4 sm:max-w-sm bg-[hsl(220,18%,10%)] border-[hsl(220,15%,20%)] text-white p-0 flex flex-col"
+        >
+          <SheetHeader className="px-4 py-3 border-b border-[hsl(220,15%,20%)] text-left">
+            <SheetTitle className="text-sm font-bold text-[hsl(45,90%,60%)]">🌍 FIFA World Rankings</SheetTitle>
+          </SheetHeader>
           <div className="flex-1 overflow-y-auto">
             <table className="w-full text-xs">
               <thead className="sticky top-0 bg-[hsl(220,18%,10%)]">
@@ -1228,8 +1228,8 @@ const WorldCupPredictor = () => {
               </tbody>
             </table>
           </div>
-        </div>
-      )}
+        </SheetContent>
+      </Sheet>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}

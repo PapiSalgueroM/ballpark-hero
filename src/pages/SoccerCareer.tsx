@@ -40,6 +40,7 @@ import {
   dismissAppealResult,
   generateShareText, getYouthAcademyClub,
   getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,
+  FALLBACK_CLUBS,
 } from "@/lib/soccerCareerEngine";
 import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg } from "@/components/FlagImg";
@@ -400,6 +401,8 @@ export default function SoccerCareer() {
     return null;
   });
   const [clubs, setClubs] = useState<ClubData[]>([]);
+  const [clubsLoading, setClubsLoading] = useState(true);
+  const [clubsError, setClubsError] = useState(false);
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
   const [showNewCareerConfirm, setShowNewCareerConfirm] = useState(false);
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -415,11 +418,31 @@ export default function SoccerCareer() {
   }, [isRetired, career]);
   useGameCompletion('soccer-career', isRetired, legacyScore);
 
-  // Load clubs from Supabase
+  // Load clubs from Supabase. If the table is missing, empty, or the request
+  // fails for any reason, fall back to a bundled static roster so the game
+  // can always start instead of hanging on a blank/failed fetch.
   useEffect(() => {
-    supabase.from("soccer_career_clubs" as any).select("*").then(({ data }) => {
-      if (data) setClubs(data as unknown as ClubData[]);
+    let cancelled = false;
+    setClubsLoading(true);
+    setClubsError(false);
+    supabase.from("soccer_career_clubs" as any).select("*").then(({ data, error }) => {
+      if (cancelled) return;
+      if (error || !data || data.length === 0) {
+        if (error) console.error("soccer_career_clubs fetch failed, using fallback roster:", error);
+        setClubs(FALLBACK_CLUBS);
+        setClubsError(!!error);
+      } else {
+        setClubs(data as unknown as ClubData[]);
+      }
+      setClubsLoading(false);
+    }).catch((err) => {
+      if (cancelled) return;
+      console.error("soccer_career_clubs fetch threw, using fallback roster:", err);
+      setClubs(FALLBACK_CLUBS);
+      setClubsError(true);
+      setClubsLoading(false);
     });
+    return () => { cancelled = true; };
   }, []);
 
   // Save career to localStorage whenever it changes
@@ -670,7 +693,8 @@ export default function SoccerCareer() {
               previewStats={previewStats} previewOvr={previewOvr}
               isFormValid={isFormValid && clubs.length > 0} saving={saving}
               user={user} onBegin={handleBeginCareer} onShowAuth={() => setShowAuth(true)}
-              clubs={clubs} onRolledOvr={setRolledOvr}
+              clubs={clubs} clubsLoading={clubsLoading} clubsError={clubsError}
+              onRolledOvr={setRolledOvr}
               onStatsGenerated={(stats: Stats, ovr: number) => { setPreviewStats(stats); setPreviewOvr(ovr); }}
             />
           ) : (
@@ -761,7 +785,7 @@ function getOverallTier(ovr: number): { label: string; color: string; bgColor: s
 }
 
 /* ─── Creation Screen ─── */
-function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, onRolledOvr, onStatsGenerated }: any) {
+function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, clubsLoading, clubsError, onRolledOvr, onStatsGenerated }: any) {
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
   const [isRolling, setIsRolling] = useState(false);
   const [displayOvr, setDisplayOvr] = useState(0);
@@ -838,6 +862,17 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         <div className="bg-card border border-border rounded-xl p-4 sm:p-5 space-y-4">
           <h2 className="text-base font-bold text-center">Starting Potential</h2>
 
+          {clubsLoading && (
+            <div className="rounded-xl border border-border bg-muted/10 p-4 text-center text-sm text-muted-foreground animate-pulse">
+              Loading clubs...
+            </div>
+          )}
+          {!clubsLoading && clubsError && (
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-center text-xs text-amber-400">
+              Couldn't reach the live club database, so we loaded a backup roster. Everything still works.
+            </div>
+          )}
+
           {(rolledOvr !== null || isRolling) && (
             <div className={`rounded-xl border p-5 text-center space-y-2 transition-all ${tier ? tier.bgColor : "bg-muted/20 border-border"}`}>
               <div className={`text-6xl font-black tabular-nums transition-all ${isRolling ? "animate-pulse" : "animate-scale-in"} ${tier ? tier.color : "text-foreground"}`}>
@@ -852,11 +887,11 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
           <div className="flex gap-2">
             <Button
               onClick={doRoll}
-              disabled={isRolling}
+              disabled={isRolling || clubsLoading}
               className={`flex-1 h-11 text-sm font-bold text-white ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
               variant={rolledOvr !== null ? "outline" : "default"}
             >
-              {isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Reroll" : "🎲 Generate Starting Potential"}
+              {clubsLoading ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Reroll" : "🎲 Generate Starting Potential"}
             </Button>
           </div>
 

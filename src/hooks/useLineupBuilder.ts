@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { getRandomTeamAssignments } from '@/data/lineupTeams';
+import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS } from '@/data/lineupTeams';
 import type { Formation, FilledSlot, GamePhase, AIVerdict, TeamAssignment } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -50,24 +50,9 @@ export function useLineupBuilder() {
   const rerollTeam = useCallback(() => {
     setTeamAssignments((prev) => {
       const usedNames = new Set(prev.filter((_, i) => i !== filledCount).map((t) => t.name));
-      const allClubs = [
-        'Real Madrid', 'Barcelona', 'Manchester City', 'Liverpool', 'Bayern Munich',
-        'PSG', 'Chelsea', 'Arsenal', 'Manchester United', 'Juventus',
-        'AC Milan', 'Inter Milan', 'Borussia Dortmund', 'Atlético Madrid', 'Tottenham',
-        'Napoli', 'Benfica', 'Porto', 'Ajax', 'Bayer Leverkusen',
-        'Roma', 'Sevilla', 'Sporting CP', 'Newcastle', 'Aston Villa',
-        'West Ham', 'Marseille', 'Lyon', 'Celtic', 'Galatasaray',
-      ];
-      const allNations = [
-        'Argentina', 'France', 'Brazil', 'England', 'Belgium',
-        'Croatia', 'Netherlands', 'Portugal', 'Spain', 'Italy',
-        'Germany', 'Uruguay', 'Colombia', 'USA', 'Mexico',
-        'Senegal', 'Japan', 'South Korea', 'Nigeria', 'Denmark',
-        'Switzerland', 'Morocco', 'Serbia', 'Poland', 'Cameroon',
-      ];
       const all = [
-        ...allClubs.map((name) => ({ name, isNation: false })),
-        ...allNations.map((name) => ({ name, isNation: true })),
+        ...ALL_CLUBS.map((name) => ({ name, isNation: false })),
+        ...ALL_NATIONS.map((name) => ({ name, isNation: true })),
       ];
       const available = all.filter((t) => !usedNames.has(t.name));
       const pick = available[Math.floor(Math.random() * available.length)];

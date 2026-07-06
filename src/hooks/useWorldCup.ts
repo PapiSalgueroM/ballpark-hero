@@ -165,14 +165,17 @@ export function useWorldCup() {
         addDailyAction({ t: 'w', v: trimmed });
       }
     } else {
-      const displayName = correct ? puzzle.answer : trimmed;
-      setAttempts(prev => [...prev, displayName]);
       if (correct) {
+        // Correct guesses are shown on the result screen, not the wrong-attempts
+        // pill list, so they must not be pushed into `attempts`.
         setUnlimitedStatus('won');
-      } else if (revealedCount >= totalClues) {
-        setUnlimitedStatus('lost');
       } else {
-        setRevealedCount(c => c + 1);
+        setAttempts(prev => [...prev, trimmed]);
+        if (revealedCount >= totalClues) {
+          setUnlimitedStatus('lost');
+        } else {
+          setRevealedCount(c => c + 1);
+        }
       }
     }
   }, [mode, gameStatus, puzzle, dailyRevealedCount, revealedCount, totalClues, addDailyAction]);

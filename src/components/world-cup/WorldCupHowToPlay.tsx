@@ -14,7 +14,7 @@ interface Props {
 export function WorldCupHowToPlay({ open, onOpenChange }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-display">How to Play</DialogTitle>
           <DialogDescription>Guess the mystery World Cup player.</DialogDescription>

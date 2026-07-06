@@ -482,6 +482,94 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
       { label: "Renegotiate to 12%", emoji: "📝", consequence: "Agent stays at 12%, partial money back" },
     ],
   },
+  {
+    id: "pitch_invader",
+    emoji: "🏃",
+    title: "PITCH INVADER",
+    description: "Mid-match, a fan hops the barrier and sprints straight at you, phone out, screaming your name. Stewards are way behind. He's five yards away and closing.",
+    choices: [
+      { label: "Pose for the selfie", emoji: "🤳", consequence: "Popularity +10, but you concede possession and the crowd loves it" },
+      { label: "Juke him like a defender", emoji: "🕺", consequence: "Viral clip! Popularity +15, morale +5" },
+      { label: "Push him away hard", emoji: "✋", consequence: "Crowd boos, popularity -10, but stewards praise your composure" },
+    ],
+  },
+  {
+    id: "match_fixer_approach",
+    emoji: "🎭",
+    title: "THE FIXER RETURNS",
+    description: "A different, smoother operator finds you at a hotel bar the night before a meaningless end-of-season game. \"Nobody cares about this one. Just miss a penalty if you get one. €2M, cash, tonight.\"",
+    choices: [
+      { label: "Take the deal", emoji: "💵", consequence: "€2M added instantly", risk: "25% chance of a leaked recording" },
+      { label: "Film him and expose it", emoji: "🎥", consequence: "Hero status! Popularity +25, Fair Play recognition" },
+      { label: "Politely decline, tell no one", emoji: "🚪", consequence: "Walk away clean. Nothing happens." },
+    ],
+  },
+  {
+    id: "captain_armband_feud",
+    emoji: "©️",
+    title: "THE ARMBAND WAR",
+    description: "The manager is stripping the captaincy from a veteran teammate and offering it to you. The dressing room is split. The veteran hasn't spoken to you in three days.",
+    choices: [
+      { label: "Accept the armband", emoji: "🎖️", consequence: "Popularity +10 with fans, morale -8 with a chunk of the squad" },
+      { label: "Refuse out of respect", emoji: "🙏", consequence: "Dressing room loyalty +, missed leadership bonus" },
+      { label: "Broker peace between camps", emoji: "🕊️", consequence: "Morale +10 long term, no armband this season" },
+    ],
+  },
+  {
+    id: "tunnel_brawl",
+    emoji: "🥊",
+    title: "TUNNEL INCIDENT",
+    description: "After a brutal derby loss, an opposition player shoves you in the tunnel and says something about your family. Cameras are everywhere. Your teammates are already grabbing your shirt to hold you back.",
+    choices: [
+      { label: "Swing back", emoji: "👊", consequence: "3-match ban, popularity +5 with your ultras, -15 elsewhere" },
+      { label: "Walk away, report it", emoji: "🚶", consequence: "Federation fines the other player, your reputation +15" },
+      { label: "Trash talk, no contact", emoji: "🗣️", consequence: "Minor fine, clip goes viral either way" },
+    ],
+  },
+  {
+    id: "sponsor_scandal",
+    emoji: "📸",
+    title: "SPONSOR MELTDOWN",
+    description: "Your energy drink sponsor just got exposed in a tax fraud scandal. Journalists are calling your phone nonstop asking if you'll cut ties with a €3M-a-year deal.",
+    choices: [
+      { label: "Cut ties publicly", emoji: "✂️", consequence: "Lose €3M/year income, popularity +15" },
+      { label: "Stay quiet, keep the money", emoji: "🤐", consequence: "Keep the deal, popularity -10 as backlash builds" },
+      { label: "Donate the year's fee to charity", emoji: "❤️", consequence: "Keep the deal, popularity +20, net worth unchanged this year" },
+    ],
+  },
+  {
+    id: "betting_ring_teammate",
+    emoji: "🎲",
+    title: "TEAMMATE IN TROUBLE",
+    description: "Your roommate on away trips confesses he owes a betting syndicate a huge sum and they've started asking about your team's injury news. He's begging you not to tell the club.",
+    choices: [
+      { label: "Report it to the club", emoji: "📢", consequence: "Teammate suspended, integrity bonus +15, morale -5 in the dressing room" },
+      { label: "Lend him the money quietly", emoji: "💶", consequence: "Net worth -1.5M, loyalty earned, risk buried" },
+      { label: "Tell him to fix it himself", emoji: "🤷", consequence: "Nothing happens immediately, but the situation lingers" },
+    ],
+  },
+  {
+    id: "wonderkid_jealousy",
+    emoji: "🌟",
+    title: "THE NEW WONDERKID",
+    description: "The club just paid a fortune for a hyped 18-year-old who plays your exact position. The manager is clearly grooming him to replace you. He's also incredibly likeable, which makes it worse.",
+    choices: [
+      { label: "Mentor him openly", emoji: "🤝", consequence: "Popularity +15, but he develops faster and threatens your spot sooner" },
+      { label: "Freeze him out", emoji: "🧊", consequence: "Morale -10, dressing room tension, but you keep your place longer" },
+      { label: "Focus on yourself, ignore it", emoji: "🎯", consequence: "No change, business as usual" },
+    ],
+  },
+  {
+    id: "night_out_photo",
+    emoji: "🍾",
+    title: "THE NIGHT OUT PHOTO",
+    description: "A photo leaks of you out until 4am, three days before a huge cup final. It is blowing up online. Training is in six hours and the manager wants to see you immediately.",
+    choices: [
+      { label: "Own it, apologize publicly", emoji: "🙇", consequence: "Popularity +5 for honesty, morale -5, fined one week's wages" },
+      { label: "Deny everything", emoji: "🙅", consequence: "Story drags on, popularity -15 if it resurfaces later" },
+      { label: "Let your agent spin it", emoji: "🎙️", consequence: "Story dies down fast, small net worth cost for the PR team" },
+    ],
+  },
 ];
 
 export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number): CareerState {
@@ -576,6 +664,130 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       }
       break;
     }
+    case "pitch_invader": {
+      if (choiceIndex === 0) {
+        s.popularity = clamp(s.popularity + 10, 0, 100);
+        s.events = [...s.events, "🤳 Stopped for the selfie mid-match. The crowd adored it."];
+      } else if (choiceIndex === 1) {
+        s.popularity = clamp(s.popularity + 15, 0, 100);
+        s.morale = clamp(s.morale + 5, 0, 100);
+        s.events = [...s.events, "🕺 Juked the pitch invader like a seasoned defender. Viral clip! Popularity +15."];
+      } else {
+        s.popularity = clamp(s.popularity - 10, 0, 100);
+        s.events = [...s.events, "✋ Shoved the invader away hard. Crowd booed, but stewards praised your composure."];
+      }
+      break;
+    }
+    case "match_fixer_approach": {
+      if (choiceIndex === 0) {
+        s.netWorth = Math.round((s.netWorth + 2) * 100) / 100;
+        s.events = [...s.events, "💵 Took €2M from the fixer to miss a penalty..."];
+        if (Math.random() < 0.25) {
+          s.matchFixBanned = 2;
+          s.popularity = clamp(s.popularity - 35, 0, 100);
+          s.morale = clamp(s.morale - 25, 0, 100);
+          s.integrityBonus -= 25;
+          s.netWorth = Math.round((s.netWorth - 2) * 100) / 100;
+          s.events = [...s.events, "🚨 A recording leaked! Caught match-fixing. 2-season ban, reputation in ruins."];
+        } else {
+          s.events = [...s.events, "🤐 The recording never surfaced. You got away with it, for now."];
+        }
+      } else if (choiceIndex === 1) {
+        s.popularity = clamp(s.popularity + 25, 0, 100);
+        s.integrityBonus += 15;
+        s.awards = [...s.awards, { year: s.seasons[s.seasons.length - 1]?.year || 2024, name: "Fair Play Award", emoji: "🛡️" }];
+        s.events = [...s.events, "🎥 Filmed the fixer and exposed him. Hero status! Popularity +25."];
+      } else {
+        s.events = [...s.events, "🚪 Declined the offer quietly and said nothing."];
+      }
+      break;
+    }
+    case "captain_armband_feud": {
+      if (choiceIndex === 0) {
+        s.isLeader = true;
+        s.popularity = clamp(s.popularity + 10, 0, 100);
+        s.morale = clamp(s.morale - 8, 0, 100);
+        s.events = [...s.events, "🎖️ Accepted the captaincy. Fans love it, some teammates resent it."];
+      } else if (choiceIndex === 1) {
+        s.morale = clamp(s.morale + 8, 0, 100);
+        s.events = [...s.events, "🙏 Refused the armband out of respect for the veteran. Dressing room loyalty grows."];
+      } else {
+        s.morale = clamp(s.morale + 10, 0, 100);
+        s.events = [...s.events, "🕊️ Brokered peace between the manager and the veteran. No armband, but harmony restored."];
+      }
+      break;
+    }
+    case "tunnel_brawl": {
+      if (choiceIndex === 0) {
+        s.popularity = clamp(s.popularity - 10, 0, 100);
+        s.events = [...s.events, "👊 Swung back in the tunnel. 3-match ban handed down. Your ultras loved it, everyone else didn't."];
+      } else if (choiceIndex === 1) {
+        s.popularity = clamp(s.popularity + 15, 0, 100);
+        s.integrityBonus += 10;
+        s.events = [...s.events, "🚶 Walked away and reported the incident. The federation fined the other player. Reputation +15."];
+      } else {
+        s.events = [...s.events, "🗣️ Traded words but kept your hands to yourself. Minor fine, clip goes viral anyway."];
+      }
+      break;
+    }
+    case "sponsor_scandal": {
+      if (choiceIndex === 0) {
+        s.sponsorshipIncome = Math.max(0, s.sponsorshipIncome - 3);
+        s.popularity = clamp(s.popularity + 15, 0, 100);
+        s.events = [...s.events, "✂️ Cut ties with the sponsor publicly. Lost €3M/year, popularity +15."];
+      } else if (choiceIndex === 1) {
+        s.popularity = clamp(s.popularity - 10, 0, 100);
+        s.events = [...s.events, "🤐 Kept the sponsor money and stayed quiet. Backlash is building."];
+      } else {
+        s.popularity = clamp(s.popularity + 20, 0, 100);
+        s.events = [...s.events, "❤️ Donated the year's sponsor fee to charity. Popularity +20, deal intact."];
+      }
+      break;
+    }
+    case "betting_ring_teammate": {
+      if (choiceIndex === 0) {
+        s.integrityBonus += 15;
+        s.morale = clamp(s.morale - 5, 0, 100);
+        s.events = [...s.events, "📢 Reported your teammate's betting trouble to the club. He was suspended. Integrity +15."];
+      } else if (choiceIndex === 1) {
+        s.netWorth = Math.round((s.netWorth - 1.5) * 100) / 100;
+        s.morale = clamp(s.morale + 5, 0, 100);
+        s.events = [...s.events, "💶 Quietly lent your teammate €1.5M to clear his debt. Loyalty earned."];
+      } else {
+        s.events = [...s.events, "🤷 Told him to sort it out himself. The situation lingers unresolved."];
+      }
+      break;
+    }
+    case "wonderkid_jealousy": {
+      if (choiceIndex === 0) {
+        s.popularity = clamp(s.popularity + 15, 0, 100);
+        s.events = [...s.events, "🤝 Mentored the wonderkid openly. Popularity +15, but he's developing fast."];
+      } else if (choiceIndex === 1) {
+        s.morale = clamp(s.morale - 10, 0, 100);
+        s.events = [...s.events, "🧊 Froze out the wonderkid. Dressing room tension rises, but you keep your place longer."];
+      } else {
+        s.events = [...s.events, "🎯 Ignored the drama and focused on your own game."];
+      }
+      break;
+    }
+    case "night_out_photo": {
+      if (choiceIndex === 0) {
+        s.popularity = clamp(s.popularity + 5, 0, 100);
+        s.morale = clamp(s.morale - 5, 0, 100);
+        s.netWorth = Math.round((s.netWorth - Math.max(0.02, s.weeklyWage / 1000000)) * 100) / 100;
+        s.events = [...s.events, "🙇 Owned up publicly and apologized. Fined a week's wages, popularity +5 for honesty."];
+      } else if (choiceIndex === 1) {
+        s.events = [...s.events, "🙅 Denied everything. The story might resurface later."];
+        if (Math.random() < 0.35) {
+          s.popularity = clamp(s.popularity - 15, 0, 100);
+          s.events = [...s.events, "📰 The denial didn't hold. Story resurfaced. Popularity -15."];
+        }
+      } else {
+        s.netWorth = Math.round((s.netWorth - 0.1) * 100) / 100;
+        s.events = [...s.events, "🎙️ Let your agent's PR team spin it. Story died down quickly."];
+      }
+      break;
+    }
   }
 
   // Stay on moral_dilemma phase — UI calls dismissMoralDilemma to continue
@@ -602,20 +814,28 @@ export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): Caree
 
 function tryTriggerMoralDilemma(s: CareerState): boolean {
   if (s.age < 20 || s.retired) return false;
-  // Max 2 dilemmas per career
-  if (s.moralDilemmasTriggered.length >= 2) return false;
-  // ~12% chance per season after age 20 (gets ~1-2 over a 15-year career)
-  if (Math.random() > 0.12) return false;
-  
-  const available = MORAL_DILEMMAS.filter(d => !s.moralDilemmasTriggered.includes(d.id));
-  if (available.length === 0) return false;
-  
+  // This is checked once per season advance, so at most one dilemma fires per
+  // season here, matching "1-2 per season max" in practice, since a rivalry
+  // or other event can occasionally also land the same season.
+  // ~20% chance per season after age 20. Over a long career, the pool of 12
+  // dilemmas can repeat once exhausted so drama doesn't dry up late in a save.
+  if (Math.random() > 0.20) return false;
+
+  // Prefer dilemmas not yet seen; once every one has fired, allow repeats.
+  const unseen = MORAL_DILEMMAS.filter(d => !s.moralDilemmasTriggered.includes(d.id));
+  const pool = unseen.length > 0 ? unseen : MORAL_DILEMMAS;
+
   // Filter contextually
-  const eligible = available.filter(d => {
+  const eligible = pool.filter(d => {
     if (d.id === "match_fixing" && s.currentClubTier > 2) return false; // only big clubs
+    if (d.id === "match_fixer_approach" && s.currentClubTier > 3) return false;
     if (d.id === "ped_offer" && s.overall > 90) return false; // already elite
     if (d.id === "diving_reputation" && s.position === "GK") return false;
     if (d.id === "agent_corruption" && s.totalEarnings < 5) return false; // need some earnings
+    if (d.id === "betting_ring_teammate" && s.totalEarnings < 2) return false;
+    if (d.id === "wonderkid_jealousy" && s.age < 24) return false; // need a few seasons in
+    if (d.id === "captain_armband_feud" && s.age < 23) return false;
+    if (d.id === "sponsor_scandal" && !s.sponsorDeal && s.sponsorshipIncome <= 0) return false;
     return true;
   });
   if (eligible.length === 0) return false;
@@ -1293,6 +1513,97 @@ function resolveInvestments(s: CareerState): void {
 
 
 const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
+
+/* ─── Fallback club roster ───
+   Used when the soccer_career_clubs table is unreachable or empty, so the game
+   can always start instead of hanging on a blank/failed fetch. */
+export const FALLBACK_CLUBS: ClubData[] = [
+  // Tier 1 — elite
+  { id: "fb-1", name: "Real Madrid", country: "Spain", tier: 1, color: "#FEBE10", league: "La Liga" },
+  { id: "fb-2", name: "Barcelona", country: "Spain", tier: 1, color: "#A50044", league: "La Liga" },
+  { id: "fb-3", name: "Man City", country: "England", tier: 1, color: "#6CABDD", league: "Premier League" },
+  { id: "fb-4", name: "Liverpool", country: "England", tier: 1, color: "#C8102E", league: "Premier League" },
+  { id: "fb-5", name: "Bayern Munich", country: "Germany", tier: 1, color: "#DC052D", league: "Bundesliga" },
+  { id: "fb-6", name: "PSG", country: "France", tier: 1, color: "#004170", league: "Ligue 1" },
+  { id: "fb-7", name: "Juventus", country: "Italy", tier: 1, color: "#000000", league: "Serie A" },
+  { id: "fb-8", name: "Inter Milan", country: "Italy", tier: 1, color: "#0068A8", league: "Serie A" },
+  { id: "fb-9", name: "Man United", country: "England", tier: 1, color: "#DA291C", league: "Premier League" },
+  { id: "fb-10", name: "Arsenal", country: "England", tier: 1, color: "#EF0107", league: "Premier League" },
+  { id: "fb-11", name: "Chelsea", country: "England", tier: 1, color: "#034694", league: "Premier League" },
+  { id: "fb-12", name: "Ajax", country: "Netherlands", tier: 1, color: "#D2122E", league: "Eredivisie" },
+  { id: "fb-13", name: "Benfica", country: "Portugal", tier: 1, color: "#E30613", league: "Primeira Liga" },
+  { id: "fb-14", name: "Porto", country: "Portugal", tier: 1, color: "#003399", league: "Primeira Liga" },
+  { id: "fb-15", name: "Boca Juniors", country: "Argentina", tier: 1, color: "#003DA5", league: "Liga Profesional" },
+  { id: "fb-16", name: "River Plate", country: "Argentina", tier: 1, color: "#E9040F", league: "Liga Profesional" },
+  { id: "fb-17", name: "Flamengo", country: "Brazil", tier: 1, color: "#C8102E", league: "Brasileirao" },
+  { id: "fb-18", name: "Sao Paulo", country: "Brazil", tier: 1, color: "#B40404", league: "Brasileirao" },
+  // Tier 2 — strong mid-table
+  { id: "fb-19", name: "Atletico Madrid", country: "Spain", tier: 2, color: "#CB3524", league: "La Liga" },
+  { id: "fb-20", name: "Sevilla", country: "Spain", tier: 2, color: "#D0021B", league: "La Liga" },
+  { id: "fb-21", name: "Tottenham", country: "England", tier: 2, color: "#132257", league: "Premier League" },
+  { id: "fb-22", name: "Newcastle", country: "England", tier: 2, color: "#241F20", league: "Premier League" },
+  { id: "fb-23", name: "Dortmund", country: "Germany", tier: 2, color: "#FDE100", league: "Bundesliga" },
+  { id: "fb-24", name: "Leipzig", country: "Germany", tier: 2, color: "#DD0741", league: "Bundesliga" },
+  { id: "fb-25", name: "AC Milan", country: "Italy", tier: 2, color: "#FB090B", league: "Serie A" },
+  { id: "fb-26", name: "Napoli", country: "Italy", tier: 2, color: "#12A0D7", league: "Serie A" },
+  { id: "fb-27", name: "Roma", country: "Italy", tier: 2, color: "#8E1F2F", league: "Serie A" },
+  { id: "fb-28", name: "Marseille", country: "France", tier: 2, color: "#2FA0DA", league: "Ligue 1" },
+  { id: "fb-29", name: "Lyon", country: "France", tier: 2, color: "#1C2C5B", league: "Ligue 1" },
+  { id: "fb-30", name: "Feyenoord", country: "Netherlands", tier: 2, color: "#00A03C", league: "Eredivisie" },
+  { id: "fb-31", name: "PSV", country: "Netherlands", tier: 2, color: "#ED1C24", league: "Eredivisie" },
+  { id: "fb-32", name: "Sporting CP", country: "Portugal", tier: 2, color: "#008148", league: "Primeira Liga" },
+  { id: "fb-33", name: "Fenerbahce", country: "Turkey", tier: 2, color: "#0A2C59", league: "Super Lig" },
+  { id: "fb-34", name: "Galatasaray", country: "Turkey", tier: 2, color: "#A90432", league: "Super Lig" },
+  { id: "fb-35", name: "Al Hilal", country: "Saudi Arabia", tier: 2, color: "#003DA5", league: "Saudi Pro League" },
+  { id: "fb-36", name: "Celtic", country: "Scotland", tier: 2, color: "#018749", league: "Scottish Premiership" },
+  { id: "fb-37", name: "Rangers", country: "Scotland", tier: 2, color: "#1E3A8A", league: "Scottish Premiership" },
+  { id: "fb-38", name: "Palmeiras", country: "Brazil", tier: 2, color: "#006437", league: "Brasileirao" },
+  { id: "fb-39", name: "LA Galaxy", country: "USA", tier: 2, color: "#00245D", league: "MLS" },
+  { id: "fb-40", name: "Inter Miami", country: "USA", tier: 2, color: "#F7B5CD", league: "MLS" },
+  // Tier 3 — solid domestic clubs
+  { id: "fb-41", name: "Real Sociedad", country: "Spain", tier: 3, color: "#0067B1", league: "La Liga" },
+  { id: "fb-42", name: "Villarreal", country: "Spain", tier: 3, color: "#FFE667", league: "La Liga" },
+  { id: "fb-43", name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Premier League" },
+  { id: "fb-44", name: "Aston Villa", country: "England", tier: 3, color: "#670E36", league: "Premier League" },
+  { id: "fb-45", name: "Everton", country: "England", tier: 3, color: "#003399", league: "Premier League" },
+  { id: "fb-46", name: "Leverkusen", country: "Germany", tier: 3, color: "#E32221", league: "Bundesliga" },
+  { id: "fb-47", name: "Frankfurt", country: "Germany", tier: 3, color: "#E1000F", league: "Bundesliga" },
+  { id: "fb-48", name: "Atalanta", country: "Italy", tier: 3, color: "#1E71B8", league: "Serie A" },
+  { id: "fb-49", name: "Fiorentina", country: "Italy", tier: 3, color: "#5B2A86", league: "Serie A" },
+  { id: "fb-50", name: "Lille", country: "France", tier: 3, color: "#C60C30", league: "Ligue 1" },
+  { id: "fb-51", name: "Monaco", country: "Monaco", tier: 3, color: "#E2231A", league: "Ligue 1" },
+  { id: "fb-52", name: "Genk", country: "Belgium", tier: 3, color: "#0055A4", league: "Belgian Pro League" },
+  { id: "fb-53", name: "Anderlecht", country: "Belgium", tier: 3, color: "#5E2C81", league: "Belgian Pro League" },
+  { id: "fb-54", name: "FC Copenhagen", country: "Denmark", tier: 3, color: "#FFFFFF", league: "Danish Superliga" },
+  { id: "fb-55", name: "Malmo FF", country: "Sweden", tier: 3, color: "#5CB8E4", league: "Allsvenskan" },
+  { id: "fb-56", name: "Red Bull Salzburg", country: "Austria", tier: 3, color: "#DB021D", league: "Austrian Bundesliga" },
+  { id: "fb-57", name: "Basel", country: "Switzerland", tier: 3, color: "#DB021D", league: "Swiss Super League" },
+  { id: "fb-58", name: "Al Nassr", country: "Saudi Arabia", tier: 3, color: "#FFF200", league: "Saudi Pro League" },
+  { id: "fb-59", name: "Cruz Azul", country: "Mexico", tier: 3, color: "#00539F", league: "Liga MX" },
+  { id: "fb-60", name: "Club America", country: "Mexico", tier: 3, color: "#FFC72C", league: "Liga MX" },
+  // Tier 4 — smaller / lower league
+  { id: "fb-61", name: "Real Betis", country: "Spain", tier: 4, color: "#00954C", league: "La Liga" },
+  { id: "fb-62", name: "Celta Vigo", country: "Spain", tier: 4, color: "#8AC3EE", league: "La Liga" },
+  { id: "fb-63", name: "Crystal Palace", country: "England", tier: 4, color: "#1B458F", league: "Premier League" },
+  { id: "fb-64", name: "Brentford", country: "England", tier: 4, color: "#D20000", league: "Premier League" },
+  { id: "fb-65", name: "Norwich City", country: "England", tier: 4, color: "#FFF200", league: "Championship" },
+  { id: "fb-66", name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "Bundesliga" },
+  { id: "fb-67", name: "Werder Bremen", country: "Germany", tier: 4, color: "#1D9053", league: "Bundesliga" },
+  { id: "fb-68", name: "Torino", country: "Italy", tier: 4, color: "#881B1E", league: "Serie A" },
+  { id: "fb-69", name: "Bologna", country: "Italy", tier: 4, color: "#A61C2E", league: "Serie A" },
+  { id: "fb-70", name: "Nantes", country: "France", tier: 4, color: "#FCE300", league: "Ligue 1" },
+  { id: "fb-71", name: "Strasbourg", country: "France", tier: 4, color: "#0072BB", league: "Ligue 1" },
+  { id: "fb-72", name: "Utrecht", country: "Netherlands", tier: 4, color: "#D2122E", league: "Eredivisie" },
+  { id: "fb-73", name: "Braga", country: "Portugal", tier: 4, color: "#DA020E", league: "Primeira Liga" },
+  { id: "fb-74", name: "Aberdeen", country: "Scotland", tier: 4, color: "#D71920", league: "Scottish Premiership" },
+  { id: "fb-75", name: "Santos", country: "Brazil", tier: 4, color: "#FFFFFF", league: "Brasileirao" },
+  { id: "fb-76", name: "Colo-Colo", country: "Chile", tier: 4, color: "#FFFFFF", league: "Primera Division" },
+  { id: "fb-77", name: "Al Ahly", country: "Egypt", tier: 4, color: "#C8102E", league: "Egyptian Premier League" },
+  { id: "fb-78", name: "Kaizer Chiefs", country: "South Africa", tier: 4, color: "#FFD100", league: "PSL" },
+  { id: "fb-79", name: "Yokohama F. Marinos", country: "Japan", tier: 4, color: "#00559A", league: "J1 League" },
+  { id: "fb-80", name: "Urawa Red Diamonds", country: "Japan", tier: 4, color: "#D2001C", league: "J1 League" },
+  { id: "fb-81", name: "Seattle Sounders", country: "USA", tier: 4, color: "#5D9741", league: "MLS" },
+];
 
 /* ─── Appearances — league + UCL + cups for realistic totals ─── */
 function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState): { apps: number; injured: boolean; injuryWeeks: number } {

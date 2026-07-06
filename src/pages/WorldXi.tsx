@@ -353,8 +353,8 @@ const WorldXi = () => {
                         >
                           {p.position}
                         </span>
-                        <span className="font-semibold text-sm text-foreground truncate">{p.name}</span>
-                        <span className="text-xs text-muted-foreground truncate ml-auto">{p.club}</span>
+                        <span className="font-semibold text-sm text-foreground truncate min-w-0 flex-1">{p.name}</span>
+                        <span className="text-xs text-muted-foreground truncate shrink-0 max-w-[35%] ml-auto">{p.club}</span>
                       </button>
                     );
                   })}
@@ -409,11 +409,11 @@ const WorldXi = () => {
                     <span className="shrink-0">{countries[i] ? flagFor(countries[i]) : '🌍'}</span>
                     {p ? (
                       <>
-                        <span className="font-semibold text-foreground truncate">{p.name}</span>
-                        <span className="text-xs text-muted-foreground truncate ml-auto">{p.club}</span>
+                        <span className="font-semibold text-foreground truncate min-w-0 flex-1">{p.name}</span>
+                        <span className="text-xs text-muted-foreground truncate shrink-0 max-w-[35%] ml-auto">{p.club}</span>
                       </>
                     ) : (
-                      <span className="text-muted-foreground italic">Unfilled ({displayCountry(countries[i] ?? '')})</span>
+                      <span className="text-muted-foreground italic truncate min-w-0">Unfilled ({displayCountry(countries[i] ?? '')})</span>
                     )}
                   </div>
                 );
