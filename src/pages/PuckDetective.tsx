@@ -3,7 +3,8 @@ import { Loader2, Check, X, Minus, ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
-import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
+import { RulesGate } from '@/components/game/RulesGate';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameNav } from '@/components/game/GameNav';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
@@ -123,6 +124,20 @@ const PuckDetective = () => {
     dailyMysteryRef.current = dailyMystery;
   }, [dailyMystery]);
 
+  // Give Up (daily): useDailyPuzzle has no native "force lose" call, and
+  // reset() would clear progress instead of ending it, so a small sibling
+  // localStorage flag (keyed the same way as the hook's own per-day storage)
+  // marks the day as given-up without touching the guess log itself. Read
+  // once per todayStr change, same pattern as the hook's own storageKey.
+  const dailyGiveUpKey = `puck-detective-giveup-${todayStr}`;
+  const [dailyGaveUp, setDailyGaveUp] = useState(() => {
+    try { return localStorage.getItem(dailyGiveUpKey) === '1'; } catch { return false; }
+  });
+  const giveUpDaily = useCallback(() => {
+    setDailyGaveUp(true);
+    try { localStorage.setItem(dailyGiveUpKey, '1'); } catch { /* private mode */ }
+  }, [dailyGiveUpKey]);
+
   // --- Unlimited mode: local state, fresh mystery per round ------------------
   const [unlimitedMystery, setUnlimitedMystery] = useState<PuckDetectivePlayer | null>(null);
   const [unlimitedGuesses, setUnlimitedGuesses] = useState<StoredGuess[]>([]);
@@ -173,8 +188,19 @@ const PuckDetective = () => {
   const mystery = mode === 'daily' ? dailyMystery : unlimitedMystery;
   const storedGuesses = mode === 'daily' ? dailyStored : unlimitedGuesses;
   const gameStatus = mode === 'daily'
-    ? (rawDailyStatus === 'playing' ? 'playing' : rawDailyStatus)
+    ? (dailyGaveUp ? 'lost' : rawDailyStatus === 'playing' ? 'playing' : rawDailyStatus)
     : unlimitedStatus;
+
+  // Give Up: reveals the mystery player and ends the round at 0, without
+  // recording a fake guess in the guess log.
+  const giveUp = useCallback(() => {
+    if (gameStatus !== 'playing') return;
+    if (mode === 'daily') {
+      giveUpDaily();
+    } else {
+      setUnlimitedStatus('lost');
+    }
+  }, [gameStatus, mode, giveUpDaily]);
 
   const byId = useMemo(() => {
     const m = new Map<number, PuckDetectivePlayer>();
@@ -251,7 +277,7 @@ const PuckDetective = () => {
     lastResolvedRef.current = 'playing';
   }, [unlimitedMystery]);
 
-  useGameCompletion('puck-detective', mode === 'daily' && rawDailyStatus !== 'playing', won ? (GUESS_LIMIT - guesses.length + 1) * 10 : 0);
+  useGameCompletion('puck-detective', mode === 'daily' && (dailyGaveUp || rawDailyStatus !== 'playing'), won ? (GUESS_LIMIT - guesses.length + 1) * 10 : 0);
 
   const isLoading = phase === 'boot' || (mode === 'daily' && dailyLoading);
   const emojiGrid = mystery ? buildShareGrid(guesses) : '';
@@ -270,7 +296,7 @@ const PuckDetective = () => {
         subtitle="Guess the mystery NHL player in 8 tries. Every guess reveals attribute clues."
         headerExtra={
           <>
-            <HowToPlayPopover title="How to Play Puck Detective">
+            <RulesGate title="How to Play Puck Detective">
               <p className="text-muted-foreground text-center">
                 A secret NHL player is picked every day. Guess who it is.
               </p>
@@ -298,7 +324,7 @@ const PuckDetective = () => {
                 </p>
               </section>
               <p className="text-muted-foreground text-center">A new daily player drops every day at midnight.</p>
-            </HowToPlayPopover>
+            </RulesGate>
 
             <div className="flex items-center justify-center gap-2 mt-4">
               {(['daily', 'unlimited'] as Mode[]).map((m) => (
@@ -385,6 +411,9 @@ const PuckDetective = () => {
                   validateOnly
                   autoFocus
                 />
+                <div className="flex justify-center mt-3">
+                  <GiveUpButton onGiveUp={giveUp} />
+                </div>
               </div>
             )}
 

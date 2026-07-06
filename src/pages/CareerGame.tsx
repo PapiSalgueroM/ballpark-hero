@@ -4,8 +4,9 @@ import { CareerBoard } from '@/components/career/CareerBoard';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
-import { Flag, Search, Lightbulb, HelpCircle } from 'lucide-react';
-import { CareerHowToPlay } from '@/components/career/CareerHowToPlay';
+import { RulesGate } from '@/components/game/RulesGate';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
+import { Search, Lightbulb } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -35,7 +36,6 @@ const CareerGame = () => {
     isLoadingPool,
   } = useCareerGame();
 
-  const [showHelp, setShowHelp] = useState(false);
   const [input, setInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(-1);
@@ -95,15 +95,51 @@ const CareerGame = () => {
         subtitle="Uncover boxes to reveal a player's career, then guess who it is!"
         headerExtra={
           <>
-            <div className="flex justify-center">
-              <button
-                onClick={() => setShowHelp(true)}
-                className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors mt-1"
-                aria-label="How to play"
-              >
-                <HelpCircle className="w-4 h-4" /> How to play
-              </button>
-            </div>
+            <RulesGate title="How to Play: Career Quiz">
+              <p className="text-muted-foreground text-center">
+                A player's career is laid out season by season. Figure out who it is.
+              </p>
+
+              <section>
+                <h3 className="font-bold text-foreground mb-2">The Board</h3>
+                <p className="text-muted-foreground">
+                  Each row is one season. <span className="text-foreground font-semibold">Season</span> is always
+                  visible. <span className="text-foreground font-semibold">Club, Appearances, Goals, Assists</span>,
+                  and <span className="text-foreground font-semibold">Market Value</span> are hidden behind boxes.
+                </p>
+              </section>
+
+              <section>
+                <h3 className="font-bold text-foreground mb-2">Uncovering Boxes</h3>
+                <ul className="space-y-1.5 text-muted-foreground">
+                  <li>Tap any hidden box to reveal that cell</li>
+                  <li>
+                    Press <span className="text-foreground font-semibold">Give Hint</span> to reveal{' '}
+                    <span className="text-primary font-semibold">4 random boxes</span> at once
+                  </li>
+                  <li>Use Give Hint as many times as you need</li>
+                </ul>
+              </section>
+
+              <section>
+                <h3 className="font-bold text-foreground mb-2">Guessing</h3>
+                <ul className="space-y-1.5 text-muted-foreground">
+                  <li>Type a player name in the search bar and pick from the suggestions</li>
+                  <li>You get <span className="text-primary font-semibold">8 guesses</span> to identify the player</li>
+                  <li>Guess anytime, even before uncovering a single box</li>
+                </ul>
+              </section>
+
+              <section>
+                <h3 className="font-bold text-foreground mb-2">Strategy Tips</h3>
+                <ul className="space-y-1.5 text-muted-foreground">
+                  <li>Club names are the biggest tell: a unique transfer history narrows it down fast</li>
+                  <li>Goal-heavy seasons point to prolific strikers</li>
+                  <li>Market value peaks hint at a player's prime years</li>
+                  <li>Fewer boxes used means a more impressive solve</li>
+                </ul>
+              </section>
+            </RulesGate>
 
             {/* Daily / Unlimited toggle */}
             <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
@@ -204,13 +240,7 @@ const CareerGame = () => {
                     <Lightbulb className="w-4 h-4" />
                     Give Hint
                   </button>
-                  <button
-                    onClick={giveUp}
-                    className="inline-flex items-center gap-2 px-5 py-2 text-sm rounded-full bg-destructive text-destructive-foreground hover:opacity-90 transition-opacity"
-                  >
-                    <Flag className="w-4 h-4" />
-                    Give Up
-                  </button>
+                  <GiveUpButton onGiveUp={giveUp} />
                 </div>
               </div>
             )}
@@ -277,7 +307,6 @@ const CareerGame = () => {
 
         <AdBanner slot="1234567891" format="horizontal" className="mt-8" />
 
-        <CareerHowToPlay open={showHelp} onOpenChange={setShowHelp} />
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="career" gameContext={{ targetPlayer: targetPlayer?.name }} />
         </div>

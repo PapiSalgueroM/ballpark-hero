@@ -403,6 +403,10 @@ export const SOCCER_MARKET_VALUE_SOURCE: PlayerSourceConfig = {
     position: 'position',
     value: 'market_value_usd',
     year: 'year',
+    // #196: Who Am I needs age to score a wide-pool guess (any of the
+    // site's 27k+ soccer players, not just the curated 400-player boot
+    // pool), so age rides along in meta like every other scoring field.
+    age: 'age',
   },
   ilikeLimit: 200,
   prominenceLimit: 1000,

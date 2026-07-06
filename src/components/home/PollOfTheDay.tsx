@@ -5,40 +5,44 @@ import { POLLS, type PollFixture } from '@/data/pollFixtures';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
 /**
- * Home: Poll of the Day (item #10).
+ * Home: Poll of the Day 2.0 (item #10 rework).
  *
- * Rotation: date-seeded through POLLS using the same convention as every
- * other daily feature on the site (getTodayET() + dateSeed(), see
- * src/lib/dateUtils.ts), so all visitors see the same matchup on the same
- * America/New_York calendar day, and it advances automatically at midnight ET.
+ * Multiple topical polls per day (matchup hype, GOAT debates, team vs team,
+ * athlete vs athlete), sourced from public.daily_polls. Every visitor on the
+ * same America/New_York calendar day sees the same set of polls, ordered by
+ * sort_order.
  *
- * Voting: one row inserted into public.poll_votes (poll_key, choice). The
- * table isn't in the generated Supabase types (added via direct SQL, same
- * situation as game_completions/poll_votes in src/lib/completions.ts), so it
- * is addressed dynamically via `(supabase.from as any)`.
+ * daily_polls isn't in the generated Supabase types (added via direct SQL,
+ * same situation as poll_votes elsewhere on the site), so it is addressed
+ * dynamically via `(supabase.from as any)`.
  *
- * Anti-repeat-vote: a localStorage guard keyed by poll_key remembers which
- * choice this browser already voted for that poll, and skips straight to the
- * results view on mount. This is a courtesy, not a security boundary — RLS
- * still allows anyone to insert, matching the "no accounts required" spirit
- * of the rest of the site.
+ * Fallback: if today has no rows in daily_polls (pool not seeded that far
+ * out, or a fetch error), the section deterministically builds today's polls
+ * from the legacy POLLS pool in src/data/pollFixtures.ts using the same
+ * date-hash convention as the old single-poll implementation, so the section
+ * never goes empty.
  *
- * Failure handling: any fetch/insert error is swallowed quietly (matches the
- * silent-catch convention used throughout Index.tsx and useMostPlayed) so a
- * Supabase hiccup never breaks the home page.
+ * Voting: one row inserted into public.poll_votes (poll_key, choice) per
+ * poll, keyed by each poll's own poll_key. Anti-repeat-vote is a localStorage
+ * guard per poll_key, same courtesy-not-security convention as before.
  */
 
-const VOTE_KEY_PREFIX = 'dukb-poll-vote-';
+interface PollItem {
+  key: string;
+  question: string;
+  optionA: string;
+  optionAEmoji: string;
+  optionB: string;
+  optionBEmoji: string;
+}
 
 interface VoteCounts {
   a: number;
   b: number;
 }
 
-function todaysPoll(): PollFixture {
-  const idx = dateSeed(getTodayET()) % POLLS.length;
-  return POLLS[idx];
-}
+const VOTE_KEY_PREFIX = 'dukb-poll-vote-';
+const FALLBACK_COUNT = 2;
 
 function readStoredVote(pollKey: string): 'a' | 'b' | null {
   try {
@@ -53,20 +57,109 @@ function storeVote(pollKey: string, choice: 'a' | 'b'): void {
   try {
     localStorage.setItem(VOTE_KEY_PREFIX + pollKey, choice);
   } catch {
-    /* localStorage unavailable (quota/private mode) — not critical */
+    /* localStorage unavailable (quota/private mode) - not critical */
   }
 }
 
+/**
+ * Deterministic fallback: picks FALLBACK_COUNT polls from the legacy fixture
+ * pool using the date seed, so every user on the same ET day still sees the
+ * same fallback set, and the section never renders empty.
+ */
+function fallbackPolls(dateStr: string): PollItem[] {
+  const seed = dateSeed(dateStr);
+  const items: PollItem[] = [];
+  for (let i = 0; i < FALLBACK_COUNT; i++) {
+    const idx = (seed + i * 7919) % POLLS.length; // 7919 is prime, spreads picks apart
+    const fixture: PollFixture = POLLS[idx];
+    items.push({
+      key: fixture.key,
+      question: fixture.prompt,
+      optionA: fixture.a,
+      optionAEmoji: '',
+      optionB: fixture.b,
+      optionBEmoji: '',
+    });
+  }
+  return items;
+}
+
 export function PollOfTheDay() {
-  const poll = useMemo(todaysPoll, []);
+  const today = useMemo(getTodayET, []);
+  const [polls, setPolls] = useState<PollItem[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadTodaysPolls = async () => {
+      try {
+        const { data, error } = await (supabase.from as any)('daily_polls')
+          .select('poll_key, question, option_a, option_a_emoji, option_b, option_b_emoji, sort_order')
+          .eq('poll_date', today)
+          .order('sort_order', { ascending: true });
+
+        if (cancelled) return;
+
+        if (error || !data || data.length === 0) {
+          setPolls(fallbackPolls(today));
+          return;
+        }
+
+        const rows = data as {
+          poll_key: string;
+          question: string;
+          option_a: string;
+          option_a_emoji: string;
+          option_b: string;
+          option_b_emoji: string;
+        }[];
+
+        setPolls(
+          rows.map((r) => ({
+            key: r.poll_key,
+            question: r.question,
+            optionA: r.option_a,
+            optionAEmoji: r.option_a_emoji ?? '',
+            optionB: r.option_b,
+            optionBEmoji: r.option_b_emoji ?? '',
+          })),
+        );
+      } catch {
+        if (!cancelled) setPolls(fallbackPolls(today));
+      }
+    };
+
+    loadTodaysPolls();
+    return () => {
+      cancelled = true;
+    };
+  }, [today]);
+
+  if (!polls || polls.length === 0) return null;
+
+  return (
+    <section>
+      <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">
+        🗳️ Polls of the Day
+      </p>
+      <div className="space-y-3">
+        {polls.map((poll) => (
+          <PollCard key={poll.key} poll={poll} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function PollCard({ poll }: { poll: PollItem }) {
   const [myVote, setMyVote] = useState<'a' | 'b' | null>(null);
   const [counts, setCounts] = useState<VoteCounts | null>(null);
   const [voting, setVoting] = useState(false);
   const [errored, setErrored] = useState(false);
 
-  // On mount / whenever the poll changes: check the local anti-repeat guard.
-  // If already voted, jump straight to results (no hooks below this are
-  // conditional — this just seeds state, it never returns early).
+  // Seed the local anti-repeat guard on mount / whenever the poll changes.
+  // No hooks below this are conditional - this only sets state, it never
+  // returns early.
   useEffect(() => {
     setMyVote(readStoredVote(poll.key));
   }, [poll.key]);
@@ -78,8 +171,6 @@ export function PollOfTheDay() {
 
     const loadResults = async () => {
       try {
-        // poll_votes isn't in the generated types (added via direct SQL), so
-        // it's addressed dynamically like game_completions elsewhere on the site.
         const { data, error } = await (supabase.from as any)('poll_votes')
           .select('choice')
           .eq('poll_key', poll.key);
@@ -101,7 +192,9 @@ export function PollOfTheDay() {
     };
 
     loadResults();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [myVote, poll.key]);
 
   const handleVote = async (choice: 'a' | 'b') => {
@@ -120,7 +213,7 @@ export function PollOfTheDay() {
         console.debug('[poll] insert failed (ignored):', error);
       }
     } catch {
-      // Never let a tracking failure break the UI — the vote already
+      // Never let a tracking failure break the UI - the vote already
       // "landed" from the player's perspective via the optimistic state above.
     } finally {
       setVoting(false);
@@ -128,42 +221,37 @@ export function PollOfTheDay() {
   };
 
   const total = counts ? counts.a + counts.b : 0;
-  // Show at least a sliver for the side that was picked even with 0 rows yet
-  // (e.g. this vote hasn't round-tripped into the SELECT below), so the UI
-  // never looks broken with two empty bars right after voting.
   const pctA = total > 0 ? Math.round((counts!.a / total) * 100) : myVote === 'a' ? 100 : 0;
   const pctB = total > 0 ? 100 - pctA : myVote === 'b' ? 100 : 0;
 
-  return (
-    <section>
-      <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">
-        🗳️ Poll of the Day
-      </p>
-      <div className="rounded-xl border border-border bg-surface-1 p-4">
-        <p className="text-sm font-display font-bold text-foreground mb-3 leading-snug">
-          {poll.prompt}
-        </p>
+  const labelA = poll.optionAEmoji ? `${poll.optionAEmoji} ${poll.optionA}` : poll.optionA;
+  const labelB = poll.optionBEmoji ? `${poll.optionBEmoji} ${poll.optionB}` : poll.optionB;
 
-        {!myVote ? (
-          <div className="grid grid-cols-2 gap-2">
-            <PollButton label={poll.a} onClick={() => handleVote('a')} disabled={voting} />
-            <PollButton label={poll.b} onClick={() => handleVote('b')} disabled={voting} />
-          </div>
-        ) : (
-          <div className="space-y-2">
-            <ResultBar label={poll.a} pct={pctA} isMine={myVote === 'a'} />
-            <ResultBar label={poll.b} pct={pctB} isMine={myVote === 'b'} />
-            {!errored && (
-              <p className="text-[10px] text-muted-foreground text-right pt-0.5">
-                {total > 0
-                  ? `${total.toLocaleString()} ${total === 1 ? 'vote' : 'votes'}`
-                  : 'You\'re the first vote today'}
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-    </section>
+  return (
+    <div className="rounded-xl border border-border bg-surface-1 p-4">
+      <p className="text-sm font-display font-bold text-foreground mb-3 leading-snug">
+        {poll.question}
+      </p>
+
+      {!myVote ? (
+        <div className="grid grid-cols-2 gap-2">
+          <PollButton label={labelA} onClick={() => handleVote('a')} disabled={voting} />
+          <PollButton label={labelB} onClick={() => handleVote('b')} disabled={voting} />
+        </div>
+      ) : (
+        <div className="space-y-2">
+          <ResultBar label={labelA} pct={pctA} isMine={myVote === 'a'} />
+          <ResultBar label={labelB} pct={pctB} isMine={myVote === 'b'} />
+          {!errored && (
+            <p className="text-[10px] text-muted-foreground text-right pt-0.5">
+              {total > 0
+                ? `${total.toLocaleString()} ${total === 1 ? 'vote' : 'votes'}`
+                : "You're the first vote today"}
+            </p>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 

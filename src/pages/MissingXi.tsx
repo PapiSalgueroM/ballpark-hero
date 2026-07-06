@@ -3,7 +3,8 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
-import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
+import { RulesGate } from '@/components/game/RulesGate';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameNav } from '@/components/game/GameNav';
 import PlayerAutocomplete from '@/components/game/PlayerAutocomplete';
 import { normalizeName, type PlayerEntity } from '@/lib/playerSearch';
@@ -37,7 +38,7 @@ type Phase = 'playing' | 'revealed';
  * for the full curated, source-verified lineup data and scoring writeup.
  *
  * Structural template follows RarityRound.tsx: GameShell, ResultScreen,
- * HowToPlayPopover, useGameCompletion, and the same Daily/Unlimited toggle
+ * RulesGate, useGameCompletion, and the same Daily/Unlimited toggle
  * convention. Every hook below lives above any conditional return, per the
  * site's React error #310 rule (TransferPathBoard's known bug class).
  */
@@ -126,6 +127,16 @@ const MissingXi = () => {
     }
   };
 
+  // Give Up: reveals the missing player and ends the round at 0, without
+  // burning a guess slot (guessesUsed stays as-is so the stat line reads
+  // honestly rather than claiming guesses that were never made).
+  const giveUp = () => {
+    if (phase !== 'playing') return;
+    setFinalScore(0);
+    setWon(false);
+    setPhase('revealed');
+  };
+
   const isComplete = phase === 'revealed';
 
   useGameCompletion('missing-xi', isComplete, finalScore, won ? 1 : 0);
@@ -158,7 +169,7 @@ const MissingXi = () => {
         subtitle="One player is missing from this famous lineup. Name him in 3 guesses."
         headerExtra={
           <>
-            <HowToPlayPopover title="How to Play Missing XI">
+            <RulesGate title="How to Play Missing XI">
               <section>
                 <h3 className="font-bold text-foreground mb-2">⚽ The idea</h3>
                 <p className="text-muted-foreground">
@@ -189,7 +200,7 @@ const MissingXi = () => {
                   fresh lineup from the archive every time you play.
                 </p>
               </section>
-            </HowToPlayPopover>
+            </RulesGate>
 
             {/* Daily / Unlimited toggle */}
             <div className="flex items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
@@ -279,6 +290,9 @@ const MissingXi = () => {
                 >
                   Lock in guess
                 </button>
+                <div className="flex justify-center">
+                  <GiveUpButton onGiveUp={giveUp} />
+                </div>
               </div>
             )}
 

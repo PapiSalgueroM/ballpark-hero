@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import type { PlayerEntity } from '@/lib/playerSearch';
 
 /**
  * Who Am I? (Goltexto / Contexto style secret-footballer game)
@@ -47,6 +48,52 @@ import { supabase } from '@/integrations/supabase/client';
  *     22 + 18 + 0 + 10.00 + 18.70 = 69
  *   Alisson -> Julian Alvarez (GK vs FWD, Brazil vs Argentina, no club link):
  *     0 + 0 + 0 + 5.00 + 5.37 = 10
+ *
+ * WIDE-POOL GUESSING (2026-07-06, owner complaint: "I put ron to guess
+ * Ronaldo and it didn't suggest it, Messi and Ronaldo aren't able to be
+ * guessed"). Root cause, verified via SQL: the boot-time GUESSABLE pool
+ * (fetchWhoAmIPool, POOL_SIZE=400) is the top 400 rows by CURRENT market
+ * value, and both Ronaldo (13M, Al-Nassr, 2026) and Messi (19M, Inter Miami,
+ * 2025) are worth far less now than active top-400 stars, so neither ever
+ * made that pool despite being the two most famous players alive.
+ *
+ * Fix: the guess/suggestion box no longer reads from the 400-player boot
+ * pool at all. It uses the shared PlayerAutocomplete component against
+ * SOCCER_MARKET_VALUE_SOURCE (src/lib/playerSearch.ts), the same
+ * prominence-ranked, paginated, accent-insensitive search every other game
+ * on the site uses. That source spans all 27,850+ distinct players in
+ * player_market_values (verified via SQL), so literally any player, however
+ * obscure or however far past their peak value, can be typed and guessed.
+ * "ron" now surfaces Ronaldo within the first few suggestions because the
+ * ilike leg matches the substring directly regardless of current value.
+ * Famous-first ordering still holds: results are ranked by match tier first
+ * (full-name prefix, then word prefix, then substring) and prominence
+ * (market_value_usd) second, exactly like every other PlayerAutocomplete
+ * consumer, so "messi" surfaces Lionel Messi above lower-profile namesakes
+ * (verified: "Rayane Messi" is a real but far less notable row).
+ *
+ * The SECRET pool is deliberately untouched: it stays the curated top-200
+ * current-value pool (SECRET_POOL_SIZE) so the answer is always someone
+ * playing at a recognizable level today, which is what makes the difficulty
+ * tiers (easy/normal/hard) and the "open with any big name" onboarding hint
+ * make sense. Only the space of ALLOWED GUESSES was too narrow; the space of
+ * POSSIBLE SECRETS was always fine and is not widened here.
+ *
+ * Because a wide-pool guess can now be any of 27k+ players, whoAmIPlayerFromEntity
+ * below builds a WhoAmIPlayer straight from PlayerAutocomplete's PlayerEntity
+ * meta fields (club/nationality/position/value/year/age all ride along on
+ * SOCCER_MARKET_VALUE_SOURCE, see playerSearch.ts). scoreGuess() already
+ * degrades gracefully for a guess like this: sameClub still compares current
+ * clubs directly (no lookup needed), and sharedClubPast simply reports false
+ * for a guess whose name isn't a key in the boot pool's clubHistory map
+ * (nothing throws, it just means that one signal is unavailable for players
+ * outside the curated pool, which is an acceptable trade for "every player is
+ * guessable"). Age is read from PlayerEntity.meta.age (added to
+ * SOCCER_MARKET_VALUE_SOURCE's metaColumns for this fix); the underlying
+ * column is null on only 3 of 171,567 rows (verified via SQL), so this is
+ * safe in the overwhelming majority of cases and never throws when absent
+ * (Number(undefined) || 0 degrades to a 0-age guess, same as any other
+ * missing numeric field already handled here).
  */
 
 export interface WhoAmIPlayer {
@@ -256,6 +303,35 @@ export function pickSecret(pool: WhoAmIPlayer[], excludeName?: string): WhoAmIPl
   const candidates = excludeName ? top.filter(p => p.name !== excludeName) : top;
   const list = candidates.length > 0 ? candidates : top;
   return list[Math.floor(Math.random() * list.length)];
+}
+
+/**
+ * Converts a PlayerAutocomplete search result (PlayerEntity, from the wide
+ * SOCCER_MARKET_VALUE_SOURCE pool of 27k+ players) into the WhoAmIPlayer
+ * shape scoreGuess() expects. This is the piece that makes "any player is
+ * guessable" work: the guess box no longer requires the guessed player to be
+ * one of the 400 rows fetched at boot, it just needs whatever fields came
+ * back from the search, same as every other PlayerAutocomplete consumer.
+ *
+ * Every field falls back to a safe default (empty string / 0) rather than
+ * throwing when the underlying row is missing that column, so scoreGuess()
+ * always gets plain numbers/strings to do arithmetic and string-compares on.
+ * `year` defaults to 0, which only affects tie-breaking inside this game's
+ * own pool building (buildWhoAmISecretPool/pickSecret), neither of which is
+ * ever called on a converted guess (guesses are never candidates to become
+ * the secret), so it has no effect on scoring or fairness.
+ */
+export function whoAmIPlayerFromEntity(entity: PlayerEntity): WhoAmIPlayer {
+  const meta = entity.meta;
+  return {
+    name: entity.name,
+    nationality: typeof meta.nationality === 'string' ? meta.nationality : '',
+    position: typeof meta.position === 'string' ? meta.position : '',
+    club: typeof meta.club === 'string' ? meta.club : '',
+    value: Number(meta.value) || 0,
+    age: Number(meta.age) || 0,
+    year: Number(meta.year) || 0,
+  };
 }
 
 /**

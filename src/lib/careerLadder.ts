@@ -40,7 +40,8 @@ export const SCORE_FLOOR = 100;
 export type LadderAction =
   | { t: 'reveal' }
   | { t: 'wrong'; name: string }
-  | { t: 'won'; score: number };
+  | { t: 'won'; score: number }
+  | { t: 'give' };
 
 /**
  * Deterministically picks today's Career Ladder player: same result for

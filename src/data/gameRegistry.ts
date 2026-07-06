@@ -18,14 +18,16 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Soccer',
     emoji: '⚽',
     games: [
-      { path: '/higher-lower-transfers', label: 'Transfer Market', emoji: '📈', description: 'Higher or lower on real market values', isNew: true },
+      // retired 2026-07-06 per owner review: "too simple". Page/route kept for direct links; uncomment to revive.
+      // { path: '/higher-lower-transfers', label: 'Transfer Market', emoji: '📈', description: 'Higher or lower on real market values', isNew: true },
       { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', isNew: true },
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', isNew: true },
       { path: '/world-xi', label: 'World XI', emoji: '🌍', description: 'Pick a formation, fill 11 random countries', isNew: true },
-      { path: '/player-bingo', label: 'Player Bingo', emoji: '🎱', description: 'Fill 12 criteria tiles as players are revealed', isNew: true },
+      { path: '/player-bingo', label: 'Player Bingo', emoji: '🎱', description: 'Complete a line on a 5x5 board before 3 strikes', isNew: true },
       { path: '/alphabet-sprint', label: 'Alphabet Sprint', emoji: '⚡', description: 'Name a player per letter against the clock', isNew: true },
       { path: '/clue-auction', label: 'Clue Auction', emoji: '💰', description: 'Buy clues, save points, name the secret player', isNew: true },
-      { path: '/rarity-round', label: 'Rarity Round', emoji: '💎', description: 'Valid answers nobody else would think of', daily: true, isNew: true },
+      // retired 2026-07-06 per owner review: "you guess one guy and you're done". Page/route kept for direct links; uncomment to revive.
+      // { path: '/rarity-round', label: 'Rarity Round', emoji: '💎', description: 'Valid answers nobody else would think of', daily: true, isNew: true },
       { path: '/missing-xi', label: 'Missing XI', emoji: '🧩', description: 'Name the missing player from a famous real lineup', daily: true, isNew: true },
       { path: '/sign-the-player', label: 'Sign the Player', emoji: '✍️', description: 'Guess the market value to sign your XI', daily: true, isNew: true },
       { path: '/footle', label: 'Footle', emoji: '🎯', description: 'Guess the soccer player from stats' },

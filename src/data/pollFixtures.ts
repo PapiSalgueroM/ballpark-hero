@@ -1,12 +1,14 @@
 /**
- * Poll of the Day fixtures (item #10).
+ * Poll of the Day fallback fixtures (item #10, superseded by daily_polls).
  *
- * Hand-curated evergreen matchup polls. Each poll has a stable `key` (used as
- * poll_votes.poll_key, never renamed once shipped or historical votes orphan),
- * a short prompt, and exactly two punchy-labeled choices.
- *
- * Rotation: PollOfTheDay picks `POLLS[dateSeed(getTodayET()) % POLLS.length]`,
- * the same daily-seed convention as the rest of the site (see src/lib/dateUtils.ts).
+ * Since Poll of the Day 2.0, the home page's primary poll source is the
+ * public.daily_polls table (2-3 topical polls per day, seeded 60+ days out).
+ * This fixture pool is now only a deterministic fallback used by
+ * src/components/home/PollOfTheDay.tsx when today has no rows in daily_polls
+ * (pool not seeded that far out yet, or a fetch error), so the section never
+ * renders empty. Each poll has a stable `key` (used as poll_votes.poll_key,
+ * never renamed once shipped or historical votes orphan), a short prompt,
+ * and exactly two punchy-labeled choices.
  *
  * Style rules: no em dashes, plain conversational phrasing, no logos/images,
  * flag or sport emoji only.

@@ -4,6 +4,8 @@ import { ChevronDown, Loader2, Lock } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { RulesGate } from '@/components/game/RulesGate';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -11,12 +13,14 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import {
+  BASE_SCORE,
   CareerPlayer,
   CareerStint,
   LadderAction,
   MAX_GUESSES,
   MIN_STINTS,
   REVEAL_PENALTY,
+  SCORE_FLOOR,
   WRONG_GUESS_PENALTY,
   careerScore,
   fetchCareerPool,
@@ -81,7 +85,7 @@ const CareerLadder = () => {
     getPuzzleId: (p) => p.id,
     maxGuesses: 999,
     isWon: (g) => g.some((a) => a.t === 'won'),
-    isLost: (g) => g.filter((a) => a.t === 'wrong').length >= MAX_GUESSES,
+    isLost: (g) => g.some((a) => a.t === 'give') || g.filter((a) => a.t === 'wrong').length >= MAX_GUESSES,
     deserializeGuesses: (raw) => raw as LadderAction[],
   });
 
@@ -94,11 +98,12 @@ const CareerLadder = () => {
     [dailyActions],
   );
   const dailyWonAction = dailyActions.find((a): a is { t: 'won'; score: number } => a.t === 'won');
+  const dailyGaveUp = dailyActions.some((a) => a.t === 'give');
   const dailyPhase: Phase = !dailyPlayer
     ? 'boot'
     : dailyWonAction
       ? 'won'
-      : dailyWrongGuesses.length >= MAX_GUESSES
+      : dailyGaveUp || dailyWrongGuesses.length >= MAX_GUESSES
         ? 'lost'
         : 'playing';
   const dailyFinalScore = dailyWonAction?.score ?? 0;
@@ -222,6 +227,27 @@ const CareerLadder = () => {
     }
   };
 
+  // Give Up: reveals the answer and ends the round at 0, same shape as
+  // useCareerGame's giveUp for the sibling Career Path game.
+  const giveUp = () => {
+    if (activePhase !== 'playing') return;
+    if (mode === 'daily') {
+      addDailyAction({ t: 'give' });
+    } else {
+      setFinalScore(0);
+      setPhase('lost');
+    }
+  };
+
+  // Honest marginal cost of the next reveal: what the button advertises must
+  // match what careerScore() will actually deduct once the floor (100) is
+  // reached, rather than always claiming a flat REVEAL_PENALTY (150) even
+  // when the score is already at or near the floor.
+  const nextRevealCost = potential - careerScore(
+    Math.max(1, Math.min(activeRevealed + 1, total)),
+    activeWrongGuesses.length,
+  );
+
   const cluesUsed = Math.max(1, Math.min(activeRevealed, total));
   const emojiGrid =
     activePhase === 'won'
@@ -251,6 +277,37 @@ const CareerLadder = () => {
         subtitle="One career, revealed stint by stint. Name the player before the ladder runs out."
         headerExtra={
           <>
+            <RulesGate title="How to Play Career Ladder">
+              <section>
+                <h3 className="font-bold text-foreground mb-2">The idea</h3>
+                <p className="text-muted-foreground">
+                  A mystery footballer's career appears one stint at a time, earliest first. Name the player
+                  before the ladder runs out.
+                </p>
+              </section>
+              <section>
+                <h3 className="font-bold text-foreground mb-2">Guessing</h3>
+                <p className="text-muted-foreground">
+                  Type at least 2 letters and pick a name from the list. You get {MAX_GUESSES} guesses. Every
+                  wrong guess reveals the next stint. You can also reveal one on purpose.
+                </p>
+              </section>
+              <section>
+                <h3 className="font-bold text-foreground mb-2">Hints</h3>
+                <p className="text-muted-foreground">
+                  A nationality flag hint appears once half the career is on the board.
+                </p>
+              </section>
+              <section>
+                <h3 className="font-bold text-foreground mb-2">Scoring</h3>
+                <p className="text-muted-foreground">
+                  Start from {BASE_SCORE} points. Extra stints cost {REVEAL_PENALTY}, wrong guesses cost{' '}
+                  {WRONG_GUESS_PENALTY}, and the score never drops below the floor of {SCORE_FLOOR}. Give Up
+                  reveals the answer and scores 0.
+                </p>
+              </section>
+            </RulesGate>
+
             {/* Daily / Unlimited toggle */}
             <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
               {(['daily', 'unlimited'] as const).map((m) => (
@@ -384,8 +441,13 @@ const CareerLadder = () => {
                   <ChevronDown className="w-4 h-4" />
                   {activeRevealed >= total
                     ? 'The whole career is on the board'
-                    : `Reveal next stint · costs ${REVEAL_PENALTY} pts`}
+                    : nextRevealCost > 0
+                      ? `Reveal next stint · costs ${nextRevealCost} pts`
+                      : `Reveal next stint · you're already at the ${SCORE_FLOOR}-pt floor`}
                 </button>
+                <div className="flex justify-center pt-1">
+                  <GiveUpButton onGiveUp={giveUp} />
+                </div>
               </div>
             )}
 

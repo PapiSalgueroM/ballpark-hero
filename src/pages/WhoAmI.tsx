@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { Loader2, RotateCcw, Search, Check, X, ArrowUp, ArrowDown } from 'lucide-react';
+import { Loader2, RotateCcw, Check, X, ArrowUp, ArrowDown } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
@@ -10,6 +10,10 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { RulesGate } from '@/components/game/RulesGate';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
+import PlayerAutocomplete from '@/components/game/PlayerAutocomplete';
+import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity } from '@/lib/playerSearch';
 import { flagFor, fmtCompactUsd } from '@/lib/dealPlayers';
 import {
   WhoAmIData,
@@ -22,7 +26,7 @@ import {
   pickSecret,
   saveWhoAmIDifficulty,
   scoreGuess,
-  suggestPlayers,
+  whoAmIPlayerFromEntity,
   shortPosition,
   positionGroup,
 } from '@/lib/whoAmI';
@@ -59,9 +63,7 @@ const WhoAmI = () => {
   const [budget, setBudget] = useState(25);
   const [secret, setSecret] = useState<WhoAmIPlayer | null>(null);
   const [guesses, setGuesses] = useState<GuessResult[]>([]);
-  const [input, setInput] = useState('');
-  const [dropOpen, setDropOpen] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [guessInput, setGuessInput] = useState('');
 
   // #40: prominence tier for the secret pick, remembered across sessions.
   // This game has no separate daily mode, so the tier applies to every round.
@@ -86,12 +88,10 @@ const WhoAmI = () => {
     boot();
   }, [boot]);
 
-  const guessedNames = useMemo(() => new Set(guesses.map(g => g.player.name)), [guesses]);
-
-  const suggestions = useMemo(() => {
-    if (!data || phase !== 'playing') return [];
-    return suggestPlayers(data.pool, input, guessedNames, 8);
-  }, [data, phase, input, guessedNames]);
+  const guessedNames = useMemo(
+    () => new Set(guesses.map(g => normalizeName(g.player.name))),
+    [guesses],
+  );
 
   const sortedGuesses = useMemo(
     () => [...guesses].sort((a, b) => b.breakdown.score - a.breakdown.score),
@@ -103,25 +103,37 @@ const WhoAmI = () => {
     setBudget(guessBudget);
     setSecret(prev => pickSecret(buildWhoAmISecretPool(difficulty, data.pool), prev?.name));
     setGuesses([]);
-    setInput('');
-    setDropOpen(false);
+    setGuessInput('');
     setPhase('playing');
   };
 
-  const submitGuess = (p: WhoAmIPlayer) => {
-    if (phase !== 'playing' || !data || !secret || guessedNames.has(p.name)) return;
+  // #196: guesses now come from the site-wide PlayerAutocomplete against the
+  // full soccer player pool (thousands of players, including Ronaldo, Messi
+  // and anyone else, not just the 400-player curated boot pool). See the
+  // WIDE-POOL GUESSING note in src/lib/whoAmI.ts for the full root cause and
+  // fix writeup. The secret itself is still drawn from the curated pool, so
+  // this only widens what you're ALLOWED to guess, not what the answer can be.
+  const submitGuess = (entity: PlayerEntity) => {
+    if (phase !== 'playing' || !data || !secret) return;
+    if (guessedNames.has(normalizeName(entity.name))) return;
+    const p = whoAmIPlayerFromEntity(entity);
     const breakdown = scoreGuess(p, secret, data.clubHistory);
     const next = [...guesses, { player: p, breakdown }];
     setGuesses(next);
-    setInput('');
-    setDropOpen(false);
+    setGuessInput('');
     if (breakdown.isExact) {
       setPhase('won');
     } else if (next.length >= budget) {
       setPhase('lost');
-    } else {
-      inputRef.current?.focus();
     }
+  };
+
+  // Give Up: reveals the secret player and ends the round at 0 guesses
+  // remaining, reusing the same "lost" result screen (which already shows
+  // revealCard with the answer) rather than a separate code path.
+  const giveUp = () => {
+    if (phase !== 'playing') return;
+    setPhase('lost');
   };
 
   const lastGuess = guesses.length > 0 ? guesses[guesses.length - 1] : null;
@@ -284,13 +296,62 @@ const WhoAmI = () => {
         path="/who-am-i"
       />
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-6">
+        <header className="relative text-center mb-6">
           <h1 className="text-4xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display mb-1">
             WHO AM I?
           </h1>
           <p className="text-muted-foreground text-sm md:text-base">
             One secret footballer. Every guess tells you how close you are. Find him before your guesses run out.
           </p>
+          <RulesGate title="How to Play Who Am I?">
+            <p className="text-muted-foreground text-center">
+              We pick one secret footballer. You try to name him. Every guess you make gets scored so you know
+              if you are getting warmer or colder.
+            </p>
+
+            <section>
+              <h3 className="font-bold text-foreground mb-2">🔎 What the score means</h3>
+              <p className="text-muted-foreground">
+                Every guess gets a similarity score from 0 to 100. It compares your guess to the secret player on
+                nationality, position, club, age and market value. The higher the number, the closer your guess is
+                to the real answer. A score of 100 means you found him.
+              </p>
+            </section>
+
+            <section>
+              <h3 className="font-bold text-foreground mb-2">🏷️ Reading the clue chips</h3>
+              <ul className="space-y-1.5 text-muted-foreground">
+                <li>🟩 <span className="text-foreground">Green chip:</span> that clue matches the secret player exactly</li>
+                <li>🟨 <span className="text-foreground">Yellow chip:</span> close, but not an exact match (same position group, or a club they used to share)</li>
+                <li>⬜ <span className="text-foreground">Gray chip:</span> no match on that clue</li>
+                <li>🔼🔽 <span className="text-foreground">Arrows</span> on age and value show whether the secret player is older/younger or worth more/less than your guess</li>
+              </ul>
+            </section>
+
+            <section>
+              <h3 className="font-bold text-foreground mb-2">⌨️ Making a guess</h3>
+              <p className="text-muted-foreground">
+                Type any player's name, at least 2 letters, and pick them from the list. You can guess absolutely
+                any soccer player, so try big names first: Ronaldo, Messi, Mbappe, anyone you can think of.
+              </p>
+            </section>
+
+            <section>
+              <h3 className="font-bold text-foreground mb-2">🏆 How to win</h3>
+              <p className="text-muted-foreground">
+                Name the secret player before you run out of guesses. Casual mode gives you 25 tries, Expert gives
+                you only 10. Use the score and the chips to narrow it down each time.
+              </p>
+            </section>
+
+            <section>
+              <h3 className="font-bold text-foreground mb-2">⚙️ How famous is the secret player?</h3>
+              <p className="text-muted-foreground">
+                Easy picks the secret player from the most famous third of the pool. Hard picks from the least
+                famous third. Normal uses the full pool. Change this from the mode screen before you start.
+              </p>
+            </section>
+          </RulesGate>
         </header>
 
         {phase === 'boot' && (
@@ -314,13 +375,12 @@ const WhoAmI = () => {
 
         {phase === 'mode' && (
           <div className="max-w-md mx-auto">
-            <div className="bg-card border border-border rounded-2xl p-5 mb-4 text-sm text-muted-foreground space-y-2">
-              <p className="text-foreground font-semibold">A secret star is hiding. Sniff him out.</p>
+            <div className="bg-card border border-border rounded-2xl p-5 mb-4 text-sm text-muted-foreground text-center">
+              <p className="text-foreground font-semibold mb-1">A secret star is hiding. Sniff him out.</p>
               <p>
-                Every guess earns a similarity score from 0 to 100 built on nationality, position, club links, age
-                and market value. 100 means you found him.
+                Tap the <span className="text-primary font-semibold">?</span> above for the full rules, or just
+                dive in.
               </p>
-              <p>Clue chips on each guess show exactly what matched, and arrows point the way on age and value.</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <button
@@ -386,62 +446,25 @@ const WhoAmI = () => {
               </span>
             </div>
 
-            <div className="relative mb-4">
-              <div className="flex items-center gap-2 bg-card border border-border rounded-xl px-3 focus-within:border-primary/60 transition-colors">
-                <Search className="w-4 h-4 text-muted-foreground shrink-0" />
-                <input
-                  ref={inputRef}
-                  value={input}
-                  onChange={e => {
-                    setInput(e.target.value);
-                    setDropOpen(true);
-                  }}
-                  onFocus={() => setDropOpen(true)}
-                  onBlur={() => setTimeout(() => setDropOpen(false), 150)}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' && suggestions.length > 0) submitGuess(suggestions[0]);
-                    if (e.key === 'Escape') {
-                      setInput('');
-                      setDropOpen(false);
-                    }
-                  }}
-                  placeholder="Type a player name (2+ letters)"
-                  className="w-full bg-transparent py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-                  autoComplete="off"
-                  autoCorrect="off"
-                  spellCheck={false}
-                />
-              </div>
-              {dropOpen && input.trim().length >= 2 && (
-                <div className="absolute z-20 left-0 right-0 top-full mt-1 bg-card border border-border rounded-xl overflow-hidden shadow-lg max-h-72 overflow-y-auto">
-                  {suggestions.length === 0 ? (
-                    <div className="px-3 py-2.5 text-sm text-muted-foreground">
-                      No player in the pool matches that. Try another star.
-                    </div>
-                  ) : (
-                    suggestions.map(p => (
-                      <button
-                        key={p.name}
-                        type="button"
-                        onMouseDown={e => {
-                          e.preventDefault();
-                          submitGuess(p);
-                        }}
-                        className="w-full flex items-center gap-2 px-3 py-2.5 text-left hover:bg-secondary/60 transition-colors"
-                      >
-                        <span className="text-lg leading-none">{flagFor(p.nationality)}</span>
-                        <span className="flex-1 min-w-0">
-                          <span className="block text-sm font-semibold text-foreground truncate">{p.name}</span>
-                          <span className="block text-[11px] text-muted-foreground truncate">
-                            {shortPosition(p.position)} · {p.club}
-                          </span>
-                        </span>
-                        <span className="text-xs text-muted-foreground shrink-0">{fmtCompactUsd(p.value)}</span>
-                      </button>
-                    ))
-                  )}
-                </div>
-              )}
+            <div className="mb-4">
+              <PlayerAutocomplete
+                value={guessInput}
+                onChange={setGuessInput}
+                onSelect={submitGuess}
+                searchOptions={{
+                  source: SOCCER_MARKET_VALUE_SOURCE,
+                  minChars: 2,
+                  limit: 8,
+                  exclude: guessedNames,
+                }}
+                placeholder="Type any player's name (2+ letters)"
+                validateOnly
+                autoFocus
+              />
+            </div>
+
+            <div className="flex justify-center mb-4">
+              <GiveUpButton onGiveUp={giveUp} />
             </div>
 
             {guesses.length === 0 && (
@@ -516,10 +539,10 @@ const WhoAmI = () => {
 
         <GameSeoContent
           title="Who Am I? The Secret Footballer Game"
-          description="A Contexto style guessing game for football fans. One secret player is drawn from the market value elite, and every guess returns a similarity score from 0 to 100 built on nationality, position, club history, age and market value. Each name you throw narrows the hunt."
+          description="Guess the secret footballer. You can search any soccer player, big name or obscure, and every guess gets a similarity score from 0 to 100 built on nationality, position, club, age and market value. Score gets higher the closer you are. 100 means you found him."
           howToPlay={[
-            'A secret footballer is picked from a pool of around 200 current stars.',
-            'Type at least two letters and pick a player from the suggestions to guess.',
+            'A secret footballer is picked from around 200 current stars.',
+            'Type at least two letters and pick any real player, from anywhere in the game, to guess.',
             'Each guess gets a 0 to 100 similarity score plus clue chips for nationality, position, club, age and value.',
             'Arrows show whether the secret player is older or younger, worth more or worth less.',
             'Find him before your guesses run out. Casual gives you 25, Expert only 10.',

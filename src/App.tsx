@@ -99,6 +99,23 @@ const shouldShowHeader = (pathname: string) =>
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   const navigationType = useNavigationType();
+
+  // The browser's own scroll restoration ("auto") can silently re-scroll the
+  // page to wherever it was on a previous visit to this history entry, and it
+  // can do this AFTER this component's effect below has already run (it is
+  // not synced to React's render/effect cycle at all). On heavily-visited
+  // pages like /footle that a player returns to often, that native restore
+  // was winning the race and landing the page scrolled down despite this
+  // effect firing window.scrollTo(0, 0) first. Setting scrollRestoration to
+  // "manual" once, sitewide, hands scroll position entirely to this
+  // component so the browser never fights it. Root cause of the /footle
+  // scrolled-to-bottom-on-entry bug.
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
   useEffect(() => {
     // New navigations (clicking into a game) start at the top of the page.
     // On POP (browser Back/Forward) we leave scroll alone so the player returns
