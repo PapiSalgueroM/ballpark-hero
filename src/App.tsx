@@ -88,6 +88,7 @@ import HockeyGrid from "./pages/HockeyGrid";
 import SignThePlayer from "./pages/SignThePlayer";
 import ConquestNba from "./pages/ConquestNba";
 import PackBattle from "./pages/PackBattle";
+import SportsMillionaire from "./pages/SportsMillionaire";
 
 const queryClient = new QueryClient();
 
@@ -217,6 +218,7 @@ const AppContent = () => {
         <Route path="/sign-the-player" element={<SignThePlayer />} />
         <Route path="/conquest-nba" element={<ConquestNba />} />
         <Route path="/pack-battle" element={<PackBattle />} />
+        <Route path="/sports-millionaire" element={<SportsMillionaire />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

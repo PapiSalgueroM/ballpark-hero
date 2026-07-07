@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Loader2, Play, RotateCcw, Timer, Trophy } from 'lucide-react';
+import { Loader2, Play, RotateCcw, Timer, Trophy, Shuffle, Sparkles } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
@@ -9,6 +9,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { StatTile } from '@/components/game/StatTile';
 import { FORMATIONS, Formation } from '@/lib/squadDeal';
 import { flagFor, shortName, fmtCompactUsd } from '@/lib/dealPlayers';
 import {
@@ -24,10 +25,16 @@ import {
   wrongPositionMessage,
   displayCountry,
   shuffle,
+  respinSlotCountry,
+  simulateWorldXiSeason,
+  SeasonReport,
+  ordinal,
 } from '@/lib/worldXi';
 import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 
 type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'won' | 'lost';
+
+const SPIN_MS = 900; // slot-machine spin duration, under the 1.5s cap
 
 const WorldXi = () => {
   const [phase, setPhase] = useState<Phase>('boot');
@@ -41,7 +48,16 @@ const WorldXi = () => {
   const [query, setQuery] = useState('');
   const [feedback, setFeedback] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
+  const [spinning, setSpinning] = useState(false);
+  const [respinning, setRespinning] = useState(false);
+  const [seasonReport, setSeasonReport] = useState<SeasonReport | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const prevStepRef = useRef<number>(-1);
+  const reducedMotionRef = useRef<boolean>(
+    typeof window !== 'undefined' && window.matchMedia
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false,
+  );
 
   const boot = useCallback(async () => {
     setPhase('boot');
@@ -96,6 +112,27 @@ const WorldXi = () => {
     if (phase === 'playing') inputRef.current?.focus();
   }, [phase, step]);
 
+  // Slot-machine reveal: whenever a new slot comes up during play, spin the
+  // position/nation display briefly before settling on the real values.
+  // Skipped entirely under prefers-reduced-motion (spin never starts, the
+  // slot just shows its landed values immediately).
+  useEffect(() => {
+    if (phase !== 'playing' || step === prevStepRef.current) return;
+    prevStepRef.current = step;
+    if (reducedMotionRef.current) {
+      setSpinning(false);
+      return;
+    }
+    setSpinning(true);
+    const id = setTimeout(() => setSpinning(false), SPIN_MS);
+    return () => clearTimeout(id);
+  }, [phase, step]);
+
+  // Reset the season report whenever a new run starts.
+  useEffect(() => {
+    if (phase === 'playing') setSeasonReport(null);
+  }, [phase]);
+
   const slotIndex = phase === 'playing' && step < playOrder.length ? playOrder[step] : -1;
   const slot = slotIndex >= 0 ? formation.slots[slotIndex] : null;
   const country = slotIndex >= 0 ? countries[slotIndex] : '';
@@ -141,7 +178,33 @@ const WorldXi = () => {
     setStep(0);
     setQuery('');
     setFeedback(null);
+    setSeasonReport(null);
     setPhase('setup');
+  };
+
+  // Unlimited nation respins: rerolls only the current slot's country, any
+  // number of times, before a player is picked for it. No penalty, no cap.
+  const respin = () => {
+    if (phase !== 'playing' || !data || slotIndex < 0) return;
+    const next = respinSlotCountry(formation, data, slotIndex, countries);
+    if (next === countries[slotIndex]) return;
+    const updated = [...countries];
+    updated[slotIndex] = next;
+    setCountries(updated);
+    setQuery('');
+    setFeedback(null);
+    if (reducedMotionRef.current) {
+      setRespinning(false);
+      return;
+    }
+    setRespinning(true);
+    setTimeout(() => setRespinning(false), SPIN_MS);
+  };
+
+  const simulateSeason = () => {
+    const players = filled.filter((p): p is WxPlayer => p !== null);
+    if (players.length === 0) return;
+    setSeasonReport(simulateWorldXiSeason(players, formation.name));
   };
 
   const squadValue = filled.reduce((sum, p) => sum + (p ? p.value : 0), 0);
@@ -186,6 +249,7 @@ const WorldXi = () => {
                   : isActive
                   ? 'bg-accent border-primary animate-pulse'
                   : 'bg-card border-border text-muted-foreground',
+                isActive && (spinning || respinning) && 'animate-slot-spin',
               )}
             >
               {p ? flagFor(p.country) : isActive ? flagFor(country) : s.label}
@@ -313,12 +377,30 @@ const WorldXi = () => {
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
                 Slot {step + 1} of 11 · {slot.label}
               </div>
-              <div className="text-xl font-bold text-foreground mb-0.5">
+              <div
+                key={`${step}-${country}-${spinning}-${respinning}`}
+                className={cn(
+                  'text-xl font-bold text-foreground mb-0.5',
+                  spinning && 'animate-slot-spin',
+                  !spinning && respinning && 'animate-slot-settle',
+                )}
+              >
                 {flagFor(country)} {displayCountry(country)}
               </div>
               <p className="text-xs text-muted-foreground mb-3">
                 Name a player from {displayCountry(country)} who can play {slot.label}. Accepts {allowedLabel(slot)}.
               </p>
+
+              <button
+                type="button"
+                onClick={respin}
+                disabled={spinning}
+                className="mb-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-secondary/40 text-xs font-semibold text-foreground hover:border-primary/40 hover:bg-accent transition-all disabled:opacity-50"
+                title="Reroll this slot's nation as many times as you like, no penalty"
+              >
+                <Shuffle className="w-3.5 h-3.5" /> Respin nation
+              </button>
+
               <input
                 ref={inputRef}
                 type="text"
@@ -332,7 +414,8 @@ const WorldXi = () => {
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck={false}
-                className="w-full px-4 py-3 rounded-xl bg-background border border-border text-foreground focus:outline-none focus:border-primary"
+                disabled={spinning}
+                className="w-full px-4 py-3 rounded-xl bg-background border border-border text-foreground focus:outline-none focus:border-primary disabled:opacity-60"
               />
 
               {suggestions.length > 0 && (
@@ -420,13 +503,70 @@ const WorldXi = () => {
               })}
             </div>
 
+            {phase === 'won' && !seasonReport && (
+              <div className="text-center mt-4">
+                <button
+                  onClick={simulateSeason}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary hover:text-primary-foreground transition-all"
+                >
+                  <Sparkles className="w-4 h-4" /> Simulate Season
+                </button>
+                <p className="text-xs text-muted-foreground mt-2">
+                  See how far this XI would go over a full league season.
+                </p>
+              </div>
+            )}
+
+            {phase === 'won' && seasonReport && (
+              <div className="mt-5 rounded-2xl border border-primary/30 bg-surface-1 p-5">
+                <div className="text-center mb-4">
+                  <div className="text-3xl mb-1">📋</div>
+                  <h3 className="text-lg font-bold text-primary font-display">Season Report</h3>
+                  <p className="text-xs text-muted-foreground">
+                    A simulated season for your {formation.name} World XI.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+                  <StatTile label="Squad Rating" value={`${seasonReport.squadRating}/100`} state="correct" />
+                  <StatTile
+                    label="League Finish"
+                    value={`${ordinal(seasonReport.tablePosition)} / 20`}
+                    state={seasonReport.tablePosition <= 4 ? 'correct' : seasonReport.tablePosition <= 10 ? 'close' : 'incorrect'}
+                  />
+                  <StatTile label="Points" value={seasonReport.points} state="pending" />
+                  <StatTile
+                    label="Trophies"
+                    value={seasonReport.trophies.length > 0 ? seasonReport.trophies.length : '0'}
+                    state={seasonReport.trophies.length > 0 ? 'correct' : 'incorrect'}
+                  />
+                </div>
+
+                <div className="grid gap-1.5 text-sm">
+                  {seasonReport.narrative.map((line, i) => (
+                    <p key={i} className="bg-background/60 border border-border/50 rounded-lg px-3 py-2 text-foreground/90">
+                      {line}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="text-center mt-4">
               <pre className="text-sm tracking-wide whitespace-pre-wrap mb-2">{emojiGrid}</pre>
               <ShareButtons
-                score={`${filledCount}/11`}
+                score={
+                  seasonReport
+                    ? `${seasonReport.squadRating}/100, ${ordinal(seasonReport.tablePosition)} place`
+                    : `${filledCount}/11`
+                }
                 gameName="World XI"
                 gamePath="/world-xi"
-                emojiGrid={emojiGrid}
+                emojiGrid={
+                  seasonReport
+                    ? `${emojiGrid}\nSeason sim: rated ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)}`
+                    : emojiGrid
+                }
               />
               <button
                 onClick={playAgain}

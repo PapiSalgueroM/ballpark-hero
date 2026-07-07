@@ -132,6 +132,28 @@
   .animate-count-up-fade {
     animation: count-up-fade 0.4s ease-out forwards;
   }
+
+  /* --- World XI rework: slot-machine spin on reveal --- */
+  @keyframes slot-spin {
+    0%   { transform: translateY(0); opacity: 1; }
+    20%  { transform: translateY(-10%); opacity: 0.6; }
+    40%  { transform: translateY(10%); opacity: 0.6; }
+    60%  { transform: translateY(-6%); opacity: 0.8; }
+    80%  { transform: translateY(4%); opacity: 0.9; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  .animate-slot-spin {
+    animation: slot-spin 1.2s cubic-bezier(0.2, 0.6, 0.3, 1) forwards;
+  }
+
+  @keyframes slot-settle {
+    0%   { transform: scale(1.15); }
+    60%  { transform: scale(0.97); }
+    100% { transform: scale(1); }
+  }
+  .animate-slot-settle {
+    animation: slot-settle 0.25s ease-out forwards;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -139,7 +161,9 @@
   .animate-pop-correct,
   .animate-shake-wrong,
   .animate-count-up-fade,
-  .animate-cell-reveal {
+  .animate-cell-reveal,
+  .animate-slot-spin,
+  .animate-slot-settle {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
   }

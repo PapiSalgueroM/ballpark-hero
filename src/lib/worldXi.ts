@@ -2,6 +2,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Position } from '@/types/game';
 import { Formation, FormationSlot, normalizePosition } from '@/lib/squadDeal';
 import { normalizeName } from '@/lib/whoAmI';
+import { rng, winProbability } from '@/lib/perfectSeason';
 
 /**
  * World XI (futbol11-style Build-a-XI)
@@ -264,6 +265,34 @@ export function drawCountries(formation: Formation, data: WorldXiData): string[]
   return null;
 }
 
+/**
+ * Rerolls the nation assigned to a single slot (the Respin button), keeping
+ * every other slot's country untouched. Only offers countries that (a) can
+ * actually fill that slot from the pool and (b) are not already used by
+ * another slot in this draw, so a respin never breaks the "distinct nation
+ * per slot" guarantee. Returns the same country back if no alternative
+ * exists (practically rare with 25+ qualifying countries).
+ */
+export function respinSlotCountry(
+  formation: Formation,
+  data: WorldXiData,
+  slotIndex: number,
+  currentCountries: string[],
+): string {
+  const slot = formation.slots[slotIndex];
+  if (!slot) return currentCountries[slotIndex];
+  const used = new Set(currentCountries.filter((_, i) => i !== slotIndex));
+  const options = data.countries.filter(c => {
+    if (used.has(c)) return false;
+    const list = data.byCountry.get(c) ?? [];
+    return list.some(p => fitsSlot(p, slot));
+  });
+  if (options.length === 0) return currentCountries[slotIndex];
+  const pool = options.filter(c => c !== currentCountries[slotIndex]);
+  const pick = pool.length > 0 ? pool : options;
+  return pick[Math.floor(Math.random() * pick.length)];
+}
+
 /* ---------------- Suggestions ---------------- */
 
 /**
@@ -296,4 +325,197 @@ export function suggestCountryPlayers(
     if (starts.length >= limit) break;
   }
   return [...starts, ...wordStarts, ...contains].slice(0, limit);
+}
+
+/* ---------------- Season simulation ---------------- */
+//
+// Runs after the XI is complete. Reuses the deterministic rng() and
+// winProbability() curve from perfectSeason.ts so the odds feel consistent
+// with the rest of the site's sim family, instead of inventing a new curve.
+// The whole report is seeded off the squad's total market value, so the same
+// 11 players always produce the same season (deterministic, shareable,
+// reproducible if a player screenshots and someone else tries to match it).
+
+const LEAGUE_TEAMS = 20;
+const LEAGUE_MATCHES = 38; // round-robin-ish, matches perfectSeason/unbeatenMode convention
+
+export interface SeasonInjury {
+  name: string;
+  weeksOut: number;
+}
+
+export interface SeasonReport {
+  squadRating: number; // 0-100 overall, drives the whole report
+  tablePosition: number; // 1-20, 1 is champions
+  points: number;
+  topScorer: { name: string; goals: number } | null;
+  trophies: string[];
+  injuries: SeasonInjury[];
+  transferHeadline: string;
+  narrative: string[];
+}
+
+/** Simple hash of the squad's names into a stable non-negative seed. */
+function squadSeed(filled: WxPlayer[]): number {
+  const key = filled.map(p => p.name).sort().join('|');
+  let h = 0;
+  for (let i = 0; i < key.length; i++) {
+    h = (Math.imul(h, 31) + key.charCodeAt(i)) | 0;
+  }
+  // Fold in total value so two squads sharing 10 names but differing in one
+  // still diverge, and clamp to a positive 31-bit range for rng().
+  const valueSum = filled.reduce((s, p) => s + Math.round(p.value), 0);
+  return Math.abs((h ^ valueSum) >>> 0);
+}
+
+/**
+ * Maps a 0-100 squad rating onto the perfectSeason win-probability curve
+ * (tuned around overalls in the 40-99 band), the same mapping unbeatenMode.ts
+ * uses for Perfect Lineup's "Go Unbeaten" mode.
+ */
+function ratingToOverall(rating: number): number {
+  const clamped = Math.max(0, Math.min(100, rating));
+  return 40 + (clamped / 100) * 59;
+}
+
+const TRANSFER_SAGA_TEMPLATES = [
+  '{name} handed in a transfer request after a bust-up with the board.',
+  'Reports linked {name} with a shock exit all winter, but the move fell through on deadline day.',
+  'A release clause row over {name} rumbled on for months before a new deal was signed.',
+  '{name} rejected a club-record bid, insisting the trophy hunt was not finished.',
+  'Agents for {name} leaked interest from three leagues to force a bumper new contract.',
+  'A medical was booked, then cancelled, then booked again in the {name} saga that dominated deadline day.',
+];
+
+/**
+ * Deterministic season sim seeded by the finished XI. Squad rating comes from
+ * average player market value mapped through the same log curve as
+ * squadDeal.ts's playerRating, so a Legends-tier draw reads as an elite squad
+ * and a bargain-bin draw reads as relegation fodder.
+ */
+export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string): SeasonReport {
+  const players = filled.filter((p): p is WxPlayer => p !== null);
+  const seed = squadSeed(players);
+  const rand = rng(seed);
+
+  // Squad rating: same log-scale spread as squadDeal.playerRating, averaged
+  // across the XI, so a bargain draw and a superstar draw read distinctly.
+  const playerRatings = players.map(p => {
+    const mv = Math.max(1, p.value / 1_000_000); // stored in USD, scale to the $M curve
+    const r = 35 + 64 * (Math.log10(mv + 1) / Math.log10(1001));
+    return Math.max(35, Math.min(99, r));
+  });
+  const avgRating = playerRatings.length
+    ? playerRatings.reduce((a, b) => a + b, 0) / playerRatings.length
+    : 50;
+  const squadRating = Math.max(1, Math.min(100, Math.round(avgRating)));
+
+  const overall = ratingToOverall(squadRating);
+  const winP = winProbability(overall);
+  const drawShare = 0.26;
+  const drawP = (1 - winP) * drawShare;
+
+  let points = 0;
+  let wins = 0;
+  let draws = 0;
+  let losses = 0;
+  for (let i = 0; i < LEAGUE_MATCHES; i++) {
+    const roll = rand();
+    if (roll < winP) { points += 3; wins++; }
+    else if (roll < winP + drawP) { points += 1; draws++; }
+    else { losses++; }
+  }
+
+  // Table position: rank this points total against 19 simulated rivals whose
+  // strength is spread around the same league so the position feels earned
+  // rather than a flat lookup table.
+  const rivalPoints: number[] = [];
+  for (let i = 0; i < LEAGUE_TEAMS - 1; i++) {
+    const rivalOverall = 55 + rand() * 40; // spread of a plausible league
+    const rp = winProbability(rivalOverall);
+    const rdp = (1 - rp) * drawShare;
+    let rpts = 0;
+    for (let m = 0; m < LEAGUE_MATCHES; m++) {
+      const roll = rand();
+      if (roll < rp) rpts += 3;
+      else if (roll < rp + rdp) rpts += 1;
+    }
+    rivalPoints.push(rpts);
+  }
+  const tablePosition = Math.min(LEAGUE_TEAMS, 1 + rivalPoints.filter(p => p > points).length);
+
+  // Trophies: rating threshold plus a little rng, layered so an elite squad
+  // can still miss out on the treble and a mid squad can still nick a cup.
+  const trophies: string[] = [];
+  if (tablePosition === 1) trophies.push('League Title');
+  if (squadRating >= 60 && rand() < (squadRating - 40) / 100) trophies.push('Domestic Cup');
+  if (squadRating >= 72 && tablePosition <= 4 && rand() < (squadRating - 55) / 100) trophies.push('Champions League');
+  if (trophies.length === 3) trophies.unshift('THE TREBLE');
+
+  // Top scorer: weighted pick from the chosen forwards/attackers by value,
+  // with a plausible goal tally scaled to squad quality.
+  const forwardLike = players.filter(p => ['ST', 'CF', 'LW', 'RW', 'CAM'].includes(p.position));
+  const scorerPool = forwardLike.length ? forwardLike : players;
+  const totalValue = scorerPool.reduce((s, p) => s + Math.max(1, p.value), 0);
+  let pick = rand() * totalValue;
+  let topScorerPlayer = scorerPool[0] ?? null;
+  for (const p of scorerPool) {
+    pick -= Math.max(1, p.value);
+    if (pick <= 0) { topScorerPlayer = p; break; }
+  }
+  const goals = topScorerPlayer
+    ? Math.round(8 + (squadRating / 100) * 22 + rand() * 10)
+    : 0;
+  const topScorer = topScorerPlayer ? { name: topScorerPlayer.name, goals } : null;
+
+  // Injuries: 1-2 random squad members, plausible weeks-out range.
+  const injuryCount = 1 + (rand() < 0.5 ? 1 : 0);
+  const shuffledForInjury = shuffle(players);
+  const injuries: SeasonInjury[] = shuffledForInjury.slice(0, Math.min(injuryCount, players.length)).map(p => ({
+    name: p.name,
+    weeksOut: 2 + Math.floor(rand() * 10),
+  }));
+
+  // Transfer saga headline, starring a random squad member.
+  const sagaPlayer = players[Math.floor(rand() * players.length)];
+  const template = TRANSFER_SAGA_TEMPLATES[Math.floor(rand() * TRANSFER_SAGA_TEMPLATES.length)];
+  const transferHeadline = sagaPlayer ? template.replace('{name}', sagaPlayer.name) : 'A quiet transfer window, for once.';
+
+  const positionLine = tablePosition === 1
+    ? `${formationName} title winners. Champions of the league.`
+    : tablePosition <= 4
+    ? `A top-four finish in the ${formationName}, European football locked in.`
+    : tablePosition <= 10
+    ? `A comfortable mid-table season in the ${formationName}.`
+    : tablePosition <= 17
+    ? `A scrappy lower-table finish in the ${formationName}. Safety first.`
+    : `A relegation battle all year in the ${formationName}. Backs against the wall.`;
+
+  const narrative: string[] = [
+    positionLine,
+    `Finished ${ordinal(tablePosition)} with ${points} points (${wins}W ${draws}D ${losses}L).`,
+  ];
+  if (topScorer) narrative.push(`${topScorer.name} top-scored with ${topScorer.goals} goals.`);
+  if (trophies.length) narrative.push(`Silverware: ${trophies.join(', ')}.`);
+  else narrative.push('No silverware this year. There is always next season.');
+  for (const inj of injuries) narrative.push(`Injury: ${inj.name} out for ${inj.weeksOut} weeks.`);
+  narrative.push(transferHeadline);
+
+  return {
+    squadRating,
+    tablePosition,
+    points,
+    topScorer,
+    trophies,
+    injuries,
+    transferHeadline,
+    narrative,
+  };
+}
+
+/** "1st", "2nd", "3rd", "4th"... for table positions and similar display. */
+export function ordinal(n: number): string {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
