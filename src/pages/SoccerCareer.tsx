@@ -469,7 +469,7 @@ export default function SoccerCareer() {
   }, [career?.seasons.length]);
 
   const handleBeginCareer = () => {
-    if (!user) { setShowAuth(true); return; }
+    // Guests can play; careers live in local state. Sign-in is only a nice-to-have.
     if (!previewStats || !isFormValid || clubs.length === 0 || rolledOvr === null) return;
     const startYear = ERAS.find(e => e.value === era)?.startYear ?? 2020;
     const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs);
@@ -794,7 +794,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
   const canGenerate = playerName.trim().length > 0 && nationality && position && era;
 
   const doRoll = useCallback(() => {
-    if (!canGenerate || clubs.length === 0) return;
+    if (!canGenerate || clubs.length === 0 || isRolling) return;
     setIsRolling(true);
     setAcademyClub(null);
     // Slot machine animation: cycle through random numbers
@@ -818,7 +818,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         setAcademyClub(club);
       }
     }, 60);
-  }, [canGenerate, clubs, nationality]);
+  }, [canGenerate, clubs, nationality, position, isRolling]);
 
   const tier = rolledOvr !== null ? getOverallTier(rolledOvr) : (isRolling ? getOverallTier(displayOvr) : null);
 
