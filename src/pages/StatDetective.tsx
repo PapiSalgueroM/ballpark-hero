@@ -3,11 +3,8 @@ import { cn } from '@/lib/utils';
 import {
   Loader2,
   RotateCcw,
-  ArrowLeft,
-  ArrowRight,
   Check,
   X,
-  Minus,
   Lock,
   Lightbulb,
   Fingerprint,
@@ -314,16 +311,9 @@ const StatDetective = () => {
                       <div>{feedbackChip('good', <Check className="w-3 h-3" />, 'That is the player')}</div>
                     ) : (
                       <div className="flex flex-wrap gap-1.5">
-                        {g.era === 'match'
-                          ? feedbackChip('good', <Check className="w-3 h-3" />, 'Right era')
-                          : g.era === 'earlier'
-                          ? feedbackChip('off', <ArrowLeft className="w-3 h-3" />, 'Earlier era')
-                          : feedbackChip('off', <ArrowRight className="w-3 h-3" />, 'Later era')}
-                        {g.pos === 'exact'
-                          ? feedbackChip('good', <Check className="w-3 h-3" />, 'Position match')
-                          : g.pos === 'group'
-                          ? feedbackChip('mid', <Minus className="w-3 h-3" />, 'Same position group')
-                          : feedbackChip('off', <X className="w-3 h-3" />, 'Different position')}
+                        {/* Era and position feedback removed: the case file already shows the
+                            mystery's era and position, so those chips only repeated known info
+                            (owner feedback). Franchise overlap is a real, non-given clue, kept. */}
                         {g.sharedFranchise
                           ? feedbackChip('good', <Check className="w-3 h-3" />, 'Shared franchise')
                           : feedbackChip('off', <X className="w-3 h-3" />, 'No shared franchise')}
