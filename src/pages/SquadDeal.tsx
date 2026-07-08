@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { Briefcase, Phone, Check, X, Trophy, ChevronRight, Crown, Zap, Sparkles, Play } from 'lucide-react';
+import { Briefcase, Phone, Check, X, Trophy, ChevronRight, Crown, Zap, Play } from 'lucide-react';
 import { useSquadDeal } from '@/hooks/useSquadDeal';
 import { FORMATIONS, EXTRAS, playerRating } from '@/lib/squadDeal';
 import type { Formation } from '@/lib/squadDeal';
@@ -83,7 +83,7 @@ const SquadDeal = () => {
         <GameSeoContent title="Squad Deal: Deal or No Deal Team Builder"
           description="A Deal or No Deal twist on building your dream team. Each position gives you 10 mystery cases of players tiered from elite to weak. Keep one, eliminate the rest, and weigh the Banker's player offers."
           howToPlay={[
-            'Pick a formation, an era (current or all-time legends), and optionally Memes mode.',
+            'Pick a formation and an era (current or all-time legends).',
             'Tap any position on the pitch to draft it.',
             'Keep one case, eliminate the rest in rounds, hit Reveal, then take the Banker offer (Deal) or gamble (No Deal).',
             'Fill all 11, pick your manager / stadium / fans / budget, then Simulate for a rating and grade.',
@@ -108,13 +108,6 @@ const SquadDeal = () => {
             <button onClick={() => g.setEra('current')} className={cn('px-5 py-2 rounded-xl font-semibold inline-flex items-center gap-2 border transition-all', g.era === 'current' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}><Zap className="w-4 h-4" /> Current Era</button>
             <button onClick={() => g.setEra('legends')} className={cn('px-5 py-2 rounded-xl font-semibold inline-flex items-center gap-2 border transition-all', g.era === 'legends' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}><Crown className="w-4 h-4" /> All-Time Legends</button>
           </div>
-        </div>
-
-        <div className="mb-6 text-center">
-          <button onClick={() => g.setMemesOn(!g.memesOn)} className={cn('px-5 py-2 rounded-xl font-semibold inline-flex items-center gap-2 border transition-all', g.memesOn ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}>
-            <Sparkles className="w-4 h-4" /> Memes Mode: {g.memesOn ? 'ON' : 'OFF'}
-          </button>
-          <p className="text-[11px] text-muted-foreground mt-1">Sprinkles goofy original characters into the cases.</p>
         </div>
 
         <div className="mb-8">

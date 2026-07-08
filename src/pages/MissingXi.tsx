@@ -307,7 +307,6 @@ const MissingXi = () => {
                       ? `${puzzle.candidate.name} was the missing ${puzzle.lineup.slots[puzzle.candidate.slotIndex].position}. Solved in ${guessesUsed}/${MAX_GUESSES} guesses.`
                       : `The missing player was ${puzzle.candidate.name} (${puzzle.lineup.slots[puzzle.candidate.slotIndex].position}).`
                   }
-                  funFact={puzzle.lineup.source}
                   statRow={[{ label: 'Score', value: finalScore }]}
                   emojiGrid={emojiGrid}
                   share={{
