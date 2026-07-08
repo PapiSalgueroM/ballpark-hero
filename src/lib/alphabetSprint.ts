@@ -32,9 +32,9 @@ export interface SprintMode {
 }
 
 export const MODES: SprintMode[] = [
-  { id: 'relaxed', label: 'Relaxed', seconds: 90, tagline: 'A gentle 90 seconds' },
-  { id: 'classic', label: 'Classic', seconds: 60, tagline: 'The standard sprint' },
-  { id: 'insane', label: 'Insane', seconds: 30, tagline: '30 seconds of chaos' },
+  { id: 'relaxed', label: 'Relaxed', seconds: 75, tagline: 'A quicker 75 seconds' },
+  { id: 'classic', label: 'Classic', seconds: 45, tagline: 'The standard sprint' },
+  { id: 'insane', label: 'Insane', seconds: 20, tagline: '20 seconds of chaos' },
 ];
 
 export const DEFAULT_MODE: SprintModeId = 'classic';

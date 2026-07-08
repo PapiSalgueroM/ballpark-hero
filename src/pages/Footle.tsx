@@ -9,6 +9,7 @@ import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import { StatTile } from '@/components/game/StatTile';
 import { cn } from '@/lib/utils';
 import { GameNav } from '@/components/game/GameNav';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PostGameStats from '@/components/game/PostGameStats';
@@ -227,12 +228,7 @@ const Index = () => {
               onSelect={makeGuess}
             />
             <div className="flex justify-center">
-              <button
-                onClick={giveUp}
-                className="px-4 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-colors"
-              >
-                🏳️ Give Up
-              </button>
+              <GiveUpButton onGiveUp={giveUp} />
             </div>
           </div>
         ) : null}
