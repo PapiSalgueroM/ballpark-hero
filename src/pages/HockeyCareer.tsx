@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { FlagImg } from '@/components/FlagImg';
 import { useHockeyCareer } from '@/hooks/useHockeyCareer';
 import { GameNav } from '@/components/game/GameNav';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
@@ -113,9 +114,7 @@ const HockeyCareer = () => {
               <button onClick={revealNextClue} className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg border border-[hsl(var(--hk-silver)/0.3)] text-[hsl(var(--hk-silver))] hover:bg-[hsl(var(--hk-blue)/0.3)] transition-colors">
                 <Eye className="w-4 h-4" /> Reveal Next Clue (−150 pts)
               </button>
-              <button onClick={giveUp} className="px-4 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-colors">
-                Give Up
-              </button>
+              <GiveUpButton onGiveUp={giveUp} />
             </div>
           )}
 

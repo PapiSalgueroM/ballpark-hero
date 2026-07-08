@@ -3,6 +3,7 @@ import { useConnections } from '@/hooks/useConnections';
 import { ConnectionsBoard } from '@/components/connections/ConnectionsBoard';
 import { ConnectionsHowToPlay } from '@/components/connections/ConnectionsHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { HelpCircle, Lightbulb, Send, ArrowRight, Shuffle, Flame } from 'lucide-react';
@@ -203,12 +204,7 @@ const Connections = () => {
                   <Lightbulb className="w-4 h-4" />
                   Hint ({4 - hintsUsed})
                 </button>
-                <button
-                  onClick={giveUp}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30"
-                >
-                  🏳️ Give Up
-                </button>
+                <GiveUpButton onGiveUp={giveUp} />
               </div>
             )}
 
