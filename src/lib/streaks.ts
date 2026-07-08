@@ -70,6 +70,10 @@ export interface StreakState {
   perGame: Record<string, StreakEntry>;
   /** Distinct ET dates (YYYY-MM-DD) the app was opened at least once. Used for the days-visited / days-logged-in stats (#13, Profile). */
   loginDates: string[];
+  /** Lifetime count of game completions on this browser (every finished game counts once). */
+  totalPlays: number;
+  /** Lifetime sum of scores from completed games on this browser. */
+  totalPoints: number;
 }
 
 const STORAGE_KEY = 'dukb-streaks-v1';
@@ -77,7 +81,7 @@ const STORAGE_KEY = 'dukb-streaks-v1';
 const EMPTY_ENTRY: StreakEntry = { current: 0, longest: 0, lastDate: null };
 
 function emptyState(): StreakState {
-  return { version: 1, global: { ...EMPTY_ENTRY }, perGame: {}, loginDates: [] };
+  return { version: 1, global: { ...EMPTY_ENTRY }, perGame: {}, loginDates: [], totalPlays: 0, totalPoints: 0 };
 }
 
 /**
@@ -121,6 +125,8 @@ function readState(): StreakState {
       global: { ...EMPTY_ENTRY, ...(parsed.global || {}) },
       perGame: parsed.perGame && typeof parsed.perGame === 'object' ? parsed.perGame : {},
       loginDates: Array.isArray(parsed.loginDates) ? parsed.loginDates : [],
+      totalPlays: typeof parsed.totalPlays === 'number' ? parsed.totalPlays : 0,
+      totalPoints: typeof parsed.totalPoints === 'number' ? parsed.totalPoints : 0,
     };
   } catch {
     return emptyState();
@@ -173,7 +179,7 @@ function advanceEntry(entry: StreakEntry, today: string): StreakEntry {
  * Returns the resulting state so callers (e.g. useStreaks) can update
  * without a second localStorage read.
  */
-export function recordGameCompletion(gameSlug: string, when: Date = new Date()): StreakState {
+export function recordGameCompletion(gameSlug: string, when: Date = new Date(), score = 0): StreakState {
   const today = getEtDateString(when);
   const state = readState();
 
@@ -181,6 +187,12 @@ export function recordGameCompletion(gameSlug: string, when: Date = new Date()):
 
   const perGamePrev = state.perGame[gameSlug] ?? { ...EMPTY_ENTRY };
   state.perGame[gameSlug] = advanceEntry(perGamePrev, today);
+
+  // Lifetime totals for the Profile stats. Every finished game counts as one
+  // play; scores accumulate. The flat profiles/user_scores columns these used
+  // to read don't exist in the live project, so this is the source of truth.
+  state.totalPlays = (state.totalPlays || 0) + 1;
+  state.totalPoints = (state.totalPoints || 0) + (Number.isFinite(score) ? Math.max(0, Math.round(score)) : 0);
 
   writeState(state);
   return state;

@@ -37,7 +37,7 @@ export function useGameCompletion(
     if (!isComplete || trackedRef.current) return;
     trackedRef.current = true;
     recordCompletion(`/${gameSlug}`, score, getCurrentPlayerName(profile));
-    recordStreakCompletion(gameSlug); // #101: local-first daily streak credit, every player, zero per-game edits needed.
+    recordStreakCompletion(gameSlug, new Date(), score); // #101: local-first daily streak credit + lifetime plays/points, every player.
   }, [isComplete, gameSlug, score, profile]);
 
   useEffect(() => {

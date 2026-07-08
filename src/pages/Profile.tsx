@@ -91,6 +91,7 @@ export default function Profile() {
   // production today regardless of how much a player has actually played.
   const {
     globalCurrentStreak, globalLongestStreak, topGameStreaks, daysVisited,
+    totalPlays: localTotalPlays, totalPoints: localTotalPoints,
   } = useStreaks();
 
   const [viewingProfile, setViewingProfile] = useState<any>(null);
@@ -307,8 +308,14 @@ export default function Profile() {
   };
 
   /* ── Computed stats ── */
-  const totalPoints = userScoreData?.total_points ?? viewingProfile?.all_time_score ?? 0;
-  const totalGames = viewingProfile?.total_games_played ?? 0;
+  // Own profile reads local-first totals (the flat DB columns don't exist, so
+  // they were always 0); other profiles fall back to whatever the DB has.
+  const totalPoints = isOwnProfile
+    ? localTotalPoints
+    : (userScoreData?.total_points ?? viewingProfile?.all_time_score ?? 0);
+  const totalGames = isOwnProfile
+    ? localTotalPlays
+    : (viewingProfile?.total_games_played ?? 0);
   // Local-first (see useStreaks() above), with the legacy DB-backed fields
   // only as a fallback for the unlikely case they're ever non-zero (e.g.
   // after the proposed profiles table + sync exists). On isOwnProfile this

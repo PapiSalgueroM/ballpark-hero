@@ -68,6 +68,10 @@ export interface UseStreaksResult {
   topGameStreaks: Array<{ gameSlug: string; current: number; longest: number }>;
   /** Distinct ET days the app has been opened (this browser), for days-visited stats. */
   daysVisited: number;
+  /** Lifetime game completions on this browser (Profile "games played"). */
+  totalPlays: number;
+  /** Lifetime points from completed games on this browser (Profile "points"). */
+  totalPoints: number;
   /** Re-reads localStorage into state. Call after an external write (e.g. right after a completion) if you're not going through recordCompletion below. */
   refresh: () => void;
   /** Records a completed game's streak credit, then refreshes local state and best-effort syncs. This is what useGameCompletion's one-line hook-in calls. */
@@ -107,6 +111,8 @@ export function useStreaks(): UseStreaksResult {
     globalLongestStreak: state.global.longest,
     topGameStreaks,
     daysVisited: state.loginDates.length,
+    totalPlays: state.totalPlays ?? 0,
+    totalPoints: state.totalPoints ?? 0,
     refresh,
     recordCompletion,
   };
