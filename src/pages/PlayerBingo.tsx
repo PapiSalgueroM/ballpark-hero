@@ -118,18 +118,20 @@ const PlayerBingo = () => {
       setLocked(next);
       const nextIdxs = new Set(lockedIndexes);
       cells.forEach((c, i) => { if (c && next[c.id]) nextIdxs.add(i); });
-      if (countCompletedLines(nextIdxs) > 0) {
+      // Track the best line count, but do NOT end on the first line — owner wants to keep
+      // filling the board for more lines (up to 12). The game ends only on 3 strikes or when
+      // the deck of players runs out.
+      const linesNow = countCompletedLines(nextIdxs);
+      if (linesNow > 0) {
         setBest(b => {
-          const lines = countCompletedLines(nextIdxs);
-          const nextBest = Math.max(b, lines);
+          const nextBest = Math.max(b, linesNow);
           try { localStorage.setItem(BEST_KEY, String(nextBest)); } catch { /* private mode */ }
           return nextBest;
         });
-        setPhase('won');
-        return;
       }
       if (pos + 1 >= deck.length) {
-        setPhase('lost');
+        // Ran out of players: completing at least one line is a win.
+        setPhase(linesNow > 0 ? 'won' : 'lost');
         return;
       }
       setPos(p => p + 1);
@@ -142,7 +144,7 @@ const PlayerBingo = () => {
         return;
       }
       if (pos + 1 >= deck.length) {
-        setPhase('lost');
+        setPhase(linesCompleted > 0 ? 'won' : 'lost');
         return;
       }
       setPos(p => p + 1);
@@ -152,7 +154,7 @@ const PlayerBingo = () => {
   const skip = () => {
     if (phase !== 'playing') return;
     if (pos + 1 >= deck.length) {
-      setPhase('lost');
+      setPhase(linesCompleted > 0 ? 'won' : 'lost');
       return;
     }
     setPos(p => p + 1);
@@ -161,7 +163,8 @@ const PlayerBingo = () => {
   const giveUp = () => {
     if (phase !== 'playing') return;
     setGaveUp(true);
-    setPhase('lost');
+    // Stopping with at least one completed line banks it as a win, not a loss.
+    setPhase(linesCompleted > 0 ? 'won' : 'lost');
   };
 
   const emojiGrid = `${buildShareGrid(board, locked)}\n${linesCompleted}/12 lines · ${strikes}/${START_LIVES} strikes · ${seenCount} players seen`;
