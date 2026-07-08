@@ -8,20 +8,12 @@ import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { TRANSFER_PATH_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { RotateCcw, ArrowRight, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { flagFor } from '@/lib/dealPlayers';
 
-const FLAG_MAP: Record<string, string> = {
-  'Argentina': '🇦🇷', 'Portugal': '🇵🇹', 'Brazil': '🇧🇷', 'France': '🇫🇷', 'England': '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
-  'Spain': '🇪🇸', 'Germany': '🇩🇪', 'Belgium': '🇧🇪', 'Netherlands': '🇳🇱', 'Croatia': '🇭🇷',
-  'Uruguay': '🇺🇾', 'Egypt': '🇪🇬', 'South Korea': '🇰🇷', 'Norway': '🇳🇴', 'Poland': '🇵🇱',
-  'Cameroon': '🇨🇲', 'Ivory Coast': '🇨🇮', 'Senegal': '🇸🇳', 'Colombia': '🇨🇴', 'Wales': '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
-  'Italy': '🇮🇹', 'Sweden': '🇸🇪', 'Morocco': '🇲🇦', 'Nigeria': '🇳🇬', 'Chile': '🇨🇱',
-  'Mexico': '🇲🇽', 'Serbia': '🇷🇸', 'Georgia': '🇬🇪', 'Slovenia': '🇸🇮', 'Canada': '🇨🇦',
-  'Austria': '🇦🇹', 'Denmark': '🇩🇰', 'Tunisia': '🇹🇳', 'Gabon': '🇬🇦', 'Algeria': '🇩🇿',
-  'Costa Rica': '🇨🇷', 'USA': '🇺🇸', 'Scotland': '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
-};
-
+// Uses the shared, comprehensive flag helper (~120 nations, handles dual
+// nationalities) instead of a local map that fell back to a blank white flag.
 function flag(nationality: string) {
-  return FLAG_MAP[nationality] ?? '🏳️';
+  return flagFor(nationality);
 }
 
 export function TransferPathBoard() {

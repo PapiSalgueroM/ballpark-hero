@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS, type Formation } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
+import { FlagImg } from '@/components/FlagImg';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import FormationPitch from '@/components/lineup/FormationPitch';
@@ -275,7 +276,7 @@ const LineupBuilder = () => {
                     <span className="text-xs font-bold text-primary w-10 shrink-0">{slot.label}</span>
                     <span className="font-semibold text-foreground flex-1 min-w-0 truncate">{slot.playerName}</span>
                     <span className="text-xs text-muted-foreground shrink-0 max-w-[35%] truncate">
-                      {slot.isNation ? '🏳️' : '🏟️'} {slot.assignedTeam}
+                      {slot.isNation ? <FlagImg name={slot.assignedTeam} size={16} showLabel /> : <>🏟️ {slot.assignedTeam}</>}
                     </span>
                   </div>
                 ))}
@@ -333,7 +334,7 @@ const LineupBuilder = () => {
                       <span className="text-xs font-bold text-primary w-8 shrink-0">{slot.label}</span>
                       <span className="font-semibold text-foreground flex-1 min-w-0 truncate">{slot.playerName}</span>
                       <span className="text-xs text-muted-foreground shrink-0 max-w-[35%] truncate">
-                        {slot.isNation ? '🏳️' : '🏟️'} {slot.assignedTeam}
+                        {slot.isNation ? <FlagImg name={slot.assignedTeam} size={16} showLabel /> : <>🏟️ {slot.assignedTeam}</>}
                       </span>
                     </div>
                   ))}
