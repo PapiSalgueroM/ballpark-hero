@@ -253,7 +253,7 @@ const SquadDeal = () => {
         {g.slotPhase === 'selecting' && <>Select <span className="text-primary">{g.opensThisRound}</span> case{g.opensThisRound === 1 ? '' : 's'} to eliminate</>}
         {g.slotPhase === 'revealed' && 'Cases eliminated, see the Banker’s offer'}
         {g.slotPhase === 'offer' && g.bankerCalling && <span className="text-primary inline-flex items-center gap-2 animate-pulse"><Phone className="w-4 h-4" /> The Banker is calling…</span>}
-        {g.slotPhase === 'final' && 'Your case or the last one?'}
+        {g.slotPhase === 'final' && 'Final call: keep your case or swap for the last one?'}
       </div>
 
       <div className="grid grid-cols-5 gap-2 md:gap-3 max-w-xl mx-auto">
@@ -271,7 +271,7 @@ const SquadDeal = () => {
                   : isFinalChoice ? 'bg-card border-primary text-primary animate-pulse'
                   : 'bg-card border-border text-foreground hover:border-primary')}>
               {isElim ? <span className="text-[9px] leading-tight">{lastName(cand.name)}</span>
-                : <><Briefcase className="w-4 h-4 md:w-5 md:h-5" /><span className="text-[10px] mt-0.5">{isKept ? 'Yours' : i + 1}</span></>}
+                : <><Briefcase className="w-4 h-4 md:w-5 md:h-5" /><span className="text-[10px] mt-0.5">{isKept ? 'Yours' : isFinalChoice ? 'Swap' : i + 1}</span></>}
             </button>
           );
         })}

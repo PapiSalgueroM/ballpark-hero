@@ -201,11 +201,20 @@ export function buildCandidates(pool: Player[], slot: FormationSlot, used: Set<s
 }
 
 /* ---------------- Banker offer ---------------- */
-export function bankerOffer(pool: Player[], slot: FormationSlot, unopened: Player[], used: Set<string>, roundFactor: number): Player | null {
-  const avgR = unopened.length ? unopened.reduce((s2, p) => s2 + playerRating(p), 0) / unopened.length : 55;
-  const target = avgR * roundFactor;
+export function bankerOffer(pool: Player[], slot: FormationSlot, unopened: Player[], used: Set<string>, roundFactor: number, excludeNames: Set<string> = new Set()): Player | null {
+  const ratings = unopened.map(playerRating);
+  const avgR = ratings.length ? ratings.reduce((s2, r) => s2 + r, 0) / ratings.length : 55;
+  const minR = ratings.length ? Math.min(...ratings) : 45;
+  const maxR = ratings.length ? Math.max(...ratings) : 95;
+  // Banker leans below average early (roundFactor climbs toward 1.0), but the offer must never
+  // be worse than the worst case still in play - owner saw "a 60 offered when the lowest was 61".
+  // Clamp the target into the remaining range so every offer is a genuine alternative.
+  const target = Math.max(minR, Math.min(maxR, avgR * roundFactor));
   const unopenedNames = new Set(unopened.map(p => p.name));
-  const elig = pool.filter(p => slot.allowed.includes(p.position) && !used.has(p.name) && !unopenedNames.has(p.name));
+  // excludeNames = players the banker already offered this slot, so it never re-offers the same guy.
+  const elig = pool.filter(p =>
+    slot.allowed.includes(p.position) && !used.has(p.name) &&
+    !unopenedNames.has(p.name) && !excludeNames.has(p.name));
   if (!elig.length) return null;
   let best = elig[0]; let bestD = Infinity;
   for (const p of elig) { const d = Math.abs(playerRating(p) - target); if (d < bestD) { bestD = d; best = p; } }

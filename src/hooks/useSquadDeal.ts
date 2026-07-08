@@ -40,6 +40,8 @@ export function useSquadDeal() {
   const [result, setResult] = useState<SquadResult | null>(null);
   const [leaderboard, setLeaderboard] = useState<LeaderEntry[]>([]);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Names the banker has already offered for the active slot, so it never re-offers the same player.
+  const offeredRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     setLeaderboard(loadLeaderboard());
@@ -65,6 +67,7 @@ export function useSquadDeal() {
     const used = new Set(squad.filter((p): p is Player => !!p).map(p => p.name));
     setCandidates(buildCandidates(pool, formation.slots[idx], used, memesPool));
     setKeptIdx(null); setEliminated([]); setSelected([]); setRoundIdx(0); setOffer(null);
+    offeredRef.current = new Set();
     setSlotPhase('pickBox');
     setActiveSlot(idx);
   };
@@ -99,13 +102,14 @@ export function useSquadDeal() {
     const unopened = candidates.filter((_, i) => !elim.has(i));
     const used = new Set(squad.filter((p): p is Player => !!p).map(p => p.name));
     const factor = ROUND_FACTORS[Math.min(roundIdx, ROUND_FACTORS.length - 1)];
-    const o = bankerOffer(pool, formation.slots[activeSlot], unopened, used, factor);
+    const o = bankerOffer(pool, formation.slots[activeSlot], unopened, used, factor, offeredRef.current);
     if (!o) {
       const nr = roundIdx + 1;
       if (nr < scheduleFor(candidates.length).length) { setRoundIdx(nr); setSelected([]); setSlotPhase('selecting'); }
       else setSlotPhase('final');
       return;
     }
+    offeredRef.current.add(o.name);
     setBankerCalling(true); setSlotPhase('offer');
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => { setOffer(o); setBankerCalling(false); }, 1100);
