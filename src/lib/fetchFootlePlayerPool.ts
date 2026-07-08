@@ -103,8 +103,10 @@ function assignDifficulty(
     // Sort DESC by marketValue (already ordered by rank from Supabase, but be safe)
     group.sort((a, b) => b.marketValue - a.marketValue);
     const n = group.length;
-    const easyCount = Math.ceil(n * 0.60);
-    const hardCount = Math.ceil(n * 0.35);
+    // Harder split so the tiers actually mean something: fewer "easy", a real "insane" band
+    // (was 60/35/5, which made insane a tiny sliver and everything else trivially easy).
+    const easyCount = Math.ceil(n * 0.40);
+    const hardCount = Math.ceil(n * 0.40);
 
     group.forEach((p, i) => {
       let difficulty: Difficulty;
@@ -115,6 +117,11 @@ function assignDifficulty(
       } else {
         difficulty = 'insane';
       }
+      // GOATs are the most recognizable players in the game, so they are always 'easy',
+      // never 'insane' — even though their CURRENT market value is low (a 39-year-old Messi).
+      // Owner hit exactly this: "I put insane and I just got Messi." Value is a fame proxy
+      // that breaks for aging legends.
+      if (GOAT_NAMES.has(p.name)) difficulty = 'easy';
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { _tempIndex: _, ...rest } = p;
       result.push({ ...rest, difficulty });
