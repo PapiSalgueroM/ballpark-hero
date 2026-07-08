@@ -106,8 +106,20 @@ export function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
+// Left/right positions are interchangeable in reality (a left winger can play right wing, a
+// left back can cover right back). Owner hit this: Raphinha plays LW at Barca but RW for
+// Brazil and was rejected for a RW slot. Mirror the flanks so those players are accepted.
+const MIRROR_POSITION: Partial<Record<Position, Position>> = {
+  LW: 'RW', RW: 'LW',
+  LM: 'RM', RM: 'LM',
+  LB: 'RB', RB: 'LB',
+  LWB: 'RWB', RWB: 'LWB',
+};
+
 export function fitsSlot(p: WxPlayer, slot: FormationSlot): boolean {
-  return slot.allowed.includes(p.position);
+  if (slot.allowed.includes(p.position)) return true;
+  const mirror = MIRROR_POSITION[p.position];
+  return mirror != null && slot.allowed.includes(mirror);
 }
 
 /** "ST / CF" style summary of what a slot accepts. */
