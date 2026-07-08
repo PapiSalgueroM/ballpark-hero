@@ -140,23 +140,27 @@ const playoffMatchups = [
 
 /* ───── FIFA rankings ───── */
 
+// Real FIFA world ranking as of 11 June 2026 (the last update before the World Cup),
+// per ESPN's official top-50 list. Ranks outside the top 50 are the true FIFA positions
+// (e.g. Curacao is 82nd, not 48th). Chile and Kosovo did not qualify but are kept here
+// with their approximate real ranks so no lookup falls through.
 const FIFA_RANKINGS: { rank: number; team: string }[] = [
-  { rank: 1, team: "France" }, { rank: 2, team: "Spain" }, { rank: 3, team: "England" },
-  { rank: 4, team: "Brazil" }, { rank: 5, team: "Portugal" }, { rank: 6, team: "Argentina" },
-  { rank: 7, team: "Belgium" }, { rank: 8, team: "Netherlands" }, { rank: 9, team: "Germany" },
-  { rank: 10, team: "Colombia" }, { rank: 11, team: "Italy" }, { rank: 12, team: "Morocco" },
-  { rank: 13, team: "USA" }, { rank: 14, team: "Mexico" }, { rank: 15, team: "Japan" },
-  { rank: 16, team: "Croatia" }, { rank: 17, team: "Senegal" }, { rank: 18, team: "Ecuador" },
-  { rank: 19, team: "Australia" }, { rank: 20, team: "Switzerland" }, { rank: 21, team: "Norway" },
-  { rank: 22, team: "Denmark" }, { rank: 23, team: "Uruguay" }, { rank: 24, team: "South Korea" },
-  { rank: 25, team: "Saudi Arabia" }, { rank: 26, team: "Turkey" }, { rank: 27, team: "Iran" },
-  { rank: 28, team: "Egypt" }, { rank: 29, team: "Ghana" }, { rank: 30, team: "Chile" },
-  { rank: 31, team: "Nigeria" }, { rank: 32, team: "Canada" }, { rank: 33, team: "Scotland" },
-  { rank: 34, team: "Algeria" }, { rank: 35, team: "Ivory Coast" }, { rank: 36, team: "Paraguay" },
-  { rank: 37, team: "Poland" }, { rank: 38, team: "Uzbekistan" }, { rank: 39, team: "South Africa" },
-  { rank: 40, team: "Cape Verde" }, { rank: 41, team: "Qatar" }, { rank: 42, team: "New Zealand" },
-  { rank: 43, team: "Panama" }, { rank: 44, team: "Tunisia" }, { rank: 45, team: "Sweden" },
-  { rank: 46, team: "Kosovo" }, { rank: 47, team: "Haiti" }, { rank: 48, team: "Curaçao" },
+  { rank: 1, team: "Argentina" }, { rank: 2, team: "Spain" }, { rank: 3, team: "France" },
+  { rank: 4, team: "England" }, { rank: 5, team: "Portugal" }, { rank: 6, team: "Brazil" },
+  { rank: 7, team: "Morocco" }, { rank: 8, team: "Netherlands" }, { rank: 9, team: "Belgium" },
+  { rank: 10, team: "Germany" }, { rank: 11, team: "Croatia" }, { rank: 12, team: "Italy" },
+  { rank: 13, team: "Colombia" }, { rank: 14, team: "Mexico" }, { rank: 15, team: "Senegal" },
+  { rank: 16, team: "Uruguay" }, { rank: 17, team: "USA" }, { rank: 18, team: "Japan" },
+  { rank: 19, team: "Switzerland" }, { rank: 20, team: "Iran" }, { rank: 21, team: "Denmark" },
+  { rank: 22, team: "Turkey" }, { rank: 23, team: "Ecuador" }, { rank: 25, team: "South Korea" },
+  { rank: 26, team: "Nigeria" }, { rank: 27, team: "Australia" }, { rank: 28, team: "Algeria" },
+  { rank: 29, team: "Egypt" }, { rank: 30, team: "Canada" }, { rank: 31, team: "Norway" },
+  { rank: 33, team: "Ivory Coast" }, { rank: 34, team: "Panama" }, { rank: 36, team: "Poland" },
+  { rank: 38, team: "Sweden" }, { rank: 41, team: "Paraguay" }, { rank: 42, team: "Scotland" },
+  { rank: 45, team: "Tunisia" }, { rank: 50, team: "Uzbekistan" }, { rank: 54, team: "Chile" },
+  { rank: 56, team: "Qatar" }, { rank: 60, team: "South Africa" }, { rank: 61, team: "Saudi Arabia" },
+  { rank: 67, team: "Cape Verde" }, { rank: 73, team: "Ghana" }, { rank: 82, team: "Curaçao" },
+  { rank: 83, team: "Haiti" }, { rank: 85, team: "New Zealand" }, { rank: 95, team: "Kosovo" },
 ];
 
 // Rank lookup: team name → rank number (lower = better)
@@ -165,7 +169,7 @@ FIFA_RANKINGS.forEach((r) => { FIFA_RANK[r.team] = r.rank; });
 
 // Also add playoff teams that aren't in top 48 with high rank numbers
 const EXTRA_RANKS: Record<string, number> = {
-  "Bosnia & Herzegovina": 60, "Czech Republic": 55, "Jamaica": 65, "DR Congo": 62, "Bolivia": 70, "Iraq": 68,
+  "Bosnia & Herzegovina": 64, "Czech Republic": 40, "Jamaica": 65, "DR Congo": 46, "Bolivia": 70, "Iraq": 57, "Jordan": 63,
 };
 Object.entries(EXTRA_RANKS).forEach(([t, r]) => { if (!FIFA_RANK[t]) FIFA_RANK[t] = r; });
 
