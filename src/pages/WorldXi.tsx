@@ -34,7 +34,7 @@ import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 
 type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'won' | 'lost';
 
-const SPIN_MS = 900; // slot-machine spin duration, under the 1.5s cap
+const SPIN_MS = 1300; // slot-machine spin duration, under the 1.5s cap
 
 const WorldXi = () => {
   const [phase, setPhase] = useState<Phase>('boot');
@@ -50,6 +50,7 @@ const WorldXi = () => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [respinning, setRespinning] = useState(false);
+  const [spinFlag, setSpinFlag] = useState<string>(''); // country shown mid-spin (cycles like a reel)
   const [seasonReport, setSeasonReport] = useState<SeasonReport | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const prevStepRef = useRef<number>(-1);
@@ -124,9 +125,14 @@ const WorldXi = () => {
       return;
     }
     setSpinning(true);
-    const id = setTimeout(() => setSpinning(false), SPIN_MS);
-    return () => clearTimeout(id);
-  }, [phase, step]);
+    // Cycle the displayed flag through random countries like a slot-machine reel, then land.
+    const pool = countries.filter(Boolean);
+    const cyc = setInterval(() => {
+      if (pool.length) setSpinFlag(pool[Math.floor(Math.random() * pool.length)]);
+    }, 80);
+    const id = setTimeout(() => { clearInterval(cyc); setSpinning(false); }, SPIN_MS);
+    return () => { clearInterval(cyc); clearTimeout(id); };
+  }, [phase, step, countries]);
 
   // Reset the season report whenever a new run starts.
   useEffect(() => {
@@ -385,7 +391,7 @@ const WorldXi = () => {
                   !spinning && respinning && 'animate-slot-settle',
                 )}
               >
-                {flagFor(country)} {displayCountry(country)}
+                {spinning && spinFlag ? `${flagFor(spinFlag)} ${displayCountry(spinFlag)}` : `${flagFor(country)} ${displayCountry(country)}`}
               </div>
               <p className="text-xs text-muted-foreground mb-3">
                 Name a player from {displayCountry(country)} who can play {slot.label}. Accepts {allowedLabel(slot)}.
