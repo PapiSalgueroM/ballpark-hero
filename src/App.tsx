@@ -117,10 +117,53 @@ const ScrollToTop = () => {
     }
   }, []);
 
+  // Home scroll memory (#8). With scrollRestoration set to "manual" above,
+  // NOBODY was restoring the games-list position: the navbar Back button is
+  // navigate(-1) (POP, browser restore disabled) and the logo is a PUSH to "/"
+  // (forced to top below). So returning from any game always dumped the player
+  // at the top of home and they had to scroll back down. Fix: while on "/",
+  // continuously remember the scroll offset (rAF-throttled, passive listener,
+  // sessionStorage so it survives the SPA page swap but not a new tab); on any
+  // navigation back to "/" - Back button, logo, browser back alike - jump
+  // straight to the remembered spot instead of the top.
   useEffect(() => {
+    if (pathname !== '/') return;
+    let raf = 0;
+    const save = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        try {
+          sessionStorage.setItem('home-scroll-y', String(window.scrollY));
+        } catch {
+          /* storage unavailable (private mode etc) - scroll memory just off */
+        }
+      });
+    };
+    window.addEventListener('scroll', save, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', save);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
+  }, [pathname]);
+
+  useEffect(() => {
+    if (pathname === '/') {
+      // Returning home: restore the remembered games-list position (0 on a
+      // fresh visit). Instant jump, no smooth scroll - it should feel like
+      // the page never moved.
+      let y = 0;
+      try {
+        y = Number(sessionStorage.getItem('home-scroll-y')) || 0;
+      } catch {
+        y = 0;
+      }
+      window.scrollTo(0, y);
+      return;
+    }
     // New navigations (clicking into a game) start at the top of the page.
     // On POP (browser Back/Forward) we leave scroll alone so the player returns
-    // to the exact spot they left in the games list.
+    // to the exact spot they left.
     if (navigationType !== "POP") {
       window.scrollTo(0, 0);
     }
