@@ -19,6 +19,7 @@ import { format } from 'date-fns';
 import html2canvas from 'html2canvas';
 import { useStreaks } from '@/hooks/useStreaks';
 import { getBadgeState, type BadgeState } from '@/lib/badges';
+import { nameModerationError } from '@/lib/nameModeration';
 
 /* ────────────────────── Constants ────────────────────── */
 
@@ -255,6 +256,12 @@ export default function Profile() {
     setSaving(true);
     if (editForm.username && !/^[a-zA-Z0-9_]{3,20}$/.test(editForm.username)) {
       toast.error('Username must be 3-20 characters, letters, numbers and underscores only');
+      setSaving(false);
+      return;
+    }
+    const nameIssue = nameModerationError(editForm.display_name) || nameModerationError(editForm.username);
+    if (nameIssue) {
+      toast.error(nameIssue);
       setSaving(false);
       return;
     }
