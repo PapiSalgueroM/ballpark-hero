@@ -23,6 +23,21 @@ const FLAG_CODES: Record<string, string> = {
   "Guinea-Bissau": "gw", "Slovenia": "si", "Georgia": "ge",
   "Bosnia": "ba", "West Germany": "de", "Czechoslovakia": "cz",
   "Soviet Union": "ru", "Yugoslavia": "rs",
+  // Exact nationality strings as they appear in player_market_values (Türkiye,
+  // Cote d'Ivoire, Korea, South, Bosnia-Herzegovina, Curacao) plus common
+  // footballing nations that were missing - all render real flags now instead
+  // of falling back to plain text.
+  "Türkiye": "tr", "Cote d'Ivoire": "ci", "Bosnia-Herzegovina": "ba",
+  "Korea, South": "kr", "Curacao": "cw", "Israel": "il", "Belarus": "by",
+  "Vietnam": "vn", "Armenia": "am", "El Salvador": "sv", "Northern Ireland": "gb-nir",
+  "United Arab Emirates": "ae", "Angola": "ao", "Lithuania": "lt", "The Gambia": "gm",
+  "Suriname": "sr", "Burkina Faso": "bf", "Guatemala": "gt", "Benin": "bj",
+  "Cyprus": "cy", "Oman": "om", "Haiti": "ht", "Indonesia": "id", "Kazakhstan": "kz",
+  "Togo": "tg", "Comoros": "km", "Guadeloupe": "gp", "Faroe Islands": "fo",
+  "Zambia": "zm", "Latvia": "lv", "Fiji": "fj", "Libya": "ly", "Malta": "mt",
+  "Moldova": "md", "Azerbaijan": "az", "Tajikistan": "tj", "Sierra Leone": "sl",
+  "Congo": "cg", "Lebanon": "lb", "Kenya": "ke", "Liberia": "lr", "Zimbabwe": "zw",
+  "Qatar": "qa", "Estonia": "ee",
 };
 
 export function FlagImg({ name, size = 20, showLabel = false }: { name: string; size?: number; showLabel?: boolean }) {
