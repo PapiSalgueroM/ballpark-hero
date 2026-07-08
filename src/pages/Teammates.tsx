@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTeammates } from '@/hooks/useTeammates';
 import { TeammatesHowToPlay } from '@/components/teammates/TeammatesHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { HelpCircle, User, ArrowRight } from 'lucide-react';
@@ -114,12 +115,7 @@ const Teammates = () => {
                   </button>
                 </div>
                 <div className="flex justify-center">
-                  <button
-                    onClick={giveUp}
-                    className="px-4 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-colors"
-                  >
-                    🏳️ Give Up
-                  </button>
+                  <GiveUpButton onGiveUp={giveUp} />
                 </div>
               </div>
             )}

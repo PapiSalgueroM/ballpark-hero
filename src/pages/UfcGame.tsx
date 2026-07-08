@@ -4,6 +4,7 @@ import { UfcFighterSearch } from '@/components/ufc/UfcFighterSearch';
 import { UfcGameBoard } from '@/components/ufc/UfcGameBoard';
 import { UfcHowToPlay } from '@/components/ufc/UfcHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { HelpCircle } from 'lucide-react';
@@ -97,12 +98,7 @@ const UfcGame = () => {
               onSelect={makeGuess}
             />
             <div className="flex justify-center">
-              <button
-                onClick={giveUp}
-                className="px-4 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-colors"
-              >
-                🏳️ Give Up
-              </button>
+              <GiveUpButton onGiveUp={giveUp} />
             </div>
           </div>
         ) : null}

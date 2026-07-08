@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useNFLCareer } from '@/hooks/useNFLCareer';
 import { NFLCareerHowToPlay } from '@/components/nfl-career/NFLCareerHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { NFL_ROSTER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
-import { Flag, HelpCircle } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -102,13 +103,7 @@ const NFLCareer = () => {
               validateOnly
             />
             <div className="flex justify-center mt-4">
-              <button
-                onClick={giveUp}
-                className="inline-flex items-center gap-2 px-5 py-2 text-sm rounded-full bg-destructive text-destructive-foreground hover:opacity-90 transition-opacity"
-              >
-                <Flag className="w-4 h-4" />
-                Give Up
-              </button>
+              <GiveUpButton onGiveUp={giveUp} />
             </div>
           </div>
         )}
