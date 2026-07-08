@@ -53,6 +53,12 @@ export const BADGE_DEFS: BadgeDef[] = [
   { id: 'visited-30', emoji: '🗓️', name: 'Regular', desc: 'Visit on 30 different days' },
   { id: 'variety-5', emoji: '🎯', name: 'Well Rounded', desc: '5 different games in one day' },
   { id: 'perfect-week', emoji: '🌅', name: 'Perfect Week', desc: '7 day streak, no gaps' },
+  { id: 'streak-14', emoji: '🔥🔥🔥', name: 'Two Weeks Hot', desc: '14 day streak' },
+  { id: 'games-25', emoji: '🎮', name: 'Getting Serious', desc: '25 games played' },
+  { id: 'games-250', emoji: '💎', name: 'Superfan', desc: '250 games played' },
+  { id: 'visited-100', emoji: '🏛️', name: 'Local Legend', desc: 'Visit on 100 different days' },
+  { id: 'points-1000', emoji: '⭐', name: 'Point Hunter', desc: 'Earn 1,000 total points' },
+  { id: 'points-10000', emoji: '🌟', name: 'Point Master', desc: 'Earn 10,000 total points' },
 ];
 
 /** Distinct non-empty category titles from the game registry, used by the All Rounder badge. */
@@ -112,6 +118,10 @@ export async function getBadgeState(
   const rows = await fetchOwnCompletions(playerName);
 
   const totalCompletions = rows.length;
+  // Games-played badges use the larger of the server completion rows and the
+  // local-first play tally, so they still unlock if the server read is empty
+  // (offline / RLS) - the local engine counts every finished game.
+  const gamesPlayed = Math.max(totalCompletions, streaks.totalPlays || 0);
 
   const playedCategories = new Set(
     rows.map(r => categoryForSlug(r.game)).filter((c): c is string => !!c)
@@ -130,15 +140,59 @@ export async function getBadgeState(
     'streak-3': streaks.global.longest >= 3,
     'streak-7': streaks.global.longest >= 7,
     'streak-30': streaks.global.longest >= 30,
-    'games-10': totalCompletions >= 10,
-    'games-50': totalCompletions >= 50,
-    'games-100': totalCompletions >= 100,
+    'games-10': gamesPlayed >= 10,
+    'games-50': gamesPlayed >= 50,
+    'games-100': gamesPlayed >= 100,
     'all-rounder': totalCategories > 0 && playedCategories.size >= totalCategories,
     'visited-7': streaks.loginDates.length >= 7,
     'visited-30': streaks.loginDates.length >= 30,
     'variety-5': maxDistinctGamesInADay >= 5,
     'perfect-week': streaks.global.longest >= 7,
+    'streak-14': streaks.global.longest >= 14,
+    'games-25': gamesPlayed >= 25,
+    'games-250': gamesPlayed >= 250,
+    'visited-100': streaks.loginDates.length >= 100,
+    'points-1000': (streaks.totalPoints || 0) >= 1000,
+    'points-10000': (streaks.totalPoints || 0) >= 10000,
   };
 
   return BADGE_DEFS.map(def => ({ ...def, earned: !!earnedById[def.id] }));
+}
+
+const EARNED_KEY = 'dukb-earned-badges-v1';
+
+/**
+ * Computes badges earned right now and returns any newly earned since the last
+ * check, so the caller can show an unlock toast. On the very first call for a
+ * browser it seeds the stored set with whatever is already earned and returns
+ * nothing, so existing players are not spammed with a toast for every past
+ * achievement. Never throws.
+ */
+export async function getNewlyEarnedBadges(
+  profile?: { display_name?: string | null; username?: string | null } | null
+): Promise<BadgeState[]> {
+  let stored: string[] | null;
+  try {
+    const raw = localStorage.getItem(EARNED_KEY);
+    stored = raw ? (JSON.parse(raw) as string[]) : null;
+  } catch {
+    stored = null;
+  }
+
+  const states = await getBadgeState(profile);
+  const earnedNow = states.filter(b => b.earned).map(b => b.id);
+  const persist = (ids: string[]) => {
+    try { localStorage.setItem(EARNED_KEY, JSON.stringify(ids)); } catch { /* ignore */ }
+  };
+
+  // First run on this browser: seed silently, never toast historical badges.
+  if (stored === null) {
+    persist(earnedNow);
+    return [];
+  }
+
+  const storedSet = new Set(stored);
+  const fresh = states.filter(b => b.earned && !storedSet.has(b.id));
+  if (fresh.length) persist(earnedNow);
+  return fresh;
 }

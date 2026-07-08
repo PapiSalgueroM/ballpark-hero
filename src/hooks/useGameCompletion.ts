@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { recordGameCompletion as recordStreakCompletion } from '@/lib/streaks';
+import { getNewlyEarnedBadges } from '@/lib/badges';
 
 /**
  * Automatically saves game completion data to user_scores, user_game_scores,
@@ -38,6 +39,10 @@ export function useGameCompletion(
     trackedRef.current = true;
     recordCompletion(`/${gameSlug}`, score, getCurrentPlayerName(profile));
     recordStreakCompletion(gameSlug, new Date(), score); // #101: local-first daily streak credit + lifetime plays/points, every player.
+    // #103/#7: toast any badge this completion just unlocked (best effort, guest or signed-in).
+    getNewlyEarnedBadges(profile)
+      .then(newBadges => newBadges.forEach(b => toast.success(`Badge unlocked ${b.emoji}`, { description: `${b.name} - ${b.desc}` })))
+      .catch(() => { /* best effort */ });
   }, [isComplete, gameSlug, score, profile]);
 
   useEffect(() => {
