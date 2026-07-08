@@ -70,15 +70,18 @@ export function normalizeName(s: string): string {
 }
 
 /**
- * 1000 base, minus 150 per stint visible beyond the first, minus 100 per
- * wrong guess, never below 100.
+ * Score = 1000 base, minus a reveal penalty that SCALES TO CAREER LENGTH (revealing every
+ * stint costs ~90% of base no matter how many stints there are), minus 100 per wrong guess,
+ * never below 100. The length-scaling fixes short careers keeping a high score after all
+ * hints: e.g. Xavi Simons used to leave ~550 with everything revealed; now that lands at the
+ * floor, same as a long career fully revealed.
  */
-export function careerScore(stintsShown: number, wrongGuesses: number): number {
-  const raw =
-    BASE_SCORE -
-    REVEAL_PENALTY * Math.max(0, stintsShown - 1) -
-    WRONG_GUESS_PENALTY * Math.max(0, wrongGuesses);
-  return Math.max(SCORE_FLOOR, raw);
+export function careerScore(stintsShown: number, wrongGuesses: number, totalStints = 7): number {
+  const revealsAvailable = Math.max(1, totalStints - 1);
+  const revealsUsed = Math.max(0, stintsShown - 1);
+  const revealPenalty = 0.9 * BASE_SCORE * Math.min(1, revealsUsed / revealsAvailable);
+  const raw = BASE_SCORE - revealPenalty - WRONG_GUESS_PENALTY * Math.max(0, wrongGuesses);
+  return Math.max(SCORE_FLOOR, Math.round(raw));
 }
 
 // The nationality column occasionally holds a birth city alongside (or instead

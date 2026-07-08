@@ -160,7 +160,7 @@ const CareerLadder = () => {
   const hiddenCount = total - shown;
   const flagUnlocked = activePlayer !== null && activeRevealed * 2 >= total;
   const guessesLeft = MAX_GUESSES - activeWrongGuesses.length;
-  const potential = careerScore(Math.max(1, Math.min(activeRevealed, total)), activeWrongGuesses.length);
+  const potential = careerScore(Math.max(1, Math.min(activeRevealed, total)), activeWrongGuesses.length, total);
 
   const query = normalizeName(input);
   const wrongNorms = activeWrongGuesses.map(normalizeName);
@@ -181,7 +181,7 @@ const CareerLadder = () => {
     if (wrongNorms.includes(norm)) return;
 
     if (norm === normalizeName(activePlayer.name)) {
-      const score = careerScore(Math.min(activeRevealed, total), activeWrongGuesses.length);
+      const score = careerScore(Math.min(activeRevealed, total), activeWrongGuesses.length, total);
       if (mode === 'daily') {
         addDailyAction({ t: 'won', score });
       } else {
@@ -246,6 +246,7 @@ const CareerLadder = () => {
   const nextRevealCost = potential - careerScore(
     Math.max(1, Math.min(activeRevealed + 1, total)),
     activeWrongGuesses.length,
+    total,
   );
 
   const cluesUsed = Math.max(1, Math.min(activeRevealed, total));
