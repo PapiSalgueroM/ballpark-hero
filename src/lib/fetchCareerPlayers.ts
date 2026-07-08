@@ -1,18 +1,35 @@
 import { supabase } from "@/integrations/supabase/client";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 import type { CareerPlayer, CareerSeason } from "@/types/career";
+
+interface SeasonRow {
+  player_id: string;
+  season: string;
+  club: string;
+  goals: number;
+  assists: number;
+  appearances: number;
+  market_value: number;
+  sort_order: number;
+}
 
 export async function fetchCareerPlayers(): Promise<CareerPlayer[]> {
   try {
+    // career_seasons is over the API's 1,000-row cap, so it must be paged
+    // (a plain select silently truncates and leaves players with empty careers).
     const [playersResult, seasonsResult] = await Promise.all([
       supabase
         .from("career_players")
         .select("id, player_name, nationality, position")
         .order("player_name", { ascending: true }),
-      supabase
-        .from("career_seasons")
-        .select("player_id, season, club, goals, assists, appearances, market_value, sort_order")
-        .order("player_id", { ascending: true })
-        .order("sort_order", { ascending: true }),
+      fetchAllRows<SeasonRow>((from, to) =>
+        supabase
+          .from("career_seasons")
+          .select("player_id, season, club, goals, assists, appearances, market_value, sort_order")
+          .order("player_id", { ascending: true })
+          .order("sort_order", { ascending: true })
+          .range(from, to),
+      ),
     ]);
 
     if (playersResult.error || !playersResult.data || playersResult.data.length === 0) {

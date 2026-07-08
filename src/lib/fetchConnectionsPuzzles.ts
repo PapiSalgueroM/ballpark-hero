@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 import type { ConnectionGroup } from '@/types/connections';
 
 interface ConnectionsPuzzle {
@@ -24,10 +25,16 @@ function isValidPuzzle(p: ConnectionsPuzzle): boolean {
  */
 export async function fetchConnectionsPuzzles(): Promise<ConnectionsPuzzle[]> {
   try {
-    const { data, error } = await supabase
-      .from('connections_puzzles')
-      .select('puzzle_id, groups_json')
-      .order('sort_order', { ascending: true });
+    // The table is past the API's 1,000-row cap (1,012 rows) — a plain select
+    // silently dropped the hand-crafted puzzles at the tail, so page through.
+    const { data, error } = await fetchAllRows<{ puzzle_id: string; groups_json: unknown }>(
+      (from, to) =>
+        supabase
+          .from('connections_puzzles')
+          .select('puzzle_id, groups_json')
+          .order('sort_order', { ascending: true })
+          .range(from, to),
+    );
 
     if (error || !data || data.length === 0) return [];
 

@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 export interface TransferValuePlayer {
   name: string;
@@ -19,12 +20,22 @@ export interface TransferValuePlayer {
  */
 export async function fetchTransferValuePool(): Promise<TransferValuePlayer[]> {
   try {
-    const { data, error } = await supabase
-      .from('player_market_values')
-      .select('player_name, position, age, nationality, club, market_value_usd, matches, goals, assists')
-      .eq('year', 2026)
-      .order('market_value_usd', { ascending: false })
-      .limit(1500);
+    // .limit(1500) was silently capped to 1,000 rows by the API — page instead.
+    const { data, error } = await fetchAllRows<{
+      player_name: string; position: string | null; age: number | null;
+      nationality: string | null; club: string | null;
+      market_value_usd: number | null; matches: number | null;
+      goals: number | null; assists: number | null;
+    }>(
+      (from, to) =>
+        supabase
+          .from('player_market_values')
+          .select('player_name, position, age, nationality, club, market_value_usd, matches, goals, assists')
+          .eq('year', 2026)
+          .order('market_value_usd', { ascending: false })
+          .range(from, to),
+      1500,
+    );
 
     if (error || !data || data.length === 0) {
       console.warn('[fetchTransferValuePool] empty/error', error);
