@@ -49,7 +49,7 @@ export function Header() {
         <div className="container flex h-14 max-w-4xl items-center justify-between px-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <span className="font-display font-bold text-xl text-primary">DoUKnowBall</span>
+            <span className="font-display font-black text-2xl sm:text-3xl tracking-wide text-primary">DoUKnowBall</span>
           </Link>
 
           {/* Auth Section */}

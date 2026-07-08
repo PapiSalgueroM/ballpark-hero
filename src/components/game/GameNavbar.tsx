@@ -44,9 +44,9 @@ export function GameNavbar() {
       <nav className="w-full bg-background/95 border-b border-border/40">
         <div className="flex items-center justify-between">
           {/* Logo — left */}
-          <Link to="/" className="shrink-0 font-display font-bold text-primary hover:opacity-80 transition-opacity">
-            <span className="hidden sm:inline text-sm">DoUKnowBall</span>
-            <span className="sm:hidden text-sm">🏠</span>
+          <Link to="/" className="shrink-0 font-display font-black text-primary hover:opacity-80 transition-opacity">
+            <span className="hidden sm:inline text-base sm:text-lg tracking-wide">DoUKnowBall</span>
+            <span className="sm:hidden text-lg">🏠</span>
           </Link>
 
           {/* Stats — center */}
@@ -116,10 +116,10 @@ export function GameNavbar() {
           <button
             onClick={() => navigate(-1)}
             aria-label="Go back"
-            className="shrink-0 inline-flex items-center gap-1 text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-1 px-2.5 py-1.5 min-h-[36px] text-xs sm:text-sm font-medium text-foreground hover:bg-surface-2 hover:border-primary/50 hover:text-primary transition-colors"
           >
-            <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span className="hidden sm:inline">Back</span>
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back</span>
           </button>
         </div>
       </nav>
