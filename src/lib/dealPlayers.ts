@@ -25,6 +25,20 @@ const FLAGS: Record<string, string> = {
   Albania: '🇦🇱', Armenia: '🇦🇲', 'Burkina Faso': '🇧🇫', 'DR Congo': '🇨🇩', Finland: '🇫🇮',
   Kosovo: '🇽🇰', Montenegro: '🇲🇪', Mozambique: '🇲🇿', 'New Zealand': '🇳🇿', Tunisia: '🇹🇳',
   Zambia: '🇿🇲', Zimbabwe: '🇿🇼',
+  // Emoji parity with FlagImg: cover the nations that were falling back to the
+  // globe. These render as real flags on iOS/Android/Mac; Windows shows the
+  // 2-letter code, still clearer than a generic globe.
+  'South Africa': '🇿🇦', China: '🇨🇳', Uzbekistan: '🇺🇿', Belarus: '🇧🇾',
+  Vietnam: '🇻🇳', Bolivia: '🇧🇴', 'Cape Verde': '🇨🇻', 'El Salvador': '🇸🇻',
+  'United Arab Emirates': '🇦🇪', 'Saudi Arabia': '🇸🇦',
+  Lithuania: '🇱🇹', Latvia: '🇱🇻', Estonia: '🇪🇪', Moldova: '🇲🇩', Azerbaijan: '🇦🇿',
+  Kazakhstan: '🇰🇿', Tajikistan: '🇹🇯', 'The Gambia': '🇬🇲', Gambia: '🇬🇲',
+  Suriname: '🇸🇷', Panama: '🇵🇦', Honduras: '🇭🇳', Guatemala: '🇬🇹', Haiti: '🇭🇹',
+  Benin: '🇧🇯', Togo: '🇹🇬', Comoros: '🇰🇲', 'Guinea-Bissau': '🇬🇼', Curacao: '🇨🇼',
+  'Curaçao': '🇨🇼', Guadeloupe: '🇬🇵', 'Faroe Islands': '🇫🇴', Cyprus: '🇨🇾',
+  Oman: '🇴🇲', Iraq: '🇮🇶', Qatar: '🇶🇦', Lebanon: '🇱🇧', Indonesia: '🇮🇩',
+  India: '🇮🇳', Fiji: '🇫🇯', Libya: '🇱🇾', Luxembourg: '🇱🇺', Malta: '🇲🇹',
+  Congo: '🇨🇬', Kenya: '🇰🇪', 'Sierra Leone': '🇸🇱', Liberia: '🇱🇷',
 };
 
 export function flagFor(nationality: string): string {
