@@ -28,11 +28,14 @@ const STEP_OPTIONS = [
   { label: '+10M', delta: 10_000_000 },
 ];
 
+// Red = warmer (closer to the true value), blue = colder (further away). Owner spec.
 function closenessColor(g: ValueGuess) {
   if (g.isCorrect) return 'bg-correct text-correct-foreground';
-  if (g.pctOff <= 0.15) return 'bg-yellow-500 text-white';
-  if (g.pctOff <= 0.40) return 'bg-orange-500 text-white';
-  return 'bg-destructive text-destructive-foreground';
+  if (g.pctOff <= 0.05) return 'bg-red-600 text-white';
+  if (g.pctOff <= 0.15) return 'bg-red-500 text-white';
+  if (g.pctOff <= 0.30) return 'bg-orange-500 text-white';
+  if (g.pctOff <= 0.50) return 'bg-sky-500 text-white';
+  return 'bg-blue-700 text-white';
 }
 
 function closenessLabel(g: ValueGuess) {
@@ -42,6 +45,26 @@ function closenessLabel(g: ValueGuess) {
   if (g.pctOff <= 0.30) return '🌤️ Warm';
   if (g.pctOff <= 0.50) return '❄️ Cool';
   return '🧊 Cold';
+}
+
+function GuessRow({ g }: { g: ValueGuess }) {
+  return (
+    <div className={cn('flex items-center justify-between gap-3 px-4 py-3 rounded-xl', closenessColor(g))}>
+      <div className="font-semibold">{fmtUsd(g.value)}</div>
+      <div className="flex items-center gap-3 text-sm font-semibold">
+        <span>{closenessLabel(g)}</span>
+        {g.direction === 'higher' && (
+          <span className="flex items-center gap-1"><ArrowUp className="w-4 h-4" /> Higher</span>
+        )}
+        {g.direction === 'lower' && (
+          <span className="flex items-center gap-1"><ArrowDown className="w-4 h-4" /> Lower</span>
+        )}
+        {g.direction === 'exact' && (
+          <span className="flex items-center gap-1"><Check className="w-4 h-4" /> Exact</span>
+        )}
+      </div>
+    </div>
+  );
 }
 
 const GuessTransferValue = () => {
@@ -195,29 +218,19 @@ const GuessTransferValue = () => {
             {/* Guess history */}
             {guesses.length > 0 && (
               <div className="mt-6 space-y-2">
-                {guesses.map((g, i) => (
-                  <div
-                    key={i}
-                    className={cn(
-                      'flex items-center justify-between gap-3 px-4 py-3 rounded-xl',
-                      closenessColor(g)
-                    )}
-                  >
-                    <div className="font-semibold">{fmtUsd(g.value)}</div>
-                    <div className="flex items-center gap-3 text-sm font-semibold">
-                      <span>{closenessLabel(g)}</span>
-                      {g.direction === 'higher' && (
-                        <span className="flex items-center gap-1"><ArrowUp className="w-4 h-4" /> Higher</span>
-                      )}
-                      {g.direction === 'lower' && (
-                        <span className="flex items-center gap-1"><ArrowDown className="w-4 h-4" /> Lower</span>
-                      )}
-                      {g.direction === 'exact' && (
-                        <span className="flex items-center gap-1"><Check className="w-4 h-4" /> Exact</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                {/* Your most recent guess, pinned on top */}
+                <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Latest guess</div>
+                <GuessRow g={guesses[guesses.length - 1]} />
+                {guesses.length > 1 && (
+                  <>
+                    <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1 mt-4">All guesses, hottest to coldest</div>
+                    {[...guesses]
+                      .sort((a, b) => a.pctOff - b.pctOff)
+                      .map((g, i) => (
+                        <GuessRow key={i} g={g} />
+                      ))}
+                  </>
+                )}
               </div>
             )}
 
