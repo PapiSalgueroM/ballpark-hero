@@ -431,11 +431,6 @@ export default function Index() {
   );
 }
 
-function formatPlays(n: number): string {
-  if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k plays`;
-  return `${n} plays`;
-}
-
 /**
  * Wave 3 / item #11: wired to public.game_completions via useMostPlayed.
  * Renders unconditionally on every breakpoint (no md: hidden class) so it
@@ -465,7 +460,7 @@ function MostPlayedToday() {
     <section>
       <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">🔥 Most Played Today</p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-        {entries.map(({ game, count, isFallback }) => (
+        {entries.map(({ game, isFallback }) => (
           <Link
             key={game.path}
             to={game.path}
@@ -475,7 +470,7 @@ function MostPlayedToday() {
             <div className="min-w-0">
               <span className="text-xs font-bold text-foreground block truncate">{game.label}</span>
               <span className="text-[10px] text-muted-foreground">
-                {isFallback ? 'Popular pick' : formatPlays(count)}
+                {isFallback ? 'Popular pick' : 'Trending today'}
               </span>
             </div>
           </Link>
