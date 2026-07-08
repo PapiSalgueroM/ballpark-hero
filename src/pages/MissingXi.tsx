@@ -182,8 +182,8 @@ const MissingXi = () => {
                 <h3 className="font-bold text-foreground mb-2">🔍 Guessing</h3>
                 <p className="text-muted-foreground">
                   Search for the missing player by name. You get 3 guesses. Every wrong guess unlocks a new hint:
-                  first their nationality, then the club they played for at the time of the match, then the first
-                  letter of their surname.
+                  first the club they played for at the time of the match, then the first letter of their surname,
+                  then how many letters it has.
                 </p>
               </section>
               <section>

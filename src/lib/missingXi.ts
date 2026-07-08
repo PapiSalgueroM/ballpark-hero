@@ -5288,11 +5288,13 @@ export function isCorrectGuess(guessName: string, candidate: BlankCandidate): bo
  */
 export function hintForLevel(level: HintLevel, candidate: BlankCandidate): string | null {
   if (level <= 0) return null;
-  if (level === 1) return `Nationality: ${candidate.nationality}`;
-  if (level === 2) return `Club at the time: ${candidate.clubAtTime}`;
   const words = candidate.name.trim().split(/\s+/);
   const surname = words[words.length - 1];
-  return `First letter of surname: ${surname.charAt(0).toUpperCase()}`;
+  // Nationality is intentionally NOT a hint: the matchup already implies it, so it was
+  // redundant (owner feedback). Lead with the more useful club clue, then narrow by surname.
+  if (level === 1) return `Club at the time: ${candidate.clubAtTime}`;
+  if (level === 2) return `Surname starts with: ${surname.charAt(0).toUpperCase()}`;
+  return `Surname has ${surname.length} letters`;
 }
 
 /** Score for a correct guess made on `guessNumber` (1-indexed). Returns 0 if guessNumber exceeds MAX_GUESSES. */
