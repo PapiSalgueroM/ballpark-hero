@@ -68,6 +68,7 @@ import TransferPath from "./pages/TransferPath";
 import GuessTransferValue from "./pages/GuessTransferValue";
 import DealOrNoDeal from "./pages/DealOrNoDeal";
 import SquadDeal from "./pages/SquadDeal";
+import ClubManager from "./pages/ClubManager";
 import ListQuiz from "./pages/ListQuiz";
 import PerfectSeasonMlb from "./pages/PerfectSeasonMlb";
 import HigherLowerTransfers from "./pages/HigherLowerTransfers";
@@ -89,6 +90,7 @@ import SignThePlayer from "./pages/SignThePlayer";
 import ConquestNba from "./pages/ConquestNba";
 import PackBattle from "./pages/PackBattle";
 import SportsMillionaire from "./pages/SportsMillionaire";
+import DartsGame from "./pages/DartsGame";
 
 const queryClient = new QueryClient();
 
@@ -241,6 +243,7 @@ const AppContent = () => {
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="/deal-or-no-deal" element={<DealOrNoDeal />} />
         <Route path="/squad-deal" element={<SquadDeal />} />
+        <Route path="/club-manager" element={<ClubManager />} />
         <Route path="/list-quiz" element={<ListQuiz />} />
         <Route path="/perfect-season-mlb" element={<PerfectSeasonMlb />} />
         <Route path="/higher-lower-transfers" element={<HigherLowerTransfers />} />
@@ -262,6 +265,7 @@ const AppContent = () => {
         <Route path="/conquest-nba" element={<ConquestNba />} />
         <Route path="/pack-battle" element={<PackBattle />} />
         <Route path="/sports-millionaire" element={<SportsMillionaire />} />
+        <Route path="/darts" element={<DartsGame />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

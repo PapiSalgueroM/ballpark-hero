@@ -212,6 +212,55 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     sport: 'WNBA', emoji: '🏀', minAnswers: 8,
     fetch: () => col('wnba_finals', 'winner'),
   },
+  {
+    id: 'usopen-tennis-champs',
+    title: 'US Open Singles Champions',
+    blurb: 'Every singles champion at the US Open in our records.',
+    sport: 'Tennis', emoji: '🎾', minAnswers: 15,
+    fetch: () => col('tennis_grand_slam_winners', 'champion', q => q.ilike('tournament', '%us open%')),
+  },
+  {
+    id: 'ausopen-tennis-champs',
+    title: 'Australian Open Singles Champions',
+    blurb: 'Every singles champion at the Australian Open in our records.',
+    sport: 'Tennis', emoji: '🎾', minAnswers: 15,
+    fetch: () => col('tennis_grand_slam_winners', 'champion', q => q.ilike('tournament', '%australian%')),
+  },
+  {
+    id: 'frenchopen-tennis-champs',
+    title: 'French Open Singles Champions',
+    blurb: 'Every singles champion at Roland Garros in our records.',
+    sport: 'Tennis', emoji: '🎾', minAnswers: 15,
+    fetch: () => col('tennis_grand_slam_winners', 'champion', q => q.ilike('tournament', '%french%')),
+  },
+  {
+    id: 'pga-champs',
+    title: 'PGA Championship Winners',
+    blurb: 'Every golfer to win the PGA Championship in our records.',
+    sport: 'Golf', emoji: '⛳', minAnswers: 10,
+    fetch: () => col('golf_majors', 'player_name', q => q.ilike('tournament', '%pga%')),
+  },
+  {
+    id: 'theopen-champs',
+    title: 'The Open Championship Winners',
+    blurb: 'Every golfer to win The Open (British Open) in our records.',
+    sport: 'Golf', emoji: '⛳', minAnswers: 15,
+    fetch: () => col('golf_majors', 'player_name', q => q.ilike('tournament', '%open championship%')),
+  },
+  {
+    id: 'usopen-golf-champs',
+    title: 'U.S. Open (Golf) Winners',
+    blurb: 'Every golfer to win the U.S. Open in our records.',
+    sport: 'Golf', emoji: '⛳', minAnswers: 10,
+    fetch: () => col('golf_majors', 'player_name', q => q.ilike('tournament', '%u.s. open%')),
+  },
+  {
+    id: 'ballon-dor-winners',
+    title: "Ballon d'Or Winners (Men's)",
+    blurb: "Every men's Ballon d'Or winner in our records.",
+    sport: 'Soccer', emoji: '🏆', minAnswers: 15,
+    fetch: () => col('ballon_dor', 'player_name', q => q.eq('rank', 1).eq('award_type', 'Men')),
+  },
 ];
 
 export async function loadPuzzleAnswers(def: ListPuzzleDef): Promise<string[] | null> {

@@ -33,9 +33,12 @@ type Phase = 'playing' | 'revealed';
 /**
  * Missing XI: a famous, real starting lineup is shown on a simple pitch with
  * ONE player blanked out. The player names the missing man in up to 3
- * guesses, with an escalating hint after each miss (nationality, then club
- * at the time, then first letter of the surname). See src/lib/missingXi.ts
- * for the full curated, source-verified lineup data and scoring writeup.
+ * guesses, with an escalating hint after each miss. Hints never repeat what
+ * the card already shows: club lineups hint nationality first, national-team
+ * lineups hint the club at the time first, then the surname's first letter.
+ * See src/lib/missingXi.ts for the full curated lineup data and scoring
+ * writeup (each lineup's `source` field is an internal editor note and is
+ * never rendered; player-facing flavor comes from BlankCandidate.fact).
  *
  * Structural template follows RarityRound.tsx: GameShell, ResultScreen,
  * RulesGate, useGameCompletion, and the same Daily/Unlimited toggle
@@ -146,7 +149,7 @@ const MissingXi = () => {
     return buildEmojiGrid(guessesUsed, won, puzzle.lineup);
   }, [puzzle, guessesUsed, won]);
 
-  const currentHint = puzzle ? hintForLevel(hintLevel, puzzle.candidate) : null;
+  const currentHint = puzzle ? hintForLevel(hintLevel, puzzle.candidate, puzzle.lineup) : null;
 
   const resultHeadline = won
     ? finalScore === 100
@@ -181,9 +184,10 @@ const MissingXi = () => {
               <section>
                 <h3 className="font-bold text-foreground mb-2">🔍 Guessing</h3>
                 <p className="text-muted-foreground">
-                  Search for the missing player by name. You get 3 guesses. Every wrong guess unlocks a new hint:
-                  first the club they played for at the time of the match, then the first letter of their surname,
-                  then how many letters it has.
+                  Search for the missing player by name. You get 3 guesses. Every wrong guess unlocks a new hint,
+                  and hints never repeat what the card already tells you: for a club lineup you get the player's
+                  nationality, for a national-team lineup you get the club they played for at the time. After
+                  that, the first letter of their surname, then how many letters it has.
                 </p>
               </section>
               <section>
@@ -303,9 +307,18 @@ const MissingXi = () => {
                   outcomeEmoji={outcomeEmoji}
                   headline={resultHeadline}
                   statLine={
-                    won
-                      ? `${puzzle.candidate.name} was the missing ${puzzle.lineup.slots[puzzle.candidate.slotIndex].position}. Solved in ${guessesUsed}/${MAX_GUESSES} guesses.`
-                      : `The missing player was ${puzzle.candidate.name} (${puzzle.lineup.slots[puzzle.candidate.slotIndex].position}).`
+                    <>
+                      {won
+                        ? `${puzzle.candidate.name} was the missing ${puzzle.lineup.slots[puzzle.candidate.slotIndex].position}. Solved in ${guessesUsed}/${MAX_GUESSES} guesses.`
+                        : `The missing player was ${puzzle.candidate.name} (${puzzle.lineup.slots[puzzle.candidate.slotIndex].position}).`}
+                      {/* One hand-verified flavor fact, only when the puzzle data
+                          carries one. Never sources/citations, never invented. */}
+                      {puzzle.candidate.fact && (
+                        <span className="block text-muted-foreground text-sm mt-1">
+                          💡 {puzzle.candidate.fact}
+                        </span>
+                      )}
+                    </>
                   }
                   statRow={[{ label: 'Score', value: finalScore }]}
                   emojiGrid={emojiGrid}
@@ -330,7 +343,7 @@ const MissingXi = () => {
 
         <GameSeoContent
           title="Missing XI: Guess the Famous Lineup's Missing Player"
-          description="A real, famous starting XI from soccer history with one player blanked out. Name the missing man using nationality, club and first-letter hints. Champions League finals, World Cup finals, Euros finals and iconic title deciders, all verified against real match reports."
+          description="A real, famous starting XI from soccer history with one player blanked out. Name the missing man with escalating hints that never repeat what the card already shows. Champions League finals, World Cup finals, Euros finals and iconic title deciders."
           howToPlay={[
             'Read the match details and look at the pitch.',
             'One tile shows a position with no name.',

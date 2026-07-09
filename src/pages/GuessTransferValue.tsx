@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useGuessTransferValue, ValueGuess } from '@/hooks/useGuessTransferValue';
+import { useGuessTransferValue } from '@/hooks/useGuessTransferValue';
 import { cn } from '@/lib/utils';
-import { ArrowUp, ArrowDown, Check, Minus, Plus } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -10,6 +10,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PostGameStats from '@/components/game/PostGameStats';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { LatestGuessCard, GuessHistory } from '@/components/transfer-value/GuessHeat';
 
 const fmtUsd = (n: number) =>
   '$' + Math.round(n).toLocaleString('en-US');
@@ -21,51 +22,14 @@ const fmtCompact = (n: number) => {
   return `$${n}`;
 };
 
+const fmtPct = (p: number) => `${Math.round(p * 100)}%`;
+
 const STEP_OPTIONS = [
   { label: '-10M', delta: -10_000_000 },
   { label: '-1M', delta: -1_000_000 },
   { label: '+1M', delta: 1_000_000 },
   { label: '+10M', delta: 10_000_000 },
 ];
-
-// Red = warmer (closer to the true value), blue = colder (further away). Owner spec.
-function closenessColor(g: ValueGuess) {
-  if (g.isCorrect) return 'bg-correct text-correct-foreground';
-  if (g.pctOff <= 0.05) return 'bg-red-600 text-white';
-  if (g.pctOff <= 0.15) return 'bg-red-500 text-white';
-  if (g.pctOff <= 0.30) return 'bg-orange-500 text-white';
-  if (g.pctOff <= 0.50) return 'bg-sky-500 text-white';
-  return 'bg-blue-700 text-white';
-}
-
-function closenessLabel(g: ValueGuess) {
-  if (g.isCorrect) return 'Bullseye';
-  if (g.pctOff <= 0.05) return '🔥 Scorching';
-  if (g.pctOff <= 0.15) return '♨️ Hot';
-  if (g.pctOff <= 0.30) return '🌤️ Warm';
-  if (g.pctOff <= 0.50) return '❄️ Cool';
-  return '🧊 Cold';
-}
-
-function GuessRow({ g }: { g: ValueGuess }) {
-  return (
-    <div className={cn('flex items-center justify-between gap-3 px-4 py-3 rounded-xl', closenessColor(g))}>
-      <div className="font-semibold">{fmtUsd(g.value)}</div>
-      <div className="flex items-center gap-3 text-sm font-semibold">
-        <span>{closenessLabel(g)}</span>
-        {g.direction === 'higher' && (
-          <span className="flex items-center gap-1"><ArrowUp className="w-4 h-4" /> Higher</span>
-        )}
-        {g.direction === 'lower' && (
-          <span className="flex items-center gap-1"><ArrowDown className="w-4 h-4" /> Lower</span>
-        )}
-        {g.direction === 'exact' && (
-          <span className="flex items-center gap-1"><Check className="w-4 h-4" /> Exact</span>
-        )}
-      </div>
-    </div>
-  );
-}
 
 const GuessTransferValue = () => {
   const {
@@ -78,6 +42,7 @@ const GuessTransferValue = () => {
     makeGuess,
     newUnlimitedPlayer,
     maxGuesses,
+    attemptsLeft,
     emojiGrid,
   } = useGuessTransferValue();
 
@@ -129,6 +94,11 @@ const GuessTransferValue = () => {
               Guesses:{' '}
               <span className="text-foreground font-semibold">{guesses.length}</span>{' '}
               / {maxGuesses}
+              {gameStatus === 'playing' && (
+                <span className={cn('ml-2 font-semibold', attemptsLeft <= 2 ? 'text-destructive' : 'text-primary')}>
+                  · {attemptsLeft} left
+                </span>
+              )}
             </p>
           </>
         }
@@ -212,23 +182,29 @@ const GuessTransferValue = () => {
                     Guess
                   </button>
                 </div>
+                <p className="text-center text-xs text-muted-foreground mt-3">
+                  <span className={cn('font-semibold', attemptsLeft <= 2 ? 'text-destructive' : 'text-foreground')}>
+                    {attemptsLeft}
+                  </span>{' '}
+                  {attemptsLeft === 1 ? 'guess' : 'guesses'} remaining · red means warmer, blue means colder
+                </p>
               </div>
             )}
 
-            {/* Guess history */}
+            {/* Guess feedback: current guess pinned big on top, then every
+                guess sorted hottest -> coldest on the warm/cold scale. */}
             {guesses.length > 0 && (
               <div className="mt-6 space-y-2">
-                {/* Your most recent guess, pinned on top */}
-                <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Latest guess</div>
-                <GuessRow g={guesses[guesses.length - 1]} />
+                <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
+                  {gameStatus === 'playing' ? 'Latest guess' : 'Final guess'}
+                </div>
+                <LatestGuessCard g={guesses[guesses.length - 1]} />
                 {guesses.length > 1 && (
                   <>
-                    <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1 mt-4">All guesses, hottest to coldest</div>
-                    {[...guesses]
-                      .sort((a, b) => a.pctOff - b.pctOff)
-                      .map((g, i) => (
-                        <GuessRow key={i} g={g} />
-                      ))}
+                    <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1 mt-4">
+                      All guesses · hottest to coldest
+                    </div>
+                    <GuessHistory guesses={guesses} latest={guesses[guesses.length - 1]} />
                   </>
                 )}
               </div>
@@ -247,7 +223,23 @@ const GuessTransferValue = () => {
                       <span className="font-bold text-primary">{fmtUsd(target.marketValue)}</span>
                     </>
                   }
-                  funFact={`${target.club} · ${target.position}`}
+                  funFact={
+                    guesses.length > 0
+                      ? `Your first guess was ${fmtPct(guesses[0].pctOff)} off. ${target.club} · ${target.position}`
+                      : `${target.club} · ${target.position}`
+                  }
+                  statRow={
+                    guesses.length > 0
+                      ? [
+                          { label: 'First guess', value: `${fmtPct(guesses[0].pctOff)} off` },
+                          {
+                            label: 'Closest',
+                            value: `${fmtPct(Math.min(...guesses.map(g => g.pctOff)))} off`,
+                          },
+                          { label: 'Guesses', value: `${guesses.length}/${maxGuesses}` },
+                        ]
+                      : undefined
+                  }
                   emojiGrid={emojiGrid || `${gameStatus === 'won' ? '🎯' : '😞'} ${target.name}`}
                   share={{
                     score: gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`,

@@ -22,6 +22,18 @@ export function getTodayET(): string {
 }
 
 /**
+ * Poll-of-the-day rollover: polls flip at NOON Eastern, not midnight (owner
+ * request: the day's polls should rotate in at 12pm ET). Implemented by
+ * shifting the instant back 12h before taking the ET date, so 11:59am ET
+ * still shows yesterday's polls and 12:00pm ET flips to today's.
+ */
+export function getPollDayET(): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/New_York',
+  }).format(new Date(Date.now() - 12 * 60 * 60 * 1000));
+}
+
+/**
  * Converts a YYYY-MM-DD date string to an integer for use as a modulo seed.
  * e.g. "2026-05-25" → 20260525
  *

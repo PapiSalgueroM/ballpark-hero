@@ -1,12 +1,15 @@
 import { supabase } from '@/integrations/supabase/client';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 import type { PlayerEntity } from '@/lib/playerSearch';
 
 /**
  * Who Am I? (Goltexto / Contexto style secret-footballer game)
  *
  * Data source: player_market_values (player_name, nationality, position, club,
- * market_value_usd, age, year). Rows exist for 2004-2026; recent years are used
- * for the pool, all years feed each player's club-history set.
+ * market_value_usd, age, year). Rows exist for 2004-2026; only CURRENT rows
+ * (year >= 2025, latest year per player, 2026 preferred) feed the pool and
+ * every displayed attribute, while all years feed each player's club-history
+ * set. See the CURRENT-ROW ATTRIBUTES section below for why.
  *
  * SIMILARITY SCORING (exact weights, verified in SQL against live rows):
  *   +22  same nationality (primary nationality, accent-insensitive)
@@ -80,20 +83,36 @@ import type { PlayerEntity } from '@/lib/playerSearch';
  * POSSIBLE SECRETS was always fine and is not widened here.
  *
  * Because a wide-pool guess can now be any of 27k+ players, whoAmIPlayerFromEntity
- * below builds a WhoAmIPlayer straight from PlayerAutocomplete's PlayerEntity
- * meta fields (club/nationality/position/value/year/age all ride along on
- * SOCCER_MARKET_VALUE_SOURCE, see playerSearch.ts). scoreGuess() already
- * degrades gracefully for a guess like this: sameClub still compares current
- * clubs directly (no lookup needed), and sharedClubPast simply reports false
- * for a guess whose name isn't a key in the boot pool's clubHistory map
- * (nothing throws, it just means that one signal is unavailable for players
- * outside the curated pool, which is an acceptable trade for "every player is
- * guessable"). Age is read from PlayerEntity.meta.age (added to
- * SOCCER_MARKET_VALUE_SOURCE's metaColumns for this fix); the underlying
- * column is null on only 3 of 171,567 rows (verified via SQL), so this is
- * safe in the overwhelming majority of cases and never throws when absent
- * (Number(undefined) || 0 degrades to a 0-age guess, same as any other
- * missing numeric field already handled here).
+ * below converts PlayerAutocomplete's PlayerEntity into a WhoAmIPlayer.
+ * scoreGuess() degrades gracefully for a guess outside the curated pool:
+ * sameClub still compares current clubs directly (no lookup needed), and
+ * sharedClubPast simply reports false for a guess whose name isn't a key in
+ * the boot pool's clubHistory map (nothing throws, that one signal is just
+ * unavailable, an acceptable trade for "every player is guessable").
+ *
+ * CURRENT-ROW ATTRIBUTES (2026-07-08, owner complaint: "put Messi but it says
+ * he's 30 and plays for Arsenal. He's 39 at Inter Miami. Ozil was guessable
+ * even though he's retired"). Two related root causes, verified via SQL:
+ *   1. The old boot fetch pulled the top 1000 rows by value across year >=
+ *      2024 and deduped keeping the latest FETCHED row — but for a faded star
+ *      only the peak-value seasons survive a value-ordered fetch, so the
+ *      "latest" row kept could still be years old. Worse, the guess converter
+ *      read PlayerEntity.meta, and playerSearch's dedupe keeps each player's
+ *      HIGHEST-VALUE row across all years — i.e. the peak-year row (Ozil's
+ *      Arsenal seasons, Messi in his 20s), which is what got displayed.
+ *   2. Long-retired players have big historical values, so nothing stopped
+ *      them appearing with those stale attributes.
+ * Fix: fetchWhoAmIPool now pages ALL rows for year >= 2025 (via fetchAllRows,
+ * ~13.8k rows across 2025+2026, verified via SQL 2026-07-08), keeps each
+ * player's latest row (2026 preferred, else 2025; value breaks ties), THEN
+ * takes the top POOL_SIZE by that CURRENT value. The full current-row map is
+ * kept module-level so whoAmIPlayerFromEntity resolves every guess to its
+ * current row (Messi -> Inter Miami CF, age 39, $12.8M). A guessed player
+ * with NO 2025+ row is retired: they are impossible as secrets (not in the
+ * pool) and are never displayed with stale peak-year attributes — the guess
+ * is still accepted, but it renders as club "Retired" with no age/value, and
+ * scores accordingly low. Attribute comparisons therefore always run on
+ * current rows only.
  */
 
 export interface WhoAmIPlayer {
@@ -148,11 +167,11 @@ export const SECRET_POOL_SIZE = 200; // the secret is always drawn from the top 
 
 // #40: prominence tiers for the secret pick, unlimited/practice play only
 // (this game has no separate daily mode; Casual/Expert guess budgets are
-// untouched by this setting). Verified via read-only SQL against
-// player_market_values on 2026-07-03: splitting the 200-player secret pool
-// into thirds by peak market value gives 67/67/66. Easy draws the top third
-// (most famous, value >= 65M), Hard draws the bottom third (value < 49M),
-// Normal is the untouched 200-player secret pool.
+// untouched by this setting). The 200-player secret pool splits into thirds
+// by CURRENT market value (67/67/66): Easy draws the top third (most famous),
+// Hard the bottom third, Normal the untouched 200. Since the 2026-07-08
+// current-rows fix the pool ranks by each player's latest 2025/2026 value,
+// so the exact dollar cutoffs drift with live data.
 export type WhoAmIDifficulty = 'easy' | 'normal' | 'hard';
 const DIFFICULTY_STORAGE_KEY = 'who-am-i-difficulty';
 
@@ -184,8 +203,9 @@ export function buildWhoAmISecretPool(
   return difficulty === 'easy' ? sorted.slice(0, third) : sorted.slice(sorted.length - third);
 }
 
-const POOL_ROW_FETCH = 1000; // top rows by value from recent years, deduped down to POOL_SIZE
-const POOL_MIN_YEAR = 2024;
+/** Years whose rows count as "current". A player with no row in any of these is treated as retired. */
+const CURRENT_YEARS = [2026, 2025] as const;
+const CURRENT_ROWS_MAX = 12000; // per-year safety valve for the paged boot fetch (~5.4k/8.4k real rows)
 const HISTORY_CHUNK = 80; // names per .in() filter, keeps request URLs comfortably small
 const HISTORY_PAGE = 1000; // PostgREST row cap per request
 const HISTORY_MAX_PAGES = 6; // safety valve: 80 names x 23 seasons is well under 6000 rows
@@ -306,27 +326,62 @@ export function pickSecret(pool: WhoAmIPlayer[], excludeName?: string): WhoAmIPl
 }
 
 /**
+ * Full current-row map built by fetchWhoAmIPool: normalized player name ->
+ * that player's latest 2025/2026 row. Module-level so the synchronous guess
+ * converter below can resolve ANY guessed player to current attributes
+ * without an extra round-trip per guess. Null until the boot fetch succeeds
+ * (the game can't start before that, so guesses never race it).
+ */
+let currentRowsCache: Map<string, WhoAmIPlayer> | null = null;
+
+/**
  * Converts a PlayerAutocomplete search result (PlayerEntity, from the wide
  * SOCCER_MARKET_VALUE_SOURCE pool of 27k+ players) into the WhoAmIPlayer
- * shape scoreGuess() expects. This is the piece that makes "any player is
- * guessable" work: the guess box no longer requires the guessed player to be
- * one of the 400 rows fetched at boot, it just needs whatever fields came
- * back from the search, same as every other PlayerAutocomplete consumer.
+ * shape scoreGuess() expects.
  *
- * Every field falls back to a safe default (empty string / 0) rather than
- * throwing when the underlying row is missing that column, so scoreGuess()
- * always gets plain numbers/strings to do arithmetic and string-compares on.
- * `year` defaults to 0, which only affects tie-breaking inside this game's
- * own pool building (buildWhoAmISecretPool/pickSecret), neither of which is
- * ever called on a converted guess (guesses are never candidates to become
- * the secret), so it has no effect on scoring or fairness.
+ * The entity's own meta is deliberately NOT trusted for club/age/value:
+ * playerSearch dedupes by highest value, so meta carries the PEAK-year row
+ * (Ozil at Arsenal, a 20-something Messi — see CURRENT-ROW ATTRIBUTES in the
+ * file header). Instead the guess is resolved against the current-row map:
+ *   - current row found  -> use it verbatim (canonical DB name spelling too,
+ *     which keeps scoreGuess's exact-name check aligned with pool secrets).
+ *   - no 2025+ row       -> the player is retired: keep the permanent facts
+ *     (nationality, position) so those chips stay meaningful, but show club
+ *     "Retired" and no age/value rather than stale peak-year numbers. The
+ *     zeros score 0 age/value points and "Retired" never club-matches
+ *     (clubKey() maps it to ''), so a retired punt reads as far-off, which
+ *     it is.
+ * The legacy meta mapping only remains as a fallback for the impossible-in-
+ * practice case that the cache is missing (it is set before any game starts).
  */
 export function whoAmIPlayerFromEntity(entity: PlayerEntity): WhoAmIPlayer {
   const meta = entity.meta;
+  const nationality = typeof meta.nationality === 'string' ? meta.nationality : '';
+  const position = typeof meta.position === 'string' ? meta.position : '';
+
+  const current = currentRowsCache?.get(normalizeName(entity.name));
+  if (current) return current;
+
+  if (currentRowsCache) {
+    // No 2025+ row: retired (or out of covered football). Never display the
+    // stale peak-year club/age/value that entity.meta carries.
+    return {
+      name: entity.name,
+      nationality,
+      position,
+      club: 'Retired',
+      value: 0,
+      age: 0,
+      year: 0,
+    };
+  }
+
+  // Cache unavailable (should not happen in the normal boot flow): legacy
+  // meta-based mapping so the function still returns something sane.
   return {
     name: entity.name,
-    nationality: typeof meta.nationality === 'string' ? meta.nationality : '',
-    position: typeof meta.position === 'string' ? meta.position : '',
+    nationality,
+    position,
     club: typeof meta.club === 'string' ? meta.club : '',
     value: Number(meta.value) || 0,
     age: Number(meta.age) || 0,
@@ -414,47 +469,71 @@ async function fetchClubHistory(names: string[]): Promise<Map<string, Set<string
 }
 
 /**
- * Boot fetch: top rows by market value from recent years, deduped by player
- * name keeping the most recent row (value breaks ties), trimmed to POOL_SIZE,
- * plus career club-history sets. Returns null on any failure so the page can
- * show an error state with retry.
+ * Boot fetch: ALL current rows (year >= 2025, paged via fetchAllRows since
+ * both years together are ~13.8k rows, far past PostgREST's 1000-row cap),
+ * deduped by player keeping the LATEST year (2026 preferred, else 2025;
+ * value breaks same-year ties), THEN trimmed to the top POOL_SIZE by that
+ * current value. This ordering matters: dedupe-then-rank guarantees a faded
+ * legend's peak-year row can never sneak into the pool, and anyone with no
+ * current row at all (retired) never enters it. The full deduped map is also
+ * cached module-level for whoAmIPlayerFromEntity. Career club-history sets
+ * are fetched for pool members as before. Returns null on any failure so the
+ * page can show an error state with retry.
  */
 export async function fetchWhoAmIPool(): Promise<WhoAmIData | null> {
   try {
-    const { data: rows, error } = await supabase
-      .from('player_market_values')
-      .select('player_name, nationality, position, club, market_value_usd, age, year')
-      .gte('year', POOL_MIN_YEAR)
-      .gt('market_value_usd', 0)
-      .not('age', 'is', null)
-      .order('market_value_usd', { ascending: false })
-      .limit(POOL_ROW_FETCH);
-    if (error || !rows) return null;
+    const results = await Promise.all(
+      CURRENT_YEARS.map(year =>
+        fetchAllRows<PoolRow>(
+          (from, to) =>
+            supabase
+              .from('player_market_values')
+              .select('player_name, nationality, position, club, market_value_usd, age, year')
+              .eq('year', year)
+              .gt('market_value_usd', 0)
+              .not('age', 'is', null)
+              .order('id', { ascending: true })
+              .range(from, to),
+          CURRENT_ROWS_MAX,
+        ),
+      ),
+    );
+    // A partial current-row map would misclassify active players as retired,
+    // so any failed page fails the whole boot (the page offers retry).
+    if (results.some(r => r.error)) return null;
 
-    const byName = new Map<string, WhoAmIPlayer>();
-    for (const r of rows as PoolRow[]) {
-      const name = (r.player_name ?? '').trim();
-      const value = Number(r.market_value_usd) || 0;
-      const age = Number(r.age) || 0;
-      const year = Number(r.year) || 0;
-      if (!name || value <= 0 || age <= 0) continue;
-      const candidate: WhoAmIPlayer = {
-        name,
-        nationality: (r.nationality ?? '').trim(),
-        position: (r.position ?? '').trim(),
-        club: (r.club ?? '').trim(),
-        value,
-        age,
-        year,
-      };
-      const prev = byName.get(name);
-      if (!prev || year > prev.year || (year === prev.year && value > prev.value)) {
-        byName.set(name, candidate);
+    const byKey = new Map<string, WhoAmIPlayer>();
+    for (const result of results) {
+      for (const r of result.data) {
+        const name = (r.player_name ?? '').trim();
+        const value = Number(r.market_value_usd) || 0;
+        const age = Number(r.age) || 0;
+        const year = Number(r.year) || 0;
+        if (!name || value <= 0 || age <= 0) continue;
+        const candidate: WhoAmIPlayer = {
+          name,
+          nationality: (r.nationality ?? '').trim(),
+          position: (r.position ?? '').trim(),
+          club: (r.club ?? '').trim(),
+          value,
+          age,
+          year,
+        };
+        const key = normalizeName(name);
+        const prev = byKey.get(key);
+        if (!prev || year > prev.year || (year === prev.year && value > prev.value)) {
+          byKey.set(key, candidate);
+        }
       }
     }
 
-    const pool = [...byName.values()].sort((a, b) => b.value - a.value).slice(0, POOL_SIZE);
+    const pool = [...byKey.values()]
+      // name breaks value ties so every client ranks the pool identically
+      .sort((a, b) => b.value - a.value || a.name.localeCompare(b.name))
+      .slice(0, POOL_SIZE);
     if (pool.length < 50) return null;
+
+    currentRowsCache = byKey;
 
     const clubHistory = await fetchClubHistory(pool.map(p => p.name));
     // Every player at least carries their current club, even if a history page failed short.

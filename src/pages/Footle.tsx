@@ -74,6 +74,25 @@ const Index = () => {
     return best;
   }, [guesses]);
 
+  // ---- Unlimited tier purity (owner: "I put unlimited mode on insane and I
+  // just got Messi") -----------------------------------------------------------
+  // useGame's buildPool() is cumulative for target selection (hard = easy+hard,
+  // insane = the whole pool), so the hook can roll a superstar as the insane
+  // answer. The GUESSABLE list should stay cumulative (probing with stars is
+  // legitimate), but the TARGET must come from the selected tier only. useGame
+  // is out of scope for this fix, so a fresh unlimited round (no guesses yet)
+  // re-rolls until the target's own tier matches the selected difficulty. With
+  // the new pool (~80 easy / ~220 hard / ~1,000 insane) this converges in 1-2
+  // rolls; the some() guard prevents a re-roll loop if a tier is absent (e.g.
+  // the obscure batch failed and the pool has no insane players).
+  useEffect(() => {
+    if (mode !== 'unlimited' || gameStatus !== 'playing' || isLoadingPool) return;
+    if (guesses.length > 0 || !targetPlayer) return;
+    if (targetPlayer.difficulty === difficulty) return;
+    if (!availablePlayers.some(p => p.difficulty === difficulty)) return;
+    resetGame();
+  }, [mode, gameStatus, isLoadingPool, guesses.length, targetPlayer, difficulty, availablePlayers, resetGame]);
+
   return (
     <>
       <PageSeo
@@ -143,9 +162,9 @@ const Index = () => {
               <section>
                 <h3 className="font-bold text-foreground mb-2">⚙️ Difficulty Modes</h3>
                 <ul className="space-y-1.5 text-muted-foreground">
-                  <li><span className="text-foreground font-semibold">Easy:</span> Popular stars from the top 5 leagues</li>
-                  <li><span className="text-foreground font-semibold">Hard:</span> Includes reserves &amp; rotation players</li>
-                  <li><span className="text-foreground font-semibold">Insane:</span> Any player from the top 20 leagues worldwide</li>
+                  <li><span className="text-foreground font-semibold">Easy:</span> The world's most famous stars &amp; legends</li>
+                  <li><span className="text-foreground font-semibold">Hard:</span> Squad &amp; rotation names from big clubs</li>
+                  <li><span className="text-foreground font-semibold">Insane:</span> Genuinely obscure pros: second divisions, smaller leagues, deep squads</li>
                 </ul>
               </section>
             </HowToPlayPopover>

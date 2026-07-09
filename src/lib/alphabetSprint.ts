@@ -20,6 +20,10 @@ import { normalizeName, WhoAmIPlayer } from '@/lib/whoAmI';
  * Scoring: +1 per correct pick, +1 bonus on every STREAK_BONUS_EVERY-th pick
  * in a row. Skipping never costs points (only time) but restarts the streak.
  * Each player can be named once per run.
+ *
+ * Answers are typed in full and submitted (resolveSprintGuess below) — there
+ * is deliberately no autocomplete during play, since suggestions were handing
+ * the answers over after two typed letters.
  */
 
 export type SprintModeId = 'relaxed' | 'classic' | 'insane';
@@ -142,33 +146,81 @@ export function drawLetter(
   return entries[entries.length - 1][0];
 }
 
+// ---------------------------------------------------------------------------
+// Guess resolution (2026-07-08, owner: "too easy — they can just put two
+// letters and the suggestion gives them the answer; make them spell out the
+// name and submit"). The old suggestForLetter() showed live suggestions after
+// 2 typed letters, which handed the answers over. There is no suggestion list
+// during play anymore: the player spells a name and submits, and the resolver
+// below decides whether it names exactly one unused player on the current
+// letter. Timer, streaks and scoring are untouched.
+// ---------------------------------------------------------------------------
+
+export type SprintGuessOutcome =
+  | { kind: 'hit'; player: SprintPlayer }
+  /** The bare surname fits 2+ unused pool players; the UI asks for the full name without listing them. */
+  | { kind: 'ambiguous'; count: number }
+  | { kind: 'miss' };
+
 /**
- * Accent-insensitive suggestions for the current letter. Requires 2+ typed
- * characters. Only unnamed players whose surname sits on the target letter are
- * returned; surname prefixes rank first, then any-word prefixes, then
- * substrings. The pool is value sorted, so famous names float up per tier.
+ * normalizeName plus punctuation folding, so "alexander arnold" matches
+ * "Alexander-Arnold" and "oneill" matches "O'Neill" without accent or case
+ * fuss (normalizeName already handles those).
  */
-export function suggestForLetter(
+function foldForMatch(s: string): string {
+  return normalizeName(s)
+    .replace(/['’]/g, '')
+    .replace(/-/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Resolves a typed, submitted guess against the unused players on the target
+ * letter. Lenient on the FORM of the answer, strict on knowing it:
+ *   - full name always accepted ("virgil van dijk", accents/case ignored);
+ *   - a bare surname is accepted ONLY when it fits exactly one unused player
+ *     on this letter ("haaland"); if several fit ("silva"), the result is
+ *     'ambiguous' and the UI asks for the full name WITHOUT revealing the
+ *     candidates;
+ *   - a multi-word name tail counts as a surname answer too ("van dijk"),
+ *     but only when it contains the real surname word, so lone suffixes like
+ *     "junior" never match Vinicius Junior.
+ * Anything else is a miss. Nothing here ever returns a list of names, so the
+ * UI cannot leak answers the player didn't already know.
+ */
+export function resolveSprintGuess(
   players: SprintPlayer[],
   letter: string,
-  query: string,
+  rawInput: string,
   used: Set<string>,
-  limit = 8,
-): SprintPlayer[] {
-  const q = normalizeName(query);
-  if (q.length < 2) return [];
-  const surnameStarts: SprintPlayer[] = [];
-  const wordStarts: SprintPlayer[] = [];
-  const contains: SprintPlayer[] = [];
+): SprintGuessOutcome {
+  const q = foldForMatch(rawInput);
+  if (q.length < 2) return { kind: 'miss' };
+  const qTokenCount = q.split(' ').length;
+
+  const surnameMatches: SprintPlayer[] = [];
   for (const p of players) {
     if (p.letter !== letter || used.has(p.name)) continue;
-    const full = normalizeName(p.name);
-    if (normalizeName(p.surname).startsWith(q)) surnameStarts.push(p);
-    else if (full.split(' ').some(w => w.startsWith(q))) wordStarts.push(p);
-    else if (full.includes(q)) contains.push(p);
-    if (surnameStarts.length >= limit) break;
+    const full = foldForMatch(p.name);
+    if (full === q) return { kind: 'hit', player: p };
+    const surname = foldForMatch(p.surname);
+    if (surname === q) {
+      surnameMatches.push(p);
+      continue;
+    }
+    if (qTokenCount >= 2 && surname) {
+      const fullTokens = full.split(' ');
+      if (qTokenCount < fullTokens.length) {
+        const tail = fullTokens.slice(fullTokens.length - qTokenCount).join(' ');
+        if (tail === q && q.includes(surname)) surnameMatches.push(p);
+      }
+    }
   }
-  return [...surnameStarts, ...wordStarts, ...contains].slice(0, limit);
+
+  if (surnameMatches.length === 1) return { kind: 'hit', player: surnameMatches[0] };
+  if (surnameMatches.length > 1) return { kind: 'ambiguous', count: surnameMatches.length };
+  return { kind: 'miss' };
 }
 
 /** Points for a correct pick that brings the streak up to newStreak. */

@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { TOTAL_GAMES } from '@/data/gameRegistry';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
+import { getGlobalCurrentStreak } from '@/lib/streaks';
 
 interface GameNavbarStats {
   gamesPlayedToday: number;
@@ -11,10 +13,27 @@ interface GameNavbarStats {
   loading: boolean;
 }
 
-
-
+/**
+ * Header stats, rebuilt (owner: "the data on the top of screen never changed.
+ * It still says zero points and zero out of 70 games played. And don't say my
+ * rank either").
+ *
+ * The old version read user_scores / daily_completions — tables that do NOT
+ * exist in the live project — and returned zeros for guests entirely. Now:
+ * - Identity: getCurrentPlayerName(profile) — the same handle (guest
+ *   "Baller-1234" or profile name) that game_completions rows are written
+ *   under, so guests get real numbers too.
+ * - Points today + world rank: the global_rank RPC (same normalized scoring
+ *   as the sitewide leaderboard — each game's best run of the day is worth
+ *   up to 100 pts).
+ * - Games played today: distinct games from game_completions for this
+ *   handle, floored by the local same-browser count so the chip updates
+ *   instantly even if the insert is still in flight.
+ * - Streak: the local streak engine (the server never tracked one).
+ */
 export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
-  const { user } = useAuth();
+  const { profile } = useAuth();
+  const playerName = getCurrentPlayerName(profile);
   const [stats, setStats] = useState<GameNavbarStats>({
     gamesPlayedToday: 0,
     totalPointsToday: 0,
@@ -25,130 +44,87 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
   const fetchingRef = useRef(false);
 
   const fetchStats = useCallback(async () => {
-    if (!user) {
-      console.log('[NavbarStats] No user, resetting stats');
-      setStats({ gamesPlayedToday: 0, totalPointsToday: 0, dailyRank: null, currentStreak: 0, loading: false });
-      return;
-    }
-
-    // Prevent concurrent fetches
     if (fetchingRef.current) return;
     fetchingRef.current = true;
-    console.log('[NavbarStats] 🔄 Fetching stats for user:', user.id);
 
     try {
-      const today = new Date().toISOString().split('T')[0];
+      const todayUtc = new Date().toISOString().split('T')[0];
 
-      // Fetch user's own score from user_scores
-      const { data: userScore, error: scoreError } = await supabase
-        .from('user_scores')
-        .select('total_points, current_streak')
-        .eq('user_id', user.id)
-        .single();
+      const [rankRes, playedRes] = await Promise.all([
+        (supabase.rpc as any)('global_rank', {
+          p_player: playerName,
+          p_period: 'today',
+          p_games: null,
+        }),
+        (supabase.from as any)('game_completions')
+          .select('game')
+          .eq('player_name', playerName)
+          .eq('completed_on', todayUtc),
+      ]);
 
-      if (scoreError && scoreError.code !== 'PGRST116') {
-        console.error('[NavbarStats] ❌ Failed to fetch user score:', scoreError);
-      }
+      const rankRow = Array.isArray(rankRes?.data) ? rankRes.data[0] : rankRes?.data ?? null;
+      const totalPointsToday = rankRow ? Number(rankRow.total_points) || 0 : 0;
+      const dailyRank = rankRow && Number(rankRow.rank) > 0 ? Number(rankRow.rank) : null;
 
-      // Count distinct games completed today from daily_completions
-      const { count: gamesPlayedCount, error: completionsError } = await supabase
-        .from('daily_completions')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id)
-        .eq('date', today);
-
-      if (completionsError) {
-        console.error('[NavbarStats] ❌ Failed to fetch daily completions:', completionsError);
-      }
-
-      const totalPoints = userScore?.total_points || 0;
-      const gamesPlayed = gamesPlayedCount || 0;
-      const streak = (userScore as any)?.current_streak || 0;
-
-      // Fetch all scores for rank calculation
-      const { data: allScores } = await supabase
-        .from('user_scores')
-        .select('user_id, total_points')
-        .order('total_points', { ascending: false });
-
-      const rank = allScores
-        ? allScores.findIndex(s => s.user_id === user.id) + 1
-        : null;
-
-      console.log(`[NavbarStats] ✅ Games: ${gamesPlayed}, Points: ${totalPoints}, Rank: ${rank}, Streak: ${streak}`);
+      const serverGames = playedRes?.data
+        ? new Set((playedRes.data as Array<{ game: string }>).map((r) => r.game)).size
+        : 0;
+      const gamesPlayedToday = Math.max(serverGames, getLocalTodayCount());
 
       setStats({
-        gamesPlayedToday: gamesPlayed,
-        totalPointsToday: totalPoints,
-        dailyRank: rank && rank > 0 ? rank : null,
-        currentStreak: streak,
+        gamesPlayedToday,
+        totalPointsToday,
+        dailyRank,
+        currentStreak: getGlobalCurrentStreak(),
         loading: false,
       });
     } catch (error) {
-      console.error('[NavbarStats] ❌ Failed to fetch game navbar stats:', error);
-      setStats(prev => ({ ...prev, loading: false }));
+      console.debug('[NavbarStats] fetch failed:', error);
+      // Even offline, show local truths rather than dashes.
+      setStats((prev) => ({
+        ...prev,
+        gamesPlayedToday: Math.max(prev.gamesPlayedToday, getLocalTodayCount()),
+        currentStreak: getGlobalCurrentStreak(),
+        loading: false,
+      }));
     } finally {
       fetchingRef.current = false;
     }
-  }, [user]);
+  }, [playerName]);
 
   useEffect(() => {
     fetchStats();
 
-    if (!user) return;
-
-    // Subscribe to realtime changes on user_scores
-    const channel = supabase
-      .channel('user_scores_realtime')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'user_scores',
-          filter: `user_id=eq.${user.id}`,
-        },
-        () => {
-          console.log('[NavbarStats] 📡 Realtime update received');
-          fetchStats();
-        }
-      )
-      .subscribe();
-
-    // Refetch when app comes back to foreground (critical for mobile)
+    // Refetch when the app comes back to the foreground (mobile) or focus.
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        console.log('[NavbarStats] 👁️ Visibility change: visible — refetching');
-        fetchStats();
-      }
+      if (document.visibilityState === 'visible') fetchStats();
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Refetch on window focus (covers tab switching on desktop too)
-    const handleFocus = () => {
-      fetchStats();
-    };
+    const handleFocus = () => fetchStats();
     window.addEventListener('focus', handleFocus);
 
-    // Listen for custom game-completion events from useGameCompletion
+    // Instant refresh after a game finishes (small delay for the DB write).
     const handleGameComplete = () => {
-      console.log('[NavbarStats] 🎯 game-completion-saved event received — refetching in 500ms');
-      // Small delay to let DB writes complete
-      setTimeout(fetchStats, 500);
+      setStats((prev) => ({
+        ...prev,
+        gamesPlayedToday: Math.max(prev.gamesPlayedToday, getLocalTodayCount()),
+        currentStreak: getGlobalCurrentStreak(),
+      }));
+      setTimeout(fetchStats, 800);
     };
     window.addEventListener('game-completion-saved', handleGameComplete);
 
-    // Periodic polling fallback every 30s (realtime can drop on mobile)
-    const pollInterval = setInterval(fetchStats, 30_000);
+    // Light polling fallback.
+    const pollInterval = setInterval(fetchStats, 60_000);
 
     return () => {
-      supabase.removeChannel(channel);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleFocus);
       window.removeEventListener('game-completion-saved', handleGameComplete);
       clearInterval(pollInterval);
     };
-  }, [user, fetchStats]);
+  }, [fetchStats]);
 
   return { ...stats, totalGames: TOTAL_GAMES };
 }

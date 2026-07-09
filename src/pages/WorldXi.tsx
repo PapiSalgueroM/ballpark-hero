@@ -31,10 +31,15 @@ import {
   ordinal,
 } from '@/lib/worldXi';
 import { computeChemistry, formatChemistry } from '@/lib/chemistry';
+import { SlotReel } from '@/components/world-xi/SlotReel';
 
 type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'won' | 'lost';
 
-const SPIN_MS = 1300; // slot-machine spin duration, under the 1.5s cap
+// Slot-machine reel durations. The reel decelerates like a real machine, so it
+// needs enough runway to read as a spin; timed modes get a shorter one so the
+// clock is not eaten by animation (11 reveals per run).
+const SPIN_MS = 1500;
+const SPIN_MS_TIMED = 1000;
 
 const WorldXi = () => {
   const [phase, setPhase] = useState<Phase>('boot');
@@ -49,8 +54,8 @@ const WorldXi = () => {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
   const [spinning, setSpinning] = useState(false);
-  const [respinning, setRespinning] = useState(false);
-  const [spinFlag, setSpinFlag] = useState<string>(''); // country shown mid-spin (cycles like a reel)
+  const [spinKey, setSpinKey] = useState(0); // bumping this starts a SlotReel spin
+  const [reelGlimpse, setReelGlimpse] = useState<string>(''); // country under the payline mid-spin
   const [seasonReport, setSeasonReport] = useState<SeasonReport | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const prevStepRef = useRef<number>(-1);
@@ -93,6 +98,7 @@ const WorldXi = () => {
     setQuery('');
     setFeedback(null);
     setTimeLeft(timerMode.seconds);
+    prevStepRef.current = -1; // so the first slot of a replay spins too
     setPhase('playing');
   }, [data, formation, timerMode]);
 
@@ -113,10 +119,10 @@ const WorldXi = () => {
     if (phase === 'playing') inputRef.current?.focus();
   }, [phase, step]);
 
-  // Slot-machine reveal: whenever a new slot comes up during play, spin the
-  // position/nation display briefly before settling on the real values.
-  // Skipped entirely under prefers-reduced-motion (spin never starts, the
-  // slot just shows its landed values immediately).
+  // Slot-machine reveal: whenever a new slot comes up during play, run the
+  // SlotReel (a real decelerating reel, not a flicker) before the nation
+  // locks in. Skipped entirely under prefers-reduced-motion: the spin never
+  // starts and the slot just shows its landed values immediately.
   useEffect(() => {
     if (phase !== 'playing' || step === prevStepRef.current) return;
     prevStepRef.current = step;
@@ -125,14 +131,8 @@ const WorldXi = () => {
       return;
     }
     setSpinning(true);
-    // Cycle the displayed flag through random countries like a slot-machine reel, then land.
-    const pool = countries.filter(Boolean);
-    const cyc = setInterval(() => {
-      if (pool.length) setSpinFlag(pool[Math.floor(Math.random() * pool.length)]);
-    }, 80);
-    const id = setTimeout(() => { clearInterval(cyc); setSpinning(false); }, SPIN_MS);
-    return () => { clearInterval(cyc); clearTimeout(id); };
-  }, [phase, step, countries]);
+    setSpinKey(k => k + 1);
+  }, [phase, step]);
 
   // Reset the season report whenever a new run starts.
   useEffect(() => {
@@ -190,8 +190,9 @@ const WorldXi = () => {
 
   // Unlimited nation respins: rerolls only the current slot's country, any
   // number of times, before a player is picked for it. No penalty, no cap.
+  // Every respin runs the same slot-machine reel as the initial reveal.
   const respin = () => {
-    if (phase !== 'playing' || !data || slotIndex < 0) return;
+    if (phase !== 'playing' || !data || slotIndex < 0 || spinning) return;
     const next = respinSlotCountry(formation, data, slotIndex, countries);
     if (next === countries[slotIndex]) return;
     const updated = [...countries];
@@ -199,12 +200,9 @@ const WorldXi = () => {
     setCountries(updated);
     setQuery('');
     setFeedback(null);
-    if (reducedMotionRef.current) {
-      setRespinning(false);
-      return;
-    }
-    setRespinning(true);
-    setTimeout(() => setRespinning(false), SPIN_MS);
+    if (reducedMotionRef.current) return;
+    setSpinning(true);
+    setSpinKey(k => k + 1);
   };
 
   const simulateSeason = () => {
@@ -255,10 +253,14 @@ const WorldXi = () => {
                   : isActive
                   ? 'bg-accent border-primary animate-pulse'
                   : 'bg-card border-border text-muted-foreground',
-                isActive && (spinning || respinning) && 'animate-slot-spin',
+                isActive && spinning && 'animate-slot-spin',
               )}
             >
-              {p ? flagFor(p.country) : isActive ? flagFor(country) : s.label}
+              {p
+                ? flagFor(p.country)
+                : isActive
+                ? flagFor(spinning && reelGlimpse ? reelGlimpse : country)
+                : s.label}
             </div>
             <span className="mt-0.5 text-[9px] font-semibold text-foreground/80 max-w-[64px] truncate text-center">
               {p ? shortName(p.name) : isActive ? '?' : ''}
@@ -383,18 +385,26 @@ const WorldXi = () => {
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
                 Slot {step + 1} of 11 · {slot.label}
               </div>
-              <div
-                key={`${step}-${country}-${spinning}-${respinning}`}
-                className={cn(
-                  'text-xl font-bold text-foreground mb-0.5',
-                  spinning && 'animate-slot-spin',
-                  !spinning && respinning && 'animate-slot-settle',
+              <SlotReel
+                spinKey={spinKey}
+                target={country}
+                pool={data?.countries ?? []}
+                rowHeight={40}
+                durationMs={timerMode.seconds > 0 ? SPIN_MS_TIMED : SPIN_MS}
+                instant={reducedMotionRef.current}
+                onSettled={() => setSpinning(false)}
+                onTick={c => setReelGlimpse(c)}
+                renderItem={c => (
+                  <span className="text-xl font-bold text-foreground whitespace-nowrap">
+                    {flagFor(c)} {displayCountry(c)}
+                  </span>
                 )}
-              >
-                {spinning && spinFlag ? `${flagFor(spinFlag)} ${displayCountry(spinFlag)}` : `${flagFor(country)} ${displayCountry(country)}`}
-              </div>
+                className="mb-2"
+              />
               <p className="text-xs text-muted-foreground mb-3">
-                Name a player from {displayCountry(country)} who can play {slot.label}. Accepts {allowedLabel(slot)}.
+                {spinning
+                  ? 'Spinning the nations...'
+                  : `Name a player from ${displayCountry(country)} who can play ${slot.label}. Accepts ${allowedLabel(slot)}.`}
               </p>
 
               <button
@@ -601,7 +611,7 @@ const WorldXi = () => {
           ]}
           examples={[
             'Brazil in goal? Alisson, Ederson and 29 other Brazilian keepers count.',
-            'A 4-3-3 wing slot accepts wingers and wide midfielders alike.',
+            'Wingers count on both flanks: Raphinha fits a right-wing or a left-wing slot.',
           ]}
         />
         <GameNav />

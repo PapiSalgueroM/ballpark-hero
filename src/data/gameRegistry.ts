@@ -20,8 +20,10 @@ export const CATEGORIES: GameCategory[] = [
     games: [
       // retired 2026-07-06 per owner review: "too simple". Page/route kept for direct links; uncomment to revive.
       // { path: '/higher-lower-transfers', label: 'Transfer Market', emoji: '📈', description: 'Higher or lower on real market values', isNew: true },
+      { path: '/darts', label: 'Darts', emoji: '🎯', description: 'Throw at the board, name a player from the category, race the machine 501→0', isNew: true },
       { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', isNew: true },
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', isNew: true },
+      { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Run a real club: tactics, transfers, trophies — and the sack race', isNew: true },
       { path: '/world-xi', label: 'World XI', emoji: '🌍', description: 'Pick a formation, fill 11 random countries', isNew: true },
       { path: '/player-bingo', label: 'Player Bingo', emoji: '🎱', description: 'Complete a line on a 5x5 board before 3 strikes', isNew: true },
       { path: '/alphabet-sprint', label: 'Alphabet Sprint', emoji: '⚡', description: 'Name a player per letter against the clock', isNew: true },
@@ -48,6 +50,9 @@ export const CATEGORIES: GameCategory[] = [
       // { path: '/shirt-number', label: 'Shirt Number', emoji: '👕', description: 'Guess the kit number a player wears', daily: true, isNew: true },
       { path: '/transfer-path', label: 'Transfer Path', emoji: '🔄', description: 'Connect two players through shared clubs', daily: true, isNew: true },
       { path: '/guess-transfer-value', label: 'Guess The Value', emoji: '💰', description: 'Guess a player’s transfer market value', daily: true, isNew: true },
+      // moved from the retired Game Shows tab 2026-07-08 (owner: game-show games belong in their sport)
+      { path: '/squad-deal', label: 'Squad Deal', emoji: '🏟️', description: 'Build an XI, Deal or No Deal style', isNew: true },
+      { path: '/deal-or-no-deal', label: 'Deal or No Deal', emoji: '💼', description: 'Bank or gamble against the Banker', isNew: true },
       // deleted 2026-07-08 per owner review: "discard this". Route kept for direct links; uncomment to revive.
       // { path: '/pack-battle', label: 'Pack Battle', emoji: '🃏', description: 'Call higher or lower before each card flips. One miss busts the pack', daily: true, isNew: true },
     ],
@@ -58,19 +63,24 @@ export const CATEGORIES: GameCategory[] = [
     games: [
       { path: '/perfect-season-nfl', label: '17-0 Perfect Season', emoji: '🏆', description: 'Draft an offense across eras, run the table', isNew: true },
       { path: '/football-grid', label: 'Pro Football Grid', emoji: '🏈', description: '3×3 grid puzzle with rarity scores', daily: true },
-      { path: '/football-timeline', label: 'Timeline', emoji: '📅', description: 'Order players by draft year', daily: true },
+      // retired 2026-07-08 per owner review: "too easy and boring... unless ur going to add to it, discard it". Route kept for direct links; uncomment to revive.
+      // { path: '/football-timeline', label: 'Timeline', emoji: '📅', description: 'Order players by draft year', daily: true },
       { path: '/football-draft', label: 'Draft Guesser', emoji: '🎰', description: 'Guess the draft round', daily: true },
       { path: '/nfl-career', label: 'NFL Career Path', emoji: '🏈', description: 'Guess the NFL player from clues', daily: true },
-      { path: '/guess-nfl-team', label: 'Guess The Team', emoji: '🏈', description: 'Identify the NFL franchise', daily: true, isNew: true },
+      // retired 2026-07-08 per owner review: "like 40 teams to choose from... get rid of this game". Route kept for direct links; uncomment to revive.
+      // { path: '/guess-nfl-team', label: 'Guess The Team', emoji: '🏈', description: 'Identify the NFL franchise', daily: true, isNew: true },
       { path: '/conquest', label: 'NFL Conquest', emoji: '🗺️', description: '32 teams, 50 states. One champion.', daily: true },
     ],
   },
   {
-    title: 'College Football',
-    emoji: '🏈',
+    // 2026-07-08: College Football + College Basketball merged into one
+    // College Sports tab per owner review ("just put the two together").
+    title: 'College Sports',
+    emoji: '🎓',
     games: [
       { path: '/college-grid', label: 'College Grid', emoji: '🎓', description: 'College football 3×3 grid puzzle', daily: true },
       { path: '/guess-the-college', label: 'Guess The College', emoji: '🏫', description: 'Guess the D1 school from clues', daily: true },
+      { path: '/guess-cbb-team', label: 'Guess The CBB Program', emoji: '🏀', description: 'Guess the college basketball program', daily: true, isNew: true },
     ],
   },
   {
@@ -84,13 +94,6 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/nba-chain', label: 'NBA Chain', emoji: '🔗', description: 'Build a chain of connected players' },
       { path: '/perfect-lineup-nba', label: 'Perfect Lineup: NBA', emoji: '🏀', description: 'Build a starting 5 under random team & era constraints, then simulate', daily: true, isNew: true },
       { path: '/conquest-nba', label: 'NBA Conquest', emoji: '🗺️', description: '30 teams, 50 states. One champion.', daily: true, isNew: true },
-    ],
-  },
-  {
-    title: 'College Basketball',
-    emoji: '🏀',
-    games: [
-      { path: '/guess-cbb-team', label: 'Guess The CBB Program', emoji: '🏀', description: 'Guess the college basketball program', daily: true, isNew: true },
     ],
   },
   {
@@ -162,18 +165,14 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/guess-the-nation', label: 'Guess The Nation', emoji: '🌍', description: 'Identify the mystery sporting nation', daily: true, isNew: true },
       { path: '/hof-or-bust', label: 'Hall of Fame or Bust?', emoji: '🏆', description: 'Is this player a legend or a letdown?', daily: true, isNew: true },
       { path: '/score-predictor', label: 'Score Predictor', emoji: '📊', description: 'Predict the final score of famous matches', daily: true, isNew: true },
-    ],
-  },
-  {
-    title: 'Game Shows',
-    emoji: '🎲',
-    games: [
-      { path: '/deal-or-no-deal', label: 'Deal or No Deal', emoji: '💼', description: 'Bank or gamble against the Banker', isNew: true },
+      // moved from the retired Game Shows tab 2026-07-08 (owner: game-show games belong with their sport; these two span all sports)
       { path: '/list-quiz', label: 'Name Them All', emoji: '📝', description: 'How many champions can you name?', isNew: true },
-      { path: '/squad-deal', label: 'Squad Deal', emoji: '🏟️', description: 'Build an XI, Deal or No Deal style', isNew: true },
       { path: '/sports-millionaire', label: 'Sports Millionaire', emoji: '💰', description: 'Climb a 15-question money ladder with lifelines', daily: true, isNew: true },
     ],
   },
+  // Game Shows category removed 2026-07-08 per owner review — its games now
+  // live inside their sports (Squad Deal + Deal or No Deal → Soccer,
+  // Name Them All + Sports Millionaire → World & Olympic Games).
 ];
 
 export const VISIBLE_CATEGORIES = CATEGORIES.filter(c => c.games.length > 0);

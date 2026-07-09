@@ -1,0 +1,194 @@
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { recordCompletion } from '@/lib/completions';
+import {
+  CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
+  FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
+  buildMarket, buyPlayer, sellPlayer, autoPickXI, nextFixture, sortedTable,
+  leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
+} from '@/lib/clubManager';
+import type { NextFixtureInfo, TableRow } from '@/lib/clubManager';
+
+export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'matchResult' | 'seasonEnd' | 'sacked';
+export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
+
+export function useClubManager() {
+  const [phase, setPhase] = useState<CMPhase>('boot');
+  const [career, setCareer] = useState<CareerState | null>(null);
+  const [report, setReport] = useState<MatchWeekReport | null>(null);
+  const [summary, setSummary] = useState<SeasonSummary | null>(null);
+  const [activeTab, setActiveTab] = useState<HubTab>('overview');
+  const [pendingClub, setPendingClub] = useState<string | null>(null);
+
+  // Boot: look for a saved career and offer to resume it.
+  useEffect(() => {
+    const saved = loadCareer();
+    if (saved) {
+      setCareer(saved);
+      if (saved.pendingSummary) setSummary(saved.pendingSummary);
+      setPhase('resume');
+    } else {
+      setPhase('clubSelect');
+    }
+  }, []);
+
+  // Persist the career on every change.
+  useEffect(() => {
+    if (career) saveCareer(career);
+  }, [career]);
+
+  /* ---------- derived ---------- */
+  const market: MarketPlayer[] = useMemo(
+    () => (career ? buildMarket(career) : []),
+    [career],
+  );
+  const nextFx: NextFixtureInfo | null = useMemo(
+    () => (career ? nextFixture(career) : null),
+    [career],
+  );
+  const tableRows: TableRow[] = useMemo(
+    () => (career ? sortedTable(career.table) : []),
+    [career],
+  );
+  const myPosition = useMemo(
+    () => (career ? leaguePosition(career) : 0),
+    [career],
+  );
+
+  /* ---------- lifecycle actions ---------- */
+  const resume = useCallback(() => {
+    if (!career) { setPhase('clubSelect'); return; }
+    if (career.sacked) setPhase('sacked');
+    else if (career.pendingSummary) { setSummary(career.pendingSummary); setPhase('seasonEnd'); }
+    else setPhase('hub');
+    setActiveTab('overview');
+  }, [career]);
+
+  const startNew = useCallback(() => {
+    clearCareer();
+    setCareer(null);
+    setReport(null);
+    setSummary(null);
+    setPendingClub(null);
+    setPhase('clubSelect');
+  }, []);
+
+  const chooseClub = useCallback((clubName: string) => {
+    setPendingClub(clubName);
+  }, []);
+
+  const confirmClub = useCallback(() => {
+    if (!pendingClub) return;
+    const s = startCareer(pendingClub);
+    setCareer(s);
+    setActiveTab('overview');
+    setPhase('hub');
+  }, [pendingClub]);
+
+  /* ---------- tactics ---------- */
+  const setFormationIndex = useCallback((idx: number) => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      const next = { ...prev, formationIndex: idx };
+      next.xiIds = autoPickXI(next.squad, FORMATIONS[idx]);
+      return next;
+    });
+  }, []);
+
+  const setMentality = useCallback((m: Mentality) => {
+    setCareer(prev => (prev ? { ...prev, mentality: m } : prev));
+  }, []);
+
+  const setXiSlot = useCallback((slotIdx: number, playerId: string | null) => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      const xi = prev.xiIds.map(id => (playerId !== null && id === playerId ? null : id));
+      xi[slotIdx] = playerId;
+      return { ...prev, xiIds: xi };
+    });
+  }, []);
+
+  const autoPick = useCallback(() => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      return { ...prev, xiIds: autoPickXI(prev.squad, FORMATIONS[prev.formationIndex]) };
+    });
+  }, []);
+
+  /* ---------- season progression ---------- */
+  const play = useCallback(() => {
+    if (!career) return;
+    const res = playNextEntry(career);
+    setCareer(res.state);
+    if (res.kind === 'window') {
+      setActiveTab('transfers');
+      setPhase('hub');
+    } else if (res.kind === 'match' && res.report) {
+      setReport(res.report);
+      setPhase('matchResult');
+    } else if (res.kind === 'seasonOver') {
+      const { state, summary: sm } = finishSeason(res.state);
+      recordCompletion('/club-manager', sm.seasonScore);
+      setCareer(state);
+      setSummary(sm);
+      setPhase('seasonEnd');
+    }
+  }, [career]);
+
+  const continueFromReport = useCallback(() => {
+    if (!career) return;
+    if (career.sacked) {
+      recordCompletion('/club-manager', currentSeasonScore(career));
+      setPhase('sacked');
+      return;
+    }
+    if (career.week >= career.calendar.length) {
+      const { state, summary: sm } = finishSeason(career);
+      recordCompletion('/club-manager', sm.seasonScore);
+      setCareer(state);
+      setSummary(sm);
+      setPhase('seasonEnd');
+      return;
+    }
+    setReport(null);
+    setActiveTab('overview');
+    setPhase('hub');
+  }, [career]);
+
+  const nextSeason = useCallback((acceptOfferClub?: string) => {
+    if (!career) return;
+    const s = startNextSeason(career, acceptOfferClub);
+    setCareer(s);
+    setSummary(null);
+    setReport(null);
+    setActiveTab('overview');
+    setPhase('hub');
+  }, [career]);
+
+  /* ---------- transfers ---------- */
+  const buy = useCallback((mp: MarketPlayer) => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      const next = buyPlayer(prev, mp);
+      return next ?? prev;
+    });
+  }, []);
+
+  const sell = useCallback((playerId: string) => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      const next = sellPlayer(prev, playerId);
+      return next ?? prev;
+    });
+  }, []);
+
+  return {
+    phase, career, report, summary, activeTab, setActiveTab, pendingClub,
+    market, nextFx, tableRows, myPosition,
+    resume, startNew, chooseClub, confirmClub,
+    setFormationIndex, setMentality, setXiSlot, autoPick,
+    play, continueFromReport, nextSeason,
+    buy, sell,
+  };
+}
+
+export type ClubManagerGame = ReturnType<typeof useClubManager>;

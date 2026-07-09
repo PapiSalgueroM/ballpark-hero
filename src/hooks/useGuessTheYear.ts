@@ -4,7 +4,11 @@ import { getDailyGuessTheYearPuzzle } from '@/data/guessTheYearPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const MAX_CLUES = 6;
-const YEAR_RANGE = { min: 1980, max: 2026 };
+// min is the earliest puzzle year in guessTheYearPuzzles.ts (1972); it must not
+// be later than any puzzle's year or that puzzle becomes unwinnable (the guess
+// slider can't reach the answer). Bug fix 2026-07-09: was 1980, which made the
+// 1972/1973/1976/1979 puzzles impossible to solve.
+const YEAR_RANGE = { min: 1972, max: 2026 };
 
 export function useGuessTheYear() {
   const [gameState, setGameState] = useState<GuessTheYearState>(() => ({

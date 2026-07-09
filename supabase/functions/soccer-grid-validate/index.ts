@@ -1,4 +1,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+// AI gateway shim: prefer a free Google Gemini API key (GEMINI_API_KEY secret)
+// over the Lovable gateway, whose credits ran out. Set GEMINI_API_KEY in
+// Supabase Edge Function secrets to bring AI validation back to life.
+const __GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
+const __AI_URL = __GEMINI_KEY ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions" : "https://ai.gateway.lovable.dev/v1/chat/completions";
 
 const allowedOrigins = [
   "https://douknowball.com",
@@ -84,7 +89,7 @@ serve(async (req) => {
       col: colAttribute.slice(0, 100).replace(/[\n\r]/g, ''),
     };
 
-    const apiKey = Deno.env.get('LOVABLE_API_KEY');
+    const apiKey = (__GEMINI_KEY || Deno.env.get('LOVABLE_API_KEY'));
     if (!apiKey) {
       return new Response(
         JSON.stringify({ valid: false, error: 'Server configuration error' }),
@@ -128,14 +133,14 @@ If valid, also return the player's full official name (first name and last name 
 
 Respond with ONLY a JSON object: {"valid": true, "fullName": "First Last"} or {"valid": false, "reason": "brief explanation"}`;
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await fetch(__AI_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: (__GEMINI_KEY ? "gemini-2.0-flash" : "google/gemini-2.5-flash"),
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.1,
         max_tokens: 150,

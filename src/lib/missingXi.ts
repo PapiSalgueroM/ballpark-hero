@@ -40,11 +40,13 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
  * - One slot (chosen by date seed for Daily, at random for Unlimited) shows
  *   "?" instead of a name. Its `allowed` position label is still shown, e.g.
  *   "? (CB)", since the position is never the secret, only the name is.
- * - 3 guesses. After each wrong guess, one more hint unlocks in this order:
- *   1) nationality, 2) club at the time of the match, 3) first letter of the
- *   surname. A guess is only checked against the pool of `blankCandidates`
- *   for THIS lineup (not the whole soccer database), since the puzzle has
- *   exactly one correct answer per day.
+ * - 3 guesses. After each wrong guess, one more hint unlocks. Hints never
+ *   restate what the card already shows (see hintForLevel): club lineups
+ *   hint nationality first, national-team lineups hint the club at the time
+ *   first, then the ladder narrows by surname (first letter, letter count).
+ *   A guess is only checked against the pool of `blankCandidates` for THIS
+ *   lineup (not the whole soccer database), since the puzzle has exactly one
+ *   correct answer per day.
  * - Scoring: 100 points on guess 1, 70 on guess 2, 40 on guess 3, 0 on a
  *   failed 3rd guess (full reveal shown instead).
  *
@@ -83,6 +85,13 @@ export interface BlankCandidate {
   nationality: string;
   /** Club the player was AT during this specific match (may differ from their most famous club). */
   clubAtTime: string;
+  /**
+   * Optional one-line flavor fact about THIS player in THIS match (e.g.
+   * "scored the opening goal", "made his competitive debut in this final").
+   * Shown on the reveal screen when present. Facts are only ever added here,
+   * hand-verified alongside the lineup — the UI must never invent one.
+   */
+  fact?: string;
 }
 
 export interface Lineup {
@@ -101,7 +110,12 @@ export interface Lineup {
   slots: XiSlot[];
   /** 2-3 verified acceptable blanks; the daily/unlimited seed picks one. */
   blankCandidates: BlankCandidate[];
-  /** One-line note on what was checked, per the file-level verification method above. */
+  /**
+   * One-line editor note on what was checked, per the file-level verification
+   * method above. INTERNAL ONLY: never render this in the UI (owner feedback
+   * 2026-07-08 — "don't show 'Wikipedia and conmebol archives' as proof").
+   * Player-facing flavor lives in BlankCandidate.fact instead.
+   */
   source: string;
 }
 
@@ -5282,19 +5296,36 @@ export function isCorrectGuess(guessName: string, candidate: BlankCandidate): bo
 
 /**
  * Returns the hint text unlocked at a given guess count (0 = no wrong
- * guesses yet, shows nothing extra). Escalates: 1st wrong guess reveals
- * nationality, 2nd reveals the club at the time of the match, 3rd (which also
- * ends the round on a miss) reveals the first letter of the surname.
+ * guesses yet, shows nothing extra).
+ *
+ * A hint must NEVER restate information the puzzle card already shows
+ * (owner feedback 2026-07-08: "after getting an answer wrong u told me the
+ * nationality even though u already told me it's Argentina vs Chile"). Which
+ * facts are visible depends on the lineup:
+ *   - national-team lineup (team = Chile): every starter's nationality is on
+ *     the card, so the nationality hint is skipped and the club at the time
+ *     leads (that IS new information there);
+ *   - club lineup (team = Barcelona): every starter's club at the time is
+ *     the team itself, so the club hint is skipped and nationality leads.
+ * After the one informative identity hint, the ladder narrows by surname:
+ * first letter, then letter count.
  */
-export function hintForLevel(level: HintLevel, candidate: BlankCandidate): string | null {
+export function hintForLevel(level: HintLevel, candidate: BlankCandidate, lineup: Lineup): string | null {
   if (level <= 0) return null;
   const words = candidate.name.trim().split(/\s+/);
   const surname = words[words.length - 1];
-  // Nationality is intentionally NOT a hint: the matchup already implies it, so it was
-  // redundant (owner feedback). Lead with the more useful club clue, then narrow by surname.
-  if (level === 1) return `Club at the time: ${candidate.clubAtTime}`;
-  if (level === 2) return `Surname starts with: ${surname.charAt(0).toUpperCase()}`;
-  return `Surname has ${surname.length} letters`;
+  const teamKey = normalizeName(lineup.team);
+
+  const hints: string[] = [];
+  if (normalizeName(candidate.nationality) !== teamKey) {
+    hints.push(`Nationality: ${candidate.nationality}`);
+  }
+  if (normalizeName(candidate.clubAtTime) !== teamKey) {
+    hints.push(`Club at the time: ${candidate.clubAtTime}`);
+  }
+  hints.push(`Surname starts with: ${surname.charAt(0).toUpperCase()}`);
+  hints.push(`Surname has ${surname.length} letters`);
+  return hints[level - 1] ?? null;
 }
 
 /** Score for a correct guess made on `guessNumber` (1-indexed). Returns 0 if guessNumber exceeds MAX_GUESSES. */

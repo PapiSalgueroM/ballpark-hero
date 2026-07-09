@@ -79,6 +79,37 @@ import type { PositionGroup } from '@/lib/whoAmI';
  * satisfiers per tile across the first GUARANTEE_WINDOW reveals so at least
  * one line is always completable, while still leaving most drawn players
  * fitting nothing on the board (the bluff element).
+ *
+ * 2026-07-08 ADDITIONS (owner: "add played with Messi, World Cup winner,
+ * 10M+ Instagram followers, more obscure"), each verified read-only in SQL
+ * against flawuiqbvjobmkfkauhw on 2026-07-08 with the exact pool definition
+ * (top 1000 rows by value, year >= 2024, dedupe by name keeping the newest
+ * row, top 500 kept; pool floor came out $32M):
+ *   YEAR SEMANTICS (load-bearing for the two club-year tiles): a year-N row
+ *   in player_market_values holds the club at the END of season N-1/N.
+ *   Checked on known transfers: Haaland year 2023 = Man City (moved Jul 22),
+ *   Bellingham year 2023 = Dortmund / 2024 = Real Madrid (moved Jun 23),
+ *   Messi 2021 = Barcelona, 2022-2023 = PSG, 2024+ = Inter Miami,
+ *   Ronaldo 2022 = Man United, 2023 = Al-Nassr (moved Jan 23). Club strings
+ *   can hold mid-season moves as "Club A / Club B"; clubYears splits those.
+ *   New tiles and their live support counts:
+ *     'World Cup winner' (11): world_cup_players squad membership for the
+ *       four champions the table covers (2010 Spain, 2014 Germany, 2018
+ *       France, 2022 Argentina). Winner map is indisputable public record.
+ *     'Played with Messi' (18): a season row at one of Messi's clubs in a
+ *       year his own rows show him there (Barcelona 2005-2021, PSG
+ *       2022-2023, Inter Miami 2024+) = teammates for at least part of
+ *       that season. Messi himself is excluded.
+ *     'Champions League winner' (62): a season row at the winning club in
+ *       the season-end year of a 2011-2025 final. Squad members who did not
+ *       play the final still count, matching how medals are credited.
+ *     '10M+ Instagram followers' (15 in pool): static hand-checked list,
+ *       every name comfortably above 10M (see INSTAGRAM_10M).
+ *   STILL REJECTED (owner also floated these; the data cannot verify them):
+ *     'Played in 4+ different leagues': player_market_values has NO league
+ *       column (checked information_schema 2026-07-08), only club strings.
+ *     'Left-footed': soccer_player_facts.preferred_foot is NULL on every
+ *       row (documented above). No foot tile can be computed.
  */
 
 export interface BingoPlayer {
@@ -94,10 +125,18 @@ export interface BingoPlayer {
 export interface BingoData {
   pool: BingoPlayer[]; // sorted by value desc
   clubHistory: Map<string, Set<string>>; // player name -> normalized club keys, all years
+  clubYears: Map<string, ClubYear[]>; // player name -> (club key, season-end year) pairs, all years
   seasonStats: Map<string, SeasonStat[]>; // player name -> every season row's stat line
   worldCupAll: Set<string>; // normalized names of 2010+ World Cup squad players
   worldCup2022: Set<string>; // normalized names of 2022 World Cup squad players
+  wcWinners: Set<string>; // normalized names of players in a winning squad (2010-2022)
   ballonDor: Set<string>; // normalized names of men's Ballon d'Or winners
+}
+
+/** One season row's club + year. Slash rows ("Club A / Club B") yield one entry per club. */
+export interface ClubYear {
+  key: string; // clubKey()-normalized club
+  year: number;
 }
 
 export interface SeasonStat {
@@ -163,6 +202,7 @@ interface PoolRow {
 interface HistoryRow {
   player_name: string | null;
   club: string | null;
+  year: number | null;
   goals: number | null;
   assists: number | null;
   matches: number | null;
@@ -171,15 +211,25 @@ interface HistoryRow {
 }
 
 /**
- * Career club sets AND every season's stat line for every pool player, from
- * ALL years in the table. Local copy of the whoAmI pattern (that helper is
- * module-private there): names are chunked into .in() filters and each
- * chunk is paged in blocks of 1000 rows to respect the PostgREST row cap.
+ * Career club sets, (club, year) pairs AND every season's stat line for every
+ * pool player, from ALL years in the table. Local copy of the whoAmI pattern
+ * (that helper is module-private there): names are chunked into .in() filters
+ * and each chunk is paged in blocks of 1000 rows to respect the PostgREST cap.
+ *
+ * clubHistory keeps its original whole-string clubKey behaviour (the club
+ * tiles' documented support counts were measured that way). clubYears, used
+ * by the Messi/UCL tiles, splits mid-season "Club A / Club B" values so a
+ * winter mover is credited at both clubs for that season.
  */
 async function fetchClubHistoryAndStats(
   names: string[],
-): Promise<{ clubHistory: Map<string, Set<string>>; seasonStats: Map<string, SeasonStat[]> }> {
+): Promise<{
+  clubHistory: Map<string, Set<string>>;
+  clubYears: Map<string, ClubYear[]>;
+  seasonStats: Map<string, SeasonStat[]>;
+}> {
   const clubHistory = new Map<string, Set<string>>();
+  const clubYears = new Map<string, ClubYear[]>();
   const seasonStats = new Map<string, SeasonStat[]>();
   const chunks: string[][] = [];
   for (let i = 0; i < names.length; i += HISTORY_CHUNK) {
@@ -191,7 +241,7 @@ async function fetchClubHistoryAndStats(
       for (let page = 0; page < HISTORY_MAX_PAGES; page++) {
         const { data, error } = await supabase
           .from('player_market_values')
-          .select('player_name, club, goals, assists, matches, yellow_cards, red_cards')
+          .select('player_name, club, year, goals, assists, matches, yellow_cards, red_cards')
           .in('player_name', chunk)
           .order('id', { ascending: true })
           .range(from, from + HISTORY_PAGE - 1);
@@ -208,6 +258,21 @@ async function fetchClubHistoryAndStats(
               clubHistory.set(name, set);
             }
             set.add(key);
+          }
+
+          const year = Number(r.year) || 0;
+          if (year > 0) {
+            let pairs = clubYears.get(name);
+            if (!pairs) {
+              pairs = [];
+              clubYears.set(name, pairs);
+            }
+            for (const part of (r.club ?? '').split('/')) {
+              const partKey = clubKey(part);
+              if (partKey && !pairs.some(e => e.key === partKey && e.year === year)) {
+                pairs.push({ key: partKey, year });
+              }
+            }
           }
 
           let stats = seasonStats.get(name);
@@ -228,7 +293,7 @@ async function fetchClubHistoryAndStats(
       }
     }),
   );
-  return { clubHistory, seasonStats };
+  return { clubHistory, clubYears, seasonStats };
 }
 
 /** Top rows by market value from recent years, deduped by player keeping the newest row. */
@@ -269,15 +334,30 @@ async function fetchPool(): Promise<BingoPlayer[] | null> {
   return pool.length >= 100 ? pool : null;
 }
 
+/**
+ * FIFA World Cup champions covered by the squads table (2010 and later).
+ * Indisputable public record: Spain won 2010 (Johannesburg), Germany 2014
+ * (Rio), France 2018 (Moscow), Argentina 2022 (Lusail). The nationality
+ * column in world_cup_players holds the squad's country as a plain name
+ * (verified in SQL 2026-07-08: 23/23/23/26 distinct players per winner).
+ */
+const WORLD_CUP_WINNERS_2010_2022: Record<number, string> = {
+  2010: 'Spain',
+  2014: 'Germany',
+  2018: 'France',
+  2022: 'Argentina',
+};
+
 /** Normalized name sets from World Cup squads (2010 and later), paged. */
-async function fetchWorldCupSets(): Promise<{ all: Set<string>; y2022: Set<string> }> {
+async function fetchWorldCupSets(): Promise<{ all: Set<string>; y2022: Set<string>; winners: Set<string> }> {
   const all = new Set<string>();
   const y2022 = new Set<string>();
+  const winners = new Set<string>();
   let from = 0;
   for (let page = 0; page < WC_MAX_PAGES; page++) {
     const { data, error } = await supabase
       .from('world_cup_players')
-      .select('player_name, world_cup_year')
+      .select('player_name, world_cup_year, nationality')
       .gte('world_cup_year', WC_MIN_YEAR)
       .order('id', { ascending: true })
       .range(from, from + WC_PAGE - 1);
@@ -286,12 +366,14 @@ async function fetchWorldCupSets(): Promise<{ all: Set<string>; y2022: Set<strin
       const key = normalizeName(r.player_name ?? '');
       if (!key) continue;
       all.add(key);
-      if (Number(r.world_cup_year) === 2022) y2022.add(key);
+      const year = Number(r.world_cup_year);
+      if (year === 2022) y2022.add(key);
+      if (WORLD_CUP_WINNERS_2010_2022[year] === (r.nationality ?? '').trim()) winners.add(key);
     }
     if (!data || data.length < WC_PAGE) break;
     from += WC_PAGE;
   }
-  return { all, y2022 };
+  return { all, y2022, winners };
 }
 
 /** Normalized names of men's Ballon d'Or winners (rank 1 rows, or unranked winner rows). */
@@ -321,7 +403,7 @@ export async function fetchBingoData(): Promise<BingoData | null> {
     ]);
     if (!pool) return null;
 
-    const { clubHistory, seasonStats } = await fetchClubHistoryAndStats(pool.map(p => p.name));
+    const { clubHistory, clubYears, seasonStats } = await fetchClubHistoryAndStats(pool.map(p => p.name));
     // Every player at least carries their current club, even if a history page fell short.
     for (const p of pool) {
       const key = clubKey(p.club);
@@ -334,7 +416,16 @@ export async function fetchBingoData(): Promise<BingoData | null> {
       set.add(key);
     }
 
-    return { pool, clubHistory, seasonStats, worldCupAll: wc.all, worldCup2022: wc.y2022, ballonDor };
+    return {
+      pool,
+      clubHistory,
+      clubYears,
+      seasonStats,
+      worldCupAll: wc.all,
+      worldCup2022: wc.y2022,
+      wcWinners: wc.winners,
+      ballonDor,
+    };
   } catch {
     return null;
   }
@@ -360,6 +451,68 @@ const CLUB_TILES: { label: string; keys: string[] }[] = [
   { label: 'Inter Milan', keys: ['inter milan'] },
   { label: 'Atletico Madrid', keys: ['atletico de madrid'] },
 ];
+
+/**
+ * Messi's clubs mapped onto this table's year convention (a year-N row holds
+ * the club at the END of season N-1/N; see the header verification block).
+ * First-team debut October 2004 => Barcelona season rows 2005-2021 (left
+ * August 2021), PSG 2022-2023 (August 2021 to June 2023), Inter Miami 2024+
+ * (joined July 2023). A pool player with a season row at one of these clubs
+ * inside the span shared a dressing room with Messi for at least part of
+ * that season. SQL-verified support in the live pool: 18 players.
+ */
+const MESSI_CLUB_SPANS: { key: string; from: number; to: number }[] = [
+  { key: 'fc barcelona', from: 2005, to: 2021 },
+  { key: 'paris saint-germain', from: 2022, to: 2023 },
+  { key: 'inter miami cf', from: 2024, to: 9999 },
+];
+
+/**
+ * UEFA Champions League winners 2011-2025 as (clubKey, season-end year)
+ * pairs, matching the year convention above. Indisputable public record:
+ * 2011 + 2015 Barcelona, 2012 + 2021 Chelsea, 2013 + 2020 Bayern (both club
+ * spellings in the table are listed), 2014/2016/2017/2018/2022/2024 Real
+ * Madrid, 2019 Liverpool, 2023 Manchester City, 2025 PSG. A year-N row at
+ * the winning club = in that club's squad when the final was won; squad
+ * members who did not play the final still count, matching how winners'
+ * medals are commonly credited. SQL-verified support in the live pool: 62.
+ */
+const UCL_WINNER_PAIRS: { keys: string[]; years: number[] }[] = [
+  { keys: ['fc barcelona'], years: [2011, 2015] },
+  { keys: ['chelsea fc'], years: [2012, 2021] },
+  { keys: ['bayern munich', 'fc bayern munich'], years: [2013, 2020] },
+  { keys: ['real madrid'], years: [2014, 2016, 2017, 2018, 2022, 2024] },
+  { keys: ['liverpool fc'], years: [2019] },
+  { keys: ['manchester city'], years: [2023] },
+  { keys: ['paris saint-germain'], years: [2025] },
+];
+const UCL_WINNER_KEYS: Set<string> = new Set(
+  UCL_WINNER_PAIRS.flatMap(p => p.keys.flatMap(k => p.years.map(y => `${k}|${y}`))),
+);
+
+/**
+ * Players with 10M+ followers on their public verified Instagram accounts.
+ * Hand-checked July 2026 and deliberately conservative: every name here is
+ * COMFORTABLY above 10M (most are several multiples of it, e.g. Ronaldo and
+ * Messi are in the hundreds of millions), so ordinary follower drift cannot
+ * silently falsify the tile. Borderline ~10M accounts (Saka, Pedri, Foden,
+ * Raphinha...) are intentionally left out rather than guessed. Names are
+ * stored as normalizeName() output; both orderings of Son are included
+ * because the table stores "Heung-min Son". 15 of these are in the current
+ * pool (SQL-verified 2026-07-08), clearing MIN_TILE_SUPPORT.
+ */
+const INSTAGRAM_10M: Set<string> = new Set(
+  [
+    'Cristiano Ronaldo', 'Lionel Messi', 'Neymar', 'Kylian Mbappé', 'Karim Benzema',
+    'Mohamed Salah', 'Vinicius Junior', 'Erling Haaland', 'Jude Bellingham',
+    'Robert Lewandowski', 'Toni Kroos', 'Luka Modric', 'Sergio Ramos', 'Luis Suárez',
+    'Paul Pogba', 'Antoine Griezmann', 'Kevin De Bruyne', 'Harry Kane',
+    'Marcus Rashford', 'Heung-min Son', 'Son Heung-min', 'Casemiro',
+    'Zlatan Ibrahimovic', 'Gareth Bale', 'James Rodríguez', 'Achraf Hakimi',
+    'Lamine Yamal', 'Rodrygo', 'Ousmane Dembélé', 'Ángel Di María', 'Eden Hazard',
+    'Mesut Özil', 'Marcelo', 'David De Gea', 'Philippe Coutinho', 'Radamel Falcao',
+  ].map(normalizeName),
+);
 
 const POSITION_GROUP_TILES: { group: PositionGroup; label: string; icon: string }[] = [
   { group: 'GK', label: 'Goalkeeper', icon: '🧤' },
@@ -558,6 +711,63 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       test: (p, d) => d.ballonDor.has(normalizeName(p.name)),
     }),
   );
+  // World Cup WINNER (2010 Spain / 2014 Germany / 2018 France / 2022
+  // Argentina squad member). Shares the 'wc' group so it never sits on a
+  // board next to the near-duplicate "played at a World Cup" tiles.
+  out.push(
+    withSupport(data, {
+      id: 'wc-winner',
+      kind: 'honour',
+      group: 'wc',
+      label: 'World Cup winner',
+      icon: '🥇',
+      test: (p, d) => d.wcWinners.has(normalizeName(p.name)),
+    }),
+  );
+  // Champions League winner via (club, season-end year) rows against the
+  // verified 2011-2025 winner pairs. See UCL_WINNER_PAIRS for method.
+  out.push(
+    withSupport(data, {
+      id: 'ucl-winner',
+      kind: 'honour',
+      label: 'Champions League winner',
+      icon: '🏆',
+      test: (p, d) => {
+        const rows = d.clubYears.get(p.name);
+        return !!rows && rows.some(r => UCL_WINNER_KEYS.has(`${r.key}|${r.year}`));
+      },
+    }),
+  );
+  // 10M+ Instagram followers, static hand-checked list (see INSTAGRAM_10M).
+  out.push(
+    withSupport(data, {
+      id: 'ig-10m',
+      kind: 'honour',
+      label: '10M+ Instagram followers',
+      icon: '📸',
+      test: p => INSTAGRAM_10M.has(normalizeName(p.name)),
+    }),
+  );
+  // Played WITH Messi: a season row at one of Messi's clubs during his
+  // verified span there (see MESSI_CLUB_SPANS). Messi never matches himself.
+  out.push(
+    withSupport(data, {
+      id: 'messi-teammate',
+      kind: 'club',
+      label: 'Played with Messi',
+      icon: '🐐',
+      test: (p, d) => {
+        if (normalizeName(p.name) === 'lionel messi') return false;
+        const rows = d.clubYears.get(p.name);
+        return (
+          !!rows &&
+          rows.some(r =>
+            MESSI_CLUB_SPANS.some(s => r.key === s.key && r.year >= s.from && r.year <= s.to),
+          )
+        );
+      },
+    }),
+  );
 
   // Season-stat tiles: real season rows, checked across the player's whole history.
   out.push(
@@ -653,14 +863,16 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
   return out;
 }
 
-/** How many tiles of each kind a board aims for (sums to BOARD_SIZE, 24). */
+/** How many tiles of each kind a board aims for (sums to BOARD_SIZE, 24).
+ * 2026-07-08: honour 1 -> 2 (WC winner / UCL winner / Instagram tiles joined
+ * the bucket) paid for by nationality 6 -> 5, keeping the sum at 24. */
 const BOARD_QUOTAS: { kind: CriterionKind; count: number }[] = [
-  { kind: 'nationality', count: 6 },
+  { kind: 'nationality', count: 5 },
   { kind: 'club', count: 4 },
   { kind: 'position', count: 5 },
   { kind: 'value', count: 2 },
   { kind: 'age', count: 2 },
-  { kind: 'honour', count: 1 },
+  { kind: 'honour', count: 2 },
   { kind: 'season-stat', count: 3 },
   { kind: 'career-shape', count: 1 },
 ];

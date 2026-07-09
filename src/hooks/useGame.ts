@@ -22,8 +22,18 @@ function buildPool(tier: Difficulty, pool: Player[]): Player[] {
   return pool; // insane: all players
 }
 
+/**
+ * Target pools are tier-PURE (owner: "insane should be a nobody, not Messi").
+ * The daily/unlimited ANSWER comes from exactly the chosen tier; the guess
+ * list stays broad so players can still probe with anyone they want.
+ */
+function buildTargetPool(tier: Difficulty, pool: Player[]): Player[] {
+  const pure = pool.filter(p => p.difficulty === tier);
+  return pure.length > 0 ? pure : buildPool(tier, pool);
+}
+
 function selectRandomPlayer(diff: Difficulty, pool: Player[]): Player {
-  const filtered = buildPool(diff, pool);
+  const filtered = buildTargetPool(diff, pool);
   return filtered[Math.floor(Math.random() * filtered.length)];
 }
 
@@ -62,7 +72,7 @@ export function useGame() {
   const todayStr = useRef(getTodayET()).current;
   const dailyTier = useRef(getDailyTier(todayStr)).current;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const dailyPool = useMemo(() => buildPool(dailyTier, playerPool), [dailyTier, playerPool]);
+  const dailyPool = useMemo(() => buildTargetPool(dailyTier, playerPool), [dailyTier, playerPool]);
 
   // ---- DAILY: useDailyPuzzle -----------------------------------------------
   // Always called unconditionally (React rules). Values are only used when
@@ -178,14 +188,15 @@ export function useGame() {
   // ---- AUTOCOMPLETE --------------------------------------------------------
 
   const availablePlayers = useMemo(() => {
+    // Guessing is always open to the FULL pool (owner: "every player should
+    // be able to be guessed") — only the secret answer is tier-restricted.
     if (mode === 'daily') {
       // Guard for the one-tick isLoading window before dailyTarget resolves
-      if (!dailyTarget) return dailyPool;
-      return ensureAnswerInList(dailyPool, dailyTarget.name, p => p.name, dailyTarget);
+      if (!dailyTarget) return playerPool;
+      return ensureAnswerInList(playerPool, dailyTarget.name, p => p.name, dailyTarget);
     }
-    const pool = buildPool(difficulty, playerPool);
-    return ensureAnswerInList(pool, unlimitedTarget.name, p => p.name, unlimitedTarget);
-  }, [mode, difficulty, playerPool, dailyPool, dailyTarget, unlimitedTarget]);
+    return ensureAnswerInList(playerPool, unlimitedTarget.name, p => p.name, unlimitedTarget);
+  }, [mode, playerPool, dailyTarget, unlimitedTarget]);
 
   const guessedPlayerNames = useMemo(() => guesses.map(g => g.playerName), [guesses]);
 

@@ -21,7 +21,7 @@ import {
   buildSprintPool,
   playableLetters,
   drawLetter,
-  suggestForLetter,
+  resolveSprintGuess,
   pointsFor,
   distinctLettersNamed,
   sprintTier,
@@ -61,6 +61,7 @@ const AlphabetSprint = () => {
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
   const [lastGain, setLastGain] = useState<number | null>(null);
+  const [feedback, setFeedback] = useState<string | null>(null);
   const [best, setBest] = useState<BestMap>(() => loadBest());
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -120,6 +121,7 @@ const AlphabetSprint = () => {
     setScore(0);
     setStreak(0);
     setLastGain(null);
+    setFeedback(null);
     setInput('');
     setLetter(first);
     setTimeLeft(modeById(id).seconds);
@@ -137,6 +139,7 @@ const AlphabetSprint = () => {
     setStreak(nextStreak);
     setScore(s => s + gain);
     setLastGain(gain);
+    setFeedback(null);
     setInput('');
     const next = drawLetter(pool, nextUsed, playable, letter);
     if (next) setLetter(next);
@@ -147,14 +150,32 @@ const AlphabetSprint = () => {
     if (phase !== 'running' || !letter || timeLeft <= 0) return;
     setStreak(0);
     setLastGain(null);
+    setFeedback(null);
     setInput('');
     const next = drawLetter(pool, used, playable, letter);
     if (next) setLetter(next);
     inputRef.current?.focus();
   };
 
+  // Free-typed submission (owner: "they can just put two letters and the
+  // suggestion gives them the answer; make them spell out the name"). There is
+  // no autocomplete during play anymore: the typed text resolves only on
+  // submit, via resolveSprintGuess (full name, or a bare surname when it is
+  // unambiguous). Ambiguity asks for the full name WITHOUT listing candidates.
+  const submit = () => {
+    if (phase !== 'running' || !letter || timeLeft <= 0) return;
+    if (input.trim().length < 2) return;
+    const outcome = resolveSprintGuess(pool, letter, input, used);
+    if (outcome.kind === 'hit') {
+      pick(outcome.player);
+    } else if (outcome.kind === 'ambiguous') {
+      setFeedback('Which one? Type the full name.');
+    } else {
+      setFeedback(`That doesn't match an unused "${letter}" surname. Check the spelling or skip.`);
+    }
+  };
+
   const mode = modeById(modeId);
-  const suggestions = phase === 'running' && letter ? suggestForLetter(pool, letter, input, used) : [];
   const isNewBest = score > 0 && score >= best[modeId];
   const timePct = mode.seconds > 0 ? Math.max(0, Math.min(100, (timeLeft / mode.seconds) * 100)) : 0;
   const lettersNamed = distinctLettersNamed(named);
@@ -163,9 +184,9 @@ const AlphabetSprint = () => {
   const emojiGrid = `🔠 Alphabet Sprint ${mode.label}: ${score} pts, ${named.length} players in ${mode.seconds}s${tierLine ? ` ${tierLine}` : ''}${isNewBest ? ' 🏅 new best' : ''}`;
 
   const onInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && suggestions.length > 0) {
+    if (e.key === 'Enter') {
       e.preventDefault();
-      pick(suggestions[0]);
+      submit();
     }
   };
 
@@ -233,7 +254,8 @@ const AlphabetSprint = () => {
               ))}
             </div>
             <ul className="text-xs text-muted-foreground space-y-1 mb-5 max-w-sm mx-auto list-disc list-inside">
-              <li>Type 2+ letters, then pick a player from the suggestions.</li>
+              <li>Spell the player's name and hit Enter. No suggestions — you have to know it.</li>
+              <li>A bare surname works if only one player fits; otherwise type the full name.</li>
               <li>Surname counts, so Kylian Mbappe answers M, not K.</li>
               <li>Each player can only be used once per run.</li>
               <li>Rare letters with too few players never come up.</li>
@@ -277,39 +299,33 @@ const AlphabetSprint = () => {
               <div className="text-7xl md:text-8xl font-bold text-primary font-display leading-none">{letter}</div>
             </div>
 
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={onInputKeyDown}
-              placeholder={`Type 2+ letters of a "${letter}" surname...`}
-              autoComplete="off"
-              autoCorrect="off"
-              spellCheck={false}
-              className="w-full px-4 py-3 rounded-xl bg-background border border-border text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary"
-            />
-
-            {suggestions.length > 0 && (
-              <div className="mt-2 border border-border rounded-xl overflow-hidden divide-y divide-border">
-                {suggestions.map(p => (
-                  <button
-                    key={p.name}
-                    type="button"
-                    onClick={() => pick(p)}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-left bg-background hover:bg-accent transition-colors"
-                  >
-                    <span className="text-lg shrink-0">{flagFor(p.nationality)}</span>
-                    <span className="font-semibold text-foreground truncate">{p.name}</span>
-                    <span className="text-xs text-muted-foreground truncate ml-auto shrink-0">{p.club}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-            {input.trim().length >= 2 && suggestions.length === 0 && (
-              <p className="mt-2 text-xs text-muted-foreground text-center">
-                No unused "{letter}" player matches that. Try another name or skip.
-              </p>
+            <div className="flex gap-2">
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={e => {
+                  setInput(e.target.value);
+                  setFeedback(null);
+                }}
+                onKeyDown={onInputKeyDown}
+                placeholder={`Spell out a "${letter}" surname player...`}
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+                className="flex-1 min-w-0 px-4 py-3 rounded-xl bg-background border border-border text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary"
+              />
+              <button
+                type="button"
+                onClick={submit}
+                disabled={input.trim().length < 2}
+                className="shrink-0 px-5 py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Submit
+              </button>
+            </div>
+            {feedback && (
+              <p className="mt-2 text-xs text-muted-foreground text-center">{feedback}</p>
             )}
 
             <div className="flex items-center justify-between mt-4">
@@ -394,8 +410,9 @@ const AlphabetSprint = () => {
           title="Alphabet Sprint: Name a Footballer for Every Letter"
           description="A quickfire football trivia race. Random letters appear, weighted by how many real players carry them, and you name anyone whose surname starts with the letter before the clock runs out. Streak bonuses reward five in a row, skips are free but reset the streak, and every player can only be used once per run."
           howToPlay={[
-            'Pick a pace: Relaxed 90s, Classic 60s or Insane 30s.',
-            'A big letter appears. Type 2+ letters and pick a player whose surname starts with it.',
+            'Pick a pace: Relaxed 75s, Classic 45s or Insane 20s.',
+            'A big letter appears. Spell out a player whose surname starts with it and press Enter.',
+            'A bare surname is accepted when it can only mean one player; if not, type the full name.',
             'Each pick is +1, with +1 bonus on every 5th in a row. Skips cost nothing but time.',
             'Every player can only be named once per run. Best score per mode is saved on this device.',
           ]}

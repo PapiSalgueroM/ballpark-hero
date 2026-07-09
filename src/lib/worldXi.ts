@@ -106,25 +106,48 @@ export function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-// Left/right positions are interchangeable in reality (a left winger can play right wing, a
-// left back can cover right back). Owner hit this: Raphinha plays LW at Barca but RW for
-// Brazil and was rejected for a RW slot. Mirror the flanks so those players are accepted.
-const MIRROR_POSITION: Partial<Record<Position, Position>> = {
-  LW: 'RW', RW: 'LW',
-  LM: 'RM', RM: 'LM',
-  LB: 'RB', RB: 'LB',
-  LWB: 'RWB', RWB: 'LWB',
+// Multi-position eligibility. A player's stored position is just their PRIMARY
+// role; real footballers cover a family of positions. Owner hit this: Raphinha
+// plays LW at Barca but RW for Brazil and was rejected for a RW slot.
+// ALT_POSITIONS lists the extra positions each primary role can cover:
+//   - wingers and wide mids are valid on BOTH flanks (LW<->RW, LM<->RM, and a
+//     winger covers the same-side wide-mid role and vice versa),
+//   - full-backs <-> wing-backs on the same side (plus the opposite full-back,
+//     which the old mirror already allowed and we keep),
+//   - CM covers CDM and CAM slots and vice versa (via the shared CM role),
+//   - CF and ST are interchangeable.
+const ALT_POSITIONS: Partial<Record<Position, Position[]>> = {
+  LW: ['RW', 'LM'], RW: ['LW', 'RM'],
+  LM: ['RM', 'LW'], RM: ['LM', 'RW'],
+  LB: ['LWB', 'RB'], RB: ['RWB', 'LB'],
+  LWB: ['LB', 'RWB'], RWB: ['RB', 'LWB'],
+  CM: ['CDM', 'CAM'],
+  CDM: ['CM'], CAM: ['CM'],
+  ST: ['CF'], CF: ['ST'],
 };
 
-export function fitsSlot(p: WxPlayer, slot: FormationSlot): boolean {
-  if (slot.allowed.includes(p.position)) return true;
-  const mirror = MIRROR_POSITION[p.position];
-  return mirror != null && slot.allowed.includes(mirror);
+const ALL_POSITIONS: Position[] = ['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'CAM', 'LM', 'RM', 'LW', 'RW', 'CF', 'ST'];
+
+/** Every position this player can take a slot for: primary + family alternates. */
+export function eligiblePositions(pos: Position): Position[] {
+  return [pos, ...(ALT_POSITIONS[pos] ?? [])];
 }
 
-/** "ST / CF" style summary of what a slot accepts. */
+export function fitsSlot(p: WxPlayer, slot: FormationSlot): boolean {
+  return eligiblePositions(p.position).some(pos => slot.allowed.includes(pos));
+}
+
+/**
+ * "ST / CF" style summary of what a slot accepts. Computed from the EFFECTIVE
+ * accepted set (any position whose family reaches one of slot.allowed), so the
+ * copy matches what fitsSlot actually lets through — e.g. a RW slot lists LW
+ * because wingers count on both flanks.
+ */
 export function allowedLabel(slot: FormationSlot): string {
-  return slot.allowed.join(' / ');
+  const effective = ALL_POSITIONS.filter(pos =>
+    eligiblePositions(pos).some(alt => slot.allowed.includes(alt)),
+  );
+  return effective.join(' / ');
 }
 
 /** Friendly rejection line for a player who is real but plays elsewhere. */

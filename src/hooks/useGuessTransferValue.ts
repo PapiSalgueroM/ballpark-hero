@@ -114,14 +114,20 @@ export function useGuessTransferValue() {
 
   useGameCompletion('guess-transfer-value', dailyStatus !== 'playing', dailyScore);
 
+  // Share grid follows the on-page heat scale: RED = warmer (closer to the
+  // true value), BLUE = colder (owner spec 2026-07-08). Green stays the win.
   const emojiGrid = useMemo(() => {
     return guesses.map(g => {
       if (g.isCorrect) return '🟩';
-      if (g.pctOff <= 0.15) return '🟨';
+      if (g.pctOff <= 0.12) return '🔥';
+      if (g.pctOff <= 0.22) return '🟥';
       if (g.pctOff <= 0.40) return '🟧';
-      return '🟥';
+      if (g.pctOff <= 0.65) return '❄️';
+      return '🟦';
     }).join('');
   }, [guesses]);
+
+  const attemptsLeft = Math.max(0, MAX_GUESSES - guesses.length);
 
   return {
     mode,
@@ -135,6 +141,7 @@ export function useGuessTransferValue() {
     newUnlimitedPlayer,
     resetDaily,
     maxGuesses: MAX_GUESSES,
+    attemptsLeft,
     todayStr,
     puzzleIndex,
     emojiGrid,

@@ -24,6 +24,10 @@ import {
   generateBoard,
   layoutGrid,
 } from '@/lib/playerBingo';
+import { FirstLineBanner, LineFlash } from '@/components/player-bingo/LineBanner';
+
+/** Why the run ended, for result-screen copy. */
+type EndReason = 'deck' | 'strikes' | 'banked' | 'blackout' | null;
 
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
 
@@ -47,6 +51,10 @@ const PlayerBingo = () => {
   const [shakeId, setShakeId] = useState<string | null>(null);
   const [gaveUp, setGaveUp] = useState(false);
   const [best, setBest] = useState(() => loadBest());
+  const [extended, setExtended] = useState(false); // accepted "keep playing" after the first bingo
+  const [choice, setChoice] = useState(false); // first-line bank/continue prompt is open
+  const [lineFlash, setLineFlash] = useState<number | null>(null); // transient extra-line banner
+  const [endReason, setEndReason] = useState<EndReason>(null);
 
   const criteria = useMemo(() => (data ? buildCriteria(data) : []), [data]);
   const cells = useMemo(() => layoutGrid(board), [board]);
@@ -76,6 +84,10 @@ const PlayerBingo = () => {
       setStrikes(0);
       setGaveUp(false);
       setShakeId(null);
+      setExtended(false);
+      setChoice(false);
+      setLineFlash(null);
+      setEndReason(null);
       setPhase('playing');
     },
     [],
@@ -97,6 +109,13 @@ const PlayerBingo = () => {
     return () => clearTimeout(t);
   }, [shakeId]);
 
+  // Clear the extra-line flash after it has had its moment.
+  useEffect(() => {
+    if (lineFlash === null) return;
+    const t = setTimeout(() => setLineFlash(null), 1800);
+    return () => clearTimeout(t);
+  }, [lineFlash]);
+
   const current = deck[pos];
   const seenCount = deck.length > 0 ? Math.min(pos + 1, deck.length) : 0;
 
@@ -111,16 +130,31 @@ const PlayerBingo = () => {
   const linesCompleted = useMemo(() => countCompletedLines(lockedIndexes), [lockedIndexes]);
   const tilesFilled = Object.keys(locked).length;
 
+  // Extended-run rules (owner spec 2026-07-08): the first bingo pauses the
+  // game with a bank-or-continue choice. Continuing grants +1 strike, every
+  // line is worth 100 points, and clearing all 24 tiles is a blackout worth
+  // a +500 bonus on top.
+  const maxStrikes = START_LIVES + (extended ? 1 : 0);
+  const blackout = tilesFilled >= BOARD_SIZE;
+  const score = linesCompleted * 100 + (blackout ? 500 : 0);
+
+  /** Move to the next reveal, or end the run if the deck is spent. */
+  const advanceOrEnd = (linesNow: number) => {
+    if (pos + 1 >= deck.length) {
+      setEndReason('deck');
+      setPhase(linesNow > 0 ? 'won' : 'lost');
+      return;
+    }
+    setPos(p => p + 1);
+  };
+
   const tapTile = (cell: BingoCriterion) => {
-    if (phase !== 'playing' || !current || !data || locked[cell.id]) return;
+    if (phase !== 'playing' || !current || !data || locked[cell.id] || choice) return;
     if (cell.test(current, data)) {
       const next = { ...locked, [cell.id]: current.name };
       setLocked(next);
       const nextIdxs = new Set(lockedIndexes);
       cells.forEach((c, i) => { if (c && next[c.id]) nextIdxs.add(i); });
-      // Track the best line count, but do NOT end on the first line — owner wants to keep
-      // filling the board for more lines (up to 12). The game ends only on 3 strikes or when
-      // the deck of players runs out.
       const linesNow = countCompletedLines(nextIdxs);
       if (linesNow > 0) {
         setBest(b => {
@@ -129,45 +163,67 @@ const PlayerBingo = () => {
           return nextBest;
         });
       }
-      if (pos + 1 >= deck.length) {
-        // Ran out of players: completing at least one line is a win.
-        setPhase(linesNow > 0 ? 'won' : 'lost');
+      // Blackout: the whole board is filled — instant win with the big bonus.
+      if (Object.keys(next).length >= BOARD_SIZE) {
+        setEndReason('blackout');
+        setPhase('won');
         return;
       }
-      setPos(p => p + 1);
+      // First completed line pauses the game: bank the win or keep playing.
+      if (linesNow > 0 && linesCompleted === 0 && !extended) {
+        setChoice(true);
+        return;
+      }
+      if (linesNow > linesCompleted) setLineFlash(linesNow);
+      advanceOrEnd(linesNow);
     } else {
       setShakeId(cell.id);
       const s = strikes + 1;
       setStrikes(s);
-      if (s >= START_LIVES) {
-        setPhase('lost');
-        return;
-      }
-      if (pos + 1 >= deck.length) {
+      if (s >= maxStrikes) {
+        // Busting with a bingo already on the board keeps the win; strikes
+        // only end the run. With zero lines it's a loss, exactly as before.
+        setEndReason('strikes');
         setPhase(linesCompleted > 0 ? 'won' : 'lost');
         return;
       }
-      setPos(p => p + 1);
+      advanceOrEnd(linesCompleted);
     }
   };
 
   const skip = () => {
-    if (phase !== 'playing') return;
+    if (phase !== 'playing' || choice) return;
+    advanceOrEnd(linesCompleted);
+  };
+
+  const giveUp = () => {
+    if (phase !== 'playing' || choice) return;
+    setGaveUp(true);
+    // Stopping with at least one completed line banks it as a win, not a loss.
+    setEndReason('banked');
+    setPhase(linesCompleted > 0 ? 'won' : 'lost');
+  };
+
+  /** First-line prompt: cash out now. */
+  const bankWin = () => {
+    setChoice(false);
+    setEndReason('banked');
+    setPhase('won');
+  };
+
+  /** First-line prompt: extend the run on the same board (+1 strike granted). */
+  const continueRun = () => {
+    setChoice(false);
+    setExtended(true);
     if (pos + 1 >= deck.length) {
-      setPhase(linesCompleted > 0 ? 'won' : 'lost');
+      setEndReason('deck');
+      setPhase('won');
       return;
     }
     setPos(p => p + 1);
   };
 
-  const giveUp = () => {
-    if (phase !== 'playing') return;
-    setGaveUp(true);
-    // Stopping with at least one completed line banks it as a win, not a loss.
-    setPhase(linesCompleted > 0 ? 'won' : 'lost');
-  };
-
-  const emojiGrid = `${buildShareGrid(board, locked)}\n${linesCompleted}/12 lines · ${strikes}/${START_LIVES} strikes · ${seenCount} players seen`;
+  const emojiGrid = `${buildShareGrid(board, locked)}\n${linesCompleted}/12 lines · ${score} pts${blackout ? ' · BLACKOUT' : ''} · ${strikes}/${maxStrikes} strikes · ${seenCount} players seen`;
 
   const lostHeadline = strikes >= START_LIVES ? 'Three strikes' : gaveUp ? 'Gave up' : 'Out of players';
   const lostCopy =
@@ -187,7 +243,7 @@ const PlayerBingo = () => {
       <GameShell
         width="wide"
         title="PLAYER BINGO"
-        subtitle="Complete a row, column, or diagonal. Unlimited skips, but three wrong placements and it's over."
+        subtitle="Complete a row, column, or diagonal — then keep the board alive for bonus lines and a blackout."
         headerExtra={
           <>
             <RulesGate title="How to Play Player Bingo" floatingTrigger>
@@ -221,6 +277,15 @@ const PlayerBingo = () => {
                   fit. Running out of players without a completed line also ends the game.
                 </p>
               </section>
+              <section>
+                <h3 className="font-bold text-foreground mb-2">After your first bingo</h3>
+                <p className="text-muted-foreground">
+                  Your first completed line banks the win on the spot. Cash out, or keep playing the same
+                  board: every completed line is worth 100 points, the extended run grants one bonus strike
+                  (4 total), and filling all 24 tiles is a BLACKOUT worth a +500 bonus. Busting on strikes
+                  after a bingo never takes the win away.
+                </p>
+              </section>
             </RulesGate>
             {best > 0 && (
               <p className="text-xs text-muted-foreground mt-3">
@@ -246,11 +311,18 @@ const PlayerBingo = () => {
         {(phase === 'playing' || phase === 'won' || phase === 'lost') && (
           <>
             <div className="flex items-center justify-between text-sm mb-3 flex-wrap gap-2">
-              <span aria-label={`${strikes} of ${START_LIVES} strikes used`} className="flex items-center gap-1">
-                {Array.from({ length: START_LIVES }, (_, i) => (
+              <span aria-label={`${strikes} of ${maxStrikes} strikes used`} className="flex items-center gap-1">
+                {Array.from({ length: maxStrikes }, (_, i) => (
                   <X
                     key={i}
-                    className={cn('w-4 h-4', i < strikes ? 'text-destructive' : 'text-muted-foreground/30')}
+                    className={cn(
+                      'w-4 h-4',
+                      i < strikes
+                        ? 'text-destructive'
+                        : i >= START_LIVES
+                        ? 'text-primary/50' // the bonus strike earned by extending the run
+                        : 'text-muted-foreground/30',
+                    )}
                     strokeWidth={3}
                   />
                 ))}
@@ -258,11 +330,15 @@ const PlayerBingo = () => {
               <span className="text-muted-foreground">
                 Lines <span className="text-primary font-bold">{linesCompleted}/12</span>
                 {' · '}Tiles <span className="text-primary font-bold">{tilesFilled}/{BOARD_SIZE}</span>
+                {' · '}Score <span className="text-primary font-bold">{score}</span>
                 {' · '}Seen <span className="text-primary font-bold">{seenCount}</span>
               </span>
             </div>
 
-            {phase === 'playing' && current && (
+            {phase === 'playing' && choice && <FirstLineBanner onBank={bankWin} onContinue={continueRun} />}
+            {phase === 'playing' && !choice && lineFlash !== null && <LineFlash lines={lineFlash} />}
+
+            {phase === 'playing' && !choice && current && (
               <div className="bg-card border border-border rounded-2xl p-5 text-center mb-4">
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
                   Player {seenCount} · Tap a matching category below, or skip
@@ -298,7 +374,7 @@ const PlayerBingo = () => {
                   <button
                     key={cell.id}
                     onClick={() => tapTile(cell)}
-                    disabled={phase !== 'playing' || !!lockedBy}
+                    disabled={phase !== 'playing' || !!lockedBy || choice}
                     title={cell.label}
                     className={cn(
                       'rounded-xl border p-1.5 min-h-[76px] md:min-h-[92px] flex flex-col items-center justify-center text-center transition-colors',
@@ -325,17 +401,30 @@ const PlayerBingo = () => {
             {phase === 'won' && (
               <ResultScreen
                 won
-                outcomeEmoji={linesCompleted >= 3 ? '🎉' : linesCompleted >= 2 ? '🔥' : '🐐'}
-                headline="BINGO!"
+                outcomeEmoji={blackout ? '🏆' : linesCompleted >= 3 ? '🎉' : linesCompleted >= 2 ? '🔥' : '🐐'}
+                headline={blackout ? 'BLACKOUT!' : 'BINGO!'}
                 statLine={
                   <>
-                    {linesCompleted} {linesCompleted === 1 ? 'line' : 'lines'} completed in {seenCount} players seen,
-                    with {strikes} {strikes === 1 ? 'strike' : 'strikes'}.
+                    {linesCompleted} {linesCompleted === 1 ? 'line' : 'lines'} · {tilesFilled}/{BOARD_SIZE} tiles ·{' '}
+                    {strikes} {strikes === 1 ? 'strike' : 'strikes'} ·{' '}
+                    <span className="font-bold text-primary">{score} pts</span>
                   </>
                 }
-                funFact={best === linesCompleted ? 'That matches your best run yet.' : best > 0 ? `Your best is ${best}/12 lines.` : undefined}
+                funFact={
+                  blackout
+                    ? `Full board cleared in ${seenCount} players: ${linesCompleted * 100} line points + 500 blackout bonus.`
+                    : endReason === 'strikes'
+                    ? 'The extended run ended on strikes, but the bingo stays banked.'
+                    : endReason === 'deck'
+                    ? `You saw all ${seenCount} players we had.`
+                    : best === linesCompleted
+                    ? 'That matches your best run yet.'
+                    : best > 0
+                    ? `Your best is ${best}/12 lines.`
+                    : undefined
+                }
                 emojiGrid={emojiGrid}
-                share={{ score: `${linesCompleted}/12 lines`, gameName: 'Player Bingo', gamePath: '/player-bingo' }}
+                share={{ score: `${linesCompleted}/12 lines · ${score} pts`, gameName: 'Player Bingo', gamePath: '/player-bingo' }}
                 onPlayAgain={() => data && start(data, criteria)}
                 playAgainLabel="New board"
               />
@@ -371,7 +460,7 @@ const PlayerBingo = () => {
 
         <GameSeoContent
           title="Player Bingo: Fill a Line with Real Footballers"
-          description="A 5 by 5 bingo board built from hard football facts. Real players are revealed by name only, one at a time, and completing any row, column, or diagonal calls bingo."
+          description="A 5 by 5 bingo board built from hard football facts. Real players are revealed by name only, one at a time, and completing any row, column, or diagonal calls bingo. After your first line you can keep the same board alive for bonus lines and a full-board blackout."
           howToPlay={[
             'The board has 24 hard category tiles around a FREE center square, arranged 5 by 5.',
             'Real footballers are revealed one at a time by name only, no flag, no club, no position shown.',
@@ -379,6 +468,7 @@ const PlayerBingo = () => {
             'A wrong tap costs a strike. Three strikes ends the game.',
             'Skips are free and unlimited. Not every player fits your board, so skipping is often the right call.',
             'Complete any single row, column, or diagonal to call bingo. You do not need the whole board.',
+            'After your first bingo, keep playing the same board for +100 per extra line, one bonus strike, and a +500 blackout bonus for all 24 tiles.',
           ]}
           examples={[
             'A one-club veteran centre-back with 20+ yellow-card seasons could lock One-club man, Centre-Back, or 10+ yellow cards in a season. Pick the box that helps your line, not just any match.',

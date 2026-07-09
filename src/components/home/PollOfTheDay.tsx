@@ -2,90 +2,84 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { POLLS, type PollFixture } from '@/data/pollFixtures';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { getPollDayET, dateSeed } from '@/lib/dateUtils';
+import { FlagImg } from '@/components/FlagImg';
 
 /**
- * Home: Poll of the Day 2.0 (item #10 rework).
+ * Home: Poll of the Day 3.0.
  *
- * Multiple topical polls per day (matchup hype, GOAT debates, team vs team,
- * athlete vs athlete), sourced from public.daily_polls. Every visitor on the
- * same America/New_York calendar day sees the same set of polls, ordered by
- * sort_order.
- *
- * daily_polls isn't in the generated Supabase types (added via direct SQL,
- * same situation as poll_votes elsewhere on the site), so it is addressed
- * dynamically via `(supabase.from as any)`.
- *
- * Fallback: if today has no rows in daily_polls (pool not seeded that far
- * out, or a fetch error), the section deterministically builds today's polls
- * from the legacy POLLS pool in src/data/pollFixtures.ts using the same
- * date-hash convention as the old single-poll implementation, so the section
- * never goes empty.
- *
- * Voting: one row inserted into public.poll_votes (poll_key, choice) per
- * poll, keyed by each poll's own poll_key. Anti-repeat-vote is a localStorage
- * guard per poll_key, same courtesy-not-security convention as before.
+ * - Polls rotate at NOON Eastern (getPollDayET), so match-day polls show up
+ *   the day of the match: e.g. the France vs Morocco quarterfinal poll
+ *   appears from 12pm ET on matchday until 12pm ET the next day.
+ * - Supports 2-4 options per poll (daily_polls option_c/option_d added for
+ *   4-way polls like the Golden Boot race).
+ * - Real flag IMAGES via FlagImg (option_*_flag holds a country name), not
+ *   emoji — Windows renders flag emoji as bare letter codes, which is what
+ *   the owner was seeing ("just showing the abbreviation of the flag").
+ * - Voting: one row into public.poll_votes (poll_key, choice in a|b|c|d),
+ *   localStorage anti-repeat guard per poll_key (courtesy, not security).
+ * - Fallback: if the poll day has no daily_polls rows, deterministically
+ *   pick from the legacy POLLS fixture pool so the section never renders
+ *   empty.
  */
+
+type ChoiceKey = 'a' | 'b' | 'c' | 'd';
+const CHOICE_KEYS: ChoiceKey[] = ['a', 'b', 'c', 'd'];
+
+interface PollOption {
+  choice: ChoiceKey;
+  label: string;
+  emoji: string;
+  flag: string; // country name understood by FlagImg, or ''
+}
 
 interface PollItem {
   key: string;
   question: string;
-  optionA: string;
-  optionAEmoji: string;
-  optionB: string;
-  optionBEmoji: string;
-}
-
-interface VoteCounts {
-  a: number;
-  b: number;
+  options: PollOption[];
 }
 
 const VOTE_KEY_PREFIX = 'dukb-poll-vote-';
 const FALLBACK_COUNT = 2;
 
-function readStoredVote(pollKey: string): 'a' | 'b' | null {
+function readStoredVote(pollKey: string): ChoiceKey | null {
   try {
     const raw = localStorage.getItem(VOTE_KEY_PREFIX + pollKey);
-    return raw === 'a' || raw === 'b' ? raw : null;
+    return raw === 'a' || raw === 'b' || raw === 'c' || raw === 'd' ? raw : null;
   } catch {
     return null;
   }
 }
 
-function storeVote(pollKey: string, choice: 'a' | 'b'): void {
+function storeVote(pollKey: string, choice: ChoiceKey): void {
   try {
     localStorage.setItem(VOTE_KEY_PREFIX + pollKey, choice);
   } catch {
-    /* localStorage unavailable (quota/private mode) - not critical */
+    /* localStorage unavailable — not critical */
   }
 }
 
-/**
- * Deterministic fallback: picks FALLBACK_COUNT polls from the legacy fixture
- * pool using the date seed, so every user on the same ET day still sees the
- * same fallback set, and the section never renders empty.
- */
+/** Deterministic fallback from the legacy fixture pool (2-option only). */
 function fallbackPolls(dateStr: string): PollItem[] {
   const seed = dateSeed(dateStr);
   const items: PollItem[] = [];
   for (let i = 0; i < FALLBACK_COUNT; i++) {
-    const idx = (seed + i * 7919) % POLLS.length; // 7919 is prime, spreads picks apart
+    const idx = (seed + i * 7919) % POLLS.length;
     const fixture: PollFixture = POLLS[idx];
     items.push({
       key: fixture.key,
       question: fixture.prompt,
-      optionA: fixture.a,
-      optionAEmoji: '',
-      optionB: fixture.b,
-      optionBEmoji: '',
+      options: [
+        { choice: 'a', label: fixture.a, emoji: '', flag: '' },
+        { choice: 'b', label: fixture.b, emoji: '', flag: '' },
+      ],
     });
   }
   return items;
 }
 
 export function PollOfTheDay() {
-  const today = useMemo(getTodayET, []);
+  const pollDay = useMemo(getPollDayET, []);
   const [polls, setPolls] = useState<PollItem[] | null>(null);
 
   useEffect(() => {
@@ -94,38 +88,41 @@ export function PollOfTheDay() {
     const loadTodaysPolls = async () => {
       try {
         const { data, error } = await (supabase.from as any)('daily_polls')
-          .select('poll_key, question, option_a, option_a_emoji, option_b, option_b_emoji, sort_order')
-          .eq('poll_date', today)
+          .select(
+            'poll_key, question, option_a, option_a_emoji, option_a_flag, option_b, option_b_emoji, option_b_flag, option_c, option_c_emoji, option_c_flag, option_d, option_d_emoji, option_d_flag, sort_order',
+          )
+          .eq('poll_date', pollDay)
           .order('sort_order', { ascending: true });
 
         if (cancelled) return;
 
         if (error || !data || data.length === 0) {
-          setPolls(fallbackPolls(today));
+          setPolls(fallbackPolls(pollDay));
           return;
         }
 
-        const rows = data as {
-          poll_key: string;
-          question: string;
-          option_a: string;
-          option_a_emoji: string;
-          option_b: string;
-          option_b_emoji: string;
-        }[];
+        const items: PollItem[] = (data as any[]).map((r) => {
+          const options: PollOption[] = [];
+          const push = (choice: ChoiceKey, label: unknown, emoji: unknown, flag: unknown) => {
+            if (typeof label === 'string' && label.trim().length > 0) {
+              options.push({
+                choice,
+                label: label.trim(),
+                emoji: typeof emoji === 'string' ? emoji : '',
+                flag: typeof flag === 'string' ? flag : '',
+              });
+            }
+          };
+          push('a', r.option_a, r.option_a_emoji, r.option_a_flag);
+          push('b', r.option_b, r.option_b_emoji, r.option_b_flag);
+          push('c', r.option_c, r.option_c_emoji, r.option_c_flag);
+          push('d', r.option_d, r.option_d_emoji, r.option_d_flag);
+          return { key: r.poll_key as string, question: r.question as string, options };
+        }).filter((p) => p.options.length >= 2);
 
-        setPolls(
-          rows.map((r) => ({
-            key: r.poll_key,
-            question: r.question,
-            optionA: r.option_a,
-            optionAEmoji: r.option_a_emoji ?? '',
-            optionB: r.option_b,
-            optionBEmoji: r.option_b_emoji ?? '',
-          })),
-        );
+        setPolls(items.length > 0 ? items : fallbackPolls(pollDay));
       } catch {
-        if (!cancelled) setPolls(fallbackPolls(today));
+        if (!cancelled) setPolls(fallbackPolls(pollDay));
       }
     };
 
@@ -133,7 +130,7 @@ export function PollOfTheDay() {
     return () => {
       cancelled = true;
     };
-  }, [today]);
+  }, [pollDay]);
 
   if (!polls || polls.length === 0) return null;
 
@@ -151,20 +148,25 @@ export function PollOfTheDay() {
   );
 }
 
+type VoteCounts = Record<ChoiceKey, number>;
+
+function emptyCounts(): VoteCounts {
+  return { a: 0, b: 0, c: 0, d: 0 };
+}
+
 function PollCard({ poll }: { poll: PollItem }) {
-  const [myVote, setMyVote] = useState<'a' | 'b' | null>(null);
+  const [myVote, setMyVote] = useState<ChoiceKey | null>(null);
   const [counts, setCounts] = useState<VoteCounts | null>(null);
   const [voting, setVoting] = useState(false);
   const [errored, setErrored] = useState(false);
 
-  // Seed the local anti-repeat guard on mount / whenever the poll changes.
-  // No hooks below this are conditional - this only sets state, it never
-  // returns early.
+  // Seed the local anti-repeat guard on mount / poll change. Never
+  // conditional — hooks always run in the same order.
   useEffect(() => {
     setMyVote(readStoredVote(poll.key));
   }, [poll.key]);
 
-  // Fetch results once the player has voted (either just now or on a prior visit).
+  // Fetch results once the player has voted (now or on a prior visit).
   useEffect(() => {
     if (!myVote) return;
     let cancelled = false;
@@ -180,10 +182,11 @@ function PollCard({ poll }: { poll: PollItem }) {
           return;
         }
 
-        const next: VoteCounts = { a: 0, b: 0 };
+        const next = emptyCounts();
         for (const row of data as { choice: string }[]) {
-          if (row.choice === 'a') next.a++;
-          else if (row.choice === 'b') next.b++;
+          if (CHOICE_KEYS.includes(row.choice as ChoiceKey)) {
+            next[row.choice as ChoiceKey]++;
+          }
         }
         if (!cancelled) setCounts(next);
       } catch {
@@ -197,12 +200,11 @@ function PollCard({ poll }: { poll: PollItem }) {
     };
   }, [myVote, poll.key]);
 
-  const handleVote = async (choice: 'a' | 'b') => {
-    if (myVote || voting) return; // already voted, or a vote is in flight
+  const handleVote = async (choice: ChoiceKey) => {
+    if (myVote || voting) return;
     setVoting(true);
 
-    // Optimistic: lock in the choice + guard immediately so a slow network
-    // can't let the same tap double-fire, and the bars render right away.
+    // Optimistic: lock in immediately so a slow network can't double-fire.
     storeVote(poll.key, choice);
     setMyVote(choice);
 
@@ -213,19 +215,17 @@ function PollCard({ poll }: { poll: PollItem }) {
         console.debug('[poll] insert failed (ignored):', error);
       }
     } catch {
-      // Never let a tracking failure break the UI - the vote already
-      // "landed" from the player's perspective via the optimistic state above.
+      // Never let a tracking failure break the UI.
     } finally {
       setVoting(false);
     }
   };
 
-  const total = counts ? counts.a + counts.b : 0;
-  const pctA = total > 0 ? Math.round((counts!.a / total) * 100) : myVote === 'a' ? 100 : 0;
-  const pctB = total > 0 ? 100 - pctA : myVote === 'b' ? 100 : 0;
-
-  const labelA = poll.optionAEmoji ? `${poll.optionAEmoji} ${poll.optionA}` : poll.optionA;
-  const labelB = poll.optionBEmoji ? `${poll.optionBEmoji} ${poll.optionB}` : poll.optionB;
+  const total = counts ? poll.options.reduce((s, o) => s + counts[o.choice], 0) : 0;
+  const pctFor = (o: PollOption): number => {
+    if (total > 0 && counts) return Math.round((counts[o.choice] / total) * 100);
+    return myVote === o.choice ? 100 : 0;
+  };
 
   return (
     <div className="rounded-xl border border-border bg-surface-1 p-4">
@@ -235,13 +235,15 @@ function PollCard({ poll }: { poll: PollItem }) {
 
       {!myVote ? (
         <div className="grid grid-cols-2 gap-2">
-          <PollButton label={labelA} onClick={() => handleVote('a')} disabled={voting} />
-          <PollButton label={labelB} onClick={() => handleVote('b')} disabled={voting} />
+          {poll.options.map((o) => (
+            <PollButton key={o.choice} option={o} onClick={() => handleVote(o.choice)} disabled={voting} />
+          ))}
         </div>
       ) : (
         <div className="space-y-2">
-          <ResultBar label={labelA} pct={pctA} isMine={myVote === 'a'} />
-          <ResultBar label={labelB} pct={pctB} isMine={myVote === 'b'} />
+          {poll.options.map((o) => (
+            <ResultBar key={o.choice} option={o} pct={pctFor(o)} isMine={myVote === o.choice} />
+          ))}
           {!errored && (
             <p className="text-[10px] text-muted-foreground text-right pt-0.5">
               {total > 0
@@ -255,19 +257,32 @@ function PollCard({ poll }: { poll: PollItem }) {
   );
 }
 
-function PollButton({ label, onClick, disabled }: { label: string; onClick: () => void; disabled: boolean }) {
+function OptionLabel({ option, size = 18 }: { option: PollOption; size?: number }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 min-w-0">
+      {option.flag ? (
+        <FlagImg name={option.flag} size={size} />
+      ) : option.emoji ? (
+        <span aria-hidden="true">{option.emoji}</span>
+      ) : null}
+      <span className="truncate">{option.label}</span>
+    </span>
+  );
+}
+
+function PollButton({ option, onClick, disabled }: { option: PollOption; onClick: () => void; disabled: boolean }) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      className="rounded-lg border border-border bg-surface-2 px-3 py-3 text-xs font-semibold text-foreground text-center hover:border-gold/50 hover:bg-surface-3 active:scale-[0.98] transition-all duration-150 disabled:opacity-60"
+      className="rounded-lg border border-border bg-surface-2 px-3 py-3 text-xs font-semibold text-foreground text-center hover:border-gold/50 hover:bg-surface-3 active:scale-[0.98] transition-all duration-150 disabled:opacity-60 flex items-center justify-center"
     >
-      {label}
+      <OptionLabel option={option} />
     </button>
   );
 }
 
-function ResultBar({ label, pct, isMine }: { label: string; pct: number; isMine: boolean }) {
+function ResultBar({ option, pct, isMine }: { option: PollOption; pct: number; isMine: boolean }) {
   return (
     <div className="rounded-lg border border-border bg-surface-2 px-3 py-2 relative overflow-hidden">
       <div
@@ -279,8 +294,8 @@ function ResultBar({ label, pct, isMine }: { label: string; pct: number; isMine:
         aria-hidden="true"
       />
       <div className="relative flex items-center justify-between gap-2 text-xs">
-        <span className={cn('font-semibold truncate', isMine ? 'text-gold' : 'text-foreground')}>
-          {label}
+        <span className={cn('font-semibold truncate flex items-center gap-1', isMine ? 'text-gold' : 'text-foreground')}>
+          <OptionLabel option={option} size={16} />
           {isMine && ' ✓'}
         </span>
         <span className="font-bold text-foreground shrink-0">{pct}%</span>
