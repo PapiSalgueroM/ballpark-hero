@@ -92,6 +92,7 @@ import PackBattle from "./pages/PackBattle";
 import SportsMillionaire from "./pages/SportsMillionaire";
 import DartsGame from "./pages/DartsGame";
 import DartDraft from "./pages/DartDraft";
+import BlindRank from "./pages/BlindRank";
 
 const queryClient = new QueryClient();
 
@@ -268,6 +269,7 @@ const AppContent = () => {
         <Route path="/sports-millionaire" element={<SportsMillionaire />} />
         <Route path="/darts" element={<DartsGame />} />
         <Route path="/dart-draft" element={<DartDraft />} />
+        <Route path="/blind-rank" element={<BlindRank />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
