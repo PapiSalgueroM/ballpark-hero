@@ -50,6 +50,9 @@ export function useTransferPath(): TransferPathState {
   }, []);
 
   // ── Career graph — memoized over playerPool ────────────────────────────────
+  // TEMPORAL teammates only (owner 2026-07-10: "Ronaldo never played with
+  // Mbappé" — both wore Real Madrid white, six years apart). A connection now
+  // requires the SAME club in the SAME season, not just the same club ever.
   const playerToClubs = useMemo(() => {
     const map = new Map<string, Set<string>>();
     for (const p of playerPool) {
@@ -58,15 +61,25 @@ export function useTransferPath(): TransferPathState {
     return map;
   }, [playerPool]);
 
+  const playerToClubSeasons = useMemo(() => {
+    const map = new Map<string, Set<string>>();
+    for (const p of playerPool) {
+      map.set(p.name, new Set(p.career.map(s => `${s.club}::${s.season}`)));
+    }
+    return map;
+  }, [playerPool]);
+
   const playersShareClub = useMemo(
     () => (a: string, b: string): string | null => {
-      const clubsA = playerToClubs.get(a);
-      const clubsB = playerToClubs.get(b);
-      if (!clubsA || !clubsB) return null;
-      for (const c of clubsA) if (clubsB.has(c)) return c;
+      const csA = playerToClubSeasons.get(a);
+      const csB = playerToClubSeasons.get(b);
+      if (!csA || !csB) return null;
+      for (const key of csA) {
+        if (csB.has(key)) return key.split('::')[0]; // club name of a shared season
+      }
       return null;
     },
-    [playerToClubs],
+    [playerToClubSeasons],
   );
 
   // Helpers returned to board — closures over playerPool / playerToClubs

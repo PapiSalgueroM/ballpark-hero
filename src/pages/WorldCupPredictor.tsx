@@ -58,13 +58,13 @@ const groups: Group[] = [
     { name: "Mexico", isTBD: false },
     { name: "South Korea", isTBD: false },
     { name: "South Africa", isTBD: false },
-    { name: "UEFA Path D Winner", isTBD: true },
+    { name: "Czech Republic", isTBD: false },
   ]},
   { letter: "B", teams: [
     { name: "Canada", isTBD: false },
     { name: "Switzerland", isTBD: false },
     { name: "Qatar", isTBD: false },
-    { name: "UEFA Path A Winner", isTBD: true },
+    { name: "Bosnia & Herzegovina", isTBD: false },
   ]},
   { letter: "C", teams: [
     { name: "Brazil", isTBD: false },
@@ -76,7 +76,7 @@ const groups: Group[] = [
     { name: "USA", isTBD: false },
     { name: "Paraguay", isTBD: false },
     { name: "Australia", isTBD: false },
-    { name: "UEFA Path C Winner", isTBD: true },
+    { name: "Turkey", isTBD: false },
   ]},
   { letter: "E", teams: [
     { name: "Germany", isTBD: false },
@@ -88,7 +88,7 @@ const groups: Group[] = [
     { name: "Netherlands", isTBD: false },
     { name: "Japan", isTBD: false },
     { name: "Tunisia", isTBD: false },
-    { name: "UEFA Path B Winner", isTBD: true },
+    { name: "Sweden", isTBD: false },
   ]},
   { letter: "G", teams: [
     { name: "Belgium", isTBD: false },
@@ -106,7 +106,7 @@ const groups: Group[] = [
     { name: "France", isTBD: false },
     { name: "Senegal", isTBD: false },
     { name: "Norway", isTBD: false },
-    { name: "Inter-Playoff 2 Winner", isTBD: true },
+    { name: "Iraq", isTBD: false },
   ]},
   { letter: "J", teams: [
     { name: "Argentina", isTBD: false },
@@ -118,7 +118,7 @@ const groups: Group[] = [
     { name: "Portugal", isTBD: false },
     { name: "Colombia", isTBD: false },
     { name: "Uzbekistan", isTBD: false },
-    { name: "Inter-Playoff 1 Winner", isTBD: true },
+    { name: "DR Congo", isTBD: false },
   ]},
   { letter: "L", teams: [
     { name: "England", isTBD: false },
@@ -129,14 +129,11 @@ const groups: Group[] = [
 ];
 
 
-const playoffMatchups = [
-  { slot: "UEFA Path A Winner", group: "B", teamA: "Italy", teamB: "Bosnia & Herzegovina" },
-  { slot: "UEFA Path B Winner", group: "F", teamA: "Sweden", teamB: "Poland" },
-  { slot: "UEFA Path C Winner", group: "D", teamA: "Kosovo", teamB: "Turkey" },
-  { slot: "UEFA Path D Winner", group: "A", teamA: "Denmark", teamB: "Czech Republic" },
-  { slot: "Inter-Playoff 1 Winner", group: "K", teamA: "Jamaica", teamB: "DR Congo" },
-  { slot: "Inter-Playoff 2 Winner", group: "I", teamA: "Bolivia", teamB: "Iraq" },
-];
+// 2026-07-10: playoffs are DONE — real winners are baked into the groups above
+// (Path A Bosnia & Herzegovina beat Italy on pens, Path B Sweden, Path C Turkey,
+// Path D Czechia beat Denmark on pens; Inter-confed: DR Congo beat Jamaica 100',
+// Iraq beat Bolivia). Keep the array shape for the sim helpers, now empty.
+const playoffMatchups: { slot: string; group: string; teamA: string; teamB: string }[] = [];
 
 /* ───── FIFA rankings ───── */
 
@@ -1290,7 +1287,7 @@ const WorldCupPredictor = () => {
         </div>
 
         {/* Playoff Slots Panel */}
-        {!viewingSharedBracket && (
+        {!viewingSharedBracket && playoffMatchups.length > 0 && (
           <PlayoffSlotsPanel picks={playoffPicks} onPick={handlePlayoffPick} onAutoPickPlayoffs={handleAutoPickPlayoffs} />
         )}
 
