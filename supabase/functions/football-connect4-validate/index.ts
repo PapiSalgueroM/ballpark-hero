@@ -1,4 +1,16 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+// Free-AI shim: prefer a free Google Gemini API key (GEMINI_API_KEY secret).
+const __GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
+const __AI_URL = __GEMINI_KEY ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions" : "https://ai.gateway.lovable.dev/v1/chat/completions";
+
+// Verified-verdict cache (2026-07-10): repeat guesses are answered from
+// Postgres instead of burning the free Gemini quota (10 requests/min).
+// SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are auto-injected in edge runtime.
+const sb = createClient(Deno.env.get("SUPABASE_URL") ?? "", Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "");
+const CACHE_GAME = "football-connect4";
+const cacheKeyOf = (p: string, r: string, c: string) =>
+  `${p}|${r}|${c}`.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 
 const allowedOrigins = [
   "https://douknowball.com",
@@ -80,19 +92,30 @@ serve(async (req) => {
       });
     }
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    const cacheKey = cacheKeyOf(playerName, rowAttribute, columnAttribute);
+    try {
+      const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
+        .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
+      if (hit?.verdict) {
+        return new Response(JSON.stringify({ ...(hit.verdict as Record<string, unknown>), cached: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    } catch { /* cache down -> fall through to AI */ }
 
-    const response = await fetch(
-      "https://ai.gateway.lovable.dev/v1/chat/completions",
+    const AI_KEY = __GEMINI_KEY || Deno.env.get("LOVABLE_API_KEY");
+    if (!AI_KEY) throw new Error("No AI key configured");
+
+    const callAI = () => fetch(
+      __AI_URL,
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          Authorization: `Bearer ${AI_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "google/gemini-2.5-pro",
+          model: (__GEMINI_KEY ? "gemini-2.5-flash" : "google/gemini-2.5-pro"),
           messages: [
             {
               role: "system",
@@ -191,6 +214,12 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
         }),
       }
     );
+    let response = await callAI();
+    if (response.status === 429) {
+      // free-tier RPM hit: wait once and retry before falling back
+      await new Promise((r) => setTimeout(r, 1200));
+      response = await callAI();
+    }
 
     if (!response.ok) {
       return new Response(
@@ -203,11 +232,18 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
     const content = data.choices?.[0]?.message?.content || "";
 
     let parsed;
+    let aiVerdict = false;
     try {
       const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/) || [null, content];
       parsed = JSON.parse(jsonMatch[1].trim());
+      aiVerdict = true;
     } catch {
       parsed = { valid: false, reason: "Could not parse response. Please try again." };
+    }
+
+    // cache VERIFIED verdicts only — never the unverified fallbacks
+    if (aiVerdict && parsed && typeof parsed === "object") {
+      try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict: parsed }); } catch { /* non-fatal */ }
     }
 
     return new Response(JSON.stringify(parsed), {

@@ -1,4 +1,23 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+// College Football (NCAA/FBS) 3x3 grid validator. FREE Gemini key ->
+// gemini-2.5-flash (2.0-flash has no free quota on this key). Falls back to
+// Lovable gateway, then accept-unverified so the daily grid never 500s.
+const GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
+const AI_URL = GEMINI_KEY
+  ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+  : "https://ai.gateway.lovable.dev/v1/chat/completions";
+const AI_MODEL = GEMINI_KEY ? "gemini-2.5-flash" : "google/gemini-2.5-flash";
+const AI_KEY = GEMINI_KEY || Deno.env.get("LOVABLE_API_KEY");
+
+// Verified-verdict cache (2026-07-10): repeat guesses are answered from
+// Postgres instead of burning the free Gemini quota (10 requests/min).
+// SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are auto-injected in edge runtime.
+const sb = createClient(Deno.env.get("SUPABASE_URL") ?? "", Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "");
+const CACHE_GAME = "college-grid";
+const cacheKeyOf = (p: string, r: string, c: string) =>
+  `${p}|${r}|${c}`.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 
 const allowedOrigins = [
   "https://douknowball.com",
@@ -8,14 +27,12 @@ const allowedOrigins = [
   "http://localhost:8080",
   "http://localhost:5173",
 ];
-
 function isAllowedOrigin(origin: string): boolean {
   if (allowedOrigins.includes(origin)) return true;
   if (origin.endsWith(".lovableproject.com")) return true;
   if (origin.endsWith(".lovable.app")) return true;
   return false;
 }
-
 function getCorsHeaders(req: Request) {
   const origin = req.headers.get("origin") || "";
   return {
@@ -28,120 +45,79 @@ function getCorsHeaders(req: Request) {
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_MAX = 20;
 const RATE_LIMIT_WINDOW_MS = 60_000;
-
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
+  const e = rateLimitMap.get(ip);
+  if (!e || now > e.resetAt) {
     rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
     return false;
   }
-  entry.count++;
-  return entry.count > RATE_LIMIT_MAX;
+  e.count++;
+  return e.count > RATE_LIMIT_MAX;
 }
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, e] of rateLimitMap) if (now > e.resetAt) rateLimitMap.delete(ip);
+}, 300_000);
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
-
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  const json = (obj: unknown, status = 200) =>
+    new Response(JSON.stringify(obj), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (isRateLimited(ip)) {
-    return new Response(
-      JSON.stringify({ valid: false, error: 'Too many requests' }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 429 }
-    );
-  }
+  if (isRateLimited(ip)) return json({ valid: false, error: "Too many requests" }, 429);
 
+  let sanitized = { player: "", row: "", col: "" };
   try {
     const { playerName, rowAttribute, colAttribute } = await req.json();
-
-    if (!playerName || !rowAttribute || !colAttribute) {
-      return new Response(
-        JSON.stringify({ valid: false, error: 'Missing required fields' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const sanitized = {
-      player: playerName.slice(0, 80).replace(/[\n\r]/g, ''),
-      row: rowAttribute.slice(0, 100).replace(/[\n\r]/g, ''),
-      col: colAttribute.slice(0, 100).replace(/[\n\r]/g, ''),
+    if (!playerName || !rowAttribute || !colAttribute) return json({ valid: false, error: "Missing required fields" });
+    sanitized = {
+      player: String(playerName).slice(0, 80).replace(/[\n\r]/g, ""),
+      row: String(rowAttribute).slice(0, 100).replace(/[\n\r]/g, ""),
+      col: String(colAttribute).slice(0, 100).replace(/[\n\r]/g, ""),
     };
-
-    const apiKey = Deno.env.get('LOVABLE_API_KEY');
-    if (!apiKey) {
-      return new Response(
-        JSON.stringify({ valid: false, error: 'Server configuration error' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
-      );
-    }
-
-    const prompt = `You are a college football (NCAA/FBS) trivia expert with knowledge from 2000 to 2026. Determine if the player "${sanitized.player}" satisfies BOTH of these criteria:
-
-1. Row attribute: "${sanitized.row}"
-2. Column attribute: "${sanitized.col}"
-
-IMPORTANT NAME MATCHING: Be lenient with name spelling. If the input name is a plausible variation or partial name of a real college football player, identify that player and validate against their actual career. Accept last-name-only if unambiguous.
-
-Consider the player's college football career including school attended, position played, awards won, draft status, and conference.
-
-For school criteria like "Alabama", the player must have played college football at that school.
-For conference criteria like "SEC Conference", "Big Ten Conference", "ACC Conference", "Pac-12 Conference", "Big 12 Conference", the player attended a school in that conference during their college career.
-For "Heisman Winner", the player won the Heisman Trophy.
-For "All-American", the player was named a consensus or unanimous All-American.
-For "National Champion", the player was on a team that won the BCS or CFP National Championship.
-For position criteria, the player played that position in college.
-For "First Round Pick", the player was selected in the 1st round of the NFL Draft.
-For "Top 10 Pick" or "Top 5 Pick", check their actual NFL Draft position.
-For "1st Overall Pick", the player was the #1 overall pick.
-For "Went Undrafted", the player was not selected in the NFL Draft.
-
-Only consider players active in college football from 2000 to 2026.
-
-Respond with ONLY a JSON object: {"valid": true} or {"valid": false, "reason": "brief explanation"}`;
-
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.1,
-        max_tokens: 150,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`AI API error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content?.trim() || '';
-
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      return new Response(
-        JSON.stringify({ valid: false, error: 'Could not validate' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const result = JSON.parse(jsonMatch[0]);
-
-    return new Response(
-      JSON.stringify({ valid: !!result.valid, reason: result.reason || null }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
   } catch {
-    return new Response(
-      JSON.stringify({ valid: false, error: 'Validation failed' }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
-    );
+    return json({ valid: false, error: "Bad request" }, 400);
+  }
+
+  const accept = () => json({ valid: true, unverified: true, reason: "Accepted (answer-checking offline).", fullName: sanitized.player });
+
+  const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
+  try {
+    const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
+      .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
+    if (hit?.verdict) return json({ ...(hit.verdict as Record<string, unknown>), cached: true });
+  } catch { /* cache down -> fall through to AI */ }
+
+  if (!AI_KEY) return accept();
+
+  const prompt = `You are a college football (NCAA/FBS) trivia expert (2000-2026). Does "${sanitized.player}" satisfy BOTH criteria?\n1. "${sanitized.row}"\n2. "${sanitized.col}"\nConsider the player's college career: school(s) attended, conference, position, Heisman/All-American/National Champion honours, and NFL draft status (round/pick/undrafted). Be lenient with spelling and accept an unambiguous surname.\nReply with ONLY JSON: {"valid":true,"fullName":"First Last"} or {"valid":false,"reason":"brief"}`;
+
+  try {
+    const callAI = () => fetch(AI_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${AI_KEY}` },
+      body: JSON.stringify({ model: AI_MODEL, messages: [{ role: "user", content: prompt }], temperature: 0.1, max_tokens: 150 }),
+    });
+    let resp = await callAI();
+    if (resp.status === 429) {
+      // free-tier RPM hit: wait once and retry before failing open
+      await new Promise((r) => setTimeout(r, 1200));
+      resp = await callAI();
+    }
+    if (!resp.ok) return accept();
+    const data = await resp.json();
+    const content = data.choices?.[0]?.message?.content?.trim() || "";
+    const m = content.match(/\{[\s\S]*\}/);
+    if (!m) return accept();
+    const result = JSON.parse(m[0]);
+    const verdict = { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
+    // cache VERIFIED verdicts only — never the fail-open acceptances
+    try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
+    return json(verdict);
+  } catch {
+    return accept();
   }
 });
