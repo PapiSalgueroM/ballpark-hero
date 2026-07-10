@@ -9,20 +9,26 @@ import { Loader2, ListOrdered, RotateCcw, CalendarDays, Infinity as InfinityIcon
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
-  buildRound, daySeed, fetchBlindRankPool, scoreRound,
-  type ModeDef, type RankPlayer,
+  buildNbaRound, buildRound, daySeed, fetchBlindRankPool, fetchNbaBlindRankPool,
+  NBA_DAILY_SEED_OFFSET, playerSubtitle, scoreRound, SPORT_EMOJI,
+  type AnyRankPlayer, type ModeDef, type NbaRankPlayer, type RankPlayer, type Sport,
 } from '@/lib/blindRank';
 
 type GameMode = 'daily' | 'unlimited';
 type Phase = 'intro' | 'playing' | 'reveal';
 
+const SPORT_LABEL: Record<Sport, string> = { soccer: 'Soccer', nba: 'NBA' };
+
 const BlindRank = () => {
   const [pool, setPool] = useState<RankPlayer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sport, setSport] = useState<Sport>('soccer');
+  const [nbaPool, setNbaPool] = useState<NbaRankPlayer[]>([]);
+  const [nbaLoading, setNbaLoading] = useState(false);
   const [gameMode, setGameMode] = useState<GameMode>('daily');
   const [phase, setPhase] = useState<Phase>('intro');
-  const [mode, setMode] = useState<ModeDef | null>(null);
-  const [players, setPlayers] = useState<RankPlayer[]>([]);
+  const [mode, setMode] = useState<ModeDef<AnyRankPlayer> | null>(null);
+  const [players, setPlayers] = useState<AnyRankPlayer[]>([]);
   const [revealIndex, setRevealIndex] = useState(0);            // which player is being placed (0..4)
   const [placements, setPlacements] = useState<(number | null)[]>([null, null, null, null, null]); // slot -> player index
   const [revealedSlots, setRevealedSlots] = useState(0);        // reveal animation progress
@@ -31,8 +37,24 @@ const BlindRank = () => {
     fetchBlindRankPool().then(p => { setPool(p); setLoading(false); });
   }, []);
 
+  // NBA pool loads lazily on the first 🏀 toggle; the lib caches it
+  // module-level, so switching sports back and forth never refetches.
+  const loadNba = () => {
+    setNbaLoading(true);
+    fetchNbaBlindRankPool().then(p => { setNbaPool(p); setNbaLoading(false); });
+  };
+
+  const pickSport = (s: Sport) => {
+    setSport(s);
+    if (s === 'nba' && nbaPool.length === 0 && !nbaLoading) loadNba();
+  };
+
   const start = (gm: GameMode) => {
-    const round = buildRound(pool, gm === 'daily' ? daySeed() : undefined);
+    // The soccer daily keeps its exact historical seed; the NBA daily is
+    // offset so it's a different-but-equally-stable board.
+    const round = sport === 'nba'
+      ? buildNbaRound(nbaPool, gm === 'daily' ? daySeed() + NBA_DAILY_SEED_OFFSET : undefined)
+      : buildRound(pool, gm === 'daily' ? daySeed() : undefined);
     if (!round) return;
     setGameMode(gm);
     setMode(round.mode);
@@ -62,15 +84,18 @@ const BlindRank = () => {
     [phase, placements, players, mode],
   );
   const revealDone = revealedSlots >= 5;
+  // Unchanged single completion hook: the blind-rank daily counts for
+  // whichever sport's daily board is finished (first one that day scores).
   useGameCompletion('blind-rank', phase === 'reveal' && revealDone && gameMode === 'daily', result?.total ?? 0, result?.exact ?? 0);
 
   const currentPlayer = revealIndex < 5 ? players[revealIndex] : null;
+  const introBusy = sport === 'nba' ? nbaLoading : loading;
 
   return (
     <>
       <PageSeo
         title="Blind Rank - Rank Players Blind | DoUKnowBall"
-        description="Five players revealed one at a time. Lock each into a rank slot before seeing who's next, then watch the true order get revealed. New daily board every day."
+        description="Five players revealed one at a time — soccer stars or NBA legends. Lock each into a rank slot before seeing who's next, then watch the true order get revealed. New daily boards every day."
         path="/blind-rank"
       />
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(222 35% 8%) 0%, hsl(262 30% 7%) 60%, hsl(222 30% 6%) 100%)' }}>
@@ -90,8 +115,28 @@ const BlindRank = () => {
                   5 players, revealed one at a time. Slot each into a rank <b>immediately</b> —
                   no take-backs, no seeing who's next. Then the truth comes out.
                 </p>
-                {loading ? (
+                <div className="flex justify-center gap-2">
+                  {(['soccer', 'nba'] as Sport[]).map(s => (
+                    <button
+                      key={s}
+                      onClick={() => pickSport(s)}
+                      className={cn(
+                        'px-5 py-2 rounded-full border text-sm font-bold transition-colors',
+                        sport === s
+                          ? 'border-primary bg-primary/15 text-foreground'
+                          : 'border-border bg-card/60 text-muted-foreground hover:bg-card/80',
+                      )}
+                    >
+                      {SPORT_EMOJI[s]} {SPORT_LABEL[s]}
+                    </button>
+                  ))}
+                </div>
+                {introBusy ? (
                   <Loader2 className="w-6 h-6 animate-spin text-muted-foreground mx-auto" />
+                ) : sport === 'nba' && nbaPool.length === 0 ? (
+                  <button className="text-sm text-muted-foreground underline underline-offset-4 mx-auto block" onClick={loadNba}>
+                    Couldn't load the NBA player pool — tap to retry
+                  </button>
                 ) : (
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Button size="lg" className="text-lg px-8 py-6 font-bold" onClick={() => start('daily')}>
@@ -108,7 +153,7 @@ const BlindRank = () => {
             {phase !== 'intro' && mode && (
               <>
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card/70 border border-border">
-                  <span className="text-xs font-bold uppercase tracking-widest text-primary">{mode.title}</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-primary">{SPORT_EMOJI[sport]} {mode.title}</span>
                   <span className="text-xs text-muted-foreground">{mode.question}</span>
                 </div>
 
@@ -119,7 +164,7 @@ const BlindRank = () => {
                       Player {revealIndex + 1} of 5 — place them now
                     </p>
                     <p className="text-2xl font-extrabold text-foreground">{currentPlayer.name}</p>
-                    <p className="text-sm text-muted-foreground">{currentPlayer.club} · {currentPlayer.nationality}</p>
+                    <p className="text-sm text-muted-foreground">{playerSubtitle(currentPlayer)}</p>
                   </div>
                 )}
 
@@ -183,7 +228,7 @@ const BlindRank = () => {
                       gameName="Blind Rank"
                       gamePath="/blind-rank"
                       score={`${result.exact}/5 exact (${result.total} pts)`}
-                      customText={`Blind Rank (${mode.title}): ${result.exact}/5 exact for ${result.total} pts${result.perfect ? ' — PERFECT BOARD 🔥' : ''}. Rank them blind at douknowball.com/blind-rank 🧠`}
+                      customText={`Blind Rank (${SPORT_EMOJI[sport]} ${mode.title}): ${result.exact}/5 exact for ${result.total} pts${result.perfect ? ' — PERFECT BOARD 🔥' : ''}. Rank them blind at douknowball.com/blind-rank 🧠`}
                     />
                     <Button size="lg" variant="outline" className="w-full font-bold" onClick={() => (gameMode === 'daily' ? start('unlimited') : start('unlimited'))}>
                       <RotateCcw className="w-4 h-4 mr-2" /> {gameMode === 'daily' ? 'Keep going (unlimited)' : 'Next board'}
@@ -196,17 +241,19 @@ const BlindRank = () => {
         </main>
 
         <GameSeoContent
-          title="Blind Rank: Rank Soccer Players Blind | DoUKnowBall"
-          description="The blind ranking challenge: five players appear one at a time and every placement is final. Rank by market value, career goals, assists or age — a new daily board every day plus unlimited mode."
+          title="Blind Rank: Rank Soccer & NBA Players Blind | DoUKnowBall"
+          description="The blind ranking challenge: five players appear one at a time and every placement is final. Rank soccer stars by market value, career goals, assists or age — or NBA legends by peak scoring, rebounding and assist seasons and career start. New daily boards for both sports every day, plus unlimited mode."
           howToPlay={[
-            'A stat category is drawn: market value, career goals, career assists, or age.',
+            'Pick a sport: ⚽ soccer stars or 🏀 NBA legends — each has its own daily board.',
+            'A stat category is drawn: market value, career goals, assists or age for soccer; peak scoring, rebounding, assist seasons or career start for the NBA.',
             'Players appear ONE at a time. Tap a rank slot to lock each one in — you cannot move them later, and you don\'t know who\'s still coming.',
             'After all five placements the true order is revealed: 20 points per exact slot, 10 for one-off, +50 for a perfect board.',
           ]}
           examples={[
             'Is Bellingham worth more than Haaland right now? Slot him before Mbappé appears...',
-            'Career goals: Lewandowski appears first — rank 1 or save the top spot?',
+            'Peak scoring season: 2,868 pts sounds like rank 1 — until Wilt\'s 4,029 shows up',
             'Age mode: rank 1 is the YOUNGEST — Yamal is a safe top pick',
+            'Career start: rank 1 debuted FIRST — short shorts go top of the board',
             'Perfect board = 150 points and eternal bragging rights',
           ]}
         />
