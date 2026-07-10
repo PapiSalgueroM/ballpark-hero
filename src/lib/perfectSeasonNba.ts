@@ -121,6 +121,38 @@ function endYear(season: string): number {
   return Number.isFinite(start) ? start + 1 : 0;
 }
 
+export interface NbaDecadeDef {
+  id: string;
+  label: string;
+  from: number;
+  to: number;
+}
+
+/**
+ * Decade Mode buckets (2026-07-10). Bounds compare against the season START
+ * year, so '1959-60' belongs to the 1950s. Minutes (and therefore the wheel
+ * index) begin in 1951-52, which makes the 1950s bucket real but thinner
+ * than the rest — the page falls back to the full index if a filtered pool
+ * ever comes up too small.
+ */
+export const NBA_DECADES: NbaDecadeDef[] = [
+  { id: '1950s', label: '1950s', from: 1950, to: 1959 },
+  { id: '1960s', label: '1960s', from: 1960, to: 1969 },
+  { id: '1970s', label: '1970s', from: 1970, to: 1979 },
+  { id: '1980s', label: '1980s', from: 1980, to: 1989 },
+  { id: '1990s', label: '1990s', from: 1990, to: 1999 },
+  { id: '2000s', label: '2000s', from: 2000, to: 2009 },
+  { id: '2010s', label: '2010s', from: 2010, to: 2019 },
+  { id: '2020s', label: '2020s', from: 2020, to: 2029 },
+];
+
+export function filterIndexByDecade(idx: NbaTeamSeasonEntry[], decade: NbaDecadeDef): NbaTeamSeasonEntry[] {
+  return idx.filter(e => {
+    const start = Number(e.season.slice(0, 4));
+    return Number.isFinite(start) && start >= decade.from && start <= decade.to;
+  });
+}
+
 /**
  * Wheel index, cached by the page: every team season with at least six
  * 1000+ minute players (about 1,600 entries, 1951-52 to today). The table
@@ -208,6 +240,21 @@ function playerRating(pts: number, trb: number, ast: number, minutes: number, se
   return Math.round(Math.min(99, Math.max(40, rating)));
 }
 
+/**
+ * Per-game-style rate line (owner request 2026-07-10: "you should do ppg and
+ * stuff like that, not totals"). True PPG needs games played, and `games` is
+ * NULL on all 30,462 bref_nba_player_seasons rows (re-verified via SQL
+ * today), with no per-season games source anywhere else in the DB
+ * (nba_player_stats is career-level). Per-36-minute rates are the honest
+ * equivalent: exact from the columns we do have, era-portable (the rating
+ * formula above is already per-36), and within ~10% of real PPG for
+ * starter-minute players. Labeled "per 36" so nobody mistakes it for PPG.
+ */
+function per36Detail(pts: number, trb: number, ast: number, minutes: number): string {
+  const per36 = (v: number) => (minutes > 0 ? ((v / minutes) * 36).toFixed(1) : '0.0');
+  return `${per36(pts)} PTS · ${per36(trb)} REB · ${per36(ast)} AST per 36`;
+}
+
 /** Normalize a bref position string into slot keys. 'PG-SG' fills both
  *  guard spots; bare 'G' or 'F' splits into its two modern slots. */
 function positionSlots(raw: unknown): string[] {
@@ -252,7 +299,7 @@ export async function fetchSquad(entry: NbaTeamSeasonEntry): Promise<SpinSquad |
         name,
         rating: playerRating(pts, trb, ast, minutes, entry.season),
         eligible: [...positionSlots(raw.position), 'SIXTH'],
-        detail: `${Math.round(pts)} PTS · ${Math.round(trb)} REB · ${Math.round(ast)} AST`,
+        detail: per36Detail(pts, trb, ast, minutes),
       });
     }
     if (players.length < MIN_SQUAD_PLAYERS) return null;

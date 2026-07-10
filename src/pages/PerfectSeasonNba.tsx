@@ -11,15 +11,20 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
   DraftablePlayer, SpinSquad, SimResult, GameMode,
-  teamOverall, simulateSeason, randomSeed, ratingTier, squadFillsAny,
+  teamOverall, randomSeed, ratingTier, squadFillsAny,
   GAME_MODE_LABELS, GAME_MODE_BLURBS, HIDDEN_RATING_DISPLAY, isRatingHidden,
   getDailyDateET, makeDailyPicker, loadDailyAttempt, saveDailyAttempt,
   msUntilNextDailyET, formatCountdown, DailyAttemptRecord,
 } from '@/lib/perfectSeason';
 import {
   NBA_SLOTS, NBA_GAMES, NbaTeamSeasonEntry,
+  NBA_DECADES, NbaDecadeDef, filterIndexByDecade,
   fetchTeamSeasonIndex, fetchSquad,
 } from '@/lib/perfectSeasonNba';
+import {
+  simulateSeasonFair, buildPlayoffRun, playoffSeedForDaily, buildAnalysis,
+  PLAYOFF_THRESHOLD, PlayoffRun,
+} from '@/lib/perfectSeasonExpansion';
 import {
   PerfectSeasonTheme, getDailyTheme, applyTheme, buildVerificationLine, themesForSport,
 } from '@/lib/perfectSeasonThemes';
@@ -29,6 +34,11 @@ const SPORT_KEY = 'nba';
 type Phase = 'mode-select' | 'daily-locked' | 'boot' | 'error' | 'spin' | 'spinning' | 'draft' | 'sim' | 'done';
 
 const MAX_REROLLS = 2;
+
+// Owner request 2026-07-10: "a little more time for the teams to spin".
+// Spins used to resolve as fast as the squad fetch (~1s on a typical
+// connection); holding the wheel to a 1.5s floor reads as roughly +40%.
+const SPIN_MIN_MS = 1500;
 
 const TIER_CLASSES: Record<string, string> = {
   elite: 'bg-correct/20 text-correct border-correct/40',
@@ -62,6 +72,8 @@ const PerfectSeasonNba = () => {
   const [revealed, setRevealed] = useState(0);
   const [countdown, setCountdown] = useState('');
   const [dailyTheme, setDailyTheme] = useState<PerfectSeasonTheme | null>(null);
+  const [decade, setDecade] = useState<NbaDecadeDef | null>(null);
+  const [poSeed, setPoSeed] = useState<number | null>(null);
   const wheelTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -119,6 +131,10 @@ const PerfectSeasonNba = () => {
           const theme = getDailyTheme(SPORT_KEY, getDailyDateET(), idx);
           setDailyTheme(theme);
           setIndex(applyTheme(idx, theme));
+        } else if (decade) {
+          // Decade Mode: same wheel, same squads, pool narrowed to the era.
+          const pool = filterIndexByDecade(idx, decade);
+          setIndex(pool.length >= 20 ? pool : idx);
         } else {
           setIndex(idx);
         }
@@ -132,7 +148,7 @@ const PerfectSeasonNba = () => {
       if (wheelTimer.current) clearInterval(wheelTimer.current);
       if (simTimer.current) clearInterval(simTimer.current);
     };
-  }, [phase, mode]);
+  }, [phase, mode, decade]);
 
   const spin = useCallback(async (isReroll: boolean) => {
     if (index.length === 0) return;
@@ -140,6 +156,7 @@ const PerfectSeasonNba = () => {
       if (rerolls <= 0) return;
       setRerolls(r => r - 1);
     }
+    const spinStart = Date.now();
     setPhase('spinning');
     setSelected(null);
     setSquad(null);
@@ -158,6 +175,13 @@ const PerfectSeasonNba = () => {
       if (sq && squadFillsAny(sq, NBA_SLOTS.filter(s => !picks[s.key]).map(s => s.key), usedNames)) {
         found = { entry, squad: sq };
       }
+    }
+
+    // Let the wheel breathe: hold the spin animation to a minimum duration
+    // even when the squad fetch comes back fast.
+    const spinElapsed = Date.now() - spinStart;
+    if (found && spinElapsed < SPIN_MIN_MS) {
+      await new Promise(resolve => setTimeout(resolve, SPIN_MIN_MS - spinElapsed));
     }
 
     if (wheelTimer.current) clearInterval(wheelTimer.current);
@@ -196,14 +220,20 @@ const PerfectSeasonNba = () => {
     }
   };
 
-  // Auto-start the sim once the lineup is complete
+  // Auto-start the sim once the lineup is complete. Records come from the
+  // rebalanced expansion curve (overall -> expected wins), tuned so mid-80s
+  // drafts land in the mid-50s-to-60s win range instead of the old sigmoid's
+  // harsher output.
   useEffect(() => {
     if (!draftDone || phase === 'sim' || phase === 'done' || sim) return;
     const seed = mode === 'daily' && dailyPicker.current
       ? Math.floor(dailyPicker.current(2 ** 31))
       : randomSeed();
-    const result = simulateSeason(overall, NBA_GAMES, seed);
+    const result = simulateSeasonFair('nba', overall, NBA_GAMES, seed);
     setSim(result);
+    // Postseason RNG: date-stable for daily (so the locked recap can replay
+    // the same bracket), fresh per run otherwise.
+    setPoSeed(mode === 'daily' ? playoffSeedForDaily('nba', getDailyDateET()) : randomSeed());
     setRevealed(0);
     setPhase('sim');
   }, [draftDone, overall, phase, sim, mode]);
@@ -243,6 +273,7 @@ const PerfectSeasonNba = () => {
     setSelected(null);
     setSquad(null);
     setSim(null);
+    setPoSeed(null);
     setRevealed(0);
     setRerolls(MAX_REROLLS);
     setSpins(0);
@@ -261,6 +292,37 @@ const PerfectSeasonNba = () => {
   const winsSoFar = sim ? sim.games.slice(0, revealed).filter(Boolean).length : 0;
   const lossesSoFar = revealed - winsSoFar;
 
+  const draftedList = useMemo(() => {
+    const out: { slotKey: string; slotLabel: string; name: string; rating: number }[] = [];
+    for (const s of NBA_SLOTS) {
+      const p = picks[s.key];
+      if (p) out.push({ slotKey: s.key, slotLabel: s.label, name: p.name, rating: p.rating });
+    }
+    return out;
+  }, [picks]);
+
+  const playoffRun: PlayoffRun | null = useMemo(() => {
+    if (!sim || poSeed == null) return null;
+    return buildPlayoffRun('nba', Math.round(overall), sim.wins, poSeed,
+      draftedList.map(d => ({ name: d.name, rating: d.rating })));
+  }, [sim, poSeed, overall, draftedList]);
+
+  const analysis = useMemo(
+    () => (sim ? buildAnalysis('nba', draftedList, Math.round(overall), sim.wins, sim.losses, playoffRun) : []),
+    [sim, draftedList, overall, playoffRun]
+  );
+
+  // The daily locked screen replays the postseason deterministically from
+  // the stored record + the date-stable seed, so its rounds match what the
+  // live run showed. The MVP is roster-dependent and only named live.
+  const lockedPlayoffRun = useMemo(
+    () => lockedAttempt
+      ? buildPlayoffRun('nba', lockedAttempt.overall, lockedAttempt.sim.wins,
+          playoffSeedForDaily('nba', lockedAttempt.date), [])
+      : null,
+    [lockedAttempt]
+  );
+
   // Resolve the locked attempt's theme by id for the "today's daily is done"
   // recap, since that screen loads from localStorage rather than the live
   // dailyTheme state (which is only set after a fresh boot fetch).
@@ -269,24 +331,36 @@ const PerfectSeasonNba = () => {
     : null;
 
   const dailyTag = mode === 'daily' ? `Daily · ${getDailyDateET()}\n` : '';
+  const decadeTag = decade && mode !== 'daily' ? ` · ${decade.label} pool` : '';
+  const playoffLine = playoffRun
+    ? playoffRun.champion
+      ? `\n🏆 ${playoffRun.bannerTitle}${playoffRun.mvp ? ` · MVP: ${playoffRun.mvp}` : ''}`
+      : `\nPlayoffs: out in the ${playoffRun.exitRound}`
+    : '';
   const verificationLine = mode === 'daily' && sim
     ? `\n${buildVerificationLine(SPORT_KEY, getDailyDateET(), dailyTheme?.id ?? null, sim.wins, sim.losses)}`
     : '';
 
   const emojiGrid = sim
     ? sim.perfect
-      ? `🏀🏆 82-0 PERFECT SEASON\n${dailyTag}Team overall ${sim.overall} · ${spins} spins${verificationLine}`
-      : `🏀 ${sim.wins}-${sim.losses} season\n${dailyTag}Team overall ${sim.overall} · ${spins} spins${verificationLine}`
+      ? `🏀🏆 82-0 PERFECT SEASON\n${dailyTag}Team overall ${sim.overall} · ${spins} spins${decadeTag}${playoffLine}${verificationLine}`
+      : `🏀 ${sim.wins}-${sim.losses} season\n${dailyTag}Team overall ${sim.overall} · ${spins} spins${decadeTag}${playoffLine}${verificationLine}`
     : '';
 
   const lockedVerificationLine = lockedAttempt
     ? `\n${buildVerificationLine(SPORT_KEY, lockedAttempt.date, lockedAttempt.themeId ?? null, lockedAttempt.sim.wins, lockedAttempt.sim.losses)}`
     : '';
 
+  const lockedPlayoffLine = lockedPlayoffRun
+    ? lockedPlayoffRun.champion
+      ? `\n🏆 ${lockedPlayoffRun.bannerTitle}`
+      : `\nPlayoffs: out in the ${lockedPlayoffRun.exitRound}`
+    : '';
+
   const lockedEmojiGrid = lockedAttempt
     ? lockedAttempt.sim.perfect
-      ? `🏀🏆 82-0 PERFECT SEASON\nDaily · ${lockedAttempt.date}\nTeam overall ${lockedAttempt.overall} · ${lockedAttempt.spins} spins${lockedVerificationLine}`
-      : `🏀 ${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses} season\nDaily · ${lockedAttempt.date}\nTeam overall ${lockedAttempt.overall} · ${lockedAttempt.spins} spins${lockedVerificationLine}`
+      ? `🏀🏆 82-0 PERFECT SEASON\nDaily · ${lockedAttempt.date}\nTeam overall ${lockedAttempt.overall} · ${lockedAttempt.spins} spins${lockedPlayoffLine}${lockedVerificationLine}`
+      : `🏀 ${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses} season\nDaily · ${lockedAttempt.date}\nTeam overall ${lockedAttempt.overall} · ${lockedAttempt.spins} spins${lockedPlayoffLine}${lockedVerificationLine}`
     : '';
 
   return (
@@ -308,7 +382,7 @@ const PerfectSeasonNba = () => {
           {phase !== 'mode-select' && (
             <div className="mt-3 inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-secondary text-muted-foreground font-semibold uppercase tracking-wider">
               {(() => { const Icon = MODE_ICONS[mode]; return <Icon className="w-3.5 h-3.5" />; })()}
-              {GAME_MODE_LABELS[mode]} mode
+              {GAME_MODE_LABELS[mode]} mode{decade && mode !== 'daily' && ` · ${decade.label}`}
             </div>
           )}
           {mode === 'daily' && phase !== 'mode-select' && (dailyTheme || lockedTheme) && (
@@ -322,6 +396,7 @@ const PerfectSeasonNba = () => {
         </header>
 
         {phase === 'mode-select' && (
+          <>
           <div className="grid sm:grid-cols-3 gap-3 max-w-2xl mx-auto">
             {(['classic', 'hard', 'daily'] as GameMode[]).map(m => {
               const Icon = MODE_ICONS[m];
@@ -338,6 +413,36 @@ const PerfectSeasonNba = () => {
               );
             })}
           </div>
+          <div className="max-w-2xl mx-auto mt-5 text-center">
+            <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Draft pool era</div>
+            <div className="flex flex-wrap justify-center gap-2">
+              <button
+                onClick={() => setDecade(null)}
+                className={cn(
+                  'text-xs px-3 py-1.5 rounded-full border font-semibold transition-colors',
+                  !decade ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:border-primary'
+                )}
+              >
+                All eras
+              </button>
+              {NBA_DECADES.map(d => (
+                <button
+                  key={d.id}
+                  onClick={() => setDecade(d)}
+                  className={cn(
+                    'text-xs px-3 py-1.5 rounded-full border font-semibold transition-colors',
+                    decade?.id === d.id ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:border-primary'
+                  )}
+                >
+                  {d.label}
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-muted-foreground mt-2">
+              Decade Mode: pick an era and every spin lands inside it. Daily mode always uses the full wheel.
+            </p>
+          </div>
+          </>
         )}
 
         {phase === 'daily-locked' && lockedAttempt && (
@@ -358,6 +463,13 @@ const PerfectSeasonNba = () => {
               <p className="text-sm text-muted-foreground mb-3">
                 Team overall {lockedAttempt.overall} · drafted in {lockedAttempt.spins} spin{lockedAttempt.spins === 1 ? '' : 's'}
               </p>
+              {lockedPlayoffRun && (
+                <p className="text-xs text-muted-foreground mb-3">
+                  {lockedPlayoffRun.champion
+                    ? `🏆 ${lockedPlayoffRun.bannerTitle} — beat ${lockedPlayoffRun.rounds.map(r => r.opponent).join(', ')}`
+                    : `Playoff run: out in the ${lockedPlayoffRun.exitRound}.`}
+                </p>
+              )}
               <pre className="text-sm tracking-wide whitespace-pre-wrap mb-3">{lockedEmojiGrid}</pre>
               <ShareButtons
                 score={`${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses}`}
@@ -576,6 +688,7 @@ const PerfectSeasonNba = () => {
             </div>
 
             {phase === 'done' && (
+              <>
               <div className="bg-card border border-border rounded-2xl p-6 text-center">
                 <div className="text-5xl mb-2">{sim.perfect ? '🏆' : sim.wins >= 78 ? '😤' : sim.wins >= 60 ? '🔥' : '📉'}</div>
                 <h2 className="text-2xl font-bold text-primary font-display mb-1">
@@ -626,6 +739,61 @@ const PerfectSeasonNba = () => {
                   </button>
                 )}
               </div>
+
+              {playoffRun ? (
+                <div className="bg-card border border-border rounded-2xl p-6 mt-4">
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground mb-3 text-center">
+                    Postseason run
+                  </div>
+                  <div className="space-y-2">
+                    {playoffRun.rounds.map(r => (
+                      <div key={r.name} className="flex items-center gap-2 text-sm">
+                        <span className="w-32 shrink-0 text-[10px] uppercase tracking-wide text-muted-foreground">{r.name}</span>
+                        <span className="flex-1 min-w-0 truncate font-medium text-foreground">vs {r.opponent}</span>
+                        <span className={cn('font-bold shrink-0', r.won ? 'text-correct' : 'text-destructive')}>
+                          {r.won ? 'W' : 'L'} {r.score}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  {playoffRun.champion ? (
+                    <div className="mt-4 rounded-xl border border-correct/40 bg-correct/10 p-4 text-center">
+                      <div className="text-3xl mb-1">🏆</div>
+                      <div className="font-display font-bold text-xl text-correct tracking-wide">{playoffRun.bannerTitle}</div>
+                      {playoffRun.mvp && (
+                        <p className="text-sm text-foreground mt-1">
+                          {playoffRun.mvpTitle}: <span className="font-semibold">{playoffRun.mvp}</span>
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground text-center mt-4">
+                      Season ends in the {playoffRun.exitRound}. The banner stays unhung.
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <p className="text-xs text-muted-foreground text-center mt-3">
+                  Missed the postseason — {PLAYOFF_THRESHOLD.nba}+ wins makes the playoffs.
+                </p>
+              )}
+
+              {analysis.length > 0 && (
+                <div className="bg-card border border-border rounded-2xl p-6 mt-4">
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground mb-3 text-center">
+                    Film room
+                  </div>
+                  <ul className="space-y-2 text-left">
+                    {analysis.map((line, i) => (
+                      <li key={i} className="text-sm text-foreground flex gap-2">
+                        <span className="text-primary shrink-0">{line.startsWith('Hot take:') ? '🎙️' : '▸'}</span>
+                        <span>{line}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              </>
             )}
           </div>
         )}

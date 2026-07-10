@@ -12,6 +12,29 @@ export const NFL_SLOTS: SeasonSlot[] = [
 
 export const NFL_GAMES = 17;
 
+export interface NflDecadeDef {
+  id: string;
+  label: string;
+  from: number;
+  to: number;
+}
+
+/**
+ * Decade Mode buckets (2026-07-10). The nflfastr data here spans 1999-2024,
+ * so there is no standalone 1990s bucket — 1999 rides with the 2000s. The
+ * wheel index is simply filtered to the range; squads load exactly as in
+ * the all-eras game.
+ */
+export const NFL_DECADES: NflDecadeDef[] = [
+  { id: '2000s', label: '2000s', from: 1999, to: 2009 },
+  { id: '2010s', label: '2010s', from: 2010, to: 2019 },
+  { id: '2020s', label: '2020s', from: 2020, to: 2029 },
+];
+
+export function filterIndexByDecade(idx: TeamSeasonEntry[], decade: NflDecadeDef): TeamSeasonEntry[] {
+  return idx.filter(e => e.year >= decade.from && e.year <= decade.to);
+}
+
 /**
  * The shared winProbability curve is tuned for 162/82 game seasons. Over only
  * 17 games a capped 0.985 win chance would go 17-0 about 77% of the time, so
