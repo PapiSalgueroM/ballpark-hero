@@ -1,5 +1,14 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
+// FREE Gemini key (GEMINI_API_KEY) -> gemini-2.5-flash; falls back to the
+// Lovable gateway, then fail-open so the game never blocks.
+const GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
+const AI_URL = GEMINI_KEY
+  ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+  : "https://ai.gateway.lovable.dev/v1/chat/completions";
+const AI_MODEL = GEMINI_KEY ? "gemini-2.5-flash" : "google/gemini-2.5-pro";
+const AI_KEY = GEMINI_KEY || Deno.env.get("LOVABLE_API_KEY");
+
 const allowedOrigins = [
   "https://douknowball.com",
   "https://www.douknowball.com",
@@ -79,19 +88,23 @@ serve(async (req) => {
       });
     }
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    if (!AI_KEY) {
+      return new Response(
+        JSON.stringify({ valid: true, reason: "Could not verify, allowing.", fullName: newPlayer }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     const response = await fetch(
-      "https://ai.gateway.lovable.dev/v1/chat/completions",
+      AI_URL,
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          Authorization: `Bearer ${AI_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "google/gemini-2.5-pro",
+          model: AI_MODEL,
           messages: [
             {
               role: "system",
