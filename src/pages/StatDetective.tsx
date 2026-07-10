@@ -127,7 +127,11 @@ const StatDetective = () => {
   };
 
   const misses = guesses.filter(g => !g.isCorrect).length;
-  const hints = mystery ? hintsFor(mystery, misses) : [];
+  const mysteryProfile = useMemo(
+    () => (mystery && data ? data.profiles.find(pr => normalizeName(pr.name) === normalizeName(mystery.player)) : undefined),
+    [mystery, data],
+  );
+  const hints = mystery ? hintsFor(mystery, misses, mysteryProfile) : [];
   const upcomingHint = nextHintAt(misses);
   const chips = mystery ? statChips(mystery) : [];
   const score = `${won ? guesses.length : 'X'}/${GUESS_LIMIT} (${DIFF_META[difficulty].label})`;

@@ -63,6 +63,10 @@ export function useFootballDraft() {
 
   // ---- SHARED LOCAL STATE --------------------------------------------------
   const [revealLevel, setRevealLevel] = useState(0);
+  // Owner bug (2026-07-10): "the 5th you don't even get to see, you just go to
+  // the end screen." Hold the end screen until the final player's 2s reveal
+  // window has played out.
+  const [finalHold, setFinalHold] = useState(false);
 
   // currentIndex in daily mode is tracked locally (to allow the 2-second result display)
   const [dailyCurrentIndex, setDailyCurrentIndex] = useState(0);
@@ -84,9 +88,11 @@ export function useFootballDraft() {
   const currentPlayer: DraftGuesserPlayer | null =
     puzzle && currentIndex < puzzle.players.length ? puzzle.players[currentIndex] : null;
 
-  const gameStatus: DraftGameStatus = mode === 'daily'
-    ? (rawDailyStatus !== 'playing' ? 'complete' : 'playing')
-    : (unlimitedGuesses.every(g => g.submitted) ? 'complete' : 'playing');
+  const gameStatus: DraftGameStatus = finalHold
+    ? 'playing'
+    : mode === 'daily'
+      ? (rawDailyStatus !== 'playing' ? 'complete' : 'playing')
+      : (unlimitedGuesses.every(g => g.submitted) ? 'complete' : 'playing');
 
   const totalPoints = guesses.reduce((sum, g) => sum + g.points, 0);
   const maxPoints   = puzzle ? puzzle.players.length * MAX_PER_PLAYER : 0;
@@ -95,6 +101,7 @@ export function useFootballDraft() {
   const switchMode = useCallback((newMode: FootballDraftMode) => {
     setMode(newMode);
     setRevealLevel(0);
+    setFinalHold(false);
     if (newMode === 'unlimited') {
       setUnlimitedCurrentIndex(0);
     } else {
@@ -114,12 +121,15 @@ export function useFootballDraft() {
     const points = calcPoints(currentPlayer.draftRound, guessValue, revealLevel);
     const playerGuess: PlayerGuess = { guessedRound: roundGuess, points, submitted: true };
 
+    const isLastPlayer = !!puzzle && currentIndex + 1 >= puzzle.players.length;
+    if (isLastPlayer) setFinalHold(true);
     if (mode === 'daily') {
       addDailyGuess(playerGuess);
       setTimeout(() => {
         setDailyCurrentIndex(prev => prev + 1);
         setRevealLevel(0);
-      }, 2000);
+        if (isLastPlayer) setFinalHold(false);
+      }, 2200);
     } else {
       setUnlimitedGuesses(prev => {
         const next = [...prev];
@@ -129,9 +139,10 @@ export function useFootballDraft() {
       setTimeout(() => {
         setUnlimitedCurrentIndex(prev => prev + 1);
         setRevealLevel(0);
-      }, 2000);
+        if (isLastPlayer) setFinalHold(false);
+      }, 2200);
     }
-  }, [mode, currentPlayer, currentIndex, gameStatus, addDailyGuess, revealLevel]);
+  }, [mode, currentPlayer, currentIndex, gameStatus, addDailyGuess, revealLevel, puzzle]);
 
   const resetGame = useCallback(() => {
     if (mode === 'daily') {
@@ -145,6 +156,7 @@ export function useFootballDraft() {
       setUnlimitedCurrentIndex(0);
     }
     setRevealLevel(0);
+    setFinalHold(false);
   }, [mode, resetDailyHook]);
 
   // ---- COMPLETION ----------------------------------------------------------
