@@ -15,9 +15,14 @@ import {
   simulateSeries, squadGrade, squadRating,
   type Formation, type Ring, type SeriesResult, type ThrowResult,
 } from '@/lib/dartDraft';
+import {
+  CONTINENT_POLYS, ISLAND_POLYS, MAP_H, MAP_W, NATION_POLYS,
+  drawFromMap, mapRegion, resolveMapHit, rollStickers, type PlacedSticker,
+} from '@/lib/dartMap';
 import type { Player } from '@/types/game';
 
 type Phase = 'intro' | 'aimX' | 'aimY' | 'flight' | 'result' | 'squad' | 'sim' | 'done';
+type BoardMode = 'classic' | 'map';
 
 const R = 100; // board radius in SVG units
 
@@ -35,11 +40,38 @@ function arcPath(a0: number, a1: number, r0: number, r1: number): string {
   ].join(' ');
 }
 
+/* ---------- World Map mode helpers ---------- */
+// The sweep runs in the same -1..1 space as the classic board; the map just
+// stretches it over the full 200x120 canvas (slight overshoot = ocean risk).
+const mapX = (v: number) => (v * 0.5 + 0.5) * MAP_W;
+const mapY = (v: number) => (v * 0.5 + 0.5) * MAP_H;
+
+const MAP_LABELS: { text: string; x: number; y: number; size: number }[] = [
+  { text: 'N. AMERICA', x: 32, y: 24, size: 4 },
+  { text: 'S. AMERICA', x: 60, y: 72, size: 2.6 },
+  { text: 'EUROPE', x: 121, y: 24.5, size: 3.2 },
+  { text: 'AFRICA', x: 108, y: 63, size: 4 },
+  { text: 'ASIA', x: 152, y: 24, size: 5 },
+  { text: 'OCEANIA', x: 172.5, y: 81, size: 3 },
+];
+const MAP_NATION_LABELS: { text: string; x: number; y: number }[] = [
+  { text: 'BRA', x: 72.5, y: 67 },
+  { text: 'ARG', x: 64.6, y: 88.5 },
+  { text: 'ENG', x: 98.1, y: 22.3 },
+  { text: 'FRA', x: 101.2, y: 28.7 },
+  { text: 'ESP', x: 97.9, y: 32.6 },
+  { text: 'POR', x: 94.2, y: 33.2 },
+  { text: 'GER', x: 107.2, y: 24 },
+  { text: 'ITA', x: 108.4, y: 31.9 },
+];
+
 const DartDraft = () => {
   const [phase, setPhase] = useState<Phase>('intro');
   const [loading, setLoading] = useState(true);
   const [current, setCurrent] = useState<Player[]>([]);
   const [legends, setLegends] = useState<Player[]>([]);
+  const [mode, setMode] = useState<BoardMode>('classic');
+  const [stickers, setStickers] = useState<PlacedSticker[]>([]);
   const [formation, setFormation] = useState<Formation>(FORMATIONS[0]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [squad, setSquad] = useState<(Player | null)[]>([]);
@@ -88,11 +120,16 @@ const DartDraft = () => {
     setImpact({ x: hx, y: hy });
     setPhase('flight');
     window.setTimeout(() => {
-      const { wedgeIndex, ring } = resolveHit(hx, hy);
-      const wedge = WEDGES[wedgeIndex];
       const used = new Set(squad.filter((p): p is Player => p !== null).map(p => p.name));
       const slot = formation.slots[slotIndex];
-      const result = drawFromBoard(current, legends, wedge, ring, slot, used);
+      let result: ThrowResult;
+      if (mode === 'map') {
+        const hit = resolveMapHit(mapX(hx), mapY(hy), stickers);
+        result = drawFromMap(current, legends, hit, slot, used);
+      } else {
+        const { wedgeIndex, ring } = resolveHit(hx, hy);
+        result = drawFromBoard(current, legends, WEDGES[wedgeIndex], ring, slot, used);
+      }
       setLastThrow(result);
       setThrowLog(log => [...log, result]);
       setSquad(sq => {
@@ -102,7 +139,7 @@ const DartDraft = () => {
       });
       setPhase('result');
     }, 520);
-  }, [current, legends, formation, slotIndex, squad, sweepPeriod]);
+  }, [current, legends, formation, slotIndex, squad, sweepPeriod, mode, stickers]);
 
   const lockIn = useCallback(() => {
     if (phaseRef.current === 'aimX') {
@@ -135,6 +172,7 @@ const DartDraft = () => {
     } else {
       setSlotIndex(i => i + 1);
       setImpact(null);
+      if (mode === 'map') setStickers(rollStickers()); // stickers move every throw
       setPhase('aimX');
     }
   };
@@ -147,6 +185,7 @@ const DartDraft = () => {
     setImpact(null);
     setSeries(null);
     setLegShown(0);
+    setStickers(mode === 'map' ? rollStickers() : []);
     setPhase('aimX');
   };
 
@@ -206,6 +245,58 @@ const DartDraft = () => {
     </g>
   ), []);
 
+  /* ---------- world map SVG (ocean, continents, nations, stickers) ---------- */
+  const mapBoard = useMemo(() => (
+    <g>
+      <rect x={0} y={0} width={MAP_W} height={MAP_H} rx={2.5} fill="hsl(215 55% 14%)" />
+      <rect x={0} y={0} width={MAP_W} height={MAP_H} rx={2.5} fill="none" stroke="hsl(203 60% 30%)" strokeWidth="0.5" />
+      {[...CONTINENT_POLYS, ...ISLAND_POLYS].map(poly => (
+        <polygon
+          key={poly.id}
+          points={poly.points.map(pt => pt.join(',')).join(' ')}
+          fill={mapRegion(poly.regionId).color}
+          fillOpacity={0.92}
+          stroke="hsl(215 50% 9%)"
+          strokeWidth="0.6"
+        />
+      ))}
+      {NATION_POLYS.map(poly => (
+        <polygon
+          key={poly.id}
+          points={poly.points.map(pt => pt.join(',')).join(' ')}
+          fill={mapRegion(poly.regionId).color}
+          stroke="rgba(255,255,255,0.55)"
+          strokeWidth="0.45"
+        />
+      ))}
+      {MAP_LABELS.map(l => (
+        <text key={l.text} x={l.x} y={l.y} fill="white" opacity={0.5} fontSize={l.size} fontWeight={800} letterSpacing={0.5} textAnchor="middle">{l.text}</text>
+      ))}
+      {MAP_NATION_LABELS.map(l => (
+        <text key={l.text} x={l.x} y={l.y} fill="white" opacity={0.9} fontSize={2} fontWeight={900} textAnchor="middle">{l.text}</text>
+      ))}
+      {stickers.map(s => (
+        <g key={s.def.id} transform={`translate(${s.x} ${s.y})`}>
+          <circle r={s.r} fill={s.def.color} fillOpacity={0.32} stroke={s.def.color} strokeWidth={0.8} />
+          <circle r={s.r - 1.1} fill="none" stroke="white" strokeOpacity={0.7} strokeWidth={0.35} strokeDasharray="1.8 1.2" />
+          <text y={-0.8} fontSize={s.r * 0.5} textAnchor="middle" dominantBaseline="middle">{s.def.emoji}</text>
+          <text
+            y={s.r * 0.42 + 1.8}
+            fontSize={Math.min(2.2, (s.r * 2 - 1.5) / (s.def.label.length * 0.62))}
+            fontWeight={900}
+            fill="white"
+            textAnchor="middle"
+            stroke="rgba(0,0,0,0.6)"
+            strokeWidth={0.35}
+            style={{ paintOrder: 'stroke' }}
+          >
+            {s.def.label}
+          </text>
+        </g>
+      ))}
+    </g>
+  ), [stickers]);
+
   const ringBadge = (ring: Ring) => (
     <span className={cn(
       'inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider',
@@ -217,6 +308,25 @@ const DartDraft = () => {
       ring === 'MISS' && 'bg-zinc-600/30 text-zinc-400',
     )}>
       {RING_LABEL[ring]} · +{RING_POINTS[ring]}
+    </span>
+  );
+
+  // Map mode has no rings — the badge speaks map language but keeps the
+  // classic ring codes underneath (sticker=T1, land=T2, ocean=MISS).
+  const mapBadge = (t: ThrowResult) => (
+    <span className={cn(
+      'inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider',
+      t.ring === 'T1' && 'bg-amber-500/20 text-amber-400',
+      t.ring === 'T2' && 'bg-emerald-500/20 text-emerald-400',
+      t.ring === 'MISS' && 'bg-zinc-600/30 text-zinc-400',
+    )}>
+      {t.ring === 'T1'
+        ? 'Sticker bonus — top-shelf pull'
+        : t.ring === 'MISS'
+          ? 'Lost at sea — worst player afloat'
+          : t.usedWorldFallback
+            ? 'World pool — top-half pull'
+            : 'Direct hit — top-half pull'} · +{t.points}
     </span>
   );
 
@@ -242,21 +352,56 @@ const DartDraft = () => {
                   Dart <span className="text-primary">Draft</span>
                 </h1>
                 <p className="text-base sm:text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
-                  11 throws. Every wedge is a league, a nation — or the golden <b>LEGENDS</b> wedge.
-                  Time your dart: the <b>triple ring</b> pulls elites, the bullseye pulls superstars,
-                  and missing the board gets you the worst player the wedge owns.
+                  11 throws. Wherever your dart lands, that&apos;s who you draft — no take-backs.
+                  Pick your board of fate, time your throws, and live with the squad it gives you.
                 </p>
                 {loading ? (
                   <Loader2 className="w-6 h-6 animate-spin text-muted-foreground mx-auto" />
                 ) : (
-                  <div className="space-y-3">
-                    <p className="text-sm font-bold uppercase tracking-widest text-primary">Pick your formation</p>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {FORMATIONS.slice(0, 6).map(f => (
-                        <Button key={f.name} variant="outline" size="lg" className="font-mono font-bold" onClick={() => startGame(f)}>
-                          {f.name}
-                        </Button>
-                      ))}
+                  <div className="space-y-5">
+                    <div className="space-y-3">
+                      <p className="text-sm font-bold uppercase tracking-widest text-primary">Pick your board</p>
+                      <div className="flex flex-wrap justify-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setMode('classic')}
+                          className={cn(
+                            'w-full sm:w-72 rounded-2xl border-2 p-4 text-left transition-colors',
+                            mode === 'classic' ? 'border-primary bg-primary/10' : 'border-border bg-card/50 hover:border-primary/50',
+                          )}
+                        >
+                          <p className="text-lg font-extrabold text-foreground">🎯 Classic Board</p>
+                          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                            12 wedges of leagues, nations and the golden <b>LEGENDS</b> slice. Rings decide quality — hunt the triple, fear the miss.
+                          </p>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setMode('map')}
+                          className={cn(
+                            'w-full sm:w-72 rounded-2xl border-2 p-4 text-left transition-colors',
+                            mode === 'map' ? 'border-primary bg-primary/10' : 'border-border bg-card/50 hover:border-primary/50',
+                          )}
+                        >
+                          <p className="text-lg font-extrabold text-foreground">
+                            🗺️ World Map
+                            <span className="ml-2 align-middle text-[10px] font-black uppercase tracking-wider bg-primary text-primary-foreground rounded-full px-2 py-0.5">New</span>
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                            Hit the country, pick a player. Bonus stickers move every throw — and the ocean hands you the worst player afloat.
+                          </p>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <p className="text-sm font-bold uppercase tracking-widest text-primary">Pick your formation</p>
+                      <div className="flex flex-wrap justify-center gap-2">
+                        {FORMATIONS.slice(0, 6).map(f => (
+                          <Button key={f.name} variant="outline" size="lg" className="font-mono font-bold" onClick={() => startGame(f)}>
+                            {f.name}
+                          </Button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -274,35 +419,63 @@ const DartDraft = () => {
                       Throw {slotIndex + 1}/{formation.slots.length}
                     </span>
                     <span className="text-xs font-mono text-primary font-bold uppercase">→ {slot.label} slot</span>
-                    <span className="text-xs text-muted-foreground hidden sm:inline">· sweeps get faster every throw</span>
+                    <span className="text-xs text-muted-foreground hidden sm:inline">
+                      {mode === 'map' ? '· stickers move every throw' : '· sweeps get faster every throw'}
+                    </span>
                   </div>
                   <div
-                    className="relative mx-auto max-w-[440px] cursor-crosshair select-none touch-none"
+                    className={cn('relative mx-auto cursor-crosshair select-none touch-none', mode === 'map' ? 'max-w-[560px]' : 'max-w-[440px]')}
                     onPointerDown={() => (phase === 'aimX' || phase === 'aimY') && lockIn()}
                   >
-                    <svg viewBox="-112 -112 224 224" className="w-full drop-shadow-2xl">
-                      <circle r={108} fill="hsl(240 20% 12%)" stroke="hsl(45 40% 35%)" strokeWidth="2.5" />
-                      {board}
-                      {/* locked X guide */}
-                      {(phase === 'aimY') && (
-                        <line x1={locked.x * R} y1={-108} x2={locked.x * R} y2={108} stroke="hsl(45 95% 60%)" strokeWidth="1.4" strokeDasharray="3 2" />
-                      )}
-                      {/* sweeping crosshairs */}
-                      {phase === 'aimX' && (
-                        <line x1={aim.x * R} y1={-108} x2={aim.x * R} y2={108} stroke="hsl(150 90% 55%)" strokeWidth="1.8" />
-                      )}
-                      {phase === 'aimY' && (
-                        <line x1={-108} y1={aim.y * R} x2={108} y2={aim.y * R} stroke="hsl(150 90% 55%)" strokeWidth="1.8" />
-                      )}
-                      {/* dart impact */}
-                      {impact && (phase === 'flight' || phase === 'result') && (
-                        <g transform={`translate(${impact.x * R} ${impact.y * R})`}>
-                          <circle r={phase === 'flight' ? 7 : 4.2} fill="hsl(150 90% 50%)" stroke="white" strokeWidth="1.6"
-                            style={{ transition: 'all 480ms cubic-bezier(0.2, 0.9, 0.3, 1)' }} />
-                          <line x1={2.5} y1={-2.5} x2={10} y2={-10} stroke="white" strokeWidth="1.6" strokeLinecap="round" />
-                        </g>
-                      )}
-                    </svg>
+                    {mode === 'classic' ? (
+                      <svg viewBox="-112 -112 224 224" className="w-full drop-shadow-2xl">
+                        <circle r={108} fill="hsl(240 20% 12%)" stroke="hsl(45 40% 35%)" strokeWidth="2.5" />
+                        {board}
+                        {/* locked X guide */}
+                        {(phase === 'aimY') && (
+                          <line x1={locked.x * R} y1={-108} x2={locked.x * R} y2={108} stroke="hsl(45 95% 60%)" strokeWidth="1.4" strokeDasharray="3 2" />
+                        )}
+                        {/* sweeping crosshairs */}
+                        {phase === 'aimX' && (
+                          <line x1={aim.x * R} y1={-108} x2={aim.x * R} y2={108} stroke="hsl(150 90% 55%)" strokeWidth="1.8" />
+                        )}
+                        {phase === 'aimY' && (
+                          <line x1={-108} y1={aim.y * R} x2={108} y2={aim.y * R} stroke="hsl(150 90% 55%)" strokeWidth="1.8" />
+                        )}
+                        {/* dart impact */}
+                        {impact && (phase === 'flight' || phase === 'result') && (
+                          <g transform={`translate(${impact.x * R} ${impact.y * R})`}>
+                            <circle r={phase === 'flight' ? 7 : 4.2} fill="hsl(150 90% 50%)" stroke="white" strokeWidth="1.6"
+                              style={{ transition: 'all 480ms cubic-bezier(0.2, 0.9, 0.3, 1)' }} />
+                            <line x1={2.5} y1={-2.5} x2={10} y2={-10} stroke="white" strokeWidth="1.6" strokeLinecap="round" />
+                          </g>
+                        )}
+                      </svg>
+                    ) : (
+                      <svg viewBox="-5 -5 210 130" className="w-full drop-shadow-2xl">
+                        <rect x={-5} y={-5} width={210} height={130} rx={5} fill="hsl(240 20% 12%)" stroke="hsl(45 40% 35%)" strokeWidth="1.6" />
+                        {mapBoard}
+                        {/* locked X guide */}
+                        {(phase === 'aimY') && (
+                          <line x1={mapX(locked.x)} y1={-5} x2={mapX(locked.x)} y2={125} stroke="hsl(45 95% 60%)" strokeWidth="0.9" strokeDasharray="2.2 1.5" />
+                        )}
+                        {/* sweeping crosshairs */}
+                        {phase === 'aimX' && (
+                          <line x1={mapX(aim.x)} y1={-5} x2={mapX(aim.x)} y2={125} stroke="hsl(150 90% 55%)" strokeWidth="1.1" />
+                        )}
+                        {phase === 'aimY' && (
+                          <line x1={-5} y1={mapY(aim.y)} x2={205} y2={mapY(aim.y)} stroke="hsl(150 90% 55%)" strokeWidth="1.1" />
+                        )}
+                        {/* dart impact */}
+                        {impact && (phase === 'flight' || phase === 'result') && (
+                          <g transform={`translate(${mapX(impact.x)} ${mapY(impact.y)})`}>
+                            <circle r={phase === 'flight' ? 4.5 : 2.6} fill="hsl(150 90% 50%)" stroke="white" strokeWidth="1"
+                              style={{ transition: 'all 480ms cubic-bezier(0.2, 0.9, 0.3, 1)' }} />
+                            <line x1={1.6} y1={-1.6} x2={6.5} y2={-6.5} stroke="white" strokeWidth="1" strokeLinecap="round" />
+                          </g>
+                        )}
+                      </svg>
+                    )}
                     {(phase === 'aimX' || phase === 'aimY') && (
                       <div className="absolute inset-x-0 -bottom-1 flex justify-center">
                         <span className="px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-black uppercase tracking-widest animate-pulse">
@@ -320,7 +493,7 @@ const DartDraft = () => {
                           ? `${lastThrow.wedge.label} had nobody for this slot — WORLD pool stepped in`
                           : lastThrow.wedge.label}
                       </p>
-                      {ringBadge(lastThrow.ring)}
+                      {mode === 'classic' ? ringBadge(lastThrow.ring) : mapBadge(lastThrow)}
                       {lastThrow.player ? (
                         <div className="flex items-center justify-between gap-3 rounded-xl bg-secondary/50 border border-border px-4 py-3">
                           <div className="text-left">
@@ -397,7 +570,7 @@ const DartDraft = () => {
                     <p className="text-sm font-black uppercase tracking-widest text-primary">Leg {i + 1} — You {leg.userGoals} : {leg.aiGoals} Machine</p>
                     {leg.events.map((e, j) => (
                       <p key={j} className={cn('text-xs sm:text-sm', e.side === 'user' ? 'text-emerald-300' : e.side === 'ai' ? 'text-red-300' : 'text-muted-foreground')}>
-                        <span className="font-mono font-bold">{e.minute}'</span> {e.text}
+                        <span className="font-mono font-bold">{e.minute}&apos;</span> {e.text}
                       </p>
                     ))}
                   </div>
@@ -438,16 +611,19 @@ const DartDraft = () => {
 
         <GameSeoContent
           title="Dart Draft: Timed Darts Squad Builder | DoUKnowBall"
-          description="The YouTuber dartboard challenge as a game: time your throws, land on leagues, nations or the Legends wedge, draft whoever the board gives you, and simulate the showdown against The Machine."
+          description="The YouTuber dartboard challenge as a game: time your throws, land on leagues, nations or the Legends wedge — or switch to the World Map board and hit the country to pick the player — then simulate the showdown against The Machine."
           howToPlay={[
+            'Pick a board: the Classic dartboard of wedges and rings, or the World Map — hit a country and you must draft a player of that nationality (Brazil, Argentina, England, France, Spain, Italy, Germany and Portugal are marked; everywhere else counts as its continent).',
             'Pick a formation, then make 11 timed throws — lock the left-right sweep, then the up-down sweep. Sweeps get faster every throw.',
-            'Wherever the dart lands decides your player: the wedge is the pool (league, nation, Legends), the ring is the quality — triple ring and bullseye pull elites, missing the board pulls the worst player the wedge owns.',
+            'Classic board: the wedge is the pool (league, nation, Legends) and the ring is the quality — triple ring and bullseye pull elites, missing the board pulls the worst player the wedge owns.',
+            'World Map: bonus stickers (Legends, U21 wonderkids, £100M+ stars and more) re-randomize every throw and override the country when hit; land in the ocean and you get the worst player afloat.',
             'When your XI is complete, take your squad rating into a best-of-3 showdown against The Machine and post your total score.',
           ]}
           examples={[
             'Bullseye on the LEGENDS wedge: prime Zidane, Maradona or Messi tier',
             'Triple ring on PREM: an elite Premier League pick for that slot',
-            'Off the board on ARG: enjoy the worst Argentine the pool owns',
+            'World Map: a dart in Brazil drafts a Brazilian; the LEGENDS sticker pulls an all-time great',
+            'Off the board (or lost at sea): enjoy the worst player the pool owns',
             'Sweeps speed up: throw 11 is a nerve test',
             'Grade S squad: rating 85+ — the board bowed to you',
           ]}
