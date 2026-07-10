@@ -42,6 +42,7 @@ import {
   getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,
   FALLBACK_CLUBS,
 } from "@/lib/soccerCareerEngine";
+import { rollStartingOverall, adjustClubsForYear } from "@/lib/careerEras";
 import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
@@ -358,6 +359,12 @@ function SeasonSummaryCard({ season, position, onContinue }: { season: SeasonRec
         <span>Avg Rating: <strong className="text-foreground">{season.rating.toFixed(1)}</strong></span>
         <span>🟨 {season.yellowCards} 🟥 {season.redCards}</span>
       </div>
+
+      {season.injury && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-2 text-center">
+          <span className="text-xs font-bold text-red-400">🚑 {season.injury} — out {season.injuryWeeks} weeks</span>
+        </div>
+      )}
 
       {trophies.length > 0 && (
         <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center">
@@ -777,9 +784,9 @@ export default function SoccerCareer() {
 
 /* ─── Overall tier info ─── */
 function getOverallTier(ovr: number): { label: string; color: string; bgColor: string } {
-  if (ovr >= 75) return { label: "Exceptional: Born Winner", color: "text-purple-400", bgColor: "bg-purple-500/15 border-purple-500/30" };
-  if (ovr >= 66) return { label: "Gifted: High Ceiling", color: "text-amber-400", bgColor: "bg-amber-500/15 border-amber-500/30" };
-  if (ovr >= 55) return { label: "Solid Foundation: Good Potential", color: "text-emerald-400", bgColor: "bg-emerald-500/15 border-emerald-500/30" };
+  if (ovr >= 66) return { label: "Exceptional: Born Winner", color: "text-purple-400", bgColor: "bg-purple-500/15 border-purple-500/30" };
+  if (ovr >= 62) return { label: "Gifted: High Ceiling", color: "text-amber-400", bgColor: "bg-amber-500/15 border-amber-500/30" };
+  if (ovr >= 58) return { label: "Solid Foundation: Good Potential", color: "text-emerald-400", bgColor: "bg-emerald-500/15 border-emerald-500/30" };
   if (ovr >= 40) return { label: "Promising: Hard Work Ahead", color: "text-blue-400", bgColor: "bg-blue-500/15 border-blue-500/30" };
   return { label: "Raw Talent: Rough Around the Edges", color: "text-muted-foreground", bgColor: "bg-muted/20 border-border" };
 }
@@ -802,10 +809,10 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
     const totalTicks = 18;
     const interval = setInterval(() => {
       ticks++;
-      setDisplayOvr(rand(25, 78));
+      setDisplayOvr(rollStartingOverall(position));
       if (ticks >= totalTicks) {
         clearInterval(interval);
-        const finalOvr = rand(25, 78);
+        const finalOvr = rollStartingOverall(position);
         setDisplayOvr(finalOvr);
         setRolledOvr(finalOvr);
         onRolledOvr?.(finalOvr);
@@ -813,12 +820,13 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         const stats = generateStatsFromOverall(finalOvr, position);
         onStatsGenerated?.(stats, finalOvr);
         setIsRolling(false);
-        // Preview academy
-        const club = getYouthAcademyClub(clubs, nationality, finalOvr);
+        // Preview academy (era-adjusted so it matches initCareer)
+        const startYr = ERAS.find(er => er.value === era)?.startYear ?? 2020;
+        const club = getYouthAcademyClub(adjustClubsForYear(clubs, startYr), nationality, finalOvr);
         setAcademyClub(club);
       }
     }, 60);
-  }, [canGenerate, clubs, nationality, position, isRolling]);
+  }, [canGenerate, clubs, nationality, position, isRolling, era]);
 
   const tier = rolledOvr !== null ? getOverallTier(rolledOvr) : (isRolling ? getOverallTier(displayOvr) : null);
 
@@ -1471,7 +1479,10 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss }: { bdor: BallonDorRes
         {!isWinner && isNominated && bdor.playerRank !== null && bdor.playerRank > 3 && (
           <p className="text-sm text-muted-foreground">You finished {bdor.playerRank}th, close but not enough this year</p>
         )}
-        {!isNominated && (
+        {!isNominated && bdor.playerRank !== null && bdor.playerRank > 10 && (
+          <p className="text-sm text-muted-foreground">Outside the top 10, but you ranked <span className="font-bold text-foreground">#{bdor.playerRank}</span> in the world&apos;s Top 30</p>
+        )}
+        {!isNominated && bdor.playerRank === null && (
           <p className="text-sm text-muted-foreground">You were not nominated this year</p>
         )}
       </div>

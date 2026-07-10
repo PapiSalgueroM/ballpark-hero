@@ -1,5 +1,11 @@
 // Soccer Career Simulation Engine v2 — Youth Academy + Pro System
 
+import {
+  getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,
+  getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,
+  BDOR_WIN_MIN_GOALS,
+} from "./careerEras";
+
 export interface ClubData {
   id: string;
   name: string;
@@ -22,12 +28,15 @@ export interface SeasonRecord {
   yellowCards: number;
   redCards: number;
   rating: number;
+  injury?: string | null;
+  injuryWeeks?: number;
+  injurySevere?: boolean;
   leagueTitle: boolean;
   domesticCup: boolean;
   championsLeague: boolean;
   worldCup: boolean;
   ballonDor: boolean;
-  ballonDorRank: number | null; // 1-5 if nominated, null otherwise
+  ballonDorRank: number | null; // 1-10 if nominated, 11-30 extended world ranking, null otherwise
   type: "youth" | "playing" | "retired" | "manager";
   // International stats for this season
   intApps: number;
@@ -1606,7 +1615,7 @@ export const FALLBACK_CLUBS: ClubData[] = [
 ];
 
 /* ─── Appearances — league + UCL + cups for realistic totals ─── */
-function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState): { apps: number; injured: boolean; injuryWeeks: number } {
+function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState): { apps: number; injured: boolean; injuryWeeks: number; injuryName: string | null; injurySevere: boolean } {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
 
@@ -1670,12 +1679,17 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
 
   let injured = false;
   let injuryWeeks = 0;
+  let injuryName: string | null = null;
+  let injurySevere = false;
   let injuryChance = 0.20;
   // Cryotherapy reduces injury risk by 15%
   if (state?.purchasedItems?.includes("perf_cryo")) injuryChance -= 0.03;
-  if (Math.random() < injuryChance) {
+  const injuryRoll = rollSeasonInjury(injuryChance);
+  if (injuryRoll) {
     injured = true;
-    injuryWeeks = rand(2, 8);
+    injuryName = injuryRoll.name;
+    injurySevere = injuryRoll.severe;
+    injuryWeeks = injuryRoll.weeks;
     // Elite recovery clinic halves injury time
     if (state?.purchasedItems?.includes("elite_recovery")) {
       injuryWeeks = Math.max(1, Math.round(injuryWeeks * 0.5));
@@ -1684,11 +1698,12 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
     if (state?.purchasedItems?.includes("perf_sleep")) {
       injuryWeeks = Math.max(1, injuryWeeks - 1);
     }
+    if (injuryWeeks < 14) injurySevere = false;
     const missedApps = Math.round(injuryWeeks * apps / 46);
-    apps = Math.max(1, apps - clamp(missedApps, 0, 12));
+    apps = Math.max(1, apps - clamp(missedApps, 0, injurySevere ? 34 : 12));
   }
 
-  return { apps, injured, injuryWeeks };
+  return { apps, injured, injuryWeeks, injuryName, injurySevere };
 }
 
 /* ─── Goals per 38 apps by position & overall rating ─── */
@@ -1782,7 +1797,7 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
   const isGK = position === "GK";
   const lastYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year : 0;
 
-  const { apps, injured, injuryWeeks } = calcAppearances(overall, currentClubTier, age, state);
+  const { apps, injured, injuryWeeks, injuryName, injurySevere } = calcAppearances(overall, currentClubTier, age, state);
   let goals = calcGoals(position, apps, overall);
   // Diving reputation: +2 goals from penalties
   if (state.divingActive && !isGK) goals += 2;
@@ -1814,6 +1829,7 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
     year: lastYear + 1, age,
     club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
     apps, goals, assists, cleanSheets, yellowCards, redCards, rating,
+    injury: injured ? injuryName : null, injuryWeeks: injured ? injuryWeeks : 0, injurySevere: injured ? injurySevere : false,
     leagueTitle: winLeague, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
     type: "playing",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
@@ -1947,6 +1963,7 @@ function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number
 export function determineTransferSituation(state: CareerState, clubs: ClubData[]): TransferSituation {
   const { overall, age, currentClub, currentClubTier, marketValue, contractYearsLeft } = state;
   const lastSeason = state.seasons[state.seasons.length - 1];
+  clubs = adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1);
   const exclude = new Set<string>([currentClub]);
   const interestedTiers = getInterestedTiers(overall, age);
 
@@ -1984,6 +2001,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
 
 /* ─── Request transfer — 50/50 ─── */
 export function requestTransfer(state: CareerState, clubs: ClubData[]): TransferSituation {
+  clubs = adjustClubsForYear(clubs, (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1);
   if (Math.random() < 0.5) {
     const exclude = new Set<string>([state.currentClub]);
     const offer = makeOffer(clubs, pick(getInterestedTiers(state.overall, state.age)), state.overall, state.age, exclude, state.marketValue);
@@ -1998,7 +2016,7 @@ export function initCareer(
   stats: { pace: number; shooting: number; passing: number; dribbling: number; defending: number; physical: number; reflexes: number },
   overall: number, startYear: number, clubs: ClubData[],
 ): CareerState {
-  const academyClub = getYouthAcademyClub(clubs, nationality, overall);
+  const academyClub = getYouthAcademyClub(adjustClubsForYear(clubs, startYear), nationality, overall);
   return {
     playerName, nationality, position, era, age: 16,
     currentClub: `${academyClub.name} Youth`, currentClubCountry: academyClub.country,
@@ -2081,7 +2099,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
   s.events.push(`📈 Stats improved during youth development (OVR ${s.overall})`);
   if (s.age >= 17) {
     s.events.push("📩 Professional contract offers received!");
-    s.pendingOffers = generateContractOffers(clubs, s.overall, s.age);
+    s.pendingOffers = generateContractOffers(adjustClubsForYear(clubs, lastYear + 1), s.overall, s.age);
     s.phase = "contract_offer";
   }
   s.marketValue = calcMarketValue(s.overall, s.age, s.position);
@@ -2483,6 +2501,16 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   }
   
   const season = generateSeasonStats(s);
+  // Injury report — named injuries that actually cost matches
+  if (season.injury) {
+    s.events.push(`🚑 Injury: ${season.injury} — out ${season.injuryWeeks} weeks, missed matches`);
+    if (season.injurySevere) {
+      s.pace = clamp(s.pace - 2, 20, 99);
+      s.physical = clamp(s.physical - 1, 20, 99);
+      s.morale = clamp(s.morale - 10, 0, 100);
+      s.events.push("🏥 Long rehab took a toll: Pace -2, Physical -1");
+    }
+  }
   // Apply stat boosts from previous season's events
   for (const [key, val] of Object.entries(s.statBoostNextSeason)) {
     const k = key as keyof typeof s.statBoostNextSeason;
@@ -2567,7 +2595,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   
   // Simulate rival's season
   if (s.rival && !s.rival.retired) {
-    s.rival = simulateRivalSeason(s.rival, clubs);
+    s.rival = simulateRivalSeason(s.rival, clubs, thisYear);
   }
   
   // Rivalry event (1 per year)
@@ -3255,10 +3283,11 @@ function getAllEvents(state: CareerState): RandomEvent[] {
         { label: "I'm a footballer, not an actor", emoji: "⚽", color: "bg-muted", consequence: "Focus on football",
           apply: s => { s.events = [...s.events, "🎬⭐ Declined movie role"]; return s; } },
       ] },
+    ...getExtraEvents(state),
   ];
 }
 
-/* ─── Generate 1-3 random events for a season ─── */
+/* ─── Generate 2-4 random events for a season ─── */
 function generateRandomEvents(state: CareerState): RandomEvent[] {
   if (state.age < 17) return [];
   const all = getAllEvents(state);
@@ -3296,7 +3325,7 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
     if (e.id === 40 && state.popularity < 55) return false; // Movie role
     return true;
   });
-  const count = rand(1, 3);
+  const count = rand(2, 4);
   const shuffled = [...eligible].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);
 }
@@ -3311,7 +3340,8 @@ function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult {
   if (Math.random() > qualChance) return { qualified: false, matches: [], result: "N/A", playerGoals: 0, isTopScorer: false };
 
   const rounds = ["R16", "QF", "SF", "Final"];
-  const opponents = ["Bayern Munich", "Real Madrid", "Barcelona", "Man City", "PSG", "Juventus", "AC Milan", "Liverpool", "Inter Milan", "Dortmund", "Atletico Madrid", "Chelsea", "Arsenal", "Porto", "Ajax", "Benfica"];
+  const uclYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year + 1 : 2024;
+  const opponents = getEraUclOpponents(uclYear).filter(o => o !== state.currentClub);
   const matches: UCLKnockoutMatch[] = [];
   let totalPlayerGoals = 0;
   const usedOpponents = new Set<string>([state.currentClub]);
@@ -3469,14 +3499,14 @@ const LEAGUE_CLUBS: Record<string, string[]> = {
   "Ligue 1": ["PSG"],
 };
 
-function getClubLeague(club: string): string | null {
-  for (const [league, clubs] of Object.entries(LEAGUE_CLUBS)) {
+function getClubLeagueEra(club: string, leagueMap: Record<string, string[]>): string | null {
+  for (const [league, clubs] of Object.entries(leagueMap)) {
     if (clubs.includes(club)) return league;
   }
   return null;
 }
 
-function calcBdorPoints(goals: number, assists: number, overall: number, clubTier: number, trophies: string[], club: string): number {
+function calcBdorPoints(goals: number, assists: number, overall: number, clubTier: number, trophies: string[], club: string, topClubs: string[]): number {
   let pts = 0;
   // Goals: 0.7pt each, max 28 (reduced from 1pt/max 40)
   pts += Math.min(goals * 0.7, 28);
@@ -3491,18 +3521,20 @@ function calcBdorPoints(goals: number, assists: number, overall: number, clubTie
   if (overall >= 92) pts += 8;
   else if (overall >= 88) pts += 4;
   // Top 6 club bonus (reduced from 10)
-  if (TOP_6_CLUBS.includes(club)) pts += 5;
+  if (topClubs.includes(club)) pts += 5;
   return Math.round(pts);
 }
 
 function calculateBallonDor(state: CareerState, season: SeasonRecord, year: number): BallonDorResult {
   const yearOffset = year - 2024;
+  const eraTopClubs = getEraTopClubs(year);
+  const eraLeagues = getEraLeagueClubs(year);
 
-  // --- Determine season's trophy winners (one club per competition) ---
-  const uclWinnerClub = pick(["Real Madrid", "Man City", "Barcelona", "Bayern Munich", "Liverpool", "Inter Milan", "Arsenal", "PSG", "Dortmund", "Atletico Madrid"]);
+  // --- Determine season's trophy winners (one club per competition) — era-correct ---
+  const uclWinnerClub = pick(eraTopClubs);
   // One league winner per league
   const leagueWinners: Record<string, string> = {};
-  for (const [league, clubs] of Object.entries(LEAGUE_CLUBS)) {
+  for (const [league, clubs] of Object.entries(eraLeagues)) {
     leagueWinners[league] = pick(clubs);
   }
   const isWorldCupYear = year % 4 === 2;
@@ -3522,61 +3554,61 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
 
   let playerPoints = 0;
   if (playerCanContend) {
-    playerPoints = calcBdorPoints(season.goals, season.assists, state.overall, state.currentClubTier, playerTrophies, state.currentClub);
+    playerPoints = calcBdorPoints(season.goals, season.assists, state.overall, state.currentClubTier, playerTrophies, state.currentClub, eraTopClubs);
   }
   const playerNominated = playerCanContend && playerPoints > 45;
 
   // --- Generate contender nominees ---
-  // Use real players for first 15 years, then switch to generated names
-  const useRealPlayers = yearOffset <= 15;
+  // Era-correct star pools (1990-2029, clamped at both ends) until 2032,
+  // then fully fictional generated contenders for far-future seasons.
+  const useEraStars = year <= 2032;
   const usedNames = new Set<string>([state.playerName]);
   if (state.rival) usedNames.add(state.rival.name);
 
-  let allContenders: RealContender[];
-  if (useRealPlayers) {
-    const activeContenders = REAL_CONTENDERS.filter(c => {
-      const age = c.startAge + yearOffset;
-      return age <= 36 && age >= 17;
-    });
-    const retiredCount = REAL_CONTENDERS.length - activeContenders.length;
-    const replacements = REPLACEMENT_YOUNG_PLAYERS.filter(c => {
-      const age = c.startAge + yearOffset;
-      return age >= 17 && age <= 36;
-    }).slice(0, retiredCount);
-    allContenders = [...activeContenders, ...replacements];
+  const allNomineeData: BallonDorNominee[] = [];
+  if (useEraStars) {
+    for (const star of getEraStars(year)) {
+      if (usedNames.has(star.name)) continue;
+      usedNames.add(star.name);
+      const goals = rand(star.baseGoals[0], star.baseGoals[1]);
+      const assists = rand(3, 18);
+
+      // Assign trophies based on this season's era-correct winners — no conflicts
+      const trophies: string[] = [];
+      if (star.club === uclWinnerClub && Math.random() < 0.85) trophies.push("UCL");
+      const starLeague = getClubLeagueEra(star.club, eraLeagues);
+      if (starLeague && leagueWinners[starLeague] === star.club && Math.random() < 0.8) trophies.push("League");
+      if (isWorldCupYear && Math.random() < 0.04) trophies.push("World Cup");
+      if (Math.random() < 0.15) trophies.push("Cup");
+
+      const overall = clamp(82 + star.power + rand(-2, 2), 78, 96);
+      const pts = calcBdorPoints(goals, assists, overall, 1, trophies, star.club, eraTopClubs) + star.power * rand(1, 3);
+      allNomineeData.push({
+        name: star.name, nationality: star.nationality, position: star.position,
+        club: star.club, points: pts, goals, trophies, isPlayer: false,
+      });
+    }
   } else {
     // Generate 15 fictional contenders
-    allContenders = [];
     for (let i = 0; i < 15; i++) {
       const gen = generateContender(usedNames, yearOffset * 100 + i);
+      if (usedNames.has(gen.name)) continue;
       usedNames.add(gen.name);
-      allContenders.push(gen);
+      const goals = rand(gen.baseGoals[0], gen.baseGoals[1]);
+      const assists = rand(3, 18);
+      const trophies: string[] = [];
+      if (gen.club === uclWinnerClub && Math.random() < 0.85) trophies.push("UCL");
+      const genLeague = getClubLeagueEra(gen.club, eraLeagues);
+      if (genLeague && leagueWinners[genLeague] === gen.club && Math.random() < 0.8) trophies.push("League");
+      if (isWorldCupYear && Math.random() < 0.04) trophies.push("World Cup");
+      if (Math.random() < 0.15) trophies.push("Cup");
+      const overall = clamp(rand(83, 93), 75, 95);
+      const pts = calcBdorPoints(goals, assists, overall, 1, trophies, gen.club, eraTopClubs);
+      allNomineeData.push({
+        name: gen.name, nationality: gen.nationality, position: gen.position,
+        club: gen.club, points: pts, goals, trophies, isPlayer: false,
+      });
     }
-  }
-
-  const allNomineeData: BallonDorNominee[] = [];
-  for (const contender of allContenders) {
-    if (usedNames.has(contender.name)) continue;
-    usedNames.add(contender.name);
-    const age = contender.startAge + yearOffset;
-    const ageFactor = age <= 28 ? 1.0 : age <= 32 ? 0.85 : 0.65;
-    const goals = Math.round(rand(contender.baseGoals[0], contender.baseGoals[1]) * ageFactor);
-    const assists = rand(3, 18);
-
-    // Assign trophies based on actual season winners — no conflicts
-    const trophies: string[] = [];
-    if (contender.club === uclWinnerClub && Math.random() < 0.85) trophies.push("UCL");
-    const contenderLeague = getClubLeague(contender.club);
-    if (contenderLeague && leagueWinners[contenderLeague] === contender.club && Math.random() < 0.8) trophies.push("League");
-    if (isWorldCupYear && Math.random() < 0.04) trophies.push("World Cup");
-    if (Math.random() < 0.15) trophies.push("Cup");
-
-    const overall = clamp(rand(83, 93) + (age <= 28 ? 2 : age >= 33 ? -3 : 0), 75, 95);
-    const pts = calcBdorPoints(goals, assists, overall, 1, trophies, contender.club);
-    allNomineeData.push({
-      name: contender.name, nationality: contender.nationality, position: contender.position,
-      club: contender.club, points: pts, goals, trophies, isPlayer: false,
-    });
   }
 
   // Add rival
@@ -3586,9 +3618,9 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     const rivalTrophies: string[] = [];
     // Check if rival's club won trophies this season
     if (state.rival.club === uclWinnerClub && Math.random() < 0.8) rivalTrophies.push("UCL");
-    const rivalLeague = getClubLeague(state.rival.club);
+    const rivalLeague = getClubLeagueEra(state.rival.club, eraLeagues);
     if (rivalLeague && leagueWinners[rivalLeague] === state.rival.club && Math.random() < 0.75) rivalTrophies.push("League");
-    const rivalPts = calcBdorPoints(rivalGoals, rivalAssists, state.rival.overall, state.rival.clubTier, rivalTrophies, state.rival.club);
+    const rivalPts = calcBdorPoints(rivalGoals, rivalAssists, state.rival.overall, state.rival.clubTier, rivalTrophies, state.rival.club, eraTopClubs);
     allNomineeData.push({
       name: state.rival.name, nationality: state.rival.nationality, position: state.rival.position,
       club: state.rival.club, points: rivalPts, goals: rivalGoals, trophies: rivalTrophies, isPlayer: false,
@@ -3609,28 +3641,15 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   const npcSpotsNeeded = playerNominated ? 9 : 10;
   const topNPCs = allNomineeData.slice(0, npcSpotsNeeded);
 
-  // Filler nominees
-  const fillerNames = [
-    { name: "Lucas Hernández", nationality: "France", position: "CB", club: "PSG" },
-    { name: "Jadon Sancho", nationality: "England", position: "RW", club: "Manchester United" },
-    { name: "Federico Valverde", nationality: "Uruguay", position: "CM", club: "Real Madrid" },
-    { name: "Bernardo Silva", nationality: "Portugal", position: "CAM", club: "Manchester City" },
-    { name: "Martin Ødegaard", nationality: "Norway", position: "CAM", club: "Arsenal" },
-    { name: "Declan Rice", nationality: "England", position: "CDM", club: "Arsenal" },
-    { name: "Aurélien Tchouaméni", nationality: "France", position: "CDM", club: "Real Madrid" },
-    { name: "Rodri", nationality: "Spain", position: "CDM", club: "Manchester City" },
-    { name: "Bruno Fernandes", nationality: "Portugal", position: "CAM", club: "Manchester United" },
-    { name: "Khvicha Kvaratskhelia", nationality: "Georgia", position: "LW", club: "PSG" },
-  ];
-  let fillerIdx = 0;
-  while (topNPCs.length < npcSpotsNeeded && fillerIdx < fillerNames.length) {
-    const f = fillerNames[fillerIdx++];
-    if (usedNames.has(f.name)) continue;
-    usedNames.add(f.name);
-    const pts = rand(30, 50);
+  // Filler nominees (only needed if the era pool somehow ran short)
+  let fillerSeed = 0;
+  while (topNPCs.length < npcSpotsNeeded && fillerSeed < 20) {
+    const gen = generateContender(usedNames, year * 31 + fillerSeed++);
+    if (usedNames.has(gen.name)) continue;
+    usedNames.add(gen.name);
     topNPCs.push({
-      name: f.name, nationality: f.nationality, position: f.position,
-      club: f.club, points: pts, goals: rand(5, 15), trophies: [], isPlayer: false,
+      name: gen.name, nationality: gen.nationality, position: gen.position,
+      club: gen.club, points: rand(30, 50), goals: rand(5, 15), trophies: [], isPlayer: false,
     });
   }
 
@@ -3652,7 +3671,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   if (playerRank === 1) {
     const hasUCLAndLeague = season.championsLeague && season.leagueTitle;
     const hasWorldCup = season.worldCup;
-    const has30PlusGoals = season.goals >= 30;
+    const has30PlusGoals = season.goals >= BDOR_WIN_MIN_GOALS;
     const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup;
     if (!meetsWinCondition) {
       // Demote player to 2nd — they weren't dominant enough
@@ -3668,6 +3687,13 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
         }
       }
     }
+  }
+
+  // Extended top-30 ranking: strong-but-not-nominated seasons still place in the world top 30
+  if (playerRank === null && playerCanContend && playerPoints >= 12) {
+    const better = allNomineeData.filter(n => !n.isPlayer && n.points > playerPoints).length;
+    const extendedRank = Math.max(11, better + 1);
+    if (extendedRank <= 30) playerRank = extendedRank;
   }
 
   return { year, nominees: top10, playerRank, playerPoints, playerNominated };
@@ -3863,6 +3889,8 @@ function generateRivalName(): string {
 }
 
 function createRival(state: CareerState, clubs: ClubData[]): RivalPlayer {
+  const rivalYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year : 2024;
+  clubs = adjustClubsForYear(clubs, rivalYear);
   const ovrDiff = rand(-5, 5);
   const rivalOvr = clamp(state.overall + ovrDiff, 45, 95);
   // Pick a different club at appropriate tier
@@ -3873,7 +3901,7 @@ function createRival(state: CareerState, clubs: ClubData[]): RivalPlayer {
   const sameNatChance = Math.random();
   const rivalNat = sameNatChance < 0.3 ? state.nationality : pick(Object.keys(FLAG_MAP));
   return {
-    name: generateRivalName(),
+    name: getEraRivalName(rivalYear),
     nationality: rivalNat,
     position: state.position,
     club: rivalClub.name,
@@ -3894,7 +3922,8 @@ function createRival(state: CareerState, clubs: ClubData[]): RivalPlayer {
   };
 }
 
-function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[]): RivalPlayer {
+function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year?: number): RivalPlayer {
+  if (year !== undefined) clubs = adjustClubsForYear(clubs, year);
   const r = { ...rival };
   if (r.retired) return r;
   r.age += 1;
