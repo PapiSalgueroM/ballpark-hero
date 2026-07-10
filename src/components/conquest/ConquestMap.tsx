@@ -1,4 +1,4 @@
-import { US_STATES } from '@/data/usStatesPaths';
+import { NFL_STATES } from '@/data/usStatesPaths';
 import { TEAM_MAP, isLightColor } from '@/data/conquestData';
 import { POWERUPS } from '@/data/conquestPowerups';
 import { useState, useMemo } from 'react';
@@ -41,11 +41,11 @@ export default function ConquestMap({
   // Per-territory geometry (centroid = labelX/labelY, weight = path bounding-box
   // area), used to group contiguous same-owner territories into "empire" blobs
   // and place one area-weighted-centroid label per blob instead of one label
-  // per state. Static input (US_STATES never changes at runtime) so this only
+  // per state. Static input (NFL_STATES never changes at runtime) so this only
   // needs to run once.
   const geomById = useMemo(() => {
     const map = new Map<string, TerritoryGeom>();
-    for (const state of US_STATES) {
+    for (const state of NFL_STATES) {
       const bbox = pathBoundingBox(state.path);
       map.set(state.id, { id: state.id, x: state.labelX, y: state.labelY, area: bboxArea(bbox) });
     }
@@ -113,7 +113,7 @@ export default function ConquestMap({
   }, [powerupStates]);
 
   const hoveredTeamId = hovered ? territories[hovered] : null;
-  const hoveredState = hovered ? US_STATES.find(s => s.id === hovered) : null;
+  const hoveredState = hovered ? NFL_STATES.find(s => s.id === hovered) : null;
   const hoveredTeam = hoveredTeamId ? TEAM_MAP.get(hoveredTeamId) : null;
   const hoveredTerrCount = hoveredTeam
     ? Object.values(territories).filter(t => t === hoveredTeamId).length
@@ -167,7 +167,7 @@ export default function ConquestMap({
         className="w-full h-auto rounded-xl border border-border bg-[#0a0f1a]"
         preserveAspectRatio="xMidYMid meet"
       >
-        {US_STATES.map(state => {
+        {NFL_STATES.map(state => {
           const color = getColor(state.id);
           const teamId = territories[state.id];
           const active = isActive(state.id);
@@ -193,7 +193,7 @@ export default function ConquestMap({
           );
         })}
 
-        {US_STATES.map(state => {
+        {NFL_STATES.map(state => {
           const teamId = territories[state.id];
           const active = isActive(state.id);
 
@@ -231,7 +231,7 @@ export default function ConquestMap({
           );
         })}
 
-        {US_STATES.map(state => (
+        {NFL_STATES.map(state => (
           <path
             key={`interact-${state.id}`}
             d={state.path}
@@ -246,7 +246,7 @@ export default function ConquestMap({
         {/* Power-up indicators on unclaimed states: each tile shows its own
             type's icon (from conquestPowerups.ts) instead of a single
             hardcoded bolt, with a subtle pulse so they read as interactive. */}
-        {US_STATES.map(state => {
+        {NFL_STATES.map(state => {
           const teamId = territories[state.id];
           if (teamId || !powerupStates.has(state.id)) return null;
           const powerup = powerupIconByState.get(state.id);

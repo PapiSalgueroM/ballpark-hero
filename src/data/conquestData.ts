@@ -39,6 +39,8 @@ export const STATE_POSITIONS: StatePos[] = [
   { id: 'CT', name: 'Connecticut', x: c(10,3)[0], y: c(10,3)[1] },
   { id: 'RI', name: 'Rhode Island', x: c(11,3)[0], y: c(11,3)[1] },
   { id: 'CA_N', name: 'Northern California', x: c(0,3)[0], y: c(0,3)[1] - 10 },
+  { id: 'CA_NW', name: 'Bay Area', x: c(0,3)[0] - 8, y: c(0,3)[1] - 10 },
+  { id: 'CA_NE', name: 'Sacramento Valley', x: c(0,3)[0] + 10, y: c(0,3)[1] - 12 },
   { id: 'CA_S', name: 'Southern California', x: c(0,4)[0], y: c(0,4)[1] },
   { id: 'CA_SC', name: 'SoCal Coast', x: c(0,5)[0], y: c(0,5)[1] - 10 },
   { id: 'UT', name: 'Utah', x: c(1,4)[0], y: c(1,4)[1] },
@@ -64,6 +66,9 @@ export const STATE_POSITIONS: StatePos[] = [
   { id: 'GA', name: 'Georgia', x: c(7,6)[0], y: c(7,6)[1] },
   { id: 'TX_N', name: 'North Texas', x: c(3,6)[0], y: c(3,6)[1] },
   { id: 'TX_S', name: 'South Texas', x: c(3,7)[0], y: c(3,7)[1] },
+  // NBA-only fine splits (rendered only by the NBA map; harmless extras here)
+  { id: 'TX_E', name: 'East Texas', x: c(3,7)[0] + 24, y: c(3,7)[1] - 6 },
+  { id: 'TX_CS', name: 'Central & South Texas', x: c(3,7)[0] - 14, y: c(3,7)[1] + 4 },
   { id: 'FL_N', name: 'North Florida', x: c(8,6)[0], y: c(8,6)[1] },
   { id: 'FL_W', name: 'Central Florida', x: c(8,7)[0], y: c(8,7)[1] },
   { id: 'FL_S', name: 'South Florida', x: c(9,7)[0], y: c(9,7)[1] },
@@ -543,6 +548,10 @@ export const STATE_GEO_COORDS: Record<string, { lat: number; lon: number }> = {
   OK: { lat: 35.5, lon: -97.5 },
   TX_N: { lat: 33.0, lon: -97.0 },
   TX_S: { lat: 29.5, lon: -95.5 },
+  TX_E: { lat: 29.8, lon: -95.4 },   // Houston
+  TX_CS: { lat: 29.4, lon: -98.5 },  // San Antonio
+  CA_NW: { lat: 37.8, lon: -122.4 }, // Bay Area
+  CA_NE: { lat: 38.6, lon: -121.5 }, // Sacramento
   MN: { lat: 46.5, lon: -94.5 },
   IA: { lat: 42.0, lon: -93.5 },
   MO: { lat: 38.5, lon: -92.5 },

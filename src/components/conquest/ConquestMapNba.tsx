@@ -1,12 +1,12 @@
 // NBA Conquest map (item 90). Parallel to ConquestMap.tsx, pointed at
 // NBA_TEAM_MAP instead of NFL's TEAM_MAP. Every geometry helper
 // (TERRITORY_ADJACENCY, pathBoundingBox, bboxArea, computeTeamBlobs,
-// blobFontSize) and the underlying US_STATES paths are imported unchanged
+// blobFontSize) and the underlying NBA_STATES paths are imported unchanged
 // from the same shared modules ConquestMap.tsx uses, since none of that
 // code has any NFL-specific content: it operates purely on state ids and
 // (x, y, area) numbers, not on team data shapes.
 
-import { US_STATES } from '@/data/usStatesPaths';
+import { NBA_STATES } from '@/data/usStatesPaths';
 import { isLightColor } from '@/data/conquestData';
 import { NBA_TEAM_MAP } from '@/data/conquestDataNba';
 import { POWERUPS } from '@/data/conquestPowerups';
@@ -49,7 +49,7 @@ export default function ConquestMapNba({
 
   const geomById = useMemo(() => {
     const map = new Map<string, TerritoryGeom>();
-    for (const state of US_STATES) {
+    for (const state of NBA_STATES) {
       const bbox = pathBoundingBox(state.path);
       map.set(state.id, { id: state.id, x: state.labelX, y: state.labelY, area: bboxArea(bbox) });
     }
@@ -103,7 +103,7 @@ export default function ConquestMapNba({
   }, [powerupStates]);
 
   const hoveredTeamId = hovered ? territories[hovered] : null;
-  const hoveredState = hovered ? US_STATES.find(s => s.id === hovered) : null;
+  const hoveredState = hovered ? NBA_STATES.find(s => s.id === hovered) : null;
   const hoveredTeam = hoveredTeamId ? NBA_TEAM_MAP.get(hoveredTeamId) : null;
   const hoveredTerrCount = hoveredTeam
     ? Object.values(territories).filter(t => t === hoveredTeamId).length
@@ -143,7 +143,7 @@ export default function ConquestMapNba({
         className="w-full h-auto rounded-xl border border-border bg-[#0a0f1a]"
         preserveAspectRatio="xMidYMid meet"
       >
-        {US_STATES.map(state => {
+        {NBA_STATES.map(state => {
           const color = getColor(state.id);
           const teamId = territories[state.id];
           const active = isActive(state.id);
@@ -169,7 +169,7 @@ export default function ConquestMapNba({
           );
         })}
 
-        {US_STATES.map(state => {
+        {NBA_STATES.map(state => {
           const teamId = territories[state.id];
           const active = isActive(state.id);
 
@@ -202,7 +202,7 @@ export default function ConquestMapNba({
           );
         })}
 
-        {US_STATES.map(state => (
+        {NBA_STATES.map(state => (
           <path
             key={`interact-${state.id}`}
             d={state.path}
@@ -214,7 +214,7 @@ export default function ConquestMapNba({
           />
         ))}
 
-        {US_STATES.map(state => {
+        {NBA_STATES.map(state => {
           const teamId = territories[state.id];
           if (teamId || !powerupStates.has(state.id)) return null;
           const powerup = powerupIconByState.get(state.id);

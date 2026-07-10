@@ -58,7 +58,7 @@ export interface NbaTeam {
 // Team          Off  Def  Ovr   Anchor players
 // DEN Nuggets    92   78   85   Jokic, Murray, Gordon
 // OKC Thunder    88   93   91   SGA, Holmgren, Williams
-// BOS Celtics    90   87   89   Tatum, Brown, Vucevic
+// BOS Celtics    90   87   89   Tatum, Brown, Queta
 // NYK Knicks     89   80   85   Brunson, Towns, Bridges, Anunoby
 // LAL Lakers     91   74   83   Doncic, James, Reaves, Ayton
 // MIL Bucks      86   80   83   Giannis, Turner, Middleton-tier
@@ -114,7 +114,7 @@ export const NBA_TEAMS: NbaTeam[] = [
   { id: 'BOS', name: 'Celtics', city: 'Boston', rating: 89, color: '#007A33', secondaryColor: '#BA9653', offense: 90, defense: 87, overall: 89, roster: [], players: [
     { name: 'Jayson Tatum', position: 'F', overall: 96, keyStat: 'Franchise scoring forward' },
     { name: 'Jaylen Brown', position: 'G', overall: 91, keyStat: 'Finals MVP two-way wing' },
-    { name: 'Nikola Vucevic', position: 'C', overall: 84, keyStat: 'Stretch-five scorer' },
+    { name: 'Neemias Queta', position: 'C', overall: 78, keyStat: 'Rim-running rebounder' },
     { name: 'Derrick White', position: 'G', overall: 86, keyStat: 'Elite two-way guard' },
     { name: 'Payton Pritchard', position: 'G', overall: 83, keyStat: 'Sixth Man caliber shooter' },
     { name: 'Baylor Scheierman', position: 'G', overall: 76, keyStat: 'Developing wing shooter' },
@@ -357,7 +357,7 @@ export const NBA_TEAMS: NbaTeam[] = [
     { name: 'Jalen Suggs', position: 'G', overall: 81, keyStat: 'Elite point-of-attack defender' },
     { name: 'Desmond Bane', position: 'G', overall: 85, keyStat: 'Sharpshooting secondary star' },
     { name: 'Moritz Wagner', position: 'C', overall: 75, keyStat: 'Stretch big off bench' },
-    { name: 'Goga Bitadze', position: 'C', overall: 76, keyStat: 'Rim-protecting backup big' },
+    { name: 'Nikola Vucevic', position: 'C', overall: 84, keyStat: 'Stretch-five scorer, 2026 homecoming' },
     { name: 'Jonathan Isaac', position: 'F', overall: 78, keyStat: 'Elite defensive anchor' },
     { name: 'Anthony Black', position: 'G', overall: 74, keyStat: 'Young defensive guard' },
     { name: 'Tristan da Silva', position: 'F', overall: 73, keyStat: 'Rookie stretch forward' },
@@ -440,7 +440,7 @@ export const NBA_TEAMS: NbaTeam[] = [
     { name: 'Guerschon Yabusele', position: 'F', overall: 74, keyStat: 'Stretch big depth' },
     { name: 'Josh Giddey', position: 'G-F', overall: 79, keyStat: 'Playmaking forward-guard' },
     { name: 'Coby White', position: 'G', overall: 82, keyStat: 'Breakout scoring guard (dual-listed)' },
-    { name: 'Nikola Vucevic', position: 'C', overall: 84, keyStat: 'Stretch-five scorer (dual-listed)' },
+    { name: 'Anfernee Simons', position: 'G', overall: 80, keyStat: 'Microwave scorer (Vucevic trade return)' },
     { name: 'Patrick Williams', position: 'F', overall: 75, keyStat: 'Versatile stretch forward' },
     { name: 'Ayo Dosunmu', position: 'G', overall: 76, keyStat: 'Two-way combo guard' },
     { name: 'Matas Buzelis', position: 'F', overall: 73, keyStat: 'Young athletic forward' },
@@ -513,13 +513,13 @@ export const INITIAL_TERRITORIES_NBA: Record<string, string> = {
   MD: 'WAS', DE: 'PHI', WV: 'CLE',
   FL_N: 'ORL', FL_W: 'ORL', FL_S: 'MIA', AL: 'ATL', MS: 'MEM', LA: 'NOP',
   AR: 'MEM', OK: 'OKC',
-  // Texas
-  TX_N: 'DAL', TX_S: 'HOU',
+  // Texas — three territories, three Texan teams (2026-07-10 map fix)
+  TX_N: 'DAL', TX_E: 'HOU', TX_CS: 'SAS',
   // Mountain / Southwest
-  CO: 'DEN', UT: 'UTA', AZ: 'PHX', NM: 'SAS', NV: 'SAC', WY: 'DEN',
+  CO: 'DEN', UT: 'UTA', AZ: 'PHX', NM: 'PHX', NV: 'SAC', WY: 'DEN',
   MT: 'UTA', ID: 'UTA', ND: 'MIN', SD: 'MIN', NE: 'DEN', KS: 'OKC',
   // Pacific
-  WA: 'POR', OR: 'POR', CA_N: 'GSW', CA_S: 'LAL', CA_SC: 'LAC',
+  WA: 'POR', OR: 'POR', CA_NW: 'GSW', CA_NE: 'SAC', CA_S: 'LAL', CA_SC: 'LAC',
 };
 
 // STATE_POSITIONS/DIRECTIONS/DIR_LABELS/DIR_ANGLES/STATE_GEO_COORDS/isLightColor

@@ -4,7 +4,7 @@ import {
   DIRECTIONS, DIR_ANGLES, DIR_LABELS, STATE_GEO_COORDS,
   CONQUEST_FREE_AGENCY_POOL, ConquestFreeAgentCandidate,
 } from '@/data/conquestData';
-import { US_STATES } from '@/data/usStatesPaths';
+import { NFL_STATES } from '@/data/usStatesPaths';
 import {
   PowerupId, PowerupDef, POWERUPS, getRandomPowerup,
   FREE_AGENTS, TEAM_LEGENDS, FreeAgent,
@@ -88,7 +88,7 @@ function buildInitialPowerRankDrift(): Record<string, number> {
 
 // Build a lookup from state ID → geographic center (from SVG paths) - kept for map rendering
 const GEO_CENTERS = new Map<string, { x: number; y: number }>();
-US_STATES.forEach(s => GEO_CENTERS.set(s.id, { x: s.labelX, y: s.labelY }));
+NFL_STATES.forEach(s => GEO_CENTERS.set(s.id, { x: s.labelX, y: s.labelY }));
 
 function buildInitialTerritories(): Record<string, string | null> {
   const t: Record<string, string | null> = {};

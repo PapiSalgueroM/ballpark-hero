@@ -21,7 +21,7 @@ import {
   CONQUEST_FREE_AGENCY_POOL_NBA, ConquestFreeAgentCandidateNba,
   TEAM_LEGENDS_NBA,
 } from '@/data/conquestDataNba';
-import { US_STATES } from '@/data/usStatesPaths';
+import { NBA_STATES } from '@/data/usStatesPaths';
 import {
   PowerupId, PowerupDef, POWERUPS, getRandomPowerup,
   FREE_AGENTS, FreeAgent,

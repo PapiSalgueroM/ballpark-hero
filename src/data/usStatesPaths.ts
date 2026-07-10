@@ -4,6 +4,10 @@ export interface USState {
   path: string;
   labelX: number;
   labelY: number;
+  /** rendered only on the NBA Conquest map (finer city splits) */
+  nbaOnly?: boolean;
+  /** rendered only on the NFL Conquest map (replaced by finer splits on NBA) */
+  nflOnly?: boolean;
 }
 
 export const US_STATES: USState[] = [
@@ -13,7 +17,7 @@ export const US_STATES: USState[] = [
     path: 'M305.3,162.0L348.5,162.0L349.4,164.3L346.2,168.0L352.7,168.0L352.4,170.3L348.7,174.7L344.3,187.0L340.5,190.4L337.7,197.3L339.4,198.8L338.3,204.0L309.6,203.8L309.6,197.4L305.2,196.4L305.7,175.3L303.8,162.0L305.3,162.0Z' },
   { id: 'AZ', name: 'Arizona', labelX: 113, labelY: 187,
     path: 'M159.6,156.0L159.5,224.0L139.3,224.0L101.8,210.1L105.3,205.9L102.7,199.1L104.8,197.4L104.6,192.8L108.6,188.3L103.7,181.5L102.6,166.8L108.5,167.7L109.5,156.0L159.6,156.0Z' },
-  { id: 'CA_N', name: 'Northern California', labelX: 35, labelY: 125,
+  { id: 'CA_N', name: 'Northern California', nflOnly: true, labelX: 35, labelY: 125,
     path: 'M17.7,95.9L50.0,96.1L50.0,132.0L75.7,155.0L28.7,155.0L25.8,153.1L25.9,142.2L25.0,144.8L20.6,143.6L18.7,138.6L12.6,132.5L11.5,122.0L6.4,116.9L9.3,102.7L7.9,96.0L17.7,95.9Z' },
   { id: 'CA_S', name: 'Southern California', labelX: 55, labelY: 172,
     path: 'M75.7,155.0L103.7,180.0L108.6,188.3L104.6,192.8L104.8,197.4L54.4,187.0L45.3,186.6L43.5,185.0L43.7,178.8L31.0,164.2L32.1,158.4L30.7,156.3L28.7,155.0L75.7,155.0Z' },
@@ -103,7 +107,7 @@ export const US_STATES: USState[] = [
     path: 'M369.5,162.0L369.3,159.9L433.2,160.9L429.6,166.6L423.9,168.4L423.6,167.2L420.1,170.7L412.3,173.3L407.1,177.3L406.8,180.1L346.9,180.1L354.7,165.0L354.6,162.0L369.5,162.0Z' },
   { id: 'TX_N', name: 'North Texas', labelX: 263, labelY: 200,
     path: 'M231.9,162.0L250.0,162.0L250.0,185.2L253.0,187.4L257.4,187.1L258.1,189.5L268.3,190.6L271.3,193.8L273.1,192.2L278.3,195.2L280.8,192.5L286.5,195.8L288.5,193.9L297.8,192.5L306.2,197.5L309.6,197.4L309.6,216.1L311.2,220.0L186.6,220.0L183.6,217.2L219.3,216.0L219.6,162.0L231.9,162.0Z' },
-  { id: 'TX_S', name: 'South Texas', labelX: 263, labelY: 255,
+  { id: 'TX_S', name: 'South Texas', nflOnly: true, labelX: 263, labelY: 255,
     path: 'M311.2,220.0L314.7,228.8L311.6,243.7L304.8,245.4L302.6,242.6L299.8,245.3L301.0,248.3L296.2,253.6L290.1,256.8L283.4,255.6L286.0,258.7L282.3,259.1L274.9,271.7L274.4,277.9L277.8,288.1L274.8,289.3L258.3,281.5L255.2,270.2L247.0,260.6L243.3,250.8L235.9,242.9L226.6,241.6L217.2,252.2L204.9,244.3L201.0,233.2L186.6,220.0L311.2,220.0Z' },
   { id: 'UT', name: 'Utah', labelX: 141, labelY: 123,
     path: 'M128.4,96.1L139.5,96.0L139.5,108.0L159.5,108.0L159.6,156.0L109.5,156.0L109.6,96.1L128.4,96.1Z' },
@@ -119,4 +123,20 @@ export const US_STATES: USState[] = [
     path: 'M444.8,112.4L444.8,123.3L455.2,123.3L455.1,129.5L459.1,126.4L465.3,125.8L468.3,123.7L471.7,124.8L472.8,128.1L471.7,130.4L466.5,126.4L466.0,130.0L461.3,134.8L460.0,133.8L456.9,139.0L453.5,136.9L447.0,149.9L433.2,153.6L425.0,144.8L424.1,138.9L426.7,138.6L429.6,131.7L431.1,133.5L433.1,128.7L437.8,127.3L441.7,123.5L443.3,113.0L444.8,112.4Z' },
   { id: 'WY', name: 'Wyoming', labelX: 171, labelY: 84,
     path: 'M159.2,60.0L209.4,60.0L209.5,108.0L139.5,108.0L139.5,60.0L159.2,60.0Z' },
+  // ── NBA-only splits (2026-07-10, owner: "teams are not where they're supposed to be") ──
+  // Texas gets a third territory so San Antonio lives in Texas, not New Mexico:
+  { id: 'TX_E', name: 'East Texas', nbaOnly: true, labelX: 298, labelY: 238,
+    path: 'M283.0,220.0L311.2,220.0L314.7,228.8L311.6,243.7L304.8,245.4L302.6,242.6L299.8,245.3L301.0,248.3L296.2,253.6L290.1,256.8L283.4,255.6L283.0,220.0Z' },
+  { id: 'TX_CS', name: 'Central & South Texas', nbaOnly: true, labelX: 235, labelY: 244,
+    path: 'M186.6,220.0L283.0,220.0L283.4,255.6L286.0,258.7L282.3,259.1L274.9,271.7L274.4,277.9L277.8,288.1L274.8,289.3L258.3,281.5L255.2,270.2L247.0,260.6L243.3,250.8L235.9,242.9L226.6,241.6L217.2,252.2L204.9,244.3L201.0,233.2L186.6,220.0Z' },
+  // Northern California splits so Sacramento lives in California, not Nevada:
+  { id: 'CA_NW', name: 'Bay Area', nbaOnly: true, labelX: 18, labelY: 122,
+    path: 'M17.7,95.9L32.0,96.0L32.0,155.0L28.7,155.0L25.8,153.1L25.9,142.2L25.0,144.8L20.6,143.6L18.7,138.6L12.6,132.5L11.5,122.0L6.4,116.9L9.3,102.7L7.9,96.0L17.7,95.9Z' },
+  { id: 'CA_NE', name: 'Sacramento Valley', nbaOnly: true, labelX: 46, labelY: 124,
+    path: 'M32.0,96.0L50.0,96.1L50.0,132.0L75.7,155.0L32.0,155.0L32.0,96.0Z' },
 ];
+
+/** Territory set for the NFL Conquest map (original 50-state + splits). */
+export const NFL_STATES: USState[] = US_STATES.filter(st => !st.nbaOnly);
+/** Territory set for the NBA Conquest map (finer TX/CA splits, no TX_S/CA_N). */
+export const NBA_STATES: USState[] = US_STATES.filter(st => !st.nflOnly);
