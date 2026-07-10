@@ -1,6 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import { Player, Position, League } from '@/types/game';
 import { players as fallbackPlayers } from '@/data/players';
+import { getEnrichment } from '@/data/footleEnrichment';
 
 /* ---------------- Position normalization ---------------- */
 const POSITION_NORMALIZE: Record<string, Position> = {
@@ -72,6 +73,19 @@ export function playerRating(p: Player): number {
   return Math.max(35, Math.min(99, Math.round(r)));
 }
 
+/**
+ * Owner (2026-07-10): "only giving the best defenders of all time 80 somethings
+ * is so disrespectful." Legends get their own curve: the synthetic legend
+ * market values (140-230) map to 85-99 so all-time greats read like it.
+ */
+export function ratingFor(p: Player, era: Era): number {
+  if (era === 'legends') {
+    const r = 85 + ((Math.max(140, Math.min(230, p.marketValue)) - 140) * 14) / 90;
+    return Math.round(Math.max(85, Math.min(99, r)));
+  }
+  return playerRating(p);
+}
+
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
@@ -106,7 +120,7 @@ export const LEGENDS: Player[] = [
   L('Lothar Matthaus', 'Bayern Munich', 'Germany', 'Bundesliga', 'CM', 175, 160),
   L('Paul Scholes', 'Manchester United', 'England', 'Premier League', 'CM', 170, 155),
   L('Ronaldinho', 'Barcelona', 'Brazil', 'La Liga', 'CAM', 195, 120, 130),
-  L('Pele', 'Santos', 'Brazil', 'Brazilian Serie A', 'CF', 225, 643),
+  L('Pele', 'Santos', 'Brazil', 'Brazilian Série A', 'CF', 225, 643),
   L('Diego Maradona', 'Napoli', 'Argentina', 'Serie A', 'CAM', 220, 311),
   L('Lionel Messi', 'Barcelona', 'Argentina', 'La Liga', 'RW', 230, 700, 350),
   L('Cristiano Ronaldo', 'Real Madrid', 'Portugal', 'La Liga', 'ST', 225, 730, 230),
@@ -120,8 +134,71 @@ export const LEGENDS: Player[] = [
   L('Romario', 'Barcelona', 'Brazil', 'La Liga', 'ST', 195, 350),
   L('Andriy Shevchenko', 'AC Milan', 'Ukraine', 'Serie A', 'ST', 185, 175),
   L('Ryan Giggs', 'Manchester United', 'Wales', 'Premier League', 'LW', 175, 168, 211),
-  L('Garrincha', 'Botafogo', 'Brazil', 'Brazilian Serie A', 'RW', 185, 232),
+  L('Garrincha', 'Botafogo', 'Brazil', 'Brazilian Série A', 'RW', 185, 232),
   L('Michel Platini', 'Juventus', 'France', 'Serie A', 'CAM', 200, 224),
+  // --- 2026-07-10 expansion: owner wants 10+ per position in the all-time pool ---
+  // GK (now 12)
+  L('Gordon Banks', 'Stoke City', 'England', 'Premier League', 'GK', 160),
+  L('Peter Schmeichel', 'Manchester United', 'Denmark', 'Premier League', 'GK', 168),
+  L('Oliver Kahn', 'Bayern Munich', 'Germany', 'Bundesliga', 'GK', 172),
+  L('Edwin van der Sar', 'Manchester United', 'Netherlands', 'Premier League', 'GK', 162),
+  L('Dino Zoff', 'Juventus', 'Italy', 'Serie A', 'GK', 166),
+  L('Sepp Maier', 'Bayern Munich', 'Germany', 'Bundesliga', 'GK', 155),
+  L('Petr Cech', 'Chelsea', 'Czechia', 'Premier League', 'GK', 158),
+  L('Keylor Navas', 'Real Madrid', 'Costa Rica', 'La Liga', 'GK', 145),
+  // CB (now 14)
+  L('Alessandro Nesta', 'AC Milan', 'Italy', 'Serie A', 'CB', 172),
+  L('Rio Ferdinand', 'Manchester United', 'England', 'Premier League', 'CB', 168),
+  L('John Terry', 'Chelsea', 'England', 'Premier League', 'CB', 165),
+  L('Nemanja Vidic', 'Manchester United', 'Serbia', 'Premier League', 'CB', 162),
+  L('Gerard Pique', 'Barcelona', 'Spain', 'La Liga', 'CB', 168),
+  L('Thiago Silva', 'Paris Saint-Germain', 'Brazil', 'Ligue 1', 'CB', 166),
+  L('Virgil van Dijk', 'Liverpool', 'Netherlands', 'Premier League', 'CB', 178),
+  L('Bobby Moore', 'West Ham United', 'England', 'Premier League', 'CB', 185),
+  // FB/WB (RB now 7, LB now 6)
+  L('Dani Alves', 'Barcelona', 'Brazil', 'La Liga', 'RB', 172),
+  L('Javier Zanetti', 'Inter Milan', 'Argentina', 'Serie A', 'RB', 165),
+  L('Gary Neville', 'Manchester United', 'England', 'Premier League', 'RB', 150),
+  L('Kyle Walker', 'Manchester City', 'England', 'Premier League', 'RB', 145),
+  L('Ashley Cole', 'Chelsea', 'England', 'Premier League', 'LB', 158),
+  L('Marcelo', 'Real Madrid', 'Brazil', 'La Liga', 'LB', 165),
+  L('Paolo Maldini (LB)', 'AC Milan', 'Italy', 'Serie A', 'LB', 182),
+  L('Andrew Robertson', 'Liverpool', 'Scotland', 'Premier League', 'LB', 148),
+  L('Trent Alexander-Arnold', 'Liverpool', 'England', 'Premier League', 'RB', 158),
+  L('Giacinto Facchetti', 'Inter Milan', 'Italy', 'Serie A', 'LB', 168),
+  // CM/CDM/CAM (now 20)
+  L('Frank Lampard', 'Chelsea', 'England', 'Premier League', 'CM', 172, 211),
+  L('Claude Makelele', 'Chelsea', 'France', 'Premier League', 'CDM', 160),
+  L('Patrick Vieira', 'Arsenal', 'France', 'Premier League', 'CDM', 170),
+  L('Roy Keane', 'Manchester United', 'Ireland', 'Premier League', 'CDM', 162),
+  L('Sergio Busquets', 'Barcelona', 'Spain', 'La Liga', 'CDM', 168),
+  L('N Golo Kante', 'Chelsea', 'France', 'Premier League', 'CDM', 165),
+  L('Toni Kroos', 'Real Madrid', 'Germany', 'La Liga', 'CM', 175),
+  L('Kevin De Bruyne', 'Manchester City', 'Belgium', 'Premier League', 'CM', 178, 105, 170),
+  L('Kaka', 'AC Milan', 'Brazil', 'Serie A', 'CAM', 190, 130),
+  L('Juan Roman Riquelme', 'Boca Juniors', 'Argentina', 'Argentine Primera División', 'CAM', 172),
+  L('Francesco Totti', 'AS Roma', 'Italy', 'Serie A', 'CAM', 185, 250),
+  L('Dennis Bergkamp', 'Arsenal', 'Netherlands', 'Premier League', 'CAM', 182, 120),
+  // Wingers (now 12)
+  L('Luis Figo', 'Real Madrid', 'Portugal', 'La Liga', 'RW', 190, 100),
+  L('David Beckham', 'Manchester United', 'England', 'Premier League', 'RM', 178, 97, 160),
+  L('Arjen Robben', 'Bayern Munich', 'Netherlands', 'Bundesliga', 'RW', 180, 144),
+  L('Franck Ribery', 'Bayern Munich', 'France', 'Bundesliga', 'LW', 175, 124),
+  L('Gareth Bale', 'Real Madrid', 'Wales', 'La Liga', 'RW', 172, 106),
+  L('Neymar Jr', 'Barcelona', 'Brazil', 'La Liga', 'LW', 195, 250, 165),
+  L('Mohamed Salah', 'Liverpool', 'Egypt', 'Premier League', 'RW', 180, 230),
+  L('Jairzinho', 'Botafogo', 'Brazil', 'Brazilian Série A', 'RW', 170, 186),
+  // ST/CF (now 16)
+  L('Alfredo Di Stefano', 'Real Madrid', 'Argentina', 'La Liga', 'CF', 220, 308),
+  L('Ferenc Puskas', 'Real Madrid', 'Hungary', 'La Liga', 'ST', 210, 512),
+  L('Zlatan Ibrahimovic', 'AC Milan', 'Sweden', 'Serie A', 'ST', 190, 511),
+  L('Samuel Eto o', 'Barcelona', 'Cameroon', 'La Liga', 'ST', 182, 360),
+  L('Didier Drogba', 'Chelsea', 'Ivory Coast', 'Premier League', 'ST', 178, 275),
+  L('Luis Suarez', 'Barcelona', 'Uruguay', 'La Liga', 'ST', 185, 400),
+  L('Robert Lewandowski', 'Bayern Munich', 'Poland', 'Bundesliga', 'ST', 188, 550),
+  L('Karim Benzema', 'Real Madrid', 'France', 'La Liga', 'CF', 182, 425),
+  L('Sergio Aguero', 'Manchester City', 'Argentina', 'Premier League', 'ST', 180, 379),
+  L('Roberto Baggio', 'Juventus', 'Italy', 'Serie A', 'CF', 188, 291),
 ];
 
 /* ---------------- Memes pool (original, IP-safe) ---------------- */
@@ -168,13 +245,40 @@ export async function fetchSquadPool(era: Era): Promise<Player[]> {
       seen.add(row.player_name);
       pool.push({
         name: row.player_name, club: row.club || 'Unknown', nationality: row.nationality || 'Unknown',
-        league: 'Premier League' as League, goals: row.goals ?? 0, assists: row.assists ?? 0,
+        league: getEnrichment(row.player_name, row.club || '').league, goals: row.goals ?? 0, assists: row.assists ?? 0,
         position: pos, kitNumber: 0, age: row.age ?? 0,
         marketValue: Math.max(1, Math.round((row.market_value_usd || 1_000_000) / 1_000_000)), difficulty: 'easy',
       });
     }
     return pool.length >= 33 ? pool : fallbackPlayers.slice();
   } catch { return fallbackPlayers.slice(); }
+}
+
+
+/* ---------------- Topics (owner: themed pools like WC-2026-only) ---------------- */
+export type Topic = 'all' | 'wc2026' | 'premier' | 'laliga' | 'seriea' | 'southamerica';
+
+export const TOPICS: { id: Topic; label: string; emoji: string; desc: string }[] = [
+  { id: 'all', label: 'All World', emoji: '🌍', desc: 'Every top player' },
+  { id: 'wc2026', label: 'World Cup 2026', emoji: '🏆', desc: 'Nations at the 2026 World Cup' },
+  { id: 'premier', label: 'Premier League', emoji: '🏴', desc: 'PL players only' },
+  { id: 'laliga', label: 'La Liga', emoji: '🇪🇸', desc: 'La Liga players only' },
+  { id: 'seriea', label: 'Serie A', emoji: '🇮🇹', desc: 'Serie A players only' },
+  { id: 'southamerica', label: 'South America', emoji: '🌎', desc: 'CONMEBOL nations only' },
+];
+
+const WC2026_NATIONS = new Set(['United States','Mexico','Canada','Argentina','France','Spain','England','Brazil','Portugal','Netherlands','Belgium','Croatia','Morocco','Germany','Italy','Uruguay','Colombia','Ecuador','Japan','South Korea','Korea, South','Australia','Iran','Saudi Arabia','Qatar','Senegal','Ghana','Cameroon','Nigeria','Egypt','Algeria','Ivory Coast',"Cote d'Ivoire",'Tunisia','Switzerland','Austria','Poland','Denmark','Sweden','Norway','Scotland','Wales','Serbia','Turkey','Türkiye','Ukraine','Greece','Czechia','Czech Republic','Paraguay','Panama','Costa Rica','Jordan','Uzbekistan','New Zealand','Bolivia','Haiti','Curacao','Cape Verde','South Africa']);
+const CONMEBOL = new Set(['Argentina','Brazil','Uruguay','Colombia','Chile','Ecuador','Paraguay','Peru','Bolivia','Venezuela']);
+
+export function filterByTopic(pool: Player[], topic: Topic): Player[] {
+  switch (topic) {
+    case 'all': return pool;
+    case 'wc2026': return pool.filter(p => WC2026_NATIONS.has(p.nationality));
+    case 'premier': return pool.filter(p => p.league === 'Premier League');
+    case 'laliga': return pool.filter(p => p.league === 'La Liga');
+    case 'seriea': return pool.filter(p => p.league === 'Serie A');
+    case 'southamerica': return pool.filter(p => CONMEBOL.has(p.nationality));
+  }
 }
 
 /* ---------------- Candidates (10 tiered, optional memes) ---------------- */
@@ -201,8 +305,8 @@ export function buildCandidates(pool: Player[], slot: FormationSlot, used: Set<s
 }
 
 /* ---------------- Banker offer ---------------- */
-export function bankerOffer(pool: Player[], slot: FormationSlot, unopened: Player[], used: Set<string>, roundFactor: number, excludeNames: Set<string> = new Set()): Player | null {
-  const ratings = unopened.map(playerRating);
+export function bankerOffer(pool: Player[], slot: FormationSlot, unopened: Player[], used: Set<string>, roundFactor: number, excludeNames: Set<string> = new Set(), era: Era = 'current'): Player | null {
+  const ratings = unopened.map(p => ratingFor(p, era));
   const avgR = ratings.length ? ratings.reduce((s2, r) => s2 + r, 0) / ratings.length : 55;
   const minR = ratings.length ? Math.min(...ratings) : 45;
   const maxR = ratings.length ? Math.max(...ratings) : 95;
@@ -217,7 +321,7 @@ export function bankerOffer(pool: Player[], slot: FormationSlot, unopened: Playe
     !unopenedNames.has(p.name) && !excludeNames.has(p.name));
   if (!elig.length) return null;
   let best = elig[0]; let bestD = Infinity;
-  for (const p of elig) { const d = Math.abs(playerRating(p) - target); if (d < bestD) { bestD = d; best = p; } }
+  for (const p of elig) { const d = Math.abs(ratingFor(p, era) - target); if (d < bestD) { bestD = d; best = p; } }
   return best;
 }
 
@@ -252,6 +356,45 @@ export const EXTRAS: ExtraCategory[] = [
   ]},
 ];
 
+/* ---------------- Extras as Deal-or-No-Deal boards (owner 2026-07-10) ----------------
+   "I wanted a deal or no deal for those too. Like Klopp and Sir Alex Ferguson and
+   Chelsea budget and Boca junior fans" — 6 named cases per category, keep one,
+   three get flipped, the Banker tempts you with a known alternative. */
+export const EXTRA_DEALS: ExtraCategory[] = [
+  { key: 'manager', title: 'Manager', emoji: '🎩', options: [
+    { id: 'pep', label: 'Pep Guardiola', emoji: '🧠', desc: 'Positional-play professor', ratingMod: 5, chemMod: 8, fact: 'Pep drilled a passing machine — 70% possession every week.' },
+    { id: 'fergie', label: 'Sir Alex Ferguson', emoji: '⏱️', desc: 'Fergie time is real', ratingMod: 5, chemMod: 10, fact: 'Sir Alex won three titles "playing badly". Mentality monsters.' },
+    { id: 'klopp', label: 'Jürgen Klopp', emoji: '🔥', desc: 'Heavy-metal football', ratingMod: 4, chemMod: 9, fact: "Klopp's gegenpress turned the squad into a wrecking ball." },
+    { id: 'ancelotti', label: 'Carlo Ancelotti', emoji: '🚬', desc: 'Eyebrow of calm', ratingMod: 4, chemMod: 7, fact: 'Don Carlo managed the egos like only Don Carlo can.' },
+    { id: 'mourinho', label: 'José Mourinho', emoji: '🚌', desc: 'Parks the bus, wins finals', ratingMod: 3, chemMod: 4, fact: 'José won a cup and started three touchline wars.' },
+    { id: 'dave', label: 'Your Mate Dave', emoji: '🍺', desc: 'Has a coaching badge (Level 1)', ratingMod: -3, chemMod: 3, fact: 'Dave subbed off your striker to "see something". Lost 4-0.' },
+  ]},
+  { key: 'stadium', title: 'Stadium', emoji: '🏟️', options: [
+    { id: 'campnou', label: 'Camp Nou', emoji: '🔵', desc: '99,000 Catalans', ratingMod: 4, chemMod: 6, fact: 'The rebuilt Camp Nou shook for the big nights.' },
+    { id: 'bernabeu', label: 'Santiago Bernabéu', emoji: '⚪', desc: 'The white wall', ratingMod: 4, chemMod: 5, fact: 'The Bernabéu demanded galáctico football and got it.' },
+    { id: 'anfield', label: 'Anfield', emoji: '🔴', desc: 'European nights', ratingMod: 3, chemMod: 9, fact: 'Anfield dragged the team through two comebacks from 3 down.' },
+    { id: 'bombonera', label: 'La Bombonera', emoji: '💛', desc: 'The box of chocolates bounces', ratingMod: 3, chemMod: 10, fact: 'La Bombonera literally trembled. Visitors hated every minute.' },
+    { id: 'sansiro', label: 'San Siro', emoji: '🔴', desc: 'Opera of football', ratingMod: 3, chemMod: 6, fact: 'San Siro gave every match a cinematic edge.' },
+    { id: 'park', label: 'The Local Park', emoji: '🌳', desc: 'Bring your own nets', ratingMod: -2, chemMod: 4, fact: 'A dog stopped play twice at the Local Park.' },
+  ]},
+  { key: 'fanbase', title: 'Fan Base', emoji: '📣', options: [
+    { id: 'kop', label: 'The Kop', emoji: '🎼', desc: "You'll Never Walk Alone", ratingMod: 3, chemMod: 9, fact: 'The Kop sang the team over the line week after week.' },
+    { id: 'yellowwall', label: 'The Yellow Wall', emoji: '🟡', desc: "25,000 standing Dortmunders", ratingMod: 3, chemMod: 8, fact: 'The Yellow Wall made warm-ups feel like finals.' },
+    { id: 'ladoce', label: "Boca's La Doce", emoji: '💙', desc: 'The 12th player', ratingMod: 3, chemMod: 10, fact: 'La Doce never sat down. Not once. All season.' },
+    { id: 'ultras', label: 'Galatasaray Ultras', emoji: '🔥', desc: 'Welcome to hell', ratingMod: 4, chemMod: 5, fact: 'Flares, tifos, and a wall of noise — hell for visitors.' },
+    { id: 'greenbrigade', label: 'The Green Brigade', emoji: '🍀', desc: 'Celtic Park eruption', ratingMod: 2, chemMod: 9, fact: 'The Green Brigade turned Tuesday nights into carnivals.' },
+    { id: 'bored', label: '3 Season-Ticket Holders', emoji: '😴', desc: 'One brings a thermos', ratingMod: -2, chemMod: 2, fact: 'Attendance peaked at 41 (a school trip got lost).' },
+  ]},
+  { key: 'budget', title: 'Transfer Budget', emoji: '💰', options: [
+    { id: 'oil', label: '£1B Oil Money', emoji: '🛢️', desc: 'Money is no object', ratingMod: 5, chemMod: -4, fact: 'The £1B warchest bought five superstars and one lawsuit.' },
+    { id: 'chelsea', label: 'Chelsea Splurge (£800M)', emoji: '💳', desc: 'Sign everyone, sort it later', ratingMod: 4, chemMod: -3, fact: 'Signed 14 players. Three play the same position. Vibes.' },
+    { id: 'galacticos', label: 'Galácticos (€500M)', emoji: '💎', desc: 'One superstar per summer', ratingMod: 4, chemMod: -1, fact: 'The Galáctico policy sold shirts AND won games this time.' },
+    { id: 'fiftyplus1', label: '50+1 Sensible (€90M)', emoji: '🇩🇪', desc: 'German efficiency', ratingMod: 2, chemMod: 6, fact: 'Smart, sustainable spending. The fans owned the club and it showed.' },
+    { id: 'moneyball', label: 'Moneyball (€30M)', emoji: '📊', desc: 'Spreadsheet FC', ratingMod: 1, chemMod: 8, fact: 'Moneyball found two gems the big clubs never scouted.' },
+    { id: 'academy', label: 'Academy Only (€0)', emoji: '🌱', desc: 'La Masia dreams', ratingMod: -1, chemMod: 12, fact: 'Eleven academy kids who grew up together. Chemistry off the charts.' },
+  ]},
+];
+
 /* ---------------- Simulation ---------------- */
 export interface SquadResult { rating: number; chemistry: number; grade: string; facts: string[]; }
 
@@ -273,9 +416,9 @@ export interface SquadResult { rating: number; chemistry: number; grade: string;
  * cutoffs (which made a mid-table XI a "B" and near-full Legends an "A+" no
  * matter how the draft or extras went, while "D" needed active sabotage).
  */
-export function simulateSquad(picks: Player[], extras: ExtraOption[] = []): SquadResult {
+export function simulateSquad(picks: Player[], extras: ExtraOption[] = [], era: Era = 'current'): SquadResult {
   if (!picks.length) return { rating: 0, chemistry: 0, grade: 'D', facts: [] };
-  const ratings = picks.map(playerRating);
+  const ratings = picks.map(p => ratingFor(p, era));
   const avg = ratings.reduce((a, b) => a + b, 0) / ratings.length;
   let chemPts = 0;
   const accessors: ((p: Player) => string)[] = [p => p.club, p => p.nationality];
@@ -295,7 +438,7 @@ export function simulateSquad(picks: Player[], extras: ExtraOption[] = []): Squa
   const nations = new Set(picks.map(p => p.nationality)).size;
   const facts: string[] = [];
   if (topScorer && topScorer.goals > 0) facts.push('Top scorer: ' + topScorer.name + ' (' + topScorer.goals + ' goals)');
-  if (star) facts.push('Star man: ' + star.name + ' (rated ' + playerRating(star) + ')');
+  if (star) facts.push('Star man: ' + star.name + ' (rated ' + ratingFor(star, era) + ')');
   facts.push('Chemistry ' + chemistry + '% · ' + nations + ' nations');
   for (const e of extras) facts.push(e.emoji + ' ' + e.fact);
   if (rating >= 84) facts.push('🏆 Won the treble in a dream season.');

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { Briefcase, Phone, Check, X, Trophy, ChevronRight, Crown, Zap, Play } from 'lucide-react';
 import { useSquadDeal } from '@/hooks/useSquadDeal';
-import { FORMATIONS, EXTRAS, playerRating } from '@/lib/squadDeal';
+import { FORMATIONS, EXTRA_DEALS, TOPICS } from '@/lib/squadDeal';
 import type { Formation } from '@/lib/squadDeal';
 import type { Player } from '@/types/game';
 import { GameNav } from '@/components/game/GameNav';
@@ -61,7 +61,8 @@ const Pitch = ({ formation, squad, activeIndex, onSlotClick, clickableEmpty }: {
 const SquadDeal = () => {
   const g = useSquadDeal();
   const poolList = useMemo(
-    () => g.candidates.map((p, i) => ({ p, i, r: playerRating(p) })).sort((a, b) => b.r - a.r),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    () => g.candidates.map((p, i) => ({ p, i, r: g.era2Rating(p) })).sort((a, b) => b.r - a.r),
     [g.candidates],
   );
   const chemistry = useMemo(
@@ -121,6 +122,21 @@ const SquadDeal = () => {
           </div>
         </div>
 
+        {g.era === 'current' && (
+          <div className="mb-8">
+            <div className="text-xs text-muted-foreground uppercase tracking-wider mb-2 text-center">Topic</div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-w-2xl mx-auto">
+              {TOPICS.map(t => (
+                <button key={t.id} onClick={() => g.setTopic(t.id)} className={cn('rounded-xl border p-3 text-left transition-all', g.topic === t.id ? 'bg-primary/10 border-primary' : 'bg-card border-border hover:border-primary')}>
+                  <div className="text-lg">{t.emoji}</div>
+                  <div className={cn('text-xs font-bold mt-0.5', g.topic === t.id ? 'text-primary' : 'text-foreground')}>{t.label}</div>
+                  <div className="text-[10px] text-muted-foreground">{t.desc}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="text-center">
           <button onClick={g.startDraft} className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold text-lg hover:opacity-90 transition-opacity">Start Building <ChevronRight className="w-5 h-5" /></button>
         </div>
@@ -130,38 +146,88 @@ const SquadDeal = () => {
 
   if (g.phase === 'loading') return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading players…</div>);
 
-  /* ---------- EXTRAS ---------- */
+  /* ---------- EXTRAS: mini Deal-or-No-Deal per category ---------- */
   if (g.phase === 'extras') {
+    const cat = g.currentExtraCat;
+    const done = g.allExtrasChosen;
     return shell(
       <div>
         <header className="text-center mb-6">
           <h1 className="text-3xl md:text-4xl font-bold text-primary font-display">FINISHING TOUCHES</h1>
-          <p className="text-muted-foreground text-sm">Pick one of each. They tweak your final rating.</p>
+          <p className="text-muted-foreground text-sm">{done ? 'All set. Time to see what this squad is made of.' : `Board ${Math.min(g.extraCat + 1, EXTRA_DEALS.length)} of ${EXTRA_DEALS.length}: keep a case, dodge the Banker.`}</p>
         </header>
-        <div className="space-y-5 max-w-2xl mx-auto">
-          {EXTRAS.map(cat => (
-            <div key={cat.key}>
-              <div className="text-sm font-semibold text-foreground mb-2">{cat.emoji} {cat.title}</div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {cat.options.map(opt => {
-                  const sel = g.extrasChosen[cat.key]?.id === opt.id;
-                  return (
-                    <button key={opt.id} onClick={() => g.chooseExtra(cat.key, opt)} className={cn('rounded-xl border p-3 text-left transition-all', sel ? 'bg-primary/10 border-primary' : 'bg-card border-border hover:border-primary')}>
-                      <div className="text-lg">{opt.emoji}</div>
-                      <div className={cn('text-xs font-bold mt-1', sel ? 'text-primary' : 'text-foreground')}>{opt.label}</div>
-                      <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">{opt.desc}</div>
-                    </button>
-                  );
-                })}
-              </div>
+
+        {!done && (
+          <div className="max-w-2xl mx-auto">
+            <div className="text-center text-sm font-semibold text-foreground mb-3">{cat.emoji} {cat.title} — {g.extraStage === 'pick' ? 'pick one case to KEEP 💼' : g.extraStage === 'reveal' ? 'three cases flip...' : g.extraStage === 'offer' ? 'the Banker calls' : 'stay or swap?'}</div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {cat.options.map((opt, i) => {
+                const kept = g.extraKept === i;
+                const flipped = g.extraElim.includes(i);
+                const faceUp = flipped || (g.extraStage !== 'pick' && kept && false);
+                return (
+                  <button key={opt.id} disabled={g.extraStage !== 'pick'} onClick={() => g.pickExtraCase(i)}
+                    className={cn('rounded-xl border p-3 text-left transition-all min-h-[86px]',
+                      kept ? 'bg-primary/15 border-primary shadow-lg' : flipped ? 'bg-secondary/30 border-border opacity-70' : 'bg-card border-border', g.extraStage === 'pick' && 'hover:border-primary cursor-pointer')}>
+                    {faceUp || flipped ? (
+                      <>
+                        <div className="text-lg">{opt.emoji}</div>
+                        <div className="text-xs font-bold mt-0.5 text-foreground line-through">{opt.label}</div>
+                        <div className="text-[10px] text-muted-foreground">rating {opt.ratingMod >= 0 ? '+' : ''}{opt.ratingMod} · chem {opt.chemMod >= 0 ? '+' : ''}{opt.chemMod}</div>
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full py-2">
+                        <Briefcase className={cn('w-6 h-6', kept ? 'text-primary' : 'text-muted-foreground')} />
+                        <span className={cn('text-[11px] font-bold mt-1', kept ? 'text-primary' : 'text-muted-foreground')}>{kept ? 'YOUR CASE' : `Case ${i + 1}`}</span>
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
-          ))}
-        </div>
-        <div className="text-center mt-7">
-          <button onClick={g.simulate} disabled={!g.allExtrasChosen} className={cn('inline-flex items-center gap-2 px-8 py-3 rounded-full font-bold text-lg transition-all', g.allExtrasChosen ? 'bg-primary text-primary-foreground hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}>
-            <Play className="w-5 h-5" /> Simulate Squad
-          </button>
-        </div>
+
+            <div className="mt-5 flex justify-center">
+              {g.extraStage === 'reveal' && (
+                <button onClick={g.extraBankerCall} className="px-7 py-2.5 rounded-xl font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity inline-flex items-center gap-2"><Phone className="w-4 h-4" /> Hear the Banker's offer</button>
+              )}
+            </div>
+
+            {g.extraStage === 'offer' && g.extraOffer && (
+              <div className="mt-5 bg-card border border-primary/40 rounded-2xl p-5 max-w-sm mx-auto text-center shadow-xl">
+                <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">The Banker offers you</div>
+                <div className="text-xl font-bold text-foreground">{g.extraOffer.emoji} {g.extraOffer.label}</div>
+                <div className="text-[11px] text-muted-foreground mb-3">rating {g.extraOffer.ratingMod >= 0 ? '+' : ''}{g.extraOffer.ratingMod} · chem {g.extraOffer.chemMod >= 0 ? '+' : ''}{g.extraOffer.chemMod}</div>
+                <div className="flex gap-3">
+                  <button onClick={g.acceptExtraDeal} className="flex-1 px-4 py-2.5 bg-primary text-primary-foreground rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-90"><Check className="w-4 h-4" /> DEAL</button>
+                  <button onClick={g.rejectExtraDeal} className="flex-1 px-4 py-2.5 bg-secondary text-foreground rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:bg-secondary/70"><X className="w-4 h-4" /> NO DEAL</button>
+                </div>
+              </div>
+            )}
+
+            {g.extraStage === 'finalSwap' && (
+              <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center">
+                <button onClick={g.extraStay} className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90">💼 STAY with my case</button>
+                <button onClick={g.extraSwap} className="px-6 py-3 bg-card border border-primary text-primary rounded-xl font-bold hover:bg-primary/10">🔄 SWAP to a mystery case</button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {done && (
+          <div className="max-w-md mx-auto">
+            <div className="bg-card border border-border rounded-2xl p-4 mb-5 space-y-1.5">
+              {EXTRA_DEALS.map(c => {
+                const sel = g.extrasChosen[c.key];
+                return sel ? <p key={c.key} className="text-sm text-foreground">{c.emoji} <span className="font-bold">{sel.label}</span> <span className="text-muted-foreground text-xs">({sel.ratingMod >= 0 ? '+' : ''}{sel.ratingMod} rating, {sel.chemMod >= 0 ? '+' : ''}{sel.chemMod} chem)</span></p> : null;
+              })}
+            </div>
+            <div className="text-center">
+              <button onClick={g.simulate} className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-bold text-lg bg-primary text-primary-foreground hover:opacity-90 transition-all">
+                <Play className="w-5 h-5" /> Simulate Squad
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -270,7 +336,7 @@ const SquadDeal = () => {
                   : isSel ? 'bg-destructive/80 text-destructive-foreground border-destructive'
                   : isFinalChoice ? 'bg-card border-primary text-primary animate-pulse'
                   : 'bg-card border-border text-foreground hover:border-primary')}>
-              {isElim ? <span className="text-[9px] leading-tight">{lastName(cand.name)}</span>
+              {isElim ? <span className="text-[8px] leading-tight px-0.5">{cand.name}</span>
                 : <><Briefcase className="w-4 h-4 md:w-5 md:h-5" /><span className="text-[10px] mt-0.5">{isKept ? 'Yours' : isFinalChoice ? 'Swap' : i + 1}</span></>}
             </button>
           );
@@ -299,6 +365,12 @@ const SquadDeal = () => {
         {g.slotPhase === 'revealed' && (
           <button onClick={g.requestOffer} className="px-7 py-2.5 rounded-xl font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity">Get the Banker's Offer</button>
         )}
+        {g.slotPhase === 'final' && g.keptIdx !== null && (
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button onClick={() => g.pickFinal(g.keptIdx!)} className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90">💼 STAY with my case</button>
+            <button onClick={() => { const other = g.finalIndices.find(i => i !== g.keptIdx); if (other !== undefined) g.pickFinal(other); }} className="px-6 py-3 bg-card border border-primary text-primary rounded-xl font-bold hover:bg-primary/10">🔄 SWAP to the last case</button>
+          </div>
+        )}
       </div>
 
       {g.slotPhase === 'offer' && g.offer && (
@@ -306,7 +378,7 @@ const SquadDeal = () => {
           <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">The Banker offers</div>
           <div className="text-2xl font-bold text-foreground">{g.offer.name}</div>
           <div className="text-sm text-muted-foreground mb-1">{g.offer.position} · {g.offer.club}</div>
-          <div className={cn('text-3xl font-bold font-display mb-4', tierColor(playerRating(g.offer)))}>{playerRating(g.offer)}</div>
+          <div className={cn('text-3xl font-bold font-display mb-4', tierColor(g.era2Rating(g.offer)))}>{g.era2Rating(g.offer)}</div>
           <div className="flex gap-3">
             <button onClick={g.acceptDeal} className="flex-1 px-5 py-3 bg-primary text-primary-foreground rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-90"><Check className="w-5 h-5" /> DEAL</button>
             <button onClick={g.rejectDeal} className="flex-1 px-5 py-3 bg-secondary text-foreground rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:bg-secondary/70"><X className="w-5 h-5" /> NO DEAL</button>
