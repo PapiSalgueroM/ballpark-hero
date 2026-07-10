@@ -95,6 +95,7 @@ import DartDraft from "./pages/DartDraft";
 import BlindRank from "./pages/BlindRank";
 import StartBenchCut from "./pages/StartBenchCut";
 import Minefield from "./pages/Minefield";
+import StadiumDraft from "./pages/StadiumDraft";
 
 const queryClient = new QueryClient();
 
@@ -274,6 +275,7 @@ const AppContent = () => {
         <Route path="/blind-rank" element={<BlindRank />} />
         <Route path="/start-bench-cut" element={<StartBenchCut />} />
         <Route path="/minefield" element={<Minefield />} />
+        <Route path="/stadium-draft" element={<StadiumDraft />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
