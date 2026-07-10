@@ -170,6 +170,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/score-predictor', label: 'Score Predictor', emoji: '📊', description: 'Predict the final score of famous matches', daily: true, isNew: true },
       // moved from the retired Game Shows tab 2026-07-08 (owner: game-show games belong with their sport; these two span all sports)
       { path: '/list-quiz', label: 'Name Them All', emoji: '📝', description: 'How many champions can you name?', isNew: true },
+      { path: '/minefield', label: 'Minefield', emoji: '💣', description: 'Click everyone who belongs. Some tiles explode', daily: true, isNew: true },
       { path: '/sports-millionaire', label: 'Sports Millionaire', emoji: '💰', description: 'Climb a 15-question money ladder with lifelines', daily: true, isNew: true },
     ],
   },
