@@ -1,376 +1,373 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Loader2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { GameShell } from '@/components/game/GameShell';
-import { ResultScreen } from '@/components/game/ResultScreen';
-import { StatTile } from '@/components/game/StatTile';
-import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
-import { GameNav } from '@/components/game/GameNav';
-import AdBanner from '@/components/ads/AdBanner';
-import ReportQuestion from '@/components/game/ReportQuestion';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Footer } from '@/components/game/Footer';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import ShareButtons from '@/components/game/ShareButtons';
+import { Button } from '@/components/ui/button';
+import { Gavel, Loader2, Trophy, RotateCcw, ChevronRight, Ban } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { getTodayET } from '@/lib/dateUtils';
-import { flagFor, fmtCompactUsd } from '@/lib/dealPlayers';
 import {
-  fetchMarketPool,
-  buildSlateForMode,
-  isWithinTolerance,
-  summarizeSquad,
-  gradeSquad,
-  buildEmojiGrid,
-  roundSummaryLine,
-  type PlayMode,
-  type MarketPlayer,
-  type RoundSlot,
-  type RoundOutcome,
-} from '@/lib/signThePlayer';
+  AUCTION_SLOTS, AUCTION_THEMES, BID_STEPS, START_BUDGET,
+  aiValuation, assignmentFee, auctionScore, buildAuctionPool, createBidders,
+  simulateShowdown,
+  type AuctionPlayer, type AuctionTheme, type Bidder, type ShowdownResult,
+} from '@/lib/auctionHouse';
 
-type Phase = 'boot' | 'error' | 'playing' | 'revealed' | 'done';
+type Phase = 'intro' | 'loading' | 'auction' | 'assign' | 'showdown';
 
-/**
- * Sign the Player: "Guess the Value, Get the Player" (MASTER_PLAN #54). See
- * src/lib/signThePlayer.ts for the full mechanic writeup, verified pool
- * sizes, and tolerance-band formula. 11 rounds, one per slot of a real
- * formation; each round shows a real current player with market value
- * hidden, and a correct-enough guess signs them into that formation slot.
- */
+interface Lot { player: AuctionPlayer; kind: 'auction' | 'assign' }
+
+const money = (m: number) => (m >= 1000 ? `£${(m / 1000).toFixed(2)}B` : `£${m}M`);
+
 const SignThePlayer = () => {
-  const [playMode, setPlayMode] = useState<PlayMode>('daily');
+  const [phase, setPhase] = useState<Phase>('intro');
+  const [, setTheme] = useState<AuctionTheme>('current');
+  const [bidders, setBidders] = useState<Bidder[]>(createBidders());
+  const [lots, setLots] = useState<Lot[]>([]);
+  const [lotIndex, setLotIndex] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [leader, setLeader] = useState<Bidder['id'] | null>(null);
+  const [activeIds, setActiveIds] = useState<Set<Bidder['id']>>(new Set());
+  const [log, setLog] = useState<string[]>([]);
+  const [aiThinking, setAiThinking] = useState(false);
+  const [result, setResult] = useState<ShowdownResult | null>(null);
+  const timer = useRef<number | null>(null);
 
-  const [phase, setPhase] = useState<Phase>('boot');
-  const [pool, setPool] = useState<MarketPlayer[]>([]);
-  const [rounds, setRounds] = useState<RoundSlot[]>([]);
-  const [formationName, setFormationName] = useState('');
-  const [roundIndex, setRoundIndex] = useState(0);
-  const [outcomes, setOutcomes] = useState<RoundOutcome[]>([]);
+  const you = bidders.find(b => b.id === 'you')!;
+  const lot = lots[lotIndex] ?? null;
+  const slotsLeftAfter = useMemo(
+    () => (lot ? AUCTION_SLOTS.length - AUCTION_SLOTS.findIndex(s => s.key === lot.player.slotKey) - 1 : 0),
+    [lot],
+  );
 
-  const [guessValue, setGuessValue] = useState('');
-  const [lastOutcome, setLastOutcome] = useState<RoundOutcome | null>(null);
+  useEffect(() => () => { if (timer.current) window.clearTimeout(timer.current); }, []);
 
-  const currentRound = rounds[roundIndex];
-
-  // Every hook lives above this point and none of them are conditional, per
-  // the site's React error #310 rule (hooks must never sit below an early
-  // return). The loading/error UI is decided entirely in the JSX below.
-
-  const startRun = useCallback((nextPlayMode: PlayMode, sourcePool: MarketPlayer[]) => {
-    setPlayMode(nextPlayMode);
-    const slate = buildSlateForMode(nextPlayMode, sourcePool);
-    if (!slate || slate.rounds.length === 0) {
-      setPhase('error');
-      return;
+  const start = async (t: AuctionTheme) => {
+    setTheme(t);
+    setPhase('loading');
+    const pool = await buildAuctionPool(t);
+    if (!pool) { setPhase('intro'); return; }
+    const ordered: Lot[] = [];
+    for (const slot of AUCTION_SLOTS) {
+      const three = pool.filter(p => p.slotKey === slot.key);
+      const good = three.find(p => p.tier === 'good')!;
+      const great = three.find(p => p.tier === 'great')!;
+      const weak = three.find(p => p.tier === 'weak')!;
+      ordered.push({ player: good, kind: 'auction' }, { player: great, kind: 'auction' }, { player: weak, kind: 'assign' });
     }
-    setRounds(slate.rounds);
-    setFormationName(slate.formation.name);
-    setRoundIndex(0);
-    setOutcomes([]);
-    setGuessValue('');
-    setLastOutcome(null);
-    setPhase('playing');
-  }, []);
+    setBidders(createBidders());
+    setLots(ordered);
+    setLotIndex(0);
+    setResult(null);
+    setLog([]);
+    setPhase('auction');
+  };
 
-  // Boot: fetch the pool once, then start the daily run.
+  const eligible = useCallback((b: Bidder, p: AuctionPlayer) => b.squad[p.slotKey] === null && b.budget >= 5, []);
+
   useEffect(() => {
-    let cancelled = false;
-    fetchMarketPool()
-      .then(fetched => {
-        if (cancelled) return;
-        if (!fetched || fetched.length === 0) {
-          setPhase('error');
-          return;
-        }
-        setPool(fetched);
-        startRun('daily', fetched);
-      })
-      .catch(() => {
-        if (!cancelled) setPhase('error');
-      });
-    return () => {
-      cancelled = true;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const switchPlayMode = (m: PlayMode) => {
-    if (m === playMode || pool.length === 0) return;
-    startRun(m, pool);
-  };
-
-  const submitGuess = () => {
-    if (!currentRound || phase !== 'playing') return;
-    const parsed = Number(guessValue.replace(/[^0-9.]/g, ''));
-    if (!Number.isFinite(parsed) || parsed < 0) return;
-
-    const trueValue = currentRound.player.value;
-    const signed = isWithinTolerance(parsed, trueValue, currentRound.tolerance);
-    const errorFraction = trueValue > 0 ? Math.abs(parsed - trueValue) / trueValue : 1;
-
-    const outcome: RoundOutcome = {
-      slot: currentRound.slot,
-      player: currentRound.player,
-      guess: parsed,
-      tolerance: currentRound.tolerance,
-      errorFraction,
-      signed,
-    };
-    setLastOutcome(outcome);
-    setOutcomes(o => [...o, outcome]);
-    setPhase('revealed');
-  };
-
-  const nextRound = () => {
-    const nextIndex = roundIndex + 1;
-    if (nextIndex >= rounds.length) {
-      setPhase('done');
+    if (phase !== 'auction' || !lot) return;
+    if (lot.kind === 'assign') {
+      const needers = bidders.filter(b => b.squad[lot.player.slotKey] === null);
+      const fee = assignmentFee(lot.player);
+      const taker = needers[0];
+      if (taker) {
+        setBidders(prev => prev.map(b => b.id !== taker.id ? b : ({
+          ...b,
+          budget: Math.max(0, b.budget - fee),
+          squad: { ...b.squad, [lot.player.slotKey]: lot.player },
+        })));
+        setLog(l => [`📋 ${lot.player.name} is assigned to ${taker.name} for ${money(fee)} — nobody else needed a ${lot.player.slotKey}.`, ...l].slice(0, 30));
+      }
+      setPhase('assign');
       return;
     }
-    setRoundIndex(nextIndex);
-    setGuessValue('');
-    setLastOutcome(null);
-    setPhase('playing');
+    const active = new Set(bidders.filter(b => eligible(b, lot.player)).map(b => b.id));
+    setActiveIds(active);
+    setPrice(lot.player.basePrice);
+    setLeader(null);
+    setLog(l => [`🔨 LOT ${lotIndex + 1}: ${lot.player.name} (${lot.player.rating}) opens at ${money(lot.player.basePrice)}.`, ...l].slice(0, 30));
+    if (!active.has('you')) setAiThinking(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, lotIndex, lots]);
+
+  const advance = useCallback(() => {
+    if (lotIndex + 1 >= lots.length) {
+      setBidders(prev => {
+        setResult(simulateShowdown(prev));
+        return prev;
+      });
+      setPhase('showdown');
+    } else {
+      setLotIndex(i => i + 1);
+      setPhase('auction');
+    }
+  }, [lotIndex, lots.length]);
+
+  const settleLot = useCallback((winnerId: Bidder['id'] | null, finalPrice: number) => {
+    if (!lot) return;
+    if (winnerId) {
+      setBidders(prev => prev.map(b => b.id !== winnerId ? b : ({
+        ...b,
+        budget: Math.max(0, b.budget - finalPrice),
+        squad: { ...b.squad, [lot.player.slotKey]: lot.player },
+      })));
+      const w = bidders.find(b => b.id === winnerId);
+      setLog(l => [`✅ SOLD! ${lot.player.name} to ${w?.name} for ${money(finalPrice)}.`, ...l].slice(0, 30));
+    } else {
+      setLog(l => [`🪙 No takers — ${lot.player.name} slips away unsold.`, ...l].slice(0, 30));
+    }
+    setAiThinking(false);
+    window.setTimeout(() => advance(), 650);
+  }, [lot, bidders, advance]);
+
+  const runAis = useCallback((currentPrice: number, currentLeader: Bidder['id'] | null, active: Set<Bidder['id']>) => {
+    if (!lot) return;
+    setAiThinking(true);
+    timer.current = window.setTimeout(() => {
+      let p = currentPrice;
+      let lead = currentLeader;
+      const act = new Set(active);
+      let moved = true;
+      const localLog: string[] = [];
+      while (moved) {
+        moved = false;
+        for (const b of bidders) {
+          if (b.id === 'you' || !act.has(b.id) || lead === b.id) continue;
+          const val = aiValuation(b, lot.player, slotsLeftAfter);
+          const step = p >= 200 ? 25 : p >= 80 ? 10 : 5;
+          if (p + step <= val && b.budget >= p + step) {
+            p += step;
+            lead = b.id;
+            localLog.push(`${b.emoji} ${b.name} bids ${money(p)}!`);
+            moved = true;
+          } else {
+            act.delete(b.id);
+            localLog.push(`${b.emoji} ${b.name} is OUT.`);
+          }
+        }
+        if (act.has('you')) break;
+      }
+      setLog(l => [...localLog.reverse(), ...l].slice(0, 30));
+      setPrice(p);
+      setLeader(lead);
+      setActiveIds(new Set(act));
+      setAiThinking(false);
+      const remaining = [...act];
+      if (!act.has('you') && remaining.length <= 1) settleLot(lead, p);
+      else if (act.has('you') && remaining.length === 1 && lead === 'you') settleLot('you', p);
+    }, 700);
+  }, [lot, bidders, slotsLeftAfter, settleLot]);
+
+  const userBid = (step: number) => {
+    if (!lot || phase !== 'auction' || aiThinking || !activeIds.has('you')) return;
+    const newPrice = leader === null ? price : price + step;
+    if (you.budget < newPrice) return;
+    setPrice(newPrice);
+    setLeader('you');
+    setLog(l => [`🫵 You bid ${money(newPrice)}.`, ...l].slice(0, 30));
+    runAis(newPrice, 'you', new Set(activeIds));
   };
 
-  const summary = useMemo(() => summarizeSquad(outcomes), [outcomes]);
-  const { grade, headline } = useMemo(() => gradeSquad(summary), [summary]);
-  const isComplete = phase === 'done';
+  const userPass = () => {
+    if (!lot || phase !== 'auction' || aiThinking || !activeIds.has('you')) return;
+    const act = new Set(activeIds);
+    act.delete('you');
+    setActiveIds(act);
+    setLog(l => ['🫵 You pass.', ...l].slice(0, 30));
+    const remaining = [...act];
+    if (remaining.length === 0) settleLot(leader, price);
+    else if (remaining.length === 1 && leader === remaining[0]) settleLot(remaining[0], price);
+    else runAis(price, leader, act);
+  };
 
-  // Score = total value of the signed squad (USD), correctAnswers = signed count.
-  useGameCompletion('sign-the-player', isComplete, summary.totalValue, summary.signedCount);
+  const youActive = activeIds.has('you');
+  useEffect(() => {
+    if (phase === 'auction' && lot && lot.kind === 'auction' && !youActive && aiThinking) {
+      runAis(price, leader, activeIds);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, lotIndex, youActive]);
 
-  const emojiGrid = useMemo(() => buildEmojiGrid(outcomes, summary), [outcomes, summary]);
+  const score = result ? auctionScore(result, you) : 0;
+  useGameCompletion('sign-the-player', phase === 'showdown' && !!result, score, result?.champion === 'you' ? 1 : 0);
 
-  const outcomeEmoji = summary.signedCount === summary.totalRounds && summary.totalRounds > 0
-    ? '🏆'
-    : summary.signedCount >= summary.totalRounds * 0.6
-    ? '⚽'
-    : summary.signedCount > 0
-    ? '🧐'
-    : '📉';
+  const squadList = (b: Bidder) => AUCTION_SLOTS.map(s => ({ slot: s, p: b.squad[s.key] }));
 
   return (
     <>
       <PageSeo
-        title="Sign the Player | DoUKnowBall"
-        description="Guess a real footballer's market value to sign them into your XI. 11 rounds, real transfer data, tighter tolerance for the superstars. Free to play daily."
+        title="Sign the Player: Auction House | DoUKnowBall"
+        description="Three bidders, £1B each, 33 players. Outbid two rivals position by position, then simulate the showdown — the box2box auction, playable."
         path="/sign-the-player"
       />
-      <GameShell
-        width="narrow"
-        title="SIGN THE PLAYER"
-        subtitle="Guess each player's market value closely enough to sign them into your XI."
-        headerExtra={
-          <>
-            <HowToPlayPopover title="How to Play Sign the Player">
-              <section>
-                <h3 className="font-bold text-foreground mb-2">🎯 The idea</h3>
-                <p className="text-muted-foreground">
-                  Each of the 11 rounds shows a real current player: club, nationality, position and
-                  age, all visible. Their market value is hidden. Type your best guess in US dollars.
+      <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(260 30% 8%) 0%, hsl(230 30% 7%) 55%, hsl(150 25% 6%) 100%)' }}>
+        <GameNavbar />
+        <main className="flex-1 flex flex-col items-center px-4 py-6 sm:py-10">
+          <div className="w-full max-w-5xl mx-auto space-y-5">
+
+            {phase === 'intro' && (
+              <div className="text-center space-y-5">
+                <Gavel className="w-12 h-12 sm:w-14 sm:h-14 text-primary mx-auto" />
+                <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-foreground">
+                  Sign the <span className="text-primary">Player</span>
+                </h1>
+                <p className="text-base sm:text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
+                  The box2box auction: you vs <b>The Sheikh</b> vs <b>Moneyball Mike</b>, £1B each.
+                  Every position sells its <b>good</b> player first, then the <b>superstar</b> —
+                  and whoever misses out takes the stinker (and still pays the fee).
                 </p>
-              </section>
-              <section>
-                <h3 className="font-bold text-foreground mb-2">✍️ Signing a player</h3>
-                <p className="text-muted-foreground">
-                  Guess close enough to the real value and you SIGN that player into your XI at their
-                  position. Miss by too much and the round is lost, leaving that spot empty.
-                </p>
-              </section>
-              <section>
-                <h3 className="font-bold text-foreground mb-2">🎚️ Tolerance</h3>
-                <p className="text-muted-foreground">
-                  Superstars are worth more but are also more famous, so the window to sign them is
-                  tighter. Lesser-known players give you a much wider window to land the guess.
-                </p>
-              </section>
-              <section>
-                <h3 className="font-bold text-foreground mb-2">🏆 Scoring</h3>
-                <p className="text-muted-foreground">
-                  Your final squad is rated on how many of the 11 slots you filled and the total value
-                  of everyone you signed.
-                </p>
-              </section>
-              <section>
-                <h3 className="font-bold text-foreground mb-2">📅 Daily vs Unlimited</h3>
-                <p className="text-muted-foreground">
-                  Daily gives everyone the same 11 players and formation each day. Unlimited shuffles a
-                  fresh slate every time you play.
-                </p>
-              </section>
-            </HowToPlayPopover>
-
-            {/* Daily / Unlimited toggle */}
-            <div className="flex items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
-              {(['daily', 'unlimited'] as const).map(m => (
-                <button
-                  key={m}
-                  onClick={() => switchPlayMode(m)}
-                  disabled={pool.length === 0}
-                  className={cn(
-                    'px-5 py-2 rounded-full text-sm font-semibold transition-all disabled:opacity-50',
-                    playMode === m ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
-                  )}
-                >
-                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-                </button>
-              ))}
-            </div>
-
-            {playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's slate, {getTodayET()}. Same 11 players for everyone.</p>
-            )}
-          </>
-        }
-      >
-        {phase === 'boot' && (
-          <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-          </div>
-        )}
-
-        {phase === 'error' && (
-          <div className="text-center py-12">
-            <p className="text-destructive font-semibold mb-3">Couldn't load Sign the Player right now.</p>
-            <button
-              onClick={() => (pool.length > 0 ? startRun(playMode, pool) : window.location.reload())}
-              className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold"
-            >
-              Try again
-            </button>
-          </div>
-        )}
-
-        {phase !== 'boot' && phase !== 'error' && phase !== 'done' && currentRound && (
-          <div className="space-y-5">
-            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground font-semibold uppercase tracking-wider">
-              <span>
-                Round {roundIndex + 1} of {rounds.length} &middot; {formationName}
-              </span>
-              {outcomes.length > 0 && (
-                <span className="text-primary">&middot; Signed {summary.signedCount}/{outcomes.length}</span>
-              )}
-            </div>
-
-            <div className="bg-surface-1 border border-border rounded-2xl p-6 text-center">
-              <p className="text-xl md:text-2xl font-display font-bold text-foreground mb-1">
-                {currentRound.player.name}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Signing for the <span className="font-semibold text-foreground">{currentRound.slot.label}</span> slot
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <StatTile label="Club" value={currentRound.player.club} state="pending" />
-              <StatTile label="Nationality" value={flagFor(currentRound.player.nationality)} state="pending" />
-              <StatTile label="Position" value={currentRound.player.position} state="pending" />
-              <StatTile label="Age" value={currentRound.player.age || '?'} state="pending" />
-            </div>
-
-            {phase === 'playing' && (
-              <div className="space-y-3">
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">$</span>
-                  <input
-                    type="text"
-                    inputMode="decimal"
-                    value={guessValue}
-                    onChange={e => setGuessValue(e.target.value)}
-                    onKeyDown={e => {
-                      if (e.key === 'Enter') submitGuess();
-                    }}
-                    placeholder="Guess the market value..."
-                    autoFocus
-                    className="w-full rounded-xl border border-border bg-card pl-8 pr-4 py-3 text-sm text-foreground text-center placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  {AUCTION_THEMES.map(t => (
+                    <Button key={t.id} size="lg" variant={t.id === 'current' ? 'default' : 'outline'} className="text-base px-6 py-6 font-bold" onClick={() => start(t.id)}>
+                      {t.emoji} {t.label}
+                    </Button>
+                  ))}
                 </div>
-                <button
-                  onClick={submitGuess}
-                  disabled={!guessValue.trim()}
-                  className="w-full py-3.5 min-h-[44px] bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  Submit bid
-                </button>
               </div>
             )}
 
-            {phase === 'revealed' && lastOutcome && (
-              <div
-                className={cn(
-                  'bg-surface-1 border rounded-2xl p-6 text-center animate-pop-correct',
-                  lastOutcome.signed
-                    ? 'border-correct shadow-[0_0_24px_hsl(var(--success-glow))]'
-                    : 'border-destructive/50',
-                )}
-              >
-                <p className="text-2xl mb-1">{lastOutcome.signed ? '✅ SIGNED' : '❌ MISSED'}</p>
-                <p className="text-sm text-muted-foreground mb-1">
-                  True value: <span className="font-bold text-foreground">{fmtCompactUsd(lastOutcome.player.value)}</span>
-                </p>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Your bid: {fmtCompactUsd(lastOutcome.guess)} &middot; off by {Math.round(lastOutcome.errorFraction * 100)}%
-                  {!lastOutcome.signed && ` (needed within ${Math.round(lastOutcome.tolerance * 100)}%)`}
-                </p>
-                <button
-                  onClick={nextRound}
-                  className="px-8 py-3 min-h-[44px] bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  {roundIndex + 1 >= rounds.length ? 'See final squad' : 'Next round'}
-                </button>
+            {phase === 'loading' && <div className="text-center py-24"><Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" /></div>}
+
+            {(phase === 'auction' || phase === 'assign') && lot && (
+              <div className="flex flex-col lg:flex-row gap-5">
+                <div className="flex-1 space-y-4">
+                  <div className="text-center">
+                    <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card/70 border border-border text-sm font-bold text-foreground">
+                      <Gavel className="w-4 h-4 text-primary" /> Lot {lotIndex + 1}/{lots.length} · {AUCTION_SLOTS.find(s => s.key === lot.player.slotKey)?.label}
+                    </span>
+                  </div>
+
+                  <div className="rounded-2xl border border-primary/40 bg-card/80 backdrop-blur-md p-6 text-center space-y-2 shadow-lg shadow-primary/10">
+                    <p className="text-[11px] uppercase tracking-widest text-muted-foreground font-bold">
+                      {lot.kind === 'assign' ? 'Leftover — automatic assignment' : lot.player.tier === 'great' ? '⭐ THE SUPERSTAR LOT' : 'Opening lot for this position'}
+                    </p>
+                    <h2 className="text-3xl font-extrabold text-foreground">{lot.player.name}</h2>
+                    <p className="text-sm text-muted-foreground">{lot.player.club} · {lot.player.nationality} · {lot.player.position}</p>
+                    <p className="text-5xl font-black text-primary">{lot.player.rating}</p>
+                    {lot.kind === 'auction' && (
+                      <>
+                        <p className="text-lg font-bold text-foreground">
+                          Current price: <span className="text-primary">{money(price)}</span>
+                          {leader && <span className="text-sm text-muted-foreground"> — {bidders.find(b => b.id === leader)?.emoji} {bidders.find(b => b.id === leader)?.name} leads</span>}
+                        </p>
+                        {activeIds.has('you') ? (
+                          <div className="flex flex-wrap gap-2 justify-center pt-1">
+                            {leader === null ? (
+                              <Button size="lg" className="font-bold" disabled={aiThinking || you.budget < price} onClick={() => userBid(0)}>
+                                Open at {money(price)}
+                              </Button>
+                            ) : (
+                              BID_STEPS.map(s => (
+                                <Button key={s} size="lg" className="font-bold" disabled={aiThinking || leader === 'you' || you.budget < price + s} onClick={() => userBid(s)}>
+                                  Bid +{s}M
+                                </Button>
+                              ))
+                            )}
+                            <Button size="lg" variant="outline" className="font-bold" disabled={aiThinking || leader === 'you'} onClick={userPass}>
+                              <Ban className="w-4 h-4 mr-1" /> Pass
+                            </Button>
+                          </div>
+                        ) : (
+                          <p className="text-sm text-muted-foreground italic">{you.squad[lot.player.slotKey] ? 'You already own this position — rivals are fighting it out...' : 'You passed — the rivals battle on...'}</p>
+                        )}
+                        {aiThinking && <p className="text-xs text-primary animate-pulse font-bold">rivals are thinking…</p>}
+                      </>
+                    )}
+                    {phase === 'assign' && (
+                      <Button size="lg" className="font-bold mt-2" onClick={advance}>
+                        Next lot <ChevronRight className="w-4 h-4 ml-1" />
+                      </Button>
+                    )}
+                  </div>
+
+                  <div className="rounded-xl border border-border bg-card/60 p-3 max-h-44 overflow-y-auto text-left space-y-1">
+                    {log.map((l, i) => <p key={i} className={cn('text-xs', i === 0 ? 'text-foreground font-semibold' : 'text-muted-foreground')}>{l}</p>)}
+                  </div>
+                </div>
+
+                <div className="w-full lg:w-[340px] shrink-0 space-y-3">
+                  {bidders.map(b => (
+                    <div key={b.id} className={cn('rounded-2xl border p-3', leader === b.id && phase === 'auction' ? 'border-primary bg-primary/5' : 'border-border bg-card/60')}>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <p className="text-sm font-extrabold text-foreground">{b.emoji} {b.name}</p>
+                        <p className="text-sm font-black text-primary">{money(Math.round(b.budget))}</p>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-secondary overflow-hidden mb-2">
+                        <div className="h-full bg-primary transition-all" style={{ width: `${(b.budget / START_BUDGET) * 100}%` }} />
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {squadList(b).map(({ slot, p }) => (
+                          <span key={slot.key} title={p ? `${p.name} (${p.rating})` : slot.label}
+                            className={cn('px-1.5 py-0.5 rounded text-[9px] font-bold', p ? 'bg-primary/20 text-primary' : 'bg-secondary/60 text-muted-foreground')}>
+                            {slot.key}{p ? ` ${p.rating}` : ''}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {phase === 'showdown' && result && (
+              <div className="max-w-2xl mx-auto space-y-4 text-center">
+                <Trophy className="w-10 h-10 text-primary mx-auto" />
+                <h2 className="text-3xl font-extrabold text-foreground">
+                  {result.champion === 'you' ? 'YOU WIN THE SHOWDOWN! 🏆' : `${result.table[0].emoji} ${result.table[0].name} takes the title`}
+                </h2>
+                <div className="rounded-2xl border border-border bg-card/70 p-4 text-left">
+                  <div className="grid grid-cols-6 text-[11px] uppercase tracking-wider text-muted-foreground font-bold pb-1 border-b border-border">
+                    <span className="col-span-2">Club</span><span>Squad</span><span>Pts</span><span>GD</span><span>Bank</span>
+                  </div>
+                  {result.table.map((r, i) => (
+                    <div key={r.bidderId} className={cn('grid grid-cols-6 py-1.5 text-sm border-b border-border/40 last:border-0', r.bidderId === 'you' ? 'text-primary font-bold' : 'text-foreground')}>
+                      <span className="col-span-2">{i + 1}. {r.emoji} {r.name}</span>
+                      <span>{r.rating}</span>
+                      <span>{r.points}</span>
+                      <span>{r.gf - r.ga > 0 ? '+' : ''}{r.gf - r.ga}</span>
+                      <span>{money(r.moneyLeft)}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="rounded-xl border border-border bg-card/60 p-3 text-left space-y-1 max-h-40 overflow-y-auto">
+                  {result.lines.map((l, i) => <p key={i} className="text-xs text-muted-foreground">{l}</p>)}
+                </div>
+                <p className="text-sm text-foreground font-semibold">👑 Golden Boot: {result.topScorer.player} ({result.topScorer.team}) — {result.topScorer.goals} goals</p>
+                <p className="text-2xl font-black text-primary">Score: {score}</p>
+                <ShareButtons
+                  gameName="Sign the Player"
+                  gamePath="/sign-the-player"
+                  score={`${result.champion === 'you' ? 'Won' : 'Lost'} the auction showdown (${score} pts)`}
+                  customText={`I took £1B to the auction against The Sheikh and Moneyball Mike and scored ${score} on Sign the Player at DoUKnowBall 🔨 douknowball.com/sign-the-player`}
+                />
+                <Button size="lg" variant="outline" className="font-bold" onClick={() => setPhase('intro')}>
+                  <RotateCcw className="w-4 h-4 mr-2" /> Run it back
+                </Button>
               </div>
             )}
           </div>
-        )}
-
-        {phase === 'done' && (
-          <div className="mt-4">
-            <ResultScreen
-              won={summary.signedCount === summary.totalRounds}
-              outcomeEmoji={outcomeEmoji}
-              headline={headline}
-              statLine={`You signed ${summary.signedCount} of ${summary.totalRounds} players`}
-              statRow={[
-                { label: 'Grade', value: grade },
-                { label: 'Squad Value', value: fmtCompactUsd(summary.totalValue) },
-                { label: 'Signed', value: `${summary.signedCount}/${summary.totalRounds}` },
-              ]}
-              emojiGrid={emojiGrid}
-              share={{
-                score: fmtCompactUsd(summary.totalValue),
-                gameName: 'Sign the Player',
-                gamePath: '/sign-the-player',
-              }}
-              onPlayAgain={() => startRun('unlimited', pool)}
-              playAgainLabel={playMode === 'daily' ? 'Play Unlimited' : 'New slate'}
-            >
-              <div className="text-left text-sm text-muted-foreground space-y-1 my-4 py-3 px-4 rounded-xl bg-surface-2 border border-border/60">
-                {outcomes.map((o, i) => (
-                  <p key={i}>{roundSummaryLine(o)}</p>
-                ))}
-              </div>
-            </ResultScreen>
-          </div>
-        )}
-
-        <AdBanner slot="1234567892" format="horizontal" className="mt-8" />
-
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="sign-the-player" />
-        </div>
+        </main>
 
         <GameSeoContent
-          title="Sign the Player: Guess the Value, Get the Player"
-          description="A transfer-market trivia game built on real soccer data. Guess a real player's market value closely enough and sign them into your XI. Tolerance is tighter for the biggest stars."
+          title="Sign the Player: The Auction House | DoUKnowBall"
+          description="A three-way transfer auction: you against two AI moguls with £1B each. Positions sell good-player-first then superstar, leftovers get assigned with a fee, and the three finished squads simulate a mini-league showdown."
           howToPlay={[
-            'Read the player\'s club, nationality, position and age.',
-            'Type your best guess of their market value in US dollars.',
-            'Guess close enough and you sign them into your XI at their position.',
-            'Play all 11 rounds, then see your final squad rated.',
+            'Pick a theme: Current Stars, All-Time Legends, or World Cup 2026 — 33 players enter the room: a great, a good and a weak option per position.',
+            'Each position auctions its GOOD player first, then the SUPERSTAR. Bid in £5M/£10M/£25M steps or pass — whoever misses out takes the leftover player and still pays the assignment fee.',
+            'When all three XIs are full, the showdown simulates a double round-robin league: table position, goal difference and money left decide your score.',
+          ]}
+          examples={[
+            'The Sheikh jumps £25M when he wants someone — bait him early',
+            "Moneyball Mike passes on superstars — snipe the value lots he's hunting",
+            'Passing everything still costs you: leftovers come with fees',
+            'Win the league with money in the bank for the max score',
           ]}
         />
-        <GameNav />
-      </GameShell>
+        <Footer />
+      </div>
     </>
   );
 };

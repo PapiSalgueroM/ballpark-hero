@@ -33,7 +33,7 @@ export const CATEGORIES: GameCategory[] = [
       // retired 2026-07-06 per owner review: "you guess one guy and you're done". Page/route kept for direct links; uncomment to revive.
       // { path: '/rarity-round', label: 'Rarity Round', emoji: '💎', description: 'Valid answers nobody else would think of', daily: true, isNew: true },
       { path: '/missing-xi', label: 'Missing XI', emoji: '🧩', description: 'Name the missing player from a famous real lineup', daily: true, isNew: true },
-      { path: '/sign-the-player', label: 'Sign the Player', emoji: '✍️', description: 'Guess the market value to sign your XI', daily: true, isNew: true },
+      { path: '/sign-the-player', label: 'Sign the Player', emoji: '🔨', description: 'The box2box auction: outbid two AI moguls, £1B each, then sim the showdown', isNew: true },
       { path: '/footle', label: 'Footle', emoji: '🎯', description: 'Guess the soccer player from stats' },
       { path: '/career', label: 'Career Quiz', emoji: '📜', description: 'Guess from career history' },
       { path: '/higher-lower', label: 'Higher or Lower', emoji: '📊', description: 'Compare all-time career stats' },
