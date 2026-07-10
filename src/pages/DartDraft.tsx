@@ -316,7 +316,9 @@ const DartDraft = () => {
                   {phase === 'result' && lastThrow && (
                     <div className="mt-5 mx-auto max-w-md rounded-2xl border border-primary/30 bg-card/70 backdrop-blur-md p-5 space-y-3 animate-in fade-in slide-in-from-bottom-2">
                       <p className="text-sm font-bold uppercase tracking-widest" style={{ color: lastThrow.wedge.color }}>
-                        🎯 {lastThrow.wedge.label}{lastThrow.usedWorldFallback ? ' (no fit — World pool bailed you out)' : ''}
+                        🎯 {lastThrow.usedWorldFallback
+                          ? `${lastThrow.wedge.label} had nobody for this slot — WORLD pool stepped in`
+                          : lastThrow.wedge.label}
                       </p>
                       {ringBadge(lastThrow.ring)}
                       {lastThrow.player ? (

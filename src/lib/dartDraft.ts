@@ -56,8 +56,13 @@ export const RING_BANDS: { ring: Ring; rOuter: number }[] = [
   { ring: 'T1',      rOuter: 0.52 }, // TRIPLE ring — the band sharpshooters hunt
   { ring: 'T4',      rOuter: 0.72 }, // outer single
   { ring: 'T2',      rOuter: 0.82 }, // double ring
+  // Owner bug (2026-07-10): players aim at the wedge LABELS painted outside
+  // the double ring, which used to score as MISS -> worst player ("it didn't
+  // give me an accurate player"). The label ring now counts as the wedge's
+  // outer single; a true MISS is only beyond the gold rim.
+  { ring: 'T4',      rOuter: 0.97 }, // label ring — still the wedge you aimed at
 ];
-export const BOARD_EDGE = 0.82; // beyond this = MISS
+export const BOARD_EDGE = 0.82; // double-ring edge (visual); MISS starts past 0.97
 
 export const RING_LABEL: Record<Ring, string> = {
   JACKPOT: 'BULLSEYE! Superstar pull',
@@ -108,7 +113,7 @@ export async function fetchDartDraftPool(): Promise<{ current: Player[]; legends
       .not('age', 'is', null)
       .order('market_value_usd', { ascending: false })
       .order('player_name', { ascending: true })
-      .limit(450);
+      .limit(600);
     if (error || !data || data.length === 0) return { current: [], legends: LEGENDS };
 
     const seen = new Set<string>();
