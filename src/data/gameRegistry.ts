@@ -21,6 +21,7 @@ export const CATEGORIES: GameCategory[] = [
       // retired 2026-07-06 per owner review: "too simple". Page/route kept for direct links; uncomment to revive.
       // { path: '/higher-lower-transfers', label: 'Transfer Market', emoji: '📈', description: 'Higher or lower on real market values', isNew: true },
       { path: '/darts', label: 'Darts', emoji: '🎯', description: 'Throw at the board, name a player from the category, race the machine 501→0', isNew: true },
+      { path: '/dart-draft', label: 'Dart Draft', emoji: '🎪', description: 'Timed throws build your XI: land a wedge, take its player, sim the showdown', isNew: true },
       { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', isNew: true },
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', isNew: true },
       { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Run a real club: tactics, transfers, trophies — and the sack race', isNew: true },

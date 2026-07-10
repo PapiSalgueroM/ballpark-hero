@@ -91,6 +91,7 @@ import ConquestNba from "./pages/ConquestNba";
 import PackBattle from "./pages/PackBattle";
 import SportsMillionaire from "./pages/SportsMillionaire";
 import DartsGame from "./pages/DartsGame";
+import DartDraft from "./pages/DartDraft";
 
 const queryClient = new QueryClient();
 
@@ -266,6 +267,7 @@ const AppContent = () => {
         <Route path="/pack-battle" element={<PackBattle />} />
         <Route path="/sports-millionaire" element={<SportsMillionaire />} />
         <Route path="/darts" element={<DartsGame />} />
+        <Route path="/dart-draft" element={<DartDraft />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
