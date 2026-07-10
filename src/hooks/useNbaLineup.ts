@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
+import { localEvaluateNbaFive } from '@/lib/localLineupEval';
 import { getRandomNbaTeams, NBA_TEAMS, type NbaTeam } from '@/data/nbaTeams';
 import { getRandomStatChallenge } from '@/data/nbaStats';
 import type { NbaFilledSlot, NbaGamePhase, NbaAIVerdict, StatChallenge, NbaPosition } from '@/types/nba';
@@ -331,10 +332,19 @@ export function useNbaLineup() {
       setVerdict(data);
       setPhase('result');
     } catch (err) {
-      // Stay in the reviewing phase so the built lineup is preserved and the
-      // user can simply retry, instead of being dumped into a dead-end result.
+      // AI referee down/out of quota -> offline judge so the game still ends
+      // with a real verdict instead of an error state.
       console.error('Evaluation error:', err);
-      setEvaluationError('Could not evaluate your lineup. Please try again.');
+      try {
+        const local = await localEvaluateNbaFive(
+          filledSlotsArray.map(s => s.playerName),
+          `${challenge.direction === 'highest' ? 'Highest' : 'Lowest'} ${challenge.stat}`,
+        );
+        setVerdict(local);
+        setPhase('result');
+      } catch {
+        setEvaluationError('Could not evaluate your lineup. Please try again.');
+      }
     } finally {
       setIsEvaluating(false);
     }

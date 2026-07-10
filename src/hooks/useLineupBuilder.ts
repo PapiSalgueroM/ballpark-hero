@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
+import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
 import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS } from '@/data/lineupTeams';
 import type { Formation, FilledSlot, GamePhase, AIVerdict, TeamAssignment } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
@@ -166,8 +167,9 @@ export function useLineupBuilder() {
       const data = await resp.json();
       
       if (!resp.ok) {
-        const errorMsg = data?.error || data?.analysis || 'Something went wrong. Please try again.';
-        setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: errorMsg });
+        // AI referee down/out of quota -> offline judge, never a dead-end
+        const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
+        setVerdict(local);
         setPhase('result');
         return;
       }
@@ -184,7 +186,12 @@ export function useLineupBuilder() {
       setPhase('result');
     } catch (err) {
       console.error('Evaluation error:', err);
-      setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Network error. Please check your connection and try again.' });
+      try {
+        const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
+        setVerdict(local);
+      } catch {
+        setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Network error. Please check your connection and try again.' });
+      }
       setPhase('result');
     } finally {
       setIsEvaluating(false);
