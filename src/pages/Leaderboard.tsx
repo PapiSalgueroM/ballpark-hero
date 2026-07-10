@@ -133,7 +133,7 @@ export default function Leaderboard() {
         <div className="flex-1 min-w-0">
           <p className="font-semibold">
             Your world rank: <span className="text-gold">#{mine.rank.toLocaleString()}</span>
-            <span className="text-muted-foreground font-normal"> of {mine.totalPlayers.toLocaleString()} players</span>
+            <span className="text-muted-foreground font-normal"> in the world</span>
           </p>
           <p className="text-xs text-muted-foreground">
             {mine.totalPoints.toLocaleString()} pts as {ownHandle}

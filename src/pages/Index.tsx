@@ -285,32 +285,10 @@ export default function Index() {
               The Ultimate Sports Trivia Hub
             </p>
 
-            {/* Stats bar */}
+            {/* Stats bar — PERSONAL stats only. Owner (2026-07-10): site-wide
+                traffic numbers ("games played today", "playing today") are
+                competitor intelligence and must never render publicly. */}
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm">
-              <div className="flex items-center gap-1.5 text-muted-foreground">
-                <Flame className="w-4 h-4 text-primary" />
-                <span><strong className="text-foreground">{TOTAL_GAMES}</strong> games to play</span>
-              </div>
-              {totalPlayed !== null && totalPlayed > 0 && (
-                <div className="flex items-center gap-1.5 text-muted-foreground">
-                  <TrendingUp className="w-4 h-4 text-primary" />
-                  <span><strong className="text-foreground">{totalPlayed.toLocaleString()}</strong> games played today</span>
-                </div>
-              )}
-              {totalPlayers !== null && (totalPlayers > 0 || !totalPlayed) && (
-                <div className="flex items-center gap-1.5 text-muted-foreground">
-                  <Users className="w-4 h-4 text-primary" />
-                  {totalPlayers > 0 ? (
-                    <span><strong className="text-foreground">{totalPlayers.toLocaleString()}</strong> playing today</span>
-                  ) : (
-                    <span>Be the first to play today!</span>
-                  )}
-                </div>
-              )}
-              {/* Owner request: everyone (guest or signed in) sees all three
-                  personal stats — games available, days visited, and games
-                  played today. daysVisited/playedCount come from the local
-                  streak engine, so they work with no account. */}
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Gamepad2 className="w-4 h-4 text-primary" />
                 <span><strong className="text-foreground">{TOTAL_GAMES}</strong> games to play</span>
