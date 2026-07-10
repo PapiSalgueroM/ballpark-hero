@@ -80,9 +80,9 @@ export interface PowerupDef {
 export const POWERUPS: PowerupDef[] = [
   { id: 'invincibility', label: 'Invincibility', icon: '🛡️', description: 'Survive your next loss, keep all states and stay alive.' },
   { id: 'free_agent', label: 'Free Agent Signing', icon: '✍️', description: 'Sign a top free agent or eliminated player to your roster.' },
-  { id: 'upgrade', label: 'Upgrade', icon: '⬆️', description: 'Boost a random roster player to 99 OVR for your next battle.' },
+  { id: 'upgrade', label: 'Upgrade', icon: '⬆️', description: 'Choose a roster player to boost to 99 OVR for your next battle.' },
   { id: 'legend', label: 'All-Time Great', icon: '🐐', description: 'Add your franchise legend at 99 OVR permanently.' },
-  { id: 'territory_steal', label: 'Territory Steal', icon: '🗺️', description: 'Instantly claim a random enemy border state.' },
+  { id: 'territory_steal', label: 'Territory Steal', icon: '🗺️', description: 'Claim a bordering enemy state of your choice.' },
 ];
 
 export function getRandomPowerup(): PowerupDef {
