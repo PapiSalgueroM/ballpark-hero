@@ -70,7 +70,9 @@ const SignThePlayer = () => {
   useEffect(() => {
     if (phase !== 'auction' || !lot) return;
     if (lot.kind === 'assign') {
-      const needers = bidders.filter(b => b.squad[lot.player.slotKey] === null);
+      const needers = bidders
+        .filter(b => b.squad[lot.player.slotKey] === null)
+        .sort((a, b) => Object.values(a.squad).filter(Boolean).length - Object.values(b.squad).filter(Boolean).length);
       const fee = assignmentFee(lot.player);
       const taker = needers[0];
       if (taker) {
@@ -108,16 +110,32 @@ const SignThePlayer = () => {
 
   const settleLot = useCallback((winnerId: Bidder['id'] | null, finalPrice: number) => {
     if (!lot) return;
-    if (winnerId) {
-      setBidders(prev => prev.map(b => b.id !== winnerId ? b : ({
+    let soldTo = winnerId;
+    let soldFor = finalPrice;
+    if (!soldTo) {
+      // Nobody bid — the hammer still falls. Forced sale to the richest
+      // bidder who needs the position, at the opening price. An auction lot
+      // must NEVER go unsold or a squad ends up with a permanent hole.
+      const takers = bidders
+        .filter(b => b.squad[lot.player.slotKey] === null)
+        .sort((a, b) => b.budget - a.budget);
+      if (takers[0]) { soldTo = takers[0].id; soldFor = Math.min(lot.player.basePrice, Math.max(5, takers[0].budget)); }
+    }
+    if (soldTo) {
+      const finalTo = soldTo;
+      const price2 = soldFor;
+      setBidders(prev => prev.map(b => b.id !== finalTo ? b : ({
         ...b,
-        budget: Math.max(0, b.budget - finalPrice),
+        budget: Math.max(0, b.budget - price2),
         squad: { ...b.squad, [lot.player.slotKey]: lot.player },
       })));
-      const w = bidders.find(b => b.id === winnerId);
-      setLog(l => [`✅ SOLD! ${lot.player.name} to ${w?.name} for ${money(finalPrice)}.`, ...l].slice(0, 30));
-    } else {
-      setLog(l => [`🪙 No takers — ${lot.player.name} slips away unsold.`, ...l].slice(0, 30));
+      const w = bidders.find(b => b.id === finalTo);
+      setLog(l => [
+        winnerId
+          ? `✅ SOLD! ${lot.player.name} to ${w?.name} for ${money(price2)}.`
+          : `🔨 Hammer falls — nobody bid, so ${lot.player.name} is FORCED onto ${w?.name} for ${money(price2)}.`,
+        ...l,
+      ].slice(0, 30));
     }
     setAiThinking(false);
     window.setTimeout(() => advance(), 650);
