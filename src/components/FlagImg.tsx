@@ -38,6 +38,13 @@ const FLAG_CODES: Record<string, string> = {
   "Moldova": "md", "Azerbaijan": "az", "Tajikistan": "tj", "Sierra Leone": "sl",
   "Congo": "cg", "Lebanon": "lb", "Kenya": "ke", "Liberia": "lr", "Zimbabwe": "zw",
   "Qatar": "qa", "Estonia": "ee",
+  // Additional nationality strings that appear in the career_players table
+  // (Transfermarkt-style). Career Ladder renders FlagImg for the nationality
+  // hint and result card, so any unmapped value would fall back to plain text
+  // (which on Windows is what the old emoji flags degraded to as well).
+  "Republic of Ireland": "ie", "Korea Republic": "kr", "Korea, Republic of": "kr",
+  "United States of America": "us", "Bosnia and Herzegovina": "ba",
+  "DR Congo Republic": "cd", "Congo DR": "cd",
 };
 
 export function FlagImg({ name, size = 20, showLabel = false }: { name: string; size?: number; showLabel?: boolean }) {

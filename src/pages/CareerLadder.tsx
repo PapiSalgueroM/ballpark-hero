@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronDown, Loader2, Lock } from 'lucide-react';
+import { FlagImg } from '@/components/FlagImg';
+import { supabase } from '@/integrations/supabase/client';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -24,7 +26,6 @@ import {
   WRONG_GUESS_PENALTY,
   careerScore,
   fetchCareerPool,
-  flagForNationality,
   fmtMarketValue,
   normalizeName,
   pickDailyPlayer,
@@ -164,15 +165,70 @@ const CareerLadder = () => {
 
   const query = normalizeName(input);
   const wrongNorms = activeWrongGuesses.map(normalizeName);
-  const suggestions =
-    activePhase === 'playing' && query.length >= 2
-      ? allNames
-          .filter(n => {
-            const norm = normalizeName(n);
-            return norm.includes(query) && !wrongNorms.includes(norm);
-          })
-          .slice(0, 8)
-      : [];
+
+  // Debounced external suggestions from player_market_values (~141k rows) so
+  // the autocomplete recognizes essentially any real footballer, not just the
+  // ~245 in the career pool. Validation still uses the career pool only:
+  // typing a non-answer name here just becomes a normal wrong guess.
+  const rawQuery = input.trim();
+  const [dbSuggestions, setDbSuggestions] = useState<string[]>([]);
+  useEffect(() => {
+    if (activePhase !== 'playing' || rawQuery.length < 2) {
+      setDbSuggestions([]);
+      return;
+    }
+    let cancelled = false;
+    const handle = setTimeout(async () => {
+      // Escape ilike wildcards so "%" or "_" in input don't broaden the match.
+      const escaped = rawQuery.replace(/[\\%_]/g, (c) => `\\${c}`);
+      const { data } = await (supabase as any)
+        .from('player_market_values')
+        .select('player_name, market_value_usd')
+        .ilike('player_name', `%${escaped}%`)
+        .order('market_value_usd', { ascending: false, nullsFirst: false })
+        .limit(200);
+      if (cancelled || !data) return;
+      const seen = new Set<string>();
+      const names: string[] = [];
+      for (const row of data as Array<{ player_name: string | null }>) {
+        const n = row?.player_name;
+        if (!n) continue;
+        const key = normalizeName(n);
+        if (seen.has(key)) continue;
+        seen.add(key);
+        names.push(n);
+        if (names.length >= 15) break;
+      }
+      setDbSuggestions(names);
+    }, 200);
+    return () => { cancelled = true; clearTimeout(handle); };
+  }, [rawQuery, activePhase]);
+
+  const suggestions = useMemo(() => {
+    if (activePhase !== 'playing' || query.length < 2) return [] as string[];
+    const pool = allNames.filter((n) => {
+      const norm = normalizeName(n);
+      return norm.includes(query) && !wrongNorms.includes(norm);
+    });
+    // Always keep the answer selectable even if the DB list would have pushed
+    // it past the cap (pool matches come first anyway, but this is defensive).
+    const answerName = activePlayer?.name;
+    if (answerName) {
+      const answerNorm = normalizeName(answerName);
+      if (answerNorm.includes(query) && !pool.some((n) => normalizeName(n) === answerNorm)) {
+        pool.unshift(answerName);
+      }
+    }
+    const seen = new Set(pool.map((n) => normalizeName(n)));
+    const merged = [...pool];
+    for (const n of dbSuggestions) {
+      const norm = normalizeName(n);
+      if (seen.has(norm) || wrongNorms.includes(norm)) continue;
+      seen.add(norm);
+      merged.push(n);
+    }
+    return merged.slice(0, 10);
+  }, [activePhase, query, allNames, wrongNorms, dbSuggestions, activePlayer]);
 
   const handleGuess = (name: string) => {
     if (activePhase !== 'playing' || !activePlayer) return;
@@ -397,7 +453,7 @@ const CareerLadder = () => {
             {activePhase === 'playing' && flagUnlocked && (
               <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground mb-4">
                 Nationality hint
-                <span className="text-2xl leading-none">{flagForNationality(activePlayer.nationality)}</span>
+                <FlagImg name={activePlayer.nationality} size={28} />
               </div>
             )}
 
@@ -480,7 +536,7 @@ const CareerLadder = () => {
                   playNext={mode === 'daily' ? 'Come back tomorrow for a new ladder!' : undefined}
                 >
                   <div className="bg-secondary rounded-xl px-4 py-3 inline-flex items-center gap-3 mb-3">
-                    <span className="text-3xl">{flagForNationality(activePlayer.nationality)}</span>
+                    <FlagImg name={activePlayer.nationality} size={32} />
                     <span className="text-left">
                       <span className="block font-bold text-foreground">{activePlayer.name}</span>
                       <span className="block text-xs text-muted-foreground">
