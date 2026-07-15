@@ -231,6 +231,7 @@ const CareerLadder = () => {
     return merged.slice(0, 10);
   }, [activePhase, query, allNames, wrongNorms, dbSuggestions, activePlayer]);
 
+  const handleGuess = (name: string) => {
     if (activePhase !== 'playing' || !activePlayer) return;
     setInput('');
     const norm = normalizeName(name);
