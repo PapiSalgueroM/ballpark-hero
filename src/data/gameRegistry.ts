@@ -22,7 +22,7 @@ export const CATEGORIES: GameCategory[] = [
       // { path: '/higher-lower-transfers', label: 'Transfer Market', emoji: '📈', description: 'Higher or lower on real market values', isNew: true },
       // Darts, Stadium Draft, Blind Rank and Start Bench Cut deleted 2026-07-15
       // per owner review (broken/low-effort). Pages, routes and libs removed entirely.
-      { path: '/dart-draft', label: 'Dart Draft', emoji: '🎪', description: 'Timed throws build your XI: land a wedge, take its player, sim the showdown', isNew: true },
+      { path: '/dart-draft', label: 'Dart Draft', emoji: '🎯', description: 'Throw timed darts at a real world map: hit a country, draft its players', isNew: true },
       { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', isNew: true },
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', isNew: true },
       { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Run a real club: tactics, transfers, trophies and the sack race', isNew: true },

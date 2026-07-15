@@ -5,627 +5,552 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import ShareButtons from '@/components/game/ShareButtons';
 import { Button } from '@/components/ui/button';
-import { Loader2, Target, Trophy, RotateCcw, ChevronRight } from 'lucide-react';
+import { FlagImg } from '@/components/FlagImg';
+import { Crosshair, Loader2, RotateCcw, Trophy, LifeBuoy, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { playerRating } from '@/lib/squadDeal';
 import {
-  BOARD_EDGE, FORMATIONS, RING_LABEL, RING_POINTS, WEDGES,
-  drawFromBoard, fetchDartDraftPool, finalScore, machineDraft, resolveHit,
-  simulateSeries, squadGrade, squadRating,
-  type Formation, type Ring, type SeriesResult, type ThrowResult,
+  fetchDartDraftPool, finalScore, simulateSeries, squadGrade, squadRating,
+  type SeriesResult,
 } from '@/lib/dartDraft';
+import { GEO_COUNTRIES, type GeoCountry } from '@/data/worldMapGeo';
 import {
-  CONTINENT_POLYS, ISLAND_POLYS, MAP_H, MAP_W, NATION_POLYS,
-  drawFromMap, mapRegion, resolveMapHit, rollStickers, type PlacedSticker,
+  DART_SLOTS, MAP_TOPICS, ROUND_VIEWS, VIEW_LABEL, accuracyPoints, countryAt,
+  countryChoices, countryFill, dbNamesFor, isWcNation, journeyman, legendChoices,
+  machineMapDraft, pathOf, resolveMapThrow, rollZones, viewBoxOf, wildcardChoices,
+  wonderkidChoices, type DraftChoice, type MapHit, type MapTopic, type Zone,
 } from '@/lib/dartMap';
+import { WC2026_NATIONS, playerRating } from '@/lib/squadDeal';
 import type { Player } from '@/types/game';
 
-type Phase = 'intro' | 'aimX' | 'aimY' | 'flight' | 'result' | 'squad' | 'sim' | 'done';
-type BoardMode = 'classic' | 'map';
+type Phase = 'intro' | 'loading' | 'squad' | 'aim' | 'draft' | 'done';
+type AimStage = 'x' | 'y' | 'landed';
 
-const R = 100; // board radius in SVG units
+const XI_SIZE = DART_SLOTS.length;
 
-/** Annular wedge sector path between two angles (deg, 0 = +x) and two radii. */
-function arcPath(a0: number, a1: number, r0: number, r1: number): string {
-  const rad = (d: number) => (d * Math.PI) / 180;
-  const x = (a: number, r: number) => Math.cos(rad(a)) * r;
-  const y = (a: number, r: number) => Math.sin(rad(a)) * r;
-  return [
-    `M ${x(a0, r1)} ${y(a0, r1)}`,
-    `A ${r1} ${r1} 0 0 1 ${x(a1, r1)} ${y(a1, r1)}`,
-    `L ${x(a1, r0)} ${y(a1, r0)}`,
-    `A ${r0} ${r0} 0 0 0 ${x(a0, r0)} ${y(a0, r0)}`,
-    'Z',
-  ].join(' ');
+const money = (m: number) => (m >= 1000 ? `£${(m / 1000).toFixed(1)}B` : `£${m}M`);
+
+/** Adjust out-of-position picks before rating and simulating. */
+function adjustedXi(xi: (Player | null)[], oop: boolean[]): (Player | null)[] {
+  return xi.map((p, i) => (p && oop[i] ? { ...p, marketValue: Math.max(1, Math.round(p.marketValue / 3)) } : p));
 }
-
-/* ---------- World Map mode helpers ---------- */
-// The sweep runs in the same -1..1 space as the classic board; the map just
-// stretches it over the full 200x120 canvas (slight overshoot = ocean risk).
-const mapX = (v: number) => (v * 0.5 + 0.5) * MAP_W;
-const mapY = (v: number) => (v * 0.5 + 0.5) * MAP_H;
-
-const MAP_LABELS: { text: string; x: number; y: number; size: number }[] = [
-  { text: 'N. AMERICA', x: 32, y: 24, size: 4 },
-  { text: 'S. AMERICA', x: 60, y: 72, size: 2.6 },
-  { text: 'EUROPE', x: 121, y: 24.5, size: 3.2 },
-  { text: 'AFRICA', x: 108, y: 63, size: 4 },
-  { text: 'ASIA', x: 152, y: 24, size: 5 },
-  { text: 'OCEANIA', x: 172.5, y: 81, size: 3 },
-];
-const MAP_NATION_LABELS: { text: string; x: number; y: number }[] = [
-  { text: 'BRA', x: 72.5, y: 67 },
-  { text: 'ARG', x: 64.6, y: 88.5 },
-  { text: 'ENG', x: 98.1, y: 22.3 },
-  { text: 'FRA', x: 101.2, y: 28.7 },
-  { text: 'ESP', x: 97.9, y: 32.6 },
-  { text: 'POR', x: 94.2, y: 33.2 },
-  { text: 'GER', x: 107.2, y: 24 },
-  { text: 'ITA', x: 108.4, y: 31.9 },
-];
 
 const DartDraft = () => {
   const [phase, setPhase] = useState<Phase>('intro');
-  const [loading, setLoading] = useState(true);
-  const [current, setCurrent] = useState<Player[]>([]);
-  const [legends, setLegends] = useState<Player[]>([]);
-  const [mode, setMode] = useState<BoardMode>('classic');
-  const [stickers, setStickers] = useState<PlacedSticker[]>([]);
-  const [formation, setFormation] = useState<Formation>(FORMATIONS[0]);
-  const [slotIndex, setSlotIndex] = useState(0);
-  const [squad, setSquad] = useState<(Player | null)[]>([]);
-  const [throwLog, setThrowLog] = useState<ThrowResult[]>([]);
-  const [lastThrow, setLastThrow] = useState<ThrowResult | null>(null);
-  const [aim, setAim] = useState({ x: 0, y: 0 });       // sweeping crosshair (board units, -1.1..1.1)
-  const [locked, setLocked] = useState({ x: 0, y: 0 }); // locked coords
-  const [impact, setImpact] = useState<{ x: number; y: number } | null>(null);
+  const [topic, setTopic] = useState<MapTopic>('current');
+  const [pool, setPool] = useState<Player[]>([]);
+  const [xi, setXi] = useState<(Player | null)[]>(Array(XI_SIZE).fill(null));
+  const [oop, setOop] = useState<boolean[]>(Array(XI_SIZE).fill(false));
+  const [slotIdx, setSlotIdx] = useState<number | null>(null);
+  const [zones, setZones] = useState<Zone[]>([]);
+  const [stage, setStage] = useState<AimStage>('x');
+  const [sweep, setSweep] = useState(0);        // 0..1 across the current axis
+  const [lockedX, setLockedX] = useState<number | null>(null);
+  const [dart, setDart] = useState<{ x: number; y: number } | null>(null);
+  const [hit, setHit] = useState<MapHit | null>(null);
+  const [blocked, setBlocked] = useState(false); // WC topic: hit a non-qualified nation
+  const [choices, setChoices] = useState<DraftChoice[] | null>(null);
+  const [choicesLoading, setChoicesLoading] = useState(false);
+  const [draftedIsos, setDraftedIsos] = useState<Set<string>>(new Set());
+  const [usedNames, setUsedNames] = useState<Set<string>>(new Set());
+  const [points, setPoints] = useState(0);
+  const [sharpHits, setSharpHits] = useState(0);
+  const [lifeboatUsed, setLifeboatUsed] = useState(false);
   const [series, setSeries] = useState<SeriesResult | null>(null);
-  const [legShown, setLegShown] = useState(0);
-  const rafRef = useRef<number>(0);
-  const phaseRef = useRef<Phase>('intro');
-  phaseRef.current = phase;
+  const [machineXi, setMachineXi] = useState<(Player | null)[]>([]);
+  const seedRef = useRef(Math.floor(Math.random() * 1e9));
+  const rafRef = useRef<number | null>(null);
+  const dirRef = useRef(1);
+  const sweepRef = useRef(0);
 
-  /* ---------- data ---------- */
-  useEffect(() => {
-    fetchDartDraftPool().then(({ current: c, legends: l }) => {
-      setCurrent(c);
-      setLegends(l);
-      setLoading(false);
-    });
+  const throwIndex = useMemo(() => xi.filter(Boolean).length, [xi]);
+  const view = ROUND_VIEWS[Math.min(throwIndex, ROUND_VIEWS.length - 1)];
+  const box = viewBoxOf(view);
+  const topicPool = useMemo(
+    () => (topic === 'wc2026' ? pool.filter(p => WC2026_NATIONS.has(p.nationality)) : pool),
+    [pool, topic],
+  );
+
+  const userRating = useMemo(() => squadRating(adjustedXi(xi, oop)), [xi, oop]);
+  const total = useMemo(
+    () => (series ? finalScore(points, userRating, series.outcome) : 0),
+    [series, points, userRating],
+  );
+  useGameCompletion('dart-draft', phase === 'done' && series !== null, total, sharpHits);
+
+  /* ---------------- sweep animation ---------------- */
+  const stopSweep = useCallback(() => {
+    if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    rafRef.current = null;
   }, []);
 
-  /* ---------- crosshair sweep ---------- */
-  // Sweeps speed up every throw: period 1450ms on throw 1 → ~730ms on throw 11.
-  const sweepPeriod = 1450 - slotIndex * 65;
-  useEffect(() => {
-    if (phase !== 'aimX' && phase !== 'aimY') return;
-    const t0 = performance.now();
-    const loop = (t: number) => {
-      const p = ((t - t0) % sweepPeriod) / sweepPeriod;           // 0..1
-      const wave = Math.sin(p * Math.PI * 2);                      // -1..1
-      setAim(prev => (phase === 'aimX' ? { ...prev, x: wave * 1.05 } : { ...prev, y: wave * 1.05 }));
-      rafRef.current = requestAnimationFrame(loop);
+  const runSweep = useCallback(() => {
+    stopSweep();
+    const speed = Math.min(0.0021, 0.0011 + throwIndex * 0.00009); // per ms, faster late game
+    let last = performance.now();
+    const step = (now: number) => {
+      const dt = now - last;
+      last = now;
+      let v = sweepRef.current + dirRef.current * speed * dt;
+      if (v > 1) { v = 2 - v; dirRef.current = -1; }
+      if (v < 0) { v = -v; dirRef.current = 1; }
+      sweepRef.current = v;
+      setSweep(v);
+      rafRef.current = requestAnimationFrame(step);
     };
-    rafRef.current = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [phase, sweepPeriod]);
+    rafRef.current = requestAnimationFrame(step);
+  }, [stopSweep, throwIndex]);
 
-  /* ---------- throw resolution ---------- */
-  const resolveThrow = useCallback((x: number, y: number) => {
-    // hand shake: small jitter that grows with sweep speed
-    const shake = 0.018 + (1450 - sweepPeriod) / 1450 * 0.03;
-    const hx = x + (Math.random() * 2 - 1) * shake;
-    const hy = y + (Math.random() * 2 - 1) * shake;
-    setImpact({ x: hx, y: hy });
-    setPhase('flight');
-    window.setTimeout(() => {
-      const used = new Set(squad.filter((p): p is Player => p !== null).map(p => p.name));
-      const slot = formation.slots[slotIndex];
-      let result: ThrowResult;
-      if (mode === 'map') {
-        const hit = resolveMapHit(mapX(hx), mapY(hy), stickers);
-        result = drawFromMap(current, legends, hit, slot, used);
-      } else {
-        const { wedgeIndex, ring } = resolveHit(hx, hy);
-        result = drawFromBoard(current, legends, WEDGES[wedgeIndex], ring, slot, used);
+  useEffect(() => () => stopSweep(), [stopSweep]);
+
+  /* ---------------- game flow ---------------- */
+  const start = async (t: MapTopic) => {
+    setTopic(t);
+    setPhase('loading');
+    const { current } = await fetchDartDraftPool();
+    if (!current.length) { setPhase('intro'); return; }
+    setPool(current);
+    setXi(Array(XI_SIZE).fill(null));
+    setOop(Array(XI_SIZE).fill(false));
+    setDraftedIsos(new Set());
+    setUsedNames(new Set());
+    setPoints(0);
+    setSharpHits(0);
+    setLifeboatUsed(false);
+    setSeries(null);
+    seedRef.current = Math.floor(Math.random() * 1e9);
+    setPhase('squad');
+  };
+
+  const beginThrow = (idx: number) => {
+    if (xi[idx]) return;
+    setSlotIdx(idx);
+    setZones(rollZones(ROUND_VIEWS[Math.min(throwIndex, ROUND_VIEWS.length - 1)], throwIndex, seedRef.current));
+    setStage('x');
+    setLockedX(null);
+    setDart(null);
+    setHit(null);
+    setBlocked(false);
+    setChoices(null);
+    sweepRef.current = 0;
+    dirRef.current = 1;
+    setPhase('aim');
+  };
+
+  useEffect(() => {
+    if (phase === 'aim' && stage !== 'landed') runSweep();
+    else stopSweep();
+  }, [phase, stage, runSweep, stopSweep]);
+
+  const resolveLanding = useCallback(async (x: number, y: number) => {
+    const zonesNow = zones;
+    const landed = resolveMapThrow(x, y, zonesNow);
+    setDart({ x, y });
+    setStage('landed');
+    setHit(landed);
+
+    const slot = DART_SLOTS[slotIdx ?? 0];
+    const wcBlocked = topic === 'wc2026' && landed.kind === 'country' && !isWcNation(landed.country);
+    setBlocked(wcBlocked);
+    const pts = wcBlocked ? 0 : accuracyPoints(landed);
+    setPoints(p => p + pts);
+    if (!wcBlocked && (landed.kind === 'zone' || pts >= 40)) setSharpHits(h => h + 1);
+
+    window.setTimeout(async () => {
+      if (landed.kind === 'ocean' || wcBlocked) {
+        setChoices(null);
+        setPhase('draft');
+        return;
       }
-      setLastThrow(result);
-      setThrowLog(log => [...log, result]);
-      setSquad(sq => {
-        const next = [...sq];
-        next[slotIndex] = result.player;
-        return next;
-      });
-      setPhase('result');
-    }, 520);
-  }, [current, legends, formation, slotIndex, squad, sweepPeriod, mode, stickers]);
+      if (landed.kind === 'zone') {
+        const c =
+          landed.zone.kind === 'legend' ? legendChoices(slot, usedNames)
+          : landed.zone.kind === 'wonderkid' ? wonderkidChoices(topicPool, slot, usedNames)
+          : wildcardChoices(topicPool, slot, usedNames);
+        setChoices(c.length ? c : null);
+        setPhase('draft');
+        return;
+      }
+      setChoicesLoading(true);
+      setPhase('draft');
+      const c = await countryChoices(landed.country, slot, usedNames);
+      setChoices(c.length ? c : null);
+      setChoicesLoading(false);
+    }, 850);
+  }, [zones, slotIdx, topic, usedNames, topicPool]);
 
   const lockIn = useCallback(() => {
-    if (phaseRef.current === 'aimX') {
-      setLocked(prev => ({ ...prev, x: aim.x }));
-      setPhase('aimY');
-    } else if (phaseRef.current === 'aimY') {
-      const y = aim.y;
-      setLocked(prev => ({ ...prev, y }));
-      resolveThrow(locked.x, y);
+    if (phase !== 'aim') return;
+    if (stage === 'x') {
+      setLockedX(box.x + sweepRef.current * box.w);
+      sweepRef.current = 0;
+      dirRef.current = 1;
+      setStage('y');
+      return;
     }
-  }, [aim, locked.x, resolveThrow]);
+    if (stage === 'y' && lockedX !== null) {
+      const wob = box.w * 0.006;
+      const x = Math.min(box.x + box.w, Math.max(box.x, lockedX + (Math.random() * 2 - 1) * wob));
+      const y = Math.min(box.y + box.h, Math.max(box.y, box.y + sweepRef.current * box.h + (Math.random() * 2 - 1) * wob));
+      stopSweep();
+      resolveLanding(x, y);
+    }
+  }, [phase, stage, lockedX, box, resolveLanding, stopSweep]);
 
-  // Space / Enter also throw
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.code === 'Space' || e.code === 'Enter') {
-        if (phaseRef.current === 'aimX' || phaseRef.current === 'aimY') {
-          e.preventDefault();
-          lockIn();
-        }
-      }
+      if (e.code === 'Space') { e.preventDefault(); lockIn(); }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [lockIn]);
 
-  const nextAfterResult = () => {
-    if (slotIndex + 1 >= formation.slots.length) {
-      setPhase('squad');
+  const pickPlayer = (choice: DraftChoice) => {
+    if (slotIdx === null) return;
+    const nextXi = [...xi];
+    nextXi[slotIdx] = choice.player;
+    const nextOop = [...oop];
+    nextOop[slotIdx] = choice.outOfPosition;
+    setXi(nextXi);
+    setOop(nextOop);
+    setUsedNames(prev => new Set(prev).add(choice.player.name));
+    if (hit?.kind === 'country') setDraftedIsos(prev => new Set(prev).add(hit.country.iso));
+    finishRound(nextXi, nextOop);
+  };
+
+  const takeJourneyman = () => {
+    if (slotIdx === null) return;
+    const jm = journeyman(topicPool, DART_SLOTS[slotIdx], usedNames);
+    if (!jm) { finishRound(xi, oop); return; }
+    const nextXi = [...xi];
+    nextXi[slotIdx] = jm;
+    setXi(nextXi);
+    setUsedNames(prev => new Set(prev).add(jm.name));
+    finishRound(nextXi, oop);
+  };
+
+  const useLifeboat = () => {
+    setLifeboatUsed(true);
+    if (slotIdx !== null) beginThrow(slotIdx);
+  };
+
+  const finishRound = (nextXi: (Player | null)[], nextOop: boolean[]) => {
+    setSlotIdx(null);
+    if (nextXi.filter(Boolean).length >= XI_SIZE) {
+      const machine = machineMapDraft(topicPool.length >= XI_SIZE ? topicPool : pool);
+      setMachineXi(machine);
+      setSeries(simulateSeries(adjustedXi(nextXi, nextOop), machine));
+      setPhase('done');
     } else {
-      setSlotIndex(i => i + 1);
-      setImpact(null);
-      if (mode === 'map') setStickers(rollStickers()); // stickers move every throw
-      setPhase('aimX');
+      setPhase('squad');
     }
   };
 
-  const startGame = (f: Formation) => {
-    setFormation(f);
-    setSquad(new Array(f.slots.length).fill(null));
-    setThrowLog([]);
-    setSlotIndex(0);
-    setImpact(null);
-    setSeries(null);
-    setLegShown(0);
-    setStickers(mode === 'map' ? rollStickers() : []);
-    setPhase('aimX');
-  };
-
-  const startSim = () => {
-    const ai = machineDraft(current, legends, formation);
-    setSeries(simulateSeries(squad, ai));
-    setLegShown(0);
-    setPhase('sim');
-  };
-
-  /* ---------- scoring + completion ---------- */
-  const throwPoints = throwLog.reduce((s, t) => s + t.points, 0);
-  const rating = squadRating(squad);
-  const grade = squadGrade(rating);
-  const score = series ? finalScore(throwPoints, rating, series.outcome) : 0;
-  const sharpHits = throwLog.filter(t => t.ring === 'JACKPOT' || t.ring === 'T1').length;
-  useGameCompletion('dart-draft', phase === 'done', score, sharpHits);
-
-  const slot = formation.slots[slotIndex];
-
-  /* ---------- board SVG ---------- */
-  const board = useMemo(() => (
-    <g>
-      {WEDGES.map((w, i) => {
-        const a0 = -105 + i * 30;
-        const a1 = a0 + 30;
+  /* ---------------- render helpers ---------------- */
+  const countryEls = useMemo(
+    () =>
+      GEO_COUNTRIES.map(c => {
+        const locked = topic === 'wc2026' && !isWcNation(c);
+        const drafted = draftedIsos.has(c.iso);
+        const isHit = hit?.kind === 'country' && hit.country.iso === c.iso;
         return (
-          <g key={w.id}>
-            <path d={arcPath(a0, a1, 15, BOARD_EDGE * R)} fill={i % 2 === 0 ? w.color : w.darkColor} stroke="hsl(0 0% 8%)" strokeWidth="0.8" />
-            {/* label */}
-            <text
-              x={Math.cos(((a0 + 15) * Math.PI) / 180) * 92}
-              y={Math.sin(((a0 + 15) * Math.PI) / 180) * 92}
-              fill={w.id === 'legends' ? 'hsl(45 90% 55%)' : 'hsl(0 0% 80%)'}
-              fontSize="6.2"
-              fontWeight="800"
-              textAnchor="middle"
-              dominantBaseline="middle"
-              transform={`rotate(${a0 + 15 + 90} ${Math.cos(((a0 + 15) * Math.PI) / 180) * 92} ${Math.sin(((a0 + 15) * Math.PI) / 180) * 92})`}
-            >
-              {w.short}
-            </text>
-          </g>
+          <path
+            key={c.iso}
+            d={pathOf(c)}
+            fill={isHit ? (blocked ? 'hsl(0 60% 35%)' : 'hsl(45 90% 45%)') : countryFill(c, { locked, drafted })}
+            stroke={isHit ? 'hsl(45 95% 70%)' : 'hsl(222 30% 8%)'}
+            strokeWidth={isHit ? 1.6 : 0.55}
+            vectorEffect="non-scaling-stroke"
+          />
         );
-      })}
-      {/* ring highlights: triple + double bands */}
-      <circle r={47 /* (0.42+0.52)/2 */} fill="none" stroke="white" strokeOpacity="0.16" strokeWidth={10} />
-      <circle r={77 /* (0.72+0.82)/2 */} fill="none" stroke="white" strokeOpacity="0.14" strokeWidth={10} />
-      {/* band boundary lines */}
-      {[0.42, 0.52, 0.72, 0.82].map(f => (
-        <circle key={f} r={f * R} fill="none" stroke="hsl(0 0% 8%)" strokeWidth="0.8" />
-      ))}
-      {/* bulls */}
-      <circle r={15} fill="hsl(150 45% 22%)" stroke="hsl(0 0% 8%)" strokeWidth="0.8" />
-      <circle r={7} fill="hsl(0 75% 45%)" stroke="hsl(0 0% 8%)" strokeWidth="0.8" />
-      <text y="1.8" fill="white" fontSize="4.6" fontWeight="900" textAnchor="middle">50</text>
-    </g>
-  ), []);
-
-  /* ---------- world map SVG (ocean, continents, nations, stickers) ---------- */
-  const mapBoard = useMemo(() => (
-    <g>
-      <rect x={0} y={0} width={MAP_W} height={MAP_H} rx={2.5} fill="hsl(215 55% 14%)" />
-      <rect x={0} y={0} width={MAP_W} height={MAP_H} rx={2.5} fill="none" stroke="hsl(203 60% 30%)" strokeWidth="0.5" />
-      {[...CONTINENT_POLYS, ...ISLAND_POLYS].map(poly => (
-        <polygon
-          key={poly.id}
-          points={poly.points.map(pt => pt.join(',')).join(' ')}
-          fill={mapRegion(poly.regionId).color}
-          fillOpacity={0.92}
-          stroke="hsl(215 50% 9%)"
-          strokeWidth="0.6"
-        />
-      ))}
-      {NATION_POLYS.map(poly => (
-        <polygon
-          key={poly.id}
-          points={poly.points.map(pt => pt.join(',')).join(' ')}
-          fill={mapRegion(poly.regionId).color}
-          stroke="rgba(255,255,255,0.55)"
-          strokeWidth="0.45"
-        />
-      ))}
-      {MAP_LABELS.map(l => (
-        <text key={l.text} x={l.x} y={l.y} fill="white" opacity={0.5} fontSize={l.size} fontWeight={800} letterSpacing={0.5} textAnchor="middle">{l.text}</text>
-      ))}
-      {MAP_NATION_LABELS.map(l => (
-        <text key={l.text} x={l.x} y={l.y} fill="white" opacity={0.9} fontSize={2} fontWeight={900} textAnchor="middle">{l.text}</text>
-      ))}
-      {stickers.map(s => (
-        <g key={s.def.id} transform={`translate(${s.x} ${s.y})`}>
-          <circle r={s.r} fill={s.def.color} fillOpacity={0.32} stroke={s.def.color} strokeWidth={0.8} />
-          <circle r={s.r - 1.1} fill="none" stroke="white" strokeOpacity={0.7} strokeWidth={0.35} strokeDasharray="1.8 1.2" />
-          <text y={-0.8} fontSize={s.r * 0.5} textAnchor="middle" dominantBaseline="middle">{s.def.emoji}</text>
-          <text
-            y={s.r * 0.42 + 1.8}
-            fontSize={Math.min(2.2, (s.r * 2 - 1.5) / (s.def.label.length * 0.62))}
-            fontWeight={900}
-            fill="white"
-            textAnchor="middle"
-            stroke="rgba(0,0,0,0.6)"
-            strokeWidth={0.35}
-            style={{ paintOrder: 'stroke' }}
-          >
-            {s.def.label}
-          </text>
-        </g>
-      ))}
-    </g>
-  ), [stickers]);
-
-  const ringBadge = (ring: Ring) => (
-    <span className={cn(
-      'inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider',
-      ring === 'JACKPOT' && 'bg-red-500/20 text-red-400',
-      ring === 'T1' && 'bg-amber-500/20 text-amber-400',
-      ring === 'T2' && 'bg-emerald-500/20 text-emerald-400',
-      ring === 'T3' && 'bg-blue-500/20 text-blue-400',
-      ring === 'T4' && 'bg-slate-500/20 text-slate-300',
-      ring === 'MISS' && 'bg-zinc-600/30 text-zinc-400',
-    )}>
-      {RING_LABEL[ring]} · +{RING_POINTS[ring]}
-    </span>
+      }),
+    [topic, draftedIsos, hit, blocked],
   );
 
-  // Map mode has no rings — the badge speaks map language but keeps the
-  // classic ring codes underneath (sticker=T1, land=T2, ocean=MISS).
-  const mapBadge = (t: ThrowResult) => (
-    <span className={cn(
-      'inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider',
-      t.ring === 'T1' && 'bg-amber-500/20 text-amber-400',
-      t.ring === 'T2' && 'bg-emerald-500/20 text-emerald-400',
-      t.ring === 'MISS' && 'bg-zinc-600/30 text-zinc-400',
-    )}>
-      {t.ring === 'T1'
-        ? 'Sticker bonus — top-shelf pull'
-        : t.ring === 'MISS'
-          ? 'Lost at sea — worst player afloat'
-          : t.usedWorldFallback
-            ? 'World pool — top-half pull'
-            : 'Direct hit — top-half pull'} · +{t.points}
-    </span>
-  );
+  const slotButton = (slot: (typeof DART_SLOTS)[number], i: number) => {
+    const p = xi[i];
+    return (
+      <button
+        key={`${slot.label}-${i}`}
+        onClick={() => !p && phase === 'squad' && beginThrow(i)}
+        disabled={!!p}
+        style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
+        className={cn(
+          'absolute -translate-x-1/2 -translate-y-1/2 rounded-lg border px-1.5 py-1 text-center transition-all',
+          'min-w-[64px] max-w-[92px] sm:min-w-[76px]',
+          p
+            ? 'border-border bg-card/90 cursor-default'
+            : 'border-primary bg-primary/15 hover:bg-primary/30 animate-pulse cursor-pointer',
+        )}
+      >
+        <div className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-primary">{slot.label}</div>
+        {p ? (
+          <>
+            <div className="text-[10px] sm:text-xs font-bold text-foreground leading-tight truncate">{p.name}</div>
+            <div className="flex items-center justify-center gap-1 text-[9px] text-muted-foreground">
+              <FlagImg name={p.nationality} size={12} />
+              <span className={cn('font-bold', oop[i] ? 'text-orange-400' : 'text-gold')}>
+                {Math.max(35, playerRating(p) - (oop[i] ? 8 : 0))}
+              </span>
+            </div>
+          </>
+        ) : (
+          <div className="text-[10px] text-muted-foreground">throw</div>
+        )}
+      </button>
+    );
+  };
 
+  const hitTitle = () => {
+    if (!hit) return '';
+    if (blocked && hit.kind === 'country') return `${hit.country.name} did not qualify for 2026`;
+    if (hit.kind === 'zone') return `${hit.zone.emoji} ${hit.zone.label} ZONE`;
+    if (hit.kind === 'country') return hit.country.name;
+    return 'LOST AT SEA';
+  };
+
+  /* ---------------- page ---------------- */
   return (
     <>
       <PageSeo
-        title="Dart Draft - Timed Darts Squad Builder | DoUKnowBall"
-        description="Throw timed darts at the board of fate: every wedge is a league, nation or the Legends pool. Build an XI from wherever your darts land, then simulate the showdown."
+        title="Dart Draft: World Map | DoUKnowBall"
+        description="Throw timed darts at a real world map. Hit a country, draft one of its actual players for the position you called. Legend zones, wonderkid zones and continent rounds."
         path="/dart-draft"
       />
-      <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(240 30% 8%) 0%, hsl(260 28% 6%) 55%, hsl(150 25% 6%) 100%)' }}>
+      <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(222 40% 7%) 0%, hsl(210 35% 9%) 55%, hsl(222 35% 6%) 100%)' }}>
         <GameNavbar />
-        <main className="flex-1 flex flex-col items-center px-4 py-6 sm:py-10">
-          <div className="w-full max-w-5xl mx-auto space-y-5 text-center">
+        <main className="flex-1 flex flex-col items-center px-3 py-5 sm:py-8">
+          <div className="w-full max-w-3xl mx-auto space-y-4 text-center">
 
-            {/* ---------- INTRO ---------- */}
             {phase === 'intro' && (
               <>
-                <div className="flex items-center justify-center gap-3 text-primary">
-                  <Target className="w-10 h-10 sm:w-14 sm:h-14" />
-                </div>
-                <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-foreground leading-tight">
+                <div className="flex items-center justify-center text-primary"><Target className="w-11 h-11 sm:w-14 sm:h-14" /></div>
+                <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-foreground">
                   Dart <span className="text-primary">Draft</span>
                 </h1>
-                <p className="text-base sm:text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
-                  11 throws. Wherever your dart lands, that&apos;s who you draft — no take-backs.
-                  Pick your board of fate, time your throws, and live with the squad it gives you.
+                <p className="text-base sm:text-lg text-muted-foreground max-w-lg mx-auto leading-relaxed">
+                  Call your position, then throw a timed dart at a real world map.
+                  Whatever country you stick, you draft one of its actual pros. 11 throws, one XI, no take-backs.
                 </p>
-                {loading ? (
-                  <Loader2 className="w-6 h-6 animate-spin text-muted-foreground mx-auto" />
-                ) : (
-                  <div className="space-y-5">
-                    <div className="space-y-3">
-                      <p className="text-sm font-bold uppercase tracking-widest text-primary">Pick your board</p>
-                      <div className="flex flex-wrap justify-center gap-3">
-                        <button
-                          type="button"
-                          onClick={() => setMode('classic')}
-                          className={cn(
-                            'w-full sm:w-72 rounded-2xl border-2 p-4 text-left transition-colors',
-                            mode === 'classic' ? 'border-primary bg-primary/10' : 'border-border bg-card/50 hover:border-primary/50',
-                          )}
-                        >
-                          <p className="text-lg font-extrabold text-foreground">🎯 Classic Board</p>
-                          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                            12 wedges of leagues, nations and the golden <b>LEGENDS</b> slice. Rings decide quality — hunt the triple, fear the miss.
-                          </p>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setMode('map')}
-                          className={cn(
-                            'w-full sm:w-72 rounded-2xl border-2 p-4 text-left transition-colors',
-                            mode === 'map' ? 'border-primary bg-primary/10' : 'border-border bg-card/50 hover:border-primary/50',
-                          )}
-                        >
-                          <p className="text-lg font-extrabold text-foreground">
-                            🗺️ World Map
-                            <span className="ml-2 align-middle text-[10px] font-black uppercase tracking-wider bg-primary text-primary-foreground rounded-full px-2 py-0.5">New</span>
-                          </p>
-                          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                            Hit the country, pick a player. Bonus stickers move every throw — and the ocean hands you the worst player afloat.
-                          </p>
-                        </button>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <p className="text-sm font-bold uppercase tracking-widest text-primary">Pick your formation</p>
-                      <div className="flex flex-wrap justify-center gap-2">
-                        {FORMATIONS.slice(0, 6).map(f => (
-                          <Button key={f.name} variant="outline" size="lg" className="font-mono font-bold" onClick={() => startGame(f)}>
-                            {f.name}
-                          </Button>
+                <div className="grid sm:grid-cols-2 gap-3 max-w-lg mx-auto">
+                  {MAP_TOPICS.map(t => (
+                    <button
+                      key={t.id}
+                      onClick={() => start(t.id)}
+                      className="rounded-xl border border-border bg-card/70 hover:border-primary hover:bg-card px-4 py-4 text-left transition-colors"
+                    >
+                      <div className="text-2xl">{t.emoji}</div>
+                      <div className="font-bold text-foreground">{t.label}</div>
+                      <div className="text-xs text-muted-foreground mt-1">{t.desc}</div>
+                    </button>
+                  ))}
+                </div>
+                <div className="text-xs text-muted-foreground max-w-md mx-auto space-y-1">
+                  <p>Gold rings over the ocean are bonus zones: 👑 all-time legends, 💎 wonderkids, 🃏 free pick.</p>
+                  <p>Ocean throws get one lifeboat per game. After that you take the journeyman.</p>
+                </div>
+              </>
+            )}
+
+            {phase === 'loading' && (
+              <div className="py-24"><Loader2 className="w-8 h-8 animate-spin text-muted-foreground mx-auto" /></div>
+            )}
+
+            {phase === 'squad' && (
+              <>
+                <div className="flex items-center justify-center gap-3 text-xs sm:text-sm">
+                  <span className="px-3 py-1 rounded-full bg-card/70 border border-border font-bold text-primary">
+                    Throw {Math.min(throwIndex + 1, XI_SIZE)}/{XI_SIZE}
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-card/70 border border-border text-muted-foreground">
+                    Next map: <b className="text-foreground">{VIEW_LABEL[view]}</b>
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-card/70 border border-border text-muted-foreground">
+                    XI <b className="text-gold">{userRating || '--'}</b>
+                  </span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-extrabold text-foreground">Pick the position you throw for</h2>
+                <div
+                  className="relative w-full max-w-xl mx-auto rounded-2xl border border-border overflow-hidden"
+                  style={{ aspectRatio: '3 / 4', background: 'linear-gradient(180deg, hsl(140 45% 16%) 0%, hsl(140 50% 12%) 100%)' }}
+                >
+                  <div className="absolute inset-x-0 top-1/2 h-px bg-white/15" />
+                  <div className="absolute left-1/2 top-1/2 w-24 h-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15" />
+                  {DART_SLOTS.map((s, i) => slotButton(s, i))}
+                </div>
+              </>
+            )}
+
+            {(phase === 'aim' || phase === 'draft') && slotIdx !== null && (
+              <>
+                <div className="flex items-center justify-center gap-2 text-xs sm:text-sm flex-wrap">
+                  <span className="px-3 py-1 rounded-full bg-primary/15 border border-primary/50 font-bold text-primary">
+                    {DART_SLOTS[slotIdx].label} • Throw {Math.min(throwIndex + 1, XI_SIZE)}/{XI_SIZE}
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-card/70 border border-border text-muted-foreground">{VIEW_LABEL[view]}</span>
+                  <span className="px-3 py-1 rounded-full bg-card/70 border border-border text-muted-foreground">Accuracy <b className="text-gold">{points}</b></span>
+                </div>
+
+                <div className="relative w-full rounded-2xl border border-border overflow-hidden bg-[hsl(215,45%,10%)]">
+                  <svg viewBox={`${box.x} ${box.y} ${box.w} ${box.h}`} className="w-full h-auto block select-none" onClick={lockIn}>
+                    {countryEls}
+                    {zones.map((z, i) => (
+                      <g key={i} opacity={0.95}>
+                        <circle cx={z.x} cy={z.y} r={z.r} fill="hsl(45 90% 45% / 0.12)" stroke="hsl(45 90% 55%)" strokeWidth={1.4} strokeDasharray="4 3" vectorEffect="non-scaling-stroke" />
+                        <text x={z.x} y={z.y - z.r - 3} textAnchor="middle" fontSize={Math.max(8, z.r * 0.55)} fill="hsl(45 90% 65%)" fontWeight={800}>
+                          {z.emoji} {z.label}
+                        </text>
+                      </g>
+                    ))}
+                    {phase === 'aim' && stage === 'x' && (
+                      <line x1={box.x + sweep * box.w} y1={box.y} x2={box.x + sweep * box.w} y2={box.y + box.h} stroke="hsl(0 85% 60%)" strokeWidth={1.6} vectorEffect="non-scaling-stroke" />
+                    )}
+                    {phase === 'aim' && stage === 'y' && lockedX !== null && (
+                      <>
+                        <line x1={lockedX} y1={box.y} x2={lockedX} y2={box.y + box.h} stroke="hsl(0 85% 60% / 0.5)" strokeWidth={1.2} vectorEffect="non-scaling-stroke" />
+                        <line x1={box.x} y1={box.y + sweep * box.h} x2={box.x + box.w} y2={box.y + sweep * box.h} stroke="hsl(0 85% 60%)" strokeWidth={1.6} vectorEffect="non-scaling-stroke" />
+                      </>
+                    )}
+                    {dart && (
+                      <g>
+                        <circle cx={dart.x} cy={dart.y} r={Math.max(3, box.w * 0.008)} fill="hsl(0 85% 55%)" stroke="white" strokeWidth={1.2} vectorEffect="non-scaling-stroke" />
+                        <circle cx={dart.x} cy={dart.y} r={Math.max(7, box.w * 0.02)} fill="none" stroke="hsl(0 85% 55% / 0.6)" strokeWidth={1} vectorEffect="non-scaling-stroke" />
+                      </g>
+                    )}
+                  </svg>
+                </div>
+
+                {phase === 'aim' && (
+                  <div className="space-y-2">
+                    <Button size="lg" className="text-lg px-10 py-6 font-black" onClick={lockIn}>
+                      <Crosshair className="w-5 h-5 mr-2" />
+                      {stage === 'x' ? 'LOCK LEFT-RIGHT' : 'THROW'}
+                    </Button>
+                    <p className="text-xs text-muted-foreground">Tap the map, the button, or press Space</p>
+                  </div>
+                )}
+
+                {phase === 'draft' && (
+                  <div className="space-y-3">
+                    <h2 className="text-xl sm:text-2xl font-extrabold text-foreground flex items-center justify-center gap-2">
+                      {hit?.kind === 'country' && !blocked && <FlagImg name={dbNamesFor(hit.country)[0]} size={26} />}
+                      {hitTitle()}
+                    </h2>
+
+                    {choicesLoading && <Loader2 className="w-6 h-6 animate-spin text-muted-foreground mx-auto" />}
+
+                    {!choicesLoading && choices && (
+                      <div className="grid sm:grid-cols-2 gap-2 max-w-xl mx-auto">
+                        {choices.map(({ player: p, outOfPosition }) => (
+                          <button
+                            key={p.name}
+                            onClick={() => pickPlayer({ player: p, outOfPosition })}
+                            className="rounded-xl border border-border bg-card/70 hover:border-primary hover:bg-card px-3 py-2.5 text-left transition-colors"
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="min-w-0">
+                                <div className="font-bold text-foreground truncate">{p.name}</div>
+                                <div className="text-xs text-muted-foreground truncate">{p.club} • {p.position} • {money(p.marketValue)}</div>
+                              </div>
+                              <div className="text-right shrink-0">
+                                <div className={cn('text-lg font-black', outOfPosition ? 'text-orange-400' : 'text-gold')}>
+                                  {Math.max(35, playerRating(p) - (outOfPosition ? 8 : 0))}
+                                </div>
+                                {outOfPosition && <div className="text-[9px] font-bold text-orange-400">OUT OF POSITION</div>}
+                              </div>
+                            </div>
+                          </button>
                         ))}
                       </div>
-                    </div>
+                    )}
+
+                    {!choicesLoading && !choices && (
+                      <div className="space-y-3">
+                        <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                          {blocked
+                            ? 'That nation is not at the 2026 World Cup, so the dart counts for nothing.'
+                            : hit?.kind === 'ocean'
+                              ? 'Straight into the water. The fish cannot play.'
+                              : 'No pros from there in the player pool.'}
+                        </p>
+                        <div className="flex gap-3 justify-center">
+                          {!lifeboatUsed && (
+                            <Button onClick={useLifeboat} className="font-bold">
+                              <LifeBuoy className="w-4 h-4 mr-2" /> Lifeboat re-throw
+                            </Button>
+                          )}
+                          <Button variant="outline" onClick={takeJourneyman} className="font-bold">
+                            Take the journeyman
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </>
             )}
 
-            {/* ---------- THROWING ---------- */}
-            {(phase === 'aimX' || phase === 'aimY' || phase === 'flight' || phase === 'result') && (
-              <div className="flex flex-col lg:flex-row gap-6 items-start">
-                {/* Board */}
-                <div className="w-full lg:flex-1">
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card/70 border border-border mb-3">
-                    <Target className="w-4 h-4 text-primary" />
-                    <span className="text-sm font-bold text-foreground">
-                      Throw {slotIndex + 1}/{formation.slots.length}
-                    </span>
-                    <span className="text-xs font-mono text-primary font-bold uppercase">→ {slot.label} slot</span>
-                    <span className="text-xs text-muted-foreground hidden sm:inline">
-                      {mode === 'map' ? '· stickers move every throw' : '· sweeps get faster every throw'}
-                    </span>
-                  </div>
-                  <div
-                    className={cn('relative mx-auto cursor-crosshair select-none touch-none', mode === 'map' ? 'max-w-[560px]' : 'max-w-[440px]')}
-                    onPointerDown={() => (phase === 'aimX' || phase === 'aimY') && lockIn()}
-                  >
-                    {mode === 'classic' ? (
-                      <svg viewBox="-112 -112 224 224" className="w-full drop-shadow-2xl">
-                        <circle r={108} fill="hsl(240 20% 12%)" stroke="hsl(45 40% 35%)" strokeWidth="2.5" />
-                        {board}
-                        {/* locked X guide */}
-                        {(phase === 'aimY') && (
-                          <line x1={locked.x * R} y1={-108} x2={locked.x * R} y2={108} stroke="hsl(45 95% 60%)" strokeWidth="1.4" strokeDasharray="3 2" />
+            {phase === 'done' && series && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-center text-gold"><Trophy className="w-12 h-12" /></div>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground">
+                  Grade {squadGrade(userRating).grade} • XI {userRating}
+                </h2>
+                <p className="text-muted-foreground">{squadGrade(userRating).line}</p>
+                <p className="text-sm font-bold text-foreground">{series.headline}</p>
+                <div className="flex items-center justify-center gap-4 text-sm">
+                  <span className="px-3 py-1.5 rounded-full bg-card/70 border border-border">Accuracy <b className="text-gold">{points}</b></span>
+                  <span className="px-3 py-1.5 rounded-full bg-card/70 border border-border">Series {series.userWins}-{series.aiWins}</span>
+                  <span className="px-3 py-1.5 rounded-full bg-card/70 border border-border">Total <b className="text-gold">{total}</b></span>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-1.5 max-w-xl mx-auto text-left">
+                  {DART_SLOTS.map((s, i) => {
+                    const p = xi[i];
+                    return (
+                      <div key={i} className="flex items-center justify-between rounded-lg border border-border bg-card/60 px-3 py-1.5">
+                        <span className="text-xs font-black text-primary w-8">{s.label}</span>
+                        {p ? (
+                          <>
+                            <span className="flex-1 min-w-0 truncate text-sm font-semibold text-foreground px-2 flex items-center gap-1.5">
+                              <FlagImg name={p.nationality} size={14} />{p.name}
+                            </span>
+                            <span className={cn('text-sm font-black', oop[i] ? 'text-orange-400' : 'text-gold')}>
+                              {Math.max(35, playerRating(p) - (oop[i] ? 8 : 0))}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="flex-1 text-sm text-muted-foreground px-2">empty</span>
                         )}
-                        {/* sweeping crosshairs */}
-                        {phase === 'aimX' && (
-                          <line x1={aim.x * R} y1={-108} x2={aim.x * R} y2={108} stroke="hsl(150 90% 55%)" strokeWidth="1.8" />
-                        )}
-                        {phase === 'aimY' && (
-                          <line x1={-108} y1={aim.y * R} x2={108} y2={aim.y * R} stroke="hsl(150 90% 55%)" strokeWidth="1.8" />
-                        )}
-                        {/* dart impact */}
-                        {impact && (phase === 'flight' || phase === 'result') && (
-                          <g transform={`translate(${impact.x * R} ${impact.y * R})`}>
-                            <circle r={phase === 'flight' ? 7 : 4.2} fill="hsl(150 90% 50%)" stroke="white" strokeWidth="1.6"
-                              style={{ transition: 'all 480ms cubic-bezier(0.2, 0.9, 0.3, 1)' }} />
-                            <line x1={2.5} y1={-2.5} x2={10} y2={-10} stroke="white" strokeWidth="1.6" strokeLinecap="round" />
-                          </g>
-                        )}
-                      </svg>
-                    ) : (
-                      <svg viewBox="-5 -5 210 130" className="w-full drop-shadow-2xl">
-                        <rect x={-5} y={-5} width={210} height={130} rx={5} fill="hsl(240 20% 12%)" stroke="hsl(45 40% 35%)" strokeWidth="1.6" />
-                        {mapBoard}
-                        {/* locked X guide */}
-                        {(phase === 'aimY') && (
-                          <line x1={mapX(locked.x)} y1={-5} x2={mapX(locked.x)} y2={125} stroke="hsl(45 95% 60%)" strokeWidth="0.9" strokeDasharray="2.2 1.5" />
-                        )}
-                        {/* sweeping crosshairs */}
-                        {phase === 'aimX' && (
-                          <line x1={mapX(aim.x)} y1={-5} x2={mapX(aim.x)} y2={125} stroke="hsl(150 90% 55%)" strokeWidth="1.1" />
-                        )}
-                        {phase === 'aimY' && (
-                          <line x1={-5} y1={mapY(aim.y)} x2={205} y2={mapY(aim.y)} stroke="hsl(150 90% 55%)" strokeWidth="1.1" />
-                        )}
-                        {/* dart impact */}
-                        {impact && (phase === 'flight' || phase === 'result') && (
-                          <g transform={`translate(${mapX(impact.x)} ${mapY(impact.y)})`}>
-                            <circle r={phase === 'flight' ? 4.5 : 2.6} fill="hsl(150 90% 50%)" stroke="white" strokeWidth="1"
-                              style={{ transition: 'all 480ms cubic-bezier(0.2, 0.9, 0.3, 1)' }} />
-                            <line x1={1.6} y1={-1.6} x2={6.5} y2={-6.5} stroke="white" strokeWidth="1" strokeLinecap="round" />
-                          </g>
-                        )}
-                      </svg>
-                    )}
-                    {(phase === 'aimX' || phase === 'aimY') && (
-                      <div className="absolute inset-x-0 -bottom-1 flex justify-center">
-                        <span className="px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-black uppercase tracking-widest animate-pulse">
-                          {phase === 'aimX' ? 'Tap to lock LEFT–RIGHT' : 'Tap to lock UP–DOWN'}
-                        </span>
                       </div>
-                    )}
-                  </div>
-
-                  {/* Result card */}
-                  {phase === 'result' && lastThrow && (
-                    <div className="mt-5 mx-auto max-w-md rounded-2xl border border-primary/30 bg-card/70 backdrop-blur-md p-5 space-y-3 animate-in fade-in slide-in-from-bottom-2">
-                      <p className="text-sm font-bold uppercase tracking-widest" style={{ color: lastThrow.wedge.color }}>
-                        🎯 {lastThrow.usedWorldFallback
-                          ? `${lastThrow.wedge.label} had nobody for this slot — WORLD pool stepped in`
-                          : lastThrow.wedge.label}
-                      </p>
-                      {mode === 'classic' ? ringBadge(lastThrow.ring) : mapBadge(lastThrow)}
-                      {lastThrow.player ? (
-                        <div className="flex items-center justify-between gap-3 rounded-xl bg-secondary/50 border border-border px-4 py-3">
-                          <div className="text-left">
-                            <p className="text-lg font-extrabold text-foreground">{lastThrow.player.name}</p>
-                            <p className="text-xs text-muted-foreground">{lastThrow.player.club} · {lastThrow.player.nationality} · {lastThrow.player.position}</p>
-                          </div>
-                          <div className="text-right shrink-0">
-                            <p className="text-2xl font-black text-primary">{playerRating(lastThrow.player)}</p>
-                            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">rating</p>
-                          </div>
-                        </div>
-                      ) : (
-                        <p className="text-sm text-muted-foreground">Nobody fits this slot — the shirt stays empty. Brutal.</p>
-                      )}
-                      <Button size="lg" className="w-full font-bold" onClick={nextAfterResult}>
-                        {slotIndex + 1 >= formation.slots.length ? 'Reveal my XI' : 'Next throw'}
-                        <ChevronRight className="w-4 h-4 ml-1" />
-                      </Button>
-                    </div>
-                  )}
+                    );
+                  })}
                 </div>
-
-                {/* Roster pitch */}
-                <div className="w-full lg:w-[300px] shrink-0">
-                  <div className="rounded-2xl border border-border bg-card/60 backdrop-blur-md p-4">
-                    <p className="text-xs font-bold uppercase tracking-widest text-primary mb-2">Your XI · {formation.name}</p>
-                    <div className="relative w-full rounded-xl overflow-hidden" style={{ paddingBottom: '128%', background: 'linear-gradient(180deg, hsl(145 45% 18%), hsl(145 50% 12%)' + ')' }}>
-                      {formation.slots.map((s, i) => {
-                        const p = squad[i];
-                        const active = i === slotIndex && phase !== 'result';
-                        return (
-                          <div key={i} className="absolute -translate-x-1/2 -translate-y-1/2 text-center" style={{ left: `${s.x}%`, top: `${s.y}%` }}>
-                            <div className={cn(
-                              'w-9 h-9 rounded-full border-2 flex items-center justify-center text-[10px] font-black mx-auto',
-                              p ? 'bg-primary text-primary-foreground border-white/70' : active ? 'bg-amber-400/30 border-amber-400 text-amber-200 animate-pulse' : 'bg-black/30 border-white/25 text-white/50',
-                            )}>
-                              {p ? playerRating(p) : s.label}
-                            </div>
-                            {p && <p className="text-[9px] font-bold text-white/90 mt-0.5 max-w-[72px] truncate">{p.name.split(' ').slice(-1)[0]}</p>}
-                          </div>
-                        );
-                      })}
-                    </div>
-                    <div className="flex justify-between mt-3 text-xs text-muted-foreground font-semibold">
-                      <span>Throw points: <span className="text-primary font-black">{throwPoints}</span></span>
-                      <span>Sharp hits: <span className="text-primary font-black">{sharpHits}</span></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* ---------- SQUAD REVEAL ---------- */}
-            {phase === 'squad' && (
-              <div className="space-y-4 max-w-lg mx-auto">
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground">Your XI is set</h2>
-                <div className="rounded-2xl border border-primary/30 bg-card/70 p-6 space-y-2">
-                  <p className="text-6xl font-black text-primary">{rating}</p>
-                  <p className="text-sm uppercase tracking-widest text-muted-foreground font-bold">Squad rating · Grade {grade.grade}</p>
-                  <p className="text-sm text-foreground">{grade.line}</p>
-                </div>
-                <Button size="lg" className="w-full text-lg py-6 font-bold" onClick={startSim}>
-                  <Trophy className="w-5 h-5 mr-2" /> Face The Machine — best of 3
-                </Button>
-              </div>
-            )}
-
-            {/* ---------- SIM ---------- */}
-            {(phase === 'sim' || phase === 'done') && series && (
-              <div className="space-y-4 max-w-xl mx-auto">
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground">The Showdown</h2>
-                {series.legs.slice(0, legShown + (phase === 'done' ? 3 : 1)).slice(0, 3).map((leg, i) => (
-                  <div key={i} className="rounded-2xl border border-border bg-card/70 p-4 text-left space-y-1.5">
-                    <p className="text-sm font-black uppercase tracking-widest text-primary">Leg {i + 1} — You {leg.userGoals} : {leg.aiGoals} Machine</p>
-                    {leg.events.map((e, j) => (
-                      <p key={j} className={cn('text-xs sm:text-sm', e.side === 'user' ? 'text-emerald-300' : e.side === 'ai' ? 'text-red-300' : 'text-muted-foreground')}>
-                        <span className="font-mono font-bold">{e.minute}&apos;</span> {e.text}
-                      </p>
-                    ))}
-                  </div>
-                ))}
-                {phase === 'sim' && legShown < 2 && (
-                  <Button size="lg" variant="outline" className="font-bold" onClick={() => setLegShown(n => n + 1)}>
-                    Next leg <ChevronRight className="w-4 h-4 ml-1" />
+                <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+                  <Button size="lg" className="font-bold" onClick={() => setPhase('intro')}>
+                    <RotateCcw className="w-4 h-4 mr-2" /> Throw again
                   </Button>
-                )}
-                {phase === 'sim' && legShown >= 2 && (
-                  <Button size="lg" className="font-bold" onClick={() => setPhase('done')}>
-                    Full-time verdict <Trophy className="w-4 h-4 ml-1" />
-                  </Button>
-                )}
-                {phase === 'done' && (
-                  <div className="rounded-2xl border border-primary/40 bg-card/80 p-6 space-y-3">
-                    <p className="text-lg font-extrabold text-foreground">{series.headline}</p>
-                    <div className="grid grid-cols-3 gap-2 text-center">
-                      <div className="rounded-xl bg-secondary/50 p-3"><p className="text-2xl font-black text-primary">{throwPoints}</p><p className="text-[10px] uppercase tracking-wider text-muted-foreground">throws</p></div>
-                      <div className="rounded-xl bg-secondary/50 p-3"><p className="text-2xl font-black text-primary">{rating}</p><p className="text-[10px] uppercase tracking-wider text-muted-foreground">squad</p></div>
-                      <div className="rounded-xl bg-secondary/50 p-3"><p className="text-2xl font-black text-primary">{score}</p><p className="text-[10px] uppercase tracking-wider text-muted-foreground">total score</p></div>
-                    </div>
-                    <ShareButtons
-                      gameName="Dart Draft"
-                      gamePath="/dart-draft"
-                      score={`${score} pts (Grade ${grade.grade} XI)`}
-                      customText={`My darts drafted a Grade ${grade.grade} XI (${rating} rated) and scored ${score} on Dart Draft at DoUKnowBall! 🎯 Can your aim build better? douknowball.com/dart-draft`}
-                    />
-                    <Button size="lg" variant="outline" className="w-full font-bold" onClick={() => setPhase('intro')}>
-                      <RotateCcw className="w-4 h-4 mr-2" /> Throw again
-                    </Button>
-                  </div>
-                )}
+                  <ShareButtons
+                    score={`XI ${userRating} (${squadGrade(userRating).grade})`}
+                    gameName="Dart Draft"
+                    gamePath="/dart-draft"
+                    customText={`Dart Draft 🎯 XI ${userRating} (${squadGrade(userRating).grade}), accuracy ${points}, series ${series.userWins}-${series.aiWins}. Can you out-throw me? https://douknowball.com/dart-draft`}
+                  />
+                </div>
               </div>
             )}
+
           </div>
         </main>
-
         <GameSeoContent
-          title="Dart Draft: Timed Darts Squad Builder | DoUKnowBall"
-          description="The YouTuber dartboard challenge as a game: time your throws, land on leagues, nations or the Legends wedge — or switch to the World Map board and hit the country to pick the player — then simulate the showdown against The Machine."
+          title="Dart Draft: throw darts at the world, draft who you hit"
+          description="A timed crosshair sweeps a real world map. Lock left to right, then top to bottom, and the dart lands with a wobble. Hit France and you choose from the best French players at the position you called before the throw. Hit a tiny island and you take what it has. Continent rounds zoom the map for precision throws, bonus zones over the ocean pay out all-time legends, wonderkids and free picks, and after 11 throws your XI plays a three match series against The Machine."
           howToPlay={[
-            'Pick a board: the Classic dartboard of wedges and rings, or the World Map — hit a country and you must draft a player of that nationality (Brazil, Argentina, England, France, Spain, Italy, Germany and Portugal are marked; everywhere else counts as its continent).',
-            'Pick a formation, then make 11 timed throws — lock the left-right sweep, then the up-down sweep. Sweeps get faster every throw.',
-            'Classic board: the wedge is the pool (league, nation, Legends) and the ring is the quality — triple ring and bullseye pull elites, missing the board pulls the worst player the wedge owns.',
-            'World Map: bonus stickers (Legends, U21 wonderkids, £100M+ stars and more) re-randomize every throw and override the country when hit; land in the ocean and you get the worst player afloat.',
-            'When your XI is complete, take your squad rating into a best-of-3 showdown against The Machine and post your total score.',
-          ]}
-          examples={[
-            'Bullseye on the LEGENDS wedge: prime Zidane, Maradona or Messi tier',
-            'Triple ring on PREM: an elite Premier League pick for that slot',
-            'World Map: a dart in Brazil drafts a Brazilian; the LEGENDS sticker pulls an all-time great',
-            'Off the board (or lost at sea): enjoy the worst player the pool owns',
-            'Sweeps speed up: throw 11 is a nerve test',
-            'Grade S squad: rating 85+ — the board bowed to you',
+            'Pick a topic: every nation, or only the 48 at the 2026 World Cup.',
+            'Choose which position you are throwing for from your empty XI slots.',
+            'Lock the sweeping line twice: once for left-right, once for up-down.',
+            'Hit a country and pick from its real players at your position.',
+            'Ocean zones pay bonuses: legends, wonderkids or a free pick.',
+            'Fill all 11 slots, then your XI plays The Machine in a 3 match series.',
           ]}
         />
         <Footer />

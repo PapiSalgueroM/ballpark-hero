@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
-import { lovable } from '@/integrations/lovable/index';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, AlertCircle } from 'lucide-react';
 
@@ -158,16 +158,26 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
-    try {
-      const { error } = await lovable.auth.signInWithOAuth('google', {
-        redirect_uri: window.location.origin,
-      });
-      if (error) {
-        toast.error('Failed to sign in with Google');
-      }
-    } finally {
+    // Native Supabase OAuth. The old path went through the Lovable auth
+    // gateway, which mints tokens for a retired backend project, so the
+    // session it produced was always rejected and nobody could ever
+    // actually sign in with Google. This goes straight to Supabase; when
+    // the Google provider is switched on in the dashboard it works with
+    // no further code changes.
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) {
+      const providerOff = /not enabled|unsupported provider/i.test(error.message);
+      toast.error(
+        providerOff
+          ? 'Google sign-in is getting an upgrade. Use email + password for now, it takes 10 seconds.'
+          : 'Could not start Google sign-in. Try email + password instead.'
+      );
       setGoogleLoading(false);
     }
+    // On success the browser redirects to Google, so leave the spinner on.
   };
 
   return (

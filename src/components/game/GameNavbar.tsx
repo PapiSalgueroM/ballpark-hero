@@ -24,11 +24,11 @@ export function GameNavbar() {
   return (
     <>
       <nav className="w-full bg-background/95 border-b border-border/40">
-        <div className="flex items-center justify-between gap-2">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 py-2">
           {/* Logo — left, bigger + stretched */}
           <Link
             to="/"
-            className="shrink-0 font-display font-black text-primary hover:opacity-80 transition-opacity"
+            className="shrink-0 justify-self-start font-display font-black text-primary hover:opacity-80 transition-opacity"
           >
             <span className="text-base sm:text-2xl tracking-[0.18em] sm:tracking-[0.22em] uppercase">
               DoUKnowBall
@@ -36,7 +36,7 @@ export function GameNavbar() {
           </Link>
 
           {/* Stats — center */}
-          <div className="flex items-center justify-center gap-3 sm:gap-5 flex-1 min-w-0">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 min-w-0">
             {/* Games completed today */}
             <div className="flex items-center gap-1 text-xs sm:text-sm">
               <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold" aria-hidden="true" />
@@ -98,7 +98,7 @@ export function GameNavbar() {
           <button
             onClick={() => navigate(-1)}
             aria-label="Go back"
-            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-[36px] text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm"
+            className="shrink-0 justify-self-end inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-[36px] text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back</span>

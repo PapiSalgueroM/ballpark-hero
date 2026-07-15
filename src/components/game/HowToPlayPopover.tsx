@@ -47,7 +47,7 @@ export function HowToPlayPopover({
         onClick={() => setOpen(true)}
         aria-label={triggerLabel}
         className={cn(
-          floatingTrigger && 'absolute top-0 right-0',
+          floatingTrigger && 'absolute top-0 left-0',
           'p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2',
           className,
         )}
