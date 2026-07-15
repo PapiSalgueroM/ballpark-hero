@@ -454,7 +454,7 @@ const CareerLadder = () => {
             {activePhase === 'playing' && flagUnlocked && (
               <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground mb-4">
                 Nationality hint
-                <span className="text-2xl leading-none">{flagForNationality(activePlayer.nationality)}</span>
+                <FlagImg name={activePlayer.nationality} size={28} />
               </div>
             )}
 
