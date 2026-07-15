@@ -1,3 +1,4 @@
+import { FlagImg, TextWithFlags } from '@/components/FlagImg';
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Loader2, RotateCcw, Search, Check, X, Lock, Coins } from 'lucide-react';
@@ -9,7 +10,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { flagFor, fmtCompactUsd } from '@/lib/dealPlayers';
+import { fmtCompactUsd } from '@/lib/dealPlayers';
 import {
   WhoAmIData,
   WhoAmIPlayer,
@@ -161,7 +162,7 @@ const ClueAuction = () => {
         {bought ? (
           <div className="flex items-start gap-1 text-sm font-semibold text-correct">
             <Check className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-            <span className="min-w-0 break-words text-left">{value}</span>
+            <span className="min-w-0 break-words text-left"><TextWithFlags text={value} size={14} /></span>
           </div>
         ) : unavailable ? (
           <div className="flex items-center gap-1 text-[11px] text-muted-foreground mt-auto">
@@ -190,7 +191,7 @@ const ClueAuction = () => {
 
   const revealCard = secret ? (
     <div className="bg-secondary/40 border border-border rounded-xl p-4 mb-4">
-      <div className="text-4xl mb-1">{flagFor(secret.nationality)}</div>
+      <div className="mb-1"><FlagImg name={secret.nationality} size={40} /></div>
       <div className="text-xl font-bold text-foreground">{secret.name}</div>
       <div className="text-sm text-muted-foreground mb-3">{secret.club}</div>
       <div className="grid grid-cols-3 gap-2 text-center">
@@ -311,7 +312,7 @@ const ClueAuction = () => {
                         }}
                         className="w-full flex items-center gap-2 px-3 py-2.5 text-left hover:bg-secondary/60 transition-colors"
                       >
-                        <span className="text-lg leading-none">{flagFor(p.nationality)}</span>
+                        <FlagImg name={p.nationality} size={18} />
                         <span className="flex-1 min-w-0">
                           <span className="block text-sm font-semibold text-foreground truncate">{p.name}</span>
                           <span className="block text-[11px] text-muted-foreground truncate">
@@ -339,7 +340,7 @@ const ClueAuction = () => {
                     key={p.name}
                     className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-destructive/40 bg-destructive/10 text-destructive text-[11px] font-medium"
                   >
-                    <X className="w-3 h-3" /> {flagFor(p.nationality)} {p.name} (-{WRONG_GUESS_COST})
+                    <X className="w-3 h-3" /> <FlagImg name={p.nationality} size={14} /> {p.name} (-{WRONG_GUESS_COST})
                   </span>
                 ))}
               </div>
@@ -376,7 +377,7 @@ const ClueAuction = () => {
                       <span>{c.emoji}</span>
                       <span className="text-xs text-muted-foreground w-28 shrink-0">{c.label}</span>
                       <span className="text-sm font-semibold text-foreground flex-1 min-w-0 break-words">
-                        {reveals ? reveals[id] : ''}
+                        <TextWithFlags text={reveals ? reveals[id] ?? '' : ''} size={14} />
                       </span>
                       <span className="text-[11px] text-destructive font-bold shrink-0">-{c.price}</span>
                     </div>

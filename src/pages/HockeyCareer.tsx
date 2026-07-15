@@ -1,3 +1,4 @@
+import { TextWithFlags } from '@/components/FlagImg';
 import { useState, useEffect } from 'react';
 import { FlagImg } from '@/components/FlagImg';
 import { useHockeyCareer } from '@/hooks/useHockeyCareer';
@@ -104,7 +105,7 @@ const HockeyCareer = () => {
             {visibleClues.map((clue) => (
               <div key={clue.label} className="flex items-start gap-3 px-4 py-3 rounded-xl bg-[hsl(var(--hk-blue)/0.2)] border border-[hsl(var(--hk-blue)/0.3)] animate-cell-reveal">
                 <span className="text-xs font-bold text-[hsl(var(--hk-silver))] uppercase w-24 shrink-0 pt-0.5">{clue.label}</span>
-                <span className="font-semibold text-foreground text-sm">{clue.value}</span>
+                <span className="font-semibold text-foreground text-sm"><TextWithFlags text={clue.value} size={16} /></span>
               </div>
             ))}
           </div>

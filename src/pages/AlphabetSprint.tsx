@@ -1,3 +1,4 @@
+import { FlagImg } from '@/components/FlagImg';
 import { useState, useEffect, useCallback, useRef, KeyboardEvent } from 'react';
 import { cn } from '@/lib/utils';
 import { Loader2, Play, RotateCcw, SkipForward } from 'lucide-react';
@@ -10,7 +11,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { fetchWhoAmIPool } from '@/lib/whoAmI';
-import { flagFor } from '@/lib/dealPlayers';
+
 import {
   MODES,
   DEFAULT_MODE,
@@ -370,7 +371,7 @@ const AlphabetSprint = () => {
                     key={p.name}
                     className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary text-xs text-foreground"
                   >
-                    {flagFor(p.nationality)} {p.name}
+                    <FlagImg name={p.nationality} size={16} /> {p.name}
                   </span>
                 ))}
               </div>

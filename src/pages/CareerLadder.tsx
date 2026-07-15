@@ -17,6 +17,7 @@ import {
   CareerPlayer,
   CareerStint,
   LadderAction,
+  LadderDifficulty,
   MAX_GUESSES,
   MIN_STINTS,
   REVEAL_PENALTY,
@@ -24,11 +25,13 @@ import {
   WRONG_GUESS_PENALTY,
   careerScore,
   fetchCareerPool,
-  flagForNationality,
   fmtMarketValue,
+  legendPool,
   normalizeName,
   pickDailyPlayer,
 } from '@/lib/careerLadder';
+import { searchPlayers, SOCCER_MARKET_VALUE_SOURCE } from '@/lib/playerSearch';
+import { FlagImg } from '@/components/FlagImg';
 
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
 type LadderMode = 'daily' | 'unlimited';
@@ -58,6 +61,11 @@ const CareerLadder = () => {
   // ---- Daily / Unlimited toggle, same convention as Footle / Career Quiz ----
   const [mode, setMode] = useState<LadderMode>('daily');
   const switchMode = useCallback((m: LadderMode) => setMode(m), []);
+
+  // ---- Standard / Legend difficulty (unlimited only). Legend rounds draw
+  // from the harder half of the pool by peak market value (see legendPool);
+  // the shared daily has its own harder skew inside pickDailyPlayer. --------
+  const [difficulty, setDifficulty] = useState<LadderDifficulty>('standard');
 
   // ---- Daily: target player is date-seeded once the pool has loaded -------
   const dailyPlayer = useMemo(() => (pool.length > 0 ? pickDailyPlayer(pool) : null), [pool]);
@@ -151,7 +159,49 @@ const CareerLadder = () => {
 
   useEffect(() => { boot(); }, [boot]);
 
+  // Switching difficulty mid-session immediately deals a new unlimited round
+  // from the matching pool (usedIds carry over so repeats stay excluded).
+  const switchDifficulty = useCallback((d: LadderDifficulty) => {
+    setDifficulty(d);
+    if (mode === 'unlimited' && pool.length > 0) {
+      startRound(d === 'legend' ? legendPool(pool) : pool, usedIds);
+    }
+  }, [mode, pool, usedIds, startRound]);
+
   const allNames = useMemo(() => pool.map(p => p.name), [pool]);
+
+  // ---- Wide-DB suggestions (owner: "there are a million soccer players but
+  // ur search bar only shows like 5"). The typed text also searches
+  // player_market_values (171k rows) through the shared searchPlayers layer
+  // (same accent-tolerant pipeline as PlayerAutocomplete), debounced 200ms,
+  // famous names first via the market-value prominence ordering. Pool names
+  // stay at the top of the list so canonical answers always lead; DB names
+  // only enrich the SUGGESTIONS. The answer checker is untouched - a picked
+  // name is judged against the round's player exactly as before. ------------
+  const [dbNames, setDbNames] = useState<string[]>([]);
+  useEffect(() => {
+    const trimmed = input.trim();
+    if (activePhase !== 'playing' || normalizeName(trimmed).length < 2) {
+      setDbNames([]);
+      return;
+    }
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => {
+      searchPlayers({
+        source: SOCCER_MARKET_VALUE_SOURCE,
+        query: trimmed,
+        minChars: 2,
+        limit: 12,
+        signal: controller.signal,
+      }).then(({ results }) => {
+        if (!controller.signal.aborted) setDbNames(results.map(r => r.name));
+      });
+    }, 200);
+    return () => {
+      controller.abort();
+      window.clearTimeout(timer);
+    };
+  }, [input, activePhase]);
 
   const ended = activePhase === 'won' || activePhase === 'lost';
   const total = activePlayer ? activePlayer.seasons.length : 0;
@@ -164,15 +214,20 @@ const CareerLadder = () => {
 
   const query = normalizeName(input);
   const wrongNorms = activeWrongGuesses.map(normalizeName);
-  const suggestions =
-    activePhase === 'playing' && query.length >= 2
-      ? allNames
-          .filter(n => {
-            const norm = normalizeName(n);
-            return norm.includes(query) && !wrongNorms.includes(norm);
-          })
-          .slice(0, 8)
-      : [];
+  let suggestions: string[] = [];
+  if (activePhase === 'playing' && query.length >= 2) {
+    const seen = new Set<string>();
+    const merged: string[] = [];
+    const push = (name: string) => {
+      const norm = normalizeName(name);
+      if (!norm || seen.has(norm) || wrongNorms.includes(norm)) return;
+      seen.add(norm);
+      merged.push(name);
+    };
+    for (const n of allNames) if (normalizeName(n).includes(query)) push(n);
+    for (const n of dbNames) push(n);
+    suggestions = merged.slice(0, 12);
+  }
 
   const handleGuess = (name: string) => {
     if (activePhase !== 'playing' || !activePlayer) return;
@@ -214,7 +269,9 @@ const CareerLadder = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.length < 2) return;
-    const exact = allNames.find(n => normalizeName(n) === query);
+    const exact =
+      allNames.find(n => normalizeName(n) === query) ??
+      suggestions.find(n => normalizeName(n) === query);
     if (exact) handleGuess(exact);
   };
 
@@ -300,6 +357,14 @@ const CareerLadder = () => {
                 </p>
               </section>
               <section>
+                <h3 className="font-bold text-foreground mb-2">Standard vs Legend</h3>
+                <p className="text-muted-foreground">
+                  Unlimited mode has two pools. Standard is the classic mix. Legend draws only from
+                  the harder half of the pool by peak market value, so the household names disappear.
+                  The daily ladder also leans harder than it used to.
+                </p>
+              </section>
+              <section>
                 <h3 className="font-bold text-foreground mb-2">Scoring</h3>
                 <p className="text-muted-foreground">
                   Start from {BASE_SCORE} points. Extra stints cost {REVEAL_PENALTY}, wrong guesses cost{' '}
@@ -326,6 +391,33 @@ const CareerLadder = () => {
                 </button>
               ))}
             </div>
+
+            {/* Standard / Legend difficulty (unlimited rounds only) */}
+            {mode === 'unlimited' && (
+              <>
+                <div className="flex items-center justify-center gap-1 mt-2 bg-secondary rounded-full p-1 w-fit mx-auto">
+                  {(['standard', 'legend'] as const).map((d) => (
+                    <button
+                      key={d}
+                      onClick={() => switchDifficulty(d)}
+                      className={cn(
+                        'px-4 py-1 rounded-full text-xs font-semibold transition-all',
+                        difficulty === d
+                          ? 'bg-background text-foreground shadow-sm'
+                          : 'text-muted-foreground hover:text-foreground',
+                      )}
+                    >
+                      {d === 'standard' ? 'Standard' : '👑 Legend'}
+                    </button>
+                  ))}
+                </div>
+                {difficulty === 'legend' && (
+                  <p className="text-[11px] text-muted-foreground mt-1.5">
+                    Legend pool: the deeper cuts. Lower peak market values, same rules.
+                  </p>
+                )}
+              </>
+            )}
 
             {mode === 'unlimited' && bestScore > 0 && (
               <p className="text-xs text-muted-foreground mt-2">
@@ -397,7 +489,7 @@ const CareerLadder = () => {
             {activePhase === 'playing' && flagUnlocked && (
               <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground mb-4">
                 Nationality hint
-                <span className="text-2xl leading-none">{flagForNationality(activePlayer.nationality)}</span>
+                <FlagImg name={activePlayer.nationality} size={24} />
               </div>
             )}
 
@@ -475,12 +567,12 @@ const CareerLadder = () => {
                     gameName: 'Career Ladder',
                     gamePath: '/career-ladder',
                   }}
-                  onPlayAgain={mode === 'unlimited' ? () => startRound(pool, usedIds) : undefined}
+                  onPlayAgain={mode === 'unlimited' ? () => startRound(difficulty === 'legend' ? legendPool(pool) : pool, usedIds) : undefined}
                   playAgainLabel="Next player"
                   playNext={mode === 'daily' ? 'Come back tomorrow for a new ladder!' : undefined}
                 >
                   <div className="bg-secondary rounded-xl px-4 py-3 inline-flex items-center gap-3 mb-3">
-                    <span className="text-3xl">{flagForNationality(activePlayer.nationality)}</span>
+                    <FlagImg name={activePlayer.nationality} size={32} />
                     <span className="text-left">
                       <span className="block font-bold text-foreground">{activePlayer.name}</span>
                       <span className="block text-xs text-muted-foreground">
@@ -508,6 +600,7 @@ const CareerLadder = () => {
           description="Every round hides a real footballer behind their career ladder. You start with a single early stint, just a club, a season and a stat line, and work out who climbed it. The fewer clues you need, the bigger your score."
           howToPlay={[
             'Play Daily for one shared ladder per day, or Unlimited for endless rounds.',
+            'Unlimited adds a Legend pool: only the harder half of the players by peak market value.',
             'A mystery player starts with only their earliest career stint showing.',
             'Type at least 2 letters and pick a name from the list. You get 6 guesses.',
             'Every wrong guess reveals the next stint. You can also reveal one on purpose.',

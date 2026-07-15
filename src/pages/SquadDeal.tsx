@@ -1,3 +1,4 @@
+import { FlagFromEmoji } from '@/components/FlagImg';
 import { useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
@@ -128,7 +129,7 @@ const SquadDeal = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-w-2xl mx-auto">
               {TOPICS.map(t => (
                 <button key={t.id} onClick={() => g.setTopic(t.id)} className={cn('rounded-xl border p-3 text-left transition-all', g.topic === t.id ? 'bg-primary/10 border-primary' : 'bg-card border-border hover:border-primary')}>
-                  <div className="text-lg">{t.emoji}</div>
+                  <div className="text-lg"><FlagFromEmoji emoji={t.emoji} size={18} /></div>
                   <div className={cn('text-xs font-bold mt-0.5', g.topic === t.id ? 'text-primary' : 'text-foreground')}>{t.label}</div>
                   <div className="text-[10px] text-muted-foreground">{t.desc}</div>
                 </button>
@@ -159,7 +160,7 @@ const SquadDeal = () => {
 
         {!done && (
           <div className="max-w-2xl mx-auto">
-            <div className="text-center text-sm font-semibold text-foreground mb-3">{cat.emoji} {cat.title}: {g.extraStage === 'pick' ? 'pick one case to KEEP 💼' : g.extraStage === 'reveal' ? 'three cases flip...' : g.extraStage === 'offer' ? 'the Banker calls' : 'stay or swap?'}</div>
+            <div className="text-center text-sm font-semibold text-foreground mb-3"><FlagFromEmoji emoji={cat.emoji} size={16} /> {cat.title}: {g.extraStage === 'pick' ? 'pick one case to KEEP 💼' : g.extraStage === 'reveal' ? 'three cases flip...' : g.extraStage === 'offer' ? 'the Banker calls' : 'stay or swap?'}</div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {cat.options.map((opt, i) => {
                 const kept = g.extraKept === i;
@@ -171,7 +172,7 @@ const SquadDeal = () => {
                       kept ? 'bg-primary/15 border-primary shadow-lg' : flipped ? 'bg-secondary/30 border-border opacity-70' : 'bg-card border-border', g.extraStage === 'pick' && 'hover:border-primary cursor-pointer')}>
                     {faceUp || flipped ? (
                       <>
-                        <div className="text-lg">{opt.emoji}</div>
+                        <div className="text-lg"><FlagFromEmoji emoji={opt.emoji} size={18} /></div>
                         <div className="text-xs font-bold mt-0.5 text-foreground line-through">{opt.label}</div>
                         <div className="text-[10px] text-muted-foreground">rating {opt.ratingMod >= 0 ? '+' : ''}{opt.ratingMod} · chem {opt.chemMod >= 0 ? '+' : ''}{opt.chemMod}</div>
                       </>
@@ -195,7 +196,7 @@ const SquadDeal = () => {
             {g.extraStage === 'offer' && g.extraOffer && (
               <div className="mt-5 bg-card border border-primary/40 rounded-2xl p-5 max-w-sm mx-auto text-center shadow-xl">
                 <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">The Banker offers you</div>
-                <div className="text-xl font-bold text-foreground">{g.extraOffer.emoji} {g.extraOffer.label}</div>
+                <div className="text-xl font-bold text-foreground"><FlagFromEmoji emoji={g.extraOffer.emoji} size={20} /> {g.extraOffer.label}</div>
                 <div className="text-[11px] text-muted-foreground mb-3">rating {g.extraOffer.ratingMod >= 0 ? '+' : ''}{g.extraOffer.ratingMod} · chem {g.extraOffer.chemMod >= 0 ? '+' : ''}{g.extraOffer.chemMod}</div>
                 <div className="flex gap-3">
                   <button onClick={g.acceptExtraDeal} className="flex-1 px-4 py-2.5 bg-primary text-primary-foreground rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-90"><Check className="w-4 h-4" /> DEAL</button>
@@ -218,7 +219,7 @@ const SquadDeal = () => {
             <div className="bg-card border border-border rounded-2xl p-4 mb-5 space-y-1.5">
               {EXTRA_DEALS.map(c => {
                 const sel = g.extrasChosen[c.key];
-                return sel ? <p key={c.key} className="text-sm text-foreground">{c.emoji} <span className="font-bold">{sel.label}</span> <span className="text-muted-foreground text-xs">({sel.ratingMod >= 0 ? '+' : ''}{sel.ratingMod} rating, {sel.chemMod >= 0 ? '+' : ''}{sel.chemMod} chem)</span></p> : null;
+                return sel ? <p key={c.key} className="text-sm text-foreground"><FlagFromEmoji emoji={c.emoji} size={16} /> <span className="font-bold">{sel.label}</span> <span className="text-muted-foreground text-xs">({sel.ratingMod >= 0 ? '+' : ''}{sel.ratingMod} rating, {sel.chemMod >= 0 ? '+' : ''}{sel.chemMod} chem)</span></p> : null;
               })}
             </div>
             <div className="text-center">

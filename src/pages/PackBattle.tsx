@@ -1,3 +1,4 @@
+import { FlagImg } from '@/components/FlagImg';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Loader2, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -11,7 +12,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
-import { flagFor } from '@/lib/dealPlayers';
+
 import {
   fetchPackPool,
   buildPackForMode,
@@ -149,7 +150,7 @@ const PackBattle = () => {
       )}
     >
       <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2">{tag}</div>
-      <div className="text-3xl mb-1">{flagFor(p.nationality)}</div>
+      <div className="mb-1"><FlagImg name={p.nationality} size={32} /></div>
       <div className="font-bold text-foreground text-lg leading-tight mb-0.5 truncate">{p.name}</div>
       <div className="text-xs text-muted-foreground truncate mb-3">{p.club}</div>
       <div className={cn(

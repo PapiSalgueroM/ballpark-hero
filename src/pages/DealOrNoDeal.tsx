@@ -9,6 +9,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { DealPlayer, fetchDealPlayers, pickSpread, flagFor, shortName, fmtCompactUsd } from '@/lib/dealPlayers';
+import { FlagImg, TextWithFlags } from '@/components/FlagImg';
 
 const VALUE_LADDER = [
   1, 5, 50, 100, 500, 1000, 5000, 10000,
@@ -309,7 +310,7 @@ const DealOrNoDeal = () => {
                 >
                   {c.player ? (
                     <>
-                      <span className="truncate">{flagFor(c.player.nationality)} {shortName(c.player.name)}</span>
+                      <span className="truncate"><FlagImg name={c.player.nationality} size={14} /> {shortName(c.player.name)}</span>
                       <span className="shrink-0">{fmtCompactUsd(c.value)}</span>
                     </>
                   ) : (
@@ -456,7 +457,7 @@ const DealOrNoDeal = () => {
                 headline={`You won ${fmtUsd(result.amount)}`}
                 statLine={
                   result.dealt && myCase ? (
-                    <>You took the deal. Your case held {caseLabel(myCase)}{myCase.player ? ` (${fmtUsd(myCase.value)})` : ''}.</>
+                    <>You took the deal. Your case held <TextWithFlags text={caseLabel(myCase)} size={14} />{myCase.player ? ` (${fmtUsd(myCase.value)})` : ''}.</>
                   ) : !result.dealt && result.gaveUpValue != null ? (
                     <>{result.swapped ? 'You swapped at the death.' : 'You kept your case all the way.'} The other case held {fmtUsd(result.gaveUpValue)}.</>
                   ) : undefined
@@ -478,7 +479,7 @@ const DealOrNoDeal = () => {
               >
                 {p && (
                   <div className="mt-3 rounded-xl bg-primary/10 border border-primary/30 px-4 py-3 text-sm">
-                    <span className="font-semibold text-primary">{flagFor(p.nationality)} {p.name}</span>
+                    <span className="font-semibold text-primary"><FlagImg name={p.nationality} size={16} /> {p.name}</span>
                     <span className="text-muted-foreground"> · {p.club} · {fmtCompactUsd(p.value)}</span>
                   </div>
                 )}

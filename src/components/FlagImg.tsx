@@ -1,3 +1,5 @@
+import { flagEmojiToIso, splitFlagSegments } from '@/lib/flagUtils';
+
 const FLAG_CODES: Record<string, string> = {
   "England": "gb-eng", "Scotland": "gb-sct", "Wales": "gb-wls",
   "Spain": "es", "France": "fr", "Germany": "de", "Brazil": "br",
@@ -38,6 +40,16 @@ const FLAG_CODES: Record<string, string> = {
   "Moldova": "md", "Azerbaijan": "az", "Tajikistan": "tj", "Sierra Leone": "sl",
   "Congo": "cg", "Lebanon": "lb", "Kenya": "ke", "Liberia": "lr", "Zimbabwe": "zw",
   "Qatar": "qa", "Estonia": "ee",
+  // July 2026 site-wide flag-image sweep: names used by pools that previously
+  // rendered emoji (dealPlayers, puckDetective labels, Olympics athletes).
+  "Czechia": "cz", "Gambia": "gm", "Mozambique": "mz", "Equatorial Guinea": "gq",
+  "Korea Republic": "kr", "Republic of Ireland": "ie", "Great Britain": "gb",
+  "United Kingdom": "gb", "Bosnia and Herzegovina": "ba", "Saint Lucia": "lc",
+  "Dominican Republic": "do", "Trinidad and Tobago": "tt", "Philippines": "ph",
+  "Thailand": "th", "Jordan": "jo", "Bahrain": "bh", "Kuwait": "kw",
+  "Uganda": "ug", "Tanzania": "tz", "Ethiopia": "et", "Madagascar": "mg",
+  "Andorra": "ad", "San Marino": "sm", "Liechtenstein": "li",
+  "North Korea": "kp", "Korea, North": "kp",
 };
 
 export function FlagImg({ name, size = 20, showLabel = false }: { name: string; size?: number; showLabel?: boolean }) {
@@ -58,5 +70,59 @@ export function FlagImg({ name, size = 20, showLabel = false }: { name: string; 
       />
       {showLabel && <span className="text-inherit">{name}</span>}
     </span>
+  );
+}
+
+/**
+ * Renders a real flag image straight from a flag EMOJI: FlagFromEmoji turns
+ * the stored pair/tag sequence into flagcdn's iso code (France pair -> fr,
+ * England tag sequence -> gb-eng). Windows renders flag emojis as bare
+ * letter pairs, so anywhere the data layer only has the emoji string, render
+ * it through this instead of printing the emoji. Non-flag strings fall back
+ * to a FLAG_CODES name lookup, then to the original text (globes, glyphs and
+ * plain words render unchanged).
+ */
+export function FlagFromEmoji({ emoji, size = 20 }: { emoji: string; size?: number }) {
+  const trimmed = (emoji ?? '').trim();
+  const iso = flagEmojiToIso(trimmed);
+  if (!iso) {
+    if (FLAG_CODES[trimmed]) return <FlagImg name={trimmed} size={size} />;
+    return <span className="inline-block align-middle">{emoji}</span>;
+  }
+  const h = Math.round(size * 0.75);
+  return (
+    <img
+      src={`https://flagcdn.com/${size * 2}x${h * 2}/${iso}.png`}
+      alt={trimmed}
+      className="inline-block align-middle"
+      style={{ width: size, height: h }}
+      loading="lazy"
+      onError={(e) => {
+        (e.target as HTMLImageElement).style.display = 'none';
+      }}
+    />
+  );
+}
+
+/**
+ * Renders a plain string, swapping every embedded flag emoji for a real
+ * flagcdn image ("[AR flag] Prime Messi", "[EU flag] Named UEFA Player of
+ * the Year!"). Strings without flag emojis pass through untouched, so this
+ * is safe to wrap around any user-visible text that MIGHT carry a flag.
+ */
+export function TextWithFlags({ text, size = 16 }: { text: string; size?: number }) {
+  const value = text ?? '';
+  const segments = splitFlagSegments(value);
+  if (!segments.some(seg => 'flag' in seg)) return <>{value}</>;
+  return (
+    <>
+      {segments.map((seg, i) =>
+        'flag' in seg ? (
+          <FlagFromEmoji key={i} emoji={seg.flag} size={size} />
+        ) : (
+          <span key={i}>{seg.text}</span>
+        ),
+      )}
+    </>
   );
 }

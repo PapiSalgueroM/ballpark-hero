@@ -9,7 +9,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import { ChevronDown, Award } from 'lucide-react';
-import { FlagImg } from '@/components/FlagImg';
+import { FlagFromEmoji } from '@/components/FlagImg';
 import { cn } from '@/lib/utils';
 
 const EMOJI_TO_COUNTRY: Record<string, string> = {
@@ -18,6 +18,8 @@ const EMOJI_TO_COUNTRY: Record<string, string> = {
   '🇩🇪': 'Germany', '🇧🇷': 'Brazil', '🇪🇸': 'Spain', '🇳🇱': 'Netherlands',
   '🇯🇵': 'Japan', '🇨🇦': 'Canada', '🇦🇺': 'Australia', '🇨🇳': 'China',
   '🇷🇺': 'Russia', '🇸🇪': 'Sweden', '🇳🇴': 'Norway', '🇨🇿': 'Czech Republic',
+  '🇺🇦': 'Ukraine', '🇷🇴': 'Romania', '🇫🇮': 'Finland', '🇨🇺': 'Cuba',
+  '🇱🇨': 'Saint Lucia', '🇰🇪': 'Kenya',
 };
 
 export default function Olympics() {
@@ -140,8 +142,8 @@ export default function Olympics() {
                     {clue.label}
                   </div>
                   <div className="text-foreground text-sm">
-                    {clue.label === 'Country' && EMOJI_TO_COUNTRY[clue.value]
-                      ? <span className="inline-flex items-center gap-1"><FlagImg name={EMOJI_TO_COUNTRY[clue.value]} size={18} />{EMOJI_TO_COUNTRY[clue.value]}</span>
+                    {clue.label === 'Country'
+                      ? <span className="inline-flex items-center gap-1"><FlagFromEmoji emoji={clue.value} size={18} />{EMOJI_TO_COUNTRY[clue.value] || ''}</span>
                       : clue.value}
                   </div>
                 </div>
@@ -157,7 +159,7 @@ export default function Olympics() {
                   headline={athlete.name}
                   statLine={
                     <span className="inline-flex items-center justify-center gap-1">
-                      {athlete.sport}, <FlagImg name={EMOJI_TO_COUNTRY[athlete.country] || ''} size={16} />{EMOJI_TO_COUNTRY[athlete.country] || athlete.country}
+                      {athlete.sport}, <FlagFromEmoji emoji={athlete.country} size={16} /> {EMOJI_TO_COUNTRY[athlete.country] || ''}
                     </span>
                   }
                   funFact={`${athlete.gamesYear} ${athlete.hostCity}`}

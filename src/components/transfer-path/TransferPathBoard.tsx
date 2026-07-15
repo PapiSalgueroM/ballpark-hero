@@ -1,3 +1,4 @@
+import { FlagImg } from '@/components/FlagImg';
 import { useState, useMemo } from 'react';
 import { useTransferPath } from '@/hooks/useTransferPath';
 import { GameShell } from '@/components/game/GameShell';
@@ -8,13 +9,11 @@ import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { TRANSFER_PATH_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { RotateCcw, ArrowRight, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { flagFor } from '@/lib/dealPlayers';
+
 
 // Uses the shared, comprehensive flag helper (~120 nations, handles dual
 // nationalities) instead of a local map that fell back to a blank white flag.
-function flag(nationality: string) {
-  return flagFor(nationality);
-}
+
 
 export function TransferPathBoard() {
   const {
@@ -85,12 +84,12 @@ export function TransferPathBoard() {
           <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground text-center mb-3">Connect</p>
           <div className="flex items-center justify-between gap-3">
             <div className="flex-1 text-center">
-              <span className="text-2xl block">{flag(getPlayerNationality(puzzle.playerA))}</span>
+              <span className="block"><FlagImg name={getPlayerNationality(puzzle.playerA)} size={24} /></span>
               <p className="text-sm font-bold text-foreground mt-1">{puzzle.playerA}</p>
             </div>
             <ArrowRight className="w-5 h-5 text-primary shrink-0" />
             <div className="flex-1 text-center">
-              <span className="text-2xl block">{flag(getPlayerNationality(puzzle.playerB))}</span>
+              <span className="block"><FlagImg name={getPlayerNationality(puzzle.playerB)} size={24} /></span>
               <p className="text-sm font-bold text-foreground mt-1">{puzzle.playerB}</p>
             </div>
           </div>
@@ -115,7 +114,7 @@ export function TransferPathBoard() {
                 i === chain.length - 1 && isWon ? 'bg-primary/10 border border-primary/20' :
                 'bg-card border border-border'
               )}>
-                <span className="shrink-0">{flag(getPlayerNationality(player))}</span>
+                <span className="shrink-0"><FlagImg name={getPlayerNationality(player)} size={18} /></span>
                 <span className="font-semibold text-foreground truncate min-w-0">{player}</span>
                 {i === 0 && <span className="ml-auto shrink-0 text-[10px] text-primary font-semibold">START</span>}
                 {i === chain.length - 1 && isWon && player === puzzle.playerB && (

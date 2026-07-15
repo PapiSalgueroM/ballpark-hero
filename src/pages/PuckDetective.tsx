@@ -1,3 +1,4 @@
+import { FlagFromEmoji } from '@/components/FlagImg';
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Loader2, Check, X, Minus, ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -439,7 +440,7 @@ const PuckDetective = () => {
                         {tierIcon(g.feedback.position)} {positionLabel(g.player.position)}
                       </span>
                       <span className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', tierChipClasses(g.feedback.country))}>
-                        {tierIcon(g.feedback.country)} {countryFlag(g.player.country)} {countryLabel(g.player.country)}
+                        {tierIcon(g.feedback.country)} <FlagFromEmoji emoji={countryFlag(g.player.country)} size={14} /> {countryLabel(g.player.country)}
                       </span>
                       <span className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', directionClasses(g.feedback.ageDirection))}>
                         {directionIcon(g.feedback.ageDirection)} Age {g.player.age}

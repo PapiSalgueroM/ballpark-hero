@@ -12,7 +12,7 @@ interface GameShellProps {
   /** Optional emoji shown above the title. */
   emoji?: string;
   /** One-line goal statement rendered under the title (spec 3.2's goal line). */
-  subtitle?: string;
+  subtitle?: ReactNode;
   /** Extra content rendered inside the header block, below the subtitle
    *  (e.g. mode toggles, difficulty pills, a How-to-Play trigger). */
   headerExtra?: ReactNode;

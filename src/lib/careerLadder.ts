@@ -53,11 +53,49 @@ export type LadderAction =
 export function pickDailyPlayer(pool: CareerPlayer[], dateStr: string = getTodayET()): CareerPlayer | null {
   const eligible = pool.filter(p => p.seasons.length >= MIN_STINTS);
   if (eligible.length === 0) return null;
+  // Difficulty skew (owner request, July 2026): two of every three days draw
+  // from the harder half of the pool (lower peak market value); every third
+  // day the whole pool is fair game, so superstars still appear. Everything
+  // stays deterministic per ET date - every user shares one daily player.
+  const seed = dateSeed(dateStr);
+  const harder = legendPool(pool);
+  const source = seed % 3 === 0 || harder.length === 0 ? eligible : harder;
   // Sort by id for a stable, reproducible ordering before indexing. Pool
   // arrival order from Supabase is not guaranteed to be stable run to run.
-  const sorted = [...eligible].sort((a, b) => a.id.localeCompare(b.id));
-  const index = dateSeed(dateStr) % sorted.length;
-  return sorted[index];
+  const sorted = [...source].sort((a, b) => a.id.localeCompare(b.id));
+  return sorted[seed % sorted.length];
+}
+
+/**
+ * Prominence signal for difficulty: the player's peak single-season market
+ * value in whole millions of euros. Every one of the 3514 career_seasons
+ * rows carries market_value (verified against the live table 2026-07-15),
+ * so this needs no extra fetch and no guesswork.
+ */
+export function peakValue(p: CareerPlayer): number {
+  let peak = 0;
+  for (const s of p.seasons) {
+    if ((s.marketValue ?? 0) > peak) peak = s.marketValue ?? 0;
+  }
+  return peak;
+}
+
+export type LadderDifficulty = 'standard' | 'legend';
+
+/**
+ * Legend pool: the harder half of the eligible pool - players at or below
+ * the pool's median peak market value, i.e. the deeper cuts rather than the
+ * Ronaldos. Ties at the boundary break by id so the split is deterministic
+ * regardless of fetch order. Falls back to the full eligible pool when the
+ * pool is too small for a meaningful split.
+ */
+export function legendPool(pool: CareerPlayer[]): CareerPlayer[] {
+  const eligible = pool.filter(p => p.seasons.length >= MIN_STINTS);
+  if (eligible.length < 20) return eligible;
+  const sorted = [...eligible].sort(
+    (a, b) => peakValue(b) - peakValue(a) || a.id.localeCompare(b.id),
+  );
+  return sorted.slice(Math.floor(sorted.length / 2));
 }
 
 /** Lowercase + strip accents so "Raphaël" matches "raphael". */

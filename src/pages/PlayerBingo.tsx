@@ -1,3 +1,4 @@
+import { FlagFromEmoji } from '@/components/FlagImg';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { Loader2, SkipForward, X } from 'lucide-react';
@@ -384,7 +385,7 @@ const PlayerBingo = () => {
                     )}
                     style={shakeId === cell.id ? { animation: 'pb-shake 0.4s' } : undefined}
                   >
-                    <span className="text-base md:text-lg leading-none mb-1">{cell.icon}</span>
+                    <span className="text-base md:text-lg leading-none mb-1"><FlagFromEmoji emoji={cell.icon} size={18} /></span>
                     <span className="text-[9px] md:text-[10px] font-semibold leading-tight text-foreground">
                       {cell.label}
                     </span>

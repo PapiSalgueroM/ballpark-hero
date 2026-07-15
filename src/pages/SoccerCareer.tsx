@@ -44,7 +44,7 @@ import {
 } from "@/lib/soccerCareerEngine";
 import { rollStartingOverall, adjustClubsForYear } from "@/lib/careerEras";
 import ShareButtons from "@/components/game/ShareButtons";
-import { FlagImg } from "@/components/FlagImg";
+import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
 
 /* ─── Constants ─── */
@@ -1112,7 +1112,7 @@ function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; r
 function InternationalDebutCard({ career, onDismiss }: { career: CareerState; onDismiss: () => void }) {
   return (
     <div className="rounded-xl border-2 border-amber-500/50 bg-gradient-to-b from-amber-500/10 to-transparent p-6 space-y-4 text-center">
-      <div className="text-5xl">🇺🇳</div>
+      <div className="flex justify-center"><FlagImg name={career.nationality} size={48} /></div>
       <h3 className="text-2xl font-black tracking-tight">INTERNATIONAL DEBUT</h3>
       <p className="text-sm text-muted-foreground">
         {career.playerName} has been called up to the <strong>{career.nationality}</strong> national team!
@@ -2499,7 +2499,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 <div className="grid grid-cols-3 gap-1.5 mt-2">
                   {awardItems.map(a => (
                     <div key={a.name} className="text-center rounded-lg p-1.5 bg-amber-500/10 border border-amber-500/20">
-                      <div className="text-base">{a.emoji}</div>
+                      <div className="text-base"><FlagFromEmoji emoji={a.emoji} size={16} /></div>
                       <div className="text-xs font-black">{a.count > 1 ? `×${a.count}` : ""}</div>
                       <div className="text-[8px] text-muted-foreground leading-tight">{a.name}</div>
                     </div>
@@ -2578,7 +2578,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           <div className="mt-2 space-y-1">
             {career.events.slice(-3).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 flex items-start gap-2">
-                <span className="shrink-0">›</span><span>{e}</span>
+                <span className="shrink-0">›</span><span><TextWithFlags text={e} size={14} /></span>
               </div>
             ))}
           </div>

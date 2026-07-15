@@ -1,3 +1,4 @@
+import { FlagImg } from '@/components/FlagImg';
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Loader2, Play, RotateCcw, Timer, Trophy, Shuffle, Sparkles } from 'lucide-react';
@@ -257,9 +258,9 @@ const WorldXi = () => {
               )}
             >
               {p
-                ? flagFor(p.country)
+                ? <FlagImg name={p.country} size={20} />
                 : isActive
-                ? flagFor(spinning && reelGlimpse ? reelGlimpse : country)
+                ? <FlagImg name={spinning && reelGlimpse ? reelGlimpse : country} size={20} />
                 : s.label}
             </div>
             <span className="mt-0.5 text-[9px] font-semibold text-foreground/80 max-w-[64px] truncate text-center">
@@ -396,7 +397,7 @@ const WorldXi = () => {
                 onTick={c => setReelGlimpse(c)}
                 renderItem={c => (
                   <span className="text-xl font-bold text-foreground whitespace-nowrap">
-                    {flagFor(c)} {displayCountry(c)}
+                    <FlagImg name={c} size={20} /> {displayCountry(c)}
                   </span>
                 )}
                 className="mb-2"
@@ -505,7 +506,7 @@ const WorldXi = () => {
                 return (
                   <div key={i} className="flex items-center gap-2 text-sm bg-background/60 border border-border/50 rounded-lg px-3 py-1.5">
                     <span className="text-[10px] font-bold text-muted-foreground w-8 shrink-0">{s.label}</span>
-                    <span className="shrink-0">{countries[i] ? flagFor(countries[i]) : '🌍'}</span>
+                    <span className="shrink-0">{countries[i] ? <FlagImg name={countries[i]} size={16} /> : '🌍'}</span>
                     {p ? (
                       <>
                         <span className="font-semibold text-foreground truncate min-w-0 flex-1">{p.name}</span>

@@ -9,7 +9,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { Button } from '@/components/ui/button';
 import { POINTS_BY_CLUE, CLUE_LABELS, MAX_CLUES } from '@/types/guessTheNation';
 import { Trophy, Loader2 } from 'lucide-react';
-import { FlagImg } from '@/components/FlagImg';
+import { FlagImg, FlagFromEmoji } from '@/components/FlagImg';
 
 const CONTINENTS = ['Europe', 'Asia', 'North America', 'South America', 'Africa', 'Oceania'];
 const continentEmoji: Record<string, string> = {
@@ -151,7 +151,7 @@ export function GuessTheNationBoard() {
                     className="h-11 text-sm border-amber-500/30 hover:bg-amber-500/10"
                     onClick={() => startGame('continent', difficulty, cont)}
                   >
-                    {continentEmoji[cont]} {cont}
+                    <FlagFromEmoji emoji={continentEmoji[cont]} size={16} /> {cont}
                   </Button>
                 ))}
               </div>
@@ -193,7 +193,7 @@ export function GuessTheNationBoard() {
     : gameState.mode === 'summer' ? '☀️ Summer Focus'
     : gameState.mode === 'winter' ? '❄️ Winter Focus'
     : gameState.mode === 'continent'
-      ? `${continentEmoji[gameState.continentFilter ?? '']} ${gameState.continentFilter}`
+      ? <><FlagFromEmoji emoji={continentEmoji[gameState.continentFilter ?? '']} size={16} /> {gameState.continentFilter}</>
     : '🔄 Unlimited';
 
   const shareScore = isWon

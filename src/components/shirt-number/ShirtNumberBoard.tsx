@@ -1,3 +1,4 @@
+import { FlagFromEmoji } from '@/components/FlagImg';
 import { useState } from 'react';
 import { useShirtNumber } from '@/hooks/useShirtNumber';
 import { GameShell } from '@/components/game/GameShell';
@@ -53,7 +54,7 @@ export function ShirtNumberBoard() {
         {/* Player card */}
         <div className="rounded-2xl border border-border bg-surface-1 p-6 text-center space-y-3">
           <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mx-auto text-2xl">
-            {puzzle.nationality}
+            <FlagFromEmoji emoji={puzzle.nationality} size={28} />
           </div>
           <h2 className="text-xl font-bold text-foreground">{puzzle.playerName}</h2>
           <p className="text-sm text-muted-foreground">{puzzle.club}</p>

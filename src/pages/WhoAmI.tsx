@@ -1,3 +1,4 @@
+import { FlagImg } from '@/components/FlagImg';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
@@ -14,7 +15,7 @@ import { RulesGate } from '@/components/game/RulesGate';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import PlayerAutocomplete from '@/components/game/PlayerAutocomplete';
 import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity } from '@/lib/playerSearch';
-import { flagFor, fmtCompactUsd } from '@/lib/dealPlayers';
+import { fmtCompactUsd } from '@/lib/dealPlayers';
 import {
   WhoAmIData,
   WhoAmIPlayer,
@@ -155,7 +156,7 @@ const WhoAmI = () => {
         className={cn('bg-card border rounded-xl p-3', highlight ? 'border-primary/60' : 'border-border')}
       >
         <div className="flex items-center gap-2 mb-1.5">
-          <span className="text-xl leading-none">{flagFor(p.nationality)}</span>
+          <FlagImg name={p.nationality} size={20} />
           <span className="font-semibold text-foreground text-sm truncate flex-1">{p.name}</span>
           <span className={cn('font-bold font-display text-lg', scoreColor(b.score))}>{b.score}</span>
         </div>
@@ -250,7 +251,7 @@ const WhoAmI = () => {
 
   const revealCard = secret ? (
     <div className="bg-secondary/40 border border-border rounded-xl p-4 mb-4">
-      <div className="text-4xl mb-1">{flagFor(secret.nationality)}</div>
+      <div className="mb-1"><FlagImg name={secret.nationality} size={40} /></div>
       <div className="text-xl font-bold text-foreground">{secret.name}</div>
       <div className="text-sm text-muted-foreground mb-3">{secret.club}</div>
       <div className="grid grid-cols-3 gap-2 text-center">

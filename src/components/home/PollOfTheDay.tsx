@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { POLLS, type PollFixture } from '@/data/pollFixtures';
 import { getPollDayET, dateSeed } from '@/lib/dateUtils';
-import { FlagImg } from '@/components/FlagImg';
+import { FlagImg, FlagFromEmoji, TextWithFlags } from '@/components/FlagImg';
 
 /**
  * Home: Poll of the Day 3.0.
@@ -263,9 +263,9 @@ function OptionLabel({ option, size = 18 }: { option: PollOption; size?: number 
       {option.flag ? (
         <FlagImg name={option.flag} size={size} />
       ) : option.emoji ? (
-        <span aria-hidden="true">{option.emoji}</span>
+        <span aria-hidden="true"><FlagFromEmoji emoji={option.emoji} size={size} /></span>
       ) : null}
-      <span className="truncate">{option.label}</span>
+      <span className="truncate"><TextWithFlags text={option.label} size={size} /></span>
     </span>
   );
 }
