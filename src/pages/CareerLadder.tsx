@@ -26,7 +26,6 @@ import {
   WRONG_GUESS_PENALTY,
   careerScore,
   fetchCareerPool,
-  flagForNationality,
   fmtMarketValue,
   normalizeName,
   pickDailyPlayer,
