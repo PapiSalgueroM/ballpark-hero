@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-
-const TOTAL_GAMES = 37;
+import { TOTAL_GAMES } from '@/data/gameRegistry';
 
 export function useDailyLegend() {
   const { user } = useAuth();
@@ -28,7 +27,7 @@ export function useDailyLegend() {
       return;
     }
 
-    // Check if user completed all 37 games today
+    // Check if user completed every live game today
     const { data: completions } = await supabase
       .from('daily_completions')
       .select('game_slug')

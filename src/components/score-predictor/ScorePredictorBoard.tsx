@@ -138,9 +138,9 @@ export function ScorePredictorBoard() {
             headline="Result Revealed"
             statLine={
               <>
-                Your Prediction: <span className="font-bold text-foreground">{guessHome} – {guessAway}</span>
+                Your Prediction: <span className="font-bold text-foreground">{guessHome} - {guessAway}</span>
                 {' · '}
-                Actual: <span className={cn('font-bold', guessHome === puzzle.homeScore && guessAway === puzzle.awayScore ? 'text-primary' : 'text-foreground')}>{puzzle.homeScore} – {puzzle.awayScore}</span>
+                Actual: <span className={cn('font-bold', guessHome === puzzle.homeScore && guessAway === puzzle.awayScore ? 'text-primary' : 'text-foreground')}>{puzzle.homeScore} - {puzzle.awayScore}</span>
               </>
             }
             funFact={puzzle.funFact}

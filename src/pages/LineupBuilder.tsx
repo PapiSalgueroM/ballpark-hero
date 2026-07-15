@@ -197,7 +197,7 @@ const LineupBuilder = () => {
                   <button
                     onClick={rerollTeam}
                     className="absolute top-2 right-2 flex items-center justify-center w-10 h-10 rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
-                    title="Reroll – get a different team"
+                    title="Reroll: get a different team"
                   >
                     <Shuffle className="w-4 h-4" />
                   </button>

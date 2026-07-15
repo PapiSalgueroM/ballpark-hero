@@ -243,7 +243,7 @@ const PlayerBingo = () => {
       <GameShell
         width="wide"
         title="PLAYER BINGO"
-        subtitle="Complete a row, column, or diagonal — then keep the board alive for bonus lines and a blackout."
+        subtitle="Complete a row, column, or diagonal, then keep the board alive for bonus lines and a blackout."
         headerExtra={
           <>
             <RulesGate title="How to Play Player Bingo" floatingTrigger>

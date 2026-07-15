@@ -2503,7 +2503,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   const season = generateSeasonStats(s);
   // Injury report — named injuries that actually cost matches
   if (season.injury) {
-    s.events.push(`🚑 Injury: ${season.injury} — out ${season.injuryWeeks} weeks, missed matches`);
+    s.events.push(`🚑 Injury: ${season.injury}, out ${season.injuryWeeks} weeks, missed matches`);
     if (season.injurySevere) {
       s.pace = clamp(s.pace - 2, 20, 99);
       s.physical = clamp(s.physical - 1, 20, 99);

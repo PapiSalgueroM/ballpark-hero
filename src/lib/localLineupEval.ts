@@ -63,7 +63,7 @@ export async function localEvaluateSoccerXI(playerNames: string[]): Promise<Loca
     `Squad average ${avg} on current 2026 market values.`,
     star ? `Star man: ${star.name} (${star.rating}).` : '',
     weakest && weakest !== star ? `Weak link: ${weakest.name} (${weakest.rating}).` : '',
-    unknowns > 0 ? `${unknowns} pick${unknowns === 1 ? '' : 's'} weren't in the value database — rated on trust.` : '',
+    unknowns > 0 ? `${unknowns} pick${unknowns === 1 ? '' : 's'} weren't in the value database, rated on trust.` : '',
     'Verdict by the offline judge (AI referee back soon).',
   ].filter(Boolean);
 
@@ -131,7 +131,7 @@ export async function localEvaluateNbaFive(playerNames: string[], challengeLabel
     `Lineup average ${avg} from career statistical peaks.`,
     `Best pick: ${sorted[0].name} (${sorted[0].rating}).`,
     sorted.length > 1 ? `Weakest link: ${sorted[sorted.length - 1].name} (${sorted[sorted.length - 1].rating}).` : '',
-    unknowns > 0 ? `${unknowns} name${unknowns === 1 ? '' : 's'} missing from the stats table — rated on reputation.` : '',
+    unknowns > 0 ? `${unknowns} name${unknowns === 1 ? '' : 's'} missing from the stats table, rated on reputation.` : '',
     'Verdict by the offline judge (AI referee back soon).',
   ].filter(Boolean);
 

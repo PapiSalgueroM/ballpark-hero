@@ -362,7 +362,7 @@ export const EXTRAS: ExtraCategory[] = [
    three get flipped, the Banker tempts you with a known alternative. */
 export const EXTRA_DEALS: ExtraCategory[] = [
   { key: 'manager', title: 'Manager', emoji: '🎩', options: [
-    { id: 'pep', label: 'Pep Guardiola', emoji: '🧠', desc: 'Positional-play professor', ratingMod: 5, chemMod: 8, fact: 'Pep drilled a passing machine — 70% possession every week.' },
+    { id: 'pep', label: 'Pep Guardiola', emoji: '🧠', desc: 'Positional-play professor', ratingMod: 5, chemMod: 8, fact: 'Pep drilled a passing machine: 70% possession every week.' },
     { id: 'fergie', label: 'Sir Alex Ferguson', emoji: '⏱️', desc: 'Fergie time is real', ratingMod: 5, chemMod: 10, fact: 'Sir Alex won three titles "playing badly". Mentality monsters.' },
     { id: 'klopp', label: 'Jürgen Klopp', emoji: '🔥', desc: 'Heavy-metal football', ratingMod: 4, chemMod: 9, fact: "Klopp's gegenpress turned the squad into a wrecking ball." },
     { id: 'ancelotti', label: 'Carlo Ancelotti', emoji: '🚬', desc: 'Eyebrow of calm', ratingMod: 4, chemMod: 7, fact: 'Don Carlo managed the egos like only Don Carlo can.' },
@@ -381,7 +381,7 @@ export const EXTRA_DEALS: ExtraCategory[] = [
     { id: 'kop', label: 'The Kop', emoji: '🎼', desc: "You'll Never Walk Alone", ratingMod: 3, chemMod: 9, fact: 'The Kop sang the team over the line week after week.' },
     { id: 'yellowwall', label: 'The Yellow Wall', emoji: '🟡', desc: "25,000 standing Dortmunders", ratingMod: 3, chemMod: 8, fact: 'The Yellow Wall made warm-ups feel like finals.' },
     { id: 'ladoce', label: "Boca's La Doce", emoji: '💙', desc: 'The 12th player', ratingMod: 3, chemMod: 10, fact: 'La Doce never sat down. Not once. All season.' },
-    { id: 'ultras', label: 'Galatasaray Ultras', emoji: '🔥', desc: 'Welcome to hell', ratingMod: 4, chemMod: 5, fact: 'Flares, tifos, and a wall of noise — hell for visitors.' },
+    { id: 'ultras', label: 'Galatasaray Ultras', emoji: '🔥', desc: 'Welcome to hell', ratingMod: 4, chemMod: 5, fact: 'Flares, tifos, and a wall of noise. Hell for visitors.' },
     { id: 'greenbrigade', label: 'The Green Brigade', emoji: '🍀', desc: 'Celtic Park eruption', ratingMod: 2, chemMod: 9, fact: 'The Green Brigade turned Tuesday nights into carnivals.' },
     { id: 'bored', label: '3 Season-Ticket Holders', emoji: '😴', desc: 'One brings a thermos', ratingMod: -2, chemMod: 2, fact: 'Attendance peaked at 41 (a school trip got lost).' },
   ]},

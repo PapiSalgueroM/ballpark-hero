@@ -120,7 +120,7 @@ export function TacticsScreen({ career, onFormation, onMentality, onSlot, onAuto
                   {p ? p.rating : sl.label}
                 </div>
                 <span className="text-[8px] md:text-[9px] text-foreground mt-0.5 max-w-[64px] truncate text-center leading-tight">
-                  {p ? lastName(p.name) : '—'}
+                  {p ? lastName(p.name) : '-'}
                 </span>
               </button>
             );
@@ -165,7 +165,7 @@ export function TacticsScreen({ career, onFormation, onMentality, onSlot, onAuto
               );
             })}
             {candidates.length === 0 && (
-              <p className="text-xs text-muted-foreground text-center py-4">No fit players available — everyone is injured or suspended.</p>
+              <p className="text-xs text-muted-foreground text-center py-4">No fit players available. Everyone is injured or suspended.</p>
             )}
           </div>
         </DialogContent>

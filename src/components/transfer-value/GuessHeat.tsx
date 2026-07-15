@@ -99,11 +99,11 @@ export function LatestGuessCard({ g }: { g: ValueGuess }) {
         <div className="flex items-center justify-center gap-1.5 mt-2 text-sm font-semibold opacity-95">
           {g.direction === 'higher' ? (
             <>
-              <ArrowUp className="w-5 h-5" /> Too low — aim higher
+              <ArrowUp className="w-5 h-5" /> Too low, aim higher
             </>
           ) : (
             <>
-              <ArrowDown className="w-5 h-5" /> Too high — aim lower
+              <ArrowDown className="w-5 h-5" /> Too high, aim lower
             </>
           )}
         </div>

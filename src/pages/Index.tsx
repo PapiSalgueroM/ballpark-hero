@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
-import { Trophy, Flame, TrendingUp, Sparkles, Users, Search, X, CalendarCheck, Gamepad2 } from 'lucide-react';
+import { Trophy, Flame, TrendingUp, Sparkles, Users, Search, X, CalendarCheck, Globe } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
@@ -11,7 +11,8 @@ import { useMostPlayed } from '@/hooks/useMostPlayed';
 import { PollOfTheDay } from '@/components/home/PollOfTheDay';
 import { useStreaks } from '@/hooks/useStreaks';
 
-import { CATEGORIES, VISIBLE_CATEGORIES, TOTAL_GAMES, type GameDef } from '@/data/gameRegistry';
+import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, TOTAL_GAMES, type GameDef } from '@/data/gameRegistry';
+import { getCurrentPlayerName } from '@/lib/completions';
 
 /**
  * Home search (item #15 audit pass).
@@ -192,10 +193,14 @@ function countPlayedGames(): number {
 }
 
 export default function Index() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   // #13: days-visited stat for the hero, local-first (see useStreaks()).
   const { daysVisited } = useStreaks();
   const [playedCount, setPlayedCount] = useState(0);
+  const [worldRank, setWorldRank] = useState<number | null>(null);
+  // Same identity game_completions rows are written under (guest handle or
+  // profile display name) — mirrors useGameNavbarStats.
+  const playerName = useMemo(() => getCurrentPlayerName(profile), [profile]);
   const [totalPlayed, setTotalPlayed] = useState<number | null>(null);
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -213,6 +218,47 @@ export default function Index() {
   useEffect(() => {
     setPlayedCount(countPlayedGames());
   }, []);
+
+  // Lifetime hero stats: distinct games ever completed under this handle
+  // (server truth from game_completions, floored by the local count so the
+  // chip never regresses while an insert is in flight) + all-time world rank
+  // from the same global_rank RPC the leaderboard's "Your world rank" uses.
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const [playedRes, rankRes] = await Promise.all([
+          (supabase.from as any)('game_completions')
+            .select('game')
+            .eq('player_name', playerName),
+          (supabase.rpc as any)('global_rank', {
+            p_player: playerName,
+            p_period: 'alltime',
+            p_games: null,
+          }),
+        ]);
+        if (cancelled) return;
+
+        if (playedRes?.data) {
+          // Only count games that still exist on the site, so the chip can
+          // never read 40/38 after a game is retired.
+          const liveSlugs = new Set(ALL_GAMES.map(g => g.path.replace(/^\//, '')));
+          const distinct = new Set(
+            (playedRes.data as Array<{ game: string }>)
+              .map(r => r.game)
+              .filter(g => liveSlugs.has(g))
+          ).size;
+          setPlayedCount(prev => Math.min(TOTAL_GAMES, Math.max(prev, distinct)));
+        }
+
+        const rankRow = Array.isArray(rankRes?.data) ? rankRes.data[0] : rankRes?.data ?? null;
+        const rank = rankRow ? Number(rankRow.rank) : 0;
+        setWorldRank(rank > 0 ? rank : null);
+      } catch { /* silent: chips keep their local values */ }
+    };
+    load();
+    return () => { cancelled = true; };
+  }, [playerName]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -285,22 +331,26 @@ export default function Index() {
               The Ultimate Sports Trivia Hub
             </p>
 
-            {/* Stats bar — PERSONAL stats only. Owner (2026-07-10): site-wide
+            {/* Stats bar: PERSONAL stats only. Owner (2026-07-10): site-wide
                 traffic numbers ("games played today", "playing today") are
-                competitor intelligence and must never render publicly. */}
+                competitor intelligence and must never render publicly.
+                2026-07-15: played chip is lifetime distinct games, plus an
+                all-time world-rank chip (renders only once a rank exists). */}
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm">
-              <div className="flex items-center gap-1.5 text-muted-foreground">
-                <Gamepad2 className="w-4 h-4 text-primary" />
-                <span><strong className="text-foreground">{TOTAL_GAMES}</strong> games to play</span>
-              </div>
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <CalendarCheck className="w-4 h-4 text-[hsl(43,85%,55%)]" />
                 <span>You've visited <strong className="text-foreground">{daysVisited}</strong> {daysVisited === 1 ? 'day' : 'days'}</span>
               </div>
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Trophy className="w-4 h-4 text-[hsl(43,85%,55%)]" />
-                <span>You've played <strong className="text-foreground">{playedCount}/{TOTAL_GAMES}</strong> today</span>
+                <span>You've played <strong className="text-foreground">{playedCount}/{TOTAL_GAMES}</strong> games</span>
               </div>
+              {worldRank !== null && (
+                <div className="flex items-center gap-1.5 text-muted-foreground">
+                  <Globe className="w-4 h-4 text-primary" />
+                  <span>World rank <strong className="text-foreground">#{worldRank.toLocaleString()}</strong></span>
+                </div>
+              )}
             </div>
           </div>
         </section>

@@ -362,7 +362,7 @@ function SeasonSummaryCard({ season, position, onContinue }: { season: SeasonRec
 
       {season.injury && (
         <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-2 text-center">
-          <span className="text-xs font-bold text-red-400">🚑 {season.injury} — out {season.injuryWeeks} weeks</span>
+          <span className="text-xs font-bold text-red-400">🚑 {season.injury}, out {season.injuryWeeks} weeks</span>
         </div>
       )}
 

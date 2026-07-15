@@ -295,12 +295,12 @@ export function buildAnalysis(
   const worstDelta = Math.max(0, Math.round(avg - worst.rating));
 
   lines.push(
-    `Best pick: ${best.name} (${best.rating} OVR) — ${bestDelta} point${bestDelta === 1 ? '' : 's'} above your roster average. The wheel owed you one.`
+    `Best pick: ${best.name} (${best.rating} OVR), ${bestDelta} point${bestDelta === 1 ? '' : 's'} above your roster average. The wheel owed you one.`
   );
   lines.push(
     worstDelta >= 8
-      ? `Weakest link: ${worst.name} (${worst.rating} OVR) at ${worst.slotLabel} — ${worstDelta} points under the room. Every opponent circled that matchup.`
-      : `Weakest link: ${worst.name} (${worst.rating} OVR) at ${worst.slotLabel} — and honestly, even the weak spot held up.`
+      ? `Weakest link: ${worst.name} (${worst.rating} OVR) at ${worst.slotLabel}, ${worstDelta} points under the room. Every opponent circled that matchup.`
+      : `Weakest link: ${worst.name} (${worst.rating} OVR) at ${worst.slotLabel}, and honestly, even the weak spot held up.`
   );
 
   const groupAvg = (keys: string[]): number | null => {
@@ -336,11 +336,11 @@ export function buildAnalysis(
 
   const champTakes = [
     `"${best.name} just wrapped the greatest single season ever assembled, and it is not close."`,
-    `"Ring secured. ${wins} wins and a parade — start pouring the statue now."`,
+    `"Ring secured. ${wins} wins and a parade. Start pouring the statue now."`,
     `"I picked against this team in every round, and I have never been happier to be wrong."`,
   ];
   const contenderTakes = [
-    `"${wins} wins and no banner. ${best.name} deserves better — someone had to say it."`,
+    `"${wins} wins and no banner. ${best.name} deserves better. Someone had to say it."`,
     `"Regular-season royalty, postseason footnote. That is the whole tweet."`,
     `"${best.name} dragged this roster further than it had any right to go."`,
   ];

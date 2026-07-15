@@ -254,7 +254,7 @@ const AlphabetSprint = () => {
               ))}
             </div>
             <ul className="text-xs text-muted-foreground space-y-1 mb-5 max-w-sm mx-auto list-disc list-inside">
-              <li>Spell the player's name and hit Enter. No suggestions — you have to know it.</li>
+              <li>Spell the player's name and hit Enter. No suggestions. You have to know it.</li>
               <li>A bare surname works if only one player fits; otherwise type the full name.</li>
               <li>Surname counts, so Kylian Mbappe answers M, not K.</li>
               <li>Each player can only be used once per run.</li>

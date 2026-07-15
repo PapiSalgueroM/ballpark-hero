@@ -176,7 +176,7 @@ export function TransferScreen({ career, market, onBuy, onSell }: TransferScreen
                 </div>
               ))}
               {career.squad.length <= 14 && (
-                <p className="text-[10px] text-yellow-400 px-1 py-2">Squad at minimum size (14) — you can't sell anyone else.</p>
+                <p className="text-[10px] text-yellow-400 px-1 py-2">Squad at minimum size (14). You can't sell anyone else.</p>
               )}
             </div>
           )}

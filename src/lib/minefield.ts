@@ -5,7 +5,7 @@
  * plausible names from the same domain that do NOT belong. Click every
  * correct tile to clear the board; clicking a mine costs a life.
  * 2 lives per board, 3 boards per run. Daily (date-seeded, same boards
- * for everyone - mulberry32/daySeed pattern shared with Blind Rank) +
+ * for everyone - the site's shared mulberry32/daySeed daily pattern) +
  * unlimited (random).
  *
  * DATA ACCURACY IS SACRED. Every list is hand-checked common knowledge.
@@ -478,7 +478,7 @@ export const MINEFIELD_CATEGORIES: MinefieldCategory[] = [
   },
 ];
 
-/* ------------- deterministic RNG - same pattern as blindRank ------------ */
+/* ------- deterministic RNG - same daily-seed pattern as other games ------ */
 export function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
   return () => {

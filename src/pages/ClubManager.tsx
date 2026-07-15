@@ -51,10 +51,10 @@ const ClubManager = () => {
           <HowToPlayPopover title="How to Play Club Manager">
             <div className="space-y-3 text-left">
               <p>🏟️ <span className="font-semibold text-foreground">Take charge of a real club.</span> Elite giants have huge budgets and zero patience; underdogs get small budgets and a low bar.</p>
-              <p>📅 <span className="font-semibold text-foreground">Play a full season</span> — 38 league matches vs 19 real clubs, a domestic cup, and the Champions League if you qualify.</p>
+              <p>📅 <span className="font-semibold text-foreground">Play a full season</span>: 38 league matches vs 19 real clubs, a domestic cup, and the Champions League if you qualify.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
               <p>💰 <span className="font-semibold text-foreground">Buy and sell in the summer and January windows.</span> Stay under budget and keep at least 14 players.</p>
-              <p>📉 <span className="font-semibold text-foreground">Watch the board confidence meter.</span> Fall too far below expectations and you're sacked — overachieve and bigger clubs come calling.</p>
+              <p>📉 <span className="font-semibold text-foreground">Watch the board confidence meter.</span> Fall too far below expectations and you're sacked. Overachieve and bigger clubs come calling.</p>
               <p>🏆 <span className="font-semibold text-foreground">Season score</span> = league points + 10 per trophy (max 130). Careers span multiple seasons; your save is kept on this device.</p>
             </div>
           </HowToPlayPopover>
@@ -65,7 +65,7 @@ const ClubManager = () => {
           title="Club Manager: Football Management Sim"
           description="A full club-management sim in your browser: pick one of 20 famous clubs, manage tactics and transfers, survive the board, and chase league titles, cups and Champions League glory season after season."
           howToPlay={[
-            'Pick a club — each tier has a different budget and board expectation.',
+            'Pick a club. Each tier has a different budget and board expectation.',
             'Set your formation, mentality and XI, then play through the 38-match season week by week.',
             'Strengthen your squad in the summer and January transfer windows.',
             'Win trophies, keep the board happy, and build a multi-season managerial career.',
@@ -194,7 +194,7 @@ const ClubManager = () => {
   /* ================= SEASON END ================= */
   if (g.phase === 'seasonEnd' && g.summary && g.career) {
     const sm = g.summary;
-    const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '—';
+    const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
     return shell(
       <div className="text-center">
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">SEASON {sm.season} COMPLETE</h1>
@@ -346,7 +346,7 @@ const ClubManager = () => {
           <span className="text-[10px] font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5">Season {c.season}</span>
         </div>
         <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground flex-wrap">
-          <span>#{g.myPosition || '—'} in league</span>
+          <span>#{g.myPosition || '-'} in league</span>
           <span className="text-gold font-semibold">{money(c.budget)}</span>
           <span className="inline-flex items-center gap-1">
             {c.form.length === 0 && <span>No matches yet</span>}
@@ -383,7 +383,7 @@ const ClubManager = () => {
               onClick={() => g.setActiveTab('transfers')}
               className="w-full rounded-xl border border-gold/40 bg-gold/10 p-2.5 text-xs font-bold text-gold hover:bg-gold/20 transition-colors"
             >
-              {c.transferWindow === 'summer' ? '☀️' : '❄️'} Transfer window open — tap to do business before your next match
+              {c.transferWindow === 'summer' ? '☀️' : '❄️'} Transfer window open. Tap to do business before your next match
             </button>
           )}
 
@@ -452,12 +452,12 @@ const ClubManager = () => {
           )}
           {c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won' && (
             <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
-              ⭐ Alive in the Champions League — next knockout round: <span className="font-bold">{c.uclKoRound === 'F' ? 'Final' : c.uclKoRound === 'SF' ? 'Semi-final' : 'Quarter-final'}</span>
+              ⭐ Alive in the Champions League. Next knockout round: <span className="font-bold">{c.uclKoRound === 'F' ? 'Final' : c.uclKoRound === 'SF' ? 'Semi-final' : 'Quarter-final'}</span>
             </div>
           )}
           {c.cupRound !== 'out' && c.cupRound !== 'won' && (
             <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
-              🏆 Still in the Cup — next round: <span className="font-bold">{c.cupRound === 'F' ? 'Final' : c.cupRound === 'SF' ? 'Semi-final' : c.cupRound === 'QF' ? 'Quarter-final' : 'Round of 16'}</span> vs {c.cupDraw[c.cupRound] ?? '???'}
+              🏆 Still in the Cup. Next round: <span className="font-bold">{c.cupRound === 'F' ? 'Final' : c.cupRound === 'SF' ? 'Semi-final' : c.cupRound === 'QF' ? 'Quarter-final' : 'Round of 16'}</span> vs {c.cupDraw[c.cupRound] ?? '???'}
             </div>
           )}
 

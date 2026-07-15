@@ -225,10 +225,10 @@ export interface PlayResult {
 /* ================================================================== */
 
 export const TIER_INFO: Record<number, TierInfo> = {
-  1: { label: 'Elite', emoji: '👑', blurb: 'Huge budgets, zero patience — anything short of the title is a crisis.' },
+  1: { label: 'Elite', emoji: '👑', blurb: 'Huge budgets, zero patience: anything short of the title is a crisis.' },
   2: { label: 'Contenders', emoji: '🥇', blurb: 'Big spenders expected to challenge on every front.' },
   3: { label: 'Challengers', emoji: '⚔️', blurb: 'Strong squads fighting for the European places.' },
-  4: { label: 'Underdogs', emoji: '🐺', blurb: 'Small budgets, low bar — every scalp is a story.' },
+  4: { label: 'Underdogs', emoji: '🐺', blurb: 'Small budgets, low bar: every scalp is a story.' },
 };
 
 export const CLUBS: ClubDef[] = [
@@ -995,7 +995,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
     if (count >= 3) events.push(`⚽ ${name} bagged a hat-trick!`);
   });
   if (decidedBy === 'pens') {
-    events.push(won ? '🥅 Nerves of steel — you win the shootout.' : '🥅 Heartbreak from the spot — shootout defeat.');
+    events.push(won ? '🥅 Nerves of steel. You win the shootout.' : '🥅 Heartbreak from the spot: shootout defeat.');
   }
 
   /* ----- competition bookkeeping + other results ----- */
@@ -1040,7 +1040,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
       if (pos <= 2) {
         state.uclKoRound = 'QF';
         state.uclDraw.QF = drawUclKoOpponent(state);
-        events.push(`⭐ Through to the Champions League quarter-finals — you'll face ${state.uclDraw.QF}.`);
+        events.push(`⭐ Through to the Champions League quarter-finals. You'll face ${state.uclDraw.QF}.`);
         confDelta += 3;
       } else {
         state.uclKoRound = 'out';
@@ -1063,7 +1063,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
         const next = CUP_ORDER[i + 1];
         state.cupRound = next;
         state.cupDraw[next] = drawCupOpponent(state);
-        events.push(`🎟️ Into the cup ${CUP_LABELS[next].toLowerCase()} — drawn against ${state.cupDraw[next]}.`);
+        events.push(`🎟️ Into the cup ${CUP_LABELS[next].toLowerCase()}, drawn against ${state.cupDraw[next]}.`);
         confDelta += 2;
       }
     } else {
@@ -1086,7 +1086,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
         const next = UCL_ORDER[i + 1];
         state.uclKoRound = next;
         state.uclDraw[next] = drawUclKoOpponent(state);
-        events.push(`⭐ Into the Champions League ${UCL_LABELS[next].toLowerCase()} — ${state.uclDraw[next]} await.`);
+        events.push(`⭐ Into the Champions League ${UCL_LABELS[next].toLowerCase()}. ${state.uclDraw[next]} await.`);
         confDelta += 4;
       }
     } else {
@@ -1110,7 +1110,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
     const p = state.squad.find(x => x.id === victim.id);
     if (p) {
       p.injuryWeeks = ri(1, 5);
-      events.push(`🩹 ${p.name} limped off — out for ~${p.injuryWeeks} week${p.injuryWeeks > 1 ? 's' : ''}.`);
+      events.push(`🩹 ${p.name} limped off, out for ~${p.injuryWeeks} week${p.injuryWeeks > 1 ? 's' : ''}.`);
     }
   }
   if (xi.length && Math.random() < 0.08) {
@@ -1118,7 +1118,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
     const p = state.squad.find(x => x.id === hothead.id);
     if (p && p.injuryWeeks === 0) {
       p.suspendedMatches = ri(1, 2);
-      events.push(`🟥 ${p.name} was sent off — suspended for ${p.suspendedMatches} match${p.suspendedMatches > 1 ? 'es' : ''}.`);
+      events.push(`🟥 ${p.name} was sent off, suspended for ${p.suspendedMatches} match${p.suspendedMatches > 1 ? 'es' : ''}.`);
     }
   }
 
@@ -1140,7 +1140,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
     state.sacked = true;
     events.push('📉 The board has seen enough. You are relieved of your duties.');
   } else if (state.boardConfidence < 22) {
-    events.push('📉 The board is running out of patience — results, now.');
+    events.push('📉 The board is running out of patience. Results, now.');
   }
 
   tickWeek(state, new Set(xi.map(p => p.id)));
@@ -1271,20 +1271,20 @@ export function currentSeasonScore(career: CareerState): number {
 
 const VERDICTS: Record<'A' | 'B' | 'C' | 'D' | 'F', string[]> = {
   A: [
-    'A sensational season — the fans are painting murals of you.',
+    'A sensational season. The fans are painting murals of you.',
     'The board is thrilled. Statues have been commissioned.',
   ],
   B: [
     'Solid work. The board is satisfied and the fans are onside.',
-    'Expectations met — quietly impressive management.',
+    'Expectations met. Quietly impressive management.',
   ],
   C: [
     'Acceptable, just. The board expects more next season.',
-    'A middling year — you survive, but the leash is shorter.',
+    'A middling year: you survive, but the leash is shorter.',
   ],
   D: [
     'Well below expectations. The board is openly frustrated.',
-    'A poor season — one more like that and you are gone.',
+    'A poor season. One more like that and you are gone.',
   ],
   F: [
     'A disaster from August to May. The fans want blood.',

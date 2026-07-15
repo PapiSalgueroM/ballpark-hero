@@ -116,7 +116,7 @@ const Minefield = () => {
                   Mine<span className="text-primary">field</span>
                 </h1>
                 <p className="text-base sm:text-xl text-muted-foreground max-w-md mx-auto leading-relaxed">
-                  One category, a board of names. Click <b>everyone who belongs</b> —
+                  One category, a board of names. Click <b>everyone who belongs</b>,
                   but a few tiles are mines that don't belong at all.
                   {' '}{LIVES_PER_ROUND} lives per board, {ROUNDS_PER_RUN} boards per run.
                 </p>
@@ -153,7 +153,7 @@ const Minefield = () => {
 
                 {phase === 'playing' && lastMine && (
                   <div className="text-sm font-bold text-red-300 animate-in fade-in slide-in-from-top-1">
-                    💥 {lastMine} was a mine — {lives} {lives === 1 ? 'life' : 'lives'} left!
+                    💥 {lastMine} was a mine, {lives} {lives === 1 ? 'life' : 'lives'} left!
                   </div>
                 )}
 
@@ -192,7 +192,7 @@ const Minefield = () => {
                     {roundWon ? (
                       <p className="text-xl font-black text-emerald-300">Board cleared! +{CLEAR_BONUS} bonus 🎉</p>
                     ) : (
-                      <p className="text-xl font-black text-red-300">💥 BOOM — out of lives</p>
+                      <p className="text-xl font-black text-red-300">💥 BOOM. Out of lives</p>
                     )}
                     <p className="text-sm text-muted-foreground font-semibold">
                       {foundCount}/{totalCorrect} found · the full board is revealed above

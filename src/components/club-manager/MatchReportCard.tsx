@@ -42,14 +42,14 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
           <div className="grid grid-cols-2 gap-3 mt-4 text-left">
             <div>
               <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">{clubName} scorers</div>
-              {r.myScorers.length === 0 && <p className="text-[10px] text-muted-foreground">—</p>}
+              {r.myScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
               {r.myScorers.map((sc, i) => (
                 <p key={i} className="text-[11px] text-foreground">⚽ {sc.name} {sc.minute}'</p>
               ))}
             </div>
             <div>
               <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">Them</div>
-              {r.oppScorers.length === 0 && <p className="text-[10px] text-muted-foreground">—</p>}
+              {r.oppScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
               {r.oppScorers.map((sc, i) => (
                 <p key={i} className="text-[11px] text-muted-foreground">⚽ {sc.name} {sc.minute}'</p>
               ))}

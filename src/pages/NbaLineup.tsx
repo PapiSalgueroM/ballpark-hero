@@ -188,7 +188,7 @@ const NbaLineup = () => {
                   <button
                     onClick={rerollTeam}
                     className="absolute top-3 right-3 p-2 rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
-                    title="Reroll – get a different team"
+                    title="Reroll: get a different team"
                   >
                     <Shuffle className="w-4 h-4" />
                   </button>

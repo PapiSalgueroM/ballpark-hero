@@ -81,7 +81,7 @@ const SignThePlayer = () => {
           budget: Math.max(0, b.budget - fee),
           squad: { ...b.squad, [lot.player.slotKey]: lot.player },
         })));
-        setLog(l => [`📋 ${lot.player.name} is assigned to ${taker.name} for ${money(fee)} — nobody else needed a ${lot.player.slotKey}.`, ...l].slice(0, 30));
+        setLog(l => [`📋 ${lot.player.name} is assigned to ${taker.name} for ${money(fee)}. Nobody else needed a ${lot.player.slotKey}.`, ...l].slice(0, 30));
       }
       setPhase('assign');
       return;
@@ -133,7 +133,7 @@ const SignThePlayer = () => {
       setLog(l => [
         winnerId
           ? `✅ SOLD! ${lot.player.name} to ${w?.name} for ${money(price2)}.`
-          : `🔨 Hammer falls — nobody bid, so ${lot.player.name} is FORCED onto ${w?.name} for ${money(price2)}.`,
+          : `🔨 Hammer falls. Nobody bid, so ${lot.player.name} is FORCED onto ${w?.name} for ${money(price2)}.`,
         ...l,
       ].slice(0, 30));
     }
@@ -218,7 +218,7 @@ const SignThePlayer = () => {
     <>
       <PageSeo
         title="Sign the Player: Auction House | DoUKnowBall"
-        description="Three bidders, £1B each, 33 players. Outbid two rivals position by position, then simulate the showdown — the box2box auction, playable."
+        description="Three bidders, £1B each, 33 players. Outbid two rivals position by position, then simulate the showdown. The box2box auction, playable."
         path="/sign-the-player"
       />
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(260 30% 8%) 0%, hsl(230 30% 7%) 55%, hsl(150 25% 6%) 100%)' }}>
@@ -234,7 +234,7 @@ const SignThePlayer = () => {
                 </h1>
                 <p className="text-base sm:text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
                   The box2box auction: you vs <b>The Sheikh</b> vs <b>Moneyball Mike</b>, £1B each.
-                  Every position sells its <b>good</b> player first, then the <b>superstar</b> —
+                  Every position sells its <b>good</b> player first, then the <b>superstar</b>,
                   and whoever misses out takes the stinker (and still pays the fee).
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -260,7 +260,7 @@ const SignThePlayer = () => {
 
                   <div className="rounded-2xl border border-primary/40 bg-card/80 backdrop-blur-md p-6 text-center space-y-2 shadow-lg shadow-primary/10">
                     <p className="text-[11px] uppercase tracking-widest text-muted-foreground font-bold">
-                      {lot.kind === 'assign' ? 'Leftover — automatic assignment' : lot.player.tier === 'great' ? '⭐ THE SUPERSTAR LOT' : 'Opening lot for this position'}
+                      {lot.kind === 'assign' ? 'Leftover: automatic assignment' : lot.player.tier === 'great' ? '⭐ THE SUPERSTAR LOT' : 'Opening lot for this position'}
                     </p>
                     <h2 className="text-3xl font-extrabold text-foreground">{lot.player.name}</h2>
                     <p className="text-sm text-muted-foreground">{lot.player.club} · {lot.player.nationality} · {lot.player.position}</p>
@@ -269,7 +269,7 @@ const SignThePlayer = () => {
                       <>
                         <p className="text-lg font-bold text-foreground">
                           Current price: <span className="text-primary">{money(price)}</span>
-                          {leader && <span className="text-sm text-muted-foreground"> — {bidders.find(b => b.id === leader)?.emoji} {bidders.find(b => b.id === leader)?.name} leads</span>}
+                          {leader && <span className="text-sm text-muted-foreground">, {bidders.find(b => b.id === leader)?.emoji} {bidders.find(b => b.id === leader)?.name} leads</span>}
                         </p>
                         {activeIds.has('you') ? (
                           <div className="flex flex-wrap gap-2 justify-center pt-1">
@@ -289,7 +289,7 @@ const SignThePlayer = () => {
                             </Button>
                           </div>
                         ) : (
-                          <p className="text-sm text-muted-foreground italic">{you.squad[lot.player.slotKey] ? 'You already own this position — rivals are fighting it out...' : 'You passed — the rivals battle on...'}</p>
+                          <p className="text-sm text-muted-foreground italic">{you.squad[lot.player.slotKey] ? 'You already own this position, so the rivals are fighting it out...' : 'You passed, so the rivals battle on...'}</p>
                         )}
                         {aiThinking && <p className="text-xs text-primary animate-pulse font-bold">rivals are thinking…</p>}
                       </>
@@ -353,7 +353,7 @@ const SignThePlayer = () => {
                 <div className="rounded-xl border border-border bg-card/60 p-3 text-left space-y-1 max-h-40 overflow-y-auto">
                   {result.lines.map((l, i) => <p key={i} className="text-xs text-muted-foreground">{l}</p>)}
                 </div>
-                <p className="text-sm text-foreground font-semibold">👑 Golden Boot: {result.topScorer.player} ({result.topScorer.team}) — {result.topScorer.goals} goals</p>
+                <p className="text-sm text-foreground font-semibold">👑 Golden Boot: {result.topScorer.player} ({result.topScorer.team}) with {result.topScorer.goals} goals</p>
                 <p className="text-2xl font-black text-primary">Score: {score}</p>
                 <ShareButtons
                   gameName="Sign the Player"
@@ -373,13 +373,13 @@ const SignThePlayer = () => {
           title="Sign the Player: The Auction House | DoUKnowBall"
           description="A three-way transfer auction: you against two AI moguls with £1B each. Positions sell good-player-first then superstar, leftovers get assigned with a fee, and the three finished squads simulate a mini-league showdown."
           howToPlay={[
-            'Pick a theme: Current Stars, All-Time Legends, or World Cup 2026 — 33 players enter the room: a great, a good and a weak option per position.',
-            'Each position auctions its GOOD player first, then the SUPERSTAR. Bid in £5M/£10M/£25M steps or pass — whoever misses out takes the leftover player and still pays the assignment fee.',
+            'Pick a theme: Current Stars, All-Time Legends, or World Cup 2026. 33 players enter the room: a great, a good and a weak option per position.',
+            'Each position auctions its GOOD player first, then the SUPERSTAR. Bid in £5M/£10M/£25M steps or pass. Whoever misses out takes the leftover player and still pays the assignment fee.',
             'When all three XIs are full, the showdown simulates a double round-robin league: table position, goal difference and money left decide your score.',
           ]}
           examples={[
-            'The Sheikh jumps £25M when he wants someone — bait him early',
-            "Moneyball Mike passes on superstars — snipe the value lots he's hunting",
+            'The Sheikh jumps £25M when he wants someone, so bait him early',
+            "Moneyball Mike passes on superstars, so snipe the value lots he's hunting",
             'Passing everything still costs you: leftovers come with fees',
             'Win the league with money in the bank for the max score',
           ]}

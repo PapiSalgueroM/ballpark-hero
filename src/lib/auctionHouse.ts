@@ -225,7 +225,7 @@ export function simulateShowdown(bidders: Bidder[]): ShowdownResult {
   }
   rows.sort((a, b) => b.points - a.points || (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf);
   // top scorer: best striker-ish player on any squad, goals scaled by team gf
-  let top = { player: 'Nobody', team: '—', goals: 0 };
+  let top = { player: 'Nobody', team: '-', goals: 0 };
   for (const b of bidders) {
     const row = rows.find(r => r.bidderId === b.id)!;
     const atk = Object.values(b.squad).filter((p): p is AuctionPlayer => !!p && ['ST', 'CF', 'LW', 'RW', 'CAM'].includes(p.position))

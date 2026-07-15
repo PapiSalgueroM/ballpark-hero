@@ -20,14 +20,12 @@ export const CATEGORIES: GameCategory[] = [
     games: [
       // retired 2026-07-06 per owner review: "too simple". Page/route kept for direct links; uncomment to revive.
       // { path: '/higher-lower-transfers', label: 'Transfer Market', emoji: '📈', description: 'Higher or lower on real market values', isNew: true },
-      { path: '/darts', label: 'Darts', emoji: '🎯', description: 'Throw at the board, name a player from the category, race the machine 501→0', isNew: true },
+      // Darts, Stadium Draft, Blind Rank and Start Bench Cut deleted 2026-07-15
+      // per owner review (broken/low-effort). Pages, routes and libs removed entirely.
       { path: '/dart-draft', label: 'Dart Draft', emoji: '🎪', description: 'Timed throws build your XI: land a wedge, take its player, sim the showdown', isNew: true },
-      { path: '/stadium-draft', label: 'Stadium Draft', emoji: '🏟️', description: 'Name the ground from clues — every stadium you know earns its star for your XI', isNew: true },
-      { path: '/blind-rank', label: 'Blind Rank', emoji: '🧠', description: 'Rank 5 players blind, one reveal at a time. No take-backs', daily: true, isNew: true },
-      { path: '/start-bench-cut', label: 'Start Bench Cut', emoji: '🪑', description: 'Three players, one brutal choice: start one, bench one, cut one', daily: true, isNew: true },
       { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', isNew: true },
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', isNew: true },
-      { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Run a real club: tactics, transfers, trophies — and the sack race', isNew: true },
+      { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Run a real club: tactics, transfers, trophies and the sack race', isNew: true },
       { path: '/world-xi', label: 'World XI', emoji: '🌍', description: 'Pick a formation, fill 11 random countries', isNew: true },
       { path: '/player-bingo', label: 'Player Bingo', emoji: '🎱', description: 'Complete a line on a 5x5 board before 3 strikes', isNew: true },
       { path: '/alphabet-sprint', label: 'Alphabet Sprint', emoji: '⚡', description: 'Name a player per letter against the clock', isNew: true },

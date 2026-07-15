@@ -90,12 +90,8 @@ import SignThePlayer from "./pages/SignThePlayer";
 import ConquestNba from "./pages/ConquestNba";
 import PackBattle from "./pages/PackBattle";
 import SportsMillionaire from "./pages/SportsMillionaire";
-import DartsGame from "./pages/DartsGame";
 import DartDraft from "./pages/DartDraft";
-import BlindRank from "./pages/BlindRank";
-import StartBenchCut from "./pages/StartBenchCut";
 import Minefield from "./pages/Minefield";
-import StadiumDraft from "./pages/StadiumDraft";
 
 const queryClient = new QueryClient();
 
@@ -270,12 +266,8 @@ const AppContent = () => {
         <Route path="/conquest-nba" element={<ConquestNba />} />
         <Route path="/pack-battle" element={<PackBattle />} />
         <Route path="/sports-millionaire" element={<SportsMillionaire />} />
-        <Route path="/darts" element={<DartsGame />} />
         <Route path="/dart-draft" element={<DartDraft />} />
-        <Route path="/blind-rank" element={<BlindRank />} />
-        <Route path="/start-bench-cut" element={<StartBenchCut />} />
         <Route path="/minefield" element={<Minefield />} />
-        <Route path="/stadium-draft" element={<StadiumDraft />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

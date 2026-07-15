@@ -425,7 +425,7 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
   if (!st.hasRelationship && st.age >= 19 && st.popularity >= 25) {
     evts.push({ id: 41, emoji: "💘", title: "Dating Rumors", description: "Paparazzi snap you at dinner with a well-known singer. Your phone will not stop buzzing.", category: "life", choices: [
       { label: "Go public together", emoji: "💑", color: "bg-pink-600", consequence: "Relationship begins, Popularity +5, Followers +0.5M", apply: s => { s.hasRelationship = true; s.popularity = clamp(s.popularity + 5, 0, 100); s.socialMediaFollowers = round1(s.socialMediaFollowers + 0.5); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "💘 Went public with a new relationship"]; return s; } },
-      { label: "Stay single, stay focused", emoji: "🎯", color: "bg-muted", consequence: "Physical +1 next season", apply: s => { s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 }; s.morale = clamp(s.morale + 2, 0, 100); s.events = [...s.events, "💘 Shut down the dating rumors — football first"]; return s; } },
+      { label: "Stay single, stay focused", emoji: "🎯", color: "bg-muted", consequence: "Physical +1 next season", apply: s => { s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 }; s.morale = clamp(s.morale + 2, 0, 100); s.events = [...s.events, "💘 Shut down the dating rumors. Football first"]; return s; } },
     ] });
   }
 
@@ -446,7 +446,7 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
 
   if ((married || st.hasRelationship) && st.age >= 23 && st.family.children < 4) {
     evts.push({ id: 44, emoji: "👶", title: "Baby News!", description: "You are going to be a parent. Life is about to change forever.", category: "life", choices: [
-      { label: "Announce it to the world", emoji: "📣", color: "bg-emerald-600", consequence: "Child +1, Morale +12, Popularity +4", apply: s => { s.family = { ...s.family, children: s.family.children + 1 }; s.morale = clamp(s.morale + 12, 0, 100); s.popularity = clamp(s.popularity + 4, 0, 100); s.customYearlyCosts = round1(s.customYearlyCosts + 0.05); s.events = [...s.events, "👶 Welcomed a child — announced with a baby-boot photo"]; return s; } },
+      { label: "Announce it to the world", emoji: "📣", color: "bg-emerald-600", consequence: "Child +1, Morale +12, Popularity +4", apply: s => { s.family = { ...s.family, children: s.family.children + 1 }; s.morale = clamp(s.morale + 12, 0, 100); s.popularity = clamp(s.popularity + 4, 0, 100); s.customYearlyCosts = round1(s.customYearlyCosts + 0.05); s.events = [...s.events, "👶 Welcomed a child, announced with a baby-boot photo"]; return s; } },
       { label: "Keep it private", emoji: "🤫", color: "bg-muted", consequence: "Child +1, Morale +8", apply: s => { s.family = { ...s.family, children: s.family.children + 1 }; s.morale = clamp(s.morale + 8, 0, 100); s.customYearlyCosts = round1(s.customYearlyCosts + 0.05); s.events = [...s.events, "👶 Became a parent, far from the cameras"]; return s; } },
     ] });
   }
@@ -454,7 +454,7 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
   if (!married && st.age >= 24 && st.popularity >= 40) {
     evts.push({ id: 45, emoji: "🧾", title: "Child Support Claim", description: "A lawyer's letter arrives: someone claims you are the parent of their child and demands support.", category: "negative", choices: [
       { label: "Settle quietly", emoji: "🤐", color: "bg-muted", consequence: "-5% net worth, Child +1, Morale -5", apply: s => { s.netWorth = round1(Math.max(0, s.netWorth * 0.95)); s.family = { ...s.family, children: s.family.children + 1 }; s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🧾 Settled a child support case privately"]; return s; } },
-      { label: "Demand a DNA test", emoji: "🧬", color: "bg-blue-600", consequence: "50%: cleared · 50%: confirmed + public scandal", apply: s => { if (Math.random() < 0.5) { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "🧬 DNA test cleared you — case dismissed"]; } else { s.family = { ...s.family, children: s.family.children + 1 }; s.netWorth = round1(Math.max(0, s.netWorth * 0.92)); s.popularity = clamp(s.popularity - 10, 0, 100); s.morale = clamp(s.morale - 8, 0, 100); s.events = [...s.events, "🧬 DNA test confirmed paternity — tabloid frenzy"]; } return s; } },
+      { label: "Demand a DNA test", emoji: "🧬", color: "bg-blue-600", consequence: "50%: cleared · 50%: confirmed + public scandal", apply: s => { if (Math.random() < 0.5) { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "🧬 DNA test cleared you, case dismissed"]; } else { s.family = { ...s.family, children: s.family.children + 1 }; s.netWorth = round1(Math.max(0, s.netWorth * 0.92)); s.popularity = clamp(s.popularity - 10, 0, 100); s.morale = clamp(s.morale - 8, 0, 100); s.events = [...s.events, "🧬 DNA test confirmed paternity, tabloid frenzy"]; } return s; } },
     ] });
   }
 
@@ -469,33 +469,33 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
   if (st.netWorth >= 5) {
     evts.push({ id: 47, emoji: "🏦", title: "Tax Investigation", description: "The tax office flags your image-rights structure. Your accountant looks nervous.", category: "negative", choices: [
       { label: "Pay back taxes", emoji: "💸", color: "bg-emerald-600", consequence: "-8% net worth, case closed", apply: s => { s.netWorth = round1(Math.max(0, s.netWorth * 0.92)); s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🏦 Paid back taxes and closed the case"]; return s; } },
-      { label: "Fight it in court", emoji: "⚖️", color: "bg-red-600", consequence: "40%: win · 60%: -15% net worth + scandal", apply: s => { if (Math.random() < 0.4) { s.popularity = clamp(s.popularity + 3, 0, 100); s.events = [...s.events, "⚖️ Won the tax case — fully vindicated"]; } else { s.netWorth = round1(Math.max(0, s.netWorth * 0.85)); s.popularity = clamp(s.popularity - 10, 0, 100); s.morale = clamp(s.morale - 6, 0, 100); s.events = [...s.events, "⚖️ Lost the tax case — headlines and a huge bill"]; } return s; } },
+      { label: "Fight it in court", emoji: "⚖️", color: "bg-red-600", consequence: "40%: win · 60%: -15% net worth + scandal", apply: s => { if (Math.random() < 0.4) { s.popularity = clamp(s.popularity + 3, 0, 100); s.events = [...s.events, "⚖️ Won the tax case, fully vindicated"]; } else { s.netWorth = round1(Math.max(0, s.netWorth * 0.85)); s.popularity = clamp(s.popularity - 10, 0, 100); s.morale = clamp(s.morale - 6, 0, 100); s.events = [...s.events, "⚖️ Lost the tax case: headlines and a huge bill"]; } return s; } },
     ] });
   }
 
   if (st.netWorth >= 1 && st.popularity >= 35 && st.socialMediaFollowers >= 2) {
     evts.push({ id: 48, emoji: "🪙", title: "Crypto Endorsement Collapses", description: "The crypto token you promoted last year just crashed to zero. Fans who bought in are furious.", category: "negative", choices: [
       { label: "Refund fans out of pocket", emoji: "💳", color: "bg-emerald-600", consequence: "-€1.5M, Popularity +6, respect earned", apply: s => { s.netWorth = round1(Math.max(0, s.netWorth - 1.5)); s.popularity = clamp(s.popularity + 6, 0, 100); s.integrityBonus += 5; s.events = [...s.events, "🪙 Personally refunded fans after the crypto collapse"]; return s; } },
-      { label: "Quietly delete the posts", emoji: "🫥", color: "bg-red-600", consequence: "Followers -1M, Popularity -8", apply: s => { s.socialMediaFollowers = Math.max(0, round1(s.socialMediaFollowers - 1)); s.popularity = clamp(s.popularity - 8, 0, 100); s.events = [...s.events, "🪙 Deleted the crypto posts — screenshots live forever"]; return s; } },
+      { label: "Quietly delete the posts", emoji: "🫥", color: "bg-red-600", consequence: "Followers -1M, Popularity -8", apply: s => { s.socialMediaFollowers = Math.max(0, round1(s.socialMediaFollowers - 1)); s.popularity = clamp(s.popularity - 8, 0, 100); s.events = [...s.events, "🪙 Deleted the crypto posts, but screenshots live forever"]; return s; } },
     ] });
   }
 
   evts.push({ id: 49, emoji: "🎤", title: "Live TV Interview", description: "A prime-time host asks: are you the best player in the league right now?", category: "life", choices: [
     { label: "Stay humble", emoji: "🤝", color: "bg-emerald-600", consequence: "Popularity +6, board approves", apply: s => { s.popularity = clamp(s.popularity + 6, 0, 100); s.morale = clamp(s.morale + 3, 0, 100); s.events = [...s.events, "🎤 The humble interview won everyone over"]; return s; } },
-    { label: "\"Yes. Easily.\"", emoji: "😎", color: "bg-amber-600", consequence: "Followers +1.5M, Popularity -4, Shooting +1 (confidence)", apply: s => { s.socialMediaFollowers = round1(s.socialMediaFollowers + 1.5); s.popularity = clamp(s.popularity - 4, 0, 100); s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1 }; s.events = [...s.events, "🎤 Declared yourself the best — the clip went viral"]; return s; } },
+    { label: "\"Yes. Easily.\"", emoji: "😎", color: "bg-amber-600", consequence: "Followers +1.5M, Popularity -4, Shooting +1 (confidence)", apply: s => { s.socialMediaFollowers = round1(s.socialMediaFollowers + 1.5); s.popularity = clamp(s.popularity - 4, 0, 100); s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1 }; s.events = [...s.events, "🎤 Declared yourself the best. The clip went viral"]; return s; } },
     { label: "Dodge the question", emoji: "🧊", color: "bg-muted", consequence: "No drama", apply: s => { s.morale = clamp(s.morale + 1, 0, 100); s.events = [...s.events, "🎤 Gave the media nothing to work with"]; return s; } },
   ] });
 
   evts.push({ id: 50, emoji: "🕴️", title: "Streaker Steals the Show", description: "A streaker interrupts your match and attempts your signature celebration on the way out.", category: "positive", choices: [
     { label: "Laugh and applaud", emoji: "😂", color: "bg-emerald-600", consequence: "Popularity +3, Followers +0.5M", apply: s => { s.popularity = clamp(s.popularity + 3, 0, 100); s.socialMediaFollowers = round1(s.socialMediaFollowers + 0.5); s.events = [...s.events, "🕴️ Your reaction to the streaker became a meme"]; return s; } },
-    { label: "Complain to the ref", emoji: "😤", color: "bg-muted", consequence: "Popularity -2", apply: s => { s.popularity = clamp(s.popularity - 2, 0, 100); s.morale = clamp(s.morale - 2, 0, 100); s.events = [...s.events, "🕴️ Fumed about the streaker — fans called you no fun"]; return s; } },
+    { label: "Complain to the ref", emoji: "😤", color: "bg-muted", consequence: "Popularity -2", apply: s => { s.popularity = clamp(s.popularity - 2, 0, 100); s.morale = clamp(s.morale - 2, 0, 100); s.events = [...s.events, "🕴️ Fumed about the streaker. Fans called you no fun"]; return s; } },
   ] });
 
   if (st.age >= 20) {
     evts.push({ id: 51, emoji: "🥊", title: "Dressing Room Bust-Up", description: "A teammate blames you loudly for a defeat. Shoving follows. Cameras hear everything.", category: "negative", choices: [
       { label: "Squash it privately", emoji: "🤝", color: "bg-emerald-600", consequence: "Morale +4, leadership respect", apply: s => { s.morale = clamp(s.morale + 4, 0, 100); s.popularity = clamp(s.popularity + 1, 0, 100); s.events = [...s.events, "🥊 Cleared the air with your teammate behind closed doors"]; return s; } },
       { label: "Let it fester", emoji: "🧊", color: "bg-red-600", consequence: "Morale -8, Passing -1 (no chemistry)", apply: s => { s.morale = clamp(s.morale - 8, 0, 100); s.statBoostNextSeason = { ...s.statBoostNextSeason, passing: (s.statBoostNextSeason.passing || 0) - 1 }; s.events = [...s.events, "🥊 The feud froze the dressing room"]; return s; } },
-      { label: "Demand the club sells him", emoji: "📤", color: "bg-amber-600", consequence: "50%: board backs you · 50%: board backs him", apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 6, 0, 100); s.events = [...s.events, "📤 The board backed you — he was sold in January"]; } else { s.morale = clamp(s.morale - 10, 0, 100); s.popularity = clamp(s.popularity - 4, 0, 100); s.events = [...s.events, "📤 The board backed HIM. Awkward training sessions ahead"]; } return s; } },
+      { label: "Demand the club sells him", emoji: "📤", color: "bg-amber-600", consequence: "50%: board backs you · 50%: board backs him", apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 6, 0, 100); s.events = [...s.events, "📤 The board backed you. He was sold in January"]; } else { s.morale = clamp(s.morale - 10, 0, 100); s.popularity = clamp(s.popularity - 4, 0, 100); s.events = [...s.events, "📤 The board backed HIM. Awkward training sessions ahead"]; } return s; } },
     ] });
   }
 
@@ -529,23 +529,23 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
 
   if (st.age >= 21) {
     evts.push({ id: 56, emoji: "🕶️", title: "Agent Demands 15%", description: "Your agent says he made you, and now wants his cut raised from 10% to 15%.", category: "negative", choices: [
-      { label: "Fire him", emoji: "🚪", color: "bg-red-600", consequence: "50%: better agent · 50%: representation chaos", apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 3, 0, 100); s.popularity = clamp(s.popularity + 1, 0, 100); s.events = [...s.events, "🚪 Fired your agent and found a sharper one"]; } else { s.morale = clamp(s.morale - 6, 0, 100); s.events = [...s.events, "🚪 The agent split turned messy — endless leaks"]; } return s; } },
+      { label: "Fire him", emoji: "🚪", color: "bg-red-600", consequence: "50%: better agent · 50%: representation chaos", apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 3, 0, 100); s.popularity = clamp(s.popularity + 1, 0, 100); s.events = [...s.events, "🚪 Fired your agent and found a sharper one"]; } else { s.morale = clamp(s.morale - 6, 0, 100); s.events = [...s.events, "🚪 The agent split turned messy: endless leaks"]; } return s; } },
       { label: "Pay the 15%", emoji: "💸", color: "bg-muted", consequence: "-€0.5M in fees, Morale -2", apply: s => { s.netWorth = round1(Math.max(0, s.netWorth - 0.5)); s.agentFeesPaid = round1(s.agentFeesPaid + 0.5); s.morale = clamp(s.morale - 2, 0, 100); s.events = [...s.events, "💸 Gave in to the agent's new cut"]; return s; } },
-      { label: "Negotiate hard to keep 10%", emoji: "🤝", color: "bg-emerald-600", consequence: "Relationship tense but intact", apply: s => { s.morale = clamp(s.morale + 1, 0, 100); s.events = [...s.events, "🤝 Talked your agent down — 10% stands"]; return s; } },
+      { label: "Negotiate hard to keep 10%", emoji: "🤝", color: "bg-emerald-600", consequence: "Relationship tense but intact", apply: s => { s.morale = clamp(s.morale + 1, 0, 100); s.events = [...s.events, "🤝 Talked your agent down, 10% stands"]; return s; } },
     ] });
   }
 
   if (st.contractYearsLeft <= 2 && st.age >= 22 && st.overall >= 72) {
     evts.push({ id: 57, emoji: "📄", title: "Contract Standoff", description: "Talks over a new deal have stalled. Your camp believes you are worth far more.", category: "life", choices: [
-      { label: "Hold out of training", emoji: "🪧", color: "bg-red-600", consequence: "50%: wage +20% · 50%: fined + fan backlash", apply: s => { if (Math.random() < 0.5) { s.weeklyWage = Math.round(s.weeklyWage * 1.2); s.popularity = clamp(s.popularity - 6, 0, 100); s.events = [...s.events, "🪧 The holdout worked — wage up 20%"]; } else { s.netWorth = round1(Math.max(0, s.netWorth * 0.98)); s.popularity = clamp(s.popularity - 8, 0, 100); s.morale = clamp(s.morale - 6, 0, 100); s.events = [...s.events, "🪧 Fined and criticized — the holdout backfired"]; } return s; } },
+      { label: "Hold out of training", emoji: "🪧", color: "bg-red-600", consequence: "50%: wage +20% · 50%: fined + fan backlash", apply: s => { if (Math.random() < 0.5) { s.weeklyWage = Math.round(s.weeklyWage * 1.2); s.popularity = clamp(s.popularity - 6, 0, 100); s.events = [...s.events, "🪧 The holdout worked: wage up 20%"]; } else { s.netWorth = round1(Math.max(0, s.netWorth * 0.98)); s.popularity = clamp(s.popularity - 8, 0, 100); s.morale = clamp(s.morale - 6, 0, 100); s.events = [...s.events, "🪧 Fined and criticized. The holdout backfired"]; } return s; } },
       { label: "Sign quietly", emoji: "🖊️", color: "bg-emerald-600", consequence: "Wage +5%, Morale +3", apply: s => { s.weeklyWage = Math.round(s.weeklyWage * 1.05); s.morale = clamp(s.morale + 3, 0, 100); s.events = [...s.events, "🖊️ Signed a modest new deal without drama"]; return s; } },
-      { label: "Play out the contract", emoji: "⏳", color: "bg-muted", consequence: "Bet on yourself", apply: s => { s.events = [...s.events, "⏳ No new deal — betting on a big season"]; return s; } },
+      { label: "Play out the contract", emoji: "⏳", color: "bg-muted", consequence: "Bet on yourself", apply: s => { s.events = [...s.events, "⏳ No new deal, betting on a big season"]; return s; } },
     ] });
   }
 
   if (st.popularity >= 45) {
     evts.push({ id: 58, emoji: "🌍", title: "Charity Match Invitation", description: "A legends charity match for disaster relief wants you as the headline act.", category: "positive", choices: [
-      { label: "Headline the match", emoji: "🌟", color: "bg-emerald-600", consequence: "Popularity +7, Morale +5", apply: s => { s.popularity = clamp(s.popularity + 7, 0, 100); s.morale = clamp(s.morale + 5, 0, 100); s.integrityBonus += 3; s.events = [...s.events, "🌍 Headlined the charity match — millions raised"]; return s; } },
+      { label: "Headline the match", emoji: "🌟", color: "bg-emerald-600", consequence: "Popularity +7, Morale +5", apply: s => { s.popularity = clamp(s.popularity + 7, 0, 100); s.morale = clamp(s.morale + 5, 0, 100); s.integrityBonus += 3; s.events = [...s.events, "🌍 Headlined the charity match, millions raised"]; return s; } },
       { label: "Politely decline", emoji: "🙏", color: "bg-muted", consequence: "Rest instead", apply: s => { s.morale = clamp(s.morale + 1, 0, 100); s.events = [...s.events, "🌍 Skipped the charity match to rest"]; return s; } },
     ] });
   }
@@ -553,14 +553,14 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
   if (st.age >= 30) {
     evts.push({ id: 59, emoji: "🏟️", title: "Testimonial Invitation", description: "Your boyhood club wants to host a testimonial in your honour.", category: "positive", choices: [
       { label: "Play the testimonial", emoji: "🥹", color: "bg-emerald-600", consequence: "Popularity +6, Morale +8", apply: s => { s.popularity = clamp(s.popularity + 6, 0, 100); s.morale = clamp(s.morale + 8, 0, 100); s.events = [...s.events, "🏟️ A sold-out testimonial at your boyhood club"]; return s; } },
-      { label: "Too busy this year", emoji: "📅", color: "bg-muted", consequence: "Popularity -3", apply: s => { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "📅 Postponed the testimonial — locals were hurt"]; return s; } },
+      { label: "Too busy this year", emoji: "📅", color: "bg-muted", consequence: "Popularity -3", apply: s => { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "📅 Postponed the testimonial. Locals were hurt"]; return s; } },
     ] });
   }
 
   if (st.overall >= 80) {
     evts.push({ id: 60, emoji: "🎮", title: "Video Game Rating Snub", description: "The new football game rates you 3 points lower than last year. Everyone is tagging you.", category: "life", choices: [
       { label: "Post a sarcastic meme", emoji: "😏", color: "bg-amber-600", consequence: "Followers +1.5M", apply: s => { s.socialMediaFollowers = round1(s.socialMediaFollowers + 1.5); s.popularity = clamp(s.popularity + 2, 0, 100); s.events = [...s.events, "😏 Your rating-snub meme got a million likes"]; return s; } },
-      { label: "Let your feet talk", emoji: "🏋️", color: "bg-emerald-600", consequence: "Physical +1 next season", apply: s => { s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 }; s.events = [...s.events, "🏋️ Trained harder — ratings are just numbers"]; return s; } },
+      { label: "Let your feet talk", emoji: "🏋️", color: "bg-emerald-600", consequence: "Physical +1 next season", apply: s => { s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 }; s.events = [...s.events, "🏋️ Trained harder. Ratings are just numbers"]; return s; } },
     ] });
   }
 
@@ -571,26 +571,26 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
 
   evts.push({ id: 62, emoji: "🦴", title: "Training Ground Collision", description: "You clash knees with a teammate in training. It hurts, but the physio says it is borderline.", category: "negative", choices: [
     { label: "Push through it", emoji: "😤", color: "bg-amber-600", consequence: "70%: fine · 30%: aggravate it (Physical -2)", apply: s => { if (Math.random() < 0.3) { s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) - 2 }; s.morale = clamp(s.morale - 4, 0, 100); s.events = [...s.events, "🦴 Played through the knock and made it worse"]; } else { s.morale = clamp(s.morale + 2, 0, 100); s.events = [...s.events, "🦴 Gritted through the training knock"]; } return s; } },
-    { label: "Sit out two weeks", emoji: "🛌", color: "bg-emerald-600", consequence: "Safe choice, Morale -1", apply: s => { s.morale = clamp(s.morale - 1, 0, 100); s.events = [...s.events, "🛌 Rested the knee — better safe than sorry"]; return s; } },
+    { label: "Sit out two weeks", emoji: "🛌", color: "bg-emerald-600", consequence: "Safe choice, Morale -1", apply: s => { s.morale = clamp(s.morale - 1, 0, 100); s.events = [...s.events, "🛌 Rested the knee. Better safe than sorry"]; return s; } },
   ] });
 
   if (st.age >= 21) {
     evts.push({ id: 63, emoji: "💬", title: "Leaked Group Chat", description: "A private message where you rate the manager's tactics \"stone age\" leaks to the press.", category: "negative", choices: [
       { label: "Apologize to the gaffer", emoji: "🙇", color: "bg-emerald-600", consequence: "Awkward but resolved", apply: s => { s.morale = clamp(s.morale + 2, 0, 100); s.events = [...s.events, "💬 Apologized for the leaked message"]; return s; } },
-      { label: "Stand by every word", emoji: "🗿", color: "bg-red-600", consequence: "50%: manager respects it · 50%: benched briefly", apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 6, 0, 100); s.popularity = clamp(s.popularity + 3, 0, 100); s.events = [...s.events, "🗿 The manager respected the honesty — cleared the air"]; } else { s.morale = clamp(s.morale - 5, 0, 100); s.statBoostNextSeason = { ...s.statBoostNextSeason, passing: (s.statBoostNextSeason.passing || 0) - 1 }; s.events = [...s.events, "🗿 Spent a month on the bench for that one"]; } return s; } },
+      { label: "Stand by every word", emoji: "🗿", color: "bg-red-600", consequence: "50%: manager respects it · 50%: benched briefly", apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 6, 0, 100); s.popularity = clamp(s.popularity + 3, 0, 100); s.events = [...s.events, "🗿 The manager respected the honesty and cleared the air"]; } else { s.morale = clamp(s.morale - 5, 0, 100); s.statBoostNextSeason = { ...s.statBoostNextSeason, passing: (s.statBoostNextSeason.passing || 0) - 1 }; s.events = [...s.events, "🗿 Spent a month on the bench for that one"]; } return s; } },
     ] });
   }
 
   if (st.popularity >= 50) {
     evts.push({ id: 64, emoji: "🍳", title: "Celebrity Cooking Show", description: "A hit cooking show wants you for its celebrity special.", category: "life", choices: [
-      { label: "Bring the apron", emoji: "👨\u200d🍳", color: "bg-emerald-600", consequence: "Popularity +5, Followers +1M", apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.socialMediaFollowers = round1(s.socialMediaFollowers + 1); s.morale = clamp(s.morale + 4, 0, 100); s.events = [...s.events, "🍳 Burned the dessert on national TV — everyone loved it"]; return s; } },
+      { label: "Bring the apron", emoji: "👨\u200d🍳", color: "bg-emerald-600", consequence: "Popularity +5, Followers +1M", apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.socialMediaFollowers = round1(s.socialMediaFollowers + 1); s.morale = clamp(s.morale + 4, 0, 100); s.events = [...s.events, "🍳 Burned the dessert on national TV. Everyone loved it"]; return s; } },
       { label: "Decline", emoji: "🚫", color: "bg-muted", consequence: "No distractions", apply: s => { s.events = [...s.events, "🍳 Passed on the cooking show"]; return s; } },
     ] });
   }
 
   if (st.age >= 20 && st.currentClubTier <= 2) {
     evts.push({ id: 65, emoji: "✈️", title: "Lost Passport Before European Night", description: "Your passport is missing the morning of a Champions League away trip.", category: "negative", choices: [
-      { label: "Emergency charter scramble", emoji: "🛩️", color: "bg-amber-600", consequence: "-€0.2M, you make kickoff", apply: s => { s.netWorth = round1(Math.max(0, s.netWorth - 0.2)); s.morale = clamp(s.morale - 2, 0, 100); s.events = [...s.events, "🛩️ Chartered a jet after the passport chaos — made kickoff"]; return s; } },
+      { label: "Emergency charter scramble", emoji: "🛩️", color: "bg-amber-600", consequence: "-€0.2M, you make kickoff", apply: s => { s.netWorth = round1(Math.max(0, s.netWorth - 0.2)); s.morale = clamp(s.morale - 2, 0, 100); s.events = [...s.events, "🛩️ Chartered a jet after the passport chaos and made kickoff"]; return s; } },
       { label: "Miss the match", emoji: "📺", color: "bg-red-600", consequence: "Morale -6, Popularity -3", apply: s => { s.morale = clamp(s.morale - 6, 0, 100); s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "📺 Watched the away match from your sofa. Unforgivable"]; return s; } },
     ] });
   }
@@ -598,13 +598,13 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
   if (st.socialMediaFollowers >= 3) {
     evts.push({ id: 66, emoji: "🧢", title: "Bootleg Merch Everywhere", description: "Street stalls are selling knock-off shirts with your face (and a questionable likeness).", category: "life", choices: [
       { label: "Lawyer up", emoji: "⚖️", color: "bg-blue-600", consequence: "+€0.5M settlement after fees", apply: s => { s.netWorth = round1(s.netWorth + 0.5); s.events = [...s.events, "⚖️ Won a settlement from the bootleggers"]; return s; } },
-      { label: "Let it slide", emoji: "😄", color: "bg-emerald-600", consequence: "Popularity +2 (man of the people)", apply: s => { s.popularity = clamp(s.popularity + 2, 0, 100); s.events = [...s.events, "😄 Posed with a bootleg shirt — fans loved it"]; return s; } },
+      { label: "Let it slide", emoji: "😄", color: "bg-emerald-600", consequence: "Popularity +2 (man of the people)", apply: s => { s.popularity = clamp(s.popularity + 2, 0, 100); s.events = [...s.events, "😄 Posed with a bootleg shirt. Fans loved it"]; return s; } },
     ] });
   }
 
   if (st.socialMediaFollowers >= 1) {
-    evts.push({ id: 67, emoji: "💇", title: "New Haircut Goes Viral", description: "Your bold new haircut is trending — and not entirely in a good way.", category: "life", choices: [
-      { label: "Lean into it", emoji: "😎", color: "bg-emerald-600", consequence: "Followers +1.2M, Popularity +3", apply: s => { s.socialMediaFollowers = round1(s.socialMediaFollowers + 1.2); s.popularity = clamp(s.popularity + 3, 0, 100); s.events = [...s.events, "💇 Owned the haircut — barbers copied it nationwide"]; return s; } },
+    evts.push({ id: 67, emoji: "💇", title: "New Haircut Goes Viral", description: "Your bold new haircut is trending, and not entirely in a good way.", category: "life", choices: [
+      { label: "Lean into it", emoji: "😎", color: "bg-emerald-600", consequence: "Followers +1.2M, Popularity +3", apply: s => { s.socialMediaFollowers = round1(s.socialMediaFollowers + 1.2); s.popularity = clamp(s.popularity + 3, 0, 100); s.events = [...s.events, "💇 Owned the haircut. Barbers copied it nationwide"]; return s; } },
       { label: "Hat until it grows back", emoji: "🧢", color: "bg-muted", consequence: "Morale -2", apply: s => { s.morale = clamp(s.morale - 2, 0, 100); s.events = [...s.events, "💇 Wore a beanie for two months straight"]; return s; } },
     ] });
   }
@@ -612,13 +612,13 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
   if (st.age >= 25 && st.socialMediaFollowers >= 2) {
     evts.push({ id: 68, emoji: "🎙️", title: "Launch Your Own Podcast", description: "A production company offers to launch your podcast: tactics, teammates, tea.", category: "life", choices: [
       { label: "Launch it", emoji: "🎧", color: "bg-emerald-600", consequence: "+€0.6M, Followers +1M", apply: s => { s.netWorth = round1(s.netWorth + 0.6); s.socialMediaFollowers = round1(s.socialMediaFollowers + 1); s.morale = clamp(s.morale + 2, 0, 100); s.events = [...s.events, "🎙️ Your podcast topped the charts in week one"]; return s; } },
-      { label: "Focus on football", emoji: "⚽", color: "bg-muted", consequence: "Passing +1 next season", apply: s => { s.statBoostNextSeason = { ...s.statBoostNextSeason, passing: (s.statBoostNextSeason.passing || 0) + 1 }; s.events = [...s.events, "⚽ Turned down the podcast — reps over takes"]; return s; } },
+      { label: "Focus on football", emoji: "⚽", color: "bg-muted", consequence: "Passing +1 next season", apply: s => { s.statBoostNextSeason = { ...s.statBoostNextSeason, passing: (s.statBoostNextSeason.passing || 0) + 1 }; s.events = [...s.events, "⚽ Turned down the podcast. Reps over takes"]; return s; } },
     ] });
   }
 
   if (st.popularity >= 40) {
     evts.push({ id: 69, emoji: "📣", title: "Ultras Ask You to Lead the Chant", description: "After a huge win, the ultras hand you the megaphone in front of the whole end.", category: "positive", choices: [
-      { label: "Grab the megaphone", emoji: "🗣️", color: "bg-emerald-600", consequence: "Popularity +6, Morale +6", apply: s => { s.popularity = clamp(s.popularity + 6, 0, 100); s.morale = clamp(s.morale + 6, 0, 100); s.events = [...s.events, "📣 Led the chant from the fence — instant cult hero"]; return s; } },
+      { label: "Grab the megaphone", emoji: "🗣️", color: "bg-emerald-600", consequence: "Popularity +6, Morale +6", apply: s => { s.popularity = clamp(s.popularity + 6, 0, 100); s.morale = clamp(s.morale + 6, 0, 100); s.events = [...s.events, "📣 Led the chant from the fence. Instant cult hero"]; return s; } },
       { label: "Wave and jog off", emoji: "👋", color: "bg-muted", consequence: "Morale +2", apply: s => { s.morale = clamp(s.morale + 2, 0, 100); s.events = [...s.events, "👋 Kept it low-key with the ultras"]; return s; } },
     ] });
   }
@@ -638,7 +638,7 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
   }
 
   evts.push({ id: 72, emoji: "🐕", title: "Adopt a Rescue Dog", description: "A shelter you follow posts a scruffy rescue dog that nobody wants. You cannot stop thinking about it.", category: "life", choices: [
-    { label: "Adopt him", emoji: "🐾", color: "bg-emerald-600", consequence: "Morale +8, Followers +0.8M", apply: s => { s.morale = clamp(s.morale + 8, 0, 100); s.socialMediaFollowers = round1(s.socialMediaFollowers + 0.8); s.customYearlyCosts = round1(s.customYearlyCosts + 0.01); s.events = [...s.events, "🐕 Adopted a rescue dog — he has his own fan account now"]; return s; } },
+    { label: "Adopt him", emoji: "🐾", color: "bg-emerald-600", consequence: "Morale +8, Followers +0.8M", apply: s => { s.morale = clamp(s.morale + 8, 0, 100); s.socialMediaFollowers = round1(s.socialMediaFollowers + 0.8); s.customYearlyCosts = round1(s.customYearlyCosts + 0.01); s.events = [...s.events, "🐕 Adopted a rescue dog. He has his own fan account now"]; return s; } },
     { label: "Not right now", emoji: "😔", color: "bg-muted", consequence: "No change", apply: s => { s.events = [...s.events, "🐕 Decided a dog can wait until retirement"]; return s; } },
   ] });
 

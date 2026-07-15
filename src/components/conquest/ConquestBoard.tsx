@@ -151,7 +151,7 @@ function FreeAgencyPanel({
   const favTeam = favoriteTeam ? TEAM_MAP.get(favoriteTeam) : undefined;
   const favoriteEliminated = !!favoriteTeam && !aliveIds.includes(favoriteTeam);
   const cooldownLabel = favoriteEliminated
-    ? '💀 Your team was eliminated — pick another team'
+    ? '💀 Your team was eliminated. Pick another team'
     : freeAgencyCooldownRemaining > 0
       ? `Available after ${freeAgencyCooldownRemaining} more conquest${freeAgencyCooldownRemaining === 1 ? '' : 's'}`
       : 'Pick a team to unlock signing';
@@ -538,10 +538,10 @@ export default function ConquestBoard() {
 
               <div className="text-center text-sm text-muted-foreground pt-1">
                 {game.battleResult.loser === game.attackingTeam
-                  ? `Raid repelled — ${loseTeam?.city} ${loseTeam?.name} lose no territory on an away defeat`
+                  ? `Raid repelled: ${loseTeam?.city} ${loseTeam?.name} lose no territory on an away defeat`
                   : game.invincibleTeams.has(game.battleResult.loser)
-                    ? `🛡️ ${loseTeam?.city} ${loseTeam?.name} survive — invincibility protects their territory`
-                    : `${loseTeam?.city} ${loseTeam?.name} eliminated — home territory conquered`}
+                    ? `🛡️ ${loseTeam?.city} ${loseTeam?.name} survive: invincibility protects their territory`
+                    : `${loseTeam?.city} ${loseTeam?.name} eliminated: home territory conquered`}
               </div>
 
               {/* Player Confirmed Animation */}

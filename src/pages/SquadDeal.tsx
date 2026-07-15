@@ -159,7 +159,7 @@ const SquadDeal = () => {
 
         {!done && (
           <div className="max-w-2xl mx-auto">
-            <div className="text-center text-sm font-semibold text-foreground mb-3">{cat.emoji} {cat.title} — {g.extraStage === 'pick' ? 'pick one case to KEEP 💼' : g.extraStage === 'reveal' ? 'three cases flip...' : g.extraStage === 'offer' ? 'the Banker calls' : 'stay or swap?'}</div>
+            <div className="text-center text-sm font-semibold text-foreground mb-3">{cat.emoji} {cat.title}: {g.extraStage === 'pick' ? 'pick one case to KEEP 💼' : g.extraStage === 'reveal' ? 'three cases flip...' : g.extraStage === 'offer' ? 'the Banker calls' : 'stay or swap?'}</div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {cat.options.map((opt, i) => {
                 const kept = g.extraKept === i;

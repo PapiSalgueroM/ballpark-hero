@@ -466,7 +466,7 @@ const PerfectSeasonNba = () => {
               {lockedPlayoffRun && (
                 <p className="text-xs text-muted-foreground mb-3">
                   {lockedPlayoffRun.champion
-                    ? `🏆 ${lockedPlayoffRun.bannerTitle} — beat ${lockedPlayoffRun.rounds.map(r => r.opponent).join(', ')}`
+                    ? `🏆 ${lockedPlayoffRun.bannerTitle}: beat ${lockedPlayoffRun.rounds.map(r => r.opponent).join(', ')}`
                     : `Playoff run: out in the ${lockedPlayoffRun.exitRound}.`}
                 </p>
               )}
@@ -774,7 +774,7 @@ const PerfectSeasonNba = () => {
                 </div>
               ) : (
                 <p className="text-xs text-muted-foreground text-center mt-3">
-                  Missed the postseason — {PLAYOFF_THRESHOLD.nba}+ wins makes the playoffs.
+                  Missed the postseason: {PLAYOFF_THRESHOLD.nba}+ wins makes the playoffs.
                 </p>
               )}
 
