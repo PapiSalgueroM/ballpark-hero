@@ -537,7 +537,7 @@ const CareerLadder = () => {
                   playNext={mode === 'daily' ? 'Come back tomorrow for a new ladder!' : undefined}
                 >
                   <div className="bg-secondary rounded-xl px-4 py-3 inline-flex items-center gap-3 mb-3">
-                    <span className="text-3xl">{flagForNationality(activePlayer.nationality)}</span>
+                    <FlagImg name={activePlayer.nationality} size={32} />
                     <span className="text-left">
                       <span className="block font-bold text-foreground">{activePlayer.name}</span>
                       <span className="block text-xs text-muted-foreground">
