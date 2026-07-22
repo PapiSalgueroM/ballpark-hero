@@ -33,6 +33,7 @@ const BaseballCareer = () => {
     maxClue,
     isLoading,
     playerNames,
+    hard, toggleHard,
   } = useBaseballCareer();
 
   const [showRules, setShowRules] = useState(false);
@@ -99,6 +100,13 @@ const BaseballCareer = () => {
                 </button>
               ))}
             </div>
+            <button
+              onClick={toggleHard}
+              title="Hard mode: the easiest clues stay hidden"
+              className={cn('mt-2 mx-auto block text-xs px-3 py-1 rounded-full border transition-all',
+                hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground'
+              )}
+            >😈 Hard mode: {hard ? 'ON' : 'off'}</button>
           </>
         }
       >

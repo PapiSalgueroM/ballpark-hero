@@ -26,6 +26,7 @@ const NFLCareer = () => {
     makeGuess,
     giveUp,
     shareText,
+    hard, toggleHard,
   } = useNFLCareer();
 
   const [showHelp, setShowHelp] = useState(false);
@@ -57,6 +58,11 @@ const NFLCareer = () => {
             >
               <HelpCircle className="w-4 h-4" /> How to play
             </button>
+            <button
+              onClick={toggleHard}
+              title="Hard mode: the easiest clues stay hidden"
+              className={'mt-2 mx-auto block text-xs px-3 py-1 rounded-full border transition-all ' + (hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground')}
+            >😈 Hard mode: {hard ? 'ON' : 'off'}</button>
             <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
               <span>Clue <span className="text-foreground font-semibold">{cluesRevealed}/{totalClues}</span></span>
               <span>Score if correct: <span className="text-correct font-semibold">{score}</span></span>

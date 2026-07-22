@@ -47,6 +47,7 @@ export function useHockeyCareer() {
     () => hockeyCareerPuzzles[Math.floor(Math.random() * hockeyCareerPuzzles.length)]
   );
   const [clueLevel, setClueLevel] = useState(0);
+  const [hard, setHard] = useState(false);
   const [status, setStatus] = useState<HockeyCareerStatus>('playing');
 
   // ---- ACTIVE VALUES -------------------------------------------------------
@@ -78,11 +79,15 @@ export function useHockeyCareer() {
     }
     if (cl >= 4) clues.push({ label: 'Career Stats', value: player.stats.join(', ') });
     if (cl >= 5) clues.push({ label: 'Awards', value: player.awards.join(', ') });
-    return clues;
-  }, [activeClueLevel, player]);
+    // HARD (task #12): drop the two easiest clues (display-only; the
+    // clue-level action log and scoring are untouched, so daily replay is safe).
+    const out = hard ? clues.slice(2) : clues;
+    return out.length ? out : clues.slice(-1);
+  }, [activeClueLevel, player, hard]);
 
   // ---- CALLBACKS -----------------------------------------------------------
   const switchMode = useCallback((newMode: HockeyCareerMode) => setMode(newMode), []);
+  const toggleHard = useCallback(() => setHard(h => !h), []);
 
   const revealNextClue = useCallback(() => {
     if (activeStatus !== 'playing') return;
@@ -147,6 +152,7 @@ export function useHockeyCareer() {
   useGameCompletion('hockey-career', rawDailyStatus !== 'playing', dailyScore);
 
   return {
+    hard, toggleHard,
     mode,
     switchMode,
     puzzle,

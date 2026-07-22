@@ -21,6 +21,7 @@ const HockeyCareer = () => {
     puzzle, player, clueLevel, visibleClues, status, score,
     guessInput, setGuessInput, submitGuess, revealNextClue, giveUp, resetGame, wrongGuess, maxClue,
     isLoading, playerNames,
+    hard, toggleHard,
   } = useHockeyCareer();
 
   const [showRules, setShowRules] = useState(false);
@@ -80,6 +81,13 @@ const HockeyCareer = () => {
                 </button>
               ))}
             </div>
+            <button
+              onClick={toggleHard}
+              title="Hard mode: the easiest clues stay hidden"
+              className={cn('mt-2 mx-auto block text-xs px-3 py-1 rounded-full border transition-all',
+                hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground'
+              )}
+            >😈 Hard mode: {hard ? 'ON' : 'off'}</button>
           </>
         }
       >
@@ -200,13 +208,4 @@ const HockeyCareer = () => {
 
         <AdBanner slot="1234567901" format="horizontal" className="mt-8" />
         <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="hockey-career" gameContext={{ puzzleId: puzzle.id }} />
-        </div>
-        <GameNav />
-      </GameShell>
-      <HockeyCareerHowToPlay open={showRules} onOpenChange={setShowRules} />
-    </>
-  );
-};
-
-export default HockeyCareer;
+          <ReportQuestion gameType="hockey-career" gameContext={{ p

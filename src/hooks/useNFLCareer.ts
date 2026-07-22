@@ -19,6 +19,7 @@ export function useNFLCareer() {
   const [cluesRevealed, setCluesRevealed] = useState(1); // start with 1 clue
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
   const [guessHistory, setGuessHistory] = useState<string[]>([]);
+  const [hard, setHard] = useState(false);
 
   const score = useMemo(() => Math.max(1, TOTAL_CLUES + 1 - cluesRevealed), [cluesRevealed]);
 
@@ -31,8 +32,10 @@ export function useNFLCareer() {
       { label: 'Teams', value: targetPlayer.teams.join(' → ') },
       { label: 'Jersey #', value: `#${targetPlayer.jerseyNumbers}` },
     ];
-    return all.slice(0, cluesRevealed);
-  }, [targetPlayer, cluesRevealed]);
+    // HARD (task #12): hide the easiest leading clues (display-only).
+    const start = hard ? Math.min(2, Math.max(0, cluesRevealed - 1)) : 0;
+    return all.slice(start, cluesRevealed);
+  }, [targetPlayer, cluesRevealed, hard]);
 
   const makeGuess = useCallback((name: string) => {
     if (gameStatus !== 'playing') return;
@@ -91,7 +94,10 @@ export function useNFLCareer() {
 
   useGameCompletion('nfl-career', gameStatus !== 'playing', score);
 
+  const toggleHard = useCallback(() => setHard(h => !h), []);
+
   return {
+    hard, toggleHard,
     targetPlayer,
     clues,
     cluesRevealed,
