@@ -131,6 +131,10 @@ export function useFootballGrid() {
           });
           const rarity = await fetchRarity(puzzle.id, capturedCell, displayName);
           addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: displayName, rarity });
+        } else if (data?.unverified) {
+          // Answer-checking is temporarily offline — don't burn a guess or
+          // flash "wrong"; ask the player to retry.
+          toast.error("Couldn't verify that answer — please try again.");
         } else {
           setWrongFlash({ cellIndex: capturedCell, playerName });
           setTimeout(() => setWrongFlash(null), 1500);

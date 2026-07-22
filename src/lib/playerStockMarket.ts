@@ -13,9 +13,10 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
  * random for unlimited. Scoring maps your trio against all C(6,3)=20
  * possible trios: 100 = the optimal portfolio, 0 = the worst.
  *
- * Known caveat (task #15): rows are keyed by player_name only, so a
- * same-named journeyman could theoretically pollute a series; q2 dedupes by
- * (name, year) keeping the max value, which keeps the star's series.
+ * Identity (task #15): resolution prefers person_key and falls back to
+ * player_name. person_key is NULL for every row today, so this is a no-op now,
+ * but once identities are keyed a same-named journeyman can no longer pollute a
+ * star's series. Dedup/series still keep the max value per (key, year).
  */
 
 export interface StockPlayer {
@@ -83,7 +84,7 @@ export async function fetchStockRound(year: number, seed: number): Promise<Stock
     // 1) Candidate pool: top players by value at the market year.
     const { data: poolRows, error: e1 } = await supabase
       .from('player_market_values')
-      .select('player_name, club, position, age, nationality, market_value_usd')
+      .select('person_key, player_name, club, position, age, nationality, market_value_usd')
       .eq('year', year)
       .gte('market_value_usd', 15000000)
       .order('market_value_usd', { ascending: false })
@@ -93,12 +94,19 @@ export async function fetchStockRound(year: number, seed: number): Promise<Stock
       return null;
     }
 
-    // Dedup by name (per-position rank duplicates exist), keep highest value.
+    // Identity prefers person_key (task #15), falling back to player_name.
+    // Every person_key is NULL today, so this behaves exactly like name-keying
+    // now, but stays forward-compatible once identities are populated.
+    const keyOf = (r: { person_key?: string | null; player_name: string }) =>
+      (r.person_key && String(r.person_key).trim()) || r.player_name;
+
+    // Dedup by identity (per-position rank duplicates exist), keep highest value.
     const seen = new Set<string>();
     const pool = poolRows.filter((r) => {
       if (!r.player_name || !r.club || !r.market_value_usd) return false;
-      if (seen.has(r.player_name)) return false;
-      seen.add(r.player_name);
+      const k = keyOf(r);
+      if (seen.has(k)) return false;
+      seen.add(k);
       return true;
     });
 
@@ -108,7 +116,7 @@ export async function fetchStockRound(year: number, seed: number): Promise<Stock
 
     const { data: histRows, error: e2 } = await supabase
       .from('player_market_values')
-      .select('player_name, year, market_value_usd')
+      .select('person_key, player_name, year, market_value_usd')
       .in('player_name', names)
       .gte('year', year - 2)
       .lte('year', year + 1);
@@ -117,23 +125,24 @@ export async function fetchStockRound(year: number, seed: number): Promise<Stock
       return null;
     }
 
-    // (name, year) -> max value.
-    const byNameYear = new Map<string, number>();
+    // (key, year) -> max value, where key prefers person_key over player_name.
+    const byKeyYear = new Map<string, number>();
     for (const r of histRows) {
       if (!r.player_name || !r.market_value_usd) continue;
-      const k = `${r.player_name}|${r.year}`;
-      byNameYear.set(k, Math.max(byNameYear.get(k) ?? 0, Number(r.market_value_usd)));
+      const k = `${keyOf(r)}|${r.year}`;
+      byKeyYear.set(k, Math.max(byKeyYear.get(k) ?? 0, Number(r.market_value_usd)));
     }
 
     const players: StockPlayer[] = [];
     for (const c of candidates) {
       if (players.length >= 6) break;
-      const next = byNameYear.get(`${c.player_name}|${year + 1}`);
-      const current = byNameYear.get(`${c.player_name}|${year}`) ?? Number(c.market_value_usd);
+      const ckey = keyOf(c);
+      const next = byKeyYear.get(`${ckey}|${year + 1}`);
+      const current = byKeyYear.get(`${ckey}|${year}`) ?? Number(c.market_value_usd);
       if (!next || !current) continue; // must have a real next-year value
       const series: { year: number; value: number }[] = [];
       for (let y = year - 2; y <= year; y++) {
-        const v = byNameYear.get(`${c.player_name}|${y}`);
+        const v = byKeyYear.get(`${ckey}|${y}`);
         if (v) series.push({ year: y, value: v });
       }
       players.push({

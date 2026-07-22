@@ -169,6 +169,17 @@ export interface PlayerSourceConfig {
   prominenceColumn?: string;
   /** Column used as a tiebreaker when prominenceColumn values are equal (e.g. year or season). Higher = more recent = preferred. */
   recencyColumn?: string;
+  /**
+   * When set, the player's name is stored split across two columns: this column
+   * holds the FIRST name and `nameColumn` holds the last name. The searchable
+   * and display name then become "First Last", and the substring (ilike) leg
+   * matches the first typed word against EITHER column so a first name
+   * ("LeBron") or a surname both resolve. For tables like
+   * nba_players_extended_v2 that have no full_name column.
+   */
+  firstNameColumn?: string;
+  /** When true, a LOWER prominenceColumn value means MORE prominent (e.g. player_id, where long-established stars hold the smallest ids). */
+  prominenceAscending?: boolean;
   /** Columns copied into PlayerEntity.meta, keyed by the meta property name they should populate. */
   metaColumns?: Record<string, string>;
   /** Row cap for the raw ilike leg. Default 200. */
@@ -224,6 +235,7 @@ function applyFilters(builder: any, filters: PlayerSourceFilter[] | undefined) {
 
 function buildSelectColumns(source: PlayerSourceConfig): string {
   const cols = new Set<string>([source.nameColumn]);
+  if (source.firstNameColumn) cols.add(source.firstNameColumn);
   if (source.prominenceColumn) cols.add(source.prominenceColumn);
   if (source.recencyColumn) cols.add(source.recencyColumn);
   if (source.metaColumns) {
@@ -238,11 +250,23 @@ function rowToRaw(row: RawRow, source: PlayerSourceConfig): {
   recency: number;
   meta: PlayerEntityMeta;
 } | null {
-  const nameVal = row[source.nameColumn];
-  const name = typeof nameVal === 'string' ? nameVal.trim() : '';
+  const lastVal = row[source.nameColumn];
+  const last = typeof lastVal === 'string' ? lastVal.trim() : '';
+  let name = last;
+  if (source.firstNameColumn) {
+    const firstVal = row[source.firstNameColumn];
+    const first = typeof firstVal === 'string' ? firstVal.trim() : '';
+    // Split-name tables (e.g. nba_players_extended_v2) build "First Last" so
+    // autocomplete matches and shows the whole name, not just the surname.
+    name = [first, last].filter(Boolean).join(' ');
+  }
   if (!name) return null;
 
-  const prominence = source.prominenceColumn ? Number(row[source.prominenceColumn]) || 0 : 0;
+  let prominence = source.prominenceColumn ? Number(row[source.prominenceColumn]) || 0 : 0;
+  // Some sources rank prominence by an ASCENDING column (e.g. player_id, where
+  // long-established stars were ingested first and hold the smallest ids).
+  // Invert so the rest of the pipeline's "higher = more prominent" still holds.
+  if (source.prominenceColumn && source.prominenceAscending) prominence = 1e15 - prominence;
   const recency = source.recencyColumn ? Number(row[source.recencyColumn]) || 0 : 0;
 
   const meta: PlayerEntityMeta = {};
@@ -291,10 +315,21 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
 
   try {
     // Leg 1: direct ilike substring search on the raw typed text. Correct and
-    // fast whenever query/data accent state already matches.
-    let ilikeQuery = supabase.from(source.table).select(selectCols).ilike(source.nameColumn, `%${rawQuery}%`);
+    // fast whenever query/data accent state already matches. For split-name
+    // sources, match the first typed word against EITHER the first- or
+    // last-name column so a first name ("LeBron") or surname both resolve.
+    let ilikeQuery;
+    if (source.firstNameColumn) {
+      const token = rawQuery.split(/\s+/)[0].replace(/[,()%]/g, ' ').trim() || rawQuery;
+      ilikeQuery = supabase
+        .from(source.table)
+        .select(selectCols)
+        .or(`${source.firstNameColumn}.ilike.%${token}%,${source.nameColumn}.ilike.%${token}%`);
+    } else {
+      ilikeQuery = supabase.from(source.table).select(selectCols).ilike(source.nameColumn, `%${rawQuery}%`);
+    }
     ilikeQuery = applyFilters(ilikeQuery, source.filters);
-    if (source.prominenceColumn) ilikeQuery = ilikeQuery.order(source.prominenceColumn, { ascending: false });
+    if (source.prominenceColumn) ilikeQuery = ilikeQuery.order(source.prominenceColumn, { ascending: source.prominenceAscending === true });
     ilikeQuery = ilikeQuery.limit(ilikeLimit);
     if (signal) ilikeQuery = ilikeQuery.abortSignal(signal);
 
@@ -309,7 +344,7 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
     if (prominenceQuery) {
       prominenceQuery = applyFilters(prominenceQuery, source.filters);
       if (source.prominenceColumn) {
-        prominenceQuery = prominenceQuery.order(source.prominenceColumn, { ascending: false });
+        prominenceQuery = prominenceQuery.order(source.prominenceColumn, { ascending: source.prominenceAscending === true });
       }
       prominenceQuery = prominenceQuery.limit(prominenceLimit);
       if (signal) prominenceQuery = prominenceQuery.abortSignal(signal);
@@ -432,14 +467,19 @@ export const NFL_ROSTER_SOURCE: PlayerSourceConfig = {
  *
  * This table has NO `full_name` column (verified via information_schema on
  * flawuiqbvjobmkfkauhw, 2026-07-02): it stores `first_name` and `last_name`
- * separately. `last_name` is used as nameColumn (populated on 5134 of 5135
- * rows) with `first_name` carried in metaColumns, mirroring
- * NBA_PLAYER_SOURCE_V2 in src/hooks/useNbaLineup.ts so both NBA integrations
- * agree on how this table is queried.
+ * separately. `last_name` is nameColumn and `first_name` is firstNameColumn,
+ * so the search layer builds "First Last" for both matching and display and
+ * the ilike leg matches either column — this is what makes first-name queries
+ * ("LeBron", "Kobe") resolve instead of returning nothing. There is no stats
+ * column, so `player_id` (ascending: balldontlie gave established stars the
+ * smallest ids) is used as a "surface obvious stars" prominence proxy.
  */
 export const NBA_PLAYER_SOURCE: PlayerSourceConfig = {
   table: 'nba_players_extended_v2',
   nameColumn: 'last_name',
+  firstNameColumn: 'first_name',
+  prominenceColumn: 'player_id',
+  prominenceAscending: true,
   metaColumns: {
     firstName: 'first_name',
     team: 'team',

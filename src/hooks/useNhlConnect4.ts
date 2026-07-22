@@ -167,7 +167,11 @@ export function useNhlConnect4() {
         // Use the full proper name from AI if available
         if (result.fullName) displayName = result.fullName;
       } catch {
-        // Allow on error
+        // FAIL CLOSED: a network/parse failure must NOT let an unchecked answer
+        // through — reject with a retry message instead of placing the piece.
+        setValidationError("Couldn't verify your answer right now — please try again.");
+        setIsValidating(false);
+        return;
       }
 
       // Re-check duplicate against the resolved display name too, in case the

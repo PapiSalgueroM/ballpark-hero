@@ -4,6 +4,7 @@ import { CellState, FootballGridGameStatus, GridPuzzle } from '@/types/footballG
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { toast } from 'sonner';
 
 type GridAction =
   | { t: 'ok'; cellIndex: number; playerName: string; rarity: number }
@@ -115,6 +116,10 @@ export function useCollegeGrid() {
           });
           const rarity = await fetchRarity(puzzle.id, capturedCell, playerName);
           addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName, rarity });
+        } else if (data?.unverified) {
+          // Answer-checking is temporarily offline — don't burn a guess or
+          // flash "wrong"; ask the player to retry.
+          toast.error("Couldn't verify that answer — please try again.");
         } else {
           setWrongFlash({ cellIndex: capturedCell, playerName });
           setTimeout(() => setWrongFlash(null), 1500);

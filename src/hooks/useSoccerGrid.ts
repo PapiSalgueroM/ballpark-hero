@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchSoccerGridPuzzles } from '@/lib/fetchSoccerGridPuzzles';
+import { toast } from 'sonner';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
 import {
   SoccerGridDifficulty,
@@ -310,6 +311,10 @@ export function useSoccerGrid() {
           } else {
             addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: displayName, rarity });
           }
+        } else if (data?.unverified) {
+          // Answer-checking is temporarily offline — don't burn a guess or
+          // flash "wrong"; ask the player to retry.
+          toast.error("Couldn't verify that answer — please try again.");
         } else {
           setWrongFlash({ cellIndex: capturedCell, playerName });
           setTimeout(() => setWrongFlash(null), 1500);
