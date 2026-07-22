@@ -112,6 +112,7 @@ import MlbGrid from "./pages/MlbGrid";
 import NbaConnections from "./pages/NbaConnections";
 import NflConnections from "./pages/NflConnections";
 import NhlConnections from "./pages/NhlConnections";
+import NbaCareer from "./pages/NbaCareer";
 
 const queryClient = new QueryClient();
 
@@ -308,6 +309,7 @@ const AppContent = () => {
         <Route path="/nba-connections" element={<NbaConnections />} />
         <Route path="/nfl-connections" element={<NflConnections />} />
         <Route path="/nhl-connections" element={<NhlConnections />} />
+        <Route path="/nba-career" element={<NbaCareer />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

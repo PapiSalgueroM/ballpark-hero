@@ -1,0 +1,215 @@
+import { TextWithFlags } from '@/components/FlagImg';
+import { useState, useEffect } from 'react';
+import { FlagImg } from '@/components/FlagImg';
+import { useNbaCareer } from '@/hooks/useNbaCareer';
+import { GameNav } from '@/components/game/GameNav';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
+import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
+import { HelpCircle, Eye, Trophy } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { NbaCareerHowToPlay } from '@/components/nba-career/NbaCareerHowToPlay';
+import { Skeleton } from '@/components/ui/skeleton';
+
+/**
+ * NBA Career Path — direct port of HockeyCareer.tsx (task #25) on the
+ * generic primary palette. Keep the career-path pages in lockstep.
+ */
+const NbaCareer = () => {
+  const {
+    mode, switchMode,
+    puzzle, player, clueLevel, visibleClues, status, score,
+    guessInput, setGuessInput, submitGuess, revealNextClue, giveUp, resetGame, wrongGuess, maxClue,
+    isLoading, playerNames,
+  } = useNbaCareer();
+
+  const [showRules, setShowRules] = useState(false);
+
+  const suggestions =
+    guessInput.trim().length >= 2
+      ? playerNames
+          .filter(
+            (n) =>
+              n.toLowerCase().includes(guessInput.trim().toLowerCase()) &&
+              n.toLowerCase() !== guessInput.trim().toLowerCase(),
+          )
+          .slice(0, 8)
+      : [];
+
+  useEffect(() => {
+    const seen = localStorage.getItem('nbac-rules-seen');
+    if (!seen) { setShowRules(true); localStorage.setItem('nbac-rules-seen', '1'); }
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (guessInput.trim()) submitGuess(guessInput);
+  };
+
+  return (
+    <>
+      <PageSeo
+        title="NBA Career Path - Guess the Basketball Player | DoUKnowBall"
+        description="Progressive clues reveal a mystery NBA player. Guess from position, draft, teams, and stats. Daily challenge."
+        path="/nba-career"
+      />
+      <GameShell
+        width="narrow"
+        title="🏀 CAREER PATH"
+        subtitle="Guess the mystery NBA player from progressive clues"
+        headerExtra={
+          <>
+            <button onClick={() => setShowRules(true)} className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors" aria-label="How to play">
+              <HelpCircle className="w-4 h-4" /> How to play
+            </button>
+
+            {/* Daily / Unlimited toggle */}
+            <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited'] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
+                  className={cn(
+                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    mode === m
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                </button>
+              ))}
+            </div>
+          </>
+        }
+      >
+        {isLoading ? (
+          <div className="bg-card border border-border rounded-2xl p-6 shadow-lg space-y-3" aria-live="polite" aria-busy="true">
+            <span className="sr-only">Loading today's puzzle…</span>
+            <Skeleton className="h-12 w-full rounded-xl" />
+            <Skeleton className="h-12 w-full rounded-xl" />
+            <Skeleton className="h-12 w-3/4 rounded-xl" />
+          </div>
+        ) : (
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-lg">
+          {status === 'playing' && (
+            <div className="text-center mb-4">
+              <span className="text-sm text-muted-foreground">Current score if correct: </span>
+              <span className="font-bold text-primary">
+                {1000 - clueLevel * 150 > 100 ? 1000 - clueLevel * 150 : 100} pts
+              </span>
+            </div>
+          )}
+
+          <div className="space-y-3 mb-6">
+            {visibleClues.map((clue) => (
+              <div key={clue.label} className="flex items-start gap-3 px-4 py-3 rounded-xl bg-secondary/60 border border-border animate-cell-reveal">
+                <span className="text-xs font-bold text-primary uppercase w-24 shrink-0 pt-0.5">{clue.label}</span>
+                <span className="font-semibold text-foreground text-sm"><TextWithFlags text={clue.value} size={16} /></span>
+              </div>
+            ))}
+          </div>
+
+          {status === 'playing' && clueLevel < maxClue && (
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <button onClick={revealNextClue} className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg border border-primary/30 text-primary hover:bg-primary/10 transition-colors">
+                <Eye className="w-4 h-4" /> Reveal Next Clue (−150 pts)
+              </button>
+              <GiveUpButton onGiveUp={giveUp} />
+            </div>
+          )}
+
+          {status === 'playing' && (
+            <div className="relative">
+            <form onSubmit={handleSubmit} className="flex gap-2">
+              <input
+                type="text" value={guessInput} onChange={(e) => setGuessInput(e.target.value)}
+                placeholder="Type player name..."
+                className={cn(
+                  'flex-1 px-4 py-3 rounded-xl bg-secondary border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 transition-all',
+                  wrongGuess ? 'border-destructive ring-destructive/30' : 'border-border focus:ring-primary/40'
+                )}
+              />
+              <button type="submit" disabled={!guessInput.trim()} className="px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-opacity disabled:opacity-40">
+                Guess
+              </button>
+            </form>
+            {suggestions.length > 0 && (
+              <div className="absolute z-20 left-0 right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden max-h-60 overflow-y-auto">
+                {suggestions.map((name) => (
+                  <button
+                    key={name}
+                    type="button"
+                    onClick={() => submitGuess(name)}
+                    className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent transition-colors"
+                  >
+                    {name}
+                  </button>
+                ))}
+              </div>
+            )}
+            </div>
+          )}
+          {wrongGuess && <p className="text-destructive text-sm text-center mt-2 animate-cell-reveal">Wrong guess. Try again!</p>}
+        </div>
+        )}
+
+        {(status === 'guessed' || status === 'revealed') && (
+          <div className="mt-6 flex justify-center">
+            <ResultScreen
+              won={status === 'guessed'}
+              outcomeEmoji={status === 'guessed' ? '🏀' : '😤'}
+              headline={player!.name}
+              statLine={<span className="inline-flex items-center gap-1"><FlagImg name={player!.country} size={16} /> {player!.position}</span>}
+              funFact={
+                <>
+                  💡 Did you know? {player!.name} ({player!.country}) played for {player!.teams.length} {player!.teams.length === 1 ? 'franchise' : 'franchises'}{player!.awards.length ? ` and earned ${player!.awards.length} career ${player!.awards.length === 1 ? 'honor' : 'honors'}` : ''}.
+                </>
+              }
+              statRow={status === 'guessed' ? [{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{score}</span> }] : undefined}
+              emojiGrid={status === 'guessed' ? `${score} points on today's NBA Career Path` : `today's NBA Career Path (gave up)`}
+              share={{
+                score: status === 'guessed' ? `${score} points on today's NBA Career Path` : `today's NBA Career Path (gave up)`,
+                gameName: 'NBA Career Path',
+                gamePath: '/nba-career',
+              }}
+              onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
+              playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p> : undefined}
+            />
+          </div>
+        )}
+
+        <GameSeoContent
+          title="NBA Career Path | DoUKnowBall"
+          description="A daily game where you guess a mystery NBA player from progressive clues: position, country, draft, teams, stats, and awards."
+          howToPlay={[
+            'Clues revealed: position, country, draft, teams, stats, awards',
+            'Guess at any point. Earlier guesses earn more points (max 1000)',
+            'Each clue costs 150 points',
+            'New player every day. Share your score!',
+          ]}
+          examples={[
+            "LeBron James: Cavaliers → Heat → Cavaliers → Lakers, 4× MVP",
+            "Michael Jordan: Bulls → Wizards, 6× champion",
+            "Hakeem Olajuwon: Nigeria, #1 pick 1984, 2× champion",
+            "Vince Carter: 8 franchises across a record 22 seasons",
+            "John Stockton: one team, all-time assists and steals records",
+          ]}
+        />
+
+        <AdBanner slot="1234567909" format="horizontal" className="mt-8" />
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="nba-career" gameContext={{ puzzleId: puzzle.id }} />
+        </div>
+        <GameNav />
+      </GameShell>
+      <NbaCareerHowToPlay open={showRules} onOpenChange={setShowRules} />
+    </>
+  );
+};
+
+export default NbaCareer;
