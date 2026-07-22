@@ -1,14 +1,15 @@
 import { useState, useMemo, useCallback } from 'react';
-import { mlbHLPlayers, MlbHLPlayer } from '@/data/mlbHLPlayers';
+import { tennisHLPlayers, TennisHLPlayer } from '@/data/tennisHLPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
 /**
- * MLB Higher/Lower — fourth Higher/Lower sport port (task #23), same rules as
- * the Hockey/NBA/NFL/F1 hooks: 10 rounds, 10 pts per correct, +5 per
+ * Tennis Higher/Lower — fifth Higher/Lower sport port (task #23), same rules
+ * as the Hockey/NBA/NFL/F1/MLB hooks: 10 rounds, 10 pts per correct, +5 per
  * consecutive-correct streak step, daily (ET-seeded) + unlimited modes.
- * Keep the HL hooks in lockstep if the mechanic ever changes.
+ * Ties (very common with slam counts: 24/24, 22/22, 18/18…) score as correct
+ * for either pick. Keep the HL hooks in lockstep if the mechanic changes.
  */
 function seededShuffle<T>(arr: T[], seed: number): T[] {
   const a = [...arr];
@@ -21,12 +22,12 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
   return a;
 }
 
-export type MlbHLStatus = 'playing' | 'complete';
-export type MlbHLMode = 'daily' | 'unlimited';
+export type TennisHLStatus = 'playing' | 'complete';
+export type TennisHLMode = 'daily' | 'unlimited';
 
 interface RoundResult {
-  player1: MlbHLPlayer;
-  player2: MlbHLPlayer;
+  player1: TennisHLPlayer;
+  player2: TennisHLPlayer;
   correct: boolean;
 }
 
@@ -34,19 +35,19 @@ type HLAction = { t: 'result'; correct: boolean };
 
 const ROUNDS = 10;
 // Sentinel puzzle array — useDailyPuzzle needs at least one element.
-const SENTINEL_PUZZLES = [{ id: 'mlbhl-daily' }];
+const SENTINEL_PUZZLES = [{ id: 'tennishl-daily' }];
 
-function buildPairs(seed: number): [MlbHLPlayer, MlbHLPlayer][] {
-  const shuffled = seededShuffle(mlbHLPlayers, seed);
-  const result: [MlbHLPlayer, MlbHLPlayer][] = [];
+function buildPairs(seed: number): [TennisHLPlayer, TennisHLPlayer][] {
+  const shuffled = seededShuffle(tennisHLPlayers, seed);
+  const result: [TennisHLPlayer, TennisHLPlayer][] = [];
   for (let i = 0; i < ROUNDS * 2 && i + 1 < shuffled.length; i += 2) {
     result.push([shuffled[i], shuffled[i + 1]]);
   }
   return result;
 }
 
-export function useMlbHL() {
-  const [mode, setMode] = useState<MlbHLMode>('daily');
+export function useTennisHL() {
+  const [mode, setMode] = useState<TennisHLMode>('daily');
 
   const {
     guesses: dailyActions,
@@ -55,7 +56,7 @@ export function useMlbHL() {
     isLoading,
     todayStr,
   } = useDailyPuzzle<{ id: string }, HLAction>({
-    gameSlug: 'mlb-hl',
+    gameSlug: 'tennis-hl',
     puzzles: SENTINEL_PUZZLES,
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,
@@ -67,7 +68,7 @@ export function useMlbHL() {
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
 
-  const [unlimitedPairs, setUnlimitedPairs] = useState<[MlbHLPlayer, MlbHLPlayer][]>(
+  const [unlimitedPairs, setUnlimitedPairs] = useState<[TennisHLPlayer, TennisHLPlayer][]>(
     () => buildPairs(Math.floor(Math.random() * 100000)),
   );
   const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
@@ -77,8 +78,8 @@ export function useMlbHL() {
   const dailyResults: RoundResult[] = useMemo(
     () =>
       dailyActions.map((a, i) => ({
-        player1: dailyPairs[i]?.[0] ?? mlbHLPlayers[0],
-        player2: dailyPairs[i]?.[1] ?? mlbHLPlayers[1],
+        player1: dailyPairs[i]?.[0] ?? tennisHLPlayers[0],
+        player2: dailyPairs[i]?.[1] ?? tennisHLPlayers[1],
         correct: a.correct,
       })),
     [dailyActions, dailyPairs],
@@ -92,7 +93,7 @@ export function useMlbHL() {
     [baseResults, currentResult],
   );
 
-  const gameStatus: MlbHLStatus = mode === 'daily'
+  const gameStatus: TennisHLStatus = mode === 'daily'
     ? (rawDailyStatus !== 'playing' ? 'complete' : 'playing')
     : (unlimitedRound >= ROUNDS ? 'complete' : 'playing');
 
@@ -120,12 +121,10 @@ export function useMlbHL() {
     (choice: 'left' | 'right') => {
       if (!currentPair || showingResult || gameStatus !== 'playing') return;
       const [p1, p2] = currentPair;
-      // Ties count as correct either way — the MLB pool literally has three
-      // 521-HR careers (Williams/McCovey/Thomas), and the old `>=` logic
-      // silently marked the right-side pick wrong on a dead tie. Fixed
-      // across all HL hooks (July 2026).
-      const tie = p1.careerHrs === p2.careerHrs;
-      const leftHigher = p1.careerHrs >= p2.careerHrs;
+      // Ties count as correct either way — slam counts tie constantly
+      // (Djokovic/Court 24, Nadal/Graf 22, Evert/Navratilova 18…).
+      const tie = p1.slams === p2.slams;
+      const leftHigher = p1.slams >= p2.slams;
       const correct = tie || (choice === 'left' && leftHigher) || (choice === 'right' && !leftHigher);
 
       setCurrentResult({ player1: p1, player2: p2, correct });
@@ -145,7 +144,7 @@ export function useMlbHL() {
     [currentPair, showingResult, gameStatus, mode, addDailyAction],
   );
 
-  const switchMode = useCallback((m: MlbHLMode) => {
+  const switchMode = useCallback((m: TennisHLMode) => {
     if (m === 'unlimited') {
       setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000)));
       setUnlimitedResults([]);
@@ -156,7 +155,7 @@ export function useMlbHL() {
     setShowingResult(false);
   }, []);
 
-  useGameCompletion('mlb-higher-lower', rawDailyStatus !== 'playing', totalScore);
+  useGameCompletion('tennis-higher-lower', rawDailyStatus !== 'playing', totalScore);
 
   return {
     mode, switchMode, currentPair, currentRound, results, showingResult, streak,

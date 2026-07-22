@@ -121,8 +121,12 @@ export function useNbaHL() {
     (choice: 'left' | 'right') => {
       if (!currentPair || showingResult || gameStatus !== 'playing') return;
       const [p1, p2] = currentPair;
+      // Ties count as correct either way — HL pools contain exact-equal stat
+      // values, and the old `>=` logic silently marked the right-side pick
+      // wrong on a dead tie. Fixed across all HL hooks (July 2026).
+      const tie = p1.careerPoints === p2.careerPoints;
       const leftHigher = p1.careerPoints >= p2.careerPoints;
-      const correct = (choice === 'left' && leftHigher) || (choice === 'right' && !leftHigher);
+      const correct = tie || (choice === 'left' && leftHigher) || (choice === 'right' && !leftHigher);
 
       setCurrentResult({ player1: p1, player2: p2, correct });
       setShowingResult(true);

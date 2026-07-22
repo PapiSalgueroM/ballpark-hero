@@ -155,6 +155,7 @@ export const CATEGORIES: GameCategory[] = [
     games: [
       { path: '/guess-tennis-player', label: 'Guess The Player', emoji: '🎾', description: 'Guess the mystery tennis player from clues', daily: true, isNew: true },
       { path: '/tennis-chain', label: 'Tennis Chain', emoji: '🔗', description: 'Build a chain of Grand Slam defeats', isNew: true },
+      { path: '/tennis-higher-lower', label: 'Tennis Higher or Lower', emoji: '📊', description: 'Which legend won more Grand Slam titles?', daily: true, isNew: true },
     ],
   },
   {
