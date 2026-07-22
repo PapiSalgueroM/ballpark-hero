@@ -343,6 +343,59 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     ],
     source: 'bref box 200806170BOS Starters (Pierce/Garnett/Allen/Rondo/Perkins; Perkins 13:25 MP) + NBA.com box 0040700406 starters block.',
   },
+  // 11. 2011 NBA Finals Game 6 — Dallas Mavericks (the Barea trap)
+  // Verified 2026-07-22: bref box 201106120MIA Starters + NBA.com box
+  // 0041000406 starters block (first bench = Brian Cardinal in both).
+  {
+    id: 'finals-2011-g6-dal',
+    dateLabel: '2011 NBA Finals, Game 6',
+    competition: 'NBA Finals',
+    matchDate: '2011-06-12',
+    team: 'Dallas Mavericks',
+    opponent: 'Miami Heat',
+    scoreLine: 'Mavericks 105-95 Heat',
+    venue: 'AmericanAirlines Arena, Miami',
+    // Trap: 6-foot backup J.J. Barea started the title clincher.
+    slots: [
+      PG('Jason Kidd'),
+      SG('J.J. Barea'),
+      SF('Shawn Marion'),
+      PF('Dirk Nowitzki'),
+      C('Tyson Chandler'),
+    ],
+    blankCandidates: [
+      { name: 'J.J. Barea', slotIndex: 1, nationality: 'Puerto Rico', fact: 'The 6-foot backup was moved into the starting lineup mid-series — Dallas won the last three games.' },
+      { name: 'Shawn Marion', slotIndex: 2, nationality: 'USA', fact: 'The Matrix drew the LeBron assignment in the clincher.' },
+      { name: 'Tyson Chandler', slotIndex: 4, nationality: 'USA' },
+    ],
+    source: 'bref box 201106120MIA Starters (Nowitzki/Kidd/Marion/Chandler/Barea) + NBA.com box 0041000406 starters block.',
+  },
+
+  // 12. 2011 NBA Finals Game 6 — Miami Heat (the Joel Anthony trap)
+  {
+    id: 'finals-2011-g6-mia',
+    dateLabel: '2011 NBA Finals, Game 6',
+    competition: 'NBA Finals',
+    matchDate: '2011-06-12',
+    team: 'Miami Heat',
+    opponent: 'Dallas Mavericks',
+    scoreLine: 'Mavericks 105-95 Heat',
+    venue: 'AmericanAirlines Arena, Miami',
+    // Trap: undrafted Joel Anthony started at center (10:55 MP).
+    slots: [
+      PG('Mario Chalmers'),
+      SG('Dwyane Wade'),
+      SF('LeBron James'),
+      PF('Chris Bosh'),
+      C('Joel Anthony'),
+    ],
+    blankCandidates: [
+      { name: 'Joel Anthony', slotIndex: 4, nationality: 'Canada', fact: 'The undrafted Canadian started at center in the title-deciding game — and played just 11 minutes.' },
+      { name: 'Mario Chalmers', slotIndex: 0, nationality: 'USA' },
+      { name: 'Chris Bosh', slotIndex: 3, nationality: 'USA' },
+    ],
+    source: 'bref box 201106120MIA Starters (Wade/James/Bosh/Chalmers/Anthony; Anthony 10:55 MP) + NBA.com box 0041000406 starters block (Mike Miller first off the bench).',
+  },
 ];
 
 // ---------------------------------------------------------------------------

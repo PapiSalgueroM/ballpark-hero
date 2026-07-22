@@ -250,6 +250,67 @@ export const NINE_LINEUPS: NineLineup[] = [
     ],
     source: 'baseball-almanac box 198810150LAN (Gibson listed only as "ph" in the 9-hole pitchers\' block; HR line: "Gibson (1,9th inning off Eckersley 1 on, 2 out)"). Hatcher HR: "1st inning off Stewart 1 on, 1 out".',
   },
+  // 7. 1986 World Series Game 6 — Boston Red Sox (one strike away)
+  // Verified 2026-07-22: baseball-almanac box 198610250NYN (starters =
+  // un-indented batting rows). In-box corroboration: Henderson HR "10th
+  // inning off Aguilera", E-Buckner, Clemens 7.0 IP.
+  {
+    id: 'ws-1986-g6-bos',
+    dateLabel: '1986 World Series, Game 6',
+    competition: 'World Series',
+    matchDate: '1986-10-25',
+    team: 'Boston Red Sox',
+    opponent: 'New York Mets',
+    scoreLine: 'Mets 6-5 Red Sox (10 inn)',
+    venue: 'Shea Stadium, New York',
+    slots: [
+      S('3B', 'Wade Boggs'),
+      S('2B', 'Marty Barrett'),
+      S('1B', 'Bill Buckner'),
+      S('LF', 'Jim Rice'),
+      S('RF', 'Dwight Evans'),
+      S('C', 'Rich Gedman'),
+      S('CF', 'Dave Henderson'),
+      S('SS', 'Spike Owen'),
+      S('P', 'Roger Clemens'),
+    ],
+    blankCandidates: [
+      { name: 'Roger Clemens', slotIndex: 8, nationality: 'USA', fact: 'Started and threw seven innings — the collapse came after he left.' },
+      { name: 'Bill Buckner', slotIndex: 2, nationality: 'USA', fact: 'Batted third and played first base — the error in the 10th made him the story forever.' },
+      { name: 'Dave Henderson', slotIndex: 6, nationality: 'USA', fact: 'His 10th-inning homer off Aguilera had Boston one strike from the title.' },
+    ],
+    source: 'baseball-almanac box 198610250NYN. Event lines: Henderson HR 10th off Aguilera; E-Buckner (1); Clemens 7.0 IP.',
+  },
+
+  // 8. 1986 World Series Game 6 — New York Mets (the Mookie game)
+  {
+    id: 'ws-1986-g6-nym',
+    dateLabel: '1986 World Series, Game 6',
+    competition: 'World Series',
+    matchDate: '1986-10-25',
+    team: 'New York Mets',
+    opponent: 'Boston Red Sox',
+    scoreLine: 'Mets 6-5 Red Sox (10 inn)',
+    venue: 'Shea Stadium, New York',
+    // Trap: Bobby Ojeda started — not Gooden. Kevin Mitchell only pinch-hit.
+    slots: [
+      S('CF', 'Lenny Dykstra'),
+      S('2B', 'Wally Backman'),
+      S('1B', 'Keith Hernandez'),
+      S('C', 'Gary Carter'),
+      S('RF', 'Darryl Strawberry'),
+      S('3B', 'Ray Knight'),
+      S('LF', 'Mookie Wilson'),
+      S('SS', 'Rafael Santana'),
+      S('P', 'Bobby Ojeda'),
+    ],
+    blankCandidates: [
+      { name: 'Bobby Ojeda', slotIndex: 8, nationality: 'USA', fact: 'The lefty ex-Red Sox started Game 6 against his old team — not Dwight Gooden.' },
+      { name: 'Mookie Wilson', slotIndex: 6, nationality: 'USA', fact: 'Hit the grounder that rolled through Buckner\'s legs.' },
+      { name: 'Rafael Santana', slotIndex: 7, nationality: 'Dominican Republic', fact: 'The light-hitting shortstop batted eighth in the most famous Game 6 ever.' },
+    ],
+    source: 'baseball-almanac box 198610250NYN. Event lines: Ojeda 6.0 IP as starter; Knight 2 RBI; Carter SF; Mitchell listed ph only.',
+  },
 ];
 
 // ---------------------------------------------------------------------------

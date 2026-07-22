@@ -132,6 +132,199 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     source: 'pfr box 201702050atl #home_starters (Chrome-rendered DOM) + Wikipedia "Super Bowl LI" Starting lineups table — 11/11 match.',
   },
+  // 3. Super Bowl XLIX — New England Patriots (the Malcolm Butler game)
+  // Verified 2026-07-22: pfr 201502010sea #vis_starters + Wikipedia "Super
+  // Bowl XLIX" Starting lineups — 11/11 match (two-TE look, Vereen at RB).
+  {
+    id: 'sb-xlix-ne',
+    dateLabel: 'Super Bowl XLIX',
+    competition: 'Super Bowl',
+    matchDate: '2015-02-01',
+    team: 'New England Patriots',
+    opponent: 'Seattle Seahawks',
+    scoreLine: 'Patriots 28-24 Seahawks',
+    venue: 'University of Phoenix Stadium, Glendale',
+    slots: [
+      S('QB', 'Tom Brady'),
+      S('RB', 'Shane Vereen'),
+      S('WR', 'Brandon LaFell'),
+      S('WR', 'Julian Edelman'),
+      S('TE', 'Rob Gronkowski'),
+      S('TE', 'Michael Hoomanawanui'),
+      S('LT', 'Nate Solder'),
+      S('LG', 'Dan Connolly'),
+      S('C', 'Bryan Stork'),
+      S('RG', 'Ryan Wendell'),
+      S('RT', 'Sebastian Vollmer'),
+    ],
+    blankCandidates: [
+      { name: 'Shane Vereen', slotIndex: 1, nationality: 'USA', fact: 'Started at running back over LeGarrette Blount in the Malcolm Butler game.' },
+      { name: 'Michael Hoomanawanui', slotIndex: 5, nationality: 'USA', fact: 'The second tight end in the opening two-TE look — the surname nobody can spell.' },
+      { name: 'Brandon LaFell', slotIndex: 2, nationality: 'USA', fact: 'The forgotten starter of the receiving corps alongside Edelman and Gronkowski.' },
+    ],
+    source: 'pfr box 201502010sea #vis_starters (Chrome DOM) + Wikipedia SB XLIX Starting lineups — 11/11 match.',
+  },
+
+  // 4. Super Bowl XLIX — Seattle Seahawks (the goal-line interception)
+  {
+    id: 'sb-xlix-sea',
+    dateLabel: 'Super Bowl XLIX',
+    competition: 'Super Bowl',
+    matchDate: '2015-02-01',
+    team: 'Seattle Seahawks',
+    opponent: 'New England Patriots',
+    scoreLine: 'Patriots 28-24 Seahawks',
+    venue: 'University of Phoenix Stadium, Glendale',
+    slots: [
+      S('QB', 'Russell Wilson'),
+      S('RB', 'Marshawn Lynch'),
+      S('WR', 'Doug Baldwin'),
+      S('WR', 'Jermaine Kearse'),
+      S('WR', 'Ricardo Lockette'),
+      S('TE', 'Luke Willson'),
+      S('LT', 'Russell Okung'),
+      S('LG', 'James Carpenter'),
+      S('C', 'Max Unger'),
+      S('RG', 'J.R. Sweezy'),
+      S('RT', 'Justin Britt'),
+    ],
+    blankCandidates: [
+      { name: 'Ricardo Lockette', slotIndex: 4, nationality: 'USA', fact: 'Started at receiver — and was the intended target on the goal-line interception that decided it.' },
+      { name: 'Jermaine Kearse', slotIndex: 3, nationality: 'USA', fact: 'His juggling catch put Seattle at the goal line moments before the interception.' },
+      { name: 'Luke Willson', slotIndex: 5, nationality: 'Canada', fact: 'The Canadian tight end from LaSalle, Ontario started with Seattle one yard from a repeat.' },
+    ],
+    source: 'pfr box 201502010sea #home_starters (Chrome DOM) + Wikipedia SB XLIX Starting lineups — 11/11 match.',
+  },
+
+  // 5. Super Bowl XLII — New England Patriots (18-1)
+  // NOTE: the Giants lineup for this game is NOT shipped — pfr and Wikipedia
+  // disagree on the 11th starter (Michael Matthews TE vs Steve Smith WR), so
+  // it fails the two-source bar. The Patriots side matched 11/11.
+  {
+    id: 'sb-xlii-ne',
+    dateLabel: 'Super Bowl XLII',
+    competition: 'Super Bowl',
+    matchDate: '2008-02-03',
+    team: 'New England Patriots',
+    opponent: 'New York Giants',
+    scoreLine: 'Giants 17-14 Patriots',
+    venue: 'University of Phoenix Stadium, Glendale',
+    slots: [
+      S('QB', 'Tom Brady'),
+      S('RB', 'Laurence Maroney'),
+      S('WR', 'Randy Moss'),
+      S('WR', 'Wes Welker'),
+      S('TE', 'Benjamin Watson'),
+      S('TE', 'Kyle Brady'),
+      S('LT', 'Matt Light'),
+      S('LG', 'Logan Mankins'),
+      S('C', 'Dan Koppen'),
+      S('RG', 'Stephen Neal'),
+      S('RT', 'Nick Kaczur'),
+    ],
+    blankCandidates: [
+      { name: 'Laurence Maroney', slotIndex: 1, nationality: 'USA', fact: 'Started at running back for the 18-0 Patriots on the night the perfect season died.' },
+      { name: 'Kyle Brady', slotIndex: 5, nationality: 'USA', fact: 'The OTHER Brady — the blocking tight end in the two-TE set.' },
+      { name: 'Benjamin Watson', slotIndex: 4, nationality: 'USA', fact: 'Started at tight end for the record-setting 2007 offense.' },
+    ],
+    source: 'pfr box 200802030nwe #home_starters (Chrome DOM) + Wikipedia SB XLII Starting lineups — 11/11 match. Giants side dropped: sources disagree on the 11th starter.',
+  },
+
+  // 6. Super Bowl 50 — Denver Broncos (Peyton's last ride)
+  // NOTE: the Panthers lineup is NOT shipped — pfr lists a 6-OL jumbo look
+  // (Funchess + Daryl Williams) while Wikipedia lists 3 WR (Ginn + Brown);
+  // only 9/11 agree. The Broncos side matched 11/11.
+  {
+    id: 'sb-50-den',
+    dateLabel: 'Super Bowl 50',
+    competition: 'Super Bowl',
+    matchDate: '2016-02-07',
+    team: 'Denver Broncos',
+    opponent: 'Carolina Panthers',
+    scoreLine: 'Broncos 24-10 Panthers',
+    venue: "Levi's Stadium, Santa Clara",
+    slots: [
+      S('QB', 'Peyton Manning'),
+      S('RB', 'C.J. Anderson'),
+      S('WR', 'Demaryius Thomas'),
+      S('WR', 'Emmanuel Sanders'),
+      S('TE', 'Owen Daniels'),
+      S('TE', 'Vernon Davis'),
+      S('LT', 'Ryan Harris'),
+      S('LG', 'Evan Mathis'),
+      S('C', 'Matt Paradis'),
+      S('RG', 'Louis Vasquez'),
+      S('RT', 'Michael Schofield'),
+    ],
+    blankCandidates: [
+      { name: 'C.J. Anderson', slotIndex: 1, nationality: 'USA', fact: "Scored the clinching touchdown in Peyton Manning's final game." },
+      { name: 'Owen Daniels', slotIndex: 4, nationality: 'USA', fact: 'The veteran tight end started in the last game of the Manning era.' },
+      { name: 'Vernon Davis', slotIndex: 5, nationality: 'USA', fact: "The former 49er started as the second tight end in Peyton's final game." },
+    ],
+    source: 'pfr box 201602070den #home_starters (Chrome DOM) + Wikipedia Super Bowl 50 Starting lineups — 11/11 match. Panthers side dropped: sources disagree on the receiver slots.',
+  },
+
+  // 7. Super Bowl LVII — Kansas City Chiefs (the Kelce Bowl)
+  {
+    id: 'sb-lvii-kc',
+    dateLabel: 'Super Bowl LVII',
+    competition: 'Super Bowl',
+    matchDate: '2023-02-12',
+    team: 'Kansas City Chiefs',
+    opponent: 'Philadelphia Eagles',
+    scoreLine: 'Chiefs 38-35 Eagles',
+    venue: 'State Farm Stadium, Glendale',
+    slots: [
+      S('QB', 'Patrick Mahomes'),
+      S('RB', 'Isiah Pacheco'),
+      S('WR', 'Marquez Valdes-Scantling'),
+      S('WR', 'JuJu Smith-Schuster'),
+      S('TE', 'Travis Kelce'),
+      S('TE', 'Noah Gray'),
+      S('LT', 'Orlando Brown Jr.'),
+      S('LG', 'Joe Thuney'),
+      S('C', 'Creed Humphrey'),
+      S('RG', 'Trey Smith'),
+      S('RT', 'Andrew Wylie'),
+    ],
+    blankCandidates: [
+      { name: 'Isiah Pacheco', slotIndex: 1, nationality: 'USA', fact: 'The seventh-round rookie started at running back and ran for a touchdown.' },
+      { name: 'Noah Gray', slotIndex: 5, nationality: 'USA', fact: 'The second tight end behind Travis Kelce — the starter nobody remembers.' },
+      { name: 'JuJu Smith-Schuster', slotIndex: 3, nationality: 'USA', fact: 'Started at receiver in his single season as a Chief.' },
+    ],
+    source: 'pfr box 202302120phi #vis_starters (Chrome DOM) + Wikipedia SB LVII Starting lineups — 11/11 match (wiki resolves pfr\'s generic OL labels).',
+  },
+
+  // 8. Super Bowl LVII — Philadelphia Eagles
+  {
+    id: 'sb-lvii-phi',
+    dateLabel: 'Super Bowl LVII',
+    competition: 'Super Bowl',
+    matchDate: '2023-02-12',
+    team: 'Philadelphia Eagles',
+    opponent: 'Kansas City Chiefs',
+    scoreLine: 'Chiefs 38-35 Eagles',
+    venue: 'State Farm Stadium, Glendale',
+    slots: [
+      S('QB', 'Jalen Hurts'),
+      S('RB', 'Miles Sanders'),
+      S('WR', 'A.J. Brown'),
+      S('WR', 'DeVonta Smith'),
+      S('WR', 'Quez Watkins'),
+      S('TE', 'Dallas Goedert'),
+      S('LT', 'Jordan Mailata'),
+      S('LG', 'Landon Dickerson'),
+      S('C', 'Jason Kelce'),
+      S('RG', 'Isaac Seumalo'),
+      S('RT', 'Lane Johnson'),
+    ],
+    blankCandidates: [
+      { name: 'Quez Watkins', slotIndex: 4, nationality: 'USA', fact: 'The forgotten third receiver next to A.J. Brown and DeVonta Smith.' },
+      { name: 'Jason Kelce', slotIndex: 8, nationality: 'USA', fact: 'Faced his brother Travis — the first brothers ever to play each other in a Super Bowl.' },
+      { name: 'Jordan Mailata', slotIndex: 6, nationality: 'Australia', fact: 'The Australian former rugby league player started at left tackle.' },
+    ],
+    source: 'pfr box 202302120phi #home_starters (Chrome DOM) + Wikipedia SB LVII Starting lineups — 11/11 match.',
+  },
 ];
 
 // ---------------------------------------------------------------------------
