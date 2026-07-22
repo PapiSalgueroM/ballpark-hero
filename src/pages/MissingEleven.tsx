@@ -67,6 +67,9 @@ const MissingEleven = () => {
 
   const [input, setInput] = useState('');
   const [wrongFlash, setWrongFlash] = useState(false);
+  // Hard mode (task #12): no hints, no suggestions, positions hidden until
+  // reveal. Presentation-only — scoring and daily persistence are unchanged.
+  const [hard, setHard] = useState(false);
 
   const act = useCallback((a: ElevenAction) => {
     if (mode === 'daily') addDailyAction(a);
@@ -98,15 +101,16 @@ const MissingEleven = () => {
   useGameCompletion('missing-eleven', mode === 'daily' && rawDailyStatus !== 'playing', score);
 
   const suggestions = useMemo(() => {
+    if (hard) return [];
     const q = normalizeElevenName(input);
     if (q.length < 2) return [];
     return ALL_ELEVEN_NAMES
       .filter((n) => normalizeElevenName(n).includes(q) && normalizeElevenName(n) !== q)
       .slice(0, 6);
-  }, [input]);
+  }, [input, hard]);
 
   const hints: string[] = [];
-  for (let l = 1 as ElevenHintLevel; l <= hintLevel; l = (l + 1) as ElevenHintLevel) {
+  if (!hard) for (let l = 1 as ElevenHintLevel; l <= hintLevel; l = (l + 1) as ElevenHintLevel) {
     const h = elevenHintForLevel(l, puzzle.candidate);
     if (h) hints.push(h);
   }
@@ -140,6 +144,16 @@ const MissingEleven = () => {
                 </button>
               ))}
             </div>
+            <button
+              onClick={() => setHard((h) => !h)}
+              title="Hard mode: no hints, no suggestions, positions hidden"
+              className={cn(
+                'mt-2 mx-auto block text-xs px-3 py-1 rounded-full border transition-all',
+                hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground'
+              )}
+            >
+              😈 Hard mode: {hard ? 'ON' : 'off'}
+            </button>
             <div className="flex items-center justify-center gap-4 mt-3 text-sm">
               <span className="text-muted-foreground">Guesses left: <span className="font-semibold text-foreground">{Math.max(0, 3 - misses)}</span></span>
               {!over && (
@@ -183,7 +197,7 @@ const MissingEleven = () => {
                           isBlank ? 'text-primary' : 'text-muted-foreground'
                         )}
                       >
-                        {slot.position}
+                        {hard && !over ? '—' : slot.position}
                       </span>
                       <span
                         className={cn(

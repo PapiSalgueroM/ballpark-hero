@@ -67,6 +67,9 @@ const MissingFive = () => {
 
   const [input, setInput] = useState('');
   const [wrongFlash, setWrongFlash] = useState(false);
+  // Hard mode (task #12): no hints, no suggestions, positions hidden until
+  // reveal. Presentation-only — scoring and daily persistence are unchanged.
+  const [hard, setHard] = useState(false);
 
   const act = useCallback((a: FiveAction) => {
     if (mode === 'daily') addDailyAction(a);
@@ -98,15 +101,16 @@ const MissingFive = () => {
   useGameCompletion('missing-five', mode === 'daily' && rawDailyStatus !== 'playing', score);
 
   const suggestions = useMemo(() => {
+    if (hard) return [];
     const q = normalizeFiveName(input);
     if (q.length < 2) return [];
     return ALL_FIVE_NAMES
       .filter((n) => normalizeFiveName(n).includes(q) && normalizeFiveName(n) !== q)
       .slice(0, 6);
-  }, [input]);
+  }, [input, hard]);
 
   const hints: string[] = [];
-  for (let l = 1 as FiveHintLevel; l <= hintLevel; l = (l + 1) as FiveHintLevel) {
+  if (!hard) for (let l = 1 as FiveHintLevel; l <= hintLevel; l = (l + 1) as FiveHintLevel) {
     const h = fiveHintForLevel(l, puzzle.candidate);
     if (h) hints.push(h);
   }
@@ -140,6 +144,16 @@ const MissingFive = () => {
                 </button>
               ))}
             </div>
+            <button
+              onClick={() => setHard((h) => !h)}
+              title="Hard mode: no hints, no suggestions, positions hidden"
+              className={cn(
+                'mt-2 mx-auto block text-xs px-3 py-1 rounded-full border transition-all',
+                hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground'
+              )}
+            >
+              😈 Hard mode: {hard ? 'ON' : 'off'}
+            </button>
             <div className="flex items-center justify-center gap-4 mt-3 text-sm">
               <span className="text-muted-foreground">Guesses left: <span className="font-semibold text-foreground">{Math.max(0, 3 - misses)}</span></span>
               {!over && (
@@ -182,7 +196,7 @@ const MissingFive = () => {
                           ? (won ? 'bg-correct/20 border-correct text-foreground' : 'bg-destructive/15 border-destructive/50 text-foreground')
                           : 'bg-card/90 border-border text-foreground'
                     )}>
-                      <span className="block text-[9px] uppercase tracking-wider opacity-70">{slot.position}</span>
+                      <span className="block text-[9px] uppercase tracking-wider opacity-70">{hard && !over ? '?' : slot.position}</span>
                       {isBlank ? '?' : slot.name}
                     </div>
                   </div>

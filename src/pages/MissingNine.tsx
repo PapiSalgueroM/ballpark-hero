@@ -67,6 +67,9 @@ const MissingNine = () => {
 
   const [input, setInput] = useState('');
   const [wrongFlash, setWrongFlash] = useState(false);
+  // Hard mode (task #12): no hints, no suggestions, positions hidden until
+  // reveal. Presentation-only — scoring and daily persistence are unchanged.
+  const [hard, setHard] = useState(false);
 
   const act = useCallback((a: NineAction) => {
     if (mode === 'daily') addDailyAction(a);
@@ -98,15 +101,16 @@ const MissingNine = () => {
   useGameCompletion('missing-nine', mode === 'daily' && rawDailyStatus !== 'playing', score);
 
   const suggestions = useMemo(() => {
+    if (hard) return [];
     const q = normalizeNineName(input);
     if (q.length < 2) return [];
     return ALL_NINE_NAMES
       .filter((n) => normalizeNineName(n).includes(q) && normalizeNineName(n) !== q)
       .slice(0, 6);
-  }, [input]);
+  }, [input, hard]);
 
   const hints: string[] = [];
-  for (let l = 1 as NineHintLevel; l <= hintLevel; l = (l + 1) as NineHintLevel) {
+  if (!hard) for (let l = 1 as NineHintLevel; l <= hintLevel; l = (l + 1) as NineHintLevel) {
     const h = nineHintForLevel(l, puzzle.candidate);
     if (h) hints.push(h);
   }
@@ -140,6 +144,16 @@ const MissingNine = () => {
                 </button>
               ))}
             </div>
+            <button
+              onClick={() => setHard((h) => !h)}
+              title="Hard mode: no hints, no suggestions, positions hidden"
+              className={cn(
+                'mt-2 mx-auto block text-xs px-3 py-1 rounded-full border transition-all',
+                hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground'
+              )}
+            >
+              😈 Hard mode: {hard ? 'ON' : 'off'}
+            </button>
             <div className="flex items-center justify-center gap-4 mt-3 text-sm">
               <span className="text-muted-foreground">Guesses left: <span className="font-semibold text-foreground">{Math.max(0, 3 - misses)}</span></span>
               {!over && (
@@ -198,7 +212,7 @@ const MissingNine = () => {
                         {isBlank ? '?' : slot.name}
                       </span>
                       <span className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground w-8 text-right shrink-0">
-                        {slot.position}
+                        {hard && !over ? '—' : slot.position}
                       </span>
                     </div>
                   );
