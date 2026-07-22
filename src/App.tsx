@@ -104,6 +104,7 @@ import MysteryBox from "./pages/MysteryBox";
 import NbaHigherLower from "./pages/NbaHigherLower";
 import NflHigherLower from "./pages/NflHigherLower";
 import F1HigherLower from "./pages/F1HigherLower";
+import MlbHigherLower from "./pages/MlbHigherLower";
 
 const queryClient = new QueryClient();
 
@@ -292,6 +293,7 @@ const AppContent = () => {
         <Route path="/nba-higher-lower" element={<NbaHigherLower />} />
         <Route path="/nfl-higher-lower" element={<NflHigherLower />} />
         <Route path="/f1-higher-lower" element={<F1HigherLower />} />
+        <Route path="/mlb-higher-lower" element={<MlbHigherLower />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

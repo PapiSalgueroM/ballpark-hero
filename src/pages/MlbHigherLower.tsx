@@ -1,0 +1,156 @@
+import { useMlbHL } from '@/hooks/useMlbHL';
+import { GameNav } from '@/components/game/GameNav';
+import { GameShell } from '@/components/game/GameShell';
+import { ResultScreen } from '@/components/game/ResultScreen';
+import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
+import { ArrowUp, Flame } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+/**
+ * Fourth Higher/Lower port (task #23). Stat axis is career HOME RUNS — the
+ * pool is all-time legends only (careers finished by 2019) because the Lahman
+ * source ends 2021 and active players' totals would read as truncated
+ * "careers". Ruth-to-Ortiz eras all compare cleanly on HRs.
+ */
+const MlbHigherLower = () => {
+  const {
+    mode, switchMode, currentPair, currentRound, results,
+    showingResult, streak, gameStatus, correctCount, totalScore,
+    makeGuess, totalRounds,
+  } = useMlbHL();
+
+  return (
+    <>
+      <PageSeo
+        title="MLB Higher or Lower - Career Home Runs Game | DoUKnowBall"
+        description="Which baseball legend hit more career home runs? Ruth, Aaron, Bonds, Griffey — compare them side by side in this daily MLB challenge."
+        path="/mlb-higher-lower"
+      />
+      <GameShell
+        width="narrow"
+        title="⚾ HIGHER OR LOWER"
+        subtitle="Which legend hit more career home runs?"
+        headerExtra={
+          <>
+            <div className="flex items-center justify-center gap-2 mt-3">
+              <button
+                onClick={() => switchMode('daily')}
+                className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
+                  mode === 'daily' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border'
+                )}
+              >Daily</button>
+              <button
+                onClick={() => switchMode('unlimited')}
+                className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
+                  mode === 'unlimited' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border'
+                )}
+              >Unlimited</button>
+            </div>
+
+            <div className="flex items-center justify-center gap-4 mt-3 text-sm">
+              <span className="text-muted-foreground">Round: <span className="font-semibold text-foreground">{Math.min(currentRound + 1, totalRounds)}</span>/{totalRounds}</span>
+              <span className="text-muted-foreground">Score: <span className="font-semibold text-gold">{totalScore}</span></span>
+              {streak > 1 && (
+                <span className="flex items-center gap-1 text-gold">
+                  <Flame className="w-4 h-4" /> {streak}🔥
+                </span>
+              )}
+            </div>
+          </>
+        }
+      >
+        {gameStatus === 'playing' && currentPair && (
+          <div className="grid grid-cols-2 gap-4">
+            {currentPair.map((player, i) => {
+              const side = i === 0 ? 'left' : 'right';
+              const lastResult = showingResult ? results[results.length - 1] : null;
+              const isWinner = showingResult && lastResult && (
+                (i === 0 && lastResult.player1.careerHrs >= lastResult.player2.careerHrs) ||
+                (i === 1 && lastResult.player2.careerHrs >= lastResult.player1.careerHrs)
+              );
+
+              return (
+                <button
+                  key={player.name}
+                  onClick={() => !showingResult && makeGuess(side as 'left' | 'right')}
+                  disabled={showingResult}
+                  className={cn(
+                    'flex flex-col items-center gap-3 p-5 rounded-2xl border transition-all text-center',
+                    showingResult
+                      ? isWinner
+                        ? 'bg-correct/20 border-correct/50'
+                        : 'bg-destructive/15 border-destructive/40'
+                      : 'bg-card border-border hover:border-primary/50 hover:scale-[1.02] cursor-pointer'
+                  )}
+                >
+                  <span className="text-3xl">⚾</span>
+                  <span className="text-lg font-bold text-foreground font-display">{player.name}</span>
+                  <span className="text-xs text-muted-foreground">{player.firstSeason}–{player.lastSeason} · {player.seasons} seasons</span>
+
+                  {showingResult ? (
+                    <span className="text-2xl font-bold text-gold animate-cell-reveal">
+                      {player.careerHrs} HR
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-1 text-sm font-semibold text-primary">
+                      <ArrowUp className="w-4 h-4" /> Higher?
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {gameStatus === 'complete' && (
+          <div className="mt-4 flex justify-center">
+            <ResultScreen
+              won={correctCount >= 5}
+              outcomeEmoji={correctCount >= 8 ? '🏆' : correctCount >= 5 ? '⚾' : '🧢'}
+              headline={`${correctCount}/${totalRounds} Correct!`}
+              statLine={<>Total Score: <span className="font-bold text-gold">{totalScore}</span></>}
+              funFact={`(${correctCount}×10 base + ${totalScore - correctCount * 10} streak bonus)`}
+              emojiGrid={`⚾ MLB Higher or Lower: ${totalScore} pts (${correctCount}/${totalRounds})`}
+              share={{
+                score: `${totalScore} points (${correctCount}/${totalRounds}) on today's MLB Higher or Lower`,
+                gameName: 'MLB Higher or Lower',
+                gamePath: '/mlb-higher-lower',
+              }}
+              onPlayAgain={mode === 'unlimited' ? () => switchMode('unlimited') : undefined}
+              playNext={mode !== 'unlimited' && <p className="text-sm text-muted-foreground">Come back tomorrow for a new challenge!</p>}
+            />
+          </div>
+        )}
+
+        <GameSeoContent
+          title="MLB Higher or Lower | DoUKnowBall"
+          description="Two baseball legends, side by side. Which one hit more career home runs? Every 399+ HR career that finished by 2019, from Babe Ruth to David Ortiz."
+          howToPlay={[
+            'Two legends shown side by side with their era and seasons played',
+            'Tap the player you think hit MORE career home runs',
+            '10 rounds per game: 10 points per correct answer',
+            'Build a streak for bonus points (+5 per consecutive correct)',
+            'Daily challenge (same pairs for everyone) or unlimited random mode',
+          ]}
+          examples={[
+            'Bonds (762 HR) vs Aaron (755 HR) — closer than people remember',
+            'Ruth vs Mays: who cleared 700?',
+            'Ted Williams, McCovey and Frank Thomas all finished on exactly 521',
+            'Mantle vs Ortiz — the Mick or Big Papi?',
+          ]}
+        />
+
+        <AdBanner slot="1234567901" format="horizontal" className="mt-8" />
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType="mlb-higher-lower" gameContext={{ mode }} />
+        </div>
+        <GameNav />
+      </GameShell>
+    </>
+  );
+};
+
+export default MlbHigherLower;
