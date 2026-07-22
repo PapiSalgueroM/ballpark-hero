@@ -86,6 +86,7 @@ export const CATEGORIES: GameCategory[] = [
       // { path: '/football-timeline', label: 'Timeline', emoji: '📅', description: 'Order players by draft year', daily: true },
       { path: '/football-draft', label: 'Draft Guesser', emoji: '🎰', description: 'Guess the draft round', daily: true },
       { path: '/nfl-career', label: 'NFL Career Path', emoji: '🏈', description: 'Guess the NFL player from clues', daily: true },
+      { path: '/nfl-higher-lower', label: 'NFL Higher or Lower', emoji: '📊', description: 'Which star scored more career touchdowns?', daily: true, isNew: true },
       // retired 2026-07-08 per owner review: "like 40 teams to choose from... get rid of this game". Route kept for direct links; uncomment to revive.
       // { path: '/guess-nfl-team', label: 'Guess The Team', emoji: '🏈', description: 'Identify the NFL franchise', daily: true, isNew: true },
       { path: '/conquest', label: 'NFL Conquest', emoji: '🗺️', description: '32 teams, 50 states. One champion.', daily: true },

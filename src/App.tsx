@@ -102,6 +102,7 @@ import Rebuild from "./pages/Rebuild";
 import EmojiGuess from "./pages/EmojiGuess";
 import MysteryBox from "./pages/MysteryBox";
 import NbaHigherLower from "./pages/NbaHigherLower";
+import NflHigherLower from "./pages/NflHigherLower";
 
 const queryClient = new QueryClient();
 
@@ -288,6 +289,7 @@ const AppContent = () => {
         <Route path="/emoji-guess" element={<EmojiGuess />} />
         <Route path="/mystery-box" element={<MysteryBox />} />
         <Route path="/nba-higher-lower" element={<NbaHigherLower />} />
+        <Route path="/nfl-higher-lower" element={<NflHigherLower />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
