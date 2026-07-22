@@ -41,18 +41,36 @@ function getDailyPairs(todayStr: string): [HockeyHLPlayer, HockeyHLPlayer][] {
   return result;
 }
 
-function getRandomPairs(): [HockeyHLPlayer, HockeyHLPlayer][] {
+function getRandomPairs(hard = false): [HockeyHLPlayer, HockeyHLPlayer][] {
   const seed = Math.floor(Math.random() * 100000);
   const shuffled = seededShuffle(hockeyHLPlayers, seed);
+  if (!hard) {
+    const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
+    for (let i = 0; i < ROUNDS * 2 && i + 1 < shuffled.length; i += 2) {
+      result.push([shuffled[i], shuffled[i + 1]]);
+    }
+    return result;
+  }
+  // HARD (task #12): greedy close-gap pairing on careerPoints from the
+  // shuffle window — selection-only, scoring untouched. Unlimited-only:
+  // daily pairs stay canonical so stored daily actions replay correctly.
+  const pool = [...shuffled];
   const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
-  for (let i = 0; i < ROUNDS * 2 && i + 1 < shuffled.length; i += 2) {
-    result.push([shuffled[i], shuffled[i + 1]]);
+  while (result.length < ROUNDS && pool.length >= 2) {
+    const a = pool.shift()!;
+    let bestI = 0, bestGap = Infinity;
+    for (let i = 0; i < Math.min(pool.length, 12); i++) {
+      const gap = Math.abs(pool[i].careerPoints - a.careerPoints);
+      if (gap < bestGap) { bestGap = gap; bestI = i; }
+    }
+    result.push([a, pool.splice(bestI, 1)[0]]);
   }
   return result;
 }
 
 export function useHockeyHL() {
   const [mode, setMode] = useState<HockeyHLMode>('daily');
+  const [hard, setHard] = useState(false);
 
   // Daily persistence — sentinel puzzle, we only use todayStr + guesses
   const {
@@ -157,19 +175,34 @@ export function useHockeyHL() {
 
   const switchMode = useCallback((m: HockeyHLMode) => {
     if (m === 'unlimited') {
-      setUnlimitedPairs(getRandomPairs());
+      setUnlimitedPairs(getRandomPairs(hard));
       setUnlimitedResults([]);
       setUnlimitedRound(0);
     }
     setMode(m);
     setCurrentResult(null);
     setShowingResult(false);
+  }, [hard]);
+
+  const toggleHard = useCallback(() => {
+    setHard((prev) => {
+      const next = !prev;
+      // Hard pairs are an unlimited-mode feature — switching keeps the
+      // daily's canonical pair list untouched.
+      setMode('unlimited');
+      setUnlimitedPairs(getRandomPairs(next));
+      setUnlimitedResults([]);
+      setUnlimitedRound(0);
+      setCurrentResult(null);
+      setShowingResult(false);
+      return next;
+    });
   }, []);
 
   useGameCompletion('hockey-higher-lower', rawDailyStatus !== 'playing', totalScore);
 
   return {
-    mode, switchMode, currentPair, currentRound, results, showingResult, streak,
+    mode, switchMode, hard, toggleHard, currentPair, currentRound, results, showingResult, streak,
     gameStatus, correctCount, totalScore, makeGuess, totalRounds: ROUNDS, isLoading,
   };
 }

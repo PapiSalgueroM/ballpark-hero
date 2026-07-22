@@ -37,17 +37,35 @@ const ROUNDS = 10;
 // Sentinel puzzle array — useDailyPuzzle needs at least one element.
 const SENTINEL_PUZZLES = [{ id: 'cfbhl-daily' }];
 
-function buildPairs(seed: number): [CfbHLPlayer, CfbHLPlayer][] {
+function buildPairs(seed: number, hard = false): [CfbHLPlayer, CfbHLPlayer][] {
   const shuffled = seededShuffle(cfbHLPlayers, seed);
+  if (!hard) {
+    const result: [CfbHLPlayer, CfbHLPlayer][] = [];
+    for (let i = 0; i < ROUNDS * 2 && i + 1 < shuffled.length; i += 2) {
+      result.push([shuffled[i], shuffled[i + 1]]);
+    }
+    return result;
+  }
+  // HARD (task #12): greedy close-gap pairing on careerPassYds from a seeded
+  // shuffle window — selection-only, scoring untouched. Unlimited-only:
+  // daily pairs stay canonical so stored daily actions replay correctly.
+  const pool = [...shuffled];
   const result: [CfbHLPlayer, CfbHLPlayer][] = [];
-  for (let i = 0; i < ROUNDS * 2 && i + 1 < shuffled.length; i += 2) {
-    result.push([shuffled[i], shuffled[i + 1]]);
+  while (result.length < ROUNDS && pool.length >= 2) {
+    const a = pool.shift()!;
+    let bestI = 0, bestGap = Infinity;
+    for (let i = 0; i < Math.min(pool.length, 12); i++) {
+      const gap = Math.abs(pool[i].careerPassYds - a.careerPassYds);
+      if (gap < bestGap) { bestGap = gap; bestI = i; }
+    }
+    result.push([a, pool.splice(bestI, 1)[0]]);
   }
   return result;
 }
 
 export function useCfbHL() {
   const [mode, setMode] = useState<CfbHLMode>('daily');
+  const [hard, setHard] = useState(false);
 
   const {
     guesses: dailyActions,
@@ -69,7 +87,7 @@ export function useCfbHL() {
   const [showingResult, setShowingResult] = useState(false);
 
   const [unlimitedPairs, setUnlimitedPairs] = useState<[CfbHLPlayer, CfbHLPlayer][]>(
-    () => buildPairs(Math.floor(Math.random() * 100000)),
+    () => buildPairs(Math.floor(Math.random() * 100000), hard),
   );
   const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
   const [unlimitedRound, setUnlimitedRound] = useState(0);
@@ -145,19 +163,34 @@ export function useCfbHL() {
 
   const switchMode = useCallback((m: CfbHLMode) => {
     if (m === 'unlimited') {
-      setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000)));
+      setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000), hard));
       setUnlimitedResults([]);
       setUnlimitedRound(0);
     }
     setMode(m);
     setCurrentResult(null);
     setShowingResult(false);
+  }, [hard]);
+
+  const toggleHard = useCallback(() => {
+    setHard((prev) => {
+      const next = !prev;
+      // Hard pairs are an unlimited-mode feature — switching keeps the
+      // daily's canonical pair list untouched.
+      setMode('unlimited');
+      setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000), next));
+      setUnlimitedResults([]);
+      setUnlimitedRound(0);
+      setCurrentResult(null);
+      setShowingResult(false);
+      return next;
+    });
   }, []);
 
   useGameCompletion('cfb-higher-lower', rawDailyStatus !== 'playing', totalScore);
 
   return {
-    mode, switchMode, currentPair, currentRound, results, showingResult, streak,
+    mode, switchMode, hard, toggleHard, currentPair, currentRound, results, showingResult, streak,
     gameStatus, correctCount, totalScore, makeGuess, totalRounds: ROUNDS, isLoading,
   };
 }

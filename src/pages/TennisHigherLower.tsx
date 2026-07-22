@@ -21,6 +21,7 @@ const TennisHigherLower = () => {
     mode, switchMode, currentPair, currentRound, results,
     showingResult, streak, gameStatus, correctCount, totalScore,
     makeGuess, totalRounds,
+    hard, toggleHard,
   } = useTennisHL();
 
   return (
@@ -49,6 +50,13 @@ const TennisHigherLower = () => {
                   mode === 'unlimited' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border'
                 )}
               >Unlimited</button>
+              <button
+                onClick={toggleHard}
+                title="Hard mode: close-gap pairs (unlimited only)"
+                className={cn('px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all',
+                  hard ? 'bg-destructive/15 text-destructive border-destructive/40' : 'bg-secondary text-muted-foreground border-border'
+                )}
+              >😈 Hard</button>
             </div>
 
             <div className="flex items-center justify-center gap-4 mt-3 text-sm">
