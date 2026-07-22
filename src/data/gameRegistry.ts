@@ -184,6 +184,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/jeopardy', label: 'Sports Jeopardy', emoji: '🎓', description: 'Five categories, $200 to $1000. Wrong answers cost you', daily: true, isNew: true },
       { path: '/ball-iq', label: 'Ball Knowledge IQ', emoji: '🧠', description: 'Twelve questions, getting harder. Do you actually know ball?', daily: true, isNew: true },
       { path: '/emoji-guess', label: 'Emoji Guess', emoji: '🤔', description: 'Five football riddles told entirely in emoji', daily: true, isNew: true },
+      { path: '/mystery-box', label: 'Mystery Box', emoji: '📦', description: 'Open 15 packs, keep or bin, build the best XI your luck allows', daily: true, isNew: true },
     ],
   },
   // Game Shows category removed 2026-07-08 per owner review — its games now

@@ -100,6 +100,7 @@ import Jeopardy from "./pages/Jeopardy";
 import BallIq from "./pages/BallIq";
 import Rebuild from "./pages/Rebuild";
 import EmojiGuess from "./pages/EmojiGuess";
+import MysteryBox from "./pages/MysteryBox";
 
 const queryClient = new QueryClient();
 
@@ -284,6 +285,7 @@ const AppContent = () => {
         <Route path="/ball-iq" element={<BallIq />} />
         <Route path="/rebuild" element={<Rebuild />} />
         <Route path="/emoji-guess" element={<EmojiGuess />} />
+        <Route path="/mystery-box" element={<MysteryBox />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
