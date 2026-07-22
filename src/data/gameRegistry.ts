@@ -143,6 +143,7 @@ export const CATEGORIES: GameCategory[] = [
     emoji: '🏎️',
     games: [
       { path: '/f1-driver', label: 'Guess The F1 Driver', emoji: '🏎️', description: 'Guess the mystery F1 driver from clues', daily: true, isNew: true },
+      { path: '/f1-higher-lower', label: 'F1 Higher or Lower', emoji: '📊', description: 'Which driver won more Grands Prix?', daily: true, isNew: true },
       { path: '/f1-constructor', label: 'Guess The Constructor', emoji: '🏗️', description: 'Guess the mystery F1 team from clues', daily: true, isNew: true },
       { path: '/perfect-lineup-f1', label: 'Perfect Lineup: F1', emoji: '🏎️', description: 'Build a 5-driver dream squad under random team/era/country constraints', daily: true, isNew: true },
     ],
