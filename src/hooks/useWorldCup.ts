@@ -3,8 +3,25 @@ import { worldCupPuzzles } from '@/data/worldCupPuzzles';
 import { WorldCupPuzzle, WorldCupClue, WorldCupGameStatus } from '@/types/worldCup';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { getTodayET } from '@/lib/dateUtils';
 
-const MAX_CLUES = 7; // maximum clue slots (always 7, Answer always last)
+/**
+ * Hard upper bound on clue slots — a CLAMP ONLY, never a game-ending test.
+ *
+ * getClues returns SIX clues, not seven, when the player is from the host
+ * nation (the 'Host Country' clue is dropped as a giveaway). Gating the run on
+ * this constant instead of the live clues.length is exactly what broke the game
+ * (see playableClues below). Anything that decides "are we out of clues?" must
+ * use playableClues.
+ *
+ * The two surviving uses are safe: dailyRevealedCount clamps to it (the real
+ * clamp happens in revealedClues), and useDailyPuzzle's isLost keeps it as a
+ * backstop. isLost genuinely cannot see playableClues — it is config for the
+ * very hook that returns dailyPuzzle, so the dependency is circular — but it no
+ * longer matters: submitGuess/skipClue now emit a 'g' action once
+ * playableClues is exhausted, and isLost's first clause catches that.
+ */
+const MAX_CLUES = 7;
 const POINTS_BY_CLUE: Record<number, number> = { 1: 1000, 2: 800, 3: 600, 4: 400, 5: 300, 6: 200, 7: 100 };
 
 // Seeded PRNG — deterministic per seed+index
@@ -15,8 +32,14 @@ function seededRandom(seed: number, index: number): number {
   return (s ^ (s >>> 16)) / 0xffffffff;
 }
 
+/**
+ * Daily clue-order seed. Uses getTodayET, not new Date().toISOString() —
+ * dateUtils.ts is explicit that the UTC form "breaks the shared daily
+ * experience for US users", since it rolls over at 7-8pm local rather than
+ * midnight ET. Fixed 2026-07-15; this hook was still on the UTC form.
+ */
 function getDailySeed(): number {
-  const [y, m, d] = new Date().toISOString().slice(0, 10).split('-').map(Number);
+  const [y, m, d] = getTodayET().split('-').map(Number);
   return y * 10000 + m * 100 + d;
 }
 
@@ -144,7 +167,33 @@ export function useWorldCup() {
   const clueSeed = mode === 'daily' ? getDailySeed() : unlimitedSeed;
   const clues = useMemo(() => (puzzle ? getClues(puzzle, clueSeed) : []), [puzzle, clueSeed]);
   const totalClues = clues.length; // 6 when player = host nation, 7 otherwise
-  const revealedClues = clues.slice(0, activeRevealed);
+
+  /**
+   * How many clues the player can actually be shown while still guessing.
+   *
+   * The LAST entry from getClues is always { label: 'Answer' } — it exists to be
+   * revealed once the game is over (the page only styles it as the big gold
+   * reveal when `isFinalReveal`, i.e. gameStatus !== 'playing'). So it must
+   * never enter revealedClues during play.
+   *
+   * BUG FIX 2026-07-15 — this is why the game was pulled on 2026-07-08 as
+   * "buggy (hint x3 -> blank screen)". Two faults, compounding:
+   *  1. Both modes ended the run at `>= totalClues`, so the final reveal index
+   *     was reachable while still playing — the page then rendered the Answer as
+   *     an ordinary clue, literally captioned "Answer", while the input box kept
+   *     asking you to guess it.
+   *  2. Daily mode compared against the CONSTANT MAX_CLUES (7) rather than the
+   *     live clues.length. For a host-nation puzzle getClues returns only 6, so
+   *     daily hit the Answer a clue earlier AND kept going to 7 on a 6-length
+   *     array. That's 9 of the 60 puzzles — and they're the marquee ones:
+   *     Beckenbauer '74, Kempes '78, Schillaci '90, Zidane '98, Klose '06,
+   *     Neymar '14.
+   * Unlimited mode already used totalClues (right idea, still off by the Answer
+   * slot); daily used the constant. Both now use playableClues.
+   */
+  const playableClues = Math.max(1, totalClues - 1);
+
+  const revealedClues = clues.slice(0, Math.min(activeRevealed, gameStatus === 'playing' ? playableClues : totalClues));
   const score = gameStatus === 'won' ? (POINTS_BY_CLUE[activeRevealed] ?? 100) : 0;
 
   // ---- CALLBACKS -----------------------------------------------------------
@@ -158,8 +207,9 @@ export function useWorldCup() {
     if (mode === 'daily') {
       if (correct) {
         addDailyAction({ t: 'ok', v: puzzle.answer });
-      } else if (dailyRevealedCount >= MAX_CLUES) {
-        // At last clue, wrong guess ends the game
+      } else if (dailyRevealedCount >= playableClues) {
+        // Out of clues: a wrong guess here ends the game (and only now does the
+        // Answer clue get revealed, as the gold final reveal).
         addDailyAction({ t: 'g' });
       } else {
         addDailyAction({ t: 'w', v: trimmed });
@@ -171,31 +221,31 @@ export function useWorldCup() {
         setUnlimitedStatus('won');
       } else {
         setAttempts(prev => [...prev, trimmed]);
-        if (revealedCount >= totalClues) {
+        if (revealedCount >= playableClues) {
           setUnlimitedStatus('lost');
         } else {
           setRevealedCount(c => c + 1);
         }
       }
     }
-  }, [mode, gameStatus, puzzle, dailyRevealedCount, revealedCount, totalClues, addDailyAction]);
+  }, [mode, gameStatus, puzzle, dailyRevealedCount, revealedCount, playableClues, addDailyAction]);
 
   const skipClue = useCallback(() => {
     if (gameStatus !== 'playing') return;
     if (mode === 'daily') {
-      if (dailyRevealedCount >= MAX_CLUES) {
+      if (dailyRevealedCount >= playableClues) {
         addDailyAction({ t: 'g' });
       } else {
         addDailyAction({ t: 's' });
       }
     } else {
-      if (revealedCount >= totalClues) {
+      if (revealedCount >= playableClues) {
         setUnlimitedStatus('lost');
       } else {
         setRevealedCount(c => c + 1);
       }
     }
-  }, [mode, gameStatus, dailyRevealedCount, revealedCount, totalClues, addDailyAction]);
+  }, [mode, gameStatus, dailyRevealedCount, revealedCount, playableClues, addDailyAction]);
 
   const giveUp = useCallback(() => {
     if (gameStatus !== 'playing') return;

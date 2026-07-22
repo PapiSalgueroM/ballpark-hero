@@ -884,6 +884,90 @@ export type Database = {
         }
         Relationships: []
       }
+      transfer_grade_votes: {
+        Row: {
+          created_at: string
+          grade: string
+          id: string
+          move_year: number
+          player_name: string
+          to_club: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          grade: string
+          id?: string
+          move_year: number
+          player_name: string
+          to_club: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          grade?: string
+          id?: string
+          move_year?: number
+          player_name?: string
+          to_club?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      tier_list_votes: {
+        Row: {
+          created_at: string
+          id: string
+          player_name: string
+          tier: string
+          user_id: string | null
+          year: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          player_name: string
+          tier: string
+          user_id?: string | null
+          year: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          player_name?: string
+          tier?: string
+          user_id?: string | null
+          year?: number
+        }
+        Relationships: []
+      }
+      overrated_votes: {
+        Row: {
+          created_at: string
+          id: string
+          player_name: string
+          user_id: string | null
+          vote: string
+          year: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          player_name: string
+          user_id?: string | null
+          vote: string
+          year: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          player_name?: string
+          user_id?: string | null
+          vote?: string
+          year?: number
+        }
+        Relationships: []
+      }
       medal_games_scores: {
         Row: {
           clues_used: number
@@ -2073,7 +2157,59 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      game_player_pool: {
+        Row: {
+          age: number | null
+          assists: number | null
+          club: string | null
+          goals: number | null
+          market_value_usd: number | null
+          matches: number | null
+          nationality: string | null
+          player_name: string | null
+          position: string | null
+          value_band: string | null
+          value_millions: number | null
+          year: number | null
+        }
+        Relationships: []
+      }
+      transfer_grade_pool: {
+        Row: {
+          actual_grade: string | null
+          from_club: string | null
+          move_year: number | null
+          nationality: string | null
+          pct_change: number | null
+          player_name: string | null
+          position: string | null
+          to_club: string | null
+          value_after: number | null
+          value_at_move: number | null
+          value_band: string | null
+        }
+        Relationships: []
+      }
+      jeopardy_clues: {
+        Row: {
+          answer: string | null
+          category: string | null
+          clue: string | null
+          clue_id: string | null
+          event_year: number | null
+          value: number | null
+        }
+        Relationships: []
+      }
+      rebuild_clubs: {
+        Row: {
+          club: string | null
+          squad_size: number | null
+          squad_value_m: number | null
+          tier: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {

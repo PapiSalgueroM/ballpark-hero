@@ -88,6 +88,69 @@ async function col(table: string, column: string, filter?: (q: any) => any): Pro
   return (data as any[]).map(r => r[column] as string);
 }
 
+/**
+ * Drops values that plainly are not a person's name.
+ *
+ * Several source tables have their columns shifted one across, so a "name"
+ * column ends up holding a rank ("1st"), a goal count ("48"), a scoreline
+ * ("2–0") or a position ("Goalkeeper"). Those are unguessable AND they inflate
+ * the target count, so a puzzle becomes unwinnable. Audit 2026-07-15 found this
+ * across ~30 columns; run select * from public.audit_name_columns() to re-check.
+ *
+ * Deliberately conservative: it only removes things that cannot be a name, so a
+ * genuine one-word name is kept.
+ */
+function onlyNames(p: Promise<string[]>): Promise<string[]> {
+  return p.then(rows =>
+    rows.filter(v => {
+      const s = (v ?? '').trim();
+      if (s.length < 3) return false;                  // "F", "SF", "1Q"
+      if (/^[0-9]+$/.test(s)) return false;            // "48", "57"
+      if (/^[0-9]+(st|nd|rd|th)$/i.test(s)) return false; // "1st"
+      if (/^[0-9]+\s*[–—-]\s*[0-9]+/.test(s)) return false; // "4–0"
+      if (/^[0-9]{4}(–[0-9]{2,4})?$/.test(s)) return false; // "1959", "1970–71"
+      if (/^(goalkeeper|forward|midfielder|defender|striker|winger|guard|center|centre)$/i.test(s)) return false;
+      return true;
+    }),
+  );
+}
+
+/**
+ * Strips the win-count suffix some source rows carry: "Lionel Messi (2)" ->
+ * "Lionel Messi", "Real Madrid (34) †" -> "Real Madrid".
+ *
+ * cleanAnswers dedupes on the normalized string, so without this a repeat
+ * winner shows up as TWO separate answers ("Mohamed Salah" and "Mohamed Salah
+ * (2)") and the second is unguessable — nobody types the bracket.
+ */
+function stripWinCount(s: string): string {
+  return (s ?? '').replace(/\s*\(\d+\)\s*†?\s*$/, '').trim();
+}
+
+/**
+ * One award out of soccer_awards, by winner_name.
+ *
+ * ONLY use this for awards whose winner_name was verified to actually hold a
+ * person's name (audit 2026-07-15). The table's columns are shifted differently
+ * per award and several are unusable:
+ *   - 'African Footballer of the Year' / 'South American Footballer of the Year':
+ *     winner_name holds the literal string "1st" (a rank) and nationality holds
+ *     the player. 70 rows each, 1 distinct "winner". DO NOT USE.
+ *   - 'World Soccer Player of the Year': 116 distinct winners across 66 years,
+ *     which is impossible for a one-per-year award. Unverified. DO NOT USE.
+ * Verified good (winner_name is the player; later columns are shifted but we
+ * don't read them): European Golden Shoe, MLS MVP, Premier League Player of the
+ * Season.
+ */
+async function awardWinners(awardName: string): Promise<string[]> {
+  const raw = await col('soccer_awards', 'winner_name', (q: any) => q.eq('award_name', awardName));
+  // onlyNames is belt-and-braces: the three awards used today are 0% bad, but
+  // the shift in this table varies BY AWARD, so anything added later that turns
+  // out to be shifted degrades to "fewer answers" instead of shipping "1st" as
+  // a guessable name.
+  return onlyNames(Promise.resolve(raw.map(stripWinCount)));
+}
+
 /** A static list so the page still works if the database is unreachable. */
 export const OFFLINE_PUZZLE: ListPuzzleDef = {
   id: 'offline-sb-winners',
@@ -107,6 +170,43 @@ export const OFFLINE_PUZZLE: ListPuzzleDef = {
 };
 
 export const LIST_PUZZLES: ListPuzzleDef[] = [
+  // Added 2026-07-15. Each source was verified against the live DB and spot-
+  // checked against real results before being added — see awardWinners() for
+  // the awards that were REJECTED as corrupt rather than added.
+  {
+    id: 'heisman-winners',
+    title: 'Heisman Trophy Winners',
+    blurb: 'Every player to win college football’s biggest individual award.',
+    sport: 'CFB', emoji: '🏈', minAnswers: 20,
+    // cfb_heisman_winners: 91 rows, 91 distinct years, 1935-2025, exactly one
+    // winner per year. 90 distinct names — Archie Griffin won twice. Verified:
+    // 2024 Travis Hunter, 2023 Jayden Daniels, 1995 Eddie George, 1975 Griffin.
+    fetch: () => col('cfb_heisman_winners', 'winner'),
+  },
+  {
+    id: 'golden-shoe-winners',
+    title: 'European Golden Shoe Winners',
+    blurb: 'Every player to finish a season as Europe’s top league scorer.',
+    sport: 'Soccer', emoji: '👟', minAnswers: 15,
+    // 44 distinct across 58 years. Verified: 2025 Mbappé, 2024 Kane, 2023 Haaland.
+    fetch: () => awardWinners('European Golden Shoe'),
+  },
+  {
+    id: 'pl-player-of-season',
+    title: 'Premier League Players of the Season',
+    blurb: 'Every winner of the Premier League’s end-of-season award.',
+    sport: 'Soccer', emoji: '🏴', minAnswers: 12,
+    // 32 distinct across 32 seasons. Verified: 2023 Foden (23-24), 2024 Salah (24-25).
+    fetch: () => awardWinners('Premier League Player of the Season'),
+  },
+  {
+    id: 'mls-mvps',
+    title: 'MLS MVPs',
+    blurb: 'Every Most Valuable Player in MLS history.',
+    sport: 'Soccer', emoji: '🇺🇸', minAnswers: 12,
+    // 30 distinct across 30 seasons. Verified: 2025 & 2024 Messi, 2023 Acosta.
+    fetch: () => awardWinners('MLS MVP'),
+  },
   {
     id: 'sb-winners',
     title: 'Super Bowl Winning Franchises',
@@ -165,10 +265,28 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
   },
   {
     id: 'ucl-topscorers',
-    title: 'Champions League Season Top Scorers',
-    blurb: 'Every player to finish a season as the Champions League top scorer.',
+    title: 'Champions League Top Scorers',
+    blurb: 'Every player near the top of the Champions League all-time scoring charts.',
     sport: 'Soccer', emoji: '⚽', minAnswers: 10,
-    fetch: () => col('ucl_top_scorers_by_season', 'player'),
+    /**
+     * LIVE BUG FIX 2026-07-15 — this puzzle was serving numbers as answers.
+     *
+     * ucl_top_scorers_by_season has THREE different row shapes merged into it,
+     * with the columns shifted differently in each (144 rows total):
+     *   - 98 rows: player = the real name (correct), club = goals, goals = apps
+     *   - 24 rows: season = the real name, player = GOALS  ("48", "57", "30")
+     *   - 22 rows: a titles-by-nation table entirely ("Yugoslavia", club =
+     *     "1955-56 , 1963-64 , ...")
+     * So the old col(..., 'player') returned 98 names and 46 numbers — 31.9%
+     * of this puzzle's answers were things like "48" and "57", which no player
+     * could ever guess and which appeared in the target count.
+     *
+     * Keeping only the 98 rows where 'player' actually holds a name. The other
+     * 46 rows' names live in 'season', but recovering them means trusting a
+     * second shift on a table this scrambled, so they're dropped rather than
+     * guessed at. See task #45 for the underlying re-scrape.
+     */
+    fetch: () => onlyNames(col('ucl_top_scorers_by_season', 'player')),
   },
   {
     id: 'wimbledon-champs',
@@ -182,7 +300,11 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     title: 'Masters Champions',
     blurb: 'Every golfer to win the green jacket.',
     sport: 'Golf', emoji: '⛳', minAnswers: 15,
-    fetch: () => col('golf_majors', 'player_name', q => q.ilike('tournament', '%masters%')),
+    // onlyNames: golf_majors stores '—' for years the major wasn't played
+    // (1943-45 WWII, and The Open 2020 for COVID) — 25 rows across the four
+    // tournaments. That's correct source data, but as a puzzle answer it means
+    // "name the golfer: —". Filtered out, not treated as corruption.
+    fetch: () => onlyNames(col('golf_majors', 'player_name', q => q.ilike('tournament', '%masters%'))),
   },
   {
     id: 'nascar-champs',
@@ -238,21 +360,21 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     title: 'PGA Championship Winners',
     blurb: 'Every golfer to win the PGA Championship in our records.',
     sport: 'Golf', emoji: '⛳', minAnswers: 10,
-    fetch: () => col('golf_majors', 'player_name', q => q.ilike('tournament', '%pga%')),
+    fetch: () => onlyNames(col('golf_majors', 'player_name', q => q.ilike('tournament', '%pga%'))),
   },
   {
     id: 'theopen-champs',
     title: 'The Open Championship Winners',
     blurb: 'Every golfer to win The Open (British Open) in our records.',
     sport: 'Golf', emoji: '⛳', minAnswers: 15,
-    fetch: () => col('golf_majors', 'player_name', q => q.ilike('tournament', '%open championship%')),
+    fetch: () => onlyNames(col('golf_majors', 'player_name', q => q.ilike('tournament', '%open championship%'))),
   },
   {
     id: 'usopen-golf-champs',
     title: 'U.S. Open (Golf) Winners',
     blurb: 'Every golfer to win the U.S. Open in our records.',
     sport: 'Golf', emoji: '⛳', minAnswers: 10,
-    fetch: () => col('golf_majors', 'player_name', q => q.ilike('tournament', '%u.s. open%')),
+    fetch: () => onlyNames(col('golf_majors', 'player_name', q => q.ilike('tournament', '%u.s. open%'))),
   },
   {
     id: 'ballon-dor-winners',

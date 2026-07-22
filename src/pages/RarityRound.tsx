@@ -21,11 +21,13 @@ import {
   totalScore,
   buildEmojiGrid,
   roundSummaryLine,
+  buildReveal,
   type RarityMode,
   type RarityCategory,
   type PoolEntry,
   type RoundResult,
 } from '@/lib/rarityRound';
+import { displayName } from '@/lib/playerSearch';
 
 type PlayMode = 'daily' | 'unlimited';
 type Phase = 'boot' | 'error' | 'loading-round' | 'playing' | 'revealed' | 'done';
@@ -395,6 +397,44 @@ const RarityRound = () => {
                 <p className="text-xs uppercase tracking-wider text-muted-foreground mb-5">
                   {rarityMode === 'rarity' ? 'points (lower is better)' : 'points (higher is better)'}
                 </p>
+
+                {/* The board reveal. Pointless's actual payoff: what you SHOULD
+                    have said. Its absence is why this game read as "you guess
+                    one guy and you're done" (owner review 2026-07-06). */}
+                {(() => {
+                  const reveal = buildReveal(pool, rarityMode);
+                  if (!reveal) return null;
+                  const nailedIt = reveal.best.rank === lastResult.rank;
+                  return (
+                    <div className="mb-5 rounded-xl border border-border bg-background/60 p-4 text-left">
+                      <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                        {nailedIt
+                          ? 'Nobody could have done better'
+                          : rarityMode === 'rarity'
+                          ? 'The rarest answer was'
+                          : 'The most popular answer was'}
+                      </p>
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="truncate font-display text-base font-bold text-gold">
+                          {displayName(reveal.best.name)}
+                        </span>
+                        <span className="shrink-0 text-sm font-bold text-primary">
+                          {reveal.bestPoints} pts
+                        </span>
+                      </div>
+                      {reveal.alternatives.length > 0 && (
+                        <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
+                          Also there:{' '}
+                          {reveal.alternatives.map(a => displayName(a.name)).join(', ')}
+                        </p>
+                      )}
+                      <p className="mt-2 text-[11px] text-muted-foreground">
+                        {reveal.poolSize} valid answers in this category.
+                      </p>
+                    </div>
+                  );
+                })()}
+
                 <button
                   onClick={nextRound}
                   className="px-8 py-3 min-h-[44px] bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"

@@ -25,18 +25,19 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
  * Crowd Says (mode 'crowd'): higher total score is better, reward for naming
  * the most obvious, famous answer instead.
  *
- * SCORING
+ * SCORING (corrected 2026-07-15 — see scoreRound for the bug this fixes)
  * Every category pool is ranked by prominence descending (rank 1 = most
- * famous player in the pool, rank poolSize = most obscure). Each round's
- * points (see scoreRound below) are:
- *   rarityScore = round(((rank - 1) / (poolSize - 1)) * 100)   // 0 = rank 1 (famous, bad), 100 = last rank (obscure, good)
- *   crowdScore  = 100 - rarityScore                            // 100 = rank 1 (famous, good), 0 = last rank (obscure, bad)
- * Rarity Round uses rarityScore directly: lower total is better, matching
- * Pointless convention ("you found a 12 point answer" being a great, rare
- * pick). Crowd Says uses crowdScore: higher total is better, rewarding the
- * most obvious, famous answer instead. Both are already on a clean 0-100
- * scale per category regardless of pool size, so a 5-round total is always
- * out of 500.
+ * famous player in the pool, rank poolSize = most obscure). Both modes score
+ * the SAME axis and differ only in which end wins — exactly like the real
+ * formats, where your Pointless score and your Family Feud score are both
+ * "how many people said this", just with opposite goals:
+ *   fameScore = round(100 - ((rank - 1) / (poolSize - 1)) * 100)
+ *               // 100 = rank 1 (most famous), 0 = last rank (most obscure)
+ * Rarity Round: LOWER total is better, matching Pointless convention ("you
+ * found a 12 point answer" being a great, rare pick) — an obscure pick scores
+ * near 0. Crowd Says: HIGHER total is better, rewarding the most obvious,
+ * famous answer. It is on a clean 0-100 scale per category regardless of pool
+ * size, so a 5-round total is always out of 500.
  *
  * DATA SOURCES (verified live on flawuiqbvjobmkfkauhw, 2026-07-03)
  * - ballon_dor: 76 rows total, 69 Men-award rows with rank = 1 (one winner
@@ -109,6 +110,24 @@ export interface RoundResult {
   poolSize: number;
   /** Points for this round, already oriented per mode (0-100, see module docstring). */
   points: number;
+}
+
+/**
+ * What the player SHOULD have said. Pointless's whole payoff is the board
+ * reveal — "you found a 12, but there was a 3 sitting there" — and its absence
+ * is the other half of why this game read as "you guess one guy and you're
+ * done" (owner review, 2026-07-06). The pool is already ranked, so this costs
+ * nothing to surface.
+ */
+export interface RoundReveal {
+  /** The mode's ideal answer: most obscure for 'rarity', most famous for 'crowd'. */
+  best: PoolEntry;
+  /** Its score under this mode — the number the player was chasing. */
+  bestPoints: number;
+  /** A few near-ideal alternatives, closest-to-ideal first. */
+  alternatives: PoolEntry[];
+  /** How many valid answers existed at all. */
+  poolSize: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -532,27 +551,58 @@ export { ROUNDS_PER_RUN };
 
 /**
  * Scores one round given the pool and the rank of the picked answer.
- * Returns a 0-100 point value oriented for the given mode:
- *   - 'rarity': 0 = rarest possible pick (best), 100 = most famous (worst).
- *   - 'crowd':  100 = most famous possible pick (best), 0 = most obscure (worst).
- * poolSize of 1 (a degenerate category) always scores as a perfect pick,
- * since there is no obscurity spectrum to measure.
+ *
+ * Both modes measure ONE axis — how famous the pick is — and differ only in
+ * which end of it wins. That mirrors the real formats: in Pointless your score
+ * IS how many people said your answer (low = obscure = good); in Family Feud
+ * it's the same number, but high wins.
+ *
+ *   fameScore: 100 at rank 1 (most famous) -> 0 at the last rank (most obscure)
+ *   - 'rarity' (Pointless):       LOWER is better. An obscure pick scores ~0.
+ *   - 'crowd'  (Fan Favourites):  HIGHER is better. A famous pick scores ~100.
+ *
+ * BUG FIX 2026-07-15 — this was inverted for 'rarity' and it is almost
+ * certainly why the game was retired on 2026-07-06 as "you guess one guy and
+ * you're done". The old code scored rarity as ((rank-1)/(poolSize-1))*100,
+ * which gives rank 1 — the MOST FAMOUS player in the pool — a score of 0. With
+ * the game's own "lower total is better, 0 is a perfect Goalless run" rule,
+ * naming Messi was a perfect round, and buildEmojiGrid rendered it as five
+ * green squares. The winning strategy was the exact opposite of the premise, so
+ * of course it felt broken. 'crowd' was always correct and its numbers are
+ * unchanged by this fix (its old crowdScore == this fameScore).
+ *
+ * poolSize of 1 (a degenerate category) always scores as a perfect pick, since
+ * there is no obscurity spectrum to measure.
  */
 export function scoreRound(rank: number, poolSize: number, mode: RarityMode): number {
   if (poolSize <= 1) return mode === 'rarity' ? 0 : 100;
-  // rarityScore: 0 at rank 1 (most famous, worst rarity pick) up to 100 at
-  // the last rank (most obscure, best rarity pick).
-  const rarityScore = ((rank - 1) / (poolSize - 1)) * 100;
-  // crowdScore is rarity's mirror: 100 at rank 1 (most famous, best crowd
-  // pick) down to 0 at the last rank (most obscure, worst crowd pick).
-  const crowdScore = 100 - rarityScore;
-  const final = mode === 'rarity' ? rarityScore : crowdScore;
-  return Math.round(Math.min(100, Math.max(0, final)));
+  const fameScore = 100 - ((rank - 1) / (poolSize - 1)) * 100;
+  return Math.round(Math.min(100, Math.max(0, fameScore)));
 }
 
 /** Sums a run's round points. */
 export function totalScore(rounds: RoundResult[]): number {
   return rounds.reduce((sum, r) => sum + r.points, 0);
+}
+
+/**
+ * The board reveal for a finished round: the answer the mode was chasing, plus
+ * a handful of near-ideal alternatives. Pool is already ranked 1..n by fame, so
+ * 'rarity' wants the tail and 'crowd' wants the head.
+ *
+ * Added 2026-07-15. Without this the game told you your score and nothing else
+ * — no sense of the answer space, nothing learned, no "I should have said HIM".
+ */
+export function buildReveal(pool: PoolEntry[], mode: RarityMode): RoundReveal | null {
+  if (pool.length === 0) return null;
+  const ordered = mode === 'rarity' ? [...pool].reverse() : [...pool];
+  const best = ordered[0];
+  return {
+    best,
+    bestPoints: scoreRound(best.rank, pool.length, mode),
+    alternatives: ordered.slice(1, 5),
+    poolSize: pool.length,
+  };
 }
 
 /** Builds the emoji-bar share grid for a completed run, per R5 spec 3.6 (a styled block, never a bare one-liner). One bar per round, filled proportional to how good the round's points were for its mode. */

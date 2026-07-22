@@ -92,6 +92,14 @@ import PackBattle from "./pages/PackBattle";
 import SportsMillionaire from "./pages/SportsMillionaire";
 import DartDraft from "./pages/DartDraft";
 import Minefield from "./pages/Minefield";
+import OverratedUnderrated from "./pages/OverratedUnderrated";
+import TierList from "./pages/TierList";
+import BudgetBuilder from "./pages/BudgetBuilder";
+import GradeTransfer from "./pages/GradeTransfer";
+import Jeopardy from "./pages/Jeopardy";
+import BallIq from "./pages/BallIq";
+import Rebuild from "./pages/Rebuild";
+import EmojiGuess from "./pages/EmojiGuess";
 
 const queryClient = new QueryClient();
 
@@ -268,6 +276,14 @@ const AppContent = () => {
         <Route path="/sports-millionaire" element={<SportsMillionaire />} />
         <Route path="/dart-draft" element={<DartDraft />} />
         <Route path="/minefield" element={<Minefield />} />
+        <Route path="/overrated-underrated" element={<OverratedUnderrated />} />
+        <Route path="/tier-list" element={<TierList />} />
+        <Route path="/budget-builder" element={<BudgetBuilder />} />
+        <Route path="/grade-transfer" element={<GradeTransfer />} />
+        <Route path="/jeopardy" element={<Jeopardy />} />
+        <Route path="/ball-iq" element={<BallIq />} />
+        <Route path="/rebuild" element={<Rebuild />} />
+        <Route path="/emoji-guess" element={<EmojiGuess />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

@@ -22,6 +22,11 @@ export const CATEGORIES: GameCategory[] = [
       // { path: '/higher-lower-transfers', label: 'Transfer Market', emoji: '📈', description: 'Higher or lower on real market values', isNew: true },
       // Darts, Stadium Draft, Blind Rank and Start Bench Cut deleted 2026-07-15
       // per owner review (broken/low-effort). Pages, routes and libs removed entirely.
+      { path: '/overrated-underrated', label: 'Overrated or Underrated', emoji: '🔥', description: 'Ten players, ten verdicts. See if the crowd agrees with you', daily: true, isNew: true },
+      { path: '/tier-list', label: 'Tier List', emoji: '🗂️', description: 'Rank eight players S to D, then face the crowd', daily: true, isNew: true },
+      { path: '/budget-builder', label: '€1B Budget Builder', emoji: '💷', description: 'One billion euros, real values, eleven slots. Spend it well', isNew: true },
+      { path: '/rebuild', label: 'Rebuild Challenge', emoji: '🔧', description: 'Inherit a real club and €100M. Sell, sign, hit the target', isNew: true },
+      { path: '/grade-transfer', label: 'Grade the Transfer', emoji: '📋', description: 'Grade five real moves A to F, then see how they aged', daily: true, isNew: true },
       { path: '/dart-draft', label: 'Dart Draft', emoji: '🎯', description: 'Throw timed darts at a real world map: hit a country, draft its players', isNew: true },
       { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', isNew: true },
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', isNew: true },
@@ -30,8 +35,13 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/player-bingo', label: 'Player Bingo', emoji: '🎱', description: 'Complete a line on a 5x5 board before 3 strikes', isNew: true },
       { path: '/alphabet-sprint', label: 'Alphabet Sprint', emoji: '⚡', description: 'Name a player per letter against the clock', isNew: true },
       { path: '/clue-auction', label: 'Clue Auction', emoji: '💰', description: 'Buy clues, save points, name the secret player', isNew: true },
-      // retired 2026-07-06 per owner review: "you guess one guy and you're done". Page/route kept for direct links; uncomment to revive.
-      // { path: '/rarity-round', label: 'Rarity Round', emoji: '💎', description: 'Valid answers nobody else would think of', daily: true, isNew: true },
+      // Revived 2026-07-15. Retired 2026-07-06 as "you guess one guy and you're
+      // done" — root cause found: scoreRound was INVERTED for rarity mode, so
+      // naming the most famous player in the pool scored a perfect 0 and the
+      // winning strategy was the opposite of the premise. Fixed, plus the board
+      // reveal (what the rarest answer actually was) is now shown after every
+      // round, which is Pointless's real payoff and was missing entirely.
+      { path: '/rarity-round', label: 'Rarity Round', emoji: '💎', description: 'Name the answer nobody else would. Rarest wins', daily: true, isNew: true },
       { path: '/missing-xi', label: 'Missing XI', emoji: '🧩', description: 'Name the missing player from a famous real lineup', daily: true, isNew: true },
       { path: '/sign-the-player', label: 'Sign the Player', emoji: '🔨', description: 'The box2box auction: outbid two AI moguls, £1B each, then sim the showdown', isNew: true },
       { path: '/footle', label: 'Footle', emoji: '🎯', description: 'Guess the soccer player from stats' },
@@ -171,6 +181,9 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/list-quiz', label: 'Name Them All', emoji: '📝', description: 'How many champions can you name?', isNew: true },
       { path: '/minefield', label: 'Minefield', emoji: '💣', description: 'Click everyone who belongs. Some tiles explode', daily: true, isNew: true },
       { path: '/sports-millionaire', label: 'Sports Millionaire', emoji: '💰', description: 'Climb a 15-question money ladder with lifelines', daily: true, isNew: true },
+      { path: '/jeopardy', label: 'Sports Jeopardy', emoji: '🎓', description: 'Five categories, $200 to $1000. Wrong answers cost you', daily: true, isNew: true },
+      { path: '/ball-iq', label: 'Ball Knowledge IQ', emoji: '🧠', description: 'Twelve questions, getting harder. Do you actually know ball?', daily: true, isNew: true },
+      { path: '/emoji-guess', label: 'Emoji Guess', emoji: '🤔', description: 'Five football riddles told entirely in emoji', daily: true, isNew: true },
     ],
   },
   // Game Shows category removed 2026-07-08 per owner review — its games now
