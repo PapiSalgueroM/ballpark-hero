@@ -109,6 +109,7 @@ import TennisHigherLower from "./pages/TennisHigherLower";
 import CfbHigherLower from "./pages/CfbHigherLower";
 import NbaGrid from "./pages/NbaGrid";
 import MlbGrid from "./pages/MlbGrid";
+import NbaConnections from "./pages/NbaConnections";
 
 const queryClient = new QueryClient();
 
@@ -302,6 +303,7 @@ const AppContent = () => {
         <Route path="/cfb-higher-lower" element={<CfbHigherLower />} />
         <Route path="/nba-grid" element={<NbaGrid />} />
         <Route path="/mlb-grid" element={<MlbGrid />} />
+        <Route path="/nba-connections" element={<NbaConnections />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
