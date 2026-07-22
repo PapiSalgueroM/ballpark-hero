@@ -106,6 +106,7 @@ import NflHigherLower from "./pages/NflHigherLower";
 import F1HigherLower from "./pages/F1HigherLower";
 import MlbHigherLower from "./pages/MlbHigherLower";
 import TennisHigherLower from "./pages/TennisHigherLower";
+import CfbHigherLower from "./pages/CfbHigherLower";
 
 const queryClient = new QueryClient();
 
@@ -296,6 +297,7 @@ const AppContent = () => {
         <Route path="/f1-higher-lower" element={<F1HigherLower />} />
         <Route path="/mlb-higher-lower" element={<MlbHigherLower />} />
         <Route path="/tennis-higher-lower" element={<TennisHigherLower />} />
+        <Route path="/cfb-higher-lower" element={<CfbHigherLower />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

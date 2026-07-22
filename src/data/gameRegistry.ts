@@ -101,6 +101,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/college-grid', label: 'College Grid', emoji: '🎓', description: 'College football 3×3 grid puzzle', daily: true },
       { path: '/guess-the-college', label: 'Guess The College', emoji: '🏫', description: 'Guess the D1 school from clues', daily: true },
       { path: '/guess-cbb-team', label: 'Guess The CBB Program', emoji: '🏀', description: 'Guess the college basketball program', daily: true, isNew: true },
+      { path: '/cfb-higher-lower', label: 'CFB Higher or Lower', emoji: '📊', description: 'Which QB threw for more college yards?', daily: true, isNew: true },
     ],
   },
   {
