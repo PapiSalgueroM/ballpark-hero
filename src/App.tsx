@@ -114,6 +114,7 @@ import NflConnections from "./pages/NflConnections";
 import NhlConnections from "./pages/NhlConnections";
 import NbaCareer from "./pages/NbaCareer";
 import MlbConnect4 from "./pages/MlbConnect4";
+import NflConnect4 from "./pages/NflConnect4";
 
 const queryClient = new QueryClient();
 
@@ -312,6 +313,7 @@ const AppContent = () => {
         <Route path="/nhl-connections" element={<NhlConnections />} />
         <Route path="/nba-career" element={<NbaCareer />} />
         <Route path="/mlb-connect-4" element={<MlbConnect4 />} />
+        <Route path="/nfl-connect-4" element={<NflConnect4 />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
