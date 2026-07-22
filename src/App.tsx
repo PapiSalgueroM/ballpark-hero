@@ -118,6 +118,7 @@ import NflConnect4 from "./pages/NflConnect4";
 import MissingFive from "./pages/MissingFive";
 import MissingNine from "./pages/MissingNine";
 import MissingEleven from "./pages/MissingEleven";
+import PlayerStockMarket from "./pages/PlayerStockMarket";
 import NhlConnect4 from "./pages/NhlConnect4";
 
 const queryClient = new QueryClient();
@@ -321,6 +322,7 @@ const AppContent = () => {
         <Route path="/missing-five" element={<MissingFive />} />
         <Route path="/missing-nine" element={<MissingNine />} />
         <Route path="/missing-eleven" element={<MissingEleven />} />
+        <Route path="/player-stock-market" element={<PlayerStockMarket />} />
         <Route path="/nhl-connect-4" element={<NhlConnect4 />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

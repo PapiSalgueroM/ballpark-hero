@@ -71,6 +71,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/guess-transfer-value', label: 'Guess The Value', emoji: '💰', description: 'Guess a player’s transfer market value', daily: true, isNew: true },
       // moved from the retired Game Shows tab 2026-07-08 (owner: game-show games belong in their sport)
       { path: '/squad-deal', label: 'Squad Deal', emoji: '🏟️', description: 'Build an XI, Deal or No Deal style', isNew: true },
+      { path: '/player-stock-market', label: 'Player Stock Market', emoji: '📈', description: 'Buy 3 players at real past values, then the market moves a real year', daily: true, isNew: true },
       { path: '/deal-or-no-deal', label: 'Deal or No Deal', emoji: '💼', description: 'Bank or gamble against the Banker', isNew: true },
       // deleted 2026-07-08 per owner review: "discard this". Route kept for direct links; uncomment to revive.
       // { path: '/pack-battle', label: 'Pack Battle', emoji: '🃏', description: 'Call higher or lower before each card flips. One miss busts the pack', daily: true, isNew: true },
