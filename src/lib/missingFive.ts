@@ -396,6 +396,57 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     ],
     source: 'bref box 201106120MIA Starters (Wade/James/Bosh/Chalmers/Anthony; Anthony 10:55 MP) + NBA.com box 0041000406 starters block (Mike Miller first off the bench).',
   },
+
+  // 2019 NBA Finals Game 6 — Toronto Raptors (first title, clinched on the road)
+  {
+    id: 'finals-2019-g6-tor',
+    dateLabel: '2019 NBA Finals, Game 6',
+    competition: 'NBA Finals',
+    matchDate: '2019-06-13',
+    team: 'Toronto Raptors',
+    opponent: 'Golden State Warriors',
+    scoreLine: 'Raptors 114-110 Warriors',
+    venue: 'Oracle Arena, Oakland',
+    slots: [
+      PG('Kyle Lowry'),
+      SG('Danny Green'),
+      SF('Kawhi Leonard'),
+      PF('Pascal Siakam'),
+      C('Marc Gasol'),
+    ],
+    blankCandidates: [
+      { name: 'Marc Gasol', slotIndex: 4, nationality: 'Spain', fact: 'The center acquired from Memphis at the February trade deadline started as Toronto won its first title.' },
+      { name: 'Danny Green', slotIndex: 1, nationality: 'USA', fact: 'The fifth starter alongside Leonard, Lowry, Siakam and Gasol — the one nobody names.' },
+      { name: 'Pascal Siakam', slotIndex: 3, nationality: 'Cameroon', fact: 'The Cameroon-born forward broke out as a starter in the championship run.' },
+    ],
+    source: 'basketball-reference box 201906130GSW (Starters: Lowry/Green/Leonard/Siakam/Gasol) + Wikipedia "2019 NBA Finals": Gasol acquired from Memphis, Raptors won Game 6 114-110.',
+  },
+
+  // 2019 NBA Finals Game 6 — Golden State Warriors (Durant out, Klay hurt)
+  {
+    id: 'finals-2019-g6-gsw',
+    dateLabel: '2019 NBA Finals, Game 6',
+    competition: 'NBA Finals',
+    matchDate: '2019-06-13',
+    team: 'Golden State Warriors',
+    opponent: 'Toronto Raptors',
+    scoreLine: 'Raptors 114-110 Warriors',
+    venue: 'Oracle Arena, Oakland',
+    // Trap: Kevon Looney started at center; Iguodala started for the injured Durant.
+    slots: [
+      PG('Stephen Curry'),
+      SG('Klay Thompson'),
+      SF('Andre Iguodala'),
+      PF('Draymond Green'),
+      C('Kevon Looney'),
+    ],
+    blankCandidates: [
+      { name: 'Andre Iguodala', slotIndex: 2, nationality: 'USA', fact: 'Started in place of Kevin Durant, who had torn his Achilles in Game 5.' },
+      { name: 'Kevon Looney', slotIndex: 4, nationality: 'USA', fact: 'Started at center and left in the second half with a chest injury.' },
+      { name: 'Draymond Green', slotIndex: 3, nationality: 'USA', fact: 'Fell one assist short of a triple-double in the clincher.' },
+    ],
+    source: 'basketball-reference box 201906130GSW (Starters: Curry/Thompson/Iguodala/Green/Looney) + Wikipedia "2019 NBA Finals": Durant tore his Achilles in Game 5, Looney chest injury in Game 6.',
+  },
 ];
 
 // ---------------------------------------------------------------------------

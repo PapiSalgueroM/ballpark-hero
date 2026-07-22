@@ -311,6 +311,68 @@ export const NINE_LINEUPS: NineLineup[] = [
     ],
     source: 'baseball-almanac box 198610250NYN. Event lines: Ojeda 6.0 IP as starter; Knight 2 RBI; Carter SF; Mitchell listed ph only.',
   },
+
+  // 5. 2013 World Series Game 6 — Boston Red Sox (clinched at Fenway; Ortiz MVP)
+  {
+    id: 'ws-2013-g6-bos',
+    dateLabel: '2013 World Series, Game 6',
+    competition: 'World Series',
+    matchDate: '2013-10-30',
+    team: 'Boston Red Sox',
+    opponent: 'St. Louis Cardinals',
+    scoreLine: 'Red Sox 6-1 Cardinals',
+    venue: 'Fenway Park, Boston',
+    // AL park: DH in the order. Trap: David Ross started at catcher over
+    // Saltalamacchia; rookie Bogaerts started at third.
+    slots: [
+      S('CF', 'Jacoby Ellsbury'),
+      S('2B', 'Dustin Pedroia'),
+      S('DH', 'David Ortiz'),
+      S('1B', 'Mike Napoli'),
+      S('LF', 'Jonny Gomes'),
+      S('RF', 'Shane Victorino'),
+      S('3B', 'Xander Bogaerts'),
+      S('SS', 'Stephen Drew'),
+      S('C', 'David Ross'),
+    ],
+    blankCandidates: [
+      { name: 'David Ross', slotIndex: 8, nationality: 'USA', fact: 'The veteran started at catcher over regular Jarrod Saltalamacchia; his glove anchored the clincher.' },
+      { name: 'Xander Bogaerts', slotIndex: 6, nationality: 'Aruba', fact: 'The 21-year-old rookie from Aruba started at third base.' },
+      { name: 'Stephen Drew', slotIndex: 7, nationality: 'USA', fact: 'Limited at the plate all series, he kept his job at shortstop for his defense.' },
+    ],
+    source: 'baseball-reference box BOS201310300 (starters = 9 batting rows before the substitution break) + Wikipedia "2013 World Series": Ross/Drew limited offensively but strong defensively, Saltalamacchia the regular catcher.',
+  },
+
+  // 6. 2013 World Series Game 6 — St. Louis Cardinals
+  {
+    id: 'ws-2013-g6-stl',
+    dateLabel: '2013 World Series, Game 6',
+    competition: 'World Series',
+    matchDate: '2013-10-30',
+    team: 'St. Louis Cardinals',
+    opponent: 'Boston Red Sox',
+    scoreLine: 'Red Sox 6-1 Cardinals',
+    venue: 'Fenway Park, Boston',
+    // Trap: Descalso started at short (Kozma reduced to pinch-running); Adams
+    // at first pushed Craig to DH.
+    slots: [
+      S('2B', 'Matt Carpenter'),
+      S('RF', 'Carlos Beltran'),
+      S('LF', 'Matt Holliday'),
+      S('DH', 'Allen Craig'),
+      S('C', 'Yadier Molina'),
+      S('1B', 'Matt Adams'),
+      S('3B', 'David Freese'),
+      S('CF', 'Jon Jay'),
+      S('SS', 'Daniel Descalso'),
+    ],
+    blankCandidates: [
+      { name: 'Daniel Descalso', slotIndex: 8, nationality: 'USA', fact: 'Started at shortstop; regular Pete Kozma was reduced to a pinch-running role.' },
+      { name: 'Matt Adams', slotIndex: 5, nationality: 'USA', fact: 'Started at first base, pushing Allen Craig to designated hitter.' },
+      { name: 'Allen Craig', slotIndex: 3, nationality: 'USA', fact: 'Batted cleanup as the designated hitter in the AL park.' },
+    ],
+    source: 'baseball-reference box BOS201310300 (starters = 9 batting rows before the substitution break) + Wikipedia "2013 World Series": Kozma pinch-ran (Descalso started SS).',
+  },
 ];
 
 // ---------------------------------------------------------------------------

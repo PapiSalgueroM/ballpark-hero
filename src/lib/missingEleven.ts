@@ -388,6 +388,134 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     source: 'pfr box 201102060pit #home_starters (Chrome DOM) + Wikipedia SB XLV Starting lineups — 11/11 match. Four-WR set, no TE started.',
   },
+
+  // 11. Super Bowl LIV — San Francisco 49ers (the fourth-quarter collapse)
+  // Verified 2026-07-22: pfr 202002020kan #vis_starters + Wikipedia "Super
+  // Bowl LIV" Starting lineups — 11/11 match (wiki resolves pfr's OL labels).
+  {
+    id: 'sb-liv-sf',
+    dateLabel: 'Super Bowl LIV',
+    competition: 'Super Bowl',
+    matchDate: '2020-02-02',
+    team: 'San Francisco 49ers',
+    opponent: 'Kansas City Chiefs',
+    scoreLine: 'Chiefs 31-20 49ers',
+    venue: 'Hard Rock Stadium, Miami Gardens',
+    slots: [
+      S('QB', 'Jimmy Garoppolo'),
+      S('RB', 'Tevin Coleman'),
+      S('FB', 'Kyle Juszczyk'),
+      S('WR', 'Deebo Samuel'),
+      S('WR', 'Emmanuel Sanders'),
+      S('TE', 'George Kittle'),
+      S('LT', 'Joe Staley'),
+      S('LG', 'Laken Tomlinson'),
+      S('C', 'Ben Garland'),
+      S('RG', 'Mike Person'),
+      S('RT', 'Mike McGlinchey'),
+    ],
+    blankCandidates: [
+      { name: 'Kyle Juszczyk', slotIndex: 2, nationality: 'USA', fact: 'A Pro Bowl fullback starting a Super Bowl in Kyle Shanahan\'s two-back offense.' },
+      { name: 'Ben Garland', slotIndex: 8, nationality: 'USA', fact: 'Started at center with Weston Richburg out for the season.' },
+      { name: 'Tevin Coleman', slotIndex: 1, nationality: 'USA', fact: 'Started at running back over Raheem Mostert, who had run for 220 yards in the NFC Championship.' },
+    ],
+    source: 'pfr box 202002020kan #vis_starters (Chrome DOM) + Wikipedia "Super Bowl LIV" Starting lineups table — 11/11 match (wiki resolves pfr generic OL labels).',
+  },
+
+  // 12. Super Bowl LIV — Kansas City Chiefs (Mahomes\' comeback)
+  {
+    id: 'sb-liv-kc',
+    dateLabel: 'Super Bowl LIV',
+    competition: 'Super Bowl',
+    matchDate: '2020-02-02',
+    team: 'Kansas City Chiefs',
+    opponent: 'San Francisco 49ers',
+    scoreLine: 'Chiefs 31-20 49ers',
+    venue: 'Hard Rock Stadium, Miami Gardens',
+    slots: [
+      S('QB', 'Patrick Mahomes'),
+      S('RB', 'Damien Williams'),
+      S('WR', 'Tyreek Hill'),
+      S('WR', 'Sammy Watkins'),
+      S('WR', 'Mecole Hardman'),
+      S('TE', 'Travis Kelce'),
+      S('LT', 'Eric Fisher'),
+      S('LG', 'Stefen Wisniewski'),
+      S('C', 'Austin Reiter'),
+      S('RG', 'Laurent Duvernay-Tardif'),
+      S('RT', 'Mitchell Schwartz'),
+    ],
+    blankCandidates: [
+      { name: 'Damien Williams', slotIndex: 1, nationality: 'USA', fact: 'Scored the go-ahead touchdown as Kansas City erased a ten-point fourth-quarter deficit.' },
+      { name: 'Laurent Duvernay-Tardif', slotIndex: 9, nationality: 'Canada', fact: 'The starting right guard also holds a medical degree from McGill.' },
+      { name: 'Mecole Hardman', slotIndex: 4, nationality: 'USA', fact: 'The rookie second-round pick started as the third receiver next to Tyreek Hill and Sammy Watkins.' },
+    ],
+    source: 'pfr box 202002020kan #home_starters (Chrome DOM) + Wikipedia "Super Bowl LIV" Starting lineups table — 11/11 match.',
+  },
+
+  // 13. Super Bowl LII — Philadelphia Eagles (the Philly Special)
+  // Verified 2026-07-22: pfr 201802040nwe #vis_starters + Wikipedia "Super
+  // Bowl LII" Starting lineups — 11/11 match (pfr listed explicit OL labels).
+  {
+    id: 'sb-lii-phi',
+    dateLabel: 'Super Bowl LII',
+    competition: 'Super Bowl',
+    matchDate: '2018-02-04',
+    team: 'Philadelphia Eagles',
+    opponent: 'New England Patriots',
+    scoreLine: 'Eagles 41-33 Patriots',
+    venue: 'U.S. Bank Stadium, Minneapolis',
+    slots: [
+      S('QB', 'Nick Foles'),
+      S('RB', 'LeGarrette Blount'),
+      S('WR', 'Alshon Jeffery'),
+      S('WR', 'Torrey Smith'),
+      S('WR', 'Nelson Agholor'),
+      S('TE', 'Zach Ertz'),
+      S('LT', 'Halapoulivaati Vaitai'),
+      S('LG', 'Stefen Wisniewski'),
+      S('C', 'Jason Kelce'),
+      S('RG', 'Brandon Brooks'),
+      S('RT', 'Lane Johnson'),
+    ],
+    blankCandidates: [
+      { name: 'Halapoulivaati Vaitai', slotIndex: 6, nationality: 'USA', fact: 'Started at left tackle with nine-time Pro Bowler Jason Peters out for the season.' },
+      { name: 'LeGarrette Blount', slotIndex: 1, nationality: 'USA', fact: 'Started at running back a year after winning Super Bowl LI with the Patriots he was now beating.' },
+      { name: 'Torrey Smith', slotIndex: 3, nationality: 'USA', fact: 'The third receiver alongside Alshon Jeffery and Nelson Agholor.' },
+    ],
+    source: 'pfr box 201802040nwe #vis_starters (Chrome DOM) + Wikipedia "Super Bowl LII" Starting lineups table — 11/11 match.',
+  },
+
+  // 14. Super Bowl LII — New England Patriots (613 yards and a loss)
+  {
+    id: 'sb-lii-ne',
+    dateLabel: 'Super Bowl LII',
+    competition: 'Super Bowl',
+    matchDate: '2018-02-04',
+    team: 'New England Patriots',
+    opponent: 'Philadelphia Eagles',
+    scoreLine: 'Eagles 41-33 Patriots',
+    venue: 'U.S. Bank Stadium, Minneapolis',
+    slots: [
+      S('QB', 'Tom Brady'),
+      S('RB', 'Dion Lewis'),
+      S('FB', 'James Develin'),
+      S('WR', 'Brandin Cooks'),
+      S('WR', 'Chris Hogan'),
+      S('TE', 'Rob Gronkowski'),
+      S('LT', 'Nate Solder'),
+      S('LG', 'Joe Thuney'),
+      S('C', 'David Andrews'),
+      S('RG', 'Shaq Mason'),
+      S('RT', 'Cameron Fleming'),
+    ],
+    blankCandidates: [
+      { name: 'Cameron Fleming', slotIndex: 10, nationality: 'USA', fact: 'Started at right tackle in the highest-scoring Super Bowl ever — 74 combined points.' },
+      { name: 'Dion Lewis', slotIndex: 1, nationality: 'USA', fact: 'Started at running back as the Patriots piled up a Super Bowl-record 613 yards — and lost.' },
+      { name: 'James Develin', slotIndex: 2, nationality: 'USA', fact: 'The fullback in New England\'s two-back opening set.' },
+    ],
+    source: 'pfr box 201802040nwe #home_starters (Chrome DOM) + Wikipedia "Super Bowl LII" Starting lineups table — 11/11 match.',
+  },
 ];
 
 // ---------------------------------------------------------------------------
