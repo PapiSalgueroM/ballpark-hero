@@ -236,6 +236,113 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     ],
     source: 'basketball-reference box score 202306120DEN (Starters table) — Adebayo/Butler/Strus/Vincent/Love confirmed.',
   },
+  // 7. 2013 NBA Finals Game 7 — San Antonio Spurs (the Ginobili trap)
+  // Verified 2026-07-22: bref box 201306200MIA Starters table (Chrome-rendered)
+  // + NBA.com official box 0041200407 (starters-first block). Splitter listed
+  // in the bench block in BOTH sources.
+  {
+    id: 'finals-2013-g7-sas',
+    dateLabel: '2013 NBA Finals, Game 7',
+    competition: 'NBA Finals',
+    matchDate: '2013-06-20',
+    team: 'San Antonio Spurs',
+    opponent: 'Miami Heat',
+    scoreLine: 'Heat 95-88 Spurs',
+    venue: 'AmericanAirlines Arena, Miami',
+    // Trap: career sixth man Manu Ginobili STARTED Game 7 (Splitter benched).
+    slots: [
+      PG('Tony Parker'),
+      SG('Manu Ginobili'),
+      SF('Danny Green'),
+      PF('Kawhi Leonard'),
+      C('Tim Duncan'),
+    ],
+    blankCandidates: [
+      { name: 'Manu Ginobili', slotIndex: 1, nationality: 'Argentina', fact: 'The career sixth man started Game 7 — Popovich moved him into the lineup with Tiago Splitter benched.' },
+      { name: 'Kawhi Leonard', slotIndex: 3, nationality: 'USA', fact: 'A 21-year-old Leonard started at forward, one year before his Finals MVP.' },
+      { name: 'Danny Green', slotIndex: 2, nationality: 'USA', fact: 'Had broken the record for made threes in a single Finals series (27) earlier in the same series.' },
+    ],
+    source: 'bref box 201306200MIA Starters (Parker/Green/Leonard/Duncan/Ginobili) + NBA.com box 0041200407 starters block; Splitter bench in both.',
+  },
+
+  // 8. 2013 NBA Finals Game 7 — Miami Heat (the Mike Miller trap)
+  {
+    id: 'finals-2013-g7-mia',
+    dateLabel: '2013 NBA Finals, Game 7',
+    competition: 'NBA Finals',
+    matchDate: '2013-06-20',
+    team: 'Miami Heat',
+    opponent: 'San Antonio Spurs',
+    scoreLine: 'Heat 95-88 Spurs',
+    venue: 'AmericanAirlines Arena, Miami',
+    // Trap: Mike Miller started; Ray Allen and Shane Battier came off the bench.
+    slots: [
+      PG('Mario Chalmers'),
+      SG('Dwyane Wade'),
+      SF('Mike Miller'),
+      PF('LeBron James'),
+      C('Chris Bosh'),
+    ],
+    blankCandidates: [
+      { name: 'Mike Miller', slotIndex: 2, nationality: 'USA', fact: 'Started the title clincher — Ray Allen and Shane Battier both came off the bench that night.' },
+      { name: 'Mario Chalmers', slotIndex: 0, nationality: 'USA', fact: 'The starting point guard on both Heatles championship teams.' },
+      { name: 'Chris Bosh', slotIndex: 4, nationality: 'USA' },
+    ],
+    source: 'bref box 201306200MIA Starters (James/Chalmers/Wade/Bosh/Miller) + NBA.com box 0041200407 starters block; Allen/Battier bench in both.',
+  },
+
+  // 9. 2008 NBA Finals Game 6 — Los Angeles Lakers (the Radmanovic trap)
+  // Verified 2026-07-22: bref box 200806170BOS Starters + NBA.com box
+  // 0040700406 starters block (Walton bench in both).
+  {
+    id: 'finals-2008-g6-lal',
+    dateLabel: '2008 NBA Finals, Game 6',
+    competition: 'NBA Finals',
+    matchDate: '2008-06-17',
+    team: 'Los Angeles Lakers',
+    opponent: 'Boston Celtics',
+    scoreLine: 'Celtics 131-92 Lakers',
+    venue: 'TD Banknorth Garden, Boston',
+    // Trap: Vladimir Radmanovic started at small forward — not Walton, not Ariza.
+    slots: [
+      PG('Derek Fisher'),
+      SG('Kobe Bryant'),
+      SF('Vladimir Radmanovic'),
+      PF('Lamar Odom'),
+      C('Pau Gasol'),
+    ],
+    blankCandidates: [
+      { name: 'Vladimir Radmanovic', slotIndex: 2, nationality: 'Serbia', fact: 'The forgotten starting small forward of the 2008 Finals — not Luke Walton, not Trevor Ariza.' },
+      { name: 'Lamar Odom', slotIndex: 3, nationality: 'USA' },
+      { name: 'Pau Gasol', slotIndex: 4, nationality: 'Spain', fact: 'Traded to L.A. that February — the Finals rematch two years later ended differently.' },
+    ],
+    source: 'bref box 200806170BOS Starters (Bryant/Odom/Gasol/Fisher/Radmanovic) + NBA.com box 0040700406 starters block; Walton bench in both.',
+  },
+
+  // 10. 2008 NBA Finals Game 6 — Boston Celtics (the 131-92 clincher)
+  {
+    id: 'finals-2008-g6-bos',
+    dateLabel: '2008 NBA Finals, Game 6',
+    competition: 'NBA Finals',
+    matchDate: '2008-06-17',
+    team: 'Boston Celtics',
+    opponent: 'Los Angeles Lakers',
+    scoreLine: 'Celtics 131-92 Lakers',
+    venue: 'TD Banknorth Garden, Boston',
+    slots: [
+      PG('Rajon Rondo'),
+      SG('Ray Allen'),
+      SF('Paul Pierce'),
+      PF('Kevin Garnett'),
+      C('Kendrick Perkins'),
+    ],
+    blankCandidates: [
+      { name: 'Kendrick Perkins', slotIndex: 4, nationality: 'USA', fact: 'Started the 131-92 clincher but played only 13 minutes with a shoulder injury — P.J. Brown soaked up the frontcourt minutes.' },
+      { name: 'Rajon Rondo', slotIndex: 0, nationality: 'USA', fact: 'The second-year point guard ran the offense in the biggest banner-clinching rout in Finals history.' },
+      { name: 'Ray Allen', slotIndex: 1, nationality: 'USA' },
+    ],
+    source: 'bref box 200806170BOS Starters (Pierce/Garnett/Allen/Rondo/Perkins; Perkins 13:25 MP) + NBA.com box 0040700406 starters block.',
+  },
 ];
 
 // ---------------------------------------------------------------------------
