@@ -185,6 +185,57 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     ],
     source: 'basketball-reference box score 199806140UTA (Starters table) + Wikipedia game article box — Malone/Russell/Hornacek/Stockton/Keefe confirmed.',
   },
+
+  // 5. 2023 NBA Finals Game 5 — Denver Nuggets (first title in franchise history)
+  {
+    id: 'finals-2023-g5-den',
+    dateLabel: '2023 NBA Finals, Game 5',
+    competition: 'NBA Finals',
+    matchDate: '2023-06-12',
+    team: 'Denver Nuggets',
+    opponent: 'Miami Heat',
+    scoreLine: 'Nuggets 94-89 Heat',
+    venue: 'Ball Arena, Denver',
+    slots: [
+      PG('Jamal Murray'),
+      SG('Kentavious Caldwell-Pope'),
+      SF('Michael Porter Jr.'),
+      PF('Aaron Gordon'),
+      C('Nikola Jokic'),
+    ],
+    blankCandidates: [
+      { name: 'Kentavious Caldwell-Pope', slotIndex: 1, nationality: 'USA' },
+      { name: 'Aaron Gordon', slotIndex: 3, nationality: 'USA' },
+      { name: 'Michael Porter Jr.', slotIndex: 2, nationality: 'USA', fact: 'Grabbed 13 rebounds in the title clincher.' },
+    ],
+    source: 'basketball-reference box score 202306120DEN (Starters table) — Jokic/Murray/Caldwell-Pope/Porter/Gordon confirmed.',
+  },
+
+  // 6. 2023 NBA Finals Game 5 — Miami Heat (the 8-seed finalists)
+  {
+    id: 'finals-2023-g5-mia',
+    dateLabel: '2023 NBA Finals, Game 5',
+    competition: 'NBA Finals',
+    matchDate: '2023-06-12',
+    team: 'Miami Heat',
+    opponent: 'Denver Nuggets',
+    scoreLine: 'Nuggets 94-89 Heat',
+    venue: 'Ball Arena, Denver',
+    // Undrafted Vincent/Strus starting a Finals game is the whole Heat-culture story.
+    slots: [
+      PG('Gabe Vincent'),
+      SG('Max Strus'),
+      SF('Jimmy Butler'),
+      PF('Kevin Love'),
+      C('Bam Adebayo'),
+    ],
+    blankCandidates: [
+      { name: 'Gabe Vincent', slotIndex: 0, nationality: 'Nigeria', fact: 'An undrafted starter in an NBA Finals game — peak Heat culture.' },
+      { name: 'Max Strus', slotIndex: 1, nationality: 'USA', fact: 'Undrafted out of DePaul, starting in the Finals.' },
+      { name: 'Kevin Love', slotIndex: 3, nationality: 'USA', fact: 'Reinserted into the starting lineup mid-series — the documented Spoelstra adjustment.' },
+    ],
+    source: 'basketball-reference box score 202306120DEN (Starters table) — Adebayo/Butler/Strus/Vincent/Love confirmed.',
+  },
 ];
 
 // ---------------------------------------------------------------------------
