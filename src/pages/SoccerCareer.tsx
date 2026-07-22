@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { toast } from "sonner";
@@ -425,31 +424,22 @@ export default function SoccerCareer() {
   }, [isRetired, career]);
   useGameCompletion('soccer-career', isRetired, legacyScore);
 
-  // Load clubs from Supabase. If the table is missing, empty, or the request
-  // fails for any reason, fall back to a bundled static roster so the game
-  // can always start instead of hanging on a blank/failed fetch.
+  // Club roster comes from the bundled FALLBACK_CLUBS list — deliberately.
+  //
+  // 2026-07-22: this used to fetch a `soccer_career_clubs` table first and fall
+  // back to the bundle, but that table does not exist in the database (checked
+  // pg_class — no table, view, or matview; only its stale entry in types.ts
+  // survives, which the `as any` cast on the old .from() call kept invisible to
+  // the compiler). The fetch had therefore failed on EVERY page load since the
+  // table was dropped: an error logged to console each visit, a loading state
+  // that only ever resolved via the catch path, and a dead code branch that
+  // could never run. The bundle IS the source of truth, so load it directly.
+  // If a DB-backed roster is ever wanted, recreate the table first and restore
+  // a typed (no `as any`) fetch here.
   useEffect(() => {
-    let cancelled = false;
-    setClubsLoading(true);
+    setClubs(FALLBACK_CLUBS);
     setClubsError(false);
-    supabase.from("soccer_career_clubs" as any).select("*").then(({ data, error }) => {
-      if (cancelled) return;
-      if (error || !data || data.length === 0) {
-        if (error) console.error("soccer_career_clubs fetch failed, using fallback roster:", error);
-        setClubs(FALLBACK_CLUBS);
-        setClubsError(!!error);
-      } else {
-        setClubs(data as unknown as ClubData[]);
-      }
-      setClubsLoading(false);
-    }).catch((err) => {
-      if (cancelled) return;
-      console.error("soccer_career_clubs fetch threw, using fallback roster:", err);
-      setClubs(FALLBACK_CLUBS);
-      setClubsError(true);
-      setClubsLoading(false);
-    });
-    return () => { cancelled = true; };
+    setClubsLoading(false);
   }, []);
 
   // Save career to localStorage whenever it changes

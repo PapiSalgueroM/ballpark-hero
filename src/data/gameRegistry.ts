@@ -51,8 +51,15 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/build-your-xi', label: 'Build Your XI', emoji: '⚽', description: 'Create a lineup, get AI rated' },
       { path: '/perfect-lineup', label: 'Perfect Lineup', emoji: '⚽', description: 'Build an XI under random league & country constraints, then simulate', daily: true, isNew: true },
       { path: '/football-connect-4', label: 'Connect 4', emoji: '🔴', description: 'Soccer trivia meets Connect 4' },
-      // deleted 2026-07-08 per owner review: buggy (hint x3 -> blank screen) and too few possible puzzles for a rare event. Route kept for direct links; uncomment to revive.
-      // { path: '/world-cup', label: 'World Cup', emoji: '🏆', description: 'Guess the World Cup legend', daily: true },
+      // Revived 2026-07-22. Was deleted 2026-07-08 as "buggy (hint x3 -> blank
+      // screen) and too few possible puzzles for a rare event". The bug is
+      // root-caused and fixed (useWorldCup.ts: the Answer clue was reachable
+      // mid-game, and daily gated on MAX_CLUES=7 vs the real 6 for host-nation
+      // puzzles — Beckenbauer/Kempes/Schillaci/Zidane/Klose/Neymar, 9 of 60).
+      // The content objection is answered by relaunching UNLIMITED-FIRST (no
+      // daily flag here, page defaults to unlimited): 60 puzzles is thin as a
+      // headline daily but plenty as a replayable archive.
+      { path: '/world-cup', label: 'World Cup Legends', emoji: '🏆', description: 'Guess the World Cup legend, clue by clue', isNew: true },
       { path: '/guess-soccer-club', label: 'Guess The Club', emoji: '🏟️', description: 'Identify the mystery football club', daily: true, isNew: true },
       { path: '/soccer-grid', label: 'Soccer Grid', emoji: '⚽', description: '3×3 grid puzzle with rarity scores', daily: true, isNew: true },
       { path: '/world-cup-bracket', label: '2026 Bracket', emoji: '🌍', description: 'Predict every World Cup 2026 match', isNew: true },

@@ -118,7 +118,12 @@ function countProgression(actions: WCAction[]): number {
 
 export function useWorldCup() {
   // ---- MODE ----------------------------------------------------------------
-  const [mode, setMode] = useState<WorldCupMode>('daily');
+  // Default to UNLIMITED (revival decision, 2026-07-22). The game was pulled
+  // for two reasons: the clue-overflow bug (fixed above) and "too few possible
+  // puzzles for a rare event" — 60 puzzles is thin as a headline DAILY but
+  // plenty as a replayable archive. Leading with unlimited mode neutralizes
+  // the content-burn objection; the daily tab still exists for streak players.
+  const [mode, setMode] = useState<WorldCupMode>('unlimited');
 
   // ---- DAILY ---------------------------------------------------------------
   const {
