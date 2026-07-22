@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronDown, Loader2, Lock } from 'lucide-react';
+import { FlagImg } from '@/components/FlagImg';
+import { supabase } from '@/integrations/supabase/client';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
