@@ -325,6 +325,69 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     source: 'pfr box 202302120phi #home_starters (Chrome DOM) + Wikipedia SB LVII Starting lineups — 11/11 match.',
   },
+  // 9. Super Bowl XLV — Pittsburgh Steelers (the jumbo look)
+  // Verified 2026-07-22: pfr 201102060pit #vis_starters + Wikipedia "Super
+  // Bowl XLV" Starting lineups — 11/11 match (1 WR, 2 TE, FB).
+  {
+    id: 'sb-xlv-pit',
+    dateLabel: 'Super Bowl XLV',
+    competition: 'Super Bowl',
+    matchDate: '2011-02-06',
+    team: 'Pittsburgh Steelers',
+    opponent: 'Green Bay Packers',
+    scoreLine: 'Packers 31-25 Steelers',
+    venue: 'Cowboys Stadium, Arlington',
+    slots: [
+      S('QB', 'Ben Roethlisberger'),
+      S('RB', 'Rashard Mendenhall'),
+      S('FB', 'David Johnson'),
+      S('WR', 'Hines Ward'),
+      S('TE', 'Heath Miller'),
+      S('TE', 'Matt Spaeth'),
+      S('LT', 'Jonathan Scott'),
+      S('LG', 'Chris Kemoeatu'),
+      S('C', 'Doug Legursky'),
+      S('RG', 'Ramon Foster'),
+      S('RT', 'Flozell Adams'),
+    ],
+    blankCandidates: [
+      { name: 'Doug Legursky', slotIndex: 8, nationality: 'USA', fact: 'Started at center with All-Rookie Maurkice Pouncey out injured.' },
+      { name: 'Rashard Mendenhall', slotIndex: 1, nationality: 'USA', fact: 'Started at running back — his fourth-quarter fumble swung the game.' },
+      { name: 'David Johnson', slotIndex: 2, nationality: 'USA', fact: 'Not THAT David Johnson — the Steelers fullback in the jumbo opening look.' },
+    ],
+    source: 'pfr box 201102060pit #vis_starters (Chrome DOM) + Wikipedia SB XLV Starting lineups — 11/11 match. Only one WR started; Brown/Wallace off the bench.',
+  },
+
+  // 10. Super Bowl XLV — Green Bay Packers (four wide, no tight end)
+  {
+    id: 'sb-xlv-gb',
+    dateLabel: 'Super Bowl XLV',
+    competition: 'Super Bowl',
+    matchDate: '2011-02-06',
+    team: 'Green Bay Packers',
+    opponent: 'Pittsburgh Steelers',
+    scoreLine: 'Packers 31-25 Steelers',
+    venue: 'Cowboys Stadium, Arlington',
+    slots: [
+      S('QB', 'Aaron Rodgers'),
+      S('RB', 'James Starks'),
+      S('WR', 'Donald Driver'),
+      S('WR', 'Greg Jennings'),
+      S('WR', 'James Jones'),
+      S('WR', 'Jordy Nelson'),
+      S('LT', 'Chad Clifton'),
+      S('LG', 'Daryn Colledge'),
+      S('C', 'Scott Wells'),
+      S('RG', 'Josh Sitton'),
+      S('RT', 'Bryan Bulaga'),
+    ],
+    blankCandidates: [
+      { name: 'James Starks', slotIndex: 1, nationality: 'USA', fact: 'The rookie back started with Ryan Grant on injured reserve.' },
+      { name: 'Jordy Nelson', slotIndex: 5, nationality: 'USA', fact: 'One of FOUR wide receivers in the no-tight-end opening look.' },
+      { name: 'James Jones', slotIndex: 4, nationality: 'USA', fact: 'The third of four wideouts Rodgers threw to all night.' },
+    ],
+    source: 'pfr box 201102060pit #home_starters (Chrome DOM) + Wikipedia SB XLV Starting lineups — 11/11 match. Four-WR set, no TE started.',
+  },
 ];
 
 // ---------------------------------------------------------------------------
