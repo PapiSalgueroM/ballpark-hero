@@ -16,8 +16,8 @@ import { getTodayET } from '@/lib/dateUtils';
  *
  * The two surviving uses are safe: dailyRevealedCount clamps to it (the real
  * clamp happens in revealedClues), and useDailyPuzzle's isLost keeps it as a
- * backstop. isLost genuinely cannot see playableClues — it is config for the
- * very hook that returns dailyPuzzle, so the dependency is circular — but it no
+ * backstop. isLost genuinely cannot see playableClues, it is config for the
+ * very hook that returns dailyPuzzle, so the dependency is circular, but it no
  * longer matters: submitGuess/skipClue now emit a 'g' action once
  * playableClues is exhausted, and isLost's first clause catches that.
  */
@@ -190,7 +190,7 @@ export function useWorldCup() {
    *  2. Daily mode compared against the CONSTANT MAX_CLUES (7) rather than the
    *     live clues.length. For a host-nation puzzle getClues returns only 6, so
    *     daily hit the Answer a clue earlier AND kept going to 7 on a 6-length
-   *     array. That's 9 of the 60 puzzles — and they're the marquee ones:
+   *     array. That's 9 of the 60 puzzles, and they're the marquee ones:
    *     Beckenbauer '74, Kempes '78, Schillaci '90, Zidane '98, Klose '06,
    *     Neymar '14.
    * Unlimited mode already used totalClues (right idea, still off by the Answer

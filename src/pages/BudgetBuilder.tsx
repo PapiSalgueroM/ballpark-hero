@@ -15,9 +15,9 @@ export default function BudgetBuilder() {
       <BudgetBuilderBoard />
       <GameSeoContent
         title="€1 Billion Budget Builder | DoUKnowBall"
-        description="One billion euros, real transfer market values, eleven slots. Choose any formation, filter by competition, and build the strongest XI your budget allows. Overspend and you cannot field the team — the whole game is deciding where the money goes."
+        description="One billion euros, real transfer market values, eleven slots. Choose any formation, filter by competition, and build the strongest XI your budget allows. Overspend and you cannot field the team, the whole game is deciding where the money goes."
         howToPlay={[
-          'You start with €1,000M — one billion euros.',
+          'You start with €1,000M, one billion euros.',
           'Pick a formation, then tap any position on the pitch.',
           'Sign a player: their real market value comes straight off your budget.',
           'You will only be shown players you can actually afford for that slot.',
@@ -28,7 +28,7 @@ export default function BudgetBuilder() {
           'Blow €430M on Haaland, Mbappé and Yamal, then field a €5M back four',
           'Spread it evenly and see if an all-85 XI beats a top-heavy one',
           'Restrict to one league and watch the budget stop stretching',
-          'Try 5-3-2 — defenders are cheaper than wingers, and it shows',
+          'Try 5-3-2, defenders are cheaper than wingers, and it shows',
         ]}
       />
     </>

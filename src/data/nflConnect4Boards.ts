@@ -3,7 +3,7 @@ import type { Connect4Board } from '@/types/nflConnect4';
 /**
  * NFL Connect 4 boards (task #22 follow-on). Every attribute string used
  * here has a definition in the nfl-connect4-validate edge function's system
- * prompt — add the definition there FIRST if you add a new attribute.
+ * prompt, add the definition there FIRST if you add a new attribute.
  *
  * Cell feasibility spot-checks for the toughest pairings, done while
  * authoring: Chargers × Super Bowl MVP = Drew Brees (SB44 MVP, SD 2001-05);

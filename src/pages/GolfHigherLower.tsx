@@ -1,4 +1,4 @@
-import { useNbaHL } from '@/hooks/useNbaHL';
+import { useGolfHL } from '@/hooks/useGolfHL';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -10,30 +10,29 @@ import { ArrowUp, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 /**
- * Direct port of HockeyHigherLower (task #23). Two intentional deltas:
- * no flag (the bref source carries no nationality — the card leads with
- * position + final season instead), and no separate how-to-play modal
- * (the rules fit in one subtitle line; GameSeoContent documents the rest).
+ * First game in the Golf tab (owner 2026-08-05). Stat axis is career MAJOR
+ * championship wins, straight from public.golf_majors: Nicklaus 18, Tiger 15,
+ * up through McIlroy completing the career slam in 2026.
  */
-const NbaHigherLower = () => {
+const GolfHigherLower = () => {
   const {
     mode, switchMode, currentPair, currentRound, results,
     showingResult, streak, gameStatus, correctCount, totalScore,
     makeGuess, totalRounds,
     hard, toggleHard,
-  } = useNbaHL();
+  } = useGolfHL();
 
   return (
     <>
       <PageSeo
-        title="NBA Higher or Lower - Career Points Game | DoUKnowBall"
-        description="Which NBA player scored more career points? Compare legends side by side in this daily basketball trivia challenge."
-        path="/nba-higher-lower"
+        title="Golf Higher or Lower - Major Championships Game | DoUKnowBall"
+        description="Which golfer won more majors? Nicklaus, Tiger, Hogan, McIlroy, Scheffler. Compare legends side by side in this daily golf challenge."
+        path="/golf-higher-lower"
       />
       <GameShell
         width="narrow"
-        title="🏀 HIGHER OR LOWER"
-        subtitle="Which player scored more career points?"
+        title="⛳ HIGHER OR LOWER"
+        subtitle="Which golfer won more major championships?"
         headerExtra={
           <>
             <div className="flex items-center justify-center gap-2 mt-3">
@@ -76,8 +75,8 @@ const NbaHigherLower = () => {
               const side = i === 0 ? 'left' : 'right';
               const lastResult = showingResult ? results[results.length - 1] : null;
               const isWinner = showingResult && lastResult && (
-                (i === 0 && lastResult.player1.careerPoints >= lastResult.player2.careerPoints) ||
-                (i === 1 && lastResult.player2.careerPoints >= lastResult.player1.careerPoints)
+                (i === 0 && lastResult.player1.majors >= lastResult.player2.majors) ||
+                (i === 1 && lastResult.player2.majors >= lastResult.player1.majors)
               );
 
               return (
@@ -94,14 +93,15 @@ const NbaHigherLower = () => {
                       : 'bg-card border-border hover:border-primary/50 hover:scale-[1.02] cursor-pointer'
                   )}
                 >
-                  <span className="text-3xl">🏀</span>
+                  <span className="text-3xl">⛳</span>
                   <span className="text-lg font-bold text-foreground font-display">{player.name}</span>
-                  <span className="text-xs text-muted-foreground">{player.position} · played until {player.lastSeason}</span>
-                  <span className="text-xs text-muted-foreground">{player.teams}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {player.nationality} · majors {player.firstWin}-{player.lastWin}
+                  </span>
 
                   {showingResult ? (
                     <span className="text-2xl font-bold text-gold animate-cell-reveal">
-                      {player.careerPoints.toLocaleString()} pts
+                      {player.majors} Majors
                     </span>
                   ) : (
                     <span className="flex items-center gap-1 text-sm font-semibold text-primary">
@@ -118,15 +118,15 @@ const NbaHigherLower = () => {
           <div className="mt-4 flex justify-center">
             <ResultScreen
               won={correctCount >= 5}
-              outcomeEmoji={correctCount >= 8 ? '🏆' : correctCount >= 5 ? '🏀' : '🧱'}
+              outcomeEmoji={correctCount >= 8 ? '🏆' : correctCount >= 5 ? '⛳' : '🏌️'}
               headline={`${correctCount}/${totalRounds} Correct!`}
               statLine={<>Total Score: <span className="font-bold text-gold">{totalScore}</span></>}
               funFact={`(${correctCount}×10 base + ${totalScore - correctCount * 10} streak bonus)`}
-              emojiGrid={`🏀 NBA Higher or Lower: ${totalScore} pts (${correctCount}/${totalRounds})`}
+              emojiGrid={`⛳ Golf Higher or Lower: ${totalScore} pts (${correctCount}/${totalRounds})`}
               share={{
-                score: `${totalScore} points (${correctCount}/${totalRounds}) on today's NBA Higher or Lower`,
-                gameName: 'NBA Higher or Lower',
-                gamePath: '/nba-higher-lower',
+                score: `${totalScore} points (${correctCount}/${totalRounds}) on today's Golf Higher or Lower`,
+                gameName: 'Golf Higher or Lower',
+                gamePath: '/golf-higher-lower',
               }}
               onPlayAgain={mode === 'unlimited' ? () => switchMode('unlimited') : undefined}
               playNext={mode !== 'unlimited' && <p className="text-sm text-muted-foreground">Come back tomorrow for a new challenge!</p>}
@@ -135,27 +135,26 @@ const NbaHigherLower = () => {
         )}
 
         <GameSeoContent
-          title="NBA Higher or Lower | DoUKnowBall"
-          description="Two NBA players, side by side. Which one scored more career points? Daily challenge and unlimited mode with streak bonuses, drawn from the all-time top 80 scorers."
+          title="Golf Higher or Lower | DoUKnowBall"
+          description="Two major champions, side by side. Which one won more majors? From Old Tom Morris to Scottie Scheffler, the whole history of championship golf is in the pool."
           howToPlay={[
-            'Two players shown side by side with position, era, and franchises',
-            'Tap the player you think scored MORE career points',
-            '10 rounds per game: 10 points per correct answer',
-            'Build a streak for bonus points (+5 per consecutive correct)',
+            'Two major champions shown side by side with their era and country',
+            'Tap the golfer you think won MORE major championships',
+            'Exact ties count as correct whichever side you pick',
+            '10 rounds per game: 10 points per correct answer, +5 per streak step',
             'Daily challenge (same pairs for everyone) or unlimited random mode',
           ]}
           examples={[
-            'LeBron (42,184 pts) vs Kareem (38,387 pts)',
-            'Jordan vs Kobe: who finished with more?',
-            'Curry vs Durant: closer than you think?',
-            'Oscar Robertson vs Jerry West, the 60s showdown',
-            'Iverson vs Wade: who outscored whom?',
+            'Nicklaus (18) vs Tiger (15), the two mountains at the top',
+            'Rory McIlroy finally has the career slam, 6 majors and counting',
+            'Walter Hagen quietly sits on 11, more than anyone but Jack and Tiger',
+            'Koepka (5) vs Scheffler (4) for the modern era bragging rights',
           ]}
         />
 
-        <AdBanner slot="1234567901" format="horizontal" className="mt-8" />
+        <AdBanner slot="1234567903" format="horizontal" className="mt-8" />
         <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nba-higher-lower" gameContext={{ mode }} />
+          <ReportQuestion gameType="golf-higher-lower" gameContext={{ mode }} />
         </div>
         <GameNav />
       </GameShell>
@@ -163,4 +162,4 @@ const NbaHigherLower = () => {
   );
 };
 
-export default NbaHigherLower;
+export default GolfHigherLower;

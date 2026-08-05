@@ -66,7 +66,7 @@ export function useGame() {
   }, []);
 
   // ---- DAILY: tier + pool (computed once on mount from today's ET date) ----
-  // todayStr/dailyTier are captured once via ref — matching useDailyPuzzle's
+  // todayStr/dailyTier are captured once via ref, matching useDailyPuzzle's
   // todayStr-on-mount semantics. dailyPool re-derives when playerPool updates
   // (which happens exactly once, before the user can interact).
   const todayStr = useRef(getTodayET()).current;
@@ -147,7 +147,7 @@ export function useGame() {
       // Persist the forfeited state to localStorage using useDailyPuzzle's
       // schema (v:1) so that on refresh the hook reads 'lost' and restores
       // correctly. This is the only coupling point with useDailyPuzzle's
-      // internal storage format — if the schema version bumps, update here too.
+      // internal storage format, if the schema version bumps, update here too.
       try {
         const storageKey = `footle-daily-${todayStr}`;
         localStorage.setItem(storageKey, JSON.stringify({
@@ -157,7 +157,7 @@ export function useGame() {
           guesses: dailyGuesses,
           gameStatus: 'lost',
         }));
-      } catch { /* quota or private browsing — silently skip */ }
+      } catch { /* quota or private browsing, silently skip */ }
       setForfeited(true);
     } else {
       setUnlimitedStatus('lost');
@@ -176,7 +176,7 @@ export function useGame() {
   }, [mode, difficulty, playerPool, resetDailyHook]);
 
   const changeDifficulty = useCallback((newDiff: Difficulty) => {
-    // Difficulty selection only applies in unlimited mode — daily tier is locked
+    // Difficulty selection only applies in unlimited mode, daily tier is locked
     if (mode === 'daily') return;
     if (newDiff === difficulty) return;
     setDifficultyState(newDiff);
@@ -189,7 +189,7 @@ export function useGame() {
 
   const availablePlayers = useMemo(() => {
     // Guessing is always open to the FULL pool (owner: "every player should
-    // be able to be guessed") — only the secret answer is tier-restricted.
+    // be able to be guessed"), only the secret answer is tier-restricted.
     if (mode === 'daily') {
       // Guard for the one-tick isLoading window before dailyTarget resolves
       if (!dailyTarget) return playerPool;

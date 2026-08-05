@@ -1,3 +1,4 @@
+import { foldSpecialLatin } from '@/lib/nameFold';
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
@@ -35,11 +36,13 @@ import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
  * so the source can't be corrupted by an editor/encoding round-trip.
  */
 function normalizeSearchText(s: string): string {
-  return s
-    .normalize('NFD')
-    .replace(new RegExp('[\\u0300-\\u036f]', 'g'), '')
-    .toLowerCase()
-    .trim();
+  return foldSpecialLatin(
+    s
+      .normalize('NFD')
+      .replace(new RegExp('[\\u0300-\\u036f]', 'g'), '')
+      .toLowerCase()
+      .trim(),
+  );
 }
 
 /**
@@ -466,17 +469,9 @@ export default function Index() {
             </>
           )}
 
-          {/* Coming Soon placeholder for Golf */}
-          <section>
-            <h2 className="flex items-center gap-2 text-lg font-display font-bold text-foreground mb-4">
-              <span className="text-xl">🏌️</span>
-              Golf
-              <span className="text-xs font-normal text-muted-foreground ml-1">Coming Soon</span>
-            </h2>
-            <div className="rounded-xl border border-dashed border-border bg-card/50 p-6 text-center text-sm text-muted-foreground">
-              Golf trivia games are coming soon! Stay tuned.
-            </div>
-          </section>
+          {/* Golf went live 2026-08-05 (Guess The Golfer + Golf Higher or
+              Lower), so the old Coming Soon placeholder is gone; the Golf
+              category now renders through VISIBLE_CATEGORIES like the rest. */}
 
           {/* ─── SOCIAL PROOF ─── */}
           {totalPlayed !== null && totalPlayed > 0 && (

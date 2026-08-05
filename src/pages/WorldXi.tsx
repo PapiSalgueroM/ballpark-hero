@@ -55,6 +55,7 @@ const WorldXi = () => {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
   const [spinning, setSpinning] = useState(false);
+  const [respinsLeft, setRespinsLeft] = useState(3); // owner 2026-08-05: limited respins, 3 per game
   const [spinKey, setSpinKey] = useState(0); // bumping this starts a SlotReel spin
   const [reelGlimpse, setReelGlimpse] = useState<string>(''); // country under the payline mid-spin
   const [seasonReport, setSeasonReport] = useState<SeasonReport | null>(null);
@@ -99,6 +100,7 @@ const WorldXi = () => {
     setQuery('');
     setFeedback(null);
     setTimeLeft(timerMode.seconds);
+    setRespinsLeft(3);
     prevStepRef.current = -1; // so the first slot of a replay spins too
     setPhase('playing');
   }, [data, formation, timerMode]);
@@ -189,11 +191,13 @@ const WorldXi = () => {
     setPhase('setup');
   };
 
-  // Unlimited nation respins: rerolls only the current slot's country, any
-  // number of times, before a player is picked for it. No penalty, no cap.
+  // Owner 2026-08-05: respins are LIMITED now (3 per game, shared across all
+  // slots), so a bad draw costs a decision instead of being reroll-until-easy.
   // Every respin runs the same slot-machine reel as the initial reveal.
   const respin = () => {
     if (phase !== 'playing' || !data || slotIndex < 0 || spinning) return;
+    if (respinsLeft <= 0) return;
+    setRespinsLeft(n => n - 1);
     const next = respinSlotCountry(formation, data, slotIndex, countries);
     if (next === countries[slotIndex]) return;
     const updated = [...countries];
@@ -411,11 +415,11 @@ const WorldXi = () => {
               <button
                 type="button"
                 onClick={respin}
-                disabled={spinning}
+                disabled={spinning || respinsLeft <= 0}
                 className="mb-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-secondary/40 text-xs font-semibold text-foreground hover:border-primary/40 hover:bg-accent transition-all disabled:opacity-50"
-                title="Reroll this slot's nation as many times as you like, no penalty"
+                title={respinsLeft > 0 ? `Reroll this slot's nation. ${respinsLeft} respin${respinsLeft === 1 ? '' : 's'} left for the whole game.` : 'No respins left this game'}
               >
-                <Shuffle className="w-3.5 h-3.5" /> Respin nation
+                <Shuffle className="w-3.5 h-3.5" /> Respin nation ({respinsLeft} left)
               </button>
 
               <input

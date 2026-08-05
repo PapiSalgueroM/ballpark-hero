@@ -431,7 +431,7 @@ export function careerSpan(profile: PlayerProfile): string {
 }
 
 /**
- * Extra clues unlocked by miss count — denser ladder (owner 2026-07-10: the
+ * Extra clues unlocked by miss count, denser ladder (owner 2026-07-10: the
  * old chips restated the case file; every unlock here is NEW information).
  * 1 miss: career span · 2: surname initial · 3: franchises played for
  * 4: team · 5: first-name initial · 6: exact season.

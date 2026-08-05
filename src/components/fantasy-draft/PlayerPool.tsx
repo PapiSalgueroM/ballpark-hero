@@ -9,6 +9,8 @@ export interface DraftPlayer {
   nationality: string;
   market_value_millions: number;
   dominant_foot: string;
+  /** Current age, backfilled from player_market_values (2026-08-05). */
+  age?: number | null;
 }
 
 interface PlayerPoolProps {
@@ -16,6 +18,10 @@ interface PlayerPoolProps {
   draftedIds: Set<string>;
   onSelect: (player: DraftPlayer) => void;
   disabled?: boolean;
+  /** Owner 2026-08-05: today's criteria is ENFORCED. Players failing it are
+   *  greyed out with the reason instead of being silently pickable. */
+  isEligible?: (player: DraftPlayer) => boolean;
+  ineligibleReason?: string;
 }
 
 const POS_COLORS: Record<string, string> = {
@@ -27,7 +33,7 @@ const POS_COLORS: Record<string, string> = {
 
 const POS_FILTERS = ['All', 'GK', 'DEF', 'MID', 'FWD'] as const;
 
-export const PlayerPool = ({ players, draftedIds, onSelect, disabled }: PlayerPoolProps) => {
+export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible, ineligibleReason }: PlayerPoolProps) => {
   const [search, setSearch] = useState('');
   const [posFilter, setPosFilter] = useState<string>('All');
 
@@ -83,16 +89,20 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled }: PlayerPo
         )}
         {filtered.map((player) => {
           const isDrafted = draftedIds.has(player.id);
+          const blocked = !isDrafted && isEligible ? !isEligible(player) : false;
           return (
             <button
               key={player.id}
-              disabled={isDrafted || disabled}
+              disabled={isDrafted || disabled || blocked}
               onClick={() => onSelect(player)}
+              title={blocked ? ineligibleReason : undefined}
               className={cn(
                 'w-full flex items-center gap-3 px-4 py-3 text-left transition-colors',
                 isDrafted
                   ? 'opacity-35 cursor-not-allowed bg-muted/20'
-                  : 'hover:bg-secondary/40 cursor-pointer'
+                  : blocked
+                    ? 'opacity-45 cursor-not-allowed'
+                    : 'hover:bg-secondary/40 cursor-pointer'
               )}
             >
               {/* Position badge */}
@@ -105,13 +115,20 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled }: PlayerPo
                 <p className={cn('text-sm font-semibold truncate', isDrafted ? 'line-through text-muted-foreground' : 'text-foreground')}>
                   {player.name}
                 </p>
-                <p className="text-xs text-muted-foreground">{player.nationality}</p>
+                <p className="text-xs text-muted-foreground">
+                  {player.nationality}
+                  {typeof player.age === 'number' ? ` • ${player.age}` : ''}
+                </p>
               </div>
 
-              {/* Value & foot */}
+              {/* Value & blocked state */}
               <div className="text-right shrink-0">
                 <p className="text-sm font-semibold text-primary">£{player.market_value_millions}M</p>
-                <p className="text-[10px] text-muted-foreground">{player.dominant_foot} foot</p>
+                {blocked ? (
+                  <p className="text-[10px] font-semibold text-destructive">Blocked by today's rule</p>
+                ) : (
+                  <p className="text-[10px] text-muted-foreground">{player.dominant_foot} foot</p>
+                )}
               </div>
             </button>
           );

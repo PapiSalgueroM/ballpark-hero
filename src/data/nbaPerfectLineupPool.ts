@@ -109,6 +109,6 @@ export const NBA_LINEUP_CONFIG: LineupConfig<NbaPoolPlayer> = {
   scoreline: (r: GenericSimResult) => {
     const f = 95 + Math.round((r.rating / 100) * 35);
     const a = 95 + Math.round(((100 - r.rating) / 100) * 20);
-    return { big: `${f}–${a}`, shareScore: `a ${f}-${a} win (Grade ${r.grade}, ${r.rating} OVR)` };
+    return { big: `${f}-${a}`, shareScore: `a ${f}-${a} win (Grade ${r.grade}, ${r.rating} OVR)` };
   },
 };

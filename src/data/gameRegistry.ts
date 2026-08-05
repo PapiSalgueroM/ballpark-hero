@@ -57,7 +57,7 @@ export const CATEGORIES: GameCategory[] = [
       // screen) and too few possible puzzles for a rare event". The bug is
       // root-caused and fixed (useWorldCup.ts: the Answer clue was reachable
       // mid-game, and daily gated on MAX_CLUES=7 vs the real 6 for host-nation
-      // puzzles — Beckenbauer/Kempes/Schillaci/Zidane/Klose/Neymar, 9 of 60).
+      // puzzles, Beckenbauer/Kempes/Schillaci/Zidane/Klose/Neymar, 9 of 60).
       // The content objection is answered by relaunching UNLIMITED-FIRST (no
       // daily flag here, page defaults to unlimited): 60 puzzles is thin as a
       // headline daily but plenty as a replayable archive.
@@ -182,7 +182,10 @@ export const CATEGORIES: GameCategory[] = [
   {
     title: 'Golf',
     emoji: '🏌️',
-    games: [],
+    games: [
+      { path: '/guess-the-golfer', label: 'Guess The Golfer', emoji: '⛳', description: 'A mystery major champion, six clues, fewer is better', daily: true, isNew: true },
+      { path: '/golf-higher-lower', label: 'Golf Higher or Lower', emoji: '📊', description: 'Which legend won more majors?', daily: true, isNew: true },
+    ],
   },
   {
     title: 'NASCAR',

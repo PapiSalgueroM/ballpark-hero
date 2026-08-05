@@ -114,7 +114,7 @@ export interface RoundResult {
 
 /**
  * What the player SHOULD have said. Pointless's whole payoff is the board
- * reveal — "you found a 12, but there was a 3 sitting there" — and its absence
+ * reveal, "you found a 12, but there was a 3 sitting there", and its absence
  * is the other half of why this game read as "you guess one guy and you're
  * done" (owner review, 2026-07-06). The pool is already ranked, so this costs
  * nothing to surface.
@@ -561,10 +561,10 @@ export { ROUNDS_PER_RUN };
  *   - 'rarity' (Pointless):       LOWER is better. An obscure pick scores ~0.
  *   - 'crowd'  (Fan Favourites):  HIGHER is better. A famous pick scores ~100.
  *
- * BUG FIX 2026-07-15 — this was inverted for 'rarity' and it is almost
+ * BUG FIX 2026-07-15, this was inverted for 'rarity' and it is almost
  * certainly why the game was retired on 2026-07-06 as "you guess one guy and
  * you're done". The old code scored rarity as ((rank-1)/(poolSize-1))*100,
- * which gives rank 1 — the MOST FAMOUS player in the pool — a score of 0. With
+ * which gives rank 1, the MOST FAMOUS player in the pool, a score of 0. With
  * the game's own "lower total is better, 0 is a perfect Goalless run" rule,
  * naming Messi was a perfect round, and buildEmojiGrid rendered it as five
  * green squares. The winning strategy was the exact opposite of the premise, so
@@ -591,7 +591,7 @@ export function totalScore(rounds: RoundResult[]): number {
  * 'rarity' wants the tail and 'crowd' wants the head.
  *
  * Added 2026-07-15. Without this the game told you your score and nothing else
- * — no sense of the answer space, nothing learned, no "I should have said HIM".
+ *, no sense of the answer space, nothing learned, no "I should have said HIM".
  */
 export function buildReveal(pool: PoolEntry[], mode: RarityMode): RoundReveal | null {
   if (pool.length === 0) return null;

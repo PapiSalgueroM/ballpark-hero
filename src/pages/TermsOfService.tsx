@@ -106,7 +106,7 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">15. Contact</h2>
-          <p>If you have any questions about these Terms of Service or need to reach us for legal inquiries, please contact us at <a href="mailto:DoUknowBall.com@gmail.com" className="underline hover:text-foreground transition-colors">DoUknowBall.com@gmail.com</a>.</p>
+          <p>If you have any questions about these Terms of Service or need to reach us for legal inquiries, please contact us at <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a>.</p>
         </div>
       </section>
 

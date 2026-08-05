@@ -1,6 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { Position } from '@/types/game';
-import { Formation, FormationSlot, normalizePosition } from '@/lib/squadDeal';
+import { Formation, FormationSlot, normalizePosition, playerRating } from '@/lib/squadDeal';
 import { normalizeName } from '@/lib/whoAmI';
 import { rng, winProbability } from '@/lib/perfectSeason';
 
@@ -37,6 +37,8 @@ export interface WxPlayer {
   position: Position;
   club: string;
   value: number; // market value in USD from the row we kept
+  /** Age from the same market-value row; feeds the age-aware FIFA-style rating. */
+  age?: number;
 }
 
 export interface WorldXiData {
@@ -140,7 +142,7 @@ export function fitsSlot(p: WxPlayer, slot: FormationSlot): boolean {
 /**
  * "ST / CF" style summary of what a slot accepts. Computed from the EFFECTIVE
  * accepted set (any position whose family reaches one of slot.allowed), so the
- * copy matches what fitsSlot actually lets through — e.g. a RW slot lists LW
+ * copy matches what fitsSlot actually lets through, e.g. a RW slot lists LW
  * because wingers count on both flanks.
  */
 export function allowedLabel(slot: FormationSlot): string {
@@ -190,7 +192,7 @@ interface PoolRow {
  */
 export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
   try {
-    const cols = 'player_name, nationality, position, club, market_value_usd, year';
+    const cols = 'player_name, nationality, position, club, market_value_usd, year, age';
     const pageRequests = Array.from({ length: CURRENT_PAGES }, (_, i) =>
       supabase
         .from('player_market_values')
@@ -227,7 +229,14 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
       const prev = byName.get(name);
       if (!prev || year > prev.year || (year === prev.year && value > prev.player.value)) {
         byName.set(name, {
-          player: { name, country, position, club: (r.club ?? '').trim(), value },
+          player: {
+            name,
+            country,
+            position,
+            club: (r.club ?? '').trim(),
+            value,
+            age: Number((r as { age?: number | null }).age) || undefined,
+          },
           year,
         });
       }
@@ -433,13 +442,12 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
   const seed = squadSeed(players);
   const rand = rng(seed);
 
-  // Squad rating: same log-scale spread as squadDeal.playerRating, averaged
-  // across the XI, so a bargain draw and a superstar draw read distinctly.
-  const playerRatings = players.map(p => {
-    const mv = Math.max(1, p.value / 1_000_000); // stored in USD, scale to the $M curve
-    const r = 35 + 64 * (Math.log10(mv + 1) / Math.log10(1001));
-    return Math.max(35, Math.min(99, r));
-  });
+  // Squad rating: the shared FIFA-style age-aware curve from
+  // squadDeal.playerRating, averaged across the XI, so ratings here read the
+  // same as everywhere else on the site (owner 2026-08-05).
+  const playerRatings = players.map(p =>
+    playerRating({ marketValue: Math.max(1, p.value / 1_000_000), age: p.age ?? 27 } as Parameters<typeof playerRating>[0]),
+  );
   const avgRating = playerRatings.length
     ? playerRatings.reduce((a, b) => a + b, 0) / playerRatings.length
     : 50;

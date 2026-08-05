@@ -3,7 +3,7 @@ import type { Connect4Board } from '@/types/nhlConnect4';
 /**
  * NHL Connect 4 boards (task #22 follow-on). Every attribute string used
  * here has a definition in the nhl-connect4-validate edge function's system
- * prompt — add the definition there FIRST if you add a new attribute.
+ * prompt, add the definition there FIRST if you add a new attribute.
  *
  * Cell feasibility spot-checks for the toughest pairings, done while
  * authoring: Maple Leafs × 500+ Goals = Mats Sundin; Sabres × 500+ Goals =

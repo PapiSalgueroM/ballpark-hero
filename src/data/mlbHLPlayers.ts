@@ -11,7 +11,7 @@
  *
  * Verified canonical: Bonds 762, Aaron 755, Ruth 714, A-Rod 696, Mays 660,
  * Griffey Jr. 630, Ted Williams 521, Gehrig 493, Ripken 431.
- * ("Ken Griffey" in Lahman is ambiguous with his father — displayed as Jr.;
+ * ("Ken Griffey" in Lahman is ambiguous with his father, displayed as Jr.;
  * the 630 row is unambiguously Junior's.)
  */
 export interface MlbHLPlayer {

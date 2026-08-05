@@ -15,14 +15,14 @@ import type { PlayerSourceConfig } from '@/lib/playerSearch';
  * Shaq's six teams.
  *
  * The 16-franchise pool below uses ONLY codes that are single-code
- * franchises in this dataset (275-429 players each) — Washington (WAS+WSB),
+ * franchises in this dataset (275-429 players each), Washington (WAS+WSB),
  * the Nets (NJN+BRK+NYN), Hornets/Pelicans (CHH/CHO/CHA/NOH/NOK/NOP),
  * Kings (SAC+KCK+KCO+CIN), Clippers (LAC+SDC+BUF), Thunder (OKC+SEA) and
  * Grizzlies (MEM+VAN) are all EXCLUDED so no relocation-alias merging is
  * ever needed. Pair-intersection verification: the worst pairing among the
  * 16 (Bulls x Heat) still shares 25 players; worst achievement coverage is
  * 33+ qualifiers per franchise (POR x 5,000 rebounds). Whole table is
- * fetched once and guesses validate against the in-memory index — no edge
+ * fetched once and guesses validate against the in-memory index, no edge
  * function, no per-guess round trip.
  */
 

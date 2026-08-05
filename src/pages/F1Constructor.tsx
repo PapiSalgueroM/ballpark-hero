@@ -25,7 +25,7 @@ export default function F1Constructor() {
           "Ferrari: 16× Constructors' Champion, Schumacher/Lauda/Prost, Maranello",
           "McLaren: 8× Constructors' Champion, Senna/Prost/Hamilton, Woking",
           "Red Bull Racing: 6× Constructors' Champion, Vettel/Verstappen, Milton Keynes",
-          "Mercedes: 8× Constructors' Champion (2014–2021), Hamilton/Rosberg",
+          "Mercedes: 8× Constructors' Champion (2014-2021), Hamilton/Rosberg",
           "Williams: 9× Constructors' Champion, Mansell/Prost/Senna, Grove",
           "Lotus: 7× Constructors' Champion, Jim Clark, Colin Chapman era"
         ]}

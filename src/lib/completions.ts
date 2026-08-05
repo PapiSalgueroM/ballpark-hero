@@ -46,7 +46,7 @@ export function getGuestHandle(): string {
     localStorage.setItem(GUEST_HANDLE_KEY, handle);
     return handle;
   } catch {
-    // localStorage unavailable — fall back to a per-call random handle.
+    // localStorage unavailable, fall back to a per-call random handle.
     // Not persisted, so it won't match across renders, but it still lets an
     // insert carry a name rather than null.
     return `Baller-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -98,7 +98,7 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
       .insert(row)
       .then(({ error }: { error: unknown }) => {
         if (error) {
-          // Swallow silently — this must never surface to the player.
+          // Swallow silently, this must never surface to the player.
           console.debug('[completions] insert failed (ignored):', error);
         }
       });

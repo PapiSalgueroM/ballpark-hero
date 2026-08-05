@@ -424,11 +424,11 @@ export default function SoccerCareer() {
   }, [isRetired, career]);
   useGameCompletion('soccer-career', isRetired, legacyScore);
 
-  // Club roster comes from the bundled FALLBACK_CLUBS list — deliberately.
+  // Club roster comes from the bundled FALLBACK_CLUBS list, deliberately.
   //
   // 2026-07-22: this used to fetch a `soccer_career_clubs` table first and fall
   // back to the bundle, but that table does not exist in the database (checked
-  // pg_class — no table, view, or matview; only its stale entry in types.ts
+  // pg_class, no table, view, or matview; only its stale entry in types.ts
   // survives, which the `as any` cast on the old .from() call kept invisible to
   // the compiler). The fetch had therefore failed on EVERY page load since the
   // table was dropped: an error logged to console each visit, a loading state
@@ -2146,7 +2146,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       </div>
 
-      {/* Finances Bar — always visible */}
+      {/* Finances Bar, always visible */}
       {!career.retired && (
         <div className="bg-card/90 backdrop-blur border border-border rounded-xl px-3 py-2 flex items-center justify-between gap-2">
           <div className="text-center flex-1">
@@ -2178,7 +2178,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
       {/* Main panels */}
       <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-3">
-        {/* LEFT — Timeline */}
+        {/* LEFT, Timeline */}
         <div className="bg-card border border-border rounded-xl overflow-hidden order-2 md:order-1">
           <div className="px-3 py-2 border-b border-border bg-muted/20">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Timeline</span>
@@ -2190,7 +2190,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
         </div>
 
-        {/* RIGHT — Stats & Overlays */}
+        {/* RIGHT, Stats & Overlays */}
         <div className="space-y-3 order-1 md:order-2">
 
           {/* OVERLAY: Newspaper Articles */}
@@ -2425,7 +2425,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <FinancialPanel career={career} />
           )}
 
-          {/* My Life — Spending & Lifestyle */}
+          {/* My Life, Spending & Lifestyle */}
           {(career.phase === "playing") && (
             <MyLifePanel career={career} onPurchase={onPurchase} />
           )}
@@ -2436,7 +2436,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             {statBars.map(s => <StatBarGame key={s.l} label={s.l} value={s.v} color={s.c} />)}
           </div>
 
-          {/* Career totals — position-specific */}
+          {/* Career totals, position-specific */}
           <div className="bg-card border border-border rounded-xl p-4">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Stats</span>
             <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-3">
@@ -2575,7 +2575,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
 
-      {/* Sentinel — when this is visible, unstick the action bar */}
+      {/* Sentinel, when this is visible, unstick the action bar */}
       <div ref={actionBarSentinelRef} className="h-1" />
 
       {/* Action bar */}

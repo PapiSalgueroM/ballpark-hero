@@ -32,6 +32,7 @@ import {
   normalizeName,
   pickDailyPlayer,
 } from '@/lib/careerLadder';
+import { flagForClub } from '@/lib/careerLadder';
 import { searchPlayers, SOCCER_MARKET_VALUE_SOURCE } from '@/lib/playerSearch';
 import { FlagImg } from '@/components/FlagImg';
 
@@ -312,7 +313,7 @@ const CareerLadder = () => {
   const emojiGrid =
     activePhase === 'won'
       ? `🪜 got it in ${cluesUsed} ${cluesUsed === 1 ? 'clue' : 'clues'} · ${activeFinalScore} pts`
-      : `🪜 stumped after ${MAX_GUESSES} guesses`;
+      : `🪜 stumped with ${activeWrongGuesses.length} wrong ${activeWrongGuesses.length === 1 ? 'guess' : 'guesses'} and ${cluesUsed} ${cluesUsed === 1 ? 'stop' : 'stops'} showing`;
 
   // ---- Completion tracking (daily only, mirrors Footle/Career Quiz) -------
   const dailyCompletionScore = dailyPhase === 'won' ? dailyFinalScore : 0;
@@ -328,20 +329,20 @@ const CareerLadder = () => {
     <>
       <PageSeo
         title="Career Ladder: Guess the Footballer | DoUKnowBall"
-        description="A mystery footballer's career appears one stint at a time. Name the player within 6 guesses. Fewer clues means more points. Daily challenge or unlimited free play."
+        description="A mystery footballer's career appears one career stop at a time. Name the player within 6 guesses. Fewer clues means more points. Daily challenge or unlimited free play."
         path="/career-ladder"
       />
       <GameShell
         width="narrow"
         title="CAREER LADDER"
-        subtitle="One career, revealed stint by stint. Name the player before the ladder runs out."
+        subtitle="One career, revealed stop by stop. Name the player before the ladder runs out."
         headerExtra={
           <>
             <RulesGate title="How to Play Career Ladder">
               <section>
                 <h3 className="font-bold text-foreground mb-2">The idea</h3>
                 <p className="text-muted-foreground">
-                  A mystery footballer's career appears one stint at a time, earliest first. Name the player
+                  A mystery footballer's career appears one stop at a time, earliest club first. Name the player
                   before the ladder runs out.
                 </p>
               </section>
@@ -349,7 +350,7 @@ const CareerLadder = () => {
                 <h3 className="font-bold text-foreground mb-2">Guessing</h3>
                 <p className="text-muted-foreground">
                   Type at least 2 letters and pick a name from the list. You get {MAX_GUESSES} guesses. Every
-                  wrong guess reveals the next stint. You can also reveal one on purpose.
+                  wrong guess reveals the next career stop. You can also reveal one on purpose.
                 </p>
               </section>
               <section>
@@ -369,7 +370,7 @@ const CareerLadder = () => {
               <section>
                 <h3 className="font-bold text-foreground mb-2">Scoring</h3>
                 <p className="text-muted-foreground">
-                  Start from {BASE_SCORE} points. Extra stints cost {REVEAL_PENALTY}, wrong guesses cost{' '}
+                  Start from {BASE_SCORE} points. Extra reveals cost {REVEAL_PENALTY}, wrong guesses cost{' '}
                   {WRONG_GUESS_PENALTY}, and the score never drops below the floor of {SCORE_FLOOR}. Give Up
                   reveals the answer and scores 0.
                 </p>
@@ -469,7 +470,10 @@ const CareerLadder = () => {
                 >
                   <span className="text-[10px] font-bold text-primary w-6 shrink-0">#{i + 1}</span>
                   <div className="min-w-0 flex-1">
-                    <div className="font-semibold text-foreground text-sm truncate">{s.club}</div>
+                    <div className="font-semibold text-foreground text-sm truncate">
+                      {flagForClub(s.club) && <span className="mr-1.5">{flagForClub(s.club)}</span>}
+                      {s.club}
+                    </div>
                     <div className="text-xs text-muted-foreground truncate">
                       {s.season}
                       {stintStats(s) ? ` · ${stintStats(s)}` : ''}
@@ -521,7 +525,7 @@ const CareerLadder = () => {
                   )}
                 </form>
                 <p className="text-[10px] text-center text-muted-foreground">
-                  Pick a name from the list to lock in a guess. Wrong guesses cost {WRONG_GUESS_PENALTY} pts and reveal the next stint.
+                  Pick a name from the list to lock in a guess. Wrong guesses cost {WRONG_GUESS_PENALTY} pts and reveal the next stop.
                 </p>
                 {activeWrongGuesses.length > 0 && (
                   <p className="text-xs text-destructive text-center">
@@ -605,9 +609,9 @@ const CareerLadder = () => {
             'Unlimited adds a Legend pool: only the harder half of the players by peak market value.',
             'A mystery player starts with only their earliest career stint showing.',
             'Type at least 2 letters and pick a name from the list. You get 6 guesses.',
-            'Every wrong guess reveals the next stint. You can also reveal one on purpose.',
+            'Every wrong guess reveals the next career stop. You can also reveal one on purpose.',
             'A nationality flag hint appears once half the career is on the board.',
-            'Start from 1000 points. Extra stints cost 150, wrong guesses cost 100, and the floor is 100.',
+            'Start from 1000 points. Extra reveals cost 150, wrong guesses cost 100, and the floor is 100.',
           ]}
           examples={[
             'A teenager scoring at Palmeiras before a move to Madrid narrows things down fast.',

@@ -2,8 +2,7 @@ import type { Connect4Board } from '@/types/mlbConnect4';
 
 /**
  * MLB Connect 4 boards (task #22). Every attribute string used here has a
- * definition in the mlb-connect4-validate edge function's system prompt —
- * add the definition there FIRST if you add a new attribute string.
+ * definition in the mlb-connect4-validate edge function's system prompt, * add the definition there FIRST if you add a new attribute string.
  *
  * Cell feasibility spot-checks done while authoring (every column×row pair
  * needs at least one real answer; toughest cells verified by example):

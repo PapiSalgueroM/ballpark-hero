@@ -28,7 +28,7 @@ const TennisHigherLower = () => {
     <>
       <PageSeo
         title="Tennis Higher or Lower - Grand Slam Titles Game | DoUKnowBall"
-        description="Which tennis legend won more Grand Slam singles titles? Djokovic, Serena, Federer, Graf — compare them side by side in this daily tennis challenge."
+        description="Which tennis legend won more Grand Slam singles titles? Djokovic, Serena, Federer, Graf, compare them side by side in this daily tennis challenge."
         path="/tennis-higher-lower"
       />
       <GameShell
@@ -98,7 +98,7 @@ const TennisHigherLower = () => {
                   <span className="text-3xl">🎾</span>
                   <span className="text-lg font-bold text-foreground font-display">{player.name}</span>
                   <span className="text-xs text-muted-foreground">
-                    {player.tour === 'M' ? "Men's" : "Women's"} · majors {player.firstYear}–{player.lastYear}
+                    {player.tour === 'M' ? "Men's" : "Women's"} · majors {player.firstYear}-{player.lastYear}
                   </span>
 
                   {showingResult ? (
@@ -147,10 +147,10 @@ const TennisHigherLower = () => {
             'Daily challenge (same pairs for everyone) or unlimited random mode',
           ]}
           examples={[
-            'Djokovic (24) vs Margaret Court (24) — the all-time tie at the top',
-            'Serena (23) vs Federer (20) — crossing the tours',
+            'Djokovic (24) vs Margaret Court (24), the all-time tie at the top',
+            'Serena (23) vs Federer (20), crossing the tours',
             'Nadal and Graf both sit on exactly 22',
-            'Alcaraz vs Sampras — the new wave against the 90s king',
+            'Alcaraz vs Sampras, the new wave against the 90s king',
           ]}
         />
 

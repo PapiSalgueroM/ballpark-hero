@@ -1,5 +1,6 @@
 // Career Ladder: guess the mystery footballer from their career, one stint at a time.
 // Data lives in Supabase: career_players (identity) + career_seasons (the ladder rows).
+import { foldSpecialLatin } from '@/lib/nameFold';
 import { supabase } from '@/integrations/supabase/client';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
 
@@ -100,11 +101,13 @@ export function legendPool(pool: CareerPlayer[]): CareerPlayer[] {
 
 /** Lowercase + strip accents so "Raphaël" matches "raphael". */
 export function normalizeName(s: string): string {
-  return s
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .trim();
+  return foldSpecialLatin(
+    s
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim(),
+  );
 }
 
 /**
@@ -210,6 +213,145 @@ export function flagForNationality(nationality: string | null | undefined): stri
     if (new RegExp(`\\b${escapeRegExp(country)}\\b`).test(norm)) return flag;
   }
   return '🌍';
+}
+
+/**
+ * Owner 2026-08-05: "a little flag next to the team they played for which
+ * corresponds to which nation that team plays in." Club -> country flag,
+ * evaluated in order so collision-prone entries (Inter Miami vs Inter,
+ * Barcelona SC vs Barcelona, Atletico Nacional vs Nacional) resolve to the
+ * right league's country. National-team stints (e.g. "Spain U21") fall back
+ * to the country-name scan. Returns '' when unknown so rows can skip the flag
+ * instead of showing a wrong one.
+ */
+const CLUB_COUNTRY: Array<[string, string]> = [
+  // Order-sensitive entries FIRST (substring collisions)
+  ['inter miami', '🇺🇸'], ['internacional', '🇧🇷'], ['barcelona sc', '🇪🇨'],
+  ['atletico nacional', '🇨🇴'], ['sporting cristal', '🇵🇪'], ['sporting kansas', '🇺🇸'],
+  ['america de cali', '🇨🇴'], ['america mineiro', '🇧🇷'], ['club america', '🇲🇽'],
+  ['al nassr', '🇸🇦'], ['austria wien', '🇦🇹'], ['austria vienna', '🇦🇹'],
+  ['atletico mineiro', '🇧🇷'], ['athletico paranaense', '🇧🇷'], ['atletico madrid', '🇪🇸'],
+  ['red bull bragantino', '🇧🇷'], ['red bull salzburg', '🇦🇹'], ['rb leipzig', '🇩🇪'],
+  ['york city', '🇺🇸'], ['toronto', '🇨🇦'], ['montreal', '🇨🇦'], ['vancouver', '🇨🇦'],
+  ['wellington phoenix', '🇳🇿'],
+  // England
+  ['manchester city', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['man city', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['manchester united', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['man utd', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['liverpool', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['arsenal', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['chelsea', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['tottenham', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['newcastle', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['everton', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['aston villa', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['west ham', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['leicester', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['southampton', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['wolverhampton', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['wolves', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['brighton', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['crystal palace', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['fulham', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['brentford', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['nottingham forest', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['leeds', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['burnley', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['sunderland', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['middlesbrough', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['blackburn', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['bolton', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['stoke', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['watford', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['norwich', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['west brom', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['sheffield', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['portsmouth', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['ipswich', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['derby', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['queens park rangers', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['qpr', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['hull', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['luton', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['bournemouth', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['charlton', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['wigan', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['birmingham', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['coventry', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['millwall', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['preston', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['reading', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['swansea', '🏴󠁧󠁢󠁷󠁬󠁳󠁿'], ['cardiff', '🏴󠁧󠁢󠁷󠁬󠁳󠁿'],
+  // Spain
+  ['real madrid', '🇪🇸'], ['barcelona', '🇪🇸'], ['sevilla', '🇪🇸'], ['valencia', '🇪🇸'],
+  ['villarreal', '🇪🇸'], ['athletic bilbao', '🇪🇸'], ['athletic club', '🇪🇸'], ['real sociedad', '🇪🇸'],
+  ['real betis', '🇪🇸'], ['betis', '🇪🇸'], ['celta', '🇪🇸'], ['espanyol', '🇪🇸'], ['getafe', '🇪🇸'],
+  ['osasuna', '🇪🇸'], ['mallorca', '🇪🇸'], ['granada', '🇪🇸'], ['levante', '🇪🇸'], ['deportivo', '🇪🇸'],
+  ['zaragoza', '🇪🇸'], ['malaga', '🇪🇸'], ['rayo vallecano', '🇪🇸'], ['alaves', '🇪🇸'], ['elche', '🇪🇸'],
+  ['cadiz', '🇪🇸'], ['girona', '🇪🇸'], ['las palmas', '🇪🇸'], ['valladolid', '🇪🇸'], ['almeria', '🇪🇸'],
+  // Italy
+  ['juventus', '🇮🇹'], ['ac milan', '🇮🇹'], ['inter', '🇮🇹'], ['napoli', '🇮🇹'], ['as roma', '🇮🇹'], ['roma', '🇮🇹'],
+  ['lazio', '🇮🇹'], ['atalanta', '🇮🇹'], ['fiorentina', '🇮🇹'], ['torino', '🇮🇹'], ['bologna', '🇮🇹'],
+  ['sampdoria', '🇮🇹'], ['genoa', '🇮🇹'], ['udinese', '🇮🇹'], ['sassuolo', '🇮🇹'], ['cagliari', '🇮🇹'],
+  ['parma', '🇮🇹'], ['palermo', '🇮🇹'], ['hellas verona', '🇮🇹'], ['verona', '🇮🇹'], ['empoli', '🇮🇹'],
+  ['lecce', '🇮🇹'], ['monza', '🇮🇹'], ['salernitana', '🇮🇹'], ['spezia', '🇮🇹'], ['cremonese', '🇮🇹'], ['brescia', '🇮🇹'],
+  // Germany
+  ['bayern', '🇩🇪'], ['borussia dortmund', '🇩🇪'], ['dortmund', '🇩🇪'], ['leverkusen', '🇩🇪'], ['schalke', '🇩🇪'],
+  ['wolfsburg', '🇩🇪'], ['eintracht frankfurt', '🇩🇪'], ['frankfurt', '🇩🇪'], ['monchengladbach', '🇩🇪'], ['gladbach', '🇩🇪'],
+  ['hoffenheim', '🇩🇪'], ['stuttgart', '🇩🇪'], ['werder bremen', '🇩🇪'], ['bremen', '🇩🇪'], ['hertha', '🇩🇪'],
+  ['mainz', '🇩🇪'], ['koln', '🇩🇪'], ['cologne', '🇩🇪'], ['freiburg', '🇩🇪'], ['augsburg', '🇩🇪'],
+  ['union berlin', '🇩🇪'], ['hamburg', '🇩🇪'], ['hannover', '🇩🇪'], ['nurnberg', '🇩🇪'], ['bochum', '🇩🇪'],
+  ['heidenheim', '🇩🇪'], ['kaiserslautern', '🇩🇪'], ['darmstadt', '🇩🇪'], ['st pauli', '🇩🇪'],
+  // France
+  ['paris saint-germain', '🇫🇷'], ['paris saint germain', '🇫🇷'], ['psg', '🇫🇷'], ['marseille', '🇫🇷'],
+  ['lyon', '🇫🇷'], ['monaco', '🇲🇨'], ['lille', '🇫🇷'], ['rennes', '🇫🇷'], ['nice', '🇫🇷'], ['lens', '🇫🇷'],
+  ['nantes', '🇫🇷'], ['montpellier', '🇫🇷'], ['strasbourg', '🇫🇷'], ['bordeaux', '🇫🇷'], ['saint-etienne', '🇫🇷'],
+  ['saint etienne', '🇫🇷'], ['reims', '🇫🇷'], ['toulouse', '🇫🇷'], ['brest', '🇫🇷'], ['lorient', '🇫🇷'],
+  ['metz', '🇫🇷'], ['angers', '🇫🇷'], ['auxerre', '🇫🇷'], ['ajaccio', '🇫🇷'], ['le havre', '🇫🇷'],
+  ['troyes', '🇫🇷'], ['clermont', '🇫🇷'],
+  // Portugal / Netherlands / Scotland
+  ['benfica', '🇵🇹'], ['porto', '🇵🇹'], ['sporting cp', '🇵🇹'], ['sporting lisbon', '🇵🇹'], ['sporting', '🇵🇹'],
+  ['braga', '🇵🇹'], ['vitoria guimaraes', '🇵🇹'], ['boavista', '🇵🇹'],
+  ['ajax', '🇳🇱'], ['psv', '🇳🇱'], ['feyenoord', '🇳🇱'], ['az alkmaar', '🇳🇱'], ['twente', '🇳🇱'],
+  ['utrecht', '🇳🇱'], ['vitesse', '🇳🇱'], ['heerenveen', '🇳🇱'], ['groningen', '🇳🇱'],
+  ['celtic', '🏴󠁧󠁢󠁳󠁣󠁴󠁿'], ['rangers', '🏴󠁧󠁢󠁳󠁣󠁴󠁿'], ['aberdeen', '🏴󠁧󠁢󠁳󠁣󠁴󠁿'], ['hearts', '🏴󠁧󠁢󠁳󠁣󠁴󠁿'], ['hibernian', '🏴󠁧󠁢󠁳󠁣󠁴󠁿'],
+  // Turkey / Greece / Belgium / Eastern Europe
+  ['galatasaray', '🇹🇷'], ['fenerbahce', '🇹🇷'], ['besiktas', '🇹🇷'], ['trabzonspor', '🇹🇷'], ['basaksehir', '🇹🇷'],
+  ['olympiacos', '🇬🇷'], ['panathinaikos', '🇬🇷'], ['aek athens', '🇬🇷'], ['paok', '🇬🇷'],
+  ['anderlecht', '🇧🇪'], ['club brugge', '🇧🇪'], ['brugge', '🇧🇪'], ['standard liege', '🇧🇪'], ['genk', '🇧🇪'],
+  ['gent', '🇧🇪'], ['antwerp', '🇧🇪'],
+  ['zenit', '🇷🇺'], ['cska moscow', '🇷🇺'], ['spartak moscow', '🇷🇺'], ['lokomotiv moscow', '🇷🇺'],
+  ['krasnodar', '🇷🇺'], ['dynamo moscow', '🇷🇺'], ['rubin', '🇷🇺'],
+  ['shakhtar', '🇺🇦'], ['dynamo kyiv', '🇺🇦'], ['dynamo kiev', '🇺🇦'],
+  ['legia', '🇵🇱'], ['lech poznan', '🇵🇱'], ['sparta prague', '🇨🇿'], ['sparta praha', '🇨🇿'],
+  ['slavia prague', '🇨🇿'], ['slavia praha', '🇨🇿'], ['viktoria plzen', '🇨🇿'],
+  ['dinamo zagreb', '🇭🇷'], ['hajduk split', '🇭🇷'], ['rijeka', '🇭🇷'],
+  ['red star', '🇷🇸'], ['crvena zvezda', '🇷🇸'], ['partizan', '🇷🇸'],
+  // Saudi / Gulf / Asia
+  ['al hilal', '🇸🇦'], ['al ittihad', '🇸🇦'], ['al ahli', '🇸🇦'], ['al shabab', '🇸🇦'], ['al ettifaq', '🇸🇦'],
+  ['al sadd', '🇶🇦'], ['al duhail', '🇶🇦'], ['al rayyan', '🇶🇦'], ['al gharafa', '🇶🇦'], ['al arabi', '🇶🇦'],
+  ['al ain', '🇦🇪'], ['al wahda', '🇦🇪'], ['al jazira', '🇦🇪'], ['shabab al ahli', '🇦🇪'], ['al wasl', '🇦🇪'],
+  ['shanghai', '🇨🇳'], ['guangzhou', '🇨🇳'], ['beijing guoan', '🇨🇳'], ['shandong', '🇨🇳'], ['jiangsu', '🇨🇳'],
+  ['hebei', '🇨🇳'], ['tianjin', '🇨🇳'], ['dalian', '🇨🇳'], ['wuhan', '🇨🇳'], ['shenzhen', '🇨🇳'],
+  ['kashima', '🇯🇵'], ['urawa', '🇯🇵'], ['kawasaki', '🇯🇵'], ['yokohama', '🇯🇵'], ['gamba osaka', '🇯🇵'],
+  ['cerezo osaka', '🇯🇵'], ['vissel kobe', '🇯🇵'], ['fc tokyo', '🇯🇵'], ['nagoya', '🇯🇵'],
+  ['jeonbuk', '🇰🇷'], ['ulsan', '🇰🇷'], ['fc seoul', '🇰🇷'], ['suwon', '🇰🇷'], ['pohang', '🇰🇷'],
+  ['mumbai city', '🇮🇳'], ['mohun bagan', '🇮🇳'], ['kerala blasters', '🇮🇳'],
+  // Alpine / Nordics
+  ['salzburg', '🇦🇹'], ['rapid wien', '🇦🇹'], ['rapid vienna', '🇦🇹'], ['sturm graz', '🇦🇹'], ['lask', '🇦🇹'],
+  ['basel', '🇨🇭'], ['young boys', '🇨🇭'], ['zurich', '🇨🇭'], ['grasshopper', '🇨🇭'], ['servette', '🇨🇭'],
+  ['lugano', '🇨🇭'], ['sion', '🇨🇭'],
+  ['copenhagen', '🇩🇰'], ['kobenhavn', '🇩🇰'], ['midtjylland', '🇩🇰'], ['brondby', '🇩🇰'],
+  ['malmo', '🇸🇪'], ['aik', '🇸🇪'], ['hammarby', '🇸🇪'], ['djurgarden', '🇸🇪'], ['goteborg', '🇸🇪'], ['hacken', '🇸🇪'],
+  ['rosenborg', '🇳🇴'], ['molde', '🇳🇴'], ['bodo/glimt', '🇳🇴'], ['bodo glimt', '🇳🇴'],
+  // Americas
+  ['la galaxy', '🇺🇸'], ['lafc', '🇺🇸'], ['los angeles fc', '🇺🇸'], ['red bulls', '🇺🇸'],
+  ['seattle sounders', '🇺🇸'], ['atlanta united', '🇺🇸'], ['austin fc', '🇺🇸'], ['portland timbers', '🇺🇸'],
+  ['orlando city', '🇺🇸'], ['chicago fire', '🇺🇸'], ['columbus crew', '🇺🇸'], ['philadelphia union', '🇺🇸'],
+  ['dc united', '🇺🇸'], ['fc dallas', '🇺🇸'], ['houston dynamo', '🇺🇸'], ['minnesota united', '🇺🇸'],
+  ['st. louis city', '🇺🇸'], ['san jose earthquakes', '🇺🇸'], ['fc cincinnati', '🇺🇸'], ['nashville', '🇺🇸'],
+  ['colorado rapids', '🇺🇸'], ['real salt lake', '🇺🇸'], ['charlotte fc', '🇺🇸'], ['new england revolution', '🇺🇸'],
+  ['club america', '🇲🇽'], ['guadalajara', '🇲🇽'], ['chivas', '🇲🇽'], ['cruz azul', '🇲🇽'], ['pumas', '🇲🇽'],
+  ['unam', '🇲🇽'], ['tigres', '🇲🇽'], ['uanl', '🇲🇽'], ['monterrey', '🇲🇽'], ['santos laguna', '🇲🇽'],
+  ['toluca', '🇲🇽'], ['pachuca', '🇲🇽'], ['club leon', '🇲🇽'], ['atlas', '🇲🇽'], ['puebla', '🇲🇽'],
+  ['necaxa', '🇲🇽'], ['queretaro', '🇲🇽'], ['tijuana', '🇲🇽'], ['juarez', '🇲🇽'], ['mazatlan', '🇲🇽'],
+  ['boca juniors', '🇦🇷'], ['river plate', '🇦🇷'], ['racing club', '🇦🇷'], ['independiente', '🇦🇷'],
+  ['san lorenzo', '🇦🇷'], ['estudiantes', '🇦🇷'], ['velez', '🇦🇷'], ['newell', '🇦🇷'], ['rosario central', '🇦🇷'],
+  ['lanus', '🇦🇷'], ['banfield', '🇦🇷'], ['talleres', '🇦🇷'], ['gimnasia', '🇦🇷'], ['huracan', '🇦🇷'],
+  ['argentinos juniors', '🇦🇷'], ['godoy cruz', '🇦🇷'],
+  ['flamengo', '🇧🇷'], ['palmeiras', '🇧🇷'], ['corinthians', '🇧🇷'], ['sao paulo', '🇧🇷'], ['santos', '🇧🇷'],
+  ['gremio', '🇧🇷'], ['fluminense', '🇧🇷'], ['botafogo', '🇧🇷'], ['vasco', '🇧🇷'], ['cruzeiro', '🇧🇷'],
+  ['bahia', '🇧🇷'], ['fortaleza', '🇧🇷'], ['ceara', '🇧🇷'], ['sport recife', '🇧🇷'], ['coritiba', '🇧🇷'],
+  ['goias', '🇧🇷'], ['bragantino', '🇧🇷'], ['cuiaba', '🇧🇷'], ['juventude', '🇧🇷'], ['chapecoense', '🇧🇷'],
+  ['ponte preta', '🇧🇷'], ['avai', '🇧🇷'], ['vitoria', '🇧🇷'],
+  ['penarol', '🇺🇾'], ['nacional', '🇺🇾'],
+  ['colo-colo', '🇨🇱'], ['colo colo', '🇨🇱'], ['universidad de chile', '🇨🇱'], ['universidad catolica', '🇨🇱'],
+  ['alianza lima', '🇵🇪'], ['universitario', '🇵🇪'],
+  ['millonarios', '🇨🇴'], ['junior', '🇨🇴'], ['ldu quito', '🇪🇨'], ['olimpia', '🇵🇾'], ['cerro porteno', '🇵🇾'],
+  // Africa / Oceania
+  ['al ahly', '🇪🇬'], ['zamalek', '🇪🇬'], ['wydad', '🇲🇦'], ['raja', '🇲🇦'], ['esperance', '🇹🇳'],
+  ['kaizer chiefs', '🇿🇦'], ['orlando pirates', '🇿🇦'], ['mamelodi sundowns', '🇿🇦'],
+  ['sydney fc', '🇦🇺'], ['melbourne victory', '🇦🇺'], ['melbourne city', '🇦🇺'], ['western sydney', '🇦🇺'],
+  ['adelaide united', '🇦🇺'], ['brisbane roar', '🇦🇺'],
+];
+
+/** Flag for the country a CLUB plays in (not the player's nationality).
+ *  National-team stints resolve through the country-name scan first. */
+export function flagForClub(club: string | null | undefined): string {
+  if (!club) return '';
+  const norm = normalizeName(club);
+  for (const [country, flag] of COUNTRY_FLAGS) {
+    if (new RegExp(`\\b${escapeRegExp(country)}\\b`).test(norm)) return flag;
+  }
+  for (const [pattern, flag] of CLUB_COUNTRY) {
+    if (norm.includes(pattern)) return flag;
+  }
+  return '';
 }
 
 /** market_value is stored as whole millions of euros. */

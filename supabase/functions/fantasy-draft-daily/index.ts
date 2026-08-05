@@ -6,13 +6,20 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// Owner 2026-08-05: every criterion here is ENFORCEABLE against the columns
+// fantasy_draft_players actually has (age, market_value_millions,
+// nationality, position). The old list included Golden Era / Premier League
+// Only / Left Foot Only, which the data cannot verify (and the left-foot
+// pool was 10 players for a 22-pick draft) - those produced rules the game
+// silently ignored, like Under 25s accepting Bernardo Silva. Labels must
+// stay in sync with CRITERIA_RULES in src/lib/fantasyCriteria.ts.
 const CRITERIA_LIST = [
-  "Budget Cap: Max £1 Billion squad value",
-  "Left Foot Only: All outfield players must be left-footed",
-  "One Nation: Max 3 players from the same country",
-  "Golden Era: Players from the 1990s-2000s only",
-  "Premier League Only: All players must have played in the PL",
-  "Under 25s: All players must be 25 or younger",
+  "Under 25s: Every player must be 25 or younger",
+  "Budget Cap: Your XI must total £1B or less",
+  "One Nation Rule: Max 3 players from any one country",
+  "Bargain Hunt: Every player must cost £60M or less",
+  "Wonderkids: Every outfield player must be 21 or younger",
+  "Galacticos Only: Every outfield player must be worth £80M+",
 ];
 
 function getTodayString(): string {
@@ -39,29 +46,31 @@ Deno.serve(async (req) => {
 
     const today = getTodayString();
 
-    // Try to read today's criteria
     const { data: existing } = await supabase
       .from("fantasy_draft_daily")
       .select("criteria")
       .eq("puzzle_date", today)
       .maybeSingle();
 
-    if (existing) {
+    // Reuse today's stored criteria only if it is still in the enforceable
+    // list; legacy rows fall through and get replaced.
+    if (existing && CRITERIA_LIST.includes(existing.criteria)) {
       return new Response(JSON.stringify({ criteria: existing.criteria, date: today }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Create today's criteria deterministically
     const idx = deterministicIndex(today, CRITERIA_LIST.length);
     const criteria = CRITERIA_LIST[idx];
 
-    await supabase.from("fantasy_draft_daily").insert({ puzzle_date: today, criteria });
+    await supabase
+      .from("fantasy_draft_daily")
+      .upsert({ puzzle_date: today, criteria }, { onConflict: "puzzle_date" });
 
     return new Response(JSON.stringify({ criteria, date: today }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-  } catch (err) {
+  } catch (_err) {
     return new Response(JSON.stringify({ error: "Failed to load daily criteria" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

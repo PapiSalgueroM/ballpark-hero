@@ -33,7 +33,7 @@ export function NbaCareerHowToPlay({ open, onOpenChange }: Props) {
             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
               <li>You start with the player's position</li>
               <li>Reveal more clues: country, draft, teams, stats, awards</li>
-              <li>Guess at any point — earlier guesses earn more points</li>
+              <li>Guess at any point, earlier guesses earn more points</li>
               <li>Start at 1,000 points; each clue costs 150 (floor of 100)</li>
             </ul>
           </div>

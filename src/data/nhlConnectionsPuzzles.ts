@@ -33,7 +33,7 @@ export interface NhlConnectionsPuzzle {
  *   - Doug Gilmour (1,414 points, 7 teams) forced Cole Caufield into the
  *     Canadiens group.
  * Margins on stat groups: nearest non-member is Brent Burns at 944 points
- * (in the same puzzle's Sharks group, 56 under the 1,000 bar — he retired
+ * (in the same puzzle's Sharks group, 56 under the 1,000 bar, he retired
  * after 2025? NO: verify Burns before refreshing nhl_player_stats; if his
  * career total crosses 1,000 the nhlconn-004 partition breaks.)
  */

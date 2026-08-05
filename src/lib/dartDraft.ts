@@ -50,17 +50,17 @@ export const WEDGES: Wedge[] = [
 export type Ring = 'JACKPOT' | 'T1' | 'T2' | 'T3' | 'T4' | 'MISS';
 
 export const RING_BANDS: { ring: Ring; rOuter: number }[] = [
-  { ring: 'JACKPOT', rOuter: 0.07 }, // bullseye — top-3 superstar of the wedge
+  { ring: 'JACKPOT', rOuter: 0.07 }, // bullseye, top-3 superstar of the wedge
   { ring: 'T2',      rOuter: 0.15 }, // outer bull
   { ring: 'T3',      rOuter: 0.42 }, // inner single
-  { ring: 'T1',      rOuter: 0.52 }, // TRIPLE ring — the band sharpshooters hunt
+  { ring: 'T1',      rOuter: 0.52 }, // TRIPLE ring, the band sharpshooters hunt
   { ring: 'T4',      rOuter: 0.72 }, // outer single
   { ring: 'T2',      rOuter: 0.82 }, // double ring
   // Owner bug (2026-07-10): players aim at the wedge LABELS painted outside
   // the double ring, which used to score as MISS -> worst player ("it didn't
   // give me an accurate player"). The label ring now counts as the wedge's
   // outer single; a true MISS is only beyond the gold rim.
-  { ring: 'T4',      rOuter: 0.97 }, // label ring — still the wedge you aimed at
+  { ring: 'T4',      rOuter: 0.97 }, // label ring, still the wedge you aimed at
 ];
 export const BOARD_EDGE = 0.82; // double-ring edge (visual); MISS starts past 0.97
 
@@ -266,7 +266,7 @@ function keeper(players: (Player | null)[]): Player | null {
 }
 
 const GOAL_LINES = [
-  (s: string) => `${s} buries it — top corner, no chance!`,
+  (s: string) => `${s} buries it, top corner, no chance!`,
   (s: string) => `${s} with a poacher's finish!`,
   (s: string) => `${s} curls one in from the edge of the box!`,
   (s: string) => `${s} rises highest and heads it home!`,
@@ -324,7 +324,7 @@ export function simulateSeries(user: (Player | null)[], ai: (Player | null)[]): 
   const outcome: SeriesResult['outcome'] = userWins > aiWins ? 'win' : aiWins > userWins ? 'loss' : 'draw';
   const headline =
     outcome === 'win'
-      ? `Your darts built a champion — series won ${userWins}-${aiWins}!`
+      ? `Your darts built a champion, series won ${userWins}-${aiWins}!`
       : outcome === 'loss'
         ? `The Machine takes the series ${aiWins}-${userWins}. The board giveth...`
         : `Dead level after three legs. Split the trophy down the middle.`;

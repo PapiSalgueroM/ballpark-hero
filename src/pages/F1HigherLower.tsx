@@ -96,7 +96,7 @@ const F1HigherLower = () => {
                   <span className="text-3xl">🏎️</span>
                   <span className="text-lg font-bold text-foreground font-display">{driver.name}</span>
                   <span className="text-xs text-muted-foreground">
-                    {driver.firstSeason}–{driver.lastSeason}
+                    {driver.firstSeason}-{driver.lastSeason}
                     {driver.titles > 0 ? ` · ${driver.titles}× champion` : ''}
                   </span>
                   <span className="text-xs text-muted-foreground">{driver.constructors}</span>
@@ -148,7 +148,7 @@ const F1HigherLower = () => {
           ]}
           examples={[
             'Hamilton (105 wins) vs Schumacher (91 wins)',
-            'Senna vs Prost — the rivalry, settled by numbers',
+            'Senna vs Prost, the rivalry, settled by numbers',
             'Fangio won 5 titles… from how many wins?',
             'Moss: the most wins by a driver who never won the title',
           ]}

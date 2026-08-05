@@ -404,7 +404,7 @@ export function rollSeasonInjury(chance: number): SeasonInjury | null {
 /* ─── Ballon d'Or win threshold (configurable) ─── */
 export const BDOR_WIN_MIN_GOALS = 30;
 
-/* ─── Starting overall by position group — deliberately capped low (55-68)
+/* ─── Starting overall by position group, deliberately capped low (55-68)
    so growth, boosters and purchases actually matter ─── */
 export function rollStartingOverall(position: string): number {
   if (position === "GK") return rand(55, 64);

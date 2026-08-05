@@ -44,7 +44,7 @@ export function useGuessTransferValue() {
     return () => { cancelled = true; };
   }, []);
 
-  // Daily puzzle — date-seeded across full pool
+  // Daily puzzle, date-seeded across full pool
   const {
     puzzle: dailyTarget,
     guesses: dailyGuesses,

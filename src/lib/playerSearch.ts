@@ -1,3 +1,4 @@
+import { foldSpecialLatin } from '@/lib/nameFold';
 import { supabase } from '@/integrations/supabase/client';
 
 /**
@@ -67,12 +68,14 @@ const DIACRITICS = new RegExp('[' + String.fromCharCode(0x0300) + '-' + String.f
  * autocomplete component, so matching and highlighting never drift apart.
  */
 export function normalizeName(s: string | null | undefined): string {
-  return (s ?? '')
-    .normalize('NFD')
-    .replace(DIACRITICS, '')
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, ' ');
+  return foldSpecialLatin(
+    (s ?? '')
+      .normalize('NFD')
+      .replace(DIACRITICS, '')
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, ' '),
+  );
 }
 
 /**
@@ -469,7 +472,7 @@ export const NFL_ROSTER_SOURCE: PlayerSourceConfig = {
  * flawuiqbvjobmkfkauhw, 2026-07-02): it stores `first_name` and `last_name`
  * separately. `last_name` is nameColumn and `first_name` is firstNameColumn,
  * so the search layer builds "First Last" for both matching and display and
- * the ilike leg matches either column — this is what makes first-name queries
+ * the ilike leg matches either column, this is what makes first-name queries
  * ("LeBron", "Kobe") resolve instead of returning nothing. There is no stats
  * column, so `player_id` (ascending: balldontlie gave established stars the
  * smallest ids) is used as a "surface obvious stars" prominence proxy.

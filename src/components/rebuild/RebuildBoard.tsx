@@ -7,10 +7,10 @@ import { useRebuild } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
 
 const TIER_LABEL: Record<ClubTier, string> = {
-  elite: 'Elite — barely any headroom',
-  strong: 'Strong — needs a nudge',
-  mid: 'Mid — real work to do',
-  modest: 'Modest — everything to prove',
+  elite: 'Elite, barely any headroom',
+  strong: 'Strong, needs a nudge',
+  mid: 'Mid, real work to do',
+  modest: 'Modest, everything to prove',
 };
 
 const TIER_STYLE: Record<ClubTier, string> = {
@@ -192,7 +192,7 @@ export function RebuildBoard() {
 
       {/* XI */}
       <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-        Your XI — tap a slot to sign someone
+        Your XI, tap a slot to sign someone
       </p>
       <div className="mt-2 space-y-1.5">
         {formation.slots.map((slot, i) => {
@@ -215,7 +215,7 @@ export function RebuildBoard() {
                       <span className="truncate text-sm font-medium text-foreground">{p.name}</span>
                     </>
                   ) : (
-                    <span className="text-sm italic text-destructive">empty — sign someone</span>
+                    <span className="text-sm italic text-destructive">empty, sign someone</span>
                   )}
                 </span>
                 {p && (
@@ -244,7 +244,7 @@ export function RebuildBoard() {
         <div className="mt-4 rounded-2xl border border-border bg-card p-4">
           <div className="mb-3 flex items-center justify-between">
             <p className="font-display font-bold text-foreground">
-              Sign a {formation.slots[activeSlot].label} — €{budget}M available
+              Sign a {formation.slots[activeSlot].label}, €{budget}M available
             </p>
             <button onClick={() => setActiveSlot(null)}><X className="h-4 w-4 text-muted-foreground" /></button>
           </div>

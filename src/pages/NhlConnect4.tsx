@@ -256,7 +256,7 @@ const NhlConnect4 = () => {
               )}
             </div>
             <p className="text-[11px] text-center text-muted-foreground">
-              Suggestions cover skaters — type a goalie's full name and hit Enter.
+              Suggestions cover skaters, type a goalie's full name and hit Enter.
             </p>
             {validationError && (
               <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">

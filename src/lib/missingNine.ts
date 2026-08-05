@@ -1,3 +1,4 @@
+import { foldSpecialLatin } from '@/lib/nameFold';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
 /**
@@ -16,7 +17,7 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
  * recap (Fowler leadoff HR, Ross entering WITH Lester in the 5th, Martinez
  * replacing Crisp defensively).
  *
- * THE TRAPS ARE THE POINT — double-confirmed, do NOT "fix" them:
+ * THE TRAPS ARE THE POINT, double-confirmed, do NOT "fix" them:
  *   - 1988 G1 Dodgers: Kirk GIBSON DID NOT START. Mickey Hatcher started LF
  *     (and homered in the 1st). Gibson's only appearance was the walk-off
  *     pinch-hit homer ("Gibson (1,9th inning off Eckersley 1 on, 2 out)").
@@ -75,7 +76,7 @@ export type NineHintLevel = 0 | 1 | 2 | 3;
 const S = (position: string, name: string): NineSlot => ({ position, name });
 
 export const NINE_LINEUPS: NineLineup[] = [
-  // 1. 2016 World Series Game 7 — Chicago Cubs (ended the 108-year drought)
+  // 1. 2016 World Series Game 7, Chicago Cubs (ended the 108-year drought)
   {
     id: 'ws-2016-g7-chc',
     dateLabel: '2016 World Series, Game 7',
@@ -104,7 +105,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     source: 'baseball-almanac box 201611020CLE (starters = un-indented batting rows) + SABR Games Project recap: Fowler leadoff HR, Ross entered with Lester in the 5th.',
   },
 
-  // 2. 2016 World Series Game 7 — Cleveland Indians
+  // 2. 2016 World Series Game 7, Cleveland Indians
   {
     id: 'ws-2016-g7-cle',
     dateLabel: '2016 World Series, Game 7',
@@ -156,9 +157,9 @@ export const NINE_LINEUPS: NineLineup[] = [
       S('P', 'Roger Clemens'),
     ],
     blankCandidates: [
-      { name: 'Shane Spencer', slotIndex: 5, nationality: 'USA', fact: 'Started left field — Chuck Knoblauch and David Justice only appeared as pinch-hitters.' },
+      { name: 'Shane Spencer', slotIndex: 5, nationality: 'USA', fact: 'Started left field, Chuck Knoblauch and David Justice only appeared as pinch-hitters.' },
       { name: 'Alfonso Soriano', slotIndex: 6, nationality: 'Dominican Republic', fact: 'His 8th-inning homer off Curt Schilling briefly put New York ahead 2-1.' },
-      { name: 'Roger Clemens', slotIndex: 8, nationality: 'USA', fact: 'NL park, no DH — the Rocket batted ninth and struck out 10 in 6.1 innings.' },
+      { name: 'Roger Clemens', slotIndex: 8, nationality: 'USA', fact: 'NL park, no DH, the Rocket batted ninth and struck out 10 in 6.1 innings.' },
     ],
     source: 'baseball-almanac box 200111040ARI (starters = un-indented rows; Knoblauch listed ph,lf and Justice ph). Soriano HR line: "8th inning off Schilling".',
   },
@@ -186,7 +187,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     ],
     blankCandidates: [
       { name: 'Tony Womack', slotIndex: 0, nationality: 'USA', fact: 'His ninth-inning double off Mariano Rivera tied the game before the walk-off.' },
-      { name: 'Craig Counsell', slotIndex: 1, nationality: 'USA', fact: 'Hit by a Rivera pitch in the 9th — setting the stage for Gonzalez\'s walk-off single.' },
+      { name: 'Craig Counsell', slotIndex: 1, nationality: 'USA', fact: 'Hit by a Rivera pitch in the 9th, setting the stage for Gonzalez\'s walk-off single.' },
       { name: 'Danny Bautista', slotIndex: 5, nationality: 'Dominican Republic', fact: 'His double off Clemens drove in Arizona\'s first run.' },
     ],
     source: 'baseball-almanac box 200111040ARI. Event lines confirm: Womack 2B off Rivera, Counsell HBP by Rivera, Bautista 2B off Clemens.',
@@ -221,7 +222,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     source: 'baseball-almanac box 198810150LAN. HR line confirms Canseco grand slam: "2nd inning off Belcher 3 on, 2 out".',
   },
 
-  // 6. 1988 World Series Game 1 — Los Angeles Dodgers (THE Gibson trap)
+  // 6. 1988 World Series Game 1, Los Angeles Dodgers (THE Gibson trap)
   {
     id: 'ws-1988-g1-lad',
     dateLabel: '1988 World Series, Game 1',
@@ -231,7 +232,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     opponent: 'Oakland Athletics',
     scoreLine: 'Dodgers 5-4 Athletics',
     venue: 'Dodger Stadium, Los Angeles',
-    // Trap: Kirk Gibson did NOT start — his walk-off was a pinch-hit at-bat.
+    // Trap: Kirk Gibson did NOT start, his walk-off was a pinch-hit at-bat.
     slots: [
       S('2B', 'Steve Sax'),
       S('1B', 'Franklin Stubbs'),
@@ -246,7 +247,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     blankCandidates: [
       { name: 'Mickey Hatcher', slotIndex: 2, nationality: 'USA', fact: 'Homered in the 1st inning. Kirk Gibson never started — his walk-off homer was a pinch-hit at-bat.' },
       { name: 'Franklin Stubbs', slotIndex: 1, nationality: 'USA', fact: 'Started at first base on the night of Gibson\'s pinch-hit walk-off.' },
-      { name: 'Mike Scioscia', slotIndex: 5, nationality: 'USA', fact: 'Caught the whole game and drove in a run — later a World Series-winning manager.' },
+      { name: 'Mike Scioscia', slotIndex: 5, nationality: 'USA', fact: 'Caught the whole game and drove in a run, later a World Series-winning manager.' },
     ],
     source: 'baseball-almanac box 198810150LAN (Gibson listed only as "ph" in the 9-hole pitchers\' block; HR line: "Gibson (1,9th inning off Eckersley 1 on, 2 out)"). Hatcher HR: "1st inning off Stewart 1 on, 1 out".',
   },
@@ -275,8 +276,8 @@ export const NINE_LINEUPS: NineLineup[] = [
       S('P', 'Roger Clemens'),
     ],
     blankCandidates: [
-      { name: 'Roger Clemens', slotIndex: 8, nationality: 'USA', fact: 'Started and threw seven innings — the collapse came after he left.' },
-      { name: 'Bill Buckner', slotIndex: 2, nationality: 'USA', fact: 'Batted third and played first base — the error in the 10th made him the story forever.' },
+      { name: 'Roger Clemens', slotIndex: 8, nationality: 'USA', fact: 'Started and threw seven innings, the collapse came after he left.' },
+      { name: 'Bill Buckner', slotIndex: 2, nationality: 'USA', fact: 'Batted third and played first base, the error in the 10th made him the story forever.' },
       { name: 'Dave Henderson', slotIndex: 6, nationality: 'USA', fact: 'His 10th-inning homer off Aguilera had Boston one strike from the title.' },
     ],
     source: 'baseball-almanac box 198610250NYN. Event lines: Henderson HR 10th off Aguilera; E-Buckner (1); Clemens 7.0 IP.',
@@ -305,7 +306,7 @@ export const NINE_LINEUPS: NineLineup[] = [
       S('P', 'Bobby Ojeda'),
     ],
     blankCandidates: [
-      { name: 'Bobby Ojeda', slotIndex: 8, nationality: 'USA', fact: 'The lefty ex-Red Sox started Game 6 against his old team — not Dwight Gooden.' },
+      { name: 'Bobby Ojeda', slotIndex: 8, nationality: 'USA', fact: 'The lefty ex-Red Sox started Game 6 against his old team, not Dwight Gooden.' },
       { name: 'Mookie Wilson', slotIndex: 6, nationality: 'USA', fact: 'Hit the grounder that rolled through Buckner\'s legs.' },
       { name: 'Rafael Santana', slotIndex: 7, nationality: 'Dominican Republic', fact: 'The light-hitting shortstop batted eighth in the most famous Game 6 ever.' },
     ],
@@ -399,7 +400,7 @@ export const ALL_NINE_NAMES: string[] = Array.from(
 
 const DIACRITICS = new RegExp('[' + String.fromCharCode(0x0300) + '-' + String.fromCharCode(0x036f) + ']', 'g');
 export function normalizeNineName(name: string): string {
-  return name.normalize('NFD').replace(DIACRITICS, '').toLowerCase().trim().replace(/\s+/g, ' ').replace(/\./g, '').replace(/'/g, '');
+  return foldSpecialLatin(name.normalize('NFD').replace(DIACRITICS, '').toLowerCase().trim().replace(/\s+/g, ' ').replace(/\./g, '').replace(/'/g, ''));
 }
 
 /** A guess is correct if it matches the blanked candidate (full name or surname). */

@@ -89,7 +89,7 @@ export interface BlankCandidate {
    * Optional one-line flavor fact about THIS player in THIS match (e.g.
    * "scored the opening goal", "made his competitive debut in this final").
    * Shown on the reveal screen when present. Facts are only ever added here,
-   * hand-verified alongside the lineup — the UI must never invent one.
+   * hand-verified alongside the lineup, the UI must never invent one.
    */
   fact?: string;
 }
@@ -113,7 +113,7 @@ export interface Lineup {
   /**
    * One-line editor note on what was checked, per the file-level verification
    * method above. INTERNAL ONLY: never render this in the UI (owner feedback
-   * 2026-07-08 — "don't show 'Wikipedia and conmebol archives' as proof").
+   * 2026-07-08, "don't show 'Wikipedia and conmebol archives' as proof").
    * Player-facing flavor lives in BlankCandidate.fact instead.
    */
   source: string;

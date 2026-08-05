@@ -54,7 +54,7 @@ export function TierListBoard() {
     <div className="mx-auto max-w-2xl px-4 py-8">
       <p className="mb-4 text-center text-sm text-muted-foreground">
         {submitted
-          ? "Your list is locked in — here's how the crowd ranked them."
+          ? "Your list is locked in, here's how the crowd ranked them."
           : selected
             ? 'Now tap a tier to place them.'
             : 'Tap a player, then tap a tier.'}

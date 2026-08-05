@@ -37,7 +37,7 @@ export interface NflConnectionsPuzzle {
  * that none of those phantom teams collide with their puzzles' groups.
  * Jamaal Charles was dropped from the Chiefs group because he really did
  * play for Denver (2017) and Denver is the same puzzle's green group.
- * Within a puzzle, no player satisfies another group's criterion — the
+ * Within a puzzle, no player satisfies another group's criterion, the
  * partition is unique. Cross-puzzle reuse is fine.
  */
 export const nflConnectionsPuzzles: NflConnectionsPuzzle[] = [

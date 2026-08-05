@@ -28,7 +28,10 @@ const G = (): FormationSlot => s('GK', ['GK'], 50, 90);
 const DC: Position[] = ['CB'];
 const DR: Position[] = ['RB', 'RWB', 'CB'];
 const DL: Position[] = ['LB', 'LWB', 'CB'];
-const MD: Position[] = ['CM', 'CDM', 'CAM', 'LM', 'RM'];
+// Owner 2026-08-05: central-mid slots take central mids ONLY. Wide mids and
+// (via the winger family) wingers were sneaking into CM slots; a CM slot now
+// accepts CM/CDM/CAM and nothing wide.
+const MD: Position[] = ['CM', 'CDM', 'CAM'];
 const WR: Position[] = ['RW', 'RM', 'RWB'];
 const WL: Position[] = ['LW', 'LM', 'LWB'];
 const FW: Position[] = ['ST', 'CF'];
@@ -68,9 +71,22 @@ export const FORMATIONS: Formation[] = [
  *   mv=230 -> 83   (was 99)   Messi/Ronaldo-tier ceiling
  */
 export function playerRating(p: Player): number {
-  const mv = Math.max(1, p.marketValue);
-  const r = 35 + 64 * (Math.log10(mv + 1) / Math.log10(1001));
-  return Math.max(35, Math.min(99, Math.round(r)));
+  // FIFA-style scale (owner 2026-08-05): "ur ratings should more closely
+  // follow what fifa and madden and 2k rate their players". Anchors chosen to
+  // land on familiar card numbers: £1M→62, £5M→71, £15M→77, £40M→82, £80M→86,
+  // £200M→91, capped at 96. Bottom pros sit around 55-65 like real FC cards.
+  //
+  // Age correction (owner: "just because people are old dosent mean their
+  // value should be so low. ur giving lewa such a low rating even though he's
+  // still so good"): market values crater for veterans while their level
+  // doesn't. 30+ gets a value multiplier that roughly undoes the age discount
+  // BEFORE the curve runs: Lewandowski (~£15M at 37) reads ~86 instead of 72,
+  // 39-year-old Messi lands ~86, prime Mbappe/Yamal money still tops the pile.
+  const age = typeof p.age === 'number' && p.age > 0 ? p.age : 27;
+  const ageBoost = age >= 30 ? Math.min(6, 1 + (age - 29) * 0.55) : 1;
+  const mv = Math.max(0.5, p.marketValue * ageBoost);
+  const r = 62 + (33 * Math.log10(mv)) / Math.log10(400);
+  return Math.max(52, Math.min(96, Math.round(r)));
 }
 
 /**
@@ -358,7 +374,7 @@ export const EXTRAS: ExtraCategory[] = [
 
 /* ---------------- Extras as Deal-or-No-Deal boards (owner 2026-07-10) ----------------
    "I wanted a deal or no deal for those too. Like Klopp and Sir Alex Ferguson and
-   Chelsea budget and Boca junior fans" — 6 named cases per category, keep one,
+   Chelsea budget and Boca junior fans", 6 named cases per category, keep one,
    three get flipped, the Banker tempts you with a known alternative. */
 export const EXTRA_DEALS: ExtraCategory[] = [
   { key: 'manager', title: 'Manager', emoji: '🎩', options: [

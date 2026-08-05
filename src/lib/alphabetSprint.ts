@@ -147,7 +147,7 @@ export function drawLetter(
 }
 
 // ---------------------------------------------------------------------------
-// Guess resolution (2026-07-08, owner: "too easy — they can just put two
+// Guess resolution (2026-07-08, owner: "too easy, they can just put two
 // letters and the suggestion gives them the answer; make them spell out the
 // name and submit"). The old suggestForLetter() showed live suggestions after
 // 2 typed letters, which handed the answers over. There is no suggestion list

@@ -1,6 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import type { PlayerEntity } from '@/lib/playerSearch';
+import { foldSpecialLatin } from '@/lib/nameFold';
 
 /**
  * Who Am I? (Goltexto / Contexto style secret-footballer game)
@@ -94,11 +95,11 @@ import type { PlayerEntity } from '@/lib/playerSearch';
  * he's 30 and plays for Arsenal. He's 39 at Inter Miami. Ozil was guessable
  * even though he's retired"). Two related root causes, verified via SQL:
  *   1. The old boot fetch pulled the top 1000 rows by value across year >=
- *      2024 and deduped keeping the latest FETCHED row — but for a faded star
+ *      2024 and deduped keeping the latest FETCHED row, but for a faded star
  *      only the peak-value seasons survive a value-ordered fetch, so the
  *      "latest" row kept could still be years old. Worse, the guess converter
  *      read PlayerEntity.meta, and playerSearch's dedupe keeps each player's
- *      HIGHEST-VALUE row across all years — i.e. the peak-year row (Ozil's
+ *      HIGHEST-VALUE row across all years, i.e. the peak-year row (Ozil's
  *      Arsenal seasons, Messi in his 20s), which is what got displayed.
  *   2. Long-retired players have big historical values, so nothing stopped
  *      them appearing with those stale attributes.
@@ -109,7 +110,7 @@ import type { PlayerEntity } from '@/lib/playerSearch';
  * kept module-level so whoAmIPlayerFromEntity resolves every guess to its
  * current row (Messi -> Inter Miami CF, age 39, $12.8M). A guessed player
  * with NO 2025+ row is retired: they are impossible as secrets (not in the
- * pool) and are never displayed with stale peak-year attributes — the guess
+ * pool) and are never displayed with stale peak-year attributes, the guess
  * is still accepted, but it renders as club "Retired" with no age/value, and
  * scores accordingly low. Attribute comparisons therefore always run on
  * current rows only.
@@ -218,7 +219,7 @@ const DIACRITICS = new RegExp('[' + String.fromCharCode(0x0300) + '-' + String.f
 
 /** Lowercase, trimmed, accents stripped. Used for names, clubs and matching. */
 export function normalizeName(s: string): string {
-  return (s || '').normalize('NFD').replace(DIACRITICS, '').toLowerCase().trim();
+  return foldSpecialLatin((s || '').normalize('NFD').replace(DIACRITICS, '').toLowerCase().trim());
 }
 
 /** First nationality when the row stores duals like "France / Algeria". */
@@ -341,7 +342,7 @@ let currentRowsCache: Map<string, WhoAmIPlayer> | null = null;
  *
  * The entity's own meta is deliberately NOT trusted for club/age/value:
  * playerSearch dedupes by highest value, so meta carries the PEAK-year row
- * (Ozil at Arsenal, a 20-something Messi — see CURRENT-ROW ATTRIBUTES in the
+ * (Ozil at Arsenal, a 20-something Messi, see CURRENT-ROW ATTRIBUTES in the
  * file header). Instead the guess is resolved against the current-row map:
  *   - current row found  -> use it verbatim (canonical DB name spelling too,
  *     which keeps scoreGuess's exact-name check aligned with pool secrets).

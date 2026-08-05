@@ -1,3 +1,4 @@
+import { foldSpecialLatin } from '@/lib/nameFold';
 import type { Player, Position } from '@/types/game';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
 import type { Formation } from '@/lib/squadDeal';
@@ -297,7 +298,7 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 function slug(name: string): string {
-  return name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-');
+  return foldSpecialLatin(name.toLowerCase()).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-');
 }
 
 /** £-formatted money in millions: money(180) -> '£180m', money(0.6) -> '£600k'. */
@@ -528,7 +529,7 @@ function priceOf(rating: number, age: number): number {
   return Math.max(1, Math.round(baseValue(rating, age) * 1.15));
 }
 
-/** What we bank when selling — 90% of value (youth products fetch less). */
+/** What we bank when selling, 90% of value (youth products fetch less). */
 export function sellValue(p: CMPlayer): number {
   const youthF = p.isYouth ? 0.4 : 1;
   return Math.max(1, Math.round(baseValue(p.rating, p.age) * 0.9 * youthF));

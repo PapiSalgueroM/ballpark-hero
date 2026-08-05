@@ -82,7 +82,7 @@ export function MysteryBoxBoard() {
             {copied ? 'Copied!' : 'Beat my pulls'}
           </button>
           <p className="mt-3 text-[11px] text-muted-foreground">
-            Same boxes for everyone today — the skill is what you keep.
+            Same boxes for everyone today, the skill is what you keep.
           </p>
         </div>
       )}
@@ -122,7 +122,7 @@ export function MysteryBoxBoard() {
 
               {compatibleSlots.length > 0 ? (
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Tap a highlighted slot below to keep him — or bin him.
+                  Tap a highlighted slot below to keep him, or bin him.
                 </p>
               ) : (
                 <p className="mt-3 text-xs text-destructive">
@@ -188,7 +188,7 @@ export function MysteryBoxBoard() {
 
       {!finished && (
         <p className="mt-3 text-center text-[11px] text-muted-foreground">
-          {TOTAL_PACKS - packIndex} packs left for {11 - filled} empty slots — you can only afford{' '}
+          {TOTAL_PACKS - packIndex} packs left for {11 - filled} empty slots, you can only afford{' '}
           {Math.max(0, TOTAL_PACKS - packIndex - (11 - filled))} more bins.
         </p>
       )}

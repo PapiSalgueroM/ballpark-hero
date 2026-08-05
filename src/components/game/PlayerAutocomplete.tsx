@@ -1,3 +1,4 @@
+import { foldSpecialLatin } from '@/lib/nameFold';
 import { useState, useEffect, useRef, useCallback, useMemo, useId, type KeyboardEvent } from 'react';
 import { Loader2, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -91,7 +92,7 @@ function normalizeWithIndexMap(text: string): { normalized: string; indexMap: nu
   let lastWasSpace = false;
   for (let i = 0; i < text.length; i++) {
     const ch = text[i];
-    const stripped = ch.normalize('NFD').replace(DIACRITICS_CHARS, '').toLowerCase();
+    const stripped = foldSpecialLatin(ch).normalize('NFD').replace(DIACRITICS_CHARS, '').toLowerCase();
     for (const outChar of stripped) {
       const isSpace = outChar === ' ' || outChar === '\t' || outChar === '\n' || outChar === '\r';
       if (isSpace) {

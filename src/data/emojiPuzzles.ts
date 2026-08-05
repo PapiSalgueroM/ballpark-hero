@@ -13,8 +13,7 @@
  * bear and tree). If you edit an entry, keep the fact right.
  *
  * NOTE ON FLAG EMOJI: Windows Chrome renders country-flag emoji as letter
- * pairs ("🇵🇹" -> "PT"). That makes flag clues EASIER on Windows, not broken —
- * acceptable for a guessing game, so flags are used as supporting clues, never
+ * pairs ("🇵🇹" -> "PT"). That makes flag clues EASIER on Windows, not broken, * acceptable for a guessing game, so flags are used as supporting clues, never
  * the whole puzzle.
  */
 
@@ -34,7 +33,7 @@ export interface EmojiPuzzle {
 }
 
 export const EMOJI_PUZZLES: EmojiPuzzle[] = [
-  // ---------------- Players — easy ----------------
+  // ---------------- Players, easy ----------------
   { id: 'p-messi', emoji: '🐐🇦🇷', answer: 'Lionel Messi', aliases: ['Messi', 'Leo Messi'], category: 'player', difficulty: 'easy', hint: 'Eight Ballon d’Ors and a 2022 World Cup.' },
   { id: 'p-ronaldo', emoji: '7️⃣🇵🇹', answer: 'Cristiano Ronaldo', aliases: ['Ronaldo', 'CR7', 'Cristiano'], category: 'player', difficulty: 'easy', hint: 'Siuuu.' },
   { id: 'p-mbappe', emoji: '🐢🇫🇷⚡', answer: 'Kylian Mbappé', aliases: ['Mbappe', 'Mbappé', 'Kylian Mbappe'], category: 'player', difficulty: 'easy', hint: 'Teammates nicknamed him the Ninja Turtle.' },
@@ -46,7 +45,7 @@ export const EMOJI_PUZZLES: EmojiPuzzle[] = [
   { id: 'p-kane', emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿🎯©️', answer: 'Harry Kane', aliases: ['Kane'], category: 'player', difficulty: 'easy', hint: 'England’s record goalscorer.' },
   { id: 'p-pele', emoji: '🇧🇷👑🏆🏆🏆', answer: 'Pelé', aliases: ['Pele'], category: 'player', difficulty: 'easy', hint: 'The only man with three World Cups.' },
 
-  // ---------------- Players — medium ----------------
+  // ---------------- Players, medium ----------------
   { id: 'p-debruyne', emoji: '👨‍🦰🎯🔵', answer: 'Kevin De Bruyne', aliases: ['De Bruyne', 'KDB'], category: 'player', difficulty: 'medium', hint: 'Belgian assist king of the Etihad.' },
   { id: 'p-lewandowski', emoji: '🇵🇱⚽5️⃣⏱️9️⃣', answer: 'Robert Lewandowski', aliases: ['Lewandowski', 'Lewy'], category: 'player', difficulty: 'medium', hint: 'Five goals in nine minutes off the bench, 2015.' },
   { id: 'p-modric', emoji: '🇭🇷🎻', answer: 'Luka Modrić', aliases: ['Modric', 'Luka Modric'], category: 'player', difficulty: 'medium', hint: 'The midfield violinist who broke the Messi–Ronaldo Ballon d’Or streak.' },
@@ -61,7 +60,7 @@ export const EMOJI_PUZZLES: EmojiPuzzle[] = [
   { id: 'p-yamal', emoji: '🇪🇸3️⃣0️⃣4️⃣🧒', answer: 'Lamine Yamal', aliases: ['Yamal'], category: 'player', difficulty: 'medium', hint: 'Barça teenager who celebrates with his neighbourhood’s number.' },
   { id: 'p-beckham', emoji: '🌀🎯🏴󠁧󠁢󠁥󠁮󠁧󠁿', answer: 'David Beckham', aliases: ['Beckham'], category: 'player', difficulty: 'medium', hint: 'Bend it like…' },
 
-  // ---------------- Players — hard ----------------
+  // ---------------- Players, hard ----------------
   { id: 'p-r9', emoji: '🇧🇷9️⃣✂️', answer: 'Ronaldo Nazário', aliases: ['Ronaldo Nazario', 'R9', 'Brazilian Ronaldo', 'Ronaldo'], category: 'player', difficulty: 'hard', hint: 'O Fenômeno — and the 2002 haircut.' },
   { id: 'p-ronaldinho', emoji: '😁🇧🇷🪄', answer: 'Ronaldinho', aliases: ['Ronaldinho Gaucho'], category: 'player', difficulty: 'hard', hint: 'Joga bonito, applauded at the Bernabéu.' },
   { id: 'p-pirlo', emoji: '🧔🍷🇮🇹', answer: 'Andrea Pirlo', aliases: ['Pirlo'], category: 'player', difficulty: 'hard', hint: 'L’architetto. Plays like he owns a vineyard — he does.' },
@@ -69,7 +68,7 @@ export const EMOJI_PUZZLES: EmojiPuzzle[] = [
   { id: 'p-buffon', emoji: '🧤🇮🇹🏆2️⃣0️⃣0️⃣6️⃣', answer: 'Gianluigi Buffon', aliases: ['Buffon', 'Gigi Buffon'], category: 'player', difficulty: 'hard', hint: 'Juventus legend between the posts, world champion in Berlin.' },
   { id: 'p-gerrard', emoji: '🔴©️⚽💥🇹🇷', answer: 'Steven Gerrard', aliases: ['Gerrard'], category: 'player', difficulty: 'hard', hint: 'Istanbul 2005 started with his header.' },
 
-  // ---------------- Clubs — easy ----------------
+  // ---------------- Clubs, easy ----------------
   { id: 'c-manutd', emoji: '🔴😈', answer: 'Manchester United', aliases: ['Man United', 'Man Utd', 'United', 'MUFC'], category: 'club', difficulty: 'easy', hint: 'The Red Devils of Old Trafford.' },
   { id: 'c-realmadrid', emoji: '⚪👑🇪🇸', answer: 'Real Madrid', aliases: ['Madrid', 'Los Blancos'], category: 'club', difficulty: 'easy', hint: 'Fifteen-plus European Cups in white.' },
   { id: 'c-barcelona', emoji: '🔵🔴🎨', answer: 'FC Barcelona', aliases: ['Barcelona', 'Barca', 'Barça'], category: 'club', difficulty: 'easy', hint: 'Més que un club.' },
@@ -79,7 +78,7 @@ export const EMOJI_PUZZLES: EmojiPuzzle[] = [
   { id: 'c-arsenal', emoji: '🔴🧨📐', answer: 'Arsenal FC', aliases: ['Arsenal', 'The Gunners', 'AFC'], category: 'club', difficulty: 'easy', hint: 'There’s a cannon on the crest.' },
   { id: 'c-spurs', emoji: '🐓⚪', answer: 'Tottenham Hotspur', aliases: ['Tottenham', 'Spurs', 'THFC'], category: 'club', difficulty: 'easy', hint: 'A cockerel stands on the ball.' },
 
-  // ---------------- Clubs — medium ----------------
+  // ---------------- Clubs, medium ----------------
   { id: 'c-juventus', emoji: '⚫⚪🦓', answer: 'Juventus', aliases: ['Juve', 'Juventus FC'], category: 'club', difficulty: 'medium', hint: 'The Old Lady runs in stripes.' },
   { id: 'c-dortmund', emoji: '🟡⚫🧱', answer: 'Borussia Dortmund', aliases: ['Dortmund', 'BVB'], category: 'club', difficulty: 'medium', hint: 'The Yellow Wall watches from the Südtribüne.' },
   { id: 'c-bayern', emoji: '🔴🇩🇪🍺', answer: 'Bayern Munich', aliases: ['Bayern', 'FC Bayern', 'Bayern München'], category: 'club', difficulty: 'medium', hint: 'Mia san mia, Oktoberfest edition.' },
@@ -91,7 +90,7 @@ export const EMOJI_PUZZLES: EmojiPuzzle[] = [
   { id: 'c-celtic', emoji: '🍀🟢⚪', answer: 'Celtic', aliases: ['Celtic FC', 'Glasgow Celtic'], category: 'club', difficulty: 'medium', hint: 'The Hoops of Glasgow’s east end.' },
   { id: 'c-inter', emoji: '🐍⚫🔵', answer: 'Inter Milan', aliases: ['Inter', 'Internazionale'], category: 'club', difficulty: 'medium', hint: 'The Biscione serpent coils on their crest.' },
 
-  // ---------------- Clubs — hard ----------------
+  // ---------------- Clubs, hard ----------------
   { id: 'c-valencia', emoji: '🦇🟠🇪🇸', answer: 'Valencia CF', aliases: ['Valencia'], category: 'club', difficulty: 'hard', hint: 'A bat spreads its wings over the badge.' },
   { id: 'c-atletico', emoji: '🔴⚪🐻🌳', answer: 'Atlético Madrid', aliases: ['Atletico', 'Atletico Madrid', 'Atleti'], category: 'club', difficulty: 'hard', hint: 'A bear and a strawberry tree, borrowed from the city’s coat of arms.' },
   { id: 'c-napoli', emoji: '🇮🇹🌋💙', answer: 'Napoli', aliases: ['SSC Napoli'], category: 'club', difficulty: 'hard', hint: 'Maradona’s adopted city, under the volcano.' },

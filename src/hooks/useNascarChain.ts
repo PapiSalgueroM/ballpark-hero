@@ -123,7 +123,7 @@ export function useNascarChain() {
       // FAIL CLOSED: a network failure is not a wrong answer — don't accept
       // an unverified guess (that farms score) and don't end the game.
       // Leave the chain untouched and ask the player to retry.
-      toast.error("Couldn't verify that guess right now — please try again.");
+      toast.error("Couldn't verify that guess right now, please try again.");
     } finally {
       setValidating(false);
     }

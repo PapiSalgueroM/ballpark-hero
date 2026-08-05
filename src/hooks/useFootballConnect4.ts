@@ -129,7 +129,7 @@ export function useFootballConnect4() {
   const [unlimitedIsDraw, setUnlimitedIsDraw] = useState(false);
   const [unlimitedUsedPlayers, setUnlimitedUsedPlayers] = useState<Set<string>>(new Set());
 
-  // Active values — daily replays from action log; unlimited uses local state
+  // Active values, daily replays from action log; unlimited uses local state
   const boardConfig = mode === 'daily' ? (dailyBoardConfig ?? FOOTBALL_CONNECT4_BOARDS[0]) : unlimitedBoardConfig;
   const board = mode === 'daily' ? dailyState.board : unlimitedBoard;
   const currentTurn = mode === 'daily' ? dailyState.currentTurn : unlimitedCurrentTurn;

@@ -68,7 +68,7 @@ const MissingEleven = () => {
   const [input, setInput] = useState('');
   const [wrongFlash, setWrongFlash] = useState(false);
   // Hard mode (task #12): no hints, no suggestions, positions hidden until
-  // reveal. Presentation-only — scoring and daily persistence are unchanged.
+  // reveal. Presentation-only, scoring and daily persistence are unchanged.
   const [hard, setHard] = useState(false);
 
   const act = useCallback((a: ElevenAction) => {
@@ -288,7 +288,7 @@ const MissingEleven = () => {
 
         <GameSeoContent
           title="Missing Eleven | DoUKnowBall"
-          description="A verified real Super Bowl starting offense is shown with one name blanked out. Remember who actually started — including the surprise starters history forgot."
+          description="A verified real Super Bowl starting offense is shown with one name blanked out. Remember who actually started, including the surprise starters history forgot."
           howToPlay={[
             'A famous real Super Bowl starting offense is shown with one player blanked',
             'The position is shown — the name is the mystery',

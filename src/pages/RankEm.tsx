@@ -23,7 +23,7 @@ import {
 /**
  * Rank 'Em (backlog: Order the List / Factle). Put five players in order by a
  * career stat, most to fewest. One submission; score = exact-position matches.
- * Deterministic ranking from verified DB totals — no answer-check backend.
+ * Deterministic ranking from verified DB totals, no answer-check backend.
  * Daily persistence via useDailyPuzzle's action log (sentinel pattern, same as
  * Missing Five/Nine/Eleven).
  */
@@ -107,13 +107,13 @@ const RankEm = () => {
     <>
       <PageSeo
         title="Rank 'Em - Put the Players in Order | DoUKnowBall"
-        description="Put five players in the correct order by a career stat, most to fewest. A new daily ranking across the NBA, NHL and MLB — every number verified."
+        description="Put five players in the correct order by a career stat, most to fewest. A new daily ranking across the NBA, NHL and MLB, every number verified."
         path="/rank-em"
       />
       <GameShell
         width="narrow"
         title="📊 RANK 'EM"
-        subtitle="Put five players in order by the stat — most to fewest."
+        subtitle="Put five players in order by the stat, most to fewest."
         headerExtra={
           <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
             {(['daily', 'unlimited'] as const).map((m) => (
@@ -171,7 +171,7 @@ const RankEm = () => {
             {/* Pool */}
             {!over && (
               <div className="max-w-md mx-auto">
-                <p className="text-xs text-muted-foreground text-center mb-2">Tap in order — highest first:</p>
+                <p className="text-xs text-muted-foreground text-center mb-2">Tap in order, highest first:</p>
                 <div className="flex flex-wrap justify-center gap-2">
                   {remaining.map((name) => (
                     <button
@@ -203,7 +203,7 @@ const RankEm = () => {
                   statLine={<>{round.sport} · {round.statLabel}</>}
                   funFact={<>💡 Correct order: {round.items.map((it) => it.name).join(' › ')}</>}
                   statRow={[{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{score}</span> }]}
-                  emojiGrid={`📊 Rank 'Em — ${round.sport} ${round.statLabel}: ${correctCount}/5`}
+                  emojiGrid={`📊 Rank 'Em, ${round.sport} ${round.statLabel}: ${correctCount}/5`}
                   share={{
                     score: `${correctCount}/5 on today's Rank 'Em`,
                     gameName: "Rank 'Em",
@@ -220,18 +220,18 @@ const RankEm = () => {
 
         <GameSeoContent
           title="Rank 'Em | DoUKnowBall"
-          description="A stat is named and you get five players near the top of it. Put them in the exact order, most to fewest. Every ranking is real career totals from the database — no opinions, one right answer."
+          description="A stat is named and you get five players near the top of it. Put them in the exact order, most to fewest. Every ranking is real career totals from the database, no opinions, one right answer."
           howToPlay={[
             'A career stat is named, with five players who rank near the top of it',
-            'Tap the players in order — highest first, down to fifth',
+            'Tap the players in order, highest first, down to fifth',
             'You get one submission per day',
             'Your score is how many you place in the exact right spot (200 each, 1000 for a perfect 5/5)',
             'Every ranking is exact career totals from the database',
           ]}
           examples={[
-            'Career points: is it Kobe or Dirk on top — and where does Iverson land?',
+            'Career points: is it Kobe or Dirk on top, and where does Iverson land?',
             'NHL goals: Ovechkin passed Gretzky, but who comes third?',
-            'Career home runs: Bonds, Aaron, Ruth, Pujols, Mays — in what order?',
+            'Career home runs: Bonds, Aaron, Ruth, Pujols, Mays, in what order?',
           ]}
         />
 

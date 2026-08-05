@@ -139,7 +139,7 @@ export function JeopardyBoard() {
               </button>
             </form>
             <p className="mt-3 text-center text-[11px] text-muted-foreground">
-              Wrong answers cost you ${openTile.clue.value}. Skipping is free — close this to leave it.
+              Wrong answers cost you ${openTile.clue.value}. Skipping is free, close this to leave it.
             </p>
           </div>
         </div>

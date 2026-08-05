@@ -86,8 +86,7 @@ export async function fetchClubSquad(club: string): Promise<Player[]> {
 /**
  * The transfer market: everyone NOT at this club.
  *
- * Filtered to >= 4m because ~40% of player_market_values sits at exactly 1m —
- * that's a floor, not a valuation, and a market full of identical "€1M" players
+ * Filtered to >= 4m because ~40% of player_market_values sits at exactly 1m, * that's a floor, not a valuation, and a market full of identical "€1M" players
  * would make signing meaningless. See PAPER-trajectory-data-findings.md.
  */
 export async function fetchMarket(excludeClub: string): Promise<Player[]> {

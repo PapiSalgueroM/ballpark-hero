@@ -157,7 +157,7 @@ export function useTierList(): TierListState {
       const names = players.filter(p => placements[p.name] === t).map(p => p.name);
       return names.length > 0 ? `${t}: ${names.join(', ')}` : null;
     }).filter(Boolean);
-    return `Tier List — ${today}\n${byTier.join('\n')}\ndouknowball.com/tier-list`;
+    return `Tier List, ${today}\n${byTier.join('\n')}\ndouknowball.com/tier-list`;
   }, [submitted, players, placements, today]);
 
   return {

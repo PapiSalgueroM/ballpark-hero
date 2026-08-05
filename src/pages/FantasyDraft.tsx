@@ -16,6 +16,7 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import { ruleForCriteria, pickIsLegal, anyLegalPick } from '@/lib/fantasyCriteria';
 
 const TEAM_SIZE = 11;
 const TOTAL_PICKS = TEAM_SIZE * 2;
@@ -69,6 +70,12 @@ const FantasyDraft = () => {
   const currentTurn = draftComplete ? 'user' : getPickOwner(pickIndex, userFirst);
   const seasonSimulated = teamAStory !== null && teamBStory !== null;
 
+  // Owner 2026-08-05: the daily criteria is a real rule, not decoration.
+  // Illegal picks are blocked for BOTH the player and the AI. If a side has
+  // no legal pick left (pool exhaustion), the rule relaxes for that pick so
+  // the draft can always finish.
+  const rule = ruleForCriteria(criteria);
+
   // Fetch daily criteria
   useEffect(() => {
     const fetchCriteria = async () => {
@@ -88,7 +95,7 @@ const FantasyDraft = () => {
       setLoadingPlayers(true);
       const { data } = await supabase
         .from('fantasy_draft_players')
-        .select('id, name, position, nationality, market_value_millions, dominant_foot')
+        .select('id, name, position, nationality, market_value_millions, dominant_foot, age' as any)
         .order('name');
       if (data) setPlayers(data as DraftPlayer[]);
       setLoadingPlayers(false);
@@ -107,20 +114,46 @@ const FantasyDraft = () => {
 
   const handleUserPick = useCallback((player: DraftPlayer) => {
     if (currentTurn !== 'user' || draftComplete) return;
+    const mustFollowRule = anyLegalPick(rule, userTeam, players, draftedIds);
+    if (mustFollowRule && !pickIsLegal(rule, userTeam, player)) {
+      toast({
+        title: 'Blocked by today\'s rule',
+        description: rule?.blockedReason ?? 'That pick breaks today\'s criteria.',
+        variant: 'destructive',
+      });
+      return;
+    }
     draftPlayer(player, 'user');
-  }, [currentTurn, draftComplete, draftPlayer]);
+  }, [currentTurn, draftComplete, draftPlayer, rule, userTeam, players, draftedIds, toast]);
 
-  // AI auto-pick
+  // AI auto-pick: obeys the criteria like the player does, and drafts with
+  // intent (leans toward the priciest legal options with a little chaos)
+  // instead of picking blind out of a hat.
   useEffect(() => {
     if (draftComplete || currentTurn !== 'ai' || players.length === 0) return;
     aiTimerRef.current = window.setTimeout(() => {
       const available = players.filter((p) => !draftedIds.has(p.id));
       if (available.length === 0) return;
-      const pick = available[Math.floor(Math.random() * available.length)];
+      const legal = available.filter((p) => pickIsLegal(rule, aiTeam, p));
+      const pool = legal.length > 0 ? legal : available;
+      // Needs a keeper by the end: if the AI has no GK and keepers are
+      // getting scarce, grab one now.
+      const aiHasGk = aiTeam.some((p) => p.position === 'GK');
+      const gksLeft = pool.filter((p) => p.position === 'GK');
+      const slotsLeft = TEAM_SIZE - aiTeam.length;
+      let candidates = pool;
+      if (!aiHasGk && gksLeft.length > 0 && (gksLeft.length <= 2 || slotsLeft <= 2)) {
+        candidates = gksLeft;
+      }
+      const sorted = [...candidates].sort(
+        (a, b) => (b.market_value_millions || 0) - (a.market_value_millions || 0),
+      );
+      const topN = sorted.slice(0, Math.min(6, sorted.length));
+      const pick = topN[Math.floor(Math.random() * topN.length)];
       draftPlayer(pick, 'ai');
     }, 2000);
     return () => { if (aiTimerRef.current) clearTimeout(aiTimerRef.current); };
-  }, [currentTurn, draftComplete, players, draftedIds, draftPlayer]);
+  }, [currentTurn, draftComplete, players, draftedIds, draftPlayer, rule, aiTeam]);
 
   // Simulate season
   const handleSimulate = async () => {
@@ -266,6 +299,9 @@ const FantasyDraft = () => {
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card/60 border border-border">
                     <Target className="w-3.5 h-3.5 text-primary" />
                     <span className="text-xs font-semibold text-muted-foreground">{criteria}</span>
+                    {rule && (
+                      <span className="text-[10px] font-bold uppercase tracking-wide text-primary">Enforced</span>
+                    )}
                   </div>
                 )}
 
@@ -291,6 +327,12 @@ const FantasyDraft = () => {
                             draftedIds={draftedIds}
                             onSelect={handleUserPick}
                             disabled={currentTurn !== 'user' || draftComplete}
+                            isEligible={
+                              rule && anyLegalPick(rule, userTeam, players, draftedIds)
+                                ? (p) => pickIsLegal(rule, userTeam, p)
+                                : undefined
+                            }
+                            ineligibleReason={rule?.blockedReason}
                           />
                         </div>
                       )}

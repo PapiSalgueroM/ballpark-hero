@@ -1,3 +1,4 @@
+import { foldSpecialLatin } from '@/lib/nameFold';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
 /**
@@ -13,14 +14,14 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
  * and cross-verified against the Wikipedia article's "Starting lineups"
  * table for the same game. Both sources matched 22/22 on offense for SB LI.
  *
- * THE TRAPS ARE THE POINT — double-confirmed, do NOT "fix" them:
+ * THE TRAPS ARE THE POINT, double-confirmed, do NOT "fix" them:
  *   - SB LI Patriots: Dion LEWIS started at RB. LeGarrette Blount and James
  *     White (three TDs incl. the OT winner) came off the bench. Rookie
  *     Malcolm MITCHELL started at WR ahead of Danny Amendola.
- *   - SB LI Falcons: Levine TOILOLO started at TE — Austin Hooper, who
+ *   - SB LI Falcons: Levine TOILOLO started at TE, Austin Hooper, who
  *     caught a touchdown, was not the starter.
  *
- * Guess checking is LOCAL (normalized compare against blankCandidates) — no
+ * Guess checking is LOCAL (normalized compare against blankCandidates), no
  * database dependency. Suggestions come from the union of names in this file.
  */
 
@@ -52,7 +53,7 @@ export interface ElevenLineup {
   opponent: string;
   scoreLine: string;
   venue: string;
-  /** Exactly 11 slots — the starting offense in pfr's listed order. */
+  /** Exactly 11 slots, the starting offense in pfr's listed order. */
   slots: ElevenSlot[];
   blankCandidates: ElevenBlankCandidate[];
   /** INTERNAL editor note on what was checked. Never rendered. */
@@ -94,11 +95,11 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       S('RT', 'Marcus Cannon'),
     ],
     blankCandidates: [
-      { name: 'Dion Lewis', slotIndex: 1, nationality: 'USA', fact: 'Started at running back in the 28-3 comeback — James White, who scored the overtime winner, came off the bench.' },
+      { name: 'Dion Lewis', slotIndex: 1, nationality: 'USA', fact: 'Started at running back in the 28-3 comeback, James White, who scored the overtime winner, came off the bench.' },
       { name: 'Malcolm Mitchell', slotIndex: 2, nationality: 'USA', fact: 'The rookie wideout started ahead of Danny Amendola.' },
       { name: 'Martellus Bennett', slotIndex: 5, nationality: 'USA', fact: 'Started at tight end with Gronkowski out injured for the Super Bowl run.' },
     ],
-    source: 'pfr box 201702050atl #vis_starters (Chrome-rendered DOM) + Wikipedia "Super Bowl LI" Starting lineups table — 11/11 match.',
+    source: 'pfr box 201702050atl #vis_starters (Chrome-rendered DOM) + Wikipedia "Super Bowl LI" Starting lineups table, 11/11 match.',
   },
 
   // 2. Super Bowl LI — Atlanta Falcons (the 28-3 offense)
@@ -126,11 +127,11 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       S('RT', 'Ryan Schraeder'),
     ],
     blankCandidates: [
-      { name: 'Levine Toilolo', slotIndex: 5, nationality: 'USA', fact: 'Started at tight end — Austin Hooper, who caught a touchdown that night, came off the bench.' },
-      { name: 'Patrick DiMarco', slotIndex: 2, nationality: 'USA', fact: 'A fullback starting a Super Bowl — the MVP-season Falcons ran a two-back look.' },
+      { name: 'Levine Toilolo', slotIndex: 5, nationality: 'USA', fact: 'Started at tight end, Austin Hooper, who caught a touchdown that night, came off the bench.' },
+      { name: 'Patrick DiMarco', slotIndex: 2, nationality: 'USA', fact: 'A fullback starting a Super Bowl, the MVP-season Falcons ran a two-back look.' },
       { name: 'Mohamed Sanu', slotIndex: 4, nationality: 'USA', fact: 'Started opposite Julio Jones; Taylor Gabriel was the third receiver off the bench.' },
     ],
-    source: 'pfr box 201702050atl #home_starters (Chrome-rendered DOM) + Wikipedia "Super Bowl LI" Starting lineups table — 11/11 match.',
+    source: 'pfr box 201702050atl #home_starters (Chrome-rendered DOM) + Wikipedia "Super Bowl LI" Starting lineups table, 11/11 match.',
   },
   // 3. Super Bowl XLIX — New England Patriots (the Malcolm Butler game)
   // Verified 2026-07-22: pfr 201502010sea #vis_starters + Wikipedia "Super
@@ -159,10 +160,10 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     blankCandidates: [
       { name: 'Shane Vereen', slotIndex: 1, nationality: 'USA', fact: 'Started at running back over LeGarrette Blount in the Malcolm Butler game.' },
-      { name: 'Michael Hoomanawanui', slotIndex: 5, nationality: 'USA', fact: 'The second tight end in the opening two-TE look — the surname nobody can spell.' },
+      { name: 'Michael Hoomanawanui', slotIndex: 5, nationality: 'USA', fact: 'The second tight end in the opening two-TE look, the surname nobody can spell.' },
       { name: 'Brandon LaFell', slotIndex: 2, nationality: 'USA', fact: 'The forgotten starter of the receiving corps alongside Edelman and Gronkowski.' },
     ],
-    source: 'pfr box 201502010sea #vis_starters (Chrome DOM) + Wikipedia SB XLIX Starting lineups — 11/11 match.',
+    source: 'pfr box 201502010sea #vis_starters (Chrome DOM) + Wikipedia SB XLIX Starting lineups, 11/11 match.',
   },
 
   // 4. Super Bowl XLIX — Seattle Seahawks (the goal-line interception)
@@ -189,11 +190,11 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       S('RT', 'Justin Britt'),
     ],
     blankCandidates: [
-      { name: 'Ricardo Lockette', slotIndex: 4, nationality: 'USA', fact: 'Started at receiver — and was the intended target on the goal-line interception that decided it.' },
+      { name: 'Ricardo Lockette', slotIndex: 4, nationality: 'USA', fact: 'Started at receiver, and was the intended target on the goal-line interception that decided it.' },
       { name: 'Jermaine Kearse', slotIndex: 3, nationality: 'USA', fact: 'His juggling catch put Seattle at the goal line moments before the interception.' },
       { name: 'Luke Willson', slotIndex: 5, nationality: 'Canada', fact: 'The Canadian tight end from LaSalle, Ontario started with Seattle one yard from a repeat.' },
     ],
-    source: 'pfr box 201502010sea #home_starters (Chrome DOM) + Wikipedia SB XLIX Starting lineups — 11/11 match.',
+    source: 'pfr box 201502010sea #home_starters (Chrome DOM) + Wikipedia SB XLIX Starting lineups, 11/11 match.',
   },
 
   // 5. Super Bowl XLII — New England Patriots (18-1)
@@ -224,14 +225,14 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     blankCandidates: [
       { name: 'Laurence Maroney', slotIndex: 1, nationality: 'USA', fact: 'Started at running back for the 18-0 Patriots on the night the perfect season died.' },
-      { name: 'Kyle Brady', slotIndex: 5, nationality: 'USA', fact: 'The OTHER Brady — the blocking tight end in the two-TE set.' },
+      { name: 'Kyle Brady', slotIndex: 5, nationality: 'USA', fact: 'The OTHER Brady, the blocking tight end in the two-TE set.' },
       { name: 'Benjamin Watson', slotIndex: 4, nationality: 'USA', fact: 'Started at tight end for the record-setting 2007 offense.' },
     ],
-    source: 'pfr box 200802030nwe #home_starters (Chrome DOM) + Wikipedia SB XLII Starting lineups — 11/11 match. Giants side dropped: sources disagree on the 11th starter.',
+    source: 'pfr box 200802030nwe #home_starters (Chrome DOM) + Wikipedia SB XLII Starting lineups, 11/11 match. Giants side dropped: sources disagree on the 11th starter.',
   },
 
   // 6. Super Bowl 50 — Denver Broncos (Peyton's last ride)
-  // NOTE: the Panthers lineup is NOT shipped — pfr lists a 6-OL jumbo look
+  // NOTE: the Panthers lineup is NOT shipped, pfr lists a 6-OL jumbo look
   // (Funchess + Daryl Williams) while Wikipedia lists 3 WR (Ginn + Brown);
   // only 9/11 agree. The Broncos side matched 11/11.
   {
@@ -261,10 +262,10 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Owen Daniels', slotIndex: 4, nationality: 'USA', fact: 'The veteran tight end started in the last game of the Manning era.' },
       { name: 'Vernon Davis', slotIndex: 5, nationality: 'USA', fact: "The former 49er started as the second tight end in Peyton's final game." },
     ],
-    source: 'pfr box 201602070den #home_starters (Chrome DOM) + Wikipedia Super Bowl 50 Starting lineups — 11/11 match. Panthers side dropped: sources disagree on the receiver slots.',
+    source: 'pfr box 201602070den #home_starters (Chrome DOM) + Wikipedia Super Bowl 50 Starting lineups, 11/11 match. Panthers side dropped: sources disagree on the receiver slots.',
   },
 
-  // 7. Super Bowl LVII — Kansas City Chiefs (the Kelce Bowl)
+  // 7. Super Bowl LVII, Kansas City Chiefs (the Kelce Bowl)
   {
     id: 'sb-lvii-kc',
     dateLabel: 'Super Bowl LVII',
@@ -289,13 +290,13 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     blankCandidates: [
       { name: 'Isiah Pacheco', slotIndex: 1, nationality: 'USA', fact: 'The seventh-round rookie started at running back and ran for a touchdown.' },
-      { name: 'Noah Gray', slotIndex: 5, nationality: 'USA', fact: 'The second tight end behind Travis Kelce — the starter nobody remembers.' },
+      { name: 'Noah Gray', slotIndex: 5, nationality: 'USA', fact: 'The second tight end behind Travis Kelce, the starter nobody remembers.' },
       { name: 'JuJu Smith-Schuster', slotIndex: 3, nationality: 'USA', fact: 'Started at receiver in his single season as a Chief.' },
     ],
-    source: 'pfr box 202302120phi #vis_starters (Chrome DOM) + Wikipedia SB LVII Starting lineups — 11/11 match (wiki resolves pfr\'s generic OL labels).',
+    source: 'pfr box 202302120phi #vis_starters (Chrome DOM) + Wikipedia SB LVII Starting lineups, 11/11 match (wiki resolves pfr\'s generic OL labels).',
   },
 
-  // 8. Super Bowl LVII — Philadelphia Eagles
+  // 8. Super Bowl LVII, Philadelphia Eagles
   {
     id: 'sb-lvii-phi',
     dateLabel: 'Super Bowl LVII',
@@ -320,14 +321,14 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     blankCandidates: [
       { name: 'Quez Watkins', slotIndex: 4, nationality: 'USA', fact: 'The forgotten third receiver next to A.J. Brown and DeVonta Smith.' },
-      { name: 'Jason Kelce', slotIndex: 8, nationality: 'USA', fact: 'Faced his brother Travis — the first brothers ever to play each other in a Super Bowl.' },
+      { name: 'Jason Kelce', slotIndex: 8, nationality: 'USA', fact: 'Faced his brother Travis, the first brothers ever to play each other in a Super Bowl.' },
       { name: 'Jordan Mailata', slotIndex: 6, nationality: 'Australia', fact: 'The Australian former rugby league player started at left tackle.' },
     ],
-    source: 'pfr box 202302120phi #home_starters (Chrome DOM) + Wikipedia SB LVII Starting lineups — 11/11 match.',
+    source: 'pfr box 202302120phi #home_starters (Chrome DOM) + Wikipedia SB LVII Starting lineups, 11/11 match.',
   },
-  // 9. Super Bowl XLV — Pittsburgh Steelers (the jumbo look)
+  // 9. Super Bowl XLV, Pittsburgh Steelers (the jumbo look)
   // Verified 2026-07-22: pfr 201102060pit #vis_starters + Wikipedia "Super
-  // Bowl XLV" Starting lineups — 11/11 match (1 WR, 2 TE, FB).
+  // Bowl XLV" Starting lineups, 11/11 match (1 WR, 2 TE, FB).
   {
     id: 'sb-xlv-pit',
     dateLabel: 'Super Bowl XLV',
@@ -352,13 +353,13 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     blankCandidates: [
       { name: 'Doug Legursky', slotIndex: 8, nationality: 'USA', fact: 'Started at center with All-Rookie Maurkice Pouncey out injured.' },
-      { name: 'Rashard Mendenhall', slotIndex: 1, nationality: 'USA', fact: 'Started at running back — his fourth-quarter fumble swung the game.' },
-      { name: 'David Johnson', slotIndex: 2, nationality: 'USA', fact: 'Not THAT David Johnson — the Steelers fullback in the jumbo opening look.' },
+      { name: 'Rashard Mendenhall', slotIndex: 1, nationality: 'USA', fact: 'Started at running back, his fourth-quarter fumble swung the game.' },
+      { name: 'David Johnson', slotIndex: 2, nationality: 'USA', fact: 'Not THAT David Johnson, the Steelers fullback in the jumbo opening look.' },
     ],
-    source: 'pfr box 201102060pit #vis_starters (Chrome DOM) + Wikipedia SB XLV Starting lineups — 11/11 match. Only one WR started; Brown/Wallace off the bench.',
+    source: 'pfr box 201102060pit #vis_starters (Chrome DOM) + Wikipedia SB XLV Starting lineups, 11/11 match. Only one WR started; Brown/Wallace off the bench.',
   },
 
-  // 10. Super Bowl XLV — Green Bay Packers (four wide, no tight end)
+  // 10. Super Bowl XLV, Green Bay Packers (four wide, no tight end)
   {
     id: 'sb-xlv-gb',
     dateLabel: 'Super Bowl XLV',
@@ -386,12 +387,12 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Jordy Nelson', slotIndex: 5, nationality: 'USA', fact: 'One of FOUR wide receivers in the no-tight-end opening look.' },
       { name: 'James Jones', slotIndex: 4, nationality: 'USA', fact: 'The third of four wideouts Rodgers threw to all night.' },
     ],
-    source: 'pfr box 201102060pit #home_starters (Chrome DOM) + Wikipedia SB XLV Starting lineups — 11/11 match. Four-WR set, no TE started.',
+    source: 'pfr box 201102060pit #home_starters (Chrome DOM) + Wikipedia SB XLV Starting lineups, 11/11 match. Four-WR set, no TE started.',
   },
 
-  // 11. Super Bowl LIV — San Francisco 49ers (the fourth-quarter collapse)
+  // 11. Super Bowl LIV, San Francisco 49ers (the fourth-quarter collapse)
   // Verified 2026-07-22: pfr 202002020kan #vis_starters + Wikipedia "Super
-  // Bowl LIV" Starting lineups — 11/11 match (wiki resolves pfr's OL labels).
+  // Bowl LIV" Starting lineups, 11/11 match (wiki resolves pfr's OL labels).
   {
     id: 'sb-liv-sf',
     dateLabel: 'Super Bowl LIV',
@@ -419,10 +420,10 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Ben Garland', slotIndex: 8, nationality: 'USA', fact: 'Started at center with Weston Richburg out for the season.' },
       { name: 'Tevin Coleman', slotIndex: 1, nationality: 'USA', fact: 'Started at running back over Raheem Mostert, who had run for 220 yards in the NFC Championship.' },
     ],
-    source: 'pfr box 202002020kan #vis_starters (Chrome DOM) + Wikipedia "Super Bowl LIV" Starting lineups table — 11/11 match (wiki resolves pfr generic OL labels).',
+    source: 'pfr box 202002020kan #vis_starters (Chrome DOM) + Wikipedia "Super Bowl LIV" Starting lineups table, 11/11 match (wiki resolves pfr generic OL labels).',
   },
 
-  // 12. Super Bowl LIV — Kansas City Chiefs (Mahomes\' comeback)
+  // 12. Super Bowl LIV, Kansas City Chiefs (Mahomes\' comeback)
   {
     id: 'sb-liv-kc',
     dateLabel: 'Super Bowl LIV',
@@ -450,12 +451,12 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Laurent Duvernay-Tardif', slotIndex: 9, nationality: 'Canada', fact: 'The starting right guard also holds a medical degree from McGill.' },
       { name: 'Mecole Hardman', slotIndex: 4, nationality: 'USA', fact: 'The rookie second-round pick started as the third receiver next to Tyreek Hill and Sammy Watkins.' },
     ],
-    source: 'pfr box 202002020kan #home_starters (Chrome DOM) + Wikipedia "Super Bowl LIV" Starting lineups table — 11/11 match.',
+    source: 'pfr box 202002020kan #home_starters (Chrome DOM) + Wikipedia "Super Bowl LIV" Starting lineups table, 11/11 match.',
   },
 
-  // 13. Super Bowl LII — Philadelphia Eagles (the Philly Special)
+  // 13. Super Bowl LII, Philadelphia Eagles (the Philly Special)
   // Verified 2026-07-22: pfr 201802040nwe #vis_starters + Wikipedia "Super
-  // Bowl LII" Starting lineups — 11/11 match (pfr listed explicit OL labels).
+  // Bowl LII" Starting lineups, 11/11 match (pfr listed explicit OL labels).
   {
     id: 'sb-lii-phi',
     dateLabel: 'Super Bowl LII',
@@ -483,10 +484,10 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'LeGarrette Blount', slotIndex: 1, nationality: 'USA', fact: 'Started at running back a year after winning Super Bowl LI with the Patriots he was now beating.' },
       { name: 'Torrey Smith', slotIndex: 3, nationality: 'USA', fact: 'The third receiver alongside Alshon Jeffery and Nelson Agholor.' },
     ],
-    source: 'pfr box 201802040nwe #vis_starters (Chrome DOM) + Wikipedia "Super Bowl LII" Starting lineups table — 11/11 match.',
+    source: 'pfr box 201802040nwe #vis_starters (Chrome DOM) + Wikipedia "Super Bowl LII" Starting lineups table, 11/11 match.',
   },
 
-  // 14. Super Bowl LII — New England Patriots (613 yards and a loss)
+  // 14. Super Bowl LII, New England Patriots (613 yards and a loss)
   {
     id: 'sb-lii-ne',
     dateLabel: 'Super Bowl LII',
@@ -510,16 +511,16 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       S('RT', 'Cameron Fleming'),
     ],
     blankCandidates: [
-      { name: 'Cameron Fleming', slotIndex: 10, nationality: 'USA', fact: 'Started at right tackle in the highest-scoring Super Bowl ever — 74 combined points.' },
-      { name: 'Dion Lewis', slotIndex: 1, nationality: 'USA', fact: 'Started at running back as the Patriots piled up a Super Bowl-record 613 yards — and lost.' },
+      { name: 'Cameron Fleming', slotIndex: 10, nationality: 'USA', fact: 'Started at right tackle in the highest-scoring Super Bowl ever, 74 combined points.' },
+      { name: 'Dion Lewis', slotIndex: 1, nationality: 'USA', fact: 'Started at running back as the Patriots piled up a Super Bowl-record 613 yards, and lost.' },
       { name: 'James Develin', slotIndex: 2, nationality: 'USA', fact: 'The fullback in New England\'s two-back opening set.' },
     ],
-    source: 'pfr box 201802040nwe #home_starters (Chrome DOM) + Wikipedia "Super Bowl LII" Starting lineups table — 11/11 match.',
+    source: 'pfr box 201802040nwe #home_starters (Chrome DOM) + Wikipedia "Super Bowl LII" Starting lineups table, 11/11 match.',
   },
 ];
 
 // ---------------------------------------------------------------------------
-// Puzzle selection — daily (ET-seeded, sitewide convention) + unlimited.
+// Puzzle selection, daily (ET-seeded, sitewide convention) + unlimited.
 // ---------------------------------------------------------------------------
 
 export function getDailyElevenPuzzle(): ActiveElevenPuzzle {
@@ -542,7 +543,7 @@ export const ALL_ELEVEN_NAMES: string[] = Array.from(
 
 const DIACRITICS = new RegExp('[' + String.fromCharCode(0x0300) + '-' + String.fromCharCode(0x036f) + ']', 'g');
 export function normalizeElevenName(name: string): string {
-  return name.normalize('NFD').replace(DIACRITICS, '').toLowerCase().trim().replace(/\s+/g, ' ').replace(/\./g, '').replace(/'/g, '');
+  return foldSpecialLatin(name.normalize('NFD').replace(DIACRITICS, '').toLowerCase().trim().replace(/\s+/g, ' ').replace(/\./g, '').replace(/'/g, ''));
 }
 
 /** A guess is correct if it matches the blanked candidate (full name or surname). */

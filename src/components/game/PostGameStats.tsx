@@ -8,11 +8,11 @@ interface PostGameStatsProps {
 }
 
 const BUCKETS = [
-  { label: '900–1000', min: 900, max: 1000 },
-  { label: '700–899', min: 700, max: 899 },
-  { label: '500–699', min: 500, max: 699 },
-  { label: '300–499', min: 300, max: 499 },
-  { label: '0–299', min: 0, max: 299 },
+  { label: '900-1000', min: 900, max: 1000 },
+  { label: '700-899', min: 700, max: 899 },
+  { label: '500-699', min: 500, max: 699 },
+  { label: '300-499', min: 300, max: 499 },
+  { label: '0-299', min: 0, max: 299 },
 ];
 
 const PostGameStats = ({ gameSlug, userScore, isVisible }: PostGameStatsProps) => {

@@ -68,7 +68,7 @@ const MissingFive = () => {
   const [input, setInput] = useState('');
   const [wrongFlash, setWrongFlash] = useState(false);
   // Hard mode (task #12): no hints, no suggestions, positions hidden until
-  // reveal. Presentation-only — scoring and daily persistence are unchanged.
+  // reveal. Presentation-only, scoring and daily persistence are unchanged.
   const [hard, setHard] = useState(false);
 
   const act = useCallback((a: FiveAction) => {
@@ -279,7 +279,7 @@ const MissingFive = () => {
 
         <GameSeoContent
           title="Missing Five | DoUKnowBall"
-          description="A verified real NBA starting five is shown with one name blanked out. Remember who actually started — including the surprise starters history forgot."
+          description="A verified real NBA starting five is shown with one name blanked out. Remember who actually started, including the surprise starters history forgot."
           howToPlay={[
             'A famous real NBA starting five is shown with one player blanked',
             'The position is shown — the name is the mystery',

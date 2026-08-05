@@ -208,7 +208,7 @@ export function GradeTransferBoard() {
       </div>
 
       <p className="mt-4 text-center text-[11px] text-muted-foreground">
-        Grades are relative to other moves at the same price — an A means it beat comparable transfers,
+        Grades are relative to other moves at the same price, an A means it beat comparable transfers,
         not that it was cheap.
       </p>
     </div>

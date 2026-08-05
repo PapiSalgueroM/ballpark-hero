@@ -38,7 +38,7 @@ function lcg(seed: number, i: number): number {
 
 /**
  * Distractors come from the SAME category and value tier, so a question about
- * 1970s Ballon d'Or winners offers other 1970s winners — not a Super Bowl team.
+ * 1970s Ballon d'Or winners offers other 1970s winners, not a Super Bowl team.
  * Wrong options have to be plausible or the test measures nothing.
  */
 function buildQuestion(correct: Clue, pool: Clue[], seed: number): Question {
@@ -171,7 +171,7 @@ export function useBallIq(): BallIqState {
   const shareText = useMemo(() => {
     if (!finished) return '';
     const squares = questions.map(q => (q.chosen === q.clue.answer ? '🟩' : '🟥')).join('');
-    return `Ball Knowledge IQ — ${today}\n${squares}\nIQ ${iq} · ${rank}\ndouknowball.com/ball-iq`;
+    return `Ball Knowledge IQ, ${today}\n${squares}\nIQ ${iq} · ${rank}\ndouknowball.com/ball-iq`;
   }, [finished, questions, iq, rank, today]);
 
   return {

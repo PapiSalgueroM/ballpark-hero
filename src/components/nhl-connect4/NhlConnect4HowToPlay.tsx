@@ -31,17 +31,17 @@ export function NhlConnect4HowToPlay({ open, onOpenChange }: Props) {
           <div className="space-y-2">
             <p className="font-semibold text-primary">How it works</p>
             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-              <li>Two players (red and blue) take turns — pass and play</li>
+              <li>Two players (red and blue) take turns, pass and play</li>
               <li>Pick a column; your piece falls to the lowest empty row</li>
               <li>Name an NHL player who matches BOTH the column and row criteria</li>
-              <li>Valid answers claim the cell. Wrong answers don't cost your turn — try again or skip</li>
+              <li>Valid answers claim the cell. Wrong answers don't cost your turn, try again or skip</li>
               <li>Every player name can only be used once per game</li>
             </ul>
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-primary">Tips</p>
             <p className="text-muted-foreground">
-              Franchise history counts across relocations — Nordiques count as Avalanche, Whalers as Hurricanes, Thrashers as the Jets. Any era is fair game.
+              Franchise history counts across relocations, Nordiques count as Avalanche, Whalers as Hurricanes, Thrashers as the Jets. Any era is fair game.
             </p>
           </div>
         </div>

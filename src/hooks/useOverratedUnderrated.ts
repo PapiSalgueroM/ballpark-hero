@@ -174,7 +174,7 @@ export function useOverratedUnderrated(): OverratedState {
       : contrarianCount >= 4 ? 'free thinker'
       : contrarianCount >= 2 ? 'mostly with the crowd'
       : 'one of the sheep';
-    return `Overrated or Underrated — ${today}\n${squares}\nWent against the crowd ${contrarianCount}/${ROUNDS} — ${label}\ndouknowball.com/overrated-underrated`;
+    return `Overrated or Underrated, ${today}\n${squares}\nWent against the crowd ${contrarianCount}/${ROUNDS}, ${label}\ndouknowball.com/overrated-underrated`;
   }, [finished, rounds, contrarianCount, today]);
 
   return { loading, rounds, index, current, status, contrarianCount, vote, next, shareText };

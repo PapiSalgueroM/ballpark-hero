@@ -1,3 +1,4 @@
+import { foldSpecialLatin } from '@/lib/nameFold';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface ListPuzzleDef {
@@ -19,8 +20,7 @@ export interface ListAnswer {
 
 /** Normalize for matching: lowercase, strip accents and punctuation, collapse spaces. */
 export function normalize(s: string): string {
-  return s
-    .toLowerCase()
+  return foldSpecialLatin(s.toLowerCase())
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .replace(/[^a-z0-9 ]+/g, ' ')
@@ -93,7 +93,7 @@ async function col(table: string, column: string, filter?: (q: any) => any): Pro
  *
  * Several source tables have their columns shifted one across, so a "name"
  * column ends up holding a rank ("1st"), a goal count ("48"), a scoreline
- * ("2–0") or a position ("Goalkeeper"). Those are unguessable AND they inflate
+ * ("2-0") or a position ("Goalkeeper"). Those are unguessable AND they inflate
  * the target count, so a puzzle becomes unwinnable. Audit 2026-07-15 found this
  * across ~30 columns; run select * from public.audit_name_columns() to re-check.
  *
@@ -107,8 +107,8 @@ function onlyNames(p: Promise<string[]>): Promise<string[]> {
       if (s.length < 3) return false;                  // "F", "SF", "1Q"
       if (/^[0-9]+$/.test(s)) return false;            // "48", "57"
       if (/^[0-9]+(st|nd|rd|th)$/i.test(s)) return false; // "1st"
-      if (/^[0-9]+\s*[–—-]\s*[0-9]+/.test(s)) return false; // "4–0"
-      if (/^[0-9]{4}(–[0-9]{2,4})?$/.test(s)) return false; // "1959", "1970–71"
+      if (/^[0-9]+\s*[–—-]\s*[0-9]+/.test(s)) return false; // "4-0"
+      if (/^[0-9]{4}(–[0-9]{2,4})?$/.test(s)) return false; // "1959", "1970-71"
       if (/^(goalkeeper|forward|midfielder|defender|striker|winger|guard|center|centre)$/i.test(s)) return false;
       return true;
     }),
@@ -171,7 +171,7 @@ export const OFFLINE_PUZZLE: ListPuzzleDef = {
 
 export const LIST_PUZZLES: ListPuzzleDef[] = [
   // Added 2026-07-15. Each source was verified against the live DB and spot-
-  // checked against real results before being added — see awardWinners() for
+  // checked against real results before being added, see awardWinners() for
   // the awards that were REJECTED as corrupt rather than added.
   {
     id: 'heisman-winners',
@@ -179,7 +179,7 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     blurb: 'Every player to win college football’s biggest individual award.',
     sport: 'CFB', emoji: '🏈', minAnswers: 20,
     // cfb_heisman_winners: 91 rows, 91 distinct years, 1935-2025, exactly one
-    // winner per year. 90 distinct names — Archie Griffin won twice. Verified:
+    // winner per year. 90 distinct names, Archie Griffin won twice. Verified:
     // 2024 Travis Hunter, 2023 Jayden Daniels, 1995 Eddie George, 1975 Griffin.
     fetch: () => col('cfb_heisman_winners', 'winner'),
   },
@@ -269,7 +269,7 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     blurb: 'Every player near the top of the Champions League all-time scoring charts.',
     sport: 'Soccer', emoji: '⚽', minAnswers: 10,
     /**
-     * LIVE BUG FIX 2026-07-15 — this puzzle was serving numbers as answers.
+     * LIVE BUG FIX 2026-07-15, this puzzle was serving numbers as answers.
      *
      * ucl_top_scorers_by_season has THREE different row shapes merged into it,
      * with the columns shifted differently in each (144 rows total):
@@ -277,7 +277,7 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
      *   - 24 rows: season = the real name, player = GOALS  ("48", "57", "30")
      *   - 22 rows: a titles-by-nation table entirely ("Yugoslavia", club =
      *     "1955-56 , 1963-64 , ...")
-     * So the old col(..., 'player') returned 98 names and 46 numbers — 31.9%
+     * So the old col(..., 'player') returned 98 names and 46 numbers, 31.9%
      * of this puzzle's answers were things like "48" and "57", which no player
      * could ever guess and which appeared in the target count.
      *
@@ -301,9 +301,9 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     blurb: 'Every golfer to win the green jacket.',
     sport: 'Golf', emoji: '⛳', minAnswers: 15,
     // onlyNames: golf_majors stores '—' for years the major wasn't played
-    // (1943-45 WWII, and The Open 2020 for COVID) — 25 rows across the four
+    // (1943-45 WWII, and The Open 2020 for COVID), 25 rows across the four
     // tournaments. That's correct source data, but as a puzzle answer it means
-    // "name the golfer: —". Filtered out, not treated as corruption.
+    // "name the golfer: , ". Filtered out, not treated as corruption.
     fetch: () => onlyNames(col('golf_majors', 'player_name', q => q.ilike('tournament', '%masters%'))),
   },
   {

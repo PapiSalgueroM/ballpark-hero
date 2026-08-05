@@ -525,7 +525,7 @@ export const INITIAL_TERRITORIES_NBA: Record<string, string> = {
   MD: 'WAS', DE: 'PHI', WV: 'CLE',
   FL_N: 'ORL', FL_W: 'ORL', FL_S: 'MIA', AL: 'ATL', MS: 'MEM', LA: 'NOP',
   AR: 'MEM', OK: 'OKC',
-  // Texas — three territories, three Texan teams (2026-07-10 map fix)
+  // Texas, three territories, three Texan teams (2026-07-10 map fix)
   TX_N: 'DAL', TX_E: 'HOU', TX_CS: 'SAS',
   // Mountain / Southwest
   CO: 'DEN', UT: 'UTA', AZ: 'PHX', NM: 'PHX', NV: 'SAC', WY: 'DEN',

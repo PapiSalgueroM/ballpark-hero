@@ -124,7 +124,7 @@ export interface DailyPuzzleReturn<T, G> {
 
   /**
    * Today's date string in YYYY-MM-DD (ET), computed once on mount.
-   * Pass this to useGameCompletion as puzzle_date — do not recompute it.
+   * Pass this to useGameCompletion as puzzle_date, do not recompute it.
    * See Known Behavior note in design spec regarding midnight rollover.
    */
   todayStr: string;
@@ -292,7 +292,7 @@ export function useDailyPuzzle<T, G>(
   const loadedForIndex = useRef<number | null>(null);
 
   useEffect(() => {
-    // Already loaded for this puzzle — skip
+    // Already loaded for this puzzle, skip
     if (loadedForIndex.current === puzzleIndex) return;
     loadedForIndex.current = puzzleIndex;
 
@@ -311,7 +311,7 @@ export function useDailyPuzzle<T, G>(
       setGuesses(saved.guesses);
       setGameStatus(saved.gameStatus);
     } else {
-      // No valid saved state — start fresh (also covers supabasePuzzle arriving
+      // No valid saved state, start fresh (also covers supabasePuzzle arriving
       // and changing puzzleIndex mid-session: reset to clean state for new puzzle)
       setGuesses([]);
       setGameStatus('playing');

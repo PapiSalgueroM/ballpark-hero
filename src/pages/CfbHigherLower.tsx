@@ -27,7 +27,7 @@ const CfbHigherLower = () => {
     <>
       <PageSeo
         title="College Football Higher or Lower - Career Passing Yards | DoUKnowBall"
-        description="Which QB threw for more career college yards? Keenum, Tebow, Mahomes, Brady — compare college careers side by side in this daily CFB challenge."
+        description="Which QB threw for more career college yards? Keenum, Tebow, Mahomes, Brady, compare college careers side by side in this daily CFB challenge."
         path="/cfb-higher-lower"
       />
       <GameShell
@@ -96,7 +96,7 @@ const CfbHigherLower = () => {
                 >
                   <span className="text-3xl">🎓</span>
                   <span className="text-lg font-bold text-foreground font-display">{player.name}</span>
-                  <span className="text-xs text-muted-foreground">{player.schools} · {player.firstYear}–{player.lastYear}</span>
+                  <span className="text-xs text-muted-foreground">{player.schools} · {player.firstYear}-{player.lastYear}</span>
 
                   {showingResult ? (
                     <span className="text-2xl font-bold text-gold animate-cell-reveal">
@@ -144,9 +144,9 @@ const CfbHigherLower = () => {
             'Daily challenge (same pairs for everyone) or unlimited random mode',
           ]}
           examples={[
-            'Case Keenum (19,217) — the all-time record nobody expects',
+            'Case Keenum (19,217), the all-time record nobody expects',
             'Tom Brady threw for just 4,773 yards at Michigan',
-            'Mahomes vs Peyton Manning — separated by 51 yards',
+            'Mahomes vs Peyton Manning, separated by 51 yards',
             'Tebow vs Matt Ryan: gators or Eagles-era BC?',
           ]}
         />

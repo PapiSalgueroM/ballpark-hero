@@ -25,7 +25,7 @@ function isValidPuzzle(p: ConnectionsPuzzle): boolean {
  */
 export async function fetchConnectionsPuzzles(): Promise<ConnectionsPuzzle[]> {
   try {
-    // The table is past the API's 1,000-row cap (1,012 rows) — a plain select
+    // The table is past the API's 1,000-row cap (1,012 rows), a plain select
     // silently dropped the hand-crafted puzzles at the tail, so page through.
     const { data, error } = await fetchAllRows<{ puzzle_id: string; groups_json: unknown }>(
       (from, to) =>

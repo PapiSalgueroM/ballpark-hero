@@ -21,8 +21,8 @@ export interface TransferCase {
  * Real club-to-club moves with what actually happened to the player's value
  * three years on, from public.transfer_grade_pool.
  *
- * The grade is band-relative on purpose. The obvious version — "A = tripled in
- * value" — is broken: market values are integer millions capped at 216, so a
+ * The grade is band-relative on purpose. The obvious version, "A = tripled in
+ * value", is broken: market values are integer millions capped at 216, so a
  * EUR 194m player literally cannot triple, and that scheme produced ZERO
  * A-grades above EUR 80m (0 of 54). Every marquee transfer was pre-doomed to
  * C/D/F by arithmetic. The view now grades on percentile within value band, so

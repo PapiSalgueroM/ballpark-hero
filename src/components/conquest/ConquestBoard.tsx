@@ -301,7 +301,7 @@ export default function ConquestBoard() {
   const loseTeam = game.battleResult ? t(game.battleResult.loser) : null;
   const pendingTeam = game.pendingPowerup ? t(game.pendingPowerup.teamId) : null;
 
-  // Battle wins per team (real battles only — neutral/powerup claims don't count).
+  // Battle wins per team (real battles only, neutral/powerup claims don't count).
   // In this elimination game a "loss" removes the team, so wins are the live record.
   const winsByTeam = new Map<string, number>();
   for (const e of game.gameLog) {

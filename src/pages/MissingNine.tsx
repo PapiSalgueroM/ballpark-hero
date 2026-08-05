@@ -68,7 +68,7 @@ const MissingNine = () => {
   const [input, setInput] = useState('');
   const [wrongFlash, setWrongFlash] = useState(false);
   // Hard mode (task #12): no hints, no suggestions, positions hidden until
-  // reveal. Presentation-only — scoring and daily persistence are unchanged.
+  // reveal. Presentation-only, scoring and daily persistence are unchanged.
   const [hard, setHard] = useState(false);
 
   const act = useCallback((a: NineAction) => {
@@ -295,7 +295,7 @@ const MissingNine = () => {
 
         <GameSeoContent
           title="Missing Nine | DoUKnowBall"
-          description="A verified real World Series starting nine is shown in batting order with one name blanked out. Remember who actually started — including the surprise starters history forgot."
+          description="A verified real World Series starting nine is shown in batting order with one name blanked out. Remember who actually started, including the surprise starters history forgot."
           howToPlay={[
             'A famous real World Series batting order is shown with one player blanked',
             'The batting-order spot and position are shown — the name is the mystery',

@@ -1,3 +1,4 @@
+import { foldSpecialLatin } from '@/lib/nameFold';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
 /**
@@ -83,7 +84,7 @@ const PF = (name: string): FiveSlot => ({ position: 'PF', name, x: 70, y: 30 });
 const C  = (name: string): FiveSlot => ({ position: 'C',  name, x: 30, y: 26 });
 
 export const FIVE_LINEUPS: FiveLineup[] = [
-  // 1. 2016 NBA Finals Game 7 — Cleveland Cavaliers (completed the 3-1 comeback)
+  // 1. 2016 NBA Finals Game 7, Cleveland Cavaliers (completed the 3-1 comeback)
   {
     id: 'finals-2016-g7-cle',
     dateLabel: '2016 NBA Finals, Game 7',
@@ -108,7 +109,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     source: 'basketball-reference box score 201606190GSW (Starters table) — Irving/Smith/James/Thompson/Love confirmed.',
   },
 
-  // 2. 2016 NBA Finals Game 7 — Golden State Warriors (the Ezeli trap)
+  // 2. 2016 NBA Finals Game 7, Golden State Warriors (the Ezeli trap)
   {
     id: 'finals-2016-g7-gsw',
     dateLabel: '2016 NBA Finals, Game 7',
@@ -134,7 +135,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     source: 'basketball-reference box score 201606190GSW (Starters table) — Curry/Thompson/Barnes/Green/Ezeli confirmed; Ezeli 10:45 MP as starter.',
   },
 
-  // 3. 1998 NBA Finals Game 6 — Chicago Bulls ("The Last Shot"; the Kukoc trap)
+  // 3. 1998 NBA Finals Game 6, Chicago Bulls ("The Last Shot"; the Kukoc trap)
   {
     id: 'finals-1998-g6-chi',
     dateLabel: '1998 NBA Finals, Game 6',
@@ -180,10 +181,10 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     ],
     blankCandidates: [
       { name: 'Adam Keefe', slotIndex: 4, nationality: 'USA', fact: 'A surprise starter at center on the night of Jordan\'s "Last Shot".' },
-      { name: 'Jeff Hornacek', slotIndex: 1, nationality: 'USA', fact: 'Scored 17 — second on the Jazz behind Malone\'s 31.' },
+      { name: 'Jeff Hornacek', slotIndex: 1, nationality: 'USA', fact: 'Scored 17, second on the Jazz behind Malone\'s 31.' },
       { name: 'Bryon Russell', slotIndex: 2, nationality: 'USA', fact: 'Forever remembered as the defender on Jordan\'s final Bulls shot.' },
     ],
-    source: 'basketball-reference box score 199806140UTA (Starters table) + Wikipedia game article box — Malone/Russell/Hornacek/Stockton/Keefe confirmed.',
+    source: 'basketball-reference box score 199806140UTA (Starters table) + Wikipedia game article box, Malone/Russell/Hornacek/Stockton/Keefe confirmed.',
   },
 
   // 5. 2023 NBA Finals Game 5 — Denver Nuggets (first title in franchise history)
@@ -208,7 +209,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       { name: 'Aaron Gordon', slotIndex: 3, nationality: 'USA' },
       { name: 'Michael Porter Jr.', slotIndex: 2, nationality: 'USA', fact: 'Grabbed 13 rebounds in the title clincher.' },
     ],
-    source: 'basketball-reference box score 202306120DEN (Starters table) — Jokic/Murray/Caldwell-Pope/Porter/Gordon confirmed.',
+    source: 'basketball-reference box score 202306120DEN (Starters table), Jokic/Murray/Caldwell-Pope/Porter/Gordon confirmed.',
   },
 
   // 6. 2023 NBA Finals Game 5 — Miami Heat (the 8-seed finalists)
@@ -230,11 +231,11 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       C('Bam Adebayo'),
     ],
     blankCandidates: [
-      { name: 'Gabe Vincent', slotIndex: 0, nationality: 'Nigeria', fact: 'An undrafted starter in an NBA Finals game — peak Heat culture.' },
+      { name: 'Gabe Vincent', slotIndex: 0, nationality: 'Nigeria', fact: 'An undrafted starter in an NBA Finals game, peak Heat culture.' },
       { name: 'Max Strus', slotIndex: 1, nationality: 'USA', fact: 'Undrafted out of DePaul, starting in the Finals.' },
-      { name: 'Kevin Love', slotIndex: 3, nationality: 'USA', fact: 'Reinserted into the starting lineup mid-series — the documented Spoelstra adjustment.' },
+      { name: 'Kevin Love', slotIndex: 3, nationality: 'USA', fact: 'Reinserted into the starting lineup mid-series, the documented Spoelstra adjustment.' },
     ],
-    source: 'basketball-reference box score 202306120DEN (Starters table) — Adebayo/Butler/Strus/Vincent/Love confirmed.',
+    source: 'basketball-reference box score 202306120DEN (Starters table), Adebayo/Butler/Strus/Vincent/Love confirmed.',
   },
   // 7. 2013 NBA Finals Game 7 — San Antonio Spurs (the Ginobili trap)
   // Verified 2026-07-22: bref box 201306200MIA Starters table (Chrome-rendered)
@@ -258,7 +259,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       C('Tim Duncan'),
     ],
     blankCandidates: [
-      { name: 'Manu Ginobili', slotIndex: 1, nationality: 'Argentina', fact: 'The career sixth man started Game 7 — Popovich moved him into the lineup with Tiago Splitter benched.' },
+      { name: 'Manu Ginobili', slotIndex: 1, nationality: 'Argentina', fact: 'The career sixth man started Game 7, Popovich moved him into the lineup with Tiago Splitter benched.' },
       { name: 'Kawhi Leonard', slotIndex: 3, nationality: 'USA', fact: 'A 21-year-old Leonard started at forward, one year before his Finals MVP.' },
       { name: 'Danny Green', slotIndex: 2, nationality: 'USA', fact: 'Had broken the record for made threes in a single Finals series (27) earlier in the same series.' },
     ],
@@ -284,7 +285,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       C('Chris Bosh'),
     ],
     blankCandidates: [
-      { name: 'Mike Miller', slotIndex: 2, nationality: 'USA', fact: 'Started the title clincher — Ray Allen and Shane Battier both came off the bench that night.' },
+      { name: 'Mike Miller', slotIndex: 2, nationality: 'USA', fact: 'Started the title clincher, Ray Allen and Shane Battier both came off the bench that night.' },
       { name: 'Mario Chalmers', slotIndex: 0, nationality: 'USA', fact: 'The starting point guard on both Heatles championship teams.' },
       { name: 'Chris Bosh', slotIndex: 4, nationality: 'USA' },
     ],
@@ -312,9 +313,9 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       C('Pau Gasol'),
     ],
     blankCandidates: [
-      { name: 'Vladimir Radmanovic', slotIndex: 2, nationality: 'Serbia', fact: 'The forgotten starting small forward of the 2008 Finals — not Luke Walton, not Trevor Ariza.' },
+      { name: 'Vladimir Radmanovic', slotIndex: 2, nationality: 'Serbia', fact: 'The forgotten starting small forward of the 2008 Finals, not Luke Walton, not Trevor Ariza.' },
       { name: 'Lamar Odom', slotIndex: 3, nationality: 'USA' },
-      { name: 'Pau Gasol', slotIndex: 4, nationality: 'Spain', fact: 'Traded to L.A. that February — the Finals rematch two years later ended differently.' },
+      { name: 'Pau Gasol', slotIndex: 4, nationality: 'Spain', fact: 'Traded to L.A. that February, the Finals rematch two years later ended differently.' },
     ],
     source: 'bref box 200806170BOS Starters (Bryant/Odom/Gasol/Fisher/Radmanovic) + NBA.com box 0040700406 starters block; Walton bench in both.',
   },
@@ -337,7 +338,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       C('Kendrick Perkins'),
     ],
     blankCandidates: [
-      { name: 'Kendrick Perkins', slotIndex: 4, nationality: 'USA', fact: 'Started the 131-92 clincher but played only 13 minutes with a shoulder injury — P.J. Brown soaked up the frontcourt minutes.' },
+      { name: 'Kendrick Perkins', slotIndex: 4, nationality: 'USA', fact: 'Started the 131-92 clincher but played only 13 minutes with a shoulder injury, P.J. Brown soaked up the frontcourt minutes.' },
       { name: 'Rajon Rondo', slotIndex: 0, nationality: 'USA', fact: 'The second-year point guard ran the offense in the biggest banner-clinching rout in Finals history.' },
       { name: 'Ray Allen', slotIndex: 1, nationality: 'USA' },
     ],
@@ -364,7 +365,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       C('Tyson Chandler'),
     ],
     blankCandidates: [
-      { name: 'J.J. Barea', slotIndex: 1, nationality: 'Puerto Rico', fact: 'The 6-foot backup was moved into the starting lineup mid-series — Dallas won the last three games.' },
+      { name: 'J.J. Barea', slotIndex: 1, nationality: 'Puerto Rico', fact: 'The 6-foot backup was moved into the starting lineup mid-series, Dallas won the last three games.' },
       { name: 'Shawn Marion', slotIndex: 2, nationality: 'USA', fact: 'The Matrix drew the LeBron assignment in the clincher.' },
       { name: 'Tyson Chandler', slotIndex: 4, nationality: 'USA' },
     ],
@@ -390,7 +391,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       C('Joel Anthony'),
     ],
     blankCandidates: [
-      { name: 'Joel Anthony', slotIndex: 4, nationality: 'Canada', fact: 'The undrafted Canadian started at center in the title-deciding game — and played just 11 minutes.' },
+      { name: 'Joel Anthony', slotIndex: 4, nationality: 'Canada', fact: 'The undrafted Canadian started at center in the title-deciding game, and played just 11 minutes.' },
       { name: 'Mario Chalmers', slotIndex: 0, nationality: 'USA' },
       { name: 'Chris Bosh', slotIndex: 3, nationality: 'USA' },
     ],
@@ -416,7 +417,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     ],
     blankCandidates: [
       { name: 'Marc Gasol', slotIndex: 4, nationality: 'Spain', fact: 'The center acquired from Memphis at the February trade deadline started as Toronto won its first title.' },
-      { name: 'Danny Green', slotIndex: 1, nationality: 'USA', fact: 'The fifth starter alongside Leonard, Lowry, Siakam and Gasol — the one nobody names.' },
+      { name: 'Danny Green', slotIndex: 1, nationality: 'USA', fact: 'The fifth starter alongside Leonard, Lowry, Siakam and Gasol, the one nobody names.' },
       { name: 'Pascal Siakam', slotIndex: 3, nationality: 'Cameroon', fact: 'The Cameroon-born forward broke out as a starter in the championship run.' },
     ],
     source: 'basketball-reference box 201906130GSW (Starters: Lowry/Green/Leonard/Siakam/Gasol) + Wikipedia "2019 NBA Finals": Gasol acquired from Memphis, Raptors won Game 6 114-110.',
@@ -474,7 +475,7 @@ export const ALL_FIVE_NAMES: string[] = Array.from(
 
 const DIACRITICS = new RegExp('[' + String.fromCharCode(0x0300) + '-' + String.fromCharCode(0x036f) + ']', 'g');
 export function normalizeFiveName(name: string): string {
-  return name.normalize('NFD').replace(DIACRITICS, '').toLowerCase().trim().replace(/\s+/g, ' ').replace(/\./g, '');
+  return foldSpecialLatin(name.normalize('NFD').replace(DIACRITICS, '').toLowerCase().trim().replace(/\s+/g, ' ').replace(/\./g, ''));
 }
 
 /** A guess is correct if it matches the blanked candidate (full name or surname). */

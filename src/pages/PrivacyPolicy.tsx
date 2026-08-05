@@ -69,13 +69,13 @@ const PrivacyPolicy = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">5. Data Retention, Access &amp; Deletion</h2>
           <p>Local storage data is retained on your device until you clear it. If you have an account, we keep your account data, scores, and streaks until you ask us to delete them or delete your account yourself. Gameplay data that is not linked to an account is kept for aggregate statistics.</p>
-          <p className="mt-2">You have the right to ask what data we have about you, correct it, or have it deleted. To do this, or for any privacy question, contact us at <a href="mailto:DoUknowBall.com@gmail.com" className="underline hover:text-foreground transition-colors">DoUknowBall.com@gmail.com</a> and we will respond within 30 days.</p>
+          <p className="mt-2">You have the right to ask what data we have about you, correct it, or have it deleted. To do this, or for any privacy question, contact us at <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a> and we will respond within 30 days.</p>
         </div>
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">6. Children's Privacy</h2>
           <p>DoUKnowBall's games are suitable for a general audience and may be played by minors. You can play every game on the Site without creating an account or providing any personal information.</p>
-          <p className="mt-2">Creating an account is optional and requires an email address. This feature is not directed at children, and we ask that anyone under the age of 13 not create an account or otherwise provide personal information without a parent or guardian's involvement. If you believe a child has created an account or given us personal information, please contact us at <a href="mailto:DoUknowBall.com@gmail.com" className="underline hover:text-foreground transition-colors">DoUknowBall.com@gmail.com</a> so we can delete it.</p>
+          <p className="mt-2">Creating an account is optional and requires an email address. This feature is not directed at children, and we ask that anyone under the age of 13 not create an account or otherwise provide personal information without a parent or guardian's involvement. If you believe a child has created an account or given us personal information, please contact us at <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a> so we can delete it.</p>
         </div>
 
         <div>
@@ -85,7 +85,7 @@ const PrivacyPolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">8. Contact</h2>
-          <p>If you have any questions about this privacy policy, want to request access to or deletion of your data, or have a general concern, please contact us at <a href="mailto:DoUknowBall.com@gmail.com" className="underline hover:text-foreground transition-colors">DoUknowBall.com@gmail.com</a>. For issues with a specific question or answer in a game, you can also use the "Report" button on that game.</p>
+          <p>If you have any questions about this privacy policy, want to request access to or deletion of your data, or have a general concern, please contact us at <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a>. For issues with a specific question or answer in a game, you can also use the "Report" button on that game.</p>
         </div>
       </section>
 

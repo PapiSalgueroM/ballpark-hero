@@ -158,7 +158,7 @@ export function useGradeTransfer(): GradeTransferState {
       const d = Math.abs(GRADES.indexOf(r.userGrade) - GRADES.indexOf(r.tc.actualGrade));
       return d === 0 ? '🟩' : d === 1 ? '🟨' : '🟥';
     }).join('');
-    return `Grade the Transfer — ${today}\n${squares}\n${exact}/${ROUNDS} spot on · ${score} pts\ndouknowball.com/grade-transfer`;
+    return `Grade the Transfer, ${today}\n${squares}\n${exact}/${ROUNDS} spot on · ${score} pts\ndouknowball.com/grade-transfer`;
   }, [finished, rounds, exact, score, today]);
 
   return { loading, rounds, index, current, status, score, exact, grade, next, shareText };

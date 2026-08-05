@@ -101,6 +101,6 @@ export const NHL_LINEUP_CONFIG: LineupConfig<NhlPoolPlayer> = {
   scoreline: (r: GenericSimResult) => {
     const f = Math.max(1, Math.round((r.rating / 100) * 6));
     const a = Math.max(0, Math.round(((100 - r.rating) / 100) * 3));
-    return { big: `${f}–${a}`, shareScore: `a ${f}-${a} win (Grade ${r.grade}, ${r.rating} OVR)` };
+    return { big: `${f}-${a}`, shareScore: `a ${f}-${a} win (Grade ${r.grade}, ${r.rating} OVR)` };
   },
 };

@@ -44,7 +44,7 @@ export function useSoccerGrid() {
     return () => { cancelled = true; };
   }, []);
 
-  // Today's date (ET) — stable for the whole session, used as the key for
+  // Today's date (ET), stable for the whole session, used as the key for
   // every settings/timer/overtime localStorage entry below so they always
   // agree with useDailyPuzzle's own per-day storage key.
   const todayStr = useRef(getTodayET()).current;
@@ -53,7 +53,7 @@ export function useSoccerGrid() {
   // Read synchronously (useState initializer, not an effect) so the very
   // first render already reflects a returning player's saved difficulty.
   // This matters because todaysPuzzle below is derived from settings.difficulty
-  // — if settings changed one render late (as an effect would cause), the
+  //, if settings changed one render late (as an effect would cause), the
   // puzzle-selection memo in useDailyPuzzle would see puzzleIndex flip after
   // mount and wipe an in-progress grid, breaking refresh persistence.
   const [settings, setSettings] = useState<SoccerGridSettings>(
@@ -105,7 +105,7 @@ export function useSoccerGrid() {
     gameSlug: 'soccer-grid',
     // soccerGridPuzzles is the stable module-level ref required by useDailyPuzzle's
     // dep array (puzzles is intentionally excluded from its useMemo deps). The actual
-    // puzzle selection comes from supabasePuzzle below — this is just the fallback pool.
+    // puzzle selection comes from supabasePuzzle below, this is just the fallback pool.
     puzzles: soccerGridPuzzles,
     supabasePuzzle: todaysPuzzle,
     getPuzzleId: (p) => p.id,
@@ -318,12 +318,12 @@ export function useSoccerGrid() {
         } else {
           setWrongFlash({ cellIndex: capturedCell, playerName });
           setTimeout(() => setWrongFlash(null), 1500);
-          // Wrong guesses during Overtime don't cost anything — Overtime has
+          // Wrong guesses during Overtime don't cost anything, Overtime has
           // no guess limit, it's purely "keep filling what's left".
           if (!isOvertime) addDailyGuess({ t: 'x' });
         }
       } catch {
-        // Network error — don't count the guess
+        // Network error, don't count the guess
       } finally {
         setValidating(false);
         setActiveCell(null);

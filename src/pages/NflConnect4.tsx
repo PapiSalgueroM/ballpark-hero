@@ -265,7 +265,7 @@ const NflConnect4 = () => {
               )}
             </div>
             <p className="text-[11px] text-center text-muted-foreground">
-              Suggestions cover the 2002-today era — type any older legend's full name and hit Enter.
+              Suggestions cover the 2002-today era, type any older legend's full name and hit Enter.
             </p>
             {validationError && (
               <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">

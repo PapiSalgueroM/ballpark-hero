@@ -65,7 +65,7 @@ export function useConnections() {
     gameSlug: 'connections',
     // connectionsPuzzles is the stable module-level ref required by useDailyPuzzle's
     // dep array (puzzles is intentionally excluded from its useMemo deps). The actual
-    // puzzle selection comes from supabasePuzzle below — this is just the fallback pool.
+    // puzzle selection comes from supabasePuzzle below, this is just the fallback pool.
     puzzles: fallbackPuzzles,
     supabasePuzzle: todaysPuzzle,
     getPuzzleId: (p) => p.id,

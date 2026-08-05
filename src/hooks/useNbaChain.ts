@@ -85,7 +85,7 @@ export function useNbaChain() {
 
       const normalized = normalizeName(trimmed);
 
-      // Check duplicate — instant game over
+      // Check duplicate, instant game over
       if (usedPlayers.has(normalized)) {
         setPhase('ended');
         setGameOverReason(`${trimmed} was already used. Game over!`);
@@ -167,7 +167,7 @@ export function useNbaChain() {
           setGameOverReason('Round complete!');
         }
       } catch {
-        // FAIL CLOSED: a network failure is not a wrong answer — don't accept
+        // FAIL CLOSED: a network failure is not a wrong answer, don't accept
         // an unverified link (that inflates streaks) and don't end the game.
         // Surface a retry message and leave the chain untouched.
         setIsValidating(false);

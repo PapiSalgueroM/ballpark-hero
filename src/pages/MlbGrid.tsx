@@ -218,7 +218,7 @@ const MlbGrid = () => {
                   <li>Each cell needs a player whose career matches both the row and column</li>
                   <li>Rows and columns are franchises a player's career touched, or career milestones like 2,000+ hits</li>
                   <li>Franchise history counts across relocations: Babe Ruth's Boston Braves year counts for the Braves</li>
-                  <li>LEGENDS ERA: the pool is careers that FINISHED by 2019 — active stars will not validate</li>
+                  <li>LEGENDS ERA: the pool is careers that FINISHED by 2019, active stars will not validate</li>
                   <li>Tap a cell, type a player name, and pick them from the list</li>
                   <li>Every name can only be used once. 9 guesses total; wrong guesses cost a guess</li>
                 </ul>
@@ -403,11 +403,11 @@ const MlbGrid = () => {
             'Each cell in the 3x3 grid requires a player who satisfies both the row and column criteria.',
             'Rows and columns are franchises a career touched, or milestones like 2,000+ hits.',
             'Legends era: the answer pool is careers that finished by 2019.',
-            'Franchise identity survives relocations — Brooklyn Dodgers count as Dodgers.',
+            'Franchise identity survives relocations, Brooklyn Dodgers count as Dodgers.',
             'Each player can only be used once. You have 9 guesses to fill 9 cells.',
           ]}
           examples={[
-            'Yankees + Red Sox = Babe Ruth works — and he counts for the Braves too.',
+            'Yankees + Red Sox = Babe Ruth works, and he counts for the Braves too.',
             'Cardinals + 300+ Home Runs = a St. Louis slugger with serious power.',
             'Athletics + Twins = remember who wore both uniforms?',
           ]}

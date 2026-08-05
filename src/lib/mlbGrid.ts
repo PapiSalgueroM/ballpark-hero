@@ -70,7 +70,7 @@ export type CellStatus = 'empty' | 'correct' | 'wrong';
 // ---------------------------------------------------------------------------
 
 /** 16 history-rich franchises, all identified by Lahman's stable franchID
- * (relocations already merged upstream in the view — no aliasing here). */
+ * (relocations already merged upstream in the view, no aliasing here). */
 export const FRANCHISE_POOL: GridCategory[] = [
   { kind: 'franchise', id: 'NYY', label: 'Yankees' },
   { kind: 'franchise', id: 'BOS', label: 'Red Sox' },
@@ -93,7 +93,7 @@ export const FRANCHISE_POOL: GridCategory[] = [
 /**
  * 3 achievement tiers. Verified 2026-07-21: worst franchise coverage is
  * 12 qualifiers (Twins x 300+ HR); hits/games tiers are 27+ everywhere.
- * Pitchers can only fill franchise x franchise cells — by design.
+ * Pitchers can only fill franchise x franchise cells, by design.
  */
 export const ACHIEVEMENT_POOL: GridCategory[] = [
   { kind: 'achievement', id: 'h2k', label: '2,000+ Career Hits' },

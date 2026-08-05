@@ -61,7 +61,7 @@ export function OverratedBoard() {
       await navigator.clipboard.writeText(shareText);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch { /* clipboard blocked — the text is on screen to copy by hand */ }
+    } catch { /* clipboard blocked, the text is on screen to copy by hand */ }
   };
 
   if (loading) {
@@ -243,7 +243,7 @@ export function OverratedBoard() {
       </div>
 
       <p className="mt-4 text-center text-xs text-muted-foreground">
-        There's no right answer — it's a vote. The fun is finding out where you sit.
+        There's no right answer, it's a vote. The fun is finding out where you sit.
       </p>
     </div>
   );

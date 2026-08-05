@@ -147,7 +147,7 @@ const NflHigherLower = () => {
           examples={[
             'LaDainian Tomlinson (162 TDs) vs Adrian Peterson (126)',
             'Gronk vs Antonio Gates: which tight end found the end zone more?',
-            'Derrick Henry vs Mike Evans — power back or red-zone receiver?',
+            'Derrick Henry vs Mike Evans, power back or red-zone receiver?',
             'Larry Fitzgerald vs Calvin Johnson: the WR showdown',
           ]}
         />

@@ -45,6 +45,14 @@ export function FootballConnect4HowToPlay({ open, onOpenChange }: Props) {
               (Barcelona and the 1998 World Cup).
             </p>
           </div>
+          <div className="space-y-2">
+            <h4 className="font-semibold text-primary">What the clues mean:</h4>
+            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+              <li><em>"Played for X"</em> counts ANY time in their career, not just right now</li>
+              <li><em>"Played with Messi"</em> means an actual teammate at some point: same club at the same time (Barca, PSG or Inter Miami years all count)</li>
+              <li>Award clues (Ballon d'Or, World Cup) count any year they won it</li>
+            </ul>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

@@ -18,7 +18,7 @@ export interface NbaConnectionsPuzzle {
  *   - #1-overall confirmations (incl. Yao 2002): nba_draft_picks
  *
  * AUTHORING RULE (the thing that makes a Connections puzzle valid): within
- * a puzzle, NO player may satisfy another group's criterion — the partition
+ * a puzzle, NO player may satisfy another group's criterion, the partition
  * must be unique. Traps found and dodged during authoring, kept here so
  * future puzzles repeat the checks:
  *   - Rondo/Doug Christie/Vlade all played LAL -> out of Celtics/Kings groups

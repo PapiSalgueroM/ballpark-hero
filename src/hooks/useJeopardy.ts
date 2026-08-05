@@ -193,7 +193,7 @@ export function useJeopardy(): JeopardyState {
         return t.correct ? '🟩' : '🟥';
       }).join(''),
     ).join('\n');
-    return `Sports Jeopardy — ${today}\n${grid}\n$${score}\ndouknowball.com/jeopardy`;
+    return `Sports Jeopardy, ${today}\n${grid}\n$${score}\ndouknowball.com/jeopardy`;
   }, [finished, categories, board, score, today]);
 
   return {

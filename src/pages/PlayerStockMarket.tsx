@@ -147,7 +147,7 @@ const PlayerStockMarket = () => {
       <GameShell
         width="narrow"
         title="📈 PLAYER STOCK MARKET"
-        subtitle="Real market values, real years. Buy 3 players, then the market moves one real year."
+        subtitle="You don't know who they are. Buy 3 mystery players on the numbers alone, then the market moves one real year and the names drop."
         headerExtra={
           <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
             {(['daily', 'unlimited'] as const).map((m) => (
@@ -184,15 +184,19 @@ const PlayerStockMarket = () => {
               <p className="text-xs text-muted-foreground mt-0.5">
                 {revealed
                   ? `The market advanced to ${round.year + 1}. Real values revealed.`
-                  : `Buy exactly ${STOCK_PICKS} — then the market advances to ${round.year + 1} for real.`}
+                  : `Buy exactly ${STOCK_PICKS}, then the market advances to ${round.year + 1} for real.`}
               </p>
             </div>
 
             <div className="max-w-md mx-auto space-y-2 mb-5">
-              {round.players.map((p) => {
+              {round.players.map((p, idx) => {
                 const bought = effectivePicks.includes(p.name);
                 const r = playerReturn(p);
                 const inBest = result?.bestPicks.includes(p.name);
+                // Owner 2026-08-05 (box2box rules): you invest BLIND. Names and
+                // clubs stay hidden until the market moves; you only get the
+                // numbers: position, age, nationality and the value history.
+                const mysteryLabel = `Mystery ${p.position} ${String.fromCharCode(65 + idx)}`;
                 return (
                   <button
                     key={p.name}
@@ -207,12 +211,14 @@ const PlayerStockMarket = () => {
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-sm text-foreground truncate">{p.name}</span>
+                        <span className="font-bold text-sm text-foreground truncate">
+                          {revealed ? p.name : `🕵️ ${mysteryLabel}`}
+                        </span>
                         {bought && <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-primary text-primary-foreground shrink-0">Bought</span>}
                         {revealed && inBest && <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-gold/20 text-gold shrink-0">Optimal</span>}
                       </div>
                       <p className="text-[11px] text-muted-foreground truncate">
-                        {p.club} · {p.position} · age {p.age}
+                        {revealed ? `${p.club} · ` : ''}{p.position} · age {p.age} · {p.nationality}
                       </p>
                       <p className="text-sm font-bold mt-0.5 text-foreground">
                         {formatMoney(p.current)}

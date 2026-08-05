@@ -66,7 +66,7 @@ export type { PowerupId, PowerupDef, FreeAgent, BattleSimulation, PlayEvent, Box
 export { POWERUPS, FREE_AGENTS, TEAM_LEGENDS, CONQUEST_FREE_AGENCY_POOL };
 
 // Power rankings tuning (item 86): a win/loss nudges a team's O/D a small
-// amount so the ranked list reflects in-run form, and — critically — the
+// amount so the ranked list reflects in-run form, and, critically, the
 // SAME adjusted numbers feed simulateDetailedBattle's win probability, so
 // the panel isn't just cosmetic. Kept small and clamped so a hot streak
 // bends the odds without erasing the underlying talent gap.

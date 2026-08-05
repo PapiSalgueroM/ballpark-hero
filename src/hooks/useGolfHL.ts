@@ -1,9 +1,17 @@
 import { useState, useMemo, useCallback } from 'react';
-import { hockeyHLPlayers, HockeyHLPlayer } from '@/data/hockeyHLPlayers';
+import { golfLegends, GolfLegend } from '@/data/golfLegends';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
+/**
+ * Golf Higher/Lower - first game in the Golf tab (owner 2026-08-05: "start
+ * building the golf games cause it's been pending for way too long"). Same
+ * rules as every other Higher/Lower on the site: 10 rounds, 10 pts per
+ * correct, +5 per consecutive-correct streak step, daily (ET-seeded) +
+ * unlimited modes, hard mode pairs close major counts. Counts come from
+ * public.golf_majors via src/data/golfLegends.ts.
+ */
 function seededShuffle<T>(arr: T[], seed: number): T[] {
   const a = [...arr];
   let s = seed;
@@ -15,52 +23,36 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
   return a;
 }
 
-export type HockeyHLStatus = 'playing' | 'complete';
-export type HockeyHLMode = 'daily' | 'unlimited';
+export type GolfHLStatus = 'playing' | 'complete';
+export type GolfHLMode = 'daily' | 'unlimited';
 
 interface RoundResult {
-  player1: HockeyHLPlayer;
-  player2: HockeyHLPlayer;
+  player1: GolfLegend;
+  player2: GolfLegend;
   correct: boolean;
 }
 
 type HLAction = { t: 'result'; correct: boolean };
 
 const ROUNDS = 10;
-// Sentinel puzzle array — useDailyPuzzle needs at least one element.
-// The hook ignores the puzzle data and uses todayStr for seeding instead.
-const SENTINEL_PUZZLES = [{ id: 'hkhl-daily' }];
+const SENTINEL_PUZZLES = [{ id: 'golfhl-daily' }];
 
-function getDailyPairs(todayStr: string): [HockeyHLPlayer, HockeyHLPlayer][] {
-  const seed = dateSeed(todayStr);
-  const shuffled = seededShuffle(hockeyHLPlayers, seed);
-  const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
-  for (let i = 0; i < ROUNDS * 2 && i + 1 < shuffled.length; i += 2) {
-    result.push([shuffled[i], shuffled[i + 1]]);
-  }
-  return result;
-}
-
-function getRandomPairs(hard = false): [HockeyHLPlayer, HockeyHLPlayer][] {
-  const seed = Math.floor(Math.random() * 100000);
-  const shuffled = seededShuffle(hockeyHLPlayers, seed);
+function buildPairs(seed: number, hard = false): [GolfLegend, GolfLegend][] {
+  const shuffled = seededShuffle(golfLegends, seed);
   if (!hard) {
-    const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
+    const result: [GolfLegend, GolfLegend][] = [];
     for (let i = 0; i < ROUNDS * 2 && i + 1 < shuffled.length; i += 2) {
       result.push([shuffled[i], shuffled[i + 1]]);
     }
     return result;
   }
-  // HARD (task #12): greedy close-gap pairing on careerPoints from the
-  // shuffle window — selection-only, scoring untouched. Unlimited-only:
-  // daily pairs stay canonical so stored daily actions replay correctly.
   const pool = [...shuffled];
-  const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
+  const result: [GolfLegend, GolfLegend][] = [];
   while (result.length < ROUNDS && pool.length >= 2) {
     const a = pool.shift()!;
     let bestI = 0, bestGap = Infinity;
     for (let i = 0; i < Math.min(pool.length, 12); i++) {
-      const gap = Math.abs(pool[i].careerPoints - a.careerPoints);
+      const gap = Math.abs(pool[i].majors - a.majors);
       if (gap < bestGap) { bestGap = gap; bestI = i; }
     }
     result.push([a, pool.splice(bestI, 1)[0]]);
@@ -68,11 +60,10 @@ function getRandomPairs(hard = false): [HockeyHLPlayer, HockeyHLPlayer][] {
   return result;
 }
 
-export function useHockeyHL() {
-  const [mode, setMode] = useState<HockeyHLMode>('daily');
+export function useGolfHL() {
+  const [mode, setMode] = useState<GolfHLMode>('daily');
   const [hard, setHard] = useState(false);
 
-  // Daily persistence — sentinel puzzle, we only use todayStr + guesses
   const {
     guesses: dailyActions,
     addGuess: addDailyAction,
@@ -80,38 +71,35 @@ export function useHockeyHL() {
     isLoading,
     todayStr,
   } = useDailyPuzzle<{ id: string }, HLAction>({
-    gameSlug: 'hockey-hl',
+    gameSlug: 'golf-hl',
     puzzles: SENTINEL_PUZZLES,
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,
     deserializeGuesses: (raw) => raw as HLAction[],
   });
 
-  const dailyPairs = useMemo(() => getDailyPairs(todayStr), [todayStr]);
+  const dailyPairs = useMemo(() => buildPairs(dateSeed(todayStr)), [todayStr]);
 
-  // currentResult: the in-progress round shown during the 2-second reveal window
-  // Not persisted, purely local UX state that disappears on reload (which is fine)
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
 
-  // Unlimited local state
-  const [unlimitedPairs, setUnlimitedPairs] = useState<[HockeyHLPlayer, HockeyHLPlayer][]>(getRandomPairs);
+  const [unlimitedPairs, setUnlimitedPairs] = useState<[GolfLegend, GolfLegend][]>(
+    () => buildPairs(Math.floor(Math.random() * 100000), hard),
+  );
   const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
   const [unlimitedRound, setUnlimitedRound] = useState(0);
 
-  // Derived daily state
   const dailyCurrentRound = dailyActions.length;
   const dailyResults: RoundResult[] = useMemo(
     () =>
       dailyActions.map((a, i) => ({
-        player1: dailyPairs[i]?.[0] ?? hockeyHLPlayers[0],
-        player2: dailyPairs[i]?.[1] ?? hockeyHLPlayers[1],
+        player1: dailyPairs[i]?.[0] ?? golfLegends[0],
+        player2: dailyPairs[i]?.[1] ?? golfLegends[1],
         correct: a.correct,
       })),
     [dailyActions, dailyPairs],
   );
 
-  // Active values — append currentResult during reveal window so page UI is consistent
   const pairs = mode === 'daily' ? dailyPairs : unlimitedPairs;
   const currentRound = mode === 'daily' ? dailyCurrentRound : unlimitedRound;
   const baseResults = mode === 'daily' ? dailyResults : unlimitedResults;
@@ -120,7 +108,7 @@ export function useHockeyHL() {
     [baseResults, currentResult],
   );
 
-  const gameStatus: HockeyHLStatus = mode === 'daily'
+  const gameStatus: GolfHLStatus = mode === 'daily'
     ? (rawDailyStatus !== 'playing' ? 'complete' : 'playing')
     : (unlimitedRound >= ROUNDS ? 'complete' : 'playing');
 
@@ -135,7 +123,6 @@ export function useHockeyHL() {
   }, 0);
   const totalScore = correctCount * 10 + streakBonus * 5;
 
-  // Current streak (computed from baseResults so it's consistent after reload)
   const streak = useMemo(() => {
     let s = 0;
     for (let i = baseResults.length - 1; i >= 0; i--) {
@@ -149,11 +136,9 @@ export function useHockeyHL() {
     (choice: 'left' | 'right') => {
       if (!currentPair || showingResult || gameStatus !== 'playing') return;
       const [p1, p2] = currentPair;
-      // Ties count as correct either way, HL pools contain exact-equal stat
-      // values, and the old `>=` logic silently marked the right-side pick
-      // wrong on a dead tie. Fixed across all HL hooks (July 2026).
-      const tie = p1.careerPoints === p2.careerPoints;
-      const leftHigher = p1.careerPoints >= p2.careerPoints;
+      // Ties count as correct either way (plenty of 2s and 3s in the pool).
+      const tie = p1.majors === p2.majors;
+      const leftHigher = p1.majors >= p2.majors;
       const correct = tie || (choice === 'left' && leftHigher) || (choice === 'right' && !leftHigher);
 
       setCurrentResult({ player1: p1, player2: p2, correct });
@@ -173,9 +158,9 @@ export function useHockeyHL() {
     [currentPair, showingResult, gameStatus, mode, addDailyAction],
   );
 
-  const switchMode = useCallback((m: HockeyHLMode) => {
+  const switchMode = useCallback((m: GolfHLMode) => {
     if (m === 'unlimited') {
-      setUnlimitedPairs(getRandomPairs(hard));
+      setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000), hard));
       setUnlimitedResults([]);
       setUnlimitedRound(0);
     }
@@ -187,10 +172,8 @@ export function useHockeyHL() {
   const toggleHard = useCallback(() => {
     setHard((prev) => {
       const next = !prev;
-      // Hard pairs are an unlimited-mode feature, switching keeps the
-      // daily's canonical pair list untouched.
       setMode('unlimited');
-      setUnlimitedPairs(getRandomPairs(next));
+      setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000), next));
       setUnlimitedResults([]);
       setUnlimitedRound(0);
       setCurrentResult(null);
@@ -199,7 +182,7 @@ export function useHockeyHL() {
     });
   }, []);
 
-  useGameCompletion('hockey-higher-lower', rawDailyStatus !== 'playing', totalScore);
+  useGameCompletion('golf-higher-lower', rawDailyStatus !== 'playing', totalScore);
 
   return {
     mode, switchMode, hard, toggleHard, currentPair, currentRound, results, showingResult, streak,

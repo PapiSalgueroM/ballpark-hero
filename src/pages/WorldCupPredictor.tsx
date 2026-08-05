@@ -1173,7 +1173,7 @@ const WorldCupPredictor = () => {
         </div>
       )}
 
-      {/* FIFA Rankings Sidebar — Sheet gives a backdrop, Escape-to-close, and a
+      {/* FIFA Rankings Sidebar, Sheet gives a backdrop, Escape-to-close, and a
           focus-trapped panel, so there is always a way out on mobile (tap the
           backdrop, tap the X, or press Escape) instead of a bare fixed div. */}
       {/* Toggle button */}
@@ -1221,7 +1221,7 @@ const WorldCupPredictor = () => {
                     </td>
                     <td className="py-1.5 px-3 text-center">
                       <span className="inline-block w-5 h-5 rounded text-[10px] font-bold leading-5 text-center bg-[hsl(220,15%,20%)] text-[hsl(150,15%,60%)]">
-                        {TEAM_GROUP[r.team] || "–"}
+                        {TEAM_GROUP[r.team] || "-"}
                       </span>
                     </td>
                   </tr>

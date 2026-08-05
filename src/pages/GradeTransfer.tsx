@@ -15,7 +15,7 @@ export default function GradeTransfer() {
       <GradeTransferBoard />
       <GameSeoContent
         title="Grade the Transfer | DoUKnowBall"
-        description="Five real club-to-club moves every day. You see the player, the clubs, the year and what they were worth at the time — then you grade the move A to F. The reveal shows what their market value actually did over the next three years, alongside the crowd's grade."
+        description="Five real club-to-club moves every day. You see the player, the clubs, the year and what they were worth at the time, then you grade the move A to F. The reveal shows what their market value actually did over the next three years, alongside the crowd's grade."
         howToPlay={[
           'You get five real transfers, the same five for everyone each day.',
           "Each card shows the player, the move, the year, and their value at the time.",

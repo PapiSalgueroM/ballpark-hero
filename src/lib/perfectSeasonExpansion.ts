@@ -66,7 +66,7 @@ export function expectedWins(sport: ExpansionSport, overall: number): number {
  * simulateSeason (deterministic seed, per-game booleans, light momentum so
  * the grid streaks) but the per-game win chance comes from the anchor
  * tables instead of the shared sigmoid. `overall` is the RAW drafted
- * overall — no NFL_OVERALL_ADJUST style offsets.
+ * overall, no NFL_OVERALL_ADJUST style offsets.
  */
 export function simulateSeasonFair(
   sport: ExpansionSport,
@@ -177,7 +177,7 @@ export function playoffSeedForDaily(sport: ExpansionSport, dateStr: string): num
  * Simulates the playoff bracket, or returns null when the record misses the
  * threshold. Deterministic for a given (sport, overall, seasonWins, seed):
  * the rng stream never depends on `roster`, which is only consulted at the
- * very end for the MVP pick — so a recap that passes an empty roster still
+ * very end for the MVP pick, so a recap that passes an empty roster still
  * reproduces the identical rounds and champion flag.
  */
 export function buildPlayoffRun(

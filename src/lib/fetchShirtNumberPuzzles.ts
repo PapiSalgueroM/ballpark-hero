@@ -14,7 +14,7 @@ export async function fetchShirtNumberPuzzles(): Promise<ShirtNumberPuzzle[]> {
       .order('created_at', { ascending: true });
 
     if (error || !data || data.length === 0) {
-      console.warn('[fetchShirtNumberPuzzles] Supabase returned empty or errored — using fallback');
+      console.warn('[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback');
       return [];
     }
 

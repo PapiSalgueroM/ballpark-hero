@@ -10,7 +10,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
  * $1 Billion Budget Builder.
  *
  * Deliberately reuses squadDeal's FORMATIONS, playerRating and fetchSquadPool
- * rather than duplicating them — same pitch coordinates, same rating curve, so
+ * rather than duplicating them, same pitch coordinates, same rating curve, so
  * a 90-rated player means the same thing here as in Squad Deal.
  *
  * NOTE ON UNITS: Player.marketValue from fetchSquadPool is in MILLIONS
@@ -136,7 +136,7 @@ export function useBudgetBuilder(): BudgetBuilderState {
     setSearch('');
   }, []);
 
-  // Changing formation clears the squad — slot indices mean different
+  // Changing formation clears the squad, slot indices mean different
   // positions between formations, so keeping picks would scramble the XI.
   const setFormation = useCallback((name: string) => {
     setFormationName(name);
@@ -150,7 +150,7 @@ export function useBudgetBuilder(): BudgetBuilderState {
       const p = squad[i];
       return p ? `${s.label}: ${p.name} (€${p.marketValue}M)` : null;
     }).filter(Boolean);
-    return `€1B Budget Builder — ${formation.name}\nRating: ${teamRating} · Spent: €${spent}M of €${BUDGET}M\n${lines.join('\n')}\ndouknowball.com/budget-builder`;
+    return `€1B Budget Builder, ${formation.name}\nRating: ${teamRating} · Spent: €${spent}M of €${BUDGET}M\n${lines.join('\n')}\ndouknowball.com/budget-builder`;
   }, [complete, formation, squad, teamRating, spent]);
 
   return {

@@ -12,19 +12,31 @@ export type TransferPathMode = 'daily' | 'unlimited';
 
 type TransferAction =
   | { t: 'step'; player: string; club: string }
-  | { t: 'won' };
+  | { t: 'won' }
+  | { t: 'give' };
+
+export interface RevealStep {
+  player: string;
+  /** Club shared with the PREVIOUS player in the path; null for the start. */
+  club: string | null;
+}
 
 export interface TransferPathState {
   puzzle: TransferPathPuzzle;
   chain: string[];
   connections: (string | null)[];
-  status: 'building' | 'won';
+  status: 'building' | 'won' | 'gaveup';
   score: number;
   mode: TransferPathMode;
   unlimitedIndex: number;
   isLoading: boolean;
   isLoadingPool: boolean;
   addPlayer: (name: string) => { ok: boolean; club: string | null };
+  /** Owner 2026-08-05: players can surrender and see a real connecting path. */
+  giveUp: () => void;
+  /** Shortest valid path A -> B through the temporal-teammate graph, computed
+   *  on surrender. Null while playing or if no path exists in the pool. */
+  revealPath: RevealStep[] | null;
   switchToUnlimited: () => void;
   nextPuzzle: () => void;
   getAllPlayerNames: () => string[];
@@ -82,6 +94,57 @@ export function useTransferPath(): TransferPathState {
     [playerToClubSeasons],
   );
 
+  // club::season -> players who were there. Powers the give-up path search.
+  const seasonIndex = useMemo(() => {
+    const idx = new Map<string, string[]>();
+    for (const p of playerPool) {
+      for (const s of p.career) {
+        const k = `${s.club}::${s.season}`;
+        const arr = idx.get(k);
+        if (arr) arr.push(p.name);
+        else idx.set(k, [p.name]);
+      }
+    }
+    return idx;
+  }, [playerPool]);
+
+  /** BFS shortest path through the temporal-teammate graph. */
+  const findPath = useMemo(
+    () => (from: string, to: string): RevealStep[] | null => {
+      if (!playerToClubSeasons.has(from) || !playerToClubSeasons.has(to)) return null;
+      if (from === to) return [{ player: from, club: null }];
+      const prev = new Map<string, { via: string; club: string }>();
+      const seen = new Set<string>([from]);
+      const queue: string[] = [from];
+      while (queue.length > 0) {
+        const cur = queue.shift()!;
+        const keys = playerToClubSeasons.get(cur);
+        if (!keys) continue;
+        for (const key of keys) {
+          const club = key.split('::')[0];
+          for (const nb of seasonIndex.get(key) ?? []) {
+            if (seen.has(nb)) continue;
+            seen.add(nb);
+            prev.set(nb, { via: cur, club });
+            if (nb === to) {
+              const path: RevealStep[] = [];
+              let at: string | null = to;
+              while (at) {
+                const pr = prev.get(at);
+                path.unshift({ player: at, club: pr ? pr.club : null });
+                at = pr ? pr.via : null;
+              }
+              return path;
+            }
+            queue.push(nb);
+          }
+        }
+      }
+      return null;
+    },
+    [playerToClubSeasons, seasonIndex],
+  );
+
   // Helpers returned to board — closures over playerPool / playerToClubs
   const getAllPlayerNames = useMemo(
     () => () => playerPool.map(p => p.name),
@@ -128,7 +191,9 @@ export function useTransferPath(): TransferPathState {
     () => [null, ...dailySteps.map(s => s.club)] as (string | null)[],
     [dailySteps],
   );
-  const dailyStatus = rawDailyStatus === 'won' ? 'won' : 'building';
+  const dailyGaveUp = useMemo(() => dailyActions.some(a => a.t === 'give'), [dailyActions]);
+  const dailyStatus: 'building' | 'won' | 'gaveup' =
+    rawDailyStatus === 'won' ? 'won' : dailyGaveUp ? 'gaveup' : 'building';
   const dailyScore = useMemo(() => {
     if (dailyStatus !== 'won') return 0;
     const steps = dailyChain.length - 1;
@@ -143,7 +208,7 @@ export function useTransferPath(): TransferPathState {
   );
   const [unlimitedConnections, setUnlimitedConnections] = useState<(string | null)[]>([null]);
   const [unlimitedScore, setUnlimitedScore] = useState(0);
-  const [unlimitedStatus, setUnlimitedStatus] = useState<'building' | 'won'>('building');
+  const [unlimitedStatus, setUnlimitedStatus] = useState<'building' | 'won' | 'gaveup'>('building');
 
   const unlimitedPuzzle = useMemo(() => {
     const idx = (unlimitedIndex + 1) % puzzlePool.length;
@@ -158,12 +223,25 @@ export function useTransferPath(): TransferPathState {
   const score = mode === 'daily' ? dailyScore : unlimitedScore;
 
   // ── useGameCompletion ──────────────────────────────────────────────────────
-  const isComplete = mode === 'daily' && status === 'won';
-  useGameCompletion('transfer-path', isComplete, score, isComplete ? 1 : 0);
+  // A surrendered daily still counts as "played today" (score 0, no win).
+  const isComplete = mode === 'daily' && (status === 'won' || status === 'gaveup');
+  useGameCompletion('transfer-path', isComplete, status === 'won' ? score : 0, status === 'won' ? 1 : 0);
+
+  // ── giveUp + reveal ────────────────────────────────────────────────────────
+  const giveUp = useCallback(() => {
+    if (status !== 'building') return;
+    if (mode === 'daily') addDailyAction({ t: 'give' });
+    else setUnlimitedStatus('gaveup');
+  }, [status, mode, addDailyAction]);
+
+  const revealPath = useMemo(
+    () => (status === 'gaveup' ? findPath(puzzle.playerA, puzzle.playerB) : null),
+    [status, puzzle, findPath],
+  );
 
   // ── addPlayer ──────────────────────────────────────────────────────────────
   const addPlayer = useCallback((name: string): { ok: boolean; club: string | null } => {
-    if (status === 'won') return { ok: false, club: null };
+    if (status !== 'building') return { ok: false, club: null };
 
     const lastInChain = chain[chain.length - 1];
     const sharedClub = playersShareClub(lastInChain, name);
@@ -239,6 +317,8 @@ export function useTransferPath(): TransferPathState {
     isLoading,
     isLoadingPool,
     addPlayer,
+    giveUp,
+    revealPath,
     switchToUnlimited,
     nextPuzzle,
     getAllPlayerNames,

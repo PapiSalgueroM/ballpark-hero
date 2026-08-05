@@ -51,7 +51,7 @@ export function GameNavbar() {
               <span className="sm:hidden">Track stats</span>
             </button>
           ) : (
-          /* Stats — center */
+          /* Stats, center */
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 min-w-0">
             {/* Games completed today */}
             <div className="flex items-center gap-1 text-xs sm:text-sm">

@@ -27,7 +27,7 @@ const MlbHigherLower = () => {
     <>
       <PageSeo
         title="MLB Higher or Lower - Career Home Runs Game | DoUKnowBall"
-        description="Which baseball legend hit more career home runs? Ruth, Aaron, Bonds, Griffey — compare them side by side in this daily MLB challenge."
+        description="Which baseball legend hit more career home runs? Ruth, Aaron, Bonds, Griffey, compare them side by side in this daily MLB challenge."
         path="/mlb-higher-lower"
       />
       <GameShell
@@ -96,7 +96,7 @@ const MlbHigherLower = () => {
                 >
                   <span className="text-3xl">⚾</span>
                   <span className="text-lg font-bold text-foreground font-display">{player.name}</span>
-                  <span className="text-xs text-muted-foreground">{player.firstSeason}–{player.lastSeason} · {player.seasons} seasons</span>
+                  <span className="text-xs text-muted-foreground">{player.firstSeason}-{player.lastSeason} · {player.seasons} seasons</span>
 
                   {showingResult ? (
                     <span className="text-2xl font-bold text-gold animate-cell-reveal">
@@ -144,10 +144,10 @@ const MlbHigherLower = () => {
             'Daily challenge (same pairs for everyone) or unlimited random mode',
           ]}
           examples={[
-            'Bonds (762 HR) vs Aaron (755 HR) — closer than people remember',
+            'Bonds (762 HR) vs Aaron (755 HR), closer than people remember',
             'Ruth vs Mays: who cleared 700?',
             'Ted Williams, McCovey and Frank Thomas all finished on exactly 521',
-            'Mantle vs Ortiz — the Mick or Big Papi?',
+            'Mantle vs Ortiz, the Mick or Big Papi?',
           ]}
         />
 

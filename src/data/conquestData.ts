@@ -494,7 +494,7 @@ export const NFL_TEAMS: NFLTeam[] = [
 
 export const TEAM_MAP = new Map(NFL_TEAMS.map(t => [t.id, t]));
 
-// Initial territory assignments — 32 teams each get 1 home state/sub-territory.
+// Initial territory assignments, 32 teams each get 1 home state/sub-territory.
 // Shared-state teams get their own real-geography sub-territory (item 83),
 // not a neighboring state stand-in:
 // CA split: SF → CA_N, LAR → CA_S, LAC → CA_SC
@@ -504,7 +504,7 @@ export const TEAM_MAP = new Map(NFL_TEAMS.map(t => [t.id, t]));
 // NJ split: NYG → NJ_N, NYJ → NJ_S
 // FL split: JAX → FL_N, TB → FL_W, MIA → FL_S
 export const INITIAL_TERRITORIES: Record<string, string> = {
-  // Each team starts with ONLY their home state/region — everything else is neutral
+  // Each team starts with ONLY their home state/region, everything else is neutral
   WA: 'SEA', CA_N: 'SF', CA_S: 'LAR', CA_SC: 'LAC', NV: 'LV', AZ: 'ARI', CO: 'DEN',
   MO: 'KC', TX_N: 'DAL', TX_S: 'HOU', MN: 'MIN', WI: 'GB', IL: 'CHI',
   MI: 'DET', OH_NE: 'CLE', OH_SW: 'CIN', PA_W: 'PIT', PA_E: 'PHI',

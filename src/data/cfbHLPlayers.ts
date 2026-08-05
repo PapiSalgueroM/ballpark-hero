@@ -12,10 +12,10 @@
  * P. Manning 11,201, Flutie 10,579, Tebow 9,285, Favre 7,695, Brady 4,773.
  *
  * Deliberately EXCLUDED: careers that started before 1980 (the scrape's
- * per-season floor) — Elway shows 8,805 (missing 1979 = canonical 9,349),
+ * per-season floor), Elway shows 8,805 (missing 1979 = canonical 9,349),
  * Marino 6,397, Jim Kelly 4,507: all truncated. Only careers starting
  * ≥1981 are admitted. Also excluded: the OTHER "Josh Allen" (Maryland,
- * 9 career yards) — same-name collision with the Wyoming star.
+ * 9 career yards), same-name collision with the Wyoming star.
  *
  * The fun of this pool is famous NFL names with modest college totals:
  * Brady (4,773) loses to almost everyone, Cam Newton (2,908, one starting

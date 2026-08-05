@@ -8,6 +8,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { TRANSFER_PATH_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { RotateCcw, ArrowRight, Lightbulb } from 'lucide-react';
+import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { cn } from '@/lib/utils';
 
 
@@ -18,7 +19,7 @@ import { cn } from '@/lib/utils';
 export function TransferPathBoard() {
   const {
     puzzle, chain, connections, status, score, mode, unlimitedIndex,
-    addPlayer, switchToUnlimited, nextPuzzle,
+    addPlayer, giveUp, revealPath, switchToUnlimited, nextPuzzle,
     getAllPlayerNames, getPlayerNationality,
     isLoadingPool, isLoading,
   } = useTransferPath();
@@ -125,8 +126,45 @@ export function TransferPathBoard() {
           ))}
         </div>
 
+        {/* Give-up reveal */}
+        {status === 'gaveup' && (
+          <div className="rounded-2xl border border-border bg-surface-1 p-5 space-y-3">
+            <p className="text-sm font-bold text-foreground text-center">Here's a path that works</p>
+            {revealPath ? (
+              <div className="space-y-0">
+                {revealPath.map((step, i) => (
+                  <div key={`${step.player}-${i}`}>
+                    {i > 0 && (
+                      <div className="flex items-center gap-1.5 ml-5 py-1">
+                        <span className="w-px h-4 bg-border inline-block" />
+                        <span className="text-[10px] text-muted-foreground italic">{step.club}</span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm bg-card border border-border">
+                      <span className="shrink-0"><FlagImg name={getPlayerNationality(step.player)} size={18} /></span>
+                      <span className="font-semibold text-foreground truncate min-w-0">{step.player}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-muted-foreground text-center">
+                No connecting path exists in the current player pool. That one's on us; it's been flagged.
+              </p>
+            )}
+            {mode === 'unlimited' && (
+              <button
+                onClick={() => { nextPuzzle(); setInput(''); setError(''); setShowHint(false); }}
+                className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity"
+              >
+                Next Puzzle
+              </button>
+            )}
+          </div>
+        )}
+
         {/* Input */}
-        {!isWon && (
+        {!isWon && status !== 'gaveup' && (
           <div className="space-y-2">
             <PlayerAutocomplete
               value={input}
@@ -152,6 +190,7 @@ export function TransferPathBoard() {
             {showHint && (
               <p className="text-xs text-center text-muted-foreground italic">💡 {puzzle.hint}</p>
             )}
+            <GiveUpButton onGiveUp={giveUp} label="Give up and see a path" />
           </div>
         )}
 

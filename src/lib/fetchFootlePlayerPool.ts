@@ -87,7 +87,7 @@ const POSITION_NORMALIZE: Record<string, Position> = {
 // The old pool was the global top 150 by value split 40/40/20 per position
 // group, so even 'insane' was a $40M+ star. The new bands are absolute:
 //   easy   = GOATs + the global top EASY_TOP_N by 2026 market value
-//            (rank 80 ≈ $65M — verified via SQL on flawuiqbvjobmkfkauhw,
+//            (rank 80 ≈ $65M, verified via SQL on flawuiqbvjobmkfkauhw,
 //            2026-07-08: rank 1 = $216M, rank 80 = $65M, rank 300 = $32M,
 //            rank 500 = $24M).
 //   hard   = ranks EASY_TOP_N+1 .. FAMOUS_FETCH_N (≈ $32-65M): squad-rotation
@@ -108,7 +108,7 @@ const INSANE_POOL_MAX = 1200;
 //
 // getEnrichment() falls back to 'Premier League' for any club it doesn't
 // know, which is fine for the famous top-300 (nearly all name-mapped) but
-// would tag ~1,000 obscure players with a fake league — and compareGuess()
+// would tag ~1,000 obscure players with a fake league, and compareGuess()
 // paints the club tile yellow on a league match, so fake leagues would emit
 // actively wrong "close" hints. Instead the insane batch is fetched ONLY from
 // clubs listed here, with the league labeled by hand. Club spellings are the
@@ -252,7 +252,7 @@ async function fetchObscureRows(): Promise<MarketRow[] | null> {
 
 // ---------------------------------------------------------------------------
 // Main export: famous top-300 (easy/hard) + obscure sub-$8M batch (insane).
-// Returns [] on any error — the caller (useGame.ts) falls back to players.ts,
+// Returns [] on any error, the caller (useGame.ts) falls back to players.ts,
 // which carries its own hand-labeled easy/hard/insane tiers.
 // ---------------------------------------------------------------------------
 export async function fetchFootlePlayerPool(): Promise<Player[]> {
@@ -262,7 +262,7 @@ export async function fetchFootlePlayerPool(): Promise<Player[]> {
       .select('player_name, position, age, nationality, club, market_value_usd, goals, assists')
       .eq('year', 2026)
       .not('age', 'is', null)
-      // Order by real market value (global), not `rank` — `rank` is per-position.
+      // Order by real market value (global), not `rank`, `rank` is per-position.
       // player_name breaks value ties deterministically (2026 rows are already
       // deduped to one per player) so every client builds an identical pool,
       // which the seeded daily puzzle index depends on.
@@ -285,7 +285,7 @@ export async function fetchFootlePlayerPool(): Promise<Player[]> {
     for (const row of famousRes.data as MarketRow[]) {
       const position = POSITION_NORMALIZE[row.position ?? ''];
       if (!position) {
-        console.warn(`[fetchFootlePlayerPool] Unknown position "${row.position}" for ${row.player_name} — skipping`);
+        console.warn(`[fetchFootlePlayerPool] Unknown position "${row.position}" for ${row.player_name}, skipping`);
         continue;
       }
       const key = normalizeName(row.player_name);
@@ -354,7 +354,7 @@ export async function fetchFootlePlayerPool(): Promise<Player[]> {
         });
       }
     } else {
-      console.warn('[fetchFootlePlayerPool] Obscure batch failed — pool has no insane tier this session');
+      console.warn('[fetchFootlePlayerPool] Obscure batch failed, pool has no insane tier this session');
     }
 
     return pool;

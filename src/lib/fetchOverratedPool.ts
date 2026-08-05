@@ -27,7 +27,7 @@ export interface OverratedPlayer {
  *     valuation. The view filters to >= 4m. Without that filter, four in ten
  *     cards would show "£1m" for wildly different players and the whole
  *     over/under premise collapses.
- *  2. player_name alone is not a stable identity — 226 names cover two or more
+ *  2. player_name alone is not a stable identity, 226 names cover two or more
  *     real players (two Aaron Ramseys, three Adama Traorés). Identity here is
  *     (name, nationality), so the dedupe below keys on both.
  *
@@ -58,7 +58,7 @@ export async function fetchOverratedPool(): Promise<OverratedPlayer[]> {
       return [];
     }
 
-    // Key on name+nationality, not name alone — see note above.
+    // Key on name+nationality, not name alone, see note above.
     const seen = new Set<string>();
     const pool: OverratedPlayer[] = [];
     for (const row of data) {

@@ -114,6 +114,8 @@ import MissingEleven from "./pages/MissingEleven";
 import RankEm from "./pages/RankEm";
 import PlayerStockMarket from "./pages/PlayerStockMarket";
 import NhlConnect4 from "./pages/NhlConnect4";
+import GolfHigherLower from "./pages/GolfHigherLower";
+import GuessTheGolfer from "./pages/GuessTheGolfer";
 
 const queryClient = new QueryClient();
 
@@ -318,6 +320,8 @@ const AppContent = () => {
         <Route path="/missing-eleven" element={<MissingEleven />} />
         <Route path="/rank-em" element={<RankEm />} />
         <Route path="/player-stock-market" element={<PlayerStockMarket />} />
+        <Route path="/golf-higher-lower" element={<GolfHigherLower />} />
+        <Route path="/guess-the-golfer" element={<GuessTheGolfer />} />
         <Route path="/nhl-connect-4" element={<NhlConnect4 />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -11,11 +11,11 @@ import { SoccerGridAttribute, SoccerGridPuzzle } from '@/types/soccerGrid';
  * common that type is across the full 500-puzzle pool:
  *
  *   club        1704   \
- *   league       463    |  broad — many real players satisfy these
+ *   league       463    |  broad, many real players satisfy these
  *   position     419    |  (common types, large answer pools in real life)
  *   nationality  373   /
  *   misc          13   \
- *   champions_league 11 |  narrow — few real players satisfy these
+ *   champions_league 11 |  narrow, few real players satisfy these
  *   world_cup     10    |  (rare types, small answer pools in real life)
  *   award          7   /
  *
@@ -148,7 +148,7 @@ export function saveSoccerGridSettings(dateStr: string, settings: SoccerGridSett
   try {
     localStorage.setItem(settingsKey(dateStr), JSON.stringify(settings));
   } catch {
-    // Quota exceeded or private browsing — silently skip persistence
+    // Quota exceeded or private browsing, silently skip persistence
   }
 }
 
@@ -187,7 +187,7 @@ export function saveOvertimeCells(dateStr: string, cells: OvertimeCell[]): void 
   try {
     localStorage.setItem(overtimeKey(dateStr), JSON.stringify(cells));
   } catch {
-    // Quota exceeded or private browsing — silently skip persistence
+    // Quota exceeded or private browsing, silently skip persistence
   }
 }
 
@@ -212,7 +212,7 @@ export function saveOvertimeActive(dateStr: string, active: boolean): void {
 }
 
 // ---------------------------------------------------------------------------
-// Timer expiry persistence — so a mid-timer refresh doesn't reset the clock
+// Timer expiry persistence, so a mid-timer refresh doesn't reset the clock
 // and let a player who was about to run out keep going for free.
 // ---------------------------------------------------------------------------
 

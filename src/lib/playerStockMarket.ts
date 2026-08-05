@@ -8,7 +8,7 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
  * real year and your portfolio return is computed from the players' actual
  * next-year market values (player_market_values, 2004-2026, ~141k rows).
  *
- * Everything is DB-derived at runtime — no authored facts. Selection is
+ * Everything is DB-derived at runtime, no authored facts. Selection is
  * seeded and deterministic for the daily (same date -> same year + cohort),
  * random for unlimited. Scoring maps your trio against all C(6,3)=20
  * possible trios: 100 = the optimal portfolio, 0 = the worst.

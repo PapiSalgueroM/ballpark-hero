@@ -85,7 +85,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
   {
     id: 'bconn-009',
     groups: [
-      { theme: 'All-Star Game MVPs (2010s–2020s)', players: ['Mike Trout', 'Mariano Rivera', 'Aaron Judge', 'Vladimir Guerrero Jr.', 'Shohei Ohtani'], difficulty: 'yellow' },
+      { theme: 'All-Star Game MVPs (2010s-2020s)', players: ['Mike Trout', 'Mariano Rivera', 'Aaron Judge', 'Vladimir Guerrero Jr.', 'Shohei Ohtani'], difficulty: 'yellow' },
       { theme: 'Played for the Philadelphia Phillies', players: ['Bryce Harper', 'Trea Turner', 'J.T. Realmuto', 'Rhys Hoskins', 'Zack Wheeler'], difficulty: 'green' },
       { theme: 'Left-handed starting pitchers', players: ['Clayton Kershaw', 'Madison Bumgarner', 'Chris Sale', 'Jon Lester', 'Cole Hamels'], difficulty: 'blue' },
       { theme: 'Born in Puerto Rico', players: ['Carlos Beltran', 'Yadier Molina', 'Carlos Correa', 'Javier Baez', 'Francisco Lindor'], difficulty: 'purple' },
@@ -114,7 +114,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
     groups: [
       { theme: 'Pitchers with 3000+ strikeouts', players: ['Nolan Ryan', 'Randy Johnson', 'Roger Clemens', 'Justin Verlander', 'Max Scherzer'], difficulty: 'yellow' },
       { theme: 'Played for the Minnesota Twins', players: ['Joe Mauer', 'Justin Morneau', 'Torii Hunter', 'David Ortiz', 'Johan Santana'], difficulty: 'green' },
-      { theme: 'Won batting title (2010s–2020s)', players: ['Jose Altuve', 'Charlie Blackmon', 'Luis Arraez', 'Tim Anderson', 'Miguel Cabrera'], difficulty: 'blue' },
+      { theme: 'Won batting title (2010s-2020s)', players: ['Jose Altuve', 'Charlie Blackmon', 'Luis Arraez', 'Tim Anderson', 'Miguel Cabrera'], difficulty: 'blue' },
       { theme: 'Played college baseball at LSU', players: ['Alex Bregman', 'DJ LeMahieu', 'Aaron Nola', 'Kevin Gausman', 'Alex Lange'], difficulty: 'purple' },
     ],
   },
@@ -139,7 +139,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
   {
     id: 'bconn-015',
     groups: [
-      { theme: 'NL MVP winners (2015–2025)', players: ['Bryce Harper', 'Kris Bryant', 'Cody Bellinger', 'Freddie Freeman', 'Shohei Ohtani'], difficulty: 'yellow' },
+      { theme: 'NL MVP winners (2015-2025)', players: ['Bryce Harper', 'Kris Bryant', 'Cody Bellinger', 'Freddie Freeman', 'Shohei Ohtani'], difficulty: 'yellow' },
       { theme: 'Played for the Detroit Tigers', players: ['Miguel Cabrera', 'Justin Verlander', 'Prince Fielder', 'Max Scherzer', 'Curtis Granderson'], difficulty: 'green' },
       { theme: 'Switch-hitting shortstops', players: ['Carlos Correa', 'Tim Anderson', 'Jose Reyes', 'Jimmy Rollins', 'Ozzie Smith'], difficulty: 'blue' },
       { theme: 'Went undrafted then became All-Stars', players: ['Jose Bautista', 'Justin Turner', 'Paul Goldschmidt', 'Max Muncy', 'J.D. Martinez'], difficulty: 'purple' },

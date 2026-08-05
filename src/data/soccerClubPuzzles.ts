@@ -56,7 +56,7 @@ export const soccerClubPuzzles: SoccerClubPuzzle[] = [
       leagueTitles: 13,
       kitColors: 'Red and white shirts, white shorts',
     },
-    funFact: 'Arsenal went the entire 2003–04 Premier League season unbeaten, earning the nickname "The Invincibles".',
+    funFact: 'Arsenal went the entire 2003-04 Premier League season unbeaten, earning the nickname "The Invincibles".',
   },
   {
     id: 'chelsea',
@@ -296,7 +296,7 @@ export const soccerClubPuzzles: SoccerClubPuzzle[] = [
       leagueTitles: 20,
       kitColors: 'Blue and black vertical striped shirts, black shorts',
     },
-    funFact: 'Inter Milan won the treble in 2009–10 under José Mourinho.',
+    funFact: 'Inter Milan won the treble in 2009-10 under José Mourinho.',
   },
   {
     id: 'ac-milan',

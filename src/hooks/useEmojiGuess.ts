@@ -46,7 +46,7 @@ function isCorrect(guessRaw: string, p: EmojiPuzzle): boolean {
   if (!g) return false;
   const targets = [p.answer, ...p.aliases].map(normalize);
   if (targets.includes(g)) return true;
-  // Surname match for people ("kante" for N'Golo Kanté) — clubs too ("united"
+  // Surname match for people ("kante" for N'Golo Kanté), clubs too ("united"
   // is an alias, not a surname, so it's handled above instead).
   const answerParts = normalize(p.answer).split(' ');
   const last = answerParts[answerParts.length - 1];
@@ -163,7 +163,7 @@ export function useEmojiGuess(): EmojiGuessState {
       if (r.points === 60) return '🟨';
       return '🟧';
     }).join('');
-    return `Emoji Guess — ${today}\n${squares}\n${solvedCount}/${rounds.length} solved · ${totalScore} pts\ndouknowball.com/emoji-guess`;
+    return `Emoji Guess, ${today}\n${squares}\n${solvedCount}/${rounds.length} solved · ${totalScore} pts\ndouknowball.com/emoji-guess`;
   }, [finished, rounds, solvedCount, totalScore, today]);
 
   return { rounds, index, current, finished, totalScore, solvedCount, hintVisible, guess, next, shareText };

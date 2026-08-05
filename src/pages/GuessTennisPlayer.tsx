@@ -22,7 +22,7 @@ export default function GuessTennisPlayer() {
           "Play the daily puzzle or switch to unlimited mode for endless tennis trivia."
         ]}
         examples={[
-          "Roger Federer: Switzerland, 20 Grand Slams, 2003–2018 dominance",
+          "Roger Federer: Switzerland, 20 Grand Slams, 2003-2018 dominance",
           "Serena Williams: USA, 23 Grand Slams, WTA GOAT",
           "Rafael Nadal: Spain, 22 Grand Slams, King of Clay",
           "Novak Djokovic: Serbia, 24 Grand Slams, most weeks at #1",

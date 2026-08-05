@@ -77,7 +77,7 @@ function save(today: string, s: Saved) {
 export function useMysteryBox(): MysteryBoxState {
   const today = useMemo(() => getTodayET(), []);
   const seed = useMemo(() => dateSeed(today), [today]);
-  const formation = FORMATIONS[0]; // 4-3-3 — fixed so everyone's run is comparable
+  const formation = FORMATIONS[0]; // 4-3-3, fixed so everyone's run is comparable
 
   const [pool, setPool] = useState<PackPlayer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -197,7 +197,7 @@ export function useMysteryBox(): MysteryBoxState {
       superstar: '🟪', star: '🟨', quality: '🟩', squad: '⬜', fringe: '🟫',
     };
     const pulls = packs.map(p => tierEmoji[p.tier]).join('');
-    return `Mystery Box — ${today}\n${pulls}\nXI rating ${rating} · ${filled}/11 filled · best pull: ${bestPull?.name ?? '—'}\nBeat my pulls: douknowball.com/mystery-box`;
+    return `Mystery Box, ${today}\n${pulls}\nXI rating ${rating} · ${filled}/11 filled · best pull: ${bestPull?.name ?? ', '}\nBeat my pulls: douknowball.com/mystery-box`;
   }, [finished, packs, rating, filled, bestPull, today]);
 
   return {

@@ -2177,7 +2177,7 @@ function get32WCTeams(playerNation: string, playerOverall: number): string[] {
   if (shuffled.length >= needed) {
     teams.push(...shuffled.slice(0, needed));
   } else {
-    // Not enough qualified — fill remainder from pool by strength
+    // Not enough qualified, fill remainder from pool by strength
     teams.push(...shuffled);
     const remaining = pool.filter(n => !teams.includes(n))
       .map(n => ({ n, w: getNationStrength(n) + rand(0, 15) }))
@@ -2198,7 +2198,7 @@ function simulateMatch(teamA: string, teamB: string, strA: number, strB: number,
   let scoreA = Math.max(0, Math.round(baseA + (Math.random() - 0.4) * 2));
   let scoreB = Math.max(0, Math.round(baseB + (Math.random() - 0.4) * 2));
   if (isKnockout && scoreA === scoreB) {
-    // Penalties — 50/50 weighted by strength
+    // Penalties, 50/50 weighted by strength
     if (Math.random() < 0.5 + diff * 0.15) scoreA += 1;
     else scoreB += 1;
   }
@@ -2532,7 +2532,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
   s.marketValue = calcMarketValue(s.overall, s.age, s.position, s.socialMediaFollowers);
 
-  // International career check — first call-up
+  // International career check, first call-up
   if (!s.internationalCareer && !s.intStats.isRetired && shouldGetCallUp(s)) {
     s.internationalCareer = true;
     s.intStats = { ...s.intStats, debutYear: season.year, debutAge: s.age };
@@ -2605,7 +2605,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       s.pendingRivalryEvent = pick(rivalEvents);
     }
   }
-  // Rival just retired — show retirement event
+  // Rival just retired, show retirement event
   if (s.rival?.retired && s.lastRivalryEventId !== 105) {
     const retireEvt = getRivalryEvents(s).find(e => e.id === 105);
     if (retireEvt) s.pendingRivalryEvent = retireEvt;
@@ -2627,7 +2627,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   if (season.leagueTitle) s.events.push(`🏆 Won the league with ${s.currentClub}!`);
   if (season.domesticCup) s.events.push(`🏆 Won the Domestic Cup with ${s.currentClub}!`);
 
-  // Awards: Player of the Month — simulate month-by-month based on goals
+  // Awards: Player of the Month, simulate month-by-month based on goals
   const MONTHS = ["August", "September", "October", "November", "December", "January", "February", "March", "April", "May"];
   const potmTotalGoals = season.goals;
   const potmTotalApps = season.apps;
@@ -3316,7 +3316,7 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
     if (e.id === 31 && state.popularity < 60) return false; // Met Gala needs fame
     if (e.id === 32 && state.popularity < 50) return false; // Documentary needs fame
     if (e.id === 33 && state.popularity < 40) return false; // TV show
-    if (e.id === 34 && (state.overall < 85 || state.age < 28)) return false; // Street naming — legend status
+    if (e.id === 34 && (state.overall < 85 || state.age < 28)) return false; // Street naming, legend status
     if (e.id === 35 && (state.overall < 88 || state.age < 30)) return false; // National honour
     if (e.id === 36 && state.netWorth < 50) return false; // Forbes top 10
     if (e.id === 37 && state.netWorth < 3) return false; // Academy needs €2M+
@@ -3530,7 +3530,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   const eraTopClubs = getEraTopClubs(year);
   const eraLeagues = getEraLeagueClubs(year);
 
-  // --- Determine season's trophy winners (one club per competition) — era-correct ---
+  // --- Determine season's trophy winners (one club per competition), era-correct ---
   const uclWinnerClub = pick(eraTopClubs);
   // One league winner per league
   const leagueWinners: Record<string, string> = {};
@@ -3897,7 +3897,7 @@ function createRival(state: CareerState, clubs: ClubData[]): RivalPlayer {
   const tiers = rivalOvr >= 80 ? [1] : rivalOvr >= 70 ? [1, 2] : rivalOvr >= 60 ? [2, 3] : [3, 4];
   const candidates = clubs.filter(c => tiers.includes(c.tier) && c.name !== state.currentClub);
   const rivalClub = candidates.length > 0 ? pick(candidates) : { name: "Unknown FC", tier: 2 };
-  // Pick nationality — prefer same region
+  // Pick nationality, prefer same region
   const sameNatChance = Math.random();
   const rivalNat = sameNatChance < 0.3 ? state.nationality : pick(Object.keys(FLAG_MAP));
   return {
