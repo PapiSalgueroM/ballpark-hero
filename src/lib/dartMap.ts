@@ -47,13 +47,45 @@ export const DART_SLOTS: FormationSlot[] = FORMATIONS[0].slots;
 /* ---------------- Country lookup ---------------- */
 interface Bounds { minx: number; miny: number; maxx: number; maxy: number; area: number }
 
+/**
+ * Antimeridian unwrap. Russia, the US (Aleutians) and Fiji cross the 180th
+ * meridian, so their raw rings jump from one map edge to the other. Drawn
+ * naively that paints full-width smear bars across the Arctic and Pacific
+ * (the owner's "map looks weird" bug) and inflates their bounding areas,
+ * wrecking accuracy scoring. Unwrapping keeps each ring contiguous past the
+ * edge; pathOf then draws a shifted copy so both halves appear correctly.
+ */
+const unwrappedCache = new Map<string, number[][][]>();
+
+function unwrappedRings(c: GeoCountry): number[][][] {
+  let r = unwrappedCache.get(c.iso);
+  if (r) return r;
+  r = c.rings.map(ring => {
+    const out: number[][] = [];
+    let offset = 0;
+    let prevX: number | null = null;
+    for (const [x, y] of ring) {
+      let xx = x + offset;
+      if (prevX !== null) {
+        if (xx - prevX > WORLD_W / 2) { offset -= WORLD_W; xx = x + offset; }
+        else if (xx - prevX < -WORLD_W / 2) { offset += WORLD_W; xx = x + offset; }
+      }
+      out.push([xx, y]);
+      prevX = xx;
+    }
+    return out;
+  });
+  unwrappedCache.set(c.iso, r);
+  return r;
+}
+
 const boundsCache = new Map<string, Bounds>();
 
 function boundsOf(c: GeoCountry): Bounds {
   let b = boundsCache.get(c.iso);
   if (b) return b;
   let minx = 1e9, miny = 1e9, maxx = -1e9, maxy = -1e9;
-  for (const ring of c.rings) {
+  for (const ring of unwrappedRings(c)) {
     for (const [x, y] of ring) {
       if (x < minx) minx = x;
       if (x > maxx) maxx = x;
@@ -82,11 +114,20 @@ export function countryAt(x: number, y: number): GeoCountry | null {
   let bestArea = Infinity;
   for (const c of GEO_COUNTRIES) {
     const b = boundsOf(c);
-    if (x < b.minx || x > b.maxx || y < b.miny || y > b.maxy) continue;
     if (b.area >= bestArea) continue;
-    for (const ring of c.rings) {
-      if (inRing(x, y, ring)) { best = c; bestArea = b.area; break; }
+    if (y < b.miny || y > b.maxy) continue;
+    const rings = unwrappedRings(c);
+    let hit = false;
+    // Test the raw point plus both wrapped copies, so a dart in the Bering
+    // Strait side of the seam still lands in the right country.
+    for (const cx of [x, x + WORLD_W, x - WORLD_W]) {
+      if (cx < b.minx || cx > b.maxx) continue;
+      for (const ring of rings) {
+        if (inRing(cx, y, ring)) { hit = true; break; }
+      }
+      if (hit) break;
     }
+    if (hit) { best = c; bestArea = b.area; }
   }
   return best;
 }
@@ -96,9 +137,15 @@ const pathCache = new Map<string, string>();
 export function pathOf(c: GeoCountry): string {
   let p = pathCache.get(c.iso);
   if (p) return p;
-  p = c.rings
-    .map(ring => 'M' + ring.map(pt => `${pt[0]},${pt[1]}`).join('L') + 'Z')
-    .join('');
+  const rings = unwrappedRings(c);
+  const b = boundsOf(c);
+  const draw = (dx: number) =>
+    rings
+      .map(ring => 'M' + ring.map(pt => `${Math.round((pt[0] + dx) * 10) / 10},${pt[1]}`).join('L') + 'Z')
+      .join('');
+  p = draw(0);
+  if (b.maxx > WORLD_W) p += draw(-WORLD_W);
+  if (b.minx < 0) p += draw(WORLD_W);
   pathCache.set(c.iso, p);
   return p;
 }
