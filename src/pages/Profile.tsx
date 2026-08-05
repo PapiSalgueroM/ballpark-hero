@@ -46,6 +46,10 @@ const GAME_LABELS: Record<string, string> = {
   'cbb-program': '🏀 CBB Program', 'conquest': '🗺️ Conquest',
   'guess-the-year': '📆 Guess the Year', 'nba-lineup': '🏀 NBA Lineup',
   'guess-nfl-team': '🏈 Guess NFL Team', 'fantasy-draft': '⚽ Fantasy Draft',
+  // QA 2026-07-15: completion slugs now match registry route paths; old keys above
+  // are kept so historical rows still label. New-convention keys:
+  'guess-cbb-team': '🏀 CBB Program', 'guess-tennis-player': '🎾 Tennis Player',
+  'guess-nascar-driver': '🏁 NASCAR Driver',
 };
 
 const SPORT_CATEGORIES: Record<string, string> = {
@@ -66,6 +70,9 @@ const SPORT_CATEGORIES: Record<string, string> = {
   'nascar-driver': 'motorsport', 'nascar-chain': 'motorsport',
   'tennis-player': 'tennis', 'tennis-chain': 'tennis',
   'guess-the-year': 'general',
+  // New-convention slugs (see GAME_LABELS note above):
+  'guess-cbb-team': 'college', 'guess-tennis-player': 'tennis',
+  'guess-nascar-driver': 'motorsport',
 };
 
 const SPORT_LABELS: Record<string, string> = {

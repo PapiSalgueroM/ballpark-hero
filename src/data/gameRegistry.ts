@@ -26,7 +26,8 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/tier-list', label: 'Tier List', emoji: '🗂️', description: 'Rank eight players S to D, then face the crowd', daily: true, isNew: true },
       { path: '/budget-builder', label: '€1B Budget Builder', emoji: '💷', description: 'One billion euros, real values, eleven slots. Spend it well', isNew: true },
       { path: '/rebuild', label: 'Rebuild Challenge', emoji: '🔧', description: 'Inherit a real club and €100M. Sell, sign, hit the target', isNew: true },
-      { path: '/grade-transfer', label: 'Grade the Transfer', emoji: '📋', description: 'Grade five real moves A to F, then see how they aged', daily: true, isNew: true },
+      // deleted 2026-08-05 per owner review: "dosent even load and it's just like their tier list game... please delete it".
+      // { path: '/grade-transfer', label: 'Grade the Transfer', emoji: '📋', description: 'Grade five real moves A to F, then see how they aged', daily: true, isNew: true },
       { path: '/dart-draft', label: 'Dart Draft', emoji: '🎯', description: 'Throw timed darts at a real world map: hit a country, draft its players', isNew: true },
       { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', isNew: true },
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', isNew: true },
@@ -49,7 +50,8 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/higher-lower', label: 'Higher or Lower', emoji: '📊', description: 'Compare all-time career stats' },
       { path: '/connections', label: 'Connections', emoji: '🔗', description: 'Find groups of 4 connected players' },
       { path: '/build-your-xi', label: 'Build Your XI', emoji: '⚽', description: 'Create a lineup, get AI rated' },
-      { path: '/perfect-lineup', label: 'Perfect Lineup', emoji: '⚽', description: 'Build an XI under random league & country constraints, then simulate', daily: true, isNew: true },
+      // deleted 2026-08-05 per owner review: "Delete perfect lineup."
+      // { path: '/perfect-lineup', label: 'Perfect Lineup', emoji: '⚽', description: 'Build an XI under random league & country constraints, then simulate', daily: true, isNew: true },
       { path: '/football-connect-4', label: 'Connect 4', emoji: '🔴', description: 'Soccer trivia meets Connect 4' },
       // Revived 2026-07-22. Was deleted 2026-07-08 as "buggy (hint x3 -> blank
       // screen) and too few possible puzzles for a rare event". The bug is
@@ -59,8 +61,10 @@ export const CATEGORIES: GameCategory[] = [
       // The content objection is answered by relaunching UNLIMITED-FIRST (no
       // daily flag here, page defaults to unlimited): 60 puzzles is thin as a
       // headline daily but plenty as a replayable archive.
-      { path: '/world-cup', label: 'World Cup Legends', emoji: '🏆', description: 'Guess the World Cup legend, clue by clue', isNew: true },
-      { path: '/guess-soccer-club', label: 'Guess The Club', emoji: '🏟️', description: 'Identify the mystery football club', daily: true, isNew: true },
+      // deleted 2026-08-05 per owner review: "Delete World Cup legends too."
+      // { path: '/world-cup', label: 'World Cup Legends', emoji: '🏆', description: 'Guess the World Cup legend, clue by clue', isNew: true },
+      // deleted 2026-08-05 per owner review: "Delete guess the club."
+      // { path: '/guess-soccer-club', label: 'Guess The Club', emoji: '🏟️', description: 'Identify the mystery football club', daily: true, isNew: true },
       { path: '/soccer-grid', label: 'Soccer Grid', emoji: '⚽', description: '3×3 grid puzzle with rarity scores', daily: true, isNew: true },
       { path: '/world-cup-bracket', label: '2026 Bracket', emoji: '🌍', description: 'Predict every World Cup 2026 match', isNew: true },
       { path: '/soccer-career', label: 'Soccer Career', emoji: '⚽', description: 'Build your career from youth academy to legend. BitLife meets football.', isNew: true },
@@ -68,11 +72,13 @@ export const CATEGORIES: GameCategory[] = [
       // deleted 2026-07-08 per owner review: too easy/boring. Route kept for direct links; uncomment to revive.
       // { path: '/shirt-number', label: 'Shirt Number', emoji: '👕', description: 'Guess the kit number a player wears', daily: true, isNew: true },
       { path: '/transfer-path', label: 'Transfer Path', emoji: '🔄', description: 'Connect two players through shared clubs', daily: true, isNew: true },
-      { path: '/guess-transfer-value', label: 'Guess The Value', emoji: '💰', description: 'Guess a player’s transfer market value', daily: true, isNew: true },
+      // deleted 2026-08-05 per owner review: "Guess the value [doesn't] even load and I would say u should delete it."
+      // { path: '/guess-transfer-value', label: 'Guess The Value', emoji: '💰', description: 'Guess a player's transfer market value', daily: true, isNew: true },
       // moved from the retired Game Shows tab 2026-07-08 (owner: game-show games belong in their sport)
       { path: '/squad-deal', label: 'Squad Deal', emoji: '🏟️', description: 'Build an XI, Deal or No Deal style', isNew: true },
       { path: '/player-stock-market', label: 'Player Stock Market', emoji: '📈', description: 'Buy 3 players at real past values, then the market moves a real year', daily: true, isNew: true },
-      { path: '/deal-or-no-deal', label: 'Deal or No Deal', emoji: '💼', description: 'Bank or gamble against the Banker', isNew: true },
+      // deleted 2026-08-05 per owner review: "delete the normal deal or no deal." (Squad Deal stays)
+      // { path: '/deal-or-no-deal', label: 'Deal or No Deal', emoji: '💼', description: 'Bank or gamble against the Banker', isNew: true },
       // deleted 2026-07-08 per owner review: "discard this". Route kept for direct links; uncomment to revive.
       // { path: '/pack-battle', label: 'Pack Battle', emoji: '🃏', description: 'Call higher or lower before each card flips. One miss busts the pack', daily: true, isNew: true },
     ],
@@ -85,7 +91,8 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/football-grid', label: 'Pro Football Grid', emoji: '🏈', description: '3×3 grid puzzle with rarity scores', daily: true },
       // retired 2026-07-08 per owner review: "too easy and boring... unless ur going to add to it, discard it". Route kept for direct links; uncomment to revive.
       // { path: '/football-timeline', label: 'Timeline', emoji: '📅', description: 'Order players by draft year', daily: true },
-      { path: '/football-draft', label: 'Draft Guesser', emoji: '🎰', description: 'Guess the draft round', daily: true },
+      // deleted 2026-08-05 per owner review: "Draft guessed is boring and I say delete it."
+      // { path: '/football-draft', label: 'Draft Guesser', emoji: '🎰', description: 'Guess the draft round', daily: true },
       { path: '/nfl-career', label: 'NFL Career Path', emoji: '🏈', description: 'Guess the NFL player from clues', daily: true },
       { path: '/nfl-higher-lower', label: 'NFL Higher or Lower', emoji: '📊', description: 'Which star scored more career touchdowns?', daily: true, isNew: true },
       { path: '/nfl-connections', label: 'NFL Connections', emoji: '🧩', description: 'Group 20 players into four hidden connections', daily: true, isNew: true },
@@ -197,6 +204,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'World & Olympic Games',
     emoji: '🌍',
     games: [
+      { path: '/rank-em', label: "Rank 'Em", emoji: '📊', description: 'Put five players in order by a career stat, most to fewest', daily: true, isNew: true },
       { path: '/teammates', label: 'Teammates or Not?', emoji: '🤝', description: 'Were they ever teammates?', isNew: true },
       { path: '/olympics', label: 'The Medal Games', emoji: '🏅', description: 'Guess the mystery athlete from clues', daily: true, isNew: true },
       { path: '/guess-the-year', label: 'Guess The Year', emoji: '📅', description: 'What year did these happen?', daily: true, isNew: true },

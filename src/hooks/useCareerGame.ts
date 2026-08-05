@@ -250,7 +250,7 @@ export function useCareerGame() {
   const completionScore = dailyGameStatus === 'won'
     ? Math.max(100, (MAX_GUESSES - dailyGuessesUsed) * 100)
     : 0;
-  useGameCompletion('career-path', rawDailyStatus !== 'playing', completionScore);
+  useGameCompletion('career', rawDailyStatus !== 'playing', completionScore);
 
   return {
     mode, switchMode,

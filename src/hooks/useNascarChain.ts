@@ -3,6 +3,7 @@ import { NascarChainState, NascarChainMode, getNascarChainMultiplier, getNascarE
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import type { PlayerSourceConfig } from '@/lib/playerSearch';
+import { toast } from 'sonner';
 
 /**
  * NASCAR driver pool for the shared PlayerAutocomplete input (see
@@ -119,20 +120,10 @@ export function useNascarChain() {
         }) : null);
       }
     } catch {
-      const newChain = [...gameState.chain];
-      newChain.push({ driverName: guessedName });
-      const newRawScore = gameState.rawScore + 100;
-      const chainLength = newChain.length - 1;
-      const multiplier = getNascarChainMultiplier(chainLength);
-
-      setGameState(prev => prev ? ({
-        ...prev,
-        currentDriver: guessedName,
-        chain: newChain,
-        score: Math.floor(newRawScore * multiplier),
-        rawScore: newRawScore,
-        usedDrivers: new Set([...prev.usedDrivers, guessedName.toLowerCase()]),
-      }) : null);
+      // FAIL CLOSED: a network failure is not a wrong answer — don't accept
+      // an unverified guess (that farms score) and don't end the game.
+      // Leave the chain untouched and ask the player to retry.
+      toast.error("Couldn't verify that guess right now — please try again.");
     } finally {
       setValidating(false);
     }

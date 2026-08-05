@@ -223,7 +223,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
 
     if (!response.ok) {
       return new Response(
-        JSON.stringify({ valid: false, reason: "Could not verify. Please try again." }),
+        JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -238,7 +238,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
       parsed = JSON.parse(jsonMatch[1].trim());
       aiVerdict = true;
     } catch {
-      parsed = { valid: false, reason: "Could not parse response. Please try again." };
+      parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." };
     }
 
     // cache VERIFIED verdicts only — never the unverified fallbacks
@@ -252,7 +252,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
   } catch (e) {
     console.error("football-connect4-validate error:", e);
     return new Response(
-      JSON.stringify({ valid: false, reason: "Validation error. Please try again." }),
+      JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

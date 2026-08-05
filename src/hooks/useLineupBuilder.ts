@@ -209,7 +209,7 @@ export function useLineupBuilder() {
     setIsSpinning(false);
   }, []);
 
-  useGameCompletion('lineup-builder', phase === 'result', verdict ? 500 : 0);
+  useGameCompletion('build-your-xi', phase === 'result', verdict ? 500 : 0);
 
   return {
     formation, phase, selectedPositionIndex, currentTeam, positions,

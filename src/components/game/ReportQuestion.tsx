@@ -33,12 +33,26 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
     setStatus('loading');
     try {
       const description = [reason, details].filter(Boolean).join(': ');
-      const { error } = await supabase.from('question_reports' as any).insert({
-        game_type: gameType,
-        game_context: gameContext,
-        description,
-      } as any);
-      if (error) throw error;
+      // Preferred path: the report-relay edge function stores the report AND
+      // emails it to the owner's inbox. If the function is unreachable, fall
+      // back to the direct table insert so no report is ever lost.
+      let delivered = false;
+      try {
+        const { data, error: fnError } = await supabase.functions.invoke('report-relay', {
+          body: { game_type: gameType, game_context: gameContext, description },
+        });
+        delivered = !fnError && (data as { ok?: boolean } | null)?.ok !== false;
+      } catch {
+        delivered = false;
+      }
+      if (!delivered) {
+        const { error } = await supabase.from('question_reports' as any).insert({
+          game_type: gameType,
+          game_context: gameContext,
+          description,
+        } as any);
+        if (error) throw error;
+      }
       setStatus('success');
       setTimeout(() => {
         setOpen(false);

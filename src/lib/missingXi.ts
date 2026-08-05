@@ -560,7 +560,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Eduardo Camavinga', slotIndex: 5, nationality: 'France', clubAtTime: 'Real Madrid' },
       { name: 'Nacho', slotIndex: 3, nationality: 'Spain', clubAtTime: 'Real Madrid' },
-      { name: 'Rodrygo', slotIndex: 9, nationality: 'Brazil', clubAtTime: 'Real Madrid' },
+      { name: 'Rodrygo', slotIndex: 10, nationality: 'Brazil', clubAtTime: 'Real Madrid' },
     ],
     source: 'Wikipedia + Sky Sports + Managing Madrid confirmed-lineups (Camavinga in for Tchouameni) + CBS/NBC Sports, unanimous.',
   },
@@ -1495,7 +1495,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Fernandinho', slotIndex: 3, nationality: 'Brazil', clubAtTime: 'Manchester City' },
       { name: 'João Cancelo', slotIndex: 4, nationality: 'Portugal', clubAtTime: 'Manchester City' },
-      { name: 'Phil Foden', slotIndex: 9, nationality: 'England', clubAtTime: 'Manchester City' },
+      { name: 'Phil Foden', slotIndex: 10, nationality: 'England', clubAtTime: 'Manchester City' },
     ],
     source: 'Man City official site + Sky Sports + ESPN + Sports Mole + Coaches Voice, all agree.',
   },
@@ -2275,7 +2275,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Freddie Ljungberg', slotIndex: 5, nationality: 'Sweden', clubAtTime: 'Arsenal' },
       { name: 'Kolo Touré', slotIndex: 2, nationality: "Cote d'Ivoire", clubAtTime: 'Arsenal' },
-      { name: 'Gilberto Silva', slotIndex: 6, nationality: 'Brazil', clubAtTime: 'Arsenal' },
+      { name: 'Gilberto Silva', slotIndex: 7, nationality: 'Brazil', clubAtTime: 'Arsenal' },
     ],
     source: 'Wikipedia match report + Arsenal.com official retrospective + 11v11.com archive, unanimous on the final home match of the unbeaten season.',
   },
@@ -3176,7 +3176,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Sulley Muntari', slotIndex: 6, nationality: 'Ghana', clubAtTime: 'AC Milan' },
       { name: 'Luca Antonini', slotIndex: 4, nationality: 'Italy', clubAtTime: 'AC Milan' },
-      { name: 'Antonio Nocerino', slotIndex: 9, nationality: 'Italy', clubAtTime: 'AC Milan' },
+      { name: 'Antonio Nocerino', slotIndex: 10, nationality: 'Italy', clubAtTime: 'AC Milan' },
     ],
     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on the starting XI that eliminated Arsenal after the 4-0 first-leg shock.',
   },
@@ -3239,7 +3239,7 @@ export const LINEUPS: Lineup[] = [
     ],
     blankCandidates: [
       { name: 'Lucas Vazquez', slotIndex: 8, nationality: 'Spain', clubAtTime: 'Real Madrid' },
-      { name: 'Marco Asensio', slotIndex: 9, nationality: 'Spain', clubAtTime: 'Real Madrid' },
+      { name: 'Marco Asensio', slotIndex: 10, nationality: 'Spain', clubAtTime: 'Real Madrid' },
       { name: 'Ferland Mendy', slotIndex: 4, nationality: 'France', clubAtTime: 'Real Madrid' },
     ],
     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on the starting XI for this quarterfinal-clinching win.',
@@ -3431,8 +3431,8 @@ export const LINEUPS: Lineup[] = [
     ],
     blankCandidates: [
       { name: 'Willy Sagnol', slotIndex: 4, nationality: 'France', clubAtTime: 'Bayern Munich' },
-      { name: 'Giovane Elber', slotIndex: 8, nationality: 'Brazil', clubAtTime: 'Bayern Munich' },
-      { name: 'Mehmet Scholl', slotIndex: 7, nationality: 'Germany', clubAtTime: 'Bayern Munich' },
+      { name: 'Giovane Elber', slotIndex: 9, nationality: 'Brazil', clubAtTime: 'Bayern Munich' },
+      { name: 'Mehmet Scholl', slotIndex: 8, nationality: 'Germany', clubAtTime: 'Bayern Munich' },
     ],
     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on the starting XI and the penalty shootout win.',
   },
@@ -3528,8 +3528,8 @@ export const LINEUPS: Lineup[] = [
     ],
     blankCandidates: [
       { name: 'Ricardo Carvalho', slotIndex: 2, nationality: 'Portugal', clubAtTime: 'Porto' },
-      { name: 'Maniche', slotIndex: 6, nationality: 'Portugal', clubAtTime: 'Porto' },
-      { name: 'Nuno Gomes', slotIndex: 8, nationality: 'Portugal', clubAtTime: 'Benfica' },
+      { name: 'Maniche', slotIndex: 7, nationality: 'Portugal', clubAtTime: 'Porto' },
+      { name: 'Nuno Gomes', slotIndex: 9, nationality: 'Portugal', clubAtTime: 'Benfica' },
     ],
     source: 'Wikipedia infobox for the Euro 2004 Final, agrees on the host nation\'s starting XI in the shock defeat to Greece.',
   },
@@ -3626,7 +3626,7 @@ export const LINEUPS: Lineup[] = [
     // Casillas started ahead of the injured Bodo Illgner, a surprise for a 19-year-old in a European Cup final - real, well-documented.
     blankCandidates: [
       { name: 'Iker Casillas', slotIndex: 0, nationality: 'Spain', clubAtTime: 'Real Madrid' },
-      { name: 'Fernando Morientes', slotIndex: 7, nationality: 'Spain', clubAtTime: 'Real Madrid' },
+      { name: 'Fernando Morientes', slotIndex: 8, nationality: 'Spain', clubAtTime: 'Real Madrid' },
       { name: 'Ivan Helguera', slotIndex: 2, nationality: 'Spain', clubAtTime: 'Real Madrid' },
     ],
     source: 'Wikipedia dedicated match article, confirms 19-year-old Casillas started in goal ahead of the injured Illgner.',
@@ -3788,7 +3788,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Rio Ferdinand', slotIndex: 2, nationality: 'England', clubAtTime: 'Manchester United' },
       { name: 'Antonio Valencia', slotIndex: 5, nationality: 'Ecuador', clubAtTime: 'Manchester United' },
-      { name: 'Wayne Rooney', slotIndex: 8, nationality: 'England', clubAtTime: 'Manchester United' },
+      { name: 'Wayne Rooney', slotIndex: 9, nationality: 'England', clubAtTime: 'Manchester United' },
     ],
     source: 'Wikipedia dedicated match article + Manchester United official archive, confirms Fabio (not Rafael) started at right back.',
   },
@@ -3852,7 +3852,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Willy Sagnol', slotIndex: 1, nationality: 'France', clubAtTime: 'Bayern Munich' },
       { name: 'Eric Abidal', slotIndex: 4, nationality: 'France', clubAtTime: 'Lyon' },
-      { name: 'Florent Malouda', slotIndex: 8, nationality: 'France', clubAtTime: 'Lyon' },
+      { name: 'Florent Malouda', slotIndex: 9, nationality: 'France', clubAtTime: 'Lyon' },
     ],
     source: 'Wikipedia infobox for the 2006 Final, confirms Zidane\'s headbutt on Materazzi came from this starting XI in his last match.',
   },
@@ -3917,7 +3917,6 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Sime Vrsaljko', slotIndex: 1, nationality: 'Croatia', clubAtTime: 'Atletico Madrid' },
       { name: 'Domagoj Vida', slotIndex: 3, nationality: 'Croatia', clubAtTime: 'Besiktas' },
-      { name: 'Andrej Kramaric', slotIndex: 8, nationality: 'Croatia', clubAtTime: 'Hoffenheim' },
     ],
     source: 'Wikipedia infobox for the 2018 Final, agrees on Croatia\'s starting XI in their first-ever World Cup final.',
   },
@@ -3981,7 +3980,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Samuel Umtiti', slotIndex: 2, nationality: 'France', clubAtTime: 'Lyon' },
       { name: 'Blaise Matuidi', slotIndex: 5, nationality: 'France', clubAtTime: 'Paris Saint-Germain' },
-      { name: 'Olivier Giroud', slotIndex: 9, nationality: 'France', clubAtTime: 'Arsenal' },
+      { name: 'Olivier Giroud', slotIndex: 10, nationality: 'France', clubAtTime: 'Arsenal' },
     ],
     source: 'Wikipedia infobox for the Euro 2016 Final, agrees on France\'s starting XI as host nation runners-up.',
   },
@@ -4078,8 +4077,8 @@ export const LINEUPS: Lineup[] = [
     ],
     blankCandidates: [
       { name: 'Dejan Lovren', slotIndex: 3, nationality: 'Croatia', clubAtTime: 'Zenit Saint Petersburg' },
-      { name: 'Andrej Kramaric', slotIndex: 8, nationality: 'Croatia', clubAtTime: 'Hoffenheim' },
-      { name: 'Ivan Perišić', slotIndex: 7, nationality: 'Croatia', clubAtTime: 'Tottenham Hotspur' },
+      { name: 'Andrej Kramaric', slotIndex: 9, nationality: 'Croatia', clubAtTime: 'Hoffenheim' },
+      { name: 'Ivan Perišić', slotIndex: 8, nationality: 'Croatia', clubAtTime: 'Tottenham Hotspur' },
     ],
     source: 'Wikipedia dedicated match article, agrees on Croatia\'s starting XI in a lopsided semifinal loss to Messi\'s Argentina.',
   },
@@ -4144,7 +4143,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Daryl Janmaat', slotIndex: 1, nationality: 'Netherlands', clubAtTime: 'Feyenoord' },
       { name: 'Bruno Martins Indi', slotIndex: 4, nationality: 'Netherlands', clubAtTime: 'Feyenoord' },
-      { name: 'Wesley Sneijder', slotIndex: 9, nationality: 'Netherlands', clubAtTime: 'Galatasaray' },
+      { name: 'Wesley Sneijder', slotIndex: 10, nationality: 'Netherlands', clubAtTime: 'Galatasaray' },
     ],
     source: 'Wikipedia dedicated match article, confirms Cillessen played the full match (Krul\'s sub appearance was the prior round vs Costa Rica).',
   },
@@ -4306,7 +4305,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Ibrahima Konate', slotIndex: 2, nationality: 'France', clubAtTime: 'Liverpool' },
       { name: 'Thiago Alcántara', slotIndex: 7, nationality: 'Spain', clubAtTime: 'Liverpool' },
-      { name: 'Luis Diaz', slotIndex: 9, nationality: 'Colombia', clubAtTime: 'Liverpool' },
+      { name: 'Luis Diaz', slotIndex: 10, nationality: 'Colombia', clubAtTime: 'Liverpool' },
     ],
     source: 'Wikipedia dedicated match article + Liverpool FC official archive, confirms Courtois\' heroics denied this starting XI.',
   },
@@ -4371,7 +4370,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Nico Schlotterbeck', slotIndex: 3, nationality: 'Germany', clubAtTime: 'Borussia Dortmund' },
       { name: 'Ian Maatsen', slotIndex: 4, nationality: 'Netherlands', clubAtTime: 'Borussia Dortmund (loan)' },
-      { name: 'Karim Adeyemi', slotIndex: 9, nationality: 'Germany', clubAtTime: 'Borussia Dortmund' },
+      { name: 'Karim Adeyemi', slotIndex: 10, nationality: 'Germany', clubAtTime: 'Borussia Dortmund' },
     ],
     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on Dortmund\'s starting XI in their Wembley final.',
   },
@@ -4435,7 +4434,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Andrea Barzagli', slotIndex: 3, nationality: 'Italy', clubAtTime: 'Juventus' },
       { name: 'Dani Alves', slotIndex: 4, nationality: 'Brazil', clubAtTime: 'Juventus' },
-      { name: 'Mario Mandžukić', slotIndex: 9, nationality: 'Croatia', clubAtTime: 'Juventus' },
+      { name: 'Mario Mandžukić', slotIndex: 10, nationality: 'Croatia', clubAtTime: 'Juventus' },
     ],
     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on Juventus\'s starting XI in the semifinal 1st leg away win.',
   },
@@ -4627,7 +4626,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Cristian Chivu', slotIndex: 4, nationality: 'Romania', clubAtTime: 'Inter Milan' },
       { name: 'Thiago Motta', slotIndex: 6, nationality: 'Brazil', clubAtTime: 'Inter Milan' },
-      { name: 'Goran Pandev', slotIndex: 9, nationality: 'North Macedonia', clubAtTime: 'Inter Milan' },
+      { name: 'Goran Pandev', slotIndex: 10, nationality: 'North Macedonia', clubAtTime: 'Inter Milan' },
     ],
     source: 'Wikipedia match report + Inter official retrospective + Football Italia archive, unanimous on the Scudetto-clinching XI en route to the 2010 treble.',
   },
@@ -4787,7 +4786,7 @@ export const LINEUPS: Lineup[] = [
     ],
     blankCandidates: [
       { name: 'Josko Gvardiol', slotIndex: 4, nationality: 'Croatia', clubAtTime: 'Manchester City' },
-      { name: 'Jeremy Doku', slotIndex: 9, nationality: 'Belgium', clubAtTime: 'Manchester City' },
+      { name: 'Jeremy Doku', slotIndex: 10, nationality: 'Belgium', clubAtTime: 'Manchester City' },
       { name: 'Ruben Dias', slotIndex: 2, nationality: 'Portugal', clubAtTime: 'Manchester City' },
     ],
     source: 'Wikipedia match report + Manchester City official archive + Sky Sports lineup graphic, unanimous on a record fourth straight title.',
@@ -4820,7 +4819,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Alejandro Balde', slotIndex: 4, nationality: 'Spain', clubAtTime: 'Barcelona' },
       { name: 'Andreas Christensen', slotIndex: 2, nationality: 'Denmark', clubAtTime: 'Barcelona' },
-      { name: 'Raphinha', slotIndex: 9, nationality: 'Brazil', clubAtTime: 'Barcelona' },
+      { name: 'Raphinha', slotIndex: 10, nationality: 'Brazil', clubAtTime: 'Barcelona' },
     ],
     source: 'Wikipedia match report + FC Barcelona official archive + Marca, unanimous on the title-clinching starting XI.',
   },
@@ -4852,7 +4851,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Samuel Umtiti', slotIndex: 3, nationality: 'France', clubAtTime: 'Barcelona' },
       { name: 'Sergi Roberto', slotIndex: 1, nationality: 'Spain', clubAtTime: 'Barcelona' },
-      { name: 'Ousmane Dembele', slotIndex: 9, nationality: 'France', clubAtTime: 'Barcelona' },
+      { name: 'Ousmane Dembele', slotIndex: 10, nationality: 'France', clubAtTime: 'Barcelona' },
     ],
     source: 'Wikipedia match report + FC Barcelona official archive + Marca, agree on the title-clinching starting XI during the unbeaten league season.',
   },
@@ -5110,7 +5109,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Dante', slotIndex: 3, nationality: 'Brazil', clubAtTime: 'Bayern Munich' },
       { name: 'Toni Kroos', slotIndex: 6, nationality: 'Germany', clubAtTime: 'Bayern Munich' },
-      { name: 'Mario Mandžukić', slotIndex: 9, nationality: 'Croatia', clubAtTime: 'Bayern Munich' },
+      { name: 'Mario Mandžukić', slotIndex: 10, nationality: 'Croatia', clubAtTime: 'Bayern Munich' },
     ],
     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on Bayern\'s starting XI for the semifinal 1st leg loss.',
   },
@@ -5206,7 +5205,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'David Luiz', slotIndex: 3, nationality: 'Brazil', clubAtTime: 'Paris Saint-Germain' },
       { name: 'Marco Verratti', slotIndex: 6, nationality: 'Italy', clubAtTime: 'Paris Saint-Germain' },
-      { name: 'Lucas Moura', slotIndex: 9, nationality: 'Brazil', clubAtTime: 'Paris Saint-Germain' },
+      { name: 'Lucas Moura', slotIndex: 10, nationality: 'Brazil', clubAtTime: 'Paris Saint-Germain' },
     ],
     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on PSG\'s starting XI for the 2nd-leg draw that eliminated a struggling Chelsea.',
   },

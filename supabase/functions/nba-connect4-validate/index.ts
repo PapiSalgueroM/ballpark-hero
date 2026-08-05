@@ -4,23 +4,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const __GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
 const __AI_URL = __GEMINI_KEY ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions" : "https://ai.gateway.lovable.dev/v1/chat/completions";
 
-// ---------------------------------------------------------------------------
-// LIVE-BUG FIX (2026-07-22): the previous deployed version (v6) was a clone
-// of nba-validate-player — it required {playerName, teamName} and returned
-// 400 "Invalid teamName" for every request, because useNbaConnect4 sends
-// {playerName, columnAttribute, rowAttribute}. Every NBA Connect 4 guess was
-// being rejected, making the game unplayable. This rewrite restores the
-// attribute-pair contract, modeled on football-connect4-validate (the
-// working soccer validator), with NBA attribute definitions covering every
-// attribute string used in src/data/nbaConnect4Boards.ts.
-// ---------------------------------------------------------------------------
+// FAIL CLOSED (2026-07-22): when the AI backend can't verify (quota/parse/error),
+// do NOT accept. Return {valid:false, unverified:true} so the client shows
+// "couldn't verify, try again" instead of silently accepting an unchecked answer.
 
-// Verified-verdict cache: repeat guesses are answered from Postgres instead
-// of burning the free Gemini quota (10 requests/min).
 const sb = createClient(Deno.env.get("SUPABASE_URL") ?? "", Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "");
 const CACHE_GAME = "nba-connect4";
-// New key format `${player}|${row}|${col}` (2 pipes) can never collide with
-// the old broken version's 3-pipe keys, so stale rows are simply dead.
 const cacheKeyOf = (p: string, row: string, col: string) =>
   `${p}|${row}|${col}`.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 
@@ -203,14 +192,14 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
     );
     let response = await callAI();
     if (response.status === 429) {
-      // free-tier RPM hit: wait once and retry before falling back
+      // free-tier RPM hit: wait once and retry before failing closed
       await new Promise((r) => setTimeout(r, 1200));
       response = await callAI();
     }
 
     if (!response.ok) {
       return new Response(
-        JSON.stringify({ valid: true, reason: "Could not verify, allowing." }),
+        JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -225,10 +214,10 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
       parsed = JSON.parse(jsonMatch[1].trim());
       aiVerdict = true;
     } catch {
-      parsed = { valid: true, reason: "Could not parse validation response." };
+      parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." };
     }
 
-    // cache VERIFIED verdicts only — never the fail-open fallbacks
+    // cache VERIFIED verdicts only — never the fail-closed fallbacks
     if (aiVerdict && parsed && typeof parsed === "object") {
       try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict: parsed }); } catch { /* non-fatal */ }
     }
@@ -239,7 +228,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
   } catch (e) {
     console.error("nba-connect4-validate error:", e);
     return new Response(
-      JSON.stringify({ valid: true, reason: "Validation error, allowing." }),
+      JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

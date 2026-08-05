@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
-import { Trophy, Flame, TrendingUp, Sparkles, Users, Search, X, CalendarCheck, Globe } from 'lucide-react';
+import { Trophy, Flame, TrendingUp, Sparkles, Users, Search, X, Globe } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
@@ -10,9 +10,10 @@ import { StreakReminder } from '@/components/game/StreakReminder';
 import { useMostPlayed } from '@/hooks/useMostPlayed';
 import { PollOfTheDay } from '@/components/home/PollOfTheDay';
 import { useStreaks } from '@/hooks/useStreaks';
+import { AuthModal } from '@/components/auth/AuthModal';
 
 import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, TOTAL_GAMES, type GameDef } from '@/data/gameRegistry';
-import { getCurrentPlayerName } from '@/lib/completions';
+import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
 
 /**
  * Home search (item #15 audit pass).
@@ -194,9 +195,13 @@ function countPlayedGames(): number {
 
 export default function Index() {
   const { user, profile } = useAuth();
-  // #13: days-visited stat for the hero, local-first (see useStreaks()).
-  const { daysVisited } = useStreaks();
+  // Owner (2026-08-05): the hero shows a CONSECUTIVE-day streak (not total
+  // days visited), games played TODAY (not lifetime), and world rank, and all
+  // of it only for signed-in players. Guests get a sign-up nudge instead.
+  const { globalCurrentStreak } = useStreaks();
   const [playedCount, setPlayedCount] = useState(0);
+  const [gamesToday, setGamesToday] = useState(0);
+  const [authOpen, setAuthOpen] = useState(false);
   const [worldRank, setWorldRank] = useState<number | null>(null);
   // Same identity game_completions rows are written under (guest handle or
   // profile display name) — mirrors useGameNavbarStats.
@@ -217,6 +222,7 @@ export default function Index() {
 
   useEffect(() => {
     setPlayedCount(countPlayedGames());
+    setGamesToday(getLocalTodayCount());
   }, []);
 
   // Lifetime hero stats: distinct games ever completed under this handle
@@ -227,7 +233,8 @@ export default function Index() {
     let cancelled = false;
     const load = async () => {
       try {
-        const [playedRes, rankRes] = await Promise.all([
+        const todayUtc = new Date().toISOString().split('T')[0];
+        const [playedRes, rankRes, todayRes] = await Promise.all([
           (supabase.from as any)('game_completions')
             .select('game')
             .eq('player_name', playerName),
@@ -236,8 +243,19 @@ export default function Index() {
             p_period: 'alltime',
             p_games: null,
           }),
+          (supabase.from as any)('game_completions')
+            .select('game')
+            .eq('player_name', playerName)
+            .eq('completed_on', todayUtc),
         ]);
         if (cancelled) return;
+
+        if (todayRes?.data) {
+          const distinctToday = new Set(
+            (todayRes.data as Array<{ game: string }>).map(r => r.game)
+          ).size;
+          setGamesToday(prev => Math.max(prev, distinctToday));
+        }
 
         if (playedRes?.data) {
           // Only count games that still exist on the site, so the chip can
@@ -331,27 +349,49 @@ export default function Index() {
               The Ultimate Sports Trivia Hub
             </p>
 
-            {/* Stats bar: PERSONAL stats only. Owner (2026-07-10): site-wide
-                traffic numbers ("games played today", "playing today") are
-                competitor intelligence and must never render publicly.
-                2026-07-15: played chip is lifetime distinct games, plus an
-                all-time world-rank chip (renders only once a rank exists). */}
-            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm">
-              <div className="flex items-center gap-1.5 text-muted-foreground">
-                <CalendarCheck className="w-4 h-4 text-[hsl(43,85%,55%)]" />
-                <span>You've visited <strong className="text-foreground">{daysVisited}</strong> {daysVisited === 1 ? 'day' : 'days'}</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-muted-foreground">
-                <Trophy className="w-4 h-4 text-[hsl(43,85%,55%)]" />
-                <span>You've played <strong className="text-foreground">{playedCount}/{TOTAL_GAMES}</strong> games</span>
-              </div>
-              {worldRank !== null && (
+            {/* Stats bar: PERSONAL stats, signed-in only (owner 2026-08-05).
+                Streak = consecutive days, played = today's count, plus world
+                rank. Guests see a sign-up nudge because none of it saves
+                without an account. Site-wide traffic numbers still must
+                never render publicly (owner 2026-07-10). */}
+            {user ? (
+              <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm">
                 <div className="flex items-center gap-1.5 text-muted-foreground">
-                  <Globe className="w-4 h-4 text-primary" />
-                  <span>World rank <strong className="text-foreground">#{worldRank.toLocaleString()}</strong></span>
+                  <Flame className="w-4 h-4 text-orange-500" />
+                  <span>
+                    {globalCurrentStreak > 0 ? (
+                      <><strong className="text-foreground">{globalCurrentStreak}</strong> {globalCurrentStreak === 1 ? 'day' : 'days'} in a row</>
+                    ) : (
+                      'Play anything to start your streak'
+                    )}
+                  </span>
                 </div>
-              )}
-            </div>
+                <div className="flex items-center gap-1.5 text-muted-foreground">
+                  <Trophy className="w-4 h-4 text-[hsl(43,85%,55%)]" />
+                  <span>Played today: <strong className="text-foreground">{gamesToday}</strong></span>
+                </div>
+                {worldRank !== null && (
+                  <div className="flex items-center gap-1.5 text-muted-foreground">
+                    <Globe className="w-4 h-4 text-primary" />
+                    <span>World rank <strong className="text-foreground">#{worldRank.toLocaleString()}</strong></span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-2">
+                <button
+                  onClick={() => setAuthOpen(true)}
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 active:scale-[0.98] transition-all"
+                >
+                  <Flame className="w-4 h-4" />
+                  Make a free account
+                </button>
+                <p className="text-xs text-muted-foreground">
+                  Sign up and your streak, points and world rank actually count.
+                </p>
+              </div>
+            )}
+            <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} defaultTab="signup" />
           </div>
         </section>
 

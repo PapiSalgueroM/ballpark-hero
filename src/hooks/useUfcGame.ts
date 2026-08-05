@@ -109,7 +109,7 @@ export function useUfcGame() {
   const dailyScore = effectiveDailyStatus === 'won'
     ? Math.max(100, (MAX_GUESSES - dailyGuesses.length) * 100)
     : 0;
-  useGameCompletion('ufc-game', effectiveDailyStatus !== 'playing', dailyScore);
+  useGameCompletion('ufc', effectiveDailyStatus !== 'playing', dailyScore);
 
   return {
     mode,

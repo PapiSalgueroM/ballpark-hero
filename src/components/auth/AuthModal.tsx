@@ -185,9 +185,15 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center font-display text-2xl">
-            {tab === 'login' ? 'Welcome Back!' : 'Create Account'}
+            {tab === 'login' ? 'Welcome Back!' : 'Join DoUKnowBall'}
           </DialogTitle>
         </DialogHeader>
+
+        <p className="text-center text-sm text-muted-foreground -mt-2">
+          {tab === 'login'
+            ? 'Good to see you again. Log in and pick your streak back up.'
+            : "First time here? It's free and takes 10 seconds. Streaks, points and world rank only count once you have an account."}
+        </p>
 
         <div className="space-y-4 py-4">
           {/* Google OAuth Button */}

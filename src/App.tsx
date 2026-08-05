@@ -18,19 +18,16 @@ import UfcGame from "./pages/UfcGame";
 import NbaLineup from "./pages/NbaLineup";
 import NbaConnect4 from "./pages/NbaConnect4";
 import NbaChain from "./pages/NbaChain";
-import WorldCup from "./pages/WorldCup";
 import FootballConnect4 from "./pages/FootballConnect4";
 import FootballGrid from "./pages/FootballGrid";
 import CollegeGrid from "./pages/CollegeGrid";
 import FootballTimeline from "./pages/FootballTimeline";
-import FootballDraft from "./pages/FootballDraft";
 import BaseballCareer from "./pages/BaseballCareer";
 import BaseballConnections from "./pages/BaseballConnections";
 import HockeyCareer from "./pages/HockeyCareer";
 import HockeyHigherLower from "./pages/HockeyHigherLower";
 import NFLCareer from "./pages/NFLCareer";
 import Teammates from "./pages/Teammates";
-import PerfectLineup from "./pages/PerfectLineup";
 import CollegeHub from "./pages/CollegeHub";
 import PerfectLineupNba from "./pages/PerfectLineupNba";
 import PerfectLineupF1 from "./pages/PerfectLineupF1";
@@ -47,7 +44,6 @@ import Profile from "./pages/Profile";
 import Leaderboard from "./pages/Leaderboard";
 import GuessTheYear from "./pages/GuessTheYear";
 import GuessNflTeam from "./pages/GuessNflTeam";
-import GuessSoccerClub from "./pages/GuessSoccerClub";
 import GuessTheNation from "./pages/GuessTheNation";
 import F1Driver from "./pages/F1Driver";
 import F1Constructor from "./pages/F1Constructor";
@@ -65,8 +61,6 @@ import ShirtNumber from "./pages/ShirtNumber";
 import HofOrBust from "./pages/HofOrBust";
 import ScorePredictor from "./pages/ScorePredictor";
 import TransferPath from "./pages/TransferPath";
-import GuessTransferValue from "./pages/GuessTransferValue";
-import DealOrNoDeal from "./pages/DealOrNoDeal";
 import SquadDeal from "./pages/SquadDeal";
 import ClubManager from "./pages/ClubManager";
 import ListQuiz from "./pages/ListQuiz";
@@ -95,7 +89,6 @@ import Minefield from "./pages/Minefield";
 import OverratedUnderrated from "./pages/OverratedUnderrated";
 import TierList from "./pages/TierList";
 import BudgetBuilder from "./pages/BudgetBuilder";
-import GradeTransfer from "./pages/GradeTransfer";
 import Jeopardy from "./pages/Jeopardy";
 import BallIq from "./pages/BallIq";
 import Rebuild from "./pages/Rebuild";
@@ -118,6 +111,7 @@ import NflConnect4 from "./pages/NflConnect4";
 import MissingFive from "./pages/MissingFive";
 import MissingNine from "./pages/MissingNine";
 import MissingEleven from "./pages/MissingEleven";
+import RankEm from "./pages/RankEm";
 import PlayerStockMarket from "./pages/PlayerStockMarket";
 import NhlConnect4 from "./pages/NhlConnect4";
 
@@ -221,11 +215,11 @@ const AppContent = () => {
         <Route path="/nba-connect-4" element={<NbaConnect4 />} />
         <Route path="/nba-chain" element={<NbaChain />} />
         <Route path="/football-connect-4" element={<FootballConnect4 />} />
-        <Route path="/world-cup" element={<WorldCup />} />
+        <Route path="/world-cup" element={<Navigate to="/" replace />} />
         <Route path="/football-grid" element={<FootballGrid />} />
         <Route path="/college-grid" element={<CollegeGrid />} />
         <Route path="/football-timeline" element={<FootballTimeline />} />
-        <Route path="/football-draft" element={<FootballDraft />} />
+        <Route path="/football-draft" element={<Navigate to="/" replace />} />
         <Route path="/baseball-career" element={<BaseballCareer />} />
         <Route path="/baseball-connections" element={<BaseballConnections />} />
         <Route path="/hockey-career" element={<HockeyCareer />} />
@@ -244,7 +238,7 @@ const AppContent = () => {
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/guess-the-year" element={<GuessTheYear />} />
         <Route path="/guess-nfl-team" element={<GuessNflTeam />} />
-        <Route path="/guess-soccer-club" element={<GuessSoccerClub />} />
+        <Route path="/guess-soccer-club" element={<Navigate to="/" replace />} />
         <Route path="/guess-the-nation" element={<GuessTheNation />} />
         <Route path="/f1-driver" element={<F1Driver />} />
         <Route path="/f1-constructor" element={<F1Constructor />} />
@@ -262,15 +256,15 @@ const AppContent = () => {
         <Route path="/hof-or-bust" element={<HofOrBust />} />
         <Route path="/score-predictor" element={<ScorePredictor />} />
         <Route path="/transfer-path" element={<TransferPath />} />
-        <Route path="/guess-transfer-value" element={<GuessTransferValue />} />
-        <Route path="/perfect-lineup" element={<PerfectLineup />} />
+        <Route path="/guess-transfer-value" element={<Navigate to="/" replace />} />
+        <Route path="/perfect-lineup" element={<Navigate to="/" replace />} />
         <Route path="/college" element={<CollegeHub />} />
         <Route path="/perfect-lineup-nba" element={<PerfectLineupNba />} />
         <Route path="/perfect-lineup-f1" element={<PerfectLineupF1 />} />
         <Route path="/perfect-lineup-nhl" element={<PerfectLineupNhl />} />
         <Route path="/world-cup-predictor" element={<Navigate to="/world-cup-bracket" replace />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-        <Route path="/deal-or-no-deal" element={<DealOrNoDeal />} />
+        <Route path="/deal-or-no-deal" element={<Navigate to="/squad-deal" replace />} />
         <Route path="/squad-deal" element={<SquadDeal />} />
         <Route path="/club-manager" element={<ClubManager />} />
         <Route path="/list-quiz" element={<ListQuiz />} />
@@ -299,7 +293,7 @@ const AppContent = () => {
         <Route path="/overrated-underrated" element={<OverratedUnderrated />} />
         <Route path="/tier-list" element={<TierList />} />
         <Route path="/budget-builder" element={<BudgetBuilder />} />
-        <Route path="/grade-transfer" element={<GradeTransfer />} />
+        <Route path="/grade-transfer" element={<Navigate to="/" replace />} />
         <Route path="/jeopardy" element={<Jeopardy />} />
         <Route path="/ball-iq" element={<BallIq />} />
         <Route path="/rebuild" element={<Rebuild />} />
@@ -322,6 +316,7 @@ const AppContent = () => {
         <Route path="/missing-five" element={<MissingFive />} />
         <Route path="/missing-nine" element={<MissingNine />} />
         <Route path="/missing-eleven" element={<MissingEleven />} />
+        <Route path="/rank-em" element={<RankEm />} />
         <Route path="/player-stock-market" element={<PlayerStockMarket />} />
         <Route path="/nhl-connect-4" element={<NhlConnect4 />} />
         <Route path="*" element={<NotFound />} />

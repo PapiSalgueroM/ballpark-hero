@@ -191,7 +191,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
 
     if (!response.ok) {
       return new Response(
-        JSON.stringify({ valid: true, reason: "Could not verify, allowing." }),
+        JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -206,7 +206,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
       parsed = JSON.parse(jsonMatch[1].trim());
       aiVerdict = true;
     } catch {
-      parsed = { valid: true, reason: "Could not parse validation response." };
+      parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." };
     }
 
     // cache VERIFIED verdicts only — never the fail-open fallbacks
@@ -220,7 +220,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
   } catch (e) {
     console.error("mlb-connect4-validate error:", e);
     return new Response(
-      JSON.stringify({ valid: true, reason: "Validation error, allowing." }),
+      JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

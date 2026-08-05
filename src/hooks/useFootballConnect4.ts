@@ -298,7 +298,7 @@ export function useFootballConnect4() {
     return `⚽ Soccer Connect 4\n${result}\n\n${grid}\n\nPlay at douknowball.com/football-connect-4`;
   }, [board, winner, isDraw]);
 
-  useGameCompletion('football-connect4', rawDailyStatus !== 'playing', winner ? 500 : 0);
+  useGameCompletion('football-connect-4', rawDailyStatus !== 'playing', winner ? 500 : 0);
 
   return {
     mode, switchMode,

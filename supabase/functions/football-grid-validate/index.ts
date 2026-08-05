@@ -1,9 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// Pro Football (NFL) 3x3 grid validator. FREE Gemini key -> gemini-2.5-flash
-// (2.0-flash has no free quota on this key). Falls back to Lovable gateway,
-// then accept-unverified so the daily grid never 500s.
+/**
+ * Pro Football (NFL) 3x3 grid validator. FAIL CLOSED (2026-07-22): when the
+ * model can't verify, do NOT accept - return an explicit unverified verdict.
+ */
+
 const GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
 const AI_URL = GEMINI_KEY
   ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
@@ -11,9 +13,6 @@ const AI_URL = GEMINI_KEY
 const AI_MODEL = GEMINI_KEY ? "gemini-2.5-flash" : "google/gemini-2.5-flash";
 const AI_KEY = GEMINI_KEY || Deno.env.get("LOVABLE_API_KEY");
 
-// Verified-verdict cache (2026-07-10): repeat guesses are answered from
-// Postgres instead of burning the free Gemini quota (10 requests/min).
-// SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are auto-injected in edge runtime.
 const sb = createClient(Deno.env.get("SUPABASE_URL") ?? "", Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "");
 const CACHE_GAME = "football-grid";
 const cacheKeyOf = (p: string, r: string, c: string) =>
@@ -23,15 +22,12 @@ const allowedOrigins = [
   "https://douknowball.com",
   "https://www.douknowball.com",
   "https://douknowball.lovable.app",
-  "https://id-preview--d69b1c20-4988-43ae-947e-7c6feb3ed683.lovable.app",
+  "https://ballpark-hero.lovable.app",
   "http://localhost:8080",
   "http://localhost:5173",
 ];
-function isAllowedOrigin(origin: string): boolean {
-  if (allowedOrigins.includes(origin)) return true;
-  if (origin.endsWith(".lovableproject.com")) return true;
-  if (origin.endsWith(".lovable.app")) return true;
-  return false;
+function isAllowedOrigin(o: string) {
+  return allowedOrigins.includes(o) || o.endsWith(".lovableproject.com") || o.endsWith(".lovable.app");
 }
 function getCorsHeaders(req: Request) {
   const origin = req.headers.get("origin") || "";
@@ -43,55 +39,128 @@ function getCorsHeaders(req: Request) {
 }
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT_MAX = 20;
-const RATE_LIMIT_WINDOW_MS = 60_000;
-function isRateLimited(ip: string): boolean {
+function isRateLimited(ip: string) {
   const now = Date.now();
   const e = rateLimitMap.get(ip);
-  if (!e || now > e.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return false;
-  }
+  if (!e || now > e.resetAt) { rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 }); return false; }
   e.count++;
-  return e.count > RATE_LIMIT_MAX;
+  return e.count > 30;
 }
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, e] of rateLimitMap) if (now > e.resetAt) rateLimitMap.delete(ip);
-}, 300_000);
+
+const norm = (s: string) =>
+  (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+
+const POSITIONS: Record<string, string[]> = {
+  "quarterback": ["qb"],
+  "running back": ["rb", "fb", "hb"],
+  "wide receiver": ["wr"],
+  "tight end": ["te"],
+  "offensive lineman": ["t", "g", "c", "ol", "ot", "og"],
+  "defensive end": ["de", "edge"],
+  "defensive tackle": ["dt", "nt", "dl"],
+  "linebacker": ["lb", "ilb", "olb", "mlb"],
+  "cornerback": ["cb", "db"],
+  "safety": ["s", "fs", "ss", "db"],
+  "kicker": ["k", "pk"],
+  "punter": ["p"],
+};
+
+type Verdict = true | false | "unknown";
+interface Stint {
+  player_name: string; team: string; position: string | null; college: string | null;
+  first_season: number; last_season: number; debut_season: number | null; debut_age: number | null;
+}
+
+function json(obj: unknown, corsHeaders: Record<string, string>, status = 200) {
+  return new Response(JSON.stringify(obj), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+}
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
-  const json = (obj: unknown, status = 200) =>
-    new Response(JSON.stringify(obj), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (isRateLimited(ip)) return json({ valid: false, error: "Too many requests" }, 429);
+  if (isRateLimited(ip)) return json({ valid: false, error: "Too many requests" }, corsHeaders, 429);
 
   let sanitized = { player: "", row: "", col: "" };
   try {
     const { playerName, rowAttribute, colAttribute } = await req.json();
-    if (!playerName || !rowAttribute || !colAttribute) return json({ valid: false, error: "Missing required fields" });
+    if (!playerName || !rowAttribute || !colAttribute) return json({ valid: false, error: "Missing required fields" }, corsHeaders);
     sanitized = {
       player: String(playerName).slice(0, 80).replace(/[\n\r]/g, ""),
       row: String(rowAttribute).slice(0, 100).replace(/[\n\r]/g, ""),
       col: String(colAttribute).slice(0, 100).replace(/[\n\r]/g, ""),
     };
   } catch {
-    return json({ valid: false, error: "Bad request" }, 400);
+    return json({ valid: false, error: "Bad request" }, corsHeaders, 400);
   }
 
-  const accept = () => json({ valid: true, unverified: true, reason: "Accepted (answer-checking offline).", fullName: sanitized.player });
+  // FAIL CLOSED: when the model can't verify, do NOT accept. Return an explicit
+  // unverified verdict so the grid shows "couldn't verify, try again".
+  const unverified = () =>
+    json({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again.", fullName: null }, corsHeaders);
 
   const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
   try {
     const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
       .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
-    if (hit?.verdict) return json({ ...(hit.verdict as Record<string, unknown>), cached: true });
-  } catch { /* cache down -> fall through to AI */ }
+    if (hit?.verdict) return json({ ...(hit.verdict as Record<string, unknown>), cached: true }, corsHeaders);
+  } catch { /* cache down */ }
 
-  if (!AI_KEY) return accept();
+  try {
+    const { data } = await sb.from("nfl_player_team_stints")
+      .select("player_name, team, position, college, first_season, last_season, debut_season, debut_age")
+      .ilike("player_name", sanitized.player).limit(40);
+    const stints = (data ?? []) as Stint[];
+
+    if (stints.length > 0) {
+      const debut = stints[0].debut_season ?? Math.min(...stints.map((s) => s.first_season));
+      const age = stints[0].debut_age;
+      const careerComplete = debut >= 2003 || (age != null && age <= 23);
+      const properName = stints[0].player_name;
+
+      const evaluate = async (label: string): Promise<Verdict> => {
+        const l = norm(label);
+        const teamMatch = l.match(/^played for\s+(.+)$/);
+        if (teamMatch) {
+          const nick = teamMatch[1];
+          const { data: codes } = await sb.from("nfl_team_codes").select("team_code, team_name, franchise");
+          const wanted = (codes ?? []).filter((c: any) =>
+            norm(c.team_name).includes(nick) || norm(c.franchise).includes(nick));
+          if (wanted.length === 0) return "unknown";
+          const codeSet = new Set(wanted.map((c: any) => c.team_code));
+          if (stints.some((s) => codeSet.has(s.team))) return true;
+          return careerComplete ? false : "unknown";
+        }
+        if (POSITIONS[l]) {
+          const want = POSITIONS[l];
+          const have = stints.map((s) => norm(s.position ?? "")).filter(Boolean);
+          if (have.length === 0) return "unknown";
+          return have.some((p) => want.includes(p)) ? true : "unknown";
+        }
+        const colleges = stints.map((s) => norm(s.college ?? "")).filter(Boolean);
+        if (colleges.length > 0 && colleges.some((c) => c === l || c.includes(l) || l.includes(c))) return true;
+        return "unknown";
+      };
+
+      const rowV = await evaluate(sanitized.row);
+      const colV = await evaluate(sanitized.col);
+
+      if (rowV === true && colV === true) {
+        const verdict = { valid: true, reason: "Verified from NFL career records.", fullName: properName };
+        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
+        return json(verdict, corsHeaders);
+      }
+      if (rowV === false || colV === false) {
+        const which = rowV === false ? sanitized.row : sanitized.col;
+        const verdict = { valid: false, reason: `${properName} does not satisfy "${which}".`, fullName: properName };
+        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
+        return json(verdict, corsHeaders);
+      }
+    }
+  } catch { /* deterministic pass unavailable -> AI */ }
+
+  if (!AI_KEY) return unverified();
 
   const prompt = `You are a pro football (NFL) trivia expert. Does "${sanitized.player}" satisfy BOTH criteria?\n1. "${sanitized.row}"\n2. "${sanitized.col}"\nConsider the player's whole NFL career: every team, college, draft status/round/pick, position, Pro Bowls, All-Pro, MVP/OPOY/DPOY/ROY awards, and Super Bowl wins. Be lenient with spelling and accept an unambiguous surname.\nReply with ONLY JSON: {"valid":true,"fullName":"First Last"} or {"valid":false,"reason":"brief"}`;
 
@@ -103,21 +172,19 @@ serve(async (req) => {
     });
     let resp = await callAI();
     if (resp.status === 429) {
-      // free-tier RPM hit: wait once and retry before failing open
       await new Promise((r) => setTimeout(r, 1200));
       resp = await callAI();
     }
-    if (!resp.ok) return accept();
+    if (!resp.ok) return unverified();
     const data = await resp.json();
     const content = data.choices?.[0]?.message?.content?.trim() || "";
     const m = content.match(/\{[\s\S]*\}/);
-    if (!m) return accept();
+    if (!m) return unverified();
     const result = JSON.parse(m[0]);
     const verdict = { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
-    // cache VERIFIED verdicts only — never the fail-open acceptances
     try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
-    return json(verdict);
+    return json(verdict, corsHeaders);
   } catch {
-    return accept();
+    return unverified();
   }
 });

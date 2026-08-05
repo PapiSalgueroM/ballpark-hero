@@ -167,15 +167,12 @@ export function useNbaChain() {
           setGameOverReason('Round complete!');
         }
       } catch {
-        // Allow on network error
-        const newLink: ChainLink = { playerName: trimmed, connection: 'Connection unverified' };
-        const newScore = score + 1;
-        setChain((prev) => [...prev, newLink]);
-        setUsedPlayers((prev) => new Set(prev).add(normalized));
-        if (mode === 'round' && newScore >= ROUND_PICK_COUNT) {
-          setPhase('ended');
-          setGameOverReason('Round complete!');
-        }
+        // FAIL CLOSED: a network failure is not a wrong answer — don't accept
+        // an unverified link (that inflates streaks) and don't end the game.
+        // Surface a retry message and leave the chain untouched.
+        setIsValidating(false);
+        setValidationError("Couldn't verify that link right now — please try again.");
+        return;
       }
 
       setIsValidating(false);

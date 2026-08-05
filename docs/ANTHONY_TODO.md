@@ -10,11 +10,16 @@
    deploy didn\'t catch them — check douknowball.com/sign-the-player: if it
    still shows the value-guessing game, tell Claude "publish" (or hit Publish
    in Lovable).
-2. The Gemini free key works but its daily quota runs out by evening — grids
-   then accept answers unverified until midnight PT. If you want validation
-   24/7: either add a second free key from another Google account (tell
-   Claude, the shim can rotate keys) or we build the validation-cache table
-   (queued item 7).
+2. UPDATE 2026-07-22: the "grids accept answers unverified" hole is CLOSED.
+   All grid/connect4/chain validators now FAIL CLOSED — when the Gemini quota
+   is out they refuse the answer with "couldn't verify, try again" instead of
+   accepting nonsense, and the player doesn't lose a guess. The verified-verdict
+   cache table is live too, so repeat answers don't burn quota. Remaining ask:
+   with the quota exhausted, AI-backed games can't accept NEW answers until
+   the quota resets — so validation 24/7 still needs a second free Gemini key
+   from another Google account (tell Claude; the shim can rotate keys).
+   Also 2 minutes while in Supabase: Authentication > Settings > enable
+   "Leaked password protection" (security advisor flags it; free toggle).
 3. The 9:07am daily poll-fixer task runs only while the Claude Cowork app is
    open on this PC. Leave it open in the morning through the World Cup final
    (Jul 19) and the polls maintain themselves.

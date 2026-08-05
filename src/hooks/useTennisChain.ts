@@ -3,6 +3,7 @@ import { TennisChainState, TennisChainMode, getTennisChainMultiplier, getTennisE
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import type { PlayerSourceConfig } from '@/lib/playerSearch';
+import { toast } from 'sonner';
 
 /**
  * Tennis player pool for the shared PlayerAutocomplete input (see
@@ -118,21 +119,10 @@ export function useTennisChain() {
         }) : null);
       }
     } catch {
-      // On error, allow the guess
-      const newChain = [...gameState.chain];
-      newChain.push({ playerName: guessedName });
-      const newRawScore = gameState.rawScore + 100;
-      const chainLength = newChain.length - 1;
-      const multiplier = getTennisChainMultiplier(chainLength);
-
-      setGameState(prev => prev ? ({
-        ...prev,
-        currentPlayer: guessedName,
-        chain: newChain,
-        score: Math.floor(newRawScore * multiplier),
-        rawScore: newRawScore,
-        usedPlayers: new Set([...prev.usedPlayers, guessedName.toLowerCase()]),
-      }) : null);
+      // FAIL CLOSED: a network failure is not a wrong answer — don't accept
+      // an unverified guess (that farms score) and don't end the game.
+      // Leave the chain untouched and ask the player to retry.
+      toast.error("Couldn't verify that guess right now — please try again.");
     } finally {
       setValidating(false);
     }

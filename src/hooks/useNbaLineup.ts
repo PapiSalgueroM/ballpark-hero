@@ -369,7 +369,7 @@ export function useNbaLineup() {
     }, 100);
   }, []);
 
-  useGameCompletion('nba-lineup', phase === 'result', verdict ? 500 : 0);
+  useGameCompletion('nba-starting-5', phase === 'result', verdict ? 500 : 0);
 
   return {
     phase, challenge, selectedPosition, currentTeam, filledSlots, filledSlotsArray,

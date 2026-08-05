@@ -144,7 +144,7 @@ export function useNascarDriver() {
     return ensureAnswerInList(allDrivers, gameState.puzzle.driver_name, d => d.driver_name, gameState.puzzle);
   }, [allDrivers, gameState?.puzzle]);
 
-  useGameCompletion('nascar-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+  useGameCompletion('guess-nascar-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
 
   return { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allDrivers: validatedDrivers, loading, status, reloadDrivers: loadDrivers };
 }

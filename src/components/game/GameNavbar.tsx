@@ -1,23 +1,28 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Trophy, Star, Medal, Flame, ArrowLeft } from 'lucide-react';
+import { Trophy, Star, Medal, Flame, ArrowLeft, UserPlus } from 'lucide-react';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
 import { useDailyLegend } from '@/hooks/useDailyLegend';
 import { DailyLegendOverlay } from '@/components/game/DailyLegendOverlay';
+import { useAuth } from '@/contexts/AuthContext';
+import { AuthModal } from '@/components/auth/AuthModal';
 
 /**
  * Game-page top bar.
  *
  * Owner feedback applied:
  * - Logo is bigger and stretched out ("have the DoUKnowBall on the top left
- *   a bit longer and stretched out and maybe a bit bigger") — full wordmark
+ *   a bit longer and stretched out and maybe a bit bigger") - full wordmark
  *   on mobile too, wide tracking.
- * - Stats chips now show REAL numbers for everyone, guests included:
- *   useGameNavbarStats reads the same identity game_completions rows are
- *   written under, so points/rank/games-today are never stuck at 0 or "-".
+ * - Owner 2026-08-05: personal stats are for ACCOUNTS only. Signed-out
+ *   players get a "Sign up" chip that opens the auth modal instead of a row
+ *   of zeros that looks broken.
  * - Back button stays boxed and visible on the right.
  */
 export function GameNavbar() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [authOpen, setAuthOpen] = useState(false);
   const { gamesPlayedToday, totalPointsToday, dailyRank, currentStreak, totalGames, loading } = useGameNavbarStats();
   const { showCelebration, streakDays, dismissCelebration } = useDailyLegend();
 
@@ -35,7 +40,18 @@ export function GameNavbar() {
             </span>
           </Link>
 
-          {/* Stats — center */}
+          {!user ? (
+            /* Guest: one honest chip instead of zeroed stats */
+            <button
+              onClick={() => setAuthOpen(true)}
+              className="justify-self-center inline-flex items-center gap-1.5 rounded-lg bg-surface-2 border border-border px-3 py-1.5 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground hover:border-gold/50 transition-colors"
+            >
+              <UserPlus className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold" />
+              <span className="hidden sm:inline">Sign up to track your stats</span>
+              <span className="sm:hidden">Track stats</span>
+            </button>
+          ) : (
+          /* Stats — center */
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 min-w-0">
             {/* Games completed today */}
             <div className="flex items-center gap-1 text-xs sm:text-sm">
@@ -93,6 +109,7 @@ export function GameNavbar() {
               </span>
             </div>
           </div>
+          )}
 
           {/* Back — right, boxed so it can't be missed */}
           <button
@@ -109,6 +126,8 @@ export function GameNavbar() {
       {showCelebration && (
         <DailyLegendOverlay streakDays={streakDays} onDismiss={dismissCelebration} />
       )}
+
+      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} defaultTab="signup" />
     </>
   );
 }
