@@ -1,4 +1,5 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
+import { searchPlayers, NFL_ROSTER_SOURCE } from '@/lib/playerSearch';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -100,14 +101,46 @@ const MissingEleven = () => {
 
   useGameCompletion('missing-eleven', mode === 'daily' && rawDailyStatus !== 'playing', score);
 
-  const suggestions = useMemo(() => {
+  // Owner 2026-08-05: the suggestion bar must search the WHOLE league, not
+  // just the handful of names in the puzzle pool (which quietly leaked the
+  // answer). Typing part of any NFL name now suggests real players from the
+  // full nflfastr roster table; puzzle-pool names still surface instantly.
+  const localSuggestions = useMemo(() => {
     if (hard) return [];
     const q = normalizeElevenName(input);
     if (q.length < 2) return [];
     return ALL_ELEVEN_NAMES
       .filter((n) => normalizeElevenName(n).includes(q) && normalizeElevenName(n) !== q)
-      .slice(0, 6);
+      .slice(0, 3);
   }, [input, hard]);
+
+  const [wideSuggestions, setWideSuggestions] = useState<string[]>([]);
+  useEffect(() => {
+    if (hard || input.trim().length < 2) { setWideSuggestions([]); return; }
+    let cancelled = false;
+    const t = window.setTimeout(async () => {
+      try {
+        const { results: found } = await searchPlayers({
+          query: input, source: NFL_ROSTER_SOURCE, minChars: 2, limit: 6,
+        });
+        if (!cancelled) setWideSuggestions(found.map((e) => e.name));
+      } catch { if (!cancelled) setWideSuggestions([]); }
+    }, 200);
+    return () => { cancelled = true; window.clearTimeout(t); };
+  }, [input, hard]);
+
+  const suggestions = useMemo(() => {
+    const merged: string[] = [];
+    const seen = new Set<string>();
+    for (const n of [...localSuggestions, ...wideSuggestions]) {
+      const k = normalizeElevenName(n);
+      if (seen.has(k)) continue;
+      seen.add(k);
+      merged.push(n);
+      if (merged.length >= 6) break;
+    }
+    return merged;
+  }, [localSuggestions, wideSuggestions]);
 
   const hints: string[] = [];
   if (!hard) for (let l = 1 as ElevenHintLevel; l <= hintLevel; l = (l + 1) as ElevenHintLevel) {

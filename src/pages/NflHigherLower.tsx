@@ -10,14 +10,14 @@ import { ArrowUp, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 /**
- * Direct port of NbaHigherLower (task #23). Stat axis is career TOUCHDOWNS
- * SCORED (rushing + receiving) — QBs are excluded because thrown TDs are a
- * different stat, and the pool only holds careers that started 2000+ so the
- * nflfastr coverage window can't silently truncate anyone's total.
+ * Multi-stat edition (owner 2026-08-05). Every round rotates through a stat
+ * category: TDs scored, passing yards, passing TDs, rushing yards, receiving
+ * yards, receptions. All values baked from nflfastr with careers starting
+ * 2000+ so nothing is silently truncated.
  */
 const NflHigherLower = () => {
   const {
-    mode, switchMode, currentPair, currentRound, results,
+    mode, switchMode, activeRound, currentPair, currentRound, results,
     showingResult, streak, gameStatus, correctCount, totalScore,
     makeGuess, totalRounds,
     hard, toggleHard,
@@ -26,14 +26,14 @@ const NflHigherLower = () => {
   return (
     <>
       <PageSeo
-        title="NFL Higher or Lower - Career Touchdowns Game | DoUKnowBall"
-        description="Which NFL star scored more career touchdowns? Compare running backs, receivers and tight ends side by side in this daily football challenge."
+        title="NFL Higher or Lower - Career Stats Game | DoUKnowBall"
+        description="Passing yards, touchdowns, receptions and more. Which NFL star has the bigger career number? A new stat every round in this daily football challenge."
         path="/nfl-higher-lower"
       />
       <GameShell
         width="narrow"
         title="🏈 HIGHER OR LOWER"
-        subtitle="Which player scored more career touchdowns?"
+        subtitle="A new stat every round. Who has the bigger career number?"
         headerExtra={
           <>
             <div className="flex items-center justify-center gap-2 mt-3">
@@ -70,48 +70,55 @@ const NflHigherLower = () => {
           </>
         }
       >
-        {gameStatus === 'playing' && currentPair && (
-          <div className="grid grid-cols-2 gap-4">
-            {currentPair.map((player, i) => {
-              const side = i === 0 ? 'left' : 'right';
-              const lastResult = showingResult ? results[results.length - 1] : null;
-              const isWinner = showingResult && lastResult && (
-                (i === 0 && lastResult.player1.careerTds >= lastResult.player2.careerTds) ||
-                (i === 1 && lastResult.player2.careerTds >= lastResult.player1.careerTds)
-              );
+        {gameStatus === 'playing' && currentPair && activeRound && (
+          <>
+            <div className="flex justify-center mb-4">
+              <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/30 px-4 py-1.5 text-sm font-bold text-primary">
+                {activeRound.category.question}
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {currentPair.map((player, i) => {
+                const side = i === 0 ? 'left' : 'right';
+                const lastResult = showingResult ? results[results.length - 1] : null;
+                const isWinner = showingResult && lastResult && (
+                  (i === 0 && lastResult.p1.value >= lastResult.p2.value) ||
+                  (i === 1 && lastResult.p2.value >= lastResult.p1.value)
+                );
 
-              return (
-                <button
-                  key={player.name}
-                  onClick={() => !showingResult && makeGuess(side as 'left' | 'right')}
-                  disabled={showingResult}
-                  className={cn(
-                    'flex flex-col items-center gap-3 p-5 rounded-2xl border transition-all text-center',
-                    showingResult
-                      ? isWinner
-                        ? 'bg-correct/20 border-correct/50'
-                        : 'bg-destructive/15 border-destructive/40'
-                      : 'bg-card border-border hover:border-primary/50 hover:scale-[1.02] cursor-pointer'
-                  )}
-                >
-                  <span className="text-3xl">🏈</span>
-                  <span className="text-lg font-bold text-foreground font-display">{player.name}</span>
-                  <span className="text-xs text-muted-foreground">{player.position} · played until {player.lastSeason}</span>
-                  <span className="text-xs text-muted-foreground">{player.teams}</span>
+                return (
+                  <button
+                    key={player.name}
+                    onClick={() => !showingResult && makeGuess(side as 'left' | 'right')}
+                    disabled={showingResult}
+                    className={cn(
+                      'flex flex-col items-center gap-3 p-5 rounded-2xl border transition-all text-center',
+                      showingResult
+                        ? isWinner
+                          ? 'bg-correct/20 border-correct/50'
+                          : 'bg-destructive/15 border-destructive/40'
+                        : 'bg-card border-border hover:border-primary/50 hover:scale-[1.02] cursor-pointer'
+                    )}
+                  >
+                    <span className="text-3xl">🏈</span>
+                    <span className="text-lg font-bold text-foreground font-display">{player.name}</span>
+                    <span className="text-xs text-muted-foreground">{player.position} · played until {player.lastSeason}</span>
+                    <span className="text-xs text-muted-foreground">{player.teams}</span>
 
-                  {showingResult ? (
-                    <span className="text-2xl font-bold text-gold animate-cell-reveal">
-                      {player.careerTds} TDs
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-1 text-sm font-semibold text-primary">
-                      <ArrowUp className="w-4 h-4" /> Higher?
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+                    {showingResult ? (
+                      <span className="text-2xl font-bold text-gold animate-cell-reveal">
+                        {player.value.toLocaleString()} {activeRound.category.unit}
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-sm font-semibold text-primary">
+                        <ArrowUp className="w-4 h-4" /> Higher?
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </>
         )}
 
         {gameStatus === 'complete' && (
@@ -136,19 +143,19 @@ const NflHigherLower = () => {
 
         <GameSeoContent
           title="NFL Higher or Lower | DoUKnowBall"
-          description="Two NFL stars, side by side. Which one scored more career touchdowns? Rushing and receiving TDs count; the pool is the 60 highest-scoring skill-position players of the 2000s onward."
+          description="A different stat every round: passing yards, passing TDs, rushing yards, receiving yards, receptions and touchdowns scored. Which NFL star has the bigger career number?"
           howToPlay={[
+            'Every round names a stat category at the top of the board',
             'Two players shown side by side with position, era, and teams',
-            'Tap the player you think scored MORE career touchdowns (rushing + receiving)',
-            '10 rounds per game: 10 points per correct answer',
-            'Build a streak for bonus points (+5 per consecutive correct)',
-            'Daily challenge (same pairs for everyone) or unlimited random mode',
+            'Tap the player you think has the BIGGER career number in that stat',
+            '10 rounds per game: 10 points per correct answer, +5 per streak step',
+            'Daily challenge (same rounds for everyone) or unlimited random mode',
           ]}
           examples={[
-            'LaDainian Tomlinson (162 TDs) vs Adrian Peterson (126)',
-            'Gronk vs Antonio Gates: which tight end found the end zone more?',
-            'Derrick Henry vs Mike Evans, power back or red-zone receiver?',
-            'Larry Fitzgerald vs Calvin Johnson: the WR showdown',
+            'Passing yards: Brady (89,216) vs Brees (80,428), closer than you think',
+            'TDs scored: LaDainian Tomlinson (162) vs Adrian Peterson (126)',
+            'Receptions: Fitzgerald (1,430) vs Jason Witten (1,228)',
+            'Rushing yards: Frank Gore quietly sits at 16,000',
           ]}
         />
 

@@ -27,6 +27,7 @@ const NFLCareer = () => {
     giveUp,
     shareText,
     hard, toggleHard,
+    mode, switchMode, nextUnlimited,
   } = useNFLCareer();
 
   const [showHelp, setShowHelp] = useState(false);
@@ -58,11 +59,21 @@ const NFLCareer = () => {
             >
               <HelpCircle className="w-4 h-4" /> How to play
             </button>
-            <button
-              onClick={toggleHard}
-              title="Hard mode: the easiest clues stay hidden"
-              className={'mt-2 mx-auto block text-xs px-3 py-1 rounded-full border transition-all ' + (hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground')}
-            >😈 Hard mode: {hard ? 'ON' : 'off'}</button>
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <button
+                onClick={() => switchMode('daily')}
+                className={'px-3 py-1 rounded-full text-xs font-semibold border transition-all ' + (mode === 'daily' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border')}
+              >Daily</button>
+              <button
+                onClick={() => switchMode('unlimited')}
+                className={'px-3 py-1 rounded-full text-xs font-semibold border transition-all ' + (mode === 'unlimited' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border')}
+              >Unlimited</button>
+              <button
+                onClick={toggleHard}
+                title="Hard mode: the easiest clues stay hidden"
+                className={'text-xs px-3 py-1 rounded-full border transition-all ' + (hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground')}
+              >😈 Hard: {hard ? 'ON' : 'off'}</button>
+            </div>
             <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
               <span>Clue <span className="text-foreground font-semibold">{cluesRevealed}/{totalClues}</span></span>
               <span>Score if correct: <span className="text-correct font-semibold">{score}</span></span>
@@ -154,7 +165,8 @@ const NFLCareer = () => {
                 gameName: 'NFL Career Path',
                 gamePath: '/nfl-career',
               }}
-              onPlayAgain={() => window.location.reload()}
+              onPlayAgain={nextUnlimited}
+              playAgainLabel={mode === 'unlimited' ? 'Next Player' : 'Play Unlimited'}
             />
           </div>
         )}

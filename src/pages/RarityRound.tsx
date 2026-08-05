@@ -13,6 +13,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
+import { supabase } from '@/integrations/supabase/client';
 import {
   CATEGORIES,
   pickDailyCategories,
@@ -55,6 +56,12 @@ const RarityRound = () => {
   const [selectedEntity, setSelectedEntity] = useState<PlayerEntity | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [lastResult, setLastResult] = useState<RoundResult | null>(null);
+
+  // Owner 2026-08-05: after each round show what everyone ELSE picked (the
+  // most said answers, real crowd data), and end the run with your rank
+  // among everyone who played today.
+  const [crowdPicks, setCrowdPicks] = useState<{ answer: string; n: number }[] | null>(null);
+  const [todayStanding, setTodayStanding] = useState<{ rank: number; total: number } | null>(null);
 
   const currentCategory = rounds[roundIndex];
 
@@ -155,6 +162,33 @@ const RarityRound = () => {
     setLastResult(result);
     setResults(r => [...r, result]);
     setPhase('revealed');
+
+    // Log the pick (fire and forget) then pull the crowd's most-said answers
+    // for this category so the reveal can show them.
+    setCrowdPicks(null);
+    try {
+      (supabase.from as any)('rarity_round_guesses')
+        .insert({ category_key: currentCategory.id, answer: match.name })
+        .then(() => {
+          (supabase.from as any)('rarity_round_guesses')
+            .select('answer')
+            .eq('category_key', currentCategory.id)
+            .order('created_at', { ascending: false })
+            .limit(400)
+            .then(({ data }: { data: { answer: string }[] | null }) => {
+              if (!data || data.length === 0) return;
+              const counts = new Map<string, number>();
+              for (const row of data) {
+                counts.set(row.answer, (counts.get(row.answer) ?? 0) + 1);
+              }
+              const top = [...counts.entries()]
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .map(([answer, n]) => ({ answer, n }));
+              setCrowdPicks(top);
+            });
+        });
+    } catch { /* crowd data is a bonus, never blocks play */ }
   };
 
   const nextRound = () => {
@@ -173,6 +207,32 @@ const RarityRound = () => {
 
   const finalScore = useMemo(() => totalScore(results), [results]);
   const isComplete = phase === 'done';
+
+  // Final standing among everyone who finished today's Rarity Round. Reads
+  // game_completions for this slug + today; includes this run even if its
+  // own insert hasn't landed yet.
+  useEffect(() => {
+    if (!isComplete) { setTodayStanding(null); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await (supabase.from as any)('game_completions')
+          .select('score')
+          .eq('game', 'rarity-round')
+          .eq('completed_on', new Date().toISOString().slice(0, 10))
+          .limit(2000);
+        if (cancelled || !data) return;
+        const scores: number[] = (data as { score: number }[]).map(r => Number(r.score) || 0);
+        if (!scores.length) return;
+        // In Rarity mode LOWER is better; in Crowd Says HIGHER is better.
+        const better = scores.filter(s =>
+          rarityMode === 'rarity' ? s < finalScore : s > finalScore,
+        ).length;
+        setTodayStanding({ rank: better + 1, total: Math.max(scores.length, better + 1) });
+      } catch { /* standing is a bonus */ }
+    })();
+    return () => { cancelled = true; };
+  }, [isComplete, finalScore, rarityMode]);
 
   useGameCompletion('rarity-round', isComplete, finalScore, results.length);
 
@@ -435,6 +495,24 @@ const RarityRound = () => {
                   );
                 })()}
 
+                {crowdPicks && crowdPicks.length > 0 && (
+                  <div className="mx-auto max-w-sm rounded-xl border border-border bg-surface-1 px-4 py-3 text-left">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
+                      👥 What everyone else picked
+                    </p>
+                    {crowdPicks.map((c, i) => (
+                      <div key={c.answer} className="flex items-baseline justify-between gap-2 text-sm">
+                        <span className="truncate text-foreground">
+                          {i + 1}. {displayName(c.answer)}
+                        </span>
+                        <span className="shrink-0 text-xs font-bold text-muted-foreground">
+                          {c.n} {c.n === 1 ? 'pick' : 'picks'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <button
                   onClick={nextRound}
                   className="px-8 py-3 min-h-[44px] bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
@@ -467,6 +545,11 @@ const RarityRound = () => {
                   <p key={i}>{roundSummaryLine(r, rarityMode)}</p>
                 ))}
               </div>
+              {todayStanding && todayStanding.total > 1 && (
+                <p className="text-sm text-center font-semibold text-primary mb-2">
+                  You rank #{todayStanding.rank} of {todayStanding.total} players today
+                </p>
+              )}
             </ResultScreen>
           </div>
         )}

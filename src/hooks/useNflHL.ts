@@ -1,15 +1,20 @@
 import { useState, useMemo, useCallback } from 'react';
-import { nflHLPlayers, NflHLPlayer } from '@/data/nflHLPlayers';
+import { NFL_HL_CATEGORIES, type NflHLCategory, type NflHLCatPlayer } from '@/data/nflHLCategories';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
 /**
- * NFL Higher/Lower — a direct port of useNbaHL/useHockeyHL (task #23), same rules:
- * 10 rounds, 10 pts per correct, +5 per consecutive-correct streak step,
- * daily (ET-seeded, same pairs for everyone) + unlimited modes.
- * Only the pool and slugs differ; keep the HL hooks in lockstep if the
- * mechanic ever changes.
+ * NFL Higher/Lower, multi-stat edition (owner 2026-08-05: "it should be more
+ * than just career touchdowns"). Every round draws a CATEGORY (TDs scored,
+ * passing yards, passing TDs, rushing yards, receiving yards, receptions)
+ * and a pair measured on that category. Same scoring as every HL on the
+ * site: 10 rounds, 10 pts per correct, +5 per consecutive-correct streak
+ * step, daily (ET-seeded) + unlimited, hard mode pairs close values.
+ *
+ * Normal pairing now REFUSES exact-tie pairs when any non-tie partner is
+ * available (owner: "try to not have players with the same totals"); if a
+ * tie somehow slips through, it still scores as correct either way.
  */
 function seededShuffle<T>(arr: T[], seed: number): T[] {
   const a = [...arr];
@@ -25,42 +30,45 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
 export type NflHLStatus = 'playing' | 'complete';
 export type NflHLMode = 'daily' | 'unlimited';
 
-interface RoundResult {
-  player1: NflHLPlayer;
-  player2: NflHLPlayer;
+export interface HLRound {
+  category: NflHLCategory;
+  p1: NflHLCatPlayer;
+  p2: NflHLCatPlayer;
+}
+
+interface RoundResult extends HLRound {
   correct: boolean;
 }
 
 type HLAction = { t: 'result'; correct: boolean };
 
 const ROUNDS = 10;
-// Sentinel puzzle array — useDailyPuzzle needs at least one element.
 const SENTINEL_PUZZLES = [{ id: 'nflhl-daily' }];
 
-function buildPairs(seed: number, hard = false): [NflHLPlayer, NflHLPlayer][] {
-  const shuffled = seededShuffle(nflHLPlayers, seed);
-  if (!hard) {
-    const result: [NflHLPlayer, NflHLPlayer][] = [];
-    for (let i = 0; i < ROUNDS * 2 && i + 1 < shuffled.length; i += 2) {
-      result.push([shuffled[i], shuffled[i + 1]]);
+function buildRounds(seed: number, hard = false): HLRound[] {
+  const cats = seededShuffle(NFL_HL_CATEGORIES, seed);
+  const rounds: HLRound[] = [];
+  let s = seed;
+  for (let r = 0; r < ROUNDS; r++) {
+    const category = cats[r % cats.length];
+    s = (s * 1103515245 + 12345) & 0x7fffffff;
+    const pool = seededShuffle(category.players, s + r * 7919);
+    const a = pool[0];
+    let partner: NflHLCatPlayer | null = null;
+    if (hard) {
+      // Closest NON-EQUAL value in a lookahead window.
+      let bestGap = Infinity;
+      for (let i = 1; i < Math.min(pool.length, 14); i++) {
+        const gap = Math.abs(pool[i].value - a.value);
+        if (gap > 0 && gap < bestGap) { bestGap = gap; partner = pool[i]; }
+      }
+    } else {
+      // First non-tie partner; a tie only if the whole pool ties (never in practice).
+      partner = pool.slice(1).find((p) => p.value !== a.value) ?? null;
     }
-    return result;
+    rounds.push({ category, p1: a, p2: partner ?? pool[1] });
   }
-  // HARD (task #12): greedy close-gap pairing on careerTds from a seeded
-  // shuffle window — selection-only, scoring untouched. Unlimited-only:
-  // daily pairs stay canonical so stored daily actions replay correctly.
-  const pool = [...shuffled];
-  const result: [NflHLPlayer, NflHLPlayer][] = [];
-  while (result.length < ROUNDS && pool.length >= 2) {
-    const a = pool.shift()!;
-    let bestI = 0, bestGap = Infinity;
-    for (let i = 0; i < Math.min(pool.length, 12); i++) {
-      const gap = Math.abs(pool[i].careerTds - a.careerTds);
-      if (gap < bestGap) { bestGap = gap; bestI = i; }
-    }
-    result.push([a, pool.splice(bestI, 1)[0]]);
-  }
-  return result;
+  return rounds;
 }
 
 export function useNflHL() {
@@ -81,13 +89,13 @@ export function useNflHL() {
     deserializeGuesses: (raw) => raw as HLAction[],
   });
 
-  const dailyPairs = useMemo(() => buildPairs(dateSeed(todayStr)), [todayStr]);
+  const dailyRounds = useMemo(() => buildRounds(dateSeed(todayStr)), [todayStr]);
 
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
 
-  const [unlimitedPairs, setUnlimitedPairs] = useState<[NflHLPlayer, NflHLPlayer][]>(
-    () => buildPairs(Math.floor(Math.random() * 100000), hard),
+  const [unlimitedRounds, setUnlimitedRounds] = useState<HLRound[]>(
+    () => buildRounds(Math.floor(Math.random() * 100000), hard),
   );
   const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
   const [unlimitedRound, setUnlimitedRound] = useState(0);
@@ -96,14 +104,13 @@ export function useNflHL() {
   const dailyResults: RoundResult[] = useMemo(
     () =>
       dailyActions.map((a, i) => ({
-        player1: dailyPairs[i]?.[0] ?? nflHLPlayers[0],
-        player2: dailyPairs[i]?.[1] ?? nflHLPlayers[1],
+        ...(dailyRounds[i] ?? dailyRounds[0]),
         correct: a.correct,
       })),
-    [dailyActions, dailyPairs],
+    [dailyActions, dailyRounds],
   );
 
-  const pairs = mode === 'daily' ? dailyPairs : unlimitedPairs;
+  const rounds = mode === 'daily' ? dailyRounds : unlimitedRounds;
   const currentRound = mode === 'daily' ? dailyCurrentRound : unlimitedRound;
   const baseResults = mode === 'daily' ? dailyResults : unlimitedResults;
   const results: RoundResult[] = useMemo(
@@ -115,7 +122,10 @@ export function useNflHL() {
     ? (rawDailyStatus !== 'playing' ? 'complete' : 'playing')
     : (unlimitedRound >= ROUNDS ? 'complete' : 'playing');
 
-  const currentPair = gameStatus === 'playing' ? pairs[currentRound] ?? null : null;
+  const activeRound = gameStatus === 'playing' ? rounds[currentRound] ?? null : null;
+  const currentPair: [NflHLCatPlayer, NflHLCatPlayer] | null = activeRound
+    ? [activeRound.p1, activeRound.p2]
+    : null;
 
   const correctCount = baseResults.filter((r) => r.correct).length;
   const streakBonus = baseResults.reduce((sum, r, i) => {
@@ -137,35 +147,33 @@ export function useNflHL() {
 
   const makeGuess = useCallback(
     (choice: 'left' | 'right') => {
-      if (!currentPair || showingResult || gameStatus !== 'playing') return;
-      const [p1, p2] = currentPair;
-      // Ties count as correct either way — HL pools contain exact-equal stat
-      // values, and the old `>=` logic silently marked the right-side pick
-      // wrong on a dead tie. Fixed across all HL hooks (July 2026).
-      const tie = p1.careerTds === p2.careerTds;
-      const leftHigher = p1.careerTds >= p2.careerTds;
+      if (!activeRound || showingResult || gameStatus !== 'playing') return;
+      const { p1, p2 } = activeRound;
+      // Ties still score as correct either way, though pairing avoids them.
+      const tie = p1.value === p2.value;
+      const leftHigher = p1.value >= p2.value;
       const correct = tie || (choice === 'left' && leftHigher) || (choice === 'right' && !leftHigher);
 
-      setCurrentResult({ player1: p1, player2: p2, correct });
+      setCurrentResult({ ...activeRound, correct });
       setShowingResult(true);
 
       setTimeout(() => {
         if (mode === 'daily') {
           addDailyAction({ t: 'result', correct });
         } else {
-          setUnlimitedResults((prev) => [...prev, { player1: p1, player2: p2, correct }]);
+          setUnlimitedResults((prev) => [...prev, { ...activeRound, correct }]);
           setUnlimitedRound((prev) => prev + 1);
         }
         setCurrentResult(null);
         setShowingResult(false);
       }, 2000);
     },
-    [currentPair, showingResult, gameStatus, mode, addDailyAction],
+    [activeRound, showingResult, gameStatus, mode, addDailyAction],
   );
 
   const switchMode = useCallback((m: NflHLMode) => {
     if (m === 'unlimited') {
-      setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000), hard));
+      setUnlimitedRounds(buildRounds(Math.floor(Math.random() * 100000), hard));
       setUnlimitedResults([]);
       setUnlimitedRound(0);
     }
@@ -177,10 +185,8 @@ export function useNflHL() {
   const toggleHard = useCallback(() => {
     setHard((prev) => {
       const next = !prev;
-      // Hard pairs are an unlimited-mode feature — switching keeps the
-      // daily's canonical pair list untouched.
       setMode('unlimited');
-      setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000), next));
+      setUnlimitedRounds(buildRounds(Math.floor(Math.random() * 100000), next));
       setUnlimitedResults([]);
       setUnlimitedRound(0);
       setCurrentResult(null);
@@ -192,7 +198,8 @@ export function useNflHL() {
   useGameCompletion('nfl-higher-lower', rawDailyStatus !== 'playing', totalScore);
 
   return {
-    mode, switchMode, hard, toggleHard, currentPair, currentRound, results, showingResult, streak,
+    mode, switchMode, hard, toggleHard,
+    activeRound, currentPair, currentRound, results, showingResult, streak,
     gameStatus, correctCount, totalScore, makeGuess, totalRounds: ROUNDS, isLoading,
   };
 }

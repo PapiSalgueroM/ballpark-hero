@@ -14,12 +14,39 @@ function getDailyIndex(): number {
   return seed % nflCareerPlayers.length;
 }
 
+export type NflCareerMode = 'daily' | 'unlimited';
+
 export function useNFLCareer() {
-  const [targetPlayer] = useState<NFLCareerPlayer>(() => nflCareerPlayers[getDailyIndex()]);
+  // Owner 2026-08-05: "it shouldn't be just a daily thing but also unlimited."
+  // Daily stays date-seeded; unlimited deals random players back to back
+  // without the old full-page reload.
+  const [mode, setMode] = useState<NflCareerMode>('daily');
+  const [targetPlayer, setTargetPlayer] = useState<NFLCareerPlayer>(() => nflCareerPlayers[getDailyIndex()]);
   const [cluesRevealed, setCluesRevealed] = useState(1); // start with 1 clue
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
   const [guessHistory, setGuessHistory] = useState<string[]>([]);
   const [hard, setHard] = useState(false);
+
+  const dealRound = useCallback((player: NFLCareerPlayer) => {
+    setTargetPlayer(player);
+    setCluesRevealed(1);
+    setGameStatus('playing');
+    setGuessHistory([]);
+  }, []);
+
+  const randomPlayer = useCallback((excludeName?: string): NFLCareerPlayer => {
+    const pool = nflCareerPlayers.filter(p => p.name !== excludeName);
+    return pool[Math.floor(Math.random() * pool.length)] ?? nflCareerPlayers[0];
+  }, []);
+
+  const switchMode = useCallback((m: NflCareerMode) => {
+    setMode(m);
+    dealRound(m === 'daily' ? nflCareerPlayers[getDailyIndex()] : randomPlayer());
+  }, [dealRound, randomPlayer]);
+
+  const nextUnlimited = useCallback(() => {
+    dealRound(randomPlayer(targetPlayer.name));
+  }, [dealRound, randomPlayer, targetPlayer]);
 
   const score = useMemo(() => Math.max(1, TOTAL_CLUES + 1 - cluesRevealed), [cluesRevealed]);
 
@@ -66,11 +93,11 @@ export function useNFLCareer() {
   }, [gameStatus]);
 
   const resetGame = useCallback(() => {
-    // Random mode — pick a random player different from daily
-    const idx = Math.floor(Math.random() * nflCareerPlayers.length);
-    // We can't reset targetPlayer with useState, so we reload
-    window.location.reload();
-  }, []);
+    // In unlimited: deal the next random player in place. From the daily:
+    // hop into unlimited with a fresh player, no page reload.
+    if (mode === 'unlimited') nextUnlimited();
+    else switchMode('unlimited');
+  }, [mode, nextUnlimited, switchMode]);
 
   const shareText = useMemo(() => {
     if (gameStatus === 'playing') return '';
@@ -92,11 +119,12 @@ export function useNFLCareer() {
   // rules used throughout the search layer).
   const excludedNames = useMemo(() => new Set(guessHistory.map(normalizeName)), [guessHistory]);
 
-  useGameCompletion('nfl-career', gameStatus !== 'playing', score);
+  useGameCompletion('nfl-career', mode === 'daily' && gameStatus !== 'playing', score);
 
   const toggleHard = useCallback(() => setHard(h => !h), []);
 
   return {
+    mode, switchMode, nextUnlimited,
     hard, toggleHard,
     targetPlayer,
     clues,

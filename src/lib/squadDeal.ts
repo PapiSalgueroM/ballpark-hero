@@ -328,8 +328,13 @@ export function bankerOffer(pool: Player[], slot: FormationSlot, unopened: Playe
   const maxR = ratings.length ? Math.max(...ratings) : 95;
   // Banker leans below average early (roundFactor climbs toward 1.0), but the offer must never
   // be worse than the worst case still in play - owner saw "a 60 offered when the lowest was 61".
-  // Clamp the target into the remaining range so every offer is a genuine alternative.
-  const target = Math.max(minR, Math.min(maxR, avgR * roundFactor));
+  // Owner 2026-08-05 ("the bankers offers suck"): the banker now runs hotter.
+  // Base target sits a notch ABOVE the old curve, and roughly one call in four
+  // is a genuine sweetener near the top of what's still in play, so taking the
+  // deal is a real decision instead of an obvious pass.
+  const sweetener = Math.random() < 0.25;
+  const base = avgR * roundFactor * 1.06;
+  const target = Math.max(minR, Math.min(maxR, sweetener ? maxR - 1 : base));
   const unopenedNames = new Set(unopened.map(p => p.name));
   // excludeNames = players the banker already offered this slot, so it never re-offers the same guy.
   const elig = pool.filter(p =>
@@ -408,6 +413,15 @@ export const EXTRA_DEALS: ExtraCategory[] = [
     { id: 'fiftyplus1', label: '50+1 Sensible (€90M)', emoji: '🇩🇪', desc: 'German efficiency', ratingMod: 2, chemMod: 6, fact: 'Smart, sustainable spending. The fans owned the club and it showed.' },
     { id: 'moneyball', label: 'Moneyball (€30M)', emoji: '📊', desc: 'Spreadsheet FC', ratingMod: 1, chemMod: 8, fact: 'Moneyball found two gems the big clubs never scouted.' },
     { id: 'academy', label: 'Academy Only (€0)', emoji: '🌱', desc: 'La Masia dreams', ratingMod: -1, chemMod: 12, fact: 'Eleven academy kids who grew up together. Chemistry off the charts.' },
+  ]},
+  // Owner 2026-08-05: "u still haven't added the... jerseys". Fifth board.
+  { key: 'kit', title: 'Home Kit', emoji: '👕', options: [
+    { id: 'iconic', label: 'The Iconic Classic', emoji: '🏛️', desc: 'Clean stripes, timeless', ratingMod: 2, chemMod: 8, fact: 'The classic kit had opponents feeling like underdogs at kickoff.' },
+    { id: 'retro', label: '90s Retro Reissue', emoji: '📼', desc: 'Loud in the best way', ratingMod: 2, chemMod: 7, fact: 'The retro shirt sold out twice and the away ends hated it.' },
+    { id: 'blackout', label: 'The Blackout', emoji: '🖤', desc: 'All black everything', ratingMod: 3, chemMod: 4, fact: 'The blackout kit made every night game feel like a heist.' },
+    { id: 'neon', label: 'Neon Statement', emoji: '🟨', desc: 'Visible from space', ratingMod: 1, chemMod: 5, fact: 'The neon kit was a menace on TV and worse in person.' },
+    { id: 'sponsorless', label: 'Sponsorless Purist', emoji: '🕊️', desc: 'Just the badge', ratingMod: 1, chemMod: 9, fact: 'No sponsor, just the badge. The purists wept with joy.' },
+    { id: 'cursed', label: 'The Cursed Third Kit', emoji: '🩹', desc: 'Beige-on-beige chaos', ratingMod: -2, chemMod: 2, fact: 'The cursed third kit clashed with itself. Two own goals wearing it.' },
   ]},
 ];
 
