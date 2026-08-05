@@ -264,6 +264,7 @@ function xiRating(xi: (Player | undefined)[]): number {
  * Simulate one rival's window: sell their 2 lowest-rated starters, then
  * greedily buy the best affordable upgrades for their weakest slots from the
  * market (players the human already signed are off limits). Deterministic.
+ * Players this rival won off you in a bidding war are forced into their squad.
  */
 export function simulateRival(
   plan: RivalPlan,
@@ -271,6 +272,7 @@ export function simulateRival(
   market: Player[],
   humanSigned: Set<string>,
   seed: number,
+  wonInWars: string[] = [],
 ): RivalResult {
   const formation = FORMATIONS[0];
   const startXi = buildXi(formation, rivalSquad);
@@ -289,14 +291,25 @@ export function simulateRival(
     if (idx >= 0) squad.splice(idx, 1);
   }
 
-  // Buy up to 3 best affordable players the human didn't take.
   const signings: string[] = [];
   const taken = new Set(squad.map(p => p.name));
+
+  // War trophies first: they outbid you for these, so they own them now.
+  for (const name of wonInWars) {
+    const won = market.find(p => p.name === name);
+    if (!won || taken.has(won.name)) continue;
+    squad.push(won);
+    taken.add(won.name);
+    budget = Math.max(0, budget - won.marketValue);
+    signings.push(won.name);
+  }
+
+  // Then up to 3 best affordable players the human didn't take.
   const options = market
     .filter(p => !humanSigned.has(p.name) && !taken.has(p.name))
     .sort((a, b) => playerRating(b) - playerRating(a));
   for (const cand of options) {
-    if (signings.length >= 3) break;
+    if (signings.length >= 3 + wonInWars.length) break;
     if (cand.marketValue > budget) continue;
     // A rival skips a candidate now and then so runs differ per seed.
     if ((hashSeed(cand.name) ^ seed) % 5 === 0) continue;
@@ -307,4 +320,173 @@ export function simulateRival(
 
   const finalRating = xiRating(buildXi(formation, squad));
   return { ...plan, startRating, finalRating, signings };
+}
+
+/* ---------------- Live bidding wars (owner 2026-08-05: "bidding wars for players") ---------------- */
+
+/** Chance (0-100) a rival hijacks this signing. Stars start wars, squad players don't. */
+export function contestChance(p: Player): number {
+  const r = playerRating(p);
+  if (r >= 86) return 55;
+  if (r >= 82) return 40;
+  if (r >= 78) return 28;
+  if (r >= 74) return 15;
+  return 6;
+}
+
+/** Seeded per run + player, so a run can't reroll the same deal. */
+export function isContested(p: Player, seed: number): boolean {
+  return (hashSeed(p.name) ^ seed) % 100 < contestChance(p);
+}
+
+/** Which of the two rivals picks the fight over this player. */
+export function warRivalIndex(p: Player, seed: number): number {
+  return (hashSeed(p.name) ^ (seed >>> 3)) % 2;
+}
+
+/** The rival's hidden ceiling: 112% to 157% of market value. */
+export function rivalCapFor(p: Player, seed: number): number {
+  const wiggle = ((hashSeed(p.name) ^ (seed >>> 5)) % 46) / 100;
+  return Math.round(p.marketValue * (1.12 + wiggle));
+}
+
+/** Next bid on the ladder. Steps grow with the fee. */
+export function nextRaise(price: number): number {
+  const step = price >= 120 ? 15 : price >= 60 ? 10 : price >= 25 ? 5 : 3;
+  return price + step;
+}
+
+/* ---------------- Season simulation (owner 2026-08-05: "simulate the season with stats") ---------------- */
+
+export interface SeasonTeam {
+  name: string;      // manager or club display name
+  clubName: string;
+  emoji: string;
+  rating: number;
+  isYou?: boolean;
+  isRival?: boolean;
+}
+
+export interface SeasonRow extends SeasonTeam {
+  w: number; d: number; l: number; gf: number; ga: number; pts: number;
+}
+
+export interface SeasonResult {
+  table: SeasonRow[];
+  position: number; // your finish, 1-based
+  highlights: string[];
+  goldenBoot: { player: string; team: string; goals: number } | null;
+  yourTopScorer: { player: string; goals: number } | null;
+  yourAssistKing: { player: string; assists: number } | null;
+  headline: string;
+}
+
+const FILLER_BASE: Record<ClubTier, number> = { elite: 84, strong: 81, mid: 77, modest: 73 };
+
+function lcg(seed: number): () => number {
+  let s = seed % 2147483647;
+  if (s <= 0) s += 2147483646;
+  return () => {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+function goalsFrom(exp: number, rnd: () => number): number {
+  let g = 0;
+  for (let i = 0; i < 6; i++) if (rnd() < exp / 6) g++;
+  return g;
+}
+
+/**
+ * A 6-team mini league season, double round robin (10 games each): you, your
+ * two rivals, and three neutral clubs of your tier. Fully seeded, so the
+ * result screen never reshuffles on re-render.
+ */
+export function simulateSeason(
+  you: { clubName: string; rating: number; xi: Player[] },
+  rivals: RivalResult[],
+  fillerClubs: RebuildClub[],
+  seed: number,
+): SeasonResult {
+  const rnd = lcg(seed * 31 + 7);
+  const rows: SeasonRow[] = [];
+  const mk = (t: SeasonTeam): SeasonRow => ({ ...t, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 });
+
+  rows.push(mk({ name: 'You', clubName: you.clubName, emoji: '🫵', rating: you.rating, isYou: true }));
+  for (const r of rivals) {
+    rows.push(mk({ name: r.name, clubName: r.club.club, emoji: r.emoji, rating: r.finalRating, isRival: true }));
+  }
+  for (const c of fillerClubs.slice(0, 3)) {
+    const jitter = Math.floor(rnd() * 5) - 2;
+    rows.push(mk({ name: c.club, clubName: c.club, emoji: '🏟️', rating: FILLER_BASE[c.tier] + jitter }));
+  }
+
+  interface Game { home: SeasonRow; away: SeasonRow; hg: number; ag: number }
+  const games: Game[] = [];
+  for (let i = 0; i < rows.length; i++) {
+    for (let j = 0; j < rows.length; j++) {
+      if (i === j) continue;
+      const home = rows[i], away = rows[j];
+      const diff = home.rating - away.rating;
+      const hg = goalsFrom(Math.max(0.35, 1.5 + diff / 13), rnd);
+      const ag = goalsFrom(Math.max(0.35, 1.2 - diff / 13), rnd);
+      home.gf += hg; home.ga += ag; away.gf += ag; away.ga += hg;
+      if (hg > ag) { home.w++; away.l++; home.pts += 3; }
+      else if (ag > hg) { away.w++; home.l++; away.pts += 3; }
+      else { home.d++; away.d++; home.pts++; away.pts++; }
+      games.push({ home, away, hg, ag });
+    }
+  }
+  rows.sort((a, b) => b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf);
+  const position = rows.findIndex(r => r.isYou) + 1;
+  const yourRow = rows[position - 1];
+
+  // Highlights: your biggest win, your worst loss, plus the wildest scoreline.
+  const highlights: string[] = [];
+  const yourGames = games.filter(g => g.home.isYou || g.away.isYou);
+  const margin = (g: Game) => (g.home.isYou ? g.hg - g.ag : g.ag - g.hg);
+  const wins = yourGames.filter(g => margin(g) > 0).sort((a, b) => margin(b) - margin(a));
+  const losses = yourGames.filter(g => margin(g) < 0).sort((a, b) => margin(a) - margin(b));
+  const line = (g: Game) => `${g.home.emoji} ${g.home.name} ${g.hg}-${g.ag} ${g.away.name} ${g.away.emoji}`;
+  if (wins[0]) highlights.push(`🔥 Statement win: ${line(wins[0])}`);
+  if (losses[0]) highlights.push(`🥶 Rough afternoon: ${line(losses[0])}`);
+  const thriller = [...games].sort((a, b) => (b.hg + b.ag) - (a.hg + a.ag))[0];
+  if (thriller) highlights.push(`🎢 Game of the season: ${line(thriller)}`);
+  const champ = rows[0];
+  highlights.push(champ.isYou ? '🏆 You lifted the trophy in front of a full house.' : `🏆 ${champ.emoji} ${champ.name} took the title with ${champ.pts} points.`);
+
+  // Golden boot: real names only (your XI + rival signings), goals scaled off team output.
+  let goldenBoot: SeasonResult['goldenBoot'] = null;
+  const yourAtk = you.xi
+    .filter(p => ['ST', 'CF', 'LW', 'RW', 'CAM'].includes(p.position))
+    .sort((a, b) => playerRating(b) - playerRating(a));
+  let yourTopScorer: SeasonResult['yourTopScorer'] = null;
+  let yourAssistKing: SeasonResult['yourAssistKing'] = null;
+  if (yourAtk[0]) {
+    const goals = Math.max(2, Math.round(yourRow.gf * (0.42 + rnd() * 0.14)));
+    yourTopScorer = { player: yourAtk[0].name, goals };
+    goldenBoot = { player: yourAtk[0].name, team: 'You', goals };
+  }
+  const yourMids = you.xi
+    .filter(p => ['CM', 'CAM', 'CDM', 'LM', 'RM', 'LW', 'RW'].includes(p.position))
+    .filter(p => p.name !== yourTopScorer?.player)
+    .sort((a, b) => playerRating(b) - playerRating(a));
+  if (yourMids[0]) {
+    yourAssistKing = { player: yourMids[0].name, assists: Math.max(2, Math.round(yourRow.gf * (0.24 + rnd() * 0.1))) };
+  }
+  for (const r of rivals) {
+    const row = rows.find(x => x.name === r.name);
+    if (!row || r.signings.length === 0) continue;
+    const goals = Math.max(2, Math.round(row.gf * (0.38 + rnd() * 0.14)));
+    if (!goldenBoot || goals > goldenBoot.goals) goldenBoot = { player: r.signings[0], team: r.name, goals };
+  }
+
+  const headline =
+    position === 1 ? 'CHAMPIONS. The rebuild worked.'
+    : position === 2 ? 'Runners up. One window away.'
+    : position <= 4 ? 'Solid season, top half, real progress.'
+    : 'A long season. The board is drafting emails.';
+
+  return { table: rows, position, highlights, goldenBoot, yourTopScorer, yourAssistKing, headline };
 }

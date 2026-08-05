@@ -13,14 +13,15 @@ import {
   fetchDartDraftPool, finalScore, simulateSeries, squadGrade, squadRating,
   type SeriesResult,
 } from '@/lib/dartDraft';
-import { GEO_COUNTRIES, type GeoCountry } from '@/data/worldMapGeo';
+import { GEO_COUNTRIES, WORLD_H, WORLD_W, type GeoCountry } from '@/data/worldMapGeo';
 import {
   DART_SLOTS, MAP_TOPICS, ROUND_VIEWS, VIEW_LABEL, accuracyPoints, countryAt,
-  countryChoices, countryFill, dbNamesFor, isWcNation, journeyman, legendChoices,
-  machineMapDraft, pathOf, resolveMapThrow, rollZones, viewBoxOf, wildcardChoices,
-  wonderkidChoices, type DraftChoice, type MapHit, type MapTopic, type Zone,
+  countryChoices, countryFill, dbNamesFor, isWcNation, legendChoices,
+  machineMapDraft, mysteryChoices, oceanTrialist, pathOf, resolveMapThrow,
+  rollZones, stormChoices, viewBoxOf, wildcardChoices, wonderkidChoices,
+  type DraftChoice, type MapHit, type MapTopic, type Zone,
 } from '@/lib/dartMap';
-import { WC2026_NATIONS, playerRating } from '@/lib/squadDeal';
+import { LEGENDS, WC2026_NATIONS, playerRating } from '@/lib/squadDeal';
 import type { Player } from '@/types/game';
 
 type Phase = 'intro' | 'loading' | 'squad' | 'aim' | 'draft' | 'done';
@@ -34,6 +35,10 @@ const money = (m: number) => (m >= 1000 ? `£${(m / 1000).toFixed(1)}B` : `£${m
 function adjustedXi(xi: (Player | null)[], oop: boolean[]): (Player | null)[] {
   return xi.map((p, i) => (p && oop[i] ? { ...p, marketValue: Math.max(1, Math.round(p.marketValue / 3)) } : p));
 }
+
+/** One rating everywhere: fillers keep their pinned overall, everyone else FIFA-curve minus the OOP tax. */
+const shownRating = (p: Player, isOop: boolean) =>
+  p.fixedOverall ?? Math.max(35, playerRating(p) - (isOop ? 8 : 0));
 
 const DartDraft = () => {
   const [phase, setPhase] = useState<Phase>('intro');
@@ -66,10 +71,13 @@ const DartDraft = () => {
   const throwIndex = useMemo(() => xi.filter(Boolean).length, [xi]);
   const view = ROUND_VIEWS[Math.min(throwIndex, ROUND_VIEWS.length - 1)];
   const box = viewBoxOf(view);
-  const topicPool = useMemo(
-    () => (topic === 'wc2026' ? pool.filter(p => WC2026_NATIONS.has(p.nationality)) : pool),
-    [pool, topic],
-  );
+  const topicPool = useMemo(() => {
+    if (topic === 'wc2026') return pool.filter(p => WC2026_NATIONS.has(p.nationality));
+    if (topic === 'alltime') {
+      return [...LEGENDS, ...pool].sort((a, b) => b.marketValue - a.marketValue);
+    }
+    return pool;
+  }, [pool, topic]);
 
   const userRating = useMemo(() => squadRating(adjustedXi(xi, oop)), [xi, oop]);
   const total = useMemo(
@@ -154,27 +162,33 @@ const DartDraft = () => {
     setBlocked(wcBlocked);
     const pts = wcBlocked ? 0 : accuracyPoints(landed);
     setPoints(p => p + pts);
-    if (!wcBlocked && (landed.kind === 'zone' || pts >= 40)) setSharpHits(h => h + 1);
+    if (!wcBlocked && ((landed.kind === 'zone' && !landed.zone.bad) || pts >= 40)) setSharpHits(h => h + 1);
 
     window.setTimeout(async () => {
       if (landed.kind === 'ocean' || wcBlocked) {
-        setChoices(null);
+        setChoices(null); // renders the lifeboat / 40-rated trialist options
         setPhase('draft');
         return;
       }
       if (landed.kind === 'zone') {
-        const c =
-          landed.zone.kind === 'legend' ? legendChoices(slot, usedNames)
-          : landed.zone.kind === 'wonderkid' ? wonderkidChoices(topicPool, slot, usedNames)
-          : wildcardChoices(topicPool, slot, usedNames);
-        setChoices(c.length ? c : null);
+        let c: DraftChoice[];
+        switch (landed.zone.kind) {
+          case 'legend':    c = legendChoices(slot, usedNames); break;
+          case 'wonderkid': c = wonderkidChoices(topicPool, slot, usedNames); break;
+          case 'mystery':   c = mysteryChoices(topicPool, slot, usedNames); break;
+          case 'storm':     c = stormChoices(topicPool, slot, usedNames); break;
+          case 'shark':     c = [{ player: oceanTrialist(slot, 'shark'), outOfPosition: false }]; break;
+          default:          c = wildcardChoices(topicPool, slot, usedNames);
+        }
+        if (!c.length && landed.zone.kind !== 'shark') c = wildcardChoices(topicPool, slot, usedNames);
+        setChoices(c.length ? c : [{ player: oceanTrialist(slot), outOfPosition: false }]);
         setPhase('draft');
         return;
       }
       setChoicesLoading(true);
       setPhase('draft');
-      const c = await countryChoices(landed.country, slot, usedNames);
-      setChoices(c.length ? c : null);
+      const c = await countryChoices(landed.country, slot, usedNames, { alltime: topic === 'alltime' });
+      setChoices(c.length ? c : [{ player: oceanTrialist(slot), outOfPosition: false }]);
       setChoicesLoading(false);
     }, 850);
   }, [zones, slotIdx, topic, usedNames, topicPool]);
@@ -218,14 +232,12 @@ const DartDraft = () => {
     finishRound(nextXi, nextOop);
   };
 
-  const takeJourneyman = () => {
+  const takeTrialist = () => {
     if (slotIdx === null) return;
-    const jm = journeyman(topicPool, DART_SLOTS[slotIdx], usedNames);
-    if (!jm) { finishRound(xi, oop); return; }
+    const t = oceanTrialist(DART_SLOTS[slotIdx], blocked ? 'blocked' : 'ocean');
     const nextXi = [...xi];
-    nextXi[slotIdx] = jm;
+    nextXi[slotIdx] = t;
     setXi(nextXi);
-    setUsedNames(prev => new Set(prev).add(jm.name));
     finishRound(nextXi, oop);
   };
 
@@ -247,6 +259,19 @@ const DartDraft = () => {
   };
 
   /* ---------------- render helpers ---------------- */
+  const graticules = useMemo(() => {
+    const els: JSX.Element[] = [];
+    for (let i = 1; i < 18; i++) {
+      const x = (i * WORLD_W) / 18;
+      els.push(<line key={`v${i}`} x1={x} y1={0} x2={x} y2={WORLD_H} stroke="hsl(210 45% 30% / 0.22)" strokeWidth={0.7} vectorEffect="non-scaling-stroke" />);
+    }
+    for (let j = 1; j < 9; j++) {
+      const y = (j * WORLD_H) / 9;
+      els.push(<line key={`h${j}`} x1={0} y1={y} x2={WORLD_W} y2={y} stroke="hsl(210 45% 30% / 0.22)" strokeWidth={0.7} vectorEffect="non-scaling-stroke" />);
+    }
+    return els;
+  }, []);
+
   const countryEls = useMemo(
     () =>
       GEO_COUNTRIES.map(c => {
@@ -289,8 +314,8 @@ const DartDraft = () => {
             <div className="text-[10px] sm:text-xs font-bold text-foreground leading-tight truncate">{p.name}</div>
             <div className="flex items-center justify-center gap-1 text-[9px] text-muted-foreground">
               <FlagImg name={p.nationality} size={12} />
-              <span className={cn('font-bold', oop[i] ? 'text-orange-400' : 'text-gold')}>
-                {Math.max(35, playerRating(p) - (oop[i] ? 8 : 0))}
+              <span className={cn('font-bold', oop[i] ? 'text-orange-400' : p.fixedOverall ? 'text-muted-foreground' : 'text-gold')}>
+                {shownRating(p, oop[i])}
               </span>
             </div>
           </>
@@ -308,6 +333,18 @@ const DartDraft = () => {
     if (hit.kind === 'country') return hit.country.name;
     return 'LOST AT SEA';
   };
+
+  const zoneCaption =
+    hit?.kind === 'zone'
+      ? ({
+          legend: 'All-time greats at your position. Pick one.',
+          wonderkid: 'Under-21 gems only. The future is now.',
+          wildcard: 'Free pick off the world top shelf.',
+          mystery: 'Three names from anywhere in the pool. Pure gamble.',
+          storm: 'Blown into the bargain bin. Best of the cheap seats.',
+          shark: 'It ate your dart. A 40-rated trialist swims out instead.',
+        } as Record<string, string>)[hit.zone.kind]
+      : null;
 
   /* ---------------- page ---------------- */
   return (
@@ -332,7 +369,7 @@ const DartDraft = () => {
                   Call your position, then throw a timed dart at a real world map.
                   Whatever country you stick, you draft one of its actual pros. 11 throws, one XI, no take-backs.
                 </p>
-                <div className="grid sm:grid-cols-2 gap-3 max-w-lg mx-auto">
+                <div className="grid sm:grid-cols-3 gap-3 max-w-2xl mx-auto">
                   {MAP_TOPICS.map(t => (
                     <button
                       key={t.id}
@@ -346,8 +383,10 @@ const DartDraft = () => {
                   ))}
                 </div>
                 <div className="text-xs text-muted-foreground max-w-md mx-auto space-y-1">
-                  <p>Gold rings over the ocean are bonus zones: 👑 all-time legends, 💎 wonderkids, 🃏 free pick.</p>
-                  <p>Ocean throws get one lifeboat per game. After that you take the journeyman.</p>
+                  <p>Gold rings pay out: 👑 legends, 💎 wonderkids, 🃏 free pick, 🎁 mystery gamble.</p>
+                  <p>Red rings punish: 🦈 shark eats your dart, 🌪️ storm blows you into the bargain bin.</p>
+                  <p>Ocean throws hand you a 40-rated trialist. One lifeboat re-throw per game.</p>
+                  <p>Every nation fields a full squad. No pro at your position? Their academy kid steps up.</p>
                 </div>
               </>
             )}
@@ -393,11 +432,25 @@ const DartDraft = () => {
 
                 <div className="relative w-full rounded-2xl border border-border overflow-hidden bg-[hsl(215,45%,10%)]">
                   <svg viewBox={`${box.x} ${box.y} ${box.w} ${box.h}`} className="w-full h-auto block select-none" onClick={lockIn}>
+                    <defs>
+                      <radialGradient id="dartOcean" cx="50%" cy="40%" r="80%">
+                        <stop offset="0%" stopColor="hsl(211 58% 18%)" />
+                        <stop offset="55%" stopColor="hsl(214 58% 13%)" />
+                        <stop offset="100%" stopColor="hsl(219 60% 8%)" />
+                      </radialGradient>
+                    </defs>
+                    <rect x={box.x} y={box.y} width={box.w} height={box.h} fill="url(#dartOcean)" />
+                    {graticules}
                     {countryEls}
                     {zones.map((z, i) => (
                       <g key={i} opacity={0.95}>
-                        <circle cx={z.x} cy={z.y} r={z.r} fill="hsl(45 90% 45% / 0.12)" stroke="hsl(45 90% 55%)" strokeWidth={1.4} strokeDasharray="4 3" vectorEffect="non-scaling-stroke" />
-                        <text x={z.x} y={z.y - z.r - 3} textAnchor="middle" fontSize={Math.max(8, z.r * 0.55)} fill="hsl(45 90% 65%)" fontWeight={800}>
+                        <circle
+                          cx={z.x} cy={z.y} r={z.r}
+                          fill={z.bad ? 'hsl(0 75% 50% / 0.12)' : 'hsl(45 90% 45% / 0.12)'}
+                          stroke={z.bad ? 'hsl(0 80% 55%)' : 'hsl(45 90% 55%)'}
+                          strokeWidth={1.4} strokeDasharray="4 3" vectorEffect="non-scaling-stroke"
+                        />
+                        <text x={z.x} y={z.y - z.r - 3} textAnchor="middle" fontSize={Math.max(8, z.r * 0.55)} fill={z.bad ? 'hsl(0 80% 65%)' : 'hsl(45 90% 65%)'} fontWeight={800}>
                           {z.emoji} {z.label}
                         </text>
                       </g>
@@ -436,6 +489,7 @@ const DartDraft = () => {
                       {hit?.kind === 'country' && !blocked && <FlagImg name={dbNamesFor(hit.country)[0]} size={26} />}
                       {hitTitle()}
                     </h2>
+                    {zoneCaption && <p className="text-xs text-muted-foreground">{zoneCaption}</p>}
 
                     {choicesLoading && <Loader2 className="w-6 h-6 animate-spin text-muted-foreground mx-auto" />}
 
@@ -450,13 +504,16 @@ const DartDraft = () => {
                             <div className="flex items-center justify-between gap-2">
                               <div className="min-w-0">
                                 <div className="font-bold text-foreground truncate">{p.name}</div>
-                                <div className="text-xs text-muted-foreground truncate">{p.club} • {p.position} • {money(p.marketValue)}</div>
+                                <div className="text-xs text-muted-foreground truncate">
+                                  {p.fixedOverall ? 'Unproven • takes the slot, no questions' : `${p.club} • ${p.position} • ${money(p.marketValue)}`}
+                                </div>
                               </div>
                               <div className="text-right shrink-0">
-                                <div className={cn('text-lg font-black', outOfPosition ? 'text-orange-400' : 'text-gold')}>
-                                  {Math.max(35, playerRating(p) - (outOfPosition ? 8 : 0))}
+                                <div className={cn('text-lg font-black', outOfPosition ? 'text-orange-400' : p.fixedOverall ? 'text-muted-foreground' : 'text-gold')}>
+                                  {shownRating(p, outOfPosition)}
                                 </div>
                                 {outOfPosition && <div className="text-[9px] font-bold text-orange-400">OUT OF POSITION</div>}
+                                {p.fixedOverall !== undefined && <div className="text-[9px] font-bold text-muted-foreground">FILLER</div>}
                               </div>
                             </div>
                           </button>
@@ -469,9 +526,7 @@ const DartDraft = () => {
                         <p className="text-sm text-muted-foreground max-w-md mx-auto">
                           {blocked
                             ? 'That nation is not at the 2026 World Cup, so the dart counts for nothing.'
-                            : hit?.kind === 'ocean'
-                              ? 'Straight into the water. The fish cannot play.'
-                              : 'No pros from there in the player pool.'}
+                            : 'Straight into the water. The fish cannot play.'}
                         </p>
                         <div className="flex gap-3 justify-center">
                           {!lifeboatUsed && (
@@ -479,10 +534,13 @@ const DartDraft = () => {
                               <LifeBuoy className="w-4 h-4 mr-2" /> Lifeboat re-throw
                             </Button>
                           )}
-                          <Button variant="outline" onClick={takeJourneyman} className="font-bold">
-                            Take the journeyman
+                          <Button variant="outline" onClick={takeTrialist} className="font-bold">
+                            Take the 40-rated trialist
                           </Button>
                         </div>
+                        {!lifeboatUsed && (
+                          <p className="text-[11px] text-muted-foreground">One lifeboat per game. Spend it wisely.</p>
+                        )}
                       </div>
                     )}
                   </div>
@@ -514,8 +572,8 @@ const DartDraft = () => {
                             <span className="flex-1 min-w-0 truncate text-sm font-semibold text-foreground px-2 flex items-center gap-1.5">
                               <FlagImg name={p.nationality} size={14} />{p.name}
                             </span>
-                            <span className={cn('text-sm font-black', oop[i] ? 'text-orange-400' : 'text-gold')}>
-                              {Math.max(35, playerRating(p) - (oop[i] ? 8 : 0))}
+                            <span className={cn('text-sm font-black', oop[i] ? 'text-orange-400' : p.fixedOverall ? 'text-muted-foreground' : 'text-gold')}>
+                              {shownRating(p, oop[i])}
                             </span>
                           </>
                         ) : (
@@ -543,13 +601,14 @@ const DartDraft = () => {
         </main>
         <GameSeoContent
           title="Dart Draft: throw darts at the world, draft who you hit"
-          description="A timed crosshair sweeps a real world map. Lock left to right, then top to bottom, and the dart lands with a wobble. Hit France and you choose from the best French players at the position you called before the throw. Hit a tiny island and you take what it has. Continent rounds zoom the map for precision throws, bonus zones over the ocean pay out all-time legends, wonderkids and free picks, and after 11 throws your XI plays a three match series against The Machine."
+          description="A timed crosshair sweeps a real world map. Lock left to right, then top to bottom, and the dart lands with a wobble. Hit France and you choose from the best French players at the position you called before the throw. Hit a tiny island and its academy kid steps up. Continent rounds zoom the map for precision throws, gold zones over the ocean pay out legends, wonderkids, free picks and mystery gambles, red zones bite back with sharks and storms, and after 11 throws your XI plays a three match series against The Machine. All-Time mode adds the legends of every nation to their squads."
           howToPlay={[
-            'Pick a topic: every nation, or only the 48 at the 2026 World Cup.',
+            'Pick a topic: every nation, the 48 at the 2026 World Cup, or All-Time with legends.',
             'Choose which position you are throwing for from your empty XI slots.',
             'Lock the sweeping line twice: once for left-right, once for up-down.',
-            'Hit a country and pick from its real players at your position.',
-            'Ocean zones pay bonuses: legends, wonderkids or a free pick.',
+            'Hit a country and pick from its real players at your position. No pro there? You get their academy kid.',
+            'Gold zones pay legends, wonderkids, free picks and mystery gambles. Red zones are sharks and storms.',
+            'Ocean throws hand you a 40-rated trialist, with one lifeboat re-throw per game.',
             'Fill all 11 slots, then your XI plays The Machine in a 3 match series.',
           ]}
         />

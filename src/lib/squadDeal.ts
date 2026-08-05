@@ -4,7 +4,7 @@ import { players as fallbackPlayers } from '@/data/players';
 import { getEnrichment } from '@/data/footleEnrichment';
 
 /* ---------------- Position normalization ---------------- */
-const POSITION_NORMALIZE: Record<string, Position> = {
+export const POSITION_NORMALIZE: Record<string, Position> = {
   'Goalkeeper': 'GK', 'GK': 'GK',
   'Centre-Back': 'CB', 'Center-Back': 'CB', 'CB': 'CB', 'Defender': 'CB',
   'Left-Back': 'LB', 'LB': 'LB', 'Right-Back': 'RB', 'RB': 'RB',

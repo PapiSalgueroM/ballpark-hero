@@ -3,6 +3,7 @@ import { Check, Copy, RotateCcw, X } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
+import { nextRaise } from '@/lib/rebuildDeck';
 import { useRebuild } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
 
@@ -28,6 +29,7 @@ export function RebuildBoard() {
     chooseClub, sell, sign, finish, reset, grade, shareText,
     coachOptions, keepCoach, coach, pickCoach,
     objectives, finLog, penalties, rivals, rivalsLoading,
+    war, raiseWar, walkAway, overpaid, season,
   } = useRebuild();
   const [copied, setCopied] = useState(false);
 
@@ -225,6 +227,49 @@ export function RebuildBoard() {
               <p className="mt-2 text-xs text-muted-foreground">The rivals ghosted this window.</p>
             )}
           </div>
+
+          {/* Season sim (owner 2026-08-05: full season with stats) */}
+          {season && (
+            <div className="mt-4 rounded-xl border border-border bg-background p-3 text-left">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">📅 The season, simulated</p>
+              <p className="mt-1 text-sm font-bold text-foreground">{season.headline}</p>
+              <div className="mt-2 overflow-hidden rounded-lg border border-border">
+                <div className="grid grid-cols-[1.2rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2rem] gap-x-1 bg-card px-2 py-1 text-[10px] font-bold uppercase text-muted-foreground">
+                  <span>#</span><span>Club</span><span>W</span><span>D</span><span>L</span><span>GD</span><span>Pts</span>
+                </div>
+                {season.table.map((r, i) => (
+                  <div
+                    key={r.name}
+                    className={`grid grid-cols-[1.2rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2rem] gap-x-1 border-t border-border/40 px-2 py-1 text-xs ${
+                      r.isYou ? 'bg-primary/10 font-bold text-primary' : 'text-foreground'
+                    }`}
+                  >
+                    <span>{i + 1}</span>
+                    <span className="truncate">{r.emoji} {r.isYou || r.isRival ? `${r.name} · ${r.clubName}` : r.clubName}</span>
+                    <span>{r.w}</span><span>{r.d}</span><span>{r.l}</span>
+                    <span>{r.gf - r.ga > 0 ? '+' : ''}{r.gf - r.ga}</span>
+                    <span>{r.pts}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-2 space-y-1">
+                {season.highlights.map((h, i) => (
+                  <p key={i} className="text-xs text-muted-foreground">{h}</p>
+                ))}
+              </div>
+              <div className="mt-2 space-y-0.5 text-xs text-foreground">
+                {season.goldenBoot && (
+                  <p>👟 Golden Boot: <b>{season.goldenBoot.player}</b> ({season.goldenBoot.team}), {season.goldenBoot.goals} goals</p>
+                )}
+                {season.yourTopScorer && season.goldenBoot?.player !== season.yourTopScorer.player && (
+                  <p>⚽ Your top scorer: <b>{season.yourTopScorer.player}</b>, {season.yourTopScorer.goals} goals</p>
+                )}
+                {season.yourAssistKing && (
+                  <p>🎯 Your assist king: <b>{season.yourAssistKing.player}</b>, {season.yourAssistKing.assists} assists</p>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="mt-5 flex justify-center gap-2">
             <button
@@ -449,6 +494,62 @@ export function RebuildBoard() {
               {signed.map(p => `${p.name} (€${p.marketValue}M)`).join(', ')}
             </p>
           )}
+          {overpaid > 0 && (
+            <p className="mt-1 text-muted-foreground">
+              <span className="font-semibold text-gold">War premiums:</span> €{overpaid}M over market value
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Live bidding war (owner 2026-08-05: rivals hijack deals in real time) */}
+      {war && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div className="w-full max-w-md rounded-2xl border border-gold/50 bg-card p-5 shadow-2xl">
+            <p className="text-center text-xs font-bold uppercase tracking-widest text-gold">⚔️ Bidding war</p>
+            <p className="mt-2 text-center font-display text-2xl font-black text-foreground">{war.player.name}</p>
+            <p className="text-center text-xs text-muted-foreground">
+              {war.player.club} · rated {playerRating(war.player)} · market value €{war.player.marketValue}M
+            </p>
+            <p className="mt-3 text-center font-display text-4xl font-black text-gold">€{war.price}M</p>
+            <p className="text-center text-xs font-semibold text-muted-foreground">
+              {war.outcome === 'won' ? '✅ DEAL DONE'
+                : war.outcome === 'lost' ? '❌ DEAL LOST'
+                : war.thinking ? `${war.rival.emoji} ${war.rival.name} is thinking…`
+                : war.leader === 'you' ? 'Your bid leads'
+                : `${war.rival.emoji} ${war.rival.name} leads`}
+            </p>
+            <div className="mt-3 max-h-32 space-y-1 overflow-y-auto rounded-lg border border-border bg-background p-2">
+              {[...war.log].reverse().map((l, i) => (
+                <p key={i} className={`text-xs ${i === 0 ? 'font-semibold text-foreground' : 'text-muted-foreground'}`}>{l}</p>
+              ))}
+            </div>
+            {war.outcome === 'live' && (
+              <>
+                <div className="mt-4 flex justify-center gap-2">
+                  <button
+                    onClick={raiseWar}
+                    disabled={war.thinking || war.leader === 'you' || nextRaise(war.price) > budget}
+                    className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
+                  >
+                    Bid €{nextRaise(war.price)}M
+                  </button>
+                  <button
+                    onClick={walkAway}
+                    disabled={war.thinking || war.leader === 'you'}
+                    className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-foreground disabled:opacity-40"
+                  >
+                    Walk away
+                  </button>
+                </div>
+                {war.leader === 'rival' && !war.thinking && nextRaise(war.price) > budget && (
+                  <p className="mt-2 text-center text-[11px] text-destructive">
+                    You cannot afford the next bid. Walk, or lose him anyway.
+                  </p>
+                )}
+              </>
+            )}
+          </div>
         </div>
       )}
 

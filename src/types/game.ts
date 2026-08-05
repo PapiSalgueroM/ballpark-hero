@@ -20,6 +20,8 @@ export interface Player {
   age: number;
   marketValue: number;
   difficulty: Difficulty;
+  /** Pins the shown/simulated overall for generated fillers (Dart Draft academy prospects, trialists). */
+  fixedOverall?: number;
 }
 
 export interface CellResult {

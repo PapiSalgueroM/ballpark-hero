@@ -6,6 +6,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import ShareButtons from '@/components/game/ShareButtons';
 import { Button } from '@/components/ui/button';
 import { Gavel, Loader2, Trophy, RotateCcw, ChevronRight, Ban } from 'lucide-react';
+import { FlagImg } from '@/components/FlagImg';
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
@@ -23,7 +24,7 @@ const money = (m: number) => (m >= 1000 ? `£${(m / 1000).toFixed(2)}B` : `£${m
 
 const SignThePlayer = () => {
   const [phase, setPhase] = useState<Phase>('intro');
-  const [, setTheme] = useState<AuctionTheme>('current');
+  const [theme, setTheme] = useState<AuctionTheme>('current');
   const [bidders, setBidders] = useState<Bidder[]>(createBidders());
   const [lots, setLots] = useState<Lot[]>([]);
   const [lotIndex, setLotIndex] = useState(0);
@@ -144,39 +145,49 @@ const SignThePlayer = () => {
   const runAis = useCallback((currentPrice: number, currentLeader: Bidder['id'] | null, active: Set<Bidder['id']>) => {
     if (!lot) return;
     setAiThinking(true);
-    timer.current = window.setTimeout(() => {
-      let p = currentPrice;
-      let lead = currentLeader;
-      const act = new Set(active);
-      let moved = true;
-      const localLog: string[] = [];
-      while (moved) {
-        moved = false;
-        for (const b of bidders) {
-          if (b.id === 'you' || !act.has(b.id) || lead === b.id) continue;
-          const val = aiValuation(b, lot.player, slotsLeftAfter);
-          const step = p >= 200 ? 25 : p >= 80 ? 10 : 5;
-          if (p + step <= val && b.budget >= p + step) {
-            p += step;
-            lead = b.id;
-            localLog.push(`${b.emoji} ${b.name} bids ${money(p)}!`);
-            moved = true;
-          } else {
-            act.delete(b.id);
-            localLog.push(`${b.emoji} ${b.name} is OUT.`);
-          }
+    // Compute the whole rival battle upfront, then REPLAY it raise by raise
+    // so the room feels live: each bid lands on its own beat, not in a dump.
+    let p = currentPrice;
+    let lead = currentLeader;
+    const act = new Set(active);
+    interface Ev { text: string; price: number; leader: Bidder['id'] | null }
+    const events: Ev[] = [];
+    let moved = true;
+    while (moved) {
+      moved = false;
+      for (const b of bidders) {
+        if (b.id === 'you' || !act.has(b.id) || lead === b.id) continue;
+        const val = aiValuation(b, lot.player, slotsLeftAfter);
+        const step = p >= 200 ? 25 : p >= 80 ? 10 : 5;
+        if (p + step <= val && b.budget >= p + step) {
+          p += step;
+          lead = b.id;
+          events.push({ text: `${b.emoji} ${b.name} bids ${money(p)}!`, price: p, leader: lead });
+          moved = true;
+        } else {
+          act.delete(b.id);
+          events.push({ text: `${b.emoji} ${b.name} is OUT.`, price: p, leader: lead });
         }
-        if (act.has('you')) break;
       }
-      setLog(l => [...localLog.reverse(), ...l].slice(0, 30));
-      setPrice(p);
-      setLeader(lead);
+      if (act.has('you')) break;
+    }
+    const finish = () => {
       setActiveIds(new Set(act));
       setAiThinking(false);
       const remaining = [...act];
       if (!act.has('you') && remaining.length <= 1) settleLot(lead, p);
       else if (act.has('you') && remaining.length === 1 && lead === 'you') settleLot('you', p);
-    }, 700);
+    };
+    const stepPlay = (i: number) => {
+      if (i >= events.length) { finish(); return; }
+      const ev = events[i];
+      setPrice(ev.price);
+      setLeader(ev.leader);
+      setLog(l => [ev.text, ...l].slice(0, 30));
+      timer.current = window.setTimeout(() => stepPlay(i + 1), 460 + Math.random() * 340);
+    };
+    if (events.length === 0) { finish(); return; }
+    timer.current = window.setTimeout(() => stepPlay(0), 350);
   }, [lot, bidders, slotsLeftAfter, settleLot]);
 
   const userBid = (step: number) => {
@@ -260,11 +271,16 @@ const SignThePlayer = () => {
 
                   <div className="rounded-2xl border border-primary/40 bg-card/80 backdrop-blur-md p-6 text-center space-y-2 shadow-lg shadow-primary/10">
                     <p className="text-[11px] uppercase tracking-widest text-muted-foreground font-bold">
-                      {lot.kind === 'assign' ? 'Leftover: automatic assignment' : lot.player.tier === 'great' ? '⭐ THE SUPERSTAR LOT' : 'Opening lot for this position'}
+                      {lot.kind === 'assign' ? 'Leftover: automatic assignment' : lot.player.tier === 'great' ? '⭐ THE SUPERSTAR LOT' : '🥈 The solid option sells first'}
                     </p>
                     <h2 className="text-3xl font-extrabold text-foreground">{lot.player.name}</h2>
-                    <p className="text-sm text-muted-foreground">{lot.player.club} · {lot.player.nationality} · {lot.player.position}</p>
+                    <p className="text-sm text-muted-foreground flex items-center justify-center gap-1.5 flex-wrap">
+                      <FlagImg name={lot.player.nationality} size={16} /> {lot.player.club} · {lot.player.position}{theme !== 'legends' && lot.player.age > 0 ? ` · age ${lot.player.age}` : ''}
+                    </p>
                     <p className="text-5xl font-black text-primary">{lot.player.rating}</p>
+                    {(lot.player.goals > 0 || lot.player.assists > 0) && (
+                      <p className="text-xs text-muted-foreground font-semibold">⚽ {lot.player.goals} goals · 🎯 {lot.player.assists} assists</p>
+                    )}
                     {lot.kind === 'auction' && (
                       <>
                         <p className="text-lg font-bold text-foreground">
@@ -316,12 +332,26 @@ const SignThePlayer = () => {
                       <div className="h-1.5 rounded-full bg-secondary overflow-hidden mb-2">
                         <div className="h-full bg-primary transition-all" style={{ width: `${(b.budget / START_BUDGET) * 100}%` }} />
                       </div>
-                      <div className="flex flex-wrap gap-1">
+                      <div className="grid grid-cols-1 gap-0.5">
                         {squadList(b).map(({ slot, p }) => (
-                          <span key={slot.key} title={p ? `${p.name} (${p.rating})` : slot.label}
-                            className={cn('px-1.5 py-0.5 rounded text-[9px] font-bold', p ? 'bg-primary/20 text-primary' : 'bg-secondary/60 text-muted-foreground')}>
-                            {slot.key}{p ? ` ${p.rating}` : ''}
-                          </span>
+                          <div
+                            key={slot.key}
+                            className={cn(
+                              'flex items-center justify-between rounded px-1.5 py-[3px] text-[10px] leading-tight',
+                              p ? 'bg-primary/10' : 'bg-secondary/40',
+                              lot && slot.key === lot.player.slotKey && (phase === 'auction' || phase === 'assign') && 'ring-1 ring-primary/60',
+                            )}
+                          >
+                            <span className="font-bold text-muted-foreground w-9 shrink-0">{slot.key}</span>
+                            {p ? (
+                              <>
+                                <span className="flex-1 truncate text-foreground font-semibold px-1">{p.name}</span>
+                                <span className="font-black text-primary shrink-0">{p.rating}</span>
+                              </>
+                            ) : (
+                              <span className="flex-1 text-muted-foreground/50 px-1">open</span>
+                            )}
+                          </div>
                         ))}
                       </div>
                     </div>

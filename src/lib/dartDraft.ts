@@ -113,7 +113,7 @@ export async function fetchDartDraftPool(): Promise<{ current: Player[]; legends
       .not('age', 'is', null)
       .order('market_value_usd', { ascending: false })
       .order('player_name', { ascending: true })
-      .limit(600);
+      .limit(900);
     if (error || !data || data.length === 0) return { current: [], legends: LEGENDS };
 
     const seen = new Set<string>();
@@ -224,12 +224,14 @@ export function machineDraft(current: Player[], legends: Player[], formation: Fo
 export function squadRating(players: (Player | null)[]): number {
   const real = players.filter((p): p is Player => p !== null);
   if (real.length === 0) return 0;
-  const avg = real.reduce((s, p) => s + playerRating(p), 0) / real.length;
-  // chemistry: reward league/nation clusters (max +4)
+  const avg = real.reduce((s, p) => s + (p.fixedOverall ?? playerRating(p)), 0) / real.length;
+  // chemistry: reward league/nation clusters (max +4). Generated fillers
+  // (fixedOverall set) never count toward chemistry.
+  const chemPool = real.filter(p => p.fixedOverall === undefined);
   const count = (key: (p: Player) => string) => {
     const m = new Map<string, number>();
-    real.forEach(p => m.set(key(p), (m.get(key(p)) ?? 0) + 1));
-    return Math.max(...m.values());
+    chemPool.forEach(p => m.set(key(p), (m.get(key(p)) ?? 0) + 1));
+    return m.size ? Math.max(...m.values()) : 0;
   };
   const chem = Math.min(4, Math.max(0, count(p => p.league) - 3) + Math.max(0, count(p => p.nationality) - 3));
   return Math.min(99, Math.round(avg + chem));

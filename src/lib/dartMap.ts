@@ -1,8 +1,8 @@
 import { supabase } from '@/integrations/supabase/client';
 import { GEO_COUNTRIES, CONTINENT_VIEWS, WORLD_W, WORLD_H, type Continent, type GeoCountry } from '@/data/worldMapGeo';
-import { FORMATIONS, LEGENDS, WC2026_NATIONS, normalizePosition, playerRating, type FormationSlot } from '@/lib/squadDeal';
+import { FORMATIONS, LEGENDS, POSITION_NORMALIZE, WC2026_NATIONS, normalizePosition, playerRating, type FormationSlot } from '@/lib/squadDeal';
 import { getEnrichment } from '@/data/footleEnrichment';
-import type { Player } from '@/types/game';
+import type { League, Player } from '@/types/game';
 
 /**
  * DART DRAFT: WORLD MAP engine, v2.
@@ -145,15 +145,16 @@ export function isWcNation(c: GeoCountry): boolean {
 }
 
 /* ---------------- Topics ---------------- */
-export type MapTopic = 'current' | 'wc2026';
+export type MapTopic = 'current' | 'wc2026' | 'alltime';
 
 export const MAP_TOPICS: { id: MapTopic; label: string; emoji: string; desc: string }[] = [
   { id: 'current', label: 'Current Stars', emoji: '🌍', desc: 'Every nation is live. Hit anywhere with pros and draft them.' },
   { id: 'wc2026', label: 'World Cup 2026', emoji: '🏆', desc: 'Only the 48 qualified nations count. Everywhere else is a wasted dart.' },
+  { id: 'alltime', label: 'All-Time', emoji: '🏛️', desc: 'Legends join every squad. Hit Brazil and Pele himself might answer.' },
 ];
 
-/* ---------------- Bonus zones ---------------- */
-export type ZoneKind = 'legend' | 'wonderkid' | 'wildcard';
+/* ---------------- Bonus and hazard zones ---------------- */
+export type ZoneKind = 'legend' | 'wonderkid' | 'wildcard' | 'mystery' | 'shark' | 'storm';
 
 export interface Zone {
   kind: ZoneKind;
@@ -162,18 +163,23 @@ export interface Zone {
   r: number;
   label: string;
   emoji: string;
+  bad?: boolean;
 }
 
-const ZONE_META: Record<ZoneKind, { label: string; emoji: string }> = {
+const ZONE_META: Record<ZoneKind, { label: string; emoji: string; bad?: boolean }> = {
   legend: { label: 'LEGEND', emoji: '👑' },
   wonderkid: { label: 'WONDERKID', emoji: '💎' },
   wildcard: { label: 'WILDCARD', emoji: '🃏' },
+  mystery: { label: 'MYSTERY', emoji: '🎁' },
+  shark: { label: 'SHARK', emoji: '🦈', bad: true },
+  storm: { label: 'STORM', emoji: '🌪️', bad: true },
 };
 
-/** Which bonus zones float on each throw (index 0-10). */
+/** Which zones float on each throw (index 0-10). Gold pays out, red punishes. */
 const ZONE_SCHEDULE: ZoneKind[][] = [
-  [], ['legend'], ['wildcard'], ['wonderkid'], [],
-  ['legend'], ['wildcard'], [], ['wonderkid', 'legend'], [], ['wildcard'],
+  [], ['legend'], ['shark'], ['wonderkid'], ['storm'],
+  ['legend', 'shark'], ['wildcard'], ['mystery'], ['wonderkid', 'storm'],
+  ['legend', 'mystery'], ['wildcard', 'shark'],
 ];
 
 function mulberry(seed: number): () => number {
@@ -225,7 +231,7 @@ export function resolveMapThrow(x: number, y: number, zones: Zone[]): MapHit {
 
 /** Smaller targets pay more. Range roughly 12 (Russia) to 55 (tiny nations). */
 export function accuracyPoints(hit: MapHit): number {
-  if (hit.kind === 'zone') return 40;
+  if (hit.kind === 'zone') return hit.zone.bad ? 0 : 40;
   if (hit.kind === 'ocean') return 0;
   const b = boundsOf(hit.country);
   return Math.max(12, Math.min(55, Math.round(9000 / Math.sqrt(b.area + 60))));
@@ -280,7 +286,7 @@ export async function fetchCountryPool(country: GeoCountry): Promise<Player[]> {
       .eq('year', 2026)
       .in('nationality', names)
       .order('market_value_usd', { ascending: false })
-      .limit(90);
+      .limit(120);
     if (error || !data) return [];
     const seen = new Set<string>();
     const pool: Player[] = [];
@@ -299,22 +305,129 @@ export async function fetchCountryPool(country: GeoCountry): Promise<Player[]> {
 
 const fitsSlot = (p: Player, slot: FormationSlot) => slot.allowed.includes(p.position);
 
+/** Raw DB position strings that normalize into this slot's allowed positions. */
+function rawPositionsFor(slot: FormationSlot): string[] {
+  return Object.keys(POSITION_NORMALIZE).filter(k => slot.allowed.includes(POSITION_NORMALIZE[k]));
+}
+
+/* ---------------- Generated fillers (honest fakes, clearly labeled) ---------------- */
+const FILLER_LEAGUE = 'MLS' as League; // never shown; excluded from chemistry by fixedOverall
+
+const filler = (name: string, nationality: string, slot: FormationSlot, overall: number): Player => ({
+  name,
+  club: 'Youth Academy',
+  nationality,
+  league: FILLER_LEAGUE,
+  goals: 0,
+  assists: 0,
+  position: slot.allowed[0],
+  kitNumber: 0,
+  age: 18,
+  marketValue: 1,
+  difficulty: 'easy',
+  fixedOverall: overall,
+});
+
+const SLOT_ROLE: Partial<Record<string, string>> = {
+  GK: 'Keeper', CB: 'Defender', RB: 'Right Back', LB: 'Left Back',
+  CM: 'Midfielder', CDM: 'Midfielder', CAM: 'Playmaker',
+  RW: 'Winger', LW: 'Winger', RM: 'Winger', LM: 'Winger', RWB: 'Wing Back', LWB: 'Wing Back',
+  ST: 'Striker', CF: 'Striker',
+};
+
+/** Ocean and shark consolation: a flat 40 overall trialist, no exceptions. */
+export function oceanTrialist(slot: FormationSlot, source: 'ocean' | 'shark' | 'blocked' = 'ocean'): Player {
+  const role = SLOT_ROLE[slot.allowed[0]] ?? 'Player';
+  const name =
+    source === 'shark' ? `Shark Bait ${role}` :
+    source === 'blocked' ? `Wasted Dart ${role}` :
+    `Open Trials ${role}`;
+  return filler(name, source === 'shark' ? '🦈' : '🌊', slot, 40);
+}
+
 /**
- * What the hit country offers for the called position. Top 8 at the position;
- * if the nation has pros but none at the position, its 5 best players step in
- * out of position (rated with a penalty by the UI). Empty pool = no pros at
- * all, the page handles the lifeboat.
+ * A nation with pros but nobody at your position still fields a full squad:
+ * you get its academy prospect at the slot, rated 40 to 52 by how deep the
+ * country's pro pool runs. Never a fake real-person, always labeled Academy.
+ */
+export function academyProspect(country: GeoCountry, slot: FormationSlot, poolSize: number): Player {
+  const role = SLOT_ROLE[slot.allowed[0]] ?? 'Player';
+  const overall = 40 + Math.min(12, Math.floor(poolSize / 8));
+  return filler(`${country.name} Academy ${role}`, dbNamesFor(country)[0], slot, overall);
+}
+
+const positionQueryCache = new Map<string, Player[]>();
+
+/** Targeted per-position fetch so deep countries never hide their keepers. */
+async function fetchCountryAtPosition(country: GeoCountry, slot: FormationSlot): Promise<Player[]> {
+  const key = `${country.iso}:${slot.allowed.join('/')}`;
+  const cached = positionQueryCache.get(key);
+  if (cached) return cached;
+  try {
+    const { data, error } = await supabase
+      .from('player_market_values')
+      .select('player_name, position, age, nationality, club, market_value_usd, goals, assists')
+      .eq('year', 2026)
+      .in('nationality', dbNamesFor(country))
+      .in('position', rawPositionsFor(slot))
+      .order('market_value_usd', { ascending: false })
+      .limit(12);
+    if (error || !data) return [];
+    const seen = new Set<string>();
+    const pool: Player[] = [];
+    for (const row of data as MarketRow[]) {
+      const p = rowToPlayer(row);
+      if (!p || seen.has(p.name)) continue;
+      seen.add(p.name);
+      pool.push(p);
+    }
+    positionQueryCache.set(key, pool);
+    return pool;
+  } catch {
+    return [];
+  }
+}
+
+/** All-time topic: the country's legends who play the slot, best first. */
+function countryLegends(country: GeoCountry, slot: FormationSlot, usedNames: Set<string>): Player[] {
+  const names = new Set(dbNamesFor(country));
+  if (country.iso === 'ru') names.add('Soviet Union');
+  if (country.iso === 'cz') names.add('Czechoslovakia');
+  return LEGENDS
+    .filter(p => names.has(p.nationality) && fitsSlot(p, slot) && !usedNames.has(p.name))
+    .sort((a, b) => playerRating(b) - playerRating(a));
+}
+
+/**
+ * What the hit country offers for the called position. Real players at the
+ * position always surface (general pool first, then a targeted position
+ * query). A nation with pros but nobody at the slot hands you its academy
+ * prospect plus its best players out of position. A nation with no pros at
+ * all still gives you the academy kid. Choices are never empty.
  */
 export async function countryChoices(
   country: GeoCountry,
   slot: FormationSlot,
   usedNames: Set<string>,
+  opts: { alltime?: boolean } = {},
 ): Promise<DraftChoice[]> {
   const pool = await fetchCountryPool(country);
   const fresh = pool.filter(p => !usedNames.has(p.name));
-  const atPos = fresh.filter(p => fitsSlot(p, slot)).slice(0, 8);
-  if (atPos.length > 0) return atPos.map(player => ({ player, outOfPosition: false }));
-  return fresh.slice(0, 5).map(player => ({ player, outOfPosition: true }));
+  const legends = opts.alltime ? countryLegends(country, slot, usedNames) : [];
+  let atPos = fresh.filter(p => fitsSlot(p, slot));
+  if (atPos.length === 0) {
+    const targeted = await fetchCountryAtPosition(country, slot);
+    atPos = targeted.filter(p => !usedNames.has(p.name));
+  }
+  if (legends.length > 0 || atPos.length > 0) {
+    const merged = [...legends, ...atPos]
+      .sort((a, b) => playerRating(b) - playerRating(a))
+      .slice(0, 8);
+    return merged.map(player => ({ player, outOfPosition: false }));
+  }
+  const prospect: DraftChoice = { player: academyProspect(country, slot, pool.length), outOfPosition: false };
+  const backups = fresh.slice(0, 4).map(player => ({ player, outOfPosition: true }));
+  return [prospect, ...backups];
 }
 
 export function legendChoices(slot: FormationSlot, usedNames: Set<string>): DraftChoice[] {
@@ -339,10 +452,24 @@ export function wildcardChoices(prefetch: Player[], slot: FormationSlot, usedNam
     .map(player => ({ player, outOfPosition: false }));
 }
 
-/** Cheapest fitting pro in the prefetch pool: the LOST AT SEA consolation. */
-export function journeyman(prefetch: Player[], slot: FormationSlot, usedNames: Set<string>): Player | null {
+/** Storm zone: blown into the bargain bin. Five picks from the cheap end of the pool. */
+export function stormChoices(prefetch: Player[], slot: FormationSlot, usedNames: Set<string>): DraftChoice[] {
   const fits = prefetch.filter(p => !usedNames.has(p.name) && fitsSlot(p, slot));
-  return fits.length ? fits[fits.length - 1] : null;
+  if (fits.length === 0) return [];
+  const bin = fits.slice(-Math.min(20, fits.length));
+  const step = Math.max(1, Math.floor(bin.length / 5));
+  const picks: Player[] = [];
+  for (let i = bin.length - 1; i >= 0 && picks.length < 5; i -= step) picks.push(bin[i]);
+  return picks.map(player => ({ player, outOfPosition: false }));
+}
+
+/** Mystery zone: three random fitting players from anywhere in the pool. Could be anyone. */
+export function mysteryChoices(prefetch: Player[], slot: FormationSlot, usedNames: Set<string>): DraftChoice[] {
+  const fits = prefetch.filter(p => !usedNames.has(p.name) && fitsSlot(p, slot));
+  if (fits.length === 0) return [];
+  const picks = new Set<number>();
+  while (picks.size < Math.min(3, fits.length)) picks.add(Math.floor(Math.random() * fits.length));
+  return [...picks].map(i => ({ player: fits[i], outOfPosition: false }));
 }
 
 /** The Machine drafts its XI from the same prefetch pool, tier-random. */
@@ -372,7 +499,7 @@ function isoHash(iso: string): number {
 export function countryFill(c: GeoCountry, opts: { locked?: boolean; drafted?: boolean } = {}): string {
   if (opts.locked) return 'hsl(222 12% 15%)';
   const hue = CONT_HUE[c.continent];
-  const light = 26 + (isoHash(c.iso) % 10);
-  if (opts.drafted) return `hsl(${hue} 18% ${Math.max(16, light - 10)}%)`;
-  return `hsl(${hue} 42% ${light}%)`;
+  const light = 28 + (isoHash(c.iso) % 7);
+  if (opts.drafted) return `hsl(${hue} 16% ${Math.max(16, light - 11)}%)`;
+  return `hsl(${hue} 38% ${light}%)`;
 }

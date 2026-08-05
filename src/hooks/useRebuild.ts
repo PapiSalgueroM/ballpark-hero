@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { Player } from '@/types/game';
 import { FORMATIONS, playerRating, type Formation, type FormationSlot } from '@/lib/squadDeal';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -8,9 +8,23 @@ import {
 } from '@/lib/fetchRebuild';
 import {
   hashSeed, coachOptionsFor, KEEP_COACH, dealObjectives, drawFinEvent,
-  planRivals, simulateRival,
+  planRivals, simulateRival, simulateSeason,
+  isContested, warRivalIndex, rivalCapFor, nextRaise,
   type CoachOption, type BoardObjective, type FinEvent, type RivalResult,
+  type RivalPlan, type SeasonResult,
 } from '@/lib/rebuildDeck';
+
+export interface WarView {
+  player: Player;
+  rival: RivalPlan;
+  rivalIdx: number;
+  price: number;
+  leader: 'you' | 'rival';
+  cap: number;
+  log: string[];
+  thinking: boolean;
+  outcome: 'live' | 'won' | 'lost';
+}
 
 export type Phase = 'pick-club' | 'pick-coach' | 'rebuilding' | 'done';
 
@@ -57,6 +71,13 @@ export interface RebuildState {
   penalties: string[];
   rivals: RivalResult[] | null;
   rivalsLoading: boolean;
+  // Live bidding wars + season sim (owner 2026-08-05)
+  war: WarView | null;
+  raiseWar: () => void;
+  walkAway: () => void;
+  lostToRivals: string[];
+  overpaid: number;
+  season: SeasonResult | null;
 }
 
 const BASE_BUDGET = 100; // €100M before any sales
@@ -128,6 +149,18 @@ export function useRebuild(): RebuildState {
   const [rivals, setRivals] = useState<RivalResult[] | null>(null);
   const [rivalsLoading, setRivalsLoading] = useState(false);
 
+  // Live bidding wars + season sim (owner 2026-08-05)
+  const [rivalPlans, setRivalPlans] = useState<RivalPlan[]>([]);
+  const [war, setWar] = useState<WarView | null>(null);
+  const [lostMap, setLostMap] = useState<Map<string, number>>(new Map());
+  const [overpaid, setOverpaid] = useState(0);
+  const [season, setSeason] = useState<SeasonResult | null>(null);
+  const warTimer = useRef<number | null>(null);
+  const warRef = useRef<WarView | null>(null);
+  useEffect(() => { warRef.current = war; }, [war]);
+
+  useEffect(() => () => { if (warTimer.current) window.clearTimeout(warTimer.current); }, []);
+
   useEffect(() => {
     let cancelled = false;
     fetchRebuildClubs().then(c => {
@@ -162,9 +195,10 @@ export function useRebuild(): RebuildState {
     () => BASE_BUDGET
       + extraFunds
       - (coach?.cost ?? 0)
+      - overpaid
       + sold.reduce((s, p) => s + p.marketValue, 0)
       - signed.reduce((s, p) => s + p.marketValue, 0),
-    [sold, signed, extraFunds, coach],
+    [sold, signed, extraFunds, coach, overpaid],
   );
 
   const target = useMemo(
@@ -182,11 +216,12 @@ export function useRebuild(): RebuildState {
     return market
       .filter(p => slot.allowed.includes(p.position))
       .filter(p => !signedNames.has(p.name))
+      .filter(p => !lostMap.has(p.name))
       .filter(p => p.marketValue <= budget)
       .filter(p => (q ? p.name.toLowerCase().includes(q) || p.club.toLowerCase().includes(q) : true))
       .sort((a, b) => playerRating(b) - playerRating(a))
       .slice(0, 50);
-  }, [activeSlot, formation, market, signedNames, budget, search]);
+  }, [activeSlot, formation, market, signedNames, budget, search, lostMap]);
 
   const objectives: ObjectiveView[] = useMemo(
     () => objectiveDeck.map(o => ({
@@ -219,9 +254,14 @@ export function useRebuild(): RebuildState {
     setPenalties([]);
     setForcedOut(new Set());
     setRivals(null);
+    setRivalPlans(planRivals(c, clubs, s));
+    setWar(null);
+    setLostMap(new Map());
+    setOverpaid(0);
+    setSeason(null);
     setLoading(false);
     setPhase('pick-coach');
-  }, []);
+  }, [clubs]);
 
   const pickCoach = useCallback((c: CoachOption) => {
     setCoach(c);
@@ -249,23 +289,87 @@ export function useRebuild(): RebuildState {
     });
   }, [bumpFinances]);
 
-  const sign = useCallback((p: Player) => {
-    if (p.marketValue > budget) return;
+  const completeSigning = useCallback((p: Player, premium: number) => {
     setSigned(prev => {
       if (prev.some(x => x.name === p.name)) return prev;
       bumpFinances();
       return [...prev, p];
     });
+    if (premium > 0) setOverpaid(o => o + premium);
     setActiveSlot(null);
     setSearch('');
-  }, [budget, bumpFinances]);
+  }, [bumpFinances]);
+
+  const sign = useCallback((p: Player) => {
+    if (p.marketValue > budget || war) return;
+    // A rival can hijack the deal and start a live bidding war (seeded per
+    // run + player; stars attract wars, squad players mostly do not).
+    if (rivalPlans.length === 2 && playerRating(p) >= 72 && isContested(p, seed)) {
+      const rivalIdx = warRivalIndex(p, seed);
+      const rival = rivalPlans[rivalIdx];
+      const opening = nextRaise(p.marketValue);
+      setWar({
+        player: p,
+        rival,
+        rivalIdx,
+        price: opening,
+        leader: 'rival',
+        cap: rivalCapFor(p, seed),
+        log: [`${rival.emoji} ${rival.name} hijacks the deal: €${opening}M for ${p.name}!`],
+        thinking: false,
+        outcome: 'live',
+      });
+      setActiveSlot(null);
+      setSearch('');
+      return;
+    }
+    completeSigning(p, 0);
+  }, [budget, war, rivalPlans, seed, completeSigning]);
+
+  const raiseWar = useCallback(() => {
+    if (!war || war.outcome !== 'live' || war.thinking || war.leader !== 'rival') return;
+    const myBid = nextRaise(war.price);
+    if (myBid > budget) return;
+    setWar(w => w && ({ ...w, price: myBid, leader: 'you', thinking: true, log: [...w.log, `🫵 You bid €${myBid}M.`] }));
+    warTimer.current = window.setTimeout(() => {
+      const w = warRef.current;
+      if (!w || w.outcome !== 'live') return;
+      const counter = nextRaise(w.price);
+      if (counter <= w.cap) {
+        setWar({ ...w, price: counter, leader: 'rival', thinking: false, log: [...w.log, `${w.rival.emoji} ${w.rival.name} fires back: €${counter}M!`] });
+        return;
+      }
+      // Rival is out. The player is yours at your bid.
+      const premium = Math.max(0, w.price - w.player.marketValue);
+      completeSigning(w.player, premium);
+      setWar({
+        ...w,
+        outcome: 'won',
+        thinking: false,
+        log: [...w.log, `${w.rival.emoji} ${w.rival.name} is OUT. ${w.player.name} signs for €${w.price}M${premium > 0 ? ` (€${premium}M over value)` : ''}!`],
+      });
+      warTimer.current = window.setTimeout(() => setWar(null), 1600);
+    }, 700 + Math.floor(Math.random() * 500));
+  }, [war, budget, completeSigning]);
+
+  const walkAway = useCallback(() => {
+    if (!war || war.outcome !== 'live' || war.thinking || war.leader !== 'rival') return;
+    setLostMap(prev => new Map(prev).set(war.player.name, war.rivalIdx));
+    setWar(w => w && ({
+      ...w,
+      outcome: 'lost',
+      log: [...w.log, `You walk away. ${w.player.name} joins ${w.rival.name}'s ${w.rival.club.club}.`],
+    }));
+    warTimer.current = window.setTimeout(() => setWar(null), 1500);
+  }, [war]);
 
   const finish = useCallback(async () => {
+    if (war) return; // settle the bidding war first
     // Board reckoning: every unmet objective costs you a player.
+    const out = new Set(forcedOut);
     const unmet = objectiveDeck.filter(o => !o.check({ signed, sold, budget }));
     if (unmet.length > 0) {
       const notes: string[] = [];
-      const out = new Set(forcedOut);
       for (const o of unmet) {
         const pool = [...signed, ...squad.filter(p => !soldNames.has(p.name))]
           .filter(p => !out.has(p.name))
@@ -283,25 +387,41 @@ export function useRebuild(): RebuildState {
     }
     setPhase('done');
 
-    // Rivals post their windows after yours closes.
+    // Rivals post their windows after yours closes, then the season kicks off.
     if (club) {
       setRivalsLoading(true);
       try {
-        const plans = planRivals(club, clubs, seed);
+        const plans = rivalPlans.length === 2 ? rivalPlans : planRivals(club, clubs, seed);
         const humanSigned = new Set(signed.map(p => p.name));
         const results: RivalResult[] = [];
-        for (const plan of plans) {
+        for (let i = 0; i < plans.length; i++) {
+          const plan = plans[i];
           const rivalSquad = await fetchClubSquad(plan.club.club);
-          results.push(simulateRival(plan, rivalSquad, market, humanSigned, seed));
+          const wonInWars = [...lostMap.entries()].filter(([, idx]) => idx === i).map(([n]) => n);
+          results.push(simulateRival(plan, rivalSquad, market, humanSigned, seed, wonInWars));
         }
         setRivals(results);
+
+        // Season sim uses your POST-penalty squad, coach bonus included.
+        const postSquad = [...squad.filter(p => !soldNames.has(p.name)), ...signed].filter(p => !out.has(p.name));
+        const postXiPlayers = buildXi(formation, postSquad).filter(Boolean) as Player[];
+        const postRating = postXiPlayers.length
+          ? Math.min(99, xiRating(buildXi(formation, postSquad)) + (coach?.bonus ?? 0))
+          : 0;
+        const usedClubs = new Set([club.club, ...plans.map(p => p.club.club)]);
+        const fillerPool = clubs.filter(c => !usedClubs.has(c.club) && c.tier === club.tier);
+        const anyPool = fillerPool.length >= 3 ? fillerPool : clubs.filter(c => !usedClubs.has(c.club));
+        const off = anyPool.length ? seed % anyPool.length : 0;
+        const fillers = anyPool.length ? [...anyPool.slice(off), ...anyPool.slice(0, off)].slice(0, 3) : [];
+        setSeason(simulateSeason({ clubName: club.club, rating: postRating, xi: postXiPlayers }, results, fillers, seed));
       } catch {
         setRivals(null);
+        setSeason(null);
       } finally {
         setRivalsLoading(false);
       }
     }
-  }, [objectiveDeck, signed, sold, budget, forcedOut, squad, soldNames, club, clubs, seed, market]);
+  }, [war, objectiveDeck, signed, sold, budget, forcedOut, squad, soldNames, club, clubs, seed, market, rivalPlans, lostMap, formation, coach]);
 
   const reset = useCallback(() => {
     setPhase('pick-club');
@@ -321,6 +441,12 @@ export function useRebuild(): RebuildState {
     setPenalties([]);
     setForcedOut(new Set());
     setRivals(null);
+    setRivalPlans([]);
+    setWar(null);
+    setLostMap(new Map());
+    setOverpaid(0);
+    setSeason(null);
+    if (warTimer.current) window.clearTimeout(warTimer.current);
   }, []);
 
   const setFormation = useCallback((name: string) => setFormationName(name), []);
@@ -335,8 +461,9 @@ export function useRebuild(): RebuildState {
     const rivalLine = rivals && rivals.length === 2
       ? `\nvs ${rivals[0].name} ${rivals[0].finalRating} · ${rivals[1].name} ${rivals[1].finalRating}`
       : '';
-    return `Rebuild: ${club.club}\n${startRating} → ${currentRating} (target ${target})\nCoach: ${coach?.name ?? 'Caretaker'}\n${grade}${rivalLine}\nSold ${sold.length} · Signed ${signed.length} · €${budget}M left\ndouknowball.com/rebuild`;
-  }, [phase, club, startRating, currentRating, target, grade, sold, signed, budget, coach, rivals]);
+    const seasonLine = season ? `\nSeason: #${season.position} of ${season.table.length}` : '';
+    return `Rebuild: ${club.club}\n${startRating} → ${currentRating} (target ${target})\nCoach: ${coach?.name ?? 'Caretaker'}\n${grade}${rivalLine}${seasonLine}\nSold ${sold.length} · Signed ${signed.length} · €${budget}M left\ndouknowball.com/rebuild`;
+  }, [phase, club, startRating, currentRating, target, grade, sold, signed, budget, coach, rivals, season]);
 
   return {
     phase, loading, clubs, club, squad: activeSquad, market, formation, setFormation,
@@ -345,5 +472,7 @@ export function useRebuild(): RebuildState {
     chooseClub, sell, sign, finish, reset, grade, shareText,
     coachOptions, keepCoach: KEEP_COACH, coach, pickCoach,
     objectives, finLog, penalties, rivals, rivalsLoading,
+    war, raiseWar, walkAway,
+    lostToRivals: [...lostMap.keys()], overpaid, season,
   };
 }
