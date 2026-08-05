@@ -6,8 +6,18 @@ import {
   fetchRebuildClubs, fetchClubSquad, fetchMarket,
   type RebuildClub,
 } from '@/lib/fetchRebuild';
+import {
+  hashSeed, coachOptionsFor, KEEP_COACH, dealObjectives, drawFinEvent,
+  planRivals, simulateRival,
+  type CoachOption, type BoardObjective, type FinEvent, type RivalResult,
+} from '@/lib/rebuildDeck';
 
-export type Phase = 'pick-club' | 'rebuilding' | 'done';
+export type Phase = 'pick-club' | 'pick-coach' | 'rebuilding' | 'done';
+
+export interface ObjectiveView {
+  objective: BoardObjective;
+  met: boolean;
+}
 
 export interface RebuildState {
   phase: Phase;
@@ -37,6 +47,16 @@ export interface RebuildState {
   reset: () => void;
   grade: string;
   shareText: string;
+  // Box2box expansion (owner 2026-08-05)
+  coachOptions: CoachOption[];
+  keepCoach: CoachOption;
+  coach: CoachOption | null;
+  pickCoach: (c: CoachOption) => void;
+  objectives: ObjectiveView[];
+  finLog: FinEvent[];
+  penalties: string[];
+  rivals: RivalResult[] | null;
+  rivalsLoading: boolean;
 }
 
 const BASE_BUDGET = 100; // €100M before any sales
@@ -65,9 +85,8 @@ function xiRating(xi: (Player | undefined)[]): number {
 
 /**
  * Target is deliberately tier-aware. Elite squads are already near the rating
- * ceiling (playerRating caps at 99 and tops out ~85 for a €216m player), so
- * asking Real Madrid for +5 would be impossible while asking Genk for +5 is
- * trivial. Weak squads have far more headroom, so they get a bigger ask.
+ * ceiling, so asking Real Madrid for +5 would be impossible while asking Genk
+ * for +5 is trivial. Weak squads have far more headroom, bigger ask.
  */
 function targetFor(startRating: number, tier: RebuildClub['tier']): number {
   const bump = tier === 'elite' ? 2 : tier === 'strong' ? 3 : tier === 'mid' ? 5 : 7;
@@ -96,6 +115,19 @@ export function useRebuild(): RebuildState {
   const [activeSlot, setActiveSlot] = useState<number | null>(null);
   const [search, setSearch] = useState('');
 
+  // Box2box expansion state (owner 2026-08-05)
+  const [seed, setSeed] = useState(0);
+  const [coachOptions, setCoachOptions] = useState<CoachOption[]>([]);
+  const [coach, setCoach] = useState<CoachOption | null>(null);
+  const [objectiveDeck, setObjectiveDeck] = useState<BoardObjective[]>([]);
+  const [finLog, setFinLog] = useState<FinEvent[]>([]);
+  const [extraFunds, setExtraFunds] = useState(0);
+  const [transferActions, setTransferActions] = useState(0);
+  const [penalties, setPenalties] = useState<string[]>([]);
+  const [forcedOut, setForcedOut] = useState<Set<string>>(new Set());
+  const [rivals, setRivals] = useState<RivalResult[] | null>(null);
+  const [rivalsLoading, setRivalsLoading] = useState(false);
+
   useEffect(() => {
     let cancelled = false;
     fetchRebuildClubs().then(c => {
@@ -113,20 +145,26 @@ export function useRebuild(): RebuildState {
 
   const soldNames = useMemo(() => new Set(sold.map(p => p.name)), [sold]);
 
-  /** Current squad = original minus sold, plus signed. */
+  /** Current squad = original minus sold, plus signed, minus board force-sales. */
   const activeSquad = useMemo(
-    () => [...squad.filter(p => !soldNames.has(p.name)), ...signed],
-    [squad, soldNames, signed],
+    () => [...squad.filter(p => !soldNames.has(p.name)), ...signed].filter(p => !forcedOut.has(p.name)),
+    [squad, soldNames, signed, forcedOut],
   );
 
   const startingXi = useMemo(() => buildXi(formation, activeSquad), [formation, activeSquad]);
-  const currentRating = useMemo(() => xiRating(startingXi), [startingXi]);
+  const coachBonus = coach?.bonus ?? 0;
+  const currentRating = useMemo(
+    () => (startingXi.some(Boolean) ? Math.min(99, xiRating(startingXi) + coachBonus) : 0),
+    [startingXi, coachBonus],
+  );
 
   const budget = useMemo(
     () => BASE_BUDGET
+      + extraFunds
+      - (coach?.cost ?? 0)
       + sold.reduce((s, p) => s + p.marketValue, 0)
       - signed.reduce((s, p) => s + p.marketValue, 0),
-    [sold, signed],
+    [sold, signed, extraFunds, coach],
   );
 
   const target = useMemo(
@@ -150,11 +188,21 @@ export function useRebuild(): RebuildState {
       .slice(0, 50);
   }, [activeSlot, formation, market, signedNames, budget, search]);
 
+  const objectives: ObjectiveView[] = useMemo(
+    () => objectiveDeck.map(o => ({
+      objective: o,
+      met: o.check({ signed, sold, budget }),
+    })),
+    [objectiveDeck, signed, sold, budget],
+  );
+
   useGameCompletion('rebuild', phase === 'done', Math.max(0, currentRating * 10), currentRating >= target ? 1 : 0);
 
   const chooseClub = useCallback(async (c: RebuildClub) => {
     setClub(c);
     setLoading(true);
+    const s = hashSeed(c.club);
+    setSeed(s);
     const [sq, mk] = await Promise.all([fetchClubSquad(c.club), fetchMarket(c.club)]);
     setSquad(sq);
     setMarket(mk);
@@ -162,22 +210,98 @@ export function useRebuild(): RebuildState {
     setFormationName(FORMATIONS[0].name);
     setSold([]);
     setSigned([]);
+    setCoach(null);
+    setCoachOptions(coachOptionsFor(c.tier, s));
+    setObjectiveDeck(dealObjectives(s));
+    setFinLog([]);
+    setExtraFunds(0);
+    setTransferActions(0);
+    setPenalties([]);
+    setForcedOut(new Set());
+    setRivals(null);
     setLoading(false);
+    setPhase('pick-coach');
+  }, []);
+
+  const pickCoach = useCallback((c: CoachOption) => {
+    setCoach(c);
     setPhase('rebuilding');
   }, []);
 
+  /** Every second transfer action, the finance department calls. */
+  const bumpFinances = useCallback(() => {
+    setTransferActions(prev => {
+      const next = prev + 1;
+      if (next % 2 === 0) {
+        const ev = drawFinEvent(seed, next / 2);
+        setFinLog(log => [...log, ev]);
+        setExtraFunds(f => f + ev.delta);
+      }
+      return next;
+    });
+  }, [seed]);
+
   const sell = useCallback((p: Player) => {
-    setSold(prev => (prev.some(x => x.name === p.name) ? prev : [...prev, p]));
-  }, []);
+    setSold(prev => {
+      if (prev.some(x => x.name === p.name)) return prev;
+      bumpFinances();
+      return [...prev, p];
+    });
+  }, [bumpFinances]);
 
   const sign = useCallback((p: Player) => {
     if (p.marketValue > budget) return;
-    setSigned(prev => (prev.some(x => x.name === p.name) ? prev : [...prev, p]));
+    setSigned(prev => {
+      if (prev.some(x => x.name === p.name)) return prev;
+      bumpFinances();
+      return [...prev, p];
+    });
     setActiveSlot(null);
     setSearch('');
-  }, [budget]);
+  }, [budget, bumpFinances]);
 
-  const finish = useCallback(() => setPhase('done'), []);
+  const finish = useCallback(async () => {
+    // Board reckoning: every unmet objective costs you a player.
+    const unmet = objectiveDeck.filter(o => !o.check({ signed, sold, budget }));
+    if (unmet.length > 0) {
+      const notes: string[] = [];
+      const out = new Set(forcedOut);
+      for (const o of unmet) {
+        const pool = [...signed, ...squad.filter(p => !soldNames.has(p.name))]
+          .filter(p => !out.has(p.name))
+          .sort((a, b) => b.marketValue - a.marketValue);
+        const victim = pool[0];
+        if (victim) {
+          out.add(victim.name);
+          notes.push(`${o.emoji} ${o.penaltyText} (${victim.name} was sold)`);
+        } else {
+          notes.push(`${o.emoji} ${o.penaltyText}`);
+        }
+      }
+      setForcedOut(out);
+      setPenalties(notes);
+    }
+    setPhase('done');
+
+    // Rivals post their windows after yours closes.
+    if (club) {
+      setRivalsLoading(true);
+      try {
+        const plans = planRivals(club, clubs, seed);
+        const humanSigned = new Set(signed.map(p => p.name));
+        const results: RivalResult[] = [];
+        for (const plan of plans) {
+          const rivalSquad = await fetchClubSquad(plan.club.club);
+          results.push(simulateRival(plan, rivalSquad, market, humanSigned, seed));
+        }
+        setRivals(results);
+      } catch {
+        setRivals(null);
+      } finally {
+        setRivalsLoading(false);
+      }
+    }
+  }, [objectiveDeck, signed, sold, budget, forcedOut, squad, soldNames, club, clubs, seed, market]);
 
   const reset = useCallback(() => {
     setPhase('pick-club');
@@ -188,6 +312,15 @@ export function useRebuild(): RebuildState {
     setSigned([]);
     setStartRating(0);
     setActiveSlot(null);
+    setCoach(null);
+    setCoachOptions([]);
+    setObjectiveDeck([]);
+    setFinLog([]);
+    setExtraFunds(0);
+    setTransferActions(0);
+    setPenalties([]);
+    setForcedOut(new Set());
+    setRivals(null);
   }, []);
 
   const setFormation = useCallback((name: string) => setFormationName(name), []);
@@ -199,13 +332,18 @@ export function useRebuild(): RebuildState {
 
   const shareText = useMemo(() => {
     if (phase !== 'done' || !club) return '';
-    return `Rebuild: ${club.club}\n${startRating} → ${currentRating} (target ${target})\n${grade}\nSold ${sold.length} · Signed ${signed.length} · €${budget}M left\ndouknowball.com/rebuild`;
-  }, [phase, club, startRating, currentRating, target, grade, sold, signed, budget]);
+    const rivalLine = rivals && rivals.length === 2
+      ? `\nvs ${rivals[0].name} ${rivals[0].finalRating} · ${rivals[1].name} ${rivals[1].finalRating}`
+      : '';
+    return `Rebuild: ${club.club}\n${startRating} → ${currentRating} (target ${target})\nCoach: ${coach?.name ?? 'Caretaker'}\n${grade}${rivalLine}\nSold ${sold.length} · Signed ${signed.length} · €${budget}M left\ndouknowball.com/rebuild`;
+  }, [phase, club, startRating, currentRating, target, grade, sold, signed, budget, coach, rivals]);
 
   return {
     phase, loading, clubs, club, squad: activeSquad, market, formation, setFormation,
     startingXi, startRating, currentRating, target, budget, sold, signed,
     activeSlot, setActiveSlot, candidates, search, setSearch,
     chooseClub, sell, sign, finish, reset, grade, shareText,
+    coachOptions, keepCoach: KEEP_COACH, coach, pickCoach,
+    objectives, finLog, penalties, rivals, rivalsLoading,
   };
 }

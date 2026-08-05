@@ -26,6 +26,8 @@ export function RebuildBoard() {
     startingXi, startRating, currentRating, target, budget, sold, signed,
     activeSlot, setActiveSlot, candidates, search, setSearch,
     chooseClub, sell, sign, finish, reset, grade, shareText,
+    coachOptions, keepCoach, coach, pickCoach,
+    objectives, finLog, penalties, rivals, rivalsLoading,
   } = useRebuild();
   const [copied, setCopied] = useState(false);
 
@@ -101,6 +103,59 @@ export function RebuildBoard() {
     );
   }
 
+  // ---- Coach hire (box2box step, owner 2026-08-05) ----
+  if (phase === 'pick-coach') {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-8">
+        <p className="text-center font-display text-xl font-bold text-foreground">
+          First call: the dugout
+        </p>
+        <p className="mt-1 text-center text-sm text-muted-foreground">
+          Keep your caretaker for free, or spend transfer money on a real one.
+          A better coach lifts your final squad rating.
+        </p>
+
+        <div className="mt-5 grid gap-2">
+          {[...coachOptions, keepCoach].map(c => (
+            <button
+              key={c.id}
+              onClick={() => pickCoach(c)}
+              className="flex items-center justify-between rounded-xl border border-border bg-card p-4 text-left transition-colors hover:border-primary/50"
+            >
+              <span className="flex min-w-0 items-center gap-3">
+                <span className="text-2xl">{c.emoji}</span>
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-bold text-foreground">{c.name}</span>
+                  <span className="block truncate text-[11px] text-muted-foreground">{c.desc}</span>
+                </span>
+              </span>
+              <span className="ml-3 shrink-0 text-right">
+                <span className="block text-sm font-bold text-primary">+{c.bonus} rating</span>
+                <span className="block text-[11px] text-gold">{c.cost === 0 ? 'Free' : `€${c.cost}M`}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {objectives.length > 0 && (
+          <div className="mt-6 rounded-xl border border-gold/40 bg-gold/5 p-4">
+            <p className="text-xs font-semibold uppercase tracking-wider text-gold">
+              📋 The board's demands (miss one and they sell a player)
+            </p>
+            <ul className="mt-2 space-y-1">
+              {objectives.map(o => (
+                <li key={o.objective.id} className="text-sm text-foreground">
+                  {o.objective.emoji} {o.objective.text}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <GameNav currentPath="/rebuild" />
+      </div>
+    );
+  }
+
   // ---- Done ----
   if (phase === 'done') {
     const hit = currentRating >= target;
@@ -126,8 +181,50 @@ export function RebuildBoard() {
           <p className="mt-2 text-sm text-muted-foreground">target was {target}</p>
           <p className="mt-3 font-display text-2xl font-bold text-gold">{grade}</p>
           <p className="mt-2 text-xs text-muted-foreground">
-            Sold {sold.length} · Signed {signed.length} · €{budget}M unspent
+            Coach: {coach?.name ?? 'Caretaker'} · Sold {sold.length} · Signed {signed.length} · €{budget}M unspent
           </p>
+
+          {penalties.length > 0 && (
+            <div className="mt-4 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-left">
+              <p className="text-xs font-semibold uppercase tracking-wider text-destructive">Board reckoning</p>
+              {penalties.map((p, i) => (
+                <p key={i} className="mt-1 text-xs text-muted-foreground">{p}</p>
+              ))}
+            </div>
+          )}
+
+          <div className="mt-4 rounded-xl border border-border bg-background p-3 text-left">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              🏁 The other managers' windows
+            </p>
+            {rivalsLoading && (
+              <p className="mt-2 text-xs text-muted-foreground">The rivals are finishing their paperwork...</p>
+            )}
+            {rivals && rivals.length > 0 && (
+              <div className="mt-2 space-y-2">
+                {[{ name: 'You', emoji: '🫵', club: { club: club.club }, startRating, finalRating: currentRating, signings: signed.map(s => s.name) }, ...rivals]
+                  .sort((a, b) => b.finalRating - a.finalRating)
+                  .map((r, i) => (
+                    <div key={r.name} className={`flex items-center justify-between rounded-lg border px-3 py-2 ${r.name === 'You' ? 'border-primary/50 bg-primary/5' : 'border-border'}`}>
+                      <span className="flex min-w-0 items-center gap-2 text-sm">
+                        <span className="font-bold text-muted-foreground">#{i + 1}</span>
+                        <span>{r.emoji}</span>
+                        <span className="min-w-0">
+                          <span className="block truncate font-semibold text-foreground">{r.name}</span>
+                          <span className="block truncate text-[10px] text-muted-foreground">
+                            {r.club.club}{r.signings.length ? ` · signed ${r.signings.slice(0, 2).join(', ')}${r.signings.length > 2 ? '...' : ''}` : ''}
+                          </span>
+                        </span>
+                      </span>
+                      <span className="ml-2 shrink-0 font-display text-xl font-black text-foreground">{r.finalRating}</span>
+                    </div>
+                  ))}
+              </div>
+            )}
+            {!rivalsLoading && (!rivals || rivals.length === 0) && (
+              <p className="mt-2 text-xs text-muted-foreground">The rivals ghosted this window.</p>
+            )}
+          </div>
 
           <div className="mt-5 flex justify-center gap-2">
             <button
@@ -190,9 +287,64 @@ export function RebuildBoard() {
         </button>
       </div>
 
+      {/* Board objectives, live checklist */}
+      {objectives.length > 0 && (
+        <div className="mt-3 rounded-xl border border-gold/40 bg-gold/5 p-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">📋 Board demands</p>
+          {objectives.map(o => (
+            <p key={o.objective.id} className={`mt-1 text-xs ${o.met ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+              {o.met ? '✅' : '⬜'} {o.objective.text}
+            </p>
+          ))}
+        </div>
+      )}
+
+      {/* Money news feed */}
+      {finLog.length > 0 && (
+        <div className="mt-3 rounded-xl border border-border bg-card p-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">💸 Money news</p>
+          {finLog.slice(-3).map((ev, i) => (
+            <p key={i} className="mt-1 text-xs text-muted-foreground">
+              {ev.emoji} {ev.text}{' '}
+              <span className={ev.delta >= 0 ? 'font-bold text-emerald-500' : 'font-bold text-destructive'}>
+                {ev.delta >= 0 ? '+' : ''}€{ev.delta}M
+              </span>
+            </p>
+          ))}
+        </div>
+      )}
+
+      {/* Pitch view (owner 2026-08-05: "like a pitch and ur formation... not just a list") */}
+      <div className="relative mt-4 aspect-[4/3] w-full overflow-hidden rounded-2xl border-2 border-emerald-900/60 bg-gradient-to-b from-emerald-950/70 to-emerald-900/40">
+        <div className="absolute inset-x-0 top-1/2 h-px bg-emerald-500/20" />
+        <div className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full border border-emerald-500/20" />
+        {formation.slots.map((slot, i) => {
+          const p = startingXi[i];
+          const last = p ? p.name.split(' ').slice(-1)[0] : null;
+          return (
+            <button
+              key={i}
+              onClick={() => setActiveSlot(activeSlot === i ? null : i)}
+              style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
+              className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-lg border px-1.5 py-1 text-center transition-all ${
+                activeSlot === i
+                  ? 'z-10 scale-110 border-gold bg-gold/20'
+                  : p ? 'border-emerald-500/40 bg-background/85 hover:border-primary' : 'border-destructive/60 bg-destructive/20'
+              }`}
+            >
+              <span className="block text-[8px] font-bold uppercase text-muted-foreground">{slot.label}</span>
+              <span className="block max-w-[64px] truncate text-[10px] font-semibold text-foreground">
+                {last ?? 'EMPTY'}
+              </span>
+              {p && <span className="block text-[9px] font-bold text-primary">{playerRating(p)}</span>}
+            </button>
+          );
+        })}
+      </div>
+
       {/* XI */}
       <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-        Your XI, tap a slot to sign someone
+        Your XI, tap a slot (pitch or list) to sign someone
       </p>
       <div className="mt-2 space-y-1.5">
         {formation.slots.map((slot, i) => {
