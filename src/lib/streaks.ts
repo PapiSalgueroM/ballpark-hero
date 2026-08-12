@@ -219,6 +219,46 @@ export function getVisitedDayCount(): number {
   return readState().loginDates.length;
 }
 
+/** The ET date string `delta` whole days away from `dateStr` (negative = earlier). */
+function shiftDate(dateStr: string, delta: number): string {
+  const ms = Date.parse(`${dateStr}T00:00:00Z`) + delta * 24 * 60 * 60 * 1000;
+  return new Date(ms).toISOString().slice(0, 10);
+}
+
+/**
+ * Consecutive ET days visited, ending today (owner Aug 2026: "the days
+ * visited should be days in a row. Not in general"). Same yesterday-grace as
+ * the play streak: if the last visit was yesterday the run is still alive, so
+ * a player checking the site after dinner doesn't watch their number die at
+ * midnight. A gap of 2+ days means the run is over and this returns 0 until
+ * the next visit starts a new one.
+ */
+export function getVisitStreakFrom(loginDates: string[], today: string = getEtDateString()): number {
+  const days = new Set(loginDates);
+  let anchor = today;
+  if (!days.has(anchor)) {
+    const yesterday = shiftDate(today, -1);
+    if (!days.has(yesterday)) return 0;
+    anchor = yesterday;
+  }
+  let count = 0;
+  let cursor = anchor;
+  while (days.has(cursor)) {
+    count++;
+    cursor = shiftDate(cursor, -1);
+  }
+  return count;
+}
+
+/** Convenience read of the current consecutive-days-visited run from localStorage. */
+export function getVisitStreakDays(): number {
+  try {
+    return getVisitStreakFrom(readState().loginDates);
+  } catch {
+    return 0;
+  }
+}
+
 /**
  * Reads current state without mutating anything. Also applies a "is the
  * streak still alive as of right now" check: if the global/per-game

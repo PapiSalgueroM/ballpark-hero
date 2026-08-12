@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import html2canvas from 'html2canvas';
 import { useStreaks } from '@/hooks/useStreaks';
+import { getLocalTodayCount } from '@/lib/completions';
 import { getBadgeState, type BadgeState } from '@/lib/badges';
 import { nameModerationError } from '@/lib/nameModeration';
 
@@ -98,9 +99,13 @@ export default function Profile() {
   // SQL against flawuiqbvjobmkfkauhw), so those fields are always 0/null in
   // production today regardless of how much a player has actually played.
   const {
-    globalCurrentStreak, globalLongestStreak, topGameStreaks, daysVisited,
+    globalCurrentStreak, globalLongestStreak, topGameStreaks, visitStreakDays,
     totalPlays: localTotalPlays, totalPoints: localTotalPoints,
   } = useStreaks();
+  // Owner Aug 2026: the games tile shows TODAY's count, not lifetime
+  // ("that should be for how many games have I played that day not in
+  // general"). Same local source the navbar chip uses.
+  const [gamesToday] = useState(() => getLocalTodayCount());
 
   const [viewingProfile, setViewingProfile] = useState<any>(null);
   const [bestScores, setBestScores] = useState<BestScore[]>([]);
@@ -558,18 +563,22 @@ export default function Profile() {
           {/* ═══════════════ 3. STATS ═══════════════ */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
             {[
-              { icon: <Gamepad2 className="w-5 h-5 text-primary" />, value: totalGames, label: 'Games Played' },
+              // Owner Aug 2026: own profile shows games played TODAY (other
+              // profiles keep lifetime, it's all the DB knows about them).
+              isOwnProfile
+                ? { icon: <Gamepad2 className="w-5 h-5 text-primary" />, value: gamesToday, label: 'Games Today' }
+                : { icon: <Gamepad2 className="w-5 h-5 text-primary" />, value: totalGames, label: 'Games Played' },
               { icon: <Trophy className="w-5 h-5 text-yellow-500" />, value: totalPoints.toLocaleString(), label: 'Total Points' },
               { icon: <Flame className="w-5 h-5 text-orange-500" />, value: currentStreak, label: 'Streak 🔥' },
               { icon: <TrendingUp className="w-5 h-5 text-amber-500" />, value: longestStreak, label: 'Best Streak' },
               { icon: <Star className="w-5 h-5 text-purple-400" />, value: favouriteSportEntry ? SPORT_LABELS[favouriteSportEntry[0]] || '-' : '-', label: 'Fav Sport', small: true },
               { icon: <Target className="w-5 h-5 text-sky-400" />, value: averageScore, label: 'Avg Score' },
               { icon: <Clock className="w-5 h-5 text-emerald-400" />, value: timeSpent > 60 ? `${Math.floor(timeSpent / 60)}h ${timeSpent % 60}m` : `${timeSpent}m`, label: 'Time Played' },
-              // #13/#100: days-visited stat, local-first (see useStreaks() above).
-              // Own-profile only: this browser's visit history has no meaning
-              // when looking at someone else's profile.
+              // Owner Aug 2026: consecutive days visited ("days in a row"),
+              // not a lifetime total. Own-profile only: this browser's visit
+              // history has no meaning when looking at someone else's profile.
               ...(isOwnProfile
-                ? [{ icon: <CalendarCheck className="w-5 h-5 text-gold" />, value: daysVisited, label: 'Days Visited' }]
+                ? [{ icon: <CalendarCheck className="w-5 h-5 text-gold" />, value: visitStreakDays, label: 'Days in a Row' }]
                 : []),
             ].map((stat, i) => (
               <Card key={i} className="border-border/40">

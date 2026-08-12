@@ -23,7 +23,8 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
-  signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
+  /** session is non-null when the project has email confirmation off (signup = instantly signed in). */
+  signUp: (email: string, password: string) => Promise<{ error: Error | null; session: Session | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
@@ -60,6 +61,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        // Password-recovery links can land on any page (if the redirect URL
+        // allowlist ever falls out of sync, Supabase falls back to the site
+        // root). The recovery session is already captured at this point, so
+        // route the player to the set-a-new-password screen no matter where
+        // the link dropped them.
+        if (event === 'PASSWORD_RECOVERY' && window.location.pathname !== '/reset-password') {
+          window.location.replace('/reset-password');
+          return;
+        }
         setSession(session);
         setUser(session?.user ?? null);
 
@@ -92,14 +102,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: window.location.origin,
       },
     });
-    return { error };
+    // With email confirmation off, Supabase returns a live session right here
+    // and the player is signed in the moment the account exists. The modal
+    // uses this to say "you're in" instead of "check your email".
+    return { error, session: data?.session ?? null };
   };
 
   const signIn = async (email: string, password: string) => {

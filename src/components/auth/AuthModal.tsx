@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { OAUTH_PROVIDERS, ANY_OAUTH_ENABLED } from '@/lib/authProviders';
 import { toast } from 'sonner';
 import { Loader2, AlertCircle } from 'lucide-react';
 
@@ -80,6 +81,8 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [appleLoading, setAppleLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const { signIn, signUp } = useAuth();
@@ -133,13 +136,20 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
           onClose();
         }
       } else {
-        const { error } = await signUp(email.trim(), password);
+        const { error, session } = await signUp(email.trim(), password);
         if (error) {
           const readable = readableAuthError(error.message);
           setFormError(readable);
           toast.error(readable);
+        } else if (session) {
+          // Email confirmation is off, so the account is live and the player
+          // is already signed in. No inbox round trip.
+          toast.success("Account created! You're in.");
+          onClose();
         } else {
-          toast.success('Check your email to confirm your account!');
+          // Fallback for the (config-dependent) case where Supabase still
+          // wants the email confirmed before the first sign-in.
+          toast.success('Almost done! Check your email to confirm your account.');
           onClose();
         }
       }
@@ -180,6 +190,58 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
     // On success the browser redirects to Google, so leave the spinner on.
   };
 
+  const handleAppleSignIn = async () => {
+    setAppleLoading(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'apple',
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) {
+      const providerOff = /not enabled|unsupported provider/i.test(error.message);
+      toast.error(
+        providerOff
+          ? 'Apple sign-in is getting an upgrade. Use email + password for now, it takes 10 seconds.'
+          : 'Could not start Apple sign-in. Try email + password instead.'
+      );
+      setAppleLoading(false);
+    }
+    // On success the browser redirects to Apple, so leave the spinner on.
+  };
+
+  /**
+   * "Forgot password?" (#login-recovery). Sends the Supabase reset email
+   * pointed at /reset-password. Needs a valid email in the field first so we
+   * never fire a reset for a blank/typo'd address.
+   */
+  const handleForgotPassword = async () => {
+    const emailIssue = validate(email, 'x'.repeat(MIN_PASSWORD_LENGTH)).email;
+    if (emailIssue) {
+      setTouched(true);
+      setFieldErrors(prev => ({ ...prev, email: email.trim() ? emailIssue : 'Type your email above first, then tap Forgot password' }));
+      return;
+    }
+    setResetLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) {
+        const rateLimited = /rate limit|too many/i.test(error.message);
+        toast.error(
+          rateLimited
+            ? 'Too many emails going out right now. Give it an hour and try again.'
+            : readableAuthError(error.message)
+        );
+      } else {
+        toast.success('Reset link sent! Check your inbox (and spam) for an email from Supabase.');
+      }
+    } catch {
+      toast.error('Could not send the reset email. Check your connection and try again.');
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
@@ -196,12 +258,16 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
         </p>
 
         <div className="space-y-4 py-4">
-          {/* Google OAuth Button */}
+          {/* Social sign-in buttons only render for providers that are
+              actually switched on in Supabase (see src/lib/authProviders.ts).
+              A button for an unconfigured provider hard-redirects the whole
+              page to a raw JSON error, so hidden > broken. */}
+          {OAUTH_PROVIDERS.google && (
           <Button
             variant="outline"
             className="w-full h-12 text-base gap-3"
             onClick={handleGoogleSignIn}
-            disabled={googleLoading}
+            disabled={googleLoading || appleLoading}
           >
             {googleLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -227,7 +293,30 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
             )}
             Continue with Google
           </Button>
+          )}
 
+          {OAUTH_PROVIDERS.apple && (
+          <Button
+            variant="outline"
+            className="w-full h-12 text-base gap-3"
+            onClick={handleAppleSignIn}
+            disabled={appleLoading || googleLoading}
+          >
+            {appleLoading ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.08zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"
+                />
+              </svg>
+            )}
+            Continue with Apple
+          </Button>
+          )}
+
+          {ANY_OAUTH_ENABLED && (
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <Separator className="w-full" />
@@ -238,6 +327,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
               </span>
             </div>
           </div>
+          )}
 
           {/* Email/Password Form */}
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -278,6 +368,18 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
               )}
               {tab === 'signup' && !fieldErrors.password && (
                 <p className="text-xs text-muted-foreground">At least {MIN_PASSWORD_LENGTH} characters</p>
+              )}
+              {tab === 'login' && (
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    disabled={resetLoading}
+                    className="text-xs text-primary hover:underline disabled:opacity-60"
+                  >
+                    {resetLoading ? 'Sending reset link...' : 'Forgot password?'}
+                  </button>
+                </div>
               )}
             </div>
             {formError && (

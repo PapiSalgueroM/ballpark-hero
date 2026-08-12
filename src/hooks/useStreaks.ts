@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import {
   getStreakState,
   getTopPerGameStreaks,
+  getVisitStreakFrom,
   recordGameCompletion,
   recordVisit,
   type StreakState,
@@ -68,6 +69,8 @@ export interface UseStreaksResult {
   topGameStreaks: Array<{ gameSlug: string; current: number; longest: number }>;
   /** Distinct ET days the app has been opened (this browser), for days-visited stats. */
   daysVisited: number;
+  /** Consecutive ET days visited ending today (yesterday-grace), for the "days in a row" stat. */
+  visitStreakDays: number;
   /** Lifetime game completions on this browser (Profile "games played"). */
   totalPlays: number;
   /** Lifetime points from completed games on this browser (Profile "points"). */
@@ -111,6 +114,7 @@ export function useStreaks(): UseStreaksResult {
     globalLongestStreak: state.global.longest,
     topGameStreaks,
     daysVisited: state.loginDates.length,
+    visitStreakDays: getVisitStreakFrom(state.loginDates),
     totalPlays: state.totalPlays ?? 0,
     totalPoints: state.totalPoints ?? 0,
     refresh,

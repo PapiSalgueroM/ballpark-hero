@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
+import { UpdateNudge } from "@/components/layout/UpdateNudge";
 import Index from "./pages/Index";
 import Footle from "./pages/Footle";
 import CareerGame from "./pages/CareerGame";
@@ -39,6 +40,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import AdminLogin from "./pages/AdminLogin";
 import AdminReports from "./pages/AdminReports";
+import ResetPassword from "./pages/ResetPassword";
 import UfcChain from "./pages/UfcChain";
 import Profile from "./pages/Profile";
 import Leaderboard from "./pages/Leaderboard";
@@ -237,6 +239,7 @@ const AppContent = () => {
         <Route path="/ufc-chain" element={<UfcChain />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:username" element={<Profile />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/guess-the-year" element={<GuessTheYear />} />
         <Route path="/guess-nfl-team" element={<GuessNflTeam />} />
@@ -335,6 +338,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <UpdateNudge />
         <BrowserRouter>
           <AppContent />
         </BrowserRouter>
