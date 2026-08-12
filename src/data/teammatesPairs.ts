@@ -1,7 +1,7 @@
 import { TeammatesPair } from '@/types/teammates';
 
 export const teammatesPairs: TeammatesPair[] = [
-  // EASY (difficulty 1) — obvious pairings
+  // EASY (difficulty 1), obvious pairings
   { player1: "LeBron James", player2: "Dwyane Wade", sport: "NBA", answer: true, funFact: "Both played for the Miami Heat from 2010-2014, winning two championships together.", difficulty: 1 },
   { player1: "Tom Brady", player2: "Rob Gronkowski", sport: "NFL", answer: true, funFact: "Teammates on the Patriots (2010-2018) and Buccaneers (2020-2021), winning 4 Super Bowls together.", difficulty: 1 },
   { player1: "Lionel Messi", player2: "Neymar", sport: "Soccer", answer: true, funFact: "Both played for Barcelona (2013-2017) and Paris Saint-Germain (2021-2023).", difficulty: 1 },
@@ -15,7 +15,7 @@ export const teammatesPairs: TeammatesPair[] = [
   { player1: "Luka Dončić", player2: "Anthony Davis", sport: "NBA", answer: true, funFact: "Both became Los Angeles Lakers teammates in 2025 after the blockbuster Dončić trade from Dallas.", difficulty: 1 },
   { player1: "Jimmy Butler", player2: "Stephen Curry", sport: "NBA", answer: true, funFact: "Butler joined the Golden State Warriors in the 2025 trade from Miami, becoming Curry's teammate.", difficulty: 1 },
 
-  // MEDIUM (difficulty 2) — less obvious
+  // MEDIUM (difficulty 2), less obvious
   { player1: "David Beckham", player2: "Zlatan Ibrahimovic", sport: "Soccer", answer: true, funFact: "Both played for PSG during the 2012-2013 season.", difficulty: 2 },
   { player1: "LeBron James", player2: "Shaquille O'Neal", sport: "NBA", answer: true, funFact: "They were Cleveland Cavaliers teammates during the 2009-2010 season.", difficulty: 2 },
   { player1: "Russell Wilson", player2: "Peyton Manning", sport: "NFL", answer: false, funFact: "They were division rivals, Wilson with Seattle and Manning with Denver, but never teammates.", difficulty: 2 },
@@ -29,7 +29,7 @@ export const teammatesPairs: TeammatesPair[] = [
   { player1: "Saquon Barkley", player2: "Jalen Hurts", sport: "NFL", answer: true, funFact: "Barkley joined the Philadelphia Eagles in 2024, rushing for over 2,000 yards alongside Hurts.", difficulty: 2 },
   { player1: "Davante Adams", player2: "Aaron Rodgers", sport: "NFL", answer: true, funFact: "Teammates on the Packers (2014-2021) and reunited on the Jets in 2024.", difficulty: 2 },
 
-  // HARD (difficulty 3) — obscure overlaps and tricky false ones
+  // HARD (difficulty 3), obscure overlaps and tricky false ones
   { player1: "Randy Moss", player2: "Tom Brady", sport: "NFL", answer: true, funFact: "Moss joined the Patriots in 2007, setting the single-season TD receiving record with 23 TDs alongside Brady.", difficulty: 3 },
   { player1: "Andrea Pirlo", player2: "David Villa", sport: "Soccer", answer: true, funFact: "Both played for New York City FC in MLS: Pirlo from 2015-2017 and Villa from 2014-2018.", difficulty: 3 },
   { player1: "Carmelo Anthony", player2: "LeBron James", sport: "NBA", answer: true, funFact: "Briefly teammates on the 2003 draft class All-Star teams, and finally on the Lakers in 2021-2022.", difficulty: 3 },

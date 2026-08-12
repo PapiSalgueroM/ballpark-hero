@@ -25,7 +25,7 @@ export function TierListBoard() {
       await navigator.clipboard.writeText(shareText);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch { /* clipboard blocked — text is on screen */ }
+    } catch { /* clipboard blocked, text is on screen */ }
   };
 
   if (loading) {

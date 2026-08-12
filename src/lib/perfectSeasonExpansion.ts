@@ -1,20 +1,20 @@
 /**
  * Perfect Season expansion pack (NFL 17-0 + NBA 82-0 only, 2026-07-10).
  *
- * Additive sibling to perfectSeason.ts — the MLB and NHL variants never
+ * Additive sibling to perfectSeason.ts, the MLB and NHL variants never
  * import this file, so nothing here can shift their behavior. It bundles the
  * three owner-requested upgrades that share tuning:
  *
- * 1. simulateSeasonFair — a rebalanced record curve. The old shared sigmoid
+ * 1. simulateSeasonFair, a rebalanced record curve. The old shared sigmoid
  *    (plus NFL_OVERALL_ADJUST) sent an 84-overall NFL draft to 5-12
- *    ("kinda harsh" — the owner). The new curve maps overall -> expected
+ *    ("kinda harsh", the owner). The new curve maps overall -> expected
  *    wins through the anchor tables below, then plays the season game by
  *    game at p = expected/games. Binomial noise over 17 games is ~±2 wins
  *    and over 82 games ~±5 wins, exactly the randomness band requested.
- * 2. buildPlayoffRun — a simulated postseason bracket for qualifying
+ * 2. buildPlayoffRun, a simulated postseason bracket for qualifying
  *    records (NFL 12+ of 17, NBA 55+ of 82), with named opponents, a
  *    champion banner, and a Finals/Super Bowl MVP from the drafted stars.
- * 3. buildAnalysis — deterministic post-sim commentary (best pick, weakest
+ * 3. buildAnalysis, deterministic post-sim commentary (best pick, weakest
  *    link, identity, a talking-head take, standings framing). No AI calls:
  *    every line derives from drafted ratings + the final record.
  */

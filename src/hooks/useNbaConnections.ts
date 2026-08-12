@@ -6,7 +6,7 @@ import { fetchNbaConnectionsPuzzles } from '@/lib/fetchNbaConnectionsPuzzles';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
 
 /**
- * NBA Connections — direct port of useBaseballConnections (task #26).
+ * NBA Connections, direct port of useBaseballConnections (task #26).
  * Keep the connections hooks in lockstep if the mechanic changes.
  */
 function isValidNbaPuzzle(p: { groups: { players: string[] }[] }): boolean {

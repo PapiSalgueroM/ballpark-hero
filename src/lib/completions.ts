@@ -9,7 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
  *
  * This is intentionally separate from the auth-gated tables written by
  * useGameCompletion (user_game_scores, daily_completions, user_scores,
- * user_best_scores, profiles) — those only ever get rows for logged-in users.
+ * user_best_scores, profiles), those only ever get rows for logged-in users.
  * game_completions exists so "Most Played Today" and the sitewide today-count
  * reflect every visitor, logged in or not. No PII is ever sent: only the
  * game's route path, an optional numeric score, and a display handle (guest
@@ -122,7 +122,7 @@ function bumpLocalTodayCount(): void {
     const count = parsed && parsed.date === today ? (parsed.count || 0) + 1 : 1;
     localStorage.setItem(LOCAL_TODAY_KEY, JSON.stringify({ date: today, count }));
   } catch {
-    /* localStorage unavailable (quota/private mode) — not critical */
+    /* localStorage unavailable (quota/private mode), not critical */
   }
 }
 

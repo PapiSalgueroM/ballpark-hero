@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 
 /**
  * Fifth Higher/Lower port (task #23). Stat axis is career GRAND SLAM SINGLES
- * TITLES — men's and women's champions share one pool on purpose, because
+ * TITLES, men's and women's champions share one pool on purpose, because
  * cross-tour matchups (Serena 23 vs Federer 20) are the whole fun. Counts
  * verified vs tennis_grand_slam_winners with marriage-name merges applied;
  * ties (24/24, 22/22, 18/18…) score as correct for either pick.

@@ -63,9 +63,9 @@ export function smartMatch(name: string, query: string): boolean {
 
 /**
  * Score for sorting. Lower = better.
- *  0 — starts-with exact match
- *  1 — exact substring (no starts-with)
- *  2 — fuzzy match only
+ *  0, starts-with exact match
+ *  1, exact substring (no starts-with)
+ *  2, fuzzy match only
  */
 export function smartScore(name: string, query: string): number {
   const words = query.toLowerCase().split(/\s+/).filter(Boolean);

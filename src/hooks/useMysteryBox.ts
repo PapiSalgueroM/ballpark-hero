@@ -11,7 +11,7 @@ const STORAGE_PREFIX = 'mystery-box-';
 /**
  * Pack odds. Tuned so a finished XI averages in the 60s-70s and a superstar
  * pull is a genuine event (~1 in 3 full runs contain one). Fringe exists so a
- * pack can disappoint — no tension without a dud.
+ * pack can disappoint, no tension without a dud.
  */
 const ODDS: Array<[PackTier, number]> = [
   ['superstar', 0.03],
@@ -44,7 +44,7 @@ function lcg(seed: number, i: number): number {
   return Math.abs((seed * (i + 29) * 1103515245 + 12345) >>> 0);
 }
 
-/** Deterministic tier for pack i — same sequence for everyone on a given day. */
+/** Deterministic tier for pack i, same sequence for everyone on a given day. */
 function tierFor(seed: number, i: number): PackTier {
   const r = (lcg(seed, i * 3 + 1) % 10000) / 10000;
   let acc = 0;

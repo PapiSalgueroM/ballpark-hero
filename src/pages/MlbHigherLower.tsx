@@ -10,7 +10,7 @@ import { ArrowUp, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 /**
- * Fourth Higher/Lower port (task #23). Stat axis is career HOME RUNS — the
+ * Fourth Higher/Lower port (task #23). Stat axis is career HOME RUNS, the
  * pool is all-time legends only (careers finished by 2019) because the Lahman
  * source ends 2021 and active players' totals would read as truncated
  * "careers". Ruth-to-Ortiz eras all compare cleanly on HRs.

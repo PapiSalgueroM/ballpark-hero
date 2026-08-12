@@ -15,13 +15,13 @@ function isValidPuzzle(p: ConnectionsPuzzle): boolean {
 
 /**
  * Fetches all Connections puzzle definitions from Supabase, ordered by sort_order.
- * groups_json is JSONB in Postgres — the client returns it as a parsed JS object,
+ * groups_json is JSONB in Postgres, the client returns it as a parsed JS object,
  * so a direct cast to ConnectionGroup[] is safe.
  *
  * Applies the same isValidPuzzle filter used in useConnections to exclude any
  * malformed rows before they reach the hook.
  *
- * Returns [] on any error — the caller falls back to the hardcoded connectionsPuzzles.
+ * Returns [] on any error, the caller falls back to the hardcoded connectionsPuzzles.
  */
 export async function fetchConnectionsPuzzles(): Promise<ConnectionsPuzzle[]> {
   try {

@@ -4,10 +4,10 @@ import { LEGENDS, normalizePosition, playerRating } from '@/lib/squadDeal';
 import { getEnrichment } from '@/data/footleEnrichment';
 
 /**
- * SIGN THE PLAYER — Auction House (owner brief 2026-07-10, box2box format):
+ * SIGN THE PLAYER, Auction House (owner brief 2026-07-10, box2box format):
  * three bidders with £1B each, an 11-position themed pool of 33 players
  * (per position: a great, a good, and a stinker), sold per position in the
- * box2box order — the 2nd-best goes under the hammer FIRST, then the best,
+ * box2box order, the 2nd-best goes under the hammer FIRST, then the best,
  * and the 3rd is assigned to whoever still needs the position (they still
  * pay a fee). Then the three squads battle in a simulated mini-league.
  */

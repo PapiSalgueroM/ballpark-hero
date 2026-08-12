@@ -12,7 +12,7 @@ import type {
 } from '@/types/nflConnect4';
 
 /**
- * NFL Connect 4 — port of useMlbConnect4 (task #22 follow-on) against the
+ * NFL Connect 4, port of useMlbConnect4 (task #22 follow-on) against the
  * nfl-connect4-validate edge function (attribute-pair AI validator).
  * Keep the connect-4 hooks in lockstep if the mechanic changes.
  */
@@ -168,7 +168,7 @@ export function useNflConnect4() {
         if (result.fullName) displayName = result.fullName;
       } catch {
         // FAIL CLOSED: a network/parse failure must NOT let an unchecked answer
-        // through — reject with a retry message instead of placing the piece.
+        // through, reject with a retry message instead of placing the piece.
         setValidationError("Couldn't verify your answer right now, please try again.");
         setIsValidating(false);
         return;

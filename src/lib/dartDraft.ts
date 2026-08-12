@@ -4,7 +4,7 @@ import { getEnrichment } from '@/data/footleEnrichment';
 import { FORMATIONS, LEGENDS, normalizePosition, playerRating, type Formation, type FormationSlot } from '@/lib/squadDeal';
 
 /**
- * DART DRAFT — the YouTuber "throw a dart, live with the consequences" format
+ * DART DRAFT, the YouTuber "throw a dart, live with the consequences" format
  * (owner brief 2026-07-10: timed dart throw; wherever it lands you must take a
  * player from there; Sidemen/MMG-style board of fate).
  *
@@ -66,11 +66,11 @@ export const BOARD_EDGE = 0.82; // double-ring edge (visual); MISS starts past 0
 
 export const RING_LABEL: Record<Ring, string> = {
   JACKPOT: 'BULLSEYE! Superstar pull',
-  T1: 'Triple ring — elite pull',
-  T2: 'Double ring — strong pull',
-  T3: 'Inner single — solid pull',
-  T4: 'Outer single — squad player',
-  MISS: 'Off the board — the wedge shows no mercy',
+  T1: 'Triple ring, elite pull',
+  T2: 'Double ring, strong pull',
+  T3: 'Inner single, solid pull',
+  T4: 'Outer single, squad player',
+  MISS: 'Off the board, the wedge shows no mercy',
 };
 
 export const RING_POINTS: Record<Ring, number> = {

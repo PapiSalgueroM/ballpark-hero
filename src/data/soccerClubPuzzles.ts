@@ -1134,7 +1134,7 @@ export function resolvePuzzleByName(input: string): SoccerClubPuzzle | undefined
   );
 }
 
-// Daily puzzle — deterministic by date
+// Daily puzzle, deterministic by date
 export function getDailySoccerClubPuzzle(): SoccerClubPuzzle {
   const start = new Date('2024-01-01');
   const today = new Date();

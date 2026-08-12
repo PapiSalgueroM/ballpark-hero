@@ -1,5 +1,5 @@
 /**
- * NBA Higher/Lower pool — top 80 career scorers, baked from
+ * NBA Higher/Lower pool, top 80 career scorers, baked from
  * bref_nba_player_seasons on 2026-07-22.
  *
  * HOW IT WAS AGGREGATED (matters if you regenerate): bref stores traded
@@ -7,11 +7,11 @@
  * sum(pts) double-counts every traded season. Career totals here are
  * sum over seasons of MAX(pts per player-season), which keeps exactly the
  * combined row. Verified against known careers: Kareem 38,387, Jordan 32,292,
- * Wilt 31,419, Iverson 24,368, Jamal Crawford 19,419 — all exact.
+ * Wilt 31,419, Iverson 24,368, Jamal Crawford 19,419, all exact.
  * "Eddie Johnson" was excluded: two different NBA Eddie Johnsons share the
  * name and their merged "career" ranked 8th all-time.
  *
- * No nationality here (bref has none) — unlike hockeyHLPlayers there is no
+ * No nationality here (bref has none), unlike hockeyHLPlayers there is no
  * flag; the card shows position, era and teams instead.
  */
 export interface NbaHLPlayer {

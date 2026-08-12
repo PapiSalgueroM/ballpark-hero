@@ -29,7 +29,7 @@ export interface JeopardyState {
 const BOARD_CATEGORIES = 5;
 const STORAGE_PREFIX = 'jeopardy-';
 
-/** Deterministic pick — same board for everyone on a given ET day. */
+/** Deterministic pick, same board for everyone on a given ET day. */
 function pickDeterministic<T>(arr: T[], seed: number): T {
   return arr[Math.abs(seed) % arr.length];
 }
@@ -37,7 +37,7 @@ function pickDeterministic<T>(arr: T[], seed: number): T {
 /**
  * Loose answer matching. Jeopardy answers are proper nouns typed by hand, so
  * we accept case/accent/punctuation differences and allow a surname-only match
- * for people ("Weah" for "George Weah"). Deliberately generous — being pedantic
+ * for people ("Weah" for "George Weah"). Deliberately generous, being pedantic
  * about diacritics would just feel broken.
  */
 function normalize(s: string): string {
@@ -100,7 +100,7 @@ export function useJeopardy(): JeopardyState {
 
   /**
    * Only categories that actually have a clue at EVERY value tier can form a
-   * column — otherwise the board would have holes. Audit found 5 such
+   * column, otherwise the board would have holes. Audit found 5 such
    * categories; Premier League (no 800/1000) and Ballon d'Or Féminin (200 only)
    * legitimately can't fill a column and are excluded here rather than faked.
    */

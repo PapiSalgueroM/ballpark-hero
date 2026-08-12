@@ -7,7 +7,7 @@ export interface CellState {
 
 export type BoardCell = CellState | null;
 
-// 6 rows x 7 columns — row 0 is top, row 5 is bottom
+// 6 rows x 7 columns, row 0 is top, row 5 is bottom
 export type Board = BoardCell[][];
 
 export interface FootballConnect4Board {

@@ -42,7 +42,7 @@ export async function fetchCareerPlayers(): Promise<CareerPlayer[]> {
       return [];
     }
 
-    // Group seasons by player_id — rows arrive pre-sorted by (player_id, sort_order)
+    // Group seasons by player_id, rows arrive pre-sorted by (player_id, sort_order)
     const seasonsByPlayer = new Map<string, CareerSeason[]>();
     for (const row of seasonsResult.data) {
       const season: CareerSeason = {

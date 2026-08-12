@@ -13,7 +13,7 @@ interface TransferPathRow {
 
 export async function fetchTransferPathPuzzles(): Promise<TransferPathPuzzle[]> {
   try {
-    // 970 rows and growing — page past the API's 1,000-row cap before it bites.
+    // 970 rows and growing, page past the API's 1,000-row cap before it bites.
     const { data, error } = await fetchAllRows<TransferPathRow>((from, to) =>
       supabase
         .from("transfer_path_puzzles")
@@ -33,7 +33,7 @@ export async function fetchTransferPathPuzzles(): Promise<TransferPathPuzzle[]> 
       playerB:  row.player_b,
       minSteps: row.min_steps,
       hint:     row.hint,
-      // oneOptimalPath intentionally omitted — unused at runtime
+      // oneOptimalPath intentionally omitted, unused at runtime
     }));
   } catch (err) {
     console.warn("[fetchTransferPathPuzzles] unexpected error:", err);

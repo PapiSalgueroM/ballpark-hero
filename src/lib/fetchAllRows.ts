@@ -3,7 +3,7 @@
  *
  * Any .select() (even with a bigger .limit()) is silently truncated to 1,000
  * rows by PostgREST's max-rows setting. That bug cut career_seasons (~2,700
- * rows) down to 1,000 — leaving most Career Quiz players with empty careers —
+ * rows) down to 1,000, leaving most Career Quiz players with empty careers -
  * and dropped the 12 hand-crafted Connections puzzles (rows 1,001-1,012).
  *
  * This helper pages through the query with .range() until a short page

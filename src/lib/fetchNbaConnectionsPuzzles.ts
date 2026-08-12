@@ -19,7 +19,7 @@ function isValidPuzzle(p: NbaConnectionsPuzzle): boolean {
  * returned parsed by the client. Applies the same 4×5×20-unique validity
  * filter used in useNbaConnections so malformed rows never reach the hook.
  *
- * Returns [] on any error — the caller falls back to the hardcoded
+ * Returns [] on any error, the caller falls back to the hardcoded
  * nbaConnectionsPuzzles. The table is not in the generated Supabase types,
  * so the query is cast to any (same approach as the other connections libs).
  */

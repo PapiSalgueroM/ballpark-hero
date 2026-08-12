@@ -5,7 +5,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 
 /**
- * NBA Career Path — direct port of useHockeyCareer (task #25).
+ * NBA Career Path, direct port of useHockeyCareer (task #25).
  * Keep the career-path hooks in lockstep if the mechanic changes.
  */
 export type NbaCareerStatus = 'playing' | 'guessed' | 'revealed';

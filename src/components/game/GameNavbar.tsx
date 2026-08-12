@@ -30,7 +30,7 @@ export function GameNavbar() {
     <>
       <nav className="w-full bg-background/95 border-b border-border/40">
         <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 py-2">
-          {/* Logo — left, bigger + stretched */}
+          {/* Logo, left, bigger + stretched */}
           <Link
             to="/"
             className="shrink-0 justify-self-start font-display font-black text-primary hover:opacity-80 transition-opacity"
@@ -103,15 +103,14 @@ export function GameNavbar() {
                   </span>
                 ) : (
                   <span>
-                    <span className="hidden sm:inline">Rank: </span>—
-                  </span>
+                    <span className="hidden sm:inline">Rank: </span>-</span>
                 )}
               </span>
             </div>
           </div>
           )}
 
-          {/* Back — right, boxed so it can't be missed */}
+          {/* Back, right, boxed so it can't be missed */}
           <button
             onClick={() => navigate(-1)}
             aria-label="Go back"

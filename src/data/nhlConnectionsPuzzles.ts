@@ -10,9 +10,9 @@ export interface NhlConnectionsPuzzle {
 }
 
 /**
- * NHL Connections puzzles (task #26 — Connections port to NHL).
+ * NHL Connections puzzles (task #26, Connections port to NHL).
  *
- * EVERY fact verified against nhl_player_stats (Supabase) on 2026-07-22 —
+ * EVERY fact verified against nhl_player_stats (Supabase) on 2026-07-22 -
  * teams codes, points, goals, assists, games all from that one table (the
  * same source hockeyGrid validated as clean). Goalies are absent from the
  * table, so no goalie groups. Tiles use the table's diacritic name forms
@@ -22,7 +22,7 @@ export interface NhlConnectionsPuzzle {
  * criterion. NHL-specific traps found while authoring, preserved for future
  * puzzles:
  *   - Jaromír Jágr (9 franchises) and Corey Perry (8) conflict with almost
- *     any franchise group — neither is used anywhere.
+ *     any franchise group, neither is used anywhere.
  *   - Penguins/Oilers legends break every stat group (Crosby/Lemieux have
  *     600+ goals and 1,000+ assists; every 1,500-game player also has
  *     1,000+ points), so nhlconn-001 is all-franchise and the only stat

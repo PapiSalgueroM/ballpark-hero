@@ -23,7 +23,7 @@ export interface OverratedPlayer {
  * this game depends on:
  *
  *  1. market_value_usd is quantised to whole millions and ~40% of the raw table
- *     (56,660 rows) sits at exactly 1,000,000 — that is a FLOOR, not a real
+ *     (56,660 rows) sits at exactly 1,000,000, that is a FLOOR, not a real
  *     valuation. The view filters to >= 4m. Without that filter, four in ten
  *     cards would show "£1m" for wildly different players and the whole
  *     over/under premise collapses.

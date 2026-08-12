@@ -221,7 +221,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
       "Miami won the national championship behind Bernie Kosar"
     ]
   },
-  // NEW — 2024 and 2025 puzzles
+  // NEW, 2024 and 2025 puzzles
   {
     year: 2024,
     clues: [

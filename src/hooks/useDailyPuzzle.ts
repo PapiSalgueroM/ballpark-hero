@@ -17,9 +17,9 @@ const SCHEMA_VERSION = 1 as const;
 // ---------------------------------------------------------------------------
 
 interface PersistedDailyState<G> {
-  /** Schema version — see SCHEMA_VERSION above. */
+  /** Schema version, see SCHEMA_VERSION above. */
   v: typeof SCHEMA_VERSION;
-  /** YYYY-MM-DD (ET) — redundant with storage key but used for validation. */
+  /** YYYY-MM-DD (ET), redundant with storage key but used for validation. */
   date: string;
   /** Index in the puzzles array that was served today. */
   puzzleIndex: number;
@@ -45,7 +45,7 @@ export interface DailyPuzzleOptions<T, G> {
   /**
    * The full static puzzle pool.
    * The hook selects from this array using the date seed.
-   * Required even when supabasePuzzle is provided — used as fallback.
+   * Required even when supabasePuzzle is provided, used as fallback.
    */
   puzzles: T[];
 
@@ -59,7 +59,7 @@ export interface DailyPuzzleOptions<T, G> {
 
   /**
    * Extract a stable string ID from a puzzle object.
-   * Required for games that pass supabasePuzzle — Supabase deserializes
+   * Required for games that pass supabasePuzzle, Supabase deserializes
    * fresh objects whose reference identity differs from the static array,
    * so indexOf() always returns -1. getPuzzleId uses value equality instead.
    *
@@ -91,7 +91,7 @@ export interface DailyPuzzleOptions<T, G> {
   /**
    * Deserialize the raw guess array from JSON.parse back into type G[].
    * JSON.parse returns `any`; this callback restores the correct type.
-   * Keep it simple — typically just a type assertion:
+   * Keep it simple, typically just a type assertion:
    *   e.g. (raw) => raw as GuessResult[]
    */
   deserializeGuesses: (raw: unknown) => G[];
@@ -158,11 +158,11 @@ function selectDailyPuzzle<T>(
   if (supabasePuzzle != null) {
     let index: number;
     if (getPuzzleId) {
-      // Value-based lookup — safe for Supabase-deserialized objects
+      // Value-based lookup, safe for Supabase-deserialized objects
       const targetId = getPuzzleId(supabasePuzzle);
       index = puzzles.findIndex((p) => getPuzzleId(p) === targetId);
     } else {
-      // Reference equality — only safe for static in-memory arrays
+      // Reference equality, only safe for static in-memory arrays
       index = puzzles.indexOf(supabasePuzzle);
     }
     if (index === -1) index = 0; // safe fallback if puzzle not found in array
@@ -203,7 +203,7 @@ function readPersistedState<G>(
       };
     }
   } catch {
-    // Corrupt JSON or unexpected structure — treat as no saved state
+    // Corrupt JSON or unexpected structure, treat as no saved state
   }
   return null;
 }
@@ -225,7 +225,7 @@ function writePersistedState<G>(
     };
     localStorage.setItem(storageKey, JSON.stringify(payload));
   } catch {
-    // Quota exceeded or private browsing — silently skip persistence
+    // Quota exceeded or private browsing, silently skip persistence
   }
 }
 
@@ -233,7 +233,7 @@ function cleanupOldEntries(gameSlug: string, currentKey: string): void {
   try {
     const prefix = `${gameSlug}-daily-`;
     const toRemove: string[] = [];
-    // Collect first — modifying localStorage while iterating is unsafe
+    // Collect first, modifying localStorage while iterating is unsafe
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && key.startsWith(prefix) && key !== currentKey) {
@@ -242,7 +242,7 @@ function cleanupOldEntries(gameSlug: string, currentKey: string): void {
     }
     toRemove.forEach((k) => localStorage.removeItem(k));
   } catch {
-    // localStorage unavailable (e.g. storage disabled) — skip
+    // localStorage unavailable (e.g. storage disabled), skip
   }
 }
 
@@ -266,7 +266,7 @@ export function useDailyPuzzle<T, G>(
 
   // todayStr is computed once on mount and never changes during the session.
   // This is intentional: a user who starts a puzzle before midnight ET and
-  // finishes after midnight plays the puzzle they started — not the new day's.
+  // finishes after midnight plays the puzzle they started, not the new day's.
   // See "Known Behavior" in docs/useDailyPuzzle-design.md.
   const todayStr = useRef(getTodayET()).current;
   const storageKey = `${gameSlug}-daily-${todayStr}`;

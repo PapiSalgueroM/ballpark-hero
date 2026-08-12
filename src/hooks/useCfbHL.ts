@@ -5,7 +5,7 @@ import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
 /**
- * College Football Higher/Lower — sixth Higher/Lower sport port (task #23),
+ * College Football Higher/Lower, sixth Higher/Lower sport port (task #23),
  * same rules as the Hockey/NBA/NFL/F1/MLB/Tennis hooks: 10 rounds, 10 pts
  * per correct, +5 per consecutive-correct streak step, daily (ET-seeded) +
  * unlimited modes. Ties score as correct for either pick. Keep the HL hooks
@@ -34,7 +34,7 @@ interface RoundResult {
 type HLAction = { t: 'result'; correct: boolean };
 
 const ROUNDS = 10;
-// Sentinel puzzle array — useDailyPuzzle needs at least one element.
+// Sentinel puzzle array, useDailyPuzzle needs at least one element.
 const SENTINEL_PUZZLES = [{ id: 'cfbhl-daily' }];
 
 function buildPairs(seed: number, hard = false): [CfbHLPlayer, CfbHLPlayer][] {
@@ -47,7 +47,7 @@ function buildPairs(seed: number, hard = false): [CfbHLPlayer, CfbHLPlayer][] {
     return result;
   }
   // HARD (task #12): greedy close-gap pairing on careerPassYds from a seeded
-  // shuffle window — selection-only, scoring untouched. Unlimited-only:
+  // shuffle window, selection-only, scoring untouched. Unlimited-only:
   // daily pairs stay canonical so stored daily actions replay correctly.
   const pool = [...shuffled];
   const result: [CfbHLPlayer, CfbHLPlayer][] = [];
@@ -175,7 +175,7 @@ export function useCfbHL() {
   const toggleHard = useCallback(() => {
     setHard((prev) => {
       const next = !prev;
-      // Hard pairs are an unlimited-mode feature — switching keeps the
+      // Hard pairs are an unlimited-mode feature, switching keeps the
       // daily's canonical pair list untouched.
       setMode('unlimited');
       setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000), next));

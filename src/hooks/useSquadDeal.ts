@@ -158,7 +158,7 @@ export function useSquadDeal() {
   };
   const extraBankerCall = () => {
     if (extraStage !== 'reveal' || extraKept === null) return;
-    // Banker offers the strongest FLIPPED option — a known, tempting bird-in-hand
+    // Banker offers the strongest FLIPPED option, a known, tempting bird-in-hand
     const flippedOpts = extraElim.map(i => currentExtraCat.options[i]);
     const best = [...flippedOpts].sort((a, b) => (b.ratingMod + b.chemMod / 3) - (a.ratingMod + a.chemMod / 3))[0];
     setExtraOffer(best); setExtraStage('offer');
@@ -190,7 +190,7 @@ export function useSquadDeal() {
 
   const finalIndices = candidates.map((_, i) => i).filter(i => !eliminated.includes(i));
 
-  // Global points/streaks/leaderboard credit (was missing — owner: every game must give points)
+  // Global points/streaks/leaderboard credit (was missing, owner: every game must give points)
   useGameCompletion('squad-deal', phase === 'done' && !!result, result?.rating ?? 0, 0);
 
   return {

@@ -147,7 +147,7 @@ export function useSoccerGrid() {
   // epoch is persisted so a mid-timer refresh resumes with the correct
   // remaining time instead of granting a fresh clock. Read synchronously
   // (useState initializer) for the same reason settings is read
-  // synchronously above — avoids a one-render-late flip that could race
+  // synchronously above, avoids a one-render-late flip that could race
   // with the win/loss check on refresh.
   const [timerStartedAt, setTimerStartedAtState] = useState<number | null>(
     () => loadTimerStartedAt(todayStr),
@@ -198,7 +198,7 @@ export function useSoccerGrid() {
   // --- Overtime ------------------------------------------------------------
   // After the main game ends (win, out-of-guesses, or time-up), the player
   // may opt into Overtime to keep filling remaining cells. The main
-  // correctCount/rarityScore above never include Overtime picks — they stay
+  // correctCount/rarityScore above never include Overtime picks, they stay
   // frozen at whatever they were when the main game ended. Read synchronously
   // for the same refresh-safety reason as settings and the timer above.
   const [overtimeActive, setOvertimeActiveState] = useState<boolean>(
@@ -239,7 +239,7 @@ export function useSoccerGrid() {
           .eq('puzzle_id', puzzleId)
           .eq('cell_index', cellIndex)
           .eq('player_name', playerName.toLowerCase());
-        if (!totalCount) return 101; // unicorn — first pick for this cell
+        if (!totalCount) return 101; // unicorn, first pick for this cell
         const total = totalCount + 1;
         const player = (playerCount ?? 0) + 1;
         return Math.round((player / total) * 100);
@@ -269,7 +269,7 @@ export function useSoccerGrid() {
     async (playerName: string) => {
       if (activeCell === null || validating) return;
 
-      // Not in Overtime and the main game has ended — nothing to submit.
+      // Not in Overtime and the main game has ended, nothing to submit.
       if (gameStatus !== 'playing' && !isOvertime) return;
 
       const currentCell = isOvertime ? overtimeDisplayCells[activeCell] : cells[activeCell];
@@ -300,7 +300,7 @@ export function useSoccerGrid() {
           const rarity = await fetchRarity(puzzle.id, capturedCell, displayName);
 
           if (isOvertime) {
-            // Overtime picks never touch dailyActions/correctCount/rarityScore —
+            // Overtime picks never touch dailyActions/correctCount/rarityScore -
             // the main recorded score stays exactly as it was when the main
             // game ended. Tracked in its own localStorage list instead.
             setOvertimeCellsState((prev) => {
@@ -312,9 +312,9 @@ export function useSoccerGrid() {
             addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: displayName, rarity });
           }
         } else if (data?.unverified) {
-          // Answer-checking is temporarily offline — don't burn a guess or
+          // Answer-checking is temporarily offline, don't burn a guess or
           // flash "wrong"; ask the player to retry.
-          toast.error("Couldn't verify that answer — please try again.");
+          toast.error("Couldn't verify that answer, please try again.");
         } else {
           setWrongFlash({ cellIndex: capturedCell, playerName });
           setTimeout(() => setWrongFlash(null), 1500);

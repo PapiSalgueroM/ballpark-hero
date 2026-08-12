@@ -15,7 +15,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 
 /**
- * MLB Connect 4 — port of NbaConnect4.tsx (task #22). The autocomplete pool
+ * MLB Connect 4, port of NbaConnect4.tsx (task #22). The autocomplete pool
  * is mlb_grid_players (legends whose careers ended by 2019), so free-text
  * submission is ENABLED (validateOnly=false): modern stars like Aaron Judge
  * can be typed directly and are judged by the AI validator, which covers

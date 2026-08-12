@@ -129,7 +129,7 @@ const groups: Group[] = [
 ];
 
 
-// 2026-07-10: playoffs are DONE — real winners are baked into the groups above
+// 2026-07-10: playoffs are DONE, real winners are baked into the groups above
 // (Path A Bosnia & Herzegovina beat Italy on pens, Path B Sweden, Path C Turkey,
 // Path D Czechia beat Denmark on pens; Inter-confed: DR Congo beat Jamaica 100',
 // Iraq beat Bolivia). Keep the array shape for the sim helpers, now empty.
@@ -659,9 +659,9 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                   <tbody>
                     {standings.map((s, pos) => {
                       let rowBg = "";
-                      if (pos === 0 || pos === 1) rowBg = "hsl(140, 55%, 16%)";  // green — qualified
-                      else if (pos === 2) rowBg = "hsl(48, 65%, 18%)";          // yellow — wildcard
-                      else rowBg = "hsl(220, 10%, 13%)";                        // grey — eliminated
+                      if (pos === 0 || pos === 1) rowBg = "hsl(140, 55%, 16%)";  // green, qualified
+                      else if (pos === 2) rowBg = "hsl(48, 65%, 18%)";          // yellow, wildcard
+                      else rowBg = "hsl(220, 10%, 13%)";                        // grey, eliminated
 
                       const shortTeam = s.team.length > 14 ? s.team.slice(0, 12) + "…" : s.team;
                       return (
@@ -1042,7 +1042,7 @@ const WorldCupPredictor = () => {
   // Ref for bracket auto-fill
   const bracketAutoFillRef = useRef<{ autoFillAllRounds: () => void } | null>(null);
 
-  // "Auto Fill Everything" — runs all steps sequentially with delays
+  // "Auto Fill Everything", runs all steps sequentially with delays
   const [autoFillEverythingLoading, setAutoFillEverythingLoading] = useState(false);
   const handleAutoFillEverything = useCallback(() => {
     setAutoFillEverythingLoading(true);

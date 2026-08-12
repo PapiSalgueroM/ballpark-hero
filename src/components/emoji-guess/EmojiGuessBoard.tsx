@@ -21,7 +21,7 @@ export function EmojiGuessBoard() {
       await navigator.clipboard.writeText(shareText);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch { /* clipboard blocked — text on screen */ }
+    } catch { /* clipboard blocked, text on screen */ }
   };
 
   if (finished) {

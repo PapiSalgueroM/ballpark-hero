@@ -27,7 +27,7 @@ interface RoundResult {
 type HLAction = { t: 'result'; correct: boolean };
 
 const ROUNDS = 10;
-// Sentinel puzzle array — useDailyPuzzle needs at least one element.
+// Sentinel puzzle array, useDailyPuzzle needs at least one element.
 // The hook ignores the puzzle data and uses todayStr for seeding instead.
 const SENTINEL_PUZZLES = [{ id: 'hkhl-daily' }];
 
@@ -52,7 +52,7 @@ function getRandomPairs(hard = false): [HockeyHLPlayer, HockeyHLPlayer][] {
     return result;
   }
   // HARD (task #12): greedy close-gap pairing on careerPoints from the
-  // shuffle window — selection-only, scoring untouched. Unlimited-only:
+  // shuffle window, selection-only, scoring untouched. Unlimited-only:
   // daily pairs stay canonical so stored daily actions replay correctly.
   const pool = [...shuffled];
   const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
@@ -72,7 +72,7 @@ export function useHockeyHL() {
   const [mode, setMode] = useState<HockeyHLMode>('daily');
   const [hard, setHard] = useState(false);
 
-  // Daily persistence — sentinel puzzle, we only use todayStr + guesses
+  // Daily persistence, sentinel puzzle, we only use todayStr + guesses
   const {
     guesses: dailyActions,
     addGuess: addDailyAction,
@@ -111,7 +111,7 @@ export function useHockeyHL() {
     [dailyActions, dailyPairs],
   );
 
-  // Active values — append currentResult during reveal window so page UI is consistent
+  // Active values, append currentResult during reveal window so page UI is consistent
   const pairs = mode === 'daily' ? dailyPairs : unlimitedPairs;
   const currentRound = mode === 'daily' ? dailyCurrentRound : unlimitedRound;
   const baseResults = mode === 'daily' ? dailyResults : unlimitedResults;

@@ -28,8 +28,8 @@ import {
 } from '@/lib/mlbGrid';
 
 /**
- * MLB Franchise Grid — port of HockeyGrid/NbaGrid (task #24) on top of
- * src/lib/mlbGrid.ts (Lahman view; careers finished by 2019 — the header
+ * MLB Franchise Grid, port of HockeyGrid/NbaGrid (task #24) on top of
+ * src/lib/mlbGrid.ts (Lahman view; careers finished by 2019, the header
  * and how-to-play say "legends era" so nobody burns guesses on Trout).
  * Keep the grid pages in lockstep if the mechanic changes.
  */

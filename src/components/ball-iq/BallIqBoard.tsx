@@ -79,7 +79,7 @@ export function BallIqBoard() {
                     <span className="text-emerald-500">✓ {q.clue.answer}</span>
                   ) : (
                     <>
-                      <span className="text-destructive">✗ {q.chosen ?? '—'}</span>
+                      <span className="text-destructive">✗ {q.chosen ?? '-'}</span>
                       <span className="text-muted-foreground"> · answer: </span>
                       <span className="font-semibold text-foreground">{q.clue.answer}</span>
                     </>

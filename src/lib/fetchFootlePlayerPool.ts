@@ -7,7 +7,7 @@ import { normalizeName } from '@/lib/playerSearch';
 // ---------------------------------------------------------------------------
 // GOATs that no longer rank highly by CURRENT market value but are the most
 // recognizable names in the sport. They are always merged into the pool and
-// always tiered 'easy' — value is a fame proxy that breaks for aging legends
+// always tiered 'easy', value is a fame proxy that breaks for aging legends
 // (a 39-year-old Messi is worth $12.8M, less than a mid-table squad player).
 // ---------------------------------------------------------------------------
 const GOAT_NAMES = new Set([
@@ -273,7 +273,7 @@ export async function fetchFootlePlayerPool(): Promise<Player[]> {
     const [famousRes, obscureRows] = await Promise.all([famousQuery, fetchObscureRows()]);
 
     if (famousRes.error || !famousRes.data || famousRes.data.length === 0) {
-      console.warn('[fetchFootlePlayerPool] Supabase returned empty or errored — using fallback');
+      console.warn('[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback');
       return [];
     }
 

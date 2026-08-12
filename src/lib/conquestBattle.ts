@@ -355,7 +355,7 @@ function generateFullGameStats(
     return p.overall;
   };
 
-  // QB stats — scale by rating
+  // QB stats, scale by rating
   const qb = pos.qbs[0] || pick(pos.all);
   const qbOvr = getOvr(qb);
   const qbFactor = qbOvr / 85; // normalise around 85 OVR

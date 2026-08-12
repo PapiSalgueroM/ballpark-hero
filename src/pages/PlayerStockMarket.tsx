@@ -27,7 +27,7 @@ import {
  * Player Stock Market (task #36). Six real players at a real past year with
  * real market values; buy exactly 3, the market advances one real year, and
  * your portfolio return is scored against the best possible trio. All values
- * come from player_market_values at runtime — nothing authored.
+ * come from player_market_values at runtime, nothing authored.
  */
 
 type Mode = 'daily' | 'unlimited';
@@ -278,14 +278,14 @@ const PlayerStockMarket = () => {
           description="Six real players at a real past year with their actual market values and value history. Buy three, watch the market advance one real year, and get scored against the optimal portfolio."
           howToPlay={[
             'The market shows 6 real players at a real past year with their real market values',
-            'Each card shows a 3-year value history sparkline — momentum or mirage?',
+            'Each card shows a 3-year value history sparkline, momentum or mirage?',
             'Buy exactly 3 players, then lock in your portfolio',
             'The market advances one real year: actual next-year values decide your return',
             'Score 0-100 against the best possible trio. 100 = the optimal portfolio',
           ]}
           examples={[
             'Would you have bought a 30-year-old superstar in 2018, or the teenager whose value was about to triple?',
-            'A falling sparkline can keep falling — or be the buy-low of the year.',
+            'A falling sparkline can keep falling, or be the buy-low of the year.',
           ]}
         />
 

@@ -2,7 +2,7 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
 /**
  * "Rank 'Em" (backlog: Order the List / Factle). Put five players in order by
- * a career stat, most to fewest. Deterministic — the ranking is a fixed set of
+ * a career stat, most to fewest. Deterministic, the ranking is a fixed set of
  * DB career totals, so NO answer-check backend is needed (safe while the AI
  * validators are quota-limited). Every value below was pulled from Supabase on
  * 2026-07-22 and confirmed strictly distinct (no ties -> unambiguous order).
@@ -19,7 +19,7 @@ export interface RankRound {
   statLabel: string;
   /** Short unit shown next to the number on reveal, e.g. "pts". */
   unit: string;
-  /** Items in the CORRECT order — highest value first. */
+  /** Items in the CORRECT order, highest value first. */
   items: RankItem[];
   /** INTERNAL editor note; never rendered. */
   source: string;

@@ -193,6 +193,14 @@ const ScrollToTop = () => {
       // Returning home: restore the remembered games-list position (0 on a
       // fresh visit). Instant jump, no smooth scroll - it should feel like
       // the page never moved.
+      //
+      // Owner Aug 2026 ("it brings me a bit farther down the site... I don't
+      // wanna be scrolling up every time"): a single scrollTo fired before
+      // the home page finished loading its async sections (most-played,
+      // polls, images), so the page height kept shifting under the restored
+      // position and the final spot drifted. Now the restore re-asserts the
+      // saved position for ~1.2s while the layout settles, and backs off the
+      // moment the player scrolls on their own.
       let y = 0;
       try {
         y = Number(sessionStorage.getItem('home-scroll-y')) || 0;
@@ -200,7 +208,33 @@ const ScrollToTop = () => {
         y = 0;
       }
       window.scrollTo(0, y);
-      return;
+      if (y <= 0) return;
+
+      let raf = 0;
+      let cancelled = false;
+      const deadline = performance.now() + 1200;
+      const cancel = () => { cancelled = true; };
+      // Any input the player makes takes over immediately.
+      window.addEventListener('wheel', cancel, { passive: true, once: true });
+      window.addEventListener('touchstart', cancel, { passive: true, once: true });
+      window.addEventListener('keydown', cancel, { once: true });
+
+      const hold = () => {
+        if (cancelled || performance.now() > deadline) return;
+        if (Math.abs(window.scrollY - y) > 1) {
+          window.scrollTo(0, y);
+        }
+        raf = window.requestAnimationFrame(hold);
+      };
+      raf = window.requestAnimationFrame(hold);
+
+      return () => {
+        cancelled = true;
+        if (raf) window.cancelAnimationFrame(raf);
+        window.removeEventListener('wheel', cancel);
+        window.removeEventListener('touchstart', cancel);
+        window.removeEventListener('keydown', cancel);
+      };
     }
     // New navigations (clicking into a game) start at the top of the page.
     // On POP (browser Back/Forward) we leave scroll alone so the player returns

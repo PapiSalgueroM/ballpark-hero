@@ -1,12 +1,12 @@
 /**
- * NFL Higher/Lower pool — career TOUCHDOWNS SCORED (rushing + receiving,
+ * NFL Higher/Lower pool, career TOUCHDOWNS SCORED (rushing + receiving,
  * regular season), baked from nflfastr_player_stats on 2026-07-22.
  *
  * DESIGN CONSTRAINTS (matter if you regenerate):
- *  - QBs are EXCLUDED: their touchdowns are thrown, a different stat — mixing
+ *  - QBs are EXCLUDED: their touchdowns are thrown, a different stat, mixing
  *    "TD passes" with "TDs scored" would make the comparison meaningless.
  *  - nflfastr coverage starts 1999, so the pool only admits players whose
- *    FIRST season is >= 2000 — careers fully inside the window. That's why
+ *    FIRST season is >= 2000, careers fully inside the window. That's why
  *    there's no Jerry Rice / Emmitt Smith here: their pre-1999 seasons would
  *    make the "career" number silently wrong.
  *  - Aggregated by the stable player_id (no name-collision risk), REG season

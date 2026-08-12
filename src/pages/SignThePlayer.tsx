@@ -114,7 +114,7 @@ const SignThePlayer = () => {
     let soldTo = winnerId;
     let soldFor = finalPrice;
     if (!soldTo) {
-      // Nobody bid — the hammer still falls. Forced sale to the richest
+      // Nobody bid, the hammer still falls. Forced sale to the richest
       // bidder who needs the position, at the opening price. An auction lot
       // must NEVER go unsold or a squad ends up with a permanent hole.
       const takers = bidders

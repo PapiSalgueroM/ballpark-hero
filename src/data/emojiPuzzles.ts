@@ -1,5 +1,5 @@
 /**
- * Emoji Guess — authored clue bank.
+ * Emoji Guess, authored clue bank.
  *
  * Kept in-repo (like shirtNumberPuzzles / the Missing XI LINEUPS array) rather
  * than in a DB table: this is authored editorial content with zero scrape risk,
@@ -53,7 +53,7 @@ export const EMOJI_PUZZLES: EmojiPuzzle[] = [
   { id: 'p-drogba', emoji: '🐘🇨🇮🔵', answer: 'Didier Drogba', aliases: ['Drogba'], category: 'player', difficulty: 'medium', hint: 'Ivorian elephant, Munich 2012 hero.' },
   { id: 'p-zlatan', emoji: '🦁🇸🇪🥋', answer: 'Zlatan Ibrahimović', aliases: ['Zlatan', 'Ibrahimovic', 'Zlatan Ibrahimovic', 'Ibra'], category: 'player', difficulty: 'medium', hint: 'Taekwondo black belt. Refers to himself in the third person.' },
   { id: 'p-vandijk', emoji: '🇳🇱🗿🛡️', answer: 'Virgil van Dijk', aliases: ['Van Dijk', 'VVD'], category: 'player', difficulty: 'medium', hint: 'The colossus Liverpool paid a defender-record fee for.' },
-  { id: 'p-ramos', emoji: '🇪🇸🟥⏱️9️⃣3️⃣', answer: 'Sergio Ramos', aliases: ['Ramos'], category: 'player', difficulty: 'medium', hint: 'Red cards for days — and THAT header in Lisbon, minute 93.' },
+  { id: 'p-ramos', emoji: '🇪🇸🟥⏱️9️⃣3️⃣', answer: 'Sergio Ramos', aliases: ['Ramos'], category: 'player', difficulty: 'medium', hint: 'Red cards for days, and THAT header in Lisbon, minute 93.' },
   { id: 'p-aguero', emoji: '🔵🇦🇷9️⃣3️⃣:2️⃣0️⃣', answer: 'Sergio Agüero', aliases: ['Aguero', 'Kun Aguero', 'Sergio Aguero'], category: 'player', difficulty: 'medium', hint: 'QPR, 2012. AGUEROOOOO.' },
   { id: 'p-iniesta', emoji: '🇪🇸🪄🏆2️⃣0️⃣1️⃣0️⃣', answer: 'Andrés Iniesta', aliases: ['Iniesta', 'Andres Iniesta'], category: 'player', difficulty: 'medium', hint: 'Scored the only goal of a World Cup final.' },
   { id: 'p-vardy', emoji: '🦊🎉5️⃣0️⃣0️⃣0️⃣', answer: 'Jamie Vardy', aliases: ['Vardy'], category: 'player', difficulty: 'medium', hint: 'From non-league to a 5000-1 title. Party in his house.' },
@@ -61,9 +61,9 @@ export const EMOJI_PUZZLES: EmojiPuzzle[] = [
   { id: 'p-beckham', emoji: '🌀🎯🏴󠁧󠁢󠁥󠁮󠁧󠁿', answer: 'David Beckham', aliases: ['Beckham'], category: 'player', difficulty: 'medium', hint: 'Bend it like…' },
 
   // ---------------- Players, hard ----------------
-  { id: 'p-r9', emoji: '🇧🇷9️⃣✂️', answer: 'Ronaldo Nazário', aliases: ['Ronaldo Nazario', 'R9', 'Brazilian Ronaldo', 'Ronaldo'], category: 'player', difficulty: 'hard', hint: 'O Fenômeno — and the 2002 haircut.' },
+  { id: 'p-r9', emoji: '🇧🇷9️⃣✂️', answer: 'Ronaldo Nazário', aliases: ['Ronaldo Nazario', 'R9', 'Brazilian Ronaldo', 'Ronaldo'], category: 'player', difficulty: 'hard', hint: 'O Fenômeno, and the 2002 haircut.' },
   { id: 'p-ronaldinho', emoji: '😁🇧🇷🪄', answer: 'Ronaldinho', aliases: ['Ronaldinho Gaucho'], category: 'player', difficulty: 'hard', hint: 'Joga bonito, applauded at the Bernabéu.' },
-  { id: 'p-pirlo', emoji: '🧔🍷🇮🇹', answer: 'Andrea Pirlo', aliases: ['Pirlo'], category: 'player', difficulty: 'hard', hint: 'L’architetto. Plays like he owns a vineyard — he does.' },
+  { id: 'p-pirlo', emoji: '🧔🍷🇮🇹', answer: 'Andrea Pirlo', aliases: ['Pirlo'], category: 'player', difficulty: 'hard', hint: 'L’architetto. Plays like he owns a vineyard, he does.' },
   { id: 'p-cruyff', emoji: '🇳🇱🔄1️⃣4️⃣', answer: 'Johan Cruyff', aliases: ['Cruyff'], category: 'player', difficulty: 'hard', hint: 'The turn is named after him. So is Total Football’s number 14.' },
   { id: 'p-buffon', emoji: '🧤🇮🇹🏆2️⃣0️⃣0️⃣6️⃣', answer: 'Gianluigi Buffon', aliases: ['Buffon', 'Gigi Buffon'], category: 'player', difficulty: 'hard', hint: 'Juventus legend between the posts, world champion in Berlin.' },
   { id: 'p-gerrard', emoji: '🔴©️⚽💥🇹🇷', answer: 'Steven Gerrard', aliases: ['Gerrard'], category: 'player', difficulty: 'hard', hint: 'Istanbul 2005 started with his header.' },
@@ -100,7 +100,7 @@ export const EMOJI_PUZZLES: EmojiPuzzle[] = [
   { id: 'c-river', emoji: '⚪🔴〰️🇦🇷', answer: 'River Plate', aliases: ['River'], category: 'club', difficulty: 'hard', hint: 'The red sash of El Monumental.' },
 
   // ---------------- Managers ----------------
-  { id: 'm-mourinho', emoji: '😎🇵🇹🏆🤫', answer: 'José Mourinho', aliases: ['Mourinho', 'Jose Mourinho', 'The Special One'], category: 'manager', difficulty: 'easy', hint: 'Please don’t call him arrogant — he’s European champion.' },
+  { id: 'm-mourinho', emoji: '😎🇵🇹🏆🤫', answer: 'José Mourinho', aliases: ['Mourinho', 'Jose Mourinho', 'The Special One'], category: 'manager', difficulty: 'easy', hint: 'Please don’t call him arrogant, he’s European champion.' },
   { id: 'm-pep', emoji: '👨‍🦲📋🔵🏆', answer: 'Pep Guardiola', aliases: ['Guardiola', 'Pep'], category: 'manager', difficulty: 'easy', hint: 'Bald, brilliant, and obsessed with the six-yard pass.' },
   { id: 'm-klopp', emoji: '🧢😁🤘🇩🇪', answer: 'Jürgen Klopp', aliases: ['Klopp', 'Jurgen Klopp'], category: 'manager', difficulty: 'easy', hint: 'Heavy-metal football and very white teeth.' },
   { id: 'm-ferguson', emoji: '🏴󠁧󠁢󠁳󠁣󠁴󠁿⏱️🏆🏆🏆', answer: 'Alex Ferguson', aliases: ['Sir Alex Ferguson', 'Sir Alex', 'Ferguson', 'Fergie'], category: 'manager', difficulty: 'medium', hint: 'Fergie time, and the hairdryer treatment.' },
@@ -114,5 +114,5 @@ export const EMOJI_PUZZLES: EmojiPuzzle[] = [
   { id: 'mo-whyalwaysme', emoji: '❓⏰🤷🎆', answer: 'Mario Balotelli', aliases: ['Balotelli', 'Why Always Me'], category: 'moment', difficulty: 'medium', hint: 'Revealed the shirt after scoring in the Manchester derby. Also: fireworks.' },
 ];
 
-/** Sanity guard used by the hook — bank must stay big enough for a daily 5. */
+/** Sanity guard used by the hook, bank must stay big enough for a daily 5. */
 export const MIN_BANK_SIZE = 20;

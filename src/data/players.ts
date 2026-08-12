@@ -1,7 +1,7 @@
 import { Player } from '@/types/game';
 
 export const players: Player[] = [
-  // =================== EASY MODE — ~150 Most Recognizable Active Stars Worldwide ===================
+  // =================== EASY MODE, ~150 Most Recognizable Active Stars Worldwide ===================
   // These are the most globally famous, recognizable active footballers as of Feb 2026
 
   // === PREMIER LEAGUE ===
@@ -191,10 +191,10 @@ export const players: Player[] = [
   { name: "Erling Haaland", club: "Manchester City", nationality: "Norway", league: "Premier League", goals: 25, assists: 4, position: "ST", kitNumber: 9, age: 25, marketValue: 180, difficulty: "easy" },
   { name: "Omar Marmoush", club: "Manchester City", nationality: "Egypt", league: "Premier League", goals: 12, assists: 7, position: "ST", kitNumber: 9, age: 26, marketValue: 60, difficulty: "easy" },
 
-  // =================== HARD MODE — Bench, rotation, and lesser-known players (~500) ===================
+  // =================== HARD MODE, Bench, rotation, and lesser-known players (~500) ===================
   // Hard mode includes all Easy players PLUS these. Top 5 league squads + big clubs worldwide.
 
-  // === PREMIER LEAGUE — Bench & Rotation ===
+  // === PREMIER LEAGUE, Bench & Rotation ===
   // Arsenal
   { name: "Gabriel Jesus", club: "Arsenal", nationality: "Brazil", league: "Premier League", goals: 4, assists: 3, position: "ST", kitNumber: 9, age: 28, marketValue: 35, difficulty: "hard" },
   { name: "Gabriel Magalhães", club: "Arsenal", nationality: "Brazil", league: "Premier League", goals: 3, assists: 0, position: "CB", kitNumber: 6, age: 28, marketValue: 75, difficulty: "hard" },
@@ -314,7 +314,7 @@ export const players: Player[] = [
   { name: "Jean-Philippe Mateta", club: "Crystal Palace", nationality: "France", league: "Premier League", goals: 8, assists: 2, position: "ST", kitNumber: 14, age: 28, marketValue: 25, difficulty: "hard" },
   { name: "James Ward-Prowse", club: "West Ham", nationality: "England", league: "Premier League", goals: 3, assists: 4, position: "CM", kitNumber: 7, age: 31, marketValue: 12, difficulty: "hard" },
 
-  // === LA LIGA — Bench & Rotation ===
+  // === LA LIGA, Bench & Rotation ===
   // Real Madrid
   { name: "Eduardo Camavinga", club: "Real Madrid", nationality: "France", league: "La Liga", goals: 1, assists: 3, position: "CM", kitNumber: 6, age: 23, marketValue: 70, difficulty: "hard" },
   { name: "Dani Carvajal", club: "Real Madrid", nationality: "Spain", league: "La Liga", goals: 1, assists: 2, position: "RB", kitNumber: 2, age: 34, marketValue: 12, difficulty: "hard" },
@@ -354,7 +354,7 @@ export const players: Player[] = [
   { name: "Gerard Moreno", club: "Villarreal", nationality: "Spain", league: "La Liga", goals: 5, assists: 3, position: "ST", kitNumber: 7, age: 34, marketValue: 5, difficulty: "hard" },
   { name: "Yeremy Pino", club: "Villarreal", nationality: "Spain", league: "La Liga", goals: 4, assists: 3, position: "RW", kitNumber: 21, age: 23, marketValue: 30, difficulty: "hard" },
 
-  // === SERIE A — Bench & Rotation ===
+  // === SERIE A, Bench & Rotation ===
   // Inter Milan
   { name: "Henrikh Mkhitaryan", club: "Inter Milan", nationality: "Armenia", league: "Serie A", goals: 2, assists: 3, position: "CM", kitNumber: 22, age: 37, marketValue: 3, difficulty: "hard" },
   { name: "Denzel Dumfries", club: "Inter Milan", nationality: "Netherlands", league: "Serie A", goals: 2, assists: 4, position: "RWB", kitNumber: 2, age: 30, marketValue: 25, difficulty: "hard" },
@@ -396,7 +396,7 @@ export const players: Player[] = [
   { name: "Moise Kean", club: "Fiorentina", nationality: "Italy", league: "Serie A", goals: 9, assists: 2, position: "ST", kitNumber: 18, age: 26, marketValue: 30, difficulty: "hard" },
   { name: "Albert Guðmundsson", club: "Fiorentina", nationality: "Iceland", league: "Serie A", goals: 5, assists: 3, position: "CF", kitNumber: 10, age: 28, marketValue: 22, difficulty: "hard" },
 
-  // === BUNDESLIGA — Bench & Rotation ===
+  // === BUNDESLIGA, Bench & Rotation ===
   // Bayern Munich
   // Leroy Sané already in easy
   { name: "Kingsley Coman", club: "Bayern Munich", nationality: "France", league: "Bundesliga", goals: 4, assists: 4, position: "RW", kitNumber: 11, age: 29, marketValue: 28, difficulty: "hard" },
@@ -431,7 +431,7 @@ export const players: Player[] = [
   { name: "Tim Kleindienst", club: "Borussia Mönchengladbach", nationality: "Germany", league: "Bundesliga", goals: 8, assists: 3, position: "ST", kitNumber: 9, age: 30, marketValue: 12, difficulty: "hard" },
   
 
-  // === LIGUE 1 — Bench & Rotation ===
+  // === LIGUE 1, Bench & Rotation ===
   // PSG
   
   { name: "Nuno Mendes", club: "PSG", nationality: "Portugal", league: "Ligue 1", goals: 0, assists: 3, position: "LB", kitNumber: 25, age: 23, marketValue: 40, difficulty: "hard" },
@@ -545,10 +545,10 @@ export const players: Player[] = [
   { name: "Ibrahima Konaté", club: "Liverpool", nationality: "France", league: "Premier League", goals: 2, assists: 1, position: "CB", kitNumber: 5, age: 26, marketValue: 60, difficulty: "hard" },
   { name: "Milos Kerkez", club: "Liverpool", nationality: "Hungary", league: "Premier League", goals: 1, assists: 4, position: "LB", kitNumber: 26, age: 22, marketValue: 35, difficulty: "hard" },
 
-  // =================== INSANE MODE — Lesser-known active players worldwide (~600) ===================
+  // =================== INSANE MODE, Lesser-known active players worldwide (~600) ===================
   // Cleaned: no duplicates from easy/hard. All players active as of Feb 2026.
 
-  // === PREMIER LEAGUE — Deeper squads (not in easy/hard) ===
+  // === PREMIER LEAGUE, Deeper squads (not in easy/hard) ===
   { name: "Sander Berge", club: "Fulham", nationality: "Norway", league: "Premier League", goals: 3, assists: 2, position: "CM", kitNumber: 16, age: 28, marketValue: 18, difficulty: "insane" },
   { name: "Carlton Morris", club: "Luton Town", nationality: "England", league: "EFL Championship", goals: 10, assists: 3, position: "ST", kitNumber: 9, age: 29, marketValue: 5, difficulty: "insane" },
   { name: "Sammie Szmodics", club: "Ipswich Town", nationality: "Ireland", league: "Premier League", goals: 4, assists: 2, position: "ST", kitNumber: 23, age: 29, marketValue: 8, difficulty: "insane" },
@@ -613,7 +613,7 @@ export const players: Player[] = [
   { name: "Jaidon Anthony", club: "Burnley", nationality: "England", league: "EFL Championship", goals: 3, assists: 4, position: "LW", kitNumber: 11, age: 26, marketValue: 5, difficulty: "insane" },
   { name: "Vitinho", club: "Burnley", nationality: "Brazil", league: "EFL Championship", goals: 2, assists: 3, position: "RB", kitNumber: 2, age: 25, marketValue: 5, difficulty: "insane" },
 
-  // === SERIE A — deeper squads ===
+  // === SERIE A, deeper squads ===
   { name: "Mattia Zaccagni", club: "Lazio", nationality: "Italy", league: "Serie A", goals: 6, assists: 4, position: "LW", kitNumber: 20, age: 30, marketValue: 22, difficulty: "insane" },
   { name: "Valentín Castellanos", club: "Lazio", nationality: "Argentina", league: "Serie A", goals: 5, assists: 2, position: "ST", kitNumber: 11, age: 26, marketValue: 15, difficulty: "insane" },
   { name: "Nuno Tavares", club: "Lazio", nationality: "Portugal", league: "Serie A", goals: 1, assists: 8, position: "LB", kitNumber: 30, age: 25, marketValue: 15, difficulty: "insane" },
@@ -665,7 +665,7 @@ export const players: Player[] = [
   { name: "Simone Verdi", club: "Verona", nationality: "Italy", league: "Serie A", goals: 2, assists: 3, position: "RW", kitNumber: 10, age: 33, marketValue: 1, difficulty: "insane" },
   { name: "Mario Balotelli", club: "Genoa", nationality: "Italy", league: "Serie A", goals: 3, assists: 1, position: "ST", kitNumber: 45, age: 36, marketValue: 1, difficulty: "insane" },
 
-  // === LA LIGA — deeper squads ===
+  // === LA LIGA, deeper squads ===
   { name: "Álex Baena", club: "Villarreal", nationality: "Spain", league: "La Liga", goals: 4, assists: 6, position: "CM", kitNumber: 16, age: 23, marketValue: 35, difficulty: "insane" },
   { name: "Ayoze Pérez", club: "Villarreal", nationality: "Spain", league: "La Liga", goals: 5, assists: 3, position: "CF", kitNumber: 10, age: 32, marketValue: 8, difficulty: "insane" },
   { name: "Giovani Lo Celso", club: "Real Betis", nationality: "Argentina", league: "La Liga", goals: 3, assists: 5, position: "CAM", kitNumber: 18, age: 30, marketValue: 12, difficulty: "insane" },
@@ -692,7 +692,7 @@ export const players: Player[] = [
   { name: "Ilkay Gündoğan", club: "Manchester City", nationality: "Germany", league: "Premier League", goals: 2, assists: 3, position: "CM", kitNumber: 19, age: 35, marketValue: 5, difficulty: "insane" },
   { name: "Wojciech Szczęsny", club: "Barcelona", nationality: "Poland", league: "La Liga", goals: 0, assists: 0, position: "GK", kitNumber: 25, age: 36, marketValue: 2, difficulty: "insane" },
 
-  // === BUNDESLIGA — deeper squads ===
+  // === BUNDESLIGA, deeper squads ===
   { name: "Chris Führich", club: "VfB Stuttgart", nationality: "Germany", league: "Bundesliga", goals: 4, assists: 5, position: "LW", kitNumber: 22, age: 28, marketValue: 18, difficulty: "insane" },
   { name: "Enzo Millot", club: "VfB Stuttgart", nationality: "France", league: "Bundesliga", goals: 5, assists: 4, position: "CAM", kitNumber: 30, age: 23, marketValue: 18, difficulty: "insane" },
   { name: "Angelo Stiller", club: "VfB Stuttgart", nationality: "Germany", league: "Bundesliga", goals: 2, assists: 5, position: "CDM", kitNumber: 6, age: 24, marketValue: 22, difficulty: "insane" },
@@ -724,7 +724,7 @@ export const players: Player[] = [
   { name: "Eric Maxim Choupo-Moting", club: "Bayern Munich", nationality: "Cameroon", league: "Bundesliga", goals: 3, assists: 1, position: "ST", kitNumber: 13, age: 37, marketValue: 1, difficulty: "insane" },
   { name: "Junya Ito", club: "Bayern Munich", nationality: "Japan", league: "Bundesliga", goals: 2, assists: 3, position: "RW", kitNumber: 33, age: 32, marketValue: 5, difficulty: "insane" },
 
-  // === LIGUE 1 — deeper squads ===
+  // === LIGUE 1, deeper squads ===
   { name: "Jonathan Clauss", club: "Nice", nationality: "France", league: "Ligue 1", goals: 1, assists: 5, position: "RWB", kitNumber: 7, age: 32, marketValue: 5, difficulty: "insane" },
   { name: "Gaëtan Laborde", club: "Nice", nationality: "France", league: "Ligue 1", goals: 4, assists: 2, position: "ST", kitNumber: 10, age: 31, marketValue: 5, difficulty: "insane" },
   { name: "Moise Bombito", club: "Nice", nationality: "Canada", league: "Ligue 1", goals: 1, assists: 0, position: "CB", kitNumber: 3, age: 25, marketValue: 12, difficulty: "insane" },
@@ -752,7 +752,7 @@ export const players: Player[] = [
   { name: "Mostafa Mohamed", club: "Nantes", nationality: "Egypt", league: "Ligue 1", goals: 5, assists: 2, position: "ST", kitNumber: 9, age: 28, marketValue: 5, difficulty: "insane" },
   { name: "Romain Faivre", club: "Lille", nationality: "France", league: "Ligue 1", goals: 3, assists: 3, position: "CAM", kitNumber: 8, age: 27, marketValue: 8, difficulty: "insane" },
 
-  // === LIGA PORTUGAL — deeper squads ===
+  // === LIGA PORTUGAL, deeper squads ===
   { name: "Orkun Kökçü", club: "Benfica", nationality: "Turkey", league: "Liga Portugal", goals: 4, assists: 5, position: "CM", kitNumber: 23, age: 24, marketValue: 30, difficulty: "insane" },
   { name: "Kerem Aktürkoğlu", club: "Benfica", nationality: "Turkey", league: "Liga Portugal", goals: 6, assists: 3, position: "LW", kitNumber: 7, age: 26, marketValue: 15, difficulty: "insane" },
   { name: "Fredrik Aursnes", club: "Benfica", nationality: "Norway", league: "Liga Portugal", goals: 2, assists: 3, position: "CM", kitNumber: 6, age: 30, marketValue: 12, difficulty: "insane" },
@@ -764,7 +764,7 @@ export const players: Player[] = [
   { name: "Gonçalo Inácio", club: "Sporting CP", nationality: "Portugal", league: "Liga Portugal", goals: 2, assists: 1, position: "CB", kitNumber: 25, age: 24, marketValue: 35, difficulty: "insane" },
   { name: "Marcus Edwards", club: "Sporting CP", nationality: "England", league: "Liga Portugal", goals: 4, assists: 5, position: "RW", kitNumber: 10, age: 27, marketValue: 15, difficulty: "insane" },
 
-  // === EREDIVISIE — deeper squads ===
+  // === EREDIVISIE, deeper squads ===
   { name: "Dávid Hancko", club: "Feyenoord", nationality: "Slovakia", league: "Eredivisie", goals: 3, assists: 2, position: "CB", kitNumber: 5, age: 27, marketValue: 25, difficulty: "insane" },
   { name: "Igor Paixão", club: "Feyenoord", nationality: "Brazil", league: "Eredivisie", goals: 7, assists: 5, position: "LW", kitNumber: 7, age: 25, marketValue: 22, difficulty: "insane" },
   { name: "Anis Hadj Moussa", club: "Feyenoord", nationality: "Algeria", league: "Eredivisie", goals: 5, assists: 3, position: "RW", kitNumber: 11, age: 22, marketValue: 12, difficulty: "insane" },
@@ -780,7 +780,7 @@ export const players: Player[] = [
   { name: "Kasper Dolberg", club: "Anderlecht", nationality: "Denmark", league: "Belgian Pro League", goals: 9, assists: 3, position: "ST", kitNumber: 7, age: 28, marketValue: 5, difficulty: "insane" },
   { name: "Anders Dreyer", club: "Anderlecht", nationality: "Denmark", league: "Belgian Pro League", goals: 8, assists: 5, position: "RW", kitNumber: 14, age: 27, marketValue: 5, difficulty: "insane" },
 
-  // === TURKISH SÜPER LIG — deeper squads ===
+  // === TURKISH SÜPER LIG, deeper squads ===
   { name: "Michy Batshuayi", club: "Galatasaray", nationality: "Belgium", league: "Turkish Süper Lig", goals: 6, assists: 2, position: "ST", kitNumber: 23, age: 32, marketValue: 3, difficulty: "insane" },
   { name: "Torreira", club: "Galatasaray", nationality: "Uruguay", league: "Turkish Süper Lig", goals: 2, assists: 3, position: "CDM", kitNumber: 34, age: 30, marketValue: 8, difficulty: "insane" },
   { name: "Davinson Sánchez", club: "Galatasaray", nationality: "Colombia", league: "Turkish Süper Lig", goals: 1, assists: 0, position: "CB", kitNumber: 6, age: 29, marketValue: 8, difficulty: "insane" },
@@ -820,7 +820,7 @@ export const players: Player[] = [
   { name: "Germán Berterame", club: "Monterrey", nationality: "Argentina", league: "Liga MX", goals: 10, assists: 2, position: "ST", kitNumber: 9, age: 27, marketValue: 8, difficulty: "insane" },
   { name: "Héctor Moreno", club: "Monterrey", nationality: "Mexico", league: "Liga MX", goals: 1, assists: 0, position: "CB", kitNumber: 15, age: 38, marketValue: 1, difficulty: "insane" },
 
-  // === MLS — deeper ===
+  // === MLS, deeper ===
   { name: "Luciano Acosta", club: "FC Cincinnati", nationality: "Argentina", league: "MLS", goals: 6, assists: 12, position: "CAM", kitNumber: 10, age: 31, marketValue: 5, difficulty: "insane" },
   { name: "Evander", club: "Portland Timbers", nationality: "Brazil", league: "MLS", goals: 8, assists: 6, position: "CAM", kitNumber: 10, age: 27, marketValue: 8, difficulty: "insane" },
   { name: "Diego Rossi", club: "Columbus Crew", nationality: "Uruguay", league: "MLS", goals: 8, assists: 4, position: "LW", kitNumber: 7, age: 27, marketValue: 5, difficulty: "insane" },
@@ -831,7 +831,7 @@ export const players: Player[] = [
   { name: "DeAndre Yedlin", club: "Inter Miami", nationality: "USA", league: "MLS", goals: 0, assists: 3, position: "RB", kitNumber: 2, age: 33, marketValue: 1, difficulty: "insane" },
   { name: "Christian Ramirez", club: "Houston Dynamo", nationality: "USA", league: "MLS", goals: 7, assists: 2, position: "ST", kitNumber: 13, age: 33, marketValue: 1, difficulty: "insane" },
 
-  // === BRAZILIAN SÉRIE A — deeper ===
+  // === BRAZILIAN SÉRIE A, deeper ===
   { name: "Yuri Alberto", club: "Corinthians", nationality: "Brazil", league: "Brazilian Série A", goals: 12, assists: 3, position: "ST", kitNumber: 9, age: 24, marketValue: 8, difficulty: "insane" },
   { name: "Rodrigo Garro", club: "Corinthians", nationality: "Argentina", league: "Brazilian Série A", goals: 5, assists: 6, position: "CAM", kitNumber: 10, age: 27, marketValue: 5, difficulty: "insane" },
   { name: "Hulk", club: "Atlético Mineiro", nationality: "Brazil", league: "Brazilian Série A", goals: 8, assists: 3, position: "CF", kitNumber: 7, age: 39, marketValue: 2, difficulty: "insane" },
@@ -855,7 +855,7 @@ export const players: Player[] = [
   { name: "Merentiel", club: "Boca Juniors", nationality: "Uruguay", league: "Argentine Primera División", goals: 7, assists: 2, position: "ST", kitNumber: 9, age: 28, marketValue: 3, difficulty: "insane" },
   { name: "Luis Advíncula", club: "Boca Juniors", nationality: "Peru", league: "Argentine Primera División", goals: 1, assists: 3, position: "RB", kitNumber: 17, age: 35, marketValue: 1, difficulty: "insane" },
 
-  // === SAUDI PRO LEAGUE — deeper ===
+  // === SAUDI PRO LEAGUE, deeper ===
   { name: "Malcom", club: "Al-Hilal", nationality: "Brazil", league: "Saudi Pro League", goals: 8, assists: 5, position: "RW", kitNumber: 10, age: 28, marketValue: 12, difficulty: "insane" },
   { name: "Marcos Leonardo", club: "Al-Hilal", nationality: "Brazil", league: "Saudi Pro League", goals: 6, assists: 2, position: "ST", kitNumber: 11, age: 25, marketValue: 15, difficulty: "insane" },
   { name: "Ali Al-Bulaihi", club: "Al-Hilal", nationality: "Saudi Arabia", league: "Saudi Pro League", goals: 1, assists: 0, position: "CB", kitNumber: 4, age: 35, marketValue: 2, difficulty: "insane" },

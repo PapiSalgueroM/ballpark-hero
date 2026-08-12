@@ -23,7 +23,7 @@ import {
 } from '@/lib/missingNine';
 
 /**
- * Missing Nine (task #39) — the MLB port of /missing-five. A verified real
+ * Missing Nine (task #39), the MLB port of /missing-five. A verified real
  * World Series starting nine shown IN BATTING ORDER with one name blanked;
  * 3 guesses, hint ladder, 100/70/40. Daily uses the sitewide ET-seeded
  * convention via lib/missingNine.ts; persistence via useDailyPuzzle's action
@@ -212,7 +212,7 @@ const MissingNine = () => {
                         {isBlank ? '?' : slot.name}
                       </span>
                       <span className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground w-8 text-right shrink-0">
-                        {hard && !over ? '—' : slot.position}
+                        {hard && !over ? '-' : slot.position}
                       </span>
                     </div>
                   );
@@ -298,13 +298,13 @@ const MissingNine = () => {
           description="A verified real World Series starting nine is shown in batting order with one name blanked out. Remember who actually started, including the surprise starters history forgot."
           howToPlay={[
             'A famous real World Series batting order is shown with one player blanked',
-            'The batting-order spot and position are shown — the name is the mystery',
+            'The batting-order spot and position are shown, the name is the mystery',
             'You get 3 guesses; each miss unlocks a hint',
             'Guess on the first try for 100 points, then 70, then 40',
             'Every lineup is verified against the official box score',
           ]}
           examples={[
-            'Who started in left field for the 1988 Dodgers in Game 1? (Not Gibson — he never started...)',
+            'Who started in left field for the 1988 Dodgers in Game 1? (Not Gibson, he never started...)',
             'Who caught Game 7 for the 2016 Cubs? (Not the guy who homered...)',
           ]}
         />

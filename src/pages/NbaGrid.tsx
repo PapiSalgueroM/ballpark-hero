@@ -28,7 +28,7 @@ import {
 } from '@/lib/nbaGrid';
 
 /**
- * NBA Franchise Grid — direct port of HockeyGrid.tsx (task #24) on top of
+ * NBA Franchise Grid, direct port of HockeyGrid.tsx (task #24) on top of
  * src/lib/nbaGrid.ts. Keep the grid pages in lockstep if the mechanic
  * changes; only data layer, labels and slugs differ.
  */

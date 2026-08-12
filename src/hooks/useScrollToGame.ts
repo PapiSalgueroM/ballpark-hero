@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 
 /**
  * Scrolls the game container into view on mobile when the game starts.
- * Pass `gameState` (or any truthy trigger) — scrolls once when it becomes truthy.
+ * Pass `gameState` (or any truthy trigger), scrolls once when it becomes truthy.
  */
 export function useScrollToGame(trigger: unknown) {
   const ref = useRef<HTMLDivElement>(null);

@@ -25,16 +25,16 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
  * Crowd Says (mode 'crowd'): higher total score is better, reward for naming
  * the most obvious, famous answer instead.
  *
- * SCORING (corrected 2026-07-15 — see scoreRound for the bug this fixes)
+ * SCORING (corrected 2026-07-15, see scoreRound for the bug this fixes)
  * Every category pool is ranked by prominence descending (rank 1 = most
  * famous player in the pool, rank poolSize = most obscure). Both modes score
- * the SAME axis and differ only in which end wins — exactly like the real
+ * the SAME axis and differ only in which end wins, exactly like the real
  * formats, where your Pointless score and your Family Feud score are both
  * "how many people said this", just with opposite goals:
  *   fameScore = round(100 - ((rank - 1) / (poolSize - 1)) * 100)
  *               // 100 = rank 1 (most famous), 0 = last rank (most obscure)
  * Rarity Round: LOWER total is better, matching Pointless convention ("you
- * found a 12 point answer" being a great, rare pick) — an obscure pick scores
+ * found a 12 point answer" being a great, rare pick), an obscure pick scores
  * near 0. Crowd Says: HIGHER total is better, rewarding the most obvious,
  * famous answer. It is on a clean 0-100 scale per category regardless of pool
  * size, so a 5-round total is always out of 500.
@@ -122,7 +122,7 @@ export interface RoundResult {
 export interface RoundReveal {
   /** The mode's ideal answer: most obscure for 'rarity', most famous for 'crowd'. */
   best: PoolEntry;
-  /** Its score under this mode — the number the player was chasing. */
+  /** Its score under this mode, the number the player was chasing. */
   bestPoints: number;
   /** A few near-ideal alternatives, closest-to-ideal first. */
   alternatives: PoolEntry[];
@@ -552,7 +552,7 @@ export { ROUNDS_PER_RUN };
 /**
  * Scores one round given the pool and the rank of the picked answer.
  *
- * Both modes measure ONE axis — how famous the pick is — and differ only in
+ * Both modes measure ONE axis, how famous the pick is, and differ only in
  * which end of it wins. That mirrors the real formats: in Pointless your score
  * IS how many people said your answer (low = obscure = good); in Family Feud
  * it's the same number, but high wins.

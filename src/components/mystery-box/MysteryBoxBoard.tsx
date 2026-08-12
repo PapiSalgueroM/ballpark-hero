@@ -113,7 +113,7 @@ export function MysteryBoxBoard() {
                 <p className="font-display text-2xl font-black text-foreground">{current.name}</p>
               </div>
               <p className="mt-1 text-sm text-muted-foreground">
-                {current.club} · {current.position} · {current.age > 0 ? `${current.age}y` : '—'}
+                {current.club} · {current.position} · {current.age > 0 ? `${current.age}y` : '-'}
               </p>
               <p className="mt-2">
                 <span className="font-display text-3xl font-black text-primary">{playerRating(current)}</span>

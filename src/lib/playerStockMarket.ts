@@ -29,7 +29,7 @@ export interface StockPlayer {
   series: { year: number; value: number }[];
   /** Market value at the market year (the "price you pay"). */
   current: number;
-  /** Real market value one year later (the outcome — hide until reveal). */
+  /** Real market value one year later (the outcome, hide until reveal). */
   next: number;
 }
 

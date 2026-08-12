@@ -171,7 +171,7 @@ export function useNbaChain() {
         // an unverified link (that inflates streaks) and don't end the game.
         // Surface a retry message and leave the chain untouched.
         setIsValidating(false);
-        setValidationError("Couldn't verify that link right now — please try again.");
+        setValidationError("Couldn't verify that link right now, please try again.");
         return;
       }
 

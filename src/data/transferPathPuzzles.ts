@@ -8,7 +8,7 @@ export interface TransferPathPuzzle {
 }
 
 const transferPathPuzzles: TransferPathPuzzle[] = [
-  // 1-step (direct — share a club)
+  // 1-step (direct, share a club)
   {
     id: 'tp-1', playerA: 'Zlatan Ibrahimović', playerB: 'Wayne Rooney', minSteps: 1,
     oneOptimalPath: ['Zlatan Ibrahimović', 'Wayne Rooney'],

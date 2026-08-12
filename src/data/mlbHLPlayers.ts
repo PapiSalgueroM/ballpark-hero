@@ -1,9 +1,9 @@
 /**
- * MLB Higher/Lower pool — career HOME RUNS, baked from lahman_batting joined
+ * MLB Higher/Lower pool, career HOME RUNS, baked from lahman_batting joined
  * to lahman_people (playerid -> name) on 2026-07-22.
  *
  * The Lahman copy in this DB ends at 2021, so the pool admits only careers
- * finished by 2019 — otherwise active players' totals would be presented as
+ * finished by 2019, otherwise active players' totals would be presented as
  * career numbers while silently truncated (Pujols would read 679, not 703).
  * That makes this an all-time-legends pool by construction, which suits the
  * stat: every era from Ruth to Ortiz is here and HR counts compare across all

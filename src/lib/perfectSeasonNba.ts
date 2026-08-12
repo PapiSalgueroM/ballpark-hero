@@ -132,7 +132,7 @@ export interface NbaDecadeDef {
  * Decade Mode buckets (2026-07-10). Bounds compare against the season START
  * year, so '1959-60' belongs to the 1950s. Minutes (and therefore the wheel
  * index) begin in 1951-52, which makes the 1950s bucket real but thinner
- * than the rest — the page falls back to the full index if a filtered pool
+ * than the rest, the page falls back to the full index if a filtered pool
  * ever comes up too small.
  */
 export const NBA_DECADES: NbaDecadeDef[] = [

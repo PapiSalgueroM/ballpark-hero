@@ -1,5 +1,5 @@
 /* ────────────────────────────────────────────────────────────────────────────
-   careerEras.ts — era engine for Soccer Career ("My Player")
+   careerEras.ts, era engine for Soccer Career ("My Player")
    Hand-written star pools per half-decade (1990-2029) so opponents, Ballon
    d'Or contenders, rivals and transfer clubs stay era-correct AND advance
    with time. Also: named injuries, position starting profiles, and the
@@ -326,7 +326,7 @@ const ERA_DEFS: EraDef[] = [
   },
 ];
 
-/* ─── Era accessors — clamp outside 1990-2029 (2030+ reuses the 2025-29 pool) ─── */
+/* ─── Era accessors, clamp outside 1990-2029 (2030+ reuses the 2025-29 pool) ─── */
 function eraDefFor(year: number): EraDef {
   if (year <= ERA_DEFS[0].to) return ERA_DEFS[0];
   for (const def of ERA_DEFS) { if (year >= def.from && year <= def.to) return def; }

@@ -284,7 +284,7 @@ export function resolveF1Driver(input: string): F1DriverPuzzle | undefined {
   );
 }
 
-/** All driver names for autocomplete — ensures current puzzle answer is included */
+/** All driver names for autocomplete, ensures current puzzle answer is included */
 export function getAllF1DriverNames(currentPuzzle?: F1DriverPuzzle): { name: string; id: string }[] {
   const names = F1_DRIVERS.map(d => ({ name: d.driverName, id: d.id }));
   if (currentPuzzle && !names.some(n => n.id === currentPuzzle.id)) {

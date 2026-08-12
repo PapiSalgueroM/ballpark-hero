@@ -5,7 +5,7 @@ import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
 /**
- * Tennis Higher/Lower — fifth Higher/Lower sport port (task #23), same rules
+ * Tennis Higher/Lower, fifth Higher/Lower sport port (task #23), same rules
  * as the Hockey/NBA/NFL/F1/MLB hooks: 10 rounds, 10 pts per correct, +5 per
  * consecutive-correct streak step, daily (ET-seeded) + unlimited modes.
  * Ties (very common with slam counts: 24/24, 22/22, 18/18…) score as correct
@@ -34,7 +34,7 @@ interface RoundResult {
 type HLAction = { t: 'result'; correct: boolean };
 
 const ROUNDS = 10;
-// Sentinel puzzle array — useDailyPuzzle needs at least one element.
+// Sentinel puzzle array, useDailyPuzzle needs at least one element.
 const SENTINEL_PUZZLES = [{ id: 'tennishl-daily' }];
 
 function buildPairs(seed: number, hard = false): [TennisHLPlayer, TennisHLPlayer][] {
@@ -47,7 +47,7 @@ function buildPairs(seed: number, hard = false): [TennisHLPlayer, TennisHLPlayer
     return result;
   }
   // HARD (task #12): greedy close-gap pairing on slams from a seeded
-  // shuffle window — selection-only, scoring untouched. Unlimited-only:
+  // shuffle window, selection-only, scoring untouched. Unlimited-only:
   // daily pairs stay canonical so stored daily actions replay correctly.
   const pool = [...shuffled];
   const result: [TennisHLPlayer, TennisHLPlayer][] = [];
@@ -139,7 +139,7 @@ export function useTennisHL() {
     (choice: 'left' | 'right') => {
       if (!currentPair || showingResult || gameStatus !== 'playing') return;
       const [p1, p2] = currentPair;
-      // Ties count as correct either way — slam counts tie constantly
+      // Ties count as correct either way, slam counts tie constantly
       // (Djokovic/Court 24, Nadal/Graf 22, Evert/Navratilova 18…).
       const tie = p1.slams === p2.slams;
       const leftHigher = p1.slams >= p2.slams;
@@ -176,7 +176,7 @@ export function useTennisHL() {
   const toggleHard = useCallback(() => {
     setHard((prev) => {
       const next = !prev;
-      // Hard pairs are an unlimited-mode feature — switching keeps the
+      // Hard pairs are an unlimited-mode feature, switching keeps the
       // daily's canonical pair list untouched.
       setMode('unlimited');
       setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000), next));

@@ -107,7 +107,7 @@ function onlyNames(p: Promise<string[]>): Promise<string[]> {
       if (s.length < 3) return false;                  // "F", "SF", "1Q"
       if (/^[0-9]+$/.test(s)) return false;            // "48", "57"
       if (/^[0-9]+(st|nd|rd|th)$/i.test(s)) return false; // "1st"
-      if (/^[0-9]+\s*[–—-]\s*[0-9]+/.test(s)) return false; // "4-0"
+      if (/^[0-9]+\s*[–—-]\s*[0-9]+/.test(s)) return false; // "4-0" scorelines, any dash style
       if (/^[0-9]{4}(–[0-9]{2,4})?$/.test(s)) return false; // "1959", "1970-71"
       if (/^(goalkeeper|forward|midfielder|defender|striker|winger|guard|center|centre)$/i.test(s)) return false;
       return true;
@@ -121,7 +121,7 @@ function onlyNames(p: Promise<string[]>): Promise<string[]> {
  *
  * cleanAnswers dedupes on the normalized string, so without this a repeat
  * winner shows up as TWO separate answers ("Mohamed Salah" and "Mohamed Salah
- * (2)") and the second is unguessable — nobody types the bracket.
+ * (2)") and the second is unguessable, nobody types the bracket.
  */
 function stripWinCount(s: string): string {
   return (s ?? '').replace(/\s*\(\d+\)\s*†?\s*$/, '').trim();
@@ -300,7 +300,7 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     title: 'Masters Champions',
     blurb: 'Every golfer to win the green jacket.',
     sport: 'Golf', emoji: '⛳', minAnswers: 15,
-    // onlyNames: golf_majors stores '—' for years the major wasn't played
+    // onlyNames: golf_majors stores '-' for years the major wasn't played
     // (1943-45 WWII, and The Open 2020 for COVID), 25 rows across the four
     // tournaments. That's correct source data, but as a puzzle answer it means
     // "name the golfer: , ". Filtered out, not treated as corruption.

@@ -10,7 +10,7 @@ export interface NbaConnectionsPuzzle {
 }
 
 /**
- * NBA Connections puzzles (task #26 — Connections port to NBA).
+ * NBA Connections puzzles (task #26, Connections port to NBA).
  *
  * EVERY fact below was verified against Supabase on 2026-07-21:
  *   - points / assists / rebounds / threes / teams: nba_player_stats
@@ -29,7 +29,7 @@ export interface NbaConnectionsPuzzle {
  *     Africa; Siakam (Cameroon, verified) replaces him
  *   - LeBron/Kareem/Shaq are all #1 picks -> excluded from the 28k-points
  *     group in the puzzle that has "Drafted #1 overall" (that's the fun)
- * Cross-PUZZLE reuse (Curry in 002 and 003) is fine — the baseball file
+ * Cross-PUZZLE reuse (Curry in 002 and 003) is fine, the baseball file
  * established that precedent; only within-puzzle uniqueness matters.
  */
 export const nbaConnectionsPuzzles: NbaConnectionsPuzzle[] = [

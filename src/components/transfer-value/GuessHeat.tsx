@@ -12,7 +12,7 @@ import type { ValueGuess } from '@/hooks/useGuessTransferValue';
  * just outside the 5% win threshold render blazing red, fading through orange
  * and gold as the distance grows, then switching to the cold side (sky blue
  * to deep blue) past 40% off. The warm and cold ramps are interpolated
- * separately on purpose — a single ramp would sweep through green mid-scale,
+ * separately on purpose, a single ramp would sweep through green mid-scale,
  * and green means "correct" everywhere else in the app.
  */
 

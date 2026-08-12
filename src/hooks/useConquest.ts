@@ -530,7 +530,7 @@ export function useConquest() {
   }, [territories, rosters, buildFreeAgentList]);
 
   // Resolve the Upgrade power-up for the chosen player (or a random roster
-  // player when called with no argument — the auto-pick fallback).
+  // player when called with no argument, the auto-pick fallback).
   const chooseUpgradePlayer = useCallback((playerName?: string) => {
     if (!powerupTeam) return;
     const roster = rosters[powerupTeam] || [];
@@ -555,7 +555,7 @@ export function useConquest() {
   }, [powerupTeam, rosters]);
 
   // Resolve the Territory Steal power-up for the chosen border state (or a
-  // random candidate when called with no argument — the auto-pick fallback).
+  // random candidate when called with no argument, the auto-pick fallback).
   const stealTerritoryTarget = useCallback((stateId?: string) => {
     if (!powerupTeam) return;
     if (stealCandidates.length === 0) {
@@ -905,7 +905,7 @@ export function useConquest() {
     const raidTag = result.longDistance ? ' · long-distance raid' : '';
 
     // Home/away rule: the defender always fights on home turf. An attacker
-    // that loses AWAY is merely repelled — it loses no territory and is
+    // that loses AWAY is merely repelled, it loses no territory and is
     // never eliminated. Only a defender that loses at home has its territory
     // conquered. Checked before invincibility so a shield is never consumed
     // on an away loss where no territory was at stake.

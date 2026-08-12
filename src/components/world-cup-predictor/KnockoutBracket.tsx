@@ -55,7 +55,7 @@ function loadPicks(): KnockoutPicks {
     const raw = localStorage.getItem(KO_STORAGE_KEY);
     if (!raw) return {};
     const parsed = JSON.parse(raw);
-    // Migration: old format stored {scoreA, scoreB} objects — clear if detected
+    // Migration: old format stored {scoreA, scoreB} objects, clear if detected
     const firstVal = Object.values(parsed)[0];
     if (firstVal && typeof firstVal === "object") {
       localStorage.removeItem(KO_STORAGE_KEY);
@@ -321,7 +321,7 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, autoFillRef }: K
         Click a team to pick them as the winner. They'll auto-advance to the next round.
       </p>
 
-      {/* Bracket — horizontally scrollable with snap on mobile */}
+      {/* Bracket, horizontally scrollable with snap on mobile */}
       <div className="overflow-x-auto pb-4 -mx-4 px-4 snap-x snap-mandatory md:snap-none md:mx-0 md:px-0">
         <div className="flex gap-2 sm:gap-3" style={{ minWidth: "1100px" }}>
           {rounds.map((round, rIdx) => (

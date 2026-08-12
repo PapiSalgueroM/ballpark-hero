@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { POLLS, type PollFixture } from '@/data/pollFixtures';
@@ -14,7 +14,7 @@ import { FlagImg, FlagFromEmoji, TextWithFlags } from '@/components/FlagImg';
  * - Supports 2-4 options per poll (daily_polls option_c/option_d added for
  *   4-way polls like the Golden Boot race).
  * - Real flag IMAGES via FlagImg (option_*_flag holds a country name), not
- *   emoji — Windows renders flag emoji as bare letter codes, which is what
+ *   emoji, Windows renders flag emoji as bare letter codes, which is what
  *   the owner was seeing ("just showing the abbreviation of the flag").
  * - Voting: one row into public.poll_votes (poll_key, choice in a|b|c|d),
  *   localStorage anti-repeat guard per poll_key (courtesy, not security).
@@ -55,7 +55,7 @@ function storeVote(pollKey: string, choice: ChoiceKey): void {
   try {
     localStorage.setItem(VOTE_KEY_PREFIX + pollKey, choice);
   } catch {
-    /* localStorage unavailable — not critical */
+    /* localStorage unavailable, not critical */
   }
 }
 
@@ -159,54 +159,70 @@ function PollCard({ poll }: { poll: PollItem }) {
   const [counts, setCounts] = useState<VoteCounts | null>(null);
   const [voting, setVoting] = useState(false);
   const [errored, setErrored] = useState(false);
+  // True only when the vote was cast in THIS page load (vs restored from
+  // localStorage), so the results effect can defer to handleVote's own fetch.
+  const votedNowRef = useRef(false);
 
   // Seed the local anti-repeat guard on mount / poll change. Never
-  // conditional — hooks always run in the same order.
+  // conditional, hooks always run in the same order.
   useEffect(() => {
     setMyVote(readStoredVote(poll.key));
   }, [poll.key]);
 
-  // Fetch results once the player has voted (now or on a prior visit).
-  useEffect(() => {
-    if (!myVote) return;
-    let cancelled = false;
+  // Owner Aug 2026 ("I clicked A rod but it still showed as zero percent"):
+  // the old flow fired the results SELECT and the vote INSERT on the same
+  // tick, so the fetch could beat the write and show counts without your own
+  // fresh vote in them. Results are now fetched through one shared function
+  // that handleVote re-runs AFTER its insert settles, so your vote is always
+  // in the bars you get shown.
+  const fetchResults = async (): Promise<void> => {
+    try {
+      const { data, error } = await (supabase.from as any)('poll_votes')
+        .select('choice')
+        .eq('poll_key', poll.key);
 
-    const loadResults = async () => {
-      try {
-        const { data, error } = await (supabase.from as any)('poll_votes')
-          .select('choice')
-          .eq('poll_key', poll.key);
-
-        if (error || !data) {
-          if (!cancelled) setErrored(true);
-          return;
-        }
-
-        const next = emptyCounts();
-        for (const row of data as { choice: string }[]) {
-          if (CHOICE_KEYS.includes(row.choice as ChoiceKey)) {
-            next[row.choice as ChoiceKey]++;
-          }
-        }
-        if (!cancelled) setCounts(next);
-      } catch {
-        if (!cancelled) setErrored(true);
+      if (error || !data) {
+        setErrored(true);
+        return;
       }
-    };
 
-    loadResults();
-    return () => {
-      cancelled = true;
-    };
+      const next = emptyCounts();
+      for (const row of data as { choice: string }[]) {
+        if (CHOICE_KEYS.includes(row.choice as ChoiceKey)) {
+          next[row.choice as ChoiceKey]++;
+        }
+      }
+      setErrored(false);
+      setCounts(next);
+    } catch {
+      setErrored(true);
+    }
+  };
+
+  // Load results for players who already voted on a prior visit. Skipped for
+  // a vote cast right now: handleVote seeds the optimistic count and does its
+  // own reconciling fetch after the insert settles, so this racing fetch
+  // would only flash a total that misses the in-flight vote.
+  useEffect(() => {
+    if (!myVote || votedNowRef.current) return;
+    fetchResults();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myVote, poll.key]);
 
   const handleVote = async (choice: ChoiceKey) => {
     if (myVote || voting) return;
+    votedNowRef.current = true;
     setVoting(true);
 
-    // Optimistic: lock in immediately so a slow network can't double-fire.
+    // Optimistic: lock in immediately so a slow network can't double-fire,
+    // and show your own vote in the bars while the write is in flight.
     storeVote(poll.key, choice);
     setMyVote(choice);
+    setCounts(prev => {
+      const next = prev ? { ...prev } : emptyCounts();
+      next[choice]++;
+      return next;
+    });
 
     try {
       const { error } = await (supabase.from as any)('poll_votes')
@@ -218,6 +234,8 @@ function PollCard({ poll }: { poll: PollItem }) {
       // Never let a tracking failure break the UI.
     } finally {
       setVoting(false);
+      // Reconcile with the real totals now that the insert has settled.
+      fetchResults();
     }
   };
 

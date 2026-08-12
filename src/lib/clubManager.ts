@@ -9,7 +9,7 @@ import { players as RAW_POOL } from '@/data/players';
  *
  * Pure, JSON-serializable state machine consumed by useClubManager (which owns
  * React state + localStorage persistence) and the club-manager components.
- * Everything in CareerState must survive JSON.stringify/parse round trips —
+ * Everything in CareerState must survive JSON.stringify/parse round trips -
  * no Dates, Maps, Sets, functions or class instances.
  *
  * Formations + the market-value -> rating curve are shared with Squad Deal
@@ -37,9 +37,9 @@ export interface CMPlayer {
   position: Position;
   rating: number;
   age: number;
-  /** 0-100 — drops when the player starts, recovers on weeks off. */
+  /** 0-100, drops when the player starts, recovers on weeks off. */
   fitness: number;
-  /** 0-100 — swings with results. */
+  /** 0-100, swings with results. */
   morale: number;
   /** Weeks (calendar entries) remaining out injured. */
   injuryWeeks: number;
@@ -1495,7 +1495,7 @@ function agePlayer(p: CMPlayer): CMPlayer {
 }
 
 /**
- * Rolls the career into the next season — optionally at a new club if a job
+ * Rolls the career into the next season, optionally at a new club if a job
  * offer was accepted. Ages the squad, runs the youth intake, resets the
  * competitions and reopens the summer window.
  */
@@ -1567,7 +1567,7 @@ export function saveCareer(career: CareerState): void {
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify(career));
   } catch {
-    /* quota/private mode — the run just won't persist */
+    /* quota/private mode, the run just won't persist */
   }
 }
 

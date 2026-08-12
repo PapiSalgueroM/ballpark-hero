@@ -1,4 +1,4 @@
-// Soccer Career Simulation Engine v2 — Youth Academy + Pro System
+// Soccer Career Simulation Engine v2, Youth Academy + Pro System
 
 import {
   getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,
@@ -1295,7 +1295,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
     }
   }
 
-  // Stay on moral_dilemma phase — UI calls dismissMoralDilemma to continue
+  // Stay on moral_dilemma phase, UI calls dismissMoralDilemma to continue
   s.phase = "moral_dilemma";
   return s;
 }
@@ -1612,12 +1612,12 @@ function growStat(current: number, age: number, isYouth: boolean, isPace: boolea
   if (isYouth) {
     growth = rand(2, 4);
   } else if (isInPrime(age, primeType)) {
-    growth = rand(2, 4); // Prime phase — strong growth
+    growth = rand(2, 4); // Prime phase, strong growth
   } else if (!isPastPrime(age, primeType)) {
-    // Pre-prime professional years — moderate growth
+    // Pre-prime professional years, moderate growth
     growth = rand(1, 3);
   } else {
-    // Post-prime — decline starts at 32, accelerates after 35
+    // Post-prime, decline starts at 32, accelerates after 35
     if (age >= 40) {
       growth = rand(-7, -4); // Extreme decline 40+
     } else if (age >= 38) {
@@ -1800,7 +1800,7 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
   } else {
     s.consecutiveDeficitYears = 0;
   }
-  // Financial crisis — also triggered by negative net worth
+  // Financial crisis, also triggered by negative net worth
   if (s.consecutiveDeficitYears >= 3 || s.netWorth < -2) {
     s.events.push("💸 FINANCIAL CRISIS: Spending exceeds income! Forced to sell assets.");
     s.netWorth = Math.max(0, s.netWorth);
@@ -2044,7 +2044,7 @@ export function purchaseSpendingItem(prev: CareerState, itemId: string): CareerS
 
 function calcTotalAssets(s: CareerState): number {
   let total = 0;
-  // Properties & vehicles — appreciate/depreciate
+  // Properties & vehicles, appreciate/depreciate
   const propertyValues: Record<string, number> = {
     "city_apartment": 0.85, "luxury_house": 3.2, "mansion": 8.5, "private_island": 27,
     "sports_car": 0.1, "supercar_collection": 0.6, "private_jet": 10, "yacht": 5,
@@ -2067,13 +2067,13 @@ function resolveInvestments(s: CareerState): void {
     const yearsHeld = currentYear - h.yearPurchased;
     
     if (h.name === "Football Club Shares") {
-      // Steady 8% return per year — resolve as income, keep holding
+      // Steady 8% return per year, resolve as income, keep holding
       const yearlyReturn = h.invested * 0.08;
       s.netWorth = Math.round((s.netWorth + yearlyReturn) * 100) / 100;
       if (yearsHeld > 0 && yearsHeld % 1 === 0) {
         s.events.push(`⚽ Football Club Shares returned €${(yearlyReturn).toFixed(1)}M this year`);
       }
-      continue; // never resolves — keeps paying
+      continue; // never resolves, keeps paying
     }
     
     // Other investments resolve after 1-2 years
@@ -2159,7 +2159,7 @@ const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelo
    Used when the soccer_career_clubs table is unreachable or empty, so the game
    can always start instead of hanging on a blank/failed fetch. */
 export const FALLBACK_CLUBS: ClubData[] = [
-  // Tier 1 — elite
+  // Tier 1, elite
   { id: "fb-1", name: "Real Madrid", country: "Spain", tier: 1, color: "#FEBE10", league: "La Liga" },
   { id: "fb-2", name: "Barcelona", country: "Spain", tier: 1, color: "#A50044", league: "La Liga" },
   { id: "fb-3", name: "Man City", country: "England", tier: 1, color: "#6CABDD", league: "Premier League" },
@@ -2178,7 +2178,7 @@ export const FALLBACK_CLUBS: ClubData[] = [
   { id: "fb-16", name: "River Plate", country: "Argentina", tier: 1, color: "#E9040F", league: "Liga Profesional" },
   { id: "fb-17", name: "Flamengo", country: "Brazil", tier: 1, color: "#C8102E", league: "Brasileirao" },
   { id: "fb-18", name: "Sao Paulo", country: "Brazil", tier: 1, color: "#B40404", league: "Brasileirao" },
-  // Tier 2 — strong mid-table
+  // Tier 2, strong mid-table
   { id: "fb-19", name: "Atletico Madrid", country: "Spain", tier: 2, color: "#CB3524", league: "La Liga" },
   { id: "fb-20", name: "Sevilla", country: "Spain", tier: 2, color: "#D0021B", league: "La Liga" },
   { id: "fb-21", name: "Tottenham", country: "England", tier: 2, color: "#132257", league: "Premier League" },
@@ -2201,7 +2201,7 @@ export const FALLBACK_CLUBS: ClubData[] = [
   { id: "fb-38", name: "Palmeiras", country: "Brazil", tier: 2, color: "#006437", league: "Brasileirao" },
   { id: "fb-39", name: "LA Galaxy", country: "USA", tier: 2, color: "#00245D", league: "MLS" },
   { id: "fb-40", name: "Inter Miami", country: "USA", tier: 2, color: "#F7B5CD", league: "MLS" },
-  // Tier 3 — solid domestic clubs
+  // Tier 3, solid domestic clubs
   { id: "fb-41", name: "Real Sociedad", country: "Spain", tier: 3, color: "#0067B1", league: "La Liga" },
   { id: "fb-42", name: "Villarreal", country: "Spain", tier: 3, color: "#FFE667", league: "La Liga" },
   { id: "fb-43", name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Premier League" },
@@ -2222,7 +2222,7 @@ export const FALLBACK_CLUBS: ClubData[] = [
   { id: "fb-58", name: "Al Nassr", country: "Saudi Arabia", tier: 3, color: "#FFF200", league: "Saudi Pro League" },
   { id: "fb-59", name: "Cruz Azul", country: "Mexico", tier: 3, color: "#00539F", league: "Liga MX" },
   { id: "fb-60", name: "Club America", country: "Mexico", tier: 3, color: "#FFC72C", league: "Liga MX" },
-  // Tier 4 — smaller / lower league
+  // Tier 4, smaller / lower league
   { id: "fb-61", name: "Real Betis", country: "Spain", tier: 4, color: "#00954C", league: "La Liga" },
   { id: "fb-62", name: "Celta Vigo", country: "Spain", tier: 4, color: "#8AC3EE", league: "La Liga" },
   { id: "fb-63", name: "Crystal Palace", country: "England", tier: 4, color: "#1B458F", league: "Premier League" },
@@ -2246,7 +2246,7 @@ export const FALLBACK_CLUBS: ClubData[] = [
   { id: "fb-81", name: "Seattle Sounders", country: "USA", tier: 4, color: "#5D9741", league: "MLS" },
 ];
 
-/* ─── Appearances — league + UCL + cups for realistic totals ─── */
+/* ─── Appearances, league + UCL + cups for realistic totals ─── */
 function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState): { apps: number; injured: boolean; injuryWeeks: number; injuryName: string | null; injurySevere: boolean } {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
@@ -2273,7 +2273,7 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
 
   let leagueApps = rand(leagueMin, leagueMax);
 
-  // --- UCL appearances (0-13) — only Tier 1-2 clubs qualify ---
+  // --- UCL appearances (0-13), only Tier 1-2 clubs qualify ---
   let uclApps = 0;
   if (clubTier <= 2) {
     // Group stage: 6-8 games, knockouts add more
@@ -2631,7 +2631,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
   return { type: "no_interest" };
 }
 
-/* ─── Request transfer — 50/50 ─── */
+/* ─── Request transfer, 50/50 ─── */
 export function requestTransfer(state: CareerState, clubs: ClubData[]): TransferSituation {
   clubs = adjustClubsForYear(clubs, (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1);
   if (Math.random() < 0.5) {
@@ -3036,12 +3036,12 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.events.push("🧘 Social media detox paid off: +2 to all stats!");
   }
 
-  // Match fix ban — skip season
+  // Match fix ban, skip season
   if (s.matchFixBanned > 0) {
     s.matchFixBanned -= 1;
     s.events.push(`🚫 Serving match-fixing ban (${s.matchFixBanned > 0 ? s.matchFixBanned + " season(s) remaining" : "ban lifted!"})`);
     if (s.matchFixBanned > 0) {
-      // Skip season entirely — add empty record
+      // Skip season entirely, add empty record
       const lastYear = s.seasons[s.seasons.length - 1].year;
       s.seasons = [...s.seasons, {
         year: lastYear + 1, age: s.age, club: "BANNED", clubCountry: "", clubTier: 99,
@@ -3056,7 +3056,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     }
   }
 
-  // PED tracking — check for failed test
+  // PED tracking, check for failed test
   if (s.pedActive && s.pedSeasonsRemaining > 0) {
     s.pedSeasonsRemaining -= 1;
     if (Math.random() < 0.20) {
@@ -3117,7 +3117,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     return s;
   }
   
-  // Retirement suggestion — when overall drops 10+ from peak OR drops to 75 or below (age 30+)
+  // Retirement suggestion, when overall drops 10+ from peak OR drops to 75 or below (age 30+)
   if (!s.retirementSuggested && s.age >= 30) {
     const dropFromPeak = s.peakOverall - s.overall;
     if (dropFromPeak >= 10 || s.overall <= 75) {
@@ -3133,7 +3133,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   }
   
   const season = generateSeasonStats(s);
-  // Injury report — named injuries that actually cost matches
+  // Injury report, named injuries that actually cost matches
   if (season.injury) {
     s.events.push(`🚑 Injury: ${season.injury}, out ${season.injuryWeeks} weeks, missed matches`);
     if (season.injurySevere) {
@@ -3168,7 +3168,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   if (!s.internationalCareer && !s.intStats.isRetired && shouldGetCallUp(s)) {
     s.internationalCareer = true;
     s.intStats = { ...s.intStats, debutYear: season.year, debutAge: s.age };
-    // Don't set phase yet — show in season summary, debut screen comes after
+    // Don't set phase yet, show in season summary, debut screen comes after
   }
 
   // International season stats
@@ -3318,38 +3318,38 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
 
   // --- NEW AWARDS ---
 
-  // Puskás Award (best goal of the year) — random chance for high-performing attackers
+  // Puskás Award (best goal of the year), random chance for high-performing attackers
   if (season.goals >= 15 && s.overall >= 80 && Math.random() < 0.08) {
     s.awards = [...s.awards, { year: thisYear, name: "Puskás Award", emoji: "🎯" }];
     s.events.push(`🎯 Won the Puskás Award for Goal of the Year!`);
   }
 
-  // Golden Boot (top league scorer) — must be top scorer caliber
+  // Golden Boot (top league scorer), must be top scorer caliber
   if (season.goals >= 25 && s.currentClubTier <= 2 && Math.random() < 0.3) {
     s.awards = [...s.awards, { year: thisYear, name: "Golden Boot", emoji: "👟" }];
     s.events.push(`👟 Won the League Golden Boot with ${season.goals} goals!`);
   }
 
-  // Golden Glove (goalkeeper of the year) — GK only
+  // Golden Glove (goalkeeper of the year), GK only
   if (s.position === "GK" && season.cleanSheets >= 12 && season.rating >= 7.5 && Math.random() < 0.3) {
     s.awards = [...s.awards, { year: thisYear, name: "Golden Glove", emoji: "🧤" }];
     s.events.push(`🧤 Won the Golden Glove Award!`);
   }
 
-  // Young Player of the Year — under 23 only
+  // Young Player of the Year, under 23 only
   if (s.age < 23 && season.rating >= 7.5 && s.overall >= 75 && Math.random() < 0.2) {
     s.awards = [...s.awards, { year: thisYear, name: "Young Player of the Year", emoji: "⭐" }];
     s.events.push(`⭐ Named Young Player of the Year!`);
     s.popularity = clamp(s.popularity + 5, 0, 100);
   }
 
-  // UEFA Player of the Year — elite performances in European competition
+  // UEFA Player of the Year, elite performances in European competition
   if (season.championsLeague && season.rating >= 8.0 && s.overall >= 85 && Math.random() < 0.25) {
     s.awards = [...s.awards, { year: thisYear, name: "UEFA Player of the Year", emoji: "🇪🇺" }];
     s.events.push(`🇪🇺 Named UEFA Player of the Year!`);
   }
 
-  // Comeback Player of the Year — significant OVR recovery after a dip
+  // Comeback Player of the Year, significant OVR recovery after a dip
   const prevSeasons = s.seasons.filter(ss => ss.type === "playing");
   if (prevSeasons.length >= 2) {
     const prevRating = prevSeasons[prevSeasons.length - 1]?.rating || 0;
@@ -3359,7 +3359,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     }
   }
 
-  // Club Legend status — 300+ appearances for one club
+  // Club Legend status, 300+ appearances for one club
   const clubAppsMap: Record<string, number> = {};
   for (const ss of s.seasons) {
     if (ss.type === "playing") clubAppsMap[ss.club] = (clubAppsMap[ss.club] || 0) + ss.apps;
@@ -3372,7 +3372,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.popularity = clamp(s.popularity + 15, 0, 100);
   }
 
-  // All Time Top Scorer for country — international goals record
+  // All Time Top Scorer for country, international goals record
   const INT_RECORDS: Record<string, number> = {
     Brazil: 77, France: 57, Argentina: 106, Germany: 71, Spain: 29, England: 66,
     Portugal: 135, Netherlands: 50, Italy: 35, Belgium: 68, Croatia: 35, Uruguay: 36,
@@ -3388,7 +3388,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     }
   }
 
-  // Fair Play Award — good conduct season (low cards, high rating)
+  // Fair Play Award, good conduct season (low cards, high rating)
   if (season.yellowCards <= 1 && season.redCards === 0 && season.rating >= 7.5 && season.apps >= 25 && Math.random() < 0.1) {
     const alreadyFairPlayThisYear = s.awards.some(a => a.name === "Fair Play Award" && a.year === thisYear);
     if (!alreadyFairPlayThisYear) {
@@ -3414,7 +3414,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   simulateSeasonFinances(s, season);
   if (s.contractYearsLeft <= 1) s.events.push("⚠️ Your contract is expiring!");
 
-  // World Cup year — trigger after summary (hard cap: 5 World Cups per career)
+  // World Cup year, trigger after summary (hard cap: 5 World Cups per career)
   if (isWCYear && s.internationalCareer && !s.intStats.isRetired && s.intStats.worldCups < 5) {
     const wcResult = simulateWorldCup(s);
     wcResult.year = thisYear;
@@ -4206,7 +4206,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       const goals = rand(star.baseGoals[0], star.baseGoals[1]);
       const assists = rand(3, 18);
 
-      // Assign trophies based on this season's era-correct winners — no conflicts
+      // Assign trophies based on this season's era-correct winners, no conflicts
       const trophies: string[] = [];
       if (star.club === uclWinnerClub && Math.random() < 0.85) trophies.push("UCL");
       const starLeague = getClubLeagueEra(star.club, eraLeagues);
@@ -4307,7 +4307,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     const has30PlusGoals = season.goals >= BDOR_WIN_MIN_GOALS;
     const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup;
     if (!meetsWinCondition) {
-      // Demote player to 2nd — they weren't dominant enough
+      // Demote player to 2nd, they weren't dominant enough
       const playerEntry = top10.find(n => n.isPlayer);
       if (playerEntry && top10.length >= 2) {
         // Swap with the top NPC
@@ -4334,7 +4334,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
 
 /* ─── Flow helper: advance to next phase ─── */
 function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
-  // Check for Ballon d'Or ceremony — always show it
+  // Check for Ballon d'Or ceremony, always show it
   if (s.pendingBallonDor) {
     s.phase = "ballon_dor";
     return s;
@@ -4355,7 +4355,7 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
     s.phase = "rivalry_event";
     return s;
   }
-  // Social media action — once per season, only during playing phase for pro players
+  // Social media action, once per season, only during playing phase for pro players
   if (!s.socialMediaActionUsedThisSeason && s.age >= 18 && !s.retired) {
     s.phase = "social_media_action";
     return s;
@@ -4364,7 +4364,7 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
   if (s.pendingFifaCoverEvent) {
     // handled in UI as a special overlay within social_media_action flow
   }
-  // Moral dilemma — triggered before random events
+  // Moral dilemma, triggered before random events
   if (tryTriggerMoralDilemma(s)) {
     s.phase = "moral_dilemma";
     return s;
@@ -5011,7 +5011,7 @@ export function choosePostRetirement(prev: CareerState, choice: PostRetirementCh
   return s;
 }
 
-/* ─── Retirement Suggestion — player can choose to continue or retire ─── */
+/* ─── Retirement Suggestion, player can choose to continue or retire ─── */
 export function acceptRetirementSuggestion(prev: CareerState): CareerState {
   const s = { ...prev };
   s.retired = true;

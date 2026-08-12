@@ -24,7 +24,7 @@ import {
 } from '@/lib/missingEleven';
 
 /**
- * Missing Eleven (task #39) — the NFL port of /missing-five. A verified real
+ * Missing Eleven (task #39), the NFL port of /missing-five. A verified real
  * Super Bowl starting UNIT (offense or defense) with one name blanked;
  * 3 guesses, hint ladder, 100/70/40. Daily uses the sitewide ET-seeded convention via
  * lib/missingEleven.ts; persistence via useDailyPuzzle's action log
@@ -231,7 +231,7 @@ const MissingEleven = () => {
                           isBlank ? 'text-primary' : 'text-muted-foreground'
                         )}
                       >
-                        {hard && !over ? '—' : slot.position}
+                        {hard && !over ? '-' : slot.position}
                       </span>
                       <span
                         className={cn(

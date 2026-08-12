@@ -2,9 +2,9 @@ import { foldSpecialLatin } from '@/lib/nameFold';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
 /**
- * Missing Eleven (task #39 — the NFL port of Missing XI): a famous real
+ * Missing Eleven (task #39, the NFL port of Missing XI): a famous real
  * Super Bowl STARTING UNIT (11 players, offenses AND defenses) is shown with
- * ONE name blanked. 3 guesses, hint ladder, 100/70/40 scoring — same mechanic
+ * ONE name blanked. 3 guesses, hint ladder, 100/70/40 scoring, same mechanic
  * as /missing-five and /missing-nine.
  *
  * CONTENT VERIFICATION METHOD:
@@ -77,7 +77,7 @@ export type ElevenHintLevel = 0 | 1 | 2 | 3;
 const S = (position: string, name: string): ElevenSlot => ({ position, name });
 
 export const ELEVEN_LINEUPS: ElevenLineup[] = [
-  // 1. Super Bowl LI — New England Patriots (the 28-3 comeback offense)
+  // 1. Super Bowl LI, New England Patriots (the 28-3 comeback offense)
   {
     id: 'sb-li-ne',
     dateLabel: 'Super Bowl LI',
@@ -109,7 +109,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     source: 'pfr box 201702050atl #vis_starters (Chrome-rendered DOM) + Wikipedia "Super Bowl LI" Starting lineups table, 11/11 match.',
   },
 
-  // 2. Super Bowl LI — Atlanta Falcons (the 28-3 offense)
+  // 2. Super Bowl LI, Atlanta Falcons (the 28-3 offense)
   {
     id: 'sb-li-atl',
     dateLabel: 'Super Bowl LI',
@@ -119,7 +119,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     opponent: 'New England Patriots',
     scoreLine: 'Patriots 34-28 Falcons (OT)',
     venue: 'NRG Stadium, Houston',
-    // Trap: Levine Toilolo started at TE — not Austin Hooper.
+    // Trap: Levine Toilolo started at TE, not Austin Hooper.
     slots: [
       S('QB', 'Matt Ryan'),
       S('RB', 'Devonta Freeman'),
@@ -140,9 +140,9 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     source: 'pfr box 201702050atl #home_starters (Chrome-rendered DOM) + Wikipedia "Super Bowl LI" Starting lineups table, 11/11 match.',
   },
-  // 3. Super Bowl XLIX — New England Patriots (the Malcolm Butler game)
+  // 3. Super Bowl XLIX, New England Patriots (the Malcolm Butler game)
   // Verified 2026-07-22: pfr 201502010sea #vis_starters + Wikipedia "Super
-  // Bowl XLIX" Starting lineups — 11/11 match (two-TE look, Vereen at RB).
+  // Bowl XLIX" Starting lineups, 11/11 match (two-TE look, Vereen at RB).
   {
     id: 'sb-xlix-ne',
     dateLabel: 'Super Bowl XLIX',
@@ -173,7 +173,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     source: 'pfr box 201502010sea #vis_starters (Chrome DOM) + Wikipedia SB XLIX Starting lineups, 11/11 match.',
   },
 
-  // 4. Super Bowl XLIX — Seattle Seahawks (the goal-line interception)
+  // 4. Super Bowl XLIX, Seattle Seahawks (the goal-line interception)
   {
     id: 'sb-xlix-sea',
     dateLabel: 'Super Bowl XLIX',
@@ -204,8 +204,8 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     source: 'pfr box 201502010sea #home_starters (Chrome DOM) + Wikipedia SB XLIX Starting lineups, 11/11 match.',
   },
 
-  // 5. Super Bowl XLII — New England Patriots (18-1)
-  // NOTE: the Giants lineup for this game is NOT shipped — pfr and Wikipedia
+  // 5. Super Bowl XLII, New England Patriots (18-1)
+  // NOTE: the Giants lineup for this game is NOT shipped, pfr and Wikipedia
   // disagree on the 11th starter (Michael Matthews TE vs Steve Smith WR), so
   // it fails the two-source bar. The Patriots side matched 11/11.
   {
@@ -238,7 +238,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     source: 'pfr box 200802030nwe #home_starters (Chrome DOM) + Wikipedia SB XLII Starting lineups, 11/11 match. Giants side dropped: sources disagree on the 11th starter.',
   },
 
-  // 6. Super Bowl 50 — Denver Broncos (Peyton's last ride)
+  // 6. Super Bowl 50, Denver Broncos (Peyton's last ride)
   // NOTE: the Panthers lineup is NOT shipped, pfr lists a 6-OL jumbo look
   // (Funchess + Daryl Williams) while Wikipedia lists 3 WR (Ginn + Brown);
   // only 9/11 agree. The Broncos side matched 11/11.

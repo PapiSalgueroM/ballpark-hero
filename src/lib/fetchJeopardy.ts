@@ -14,7 +14,7 @@ export interface Clue {
 }
 
 /**
- * Clue bank from public.jeopardy_clues — generated in SQL from the verified
+ * Clue bank from public.jeopardy_clues, generated in SQL from the verified
  * champions tables so the board can never drift from the source data.
  *
  * The view deliberately excludes most of soccer_league_champions. Audit

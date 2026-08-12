@@ -3,7 +3,7 @@ import type { PlayerSourceConfig } from '@/lib/playerSearch';
 
 /**
  * Data layer for the NBA Franchise Grid (3x3 Immaculate-Grid-style board),
- * built entirely on nba_player_stats — a direct port of src/lib/hockeyGrid.ts
+ * built entirely on nba_player_stats, a direct port of src/lib/hockeyGrid.ts
  * (task #24). Keep the two in lockstep if the mechanic changes.
  *
  * DATA NOTE (verified live against flawuiqbvjobmkfkauhw on 2026-07-21):

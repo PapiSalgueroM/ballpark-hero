@@ -1,5 +1,5 @@
 /**
- * Tennis Higher/Lower pool — career GRAND SLAM SINGLES TITLES.
+ * Tennis Higher/Lower pool, career GRAND SLAM SINGLES TITLES.
  *
  * Source: public.tennis_grand_slam_winners (Supabase), aggregated per champion
  * with "(N)"/"†" noise stripped, verified 2026-07-21. Current through the
@@ -13,23 +13,23 @@
  * All three merged totals match the canonical record exactly.
  *
  * Deliberately EXCLUDED (do not re-add without resolving):
- *   - Suzanne Lenglen — table counts 12 (incl. pre-1925 closed French);
+ *   - Suzanne Lenglen, table counts 12 (incl. pre-1925 closed French);
  *     the commonly cited figure is 8. Disputed either way.
- *   - Henri Cochet — table counts 8 incl. the 1922 World Hard Court title;
+ *   - Henri Cochet, table counts 8 incl. the 1922 World Hard Court title;
  *     usually cited as 7.
- *   - Evonne Goolagong — canonical 7, but the table is keyed one slam per
+ *   - Evonne Goolagong, canonical 7, but the table is keyed one slam per
  *     year and drops the SECOND 1977 Australian Open (Dec edition), so it
  *     says 6. Wrong number either way you bake it.
  *   - Everyone whose slam career started before 1920 (challenge-round /
  *     closed-era titles: Decugis, Sears, Renshaw, Larned, Doherty, Wilding,
- *     Mallory…) — counting conventions for that era are all disputed.
+ *     Mallory…), counting conventions for that era are all disputed.
  *
  * Anchors verified vs canonical: Djokovic 24, Court 24, Serena 23, Nadal 22,
  * Graf 22, Federer 20, Wills 19, Evert/Navratilova 18, Sampras 14.
  * Active players (Alcaraz, Sinner, Świątek, Sabalenka) are snapshots through
  * AO 2026 and will need a re-bake after future slams.
  *
- * NOTE: this pool intentionally mixes men's and women's champions — the axis
+ * NOTE: this pool intentionally mixes men's and women's champions, the axis
  * is total major titles, and cross-tour matchups (Serena 23 vs Federer 20)
  * are the fun ones. Ties (24/24, 22/22, 18/18…) are common; the HL hooks
  * score a tie as correct for either pick.

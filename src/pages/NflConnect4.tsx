@@ -14,10 +14,10 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 
 /**
- * NFL Connect 4 — port of MlbConnect4.tsx (task #22 follow-on). The
+ * NFL Connect 4, port of MlbConnect4.tsx (task #22 follow-on). The
  * autocomplete pool is nfl_player_team_stints (2002-2025 era, incl. current
  * players); free-text submission stays ENABLED so pre-2002 legends like
- * Joe Montana can be typed directly — the AI validator covers every era.
+ * Joe Montana can be typed directly, the AI validator covers every era.
  */
 
 // Career-history autocomplete source. nfl_player_team_stints has one row per

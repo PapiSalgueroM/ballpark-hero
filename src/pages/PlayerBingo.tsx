@@ -164,7 +164,7 @@ const PlayerBingo = () => {
           return nextBest;
         });
       }
-      // Blackout: the whole board is filled — instant win with the big bonus.
+      // Blackout: the whole board is filled, instant win with the big bonus.
       if (Object.keys(next).length >= BOARD_SIZE) {
         setEndReason('blackout');
         setPhase('won');

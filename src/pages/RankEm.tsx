@@ -156,7 +156,7 @@ const RankEm = () => {
                     )}
                   >
                     <span className="w-6 text-sm font-bold text-muted-foreground shrink-0">{i + 1}</span>
-                    <span className="flex-1 text-sm font-semibold text-foreground">{name ?? '—'}</span>
+                    <span className="flex-1 text-sm font-semibold text-foreground">{name ?? '-'}</span>
                     {over && name && (
                       <span className="text-xs text-muted-foreground tabular-nums">
                         {valueOf(name)?.toLocaleString()} {round.unit}

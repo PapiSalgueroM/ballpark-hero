@@ -1,9 +1,9 @@
 /**
- * College Football Higher/Lower pool — career PASSING YARDS.
+ * College Football Higher/Lower pool, career PASSING YARDS.
  *
  * Source: public.cfb_qb_stats (Supabase; sports-reference career leaderboard
  * scrape), verified 2026-07-21. The table follows the NCAA official record
- * book convention: bowl games before 2002 are NOT counted — which is why
+ * book convention: bowl games before 2002 are NOT counted, which is why
  * Brees shows 10,909 (not the with-bowls 11,792) while every post-2002
  * career matches the number fans cite exactly. Internally consistent.
  *

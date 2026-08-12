@@ -17,7 +17,7 @@ import type { Connect4Board } from '@/types/nhlConnect4';
  * Marchessault; Wild × Undrafted = Mats Zuccarello.
  *
  * NOTE: young-franchise columns (Golden Knights, Jets, Wild, Predators)
- * deliberately avoid "Hall of Famer" and "#1 Overall Draft Pick" rows —
+ * deliberately avoid "Hall of Famer" and "#1 Overall Draft Pick" rows -
  * those intersections are empty or near-empty.
  */
 const curatedBoards: Connect4Board[] = [

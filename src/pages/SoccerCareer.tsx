@@ -1761,7 +1761,7 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
   );
 }
 
-/* ─── My Life Panel — Spending & Lifestyle ─── */
+/* ─── My Life Panel, Spending & Lifestyle ─── */
 function MyLifePanel({ career, onPurchase }: { career: CareerState; onPurchase: (id: string) => void }) {
   const [activeTab, setActiveTab] = useState<SpendingCategory>("property");
   const categories: { key: SpendingCategory; label: string; emoji: string }[] = [

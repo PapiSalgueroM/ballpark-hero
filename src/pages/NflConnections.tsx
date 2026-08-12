@@ -13,7 +13,7 @@ import { NflConnectionsHowToPlay } from '@/components/nfl-connections/NflConnect
 import { Skeleton } from '@/components/ui/skeleton';
 
 /**
- * NFL Connections — direct port of NbaConnections.tsx (task #26).
+ * NFL Connections, direct port of NbaConnections.tsx (task #26).
  * Keep the connections pages in lockstep if the mechanic changes.
  */
 

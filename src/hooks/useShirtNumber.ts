@@ -4,7 +4,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchShirtNumberPuzzles } from '@/lib/fetchShirtNumberPuzzles';
 
-// Internal guess record — stores correctness so isWon doesn't need puzzle access
+// Internal guess record, stores correctness so isWon doesn't need puzzle access
 type ShirtGuess = { guess: number; correct: boolean };
 
 export type ShirtNumberMode = 'daily' | 'unlimited';

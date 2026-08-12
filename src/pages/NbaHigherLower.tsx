@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 
 /**
  * Direct port of HockeyHigherLower (task #23). Two intentional deltas:
- * no flag (the bref source carries no nationality — the card leads with
+ * no flag (the bref source carries no nationality, the card leads with
  * position + final season instead), and no separate how-to-play modal
  * (the rules fit in one subtitle line; GameSeoContent documents the rest).
  */

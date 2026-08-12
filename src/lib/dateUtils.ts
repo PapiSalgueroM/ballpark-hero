@@ -2,7 +2,7 @@
  * Canonical date utilities for DoUKnowBall daily puzzle selection.
  *
  * All game hooks must use getTodayET() as the single source of "today".
- * Do not call new Date().toISOString().slice(0, 10) directly in game hooks —
+ * Do not call new Date().toISOString().slice(0, 10) directly in game hooks -
  * that returns UTC, which breaks the shared daily experience for US users.
  */
 

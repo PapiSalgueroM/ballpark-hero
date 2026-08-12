@@ -16,7 +16,7 @@ import { NbaCareerHowToPlay } from '@/components/nba-career/NbaCareerHowToPlay';
 import { Skeleton } from '@/components/ui/skeleton';
 
 /**
- * NBA Career Path — direct port of HockeyCareer.tsx (task #25) on the
+ * NBA Career Path, direct port of HockeyCareer.tsx (task #25) on the
  * generic primary palette. Keep the career-path pages in lockstep.
  */
 const NbaCareer = () => {

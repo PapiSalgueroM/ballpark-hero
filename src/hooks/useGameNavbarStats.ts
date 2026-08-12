@@ -18,13 +18,13 @@ interface GameNavbarStats {
  * It still says zero points and zero out of 70 games played. And don't say my
  * rank either").
  *
- * The old version read user_scores / daily_completions — tables that do NOT
- * exist in the live project — and returned zeros for guests entirely. Now:
- * - Identity: getCurrentPlayerName(profile) — the same handle (guest
+ * The old version read user_scores / daily_completions, tables that do NOT
+ * exist in the live project, and returned zeros for guests entirely. Now:
+ * - Identity: getCurrentPlayerName(profile), the same handle (guest
  *   "Baller-1234" or profile name) that game_completions rows are written
  *   under, so guests get real numbers too.
  * - Points today + world rank: the global_rank RPC (same normalized scoring
- *   as the sitewide leaderboard — each game's best run of the day is worth
+ *   as the sitewide leaderboard, each game's best run of the day is worth
  *   up to 100 pts).
  * - Games played today: distinct games from game_completions for this
  *   handle, floored by the local same-browser count so the chip updates

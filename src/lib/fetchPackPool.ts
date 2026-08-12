@@ -15,7 +15,7 @@ export interface PackPlayer extends Player {
  * game_player_pool view already computes (fringe <5m, squad <15m,
  * quality <40m, star <80m, superstar 81m+).
  *
- * Uses game_player_pool — NOT player_market_values — so the >=4m floor filter
+ * Uses game_player_pool, NOT player_market_values, so the >=4m floor filter
  * and (name, nationality) identity rules apply (see the view's comment and
  * PAPER-trajectory-data-findings.md). Unlike fetchOverratedPool this takes the
  * WHOLE year (~2,900 rows), because packs need fringe-through-superstar spread,

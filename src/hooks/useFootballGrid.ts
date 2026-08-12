@@ -95,7 +95,7 @@ export function useFootballGrid() {
           .eq('puzzle_id', puzzleId)
           .eq('cell_index', cellIndex)
           .eq('player_name', playerName.toLowerCase());
-        if (!totalCount) return 101; // unicorn — first pick for this cell
+        if (!totalCount) return 101; // unicorn, first pick for this cell
         const total = totalCount + 1;
         const player = (playerCount ?? 0) + 1;
         return Math.round((player / total) * 100);
@@ -132,9 +132,9 @@ export function useFootballGrid() {
           const rarity = await fetchRarity(puzzle.id, capturedCell, displayName);
           addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: displayName, rarity });
         } else if (data?.unverified) {
-          // Answer-checking is temporarily offline — don't burn a guess or
+          // Answer-checking is temporarily offline, don't burn a guess or
           // flash "wrong"; ask the player to retry.
-          toast.error("Couldn't verify that answer — please try again.");
+          toast.error("Couldn't verify that answer, please try again.");
         } else {
           setWrongFlash({ cellIndex: capturedCell, playerName });
           setTimeout(() => setWrongFlash(null), 1500);

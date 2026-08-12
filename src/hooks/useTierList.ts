@@ -77,7 +77,7 @@ function loadSaved(today: string): { placements: Record<string, Tier>; submitted
 function save(today: string, placements: Record<string, Tier>, submitted: boolean) {
   try {
     localStorage.setItem(`${STORAGE_PREFIX}${today}`, JSON.stringify({ placements, submitted }));
-  } catch { /* storage unavailable — still playable, just not resumable */ }
+  } catch { /* storage unavailable, still playable, just not resumable */ }
 }
 
 export function useTierList(): TierListState {
@@ -130,7 +130,7 @@ export function useTierList(): TierListState {
 
   /**
    * Submit writes one row per placement, then reads back the crowd average per
-   * player. Average is computed over real rows only — a player nobody else has
+   * player. Average is computed over real rows only, a player nobody else has
    * ranked shows as "first to rank" rather than a made-up consensus.
    */
   const submit = useCallback(async () => {
@@ -146,7 +146,7 @@ export function useTierList(): TierListState {
 
     try {
       await supabase.from('tier_list_votes').insert(rows);
-    } catch { /* vote write failed — still show whatever crowd data exists */ }
+    } catch { /* vote write failed, still show whatever crowd data exists */ }
 
     try {
       const { data } = await supabase
@@ -166,7 +166,7 @@ export function useTierList(): TierListState {
         acc[p.name] = { avgIndex: avg, tier: TIERS[Math.round(avg)] ?? null, total: mine.length };
       }
       setCrowd(acc);
-    } catch { /* silent — summary just omits crowd column */ }
+    } catch { /* silent, summary just omits crowd column */ }
   }, [allPlaced, submitted, placements, players, today]);
 
   const shareText = useMemo(() => {

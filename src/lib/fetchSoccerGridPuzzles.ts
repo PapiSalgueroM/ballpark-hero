@@ -3,10 +3,10 @@ import { SoccerGridPuzzle, SoccerGridAttribute } from '@/types/soccerGrid';
 
 /**
  * Fetches all Soccer Grid puzzle definitions from Supabase, ordered by sort_order.
- * rows_json and cols_json are JSONB in Postgres — the client returns them as parsed
+ * rows_json and cols_json are JSONB in Postgres, the client returns them as parsed
  * JS objects, so a direct cast to SoccerGridAttribute[] is safe.
  *
- * Returns [] on any error — the caller falls back to the hardcoded soccerGridPuzzles.
+ * Returns [] on any error, the caller falls back to the hardcoded soccerGridPuzzles.
  */
 export async function fetchSoccerGridPuzzles(): Promise<SoccerGridPuzzle[]> {
   try {

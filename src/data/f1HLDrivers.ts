@@ -1,5 +1,5 @@
 /**
- * F1 Higher/Lower pool — career GRAND PRIX WINS, baked from f1_driver_standings
+ * F1 Higher/Lower pool, career GRAND PRIX WINS, baked from f1_driver_standings
  * (sum of per-season wins by stable driver_id) on 2026-07-22.
  *
  * Wins, not points: points systems changed massively across eras (a 1950s

@@ -13,7 +13,7 @@ export interface ChainGameState {
   gameOverReason?: string;
 }
 
-// Starting players pool — randomly picked each game
+// Starting players pool, randomly picked each game
 export const CHAIN_STARTERS: string[] = [
   'LeBron James',
   'Stephen Curry',

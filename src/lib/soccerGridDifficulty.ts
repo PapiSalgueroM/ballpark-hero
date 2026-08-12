@@ -5,7 +5,7 @@ import { SoccerGridAttribute, SoccerGridPuzzle } from '@/types/soccerGrid';
  *
  * Difficulty is derived from data actually present in soccer_grid_puzzles,
  * not from a stored per-cell answer count (soccer_grid_selections has 0 rows
- * live — validity is decided at guess-time by the soccer-grid-validate edge
+ * live, validity is decided at guess-time by the soccer-grid-validate edge
  * function against an LLM, not a fixed candidate list per cell). The closest
  * real signal we have is each cell's row/column attribute `type`, and how
  * common that type is across the full 500-puzzle pool:

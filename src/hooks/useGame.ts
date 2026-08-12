@@ -13,7 +13,7 @@ const MAX_GUESSES = 8;
 export type FootleMode = 'daily' | 'unlimited';
 
 // ---------------------------------------------------------------------------
-// Module-level helpers (stable references — not recreated on render)
+// Module-level helpers (stable references, not recreated on render)
 // ---------------------------------------------------------------------------
 
 function buildPool(tier: Difficulty, pool: Player[]): Player[] {
@@ -94,7 +94,7 @@ export function useGame() {
     maxGuesses: MAX_GUESSES,
     // Win: the most recent guess is correct
     isWon: (g) => g.length > 0 && g[g.length - 1].isCorrect,
-    // Guesses are plain objects — safe to cast after JSON.parse
+    // Guesses are plain objects, safe to cast after JSON.parse
     deserializeGuesses: (raw) => raw as GuessResult[],
   });
 

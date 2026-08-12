@@ -2,9 +2,9 @@ import { foldSpecialLatin } from '@/lib/nameFold';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
 /**
- * Missing Five (task #39 — the NBA port of Missing XI): a famous real NBA
+ * Missing Five (task #39, the NBA port of Missing XI): a famous real NBA
  * starting five is shown with ONE player blanked out. 3 guesses, hint ladder,
- * 100/70/40 scoring — same mechanic as /missing-xi.
+ * 100/70/40 scoring, same mechanic as /missing-xi.
  *
  * CONTENT VERIFICATION METHOD (same discipline as src/lib/missingXi.ts):
  * Every lineup below was verified on 2026-07-22 against the
@@ -23,7 +23,7 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
  * Do NOT "fix" these back to the famous-but-wrong names.
  *
  * Guess checking is LOCAL (normalized compare against this lineup's
- * blankCandidates) — no database dependency, so 90s role players who are
+ * blankCandidates), no database dependency, so 90s role players who are
  * absent from nba_player_stats are still guessable. Suggestions come from
  * the union of all names in this file.
  */
@@ -106,7 +106,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       { name: 'Kevin Love', slotIndex: 3, nationality: 'USA', fact: 'Grabbed 14 rebounds and made the famous final defensive stand on Stephen Curry.' },
       { name: 'Tristan Thompson', slotIndex: 4, nationality: 'Canada' },
     ],
-    source: 'basketball-reference box score 201606190GSW (Starters table) — Irving/Smith/James/Thompson/Love confirmed.',
+    source: 'basketball-reference box score 201606190GSW (Starters table), Irving/Smith/James/Thompson/Love confirmed.',
   },
 
   // 2. 2016 NBA Finals Game 7, Golden State Warriors (the Ezeli trap)
@@ -128,11 +128,11 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       C('Festus Ezeli'),
     ],
     blankCandidates: [
-      { name: 'Festus Ezeli', slotIndex: 4, nationality: 'Nigeria', fact: 'Started at center with Andrew Bogut out injured — the answer almost nobody remembers.' },
+      { name: 'Festus Ezeli', slotIndex: 4, nationality: 'Nigeria', fact: 'Started at center with Andrew Bogut out injured, the answer almost nobody remembers.' },
       { name: 'Harrison Barnes', slotIndex: 2, nationality: 'USA' },
       { name: 'Draymond Green', slotIndex: 3, nationality: 'USA', fact: 'Scored 32 with 15 rebounds and 9 assists in the losing effort.' },
     ],
-    source: 'basketball-reference box score 201606190GSW (Starters table) — Curry/Thompson/Barnes/Green/Ezeli confirmed; Ezeli 10:45 MP as starter.',
+    source: 'basketball-reference box score 201606190GSW (Starters table), Curry/Thompson/Barnes/Green/Ezeli confirmed; Ezeli 10:45 MP as starter.',
   },
 
   // 3. 1998 NBA Finals Game 6, Chicago Bulls ("The Last Shot"; the Kukoc trap)
@@ -154,14 +154,14 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       C('Luc Longley'),
     ],
     blankCandidates: [
-      { name: 'Toni Kukoc', slotIndex: 3, nationality: 'Croatia', fact: 'Started with Rodman on the bench that night and scored 15 — second only to Jordan\'s 45.' },
+      { name: 'Toni Kukoc', slotIndex: 3, nationality: 'Croatia', fact: 'Started with Rodman on the bench that night and scored 15, second only to Jordan\'s 45.' },
       { name: 'Ron Harper', slotIndex: 0, nationality: 'USA' },
       { name: 'Luc Longley', slotIndex: 4, nationality: 'Australia' },
     ],
     source: 'basketball-reference box score 199806140UTA (Starters table) + Wikipedia "Game 6 of the 1998 NBA Finals" box (row order matches; Rodman 38:59 in reserves block in both).',
   },
 
-  // 4. 1998 NBA Finals Game 6 — Utah Jazz (the Keefe trap)
+  // 4. 1998 NBA Finals Game 6, Utah Jazz (the Keefe trap)
   {
     id: 'finals-1998-g6-uta',
     dateLabel: '1998 NBA Finals, Game 6',
@@ -187,7 +187,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     source: 'basketball-reference box score 199806140UTA (Starters table) + Wikipedia game article box, Malone/Russell/Hornacek/Stockton/Keefe confirmed.',
   },
 
-  // 5. 2023 NBA Finals Game 5 — Denver Nuggets (first title in franchise history)
+  // 5. 2023 NBA Finals Game 5, Denver Nuggets (first title in franchise history)
   {
     id: 'finals-2023-g5-den',
     dateLabel: '2023 NBA Finals, Game 5',
@@ -212,7 +212,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     source: 'basketball-reference box score 202306120DEN (Starters table), Jokic/Murray/Caldwell-Pope/Porter/Gordon confirmed.',
   },
 
-  // 6. 2023 NBA Finals Game 5 — Miami Heat (the 8-seed finalists)
+  // 6. 2023 NBA Finals Game 5, Miami Heat (the 8-seed finalists)
   {
     id: 'finals-2023-g5-mia',
     dateLabel: '2023 NBA Finals, Game 5',
@@ -237,7 +237,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     ],
     source: 'basketball-reference box score 202306120DEN (Starters table), Adebayo/Butler/Strus/Vincent/Love confirmed.',
   },
-  // 7. 2013 NBA Finals Game 7 — San Antonio Spurs (the Ginobili trap)
+  // 7. 2013 NBA Finals Game 7, San Antonio Spurs (the Ginobili trap)
   // Verified 2026-07-22: bref box 201306200MIA Starters table (Chrome-rendered)
   // + NBA.com official box 0041200407 (starters-first block). Splitter listed
   // in the bench block in BOTH sources.
@@ -266,7 +266,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     source: 'bref box 201306200MIA Starters (Parker/Green/Leonard/Duncan/Ginobili) + NBA.com box 0041200407 starters block; Splitter bench in both.',
   },
 
-  // 8. 2013 NBA Finals Game 7 — Miami Heat (the Mike Miller trap)
+  // 8. 2013 NBA Finals Game 7, Miami Heat (the Mike Miller trap)
   {
     id: 'finals-2013-g7-mia',
     dateLabel: '2013 NBA Finals, Game 7',
@@ -292,7 +292,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     source: 'bref box 201306200MIA Starters (James/Chalmers/Wade/Bosh/Miller) + NBA.com box 0041200407 starters block; Allen/Battier bench in both.',
   },
 
-  // 9. 2008 NBA Finals Game 6 — Los Angeles Lakers (the Radmanovic trap)
+  // 9. 2008 NBA Finals Game 6, Los Angeles Lakers (the Radmanovic trap)
   // Verified 2026-07-22: bref box 200806170BOS Starters + NBA.com box
   // 0040700406 starters block (Walton bench in both).
   {
@@ -304,7 +304,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     opponent: 'Boston Celtics',
     scoreLine: 'Celtics 131-92 Lakers',
     venue: 'TD Banknorth Garden, Boston',
-    // Trap: Vladimir Radmanovic started at small forward — not Walton, not Ariza.
+    // Trap: Vladimir Radmanovic started at small forward, not Walton, not Ariza.
     slots: [
       PG('Derek Fisher'),
       SG('Kobe Bryant'),
@@ -320,7 +320,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     source: 'bref box 200806170BOS Starters (Bryant/Odom/Gasol/Fisher/Radmanovic) + NBA.com box 0040700406 starters block; Walton bench in both.',
   },
 
-  // 10. 2008 NBA Finals Game 6 — Boston Celtics (the 131-92 clincher)
+  // 10. 2008 NBA Finals Game 6, Boston Celtics (the 131-92 clincher)
   {
     id: 'finals-2008-g6-bos',
     dateLabel: '2008 NBA Finals, Game 6',
@@ -344,7 +344,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     ],
     source: 'bref box 200806170BOS Starters (Pierce/Garnett/Allen/Rondo/Perkins; Perkins 13:25 MP) + NBA.com box 0040700406 starters block.',
   },
-  // 11. 2011 NBA Finals Game 6 — Dallas Mavericks (the Barea trap)
+  // 11. 2011 NBA Finals Game 6, Dallas Mavericks (the Barea trap)
   // Verified 2026-07-22: bref box 201106120MIA Starters + NBA.com box
   // 0041000406 starters block (first bench = Brian Cardinal in both).
   {
@@ -372,7 +372,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     source: 'bref box 201106120MIA Starters (Nowitzki/Kidd/Marion/Chandler/Barea) + NBA.com box 0041000406 starters block.',
   },
 
-  // 12. 2011 NBA Finals Game 6 — Miami Heat (the Joel Anthony trap)
+  // 12. 2011 NBA Finals Game 6, Miami Heat (the Joel Anthony trap)
   {
     id: 'finals-2011-g6-mia',
     dateLabel: '2011 NBA Finals, Game 6',
@@ -398,7 +398,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     source: 'bref box 201106120MIA Starters (Wade/James/Bosh/Chalmers/Anthony; Anthony 10:55 MP) + NBA.com box 0041000406 starters block (Mike Miller first off the bench).',
   },
 
-  // 2019 NBA Finals Game 6 — Toronto Raptors (first title, clinched on the road)
+  // 2019 NBA Finals Game 6, Toronto Raptors (first title, clinched on the road)
   {
     id: 'finals-2019-g6-tor',
     dateLabel: '2019 NBA Finals, Game 6',
@@ -423,7 +423,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     source: 'basketball-reference box 201906130GSW (Starters: Lowry/Green/Leonard/Siakam/Gasol) + Wikipedia "2019 NBA Finals": Gasol acquired from Memphis, Raptors won Game 6 114-110.',
   },
 
-  // 2019 NBA Finals Game 6 — Golden State Warriors (Durant out, Klay hurt)
+  // 2019 NBA Finals Game 6, Golden State Warriors (Durant out, Klay hurt)
   {
     id: 'finals-2019-g6-gsw',
     dateLabel: '2019 NBA Finals, Game 6',
@@ -451,7 +451,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Puzzle selection — daily (ET-seeded, sitewide convention) + unlimited.
+// Puzzle selection, daily (ET-seeded, sitewide convention) + unlimited.
 // ---------------------------------------------------------------------------
 
 export function getDailyFivePuzzle(): ActiveFivePuzzle {

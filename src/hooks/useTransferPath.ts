@@ -61,9 +61,9 @@ export function useTransferPath(): TransferPathState {
     return () => { cancelled = true; };
   }, []);
 
-  // ── Career graph — memoized over playerPool ────────────────────────────────
+  // ── Career graph, memoized over playerPool ────────────────────────────────
   // TEMPORAL teammates only (owner 2026-07-10: "Ronaldo never played with
-  // Mbappé" — both wore Real Madrid white, six years apart). A connection now
+  // Mbappé", both wore Real Madrid white, six years apart). A connection now
   // requires the SAME club in the SAME season, not just the same club ever.
   const playerToClubs = useMemo(() => {
     const map = new Map<string, Set<string>>();
@@ -145,7 +145,7 @@ export function useTransferPath(): TransferPathState {
     [playerToClubSeasons, seasonIndex],
   );
 
-  // Helpers returned to board — closures over playerPool / playerToClubs
+  // Helpers returned to board, closures over playerPool / playerToClubs
   const getAllPlayerNames = useMemo(
     () => () => playerPool.map(p => p.name),
     [playerPool],
@@ -162,7 +162,7 @@ export function useTransferPath(): TransferPathState {
   // ── Mode state ─────────────────────────────────────────────────────────────
   const [mode, setMode] = useState<TransferPathMode>('daily');
 
-  // ── Daily — useDailyPuzzle ─────────────────────────────────────────────────
+  // ── Daily, useDailyPuzzle ─────────────────────────────────────────────────
   const {
     puzzle: dailyPuzzle,
     guesses: dailyActions,
@@ -201,7 +201,7 @@ export function useTransferPath(): TransferPathState {
     return Math.max(0, 1000 - extra * 100);
   }, [dailyStatus, dailyChain, dailyPuzzle]);
 
-  // ── Unlimited — direct useState ────────────────────────────────────────────
+  // ── Unlimited, direct useState ────────────────────────────────────────────
   const [unlimitedIndex, setUnlimitedIndex] = useState(0);
   const [unlimitedChain, setUnlimitedChain] = useState<string[]>(
     () => [fallbackPuzzles[0].playerA],

@@ -34,7 +34,7 @@ const ROUNDS = 10;
 const STORAGE_PREFIX = 'overrated-underrated-';
 
 /**
- * Deterministic shuffle — same 10 players for every visitor on a given ET day.
+ * Deterministic shuffle, same 10 players for every visitor on a given ET day.
  * Never Math.random(), matching how every other daily game here works.
  */
 function pickDaily(pool: OverratedPlayer[], today: string): OverratedPlayer[] {
@@ -63,7 +63,7 @@ function loadSaved(today: string): { votes: (Vote | null)[]; index: number } | n
 function save(today: string, votes: (Vote | null)[], index: number) {
   try {
     localStorage.setItem(`${STORAGE_PREFIX}${today}`, JSON.stringify({ votes, index }));
-  } catch { /* storage unavailable — game still playable, just not resumable */ }
+  } catch { /* storage unavailable, game still playable, just not resumable */ }
 }
 
 export function useOverratedUnderrated(): OverratedState {
@@ -115,7 +115,7 @@ export function useOverratedUnderrated(): OverratedState {
   /**
    * Read the community split for the player just voted on. Counted server-side
    * per (player_name, year) so the percentages are real. If this player has few
-   * votes so far we still show the true split rather than inventing one — an
+   * votes so far we still show the true split rather than inventing one, an
    * honest "1 of 1" beats a fabricated 50/50.
    */
   const loadCommunity = useCallback(async (i: number, player: OverratedPlayer) => {
@@ -133,7 +133,7 @@ export function useOverratedUnderrated(): OverratedState {
         nextArr[i] = { over, under, total: over + under };
         return nextArr;
       });
-    } catch { /* silent — reveal just shows no split */ }
+    } catch { /* silent, reveal just shows no split */ }
   }, []);
 
   const vote = useCallback((v: Vote) => {

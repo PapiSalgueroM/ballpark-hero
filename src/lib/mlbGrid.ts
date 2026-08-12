@@ -3,11 +3,11 @@ import type { PlayerSourceConfig } from '@/lib/playerSearch';
 
 /**
  * Data layer for the MLB Franchise Grid (3x3 Immaculate-Grid-style board),
- * built on the mlb_grid_players view — a port of src/lib/hockeyGrid.ts /
+ * built on the mlb_grid_players view, a port of src/lib/hockeyGrid.ts /
  * src/lib/nbaGrid.ts (task #24). Keep the grid libs in lockstep.
  *
  * DATA NOTE (view created + verified 2026-07-21): mlb_grid_players is a
- * Lahman aggregate — one row per career, franchises = comma list of Lahman
+ * Lahman aggregate, one row per career, franchises = comma list of Lahman
  * franchID (stable across relocations: Ruth's Boston Braves year shows as
  * ATL), restricted to complete careers (last season <= 2019, since the
  * Lahman copy ends 2021) with 500+ games. 3,264 rows. Colliding display
@@ -17,11 +17,11 @@ import type { PlayerSourceConfig } from '@/lib/playerSearch';
  *
  * Pair verification: worst pairing among the 16 franchises below is
  * MIN x STL with 50 shared players; worst achievement coverage is
- * MIN x 300+ HR with 12 qualifiers — every cell always has answers.
+ * MIN x 300+ HR with 12 qualifiers, every cell always has answers.
  * The whole view is fetched once (4 pages) and guesses validate against
  * the in-memory index; no per-guess round trips.
  *
- * IMPORTANT for players: the pool is careers FINISHED by 2019 — guessing
+ * IMPORTANT for players: the pool is careers FINISHED by 2019, guessing
  * active stars will not validate. The page copy says so.
  */
 

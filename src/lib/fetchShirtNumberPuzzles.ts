@@ -3,7 +3,7 @@ import { type ShirtNumberPuzzle } from '@/data/shirtNumberPuzzles';
 
 // ---------------------------------------------------------------------------
 // Fetch all shirt number puzzles from Supabase.
-// Returns [] on any error — the caller (useShirtNumber.ts) falls back to the
+// Returns [] on any error, the caller (useShirtNumber.ts) falls back to the
 // hardcoded shirtNumberPuzzles array in src/data/shirtNumberPuzzles.ts.
 // ---------------------------------------------------------------------------
 export async function fetchShirtNumberPuzzles(): Promise<ShirtNumberPuzzle[]> {

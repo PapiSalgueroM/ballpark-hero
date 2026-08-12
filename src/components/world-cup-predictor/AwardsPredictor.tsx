@@ -259,7 +259,7 @@ export default function AwardsPredictor({ champion }: { champion: string }) {
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {/* Tournament Winner — auto-filled */}
+        {/* Tournament Winner, auto-filled */}
         <div className="px-4 py-3 rounded-xl bg-[hsl(220,15%,13%)] border border-[hsl(220,15%,22%)]">
           <div className="flex items-center gap-2">
             <span className="text-lg">🏆</span>

@@ -10,7 +10,7 @@ import { ArrowUp, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 /**
- * Third Higher/Lower port (task #23). Stat axis is career GRAND PRIX WINS —
+ * Third Higher/Lower port (task #23). Stat axis is career GRAND PRIX WINS -
  * not points, because scoring systems changed so much across eras that points
  * would make every pre-2010 driver auto-low and the game guessable.
  */

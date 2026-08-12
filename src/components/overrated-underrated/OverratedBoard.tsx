@@ -140,7 +140,7 @@ export function OverratedBoard() {
                   <span className="truncate font-medium text-foreground">{r.player.name}</span>
                 </span>
                 <span className="ml-3 shrink-0 text-xs text-muted-foreground">
-                  you: <span className="font-semibold text-foreground">{r.userVote ?? '—'}</span>
+                  you: <span className="font-semibold text-foreground">{r.userVote ?? '-'}</span>
                   {overPct !== null && <> · crowd: {overPct}% over</>}
                 </span>
               </div>
@@ -183,7 +183,7 @@ export function OverratedBoard() {
             <h2 className="font-display text-2xl font-black text-foreground">{p.name}</h2>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
-            {p.club} · {p.position} · {p.age > 0 ? `${p.age}y` : '—'}
+            {p.club} · {p.position} · {p.age > 0 ? `${p.age}y` : '-'}
           </p>
 
           <div className="my-6">

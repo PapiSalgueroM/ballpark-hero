@@ -25,7 +25,7 @@ export interface NflDecadeDef {
 
 /**
  * Decade Mode buckets (2026-07-10). The nflfastr data here spans 1999-2024,
- * so there is no standalone 1990s bucket — 1999 rides with the 2000s. The
+ * so there is no standalone 1990s bucket, 1999 rides with the 2000s. The
  * wheel index is simply filtered to the range; squads load exactly as in
  * the all-eras game.
  */

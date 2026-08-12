@@ -17,7 +17,7 @@ function isValidPuzzle(p: NhlConnectionsPuzzle): boolean {
  * Fetches all NHL Connections puzzle definitions from Supabase, ordered by
  * sort_order. Mirrors the NBA/NFL fetchers: groups_json is JSONB, returned
  * parsed by the client, with the 4×5×20-unique validity filter applied so
- * malformed rows never reach the hook. Returns [] on any error — callers
+ * malformed rows never reach the hook. Returns [] on any error, callers
  * fall back to the hardcoded nhlConnectionsPuzzles.
  */
 export async function fetchNhlConnectionsPuzzles(): Promise<NhlConnectionsPuzzle[]> {

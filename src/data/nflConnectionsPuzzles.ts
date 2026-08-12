@@ -10,10 +10,10 @@ export interface NflConnectionsPuzzle {
 }
 
 /**
- * NFL Connections puzzles (task #26 — Connections port to NFL).
+ * NFL Connections puzzles (task #26, Connections port to NFL).
  *
  * EVERY fact verified against Supabase on 2026-07-22:
- *   - teams / colleges / era: nfl_player_team_stints (COVERAGE STARTS 2002 —
+ *   - teams / colleges / era: nfl_player_team_stints (COVERAGE STARTS 2002 -
  *     pre-2002 stints are invisible, so only players whose relevant career
  *     is fully 2002+ are used for team facts; Ray Lewis is admitted because
  *     his invisible 1996-2001 years are the same single franchise)
@@ -27,13 +27,13 @@ export interface NflConnectionsPuzzle {
  * Eli 59,841 passing (>= 55,000; Russell Wilson is at 50,191 and must be
  * re-checked before any puzzle ever pairs him with this group); Fitzgerald
  * 18,466 / A.Johnson 14,543 / C.Johnson 11,920 / Green 10,746 / Evans
- * 13,485 receiving (>= 10,000 — Antonio Brown at 13,209 is exactly why he
+ * 13,485 receiving (>= 10,000, Antonio Brown at 13,209 is exactly why he
  * was PULLED from the Steelers group in nflconn-004).
  *
  * Name-collision notes (nfl tables key by name only, task #15 bug):
  * "Chris Johnson" is unusable (CB+RB merged); "Adrian Peterson" merges a
  * 2002 Bears RB but the real AP alone clears every threshold used; "Chris
- * Jones" and "Lamar Jackson" carry phantom teams from namesakes — verified
+ * Jones" and "Lamar Jackson" carry phantom teams from namesakes, verified
  * that none of those phantom teams collide with their puzzles' groups.
  * Jamaal Charles was dropped from the Chiefs group because he really did
  * play for Denver (2017) and Denver is the same puzzle's green group.

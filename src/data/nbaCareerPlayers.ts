@@ -15,7 +15,7 @@ export interface NbaCareerPuzzle {
 }
 
 /**
- * NBA Career Path puzzles (task #25 — the one missing Career Path sport).
+ * NBA Career Path puzzles (task #25, the one missing Career Path sport).
  * Direct analog of hockeyCareerPlayers.ts.
  *
  * PROVENANCE (2026-07-22): team memberships, career points/rebounds/assists

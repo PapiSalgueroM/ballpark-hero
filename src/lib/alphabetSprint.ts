@@ -21,7 +21,7 @@ import { normalizeName, WhoAmIPlayer } from '@/lib/whoAmI';
  * in a row. Skipping never costs points (only time) but restarts the streak.
  * Each player can be named once per run.
  *
- * Answers are typed in full and submitted (resolveSprintGuess below) — there
+ * Answers are typed in full and submitted (resolveSprintGuess below), there
  * is deliberately no autocomplete during play, since suggestions were handing
  * the answers over after two typed letters.
  */

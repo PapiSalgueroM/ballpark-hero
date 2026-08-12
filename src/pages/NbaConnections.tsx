@@ -13,7 +13,7 @@ import { NbaConnectionsHowToPlay } from '@/components/nba-connections/NbaConnect
 import { Skeleton } from '@/components/ui/skeleton';
 
 /**
- * NBA Connections — direct port of BaseballConnections.tsx (task #26) on the
+ * NBA Connections, direct port of BaseballConnections.tsx (task #26) on the
  * generic primary palette (the baseball page's --bb-* vars stay baseball's).
  */
 

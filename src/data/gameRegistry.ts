@@ -39,7 +39,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/alphabet-sprint', label: 'Alphabet Sprint', emoji: '⚡', description: 'Name a player per letter against the clock', isNew: true },
       { path: '/clue-auction', label: 'Clue Auction', emoji: '💰', description: 'Buy clues, save points, name the secret player', isNew: true },
       // Revived 2026-07-15. Retired 2026-07-06 as "you guess one guy and you're
-      // done" — root cause found: scoreRound was INVERTED for rarity mode, so
+      // done", root cause found: scoreRound was INVERTED for rarity mode, so
       // naming the most famous player in the pool scored a perfect 0 and the
       // winning strategy was the opposite of the premise. Fixed, plus the board
       // reveal (what the rarest answer actually was) is now shown after every
@@ -238,7 +238,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/mystery-box', label: 'Mystery Box', emoji: '📦', description: 'Open 15 packs, keep or bin, build the best XI your luck allows', daily: true, isNew: true },
     ],
   },
-  // Game Shows category removed 2026-07-08 per owner review — its games now
+  // Game Shows category removed 2026-07-08 per owner review, its games now
   // live inside their sports (Squad Deal + Deal or No Deal → Soccer,
   // Name Them All + Sports Millionaire → World & Olympic Games).
 ];

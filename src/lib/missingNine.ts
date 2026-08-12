@@ -2,9 +2,9 @@ import { foldSpecialLatin } from '@/lib/nameFold';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
 /**
- * Missing Nine (task #39 — the MLB port of Missing XI/Five): a famous real
+ * Missing Nine (task #39, the MLB port of Missing XI/Five): a famous real
  * World Series starting nine is shown IN BATTING ORDER with ONE name blanked.
- * 3 guesses, hint ladder, 100/70/40 scoring — same mechanic as /missing-five.
+ * 3 guesses, hint ladder, 100/70/40 scoring, same mechanic as /missing-five.
  *
  * CONTENT VERIFICATION METHOD:
  * sports-reference hides its "Starting Lineups" tables inside HTML comments
@@ -26,7 +26,7 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
  *   - 2001 G7 Yankees: Shane SPENCER started LF; Knoblauch and Justice were
  *     pinch-hitters only. Clemens batted 9th (NL park, no DH).
  *
- * Guess checking is LOCAL (normalized compare against blankCandidates) — no
+ * Guess checking is LOCAL (normalized compare against blankCandidates), no
  * database dependency. Suggestions come from the union of names in this file.
  */
 
@@ -99,8 +99,8 @@ export const NINE_LINEUPS: NineLineup[] = [
     ],
     blankCandidates: [
       { name: 'Kyle Schwarber', slotIndex: 1, nationality: 'USA', fact: 'Tore knee ligaments in April and returned seven months later to DH in the World Series.' },
-      { name: 'Willson Contreras', slotIndex: 6, nationality: 'Venezuela', fact: 'Started behind the plate — David Ross (who homered) only entered in the 5th with Jon Lester.' },
-      { name: 'Ben Zobrist', slotIndex: 4, nationality: 'USA', fact: 'Series MVP — his 10th-inning double off Bryan Shaw broke the 6-6 tie.' },
+      { name: 'Willson Contreras', slotIndex: 6, nationality: 'Venezuela', fact: 'Started behind the plate, David Ross (who homered) only entered in the 5th with Jon Lester.' },
+      { name: 'Ben Zobrist', slotIndex: 4, nationality: 'USA', fact: 'Series MVP, his 10th-inning double off Bryan Shaw broke the 6-6 tie.' },
     ],
     source: 'baseball-almanac box 201611020CLE (starters = un-indented batting rows) + SABR Games Project recap: Fowler leadoff HR, Ross entered with Lester in the 5th.',
   },
@@ -128,13 +128,13 @@ export const NINE_LINEUPS: NineLineup[] = [
     ],
     blankCandidates: [
       { name: 'Rajai Davis', slotIndex: 6, nationality: 'USA', fact: 'His two-run, two-out homer off Aroldis Chapman in the 8th tied Game 7 at 6-6.' },
-      { name: 'Roberto Perez', slotIndex: 8, nationality: 'Puerto Rico', fact: 'Batted ninth and caught the start — Yan Gomes only entered late.' },
+      { name: 'Roberto Perez', slotIndex: 8, nationality: 'Puerto Rico', fact: 'Batted ninth and caught the start, Yan Gomes only entered late.' },
       { name: 'Coco Crisp', slotIndex: 7, nationality: 'USA', fact: 'Doubled and scored Cleveland\'s first run; Michael Martinez replaced him defensively in the 8th.' },
     ],
     source: 'baseball-almanac box 201611020CLE + SABR recap (Crisp double in the 3rd, Martinez defensive sub, Davis HR off Chapman).',
   },
 
-  // 3. 2001 World Series Game 7 — New York Yankees (the Spencer trap)
+  // 3. 2001 World Series Game 7, New York Yankees (the Spencer trap)
   {
     id: 'ws-2001-g7-nyy',
     dateLabel: '2001 World Series, Game 7',
@@ -144,7 +144,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     opponent: 'Arizona Diamondbacks',
     scoreLine: 'Diamondbacks 3-2 Yankees',
     venue: 'Bank One Ballpark, Phoenix',
-    // NL park: no DH, Clemens bats ninth. Spencer started LF — not Knoblauch.
+    // NL park: no DH, Clemens bats ninth. Spencer started LF, not Knoblauch.
     slots: [
       S('SS', 'Derek Jeter'),
       S('RF', 'Paul O\'Neill'),
@@ -164,7 +164,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     source: 'baseball-almanac box 200111040ARI (starters = un-indented rows; Knoblauch listed ph,lf and Justice ph). Soriano HR line: "8th inning off Schilling".',
   },
 
-  // 4. 2001 World Series Game 7 — Arizona Diamondbacks (the walk-off)
+  // 4. 2001 World Series Game 7, Arizona Diamondbacks (the walk-off)
   {
     id: 'ws-2001-g7-ari',
     dateLabel: '2001 World Series, Game 7',
@@ -193,7 +193,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     source: 'baseball-almanac box 200111040ARI. Event lines confirm: Womack 2B off Rivera, Counsell HBP by Rivera, Bautista 2B off Clemens.',
   },
 
-  // 5. 1988 World Series Game 1 — Oakland Athletics (Canseco\'s slam wasted)
+  // 5. 1988 World Series Game 1, Oakland Athletics (Canseco\'s slam wasted)
   {
     id: 'ws-1988-g1-oak',
     dateLabel: '1988 World Series, Game 1',
@@ -217,7 +217,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     blankCandidates: [
       { name: 'Jose Canseco', slotIndex: 2, nationality: 'Cuba', fact: 'His second-inning grand slam off Tim Belcher gave Oakland a 4-2 lead.' },
       { name: 'Dave Parker', slotIndex: 3, nationality: 'USA', fact: 'The Cobra started in left field batting cleanup for Oakland.' },
-      { name: 'Dave Stewart', slotIndex: 8, nationality: 'USA', fact: 'Threw 8 innings — then Eckersley took the loss on the famous walk-off.' },
+      { name: 'Dave Stewart', slotIndex: 8, nationality: 'USA', fact: 'Threw 8 innings, then Eckersley took the loss on the famous walk-off.' },
     ],
     source: 'baseball-almanac box 198810150LAN. HR line confirms Canseco grand slam: "2nd inning off Belcher 3 on, 2 out".',
   },
@@ -245,13 +245,13 @@ export const NINE_LINEUPS: NineLineup[] = [
       S('P', 'Tim Belcher'),
     ],
     blankCandidates: [
-      { name: 'Mickey Hatcher', slotIndex: 2, nationality: 'USA', fact: 'Homered in the 1st inning. Kirk Gibson never started — his walk-off homer was a pinch-hit at-bat.' },
+      { name: 'Mickey Hatcher', slotIndex: 2, nationality: 'USA', fact: 'Homered in the 1st inning. Kirk Gibson never started, his walk-off homer was a pinch-hit at-bat.' },
       { name: 'Franklin Stubbs', slotIndex: 1, nationality: 'USA', fact: 'Started at first base on the night of Gibson\'s pinch-hit walk-off.' },
       { name: 'Mike Scioscia', slotIndex: 5, nationality: 'USA', fact: 'Caught the whole game and drove in a run, later a World Series-winning manager.' },
     ],
     source: 'baseball-almanac box 198810150LAN (Gibson listed only as "ph" in the 9-hole pitchers\' block; HR line: "Gibson (1,9th inning off Eckersley 1 on, 2 out)"). Hatcher HR: "1st inning off Stewart 1 on, 1 out".',
   },
-  // 7. 1986 World Series Game 6 — Boston Red Sox (one strike away)
+  // 7. 1986 World Series Game 6, Boston Red Sox (one strike away)
   // Verified 2026-07-22: baseball-almanac box 198610250NYN (starters =
   // un-indented batting rows). In-box corroboration: Henderson HR "10th
   // inning off Aguilera", E-Buckner, Clemens 7.0 IP.
@@ -283,7 +283,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     source: 'baseball-almanac box 198610250NYN. Event lines: Henderson HR 10th off Aguilera; E-Buckner (1); Clemens 7.0 IP.',
   },
 
-  // 8. 1986 World Series Game 6 — New York Mets (the Mookie game)
+  // 8. 1986 World Series Game 6, New York Mets (the Mookie game)
   {
     id: 'ws-1986-g6-nym',
     dateLabel: '1986 World Series, Game 6',
@@ -293,7 +293,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     opponent: 'Boston Red Sox',
     scoreLine: 'Mets 6-5 Red Sox (10 inn)',
     venue: 'Shea Stadium, New York',
-    // Trap: Bobby Ojeda started — not Gooden. Kevin Mitchell only pinch-hit.
+    // Trap: Bobby Ojeda started, not Gooden. Kevin Mitchell only pinch-hit.
     slots: [
       S('CF', 'Lenny Dykstra'),
       S('2B', 'Wally Backman'),
@@ -313,7 +313,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     source: 'baseball-almanac box 198610250NYN. Event lines: Ojeda 6.0 IP as starter; Knight 2 RBI; Carter SF; Mitchell listed ph only.',
   },
 
-  // 5. 2013 World Series Game 6 — Boston Red Sox (clinched at Fenway; Ortiz MVP)
+  // 5. 2013 World Series Game 6, Boston Red Sox (clinched at Fenway; Ortiz MVP)
   {
     id: 'ws-2013-g6-bos',
     dateLabel: '2013 World Series, Game 6',
@@ -344,7 +344,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     source: 'baseball-reference box BOS201310300 (starters = 9 batting rows before the substitution break) + Wikipedia "2013 World Series": Ross/Drew limited offensively but strong defensively, Saltalamacchia the regular catcher.',
   },
 
-  // 6. 2013 World Series Game 6 — St. Louis Cardinals
+  // 6. 2013 World Series Game 6, St. Louis Cardinals
   {
     id: 'ws-2013-g6-stl',
     dateLabel: '2013 World Series, Game 6',
@@ -377,7 +377,7 @@ export const NINE_LINEUPS: NineLineup[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Puzzle selection — daily (ET-seeded, sitewide convention) + unlimited.
+// Puzzle selection, daily (ET-seeded, sitewide convention) + unlimited.
 // ---------------------------------------------------------------------------
 
 export function getDailyNinePuzzle(): ActiveNinePuzzle {

@@ -162,7 +162,7 @@ export function useNbaConnect4() {
         if (result.fullName) displayName = result.fullName;
       } catch {
         // FAIL CLOSED: a network/parse failure must NOT let an unchecked answer
-        // through — reject with a retry message instead of placing the piece.
+        // through, reject with a retry message instead of placing the piece.
         setValidationError("Couldn't verify your answer right now, please try again.");
         setIsValidating(false);
         return;

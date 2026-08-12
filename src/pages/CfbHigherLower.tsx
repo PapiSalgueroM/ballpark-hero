@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 
 /**
  * Sixth Higher/Lower port (task #23). Stat axis is career COLLEGE passing
- * yards — the pool mixes record-book kings (Keenum 19,217) with famous NFL
+ * yards, the pool mixes record-book kings (Keenum 19,217) with famous NFL
  * names whose college totals surprise people (Brady 4,773, Cam 2,908).
  * Values verified vs cfb_qb_stats; NCAA official convention (see data file).
  */

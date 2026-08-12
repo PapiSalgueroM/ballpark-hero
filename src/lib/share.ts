@@ -9,7 +9,7 @@ export async function shareResult(text: string, title = 'DoUKnowBall') {
       toast.success('Copied to clipboard!');
     }
   } catch (err) {
-    // User cancelled share or clipboard failed — try clipboard as fallback
+    // User cancelled share or clipboard failed, try clipboard as fallback
     if (err instanceof DOMException && err.name === 'AbortError') return;
     try {
       await navigator.clipboard.writeText(text);

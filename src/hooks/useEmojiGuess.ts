@@ -63,7 +63,7 @@ function lcg(seed: number, i: number): number {
 
 /**
  * Daily five: 2 easy, 2 medium, 1 hard, same for everyone (ET day seed).
- * Falls back to whatever exists if a bucket is thin — the MIN_BANK_SIZE guard
+ * Falls back to whatever exists if a bucket is thin, the MIN_BANK_SIZE guard
  * in the data file keeps that theoretical.
  */
 function pickDaily(today: string): EmojiPuzzle[] {
@@ -101,7 +101,7 @@ function loadSaved(today: string): Saved | null {
 function save(today: string, guesses: string[][], index: number) {
   try {
     localStorage.setItem(`${STORAGE_PREFIX}${today}`, JSON.stringify({ guesses, index }));
-  } catch { /* storage unavailable — playable, not resumable */ }
+  } catch { /* storage unavailable, playable, not resumable */ }
 }
 
 export function useEmojiGuess(): EmojiGuessState {

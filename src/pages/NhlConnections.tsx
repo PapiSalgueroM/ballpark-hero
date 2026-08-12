@@ -13,7 +13,7 @@ import { NhlConnectionsHowToPlay } from '@/components/nhl-connections/NhlConnect
 import { Skeleton } from '@/components/ui/skeleton';
 
 /**
- * NHL Connections — direct port of NbaConnections/NflConnections (task #26).
+ * NHL Connections, direct port of NbaConnections/NflConnections (task #26).
  * Keep the connections pages in lockstep if the mechanic changes.
  */
 

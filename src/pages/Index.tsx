@@ -49,7 +49,7 @@ function normalizeSearchText(s: string): string {
  * Obvious aliases players might type that don't literally appear in a game's
  * label/description/category/path. Each alias expands to extra terms that
  * ARE searched against those fields. Intentionally small and curated rather
- * than exhaustive — this is a quality pass, not a synonym engine.
+ * than exhaustive, this is a quality pass, not a synonym engine.
  */
 const SEARCH_ALIASES: Record<string, string[]> = {
   wordle: ['footle'], // Footle is this site's Wordle-style guessing game
@@ -207,7 +207,7 @@ export default function Index() {
   const [authOpen, setAuthOpen] = useState(false);
   const [worldRank, setWorldRank] = useState<number | null>(null);
   // Same identity game_completions rows are written under (guest handle or
-  // profile display name) — mirrors useGameNavbarStats.
+  // profile display name), mirrors useGameNavbarStats.
   const playerName = useMemo(() => getCurrentPlayerName(profile), [profile]);
   const [totalPlayed, setTotalPlayed] = useState<number | null>(null);
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null);

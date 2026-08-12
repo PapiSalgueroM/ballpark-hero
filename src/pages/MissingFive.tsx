@@ -23,7 +23,7 @@ import {
 } from '@/lib/missingFive';
 
 /**
- * Missing Five (task #39) — the NBA port of /missing-xi. A verified real
+ * Missing Five (task #39), the NBA port of /missing-xi. A verified real
  * starting five with one name blanked; 3 guesses, hint ladder, 100/70/40.
  * Daily uses the sitewide ET-seeded convention via lib/missingFive.ts;
  * persistence via useDailyPuzzle's action log (sentinel-puzzle pattern,
@@ -282,7 +282,7 @@ const MissingFive = () => {
           description="A verified real NBA starting five is shown with one name blanked out. Remember who actually started, including the surprise starters history forgot."
           howToPlay={[
             'A famous real NBA starting five is shown with one player blanked',
-            'The position is shown — the name is the mystery',
+            'The position is shown, the name is the mystery',
             'You get 3 guesses; each miss unlocks a hint',
             'Guess on the first try for 100 points, then 70, then 40',
             'Every lineup is verified against the official box score',

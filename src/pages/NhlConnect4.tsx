@@ -15,8 +15,8 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 
 /**
- * NHL Connect 4 — final Connect 4 port (task #22 follow-on). Autocomplete
- * pool is nhl_player_stats (all-era SKATERS — goalies are absent from that
+ * NHL Connect 4, final Connect 4 port (task #22 follow-on). Autocomplete
+ * pool is nhl_player_stats (all-era SKATERS, goalies are absent from that
  * table), so free-text submission is ENABLED: goalie answers like Patrick
  * Roy are typed directly and judged by the AI validator, which covers
  * everyone. Keep the connect-4 pages in lockstep if the mechanic changes.

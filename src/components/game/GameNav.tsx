@@ -14,7 +14,7 @@ interface GameNavProps {
 /**
  * Owner request: every game page ends with THREE "play next" suggestions in
  * one consistent format (previously a single card). Picks are deterministic
- * per (ET day, current game) — same for every visitor, rotating daily —
+ * per (ET day, current game), same for every visitor, rotating daily -
  * drawn from three different categories where possible, preferring daily
  * games this browser hasn't completed yet today.
  */

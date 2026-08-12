@@ -6,7 +6,7 @@ import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { getTodayET } from '@/lib/dateUtils';
 
 /**
- * Hard upper bound on clue slots — a CLAMP ONLY, never a game-ending test.
+ * Hard upper bound on clue slots, a CLAMP ONLY, never a game-ending test.
  *
  * getClues returns SIX clues, not seven, when the player is from the host
  * nation (the 'Host Country' clue is dropped as a giveaway). Gating the run on
@@ -24,7 +24,7 @@ import { getTodayET } from '@/lib/dateUtils';
 const MAX_CLUES = 7;
 const POINTS_BY_CLUE: Record<number, number> = { 1: 1000, 2: 800, 3: 600, 4: 400, 5: 300, 6: 200, 7: 100 };
 
-// Seeded PRNG — deterministic per seed+index
+// Seeded PRNG, deterministic per seed+index
 function seededRandom(seed: number, index: number): number {
   let s = (seed ^ (index * 2654435761)) >>> 0;
   s = ((s ^ (s >>> 16)) * 0x45d9f3b) >>> 0;
@@ -33,7 +33,7 @@ function seededRandom(seed: number, index: number): number {
 }
 
 /**
- * Daily clue-order seed. Uses getTodayET, not new Date().toISOString() —
+ * Daily clue-order seed. Uses getTodayET, not new Date().toISOString() -
  * dateUtils.ts is explicit that the UTC form "breaks the shared daily
  * experience for US users", since it rolls over at 7-8pm local rather than
  * midnight ET. Fixed 2026-07-15; this hook was still on the UTC form.
@@ -64,7 +64,7 @@ function isGuessCorrect(guess: string, puzzle: WorldCupPuzzle): boolean {
 function getClues(puzzle: WorldCupPuzzle, seed?: number): WorldCupClue[] {
   const isHostNation = puzzle.hostCountry === puzzle.country;
 
-  // Middle clues (shuffleable) — skip 'Host Country' when player is from host nation
+  // Middle clues (shuffleable), skip 'Host Country' when player is from host nation
   const middle: WorldCupClue[] = [
     ...(isHostNation ? [] : [{ label: 'Host Country', value: puzzle.hostCountry }]),
     { label: isHostNation ? 'Country (Host Nation)' : 'Country', value: puzzle.country },
@@ -120,7 +120,7 @@ export function useWorldCup() {
   // ---- MODE ----------------------------------------------------------------
   // Default to UNLIMITED (revival decision, 2026-07-22). The game was pulled
   // for two reasons: the clue-overflow bug (fixed above) and "too few possible
-  // puzzles for a rare event" — 60 puzzles is thin as a headline DAILY but
+  // puzzles for a rare event", 60 puzzles is thin as a headline DAILY but
   // plenty as a replayable archive. Leading with unlimited mode neutralizes
   // the content-burn objection; the daily tab still exists for streak players.
   const [mode, setMode] = useState<WorldCupMode>('unlimited');
@@ -176,15 +176,15 @@ export function useWorldCup() {
   /**
    * How many clues the player can actually be shown while still guessing.
    *
-   * The LAST entry from getClues is always { label: 'Answer' } — it exists to be
+   * The LAST entry from getClues is always { label: 'Answer' }, it exists to be
    * revealed once the game is over (the page only styles it as the big gold
    * reveal when `isFinalReveal`, i.e. gameStatus !== 'playing'). So it must
    * never enter revealedClues during play.
    *
-   * BUG FIX 2026-07-15 — this is why the game was pulled on 2026-07-08 as
+   * BUG FIX 2026-07-15, this is why the game was pulled on 2026-07-08 as
    * "buggy (hint x3 -> blank screen)". Two faults, compounding:
    *  1. Both modes ended the run at `>= totalClues`, so the final reveal index
-   *     was reachable while still playing — the page then rendered the Answer as
+   *     was reachable while still playing, the page then rendered the Answer as
    *     an ordinary clue, literally captioned "Answer", while the input box kept
    *     asking you to guess it.
    *  2. Daily mode compared against the CONSTANT MAX_CLUES (7) rather than the

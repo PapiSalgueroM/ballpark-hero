@@ -20,7 +20,7 @@ export interface TransferValuePlayer {
  */
 export async function fetchTransferValuePool(): Promise<TransferValuePlayer[]> {
   try {
-    // .limit(1500) was silently capped to 1,000 rows by the API — page instead.
+    // .limit(1500) was silently capped to 1,000 rows by the API, page instead.
     const { data, error } = await fetchAllRows<{
       player_name: string; position: string | null; age: number | null;
       nationality: string | null; club: string | null;
