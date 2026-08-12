@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ReportSiteIssue } from '@/components/game/ReportSiteIssue';
 
 export function Footer() {
   return (
@@ -14,6 +15,8 @@ export function Footer() {
         <Link to="/terms" className="underline hover:text-foreground transition-colors">
           Terms of Service
         </Link>
+        <span>·</span>
+        <ReportSiteIssue />
       </div>
     </footer>
   );
