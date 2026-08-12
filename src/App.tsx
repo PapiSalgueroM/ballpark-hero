@@ -84,6 +84,18 @@ import PuckDetective from "./pages/PuckDetective";
 import HockeyGrid from "./pages/HockeyGrid";
 import SignThePlayer from "./pages/SignThePlayer";
 import ConquestNba from "./pages/ConquestNba";
+import ConquestNhl from "./pages/ConquestNhl";
+import ConquestMlb from "./pages/ConquestMlb";
+import FrontOffice from "./pages/FrontOffice";
+import NflMyCareer from "./pages/NflMyCareer";
+import NbaFrontOffice from "./pages/NbaFrontOffice";
+import MlbFrontOffice from "./pages/MlbFrontOffice";
+import NhlFrontOffice from "./pages/NhlFrontOffice";
+import CfbDynasty from "./pages/CfbDynasty";
+import CbbDynasty from "./pages/CbbDynasty";
+import NbaMyCareer from "./pages/NbaMyCareer";
+import MlbMyCareer from "./pages/MlbMyCareer";
+import NhlMyCareer from "./pages/NhlMyCareer";
 import PackBattle from "./pages/PackBattle";
 import SportsMillionaire from "./pages/SportsMillionaire";
 import DartDraft from "./pages/DartDraft";
@@ -291,6 +303,18 @@ const AppContent = () => {
         <Route path="/hockey-grid" element={<HockeyGrid />} />
         <Route path="/sign-the-player" element={<SignThePlayer />} />
         <Route path="/conquest-nba" element={<ConquestNba />} />
+        <Route path="/conquest-nhl" element={<ConquestNhl />} />
+        <Route path="/conquest-mlb" element={<ConquestMlb />} />
+        <Route path="/front-office" element={<FrontOffice />} />
+        <Route path="/nfl-my-career" element={<NflMyCareer />} />
+        <Route path="/nba-front-office" element={<NbaFrontOffice />} />
+        <Route path="/mlb-front-office" element={<MlbFrontOffice />} />
+        <Route path="/nhl-front-office" element={<NhlFrontOffice />} />
+        <Route path="/cfb-dynasty" element={<CfbDynasty />} />
+        <Route path="/cbb-dynasty" element={<CbbDynasty />} />
+        <Route path="/nba-my-career" element={<NbaMyCareer />} />
+        <Route path="/mlb-my-career" element={<MlbMyCareer />} />
+        <Route path="/nhl-my-career" element={<NhlMyCareer />} />
         <Route path="/pack-battle" element={<PackBattle />} />
         <Route path="/sports-millionaire" element={<SportsMillionaire />} />
         <Route path="/dart-draft" element={<DartDraft />} />

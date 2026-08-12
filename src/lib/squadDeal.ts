@@ -243,13 +243,13 @@ export const MEMES: Player[] = [
 /* ---------------- Era + pool fetch ---------------- */
 export type Era = 'current' | 'legends';
 
-export async function fetchSquadPool(era: Era): Promise<Player[]> {
+export async function fetchSquadPool(era: Era, year = 2026): Promise<Player[]> {
   if (era === 'legends') return [...LEGENDS];
   try {
     const { data, error } = await supabase
       .from('player_market_values')
       .select('player_name, position, age, nationality, club, market_value_usd, goals, assists')
-      .eq('year', 2026)
+      .eq('year', year)
       .order('market_value_usd', { ascending: false })
       .limit(1000);
     if (error || !data || data.length === 0) return fallbackPlayers.slice();

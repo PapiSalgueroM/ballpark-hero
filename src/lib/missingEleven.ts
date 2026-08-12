@@ -3,9 +3,9 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
 /**
  * Missing Eleven (task #39 — the NFL port of Missing XI): a famous real
- * Super Bowl STARTING OFFENSE (11 players) is shown with ONE name blanked.
- * 3 guesses, hint ladder, 100/70/40 scoring — same mechanic as /missing-five
- * and /missing-nine.
+ * Super Bowl STARTING UNIT (11 players, offenses AND defenses) is shown with
+ * ONE name blanked. 3 guesses, hint ladder, 100/70/40 scoring — same mechanic
+ * as /missing-five and /missing-nine.
  *
  * CONTENT VERIFICATION METHOD:
  * pro-football-reference hides its "Starters" tables inside HTML comments
@@ -53,11 +53,18 @@ export interface ElevenLineup {
   opponent: string;
   scoreLine: string;
   venue: string;
-  /** Exactly 11 slots, the starting offense in pfr's listed order. */
+  /** Which side of the ball this lineup is. Missing = 'offense' (the original entries). */
+  unit?: 'offense' | 'defense';
+  /** Exactly 11 slots, the starting unit in the official listed order. */
   slots: ElevenSlot[];
   blankCandidates: ElevenBlankCandidate[];
   /** INTERNAL editor note on what was checked. Never rendered. */
   source: string;
+}
+
+/** Side of the ball for a lineup ('offense' when the field is omitted). */
+export function elevenUnit(lineup: ElevenLineup): 'offense' | 'defense' {
+  return lineup.unit ?? 'offense';
 }
 
 export interface ActiveElevenPuzzle {
@@ -516,6 +523,152 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'James Develin', slotIndex: 2, nationality: 'USA', fact: 'The fullback in New England\'s two-back opening set.' },
     ],
     source: 'pfr box 201802040nwe #home_starters (Chrome DOM) + Wikipedia "Super Bowl LII" Starting lineups table, 11/11 match.',
+  },
+
+  // -------------------------------------------------------------------------
+  // DEFENSES (task #82, added 2026-08-05). Verification: every starter is
+  // confirmed by 2+ independent publishers fetched on 2026-08-05; primary
+  // per-lineup sources are in each entry's source note. Traps double-checked,
+  // do NOT "fix" them:
+  //   - SB XLVIII Seattle: the official card is the NICKEL (3 CBs, 2 LBs).
+  //     Malcolm Smith, the game MVP, did NOT start (gamebook substitutions
+  //     "LB 53 M.Smith"), and neither did Bruce Irvin, Brandon Mebane, Tony
+  //     McDaniel or Red Bryant. Clinton McDonald started at RDT.
+  //   - SB XX Chicago: William Perry STARTED at RDT (Hartenstine did not).
+  //   - SB XXXV Baltimore: Kim Herring is the SS, not Corey Harris.
+  // -------------------------------------------------------------------------
+
+  // 15. Super Bowl XX, Chicago Bears defense (the 46)
+  {
+    id: 'sb-xx-chi-d',
+    dateLabel: 'Super Bowl XX',
+    competition: 'Super Bowl',
+    matchDate: '1986-01-26',
+    team: 'Chicago Bears',
+    opponent: 'New England Patriots',
+    scoreLine: 'Bears 46-10 Patriots',
+    venue: 'Louisiana Superdome, New Orleans',
+    unit: 'defense',
+    slots: [
+      S('LDE', 'Dan Hampton'),
+      S('LDT', 'Steve McMichael'),
+      S('RDT', 'William Perry'),
+      S('RDE', 'Richard Dent'),
+      S('LLB', 'Otis Wilson'),
+      S('MLB', 'Mike Singletary'),
+      S('RLB', 'Wilber Marshall'),
+      S('LCB', 'Mike Richardson'),
+      S('RCB', 'Leslie Frazier'),
+      S('SS', 'Dave Duerson'),
+      S('FS', 'Gary Fencik'),
+    ],
+    blankCandidates: [
+      { name: 'William Perry', slotIndex: 2, nationality: 'USA', fact: 'The Fridge started at right tackle and rumbled in a rushing touchdown that night.' },
+      { name: 'Leslie Frazier', slotIndex: 8, nationality: 'USA', fact: 'Started at right corner and suffered a career-ending knee injury in the game.' },
+      { name: 'Otis Wilson', slotIndex: 4, nationality: 'USA', fact: 'The left-side linebacker piled up 10.5 sacks that season in the 46.' },
+      { name: 'Gary Fencik', slotIndex: 10, nationality: 'USA', fact: 'The Yale man at free safety, with five interceptions that season.' },
+    ],
+    source: 'chicagobears.com official "Super Bowl XX Starters" photo gallery + profootballarchives.com SB XX box score, 11/11 match incl. positions and CB sides; Perry-started and Frazier-injury cross-checked in Wikipedia SB XX prose and Post and Courier.',
+  },
+
+  // 16. Super Bowl XXXV, Baltimore Ravens defense (the 2000 Ravens)
+  {
+    id: 'sb-xxxv-bal-d',
+    dateLabel: 'Super Bowl XXXV',
+    competition: 'Super Bowl',
+    matchDate: '2001-01-28',
+    team: 'Baltimore Ravens',
+    opponent: 'New York Giants',
+    scoreLine: 'Ravens 34-7 Giants',
+    venue: 'Raymond James Stadium, Tampa',
+    unit: 'defense',
+    slots: [
+      S('LDE', 'Rob Burnett'),
+      S('LDT', 'Sam Adams'),
+      S('RDT', 'Tony Siragusa'),
+      S('RDE', 'Michael McCrary'),
+      S('LLB', 'Peter Boulware'),
+      S('MLB', 'Ray Lewis'),
+      S('RLB', 'Jamie Sharper'),
+      S('LCB', 'Duane Starks'),
+      S('RCB', 'Chris McAlister'),
+      S('SS', 'Kim Herring'),
+      S('FS', 'Rod Woodson'),
+    ],
+    blankCandidates: [
+      { name: 'Kim Herring', slotIndex: 9, nationality: 'USA', fact: 'The forgotten starter on the most feared defense ever, and he picked off Kerry Collins in this game.' },
+      { name: 'Duane Starks', slotIndex: 7, nationality: 'USA', fact: 'Jumped a Kerry Collins route and took it 49 yards to the house.' },
+      { name: 'Jamie Sharper', slotIndex: 6, nationality: 'USA', fact: 'The third man in the linebacker trio with Ray Lewis and Peter Boulware.' },
+      { name: 'Rob Burnett', slotIndex: 0, nationality: 'USA', fact: 'The left end had 10.5 sacks that season, a career year at age 33.' },
+    ],
+    source: 'pfr 2000 Ravens roster Starters table (fetched, matches 11/11 incl. CB sides) + reference.org/nfl-video.com SB XXXV lineups; Herring SS (not Corey Harris) per Baltimore Sun via neilcornrich.com and Russell Street Report; Starks pick-six per CBS News recap.',
+  },
+
+  // 17. Super Bowl XLVIII, Seattle Seahawks defense (the Legion of Boom)
+  {
+    id: 'sb-xlviii-sea-d',
+    dateLabel: 'Super Bowl XLVIII',
+    competition: 'Super Bowl',
+    matchDate: '2014-02-02',
+    team: 'Seattle Seahawks',
+    opponent: 'Denver Broncos',
+    scoreLine: 'Seahawks 43-8 Broncos',
+    venue: 'MetLife Stadium, East Rutherford',
+    unit: 'defense',
+    // Official gamebook lists the NICKEL as the starting defense: 3 CBs, 2 LBs.
+    slots: [
+      S('LDE', 'Cliff Avril'),
+      S('LDT', 'Michael Bennett'),
+      S('RDT', 'Clinton McDonald'),
+      S('RDE', 'Chris Clemons'),
+      S('OLB', 'K.J. Wright'),
+      S('MLB', 'Bobby Wagner'),
+      S('CB', 'Walter Thurmond'),
+      S('LCB', 'Richard Sherman'),
+      S('RCB', 'Byron Maxwell'),
+      S('SS', 'Kam Chancellor'),
+      S('FS', 'Earl Thomas'),
+    ],
+    blankCandidates: [
+      { name: 'K.J. Wright', slotIndex: 4, nationality: 'USA', fact: 'Wright started at linebacker. Malcolm Smith, who won MVP that night, came off the bench.' },
+      { name: 'Clinton McDonald', slotIndex: 2, nationality: 'USA', fact: 'Started inside in the nickel front while base tackles Brandon Mebane and Tony McDaniel waited.' },
+      { name: 'Walter Thurmond', slotIndex: 6, nationality: 'USA', fact: 'Seattle opened in the nickel, so the official card lists three starting corners. Thurmond held the slot.' },
+      { name: 'Byron Maxwell', slotIndex: 8, nationality: 'USA', fact: 'Started opposite Sherman after stepping in for Brandon Browner late that season.' },
+    ],
+    source: 'Official NFL gamebook PDF (static.www.nfl.com, Lineups page: nickel starters verbatim, M.Smith and B.Irvin listed as substitutions) + PFT starters-remaining enumeration + SI All-22 film review; Wright start also in Wikipedia K.J. Wright prose.',
+  },
+
+  // 18. Super Bowl 50, Denver Broncos defense (the No Fly Zone)
+  {
+    id: 'sb-50-den-d',
+    dateLabel: 'Super Bowl 50',
+    competition: 'Super Bowl',
+    matchDate: '2016-02-07',
+    team: 'Denver Broncos',
+    opponent: 'Carolina Panthers',
+    scoreLine: 'Broncos 24-10 Panthers',
+    venue: "Levi's Stadium, Santa Clara",
+    unit: 'defense',
+    slots: [
+      S('DE', 'Derek Wolfe'),
+      S('NT', 'Sylvester Williams'),
+      S('DE', 'Malik Jackson'),
+      S('OLB', 'Von Miller'),
+      S('ILB', 'Brandon Marshall'),
+      S('ILB', 'Danny Trevathan'),
+      S('OLB', 'DeMarcus Ware'),
+      S('CB', 'Aqib Talib'),
+      S('CB', 'Chris Harris Jr.'),
+      S('SS', 'T.J. Ward'),
+      S('FS', 'Darian Stewart'),
+    ],
+    blankCandidates: [
+      { name: 'Sylvester Williams', slotIndex: 1, nationality: 'USA', fact: "The nose tackle between Derek Wolfe and Malik Jackson in Wade Phillips' front." },
+      { name: 'Danny Trevathan', slotIndex: 5, nationality: 'USA', fact: 'Led the Broncos with eight tackles and recovered two fumbles in the game.' },
+      { name: 'Malik Jackson', slotIndex: 2, nationality: 'USA', fact: "Fell on Cam Newton's fumble in the end zone for the game's first touchdown." },
+      { name: 'Darian Stewart', slotIndex: 10, nationality: 'USA', fact: 'Wade Phillips named him the free safety, with T.J. Ward at strong.' },
+    ],
+    source: 'B/R position-by-position SB 50 preview + AMNY defenses-at-a-glance + NFL.com postgame film review (front three named) + Wikipedia player pages ("started in Super Bowl 50" for Marshall, Trevathan; Stewart FS/Ward SS assignment), 11/11 across 2+ publishers each.',
   },
 ];
 

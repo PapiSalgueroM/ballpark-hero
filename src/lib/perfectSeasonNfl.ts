@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { DraftablePlayer, SeasonSlot, SpinSquad } from '@/lib/perfectSeason';
+import { coachFor } from '@/data/nflCoaches';
 
 export const NFL_SLOTS: SeasonSlot[] = [
   { key: 'QB', label: 'Quarterback', weight: 1.8 },
@@ -8,6 +9,9 @@ export const NFL_SLOTS: SeasonSlot[] = [
   { key: 'WR2', label: 'Wide Receiver 2', weight: 1 },
   { key: 'TE', label: 'Tight End', weight: 1 },
   { key: 'FLEX', label: 'Flex (RB/WR/TE)', weight: 1 },
+  // Owner task 77 (2026-08-05): defense units and head coaches join the draft.
+  { key: 'DEF', label: 'Defense', weight: 1.3 },
+  { key: 'HC', label: 'Head Coach', weight: 0.7 },
 ];
 
 export const NFL_GAMES = 17;
@@ -166,6 +170,54 @@ function detailFor(group: string, t: SeasonTotals): string {
 }
 
 /**
+ * Team defense unit for one team season, from nfl_team_defense (real opponent
+ * aggregates baked in Postgres 2026-08-05; rating is the season-relative
+ * percentile so a 97 means best defense of that year). Null on any miss.
+ */
+async function fetchDefenseUnit(entry: TeamSeasonEntry): Promise<DraftablePlayer | null> {
+  try {
+    const { data, error } = await supabase
+      .from('nfl_team_defense' as any)
+      .select('ypg, tdpg, ints, sacks, def_rank, rating')
+      .eq('abbr', statsTeamAbbr(entry.abbr))
+      .eq('year', entry.year)
+      .maybeSingle();
+    if (error || !data) return null;
+    const d = data as any;
+    return {
+      playerId: `DEF-${entry.abbr}-${entry.year}`,
+      name: `${entry.name} Defense`,
+      rating: clampRating(num(d.rating)),
+      eligible: ['DEF'],
+      detail: `#${num(d.def_rank)} defense of ${entry.year} · ${num(d.ypg)} yds/gm allowed · ${num(d.sacks)} sacks · ${num(d.ints)} INTs`,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/** The coach card: curated stint if certain, otherwise the generic committee. */
+function coachUnit(entry: TeamSeasonEntry): DraftablePlayer {
+  const stint = coachFor(entry.abbr, entry.year);
+  if (stint) {
+    return {
+      playerId: `HC-${entry.abbr}-${entry.year}`,
+      name: stint.coach,
+      rating: clampRating(stint.rating),
+      eligible: ['HC'],
+      detail: `Head coach, ${entry.year} · ${stint.note}`,
+    };
+  }
+  return {
+    playerId: `HC-${entry.abbr}-${entry.year}`,
+    name: 'The Coordinator Committee',
+    rating: 70,
+    eligible: ['HC'],
+    detail: `No famous name ran this sideline in ${entry.year}. Steady 70, no questions.`,
+  };
+}
+
+/**
  * Full draftable squad for one team season. nflfastr_player_stats is weekly,
  * so REG rows are aggregated to season totals client side (max observed rows
  * for one team season is 199, well inside the 400 limit).
@@ -242,6 +294,21 @@ export async function fetchSquad(entry: TeamSeasonEntry): Promise<SpinSquad | nu
     }
 
     if (players.length < 4) return null;
+
+    // Owner task 77: every spin also offers the team's real defense unit and
+    // its head coach (curated stints only; committee card otherwise). If the
+    // defense row cannot be fetched the card says so and rates league-average,
+    // because an unfillable DEF slot would strand the whole draft.
+    const def = await fetchDefenseUnit(entry);
+    players.push(def ?? {
+      playerId: `DEF-${entry.abbr}-${entry.year}`,
+      name: `${entry.name} Defense`,
+      rating: 65,
+      eligible: ['DEF'],
+      detail: 'Defensive numbers unavailable right now. Rated league average.',
+    });
+    players.push(coachUnit(entry));
+
     players.sort((a, b) => b.rating - a.rating);
     return {
       squadId: `${entry.abbr}-${entry.year}`,

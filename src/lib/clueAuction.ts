@@ -8,9 +8,10 @@ import { flagFor } from '@/lib/dealPlayers';
  *
  * The secret is drawn with pickSecret from the Who Am I? pool
  * (player_market_values, most recent row per player from 2024 onward;
- * secrets always come from the top 200 by market value). Reveal values are
- * computed from that pool row plus the career club-history set that
- * fetchWhoAmIPool builds from every year in the table.
+ * secrets always come from the top of the pool by market value, 300 names
+ * since 2026-08-05). Reveal values are computed from that pool row plus the
+ * career club-history set that fetchWhoAmIPool builds from every year in
+ * the table.
  *
  * Menu prices sum to 155 against a bank of 100, so buying everything is
  * impossible by design.

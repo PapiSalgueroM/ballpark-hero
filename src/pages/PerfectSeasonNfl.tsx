@@ -812,9 +812,10 @@ const PerfectSeasonNfl = () => {
           description="Draft an offense across the modern NFL. The wheel decides which team-season you draft from, one player per spin, no repeats. Then the sim decides your fate over 17 games."
           howToPlay={[
             'Spin the wheel. It lands on a real NFL team and season from 1999 to today.',
-            'Draft one player from that squad into an open slot. Ratings come from their real stats that year.',
-            'Repeat until all 6 slots are filled: quarterback, running back, two receivers, tight end, and a flex.',
-            'Simulate the 17 game season. Better offenses win more, but 17-0 takes serious luck.',
+            'Draft one pick from that squad into an open slot. Player ratings come from their real stats that year.',
+            'Fill all 8 slots: QB, RB, two receivers, tight end, flex, a real DEFENSE unit, and a HEAD COACH.',
+            'Defenses are rated off what they actually allowed that season. Coaches range from Belichick to Urban Meyer, and yes, the bad ones drag you down.',
+            'Simulate the 17 game season. Better teams win more, but 17-0 takes serious luck.',
             'Two rerolls per run if a spin gives you nothing you like.',
           ]}
           examples={[

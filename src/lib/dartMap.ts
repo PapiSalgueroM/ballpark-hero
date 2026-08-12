@@ -48,33 +48,55 @@ export const DART_SLOTS: FormationSlot[] = FORMATIONS[0].slots;
 interface Bounds { minx: number; miny: number; maxx: number; maxy: number; area: number }
 
 /**
- * Antimeridian unwrap. Russia, the US (Aleutians) and Fiji cross the 180th
- * meridian, so their raw rings jump from one map edge to the other. Drawn
- * naively that paints full-width smear bars across the Arctic and Pacific
- * (the owner's "map looks weird" bug) and inflates their bounding areas,
- * wrecking accuracy scoring. Unwrapping keeps each ring contiguous past the
- * edge; pathOf then draws a shifted copy so both halves appear correctly.
+ * Antimeridian repair. Russia and a few Pacific nations cross the 180th
+ * meridian; the projection script stitched both halves of each such polygon
+ * into ONE ring joined by full-width horizontal traverse edges. Drawn
+ * naively that paints smear bars across the Arctic and Pacific (the owner's
+ * "map looks weird" bug) and inflates bounding areas, wrecking accuracy
+ * scoring. The fix: cut every ring at its seam jumps and close each side as
+ * its own polygon. Each piece then lives at its correct map edge, the
+ * traverse edges vanish, and hit-testing works on plain coordinates.
  */
 const unwrappedCache = new Map<string, number[][][]>();
+
+function splitAtSeam(ring: number[][]): number[][][] {
+  const jumps: number[] = [];
+  for (let i = 1; i < ring.length; i++) {
+    if (Math.abs(ring[i][0] - ring[i - 1][0]) > WORLD_W / 2) jumps.push(i);
+  }
+  if (jumps.length === 0) return [ring];
+  const starts = [0, ...jumps];
+  const segs: number[][][] = [];
+  for (let s = 0; s < starts.length; s++) {
+    const from = starts[s];
+    const to = s + 1 < starts.length ? starts[s + 1] : ring.length;
+    segs.push(ring.slice(from, to));
+  }
+  // The ring is cyclic, so the last segment continues into the first: merge.
+  if (segs.length > 1) {
+    const last = segs.pop()!;
+    segs[0] = [...last, ...segs[0]];
+  }
+  return segs.filter(s => s.length >= 3);
+}
 
 function unwrappedRings(c: GeoCountry): number[][][] {
   let r = unwrappedCache.get(c.iso);
   if (r) return r;
-  r = c.rings.map(ring => {
-    const out: number[][] = [];
-    let offset = 0;
-    let prevX: number | null = null;
-    for (const [x, y] of ring) {
-      let xx = x + offset;
-      if (prevX !== null) {
-        if (xx - prevX > WORLD_W / 2) { offset -= WORLD_W; xx = x + offset; }
-        else if (xx - prevX < -WORLD_W / 2) { offset += WORLD_W; xx = x + offset; }
+  r = c.rings
+    .flatMap(splitAtSeam)
+    .filter(ring => {
+      // Belt and braces: drop any near-flat ultra-wide ribbon that still
+      // slips through (projection garbage, never real geography).
+      let minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9;
+      for (const [x, y] of ring) {
+        if (x < minx) minx = x;
+        if (x > maxx) maxx = x;
+        if (y < miny) miny = y;
+        if (y > maxy) maxy = y;
       }
-      out.push([xx, y]);
-      prevX = xx;
-    }
-    return out;
-  });
+      return !(maxx - minx > 150 && maxy - miny < 12);
+    });
   unwrappedCache.set(c.iso, r);
   return r;
 }

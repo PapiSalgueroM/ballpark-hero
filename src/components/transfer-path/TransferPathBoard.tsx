@@ -9,6 +9,7 @@ import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { TRANSFER_PATH_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { RotateCcw, ArrowRight, Lightbulb } from 'lucide-react';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
+import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import { cn } from '@/lib/utils';
 
 
@@ -74,9 +75,20 @@ export function TransferPathBoard() {
       title="TRANSFER PATH"
       subtitle="Name teammates to connect the two players in as few steps as possible."
       headerExtra={
-        <p className="text-xs text-muted-foreground mt-1">
-          {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
-        </p>
+        <div className="mt-1 flex items-center justify-center gap-2">
+          <p className="text-xs text-muted-foreground">
+            {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
+          </p>
+          <HowToPlayPopover title="How to Play Transfer Path" floatingTrigger={false} className="p-1">
+            <div className="space-y-3 text-left">
+              <p>🎯 <span className="font-semibold text-foreground">Connect the two players</span> by naming footballers who shared a club, one link at a time.</p>
+              <p>🔗 Each name you add must have been a club teammate of the LAST player in your chain, in any season.</p>
+              <p>🏁 Reach the target player to win. 1000 points for the shortest possible path, minus 100 for every extra step.</p>
+              <p>💡 Stuck? The hint nudges you toward a route, and giving up shows a full working path.</p>
+              <p>📅 One daily puzzle for everyone, plus unlimited practice puzzles.</p>
+            </div>
+          </HowToPlayPopover>
+        </div>
       }
     >
       <div className="space-y-6">

@@ -115,7 +115,11 @@ export function useLineupBuilder() {
           playerName = result.fullName;
         }
       } catch {
-        // On error allow through
+        // FAIL CLOSED (July 2026 P1 rule: never accept-on-error). A network
+        // or quota failure is a free retry, not a free pass.
+        setValidationError("Couldn't verify that answer. Try again in a second.");
+        setIsValidating(false);
+        return;
       }
 
       const slot: FilledSlot = {

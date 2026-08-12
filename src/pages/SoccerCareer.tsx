@@ -28,7 +28,7 @@ import {
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
-  dismissBallonDor, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
+  dismissBallonDor, applyBdorSpeech, type BdorSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
   acceptRetirementSuggestion, declineRetirementSuggestion,
   advancePunditSeason, endPunditCareer,
   advanceOwnerSeason, endOwnerCareer,
@@ -557,6 +557,10 @@ export default function SoccerCareer() {
     if (!career) return;
     setCareer(dismissBallonDor(career, clubs));
   };
+  const handleBdorSpeech = (choice: BdorSpeechChoice) => {
+    if (!career) return;
+    setCareer(applyBdorSpeech(career, choice, clubs));
+  };
 
   const handleManualRetire = () => {
     if (!career) return;
@@ -711,6 +715,7 @@ export default function SoccerCareer() {
               onRetireInternational={handleRetireInternational}
               onDismissRivalryEvent={handleDismissRivalryEvent}
               onDismissBallonDor={handleDismissBallonDor}
+              onBdorSpeech={handleBdorSpeech}
               onManualRetire={handleManualRetire}
               onPostRetirement={handlePostRetirement}
               onAdvanceManager={handleAdvanceManager}
@@ -1184,9 +1189,31 @@ function WorldCupResultCard({ wc, career, onDismiss }: { wc: WorldCupResult; car
           )}
         </>
       )}
-      <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-white ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
-        Continue →
-      </Button>
+      {isWinner ? (
+        <div className="space-y-1.5">
+          <p className="text-center text-[11px] font-bold uppercase tracking-wider text-amber-300">The microphone is yours. The speech:</p>
+          {career.rival && !career.rival.retired && (
+            <Button onClick={() => onSpeech("thank_rival")} className="w-full h-10 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 justify-start">
+              🎤 Thank {career.rival.name} by name: he made me this good
+            </Button>
+          )}
+          {career.family.children > 0 && (
+            <Button onClick={() => onSpeech("family_on_stage")} className="w-full h-10 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 justify-start">
+              👶 Bring your kid on stage to hold the golden ball
+            </Button>
+          )}
+          <Button onClick={() => onSpeech("tears")} className="w-full h-10 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 justify-start">
+            😭 Cry through the whole thing, thank your youth coach
+          </Button>
+          <Button onClick={() => onSpeech("greatest_ever")} className="w-full h-10 text-xs font-bold text-white bg-amber-700 hover:bg-amber-600 justify-start">
+            🐐 Declare yourself the greatest to ever do it
+          </Button>
+        </div>
+      ) : (
+        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-500">
+          Continue →
+        </Button>
+      )}
     </div>
   );
 }
@@ -1444,7 +1471,7 @@ function FinancialPanel({ career }: { career: CareerState }) {
 }
 
 /* ─── Ballon d'Or Ceremony Screen ─── */
-function BallonDorCeremonyCard({ bdor, career, onDismiss }: { bdor: BallonDorResult; career: CareerState; onDismiss: () => void }) {
+function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: BallonDorResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: BdorSpeechChoice) => void }) {
   const isWinner = bdor.playerRank === 1;
   const isPodium = bdor.playerRank !== null && bdor.playerRank <= 3;
   const isNominated = bdor.playerNominated;
@@ -2060,7 +2087,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -2076,6 +2103,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onRetireInternational: () => void;
   onDismissRivalryEvent: () => void;
   onDismissBallonDor: () => void;
+  onBdorSpeech: (choice: BdorSpeechChoice) => void;
   onManualRetire: () => void;
   onPostRetirement: (choice: PostRetirementChoice) => void;
   onAdvanceManager: () => void;
@@ -2385,7 +2413,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             </div>
           )}
           {career.phase === "ballon_dor" && career.pendingBallonDor && (
-            <BallonDorCeremonyCard bdor={career.pendingBallonDor} career={career} onDismiss={onDismissBallonDor} />
+            <BallonDorCeremonyCard bdor={career.pendingBallonDor} career={career} onDismiss={onDismissBallonDor} onSpeech={onBdorSpeech} />
           )}
 
           {/* OVERLAY: Transfer Window */}

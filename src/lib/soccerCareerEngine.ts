@@ -324,6 +324,27 @@ export const SPENDING_ITEMS: SpendingItem[] = [
   { id: "perf_vr", name: "VR Training System", emoji: "🥽", category: "performance", cost: 2, description: "Virtual training tech, €2M", oneTime: true, effect: "+2 Decision Making" },
   { id: "perf_vision", name: "Vision Training Clinic", emoji: "👁️", category: "performance", cost: 1.5, description: "Visual processing training, €1.5M", oneTime: true, effect: "+2 Passing, better assist rate" },
   { id: "perf_setpiece", name: "Set Piece Coach", emoji: "🎯", category: "performance", cost: 1, description: "Dead ball specialist, €1M", oneTime: true, effect: "+3 Free Kick accuracy" },
+  // 2026-08-05 money expansion (owner: "way more options to do with ur money")
+  { id: "boyhood_club", name: "Buy Your Boyhood Club", emoji: "🏟️", category: "property", cost: 60, description: "Buy the club where it all started, €60M", oneTime: true, minNetWorth: 50, effect: "Legacy landmark, popularity +20" },
+  { id: "hometown_academy", name: "Hometown Academy", emoji: "🎓", category: "property", cost: 10, description: "Build a youth academy back home, €10M", oneTime: true, minNetWorth: 8, effect: "Legacy +, popularity +10" },
+  { id: "football_museum", name: "Museum of You", emoji: "🖼️", category: "property", cost: 12, description: "A museum about your own career, €12M", oneTime: true, minNetWorth: 15, effect: "Popularity +8, peak ego" },
+  { id: "hypercar", name: "Hypercar", emoji: "🏎️", category: "vehicle", cost: 2, description: "A seven-figure hypercar, €2M", oneTime: false, minNetWorth: 3 },
+  { id: "submarine", name: "Personal Submarine", emoji: "🛳️", category: "vehicle", cost: 30, monthlyCost: 0.4, description: "Yes, a submarine, €30M", oneTime: true, minNetWorth: 45, effect: "Absolutely unnecessary. Popularity +5" },
+  { id: "teammate_startup", name: "Teammate's Startup", emoji: "🚀", category: "investment", cost: 1, description: "40% chance 5x return, 60% lose it", oneTime: false },
+  { id: "meme_coin", name: "Meme Coin", emoji: "🐕", category: "investment", cost: 0.5, description: "10% chance 20x, 90% goes to zero", oneTime: false },
+  { id: "art_collection", name: "Art Collection", emoji: "🎨", category: "investment", cost: 3, description: "Steady 12% a year, very classy", oneTime: true, minNetWorth: 5 },
+  { id: "racehorse", name: "Racehorse", emoji: "🐎", category: "investment", cost: 2, description: "25% chance of a €6M champion, else modest stud fees", oneTime: false, minNetWorth: 4 },
+  { id: "esports_org", name: "Esports Org", emoji: "🎮", category: "investment", cost: 4, description: "35% chance 3x return", oneTime: true, minNetWorth: 6 },
+  { id: "security_team", name: "Security Team", emoji: "🕶️", category: "lifestyle", cost: 0, monthlyCost: 0.2, description: "Round-the-clock protection, €200k/year", oneTime: true, effect: "+3 Morale, sleeps easy" },
+  { id: "documentary_crew", name: "Documentary Crew", emoji: "🎥", category: "lifestyle", cost: 0, monthlyCost: 0.15, description: "Your own all-access doc series, €150k/year", oneTime: true, effect: "+3 Popularity per season" },
+  { id: "family_office", name: "Family Office", emoji: "🏦", category: "lifestyle", cost: 0, monthlyCost: 0.12, description: "Professional wealth managers, €120k/year", oneTime: true, effect: "+2% net worth growth per season" },
+  { id: "charity_foundation", name: "Charity Foundation", emoji: "❤️", category: "lifestyle", cost: 5, monthlyCost: 0.1, description: "Your name, doing good, €5M + €100k/year", oneTime: true, minNetWorth: 8, effect: "Popularity +3 and legacy credit per season" },
+  // 2026-08-05 second wave: even more outta pocket
+  { id: "signature_cologne", name: "Signature Cologne", emoji: "🧴", category: "investment", cost: 2, description: "Launch your own fragrance, €2M. 60% chance it prints €5M, 40% it smells like a locker room", oneTime: true, minNetWorth: 3 },
+  { id: "tequila_brand", name: "Celebrity Tequila", emoji: "🥃", category: "investment", cost: 4, description: "Every star has one, €4M. 45% chance 3x, else slow fade", oneTime: true, minNetWorth: 6 },
+  { id: "video_game_studio", name: "Football Game Studio", emoji: "🎮", category: "investment", cost: 8, description: "Fund a studio making a game where YOU are the cover star, €8M. 25% chance 4x hit", oneTime: true, minNetWorth: 12 },
+  { id: "space_flight", name: "Seat To Space", emoji: "🚀", category: "lifestyle", cost: 12, description: "Eleven minutes above the atmosphere, €12M. Popularity +12, perspective forever", oneTime: true, minNetWorth: 20 },
+  { id: "rivals_boyhood_club", name: "Buy Your Rival's Boyhood Club", emoji: "🗿", category: "property", cost: 45, description: "The pettiest €45M in football history. Rename the stadium after yourself", oneTime: true, minNetWorth: 60, effect: "Popularity +8, the feud becomes eternal" },
 ];
 
 export function getSpendingItem(id: string): SpendingItem | undefined {
@@ -429,6 +450,10 @@ export interface CareerState {
   integrityBonus: number;
   childEventsSeen: string[]; // track which child follow-up events have been shown
   pregnancyAnnounced: boolean;
+  /** 2026-08-05 storyline arcs. Optional so pre-expansion saves keep loading. */
+  mafiaStage?: number;        // 0 none, 1 took the cup money, 2 arc closed
+  bdorSnubFuel?: boolean;     // finished 2nd or 3rd last ceremony
+  rivalryIntensity?: number;  // 0-100 heat of the feud, optional for old saves
 }
 
 /* ─── Moral Dilemma System ─── */
@@ -577,6 +602,184 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
       { label: "Own it, apologize publicly", emoji: "🙇", consequence: "Popularity +5 for honesty, morale -5, fined one week's wages" },
       { label: "Deny everything", emoji: "🙅", consequence: "Story drags on, popularity -15 if it resurfaces later" },
       { label: "Let your agent spin it", emoji: "🎙️", consequence: "Story dies down fast, small net worth cost for the PR team" },
+    ],
+  },
+  // 2026-08-05 storyline expansion (owner request: mafia arc, magazine offer, pitch chaos, more)
+  {
+    id: "magazine_shoot",
+    emoji: "📸",
+    title: "THE MAGAZINE CALL",
+    description: "A famous magazine wants you on the cover. The tasteful version pays well. The artistic version, wearing nothing but a strategically held football, pays absurdly. Your agent is already laughing.",
+    choices: [
+      { label: "Tasteful calendar shoot", emoji: "😎", consequence: "2M fee, popularity +10" },
+      { label: "The full artistic cover", emoji: "🙈", consequence: "6M fee, popularity +18", risk: "25% chance a sponsor drops you for 2M" },
+      { label: "Decline politely", emoji: "🚪", consequence: "Nothing happens. Your grandmother approves." },
+    ],
+  },
+  {
+    id: "mafia_cup_ask",
+    emoji: "🕴️",
+    title: "AN OFFER FROM SERIOUS PEOPLE",
+    description: "Two men in beautiful suits find you at a family restaurant. They know your order. They want next month's cup tie thrown. 8M, offshore, untouchable. A small favor between friends, they say.",
+    choices: [
+      { label: "Take the money", emoji: "💰", consequence: "8M offshore. They now consider you a friend.", risk: "They ALWAYS come back" },
+      { label: "Refuse and go to the police", emoji: "🚔", consequence: "Federation protection, popularity +20, integrity +15" },
+      { label: "Refuse, say nothing", emoji: "🤐", consequence: "They nod and leave. You sleep badly for a week." },
+    ],
+  },
+  {
+    id: "mafia_second_ask",
+    emoji: "🎩",
+    title: "THE FRIENDS RETURN",
+    description: "Same restaurant. Same suits. This time it is the title decider they want, and the number is 15M. The smile is thinner now. Friends help friends twice, they say.",
+    choices: [
+      { label: "Do it one last time", emoji: "💶", consequence: "15M offshore", risk: "50% chance the investigation lands: 3-season ban, legacy shattered" },
+      { label: "Refuse them", emoji: "✋", consequence: "They mention the first favor on the way out", risk: "40% chance the first fix leaks: 2-season ban" },
+      { label: "Go to the police, full confession", emoji: "🚔", consequence: "Immunity for testimony, forced move abroad, popularity +25, the arc ends" },
+    ],
+  },
+  {
+    id: "streaker_proposal",
+    emoji: "💍",
+    title: "PITCH SIDE PROPOSAL",
+    description: "A fan in a full wedding dress clears the hoardings, drops to one knee in the center circle, and holds up a ring the size of a grape. The stadium is HOWLING. The referee has given up.",
+    choices: [
+      { label: "Say yes as a joke", emoji: "💍", consequence: "The clip breaks the internet. Popularity +15" },
+      { label: "Sign her sign, keep it moving", emoji: "🖊️", consequence: "Wholesome moment, popularity +8" },
+      { label: "Play on, total professional", emoji: "⚽", consequence: "Pundits praise the focus, morale +3" },
+    ],
+  },
+  {
+    id: "deepfake_scandal",
+    emoji: "🤖",
+    title: "THE DEEPFAKE",
+    description: "An AI video of you insulting your own fans is everywhere. It is fake, it is convincing, and your mentions are a war zone. The club wants a response within the hour.",
+    choices: [
+      { label: "Sue everyone involved", emoji: "⚖️", consequence: "1M legal costs, vindicated in court, popularity +15" },
+      { label: "Post a parody of the parody", emoji: "🎭", consequence: "Popularity +20 if it lands", risk: "20% chance it reads wrong and costs 10 popularity" },
+      { label: "Ignore it entirely", emoji: "🧘", consequence: "It burns out in a week. Small morale dip." },
+    ],
+  },
+  {
+    id: "hometown_statue",
+    emoji: "🗿",
+    title: "THE STATUE PROBLEM",
+    description: "Your hometown commissioned a statue of you. The unveiling photos leak early. It looks like a melted action figure of someone else entirely. The sculptor is very proud.",
+    choices: [
+      { label: "Quietly fund a redo", emoji: "💶", consequence: "2M cost, the new one is beautiful, popularity +12" },
+      { label: "Embrace the meme statue", emoji: "🗿", consequence: "It becomes a pilgrimage site. Popularity +18" },
+      { label: "Ask them to take it down", emoji: "🙅", consequence: "The town is hurt. Popularity -5" },
+    ],
+  },
+  {
+    id: "haunted_hotel",
+    emoji: "👻",
+    title: "THE HAUNTED HOTEL",
+    description: "Night before the biggest match of the season, half the squad swears the team hotel is haunted. Two defenders are refusing to sleep alone. The manager is furious. Somebody has to lead here.",
+    choices: [
+      { label: "Lead a squad seance", emoji: "🕯️", consequence: "Team bonding of the strangest kind. Morale +8" },
+      { label: "Demand a hotel change", emoji: "🏨", consequence: "Awkward with the club, but everyone sleeps. Morale +3" },
+      { label: "Sleep in the team bus", emoji: "🚌", consequence: "The photo goes viral. Popularity +10" },
+    ],
+  },
+  {
+    id: "valet_crash",
+    emoji: "🔑",
+    title: "THE VALET INCIDENT",
+    description: "A hotel valet just reversed your hypercar into a fountain at 40 km/h. He is 19, shaking, and pretty sure his life is over. Forty phones are already filming.",
+    choices: [
+      { label: "Hug him, forgive publicly", emoji: "🤗", consequence: "The clip melts hearts. Popularity +12, the car costs 1.5M" },
+      { label: "Insurance war", emoji: "📋", consequence: "Recover 1.5M, popularity -8, he loses his job" },
+      { label: "Gift him a bus pass and a smile", emoji: "🚌", consequence: "Perfect comedy. Popularity +15, the car still costs 1.5M" },
+    ],
+  },
+  {
+    id: "wag_reality_show",
+    emoji: "📺",
+    title: "THE REALITY SHOW",
+    description: "A production company offers serious money to film a reality series inside your house. Your partner is excited. Your center back already texted: do NOT do this.",
+    choices: [
+      { label: "Full season, full access", emoji: "🎬", consequence: "3M fee, popularity +8", risk: "25% chance a dressing-room secret airs: morale -10" },
+      { label: "One tasteful episode", emoji: "🎞️", consequence: "1M fee, everyone survives" },
+      { label: "Hard no", emoji: "🚪", consequence: "Partner sulks for a week, morale +4 long term" },
+    ],
+  },
+  {
+    id: "ultras_tattoo",
+    emoji: "🐉",
+    title: "THE ULTRAS' DEMAND",
+    description: "After your derby winner, the ultras unfurl a banner: TATTOO THE CREST OR YOU NEVER LOVED US. They are outside training with a tattoo artist. He seems extremely available.",
+    choices: [
+      { label: "Get the crest tattooed", emoji: "🐉", consequence: "Popularity +15 here forever. Awkward if you ever transfer" },
+      { label: "Henna prank first", emoji: "🖌️", consequence: "Popularity +8 for the joke", risk: "30% chance they find out it washed off: -10" },
+      { label: "Respectfully decline", emoji: "🙏", consequence: "Popularity -5, your skin remains yours" },
+    ],
+  },
+  {
+    id: "bdor_snub",
+    emoji: "🥈",
+    title: "THE SNUB",
+    description: "Everyone in your camp thought this was your Ballon d'Or. It went to someone else. The cameras cut to your face at the exact wrong moment and the whole world saw it.",
+    choices: [
+      { label: "Fuel. Pure fuel.", emoji: "🔥", consequence: "+3 to every stat next season, morale -5. Revenge tour begins" },
+      { label: "Congratulate the winner beautifully", emoji: "🤝", consequence: "Popularity +10, integrity +5, the high road" },
+      { label: "Skip the afterparty, train at midnight", emoji: "🌙", consequence: "The gym photo goes viral. +2 stats next season, popularity +5" },
+    ],
+  },
+  {
+    id: "biscuit_gate",
+    emoji: "🍪",
+    title: "BISCUIT GATE",
+    description: "You were photographed enjoying a rival brand's biscuit while your cereal sponsor pays you millions. The internet has named it Biscuit Gate. The sponsor's lawyers have named it a breach.",
+    choices: [
+      { label: "Apologize with a taste test video", emoji: "🎥", consequence: "Sponsor placated, the video hits huge, popularity +10" },
+      { label: "Declare biscuit independence", emoji: "🍪", consequence: "Lose 1M sponsor fee, popularity +15, folk hero status" },
+      { label: "Blame a lookalike", emoji: "🥸", consequence: "Nobody believes you, popularity -5, it becomes a meme" },
+    ],
+  },
+  // 2026-08-05 rivalry expansion: the feud gets interactive
+  {
+    id: "rival_club_offer",
+    emoji: "📞",
+    title: "THE ENEMY CALLS",
+    description: "Your great rival's club triggers your release clause. Their sporting director says one sentence: come win everything next to him instead of against him. Your fans are already burning shirts preemptively.",
+    choices: [
+      { label: "Join forces with your rival", emoji: "🤝", consequence: "The most talked-about transfer of the decade. Signing bonus 10M, old fans furious" },
+      { label: "Leak the offer and refuse", emoji: "📰", consequence: "Your fans crown you a legend of loyalty. Popularity +12, integrity +5" },
+      { label: "Refuse quietly", emoji: "🤐", consequence: "Nobody ever knows how close it came" },
+    ],
+  },
+  {
+    id: "rival_bad_tackle",
+    emoji: "🦵",
+    title: "THE TACKLE",
+    description: "Your rival went through your ankle in the derby, studs up, no ball. The referee gave a yellow. Your physio says you are fine. Your teammates want blood. The rematch is in May.",
+    choices: [
+      { label: "Plot revenge for the rematch", emoji: "😈", consequence: "The feud goes nuclear", risk: "30% chance you see red doing it: popularity and morale -5" },
+      { label: "Accept his apology publicly", emoji: "🕊️", consequence: "Integrity +8, popularity +5, the feud cools" },
+      { label: "Say nothing. Score twice in May.", emoji: "🥶", consequence: "+1 Shooting next season, ice in the veins" },
+    ],
+  },
+  {
+    id: "goat_debate_show",
+    emoji: "🎤",
+    title: "THE DEBATE SHOW",
+    description: "A global sports network offers 2M for one live hour: you versus a panel of pundits arguing that your rival is better. No script, no edits, one microphone.",
+    choices: [
+      { label: "Go on and cook them", emoji: "🔥", consequence: "2M fee", risk: "35% chance a clip goes viral badly: popularity -8" },
+      { label: "Send a highlight reel instead", emoji: "📼", consequence: "The reel does the talking. Popularity +8" },
+      { label: "Decline. Legends do not debate.", emoji: "😎", consequence: "Integrity +5, the mystique grows" },
+    ],
+  },
+  {
+    id: "rival_charity_match",
+    emoji: "💛",
+    title: "TRUCE FOR ONE NIGHT",
+    description: "Your rival's foundation asks you to co-headline a charity match for children's hospitals. Same pitch, same team, one night only. The photo of you two in the same shirt would break the internet.",
+    choices: [
+      { label: "Play, and split the donation", emoji: "🤝", consequence: "1M donated, popularity +10, integrity +8, the feud softens" },
+      { label: "Play, but start a playful nutmeg war", emoji: "😉", consequence: "The clips are legendary. Popularity +12" },
+      { label: "Send a check, skip the match", emoji: "💸", consequence: "1M donated quietly, integrity +3" },
     ],
   },
 ];
@@ -797,6 +1000,299 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       }
       break;
     }
+    case "magazine_shoot": {
+      if (choiceIndex === 0) {
+        s.netWorth = Math.round((s.netWorth + 2) * 100) / 100;
+        s.totalEarnings += 2;
+        s.popularity = clamp(s.popularity + 10, 0, 100);
+        s.events = [...s.events, "😎 The tasteful calendar sells out in a week. 2M and popularity +10."];
+      } else if (choiceIndex === 1) {
+        s.netWorth = Math.round((s.netWorth + 6) * 100) / 100;
+        s.totalEarnings += 6;
+        s.popularity = clamp(s.popularity + 18, 0, 100);
+        if (Math.random() < 0.25) {
+          s.netWorth = Math.round((s.netWorth - 2) * 100) / 100;
+          s.events = [...s.events, "🙈 The artistic cover breaks the internet. 6M earned, popularity +18... and a family-brand sponsor quietly walked, costing 2M."];
+        } else {
+          s.events = [...s.events, "🙈 The artistic cover breaks the internet. 6M earned, popularity +18. The football was held VERY strategically."];
+        }
+      } else {
+        s.events = [...s.events, "🚪 Declined the shoot. Your grandmother frames the polite refusal letter."];
+      }
+      break;
+    }
+    case "mafia_cup_ask": {
+      if (choiceIndex === 0) {
+        s.netWorth = Math.round((s.netWorth + 8) * 100) / 100;
+        s.mafiaStage = 1;
+        s.morale = clamp(s.morale - 5, 0, 100);
+        s.events = [...s.events, "💰 The cup tie slipped away. 8M appeared offshore. You are now a friend of serious people."];
+      } else if (choiceIndex === 1) {
+        s.mafiaStage = 2;
+        s.popularity = clamp(s.popularity + 20, 0, 100);
+        s.integrityBonus += 15;
+        s.events = [...s.events, "🚔 You went straight to the police. Federation protection, national praise, and the suits vanished. Popularity +20."];
+      } else {
+        s.events = [...s.events, "🤐 You refused and said nothing. The suits nodded politely. Somewhere, a file with your name stays open."];
+      }
+      break;
+    }
+    case "mafia_second_ask": {
+      if (choiceIndex === 0) {
+        s.netWorth = Math.round((s.netWorth + 15) * 100) / 100;
+        s.mafiaStage = 2;
+        if (Math.random() < 0.5) {
+          s.matchFixBanned = 3;
+          s.popularity = clamp(s.popularity - 40, 0, 100);
+          s.integrityBonus -= 40;
+          s.events = [...s.events, "🚨 THE INVESTIGATION LANDED. Betting patterns, wiretaps, everything. 3-SEASON BAN. The 15M sits frozen while your name burns."];
+        } else {
+          s.events = [...s.events, "💶 The title decider slipped away. 15M offshore. The suits toast you from a distance. You check the news every morning."];
+        }
+      } else if (choiceIndex === 1) {
+        s.mafiaStage = 2;
+        if (Math.random() < 0.4) {
+          s.matchFixBanned = 2;
+          s.popularity = clamp(s.popularity - 30, 0, 100);
+          s.integrityBonus -= 25;
+          s.events = [...s.events, "🗞️ You refused, and the first fix leaked within a month. 2-SEASON BAN. The money was never worth this."];
+        } else {
+          s.morale = clamp(s.morale - 10, 0, 100);
+          s.events = [...s.events, "✋ You refused. On the way out, one suit mentioned the cup tie by date. You have not slept properly since."];
+        }
+      } else {
+        s.mafiaStage = 2;
+        s.popularity = clamp(s.popularity + 25, 0, 100);
+        s.integrityBonus += 10;
+        s.transferSituation = s.transferSituation ?? null;
+        s.events = [...s.events, "🚔 Full confession, full cooperation, immunity for testimony. The network falls. You will need a new city soon, but you sleep like a baby. Popularity +25."];
+      }
+      break;
+    }
+    case "streaker_proposal": {
+      if (choiceIndex === 0) {
+        s.popularity = clamp(s.popularity + 15, 0, 100);
+        s.events = [...s.events, "💍 You said yes as a joke. The clip has 80 million views. You are now engaged to a stranger, legally speaking, in zero countries."];
+      } else if (choiceIndex === 1) {
+        s.popularity = clamp(s.popularity + 8, 0, 100);
+        s.events = [...s.events, "🖊️ Signed the sign, hugged the steward who finally arrived. Wholesome scenes. Popularity +8."];
+      } else {
+        s.morale = clamp(s.morale + 3, 0, 100);
+        s.events = [...s.events, "⚽ You played on like nothing happened. The pundits called it elite mentality."];
+      }
+      break;
+    }
+    case "deepfake_scandal": {
+      if (choiceIndex === 0) {
+        s.netWorth = Math.round((s.netWorth - 1) * 100) / 100;
+        s.popularity = clamp(s.popularity + 15, 0, 100);
+        s.events = [...s.events, "⚖️ You sued and won. The court statement trended. Popularity +15, lawyers +1M."];
+      } else if (choiceIndex === 1) {
+        if (Math.random() < 0.2) {
+          s.popularity = clamp(s.popularity - 10, 0, 100);
+          s.events = [...s.events, "🎭 The parody video read wrong. Think pieces everywhere. Popularity -10."];
+        } else {
+          s.popularity = clamp(s.popularity + 20, 0, 100);
+          s.events = [...s.events, "🎭 Your parody of the deepfake was funnier than the deepfake. Internet won. Popularity +20."];
+        }
+      } else {
+        s.morale = clamp(s.morale - 3, 0, 100);
+        s.events = [...s.events, "🧘 You ignored it and it burned out in a week, like your media officer promised."];
+      }
+      break;
+    }
+    case "hometown_statue": {
+      if (choiceIndex === 0) {
+        s.netWorth = Math.round((s.netWorth - 2) * 100) / 100;
+        s.popularity = clamp(s.popularity + 12, 0, 100);
+        s.events = [...s.events, "💶 You quietly paid for a proper statue. The new unveiling made the town cry. Popularity +12."];
+      } else if (choiceIndex === 1) {
+        s.popularity = clamp(s.popularity + 18, 0, 100);
+        s.events = [...s.events, "🗿 You embraced the cursed statue. It is now a pilgrimage site with its own hashtag. Popularity +18."];
+      } else {
+        s.popularity = clamp(s.popularity - 5, 0, 100);
+        s.events = [...s.events, "🙅 The statue came down. The sculptor gave seventeen interviews about betrayal. Popularity -5."];
+      }
+      break;
+    }
+    case "haunted_hotel": {
+      if (choiceIndex === 0) {
+        s.morale = clamp(s.morale + 8, 0, 100);
+        s.events = [...s.events, "🕯️ You led a squad seance at 1am. Nothing appeared except team chemistry. Morale +8."];
+      } else if (choiceIndex === 1) {
+        s.morale = clamp(s.morale + 3, 0, 100);
+        s.events = [...s.events, "🏨 You made the club switch hotels at midnight. Everyone slept. The kit man still talks about the ghost."];
+      } else {
+        s.popularity = clamp(s.popularity + 10, 0, 100);
+        s.events = [...s.events, "🚌 You slept in the team bus. The photo of you wrapped in a training bib went viral. Popularity +10."];
+      }
+      break;
+    }
+    case "valet_crash": {
+      if (choiceIndex === 0) {
+        s.netWorth = Math.round((s.netWorth - 1.5) * 100) / 100;
+        s.popularity = clamp(s.popularity + 12, 0, 100);
+        s.events = [...s.events, "🤗 You hugged the shaking valet on camera. The clip melted hearts. Popularity +12, hypercar -1.5M."];
+      } else if (choiceIndex === 1) {
+        s.netWorth = Math.round((s.netWorth + 1.5) * 100) / 100;
+        s.popularity = clamp(s.popularity - 8, 0, 100);
+        s.events = [...s.events, "📋 Insurance recovered 1.5M. The valet lost his job and the internet chose his side. Popularity -8."];
+      } else {
+        s.netWorth = Math.round((s.netWorth - 1.5) * 100) / 100;
+        s.popularity = clamp(s.popularity + 15, 0, 100);
+        s.events = [...s.events, "🚌 You handed him a bus pass and said maybe stick to these. Comedy gold. Popularity +15."];
+      }
+      break;
+    }
+    case "wag_reality_show": {
+      if (choiceIndex === 0) {
+        s.netWorth = Math.round((s.netWorth + 3) * 100) / 100;
+        s.totalEarnings += 3;
+        s.popularity = clamp(s.popularity + 8, 0, 100);
+        if (Math.random() < 0.25) {
+          s.morale = clamp(s.morale - 10, 0, 100);
+          s.events = [...s.events, "🎬 The show was a hit... until episode six aired a dressing-room story. Training is FROSTY. Morale -10."];
+        } else {
+          s.events = [...s.events, "🎬 The show was a hit and nobody got burned. 3M earned, popularity +8."];
+        }
+      } else if (choiceIndex === 1) {
+        s.netWorth = Math.round((s.netWorth + 1) * 100) / 100;
+        s.totalEarnings += 1;
+        s.events = [...s.events, "🎞️ One tasteful episode. Everyone survived. 1M earned."];
+      } else {
+        s.morale = clamp(s.morale + 4, 0, 100);
+        s.events = [...s.events, "🚪 Hard no on the cameras. A week of sulking, then peace. Morale +4."];
+      }
+      break;
+    }
+    case "ultras_tattoo": {
+      if (choiceIndex === 0) {
+        s.popularity = clamp(s.popularity + 15, 0, 100);
+        s.events = [...s.events, "🐉 You got the crest tattooed live outside training. The ultras wept. Popularity +15, forever."];
+      } else if (choiceIndex === 1) {
+        if (Math.random() < 0.3) {
+          s.popularity = clamp(s.popularity - 10, 0, 100);
+          s.events = [...s.events, "🖌️ The henna washed off at the pool and someone had a camera. The ultras are NOT laughing. Popularity -10."];
+        } else {
+          s.popularity = clamp(s.popularity + 8, 0, 100);
+          s.events = [...s.events, "🖌️ The henna prank landed perfectly and you got the real one later. Popularity +8."];
+        }
+      } else {
+        s.popularity = clamp(s.popularity - 5, 0, 100);
+        s.events = [...s.events, "🙏 You respectfully declined the needle. The banner next week just said FINE."];
+      }
+      break;
+    }
+    case "bdor_snub": {
+      s.bdorSnubFuel = false;
+      if (choiceIndex === 0) {
+        s.morale = clamp(s.morale - 5, 0, 100);
+        s.statBoostNextSeason = { pace: 3, shooting: 3, passing: 3, dribbling: 3, defending: 3, physical: 3, reflexes: 3 };
+        s.events = [...s.events, "🔥 You printed the final voting and taped it inside your locker. +3 EVERYTHING next season. The revenge tour is on."];
+      } else if (choiceIndex === 1) {
+        s.popularity = clamp(s.popularity + 10, 0, 100);
+        s.integrityBonus += 5;
+        s.events = [...s.events, "🤝 Your congratulation speech was so classy it trended above the winner. Popularity +10."];
+      } else {
+        s.popularity = clamp(s.popularity + 5, 0, 100);
+        s.statBoostNextSeason = { pace: 2, shooting: 2, passing: 2, dribbling: 2, defending: 2, physical: 2, reflexes: 2 };
+        s.events = [...s.events, "🌙 You skipped the afterparty and the midnight gym photo went viral. +2 stats next season."];
+      }
+      break;
+    }
+    case "biscuit_gate": {
+      if (choiceIndex === 0) {
+        s.popularity = clamp(s.popularity + 10, 0, 100);
+        s.events = [...s.events, "🎥 The apology taste-test video got 40 million views. The sponsor renewed early. Popularity +10."];
+      } else if (choiceIndex === 1) {
+        s.netWorth = Math.round((s.netWorth - 1) * 100) / 100;
+        s.popularity = clamp(s.popularity + 15, 0, 100);
+        s.events = [...s.events, "🍪 You declared biscuit independence at a press conference. Lost 1M, became a folk hero. Popularity +15."];
+      } else {
+        s.popularity = clamp(s.popularity - 5, 0, 100);
+        s.events = [...s.events, "🥸 The lookalike defense fooled no one. The meme lives forever. Popularity -5."];
+      }
+      break;
+    }
+    case "rival_club_offer": {
+      const rivalName = s.rival?.name ?? "your rival";
+      if (choiceIndex === 0) {
+        s.netWorth = Math.round((s.netWorth + 10) * 100) / 100;
+        s.popularity = clamp(s.popularity - 10, 0, 100);
+        s.morale = clamp(s.morale + 5, 0, 100);
+        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 30, 0, 100);
+        s.events = [...s.events, `📞 You answered the enemy's call. 10M signing bonus banked, and the football world lost its mind. Old fans are furious, ${rivalName} posted a handshake emoji.`];
+      } else if (choiceIndex === 1) {
+        s.popularity = clamp(s.popularity + 12, 0, 100);
+        s.integrityBonus += 5;
+        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+        s.events = [...s.events, "📰 The leaked offer made the front page. Your fans crowned you a legend of loyalty. Popularity +12."];
+      } else {
+        s.events = [...s.events, "🤐 You refused quietly. Somewhere in a drawer sits the most explosive transfer that never happened."];
+      }
+      break;
+    }
+    case "rival_bad_tackle": {
+      const rivalName = s.rival?.name ?? "your rival";
+      if (choiceIndex === 0) {
+        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 25, 0, 100);
+        if (Math.random() < 0.3) {
+          s.popularity = clamp(s.popularity - 5, 0, 100);
+          s.morale = clamp(s.morale - 5, 0, 100);
+          s.events = [...s.events, `🟥 Revenge tasted sweet for four seconds, then the red card came out. Popularity and morale -5, and ${rivalName} smiled the whole time.`];
+        } else {
+          s.morale = clamp(s.morale + 8, 0, 100);
+          s.events = [...s.events, `😈 You got him back, clean enough to escape a card. The derby now has its own documentary crew.`];
+        }
+      } else if (choiceIndex === 1) {
+        s.integrityBonus += 8;
+        s.popularity = clamp(s.popularity + 5, 0, 100);
+        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 15, 0, 100);
+        s.events = [...s.events, "🕊️ You accepted the apology on camera. The adults in the room won today. Integrity +8."];
+      } else {
+        s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1 };
+        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+        s.events = [...s.events, "🥶 You said nothing. May is circled on your calendar in red ink. +1 Shooting next season."];
+      }
+      break;
+    }
+    case "goat_debate_show": {
+      if (choiceIndex === 0) {
+        s.netWorth = Math.round((s.netWorth + 2) * 100) / 100;
+        if (Math.random() < 0.35) {
+          s.popularity = clamp(s.popularity - 8, 0, 100);
+          s.events = [...s.events, "🎤 You went on the debate show and one heated clip went viral for the wrong reasons. 2M banked, popularity -8."];
+        } else {
+          s.popularity = clamp(s.popularity + 6, 0, 100);
+          s.events = [...s.events, "🔥 You cooked the whole panel live on air. 2M banked and the clip is a permanent argument-ender. Popularity +6."];
+        }
+      } else if (choiceIndex === 1) {
+        s.popularity = clamp(s.popularity + 8, 0, 100);
+        s.events = [...s.events, "📼 You sent a four-minute highlight reel with no caption. It out-rated the show. Popularity +8."];
+      } else {
+        s.integrityBonus += 5;
+        s.events = [...s.events, "😎 You declined. Legends do not debate. The mystique compounds like interest."];
+      }
+      break;
+    }
+    case "rival_charity_match": {
+      const rivalName = s.rival?.name ?? "your rival";
+      if (choiceIndex === 0) {
+        s.netWorth = Math.round((s.netWorth - 1) * 100) / 100;
+        s.popularity = clamp(s.popularity + 10, 0, 100);
+        s.integrityBonus += 8;
+        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 20, 0, 100);
+        s.events = [...s.events, `💛 One night, one shirt, one cause. You and ${rivalName} raised millions for children's hospitals. The feud took the night off.`];
+      } else if (choiceIndex === 1) {
+        s.popularity = clamp(s.popularity + 12, 0, 100);
+        s.events = [...s.events, `😉 The charity match turned into a nutmeg war with ${rivalName}. The kids loved it, the internet melted. Popularity +12.`];
+      } else {
+        s.netWorth = Math.round((s.netWorth - 1) * 100) / 100;
+        s.integrityBonus += 3;
+        s.events = [...s.events, "💸 You sent the donation and skipped the cameras. The quiet kind of good. Integrity +3."];
+      }
+      break;
+    }
   }
 
   // Stay on moral_dilemma phase — UI calls dismissMoralDilemma to continue
@@ -828,7 +1324,25 @@ function tryTriggerMoralDilemma(s: CareerState): boolean {
   // or other event can occasionally also land the same season.
   // ~20% chance per season after age 20. Over a long career, the pool of 12
   // dilemmas can repeat once exhausted so drama doesn't dry up late in a save.
-  if (Math.random() > 0.20) return false;
+  // The mafia arc and a Ballon d'Or snub jump the queue: they are follow-ups
+  // the player is waiting on, not random flavor.
+  if ((s.mafiaStage ?? 0) === 1 && !s.moralDilemmasTriggered.includes("mafia_second_ask") && Math.random() < 0.6) {
+    const second = MORAL_DILEMMAS.find(d => d.id === "mafia_second_ask");
+    if (second) {
+      s.pendingMoralDilemma = second;
+      s.moralDilemmasTriggered = [...s.moralDilemmasTriggered, second.id];
+      return true;
+    }
+  }
+  if (s.bdorSnubFuel && !s.moralDilemmasTriggered.includes("bdor_snub")) {
+    const snub = MORAL_DILEMMAS.find(d => d.id === "bdor_snub");
+    if (snub) {
+      s.pendingMoralDilemma = snub;
+      s.moralDilemmasTriggered = [...s.moralDilemmasTriggered, snub.id];
+      return true;
+    }
+  }
+  if (Math.random() > 0.30) return false;
 
   // Prefer dilemmas not yet seen; once every one has fired, allow repeats.
   const unseen = MORAL_DILEMMAS.filter(d => !s.moralDilemmasTriggered.includes(d.id));
@@ -845,6 +1359,19 @@ function tryTriggerMoralDilemma(s: CareerState): boolean {
     if (d.id === "wonderkid_jealousy" && s.age < 24) return false; // need a few seasons in
     if (d.id === "captain_armband_feud" && s.age < 23) return false;
     if (d.id === "sponsor_scandal" && !s.sponsorDeal && s.sponsorshipIncome <= 0) return false;
+    // 2026-08-05 expansion rules
+    if (d.id === "magazine_shoot" && (s.popularity < 50 || s.age < 21)) return false;
+    if (d.id === "mafia_cup_ask" && ((s.mafiaStage ?? 0) !== 0 || s.currentClubTier > 3)) return false;
+    if (d.id === "mafia_second_ask") return false; // only via the priority path above
+    if (d.id === "bdor_snub") return false;        // only via the priority path above
+    if (d.id === "ultras_tattoo" && s.age < 24) return false;
+    if (d.id === "wag_reality_show" && !s.hasRelationship) return false;
+    if (d.id === "valet_crash" && !s.purchasedItems.some(i => i === "hypercar" || i === "sports_car" || i === "supercar_collection")) return false;
+    if (d.id === "hometown_statue" && s.popularity < 70) return false;
+    if (d.id === "biscuit_gate" && !s.sponsorDeal && s.sponsorshipIncome <= 0) return false;
+    if ((d.id === "rival_club_offer" || d.id === "rival_bad_tackle" || d.id === "goat_debate_show" || d.id === "rival_charity_match") && (!s.rival || s.rival.retired)) return false;
+    if (d.id === "rival_club_offer" && s.age < 24) return false;
+    if (d.id === "goat_debate_show" && s.overall < 85) return false;
     return true;
   });
   if (eligible.length === 0) return false;
@@ -1253,6 +1780,17 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
   const smGrowth = growSocialMedia(s, season);
   s.socialMediaFollowers = Math.round((s.socialMediaFollowers + smGrowth) * 100) / 100;
   // Lifestyle effects: personal chef gives morale
+  if (s.purchasedItems.includes("documentary_crew")) {
+    s.popularity = clamp(s.popularity + 3, 0, 100);
+  }
+  if (s.purchasedItems.includes("charity_foundation")) {
+    s.popularity = clamp(s.popularity + 3, 0, 100);
+    s.integrityBonus += 2;
+  }
+  if (s.purchasedItems.includes("family_office") && s.netWorth > 0) {
+    const growth = Math.round(s.netWorth * 0.02 * 100) / 100;
+    s.netWorth = Math.round((s.netWorth + growth) * 100) / 100;
+  }
   if (s.purchasedItems.includes("personal_chef")) {
     s.morale = clamp(s.morale + 2, 0, 100);
   }
@@ -1434,6 +1972,61 @@ export function purchaseSpendingItem(prev: CareerState, itemId: string): CareerS
   } else if (itemId === "perf_setpiece") {
     s.shooting = clamp(s.shooting + 3, 20, 99);
     s.events.push("🎯 Hired a Set Piece Coach! +3 Free Kick accuracy.");
+  } else if (itemId === "boyhood_club") {
+    s.popularity = clamp(s.popularity + 20, 0, 100);
+    s.integrityBonus += 15;
+    s.events.push("🏟️ YOU BOUGHT YOUR BOYHOOD CLUB. The town declares a holiday. Popularity +20, legacy secured.");
+  } else if (itemId === "hometown_academy") {
+    s.popularity = clamp(s.popularity + 10, 0, 100);
+    s.integrityBonus += 8;
+    s.events.push("🎓 Opened a youth academy back home. Popularity +10, legacy credit banked.");
+  } else if (itemId === "football_museum") {
+    s.popularity = clamp(s.popularity + 8, 0, 100);
+    s.events.push("🖼️ Opened a museum about yourself. Bold. Popularity +8.");
+  } else if (itemId === "submarine") {
+    s.popularity = clamp(s.popularity + 5, 0, 100);
+    s.events.push("🛳️ Bought a personal submarine. Nobody knows why. Popularity +5.");
+  } else if (itemId === "security_team") {
+    s.morale = clamp(s.morale + 3, 0, 100);
+    s.events.push("🕶️ Hired a security team. +3 Morale, you sleep easy now.");
+  } else if (itemId === "documentary_crew") {
+    s.events.push("🎥 Signed your own documentary crew. +3 Popularity per season.");
+  } else if (itemId === "family_office") {
+    s.events.push("🏦 Hired a family office. Your money now works while you train.");
+  } else if (itemId === "charity_foundation") {
+    s.popularity = clamp(s.popularity + 5, 0, 100);
+    s.integrityBonus += 5;
+    s.events.push("❤️ Launched your charity foundation. Popularity +5 now, legacy credit every season.");  } else if (itemId === "signature_cologne") {
+    if (Math.random() < 0.6) {
+      s.netWorth = Math.round((s.netWorth + 5) * 100) / 100;
+      s.events.push("🧴 Your cologne sold out three restocks. +€5M and airports smell like you now.");
+    } else {
+      s.events.push("🧴 The cologne reviews said 'locker room after extra time'. The €2M is gone.");
+    }
+    s.popularity = clamp(s.popularity + 3, 0, 100);
+  } else if (itemId === "tequila_brand") {
+    if (Math.random() < 0.45) {
+      s.netWorth = Math.round((s.netWorth + 12) * 100) / 100;
+      s.events.push("🥃 The tequila took off in three continents. +€12M. Salud.");
+    } else {
+      s.events.push("🥃 The tequila sits on shelves next to eleven other celebrity bottles. Slow fade.");
+    }
+  } else if (itemId === "video_game_studio") {
+    if (Math.random() < 0.25) {
+      s.netWorth = Math.round((s.netWorth + 32) * 100) / 100;
+      s.popularity = clamp(s.popularity + 8, 0, 100);
+      s.events.push("🎮 Your studio's game hit number one in 40 countries with your face on the cover. +€32M.");
+    } else {
+      s.events.push("🎮 The game shipped buggy and the reviews were brutal. The €8M is a write-off, but the memes are immortal.");
+    }
+  } else if (itemId === "space_flight") {
+    s.popularity = clamp(s.popularity + 12, 0, 100);
+    s.morale = clamp(s.morale + 8, 0, 100);
+    s.events.push("🚀 Eleven minutes in space. You saw the whole planet and it did not have a single defender in it. Popularity +12.");
+  } else if (itemId === "rivals_boyhood_club") {
+    s.popularity = clamp(s.popularity + 8, 0, 100);
+    s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 40, 0, 100);
+    s.events.push(`🗿 You bought ${s.rival ? s.rival.name + "'s" : "your rival's"} boyhood club and renamed the stadium after yourself. The pettiest move in football history. The feud is now eternal.`);
   } else {
     s.events.push(`${item.emoji} Purchased ${item.name}! (€${item.cost >= 1 ? item.cost.toFixed(0) + "M" : Math.round(item.cost * 1000) + "k"})`);
   }
@@ -1505,6 +2098,45 @@ function resolveInvestments(s: CareerState): void {
         s.events.push(`₿ Crypto investment 3x'd! Earned €${h.returnAmount.toFixed(1)}M!`);
       } else {
         s.events.push("₿ Crypto investment crashed! Lost everything.");
+      }
+    } else if (h.name === "Art Collection") {
+      const yearlyReturn = h.invested * 0.12;
+      s.netWorth = Math.round((s.netWorth + yearlyReturn) * 100) / 100;
+      s.events.push(`🎨 Art collection appreciated €${yearlyReturn.toFixed(1)}M this year`);
+      continue; // keeps paying like club shares
+    } else if (h.name === "Teammate's Startup") {
+      if (Math.random() < 0.40) {
+        h.returnAmount = h.invested * 5;
+        s.netWorth = Math.round((s.netWorth + h.returnAmount) * 100) / 100;
+        s.events.push(`🚀 Your teammate's startup got acquired! 5x return: €${h.returnAmount.toFixed(1)}M!`);
+      } else {
+        s.events.push("🚀 The teammate's startup folded. He avoids you at training.");
+      }
+    } else if (h.name === "Meme Coin") {
+      if (Math.random() < 0.10) {
+        h.returnAmount = h.invested * 20;
+        s.netWorth = Math.round((s.netWorth + h.returnAmount) * 100) / 100;
+        s.events.push(`🐕 THE MEME COIN DID A 20X. €${h.returnAmount.toFixed(1)}M. Delete the evidence of how proud you are.`);
+      } else {
+        s.events.push("🐕 The meme coin went to zero, as meme coins do.");
+      }
+    } else if (h.name === "Racehorse") {
+      if (Math.random() < 0.25) {
+        h.returnAmount = 6;
+        s.netWorth = Math.round((s.netWorth + h.returnAmount) * 100) / 100;
+        s.events.push("🐎 Your horse WON THE BIG ONE. €6.0M in prize money and stud fees!");
+      } else {
+        h.returnAmount = h.invested * 0.4;
+        s.netWorth = Math.round((s.netWorth + h.returnAmount) * 100) / 100;
+        s.events.push(`🐎 The horse never won but the stud fees paid €${h.returnAmount.toFixed(1)}M back.`);
+      }
+    } else if (h.name === "Esports Org") {
+      if (Math.random() < 0.35) {
+        h.returnAmount = h.invested * 3;
+        s.netWorth = Math.round((s.netWorth + h.returnAmount) * 100) / 100;
+        s.events.push(`🎮 Your esports org won a major! 3x return: €${h.returnAmount.toFixed(1)}M!`);
+      } else {
+        s.events.push("🎮 The esports org burned through the money. Teenagers are expensive.");
       }
     } else if (h.name === "Tech Startup") {
       if (Math.random() < 0.20) {
@@ -2828,6 +3460,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       s.popularity = clamp(s.popularity + 20, 0, 100);
     } else if (bdorResult.playerRank <= 3) {
       s.popularity = clamp(s.popularity + 5, 0, 100);
+      s.bdorSnubFuel = true; // the snub storyline can fire next season
     }
   }
 
@@ -3782,6 +4415,47 @@ export function dismissBallonDor(prev: CareerState, clubs: ClubData[]): CareerSt
   return advanceToNextPhase(s, clubs);
 }
 
+/* 2026-08-05 Ballon d'Or ceremony upgrade: the winner gives a speech.
+   Choices are gated in the UI (rival option needs a rival, family option
+   needs a child). Effects land on top of the automatic win bonuses. */
+export type BdorSpeechChoice = "thank_rival" | "family_on_stage" | "tears" | "greatest_ever";
+
+export function applyBdorSpeech(prev: CareerState, choice: BdorSpeechChoice, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  const rivalName = s.rival?.name ?? "your rival";
+  switch (choice) {
+    case "thank_rival":
+      s.popularity = clamp(s.popularity + 12, 0, 100);
+      s.integrityBonus += 5;
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 20, 0, 100);
+      s.events = [...s.events, `🎤 On the biggest stage you thanked ${rivalName} by name: "he made me this good." The room stood up. The feud will never be the same.`];
+      break;
+    case "family_on_stage":
+      s.popularity = clamp(s.popularity + 15, 0, 100);
+      s.morale = clamp(s.morale + 10, 0, 100);
+      s.events = [...s.events, "👶 You carried your kid on stage and let them hold the golden ball. Every camera in the theatre wept."];
+      break;
+    case "tears":
+      s.popularity = clamp(s.popularity + 10, 0, 100);
+      s.morale = clamp(s.morale + 8, 0, 100);
+      s.events = [...s.events, "😭 You cried from the first sentence to the last. The clip of you thanking your youth coach is everywhere."];
+      break;
+    case "greatest_ever":
+      s.morale = clamp(s.morale + 5, 0, 100);
+      if (Math.random() < 0.35) {
+        s.popularity = clamp(s.popularity - 10, 0, 100);
+        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+        s.events = [...s.events, '🐐 "I am the greatest to ever do this." Half the room gasped, the pundits fed on it for weeks. Popularity -10, but you meant every word.'];
+      } else {
+        s.popularity = clamp(s.popularity + 8, 0, 100);
+        s.events = [...s.events, '🐐 "I am the greatest to ever do this." Delivered with such calm that people just... agreed. Popularity +8.'];
+      }
+      break;
+  }
+  s.pendingBallonDor = null;
+  return advanceToNextPhase(s, clubs);
+}
+
 /* ─── Dismiss international debut screen ─── */
 export function dismissDebut(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev };
@@ -3994,6 +4668,32 @@ function getRivalryEvents(state: CareerState): RivalryEvent[] {
     events.push({ id: 108, emoji: "📈", title: "Surpassed Your Rival!", description: `For the first time in your career, your overall rating (${state.overall}) has surpassed ${r.name}'s (${r.overall}).`, consequence: "Morale +10, Legacy boost" });
   }
   
+  // 2026-08-05 rivalry expansion: ten more beats in the saga
+  if (r.club === state.currentClub) {
+    events.push({ id: 109, emoji: "😬", title: "Your Rival Is Now Your Teammate", description: `${r.name} just signed for YOUR club. The first training session is the most watched non-match footage of the year.`, consequence: "The feud cools, the cameras multiply" });
+  }
+  events.push({ id: 110, emoji: "🤬", title: "Tunnel Bust-Up", description: `Cameras catch you and ${r.name} chest to chest in the tunnel after a bad-blood derby. Lip readers are having the week of their lives.`, consequence: "Rivalry intensifies, the league schedules you for prime time" });
+  if (r.careerGoals >= 300) {
+    events.push({ id: 111, emoji: "🎯", title: "The Chase", description: `${r.name} just passed 300 career goals. Every broadcast now shows your tallies side by side in real time.`, consequence: "Motivation surges: +1 Shooting next season" });
+  }
+  if (r.nationality === state.nationality) {
+    events.push({ id: 112, emoji: "💫", title: "The Armband Snub", description: `The national team named ${r.name} captain. Your shirt number stays, the armband does not.`, consequence: "Morale -5, motivation +2 Physical next season" });
+  }
+  events.push({ id: 113, emoji: "👕", title: "The Shirt Swap", description: `After a classic against ${r.name}, you swap shirts and embrace. The photo becomes the wallpaper of half the football internet.`, consequence: "Popularity +8, the feud softens" });
+  events.push({ id: 114, emoji: "🏥", title: "Rival Goes Down", description: `${r.name} tears a ligament and faces a year out. You post a genuine get-well message within the hour.`, consequence: "Integrity +5, Popularity +5, rivalry cools" });
+  if (state.overall >= 88 && r.overall >= 88) {
+    events.push({ id: 115, emoji: "🐐", title: "The GOAT Debate", description: `Every pundit panel this week ran the same segment: you or ${r.name}. Your teammates printed the losing poll and taped it to his locker room door.`, consequence: "Popularity +5, the era has a name now" });
+  }
+  if (state.popularity >= 40) {
+    events.push({ id: 116, emoji: "🏴", title: "The Banner", description: `${r.name}'s ultras unveil a 40-meter banner mocking you before kickoff. You answer the only way that matters.`, consequence: "+1 Shooting and +1 Dribbling next season, rivalry intensifies" });
+  }
+  if (state.age >= 28) {
+    events.push({ id: 117, emoji: "🎬", title: "The Rivalry Documentary", description: `A streaming giant offers to make a series about you and ${r.name}. Both camps say yes before the call ends.`, consequence: "Net worth +3M, Popularity +8" });
+  }
+  if (state.age >= 32) {
+    events.push({ id: 118, emoji: "🤝", title: "Testimonial Invitation", description: `${r.name} personally invites you to captain the opposition in his testimonial match. Two decades of war, one guard of honor.`, consequence: "Integrity +8, Popularity +8, the feud becomes history" });
+  }
+
   return events;
 }
 
@@ -4033,6 +4733,50 @@ function applyRivalryEvent(state: CareerState, event: RivalryEvent): CareerState
       break;
     case 108:
       s.morale = clamp(s.morale + 10, 0, 100);
+      break;
+    case 109:
+      s.morale = clamp(s.morale + 3, 0, 100);
+      s.popularity = clamp(s.popularity + 5, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 10, 0, 100);
+      break;
+    case 110:
+      s.popularity = clamp(s.popularity + 3, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 15, 0, 100);
+      break;
+    case 111:
+      s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1 };
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 5, 0, 100);
+      break;
+    case 112:
+      s.morale = clamp(s.morale - 5, 0, 100);
+      s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 2 };
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+      break;
+    case 113:
+      s.popularity = clamp(s.popularity + 8, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 15, 0, 100);
+      break;
+    case 114:
+      s.integrityBonus += 5;
+      s.popularity = clamp(s.popularity + 5, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 20, 0, 100);
+      break;
+    case 115:
+      s.popularity = clamp(s.popularity + 5, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+      break;
+    case 116:
+      s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1, dribbling: (s.statBoostNextSeason.dribbling || 0) + 1 };
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+      break;
+    case 117:
+      s.netWorth = Math.round((s.netWorth + 3) * 100) / 100;
+      s.popularity = clamp(s.popularity + 8, 0, 100);
+      break;
+    case 118:
+      s.integrityBonus += 8;
+      s.popularity = clamp(s.popularity + 8, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 25, 0, 100);
       break;
   }
   s.events = [...s.events, `${event.emoji} ${event.title}`];
@@ -4074,7 +4818,7 @@ export function generateRivalrySummary(state: CareerState): RivalrySummary | nul
   const playerWins = categories.filter(c => c.winner === "player").length;
   const rivalWins = categories.filter(c => c.winner === "rival").length;
   const overallWinner = playerWins > rivalWins ? "player" as const : playerWins < rivalWins ? "rival" as const : "tie" as const;
-  const legacyBonus = overallWinner === "player" ? 15 : overallWinner === "tie" ? 5 : -5;
+  const legacyBonus = overallWinner === "player" ? 15 : overallWinner === "tie" ? 5 : -5 + (((state.rivalryIntensity ?? 0) >= 70) ? 5 : 0);
   
   return { playerWins, rivalWins, categories, overallWinner, legacyBonus };
 }

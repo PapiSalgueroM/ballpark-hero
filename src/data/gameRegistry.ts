@@ -5,6 +5,8 @@ export interface GameDef {
   description: string;
   daily?: boolean;
   isNew?: boolean;
+  /** Shown in the Dynasty & Career Sims showcase at the top of the home page. */
+  featured?: boolean;
 }
 
 export interface GameCategory {
@@ -31,7 +33,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/dart-draft', label: 'Dart Draft', emoji: '🎯', description: 'Throw timed darts at a real world map: hit a country, draft its players', isNew: true },
       { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', isNew: true },
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', isNew: true },
-      { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Run a real club: tactics, transfers, trophies and the sack race', isNew: true },
+      { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Run a real club: tactics, transfers, trophies and the sack race', isNew: true, featured: true },
       { path: '/world-xi', label: 'World XI', emoji: '🌍', description: 'Pick a formation, fill 11 random countries', isNew: true },
       { path: '/player-bingo', label: 'Player Bingo', emoji: '🎱', description: 'Complete a line on a 5x5 board before 3 strikes', isNew: true },
       { path: '/alphabet-sprint', label: 'Alphabet Sprint', emoji: '⚡', description: 'Name a player per letter against the clock', isNew: true },
@@ -67,7 +69,7 @@ export const CATEGORIES: GameCategory[] = [
       // { path: '/guess-soccer-club', label: 'Guess The Club', emoji: '🏟️', description: 'Identify the mystery football club', daily: true, isNew: true },
       { path: '/soccer-grid', label: 'Soccer Grid', emoji: '⚽', description: '3×3 grid puzzle with rarity scores', daily: true, isNew: true },
       { path: '/world-cup-bracket', label: '2026 Bracket', emoji: '🌍', description: 'Predict every World Cup 2026 match', isNew: true },
-      { path: '/soccer-career', label: 'Soccer Career', emoji: '⚽', description: 'Build your career from youth academy to legend. BitLife meets football.', isNew: true },
+      { path: '/soccer-career', label: 'Soccer Career', emoji: '⚽', description: 'Build your career from youth academy to legend. BitLife meets football.', isNew: true, featured: true },
       { path: '/fantasy-draft', label: 'Fantasy Draft', emoji: '🧑‍💼', description: 'Draft your ultimate XI against an AI opponent', isNew: true },
       // deleted 2026-07-08 per owner review: too easy/boring. Route kept for direct links; uncomment to revive.
       // { path: '/shirt-number', label: 'Shirt Number', emoji: '👕', description: 'Guess the kit number a player wears', daily: true, isNew: true },
@@ -88,6 +90,8 @@ export const CATEGORIES: GameCategory[] = [
     emoji: '🏈',
     games: [
       { path: '/perfect-season-nfl', label: '17-0 Perfect Season', emoji: '🏆', description: 'Draft an offense across eras, run the table', isNew: true },
+      { path: '/front-office', label: 'NFL Front Office', emoji: '🏢', description: 'Full GM sim with real rosters: cap, trades, drafts, dynasties', isNew: true, featured: true },
+      { path: '/nfl-my-career', label: 'NFL My Career', emoji: '🌟', description: 'Draft night to Canton: live a whole player career, one big choice at a time', isNew: true, featured: true },
       { path: '/football-grid', label: 'Pro Football Grid', emoji: '🏈', description: '3×3 grid puzzle with rarity scores', daily: true },
       // retired 2026-07-08 per owner review: "too easy and boring... unless ur going to add to it, discard it". Route kept for direct links; uncomment to revive.
       // { path: '/football-timeline', label: 'Timeline', emoji: '📅', description: 'Order players by draft year', daily: true },
@@ -100,7 +104,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/missing-eleven', label: 'Missing Eleven', emoji: '🕵️', description: 'Name the missing starter from a famous Super Bowl offense', daily: true, isNew: true },
       // retired 2026-07-08 per owner review: "like 40 teams to choose from... get rid of this game". Route kept for direct links; uncomment to revive.
       // { path: '/guess-nfl-team', label: 'Guess The Team', emoji: '🏈', description: 'Identify the NFL franchise', daily: true, isNew: true },
-      { path: '/conquest', label: 'NFL Conquest', emoji: '🗺️', description: '32 teams, 50 states. One champion.', daily: true },
+      { path: '/conquest', label: 'NFL Conquest', emoji: '🗺️', description: 'The imperialism map: winners annex whole empires until one team rules America', daily: true, isNew: true },
     ],
   },
   {
@@ -113,6 +117,8 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/guess-the-college', label: 'Guess The College', emoji: '🏫', description: 'Guess the D1 school from clues', daily: true },
       { path: '/guess-cbb-team', label: 'Guess The CBB Program', emoji: '🏀', description: 'Guess the college basketball program', daily: true, isNew: true },
       { path: '/cfb-higher-lower', label: 'CFB Higher or Lower', emoji: '📊', description: 'Which QB threw for more college yards?', daily: true, isNew: true },
+      { path: '/cfb-dynasty', label: 'CFB Dynasty', emoji: '🏟️', description: 'Full program sim: NIL recruiting, the portal, the 12-team Playoff, dynasties', isNew: true, featured: true },
+      { path: '/cbb-dynasty', label: 'CBB Dynasty', emoji: '🏀', description: 'College hoops sim: one-and-dones, conference tournaments, 32-team March, Cinderella', isNew: true, featured: true },
     ],
   },
   {
@@ -130,7 +136,9 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/nba-career', label: 'NBA Career Path', emoji: '📜', description: 'Guess the NBA player from progressive clues', daily: true, isNew: true },
       { path: '/missing-five', label: 'Missing Five', emoji: '🕵️', description: 'Name the missing starter from a famous real lineup', daily: true, isNew: true },
       { path: '/perfect-lineup-nba', label: 'Perfect Lineup: NBA', emoji: '🏀', description: 'Build a starting 5 under random team & era constraints, then simulate', daily: true, isNew: true },
-      { path: '/conquest-nba', label: 'NBA Conquest', emoji: '🗺️', description: '30 teams, 50 states. One champion.', daily: true, isNew: true },
+      { path: '/conquest-nba', label: 'NBA Conquest', emoji: '🗺️', description: 'Imperialism mode: winners annex whole empires until one team rules the map', daily: true, isNew: true },
+      { path: '/nba-front-office', label: 'NBA Front Office', emoji: '🏢', description: 'Full GM sim: cap, trades, the play-in, best-of-7 wars, dynasties', isNew: true, featured: true },
+      { path: '/nba-my-career', label: 'NBA My Career', emoji: '🌟', description: 'Draft night to the rafters: live a whole player career, one summer at a time', isNew: true, featured: true },
     ],
   },
   {
@@ -142,6 +150,9 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/mlb-higher-lower', label: 'MLB Higher or Lower', emoji: '📊', description: 'Which legend hit more career home runs?', daily: true, isNew: true },
       { path: '/mlb-grid', label: 'MLB Franchise Grid', emoji: '🔲', description: 'Fill the 3×3 with legends who match both teams', daily: true, isNew: true },
       { path: '/mlb-connect-4', label: 'MLB Connect 4', emoji: '⚾', description: 'Baseball trivia meets Connect 4', isNew: true },
+      { path: '/conquest-mlb', label: 'MLB Conquest', emoji: '🗺️', description: 'Imperialism at the ballpark: winners annex whole empires, two invaders start landless', daily: true, isNew: true },
+      { path: '/mlb-my-career', label: 'MLB My Career', emoji: '🌟', description: 'Draft day to Cooperstown: live a whole player career', isNew: true, featured: true },
+      { path: '/mlb-front-office', label: 'MLB Front Office', emoji: '🏢', description: 'Full GM sim with real 2026 rosters: the tax line, trades, October, dynasties', isNew: true, featured: true },
       { path: '/missing-nine', label: 'Missing Nine', emoji: '🕵️', description: 'Name the missing starter from a famous World Series batting order', daily: true, isNew: true },
       { path: '/baseball-connections', label: 'Connections', emoji: '⚾', description: 'Group baseball players', daily: true },
     ],
@@ -156,6 +167,9 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/hockey-career', label: 'Career Path', emoji: '🏒', description: 'Guess the hockey player', daily: true },
       { path: '/hockey-higher-lower', label: 'Higher / Lower', emoji: '🏒', description: 'Compare career points', daily: true },
       { path: '/nhl-connections', label: 'NHL Connections', emoji: '🧩', description: 'Group 20 players into four hidden connections', daily: true, isNew: true },
+      { path: '/conquest-nhl', label: 'NHL Conquest', emoji: '🗺️', description: 'Imperialism on ice: winners annex whole empires, five invaders start landless', daily: true, isNew: true },
+      { path: '/nhl-my-career', label: 'NHL My Career', emoji: '🌟', description: 'Draft floor to the farewell tour: live a whole player career', isNew: true, featured: true },
+      { path: '/nhl-front-office', label: 'NHL Front Office', emoji: '🏢', description: 'Full GM sim with real 2026-27 rosters: hard cap, OT points, the bracket, the Cup', isNew: true, featured: true },
       { path: '/nhl-connect-4', label: 'NHL Connect 4', emoji: '🏒', description: 'Hockey trivia meets Connect 4', isNew: true },
       { path: '/perfect-lineup-nhl', label: 'Perfect Lineup: NHL', emoji: '🏒', description: 'Build a dream line under random team & era constraints, then simulate', daily: true, isNew: true },
     ],
@@ -231,4 +245,6 @@ export const CATEGORIES: GameCategory[] = [
 
 export const VISIBLE_CATEGORIES = CATEGORIES.filter(c => c.games.length > 0);
 export const ALL_GAMES = CATEGORIES.flatMap(c => c.games);
+/** The deep sims showcased at the top of the home page, in display order. */
+export const FEATURED_GAMES = ALL_GAMES.filter(g => g.featured);
 export const TOTAL_GAMES = ALL_GAMES.length;

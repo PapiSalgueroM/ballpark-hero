@@ -301,7 +301,10 @@ const CLUB_COUNTRY: Array<[string, string]> = [
   ['kashima', '🇯🇵'], ['urawa', '🇯🇵'], ['kawasaki', '🇯🇵'], ['yokohama', '🇯🇵'], ['gamba osaka', '🇯🇵'],
   ['cerezo osaka', '🇯🇵'], ['vissel kobe', '🇯🇵'], ['fc tokyo', '🇯🇵'], ['nagoya', '🇯🇵'],
   ['jeonbuk', '🇰🇷'], ['ulsan', '🇰🇷'], ['fc seoul', '🇰🇷'], ['suwon', '🇰🇷'], ['pohang', '🇰🇷'],
-  ['mumbai city', '🇮🇳'], ['mohun bagan', '🇮🇳'], ['kerala blasters', '🇮🇳'],
+  ['mumbai city', '🇮🇳'], ['mohun bagan', '🇮🇳'], ['kerala blasters', '🇮🇳'], ['atk', '🇮🇳'],
+  // 2026-08-05 ladder expansion: clubs from the 8 new verified careers.
+  ['vicenza', '🇮🇹'], ['nancy', '🇫🇷'], ['hvidovre', '🇩🇰'],
+  ['aztecs', '🇺🇸'], ['diplomats', '🇺🇸'],
   // Alpine / Nordics
   ['salzburg', '🇦🇹'], ['rapid wien', '🇦🇹'], ['rapid vienna', '🇦🇹'], ['sturm graz', '🇦🇹'], ['lask', '🇦🇹'],
   ['basel', '🇨🇭'], ['young boys', '🇨🇭'], ['zurich', '🇨🇭'], ['grasshopper', '🇨🇭'], ['servette', '🇨🇭'],

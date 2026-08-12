@@ -48,10 +48,12 @@ const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish }: TeamSpinnerPr
     }
 
     setSettled(false);
-    setSpeed(60);
+    setSpeed(45);
 
     let elapsed = 0;
-    const totalDuration = 2000;
+    // Owner task 70 (2026-08-05): the wheel used to eat a fixed 2 seconds on
+    // all 11 picks. Snappier now: just over a second, quick start, short tail.
+    const totalDuration = 1100;
     let frame: number;
 
     const tick = () => {
@@ -66,13 +68,13 @@ const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish }: TeamSpinnerPr
       setDisplayIndex((prev) => (prev + 1) % allDisplayTeams.length);
 
       const progress = elapsed / totalDuration;
-      const newSpeed = 60 + progress * 300;
+      const newSpeed = 45 + progress * 230;
       setSpeed(newSpeed);
 
       frame = window.setTimeout(tick, newSpeed);
     };
 
-    frame = window.setTimeout(tick, speed);
+    frame = window.setTimeout(tick, 45);
 
     return () => clearTimeout(frame);
   }, [isSpinning]);

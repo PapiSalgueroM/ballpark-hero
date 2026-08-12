@@ -25,8 +25,8 @@ import {
 
 /**
  * Missing Eleven (task #39) — the NFL port of /missing-five. A verified real
- * Super Bowl starting OFFENSE with one name blanked; 3 guesses, hint ladder,
- * 100/70/40. Daily uses the sitewide ET-seeded convention via
+ * Super Bowl starting UNIT (offense or defense) with one name blanked;
+ * 3 guesses, hint ladder, 100/70/40. Daily uses the sitewide ET-seeded convention via
  * lib/missingEleven.ts; persistence via useDailyPuzzle's action log
  * (sentinel-puzzle pattern, same as Missing Five/Nine).
  */
@@ -149,18 +149,19 @@ const MissingEleven = () => {
   }
 
   const { lineup, candidate } = puzzle;
+  const unit = lineup.unit ?? 'offense';
 
   return (
     <>
       <PageSeo
         title="Missing Eleven - Name the Missing Super Bowl Starter | DoUKnowBall"
-        description="A famous real Super Bowl starting offense with one name blanked out. Can you remember who actually started? Daily challenge with verified lineups."
+        description="A famous real Super Bowl starting lineup, offense or defense, with one name blanked out. Can you remember who actually started? Daily challenge with verified lineups."
         path="/missing-eleven"
       />
       <GameShell
         width="narrow"
         title="🏈 MISSING ELEVEN"
-        subtitle="One starter from a famous Super Bowl offense is blanked. Who was it?"
+        subtitle="One starter from a famous Super Bowl lineup is blanked. Who was it?"
         headerExtra={
           <>
             <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
@@ -202,13 +203,13 @@ const MissingEleven = () => {
             <div className="text-center mb-4">
               <p className="text-sm font-bold text-primary">{lineup.dateLabel}</p>
               <p className="text-xs text-muted-foreground mt-0.5">{lineup.scoreLine} · {lineup.venue}</p>
-              <p className="text-sm font-semibold text-foreground mt-1">{lineup.team} starting offense</p>
+              <p className="text-sm font-semibold text-foreground mt-1">{lineup.team} starting {unit}</p>
             </div>
 
-            {/* Starting offense card */}
+            {/* Starting unit card */}
             <div className="max-w-md mx-auto rounded-2xl border border-border bg-gradient-to-b from-emerald-950/40 to-card overflow-hidden mb-6">
               <div className="px-4 py-2 border-b border-border/60 flex items-center justify-between">
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Starting offense</span>
+                <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Starting {unit}</span>
                 <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Pos</span>
               </div>
               <div className="divide-y divide-border/40">
@@ -302,7 +303,7 @@ const MissingEleven = () => {
                   outcomeEmoji={won ? '🏆' : '🙈'}
                   headline={candidate.name}
                   statLine={<>{lineup.team} · {lineup.dateLabel}</>}
-                  funFact={candidate.fact ? <>💡 {candidate.fact}</> : <>That was the real starting offense that night.</>}
+                  funFact={candidate.fact ? <>💡 {candidate.fact}</> : <>That was the real starting {unit} that night.</>}
                   statRow={won ? [{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{score}</span> }] : undefined}
                   emojiGrid={won ? `🏈 Missing Eleven: ${score} pts` : `🏈 Missing Eleven: missed it`}
                   share={{
@@ -321,10 +322,10 @@ const MissingEleven = () => {
 
         <GameSeoContent
           title="Missing Eleven | DoUKnowBall"
-          description="A verified real Super Bowl starting offense is shown with one name blanked out. Remember who actually started, including the surprise starters history forgot."
+          description="A verified real Super Bowl starting lineup, offense or defense, is shown with one name blanked out. Remember who actually started, including the surprise starters history forgot."
           howToPlay={[
-            'A famous real Super Bowl starting offense is shown with one player blanked',
-            'The position is shown — the name is the mystery',
+            'A famous real Super Bowl starting offense or defense is shown with one player blanked',
+            'The position is shown, the name is the mystery',
             'You get 3 guesses; each miss unlocks a hint',
             'Guess on the first try for 100 points, then 70, then 40',
             'Every lineup is verified against the official starters table',
@@ -332,6 +333,8 @@ const MissingEleven = () => {
           examples={[
             'Who started at running back for the Patriots in Super Bowl LI? (Not Blount, not White...)',
             'Who started at tight end for the 28-3 Falcons? (Not the guy who caught the TD...)',
+            'Who started at linebacker for the Super Bowl XLVIII Seahawks? (Not the MVP...)',
+            'Who started at strong safety for the 2000 Ravens? (Everyone forgets him...)',
           ]}
         />
 

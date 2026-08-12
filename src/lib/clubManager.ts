@@ -268,6 +268,82 @@ const EURO_CLUBS = [
   'Bayer Leverkusen', 'Monaco', 'Lille', 'Atalanta', 'Lazio', 'Sevilla',
 ];
 
+/* ================================================================== */
+/* Real leagues (owner task 61, 2026-08-05: "real accurate tables")   */
+/* ================================================================== */
+
+/**
+ * Every playable club now competes in its REAL league against that league's
+ * real clubs (2025-26 memberships), not the old fictional World Super
+ * League. Names for playable clubs match CLUBS exactly, since the whole
+ * engine keys on the name string. Strength priors are rough tiers on the
+ * same 55-92 scale seasonStrengths already used; ±2 jitter applies on top
+ * each season.
+ */
+export interface LeagueDef {
+  id: string;
+  name: string;
+  cupName: string;
+  clubs: string[];
+}
+
+export const REAL_LEAGUES: LeagueDef[] = [
+  {
+    id: 'premier', name: 'Premier League', cupName: 'FA Cup',
+    clubs: ['Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Leeds United', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Nottingham Forest', 'Sunderland', 'Tottenham', 'West Ham', 'Wolves'],
+  },
+  {
+    id: 'laliga', name: 'La Liga', cupName: 'Copa del Rey',
+    clubs: ['Alavés', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Real Betis', 'Celta Vigo', 'Elche', 'Espanyol', 'Getafe', 'Girona', 'Levante', 'Mallorca', 'Osasuna', 'Real Oviedo', 'Rayo Vallecano', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Valencia', 'Villarreal'],
+  },
+  {
+    id: 'seriea', name: 'Serie A', cupName: 'Coppa Italia',
+    clubs: ['Atalanta', 'Bologna', 'Cagliari', 'Como', 'Cremonese', 'Fiorentina', 'Genoa', 'Inter Milan', 'Juventus', 'Lazio', 'Lecce', 'AC Milan', 'Napoli', 'Parma', 'Pisa', 'Roma', 'Sassuolo', 'Torino', 'Udinese', 'Verona'],
+  },
+  {
+    id: 'bundesliga', name: 'Bundesliga', cupName: 'DFB-Pokal',
+    clubs: ['Augsburg', 'Bayer Leverkusen', 'Bayern Munich', 'Borussia Dortmund', 'Gladbach', 'Eintracht Frankfurt', 'Freiburg', 'Hamburg', 'Heidenheim', 'Hoffenheim', 'Köln', 'Mainz', 'RB Leipzig', 'St. Pauli', 'Stuttgart', 'Union Berlin', 'Werder Bremen', 'Wolfsburg'],
+  },
+  {
+    id: 'ligue1', name: 'Ligue 1', cupName: 'Coupe de France',
+    clubs: ['Angers', 'Auxerre', 'Brest', 'Le Havre', 'Lens', 'Lille', 'Lorient', 'Lyon', 'Marseille', 'Metz', 'Monaco', 'Nantes', 'Nice', 'Paris FC', 'PSG', 'Rennes', 'Strasbourg', 'Toulouse'],
+  },
+];
+
+/** Strength priors for league clubs the player pool cannot rate. */
+const STRENGTH_PRIORS: Record<string, number> = {
+  // Premier League
+  'Liverpool': 86, 'Manchester City': 86, 'Arsenal': 86, 'Chelsea': 83, 'Newcastle': 81,
+  'Aston Villa': 80, 'Manchester United': 79, 'Tottenham': 79, 'Brighton': 77, 'Nottingham Forest': 76,
+  'Bournemouth': 76, 'Crystal Palace': 76, 'Brentford': 75, 'Fulham': 75, 'Everton': 74,
+  'West Ham': 74, 'Wolves': 73, 'Leeds United': 72, 'Burnley': 70, 'Sunderland': 70,
+  // La Liga
+  'Real Madrid': 88, 'Barcelona': 87, 'Atlético Madrid': 83, 'Athletic Club': 79, 'Villarreal': 78,
+  'Real Betis': 76, 'Real Sociedad': 76, 'Girona': 74, 'Sevilla': 73, 'Valencia': 73,
+  'Celta Vigo': 73, 'Osasuna': 72, 'Mallorca': 72, 'Rayo Vallecano': 72, 'Getafe': 71,
+  'Espanyol': 70, 'Alavés': 70, 'Levante': 68, 'Elche': 68, 'Real Oviedo': 67,
+  // Serie A
+  'Inter Milan': 85, 'Napoli': 83, 'AC Milan': 82, 'Juventus': 82, 'Atalanta': 81,
+  'Roma': 79, 'Lazio': 77, 'Fiorentina': 77, 'Bologna': 76, 'Torino': 72,
+  'Como': 72, 'Udinese': 71, 'Genoa': 71, 'Cagliari': 69, 'Lecce': 69,
+  'Parma': 69, 'Verona': 68, 'Sassuolo': 68, 'Pisa': 66, 'Cremonese': 66,
+  // Bundesliga
+  'Bayern Munich': 87, 'Bayer Leverkusen': 83, 'Borussia Dortmund': 81, 'RB Leipzig': 79, 'Eintracht Frankfurt': 77,
+  'Stuttgart': 77, 'Freiburg': 74, 'Mainz': 73, 'Gladbach': 73, 'Hoffenheim': 72,
+  'Wolfsburg': 72, 'Union Berlin': 71, 'Werder Bremen': 71, 'Augsburg': 70, 'Köln': 69,
+  'Hamburg': 69, 'St. Pauli': 68, 'Heidenheim': 67,
+  // Ligue 1
+  'PSG': 87, 'Monaco': 79, 'Marseille': 79, 'Lille': 77, 'Lyon': 76,
+  'Nice': 75, 'Lens': 74, 'Rennes': 74, 'Strasbourg': 72, 'Brest': 71,
+  'Toulouse': 70, 'Nantes': 69, 'Auxerre': 68, 'Angers': 67, 'Le Havre': 67,
+  'Metz': 66, 'Lorient': 66, 'Paris FC': 66,
+};
+
+/** The real league a club plays in. Every playable club is covered. */
+export function leagueOf(clubName: string): LeagueDef {
+  return REAL_LEAGUES.find(l => l.clubs.includes(clubName)) ?? REAL_LEAGUES[0];
+}
+
 const CUP_ORDER: CupRound[] = ['R16', 'QF', 'SF', 'F'];
 const CUP_LABELS: Record<CupRound, string> = {
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
@@ -278,7 +354,9 @@ const UCL_LABELS: Record<UclKoRound, string> = {
 };
 
 const SAVE_KEY = 'dukb-club-manager-save';
-const SAVE_VERSION = 1;
+// v2 (2026-08-05): real leagues replaced the fictional World Super League;
+// old saves carry a 20-club fictional table and must start fresh.
+const SAVE_VERSION = 2;
 
 /* ================================================================== */
 /* Small utilities                                                    */
@@ -630,10 +708,17 @@ function generateHeadlines(state: CareerState): void {
 /* ================================================================== */
 
 /** Per-season strength for every club we might face (with a little jitter). */
-function genClubStrengths(): Record<string, number> {
+function genClubStrengths(myLeague: LeagueDef): Record<string, number> {
   const out: Record<string, number> = {};
+  // Real league opponents first: strength priors, else the player-pool XI.
+  for (const name of myLeague.clubs) {
+    const base = STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
+    out[name] = clamp(base + ri(-2, 2), 55, 92);
+  }
   for (const c of CLUBS) {
-    out[c.name] = clamp(clubPreviewRating(c.name) + ri(-2, 2), 55, 92);
+    if (out[c.name] !== undefined) continue;
+    const base = STRENGTH_PRIORS[c.name] ?? clubPreviewRating(c.name);
+    out[c.name] = clamp(base + ri(-2, 2), 55, 92);
   }
   for (const e of EURO_CLUBS) {
     if (out[e] !== undefined) continue;
@@ -644,7 +729,7 @@ function genClubStrengths(): Record<string, number> {
 }
 
 function strengthOf(state: CareerState, club: string): number {
-  return state.clubStrengths[club] ?? Math.max(clubPreviewRating(club), 64);
+  return state.clubStrengths[club] ?? STRENGTH_PRIORS[club] ?? Math.max(clubPreviewRating(club), 64);
 }
 
 /**
@@ -669,33 +754,43 @@ function roundPairs(clubs: string[], round: number): [string, string][] {
 }
 
 /**
- * 52-entry season calendar: 38 league rounds with the domestic cup, UCL group
+ * Season calendar: every league round with the domestic cup, UCL group
  * matchdays, UCL knockouts and the January window interleaved between them.
+ * League length follows the real league: 38 rounds for 20 clubs, 34 for the
+ * 18-club Bundesliga and Ligue 1.
  */
-function buildCalendar(): CalendarEntry[] {
+function buildCalendar(leagueSize: number): CalendarEntry[] {
+  const rounds = 2 * (leagueSize - 1);
+  const marks = rounds >= 38
+    ? { ucl: [2, 5, 8, 10, 12, 15], cupR16: 6, cupQF: 14, window: 18, uclQF: 22, cupSF: 26, uclSF: 29, cupF: 33, uclF: 35 }
+    : { ucl: [2, 4, 7, 9, 11, 13], cupR16: 5, cupQF: 12, window: 16, uclQF: 20, cupSF: 23, uclSF: 26, cupF: 29, uclF: 31 };
   const cal: CalendarEntry[] = [];
   let md = 0;
-  for (let r = 0; r < 38; r++) {
+  for (let r = 0; r < rounds; r++) {
     cal.push({ type: 'league', round: r });
-    if ([2, 5, 8, 10, 12, 15].includes(r)) {
+    if (marks.ucl.includes(r)) {
       cal.push({ type: 'uclGroup', round: md });
       md += 1;
     }
-    if (r === 6) cal.push({ type: 'cup', round: 0, cupRound: 'R16' });
-    if (r === 14) cal.push({ type: 'cup', round: 0, cupRound: 'QF' });
-    if (r === 18) cal.push({ type: 'window', round: 0 });
-    if (r === 22) cal.push({ type: 'uclKo', round: 0, uclRound: 'QF' });
-    if (r === 26) cal.push({ type: 'cup', round: 0, cupRound: 'SF' });
-    if (r === 29) cal.push({ type: 'uclKo', round: 0, uclRound: 'SF' });
-    if (r === 33) cal.push({ type: 'cup', round: 0, cupRound: 'F' });
-    if (r === 35) cal.push({ type: 'uclKo', round: 0, uclRound: 'F' });
+    if (r === marks.cupR16) cal.push({ type: 'cup', round: 0, cupRound: 'R16' });
+    if (r === marks.cupQF) cal.push({ type: 'cup', round: 0, cupRound: 'QF' });
+    if (r === marks.window) cal.push({ type: 'window', round: 0 });
+    if (r === marks.uclQF) cal.push({ type: 'uclKo', round: 0, uclRound: 'QF' });
+    if (r === marks.cupSF) cal.push({ type: 'cup', round: 0, cupRound: 'SF' });
+    if (r === marks.uclSF) cal.push({ type: 'uclKo', round: 0, uclRound: 'SF' });
+    if (r === marks.cupF) cal.push({ type: 'cup', round: 0, cupRound: 'F' });
+    if (r === marks.uclF) cal.push({ type: 'uclKo', round: 0, uclRound: 'F' });
   }
   return cal;
 }
 
 function initUclGroup(qualified: boolean, myClub: string): UclGroupState | null {
   if (!qualified) return null;
-  const opponents = shuffle(EURO_CLUBS.filter(c => c !== myClub)).slice(0, 3);
+  // Groups avoid clubs from my own league, like the real group/league phase.
+  const myLeagueClubs = new Set(leagueOf(myClub).clubs);
+  const bigForeign = CLUBS.map(c => c.name).filter(c => c !== myClub && !myLeagueClubs.has(c));
+  const pool = [...new Set([...EURO_CLUBS, ...bigForeign])].filter(c => c !== myClub && !myLeagueClubs.has(c));
+  const opponents = shuffle(pool).slice(0, 3);
   return {
     opponents,
     table: [myClub, ...opponents].map(emptyRow),
@@ -914,7 +1009,7 @@ function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null 
     const home = mine[0] === state.clubName;
     return {
       competition: 'league',
-      compLabel: `World Super League · Round ${entry.round + 1}`,
+      compLabel: `${leagueOf(state.clubName).name} · Round ${entry.round + 1}`,
       opponent: home ? mine[1] : mine[0],
       home,
     };
@@ -924,7 +1019,7 @@ function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null 
     if (!opponent) return null;
     return {
       competition: 'cup',
-      compLabel: `Domestic Cup · ${CUP_LABELS[entry.cupRound]}`,
+      compLabel: `${leagueOf(state.clubName).cupName} · ${CUP_LABELS[entry.cupRound]}`,
       opponent,
       home: cupVenue(entry.cupRound),
     };
@@ -1056,9 +1151,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
       const i = CUP_ORDER.indexOf(entry.cupRound!);
       if (entry.cupRound === 'F') {
         state.cupRound = 'won';
-        trophyWon = 'Domestic Cup';
-        state.trophies.push({ name: 'Domestic Cup', emoji: '🏅', season: state.season });
-        events.push('🏅 The Domestic Cup is yours!');
+        const cupName = leagueOf(state.clubName).cupName;
+        trophyWon = cupName;
+        state.trophies.push({ name: cupName, emoji: '🏅', season: state.season });
+        events.push(`🏅 The ${cupName} is yours!`);
         confDelta += 12;
       } else {
         const next = CUP_ORDER[i + 1];
@@ -1069,7 +1165,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
       }
     } else {
       state.cupRound = 'out';
-      events.push('❌ Knocked out of the Domestic Cup.');
+      events.push(`❌ Knocked out of the ${leagueOf(state.clubName).cupName}.`);
       confDelta -= entry.cupRound === 'R16' ? 3 : 4.5;
     }
   }
@@ -1176,7 +1272,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
 export function startCareer(clubName: string): CareerState {
   const club = clubByName(clubName) ?? CLUBS[0];
   const squad = buildSquad(club.name);
-  const leagueClubs = shuffle(CLUBS.map(c => c.name));
+  // Owner task 61: the league is the club's REAL league with its real clubs.
+  const league = leagueOf(club.name);
+  const leagueClubs = shuffle([...league.clubs]);
   const state: CareerState = {
     saveVersion: SAVE_VERSION,
     clubName: club.name,
@@ -1192,8 +1290,8 @@ export function startCareer(clubName: string): CareerState {
     leagueClubs,
     table: leagueClubs.map(emptyRow),
     form: [],
-    calendar: buildCalendar(),
-    clubStrengths: genClubStrengths(),
+    calendar: buildCalendar(league.clubs.length),
+    clubStrengths: genClubStrengths(league),
     transferWindow: 'summer',
     aiHeadlines: [],
     goneNames: [],
@@ -1426,7 +1524,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     ? Math.round(club.budget * 1.1)
     : Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12));
   const qualifiedUcl = summary ? summary.qualifiedUcl : prevPos <= 4;
-  const leagueClubs = shuffle(CLUBS.map(c => c.name));
+  const league = leagueOf(clubName);
+  const leagueClubs = shuffle([...league.clubs]);
 
   const state: CareerState = {
     ...JSON.parse(JSON.stringify(career)) as CareerState,
@@ -1441,8 +1540,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     leagueClubs,
     table: leagueClubs.map(emptyRow),
     form: [],
-    calendar: buildCalendar(),
-    clubStrengths: genClubStrengths(),
+    calendar: buildCalendar(league.clubs.length),
+    clubStrengths: genClubStrengths(league),
     transferWindow: 'summer',
     aiHeadlines: [],
     goneNames: [],

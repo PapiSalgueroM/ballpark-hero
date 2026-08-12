@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClubManager } from '@/hooks/useClubManager';
 import type { HubTab } from '@/hooks/useClubManager';
 import {
-  CLUBS, TIER_INFO, clubByName, clubPreviewRating, money, confidenceLabel,
+  CLUBS, TIER_INFO, clubByName, clubPreviewRating, leagueOf, money, confidenceLabel,
   isAvailable, xiAverageRating, sortedTable,
 } from '@/lib/clubManager';
 import { GameNav } from '@/components/game/GameNav';
@@ -51,7 +51,7 @@ const ClubManager = () => {
           <HowToPlayPopover title="How to Play Club Manager">
             <div className="space-y-3 text-left">
               <p>🏟️ <span className="font-semibold text-foreground">Take charge of a real club.</span> Elite giants have huge budgets and zero patience; underdogs get small budgets and a low bar.</p>
-              <p>📅 <span className="font-semibold text-foreground">Play a full season</span>: 38 league matches vs 19 real clubs, a domestic cup, and the Champions League if you qualify.</p>
+              <p>📅 <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>: the actual Premier League, La Liga, Serie A, Bundesliga or Ligue 1 clubs, plus the domestic cup and the Champions League if you qualify.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
               <p>💰 <span className="font-semibold text-foreground">Buy and sell in the summer and January windows.</span> Stay under budget and keep at least 14 players.</p>
               <p>📉 <span className="font-semibold text-foreground">Watch the board confidence meter.</span> Fall too far below expectations and you're sacked. Overachieve and bigger clubs come calling.</p>
@@ -493,7 +493,7 @@ const ClubManager = () => {
 
         {/* -------- Table -------- */}
         <TabsContent value="table">
-          <LeagueTableCard rows={g.tableRows} myClub={c.clubName} title="World Super League" />
+          <LeagueTableCard rows={g.tableRows} myClub={c.clubName} title={leagueOf(c.clubName).name} />
         </TabsContent>
 
         {/* -------- Transfers -------- */}

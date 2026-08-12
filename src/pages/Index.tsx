@@ -13,7 +13,7 @@ import { PollOfTheDay } from '@/components/home/PollOfTheDay';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
-import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, TOTAL_GAMES, type GameDef } from '@/data/gameRegistry';
+import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, TOTAL_GAMES, type GameDef } from '@/data/gameRegistry';
 import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
 
 /**
@@ -450,6 +450,25 @@ export default function Index() {
             )
           ) : (
             <>
+              {/* Dynasty & Career Sims showcase (2026-08-05): the deep games, front and center */}
+              <section>
+                <h2 className="flex items-center gap-2 text-lg font-display font-bold text-foreground mb-1">
+                  <span className="text-xl">👑</span>
+                  Dynasty & Career Sims
+                  <span className="text-xs font-normal text-muted-foreground ml-1">
+                    ({FEATURED_GAMES.length} worlds)
+                  </span>
+                </h2>
+                <p className="text-xs text-muted-foreground mb-4">
+                  Not quizzes. Whole universes: run a franchise, live a career, build a dynasty. Every one saves your progress.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {FEATURED_GAMES.map(game => (
+                    <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} />
+                  ))}
+                </div>
+              </section>
+
               {VISIBLE_CATEGORIES.map(cat => (
                 <section key={cat.title}>
                   <h2 className="flex items-center gap-2 text-lg font-display font-bold text-foreground mb-4">

@@ -163,16 +163,21 @@ export const AGE_RANGE = 12;
 /** Value points fall linearly to zero across this many log10 units (1 = 10x apart). */
 export const VALUE_LOG_RANGE = 1;
 
-export const POOL_SIZE = 400; // notable current-ish players kept in the guessable pool
-export const SECRET_POOL_SIZE = 200; // the secret is always drawn from the top of the pool
+export const POOL_SIZE = 500; // notable current-ish players kept in the guessable pool
+// Owner task 60 (2026-08-05): "lots more puzzles". The secret pool grows
+// 200 -> 300, which adds a hundred fresh, less-obvious secrets to Who Am I
+// AND Clue Auction (it draws from the same pickSecret pool). Value bands in
+// clueAuction were checked against the wider spread: the sub-$45M band just
+// absorbs the new tail.
+export const SECRET_POOL_SIZE = 300; // the secret is always drawn from the top of the pool
 
 // #40: prominence tiers for the secret pick, unlimited/practice play only
 // (this game has no separate daily mode; Casual/Expert guess budgets are
-// untouched by this setting). The 200-player secret pool splits into thirds
-// by CURRENT market value (67/67/66): Easy draws the top third (most famous),
-// Hard the bottom third, Normal the untouched 200. Since the 2026-07-08
-// current-rows fix the pool ranks by each player's latest 2025/2026 value,
-// so the exact dollar cutoffs drift with live data.
+// untouched by this setting). The secret pool splits into thirds by CURRENT
+// market value: Easy draws the top third (most famous), Hard the bottom
+// third, Normal the whole pool. Since the 2026-07-08 current-rows fix the
+// pool ranks by each player's latest 2025/2026 value, so the exact dollar
+// cutoffs drift with live data.
 export type WhoAmIDifficulty = 'easy' | 'normal' | 'hard';
 const DIFFICULTY_STORAGE_KEY = 'who-am-i-difficulty';
 

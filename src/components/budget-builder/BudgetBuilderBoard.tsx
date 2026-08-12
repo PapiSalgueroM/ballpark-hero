@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import { Check, Copy, RotateCcw, X } from 'lucide-react';
+import { Check, Copy, RotateCcw, Swords, X } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, TOPICS, playerRating } from '@/lib/squadDeal';
-import { BUDGET, useBudgetBuilder } from '@/hooks/useBudgetBuilder';
+import { BB_ERAS, useBudgetBuilder } from '@/hooks/useBudgetBuilder';
 
 export function BudgetBuilderBoard() {
   const {
     loading, formation, setFormation, topic, setTopic,
+    era, setEra, budget,
     squad, activeSlot, setActiveSlot, candidates, search, setSearch,
-    spent, remaining, filled, complete, teamRating, sign, release, reset, shareText,
+    spent, remaining, filled, complete, teamRating,
+    criterion, criterionMet, moneyRating, series, playFinal, finalScore,
+    sign, release, reset, shareText,
   } = useBudgetBuilder();
   const [copied, setCopied] = useState(false);
 
@@ -30,10 +33,27 @@ export function BudgetBuilderBoard() {
     );
   }
 
-  const pct = Math.max(0, Math.min(100, (spent / BUDGET) * 100));
+  const pct = Math.max(0, Math.min(100, (spent / Math.max(1, budget)) * 100));
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6">
+      {/* Era picker (owner task 49: eras) */}
+      <div className="mb-3 grid grid-cols-3 gap-2">
+        {BB_ERAS.map(e => (
+          <button
+            key={e.id}
+            onClick={() => setEra(e.id)}
+            className={`rounded-xl border px-2 py-2 text-center transition-colors ${
+              era.id === e.id ? 'border-primary bg-primary/10' : 'border-border bg-card hover:border-primary/40'
+            }`}
+          >
+            <div className="text-lg">{e.emoji}</div>
+            <div className="text-xs font-bold text-foreground">{e.label}</div>
+            <div className="text-[9px] text-muted-foreground">{e.blurb}</div>
+          </button>
+        ))}
+      </div>
+
       {/* Budget bar */}
       <div className="rounded-2xl border border-border bg-card p-4">
         <div className="flex items-end justify-between">
@@ -66,7 +86,15 @@ export function BudgetBuilderBoard() {
           />
         </div>
         <p className="mt-1.5 text-[11px] text-muted-foreground">
-          Spent €{spent}M of €{BUDGET}M
+          Spent €{spent}M of €{budget}M ({era.label} market cap: 62% of the priciest possible XI)
+        </p>
+      </div>
+
+      {/* Board demand (owner task 49: criteria) */}
+      <div className={`mt-3 rounded-xl border p-3 ${complete ? (criterionMet ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-destructive/50 bg-destructive/5') : 'border-gold/40 bg-gold/5'}`}>
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">📋 Today's board demand (+100 score)</p>
+        <p className={`mt-1 text-sm font-semibold ${complete ? (criterionMet ? 'text-emerald-500' : 'text-destructive') : 'text-foreground'}`}>
+          {complete ? (criterionMet ? '✅ ' : '❌ ') : ''}{criterion.emoji} {criterion.label}
         </p>
       </div>
 
@@ -81,15 +109,17 @@ export function BudgetBuilderBoard() {
             <option key={f.name} value={f.name}>{f.name}</option>
           ))}
         </select>
-        <select
-          value={topic}
-          onChange={e => setTopic(e.target.value as typeof topic)}
-          className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm text-foreground"
-        >
-          {TOPICS.map(t => (
-            <option key={t.id} value={t.id}>{t.emoji} {t.label}</option>
-          ))}
-        </select>
+        {era.id === 'today' && (
+          <select
+            value={topic}
+            onChange={e => setTopic(e.target.value as typeof topic)}
+            className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm text-foreground"
+          >
+            {TOPICS.map(t => (
+              <option key={t.id} value={t.id}>{t.emoji} {t.label}</option>
+            ))}
+          </select>
+        )}
         <button
           onClick={reset}
           className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
@@ -196,7 +226,7 @@ export function BudgetBuilderBoard() {
         </div>
       )}
 
-      {/* Done */}
+      {/* Done: the goal (owner task 49) */}
       {complete && (
         <div className="mt-4 rounded-2xl border border-border bg-card p-5 text-center">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -206,6 +236,38 @@ export function BudgetBuilderBoard() {
           <p className="text-sm text-muted-foreground">
             team rating · €{spent}M spent · €{remaining}M left over
           </p>
+
+          {!series && (
+            <button
+              onClick={playFinal}
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-gold px-6 py-2.5 text-sm font-bold text-background hover:opacity-90"
+            >
+              <Swords className="h-4 w-4" /> Play the Final vs the Money XI ({moneyRating})
+            </button>
+          )}
+
+          {series && (
+            <div className="mt-4 rounded-xl border border-border bg-background p-4 text-left">
+              <p className="text-center text-sm font-bold text-foreground">{series.headline}</p>
+              <div className="mt-2 flex items-center justify-center gap-3 text-xs text-muted-foreground">
+                <span>Legs: {series.legs.map(l => `${l.userGoals}-${l.aiGoals}`).join(' · ')}</span>
+              </div>
+              <div className="mt-2 max-h-32 space-y-1 overflow-y-auto">
+                {series.legs.flatMap((l, li) =>
+                  l.events.slice(0, 3).map((ev, ei) => (
+                    <p key={`${li}-${ei}`} className="text-[11px] text-muted-foreground">
+                      Leg {li + 1}, {ev.minute}' {ev.text}
+                    </p>
+                  )),
+                )}
+              </div>
+              <p className="mt-3 text-center font-display text-2xl font-black text-gold">Score: {finalScore}</p>
+              <p className="text-center text-[11px] text-muted-foreground">
+                rating x10 + thrift + board demand bonus + final result
+              </p>
+            </div>
+          )}
+
           <button
             onClick={copyShare}
             className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
