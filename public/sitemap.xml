@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Generated from src/data/gameRegistry.ts (live games only) on 2026-08-12.
+  Generated from src/data/gameRegistry.ts (live games only) plus static pages on 2026-08-12.
   Deleted or retired games are intentionally left out so Search Console
   does not chase orphaned thin pages. Regenerate when the registry changes.
 -->
@@ -9,6 +9,9 @@
   <url><loc>https://douknowball.com/leaderboard</loc><lastmod>2026-08-12</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
   <url><loc>https://douknowball.com/privacy</loc><lastmod>2026-08-12</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://douknowball.com/terms</loc><lastmod>2026-08-12</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://douknowball.com/about</loc><lastmod>2026-08-12</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://douknowball.com/contact</loc><lastmod>2026-08-12</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://douknowball.com/whats-new</loc><lastmod>2026-08-12</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://douknowball.com/higher-lower-transfers</loc><lastmod>2026-08-12</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/overrated-underrated</loc><lastmod>2026-08-12</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/tier-list</loc><lastmod>2026-08-12</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>

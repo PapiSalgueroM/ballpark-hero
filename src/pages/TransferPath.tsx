@@ -1,4 +1,5 @@
 import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
 import { TransferPathBoard } from '@/components/transfer-path/TransferPathBoard';
 
 export default function TransferPath() {
@@ -10,6 +11,10 @@ export default function TransferPath() {
         path="/transfer-path"
       />
       <TransferPathBoard />
+      <GameSeoContent
+        title="Transfer Path: Connect Soccer Players Through Shared Clubs"
+        description="Link two soccer players by walking through the clubs they share with other players. Like Six Degrees of Kevin Bacon, but for football transfers."
+      />
     </>
   );
 }

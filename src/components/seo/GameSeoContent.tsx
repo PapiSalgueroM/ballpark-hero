@@ -1,45 +1,55 @@
 import { Link, useLocation } from 'react-router-dom';
 import { CATEGORIES, ALL_GAMES } from '@/data/gameRegistry';
+import { GAME_CONTENT } from '@/data/gameContent';
 
 interface GameSeoContentProps {
   title: string;
   description: string;
-  howToPlay: string[];
+  howToPlay?: string[];
   examples?: string[];
 }
 
-// NOTE: the on-page "How to Play" list was removed from the bottom of every game
-// (it duplicated the top-right "?" help modal and looked cluttered). We keep the
-// SEO title + description for search ranking. howToPlay/examples props are kept on
-// the interface for backwards compatibility with the 52 call sites but no longer rendered.
-//
-// FAQ schema + internal links (MASTER_PLAN #114): both are derived entirely from the
-// current route (via useLocation) and the game registry, so every one of the 70+ call
-// sites gets them for free with zero per-page prop changes. If a page's path isn't in
-// the registry (e.g. a hub page), the lookup is undefined and both blocks quietly skip.
-const GameSeoContent = ({ title, description }: GameSeoContentProps) => {
+// Round 48 (AdSense content build): this block grew from title + description only
+// into a real on-page guide. Every game in the registry has a long-form entry in
+// src/data/gameContent (intro, how to play, rules, example run, tips, FAQs), keyed
+// by route path, so all 100+ call sites get the rich content with zero per-page
+// prop changes (same trick as the FAQ schema + internal links from MASTER_PLAN
+// #114). The legacy howToPlay/examples props are kept for backwards compatibility
+// and only render as a small fallback when a page has no gameContent entry.
+// The visible FAQ list and the FAQPage JSON-LD are built from the same array so
+// the structured data always matches what is actually on the page.
+const GameSeoContent = ({ title, description, howToPlay }: GameSeoContentProps) => {
   const location = useLocation();
   const path = location.pathname;
 
   const game = ALL_GAMES.find(g => g.path === path);
   const category = CATEGORIES.find(c => c.games.some(g => g.path === path));
+  const content = GAME_CONTENT[path];
 
   const gameLabel = game?.label || title;
 
-  const faqs = [
-    {
-      q: `What is ${gameLabel}?`,
-      a: description,
-    },
-    {
-      q: `How do you play ${gameLabel}?`,
-      a: `Open the game at douknowball.com${path} and follow the on-screen prompts. Use the "?" help button on the page for the full rules.`,
-    },
-    {
-      q: `Is ${gameLabel} free to play?`,
-      a: `Yes. ${gameLabel} is free to play on DoUKnowBall, with no login required and no download.`,
-    },
-  ];
+  const faqs = content
+    ? [
+        ...content.faqs,
+        {
+          q: `Is ${gameLabel} free to play?`,
+          a: `Yes. ${gameLabel} is free to play on DoUKnowBall, right in your browser. No download and no signup needed.`,
+        },
+      ]
+    : [
+        {
+          q: `What is ${gameLabel}?`,
+          a: description,
+        },
+        {
+          q: `How do you play ${gameLabel}?`,
+          a: `Open the game at douknowball.com${path} and follow the on-screen prompts. Use the "?" help button on the page for the full rules.`,
+        },
+        {
+          q: `Is ${gameLabel} free to play?`,
+          a: `Yes. ${gameLabel} is free to play on DoUKnowBall, with no login required and no download.`,
+        },
+      ];
 
   const faqJsonLd = {
     '@context': 'https://schema.org',
@@ -58,20 +68,101 @@ const GameSeoContent = ({ title, description }: GameSeoContentProps) => {
   const siblings = (category?.games || []).filter(g => g.path !== path).slice(0, 3);
 
   return (
-    <section className="max-w-2xl mx-auto mt-12 mb-8 px-4 text-center">
-      <h1 className="text-lg font-semibold text-muted-foreground font-display mb-2">
-        {title}
-      </h1>
-      <p className="text-sm text-muted-foreground leading-relaxed">
-        {description}
-      </p>
+    <section className="max-w-2xl mx-auto mt-12 mb-8 px-4">
+      <div className="text-center">
+        <h1 className="text-lg font-semibold text-muted-foreground font-display mb-2">
+          {title}
+        </h1>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          {description}
+        </p>
+      </div>
+
+      {content && (
+        <article className="mt-10 text-left text-sm text-muted-foreground leading-relaxed space-y-8">
+          <div className="space-y-3">
+            {content.intro.map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
+          </div>
+
+          <div>
+            <h2 className="text-base font-semibold text-foreground mb-3">
+              How to play {gameLabel}
+            </h2>
+            <ol className="list-decimal pl-5 space-y-2">
+              {content.howToPlay.map((step, i) => (
+                <li key={i}>{step}</li>
+              ))}
+            </ol>
+          </div>
+
+          <div>
+            <h2 className="text-base font-semibold text-foreground mb-3">
+              Rules to know
+            </h2>
+            <ul className="list-disc pl-5 space-y-2">
+              {content.rules.map((rule, i) => (
+                <li key={i}>{rule}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-base font-semibold text-foreground mb-3">
+              Example walkthrough
+            </h2>
+            <div className="space-y-3">
+              {content.example.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-base font-semibold text-foreground mb-3">
+              Strategy tips
+            </h2>
+            <ul className="list-disc pl-5 space-y-2">
+              {content.tips.map((tip, i) => (
+                <li key={i}>{tip}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-base font-semibold text-foreground mb-3">
+              {gameLabel} FAQ
+            </h2>
+            <div className="space-y-4">
+              {faqs.map((faq, i) => (
+                <div key={i}>
+                  <h3 className="font-medium text-foreground">{faq.q}</h3>
+                  <p className="mt-1">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </article>
+      )}
+
+      {!content && howToPlay && howToPlay.length > 0 && (
+        <div className="mt-8 text-left text-sm text-muted-foreground leading-relaxed">
+          <h2 className="text-base font-semibold text-foreground mb-3">How to play</h2>
+          <ol className="list-decimal pl-5 space-y-2">
+            {howToPlay.map((step, i) => (
+              <li key={i}>{step}</li>
+            ))}
+          </ol>
+        </div>
+      )}
 
       {game && (
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       )}
 
       {siblings.length > 0 && (
-        <nav aria-label="More games" className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+        <nav aria-label="More games" className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
           {siblings.map(sibling => (
             <Link
               key={sibling.path}

@@ -7,7 +7,19 @@ export function Footer() {
       <p className="max-w-lg mx-auto leading-relaxed">
         All team names, logos and trademarks are property of their respective owners. DoUKnowBall is not affiliated with the NFL, NBA, UFC, NHL, MLB, FIFA, IOC, NCAA, F1, PGA Tour, NASCAR, ATP or WTA. © 2026 DoUKnowBall
       </p>
-      <div className="flex items-center justify-center gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4">
+        <Link to="/about" className="underline hover:text-foreground transition-colors">
+          About
+        </Link>
+        <span>·</span>
+        <Link to="/contact" className="underline hover:text-foreground transition-colors">
+          Contact
+        </Link>
+        <span>·</span>
+        <Link to="/whats-new" className="underline hover:text-foreground transition-colors">
+          What's New
+        </Link>
+        <span>·</span>
         <Link to="/privacy" className="underline hover:text-foreground transition-colors">
           Privacy Policy
         </Link>

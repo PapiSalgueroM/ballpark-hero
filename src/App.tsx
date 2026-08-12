@@ -130,6 +130,9 @@ import PlayerStockMarket from "./pages/PlayerStockMarket";
 import NhlConnect4 from "./pages/NhlConnect4";
 import GolfHigherLower from "./pages/GolfHigherLower";
 import GuessTheGolfer from "./pages/GuessTheGolfer";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import WhatsNew from "./pages/WhatsNew";
 
 const queryClient = new QueryClient();
 
@@ -280,6 +283,9 @@ const AppContent = () => {
         <Route path="/guess-the-college" element={<GuessTheCollege />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/whats-new" element={<WhatsNew />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/reports" element={<AdminReports />} />
         <Route path="/ufc-chain" element={<UfcChain />} />
