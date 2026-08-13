@@ -8,7 +8,7 @@
  */
 
 import { NBA_TEAMS } from '@/data/conquestDataNba';
-import { seasonSwing, swingNote } from './careerVariance';
+import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNbaLifeEventsA } from './nbaCareerLifeA';
@@ -77,6 +77,8 @@ export interface NbaSeasonLine {
   ppg: number;
   rpg: number;
   apg: number;
+  /** Round 103: what you did once the regular season ended. */
+  poGames?: number; poPpg?: number; poRpg?: number; poApg?: number;
   awards: string[];
   teamResult: string;
   salary: number;
@@ -321,10 +323,12 @@ export function simNbaSeason(
   const strength = teamQuality + (c.ovr - 78) * 0.5;
   const playoffOdds = Math.max(0.05, Math.min(0.92, (strength - 66) / 28));
   let result = 'Missed the playoffs';
+  let poStage = -1;
   if (rng() < playoffOdds) {
     const stages = ['Lost in the first round', 'Lost in the conference semis', 'Lost the Conference Finals', 'Lost the NBA Finals', 'WON THE NBA FINALS'];
     let stage = 0;
     while (stage < 4 && rng() < 0.42 + (strength - 78) / 80) stage++;
+    poStage = stage;
     result = stages[stage];
     if (result === 'WON THE NBA FINALS') {
       c.rings += 1;
@@ -334,6 +338,23 @@ export function simNbaSeason(
     }
   }
   line.teamResult = result;
+
+  // Round 103: the postseason is its own performance, not a sentence.
+  const depth = playoffDepthOf(poStage >= 0, poStage);
+  if (depth >= 0) {
+    const poG = playoffGames(depth, rng, 'nba');
+    const clutch = clutchSwing(rng);
+    // Defences tighten and rotations shorten, so scoring dips a little for
+    // everyone before the player's own clutch roll is applied.
+    const poForm = form + clutch - 1.5;
+    line.poGames = poG;
+    line.poPpg = Math.min(42, Math.max(2, Math.round((5 + (poForm - 64) * 0.62) * a.scoring + rng() * 3)));
+    line.poRpg = Math.min(18, Math.max(0.5, Math.round(((2 + (poForm - 64) * 0.2) * a.rebounding + rng() * 2) * 10) / 10));
+    line.poApg = Math.min(14, Math.max(0.3, Math.round(((1.5 + (poForm - 64) * 0.22) * a.playmaking + rng() * 2) * 10) / 10));
+    notes.push(`📊 Playoffs: ${poG} games, ${line.poPpg} ppg, ${line.poRpg} rpg, ${line.poApg} apg.`);
+    const cn = clutchNote(clutch, depth, 'nba');
+    if (cn) notes.push(cn);
+  }
 
   const statScore = ppg * 1.6 + rpg * 1.4 + apg * 1.7;
   if (c.seasons.length === 0 && statScore > 42 && rng() < 0.72) { line.awards.push('Rookie of the Year'); notes.push('🏆 Rookie of the Year.'); }

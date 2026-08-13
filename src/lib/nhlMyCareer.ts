@@ -8,7 +8,7 @@
  */
 
 import { NHL_TEAMS } from '@/data/conquestDataNhl';
-import { seasonSwing, swingNote } from './careerVariance';
+import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNhlLifeEventsA } from './nhlCareerLifeA';
@@ -77,6 +77,9 @@ export interface NhlSeasonLine {
   games: number;
   goals?: number; assists?: number; points?: number;
   wins?: number; svpct?: number;
+  /** Round 103: the run to the Cup, or the four games that ended it. */
+  poGames?: number; poGoals?: number; poAssists?: number; poPoints?: number;
+  poWins?: number; poSvpct?: number;
   awards: string[];
   teamResult: string;
   salary: number;
@@ -219,10 +222,12 @@ export function simNhlSeason(
   const strength = teamQuality + (c.ovr - 76) * 0.4;
   const playoffOdds = Math.max(0.05, Math.min(0.9, (strength - 66) / 28));
   let result = 'Missed the playoffs';
+  let poStage = -1;
   if (rng() < playoffOdds) {
     const stages = ['Lost in Round 1', 'Lost in Round 2', 'Lost the Conference Final', 'Lost the Cup Final', 'WON THE STANLEY CUP'];
     let stage = 0;
     while (stage < 4 && rng() < 0.42 + (strength - 78) / 85) stage++;
+    poStage = stage;
     result = stages[stage];
     if (result === 'WON THE STANLEY CUP') {
       c.cups += 1;
@@ -232,6 +237,29 @@ export function simNhlSeason(
     }
   }
   line.teamResult = result;
+
+  // Round 103: sixteen wins is its own season, so it gets its own line.
+  const poDepth = playoffDepthOf(poStage >= 0, poStage);
+  if (poDepth >= 0) {
+    const poG = playoffGames(poDepth, rng, 'nhl');
+    const clutch = clutchSwing(rng);
+    const poForm = form + clutch - 1.2;   // playoff hockey is tighter
+    line.poGames = poG;
+    if (c.pos === 'G') {
+      line.poWins = Math.max(0, Math.min(16, Math.round(poG * (0.45 + (poForm - 64) * 0.006))));
+      line.poSvpct = Math.min(0.96, Math.max(0.86, Math.round((0.903 + (poForm - 64) * 0.0012 + rng() * 0.006) * 1000) / 1000));
+      notes.push(`📊 Playoffs: ${poG} games, ${line.poWins} wins, ${line.poSvpct.toFixed(3)} SV%.`);
+    } else {
+      const pg = poG / 82;
+      const off = (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).offense;
+      line.poGoals = Math.max(0, Math.round((4 + (poForm - 62) * 1.35) * c.archetype.scoringMult * off * pg + rng() * 2));
+      line.poAssists = Math.max(0, Math.round((7 + (poForm - 62) * 1.5) * (c.pos === 'D' ? 1.15 : 1.05 - (c.archetype.scoringMult - 1) * 0.5) * pg + rng() * 3));
+      line.poPoints = (line.poGoals ?? 0) + (line.poAssists ?? 0);
+      notes.push(`📊 Playoffs: ${poG} games, ${line.poGoals}G ${line.poAssists}A ${line.poPoints}P.`);
+    }
+    const cn = clutchNote(clutch, poDepth, 'nhl');
+    if (cn) notes.push(cn);
+  }
 
   const statScore = c.pos === 'G'
     ? (line.wins ?? 0) * 1.8 + Math.max(0, ((line.svpct ?? 0.9) - 0.9) * 2400)

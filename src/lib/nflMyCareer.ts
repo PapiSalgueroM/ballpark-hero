@@ -14,7 +14,7 @@
 // its own award math, its own salary multiplier and its own aging curve, so
 // they are real career paths and not reskins of a receiver.
 import type { PlayerAppearance } from './soccerCareerAppearance';
-import { seasonSwing, swingNote } from './careerVariance';
+import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { getNflLifeEventsA } from './nflCareerLifeA';
 import { getNflLifeEventsB } from './nflCareerLifeB';
 import { getNflCorruptionEvents } from './nflCareerCorruption';
@@ -125,6 +125,8 @@ export interface SeasonLine {
   tackles?: number; sacks?: number; picks?: number; passDef?: number; forcedFum?: number;
   // Round 56 kicker
   fgMade?: number; fgAtt?: number; longFg?: number;
+  /** Round 103: January football, told as numbers rather than a sentence. */
+  poGames?: number; poLine?: string;
   awards: string[];
   teamResult: string; // 'Missed playoffs' | 'Lost Wild Card' | ... | 'Won the Super Bowl'
   salary: number;
@@ -292,14 +294,51 @@ export function simSeason(
   const strength = teamQuality + (c.ovr - 74) * (c.pos === 'QB' ? 0.55 : c.pos === 'K' ? 0.08 : DEFENSIVE_POS.includes(c.pos) ? 0.22 : 0.25);
   const playoffOdds = Math.max(0.04, Math.min(0.92, (strength - 66) / 26));
   let result = 'Missed the playoffs';
+  let poStage = -1;
   if (rng() < playoffOdds) {
     const runs = ['Lost in the Wild Card round', 'Lost in the Divisional round', 'Lost the Conference Championship', 'Lost the Super Bowl', 'WON THE SUPER BOWL'];
     let stage = 0;
     while (stage < 4 && rng() < 0.42 + (strength - 76) / 90) stage++;
+    poStage = stage;
     result = runs[stage];
     if (result === 'WON THE SUPER BOWL') { c.rings += 1; c.fanbase = Math.min(100, c.fanbase + 14); notes.push('💍 A RING.'); }
   }
   line.teamResult = result;
+
+  // Round 103: a playoff run is one to four games, which is far too short a
+  // sample for per-game averages to mean anything, so this is a total for
+  // the run and it reads the way a broadcast graphic would.
+  const depth = playoffDepthOf(poStage >= 0, poStage);
+  if (depth >= 0) {
+    const poG = playoffGames(depth, rng, 'nfl');
+    const clutch = clutchSwing(rng);
+    const pf = form + clutch - 1;      // January defences are better
+    const per = poG / 17;
+    line.poGames = poG;
+    if (c.pos === 'QB') {
+      const y = Math.max(0, Math.round((1900 + (pf - 62) * 92) * per));
+      const td = Math.max(0, Math.round((6 + (pf - 62) * 0.95) * per));
+      const ip = Math.max(0, Math.round((18.5 - (pf - 62) * 0.36) * per));
+      line.poLine = `${y} yds, ${td} TD, ${ip} INT`;
+    } else if (c.pos === 'RB') {
+      const y = Math.max(0, Math.round((260 + (pf - 62) * 46) * per));
+      const td = Math.max(0, Math.round((1 + (pf - 62) * 0.42) * per));
+      line.poLine = `${y} rush yds, ${td} TD`;
+    } else if (c.pos === 'WR' || c.pos === 'TE') {
+      const rc = Math.max(0, Math.round((28 + (pf - 62) * 2.5) * per));
+      line.poLine = `${rc} rec, ${Math.round(rc * 11)} yds`;
+    } else if (c.pos === 'K') {
+      const fg = Math.max(0, Math.round((22 + (pf - 62) * 0.5) * per));
+      line.poLine = `${fg} of ${fg + (rng() < 0.5 ? 0 : 1)} on field goals`;
+    } else {
+      const tk = Math.max(0, Math.round((95 + (pf - 62) * 2.4) * per));
+      const sk = Math.max(0, Math.round((3 + (pf - 62) * 0.35) * per * 10) / 10);
+      line.poLine = `${tk} tackles, ${sk} sacks`;
+    }
+    notes.push(`📊 Playoffs: ${poG} game${poG === 1 ? '' : 's'}, ${line.poLine}.`);
+    const cn = clutchNote(clutch, depth, 'nfl');
+    if (cn) notes.push(cn);
+  }
 
   // awards
   // Round 56: every position is scored on its own currency, normalised so a

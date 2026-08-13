@@ -8,7 +8,7 @@
  */
 
 import { MLB_TEAMS } from '@/data/conquestDataMlb';
-import { seasonSwing, swingNote } from './careerVariance';
+import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getMlbLifeEventsA } from './mlbCareerLifeA';
@@ -117,6 +117,8 @@ export interface MlbSeasonLine {
   wins?: number; lossesP?: number; era?: number; so?: number;
   // Round 58: relievers and richer hitting lines
   saves?: number; holds?: number; obp?: number; doubles?: number;
+  /** Round 103: October, which is the only month anyone remembers. */
+  poGames?: number; poLine?: string;
   awards: string[];
   teamResult: string;
   salary: number;
@@ -291,14 +293,41 @@ export function simMlbSeason(
   const strength = teamQuality + (c.ovr - 76) * 0.35;
   const playoffOdds = Math.max(0.05, Math.min(0.85, (strength - 68) / 30));
   let result = 'Missed October';
+  let poStage = -1;
   if (rng() < playoffOdds) {
     const stages = ['Lost the Wild Card series', 'Lost the Division Series', 'Lost the Championship Series', 'Lost the World Series', 'WON THE WORLD SERIES'];
     let stage = 0;
     while (stage < 4 && rng() < 0.42 + (strength - 78) / 85) stage++;
+    poStage = stage;
     result = stages[stage];
     if (result === 'WON THE WORLD SERIES') { c.rings += 1; c.fanbase = Math.min(100, c.fanbase + 14); notes.push('💍 A RING. The parade is downtown.'); }
   }
   line.teamResult = result;
+
+  // Round 103: October is a handful of games against the best pitching a
+  // hitter sees all year, so this is a total for the run, not an average.
+  const depth = playoffDepthOf(poStage >= 0, poStage);
+  if (depth >= 0) {
+    const poG = playoffGames(depth, rng, 'mlb');
+    const clutch = clutchSwing(rng);
+    const pf = form + clutch - 2;     // you face nothing but their best arms
+    line.poGames = poG;
+    if (c.pos === 'SP' || c.pos === 'RP') {
+      const starts = c.pos === 'SP' ? Math.max(1, Math.round(poG / 4)) : poG;
+      const era = Math.max(0.0, Math.round((5.2 - (pf - 62) * 0.08 + rng() * 0.9) * 100) / 100);
+      const k = Math.max(0, Math.round(starts * (c.pos === 'SP' ? 5.4 : 1.1) * (1 + (pf - 62) * 0.012)));
+      line.poLine = `${starts} appearance${starts === 1 ? '' : 's'}, ${era.toFixed(2)} ERA, ${k} K`;
+    } else {
+      const ab = Math.max(1, poG * 4);
+      const avg = Math.min(0.5, Math.max(0.0, Math.round((0.216 + (pf - 62) * 0.0028 * prof.contact + rng() * 0.03) * 1000) / 1000));
+      const hits = Math.round(ab * avg);
+      const hr = Math.max(0, Math.round((4 + (pf - 62) * 0.85) * prof.power * (poG / 160) + (rng() < 0.35 ? 1 : 0)));
+      line.poLine = `${hits} for ${ab} (${avg.toFixed(3)}), ${hr} HR`;
+    }
+    notes.push(`📊 Postseason: ${poG} game${poG === 1 ? '' : 's'}, ${line.poLine}.`);
+    const cn = clutchNote(clutch, depth, 'mlb');
+    if (cn) notes.push(cn);
+  }
 
   const statScore = c.pos === 'SP'
     ? (line.so ?? 0) / 5 + (line.wins ?? 0) * 2.2 + Math.max(0, (3.8 - (line.era ?? 5)) * 22)
