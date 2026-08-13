@@ -56,6 +56,15 @@ export interface PlayerAutocompleteProps {
   validateOnly?: boolean;
   /** Called on Enter when validateOnly is false and no suggestion row is highlighted. */
   onSubmitFreeText?: (value: string) => void;
+  /**
+   * Round 84: extra names matched CLIENT-SIDE and merged into the suggestion
+   * list. Use this when the game's answer pool contains players the remote
+   * search source cannot know (the NFL roster table starts in 2002, so a
+   * legend like Jim Kelly was impossible to pick with validateOnly set,
+   * exactly as a player reported). Local matches append after remote results,
+   * dedupe by normalized name, and respect searchOptions.exclude.
+   */
+  localNames?: string[];
   className?: string;
   inputClassName?: string;
   /** Debounce delay before a search fires, in milliseconds. Default 200. */
@@ -165,6 +174,7 @@ export function PlayerAutocomplete({
   autoFocus = false,
   validateOnly = false,
   onSubmitFreeText,
+  localNames,
   className,
   inputClassName,
   debounceMs = DEFAULT_DEBOUNCE_MS,
@@ -202,6 +212,28 @@ export function PlayerAutocomplete({
     setLoading(true);
     setOpen(true);
 
+    // Round 84: matches from the caller's own answer pool, computed locally so
+    // legends absent from the remote source are still selectable.
+    const computeLocalMatches = (): PlayerEntity[] => {
+      if (!localNames || localNames.length === 0) return [];
+      const q = normalizeName(value);
+      const out: PlayerEntity[] = [];
+      for (const n of localNames) {
+        const key = normalizeName(n);
+        if (!key.includes(q)) continue;
+        if (searchOptions.exclude?.has(key)) continue;
+        out.push({ key, name: n, rawName: n, meta: {}, matchRank: 2, prominence: 0 });
+        if (out.length >= 6) break;
+      }
+      return out;
+    };
+    const mergeLocal = (remote: PlayerEntity[]): PlayerEntity[] => {
+      const locals = computeLocalMatches();
+      if (locals.length === 0) return remote;
+      const seen = new Set(remote.map(r => r.key));
+      return [...remote, ...locals.filter(l => !seen.has(l.key))];
+    };
+
     debounceRef.current = window.setTimeout(() => {
       const thisRequestId = ++requestIdRef.current;
       abortRef.current?.abort();
@@ -214,13 +246,14 @@ export function PlayerAutocomplete({
           // longer the latest one fired (covers out-of-order network
           // resolution, not just cancellation).
           if (thisRequestId !== requestIdRef.current) return;
-          setSuggestions(results);
+          setSuggestions(mergeLocal(results));
           setLoading(false);
           setHighlightedIndex(-1);
         })
         .catch(() => {
           if (thisRequestId !== requestIdRef.current) return;
-          setSuggestions([]);
+          // Remote search failed: the local pool is better than nothing.
+          setSuggestions(mergeLocal([]));
           setLoading(false);
         });
     }, debounceMs);
@@ -229,7 +262,7 @@ export function PlayerAutocomplete({
       if (debounceRef.current) window.clearTimeout(debounceRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value, optionsKey, minChars, debounceMs]);
+  }, [value, optionsKey, minChars, debounceMs, localNames]);
 
   useEffect(() => {
     return () => {

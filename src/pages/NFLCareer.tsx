@@ -23,6 +23,7 @@ const NFLCareer = () => {
     gameStatus,
     guessHistory,
     excludedNames,
+    playerNames,
     makeGuess,
     giveUp,
     shareText,
@@ -118,6 +119,7 @@ const NFLCareer = () => {
               searchOptions={{ source: NFL_ROSTER_SOURCE, exclude: excludedNames }}
               placeholder="Type player name to guess..."
               validateOnly
+              localNames={playerNames}
             />
             <div className="flex justify-center mt-4">
               <GiveUpButton onGiveUp={giveUp} />
