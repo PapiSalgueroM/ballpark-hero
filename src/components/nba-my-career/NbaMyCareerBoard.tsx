@@ -4,7 +4,7 @@ import ShareButtons from '@/components/game/ShareButtons';
 import {
   NBA_ARCHETYPES, startNbaCareer, simNbaSeason, nbaProgress, drawNbaEvent,
   nbaShouldRetire, nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaTeamLabelOf, nbaMarketSalary,
-  type NbaNbaCareerPos, type NbaNbaCareerState, type NbaNbaCareerEvent, type NbaNbaSeasonLine,
+  type NbaCareerPos, type NbaCareerState, type NbaCareerEvent, type NbaSeasonLine,
 } from '@/lib/nbaMyCareer';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';

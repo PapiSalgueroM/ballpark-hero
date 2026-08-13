@@ -4,7 +4,7 @@ import ShareButtons from '@/components/game/ShareButtons';
 import {
   MLB_ARCHETYPES, startMlbCareer, simMlbSeason, mlbProgress, drawMlbEvent,
   mlbShouldRetire, mlbLegacyOf, mlbCareerTotals, mlbRollTeamQuality, mlbTeamLabelOf, mlbMarketSalary,
-  type NbaMlbCareerPos, type NbaMlbCareerState, type NbaMlbCareerEvent, type NbaMlbSeasonLine,
+  type MlbCareerPos, type MlbCareerState, type MlbCareerEvent, type MlbSeasonLine,
 } from '@/lib/mlbMyCareer';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';

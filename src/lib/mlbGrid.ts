@@ -160,7 +160,7 @@ export async function fetchMlbGridData(): Promise<MlbGridData | null> {
         .order('player_name', { ascending: true })
         .range(from, from + PAGE_SIZE - 1);
       if (error || !data) return null;
-      rows.push(...(data as RawRow[]));
+      rows.push(...(data as unknown as RawRow[]));
       if (data.length < PAGE_SIZE) break;
     }
 

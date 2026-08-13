@@ -155,70 +155,19 @@ export function useGameCompletion(
             .eq('game_type', gameSlug);
         }
 
-        // 5. Update profile stats
-        // Check if this is the first completion of this game today (not a replay)
-        const { count: gameCompletionsToday } = await supabase
-          .from('daily_completions')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id)
-          .eq('game_slug', gameSlug)
-          .eq('date', today);
-
-        const isFirstCompletion = (gameCompletionsToday || 0) <= 1;
-
-        const lastPlayed = profile?.last_played_date;
-        let newStreak = profile?.current_streak || 0;
-        let freezes = (profile as any)?.streak_freezes ?? 1;
-        const profileUpdate: Record<string, any> = {};
-
-        // Only add to all_time_score on first daily completion (not replays)
-        if (isFirstCompletion) {
-          profileUpdate.all_time_score = ((profile as any)?.all_time_score || 0) + score;
-        }
-
-        // Award weekly streak freeze on Monday (max 2)
-        const dayOfWeek = new Date().getDay(); // 0=Sun, 1=Mon
-        if (dayOfWeek === 1 && lastPlayed !== today && freezes < 2) {
-          freezes = Math.min(2, freezes + 1);
-          profileUpdate.streak_freezes = freezes;
-        }
-
-        if (lastPlayed !== today) {
-          const yesterday = new Date();
-          yesterday.setDate(yesterday.getDate() - 1);
-          const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-          if (lastPlayed === yesterdayStr) {
-            // Consecutive day
-            newStreak = newStreak + 1;
-          } else {
-            // Missed a day - try to use a freeze
-            if (freezes > 0 && newStreak > 0) {
-              freezes -= 1;
-              profileUpdate.streak_freezes = freezes;
-              toast('🛡️ Streak saved! Your freeze was used.');
-              // Keep newStreak as-is
-            } else {
-              newStreak = 1;
-            }
-          }
-
-          profileUpdate.current_streak = newStreak;
-          profileUpdate.longest_streak = Math.max(newStreak, profile?.longest_streak || 0);
-          profileUpdate.last_played_date = today;
-          // Only increment total_games_played on first completion
-          if (isFirstCompletion) {
-            profileUpdate.total_games_played = (profile?.total_games_played || 0) + 1;
-          }
-          profileUpdate.total_correct_answers = (profile?.total_correct_answers || 0) + correctAnswers;
-        }
-
-        if (Object.keys(profileUpdate).length > 0) {
-          await supabase
-            .from('profiles')
-            .update(profileUpdate)
-            .eq('user_id', user.id);
-        }
+        // 5. Profile stats
+        // Round 55 BUG FIX: this block used to build a profileUpdate object of
+        // current_streak / longest_streak / last_played_date /
+        // total_games_played / total_correct_answers / streak_freezes /
+        // all_time_score and write it to `profiles`. NONE of those columns
+        // exist on that table (it holds id, user_id, username, display_name,
+        // avatar_url, streak_state, created_at, updated_at), so every single
+        // game completion fired a Postgres write that failed with "column does
+        // not exist", and the error was never checked so it vanished silently.
+        // The columns are real on `user_scores`, which step 3 above already
+        // maintains, and the UI reads its streak from there and from
+        // daily_completions. So the write was pure dead weight on every play.
+        // Verified against the live schema before removing.
 
         refreshProfile();
 

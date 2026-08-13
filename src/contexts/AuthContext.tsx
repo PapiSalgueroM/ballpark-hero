@@ -2,18 +2,18 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
+/** Mirrors the live `profiles` table exactly (verified against the schema in
+    Round 55). The old shape claimed current_streak, longest_streak,
+    last_played_date, total_games_played, total_correct_answers and
+    streak_freezes; none of those columns exist here. They live on
+    `user_scores`, which is where the UI reads streaks from. */
 interface Profile {
   id: string;
   user_id: string;
   username: string | null;
   display_name: string | null;
   avatar_url: string | null;
-  current_streak: number;
-  longest_streak: number;
-  last_played_date: string | null;
-  total_games_played: number;
-  total_correct_answers: number;
-  streak_freezes: number;
+  streak_state: unknown;
   created_at: string;
   updated_at: string;
 }
@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .maybeSingle();
 
     if (!error && data) {
-      setProfile(data as Profile);
+      setProfile(data as unknown as Profile);
     }
   };
 

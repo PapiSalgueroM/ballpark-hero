@@ -43,7 +43,7 @@ let homegrownOffers = 0;
 let academySignings = 0;
 let prisonSeasons = 0;
 let convictions = 0;
-let bdorSnubs = 0;   // dominant seasons that did NOT win, the bug we fixed
+let bdorSnubs = [];  // monster seasons pushed off the podium, the bug we fixed
 let bdorWins = 0;
 let dominantSeasons = 0;
 const eventIdsSeen = new Set();
@@ -119,9 +119,14 @@ for (let c = 0; c < CAREERS; c++) {
           if (b && last) {
             const ga = last.goals + last.assists;
             const monster = ga >= 55 || last.goals >= 45;
+              // Product rule (matches scripts/testBallonDorFairness.mjs): a monster
+            // line guarantees a PODIUM, not a win. Only outscoring the entire
+            // shortlist while winning a major guarantees the trophy, because a
+            // rival can legitimately own a year with a treble.
             if (monster) {
               dominantSeasons++;
-              if (b.playerRank === 1) bdorWins++; else bdorSnubs++;
+              if (b.playerRank !== null && b.playerRank <= 3) bdorWins++;
+              else bdorSnubs.push({ goals: last.goals, assists: last.assists, rank: b.playerRank });
             }
           }
           s = b && b.playerRank === 1 ? applyBdorSpeech(s, "tears", clubs) : dismissBallonDor(s, clubs);
@@ -205,7 +210,8 @@ console.log(`peak 85+ rate     : ${pct(results.filter(r => r.peak >= 85).length,
 console.log(`avg pro seasons   : ${avg("seasons")}`);
 console.log(`avg career goals  : ${avg("goals")}`);
 console.log(`homegrown offers  : ${homegrownOffers}   academy signings: ${academySignings}`);
-console.log(`dominant seasons  : ${dominantSeasons}   won: ${bdorWins}   SNUBBED: ${bdorSnubs}  (snubs must be 0)`);
+console.log(`monster seasons   : ${dominantSeasons}   podiumed: ${bdorWins}   SNUBBED: ${bdorSnubs.length}  (snubs must be 0)`);
+if (bdorSnubs.length) console.log(bdorSnubs.slice(0, 5));
 console.log(`prison seasons    : ${prisonSeasons}   convictions: ${convictions}`);
 console.log(`distinct events   : ${eventIdsSeen.size}`);
 console.log(`  corruption ids  : ${[...eventIdsSeen].filter(i => i >= 300 && i < 350).length}`);
@@ -214,7 +220,7 @@ console.log(`shop items usable : ${purchasedOk.size}/${SPENDING_ITEMS.length}`);
 
 const failures = [];
 if (crashes > 0) failures.push(`${crashes} crashes`);
-if (bdorSnubs > 0) failures.push(`${bdorSnubs} dominant seasons snubbed`);
+if (bdorSnubs.length > 0) failures.push(`${bdorSnubs.length} monster seasons pushed off the podium`);
 if (homegrownOffers === 0) failures.push("no homegrown offers ever generated");
 if (results.some(r => Number.isNaN(r.peak) || Number.isNaN(r.netWorth))) failures.push("NaN leaked into state");
 console.log(failures.length ? `\nFAIL: ${failures.join("; ")}` : "\nPASS: no crashes, no snubs, homegrown path live");

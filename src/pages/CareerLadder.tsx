@@ -34,7 +34,6 @@ import {
 } from '@/lib/careerLadder';
 import { flagForClub } from '@/lib/careerLadder';
 import { searchPlayers, SOCCER_MARKET_VALUE_SOURCE } from '@/lib/playerSearch';
-import { FlagImg } from '@/components/FlagImg';
 
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
 type LadderMode = 'daily' | 'unlimited';

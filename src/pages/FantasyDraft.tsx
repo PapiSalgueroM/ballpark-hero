@@ -96,7 +96,7 @@ const FantasyDraft = () => {
         .from('fantasy_draft_players')
         .select('id, name, position, nationality, market_value_millions, dominant_foot, age' as any)
         .order('name');
-      if (data) setPlayers(data as DraftPlayer[]);
+      if (data) setPlayers(data as unknown as DraftPlayer[]);
       setLoadingPlayers(false);
     };
     setUserFirst(Math.random() < 0.5);

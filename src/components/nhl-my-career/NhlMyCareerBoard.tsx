@@ -4,7 +4,7 @@ import ShareButtons from '@/components/game/ShareButtons';
 import {
   NHL_ARCHETYPES, startNhlCareer, simNhlSeason, nhlProgress, drawNhlEvent,
   nhlShouldRetire, nhlLegacyOf, nhlCareerTotals, nhlRollTeamQuality, nhlTeamLabelOf, nhlMarketSalary,
-  type NbaNhlCareerPos, type NbaNhlCareerState, type NbaNhlCareerEvent, type NbaNhlSeasonLine,
+  type NhlCareerPos, type NhlCareerState, type NhlCareerEvent, type NhlSeasonLine,
 } from '@/lib/nhlMyCareer';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';

@@ -53,7 +53,11 @@ export function useNascarDriver() {
           .maybeSingle();
 
         if (daily?.driver_id) {
-          const { data: driver } = await supabase
+          // Round 55: nascar_drivers is a wide table and .single() on select('*')
+          // pushes postgrest-js past TypeScript's instantiation depth limit.
+          // Widening the client here keeps the query byte-identical at runtime.
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const { data: driver } = await (supabase as any)
             .from('nascar_drivers')
             .select('*')
             .eq('id', daily.driver_id)

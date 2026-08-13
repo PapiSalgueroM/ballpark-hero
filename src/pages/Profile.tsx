@@ -24,7 +24,8 @@ import { nameModerationError } from '@/lib/nameModeration';
 /* ────────────────────── Constants ────────────────────── */
 
 interface BestScore { game_type: string; best_score: number; achieved_at: string; }
-interface RecentGame { game_type: string; score: number; played_at: string; }
+// Round 55: renamed played_at to created_at, the column that actually exists
+interface RecentGame { game_type: string; score: number; created_at: string; }
 
 const GAME_LABELS: Record<string, string> = {
   'footle': '🎯 Footle', 'career': '📜 Career Quiz', 'higher-lower': '📊 Higher/Lower',
@@ -187,16 +188,16 @@ export default function Profile() {
 
       const [scoresRes, recentRes, userScoreRes, rankRes, bracketRes, todayRes, prefsRes] = await Promise.all([
         supabase.from('user_best_scores').select('*').eq('user_id', targetUserId).order('best_score', { ascending: false }),
-        supabase.from('user_game_scores').select('game_type, score, played_at').eq('user_id', targetUserId).order('played_at', { ascending: false }).limit(5),
+        supabase.from('user_game_scores').select('game_type, score, created_at').eq('user_id', targetUserId).order('created_at', { ascending: false }).limit(5),
         supabase.from('user_scores').select('current_streak, longest_streak, total_points').eq('user_id', targetUserId).maybeSingle(),
-        supabase.from('profiles').select('user_id').order('all_time_score', { ascending: false }),
+        supabase.from('user_scores').select('user_id').order('total_points', { ascending: false }),
         supabase.from('saved_brackets').select('id, bracket_data').eq('user_id', targetUserId).limit(1),
         supabase.from('daily_completions').select('game_slug').eq('user_id', targetUserId).eq('date', new Date().toISOString().split('T')[0]),
         supabase.from('user_preferences').select('*').eq('user_id', targetUserId).maybeSingle(),
       ]);
 
       setBestScores(scoresRes.data || []);
-      setRecentGames((recentRes.data || []) as RecentGame[]);
+      setRecentGames((recentRes.data || []) as unknown as RecentGame[]);
       if (userScoreRes.data) setUserScoreData(userScoreRes.data as any);
       if (bracketRes.data && bracketRes.data.length > 0) setSavedBracket(bracketRes.data[0]);
       if (todayRes.data) setDailyGameSlugs(todayRes.data.map((c: any) => c.game_slug));
@@ -685,7 +686,7 @@ export default function Profile() {
                     <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-border/40 bg-muted/10">
                       <div>
                         <p className="font-medium text-sm text-foreground">{GAME_LABELS[game.game_type] || game.game_type}</p>
-                        <p className="text-xs text-muted-foreground">{format(new Date(game.played_at), 'MMM d, yyyy')}</p>
+                        <p className="text-xs text-muted-foreground">{format(new Date(game.created_at), 'MMM d, yyyy')}</p>
                       </div>
                       <span className="text-lg font-bold text-primary">{game.score}</span>
                     </div>

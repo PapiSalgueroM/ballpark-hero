@@ -178,7 +178,7 @@ export async function fetchHockeyGridData(): Promise<HockeyGridData | null> {
         .order('player_name', { ascending: true })
         .range(from, from + PAGE_SIZE - 1);
       if (error || !data) return null;
-      rows.push(...(data as RawStatsRow[]));
+      rows.push(...(data as unknown as RawStatsRow[]));
       if (data.length < PAGE_SIZE) break;
     }
 

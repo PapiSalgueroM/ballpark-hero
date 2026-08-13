@@ -228,7 +228,7 @@ async function fetchCareerPointsByName(): Promise<Map<string, number>> {
         .order('player_name', { ascending: true })
         .range(from, from + PAGE_SIZE - 1);
       if (error || !data) break;
-      for (const row of data as RawStatsPointsRow[]) {
+      for (const row of data as unknown as RawStatsPointsRow[]) {
         const name = String(row.player_name ?? '').trim();
         if (!name) continue;
         const pts = Number(row.points);
@@ -260,7 +260,7 @@ export async function fetchPuckDetectivePool(): Promise<PuckDetectivePlayer[] | 
     const asOf = new Date();
     const byId = new Map<number, PuckDetectivePlayer>();
 
-    for (const raw of data as RawNhlPlayerRow[]) {
+    for (const raw of data as unknown as RawNhlPlayerRow[]) {
       const id = Number(raw.player_id);
       if (!Number.isFinite(id) || byId.has(id)) continue;
 

@@ -7,6 +7,16 @@ import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 
+/** One recorded action in a daily Career Path run. Round 55: this type was
+    USED in three places but never actually defined or imported, so the daily
+    action pipeline was silently unchecked. Shape recovered from every
+    addDailyAction call site in this file. */
+export type CareerAction =
+  | { t: 'cell'; key: string }
+  | { t: 'won' }
+  | { t: 'wrong' }
+  | { t: 'give' };
+
 const MAX_GUESSES = 8;
 const COLS = ['club', 'appearances', 'goals', 'assists', 'marketValue'] as const;
 

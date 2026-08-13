@@ -321,15 +321,20 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
     // fast whenever query/data accent state already matches. For split-name
     // sources, match the first typed word against EITHER the first- or
     // last-name column so a first name ("LeBron") or surname both resolve.
-    let ilikeQuery;
+    // Round 55: source.table is dynamic, so postgrest-js resolves the select
+    // against a union of every table in the schema and errors out. The query
+    // is correct at runtime (verified against the live DB), so the builder is
+    // typed loosely here rather than fighting the union.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let ilikeQuery: any;
     if (source.firstNameColumn) {
       const token = rawQuery.split(/\s+/)[0].replace(/[,()%]/g, ' ').trim() || rawQuery;
-      ilikeQuery = supabase
+      ilikeQuery = (supabase as any)
         .from(source.table)
         .select(selectCols)
         .or(`${source.firstNameColumn}.ilike.%${token}%,${source.nameColumn}.ilike.%${token}%`);
     } else {
-      ilikeQuery = supabase.from(source.table).select(selectCols).ilike(source.nameColumn, `%${rawQuery}%`);
+      ilikeQuery = (supabase as any).from(source.table).select(selectCols).ilike(source.nameColumn, `%${rawQuery}%`);
     }
     ilikeQuery = applyFilters(ilikeQuery, source.filters);
     if (source.prominenceColumn) ilikeQuery = ilikeQuery.order(source.prominenceColumn, { ascending: source.prominenceAscending === true });
@@ -341,8 +346,9 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
     // still helps (very long queries are unlikely to be accent-mismatched
     // AND only findable this way, so skip the extra request past ~24 chars).
     const runProminenceLeg = normalizedQuery.length <= 24;
-    let prominenceQuery = runProminenceLeg
-      ? supabase.from(source.table).select(selectCols)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let prominenceQuery: any = runProminenceLeg
+      ? (supabase as any).from(source.table).select(selectCols)
       : null;
     if (prominenceQuery) {
       prominenceQuery = applyFilters(prominenceQuery, source.filters);
