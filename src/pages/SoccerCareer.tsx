@@ -53,6 +53,7 @@ import { heatLabel } from "@/lib/soccerCareerCorruption";
 import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
+import { useRevealScroll } from "@/hooks/useRevealScroll";
 
 /* ─── Constants ─── */
 const NATIONALITIES = [
@@ -2247,6 +2248,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
   const totals = getCareerTotals(career.seasons);
+  // Round 61: the owner's no scroll rule. Every overlay (event, newspaper,
+  // season summary, transfer window, ceremony) pulls itself into view when it
+  // appears, instead of rendering below the fold on a phone.
+  const revealRef = useRevealScroll<HTMLDivElement>(
+    `${career.phase}:${career.pendingEvents[0]?.id ?? ''}:${career.seasons.length}`,
+  );
   const currentSeason = career.seasons[career.seasons.length - 1];
 
   const statBars = getPositionStatBars(career.position, career);
@@ -2340,6 +2347,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           <div className="px-3 py-2 border-b border-border bg-muted/20">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Timeline</span>
           </div>
+          </div>
+
           <div ref={timelineRef} className="max-h-[280px] md:max-h-[480px] overflow-y-auto p-2 space-y-0.5 scrollbar-thin">
             {career.seasons.map((s, i) => (
               <TimelineEntry key={s.year + s.club} season={s} isCurrent={i === career.seasons.length - 1} isLast={i === career.seasons.length - 1} />
@@ -2350,6 +2359,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         {/* RIGHT, Stats & Overlays */}
         <div className="space-y-3 order-1 md:order-2">
 
+          <div ref={revealRef}>
           {/* OVERLAY: Newspaper Articles */}
           {career.phase === "newspaper" && career.pendingNews.length > 0 && (
             <NewspaperCard articles={career.pendingNews} onContinue={onDismissNewspaper} />

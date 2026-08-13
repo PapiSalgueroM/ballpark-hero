@@ -6,6 +6,7 @@ import { FORMATIONS, playerRating } from '@/lib/squadDeal';
 import { nextRaise, TIER_BUDGET } from '@/lib/rebuildDeck';
 import { useRebuild } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 const TIER_LABEL: Record<ClubTier, string> = {
   elite: 'Elite, barely any headroom',
@@ -34,6 +35,10 @@ export function RebuildBoard() {
     objectives, finLog, penalties, rivals, rivalsLoading,
     war, raiseWar, walkAway, overpaid, season,
   } = useRebuild();
+  // Round 61: the owner's no scroll rule. Every phase change (fortune, cuts,
+  // market, results) pulls the new screen into view instead of leaving the
+  // player looking at the old one.
+  const revealRef = useRevealScroll<HTMLDivElement>(phase);
   const [copied, setCopied] = useState(false);
 
   const copyShare = async () => {

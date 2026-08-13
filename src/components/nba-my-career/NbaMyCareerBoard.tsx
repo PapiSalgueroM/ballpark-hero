@@ -8,6 +8,7 @@ import {
   type NbaCareerPos, type NbaCareerState, type NbaCareerEvent, type NbaSeasonLine,
 } from '@/lib/nbaMyCareer';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { nbaHeatLabel } from '@/lib/nbaCareerCorruption';
 import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';
 import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
@@ -34,6 +35,12 @@ export default function NbaMyCareerBoard() {
   const [feed, setFeed] = useState<string[]>([]);
   const [pendingEvent, setPendingEvent] = useState<NbaCareerEvent | null>(null);
   const [lastLine, setLastLine] = useState<NbaSeasonLine | null>(null);
+  // Round 61: the owner's no scroll rule. When a new crossroads or a new
+  // season result lands, it pulls itself into view instead of rendering
+  // below the fold where a phone player never sees it.
+  const revealRef = useRevealScroll<HTMLDivElement>(
+    `${phase}:${pendingEvent?.id ?? ''}:${career?.seasons.length ?? 0}`,
+  );
 
   const done = phase === 'retired';
   useGameCompletion('nba-my-career', done, career ? nbaLegacyOf(career).score : 0);
@@ -322,7 +329,7 @@ export default function NbaMyCareerBoard() {
       )}
 
       {phase === 'event' && pendingEvent ? (
-        <div className="rounded-2xl border border-gold/40 bg-card p-4">
+        <div ref={revealRef} className="rounded-2xl border border-gold/40 bg-card p-4">
           <p className="text-center text-sm font-bold text-foreground"><Sparkles className="mr-1 inline h-4 w-4 text-gold" />{pendingEvent.title}</p>
           <p className="mt-1 text-center text-xs text-muted-foreground">{pendingEvent.body}</p>
           <div className="mt-3 grid gap-1.5">
