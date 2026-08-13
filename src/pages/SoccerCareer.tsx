@@ -42,8 +42,10 @@ import {
   getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,
   FALLBACK_CLUBS,
   answerPhoneText, unreadPhoneCount,
+  applyTrainingResult, trainingAvailable, type TrainingDrill,
 } from "@/lib/soccerCareerEngine";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
+import TrainingPanel from "@/components/soccer-career/TrainingPanel";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocRowsFor, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike } from "@/lib/careerEras";
 import {
   type PlayerAppearance, defaultAppearance, getCelebration,
@@ -448,6 +450,8 @@ export default function SoccerCareer() {
   const [rolledPot, setRolledPot] = useState<number | null>(null);
   // Round 80: the phone overlay
   const [phoneOpen, setPhoneOpen] = useState(false);
+  // Round 81: the training ground overlay
+  const [trainingOpen, setTrainingOpen] = useState(false);
   const [showNewCareerConfirm, setShowNewCareerConfirm] = useState(false);
   const timelineRef = useRef<HTMLDivElement>(null);
 
@@ -714,6 +718,11 @@ export default function SoccerCareer() {
     setCareer(prev => (prev ? answerPhoneText(prev, msgId, choiceIdx) : prev));
   }, []);
 
+  // Round 81: training mini games
+  const handleTrainingComplete = useCallback((drill: TrainingDrill, score: number) => {
+    setCareer(prev => (prev ? applyTrainingResult(prev, drill, score) : prev));
+  }, []);
+
   const handleConfirmNewCareer = () => {
     localStorage.removeItem(SAVE_KEY);
     setCareer(null);
@@ -721,6 +730,7 @@ export default function SoccerCareer() {
     setRolledOvr(null);
     setRolledPot(null);
     setPhoneOpen(false);
+    setTrainingOpen(false);
     setPlayerName(""); setNationality(""); setPosition(""); setEra("");
     setAppearance(defaultAppearance());
     setShowNewCareerConfirm(false);
@@ -794,9 +804,22 @@ export default function SoccerCareer() {
           )}
         </main>
 
-        {/* Round 80: the phone, GTA style. Floating button + full overlay. */}
+        {/* Round 80: the phone, GTA style. Floating button + full overlay.
+            Round 81: the training ground button stacks above it. */}
         {career && (
           <>
+            {!career.retired && (
+              <button
+                onClick={() => setTrainingOpen(true)}
+                aria-label="Open the training ground"
+                className="fixed bottom-[5.5rem] right-4 z-40 w-14 h-14 rounded-2xl bg-zinc-900 border-2 border-zinc-700 shadow-xl flex items-center justify-center text-2xl hover:scale-105 active:scale-95 transition-transform"
+              >
+                🏋️
+                {trainingAvailable(career) && (
+                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900" />
+                )}
+              </button>
+            )}
             <button
               onClick={() => setPhoneOpen(true)}
               aria-label="Open your phone"
@@ -811,6 +834,14 @@ export default function SoccerCareer() {
             </button>
             {phoneOpen && (
               <PhonePanel career={career} onAnswer={handlePhoneAnswer} onClose={() => setPhoneOpen(false)} />
+            )}
+            {trainingOpen && (
+              <TrainingPanel
+                career={career}
+                available={trainingAvailable(career)}
+                onComplete={handleTrainingComplete}
+                onClose={() => setTrainingOpen(false)}
+              />
             )}
           </>
         )}

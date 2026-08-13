@@ -511,6 +511,8 @@ export interface CareerState {
   karma?: number;              // 0-100 public karma, starts 50
   phoneInbox?: PhoneMessage[]; // waiting texts + answered thread log
   phoneUsedIds?: string[];     // pool ids already received this career
+  /** Round 81: last season-year a training mini game was played (one per season). */
+  trainingSeasonYear?: number;
   peakOverall: number;
   retirementSuggested: boolean; // has the player been shown the retirement suggestion
   // Social media action system
@@ -609,6 +611,41 @@ function receivePhoneTexts(s: CareerState, phase: "youth" | "pro"): void {
   }
   s.phoneInbox = inbox;
   s.phoneUsedIds = used;
+}
+
+/* ─── Round 81: training ground mini games ───
+   Three drills (trace-the-cones dribbling, click-burst pace, penalty
+   placement shooting), one session per season. 50+ scores +1, 80+ scores +2
+   to the drilled stat via the existing statBoostNextSeason pipeline, so the
+   gain lands with next season's growth exactly like event boosts do. */
+
+export type TrainingDrill = "dribbling" | "pace" | "shooting";
+
+export function trainingAvailable(s: CareerState): boolean {
+  if (s.retired) return false;
+  if (["retired", "post_retirement", "manager_season", "pundit_season", "owner_season", "retirement_ceremony"].includes(s.phase)) return false;
+  const year = s.seasons[s.seasons.length - 1]?.year ?? 0;
+  return s.trainingSeasonYear !== year;
+}
+
+export function applyTrainingResult(prev: CareerState, drill: TrainingDrill, score: number): CareerState {
+  const s = { ...prev };
+  const year = s.seasons[s.seasons.length - 1]?.year ?? 0;
+  if (s.trainingSeasonYear === year) return prev; // one session per season
+  const sc = clamp(Math.round(score), 0, 100);
+  const stat: keyof CareerState["statBoostNextSeason"] =
+    drill === "pace" ? "pace" : drill === "dribbling" ? "dribbling" : (s.position === "GK" ? "reflexes" : "shooting");
+  const boost = sc >= 80 ? 2 : sc >= 50 ? 1 : 0;
+  s.trainingSeasonYear = year;
+  const label = stat === "reflexes" ? "Reflexes" : stat === "pace" ? "Pace" : stat === "dribbling" ? "Dribbling" : "Shooting";
+  if (boost > 0) {
+    s.statBoostNextSeason = { ...s.statBoostNextSeason, [stat]: (s.statBoostNextSeason[stat] || 0) + boost };
+    s.morale = clamp(s.morale + 2, 0, 100);
+    s.events = [...s.events, `🏋️ Training session: ${sc}/100. +${boost} ${label} coming with next season's growth`];
+  } else {
+    s.events = [...s.events, `🏋️ Training session: ${sc}/100. Rough day at the training ground, no gains`];
+  }
+  return s;
 }
 
 export function answerPhoneText(prev: CareerState, msgId: string, choiceIdx: number): CareerState {
