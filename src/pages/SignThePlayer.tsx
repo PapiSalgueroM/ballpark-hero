@@ -14,6 +14,7 @@ import {
   simulateShowdown,
   type AuctionPlayer, type AuctionTheme, type Bidder, type ShowdownResult,
 } from '@/lib/auctionHouse';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 type Phase = 'intro' | 'loading' | 'auction' | 'assign' | 'showdown';
 
@@ -29,6 +30,9 @@ const SignThePlayer = () => {
   const [lotIndex, setLotIndex] = useState(0);
   const [price, setPrice] = useState(0);
   const [leader, setLeader] = useState<Bidder['id'] | null>(null);
+  // Round 62: the owner's no scroll rule. A new lot or a new leading bid is
+  // the thing you need to see, so the auction panel pulls itself into view.
+  const revealRef = useRevealScroll<HTMLDivElement>(`${phase}:${lotIndex}:${price}:${leader ?? ''}`);
   const [activeIds, setActiveIds] = useState<Set<Bidder['id']>>(new Set());
   const [log, setLog] = useState<string[]>([]);
   const [aiThinking, setAiThinking] = useState(false);
@@ -281,7 +285,7 @@ const SignThePlayer = () => {
                       <p className="text-xs text-muted-foreground font-semibold">⚽ {lot.player.goals} goals · 🎯 {lot.player.assists} assists</p>
                     )}
                     {lot.kind === 'auction' && (
-                      <>
+                      <div ref={revealRef}>
                         <p className="text-lg font-bold text-foreground">
                           Current price: <span className="text-primary">{money(price)}</span>
                           {leader && <span className="text-sm text-muted-foreground">, {bidders.find(b => b.id === leader)?.emoji} {bidders.find(b => b.id === leader)?.name} leads</span>}
@@ -307,7 +311,7 @@ const SignThePlayer = () => {
                           <p className="text-sm text-muted-foreground italic">{you.squad[lot.player.slotKey] ? 'You already own this position, so the rivals are fighting it out...' : 'You passed, so the rivals battle on...'}</p>
                         )}
                         {aiThinking && <p className="text-xs text-primary animate-pulse font-bold">rivals are thinking…</p>}
-                      </>
+                      </div>
                     )}
                     {phase === 'assign' && (
                       <Button size="lg" className="font-bold mt-2" onClick={advance}>

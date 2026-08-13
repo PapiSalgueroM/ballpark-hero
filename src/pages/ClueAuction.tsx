@@ -29,6 +29,7 @@ import {
   buildClubDisplayMap,
   buildClueReveals,
 } from '@/lib/clueAuction';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
 
@@ -49,6 +50,12 @@ const ClueAuction = () => {
   const [bank, setBank] = useState(START_BANK);
   const [purchased, setPurchased] = useState<ClueId[]>([]);
   const [wrongGuesses, setWrongGuesses] = useState<WhoAmIPlayer[]>([]);
+  // Round 62: the owner's no scroll rule. Buying a clue or missing a guess
+  // adds a receipt row further down the page, so the receipts pull themselves
+  // back into view instead of leaving you staring at the button you pressed.
+  const revealRef = useRevealScroll<HTMLDivElement>(
+    `${phase}:${purchased.length}:${wrongGuesses.length}`,
+  );
   const [input, setInput] = useState('');
   const [dropOpen, setDropOpen] = useState(false);
   const [best, setBest] = useState(() => loadBest());
@@ -367,7 +374,7 @@ const ClueAuction = () => {
             </p>
             {revealCard}
             {(purchased.length > 0 || wrongGuesses.length > 0) && (
-              <div className="text-left space-y-1.5 mb-4">
+              <div ref={revealRef} className="text-left space-y-1.5 mb-4">
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Your receipts</div>
                 {purchased.map(id => {
                   const c = CLUE_BY_ID[id];
