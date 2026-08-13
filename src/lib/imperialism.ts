@@ -90,6 +90,8 @@ export function seedEmpires(): Record<string, string> {
 }
 
 export interface ImpGame {
+  /** Round 92: territory ids annexed in this game (drives the map animation). */
+  flipped?: string[];
   home: string;
   away: string;
   winner: string;
@@ -185,6 +187,9 @@ export function resolveGame(
   return {
     home, away, winner, homeScore, awayScore,
     swing: loserStates.length,
+    // Round 92: the exact territories that changed hands, so the map can
+    // animate the takeover instead of silently recolouring.
+    flipped: loserStates,
     nothingAtStake: loserStates.length === 0,
     comeback: winnerHadNothing && loserStates.length > 0,
     overtime,

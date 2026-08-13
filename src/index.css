@@ -168,3 +168,17 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* Round 92: Conquest annexation. When a team takes an empire, every captured
+   territory flashes and settles into its new colour, staggered so the takeover
+   sweeps across the map like the imperialism map videos. Respects reduced
+   motion, where it simply does nothing. */
+@keyframes conquest-annex {
+  0%   { filter: brightness(2.2) drop-shadow(0 0 10px rgba(255,255,255,0.9)); }
+  45%  { filter: brightness(1.6) drop-shadow(0 0 6px rgba(255,215,0,0.7)); }
+  100% { filter: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  @keyframes conquest-annex { 0%, 100% { filter: none; } }
+}

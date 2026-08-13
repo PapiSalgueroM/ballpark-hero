@@ -15,11 +15,14 @@ interface ConquestMapProps {
   powerupStates: Set<string>;
   invincibleTeams: Set<string>;
   territoryStolenState: string | null;
+  /** Round 92: territories annexed this round. They flash and sweep in so a
+   *  whole empire changing hands actually reads as a takeover. */
+  flippedStates?: Set<string>;
 }
 
 export default function ConquestMap({
   territories, attackingTeam, defendingTeam, phase,
-  powerupStates, invincibleTeams, territoryStolenState,
+  powerupStates, invincibleTeams, territoryStolenState, flippedStates,
 }: ConquestMapProps) {
   const [hovered, setHovered] = useState<string | null>(null);
 
@@ -167,11 +170,12 @@ export default function ConquestMap({
         className="w-full h-auto rounded-xl border border-border bg-[#0a0f1a]"
         preserveAspectRatio="xMidYMid meet"
       >
-        {NFL_STATES.map(state => {
+        {NFL_STATES.map((state, idx) => {
           const color = getColor(state.id);
           const teamId = territories[state.id];
           const active = isActive(state.id);
           const isStolen = state.id === territoryStolenState;
+          const justFlipped = flippedStates?.has(state.id) ?? false;
 
           return (
             <path
@@ -183,6 +187,9 @@ export default function ConquestMap({
               strokeLinejoin="round"
               style={{
                 transition: 'fill 0.8s ease-in-out, stroke 0.8s ease-in-out',
+                // Round 92: staggered so an annexation sweeps across the map
+                // rather than every territory blinking at once.
+                animation: justFlipped ? `conquest-annex 900ms ease-out ${(idx % 12) * 45}ms both` : undefined,
                 filter: active
                   ? 'brightness(1.3) drop-shadow(0 0 4px rgba(255,255,255,0.4))'
                   : isStolen

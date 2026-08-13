@@ -41,6 +41,7 @@ export default function ImperialismBoard() {
   const [madePlayoffs, setMadePlayoffs] = useState(false);
   const [records, setRecords] = useState<ImpRecords>({});
   const [showStandings, setShowStandings] = useState(false);
+  const [flipped, setFlipped] = useState<Set<string>>(new Set());
 
   // Round 50: the real Daily Challenge. Same seeded season for every player
   // (fixtures AND results), one scored run per ET day, streaks, share line.
@@ -132,6 +133,9 @@ export default function ImperialismBoard() {
     for (const [h, a] of pairings) {
       games.push(resolveGame(h, a, next, rngRef.current));
     }
+    // Round 92: hand the map every territory that changed hands this week so
+    // the annexation animates as one sweeping takeover.
+    setFlipped(new Set(games.flatMap(g => g.flipped ?? [])));
     const nextRecords = applyRecords(records, games);
     setRecords(nextRecords);
 
@@ -319,6 +323,7 @@ export default function ImperialismBoard() {
         powerupStates={new Set()}
         invincibleTeams={new Set()}
         territoryStolenState={null}
+        flippedStates={flipped}
       />
 
       {landless.length > 0 && (
