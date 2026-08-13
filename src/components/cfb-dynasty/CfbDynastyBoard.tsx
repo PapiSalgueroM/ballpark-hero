@@ -10,6 +10,7 @@ import {
 } from '@/lib/cfbDynasty';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 type Phase = 'pick' | 'season' | 'recap' | 'recruit';
 type Tab = 'team' | 'play' | 'rankings' | 'standings';
@@ -27,6 +28,11 @@ export default function CfbDynastyBoard() {
   const [st, setSt] = useState<CfbState | null>(null);
   const [feed, setFeed] = useState<string[]>([]);
   const [lastGames, setLastGames] = useState<CfbGame[]>([]);
+  // Round 66: the owner's no scroll rule. You press Play Week at the top and
+  // the results render underneath, so the scoreboard pulls itself into view.
+  const revealRef = useRevealScroll<HTMLDivElement>(
+    `${phase}:${lastGames.length}:${lastGames[0]?.home ?? ''}:${lastGames[0]?.away ?? ''}`,
+  );
   const [postseason, setPostseason] = useState<{ ccgs: CfbPlayoffGame[]; bracket: CfbPlayoffGame[]; champion: string; heisman: HeismanFinalist[] } | null>(null);
   const [recruits, setRecruits] = useState<CfbRecruit[] | null>(null);
   const [portal, setPortal] = useState<CfbRecruit[] | null>(null);
@@ -326,7 +332,7 @@ export default function CfbDynastyBoard() {
             <p className="mt-2 text-[10px] text-muted-foreground">Five conference champs auto-qualify; twelve teams, straight seeding, byes for the top four.</p>
           </div>
           {lastGames.length > 0 && (
-            <div className="rounded-2xl border border-border bg-card p-3">
+            <div ref={revealRef} className="rounded-2xl border border-border bg-card p-3">
               <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Around the country</p>
               <div className="grid max-h-48 grid-cols-1 gap-0.5 overflow-y-auto text-[11px] sm:grid-cols-2">
                 {lastGames.map((g, i) => (

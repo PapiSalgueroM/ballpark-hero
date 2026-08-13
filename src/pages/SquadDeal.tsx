@@ -14,6 +14,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { computeChemistry, formatChemistry } from '@/lib/chemistry';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 // Thresholds track playerRating's 2026-07-03 rescale (curve now spans ~41-85
 // instead of ~52-99), so the top individual-player color band is reachable
@@ -61,6 +62,10 @@ const Pitch = ({ formation, squad, activeIndex, onSlotClick, clickableEmpty }: {
 
 const SquadDeal = () => {
   const g = useSquadDeal();
+  // Round 66: the owner's no scroll rule. The Banker's offer is the whole
+  // point of the round, so it pulls itself into view instead of appearing
+  // below the case grid you were just tapping.
+  const revealRef = useRevealScroll<HTMLDivElement>(`${g.slotPhase}:${g.offer?.name ?? ''}`);
   const poolList = useMemo(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     () => g.candidates.map((p, i) => ({ p, i, r: g.era2Rating(p) })).sort((a, b) => b.r - a.r),
@@ -375,7 +380,7 @@ const SquadDeal = () => {
       </div>
 
       {g.slotPhase === 'offer' && g.offer && (
-        <div className="mt-6 bg-card border border-primary/40 rounded-2xl p-6 max-w-sm mx-auto text-center shadow-xl">
+        <div ref={revealRef} className="mt-6 bg-card border border-primary/40 rounded-2xl p-6 max-w-sm mx-auto text-center shadow-xl">
           <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">The Banker offers</div>
           <div className="text-2xl font-bold text-foreground">{g.offer.name}</div>
           <div className="text-sm text-muted-foreground mb-1">{g.offer.position} · {g.offer.club}</div>

@@ -200,8 +200,10 @@ const ClubManager = () => {
   if (g.phase === 'seasonEnd' && g.summary && g.career) {
     const sm = g.summary;
     const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
+    // Round 66: same treatment as full time. Only one phase screen renders at a
+    // time, so the shared ref is safe here too.
     return shell(
-      <div className="text-center">
+      <div ref={revealRef} className="text-center">
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">SEASON {sm.season} COMPLETE</h1>
         <p className="text-muted-foreground text-sm mb-5">{sm.club} · finished <span className="text-foreground font-bold">#{sm.position}</span> with {sm.points} pts</p>
         <ResultScreen

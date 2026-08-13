@@ -4,6 +4,7 @@ import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, TOPICS, playerRating } from '@/lib/squadDeal';
 import { BB_ERAS, useBudgetBuilder } from '@/hooks/useBudgetBuilder';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 export function BudgetBuilderBoard() {
   const {
@@ -14,6 +15,10 @@ export function BudgetBuilderBoard() {
     criterion, criterionMet, moneyRating, series, playFinal, finalScore,
     sign, release, reset, shareText,
   } = useBudgetBuilder();
+  // Round 66: the owner's no scroll rule. Filling the last slot completes the
+  // squad, and the verdict card appears at the bottom, so it pulls itself into
+  // view the moment the team is done.
+  const revealRef = useRevealScroll<HTMLDivElement>(complete);
   const [copied, setCopied] = useState(false);
 
   const copyShare = async () => {
@@ -228,7 +233,7 @@ export function BudgetBuilderBoard() {
 
       {/* Done: the goal (owner task 49) */}
       {complete && (
-        <div className="mt-4 rounded-2xl border border-border bg-card p-5 text-center">
+        <div ref={revealRef} className="mt-4 rounded-2xl border border-border bg-card p-5 text-center">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Squad complete
           </p>
