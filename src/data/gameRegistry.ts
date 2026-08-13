@@ -151,7 +151,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/mlb-grid', label: 'MLB Franchise Grid', emoji: '🔲', description: 'Fill the 3×3 with legends who match both teams', daily: true, isNew: true },
       { path: '/mlb-connect-4', label: 'MLB Connect 4', emoji: '⚾', description: 'Baseball trivia meets Connect 4', isNew: true },
       { path: '/conquest-mlb', label: 'MLB Conquest', emoji: '🗺️', description: 'Imperialism at the ballpark: winners annex whole empires, two invaders start landless', daily: true, isNew: true },
-      { path: '/mlb-my-career', label: 'MLB My Career', emoji: '🌟', description: 'Draft day to Cooperstown: live a whole player career', isNew: true, featured: true },
+      { path: '/mlb-my-career', label: 'MLB My Career', emoji: '🌟', description: 'Draft day to Cooperstown. 11 positions, 100+ crossroads, and a camera in center field', isNew: true, featured: true },
       { path: '/mlb-front-office', label: 'MLB Front Office', emoji: '🏢', description: 'Full GM sim with real 2026 rosters: the tax line, trades, October, dynasties', isNew: true, featured: true },
       { path: '/missing-nine', label: 'Missing Nine', emoji: '🕵️', description: 'Name the missing starter from a famous World Series batting order', daily: true, isNew: true },
       { path: '/baseball-connections', label: 'Connections', emoji: '⚾', description: 'Group baseball players', daily: true },

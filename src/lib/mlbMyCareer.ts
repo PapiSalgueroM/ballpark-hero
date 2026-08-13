@@ -9,7 +9,32 @@
 
 import { MLB_TEAMS } from '@/data/conquestDataMlb';
 
-export type MlbCareerPos = 'SP' | 'CF' | 'SS' | '1B';
+import type { PlayerAppearance } from './soccerCareerAppearance';
+import { getMlbLifeEventsA } from './mlbCareerLifeA';
+import { getMlbLifeEventsB } from './mlbCareerLifeB';
+import { getMlbCorruptionEvents } from './mlbCareerCorruption';
+
+// Round 58: a real diamond instead of four sample positions. Relievers,
+// catchers and corner bats all live different careers now.
+export type MlbCareerPos = 'SP' | 'RP' | 'C' | '1B' | '2B' | '3B' | 'SS' | 'LF' | 'CF' | 'RF' | 'DH';
+
+/** Pitchers get an innings line, everyone else gets a batting line. */
+export const MLB_PITCHERS: MlbCareerPos[] = ['SP', 'RP'];
+
+/** Positional power and speed shape, so a catcher and a DH do not hit alike. */
+export const MLB_POS_PROFILE: Record<MlbCareerPos, { power: number; contact: number; speed: number; salary: number; cliff: number }> = {
+  SP: { power: 0, contact: 0, speed: 0, salary: 1.35, cliff: 34 },
+  RP: { power: 0, contact: 0, speed: 0, salary: 0.6, cliff: 35 },
+  C:  { power: 0.85, contact: 0.95, speed: 0.3, salary: 0.95, cliff: 32 },
+  '1B': { power: 1.25, contact: 1.0, speed: 0.4, salary: 1.0, cliff: 34 },
+  '2B': { power: 0.8, contact: 1.08, speed: 1.1, salary: 0.9, cliff: 32 },
+  '3B': { power: 1.15, contact: 1.0, speed: 0.6, salary: 1.05, cliff: 34 },
+  SS: { power: 0.95, contact: 1.05, speed: 1.15, salary: 1.2, cliff: 33 },
+  LF: { power: 1.1, contact: 1.0, speed: 0.9, salary: 0.95, cliff: 34 },
+  CF: { power: 0.95, contact: 1.02, speed: 1.3, salary: 1.1, cliff: 33 },
+  RF: { power: 1.15, contact: 1.0, speed: 0.85, salary: 1.0, cliff: 34 },
+  DH: { power: 1.3, contact: 1.0, speed: 0.25, salary: 0.85, cliff: 37 },
+};
 
 export interface MlbArchetype {
   id: string;
@@ -41,6 +66,42 @@ export const MLB_ARCHETYPES: Record<MlbCareerPos, MlbArchetype[]> = {
     { id: 'contact', label: 'Contact Machine', desc: 'A .320 season is normal', ovrBoost: 1, potBoost: 5, durability: 1.0 },
     { id: 'clutch', label: 'Captain Clutch', desc: 'October legend in the making', ovrBoost: 2, potBoost: 4, durability: 0.95 },
   ],
+  // ── Round 58: seven new position rooms ──
+  RP: [
+    { id: 'closer', label: 'The Closer', desc: 'Ninth inning, gate opens, crowd stands', ovrBoost: 3, potBoost: 3, durability: 0.85 },
+    { id: 'setup', label: 'Fireman', desc: 'Bases loaded in the seventh, every time', ovrBoost: 1, potBoost: 5, durability: 0.8 },
+    { id: 'sidearm', label: 'Sidearm Specialist', desc: 'Unhittable to half the lineup, pitches forever', ovrBoost: 0, potBoost: 4, durability: 1.0 },
+  ],
+  C: [
+    { id: 'framer', label: 'The Framer', desc: 'Steals 20 strikes a week nobody notices', ovrBoost: 2, potBoost: 4, durability: 0.85 },
+    { id: 'bat_first', label: 'Bat First Catcher', desc: 'Hits like a corner guy, catches like a catcher', ovrBoost: 3, potBoost: 4, durability: 0.75 },
+    { id: 'field_general', label: 'Field General', desc: 'Runs the pitching staff, ages into a manager', ovrBoost: 1, potBoost: 5, durability: 0.9 },
+  ],
+  '2B': [
+    { id: 'turner', label: 'The Turner', desc: 'Best double play pivot alive', ovrBoost: 2, potBoost: 4, durability: 0.95 },
+    { id: 'gap', label: 'Gap To Gap', desc: 'Forty doubles a year, every year', ovrBoost: 2, potBoost: 4, durability: 0.95 },
+    { id: 'scrapper', label: 'Scrapper', desc: 'Fouls off nine pitches then singles', ovrBoost: 1, potBoost: 5, durability: 1.0 },
+  ],
+  '3B': [
+    { id: 'hot_corner', label: 'Hot Corner Vacuum', desc: 'Nothing gets by, ever', ovrBoost: 2, potBoost: 4, durability: 0.9 },
+    { id: 'thumper', label: 'Thumper', desc: 'Thirty five homers from the five hole', ovrBoost: 3, potBoost: 4, durability: 0.9 },
+    { id: 'onbase', label: 'On Base Machine', desc: 'Walks more than he strikes out', ovrBoost: 1, potBoost: 5, durability: 0.95 },
+  ],
+  LF: [
+    { id: 'slugger_lf', label: 'Left Field Slugger', desc: 'Bat carries the glove, and then some', ovrBoost: 3, potBoost: 4, durability: 0.9 },
+    { id: 'leadoff', label: 'Leadoff Spark', desc: 'On base, then gone', ovrBoost: 1, potBoost: 4, durability: 0.95 },
+    { id: 'grinder', label: 'Grinder', desc: 'Never has a bad at bat, never misses a game', ovrBoost: 2, potBoost: 4, durability: 1.0 },
+  ],
+  RF: [
+    { id: 'cannon', label: 'The Cannon', desc: 'Nobody goes first to third on you. Ever', ovrBoost: 2, potBoost: 4, durability: 0.95 },
+    { id: 'complete', label: 'Complete Hitter', desc: 'Average, power, plate discipline, all of it', ovrBoost: 3, potBoost: 5, durability: 0.9 },
+    { id: 'wall_rf', label: 'Wall Banger', desc: 'Plays the corner like he built it', ovrBoost: 1, potBoost: 4, durability: 0.9 },
+  ],
+  DH: [
+    { id: 'pure_masher', label: 'Pure Masher', desc: 'One job. Hits it a very long way', ovrBoost: 4, potBoost: 3, durability: 1.0 },
+    { id: 'professional', label: 'Professional Hitter', desc: 'A .300 machine who never ages', ovrBoost: 2, potBoost: 4, durability: 1.0 },
+    { id: 'veteran_bat', label: 'Veteran Bat', desc: 'Bad knees, incredible eye, October legend', ovrBoost: 1, potBoost: 4, durability: 1.0 },
+  ],
 };
 
 export interface MlbSeasonLine {
@@ -53,6 +114,8 @@ export interface MlbSeasonLine {
   avg?: number; hr?: number; rbi?: number; sb?: number;
   // pitchers
   wins?: number; lossesP?: number; era?: number; so?: number;
+  // Round 58: relievers and richer hitting lines
+  saves?: number; holds?: number; obp?: number; doubles?: number;
   awards: string[];
   teamResult: string;
   salary: number;
@@ -79,6 +142,15 @@ export interface MlbCareerState {
   retired: boolean;
   draftPick: number;
   earnings: number;
+  /** Round 58 life layer. All optional so pre-R58 saves keep loading. */
+  netWorth?: number;
+  dirtyMoney?: number;
+  heat?: number;
+  suspendedSeasons?: number;
+  purchased?: string[];
+  lifeFlags?: Record<string, number>;
+  appearance?: PlayerAppearance | null;
+  yearlyCosts?: number;
 }
 
 export interface MlbCareerEvent {
@@ -95,6 +167,7 @@ export function mlbTeamLabelOf(id: string): string {
 
 export function startMlbCareer(
   name: string, pos: MlbCareerPos, archetype: MlbArchetype, rng: () => number = Math.random,
+  appearance?: PlayerAppearance | null,
 ): MlbCareerState {
   const base = 64 + Math.floor(rng() * 8) + archetype.ovrBoost;
   const pot = Math.min(99, base + 12 + Math.floor(rng() * 14) + archetype.potBoost);
@@ -112,6 +185,15 @@ export function startMlbCareer(
     retired: false,
     draftPick: stock,
     earnings: 0,
+    // Round 58 life layer
+    netWorth: 0.4,
+    dirtyMoney: 0,
+    heat: 0,
+    suspendedSeasons: 0,
+    purchased: [],
+    lifeFlags: {},
+    appearance: appearance ?? null,
+    yearlyCosts: 0,
   };
 }
 
@@ -121,16 +203,24 @@ export function mlbRollTeamQuality(prev: number | null, rng: () => number): numb
 }
 
 export function mlbMarketSalary(c: MlbCareerState): number {
-  return Math.max(1, Math.round(((c.ovr - 64) * 1.5 - 6) * 10) / 10);
+  // Round 58: position matters. Aces and shortstops get paid, relievers and
+  // designated hitters do not, which is exactly how the market works.
+  const mult = (MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF).salary;
+  return Math.max(1, Math.round(((c.ovr - 64) * 1.5 - 6) * mult * 10) / 10);
 }
 
 function gamesFor(c: MlbCareerState, rng: () => number): { games: number; note: string | null } {
   const isSp = c.pos === 'SP';
-  const full = isSp ? 32 : 155 + Math.floor(rng() * 8);
+  // Round 58: relievers are their own thing. A closer appears in about 65
+  // games, not 155. Getting this wrong once had a reliever striking out 490
+  // batters in a season, which is roughly four times the real record.
+  const isRp = c.pos === 'RP';
+  const full = isSp ? 32 : isRp ? 62 + Math.floor(rng() * 10) : 155 + Math.floor(rng() * 8);
+  const floorGames = isSp ? 8 : isRp ? 20 : 45;
   const risk = (1 - c.archetype.durability) * 0.55 + (100 - c.health) / 250;
   if (rng() < risk) {
     const frac = 0.35 + rng() * 0.4;
-    return { games: Math.max(isSp ? 8 : 45, Math.round(full * frac)), note: isSp && rng() < 0.4 ? 'The elbow. Season shortened, surgery whispers.' : 'Injured list stints ate the season.' };
+    return { games: Math.max(floorGames, Math.round(full * frac)), note: (isSp || isRp) && rng() < 0.4 ? 'The elbow. Season shortened, surgery whispers.' : 'Injured list stints ate the season.' };
   }
   return { games: full, note: null };
 }
@@ -146,18 +236,37 @@ export function simMlbSeason(
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     awards: [], teamResult: '', salary: c.salary,
   };
+  const prof = MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF;
   if (c.pos === 'SP') {
     const gs = games;
     line.era = Math.max(1.85, Math.round((5.6 - (form - 62) * 0.075 + rng() * 0.8) * 100) / 100);
     line.wins = Math.max(1, Math.round(gs * (0.25 + (form - 62) * 0.009) + rng() * 3));
     line.lossesP = Math.max(0, Math.round(gs * 0.42 - (line.wins ?? 0) * 0.55 + rng() * 3));
     line.so = Math.max(40, Math.round(gs * (3.4 + (form - 62) * 0.11) + rng() * 25));
+  } else if (c.pos === 'RP') {
+    // Round 58: relievers throw a quarter of the innings, so their line is
+    // saves, holds and a much lower ERA, with wins near zero.
+    const apps = games; // already an appearance count, see gamesFor
+    line.era = Math.max(1.05, Math.round((4.9 - (form - 62) * 0.085 + rng() * 0.9) * 100) / 100);
+    line.so = Math.max(25, Math.round(apps * (1.05 + (form - 62) * 0.035) + rng() * 15));
+    line.wins = Math.max(0, Math.round(rng() * 6));
+    line.lossesP = Math.max(0, Math.round(rng() * 5));
+    if (c.archetype.id === 'closer') {
+      line.saves = Math.min(58, Math.max(0, Math.round((14 + (form - 62) * 1.15 + rng() * 8) * (games / 62))));
+      line.holds = Math.round(rng() * 4);
+    } else {
+      line.saves = Math.round(rng() * 6);
+      line.holds = Math.min(45, Math.max(0, Math.round((10 + (form - 62) * 0.7 + rng() * 8) * (games / 62))));
+    }
   } else {
     const g = games / 160;
-    line.avg = Math.min(0.365, Math.max(0.205, Math.round((0.238 + (form - 62) * 0.0028 + rng() * 0.02) * 1000) / 1000));
-    line.hr = Math.min(58, Math.max(2, Math.round((6 + (form - 62) * 1.05 + rng() * 8) * g)));
-    line.rbi = Math.max(15, Math.round(((line.hr ?? 0) * 2.4 + 25 + rng() * 20) * g));
-    line.sb = c.archetype.id === 'burner' ? Math.round((28 + rng() * 35) * g) : Math.round(rng() * 12 * g);
+    line.avg = Math.min(0.365, Math.max(0.205, Math.round((0.238 + (form - 62) * 0.0028 * prof.contact + rng() * 0.02) * 1000) / 1000));
+    line.hr = Math.min(58, Math.max(0, Math.round((6 + (form - 62) * 1.05) * prof.power * g + rng() * 6 * prof.power)));
+    line.rbi = Math.max(10, Math.round(((line.hr ?? 0) * 2.4 + 25 + rng() * 20) * g));
+    const fast = c.archetype.id === 'burner' || c.archetype.id === 'leadoff' || c.archetype.id === 'sparkplug';
+    line.sb = Math.max(0, Math.round((fast ? 24 + rng() * 30 : rng() * 10) * prof.speed * g));
+    line.doubles = Math.max(0, Math.round((18 + (form - 62) * 0.55 + rng() * 12) * g));
+    line.obp = Math.round(((line.avg ?? 0.24) + 0.055 + rng() * 0.05) * 1000) / 1000;
   }
 
   const strength = teamQuality + (c.ovr - 76) * 0.35;
@@ -174,12 +283,43 @@ export function simMlbSeason(
 
   const statScore = c.pos === 'SP'
     ? (line.so ?? 0) / 5 + (line.wins ?? 0) * 2.2 + Math.max(0, (3.8 - (line.era ?? 5)) * 22)
-    : (line.hr ?? 0) * 1.6 + (line.rbi ?? 0) / 3 + Math.max(0, ((line.avg ?? 0.2) - 0.24) * 320) + (line.sb ?? 0) / 3;
+    : c.pos === 'RP'
+      ? (line.saves ?? 0) * 1.5 + (line.holds ?? 0) * 1.1 + (line.so ?? 0) / 4 + Math.max(0, (3.6 - (line.era ?? 5)) * 26)
+      : (line.hr ?? 0) * 1.6 + (line.rbi ?? 0) / 3 + Math.max(0, ((line.avg ?? 0.2) - 0.24) * 320) + (line.sb ?? 0) / 3;
   if (c.seasons.length === 0 && statScore > 55 && rng() < 0.72) { line.awards.push('Rookie of the Year'); notes.push('🏆 Rookie of the Year.'); }
   if (statScore > 88) { line.awards.push('All-Star'); c.allStars += 1; notes.push('⭐ All-Star.'); }
-  if (statScore > 118 && c.ovr >= 90 && rng() < (c.pos === 'SP' ? 0.35 : 0.22)) {
-    const award = c.pos === 'SP' ? 'Cy Young' : 'MVP';
+  const isPitcher = MLB_PITCHERS.includes(c.pos);
+  if (statScore > 118 && c.ovr >= 90 && rng() < (c.pos === 'SP' ? 0.35 : c.pos === 'RP' ? 0.08 : 0.22)) {
+    const award = isPitcher ? 'Cy Young' : 'MVP';
     line.awards.push(award); c.mvpCys += 1; notes.push(`👑 ${award.toUpperCase()}.`);
+  }
+
+  // ── Round 58: the rest of the trophy case ──
+  // The old code had Rookie of the Year, All-Star, MVP and Cy Young only, so a
+  // glove first shortstop or a lights out closer could play fifteen years and
+  // win nothing. Every position now has hardware to chase.
+  if (!isPitcher && c.pos !== 'DH' && games >= 130 && statScore > 70 && rng() < 0.4) {
+    line.awards.push('Gold Glove'); notes.push('🧤 Gold Glove.');
+  }
+  if (!isPitcher && (line.hr ?? 0) >= 28 && games >= 130 && rng() < 0.45) {
+    line.awards.push('Silver Slugger'); notes.push('🥈 Silver Slugger.');
+  }
+  if (!isPitcher && (line.avg ?? 0) >= 0.335 && games >= 130 && rng() < 0.6) {
+    line.awards.push('Batting Title'); notes.push('🏅 Batting title.');
+  }
+  if (!isPitcher && (line.hr ?? 0) >= 45 && games >= 130 && rng() < 0.65) {
+    line.awards.push('Home Run Champion'); notes.push('💣 Led the league in home runs.');
+  }
+  if (c.pos === 'SP' && (line.era ?? 9) <= 2.6 && games >= 28 && rng() < 0.55) {
+    line.awards.push('ERA Title'); notes.push('🎯 Led the league in ERA.');
+  }
+  if (c.pos === 'RP' && (line.saves ?? 0) >= 38 && rng() < 0.6) {
+    line.awards.push('Saves Leader'); notes.push('🚪 Led the league in saves.');
+  }
+  // Comeback needs a real bounce off a lost season, not just a good year.
+  const prevSeason = c.seasons[c.seasons.length - 1];
+  if (prevSeason && prevSeason.games <= 70 && games >= 130 && statScore > 85 && rng() < 0.55) {
+    line.awards.push('Comeback Player of the Year'); notes.push('🔁 Comeback Player of the Year.');
   }
 
   c.earnings += c.salary;
@@ -190,8 +330,15 @@ export function simMlbSeason(
 export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
   const notes: string[] = [];
   const before = c.ovr;
-  if (c.age <= 26 && c.ovr < c.pot) c.ovr = Math.min(c.pot, c.ovr + 2 + Math.floor(rng() * 3));
-  else if (c.age >= 32) {
+  // Round 58: progression slowed, and the fall now starts at the age this
+  // position actually falls apart. Catchers go early, designated hitters last.
+  if (c.age <= 26 && c.ovr < c.pot) {
+    const drag = c.ovr >= 92 ? 0.25 : c.ovr >= 88 ? 0.5 : c.ovr >= 84 ? 0.75 : 1;
+    const raw = 1 + Math.floor(rng() * 2);
+    c.ovr = Math.min(c.pot, c.ovr + Math.max(c.ovr >= 88 ? 0 : 1, Math.round(raw * drag)));
+  } else if (c.age <= 29 && c.ovr < c.pot && rng() < 0.45) {
+    c.ovr = Math.min(c.pot, c.ovr + 1);
+  } else if (c.age >= ((MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF).cliff)) {
     const wear = (100 - c.health) / 40;
     c.ovr = Math.max(60, Math.round(c.ovr - (1 + rng() * 2 + wear) * (c.age >= 37 ? 1.5 : 1)));
   }
@@ -202,6 +349,25 @@ export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
   c.year += 1;
   c.contractYears -= 1;
   c.morale = Math.max(20, Math.min(100, c.morale + Math.round(rng() * 10 - 4)));
+
+  // ── Round 58: the corruption meter resolves here ──
+  const heat = c.heat ?? 0;
+  if (heat > 0) {
+    const dm = c.dirtyMoney ?? 0;
+    const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -9;
+    c.heat = Math.max(0, Math.min(100, heat + drift));
+    if ((c.heat ?? 0) >= 90 && (c.suspendedSeasons ?? 0) === 0) {
+      c.suspendedSeasons = 1;
+      c.dirtyMoney = 0;
+      c.fanbase = Math.max(0, c.fanbase - 30);
+      c.morale = Math.max(0, c.morale - 25);
+      notes.push('🚨 Suspended by the commissioner. Every dollar they could trace is gone.');
+    } else if ((c.heat ?? 0) >= 65 && (c.heat ?? 0) - drift < 65) {
+      notes.push('🕵️ The league office has opened a formal investigation.');
+    }
+  }
+  const upkeep = c.yearlyCosts ?? 0;
+  if (upkeep > 0) c.netWorth = Math.round(((c.netWorth ?? c.earnings * 0.45) - upkeep) * 10) / 10;
   return notes;
 }
 
@@ -251,6 +417,15 @@ export function drawMlbEvent(c: MlbCareerState, rng: () => number): MlbCareerEve
       ],
     });
   }
+  // ── Round 58: 90 life events and the corruption deck join the draw ──
+  deck.push(...getMlbLifeEventsA(c, rng));
+  deck.push(...getMlbLifeEventsB(c, rng));
+  const corrupt = getMlbCorruptionEvents(c, rng);
+  deck.push(...corrupt);
+  const arcOpen = Object.keys(c.lifeFlags ?? {}).some(k => ['signs', 'sticky', 'clinic', 'tips', 'academy', 'wash'].includes(k));
+  if (arcOpen && corrupt.length > 0 && rng() < 0.45) {
+    return corrupt[Math.floor(rng() * corrupt.length)];
+  }
   return deck[Math.floor(rng() * deck.length)];
 }
 
@@ -285,4 +460,116 @@ export function mlbLegacyOf(c: MlbCareerState): MlbLegacy {
     `${Math.round(c.earnings)}M career earnings, drafted pick ${c.draftPick}`,
   ];
   return { score, verdict, hof, bullets };
+}
+
+/* ─── Round 58: the money ─── */
+export type MlbSpendCategory = 'home' | 'ride' | 'invest' | 'body' | 'flex' | 'family' | 'shady';
+
+export interface MlbSpendItem {
+  id: string; name: string; emoji: string; category: MlbSpendCategory;
+  cost: number; yearly?: number; desc: string; oneTime: boolean;
+  minNetWorth?: number; minFanbase?: number; requiresDirty?: boolean; effect?: string;
+}
+
+export const MLB_SPEND_ITEMS: MlbSpendItem[] = [
+  // Home
+  { id: 'downtown_loft', name: 'Downtown Loft', emoji: '🏙️', category: 'home', cost: 1.5, desc: 'A real place instead of the rookie hotel, 1.5M', oneTime: true },
+  { id: 'gated_house', name: 'House Behind A Gate', emoji: '🏡', category: 'home', cost: 4.5, desc: 'Where the fans cannot ring the doorbell, 4.5M', oneTime: true, minNetWorth: 4 },
+  { id: 'summer_villa', name: 'Summer Villa', emoji: '🌴', category: 'home', cost: 8, yearly: 0.2, desc: 'Where the offseason actually happens, 8M', oneTime: true, minNetWorth: 9 },
+  { id: 'compound', name: 'The Compound', emoji: '🏰', category: 'home', cost: 20, yearly: 0.5, desc: 'Full court, screening room, guest wing, 20M', oneTime: true, minNetWorth: 25 },
+  { id: 'home_court', name: 'Private Cage And Gym', emoji: '🏀', category: 'home', cost: 5, yearly: 0.25, desc: 'Batting cage, mound, weight room, cold tub, 5M', oneTime: true, minNetWorth: 6, effect: 'Health +6 every offseason' },
+  { id: 'hometown_court', name: 'Rebuild Your Little League Field', emoji: '⛹️', category: 'home', cost: 2, desc: 'New infield, new lights, real dugouts, 2M', oneTime: true, minNetWorth: 3, effect: 'Fanbase +12' },
+  // Ride
+  { id: 'first_car', name: 'The Car You Always Wanted', emoji: '🚗', category: 'ride', cost: 0.15, desc: 'First real purchase. Everybody does it, 150k', oneTime: true },
+  { id: 'sprinter', name: 'Custom Sprinter', emoji: '🚐', category: 'ride', cost: 0.5, desc: 'Reclining seats and four screens for road trips, 500k', oneTime: true },
+  { id: 'exotic', name: 'Exotic Car', emoji: '🏎️', category: 'ride', cost: 0.6, desc: 'Photographed in the players lot constantly, 600k', oneTime: false },
+  { id: 'hypercar_mlb', name: 'Hypercar', emoji: '🏁', category: 'ride', cost: 3.5, desc: 'Seven figures you will drive twice, 3.5M', oneTime: false, minNetWorth: 7 },
+  { id: 'jet_share_mlb', name: 'Private Jet Share', emoji: '✈️', category: 'ride', cost: 6, yearly: 0.7, desc: 'Home for every off day, 6M', oneTime: true, minNetWorth: 12 },
+  // Invest
+  { id: 'restaurant_group', name: 'Restaurant Group', emoji: '🍽️', category: 'invest', cost: 1.2, desc: '35 percent chance it prints 3M, otherwise it limps', oneTime: false },
+  { id: 'index_mlb', name: 'Boring Index Fund', emoji: '📈', category: 'invest', cost: 2, desc: 'Steady 7 percent. Your accountant weeps with joy', oneTime: false },
+  { id: 'media_company', name: 'Media Company', emoji: '🎙️', category: 'invest', cost: 3, yearly: 0.15, desc: 'Podcasts, docs, and your own narrative, 3M', oneTime: true, minNetWorth: 5, effect: 'Fanbase +6 a year' },
+  { id: 'youth_academy_mlb', name: 'Youth Academy', emoji: '🎓', category: 'invest', cost: 2.5, yearly: 0.1, desc: 'Where the next you comes from, 2.5M', oneTime: true, minNetWorth: 4, effect: 'Fanbase +8' },
+  { id: 'crypto_mlb', name: 'Crypto Punt', emoji: '🪙', category: 'invest', cost: 1, desc: '20 percent chance of 5x, 80 percent chance of a lesson', oneTime: false },
+  { id: 'wine_label', name: 'Wine Label', emoji: '🍷', category: 'invest', cost: 2, desc: 'Steady 10 percent and very good dinners', oneTime: true, minNetWorth: 4 },
+  { id: 'team_stake', name: 'Minority Stake In A Franchise', emoji: '🏆', category: 'invest', cost: 40, desc: 'A real piece of a real team, 40M', oneTime: true, minNetWorth: 70, effect: 'The retirement plan, fanbase +10' },
+  // Body
+  { id: 'chef_mlb', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.15, desc: 'Every meal built for 82 games, 150k a year', oneTime: true, effect: 'Health +4 a year' },
+  { id: 'recovery_mlb', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M', oneTime: true, minNetWorth: 3, effect: 'Injury risk down' },
+  { id: 'shot_doctor', name: 'Private Hitting Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three batting titles, 200k a year', oneTime: true, effect: 'Rating +1 a year while young' },
+  { id: 'sleep_mlb', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.7, desc: 'Turns out most of it is sleep, 700k', oneTime: true, effect: 'Health +8' },
+  { id: 'psych_mlb', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.12, desc: 'The part nobody used to talk about, 120k a year', oneTime: true, effect: 'Morale +8 on hire' },
+  { id: 'biomech_mlb', name: 'Biomechanics Team', emoji: '🔬', category: 'body', cost: 1.2, desc: 'They rebuilt your landing mechanics, 1.2M', oneTime: true, effect: 'Rating +2' },
+  // Flex
+  { id: 'chain_mlb', name: 'The Chain', emoji: '💎', category: 'flex', cost: 0.6, desc: 'Iced out, photographed in every tunnel, 600k', oneTime: false, minFanbase: 40 },
+  { id: 'tunnel_fits', name: 'A Stylist And A Tunnel Budget', emoji: '🕶️', category: 'flex', cost: 0, yearly: 0.3, desc: 'The tunnel is a runway now, 300k a year', oneTime: true, minFanbase: 45, effect: 'Fanbase +5 a year' },
+  { id: 'watch_mlb', name: 'Watch Collection', emoji: '⌚', category: 'flex', cost: 2, desc: 'Six figures on each wrist, 2M', oneTime: true, minNetWorth: 5 },
+  { id: 'album', name: 'Fund Your Own Album', emoji: '🎤', category: 'flex', cost: 1, desc: 'You cannot rap. You are doing it anyway, 1M', oneTime: true, minFanbase: 55, effect: 'Fanbase +10 and endless jokes' },
+  { id: 'signature_shoe', name: 'Signature Shoe Line', emoji: '👟', category: 'flex', cost: 2.5, desc: 'Your silhouette on a shoe, 2.5M', oneTime: true, minFanbase: 70, effect: 'Fanbase +12, real royalties' },
+  { id: 'court_mural', name: 'Mural On Your Old Field', emoji: '🎨', category: 'flex', cost: 0.3, desc: 'Twenty feet of you where you learned, 300k', oneTime: true, minFanbase: 55 },
+  { id: 'ring_copy_mlb', name: 'Second Ring, Bigger', emoji: '💍', category: 'flex', cost: 0.5, desc: 'A custom copy with more diamonds than the real one, 500k', oneTime: true, minNetWorth: 8 },
+  // Family
+  { id: 'mom_house_mlb', name: 'Buy Your Mother A House', emoji: '❤️', category: 'family', cost: 2, desc: 'The reason most people do any of this, 2M', oneTime: true, minNetWorth: 2.5, effect: 'Morale +15' },
+  { id: 'siblings_mlb', name: 'Pay For Your Siblings College', emoji: '🎓', category: 'family', cost: 0.7, desc: 'All of them, all four years, 700k', oneTime: true, effect: 'Morale +10' },
+  { id: 'family_office_mlb', name: 'Family Office', emoji: '🏦', category: 'family', cost: 0, yearly: 0.18, desc: 'Professionals so relatives stop asking you directly, 180k a year', oneTime: true, effect: 'Protects your money' },
+  { id: 'foundation_mlb', name: 'Start A Foundation', emoji: '🤝', category: 'family', cost: 3.5, yearly: 0.25, desc: 'Your name doing good in your city, 3.5M', oneTime: true, minNetWorth: 7, effect: 'Fanbase +10 a year' },
+  { id: 'road_family', name: 'Fly Your Family To Every Road Game', emoji: '🛫', category: 'family', cost: 0, yearly: 0.2, desc: 'Somebody in the stands every night, 200k a year', oneTime: true, effect: 'Morale +6 a year' },
+  { id: 'trust_mlb', name: 'Set Up Trusts For Your Kids', emoji: '🧸', category: 'family', cost: 6, desc: 'They will never have to do this, 6M', oneTime: true, minNetWorth: 14 },
+  // Shady
+  { id: 'mshady_laundromats', name: 'Laundromat Chain', emoji: '🧼', category: 'shady', cost: 1, desc: 'Remarkable revenue for the foot traffic, 1M', oneTime: true, requiresDirty: true, effect: 'Washes 2M of dirty money' },
+  { id: 'mshady_barbers', name: 'Barbershop Chain', emoji: '💈', category: 'shady', cost: 0.8, desc: 'Nine chairs, three customers, endless cash, 800k', oneTime: true, requiresDirty: true, effect: 'Washes 1.5M of dirty money' },
+  { id: 'mshady_club', name: 'The Nightclub', emoji: '🍾', category: 'shady', cost: 3, yearly: 0.25, desc: 'Bottle service and a flexible ledger, 3M', oneTime: true, requiresDirty: true, effect: 'Washes 4M, heat +3 a year' },
+  { id: 'mshady_lawyer', name: 'The Lawyer Who Never Loses', emoji: '⚖️', category: 'shady', cost: 0, yearly: 0.45, desc: 'On retainer, answers at 3am, 450k a year', oneTime: true, effect: 'Heat cools twice as fast' },
+  { id: 'mshady_fixer', name: 'A Guy Who Handles Things', emoji: '🤐', category: 'shady', cost: 0, yearly: 0.3, desc: 'You do not ask how, 300k a year', oneTime: true, effect: 'Heat -8 immediately' },
+  { id: 'mshady_offshore', name: 'Offshore Account', emoji: '🏝️', category: 'shady', cost: 0.5, desc: 'An island, a bank, a form nobody files, 500k', oneTime: true, requiresDirty: true, effect: 'Hides money, heat +6' },
+  // Round 58 second wave
+  { id: 'barber_chair', name: 'A Barber On Retainer', emoji: '💇', category: 'body', cost: 0, yearly: 0.06, desc: 'Flies to every road city. The line has to be right, 60k a year', oneTime: true, effect: 'Morale +4 a year' },
+  { id: 'film_room', name: 'Personal Film Analyst', emoji: '🎞️', category: 'body', cost: 0, yearly: 0.14, desc: 'Cuts every possession you played by 6am, 140k a year', oneTime: true, effect: 'Rating +1 a year' },
+  { id: 'sneaker_vault', name: 'The Cleat And Glove Vault', emoji: '👟', category: 'flex', cost: 0.9, desc: 'Climate controlled, 400 gloves, 900k', oneTime: true, minFanbase: 50 },
+  { id: 'courtside_seats', name: 'Season Seats Behind The Dugout For Your Block', emoji: '🎟️', category: 'family', cost: 0, yearly: 0.25, desc: 'Twelve seats behind the dugout, all 81 home games, 250k a year', oneTime: true, effect: 'Fanbase +6 a year' },
+  { id: 'barbershop_legit', name: 'A Real Barbershop', emoji: '✂️', category: 'invest', cost: 0.4, desc: 'An actual business with actual customers, 400k', oneTime: true },
+  { id: 'summer_camp', name: 'Free Youth Baseball Camp', emoji: '⛹️', category: 'family', cost: 1, yearly: 0.15, desc: 'Two weeks, 400 kids, no fee, 1M', oneTime: true, minNetWorth: 2, effect: 'Fanbase +8, morale +6' },
+];
+
+export function getMlbSpendItem(id: string): MlbSpendItem | undefined {
+  return MLB_SPEND_ITEMS.find(i => i.id === id);
+}
+
+/** Buy an item. Returns the new state and a log line, or null when blocked. */
+export function buyMlbItem(c: MlbCareerState, itemId: string): { state: MlbCareerState; log: string } | null {
+  const item = getMlbSpendItem(itemId);
+  if (!item) return null;
+  const owned = c.purchased ?? [];
+  if (item.oneTime && owned.includes(itemId)) return null;
+  const net = c.netWorth ?? Math.round(c.earnings * 0.45 * 10) / 10;
+  if (item.minNetWorth && net < item.minNetWorth) return null;
+  if (item.minFanbase && c.fanbase < item.minFanbase) return null;
+  if (item.requiresDirty && (c.dirtyMoney ?? 0) <= 0) return null;
+  if (item.cost > net) return null;
+
+  const s: MlbCareerState = { ...c, purchased: [...owned, itemId] };
+  s.netWorth = Math.round((net - item.cost) * 10) / 10;
+  if (item.yearly) s.yearlyCosts = Math.round(((s.yearlyCosts ?? 0) + item.yearly) * 100) / 100;
+
+  let log = `Bought ${item.name}.`;
+  switch (itemId) {
+    case 'hometown_court': s.fanbase = Math.min(100, s.fanbase + 12); log = 'You rebuilt the courts you grew up on. The whole neighborhood came out for the reopening.'; break;
+    case 'youth_academy_mlb': s.fanbase = Math.min(100, s.fanbase + 8); log = 'Your academy opened with 120 kids on day one.'; break;
+    case 'team_stake': s.fanbase = Math.min(100, s.fanbase + 10); log = 'You own a piece of a franchise now. The other owners are still deciding how they feel about that.'; break;
+    case 'sleep_mlb': s.health = Math.min(100, s.health + 8); log = 'Turns out it was mostly sleep the whole time. Health +8.'; break;
+    case 'biomech_mlb': s.ovr = Math.min(99, s.ovr + 2); log = 'They rebuilt how you land and everything got easier. Rating +2.'; break;
+    case 'psych_mlb': s.morale = Math.min(100, s.morale + 8); log = 'Best hire you ever made and the one you almost skipped. Morale +8.'; break;
+    case 'mom_house_mlb': s.morale = Math.min(100, s.morale + 15); log = 'You handed your mother the keys and she did not say a word for a full minute. Morale +15.'; break;
+    case 'siblings_mlb': s.morale = Math.min(100, s.morale + 10); log = 'Every sibling, all four years, paid in full. Morale +10.'; break;
+    case 'album': s.fanbase = Math.min(100, s.fanbase + 10); log = 'The album has four million streams and the locker room has never let it go. Fanbase +10.'; break;
+    case 'signature_shoe': s.fanbase = Math.min(100, s.fanbase + 12); log = 'Your silhouette is on a shoe in every mall in the country. Fanbase +12.'; break;
+    case 'foundation_mlb': s.fanbase = Math.min(100, s.fanbase + 10); log = 'The foundation launched with a block party and a scholarship fund. Fanbase +10.'; break;
+    case 'mshady_laundromats': { const w = Math.min(2, c.dirtyMoney ?? 0); s.dirtyMoney = Math.max(0, Math.round(((s.dirtyMoney ?? 0) - 2) * 10) / 10); s.netWorth = Math.round((s.netWorth + w) * 10) / 10; log = 'Two million went in dirty and came out as a very busy laundromat chain.'; break; }
+    case 'mshady_barbers': { const w = Math.min(1.5, c.dirtyMoney ?? 0); s.dirtyMoney = Math.max(0, Math.round(((s.dirtyMoney ?? 0) - 1.5) * 10) / 10); s.netWorth = Math.round((s.netWorth + w) * 10) / 10; log = 'Nine chairs, three customers, and a ledger that balances beautifully.'; break; }
+    case 'mshady_club': { const w = Math.min(4, c.dirtyMoney ?? 0); s.dirtyMoney = Math.max(0, Math.round(((s.dirtyMoney ?? 0) - 4) * 10) / 10); s.netWorth = Math.round((s.netWorth + w) * 10) / 10; s.heat = Math.min(100, (s.heat ?? 0) + 3); log = 'The club opened. Four million cleaned and a line around the block.'; break; }
+    case 'mshady_fixer': s.heat = Math.max(0, (s.heat ?? 0) - 8); log = 'You have a guy now. Heat -8, and you genuinely do not want to know how.'; break;
+    case 'mshady_offshore': s.heat = Math.min(100, (s.heat ?? 0) + 6); log = 'The account is open. An island, a bank, and a form nobody will ever file. Heat +6.'; break;
+    default: break;
+  }
+  return { state: s, log };
 }

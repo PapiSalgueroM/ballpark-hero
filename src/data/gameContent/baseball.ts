@@ -216,8 +216,11 @@ export const BASEBALL_CONTENT: GameContentMap = {
     intro: [
       "Draft day, age 21, one made-up prospect: you. My Career drops a fictional player into the real 30 team league to live every season from draft hype to farewell tour.",
       "Your archetype shapes the ride. A Flamethrower touches triple digits while his elbow prays nightly. A Crafty Lefty ages forever. A Masher is 45 homers or bust.",
+      "You build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. A camera in center field and a trash can behind the dugout, something on the glove that adds 300 rpm, a clinic in Florida that ships in unmarked boxes, tipping pitches to a man who likes first innings. Every dirty choice raises a hidden commissioner meter, and this is the sport that hands out lifetime bans."
     ],
     howToPlay: [
+      "Create your player: name, one of 11 positions (SP, RP, C, 1B, 2B, 3B, SS, LF, CF, RF, DH), and one of 33 archetypes, from Flamethrower to The Framer to Pure Masher.",
+      "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
       "Name your player and pick a position: starting pitcher, center field, shortstop or first base.",
       "Choose one of three archetypes per position. Each trades rating, ceiling and durability differently.",
       "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
