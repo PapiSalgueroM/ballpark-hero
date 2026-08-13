@@ -5,16 +5,18 @@ import { leagueOf } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry } from '@/lib/clubManager';
 
 /** Round 73: the season at a glance. Recent results plus what's coming. */
-export function CalendarCard({ career }: { career: CareerState }) {
+export function CalendarCard({ career, onQuickSim }: { career: CareerState; onQuickSim?: (n: number) => void }) {
   const [expanded, setExpanded] = useState(false);
 
   const played = career.resultLog ?? [];
-  const recent = played.slice(-3);
+  // Round 93: expanded shows every result so far, not just the last three.
+  const recent = expanded ? [...played].reverse() : played.slice(-3);
 
   const upcoming = useMemo(() => {
     const league = leagueOf(career.clubName);
     const out: { label: string; detail: string }[] = [];
-    for (let w = career.week; w < career.calendar.length && out.length < (expanded ? 14 : 5); w++) {
+    // Round 93: expanded shows the WHOLE rest of the season, not a 14 game window.
+    for (let w = career.week; w < career.calendar.length && (expanded || out.length < 5); w++) {
       const entry: CalendarEntry = career.calendar[w];
       if (entry.type === 'window') {
         out.push({ label: '❄️ January window', detail: 'Do your business' });
@@ -55,7 +57,7 @@ export function CalendarCard({ career }: { career: CareerState }) {
       </div>
 
       {recent.length > 0 && (
-        <div className="mb-1.5 space-y-0.5">
+        <div className={cn("mb-1.5 space-y-0.5", expanded && "max-h-56 overflow-y-auto pr-1")}>
           {recent.map((r, i) => (
             <div key={i} className="flex items-center gap-2 text-[11px]">
               <span className={cn(
@@ -72,7 +74,7 @@ export function CalendarCard({ career }: { career: CareerState }) {
         </div>
       )}
 
-      <div className="space-y-0.5 border-t border-border/40 pt-1.5">
+      <div className={cn("space-y-0.5 border-t border-border/40 pt-1.5", expanded && "max-h-72 overflow-y-auto pr-1")}>
         {upcoming.map((u, i) => (
           <div key={i} className="flex items-center gap-2 text-[11px]">
             <span className={cn('shrink-0', i === 0 ? 'text-primary font-bold' : 'text-muted-foreground')}>{u.label}</span>
@@ -81,6 +83,24 @@ export function CalendarCard({ career }: { career: CareerState }) {
         ))}
         {upcoming.length === 0 && <p className="text-[11px] text-muted-foreground">Season complete.</p>}
       </div>
+
+      {/* Round 93: fast forward. Play a run of fixtures without stopping at
+          every match screen. It still halts for the transfer window and the
+          end of the season, because those actually need you. */}
+      {onQuickSim && upcoming.length > 0 && (
+        <div className="mt-2 flex items-center gap-1.5 border-t border-border/40 pt-2">
+          <span className="text-[10px] text-muted-foreground shrink-0">Fast forward</span>
+          {[3, 5, 10].map(n => (
+            <button
+              key={n}
+              onClick={() => onQuickSim(n)}
+              className="flex-1 rounded-lg border border-border bg-background px-2 py-1 text-[11px] font-bold text-foreground hover:border-primary/60 transition-colors"
+            >
+              {n} games
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

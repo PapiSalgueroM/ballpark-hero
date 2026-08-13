@@ -136,6 +136,42 @@ export function useClubManager() {
     }
   }, [career]);
 
+  /* Round 93: his calendar complaint. "u can click through and sim much
+     faster... simulate through date or play match or whatever." Quick sim
+     plays a run of fixtures back to back and only stops early for the things
+     that genuinely need you: the transfer window, or the end of the season.
+     The final match still surfaces its report so the run has a payoff. */
+  const quickSim = useCallback((entries: number) => {
+    if (!career) return;
+    let state = career;
+    let lastReport: MatchWeekReport | null = null;
+    for (let i = 0; i < entries; i++) {
+      if (state.week >= state.calendar.length) break;
+      const res = playNextEntry(state);
+      state = res.state;
+      if (res.kind === 'window') {
+        setCareer(state);
+        setActiveTab('transfers');
+        setPhase('hub');
+        return;
+      }
+      if (res.kind === 'seasonOver') {
+        const { state: done, summary: sm } = finishSeason(state);
+        recordCompletion('/club-manager', sm.seasonScore);
+        setCareer(done);
+        setSummary(sm);
+        setPhase('seasonEnd');
+        return;
+      }
+      if (res.kind === 'match' && res.report) lastReport = res.report;
+    }
+    setCareer(state);
+    if (lastReport) {
+      setReport(lastReport);
+      setPhase('matchResult');
+    }
+  }, [career]);
+
   const continueFromReport = useCallback(() => {
     if (!career) return;
     if (career.sacked) {
@@ -222,6 +258,7 @@ export function useClubManager() {
   }, []);
 
   return {
+    quickSim,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition,
     resume, startNew, chooseClub, confirmClub,

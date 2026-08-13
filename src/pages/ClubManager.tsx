@@ -735,7 +735,7 @@ const ClubManager = () => {
                 <p className="text-xs text-muted-foreground text-center py-6">Nobody has texted you yet. Play some matches, the drama finds you.</p>
               )}
 
-              {hubPanel === 'calendar' && <CalendarCard career={c} />}
+              {hubPanel === 'calendar' && <CalendarCard career={c} onQuickSim={g.quickSim} />}
 
               {hubPanel === 'treatment' && (
                 <div className="bg-card border border-border rounded-xl p-3">
