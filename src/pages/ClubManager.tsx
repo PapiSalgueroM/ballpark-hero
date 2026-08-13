@@ -10,7 +10,7 @@ import {
   isAvailable, xiAverageRating, sortedTable,
   NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
 } from '@/lib/clubManager';
-import type { NationDef, ObjectiveStatus } from '@/lib/clubManager';
+import type { NationDef, ObjectiveStatus, CupRound } from '@/lib/clubManager';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
@@ -21,6 +21,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { CalendarCard } from '@/components/club-manager/CalendarCard';
 import { InboxCard } from '@/components/club-manager/InboxCard';
+import { ClubDetailScreen } from '@/components/club-manager/ClubDetailScreen';
 import { SquadScreen } from '@/components/club-manager/SquadScreen';
 import { TacticsScreen } from '@/components/club-manager/TacticsScreen';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
@@ -39,6 +40,31 @@ const OBJ_CHIP: Record<ObjectiveStatus, { label: string; cls: string }> = {
   failed: { label: 'Failed', cls: 'bg-red-500/10 text-red-400 border-red-500/40' },
 };
 
+/** Round 74: one FIFA-style hub box. Tap it, it becomes its own screen. */
+function HubTile({ icon, title, value, sub, accent, onClick }: {
+  icon: string; title: string; value: string; sub?: string; accent?: boolean; onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        'rounded-xl border p-3 text-left transition-all bg-card hover:border-primary hover:-translate-y-0.5',
+        accent ? 'border-gold/50' : 'border-border',
+      )}
+    >
+      <div className="flex items-center justify-between mb-1">
+        <span className="text-base leading-none">{icon}</span>
+        {accent && <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />}
+      </div>
+      <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{title}</div>
+      <div className="text-sm font-bold font-display text-foreground truncate">{value}</div>
+      {sub && <div className="text-[9px] text-muted-foreground truncate mt-0.5">{sub}</div>}
+    </button>
+  );
+}
+
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies';
+
 const ClubManager = () => {
   const g = useClubManager();
   // Round 65: the owner's no scroll rule. Full time and season end screens are
@@ -52,6 +78,11 @@ const ClubManager = () => {
   const [pickNation, setPickNation] = useState<NationDef | null>(null);
   const [pickLeagueId, setPickLeagueId] = useState<string | null>(null);
   const pickRef = useRevealScroll<HTMLDivElement>(`pick:${pickStep}:${pickNation?.id ?? ''}:${pickLeagueId ?? ''}`, { skipFirst: true });
+  // Round 74: FIFA-style hub. Boxes on the home screen open their own
+  // screens, and any club anywhere opens the rival viewer.
+  const [hubPanel, setHubPanel] = useState<HubPanel | null>(null);
+  const [clubView, setClubView] = useState<string | null>(null);
+  const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
 
   const club = g.career ? clubByName(g.career.clubName) : null;
   const unavailable = useMemo(
@@ -484,6 +515,26 @@ const ClubManager = () => {
   const confTone = conf >= 60 ? 'bg-emerald-500' : conf >= 30 ? 'bg-yellow-500' : 'bg-red-500';
   const fx = g.nextFx;
   const objStatuses = objectiveStatuses(c);
+  // Round 74: tile summaries.
+  const objBehind = objStatuses.filter(s => s.status === 'behind' || s.status === 'failed').length;
+  const objDone = objStatuses.filter(s => s.status === 'done').length;
+  const unreadCount = (c.inbox ?? []).filter(m => !m.resolved).length;
+  const latestMsg = (c.inbox ?? [])[0];
+  const lastRes = (c.resultLog ?? []).slice(-1)[0];
+  const rivalName = c.boardObjectives?.find(o => o.id === 'rival')?.rivalName ?? null;
+  const rivalIdx = rivalName ? g.tableRows.findIndex(r => r.club === rivalName) : -1;
+  const bidsCount = (c.incomingBids ?? []).length;
+  const cupAlive = c.cupRound !== 'out' && c.cupRound !== 'won';
+  const uclAlive = (c.uclGroup !== null && c.uclKoRound === null) || (!!c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won');
+
+  /* ---- Round 74: the rival viewer takes over the whole screen ---- */
+  if (clubView) {
+    return shell(
+      <div ref={panelRef}>
+        <ClubDetailScreen clubName={clubView} career={c} onBack={() => setClubView(null)} />
+      </div>
+    );
+  }
 
   return shell(
     <div>
@@ -579,112 +630,207 @@ const ClubManager = () => {
             )}
           </div>
 
-          {/* Round 70: the board's demands for the season, FIFA manager
-              style, graded live. */}
-          {objStatuses.length > 0 && (
-            <div className="bg-card border border-border rounded-xl p-3">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                <ClipboardList className="w-3 h-3" /> Board expectations · {TIER_INFO[club.tier].blurb}
-              </div>
-              <div className="space-y-1.5">
-                {objStatuses.map(({ objective, status }) => (
-                  <div key={objective.id} className="flex items-center justify-between gap-2">
-                    <span className="text-xs text-foreground min-w-0 truncate">{objective.label}</span>
-                    <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
-                      {OBJ_CHIP[status].label}
-                    </span>
+          {/* Round 74: FIFA style hub. Everything below the next match is a
+              box; tapping one opens its own screen instead of one long page
+              (his words: "make it smaller and with boxes and when they open
+              it takes u to see something different. just like on fifa"). */}
+          {hubPanel === null && (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              <HubTile
+                icon="📋" title="Board" accent={objBehind > 0}
+                value={objBehind > 0 ? `${objBehind} behind` : `${objDone}/${objStatuses.length} done`}
+                sub={TIER_INFO[club.tier].label + ' patience'}
+                onClick={() => setHubPanel('board')}
+              />
+              <HubTile
+                icon="📩" title="Inbox" accent={unreadCount > 0}
+                value={unreadCount > 0 ? `${unreadCount} new` : 'All quiet'}
+                sub={latestMsg ? latestMsg.playerName : 'No messages yet'}
+                onClick={() => setHubPanel('inbox')}
+              />
+              <HubTile
+                icon="📅" title="Calendar"
+                value={lastRes ? `${lastRes.res} ${lastRes.score}` : 'Season start'}
+                sub={fx && fx.kind === 'match' ? `Next: ${fx.opponent}` : 'See the schedule'}
+                onClick={() => setHubPanel('calendar')}
+              />
+              <HubTile
+                icon="🏆" title="League"
+                value={`#${g.myPosition || '-'}`}
+                sub={c.form.length ? `Form: ${c.form.join(' ')}` : leagueOf(c.clubName).name}
+                onClick={() => g.setActiveTab('table')}
+              />
+              <HubTile
+                icon="🏅" title="Cups" accent={cupAlive && !!c.cupDraw[c.cupRound as CupRound]}
+                value={cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
+                sub={uclAlive ? 'UCL alive too' : leagueOf(c.clubName).cupName}
+                onClick={() => setHubPanel('cups')}
+              />
+              <HubTile
+                icon="🧢" title="Manager"
+                value={`${c.careerStats.wins}W ${c.careerStats.losses}L`}
+                sub={c.careerStats.played > 0 ? `${Math.round((c.careerStats.wins / c.careerStats.played) * 100)}% win rate` : 'New in the job'}
+                onClick={() => setHubPanel('manager')}
+              />
+              <HubTile
+                icon="🏥" title="Treatment" accent={unavailable.length > 0}
+                value={unavailable.length ? `${unavailable.length} out` : 'All fit'}
+                sub={unavailable[0] ? unavailable[0].name : 'No injuries or bans'}
+                onClick={() => setHubPanel('treatment')}
+              />
+              <HubTile
+                icon="🕵️" title="Rival watch"
+                value={rivalName ?? 'Scout clubs'}
+                sub={rivalName && rivalIdx >= 0 ? `They sit #${rivalIdx + 1}` : 'Tap any club in the table'}
+                onClick={rivalName ? () => setClubView(rivalName) : () => g.setActiveTab('table')}
+              />
+              <HubTile
+                icon="🛒" title="Market" accent={c.transferWindow !== null}
+                value={c.transferWindow !== null ? 'Window OPEN' : 'Window shut'}
+                sub={bidsCount > 0 ? `${bidsCount} bid${bidsCount > 1 ? 's' : ''} for your players` : 'Latest transfers inside'}
+                onClick={() => g.setActiveTab('transfers')}
+              />
+              {c.trophies.length > 0 && (
+                <HubTile
+                  icon="✨" title="Cabinet"
+                  value={`${c.trophies.length} troph${c.trophies.length > 1 ? 'ies' : 'y'}`}
+                  sub={c.trophies[c.trophies.length - 1].name}
+                  onClick={() => setHubPanel('trophies')}
+                />
+              )}
+            </div>
+          )}
+
+          {/* Round 74: drill-in screens, one per box. */}
+          {hubPanel !== null && (
+            <div ref={panelRef} className="space-y-3">
+              <button
+                onClick={() => setHubPanel(null)}
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <ChevronLeft className="w-3.5 h-3.5" /> Club home
+              </button>
+
+              {hubPanel === 'board' && objStatuses.length > 0 && (
+                <div className="bg-card border border-border rounded-xl p-3">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                    <ClipboardList className="w-3 h-3" /> Board expectations · {TIER_INFO[club.tier].blurb}
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Round 73: player DMs and the season calendar. */}
-          <InboxCard career={c} onAnswer={g.answer} />
-          <CalendarCard career={c} />
-
-          {unavailable.length > 0 && (
-            <div className="bg-card border border-border rounded-xl p-3">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                <ShieldAlert className="w-3 h-3" /> Treatment room
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {unavailable.map(p => (
-                  <span key={p.id} className="text-[10px] bg-secondary rounded-full px-2 py-1 text-foreground">
-                    {p.injuryWeeks > 0 ? `🩹 ${p.name} (${p.injuryWeeks}w)` : `🟥 ${p.name} (${p.suspendedMatches})`}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <LeagueTableCard rows={g.tableRows} myClub={c.clubName} compact title="League standings" />
-
-          {c.uclGroup && c.uclKoRound === null && (
-            <LeagueTableCard rows={groupRows} myClub={c.clubName} title={`UCL Group · MD${c.uclGroup.matchday}/6`} />
-          )}
-          {c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won' && (
-            <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
-              ⭐ Alive in the Champions League. Next knockout round: <span className="font-bold">{c.uclKoRound === 'F' ? 'Final' : c.uclKoRound === 'SF' ? 'Semi-final' : 'Quarter-final'}</span>
-            </div>
-          )}
-          {/* Round 70: the cup line names the actual competition (his bug
-              report: "still in the cup next round round of 16 vs grilna",
-              which was a nameless cup and Girona rendered without context). */}
-          {c.cupRound !== 'out' && c.cupRound !== 'won' && (
-            <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
-              🏅 <span className="font-bold">{leagueOf(c.clubName).cupName}</span>: still alive. Next up, the <span className="font-bold">{c.cupRound === 'F' ? 'final' : c.cupRound === 'SF' ? 'semi-final' : c.cupRound === 'QF' ? 'quarter-final' : 'Round of 16'}</span> against <span className="font-bold">{c.cupDraw[c.cupRound] ?? 'a club to be drawn'}</span>.
-            </div>
-          )}
-
-          {c.trophies.length > 0 && (
-            <div className="bg-card border border-border rounded-xl p-3">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">Trophy cabinet</div>
-              <div className="flex flex-wrap gap-1.5">
-                {c.trophies.map((t, i) => (
-                  <span key={i} className="text-[10px] bg-gold/10 border border-gold/30 text-gold rounded-full px-2 py-1 font-semibold">
-                    {t.emoji} {t.name} · S{t.season}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Round 71: your managerial career, the numbers that follow you. */}
-          {c.careerStats.played > 0 && (
-            <div className="bg-card border border-border rounded-xl p-3">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💼 Manager career</div>
-              <div className="grid grid-cols-3 gap-2 text-center mb-2">
-                <div>
-                  <div className="text-sm font-bold font-display text-foreground">{c.careerStats.wins}W {c.careerStats.draws}D {c.careerStats.losses}L</div>
-                  <div className="text-[9px] text-muted-foreground">Record</div>
+                  <div className="space-y-1.5">
+                    {objStatuses.map(({ objective, status }) => (
+                      <div key={objective.id} className="flex items-center justify-between gap-2">
+                        <span className="text-xs text-foreground min-w-0 truncate">{objective.label}</span>
+                        <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
+                          {OBJ_CHIP[status].label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div>
-                  <div className="text-sm font-bold font-display text-foreground">{Math.round((c.careerStats.wins / c.careerStats.played) * 100)}%</div>
-                  <div className="text-[9px] text-muted-foreground">Win rate</div>
+              )}
+
+              {hubPanel === 'inbox' && <InboxCard career={c} onAnswer={g.answer} />}
+              {hubPanel === 'inbox' && (c.inbox ?? []).length === 0 && (
+                <p className="text-xs text-muted-foreground text-center py-6">Nobody has texted you yet. Play some matches, the drama finds you.</p>
+              )}
+
+              {hubPanel === 'calendar' && <CalendarCard career={c} />}
+
+              {hubPanel === 'treatment' && (
+                <div className="bg-card border border-border rounded-xl p-3">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                    <ShieldAlert className="w-3 h-3" /> Treatment room
+                  </div>
+                  {unavailable.length === 0 && <p className="text-xs text-muted-foreground">Everyone is fit and available. Enjoy it while it lasts.</p>}
+                  <div className="flex flex-wrap gap-1.5">
+                    {unavailable.map(p => (
+                      <span key={p.id} className="text-[10px] bg-secondary rounded-full px-2 py-1 text-foreground">
+                        {p.injuryWeeks > 0 ? `🩹 ${p.name} (${p.injuryWeeks}w)` : `🟥 ${p.name} (${p.suspendedMatches})`}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <div>
-                  <div className="text-sm font-bold font-display text-foreground">{c.trophies.length}</div>
-                  <div className="text-[9px] text-muted-foreground">Trophies</div>
+              )}
+
+              {hubPanel === 'cups' && (
+                <div className="space-y-2">
+                  <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
+                    {cupAlive ? (
+                      <>🏅 <span className="font-bold">{leagueOf(c.clubName).cupName}</span>: still alive. Next up, the <span className="font-bold">{c.cupRound === 'F' ? 'final' : c.cupRound === 'SF' ? 'semi-final' : c.cupRound === 'QF' ? 'quarter-final' : 'Round of 16'}</span> against <span className="font-bold">{c.cupDraw[c.cupRound as CupRound] ?? 'a club to be drawn'}</span>.</>
+                    ) : c.cupRound === 'won' ? (
+                      <>🏅 <span className="font-bold">{leagueOf(c.clubName).cupName}</span>: WON. It is in the cabinet.</>
+                    ) : (
+                      <>🏅 <span className="font-bold">{leagueOf(c.clubName).cupName}</span>: out{c.cupExit ? ` at the ${c.cupExit === 'F' ? 'final' : c.cupExit === 'SF' ? 'semi-final' : c.cupExit === 'QF' ? 'quarter-final' : 'Round of 16'}` : ''}. Next year.</>
+                    )}
+                  </div>
+                  {c.uclGroup && c.uclKoRound === null && (
+                    <LeagueTableCard rows={groupRows} myClub={c.clubName} title={`UCL Group · MD${c.uclGroup.matchday}/6`} onClubClick={setClubView} />
+                  )}
+                  {c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won' && (
+                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
+                      ⭐ Alive in the Champions League. Next knockout round: <span className="font-bold">{c.uclKoRound === 'F' ? 'Final' : c.uclKoRound === 'SF' ? 'Semi-final' : 'Quarter-final'}</span>
+                    </div>
+                  )}
+                  {c.uclKoRound === 'won' && (
+                    <div className="bg-card border border-gold/40 rounded-xl p-3 text-xs text-gold font-bold">⭐ CHAMPIONS OF EUROPE.</div>
+                  )}
+                  {!uclAlive && c.uclKoRound !== 'won' && c.uclGroup === null && (
+                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{leagueOf(c.clubName).euro ? '. Finish top 4 to change that' : ' in this league'}.</div>
+                  )}
                 </div>
-              </div>
-              <div className="space-y-0.5 text-[10px] text-muted-foreground">
-                {c.careerStats.biggestWin && (
-                  <p>🎉 Biggest win: <span className="text-foreground font-semibold">{c.careerStats.biggestWin.score}</span> vs {c.careerStats.biggestWin.opp}</p>
-                )}
-                {c.careerStats.biggestDefeat && (
-                  <p>💀 Worst defeat: <span className="text-foreground font-semibold">{c.careerStats.biggestDefeat.score}</span> vs {c.careerStats.biggestDefeat.opp}</p>
-                )}
-                {c.careerStats.mostExpensiveBuy && (
-                  <p>💸 Priciest buy: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveBuy.name}</span> ({money(c.careerStats.mostExpensiveBuy.fee)})</p>
-                )}
-                {c.careerStats.mostExpensiveSale && (
-                  <p>🤑 Best sale: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveSale.name}</span> ({money(c.careerStats.mostExpensiveSale.fee)})</p>
-                )}
-                {(c.careerStats.clubsManaged?.length ?? 0) > 1 && (
-                  <p>🧳 Clubs managed: <span className="text-foreground">{c.careerStats.clubsManaged!.join(', ')}</span></p>
-                )}
-              </div>
+              )}
+
+              {hubPanel === 'trophies' && (
+                <div className="bg-card border border-border rounded-xl p-3">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">Trophy cabinet</div>
+                  {c.trophies.length === 0 && <p className="text-xs text-muted-foreground">Empty. For now.</p>}
+                  <div className="flex flex-wrap gap-1.5">
+                    {c.trophies.map((t, i) => (
+                      <span key={i} className="text-[10px] bg-gold/10 border border-gold/30 text-gold rounded-full px-2 py-1 font-semibold">
+                        {t.emoji} {t.name} · S{t.season}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {hubPanel === 'manager' && (
+                <div className="bg-card border border-border rounded-xl p-3">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💼 Manager career</div>
+                  <div className="grid grid-cols-3 gap-2 text-center mb-2">
+                    <div>
+                      <div className="text-sm font-bold font-display text-foreground">{c.careerStats.wins}W {c.careerStats.draws}D {c.careerStats.losses}L</div>
+                      <div className="text-[9px] text-muted-foreground">Record</div>
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold font-display text-foreground">{c.careerStats.played > 0 ? Math.round((c.careerStats.wins / c.careerStats.played) * 100) : 0}%</div>
+                      <div className="text-[9px] text-muted-foreground">Win rate</div>
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold font-display text-foreground">{c.trophies.length}</div>
+                      <div className="text-[9px] text-muted-foreground">Trophies</div>
+                    </div>
+                  </div>
+                  <div className="space-y-0.5 text-[10px] text-muted-foreground">
+                    {c.careerStats.biggestWin && (
+                      <p>🎉 Biggest win: <span className="text-foreground font-semibold">{c.careerStats.biggestWin.score}</span> vs {c.careerStats.biggestWin.opp}</p>
+                    )}
+                    {c.careerStats.biggestDefeat && (
+                      <p>💀 Worst defeat: <span className="text-foreground font-semibold">{c.careerStats.biggestDefeat.score}</span> vs {c.careerStats.biggestDefeat.opp}</p>
+                    )}
+                    {c.careerStats.mostExpensiveBuy && (
+                      <p>💸 Priciest buy: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveBuy.name}</span> ({money(c.careerStats.mostExpensiveBuy.fee)})</p>
+                    )}
+                    {c.careerStats.mostExpensiveSale && (
+                      <p>🤑 Best sale: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveSale.name}</span> ({money(c.careerStats.mostExpensiveSale.fee)})</p>
+                    )}
+                    {(c.careerStats.clubsManaged?.length ?? 0) > 1 && (
+                      <p>🧳 Clubs managed: <span className="text-foreground">{c.careerStats.clubsManaged!.join(', ')}</span></p>
+                    )}
+                    {c.careerStats.played === 0 && <p>Take charge of your first match and the numbers start here.</p>}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </TabsContent>
@@ -707,7 +853,7 @@ const ClubManager = () => {
 
         {/* -------- Table -------- */}
         <TabsContent value="table">
-          <LeagueTableCard rows={g.tableRows} myClub={c.clubName} title={leagueOf(c.clubName).name} />
+          <LeagueTableCard rows={g.tableRows} myClub={c.clubName} title={leagueOf(c.clubName).name} onClubClick={setClubView} />
         </TabsContent>
 
         {/* -------- Transfers -------- */}

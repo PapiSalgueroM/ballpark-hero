@@ -21,10 +21,19 @@ interface TacticsScreenProps {
 /** Formation + mentality + XI picker on a mini pitch. */
 export function TacticsScreen({ career, onFormation, onMentality, onSlot, onAutoPick }: TacticsScreenProps) {
   const [openSlot, setOpenSlot] = useState<number | null>(null);
+  // Round 74: a one-shot pitch animation when the mentality changes, plus a
+  // persistent posture shift (the outfield line pushes up or drops deep).
+  const [mentPulse, setMentPulse] = useState(0);
   const formation = FORMATIONS[career.formationIndex];
   const xi = resolveXI(career);
   const slot = openSlot !== null ? formation.slots[openSlot] : null;
   const usedIds = new Set(career.xiIds.filter((id): id is string => !!id));
+  const posture = career.mentality === 'attacking' ? -3.5 : career.mentality === 'defensive' ? 3.5 : 0;
+
+  const pickMentality = (m: Mentality) => {
+    onMentality(m);
+    setMentPulse(p => p + 1);
+  };
 
   const candidates: CMPlayer[] = slot
     ? [...career.squad]
@@ -66,7 +75,7 @@ export function TacticsScreen({ career, onFormation, onMentality, onSlot, onAuto
           {MENTALITIES.map(m => (
             <button
               key={m.id}
-              onClick={() => onMentality(m.id)}
+              onClick={() => pickMentality(m.id)}
               className={cn(
                 'rounded-lg border p-2 text-center transition-all',
                 career.mentality === m.id ? 'bg-primary/10 border-primary' : 'bg-card border-border hover:border-primary',
@@ -93,21 +102,58 @@ export function TacticsScreen({ career, onFormation, onMentality, onSlot, onAuto
             <Wand2 className="w-3.5 h-3.5" /> Auto Pick
           </button>
         </div>
+        <style>{`
+          @keyframes cmSurge { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 0.85; } 100% { opacity: 0; transform: translateY(var(--surge, -46px)); } }
+          @keyframes cmHold { 0% { opacity: 0; transform: scaleX(0.6); } 40% { opacity: 0.8; } 100% { opacity: 0; transform: scaleX(1.15); } }
+          @media (prefers-reduced-motion: reduce) {
+            .cm-ment-fx { display: none; }
+            .cm-slot { transition: none !important; }
+          }
+        `}</style>
         <div
           className="relative w-full max-w-md mx-auto rounded-2xl border border-border overflow-hidden"
           style={{ aspectRatio: '3 / 4', background: 'linear-gradient(to top, hsl(var(--secondary)) 0%, hsl(var(--card)) 100%)' }}
         >
           <div className="absolute inset-x-0 top-1/2 h-px bg-border/40" />
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border border-border/40" />
+          {/* Round 74: one-shot mentality FX layer, keyed so it replays each click. */}
+          {mentPulse > 0 && career.mentality !== 'balanced' && (
+            <div key={mentPulse} className="cm-ment-fx absolute inset-0 pointer-events-none">
+              {[18, 50, 82].map(x => (
+                <span
+                  key={x}
+                  className={cn('absolute text-2xl', career.mentality === 'attacking' ? 'text-emerald-400' : 'text-sky-400')}
+                  style={{
+                    left: `${x}%`,
+                    top: career.mentality === 'attacking' ? '62%' : '30%',
+                    ['--surge' as string]: career.mentality === 'attacking' ? '-52px' : '52px',
+                    animation: 'cmSurge 0.7s ease-out forwards',
+                    transform: 'translateX(-50%)',
+                  }}
+                >
+                  {career.mentality === 'attacking' ? '⌃' : '⌄'}
+                </span>
+              ))}
+            </div>
+          )}
+          {mentPulse > 0 && career.mentality === 'balanced' && (
+            <div key={mentPulse} className="cm-ment-fx absolute inset-0 pointer-events-none">
+              <span
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-px bg-yellow-400"
+                style={{ animation: 'cmHold 0.7s ease-out forwards' }}
+              />
+            </div>
+          )}
           {formation.slots.map((sl, i) => {
             const p = xi[i];
             const unavailable = p ? !isAvailable(p) : false;
+            const isKeeper = sl.y > 86;
             return (
               <button
                 key={i}
                 onClick={() => setOpenSlot(i)}
-                className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
-                style={{ left: `${sl.x}%`, top: `${sl.y}%` }}
+                className="cm-slot absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center transition-[top] duration-500 ease-out"
+                style={{ left: `${sl.x}%`, top: `${sl.y + (isKeeper ? 0 : posture)}%` }}
               >
                 <div className={cn(
                   'w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center text-[9px] font-bold border-2 transition-all',

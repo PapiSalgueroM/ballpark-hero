@@ -7,12 +7,14 @@ interface LeagueTableCardProps {
   /** Show only a slice of rows centered on my club (for the overview tab). */
   compact?: boolean;
   title?: string;
+  /** Round 74: tap any club to open its detail screen (the rival viewer). */
+  onClubClick?: (club: string) => void;
 }
 
 /**
  * League (or UCL group) standings. Top 4 = UCL zone marker, 1st = title.
  */
-export function LeagueTableCard({ rows, myClub, compact = false, title }: LeagueTableCardProps) {
+export function LeagueTableCard({ rows, myClub, compact = false, title, onClubClick }: LeagueTableCardProps) {
   const myIdx = rows.findIndex(r => r.club === myClub);
   let visible = rows.map((r, i) => ({ r, pos: i + 1 }));
   if (compact) {
@@ -26,15 +28,20 @@ export function LeagueTableCard({ rows, myClub, compact = false, title }: League
       <div className="grid grid-cols-[1.6rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2.2rem] gap-x-1 text-[10px] text-muted-foreground uppercase tracking-wide pb-1 border-b border-border/60">
         <span>#</span><span>Club</span><span className="text-center">W</span><span className="text-center">D</span><span className="text-center">L</span><span className="text-center">GD</span><span className="text-right">Pts</span>
       </div>
+      {onClubClick && (
+        <p className="text-[9px] text-muted-foreground pt-1">Tap any club to scout their full squad.</p>
+      )}
       {visible.map(({ r, pos }) => {
         const mine = r.club === myClub;
         const gd = r.gf - r.ga;
         return (
           <div
             key={r.club}
+            onClick={onClubClick ? () => onClubClick(r.club) : undefined}
             className={cn(
               'grid grid-cols-[1.6rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2.2rem] gap-x-1 items-center text-xs py-1.5 border-b border-border/30 last:border-0',
               mine && 'bg-primary/10 rounded-md -mx-1 px-1',
+              onClubClick && 'cursor-pointer hover:bg-secondary/40 rounded-md -mx-1 px-1 transition-colors',
             )}
           >
             <span className={cn(
