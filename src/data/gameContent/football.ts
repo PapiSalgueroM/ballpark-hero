@@ -87,17 +87,22 @@ export const FOOTBALL_CONTENT: GameContentMap = {
   '/nfl-my-career': {
     intro: [
       "Every draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career one big decision at a time.",
-      "Seasons produce realistic stat lines from your rating, health, and team. Between them comes one crossroads: contracts, trade requests, surgeries, even a podcast invite the front office will hate.",
+      "Seasons produce realistic stat lines from your rating, health, and team. Between them comes one crossroads drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.",
+      "You build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty pool in the meeting room, a clinic in Arizona running a program the league cannot test for yet. Every dirty choice raises a hidden league security meter, and at the top of it sits an indefinite suspension and a comeback from the minimum.",
     ],
     howToPlay: [
-      "Create your player: name, position (QB, RB, or WR), and an archetype like Cannon Arm, Bellcow, or Burner that sets ceiling and durability.",
+      "Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K), and an archetype like Cannon Arm, Island Corner, Speed Bender or Ice in December that sets ceiling and durability.",
+      "Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.",
       "Enter the draft. Your hidden rating decides the slot, and a real team calls your name.",
       "Play each season with one tap: yards, touchdowns, awards, how far the team went.",
-      "Make the offseason call: re-sign at a discount or test free agency, train skills or body, fix the knee or play through it.",
+      "Make the offseason call: re-sign at a discount or test free agency, train skills or body, fix the knee or play through it, take the envelope or report it.",
+      "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
       "Retire, or get forced out, and face the legacy verdict.",
     ],
     rules: [
-      "You start at 22 on a 4 year rookie deal, and growth runs through age 26.",
+      "You start at 22 on a 4 year rookie deal. Growth is slow and honest, 1 to 2 rating points a year through age 26 with a late bloomer chance after that, and the last few points above 88 are the hardest in the game.",
+      "Every position has its own stat line, its own awards and its own aging curve. Running backs fall off at 28, corners at 30, quarterbacks at 34, kickers at 39. Defenders chase Defensive Player of the Year instead of MVP, and kickers chase neither.",
+      "The league security meter runs 0 to 100 and cools 9 a year while you stay clean. Unexplained money keeps it warm. At 65 they open a file on you, at 90 you are suspended indefinitely, you lose the season, the money is seized, and you come back on a minimum deal if anyone calls.",
       "Decline starts at 31, or 28 for running backs, and it hits them harder.",
       "Injuries can erase 2 to 10 games a season and leave permanent wear on your health bar.",
       "Retirement is forced at rating 64, age 40, 34 for backs, or 19 seasons. You can walk away after 6, and progress saves automatically.",
