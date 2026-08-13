@@ -6,7 +6,7 @@ import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
 // imports nothing but types, so reading it at module scope is safe.
-import { CM_ROSTERS, CM_ROSTER_META } from '@/data/clubManagerRosters';
+import { CM_ROSTERS, CM_ROSTER_META, CM_PARTIAL } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 
 /**
@@ -35,7 +35,7 @@ export type UclKoState = UclKoRound | 'out' | 'won' | null;
 
 export { FORMATIONS };
 export type { Formation };
-export { CM_ROSTER_META };
+export { CM_ROSTER_META, CM_ROSTERS, CM_PARTIAL };
 
 export interface CMPlayer {
   id: string;
@@ -377,29 +377,66 @@ export interface LeagueDef {
   id: string;
   name: string;
   cupName: string;
+  /** Can clubs from this league qualify for the Champions League in-game? */
+  euro: boolean;
   clubs: string[];
 }
 
+/**
+ * Round 72: league memberships are the REAL 2026-27 lineups (promotions and
+ * relegations applied, verified 2026-08-13), and the playable world grew to
+ * nine leagues: the big five plus the EFL Championship, Saudi Pro League,
+ * MLS (both conferences) and the Eredivisie.
+ */
 export const REAL_LEAGUES: LeagueDef[] = [
   {
-    id: 'premier', name: 'Premier League', cupName: 'FA Cup',
-    clubs: ['Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Leeds United', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Nottingham Forest', 'Sunderland', 'Tottenham', 'West Ham', 'Wolves'],
+    id: 'premier', name: 'Premier League', cupName: 'FA Cup', euro: true,
+    // 2026-27: Coventry, Ipswich and Hull came up; Wolves, Burnley and West Ham went down.
+    clubs: ['Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton', 'Chelsea', 'Coventry City', 'Crystal Palace', 'Everton', 'Fulham', 'Hull City', 'Ipswich Town', 'Leeds United', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Nottingham Forest', 'Sunderland', 'Tottenham'],
   },
   {
-    id: 'laliga', name: 'La Liga', cupName: 'Copa del Rey',
-    clubs: ['Alavés', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Real Betis', 'Celta Vigo', 'Elche', 'Espanyol', 'Getafe', 'Girona', 'Levante', 'Mallorca', 'Osasuna', 'Real Oviedo', 'Rayo Vallecano', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Valencia', 'Villarreal'],
+    id: 'championship', name: 'EFL Championship', cupName: 'FA Cup', euro: false,
+    // 2026-27 lineup per the fixture release: the three relegated Premier
+    // League sides plus Cardiff, Bolton and Lincoln up from League One.
+    clubs: ['Birmingham City', 'Blackburn Rovers', 'Bolton Wanderers', 'Bristol City', 'Burnley', 'Cardiff City', 'Charlton Athletic', 'Derby County', 'Lincoln City', 'Middlesbrough', 'Millwall', 'Norwich City', 'Portsmouth', 'Preston North End', 'QPR', 'Sheffield United', 'Southampton', 'Stoke City', 'Swansea City', 'Watford', 'West Brom', 'West Ham', 'Wolves', 'Wrexham'],
   },
   {
-    id: 'seriea', name: 'Serie A', cupName: 'Coppa Italia',
-    clubs: ['Atalanta', 'Bologna', 'Cagliari', 'Como', 'Cremonese', 'Fiorentina', 'Genoa', 'Inter Milan', 'Juventus', 'Lazio', 'Lecce', 'AC Milan', 'Napoli', 'Parma', 'Pisa', 'Roma', 'Sassuolo', 'Torino', 'Udinese', 'Verona'],
+    id: 'laliga', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
+    // 2026-27: Racing Santander, Deportivo and Málaga up; Oviedo, Girona and Mallorca down.
+    clubs: ['Alavés', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Real Betis', 'Celta Vigo', 'Deportivo La Coruña', 'Elche', 'Espanyol', 'Getafe', 'Levante', 'Málaga', 'Osasuna', 'Racing Santander', 'Rayo Vallecano', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Valencia', 'Villarreal'],
   },
   {
-    id: 'bundesliga', name: 'Bundesliga', cupName: 'DFB-Pokal',
-    clubs: ['Augsburg', 'Bayer Leverkusen', 'Bayern Munich', 'Borussia Dortmund', 'Gladbach', 'Eintracht Frankfurt', 'Freiburg', 'Hamburg', 'Heidenheim', 'Hoffenheim', 'Köln', 'Mainz', 'RB Leipzig', 'St. Pauli', 'Stuttgart', 'Union Berlin', 'Werder Bremen', 'Wolfsburg'],
+    id: 'seriea', name: 'Serie A', cupName: 'Coppa Italia', euro: true,
+    // 2026-27: Venezia, Frosinone and Monza up; Cremonese, Verona and Pisa down.
+    clubs: ['Atalanta', 'Bologna', 'Cagliari', 'Como', 'Fiorentina', 'Frosinone', 'Genoa', 'Inter Milan', 'Juventus', 'Lazio', 'Lecce', 'AC Milan', 'Monza', 'Napoli', 'Parma', 'Roma', 'Sassuolo', 'Torino', 'Udinese', 'Venezia'],
   },
   {
-    id: 'ligue1', name: 'Ligue 1', cupName: 'Coupe de France',
-    clubs: ['Angers', 'Auxerre', 'Brest', 'Le Havre', 'Lens', 'Lille', 'Lorient', 'Lyon', 'Marseille', 'Metz', 'Monaco', 'Nantes', 'Nice', 'Paris FC', 'PSG', 'Rennes', 'Strasbourg', 'Toulouse'],
+    id: 'bundesliga', name: 'Bundesliga', cupName: 'DFB-Pokal', euro: true,
+    // 2026-27: Schalke, Elversberg and Paderborn up; Heidenheim, St. Pauli and Wolfsburg down.
+    clubs: ['Augsburg', 'Bayer Leverkusen', 'Bayern Munich', 'Borussia Dortmund', 'Gladbach', 'Eintracht Frankfurt', 'Freiburg', 'Hamburg', 'Hoffenheim', 'Köln', 'Mainz', 'RB Leipzig', 'Schalke 04', 'Elversberg', 'Paderborn', 'Stuttgart', 'Union Berlin', 'Werder Bremen'],
+  },
+  {
+    id: 'ligue1', name: 'Ligue 1', cupName: 'Coupe de France', euro: true,
+    // 2026-27: Troyes and Le Mans up; Metz and Nantes down.
+    clubs: ['Angers', 'Auxerre', 'Brest', 'Le Havre', 'Le Mans', 'Lens', 'Lille', 'Lorient', 'Lyon', 'Marseille', 'Monaco', 'Nice', 'Paris FC', 'PSG', 'Rennes', 'Strasbourg', 'Toulouse', 'Troyes'],
+  },
+  {
+    id: 'eredivisie', name: 'Eredivisie', cupName: 'KNVB Cup', euro: true,
+    // 2026-27: ADO Den Haag, Cambuur and Willem II up; Volendam, NAC and Heracles down.
+    clubs: ['Ajax', 'AZ Alkmaar', 'ADO Den Haag', 'Cambuur', 'Excelsior', 'Feyenoord', 'Fortuna Sittard', 'Go Ahead Eagles', 'Groningen', 'Heerenveen', 'NEC Nijmegen', 'PEC Zwolle', 'PSV', 'Sparta Rotterdam', 'Telstar', 'Twente', 'Utrecht', 'Willem II'],
+  },
+  {
+    id: 'saudi', name: 'Saudi Pro League', cupName: "King's Cup", euro: false,
+    // 2026-27: Abha, Al-Faisaly and Al-Diriyah up; Al-Najma, Al-Okhdood and Damac down.
+    clubs: ['Abha', 'Al-Ahli', 'Al-Diriyah', 'Al-Ettifaq', 'Al-Faisaly', 'Al-Fateh', 'Al-Fayha', 'Al-Hazem', 'Al-Hilal', 'Al-Ittihad', 'Al-Khaleej', 'Al-Kholood', 'Al-Nassr', 'Al-Qadsiah', 'Al-Riyadh', 'Al-Shabab', 'Al-Taawoun', 'NEOM SC'],
+  },
+  {
+    id: 'mlsEast', name: 'MLS Eastern Conference', cupName: 'U.S. Open Cup', euro: false,
+    clubs: ['Atlanta United', 'Charlotte FC', 'Chicago Fire', 'FC Cincinnati', 'Columbus Crew', 'D.C. United', 'Inter Miami', 'CF Montréal', 'Nashville SC', 'New England Revolution', 'New York City FC', 'New York Red Bulls', 'Orlando City', 'Philadelphia Union', 'Toronto FC'],
+  },
+  {
+    id: 'mlsWest', name: 'MLS Western Conference', cupName: 'U.S. Open Cup', euro: false,
+    clubs: ['Austin FC', 'Colorado Rapids', 'FC Dallas', 'Houston Dynamo', 'LA Galaxy', 'LAFC', 'Minnesota United', 'Portland Timbers', 'Real Salt Lake', 'San Diego FC', 'San Jose Earthquakes', 'Seattle Sounders', 'Sporting Kansas City', 'St. Louis City', 'Vancouver Whitecaps'],
   },
 ];
 
@@ -441,14 +478,17 @@ export function leagueOf(clubName: string): LeagueDef {
 /* Round 70: every club is playable. Nations, colors, rivals, defs.   */
 /* ================================================================== */
 
-export interface NationDef { id: string; name: string; flag: string; leagueId: string; }
+export interface NationDef { id: string; name: string; flag: string; leagueIds: string[]; }
 
 export const NATIONS: NationDef[] = [
-  { id: 'england', name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', leagueId: 'premier' },
-  { id: 'spain', name: 'Spain', flag: '🇪🇸', leagueId: 'laliga' },
-  { id: 'italy', name: 'Italy', flag: '🇮🇹', leagueId: 'seriea' },
-  { id: 'germany', name: 'Germany', flag: '🇩🇪', leagueId: 'bundesliga' },
-  { id: 'france', name: 'France', flag: '🇫🇷', leagueId: 'ligue1' },
+  { id: 'england', name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', leagueIds: ['premier', 'championship'] },
+  { id: 'spain', name: 'Spain', flag: '🇪🇸', leagueIds: ['laliga'] },
+  { id: 'italy', name: 'Italy', flag: '🇮🇹', leagueIds: ['seriea'] },
+  { id: 'germany', name: 'Germany', flag: '🇩🇪', leagueIds: ['bundesliga'] },
+  { id: 'france', name: 'France', flag: '🇫🇷', leagueIds: ['ligue1'] },
+  { id: 'netherlands', name: 'Netherlands', flag: '🇳🇱', leagueIds: ['eredivisie'] },
+  { id: 'saudi', name: 'Saudi Arabia', flag: '🇸🇦', leagueIds: ['saudi'] },
+  { id: 'usa', name: 'United States', flag: '🇺🇸', leagueIds: ['mlsEast', 'mlsWest'] },
 ];
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
@@ -483,7 +523,44 @@ const CLUB_COLORS: Record<string, string> = {
   'Lens': '#ffd700', 'Lille': '#e01e13', 'Lorient': '#ff6600', 'Lyon': '#d6001c',
   'Marseille': '#2faee0', 'Metz': '#a01d3c', 'Monaco': '#e63329', 'Nantes': '#fcd405',
   'Nice': '#d10429', 'Paris FC': '#3d5da8', 'PSG': '#004170', 'Rennes': '#e13327',
-  'Strasbourg': '#009fe3', 'Toulouse': '#8b5bb8',
+  'Strasbourg': '#009fe3', 'Toulouse': '#8b5bb8', 'Troyes': '#2a5aa8', 'Le Mans': '#f0b41c',
+  // Round 72: promoted big-five clubs
+  'Coventry City': '#66b2e8', 'Ipswich Town': '#2450a3', 'Hull City': '#f5a12d',
+  'Racing Santander': '#009e49', 'Deportivo La Coruña': '#0068b3', 'Málaga': '#29a5dd',
+  'Venezia': '#f28020', 'Frosinone': '#f7d417', 'Monza': '#e31b23',
+  'Schalke 04': '#004b95', 'Elversberg': '#dd1425', 'Paderborn': '#0060ae',
+  // EFL Championship
+  'Birmingham City': '#2966b0', 'Blackburn Rovers': '#009ee0', 'Bolton Wanderers': '#263c7e',
+  'Bristol City': '#e21a23', 'Cardiff City': '#0070b5', 'Charlton Athletic': '#d4021d',
+  'Derby County': '#d8d8d8', 'Lincoln City': '#e30613', 'Middlesbrough': '#e21a23',
+  'Millwall': '#25457a', 'Norwich City': '#f4e300', 'Portsmouth': '#2450a3',
+  'Preston North End': '#b9c4d1', 'QPR': '#1d5ba4', 'Sheffield United': '#ee2737',
+  'Southampton': '#d71920', 'Stoke City': '#e03a3e', 'Swansea City': '#c8c8c8',
+  'Watford': '#fbee23', 'West Brom': '#3a5da8', 'Wrexham': '#ce1126',
+  // Saudi Pro League
+  'Abha': '#cf3a3a', 'Al-Ahli': '#00693e', 'Al-Diriyah': '#9a7b3f', 'Al-Ettifaq': '#0d7a3c',
+  'Al-Faisaly': '#f9a11b', 'Al-Fateh': '#3b2a7a', 'Al-Fayha': '#e8871e', 'Al-Hazem': '#2d7dc8',
+  'Al-Hilal': '#1b4fa0', 'Al-Ittihad': '#f9d616', 'Al-Khaleej': '#cf2032', 'Al-Kholood': '#8f2f4f',
+  'Al-Nassr': '#f2c500', 'Al-Qadsiah': '#e6b31e', 'Al-Riyadh': '#3aa335', 'Al-Shabab': '#bfbfbf',
+  'Al-Taawoun': '#b78b28', 'NEOM SC': '#2ab6bd',
+  // MLS East
+  'Atlanta United': '#80000a', 'Charlotte FC': '#1a85c8', 'Chicago Fire': '#cf2334',
+  'FC Cincinnati': '#fe5000', 'Columbus Crew': '#fedd00', 'D.C. United': '#ee3524',
+  'Inter Miami': '#f7b5cd', 'CF Montréal': '#244a8e', 'Nashville SC': '#ece83a',
+  'New England Revolution': '#d21033', 'New York City FC': '#6cace4', 'New York Red Bulls': '#ed1e36',
+  'Orlando City': '#633492', 'Philadelphia Union': '#b38707', 'Toronto FC': '#b81137',
+  // MLS West
+  'Austin FC': '#00b140', 'Colorado Rapids': '#862633', 'FC Dallas': '#e81f3e',
+  'Houston Dynamo': '#ff6b00', 'LA Galaxy': '#ffd200', 'LAFC': '#c39e6d',
+  'Minnesota United': '#8cd2f4', 'Portland Timbers': '#0d6b3f', 'Real Salt Lake': '#b30838',
+  'San Diego FC': '#00b0e7', 'San Jose Earthquakes': '#0067b1', 'Seattle Sounders': '#5d9741',
+  'Sporting Kansas City': '#91b0d5', 'St. Louis City': '#dd004a', 'Vancouver Whitecaps': '#7ba4d9',
+  // Eredivisie
+  'Ajax': '#d2122e', 'PSV': '#ed1c24', 'Feyenoord': '#d0111b', 'AZ Alkmaar': '#df1119',
+  'Utrecht': '#e8483f', 'Twente': '#d40019', 'NEC Nijmegen': '#cf2038', 'Sparta Rotterdam': '#b01c2e',
+  'Go Ahead Eagles': '#f2c200', 'Fortuna Sittard': '#f6c500', 'Heerenveen': '#1560bd',
+  'PEC Zwolle': '#1660a8', 'Groningen': '#009651', 'Excelsior': '#c41f30', 'Telstar': '#d9d9d9',
+  'ADO Den Haag': '#0d8a4e', 'Cambuur': '#f5d800', 'Willem II': '#2f4d8f',
 };
 
 /**
@@ -496,8 +573,8 @@ const RIVALS: Record<string, string> = {
   'Arsenal': 'Tottenham', 'Tottenham': 'Arsenal', 'Manchester United': 'Liverpool',
   'Liverpool': 'Everton', 'Everton': 'Liverpool', 'Manchester City': 'Manchester United',
   'Chelsea': 'Arsenal', 'Newcastle': 'Sunderland', 'Sunderland': 'Newcastle',
-  'Aston Villa': 'Wolves', 'Wolves': 'Aston Villa', 'Crystal Palace': 'Brighton',
-  'Brighton': 'Crystal Palace', 'Fulham': 'Chelsea', 'West Ham': 'Tottenham',
+  'Crystal Palace': 'Brighton',
+  'Brighton': 'Crystal Palace', 'Fulham': 'Chelsea',
   'Brentford': 'Fulham', 'Leeds United': 'Manchester United', 'Nottingham Forest': 'Leeds United',
   // Spain
   'Real Madrid': 'Barcelona', 'Barcelona': 'Real Madrid', 'Atlético Madrid': 'Real Madrid',
@@ -520,7 +597,33 @@ const RIVALS: Record<string, string> = {
   'Monaco': 'Nice', 'Lens': 'Lille', 'Lille': 'Lens', 'Rennes': 'Nantes', 'Nantes': 'Rennes',
   'Brest': 'Lorient', 'Lorient': 'Brest', 'Strasbourg': 'Metz', 'Metz': 'Strasbourg',
   'Paris FC': 'PSG',
+  // Round 72: new-league rivalries
+  'Hull City': 'Leeds United',
+  'Wolves': 'West Brom', 'West Brom': 'Wolves', 'Cardiff City': 'Swansea City',
+  'Swansea City': 'Cardiff City', 'Portsmouth': 'Southampton', 'Southampton': 'Portsmouth',
+  'West Ham': 'Millwall', 'Millwall': 'West Ham', 'Blackburn Rovers': 'Burnley',
+  'Burnley': 'Blackburn Rovers', 'Preston North End': 'Blackburn Rovers',
+  'Bristol City': 'Cardiff City',
+  'Al-Hilal': 'Al-Nassr', 'Al-Nassr': 'Al-Hilal', 'Al-Ittihad': 'Al-Ahli', 'Al-Ahli': 'Al-Ittihad',
+  'Al-Shabab': 'Al-Hilal',
+  'LA Galaxy': 'LAFC', 'LAFC': 'LA Galaxy', 'Inter Miami': 'Orlando City',
+  'Orlando City': 'Inter Miami', 'New York City FC': 'New York Red Bulls',
+  'New York Red Bulls': 'New York City FC', 'Seattle Sounders': 'Portland Timbers',
+  'Portland Timbers': 'Seattle Sounders', 'Vancouver Whitecaps': 'Seattle Sounders',
+  'FC Dallas': 'Houston Dynamo', 'Houston Dynamo': 'FC Dallas',
+  'Columbus Crew': 'FC Cincinnati', 'FC Cincinnati': 'Columbus Crew',
+  'D.C. United': 'New York Red Bulls', 'Toronto FC': 'CF Montréal', 'CF Montréal': 'Toronto FC',
+  'Ajax': 'Feyenoord', 'Feyenoord': 'Ajax', 'PSV': 'Ajax', 'Sparta Rotterdam': 'Feyenoord',
+  'Groningen': 'Heerenveen', 'Heerenveen': 'Groningen', 'ADO Den Haag': 'Ajax',
 };
+
+/**
+ * Round 72: clubs where the market value dataset runs thin get youth-padded
+ * squads; the picker labels them honestly instead of pretending.
+ */
+export function isPartialClub(clubName: string): boolean {
+  return CM_PARTIAL.includes(clubName);
+}
 
 /** Average rating of the club's best XI from the baked real rosters. */
 export function bakedXIAvg(clubName: string): number | null {
@@ -787,11 +890,14 @@ function ensureSquadCoverage(squad: CMPlayer[]): CMPlayer[] {
 }
 
 function buildSquad(clubName: string): CMPlayer[] {
-  // Round 70: baked real 2026 rosters first (every big-five club, with real
-  // market values); the old static pool only backs up clubs outside the bake.
+  // Round 70: baked real rosters first (with real market values); the old
+  // static pool only backs up clubs outside the bake. Round 72: cap the
+  // start at the 26 most valuable so deep baked squads (Real Madrid has 29
+  // dataset players) leave room under the 30-man limit to actually sign
+  // people.
   const baked = CM_ROSTERS[clubName];
   const real = baked && baked.length
-    ? baked.map(bakedToCMPlayer)
+    ? baked.slice(0, 26).map(bakedToCMPlayer)
     : getPool().filter(p => p.club === clubName).map(toCMPlayer);
   return ensureSquadCoverage(real);
 }
@@ -1350,22 +1456,30 @@ function strengthOf(state: CareerState, club: string): number {
   return state.clubStrengths[club] ?? STRENGTH_PRIORS[club] ?? Math.max(clubPreviewRating(club), 64);
 }
 
+/** Ghost club that gives one side a bye in odd-sized leagues (MLS's 15). */
+const BYE = '__BYE__';
+
 /**
- * Double round robin via the circle method: rounds 0-18 are the first half,
- * 19-37 mirror them with venues swapped. Pure function of (clubs, round).
+ * Double round robin via the circle method: the first half mirrors into the
+ * second with venues swapped. Round 72: odd-sized leagues (each MLS
+ * conference has 15 clubs) get a ghost BYE entrant, so every round one club
+ * rests and everyone ends on 2*(n-1) games across 2*n rounds.
+ * Pure function of (clubs, round).
  */
 function roundPairs(clubs: string[], round: number): [string, string][] {
-  const n = clubs.length;
+  const list = clubs.length % 2 === 0 ? clubs : [...clubs, BYE];
+  const n = list.length;
   const r = round % (n - 1);
-  const rest = clubs.slice(1);
+  const rest = list.slice(1);
   const rot = [...rest.slice(r), ...rest.slice(0, r)];
-  const arr = [clubs[0], ...rot];
+  const arr = [list[0], ...rot];
   const pairs: [string, string][] = [];
   for (let i = 0; i < n / 2; i++) {
     let h = arr[i];
     let a = arr[n - 1 - i];
     if ((r + i) % 2 === 1) [h, a] = [a, h];
     if (round >= n - 1) [h, a] = [a, h];
+    if (h === BYE || a === BYE) continue;
     pairs.push([h, a]);
   }
   return pairs;
@@ -1377,16 +1491,28 @@ function roundPairs(clubs: string[], round: number): [string, string][] {
  * League length follows the real league: 38 rounds for 20 clubs, 34 for the
  * 18-club Bundesliga and Ligue 1.
  */
+/**
+ * Round 72: the calendar marks are proportional to the league length, so a
+ * 15-club MLS conference (28 rounds), an 18 or 20-club league, and the
+ * 24-club Championship (46 rounds) all fit every cup round and the window
+ * inside the season. The old fixed marks silently dropped the cup final for
+ * any league shorter than 30 rounds.
+ */
 function buildCalendar(leagueSize: number): CalendarEntry[] {
-  const rounds = 2 * (leagueSize - 1);
-  const marks = rounds >= 38
-    ? { ucl: [2, 5, 8, 10, 12, 15], cupR16: 6, cupQF: 14, window: 18, uclQF: 22, cupSF: 26, uclSF: 29, cupF: 33, uclF: 35 }
-    : { ucl: [2, 4, 7, 9, 11, 13], cupR16: 5, cupQF: 12, window: 16, uclQF: 20, cupSF: 23, uclSF: 26, cupF: 29, uclF: 31 };
+  // Odd-sized leagues carry a BYE ghost, so the schedule runs 2*n rounds.
+  const effSize = leagueSize % 2 === 0 ? leagueSize : leagueSize + 1;
+  const rounds = 2 * (effSize - 1);
+  const at = (f: number): number => Math.max(0, Math.min(rounds - 1, Math.round(rounds * f)));
+  const marks = {
+    ucl: [at(0.05), at(0.13), at(0.21), at(0.27), at(0.32), at(0.39)],
+    cupR16: at(0.16), cupQF: at(0.37), window: at(0.47),
+    uclQF: at(0.58), cupSF: at(0.68), uclSF: at(0.76), cupF: at(0.87), uclF: at(0.92),
+  };
   const cal: CalendarEntry[] = [];
   let md = 0;
   for (let r = 0; r < rounds; r++) {
     cal.push({ type: 'league', round: r });
-    if (marks.ucl.includes(r)) {
+    while (md < 6 && marks.ucl[md] === r) {
       cal.push({ type: 'uclGroup', round: md });
       md += 1;
     }
@@ -1527,7 +1653,8 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
   }
   const rounds = 2 * (leagueSize - 1);
   const goalsBase = club.tier === 1 ? 78 : club.tier === 2 ? 70 : club.tier === 3 ? 62 : 50;
-  const goals = rounds >= 38 ? goalsBase : Math.round(goalsBase * 0.9);
+  // Round 72: quota scales with the real season length (28 to 46 rounds now).
+  const goals = Math.max(30, Math.round(goalsBase * (rounds / 38)));
   objs.push({ id: 'goals', target: goals, label: `Score ${goals}+ league goals` });
   return objs;
 }
@@ -2086,7 +2213,8 @@ export function startCareer(clubName: string): CareerState {
     seasonSignings: [],
     cupRound: 'R16',
     cupDraw: {},
-    uclGroup: initUclGroup(club.tier <= 2, club.name),
+    // Round 72: only clubs in UCL-eligible leagues start in Europe.
+    uclGroup: initUclGroup(club.tier <= 2 && league.euro, club.name),
     uclKoRound: null,
     uclDraw: {},
     trophies: [],
@@ -2125,6 +2253,16 @@ export function playNextEntry(career: CareerState): PlayResult {
       return { state, kind: 'window' };
     }
     if (!entryInvolvesMe(state, entry) || !fixtureFor(state, entry)) {
+      // Round 72: on my bye week (odd-sized leagues) the rest of the round
+      // still gets played, or the table comes up short for everyone else.
+      if (entry.type === 'league') {
+        const pairs = roundPairs(state.leagueClubs, entry.round);
+        for (const [h, a] of pairs) {
+          if (h === state.clubName || a === state.clubName) continue;
+          const [hg, ag] = simAiMatch(state, h, a);
+          applyResult(state.table, h, a, hg, ag);
+        }
+      }
       state.week += 1;
       tickWeek(state, null);
       continue;
@@ -2265,7 +2403,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     trophies: seasonTrophies,
     topScorer,
     topAssister,
-    qualifiedUcl: position <= 4,
+    qualifiedUcl: position <= 4 && leagueOf(state.clubName).euro,
     signings: state.seasonSignings,
     offers,
     seasonScore: Math.min(130, myRow.pts + seasonTrophies.length * 10),
@@ -2344,7 +2482,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const budget = moving
     ? Math.round(club.budget * 1.1)
     : Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12));
-  const qualifiedUcl = summary ? summary.qualifiedUcl : prevPos <= 4;
+  const qualifiedUcl = (summary ? summary.qualifiedUcl : prevPos <= 4) && leagueOf(clubName).euro;
   const league = leagueOf(clubName);
   const leagueClubs = shuffle([...league.clubs]);
 

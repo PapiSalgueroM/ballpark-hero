@@ -33,7 +33,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/dart-draft', label: 'Dart Draft', emoji: '🎯', description: 'Throw timed darts at a real world map: hit a country, draft its players', isNew: true },
       { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', isNew: true },
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', isNew: true },
-      { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Manage any big-five club with real 2026 squads: board objectives, transfers, trophies and the sack race', isNew: true, featured: true },
+      { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Manage any of 186 real clubs across nine leagues: negotiations, board objectives, trophies and the sack race', isNew: true, featured: true },
       { path: '/world-xi', label: 'World XI', emoji: '🌍', description: 'Pick a formation, fill 11 random countries', isNew: true },
       { path: '/player-bingo', label: 'Player Bingo', emoji: '🎱', description: 'Complete a line on a 5x5 board before 3 strikes', isNew: true },
       { path: '/alphabet-sprint', label: 'Alphabet Sprint', emoji: '⚡', description: 'Name a player per letter against the clock', isNew: true },

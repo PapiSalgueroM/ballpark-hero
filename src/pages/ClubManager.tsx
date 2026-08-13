@@ -8,7 +8,7 @@ import type { HubTab } from '@/hooks/useClubManager';
 import {
   TIER_INFO, clubByName, clubPreviewRating, leagueOf, money, confidenceLabel,
   isAvailable, xiAverageRating, sortedTable,
-  NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META,
+  NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
 } from '@/lib/clubManager';
 import type { NationDef, ObjectiveStatus } from '@/lib/clubManager';
 import { GameNav } from '@/components/game/GameNav';
@@ -45,9 +45,11 @@ const ClubManager = () => {
   const revealRef = useRevealScroll<HTMLDivElement>(`${g.phase}:${g.career?.week ?? 0}`);
   // Round 70: the nation -> league -> team picker. Each step change pulls the
   // new step into view (skipFirst so landing on the page stays put).
+  // Round 72: nations can hold more than one league (England, the USA).
   const [pickStep, setPickStep] = useState<'nation' | 'league' | 'team'>('nation');
   const [pickNation, setPickNation] = useState<NationDef | null>(null);
-  const pickRef = useRevealScroll<HTMLDivElement>(`pick:${pickStep}:${pickNation?.id ?? ''}`, { skipFirst: true });
+  const [pickLeagueId, setPickLeagueId] = useState<string | null>(null);
+  const pickRef = useRevealScroll<HTMLDivElement>(`pick:${pickStep}:${pickNation?.id ?? ''}:${pickLeagueId ?? ''}`, { skipFirst: true });
 
   const club = g.career ? clubByName(g.career.clubName) : null;
   const unavailable = useMemo(
@@ -70,7 +72,7 @@ const ClubManager = () => {
         <div className="relative">
           <HowToPlayPopover title="How to Play Club Manager">
             <div className="space-y-3 text-left">
-              <p>🌍 <span className="font-semibold text-foreground">Pick any club in the big five leagues.</span> Nation, then league, then team: all 96 clubs are playable, each with its real 2026 squad and market values. Giants get huge budgets and zero patience; underdogs get small budgets and a low bar.</p>
+              <p>🌍 <span className="font-semibold text-foreground">Pick any club in nine real leagues.</span> The big five (2026-27 lineups with promotions and relegations applied), the EFL Championship, the Saudi Pro League, both MLS conferences and the Eredivisie: 186 clubs, each with its real squad and market values as of August 2026, after the summer window. Giants get huge budgets and zero patience; underdogs get small budgets and a low bar.</p>
               <p>📋 <span className="font-semibold text-foreground">The board hands you a list of objectives</span>: league finish, a cup run, Europe, finishing above your rival, a goals quota. Hit them and your stock rises; miss them and the confidence meter drains.</p>
               <p>📅 <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>: the actual Premier League, La Liga, Serie A, Bundesliga or Ligue 1 clubs, plus the domestic cup and the Champions League if you qualify.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
@@ -84,13 +86,13 @@ const ClubManager = () => {
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
         <GameSeoContent
           title="Club Manager: Football Management Sim"
-          description="A full club-management sim in your browser: pick any of the 96 clubs across the Premier League, La Liga, Serie A, Bundesliga and Ligue 1, each with its real 2026 squad and market values. Manage tactics and transfers, hit the board's objectives, and chase league titles, cups and Champions League glory season after season."
+          description="A full club-management sim in your browser: 186 clubs across nine real leagues, from the Premier League and the EFL Championship to the Saudi Pro League, MLS and the Eredivisie, each with its real squad and market values as of August 2026. Negotiate transfers, survive bidding wars, hit the board's objectives, and chase titles season after season."
           howToPlay={[
-            'Pick your nation, then your league, then your club. All 96 big-five clubs are playable with real current squads.',
-            'Read the board\'s objectives: league finish, cup run, Europe, beating your rival, and a goals quota.',
+            'Pick your nation, then your league, then your club: 186 clubs across nine real leagues with 2026-27 lineups.',
+            'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
             'Set your formation, mentality and XI, then play through the full season week by week.',
-            'Strengthen your squad in the summer and January windows: nearly 2,000 real players at real market values.',
-            'Win trophies, keep the board happy, and build a multi-season managerial career across all five leagues.',
+            'Work the market: negotiate fees, pay release clauses, take loans, and field bids for your own stars.',
+            'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
           ]}
         />
         <GameNav />
@@ -138,8 +140,9 @@ const ClubManager = () => {
       g.confirmClub();
       setPickStep('nation');
       setPickNation(null);
+      setPickLeagueId(null);
     };
-    const league = pickNation ? REAL_LEAGUES.find(l => l.id === pickNation.leagueId) : null;
+    const league = pickLeagueId ? REAL_LEAGUES.find(l => l.id === pickLeagueId) : null;
     const teams = league ? playableClubs(league.id) : [];
 
     return shell(
@@ -147,7 +150,7 @@ const ClubManager = () => {
         <header className="text-center mb-6">
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">CLUB MANAGER</h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Every club in the big five leagues, with real 2026 squads and market values. Pick your nation, your league, your club.
+            Nine real leagues, {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} clubs, squads as of {CM_ROSTER_META.asOf}. Pick your nation, your league, your club.
           </p>
         </header>
 
@@ -170,19 +173,24 @@ const ClubManager = () => {
         {pickStep === 'nation' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-2xl mx-auto">
             {NATIONS.map(n => {
-              const lg = REAL_LEAGUES.find(l => l.id === n.leagueId);
-              const top = lg ? playableClubs(lg.id).slice(0, 3).map(c => c.name).join(' · ') : '';
+              const leagues = n.leagueIds
+                .map(id => REAL_LEAGUES.find(l => l.id === id))
+                .filter((l): l is typeof REAL_LEAGUES[number] => !!l);
+              const clubCount = leagues.reduce((s, l) => s + l.clubs.length, 0);
+              const top = leagues[0] ? playableClubs(leagues[0].id).slice(0, 3).map(c => c.name).join(' · ') : '';
               return (
                 <button
                   key={n.id}
-                  onClick={() => { setPickNation(n); setPickStep('league'); }}
+                  onClick={() => { setPickNation(n); setPickLeagueId(null); setPickStep('league'); }}
                   className="rounded-xl border bg-card border-border hover:border-primary p-4 text-left transition-all"
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="text-3xl leading-none">{n.flag}</span>
                     <div className="min-w-0">
                       <div className="text-sm font-bold text-foreground">{n.name}</div>
-                      <div className="text-[10px] text-muted-foreground">{lg?.name} · {lg?.clubs.length} clubs</div>
+                      <div className="text-[10px] text-muted-foreground">
+                        {leagues.length > 1 ? `${leagues.length} leagues` : leagues[0]?.name} · {clubCount} clubs
+                      </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
                   </div>
@@ -194,35 +202,40 @@ const ClubManager = () => {
         )}
 
         {/* -------- Step 2: league -------- */}
-        {pickStep === 'league' && pickNation && league && (
-          <div className="max-w-2xl mx-auto">
+        {pickStep === 'league' && pickNation && (
+          <div className="max-w-2xl mx-auto space-y-2.5">
             <button
               onClick={() => { setPickStep('nation'); setPickNation(null); }}
-              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors mb-3"
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors mb-1"
             >
               <ChevronLeft className="w-3.5 h-3.5" /> All nations
             </button>
-            <button
-              onClick={() => setPickStep('team')}
-              className="w-full rounded-xl border bg-card border-border hover:border-primary p-4 text-left transition-all"
-            >
-              <div className="flex items-center gap-2.5">
-                <span className="text-3xl leading-none">{pickNation.flag}</span>
-                <div className="min-w-0">
-                  <div className="text-base font-bold text-foreground">{league.name}</div>
-                  <div className="text-[10px] text-muted-foreground">
-                    {league.clubs.length} clubs · domestic cup: {league.cupName} · every squad real and current
+            {pickNation.leagueIds.map(id => {
+              const lg = REAL_LEAGUES.find(l => l.id === id);
+              if (!lg) return null;
+              const lgTeams = playableClubs(lg.id);
+              return (
+                <button
+                  key={lg.id}
+                  onClick={() => { setPickLeagueId(lg.id); setPickStep('team'); }}
+                  className="w-full rounded-xl border bg-card border-border hover:border-primary p-4 text-left transition-all"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-3xl leading-none">{pickNation.flag}</span>
+                    <div className="min-w-0">
+                      <div className="text-base font-bold text-foreground">{lg.name}</div>
+                      <div className="text-[10px] text-muted-foreground">
+                        {lg.clubs.length} clubs · domestic cup: {lg.cupName}{lg.euro ? ' · Champions League spots' : ''}
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
                   </div>
-                </div>
-                <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
-              </div>
-              <div className="text-[10px] text-muted-foreground mt-2 truncate">
-                Strongest sides: {teams.slice(0, 4).map(c => c.name).join(' · ')}
-              </div>
-            </button>
-            <p className="text-[10px] text-muted-foreground text-center mt-3">
-              Top division for now. Second divisions are on the roadmap.
-            </p>
+                  <div className="text-[10px] text-muted-foreground mt-2 truncate">
+                    Strongest sides: {lgTeams.slice(0, 4).map(c => c.name).join(' · ')}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         )}
 
@@ -238,6 +251,7 @@ const ClubManager = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {teams.map(c => {
                 const sel = g.pendingClub === c.name;
+                const partial = isPartialClub(c.name);
                 return (
                   <button
                     key={c.name}
@@ -251,7 +265,10 @@ const ClubManager = () => {
                       <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
                       <span className={cn('text-xs font-bold truncate', sel ? 'text-primary' : 'text-foreground')}>{c.name}</span>
                     </div>
-                    <div className="text-[9px] text-muted-foreground mt-0.5">{TIER_INFO[c.tier].emoji} {TIER_INFO[c.tier].label}</div>
+                    <div className="text-[9px] text-muted-foreground mt-0.5">
+                      {TIER_INFO[c.tier].emoji} {TIER_INFO[c.tier].label}
+                      {partial && <span className="ml-1 text-yellow-500/80" title="The market data covers only part of this squad; the rest is filled with youth players.">· partial data</span>}
+                    </div>
                     <div className="flex items-center justify-between mt-1.5">
                       <span className="text-[10px] text-muted-foreground">Squad</span>
                       <span className="text-sm font-bold font-display text-foreground">{clubPreviewRating(c.name)}</span>
@@ -269,7 +286,7 @@ const ClubManager = () => {
               })}
             </div>
             <p className="text-[9px] text-muted-foreground text-center mt-3">
-              Squads, ratings and values from the {CM_ROSTER_META.year} market data ({CM_ROSTER_META.players} players), refreshed {CM_ROSTER_META.generated}.
+              Squads, ratings and values from market data plus the verified summer window: {CM_ROSTER_META.players} players as of {CM_ROSTER_META.asOf}, refreshed {CM_ROSTER_META.generated}.
             </p>
 
             {/* Round 70: no scrolling to confirm. The confirm bar pins to the

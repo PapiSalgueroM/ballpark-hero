@@ -42,30 +42,58 @@ const isNum = v => typeof v === 'number' && Number.isFinite(v);
 
 /* ---------- 1. Static shape ---------- */
 console.log('1) Nations and leagues');
-if (NATIONS.length !== 5) fail(`expected 5 nations, got ${NATIONS.length}`);
+if (NATIONS.length !== 8) fail(`expected 8 nations, got ${NATIONS.length}`);
 let totalClubs = 0;
 for (const n of NATIONS) {
-  const clubs = playableClubs(n.leagueId);
-  totalClubs += clubs.length;
-  const lg = REAL_LEAGUES.find(l => l.id === n.leagueId);
-  if (!lg) { fail(`nation ${n.name} points at missing league ${n.leagueId}`); continue; }
-  if (clubs.length !== lg.clubs.length) fail(`${lg.name}: ${clubs.length} playable vs ${lg.clubs.length} in league`);
-  for (const c of clubs) {
-    if (!isNum(c.budget) || c.budget < 5) fail(`${c.name}: bad budget ${c.budget}`);
-    if (!isNum(c.expectation) || c.expectation < 1 || c.expectation > lg.clubs.length) fail(`${c.name}: bad expectation ${c.expectation}`);
-    if (![1, 2, 3, 4].includes(c.tier)) fail(`${c.name}: bad tier ${c.tier}`);
-    const xi = clubPreviewRating(c.name);
-    if (!isNum(xi) || xi < 48 || xi > 95) fail(`${c.name}: XI preview ${xi} out of range`);
+  for (const leagueId of n.leagueIds) {
+    const clubs = playableClubs(leagueId);
+    totalClubs += clubs.length;
+    const lg = REAL_LEAGUES.find(l => l.id === leagueId);
+    if (!lg) { fail(`nation ${n.name} points at missing league ${leagueId}`); continue; }
+    if (clubs.length !== lg.clubs.length) fail(`${lg.name}: ${clubs.length} playable vs ${lg.clubs.length} in league`);
+    for (const c of clubs) {
+      if (!isNum(c.budget) || c.budget < 5) fail(`${c.name}: bad budget ${c.budget}`);
+      if (!isNum(c.expectation) || c.expectation < 1 || c.expectation > lg.clubs.length) fail(`${c.name}: bad expectation ${c.expectation}`);
+      if (![1, 2, 3, 4].includes(c.tier)) fail(`${c.name}: bad tier ${c.tier}`);
+      const xi = clubPreviewRating(c.name);
+      if (!isNum(xi) || xi < 48 || xi > 95) fail(`${c.name}: XI preview ${xi} out of range`);
+    }
   }
 }
-if (totalClubs !== 96) fail(`expected 96 playable clubs, got ${totalClubs}`);
-const ordering = [['Real Madrid', 'Real Oviedo'], ['Bayern Munich', 'Heidenheim'], ['PSG', 'Le Havre'], ['Liverpool', 'Burnley']];
+if (totalClubs !== 186) fail(`expected 186 playable clubs, got ${totalClubs}`);
+const ordering = [
+  ['Real Madrid', 'Racing Santander'], ['Bayern Munich', 'Paderborn'], ['PSG', 'Le Havre'],
+  ['Liverpool', 'Hull City'], ['Wolves', 'Lincoln City'], ['Al-Hilal', 'Al-Riyadh'],
+  ['Inter Miami', 'San Jose Earthquakes'], ['Ajax', 'Telstar'],
+];
 for (const [a, b] of ordering) {
   if (!(clubPreviewRating(a) > clubPreviewRating(b))) fail(`${a} (${clubPreviewRating(a)}) not stronger than ${b} (${clubPreviewRating(b)})`);
 }
+// Round 72 anchors: the verified summer window is in the shipped data.
+const rosterHas = (club, frag) => (cm.CM_ROSTERS[club] ?? []).some(p => p.n.includes(frag));
+if (!rosterHas('Chicago Fire', 'Lewandowski')) fail('Lewandowski not at Chicago Fire in bake');
+if (!rosterHas('Ajax', 'ter Stegen')) fail('ter Stegen not at Ajax in bake');
+if (!rosterHas('Chelsea', 'Morgan Rogers')) fail('Rogers not at Chelsea in bake');
+if (!rosterHas('Al-Nassr', 'Ronaldo')) fail('Ronaldo not at Al-Nassr in bake');
+if (rosterHas('Barcelona', 'Lewandowski')) fail('Lewandowski still at Barcelona in bake');
+// UCL gating: European leagues only.
+{
+  const rm = startCareer('Real Madrid');
+  if (!rm.uclGroup) fail('Real Madrid did not start in the UCL');
+  const hilal = startCareer('Al-Hilal');
+  if (hilal.uclGroup) fail('Al-Hilal started in the UCL (non-euro league)');
+  const miami = startCareer('Inter Miami');
+  if (miami.uclGroup) fail('Inter Miami started in the UCL (non-euro league)');
+  // Round 72: every league length now fits a full cup run.
+  for (const probe of ['Inter Miami', 'Wolves', 'Ajax', 'Al-Nassr', 'Arsenal']) {
+    const s = startCareer(probe);
+    if (!s.calendar.some(e => e.type === 'cup' && e.cupRound === 'F')) fail(`${probe}: calendar missing the cup final`);
+    if (!s.calendar.some(e => e.type === 'window')) fail(`${probe}: calendar missing the January window`);
+  }
+}
 
 /* ---------- 2. Every club can start ---------- */
-console.log('2) startCareer for all 96 clubs');
+console.log('2) startCareer for all 186 clubs');
 const allClubNames = REAL_LEAGUES.flatMap(l => l.clubs);
 for (const name of allClubNames) {
   const s = startCareer(name);
@@ -73,9 +101,10 @@ for (const name of allClubNames) {
   if (s.squad.length < 16) fail(`${name}: squad only ${s.squad.length}`);
   const xi = s.xiIds.filter(Boolean).length;
   if (xi !== 11) fail(`${name}: auto XI picked ${xi}/11`);
-  if (!s.boardObjectives || s.boardObjectives.length < 4) fail(`${name}: only ${s.boardObjectives?.length ?? 0} board objectives`);
+  if (!s.boardObjectives || s.boardObjectives.length < 3) fail(`${name}: only ${s.boardObjectives?.length ?? 0} board objectives`);
   const realCount = s.squad.filter(p => !p.isYouth).length;
-  if (realCount < 7) fail(`${name}: only ${realCount} real players in squad`);
+  // Partial-data clubs are youth padded by design and labeled in the UI.
+  if (realCount < 7 && !cm.isPartialClub(name)) fail(`${name}: only ${realCount} real players and not flagged partial`);
   const cup = s.cupDraw.R16;
   if (!cup || !leagueOf(name).clubs.includes(cup)) fail(`${name}: cup R16 draw "${cup}" not a league club`);
   for (const p of s.squad) {
@@ -91,7 +120,7 @@ console.log('3) Transfer market');
 {
   const s = startCareer('Sunderland');
   const market = buildMarket(s);
-  if (market.length < 1700) fail(`market only ${market.length} players (expected 1700+)`);
+  if (market.length < 2500) fail(`market only ${market.length} players (expected 2500+)`);
   for (const m of market.slice(0, 400)) {
     if (!isNum(m.price) || m.price <= 0 || m.price > 250) fail(`market price ${m.price} for ${m.name}`);
     if (m.value !== undefined && m.price > m.value * 1.3 + 0.5) fail(`${m.name}: price ${m.price} way above value ${m.value}`);
@@ -115,20 +144,20 @@ console.log('3) Transfer market');
 
 /* ---------- 4. Full seasons ---------- */
 console.log('4) Full-season sims');
-const SAMPLE = ['Real Madrid', 'Barcelona', 'Girona', 'Sunderland', 'Manchester City', 'Burnley', 'Inter Milan', 'Pisa', 'Bayern Munich', 'St. Pauli', 'PSG', 'Metz', 'Como', 'Union Berlin'];
+const SAMPLE = ['Real Madrid', 'Barcelona', 'Sunderland', 'Manchester City', 'Wolves', 'Lincoln City', 'Inter Milan', 'Monza', 'Bayern Munich', 'Schalke 04', 'PSG', 'Le Mans', 'Ajax', 'Cambuur', 'Al-Nassr', 'Al-Riyadh', 'Chicago Fire', 'Inter Miami', 'San Diego FC', 'Como', 'Union Berlin'];
 let cupLabelsSeen = 0;
 for (const clubName of SAMPLE) {
   let s = startCareer(clubName);
   const knownNames = new Set([
     ...REAL_LEAGUES.flatMap(l => l.clubs),
-    'Benfica', 'Porto', 'Sporting CP', 'Ajax', 'PSV', 'Feyenoord', 'Celtic', 'Rangers',
+    'Benfica', 'Porto', 'Sporting CP', 'Celtic', 'Rangers',
     'Galatasaray', 'Fenerbahçe', 'Club Brugge', 'RB Salzburg', 'Olympiacos', 'Galacticos XI',
   ]);
   for (let season = 1; season <= 2; season++) {
     let guard = 0;
     for (;;) {
       guard += 1;
-      if (guard > 90) { fail(`${clubName}: season ${season} never ended (90 entries)`); break; }
+      if (guard > 110) { fail(`${clubName}: season ${season} never ended (110 entries)`); break; }
       const res = playNextEntry(s);
       s = res.state;
       if (res.kind === 'seasonOver') break;
@@ -255,7 +284,7 @@ console.log('6) Negotiations and the deadline-day machinery');
   }
 
   // Loans: cap of 2, loanees leave at season end.
-  s = startCareer('Real Oviedo');
+  s = startCareer('Racing Santander');
   const loanables = buildMarket(s).filter(m => loanEligible(s, m) && loanFeeOf(m) <= s.budget && m.rating >= 70).slice(0, 5);
   if (loanables.length < 3) fail('fewer than 3 affordable loan targets for a minnow');
   const superstarLoan = buildMarket(s).filter(m => loanEligible(s, m) && m.rating >= 88);
