@@ -2510,7 +2510,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
     const sentinel = actionBarSentinelRef.current;
     if (!sentinel) return;
     const observer = new IntersectionObserver(
-      ([entry]) => { setIsActionBarSticky(!entry.isIntersecting); },
+      // Round 86: sticky ONLY while the bar's natural spot is still below the
+      // fold (sentinel under the viewport). The old check also re-stuck the
+      // bar after you scrolled PAST the game into the footer, where it sat
+      // over the Privacy and footer links as an invisible full-width click
+      // shield with a lone floating AGE tile. His report, his screenshot.
+      ([entry]) => { setIsActionBarSticky(!entry.isIntersecting && entry.boundingClientRect.top > 0); },
       { threshold: 0.1 }
     );
     observer.observe(sentinel);
@@ -2993,7 +2998,10 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       <div ref={actionBarSentinelRef} className="h-1" />
 
       {/* Action bar */}
-      <div className={`flex items-center gap-3 ${isActionBarSticky ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 sm:px-4 py-3 max-w-5xl mx-auto' : ''}`}>
+      {/* Round 86: the bar only floats when it actually has buttons to offer.
+          In button-less phases it stays inline, so no orphan AGE tile ever
+          hovers over the page blocking clicks. */}
+      <div className={`flex items-center gap-3 ${isActionBarSticky && (showActionButton || career.phase === "retired") ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 sm:px-4 py-3 max-w-5xl mx-auto' : ''}`}>
         {career.phase === "retired" ? (
           <div className="flex-1 flex gap-2">
             <Button onClick={onShare} variant="outline" className="flex-1 h-12 text-sm font-bold">
