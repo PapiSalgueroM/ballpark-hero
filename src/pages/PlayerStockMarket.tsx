@@ -97,6 +97,13 @@ const PlayerStockMarket = () => {
     deserializeGuesses: (raw) => raw as StockAction[],
   });
 
+  // Round 67: the mirror of the base game. Classic is numbers only (names
+  // hidden). Names style shows you exactly who they are and hides every number
+  // until the market moves, so you are buying on reputation alone. Unlimited
+  // only, so the daily stays one shared fair test.
+  const [style, setStyle] = useState<'numbers' | 'names'>('numbers');
+  const namesStyle = mode === 'unlimited' && style === 'names';
+
   const [unlimitedActions, setUnlimitedActions] = useState<StockAction[]>([]);
   const actions = mode === 'daily' ? dailyActions : unlimitedActions;
   const locked = actions.find((a) => a.t === 'lock');
@@ -135,6 +142,13 @@ const PlayerStockMarket = () => {
 
   const switchMode = useCallback((m: Mode) => { setMode(m); setPicks([]); }, []);
 
+  const switchStyle = useCallback((st: 'numbers' | 'names') => {
+    setStyle(st);
+    setUnl(randomStockSeed());
+    setUnlimitedActions([]);
+    setPicks([]);
+  }, []);
+
   const revealed = !!locked && !!round;
 
   return (
@@ -149,7 +163,8 @@ const PlayerStockMarket = () => {
         title="📈 PLAYER STOCK MARKET"
         subtitle="You don't know who they are. Buy 3 mystery players on the numbers alone, then the market moves one real year and the names drop."
         headerExtra={
-          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+          <div className="flex flex-col items-center gap-2 mt-4">
+          <div className="flex items-center justify-center gap-1 bg-secondary rounded-full p-1 w-fit mx-auto">
             {(['daily', 'unlimited'] as const).map((m) => (
               <button
                 key={m}
@@ -162,6 +177,23 @@ const PlayerStockMarket = () => {
                 {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
               </button>
             ))}
+          </div>
+          {mode === 'unlimited' && (
+            <div className="flex items-center justify-center gap-1 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['numbers', 'names'] as const).map((st) => (
+                <button
+                  key={st}
+                  onClick={() => switchStyle(st)}
+                  className={cn(
+                    'px-4 py-1 rounded-full text-xs font-semibold transition-all',
+                    style === st ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  {st === 'numbers' ? '🔢 Numbers only' : '🧠 Names only'}
+                </button>
+              ))}
+            </div>
+          )}
           </div>
         }
       >
@@ -184,7 +216,9 @@ const PlayerStockMarket = () => {
               <p className="text-xs text-muted-foreground mt-0.5">
                 {revealed
                   ? `The market advanced to ${round.year + 1}. Real values revealed.`
-                  : `Buy exactly ${STOCK_PICKS}, then the market advances to ${round.year + 1} for real.`}
+                  : namesStyle
+                    ? `You know exactly who they are. You have no idea what they cost. Buy ${STOCK_PICKS}, then the market advances to ${round.year + 1} for real.`
+                    : `Buy exactly ${STOCK_PICKS}, then the market advances to ${round.year + 1} for real.`}
               </p>
             </div>
 
@@ -212,16 +246,16 @@ const PlayerStockMarket = () => {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-sm text-foreground truncate">
-                          {revealed ? p.name : `🕵️ ${mysteryLabel}`}
+                          {revealed || namesStyle ? p.name : `🕵️ ${mysteryLabel}`}
                         </span>
                         {bought && <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-primary text-primary-foreground shrink-0">Bought</span>}
                         {revealed && inBest && <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-gold/20 text-gold shrink-0">Optimal</span>}
                       </div>
                       <p className="text-[11px] text-muted-foreground truncate">
-                        {revealed ? `${p.club} · ` : ''}{p.position} · age {p.age} · {p.nationality}
+                        {revealed || namesStyle ? `${p.club} · ` : ''}{p.position} · age {p.age} · {p.nationality}
                       </p>
                       <p className="text-sm font-bold mt-0.5 text-foreground">
-                        {formatMoney(p.current)}
+                        {namesStyle && !revealed ? '€ hidden' : formatMoney(p.current)}
                         {revealed && (
                           <span className={cn('ml-2 inline-flex items-center gap-1 text-xs font-bold', r >= 0 ? 'text-emerald-400' : 'text-red-400')}>
                             {r >= 0 ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
@@ -230,7 +264,9 @@ const PlayerStockMarket = () => {
                         )}
                       </p>
                     </div>
-                    <Sparkline p={p} revealed={revealed} />
+                    {namesStyle && !revealed
+                      ? <span className="text-lg" aria-hidden="true">🤫</span>
+                      : <Sparkline p={p} revealed={revealed} />}
                   </button>
                 );
               })}
@@ -258,7 +294,7 @@ const PlayerStockMarket = () => {
                   statLine={<>Market year {round.year} → {round.year + 1}</>}
                   funFact={<>💡 Best possible trio returned {formatPct(result.bestReturn)}; the worst returned {formatPct(result.worstReturn)}.</>}
                   statRow={[{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{result.score}/100</span> }]}
-                  emojiGrid={`📈 Player Stock Market ${round.year}: ${formatPct(result.yourReturn)} · ${result.score}/100`}
+                  emojiGrid={`📈 Player Stock Market ${round.year}${namesStyle ? ' (names only)' : ''}: ${formatPct(result.yourReturn)} · ${result.score}/100`}
                   share={{
                     score: `${result.score}/100 on the ${round.year} Player Stock Market`,
                     gameName: 'Player Stock Market',

@@ -616,6 +616,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Every number is real: the prices are historical market values, and the reveal shows what those players were actually worth twelve months later, names included.",
     ],
     howToPlay: [
+      "Unlimited mode has a second style: Names only. You see exactly who every player is and none of the numbers, so you are buying on reputation alone and the values only drop when the market moves.",
       "Check the market year. The daily lands somewhere between 2010 and 2025.",
       "Study each mystery card: position, age, nationality, price, and a 3 year value sparkline.",
       "Tap to buy exactly 3 players, swapping freely until you lock in.",
