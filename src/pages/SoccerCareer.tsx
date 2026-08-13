@@ -56,14 +56,27 @@ import { shareResult } from "@/lib/share";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
 
 /* ─── Constants ─── */
+// Round 76: 131 nations (was 49), every one with a real flag in FlagImg,
+// sorted alphabetically so yours is findable in the scroll.
 const NATIONALITIES = [
-  "England","Spain","France","Germany","Brazil","Argentina","Portugal","Italy",
-  "Netherlands","USA","Mexico","Japan","South Korea","Nigeria","Senegal","Ghana",
-  "Morocco","Colombia","Uruguay","Belgium","Croatia","Denmark","Sweden","Norway",
-  "Switzerland","Austria","Scotland","Wales","Ireland","Poland","Czech Republic",
-  "Serbia","Romania","Greece","Turkey","Russia","Ukraine","Australia","New Zealand",
-  "Canada","Jamaica","Costa Rica","Ecuador","Peru","Chile","Cameroon","Ivory Coast",
-  "Egypt","Algeria","Tunisia",
+  "Albania","Algeria","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan",
+  "Bahrain","Belarus","Belgium","Benin","Bolivia","Bosnia & Herzegovina","Brazil","Bulgaria",
+  "Burkina Faso","Cameroon","Canada","Cape Verde","Chile","China","Colombia","Comoros",
+  "Congo","Costa Rica","Croatia","Cuba","Curaçao","Cyprus","Czech Republic","DR Congo",
+  "Denmark","Dominican Republic","Ecuador","Egypt","El Salvador","England","Estonia",
+  "Ethiopia","Faroe Islands","Finland","France","Gabon","Georgia","Germany","Ghana",
+  "Greece","Guatemala","Guinea","Guinea-Bissau","Haiti","Honduras","Hungary","Iceland",
+  "India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Ivory Coast","Jamaica",
+  "Japan","Jordan","Kazakhstan","Kenya","Kosovo","Kuwait","Latvia","Lebanon","Liberia",
+  "Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar","Mali","Malta","Mexico",
+  "Moldova","Montenegro","Morocco","Mozambique","Netherlands","New Zealand","Nigeria",
+  "North Korea","North Macedonia","Northern Ireland","Norway","Oman","Panama","Paraguay",
+  "Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Saudi Arabia",
+  "Scotland","Senegal","Serbia","Sierra Leone","Slovakia","Slovenia","South Africa",
+  "South Korea","Spain","Suriname","Sweden","Switzerland","Tajikistan","Tanzania",
+  "Thailand","The Gambia","Togo","Trinidad and Tobago","Tunisia","Turkey","Uganda",
+  "Ukraine","United Arab Emirates","Uruguay","USA","Uzbekistan","Venezuela","Vietnam",
+  "Wales","Zambia","Zimbabwe",
 ];
 const POSITIONS = [
   { value: "GK", label: "Goalkeeper (GK)" }, { value: "CB", label: "Centre Back (CB)" },
@@ -865,9 +878,19 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         </div>
         <div className="space-y-1.5">
           <Label>Nationality</Label>
+          {/* Round 76: position="popper" pins the list BELOW the trigger with
+              its own scroll, fixing his bug where the item-aligned popup shot
+              off the top of the screen and cut off the first nations. Flag
+              sits to the RIGHT of the name, exactly as he asked. */}
           <Select value={nationality} onValueChange={setNationality}>
             <SelectTrigger className="bg-muted/30"><SelectValue placeholder="Choose nationality" /></SelectTrigger>
-            <SelectContent>{NATIONALITIES.map(n => <SelectItem key={n} value={n}><span className="flex items-center gap-1.5"><FlagImg name={n} size={18} />{n}</span></SelectItem>)}</SelectContent>
+            <SelectContent position="popper" className="max-h-72">
+              {NATIONALITIES.map(n => (
+                <SelectItem key={n} value={n}>
+                  <span className="flex items-center gap-2">{n}<FlagImg name={n} size={18} /></span>
+                </SelectItem>
+              ))}
+            </SelectContent>
           </Select>
         </div>
         <div className="space-y-1.5">
