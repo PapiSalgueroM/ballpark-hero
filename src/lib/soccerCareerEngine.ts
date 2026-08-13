@@ -1824,7 +1824,50 @@ function isPastPrime(age: number, primeType: PrimeType): boolean {
    too quick"). Youth years develop steadily, pro growth is a grind, and the
    late 80s onward are a wall: most world-class seasons move a stat by 0 or 1.
    Reaching 90+ should feel like a decade of work, not an accident. */
-function growStat(current: number, age: number, isYouth: boolean, isPace: boolean, primeType: PrimeType, potential = 99, currentOverall = 0): number {
+/**
+ * Round 96: how fast this player is developing right now.
+ *
+ * The problem this fixes: growth used to depend on nothing but age. A player
+ * with a 93 ceiling improved at exactly the same rate as one with a 74
+ * ceiling, and nothing you did in a season changed it. Measured over 60
+ * careers of a striker who trained every session, chased the biggest club
+ * and took the ambitious option every time, 2 percent reached 85 overall and
+ * NOBODY reached 90, even though one career in five rolls a ceiling of 84 or
+ * better. The engine simply could not carry a player to his own potential,
+ * which made every choice in the game decorative.
+ *
+ * Three things drive it now, which is how the games he is measuring us
+ * against do it:
+ *  1. HEADROOM. The further below your ceiling, the faster you climb, and it
+ *     tails off to almost nothing once you are on it. This is what makes a
+ *     wonderkid feel like a wonderkid instead of a slow grind.
+ *  2. MINUTES AND FORM. Last season actually happened. You cannot develop
+ *     from the bench, and a 7.6 rated season is worth a lot more than a 6.0.
+ *  3. THE TRAINING GROUND. Elite clubs develop players faster.
+ */
+function developmentRate(s: CareerState): number {
+  const pot = s.potential ?? Math.max(90, s.overall + 3);
+  const gap = pot - s.overall;
+  const headroom =
+    gap <= 0 ? 0.15 :
+    gap <= 3 ? 0.5 :
+    gap <= 8 ? 1.0 :
+    gap <= 15 ? 1.5 : 1.9;
+
+  let form = 1;
+  const last = s.seasons.length ? s.seasons[s.seasons.length - 1] : null;
+  if (last && last.type !== "youth") {
+    const apps = last.apps ?? 0;
+    form *= apps >= 30 ? 1.25 : apps >= 18 ? 1 : apps >= 8 ? 0.78 : 0.5;
+    const r = last.rating ?? 6.5;
+    form *= r >= 7.6 ? 1.45 : r >= 7.1 ? 1.2 : r >= 6.6 ? 1 : r >= 6 ? 0.82 : 0.62;
+  }
+
+  const tierF = s.currentClubTier === 1 ? 1.2 : s.currentClubTier === 2 ? 1.07 : 1;
+  return clamp(headroom * form * tierF, 0.1, 2.6);
+}
+
+function growStat(current: number, age: number, isYouth: boolean, isPace: boolean, primeType: PrimeType, potential = 99, currentOverall = 0, dev = 1): number {
   let growth: number;
   if (isYouth) {
     growth = current >= 78 ? rand(0, 1) : rand(1, 3);
@@ -1852,6 +1895,12 @@ function growStat(current: number, age: number, isYouth: boolean, isPace: boolea
         growth = rand(-3, -1); // Moderate decline
       }
     }
+  }
+  // Round 96: the development rate scales real growth. Decline is left alone,
+  // because no amount of good form stops a 37 year old losing a yard.
+  if (growth > 0 && dev !== 1) {
+    const scaled = growth * dev;
+    growth = Math.floor(scaled) + (Math.random() < scaled % 1 ? 1 : 0);
   }
   // Round 54 elite ceiling: the closer to perfect, the harder every point.
   // 86+ growth is capped, 90+ usually stalls, 94+ is nearly frozen.
@@ -3139,13 +3188,14 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
   // Round 78: legacy saves get a generous default so mid-career players are
   // not suddenly nerfed; new careers carry their rolled ceiling.
   const pot = s.potential ?? Math.max(90, s.overall + 3);
-  s.pace = growStat(s.pace, s.age, true, true, s.primeType, pot, s.overall);
-  s.shooting = growStat(s.shooting, s.age, true, false, s.primeType, pot, s.overall);
-  s.passing = growStat(s.passing, s.age, true, false, s.primeType, pot, s.overall);
-  s.dribbling = growStat(s.dribbling, s.age, true, false, s.primeType, pot, s.overall);
-  s.defending = growStat(s.defending, s.age, true, false, s.primeType, pot, s.overall);
-  s.physical = growStat(s.physical, s.age, true, false, s.primeType, pot, s.overall);
-  s.reflexes = growStat(s.reflexes, s.age, true, false, s.primeType, pot, s.overall);
+  const devY = developmentRate(s);
+  s.pace = growStat(s.pace, s.age, true, true, s.primeType, pot, s.overall, devY);
+  s.shooting = growStat(s.shooting, s.age, true, false, s.primeType, pot, s.overall, devY);
+  s.passing = growStat(s.passing, s.age, true, false, s.primeType, pot, s.overall, devY);
+  s.dribbling = growStat(s.dribbling, s.age, true, false, s.primeType, pot, s.overall, devY);
+  s.defending = growStat(s.defending, s.age, true, false, s.primeType, pot, s.overall, devY);
+  s.physical = growStat(s.physical, s.age, true, false, s.primeType, pot, s.overall, devY);
+  s.reflexes = growStat(s.reflexes, s.age, true, false, s.primeType, pot, s.overall, devY);
   s.overall = calcOverall(s, s.position);
   const lastYear = s.seasons[s.seasons.length - 1].year;
   s.seasons = [...s.seasons, {
@@ -3672,17 +3722,19 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   s.statBoostNextSeason = {};
   // Round 78: growth respects the rolled potential (legacy default generous).
   const potWall = s.potential ?? Math.max(90, s.overall + 3);
-  s.pace = growStat(s.pace, s.age, false, true, s.primeType, potWall, s.overall);
-  s.shooting = growStat(s.shooting, s.age, false, false, s.primeType, potWall, s.overall);
-  s.passing = growStat(s.passing, s.age, false, false, s.primeType, potWall, s.overall);
-  s.dribbling = growStat(s.dribbling, s.age, false, false, s.primeType, potWall, s.overall);
-  s.defending = growStat(s.defending, s.age, false, false, s.primeType, potWall, s.overall);
-  s.physical = growStat(s.physical, s.age, false, false, s.primeType, potWall, s.overall);
+  // Round 96: the season you just played decides how much you improve.
+  const dev = developmentRate(s);
+  s.pace = growStat(s.pace, s.age, false, true, s.primeType, potWall, s.overall, dev);
+  s.shooting = growStat(s.shooting, s.age, false, false, s.primeType, potWall, s.overall, dev);
+  s.passing = growStat(s.passing, s.age, false, false, s.primeType, potWall, s.overall, dev);
+  s.dribbling = growStat(s.dribbling, s.age, false, false, s.primeType, potWall, s.overall, dev);
+  s.defending = growStat(s.defending, s.age, false, false, s.primeType, potWall, s.overall, dev);
+  s.physical = growStat(s.physical, s.age, false, false, s.primeType, potWall, s.overall, dev);
   // Personal trainer: +1 physical per season
   if (s.purchasedItems.includes("personal_trainer")) {
     s.physical = clamp(s.physical + 1, 20, 99);
   }
-  s.reflexes = growStat(s.reflexes, s.age, false, false, s.primeType, potWall, s.overall);
+  s.reflexes = growStat(s.reflexes, s.age, false, false, s.primeType, potWall, s.overall, dev);
   s.overall = calcOverall(s, s.position);
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
   s.marketValue = calcMarketValue(s.overall, s.age, s.position, s.socialMediaFollowers);
