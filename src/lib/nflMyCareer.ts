@@ -14,6 +14,7 @@
 // its own award math, its own salary multiplier and its own aging curve, so
 // they are real career paths and not reskins of a receiver.
 import type { PlayerAppearance } from './soccerCareerAppearance';
+import { seasonSwing, swingNote } from './careerVariance';
 import { getNflLifeEventsA } from './nflCareerLifeA';
 import { getNflLifeEventsB } from './nflCareerLifeB';
 import { getNflCorruptionEvents } from './nflCareerCorruption';
@@ -231,14 +232,20 @@ export function simSeason(
   const notes: string[] = [];
   const { games, injuryNote } = seasonGames(c, rng);
   if (injuryNote) { notes.push(`🚑 ${injuryNote}`); c.health -= 6; }
-  const form = c.ovr + (c.morale - 60) / 10 + (teamQuality - 78) / 5;
+  const swing = seasonSwing(rng, c.age);
+  const form = c.ovr + (c.morale - 60) / 10 + (teamQuality - 78) / 5
+    // Round 98: the season itself gets a say, so career years and lost
+    // years both exist. Averages out to zero across a career.
+    + swing;
   const g = games / 17;
   const line: SeasonLine = {
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     awards: [], teamResult: '', salary: c.salary,
   };
   if (c.pos === 'QB') {
-    line.passYds = Math.round((1900 + (form - 62) * 92 + rng() * 500) * g);
+    // Round 98: capped just under Peyton Manning's 5477 in 2013, which is
+    // the real record. A career year should scrape it, never beat it.
+    line.passYds = Math.min(5450, Math.round((1900 + (form - 62) * 92 + rng() * 500) * g));
     line.passTd = Math.max(4, Math.round((6 + (form - 62) * 0.95 + rng() * 6) * g));
     // Round 56 realism fix: the old slope (0.25) meant a 95 rated quarterback
     // still threw 12 interceptions a year, which no elite passer does. Real
@@ -324,6 +331,9 @@ export function simSeason(
   }
 
   c.earnings += c.salary;
+  // Round 98: tell the player when the season itself was the story.
+  const sn = swingNote(swing, 'nfl');
+  if (sn) notes.push(sn);
   c.seasons.push(line);
   return { line, notes };
 }

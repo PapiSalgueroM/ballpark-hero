@@ -8,6 +8,7 @@
  */
 
 import { NBA_TEAMS } from '@/data/conquestDataNba';
+import { seasonSwing, swingNote } from './careerVariance';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNbaLifeEventsA } from './nbaCareerLifeA';
@@ -296,7 +297,11 @@ export function simNbaSeason(
   const notes: string[] = [];
   const { games, note } = gamesFor(c, rng);
   if (note) { notes.push(`🚑 ${note}`); c.health -= 7; }
-  const form = c.ovr + (c.morale - 60) / 12 + (teamQuality - 78) / 8;
+  const swing = seasonSwing(rng, c.age);
+  const form = c.ovr + (c.morale - 60) / 12 + (teamQuality - 78) / 8
+    // Round 98: the season itself gets a say, so career years and lost
+    // years both exist. Averages out to zero across a career.
+    + swing;
   const a = c.archetype;
   // Round 57 realism fix: the old slope (0.82 per rating point, multiplied by a
   // scoring archetype up to 1.35) had a 78 rated shooting guard averaging 27 a
@@ -369,6 +374,9 @@ export function simNbaSeason(
   }
 
   c.earnings += c.salary;
+  // Round 98: tell the player when the season itself was the story.
+  const sn = swingNote(swing, 'nba');
+  if (sn) notes.push(sn);
   c.seasons.push(line);
   return { line, notes };
 }

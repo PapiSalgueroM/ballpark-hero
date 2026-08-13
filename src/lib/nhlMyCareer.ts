@@ -8,6 +8,7 @@
  */
 
 import { NHL_TEAMS } from '@/data/conquestDataNhl';
+import { seasonSwing, swingNote } from './careerVariance';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNhlLifeEventsA } from './nhlCareerLifeA';
@@ -190,7 +191,11 @@ export function simNhlSeason(
   const notes: string[] = [];
   const { games, note } = gamesFor(c, rng);
   if (note) { notes.push(`🚑 ${note}`); c.health -= 7; }
-  const form = c.ovr + (c.morale - 60) / 12 + (teamQuality - 78) / 9;
+  const swing = seasonSwing(rng, c.age);
+  const form = c.ovr + (c.morale - 60) / 12 + (teamQuality - 78) / 9
+    // Round 98: the season itself gets a say, so career years and lost
+    // years both exist. Averages out to zero across a career.
+    + swing;
   const line: NhlSeasonLine = {
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     awards: [], teamResult: '', salary: c.salary,
@@ -266,6 +271,9 @@ export function simNhlSeason(
   }
 
   c.earnings += c.salary;
+  // Round 98: tell the player when the season itself was the story.
+  const sn = swingNote(swing, 'nhl');
+  if (sn) notes.push(sn);
   c.seasons.push(line);
   return { line, notes };
 }

@@ -51,17 +51,24 @@ const pct = (a, p) => { const s = [...a].sort((x, y) => x - y); return s.length 
  *  ceiling: the real single-season record (or a hair above). NOTHING may cross it.
  *  medLo/medHi: what a real everyday starter at that position actually does.
  */
-function check(sport, pos, stat, vals, { ceiling, medLo, medHi, note }) {
+function check(sport, pos, stat, vals, { ceiling, medLo, medHi, note, spread }) {
   const clean = vals.filter(v => typeof v === 'number' && Number.isFinite(v));
   if (clean.length < 20) { fail(`${sport} ${pos} ${stat}: only ${clean.length} samples`); return; }
   const mx = Math.max(...clean);
   const md = median(clean);
+  const p05 = pct(clean, 0.05);
   const p95 = pct(clean, 0.95);
-  const flag = (mx > ceiling ? ' OVER-CEILING' : '') + (md < medLo || md > medHi ? ' MEDIAN-OFF' : '');
-  console.log(`   ${sport} ${pos.padEnd(5)} ${stat.padEnd(9)} med ${String(md).padStart(6)}  p95 ${String(p95).padStart(6)}  max ${String(mx).padStart(6)}  (real: median ${medLo}-${medHi}, record ${ceiling})${flag}`);
+  // Round 98: a sim where every season looks the same is not realistic even
+  // when every number is individually legal, so the SPREAD is checked too.
+  // `spread` is the minimum acceptable p95 over p05 ratio for that stat.
+  const ratio = p05 > 0 ? p95 / p05 : Infinity;
+  const flat = spread !== undefined && ratio < spread;
+  const flag = (mx > ceiling ? ' OVER-CEILING' : '') + (md < medLo || md > medHi ? ' MEDIAN-OFF' : '') + (flat ? ' TOO-FLAT' : '');
+  console.log(`   ${sport} ${pos.padEnd(5)} ${stat.padEnd(9)} p05 ${String(p05).padStart(6)}  med ${String(md).padStart(6)}  p95 ${String(p95).padStart(6)}  max ${String(mx).padStart(6)}  spread ${ratio === Infinity ? ' inf' : ratio.toFixed(2)}${flag}`);
   if (mx > ceiling) fail(`${sport} ${pos} ${stat}: ${mx} beats the real single season record of ${ceiling}${note ? ' (' + note + ')' : ''}`);
   if (md < medLo) fail(`${sport} ${pos} ${stat}: median ${md} is below a real starter's ${medLo}`);
   if (md > medHi) fail(`${sport} ${pos} ${stat}: median ${md} is above a real starter's ${medHi}, everyone is a superstar`);
+  if (flat) fail(`${sport} ${pos} ${stat}: p95 is only ${ratio.toFixed(2)}x p05, every season looks the same`);
 }
 
 /* ================================ MLB ================================ */
@@ -96,11 +103,11 @@ console.log('\nMLB');
     // The designated hitter is a pure slugger, so he gets his own band.
     const power = ['1B', '3B', 'LF', 'RF'].includes(pos);
     const hrHi = pos === 'DH' ? 34 : power ? 31 : 24;
-    check('MLB', pos, 'hr', acc[pos].hr ?? [], { ceiling: 73, medLo: pos === 'DH' || power ? 12 : 6, medHi: hrHi });
-    check('MLB', pos, 'rbi', acc[pos].rbi ?? [], { ceiling: 191, medLo: 30, medHi: 110 });
+    check('MLB', pos, 'hr', acc[pos].hr ?? [], { ceiling: 73, medLo: pos === 'DH' || power ? 12 : 6, medHi: hrHi, spread: 1.9 });
+    check('MLB', pos, 'rbi', acc[pos].rbi ?? [], { ceiling: 191, medLo: 30, medHi: 110, spread: 1.6 });
     check('MLB', pos, 'avg', acc[pos].avg ?? [], { ceiling: 0.44, medLo: 0.24, medHi: 0.295 });
   }
-  check('MLB', 'SP', 'so', acc.SP.so ?? [], { ceiling: 383, medLo: 90, medHi: 230 });
+  check('MLB', 'SP', 'so', acc.SP.so ?? [], { ceiling: 383, medLo: 90, medHi: 230, spread: 1.6 });
   check('MLB', 'SP', 'wins', acc.SP.wins ?? [], { ceiling: 31, medLo: 5, medHi: 18 });
   check('MLB', 'SP', 'era', acc.SP.era ?? [], { ceiling: 12, medLo: 2.4, medHi: 5.2 });
   check('MLB', 'RP', 'so', acc.RP.so ?? [], { ceiling: 143, medLo: 35, medHi: 85, note: "Dick Radatz threw 157 relief innings in 1964; in the one inning era Josh Hader's 138 in 2019 is the high" });
@@ -135,7 +142,7 @@ console.log('\nNBA');
   // A real rotation starter is nowhere near any of those.
   for (const pos of POS) {
     const big = pos === 'PF' || pos === 'C';
-    check('NBA', pos, 'ppg', acc[pos].ppg ?? [], { ceiling: 50.4, medLo: 6, medHi: 22 });
+    check('NBA', pos, 'ppg', acc[pos].ppg ?? [], { ceiling: 50.4, medLo: 6, medHi: 22, spread: 1.9 });
     check('NBA', pos, 'rpg', acc[pos].rpg ?? [], { ceiling: 27.2, medLo: big ? 4 : 1.5, medHi: big ? 12 : 7 });
     const apgHi = pos === 'PG' ? 10 : pos === 'SF' ? 7 : pos === 'C' ? 5 : 6;
     check('NBA', pos, 'apg', acc[pos].apg ?? [], { ceiling: 14.5, medLo: 0.5, medHi: apgHi });
@@ -172,13 +179,13 @@ console.log('\nNFL');
   // (2012), Randy Moss 23 rec TD (2007), Michael Strahan 22.5 sacks (2001),
   // Night Train Lane 14 INT (1952), Tackle records are unofficial but 200 is
   // the ceiling nobody touches, Kevin Butler style FG high is 44 made.
-  check('NFL', 'QB', 'passYds', acc.QB.passYds ?? [], { ceiling: 5477, medLo: 1500, medHi: 4200 });
+  check('NFL', 'QB', 'passYds', acc.QB.passYds ?? [], { ceiling: 5477, medLo: 1500, medHi: 4200, spread: 1.5 });
   check('NFL', 'QB', 'passTd', acc.QB.passTd ?? [], { ceiling: 55, medLo: 8, medHi: 32 });
   check('NFL', 'QB', 'ints', acc.QB.ints ?? [], { ceiling: 42, medLo: 3, medHi: 20 });
-  check('NFL', 'RB', 'rushYds', acc.RB.rushYds ?? [], { ceiling: 2105, medLo: 300, medHi: 1200 });
+  check('NFL', 'RB', 'rushYds', acc.RB.rushYds ?? [], { ceiling: 2105, medLo: 300, medHi: 1200, spread: 1.8 });
   check('NFL', 'RB', 'rushTd', acc.RB.rushTd ?? [], { ceiling: 28, medLo: 1, medHi: 12 });
   check('NFL', 'WR', 'rec', acc.WR.rec ?? [], { ceiling: 149, medLo: 20, medHi: 90 });
-  check('NFL', 'WR', 'recYds', acc.WR.recYds ?? [], { ceiling: 1964, medLo: 250, medHi: 1200 });
+  check('NFL', 'WR', 'recYds', acc.WR.recYds ?? [], { ceiling: 1964, medLo: 250, medHi: 1200, spread: 1.8 });
   check('NFL', 'TE', 'rec', acc.TE.rec ?? [], { ceiling: 149, medLo: 15, medHi: 80 });
   check('NFL', 'LB', 'tackles', acc.LB.tackles ?? [], { ceiling: 200, medLo: 40, medHi: 140 });
   check('NFL', 'EDGE', 'sacks', acc.EDGE.sacks ?? [], { ceiling: 22.5, medLo: 1, medHi: 12 });
@@ -213,9 +220,9 @@ console.log('\nNHL');
   // assists as a defenceman (1970-71), Martin Brodeur 48 wins (2006-07),
   // and no goalie has ever finished a full season above .940.
   for (const pos of ['C', 'LW', 'RW']) {
-    check('NHL', pos, 'goals', acc[pos].goals ?? [], { ceiling: 92, medLo: 5, medHi: 35 });
+    check('NHL', pos, 'goals', acc[pos].goals ?? [], { ceiling: 92, medLo: 5, medHi: 35, spread: 2 });
     check('NHL', pos, 'assists', acc[pos].assists ?? [], { ceiling: 163, medLo: 5, medHi: 50 });
-    check('NHL', pos, 'points', acc[pos].points ?? [], { ceiling: 215, medLo: 12, medHi: 80 });
+    check('NHL', pos, 'points', acc[pos].points ?? [], { ceiling: 215, medLo: 12, medHi: 80, spread: 1.9 });
   }
   check('NHL', 'D', 'goals', acc.D.goals ?? [], { ceiling: 48, medLo: 1, medHi: 14 });
   check('NHL', 'D', 'assists', acc.D.assists ?? [], { ceiling: 102, medLo: 5, medHi: 45 });

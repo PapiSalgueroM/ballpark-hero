@@ -8,6 +8,7 @@
  */
 
 import { MLB_TEAMS } from '@/data/conquestDataMlb';
+import { seasonSwing, swingNote } from './careerVariance';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getMlbLifeEventsA } from './mlbCareerLifeA';
@@ -231,7 +232,11 @@ export function simMlbSeason(
   const notes: string[] = [];
   const { games, note } = gamesFor(c, rng);
   if (note) { notes.push(`🚑 ${note}`); c.health -= 8; }
-  const form = c.ovr + (c.morale - 60) / 12 + (teamQuality - 78) / 10;
+  const swing = seasonSwing(rng, c.age);
+  const form = c.ovr + (c.morale - 60) / 12 + (teamQuality - 78) / 10
+    // Round 98: the season itself gets a say, so career years and lost
+    // years both exist. Averages out to zero across a career.
+    + swing;
   const line: MlbSeasonLine = {
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     awards: [], teamResult: '', salary: c.salary,
@@ -260,7 +265,8 @@ export function simMlbSeason(
       line.holds = Math.round(rng() * 4);
     } else {
       line.saves = Math.round(rng() * 6);
-      line.holds = Math.min(45, Math.max(0, Math.round((10 + (form - 62) * 0.7 + rng() * 8) * (games / 62))));
+      // Round 98: capped at 41, Joel Peralta's real single season record.
+      line.holds = Math.min(41, Math.max(0, Math.round((10 + (form - 62) * 0.7 + rng() * 8) * (games / 62))));
     }
   } else {
     const g = games / 160;
@@ -336,6 +342,9 @@ export function simMlbSeason(
   }
 
   c.earnings += c.salary;
+  // Round 98: tell the player when the season itself was the story.
+  const sn = swingNote(swing, 'mlb');
+  if (sn) notes.push(sn);
   c.seasons.push(line);
   return { line, notes };
 }
