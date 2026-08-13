@@ -324,8 +324,11 @@ export const HOCKEY_CONTENT: GameContentMap = {
     intro: [
       "You start as a name on a draft board and end, if it all breaks right, with a call from the Hall in Toronto.",
       "Your player is fictional. The league is real: 32 NHL teams, real trophies, a whole career of season stat lines in between.",
+      "You build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. An envelope on the bench with a bounty in it, a twelve year contract whose tail years everyone knows you will never play, a doctor in Europe with a suitcase, and a man who pays for the starting goalie an hour before anyone announces it. Every dirty choice raises a hidden league meter, and at the top of it is an indefinite suspension that costs you a full season."
     ],
     howToPlay: [
+      "Create your player: name, one of 5 positions (C, LW, RW, D, G), and one of 17 archetypes, from Generational Talent to The Agitator to The Workhorse in net.",
+      "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
       "Create your player: name, position (C, W, D or G) and one of three archetypes, from Generational Talent to The Statue.",
       "Get drafted by a real club; your slot reflects your starting ability.",
       "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",

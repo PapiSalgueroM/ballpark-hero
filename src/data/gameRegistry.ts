@@ -168,7 +168,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/hockey-higher-lower', label: 'Higher / Lower', emoji: '🏒', description: 'Compare career points', daily: true },
       { path: '/nhl-connections', label: 'NHL Connections', emoji: '🧩', description: 'Group 20 players into four hidden connections', daily: true, isNew: true },
       { path: '/conquest-nhl', label: 'NHL Conquest', emoji: '🗺️', description: 'Imperialism on ice: winners annex whole empires, five invaders start landless', daily: true, isNew: true },
-      { path: '/nhl-my-career', label: 'NHL My Career', emoji: '🌟', description: 'Draft floor to the farewell tour: live a whole player career', isNew: true, featured: true },
+      { path: '/nhl-my-career', label: 'NHL My Career', emoji: '🌟', description: 'Draft day to the rafters. 5 positions, 100+ crossroads, and an envelope on the bench', isNew: true, featured: true },
       { path: '/nhl-front-office', label: 'NHL Front Office', emoji: '🏢', description: 'Full GM sim with real 2026-27 rosters: hard cap, OT points, the bracket, the Cup', isNew: true, featured: true },
       { path: '/nhl-connect-4', label: 'NHL Connect 4', emoji: '🏒', description: 'Hockey trivia meets Connect 4', isNew: true },
       { path: '/perfect-lineup-nhl', label: 'Perfect Lineup: NHL', emoji: '🏒', description: 'Build a dream line under random team & era constraints, then simulate', daily: true, isNew: true },

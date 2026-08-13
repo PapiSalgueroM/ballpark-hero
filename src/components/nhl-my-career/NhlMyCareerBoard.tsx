@@ -3,10 +3,16 @@ import { Crown, Dumbbell, RotateCcw, Sparkles } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import {
   NHL_ARCHETYPES, startNhlCareer, simNhlSeason, nhlProgress, drawNhlEvent,
+  NHL_SPEND_ITEMS, buyNhlItem, type NhlSpendCategory,
   nhlShouldRetire, nhlLegacyOf, nhlCareerTotals, nhlRollTeamQuality, nhlTeamLabelOf, nhlMarketSalary,
   type NhlCareerPos, type NhlCareerState, type NhlCareerEvent, type NhlSeasonLine,
 } from '@/lib/nhlMyCareer';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { nhlHeatLabel } from '@/lib/nhlCareerCorruption';
+import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';
+import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
+import AppearanceBuilder from '@/components/soccer-career/AppearanceBuilder';
+import { Confetti, CountUp } from '@/components/soccer-career/CareerFx';
 import { cn } from '@/lib/utils';
 
 type Phase = 'create' | 'season' | 'event' | 'retired';
@@ -17,6 +23,9 @@ interface SaveShape { c: NhlCareerState; phase: Phase; teamQuality: number | nul
 
 export default function NhlMyCareerBoard() {
   const [phase, setPhase] = useState<Phase>('create');
+  // Round 59: build your player's face before the draft
+  const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
+  const [showShop, setShowShop] = useState(false);
   const [career, setCareer] = useState<NhlCareerState | null>(null);
   const [teamQuality, setTeamQuality] = useState<number | null>(null);
   const [nameInput, setNameInput] = useState('');
@@ -47,7 +56,7 @@ export default function NhlMyCareerBoard() {
 
   const create = () => {
     const arch = NHL_ARCHETYPES[pos].find(a => a.id === archetypeId) ?? NHL_ARCHETYPES[pos][0];
-    const c = startNhlCareer(nameInput.trim() || 'Gordie Blaze', pos, arch);
+    const c = startNhlCareer(nameInput.trim() || 'Gordie Blaze', pos, arch, Math.random, appearance);
     const tq = nhlRollTeamQuality(null, Math.random);
     setCareer(c);
     setTeamQuality(tq);
@@ -62,6 +71,23 @@ export default function NhlMyCareerBoard() {
   const playSeason = () => {
     if (!career || teamQuality == null) return;
     const c: NhlCareerState = JSON.parse(JSON.stringify(career));
+
+    // Round 59: a suspension costs the whole season. You still age and decline.
+    if ((c.suspendedSeasons ?? 0) > 0) {
+      c.suspendedSeasons = (c.suspendedSeasons ?? 0) - 1;
+      const banned: NhlSeasonLine = {
+        year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
+        awards: [], teamResult: 'SUSPENDED', salary: 0,
+      };
+      c.seasons.push(banned);
+      const banNotes = nhlProgress(c, Math.random);
+      setLastLine(banned);
+      setCareer(c);
+      setFeed(['🚫 Season served on the suspended list. No hockey, no money, no going back.', ...banNotes]);
+      setPhase('season');
+      persist(c, 'season', teamQuality);
+      return;
+    }
     const { line, notes } = simNhlSeason(c, teamQuality, Math.random);
     const progressNotes = nhlProgress(c, Math.random);
     setLastLine(line);
@@ -136,17 +162,19 @@ export default function NhlMyCareerBoard() {
             maxLength={24}
             className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
-          <div className="flex items-center justify-center gap-1 rounded-full bg-secondary p-1">
-            {(['C', 'W', 'D', 'G'] as NhlCareerPos[]).map(p => (
+          <div className="grid grid-cols-5 gap-1 rounded-2xl bg-secondary p-1">
+            {(['C', 'LW', 'RW', 'D', 'G'] as NhlCareerPos[]).map(p => (
               <button
                 key={p}
                 onClick={() => { setPos(p); setArchetypeId(NHL_ARCHETYPES[p][0].id); }}
-                className={cn('flex-1 rounded-full px-4 py-1.5 text-sm font-bold', pos === p ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground')}
+                className={cn('rounded-xl px-1 py-1.5 text-sm font-bold transition-all', pos === p ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground')}
               >
                 {p}
               </button>
             ))}
           </div>
+          <AppearanceBuilder appearance={appearance} onChange={setAppearance} clubColor="#0EA5E9" />
+
           <div className="grid gap-1.5">
             {NHL_ARCHETYPES[pos].map(a => (
               <button
@@ -222,12 +250,58 @@ export default function NhlMyCareerBoard() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
+        {career.appearance && (
+          <span className="overflow-hidden rounded-xl border border-border bg-card">
+            <PlayerAvatar appearance={career.appearance} clubColor="#0EA5E9" size={44} animate />
+          </span>
+        )}
         <span className="rounded-full border border-border bg-card px-3 py-1 font-bold text-foreground">{career.name} · {career.pos}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{nhlTeamLabelOf(career.team)}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{career.year} · age {career.age}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">OVR <b className="text-primary">{career.ovr}</b></span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">${career.salary}M x{Math.max(0, career.contractYears)}</span>
+        <button
+          onClick={() => setShowShop(v => !v)}
+          className="rounded-full border border-border bg-card px-3 py-1 font-bold text-foreground transition-colors hover:border-primary/50"
+        >
+          💰 ${(career.netWorth ?? 0).toFixed(1)}M {showShop ? '▲' : '▼'}
+        </button>
       </div>
+
+      {/* Round 59: the heat meter, only once you have something to hide */}
+      {((career.heat ?? 0) > 0 || (career.dirtyMoney ?? 0) > 0) && (() => {
+        const hv = career.heat ?? 0;
+        const band = nhlHeatLabel(hv);
+        return (
+          <div className="rounded-2xl border border-destructive/25 bg-destructive/5 p-3">
+            <div className="flex items-center justify-between text-[11px]">
+              <span className="font-bold uppercase tracking-wider text-muted-foreground">🕶️ League office</span>
+              <span className={cn('font-black', band.tone)}>{band.label}</span>
+            </div>
+            <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-secondary">
+              <div className={cn('h-full rounded-full transition-all duration-700', hv >= 65 ? 'bg-destructive' : hv >= 40 ? 'bg-orange-500' : 'bg-gold')} style={{ width: `${hv}%` }} />
+            </div>
+            <p className="mt-1.5 text-[11px] leading-snug text-muted-foreground">{band.blurb}</p>
+            {(career.dirtyMoney ?? 0) > 0 && (
+              <p className="mt-1 text-[11px] font-bold text-destructive">
+                💼 ${(career.dirtyMoney ?? 0).toFixed(1)}M unexplained. Wash it in the Shady aisle or it keeps burning.
+              </p>
+            )}
+          </div>
+        );
+      })()}
+
+      {showShop && (
+        <NhlShopPanel
+          career={career}
+          onBuy={id => {
+            const res = buyNhlItem(career, id);
+            if (!res) return;
+            setCareer(res.state);
+            setFeed(f => [res.log, ...f].slice(0, 8));
+          }}
+        />
+      )}
 
       <div className="grid grid-cols-3 gap-2 text-center text-[11px]">
         {[['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health]].map(([lbl, v]) => (
@@ -299,6 +373,101 @@ export default function NhlMyCareerBoard() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ─── Round 59: the money panel ───
+   Seven aisles of things to spend it on, plus a Shady aisle that only shows up
+   once you actually have something to hide. Gates mirror buyNhlItem exactly so
+   a button never lies about what it will do. */
+function NhlShopPanel({ career, onBuy }: { career: NhlCareerState; onBuy: (id: string) => void }) {
+  const [tab, setTab] = useState<NhlSpendCategory>('home');
+  const cats: { key: NhlSpendCategory; label: string; emoji: string }[] = [
+    { key: 'home', label: 'Home', emoji: '🏡' },
+    { key: 'ride', label: 'Rides', emoji: '🏎️' },
+    { key: 'invest', label: 'Invest', emoji: '📈' },
+    { key: 'body', label: 'Body', emoji: '💪' },
+    { key: 'flex', label: 'Flex', emoji: '💎' },
+    { key: 'family', label: 'Family', emoji: '❤️' },
+    { key: 'shady', label: 'Shady', emoji: '🕶️' },
+  ];
+  const hasDirt = (career.heat ?? 0) > 0 || (career.dirtyMoney ?? 0) > 0;
+  const visible = cats.filter(c => c.key !== 'shady' || hasDirt);
+  const owned = career.purchased ?? [];
+  const net = career.netWorth ?? 0;
+  const items = NHL_SPEND_ITEMS.filter(i => i.category === tab);
+
+  return (
+    <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
+      <div className="flex items-center justify-between text-[11px]">
+        <span className="font-bold uppercase tracking-wider text-muted-foreground">💰 Your money</span>
+        <span className="text-muted-foreground">
+          Banked <b className="text-primary">${net.toFixed(1)}M</b>
+          {(career.yearlyCosts ?? 0) > 0 && <> · Upkeep <b className="text-destructive">${(career.yearlyCosts ?? 0).toFixed(2)}M/yr</b></>}
+        </span>
+      </div>
+
+      <div className="grid grid-cols-4 gap-1">
+        {visible.map(c => (
+          <button
+            key={c.key}
+            onClick={() => setTab(c.key)}
+            className={cn(
+              'rounded-lg px-1 py-1.5 text-[11px] font-bold transition-all',
+              tab === c.key
+                ? c.key === 'shady' ? 'bg-destructive/20 text-destructive' : 'bg-primary/15 text-primary'
+                : 'bg-secondary text-muted-foreground hover:text-foreground',
+            )}
+          >
+            {c.emoji} {c.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="space-y-1.5">
+        {items.map(item => {
+          const isOwned = item.oneTime && owned.includes(item.id);
+          const needsNet = item.minNetWorth && net < item.minNetWorth;
+          const needsFame = item.minFanbase && career.fanbase < item.minFanbase;
+          const needsDirty = item.requiresDirty && (career.dirtyMoney ?? 0) <= 0;
+          const tooPoor = item.cost > net;
+          const disabled = !!(isOwned || needsNet || needsFame || needsDirty || tooPoor);
+          const lock = needsFame ? `Needs ${item.minFanbase} fanbase`
+            : needsDirty ? 'Needs untraceable money to move'
+            : needsNet ? `Needs $${item.minNetWorth}M banked`
+            : tooPoor ? 'Cannot afford it yet' : null;
+          return (
+            <div key={item.id} className={cn('rounded-lg border p-2', isOwned ? 'border-primary/30 bg-primary/5' : disabled ? 'border-border/50 bg-secondary/40 opacity-60' : 'border-border bg-secondary/60')}>
+              <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <p className="flex items-center gap-1.5 text-xs font-bold text-foreground">
+                    <span>{item.emoji}</span>
+                    <span className="truncate">{item.name}</span>
+                    {isOwned && <span className="rounded bg-primary/20 px-1 py-0.5 text-[9px] font-bold text-primary">OWNED</span>}
+                  </p>
+                  <p className="mt-0.5 text-[11px] text-muted-foreground">{item.desc}</p>
+                  {item.effect && <p className="mt-0.5 text-[11px] text-gold">⚡ {item.effect}</p>}
+                  {!isOwned && lock && <p className="mt-0.5 text-[11px] text-destructive/80">🔒 {lock}</p>}
+                  {item.yearly ? <p className="mt-0.5 text-[10px] text-muted-foreground">+ ${item.yearly.toFixed(2)}M a year upkeep</p> : null}
+                </div>
+                {!isOwned && (
+                  <button
+                    onClick={() => onBuy(item.id)}
+                    disabled={disabled}
+                    className={cn(
+                      'shrink-0 rounded-lg px-3 py-1.5 text-[11px] font-bold transition-all',
+                      disabled ? 'cursor-not-allowed bg-secondary text-muted-foreground' : 'bg-primary text-primary-foreground hover:opacity-90 active:scale-95',
+                    )}
+                  >
+                    {item.cost > 0 ? `$${item.cost}M` : 'Hire'}
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
