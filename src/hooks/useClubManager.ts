@@ -104,8 +104,27 @@ export function useClubManager() {
   const setXiSlot = useCallback((slotIdx: number, playerId: string | null) => {
     setCareer(prev => {
       if (!prev) return prev;
-      const xi = prev.xiIds.map(id => (playerId !== null && id === playerId ? null : id));
+      const xi = [...prev.xiIds];
+      // Round 114: picking someone who is already in the XI now SWAPS the two
+      // rather than leaving an empty hole where he used to stand, which is
+      // what the drag on the pitch does and what everyone expects anyway.
+      const at = playerId === null ? -1 : xi.findIndex(id => id === playerId);
+      if (at >= 0 && at !== slotIdx) xi[at] = xi[slotIdx];
       xi[slotIdx] = playerId;
+      return { ...prev, xiIds: xi };
+    });
+  }, []);
+
+  /** Round 114: drag a player onto another spot and the two trade places. */
+  const swapXiSlots = useCallback((a: number, b: number) => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      if (a === b) return prev;
+      const xi = [...prev.xiIds];
+      if (a < 0 || b < 0 || a >= xi.length || b >= xi.length) return prev;
+      const held = xi[a];
+      xi[a] = xi[b];
+      xi[b] = held;
       return { ...prev, xiIds: xi };
     });
   }, []);
@@ -277,7 +296,7 @@ export function useClubManager() {
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition,
     resume, startNew, chooseClub, confirmClub,
-    setFormationIndex, setMentality, setXiSlot, autoPick,
+    setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
     play, continueFromReport, nextSeason,
     buy, sell,
     negotiate, offer, walk, dismissNegotiation, clause, loan,

@@ -1,7 +1,7 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import type { Player, Position } from '@/types/game';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
-import type { Formation } from '@/lib/squadDeal';
+import type { Formation, FormationSlot } from '@/lib/squadDeal';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -34,7 +34,7 @@ export type UclKoRound = 'QF' | 'SF' | 'F';
 export type UclKoState = UclKoRound | 'out' | 'won' | null;
 
 export { FORMATIONS };
-export type { Formation };
+export type { Formation, FormationSlot };
 export { CM_ROSTER_META, CM_ROSTERS, CM_PARTIAL };
 
 /**
@@ -488,6 +488,68 @@ export const MENTALITIES: MentalityDef[] = [
   { id: 'balanced', label: 'Balanced', emoji: '⚖️', desc: 'Keep your shape and pick your moments' },
   { id: 'attacking', label: 'Attacking', emoji: '⚔️', desc: 'Throw bodies forward and chase goals' },
 ];
+
+/* ---------------- Round 114: where the shape actually sits ---------------- */
+/**
+ * Owner: "I would love to see an animation or something for when u click
+ * defensive or balanced or attacking."
+ *
+ * The old pitch nudged every outfielder by the same 3.5 percent, which you
+ * could barely see and which is not what a mentality is anyway. A high line is
+ * the BACK FOUR stepping up. A low block is the front men dropping in so the
+ * whole team is compact in front of its own box. So the shift is graded by
+ * which line a slot belongs to, and the wide men spread when we go for it and
+ * tuck in when we shut up shop.
+ *
+ * Units are percentage points of the pitch. y counts DOWN the screen (the
+ * keeper sits at y 90 and the strikers live near 18), so a negative dy is UP
+ * the pitch toward the goal we are attacking.
+ */
+export interface PitchShift { dx: number; dy: number; }
+
+/** Which band of the shape a slot belongs to, read straight off its y. */
+export type PitchLine = 'keeper' | 'defence' | 'midfield' | 'attack';
+
+export function pitchLineOf(slot: FormationSlot): PitchLine {
+  if (slot.y > 86) return 'keeper';
+  if (slot.y >= 62) return 'defence';
+  if (slot.y >= 40) return 'midfield';
+  return 'attack';
+}
+
+export function mentalityShift(slot: FormationSlot, m: Mentality): PitchShift {
+  if (m === 'balanced') return { dx: 0, dy: 0 };
+  const line = pitchLineOf(slot);
+  const up = m === 'attacking';
+  // Attacking stretches the block up the pitch, led by the defenders.
+  // Defensive drops it and squeezes it, led by the forwards coming back.
+  const UP: Record<PitchLine, number> = { keeper: -2, defence: -8, midfield: -6, attack: -2.5 };
+  const BACK: Record<PitchLine, number> = { keeper: 1, defence: 4, midfield: 7.5, attack: 11 };
+  const dy = up ? UP[line] : BACK[line];
+  const spread = line === 'keeper' ? 0 : up ? 0.12 : -0.16;
+  return { dx: (slot.x - 50) * spread, dy };
+}
+
+/** Final spot for a slot under a mentality, clamped so nobody leaves the grass. */
+export function slotPosition(slot: FormationSlot, m: Mentality): { x: number; y: number } {
+  const sh = mentalityShift(slot, m);
+  return {
+    x: Math.max(6, Math.min(94, slot.x + sh.dx)),
+    y: Math.max(6, Math.min(94, slot.y + sh.dy)),
+  };
+}
+
+/** Average height of the back line, which is the number a manager actually feels. */
+export function defensiveLineY(formation: Formation, m: Mentality): number {
+  const back = formation.slots.filter(sl => pitchLineOf(sl) === 'defence');
+  if (!back.length) return slotPosition(formation.slots[0] ?? { label: '', allowed: [], x: 50, y: 74 }, m).y;
+  return back.reduce((t, sl) => t + slotPosition(sl, m).y, 0) / back.length;
+}
+
+/** Player facing name for that line, used as the caption on the pitch. */
+export function lineLabel(m: Mentality): string {
+  return m === 'attacking' ? 'High line' : m === 'defensive' ? 'Low block' : 'Standard line';
+}
 
 /** European flavor clubs used for UCL groups/knockouts (not in the league). */
 const EURO_CLUBS = [

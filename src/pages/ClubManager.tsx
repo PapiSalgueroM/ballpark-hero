@@ -861,6 +861,7 @@ const ClubManager = () => {
             onFormation={g.setFormationIndex}
             onMentality={g.setMentality}
             onSlot={g.setXiSlot}
+            onSwap={g.swapXiSlots}
             onAutoPick={g.autoPick}
           />
         </TabsContent>
