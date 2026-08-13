@@ -3,6 +3,11 @@ import type { Player, Position } from '@/types/game';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
 import type { Formation } from '@/lib/squadDeal';
 import { players as RAW_POOL } from '@/data/players';
+// Round 70: real 2026 rosters for every club in the big five leagues, baked
+// from the Transfermarkt style market value data in Supabase. The bake file
+// imports nothing but types, so reading it at module scope is safe.
+import { CM_ROSTERS, CM_ROSTER_META } from '@/data/clubManagerRosters';
+import type { BakedPlayer } from '@/data/clubManagerRosters';
 
 /**
  * Club Manager engine.
@@ -30,6 +35,7 @@ export type UclKoState = UclKoRound | 'out' | 'won' | null;
 
 export { FORMATIONS };
 export type { Formation };
+export { CM_ROSTER_META };
 
 export interface CMPlayer {
   id: string;
@@ -48,7 +54,22 @@ export interface CMPlayer {
   isYouth: boolean;
   seasonGoals: number;
   seasonAssists: number;
+  /** Real market value in £m (Round 70, baked data). Youth pads have none. */
+  value?: number;
 }
+
+/** Round 70: one board demand for the season, FIFA manager style. */
+export interface BoardObjective {
+  id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals';
+  /** What the board wants, e.g. "Finish top 4". */
+  label: string;
+  /** League position / cup stage rank / goal count the objective needs. */
+  target: number;
+  /** Rival club name, only on the rival objective. */
+  rivalName?: string;
+}
+
+export type ObjectiveStatus = 'onTrack' | 'behind' | 'done' | 'failed';
 
 export interface TableRow {
   club: string;
@@ -82,6 +103,8 @@ export interface MarketPlayer {
   rating: number;
   /** Asking price in £m. */
   price: number;
+  /** Real market value in £m (Round 70, baked data). */
+  value?: number;
 }
 
 export interface TransferRecord { dir: 'in' | 'out'; name: string; fee: number; }
@@ -161,6 +184,8 @@ export interface SeasonSummary {
   offers: JobOffer[];
   /** min(130, league points + 10 per trophy this season). */
   seasonScore: number;
+  /** Round 70: how each board objective ended up. */
+  objectives?: { label: string; hit: boolean }[];
 }
 
 export interface CareerState {
@@ -200,6 +225,12 @@ export interface CareerState {
   careerStats: CareerStats;
   /** Set by finishSeason so a reload mid-review can resume the summary. */
   pendingSummary: SeasonSummary | null;
+  /** Round 70: the board's demands for this season. */
+  boardObjectives?: BoardObjective[];
+  /** Round 70: the cup round we were knocked out at (for objective grading). */
+  cupExit?: CupRound | null;
+  /** Round 70: the UCL stage we were knocked out at (for objective grading). */
+  uclExit?: UclKoRound | 'group' | null;
 }
 
 export type NextFixtureInfo =
@@ -344,6 +375,151 @@ export function leagueOf(clubName: string): LeagueDef {
   return REAL_LEAGUES.find(l => l.clubs.includes(clubName)) ?? REAL_LEAGUES[0];
 }
 
+/* ================================================================== */
+/* Round 70: every club is playable. Nations, colors, rivals, defs.   */
+/* ================================================================== */
+
+export interface NationDef { id: string; name: string; flag: string; leagueId: string; }
+
+export const NATIONS: NationDef[] = [
+  { id: 'england', name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', leagueId: 'premier' },
+  { id: 'spain', name: 'Spain', flag: '🇪🇸', leagueId: 'laliga' },
+  { id: 'italy', name: 'Italy', flag: '🇮🇹', leagueId: 'seriea' },
+  { id: 'germany', name: 'Germany', flag: '🇩🇪', leagueId: 'bundesliga' },
+  { id: 'france', name: 'France', flag: '🇫🇷', leagueId: 'ligue1' },
+];
+
+/** Primary kit colors for the club dot in the UI (approximate, decorative). */
+const CLUB_COLORS: Record<string, string> = {
+  // Premier League
+  'Arsenal': '#ef0107', 'Aston Villa': '#95bfe5', 'Bournemouth': '#da291c', 'Brentford': '#e30613',
+  'Brighton': '#0057b8', 'Burnley': '#8b2a4a', 'Chelsea': '#034694', 'Crystal Palace': '#1b458f',
+  'Everton': '#2455b3', 'Fulham': '#d9d9d9', 'Leeds United': '#ffcd00', 'Liverpool': '#c8102e',
+  'Manchester City': '#6cabdd', 'Manchester United': '#da291c', 'Newcastle': '#a0a6ad',
+  'Nottingham Forest': '#dd0000', 'Sunderland': '#eb172b', 'Tottenham': '#9bb3d4',
+  'West Ham': '#9c2d46', 'Wolves': '#fdb913',
+  // La Liga
+  'Alavés': '#0761af', 'Athletic Club': '#ee2523', 'Atlético Madrid': '#cb3524', 'Barcelona': '#a50044',
+  'Real Betis': '#00954c', 'Celta Vigo': '#8ac3ee', 'Elche': '#1a9349', 'Espanyol': '#007fc8',
+  'Getafe': '#1265b3', 'Girona': '#cd2534', 'Levante': '#9c2743', 'Mallorca': '#e20613',
+  'Osasuna': '#d91a21', 'Real Oviedo': '#2b7fc4', 'Rayo Vallecano': '#e53027', 'Real Madrid': '#f0c243',
+  'Real Sociedad': '#1770b8', 'Sevilla': '#f43333', 'Valencia': '#ee7f24', 'Villarreal': '#ffe667',
+  // Serie A
+  'Atalanta': '#1e71b8', 'Bologna': '#a21c26', 'Cagliari': '#b01028', 'Como': '#2764b0',
+  'Cremonese': '#e3546c', 'Fiorentina': '#7d4bc0', 'Genoa': '#a71930', 'Inter Milan': '#0068a8',
+  'Juventus': '#d5d5d5', 'Lazio': '#87d8f7', 'Lecce': '#f7d117', 'AC Milan': '#fb090b',
+  'Napoli': '#12a0d7', 'Parma': '#f6c800', 'Pisa': '#3a6fc4', 'Roma': '#8e1f2f',
+  'Sassuolo': '#00a752', 'Torino': '#a8352b', 'Udinese': '#c9c9c9', 'Verona': '#ffdd00',
+  // Bundesliga
+  'Augsburg': '#ba3733', 'Bayer Leverkusen': '#e32221', 'Bayern Munich': '#dc052d',
+  'Borussia Dortmund': '#fde100', 'Gladbach': '#1a9f3d', 'Eintracht Frankfurt': '#e1000f',
+  'Freiburg': '#cc0000', 'Hamburg': '#2b62b8', 'Heidenheim': '#e30613', 'Hoffenheim': '#1961b5',
+  'Köln': '#ed1c24', 'Mainz': '#c3141e', 'RB Leipzig': '#dd0741', 'St. Pauli': '#b08968',
+  'Stuttgart': '#e32219', 'Union Berlin': '#eb1923', 'Werder Bremen': '#1d9053', 'Wolfsburg': '#65b32e',
+  // Ligue 1
+  'Angers': '#9aa0a6', 'Auxerre': '#4a7fc0', 'Brest': '#e30613', 'Le Havre': '#75aadb',
+  'Lens': '#ffd700', 'Lille': '#e01e13', 'Lorient': '#ff6600', 'Lyon': '#d6001c',
+  'Marseille': '#2faee0', 'Metz': '#a01d3c', 'Monaco': '#e63329', 'Nantes': '#fcd405',
+  'Nice': '#d10429', 'Paris FC': '#3d5da8', 'PSG': '#004170', 'Rennes': '#e13327',
+  'Strasbourg': '#009fe3', 'Toulouse': '#8b5bb8',
+};
+
+/**
+ * Real rivalries for the "finish above them" board objective. One direction
+ * per club; clubs without a famous league rival get the nearest-strength
+ * club instead (see buildBoardObjectives).
+ */
+const RIVALS: Record<string, string> = {
+  // England
+  'Arsenal': 'Tottenham', 'Tottenham': 'Arsenal', 'Manchester United': 'Liverpool',
+  'Liverpool': 'Everton', 'Everton': 'Liverpool', 'Manchester City': 'Manchester United',
+  'Chelsea': 'Arsenal', 'Newcastle': 'Sunderland', 'Sunderland': 'Newcastle',
+  'Aston Villa': 'Wolves', 'Wolves': 'Aston Villa', 'Crystal Palace': 'Brighton',
+  'Brighton': 'Crystal Palace', 'Fulham': 'Chelsea', 'West Ham': 'Tottenham',
+  'Brentford': 'Fulham', 'Leeds United': 'Manchester United', 'Nottingham Forest': 'Leeds United',
+  // Spain
+  'Real Madrid': 'Barcelona', 'Barcelona': 'Real Madrid', 'Atlético Madrid': 'Real Madrid',
+  'Sevilla': 'Real Betis', 'Real Betis': 'Sevilla', 'Athletic Club': 'Real Sociedad',
+  'Real Sociedad': 'Athletic Club', 'Espanyol': 'Barcelona', 'Girona': 'Barcelona',
+  'Valencia': 'Levante', 'Levante': 'Valencia', 'Villarreal': 'Valencia',
+  'Alavés': 'Athletic Club', 'Getafe': 'Rayo Vallecano', 'Rayo Vallecano': 'Atlético Madrid',
+  // Italy
+  'Inter Milan': 'AC Milan', 'AC Milan': 'Inter Milan', 'Juventus': 'Inter Milan',
+  'Torino': 'Juventus', 'Roma': 'Lazio', 'Lazio': 'Roma', 'Napoli': 'Juventus',
+  'Fiorentina': 'Juventus', 'Pisa': 'Fiorentina', 'Bologna': 'Fiorentina',
+  // Germany
+  'Bayern Munich': 'Borussia Dortmund', 'Borussia Dortmund': 'Bayern Munich',
+  'Gladbach': 'Köln', 'Köln': 'Gladbach', 'Hamburg': 'Werder Bremen', 'Werder Bremen': 'Hamburg',
+  'St. Pauli': 'Hamburg', 'Eintracht Frankfurt': 'Mainz', 'Mainz': 'Eintracht Frankfurt',
+  'Bayer Leverkusen': 'Köln', 'Freiburg': 'Stuttgart', 'Stuttgart': 'Freiburg',
+  'Union Berlin': 'RB Leipzig',
+  // France
+  'PSG': 'Marseille', 'Marseille': 'PSG', 'Lyon': 'Marseille', 'Nice': 'Monaco',
+  'Monaco': 'Nice', 'Lens': 'Lille', 'Lille': 'Lens', 'Rennes': 'Nantes', 'Nantes': 'Rennes',
+  'Brest': 'Lorient', 'Lorient': 'Brest', 'Strasbourg': 'Metz', 'Metz': 'Strasbourg',
+  'Paris FC': 'PSG',
+};
+
+/** Average rating of the club's best XI from the baked real rosters. */
+export function bakedXIAvg(clubName: string): number | null {
+  const roster = CM_ROSTERS[clubName];
+  if (!roster || !roster.length) return null;
+  const rs = roster.map(p => p.r).sort((a, b) => b - a).slice(0, 11);
+  while (rs.length < 11) rs.push(60);
+  return Math.round((rs.reduce((s, r) => s + r, 0) / 11) * 10) / 10;
+}
+
+let CLUB_DEF_CACHE: Map<string, ClubDef> | null = null;
+
+/**
+ * Round 70: a ClubDef for EVERY league club, synthesized from the baked
+ * rosters. Budget is a slice of squad value, the board's expected finish is
+ * the club's strength rank inside its own league, and tier comes from
+ * absolute strength (drives patience, UCL seeding and job offers).
+ * Built lazily so module evaluation order never bites (see the circular
+ * import gotcha in the NFL corruption file).
+ */
+function clubDefMap(): Map<string, ClubDef> {
+  if (CLUB_DEF_CACHE) return CLUB_DEF_CACHE;
+  const map = new Map<string, ClubDef>();
+  for (const league of REAL_LEAGUES) {
+    const ranked = league.clubs
+      .map(name => ({ name, xi: bakedXIAvg(name) ?? STRENGTH_PRIORS[name] ?? 65 }))
+      .sort((a, b) => b.xi - a.xi);
+    ranked.forEach((entry, i) => {
+      const roster = CM_ROSTERS[entry.name] ?? [];
+      const squadValue = roster.reduce((s, p) => s + p.v, 0);
+      const budget = Math.min(200, Math.max(8, Math.round(squadValue * 0.16)));
+      const tier: 1 | 2 | 3 | 4 = entry.xi >= 87 ? 1 : entry.xi >= 83 ? 2 : entry.xi >= 78 ? 3 : 4;
+      map.set(entry.name, {
+        name: entry.name,
+        tier,
+        color: CLUB_COLORS[entry.name] ?? '#8899aa',
+        budget,
+        expectation: i + 1,
+      });
+    });
+  }
+  CLUB_DEF_CACHE = map;
+  return map;
+}
+
+/** Every playable club (all five real leagues), strongest first. */
+export function playableClubs(leagueId: string): ClubDef[] {
+  const league = REAL_LEAGUES.find(l => l.id === leagueId) ?? REAL_LEAGUES[0];
+  return league.clubs
+    .map(name => clubDefMap().get(name))
+    .filter((c): c is ClubDef => !!c)
+    .sort((a, b) => a.expectation - b.expectation);
+}
+
+/** ClubDef for any playable club, with a safe fallback for odd save states. */
+export function clubDefFor(name: string): ClubDef {
+  return clubDefMap().get(name)
+    ?? CLUBS.find(c => c.name === name)
+    ?? { name, tier: 4, color: '#8899aa', budget: 20, expectation: 10 };
+}
+
 const CUP_ORDER: CupRound[] = ['R16', 'QF', 'SF', 'F'];
 const CUP_LABELS: Record<CupRound, string> = {
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
@@ -356,7 +532,12 @@ const UCL_LABELS: Record<UclKoRound, string> = {
 const SAVE_KEY = 'dukb-club-manager-save';
 // v2 (2026-08-05): real leagues replaced the fictional World Super League;
 // old saves carry a 20-club fictional table and must start fresh.
-const SAVE_VERSION = 2;
+// v3 (2026-08-13, Round 70): every club in the big five leagues is playable
+// with real 2026 rosters and market values, ratings moved to the 48-94 value
+// curve, and the board now sets multiple objectives. Old saves carry
+// old-curve squads that would be ~10 points weak against the new strengths,
+// so they must start fresh.
+const SAVE_VERSION = 3;
 
 /* ================================================================== */
 /* Small utilities                                                    */
@@ -421,11 +602,13 @@ function getPool(): Player[] {
 }
 
 export function clubByName(name: string): ClubDef | null {
-  return CLUBS.find(c => c.name === name) ?? null;
+  return clubDefMap().get(name) ?? CLUBS.find(c => c.name === name) ?? null;
 }
 
-/** Average rating of the club's best XI (padded with 66-rated youth). */
+/** Average rating of the club's best XI (baked rosters first, then pool). */
 export function clubPreviewRating(clubName: string): number {
+  const baked = bakedXIAvg(clubName);
+  if (baked !== null) return Math.round(baked);
   const ratings = getPool()
     .filter(p => p.club === clubName)
     .map(playerRating)
@@ -459,7 +642,9 @@ const YOUTH_LAST = [
 
 let youthSeq = 0;
 
-function makeYouth(position: Position, minRating = 62, maxRating = 72): CMPlayer {
+// Round 70: youth pads sit at 55-68 so they slot below a club's real players
+// on the new value curve instead of outranking half the squad.
+function makeYouth(position: Position, minRating = 55, maxRating = 68): CMPlayer {
   youthSeq += 1;
   const name = `${pick(YOUTH_FIRST)} ${pick(YOUTH_LAST)} (Youth)`;
   return {
@@ -495,6 +680,25 @@ function toCMPlayer(p: Player): CMPlayer {
   };
 }
 
+/** Round 70: a squad player from the baked real-roster data. */
+function bakedToCMPlayer(b: BakedPlayer): CMPlayer {
+  return {
+    id: `p-${slug(b.n)}`,
+    name: b.n,
+    position: b.p,
+    rating: b.r,
+    age: b.a,
+    fitness: 100,
+    morale: 70,
+    injuryWeeks: 0,
+    suspendedMatches: 0,
+    isYouth: false,
+    seasonGoals: 0,
+    seasonAssists: 0,
+    value: b.v,
+  };
+}
+
 /** Tops a squad up with youth so it has positional coverage + at least 16 players. */
 function ensureSquadCoverage(squad: CMPlayer[]): CMPlayer[] {
   const out = [...squad];
@@ -521,7 +725,12 @@ function ensureSquadCoverage(squad: CMPlayer[]): CMPlayer[] {
 }
 
 function buildSquad(clubName: string): CMPlayer[] {
-  const real = getPool().filter(p => p.club === clubName).map(toCMPlayer);
+  // Round 70: baked real 2026 rosters first (every big-five club, with real
+  // market values); the old static pool only backs up clubs outside the bake.
+  const baked = CM_ROSTERS[clubName];
+  const real = baked && baked.length
+    ? baked.map(bakedToCMPlayer)
+    : getPool().filter(p => p.club === clubName).map(toCMPlayer);
   return ensureSquadCoverage(real);
 }
 
@@ -607,34 +816,66 @@ function priceOf(rating: number, age: number): number {
   return Math.max(1, Math.round(baseValue(rating, age) * 1.15));
 }
 
-/** What we bank when selling, 90% of value (youth products fetch less). */
+/**
+ * Round 70: asking price anchored on the REAL market value when we have it
+ * (his complaint: "values are extremely high"). Selling clubs want a premium
+ * for prospects and knock a little off for the over-30s.
+ */
+function askingPrice(value: number, age: number): number {
+  const f = age <= 23 ? 1.25 : age <= 29 ? 1.1 : 0.9;
+  return Math.max(0.5, Math.round(value * f * 10) / 10);
+}
+
+/** What we bank when selling: 90% of real value (youth products fetch less). */
 export function sellValue(p: CMPlayer): number {
+  if (p.value !== undefined) {
+    return Math.max(0.3, Math.round(p.value * 0.9 * 10) / 10);
+  }
   const youthF = p.isYouth ? 0.4 : 1;
   return Math.max(1, Math.round(baseValue(p.rating, p.age) * 0.9 * youthF));
 }
 
+let MARKET_BASE_CACHE: MarketPlayer[] | null = null;
+
 /**
- * Deterministic view of who is purchasable right now: the whole real-player
- * pool minus my squad and minus anyone already transferred (goneNames).
+ * Round 70: the purchasable universe is every baked real player across all
+ * five leagues plus the European flavor clubs, nearly 2,000 players with
+ * real market-value pricing (was: a 716-player static pool with curve
+ * prices). Built once and cached; buildMarket filters it per career.
+ */
+function marketBase(): MarketPlayer[] {
+  if (MARKET_BASE_CACHE) return MARKET_BASE_CACHE;
+  const out: MarketPlayer[] = [];
+  const seen = new Set<string>();
+  for (const [club, roster] of Object.entries(CM_ROSTERS)) {
+    for (const b of roster) {
+      if (seen.has(b.n)) continue;
+      seen.add(b.n);
+      out.push({
+        name: b.n,
+        club,
+        position: b.p,
+        age: b.a,
+        rating: b.r,
+        price: askingPrice(b.v, b.a),
+        value: b.v,
+      });
+    }
+  }
+  out.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
+  MARKET_BASE_CACHE = out;
+  return out;
+}
+
+/**
+ * Deterministic view of who is purchasable right now: the baked player
+ * universe minus my squad and minus anyone already transferred (goneNames).
  * Called from a useMemo on every career change, so it must be pure.
  */
 export function buildMarket(career: CareerState): MarketPlayer[] {
   const squadNames = new Set(career.squad.map(p => p.name));
   const gone = new Set(career.goneNames);
-  return getPool()
-    .filter(p => !squadNames.has(p.name) && !gone.has(p.name))
-    .map(p => {
-      const rating = playerRating(p);
-      return {
-        name: p.name,
-        club: p.club,
-        position: p.position,
-        age: p.age || 25,
-        rating,
-        price: priceOf(rating, p.age || 25),
-      };
-    })
-    .sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
+  return marketBase().filter(p => !squadNames.has(p.name) && !gone.has(p.name));
 }
 
 /** Returns the new state, or null if the deal is not allowed. */
@@ -656,6 +897,7 @@ export function buyPlayer(career: CareerState, mp: MarketPlayer): CareerState | 
     isYouth: false,
     seasonGoals: 0,
     seasonAssists: 0,
+    value: mp.value,
   };
   return {
     ...career,
@@ -693,9 +935,14 @@ function generateHeadlines(state: CareerState): void {
   const count = Math.min(ri(3, 6), market.length);
   const candidates = shuffle(market.slice(0, 120)).slice(0, count);
   const heads: string[] = [];
+  // Round 70: any club in the five leagues can be the buyer, weighted toward
+  // my own league so the headlines feel local.
+  const myLeagueNames = leagueOf(state.clubName).clubs;
+  const bigSpenders = REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 6).map(c => c.name));
   for (const mp of candidates) {
-    const buyers = CLUBS.map(c => c.name).filter(n => n !== state.clubName && n !== mp.club);
-    const buyer = pick(buyers);
+    const pool = Math.random() < 0.55 ? myLeagueNames : bigSpenders;
+    const buyers = pool.filter(n => n !== state.clubName && n !== mp.club);
+    const buyer = buyers.length ? pick(buyers) : myLeagueNames[0];
     const fee = Math.max(1, Math.round(mp.price * (0.9 + Math.random() * 0.25)));
     heads.push(`${buyer} sign ${mp.name} from ${mp.club} for ${money(fee)}.`);
     state.goneNames.push(mp.name);
@@ -707,23 +954,28 @@ function generateHeadlines(state: CareerState): void {
 /* Season scaffolding: strengths, fixtures, calendar, cup + UCL       */
 /* ================================================================== */
 
-/** Per-season strength for every club we might face (with a little jitter). */
+/**
+ * Per-season strength for every club we might face (with a little jitter).
+ * Round 70: strengths come straight from the baked real rosters (best-XI
+ * average of the value-derived ratings), so the data drives the sim. The
+ * old priors only back up anything outside the bake.
+ */
 function genClubStrengths(myLeague: LeagueDef): Record<string, number> {
   const out: Record<string, number> = {};
-  // Real league opponents first: strength priors, else the player-pool XI.
+  const baseFor = (name: string): number =>
+    bakedXIAvg(name) ?? STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
   for (const name of myLeague.clubs) {
-    const base = STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
-    out[name] = clamp(base + ri(-2, 2), 55, 92);
+    out[name] = clamp(baseFor(name) + ri(-2, 2), 52, 95);
   }
-  for (const c of CLUBS) {
-    if (out[c.name] !== undefined) continue;
-    const base = STRENGTH_PRIORS[c.name] ?? clubPreviewRating(c.name);
-    out[c.name] = clamp(base + ri(-2, 2), 55, 92);
+  for (const league of REAL_LEAGUES) {
+    for (const name of league.clubs) {
+      if (out[name] !== undefined) continue;
+      out[name] = clamp(baseFor(name) + ri(-2, 2), 52, 95);
+    }
   }
   for (const e of EURO_CLUBS) {
     if (out[e] !== undefined) continue;
-    const base = Math.max(clubPreviewRating(e), 66);
-    out[e] = clamp(base + ri(-2, 2), 60, 88);
+    out[e] = clamp(baseFor(e) + ri(-2, 2), 56, 92);
   }
   return out;
 }
@@ -832,6 +1084,134 @@ function entryInvolvesMe(state: CareerState, entry: CalendarEntry): boolean {
     case 'uclKo': return state.uclKoRound === entry.uclRound;
     default: return false;
   }
+}
+
+/* ================================================================== */
+/* Round 70: board objectives, FIFA manager style                     */
+/* ================================================================== */
+
+const CUP_STAGE_RANK: Record<CupRound, number> = { R16: 0, QF: 1, SF: 2, F: 3 };
+const UCL_STAGE_RANK: Record<UclKoRound, number> = { QF: 1, SF: 2, F: 3 };
+
+/** How far we got in the cup: 0 = still/exit at R16 ... 4 = won it. */
+function cupProgressRank(state: CareerState): { rank: number; alive: boolean } {
+  if (state.cupRound === 'won') return { rank: 4, alive: false };
+  if (state.cupRound === 'out') return { rank: CUP_STAGE_RANK[state.cupExit ?? 'R16'], alive: false };
+  return { rank: CUP_STAGE_RANK[state.cupRound], alive: true };
+}
+
+/** How far we got in Europe: 0 = group, 1 = knockouts ... 4 = won it. */
+function uclProgressRank(state: CareerState): { rank: number; alive: boolean } {
+  if (state.uclKoRound === 'won') return { rank: 4, alive: false };
+  if (state.uclKoRound === 'out') {
+    const exit = state.uclExit;
+    return { rank: !exit || exit === 'group' ? 0 : UCL_STAGE_RANK[exit], alive: false };
+  }
+  if (state.uclKoRound) return { rank: UCL_STAGE_RANK[state.uclKoRound], alive: true };
+  return { rank: 0, alive: state.uclGroup !== null };
+}
+
+/** The league club whose squad strength sits closest to mine. */
+function nearestRival(clubName: string): string | null {
+  const league = leagueOf(clubName);
+  const myXi = bakedXIAvg(clubName) ?? 65;
+  const others = league.clubs
+    .filter(c => c !== clubName)
+    .map(c => ({ c, d: Math.abs((bakedXIAvg(c) ?? 65) - myXi) }))
+    .sort((a, b) => a.d - b.d);
+  return others.length ? others[0].c : null;
+}
+
+/**
+ * The board's demands for a season: league finish, a cup run scaled to the
+ * club's stature, Europe when qualified, finishing above the rival, and a
+ * goals quota. "Way more expectations", per the owner.
+ */
+export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSize: number): BoardObjective[] {
+  const club = clubDefFor(clubName);
+  const league = leagueOf(clubName);
+  const objs: BoardObjective[] = [];
+  objs.push({
+    id: 'league',
+    target: club.expectation,
+    label: club.expectation === 1 ? `Win the ${league.name}` : `Finish top ${club.expectation}`,
+  });
+  const cupTarget = club.tier === 1 ? 4 : club.tier === 2 ? 3 : club.tier === 3 ? 2 : 1;
+  objs.push({
+    id: 'cup',
+    target: cupTarget,
+    label:
+      cupTarget === 4 ? `Win the ${league.cupName}` :
+      cupTarget === 3 ? `Reach the ${league.cupName} final` :
+      cupTarget === 2 ? `Reach the ${league.cupName} semi-finals` :
+      `Win your ${league.cupName} Round of 16 tie`,
+  });
+  if (hasUcl) {
+    const t = club.tier === 1 ? 2 : 1;
+    objs.push({
+      id: 'ucl',
+      target: t,
+      label: t === 2 ? 'Reach the Champions League semi-finals' : 'Make the Champions League knockouts',
+    });
+  }
+  const mapped = RIVALS[clubName];
+  const rival = mapped && league.clubs.includes(mapped) ? mapped : nearestRival(clubName);
+  if (rival) {
+    objs.push({ id: 'rival', target: 0, rivalName: rival, label: `Finish above ${rival}` });
+  }
+  const rounds = 2 * (leagueSize - 1);
+  const goalsBase = club.tier === 1 ? 78 : club.tier === 2 ? 70 : club.tier === 3 ? 62 : 50;
+  const goals = rounds >= 38 ? goalsBase : Math.round(goalsBase * 0.9);
+  objs.push({ id: 'goals', target: goals, label: `Score ${goals}+ league goals` });
+  return objs;
+}
+
+/**
+ * Live status of every board objective. Pure; the hub renders this and
+ * finishSeason grades from it (seasonDone flips onTrack/behind into
+ * done/failed).
+ */
+export function objectiveStatuses(career: CareerState): { objective: BoardObjective; status: ObjectiveStatus }[] {
+  const objs = career.boardObjectives ?? [];
+  const table = sortedTable(career.table);
+  const myIdx = table.findIndex(r => r.club === career.clubName);
+  const myPos = myIdx >= 0 ? myIdx + 1 : 1;
+  const myRow = myIdx >= 0 ? table[myIdx] : null;
+  const roundsTotal = career.leagueClubs.length > 1 ? 2 * (career.leagueClubs.length - 1) : 38;
+  const played = myRow ? myRow.w + myRow.d + myRow.l : 0;
+  const seasonDone = career.week >= career.calendar.length;
+  return objs.map(objective => {
+    let status: ObjectiveStatus = 'onTrack';
+    if (objective.id === 'league') {
+      const met = myPos <= objective.target;
+      status = seasonDone ? (met ? 'done' : 'failed') : (met ? 'onTrack' : 'behind');
+    } else if (objective.id === 'cup') {
+      const { rank, alive } = cupProgressRank(career);
+      status = rank >= objective.target ? 'done' : alive ? 'onTrack' : 'failed';
+    } else if (objective.id === 'ucl') {
+      const { rank, alive } = uclProgressRank(career);
+      status = rank >= objective.target ? 'done' : alive ? 'onTrack' : 'failed';
+    } else if (objective.id === 'rival') {
+      const rIdx = table.findIndex(r => r.club === objective.rivalName);
+      if (rIdx < 0) {
+        status = 'onTrack';
+      } else {
+        const above = myPos < rIdx + 1;
+        status = seasonDone ? (above ? 'done' : 'failed') : (above || myPos === rIdx + 1 ? 'onTrack' : 'behind');
+      }
+    } else {
+      const gf = myRow ? myRow.gf : 0;
+      if (gf >= objective.target) {
+        status = 'done';
+      } else if (seasonDone) {
+        status = 'failed';
+      } else {
+        const pace = played > 0 ? (gf / played) * roundsTotal : objective.target;
+        status = pace >= objective.target * 0.92 ? 'onTrack' : 'behind';
+      }
+    }
+    return { objective, status };
+  });
 }
 
 /* ================================================================== */
@@ -955,11 +1335,24 @@ function generateMyScorers(state: CareerState, xi: CMPlayer[], goals: number): S
 
 function generateOppScorers(opp: string, goals: number): ScorerLine[] {
   const minutes = Array.from({ length: goals }, () => ri(1, 90)).sort((a, b) => a - b);
+  // Round 70: opponent scorers are their real attackers from the baked
+  // rosters, weighted toward the expensive ones, so "Semenyo 63'" instead of
+  // "Bournemouth No. 9".
+  const baked = (CM_ROSTERS[opp] ?? []).filter(p =>
+    groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID');
   const oppPool = getPool().filter(p =>
     p.club === opp && (groupOf(p.position) === 'ATT' || groupOf(p.position) === 'MID'));
   const lines: ScorerLine[] = [];
   for (let g = 0; g < goals; g++) {
-    const name = oppPool.length ? pick(oppPool).name : `${opp} No. ${ri(7, 11)}`;
+    let name: string;
+    if (baked.length) {
+      const idx = Math.floor(Math.pow(Math.random(), 1.7) * baked.length);
+      name = baked[Math.min(idx, baked.length - 1)].n;
+    } else if (oppPool.length) {
+      name = pick(oppPool).name;
+    } else {
+      name = `${opp} No. ${ri(7, 11)}`;
+    }
     lines.push({ name, minute: minutes[g] });
   }
   return lines;
@@ -1055,7 +1448,7 @@ function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null 
  */
 function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport {
   const fx = fixtureFor(state, entry)!;
-  const club = clubByName(state.clubName) ?? CLUBS[0];
+  const club = clubDefFor(state.clubName);
   const isKnockout = fx.competition === 'cup' || fx.competition === 'uclKo';
 
   const suspendedNow = state.squad.filter(p => p.suspendedMatches > 0).map(p => p.id);
@@ -1140,6 +1533,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
         confDelta += 3;
       } else {
         state.uclKoRound = 'out';
+        state.uclExit = 'group';
         events.push('💤 Out of the Champions League at the group stage.');
         confDelta -= 4;
       }
@@ -1165,7 +1559,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
       }
     } else {
       state.cupRound = 'out';
-      events.push(`❌ Knocked out of the ${leagueOf(state.clubName).cupName}.`);
+      state.cupExit = entry.cupRound ?? 'R16';
+      events.push(`❌ Knocked out of the ${leagueOf(state.clubName).cupName} at the ${CUP_LABELS[entry.cupRound ?? 'R16'].toLowerCase()} stage.`);
       confDelta -= entry.cupRound === 'R16' ? 3 : 4.5;
     }
   }
@@ -1188,6 +1583,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
       }
     } else {
       state.uclKoRound = 'out';
+      state.uclExit = entry.uclRound!;
       events.push(`❌ Champions League run ends at the ${UCL_LABELS[entry.uclRound!].toLowerCase()}.`);
       confDelta -= 4;
     }
@@ -1270,7 +1666,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
 /* ================================================================== */
 
 export function startCareer(clubName: string): CareerState {
-  const club = clubByName(clubName) ?? CLUBS[0];
+  // Round 70: any club in the five real leagues is a valid start.
+  const club = clubDefFor(clubName);
   const squad = buildSquad(club.name);
   // Owner task 61: the league is the club's REAL league with its real clubs.
   const league = leagueOf(club.name);
@@ -1305,7 +1702,11 @@ export function startCareer(clubName: string): CareerState {
     history: [],
     careerStats: { played: 0, wins: 0, draws: 0, losses: 0 },
     pendingSummary: null,
+    boardObjectives: [],
+    cupExit: null,
+    uclExit: null,
   };
+  state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length);
   state.cupDraw.R16 = drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex]);
   generateHeadlines(state);
@@ -1398,7 +1799,7 @@ const VERDICTS: Record<'A' | 'B' | 'C' | 'D' | 'F', string[]> = {
  */
 export function finishSeason(career: CareerState): { state: CareerState; summary: SeasonSummary } {
   const state: CareerState = JSON.parse(JSON.stringify(career));
-  const club = clubByName(state.clubName) ?? CLUBS[0];
+  const club = clubDefFor(state.clubName);
   const table = sortedTable(state.table);
   const myRow = table.find(r => r.club === state.clubName) ?? emptyRow(state.clubName);
   const position = Math.max(1, table.findIndex(r => r.club === state.clubName) + 1);
@@ -1432,13 +1833,23 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     ? { name: byAssists[0].name, assists: byAssists[0].seasonAssists }
     : null;
 
+  // Round 70: objective report card. Statuses are final here because the
+  // calendar is exhausted when finishSeason runs.
+  const objectiveResults = objectiveStatuses(state).map(s => ({
+    label: s.objective.label,
+    hit: s.status === 'done',
+  }));
+
   const offers: JobOffer[] = [];
   if (overshoot >= 2 || seasonTrophies.length > 0) {
-    const suitors = shuffle(CLUBS.filter(c => c.tier < club.tier && c.name !== state.clubName));
+    // Round 70: suitors can come from any of the five leagues now.
+    const everyClub = REAL_LEAGUES.flatMap(l => playableClubs(l.id));
+    const suitors = shuffle(everyClub.filter(c => c.tier < club.tier && c.name !== state.clubName));
     for (const s of suitors.slice(0, ri(1, 2))) {
+      const abroad = !leagueOf(state.clubName).clubs.includes(s.name);
       offers.push({
         club: s.name,
-        blurb: `${TIER_INFO[s.tier].emoji} ${TIER_INFO[s.tier].label} club · ${money(s.budget)} budget · board expects Top ${s.expectation}`,
+        blurb: `${TIER_INFO[s.tier].emoji} ${TIER_INFO[s.tier].label} club · ${leagueOf(s.name).name}${abroad ? ' (abroad)' : ''} · ${money(s.budget)} budget · board expects Top ${s.expectation}`,
       });
     }
   }
@@ -1463,6 +1874,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     signings: state.seasonSignings,
     offers,
     seasonScore: Math.min(130, myRow.pts + seasonTrophies.length * 10),
+    objectives: objectiveResults,
   };
 
   state.history = [
@@ -1481,10 +1893,18 @@ function agePlayer(p: CMPlayer): CMPlayer {
   else if (age <= 23) drift = ri(0, 2);
   else if (age >= 33) drift = -ri(1, 3);
   else if (age >= 30) drift = -ri(0, 2);
+  // Round 70: market value tracks the rating drift (each rating point is
+  // ~20% of value on the curve) and decays for the over-30s.
+  let value = p.value;
+  if (value !== undefined) {
+    value = value * Math.pow(1.2, drift) * (age >= 31 ? 0.85 : 1);
+    value = Math.max(0.2, Math.round(value * 10) / 10);
+  }
   return {
     ...p,
     age,
     rating: clamp(p.rating + drift, 40, 95),
+    value,
     fitness: 100,
     morale: 70,
     injuryWeeks: 0,
@@ -1504,8 +1924,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const prevPos = summary ? summary.position : Math.max(1, leaguePosition(career));
   const moving = !!(acceptOfferClub && clubByName(acceptOfferClub) && acceptOfferClub !== career.clubName);
   const clubName = moving && acceptOfferClub ? acceptOfferClub : career.clubName;
-  const club = clubByName(clubName) ?? CLUBS[0];
+  const club = clubDefFor(clubName);
   const season = career.season + 1;
+  // Round 70: hitting or missing board objectives carries into next season's
+  // starting confidence.
+  const objs = summary?.objectives ?? [];
+  const objNet = objs.reduce((s, o) => s + (o.hit ? 1 : -1), 0);
 
   let squad: CMPlayer[];
   if (moving) {
@@ -1533,7 +1957,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     season,
     week: 0,
     budget,
-    boardConfidence: moving ? 62 : clamp(55 + (club.expectation - prevPos) * 1.5, 40, 78),
+    boardConfidence: moving ? 62 : clamp(55 + (club.expectation - prevPos) * 1.5 + objNet * 2, 35, 82),
     sacked: false,
     squad,
     xiIds: [],
@@ -1552,7 +1976,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     uclKoRound: null,
     uclDraw: {},
     pendingSummary: null,
+    cupExit: null,
+    uclExit: null,
   };
+  state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length);
   state.cupDraw.R16 = drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
   generateHeadlines(state);

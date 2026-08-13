@@ -131,7 +131,9 @@ export function TransferScreen({ career, market, onBuy, onSell }: TransferScreen
                       <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{m.position}</span>
                       <div className="flex-1 min-w-0">
                         <div className="text-xs text-foreground truncate">{m.name}</div>
-                        <div className="text-[9px] text-muted-foreground truncate">{m.club} · {m.age}y</div>
+                        <div className="text-[9px] text-muted-foreground truncate">
+                          {m.club} · {m.age}y{m.value !== undefined ? <> · worth {money(m.value)}</> : null}
+                        </div>
                       </div>
                       <span className={cn('text-sm font-bold font-display', ratingTint(m.rating))}>{m.rating}</span>
                       <button
