@@ -1876,15 +1876,26 @@ function generateHeadlines(state: CareerState): void {
   const count = Math.min(ri(3, 6), market.length);
   const candidates = shuffle(market.slice(0, 120)).slice(0, count);
   const heads: string[] = [];
-  // Round 70: any club in the five leagues can be the buyer, weighted toward
-  // my own league so the headlines feel local.
+  // Round 99: found by playing it. The old rule picked the buyer at random
+  // from my league or a big spender list, so the news feed produced things
+  // like "Hull City sign Alphonso Davies for 42m" and "Twente sign Desire
+  // Doue for 88m". Promoted sides and mid table Eredivisie clubs do not sign
+  // 80m superstars, and a feed that says they do reads as fake immediately.
+  // A club can only be in for a player its budget could plausibly cover.
   const myLeagueNames = leagueOf(state.clubName).clubs;
-  const bigSpenders = REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 6).map(c => c.name));
+  const allClubs = REAL_LEAGUES.flatMap(l => playableClubs(l.id));
   for (const mp of candidates) {
-    const pool = Math.random() < 0.55 ? myLeagueNames : bigSpenders;
-    const buyers = pool.filter(n => n !== state.clubName && n !== mp.club);
-    const buyer = buyers.length ? pick(buyers) : myLeagueNames[0];
     const fee = Math.max(1, Math.round(mp.price * (0.9 + Math.random() * 0.25)));
+    // Who could actually afford him. One player can eat a club's entire
+    // transfer budget for the season if he is the marquee signing, but not
+    // more than that, which is what keeps Brentford out of the Osimhen race.
+    const affordable = allClubs.filter(c => c.name !== state.clubName && c.name !== mp.club && c.budget >= fee);
+    // Weight toward my own league so the feed still feels local, but only
+    // among the clubs that could really do the deal.
+    const local = affordable.filter(c => myLeagueNames.includes(c.name));
+    const pool = (local.length && Math.random() < 0.5) ? local : affordable;
+    if (pool.length === 0) continue;   // nobody in the world can afford him
+    const buyer = pick(pool).name;
     heads.push(`${buyer} sign ${mp.name} from ${mp.club} for ${money(fee)}.`);
     state.goneNames.push(mp.name);
     // Round 71: every AI deal lands in the Latest Transfers feed too.

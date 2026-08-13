@@ -389,11 +389,17 @@ export function TransferScreen({
             </div>
           )}
 
-          {windowOpen ? (
-            <div className="bg-card border border-border rounded-xl p-2 max-h-[28rem] overflow-y-auto">
+          {/* Round 99: found by playing it. This whole list used to be hidden
+              whenever the window was shut, and the window shuts the moment you
+              play a match, so a player who taps Play Match straight away never
+              saw the transfer list, loan list or block controls at all. Telling
+              your club a player is available is an instruction, not a deal, so
+              it works any time. Only the money moves need an open window. */}
+          <div className="bg-card border border-border rounded-xl p-2 max-h-[28rem] overflow-y-auto">
               <p className="text-[9px] text-muted-foreground px-1 pb-1.5 border-b border-border/40">
-                Sell cashes out now at 90 percent of his value. Listing him takes longer but the market
-                decides the fee, and a bidding war beats any instant sale.
+                {windowOpen
+                  ? 'Sell cashes out now at 90 percent of his value. Listing him takes longer but the market decides the fee, and a bidding war beats any instant sale.'
+                  : 'The window is shut, so nobody moves today. You can still tell the club who is available, who is off limits and who you want out on loan, and it will be waiting when it reopens.'}
               </p>
               {sellable.map(p => {
                 const st = p.transferStatus;
@@ -460,10 +466,8 @@ export function TransferScreen({
               {career.squad.length <= 14 && (
                 <p className="text-[10px] text-yellow-400 px-1 py-2">Squad at minimum size (14). Nobody else can leave.</p>
               )}
-            </div>
-          ) : (
-            <ClosedWindowBusiness career={career} />
-          )}
+          </div>
+          {!windowOpen && <ClosedWindowBusiness career={career} />}
         </div>
       )}
 

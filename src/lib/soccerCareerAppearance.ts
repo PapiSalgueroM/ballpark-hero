@@ -93,17 +93,22 @@ export const BOOTS: (AppearanceOption & { color: string; flavor: string })[] = [
   { id: "bubblegum", label: "Bubblegum Pop", color: "#E86FAE", flavor: "Pink enough to trend on its own." },
 ];
 
+/* Round 99: found by playing it. Both places these appear render them as
+   "you {line}", but every line was written in the third person, so the
+   character creation screen every single player sees read "you rips off
+   toward the corner flag", "you stands frozen", "you throws a backflip".
+   All ten are second person now, which is how they were always rendered. */
 export const CELEBRATIONS: (AppearanceOption & { emoji: string; line: string })[] = [
-  { id: "knee_slide", label: "Knee Slide", emoji: "🛝", line: "rips off toward the corner flag and slides on the knees" },
-  { id: "statue", label: "The Statue", emoji: "🗿", line: "stands frozen, arms crossed, dead serious, while teammates mob the pose" },
-  { id: "backflip", label: "Backflip", emoji: "🤸", line: "throws a full backflip that makes the physio cover their eyes" },
-  { id: "shush", label: "The Shush", emoji: "🤫", line: "shushes the away end with one finger. They deserved it" },
-  { id: "heart_hands", label: "Heart Hands", emoji: "🫶", line: "makes a heart to the family section" },
-  { id: "robot", label: "The Robot", emoji: "🤖", line: "hits a crisp robot that goes straight to every highlight reel" },
-  { id: "cradle", label: "Baby Cradle", emoji: "👶", line: "rocks the baby cradle for the newest member of the family" },
-  { id: "binoculars", label: "Binoculars", emoji: "🔭", line: "scans the crowd through pretend binoculars looking for the doubters" },
-  { id: "phone_call", label: "Phone Call", emoji: "📞", line: "picks up an imaginary phone. Sorry, the GOAT line is busy" },
-  { id: "sleeper", label: "The Sleeper", emoji: "😴", line: "lies down for a nap on the grass. Too easy" },
+  { id: "knee_slide", label: "Knee Slide", emoji: "🛝", line: "rip off toward the corner flag and slide on the knees" },
+  { id: "statue", label: "The Statue", emoji: "🗿", line: "stand frozen, arms crossed, dead serious, while your teammates mob the pose" },
+  { id: "backflip", label: "Backflip", emoji: "🤸", line: "throw a full backflip that makes the physio cover their eyes" },
+  { id: "shush", label: "The Shush", emoji: "🤫", line: "shush the away end with one finger. They deserved it" },
+  { id: "heart_hands", label: "Heart Hands", emoji: "🫶", line: "make a heart to the family section" },
+  { id: "robot", label: "The Robot", emoji: "🤖", line: "hit a crisp robot that goes straight to every highlight reel" },
+  { id: "cradle", label: "Baby Cradle", emoji: "👶", line: "rock the baby cradle for the newest member of the family" },
+  { id: "binoculars", label: "Binoculars", emoji: "🔭", line: "scan the crowd through pretend binoculars looking for the doubters" },
+  { id: "phone_call", label: "Phone Call", emoji: "📞", line: "pick up an imaginary phone. Sorry, the GOAT line is busy" },
+  { id: "sleeper", label: "The Sleeper", emoji: "😴", line: "lie down for a nap on the grass. Too easy" },
 ];
 
 /* Lookup helpers, all safe on unknown ids so old or hand-edited saves never crash. */

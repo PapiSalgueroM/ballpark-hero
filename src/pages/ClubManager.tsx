@@ -549,7 +549,11 @@ const ClubManager = () => {
           <span className="text-[10px] font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5">Season {c.season}</span>
         </div>
         <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground flex-wrap">
-          <span>#{g.myPosition || '-'} in league</span>
+          {/* Round 99: found by playing it. Before a ball is kicked every
+              club is on zero points, so the "position" was just wherever the
+              shuffled table happened to put you: a brand new Manchester City
+              save opened on "#15 in league", which reads as broken. */}
+          <span>{c.week === 0 ? 'Season not started' : `#${g.myPosition || '-'} in league`}</span>
           <span className="text-gold font-semibold">{money(c.budget)}</span>
           <span className="inline-flex items-center gap-1">
             {c.form.length === 0 && <span>No matches yet</span>}
