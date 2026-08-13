@@ -6,6 +6,7 @@ import {
   buildMarket, buyPlayer, sellPlayer, autoPickXI, nextFixture, sortedTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
   startNegotiation, makeOffer, walkAway, payClause, loanIn, acceptBid, rejectBid,
+  answerMessage,
 } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow } from '@/lib/clubManager';
 
@@ -215,6 +216,11 @@ export function useClubManager() {
     setCareer(prev => (prev ? rejectBid(prev, playerId) : prev));
   }, []);
 
+  /* ---------- Round 73: the inbox ---------- */
+  const answer = useCallback((messageId: string, optionIdx: number) => {
+    setCareer(prev => (prev ? answerMessage(prev, messageId, optionIdx) : prev));
+  }, []);
+
   return {
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition,
@@ -224,6 +230,7 @@ export function useClubManager() {
     buy, sell,
     negotiate, offer, walk, dismissNegotiation, clause, loan,
     acceptIncomingBid, rejectIncomingBid,
+    answer,
   };
 }
 

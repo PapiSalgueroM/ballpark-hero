@@ -58,6 +58,39 @@ export interface CMPlayer {
   value?: number;
   /** Round 71: loan signings go home at the end of the season. */
   onLoan?: boolean;
+  /** Round 73: full per-season stat line. */
+  apps?: number;
+  seasonYellows?: number;
+  seasonReds?: number;
+  /** Clean sheets, tracked for keepers and defenders. */
+  cleanSheets?: number;
+  /** Sum of match ratings; average = ratingSum / apps. */
+  ratingSum?: number;
+}
+
+/** Round 73: one line in the season's fixture and result log. */
+export interface ResultLogEntry {
+  week: number;
+  comp: string;
+  opp: string;
+  home: boolean | null;
+  score: string;
+  res: FormResult;
+}
+
+export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support' | 'laugh';
+
+/** Round 73: players slide into your DMs. */
+export interface PlayerMessage {
+  id: string;
+  playerName: string;
+  playerId: string;
+  kind: 'startMe' | 'wantMove' | 'drama' | 'praise';
+  text: string;
+  options: { label: string; effect: MessageEffect }[];
+  week: number;
+  /** Set once answered (or auto-resolved): the outcome line shown in the UI. */
+  resolved?: string;
 }
 
 /** Round 70: one board demand for the season, FIFA manager style. */
@@ -293,6 +326,12 @@ export interface CareerState {
   coldNames?: string[];
   /** Round 71: the Latest Transfers feed, newest last, capped at 80. */
   transferLog?: TransferNews[];
+  /** Round 73: this season's played fixtures, newest last, capped at 60. */
+  resultLog?: ResultLogEntry[];
+  /** Round 73: player messages, newest first, capped at 8. */
+  inbox?: PlayerMessage[];
+  /** Round 73: player ids you promised a start; break it and they notice. */
+  promisedStarts?: string[];
 }
 
 export type NextFixtureInfo =
@@ -1153,6 +1192,199 @@ export function loanIn(career: CareerState, mp: MarketPlayer): CareerState | nul
   return completeSigning(career, mp, loanFeeOf(mp), true);
 }
 
+/* ================================================================== */
+/* Round 73: player messages, the dressing room slides into your DMs  */
+/* ================================================================== */
+
+let msgSeq = 0;
+
+const DRAMA_POOL: { text: string; options: { label: string; effect: MessageEffect }[] }[] = [
+  { text: '{P} crashed his brand new Lamborghini into the training ground fountain at 2am. The fountain lost.', options: [{ label: 'Fine him two weeks wages', effect: 'fine' }, { label: 'Laugh it off in the press', effect: 'laugh' }] },
+  { text: '{P} got caught selling his match worn boots on eBay. Buy it now, no returns.', options: [{ label: 'Fine him', effect: 'fine' }, { label: 'Buy a pair yourself', effect: 'laugh' }] },
+  { text: "{P}'s wife and {Q}'s wife are feuding on Instagram and the dressing room has picked sides.", options: [{ label: 'Order everyone offline', effect: 'refuse' }, { label: 'Stay out of it', effect: 'laugh' }] },
+  { text: '{P} wants to skip Saturday to attend his cousin\'s album release party. The cousin raps under the name Lil Nutmeg.', options: [{ label: 'Absolutely not', effect: 'refuse' }, { label: 'Let him go', effect: 'support' }] },
+  { text: '{P} showed up to training in a full chrome wrap on his car with his own face printed on the hood.', options: [{ label: 'Fine him for the parking spot he took', effect: 'fine' }, { label: 'Respect it, honestly', effect: 'laugh' }] },
+  { text: '{P} has started a podcast. Episode one is called "Why My Manager Does Not Understand Football".', options: [{ label: 'Make him listen to it in front of everyone', effect: 'fine' }, { label: 'Go on the podcast', effect: 'support' }] },
+  { text: '{P} adopted an emotional support alpaca and wants to bring it to the training ground.', options: [{ label: 'No farm animals', effect: 'refuse' }, { label: 'The alpaca stays, morale is up', effect: 'support' }] },
+  { text: '{P} was spotted at a casino until 4am two nights before the match. He says he was "networking".', options: [{ label: 'Fine him', effect: 'fine' }, { label: 'Have a quiet word', effect: 'listen' }] },
+  { text: '{P} bought the apartment building next to the stadium and is renting flats to away fans on matchday.', options: [{ label: 'Make him stop', effect: 'refuse' }, { label: 'Business is business', effect: 'laugh' }] },
+  { text: '{P} got a tattoo of the club badge. The tattoo artist misspelled the club name.', options: [{ label: 'Pay for the fix', effect: 'support' }, { label: 'It stays, as a lesson', effect: 'laugh' }] },
+  { text: '{P} challenged a fan who criticized him to a race. The fan won. It is everywhere.', options: [{ label: 'Ban him from social media', effect: 'refuse' }, { label: 'Sign the fan for the youth team', effect: 'laugh' }] },
+  { text: '{P} says his personal chef was poached by {Q} and now they are not speaking.', options: [{ label: 'Hire a team chef for everyone', effect: 'fine' }, { label: 'Let them sort it out', effect: 'laugh' }] },
+  { text: '{P} missed training because he flew to Milan "for a haircut". The haircut is admittedly immaculate.', options: [{ label: 'Fine him', effect: 'fine' }, { label: "Ask for the barber's number", effect: 'laugh' }] },
+  { text: '{P} has been teaching the youth players a goal celebration so elaborate it needs a permit.', options: [{ label: 'Ban it', effect: 'refuse' }, { label: 'Ask for a role in it', effect: 'support' }] },
+  { text: "{P} accidentally liked a rival fan account's post calling for your sacking. Says his phone was hacked. Sure.", options: [{ label: 'Fine him', effect: 'fine' }, { label: 'Let it slide, but he knows', effect: 'listen' }] },
+  { text: '{P} turned up with a personal documentary crew. They want to film team talks "for the arc".', options: [{ label: 'No cameras inside', effect: 'refuse' }, { label: 'Give them one episode', effect: 'support' }] },
+  { text: '{P} is selling his own brand of protein cereal in the players lounge. {Q} says it tastes like drywall.', options: [{ label: 'Shut the stand down', effect: 'refuse' }, { label: 'Invest early', effect: 'laugh' }] },
+  { text: '{P} got stuck in the stadium elevator for two hours and live streamed the whole thing. Record viewership.', options: [{ label: 'Check on him', effect: 'support' }, { label: 'Clip it for the club account', effect: 'laugh' }] },
+  { text: '{P} wants the club to sign his brother. His brother is 34 and plays Sunday league. He is, however, "in the best shape of his life".', options: [{ label: 'Politely decline', effect: 'refuse' }, { label: 'Offer a trial, for the content', effect: 'laugh' }] },
+  { text: '{P} rated his own performance 10/10 in the club app after a 4-0 defeat.', options: [{ label: 'Make him explain it to the squad', effect: 'fine' }, { label: 'Confidence is confidence', effect: 'laugh' }] },
+  { text: '{P} has been parking in your spot all month and putting a traffic cone on his own.', options: [{ label: 'Tow it', effect: 'fine' }, { label: 'Take the cone spot, be the bigger man', effect: 'laugh' }] },
+  { text: '{P} announced his retirement on social media by accident. He meant to post his dinner.', options: [{ label: 'Get the club to clarify', effect: 'support' }, { label: 'Let the rumors run a day', effect: 'laugh' }] },
+  { text: '{P} and {Q} got matching tattoos to celebrate a win. Neither remembers deciding this.', options: [{ label: 'Fine them both', effect: 'fine' }, { label: 'Team bonding is team bonding', effect: 'support' }] },
+  { text: '{P} claims a fortune teller told him he will score a hat-trick this weekend, and he has already ordered the match ball display case.', options: [{ label: 'Manage expectations', effect: 'listen' }, { label: 'Start him. Fate is fate', effect: 'promise' }] },
+];
+
+const START_ME_TEXTS = [
+  'Gaffer. {P} here. I am the best player at this club and I am watching from the bench. Start me Saturday or we have a problem.',
+  '{P} knocked on your office door: "I did not join this club to model the warmup jacket. I want to start."',
+  "{P}'s agent texts you at midnight: my client trains like a machine and sits like furniture. Start him.",
+];
+const WANT_MOVE_TEXTS = [
+  '{P} has requested a meeting. He is not happy, and the word "transfer" was used twice before he sat down.',
+  "{P}'s camp has been whispering to journalists. He wants out unless things change fast.",
+];
+const PRAISE_TEXTS = [
+  '{P} after the win: "That one was for you, boss. The lads would run through a wall for you right now."',
+  '{P} left a bottle of very expensive wine on your desk with a note: "More of that, yeah?"',
+];
+
+function pushMessage(state: CareerState, msg: Omit<PlayerMessage, 'id' | 'week'>): void {
+  msgSeq += 1;
+  const inbox = state.inbox ?? [];
+  inbox.unshift({ ...msg, id: `msg-${state.season}-${state.week}-${msgSeq}`, week: state.week });
+  state.inbox = inbox.slice(0, 8);
+}
+
+/** Rolled after each match: someone in the squad has something to say. */
+function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean, margin: number): void {
+  const unresolved = (state.inbox ?? []).filter(m => !m.resolved).length;
+  if (unresolved >= 3 || Math.random() > 0.38) return;
+  const xiIds = new Set(xi.map(p => p.id));
+  const roll = Math.random();
+
+  // Praise after a statement win.
+  if (won && margin >= 3 && roll < 0.35) {
+    const hero = xi.filter(p => !p.isYouth)[0];
+    if (hero) {
+      pushMessage(state, {
+        playerName: hero.name,
+        playerId: hero.id,
+        kind: 'praise',
+        text: pick(PRAISE_TEXTS).replace('{P}', hero.name),
+        options: [{ label: 'Appreciate it', effect: 'support' }],
+      });
+      return;
+    }
+  }
+
+  // A benched name wants your teamsheet.
+  if (roll < 0.45) {
+    const xiRatings = xi.map(p => p.rating).sort((a, b) => a - b);
+    const floor = xiRatings[0] ?? 60;
+    const benched = state.squad
+      .filter(p => !xiIds.has(p.id) && !p.isYouth && isAvailable(p) && p.rating >= floor - 2 && p.morale < 80)
+      .sort((a, b) => b.rating - a.rating)[0];
+    if (benched) {
+      pushMessage(state, {
+        playerName: benched.name,
+        playerId: benched.id,
+        kind: 'startMe',
+        text: pick(START_ME_TEXTS).replace('{P}', benched.name),
+        options: [
+          { label: 'Promise him a start', effect: 'promise' },
+          { label: 'Earn it in training', effect: 'refuse' },
+          { label: 'Hear him out', effect: 'listen' },
+        ],
+      });
+      return;
+    }
+  }
+
+  // A miserable star wants out.
+  if (roll < 0.6) {
+    const unhappy = state.squad
+      .filter(p => !p.isYouth && p.morale < 45 && p.rating >= 72)
+      .sort((a, b) => b.rating - a.rating)[0];
+    if (unhappy) {
+      pushMessage(state, {
+        playerName: unhappy.name,
+        playerId: unhappy.id,
+        kind: 'wantMove',
+        text: pick(WANT_MOVE_TEXTS).replace('{P}', unhappy.name),
+        options: [
+          { label: 'You are going nowhere', effect: 'refuse' },
+          { label: 'Promise more minutes', effect: 'promise' },
+          { label: 'Talk it through', effect: 'listen' },
+        ],
+      });
+      return;
+    }
+  }
+
+  // Otherwise: pure drama.
+  const nonYouth = state.squad.filter(p => !p.isYouth);
+  if (nonYouth.length < 2) return;
+  const p1 = pick(nonYouth);
+  let p2 = pick(nonYouth);
+  let tries = 0;
+  while (p2.id === p1.id && tries < 5) { p2 = pick(nonYouth); tries += 1; }
+  const drama = pick(DRAMA_POOL);
+  pushMessage(state, {
+    playerName: p1.name,
+    playerId: p1.id,
+    kind: 'drama',
+    text: drama.text.replace('{P}', p1.name).replace('{Q}', p2.name),
+    options: drama.options,
+  });
+}
+
+/** Answer a message. Pure: returns the new state. */
+export function answerMessage(career: CareerState, messageId: string, optionIdx: number): CareerState {
+  const inbox = career.inbox ?? [];
+  const msg = inbox.find(m => m.id === messageId);
+  if (!msg || msg.resolved) return career;
+  const opt = msg.options[optionIdx];
+  if (!opt) return career;
+
+  let squad = career.squad;
+  let budget = career.budget;
+  let promisedStarts = career.promisedStarts ?? [];
+  let resolved = '';
+  const bump = (id: string, delta: number) => {
+    squad = squad.map(p => (p.id === id ? { ...p, morale: clamp(p.morale + delta, 5, 99) } : p));
+  };
+
+  switch (opt.effect) {
+    case 'promise':
+      bump(msg.playerId, 10);
+      promisedStarts = [...promisedStarts, msg.playerId];
+      resolved = 'You promised him a start. He left smiling. Break it and he will notice.';
+      break;
+    case 'refuse':
+      bump(msg.playerId, -8);
+      resolved = 'You shut it down. He was not thrilled.';
+      break;
+    case 'listen':
+      bump(msg.playerId, 4);
+      resolved = 'You heard him out. Sometimes that is all it takes.';
+      break;
+    case 'fine': {
+      const fine = Math.max(0.1, Math.round((0.1 + Math.random() * 0.4) * 10) / 10);
+      budget = Math.round((budget + fine) * 10) / 10;
+      bump(msg.playerId, -6);
+      resolved = `Fined. ${money(fine)} into the club account. He is sulking.`;
+      break;
+    }
+    case 'support':
+      bump(msg.playerId, 8);
+      resolved = 'You backed him. The dressing room noticed.';
+      break;
+    case 'laugh':
+      bump(msg.playerId, 2);
+      resolved = 'You let it slide. Football is meant to be fun.';
+      break;
+  }
+
+  return {
+    ...career,
+    squad,
+    budget,
+    promisedStarts,
+    inbox: inbox.map(m => (m.id === messageId ? { ...m, resolved } : m)),
+  };
+}
+
 /* ---------- Round 71: fee negotiations and bidding wars ---------- */
 
 const SELLER_OPENERS = [
@@ -1801,14 +2033,23 @@ function weightedPick(xi: CMPlayer[], weight: (p: CMPlayer) => number): CMPlayer
   return xi[xi.length - 1];
 }
 
-/** Generates my scorers, bumps their season tallies, credits some assists. */
-function generateMyScorers(state: CareerState, xi: CMPlayer[], goals: number): ScorerLine[] {
+/** Generates my scorers, bumps their season tallies, credits some assists.
+ *  Round 73: also returns per-player goal/assist counts so match ratings can
+ *  reward the players who actually produced. */
+function generateMyScorers(
+  state: CareerState,
+  xi: CMPlayer[],
+  goals: number,
+): { lines: ScorerLine[]; goalCounts: Map<string, number>; assistCounts: Map<string, number> } {
   const minutes = Array.from({ length: goals }, () => ri(1, 90)).sort((a, b) => a - b);
   const lines: ScorerLine[] = [];
+  const goalCounts = new Map<string, number>();
+  const assistCounts = new Map<string, number>();
   for (let g = 0; g < goals; g++) {
     const scorer = weightedPick(xi, scorerWeight);
     if (!scorer) break;
     lines.push({ name: scorer.name, minute: minutes[g] });
+    goalCounts.set(scorer.id, (goalCounts.get(scorer.id) ?? 0) + 1);
     const sq = state.squad.find(p => p.id === scorer.id);
     if (sq) {
       sq.seasonGoals += 1;
@@ -1818,12 +2059,13 @@ function generateMyScorers(state: CareerState, xi: CMPlayer[], goals: number): S
       const others = xi.filter(p => p.id !== scorer.id && p.position !== 'GK');
       const assister = weightedPick(others, p => scorerWeight(p) * 0.6 + 0.5);
       if (assister) {
+        assistCounts.set(assister.id, (assistCounts.get(assister.id) ?? 0) + 1);
         const aq = state.squad.find(p => p.id === assister.id);
         if (aq) aq.seasonAssists += 1;
       }
     }
   }
-  return lines;
+  return { lines, goalCounts, assistCounts };
 }
 
 function generateOppScorers(opp: string, goals: number): ScorerLine[] {
@@ -1969,7 +2211,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
   const events: string[] = [];
   let trophyWon: string | null = null;
 
-  const myScorers = generateMyScorers(state, xi, myGoals);
+  const { lines: myScorers, goalCounts, assistCounts } = generateMyScorers(state, xi, myGoals);
   const oppScorers = generateOppScorers(fx.opponent, oppGoals);
   const tally = new Map<string, number>();
   for (const sc of myScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
@@ -2082,6 +2324,37 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
     }
   }
 
+  /* ----- Round 73: full stat lines for everyone who played ----- */
+  const cleanSheet = oppGoals === 0;
+  const xiIdSet = new Set(xi.map(p => p.id));
+  state.squad = state.squad.map(p => {
+    if (!xiIdSet.has(p.id)) return p;
+    const g = goalCounts.get(p.id) ?? 0;
+    const a = assistCounts.get(p.id) ?? 0;
+    const base = won ? 7.0 : drawn ? 6.4 : 5.7;
+    const matchRating = clamp(
+      base + g * 0.9 + a * 0.5 + (Math.random() * 1.2 - 0.6) + (cleanSheet && (p.position === 'GK' || groupOf(p.position) === 'DEF') ? 0.5 : 0),
+      4.5, 10,
+    );
+    const defensive = p.position === 'GK' || groupOf(p.position) === 'DEF';
+    return {
+      ...p,
+      apps: (p.apps ?? 0) + 1,
+      ratingSum: Math.round(((p.ratingSum ?? 0) + matchRating) * 10) / 10,
+      cleanSheets: (p.cleanSheets ?? 0) + (cleanSheet && defensive ? 1 : 0),
+    };
+  });
+  // Yellow cards: 0-3 a match, defenders and holders pick up most of them.
+  const yellows = ri(0, 3);
+  for (let i = 0; i < yellows; i++) {
+    const victim = weightedPick(xi, p =>
+      p.position === 'GK' ? 0.1 : groupOf(p.position) === 'DEF' ? 2.2 : p.position === 'CDM' ? 2.4 : groupOf(p.position) === 'MID' ? 1.4 : 0.8);
+    if (victim) {
+      const sq = state.squad.find(p => p.id === victim.id);
+      if (sq) sq.seasonYellows = (sq.seasonYellows ?? 0) + 1;
+    }
+  }
+
   /* ----- squad after-effects ----- */
   const moraleShift = won ? 5 : drawn ? -1 : -6;
   state.squad = state.squad.map(p => ({ ...p, morale: clamp(p.morale + moraleShift, 5, 99) }));
@@ -2104,9 +2377,22 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
     const p = state.squad.find(x => x.id === hothead.id);
     if (p && p.injuryWeeks === 0) {
       p.suspendedMatches = ri(1, 2);
+      p.seasonReds = (p.seasonReds ?? 0) + 1;
       events.push(`🟥 ${p.name} was sent off, suspended for ${p.suspendedMatches} match${p.suspendedMatches > 1 ? 'es' : ''}.`);
     }
   }
+
+  // Round 73: the season's fixture log feeds the calendar card.
+  const log = state.resultLog ?? [];
+  log.push({
+    week: state.week,
+    comp: fx.compLabel,
+    opp: fx.opponent,
+    home: fx.home,
+    score: `${myGoals}-${oppGoals}`,
+    res: won ? 'W' : drawn ? 'D' : 'L',
+  });
+  state.resultLog = log.slice(-60);
 
   const res: FormResult = won ? 'W' : drawn ? 'D' : 'L';
   state.form = [...state.form, res].slice(-5);
@@ -2136,6 +2422,29 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
       state.careerStats.biggestDefeat = { opp: fx.opponent, score: `${oppGoals}-${myGoals}` };
     }
   }
+
+  // Round 73: broken start promises get noticed, then the dressing room
+  // finds something new to message you about.
+  const promised = state.promisedStarts ?? [];
+  if (promised.length) {
+    for (const id of promised) {
+      if (xiIdSet.has(id)) continue;
+      const p = state.squad.find(x => x.id === id);
+      if (p && isAvailable(p)) {
+        p.morale = clamp(p.morale - 14, 5, 99);
+        pushMessage(state, {
+          playerName: p.name,
+          playerId: p.id,
+          kind: 'drama',
+          text: `${p.name} sat in the dressing room long after everyone left. You promised him a start. He counted the teamsheet twice.`,
+          options: [],
+          resolved: 'He will remember this.',
+        });
+      }
+    }
+    state.promisedStarts = [];
+  }
+  generatePlayerMessage(state, xi, won, margin);
 
   /* ----- board confidence ----- */
   const patience = club.tier === 1 ? 1.3 : club.tier === 2 ? 1.15 : club.tier === 3 ? 1 : 0.85;
@@ -2228,6 +2537,9 @@ export function startCareer(clubName: string): CareerState {
     incomingBids: [],
     coldNames: [],
     transferLog: [],
+    resultLog: [],
+    inbox: [],
+    promisedStarts: [],
   };
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length);
   state.cupDraw.R16 = drawCupOpponent(state);
@@ -2444,6 +2756,12 @@ function agePlayer(p: CMPlayer): CMPlayer {
     suspendedMatches: 0,
     seasonGoals: 0,
     seasonAssists: 0,
+    // Round 73: the full stat line resets with the season.
+    apps: 0,
+    seasonYellows: 0,
+    seasonReds: 0,
+    cleanSheets: 0,
+    ratingSum: 0,
   };
 }
 
@@ -2516,6 +2834,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     negotiation: null,
     incomingBids: [],
     coldNames: [],
+    resultLog: [],
+    inbox: [],
+    promisedStarts: [],
   };
   // Round 71: track every club this manager has run.
   const managed = new Set(state.careerStats.clubsManaged ?? [career.clubName]);

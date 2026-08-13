@@ -357,5 +357,68 @@ console.log('6) Negotiations and the deadline-day machinery');
   if ((w.incomingBids ?? []).length !== 0) fail('incoming bids survived the window closing');
 }
 
+/* ---------- 7. Round 73: stat lines, calendar log, the inbox ---------- */
+console.log('7) Stat lines, fixture log and player DMs');
+{
+  const { answerMessage } = cm;
+  let inboxSeen = 0, promiseBreaks = 0;
+  for (const clubName of ['Arsenal', 'Inter Miami', 'Al-Nassr', 'Swansea City']) {
+    let s = startCareer(clubName);
+    let guard = 0;
+    for (;;) {
+      guard += 1;
+      if (guard > 110) { fail(`${clubName}: stat season never ended`); break; }
+      const res = playNextEntry(s);
+      s = res.state;
+      if (res.kind === 'seasonOver' || s.sacked) break;
+      // Answer any open message with a random option; count promises.
+      const open = (s.inbox ?? []).find(m => !m.resolved && m.options.length > 0);
+      if (open) {
+        inboxSeen += 1;
+        const idx = Math.floor(Math.random() * open.options.length);
+        if (open.options[idx].effect === 'promise') promiseBreaks += 1;
+        const s2 = answerMessage(s, open.id, idx);
+        if (!s2 || s2 === s) fail(`${clubName}: answerMessage did nothing`);
+        else {
+          const answered = (s2.inbox ?? []).find(m => m.id === open.id);
+          if (!answered?.resolved) fail(`${clubName}: message not marked resolved`);
+          s = s2;
+        }
+      }
+    }
+    // Stat integrity at season end.
+    const gf = s.table.find(r => r.club === clubName)?.gf ?? 0;
+    const playerLeagueGoals = s.squad.reduce((t, p) => t + p.seasonGoals, 0);
+    // seasonGoals also count cup/UCL goals, so player total must be >= league gf is
+    // not guaranteed either way; assert the softer invariants instead:
+    for (const p of s.squad) {
+      const apps = p.apps ?? 0;
+      if (apps > 0) {
+        const avg = (p.ratingSum ?? 0) / apps;
+        if (!isNum(avg) || avg < 4.4 || avg > 10.01) fail(`${clubName}: ${p.name} avg rating ${avg.toFixed(2)}`);
+      }
+      if ((p.cleanSheets ?? 0) > apps) fail(`${clubName}: ${p.name} more clean sheets than apps`);
+      if ((p.seasonYellows ?? 0) > apps * 2) fail(`${clubName}: ${p.name} absurd yellow count`);
+    }
+    const totalApps = s.squad.reduce((t, p) => t + (p.apps ?? 0), 0);
+    if (!s.sacked && totalApps < 11 * 20) fail(`${clubName}: only ${totalApps} total apps recorded`);
+    if (playerLeagueGoals === 0 && gf > 5) fail(`${clubName}: team scored ${gf} but no player has a goal`);
+    // Fixture log covers every match played.
+    const logLen = (s.resultLog ?? []).length;
+    const played = s.careerStats.played;
+    if (!s.sacked && logLen !== Math.min(played, 60)) fail(`${clubName}: resultLog ${logLen} vs played ${played}`);
+    // Season rollover wipes the stat lines.
+    if (!s.sacked) {
+      const { state: fin } = finishSeason(s);
+      const nxt = startNextSeason(fin);
+      if ((nxt.resultLog ?? []).length !== 0) fail(`${clubName}: resultLog survived the season`);
+      if (nxt.squad.some(p => (p.apps ?? 0) > 0 && !p.onLoan)) fail(`${clubName}: apps survived the season`);
+      if ((nxt.inbox ?? []).length !== 0) fail(`${clubName}: inbox survived the season`);
+    }
+  }
+  if (inboxSeen < 4) fail(`only ${inboxSeen} player messages across 4 seasons (generator too quiet)`);
+  console.log(`   ${inboxSeen} messages answered across 4 seasons (${promiseBreaks} promises made)`);
+}
+
 console.log(failures === 0 ? '\nALL CLUB MANAGER SIMS PASSED' : `\n${failures} FAILURES`);
 process.exit(failures === 0 ? 0 : 1);

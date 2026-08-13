@@ -19,6 +19,8 @@ import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
+import { CalendarCard } from '@/components/club-manager/CalendarCard';
+import { InboxCard } from '@/components/club-manager/InboxCard';
 import { SquadScreen } from '@/components/club-manager/SquadScreen';
 import { TacticsScreen } from '@/components/club-manager/TacticsScreen';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
@@ -596,6 +598,10 @@ const ClubManager = () => {
               </div>
             </div>
           )}
+
+          {/* Round 73: player DMs and the season calendar. */}
+          <InboxCard career={c} onAnswer={g.answer} />
+          <CalendarCard career={c} />
 
           {unavailable.length > 0 && (
             <div className="bg-card border border-border rounded-xl p-3">
