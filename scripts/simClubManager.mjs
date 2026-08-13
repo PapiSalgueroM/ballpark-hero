@@ -166,8 +166,11 @@ for (const clubName of SAMPLE) {
         if (!r.compLabel || r.compLabel.includes('undefined')) fail(`${clubName}: bad compLabel "${r.compLabel}"`);
         if (r.competition === 'cup') {
           cupLabelsSeen += 1;
-          const cupName = leagueOf(clubName).cupName;
-          if (!r.compLabel.includes(cupName)) fail(`${clubName}: cup label "${r.compLabel}" missing "${cupName}"`);
+          // Round 95: the test accepts the first job offer at the end of
+          // season one, so by season two the club (and its cup) may have
+          // changed. Grade against where the manager actually IS.
+          const cupName = leagueOf(s.clubName).cupName;
+          if (!r.compLabel.includes(cupName)) fail(`${clubName} (now at ${s.clubName}): cup label "${r.compLabel}" missing "${cupName}"`);
         }
         const opp = r.home === s.clubName ? r.away : r.home;
         if (!knownNames.has(opp)) fail(`${clubName}: unknown opponent "${opp}" (grilna class bug)`);

@@ -257,6 +257,38 @@ export interface UclGroupState {
   matchday: number;
 }
 
+/**
+ * Round 95: one other league, simulated week by week alongside mine so the
+ * world outside my dugout is a real place with real standings.
+ */
+export interface WorldLeague {
+  /** Rounds of this league already played. */
+  round: number;
+  table: TableRow[];
+}
+
+/**
+ * Round 95: one knockout tie in the Champions League bracket. The bracket is
+ * eight clubs, my club among them if I got through the group, and every tie
+ * is simulated so the whole thing is real rather than a note saying who I
+ * happen to play next.
+ */
+export interface UclTie {
+  round: UclKoRound;
+  /** Slot in that round, left to right. */
+  slot: number;
+  home: string;
+  away: string;
+  homeGoals: number | null;
+  awayGoals: number | null;
+  /** Set once the tie is settled. */
+  winner: string | null;
+  /** True when this is my club's tie. */
+  mine: boolean;
+  /** Level after normal time, settled on penalties. */
+  pens?: boolean;
+}
+
 export interface SeasonRecord {
   season: number;
   club: string;
@@ -354,6 +386,10 @@ export interface CareerState {
   incomingBids?: IncomingBid[];
   /** Round 94: my players out on loan, returning at the end of the season. */
   loanedOut?: LoanOut[];
+  /** Round 95: live standings for every league that is not mine, by league id. */
+  world?: Record<string, WorldLeague>;
+  /** Round 95: the full Champions League knockout bracket. */
+  uclBracket?: UclTie[];
   /** Round 71: sellers who walked away from me this window. */
   coldNames?: string[];
   /** Round 71: the Latest Transfers feed, newest last, capped at 80. */
@@ -1965,6 +2001,154 @@ function buildCalendar(leagueSize: number): CalendarEntry[] {
   return cal;
 }
 
+/* ---------- Round 95: the rest of the football world ---------- */
+
+/** Total rounds a league of this size plays (mirrors buildCalendar). */
+export function leagueRounds(size: number): number {
+  const eff = size % 2 === 0 ? size : size + 1;
+  return 2 * (eff - 1);
+}
+
+/** Blank standings for every league except my own. */
+function initWorld(myClub: string): Record<string, WorldLeague> {
+  const mine = leagueOf(myClub).id;
+  const world: Record<string, WorldLeague> = {};
+  for (const lg of REAL_LEAGUES) {
+    if (lg.id === mine) continue;
+    world[lg.id] = { round: 0, table: lg.clubs.map(emptyRow) };
+  }
+  return world;
+}
+
+/** League rounds of MY season played through calendar index `upto` (exclusive). */
+function myRoundsPlayed(state: CareerState, upto: number): number {
+  let n = 0;
+  const end = Math.min(upto, state.calendar.length);
+  for (let w = 0; w < end; w++) if (state.calendar[w].type === 'league') n += 1;
+  return n;
+}
+
+/**
+ * Drag every other league up to the same FRACTION of its season that I am
+ * through mine, playing however many rounds that takes. Leagues are not all
+ * the same size (the Championship plays 46 rounds where the Premier League
+ * plays 38, MLS conferences 30), so ticking one round each would leave the
+ * bigger leagues unfinished when my season ends. Proportional progress means
+ * every league in the world crosses its own finish line with me.
+ *
+ * This also doubles as the repair path for a save made before Round 95: it
+ * has no world at all, and starting one from zero halfway through a season
+ * would show tables that make no sense, so we simulate it up to where I am.
+ * Mutates state.
+ */
+function syncWorld(state: CareerState, myPlayed: number): void {
+  if (!state.world) state.world = initWorld(state.clubName);
+  const myTotal = leagueRounds(leagueOf(state.clubName).clubs.length);
+  const frac = myTotal > 0 ? Math.min(1, myPlayed / myTotal) : 0;
+  for (const lg of REAL_LEAGUES) {
+    const w = state.world[lg.id];
+    if (!w) continue;
+    const total = leagueRounds(lg.clubs.length);
+    const target = Math.min(total, Math.round(total * frac));
+    let guard = 0;
+    while (w.round < target && guard < 200) {
+      guard += 1;
+      for (const [h, a] of roundPairs(lg.clubs, w.round)) {
+        const [hg, ag] = simAiMatch(state, h, a);
+        applyResult(w.table, h, a, hg, ag);
+      }
+      w.round += 1;
+    }
+  }
+}
+
+/* ---------- Round 95: a real Champions League bracket ---------- */
+
+/** The eight clubs in the knockout draw: me (if through) plus Europe's best. */
+function uclBracketField(state: CareerState, includeMe: boolean): string[] {
+  const taken = new Set<string>([state.clubName, ...(state.uclGroup?.opponents ?? [])]);
+  const bigLeague = CLUBS.filter(c => c.tier <= 2).map(c => c.name);
+  const pool = shuffle([...new Set([...EURO_CLUBS, ...bigLeague])].filter(c => !taken.has(c)));
+  const others = pool.slice(0, includeMe ? 7 : 8);
+  const field = includeMe ? [state.clubName, ...others] : others;
+  // Guard against a thin pool: never hand back fewer than eight names.
+  let n = 1;
+  while (field.length < 8) field.push(`Continental XI ${n++}`);
+  return field;
+}
+
+/** Build the quarter-final ties. My club always sits in slot 0 when I am in. */
+function buildUclBracket(state: CareerState, includeMe: boolean): UclTie[] {
+  const field = uclBracketField(state, includeMe);
+  const ties: UclTie[] = [];
+  for (let i = 0; i < 4; i++) {
+    const home = field[i * 2];
+    const away = field[i * 2 + 1];
+    ties.push({
+      round: 'QF', slot: i, home, away,
+      homeGoals: null, awayGoals: null, winner: null,
+      mine: home === state.clubName || away === state.clubName,
+    });
+  }
+  return ties;
+}
+
+/** Settle every tie in a round that is not mine, then seed the next round. */
+function advanceUclBracket(state: CareerState, round: UclKoRound): void {
+  const bracket = state.uclBracket;
+  if (!bracket) return;
+  for (const t of bracket) {
+    if (t.round !== round || t.winner) continue;
+    if (t.mine) continue;                     // my tie is settled by my match
+    const [hg, ag] = simAiMatch(state, t.home, t.away);
+    t.homeGoals = hg;
+    t.awayGoals = ag;
+    if (hg === ag) {
+      // Knockout football always produces a winner, and level means penalties.
+      t.pens = true;
+      t.winner = Math.random() < 0.5 ? t.home : t.away;
+    } else {
+      t.winner = hg > ag ? t.home : t.away;
+    }
+  }
+  const next: UclKoRound | null = round === 'QF' ? 'SF' : round === 'SF' ? 'F' : null;
+  if (!next) return;
+  if (bracket.some(t => t.round === next)) return;
+  const thisRound = bracket.filter(t => t.round === round).sort((a, b) => a.slot - b.slot);
+  // Never seed a half-finished round: my own tie is settled by my match, so
+  // the semi-finals wait for me rather than guessing.
+  if (thisRound.some(t => !t.winner)) return;
+  const winners = thisRound.map(t => t.winner).filter((w): w is string => !!w);
+  if (winners.length < 2) return;
+  for (let i = 0; i * 2 + 1 < winners.length; i++) {
+    const home = winners[i * 2];
+    const away = winners[i * 2 + 1];
+    bracket.push({
+      round: next, slot: i, home, away,
+      homeGoals: null, awayGoals: null, winner: null,
+      mine: home === state.clubName || away === state.clubName,
+    });
+  }
+}
+
+/** Record MY result into the bracket so the picture stays honest. */
+/** Who the bracket says I play in a given round, if anyone. */
+function myUclOpponent(state: CareerState, round: UclKoRound): string | null {
+  const tie = state.uclBracket?.find(t => t.round === round && t.mine);
+  if (!tie) return null;
+  return tie.home === state.clubName ? tie.away : tie.home;
+}
+
+function recordMyUclTie(state: CareerState, round: UclKoRound, opponent: string, myGoals: number, oppGoals: number, iWon: boolean): void {
+  const tie = state.uclBracket?.find(t => t.round === round && t.mine);
+  if (!tie) return;
+  const iAmHome = tie.home === state.clubName;
+  tie.homeGoals = iAmHome ? myGoals : oppGoals;
+  tie.awayGoals = iAmHome ? oppGoals : myGoals;
+  if (myGoals === oppGoals) tie.pens = true;
+  tie.winner = iWon ? state.clubName : opponent;
+}
+
 function initUclGroup(qualified: boolean, myClub: string): UclGroupState | null {
   if (!qualified) return null;
   // Groups avoid clubs from my own league, like the real group/league phase.
@@ -2290,12 +2474,25 @@ function effectiveXI(state: CareerState): CMPlayer[] {
 }
 
 /** Match-day strength: XI ratings scaled by fitness + morale, plus form. */
+/**
+ * Round 95: my XI's strength on the SAME SCALE the AI clubs are rated on.
+ *
+ * This used to multiply every rating by a fitness and morale factor that
+ * could never reach 1, so my club was permanently weaker than an AI club
+ * with the identical squad. Condition is now a bounded SWING around the
+ * squad's real rating, centred on the fitness and morale a squad actually
+ * sits at through a season. A fresh, happy XI plays a couple of points above
+ * itself, an exhausted and unhappy one a few points below, and neither is a
+ * hidden tax on being the human in the dugout.
+ */
 function myMatchStrength(state: CareerState, xi: CMPlayer[]): number {
   if (!xi.length) return 40;
-  const avg = xi.reduce((s, p) =>
-    s + p.rating * (0.8 + 0.2 * (p.fitness / 100)) * (0.94 + 0.06 * (p.morale / 100)), 0) / xi.length;
+  const avg = xi.reduce((s, p) => s + p.rating, 0) / xi.length;
+  const fit = xi.reduce((s, p) => s + p.fitness, 0) / xi.length;
+  const mor = xi.reduce((s, p) => s + p.morale, 0) / xi.length;
+  const condition = clamp((fit - 78) * 0.14 + (mor - 68) * 0.06, -7, 4);
   const formBonus = state.form.reduce((s, f) => s + (f === 'W' ? 0.7 : f === 'L' ? -0.7 : 0), 0);
-  return avg + formBonus;
+  return avg + condition + formBonus;
 }
 
 function scorerWeight(p: CMPlayer): number {
@@ -2385,10 +2582,30 @@ function generateOppScorers(opp: string, goals: number): ScorerLine[] {
 }
 
 /** Weekly recovery tick: injuries count down, everyone else freshens up. */
+/**
+ * Round 95: recovery between fixtures, and the reason the human manager was
+ * losing every season.
+ *
+ * The old rule was flat: play and lose 16 to 24 fitness, sit out and gain 24.
+ * There is a match nearly every calendar week, so an ever present starter
+ * slid all the way to the floor of 15 and stayed there. Match strength then
+ * multiplied the XI rating by (0.8 + 0.2 * fitness / 100), so a knackered XI
+ * played at 84 percent of its rating while every AI club used its full
+ * strength. Manchester City, the best squad in the game, finished 19th or
+ * 20th in ten seasons out of ten.
+ *
+ * Recovery is now proportional to how tired a player is, which is both how
+ * bodies actually work and what gives the system an equilibrium: an ever
+ * present settles around 70 rather than bottoming out, a rested player is
+ * back near 100 within a week, and rotation is a real edge instead of the
+ * only way to avoid collapse.
+ */
 function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   state.squad = state.squad.map(p => {
     const played = playedIds ? playedIds.has(p.id) : false;
-    const fitness = clamp(p.fitness + (played ? -(16 + ri(0, 8)) : 24), 15, 100);
+    const recovery = Math.round((100 - p.fitness) * 0.71) + 4;
+    const cost = played ? 20 + ri(0, 8) : 0;
+    const fitness = clamp(p.fitness + recovery - cost, 20, 100);
     const injuryWeeks = Math.max(0, p.injuryWeeks - 1);
     return { ...p, fitness, injuryWeeks };
   });
@@ -2554,12 +2771,16 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
       const pos = sortedTable(group.table).findIndex(r => r.club === state.clubName) + 1;
       if (pos <= 2) {
         state.uclKoRound = 'QF';
-        state.uclDraw.QF = drawUclKoOpponent(state);
+        // Round 95: a real eight club bracket, with my name in it.
+        state.uclBracket = buildUclBracket(state, true);
+        state.uclDraw.QF = myUclOpponent(state, 'QF') ?? drawUclKoOpponent(state);
         events.push(`⭐ Through to the Champions League quarter-finals. You'll face ${state.uclDraw.QF}.`);
         confDelta += 3;
       } else {
         state.uclKoRound = 'out';
         state.uclExit = 'group';
+        // Round 95: Europe carries on without you, and you can watch it happen.
+        state.uclBracket = buildUclBracket(state, false);
         events.push('💤 Out of the Champions League at the group stage.');
         confDelta -= 4;
       }
@@ -2592,9 +2813,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
   }
 
   if (fx.competition === 'uclKo') {
+    const koRound = entry.uclRound!;
+    // Round 95: my result goes into the bracket, then the rest of that round
+    // is played out so the picture is complete before the next draw.
+    recordMyUclTie(state, koRound, fx.opponent, myGoals, oppGoals, advanced);
+    advanceUclBracket(state, koRound);
     if (advanced) {
-      const i = UCL_ORDER.indexOf(entry.uclRound!);
-      if (entry.uclRound === 'F') {
+      const i = UCL_ORDER.indexOf(koRound);
+      if (koRound === 'F') {
         state.uclKoRound = 'won';
         trophyWon = 'Champions League';
         state.trophies.push({ name: 'Champions League', emoji: '⭐', season: state.season });
@@ -2603,14 +2829,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
       } else {
         const next = UCL_ORDER[i + 1];
         state.uclKoRound = next;
-        state.uclDraw[next] = drawUclKoOpponent(state);
+        state.uclDraw[next] = myUclOpponent(state, next) ?? drawUclKoOpponent(state);
         events.push(`⭐ Into the Champions League ${UCL_LABELS[next].toLowerCase()}. ${state.uclDraw[next]} await.`);
         confDelta += 4;
       }
     } else {
       state.uclKoRound = 'out';
-      state.uclExit = entry.uclRound!;
-      events.push(`❌ Champions League run ends at the ${UCL_LABELS[entry.uclRound!].toLowerCase()}.`);
+      state.uclExit = koRound;
+      events.push(`❌ Champions League run ends at the ${UCL_LABELS[koRound].toLowerCase()}.`);
       confDelta -= 4;
     }
   }
@@ -2817,6 +3043,8 @@ export function startCareer(clubName: string): CareerState {
     uclGroup: initUclGroup(club.tier <= 2 && league.euro, club.name),
     uclKoRound: null,
     uclDraw: {},
+    uclBracket: undefined,
+    world: initWorld(club.name),
     trophies: [],
     history: [],
     careerStats: { played: 0, wins: 0, draws: 0, losses: 0, clubsManaged: [club.name] },
@@ -2847,6 +3075,9 @@ export function startCareer(clubName: string): CareerState {
  */
 export function playNextEntry(career: CareerState): PlayResult {
   const state: CareerState = JSON.parse(JSON.stringify(career));
+  // Round 95: a save made before the world existed repairs itself here, and
+  // a save made after this is a no-op because it is already in step.
+  if (!state.world) syncWorld(state, myRoundsPlayed(state, state.week));
   while (state.week < state.calendar.length) {
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
@@ -2866,10 +3097,19 @@ export function playNextEntry(career: CareerState): PlayResult {
           const [hg, ag] = simAiMatch(state, h, a);
           applyResult(state.table, h, a, hg, ag);
         }
+        syncWorld(state, myRoundsPlayed(state, state.week + 1));
+      }
+      // Round 95: the Champions League runs whether or not I am still in it.
+      if (entry.type === 'uclKo' && entry.uclRound && state.uclBracket) {
+        advanceUclBracket(state, entry.uclRound);
       }
       state.week += 1;
       tickWeek(state, null);
       continue;
+    }
+    // Round 95: the rest of the football world plays its round too.
+    if (entry.type === 'league') {
+      syncWorld(state, myRoundsPlayed(state, state.week + 1));
     }
     const report = playMyMatch(state, entry);
     state.week += 1;
@@ -3122,6 +3362,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     uclGroup: initUclGroup(qualifiedUcl, clubName),
     uclKoRound: null,
     uclDraw: {},
+    uclBracket: undefined,
+    world: initWorld(clubName),
     pendingSummary: null,
     cupExit: null,
     uclExit: null,

@@ -20,6 +20,8 @@ import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
+import { WorldTablesCard } from '@/components/club-manager/WorldTablesCard';
+import { UclBracketCard } from '@/components/club-manager/UclBracketCard';
 import { CalendarCard } from '@/components/club-manager/CalendarCard';
 import { InboxCard } from '@/components/club-manager/InboxCard';
 import { ClubDetailScreen } from '@/components/club-manager/ClubDetailScreen';
@@ -775,6 +777,8 @@ const ClubManager = () => {
                   {c.uclKoRound === 'won' && (
                     <div className="bg-card border border-gold/40 rounded-xl p-3 text-xs text-gold font-bold">⭐ CHAMPIONS OF EUROPE.</div>
                   )}
+                  {/* Round 95: the knockout stage as a real bracket. */}
+                  <UclBracketCard career={c} onClubClick={setClubView} />
                   {!uclAlive && c.uclKoRound !== 'won' && c.uclGroup === null && (
                     <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{leagueOf(c.clubName).euro ? '. Finish top 4 to change that' : ' in this league'}.</div>
                   )}
@@ -854,7 +858,8 @@ const ClubManager = () => {
 
         {/* -------- Table -------- */}
         <TabsContent value="table">
-          <LeagueTableCard rows={g.tableRows} myClub={c.clubName} title={leagueOf(c.clubName).name} onClubClick={setClubView} />
+          {/* Round 95: every league in the world, not just mine. */}
+          <WorldTablesCard career={c} myRows={g.tableRows} onClubClick={setClubView} />
         </TabsContent>
 
         {/* -------- Transfers -------- */}
