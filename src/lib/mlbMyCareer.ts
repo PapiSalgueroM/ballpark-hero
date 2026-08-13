@@ -248,7 +248,11 @@ export function simMlbSeason(
     // saves, holds and a much lower ERA, with wins near zero.
     const apps = games; // already an appearance count, see gamesFor
     line.era = Math.max(1.05, Math.round((4.9 - (form - 62) * 0.085 + rng() * 0.9) * 100) / 100);
-    line.so = Math.max(25, Math.round(apps * (1.05 + (form - 62) * 0.035) + rng() * 15));
+    // Round 97: this used to reach 149 strikeouts in a season, which no
+    // reliever in the one inning era has ever come close to (Josh Hader's
+    // 138 in 2019 is the modern high). A real reliever throws about 60
+    // innings, so the median lands near 70 and only the very best clear 120.
+    line.so = Math.max(20, Math.round(apps * (0.62 + (form - 62) * 0.031) + rng() * 12));
     line.wins = Math.max(0, Math.round(rng() * 6));
     line.lossesP = Math.max(0, Math.round(rng() * 5));
     if (c.archetype.id === 'closer') {
@@ -260,9 +264,18 @@ export function simMlbSeason(
     }
   } else {
     const g = games / 160;
-    line.avg = Math.min(0.365, Math.max(0.205, Math.round((0.238 + (form - 62) * 0.0028 * prof.contact + rng() * 0.02) * 1000) / 1000));
-    line.hr = Math.min(58, Math.max(0, Math.round((6 + (form - 62) * 1.05) * prof.power * g + rng() * 6 * prof.power)));
-    line.rbi = Math.max(10, Math.round(((line.hr ?? 0) * 2.4 + 25 + rng() * 20) * g));
+    // Round 97: the median season came out at .295, which in real baseball
+    // is top ten in the league. Shifted down so an average year looks
+    // average and .300 means something again.
+    line.avg = Math.min(0.365, Math.max(0.195, Math.round((0.216 + (form - 62) * 0.0028 * prof.contact + rng() * 0.022) * 1000) / 1000));
+    // Round 97: power was running about ten home runs hot at every position
+    // (the median designated hitter was a 35 homer man, which is an all star
+    // season, not a normal one).
+    line.hr = Math.min(58, Math.max(0, Math.round((4 + (form - 62) * 0.85) * prof.power * g + rng() * 6 * prof.power)));
+    // Round 97: real hitters drive in roughly two runs per home run, not
+    // two and a half. Judge hit 62 with 131 RBI, Ohtani 44 with 95. The old
+    // ratio made every designated hitter a 116 RBI man.
+    line.rbi = Math.max(10, Math.round(((line.hr ?? 0) * 1.9 + 28 + rng() * 20) * g));
     const fast = c.archetype.id === 'burner' || c.archetype.id === 'leadoff' || c.archetype.id === 'sparkplug';
     line.sb = Math.max(0, Math.round((fast ? 24 + rng() * 30 : rng() * 10) * prof.speed * g));
     line.doubles = Math.max(0, Math.round((18 + (form - 62) * 0.55 + rng() * 12) * g));

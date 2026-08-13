@@ -201,7 +201,12 @@ export function simNhlSeason(
   } else {
     const g = games / 82;
     const mult = c.archetype.scoringMult;
-    line.goals = Math.min(72, Math.max(1, Math.round((4 + (form - 62) * 1.35) * mult * g + rng() * 5)));
+    // Round 97: NHL_POS_PROFILE carries an offense weight (D is 0.55) that
+    // this line never used, so defencemen were finishing with a median of 20
+    // goals, roughly what a first line winger scores. Assists deliberately
+    // stay high for a defenceman, because that is how they actually produce.
+    const off = (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).offense;
+    line.goals = Math.min(72, Math.max(1, Math.round((4 + (form - 62) * 1.35) * mult * off * g + rng() * 5)));
     line.assists = Math.min(90, Math.max(2, Math.round((7 + (form - 62) * 1.5) * (c.pos === 'D' ? 1.15 : 1.05 - (mult - 1) * 0.5) * g + rng() * 7)));
     line.points = (line.goals ?? 0) + (line.assists ?? 0);
   }
