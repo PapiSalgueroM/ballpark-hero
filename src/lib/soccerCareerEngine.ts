@@ -3,7 +3,7 @@
 import {
   getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,
   getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,
-  BDOR_WIN_MIN_GOALS,
+  BDOR_WIN_MIN_GOALS, rollPotential,
 } from "./careerEras";
 import {
   getLifeEvents, getPriorityLifeEventIds,
@@ -503,6 +503,9 @@ export interface CareerState {
   isPundit: boolean;
   punditEvents: string[];
   primeType: PrimeType;
+  /** Round 78: the hidden ceiling rolled at creation. Growth stalls hard as
+   *  overall approaches it. Old saves have none and default generously. */
+  potential?: number;
   peakOverall: number;
   retirementSuggested: boolean; // has the player been shown the retirement suggestion
   // Social media action system
@@ -1709,7 +1712,7 @@ function isPastPrime(age: number, primeType: PrimeType): boolean {
    too quick"). Youth years develop steadily, pro growth is a grind, and the
    late 80s onward are a wall: most world-class seasons move a stat by 0 or 1.
    Reaching 90+ should feel like a decade of work, not an accident. */
-function growStat(current: number, age: number, isYouth: boolean, isPace: boolean, primeType: PrimeType): number {
+function growStat(current: number, age: number, isYouth: boolean, isPace: boolean, primeType: PrimeType, potential = 99, currentOverall = 0): number {
   let growth: number;
   if (isYouth) {
     growth = current >= 78 ? rand(0, 1) : rand(1, 3);
@@ -1744,6 +1747,14 @@ function growStat(current: number, age: number, isYouth: boolean, isPace: boolea
     if (current >= 94) growth = Math.random() < 0.20 ? 1 : 0;
     else if (current >= 90) growth = Math.random() < 0.45 ? 1 : 0;
     else if (current >= 86) growth = Math.min(growth, Math.random() < 0.5 ? 1 : 2);
+  }
+  // Round 78: the personal potential wall. At or past your rolled ceiling,
+  // natural growth basically stops (events, training and the shop are the
+  // only ways to squeeze more). Within 3 points, everything slows. Applies
+  // to youth too, so a low-ceiling wonderkid plateaus honestly.
+  if (growth > 0 && currentOverall > 0) {
+    if (currentOverall >= potential) growth = Math.random() < 0.12 ? 1 : 0;
+    else if (currentOverall >= potential - 3) growth = Math.min(growth, Math.random() < 0.55 ? 1 : 0);
   }
   // Pace always declines 1 extra from age 28+, and additional penalty at 35+
   if (isPace && age >= 28 && !isYouth) {
@@ -2925,10 +2936,13 @@ export function initCareer(
   stats: { pace: number; shooting: number; passing: number; dribbling: number; defending: number; physical: number; reflexes: number },
   overall: number, startYear: number, clubs: ClubData[],
   appearance?: PlayerAppearance | null,
+  potential?: number,
 ): CareerState {
   const academyClub = getYouthAcademyClub(adjustClubsForYear(clubs, startYear), nationality, overall);
   return {
     playerName, nationality, position, era, age: 16,
+    // Round 78: the hidden ceiling this career will fight to reach.
+    potential: potential ?? rollPotential(overall),
     currentClub: `${academyClub.name} Youth`, currentClubCountry: academyClub.country,
     currentClubTier: academyClub.tier, currentClubColor: academyClub.color, currentLeague: academyClub.league,
     contractYearsLeft: 2, weeklyWage: 500, marketValue: 0.1, ...stats, overall,
@@ -2998,13 +3012,16 @@ export function initCareer(
 /* ─── Advance youth year ─── */
 export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev }; s.age += 1; s.events = [];
-  s.pace = growStat(s.pace, s.age, true, true, s.primeType);
-  s.shooting = growStat(s.shooting, s.age, true, false, s.primeType);
-  s.passing = growStat(s.passing, s.age, true, false, s.primeType);
-  s.dribbling = growStat(s.dribbling, s.age, true, false, s.primeType);
-  s.defending = growStat(s.defending, s.age, true, false, s.primeType);
-  s.physical = growStat(s.physical, s.age, true, false, s.primeType);
-  s.reflexes = growStat(s.reflexes, s.age, true, false, s.primeType);
+  // Round 78: legacy saves get a generous default so mid-career players are
+  // not suddenly nerfed; new careers carry their rolled ceiling.
+  const pot = s.potential ?? Math.max(90, s.overall + 3);
+  s.pace = growStat(s.pace, s.age, true, true, s.primeType, pot, s.overall);
+  s.shooting = growStat(s.shooting, s.age, true, false, s.primeType, pot, s.overall);
+  s.passing = growStat(s.passing, s.age, true, false, s.primeType, pot, s.overall);
+  s.dribbling = growStat(s.dribbling, s.age, true, false, s.primeType, pot, s.overall);
+  s.defending = growStat(s.defending, s.age, true, false, s.primeType, pot, s.overall);
+  s.physical = growStat(s.physical, s.age, true, false, s.primeType, pot, s.overall);
+  s.reflexes = growStat(s.reflexes, s.age, true, false, s.primeType, pot, s.overall);
   s.overall = calcOverall(s, s.position);
   const lastYear = s.seasons[s.seasons.length - 1].year;
   s.seasons = [...s.seasons, {
@@ -3528,17 +3545,19 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     if (k in s) (s as any)[k] = clamp((s as any)[k] + (val || 0), 20, 99);
   }
   s.statBoostNextSeason = {};
-  s.pace = growStat(s.pace, s.age, false, true, s.primeType);
-  s.shooting = growStat(s.shooting, s.age, false, false, s.primeType);
-  s.passing = growStat(s.passing, s.age, false, false, s.primeType);
-  s.dribbling = growStat(s.dribbling, s.age, false, false, s.primeType);
-  s.defending = growStat(s.defending, s.age, false, false, s.primeType);
-  s.physical = growStat(s.physical, s.age, false, false, s.primeType);
+  // Round 78: growth respects the rolled potential (legacy default generous).
+  const potWall = s.potential ?? Math.max(90, s.overall + 3);
+  s.pace = growStat(s.pace, s.age, false, true, s.primeType, potWall, s.overall);
+  s.shooting = growStat(s.shooting, s.age, false, false, s.primeType, potWall, s.overall);
+  s.passing = growStat(s.passing, s.age, false, false, s.primeType, potWall, s.overall);
+  s.dribbling = growStat(s.dribbling, s.age, false, false, s.primeType, potWall, s.overall);
+  s.defending = growStat(s.defending, s.age, false, false, s.primeType, potWall, s.overall);
+  s.physical = growStat(s.physical, s.age, false, false, s.primeType, potWall, s.overall);
   // Personal trainer: +1 physical per season
   if (s.purchasedItems.includes("personal_trainer")) {
     s.physical = clamp(s.physical + 1, 20, 99);
   }
-  s.reflexes = growStat(s.reflexes, s.age, false, false, s.primeType);
+  s.reflexes = growStat(s.reflexes, s.age, false, false, s.primeType, potWall, s.overall);
   s.overall = calcOverall(s, s.position);
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
   s.marketValue = calcMarketValue(s.overall, s.age, s.position, s.socialMediaFollowers);

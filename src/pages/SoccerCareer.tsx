@@ -42,7 +42,7 @@ import {
   getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,
   FALLBACK_CLUBS,
 } from "@/lib/soccerCareerEngine";
-import { rollStartingOverall, adjustClubsForYear } from "@/lib/careerEras";
+import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear } from "@/lib/careerEras";
 import {
   type PlayerAppearance, defaultAppearance, getCelebration,
 } from "@/lib/soccerCareerAppearance";
@@ -442,6 +442,8 @@ export default function SoccerCareer() {
   const [clubsLoading, setClubsLoading] = useState(true);
   const [clubsError, setClubsError] = useState(false);
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
+  // Round 78: the potential rolled alongside the overall, threaded into the career.
+  const [rolledPot, setRolledPot] = useState<number | null>(null);
   const [showNewCareerConfirm, setShowNewCareerConfirm] = useState(false);
   const timelineRef = useRef<HTMLDivElement>(null);
 
@@ -489,6 +491,7 @@ export default function SoccerCareer() {
     setPreviewStats(null);
     setPreviewOvr(0);
     setRolledOvr(null);
+    setRolledPot(null);
   }, []);
 
   useEffect(() => {
@@ -501,7 +504,7 @@ export default function SoccerCareer() {
     // Guests can play; careers live in local state. Sign-in is only a nice-to-have.
     if (!previewStats || !isFormValid || clubs.length === 0 || rolledOvr === null) return;
     const startYear = ERAS.find(e => e.value === era)?.startYear ?? 2020;
-    const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs, appearance);
+    const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs, appearance, rolledPot ?? undefined);
     setCareer(newCareer);
     toast.success(`Joined ${newCareer.currentClub}!`);
   };
@@ -707,6 +710,7 @@ export default function SoccerCareer() {
     setCareer(null);
     setPreviewStats(null);
     setRolledOvr(null);
+    setRolledPot(null);
     setPlayerName(""); setNationality(""); setPosition(""); setEra("");
     setAppearance(defaultAppearance());
     setShowNewCareerConfirm(false);
@@ -733,7 +737,7 @@ export default function SoccerCareer() {
               isFormValid={isFormValid && clubs.length > 0} saving={saving}
               user={user} onBegin={handleBeginCareer} onShowAuth={() => setShowAuth(true)}
               clubs={clubs} clubsLoading={clubsLoading} clubsError={clubsError}
-              onRolledOvr={setRolledOvr}
+              onRolledOvr={(ovr: number, pot: number) => { setRolledOvr(ovr); setRolledPot(pot); }}
               onStatsGenerated={(stats: Stats, ovr: number) => { setPreviewStats(stats); setPreviewOvr(ovr); }}
               appearance={appearance} setAppearance={setAppearance}
             />
@@ -828,6 +832,8 @@ function getOverallTier(ovr: number): { label: string; color: string; bgColor: s
 /* ─── Creation Screen ─── */
 function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, clubsLoading, clubsError, onRolledOvr, onStatsGenerated, appearance, setAppearance }: any) {
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
+  const [rolledPot, setRolledPot] = useState<number | null>(null);
+  const [rollsLeft, setRollsLeft] = useState(3);
   const [isRolling, setIsRolling] = useState(false);
   const [displayOvr, setDisplayOvr] = useState(0);
   const [academyClub, setAcademyClub] = useState<ClubData | null>(null);
@@ -835,7 +841,10 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
   const canGenerate = playerName.trim().length > 0 && nationality && position && era;
 
   const doRoll = useCallback(() => {
-    if (!canGenerate || clubs.length === 0 || isRolling) return;
+    // Round 78: scouts only look so many times. 3 rolls total, then you
+    // commit to what you got. Makes the rare high-potential rolls mean
+    // something instead of reroll-until-generational.
+    if (!canGenerate || clubs.length === 0 || isRolling || rollsLeft <= 0) return;
     setIsRolling(true);
     setAcademyClub(null);
     // Slot machine animation: cycle through random numbers
@@ -847,9 +856,14 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
       if (ticks >= totalTicks) {
         clearInterval(interval);
         const finalOvr = rollStartingOverall(position);
+        // Round 78: potential rolled alongside the overall. Weighted low,
+        // tiny chance of a generational ceiling, exactly like he asked.
+        const pot = rollPotential(finalOvr);
         setDisplayOvr(finalOvr);
         setRolledOvr(finalOvr);
-        onRolledOvr?.(finalOvr);
+        setRolledPot(pot);
+        setRollsLeft(prev => prev - 1);
+        onRolledOvr?.(finalOvr, pot);
         // Generate stats that average to exactly this overall
         const stats = generateStatsFromOverall(finalOvr, position);
         onStatsGenerated?.(stats, finalOvr);
@@ -860,7 +874,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         setAcademyClub(club);
       }
     }, 60);
-  }, [canGenerate, clubs, nationality, position, isRolling, era]);
+  }, [canGenerate, clubs, nationality, position, isRolling, era, rollsLeft]);
 
   const tier = rolledOvr !== null ? getOverallTier(rolledOvr) : (isRolling ? getOverallTier(displayOvr) : null);
 
@@ -940,19 +954,32 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
               <div className={`text-sm font-bold ${tier ? tier.color : "text-muted-foreground"}`}>
                 {isRolling ? "Rolling..." : tier?.label}
               </div>
+              {/* Round 78: scout projection. Potential is rolled once and the
+                  engine walls growth at it, so this number actually matters. */}
+              {!isRolling && rolledPot !== null && (
+                <div className="pt-1 border-t border-border/50 space-y-0.5 animate-fade-in">
+                  <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Scout Projection</div>
+                  <div className={`text-sm font-bold ${potentialTier(rolledPot).color}`}>
+                    {potentialTier(rolledPot).label} · {rolledPot} ceiling
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
           <div className="flex gap-2">
             <Button
               onClick={doRoll}
-              disabled={isRolling || clubsLoading}
+              disabled={isRolling || clubsLoading || rollsLeft <= 0}
               className={`flex-1 h-11 text-sm font-bold text-white ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
               variant={rolledOvr !== null ? "outline" : "default"}
             >
-              {clubsLoading ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Reroll" : "🎲 Generate Starting Potential"}
+              {clubsLoading ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? (rollsLeft > 0 ? `🎲 Reroll (${rollsLeft} left)` : "🔒 Scouts have made up their mind") : "🎲 Generate Starting Potential"}
             </Button>
           </div>
+          {rolledOvr !== null && rollsLeft === 0 && (
+            <p className="text-[11px] text-muted-foreground text-center">No rerolls left. This is your player, make it work.</p>
+          )}
 
           {/* Academy preview */}
           {academyClub && !isRolling && (
@@ -2329,6 +2356,10 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               {career.overall}
             </div>
             <div className="text-[10px] text-muted-foreground uppercase tracking-widest">OVR</div>
+            {/* Round 78: show the scouted ceiling so growth toward it reads as progress */}
+            {typeof career.potential === "number" && !career.retired && career.age < 30 && (
+              <div className={`text-[10px] font-bold ${potentialTier(career.potential).color}`}>POT {career.potential}</div>
+            )}
           </div>
         </div>
       </div>

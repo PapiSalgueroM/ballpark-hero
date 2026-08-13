@@ -419,11 +419,48 @@ export const BDOR_WIN_MIN_GOALS = 30;
 
 /* ─── Starting overall by position group, deliberately capped low (55-68)
    so growth, boosters and purchases actually matter ─── */
+/**
+ * Round 78: start WAY lower (owner: "it should start way lower"). A 16 year
+ * old academy kid is raw: most rolls land 46-58, a gifted start is uncommon
+ * and an exceptional one is a 3 percent event.
+ */
 export function rollStartingOverall(position: string): number {
-  if (position === "GK") return rand(55, 64);
-  if (["CB", "LB", "RB"].includes(position)) return rand(55, 66);
-  if (["CDM", "CM", "CAM"].includes(position)) return rand(56, 67);
-  return rand(56, 68);
+  const r = Math.random();
+  let base: number;
+  if (r < 0.55) base = rand(46, 54);        // raw, the normal case
+  else if (r < 0.85) base = rand(53, 59);   // promising
+  else if (r < 0.97) base = rand(58, 63);   // gifted
+  else base = rand(63, 66);                 // exceptional, 3 percent
+  const posAdj = position === "GK" ? -1 : ["CB", "LB", "RB"].includes(position) ? 0 : 1;
+  return Math.max(44, Math.min(67, base + posAdj));
+}
+
+/**
+ * Round 78: every career now rolls a hidden POTENTIAL at creation (owner:
+ * "have a very few percentage of starting off with a high potential").
+ * Half of all careers cap in the 70s, a solid chunk in the low 80s, and the
+ * generational 93+ ceiling is a 1.5 percent roll. Stat growth stalls hard as
+ * you approach it, so the shop, training and events are what squeeze out the
+ * last points.
+ */
+export function rollPotential(startingOvr: number): number {
+  const r = Math.random();
+  let pot: number;
+  if (r < 0.5) pot = rand(70, 79);          // journeyman to solid pro
+  else if (r < 0.8) pot = rand(78, 84);     // very good career
+  else if (r < 0.93) pot = rand(84, 89);    // star
+  else if (r < 0.985) pot = rand(89, 93);   // world class, 5.5 percent
+  else pot = rand(93, 97);                  // generational, 1.5 percent
+  return Math.max(pot, startingOvr + 6);
+}
+
+/** Scout-speak for a rolled potential, exact number never shown. */
+export function potentialTier(pot: number): { label: string; color: string } {
+  if (pot >= 93) return { label: "Generational talent", color: "text-purple-400" };
+  if (pot >= 89) return { label: "World class ceiling", color: "text-amber-400" };
+  if (pot >= 84) return { label: "Future star", color: "text-emerald-400" };
+  if (pot >= 78) return { label: "Top league quality", color: "text-sky-400" };
+  return { label: "Honest pro ceiling", color: "text-muted-foreground" };
 }
 
 /* ─── Expanded life-event catalog (ids 41+) ───
