@@ -20,6 +20,7 @@ import { useStreaks } from '@/hooks/useStreaks';
 import { getLocalTodayCount } from '@/lib/completions';
 import { getBadgeState, type BadgeState } from '@/lib/badges';
 import { nameModerationError } from '@/lib/nameModeration';
+import { CATEGORIES } from '@/data/gameRegistry';
 
 /* ────────────────────── Constants ────────────────────── */
 
@@ -83,7 +84,32 @@ const SPORT_LABELS: Record<string, string> = {
   tennis: '🎾 Tennis', general: '🧩 General',
 };
 
-const ALL_GAME_OPTIONS = Object.entries(GAME_LABELS).map(([key, label]) => ({ value: key, label }));
+/* Round 75: the favourite game list now comes from the live registry, so
+   EVERY game on the site is pickable (his complaint: "there's not all games
+   that I have that are listed"). Legacy completion slugs stay so an old
+   saved pick still displays. */
+const REGISTRY_OPTIONS = CATEGORIES.flatMap(cat =>
+  cat.games.map(g => ({ value: g.path.replace(/^\//, ''), label: `${g.emoji} ${g.label}` })));
+const REGISTRY_VALUES = new Set(REGISTRY_OPTIONS.map(o => o.value));
+const stripEmoji = (s: string) => s.replace(/^[^A-Za-z0-9]+\s*/, '');
+const ALL_GAME_OPTIONS = [
+  ...REGISTRY_OPTIONS,
+  ...Object.entries(GAME_LABELS)
+    .filter(([key]) => !REGISTRY_VALUES.has(key))
+    .map(([key, label]) => ({ value: key, label })),
+].sort((a, b) => stripEmoji(a.label).localeCompare(stripEmoji(b.label)));
+
+/* Round 75: a game's sport is its registry category ("Fav sport: General"
+   made no sense; modern slugs were simply unmapped). */
+const SLUG_TO_SPORT: Record<string, string> = {};
+for (const cat of CATEGORIES) {
+  for (const g of cat.games) SLUG_TO_SPORT[g.path.replace(/^\//, '')] = cat.title;
+}
+const LEGACY_SPORT_TO_TITLE: Record<string, string> = {
+  soccer: 'Soccer', football: 'Pro Football', college: 'College Sports',
+  basketball: 'Pro Basketball', baseball: 'Baseball', hockey: 'Hockey',
+  combat: 'Combat Sports', olympics: 'World & Olympic Games', tennis: 'Tennis',
+};
 
 /* ────────────────────── Component ────────────────────── */
 
@@ -351,9 +377,16 @@ export default function Profile() {
     : (userScoreData?.longest_streak ?? viewingProfile?.longest_streak ?? 0);
   const averageScore = totalGames > 0 ? Math.round(totalPoints / totalGames) : 0;
 
+  // Round 75: count sports via the registry; unknown slugs are skipped
+  // instead of bucketing into a meaningless "General".
   const sportCounts: Record<string, number> = {};
   bestScores.forEach(s => {
-    const sport = SPORT_CATEGORIES[s.game_type] || 'general';
+    const slug = s.game_type;
+    const legacy = SPORT_CATEGORIES[slug];
+    const sport = SLUG_TO_SPORT[slug]
+      ?? (slug.startsWith('f1') || slug.startsWith('nascar') ? (slug.startsWith('f1') ? 'Formula 1' : 'NASCAR') : null)
+      ?? (legacy ? LEGACY_SPORT_TO_TITLE[legacy] ?? null : null);
+    if (!sport) return;
     sportCounts[sport] = (sportCounts[sport] || 0) + 1;
   });
   const favouriteSportEntry = Object.entries(sportCounts).sort((a, b) => b[1] - a[1])[0];
@@ -571,7 +604,11 @@ export default function Profile() {
               { icon: <Trophy className="w-5 h-5 text-yellow-500" />, value: totalPoints.toLocaleString(), label: 'Total Points' },
               { icon: <Flame className="w-5 h-5 text-orange-500" />, value: currentStreak, label: 'Streak 🔥' },
               { icon: <TrendingUp className="w-5 h-5 text-amber-500" />, value: longestStreak, label: 'Best Streak' },
-              { icon: <Star className="w-5 h-5 text-purple-400" />, value: favouriteSportEntry ? SPORT_LABELS[favouriteSportEntry[0]] || '-' : '-', label: 'Fav Sport', small: true },
+              // Round 75: only show a favourite sport when a real one wins;
+              // no more "Fav Sport: General".
+              ...(favouriteSportEntry
+                ? [{ icon: <Star className="w-5 h-5 text-purple-400" />, value: favouriteSportEntry[0], label: 'Fav Sport', small: true }]
+                : []),
               { icon: <Target className="w-5 h-5 text-sky-400" />, value: averageScore, label: 'Avg Score' },
               { icon: <Clock className="w-5 h-5 text-emerald-400" />, value: timeSpent > 60 ? `${Math.floor(timeSpent / 60)}h ${timeSpent % 60}m` : `${timeSpent}m`, label: 'Time Played' },
               // Owner Aug 2026: consecutive days visited ("days in a row"),
