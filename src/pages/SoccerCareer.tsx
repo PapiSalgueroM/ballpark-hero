@@ -28,7 +28,8 @@ import {
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
-  dismissBallonDor, applyBdorSpeech, type BdorSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
+  dismissBallonDor, applyBdorSpeech, type BdorSpeechChoice,
+  applyWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
   acceptRetirementSuggestion, declineRetirementSuggestion,
   advancePunditSeason, endPunditCareer,
   advanceOwnerSeason, endOwnerCareer,
@@ -42,6 +43,13 @@ import {
   FALLBACK_CLUBS,
 } from "@/lib/soccerCareerEngine";
 import { rollStartingOverall, adjustClubsForYear } from "@/lib/careerEras";
+import {
+  type PlayerAppearance, defaultAppearance, getCelebration,
+} from "@/lib/soccerCareerAppearance";
+import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";
+import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";
+import { Confetti, CountUp, ShineWrap } from "@/components/soccer-career/CareerFx";
+import { heatLabel } from "@/lib/soccerCareerCorruption";
 import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
@@ -328,12 +336,14 @@ function NewspaperCard({ articles, onContinue }: { articles: NewsArticle[]; onCo
 }
 
 /* ─── Season Summary Card ─── */
-function SeasonSummaryCard({ season, position, onContinue }: { season: SeasonRecord; position: string; onContinue: () => void }) {
+function SeasonSummaryCard({ season, position, onContinue, appearance }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null }) {
   const isGK = position === "GK";
   const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.worldCup && "🌍 World Cup", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
+  const celebration = appearance ? getCelebration(appearance.celebration) : null;
 
   return (
-    <div className="bg-card border-2 border-emerald-500/30 rounded-xl p-5 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="relative bg-card border-2 border-emerald-500/30 rounded-xl p-5 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      {trophies.length > 0 && <Confetti pieces={trophies.length >= 2 ? 55 : 34} gold />}
       <div className="text-center">
         <h3 className="text-lg font-black">Season Summary</h3>
         <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={season.clubCountry} size={14} />{season.club} · {season.year}/{(season.year + 1).toString().slice(-2)}</p>
@@ -341,15 +351,15 @@ function SeasonSummaryCard({ season, position, onContinue }: { season: SeasonRec
 
       <div className="grid grid-cols-3 gap-3">
         <div className="text-center bg-muted/20 rounded-lg p-2">
-          <div className="text-xl font-black">{season.apps}</div>
+          <div className="text-xl font-black tabular-nums"><CountUp value={season.apps} /></div>
           <div className="text-[10px] text-muted-foreground">Apps</div>
         </div>
         <div className="text-center bg-muted/20 rounded-lg p-2">
-          <div className="text-xl font-black">{isGK ? season.cleanSheets : season.goals}</div>
+          <div className="text-xl font-black tabular-nums"><CountUp value={isGK ? season.cleanSheets : season.goals} duration={1100} /></div>
           <div className="text-[10px] text-muted-foreground">{isGK ? "Clean Sheets" : "Goals"}</div>
         </div>
         <div className="text-center bg-muted/20 rounded-lg p-2">
-          <div className="text-xl font-black">{season.assists}</div>
+          <div className="text-xl font-black tabular-nums"><CountUp value={season.assists} /></div>
           <div className="text-[10px] text-muted-foreground">Assists</div>
         </div>
       </div>
@@ -365,10 +375,16 @@ function SeasonSummaryCard({ season, position, onContinue }: { season: SeasonRec
         </div>
       )}
 
+      {celebration && !isGK && season.goals > 0 && (
+        <p className="text-[11px] text-muted-foreground text-center leading-snug animate-fade-in">
+          {celebration.emoji} {season.goals} time{season.goals === 1 ? "" : "s"} this season you {celebration.line}.
+        </p>
+      )}
+
       {trophies.length > 0 && (
-        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center">
+        <ShineWrap className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center">
           <span className="text-sm font-bold">{trophies.join(" · ")}</span>
-        </div>
+        </ShineWrap>
       )}
 
       <Button onClick={onContinue} className="w-full h-10 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
@@ -389,6 +405,8 @@ export default function SoccerCareer() {
   const [position, setPosition] = useState("");
   const [era, setEra] = useState("");
   const [previewStats, setPreviewStats] = useState<Stats | null>(null);
+  // Round 54: the look you build on the creation screen, carried into initCareer
+  const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
   const [previewOvr, setPreviewOvr] = useState(0);
   const [saving, setSaving] = useState(false);
   const [career, setCareer] = useState<CareerState | null>(() => {
@@ -469,7 +487,7 @@ export default function SoccerCareer() {
     // Guests can play; careers live in local state. Sign-in is only a nice-to-have.
     if (!previewStats || !isFormValid || clubs.length === 0 || rolledOvr === null) return;
     const startYear = ERAS.find(e => e.value === era)?.startYear ?? 2020;
-    const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs);
+    const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs, appearance);
     setCareer(newCareer);
     toast.success(`Joined ${newCareer.currentClub}!`);
   };
@@ -535,6 +553,11 @@ export default function SoccerCareer() {
   const handleDismissDebut = () => {
     if (!career) return;
     setCareer(dismissDebut(career, clubs));
+  };
+
+  const handleWorldCupSpeech = (choice: WorldCupSpeechChoice) => {
+    if (!career) return;
+    setCareer(applyWorldCupSpeech(career, choice, clubs));
   };
 
   const handleDismissWorldCup = () => {
@@ -671,6 +694,7 @@ export default function SoccerCareer() {
     setPreviewStats(null);
     setRolledOvr(null);
     setPlayerName(""); setNationality(""); setPosition(""); setEra("");
+    setAppearance(defaultAppearance());
     setShowNewCareerConfirm(false);
   };
 
@@ -697,6 +721,7 @@ export default function SoccerCareer() {
               clubs={clubs} clubsLoading={clubsLoading} clubsError={clubsError}
               onRolledOvr={setRolledOvr}
               onStatsGenerated={(stats: Stats, ovr: number) => { setPreviewStats(stats); setPreviewOvr(ovr); }}
+              appearance={appearance} setAppearance={setAppearance}
             />
           ) : (
             <GameScreen
@@ -712,6 +737,7 @@ export default function SoccerCareer() {
               onEventChoice={handleEventChoice}
               onDismissDebut={handleDismissDebut}
               onDismissWorldCup={handleDismissWorldCup}
+              onWorldCupSpeech={handleWorldCupSpeech}
               onRetireInternational={handleRetireInternational}
               onDismissRivalryEvent={handleDismissRivalryEvent}
               onDismissBallonDor={handleDismissBallonDor}
@@ -786,7 +812,7 @@ function getOverallTier(ovr: number): { label: string; color: string; bgColor: s
 }
 
 /* ─── Creation Screen ─── */
-function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, clubsLoading, clubsError, onRolledOvr, onStatsGenerated }: any) {
+function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, clubsLoading, clubsError, onRolledOvr, onStatsGenerated, appearance, setAppearance }: any) {
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
   const [isRolling, setIsRolling] = useState(false);
   const [displayOvr, setDisplayOvr] = useState(0);
@@ -858,6 +884,13 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
           </Select>
         </div>
       </div>
+
+      {/* Round 54: create your appearance */}
+      <AppearanceBuilder
+        appearance={appearance}
+        onChange={setAppearance}
+        clubColor={academyClub?.color || "#10B981"}
+      />
 
       {/* Generate Starting Potential */}
       {canGenerate && (
@@ -1130,13 +1163,14 @@ function InternationalDebutCard({ career, onDismiss }: { career: CareerState; on
 }
 
 /* ─── World Cup Result Screen ─── */
-function WorldCupResultCard({ wc, career, onDismiss }: { wc: WorldCupResult; career: CareerState; onDismiss: () => void }) {
+function WorldCupResultCard({ wc, career, onDismiss, onSpeech }: { wc: WorldCupResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: WorldCupSpeechChoice) => void }) {
   const isWinner = wc.result === "Winner";
   const didNotQualify = wc.result === "Did Not Qualify";
   const borderColor = isWinner ? "border-amber-400/60" : didNotQualify ? "border-red-500/40" : "border-blue-500/40";
   const bgGrad = isWinner ? "from-amber-500/15 to-transparent" : didNotQualify ? "from-red-500/10 to-transparent" : "from-blue-500/10 to-transparent";
   return (
-    <div className={`rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4`}>
+    <div className={`relative rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4 animate-in fade-in zoom-in-95 duration-500`}>
+      {isWinner && <Confetti pieces={70} gold />}
       <div className="text-center space-y-2">
         <div className="text-4xl">{isWinner ? "🏆" : didNotQualify ? "😞" : "🌍"}</div>
         <h3 className="text-xl font-black">{isWinner ? "WORLD CUP WINNER!" : didNotQualify ? "World Cup Qualifiers" : `World Cup ${wc.year}`}</h3>
@@ -1190,22 +1224,18 @@ function WorldCupResultCard({ wc, career, onDismiss }: { wc: WorldCupResult; car
       )}
       {isWinner ? (
         <div className="space-y-1.5">
-          <p className="text-center text-[11px] font-bold uppercase tracking-wider text-amber-300">The microphone is yours. The speech:</p>
-          {career.rival && !career.rival.retired && (
-            <Button onClick={() => onSpeech("thank_rival")} className="w-full h-10 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 justify-start">
-              🎤 Thank {career.rival.name} by name: he made me this good
-            </Button>
-          )}
-          {career.family.children > 0 && (
-            <Button onClick={() => onSpeech("family_on_stage")} className="w-full h-10 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 justify-start">
-              👶 Bring your kid on stage to hold the golden ball
-            </Button>
-          )}
-          <Button onClick={() => onSpeech("tears")} className="w-full h-10 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 justify-start">
-            😭 Cry through the whole thing, thank your youth coach
+          <p className="text-center text-[11px] font-bold uppercase tracking-wider text-amber-300 animate-fade-in">The microphone is yours. The speech:</p>
+          <Button onClick={() => onSpeech("for_the_country")} className="w-full h-auto py-2.5 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
+            🏆 Dedicate it to every kid back home
           </Button>
-          <Button onClick={() => onSpeech("greatest_ever")} className="w-full h-10 text-xs font-bold text-white bg-amber-700 hover:bg-amber-600 justify-start">
-            🐐 Declare yourself the greatest to ever do it
+          <Button onClick={() => onSpeech("shirt_to_the_fans")} className="w-full h-auto py-2.5 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
+            🎽 Throw your shirt into the away end
+          </Button>
+          <Button onClick={() => onSpeech("call_out_doubters")} className="w-full h-auto py-2.5 text-xs font-bold text-white bg-amber-700 hover:bg-amber-600 justify-start text-left whitespace-normal">
+            📢 Name the pundits who wrote you off
+          </Button>
+          <Button onClick={() => onSpeech("quiet_lap")} className="w-full h-auto py-2.5 text-xs font-bold text-white bg-muted hover:bg-muted/80 justify-start text-left whitespace-normal">
+            🚶 Say nothing. Walk one slow lap with the trophy
           </Button>
         </div>
       ) : (
@@ -1490,6 +1520,32 @@ function FinancialPanel({ career }: { career: CareerState }) {
           <span className="text-[10px] font-bold w-6 text-right">{career.popularity}</span>
         </div>
       </div>
+
+      {/* Round 54: the heat meter. Only appears once you have something to hide. */}
+      {((career.corruptionHeat ?? 0) > 0 || (career.dirtyMoney ?? 0) > 0) && (() => {
+        const h = career.corruptionHeat ?? 0;
+        const band = heatLabel(h);
+        return (
+          <div className="rounded-lg border border-red-500/25 bg-red-500/5 p-2.5 space-y-1.5 animate-fade-in">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground">🕶️ Heat</span>
+              <span className={`text-[10px] font-black ${band.tone}`}>{band.label}</span>
+            </div>
+            <div className="h-1.5 rounded-full bg-muted/40 overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all duration-700 ${h >= 70 ? "bg-red-500" : h >= 40 ? "bg-orange-500" : "bg-amber-500"}`}
+                style={{ width: `${h}%` }}
+              />
+            </div>
+            <p className="text-[10px] text-muted-foreground leading-snug">{band.blurb}</p>
+            {(career.dirtyMoney ?? 0) > 0 && (
+              <p className="text-[10px] text-red-400 font-bold">
+                💼 {formatNetWorth(career.dirtyMoney ?? 0)} unexplained. Wash it through the Shady aisle or it keeps burning.
+              </p>
+            )}
+          </div>
+        );
+      })()}
     </div>
   );
 }
@@ -1505,9 +1561,17 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: Ba
   const rankEmoji = (rank: number) => rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `${rank}.`;
   
   return (
-    <div className={`rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4 animate-in fade-in zoom-in-90 duration-700`}>
+    <div className={`relative rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4 animate-in fade-in zoom-in-90 duration-700`}>
+      {isWinner && <Confetti pieces={70} gold />}
       <div className="text-center space-y-2">
-        <div className={`text-5xl ${isWinner ? "animate-pulse" : ""}`}>{isWinner ? "🏅" : "⭐"}</div>
+        {career.appearance && (
+          <div className="flex justify-center">
+            <div className={`rounded-xl overflow-hidden border-2 ${isWinner ? "border-amber-400/70 animate-trophy-glow" : "border-border"} bg-muted/20`}>
+              <PlayerAvatar appearance={career.appearance} clubColor={career.currentClubColor} size={isWinner ? 88 : 64} animate />
+            </div>
+          </div>
+        )}
+        <div className={`text-5xl ${isWinner ? "animate-trophy-glow" : ""}`}>{isWinner ? "🏅" : "⭐"}</div>
         <h3 className="text-xl font-black tracking-tight">
           {isWinner ? "BALLON D'OR WINNER!" : `Ballon d'Or ${bdor.year}`}
         </h3>
@@ -1571,9 +1635,18 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
   }, []);
 
   return (
-    <div className="rounded-xl border-2 border-amber-400/40 bg-gradient-to-b from-amber-500/10 to-transparent p-5 space-y-4">
+    <div className="relative rounded-xl border-2 border-amber-400/40 bg-gradient-to-b from-amber-500/10 to-transparent p-5 space-y-4">
+      {(legacy.tier === "GOAT" || legacy.tier === "LEGEND") && <Confetti pieces={60} gold />}
       <div className="text-center space-y-2">
-        <div className="text-5xl">👋</div>
+        {career.appearance ? (
+          <div className="flex justify-center">
+            <div className="rounded-xl overflow-hidden border-2 border-amber-400/50 bg-muted/20">
+              <PlayerAvatar appearance={career.appearance} clubColor={career.currentClubColor} size={96} />
+            </div>
+          </div>
+        ) : (
+          <div className="text-5xl">👋</div>
+        )}
         <h3 className="text-xl font-black tracking-tight">RETIREMENT</h3>
         <p className="text-sm text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={career.nationality} />{career.playerName} retires at age {career.age}</p>
       </div>
@@ -1618,7 +1691,7 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
       <div className="text-center space-y-1 py-2">
         <div className="text-3xl">{tierEmoji[legacy.tier]}</div>
         <div className={`text-2xl font-black ${tierColors[legacy.tier]}`}>{legacy.tier}</div>
-        <div className="text-4xl font-black">{legacy.score}<span className="text-lg text-muted-foreground">/100</span></div>
+        <div className="text-4xl font-black tabular-nums"><CountUp value={legacy.score} duration={1400} /><span className="text-lg text-muted-foreground">/100</span></div>
       </div>
 
       {/* Post-retirement choices */}
@@ -1794,7 +1867,16 @@ function MyLifePanel({ career, onPurchase }: { career: CareerState; onPurchase: 
     { key: "investment", label: "Invest", emoji: "📈" },
     { key: "lifestyle", label: "Lifestyle", emoji: "✨" },
     { key: "performance", label: "Performance", emoji: "⚡" },
+    // Round 54: three new aisles of the shop
+    { key: "flex", label: "Flex", emoji: "💎" },
+    { key: "family", label: "Family", emoji: "❤️" },
+    { key: "shady", label: "Shady", emoji: "🕶️" },
   ];
+
+  // The shady aisle only exists once you have actually done something shady.
+  const visibleCategories = categories.filter(c =>
+    c.key !== "shady" || (career.corruptionHeat ?? 0) > 0 || (career.dirtyMoney ?? 0) > 0
+  );
 
   const items = SPENDING_ITEMS.filter(i => i.category === activeTab);
   const owned = career.purchasedItems || [];
@@ -1812,14 +1894,16 @@ function MyLifePanel({ career, onPurchase }: { career: CareerState; onPurchase: 
       </div>
 
       {/* Category tabs */}
-      <div className="flex gap-1">
-        {categories.map(c => (
+      <div className="grid grid-cols-4 gap-1">
+        {visibleCategories.map(c => (
           <button
             key={c.key}
             onClick={() => setActiveTab(c.key)}
-            className={`flex-1 text-[10px] sm:text-xs font-bold py-1.5 rounded-lg transition-all ${
+            className={`text-[10px] sm:text-xs font-bold py-1.5 rounded-lg transition-all ${
               activeTab === c.key
-                ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                ? c.key === "shady"
+                  ? "bg-red-500/20 text-red-400 border border-red-500/30"
+                  : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                 : "bg-muted/20 text-muted-foreground hover:bg-muted/40"
             }`}
           >
@@ -1834,7 +1918,18 @@ function MyLifePanel({ career, onPurchase }: { career: CareerState; onPurchase: 
           const isOwned = item.oneTime && owned.includes(item.id);
           const canAfford = item.cost === 0 || career.netWorth >= item.cost * 0.5;
           const meetsMin = !item.minNetWorth || career.netWorth >= item.minNetWorth;
-          const disabled = isOwned || !canAfford || !meetsMin;
+          // Round 54 gates, mirrored from purchaseSpendingItem so the button
+          // never lies about what it will do
+          const meetsFame = !item.minPopularity || career.popularity >= item.minPopularity;
+          const meetsDirty = !item.requiresDirty || (career.dirtyMoney ?? 0) > 0;
+          const disabled = isOwned || !canAfford || !meetsMin || !meetsFame || !meetsDirty;
+          const lockNote = !meetsFame
+            ? `Needs ${item.minPopularity} popularity`
+            : !meetsDirty
+              ? "Needs untraceable money to move"
+              : !meetsMin
+                ? `Needs ${formatNetWorth(item.minNetWorth || 0)} net worth`
+                : null;
 
           return (
             <div key={item.id} className={`rounded-lg border p-3 transition-all ${
@@ -1851,6 +1946,7 @@ function MyLifePanel({ career, onPurchase }: { career: CareerState; onPurchase: 
                   </div>
                   <p className="text-[10px] text-muted-foreground mt-0.5">{item.description}</p>
                   {item.effect && <p className="text-[10px] text-amber-400 mt-0.5">⚡ {item.effect}</p>}
+                  {!isOwned && lockNote && <p className="text-[10px] text-red-400/80 mt-0.5">🔒 {lockNote}</p>}
                 </div>
                 {!isOwned && (
                   <button
@@ -2111,7 +2207,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -2124,6 +2220,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onEventChoice: (choiceIndex: number) => void;
   onDismissDebut: () => void;
   onDismissWorldCup: () => void;
+  onWorldCupSpeech: (choice: WorldCupSpeechChoice) => void;
   onRetireInternational: () => void;
   onDismissRivalryEvent: () => void;
   onDismissBallonDor: () => void;
@@ -2174,11 +2271,19 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
     <div className="space-y-3 pb-20">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-black flex items-center gap-2">
-            <FlagImg name={career.nationality} size={24} />{career.playerName}
-          </h1>
-          <p className="text-xs text-muted-foreground">{career.position} · Age {career.age} · {career.nationality}</p>
+        <div className="flex items-center gap-2.5 min-w-0">
+          {/* Round 54: your face, on your career, everywhere */}
+          {career.appearance && (
+            <div className="shrink-0 rounded-xl overflow-hidden border border-border bg-muted/20">
+              <PlayerAvatar appearance={career.appearance} clubColor={career.currentClubColor} size={52} animate />
+            </div>
+          )}
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-black flex items-center gap-2 truncate">
+              <FlagImg name={career.nationality} size={24} />{career.playerName}
+            </h1>
+            <p className="text-xs text-muted-foreground">{career.position} · Age {career.age} · {career.nationality}</p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           {career.phase !== "retired" && career.phase !== "retirement_ceremony" && career.phase !== "post_retirement" && (
@@ -2252,7 +2357,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Season Summary */}
           {career.phase === "season_summary" && career.pendingSummary && (
-            <SeasonSummaryCard season={career.pendingSummary} position={career.position} onContinue={onDismissSummary} />
+            <SeasonSummaryCard season={career.pendingSummary} position={career.position} onContinue={onDismissSummary} appearance={career.appearance} />
           )}
 
           {/* OVERLAY: Contract Offers (youth → pro) */}
@@ -2284,7 +2389,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: World Cup */}
           {career.phase === "world_cup" && career.pendingWorldCup && (
-            <WorldCupResultCard wc={career.pendingWorldCup} career={career} onDismiss={onDismissWorldCup} />
+            <WorldCupResultCard wc={career.pendingWorldCup} career={career} onDismiss={onDismissWorldCup} onSpeech={onWorldCupSpeech} />
           )}
 
           {/* OVERLAY: Rivalry Event */}

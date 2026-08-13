@@ -102,10 +102,43 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        // Round 54: career-mode juice
+        "avatar-bob": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-2.5px)" },
+        },
+        "confetti-fall": {
+          "0%": { transform: "translateY(-10vh) rotate(0deg)", opacity: "1" },
+          "100%": { transform: "translateY(105vh) rotate(720deg)", opacity: "0.7" },
+        },
+        "shine-sweep": {
+          "0%": { transform: "translateX(-120%) skewX(-15deg)" },
+          "100%": { transform: "translateX(240%) skewX(-15deg)" },
+        },
+        "float-up": {
+          "0%": { transform: "translateY(6px)", opacity: "0" },
+          "20%": { opacity: "1" },
+          "100%": { transform: "translateY(-14px)", opacity: "0" },
+        },
+        "count-pop": {
+          "0%": { transform: "scale(1)" },
+          "40%": { transform: "scale(1.25)" },
+          "100%": { transform: "scale(1)" },
+        },
+        "trophy-glow": {
+          "0%, 100%": { filter: "drop-shadow(0 0 4px rgba(251,191,36,0.5))" },
+          "50%": { filter: "drop-shadow(0 0 16px rgba(251,191,36,0.95))" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "avatar-bob": "avatar-bob 3s ease-in-out infinite",
+        "confetti-fall": "confetti-fall 3.2s linear forwards",
+        "shine-sweep": "shine-sweep 2.4s ease-in-out infinite",
+        "float-up": "float-up 1.6s ease-out forwards",
+        "count-pop": "count-pop 0.4s ease-out",
+        "trophy-glow": "trophy-glow 2s ease-in-out infinite",
       },
     },
   },

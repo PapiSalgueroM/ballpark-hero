@@ -351,6 +351,12 @@ export function getEraRivalName(year: number): string {
 const CLUB_FOUNDED_AFTER: Record<string, number> = {
   "Leipzig": 2010, "RB Leipzig": 2010, "Inter Miami": 2020, "LAFC": 2018,
   "Los Angeles FC": 2018, "New York City FC": 2015, "Austin FC": 2021, "Charlotte FC": 2022,
+  // Round 54 club expansion: keep the new-world clubs out of eras where they
+  // did not exist yet (or were not professional outfits yet).
+  "Toronto FC": 2006, "Vancouver Whitecaps": 2011, "Melbourne Victory": 2004,
+  "Wellington Phoenix": 2007, "Auckland FC": 2024, "Mumbai City": 2014,
+  "Buriram United": 2012, "Hanoi FC": 2006, "Al Duhail": 2009,
+  "Shanghai Port": 2005, "Sheriff Tiraspol": 1997, "Beijing Guoan": 1992,
 };
 interface TierRule { name: string; from?: number; until?: number; tier: number }
 const ERA_TIER_RULES: TierRule[] = [
@@ -369,6 +375,13 @@ const ERA_TIER_RULES: TierRule[] = [
   { name: "Marseille", until: 1993, tier: 1 },
   { name: "Al Hilal", until: 2022, tier: 4 }, { name: "Al Nassr", until: 2022, tier: 4 },
   { name: "Leipzig", until: 2015, tier: 4 },
+  // Round 54: era-honest tiers for the expansion clubs
+  { name: "Girona", until: 2022, tier: 4 },
+  { name: "Al Ittihad", until: 2022, tier: 4 },
+  { name: "Brighton", until: 2016, tier: 4 }, { name: "Brighton", until: 2021, tier: 3 },
+  { name: "Wolves", until: 2017, tier: 4 },
+  { name: "Zenit", until: 2006, tier: 4 },
+  { name: "Shakhtar Donetsk", until: 1999, tier: 4 },
 ];
 export function adjustClubsForYear(clubs: ClubData[], year: number): ClubData[] {
   return clubs

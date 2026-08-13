@@ -10,6 +10,9 @@ import {
   personalityFollowerMult, personalitySponsorMult,
   agentWageMult, agentIncomeCutRate, agentTransferCutRate,
 } from "./soccerCareerLife";
+import type { PlayerAppearance } from "./soccerCareerAppearance";
+import { getCorruptionEvents } from "./soccerCareerCorruption";
+import { getRealismEvents } from "./soccerCareerRealism";
 
 export interface ClubData {
   id: string;
@@ -59,6 +62,9 @@ export interface ContractOffer {
   transferFee: number; // in millions
   isDreamClub?: boolean;
   isPayCut?: boolean;
+  /** Round 54: the senior side of the academy that raised you. Always on the
+      table when you turn pro, and again later as a romantic homecoming. */
+  isHomegrown?: boolean;
 }
 
 export type TransferSituation =
@@ -272,7 +278,7 @@ export interface FamilyStatus {
 export type PrimeType = "early" | "normal" | "late" | "extended";
 
 /* ─── Spending & Lifestyle System ─── */
-export type SpendingCategory = "property" | "vehicle" | "investment" | "lifestyle" | "performance";
+export type SpendingCategory = "property" | "vehicle" | "investment" | "lifestyle" | "performance" | "flex" | "family" | "shady";
 
 export interface SpendingItem {
   id: string;
@@ -285,6 +291,15 @@ export interface SpendingItem {
   oneTime: boolean; // can only buy once?
   minNetWorth?: number; // minimum net worth to unlock
   effect?: string; // description of gameplay effect
+  /** Round 54 generic effects, applied automatically on purchase so new items
+      never need another branch in purchaseSpendingItem. */
+  statBoosts?: Partial<Record<"pace" | "shooting" | "passing" | "dribbling" | "defending" | "physical" | "reflexes", number>>;
+  moraleBoost?: number;
+  popularityBoost?: number;
+  followersBoostM?: number; // millions of followers gained on purchase
+  heatChange?: number;      // corruption heat delta (shady items run hot)
+  minPopularity?: number;   // some purchases need fame, not just money
+  requiresDirty?: boolean;  // only appears once you have dirty money to move
 }
 
 export interface InvestmentHolding {
@@ -350,6 +365,57 @@ export const SPENDING_ITEMS: SpendingItem[] = [
   { id: "video_game_studio", name: "Football Game Studio", emoji: "🎮", category: "investment", cost: 8, description: "Fund a studio making a game where YOU are the cover star, €8M. 25% chance 4x hit", oneTime: true, minNetWorth: 12 },
   { id: "space_flight", name: "Seat To Space", emoji: "🚀", category: "lifestyle", cost: 12, description: "Eleven minutes above the atmosphere, €12M. Popularity +12, perspective forever", oneTime: true, minNetWorth: 20 },
   { id: "rivals_boyhood_club", name: "Buy Your Rival's Boyhood Club", emoji: "🗿", category: "property", cost: 45, description: "The pettiest €45M in football history. Rename the stadium after yourself", oneTime: true, minNetWorth: 60, effect: "Popularity +8, the feud becomes eternal" },
+  // ── Round 54 mega expansion: FLEX. Pure, glorious, unnecessary. ──
+  { id: "flex_gold_chain", name: "Cuban Link Chain", emoji: "⛓️", category: "flex", cost: 0.3, description: "Half a kilo of gold around your neck, €300k", oneTime: true, popularityBoost: 2, effect: "Popularity +2" },
+  { id: "flex_diamond_grill", name: "Diamond Grill", emoji: "😬", category: "flex", cost: 0.5, description: "Your smile now costs more than most transfers, €500k", oneTime: true, popularityBoost: 3, effect: "Popularity +3, blinding" },
+  { id: "flex_watch_wall", name: "Watch Wall", emoji: "⌚", category: "flex", cost: 4, description: "A rotating display wall of 40 watches, €4M", oneTime: true, minNetWorth: 6, popularityBoost: 3, effect: "Popularity +3" },
+  { id: "flex_sneaker_vault", name: "Sneaker Vault", emoji: "👟", category: "flex", cost: 1.5, description: "Climate-controlled room for 800 pairs, €1.5M", oneTime: true, minNetWorth: 2, moraleBoost: 4, effect: "+4 Morale" },
+  { id: "flex_full_sleeve", name: "Full Tattoo Sleeve", emoji: "🖋️", category: "flex", cost: 0.05, description: "Your whole story in ink, €50k", oneTime: true, popularityBoost: 2, effect: "Popularity +2" },
+  { id: "flex_back_tattoo", name: "Back Piece Of Yourself", emoji: "🎨", category: "flex", cost: 0.1, description: "A tattoo of you celebrating, on you, €100k", oneTime: true, minPopularity: 50, popularityBoost: 3, effect: "Peak ego. Popularity +3" },
+  { id: "flex_tiger", name: "Pet Tiger", emoji: "🐅", category: "flex", cost: 1, monthlyCost: 0.15, description: "A literal tiger named Butters, €1M + upkeep", oneTime: true, minNetWorth: 5, popularityBoost: 5, heatChange: 5, effect: "Popularity +5, questions from authorities" },
+  { id: "flex_exotic_aquarium", name: "Shark Aquarium", emoji: "🦈", category: "flex", cost: 2.5, monthlyCost: 0.1, description: "A wall-sized tank with two actual sharks, €2.5M", oneTime: true, minNetWorth: 8, moraleBoost: 3, effect: "+3 Morale, do not tap the glass" },
+  { id: "flex_entourage", name: "Full-Time Entourage", emoji: "🕺", category: "flex", cost: 0, monthlyCost: 0.5, description: "Twelve guys whose job is agreeing with you, €500k/yr", oneTime: true, minNetWorth: 10, moraleBoost: 5, effect: "+5 Morale, zero honest feedback" },
+  { id: "flex_gold_phone", name: "Solid Gold Phone", emoji: "📱", category: "flex", cost: 0.2, description: "It barely gets signal but it is GOLD, €200k", oneTime: true, popularityBoost: 1, effect: "Popularity +1" },
+  { id: "flex_custom_cleats", name: "Diamond-Studded Boots", emoji: "💎", category: "flex", cost: 0.8, description: "Match-worn once, then straight into a display case, €800k", oneTime: true, minPopularity: 40, popularityBoost: 4, effect: "Popularity +4" },
+  { id: "flex_hologram", name: "Hologram Of Yourself", emoji: "👻", category: "flex", cost: 3, description: "Greets guests in your foyer with your catchphrase, €3M", oneTime: true, minNetWorth: 12, popularityBoost: 3, effect: "Guests scream every time. Popularity +3" },
+  { id: "flex_theme_park_day", name: "Rent A Theme Park", emoji: "🎢", category: "flex", cost: 1.2, description: "The whole park, one day, just your people, €1.2M", oneTime: false, minNetWorth: 4, moraleBoost: 6, effect: "+6 Morale" },
+  { id: "flex_statue_garden", name: "Statue Garden Of You", emoji: "🗽", category: "flex", cost: 6, description: "Seven marble yous in seven iconic poses, €6M", oneTime: true, minNetWorth: 20, popularityBoost: 4, effect: "Popularity +4, deeply unsettling" },
+  { id: "flex_racing_team", name: "Kart Racing Team", emoji: "🏎️", category: "flex", cost: 2, description: "Your own liveried karting outfit, €2M", oneTime: true, minNetWorth: 8, moraleBoost: 3, popularityBoost: 2, effect: "+3 Morale, +2 Popularity" },
+  // ── FAMILY. The people who knew you before the money. ──
+  { id: "fam_parents_house", name: "Buy Your Parents A House", emoji: "🏡", category: "family", cost: 1.5, description: "The first big promise, kept, €1.5M", oneTime: true, moraleBoost: 8, popularityBoost: 3, effect: "+8 Morale, +3 Popularity. The photo goes viral" },
+  { id: "fam_mom_car", name: "Mom's Dream Car", emoji: "🚙", category: "family", cost: 0.15, description: "She cried at the dealership, €150k", oneTime: true, moraleBoost: 4, effect: "+4 Morale" },
+  { id: "fam_college_fund", name: "Siblings' College Fund", emoji: "🎓", category: "family", cost: 0.5, description: "Every niece, nephew and cousin covered, €500k", oneTime: true, moraleBoost: 5, effect: "+5 Morale" },
+  { id: "fam_grandpa_season", name: "Grandpa's Lifetime Season Ticket", emoji: "👴", category: "family", cost: 0.05, description: "Front row, halfway line, forever, €50k", oneTime: true, moraleBoost: 4, effect: "+4 Morale, he heckles the ref weekly" },
+  { id: "fam_hometown_pitch", name: "Rebuild The Hometown Pitch", emoji: "🥅", category: "family", cost: 2, description: "The cage you learned in, redone properly with lights, €2M", oneTime: true, popularityBoost: 6, moraleBoost: 4, effect: "+6 Popularity, +4 Morale" },
+  { id: "fam_family_vacation", name: "Whole-Family World Tour", emoji: "🌍", category: "family", cost: 0.8, description: "Twenty-three relatives, first class, one summer, €800k", oneTime: false, moraleBoost: 6, effect: "+6 Morale" },
+  { id: "fam_wedding", name: "Fairytale Wedding", emoji: "💒", category: "family", cost: 3, description: "Castle, fireworks, a surprise performance by a global star, €3M", oneTime: true, minNetWorth: 5, moraleBoost: 8, popularityBoost: 4, effect: "+8 Morale, +4 Popularity" },
+  { id: "fam_dad_pub", name: "Buy Dad The Local Pub", emoji: "🍺", category: "family", cost: 0.7, description: "He renames it after your first goal, €700k", oneTime: true, moraleBoost: 5, popularityBoost: 2, effect: "+5 Morale, +2 Popularity" },
+  { id: "fam_security_family", name: "Family Security Detail", emoji: "🛡️", category: "family", cost: 0, monthlyCost: 0.25, description: "Round-the-clock protection for the whole family, €250k/yr", oneTime: true, minNetWorth: 15, moraleBoost: 4, effect: "+4 Morale, everyone sleeps easy" },
+  { id: "fam_foundation_scholarship", name: "Hometown Scholarships", emoji: "📚", category: "family", cost: 1, monthlyCost: 0.1, description: "Ten kids a year through school in your name, €1M + €100k/yr", oneTime: true, popularityBoost: 5, effect: "+5 Popularity and legacy credit" },
+  // ── SHADY. The catalogue nobody photographs. Every purchase runs hot. ──
+  { id: "shady_offshore", name: "Offshore Account", emoji: "🏝️", category: "shady", cost: 0.5, description: "A quiet account in a sunny jurisdiction, €500k in fees", oneTime: true, minNetWorth: 3, heatChange: 12, effect: "Hides earnings from the taxman. Heat +12" },
+  { id: "shady_shell_carwash", name: "Cash-Only Car Wash", emoji: "🧼", category: "shady", cost: 1, description: "Somehow washes 4,000 cars a week, €1M", oneTime: true, requiresDirty: true, heatChange: 8, effect: "Launders €2M of dirty money per season. Heat +8" },
+  { id: "shady_nightclub", name: "Nightclub 'Offside'", emoji: "🪩", category: "shady", cost: 3, description: "VIP room, no cameras, cash bar, €3M", oneTime: true, minNetWorth: 5, requiresDirty: true, heatChange: 10, effect: "Launders €4M of dirty money per season. Heat +10" },
+  { id: "shady_burner_phones", name: "Drawer Of Burner Phones", emoji: "📵", category: "shady", cost: 0.02, description: "Twelve prepaid phones, no names, €20k", oneTime: true, heatChange: 4, effect: "Shady arcs get safer calls. Heat +4" },
+  { id: "shady_fixer_retainer", name: "The Fixer's Retainer", emoji: "🕴️", category: "shady", cost: 0, monthlyCost: 0.3, description: "A man who makes problems disappear, €300k/yr", oneTime: true, minNetWorth: 8, heatChange: 6, effect: "Reduces scandal fallout. Heat +6" },
+  { id: "shady_ref_dinner", name: "'Dinner' With Officials", emoji: "🍷", category: "shady", cost: 0.25, description: "A very expensive restaurant, a very friendly whistle, €250k", oneTime: false, heatChange: 15, effect: "Next season runs smoother. Heat +15" },
+  { id: "shady_passport", name: "Second Passport", emoji: "🛂", category: "shady", cost: 0.8, description: "A backup identity from a cooperative consulate, €800k", oneTime: true, minNetWorth: 5, heatChange: 10, effect: "An exit plan. Heat +10" },
+  { id: "shady_casino_credit", name: "Casino Credit Line", emoji: "🎰", category: "shady", cost: 0, monthlyCost: 0.4, description: "The house always says yes to you, €400k/yr average damage", oneTime: true, minNetWorth: 10, heatChange: 8, effect: "Feeds the gambling arcs. Heat +8" },
+  { id: "shady_paparazzi_payoff", name: "Paparazzi Payroll", emoji: "📸", category: "shady", cost: 0, monthlyCost: 0.2, description: "They shoot what you TELL them to shoot, €200k/yr", oneTime: true, heatChange: 5, popularityBoost: 3, effect: "+3 Popularity, the bad photos vanish. Heat +5" },
+  { id: "shady_crypto_mixer", name: "Crypto Tumbler", emoji: "🌀", category: "shady", cost: 0.3, description: "Coins go in dirty, come out confused, €300k", oneTime: true, requiresDirty: true, heatChange: 12, effect: "Launders €1.5M of dirty money per season. Heat +12" },
+  // ── More PROPERTY, VEHICLES and INVESTMENTS while we are here. ──
+  { id: "ski_chalet", name: "Alpine Ski Chalet", emoji: "🎿", category: "property", cost: 6, description: "Snow, sauna, silence, €6M", oneTime: true, minNetWorth: 10, moraleBoost: 3, effect: "+3 Morale" },
+  { id: "desert_palace", name: "Desert Palace", emoji: "🕌", category: "property", cost: 18, description: "Gold taps. Twelve bathrooms. Why not, €18M", oneTime: true, minNetWorth: 30, popularityBoost: 3, effect: "Popularity +3" },
+  { id: "penthouse_row", name: "Penthouse In Five Cities", emoji: "🌆", category: "property", cost: 22, description: "Paris, Dubai, Miami, Tokyo, London. One key ring, €22M", oneTime: true, minNetWorth: 35, popularityBoost: 4, effect: "Popularity +4" },
+  { id: "vineyard", name: "Tuscan Vineyard", emoji: "🍇", category: "property", cost: 9, description: "Your face on every bottle, €9M", oneTime: true, minNetWorth: 15, moraleBoost: 3, effect: "+3 Morale, surprisingly drinkable" },
+  { id: "monster_truck", name: "Monster Truck", emoji: "🚛", category: "vehicle", cost: 0.4, description: "For the school run, €400k", oneTime: true, popularityBoost: 2, effect: "Popularity +2" },
+  { id: "vintage_bus", name: "The Team Bus (Vintage)", emoji: "🚌", category: "vehicle", cost: 0.6, description: "Your first club's 1980s team bus, restored, €600k", oneTime: true, moraleBoost: 3, effect: "+3 Morale, pure nostalgia" },
+  { id: "helicopter", name: "Personal Helicopter", emoji: "🚁", category: "vehicle", cost: 7, monthlyCost: 0.25, description: "Training is 90 seconds away, €7M", oneTime: true, minNetWorth: 12, effect: "Never late again" },
+  { id: "superyacht", name: "Superyacht 'Golazo'", emoji: "🛳️", category: "vehicle", cost: 40, monthlyCost: 1, description: "Helipad, cinema, a smaller boat inside it, €40M", oneTime: true, minNetWorth: 60, popularityBoost: 6, effect: "Popularity +6" },
+  { id: "inv_padel_chain", name: "Padel Club Chain", emoji: "🎾", category: "investment", cost: 2, description: "Every footballer's favorite retirement hobby, early. 50% chance 2x", oneTime: true, minNetWorth: 4 },
+  { id: "inv_burger_franchise", name: "Burger Franchise", emoji: "🍔", category: "investment", cost: 1.5, description: "Your celebration is on the cups. 55% chance 2x, else break even", oneTime: true, minNetWorth: 3 },
+  { id: "inv_womens_club", name: "Fund A Women's Team", emoji: "⚽", category: "investment", cost: 3, description: "Build the women's side of a club properly. Steady 6% and huge respect", oneTime: true, minNetWorth: 6, popularityBoost: 5, effect: "+5 Popularity" },
+  { id: "inv_stadium_naming", name: "Stadium Naming Rights", emoji: "🏟️", category: "investment", cost: 15, description: "A real stadium, your name on it, 10 years. Steady 5% a year", oneTime: true, minNetWorth: 25, popularityBoost: 6, effect: "+6 Popularity" },
 ];
 
 export function getSpendingItem(id: string): SpendingItem | undefined {
@@ -463,6 +529,12 @@ export interface CareerState {
   personality?: string | null; // showman | iceman | hothead | professor | enigma
   agentId?: string | null;     // cousin | shark | super | self
   lifeFlags?: Record<string, number>; // chained life-event arcs
+  /** Round 54 realism layer. All optional so pre-R54 saves keep loading. */
+  appearance?: PlayerAppearance | null; // create-your-look, rendered by PlayerAvatar
+  corruptionHeat?: number;   // 0-100 hidden. Dirty choices raise it, clean seasons cool it, investigators knock at the top
+  dirtyMoney?: number;       // millions of unexplained income. Spends like cash, feeds heat every season
+  prisonSeasons?: number;    // >0 = doing time. Season is skipped, stats rot, papers feast
+  academyClubName?: string;  // parent club of the academy you came up at (no " Youth" suffix)
 }
 
 /* ─── Moral Dilemma System ─── */
@@ -1519,6 +1591,23 @@ const FLAG_MAP: Record<string, string> = {
   "Jamaica": "🇯🇲", "Costa Rica": "🇨🇷", "Ecuador": "🇪🇨", "Peru": "🇵🇪",
   "Chile": "🇨🇱", "Cameroon": "🇨🇲", "Ivory Coast": "🇨🇮", "Egypt": "🇪🇬",
   "Algeria": "🇩🇿", "Tunisia": "🇹🇳",
+  // Round 54 expansion: more flags, more nations, more everything
+  "Saudi Arabia": "🇸🇦", "Qatar": "🇶🇦", "UAE": "🇦🇪", "Iran": "🇮🇷",
+  "Iraq": "🇮🇶", "Israel": "🇮🇱", "China": "🇨🇳", "India": "🇮🇳",
+  "Indonesia": "🇮🇩", "Thailand": "🇹🇭", "Vietnam": "🇻🇳", "Malaysia": "🇲🇾",
+  "Philippines": "🇵🇭", "Singapore": "🇸🇬", "Uzbekistan": "🇺🇿", "Kazakhstan": "🇰🇿",
+  "Georgia": "🇬🇪", "Armenia": "🇦🇲", "Azerbaijan": "🇦🇿", "South Africa": "🇿🇦",
+  "Kenya": "🇰🇪", "Ethiopia": "🇪🇹", "Tanzania": "🇹🇿", "Angola": "🇦🇴",
+  "Mozambique": "🇲🇿", "DR Congo": "🇨🇩", "Mali": "🇲🇱", "Burkina Faso": "🇧🇫",
+  "Guinea": "🇬🇳", "Gabon": "🇬🇦", "Zambia": "🇿🇲", "Zimbabwe": "🇿🇼",
+  "Venezuela": "🇻🇪", "Bolivia": "🇧🇴", "Paraguay": "🇵🇾", "Panama": "🇵🇦",
+  "Honduras": "🇭🇳", "El Salvador": "🇸🇻", "Guatemala": "🇬🇹", "Haiti": "🇭🇹",
+  "Trinidad and Tobago": "🇹🇹", "Iceland": "🇮🇸", "Finland": "🇫🇮", "Slovakia": "🇸🇰",
+  "Slovenia": "🇸🇮", "Hungary": "🇭🇺", "Bulgaria": "🇧🇬", "Albania": "🇦🇱",
+  "Bosnia": "🇧🇦", "North Macedonia": "🇲🇰", "Montenegro": "🇲🇪", "Kosovo": "🇽🇰",
+  "Cuba": "🇨🇺", "Dominican Republic": "🇩🇴", "Monaco": "🇲🇨", "Luxembourg": "🇱🇺",
+  "Cyprus": "🇨🇾", "Malta": "🇲🇹", "Estonia": "🇪🇪", "Latvia": "🇱🇻",
+  "Lithuania": "🇱🇹", "Moldova": "🇲🇩",
 };
 export function getFlag(country: string): string { return FLAG_MAP[country] || "🏳️"; }
 
@@ -1615,16 +1704,20 @@ function isPastPrime(age: number, primeType: PrimeType): boolean {
   }
 }
 
-/* ─── Stat progression with prime system ─── */
+/* ─── Stat progression with prime system ───
+   Round 54: the whole curve slowed down (owner feedback: "progression is way
+   too quick"). Youth years develop steadily, pro growth is a grind, and the
+   late 80s onward are a wall: most world-class seasons move a stat by 0 or 1.
+   Reaching 90+ should feel like a decade of work, not an accident. */
 function growStat(current: number, age: number, isYouth: boolean, isPace: boolean, primeType: PrimeType): number {
   let growth: number;
   if (isYouth) {
-    growth = rand(2, 4);
+    growth = current >= 78 ? rand(0, 1) : rand(1, 3);
   } else if (isInPrime(age, primeType)) {
-    growth = rand(2, 4); // Prime phase, strong growth
+    growth = rand(1, 3); // Prime phase, the best years still move
   } else if (!isPastPrime(age, primeType)) {
-    // Pre-prime professional years, moderate growth
-    growth = rand(1, 3);
+    // Pre-prime professional years, slow build
+    growth = rand(0, 2);
   } else {
     // Post-prime, decline starts at 32, accelerates after 35
     if (age >= 40) {
@@ -1644,6 +1737,13 @@ function growStat(current: number, age: number, isYouth: boolean, isPace: boolea
         growth = rand(-3, -1); // Moderate decline
       }
     }
+  }
+  // Round 54 elite ceiling: the closer to perfect, the harder every point.
+  // 86+ growth is capped, 90+ usually stalls, 94+ is nearly frozen.
+  if (growth > 0 && !isYouth) {
+    if (current >= 94) growth = Math.random() < 0.20 ? 1 : 0;
+    else if (current >= 90) growth = Math.random() < 0.45 ? 1 : 0;
+    else if (current >= 86) growth = Math.min(growth, Math.random() < 0.5 ? 1 : 2);
   }
   // Pace always declines 1 extra from age 28+, and additional penalty at 35+
   if (isPace && age >= 28 && !isYouth) {
@@ -1916,9 +2016,13 @@ export function purchaseSpendingItem(prev: CareerState, itemId: string): CareerS
   
   // Check if already owned (one-time items)
   if (item.oneTime && s.purchasedItems.includes(itemId)) return prev;
-  
+
   // Check if can afford
   if (item.cost > 0 && s.netWorth < item.cost * 0.5) return prev; // need at least half net worth
+
+  // Round 54 gates: fame-locked and dirty-money-locked purchases
+  if (item.minPopularity && s.popularity < item.minPopularity) return prev;
+  if (item.requiresDirty && (s.dirtyMoney ?? 0) <= 0) return prev;
   
   // Deduct cost
   s.netWorth = Math.round((s.netWorth - item.cost) * 100) / 100;
@@ -2046,7 +2150,24 @@ export function purchaseSpendingItem(prev: CareerState, itemId: string): CareerS
   } else {
     s.events.push(`${item.emoji} Purchased ${item.name}! (€${item.cost >= 1 ? item.cost.toFixed(0) + "M" : Math.round(item.cost * 1000) + "k"})`);
   }
-  
+
+  // Round 54: generic effect fields, so the 47 expansion items (and anything
+  // added later) apply themselves without another branch above.
+  if (item.statBoosts) {
+    for (const [stat, delta] of Object.entries(item.statBoosts)) {
+      const key = stat as keyof typeof item.statBoosts;
+      s[key] = clamp(s[key] + (delta ?? 0), 20, 99);
+    }
+    s.overall = calcOverall(s, s.position);
+  }
+  if (item.moraleBoost) s.morale = clamp(s.morale + item.moraleBoost, 0, 100);
+  if (item.popularityBoost) s.popularity = clamp(s.popularity + item.popularityBoost, 0, 100);
+  if (item.followersBoostM) s.socialMediaFollowers = Math.round((s.socialMediaFollowers + item.followersBoostM) * 10) / 10;
+  if (item.heatChange) {
+    s.corruptionHeat = clamp((s.corruptionHeat ?? 0) + item.heatChange, 0, 100);
+    if (item.heatChange >= 10) s.events.push("🌡️ Somewhere, an investigator opens a folder with your name on it.");
+  }
+
   // Update total asset value
   s.totalAssetValue = calcTotalAssets(s);
   s.lifestyleLevel = calcLifestyleLevel(s.netWorth + s.totalAssetValue);
@@ -2054,7 +2175,7 @@ export function purchaseSpendingItem(prev: CareerState, itemId: string): CareerS
   if (item.category === "performance") {
     s.overall = calcOverall(s, s.position);
   }
-  
+
   return s;
 }
 
@@ -2260,6 +2381,106 @@ export const FALLBACK_CLUBS: ClubData[] = [
   { id: "fb-79", name: "Yokohama F. Marinos", country: "Japan", tier: 4, color: "#00559A", league: "J1 League" },
   { id: "fb-80", name: "Urawa Red Diamonds", country: "Japan", tier: 4, color: "#D2001C", league: "J1 League" },
   { id: "fb-81", name: "Seattle Sounders", country: "USA", tier: 4, color: "#5D9741", league: "MLS" },
+  // ── Round 54 expansion: 60+ new clubs so careers can wind through nearly
+  // every football country on earth (owner: "more teams and more flags and
+  // more of everything"). Tier 2, big names outside the usual five leagues.
+  { id: "fb-82", name: "Al Ittihad", country: "Saudi Arabia", tier: 2, color: "#F9C623", league: "Saudi Pro League" },
+  { id: "fb-83", name: "Club Brugge", country: "Belgium", tier: 2, color: "#0B4494", league: "Belgian Pro League" },
+  { id: "fb-84", name: "Olympiacos", country: "Greece", tier: 2, color: "#D6202B", league: "Super League Greece" },
+  { id: "fb-85", name: "Shakhtar Donetsk", country: "Ukraine", tier: 2, color: "#F26522", league: "Ukrainian Premier League" },
+  { id: "fb-86", name: "Corinthians", country: "Brazil", tier: 2, color: "#141414", league: "Brasileirao" },
+  { id: "fb-87", name: "Monterrey", country: "Mexico", tier: 2, color: "#0A2240", league: "Liga MX" },
+  { id: "fb-88", name: "Tigres UANL", country: "Mexico", tier: 2, color: "#FDB913", league: "Liga MX" },
+  { id: "fb-89", name: "Athletic Bilbao", country: "Spain", tier: 2, color: "#EE2523", league: "La Liga" },
+  { id: "fb-90", name: "Brighton", country: "England", tier: 2, color: "#0057B8", league: "Premier League" },
+  { id: "fb-91", name: "Stuttgart", country: "Germany", tier: 2, color: "#E32219", league: "Bundesliga" },
+  { id: "fb-92", name: "LAFC", country: "USA", tier: 2, color: "#C39E6D", league: "MLS" },
+  { id: "fb-93", name: "River Plate Asuncion", country: "Paraguay", tier: 4, color: "#CE1126", league: "Primera Division Paraguay" },
+  { id: "fb-94", name: "Racing Club", country: "Argentina", tier: 2, color: "#75AADB", league: "Liga Profesional" },
+  { id: "fb-95", name: "Zenit", country: "Russia", tier: 2, color: "#009FDF", league: "Russian Premier League" },
+  { id: "fb-96", name: "Girona", country: "Spain", tier: 2, color: "#CD2534", league: "La Liga" },
+  // Tier 3, strong clubs across Europe, Asia, Africa and the Americas.
+  { id: "fb-97", name: "PAOK", country: "Greece", tier: 3, color: "#2B2B2B", league: "Super League Greece" },
+  { id: "fb-98", name: "Panathinaikos", country: "Greece", tier: 3, color: "#00743F", league: "Super League Greece" },
+  { id: "fb-99", name: "Dinamo Zagreb", country: "Croatia", tier: 3, color: "#1F4C9C", league: "HNL" },
+  { id: "fb-100", name: "Red Star Belgrade", country: "Serbia", tier: 3, color: "#D6202B", league: "Serbian SuperLiga" },
+  { id: "fb-101", name: "Legia Warsaw", country: "Poland", tier: 3, color: "#0F5B2F", league: "Ekstraklasa" },
+  { id: "fb-102", name: "Slavia Prague", country: "Czech Republic", tier: 3, color: "#D6202B", league: "Czech First League" },
+  { id: "fb-103", name: "Besiktas", country: "Turkey", tier: 3, color: "#2B2B2B", league: "Super Lig" },
+  { id: "fb-104", name: "Trabzonspor", country: "Turkey", tier: 3, color: "#5C1F33", league: "Super Lig" },
+  { id: "fb-105", name: "Nice", country: "France", tier: 3, color: "#CC0000", league: "Ligue 1" },
+  { id: "fb-106", name: "Wolves", country: "England", tier: 3, color: "#FDB913", league: "Premier League" },
+  { id: "fb-107", name: "Fulham", country: "England", tier: 3, color: "#111111", league: "Premier League" },
+  { id: "fb-108", name: "Gremio", country: "Brazil", tier: 3, color: "#0D80BF", league: "Brasileirao" },
+  { id: "fb-109", name: "Atletico Nacional", country: "Colombia", tier: 3, color: "#00A650", league: "Liga BetPlay" },
+  { id: "fb-110", name: "Penarol", country: "Uruguay", tier: 3, color: "#FFD100", league: "Primera Division Uruguay" },
+  { id: "fb-111", name: "Kawasaki Frontale", country: "Japan", tier: 3, color: "#009FE8", league: "J1 League" },
+  { id: "fb-112", name: "Jeonbuk Motors", country: "South Korea", tier: 3, color: "#0C6B3E", league: "K League 1" },
+  { id: "fb-113", name: "Al Sadd", country: "Qatar", tier: 3, color: "#2B2B2B", league: "Qatar Stars League" },
+  { id: "fb-114", name: "Persepolis", country: "Iran", tier: 3, color: "#D6202B", league: "Persian Gulf Pro League" },
+  { id: "fb-115", name: "Shanghai Port", country: "China", tier: 3, color: "#D6202B", league: "Chinese Super League" },
+  { id: "fb-116", name: "Zamalek", country: "Egypt", tier: 3, color: "#FFFFFF", league: "Egyptian Premier League" },
+  { id: "fb-117", name: "Wydad Casablanca", country: "Morocco", tier: 3, color: "#D6202B", league: "Botola Pro" },
+  { id: "fb-118", name: "Esperance", country: "Tunisia", tier: 3, color: "#BC0C12", league: "Ligue 1 Tunisia" },
+  { id: "fb-119", name: "Mamelodi Sundowns", country: "South Africa", tier: 3, color: "#FBC403", league: "PSL" },
+  { id: "fb-120", name: "Toronto FC", country: "Canada", tier: 3, color: "#B81137", league: "MLS" },
+  // Tier 4, the wide world where most careers actually start.
+  { id: "fb-121", name: "Sparta Prague", country: "Czech Republic", tier: 4, color: "#7B0C11", league: "Czech First League" },
+  { id: "fb-122", name: "Partizan", country: "Serbia", tier: 4, color: "#2B2B2B", league: "Serbian SuperLiga" },
+  { id: "fb-123", name: "Ferencvaros", country: "Hungary", tier: 4, color: "#0E5C2F", league: "NB I" },
+  { id: "fb-124", name: "Hajduk Split", country: "Croatia", tier: 4, color: "#0C4076", league: "HNL" },
+  { id: "fb-125", name: "HJK Helsinki", country: "Finland", tier: 4, color: "#0056A3", league: "Veikkausliiga" },
+  { id: "fb-126", name: "Breidablik", country: "Iceland", tier: 4, color: "#00954C", league: "Besta deild" },
+  { id: "fb-127", name: "Slovan Bratislava", country: "Slovakia", tier: 4, color: "#57A8E2", league: "Slovak First League" },
+  { id: "fb-128", name: "Ludogorets", country: "Bulgaria", tier: 4, color: "#00954C", league: "First League Bulgaria" },
+  { id: "fb-129", name: "Sheriff Tiraspol", country: "Moldova", tier: 4, color: "#FBC403", league: "Super Liga Moldova" },
+  { id: "fb-130", name: "Dinamo Tbilisi", country: "Georgia", tier: 4, color: "#0C4076", league: "Erovnuli Liga" },
+  { id: "fb-131", name: "Pyunik", country: "Armenia", tier: 4, color: "#D6202B", league: "Armenian Premier League" },
+  { id: "fb-132", name: "Qarabag", country: "Azerbaijan", tier: 4, color: "#2B2B2B", league: "Azerbaijan Premier League" },
+  { id: "fb-133", name: "Kairat Almaty", country: "Kazakhstan", tier: 4, color: "#FBC403", league: "Kazakhstan Premier League" },
+  { id: "fb-134", name: "Pakhtakor", country: "Uzbekistan", tier: 4, color: "#0056A3", league: "Uzbekistan Super League" },
+  { id: "fb-135", name: "Mumbai City", country: "India", tier: 4, color: "#57A8E2", league: "Indian Super League" },
+  { id: "fb-136", name: "Buriram United", country: "Thailand", tier: 4, color: "#0C2E5C", league: "Thai League 1" },
+  { id: "fb-137", name: "Persija Jakarta", country: "Indonesia", tier: 4, color: "#D6202B", league: "Liga 1 Indonesia" },
+  { id: "fb-138", name: "Hanoi FC", country: "Vietnam", tier: 4, color: "#5C2D91", league: "V.League 1" },
+  { id: "fb-139", name: "Johor Darul Tazim", country: "Malaysia", tier: 4, color: "#0C2E5C", league: "Malaysia Super League" },
+  { id: "fb-140", name: "Melbourne Victory", country: "Australia", tier: 4, color: "#0C2E5C", league: "A-League" },
+  { id: "fb-141", name: "Auckland FC", country: "New Zealand", tier: 4, color: "#2B2B2B", league: "A-League" },
+  { id: "fb-142", name: "Wellington Phoenix", country: "New Zealand", tier: 4, color: "#FBC403", league: "A-League" },
+  { id: "fb-143", name: "Raja Casablanca", country: "Morocco", tier: 4, color: "#00954C", league: "Botola Pro" },
+  { id: "fb-144", name: "TP Mazembe", country: "DR Congo", tier: 4, color: "#2B2B2B", league: "Linafoot" },
+  { id: "fb-145", name: "Enyimba", country: "Nigeria", tier: 4, color: "#0056A3", league: "NPFL" },
+  { id: "fb-146", name: "Asante Kotoko", country: "Ghana", tier: 4, color: "#D6202B", league: "Ghana Premier League" },
+  { id: "fb-147", name: "Gor Mahia", country: "Kenya", tier: 4, color: "#00954C", league: "Kenyan Premier League" },
+  { id: "fb-148", name: "Orlando Pirates", country: "South Africa", tier: 4, color: "#2B2B2B", league: "PSL" },
+  { id: "fb-149", name: "Saint George", country: "Ethiopia", tier: 4, color: "#FBC403", league: "Ethiopian Premier League" },
+  { id: "fb-150", name: "Young Africans", country: "Tanzania", tier: 4, color: "#00954C", league: "NBC Premier League" },
+  { id: "fb-151", name: "Atletico Petroleos", country: "Angola", tier: 4, color: "#FBC403", league: "Girabola" },
+  { id: "fb-152", name: "Nacional", country: "Uruguay", tier: 4, color: "#FFFFFF", league: "Primera Division Uruguay" },
+  { id: "fb-153", name: "Universidad de Chile", country: "Chile", tier: 4, color: "#0C2E5C", league: "Primera Division" },
+  { id: "fb-154", name: "Millonarios", country: "Colombia", tier: 4, color: "#0056A3", league: "Liga BetPlay" },
+  { id: "fb-155", name: "LDU Quito", country: "Ecuador", tier: 4, color: "#FFFFFF", league: "LigaPro" },
+  { id: "fb-156", name: "Alianza Lima", country: "Peru", tier: 4, color: "#0C2E5C", league: "Liga 1 Peru" },
+  { id: "fb-157", name: "Olimpia", country: "Paraguay", tier: 4, color: "#2B2B2B", league: "Primera Division Paraguay" },
+  { id: "fb-158", name: "Caracas FC", country: "Venezuela", tier: 4, color: "#7B0C11", league: "Liga FUTVE" },
+  { id: "fb-159", name: "Bolivar", country: "Bolivia", tier: 4, color: "#57A8E2", league: "Division Profesional" },
+  { id: "fb-160", name: "Saprissa", country: "Costa Rica", tier: 4, color: "#5C2D91", league: "Liga FPD" },
+  { id: "fb-161", name: "Olimpia Tegucigalpa", country: "Honduras", tier: 4, color: "#FFFFFF", league: "Liga Nacional Honduras" },
+  { id: "fb-162", name: "Alianza FC", country: "El Salvador", tier: 4, color: "#FFFFFF", league: "Primera Division El Salvador" },
+  { id: "fb-163", name: "Comunicaciones", country: "Guatemala", tier: 4, color: "#FFFFFF", league: "Liga Nacional Guatemala" },
+  { id: "fb-164", name: "Violette AC", country: "Haiti", tier: 4, color: "#5C2D91", league: "Ligue Haitienne" },
+  { id: "fb-165", name: "Waterhouse FC", country: "Jamaica", tier: 4, color: "#D6202B", league: "Jamaica Premier League" },
+  { id: "fb-166", name: "Defence Force FC", country: "Trinidad and Tobago", tier: 4, color: "#7B0C11", league: "TT Premier League" },
+  { id: "fb-167", name: "Vancouver Whitecaps", country: "Canada", tier: 4, color: "#0C2E5C", league: "MLS" },
+  { id: "fb-168", name: "Chivas", country: "Mexico", tier: 4, color: "#D6202B", league: "Liga MX" },
+  { id: "fb-169", name: "Pumas", country: "Mexico", tier: 4, color: "#0C2E5C", league: "Liga MX" },
+  { id: "fb-170", name: "Al Duhail", country: "Qatar", tier: 4, color: "#D6202B", league: "Qatar Stars League" },
+  { id: "fb-171", name: "Al Ain", country: "UAE", tier: 4, color: "#5C2D91", league: "UAE Pro League" },
+  { id: "fb-172", name: "Beijing Guoan", country: "China", tier: 4, color: "#00954C", league: "Chinese Super League" },
+  { id: "fb-173", name: "Maccabi Tel Aviv", country: "Israel", tier: 4, color: "#FBC403", league: "Israeli Premier League" },
+  { id: "fb-174", name: "APOEL", country: "Cyprus", tier: 4, color: "#F26522", league: "Cypriot First Division" },
+  { id: "fb-175", name: "Flora Tallinn", country: "Estonia", tier: 4, color: "#00954C", league: "Meistriliiga" },
+  { id: "fb-176", name: "Zalgiris Vilnius", country: "Lithuania", tier: 4, color: "#00954C", league: "A Lyga" },
 ];
 
 /* ─── Appearances, league + UCL + cups for realistic totals ─── */
@@ -2513,7 +2734,7 @@ export function formatWage(wage: number): string {
 }
 
 /* ─── Generate initial contract offers (age 17) ─── */
-export function generateContractOffers(clubs: ClubData[], overall: number, age: number): ContractOffer[] {
+export function generateContractOffers(clubs: ClubData[], overall: number, age: number, academyClubName?: string): ContractOffer[] {
   let targetTiers: number[];
   if (overall >= 66) targetTiers = [2, 2, 3];
   else if (overall >= 56) targetTiers = [3, 3, 3];
@@ -2521,6 +2742,25 @@ export function generateContractOffers(clubs: ClubData[], overall: number, age: 
 
   const offers: ContractOffer[] = [];
   const usedNames = new Set<string>();
+
+  // Round 54: the club that raised you ALWAYS offers a first-team deal.
+  // Slightly lighter wage (they know you would play for free), but it is the
+  // only path to homegrown-legend storylines. Owner feedback: "you should be
+  // able to play for the team you started at in academy".
+  if (academyClubName) {
+    const parentClub = clubs.find(c => c.name === academyClubName);
+    if (parentClub) {
+      usedNames.add(parentClub.name);
+      offers.push({
+        club: parentClub,
+        contractYears: rand(3, 5),
+        wage: Math.round(wageForTier(parentClub.tier, overall) * 0.8),
+        transferFee: 0,
+        isHomegrown: true,
+      });
+    }
+  }
+
   for (const tier of targetTiers) {
     const candidates = getClubsByTier(clubs, tier).filter(c => !usedNames.has(c.name));
     if (candidates.length === 0) continue;
@@ -2640,6 +2880,25 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
     if (dreamOffer) return { type: "dream_club", offer: dreamOffer };
   }
 
+  // Round 54: the homecoming call. Late-career (or just homesick), the club
+  // that raised you rings up wanting the prodigal star back.
+  const academyName = state.academyClubName;
+  if (academyName && academyName !== currentClub && age >= 27 && Math.random() < 0.12) {
+    const homeClub = clubs.find(c => c.name === academyName);
+    if (homeClub) {
+      exclude.add(homeClub.name);
+      const homecoming: ContractOffer = {
+        club: homeClub,
+        contractYears: rand(2, 4),
+        wage: Math.round(wageForTier(homeClub.tier, overall) * 0.75),
+        transferFee: realisticTransferFee(overall, age),
+        isHomegrown: true,
+        isPayCut: true,
+      };
+      return { type: "one_offer", offer: homecoming };
+    }
+  }
+
   const interestChance = aboveLevel >= 15 ? 0.7 : aboveLevel >= 5 ? 0.5 : aboveLevel >= 0 ? 0.3 : 0.1;
   if (Math.random() < interestChance) {
     const offer = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue);
@@ -2665,6 +2924,7 @@ export function initCareer(
   playerName: string, nationality: string, position: string, era: string,
   stats: { pace: number; shooting: number; passing: number; dribbling: number; defending: number; physical: number; reflexes: number },
   overall: number, startYear: number, clubs: ClubData[],
+  appearance?: PlayerAppearance | null,
 ): CareerState {
   const academyClub = getYouthAcademyClub(adjustClubsForYear(clubs, startYear), nationality, overall);
   return {
@@ -2713,6 +2973,11 @@ export function initCareer(
     personality: null,
     agentId: null,
     lifeFlags: {},
+    appearance: appearance ?? null,
+    corruptionHeat: 0,
+    dirtyMoney: 0,
+    prisonSeasons: 0,
+    academyClubName: academyClub.name,
     moralDilemmasTriggered: [],
     pendingMoralDilemma: null,
     pedSeasonsRemaining: 0,
@@ -2752,7 +3017,10 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
   s.events.push(`📈 Stats improved during youth development (OVR ${s.overall})`);
   if (s.age >= 17) {
     s.events.push("📩 Professional contract offers received!");
-    s.pendingOffers = generateContractOffers(adjustClubsForYear(clubs, lastYear + 1), s.overall, s.age);
+    // Round 54: old saves predate academyClubName, so recover it from the
+    // "<Club> Youth" naming convention on the fly.
+    const academyName = s.academyClubName || (s.currentClub.endsWith(" Youth") ? s.currentClub.slice(0, -6) : undefined);
+    s.pendingOffers = generateContractOffers(adjustClubsForYear(clubs, lastYear + 1), s.overall, s.age, academyName);
     s.phase = "contract_offer";
   }
   s.marketValue = calcMarketValue(s.overall, s.age, s.position);
@@ -2776,6 +3044,16 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
     s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)}) · Agent fee: €${agentFee.toFixed(1)}M`];
   } else {
     s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)})`];
+  }
+  // Round 54: staying loyal to the badge that raised you pays off in the
+  // fans' hearts, and coming home later is an instant love story.
+  if (offer.isHomegrown) {
+    s.popularity = clamp(s.popularity + 10, 0, 100);
+    s.morale = clamp(s.morale + 8, 0, 100);
+    const cameThrough = (prev.academyClubName && offer.club.name === prev.academyClubName) || prev.currentClub === `${offer.club.name} Youth`;
+    s.events.push(cameThrough && prev.currentClub.endsWith(" Youth")
+      ? `🏠 One of our own! The ${offer.club.name} academy kid signs a first-team deal. The ultras already have a chant ready.`
+      : `🏠 THE HOMECOMING! ${s.playerName} returns to ${offer.club.name}, the club that raised them. Scenes outside the stadium.`);
   }
   return s;
 }
@@ -3078,6 +3356,83 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       simulateSeasonFinances(s, s.pendingSummary);
       return s;
     }
+  }
+
+  // ── Round 54: doing time. Prison eats the season whole. ──
+  if ((s.prisonSeasons ?? 0) > 0) {
+    s.prisonSeasons = (s.prisonSeasons ?? 0) - 1;
+    // A year inside rots the body faster than any bench
+    for (const k of ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"] as const) {
+      (s as any)[k] = clamp((s as any)[k] - rand(3, 5), 20, 99);
+    }
+    s.overall = calcOverall(s, s.position);
+    s.marketValue = calcMarketValue(s.overall, s.age, s.position);
+    s.morale = clamp(s.morale - 15, 0, 100);
+    s.events.push(s.prisonSeasons > 0
+      ? `⛓️ A year served. ${s.prisonSeasons} more to go. You run laps of the yard to stay sharp.`
+      : "⛓️ RELEASED. You walk out to forty cameras and one loyal agent. The comeback starts now.");
+    const lastYearP = s.seasons[s.seasons.length - 1].year;
+    s.seasons = [...s.seasons, {
+      year: lastYearP + 1, age: s.age, club: "PRISON", clubCountry: "", clubTier: 99,
+      apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
+      leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
+      intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
+    }];
+    s.pendingSummary = s.seasons[s.seasons.length - 1];
+    s.phase = "season_summary";
+    simulateSeasonFinances(s, s.pendingSummary);
+    return s;
+  }
+
+  // ── Round 54: the corruption thermostat. Dirty money wants washing, heat
+  // wants cooling, and investigators want promotions. ──
+  const dirtyNow = s.dirtyMoney ?? 0;
+  if (dirtyNow > 0) {
+    let washCapacity = 0;
+    if (s.purchasedItems.includes("shady_shell_carwash")) washCapacity += 2;
+    if (s.purchasedItems.includes("shady_nightclub")) washCapacity += 4;
+    if (s.purchasedItems.includes("shady_crypto_mixer")) washCapacity += 1.5;
+    if (washCapacity > 0) {
+      const washed = Math.min(dirtyNow, washCapacity);
+      s.dirtyMoney = Math.round((dirtyNow - washed) * 100) / 100;
+      s.netWorth = Math.round((s.netWorth + washed) * 100) / 100;
+      s.events.push(`🧼 The businesses had a "great year": €${washed.toFixed(1)}M of quiet money is now clean.`);
+    }
+    if ((s.dirtyMoney ?? 0) > 0) {
+      s.corruptionHeat = clamp((s.corruptionHeat ?? 0) + 6, 0, 100);
+      s.events.push(`💼 €${(s.dirtyMoney ?? 0).toFixed(1)}M still sits in the duffel bags. Money that loud attracts ears.`);
+    }
+  } else if ((s.corruptionHeat ?? 0) > 0) {
+    s.corruptionHeat = clamp((s.corruptionHeat ?? 0) - 8, 0, 100);
+  }
+
+  const heat = s.corruptionHeat ?? 0;
+  if (heat >= 90 && Math.random() < 0.5) {
+    // The trial. It was always going to end like this.
+    const confiscated = Math.round(((s.dirtyMoney ?? 0) + s.netWorth * 0.3) * 100) / 100;
+    s.dirtyMoney = 0;
+    s.netWorth = Math.round(s.netWorth * 0.7 * 100) / 100;
+    s.prisonSeasons = 1;
+    s.corruptionHeat = 20;
+    s.popularity = clamp(s.popularity - 35, 0, 100);
+    s.integrityBonus -= 30;
+    s.events.push(`⚖️ CONVICTED. Fraud, bribery, and one very confused judge reading out the submarine receipts. €${confiscated.toFixed(1)}M seized, 1 year inside.`);
+    s.pendingNews = [{
+      newspaper: "The Daily Sport", type: "negative",
+      headline: `GUILTY: ${s.playerName} Going To Prison`,
+      body: `The fall is complete. ${s.playerName} was convicted on all counts after prosecutors traced years of unexplained income. The courtroom sketch artist gave them enormous sad eyes and the internet made it a meme within the hour.`,
+    }];
+    s.phase = "newspaper";
+    return s;
+  } else if (heat >= 70 && Math.random() < 0.35) {
+    // The dawn raid: painful, survivable, very public
+    const fine = Math.round((s.netWorth * 0.2 + (s.dirtyMoney ?? 0) * 0.5) * 100) / 100;
+    s.netWorth = Math.round((s.netWorth - fine) * 100) / 100;
+    s.dirtyMoney = Math.round(((s.dirtyMoney ?? 0) * 0.5) * 100) / 100;
+    s.corruptionHeat = clamp(heat - 30, 0, 100);
+    s.popularity = clamp(s.popularity - 15, 0, 100);
+    s.integrityBonus -= 10;
+    s.events.push(`🚔 DAWN RAID. Financial crimes unit, seven vans, one very smug spokesperson. Settled for €${fine.toFixed(1)}M to avoid charges.`);
   }
 
   // PED tracking, check for failed test
@@ -3498,7 +3853,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
 }
 
 /* ─── Newspaper Article Generation ─── */
-const NEWSPAPERS = ["The Daily Sport", "Football Weekly", "The Global Game", "Soccer Times", "The Beautiful Game Report"];
+const NEWSPAPERS = ["The Daily Sport", "Football Weekly", "The Global Game", "Soccer Times", "The Beautiful Game Report", "The Daily Nutmeg", "El Golazo", "Tackle Weekly", "The Sunday Volley", "90+4 Magazine"];
 
 function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: number, totalApps: number): NewsArticle[] {
   const articles: NewsArticle[] = [];
@@ -3633,6 +3988,88 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "milestone",
         headline: `LEGEND STATUS: ${name} Announces Retirement After ${yearsPlaying} Year Career`,
         body: `In an emotional press conference, ${name} confirmed this will be their final season as a professional footballer. ${yearsPlaying} years, ${totalGoals} goals, and countless memories. A true legend of the game.` }) },
+    // ── Round 54: twenty more stories. The papers now cover your snubs, your
+    // scandals, your shopping and your softest moments. ──
+    { weight: 1.4, check: () => s.bdorSnubFuel === true && season.goals >= 25,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `ROBBED! Fans Fume As ${name} Misses Out On Ballon d'Or AGAIN`,
+        body: `${season.goals} goals and still no golden ball. Social media has already produced 4,000 conspiracy charts, a petition, and one very angry podcast episode. "The voters watch highlights on mute," wrote one fan. Hard to argue.` }) },
+    { weight: 1.2, check: () => (s.corruptionHeat ?? 0) >= 50,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `WHERE DOES THE MONEY COME FROM? Questions Mount Over ${name}'s Empire`,
+        body: `An investigative series has begun sniffing around ${name}'s business affairs. A car wash that outsells the national chain. A nightclub with no music license. Nothing proven, the lawyers stress. Yet.` }) },
+    { weight: 1, check: () => (s.dirtyMoney ?? 0) > 3,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `THE DUFFEL BAG FILES: Mystery Cash Linked To ${name}'s Circle`,
+        body: `A leaked memo describes "sports bags of unusual weight" moving through ${name}'s entourage. The player's spokesperson called the story "gym equipment." The gym in question could not be located.` }) },
+    { weight: 1.3, check: () => s.seasons.filter(ss => ss.club === "PRISON").length > 0 && season.apps > 0 && season.rating >= 7.0,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `REDEMPTION: ${name} Is Officially BACK`,
+        body: `From a cell to ${season.goals} goals. Whatever you think of the past, ${name}'s comeback season at ${club} is one of the great sporting redemption stories. The away fans still sing about it. The home fans sing louder.` }) },
+    { weight: 1, check: () => s.purchasedItems.includes("flex_tiger"),
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `${name}'s Pet Tiger Escapes Garden, Delays Training`,
+        body: `Butters the tiger was found napping in a neighbour's gazebo on Tuesday. Animal control described the situation as "genuinely outside our training." ${name} apologised and bought the street lunch. The tiger remains extremely large.` }) },
+    { weight: 0.8, check: () => s.purchasedItems.includes("superyacht") || s.purchasedItems.includes("private_island"),
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `OUT OF TOUCH? ${name}'s Latest Purchase Raises Eyebrows`,
+        body: `As ticket prices climb, photos of ${name}'s newest toy did the rounds this week. A club source shrugged: "They scored ${season.goals} this season, they can buy a moon." Fans remain split roughly 50-50 between outrage and requests for a ride.` }) },
+    { weight: 1, check: () => s.family.children > 0 && season.goals >= 15,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `DAD GOALS: ${name} Celebrates Every Strike With The Kids In The Stands`,
+        body: `The now-famous routine, goal, run to the family section, ${s.family.children > 1 ? "high-five the kids" : "lift the little one"}, has become the league's most wholesome tradition. Cameras cut to the family before the ball even hits the net now.` }) },
+    { weight: 0.9, check: () => s.personality === "showman" && s.socialMediaFollowers >= 5,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `BOX OFFICE: Every ${name} Match Is A Show Now`,
+        body: `Nutmegs, no-look passes, a celebration catalogue deeper than most players' highlight reels. Purists grumble. Everyone else buys tickets. "I play football," ${name} shrugged, "the theatre is free."` }) },
+    { weight: 0.9, check: () => s.personality === "iceman" && season.rating >= 7.5,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `THE MACHINE: ${name} Never Celebrates, Never Blinks, Never Misses`,
+        body: `Another ${season.goals}-goal season delivered with the emotional range of a filing cabinet. Teammates say they have seen ${name} smile twice. Both times were at tactics boards.` }) },
+    { weight: 0.9, check: () => s.personality === "hothead" && (season.yellowCards >= 8 || season.redCards >= 1),
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `TICKING TIME BOMB: ${name} Walks Disciplinary Tightrope AGAIN`,
+        body: `${season.yellowCards} yellows${season.redCards > 0 ? ` and ${season.redCards} red` : ""} this season. The talent is undeniable, the temper is unmissable. The league's referees have reportedly started a group chat.` }) },
+    { weight: 1, check: () => s.academyClubName !== undefined && club === s.academyClubName && seasonsAtClub >= 3 && ovr >= 80,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `ONE OF OUR OWN: ${name} Is ${club}'s Greatest Homegrown Story`,
+        body: `From the academy pitches to ${season.goals} goals a season, ${name} never needed to leave to become world class. The club shop cannot print the name fast enough. There are babies in this town named after a ${pos}.` }) },
+    { weight: 0.8, check: () => season.goals >= 30 && s.age <= 21,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `WONDERKID ALERT: ${s.age}-Year-Old ${name} Breaks The Scouting Apps`,
+        body: `${season.goals} goals at ${s.age}. Scouts from every superclub attended the last home game, and one reportedly cried. Comparisons to legends are premature, say pundits, before making seven of them in the same sentence.` }) },
+    { weight: 0.7, check: () => s.morale >= 85 && season.rating >= 7.3,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `HAPPIEST MAN IN FOOTBALL: The Secret To ${name}'s Golden Season`,
+        body: `Sources close to the player credit "family, sleep, and turning the phone off." Whatever it is, it produced a ${season.rating.toFixed(1)} average rating and the widest grin in the league.` }) },
+    { weight: 0.7, check: () => s.weeklyWage >= 400000,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "transfer",
+        headline: `${formatWage(s.weeklyWage)} A WEEK: Inside ${name}'s Monster Contract`,
+        body: `Leaked figures put ${name} among the best paid players alive. The club insists the deal "reflects performance." The performance this season: ${season.goals} goals, ${season.assists} assists. The accountants have stopped complaining.` }) },
+    { weight: 0.6, check: () => s.intStats.isCaptain && (season.intApps || 0) > 0,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `LEADER OF THE NATION: ${name} Wears The ${s.nationality} Armband Like Armour`,
+        body: `Since taking the captaincy, ${name} has turned the national side into a family business. Teammates describe the pre-match speeches as "somewhere between a sermon and a heist briefing."` }) },
+    { weight: 0.6, check: () => s.purchasedItems.includes("fam_parents_house"),
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `THE PROMISE: ${name} Bought Mum The House, And The Video Broke The Internet`,
+        body: `The clip of ${name}'s mother opening her new front door has passed 40 million views. "I told her when I was nine," the player said, and that was all anyone needed. Not a dry eye in the press room.` }) },
+    { weight: 0.6, check: () => season.cleanSheets >= 15 && pos === "GK",
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `THE WALL: ${name} Posts ${season.cleanSheets} Clean Sheets, Strikers In Therapy`,
+        body: `Opposition forwards have begun passing backwards on sight of ${name}. ${season.cleanSheets} shutouts this season, and at least three saves that appeared to violate physics. The league is investigating the goalkeeper for witchcraft. (It is not.)` }) },
+    { weight: 0.6, check: () => s.rival !== null && !s.rival.retired && (s.rivalryIntensity ?? 0) >= 60,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
+        headline: `THE FEUD: ${name} vs ${s.rival!.name} Is Football's Coldest War`,
+        body: `No handshake. No eye contact. One suspiciously timed unfollow. The rivalry between ${name} and ${s.rival!.name} now has its own fan wikis, timeline threads, and at least one university thesis.` }) },
+    { weight: 0.5, check: () => s.lifestyleLevel === "Billionaire" || s.netWorth >= 500,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "milestone",
+        headline: `THE BILLION CLUB: ${name} Is Officially Richer Than The Club That Pays Them`,
+        body: `Forbes confirmed it this week: ${name}'s empire, boots, brands, buildings and businesses, has crossed into billionaire territory. The club's owner reportedly asked THEM for a loan. It was declined, politely.` }) },
+    { weight: 0.5, check: () => s.age >= 36 && season.goals >= 15,
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `AGELESS: ${s.age}-Year-Old ${name} Refuses To Read The Calendar`,
+        body: `${season.goals} goals at ${s.age}. Nutritionists want the meal plan, scientists want the bloodwork, defenders want it to stop. "I will retire when it stops being fun," ${name} smiled, ominously, at everyone under 30.` }) },
   ];
 
   const eligible = templates.filter(t => t.check());
@@ -3942,6 +4379,10 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       ] },
     ...getExtraEvents(state),
     ...getLifeEvents(state),
+    // Round 54: the corruption layer (ids 300-349) and the realism layer
+    // (ids 400+). Both self-gate, so no eligibility rules are needed here.
+    ...getCorruptionEvents(state),
+    ...getRealismEvents(state),
   ];
 }
 
@@ -4297,15 +4738,66 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // Sort all contenders by points descending
   allNomineeData.sort((a, b) => b.points - a.points);
 
-  // DIFFICULTY: Boost top NPC so there's always a strong rival for the award
-  // Ensure at least 1-2 NPCs have very competitive scores
-  if (allNomineeData.length >= 2) {
+  // Round 54 FAIRNESS RULE (owner feedback: "you can have the best stats that
+  // season and they won't give you the award").
+  //
+  // ROOT CAUSE: calcBdorPoints caps goals at 28 points and assists at 8, while
+  // NPC stars get an uncapped `power * rand(1,3)` pedigree bonus on top of the
+  // same formula. A player could post 46 goals and 11 assists (59 pts) and lose
+  // to a nominee sitting on 119. No stat line could ever beat reputation, which
+  // is exactly what the owner hit.
+  //
+  // FIX: judge dominance on PRODUCTION, comparing like for like. Every nominee
+  // carries goals + trophies, so score the player and the field on the same
+  // scale and let the numbers speak. Reputation still decides close years, but
+  // it can no longer beat a season that objectively led the world.
+  const productionScore = (goals: number, assists: number, trophies: string[]): number => {
+    let p = goals + assists * 0.5;
+    if (trophies.includes("World Cup")) p += 22;
+    if (trophies.includes("UCL")) p += 18;
+    if (trophies.includes("League")) p += 9;
+    if (trophies.includes("Cup")) p += 3;
+    return p;
+  };
+  const playerProduction = productionScore(season.goals, season.assists, playerTrophies);
+  // Nominees do not expose assists, so give every one of them a generous
+  // benefit-of-the-doubt assist total (12) rather than assuming zero.
+  const fieldBest = allNomineeData.reduce(
+    (mx, n) => Math.max(mx, productionScore(n.goals, 12, n.trophies)),
+    0,
+  );
+  const gaTotal = season.goals + season.assists;
+  const trebleSeason = season.leagueTitle && season.championsLeague && season.domesticCup;
+  const statMonster = gaTotal >= 55 || season.goals >= 45 || (gaTotal >= 45 && (season.leagueTitle || season.championsLeague || season.worldCup));
+  // Outscored every single nominee, the plainest version of "best stats".
+  const fieldTopGoals = allNomineeData.reduce((mx, n) => Math.max(mx, n.goals), 0);
+  const outscoredEveryone = season.goals > fieldTopGoals;
+  const wonMajor = season.leagueTitle || season.championsLeague || season.worldCup;
+  // Led the world on production, or outscored the entire field while winning a
+  // major, or posted a monster line and at least matched the best of the field,
+  // or won a domestic treble while staying in touch.
+  const playerDominant = playerCanContend && (
+    playerProduction > fieldBest ||
+    (outscoredEveryone && wonMajor) ||
+    (statMonster && playerProduction >= fieldBest * 0.95) ||
+    (trebleSeason && playerProduction >= fieldBest * 0.9)
+  );
+
+  // DIFFICULTY: Boost top NPC so there's always a strong rival for the award,
+  // but never against a dominant player season (that was the snub machine).
+  if (allNomineeData.length >= 2 && !playerDominant) {
     // Give the top NPC a random bonus to make winning harder
     allNomineeData[0].points += rand(5, 15);
     if (allNomineeData[1]) allNomineeData[1].points += rand(2, 8);
   }
 
-  const npcSpotsNeeded = playerNominated ? 9 : 10;
+  // A dominant season is always on the shortlist, even if the legacy points
+  // formula would have left it off. Same for any monster line: the old
+  // nomination gate (points > 45) could not be cleared by goals alone, because
+  // goals are capped at 28 points, so a 45-goal trophyless season was not even
+  // NOMINATED. That was the purest form of the snub the owner reported.
+  const playerInTop10 = playerCanContend && (playerNominated || playerDominant || statMonster);
+  const npcSpotsNeeded = playerInTop10 ? 9 : 10;
   const topNPCs = allNomineeData.slice(0, npcSpotsNeeded);
 
   // Filler nominees (only needed if the era pool somehow ran short)
@@ -4320,8 +4812,8 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     });
   }
 
-  // Add player if nominated
-  if (playerNominated) {
+  // Add player if nominated (or if the season was flat out dominant)
+  if (playerInTop10) {
     topNPCs.push({
       name: state.playerName, nationality: state.nationality, position: state.position,
       club: state.currentClub, points: playerPoints, goals: season.goals, trophies: playerTrophies, isPlayer: true,
@@ -4334,12 +4826,29 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   let playerRankIdx = top10.findIndex(n => n.isPlayer);
   let playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
 
-  // STRICT WIN CONDITIONS: Player can only win (rank 1) if they meet elite criteria
-  if (playerRank === 1) {
+  // Round 54: a dominant season is untouchable. If the raw numbers say the
+  // player owned the year, they lift the trophy, even if a filler nominee
+  // landed above them on a technicality.
+  if (playerDominant && playerRank !== 1) {
+    const playerEntry = top10.find(n => n.isPlayer);
+    if (playerEntry) {
+      playerEntry.points = top10.reduce((mx, n) => Math.max(mx, n.points), 0) + rand(3, 9);
+      top10.sort((a, b) => b.points - a.points);
+      playerRankIdx = top10.findIndex(n => n.isPlayer);
+      playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
+    }
+  }
+
+  // STRICT WIN CONDITIONS: Player can only win (rank 1) if they meet elite criteria.
+  // Round 54 widened the paths so voters respect stats, not just trophies:
+  // 30+ goals, UCL+League double, World Cup, a domestic treble, or a 45+ goal
+  // involvement season alongside any major trophy all count as winning material.
+  if (playerRank === 1 && !playerDominant) {
     const hasUCLAndLeague = season.championsLeague && season.leagueTitle;
     const hasWorldCup = season.worldCup;
     const has30PlusGoals = season.goals >= BDOR_WIN_MIN_GOALS;
-    const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup;
+    const bigInvolvementPlusTrophy = gaTotal >= 45 && (season.leagueTitle || season.championsLeague);
+    const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup || trebleSeason || bigInvolvementPlusTrophy;
     if (!meetsWinCondition) {
       // Demote player to 2nd, they weren't dominant enough
       const playerEntry = top10.find(n => n.isPlayer);
@@ -4356,6 +4865,20 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     }
   }
 
+  // Round 54 PODIUM FLOOR: even in a year someone else legitimately owned, a
+  // monster individual season cannot be shoved down to 8th. 45+ goals, or 55+
+  // goal involvements, guarantees at least a podium finish.
+  if (statMonster && playerRank !== null && playerRank > 3) {
+    const playerEntry = top10.find(n => n.isPlayer);
+    if (playerEntry) {
+      const thirdBest = [...top10].sort((a, b) => b.points - a.points)[2];
+      playerEntry.points = (thirdBest ? thirdBest.points : playerEntry.points) + rand(1, 4);
+      top10.sort((a, b) => b.points - a.points);
+      playerRankIdx = top10.findIndex(n => n.isPlayer);
+      playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
+    }
+  }
+
   // Extended top-30 ranking: strong-but-not-nominated seasons still place in the world top 30
   if (playerRank === null && playerCanContend && playerPoints >= 12) {
     const better = allNomineeData.filter(n => !n.isPlayer && n.points > playerPoints).length;
@@ -4363,7 +4886,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     if (extendedRank <= 30) playerRank = extendedRank;
   }
 
-  return { year, nominees: top10, playerRank, playerPoints, playerNominated };
+  return { year, nominees: top10, playerRank, playerPoints, playerNominated: playerInTop10 };
 }
 
 /* ─── Flow helper: advance to next phase ─── */
@@ -4506,6 +5029,52 @@ export function dismissDebut(prev: CareerState, clubs: ClubData[]): CareerState 
 /* ─── Dismiss World Cup screen ─── */
 export function dismissWorldCup(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev };
+  s.pendingWorldCup = null;
+  return advanceToNextPhase(s, clubs);
+}
+
+/* ─── World Cup winner's speech (Round 54) ───
+   BUG FIX: the winner branch of WorldCupResultCard rendered four speech
+   buttons that called an `onSpeech` prop the component never received, and
+   that branch had no Continue button. Winning the World Cup, the single best
+   moment in the game, threw a ReferenceError on click and left the player
+   stuck with no way forward. Now the moment has its own real speech with real
+   effects, and every path ends by clearing the pending result. */
+export type WorldCupSpeechChoice = "for_the_country" | "shirt_to_the_fans" | "call_out_doubters" | "quiet_lap";
+
+export function applyWorldCupSpeech(prev: CareerState, choice: WorldCupSpeechChoice, clubs: ClubData[]): CareerState {
+  const s = { ...prev };
+  switch (choice) {
+    case "for_the_country":
+      s.popularity = clamp(s.popularity + 18, 0, 100);
+      s.morale = clamp(s.morale + 12, 0, 100);
+      s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 3) * 100) / 100;
+      s.events = [...s.events, `🏆 You dedicated it to every kid in ${s.nationality} playing on a broken pitch right now. A nation lost its mind.`];
+      break;
+    case "shirt_to_the_fans":
+      s.popularity = clamp(s.popularity + 14, 0, 100);
+      s.morale = clamp(s.morale + 8, 0, 100);
+      s.integrityBonus += 6;
+      s.events = [...s.events, "🎽 You threw the match shirt into the away end and walked off in a training top. That photo is now a mural."];
+      break;
+    case "call_out_doubters":
+      s.morale = clamp(s.morale + 15, 0, 100);
+      s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 4) * 100) / 100;
+      if (Math.random() < 0.4) {
+        s.popularity = clamp(s.popularity - 8, 0, 100);
+        s.events = [...s.events, '📢 "Where are they now?" Named three pundits live on air. Iconic, petty, and replayed for a decade. Popularity -8.'];
+      } else {
+        s.popularity = clamp(s.popularity + 10, 0, 100);
+        s.events = [...s.events, '📢 "Where are they now?" Named three pundits live on air and the whole country cheered. Popularity +10.'];
+      }
+      break;
+    case "quiet_lap":
+      s.morale = clamp(s.morale + 10, 0, 100);
+      s.integrityBonus += 10;
+      s.popularity = clamp(s.popularity + 6, 0, 100);
+      s.events = [...s.events, "🚶 No speech. You walked one slow lap with the trophy, found your family in row 12, and said nothing at all."];
+      break;
+  }
   s.pendingWorldCup = null;
   return advanceToNextPhase(s, clubs);
 }

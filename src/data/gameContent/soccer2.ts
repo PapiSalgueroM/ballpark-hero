@@ -408,21 +408,30 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Every soccer career simulator promises the same fantasy: start as a nobody, retire as a legend. This one makes the middle the good part. You begin at 16 in a youth academy and live season by season through contracts, transfers, injuries, feuds, trophies, and increasingly questionable purchases, until the game hands down a legacy verdict.",
       "It is the most played game on DoUKnowBall, and it sits closer to BitLife than to a match engine. You never dribble anyone. You make decisions, and the sim turns them into a story that is different every run.",
       "Your save lives in your browser, one career at a time, so choices carry weight into the years that follow them.",
+      "You build your player's actual face before kickoff: skin tone, hairstyle and colour, facial hair, a boot line, an accessory, and a signature celebration that gets described every time you score. That look follows you onto the Ballon d'Or stage and into your retirement send off.",
+      "There is a dirty side too. Bent officials, betting syndicates, kickbacks, offshore accounts and laundering fronts all sit there waiting, each one heating up a hidden investigation meter. Take enough envelopes and the dawn raid comes, then the trial, then a season inside and a comeback from nothing.",
     ],
     howToPlay: [
       "Create your player: name, one of 50 nationalities, one of 10 positions, and a starting era from the 1990s to the 2020s.",
+      "Build your look in the appearance editor: 6 skin tones, 12 hairstyles, 8 hair colours, 7 beard styles, 8 accessories, 10 boot lines, and 10 signature celebrations, or hit Surprise me.",
       "Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll until it feels right.",
       "Begin in an academy matched to your nationality and talent. Pro contract offers arrive from age 17.",
       "Advance season by season through simulated stats, newspaper headlines, random events, and decisions.",
       "Work the transfer windows: stay, extend, request a move, or weigh rival offers and dream club pay cuts.",
+      "Spend the money in 8 shop aisles: property, vehicles, investments, lifestyle, performance, flex, family, and a shady aisle that only appears once you have something to hide.",
       "Retire, on your terms or your body's, collect the legacy verdict, then carry on as a manager, pundit, or owner if you want.",
     ],
     rules: [
-      "Stats grow 2 to 4 points a year through the academy and your prime, then fade once your hidden prime type (early, normal, late, or extended) ends, with decline turning brutal from 38.",
+      "Stats grow slowly and honestly: 1 to 3 points a year through the academy and your prime, less once you pass 86, and barely at all above 90. Reaching world class is a decade of work, not three good seasons.",
+      "Growth fades once your hidden prime type (early, normal, late, or extended) ends, with decline turning brutal from 38.",
+      "The club that raised you always offers you a first team deal when you turn pro, so you can spend a whole career at your boyhood club, and it can call you home again from 27.",
       "Retirement is suggested from age 30 once you drop 10 off your peak or hit 75 overall, forced below 50 overall at 33 or older, and automatic at 45.",
       "The World Cup comes every 4 years. Top nations qualify about 90 percent of the time, while a small nation mostly needs a world class you.",
       "Legacy runs 0 to 100: 90 is GOAT, 80 LEGEND, 70 GREAT, 60 SOLID PRO, and less is JOURNEYMAN.",
       "Morale runs 0 to 100 and moves with events and choices, while scandals feed an integrity ledger worth minus 30 to plus 20 legacy points at the end.",
+      "A statistically dominant season cannot be snubbed at the Ballon d'Or. Outscore the whole shortlist while winning a major and the trophy is yours, and any 45 goal or 55 goal involvement season finishes on the podium at worst.",
+      "Corruption heat runs 0 to 100 and cools 8 a year when you stay clean. Past 70 the financial crimes unit can raid you, and past 90 comes a conviction, seized money, and a season in prison that wrecks your stats.",
+      "Unexplained money keeps generating heat every season until you wash it through a shady business or declare it and eat the tax.",
     ],
     example: [
       "Take a Nigerian striker rolled at 63, a Gifted start. Two academy years push him past 70, and at 18 a bidding war breaks out. He takes minutes over money, bags 20 league goals, and the papers crown him the next superstar.",
@@ -444,7 +453,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "How do I win the Ballon d'Or?",
-        a: "Stack an undeniable season: big numbers at a big club, a deep Champions League run, and trophies. The ceremony shows the full nominee ranking, and a second place snub becomes next season's fuel.",
+        a: "Post the best season in the world and the voters have to give it to you. If you outscore every player on the shortlist and win a league, Champions League, or World Cup, you win it outright, and any season of 45 goals or 55 goal involvements finishes top 3 at worst. Trophies still decide the close years, and a second place finish becomes next season's fuel.",
       },
       {
         q: "What happens after retirement?",
@@ -453,6 +462,14 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         q: "What is the highest legacy score?",
         a: "100, with GOAT starting at 90. Expect to need multiple Ballon d'Ors and Champions Leagues, a World Cup, huge totals, and a clean record, since one scandal can separate GOAT from LEGEND.",
+      },
+      {
+        q: "Can I play for the club I came through as a youth player?",
+        a: "Yes. The senior side of your academy club always puts a contract on the table when you turn pro, usually on slightly lower wages because they know you would sign for free. Staying gives you a popularity and morale boost and unlocks the homegrown legend storylines. From 27 they can also call you back for a homecoming transfer.",
+      },
+      {
+        q: "What is corruption mode and can it end my career?",
+        a: "It is the dirty half of the game and yes, it absolutely can. Taking envelopes from a betting syndicate, paying a referee's brother in law, buying Ballon d'Or votes, or laundering cash through your own nightclub all raise a hidden heat meter. Stay hot too long and you get raided, then convicted, then you serve a season in prison while your stats rot. There is always a way out: confess, take the tax amnesty, or just stop, and heat cools every clean season.",
       },
       {
         q: "Is this a football career sim game or a management game?",
