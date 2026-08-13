@@ -26,7 +26,8 @@ export default function MlbMyCareerBoard() {
   const [phase, setPhase] = useState<Phase>('create');
   // Round 58: build your player's face before the draft
   const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
-  const [showShop, setShowShop] = useState(false);
+  // Round 85: FIFA tile rule. The season hub is boxes; each opens its own screen.
+  const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'news'>('none');
   const [career, setCareer] = useState<MlbCareerState | null>(null);
   const [teamQuality, setTeamQuality] = useState<number | null>(null);
   const [nameInput, setNameInput] = useState('');
@@ -144,6 +145,7 @@ export default function MlbMyCareerBoard() {
     setFeed([]);
     setLastLine(null);
     setPendingEvent(null);
+    setPanel('none');
   };
 
   const statLine = (s: MlbSeasonLine, p: MlbCareerPos) =>
@@ -253,6 +255,81 @@ export default function MlbMyCareerBoard() {
     );
   }
 
+  /* ---------------- Round 85: tile drill-in screens (the FIFA rule) ---------------- */
+  if (panel !== 'none' && phase !== 'event') {
+    const meters: [string, number][] = [['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health]];
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <button onClick={() => setPanel('none')} className="rounded-full border border-border bg-card px-3 py-1 text-xs font-bold text-muted-foreground hover:text-foreground">‹ Back</button>
+          <p className="text-sm font-black text-foreground">
+            {panel === 'bank' ? '💰 The Bank' : panel === 'stats' ? '📊 My Player' : panel === 'log' ? '📜 Career Log' : '📰 News Feed'}
+          </p>
+        </div>
+        {panel === 'bank' && (
+          <div className="space-y-3">
+            <div className="rounded-2xl border border-border bg-card p-3 text-center">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Net worth</p>
+              <p className="text-2xl font-black text-gold">${(career.netWorth ?? 0).toFixed(1)}M</p>
+              <p className="text-[10px] text-muted-foreground">${career.salary}M a year, {Math.max(0, career.contractYears)} years left on the deal</p>
+            </div>
+            <MlbShopPanel career={career} onBuy={id => { const res = buyMlbItem(career, id); if (!res) return; setCareer(res.state); setFeed(f => [res.log, ...f].slice(0, 8)); }} />
+          </div>
+        )}
+        {panel === 'stats' && (
+          <div className="space-y-3">
+            <div className="rounded-2xl border border-border bg-card p-4 text-center">
+              <p className="text-4xl font-black text-primary">{career.ovr}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">overall</p>
+              <p className="mt-1 text-xs text-muted-foreground">{career.name} · {career.pos} · age {career.age}</p>
+            </div>
+            <div className="space-y-2">
+              {meters.map(([lbl, v]) => (
+                <div key={lbl} className="rounded-xl border border-border bg-card px-3 py-2">
+                  <div className="flex justify-between text-[11px]"><span className="text-muted-foreground">{lbl}</span><b className="text-foreground">{v}</b></div>
+                  <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-secondary">
+                    <div className={cn('h-full rounded-full', v > 60 ? 'bg-primary' : v > 35 ? 'bg-gold' : 'bg-destructive')} style={{ width: `${v}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-center text-[11px]">
+              <div className="rounded-xl border border-border bg-card px-2 py-2"><p className="text-lg font-black text-foreground">{career.seasons.length}</p><p className="text-muted-foreground">seasons</p></div>
+              <div className="rounded-xl border border-border bg-card px-2 py-2"><p className="text-lg font-black text-foreground">{career.rings}</p><p className="text-muted-foreground">rings</p></div>
+            </div>
+          </div>
+        )}
+        {panel === 'log' && (
+          <div className="rounded-2xl border border-border bg-card p-3">
+            {career.seasons.length === 0 ? (
+              <p className="py-6 text-center text-xs text-muted-foreground">No seasons on the books yet. Go play one.</p>
+            ) : (
+              <div className="max-h-96 space-y-0.5 overflow-y-auto">
+                {[...career.seasons].reverse().map((s, i) => (
+                  <div key={i} className="flex items-center justify-between rounded px-2 py-1 text-[11px] odd:bg-background">
+                    <span className="text-muted-foreground">{s.year} · {s.team}</span>
+                    <span className="text-foreground">{statLine(s, career.pos)}{s.awards.length ? ' 🏆' : ''}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        {panel === 'news' && (
+          <div className="rounded-2xl border border-border bg-card p-3">
+            {feed.length === 0 ? (
+              <p className="py-6 text-center text-xs text-muted-foreground">Quiet week. Play a season and the headlines write themselves.</p>
+            ) : (
+              <div className="space-y-1.5 text-xs text-muted-foreground">
+                {feed.map((n, i) => <p key={i} className="rounded-lg bg-background px-2 py-1.5">{n}</p>)}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   /* ------------------------------ season hub ------------------------------ */
   return (
     <div className="space-y-4">
@@ -267,12 +344,6 @@ export default function MlbMyCareerBoard() {
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{career.year} · age {career.age}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">OVR <b className="text-primary">{career.ovr}</b></span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">${career.salary}M x{Math.max(0, career.contractYears)}</span>
-        <button
-          onClick={() => setShowShop(v => !v)}
-          className="rounded-full border border-border bg-card px-3 py-1 font-bold text-foreground transition-colors hover:border-primary/50"
-        >
-          💰 ${(career.netWorth ?? 0).toFixed(1)}M {showShop ? '▲' : '▼'}
-        </button>
       </div>
 
       {/* Round 58: the heat meter, only once you have something to hide */}
@@ -298,34 +369,8 @@ export default function MlbMyCareerBoard() {
         );
       })()}
 
-      {showShop && (
-        <MlbShopPanel
-          career={career}
-          onBuy={id => {
-            const res = buyMlbItem(career, id);
-            if (!res) return;
-            setCareer(res.state);
-            setFeed(f => [res.log, ...f].slice(0, 8));
-          }}
-        />
-      )}
 
-      <div className="grid grid-cols-3 gap-2 text-center text-[11px]">
-        {[['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health]].map(([lbl, v]) => (
-          <div key={lbl as string} className="rounded-xl border border-border bg-card px-2 py-1.5">
-            <p className="text-muted-foreground">{lbl}</p>
-            <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-secondary">
-              <div className={cn('h-full rounded-full', (v as number) > 60 ? 'bg-primary' : (v as number) > 35 ? 'bg-gold' : 'bg-destructive')} style={{ width: `${v}%` }} />
-            </div>
-          </div>
-        ))}
-      </div>
 
-      {feed.length > 0 && (
-        <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
-          {feed.slice(0, 5).map((n, i) => <p key={i}>{n}</p>)}
-        </div>
-      )}
 
       {phase === 'event' && pendingEvent ? (
         <div ref={revealRef} className="rounded-2xl border border-gold/40 bg-card p-4">
@@ -367,19 +412,34 @@ export default function MlbMyCareerBoard() {
         </div>
       )}
 
-      {career.seasons.length > 0 && (
-        <div className="rounded-2xl border border-border bg-card p-3">
-          <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Career log</p>
-          <div className="max-h-48 space-y-0.5 overflow-y-auto">
-            {[...career.seasons].reverse().map((s, i) => (
-              <div key={i} className="flex items-center justify-between rounded px-2 py-1 text-[11px] odd:bg-background">
-                <span className="text-muted-foreground">{s.year} · {s.team}</span>
-                <span className="text-foreground">{statLine(s, career.pos)}{s.awards.length ? ' 🏆' : ''}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Round 85: FIFA style boxes. Tap one, it opens its own screen. */}
+      <div className="grid grid-cols-2 gap-2">
+        <button onClick={() => setPanel('stats')} className="relative rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
+          <span className="text-xl">📊</span>
+          <span className="mt-0.5 block text-sm font-black text-foreground">My Player</span>
+          <span className="block text-[10px] text-muted-foreground">OVR {career.ovr} · morale {career.morale}</span>
+          {(career.morale <= 35 || career.health <= 35 || career.fanbase <= 35) && (
+            <span className="absolute right-2 top-2 h-2.5 w-2.5 animate-pulse rounded-full bg-destructive" />
+          )}
+        </button>
+        <button onClick={() => setPanel('bank')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
+          <span className="text-xl">💰</span>
+          <span className="mt-0.5 block text-sm font-black text-foreground">Bank</span>
+          <span className="block text-[10px] text-muted-foreground">${(career.netWorth ?? 0).toFixed(1)}M to spend</span>
+        </button>
+        <button onClick={() => setPanel('log')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
+          <span className="text-xl">📜</span>
+          <span className="mt-0.5 block text-sm font-black text-foreground">Career Log</span>
+          <span className="block text-[10px] text-muted-foreground">{career.seasons.length} seasons on the books</span>
+        </button>
+        <button onClick={() => setPanel('news')} className="relative rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
+          <span className="text-xl">📰</span>
+          <span className="mt-0.5 block text-sm font-black text-foreground">News</span>
+          <span className="block truncate text-[10px] text-muted-foreground">{feed[0] ?? 'No headlines yet'}</span>
+          {feed.length > 0 && <span className="absolute right-2 top-2 rounded-full bg-primary px-1.5 text-[9px] font-black text-primary-foreground">{feed.length}</span>}
+        </button>
+      </div>
+
     </div>
   );
 }
