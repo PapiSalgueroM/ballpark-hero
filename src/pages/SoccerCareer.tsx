@@ -3056,10 +3056,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
         ) : career.phase === "manager_season" ? (
           <div className="flex-1 flex gap-2">
+            {/* Round 112: when you are out of work you are not managing a
+                season, you are waiting for a phone call, and the button
+                should say which one of those is happening. */}
             <Button onClick={onAdvanceManager} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
-              Next Manager Season <ChevronRight className="w-5 h-5" />
+              {career.managerState?.unemployed ? "Sit Out A Season" : "Next Manager Season"} <ChevronRight className="w-5 h-5" />
             </Button>
-            <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold">Retire</Button>
+            <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold">
+              {career.managerState?.unemployed ? "Walk Away" : "Retire"}
+            </Button>
           </div>
         ) : career.phase === "owner_season" ? (
           <div className="flex-1 flex gap-2">
