@@ -409,6 +409,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Correct predictions pay 25 points each. Final score adds 3 per territory held, 50 for making the playoffs, 200 if your team takes the title.",
       "Playoff seeding is territories first, season record as the tiebreaker.",
       "Arcade mode is the original formula: battles, stealing a player from every beaten team, and power-ups.",
+      "The Daily Challenge deals every player the same date-seeded season: same starting map, same fixtures, same results. One scored run per day with streaks. Free Play is unlimited and fully random.",
     ],
     example: [
       "You take Denver. Two early wins triple your land, then the Mavericks flatten you in round six and the whole empire changes color.",
@@ -420,6 +421,10 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Peek at the standings. Playoff seeding sneaks up fast, and territories decide it.",
     ],
     faqs: [
+      {
+        q: "How does the Daily Challenge work?",
+        a: "Everyone on the planet gets the same season today: identical starting map, identical fixtures, identical results. Your score comes from which empire you back and how well you call the games, so comparing scores is a fair fight. One scored run per day, streaks build if you show up daily, and a fresh map drops at midnight Eastern. Free Play stays unlimited.",
+      },
       { q: "What happens when my team loses everything?", a: "You stay in the game. Landless teams keep playing, and the moment they win they seize their conqueror's entire empire. The best runs start from zero." },
       { q: "Can the season end before round 14?", a: "Yes. If one team conquers every territory, the season ends right there with a total conquest." },
       { q: "How do the two modes differ?", a: "Imperialism is the map format with predictions and annexed empires. Arcade is the original battle mode with player steals and power-ups." },

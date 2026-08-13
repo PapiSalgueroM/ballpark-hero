@@ -409,6 +409,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "If a team owns the whole map before week 18, the season ends on the spot.",
       "Playoff seeding is territory first, with season record breaking ties.",
       "Scoring: 3 points per state held at the end, 25 per correct call, 50 for making the playoffs, 200 if your team takes the crown.",
+      "The Daily Challenge deals every player the same date-seeded season: same starting map, same fixtures, same results. One scored run per day with streaks. Free Play is unlimited and fully random.",
     ],
     example: [
       "You pick the Chiefs, who start with a slice of the middle of the map. Week 1 they beat the Broncos and the whole mountain empire flips red in an afternoon. By week 6 you stretch toward the Pacific, because your victims had already eaten their neighbors.",
@@ -422,6 +423,10 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "Try Arcade when you want a slower burn: battles, player steals, and a 99 rated franchise legend power up.",
     ],
     faqs: [
+      {
+        q: "How does the Daily Challenge work?",
+        a: "Everyone on the planet gets the same season today: identical starting map, identical fixtures, identical results. Your score comes from which empire you back and how well you call the games, so comparing scores is a fair fight. One scored run per day, streaks build if you show up daily, and a fresh map drops at midnight Eastern. Free Play stays unlimited.",
+      },
       {
         q: "How does the imperialism format work?",
         a: "Every territory starts with its nearest stadium. Each winner annexes every state the loser owned, wiped out teams stay on the schedule and can reclaim an empire with one win, and after 18 weeks the top 8 empires play a knockout bracket.",

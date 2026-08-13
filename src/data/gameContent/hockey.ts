@@ -288,6 +288,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Playoff seeding takes the 8 biggest empires, with win-loss record breaking ties.",
       "Final score: 3 per territory held, 25 per correct call, 50 for making the playoffs, 200 for winning it all.",
       "Winners score 2 to 7 goals, overtime games finish one goal apart, and ties do not exist.",
+      "The Daily Challenge deals every player the same date-seeded season: same starting map, same fixtures, same results. One scored run per day with streaks. Free Play is unlimited and fully random.",
     ],
     example: [
       "Say you ride the Avalanche. Round 3 they lose a coin flip and the whole empire vanishes in one night. Round 5 they win, and because that opponent had been hoarding, you inherit more land than you lost.",
@@ -300,6 +301,10 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Playoff games transfer land too, so the eventual champion usually ends up owning most of the map.",
     ],
     faqs: [
+      {
+        q: "How does the Daily Challenge work?",
+        a: "Everyone on the planet gets the same season today: identical starting map, identical fixtures, identical results. Your score comes from which empire you back and how well you call the games, so comparing scores is a fair fight. One scored run per day, streaks build if you show up daily, and a fresh map drops at midnight Eastern. Free Play stays unlimited.",
+      },
       {
         q: "My team got erased in round 2. Is my run over?",
         a: "No. Wiped-out clubs keep their full schedule, and beating any landowner hands you everything they hold.",

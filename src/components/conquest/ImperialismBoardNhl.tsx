@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { Crown, Flag, ListOrdered, RotateCcw, Swords } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { CalendarDays, Crown, Flag, ListOrdered, RotateCcw, Swords } from 'lucide-react';
 import ConquestMapNhl from '@/components/conquest/ConquestMapNhl';
 import ShareButtons from '@/components/game/ShareButtons';
 import { NHL_TEAMS, NHL_TEAM_MAP } from '@/data/conquestDataNhl';
@@ -13,6 +13,11 @@ import {
   type NhlImpGame, type NhlImpRoundResult, type NhlImpRecords,
 } from '@/lib/imperialismNhl';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import {
+  dailyConquestRng, loadDailyResult, loadDailyStreak, saveDailyResult, dailyShareText,
+  type ConquestDailyResult,
+} from '@/lib/conquestDaily';
+import { getTodayET } from '@/lib/dateUtils';
 import { cn } from '@/lib/utils';
 
 type Phase = 'pick' | 'preview' | 'recap' | 'done';
@@ -38,6 +43,14 @@ export default function ImperialismBoardNhl() {
   const [records, setRecords] = useState<NhlImpRecords>({});
   const [showStandings, setShowStandings] = useState(false);
 
+  // Round 50: the real Daily Challenge. Same seeded season for every player
+  // (fixtures AND results), one scored run per ET day, streaks, share line.
+  const [dailyDone, setDailyDone] = useState<ConquestDailyResult | null>(() => loadDailyResult('nhl'));
+  const [dailyStreak, setDailyStreak] = useState(() => loadDailyStreak('nhl'));
+  const [mode, setMode] = useState<'daily' | 'free'>(() => (loadDailyResult('nhl') ? 'free' : 'daily'));
+  const rngRef = useRef<() => number>(Math.random);
+  const dailySaved = useRef(false);
+
   const counts = useMemo(() => nhlEmpireCounts(owners), [owners]);
   const total = Object.keys(owners).length;
   const landless = useMemo(() => nhlLandlessTeams(owners), [owners]);
@@ -61,6 +74,25 @@ export default function ImperialismBoardNhl() {
 
   useGameCompletion('conquest-nhl-imperialism', phase === 'done', score, favorite ? nhlStatesOf(owners, favorite).length : 0);
 
+  // Lock in the daily result the moment the season ends.
+  useEffect(() => {
+    if (phase !== 'done' || mode !== 'daily' || !champion || !favorite || dailySaved.current || dailyDone) return;
+    dailySaved.current = true;
+    const result: ConquestDailyResult = {
+      date: getTodayET(),
+      team: favorite,
+      score,
+      empire: nhlStatesOf(owners, favorite).length,
+      calls: predictionHits,
+      callsTotal: predictionTotal,
+      champion,
+      championWasYou: champion === favorite,
+    };
+    const s = saveDailyResult('nhl', result);
+    setDailyDone(result);
+    setDailyStreak(s);
+  }, [phase, mode, champion, favorite, score, owners, predictionHits, predictionTotal, dailyDone]);
+
   const rollPairings = (br: BracketState | null) => {
     if (br) {
       const seeds = br.alive;
@@ -70,12 +102,14 @@ export default function ImperialismBoardNhl() {
       }
       setPairings(pairs);
     } else {
-      setPairings(nhlRandomPairings());
+      setPairings(nhlRandomPairings(rngRef.current));
     }
     setPrediction(null);
   };
 
   const start = (teamId: string) => {
+    rngRef.current = mode === 'daily' ? dailyConquestRng('nhl') : Math.random;
+    dailySaved.current = false;
     setFavorite(teamId);
     setOwners(seedNhlEmpires());
     setRound(1);
@@ -88,7 +122,7 @@ export default function ImperialismBoardNhl() {
     setRecords(nhlEmptyRecords());
     setShowStandings(false);
     setPhase('preview');
-    setPairings(nhlRandomPairings());
+    setPairings(nhlRandomPairings(rngRef.current));
     setPrediction(null);
   };
 
@@ -96,7 +130,7 @@ export default function ImperialismBoardNhl() {
     const next = { ...owners };
     const games: NhlImpGame[] = [];
     for (const [h, a] of pairings) {
-      games.push(resolveNhlGame(h, a, next));
+      games.push(resolveNhlGame(h, a, next, rngRef.current));
     }
     const nextRecords = nhlApplyRecords(records, games);
     setRecords(nextRecords);
@@ -174,8 +208,57 @@ export default function ImperialismBoardNhl() {
 
   /* ---------------- pick screen ---------------- */
   if (phase === 'pick') {
+    const playedToday = mode === 'daily' && dailyDone;
     return (
       <div className="space-y-4">
+        {/* Round 50: Daily Challenge vs Free Play */}
+        <div className="flex items-center justify-center gap-2">
+          {(['daily', 'free'] as const).map(m => (
+            <button
+              key={m}
+              onClick={() => setMode(m)}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-bold transition-all',
+                mode === m ? 'border-gold bg-gold/10 text-foreground' : 'border-border text-muted-foreground hover:text-foreground',
+              )}
+            >
+              {m === 'daily'
+                ? (<><CalendarDays className="h-3.5 w-3.5" /> Daily Challenge{dailyStreak >= 2 ? ` · 🔥${dailyStreak}` : ''}</>)
+                : 'Free Play'}
+            </button>
+          ))}
+        </div>
+        {playedToday ? (
+          <div className="rounded-2xl border border-gold/40 bg-card p-5 text-center animate-in fade-in zoom-in-95 duration-300">
+            <p className="font-display text-lg font-bold text-foreground">Today's Conquest is in the books</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              You rode {nhlTeamLabel(dailyDone.team)} to {dailyDone.empire} territor{dailyDone.empire === 1 ? 'y' : 'ies'} and called {dailyDone.calls}/{dailyDone.callsTotal} games.
+              {dailyDone.championWasYou ? ' Your empire took the whole map.' : ` ${nhlTeamLabel(dailyDone.champion)} took the map.`}
+            </p>
+            <div className="mt-3 flex items-center justify-center gap-3 text-sm">
+              <span className="rounded-full border border-border bg-background px-3 py-1.5">Score <b className="text-gold">{dailyDone.score}</b></span>
+              {dailyStreak >= 2 && (
+                <span className="rounded-full border border-border bg-background px-3 py-1.5">Streak <b className="text-gold">🔥{dailyStreak}</b></span>
+              )}
+            </div>
+            <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <button
+                onClick={() => setMode('free')}
+                className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground"
+              >
+                <RotateCcw className="h-4 w-4" /> Free play instead
+              </button>
+              <ShareButtons
+                gameName="NHL Imperialism"
+                gamePath="/conquest-nhl"
+                score={`${dailyDone.score} pts`}
+                customText={dailyShareText('NHL Imperialism', '/conquest-nhl', dailyDone, dailyStreak, nhlTeamLabel(dailyDone.champion), nhlTeamLabel(dailyDone.team))}
+              />
+            </div>
+            <p className="mt-3 text-[10px] text-muted-foreground">A fresh map drops at midnight Eastern.</p>
+          </div>
+        ) : (
+          <>
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Pick your team</p>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -185,6 +268,11 @@ export default function ImperialismBoardNhl() {
             Ottawa, Edmonton, Vancouver, Buffalo) start as THE INVADERS: landless, dangerous, one win
             from an empire. Ride your team to the end, call their games, and pray.
           </p>
+          {mode === 'daily' && (
+            <p className="mt-2 text-[11px] font-semibold text-gold">
+              🗓️ Daily Challenge: every player gets today's exact fixtures and results. Pick the right empire, call the games, post your score. One scored run per day.
+            </p>
+          )}
         </div>
         <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
           {NHL_TEAMS.map(t => (
@@ -199,6 +287,8 @@ export default function ImperialismBoardNhl() {
             </button>
           ))}
         </div>
+          </>
+        )}
       </div>
     );
   }
@@ -378,19 +468,27 @@ export default function ImperialismBoardNhl() {
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Empire <b className="text-primary">{myStates}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Calls <b className="text-gold">{predictionHits}/{predictionTotal}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Score <b className="text-gold">{score}</b></span>
+            {mode === 'daily' && dailyStreak >= 2 && (
+              <span className="rounded-full border border-border bg-background px-3 py-1.5">Streak <b className="text-gold">🔥{dailyStreak}</b></span>
+            )}
           </div>
+          {mode === 'daily' && (
+            <p className="mt-2 text-[11px] text-muted-foreground">🗓️ Daily done. A fresh map drops at midnight Eastern.</p>
+          )}
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <button
-              onClick={reset}
+              onClick={() => { if (mode === 'daily') setMode('free'); reset(); }}
               className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground"
             >
-              <RotateCcw className="h-4 w-4" /> New season
+              <RotateCcw className="h-4 w-4" /> {mode === 'daily' ? 'Free play' : 'New season'}
             </button>
             <ShareButtons
               gameName="NHL Imperialism"
               gamePath="/conquest-nhl"
               score={`${score} pts`}
-              customText={`NHL Imperialism 🗺️ ${nhlTeamLabel(champion)} took the whole map. My ${favorite ? nhlTeamLabel(favorite) : 'team'} finished with ${myStates} territories and I called ${predictionHits}/${predictionTotal} games. Score ${score}. douknowball.com/conquest-nhl`}
+              customText={mode === 'daily' && dailyDone
+                ? dailyShareText('NHL Imperialism', '/conquest-nhl', dailyDone, dailyStreak, nhlTeamLabel(champion), favorite ? nhlTeamLabel(favorite) : 'team')
+                : `NHL Imperialism 🗺️ ${nhlTeamLabel(champion)} took the whole map. My ${favorite ? nhlTeamLabel(favorite) : 'team'} finished with ${myStates} territories and I called ${predictionHits}/${predictionTotal} games. Score ${score}. douknowball.com/conquest-nhl`}
             />
           </div>
         </div>

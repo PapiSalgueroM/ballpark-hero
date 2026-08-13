@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { Crown, Flag, ListOrdered, RotateCcw, Swords } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { CalendarDays, Crown, Flag, ListOrdered, RotateCcw, Swords } from 'lucide-react';
 import ConquestMap from '@/components/conquest/ConquestMap';
 import ShareButtons from '@/components/game/ShareButtons';
 import { NFL_TEAMS, TEAM_MAP, isLightColor } from '@/data/conquestData';
@@ -12,6 +12,11 @@ import {
   type ImpGame, type ImpWeekResult, type ImpRecords,
 } from '@/lib/imperialism';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import {
+  dailyConquestRng, loadDailyResult, loadDailyStreak, saveDailyResult, dailyShareText,
+  type ConquestDailyResult,
+} from '@/lib/conquestDaily';
+import { getTodayET } from '@/lib/dateUtils';
 import { cn } from '@/lib/utils';
 
 type Phase = 'pick' | 'preview' | 'recap' | 'done';
@@ -37,6 +42,14 @@ export default function ImperialismBoard() {
   const [records, setRecords] = useState<ImpRecords>({});
   const [showStandings, setShowStandings] = useState(false);
 
+  // Round 50: the real Daily Challenge. Same seeded season for every player
+  // (fixtures AND results), one scored run per ET day, streaks, share line.
+  const [dailyDone, setDailyDone] = useState<ConquestDailyResult | null>(() => loadDailyResult('nfl'));
+  const [dailyStreak, setDailyStreak] = useState(() => loadDailyStreak('nfl'));
+  const [mode, setMode] = useState<'daily' | 'free'>(() => (loadDailyResult('nfl') ? 'free' : 'daily'));
+  const rngRef = useRef<() => number>(Math.random);
+  const dailySaved = useRef(false);
+
   const counts = useMemo(() => empireCounts(owners), [owners]);
   const total = Object.keys(owners).length;
   const landless = useMemo(() => landlessTeams(owners), [owners]);
@@ -60,6 +73,25 @@ export default function ImperialismBoard() {
 
   useGameCompletion('conquest-imperialism', phase === 'done', score, favorite ? statesOf(owners, favorite).length : 0);
 
+  // Lock in the daily result the moment the season ends.
+  useEffect(() => {
+    if (phase !== 'done' || mode !== 'daily' || !champion || !favorite || dailySaved.current || dailyDone) return;
+    dailySaved.current = true;
+    const result: ConquestDailyResult = {
+      date: getTodayET(),
+      team: favorite,
+      score,
+      empire: statesOf(owners, favorite).length,
+      calls: predictionHits,
+      callsTotal: predictionTotal,
+      champion,
+      championWasYou: champion === favorite,
+    };
+    const s = saveDailyResult('nfl', result);
+    setDailyDone(result);
+    setDailyStreak(s);
+  }, [phase, mode, champion, favorite, score, owners, predictionHits, predictionTotal, dailyDone]);
+
   const rollPairings = (br: BracketState | null) => {
     if (br) {
       const seeds = br.alive;
@@ -69,12 +101,14 @@ export default function ImperialismBoard() {
       }
       setPairings(pairs);
     } else {
-      setPairings(randomPairings(NFL_TEAMS.map(t => t.id)));
+      setPairings(randomPairings(NFL_TEAMS.map(t => t.id), rngRef.current));
     }
     setPrediction(null);
   };
 
   const start = (teamId: string) => {
+    rngRef.current = mode === 'daily' ? dailyConquestRng('nfl') : Math.random;
+    dailySaved.current = false;
     const seeded = seedEmpires();
     setFavorite(teamId);
     setOwners(seeded);
@@ -88,7 +122,7 @@ export default function ImperialismBoard() {
     setRecords(emptyRecords(NFL_TEAMS.map(t => t.id)));
     setShowStandings(false);
     setPhase('preview');
-    setPairings(randomPairings(NFL_TEAMS.map(t => t.id)));
+    setPairings(randomPairings(NFL_TEAMS.map(t => t.id), rngRef.current));
     setPrediction(null);
   };
 
@@ -96,7 +130,7 @@ export default function ImperialismBoard() {
     const next = { ...owners };
     const games: ImpGame[] = [];
     for (const [h, a] of pairings) {
-      games.push(resolveGame(h, a, next));
+      games.push(resolveGame(h, a, next, rngRef.current));
     }
     const nextRecords = applyRecords(records, games);
     setRecords(nextRecords);
@@ -174,29 +208,86 @@ export default function ImperialismBoard() {
 
   /* ---------------- pick screen ---------------- */
   if (phase === 'pick') {
+    const playedToday = mode === 'daily' && dailyDone;
     return (
       <div className="space-y-4">
-        <div className="rounded-2xl border border-border bg-card p-4 text-center">
-          <p className="font-display text-lg font-bold text-foreground">Pick your team</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            The map starts as a true imperialism split: every territory belongs to its nearest stadium.
-            Every week, winners conquer the loser's ENTIRE empire. Wiped-out teams keep playing, and one
-            win takes it all back. Ride your team to the end, call their games, and pray.
-          </p>
-        </div>
-        <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
-          {NFL_TEAMS.map(t => (
+        {/* Round 50: Daily Challenge vs Free Play */}
+        <div className="flex items-center justify-center gap-2">
+          {(['daily', 'free'] as const).map(m => (
             <button
-              key={t.id}
-              onClick={() => start(t.id)}
-              className="rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60"
+              key={m}
+              onClick={() => setMode(m)}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-bold transition-all',
+                mode === m ? 'border-gold bg-gold/10 text-foreground' : 'border-border text-muted-foreground hover:text-foreground',
+              )}
             >
-              <span className="block h-1.5 w-full rounded-full" style={{ background: t.color }} />
-              <span className="mt-1.5 block truncate text-xs font-bold text-foreground">{t.city}</span>
-              <span className="block truncate text-[10px] text-muted-foreground">{t.name} · {t.overall} OVR</span>
+              {m === 'daily'
+                ? (<><CalendarDays className="h-3.5 w-3.5" /> Daily Challenge{dailyStreak >= 2 ? ` · 🔥${dailyStreak}` : ''}</>)
+                : 'Free Play'}
             </button>
           ))}
         </div>
+
+        {playedToday ? (
+          <div className="rounded-2xl border border-gold/40 bg-card p-5 text-center animate-in fade-in zoom-in-95 duration-300">
+            <p className="font-display text-lg font-bold text-foreground">Today's Conquest is in the books</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              You rode {teamLabel(dailyDone.team)} to {dailyDone.empire} territor{dailyDone.empire === 1 ? 'y' : 'ies'} and called {dailyDone.calls}/{dailyDone.callsTotal} games.
+              {dailyDone.championWasYou ? ' Your empire took the whole map.' : ` ${teamLabel(dailyDone.champion)} took the map.`}
+            </p>
+            <div className="mt-3 flex items-center justify-center gap-3 text-sm">
+              <span className="rounded-full border border-border bg-background px-3 py-1.5">Score <b className="text-gold">{dailyDone.score}</b></span>
+              {dailyStreak >= 2 && (
+                <span className="rounded-full border border-border bg-background px-3 py-1.5">Streak <b className="text-gold">🔥{dailyStreak}</b></span>
+              )}
+            </div>
+            <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <button
+                onClick={() => setMode('free')}
+                className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground"
+              >
+                <RotateCcw className="h-4 w-4" /> Free play instead
+              </button>
+              <ShareButtons
+                gameName="NFL Imperialism"
+                gamePath="/conquest"
+                score={`${dailyDone.score} pts`}
+                customText={dailyShareText('NFL Imperialism', '/conquest', dailyDone, dailyStreak, teamLabel(dailyDone.champion), teamLabel(dailyDone.team))}
+              />
+            </div>
+            <p className="mt-3 text-[10px] text-muted-foreground">A fresh map drops at midnight Eastern.</p>
+          </div>
+        ) : (
+          <>
+            <div className="rounded-2xl border border-border bg-card p-4 text-center">
+              <p className="font-display text-lg font-bold text-foreground">Pick your team</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                The map starts as a true imperialism split: every territory belongs to its nearest stadium.
+                Every week, winners conquer the loser's ENTIRE empire. Wiped-out teams keep playing, and one
+                win takes it all back. Ride your team to the end, call their games, and pray.
+              </p>
+              {mode === 'daily' && (
+                <p className="mt-2 text-[11px] font-semibold text-gold">
+                  🗓️ Daily Challenge: every player gets today's exact fixtures and results. Pick the right empire, call the games, post your score. One scored run per day.
+                </p>
+              )}
+            </div>
+            <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
+              {NFL_TEAMS.map(t => (
+                <button
+                  key={t.id}
+                  onClick={() => start(t.id)}
+                  className="rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60"
+                >
+                  <span className="block h-1.5 w-full rounded-full" style={{ background: t.color }} />
+                  <span className="mt-1.5 block truncate text-xs font-bold text-foreground">{t.city}</span>
+                  <span className="block truncate text-[10px] text-muted-foreground">{t.name} · {t.overall} OVR</span>
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     );
   }
@@ -376,19 +467,27 @@ export default function ImperialismBoard() {
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Empire <b className="text-primary">{myStates}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Calls <b className="text-gold">{predictionHits}/{predictionTotal}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Score <b className="text-gold">{score}</b></span>
+            {mode === 'daily' && dailyStreak >= 2 && (
+              <span className="rounded-full border border-border bg-background px-3 py-1.5">Streak <b className="text-gold">🔥{dailyStreak}</b></span>
+            )}
           </div>
+          {mode === 'daily' && (
+            <p className="mt-2 text-[11px] text-muted-foreground">🗓️ Daily done. A fresh map drops at midnight Eastern.</p>
+          )}
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <button
-              onClick={reset}
+              onClick={() => { if (mode === 'daily') setMode('free'); reset(); }}
               className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground"
             >
-              <RotateCcw className="h-4 w-4" /> New season
+              <RotateCcw className="h-4 w-4" /> {mode === 'daily' ? 'Free play' : 'New season'}
             </button>
             <ShareButtons
               gameName="NFL Imperialism"
               gamePath="/conquest"
               score={`${score} pts`}
-              customText={`NFL Imperialism 🗺️ ${teamLabel(champion)} took the whole map. My ${favorite ? teamLabel(favorite) : 'team'} finished with ${myStates} states and I called ${predictionHits}/${predictionTotal} games. Score ${score}. douknowball.com/conquest`}
+              customText={mode === 'daily' && dailyDone
+                ? dailyShareText('NFL Imperialism', '/conquest', dailyDone, dailyStreak, teamLabel(champion), favorite ? teamLabel(favorite) : 'team')
+                : `NFL Imperialism 🗺️ ${teamLabel(champion)} took the whole map. My ${favorite ? teamLabel(favorite) : 'team'} finished with ${myStates} states and I called ${predictionHits}/${predictionTotal} games. Score ${score}. douknowball.com/conquest`}
             />
           </div>
         </div>

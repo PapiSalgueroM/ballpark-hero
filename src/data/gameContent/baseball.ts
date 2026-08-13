@@ -190,6 +190,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "Scoring: 25 points per correct call, 3 per territory held at the end, 200 for the crown, 50 for making the playoffs.",
       "Wiped-out teams keep playing, and one win takes back a whole empire.",
       "Extra-inning games are decided by a single run, and there are no ties, ever.",
+      "The Daily Challenge deals every player the same date-seeded season: same starting map, same fixtures, same results. One scored run per day with streaks. Free Play is unlimited and fully random.",
     ],
     example: [
       "You ride the Blue Jays, landless at first pitch. Round 1 pairs Toronto with a fat empire, you call the upset, and it hits: the Jays annex the whole thing.",
@@ -201,6 +202,10 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "Check standings late. Seeding goes by territories, so the last rounds are about protecting your count.",
     ],
     faqs: [
+      {
+        q: "How does the Daily Challenge work?",
+        a: "Everyone on the planet gets the same season today: identical starting map, identical fixtures, identical results. Your score comes from which empire you back and how well you call the games, so comparing scores is a fair fight. One scored run per day, streaks build if you show up daily, and a fresh map drops at midnight Eastern. Free Play stays unlimited.",
+      },
       { q: "Why do the Blue Jays and Padres start with no land?", a: "The map splits by nearest park. Toronto sits outside the border and San Diego loses the California split, so both open as invaders." },
       { q: "Can the season end early?", a: "Yes. If any club annexes the entire map before round 14, total conquest crowns them immediately." },
       { q: "How do the playoffs work?", a: "The top 8 empires seed a knockout: Division Round, Pennant Round, then the Imperial World Series. Territories decide seeding, record breaks ties." },
