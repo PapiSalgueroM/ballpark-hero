@@ -3,137 +3,137 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CookieConsent } from "@/components/CookieConsent";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { UpdateNudge } from "@/components/layout/UpdateNudge";
 import { Footer } from "@/components/game/Footer";
 import Index from "./pages/Index";
-import Footle from "./pages/Footle";
-import CareerGame from "./pages/CareerGame";
-import HigherLower from "./pages/HigherLower";
-import Connections from "./pages/Connections";
-import LineupBuilder from "./pages/LineupBuilder";
+const Footle = lazy(() => import("./pages/Footle"));
+const CareerGame = lazy(() => import("./pages/CareerGame"));
+const HigherLower = lazy(() => import("./pages/HigherLower"));
+const Connections = lazy(() => import("./pages/Connections"));
+const LineupBuilder = lazy(() => import("./pages/LineupBuilder"));
 
-import UfcGame from "./pages/UfcGame";
-import NbaLineup from "./pages/NbaLineup";
-import NbaConnect4 from "./pages/NbaConnect4";
-import NbaChain from "./pages/NbaChain";
-import FootballConnect4 from "./pages/FootballConnect4";
-import FootballGrid from "./pages/FootballGrid";
-import CollegeGrid from "./pages/CollegeGrid";
-import FootballTimeline from "./pages/FootballTimeline";
-import BaseballCareer from "./pages/BaseballCareer";
-import BaseballConnections from "./pages/BaseballConnections";
-import HockeyCareer from "./pages/HockeyCareer";
-import HockeyHigherLower from "./pages/HockeyHigherLower";
-import NFLCareer from "./pages/NFLCareer";
-import Teammates from "./pages/Teammates";
-import CollegeHub from "./pages/CollegeHub";
-import PerfectLineupNba from "./pages/PerfectLineupNba";
-import PerfectLineupF1 from "./pages/PerfectLineupF1";
-import PerfectLineupNhl from "./pages/PerfectLineupNhl";
-import Olympics from "./pages/Olympics";
-import GuessTheCollege from "./pages/GuessTheCollege";
+const UfcGame = lazy(() => import("./pages/UfcGame"));
+const NbaLineup = lazy(() => import("./pages/NbaLineup"));
+const NbaConnect4 = lazy(() => import("./pages/NbaConnect4"));
+const NbaChain = lazy(() => import("./pages/NbaChain"));
+const FootballConnect4 = lazy(() => import("./pages/FootballConnect4"));
+const FootballGrid = lazy(() => import("./pages/FootballGrid"));
+const CollegeGrid = lazy(() => import("./pages/CollegeGrid"));
+const FootballTimeline = lazy(() => import("./pages/FootballTimeline"));
+const BaseballCareer = lazy(() => import("./pages/BaseballCareer"));
+const BaseballConnections = lazy(() => import("./pages/BaseballConnections"));
+const HockeyCareer = lazy(() => import("./pages/HockeyCareer"));
+const HockeyHigherLower = lazy(() => import("./pages/HockeyHigherLower"));
+const NFLCareer = lazy(() => import("./pages/NFLCareer"));
+const Teammates = lazy(() => import("./pages/Teammates"));
+const CollegeHub = lazy(() => import("./pages/CollegeHub"));
+const PerfectLineupNba = lazy(() => import("./pages/PerfectLineupNba"));
+const PerfectLineupF1 = lazy(() => import("./pages/PerfectLineupF1"));
+const PerfectLineupNhl = lazy(() => import("./pages/PerfectLineupNhl"));
+const Olympics = lazy(() => import("./pages/Olympics"));
+const GuessTheCollege = lazy(() => import("./pages/GuessTheCollege"));
 import NotFound from "./pages/NotFound";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import AdminLogin from "./pages/AdminLogin";
-import AdminReports from "./pages/AdminReports";
-import ResetPassword from "./pages/ResetPassword";
-import UfcChain from "./pages/UfcChain";
-import Profile from "./pages/Profile";
-import Leaderboard from "./pages/Leaderboard";
-import GuessTheYear from "./pages/GuessTheYear";
-import GuessNflTeam from "./pages/GuessNflTeam";
-import GuessTheNation from "./pages/GuessTheNation";
-import F1Driver from "./pages/F1Driver";
-import F1Constructor from "./pages/F1Constructor";
-import GuessCbbTeam from "./pages/GuessCbbTeam";
-import GuessTennisPlayer from "./pages/GuessTennisPlayer";
-import TennisChain from "./pages/TennisChain";
-import GuessNascarDriver from "./pages/GuessNascarDriver";
-import NascarChain from "./pages/NascarChain";
-import SoccerGrid from "./pages/SoccerGrid";
-import FantasyDraft from "./pages/FantasyDraft";
-import Conquest from "./pages/Conquest";
-import WorldCupPredictor from "./pages/WorldCupPredictor";
-import SoccerCareer from "./pages/SoccerCareer";
-import ShirtNumber from "./pages/ShirtNumber";
-import HofOrBust from "./pages/HofOrBust";
-import ScorePredictor from "./pages/ScorePredictor";
-import TransferPath from "./pages/TransferPath";
-import SquadDeal from "./pages/SquadDeal";
-import ClubManager from "./pages/ClubManager";
-import ListQuiz from "./pages/ListQuiz";
-import PerfectSeasonMlb from "./pages/PerfectSeasonMlb";
-import HigherLowerTransfers from "./pages/HigherLowerTransfers";
-import PerfectSeasonNhl from "./pages/PerfectSeasonNhl";
-import CareerLadder from "./pages/CareerLadder";
-import PerfectSeasonNba from "./pages/PerfectSeasonNba";
-import PerfectSeasonNfl from "./pages/PerfectSeasonNfl";
-import WhoAmI from "./pages/WhoAmI";
-import WorldXi from "./pages/WorldXi";
-import PlayerBingo from "./pages/PlayerBingo";
-import StatDetective from "./pages/StatDetective";
-import AlphabetSprint from "./pages/AlphabetSprint";
-import ClueAuction from "./pages/ClueAuction";
-import RarityRound from "./pages/RarityRound";
-import MissingXi from "./pages/MissingXi";
-import PuckDetective from "./pages/PuckDetective";
-import HockeyGrid from "./pages/HockeyGrid";
-import SignThePlayer from "./pages/SignThePlayer";
-import ConquestNba from "./pages/ConquestNba";
-import ConquestNhl from "./pages/ConquestNhl";
-import ConquestMlb from "./pages/ConquestMlb";
-import FrontOffice from "./pages/FrontOffice";
-import NflMyCareer from "./pages/NflMyCareer";
-import NbaFrontOffice from "./pages/NbaFrontOffice";
-import MlbFrontOffice from "./pages/MlbFrontOffice";
-import NhlFrontOffice from "./pages/NhlFrontOffice";
-import CfbDynasty from "./pages/CfbDynasty";
-import CbbDynasty from "./pages/CbbDynasty";
-import NbaMyCareer from "./pages/NbaMyCareer";
-import MlbMyCareer from "./pages/MlbMyCareer";
-import NhlMyCareer from "./pages/NhlMyCareer";
-import PackBattle from "./pages/PackBattle";
-import SportsMillionaire from "./pages/SportsMillionaire";
-import DartDraft from "./pages/DartDraft";
-import Minefield from "./pages/Minefield";
-import OverratedUnderrated from "./pages/OverratedUnderrated";
-import TierList from "./pages/TierList";
-import BudgetBuilder from "./pages/BudgetBuilder";
-import Jeopardy from "./pages/Jeopardy";
-import BallIq from "./pages/BallIq";
-import Rebuild from "./pages/Rebuild";
-import EmojiGuess from "./pages/EmojiGuess";
-import MysteryBox from "./pages/MysteryBox";
-import NbaHigherLower from "./pages/NbaHigherLower";
-import NflHigherLower from "./pages/NflHigherLower";
-import F1HigherLower from "./pages/F1HigherLower";
-import MlbHigherLower from "./pages/MlbHigherLower";
-import TennisHigherLower from "./pages/TennisHigherLower";
-import CfbHigherLower from "./pages/CfbHigherLower";
-import NbaGrid from "./pages/NbaGrid";
-import MlbGrid from "./pages/MlbGrid";
-import NbaConnections from "./pages/NbaConnections";
-import NflConnections from "./pages/NflConnections";
-import NhlConnections from "./pages/NhlConnections";
-import NbaCareer from "./pages/NbaCareer";
-import MlbConnect4 from "./pages/MlbConnect4";
-import NflConnect4 from "./pages/NflConnect4";
-import MissingFive from "./pages/MissingFive";
-import MissingNine from "./pages/MissingNine";
-import MissingEleven from "./pages/MissingEleven";
-import RankEm from "./pages/RankEm";
-import PlayerStockMarket from "./pages/PlayerStockMarket";
-import NhlConnect4 from "./pages/NhlConnect4";
-import GolfHigherLower from "./pages/GolfHigherLower";
-import GuessTheGolfer from "./pages/GuessTheGolfer";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import WhatsNew from "./pages/WhatsNew";
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const AdminLogin = lazy(() => import("./pages/AdminLogin"));
+const AdminReports = lazy(() => import("./pages/AdminReports"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const UfcChain = lazy(() => import("./pages/UfcChain"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Leaderboard = lazy(() => import("./pages/Leaderboard"));
+const GuessTheYear = lazy(() => import("./pages/GuessTheYear"));
+const GuessNflTeam = lazy(() => import("./pages/GuessNflTeam"));
+const GuessTheNation = lazy(() => import("./pages/GuessTheNation"));
+const F1Driver = lazy(() => import("./pages/F1Driver"));
+const F1Constructor = lazy(() => import("./pages/F1Constructor"));
+const GuessCbbTeam = lazy(() => import("./pages/GuessCbbTeam"));
+const GuessTennisPlayer = lazy(() => import("./pages/GuessTennisPlayer"));
+const TennisChain = lazy(() => import("./pages/TennisChain"));
+const GuessNascarDriver = lazy(() => import("./pages/GuessNascarDriver"));
+const NascarChain = lazy(() => import("./pages/NascarChain"));
+const SoccerGrid = lazy(() => import("./pages/SoccerGrid"));
+const FantasyDraft = lazy(() => import("./pages/FantasyDraft"));
+const Conquest = lazy(() => import("./pages/Conquest"));
+const WorldCupPredictor = lazy(() => import("./pages/WorldCupPredictor"));
+const SoccerCareer = lazy(() => import("./pages/SoccerCareer"));
+const ShirtNumber = lazy(() => import("./pages/ShirtNumber"));
+const HofOrBust = lazy(() => import("./pages/HofOrBust"));
+const ScorePredictor = lazy(() => import("./pages/ScorePredictor"));
+const TransferPath = lazy(() => import("./pages/TransferPath"));
+const SquadDeal = lazy(() => import("./pages/SquadDeal"));
+const ClubManager = lazy(() => import("./pages/ClubManager"));
+const ListQuiz = lazy(() => import("./pages/ListQuiz"));
+const PerfectSeasonMlb = lazy(() => import("./pages/PerfectSeasonMlb"));
+const HigherLowerTransfers = lazy(() => import("./pages/HigherLowerTransfers"));
+const PerfectSeasonNhl = lazy(() => import("./pages/PerfectSeasonNhl"));
+const CareerLadder = lazy(() => import("./pages/CareerLadder"));
+const PerfectSeasonNba = lazy(() => import("./pages/PerfectSeasonNba"));
+const PerfectSeasonNfl = lazy(() => import("./pages/PerfectSeasonNfl"));
+const WhoAmI = lazy(() => import("./pages/WhoAmI"));
+const WorldXi = lazy(() => import("./pages/WorldXi"));
+const PlayerBingo = lazy(() => import("./pages/PlayerBingo"));
+const StatDetective = lazy(() => import("./pages/StatDetective"));
+const AlphabetSprint = lazy(() => import("./pages/AlphabetSprint"));
+const ClueAuction = lazy(() => import("./pages/ClueAuction"));
+const RarityRound = lazy(() => import("./pages/RarityRound"));
+const MissingXi = lazy(() => import("./pages/MissingXi"));
+const PuckDetective = lazy(() => import("./pages/PuckDetective"));
+const HockeyGrid = lazy(() => import("./pages/HockeyGrid"));
+const SignThePlayer = lazy(() => import("./pages/SignThePlayer"));
+const ConquestNba = lazy(() => import("./pages/ConquestNba"));
+const ConquestNhl = lazy(() => import("./pages/ConquestNhl"));
+const ConquestMlb = lazy(() => import("./pages/ConquestMlb"));
+const FrontOffice = lazy(() => import("./pages/FrontOffice"));
+const NflMyCareer = lazy(() => import("./pages/NflMyCareer"));
+const NbaFrontOffice = lazy(() => import("./pages/NbaFrontOffice"));
+const MlbFrontOffice = lazy(() => import("./pages/MlbFrontOffice"));
+const NhlFrontOffice = lazy(() => import("./pages/NhlFrontOffice"));
+const CfbDynasty = lazy(() => import("./pages/CfbDynasty"));
+const CbbDynasty = lazy(() => import("./pages/CbbDynasty"));
+const NbaMyCareer = lazy(() => import("./pages/NbaMyCareer"));
+const MlbMyCareer = lazy(() => import("./pages/MlbMyCareer"));
+const NhlMyCareer = lazy(() => import("./pages/NhlMyCareer"));
+const PackBattle = lazy(() => import("./pages/PackBattle"));
+const SportsMillionaire = lazy(() => import("./pages/SportsMillionaire"));
+const DartDraft = lazy(() => import("./pages/DartDraft"));
+const Minefield = lazy(() => import("./pages/Minefield"));
+const OverratedUnderrated = lazy(() => import("./pages/OverratedUnderrated"));
+const TierList = lazy(() => import("./pages/TierList"));
+const BudgetBuilder = lazy(() => import("./pages/BudgetBuilder"));
+const Jeopardy = lazy(() => import("./pages/Jeopardy"));
+const BallIq = lazy(() => import("./pages/BallIq"));
+const Rebuild = lazy(() => import("./pages/Rebuild"));
+const EmojiGuess = lazy(() => import("./pages/EmojiGuess"));
+const MysteryBox = lazy(() => import("./pages/MysteryBox"));
+const NbaHigherLower = lazy(() => import("./pages/NbaHigherLower"));
+const NflHigherLower = lazy(() => import("./pages/NflHigherLower"));
+const F1HigherLower = lazy(() => import("./pages/F1HigherLower"));
+const MlbHigherLower = lazy(() => import("./pages/MlbHigherLower"));
+const TennisHigherLower = lazy(() => import("./pages/TennisHigherLower"));
+const CfbHigherLower = lazy(() => import("./pages/CfbHigherLower"));
+const NbaGrid = lazy(() => import("./pages/NbaGrid"));
+const MlbGrid = lazy(() => import("./pages/MlbGrid"));
+const NbaConnections = lazy(() => import("./pages/NbaConnections"));
+const NflConnections = lazy(() => import("./pages/NflConnections"));
+const NhlConnections = lazy(() => import("./pages/NhlConnections"));
+const NbaCareer = lazy(() => import("./pages/NbaCareer"));
+const MlbConnect4 = lazy(() => import("./pages/MlbConnect4"));
+const NflConnect4 = lazy(() => import("./pages/NflConnect4"));
+const MissingFive = lazy(() => import("./pages/MissingFive"));
+const MissingNine = lazy(() => import("./pages/MissingNine"));
+const MissingEleven = lazy(() => import("./pages/MissingEleven"));
+const RankEm = lazy(() => import("./pages/RankEm"));
+const PlayerStockMarket = lazy(() => import("./pages/PlayerStockMarket"));
+const NhlConnect4 = lazy(() => import("./pages/NhlConnect4"));
+const GolfHigherLower = lazy(() => import("./pages/GolfHigherLower"));
+const GuessTheGolfer = lazy(() => import("./pages/GuessTheGolfer"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+const WhatsNew = lazy(() => import("./pages/WhatsNew"));
 
 const queryClient = new QueryClient();
 
@@ -250,6 +250,15 @@ const ScrollToTop = () => {
   return null;
 };
 
+/* Round 53: route-level code splitting. The whole site used to ship as one
+   4.9MB JS bundle; every game now loads its own chunk on demand, so the home
+   page (and every first paint) is a fraction of the download. */
+const RouteLoader = () => (
+  <div className="flex min-h-[60vh] items-center justify-center">
+    <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" aria-label="Loading" />
+  </div>
+);
+
 const AppContent = () => {
   const { pathname } = useLocation();
   return (
@@ -257,6 +266,7 @@ const AppContent = () => {
       <ScrollToTop />
       <CookieConsent />
       {shouldShowHeader(pathname) && <Header />}
+      <Suspense fallback={<RouteLoader />}>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/footle" element={<Footle />} />
@@ -393,6 +403,7 @@ const AppContent = () => {
         <Route path="/nhl-connect-4" element={<NhlConnect4 />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      </Suspense>
       {/* Round 49: one global footer on every page (legal disclaimer, About/Contact/
           What's New links, and the Report a bug button), instead of 33 pages
           importing their own copy and 95 pages having none. */}

@@ -1,0 +1,31 @@
+# DoUKnowBall
+
+> DoUKnowBall.com is a free sports trivia and puzzle site with 100+ games
+> across soccer, NFL, NBA, MLB, NHL, college sports, Formula 1, tennis, golf,
+> NASCAR and combat sports. Daily puzzles (grids, connections, guess-the-player,
+> higher or lower) plus deep career and manager simulations. Every game is free,
+> runs in the browser, and needs no login. Data correctness is the house rule:
+> real rosters, real stats, verified lineups.
+
+## Popular games
+
+- [Soccer Career](https://douknowball.com/soccer-career): BitLife-style football life sim, the site's flagship
+- [College Grid](https://douknowball.com/college-grid): college football 3x3 grid puzzle
+- [Footle](https://douknowball.com/footle): daily guess-the-player with feedback tiles
+- [NFL Conquest](https://douknowball.com/conquest): imperialism map where winners annex whole empires
+- [NBA Connections](https://douknowball.com/nba-connections): group 20 players into four hidden links
+- [Rebuild Challenge](https://douknowball.com/rebuild): inherit a real club, survive the transfer window
+
+## Pages
+
+- [All games](https://douknowball.com): the full catalog, organized by sport
+- [About](https://douknowball.com/about): what the site is and who builds it
+- [What's New](https://douknowball.com/whats-new): the running update log
+- [Contact](https://douknowball.com/contact): douknowball1@gmail.com
+
+## Notes
+
+- Sitemap: https://douknowball.com/sitemap.xml
+- Every game page carries a full how-to-play guide, rules, an example run,
+  strategy tips and an FAQ in its on-page content.
+- DoUKnowBall is not affiliated with any sports league.

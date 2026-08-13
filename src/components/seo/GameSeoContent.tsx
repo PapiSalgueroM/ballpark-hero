@@ -161,6 +161,18 @@ const GameSeoContent = ({ title, description, howToPlay }: GameSeoContentProps) 
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       )}
 
+      {/* Round 53: breadcrumb structured data (Home > Game) for richer snippets. */}
+      {game && (
+        <script type="application/ld+json">{JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'DoUKnowBall', item: 'https://douknowball.com' },
+            { '@type': 'ListItem', position: 2, name: gameLabel, item: `https://douknowball.com${path}` },
+          ],
+        })}</script>
+      )}
+
       {siblings.length > 0 && (
         <nav aria-label="More games" className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
           {siblings.map(sibling => (
