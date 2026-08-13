@@ -58,7 +58,10 @@ const DartDraft = () => {
   // Round 63: the owner's no scroll rule. After a dart lands, the players you
   // can actually draft render further down the page, so that panel pulls
   // itself into view instead of leaving you looking at the board.
-  const revealRef = useRevealScroll<HTMLDivElement>(`${phase}:${slotIdx ?? -1}:${choices.length}`);
+  // Round 100: choices starts as null, so reading .length here threw on the
+  // very FIRST render and the whole page came up blank. Dart Draft has been
+  // completely unplayable, every visit, for anyone.
+  const revealRef = useRevealScroll<HTMLDivElement>(`${phase}:${slotIdx ?? -1}:${choices?.length ?? 0}`);
   const [choicesLoading, setChoicesLoading] = useState(false);
   const [draftedIsos, setDraftedIsos] = useState<Set<string>>(new Set());
   const [usedNames, setUsedNames] = useState<Set<string>>(new Set());

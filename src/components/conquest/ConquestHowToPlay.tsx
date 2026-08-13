@@ -32,7 +32,7 @@ export function ConquestHowToPlay({ open, onOpenChange }: ConquestHowToPlayProps
             <ul className="space-y-1.5 text-muted-foreground">
               <li>🎯 <span className="text-foreground">Direction Spin:</span> A compass direction is chosen randomly</li>
               <li>📍 <span className="text-foreground">Targeting:</span> The closest enemy or neutral state in that direction is selected</li>
-              <li>📺 <span className="text-foreground">Play-by-Play:</span> Watch 6–8 live plays featuring real player names</li>
+              <li>📺 <span className="text-foreground">Play-by-Play:</span> Watch 6 to 8 live plays featuring real player names</li>
               <li>📊 <span className="text-foreground">Box Score:</span> Full stats are shown after the game simulation</li>
             </ul>
           </section>

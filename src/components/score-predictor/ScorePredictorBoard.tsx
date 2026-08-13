@@ -104,7 +104,7 @@ export function ScorePredictorBoard() {
                   autoFocus
                 />
               </div>
-              <span className="text-lg font-bold text-muted-foreground mt-5">–</span>
+              <span className="text-lg font-bold text-muted-foreground mt-5">v</span>
               <div className="flex-1 text-center">
                 <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground block mb-1">
                   {puzzle.awayTeam}

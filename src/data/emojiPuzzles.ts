@@ -48,7 +48,7 @@ export const EMOJI_PUZZLES: EmojiPuzzle[] = [
   // ---------------- Players, medium ----------------
   { id: 'p-debruyne', emoji: '👨‍🦰🎯🔵', answer: 'Kevin De Bruyne', aliases: ['De Bruyne', 'KDB'], category: 'player', difficulty: 'medium', hint: 'Belgian assist king of the Etihad.' },
   { id: 'p-lewandowski', emoji: '🇵🇱⚽5️⃣⏱️9️⃣', answer: 'Robert Lewandowski', aliases: ['Lewandowski', 'Lewy'], category: 'player', difficulty: 'medium', hint: 'Five goals in nine minutes off the bench, 2015.' },
-  { id: 'p-modric', emoji: '🇭🇷🎻', answer: 'Luka Modrić', aliases: ['Modric', 'Luka Modric'], category: 'player', difficulty: 'medium', hint: 'The midfield violinist who broke the Messi–Ronaldo Ballon d’Or streak.' },
+  { id: 'p-modric', emoji: '🇭🇷🎻', answer: 'Luka Modrić', aliases: ['Modric', 'Luka Modric'], category: 'player', difficulty: 'medium', hint: 'The midfield violinist who broke the Messi and Ronaldo Ballon d’Or streak.' },
   { id: 'p-kante', emoji: '🔋😊🇫🇷', answer: "N'Golo Kanté", aliases: ['Kante', 'NGolo Kante', "N'Golo Kante"], category: 'player', difficulty: 'medium', hint: 'Covers 70% of the earth, smiles the whole time.' },
   { id: 'p-drogba', emoji: '🐘🇨🇮🔵', answer: 'Didier Drogba', aliases: ['Drogba'], category: 'player', difficulty: 'medium', hint: 'Ivorian elephant, Munich 2012 hero.' },
   { id: 'p-zlatan', emoji: '🦁🇸🇪🥋', answer: 'Zlatan Ibrahimović', aliases: ['Zlatan', 'Ibrahimovic', 'Zlatan Ibrahimovic', 'Ibra'], category: 'player', difficulty: 'medium', hint: 'Taekwondo black belt. Refers to himself in the third person.' },
