@@ -1,3 +1,4 @@
+import { applyMomentum, type MomentumCtx } from './conquestMomentum';
 import { MLB_TEAMS, MLB_TEAM_MAP, INITIAL_TERRITORIES_MLB } from '@/data/conquestDataMlb';
 
 /**
@@ -66,9 +67,10 @@ export function mlbTeamLabel(teamId: string): string {
 }
 
 /** Home win probability: overall-gap logistic plus home ice. */
-export function mlbHomeWinProb(home: string, away: string): number {
+export function mlbHomeWinProb(home: string, away: string, ctx?: MomentumCtx): number {
   const gap = overallOf(home) - overallOf(away) + 1.5;
-  return 1 / (1 + Math.pow(10, -gap / 26));
+  const base = 1 / (1 + Math.pow(10, -gap / 26));
+  return applyMomentum(base, ctx);
 }
 
 function mlbScorePair(rng: () => number): [number, number] {
@@ -82,8 +84,18 @@ export function resolveMlbGame(
   away: string,
   owners: Record<string, string>,
   rng: () => number = Math.random,
+  records?: Record<string, { streak: number }>,
 ): MlbImpGame {
-  const pHome = mlbHomeWinProb(home, away);
+  // Round 91: the map now fights back. Momentum, overextension, last
+  // stands and form all tilt the number before the dice are rolled.
+  const ctx: MomentumCtx = {
+    homeLand: mlbStatesOf(owners, home).length,
+    awayLand: mlbStatesOf(owners, away).length,
+    totalLand: Object.keys(owners).length,
+    homeStreak: records?.[home]?.streak ?? 0,
+    awayStreak: records?.[away]?.streak ?? 0,
+  };
+  const pHome = mlbHomeWinProb(home, away, ctx);
   const roll = rng();
   const winner = roll < pHome ? home : away;
   const loser = winner === home ? away : home;

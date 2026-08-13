@@ -1,3 +1,4 @@
+import { applyMomentum, type MomentumCtx } from './conquestMomentum';
 import { NFL_TEAMS, TEAM_MAP, STATE_GEO_COORDS, INITIAL_TERRITORIES } from '@/data/conquestData';
 import { TERRITORY_ADJACENCY } from '@/lib/conquestMapGeometry';
 
@@ -139,9 +140,10 @@ export function teamLabel(teamId: string): string {
 
 /** Win probability for the home side: overall-gap logistic plus a small
  *  home edge. A 10-point overall gap is roughly 70/30. */
-export function homeWinProb(home: string, away: string): number {
+export function homeWinProb(home: string, away: string, ctx?: MomentumCtx): number {
   const gap = overallOf(home) - overallOf(away) + 2;
-  return 1 / (1 + Math.pow(10, -gap / 22));
+  const base = 1 / (1 + Math.pow(10, -gap / 22));
+  return applyMomentum(base, ctx);
 }
 
 function nflScorePair(rng: () => number): [number, number] {
@@ -155,8 +157,18 @@ export function resolveGame(
   away: string,
   owners: Record<string, string>,
   rng: () => number = Math.random,
+  records?: Record<string, { streak: number }>,
 ): ImpGame {
-  const pHome = homeWinProb(home, away);
+  // Round 91: the map now fights back. Momentum, overextension, last
+  // stands and form all tilt the number before the dice are rolled.
+  const ctx: MomentumCtx = {
+    homeLand: statesOf(owners, home).length,
+    awayLand: statesOf(owners, away).length,
+    totalLand: Object.keys(owners).length,
+    homeStreak: records?.[home]?.streak ?? 0,
+    awayStreak: records?.[away]?.streak ?? 0,
+  };
+  const pHome = homeWinProb(home, away, ctx);
   const roll = rng();
   const winner = roll < pHome ? home : away;
   const loser = winner === home ? away : home;

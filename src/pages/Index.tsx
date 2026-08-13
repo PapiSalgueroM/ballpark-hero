@@ -2,7 +2,7 @@ import { foldSpecialLatin } from '@/lib/nameFold';
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
-import { Trophy, Flame, TrendingUp, Sparkles, Users, Search, X, Globe } from 'lucide-react';
+import { Trophy, Flame, Sparkles, Users, Search, X, Globe } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import PageSeo from '@/components/seo/PageSeo';
 
@@ -208,7 +208,6 @@ export default function Index() {
   // Same identity game_completions rows are written under (guest handle or
   // profile display name), mirrors useGameNavbarStats.
   const playerName = useMemo(() => getCurrentPlayerName(profile), [profile]);
-  const [totalPlayed, setTotalPlayed] = useState<number | null>(null);
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
@@ -290,11 +289,6 @@ export default function Index() {
         // hardcoded list of per-game (mostly auth-only) score tables.
         // game_completions isn't in the generated Supabase types yet (added
         // via direct SQL), so it's addressed dynamically here.
-        const { count: completionsToday } = await (supabase.from as any)('game_completions')
-          .select('*', { count: 'exact', head: true })
-          .eq('completed_on', today);
-        setTotalPlayed(completionsToday ?? 0);
-
         // Players who completed a game today from daily_completions
         // TODO Round 3: daily_completions only counts logged-in users.
         // Add anonymous_play_counter table for full play count including anonymous visitors.
@@ -491,18 +485,8 @@ export default function Index() {
               Lower), so the old Coming Soon placeholder is gone; the Golf
               category now renders through VISIBLE_CATEGORIES like the rest. */}
 
-          {/* ─── SOCIAL PROOF ─── */}
-          {totalPlayed !== null && totalPlayed > 0 && (
-            <section className="rounded-2xl border border-border bg-card p-6 text-center">
-              <TrendingUp className="w-8 h-8 text-primary mx-auto mb-2" />
-              <p className="text-2xl font-display font-bold text-foreground mb-1">
-                {totalPlayed.toLocaleString()} rounds played
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Join players from around the world testing their sports knowledge daily.
-              </p>
-            </section>
-          )}
+          {/* Round 91: the owner asked for the rounds-played social proof
+              block to go. Removed. */}
 
         </div>
       </div>
