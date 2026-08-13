@@ -92,11 +92,20 @@ const MlbGrid = () => {
     try {
       const raw = localStorage.getItem(dailyStorageKey);
       if (!raw) return {};
-      const saved = JSON.parse(raw) as { date: string; cells: Record<number, FilledCell> };
+      const saved = JSON.parse(raw) as { date: string; cells: Record<number, FilledCell>; wrong?: number };
       return saved.date === todayStr ? saved.cells : {};
     } catch { return {}; }
   });
-  const [dailyWrongCount, setDailyWrongCount] = useState(0);
+  // Round 52: the wrong-guess count persists with the board. Reloading
+  // mid-daily used to hand back a full guess budget with the cells intact.
+  const [dailyWrongCount, setDailyWrongCount] = useState(() => {
+    try {
+      const raw = localStorage.getItem(dailyStorageKey);
+      if (!raw) return 0;
+      const saved = JSON.parse(raw) as { date: string; wrong?: number };
+      return saved.date === todayStr ? (saved.wrong ?? 0) : 0;
+    } catch { return 0; }
+  });
 
   const [unlimitedCells, setUnlimitedCells] = useState<Record<number, FilledCell>>({});
   const [unlimitedWrongCount, setUnlimitedWrongCount] = useState(0);
@@ -107,9 +116,9 @@ const MlbGrid = () => {
   useEffect(() => {
     if (mode !== 'daily') return;
     try {
-      localStorage.setItem(dailyStorageKey, JSON.stringify({ date: todayStr, cells: dailyCells }));
+      localStorage.setItem(dailyStorageKey, JSON.stringify({ date: todayStr, cells: dailyCells, wrong: dailyWrongCount }));
     } catch { /* private mode / quota */ }
-  }, [dailyCells, dailyStorageKey, todayStr, mode]);
+  }, [dailyCells, dailyWrongCount, dailyStorageKey, todayStr, mode]);
 
   const [activeCell, setActiveCell] = useState<number | null>(null);
   const [query, setQuery] = useState('');

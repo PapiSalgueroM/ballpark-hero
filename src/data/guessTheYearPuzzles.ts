@@ -1,4 +1,5 @@
 import { YearPuzzle } from '@/types/guessTheYear';
+import { getTodayET } from '@/lib/dateUtils';
 
 export const guessTheYearPuzzles: YearPuzzle[] = [
   {
@@ -555,9 +556,11 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
 ];
 
 export function getDailyGuessTheYearPuzzle(): YearPuzzle {
-  const startDate = new Date('2024-01-01');
-  const today = new Date();
-  const daysDiff = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-  const puzzleIndex = daysDiff % guessTheYearPuzzles.length;
+  // Round 52: anchor the day count to the ET calendar so the puzzle flips at
+  // midnight Eastern for everyone, not at each browser's local midnight.
+  const start = new Date('2024-01-01T12:00:00Z').getTime();
+  const today = new Date(getTodayET() + 'T12:00:00Z').getTime();
+  const daysDiff = Math.floor((today - start) / 86400000);
+  const puzzleIndex = ((daysDiff % guessTheYearPuzzles.length) + guessTheYearPuzzles.length) % guessTheYearPuzzles.length;
   return guessTheYearPuzzles[puzzleIndex];
 }

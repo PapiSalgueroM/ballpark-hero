@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
+import { getTodayET } from '@/lib/dateUtils';
 import { CbbProgramPuzzle, CbbProgramState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/cbbProgram';
 import { supabase } from '@/integrations/supabase/client';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
@@ -48,7 +49,7 @@ export function useCbbProgram() {
     setLoading(true);
     try {
       if (mode === 'daily') {
-        const today = new Date().toISOString().slice(0, 10);
+        const today = getTodayET();
         const { data: daily } = await supabase
           .from('cbb_daily')
           .select('program_id')
@@ -96,7 +97,7 @@ export function useCbbProgram() {
       const score = POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0;
       setGameState(prev => prev ? { ...prev, guesses: newGuesses, gameStatus: 'won', score } : null);
       // Save score
-      const today = new Date().toISOString().slice(0, 10);
+      const today = getTodayET();
       supabase.from('cbb_scores').insert({
         puzzle_date: today,
         clues_used: gameState.revealedClues,
@@ -108,7 +109,7 @@ export function useCbbProgram() {
       const newRevealed = gameState.revealedClues + 1;
       const isLost = newRevealed > MAX_CLUES;
       if (isLost) {
-        const today = new Date().toISOString().slice(0, 10);
+        const today = getTodayET();
         supabase.from('cbb_scores').insert({
           puzzle_date: today,
           clues_used: MAX_CLUES,

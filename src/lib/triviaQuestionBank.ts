@@ -27,23 +27,13 @@ import { flagFor, fmtCompactUsd } from '@/lib/dealPlayers';
  * - shirt_number_puzzles: id, player_name, club, league, nationality,
  *   kit_number, fun_fact. 154 rows.
  *
- * KNOWN GAP (verified 2026-07-06, not fixed here): ballon_dor has
- * row-level security ENABLED but NO SELECT policy defined
- * (pg_policies returns zero rows for it), unlike player_market_values and
- * shirt_number_puzzles which both have a public-read SELECT policy. That
- * means fetchBallonDor() below will currently return [] for anon clients in
- * production, and the "Who won the Ballon d'Or" question type will never
- * actually generate until a public SELECT policy is added to that table.
- * This file was intentionally kept read-only against Supabase (no DDL) per
- * this agent's operating constraints, so the fix is a one-line migration
- * someone with write access needs to run:
- *   CREATE POLICY "Allow public read" ON public.ballon_dor
- *     FOR SELECT TO public USING (true);
- * The rest of the game degrades gracefully in the meantime: isTriviaPoolPlayable()
- * only requires the market pool, and generateQuestion()'s per-type fallback
- * loop silently skips ballon-dor if buildBallonDorQuestion() returns null,
- * so Sports Millionaire plays fine with 5 question types instead of 6 until
- * the policy is added.
+ * GAP CLOSED (2026-08-12, Round 52): ballon_dor previously had RLS enabled
+ * with NO SELECT policy, so anon clients got [] and the Ballon d'Or question
+ * type never generated. The public-read policy now exists (verified in
+ * pg_policy: "Allow public read", FOR SELECT USING (true)), matching
+ * player_market_values and shirt_number_puzzles, so all 6 question types are
+ * live. The graceful degradation below (per-type fallback in
+ * generateQuestion()) stays as a safety net.
  *
  * DIFFICULTY MODEL
  * difficulty is 1-15, matching Sports Millionaire's 15-question ladder.

@@ -62,7 +62,8 @@ const MissingNine = () => {
   const won = actions.some((a) => a.t === 'won');
   const gaveUp = actions.some((a) => a.t === 'give');
   const over = won || gaveUp || misses >= 3;
-  const hintLevel = Math.min(misses, 3) as NineHintLevel;
+  // Round 52: full ladder unlocks on your last guess (level 3 was unreachable).
+  const hintLevel = (misses >= 2 ? 3 : misses) as NineHintLevel;
   const score = won ? NINE_SCORES[Math.min(misses, NINE_SCORES.length - 1)] : 0;
 
   const [input, setInput] = useState('');

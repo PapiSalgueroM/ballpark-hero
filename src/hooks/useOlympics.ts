@@ -69,6 +69,9 @@ export function useOlympics() {
     if (clueLevel >= 3) clues.push({ label: 'Achievement', value: athlete.achievement });
     if (clueLevel >= 4) clues.push({ label: 'Career Context', value: athlete.careerContext });
     if (clueLevel >= 5) clues.push({ label: 'Medals', value: athlete.medalSummary });
+    // Round 52: clue 7 used to cost points and reveal NOTHING (the scores table
+    // had 7 rungs but only 6 clues rendered). The final rung is now the initials.
+    if (clueLevel >= 6) clues.push({ label: 'Initials', value: athlete.name.split(' ').filter(Boolean).map(w => w[0].toUpperCase()).join('. ') + '.' });
     return clues;
   }, [clueLevel, athlete]);
 

@@ -28,6 +28,7 @@ const DIFFICULTY_HEADER: Record<string, string> = {
 
 const BaseballConnections = () => {
   const {
+    foundGroups,
     mode,
     switchMode,
     puzzle,
@@ -87,7 +88,7 @@ const BaseballConnections = () => {
 
             <div className="flex items-center justify-center gap-4 mt-3 text-sm">
               <span className="text-muted-foreground">
-                Groups found: <span className="font-semibold text-[hsl(var(--bb-red))]">{solvedGroups.length}</span>/4
+                Groups found: <span className="font-semibold text-[hsl(var(--bb-red))]">{foundGroups}</span>/4
               </span>
               <span className="text-muted-foreground">
                 Lives: <span className="font-semibold text-foreground">{'❤️'.repeat(lives)}{'🖤'.repeat(Math.max(0, 4 - lives))}</span>
@@ -196,7 +197,7 @@ const BaseballConnections = () => {
                   {lives > 0 && ` with ${lives} ${lives === 1 ? 'life' : 'lives'} remaining`}
                 </>
               }
-              emojiGrid={lives > 0 ? `🏆 Baseball Connections: all 4 groups, ${lives} ${lives === 1 ? 'life' : 'lives'} left` : `⚾ Baseball Connections: ${solvedGroups.length}/4 groups`}
+              emojiGrid={lives > 0 ? `🏆 Baseball Connections: all 4 groups, ${lives} ${lives === 1 ? 'life' : 'lives'} left` : `⚾ Baseball Connections: ${foundGroups}/4 groups`}
               share={{
                 score: lives > 0 ? `all 4 groups with ${lives} ${lives === 1 ? 'life' : 'lives'} left on today's Baseball Connections` : `today's Baseball Connections`,
                 gameName: 'Baseball Connections',

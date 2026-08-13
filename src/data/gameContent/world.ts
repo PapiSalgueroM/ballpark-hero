@@ -99,7 +99,7 @@ export const WORLD_CONTENT: GameContentMap = {
     howToPlay: [
       "Start with clue one, the athlete's sport, and see if a name jumps out.",
       "Type a guess any time. Suggestions appear once you've typed a couple of letters, and last names count.",
-      "Stuck? Hit Next Clue to reveal country, then the Games year and host city, achievement, career context and medal haul.",
+      "Stuck? Hit Next Clue to reveal country, then the Games year and host city, achievement, career context, medal haul, and finally the athlete's initials.",
       "Wrong guesses cost nothing, so fire away and guess again.",
       "Give up if you're done, which reveals the athlete and scores zero.",
     ],

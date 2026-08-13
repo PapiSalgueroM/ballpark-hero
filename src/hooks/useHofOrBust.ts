@@ -1,10 +1,11 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
+import { getTodayET } from '@/lib/dateUtils';
 import hofPlayers, { type HofPlayer } from '@/data/hofPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { supabase } from '@/integrations/supabase/client';
 
 function getDateSeed(): number {
-  const d = new Date().toISOString().slice(0, 10);
+  const d = getTodayET();
   let hash = 0;
   for (let i = 0; i < d.length; i++) {
     hash = (hash << 5) - hash + d.charCodeAt(i);
@@ -40,7 +41,7 @@ function getDailyPlayer(): HofPlayer {
 }
 
 function loadDailyState() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getTodayET();
   const key = `${STORAGE_PREFIX}daily-${today}`;
   try {
     const raw = localStorage.getItem(key);
@@ -50,7 +51,7 @@ function loadDailyState() {
 }
 
 function saveDailyState(userVote: string, hintsRevealed: number, score: number) {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getTodayET();
   const key = `${STORAGE_PREFIX}daily-${today}`;
   localStorage.setItem(key, JSON.stringify({ userVote, hintsRevealed, score }));
 }

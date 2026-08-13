@@ -8,7 +8,8 @@ export type BaseballCareerStatus = 'playing' | 'guessed' | 'revealed';
 
 export type BaseballCareerMode = 'daily' | 'unlimited';
 
-const CLUE_SCORES = [1000, 850, 700, 550, 400, 250, 0];
+// Round 52: the last clue pays 100 like the board says (it silently paid 0)
+const CLUE_SCORES = [1000, 850, 700, 550, 400, 250, 100];
 
 // Action events stored in the daily action log
 type CareerAction = { t: 'skip' } | { t: 'won' } | { t: 'give' };

@@ -334,7 +334,7 @@ export default function Index() {
     <>
       <PageSeo
         title="DoUKnowBall: The Ultimate Sports Trivia Hub"
-        description="30+ free sports trivia games covering NFL, NBA, MLB, NHL, UFC, F1, Tennis, NASCAR, Soccer and more. Daily challenges, no login required."
+        description="100+ free sports trivia games and career sims covering NFL, NBA, MLB, NHL, Soccer, College Sports, UFC, F1, Tennis, NASCAR and more. Daily challenges, no login required."
         path="/"
       />
       <div className="min-h-screen bg-background text-foreground">

@@ -62,7 +62,9 @@ const MissingFive = () => {
   const won = actions.some((a) => a.t === 'won');
   const gaveUp = actions.some((a) => a.t === 'give');
   const over = won || gaveUp || misses >= 3;
-  const hintLevel = Math.min(misses, 3) as FiveHintLevel;
+  // Round 52: at 2 misses (your last guess) the FULL ladder shows; level 3 used
+  // to unlock only when the game was already over.
+  const hintLevel = (misses >= 2 ? 3 : misses) as FiveHintLevel;
   const score = won ? FIVE_SCORES[Math.min(misses, FIVE_SCORES.length - 1)] : 0;
 
   const [input, setInput] = useState('');

@@ -40,7 +40,23 @@ export function MysteryBoxBoard() {
   }
 
   if (squad.length === 0 && packIndex === 0 && !revealed && !finished && !current) {
-    // pool failed entirely
+    // Round 52: the pool fetch failed entirely. This used to render a silent
+    // empty shell with no explanation and no way out.
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-16 text-center">
+        <p className="text-3xl">📦</p>
+        <p className="mt-2 font-display text-lg font-bold text-foreground">The packs did not arrive</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          The player pool could not be loaded. It is usually a connection blip.
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-4 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+        >
+          Try again
+        </button>
+      </div>
+    );
   }
 
   return (

@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
+import { getTodayET } from '@/lib/dateUtils';
 import { nflCareerPlayers } from '@/data/nflCareerPlayers';
 import { NFLCareerPlayer } from '@/types/nflCareer';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
@@ -9,9 +10,28 @@ import { toast } from 'sonner';
 const TOTAL_CLUES = 6;
 
 function getDailyIndex(): number {
-  const now = new Date();
-  const seed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
-  return seed % nflCareerPlayers.length;
+  // Round 52: seed off the ET calendar like every other daily on the site.
+  return parseInt(getTodayET().replace(/-/g, ''), 10) % nflCareerPlayers.length;
+}
+
+/* Round 52: the daily locks once finished. Refreshing used to hand out the
+   same daily again with a clean slate. */
+interface NflDailySave { date: string; status: 'won' | 'lost'; cluesRevealed: number; guesses: string[] }
+const DAILY_KEY = 'nfl-career-daily';
+
+function loadDailySave(): NflDailySave | null {
+  try {
+    const raw = localStorage.getItem(DAILY_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw) as NflDailySave;
+    return s.date === getTodayET() ? s : null;
+  } catch { return null; }
+}
+
+function persistDaily(status: 'won' | 'lost', cluesRevealed: number, guesses: string[]) {
+  try {
+    localStorage.setItem(DAILY_KEY, JSON.stringify({ date: getTodayET(), status, cluesRevealed, guesses } satisfies NflDailySave));
+  } catch { /* private mode: daily just won't lock */ }
 }
 
 export type NflCareerMode = 'daily' | 'unlimited';
@@ -22,9 +42,9 @@ export function useNFLCareer() {
   // without the old full-page reload.
   const [mode, setMode] = useState<NflCareerMode>('daily');
   const [targetPlayer, setTargetPlayer] = useState<NFLCareerPlayer>(() => nflCareerPlayers[getDailyIndex()]);
-  const [cluesRevealed, setCluesRevealed] = useState(1); // start with 1 clue
-  const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
-  const [guessHistory, setGuessHistory] = useState<string[]>([]);
+  const [cluesRevealed, setCluesRevealed] = useState(() => loadDailySave()?.cluesRevealed ?? 1); // start with 1 clue
+  const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>(() => loadDailySave()?.status ?? 'playing');
+  const [guessHistory, setGuessHistory] = useState<string[]>(() => loadDailySave()?.guesses ?? []);
   const [hard, setHard] = useState(false);
 
   const dealRound = useCallback((player: NFLCareerPlayer) => {
@@ -41,7 +61,15 @@ export function useNFLCareer() {
 
   const switchMode = useCallback((m: NflCareerMode) => {
     setMode(m);
-    dealRound(m === 'daily' ? nflCareerPlayers[getDailyIndex()] : randomPlayer());
+    if (m === 'daily') {
+      const saved = loadDailySave();
+      setTargetPlayer(nflCareerPlayers[getDailyIndex()]);
+      setCluesRevealed(saved?.cluesRevealed ?? 1);
+      setGameStatus(saved?.status ?? 'playing');
+      setGuessHistory(saved?.guesses ?? []);
+    } else {
+      dealRound(randomPlayer());
+    }
   }, [dealRound, randomPlayer]);
 
   const nextUnlimited = useCallback(() => {
@@ -73,6 +101,7 @@ export function useNFLCareer() {
 
     if (trimmed.toLowerCase() === targetPlayer.name.toLowerCase()) {
       setGameStatus('won');
+      if (mode === 'daily') persistDaily('won', cluesRevealed, [...guessHistory, trimmed]);
       toast.success(`🎉 Correct! You scored ${Math.max(1, TOTAL_CLUES + 1 - cluesRevealed)} points!`);
       return;
     }
@@ -81,16 +110,18 @@ export function useNFLCareer() {
 
     if (cluesRevealed >= TOTAL_CLUES) {
       setGameStatus('lost');
+      if (mode === 'daily') persistDaily('lost', cluesRevealed, [...guessHistory, trimmed]);
       toast.error(`The player was ${targetPlayer.name}`);
     } else {
       setCluesRevealed(prev => prev + 1);
     }
-  }, [gameStatus, targetPlayer, cluesRevealed]);
+  }, [gameStatus, targetPlayer, cluesRevealed, mode, guessHistory]);
 
   const giveUp = useCallback(() => {
     if (gameStatus !== 'playing') return;
     setGameStatus('lost');
-  }, [gameStatus]);
+    if (mode === 'daily') persistDaily('lost', cluesRevealed, guessHistory);
+  }, [gameStatus, mode, cluesRevealed, guessHistory]);
 
   const resetGame = useCallback(() => {
     // In unlimited: deal the next random player in place. From the daily:

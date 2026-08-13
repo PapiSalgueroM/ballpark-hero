@@ -86,11 +86,20 @@ const HockeyGrid = () => {
     try {
       const raw = localStorage.getItem(dailyStorageKey);
       if (!raw) return {};
-      const saved = JSON.parse(raw) as { date: string; cells: Record<number, FilledCell> };
+      const saved = JSON.parse(raw) as { date: string; cells: Record<number, FilledCell>; wrong?: number };
       return saved.date === todayStr ? saved.cells : {};
     } catch { return {}; }
   });
-  const [dailyWrongCount, setDailyWrongCount] = useState(0);
+  // Round 52: the wrong-guess count persists with the board. Reloading
+  // mid-daily used to hand back a full guess budget with the cells intact.
+  const [dailyWrongCount, setDailyWrongCount] = useState(() => {
+    try {
+      const raw = localStorage.getItem(dailyStorageKey);
+      if (!raw) return 0;
+      const saved = JSON.parse(raw) as { date: string; wrong?: number };
+      return saved.date === todayStr ? (saved.wrong ?? 0) : 0;
+    } catch { return 0; }
+  });
 
   const [unlimitedCells, setUnlimitedCells] = useState<Record<number, FilledCell>>({});
   const [unlimitedWrongCount, setUnlimitedWrongCount] = useState(0);
@@ -101,9 +110,9 @@ const HockeyGrid = () => {
   useEffect(() => {
     if (mode !== 'daily') return;
     try {
-      localStorage.setItem(dailyStorageKey, JSON.stringify({ date: todayStr, cells: dailyCells }));
+      localStorage.setItem(dailyStorageKey, JSON.stringify({ date: todayStr, cells: dailyCells, wrong: dailyWrongCount }));
     } catch { /* private mode / quota */ }
-  }, [dailyCells, dailyStorageKey, todayStr, mode]);
+  }, [dailyCells, dailyWrongCount, dailyStorageKey, todayStr, mode]);
 
   const [activeCell, setActiveCell] = useState<number | null>(null);
   const [query, setQuery] = useState('');
@@ -200,7 +209,7 @@ const HockeyGrid = () => {
         width="wide"
         emoji="🏒"
         title="NHL FRANCHISE GRID"
-        subtitle="Name a player who matches both the row and the column. 9 cells, 9 guesses."
+        subtitle="Name a player who matches both the row and the column. 9 cells, 9 wrong guesses allowed."
         headerExtra={
           <>
             <HowToPlayPopover title="How to Play NHL Franchise Grid">
@@ -214,7 +223,7 @@ const HockeyGrid = () => {
                   <li>Rows and columns are franchises a player's career touched, or career milestones like 500+ points</li>
                   <li>Tap a cell, type a player name, and pick them from the list</li>
                   <li>Every name can only be used once on the board</li>
-                  <li>You have 9 guesses total. Wrong guesses cost a guess but do not fill a cell</li>
+                  <li>You get 9 wrong guesses. Correct answers are always free, wrong ones burn one of the 9</li>
                 </ul>
               </section>
               <section>
@@ -402,7 +411,7 @@ const HockeyGrid = () => {
             'Rows and columns are franchises a career touched, or milestones like 500+ points.',
             'Tap a cell, type a name, and pick a real player from the suggestions.',
             'Each player can only be used once across the whole grid.',
-            'You have 9 guesses to fill all 9 cells. Wrong guesses cost a guess.',
+            'Fill all 9 cells. Only wrong guesses count against you, and 9 wrong ends the run.',
           ]}
           examples={[
             'Maple Leafs + Red Wings = a player whose career touched both Original Six franchises.',

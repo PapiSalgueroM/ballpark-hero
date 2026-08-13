@@ -1,9 +1,10 @@
 import { useState, useCallback, useMemo } from 'react';
+import { getTodayET } from '@/lib/dateUtils';
 import scorePredictorPuzzles, { type ScorePredictorPuzzle } from '@/data/scorePredictorPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 function getDateSeed(): number {
-  const d = new Date().toISOString().slice(0, 10);
+  const d = getTodayET();
   let hash = 0;
   for (let i = 0; i < d.length; i++) {
     hash = (hash << 5) - hash + d.charCodeAt(i);
@@ -54,7 +55,7 @@ function calcScore(
 }
 
 function loadDailyState() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getTodayET();
   const key = `${STORAGE_PREFIX}daily-${today}`;
   try {
     const raw = localStorage.getItem(key);
@@ -64,7 +65,7 @@ function loadDailyState() {
 }
 
 function saveDailyState(guessHome: number, guessAway: number, score: number) {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getTodayET();
   const key = `${STORAGE_PREFIX}daily-${today}`;
   localStorage.setItem(key, JSON.stringify({ guessHome, guessAway, score }));
 }

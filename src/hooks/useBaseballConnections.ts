@@ -114,6 +114,9 @@ export function useBaseballConnections() {
   // ---- ACTIVE VALUES -------------------------------------------------------
   const puzzle       = mode === 'daily' ? dailyPuzzle : unlimitedPuzzle;
   const solvedGroups = mode === 'daily' ? dailySolvedGroupsFinal : unlimitedSolvedGroups;
+  // Round 52: groups the PLAYER actually found (auto-revealed ones excluded),
+  // so the loss share line stops claiming 4/4.
+  const foundGroups = mode === 'daily' ? dailySolvedGroups.length : unlimitedSolvedGroups.length;
   const lives        = mode === 'daily' ? dailyLives : unlimitedLives;
   const gameStatus: BBConnStatus = mode === 'daily'
     ? (rawDailyStatus !== 'playing' ? 'complete' : 'playing')
@@ -214,6 +217,7 @@ export function useBaseballConnections() {
   useGameCompletion('baseball-connections', rawDailyStatus !== 'playing', completionScore);
 
   return {
+    foundGroups,
     mode,
     switchMode,
     puzzle,

@@ -281,7 +281,7 @@ export function GuessTheNationBoard() {
                   onClick={handleHint}
                   className="text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors"
                 >
-                  💡 Hint (-100 pts)
+                  💡 Hint (-{(POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0) - (POINTS_BY_CLUE[gameState.revealedClues] ?? 0)} pts)
                 </button>
               )}
               {gameState.guesses.length > 0 && !showGiveUpConfirm && (

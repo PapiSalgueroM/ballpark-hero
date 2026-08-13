@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { getTodayET } from '@/lib/dateUtils';
 import { supabase } from '@/integrations/supabase/client';
 import {
   NationPuzzle, GuessTheNationState, POINTS_BY_CLUE, MAX_CLUES, STREAK_BADGES,
@@ -6,7 +7,7 @@ import {
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
-function getTodayStr() { return new Date().toISOString().slice(0, 10); }
+function getTodayStr() { return getTodayET(); }
 
 function mapRow(row: any): NationPuzzle {
   return {

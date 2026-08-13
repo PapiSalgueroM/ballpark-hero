@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
+import { getTodayET } from '@/lib/dateUtils';
 import {
   LineupConfig,
   GenericSlot,
@@ -13,7 +14,8 @@ export type Phase = 'picking' | 'result';
 export type Mode = 'daily' | 'unlimited';
 
 function dailySeed(): number {
-  return parseInt(new Date().toISOString().slice(0, 10).replace(/-/g, ''), 10);
+  // Round 52: seed off the ET date like every other daily on the site.
+  return parseInt(getTodayET().replace(/-/g, ''), 10);
 }
 
 export function usePerfectLineupGeneric<P>(config: LineupConfig<P>) {

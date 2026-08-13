@@ -49,7 +49,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
     ],
     rules: [
       "A correct guess on the opening clue scores 1000 points.",
-      "Each of the first five reveals costs 150 points, stepping you down to 250. Using the sixth and final reveal drops a win to zero.",
+      "Each of the first five reveals costs 150 points, stepping you down to 250. The sixth and final reveal still leaves 100 on the table.",
       "Wrong guesses are free and unlimited. Only reveals cost points.",
       "Typing just the last name counts as a correct answer.",
       "Hard mode hides the two easiest clues. The daily resets at midnight Eastern.",
