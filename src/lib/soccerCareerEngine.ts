@@ -3,8 +3,9 @@
 import {
   getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,
   getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,
-  BDOR_WIN_MIN_GOALS, rollPotential,
+  BDOR_WIN_MIN_GOALS, rollPotential, pickPhoneTexts,
 } from "./careerEras";
+import type { PhoneChoiceDef } from "./careerEras";
 import {
   getLifeEvents, getPriorityLifeEventIds,
   personalityFollowerMult, personalitySponsorMult,
@@ -506,6 +507,10 @@ export interface CareerState {
   /** Round 78: the hidden ceiling rolled at creation. Growth stalls hard as
    *  overall approaches it. Old saves have none and default generously. */
   potential?: number;
+  /** Round 80: the phone. All optional so older saves keep loading. */
+  karma?: number;              // 0-100 public karma, starts 50
+  phoneInbox?: PhoneMessage[]; // waiting texts + answered thread log
+  phoneUsedIds?: string[];     // pool ids already received this career
   peakOverall: number;
   retirementSuggested: boolean; // has the player been shown the retirement suggestion
   // Social media action system
@@ -554,6 +559,76 @@ export interface MoralDilemma {
   title: string;
   description: string;
   choices: MoralDilemmaChoice[];
+}
+
+/* ─── Round 80: the phone (GTA/BitLife style life layer) ───
+   Texts arrive between seasons from the PHONE_POOL in careerEras; replying
+   moves karma (0-100, neutral 50) plus small morale/popularity/cash effects.
+   Karma drifts back toward 50 a little every season and gently couples into
+   morale and popularity at the extremes. Everything optional-field so old
+   saves keep loading untouched. */
+
+export interface PhoneMessage {
+  id: string;       // unique per career: defId-year
+  defId: string;
+  from: string;
+  emoji: string;
+  text: string;
+  year: number;
+  choices: PhoneChoiceDef[];
+  answered?: number; // index into choices once replied
+}
+
+export function karmaOf(s: CareerState): number { return s.karma ?? 50; }
+
+export function unreadPhoneCount(s: CareerState): number {
+  return (s.phoneInbox ?? []).filter(m => m.answered === undefined).length;
+}
+
+/** Season tick: karma drift + coupling, then deliver up to 2 new texts. */
+function receivePhoneTexts(s: CareerState, phase: "youth" | "pro"): void {
+  const karma = s.karma ?? 50;
+  const k = karma > 50 ? karma - 2 : karma < 50 ? Math.min(50, karma + 2) : karma;
+  if (k >= 70) { s.popularity = clamp(s.popularity + 2, 0, 100); s.morale = clamp(s.morale + 2, 0, 100); }
+  else if (k <= 30) { s.popularity = clamp(s.popularity - 2, 0, 100); s.morale = clamp(s.morale - 1, 0, 100); }
+  s.karma = k;
+  const inbox = [...(s.phoneInbox ?? [])];
+  const used = [...(s.phoneUsedIds ?? [])];
+  const unanswered = inbox.filter(m => m.answered === undefined).length;
+  const want = Math.max(0, 2 - unanswered);
+  const year = s.seasons[s.seasons.length - 1]?.year ?? 2020;
+  for (const def of pickPhoneTexts(s.age, phase, used, want)) {
+    inbox.push({ id: `${def.id}-${year}`, defId: def.id, from: def.from, emoji: def.emoji, text: def.text, year, choices: def.choices });
+    used.push(def.id);
+  }
+  // Keep the thread tidy: cap at 18 messages, dropping oldest ANSWERED first
+  while (inbox.length > 18) {
+    const idx = inbox.findIndex(m => m.answered !== undefined);
+    if (idx === -1) break;
+    inbox.splice(idx, 1);
+  }
+  s.phoneInbox = inbox;
+  s.phoneUsedIds = used;
+}
+
+export function answerPhoneText(prev: CareerState, msgId: string, choiceIdx: number): CareerState {
+  const s = { ...prev };
+  const inbox = [...(s.phoneInbox ?? [])];
+  const i = inbox.findIndex(m => m.id === msgId);
+  if (i === -1) return prev;
+  const msg = inbox[i];
+  if (msg.answered !== undefined) return prev;
+  const choice = msg.choices[choiceIdx];
+  if (!choice) return prev;
+  inbox[i] = { ...msg, answered: choiceIdx };
+  s.phoneInbox = inbox;
+  s.karma = clamp((s.karma ?? 50) + choice.karma, 0, 100);
+  if (choice.morale) s.morale = clamp(s.morale + choice.morale, 0, 100);
+  if (choice.popularity) s.popularity = clamp(s.popularity + choice.popularity, 0, 100);
+  if (choice.cash) s.netWorth = Math.round((s.netWorth + choice.cash) * 100) / 100;
+  const swing = choice.karma >= 5 ? " Karma up." : choice.karma <= -5 ? " Karma down." : "";
+  s.events = [...s.events, `📱 Replied to ${msg.from}: ${choice.label}.${swing}`];
+  return s;
 }
 
 export const MORAL_DILEMMAS: MoralDilemma[] = [
@@ -2939,12 +3014,21 @@ export function initCareer(
   potential?: number,
 ): CareerState {
   const academyClub = getYouthAcademyClub(adjustClubsForYear(clubs, startYear), nationality, overall);
+  // Round 80: one text waiting on day one so the phone is alive immediately
+  const seedTexts = pickPhoneTexts(16, "youth", [], 1);
   return {
     playerName, nationality, position, era, age: 16,
     // Round 78: the hidden ceiling this career will fight to reach.
     // Round 79: clamped above the final overall, since the 2K style build
     // editor can nudge a keeper's overall a few points past the roll.
     potential: Math.max(potential ?? rollPotential(overall), overall + 2),
+    // Round 80: the phone starts neutral with one text waiting on day one
+    karma: 50,
+    phoneUsedIds: seedTexts.map(d => d.id),
+    phoneInbox: seedTexts.map(def => ({
+      id: `${def.id}-${startYear}`, defId: def.id, from: def.from, emoji: def.emoji,
+      text: def.text, year: startYear, choices: def.choices,
+    })),
     currentClub: `${academyClub.name} Youth`, currentClubCountry: academyClub.country,
     currentClubTier: academyClub.tier, currentClubColor: academyClub.color, currentLeague: academyClub.league,
     contractYearsLeft: 2, weeklyWage: 500, marketValue: 0.1, ...stats, overall,
@@ -3014,6 +3098,7 @@ export function initCareer(
 /* ─── Advance youth year ─── */
 export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev }; s.age += 1; s.events = [];
+  receivePhoneTexts(s, "youth");
   // Round 78: legacy saves get a generous default so mid-career players are
   // not suddenly nerfed; new careers carry their rolled ceiling.
   const pot = s.potential ?? Math.max(90, s.overall + 3);
@@ -3346,6 +3431,7 @@ function generateIntSeasonStats(state: CareerState, year: number): { intApps: nu
 /* ─── Advance pro season ─── */
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev }; s.age += 1; s.events = [];
+  receivePhoneTexts(s, "pro");
   // Reset social media action for new season
   s.socialMediaActionUsedThisSeason = false;
   // Apply focus boost from "stay off social media" last season

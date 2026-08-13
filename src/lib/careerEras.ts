@@ -645,6 +645,352 @@ export function playsLike(stats: AllocStats, position: string): { name: string; 
   return { name: best.name, pct, style: best.style };
 }
 
+/* ─── Round 80: the phone. GTA/BitLife style life layer for Soccer Career.
+   Texts arrive between seasons; how you reply moves your karma (0-100,
+   starts 50) plus small morale/popularity/cash effects. Casual PG-13 tone,
+   never em dashes (the sim harness lints the whole pool for them). ─── */
+
+export interface PhoneChoiceDef {
+  label: string;
+  reply: string;      // what your player answers, shown in the thread
+  karma: number;      // -12..+12
+  morale?: number;
+  popularity?: number;
+  cash?: number;      // net worth delta in £m, can be negative
+}
+
+export interface PhoneTextDef {
+  id: string;
+  from: string;
+  emoji: string;
+  text: string;
+  phase: "youth" | "pro" | "any";
+  minAge?: number;
+  maxAge?: number;
+  choices: PhoneChoiceDef[];
+}
+
+export const PHONE_POOL: PhoneTextDef[] = [
+  {
+    id: "mum_call", from: "Mum", emoji: "❤️", phase: "any",
+    text: "Hi love, haven't heard from you in weeks. Everything ok? Call me when you can.",
+    choices: [
+      { label: "Call her tonight", reply: "Calling you after training, promise. Love you", karma: 8, morale: 6 },
+      { label: "Leave it on read", reply: "", karma: -6, morale: -2 },
+    ],
+  },
+  {
+    id: "kid_dm", from: "Fan DM", emoji: "🧒", phase: "any",
+    text: "ur my favorite player ever. im in hospital and my dream is a signed shirt. no worries if not",
+    choices: [
+      { label: "Send a signed shirt and visit", reply: "Shirt is on the way and I'm coming to see you next week. Stay strong", karma: 12, popularity: 6, cash: -0.1 },
+      { label: "Send the shirt", reply: "On its way little legend", karma: 6, popularity: 3 },
+      { label: "Ignore it", reply: "", karma: -8 },
+    ],
+  },
+  {
+    id: "agent_boots", from: "Agent", emoji: "💼", phase: "any",
+    text: "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+    choices: [
+      { label: "Take the money", reply: "Money is money. Send the contract", karma: -7, cash: 1.5 },
+      { label: "Turn it down publicly", reply: "Not wearing that. And I'm saying why", karma: 9, popularity: 4 },
+      { label: "Quietly decline", reply: "Pass on this one. Keep it quiet", karma: 4 },
+    ],
+  },
+  {
+    id: "teammate_benched", from: "Teammate", emoji: "😤", phase: "pro",
+    text: "Gaffer benched me again bro. Thinking of asking away in January. You think I should go?",
+    choices: [
+      { label: "Be honest with him", reply: "You deserve minutes mate. If he won't give them, go get them somewhere", karma: 6, morale: 2 },
+      { label: "Tell him to stop whining", reply: "Train harder then. Nobody owes you a shirt", karma: -5 },
+      { label: "Dodge the question", reply: "Tough one bro. Sleep on it", karma: -1 },
+    ],
+  },
+  {
+    id: "granny_scam", from: "Unknown", emoji: "🎣", phase: "any",
+    text: "CONGRATULATIONS! You won 2 MILLION. Just send account details plus a small release fee to claim.",
+    choices: [
+      { label: "Report and warn fans", reply: "Posting this so nobody falls for it. Stay safe out there", karma: 7, popularity: 3 },
+      { label: "Delete it", reply: "", karma: 1 },
+      { label: "Reply as a joke and string them along", reply: "Amazing news!! My account number is 1-2-3-GET-A-JOB", karma: 2, popularity: 2 },
+    ],
+  },
+  {
+    id: "kitman_fine", from: "Kit man", emoji: "🧺", phase: "pro",
+    text: "You left the away kit at the hotel AGAIN. Club wants to fine you. I can cover for you this once.",
+    choices: [
+      { label: "Own it, pay the fine", reply: "My fault Tony. I'll pay it. Pint on me too", karma: 7, cash: -0.05 },
+      { label: "Let him cover for you", reply: "You're a legend. I owe you", karma: -5, morale: 2 },
+    ],
+  },
+  {
+    id: "charity_gala", from: "Foundation", emoji: "🎗️", phase: "pro", minAge: 19,
+    text: "We're hosting a children's hospital gala Friday. Would mean the world if you came. Press will be there.",
+    choices: [
+      { label: "Go and donate", reply: "Count me in. And put me down for a donation", karma: 10, popularity: 5, cash: -0.5 },
+      { label: "Go for the cameras only", reply: "I'll swing by for an hour", karma: 2, popularity: 3 },
+      { label: "Skip it", reply: "Can't make it, good luck", karma: -6 },
+    ],
+  },
+  {
+    id: "old_coach", from: "Youth coach", emoji: "👴", phase: "pro",
+    text: "Watched you play last weekend. Still remember you at 12 refusing to pass. Proud of you kid.",
+    choices: [
+      { label: "Thank him properly", reply: "Everything started with you coach. Tickets for you whenever you want, for life", karma: 8, morale: 5 },
+      { label: "Thumbs up emoji", reply: "👍", karma: -3 },
+    ],
+  },
+  {
+    id: "party_final", from: "Promoter", emoji: "🎉", phase: "pro", minAge: 18,
+    text: "Biggest party of the year Saturday night. VIP table with your name on it. Cup final is Sunday btw.",
+    choices: [
+      { label: "Stay home and rest", reply: "Final tomorrow. Another time", karma: 6, morale: 2 },
+      { label: "Go but leave early", reply: "One hour max, then I'm gone", karma: -3, popularity: 2 },
+      { label: "Full send", reply: "Save me the good seat", karma: -9, popularity: 4, morale: 3 },
+    ],
+  },
+  {
+    id: "rookie_advice", from: "Academy kid", emoji: "🌱", phase: "pro", minAge: 21,
+    text: "Just got promoted to first team training. Any advice? Kinda terrified honestly.",
+    choices: [
+      { label: "Take him under your wing", reply: "Come in early tomorrow, we'll do finishing drills together. You'll be fine", karma: 9, morale: 3 },
+      { label: "One line of advice", reply: "First ball, first tackle, win it. Rest follows", karma: 4 },
+      { label: "Big time him", reply: "Earn it like I did", karma: -7 },
+    ],
+  },
+  {
+    id: "journalist_leak", from: "Journalist", emoji: "📰", phase: "pro",
+    text: "I know the dressing room fell out with the manager. Give me the inside story, I'll keep you anonymous.",
+    choices: [
+      { label: "Keep it in house", reply: "Nothing to tell. Dressing room stays in the dressing room", karma: 8, morale: 2 },
+      { label: "Leak it", reply: "Ok but this NEVER came from me", karma: -10, popularity: 3 },
+    ],
+  },
+  {
+    id: "barber_cut", from: "Barber", emoji: "💈", phase: "any",
+    text: "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+    choices: [
+      { label: "Send it", reply: "Chair. Tomorrow. Do your worst", karma: 2, popularity: 4 },
+      { label: "Keep it classic", reply: "Usual trim mate, big game week", karma: 1 },
+    ],
+  },
+  {
+    id: "lost_wallet", from: "Groundskeeper", emoji: "👛", phase: "any",
+    text: "Found a wallet in the car park with 800 quid inside. No ID. What do I do with it?",
+    choices: [
+      { label: "Hand it to reception", reply: "Reception, mate. Someone's having a bad day", karma: 6 },
+      { label: "Finders keepers", reply: "That's the football gods paying you. Keep it", karma: -6 },
+    ],
+  },
+  {
+    id: "ex_club_message", from: "Old teammate", emoji: "🫂", phase: "pro", minAge: 22,
+    text: "Club legends match at your first club next month. They're asking if you'd come back and play 45 minutes.",
+    choices: [
+      { label: "Play the full 90", reply: "45? I'm playing the whole thing. That badge made me", karma: 8, popularity: 4, morale: 3 },
+      { label: "Politely decline", reply: "Season's too heavy, give everyone my love", karma: -2 },
+    ],
+  },
+  {
+    id: "crypto_bro", from: "School friend", emoji: "🪙", phase: "pro", minAge: 19,
+    text: "Bro I need you to promote my new coin BallerCoin to your followers. It's guaranteed 100x. Family discount.",
+    choices: [
+      { label: "Hard pass", reply: "Not putting my fans into that. Look after yourself", karma: 7 },
+      { label: "Promote it", reply: "Sending the post now. We better get rich", karma: -11, cash: 0.8, popularity: -3 },
+    ],
+  },
+  {
+    id: "training_extra", from: "Fitness coach", emoji: "🏋️", phase: "any",
+    text: "Optional double sessions next month. Brutal but they work. Most of the squad is dodging them.",
+    choices: [
+      { label: "Sign up", reply: "Put my name down. First one in, last one out", karma: 5, morale: -2 },
+      { label: "Skip them", reply: "Rest is part of training too coach", karma: -3, morale: 2 },
+    ],
+  },
+  {
+    id: "youth_bully", from: "Academy mate", emoji: "🥺", phase: "youth",
+    text: "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+    choices: [
+      { label: "Stand up for him", reply: "Sit with me at lunch. If they touch your stuff again they deal with me", karma: 10, morale: 2 },
+      { label: "Stay out of it", reply: "Rough mate. Keep your head down", karma: -6 },
+    ],
+  },
+  {
+    id: "youth_homework", from: "Tutor", emoji: "📚", phase: "youth",
+    text: "You've missed three sessions. The academy requires passing grades to keep your registration. Tonight, 6pm?",
+    choices: [
+      { label: "Show up", reply: "I'll be there. Sorry, no excuses", karma: 6 },
+      { label: "Blow it off for extra shooting", reply: "Football is my exam", karma: -4 },
+    ],
+  },
+  {
+    id: "youth_poach", from: "Stranger", emoji: "🕶️", phase: "youth",
+    text: "I represent players. Ditch the academy's advisor, sign with me quietly, I'll get your family paid NOW.",
+    choices: [
+      { label: "Tell the academy", reply: "Reported you to the club. Don't message me again", karma: 8 },
+      { label: "Meet him in secret", reply: "Where and when?", karma: -8, cash: 0.05 },
+    ],
+  },
+  {
+    id: "nutrition_cheat", from: "Nutritionist", emoji: "🥗", phase: "any",
+    text: "Your body fat crept up. I'm putting you on the strict plan. No takeaways for eight weeks. Confirm?",
+    choices: [
+      { label: "Commit fully", reply: "Locked in. Hide the menus", karma: 5, morale: -1 },
+      { label: "Secret cheat days", reply: "Confirmed 😇 (orders kebab)", karma: -4, morale: 3 },
+    ],
+  },
+  {
+    id: "grandad_game", from: "Grandad", emoji: "🧓", phase: "any",
+    text: "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+    choices: [
+      { label: "Visit with your shirt", reply: "Coming round Sunday with a shirt and biscuits. Put the kettle on", karma: 9, morale: 5 },
+      { label: "Promise vaguely", reply: "One day grandad, promise", karma: 1 },
+    ],
+  },
+  {
+    id: "referee_apology", from: "Referee assoc.", emoji: "🟨", phase: "pro",
+    text: "Your comments about Saturday's officiating went viral. We'd welcome a public clarification.",
+    choices: [
+      { label: "Apologize properly", reply: "I was out of order. Refs have the hardest job in football. Apologies", karma: 6, popularity: -1 },
+      { label: "Double down", reply: "I said what I said", karma: -7, popularity: 5 },
+    ],
+  },
+  {
+    id: "stadium_worker", from: "Steward", emoji: "🦺", phase: "pro",
+    text: "30 years at this club, retiring Saturday. Would you sign my hi-vis after the game? Means a lot.",
+    choices: [
+      { label: "Sign it and get the squad to", reply: "I'll get the whole squad on it. Thanks for everything", karma: 9, popularity: 3 },
+      { label: "If there's time", reply: "If I can, busy day", karma: -2 },
+    ],
+  },
+  {
+    id: "diving_tip", from: "Veteran", emoji: "🎭", phase: "pro", maxAge: 24,
+    text: "Kid, lesson one. In the box, feel contact, go down. Refs give it every time. That's how you win games.",
+    choices: [
+      { label: "Refuse to dive", reply: "I stay on my feet. I score them properly", karma: 8 },
+      { label: "Take the advice", reply: "Noted. Whatever wins", karma: -8 },
+    ],
+  },
+  {
+    id: "hometown_pitch", from: "Council", emoji: "🏗️", phase: "pro", minAge: 20,
+    text: "The pitch you grew up on is closing without funding. 200 kids play there weekly. Sponsorship would save it.",
+    choices: [
+      { label: "Fund it and rename it", reply: "I'll cover it. Name it after my old coach, not me", karma: 12, popularity: 5, cash: -1.2 },
+      { label: "Fund it quietly", reply: "Invoice my foundation. No press", karma: 10, cash: -1.2 },
+      { label: "Share a fundraiser", reply: "Posting the link, let's all chip in", karma: 4, popularity: 1 },
+    ],
+  },
+  {
+    id: "team_fine_pot", from: "Captain", emoji: "🍺", phase: "pro",
+    text: "End of season squad night out, fines pot pays. You're 400 in the pot for late gym arrivals. Coming?",
+    choices: [
+      { label: "Pay up and go", reply: "Fair cop. First round's the fine pot anyway", karma: 4, morale: 4, cash: -0.01 },
+      { label: "Dispute the fines", reply: "The gym clock is WRONG and I have evidence", karma: -3, morale: 1 },
+    ],
+  },
+  {
+    id: "kids_camp", from: "Community team", emoji: "⚽", phase: "any",
+    text: "Summer kids camp needs a surprise guest coach for a morning. No fee, just chaos and juice boxes.",
+    choices: [
+      { label: "Do the full morning", reply: "I'm in. Someone else does the juice run though", karma: 8, popularity: 3, morale: 3 },
+      { label: "Send signed balls instead", reply: "Can't make it, sending a box of signed balls", karma: 3 },
+    ],
+  },
+  {
+    id: "tax_scheme", from: "Financial advisor", emoji: "🏝️", phase: "pro", minAge: 21,
+    text: "New structure for your image rights. Runs through three islands. Technically legal. Probably. Saves millions.",
+    choices: [
+      { label: "Keep it clean", reply: "Pay what I owe where I earn it. Not risking my name", karma: 8 },
+      { label: "Do the scheme", reply: "If it's legal, file it", karma: -9, cash: 2.0 },
+    ],
+  },
+  {
+    id: "injury_teammate", from: "Teammate", emoji: "🏥", phase: "pro",
+    text: "ACL gone. Nine months. Sitting in this hospital bed wondering if I'll ever be the same, honestly.",
+    choices: [
+      { label: "Visit weekly", reply: "I'm there every week bro. Rehab buddies. You're coming back stronger", karma: 10, morale: 2 },
+      { label: "Send a message", reply: "Gutted for you. Speedy recovery brother", karma: 3 },
+      { label: "Read it later", reply: "", karma: -6 },
+    ],
+  },
+  {
+    id: "boot_kid_swap", from: "Ballkid", emoji: "👟", phase: "pro",
+    text: "You gave me your boots after the match!! My mum says I have to check you actually meant it??",
+    choices: [
+      { label: "Meant it, keep them", reply: "All yours. Score goals in them", karma: 7, popularity: 2 },
+      { label: "Ask for them back", reply: "Actually those are my lucky pair... sorry kid", karma: -9, popularity: -3 },
+    ],
+  },
+  {
+    id: "podcast_invite", from: "Podcast", emoji: "🎙️", phase: "pro", minAge: 20,
+    text: "Come on the show. Fans love unfiltered. We WILL ask about your manager, your rival and your contract.",
+    choices: [
+      { label: "Go and stay classy", reply: "I'll come on. Keeping club stuff in house though", karma: 5, popularity: 3 },
+      { label: "Go and spill everything", reply: "Unfiltered? You'll get unfiltered", karma: -6, popularity: 6 },
+      { label: "Decline", reply: "Not my thing, good luck with the show", karma: 1 },
+    ],
+  },
+  {
+    id: "penalty_gift", from: "Rival striker", emoji: "🤝", phase: "pro", minAge: 22,
+    text: "You're one goal off the golden boot and we've got a dead rubber Sunday. Win a pen, I won't complain. Us strikers stick together.",
+    choices: [
+      { label: "Win it fair", reply: "If I get the boot I'm getting it properly. Respect though", karma: 7 },
+      { label: "Take the free pen", reply: "Say less. Drinks on me if it lands", karma: -8 },
+    ],
+  },
+  {
+    id: "documentary", from: "Streaming service", emoji: "🎬", phase: "pro", minAge: 23,
+    text: "All access documentary on your season. Big fee. Cameras everywhere including the bad days.",
+    choices: [
+      { label: "Do it honestly", reply: "Deal, but you show the real thing, not a highlight reel", karma: 5, popularity: 6, cash: 1.0 },
+      { label: "Decline", reply: "Dressing room stays sacred. Pass", karma: 3 },
+    ],
+  },
+  {
+    id: "matchday_nerves", from: "Sports psych", emoji: "🧠", phase: "any",
+    text: "Noticed you've been quiet before big games. My door is open Thursday if you want to talk it through.",
+    choices: [
+      { label: "Book the session", reply: "Thursday works. Cheers doc", karma: 5, morale: 5 },
+      { label: "Tough it out", reply: "I'm fine. Just focused", karma: -2 },
+    ],
+  },
+  {
+    id: "old_boots_museum", from: "Club museum", emoji: "🏛️", phase: "pro", minAge: 26,
+    text: "We'd love your debut boots for the club museum display. Fans keep asking about you.",
+    choices: [
+      { label: "Donate with a note", reply: "They're yours. I'll write the story that goes with them", karma: 6, popularity: 3 },
+      { label: "Keep them", reply: "Those stay with me forever, sorry", karma: 0 },
+    ],
+  },
+];
+
+/** Pick up to `count` unseen texts that fit the player's age and phase. */
+export function pickPhoneTexts(age: number, phase: "youth" | "pro", usedIds: string[], count: number): PhoneTextDef[] {
+  const used = new Set(usedIds);
+  const fits = PHONE_POOL.filter(t =>
+    !used.has(t.id) &&
+    (t.phase === "any" || t.phase === phase) &&
+    (t.minAge === undefined || age >= t.minAge) &&
+    (t.maxAge === undefined || age <= t.maxAge)
+  );
+  const out: PhoneTextDef[] = [];
+  const pool = [...fits];
+  while (out.length < count && pool.length > 0) {
+    const i = Math.floor(Math.random() * pool.length);
+    out.push(pool[i]);
+    pool.splice(i, 1);
+  }
+  return out;
+}
+
+/** Karma meter copy for the phone status bar and Life app. */
+export function karmaTier(karma: number): { label: string; color: string; emoji: string } {
+  if (karma >= 80) return { label: "Fan favorite", color: "text-emerald-400", emoji: "😇" };
+  if (karma >= 60) return { label: "Good egg", color: "text-sky-400", emoji: "🙂" };
+  if (karma >= 40) return { label: "Neutral", color: "text-muted-foreground", emoji: "😐" };
+  if (karma >= 20) return { label: "Villain era", color: "text-amber-400", emoji: "😈" };
+  return { label: "Public enemy", color: "text-red-400", emoji: "🔥" };
+}
+
 /* ─── Expanded life-event catalog (ids 41+) ───
    Same RandomEvent shape as the engine's built-in events; getExtraEvents
    returns only the events currently eligible for this player. Everything

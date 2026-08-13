@@ -41,7 +41,9 @@ import {
   generateShareText, getYouthAcademyClub,
   getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,
   FALLBACK_CLUBS,
+  answerPhoneText, unreadPhoneCount,
 } from "@/lib/soccerCareerEngine";
+import PhonePanel from "@/components/soccer-career/PhonePanel";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocRowsFor, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike } from "@/lib/careerEras";
 import {
   type PlayerAppearance, defaultAppearance, getCelebration,
@@ -444,6 +446,8 @@ export default function SoccerCareer() {
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
   // Round 78: the potential rolled alongside the overall, threaded into the career.
   const [rolledPot, setRolledPot] = useState<number | null>(null);
+  // Round 80: the phone overlay
+  const [phoneOpen, setPhoneOpen] = useState(false);
   const [showNewCareerConfirm, setShowNewCareerConfirm] = useState(false);
   const timelineRef = useRef<HTMLDivElement>(null);
 
@@ -705,12 +709,18 @@ export default function SoccerCareer() {
     setShowNewCareerConfirm(true);
   };
 
+  // Round 80: the phone
+  const handlePhoneAnswer = useCallback((msgId: string, choiceIdx: number) => {
+    setCareer(prev => (prev ? answerPhoneText(prev, msgId, choiceIdx) : prev));
+  }, []);
+
   const handleConfirmNewCareer = () => {
     localStorage.removeItem(SAVE_KEY);
     setCareer(null);
     setPreviewStats(null);
     setRolledOvr(null);
     setRolledPot(null);
+    setPhoneOpen(false);
     setPlayerName(""); setNationality(""); setPosition(""); setEra("");
     setAppearance(defaultAppearance());
     setShowNewCareerConfirm(false);
@@ -783,6 +793,27 @@ export default function SoccerCareer() {
             />
           )}
         </main>
+
+        {/* Round 80: the phone, GTA style. Floating button + full overlay. */}
+        {career && (
+          <>
+            <button
+              onClick={() => setPhoneOpen(true)}
+              aria-label="Open your phone"
+              className="fixed bottom-5 right-4 z-40 w-14 h-14 rounded-2xl bg-zinc-900 border-2 border-zinc-700 shadow-xl flex items-center justify-center text-2xl hover:scale-105 active:scale-95 transition-transform"
+            >
+              📱
+              {unreadPhoneCount(career) > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-white flex items-center justify-center">
+                  {unreadPhoneCount(career)}
+                </span>
+              )}
+            </button>
+            {phoneOpen && (
+              <PhonePanel career={career} onAnswer={handlePhoneAnswer} onClose={() => setPhoneOpen(false)} />
+            )}
+          </>
+        )}
         <GameSeoContent
           title="Soccer Career Simulator | DoUKnowBall"
           description="Live out your soccer dream in this BitLife-style career simulator. Create a player, join a youth academy, develop skills, sign contracts, win trophies, and compete for the Ballon d'Or."
