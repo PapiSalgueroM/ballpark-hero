@@ -21,6 +21,7 @@ import { SquadScreen } from '@/components/club-manager/SquadScreen';
 import { TacticsScreen } from '@/components/club-manager/TacticsScreen';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
 import { MatchReportCard } from '@/components/club-manager/MatchReportCard';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
   W: 'bg-emerald-500', D: 'bg-yellow-500', L: 'bg-red-500',
@@ -28,6 +29,10 @@ const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
 
 const ClubManager = () => {
   const g = useClubManager();
+  // Round 65: the owner's no scroll rule. Full time and season end screens are
+  // what you were waiting for after pressing Play, so they pull themselves into
+  // view rather than rendering below where your thumb just was.
+  const revealRef = useRevealScroll<HTMLDivElement>(`${g.phase}:${g.career?.week ?? 0}`);
 
   const club = g.career ? clubByName(g.career.clubName) : null;
   const unavailable = useMemo(
@@ -182,7 +187,7 @@ const ClubManager = () => {
   /* ================= MATCH RESULT ================= */
   if (g.phase === 'matchResult' && g.report && g.career) {
     return shell(
-      <div>
+      <div ref={revealRef}>
         <header className="text-center mb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">FULL TIME</h1>
         </header>
