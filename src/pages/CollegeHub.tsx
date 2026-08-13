@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { CATEGORIES } from '@/data/gameRegistry';
@@ -66,7 +65,6 @@ const CollegeHub = () => {
           ]}
         />
       </main>
-      <Footer />
     </div>
   );
 };

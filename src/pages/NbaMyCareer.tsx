@@ -3,7 +3,6 @@ import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { Footer } from '@/components/game/Footer';
 
 const NbaMyCareer = () => {
   return (
@@ -42,7 +41,6 @@ const NbaMyCareer = () => {
           />
           <GameNav />
         </main>
-        <Footer />
       </div>
     </>
   );

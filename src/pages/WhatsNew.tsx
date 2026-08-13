@@ -26,6 +26,7 @@ const WhatsNew = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">August 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
+            <li>Soccer Career got a life. Pick a personality (Showman, Ice Cold, Hothead, Professor, or Enigma), sign an agent (or let your cousin handle it, good luck), and live through 40+ new off-pitch storylines: cursed boots, lookalike scams, pet pigeons, podcast feuds and more, all with real consequences for your career. Smoother animations on the big moments too.</li>
             <li>Real guides on every game page. Every single game now has a proper writeup at the bottom of its page: how to play, the rules that matter, an example run, strategy tips, and an FAQ. No more guessing what a game is about before you click in.</li>
             <li>New <Link to="/about" className="underline hover:text-foreground transition-colors">About</Link>, <Link to="/contact" className="underline hover:text-foreground transition-colors">Contact</Link>, and What's New pages (you are reading one right now).</li>
             <li>A Report a bug button in the footer of every page. Reports land straight in our inbox with the page attached, so fixes happen fast.</li>

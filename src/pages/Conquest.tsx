@@ -5,7 +5,6 @@ import ImperialismBoard from '@/components/conquest/ImperialismBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { Footer } from '@/components/game/Footer';
 import { ConquestHowToPlay } from '@/components/conquest/ConquestHowToPlay';
 import { HelpCircle } from 'lucide-react';
 
@@ -111,7 +110,6 @@ const Conquest = () => {
           />
           <GameNav />
         </main>
-        <Footer />
       </div>
       <ConquestHowToPlay open={showHelp} onOpenChange={setShowHelp} />
     </>

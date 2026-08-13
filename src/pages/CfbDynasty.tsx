@@ -3,7 +3,6 @@ import CfbDynastyBoard from '@/components/cfb-dynasty/CfbDynastyBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { Footer } from '@/components/game/Footer';
 
 const CfbDynasty = () => {
   return (
@@ -42,7 +41,6 @@ const CfbDynasty = () => {
           />
           <GameNav />
         </main>
-        <Footer />
       </div>
     </>
   );

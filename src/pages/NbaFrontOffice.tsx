@@ -3,7 +3,6 @@ import NbaFrontOfficeBoard from '@/components/nba-front-office/NbaFrontOfficeBoa
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { Footer } from '@/components/game/Footer';
 
 const NbaFrontOffice = () => {
   return (
@@ -42,7 +41,6 @@ const NbaFrontOffice = () => {
           />
           <GameNav />
         </main>
-        <Footer />
       </div>
     </>
   );

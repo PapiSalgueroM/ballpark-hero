@@ -4,7 +4,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { Trophy, Flame, TrendingUp, Sparkles, Users, Search, X, Globe } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 
 import { StreakReminder } from '@/components/game/StreakReminder';
@@ -505,7 +504,6 @@ export default function Index() {
             </section>
           )}
 
-          <Footer />
         </div>
       </div>
     </>

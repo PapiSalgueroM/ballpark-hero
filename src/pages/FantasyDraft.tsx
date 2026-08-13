@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Footer } from '@/components/game/Footer';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -407,7 +406,6 @@ const FantasyDraft = () => {
             "Snake draft: You pick 1st, AI picks 2nd & 3rd, you pick 4th & 5th..."
           ]}
         />
-        <Footer />
       </div>
     </>
   );

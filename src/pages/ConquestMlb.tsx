@@ -3,7 +3,6 @@ import ImperialismBoardMlb from '@/components/conquest/ImperialismBoardMlb';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { Footer } from '@/components/game/Footer';
 
 const ConquestMlb = () => {
   return (
@@ -43,7 +42,6 @@ const ConquestMlb = () => {
           />
           <GameNav />
         </main>
-        <Footer />
       </div>
     </>
   );

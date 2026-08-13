@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType 
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { UpdateNudge } from "@/components/layout/UpdateNudge";
+import { Footer } from "@/components/game/Footer";
 import Index from "./pages/Index";
 import Footle from "./pages/Footle";
 import CareerGame from "./pages/CareerGame";
@@ -392,6 +393,10 @@ const AppContent = () => {
         <Route path="/nhl-connect-4" element={<NhlConnect4 />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      {/* Round 49: one global footer on every page (legal disclaimer, About/Contact/
+          What's New links, and the Report a bug button), instead of 33 pages
+          importing their own copy and 95 pages having none. */}
+      <Footer />
     </>
   );
 };

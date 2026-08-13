@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Footer } from '@/components/game/Footer';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -612,7 +611,6 @@ const DartDraft = () => {
             'Fill all 11 slots, then your XI plays The Machine in a 3 match series.',
           ]}
         />
-        <Footer />
       </div>
     </>
   );

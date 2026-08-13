@@ -4,7 +4,6 @@ import { getCurrentPlayerName } from '@/lib/completions';
 import { useAuth } from '@/contexts/AuthContext';
 import { CATEGORIES } from '@/data/gameRegistry';
 
-import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -254,7 +253,6 @@ export default function Leaderboard() {
         </main>
 
         <div className="max-w-4xl mx-auto px-4">
-          <Footer />
         </div>
       </div>
     </>

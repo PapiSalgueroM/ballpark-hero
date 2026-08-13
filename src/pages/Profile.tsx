@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Footer } from '@/components/game/Footer';
 import PageSeo from '@/components/seo/PageSeo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -720,7 +719,6 @@ export default function Profile() {
         </main>
 
         <div className="max-w-4xl mx-auto px-4">
-          <Footer />
         </div>
       </div>
     </>

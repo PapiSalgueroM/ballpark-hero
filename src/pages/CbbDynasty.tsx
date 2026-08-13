@@ -3,7 +3,6 @@ import CbbDynastyBoard from '@/components/cbb-dynasty/CbbDynastyBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { Footer } from '@/components/game/Footer';
 
 const CbbDynasty = () => {
   return (
@@ -42,7 +41,6 @@ const CbbDynasty = () => {
           />
           <GameNav />
         </main>
-        <Footer />
       </div>
     </>
   );

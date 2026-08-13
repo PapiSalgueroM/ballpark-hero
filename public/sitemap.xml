@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Generated from src/data/gameRegistry.ts (live games only) plus static pages on 2026-08-12.
+  Generated from src/data/gameRegistry.ts (live games only) plus static pages on 2026-08-12 (r49).
   Deleted or retired games are intentionally left out so Search Console
   does not chase orphaned thin pages. Regenerate when the registry changes.
 -->

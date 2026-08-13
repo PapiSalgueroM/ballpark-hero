@@ -3,7 +3,6 @@ import FrontOfficeBoard from '@/components/front-office/FrontOfficeBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { Footer } from '@/components/game/Footer';
 
 const FrontOffice = () => {
   return (
@@ -43,7 +42,6 @@ const FrontOffice = () => {
           />
           <GameNav />
         </main>
-        <Footer />
       </div>
     </>
   );

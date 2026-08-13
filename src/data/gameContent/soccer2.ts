@@ -434,6 +434,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "There is no training menu. Growth follows your age curve, and you steer it through event choices, lifestyle purchases, and the social media detox, worth plus 2 to every stat next season.",
       "Money matters: a personal trainer adds a stat point per season, and the recovery clinic halves injury layoffs.",
       "The doping storyline boosts every stat but risks a 20 percent failed test each season it runs, and failing means a 1 season ban and a wrecked reputation.",
+      "Your personality and your agent shape the whole run. The Showman grows followers 60 percent faster, The Professor earns brand trust, and super agent Zara Blackwood opens dream club doors for a 10 percent cut.",
       "Loyalty pays: a decade at one club is worth about as much legacy as two and a half league titles.",
     ],
     faqs: [

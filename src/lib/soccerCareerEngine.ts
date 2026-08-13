@@ -5,6 +5,11 @@ import {
   getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,
   BDOR_WIN_MIN_GOALS,
 } from "./careerEras";
+import {
+  getLifeEvents, getPriorityLifeEventIds,
+  personalityFollowerMult, personalitySponsorMult,
+  agentWageMult, agentIncomeCutRate, agentTransferCutRate,
+} from "./soccerCareerLife";
 
 export interface ClubData {
   id: string;
@@ -454,6 +459,10 @@ export interface CareerState {
   mafiaStage?: number;        // 0 none, 1 took the cup money, 2 arc closed
   bdorSnubFuel?: boolean;     // finished 2nd or 3rd last ceremony
   rivalryIntensity?: number;  // 0-100 heat of the feud, optional for old saves
+  /** Round 49 life layer. Optional so pre-R49 saves keep loading. */
+  personality?: string | null; // showman | iceman | hothead | professor | enigma
+  agentId?: string | null;     // cousin | shark | super | self
+  lifeFlags?: Record<string, number>; // chained life-event arcs
 }
 
 /* ─── Moral Dilemma System ─── */
@@ -1406,10 +1415,10 @@ export const SOCIAL_MEDIA_ACTIONS: SocialMediaAction[] = [
 
 export const SPONSORSHIP_TIERS: { tier: SponsorshipTier; name: string; emoji: string; minFollowers: number; income: number }[] = [
   { tier: "local_brand", name: "Local Brand Deal", emoji: "🏪", minFollowers: 1_000_000, income: 0.5 },
-  { tier: "nike_adidas", name: "Nike / Adidas Deal", emoji: "👟", minFollowers: 5_000_000, income: 3 },
+  { tier: "nike_adidas", name: "Global Boot Deal", emoji: "👟", minFollowers: 5_000_000, income: 3 },
   { tier: "global_ambassador", name: "Global Brand Ambassador", emoji: "🌍", minFollowers: 15_000_000, income: 8 },
   { tier: "merchandise_line", name: "Own Merchandise Line", emoji: "👕", minFollowers: 30_000_000, income: 15 },
-  { tier: "fifa_cover", name: "FIFA Cover Athlete", emoji: "🎮", minFollowers: 50_000_000, income: 25 },
+  { tier: "fifa_cover", name: "Game Cover Athlete", emoji: "🎮", minFollowers: 50_000_000, income: 25 },
 ];
 
 function getActiveSponsorshipTier(followers: number): SponsorshipTier | null {
@@ -1484,11 +1493,11 @@ export function handleFifaCoverDecision(prev: CareerState, accept: boolean): Car
     s.fifaCoverAccepted = true;
     s.netWorth = Math.round((s.netWorth + 25) * 100) / 100;
     s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 5) * 100) / 100;
-    s.events = [...s.events, "🎮 Became the FIFA Cover Athlete! €25M + 5M followers + Legacy +10"];
-    s.awards = [...s.awards, { year: s.seasons[s.seasons.length - 1]?.year || 2024, name: "FIFA Cover Athlete", emoji: "🎮" }];
+    s.events = [...s.events, "🎮 You are the cover athlete of the world's biggest football video game! €25M + 5M followers + Legacy +10"];
+    s.awards = [...s.awards, { year: s.seasons[s.seasons.length - 1]?.year || 2024, name: "Game Cover Athlete", emoji: "🎮" }];
   } else {
     s.popularity = clamp(s.popularity + 5, 0, 100);
-    s.events = [...s.events, "🎮 Declined FIFA cover: gained respect for being selective. Reputation +5"];
+    s.events = [...s.events, "🎮 Declined the game cover: gained respect for being selective. Reputation +5"];
   }
   // Will continue via dismissSocialMediaPhase
   s.phase = "social_media_action";
@@ -1734,8 +1743,9 @@ function calcSponsorshipIncome(popularity: number, socialMediaFollowers: number,
   // Social media income
   income += socialMediaFollowers * 0.1; // €100k per 1M followers
   // Named sponsor deal (legacy)
-  if (sponsorDeal === "Nike") income += 2;
-  else if (sponsorDeal === "Adidas") income += 1.5;
+  // "Nike"/"Adidas" kept for pre-R49 saves; new deals sign fictional brands
+  if (sponsorDeal === "Nike" || sponsorDeal === "Vortex") income += 2;
+  else if (sponsorDeal === "Adidas" || sponsorDeal === "Kinetiq") income += 1.5;
   // Tiered sponsorship from social media actions
   income += getSponsorshipIncome(activeSponsorship || null);
   return Math.round(income * 100) / 100;
@@ -1756,6 +1766,8 @@ function growSocialMedia(state: CareerState, season: SeasonRecord): number {
   growth += state.popularity * 0.005;
   // Random viral moment
   if (Math.random() < 0.05) growth += rand(1, 5);
+  // Round 49: personality shapes the algorithm
+  growth *= personalityFollowerMult(state.personality);
   return Math.round(growth * 100) / 100;
 }
 
@@ -1763,8 +1775,12 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
   // Wage income (52 weeks, in millions)
   const wageIncome = (s.weeklyWage * 52) / 1_000_000;
   // Sponsorship income
-  s.sponsorshipIncome = calcSponsorshipIncome(s.popularity, s.socialMediaFollowers, s.sponsorDeal, s.activeSponsorship);
-  const totalIncome = wageIncome + s.sponsorshipIncome;
+  s.sponsorshipIncome = Math.round(calcSponsorshipIncome(s.popularity, s.socialMediaFollowers, s.sponsorDeal, s.activeSponsorship) * personalitySponsorMult(s.personality) * 100) / 100;
+  const grossIncome = wageIncome + s.sponsorshipIncome;
+  // Round 49: the agent takes a yearly cut of wage + sponsorship income
+  const agentCut = Math.round(grossIncome * agentIncomeCutRate(s.agentId) * 100) / 100;
+  if (agentCut > 0) s.agentFeesPaid = Math.round((s.agentFeesPaid + agentCut) * 100) / 100;
+  const totalIncome = grossIncome - agentCut;
   // Lifestyle cost (auto + custom spending)
   s.lifestyleLevel = calcLifestyleLevel(s.netWorth + (s.totalAssetValue || 0));
   s.lifestyleCostPerYear = calcLifestyleCost(s.lifestyleLevel) + (s.customYearlyCosts || 0);
@@ -2617,7 +2633,9 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
     if (offerA && offerB) return { type: "bidding_war", offerA, offerB };
   }
 
-  if (overall >= 75 && Math.abs(overall - 80) <= 5 && currentClubTier > 1 && Math.random() < 0.15) {
+  // Round 49: a super agent gets dream clubs to actually pick up the phone
+  const dreamChance = state.agentId === "super" ? 0.25 : 0.15;
+  if (overall >= 75 && Math.abs(overall - 80) <= 5 && currentClubTier > 1 && Math.random() < dreamChance) {
     const dreamOffer = makeOffer(clubs, 1, overall, age, exclude, marketValue, true);
     if (dreamOffer) return { type: "dream_club", offer: dreamOffer };
   }
@@ -2692,6 +2710,9 @@ export function initCareer(
     pendingFifaCoverEvent: false,
     fifaCoverAccepted: false,
     activeSponsorship: null,
+    personality: null,
+    agentId: null,
+    lifeFlags: {},
     moralDilemmasTriggered: [],
     pendingMoralDilemma: null,
     pedSeasonsRemaining: 0,
@@ -2743,15 +2764,18 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   const s = { ...prev };
   s.currentClub = offer.club.name; s.currentClubCountry = offer.club.country;
   s.currentClubTier = offer.club.tier; s.currentClubColor = offer.club.color; s.currentLeague = offer.club.league;
-  s.contractYearsLeft = offer.contractYears; s.weeklyWage = offer.wage;
+  s.contractYearsLeft = offer.contractYears;
+  // Round 49: your agent's negotiating skill decides the final wage
+  s.weeklyWage = Math.round(offer.wage * agentWageMult(prev.agentId));
   s.phase = "playing"; s.pendingOffers = []; s.transferSituation = null;
-  // Agent fee: 10% of transfer fee
-  if (offer.transferFee > 0) {
-    const agentFee = Math.round(offer.transferFee * 0.1 * 100) / 100;
+  // Agent fee on the transfer (rate depends on who represents you; legacy saves keep 10%)
+  const feeRate = agentTransferCutRate(prev.agentId);
+  const agentFee = offer.transferFee > 0 ? Math.round(offer.transferFee * feeRate * 100) / 100 : 0;
+  if (agentFee > 0) {
     s.agentFeesPaid = Math.round((s.agentFeesPaid + agentFee) * 100) / 100;
-    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(offer.wage)}) · Agent fee: €${agentFee.toFixed(1)}M`];
+    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)}) · Agent fee: €${agentFee.toFixed(1)}M`];
   } else {
-    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(offer.wage)})`];
+    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)})`];
   }
   return s;
 }
@@ -3657,10 +3681,10 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       ] },
     { id: 5, emoji: "👟", title: "Sponsorship Deal!", description: "A major sportswear brand offers you a sponsorship deal.",
       category: "positive", choices: [
-        { label: "Sign with Nike", emoji: "✔️", color: "bg-emerald-600", consequence: "+€2M/year income",
-          apply: s => { s.sponsorDeal = "Nike"; s.totalEarnings += 2; s.events = [...s.events, "👟 Signed Nike sponsorship deal"]; return s; } },
-        { label: "Sign with Adidas", emoji: "✔️", color: "bg-blue-600", consequence: "+€1.5M/year income",
-          apply: s => { s.sponsorDeal = "Adidas"; s.totalEarnings += 1.5; s.events = [...s.events, "👟 Signed Adidas sponsorship deal"]; return s; } },
+        { label: "Sign with Vortex", emoji: "✔️", color: "bg-emerald-600", consequence: "+€2M/year income",
+          apply: s => { s.sponsorDeal = "Vortex"; s.totalEarnings += 2; s.events = [...s.events, "👟 Signed the Vortex boot deal"]; return s; } },
+        { label: "Sign with Kinetiq", emoji: "✔️", color: "bg-blue-600", consequence: "+€1.5M/year income",
+          apply: s => { s.sponsorDeal = "Kinetiq"; s.totalEarnings += 1.5; s.events = [...s.events, "👟 Signed the Kinetiq boot deal"]; return s; } },
         { label: "Reject all offers", emoji: "✋", color: "bg-muted", consequence: "No deal, stay independent",
           apply: s => { s.events = [...s.events, "👟 Rejected sponsorship offers"]; return s; } },
       ] },
@@ -3917,6 +3941,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.events = [...s.events, "🎬⭐ Declined movie role"]; return s; } },
       ] },
     ...getExtraEvents(state),
+    ...getLifeEvents(state),
   ];
 }
 
@@ -3960,7 +3985,16 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
   });
   const count = rand(2, 4);
   const shuffled = [...eligible].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
+  const picked = shuffled.slice(0, count);
+  // Round 49: identity beats (personality reveal, agent signing) always show up
+  // the season they become due instead of losing the random draw.
+  for (const pid of getPriorityLifeEventIds(state)) {
+    if (!picked.some(e => e.id === pid)) {
+      const ev = all.find(e => e.id === pid);
+      if (ev) picked.unshift(ev);
+    }
+  }
+  return picked;
 }
 
 /* ─── UCL Simulation ─── */

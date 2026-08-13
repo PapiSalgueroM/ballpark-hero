@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Footer } from '@/components/game/Footer';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -414,7 +413,6 @@ const SignThePlayer = () => {
             'Win the league with money in the bank for the max score',
           ]}
         />
-        <Footer />
       </div>
     </>
   );

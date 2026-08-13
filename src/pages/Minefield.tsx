@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Footer } from '@/components/game/Footer';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -242,7 +241,6 @@ const Minefield = () => {
             'Clear all three boards without a scratch for the flawless sweep',
           ]}
         />
-        <Footer />
       </div>
     </>
   );

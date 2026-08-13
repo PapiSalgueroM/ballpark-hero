@@ -12,7 +12,6 @@ import ShareButtons from "@/components/game/ShareButtons";
 import AwardsPredictor from "@/components/world-cup-predictor/AwardsPredictor";
 import { GameNav } from "@/components/game/GameNav";
 import { GameNavbar } from "@/components/game/GameNavbar";
-import { Footer } from "@/components/game/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { supabase } from "@/integrations/supabase/client";
@@ -1515,7 +1514,6 @@ const WorldCupPredictor = () => {
           ]}
         />
         <GameNav />
-        <Footer />
       </div>
     </div>
   );

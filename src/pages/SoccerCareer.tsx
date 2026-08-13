@@ -3,7 +3,6 @@ import { useGameCompletion } from "@/hooks/useGameCompletion";
 import PageSeo from "@/components/seo/PageSeo";
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from "@/components/game/GameNavbar";
-import { Footer } from "@/components/game/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { toast } from "sonner";
 import { ChevronRight } from "lucide-react";
+import { getPersonalityDef, getAgentDef } from "@/lib/soccerCareerLife";
 import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
   type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,
@@ -333,7 +333,7 @@ function SeasonSummaryCard({ season, position, onContinue }: { season: SeasonRec
   const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.worldCup && "🌍 World Cup", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
 
   return (
-    <div className="bg-card border-2 border-emerald-500/30 rounded-xl p-5 space-y-4">
+    <div className="bg-card border-2 border-emerald-500/30 rounded-xl p-5 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center">
         <h3 className="text-lg font-black">Season Summary</h3>
         <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={season.clubCountry} size={14} />{season.club} · {season.year}/{(season.year + 1).toString().slice(-2)}</p>
@@ -757,7 +757,6 @@ export default function SoccerCareer() {
             "Retire after 20 seasons with a legendary career score"
           ]}
         />
-        <Footer />
       </div>
       <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
       {/* New Career Confirmation Dialog */}
@@ -1075,7 +1074,7 @@ function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; r
     life: "🏠 Life Event",
   };
   return (
-    <div className={`rounded-xl border-2 p-5 space-y-4 ${categoryColors[event.category] || "border-border bg-card"}`}>
+    <div className={`rounded-xl border-2 p-5 space-y-4 animate-in fade-in zoom-in-95 slide-in-from-bottom-4 duration-500 ${categoryColors[event.category] || "border-border bg-card"}`}>
       <div className="text-center space-y-2">
         <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">
           {categoryLabels[event.category]} · {remaining} event{remaining !== 1 ? "s" : ""} remaining
@@ -1449,6 +1448,31 @@ function FinancialPanel({ career }: { career: CareerState }) {
         </div>
       )}
 
+      {/* Persona & Agent (Round 49) */}
+      {(career.personality || career.agentId) && (
+        <div className="flex items-center gap-2 text-[10px] flex-wrap">
+          {(() => {
+            const p = getPersonalityDef(career.personality);
+            return p ? (
+              <span className="px-1.5 py-0.5 rounded bg-purple-500/15 text-purple-400" title={p.perk}>
+                {p.emoji} {p.name}
+              </span>
+            ) : null;
+          })()}
+          {(() => {
+            const a = getAgentDef(career.agentId);
+            if (!a) return null;
+            return a.id === "self" ? (
+              <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400" title={a.blurb}>🤝 Self-represented</span>
+            ) : (
+              <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400" title={a.blurb}>
+                {a.emoji} Agent: {a.name}
+              </span>
+            );
+          })()}
+        </div>
+      )}
+
       {/* Popularity & Morale bars */}
       <div className="space-y-1.5">
         <div className="flex items-center gap-2">
@@ -1481,9 +1505,9 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: Ba
   const rankEmoji = (rank: number) => rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `${rank}.`;
   
   return (
-    <div className={`rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4`}>
+    <div className={`rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4 animate-in fade-in zoom-in-90 duration-700`}>
       <div className="text-center space-y-2">
-        <div className="text-5xl">{isWinner ? "🏅" : "⭐"}</div>
+        <div className={`text-5xl ${isWinner ? "animate-pulse" : ""}`}>{isWinner ? "🏅" : "⭐"}</div>
         <h3 className="text-xl font-black tracking-tight">
           {isWinner ? "BALLON D'OR WINNER!" : `Ballon d'Or ${bdor.year}`}
         </h3>
@@ -1964,8 +1988,8 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
       <div className="rounded-xl border-2 border-amber-400/60 bg-gradient-to-b from-amber-500/20 to-transparent p-5 space-y-4">
         <div className="text-center space-y-2">
           <div className="text-5xl">🎮</div>
-          <h3 className="text-xl font-black tracking-tight">EA SPORTS FIFA COVER</h3>
-          <p className="text-sm text-amber-300 font-bold">EA Sports wants YOU as the FIFA cover athlete!</p>
+          <h3 className="text-xl font-black tracking-tight">THE COVER OFFER</h3>
+          <p className="text-sm text-amber-300 font-bold">The world's biggest football video game wants YOU on the cover!</p>
           <p className="text-xs text-muted-foreground">With {formatFollowers(currentFollowers)} followers and {career.overall} OVR, you're the perfect choice.</p>
         </div>
         <div className="space-y-2">
