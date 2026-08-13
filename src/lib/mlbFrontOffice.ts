@@ -266,7 +266,10 @@ export function mlbTrade(
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
   if (!mine || !theirs || my.players.length <= 9 || their.players.length <= 9) return 'invalid';
-  if (mlbCapRoom(my, cap) + mine.salary < theirs.salary) return 'invalid';
+  // Round 82: salary matching so payroll-heavy teams can still swap contracts
+  const fitsMe = mlbCapRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
+  const fitsThem = mlbCapRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;
+  if (!fitsMe || !fitsThem) return 'invalid';
   const pickV = sweeten && my.picks.length ? 13 : 0;
   if (mlbTradeValue(mine) + pickV < mlbTradeValue(theirs) * 1.07) return 'rejected';
   my.players = my.players.filter(p => p.id !== myId);

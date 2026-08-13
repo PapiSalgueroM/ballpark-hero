@@ -394,7 +394,10 @@ export function proposeTrade(
   const mine = my.players.find(p => p.id === myPlayerId);
   const theirs = their.players.find(p => p.id === theirPlayerId);
   if (!mine || !theirs || my.players.length <= 6 || their.players.length <= 6) return 'invalid';
-  if (capRoom(my, cap) + mine.salary < theirs.salary) return 'invalid';
+  // Round 82: salary matching so cap-strapped teams can still swap contracts
+  const fitsMe = capRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
+  const fitsThem = capRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;
+  if (!fitsMe || !fitsThem) return 'invalid';
   const pickValue = sweetenerPick && my.picks.length > 0 ? 14 : 0;
   if (tradeValue(mine) + pickValue < tradeValue(theirs) * 1.08) return 'rejected';
   my.players = my.players.filter(p => p.id !== myPlayerId);

@@ -5,10 +5,11 @@ import { NHL_TEAMS, NHL_TEAM_MAP } from '@/data/conquestDataNhl';
 import {
   initNhlLeague, simNhlRound, nhlFoStandings, runNhlFoPlayoffs, nhlOffseason,
   nhlDraftClass, nhlProspectToPlayer, nhlStrength, nhlCapUsed, nhlCapRoom,
-  nhlRelease, nhlSign, nhlTrade, nhlAiMoves, nhlPoints, EASTERN, NHL_FO_DIVISIONS,
+  nhlRelease, nhlSign, nhlTrade, nhlTradeValue, nhlAiMoves, nhlPoints, EASTERN, NHL_FO_DIVISIONS,
   NHL_FO_ROUNDS,
   type NhlLeague, type NhlProspect, type NhlSeriesResult,
 } from '@/lib/nhlFrontOffice';
+import { findTrades, type FinderOffer } from '@/lib/tradeFinder';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
 
@@ -33,6 +34,9 @@ export default function NhlFrontOfficeBoard() {
   const [draftClass, setDraftClass] = useState<NhlProspect[] | null>(null);
   const [picksLeft, setPicksLeft] = useState(0);
   const [tradePartner, setTradePartner] = useState('');
+  // Round 82: trade finder
+  const [shopOffers, setShopOffers] = useState<FinderOffer[]>([]);
+  const [shopTried, setShopTried] = useState(false);
   const [myTradePiece, setMyTradePiece] = useState('');
   const [titles, setTitles] = useState(0);
   const [seasonsPlayed, setSeasonsPlayed] = useState(0);
@@ -157,10 +161,30 @@ export default function NhlFrontOfficeBoard() {
     const res = nhlTrade(lg.teams[myTeam], lg.teams[tradePartner], myTradePiece, theirPid, sweeten, lg.cap);
     if (res === 'accepted') {
       setFeed(f => [`🤝 Trade completed with ${label(tradePartner)}.`, ...f].slice(0, 6));
-      setMyTradePiece('');
+      setMyTradePiece(''); setShopOffers([]); setShopTried(false);
       setLeague(lg); persist({}, lg, myTeam);
     } else {
       setFeed(f => [res === 'rejected' ? `❌ ${label(tradePartner)} pass on that offer.` : '❌ That deal breaks cap or roster rules.', ...f].slice(0, 6));
+    }
+  };
+
+  // Round 82: shop a player league-wide with the real trade rules
+  const doShop = () => {
+    if (!league || !myTradePiece) return;
+    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, nhlTrade, nhlTradeValue);
+    setShopOffers(offers); setShopTried(true);
+  };
+  const acceptShopOffer = (o: FinderOffer) => {
+    if (!league || !myTradePiece) return;
+    const lg: NhlLeague = JSON.parse(JSON.stringify(league));
+    const res = nhlTrade(lg.teams[myTeam], lg.teams[o.teamId], myTradePiece, o.playerId, o.sweeten, lg.cap);
+    if (res === 'accepted') {
+      setFeed(f => [`🤝 Trade finder deal done with ${label(o.teamId)}.`, ...f].slice(0, 6));
+      setMyTradePiece(''); setShopOffers([]); setShopTried(false);
+      setLeague(lg); persist({}, lg, myTeam);
+    } else {
+      setFeed(f => ['❌ That offer went stale, shop him again.', ...f].slice(0, 6));
+      setShopOffers([]); setShopTried(false);
     }
   };
 
@@ -345,6 +369,34 @@ export default function NhlFrontOfficeBoard() {
 
       {tab === 'trade' && (
         <div className="rounded-2xl border border-border bg-card p-3 space-y-2">
+          {/* Round 82: Trade Finder, shop a player and let the league bid */}
+          <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2">
+            <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
+            <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked.</p>
+            <div className="grid grid-cols-2 gap-1">
+              {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
+                <button key={p.id} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
+                  <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+                </button>
+              ))}
+            </div>
+            <button onClick={doShop} disabled={!myTradePiece} className="w-full rounded-full bg-primary px-4 py-1.5 text-[11px] font-bold text-primary-foreground disabled:opacity-40">
+              Shop him around the league
+            </button>
+            {shopTried && shopOffers.length === 0 && (
+              <p className="text-center text-[10px] text-muted-foreground">📵 Nobody bit. Shop a better player or build a deal yourself below.</p>
+            )}
+            {shopOffers.map(o => (
+              <div key={o.teamId + o.playerId} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1.5 text-[11px]">
+                <span className="min-w-0">
+                  <span className="block truncate text-foreground"><b>{o.teamId}</b> offer: {o.playerName} ({o.playerPos}) <b className="text-primary">{o.playerOvr}</b></span>
+                  <span className="block text-[9px] text-muted-foreground">age {o.playerAge} · ${o.playerSalary}M{o.sweeten ? ' · costs one of your picks' : ''}</span>
+                </span>
+                <button onClick={() => acceptShopOffer(o)} className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[9px] font-bold text-primary-foreground">Accept</button>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-[10px] font-bold uppercase text-muted-foreground pt-1">Or build your own deal</p>
           <div className="flex flex-wrap items-center justify-center gap-1">
             {NHL_TEAMS.filter(x => x.id !== myTeam).map(x => (
               <button key={x.id} onClick={() => setTradePartner(x.id)} className={cn('rounded-full border px-2 py-0.5 text-[10px] font-bold', tradePartner === x.id ? 'border-gold bg-gold/10 text-foreground' : 'border-border text-muted-foreground hover:text-foreground')}>

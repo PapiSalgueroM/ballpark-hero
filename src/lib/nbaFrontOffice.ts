@@ -256,7 +256,12 @@ export function nbaTrade(
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
   if (!mine || !theirs || my.players.length <= 8 || their.players.length <= 8) return 'invalid';
-  if (nbaCapRoom(my, cap) + mine.salary < theirs.salary) return 'invalid';
+  // Round 82: NBA style salary matching. Over-cap teams can still trade when
+  // the money roughly lines up (the old room-only check made every trade
+  // between capped-out rosters invalid, which killed the whole trade screen).
+  const fitsMe = nbaCapRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
+  const fitsThem = nbaCapRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;
+  if (!fitsMe || !fitsThem) return 'invalid';
   const pickV = sweeten && my.picks.length ? 12 : 0;
   if (nbaTradeValue(mine) + pickV < nbaTradeValue(theirs) * 1.07) return 'rejected';
   my.players = my.players.filter(p => p.id !== myId);
