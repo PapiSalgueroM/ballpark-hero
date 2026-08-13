@@ -22,6 +22,7 @@ import {
 } from '@/lib/dartMap';
 import { LEGENDS, WC2026_NATIONS, playerRating } from '@/lib/squadDeal';
 import type { Player } from '@/types/game';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 type Phase = 'intro' | 'loading' | 'squad' | 'aim' | 'draft' | 'done';
 type AimStage = 'x' | 'y' | 'landed';
@@ -54,6 +55,10 @@ const DartDraft = () => {
   const [hit, setHit] = useState<MapHit | null>(null);
   const [blocked, setBlocked] = useState(false); // WC topic: hit a non-qualified nation
   const [choices, setChoices] = useState<DraftChoice[] | null>(null);
+  // Round 63: the owner's no scroll rule. After a dart lands, the players you
+  // can actually draft render further down the page, so that panel pulls
+  // itself into view instead of leaving you looking at the board.
+  const revealRef = useRevealScroll<HTMLDivElement>(`${phase}:${slotIdx ?? -1}:${choices.length}`);
   const [choicesLoading, setChoicesLoading] = useState(false);
   const [draftedIsos, setDraftedIsos] = useState<Set<string>>(new Set());
   const [usedNames, setUsedNames] = useState<Set<string>>(new Set());
@@ -493,7 +498,7 @@ const DartDraft = () => {
                     {choicesLoading && <Loader2 className="w-6 h-6 animate-spin text-muted-foreground mx-auto" />}
 
                     {!choicesLoading && choices && (
-                      <div className="grid sm:grid-cols-2 gap-2 max-w-xl mx-auto">
+                      <div ref={revealRef} className="grid sm:grid-cols-2 gap-2 max-w-xl mx-auto">
                         {choices.map(({ player: p, outOfPosition }) => (
                           <button
                             key={p.name}
