@@ -42,7 +42,7 @@ import {
   getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,
   FALLBACK_CLUBS,
 } from "@/lib/soccerCareerEngine";
-import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear } from "@/lib/careerEras";
+import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocRowsFor, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike } from "@/lib/careerEras";
 import {
   type PlayerAppearance, defaultAppearance, getCelebration,
 } from "@/lib/soccerCareerAppearance";
@@ -829,6 +829,100 @@ function getOverallTier(ovr: number): { label: string; color: string; bgColor: s
   return { label: "Raw Talent: Rough Around the Edges", color: "text-muted-foreground", bgColor: "bg-muted/20 border-border" };
 }
 
+/* ─── Round 79: 2K style build editor, a full screen drill-in per the tile
+   rule. You get the rolled points as a budget and move them between the
+   stats your position actually uses. Outfield overall never drifts (it is
+   the average, so a fixed pool pins it); a keeper's overall is weighted, so
+   where you put points genuinely matters, exactly like a 2K build. ─── */
+function BuildEditor({ position, targetOvr, baseStats, potLabel, onConfirm, onCancel }: {
+  position: string;
+  targetOvr: number;
+  baseStats: Stats;
+  potLabel: { label: string; color: string } | null;
+  onConfirm: (stats: Stats, calcOvr: number) => void;
+  onCancel: () => void;
+}) {
+  const rows = allocRowsFor(position);
+  const startRef = useRef<Stats | null>(null);
+  if (startRef.current === null) startRef.current = normalizeAllocation(baseStats, position, targetOvr) as Stats;
+  const [alloc, setAlloc] = useState<Stats>(startRef.current);
+  const budget = rows.reduce((a, r) => a + (startRef.current as any)[r.key], 0);
+  const spent = rows.reduce((a, r) => a + (alloc as any)[r.key], 0);
+  const pool = budget - spent;
+  const maxStat = allocMax(targetOvr);
+  const liveOvr = allocOverall(alloc, position);
+  const comp = playsLike(alloc, position);
+
+  const bump = (key: string, delta: number) => {
+    setAlloc(prev => {
+      const cur = (prev as any)[key] as number;
+      let next = cur + delta;
+      if (delta > 0) next = Math.min(next, maxStat, cur + pool);
+      else next = Math.max(next, ALLOC_MIN);
+      if (next === cur) return prev;
+      return { ...prev, [key]: next };
+    });
+  };
+
+  return (
+    <div className="max-w-xl mx-auto space-y-4 animate-fade-in">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="sm" onClick={onCancel} className="h-8 px-2 text-muted-foreground">← Back</Button>
+        <h1 className="text-lg font-black">🎮 Build Your Player</h1>
+      </div>
+
+      <div className="bg-card border border-border rounded-xl p-4 flex items-center justify-between">
+        <div>
+          <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Points to spend</div>
+          <div className={`text-3xl font-black tabular-nums ${pool > 0 ? "text-emerald-400" : "text-foreground"}`}>{pool}</div>
+        </div>
+        <div className="text-center">
+          <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Overall</div>
+          <div className="text-3xl font-black tabular-nums">{liveOvr}</div>
+          {position === "GK" && <div className="text-[9px] text-muted-foreground">weighted by where points go</div>}
+        </div>
+        {potLabel && (
+          <div className="text-right">
+            <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Ceiling</div>
+            <div className={`text-xs font-bold ${potLabel.color}`}>{potLabel.label}</div>
+          </div>
+        )}
+      </div>
+
+      <div className="bg-card border border-border rounded-xl p-4 space-y-3">
+        {rows.map(r => {
+          const v = (alloc as any)[r.key] as number;
+          return (
+            <div key={r.key} className="flex items-center gap-2">
+              <div className="w-28 shrink-0 text-xs font-bold">{r.label}</div>
+              <Button variant="outline" size="sm" className="h-7 w-7 p-0 shrink-0 font-black" disabled={v <= ALLOC_MIN} onClick={() => bump(r.key, -1)}>−</Button>
+              <div className="flex-1 h-2.5 rounded-full bg-muted/30 overflow-hidden">
+                <div className="h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${Math.min(100, v)}%` }} />
+              </div>
+              <div className="w-8 text-center text-sm font-black tabular-nums">{v}</div>
+              <Button variant="outline" size="sm" className="h-7 w-7 p-0 shrink-0 font-black" disabled={v >= maxStat || pool <= 0} onClick={() => bump(r.key, +1)}>+</Button>
+            </div>
+          );
+        })}
+        <p className="text-[10px] text-muted-foreground text-center pt-1">Take points out of one stat to spend on another. Cap {maxStat} per stat at your age.</p>
+      </div>
+
+      <div className="bg-card border border-border rounded-xl p-4 text-center space-y-1">
+        <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Scouts say you play like</div>
+        <div className="text-lg font-black">{comp.name}</div>
+        <div className="text-[11px] text-muted-foreground">{comp.pct > 0 ? `${comp.pct}% style match · ` : ""}{comp.style}</div>
+      </div>
+
+      <div className="flex gap-2">
+        <Button variant="outline" className="flex-1 h-11 text-sm font-bold" onClick={() => setAlloc(startRef.current as Stats)}>↩️ Reset to scout build</Button>
+        <Button className="flex-1 h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-40" disabled={pool !== 0} onClick={() => onConfirm(alloc, liveOvr)}>
+          {pool !== 0 ? `Spend your ${pool} points first` : "✅ Lock in build"}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Creation Screen ─── */
 function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, clubsLoading, clubsError, onRolledOvr, onStatsGenerated, appearance, setAppearance }: any) {
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
@@ -837,6 +931,8 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
   const [isRolling, setIsRolling] = useState(false);
   const [displayOvr, setDisplayOvr] = useState(0);
   const [academyClub, setAcademyClub] = useState<ClubData | null>(null);
+  // Round 79: the 2K style build editor drill-in
+  const [buildOpen, setBuildOpen] = useState(false);
 
   const canGenerate = playerName.trim().length > 0 && nationality && position && era;
 
@@ -877,6 +973,28 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
   }, [canGenerate, clubs, nationality, position, isRolling, era, rollsLeft]);
 
   const tier = rolledOvr !== null ? getOverallTier(rolledOvr) : (isRolling ? getOverallTier(displayOvr) : null);
+
+  const handleBuildConfirm = (stats: Stats, calcOvr: number) => {
+    setRolledOvr(calcOvr);
+    setDisplayOvr(calcOvr);
+    onRolledOvr?.(calcOvr, rolledPot ?? calcOvr + 6);
+    onStatsGenerated?.(stats, calcOvr);
+    setBuildOpen(false);
+  };
+
+  // Tile rule: the build editor takes over the whole screen with a back button
+  if (buildOpen && previewStats && rolledOvr !== null) {
+    return (
+      <BuildEditor
+        position={position}
+        targetOvr={rolledOvr}
+        baseStats={previewStats}
+        potLabel={rolledPot !== null ? potentialTier(rolledPot) : null}
+        onConfirm={handleBuildConfirm}
+        onCancel={() => setBuildOpen(false)}
+      />
+    );
+  }
 
   return (
     <div className="max-w-xl mx-auto space-y-5">
@@ -1010,6 +1128,19 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
           <div className="space-y-2">
             {getPositionStatBars(position, previewStats).map(s => <StatBarGame key={s.l} label={s.l} value={s.v} color={s.c} />)}
           </div>
+          {/* Round 79: who your build plays like, live off the actual numbers */}
+          {!isRolling && (() => { const comp = playsLike(previewStats, position); return (
+            <div className="rounded-lg border border-border/60 bg-muted/10 px-3 py-2 text-center">
+              <span className="text-[11px] text-muted-foreground">Scouts say you play like </span>
+              <span className="text-[12px] font-black">{comp.name}</span>
+              {comp.pct > 0 && <span className="text-[11px] text-muted-foreground"> ({comp.pct}% match)</span>}
+            </div>
+          ); })()}
+          {rolledOvr !== null && !isRolling && (
+            <Button variant="outline" className="w-full h-10 text-sm font-bold" onClick={() => setBuildOpen(true)}>
+              🎮 Customize build (2K style)
+            </Button>
+          )}
         </div>
       )}
 

@@ -2942,7 +2942,9 @@ export function initCareer(
   return {
     playerName, nationality, position, era, age: 16,
     // Round 78: the hidden ceiling this career will fight to reach.
-    potential: potential ?? rollPotential(overall),
+    // Round 79: clamped above the final overall, since the 2K style build
+    // editor can nudge a keeper's overall a few points past the roll.
+    potential: Math.max(potential ?? rollPotential(overall), overall + 2),
     currentClub: `${academyClub.name} Youth`, currentClubCountry: academyClub.country,
     currentClubTier: academyClub.tier, currentClubColor: academyClub.color, currentLeague: academyClub.league,
     contractYearsLeft: 2, weeklyWage: 500, marketValue: 0.1, ...stats, overall,

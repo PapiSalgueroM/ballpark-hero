@@ -463,6 +463,188 @@ export function potentialTier(pot: number): { label: string; color: string } {
   return { label: "Honest pro ceiling", color: "text-muted-foreground" };
 }
 
+/* ─── Round 79: 2K style stat allocation + "plays like" (his ask: "pick ur
+   starting stats like on 2k and it tell u who u play like") ───
+   The roll gives you a point budget; the build screen lets you move points
+   between the stats that actually feed the engine's overall. allocOverall
+   mirrors soccerCareerEngine.calcOverall EXACTLY (same weights) and the sim
+   harness asserts they never drift apart. Type-only imports here, so the
+   mirror is duplicated on purpose like the helpers above. */
+
+export type AllocKey = "pace" | "shooting" | "passing" | "dribbling" | "defending" | "physical" | "reflexes";
+export interface AllocStats { pace: number; shooting: number; passing: number; dribbling: number; defending: number; physical: number; reflexes: number }
+export interface AllocRow { key: AllocKey; label: string }
+
+export const ALLOC_MIN = 25;
+export function allocMax(ovr: number): number { return Math.min(85, ovr + 18); }
+
+/** The stats a position can actually spend points on, with labels that say
+    what the engine key DOES for that role. GK spends on all seven (weighted
+    overall), outfielders on the six that make up their overall. */
+export function allocRowsFor(position: string): AllocRow[] {
+  if (position === "GK") return [
+    { key: "reflexes", label: "Reflexes" },
+    { key: "shooting", label: "Shot Stopping" },
+    { key: "defending", label: "Positioning" },
+    { key: "physical", label: "Aerial Command" },
+    { key: "passing", label: "Distribution" },
+    { key: "dribbling", label: "Penalty Saving" },
+    { key: "pace", label: "Sweeping Speed" },
+  ];
+  if (["CB", "LB", "RB"].includes(position)) return [
+    { key: "defending", label: "Tackling" },
+    { key: "physical", label: "Strength" },
+    { key: "pace", label: "Pace" },
+    { key: "passing", label: "Passing" },
+    { key: "shooting", label: "Heading" },
+    { key: "dribbling", label: "Ball Control" },
+  ];
+  if (["CDM", "CM", "CAM"].includes(position)) return [
+    { key: "passing", label: "Passing" },
+    { key: "dribbling", label: "Dribbling" },
+    { key: "shooting", label: "Long Shots" },
+    { key: "defending", label: "Defending" },
+    { key: "physical", label: "Stamina" },
+    { key: "pace", label: "Pace" },
+  ];
+  return [
+    { key: "shooting", label: "Finishing" },
+    { key: "pace", label: "Pace" },
+    { key: "dribbling", label: "Dribbling" },
+    { key: "passing", label: "Playmaking" },
+    { key: "defending", label: "Off The Ball" },
+    { key: "physical", label: "Strength" },
+  ];
+}
+
+/** EXACT mirror of soccerCareerEngine.calcOverall. Sim-asserted in lockstep. */
+export function allocOverall(s: AllocStats, position: string): number {
+  if (position === "GK") {
+    return Math.round(s.reflexes * 0.3 + s.defending * 0.2 + s.physical * 0.2 + s.pace * 0.1 + s.passing * 0.1 + s.dribbling * 0.05 + s.shooting * 0.05);
+  }
+  return Math.round((s.pace + s.shooting + s.passing + s.dribbling + s.defending + s.physical) / 6);
+}
+
+/** Nudge a generated stat line so allocOverall lands EXACTLY on targetOvr,
+    only touching that position's allocatable keys, respecting bounds. The
+    creation screen runs this once before opening the build editor so the
+    pool math starts clean. */
+export function normalizeAllocation(stats: AllocStats, position: string, targetOvr: number): AllocStats {
+  const s: AllocStats = { ...stats };
+  const keys = allocRowsFor(position).map(r => r.key);
+  const max = allocMax(targetOvr);
+  for (const k of keys) s[k] = clamp(s[k], ALLOC_MIN, max);
+  let guard = 0;
+  while (allocOverall(s, position) !== targetOvr && guard < 400) {
+    guard++;
+    if (allocOverall(s, position) < targetOvr) {
+      let bestK: AllocKey | null = null;
+      for (const k of keys) if (s[k] < max && (bestK === null || s[k] > s[bestK])) bestK = k;
+      if (bestK === null) break;
+      s[bestK] += 1;
+    } else {
+      let bestK: AllocKey | null = null;
+      for (const k of keys) if (s[k] > ALLOC_MIN && (bestK === null || s[k] > s[bestK])) bestK = k;
+      if (bestK === null) break;
+      s[bestK] -= 1;
+    }
+  }
+  return s;
+}
+
+/* ─── The "plays like" bank ───
+   Style SHAPES, not ratings: each vector is [pace, shooting, passing,
+   dribbling, defending, physical, reflexes] emphasis around that player's own
+   average. We compare the shape of your build to the shape of theirs, so a 52
+   overall kid can still "play like" a superstar. Names and playing styles are
+   public sporting facts; no ratings are claimed as real. */
+export interface PlaysLikeEntry { name: string; positions: string[]; shape: number[]; style: string }
+
+export const PLAYS_LIKE_BANK: PlaysLikeEntry[] = [
+  // Strikers
+  { name: "Erling Haaland", positions: ["ST"], shape: [6, 10, -4, -2, -6, 9, 0], style: "Runs in behind and finishes everything, a physical monster" },
+  { name: "Kylian Mbappé", positions: ["ST", "LW"], shape: [10, 8, 0, 7, -8, 0, 0], style: "Blistering pace, attacks space like nobody else" },
+  { name: "Harry Kane", positions: ["ST"], shape: [-4, 9, 8, 1, -5, 3, 0], style: "Drops deep, passes like a 10, finishes like a 9" },
+  { name: "Robert Lewandowski", positions: ["ST"], shape: [-2, 10, 2, 3, -6, 4, 0], style: "Pure box movement and clinical finishing" },
+  { name: "Victor Osimhen", positions: ["ST"], shape: [8, 7, -5, 0, -7, 7, 0], style: "Relentless running and a leap defenders hate" },
+  { name: "Ronaldo Nazário", positions: ["ST"], shape: [9, 9, -1, 8, -10, 1, 0], style: "90s icon, speed and skill nobody could stop" },
+  // Left wingers
+  { name: "Vinícius Júnior", positions: ["LW"], shape: [9, 4, 0, 10, -8, -2, 0], style: "Takes his man on every single time" },
+  { name: "Rafael Leão", positions: ["LW"], shape: [8, 4, -1, 8, -7, 3, 0], style: "Gliding runs that start at the halfway line" },
+  { name: "Son Heung-min", positions: ["LW", "ST"], shape: [7, 8, 1, 4, -7, -1, 0], style: "Two footed and ruthless on the break" },
+  // Right wingers
+  { name: "Lamine Yamal", positions: ["RW"], shape: [5, 5, 7, 10, -8, -5, 0], style: "Wand of a left foot, sees passes others don't" },
+  { name: "Mohamed Salah", positions: ["RW"], shape: [8, 9, 2, 5, -7, -1, 0], style: "Cuts inside and scores 25 a season" },
+  { name: "Bukayo Saka", positions: ["RW"], shape: [5, 5, 5, 6, -4, 0, 0], style: "Balanced winger with end product both ways" },
+  { name: "Jérémy Doku", positions: ["RW", "LW"], shape: [10, -2, -1, 10, -8, 0, 0], style: "Pure chaos, dribbles at fullbacks all day" },
+  // Attacking mids
+  { name: "Kevin De Bruyne", positions: ["CAM", "CM"], shape: [1, 7, 10, 3, -6, 1, 0], style: "Whips the final pass nobody else even attempts" },
+  { name: "Jude Bellingham", positions: ["CAM", "CM"], shape: [3, 6, 3, 5, 0, 7, 0], style: "Box to box force who arrives late to score" },
+  { name: "Jamal Musiala", positions: ["CAM"], shape: [4, 2, 3, 10, -6, -3, 0], style: "Wriggles through packed boxes like they are open" },
+  { name: "Martin Ødegaard", positions: ["CAM"], shape: [0, 3, 9, 6, -4, -3, 0], style: "Sets the tempo from the half spaces" },
+  { name: "Zinédine Zidane", positions: ["CAM"], shape: [0, 3, 8, 10, -4, 2, 0], style: "2000s icon, velvet touch and total control" },
+  // Central mids
+  { name: "Pedri", positions: ["CM"], shape: [0, -2, 9, 8, -2, -3, 0], style: "Never loses it, always shows for the ball" },
+  { name: "Federico Valverde", positions: ["CM"], shape: [7, 6, 2, 1, 2, 6, 0], style: "Engine of the team, thunderbolts from deep" },
+  { name: "Luka Modrić", positions: ["CM"], shape: [-2, 1, 10, 7, -1, -4, 0], style: "Dictates every rhythm of the game" },
+  { name: "Vitinha", positions: ["CM"], shape: [-1, 0, 9, 6, 0, -3, 0], style: "Press resistant metronome in tight spaces" },
+  // Defensive mids
+  { name: "Rodri", positions: ["CDM", "CM"], shape: [-3, 2, 8, 2, 6, 4, 0], style: "Controls the whole game from the base" },
+  { name: "Declan Rice", positions: ["CDM"], shape: [2, 0, 2, 0, 8, 7, 0], style: "Screens the back four then carries it forward" },
+  { name: "Aurélien Tchouaméni", positions: ["CDM"], shape: [1, 1, 2, -1, 7, 6, 0], style: "Wins duels and breaks up everything" },
+  { name: "Claude Makélélé", positions: ["CDM"], shape: [1, -6, 2, 0, 10, 3, 0], style: "2000s icon, the position is named after him" },
+  // Centre backs
+  { name: "Virgil van Dijk", positions: ["CB"], shape: [4, -2, 4, 0, 10, 8, 0], style: "Reads everything, wins everything in the air" },
+  { name: "William Saliba", positions: ["CB"], shape: [7, -5, 2, 2, 9, 4, 0], style: "Recovery pace and ice in his veins" },
+  { name: "Rúben Dias", positions: ["CB"], shape: [-1, -4, 2, -1, 10, 6, 0], style: "Organizes the line and defends the box like a wall" },
+  { name: "Paolo Maldini", positions: ["CB", "LB"], shape: [3, -4, 3, 1, 10, 3, 0], style: "90s icon, perfect positioning for 25 years" },
+  // Fullbacks
+  { name: "Trent Alexander-Arnold", positions: ["RB"], shape: [2, 2, 10, 2, -2, -2, 0], style: "Quarterback passing from right back" },
+  { name: "Achraf Hakimi", positions: ["RB"], shape: [10, 2, 1, 3, 0, 2, 0], style: "Wingback rocket, up and down all game" },
+  { name: "Cafu", positions: ["RB"], shape: [8, 0, 3, 3, 4, 4, 0], style: "90s icon who never stopped overlapping" },
+  { name: "Théo Hernandez", positions: ["LB"], shape: [9, 2, 0, 3, 1, 5, 0], style: "Charges forward like a freight train" },
+  { name: "Alphonso Davies", positions: ["LB"], shape: [10, -1, 0, 5, 1, 2, 0], style: "Fastest man on the pitch, twice a game" },
+  // Goalkeepers
+  { name: "Alisson", positions: ["GK"], shape: [2, 0, 4, 0, 6, 3, 8], style: "Complete keeper who wins the one on ones" },
+  { name: "Thibaut Courtois", positions: ["GK"], shape: [0, 0, 0, 0, 4, 7, 9], style: "Giant frame, impossible to beat at full stretch" },
+  { name: "Ederson", positions: ["GK"], shape: [3, 0, 10, 2, 1, 1, 3], style: "Plays like an eleventh outfielder" },
+  { name: "Gianluigi Donnarumma", positions: ["GK"], shape: [-1, 0, -2, 1, 3, 5, 10], style: "Pure shot stopper for the big nights" },
+  { name: "Emiliano Martínez", positions: ["GK"], shape: [0, 0, 1, 9, 3, 3, 6], style: "Penalty specialist who lives for the shootout" },
+  { name: "Gianluigi Buffon", positions: ["GK"], shape: [0, 0, 1, 2, 7, 3, 9], style: "2000s icon, two decades of world class" },
+];
+
+/** Compare the SHAPE of a build to the bank and return the closest match.
+    Cosine similarity over mean-centered vectors, position filtered. A
+    perfectly flat build has no shape, which gets its own honest answer. */
+export function playsLike(stats: AllocStats, position: string): { name: string; pct: number; style: string } {
+  const pool = PLAYS_LIKE_BANK.filter(e => e.positions.includes(position));
+  const keys: AllocKey[] = position === "GK"
+    ? ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"]
+    : ["pace", "shooting", "passing", "dribbling", "defending", "physical"];
+  const idxOf: Record<AllocKey, number> = { pace: 0, shooting: 1, passing: 2, dribbling: 3, defending: 4, physical: 5, reflexes: 6 };
+  const mine = keys.map(k => stats[k]);
+  const myMean = mine.reduce((a, b) => a + b, 0) / keys.length;
+  const myVec = mine.map(v => v - myMean);
+  const myMag = Math.sqrt(myVec.reduce((a, b) => a + b * b, 0));
+  if (myMag < 0.9 || pool.length === 0) {
+    return { name: "Nobody, honestly", pct: 0, style: "A perfectly flat build. Scouts have no comparison for you" };
+  }
+  let best = pool[0]; let bestCos = -2;
+  for (const e of pool) {
+    const theirs = keys.map(k => e.shape[idxOf[k]]);
+    const thMean = theirs.reduce((a, b) => a + b, 0) / keys.length;
+    const thVec = theirs.map(v => v - thMean);
+    const thMag = Math.sqrt(thVec.reduce((a, b) => a + b * b, 0));
+    if (thMag < 1e-6) continue;
+    let dot = 0;
+    for (let i = 0; i < keys.length; i++) dot += myVec[i] * thVec[i];
+    const cos = dot / (myMag * thMag);
+    if (cos > bestCos) { bestCos = cos; best = e; }
+  }
+  const pct = clamp(Math.round(bestCos * 100), 5, 98);
+  return { name: best.name, pct, style: best.style };
+}
+
 /* ─── Expanded life-event catalog (ids 41+) ───
    Same RandomEvent shape as the engine's built-in events; getExtraEvents
    returns only the events currently eligible for this player. Everything
