@@ -6,8 +6,9 @@ import {
   buildMarket, buyPlayer, sellPlayer, autoPickXI, nextFixture, sortedTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
   startNegotiation, makeOffer, walkAway, payClause, loanIn, acceptBid, rejectBid,
-  answerMessage,
+  answerMessage, setTransferStatus, loanOutPlayer,
 } from '@/lib/clubManager';
+import type { TransferStatus } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow } from '@/lib/clubManager';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'matchResult' | 'seasonEnd' | 'sacked';
@@ -252,6 +253,15 @@ export function useClubManager() {
     setCareer(prev => (prev ? rejectBid(prev, playerId) : prev));
   }, []);
 
+  /* ---------- Round 94: transfer list, loan list, block ---------- */
+  const setStatus = useCallback((playerId: string, status: TransferStatus | null) => {
+    setCareer(prev => (prev ? setTransferStatus(prev, playerId, status) : prev));
+  }, []);
+
+  const loanOut = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? loanOutPlayer(prev, playerId) ?? prev : prev));
+  }, []);
+
   /* ---------- Round 73: the inbox ---------- */
   const answer = useCallback((messageId: string, optionIdx: number) => {
     setCareer(prev => (prev ? answerMessage(prev, messageId, optionIdx) : prev));
@@ -267,6 +277,7 @@ export function useClubManager() {
     buy, sell,
     negotiate, offer, walk, dismissNegotiation, clause, loan,
     acceptIncomingBid, rejectIncomingBid,
+    setStatus, loanOut,
     answer,
   };
 }

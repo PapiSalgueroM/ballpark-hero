@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
-import { money, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans } from '@/lib/clubManager';
-import type { CareerState, CMPlayer, MarketPlayer } from '@/lib/clubManager';
+import { money, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad } from '@/lib/clubManager';
+import type { CareerState, CMPlayer, MarketPlayer, TransferStatus } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import { ratingTint } from '@/components/club-manager/SquadScreen';
 
@@ -29,13 +29,35 @@ interface TransferScreenProps {
   onLoan: (mp: MarketPlayer) => void;
   onAcceptBid: (playerId: string) => void;
   onRejectBid: (playerId: string) => void;
+  /* Round 94: the FIFA controls. */
+  onSetStatus: (playerId: string, status: TransferStatus | null) => void;
+  onLoanOut: (playerId: string) => void;
 }
+
+/** Round 94: the three things you can tell the world about a player. */
+const STATUS_META: Record<TransferStatus, { short: string; tint: string; blurb: string }> = {
+  listed: {
+    short: 'Listed',
+    tint: 'bg-gold text-background border-gold',
+    blurb: 'Clubs will come in for him, but they know you want him gone.',
+  },
+  loanListed: {
+    short: 'Loan',
+    tint: 'bg-sky-500 text-white border-sky-500',
+    blurb: 'Available on loan. He plays elsewhere all season and comes back better.',
+  },
+  blocked: {
+    short: 'Blocked',
+    tint: 'bg-red-600 text-white border-red-600',
+    blurb: 'Not for sale. No bid will ever reach your desk.',
+  },
+};
 
 /** Buy/sell/news hub, shown inside the transfers tab. */
 export function TransferScreen({
   career, market, onSell,
   onNegotiate, onOffer, onWalk, onDismissNegotiation, onClause, onLoan,
-  onAcceptBid, onRejectBid,
+  onAcceptBid, onRejectBid, onSetStatus, onLoanOut,
 }: TransferScreenProps) {
   const [filter, setFilter] = useState<PosFilter>('ALL');
   const [query, setQuery] = useState('');
@@ -66,10 +88,9 @@ export function TransferScreen({
     return items.slice(0, 50);
   }, [log, newsSort]);
 
-  const gkCount = career.squad.filter(p => p.position === 'GK').length;
-  const canSell = (p: CMPlayer) =>
-    windowOpen && career.squad.length > 14 && !(p.position === 'GK' && gkCount <= 1);
+  const canSell = (p: CMPlayer) => windowOpen && canLeaveSquad(career, p);
   const loansUsed = activeLoans(career);
+  const out = career.loanedOut ?? [];
 
   const offerBtn = (label: string, amount: number, tone: 'safe' | 'risky' | 'close' = 'safe') => (
     <button
@@ -309,9 +330,23 @@ export function TransferScreen({
                 const blocked = !p || !canSell(p);
                 return (
                   <div key={b.playerId} className="flex items-center gap-2">
-                    <div className="flex-1 min-w-0 text-xs text-foreground truncate">
-                      <span className="font-bold">{b.club}</span> bid <span className="font-bold text-gold">{money(b.offer)}</span> for {b.playerName}
-                      {b.status === 'improved' && <span className="text-[9px] text-emerald-400 ml-1">(improved, final)</span>}
+                    <div className="flex-1 min-w-0 text-xs text-foreground">
+                      <div className="truncate">
+                        <span className="font-bold">{b.club}</span>
+                        {b.loan ? ' want ' : ' bid '}
+                        <span className="font-bold text-gold">{money(b.offer)}</span>
+                        {b.loan ? ' to take ' : ' for '}{b.playerName}
+                        {b.loan && <span className="text-[9px] text-sky-400 ml-1">(season loan)</span>}
+                        {b.status === 'improved' && <span className="text-[9px] text-emerald-400 ml-1">(improved, final)</span>}
+                      </div>
+                      {b.rival && (
+                        <div className="text-[9px] text-emerald-400 truncate">
+                          {b.rival} are in the race too, which is why the number is that high.
+                        </div>
+                      )}
+                      {b.fromListing && !b.rival && (
+                        <div className="text-[9px] text-muted-foreground truncate">They know he is listed, so this is a market price.</div>
+                      )}
                     </div>
                     <button
                       onClick={() => onAcceptBid(b.playerId)}
@@ -335,30 +370,95 @@ export function TransferScreen({
             </div>
           )}
 
-          {windowOpen ? (
-            <div className="bg-card border border-border rounded-xl p-2 max-h-96 overflow-y-auto">
-              {sellable.map(p => (
-                <div key={p.id} className="flex items-center gap-2 py-1.5 border-b border-border/30 last:border-0">
-                  <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{p.position}</span>
-                  <div className="flex-1 min-w-0">
-                    <div className={cn('text-xs truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>
-                      {p.name}{p.onLoan && <span className="text-[9px] text-muted-foreground ml-1">(on loan)</span>}
-                    </div>
-                    <div className="text-[9px] text-muted-foreground">{p.age}y · {p.seasonGoals}g {p.seasonAssists}a</div>
-                  </div>
-                  <span className={cn('text-sm font-bold font-display', ratingTint(p.rating))}>{p.rating}</span>
-                  <button
-                    onClick={() => onSell(p.id)}
-                    disabled={!canSell(p) || !!p.onLoan}
-                    className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all min-w-[64px]',
-                      canSell(p) && !p.onLoan ? 'bg-destructive text-destructive-foreground hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
-                  >
-                    +{money(sellValue(p))}
-                  </button>
+          {/* Round 94: who is currently out on loan */}
+          {out.length > 0 && (
+            <div className="bg-card border border-sky-500/30 rounded-xl p-3 space-y-1">
+              <div className="text-[10px] text-sky-400 uppercase tracking-wider font-bold">🔄 Out on loan</div>
+              {out.map(l => (
+                <div key={l.player.id} className="flex items-center gap-2 text-xs">
+                  <span className="flex-1 min-w-0 truncate text-foreground">
+                    <span className="font-bold">{l.player.name}</span>
+                    <span className="text-muted-foreground"> at {l.club}</span>
+                  </span>
+                  <span className={cn('font-bold font-display', ratingTint(l.player.rating))}>{l.player.rating}</span>
                 </div>
               ))}
+              <p className="text-[9px] text-muted-foreground">
+                Back in the summer. Under 25s come home with a rating bump from playing every week.
+              </p>
+            </div>
+          )}
+
+          {windowOpen ? (
+            <div className="bg-card border border-border rounded-xl p-2 max-h-[28rem] overflow-y-auto">
+              <p className="text-[9px] text-muted-foreground px-1 pb-1.5 border-b border-border/40">
+                Sell cashes out now at 90 percent of his value. Listing him takes longer but the market
+                decides the fee, and a bidding war beats any instant sale.
+              </p>
+              {sellable.map(p => {
+                const st = p.transferStatus;
+                const free = canSell(p);
+                const pill = (key: TransferStatus, label: string) => (
+                  <button
+                    key={key}
+                    onClick={() => onSetStatus(p.id, st === key ? null : key)}
+                    disabled={!!p.onLoan}
+                    title={STATUS_META[key].blurb}
+                    className={cn(
+                      'px-2 py-1 rounded-md text-[9px] font-bold border transition-all',
+                      p.onLoan ? 'bg-secondary border-border text-muted-foreground cursor-not-allowed'
+                        : st === key ? STATUS_META[key].tint
+                        : 'bg-card border-border text-muted-foreground hover:border-primary',
+                    )}
+                  >
+                    {label}
+                  </button>
+                );
+                return (
+                  <div key={p.id} className="py-2 border-b border-border/30 last:border-0">
+                    <div className="flex items-center gap-2">
+                      <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{p.position}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className={cn('text-xs truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>
+                          {p.name}
+                          {p.onLoan && <span className="text-[9px] text-muted-foreground ml-1">(borrowed)</span>}
+                          {st && <span className={cn('text-[8px] font-bold rounded px-1 ml-1 border', STATUS_META[st].tint)}>{STATUS_META[st].short}</span>}
+                        </div>
+                        <div className="text-[9px] text-muted-foreground">
+                          {p.age}y · {p.seasonGoals}g {p.seasonAssists}a · worth {money(sellValue(p))}
+                        </div>
+                      </div>
+                      <span className={cn('text-sm font-bold font-display', ratingTint(p.rating))}>{p.rating}</span>
+                      <button
+                        onClick={() => onSell(p.id)}
+                        disabled={!free}
+                        title={free ? 'Cash out now' : 'Squad rules block this right now'}
+                        className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all min-w-[62px]',
+                          free ? 'bg-destructive text-destructive-foreground hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
+                      >
+                        Sell
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-1 mt-1.5 pl-11 flex-wrap">
+                      {pill('listed', 'Transfer list')}
+                      {pill('loanListed', 'Loan list')}
+                      {pill('blocked', 'Not for sale')}
+                      <button
+                        onClick={() => onLoanOut(p.id)}
+                        disabled={!free}
+                        title={free ? 'Send him out on loan for the rest of the season' : 'Squad rules block this right now'}
+                        className={cn('px-2 py-1 rounded-md text-[9px] font-bold border transition-all',
+                          free ? 'bg-card border-sky-500/50 text-sky-400 hover:border-sky-400'
+                            : 'bg-secondary border-border text-muted-foreground cursor-not-allowed')}
+                      >
+                        Loan out now +{money(loanOutFee(p))}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
               {career.squad.length <= 14 && (
-                <p className="text-[10px] text-yellow-400 px-1 py-2">Squad at minimum size (14). You can't sell anyone else.</p>
+                <p className="text-[10px] text-yellow-400 px-1 py-2">Squad at minimum size (14). Nobody else can leave.</p>
               )}
             </div>
           ) : (

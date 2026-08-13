@@ -37,6 +37,28 @@ export { FORMATIONS };
 export type { Formation };
 export { CM_ROSTER_META, CM_ROSTERS, CM_PARTIAL };
 
+/**
+ * Round 94: what you have told the world about a player.
+ *  - listed:     up for sale, so clubs actually come in, but they know you
+ *                want him gone and they bid accordingly.
+ *  - loanListed: available on loan, he leaves for the season and comes back
+ *                developed.
+ *  - blocked:    not for sale at any price. No bid ever lands.
+ * Undefined means the normal state: nobody knows anything, so only a
+ * speculative bid for a genuine star will ever arrive.
+ */
+export type TransferStatus = 'listed' | 'loanListed' | 'blocked';
+
+/** Round 94: one of my players out on loan, home at the end of the season. */
+export interface LoanOut {
+  player: CMPlayer;
+  /** Where he is playing. */
+  club: string;
+  /** Loan fee banked when he left. */
+  fee: number;
+  season: number;
+}
+
 export interface CMPlayer {
   id: string;
   name: string;
@@ -58,6 +80,8 @@ export interface CMPlayer {
   value?: number;
   /** Round 71: loan signings go home at the end of the season. */
   onLoan?: boolean;
+  /** Round 94: how this player is being handled in the market. */
+  transferStatus?: TransferStatus;
   /** Round 73: full per-season stat line. */
   apps?: number;
   seasonYellows?: number;
@@ -172,6 +196,12 @@ export interface IncomingBid {
   offer: number;
   /** 'improved' means they came back once with a higher number. */
   status: 'open' | 'improved';
+  /** Round 94: a season-long loan approach rather than a permanent bid. */
+  loan?: boolean;
+  /** Round 94: a second club in the race, which is what pushed the fee up. */
+  rival?: string;
+  /** Round 94: they came because you listed him, not out of the blue. */
+  fromListing?: boolean;
 }
 
 /** A line in the Latest Transfers feed. */
@@ -322,6 +352,8 @@ export interface CareerState {
   negotiation?: Negotiation | null;
   /** Round 71: AI clubs bidding for my players this window. */
   incomingBids?: IncomingBid[];
+  /** Round 94: my players out on loan, returning at the end of the season. */
+  loanedOut?: LoanOut[];
   /** Round 71: sellers who walked away from me this window. */
   coldNames?: string[];
   /** Round 71: the Latest Transfers feed, newest last, capped at 80. */
@@ -1545,11 +1577,15 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
   const bid = bids.find(b => b.playerId === playerId);
   if (!bid) return null;
   if (career.transferWindow === null) return null;
-  if (career.squad.length <= 14) return null;
   const p = career.squad.find(x => x.id === playerId);
   if (!p) return null;
-  const gkCount = career.squad.filter(x => x.position === 'GK').length;
-  if (p.position === 'GK' && gkCount <= 1) return null;
+  if (!canLeaveSquad(career, p)) return null;
+  // Round 94: a loan approach sends him out for the season instead of selling.
+  if (bid.loan) {
+    const loaned = loanOutPlayer(career, playerId, bid.club);
+    if (!loaned) return null;
+    return { ...loaned, incomingBids: bids.filter(b => b.playerId !== playerId) };
+  }
   const state: CareerState = {
     ...career,
     budget: Math.round((career.budget + bid.offer) * 10) / 10,
@@ -1565,7 +1601,11 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
   return state;
 }
 
-/** Reject a bid: half the time they come back once with ~15% more. */
+/**
+ * Reject a bid: half the time they come back once with ~15% more.
+ * Round 94: turning down a bid for a player you yourself listed is the worst
+ * of both worlds, and he takes it personally.
+ */
 export function rejectBid(career: CareerState, playerId: string): CareerState {
   const bids = career.incomingBids ?? [];
   const bid = bids.find(b => b.playerId === playerId);
@@ -1578,23 +1618,190 @@ export function rejectBid(career: CareerState, playerId: string): CareerState {
     };
     return { ...career, incomingBids: bids.map(b => (b.playerId === playerId ? improved : b)) };
   }
-  // Final rejection: the player wanted the move 40% of the time.
-  const squad = Math.random() < 0.4
-    ? career.squad.map(p => (p.id === playerId ? { ...p, morale: clamp(p.morale - 7, 5, 99) } : p))
+  const target = career.squad.find(p => p.id === playerId);
+  const listed = target?.transferStatus === 'listed' || target?.transferStatus === 'loanListed';
+  // Final rejection: the player wanted the move 40% of the time, and always
+  // if you had already told him he was available.
+  const sulks = listed || Math.random() < 0.4;
+  const squad = sulks
+    ? career.squad.map(p => (p.id === playerId ? { ...p, morale: clamp(p.morale - (listed ? 12 : 7), 5, 99) } : p))
     : career.squad;
   return { ...career, squad, incomingBids: bids.filter(b => b.playerId !== playerId) };
 }
 
-/** 0-2 AI bids for my most wanted players, rolled when a window opens. */
+/* ---------- Round 94: transfer status, the FIFA controls ---------- */
+
+/** Every club that could plausibly come in for one of my players. */
+function buyerPool(state: CareerState): string[] {
+  return REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 8).map(c => c.name))
+    .filter(n => n !== state.clubName);
+}
+
+/**
+ * Tell the world what you are doing with a player. Pass null to take the
+ * label back off.
+ *
+ * There is a cost either way, which is the whole point of the feature:
+ * shopping a settled star wounds him, and slamming the door on a player who
+ * already wants out makes it worse, not better.
+ */
+export function setTransferStatus(
+  career: CareerState,
+  playerId: string,
+  status: TransferStatus | null,
+): CareerState {
+  const p = career.squad.find(x => x.id === playerId);
+  if (!p) return career;
+  if (p.onLoan) return career;            // he is not ours to shop
+  if ((p.transferStatus ?? null) === status) return career;
+
+  let moraleHit = 0;
+  if (status === 'listed' && p.morale >= 70 && p.rating >= 74) moraleHit = 8;
+  else if (status === 'loanListed' && p.age >= 26 && p.morale >= 70) moraleHit = 5;
+  else if (status === 'blocked' && p.morale < 50) moraleHit = 6;
+
+  const squad = career.squad.map(x => (
+    x.id === playerId
+      ? { ...x, transferStatus: status ?? undefined, morale: clamp(x.morale - moraleHit, 5, 99) }
+      : x
+  ));
+  // Blocking him kills any bid already on the table.
+  const bids = status === 'blocked'
+    ? (career.incomingBids ?? []).filter(b => b.playerId !== playerId)
+    : (career.incomingBids ?? []);
+  return { ...career, squad, incomingBids: bids };
+}
+
+/** What a rival pays to borrow him for the season. */
+export function loanOutFee(p: CMPlayer): number {
+  return Math.max(0.2, Math.round(sellValue(p) * 0.08 * 10) / 10);
+}
+
+/**
+ * Squad rules: you cannot strip yourself below a playable team. Shared by
+ * selling, accepting a bid and loaning out, so all three agree.
+ */
+export function canLeaveSquad(career: CareerState, p: CMPlayer): boolean {
+  if (career.squad.length <= 14) return false;
+  if (p.onLoan) return false;             // he belongs to someone else
+  if (p.position === 'GK' && career.squad.filter(x => x.position === 'GK').length <= 1) return false;
+  return true;
+}
+
+/**
+ * Send a player out on loan for the rest of the season. He leaves the squad,
+ * you bank a small fee, and he comes back at the end of the season with
+ * game time behind him, which for a young player is worth far more than the
+ * fee (see returnLoanedPlayers).
+ */
+export function loanOutPlayer(career: CareerState, playerId: string, toClub?: string): CareerState | null {
+  if (career.transferWindow === null) return null;
+  const p = career.squad.find(x => x.id === playerId);
+  if (!p || !canLeaveSquad(career, p)) return null;
+  const pool = buyerPool(career);
+  const club = toClub && toClub !== career.clubName ? toClub : pick(pool);
+  const fee = loanOutFee(p);
+  const state: CareerState = {
+    ...career,
+    budget: Math.round((career.budget + fee) * 10) / 10,
+    squad: career.squad.filter(x => x.id !== playerId),
+    xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
+    seasonSignings: [...career.seasonSignings, { dir: 'out', name: p.name, fee, loan: true }],
+    incomingBids: (career.incomingBids ?? []).filter(b => b.playerId !== playerId),
+    loanedOut: [...(career.loanedOut ?? []), { player: { ...p, transferStatus: undefined }, club, fee, season: career.season }],
+    careerStats: { ...career.careerStats },
+    transferLog: [...(career.transferLog ?? [])],
+  };
+  pushNews(state, { name: p.name, from: career.clubName, to: club, fee, loan: true });
+  return state;
+}
+
+/**
+ * Round 94: bring the loans home. A season of real football is the single
+ * best thing that can happen to a young player, and the game should say so.
+ */
+function returnLoanedPlayers(career: CareerState): CMPlayer[] {
+  const out: CMPlayer[] = [];
+  for (const l of career.loanedOut ?? []) {
+    const p = l.player;
+    const bump =
+      p.age <= 21 ? ri(2, 4) :
+      p.age <= 24 ? ri(1, 3) :
+      p.age <= 28 ? ri(0, 1) : 0;
+    let value = p.value;
+    if (value !== undefined && bump > 0) {
+      value = Math.max(0.2, Math.round(value * Math.pow(1.2, bump) * 10) / 10);
+    }
+    out.push({
+      ...p,
+      rating: clamp(p.rating + bump, 40, 95),
+      value,
+      morale: 76,
+      transferStatus: undefined,
+      onLoan: undefined,
+    });
+  }
+  return out;
+}
+
+/**
+ * Round 94: the market reacts to what you have told it.
+ *  - a blocked player never gets a bid, full stop
+ *  - a listed player almost always gets one, sometimes two clubs at once,
+ *    but they know you want him gone so the money is closer to his real
+ *    value than the fantasy number a speculative bidder has to wave
+ *  - a loan-listed player gets loan approaches instead
+ *  - and a genuine star can still be approached out of the blue, exactly
+ *    as before, at a price that has to tempt you
+ */
 function generateIncomingBids(state: CareerState): void {
   const bids: IncomingBid[] = [];
-  const targets = state.squad
-    .filter(p => !p.isYouth && !p.onLoan && p.rating >= 74)
+  const buyers = buyerPool(state);
+  const taken = new Set<string>();
+  const available = state.squad.filter(p => !p.onLoan && p.transferStatus !== 'blocked');
+
+  // 1. Listed players: the phone actually rings.
+  for (const p of available.filter(x => x.transferStatus === 'listed')) {
+    if (Math.random() > 0.85) continue;
+    const base = sellValue(p);
+    const pool = buyers.filter(n => n !== state.clubName);
+    const club = pick(pool);
+    const contested = Math.random() < 0.3;
+    const rival = contested ? pick(pool.filter(n => n !== club)) : undefined;
+    const mult = contested ? 1.05 + Math.random() * 0.3 : 0.85 + Math.random() * 0.3;
+    bids.push({
+      playerId: p.id,
+      playerName: p.name,
+      club,
+      offer: Math.max(0.3, Math.round(base * mult * 10) / 10),
+      status: 'open',
+      rival,
+      fromListing: true,
+    });
+    taken.add(p.id);
+  }
+
+  // 2. Loan-listed players: someone will take him for the season.
+  for (const p of available.filter(x => x.transferStatus === 'loanListed')) {
+    if (Math.random() > 0.8) continue;
+    bids.push({
+      playerId: p.id,
+      playerName: p.name,
+      club: pick(buyers),
+      offer: loanOutFee(p),
+      status: 'open',
+      loan: true,
+      fromListing: true,
+    });
+    taken.add(p.id);
+  }
+
+  // 3. Out of the blue, for the players everyone can see are good.
+  const targets = available
+    .filter(p => !taken.has(p.id) && !p.isYouth && !p.transferStatus && p.rating >= 74)
     .sort((a, b) => (b.value ?? 0) - (a.value ?? 0))
     .slice(0, 8);
   const count = Math.random() < 0.45 ? 0 : ri(1, 2);
-  const buyers = REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 7).map(c => c.name))
-    .filter(n => n !== state.clubName);
   for (const p of shuffle(targets).slice(0, count)) {
     const base = sellValue(p);
     bids.push({
@@ -1611,11 +1818,9 @@ function generateIncomingBids(state: CareerState): void {
 /** Returns the new state, or null if the sale is not allowed. */
 export function sellPlayer(career: CareerState, playerId: string): CareerState | null {
   if (career.transferWindow === null) return null;
-  if (career.squad.length <= 14) return null;
   const p = career.squad.find(x => x.id === playerId);
   if (!p) return null;
-  const gkCount = career.squad.filter(x => x.position === 'GK').length;
-  if (p.position === 'GK' && gkCount <= 1) return null;
+  if (!canLeaveSquad(career, p)) return null;
   const fee = sellValue(p);
   return {
     ...career,
@@ -2622,6 +2827,7 @@ export function startCareer(clubName: string): CareerState {
     negotiation: null,
     incomingBids: [],
     coldNames: [],
+    loanedOut: [],
     transferLog: [],
     resultLog: [],
     inbox: [],
@@ -2871,10 +3077,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   let squad: CMPlayer[];
   // Round 71: loan players go back to their parent clubs at season's end.
   const afterLoans = career.squad.filter(p => !p.onLoan);
+  // Round 94: and MY loanees come home, with a season of football in them.
+  const homeFromLoan = returnLoanedPlayers(career);
   if (moving) {
     squad = buildSquad(clubName);
   } else {
-    squad = afterLoans.map(agePlayer).filter(p => p.age < 38 || p.rating >= 70);
+    squad = [...afterLoans, ...homeFromLoan].map(agePlayer).filter(p => p.age < 38 || p.rating >= 70);
     const intake = ri(2, 3);
     for (let i = 0; i < intake; i++) {
       squad.push(makeYouth(pick([...POS_DEF, ...POS_MID, ...POS_ATT, 'GK' as Position])));
@@ -2920,6 +3128,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     negotiation: null,
     incomingBids: [],
     coldNames: [],
+    loanedOut: [],
     resultLog: [],
     inbox: [],
     promisedStarts: [],
