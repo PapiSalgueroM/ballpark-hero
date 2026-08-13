@@ -105,8 +105,14 @@ for (const name of allClubNames) {
   const realCount = s.squad.filter(p => !p.isYouth).length;
   // Partial-data clubs are youth padded by design and labeled in the UI.
   if (realCount < 7 && !cm.isPartialClub(name)) fail(`${name}: only ${realCount} real players and not flagged partial`);
+  // Round 102: the cup draws from the whole COUNTRY, not just my division,
+  // so an English club can and should be drawn against a Championship side.
   const cup = s.cupDraw.R16;
-  if (!cup || !leagueOf(name).clubs.includes(cup)) fail(`${name}: cup R16 draw "${cup}" not a league club`);
+  const myLeagueId = leagueOf(name).id;
+  const nation = cm.NATIONS.find(n => n.leagueIds.includes(myLeagueId));
+  const countryClubs = new Set((nation ? nation.leagueIds : [myLeagueId]).flatMap(id => cm.playableClubs(id).map(c => c.name)));
+  if (!cup || !countryClubs.has(cup)) fail(`${name}: cup R16 draw "${cup}" is not a club from this country`);
+  if (cup === name) fail(`${name}: drawn against itself in the cup`);
   for (const p of s.squad) {
     if (!isNum(p.rating) || p.rating < 40 || p.rating > 95) fail(`${name}: ${p.name} rating ${p.rating}`);
     if (p.value !== undefined && (!isNum(p.value) || p.value <= 0)) fail(`${name}: ${p.name} value ${p.value}`);

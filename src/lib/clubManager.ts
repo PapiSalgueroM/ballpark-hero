@@ -49,7 +49,27 @@ export { CM_ROSTER_META, CM_ROSTERS, CM_PARTIAL };
  */
 export type TransferStatus = 'listed' | 'loanListed' | 'blocked';
 
-/** Round 94: one of my players out on loan, home at the end of the season. */
+/**
+ * Round 102: one tie in the domestic cup bracket. Sixteen clubs from the
+ * WHOLE country, so in England the Championship is in it and a second tier
+ * side can knock a giant out, which is the entire point of a cup.
+ */
+export interface CupTie {
+  round: CupRound;
+  slot: number;
+  home: string;
+  away: string;
+  homeGoals: number | null;
+  awayGoals: number | null;
+  winner: string | null;
+  mine: boolean;
+  /** Level after 90, settled on penalties. */
+  pens?: boolean;
+  /** A club from a lower division put a bigger one out. */
+  upset?: boolean;
+}
+
+/** Round 95: one of my players out on loan, home at the end of the season. */
 export interface LoanOut {
   player: CMPlayer;
   /** Where he is playing. */
@@ -390,6 +410,8 @@ export interface CareerState {
   world?: Record<string, WorldLeague>;
   /** Round 95: the full Champions League knockout bracket. */
   uclBracket?: UclTie[];
+  /** Round 102: the domestic cup as a real sixteen club bracket. */
+  cupBracket?: CupTie[];
   /** Round 71: sellers who walked away from me this window. */
   coldNames?: string[];
   /** Round 71: the Latest Transfers feed, newest last, capped at 80. */
@@ -2179,6 +2201,120 @@ function drawCupOpponent(state: CareerState): string {
   return pick(others);
 }
 
+/* ---------- Round 102: the domestic cup is a real tournament ---------- */
+
+/** Which league tiers of this country the cup draws from. */
+function cupCountryClubs(state: CareerState): ClubDef[] {
+  const myLeague = leagueOf(state.clubName);
+  const nation = NATIONS.find(n => n.leagueIds.includes(myLeague.id));
+  const ids = nation ? nation.leagueIds : [myLeague.id];
+  return ids.flatMap(id => playableClubs(id));
+}
+
+/**
+ * Sixteen clubs, my own plus fifteen more from the whole country. The field
+ * is weighted toward the top flight the way a real cup is by the time it
+ * reaches the last sixteen, but a couple of lower division sides get in,
+ * because a cup with nobody to knock over is just another league.
+ */
+function buildCupBracket(state: CareerState): CupTie[] {
+  const all = cupCountryClubs(state).filter(c => c.name !== state.clubName);
+  const myLeagueNames = new Set(leagueOf(state.clubName).clubs);
+  const top = shuffle(all.filter(c => myLeagueNames.has(c.name)));
+  const lower = shuffle(all.filter(c => !myLeagueNames.has(c.name)));
+  const field = [state.clubName];
+  // Two or three from outside my division when the country has one.
+  const lowerCount = lower.length ? ri(2, 3) : 0;
+  for (const c of lower.slice(0, lowerCount)) field.push(c.name);
+  for (const c of top) {
+    if (field.length >= 16) break;
+    field.push(c.name);
+  }
+  // Thin country: fall back to anyone left rather than a short bracket.
+  for (const c of [...lower.slice(lowerCount), ...all]) {
+    if (field.length >= 16) break;
+    if (!field.includes(c.name)) field.push(c.name);
+  }
+  const rest = shuffle(field.slice(1));
+  const ordered = [state.clubName, ...rest];
+  const ties: CupTie[] = [];
+  for (let i = 0; i < 8 && i * 2 + 1 < ordered.length; i++) {
+    const home = ordered[i * 2];
+    const away = ordered[i * 2 + 1];
+    ties.push({
+      round: 'R16', slot: i, home, away,
+      homeGoals: null, awayGoals: null, winner: null,
+      mine: home === state.clubName || away === state.clubName,
+    });
+  }
+  return ties;
+}
+
+/** True when the winner came from a lower division than the loser. */
+function isCupUpset(state: CareerState, winner: string, loser: string): boolean {
+  const top = new Set(leagueOf(state.clubName).clubs);
+  const w = clubByName(winner);
+  const l = clubByName(loser);
+  if (!w || !l) return false;
+  if (top.has(loser) && !top.has(winner)) return true;
+  return w.tier - l.tier >= 2;
+}
+
+/** Play out everyone else's ties in a round, then seed the next one. */
+function advanceCupBracket(state: CareerState, round: CupRound): void {
+  const bracket = state.cupBracket;
+  if (!bracket) return;
+  for (const t of bracket) {
+    if (t.round !== round || t.winner || t.mine) continue;
+    const [hg, ag] = simAiMatch(state, t.home, t.away);
+    t.homeGoals = hg;
+    t.awayGoals = ag;
+    if (hg === ag) {
+      t.pens = true;
+      t.winner = Math.random() < 0.5 ? t.home : t.away;
+    } else {
+      t.winner = hg > ag ? t.home : t.away;
+    }
+    const loser = t.winner === t.home ? t.away : t.home;
+    if (isCupUpset(state, t.winner, loser)) t.upset = true;
+  }
+  const next: CupRound | null = round === 'R16' ? 'QF' : round === 'QF' ? 'SF' : round === 'SF' ? 'F' : null;
+  if (!next) return;
+  if (bracket.some(t => t.round === next)) return;
+  const thisRound = bracket.filter(t => t.round === round).sort((a, b) => a.slot - b.slot);
+  if (thisRound.some(t => !t.winner)) return;   // my tie is settled by my match
+  const winners = thisRound.map(t => t.winner).filter((w): w is string => !!w);
+  for (let i = 0; i * 2 + 1 < winners.length; i++) {
+    const home = winners[i * 2];
+    const away = winners[i * 2 + 1];
+    bracket.push({
+      round: next, slot: i, home, away,
+      homeGoals: null, awayGoals: null, winner: null,
+      mine: home === state.clubName || away === state.clubName,
+    });
+  }
+}
+
+/** Who the bracket says I face in a cup round. */
+function myCupOpponent(state: CareerState, round: CupRound): string | null {
+  const tie = state.cupBracket?.find(t => t.round === round && t.mine);
+  if (!tie) return null;
+  return tie.home === state.clubName ? tie.away : tie.home;
+}
+
+/** Write MY result into the cup bracket. */
+function recordMyCupTie(state: CareerState, round: CupRound, opponent: string, myGoals: number, oppGoals: number, iWon: boolean): void {
+  const tie = state.cupBracket?.find(t => t.round === round && t.mine);
+  if (!tie) return;
+  const iAmHome = tie.home === state.clubName;
+  tie.homeGoals = iAmHome ? myGoals : oppGoals;
+  tie.awayGoals = iAmHome ? oppGoals : myGoals;
+  if (myGoals === oppGoals) tie.pens = true;
+  tie.winner = iWon ? state.clubName : opponent;
+  const loser = iWon ? opponent : state.clubName;
+  if (isCupUpset(state, tie.winner, loser)) tie.upset = true;
+}
+
 function drawUclKoOpponent(state: CareerState): string {
   const already = new Set<string>([
     state.clubName,
@@ -2799,6 +2935,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
   }
 
   if (fx.competition === 'cup') {
+    const cupR = entry.cupRound ?? 'R16';
+    // Round 102: my result goes into the bracket and the rest of the round
+    // is played out, so the cup is a tournament you can actually follow.
+    recordMyCupTie(state, cupR, fx.opponent, myGoals, oppGoals, advanced);
+    advanceCupBracket(state, cupR);
     if (advanced) {
       const i = CUP_ORDER.indexOf(entry.cupRound!);
       if (entry.cupRound === 'F') {
@@ -2811,7 +2952,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
       } else {
         const next = CUP_ORDER[i + 1];
         state.cupRound = next;
-        state.cupDraw[next] = drawCupOpponent(state);
+        state.cupDraw[next] = myCupOpponent(state, next) ?? drawCupOpponent(state);
         events.push(`🎟️ Into the cup ${CUP_LABELS[next].toLowerCase()}, drawn against ${state.cupDraw[next]}.`);
         confDelta += 2;
       }
@@ -3055,6 +3196,7 @@ export function startCareer(clubName: string): CareerState {
     uclKoRound: null,
     uclDraw: {},
     uclBracket: undefined,
+    cupBracket: undefined,
     world: initWorld(club.name),
     trophies: [],
     history: [],
@@ -3073,7 +3215,8 @@ export function startCareer(clubName: string): CareerState {
     promisedStarts: [],
   };
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length);
-  state.cupDraw.R16 = drawCupOpponent(state);
+  state.cupBracket = buildCupBracket(state);
+  state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex]);
   generateHeadlines(state);
   return state;
@@ -3113,6 +3256,10 @@ export function playNextEntry(career: CareerState): PlayResult {
       // Round 95: the Champions League runs whether or not I am still in it.
       if (entry.type === 'uclKo' && entry.uclRound && state.uclBracket) {
         advanceUclBracket(state, entry.uclRound);
+      }
+      // Round 102: and so does the cup.
+      if (entry.type === 'cup' && entry.cupRound && state.cupBracket) {
+        advanceCupBracket(state, entry.cupRound);
       }
       state.week += 1;
       tickWeek(state, null);
@@ -3374,6 +3521,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     uclKoRound: null,
     uclDraw: {},
     uclBracket: undefined,
+    cupBracket: undefined,
     world: initWorld(clubName),
     pendingSummary: null,
     cupExit: null,
@@ -3391,7 +3539,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   managed.add(clubName);
   state.careerStats = { ...state.careerStats, clubsManaged: [...managed] };
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length);
-  state.cupDraw.R16 = drawCupOpponent(state);
+  state.cupBracket = buildCupBracket(state);
+  state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
   generateHeadlines(state);
   return state;
