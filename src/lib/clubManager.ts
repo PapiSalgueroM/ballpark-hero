@@ -102,6 +102,10 @@ export interface CMPlayer {
   onLoan?: boolean;
   /** Round 94: how this player is being handled in the market. */
   transferStatus?: TransferStatus;
+  /** Round 105: seasons left on his deal. Hits zero and he walks for nothing. */
+  contractYears?: number;
+  /** Round 105: what he costs you every week, in thousands. */
+  wage?: number;
   /** Round 73: full per-season stat line. */
   apps?: number;
   seasonYellows?: number;
@@ -412,6 +416,8 @@ export interface CareerState {
   uclBracket?: UclTie[];
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
+  /** Round 105: the weekly wage bill the board will tolerate, in thousands. */
+  wageCap?: number;
   /** Round 71: sellers who walked away from me this window. */
   coldNames?: string[];
   /** Round 71: the Latest Transfers feed, newest last, capped at 80. */
@@ -1123,13 +1129,106 @@ function askingPrice(value: number, age: number): number {
   return Math.max(0.5, Math.round(value * f * 10) / 10);
 }
 
+/* ================================================================== */
+/* Round 105: contracts and wages                                     */
+/* ================================================================== */
+
+/**
+ * Weekly wage in thousands, from what he is worth. Deliberately a curve, not
+ * a line: the gap between an 80 and a 90 in wages is far bigger than the gap
+ * between a 60 and a 70, which is exactly how a real wage bill gets away
+ * from a club.
+ */
+export function wageFor(p: CMPlayer): number {
+  const v = p.value ?? Math.max(0.5, baseValue(p.rating, p.age));
+  const base = Math.pow(v, 0.72) * 3.6;
+  const youth = p.isYouth ? 0.25 : 1;
+  return Math.max(1, Math.round(base * youth));
+}
+
+/** The whole weekly wage bill, in thousands. */
+export function wageBill(career: CareerState): number {
+  return career.squad.reduce((s, p) => s + (p.wage ?? wageFor(p)), 0);
+}
+
+/**
+ * What the board will tolerate. Derived from the squad you were HANDED, plus
+ * about fifteen percent of headroom, rather than from the transfer budget.
+ * That was the first version and it was wrong at every club: a transfer
+ * budget and a weekly wage bill are not on the same scale, so every single
+ * side in the game started two to three hundred percent over its own cap and
+ * the constraint was meaningless from the first minute. Anchoring on the
+ * real bill means the cap is honest everywhere, from Manchester City to
+ * Inter Miami, and it starts biting exactly when you start buying.
+ */
+export function wageCapFrom(bill: number): number {
+  return Math.max(60, Math.round(bill * 1.15));
+}
+
+/**
+ * Round 105: a save made before contracts existed hands out sensible ones
+ * rather than showing everybody on zero years. Staggered on a name hash so a
+ * squad does not all expire in the same summer.
+ */
+export function ensureContracts(state: CareerState): void {
+  for (const p of state.squad) {
+    if (p.wage === undefined) p.wage = wageFor(p);
+    if (p.contractYears === undefined) {
+      let h = 0;
+      for (let i = 0; i < p.name.length; i++) h = ((h * 31) + p.name.charCodeAt(i)) >>> 0;
+      p.contractYears = 1 + (h % 4);
+    }
+  }
+  if (state.wageCap === undefined) state.wageCap = wageCapFrom(wageBill(state));
+}
+
+/** What he wants to sign again: longer and dearer the better he is. */
+export function renewalTerms(p: CMPlayer): { years: number; wage: number; fee: number } {
+  const current = p.wage ?? wageFor(p);
+  const market = wageFor(p);
+  // A player in form and in his prime knows it. An over-30 takes what he can.
+  const leverage = p.age <= 23 ? 1.15 : p.age <= 29 ? 1.3 : 0.95;
+  const wage = Math.max(1, Math.round(Math.max(current, market) * leverage));
+  const years = p.age >= 32 ? 1 : p.age >= 29 ? 2 : 4;
+  // Signing on fee, out of the transfer budget, in millions.
+  const fee = Math.max(0.1, Math.round(wage * years * 0.045 * 10) / 10);
+  return { years, wage, fee };
+}
+
+/** Sign him again. Costs the fee up front and resets his deal. */
+export function renewContract(career: CareerState, playerId: string): CareerState | null {
+  const p = career.squad.find(x => x.id === playerId);
+  if (!p || p.onLoan) return null;
+  const terms = renewalTerms(p);
+  if (terms.fee > career.budget) return null;
+  return {
+    ...career,
+    budget: Math.round((career.budget - terms.fee) * 10) / 10,
+    squad: career.squad.map(x => (
+      x.id === playerId
+        ? { ...x, contractYears: terms.years, wage: terms.wage, morale: clamp(x.morale + 9, 5, 99) }
+        : x
+    )),
+  };
+}
+
+/** Everyone in the last year of his deal, worst case first. */
+export function expiringPlayers(career: CareerState): CMPlayer[] {
+  return career.squad
+    .filter(p => !p.onLoan && (p.contractYears ?? 9) <= 1)
+    .sort((a, b) => b.rating - a.rating);
+}
+
 /** What we bank when selling: 90% of real value (youth products fetch less). */
 export function sellValue(p: CMPlayer): number {
+  // Round 105: a year left and everyone knows they can wait and get him for
+  // nothing, so the fee collapses. This is the cost of letting a deal run.
+  const runDown = (p.contractYears ?? 9) <= 1 ? 0.45 : 1;
   if (p.value !== undefined) {
-    return Math.max(0.3, Math.round(p.value * 0.9 * 10) / 10);
+    return Math.max(0.3, Math.round(p.value * 0.9 * runDown * 10) / 10);
   }
   const youthF = p.isYouth ? 0.4 : 1;
-  return Math.max(1, Math.round(baseValue(p.rating, p.age) * 0.9 * youthF));
+  return Math.max(1, Math.round(baseValue(p.rating, p.age) * 0.9 * youthF * runDown));
 }
 
 let MARKET_BASE_CACHE: MarketPlayer[] | null = null;
@@ -1213,7 +1312,11 @@ function completeSigning(career: CareerState, mp: MarketPlayer, fee: number, loa
     seasonAssists: 0,
     value: mp.value,
     onLoan: loan || undefined,
+    // Round 105: a signing arrives on a real deal.
+    contractYears: loan ? 1 : (mp.age >= 31 ? 2 : 4),
+    wage: 0,
   };
+  player.wage = wageFor(player);
   const state: CareerState = {
     ...career,
     budget: Math.round((career.budget - fee) * 10) / 10,
@@ -3116,6 +3219,20 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
   generatePlayerMessage(state, xi, won, margin);
 
   /* ----- board confidence ----- */
+  // Round 105: an overspent wage bill is a slow drip on the board's patience,
+  // which is what stops you hoarding a squad of superstars you cannot pay.
+  const bill = wageBill(state);
+  const cap = state.wageCap ?? wageCapFrom(bill);
+  if (bill > cap) {
+    const over = (bill - cap) / cap;
+    // A drip, not a guillotine. There are around fifty matches in a season,
+    // so the worst case costs about thirty confidence across a whole year:
+    // survivable if you are winning, fatal if you are not.
+    confDelta -= Math.min(0.7, 0.12 + over * 1.2);
+    if (over > 0.25 && Math.random() < 0.25) {
+      events.push(`💸 The board are asking why the wage bill is ${Math.round(over * 100)} percent over what was agreed.`);
+    }
+  }
   const patience = club.tier === 1 ? 1.3 : club.tier === 2 ? 1.15 : club.tier === 3 ? 1 : 0.85;
   if (confDelta < 0) confDelta *= patience;
   confDelta = Math.round(confDelta * 10) / 10;
@@ -3214,6 +3331,8 @@ export function startCareer(clubName: string): CareerState {
     inbox: [],
     promisedStarts: [],
   };
+  ensureContracts(state);
+  state.wageCap = wageCapFrom(wageBill(state));
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length);
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
@@ -3232,6 +3351,8 @@ export function playNextEntry(career: CareerState): PlayResult {
   // Round 95: a save made before the world existed repairs itself here, and
   // a save made after this is a no-op because it is already in step.
   if (!state.world) syncWorld(state, myRoundsPlayed(state, state.week));
+  // Round 105: and a save made before contracts existed gets given some.
+  ensureContracts(state);
   while (state.week < state.calendar.length) {
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
@@ -3452,6 +3573,8 @@ function agePlayer(p: CMPlayer): CMPlayer {
     seasonReds: 0,
     cleanSheets: 0,
     ratingSum: 0,
+    // Round 105: a year off the deal, and his wage tracks his new value.
+    contractYears: Math.max(0, (p.contractYears ?? 3) - 1),
   };
 }
 
@@ -3473,6 +3596,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const objNet = objs.reduce((s, o) => s + (o.hit ? 1 : -1), 0);
 
   let squad: CMPlayer[];
+  const freeAgentNews: string[] = [];
   // Round 71: loan players go back to their parent clubs at season's end.
   const afterLoans = career.squad.filter(p => !p.onLoan);
   // Round 94: and MY loanees come home, with a season of football in them.
@@ -3480,7 +3604,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   if (moving) {
     squad = buildSquad(clubName);
   } else {
-    squad = [...afterLoans, ...homeFromLoan].map(agePlayer).filter(p => p.age < 38 || p.rating >= 70);
+    // Round 105: deals run down over the summer and the expired walk for
+    // nothing. This is the price of never sitting down with your own players.
+    const aged = [...afterLoans, ...homeFromLoan].map(agePlayer);
+    const walked = aged.filter(p => (p.contractYears ?? 1) <= 0);
+    for (const p of walked) freeAgentNews.push(p.name);
+    squad = aged.filter(p => (p.contractYears ?? 1) > 0).filter(p => p.age < 38 || p.rating >= 70);
     const intake = ri(2, 3);
     for (let i = 0; i < intake; i++) {
       squad.push(makeYouth(pick([...POS_DEF, ...POS_MID, ...POS_ATT, 'GK' as Position])));
@@ -3538,6 +3667,19 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const managed = new Set(state.careerStats.clubsManaged ?? [career.clubName]);
   managed.add(clubName);
   state.careerStats = { ...state.careerStats, clubsManaged: [...managed] };
+  // Round 105: everyone still here needs a wage on file, the new club sets a
+  // new cap, and the players you let walk lead the summer's news.
+  ensureContracts(state);
+  state.wageCap = wageCapFrom(wageBill(state));
+  for (const name of freeAgentNews) {
+    pushNews(state, { name, from: career.clubName, to: 'a free transfer', fee: 0 });
+  }
+  if (freeAgentNews.length && !moving) {
+    state.aiHeadlines = [
+      `📰 ${freeAgentNews.length} player${freeAgentNews.length === 1 ? '' : 's'} left ${career.clubName} for nothing: ${freeAgentNews.slice(0, 4).join(', ')}.`,
+      ...state.aiHeadlines,
+    ];
+  }
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length);
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);

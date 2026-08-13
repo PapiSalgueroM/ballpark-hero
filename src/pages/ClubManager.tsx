@@ -23,6 +23,7 @@ import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { WorldTablesCard } from '@/components/club-manager/WorldTablesCard';
 import { UclBracketCard } from '@/components/club-manager/UclBracketCard';
 import { CupBracketCard } from '@/components/club-manager/CupBracketCard';
+import { ContractsCard } from '@/components/club-manager/ContractsCard';
 import { CalendarCard } from '@/components/club-manager/CalendarCard';
 import { InboxCard } from '@/components/club-manager/InboxCard';
 import { ClubDetailScreen } from '@/components/club-manager/ClubDetailScreen';
@@ -885,6 +886,9 @@ const ClubManager = () => {
             onRejectBid={g.rejectIncomingBid}
             onSetStatus={g.setStatus}
             onLoanOut={g.loanOut}
+          />
+          {/* Round 105: the wage bill and the deals running out. */}
+          <ContractsCard career={c} onRenew={g.renew}
           />
         </TabsContent>
       </Tabs>
