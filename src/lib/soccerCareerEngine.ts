@@ -6,6 +6,9 @@ import {
   BDOR_WIN_MIN_GOALS, rollPotential, pickPhoneTexts,
 } from "./careerEras";
 import type { PhoneChoiceDef } from "./careerEras";
+import { managerProfileFromCareer } from './soccerCareerToManager';
+import { realJobOffers } from './managerJobMarket';
+import { managerStanding } from './managerOffers';
 import {
   getLifeEvents, getPriorityLifeEventIds,
   personalityFollowerMult, personalitySponsorMult,
@@ -210,6 +213,34 @@ export interface ManagerState {
   seasonResults: { year: number; club: string; tier: number; result: string; trophy: boolean }[];
   nationalTeamOffer: boolean;
   managingNationalTeam: boolean;
+  /* ─── Round 111: being out of work is a real place you can be ───
+     Until now getting sacked hired you again on the very same line, at a
+     random club, instantly. That is the opposite of what was asked for: if
+     the sack has no consequence then the whole job is free. You now sit
+     unemployed with a feed of offers you have to have earned, and it is
+     genuinely possible to open it and find nothing. */
+  unemployed?: boolean;
+  /** Seasons spent out of work. Offers dry up the longer this runs. */
+  seasonsOut?: number;
+  /** Relegations, which follow you around. */
+  relegations?: number;
+  /** How the last job ended, which is the biggest short term factor. */
+  departure?: 'relegated' | 'sacked' | 'mutual' | 'resigned' | 'poached' | 'retiredPlayer';
+  /** The offers currently on the table, empty when nobody wants you. */
+  offers?: ManagerJobOffer[];
+  /** What to tell the player when the feed is empty. */
+  offerNote?: string;
+}
+
+/** Round 111: one job on the table, with the reason it exists. */
+export interface ManagerJobOffer {
+  club: string;
+  country: string;
+  tier: number;
+  league: string;
+  brief: string;
+  reason: string;
+  budget: number;
 }
 
 /* ─── Rivalry System ─── */
@@ -5836,11 +5867,95 @@ export function declineRetirementSuggestion(prev: CareerState): CareerState {
 }
 
 /* ─── Manager Career ─── */
+/**
+ * Round 111: rebuild the offer feed for an unemployed manager.
+ *
+ * Everything the job market judges you on comes from the save you have
+ * already played: the trophies you won as a player, the caps, the level you
+ * finished at, then what you have done in the dugout since. That is the
+ * whole point of continuing in the same career rather than starting a new
+ * manager game.
+ */
+export function refreshManagerOffers(s: CareerState, ms: ManagerState): void {
+  const played = s.seasons.filter(x => x.type === "playing");
+  const profile = managerProfileFromCareer({
+    nationality: s.nationality,
+    peakOverall: s.peakOverall,
+    intCaps: s.intStats?.caps ?? 0,
+    seasons: played.map(x => ({
+      club: x.club, clubCountry: x.clubCountry, clubTier: x.clubTier,
+      apps: x.apps, goals: x.goals, rating: x.rating,
+      leagueTitle: x.leagueTitle, championsLeague: x.championsLeague,
+      worldCup: x.worldCup, ballonDor: x.ballonDor, type: x.type,
+    })),
+  });
+  // Fold in what has actually happened since he put the boots away.
+  profile.seasonsManaged = ms.season;
+  profile.managerTrophies = ms.trophies;
+  profile.promotions = ms.promotions;
+  profile.relegations = ms.relegations ?? 0;
+  profile.lastTier = Math.max(1, Math.min(4, ms.clubTier)) as 1 | 2 | 3 | 4;
+  profile.seasonsOut = ms.seasonsOut ?? 0;
+  profile.seasonsSinceRetired = ms.season;
+  profile.departure = ms.departure ?? "sacked";
+
+  const offers = realJobOffers(profile, Math.random, [ms.club]);
+  ms.offers = offers.map(o => ({
+    club: o.club, country: o.country, tier: o.tier, league: o.league,
+    brief: o.brief, reason: o.reason, budget: o.budget,
+  }));
+  const standing = managerStanding(profile);
+  ms.offerNote = offers.length === 0
+    ? (standing < 25
+        ? "Silence. Nobody is calling, and sitting here another season will only make it quieter."
+        : "No offers this window. Boards move slowly. See who panics in the spring.")
+    : offers.length === 1
+      ? "One club came in."
+      : `${offers.length} clubs want to talk.`;
+}
+
+/** Round 111: take one of the jobs on the table. */
+export function acceptManagerOffer(prev: CareerState, index: number): CareerState {
+  const s = { ...prev };
+  if (!s.managerState) return s;
+  const ms = { ...s.managerState };
+  const offer = (ms.offers ?? [])[index];
+  if (!offer) return s;
+  ms.club = offer.club;
+  ms.clubTier = offer.tier;
+  ms.unemployed = false;
+  ms.seasonsOut = 0;
+  ms.offers = [];
+  ms.offerNote = undefined;
+  ms.seasonResults = [...ms.seasonResults, {
+    year: ms.season, club: offer.club, tier: offer.tier,
+    result: `Took the ${offer.club} job. ${offer.brief}`, trophy: false,
+  }];
+  s.managerState = ms;
+  return s;
+}
+
 export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev };
   if (!s.managerState) return s;
   const ms = { ...s.managerState };
   ms.season += 1;
+
+  // Round 111: out of work means you sit through the season, and every
+  // season you sit makes the next feed thinner.
+  if (ms.unemployed) {
+    ms.seasonsOut = (ms.seasonsOut ?? 0) + 1;
+    refreshManagerOffers(s, ms);
+    ms.seasonResults = [...ms.seasonResults, {
+      year: ms.season, club: "Out of work", tier: ms.clubTier,
+      result: ms.offers && ms.offers.length
+        ? `A season out. ${ms.offers.length} club${ms.offers.length === 1 ? '' : 's'} interested.`
+        : "Another season out of the game. The phone stayed quiet.",
+      trophy: false,
+    }];
+    s.managerState = ms;
+    return s;
+  }
   
   const promotionChance = ms.clubTier >= 3 ? 0.30 : ms.clubTier === 2 ? 0.20 : 0.15;
   const trophyChance = ms.clubTier <= 2 ? 0.20 : 0.10;
@@ -5851,15 +5966,19 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
   
   let result = "";
   if (sacked) {
-    result = `Sacked after poor results!`;
-    // Get new job at same or lower tier
-    const newClubs = clubs.filter(c => c.tier >= ms.clubTier && c.name !== ms.club);
-    if (newClubs.length > 0) {
-      const newClub = pick(newClubs);
-      ms.club = newClub.name;
-      ms.clubTier = newClub.tier;
-      result += ` Hired by ${newClub.name} (Tier ${newClub.tier})`;
-    }
+    // Round 111: no more instant rehire. You are out of work, and whether
+    // anyone calls depends on what you did as a player, what you have won in
+    // the dugout, how badly this ended and how long you sit.
+    const wentDown = ms.clubTier >= 3 && Math.random() < 0.45;
+    result = wentDown ? 'Relegated, and sacked on the spot.' : 'Sacked after a bad run.';
+    ms.unemployed = true;
+    ms.seasonsOut = 0;
+    ms.departure = wentDown ? 'relegated' : 'sacked';
+    if (wentDown) ms.relegations = (ms.relegations ?? 0) + 1;
+    refreshManagerOffers(s, ms);
+    result += ms.offers && ms.offers.length
+      ? ` ${ms.offers.length} club${ms.offers.length === 1 ? '' : 's'} came in.`
+      : ' Nobody has called.';
   } else if (promoted) {
     ms.promotions += 1;
     ms.clubTier -= 1;
@@ -5879,11 +5998,14 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     if (biggerClubs.length > 0) {
       const offer = pick(biggerClubs);
       result += ` · 👀 Scouts from ${offer.name} watching your sessions`;
-      // Auto-move if tier 1-2 offer
-      if (offer.tier <= 2 && Math.random() < 0.5) {
+      // Round 111: a bigger club only moves for you if your record justifies
+      // it. Watching a session is not the same as offering the job.
+      const earned = ms.trophies + ms.promotions * 2 + Math.max(0, 4 - ms.clubTier);
+      if (offer.tier <= 2 && earned >= 3 && Math.random() < 0.45) {
         ms.club = offer.name;
         ms.clubTier = offer.tier;
-        result += ` → HIRED by ${offer.name}!`;
+        ms.departure = 'poached';
+        result += ` and HIRED by ${offer.name}`;
       }
     }
   }

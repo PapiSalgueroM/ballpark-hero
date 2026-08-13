@@ -29,7 +29,7 @@ import {
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, applyBdorSpeech, type BdorSpeechChoice,
-  applyWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, endManagerCareer,
+  applyWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer,
   acceptRetirementSuggestion, declineRetirementSuggestion,
   advancePunditSeason, endPunditCareer,
   advanceOwnerSeason, endOwnerCareer,
@@ -625,6 +625,12 @@ export default function SoccerCareer() {
     setCareer(advanceManagerSeason(career, clubs));
   };
 
+  /* Round 111: take one of the jobs on the table after being sacked. */
+  const handleAcceptManagerOffer = (index: number) => {
+    if (!career) return;
+    setCareer(acceptManagerOffer(career, index));
+  };
+
   const handleEndManager = () => {
     if (!career) return;
     setCareer(endManagerCareer(career));
@@ -783,6 +789,7 @@ export default function SoccerCareer() {
               onManualRetire={handleManualRetire}
               onPostRetirement={handlePostRetirement}
               onAdvanceManager={handleAdvanceManager}
+              onAcceptManagerOffer={handleAcceptManagerOffer}
               onEndManager={handleEndManager}
               onShare={handleShare}
               onNewCareer={handleNewCareer}
@@ -1976,7 +1983,7 @@ function PostRetirementCard({ career, onChoice }: { career: CareerState; onChoic
 }
 
 /* ─── Manager Panel ─── */
-function ManagerPanel({ manager, career, onAdvance, onEnd }: { manager: ManagerState; career: CareerState; onAdvance: () => void; onEnd: () => void }) {
+function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { manager: ManagerState; career: CareerState; onAdvance: () => void; onEnd: () => void; onAcceptOffer?: (i: number) => void }) {
   return (
     <div className="rounded-xl border border-border bg-card p-4 space-y-3">
       <div className="text-center space-y-1">
@@ -1993,6 +2000,41 @@ function ManagerPanel({ manager, career, onAdvance, onEnd }: { manager: ManagerS
               <span className={`text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{r.result}</span>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Round 111: out of work, with a feed you had to earn. */}
+      {manager.unemployed && (
+        <div className="rounded-xl border-2 border-amber-500/50 bg-amber-500/5 p-3 space-y-2">
+          <div className="text-center">
+            <div className="text-2xl">📪</div>
+            <h4 className="text-sm font-black">OUT OF WORK</h4>
+            <p className="text-[11px] text-muted-foreground">
+              {(manager.seasonsOut ?? 0) === 0 ? 'Just sacked' : `${manager.seasonsOut} season${manager.seasonsOut === 1 ? '' : 's'} without a club`}
+            </p>
+          </div>
+          {manager.offerNote && (
+            <p className="text-[11px] text-center text-muted-foreground italic">{manager.offerNote}</p>
+          )}
+          {(manager.offers ?? []).map((o, i) => (
+            <button
+              key={`${o.club}-${i}`}
+              onClick={() => onAcceptOffer?.(i)}
+              className="w-full text-left rounded-lg border border-border bg-card hover:border-primary p-2.5 transition-all"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-black truncate">{o.club}</span>
+                <span className="text-[9px] text-muted-foreground shrink-0">Tier {o.tier} · {o.league}</span>
+              </div>
+              <div className="text-[10px] text-muted-foreground mt-0.5">{o.brief}</div>
+              <div className="text-[10px] text-amber-400/90 mt-0.5">{o.reason}</div>
+            </button>
+          ))}
+          {(manager.offers ?? []).length === 0 && (
+            <p className="text-[10px] text-center text-muted-foreground">
+              Sit out another season and see who comes calling. It gets harder every year you wait.
+            </p>
+          )}
         </div>
       )}
 
@@ -2451,7 +2493,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -2472,6 +2514,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onManualRetire: () => void;
   onPostRetirement: (choice: PostRetirementChoice) => void;
   onAdvanceManager: () => void;
+  onAcceptManagerOffer: (i: number) => void;
   onEndManager: () => void;
   onShare: () => void;
   onNewCareer: () => void;
@@ -2746,7 +2789,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Manager Season */}
           {career.phase === "manager_season" && career.managerState && (
-            <ManagerPanel manager={career.managerState} career={career} onAdvance={onAdvanceManager} onEnd={onEndManager} />
+            <ManagerPanel manager={career.managerState} career={career} onAdvance={onAdvanceManager} onEnd={onEndManager} onAcceptOffer={onAcceptManagerOffer} />
           )}
 
           {/* OVERLAY: Pundit Season */}
