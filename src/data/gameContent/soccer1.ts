@@ -121,33 +121,38 @@ export const SOCCER_CONTENT_1: GameContentMap = {
 
   '/rebuild': {
     intro: [
-      "Rebuild Challenge drops you into a real club's 2026 squad with 100 million euros and a target rating. Sell who you like, sign what you can afford, leave the place better.",
-      "The target scales with the job: elite squads need a nudge, modest ones a renovation. The board deals demands, finances swing, and two AI managers rebuild rivals beside you.",
+      "Rebuild Challenge drops you into a real club's 2026 squad with a war chest sized to the badge and a target rating. Commit your sales, flip your fortune, spend what's left, leave the place better.",
+      "The target scales with the job: elite squads need a nudge, modest ones a renovation. The board deals three demands, one tied to the club's identity, a fortune card swings the books, and two AI managers rebuild rivals beside you.",
     ],
     howToPlay: [
       "Pick one of 63 real clubs, tiered from elite down to modest.",
       "Choose a coach: the free caretaker, or one of three paid names adding +1, +2 or +3 to your final rating.",
-      "Sell to raise funds. Every sale adds the player's full market value to the budget.",
+      "Flip one of ten fortune cards. Takeovers, lawsuits, anything from +60 to -35 million.",
+      "Commit your sales before the market opens. Once you lock the list, nobody else leaves.",
       "Tap any XI slot to sign a replacement. Only affordable players are listed.",
-      "Mind your two board objectives, then hit finish for the rivals' windows and the season sim.",
+      "Mind the board's three demands, then hit finish for the rivals' windows and the season sim.",
     ],
     rules: [
-      "You start with 100 million plus sales, minus coach fees, war premiums and whatever the finance events do.",
+      "Budgets scale with the club: 200 million at elite clubs, 140 at strong, 100 at mid, 65 at modest. Sales add to it, coach fees, war premiums and money swings eat it.",
       "The target is your starting rating plus 2 for elite clubs, 3 for strong, 5 for mid and 7 for modest.",
-      "Two board objectives are dealt per run, like sign 2 players aged 23 or under. Each miss gets your most valuable player force sold.",
-      "Every second deal fires a finance event, from a 40 million TV windfall to a 25 million sponsor scandal.",
+      "Three board cards are dealt per run, and one is tied to the club's identity: superclubs demand a galactico, modest clubs demand negative net spend. Each miss gets your most valuable player force sold.",
+      "Every second signing fires a finance event, from a 40 million TV windfall to a 25 million sponsor scandal, on top of whatever your fortune card did.",
       "Signing a star rated 72 or higher can spark a bidding war. The rival's hidden ceiling is 112 to 157 percent of value: outbid it or walk away.",
     ],
     example: [
-      "A modest club with a 74 rated XI makes the target 81. You keep the caretaker and sell two aging starters for 60 million.",
+      "A modest club with a 74 rated XI makes the target 81 on a 65 million budget. You keep the caretaker, flip the sell-on clause card for +20 million, and commit two aging starters to the exit list before the market opens.",
       "A rival hijacks your marquee signing and you pay 15 million over value before he folds. The XI lands on 82, both objectives hold, and the season sim puts you second of six. Job Done.",
     ],
     tips: [
       "Read the objectives before selling anyone. A missed one costs your best player.",
-      "Sell first. The budget is tiny until the deadwood is gone.",
+      "Be brave with the cuts. Once the market opens the sale window is shut for good, and a timid exit list leaves you shopping with pocket change.",
       "Walk away from wars over players you only half want. Overpaying twice sinks rebuilds.",
     ],
     faqs: [
+      {
+        q: "What is the fortune card?",
+        a: "After hiring your coach the board hands you ten face-down envelopes and you flip exactly one. Best case is a 60 million takeover, worst is a 35 million hidden clause. The deck order is seeded per run, so there is no re-rolling your luck.",
+      },
       {
         q: "What do the grades mean?",
         a: "Target plus 3 or more is Legendary Rebuild, hitting it is Job Done, improving short of it is Some Progress. Level or worse, the game says so.",

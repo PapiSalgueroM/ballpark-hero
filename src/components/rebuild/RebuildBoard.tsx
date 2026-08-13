@@ -3,7 +3,7 @@ import { Check, Copy, RotateCcw, X } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
-import { nextRaise } from '@/lib/rebuildDeck';
+import { nextRaise, TIER_BUDGET } from '@/lib/rebuildDeck';
 import { useRebuild } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
 
@@ -26,7 +26,10 @@ export function RebuildBoard() {
     phase, loading, clubs, club, squad, formation, setFormation,
     startingXi, startRating, currentRating, target, budget, sold, signed,
     activeSlot, setActiveSlot, candidates, search, setSearch,
-    chooseClub, sell, sign, finish, reset, grade, shareText,
+    chooseClub, sign, finish, reset, grade, shareText,
+    baseBudget,
+    fortuneDeck, flippedFortune, flippedIndex, flipFortune, confirmFortune,
+    cuts, cutsValue, toggleCut, lockCuts,
     coachOptions, keepCoach, coach, pickCoach,
     objectives, finLog, penalties, rivals, rivalsLoading,
     war, raiseWar, walkAway, overpaid, season,
@@ -62,14 +65,15 @@ export function RebuildBoard() {
           Pick a club to rebuild
         </p>
         <p className="mt-1 text-center text-sm text-muted-foreground">
-          You get €100M plus whatever you raise selling players.
+          Box2box rules: bigger clubs hand you a bigger war chest, then you flip a fortune card,
+          commit your sales before the market opens, and answer to the board.
         </p>
 
         {order.map(tier => (
           byTier[tier]?.length ? (
             <div key={tier} className="mt-6">
               <p className={`mb-2 text-xs font-semibold uppercase tracking-wider ${TIER_STYLE[tier]}`}>
-                {TIER_LABEL[tier]}
+                {TIER_LABEL[tier]} · €{TIER_BUDGET[tier]}M budget
               </p>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 {byTier[tier].map(c => (
@@ -153,6 +157,120 @@ export function RebuildBoard() {
             </ul>
           </div>
         )}
+        <GameNav currentPath="/rebuild" />
+      </div>
+    );
+  }
+
+  // ---- Fortune card flip (Round 51, box2box: pick one of ten) ----
+  if (phase === 'fortune') {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-8">
+        <p className="text-center font-display text-xl font-bold text-foreground">
+          The board hands you ten envelopes
+        </p>
+        <p className="mt-1 text-center text-sm text-muted-foreground">
+          One holds a takeover. One holds a lawsuit. Flip exactly one card and live with it.
+        </p>
+        <div className="mt-5 grid grid-cols-5 gap-2">
+          {fortuneDeck.map((card, i) => {
+            const isFlipped = flippedIndex === i;
+            return (
+              <button
+                key={card.id}
+                onClick={() => flipFortune(i)}
+                disabled={!!flippedFortune}
+                className={`aspect-[3/4] rounded-xl border-2 text-2xl font-black transition-all duration-300 ${
+                  isFlipped
+                    ? 'scale-110 border-gold bg-gold/15'
+                    : flippedFortune
+                      ? 'border-border bg-card opacity-40'
+                      : 'border-border bg-card hover:scale-105 hover:border-gold/60'
+                }`}
+              >
+                {isFlipped ? card.emoji : '❓'}
+              </button>
+            );
+          })}
+        </div>
+        {flippedFortune && (
+          <div className="mt-5 rounded-2xl border border-gold/40 bg-card p-5 text-center animate-in fade-in zoom-in-90 duration-500">
+            <div className="text-4xl">{flippedFortune.emoji}</div>
+            <p className="mt-1 font-display text-xl font-black text-foreground">{flippedFortune.title}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{flippedFortune.text}</p>
+            <p className={`mt-2 font-display text-3xl font-black ${flippedFortune.delta >= 0 ? 'text-emerald-500' : 'text-destructive'}`}>
+              {flippedFortune.delta >= 0 ? '+' : ''}€{flippedFortune.delta}M
+            </p>
+            <button
+              onClick={confirmFortune}
+              className="mt-4 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+            >
+              To the squad decisions
+            </button>
+          </div>
+        )}
+        <GameNav currentPath="/rebuild" />
+      </div>
+    );
+  }
+
+  // ---- Keep/sell commitment (Round 51, box2box: commit before the market opens) ----
+  if (phase === 'cuts') {
+    const sorted = [...squad].sort((a, b) => b.marketValue - a.marketValue);
+    const fundsNow = baseBudget + (flippedFortune?.delta ?? 0) - (coach?.cost ?? 0);
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-8">
+        <p className="text-center font-display text-xl font-bold text-foreground">
+          Commit your sales. Right now.
+        </p>
+        <p className="mt-1 text-center text-sm text-muted-foreground">
+          Box2box rules: you decide who goes BEFORE you see a single transfer target.
+          Once the market opens, nobody else leaves.
+        </p>
+        <div className="sticky top-2 z-10 mt-4 flex items-center justify-between gap-2 rounded-xl border border-gold/40 bg-card/95 px-4 py-2.5 backdrop-blur">
+          <span className="text-xs text-muted-foreground">
+            €{fundsNow}M<b className="text-emerald-500"> + €{cutsValue}M</b> from {cuts.length} sale{cuts.length === 1 ? '' : 's'}
+          </span>
+          <button
+            onClick={lockCuts}
+            className="shrink-0 rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90"
+          >
+            Lock it. Open the market
+          </button>
+        </div>
+        <div className="mt-3 space-y-1.5">
+          {sorted.map(p => {
+            const out = cuts.includes(p.name);
+            return (
+              <button
+                key={p.name}
+                onClick={() => toggleCut(p)}
+                className={`flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left transition-colors ${
+                  out ? 'border-destructive/60 bg-destructive/10' : 'border-border bg-card hover:border-primary/40'
+                }`}
+              >
+                <span className="flex min-w-0 items-center gap-2">
+                  <FlagImg name={p.nationality} size={14} />
+                  <span className="min-w-0">
+                    <span className={`block truncate text-sm font-medium ${out ? 'text-destructive line-through' : 'text-foreground'}`}>
+                      {p.name}
+                    </span>
+                    <span className="block text-[10px] text-muted-foreground">
+                      {p.position} · age {p.age || '?'} · rated {playerRating(p)}
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className={`ml-2 shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-bold ${
+                    out ? 'border-destructive/60 text-destructive' : 'border-border text-muted-foreground'
+                  }`}
+                >
+                  {out ? `SELLING €${p.marketValue}M` : 'KEEP'}
+                </span>
+              </button>
+            );
+          })}
+        </div>
         <GameNav currentPath="/rebuild" />
       </div>
     );
@@ -422,15 +540,6 @@ export function RebuildBoard() {
                   </span>
                 )}
               </button>
-              {p && (
-                <button
-                  onClick={() => sell(p)}
-                  className="shrink-0 rounded-lg border border-destructive/40 px-2 py-2 text-[10px] font-bold text-destructive hover:bg-destructive/10"
-                  title={`Sell ${p.name} for €${p.marketValue}M`}
-                >
-                  SELL
-                </button>
-              )}
             </div>
           );
         })}
@@ -454,7 +563,7 @@ export function RebuildBoard() {
           <div className="max-h-56 space-y-1.5 overflow-y-auto">
             {candidates.length === 0 && (
               <p className="py-4 text-center text-xs text-muted-foreground">
-                Nobody in this position fits in €{budget}M. Sell someone first.
+                Nobody in this position fits in €{budget}M. Your sales are locked, so aim lower or free up money elsewhere.
               </p>
             )}
             {candidates.map(p => (

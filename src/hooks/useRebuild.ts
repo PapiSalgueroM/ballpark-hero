@@ -7,11 +7,12 @@ import {
   type RebuildClub,
 } from '@/lib/fetchRebuild';
 import {
-  hashSeed, coachOptionsFor, KEEP_COACH, dealObjectives, drawFinEvent,
+  hashSeed, coachOptionsFor, KEEP_COACH, drawFinEvent,
+  dealObjectivesWithIdentity, budgetFor, fortuneDeckFor,
   planRivals, simulateRival, simulateSeason,
   isContested, warRivalIndex, rivalCapFor, nextRaise,
   type CoachOption, type BoardObjective, type FinEvent, type RivalResult,
-  type RivalPlan, type SeasonResult,
+  type RivalPlan, type SeasonResult, type FortuneCard,
 } from '@/lib/rebuildDeck';
 
 export interface WarView {
@@ -26,7 +27,7 @@ export interface WarView {
   outcome: 'live' | 'won' | 'lost';
 }
 
-export type Phase = 'pick-club' | 'pick-coach' | 'rebuilding' | 'done';
+export type Phase = 'pick-club' | 'pick-coach' | 'fortune' | 'cuts' | 'rebuilding' | 'done';
 
 export interface ObjectiveView {
   objective: BoardObjective;
@@ -55,12 +56,24 @@ export interface RebuildState {
   search: string;
   setSearch: (s: string) => void;
   chooseClub: (c: RebuildClub) => void;
-  sell: (p: Player) => void;
   sign: (p: Player) => void;
   finish: () => void;
   reset: () => void;
   grade: string;
   shareText: string;
+  /** Tier-scaled starting money before sales and swings (Round 51). */
+  baseBudget: number;
+  // Fortune card flip (Round 51, box2box: pick one of ten)
+  fortuneDeck: FortuneCard[];
+  flippedFortune: FortuneCard | null;
+  flippedIndex: number | null;
+  flipFortune: (i: number) => void;
+  confirmFortune: () => void;
+  // Keep/sell commitment before the market opens (Round 51)
+  cuts: string[];
+  cutsValue: number;
+  toggleCut: (p: Player) => void;
+  lockCuts: () => void;
   // Box2box expansion (owner 2026-08-05)
   coachOptions: CoachOption[];
   keepCoach: CoachOption;
@@ -149,6 +162,12 @@ export function useRebuild(): RebuildState {
   const [rivals, setRivals] = useState<RivalResult[] | null>(null);
   const [rivalsLoading, setRivalsLoading] = useState(false);
 
+  // Round 51: fortune card + keep/sell commitment
+  const [fortuneDeck, setFortuneDeck] = useState<FortuneCard[]>([]);
+  const [flippedFortune, setFlippedFortune] = useState<FortuneCard | null>(null);
+  const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
+  const [cuts, setCuts] = useState<Set<string>>(new Set());
+
   // Live bidding wars + season sim (owner 2026-08-05)
   const [rivalPlans, setRivalPlans] = useState<RivalPlan[]>([]);
   const [war, setWar] = useState<WarView | null>(null);
@@ -191,14 +210,17 @@ export function useRebuild(): RebuildState {
     [startingXi, coachBonus],
   );
 
+  // Round 51 (box2box): the war chest scales with club size.
+  const baseBudget = useMemo(() => (club ? budgetFor(club.tier) : BASE_BUDGET), [club]);
+
   const budget = useMemo(
-    () => BASE_BUDGET
+    () => baseBudget
       + extraFunds
       - (coach?.cost ?? 0)
       - overpaid
       + sold.reduce((s, p) => s + p.marketValue, 0)
       - signed.reduce((s, p) => s + p.marketValue, 0),
-    [sold, signed, extraFunds, coach, overpaid],
+    [baseBudget, sold, signed, extraFunds, coach, overpaid],
   );
 
   const target = useMemo(
@@ -247,7 +269,11 @@ export function useRebuild(): RebuildState {
     setSigned([]);
     setCoach(null);
     setCoachOptions(coachOptionsFor(c.tier, s));
-    setObjectiveDeck(dealObjectives(s));
+    setObjectiveDeck(dealObjectivesWithIdentity(s, c));
+    setFortuneDeck(fortuneDeckFor(s));
+    setFlippedFortune(null);
+    setFlippedIndex(null);
+    setCuts(new Set());
     setFinLog([]);
     setExtraFunds(0);
     setTransferActions(0);
@@ -265,8 +291,40 @@ export function useRebuild(): RebuildState {
 
   const pickCoach = useCallback((c: CoachOption) => {
     setCoach(c);
-    setPhase('rebuilding');
+    setPhase('fortune');
   }, []);
+
+  /** Round 51: flip exactly one of the ten fortune cards. */
+  const flipFortune = useCallback((i: number) => {
+    if (flippedFortune) return;
+    const card = fortuneDeck[i];
+    if (!card) return;
+    setFlippedFortune(card);
+    setFlippedIndex(i);
+    setExtraFunds(f => f + card.delta);
+    setFinLog(log => [...log, { emoji: card.emoji, text: card.title, delta: card.delta }]);
+  }, [flippedFortune, fortuneDeck]);
+
+  const confirmFortune = useCallback(() => {
+    if (!flippedFortune) return;
+    setPhase('cuts');
+  }, [flippedFortune]);
+
+  /** Round 51: commit keep/sell BEFORE the market opens (box2box rule). */
+  const toggleCut = useCallback((p: Player) => {
+    setCuts(prev => {
+      const next = new Set(prev);
+      if (next.has(p.name)) next.delete(p.name);
+      else next.add(p.name);
+      return next;
+    });
+  }, []);
+
+  const lockCuts = useCallback(() => {
+    const outgoing = squad.filter(p => cuts.has(p.name));
+    setSold(outgoing);
+    setPhase('rebuilding');
+  }, [squad, cuts]);
 
   /** Every second transfer action, the finance department calls. */
   const bumpFinances = useCallback(() => {
@@ -280,14 +338,6 @@ export function useRebuild(): RebuildState {
       return next;
     });
   }, [seed]);
-
-  const sell = useCallback((p: Player) => {
-    setSold(prev => {
-      if (prev.some(x => x.name === p.name)) return prev;
-      bumpFinances();
-      return [...prev, p];
-    });
-  }, [bumpFinances]);
 
   const completeSigning = useCallback((p: Player, premium: number) => {
     setSigned(prev => {
@@ -435,6 +485,10 @@ export function useRebuild(): RebuildState {
     setCoach(null);
     setCoachOptions([]);
     setObjectiveDeck([]);
+    setFortuneDeck([]);
+    setFlippedFortune(null);
+    setFlippedIndex(null);
+    setCuts(new Set());
     setFinLog([]);
     setExtraFunds(0);
     setTransferActions(0);
@@ -465,11 +519,19 @@ export function useRebuild(): RebuildState {
     return `Rebuild: ${club.club}\n${startRating} → ${currentRating} (target ${target})\nCoach: ${coach?.name ?? 'Caretaker'}\n${grade}${rivalLine}${seasonLine}\nSold ${sold.length} · Signed ${signed.length} · €${budget}M left\ndouknowball.com/rebuild`;
   }, [phase, club, startRating, currentRating, target, grade, sold, signed, budget, coach, rivals, season]);
 
+  const cutsValue = useMemo(
+    () => squad.filter(p => cuts.has(p.name)).reduce((s, p) => s + p.marketValue, 0),
+    [squad, cuts],
+  );
+
   return {
     phase, loading, clubs, club, squad: activeSquad, market, formation, setFormation,
     startingXi, startRating, currentRating, target, budget, sold, signed,
     activeSlot, setActiveSlot, candidates, search, setSearch,
-    chooseClub, sell, sign, finish, reset, grade, shareText,
+    chooseClub, sign, finish, reset, grade, shareText,
+    baseBudget,
+    fortuneDeck, flippedFortune, flippedIndex, flipFortune, confirmFortune,
+    cuts: [...cuts], cutsValue, toggleCut, lockCuts,
     coachOptions, keepCoach: KEEP_COACH, coach, pickCoach,
     objectives, finLog, penalties, rivals, rivalsLoading,
     war, raiseWar, walkAway,

@@ -79,6 +79,52 @@ export const KEEP_COACH: CoachOption = {
   bonus: 0,
 };
 
+/* ---------------- Tier budgets (Round 51, box2box rule: budgets by club size) ---------------- */
+
+export const TIER_BUDGET: Record<ClubTier, number> = {
+  elite: 200,
+  strong: 140,
+  mid: 100,
+  modest: 65,
+};
+
+export function budgetFor(tier: ClubTier): number {
+  return TIER_BUDGET[tier];
+}
+
+/* ---------------- Fortune cards (Round 51, box2box rule: flip one of ten) ---------------- */
+
+export interface FortuneCard {
+  id: string;
+  emoji: string;
+  title: string;
+  text: string;
+  delta: number;
+}
+
+export const FORTUNE_DECK: FortuneCard[] = [
+  { id: 'takeover', emoji: '🛢️', title: 'The Takeover', text: 'A consortium buys the club and wants a splash. The war chest explodes.', delta: 60 },
+  { id: 'uclMoney', emoji: '⭐', title: 'European Windfall', text: 'Last season\'s European run finally pays out. Accounting is smiling.', delta: 45 },
+  { id: 'megaShirt', emoji: '👕', title: 'Shirt Deal of the Decade', text: 'A record kit sponsorship lands on the desk, signed.', delta: 30 },
+  { id: 'sellOn', emoji: '🎓', title: 'Academy Kid Sells Big', text: 'An old academy graduate moves for a fortune and the sell-on clause hits.', delta: 20 },
+  { id: 'docuseries', emoji: '🎥', title: 'Documentary Money', text: 'A streaming crew pays to follow your rebuild. Cameras everywhere, cash in the bank.', delta: 12 },
+  { id: 'cupRun', emoji: '🏆', title: 'Cup Run Gate Receipts', text: 'Two sold-out cup nights nobody budgeted for.', delta: 8 },
+  { id: 'quiet', emoji: '🪑', title: 'A Quiet Summer', text: 'No drama, no windfall. The books stay exactly as they are.', delta: 0 },
+  { id: 'ffp', emoji: '⚖️', title: 'FFP Warning Letter', text: 'The regulators flag last year\'s spending. Lawyers get paid first.', delta: -15 },
+  { id: 'taxCase', emoji: '🧾', title: 'Tax Case Settlement', text: 'An old ownership mess finally lands on your desk. It is expensive.', delta: -25 },
+  { id: 'clause', emoji: '📜', title: 'The Hidden Clause', text: 'A cursed clause in an ancient transfer contract triggers. Everyone is furious.', delta: -35 },
+];
+
+/** The ten cards in a seeded order, so a run cannot re-flip for a better card. */
+export function fortuneDeckFor(seed: number): FortuneCard[] {
+  const deck = [...FORTUNE_DECK];
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.abs((seed ^ (i * 2654435761)) >>> 0) % (i + 1);
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  return deck;
+}
+
 /* ---------------- Board objectives (management cards) ---------------- */
 
 export interface ObjectiveState {
@@ -163,6 +209,78 @@ export function dealObjectives(seed: number): BoardObjective[] {
     second = pick(OBJECTIVE_DECK, seed, salt);
   }
   return [first, second];
+}
+
+/* Round 51 (box2box rule): a third management card tied to the club's identity.
+   Elite boards demand galacticos, modest boards demand thrift, and missing it
+   costs a player like every other card. */
+
+const IDENTITY_CARDS: Record<ClubTier, BoardObjective[]> = {
+  elite: [
+    {
+      id: 'idGalactico', emoji: '👑',
+      text: 'Club identity: sign a true galactico worth €80M or more',
+      penaltyText: 'A superclub with no superstar signing. The board sold a star out of spite.',
+      check: (s) => s.signed.some(p => p.marketValue >= 80),
+    },
+    {
+      id: 'idStatement', emoji: '📣',
+      text: 'Club identity: make at least 2 signings worth €50M+ each',
+      penaltyText: 'The board wanted a statement window and got a whisper.',
+      check: (s) => s.signed.filter(p => p.marketValue >= 50).length >= 2,
+    },
+  ],
+  strong: [
+    {
+      id: 'idUpgrade', emoji: '🎯',
+      text: 'Club identity: your priciest signing must beat your priciest sale',
+      penaltyText: 'You downgraded the squad\'s ceiling. The board corrected it their way.',
+      check: (s) => {
+        const maxIn = Math.max(0, ...s.signed.map(p => p.marketValue));
+        const maxOut = Math.max(0, ...s.sold.map(p => p.marketValue));
+        return s.signed.length > 0 && maxIn > maxOut;
+      },
+    },
+    {
+      id: 'idCore', emoji: '🧬',
+      text: 'Club identity: sign at least 2 players aged 26 or under',
+      penaltyText: 'The project needed a young core. The board went and found one without you.',
+      check: (s) => s.signed.filter(p => (p.age ?? 99) <= 26).length >= 2,
+    },
+  ],
+  mid: [
+    {
+      id: 'idMoneyball', emoji: '📊',
+      text: 'Club identity: no single signing over €35M',
+      penaltyText: 'This club does not do big fees. The board flipped your expensive buy immediately.',
+      check: (s) => s.signed.every(p => p.marketValue <= 35),
+    },
+    {
+      id: 'idFlip', emoji: '💱',
+      text: 'Club identity: sell at least one player for €25M or more',
+      penaltyText: 'The model is buy low, sell high, and you forgot the second half.',
+      check: (s) => s.sold.some(p => p.marketValue >= 25),
+    },
+  ],
+  modest: [
+    {
+      id: 'idSellToBuy', emoji: '🪙',
+      text: 'Club identity: finish with negative net spend (sales cover signings)',
+      penaltyText: 'A club this size cannot splash. The board balanced the books brutally.',
+      check: (s) => s.sold.reduce((t, p) => t + p.marketValue, 0) >= s.signed.reduce((t, p) => t + p.marketValue, 0),
+    },
+    {
+      id: 'idBargains', emoji: '🧺',
+      text: 'Club identity: every signing €20M or less',
+      penaltyText: 'One transfer blew the whole wage structure. The board hit undo.',
+      check: (s) => s.signed.every(p => p.marketValue <= 20),
+    },
+  ],
+};
+
+export function dealObjectivesWithIdentity(seed: number, club: RebuildClub): BoardObjective[] {
+  const identity = pick(IDENTITY_CARDS[club.tier], seed, 631);
+  return [identity, ...dealObjectives(seed)];
 }
 
 /* ---------------- Financial events ---------------- */
@@ -278,7 +396,8 @@ export function simulateRival(
   const startXi = buildXi(formation, rivalSquad);
   const startRating = xiRating(startXi);
 
-  let budget = 100;
+  // Round 51: rivals get the same tier-scaled war chest you do.
+  let budget = budgetFor(plan.club.tier);
   const squad = [...rivalSquad];
 
   // Sell the two cheapest starters to raise funds.

@@ -27,7 +27,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/overrated-underrated', label: 'Overrated or Underrated', emoji: '🔥', description: 'Ten players, ten verdicts. See if the crowd agrees with you', daily: true, isNew: true },
       { path: '/tier-list', label: 'Tier List', emoji: '🗂️', description: 'Rank eight players S to D, then face the crowd', daily: true, isNew: true },
       { path: '/budget-builder', label: '€1B Budget Builder', emoji: '💷', description: 'One billion euros, real values, eleven slots. Spend it well', isNew: true },
-      { path: '/rebuild', label: 'Rebuild Challenge', emoji: '🔧', description: 'Inherit a real club and €100M. Sell, sign, hit the target', isNew: true },
+      { path: '/rebuild', label: 'Rebuild Challenge', emoji: '🔧', description: 'Inherit a real club. Flip your fortune, commit your cuts, survive the board', isNew: true },
       // deleted 2026-08-05 per owner review: "dosent even load and it's just like their tier list game... please delete it".
       // { path: '/grade-transfer', label: 'Grade the Transfer', emoji: '📋', description: 'Grade five real moves A to F, then see how they aged', daily: true, isNew: true },
       { path: '/dart-draft', label: 'Dart Draft', emoji: '🎯', description: 'Throw timed darts at a real world map: hit a country, draft its players', isNew: true },
