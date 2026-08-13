@@ -626,6 +626,44 @@ const ClubManager = () => {
               </div>
             </div>
           )}
+
+          {/* Round 71: your managerial career, the numbers that follow you. */}
+          {c.careerStats.played > 0 && (
+            <div className="bg-card border border-border rounded-xl p-3">
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💼 Manager career</div>
+              <div className="grid grid-cols-3 gap-2 text-center mb-2">
+                <div>
+                  <div className="text-sm font-bold font-display text-foreground">{c.careerStats.wins}W {c.careerStats.draws}D {c.careerStats.losses}L</div>
+                  <div className="text-[9px] text-muted-foreground">Record</div>
+                </div>
+                <div>
+                  <div className="text-sm font-bold font-display text-foreground">{Math.round((c.careerStats.wins / c.careerStats.played) * 100)}%</div>
+                  <div className="text-[9px] text-muted-foreground">Win rate</div>
+                </div>
+                <div>
+                  <div className="text-sm font-bold font-display text-foreground">{c.trophies.length}</div>
+                  <div className="text-[9px] text-muted-foreground">Trophies</div>
+                </div>
+              </div>
+              <div className="space-y-0.5 text-[10px] text-muted-foreground">
+                {c.careerStats.biggestWin && (
+                  <p>🎉 Biggest win: <span className="text-foreground font-semibold">{c.careerStats.biggestWin.score}</span> vs {c.careerStats.biggestWin.opp}</p>
+                )}
+                {c.careerStats.biggestDefeat && (
+                  <p>💀 Worst defeat: <span className="text-foreground font-semibold">{c.careerStats.biggestDefeat.score}</span> vs {c.careerStats.biggestDefeat.opp}</p>
+                )}
+                {c.careerStats.mostExpensiveBuy && (
+                  <p>💸 Priciest buy: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveBuy.name}</span> ({money(c.careerStats.mostExpensiveBuy.fee)})</p>
+                )}
+                {c.careerStats.mostExpensiveSale && (
+                  <p>🤑 Best sale: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveSale.name}</span> ({money(c.careerStats.mostExpensiveSale.fee)})</p>
+                )}
+                {(c.careerStats.clubsManaged?.length ?? 0) > 1 && (
+                  <p>🧳 Clubs managed: <span className="text-foreground">{c.careerStats.clubsManaged!.join(', ')}</span></p>
+                )}
+              </div>
+            </div>
+          )}
         </TabsContent>
 
         {/* -------- Squad -------- */}
@@ -651,7 +689,19 @@ const ClubManager = () => {
 
         {/* -------- Transfers -------- */}
         <TabsContent value="transfers">
-          <TransferScreen career={c} market={g.market} onBuy={g.buy} onSell={g.sell} />
+          <TransferScreen
+            career={c}
+            market={g.market}
+            onSell={g.sell}
+            onNegotiate={g.negotiate}
+            onOffer={g.offer}
+            onWalk={g.walk}
+            onDismissNegotiation={g.dismissNegotiation}
+            onClause={g.clause}
+            onLoan={g.loan}
+            onAcceptBid={g.acceptIncomingBid}
+            onRejectBid={g.rejectIncomingBid}
+          />
         </TabsContent>
       </Tabs>
     </div>

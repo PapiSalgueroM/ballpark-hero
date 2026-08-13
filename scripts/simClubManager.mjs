@@ -32,6 +32,8 @@ const {
   REAL_LEAGUES, NATIONS, playableClubs, clubPreviewRating, startCareer, playNextEntry,
   finishSeason, startNextSeason, buildMarket, buyPlayer, sellPlayer, objectiveStatuses,
   xiAverageRating, sortedTable, leagueOf, nextFixture,
+  startNegotiation, makeOffer, walkAway, payClause, releaseClauseOf, loanIn, loanEligible,
+  loanFeeOf, activeLoans, acceptBid, rejectBid,
 } = cm;
 
 let failures = 0;
@@ -181,6 +183,149 @@ console.log('5) Fixture preview');
     if (!fx.compLabel.includes('Premier League')) fail(`first fixture label "${fx.compLabel}"`);
     if (!isNum(fx.oppStrength) || fx.oppStrength < 48 || fx.oppStrength > 96) fail(`opp strength ${fx.oppStrength}`);
   }
+}
+
+/* ---------- 6. Round 71: negotiations, clauses, loans, incoming bids ---------- */
+console.log('6) Negotiations and the deadline-day machinery');
+{
+  // 300 negotiations with random strategies must always terminate legally.
+  let agreed = 0, collapsed = 0, hijacked = 0, walked = 0;
+  for (let i = 0; i < 300; i++) {
+    let s = startCareer(['Arsenal', 'Como', 'Sunderland', 'Real Madrid', 'Mainz', 'Lens'][i % 6]);
+    const market = buildMarket(s);
+    const affordable = market.filter(m => m.price <= s.budget * 0.9);
+    if (!affordable.length) { fail('no affordable targets at all'); break; }
+    const target = affordable[Math.floor(Math.random() * Math.min(affordable.length, 60))];
+    const s1 = startNegotiation(s, target);
+    if (!s1) { fail(`startNegotiation refused ${target.name}`); continue; }
+    s = s1;
+    let rounds = 0;
+    while (s.negotiation && s.negotiation.status === 'open') {
+      rounds += 1;
+      if (rounds > 30) { fail('negotiation never terminated in 30 rounds'); break; }
+      const neg = s.negotiation;
+      const roll = Math.random();
+      if (roll < 0.15) { s = walkAway(s); walked += 1; break; }
+      const mult = roll < 0.35 ? 0.7 : roll < 0.7 ? 0.88 : roll < 0.9 ? 0.97 : 1.0;
+      let amount = neg.theirAsk * mult;
+      if (neg.rivalOffer !== null && roll >= 0.7) amount = Math.max(amount, neg.rivalOffer * 1.06);
+      const s2 = makeOffer(s, amount);
+      if (!s2) { fail('makeOffer returned null on an open negotiation'); break; }
+      s = s2;
+      if (!isNum(s.budget) || s.budget < -0.01) { fail(`budget went negative: ${s.budget}`); break; }
+    }
+    const st = s.negotiation?.status;
+    if (st === 'agreed') {
+      agreed += 1;
+      const paid = s.seasonSignings.find(t => t.name === s.negotiation.player.name);
+      if (!paid) fail('agreed deal missing from seasonSignings');
+      else {
+        const base = s.negotiation.player.value ?? s.negotiation.player.price;
+        if (paid.fee > base * 2.8 + 1) fail(`agreed fee ${paid.fee} absurd vs value ${base}`);
+      }
+      if (!s.squad.some(p => p.name === s.negotiation.player.name)) fail('agreed player not in squad');
+      if (!(s.transferLog ?? []).some(n => n.name === s.negotiation.player.name)) fail('agreed deal not in transfer log');
+    } else if (st === 'collapsed') {
+      collapsed += 1;
+      if (!(s.coldNames ?? []).includes(s.negotiation.player.name)) fail('collapsed seller not marked cold');
+    } else if (st === 'hijacked') {
+      hijacked += 1;
+      if (!s.goneNames.includes(s.negotiation.player.name)) fail('hijacked player still on the market');
+    }
+  }
+  console.log(`   300 negotiations: ${agreed} agreed, ${collapsed} collapsed, ${hijacked} hijacked, ${walked} walked`);
+  if (agreed === 0) fail('no negotiation ever agreed (broken convergence)');
+  if (collapsed === 0) fail('no negotiation ever collapsed (patience never burns)');
+
+  // Release clauses: deterministic, instant, priced above value.
+  let s = startCareer('Barcelona');
+  const market = buildMarket(s);
+  const withClause = market.filter(m => releaseClauseOf(m, s.season) !== null);
+  if (withClause.length < market.length * 0.25 || withClause.length > market.length * 0.45) {
+    fail(`clause share ${withClause.length}/${market.length} outside 25-45%`);
+  }
+  const cheapClause = withClause.filter(m => releaseClauseOf(m, s.season) <= s.budget)[0];
+  if (cheapClause) {
+    const c1 = releaseClauseOf(cheapClause, s.season);
+    const c2 = releaseClauseOf(cheapClause, s.season);
+    if (c1 !== c2) fail('release clause not deterministic');
+    const paid = payClause(s, cheapClause);
+    if (!paid) fail('payClause refused a payable clause');
+    else if (!paid.squad.some(p => p.name === cheapClause.name)) fail('clause signing not in squad');
+  }
+
+  // Loans: cap of 2, loanees leave at season end.
+  s = startCareer('Real Oviedo');
+  const loanables = buildMarket(s).filter(m => loanEligible(s, m) && loanFeeOf(m) <= s.budget && m.rating >= 70).slice(0, 5);
+  if (loanables.length < 3) fail('fewer than 3 affordable loan targets for a minnow');
+  const superstarLoan = buildMarket(s).filter(m => loanEligible(s, m) && m.rating >= 88);
+  if (superstarLoan.length) fail(`superstars loanable to a minnow: ${superstarLoan.slice(0, 3).map(m => m.name).join(', ')}`);
+  else {
+    let l1 = loanIn(s, loanables[0]);
+    if (!l1) fail('first loan refused');
+    else {
+      let l2 = loanIn(l1, loanables[1]);
+      if (!l2) fail('second loan refused');
+      else {
+        if (activeLoans(l2) !== 2) fail(`activeLoans ${activeLoans(l2)} after two loans`);
+        if (loanIn(l2, loanables[2])) fail('third loan allowed past the cap');
+        // run the season out, loanees must leave
+        let st2 = l2;
+        let guard = 0;
+        for (;;) {
+          guard += 1;
+          if (guard > 90) { fail('loan season never ended'); break; }
+          const res = playNextEntry(st2);
+          st2 = res.state;
+          if (res.kind === 'seasonOver') break;
+          if (st2.sacked) break;
+        }
+        if (!st2.sacked && guard <= 90) {
+          const { state: fin } = finishSeason(st2);
+          const nextS = startNextSeason(fin);
+          if (nextS.squad.some(p => p.onLoan)) fail('loan player survived into next season');
+        }
+      }
+    }
+  }
+
+  // Incoming bids: accept pays out, reject either improves once or ends.
+  let found = false;
+  for (let i = 0; i < 40 && !found; i++) {
+    const c = startCareer('Tottenham');
+    const bids = c.incomingBids ?? [];
+    if (!bids.length) continue;
+    found = true;
+    const bid = bids[0];
+    const before = c.budget;
+    const acc = acceptBid(c, bid.playerId);
+    if (!acc) fail('acceptBid refused a legal sale');
+    else {
+      if (Math.round((acc.budget - before - bid.offer) * 10) / 10 !== 0) fail(`acceptBid paid ${acc.budget - before} not ${bid.offer}`);
+      if (acc.squad.some(p => p.id === bid.playerId)) fail('sold player still in squad');
+      if (!acc.careerStats.mostExpensiveSale) fail('sale did not track mostExpensiveSale');
+    }
+    const rej = rejectBid(c, bid.playerId);
+    const after = (rej.incomingBids ?? []).find(b => b.playerId === bid.playerId);
+    if (after && after.status !== 'improved') fail('rejected bid neither improved nor removed');
+    if (after && after.offer <= bid.offer) fail('improved bid not higher');
+  }
+  if (!found) fail('no incoming bids generated across 40 window opens');
+
+  // Window close kills the machinery.
+  let w = startCareer('Lyon');
+  const t = buildMarket(w).find(m => m.price <= w.budget);
+  w = startNegotiation(w, t) ?? w;
+  let guard = 0;
+  for (;;) {
+    guard += 1;
+    if (guard > 20) { fail('never played a match'); break; }
+    const res = playNextEntry(w);
+    w = res.state;
+    if (res.kind === 'match') break;
+  }
+  if (w.negotiation !== null) fail('negotiation survived the window closing');
+  if ((w.incomingBids ?? []).length !== 0) fail('incoming bids survived the window closing');
 }
 
 console.log(failures === 0 ? '\nALL CLUB MANAGER SIMS PASSED' : `\n${failures} FAILURES`);

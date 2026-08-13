@@ -5,6 +5,7 @@ import {
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
   buildMarket, buyPlayer, sellPlayer, autoPickXI, nextFixture, sortedTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
+  startNegotiation, makeOffer, walkAway, payClause, loanIn, acceptBid, rejectBid,
 } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow } from '@/lib/clubManager';
 
@@ -181,6 +182,39 @@ export function useClubManager() {
     });
   }, []);
 
+  /* ---------- Round 71: negotiations, clauses, loans, incoming bids ---------- */
+  const negotiate = useCallback((mp: MarketPlayer) => {
+    setCareer(prev => (prev ? startNegotiation(prev, mp) ?? prev : prev));
+  }, []);
+
+  const offer = useCallback((amount: number) => {
+    setCareer(prev => (prev ? makeOffer(prev, amount) ?? prev : prev));
+  }, []);
+
+  const walk = useCallback(() => {
+    setCareer(prev => (prev ? walkAway(prev) : prev));
+  }, []);
+
+  const dismissNegotiation = useCallback(() => {
+    setCareer(prev => (prev ? { ...prev, negotiation: null } : prev));
+  }, []);
+
+  const clause = useCallback((mp: MarketPlayer) => {
+    setCareer(prev => (prev ? payClause(prev, mp) ?? prev : prev));
+  }, []);
+
+  const loan = useCallback((mp: MarketPlayer) => {
+    setCareer(prev => (prev ? loanIn(prev, mp) ?? prev : prev));
+  }, []);
+
+  const acceptIncomingBid = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? acceptBid(prev, playerId) ?? prev : prev));
+  }, []);
+
+  const rejectIncomingBid = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? rejectBid(prev, playerId) : prev));
+  }, []);
+
   return {
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition,
@@ -188,6 +222,8 @@ export function useClubManager() {
     setFormationIndex, setMentality, setXiSlot, autoPick,
     play, continueFromReport, nextSeason,
     buy, sell,
+    negotiate, offer, walk, dismissNegotiation, clause, loan,
+    acceptIncomingBid, rejectIncomingBid,
   };
 }
 

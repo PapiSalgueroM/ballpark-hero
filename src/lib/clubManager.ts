@@ -56,6 +56,8 @@ export interface CMPlayer {
   seasonAssists: number;
   /** Real market value in £m (Round 70, baked data). Youth pads have none. */
   value?: number;
+  /** Round 71: loan signings go home at the end of the season. */
+  onLoan?: boolean;
 }
 
 /** Round 70: one board demand for the season, FIFA manager style. */
@@ -107,7 +109,48 @@ export interface MarketPlayer {
   value?: number;
 }
 
-export interface TransferRecord { dir: 'in' | 'out'; name: string; fee: number; }
+export interface TransferRecord { dir: 'in' | 'out'; name: string; fee: number; loan?: boolean; }
+
+/* ---------- Round 71: the transfer market grows a brain ---------- */
+
+/** One live fee negotiation with a selling club. */
+export interface Negotiation {
+  /** Snapshot of the target so the deal survives market rebuilds. */
+  player: MarketPlayer;
+  /** Haggle rounds used so far. */
+  stage: number;
+  /** Seller patience left; hits 0 and the deal collapses. */
+  patience: number;
+  myOffer: number | null;
+  theirAsk: number;
+  status: 'open' | 'agreed' | 'collapsed' | 'hijacked';
+  /** A rival club drives the price up mid-deal. */
+  rivalBidder: string | null;
+  rivalOffer: number | null;
+  /** The seller's last response, shown in the UI. */
+  note: string;
+}
+
+/** An AI club bidding for one of MY players while the window is open. */
+export interface IncomingBid {
+  playerId: string;
+  playerName: string;
+  club: string;
+  offer: number;
+  /** 'improved' means they came back once with a higher number. */
+  status: 'open' | 'improved';
+}
+
+/** A line in the Latest Transfers feed. */
+export interface TransferNews {
+  name: string;
+  from: string;
+  to: string;
+  fee: number;
+  loan?: boolean;
+  season: number;
+  week: number;
+}
 
 export interface Trophy { name: string; emoji: string; season: number; }
 
@@ -159,7 +202,18 @@ export interface SeasonRecord {
   trophies: string[];
 }
 
-export interface CareerStats { played: number; wins: number; draws: number; losses: number; }
+export interface CareerStats {
+  played: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  /** Round 71: manager career extremes ("your own managerial career stats"). */
+  biggestWin?: { opp: string; score: string } | null;
+  biggestDefeat?: { opp: string; score: string } | null;
+  mostExpensiveBuy?: { name: string; fee: number } | null;
+  mostExpensiveSale?: { name: string; fee: number } | null;
+  clubsManaged?: string[];
+}
 
 export interface JobOffer { club: string; blurb: string; }
 
@@ -231,6 +285,14 @@ export interface CareerState {
   cupExit?: CupRound | null;
   /** Round 70: the UCL stage we were knocked out at (for objective grading). */
   uclExit?: UclKoRound | 'group' | null;
+  /** Round 71: the one live fee negotiation (dies when the window shuts). */
+  negotiation?: Negotiation | null;
+  /** Round 71: AI clubs bidding for my players this window. */
+  incomingBids?: IncomingBid[];
+  /** Round 71: sellers who walked away from me this window. */
+  coldNames?: string[];
+  /** Round 71: the Latest Transfers feed, newest last, capped at 80. */
+  transferLog?: TransferNews[];
 }
 
 export type NextFixtureInfo =
@@ -878,10 +940,27 @@ export function buildMarket(career: CareerState): MarketPlayer[] {
   return marketBase().filter(p => !squadNames.has(p.name) && !gone.has(p.name));
 }
 
-/** Returns the new state, or null if the deal is not allowed. */
-export function buyPlayer(career: CareerState, mp: MarketPlayer): CareerState | null {
+/** Round 71: append a line to the Latest Transfers feed (capped at 80). */
+function pushNews(state: CareerState, news: Omit<TransferNews, 'season' | 'week'>): void {
+  const log = state.transferLog ?? [];
+  log.push({ ...news, season: state.season, week: state.week });
+  state.transferLog = log.slice(-80);
+}
+
+/** Round 71: track the priciest deal either way for the manager card. */
+function trackDealExtremes(state: CareerState, dir: 'in' | 'out', name: string, fee: number): void {
+  const cs = state.careerStats;
+  if (dir === 'in') {
+    if (!cs.mostExpensiveBuy || fee > cs.mostExpensiveBuy.fee) cs.mostExpensiveBuy = { name, fee };
+  } else if (!cs.mostExpensiveSale || fee > cs.mostExpensiveSale.fee) {
+    cs.mostExpensiveSale = { name, fee };
+  }
+}
+
+/** Shared signing mechanics for instant buys, negotiations, clauses, loans. */
+function completeSigning(career: CareerState, mp: MarketPlayer, fee: number, loan = false): CareerState | null {
   if (career.transferWindow === null) return null;
-  if (mp.price > career.budget) return null;
+  if (fee > career.budget) return null;
   if (career.squad.length >= 30) return null;
   if (career.squad.some(p => p.name === mp.name)) return null;
   const player: CMPlayer = {
@@ -898,14 +977,297 @@ export function buyPlayer(career: CareerState, mp: MarketPlayer): CareerState | 
     seasonGoals: 0,
     seasonAssists: 0,
     value: mp.value,
+    onLoan: loan || undefined,
   };
-  return {
+  const state: CareerState = {
     ...career,
-    budget: Math.round((career.budget - mp.price) * 10) / 10,
+    budget: Math.round((career.budget - fee) * 10) / 10,
     squad: [...career.squad, player],
     goneNames: [...career.goneNames, mp.name],
-    seasonSignings: [...career.seasonSignings, { dir: 'in', name: mp.name, fee: mp.price }],
+    seasonSignings: [...career.seasonSignings, { dir: 'in', name: mp.name, fee, loan: loan || undefined }],
+    careerStats: { ...career.careerStats },
+    transferLog: [...(career.transferLog ?? [])],
   };
+  pushNews(state, { name: mp.name, from: mp.club, to: state.clubName, fee, loan: loan || undefined });
+  if (!loan) trackDealExtremes(state, 'in', mp.name, fee);
+  return state;
+}
+
+/** Returns the new state, or null if the deal is not allowed. */
+export function buyPlayer(career: CareerState, mp: MarketPlayer): CareerState | null {
+  return completeSigning(career, mp, mp.price);
+}
+
+/**
+ * Round 71: ~35% of players have a release clause, deterministic per player
+ * and season so the market stays stable across renders. Pay it and the deal
+ * is instant, no negotiation, no bidding war.
+ */
+export function releaseClauseOf(mp: MarketPlayer, season: number): number | null {
+  const s = `${mp.name}:${season}`;
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = ((h * 31) + s.charCodeAt(i)) >>> 0;
+  if (h % 100 >= 35) return null;
+  const mult = 1.5 + ((h >>> 8) % 100) / 100;
+  const base = mp.value ?? mp.price;
+  return Math.max(1, Math.round(base * mult * 10) / 10);
+}
+
+/** Pay the release clause: instant signing at the clause price. */
+export function payClause(career: CareerState, mp: MarketPlayer): CareerState | null {
+  const clause = releaseClauseOf(mp, career.season);
+  if (clause === null) return null;
+  const state = completeSigning(career, mp, clause);
+  if (state) state.negotiation = null;
+  return state;
+}
+
+/**
+ * Round 71: loans. Young prospects (not wonderkid superstars, nobody loans
+ * you Yamal) and squad-level players will come on loan.
+ */
+export function loanEligible(career: CareerState, mp: MarketPlayer): boolean {
+  if (mp.rating > 84) return false;
+  const value = mp.value ?? mp.price;
+  return (mp.age <= 23 && value <= 25) || mp.rating <= xiAverageRating(career) - 2;
+}
+
+export function activeLoans(career: CareerState): number {
+  return career.squad.filter(p => p.onLoan).length;
+}
+
+export function loanFeeOf(mp: MarketPlayer): number {
+  return Math.max(0.3, Math.round((mp.value ?? mp.price) * 0.08 * 10) / 10);
+}
+
+/** Take a player on loan until the end of the season (2 loan slots). */
+export function loanIn(career: CareerState, mp: MarketPlayer): CareerState | null {
+  if (!loanEligible(career, mp)) return null;
+  if (activeLoans(career) >= 2) return null;
+  return completeSigning(career, mp, loanFeeOf(mp), true);
+}
+
+/* ---------- Round 71: fee negotiations and bidding wars ---------- */
+
+const SELLER_OPENERS = [
+  'They want top money for him.',
+  'The selling club says he is not for sale... at the right price he is.',
+  'Their sporting director picks up on the second ring. Everyone is for sale.',
+  'They know you are interested. The price just went up.',
+];
+const SELLER_INSULTED = [
+  'They hung up. That offer was an insult.',
+  'The fax machine allegedly "broke". The ask just went up.',
+  'Their president leaked your lowball to the press for a laugh.',
+];
+const SELLER_COUNTER = [
+  'They came down a little. Progress.',
+  'Their negotiator sighs, scribbles, slides a new number over.',
+  'Getting closer. They want it done before the window shuts.',
+];
+
+/** Open a negotiation for a market player. One live deal at a time. */
+export function startNegotiation(career: CareerState, mp: MarketPlayer): CareerState | null {
+  if (career.transferWindow === null) return null;
+  if (career.negotiation && career.negotiation.status === 'open') return null;
+  if (career.squad.length >= 30) return null;
+  if (career.squad.some(p => p.name === mp.name)) return null;
+  if ((career.coldNames ?? []).includes(mp.name)) return null;
+  const theirAsk = Math.round(mp.price * (1.02 + Math.random() * 0.13) * 10) / 10;
+  return {
+    ...career,
+    negotiation: {
+      player: mp,
+      stage: 0,
+      patience: 2 + ri(0, 1),
+      myOffer: null,
+      theirAsk,
+      status: 'open',
+      rivalBidder: null,
+      rivalOffer: null,
+      note: pick(SELLER_OPENERS),
+    },
+  };
+}
+
+/**
+ * Make an offer in the live negotiation. Meet ~97% of the ask and the deal
+ * is done; lowball and patience burns; anything in between drags the ask
+ * down but can wake up a rival bidder who tries to hijack the deal.
+ */
+export function makeOffer(career: CareerState, amount: number): CareerState | null {
+  const neg = career.negotiation;
+  if (!neg || neg.status !== 'open') return null;
+  if (career.transferWindow === null) return null;
+  amount = Math.round(amount * 10) / 10;
+  if (amount > career.budget) {
+    return {
+      ...career,
+      negotiation: { ...neg, note: `You do not have ${money(amount)}. The budget is ${money(career.budget)}.` },
+    };
+  }
+
+  const next: Negotiation = { ...neg, stage: neg.stage + 1, myOffer: amount };
+
+  // Beat-the-rival check comes first when a war is on.
+  if (next.rivalBidder && next.rivalOffer !== null && amount <= next.rivalOffer) {
+    next.note = `${next.rivalBidder} are still ahead at ${money(next.rivalOffer)}. Beat it or lose him.`;
+    // Dithering lets the rival close: 30% they win the race right now.
+    if (Math.random() < 0.3) {
+      const state: CareerState = {
+        ...career,
+        negotiation: { ...next, status: 'hijacked', note: `${next.rivalBidder} closed the deal at ${money(next.rivalOffer)} while you hesitated.` },
+        goneNames: [...career.goneNames, next.player.name],
+        transferLog: [...(career.transferLog ?? [])],
+      };
+      pushNews(state, { name: next.player.name, from: next.player.club, to: next.rivalBidder, fee: next.rivalOffer });
+      return state;
+    }
+    return { ...career, negotiation: next };
+  }
+
+  // Deal done.
+  if (amount >= next.theirAsk * 0.97) {
+    const signed = completeSigning(career, next.player, amount);
+    if (!signed) return null;
+    signed.negotiation = { ...next, status: 'agreed', note: `Done at ${money(amount)}. Welcome to ${career.clubName}, ${next.player.name}.` };
+    return signed;
+  }
+
+  // Insulting lowball.
+  if (amount < next.theirAsk * 0.75) {
+    next.patience -= 1;
+    if (next.patience <= 0) {
+      return {
+        ...career,
+        negotiation: { ...next, status: 'collapsed', note: 'They walked away from the table. Deal dead this window.' },
+        coldNames: [...(career.coldNames ?? []), next.player.name],
+      };
+    }
+    next.theirAsk = Math.round(next.theirAsk * 1.04 * 10) / 10;
+    next.note = pick(SELLER_INSULTED);
+    return { ...career, negotiation: next };
+  }
+
+  // A real offer: the ask moves toward it.
+  next.theirAsk = Math.max(
+    Math.round(amount * 1.02 * 10) / 10,
+    Math.round((next.theirAsk - (next.theirAsk - amount) * 0.55) * 10) / 10,
+  );
+  next.note = pick(SELLER_COUNTER);
+
+  // Rival bidder logic.
+  if (next.rivalBidder && next.rivalOffer !== null) {
+    // I beat their number: they either quit or raise.
+    if (Math.random() < 0.5 || next.rivalOffer >= (next.player.value ?? next.player.price) * 1.6) {
+      next.note = `${next.rivalBidder} pulled out. It is your deal to finish.`;
+      next.rivalBidder = null;
+      next.rivalOffer = null;
+    } else {
+      next.rivalOffer = Math.round(amount * (1.05 + Math.random() * 0.07) * 10) / 10;
+      next.note = `${next.rivalBidder} raised to ${money(next.rivalOffer)}.`;
+    }
+  } else if (!next.rivalBidder && next.stage >= 1 && Math.random() < 0.22) {
+    const spenders = REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 5).map(c => c.name))
+      .filter(n => n !== career.clubName && n !== next.player.club);
+    next.rivalBidder = pick(spenders);
+    next.rivalOffer = Math.round(amount * (1.06 + Math.random() * 0.1) * 10) / 10;
+    next.note = `${next.rivalBidder} just entered the race at ${money(next.rivalOffer)}. Bidding war.`;
+  }
+
+  return { ...career, negotiation: next };
+}
+
+/** Walk away. If a rival was circling, they usually take him. */
+export function walkAway(career: CareerState): CareerState {
+  const neg = career.negotiation;
+  if (!neg) return career;
+  if (neg.status === 'open' && neg.rivalBidder && neg.rivalOffer !== null && Math.random() < 0.6) {
+    const state: CareerState = {
+      ...career,
+      negotiation: null,
+      goneNames: [...career.goneNames, neg.player.name],
+      transferLog: [...(career.transferLog ?? [])],
+    };
+    pushNews(state, { name: neg.player.name, from: neg.player.club, to: neg.rivalBidder, fee: neg.rivalOffer });
+    state.aiHeadlines = [
+      `${neg.rivalBidder} sign ${neg.player.name} after ${career.clubName} walk away from the table.`,
+      ...state.aiHeadlines,
+    ].slice(0, 8);
+    return state;
+  }
+  return { ...career, negotiation: null };
+}
+
+/* ---------- Round 71: AI clubs bid for MY players ---------- */
+
+/** Accept an incoming bid: the player leaves at the bid price. */
+export function acceptBid(career: CareerState, playerId: string): CareerState | null {
+  const bids = career.incomingBids ?? [];
+  const bid = bids.find(b => b.playerId === playerId);
+  if (!bid) return null;
+  if (career.transferWindow === null) return null;
+  if (career.squad.length <= 14) return null;
+  const p = career.squad.find(x => x.id === playerId);
+  if (!p) return null;
+  const gkCount = career.squad.filter(x => x.position === 'GK').length;
+  if (p.position === 'GK' && gkCount <= 1) return null;
+  const state: CareerState = {
+    ...career,
+    budget: Math.round((career.budget + bid.offer) * 10) / 10,
+    squad: career.squad.filter(x => x.id !== playerId),
+    xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
+    seasonSignings: [...career.seasonSignings, { dir: 'out', name: p.name, fee: bid.offer }],
+    incomingBids: bids.filter(b => b.playerId !== playerId),
+    careerStats: { ...career.careerStats },
+    transferLog: [...(career.transferLog ?? [])],
+  };
+  pushNews(state, { name: p.name, from: career.clubName, to: bid.club, fee: bid.offer });
+  trackDealExtremes(state, 'out', p.name, bid.offer);
+  return state;
+}
+
+/** Reject a bid: half the time they come back once with ~15% more. */
+export function rejectBid(career: CareerState, playerId: string): CareerState {
+  const bids = career.incomingBids ?? [];
+  const bid = bids.find(b => b.playerId === playerId);
+  if (!bid) return career;
+  if (bid.status === 'open' && Math.random() < 0.5) {
+    const improved: IncomingBid = {
+      ...bid,
+      offer: Math.round(bid.offer * 1.15 * 10) / 10,
+      status: 'improved',
+    };
+    return { ...career, incomingBids: bids.map(b => (b.playerId === playerId ? improved : b)) };
+  }
+  // Final rejection: the player wanted the move 40% of the time.
+  const squad = Math.random() < 0.4
+    ? career.squad.map(p => (p.id === playerId ? { ...p, morale: clamp(p.morale - 7, 5, 99) } : p))
+    : career.squad;
+  return { ...career, squad, incomingBids: bids.filter(b => b.playerId !== playerId) };
+}
+
+/** 0-2 AI bids for my most wanted players, rolled when a window opens. */
+function generateIncomingBids(state: CareerState): void {
+  const bids: IncomingBid[] = [];
+  const targets = state.squad
+    .filter(p => !p.isYouth && !p.onLoan && p.rating >= 74)
+    .sort((a, b) => (b.value ?? 0) - (a.value ?? 0))
+    .slice(0, 8);
+  const count = Math.random() < 0.45 ? 0 : ri(1, 2);
+  const buyers = REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 7).map(c => c.name))
+    .filter(n => n !== state.clubName);
+  for (const p of shuffle(targets).slice(0, count)) {
+    const base = sellValue(p);
+    bids.push({
+      playerId: p.id,
+      playerName: p.name,
+      club: pick(buyers),
+      offer: Math.round(base * (1.15 + Math.random() * 0.35) * 10) / 10,
+      status: 'open',
+    });
+  }
+  state.incomingBids = bids;
 }
 
 /** Returns the new state, or null if the sale is not allowed. */
@@ -946,8 +1308,12 @@ function generateHeadlines(state: CareerState): void {
     const fee = Math.max(1, Math.round(mp.price * (0.9 + Math.random() * 0.25)));
     heads.push(`${buyer} sign ${mp.name} from ${mp.club} for ${money(fee)}.`);
     state.goneNames.push(mp.name);
+    // Round 71: every AI deal lands in the Latest Transfers feed too.
+    pushNews(state, { name: mp.name, from: mp.club, to: buyer, fee });
   }
   state.aiHeadlines = heads;
+  // Round 71: a fresh window also means AI clubs come sniffing at my squad.
+  generateIncomingBids(state);
 }
 
 /* ================================================================== */
@@ -1617,12 +1983,32 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
 
   const res: FormResult = won ? 'W' : drawn ? 'D' : 'L';
   state.form = [...state.form, res].slice(-5);
+  // Round 71: spread keeps the manager-career extremes (biggest win, priciest
+  // buy...) instead of wiping them every match.
   state.careerStats = {
+    ...state.careerStats,
     played: state.careerStats.played + 1,
     wins: state.careerStats.wins + (won ? 1 : 0),
     draws: state.careerStats.draws + (drawn ? 1 : 0),
     losses: state.careerStats.losses + (!won && !drawn ? 1 : 0),
   };
+  const scoreMargin = (score: string): number => {
+    const [a, b] = score.split('-').map(Number);
+    return Number.isFinite(a) && Number.isFinite(b) ? Math.abs(a - b) : -1;
+  };
+  const margin = Math.abs(myGoals - oppGoals);
+  if (won && decidedBy === 'regular') {
+    const prev = state.careerStats.biggestWin;
+    if (!prev || margin > scoreMargin(prev.score)) {
+      state.careerStats.biggestWin = { opp: fx.opponent, score: `${myGoals}-${oppGoals}` };
+    }
+  }
+  if (!won && !drawn && decidedBy === 'regular') {
+    const prev = state.careerStats.biggestDefeat;
+    if (!prev || margin > scoreMargin(prev.score)) {
+      state.careerStats.biggestDefeat = { opp: fx.opponent, score: `${oppGoals}-${myGoals}` };
+    }
+  }
 
   /* ----- board confidence ----- */
   const patience = club.tier === 1 ? 1.3 : club.tier === 2 ? 1.15 : club.tier === 3 ? 1 : 0.85;
@@ -1637,7 +2023,12 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
   }
 
   tickWeek(state, new Set(xi.map(p => p.id)));
+  // Round 71: playing a match shuts the window; live deals and bids die with
+  // it (the negotiation table clears, sellers forget grudges by January).
   state.transferWindow = null;
+  state.negotiation = null;
+  state.incomingBids = [];
+  state.coldNames = [];
 
   const iAmHome = fx.home !== false; // neutral finals list us first
   return {
@@ -1700,11 +2091,15 @@ export function startCareer(clubName: string): CareerState {
     uclDraw: {},
     trophies: [],
     history: [],
-    careerStats: { played: 0, wins: 0, draws: 0, losses: 0 },
+    careerStats: { played: 0, wins: 0, draws: 0, losses: 0, clubsManaged: [club.name] },
     pendingSummary: null,
     boardObjectives: [],
     cupExit: null,
     uclExit: null,
+    negotiation: null,
+    incomingBids: [],
+    coldNames: [],
+    transferLog: [],
   };
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length);
   state.cupDraw.R16 = drawCupOpponent(state);
@@ -1932,10 +2327,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const objNet = objs.reduce((s, o) => s + (o.hit ? 1 : -1), 0);
 
   let squad: CMPlayer[];
+  // Round 71: loan players go back to their parent clubs at season's end.
+  const afterLoans = career.squad.filter(p => !p.onLoan);
   if (moving) {
     squad = buildSquad(clubName);
   } else {
-    squad = career.squad.map(agePlayer).filter(p => p.age < 38 || p.rating >= 70);
+    squad = afterLoans.map(agePlayer).filter(p => p.age < 38 || p.rating >= 70);
     const intake = ri(2, 3);
     for (let i = 0; i < intake; i++) {
       squad.push(makeYouth(pick([...POS_DEF, ...POS_MID, ...POS_ATT, 'GK' as Position])));
@@ -1978,7 +2375,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     pendingSummary: null,
     cupExit: null,
     uclExit: null,
+    negotiation: null,
+    incomingBids: [],
+    coldNames: [],
   };
+  // Round 71: track every club this manager has run.
+  const managed = new Set(state.careerStats.clubsManaged ?? [career.clubName]);
+  managed.add(clubName);
+  state.careerStats = { ...state.careerStats, clubsManaged: [...managed] };
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length);
   state.cupDraw.R16 = drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
