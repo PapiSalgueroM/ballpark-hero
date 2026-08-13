@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -101,6 +101,20 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
     setPassword(value);
     if (touched) setFieldErrors(prev => ({ ...prev, password: validate(email, value).password }));
   };
+
+  /* Round 88, straight off his guest-browser test: this modal never unmounts
+     (the Dialog just hides it), so useState(defaultTab) only ever read the
+     FIRST value it was given. Click Sign up and you got "Welcome Back!";
+     switch to signup, close, click Log in and you got "Join DoUKnowBall".
+     The tab now re-syncs to whatever the button asked for every time the
+     modal opens, and a stale half-typed form never carries over either. */
+  useEffect(() => {
+    if (!isOpen) return;
+    setTab(defaultTab);
+    setFieldErrors({});
+    setFormError(null);
+    setTouched(false);
+  }, [isOpen, defaultTab]);
 
   const switchTab = (next: 'login' | 'signup') => {
     setTab(next);

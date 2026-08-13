@@ -95,7 +95,7 @@ export interface PlayerMessage {
 
 /** Round 70: one board demand for the season, FIFA manager style. */
 export interface BoardObjective {
-  id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals';
+  id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals' | 'defence' | 'youth';
   /** What the board wants, e.g. "Finish top 4". */
   label: string;
   /** League position / cup stage rank / goal count the objective needs. */
@@ -1851,15 +1851,56 @@ function nearestRival(clubName: string): string | null {
  * club's stature, Europe when qualified, finishing above the rival, and a
  * goals quota. "Way more expectations", per the owner.
  */
+/**
+ * Round 88, from his note: "for city they want top 2. I think city, Chelsea,
+ * Liverpool all have standards to win it all... the relegation teams they
+ * shouldn't say top 20 meaning they could get relegated and no team wants
+ * that. Instead the board wants should be like place mid table or don't get
+ * relegated."
+ *
+ * club.expectation is a raw strength RANK (1..leagueSize), so the bottom club
+ * was literally being told "Finish top 20". Boards do not talk like that.
+ * A rank now maps to a demand BAND that reads like a real board, and the
+ * heavyweights are all told to win it, not to finish second.
+ */
+function relegationSpots(leagueId: string): number {
+  // MLS conferences do not relegate; everyone else drops 2-3.
+  if (leagueId.startsWith('mls')) return 0;
+  if (leagueId === 'bundesliga' || leagueId === 'eredivisie') return 2;
+  return 3;
+}
+
+function leagueDemand(rank: number, tier: number, size: number, league: LeagueDef): { target: number; label: string } {
+  // Heavyweights: the badge demands the title, full stop.
+  if (rank <= 2 || (rank <= 4 && tier <= 2)) {
+    return { target: 1, label: `Win the ${league.name}` };
+  }
+  const uclSlots = league.euro ? (size >= 18 ? 4 : 3) : 0;
+  if (league.euro && rank <= uclSlots + 1) {
+    return { target: uclSlots, label: `Qualify for the Champions League (top ${uclSlots})` };
+  }
+  if (rank <= Math.max(6, Math.round(size * 0.35))) {
+    const t = Math.max(5, Math.round(size * 0.35));
+    return { target: t, label: league.euro ? `Push for Europe (top ${t})` : `Challenge at the top (top ${t})` };
+  }
+  const half = Math.floor(size / 2);
+  if (rank <= Math.round(size * 0.65)) {
+    return { target: half, label: `Finish in the top half` };
+  }
+  const drop = relegationSpots(league.id);
+  if (drop === 0) {
+    // No relegation here, so the honest ask is a respectable finish.
+    return { target: Math.max(half, size - 3), label: `Finish mid-table or better` };
+  }
+  return { target: size - drop, label: `Stay up. Avoid relegation` };
+}
+
 export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSize: number): BoardObjective[] {
   const club = clubDefFor(clubName);
   const league = leagueOf(clubName);
   const objs: BoardObjective[] = [];
-  objs.push({
-    id: 'league',
-    target: club.expectation,
-    label: club.expectation === 1 ? `Win the ${league.name}` : `Finish top ${club.expectation}`,
-  });
+  const demand = leagueDemand(club.expectation, club.tier, leagueSize, league);
+  objs.push({ id: 'league', target: demand.target, label: demand.label });
   const cupTarget = club.tier === 1 ? 4 : club.tier === 2 ? 3 : club.tier === 3 ? 2 : 1;
   objs.push({
     id: 'cup',
@@ -1884,10 +1925,31 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
     objs.push({ id: 'rival', target: 0, rivalName: rival, label: `Finish above ${rival}` });
   }
   const rounds = 2 * (leagueSize - 1);
-  const goalsBase = club.tier === 1 ? 78 : club.tier === 2 ? 70 : club.tier === 3 ? 62 : 50;
-  // Round 72: quota scales with the real season length (28 to 46 rounds now).
-  const goals = Math.max(30, Math.round(goalsBase * (rounds / 38)));
-  objs.push({ id: 'goals', target: goals, label: `Score ${goals}+ league goals` });
+  /* Round 88: boards no longer all want the same thing. Every club gets a
+     performance mandate picked deterministically from its name (so your club
+     always asks the same thing, but the league as a whole feels varied), and
+     developing clubs also get a squad-building philosophy on top. His ask:
+     "a team wants more experienced players or more home grown players or
+     younger players to develop... there are tons of board expectations". */
+  let h = 0;
+  for (let i = 0; i < clubName.length; i++) h = (h * 31 + clubName.charCodeAt(i)) >>> 0;
+
+  if (h % 2 === 0) {
+    const goalsBase = club.tier === 1 ? 78 : club.tier === 2 ? 70 : club.tier === 3 ? 62 : 50;
+    // Round 72: quota scales with the real season length (28 to 46 rounds now).
+    const goals = Math.max(30, Math.round(goalsBase * (rounds / 38)));
+    objs.push({ id: 'goals', target: goals, label: `Score ${goals}+ league goals` });
+  } else {
+    const gaBase = club.tier === 1 ? 34 : club.tier === 2 ? 40 : club.tier === 3 ? 48 : 58;
+    const ga = Math.max(18, Math.round(gaBase * (rounds / 38)));
+    objs.push({ id: 'defence', target: ga, label: `Concede fewer than ${ga} league goals` });
+  }
+
+  // Smaller clubs are told to build, not just to survive.
+  if (club.tier >= 3) {
+    const youth = club.tier === 4 ? 3 : 2;
+    objs.push({ id: 'youth', target: youth, label: `Blood ${youth} under-21 players in the league` });
+  }
   return objs;
 }
 
@@ -1923,6 +1985,30 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
       } else {
         const above = myPos < rIdx + 1;
         status = seasonDone ? (above ? 'done' : 'failed') : (above || myPos === rIdx + 1 ? 'onTrack' : 'behind');
+      }
+    } else if (objective.id === 'defence') {
+      // Round 88: a CEILING objective, so it can only be judged on pace and
+      // is only truly "done" once the season is over and the ceiling held.
+      const ga = myRow ? myRow.ga : 0;
+      if (ga >= objective.target) {
+        status = 'failed';
+      } else if (seasonDone) {
+        status = 'done';
+      } else {
+        const pace = played > 0 ? (ga / played) * roundsTotal : 0;
+        status = pace <= objective.target * 0.98 ? 'onTrack' : 'behind';
+      }
+    } else if (objective.id === 'youth') {
+      const blooded = career.squad.filter(p => p.age <= 21 && (p.apps ?? 0) > 0).length;
+      if (blooded >= objective.target) {
+        status = 'done';
+      } else if (seasonDone) {
+        status = 'failed';
+      } else {
+        // Plenty of season left is still "on track"; it only reads as behind
+        // once the run-in starts and the kids are still not playing.
+        const late = played > roundsTotal * 0.6;
+        status = late ? 'behind' : 'onTrack';
       }
     } else {
       const gf = myRow ? myRow.gf : 0;

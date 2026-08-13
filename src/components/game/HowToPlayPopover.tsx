@@ -18,6 +18,11 @@ interface HowToPlayPopoverProps {
   /** Position the trigger absolutely in a relative-positioned header
    *  (spec 3.2). Set false to render the trigger inline instead. */
   floatingTrigger?: boolean;
+  /** Round 88: which corner the floating trigger pins to. Defaults to 'left'
+   *  so every existing game is untouched; screens that put a back button in
+   *  the top left (Club Manager's drill-ins) pass 'right' so the two controls
+   *  stop sitting on top of each other, exactly as he reported. */
+  triggerSide?: 'left' | 'right';
   className?: string;
 }
 
@@ -33,6 +38,7 @@ export function HowToPlayPopover({
   onOpenChange,
   triggerLabel = 'How to play',
   floatingTrigger = true,
+  triggerSide = 'left',
   className,
 }: HowToPlayPopoverProps) {
   const [internalOpen, setInternalOpen] = useState(false);
@@ -47,7 +53,7 @@ export function HowToPlayPopover({
         onClick={() => setOpen(true)}
         aria-label={triggerLabel}
         className={cn(
-          floatingTrigger && 'absolute top-0 left-0',
+          floatingTrigger && (triggerSide === 'right' ? 'absolute top-0 right-0' : 'absolute top-0 left-0'),
           'p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2',
           className,
         )}

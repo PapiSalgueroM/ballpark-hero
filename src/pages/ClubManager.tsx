@@ -11,6 +11,7 @@ import {
   NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
 } from '@/lib/clubManager';
 import type { NationDef, ObjectiveStatus, CupRound } from '@/lib/clubManager';
+import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
@@ -103,7 +104,7 @@ const ClubManager = () => {
       />
       <GameShell width="wide">
         <div className="relative">
-          <HowToPlayPopover title="How to Play Club Manager">
+          <HowToPlayPopover title="How to Play Club Manager" triggerSide="right">
             <div className="space-y-3 text-left">
               <p>🌍 <span className="font-semibold text-foreground">Pick any club in nine real leagues.</span> The big five (2026-27 lineups with promotions and relegations applied), the EFL Championship, the Saudi Pro League, both MLS conferences and the Eredivisie: 186 clubs, each with its real squad and market values as of August 2026, after the summer window. Giants get huge budgets and zero patience; underdogs get small budgets and a low bar.</p>
               <p>📋 <span className="font-semibold text-foreground">The board hands you a list of objectives</span>: league finish, a cup run, Europe, finishing above your rival, a goals quota. Hit them and your stock rises; miss them and the confidence meter drains.</p>
@@ -218,7 +219,7 @@ const ClubManager = () => {
                   className="rounded-xl border bg-card border-border hover:border-primary p-4 text-left transition-all"
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="text-3xl leading-none">{n.flag}</span>
+                    <FlagImg name={n.name} size={34} />
                     <div className="min-w-0">
                       <div className="text-sm font-bold text-foreground">{n.name}</div>
                       <div className="text-[10px] text-muted-foreground">
@@ -254,7 +255,7 @@ const ClubManager = () => {
                   className="w-full rounded-xl border bg-card border-border hover:border-primary p-4 text-left transition-all"
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="text-3xl leading-none">{pickNation.flag}</span>
+                    <FlagImg name={pickNation.name} size={34} />
                     <div className="min-w-0">
                       <div className="text-base font-bold text-foreground">{lg.name}</div>
                       <div className="text-[10px] text-muted-foreground">
@@ -279,7 +280,7 @@ const ClubManager = () => {
               onClick={() => { g.chooseClub(''); setPickStep('league'); }}
               className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors mb-3"
             >
-              <ChevronLeft className="w-3.5 h-3.5" /> {pickNation.flag} {league.name}
+              <ChevronLeft className="w-3.5 h-3.5" /> <FlagImg name={pickNation.name} size={14} /> {league.name}
             </button>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {teams.map(c => {
