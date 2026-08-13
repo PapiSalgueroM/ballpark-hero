@@ -9,6 +9,7 @@ import {
   TIER_INFO, clubByName, clubPreviewRating, leagueOf, money, confidenceLabel,
   isAvailable, xiAverageRating, sortedTable,
   NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
+  developingPlayers, INTENSITY_INFO, FOCUS_INFO,
 } from '@/lib/clubManager';
 import type { NationDef, ObjectiveStatus, CupRound } from '@/lib/clubManager';
 import { FlagImg } from '@/components/FlagImg';
@@ -29,6 +30,8 @@ import { SquadScreen } from '@/components/club-manager/SquadScreen';
 import { TacticsScreen } from '@/components/club-manager/TacticsScreen';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
 import { MatchReportCard } from '@/components/club-manager/MatchReportCard';
+import { AcademyScreen } from '@/components/club-manager/AcademyScreen';
+import { TrainingScreen } from '@/components/club-manager/TrainingScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
@@ -66,7 +69,7 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -96,6 +99,16 @@ const ClubManager = () => {
     () => (g.career && g.career.uclGroup ? sortedTable(g.career.uclGroup.table) : []),
     [g.career],
   );
+  // Round 116: the academy and the training ground feed their own hub tiles.
+  const academy = g.career?.academy ?? null;
+  const prospectCount = academy ? academy.prospects.length : 0;
+  const growingCount = useMemo(
+    () => (g.career ? developingPlayers(g.career).length : 0),
+    [g.career],
+  );
+  const trainingLabel = g.career?.training
+    ? `${INTENSITY_INFO[g.career.training.intensity].label} · ${FOCUS_INFO[g.career.training.focus].label}`
+    : 'Not set';
 
   const shell = (inner: ReactNode) => (
     <>
@@ -696,6 +709,20 @@ const ClubManager = () => {
                 sub={rivalName && rivalIdx >= 0 ? `They sit #${rivalIdx + 1}` : 'Tap any club in the table'}
                 onClick={rivalName ? () => setClubView(rivalName) : () => g.setActiveTab('table')}
               />
+              {/* Round 116: the academy and the training ground, the two
+                  things every real manager sim has and this one did not. */}
+              <HubTile
+                icon="🎓" title="Academy" accent={prospectCount > 0}
+                value={prospectCount > 0 ? `${prospectCount} on the books` : 'Nobody yet'}
+                sub={academy ? `Recruitment ${academy.recruitment}/20 · ${academy.scouts.length} scouting` : 'Build a youth setup'}
+                onClick={() => setHubPanel('academy')}
+              />
+              <HubTile
+                icon="🏋️" title="Training"
+                value={trainingLabel}
+                sub={growingCount > 0 ? `${growingCount} player${growingCount === 1 ? '' : 's'} still improving` : 'Nobody left to develop'}
+                onClick={() => setHubPanel('training')}
+              />
               <HubTile
                 icon="🛒" title="Market" accent={c.transferWindow !== null}
                 value={c.transferWindow !== null ? 'Window OPEN' : 'Window shut'}
@@ -747,6 +774,19 @@ const ClubManager = () => {
               )}
 
               {hubPanel === 'calendar' && <CalendarCard career={c} onQuickSim={g.quickSim} />}
+
+              {hubPanel === 'academy' && (
+                <AcademyScreen
+                  career={c}
+                  onUpgrade={g.upgradeFacility}
+                  onHire={g.sendScout}
+                  onRecall={g.callScoutHome}
+                  onPromote={g.promote}
+                  onRelease={g.release}
+                />
+              )}
+
+              {hubPanel === 'training' && <TrainingScreen career={c} onSetPlan={g.setTraining} />}
 
               {hubPanel === 'treatment' && (
                 <div className="bg-card border border-border rounded-xl p-3">

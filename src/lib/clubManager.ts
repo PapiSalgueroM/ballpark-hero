@@ -114,6 +114,14 @@ export interface CMPlayer {
   cleanSheets?: number;
   /** Sum of match ratings; average = ratingSum / apps. */
   ratingSum?: number;
+  /**
+   * Round 116: the ceiling. Growth can never take a player past this, and how
+   * fast he closes the gap is what training and game time decide. Undefined on
+   * a save made before this existed, and repaired by ensureAcademy.
+   */
+  potential?: number;
+  /** Round 116: he came through your academy or your scouting network. */
+  academyGrad?: boolean;
 }
 
 /** Round 73: one line in the season's fixture and result log. */
@@ -139,6 +147,82 @@ export interface PlayerMessage {
   week: number;
   /** Set once answered (or auto-resolved): the outcome line shown in the UI. */
   resolved?: string;
+}
+
+/* ---------- Round 116: the academy, the scouts and the training ground ---------- */
+
+/**
+ * A scout, either sitting in the office waiting to be sent somewhere (a
+ * candidate, regionId empty) or out on a trip.
+ *
+ * Two numbers matter, and they are the two FIFA career mode has always used:
+ * network is how likely he is to turn anyone up at all, judgement is how close
+ * his read on a kid is to the truth. A cheap scout finds nobody and lies about
+ * the ones he does find.
+ */
+export interface Scout {
+  id: string;
+  name: string;
+  /** 1 to 5. How tight the band he reports is around the real ceiling. */
+  judgement: number;
+  /** 1 to 5. How often he finds anybody worth a look. */
+  network: number;
+  /** What sending him costs, in millions. */
+  fee: number;
+  /** Empty while he is a candidate. */
+  regionId: string;
+  regionName: string;
+  regionFlag: string;
+  weeksLeft: number;
+  found: number;
+}
+
+/** A kid on the books but not in the squad, from the academy or from a scout. */
+export interface Prospect {
+  id: string;
+  name: string;
+  position: Position;
+  age: number;
+  rating: number;
+  /** The truth. Never shown, only the band around it is. */
+  potential: number;
+  /** What the report reckons his ceiling is. */
+  lowGuess: number;
+  highGuess: number;
+  /** 'Academy' or the country the scout was in. */
+  source: string;
+  flag: string;
+  /** Signing fee in millions. The academy's own kids are free. */
+  fee: number;
+  season: number;
+}
+
+export type FacilityKind = 'recruitment' | 'coaching' | 'facilities';
+
+/** The club's youth setup. Everything here is upgradable and everything bites. */
+export interface Academy {
+  /** 1 to 20. How good the club is at getting the best juniors in the door. */
+  recruitment: number;
+  /** 1 to 20. Coaching quality, which drives development for the WHOLE squad. */
+  coaching: number;
+  /** 1 to 20. The training ground itself. */
+  facilities: number;
+  scouts: Scout[];
+  candidates: Scout[];
+  prospects: Prospect[];
+  /** The season the last intake landed, so it only ever runs once a year. */
+  lastIntakeSeason: number;
+  /** The head of youth's read on what is coming, shown before intake day. */
+  preview?: string;
+}
+
+export type TrainingIntensity = 'light' | 'normal' | 'double';
+export type TrainingFocus = 'firstTeam' | 'balanced' | 'youth';
+
+/** The week's work on the training ground. */
+export interface TrainingPlan {
+  intensity: TrainingIntensity;
+  focus: TrainingFocus;
 }
 
 /** Round 70: one board demand for the season, FIFA manager style. */
@@ -428,6 +512,12 @@ export interface CareerState {
   inbox?: PlayerMessage[];
   /** Round 73: player ids you promised a start; break it and they notice. */
   promisedStarts?: string[];
+  /** Round 116: the youth setup, the scouts on the road and the kids on the books. */
+  academy?: Academy;
+  /** Round 116: how the squad is being worked this week. */
+  training?: TrainingPlan;
+  /** Round 116: how many of your own kids you have promoted, all time. */
+  academyGraduates?: number;
 }
 
 export type NextFixtureInfo =
@@ -2913,14 +3003,24 @@ function generateOppScorers(opp: string, goals: number): ScorerLine[] {
  * only way to avoid collapse.
  */
 function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
+  // Round 116: how hard you work them all week shows up here. Light sessions
+  // send a fresher team out on Saturday, double sessions send a tired one and
+  // pick up knocks on the training ground, and that is the price of the
+  // development the same setting buys you at the end of the season.
+  const plan = state.training ?? DEFAULT_TRAINING;
+  const recoveryMod = plan.intensity === 'double' ? 0.78 : plan.intensity === 'light' ? 1.18 : 1;
+  const flat = plan.intensity === 'light' ? 6 : plan.intensity === 'double' ? 3 : 4;
+  const knockRisk = plan.intensity === 'double' ? 0.005 : 0;
   state.squad = state.squad.map(p => {
     const played = playedIds ? playedIds.has(p.id) : false;
-    const recovery = Math.round((100 - p.fitness) * 0.71) + 4;
+    const recovery = Math.round((100 - p.fitness) * 0.71 * recoveryMod) + flat;
     const cost = played ? 20 + ri(0, 8) : 0;
     const fitness = clamp(p.fitness + recovery - cost, 20, 100);
-    const injuryWeeks = Math.max(0, p.injuryWeeks - 1);
+    let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
+    if (knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = ri(1, 3);
     return { ...p, fitness, injuryWeeks };
   });
+  tickScouting(state);
 }
 
 function applyResult(table: TableRow[], home: string, away: string, hg: number, ag: number): void {
@@ -3340,6 +3440,469 @@ function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport 
 /* Career lifecycle                                                   */
 /* ================================================================== */
 
+/* ================================================================== */
+/* Round 116: academy, scouting and training                          */
+/* ================================================================== */
+
+/**
+ * Where a scout can be sent, and roughly how strong that country's youth
+ * production is.
+ *
+ * These numbers are OURS, not anybody's dataset: a rough 60 to 92 ranking of
+ * how reliably each country turns out top level teenagers, which is the same
+ * job Football Manager's youth rating does. They set how good a prospect from
+ * that country is likely to be, nothing else. Country names only, no badges
+ * and no real kids.
+ */
+export interface ScoutRegion { id: string; name: string; flag: string; youth: number; }
+
+export const SCOUT_REGIONS: ScoutRegion[] = [
+  { id: 'brazil', name: 'Brazil', flag: '\u{1F1E7}\u{1F1F7}', youth: 92 },
+  { id: 'france', name: 'France', flag: '\u{1F1EB}\u{1F1F7}', youth: 90 },
+  { id: 'argentina', name: 'Argentina', flag: '\u{1F1E6}\u{1F1F7}', youth: 88 },
+  { id: 'spain', name: 'Spain', flag: '\u{1F1EA}\u{1F1F8}', youth: 87 },
+  { id: 'england', name: 'England', flag: '\u{1F3F4}\u{E0067}\u{E0062}\u{E0065}\u{E006E}\u{E0067}\u{E007F}', youth: 86 },
+  { id: 'germany', name: 'Germany', flag: '\u{1F1E9}\u{1F1EA}', youth: 85 },
+  { id: 'portugal', name: 'Portugal', flag: '\u{1F1F5}\u{1F1F9}', youth: 84 },
+  { id: 'netherlands', name: 'Netherlands', flag: '\u{1F1F3}\u{1F1F1}', youth: 82 },
+  { id: 'italy', name: 'Italy', flag: '\u{1F1EE}\u{1F1F9}', youth: 79 },
+  { id: 'belgium', name: 'Belgium', flag: '\u{1F1E7}\u{1F1EA}', youth: 78 },
+  { id: 'uruguay', name: 'Uruguay', flag: '\u{1F1FA}\u{1F1FE}', youth: 76 },
+  { id: 'colombia', name: 'Colombia', flag: '\u{1F1E8}\u{1F1F4}', youth: 75 },
+  { id: 'croatia', name: 'Croatia', flag: '\u{1F1ED}\u{1F1F7}', youth: 74 },
+  { id: 'serbia', name: 'Serbia', flag: '\u{1F1F7}\u{1F1F8}', youth: 72 },
+  { id: 'japan', name: 'Japan', flag: '\u{1F1EF}\u{1F1F5}', youth: 72 },
+  { id: 'nigeria', name: 'Nigeria', flag: '\u{1F1F3}\u{1F1EC}', youth: 71 },
+  { id: 'denmark', name: 'Denmark', flag: '\u{1F1E9}\u{1F1F0}', youth: 71 },
+  { id: 'senegal', name: 'Senegal', flag: '\u{1F1F8}\u{1F1F3}', youth: 70 },
+  { id: 'morocco', name: 'Morocco', flag: '\u{1F1F2}\u{1F1E6}', youth: 70 },
+  { id: 'ivorycoast', name: 'Ivory Coast', flag: '\u{1F1E8}\u{1F1EE}', youth: 69 },
+  { id: 'sweden', name: 'Sweden', flag: '\u{1F1F8}\u{1F1EA}', youth: 69 },
+  { id: 'ghana', name: 'Ghana', flag: '\u{1F1EC}\u{1F1ED}', youth: 68 },
+  { id: 'turkey', name: 'Turkey', flag: '\u{1F1F9}\u{1F1F7}', youth: 68 },
+  { id: 'usa', name: 'United States', flag: '\u{1F1FA}\u{1F1F8}', youth: 67 },
+  { id: 'mexico', name: 'Mexico', flag: '\u{1F1F2}\u{1F1FD}', youth: 66 },
+];
+
+export function regionById(id: string): ScoutRegion {
+  return SCOUT_REGIONS.find(r => r.id === id) ?? SCOUT_REGIONS[0];
+}
+
+export const DEFAULT_TRAINING: TrainingPlan = { intensity: 'normal', focus: 'balanced' };
+
+/** How long you can send a scout for, and what that does to his fee. */
+export const SCOUT_TRIPS = [
+  { weeks: 10, label: 'Short trip (10 weeks)' },
+  { weeks: 20, label: 'Half a season (20 weeks)' },
+  { weeks: 32, label: 'The full year (32 weeks)' },
+];
+
+/** Nobody can have more than this many scouts on the road at once. */
+export const MAX_SCOUTS = 3;
+/** Or more than this many kids sitting on the books unsigned. */
+export const MAX_PROSPECTS = 12;
+
+const SCOUT_FIRST = [
+  'Ray', 'Dermot', 'Paolo', 'Gus', 'Hakim', 'Bernd', 'Colin', 'Tomas', 'Rui', 'Wim',
+  'Freddie', 'Nacho', 'Olu', 'Stefan', 'Duncan', 'Aleks', 'Pierre', 'Kenny', 'Sepp', 'Ivan',
+];
+const SCOUT_LAST = [
+  'Brennan', 'Kovac', 'Delgado', 'Ohashi', 'Fenton', 'Lindqvist', 'Barros', 'Aziz', 'McGrath', 'Steiner',
+  'Almeida', 'Duffy', 'Roussel', 'Vialli', 'Osei', 'Janssen', 'Salvatore', 'Bright', 'Radic', 'Nkemdi',
+];
+
+/**
+ * The ceiling a player is carrying. Older players are at or near it already,
+ * which is why the whole system is about teenagers.
+ */
+export function rollPotential(rating: number, age: number): number {
+  let head: number;
+  if (age >= 30) head = 0;
+  else if (age >= 28) head = ri(0, 1);
+  else if (age >= 26) head = ri(0, 2);
+  else if (age >= 24) head = ri(1, 4);
+  else if (age >= 22) head = ri(1, 6);
+  else if (age >= 20) head = ri(2, 10);
+  else head = ri(3, 15);
+  // About one young player in twelve is carrying something special.
+  if (age <= 21 && Math.random() < 0.085) head += ri(4, 9);
+  return clamp(rating + head, rating, 95);
+}
+
+/** What the club is handed on day one. Big clubs have better everything. */
+function defaultAcademy(clubName: string): Academy {
+  const tier = clubDefFor(clubName).tier;
+  const base: Record<number, [number, number, number]> = {
+    1: [13, 14, 14],
+    2: [11, 12, 12],
+    3: [8, 9, 9],
+    4: [6, 7, 7],
+  };
+  const [r, c, f] = base[tier] ?? base[3];
+  return {
+    recruitment: clamp(r + ri(-1, 1), 1, 20),
+    coaching: clamp(c + ri(-1, 1), 1, 20),
+    facilities: clamp(f + ri(-1, 1), 1, 20),
+    scouts: [],
+    candidates: [],
+    prospects: [],
+    lastIntakeSeason: 0,
+  };
+}
+
+function makeScoutCandidate(): Scout {
+  const judgement = ri(1, 5);
+  const network = ri(1, 5);
+  return {
+    id: `sc-${Date.now().toString(36)}-${ri(1000, 9999)}`,
+    name: `${pick(SCOUT_FIRST)} ${pick(SCOUT_LAST)}`,
+    judgement,
+    network,
+    fee: Math.max(1, Math.round((judgement + network) * 0.6)),
+    regionId: '',
+    regionName: '',
+    regionFlag: '',
+    weeksLeft: 0,
+    found: 0,
+  };
+}
+
+/**
+ * Repairs a save that predates any of this and seeds a new one. Runs at the
+ * top of playNextEntry beside ensureContracts, and has to be a no-op the
+ * second time it is called.
+ */
+export function ensureAcademy(state: CareerState): void {
+  if (!state.training) state.training = { ...DEFAULT_TRAINING };
+  if (!state.academy) state.academy = defaultAcademy(state.clubName);
+  const a = state.academy;
+  if (!Array.isArray(a.scouts)) a.scouts = [];
+  if (!Array.isArray(a.prospects)) a.prospects = [];
+  if (!Array.isArray(a.candidates)) a.candidates = [];
+  while (a.candidates.length < 3) a.candidates.push(makeScoutCandidate());
+  if (typeof a.lastIntakeSeason !== 'number') a.lastIntakeSeason = 0;
+  if (state.academyGraduates === undefined) state.academyGraduates = 0;
+  for (const p of state.squad) {
+    if (p.potential === undefined) p.potential = rollPotential(p.rating, p.age);
+  }
+}
+
+/** What the next level of a facility costs, out of the transfer budget. */
+export function academyUpgradeCost(level: number): number {
+  return Math.max(3, Math.round(2 + Math.pow(clamp(level, 1, 20), 1.9) * 0.2));
+}
+
+export const FACILITY_INFO: Record<FacilityKind, { label: string; blurb: string; emoji: string }> = {
+  recruitment: {
+    label: 'Youth recruitment',
+    blurb: 'How far up the queue you are for the best local kids. Drives intake quality and how many turn up.',
+    emoji: '\u{1F50D}',
+  },
+  coaching: {
+    label: 'Coaching staff',
+    blurb: 'Better coaches develop EVERY player faster, not just the teenagers, and sharpen your scouting reports.',
+    emoji: '\u{1F9E2}',
+  },
+  facilities: {
+    label: 'Training ground',
+    blurb: 'The building itself. Lifts intake quality and helps everyone squeeze more out of the week.',
+    emoji: '\u{1F3DF}\uFE0F',
+  },
+};
+
+/** Spend the money, get the level. Refuses if you cannot afford it. */
+export function upgradeAcademy(career: CareerState, kind: FacilityKind): CareerState | null {
+  const next: CareerState = JSON.parse(JSON.stringify(career));
+  ensureAcademy(next);
+  const a = next.academy!;
+  const level = a[kind];
+  if (level >= 20) return null;
+  const cost = academyUpgradeCost(level);
+  if (cost > next.budget) return null;
+  a[kind] = level + 1;
+  next.budget = Math.round((next.budget - cost) * 10) / 10;
+  return next;
+}
+
+/** Cost of a trip: the scout's fee scaled by how long you send him for. */
+export function tripCost(scout: Scout, weeks: number): number {
+  return Math.max(1, Math.round(scout.fee * (weeks / 20)));
+}
+
+/** Send a candidate somewhere. Refuses on money, a full staff or a bad id. */
+export function hireScout(
+  career: CareerState,
+  candidateId: string,
+  regionId: string,
+  weeks: number,
+): CareerState | null {
+  const next: CareerState = JSON.parse(JSON.stringify(career));
+  ensureAcademy(next);
+  const a = next.academy!;
+  if (a.scouts.length >= MAX_SCOUTS) return null;
+  const idx = a.candidates.findIndex(c => c.id === candidateId);
+  if (idx < 0) return null;
+  const region = SCOUT_REGIONS.find(r => r.id === regionId);
+  if (!region) return null;
+  const trip = SCOUT_TRIPS.find(t => t.weeks === weeks);
+  if (!trip) return null;
+  const cand = a.candidates[idx];
+  const cost = tripCost(cand, weeks);
+  if (cost > next.budget) return null;
+  next.budget = Math.round((next.budget - cost) * 10) / 10;
+  a.candidates.splice(idx, 1);
+  a.scouts.push({
+    ...cand,
+    regionId: region.id,
+    regionName: region.name,
+    regionFlag: region.flag,
+    weeksLeft: weeks,
+    found: 0,
+  });
+  while (a.candidates.length < 3) a.candidates.push(makeScoutCandidate());
+  return next;
+}
+
+/** Bring one home early. No refund, obviously. */
+export function recallScout(career: CareerState, scoutId: string): CareerState {
+  const next: CareerState = JSON.parse(JSON.stringify(career));
+  ensureAcademy(next);
+  const a = next.academy!;
+  a.scouts = a.scouts.filter(s => s.id !== scoutId);
+  return next;
+}
+
+function prospectPosition(): Position {
+  const roll = Math.random();
+  if (roll < 0.09) return 'GK';
+  if (roll < 0.4) return pick(POS_DEF);
+  if (roll < 0.74) return pick(POS_MID);
+  return pick(POS_ATT);
+}
+
+/** The band a report puts around a ceiling. Bad judgement, wide band. */
+function reportBand(potential: number, judgement: number): { lowGuess: number; highGuess: number } {
+  const spread = Math.max(1, 12 - judgement * 2);
+  return {
+    lowGuess: clamp(potential - ri(0, spread), 40, 99),
+    highGuess: clamp(potential + ri(0, spread), 40, 99),
+  };
+}
+
+function makeProspect(
+  potential: number,
+  source: string,
+  flag: string,
+  judgement: number,
+  fee: number,
+  season: number,
+): Prospect {
+  const age = ri(15, 18);
+  const rating = clamp(potential - ri(8, 22), 40, 76);
+  const band = reportBand(potential, judgement);
+  return {
+    id: `pr-${Date.now().toString(36)}-${ri(1000, 9999)}-${ri(100, 999)}`,
+    name: `${pick(YOUTH_FIRST)} ${pick(YOUTH_LAST)}`,
+    position: prospectPosition(),
+    age,
+    rating,
+    potential,
+    lowGuess: Math.min(band.lowGuess, band.highGuess),
+    highGuess: Math.max(band.lowGuess, band.highGuess),
+    source,
+    flag,
+    fee,
+    season,
+  };
+}
+
+/** Drops the worst reported kid when the books are full. */
+function addProspect(a: Academy, p: Prospect): void {
+  a.prospects.push(p);
+  while (a.prospects.length > MAX_PROSPECTS) {
+    let worst = 0;
+    for (let i = 1; i < a.prospects.length; i++) {
+      if (a.prospects[i].highGuess < a.prospects[worst].highGuess) worst = i;
+    }
+    a.prospects.splice(worst, 1);
+  }
+}
+
+/**
+ * One week on the road for every scout. Called from tickWeek, so it runs once
+ * per calendar entry whatever kind of entry it was.
+ */
+function tickScouting(state: CareerState): void {
+  const a = state.academy;
+  if (!a || !a.scouts.length) return;
+  const home: string[] = [];
+  for (const s of a.scouts) {
+    s.weeksLeft -= 1;
+    const region = regionById(s.regionId);
+    if (Math.random() < 0.02 + s.network * 0.018) {
+      // Better networks reach further into a country, and the country itself
+      // sets the base level of what there is to find.
+      let potential = clamp(
+        52 + Math.round((region.youth - 60) * 0.42) + ri(0, 12) + Math.round(s.network * 1.4),
+        54, 93,
+      );
+      if (Math.random() < 0.06) potential = clamp(potential + ri(3, 8), 54, 95);
+      const fee = Math.max(0.2, Math.round((potential - 52) * 0.14 * 10) / 10);
+      addProspect(a, makeProspect(potential, region.name, region.flag, s.judgement, fee, state.season));
+      s.found += 1;
+    }
+    if (s.weeksLeft <= 0) home.push(`${s.name} is back from ${region.name} with ${s.found} name${s.found === 1 ? '' : 's'} for you.`);
+  }
+  if (home.length) {
+    a.scouts = a.scouts.filter(s => s.weeksLeft > 0);
+    state.aiHeadlines = [...home.map(h => `\u{1F575} ${h}`), ...state.aiHeadlines].slice(0, 8);
+  }
+}
+
+/** The head of youth's guess at what is coming, for the intake preview. */
+function intakePreview(a: Academy): string {
+  const q = (a.recruitment * 1.3 + a.facilities * 0.9 + a.coaching * 0.8) / 3;
+  if (q >= 16) return 'The head of youth reckons this is the best group he has seen here. Two or three could play.';
+  if (q >= 12) return 'The head of youth likes this group. There should be one worth keeping.';
+  if (q >= 8) return 'The head of youth is lukewarm. A couple of bodies, maybe a surprise.';
+  return 'The head of youth is not promising you anything. The setup is not good enough yet.';
+}
+
+/**
+ * Intake day. Runs once a season at the rollover, and what turns up is decided
+ * entirely by what you spent on the academy.
+ */
+function runYouthIntake(state: CareerState): string[] {
+  const a = state.academy;
+  if (!a) return [];
+  if (a.lastIntakeSeason === state.season) return [];
+  a.lastIntakeSeason = state.season;
+  const q = (a.recruitment * 1.3 + a.facilities * 0.9 + a.coaching * 0.8) / 3;
+  let count = 1;
+  if (a.recruitment >= 8) count += 1;
+  if (a.recruitment >= 14) count += 1;
+  if (Math.random() < a.recruitment / 26) count += 1;
+  const judgement = clamp(Math.round(a.coaching / 4), 1, 5);
+  const flag = '\u{1F3E0}';
+  let best = 0;
+  for (let i = 0; i < count; i++) {
+    let potential = clamp(50 + Math.round(q * 1.55) + ri(0, 10), 52, 92);
+    if (Math.random() < 0.07) potential = clamp(potential + ri(3, 9), 52, 95);
+    best = Math.max(best, potential);
+    addProspect(a, makeProspect(potential, 'Academy', flag, judgement, 0, state.season));
+  }
+  a.preview = intakePreview(a);
+  return [
+    `\u{1F393} Intake day: ${count} kid${count === 1 ? '' : 's'} came up from the ${state.clubName} academy. ${a.preview}`,
+  ];
+}
+
+/** Sign a kid into the senior squad. Refuses on money or a full squad. */
+export function promoteProspect(career: CareerState, prospectId: string): CareerState | null {
+  const next: CareerState = JSON.parse(JSON.stringify(career));
+  ensureAcademy(next);
+  const a = next.academy!;
+  const idx = a.prospects.findIndex(p => p.id === prospectId);
+  if (idx < 0) return null;
+  const pr = a.prospects[idx];
+  if (next.squad.length >= 30) return null;
+  if (pr.fee > next.budget) return null;
+  a.prospects.splice(idx, 1);
+  next.budget = Math.round((next.budget - pr.fee) * 10) / 10;
+  const player: CMPlayer = {
+    id: `ac-${pr.id}`,
+    name: pr.name,
+    position: pr.position,
+    rating: pr.rating,
+    age: pr.age,
+    fitness: 100,
+    morale: 82,
+    injuryWeeks: 0,
+    suspendedMatches: 0,
+    isYouth: false,
+    academyGrad: true,
+    potential: pr.potential,
+    seasonGoals: 0,
+    seasonAssists: 0,
+    apps: 0,
+    seasonYellows: 0,
+    seasonReds: 0,
+    cleanSheets: 0,
+    ratingSum: 0,
+    contractYears: 4,
+  };
+  player.wage = wageFor(player);
+  next.squad = [...next.squad, player];
+  next.academyGraduates = (next.academyGraduates ?? 0) + 1;
+  next.aiHeadlines = [
+    `\u{1F393} ${pr.name} has signed his first professional deal at ${next.clubName}.`,
+    ...next.aiHeadlines,
+  ].slice(0, 8);
+  return next;
+}
+
+/** Let one go. Frees a slot on the books. */
+export function releaseProspect(career: CareerState, prospectId: string): CareerState {
+  const next: CareerState = JSON.parse(JSON.stringify(career));
+  ensureAcademy(next);
+  next.academy!.prospects = next.academy!.prospects.filter(p => p.id !== prospectId);
+  return next;
+}
+
+export function setTrainingPlan(career: CareerState, plan: TrainingPlan): CareerState {
+  return { ...career, training: { ...plan } };
+}
+
+export const INTENSITY_INFO: Record<TrainingIntensity, { label: string; desc: string; emoji: string }> = {
+  light: { label: 'Light', desc: 'Fresh legs on match day, but nobody gets any better.', emoji: '\u{1F6CC}' },
+  normal: { label: 'Normal', desc: 'The safe middle. Steady development, normal fatigue.', emoji: '\u{2699}\uFE0F' },
+  double: { label: 'Double', desc: 'They improve fastest and they pay for it in tired legs and knocks.', emoji: '\u{1F525}' },
+};
+
+export const FOCUS_INFO: Record<TrainingFocus, { label: string; desc: string; emoji: string }> = {
+  firstTeam: { label: 'First team', desc: 'Sessions built around the senior XI. The kids get left behind.', emoji: '\u{1F454}' },
+  balanced: { label: 'Balanced', desc: 'Everyone gets the same session. Nothing is wasted, nothing is special.', emoji: '\u{2696}\uFE0F' },
+  youth: { label: 'Youth', desc: 'The whole week is about the teenagers. Your senior players stagnate.', emoji: '\u{1F476}' },
+};
+
+/**
+ * The multiplier on a player's positive growth for the season.
+ *
+ * This is the whole point of the round. Before it, a twenty year old improved
+ * by the same one to three points whether he played forty games or none, and
+ * whether he was a future world beater or a squad filler, because growth read
+ * only his age. Now it reads five things, and every one of them is something
+ * you control.
+ */
+export function developmentRate(p: CMPlayer, career: CareerState): number {
+  const pot = p.potential ?? p.rating;
+  const gap = pot - p.rating;
+  // Headroom. A player already at his ceiling barely moves whatever you do.
+  const headroom = gap <= 0 ? 0.1 : gap <= 3 ? 0.55 : gap <= 8 ? 1 : gap <= 15 ? 1.5 : 1.9;
+  // Game time. Nobody has ever developed sitting on a bench.
+  const apps = p.apps ?? 0;
+  const minutes = apps >= 30 ? 1.3 : apps >= 18 ? 1.12 : apps >= 8 ? 0.85 : apps >= 1 ? 0.6 : 0.4;
+  const plan = career.training ?? DEFAULT_TRAINING;
+  const intensity = plan.intensity === 'double' ? 1.28 : plan.intensity === 'light' ? 0.78 : 1;
+  const focus =
+    plan.focus === 'youth'
+      ? (p.age <= 21 ? 1.3 : p.age >= 27 ? 0.82 : 0.95)
+      : plan.focus === 'firstTeam'
+        ? (p.age <= 21 ? 0.72 : p.age >= 24 ? 1.18 : 1.05)
+        : 1;
+  const coaching = career.academy?.coaching ?? 8;
+  const facilities = career.academy?.facilities ?? 8;
+  const staff = 0.72 + coaching * 0.022 + facilities * 0.011;
+  return clamp(headroom * minutes * intensity * focus * staff, 0.1, 2.6);
+}
+
+/** Everyone under 24 with room left, worst prepared first, for the UI. */
+export function developingPlayers(career: CareerState): CMPlayer[] {
+  return career.squad
+    .filter(p => !p.onLoan && p.age <= 24 && (p.potential ?? p.rating) > p.rating)
+    .sort((a, b) => ((b.potential ?? b.rating) - b.rating) - ((a.potential ?? a.rating) - a.rating));
+}
+
 export function startCareer(clubName: string): CareerState {
   // Round 70: any club in the five real leagues is a valid start.
   const club = clubDefFor(clubName);
@@ -3394,6 +3957,7 @@ export function startCareer(clubName: string): CareerState {
     promisedStarts: [],
   };
   ensureContracts(state);
+  ensureAcademy(state);
   state.wageCap = wageCapFrom(wageBill(state));
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length);
   state.cupBracket = buildCupBracket(state);
@@ -3415,6 +3979,8 @@ export function playNextEntry(career: CareerState): PlayResult {
   if (!state.world) syncWorld(state, myRoundsPlayed(state, state.week));
   // Round 105: and a save made before contracts existed gets given some.
   ensureContracts(state);
+  // Round 116: same story for the academy, the training plan and potentials.
+  ensureAcademy(state);
   while (state.week < state.calendar.length) {
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
@@ -3603,14 +4169,31 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   return { state, summary };
 }
 
-/** One season older: rating drift, fresh legs, wiped season stats. */
-function agePlayer(p: CMPlayer): CMPlayer {
+/**
+ * One season older: rating drift, fresh legs, wiped season stats.
+ *
+ * Round 116: the drift used to read nothing but the birthday, so a kid on the
+ * bench improved exactly as fast as a kid playing every week and a future star
+ * improved exactly as fast as a squad filler. The age curve is still the base,
+ * but positive growth is now multiplied by developmentRate and hard capped at
+ * the player's ceiling. Decline is untouched: no amount of coaching keeps a
+ * thirty four year old from slowing down.
+ */
+function agePlayer(p: CMPlayer, career: CareerState): CMPlayer {
   const age = p.age + 1;
   let drift = 0;
-  if (age <= 20) drift = ri(1, 3);
-  else if (age <= 23) drift = ri(0, 2);
+  if (age <= 19) drift = ri(1, 4);
+  else if (age <= 21) drift = ri(1, 3);
+  else if (age <= 23) drift = ri(0, 3);
+  else if (age <= 26) drift = ri(0, 2);
+  else if (age <= 29) drift = ri(0, 1);
   else if (age >= 33) drift = -ri(1, 3);
   else if (age >= 30) drift = -ri(0, 2);
+  const potential = p.potential ?? rollPotential(p.rating, p.age);
+  if (drift > 0) {
+    drift = Math.round(drift * developmentRate(p, career));
+    drift = Math.min(drift, Math.max(0, potential - p.rating));
+  }
   // Round 70: market value tracks the rating drift (each rating point is
   // ~20% of value on the curve) and decays for the over-30s.
   let value = p.value;
@@ -3618,10 +4201,14 @@ function agePlayer(p: CMPlayer): CMPlayer {
     value = value * Math.pow(1.2, drift) * (age >= 31 ? 0.85 : 1);
     value = Math.max(0.2, Math.round(value * 10) / 10);
   }
+  const rating = clamp(p.rating + drift, 40, 95);
   return {
     ...p,
     age,
-    rating: clamp(p.rating + drift, 40, 95),
+    rating,
+    // The ceiling never sits below where he already is, and it slides down a
+    // little once the legs start going.
+    potential: Math.max(rating, age >= 30 ? potential - 2 : potential),
     value,
     fitness: 100,
     morale: 70,
@@ -3668,7 +4255,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   } else {
     // Round 105: deals run down over the summer and the expired walk for
     // nothing. This is the price of never sitting down with your own players.
-    const aged = [...afterLoans, ...homeFromLoan].map(agePlayer);
+    const aged = [...afterLoans, ...homeFromLoan].map(p => agePlayer(p, career));
     const walked = aged.filter(p => (p.contractYears ?? 1) <= 0);
     for (const p of walked) freeAgentNews.push(p.name);
     squad = aged.filter(p => (p.contractYears ?? 1) > 0).filter(p => p.age < 38 || p.rating >= 70);
@@ -3729,9 +4316,18 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const managed = new Set(state.careerStats.clubsManaged ?? [career.clubName]);
   managed.add(clubName);
   state.careerStats = { ...state.careerStats, clubsManaged: [...managed] };
+  // Round 116: you do not take the training ground with you. A new club hands
+  // you its own setup, its own kids and nobody else's scouting reports.
+  if (moving) {
+    state.academy = defaultAcademy(clubName);
+    state.academyGraduates = 0;
+  }
   // Round 105: everyone still here needs a wage on file, the new club sets a
   // new cap, and the players you let walk lead the summer's news.
   ensureContracts(state);
+  ensureAcademy(state);
+  // Round 116: intake day. What comes up is whatever your academy earned.
+  const intakeNews = runYouthIntake(state);
   state.wageCap = wageCapFrom(wageBill(state));
   for (const name of freeAgentNews) {
     pushNews(state, { name, from: career.clubName, to: 'a free transfer', fee: 0 });
@@ -3742,6 +4338,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       ...state.aiHeadlines,
     ];
   }
+  if (intakeNews.length) state.aiHeadlines = [...intakeNews, ...state.aiHeadlines].slice(0, 8);
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length);
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);

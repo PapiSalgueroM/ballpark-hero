@@ -7,8 +7,9 @@ import {
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
   startNegotiation, makeOffer, walkAway, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract,
+  upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
 } from '@/lib/clubManager';
-import type { TransferStatus } from '@/lib/clubManager';
+import type { TransferStatus, FacilityKind, TrainingPlan } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow } from '@/lib/clubManager';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'matchResult' | 'seasonEnd' | 'sacked';
@@ -286,6 +287,31 @@ export function useClubManager() {
     setCareer(prev => (prev ? renewContract(prev, playerId) ?? prev : prev));
   }, []);
 
+  /* ---------- Round 116: the academy and the training ground ---------- */
+  const upgradeFacility = useCallback((kind: FacilityKind) => {
+    setCareer(prev => (prev ? upgradeAcademy(prev, kind) ?? prev : prev));
+  }, []);
+
+  const sendScout = useCallback((candidateId: string, regionId: string, weeks: number) => {
+    setCareer(prev => (prev ? hireScout(prev, candidateId, regionId, weeks) ?? prev : prev));
+  }, []);
+
+  const callScoutHome = useCallback((scoutId: string) => {
+    setCareer(prev => (prev ? recallScout(prev, scoutId) : prev));
+  }, []);
+
+  const promote = useCallback((prospectId: string) => {
+    setCareer(prev => (prev ? promoteProspect(prev, prospectId) ?? prev : prev));
+  }, []);
+
+  const release = useCallback((prospectId: string) => {
+    setCareer(prev => (prev ? releaseProspect(prev, prospectId) : prev));
+  }, []);
+
+  const setTraining = useCallback((plan: TrainingPlan) => {
+    setCareer(prev => (prev ? setTrainingPlan(prev, plan) : prev));
+  }, []);
+
   /* ---------- Round 73: the inbox ---------- */
   const answer = useCallback((messageId: string, optionIdx: number) => {
     setCareer(prev => (prev ? answerMessage(prev, messageId, optionIdx) : prev));
@@ -302,6 +328,7 @@ export function useClubManager() {
     negotiate, offer, walk, dismissNegotiation, clause, loan,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew,
+    upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
     answer,
   };
 }
