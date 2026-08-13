@@ -9,6 +9,8 @@
 
 import { NBA_TEAMS } from '@/data/conquestDataNba';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
+import { draftRival, judgeRivalSeason } from './careerRival';
+import type { CareerRival } from './careerRival';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNbaLifeEventsA } from './nbaCareerLifeA';
@@ -115,6 +117,8 @@ export interface NbaCareerState {
   lifeFlags?: Record<string, number>;
   appearance?: PlayerAppearance | null;
   yearlyCosts?: number;
+  /** Round 104: the player drafted alongside you, measured against you every season. */
+  rival?: CareerRival;
 }
 
 export interface NbaCareerEvent {
@@ -138,7 +142,7 @@ export function startNbaCareer(
   const stock = Math.max(1, Math.round(62 - (base - 66) * 5.5 + rng() * 22));
   const team = NBA_TEAMS[Math.floor(rng() * NBA_TEAMS.length)].id;
   const lottery = stock <= 14;
-  return {
+  const c: NbaCareerState = {
     name, pos, archetype, team,
     year: 2026, age: 19 + Math.floor(rng() * 3),
     ovr: base, pot,
@@ -160,6 +164,9 @@ export function startNbaCareer(
     appearance: appearance ?? null,
     yearlyCosts: 0,
   };
+  // Round 104: draft the rival at the same moment the player is created.
+  c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
+  return c;
 }
 
 /* ─── Round 57: the money ─── */
@@ -398,6 +405,11 @@ export function simNbaSeason(
   // Round 98: tell the player when the season itself was the story.
   const sn = swingNote(swing, 'nba');
   if (sn) notes.push(sn);
+  // Round 104: the rival played his season too, on the same scale as mine,
+  // so the head to head is an honest comparison rather than a vibe.
+  if (c.rival && !c.rival.retired) {
+    for (const n of judgeRivalSeason(c.rival, statScore, c.name, 'nba', rng)) notes.push(n);
+  }
   c.seasons.push(line);
   return { line, notes };
 }

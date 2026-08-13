@@ -15,6 +15,8 @@
 // they are real career paths and not reskins of a receiver.
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
+import { draftRival, judgeRivalSeason } from './careerRival';
+import type { CareerRival } from './careerRival';
 import { getNflLifeEventsA } from './nflCareerLifeA';
 import { getNflLifeEventsB } from './nflCareerLifeB';
 import { getNflCorruptionEvents } from './nflCareerCorruption';
@@ -162,6 +164,8 @@ export interface CareerState {
   lifeFlags?: Record<string, number>; // chained storyline arcs
   appearance?: PlayerAppearance | null;
   yearlyCosts?: number;       // millions per year from purchased upkeep
+  /** Round 104: the player drafted alongside you, measured against you every season. */
+  rival?: CareerRival;
 }
 
 export interface CareerEvent {
@@ -181,7 +185,7 @@ export function startCareer(
   const stock = Math.max(1, Math.round(90 - (base - 64) * 9 + rng() * 40));
   const team = NFL_TEAM_NAMES[Math.floor(rng() * NFL_TEAM_NAMES.length)].abbr;
   const firstRound = stock <= 32;
-  return {
+  const c: CareerState = {
     name, pos, archetype, team,
     year: 2026,
     age: 22,
@@ -207,6 +211,9 @@ export function startCareer(
     appearance: appearance ?? null,
     yearlyCosts: 0,
   };
+  // Round 104: draft the rival at the same moment the player is created.
+  c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
+  return c;
 }
 
 export function teamLabelOf(abbr: string): string {
@@ -373,6 +380,11 @@ export function simSeason(
   // Round 98: tell the player when the season itself was the story.
   const sn = swingNote(swing, 'nfl');
   if (sn) notes.push(sn);
+  // Round 104: the rival played his season too, on the same scale as mine,
+  // so the head to head is an honest comparison rather than a vibe.
+  if (c.rival && !c.rival.retired) {
+    for (const n of judgeRivalSeason(c.rival, (((line.passYds ?? 0) + (line.rushYds ?? 0) + (line.recYds ?? 0) + (line.tackles ?? 0) * 9 + (line.fgMade ?? 0) * 30) / 60 + ((line.passTd ?? 0) + (line.rushTd ?? 0) + (line.recTd ?? 0) + (line.sacks ?? 0) + (line.picks ?? 0)) * 2), c.name, 'nfl', rng)) notes.push(n);
+  }
   c.seasons.push(line);
   return { line, notes };
 }

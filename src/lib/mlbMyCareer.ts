@@ -9,6 +9,8 @@
 
 import { MLB_TEAMS } from '@/data/conquestDataMlb';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
+import { draftRival, judgeRivalSeason } from './careerRival';
+import type { CareerRival } from './careerRival';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getMlbLifeEventsA } from './mlbCareerLifeA';
@@ -154,6 +156,8 @@ export interface MlbCareerState {
   lifeFlags?: Record<string, number>;
   appearance?: PlayerAppearance | null;
   yearlyCosts?: number;
+  /** Round 104: the player drafted alongside you, measured against you every season. */
+  rival?: CareerRival;
 }
 
 export interface MlbCareerEvent {
@@ -176,7 +180,7 @@ export function startMlbCareer(
   const pot = Math.min(99, base + 12 + Math.floor(rng() * 14) + archetype.potBoost);
   const stock = Math.max(1, Math.round(45 - (base - 62) * 4 + rng() * 25));
   const team = MLB_TEAMS[Math.floor(rng() * MLB_TEAMS.length)].id;
-  return {
+  const c: MlbCareerState = {
     name, pos, archetype, team,
     year: 2026, age: 21,
     ovr: base, pot,
@@ -198,6 +202,9 @@ export function startMlbCareer(
     appearance: appearance ?? null,
     yearlyCosts: 0,
   };
+  // Round 104: draft the rival at the same moment the player is created.
+  c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
+  return c;
 }
 
 export function mlbRollTeamQuality(prev: number | null, rng: () => number): number {
@@ -374,6 +381,11 @@ export function simMlbSeason(
   // Round 98: tell the player when the season itself was the story.
   const sn = swingNote(swing, 'mlb');
   if (sn) notes.push(sn);
+  // Round 104: the rival played his season too, on the same scale as mine,
+  // so the head to head is an honest comparison rather than a vibe.
+  if (c.rival && !c.rival.retired) {
+    for (const n of judgeRivalSeason(c.rival, ((c.pos === 'SP' || c.pos === 'RP') ? Math.round((line.so ?? 0) * 0.12 + Math.max(0, (5.2 - (line.era ?? 5)) * 8)) : Math.round((line.hr ?? 0) * 1.6 + ((line.avg ?? 0.24) - 0.24) * 300)), c.name, 'mlb', rng)) notes.push(n);
+  }
   c.seasons.push(line);
   return { line, notes };
 }
