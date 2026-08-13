@@ -22,8 +22,6 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { WorldTablesCard } from '@/components/club-manager/WorldTablesCard';
 import { UclBracketCard } from '@/components/club-manager/UclBracketCard';
-import { CupBracketCard } from '@/components/club-manager/CupBracketCard';
-import { ContractsCard } from '@/components/club-manager/ContractsCard';
 import { CalendarCard } from '@/components/club-manager/CalendarCard';
 import { InboxCard } from '@/components/club-manager/InboxCard';
 import { ClubDetailScreen } from '@/components/club-manager/ClubDetailScreen';
@@ -215,7 +213,10 @@ const ClubManager = () => {
                 .map(id => REAL_LEAGUES.find(l => l.id === id))
                 .filter((l): l is typeof REAL_LEAGUES[number] => !!l);
               const clubCount = leagues.reduce((s, l) => s + l.clubs.length, 0);
-              const top = leagues[0] ? playableClubs(leagues[0].id).slice(0, 3).map(c => c.name).join(' · ') : '';
+              // Round 106: his note, in his words: "dont be saying teams. just
+              // the leagues". A nation card is a nation and what you can manage
+              // in it, so it names the leagues rather than three arbitrary clubs.
+              const top = leagues.map(l => l.name).join(' · ');
               return (
                 <button
                   key={n.id}
@@ -227,7 +228,7 @@ const ClubManager = () => {
                     <div className="min-w-0">
                       <div className="text-sm font-bold text-foreground">{n.name}</div>
                       <div className="text-[10px] text-muted-foreground">
-                        {leagues.length > 1 ? `${leagues.length} leagues` : leagues[0]?.name} · {clubCount} clubs
+                        {leagues.length > 1 ? `${leagues.length} leagues` : '1 league'} · {clubCount} clubs
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
@@ -301,6 +302,8 @@ const ClubManager = () => {
                   >
                     <div className="flex items-center gap-1.5">
                       <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
+                      {/* Round 106: flags run all the way through the picker now. */}
+                      <FlagImg name={pickNation.name} size={12} />
                       <span className={cn('text-xs font-bold truncate', sel ? 'text-primary' : 'text-foreground')}>{c.name}</span>
                     </div>
                     <div className="text-[9px] text-muted-foreground mt-0.5">
@@ -783,8 +786,6 @@ const ClubManager = () => {
                   {c.uclKoRound === 'won' && (
                     <div className="bg-card border border-gold/40 rounded-xl p-3 text-xs text-gold font-bold">⭐ CHAMPIONS OF EUROPE.</div>
                   )}
-                  {/* Round 102: the domestic cup is a real tournament now. */}
-                  <CupBracketCard career={c} onClubClick={setClubView} />
                   {/* Round 95: the knockout stage as a real bracket. */}
                   <UclBracketCard career={c} onClubClick={setClubView} />
                   {!uclAlive && c.uclKoRound !== 'won' && c.uclGroup === null && (
@@ -886,9 +887,6 @@ const ClubManager = () => {
             onRejectBid={g.rejectIncomingBid}
             onSetStatus={g.setStatus}
             onLoanOut={g.loanOut}
-          />
-          {/* Round 105: the wage bill and the deals running out. */}
-          <ContractsCard career={c} onRenew={g.renew}
           />
         </TabsContent>
       </Tabs>

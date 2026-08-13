@@ -52,22 +52,81 @@ const FLAG_CODES: Record<string, string> = {
   "North Korea": "kp", "Korea, North": "kp",
 };
 
+/* ─── Round 106: flags that actually appear ───
+
+   Two separate bugs meant most flags on the site rendered as nothing at all,
+   which is why the Club Manager nation picker showed bare country names.
+
+   1. THE SIZE. The old code asked flagcdn for `${size*2}x${h*2}`, where h was
+      round(size * 0.75). flagcdn only serves a fixed set of 4:3 pairs
+      (20x15, 28x21, 32x24, 40x30, 60x45, 80x60). At size 20 the maths landed
+      on 40x30 and worked, which is why this was never spotted, but at size 34
+      it asked for 68x52 and got a 404, and at size 14 it asked for 28x22 and
+      got a 404. Every flag at any size the maths did not happen to hit was a
+      broken image. This now asks by WIDTH only (w40, w80, w160), which
+      flagcdn always honours, and lets CSS do the rest.
+
+   2. ENGLAND. flagcdn serves gb-eng as a 122 byte blank. Scotland, Wales and
+      Northern Ireland are all fine; England, the single most important flag
+      in a football game, is empty. So England is drawn inline instead, and
+      any other flag that turns out to be blank can join it in INLINE_FLAGS
+      without touching anything else.
+
+   Anything that still fails falls back to the flag emoji, and only then to
+   text, so a flag slot is never just empty space. */
+
+/** flagcdn honours these widths; anything else is a coin flip. */
+const CDN_WIDTHS = [20, 40, 80, 160, 320];
+
+/** Drawn here because the CDN copy is blank or wrong. */
+const INLINE_FLAGS: Record<string, (w: number, h: number) => JSX.Element> = {
+  'gb-eng': (w, h) => (
+    <svg width={w} height={h} viewBox="0 0 60 36" aria-hidden="true" style={{ display: 'block', borderRadius: 2 }}>
+      <rect width="60" height="36" fill="#fff" />
+      <rect x="25" width="10" height="36" fill="#CE1124" />
+      <rect y="13" width="60" height="10" fill="#CE1124" />
+    </svg>
+  ),
+};
+
+/** The flag emoji for an iso code, used as the fallback if the image fails. */
+function emojiFor(code: string): string {
+  const base = code.split('-')[0];
+  if (base.length !== 2) return '';
+  return String.fromCodePoint(...[...base.toUpperCase()].map(c => 0x1f1e6 + c.charCodeAt(0) - 65));
+}
+
 export function FlagImg({ name, size = 20, showLabel = false }: { name: string; size?: number; showLabel?: boolean }) {
   const code = FLAG_CODES[name];
   if (!code) return <span className="inline-block align-middle text-xs">{name}</span>;
   const h = Math.round(size * 0.75);
+  const inline = INLINE_FLAGS[code];
+  const emoji = emojiFor(code);
+  // Ask for the smallest supported width that still covers a retina screen.
+  const want = size * 2;
+  const cdnWidth = CDN_WIDTHS.find(w => w >= want) ?? CDN_WIDTHS[CDN_WIDTHS.length - 1];
   return (
-    <span className="inline-flex items-center gap-1 align-middle">
-      <img
-        src={`https://flagcdn.com/${size * 2}x${h * 2}/${code}.png`}
-        alt={name}
-        className="inline-block align-middle"
-        style={{ width: size, height: h }}
-        loading="lazy"
-        onError={(e) => {
-          (e.target as HTMLImageElement).style.display = 'none';
-        }}
-      />
+    <span className="inline-flex items-center gap-1 align-middle shrink-0">
+      {inline ? inline(size, h) : (
+        <img
+          src={`https://flagcdn.com/w${cdnWidth}/${code}.png`}
+          alt={name}
+          className="inline-block align-middle object-cover"
+          style={{ width: size, height: h, borderRadius: 2 }}
+          loading="lazy"
+          onError={(e) => {
+            // Never leave a hole: swap in the emoji, and if the platform has
+            // no flag font (Windows) that still reads as the country code.
+            const img = e.target as HTMLImageElement;
+            img.style.display = 'none';
+            const span = img.nextElementSibling as HTMLElement | null;
+            if (span) span.style.display = 'inline';
+          }}
+        />
+      )}
+      {!inline && emoji && (
+        <span style={{ display: 'none', fontSize: size * 0.9, lineHeight: 1 }} aria-hidden="true">{emoji}</span>
+      )}
       {showLabel && <span className="text-inherit">{name}</span>}
     </span>
   );
