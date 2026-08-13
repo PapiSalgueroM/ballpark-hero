@@ -138,7 +138,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/perfect-lineup-nba', label: 'Perfect Lineup: NBA', emoji: '🏀', description: 'Build a starting 5 under random team & era constraints, then simulate', daily: true, isNew: true },
       { path: '/conquest-nba', label: 'NBA Conquest', emoji: '🗺️', description: 'Imperialism mode: winners annex whole empires until one team rules the map', daily: true, isNew: true },
       { path: '/nba-front-office', label: 'NBA Front Office', emoji: '🏢', description: 'Full GM sim: cap, trades, the play-in, best-of-7 wars, dynasties', isNew: true, featured: true },
-      { path: '/nba-my-career', label: 'NBA My Career', emoji: '🌟', description: 'Draft night to the rafters: live a whole player career, one summer at a time', isNew: true, featured: true },
+      { path: '/nba-my-career', label: 'NBA My Career', emoji: '🌟', description: 'Draft night to the rafters. 5 positions, 100+ crossroads, and one very tempting phone call', isNew: true, featured: true },
     ],
   },
   {

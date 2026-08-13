@@ -469,10 +469,13 @@ export const BASKETBALL_CONTENT: GameContentMap = {
   '/nba-my-career': {
     intro: [
       "Draft night is where it starts: a made up prospect with your name, landing in a real NBA locker room. Where it ends is up to your summers.",
-      "Each season prints a stat line shaped by your rating, archetype, health and team quality. Each summer drops one decision on your desk: contracts, surgeries, trade demands.",
+      "Each season prints a stat line shaped by your rating, archetype, health and team quality. Each summer drops one decision on your desk, drawn from over a hundred of them: contracts, surgeries, trade demands, tunnel fits, a rookie who idolises you, a mural in your neighborhood.",
+      "You build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Taking the under on your own rebound totals, faking load management for a bettor, tanking in March, an agent advance you were never supposed to mention. Every dirty choice raises a hidden league integrity meter, and at the top of it is an indefinite suspension and a comeback on the minimum.",
     ],
     howToPlay: [
-      "Create your player: name, position, and one of nine archetypes, from Point God to Paint Beast.",
+      "Create your player: name, one of 5 positions (PG, SG, SF, PF, C), and one of 15 archetypes, from Point God to Movement Sniper to Paint Beast.",
+      "Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.",
+      "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
       "Get drafted by a real NBA team. Stronger prospects go higher and earn more.",
       "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
       "Handle the offseason event, one big decision per summer.",
