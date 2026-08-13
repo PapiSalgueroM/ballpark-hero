@@ -129,7 +129,7 @@ export interface BingoData {
   seasonStats: Map<string, SeasonStat[]>; // player name -> every season row's stat line
   worldCupAll: Set<string>; // normalized names of 2010+ World Cup squad players
   worldCup2022: Set<string>; // normalized names of 2022 World Cup squad players
-  wcWinners: Set<string>; // normalized names of players in a winning squad (2010-2022)
+  wcWinners: Set<string>; // normalized names of players in a winning squad (2010-2026)
   ballonDor: Set<string>; // normalized names of men's Ballon d'Or winners
 }
 
@@ -337,15 +337,20 @@ async function fetchPool(): Promise<BingoPlayer[] | null> {
 /**
  * FIFA World Cup champions covered by the squads table (2010 and later).
  * Indisputable public record: Spain won 2010 (Johannesburg), Germany 2014
- * (Rio), France 2018 (Moscow), Argentina 2022 (Lusail). The nationality
- * column in world_cup_players holds the squad's country as a plain name
- * (verified in SQL 2026-07-08: 23/23/23/26 distinct players per winner).
+ * (Rio), France 2018 (Moscow), Argentina 2022 (Lusail), and Spain again in
+ * 2026 (New Jersey, 1-0 over Argentina). The nationality column in
+ * world_cup_players holds the squad's country as a plain name (verified in
+ * SQL 2026-07-08: 23/23/23/26 distinct players per winner; the 26-man Spain
+ * 2026 squad was inserted 2026-08-13, names verified across three sources).
+ * Round 83: without the 2026 entry here, Cubarsí and co. were not counting
+ * as World Cup winners on the bingo board, exactly as a player reported.
  */
-const WORLD_CUP_WINNERS_2010_2022: Record<number, string> = {
+const WORLD_CUP_WINNERS_2010_2026: Record<number, string> = {
   2010: 'Spain',
   2014: 'Germany',
   2018: 'France',
   2022: 'Argentina',
+  2026: 'Spain',
 };
 
 /** Normalized name sets from World Cup squads (2010 and later), paged. */
@@ -368,7 +373,7 @@ async function fetchWorldCupSets(): Promise<{ all: Set<string>; y2022: Set<strin
       all.add(key);
       const year = Number(r.world_cup_year);
       if (year === 2022) y2022.add(key);
-      if (WORLD_CUP_WINNERS_2010_2022[year] === (r.nationality ?? '').trim()) winners.add(key);
+      if (WORLD_CUP_WINNERS_2010_2026[year] === (r.nationality ?? '').trim()) winners.add(key);
     }
     if (!data || data.length < WC_PAGE) break;
     from += WC_PAGE;
