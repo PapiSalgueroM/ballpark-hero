@@ -11,6 +11,7 @@ import {
 } from '@/lib/frontOffice';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 type Phase = 'pick' | 'hub' | 'draft' | 'recap';
 type Tab = 'team' | 'market' | 'trade' | 'week' | 'standings';
@@ -38,6 +39,12 @@ export default function FrontOfficeBoard() {
   const [champion, setChampion] = useState<string>('');
   const [draftClass, setDraftClass] = useState<Prospect[] | null>(null);
   const [picksLeft, setPicksLeft] = useState(0);
+  // Round 64: the owner's no scroll rule. You press Play Week at the top and
+  // the scoreboard renders underneath it, often below the fold on a phone, so
+  // the results pull themselves into view.
+  const revealRef = useRevealScroll<HTMLDivElement>(
+    `${phase}:${league?.week ?? 0}:${weekResults.length}`,
+  );
   const [tradePartner, setTradePartner] = useState<string>('');
   const [myTradePiece, setMyTradePiece] = useState<string>('');
   const [titles, setTitles] = useState(0);
@@ -515,7 +522,7 @@ export default function FrontOfficeBoard() {
             <ShieldHalf className="h-4 w-4" /> {league.week >= REGULAR_WEEKS ? 'Play the final week + playoffs' : `Play Week ${league.week}`}
           </button>
           {weekResults.length > 0 && (
-            <div className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto text-left sm:grid-cols-2">
+            <div ref={revealRef} className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto text-left sm:grid-cols-2">
               {weekResults.map((g, i) => {
                 const involved = g.home === myTeam || g.away === myTeam;
                 return (
