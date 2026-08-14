@@ -459,6 +459,8 @@ export interface CareerState {
   xiIds: (string | null)[];
   formationIndex: number;
   mentality: Mentality;
+  /** Round 119: set only while a match is paused at halftime. */
+  live?: LiveMatch | null;
   /** The 20 league clubs in scheduling order (shuffled each season). */
   leagueClubs: string[];
   table: TableRow[];
@@ -533,10 +535,33 @@ export type NextFixtureInfo =
   | { kind: 'window' }
   | { kind: 'seasonOver' };
 
+/**
+ * Round 119: a match that is stopped at the interval, waiting on the manager.
+ * Everything needed to finish it lives here so a save can be closed at
+ * halftime and picked back up.
+ */
+export interface LiveMatch {
+  /** Index into the calendar, so resuming knows which fixture this is. */
+  week: number;
+  myGoals: number;
+  oppGoals: number;
+  /** Who kicked off, and who is on the pitch now: the two differ after subs. */
+  startXi: string[];
+  onPitch: string[];
+  subsUsed: number;
+  mentality: Mentality;
+  opponent: string;
+  compLabel: string;
+  home: boolean | null;
+  /** What the first half felt like, in words, so the screen has something to say. */
+  read: string;
+}
+
 export interface PlayResult {
   state: CareerState;
-  kind: 'window' | 'match' | 'seasonOver';
+  kind: 'window' | 'match' | 'seasonOver' | 'halftime';
   report?: MatchWeekReport;
+  live?: LiveMatch;
 }
 
 /* ================================================================== */
@@ -2844,6 +2869,19 @@ function simScore(sA: number, sB: number, boostA: number, boostB: number): [numb
   return [poisson(lA), poisson(lB)];
 }
 
+/**
+ * Round 119: one half of a match, and the reason the halftime break costs the
+ * game nothing. A Poisson draw splits exactly: Poisson(L) has the same
+ * distribution as Poisson(L/2) + Poisson(L/2). So a manager who walks into the
+ * dressing room, changes nothing and walks back out gets precisely the game
+ * that used to be simulated in one shot. Only an actual decision moves it.
+ */
+function simHalf(sA: number, sB: number, boostA: number, boostB: number): [number, number] {
+  const lA = clamp(1.25 + (sA - sB) * 0.055 + boostA, 0.12, 4.2) / 2;
+  const lB = clamp(1.25 + (sB - sA) * 0.055 + boostB, 0.12, 4.2) / 2;
+  return [poisson(lA), poisson(lB)];
+}
+
 /** Quick AI-vs-AI league result (small home edge). */
 function simAiMatch(state: CareerState, home: string, away: string): [number, number] {
   return simScore(strengthOf(state, home), strengthOf(state, away), 0.2, -0.08);
@@ -2872,6 +2910,16 @@ function effectiveXI(state: CareerState): CMPlayer[] {
       out.push(p);
     }
   });
+  return out;
+}
+
+/** Round 119: the players behind a list of ids, in that order, skipping any gone. */
+function squadByIds(state: CareerState, ids: string[]): CMPlayer[] {
+  const out: CMPlayer[] = [];
+  for (const id of ids) {
+    const p = state.squad.find(x => x.id === id);
+    if (p) out.push(p);
+  }
   return out;
 }
 
@@ -3101,20 +3149,40 @@ function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null 
  * Plays my match for this entry, mutating state (tables, squad, cups, board)
  * and returning the report. state must already be a private copy.
  */
-function playMyMatch(state: CareerState, entry: CalendarEntry): MatchWeekReport {
+function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch): MatchWeekReport {
   const fx = fixtureFor(state, entry)!;
   const club = clubDefFor(state.clubName);
   const isKnockout = fx.competition === 'cup' || fx.competition === 'uclKo';
 
   const suspendedNow = state.squad.filter(p => p.suspendedMatches > 0).map(p => p.id);
-  const xi = effectiveXI(state);
-  const mine = myMatchStrength(state, xi);
   const oppS = strengthOf(state, fx.opponent);
-  const ment = MENT_MOD[state.mentality] ?? MENT_MOD.balanced;
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
 
-  let [myGoals, oppGoals] = simScore(mine, oppS, ment.atk + homeAtk, ment.def + oppAtk);
+  /* Round 119: with a first half already played, the second is simulated off
+     whatever the manager left on the pitch and whichever mentality he sent
+     them out in. Without one, this is the single shot match it always was, so
+     fast forwarding a run of fixtures behaves exactly as before. */
+  let xi: CMPlayer[];
+  let mine: number;
+  let myGoals: number;
+  let oppGoals: number;
+  if (live) {
+    const second = squadByIds(state, live.onPitch);
+    mine = myMatchStrength(state, second);
+    const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
+    const [m2, o2] = simHalf(mine, oppS, ment2.atk + homeAtk, ment2.def + oppAtk);
+    myGoals = live.myGoals + m2;
+    oppGoals = live.oppGoals + o2;
+    // Anyone who was on the pitch at any point can appear on the scoresheet.
+    const ids = [...new Set([...live.startXi, ...live.onPitch])];
+    xi = squadByIds(state, ids);
+  } else {
+    xi = effectiveXI(state);
+    mine = myMatchStrength(state, xi);
+    const ment = MENT_MOD[state.mentality] ?? MENT_MOD.balanced;
+    [myGoals, oppGoals] = simScore(mine, oppS, ment.atk + homeAtk, ment.def + oppAtk);
+  }
 
   let decidedBy: 'regular' | 'pens' = 'regular';
   let won = myGoals > oppGoals;
@@ -3972,7 +4040,7 @@ export function startCareer(clubName: string): CareerState {
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean }): PlayResult {
   const state: CareerState = JSON.parse(JSON.stringify(career));
   // Round 95: a save made before the world existed repairs itself here, and
   // a save made after this is a no-op because it is already in step.
@@ -4018,11 +4086,125 @@ export function playNextEntry(career: CareerState): PlayResult {
     if (entry.type === 'league') {
       syncWorld(state, myRoundsPlayed(state, state.week + 1));
     }
+    /* Round 119: stop at the interval unless the caller asked not to. Round
+       93's fast forward plays three, five or ten fixtures back to back and
+       would stop being a fast forward if every one of them opened a dressing
+       room, so it passes skipHalftime and gets the old single shot match. */
+    if (!opts?.skipHalftime) {
+      const live = kickOff(state, entry);
+      state.live = live;
+      return { state, kind: 'halftime', live };
+    }
     const report = playMyMatch(state, entry);
     state.week += 1;
     return { state, kind: 'match', report };
   }
   return { state, kind: 'seasonOver' };
+}
+
+/**
+ * Round 119: play the first half and stop.
+ *
+ * Everything the club sim has been built around for eleven rounds happens
+ * between matches. The match itself was one call to simScore and a scoreline,
+ * and the goal minutes in the report were invented afterwards. This is the
+ * point where the manager gets to manage: a real half, a real score, and a
+ * dressing room where changing something changes what happens next.
+ */
+function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
+  const fx = fixtureFor(state, entry)!;
+  const xi = effectiveXI(state);
+  const mine = myMatchStrength(state, xi);
+  const oppS = strengthOf(state, fx.opponent);
+  const ment = MENT_MOD[state.mentality] ?? MENT_MOD.balanced;
+  const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
+  const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
+  const [myGoals, oppGoals] = simHalf(mine, oppS, ment.atk + homeAtk, ment.def + oppAtk);
+
+  const ids = xi.map(p => p.id);
+  return {
+    week: state.week,
+    myGoals,
+    oppGoals,
+    startXi: ids,
+    onPitch: [...ids],
+    subsUsed: 0,
+    mentality: state.mentality,
+    opponent: fx.opponent,
+    compLabel: fx.compLabel,
+    home: fx.home,
+    read: halftimeRead(state, xi, myGoals, oppGoals, mine, oppS),
+  };
+}
+
+/** What the first half looked like, in the language a manager would use. */
+function halftimeRead(
+  state: CareerState, xi: CMPlayer[], my: number, opp: number, mine: number, oppS: number,
+): string {
+  const gap = mine - oppS;
+  if (my > opp && gap < -4) return 'Against the run of play, and they will come at you after the break.';
+  if (my > opp) return 'In front, and deservedly so. The question is whether to protect it or bury them.';
+  if (my < opp && gap > 4) return 'Behind, to a side you should be beating. Something has to change.';
+  if (my < opp) return 'Second best so far. Chasing this needs bodies forward and it will leave gaps.';
+  if (gap > 5) return 'Level, and that flatters them. Keep going and it will come.';
+  return 'Nothing between the sides. Whoever blinks first at the restart loses this.';
+}
+
+/** The bench, worst-to-best, for the halftime screen. */
+export function benchForHalftime(career: CareerState): CMPlayer[] {
+  const live = career.live;
+  if (!live) return [];
+  const on = new Set(live.onPitch);
+  return career.squad
+    .filter(p => !on.has(p.id) && isAvailable(p))
+    .sort((a, b) => b.rating - a.rating);
+}
+
+/** Who is flagging: the players a manager would actually think about hooking. */
+export function tiringAtHalftime(career: CareerState): CMPlayer[] {
+  const live = career.live;
+  if (!live) return [];
+  return squadByIds(career, live.onPitch)
+    .filter(p => p.fitness < 68 || p.morale < 45)
+    .sort((a, b) => a.fitness - b.fitness);
+}
+
+export const MAX_HALFTIME_SUBS = 3;
+
+/** Swap one player for another at the break. Returns null if it is not allowed. */
+export function makeHalftimeSub(career: CareerState, outId: string, inId: string): CareerState | null {
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  const live = state.live;
+  if (!live) return null;
+  if (live.subsUsed >= MAX_HALFTIME_SUBS) return null;
+  const idx = live.onPitch.indexOf(outId);
+  if (idx < 0) return null;
+  if (live.onPitch.includes(inId)) return null;
+  const coming = state.squad.find(p => p.id === inId);
+  if (!coming || !isAvailable(coming)) return null;
+  live.onPitch[idx] = inId;
+  live.subsUsed += 1;
+  return state;
+}
+
+/** Change the shape of the second half. */
+export function setHalftimeMentality(career: CareerState, mentality: Mentality): CareerState {
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  if (state.live) state.live.mentality = mentality;
+  state.mentality = mentality;
+  return state;
+}
+
+/** Play the second half and finish the match. */
+export function resumeMatch(career: CareerState): PlayResult {
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  const live = state.live;
+  if (!live) return playNextEntry(state);
+  const entry = state.calendar[live.week];
+  state.live = null;
+  const report = playMyMatch(state, entry, live);
+  state.week = live.week + 1;
+  return { state, kind: 'match', report };
 }
 
 /** Preview of the next thing on the calendar that involves my club. */

@@ -29,6 +29,7 @@ import { ClubDetailScreen } from '@/components/club-manager/ClubDetailScreen';
 import { SquadScreen } from '@/components/club-manager/SquadScreen';
 import { TacticsScreen } from '@/components/club-manager/TacticsScreen';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
+import { HalftimeScreen } from '@/components/club-manager/HalftimeScreen';
 import { MatchReportCard } from '@/components/club-manager/MatchReportCard';
 import { AcademyScreen } from '@/components/club-manager/AcademyScreen';
 import { TrainingScreen } from '@/components/club-manager/TrainingScreen';
@@ -368,6 +369,23 @@ const ClubManager = () => {
   }
 
   /* ================= MATCH RESULT ================= */
+  /* ================= HALF TIME (Round 119) ================= */
+  if (g.phase === 'halftime' && g.career?.live) {
+    return shell(
+      <div ref={revealRef}>
+        <header className="text-center mb-4">
+          <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">HALF TIME</h1>
+        </header>
+        <HalftimeScreen
+          career={g.career}
+          onSub={g.subAtHalftime}
+          onShape={g.shapeAtHalftime}
+          onSecondHalf={g.secondHalf}
+        />
+      </div>
+    );
+  }
+
   if (g.phase === 'matchResult' && g.report && g.career) {
     return shell(
       <div ref={revealRef}>

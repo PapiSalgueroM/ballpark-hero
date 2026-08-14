@@ -8,11 +8,12 @@ import {
   startNegotiation, makeOffer, walkAway, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
+  resumeMatch, makeHalftimeSub, setHalftimeMentality,
 } from '@/lib/clubManager';
 import type { TransferStatus, FacilityKind, TrainingPlan } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow } from '@/lib/clubManager';
 
-export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'matchResult' | 'seasonEnd' | 'sacked';
+export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
 
 export function useClubManager() {
@@ -142,7 +143,12 @@ export function useClubManager() {
     if (!career) return;
     const res = playNextEntry(career);
     setCareer(res.state);
-    if (res.kind === 'window') {
+    /* Round 119: the match stops at the interval now. Everything this game has
+       built for eleven rounds happens between fixtures; this is the one moment
+       inside one where the manager gets to manage. */
+    if (res.kind === 'halftime') {
+      setPhase('halftime');
+    } else if (res.kind === 'window') {
       setActiveTab('transfers');
       setPhase('hub');
     } else if (res.kind === 'match' && res.report) {
@@ -168,7 +174,10 @@ export function useClubManager() {
     let lastReport: MatchWeekReport | null = null;
     for (let i = 0; i < entries; i++) {
       if (state.week >= state.calendar.length) break;
-      const res = playNextEntry(state);
+      /* Round 93's fast forward plays a run of fixtures back to back, so it
+         asks for the whole match at once. A dressing room ten times over is
+         not a fast forward. */
+      const res = playNextEntry(state, { skipHalftime: true });
       state = res.state;
       if (res.kind === 'window') {
         setCareer(state);
@@ -312,6 +321,27 @@ export function useClubManager() {
     setCareer(prev => (prev ? setTrainingPlan(prev, plan) : prev));
   }, []);
 
+  /* ---------- Round 119: the dressing room ---------- */
+  const subAtHalftime = useCallback((outId: string, inId: string) => {
+    setCareer(prev => (prev ? makeHalftimeSub(prev, outId, inId) ?? prev : prev));
+  }, []);
+
+  const shapeAtHalftime = useCallback((m: Mentality) => {
+    setCareer(prev => (prev ? setHalftimeMentality(prev, m) : prev));
+  }, []);
+
+  const secondHalf = useCallback(() => {
+    if (!career) return;
+    const res = resumeMatch(career);
+    setCareer(res.state);
+    if (res.report) {
+      setReport(res.report);
+      setPhase('matchResult');
+    } else {
+      setPhase('hub');
+    }
+  }, [career]);
+
   /* ---------- Round 73: the inbox ---------- */
   const answer = useCallback((messageId: string, optionIdx: number) => {
     setCareer(prev => (prev ? answerMessage(prev, messageId, optionIdx) : prev));
@@ -329,6 +359,7 @@ export function useClubManager() {
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
+    subAtHalftime, shapeAtHalftime, secondHalf,
     answer,
   };
 }
