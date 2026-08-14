@@ -230,7 +230,7 @@ const MissingFive = () => {
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Who was the missing starter?"
                     className={cn(
-                      'flex-1 px-4 py-3 rounded-xl bg-secondary border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 transition-all',
+                      'flex-1 min-w-0 px-4 py-3 rounded-xl bg-secondary border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 transition-all',
                       wrongFlash ? 'border-destructive ring-destructive/30' : 'border-border focus:ring-primary/40'
                     )}
                   />

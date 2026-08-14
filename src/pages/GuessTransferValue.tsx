@@ -172,7 +172,7 @@ const GuessTransferValue = () => {
                     value={input}
                     min={100_000}
                     onChange={(e) => setInput(Math.max(0, Number(e.target.value) || 0))}
-                    className="flex-1 px-4 py-2 rounded-lg bg-background border border-border text-foreground focus:outline-none focus:border-primary"
+                    className="flex-1 min-w-0 px-4 py-2 rounded-lg bg-background border border-border text-foreground focus:outline-none focus:border-primary"
                     placeholder="Enter exact amount in USD"
                   />
                   <button

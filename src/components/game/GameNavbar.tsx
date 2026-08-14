@@ -29,7 +29,12 @@ export function GameNavbar() {
   return (
     <>
       <nav className="w-full bg-background/95 border-b border-border/40">
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 py-2">
+        {/* Round 117: minmax(0,1fr), not 1fr. A grid track sized 1fr still gets
+            min-width:auto, so it refuses to shrink below its own content and the
+            Back button was pushed 13px off the right edge of a 320px phone on
+            every one of the 118 game pages. Same root cause as the guess row
+            this round fixes with min-w-0: an implicit min-size nobody asked for. */}
+        <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-3 py-2">
           {/* Logo, left, bigger + stretched */}
           <Link
             to="/"

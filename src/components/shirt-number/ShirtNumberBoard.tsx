@@ -115,7 +115,7 @@ export function ShirtNumberBoard() {
               value={input}
               onChange={e => setInput(e.target.value)}
               placeholder="Enter shirt number (1-99)"
-              className="flex-1 px-4 py-3 rounded-xl border border-border bg-card text-foreground text-center text-lg font-bold placeholder:text-muted-foreground placeholder:text-sm placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-primary/40"
+              className="flex-1 min-w-0 px-4 py-3 rounded-xl border border-border bg-card text-foreground text-center text-lg font-bold placeholder:text-muted-foreground placeholder:text-sm placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-primary/40"
               autoFocus
             />
             <button

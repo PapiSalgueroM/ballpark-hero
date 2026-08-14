@@ -129,7 +129,7 @@ export function JeopardyBoard() {
                 value={guess}
                 onChange={e => setGuess(e.target.value)}
                 placeholder="Who or what is…"
-                className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground"
+                className="flex-1 min-w-0 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground"
               />
               <button
                 type="submit"

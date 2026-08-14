@@ -138,7 +138,7 @@ const NbaCareer = () => {
                 type="text" value={guessInput} onChange={(e) => setGuessInput(e.target.value)}
                 placeholder="Type player name..."
                 className={cn(
-                  'flex-1 px-4 py-3 rounded-xl bg-secondary border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 transition-all',
+                  'flex-1 min-w-0 px-4 py-3 rounded-xl bg-secondary border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 transition-all',
                   wrongGuess ? 'border-destructive ring-destructive/30' : 'border-border focus:ring-primary/40'
                 )}
               />

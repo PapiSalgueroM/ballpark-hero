@@ -204,7 +204,7 @@ export function NascarChainBoard() {
                       onChange={(e) => setNickname(e.target.value)}
                       placeholder="Nickname"
                       maxLength={30}
-                      className="flex-1 bg-neutral-800 border border-neutral-600 rounded-md px-3 py-2 text-white placeholder:text-neutral-600 focus:outline-none focus:border-red-500"
+                      className="flex-1 min-w-0 bg-neutral-800 border border-neutral-600 rounded-md px-3 py-2 text-white placeholder:text-neutral-600 focus:outline-none focus:border-red-500"
                     />
                     <Button
                       onClick={handleSaveScore}

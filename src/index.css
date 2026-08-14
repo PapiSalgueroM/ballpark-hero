@@ -182,3 +182,15 @@
 @media (prefers-reduced-motion: reduce) {
   @keyframes conquest-annex { 0%, 100% { filter: none; } }
 }
+
+/* Round 117: while the cookie banner is still unanswered it sits above the
+   dialog layer, because otherwise a player can never reach Accept or
+   Essential only on any game that opens its rules on mount, which is most of
+   them. The banner is bottom anchored and a dialog is centred, so cap the
+   dialog's height while consent is pending: a centred box that is shorter
+   keeps its own bottom edge above the banner, and every control inside it
+   stays clickable. Nothing applies once consent is answered. */
+body[data-consent-pending] [role='dialog'] {
+  max-height: calc(100dvh - 230px);
+  overflow-y: auto;
+}

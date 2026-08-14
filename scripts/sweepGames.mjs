@@ -2,10 +2,16 @@
  * Site wide play sweep: open every game, look at what a player would see,
  * and flag anything that is broken on its face.
  *
- * The Supabase calls cannot reach the network from this sandbox, so a game
- * that is waiting on data is expected and is NOT a finding. What IS a
- * finding: a thrown exception, a literally empty screen, and any rendered
- * "undefined" / "NaN" / "[object Object]" / "null" leaking into copy.
+ * Round 117: this used to say the Supabase calls could not reach the network
+ * from the sandbox, so a game waiting on data was expected and not a finding.
+ * That was true only because the context did not set ignoreHTTPSErrors and a
+ * proxy that inspects TLS was breaking every call. It does now, so the sweep
+ * sees the games with their real data in them, which is how it found eight
+ * games pushing their Guess button off the side of a phone.
+ *
+ * A finding is: a thrown exception, a literally empty screen, a page wider
+ * than its own viewport, and any rendered "undefined" / "NaN" /
+ * "[object Object]" / "null" leaking into copy.
  */
 import pw from '/home/claude/.npm-global/lib/node_modules/playwright/index.js';
 const { chromium, webkit } = pw;
@@ -18,6 +24,12 @@ import fs from 'node:fs';
    runs a matrix. ENGINES=chromium,webkit and SIZES=phone,tablet,desktop pick
    a subset; the default is everything. */
 const VIEWPORTS = {
+  /* Round 117: 320 is here because 390 was hiding things. Eight games pushed
+     their Guess button off the right edge of the screen and only the three
+     worst were wide enough to show it at 390; at 320 all eight did, and so did
+     the Back button in the shared game navbar, on all 118 pages. A phone size
+     that only catches the worst cases is a phone size that lets the rest ship. */
+  mini: { width: 320, height: 640 },
   phone: { width: 390, height: 844 },
   tablet: { width: 820, height: 1180 },
   desktop: { width: 1440, height: 900 },
@@ -59,7 +71,12 @@ for (const engineName of wantEngines) {
   const browser = engineName === 'chromium'
     ? await chromium.launch({ executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--no-sandbox', '--no-proxy-server'] })
     : await webkit.launch();
-  const ctx = await browser.newContext({ viewport: VIEWPORTS[sizeName] });
+  /* Round 117: without ignoreHTTPSErrors a sandbox that inspects outbound TLS
+     makes every Supabase call fail with ERR_CERT_AUTHORITY_INVALID, so this
+     swept all 118 routes with the database effectively unreachable and passed
+     them on their loading and error states. With it, the sweep sees what a
+     player sees. */
+  const ctx = await browser.newContext({ viewport: VIEWPORTS[sizeName], ignoreHTTPSErrors: true });
   console.log(`\n== ${label} ==`);
   for (const route of routes) {
   const page = await ctx.newPage();
