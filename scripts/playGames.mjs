@@ -35,7 +35,18 @@ const registry = fs.readFileSync(new URL('../src/data/gameRegistry.ts', import.m
 const ALL = [...new Set([...registry.matchAll(/path: '([^']+)'/g)].map(m => m[1]))].sort();
 const GAMES = process.env.ONLY ? [process.env.ONLY] : ALL;
 
-const browser = await chromium.launch({
+const LAUNCH = {
+  executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
+  args: ['--no-sandbox', '--no-proxy-server'],
+};
+/* Round 122: a hundred and eighteen games is long enough that Chromium itself
+   does not always survive the trip. It died around the fortieth game with
+   "Target page, context or browser has been closed" and took the whole run
+   with it, which means the suite could report on a third of the site and call
+   that a pass. A dead browser is a fact about the sandbox, not a finding about
+   a game, so notice it and start a new one rather than throwing away the
+   other seventy eight. */
+let browser = await chromium.launch({
   executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
   args: ['--no-sandbox', '--no-proxy-server'],
 });
@@ -234,6 +245,29 @@ const WANT = /^(?!how to\b).*(play now|start|continue|next|confirm|submit|take t
    happens twice. /sports-millionaire earned this: it threw a CORS failure on
    rpc/global_rank once under load and came back clean three times out of three
    on its own. A harness that reports weather is a harness people stop reading. */
+/**
+ * Round 122: what a screen looks like once the clock is taken off it.
+ *
+ * Round 117 taught this harness that a control which hands back an IDENTICAL
+ * screen is a dud, and that rule is the reason its stalls mean anything. It
+ * had a hole in it big enough to drive every timed game through. Several
+ * screens carry a live countdown, and two visits to the same screen measured
+ * 5567 characters each with exactly one word different: "05:50:05" against
+ * "05:50:04". One ticking second. That is enough for a string compare to call
+ * it a brand new screen, so on any page with a clock NO control could ever be
+ * marked a dud, and the stall check that depends on duds could never fire.
+ * The rule the file was proudest of was quietly switched off wherever a timer
+ * ran.
+ *
+ * Only clock shaped tokens get masked, and that restraint is the point. The
+ * lazy version of this strips every digit, which also erases the score going
+ * from 0 to 1 and the week going from 3 to 4, and then a harness that used to
+ * miss stalls starts inventing them instead. Times change on their own.
+ * Scores change because something happened.
+ */
+const CLOCK = /\b\d{1,2}:\d{2}(?::\d{2})?\b|\b\d+\s?(?:ms|s) (?:left|remaining)\b/gi;
+const screenId = s => s.replace(CLOCK, '<clock>');
+
 async function playOnce(game) {
   const out = { findings: [], skipped: null, acted: 0 };
   let acted = 0;
@@ -249,7 +283,15 @@ async function playOnce(game) {
      table. Nothing here bypasses a check the site itself makes: the site's own
      validators still run, this only stops the sandbox's own proxy from
      breaking the connection. */
-  const ctx = await browser.newContext({ viewport: { width: 430, height: 900 }, ignoreHTTPSErrors: true });
+  let ctx;
+  try {
+    ctx = await browser.newContext({ viewport: { width: 430, height: 900 }, ignoreHTTPSErrors: true });
+  } catch (e) {
+    if (!/browser has been closed|Target page/.test(String(e))) throw e;
+    console.log(`  note    the browser died before ${game}, starting a new one`);
+    browser = await chromium.launch(LAUNCH);
+    ctx = await browser.newContext({ viewport: { width: 430, height: 900 }, ignoreHTTPSErrors: true });
+  }
   const page = await ctx.newPage();
   const errs = [];
   page.on('pageerror', e => errs.push(String(e).split('\n')[0].slice(0, 150)));
@@ -278,6 +320,24 @@ async function playOnce(game) {
        the harness tried every control it could reach and NONE of them moved
        the game on. */
     const duds = new Set();
+    const loopers = new Set();
+    /* Round 122: every screen this run has already shown, so a control that
+       hands back one of them can be recognised as going BACKWARDS.
+
+       Round 117 taught the harness never to press a control twice if the
+       screen came back identical. That is not enough, and /cbb-dynasty is the
+       proof: it pressed "Duke", then "Fire yourself and start over", then
+       "Duke", then "Fire yourself" again, fourteen presses, alternating, and
+       reported "14 interactions clean". Neither control was ever a dud,
+       because each one genuinely changed the screen. They just changed it back
+       into the other one's screen. The harness built and destroyed the same
+       dynasty seven times and never played one game of basketball, and the
+       same shape is waiting in any game with a create and a reset.
+
+       So: a press that lands on a screen already seen this run is a loop back.
+       Remember it and never take that door again. Forward is the only
+       direction that counts as progress. */
+    const seen = new Set();
     let sawDisabled = false;
     for (let s = 0; s < STEPS; s++) {
       await clearOverlays(page);
@@ -341,10 +401,34 @@ async function playOnce(game) {
         // Scan the whole button list, not the first twelve. A portaled dialog
         // or a board rendered after the chrome puts the only live controls at
         // the end of the DOM, which is exactly where the old cap stopped.
+        /* Round 122: gather the candidates before pressing one, so a bare
+           navigation word cannot beat the real action that shares its name.
+
+           /cbb-dynasty is the case that forced this. Its dashboard has a tab
+           called "Play" and, inside that tab, the button that actually starts
+           basketball: "Play Round 1". Pressing in DOM order meant the tab won
+           every time, and pressing the tab while it was already open returns
+           an identical screen, so Round 117's rule blacklisted "Play" as a
+           dud. The harness then wandered Top 25 and Leagues until it ran out
+           of steps, with the only door to the game marked broken and shut.
+
+           So when one candidate label extends another, take the longer one.
+           "Play Round 1" beats "Play". A label that says what it will do is a
+           better guess than the word it starts with, which is usually just
+           where that action lives. */
+        const cands = [];
         for (let i = 0; i < Math.min(n, 40); i++) {
           const b = buttons.nth(i);
           const label = ((await b.innerText().catch(() => '')) || '').trim();
           if (!label || CHROME.test(label) || SURRENDER.test(label) || duds.has(label)) continue;
+          cands.push({ i, label });
+        }
+        const specific = new Set(
+          cands.filter(c => cands.some(o => o !== c && c.label.toLowerCase().startsWith(o.label.toLowerCase() + ' '))).map(c => c.i)
+        );
+        const order = [...cands].sort((a, b2) => (specific.has(b2.i) ? 1 : 0) - (specific.has(a.i) ? 1 : 0) || a.i - b2.i);
+        for (const { i, label } of order) {
+          const b = buttons.nth(i);
           // An already answered select still renders as a button showing its
           // value. Pressing it opens a dropdown that covers the whole screen
           // and the run dies there, so leave comboboxes to the block above.
@@ -356,9 +440,22 @@ async function playOnce(game) {
       if (!clicked) {
         // Out of controls. Three different outcomes hide behind that, and
         // calling them all the same thing is what made the first pass useless.
-        if (duds.size >= MIN_TRIED) {
+        /* Round 122: an answer box still sitting there is not a broken game.
+           Masking the clock switched Round 117's dud rule back on for every
+           timed screen, which is the point of it, but it also meant games that
+           had always been waiting on a real answer started reporting a stall
+           instead of a skip. /footle and /football-grid both did: each wants a
+           word or a player name typed in, neither has any other way on, and
+           both had been passing as "14 interactions clean" purely because a
+           countdown made every press look like progress. Stuck and waiting are
+           different things and the report should not confuse them. */
+        const answerBox = await page.locator('input:visible:not([type=checkbox]):not([type=radio]), textarea:visible').count().catch(() => 0);
+        if (answerBox > 0) {
+          skip(`played ${acted} press${acted === 1 ? '' : 'es'} then ran out of controls with an answer box still open, so the way on is a real answer the harness cannot invent`);
+        } else if (duds.size >= MIN_TRIED) {
           // Genuinely stuck: several distinct controls, none of them moved it.
-          note('STALL  ', `tried ${duds.size} different controls by step ${s} and none of them changed the screen`);
+          const back = loopers.size ? `, ${loopers.size} of them only went back to a screen it had already seen (${[...loopers].slice(0, 3).join(', ')})` : '';
+          note('STALL  ', `tried ${duds.size} different controls by step ${s} and none of them moved the game forward${back}`);
         } else if (sawDisabled) {
           /* The only controls that were not chrome were DISABLED. That is a
              screen waiting for input, not a broken one, and calling it dead
@@ -383,7 +480,16 @@ async function playOnce(game) {
       // shared header on every game, so a prefix comparison calls everything
       // a stall. A real stall is the identical screen coming back three
       // presses running, which means nothing is advancing.
-      if (after === before) duds.add(pressed);
+      const idBefore = screenId(before), idAfter = screenId(after);
+      if (idAfter === idBefore) duds.add(pressed);
+      else if (seen.has(idAfter)) {
+        // Went somewhere, and somewhere was backwards.
+        duds.add(pressed);
+        loopers.add(pressed);
+        if (process.env.VERBOSE) console.log(`      ^ "${pressed}" only went back to a screen already seen`);
+      }
+      seen.add(idBefore);
+      seen.add(idAfter);
       if (errs.length) { note('THROWS ', `${errs[0]} (step ${s})`); break; }
     }
     if (errs.length && !out.findings.some(f => f.kind === 'THROWS ')) note('THROWS ', errs[0]);
