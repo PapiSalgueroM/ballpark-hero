@@ -135,7 +135,18 @@ console.log('2) A manager who works the break finishes ahead of one who does not
      substitution should not swing a season, and if it did the game would be
      silly. Standard error falls with the square root of the sample, so this
      buys a clean read on an effect worth roughly one extra win a year. */
-  const RUNS = 250;
+  /* 500 an arm now, up from 250, and the reason is worth being exact about
+     because the first explanation for it was wrong. Round 121 gave the other
+     manager a half time too, and the obvious worry was that it would eat the
+     payoff: one 250 season read came back at 1.8 points, inside its own noise,
+     and it looked like the feature had been hollowed out. It had not. At 250
+     the reading swung between roughly 1.8 and 3.0 depending on the run, which
+     is a sample too small for the size of the effect and nothing more. At 500
+     it settles near 4 points against two standard errors of about 1.4. The
+     lesson is the same one this file already learned once: when an effect and
+     its error bar are the same size, take more samples before believing a
+     story about why the number moved. */
+  const RUNS = 500;
   const ignore = [], react = [];
   for (let i = 0; i < RUNS; i++) ignore.push(playSeason('Everton', 'skip'));
   for (let i = 0; i < RUNS; i++) react.push(playSeason('Everton', 'react'));

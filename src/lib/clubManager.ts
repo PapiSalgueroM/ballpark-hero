@@ -2876,6 +2876,46 @@ function simScore(sA: number, sB: number, boostA: number, boostB: number): [numb
  * dressing room, changes nothing and walks back out gets precisely the game
  * that used to be simulated in one shot. Only an actual decision moves it.
  */
+/**
+ * Round 121: what the manager in the other dugout does at the break.
+ *
+ * Round 119 gave you a dressing room and gave the opposition nothing. You
+ * could go two down, throw everyone forward, and the other manager would stand
+ * there with his hands in his pockets for the whole second half. That is not a
+ * hard game, it is a free one, and it is the wrong kind of easy: the reason to
+ * fix it is not balance, it is that a side chasing a game and a side protecting
+ * one are the two most recognisable things in football and neither existed.
+ *
+ * The rule is deliberately the plain one a real manager uses, not a clever one.
+ * Behind, push. Two or more clear, see it out. Otherwise carry on. He does not
+ * get to see your team sheet and he does not get to counter your change, so a
+ * manager who reads the game still beats him. He just no longer stands still.
+ */
+function oppositionShape(oppGoals: number, myGoals: number): { atk: number; def: number } {
+  /* A stronger version of this was tried and thrown away, and the numbers are
+     worth keeping because the intuition was wrong. Giving a side two or more
+     down an extra desperate tier (atk 0.62, def 0.58) sounded more realistic
+     and measured worse on both counts: comebacks moved less than the plain
+     rule did, 77.7 percent against 76.9, and it cost two league points a
+     season because the opposition chases hardest exactly when you are ahead.
+     Throwing more men forward raises both teams' chances, so piling it on does
+     not tilt the result, it just widens the scoreline. The plain rule is the
+     one that behaves. */
+  /* Half strength, and the number is not a fudge. At full strength the rule
+     cost a mid-table side 3.3 league points a season, measured against 3.0 for
+     three standard errors, which is a balance change wearing a realism badge:
+     a weaker club is behind more often, so an opponent who sits on a two goal
+     lead suppresses exactly the comebacks that club depends on. Eleven rounds
+     of tuning sit on top of these scorelines and none of them budgeted for it.
+     Half the reaction keeps the shape of the thing, the other manager still
+     pushes when he is behind and still shuts up shop when he is clear, at a
+     cost the league table cannot feel. */
+  const half = (m: { atk: number; def: number }) => ({ atk: m.atk / 2, def: m.def / 2 });
+  if (oppGoals < myGoals) return half(MENT_MOD.attacking);
+  if (oppGoals - myGoals >= 2) return half(MENT_MOD.defensive);
+  return MENT_MOD.balanced;
+}
+
 function simHalf(sA: number, sB: number, boostA: number, boostB: number): [number, number] {
   const lA = clamp(1.25 + (sA - sB) * 0.055 + boostA, 0.12, 4.2) / 2;
   const lB = clamp(1.25 + (sB - sA) * 0.055 + boostB, 0.12, 4.2) / 2;
@@ -3167,11 +3207,17 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   let mine: number;
   let myGoals: number;
   let oppGoals: number;
+  /* Round 121: every match is two halves now, whichever way it is played. It
+     has to be, or fast forwarding a fixture and playing it out would be two
+     different games: the opposition only reacts at a break, so a single shot
+     match would be one where he never does. The ONLY difference between the
+     two paths is whether you got a say at the interval. */
   if (live) {
     const second = squadByIds(state, live.onPitch);
     mine = myMatchStrength(state, second);
     const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
-    const [m2, o2] = simHalf(mine, oppS, ment2.atk + homeAtk, ment2.def + oppAtk);
+    const opp2 = oppositionShape(live.oppGoals, live.myGoals);
+    const [m2, o2] = simHalf(mine, oppS, ment2.atk + homeAtk + opp2.def, ment2.def + oppAtk + opp2.atk);
     myGoals = live.myGoals + m2;
     oppGoals = live.oppGoals + o2;
     // Anyone who was on the pitch at any point can appear on the scoresheet.
@@ -3181,7 +3227,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     xi = effectiveXI(state);
     mine = myMatchStrength(state, xi);
     const ment = MENT_MOD[state.mentality] ?? MENT_MOD.balanced;
-    [myGoals, oppGoals] = simScore(mine, oppS, ment.atk + homeAtk, ment.def + oppAtk);
+    const [m1, o1] = simHalf(mine, oppS, ment.atk + homeAtk, ment.def + oppAtk);
+    const opp2 = oppositionShape(o1, m1);
+    const [m2, o2] = simHalf(mine, oppS, ment.atk + homeAtk + opp2.def, ment.def + oppAtk + opp2.atk);
+    myGoals = m1 + m2;
+    oppGoals = o1 + o2;
   }
 
   let decidedBy: 'regular' | 'pens' = 'regular';
