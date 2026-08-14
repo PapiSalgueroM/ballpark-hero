@@ -103,10 +103,126 @@ async function settle(page) {
   await page.waitForTimeout(600);
 }
 
+/* Round 118: how the harness answers a question instead of giving up on it.
+ *
+ * Round 117 left fifteen games reported as skipped, all the same shape: a text
+ * box, a suggestion list, and a Guess button that stays disabled until you pick
+ * a real name out of that list. Typing "Playtest" never matches anything, so
+ * the harness ran out of controls and stopped, and those fifteen games have
+ * only ever been checked on their first screen.
+ *
+ * Two things make this work. Type a prefix real answers actually start with,
+ * one character at a time so a debounced onChange fires the way it does for a
+ * player: "mar" turns up Marcus Rashford, Marcelo, Martin Odegaard in the
+ * soccer games, Morocco in the nations game, Marquette in the colleges one.
+ * And decide what kind of box it is by what typing DOES rather than by reading
+ * its placeholder, which is the part Round 117 got wrong: it excluded anything
+ * matching /player|type a/ to avoid search boxes, and "Type a player name..."
+ * is exactly what the answer boxes say. So snapshot the visible buttons, type,
+ * and see what appears. New buttons means a suggestion list, so press one and
+ * the game moves on. Nothing new means it was a filter after all, so clear it
+ * again, because a filter left applied is what silently emptied the list under
+ * /fantasy-draft and made five working controls look like a stall. */
+/* Round 118: a CORS failure here is the security working, not a bug, and it
+   cost a false finding on /college-grid to be sure of that. The AI backed
+   validators are edge functions that answer every preflight with
+   access-control-allow-origin: https://douknowball.com no matter who asked,
+   which is a deliberate allowlist that stops anyone else's page driving them.
+   Confirmed by hand: the same OPTIONS request sent with Origin
+   http://127.0.0.1:4174 still comes back allowing only douknowball.com. This
+   harness serves a local build, so EVERY validator call it makes is refused by
+   the browser, on every grid, connect four and chain game. Reporting that as a
+   finding would be reporting the allowlist. Blocked network calls are already
+   ignored on purpose in sweepGames.mjs for the same reason. */
+const IGNORE_CONSOLE = /ERR_CERT|ERR_QUIC|ERR_NAME|Failed to load resource|blocked by CORS policy|Access-Control-Allow-Origin|net::ERR_FAILED/i;
+
+const PREFIXES = ['mar', 'ro', 'de'];
+
+async function answerInput(page, tryClick, step) {
+  const inputs = page.locator('input[type="text"]:visible, input:not([type]):visible');
+  const count = Math.min(await inputs.count().catch(() => 0), 3);
+  for (let i = 0; i < count; i++) {
+    const inp = inputs.nth(i);
+    const hint = [
+      await inp.getAttribute('placeholder').catch(() => ''),
+      await inp.getAttribute('aria-label').catch(() => ''),
+    ].join(' ');
+    // An explicit search box is never a gate, so leave it alone entirely.
+    if (/\bsearch\b|\bfilter\b/i.test(hint)) continue;
+    if (((await inp.inputValue().catch(() => 'x')) || '').trim() !== '') continue;
+    let unlockedGate = false;
+
+    /* Snapshot both what the buttons SAY and whether they are usable. The
+       label diff finds a suggestion list; the disabled diff answers the other
+       question, which is whether typing into this box unlocked anything. */
+    const snap = async () => {
+      const out = [];
+      const bs = page.locator('button:visible');
+      for (let k = 0; k < Math.min(await bs.count().catch(() => 0), 60); k++) {
+        const b = bs.nth(k);
+        out.push({
+          label: ((await b.innerText().catch(() => '')) || '').trim(),
+          off: await b.isDisabled().catch(() => false),
+        });
+      }
+      return out;
+    };
+    const before = await snap();
+    const beforeButtons = before.map(x => x.label);
+
+    for (const prefix of PREFIXES) {
+      await inp.fill('', { timeout: 2000 }).catch(() => {});
+      await inp.pressSequentially(prefix, { delay: 80, timeout: 4000 }).catch(() => {});
+      await page.waitForTimeout(1100);
+      const after = await snap();
+      const afterButtons = after.map(x => x.label);
+      /* Did typing unlock a control that was greyed out before? Then this box
+         is a gate and the text belongs in it, even with nothing suggested.
+         That is how the free text games are answered: /emoji-guess has no
+         autocomplete at all, just a Guess button that stays dead until the
+         field has something in it. */
+      const unlocked = after.some((x, k) => !x.off && before[k] && before[k].off && before[k].label === x.label);
+      if (unlocked) { unlockedGate = true; }
+      const freshIndex = afterButtons.findIndex(l => l && !beforeButtons.includes(l));
+      if (freshIndex < 0) { if (unlocked) return false; continue; }
+      /* Click by POSITION, never by name. A suggestion row is two lines,
+         "Marcus Rashford" over "LW · England", so its innerText carries a
+         newline while its accessible name has that collapsed to a space, and
+         getByRole({name, exact:true}) therefore matches nothing at all. That
+         silently cost /transfer-path its whole run. */
+      const pick = page.locator('button:visible').nth(freshIndex);
+      const label = afterButtons[freshIndex].replace(/\s+/g, ' ');
+      if (await tryClick(pick, `answer:${label.slice(0, 28)}`)) return true;
+    }
+    /* Nothing was suggested. If typing unlocked a button, this is a gate and
+       the text stays: the very next thing the loop does is press that button.
+       If it unlocked nothing it was a filter, and a filter left applied is
+       what emptied the list under /fantasy-draft and made five working
+       controls look like a stall, so put it back the way it was found. */
+    if (unlockedGate) {
+      await inp.fill('', { timeout: 2000 }).catch(() => {});
+      await inp.pressSequentially('Playtest', { delay: 25, timeout: 4000 }).catch(() => {});
+      return false;
+    }
+    await inp.fill('', { timeout: 2000 }).catch(() => {});
+    if (step === 0) await inp.fill('Playtest', { timeout: 2000 }).catch(() => {});
+  }
+  return false;
+}
+
 // Never press the site chrome: Back and Home leave the game, which is not a
 // bug, it is the harness walking out of the room. How to play only reopens
 // the dialog we just closed, and Report opens a form over the game.
 const CHROME = /^(back|home|track stats|douknowball|menu|accept|essential only|share|copy|how to play|report|report a bug|close|privacy|terms|about|contact|log in|sign up)$/i;
+/* Round 118: and never surrender. This is the same rule as never pressing Back
+   or Home, one level in. On /transfer-path the harness opened the game and
+   immediately pressed "Give up and see a path", then confirmed it with "Yes,
+   reveal it", which ended the game at step 1 and left it reported as unplayable
+   when it plays perfectly well. Quitting is not a bug and restarting is not
+   progress, so both are off the table. Note this deliberately does not blanket
+   block "reveal": "Reveal Next Clue" is how you actually play the career path
+   games, and only the give-up phrasings are listed. */
+const SURRENDER = /^(give up|quit|forfeit|surrender|yes,? reveal|reveal the answer|show (the )?answer|see the answer|play again|new game|restart|start over)/i;
 /* "How to play" matches /play/, so the old WANT regex made the how-to-play
    button the single most attractive control on most of the site. Anchor the
    play words so they cannot be reached through it. */
@@ -139,7 +255,7 @@ async function playOnce(game) {
   page.on('pageerror', e => errs.push(String(e).split('\n')[0].slice(0, 150)));
   page.on('console', m => {
     const t = m.text();
-    if (m.type() === 'error' && !/ERR_CERT|ERR_QUIC|ERR_NAME|Failed to load resource/.test(t)) errs.push(t.slice(0, 150));
+    if (m.type() === 'error' && !IGNORE_CONSOLE.test(t)) errs.push(t.slice(0, 150));
   });
 
   const note = (kind, detail) => { out.findings.push({ game, kind, detail }); };
@@ -192,21 +308,7 @@ async function playOnce(game) {
 
          And never a search or filter box. Those are not gates, they are the
          opposite: typing in one takes options away. */
-      if (s === 0) {
-        const inputs = page.locator('input[type="text"]:visible, input:not([type]):visible');
-        for (let i = 0; i < Math.min(await inputs.count(), 3); i++) {
-          const inp = inputs.nth(i);
-          const hint = [
-            await inp.getAttribute('placeholder').catch(() => ''),
-            await inp.getAttribute('aria-label').catch(() => ''),
-            await inp.getAttribute('name').catch(() => ''),
-          ].join(' ');
-          if (/search|filter|find|guess|player|type a/i.test(hint)) continue;
-          if (((await inp.inputValue().catch(() => 'x')) || '').trim() === '') {
-            await inp.fill('Playtest', { timeout: 2500 }).catch(() => {});
-          }
-        }
-      }
+      if (!clicked) clicked = await answerInput(page, tryClick, s);
       // A shadcn Select is a combobox, not a button, and several creation
       // screens gate progress behind one. Open it and take the first option.
       const combos = page.getByRole('combobox');
@@ -230,7 +332,7 @@ async function playOnce(game) {
         for (let i = 0; i < Math.min(await wanted.count(), 6); i++) {
           const w = wanted.nth(i);
           const label = ((await w.innerText().catch(() => '')) || '').trim();
-          if (duds.has(label)) continue;
+          if (duds.has(label) || SURRENDER.test(label)) continue;
           if (await w.isDisabled().catch(() => false)) { sawDisabled = true; continue; }
           if (await tryClick(w, label)) break;
         }
@@ -242,7 +344,7 @@ async function playOnce(game) {
         for (let i = 0; i < Math.min(n, 40); i++) {
           const b = buttons.nth(i);
           const label = ((await b.innerText().catch(() => '')) || '').trim();
-          if (!label || CHROME.test(label) || duds.has(label)) continue;
+          if (!label || CHROME.test(label) || SURRENDER.test(label) || duds.has(label)) continue;
           // An already answered select still renders as a button showing its
           // value. Pressing it opens a dropdown that covers the whole screen
           // and the run dies there, so leave comboboxes to the block above.
