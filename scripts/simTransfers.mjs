@@ -42,7 +42,13 @@ function toWindow(s) {
   let guard = 0;
   while (s.transferWindow === null && s.week < s.calendar.length && guard < 60) {
     guard++;
-    const r = playNextEntry(s);
+/* Round 125: Round 119 made every match stop at half time, and playNextEntry
+   parks on the interval waiting for a decision unless it is told not to. This
+   harness is about the season, not the interval, so every call below takes the
+   straight through path, which is exactly the game this file was calibrated
+   against before Round 119 existed. simHalftime and simOpposition are the two
+   that DO want the break and they call playNextEntry raw on purpose. */
+    const r = playNextEntry(s, { skipHalftime: true });
     s = r.state;
     if (r.kind === 'seasonOver') break;
   }
@@ -67,7 +73,7 @@ console.log('1) A blocked player never gets a bid');
         for (const b of s.incomingBids ?? []) if (blockedIds.has(b.playerId)) bidsOnBlocked++;
       }
       // play on to the January window
-      const r = playNextEntry(s);
+      const r = playNextEntry(s, { skipHalftime: true });
       s = r.state;
       s = toWindow(s);
       if (s.transferWindow) {
@@ -97,7 +103,7 @@ console.log('2) Listing brings the market to you');
       // reroll the opening window's bids by starting a fresh career state:
       // startCareer already generated bids, so re-run the January window.
       s = toWindow(s);
-      const r = playNextEntry(s);
+      const r = playNextEntry(s, { skipHalftime: true });
       s = toWindow(r.state);
       tries++;
       if ((s.incomingBids ?? []).some(b => b.playerId === target.id)) got++;
@@ -138,7 +144,7 @@ console.log('3) Loan out, then home developed');
     let guard = 0;
     while (s.week < s.calendar.length && guard < 120) {
       guard++;
-      const r = playNextEntry(s);
+      const r = playNextEntry(s, { skipHalftime: true });
       s = r.state;
       if (r.kind === 'seasonOver') break;
     }
@@ -231,7 +237,7 @@ console.log('6) Full seasons with the controls hammered');
       });
       while (s.week < s.calendar.length && guard < 130) {
         guard++;
-        const r = playNextEntry(s);
+        const r = playNextEntry(s, { skipHalftime: true });
         s = r.state;
         if (r.kind === 'seasonOver') break;
         if (r.kind === 'window') {

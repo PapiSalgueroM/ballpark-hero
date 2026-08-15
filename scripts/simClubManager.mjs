@@ -164,7 +164,13 @@ for (const clubName of SAMPLE) {
     for (;;) {
       guard += 1;
       if (guard > 110) { fail(`${clubName}: season ${season} never ended (110 entries)`); break; }
-      const res = playNextEntry(s);
+/* Round 125: Round 119 made every match stop at half time, and playNextEntry
+   parks on the interval waiting for a decision unless it is told not to. This
+   harness is about the season, not the interval, so every call below takes the
+   straight through path, which is exactly the game this file was calibrated
+   against before Round 119 existed. simHalftime and simOpposition are the two
+   that DO want the break and they call playNextEntry raw on purpose. */
+      const res = playNextEntry(s, { skipHalftime: true });
       s = res.state;
       if (res.kind === 'seasonOver') break;
       if (res.kind === 'match') {
@@ -313,7 +319,7 @@ console.log('6) Negotiations and the deadline-day machinery');
         for (;;) {
           guard += 1;
           if (guard > 90) { fail('loan season never ended'); break; }
-          const res = playNextEntry(st2);
+          const res = playNextEntry(st2, { skipHalftime: true });
           st2 = res.state;
           if (res.kind === 'seasonOver') break;
           if (st2.sacked) break;
@@ -358,7 +364,7 @@ console.log('6) Negotiations and the deadline-day machinery');
   for (;;) {
     guard += 1;
     if (guard > 20) { fail('never played a match'); break; }
-    const res = playNextEntry(w);
+    const res = playNextEntry(w, { skipHalftime: true });
     w = res.state;
     if (res.kind === 'match') break;
   }
@@ -377,7 +383,7 @@ console.log('7) Stat lines, fixture log and player DMs');
     for (;;) {
       guard += 1;
       if (guard > 110) { fail(`${clubName}: stat season never ended`); break; }
-      const res = playNextEntry(s);
+      const res = playNextEntry(s, { skipHalftime: true });
       s = res.state;
       if (res.kind === 'seasonOver' || s.sacked) break;
       // Answer any open message with a random option; count promises.

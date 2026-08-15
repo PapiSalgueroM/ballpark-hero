@@ -45,7 +45,13 @@ function runSeason(s) {
   let guard = 0;
   while (s.week < s.calendar.length && guard < 140) {
     guard++;
-    const r = playNextEntry(s);
+/* Round 125: Round 119 made every match stop at half time, and playNextEntry
+   parks on the interval waiting for a decision unless it is told not to. This
+   harness is about the season, not the interval, so every call below takes the
+   straight through path, which is exactly the game this file was calibrated
+   against before Round 119 existed. simHalftime and simOpposition are the two
+   that DO want the break and they call playNextEntry raw on purpose. */
+    const r = playNextEntry(s, { skipHalftime: true });
     s = r.state;
     if (r.kind === 'seasonOver') break;
   }
@@ -156,7 +162,7 @@ console.log('5) An overspent wage bill costs board confidence');
       let guard = 0;
       while (guard < 14 && s.week < s.calendar.length) {
         guard++;
-        const r = playNextEntry(s);
+        const r = playNextEntry(s, { skipHalftime: true });
         s = r.state;
         if (r.kind === 'seasonOver' || s.sacked) break;
       }

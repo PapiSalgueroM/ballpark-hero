@@ -40,7 +40,13 @@ function runSeason(s) {
   let guard = 0;
   while (s.week < s.calendar.length && guard < 140) {
     guard++;
-    const r = playNextEntry(s);
+/* Round 125: Round 119 made every match stop at half time, and playNextEntry
+   parks on the interval waiting for a decision unless it is told not to. This
+   harness is about the season, not the interval, so every call below takes the
+   straight through path, which is exactly the game this file was calibrated
+   against before Round 119 existed. simHalftime and simOpposition are the two
+   that DO want the break and they call playNextEntry raw on purpose. */
+    const r = playNextEntry(s, { skipHalftime: true });
     s = r.state;
     if (r.kind === 'seasonOver') break;
   }
@@ -231,13 +237,13 @@ console.log('6) An existing save with no world is caught up mid-season');
   let s = startCareer('Everton');
   // play a chunk of the season, then strip the world exactly as an old save would be
   for (let i = 0; i < 20; i++) {
-    const r = playNextEntry(s);
+    const r = playNextEntry(s, { skipHalftime: true });
     s = r.state;
     if (r.kind === 'seasonOver') break;
   }
   const myPlayed = s.calendar.slice(0, s.week).filter(e => e.type === 'league').length;
   delete s.world;
-  const r = playNextEntry(s);
+  const r = playNextEntry(s, { skipHalftime: true });
   s = r.state;
   const laliga = s.world?.laliga;
   if (!laliga) fail('the world was not rebuilt for an old save');

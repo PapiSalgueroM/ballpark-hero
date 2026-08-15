@@ -111,7 +111,13 @@ console.log('4) Six full seasons, every objective grades cleanly');
       let guard = 0;
       while (s.week < s.calendar.length && guard < 120) {
         guard++;
-        const res = playNextEntry(s);
+/* Round 125: Round 119 made every match stop at half time, and playNextEntry
+   parks on the interval waiting for a decision unless it is told not to. This
+   harness is about the season, not the interval, so every call below takes the
+   straight through path, which is exactly the game this file was calibrated
+   against before Round 119 existed. simHalftime and simOpposition are the two
+   that DO want the break and they call playNextEntry raw on purpose. */
+        const res = playNextEntry(s, { skipHalftime: true });
         s = res.state;
         if (res.kind === 'seasonOver') break;
       }

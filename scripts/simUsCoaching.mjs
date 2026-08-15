@@ -302,7 +302,15 @@ console.log('7) Real simulated careers produce sane reputations');
     },
   };
 
-  const CAREERS = 200;
+  /* Round 125: was a flat 200, and the check at the bottom of this block asks
+     whether the TOP of 200 careers can reach a reputation of 80. The most
+     extreme value in a sample is the noisiest number you can pick: measured
+     over twelve runs at 200 careers the best MLB career came back anywhere
+     between 74 and 100 and the best NFL one between 79 and 100, so the check
+     failed about one run in six while nothing was wrong. Nothing was learned
+     from those failures except to stop reading the output. 2000 careers costs
+     a few seconds and makes the number mean something. */
+  const CAREERS = Number(process.env.CAREERS || 2000);
   for (const sport of SPORTS) {
     const rows = [];
     for (let i = 0; i < CAREERS; i++) {
