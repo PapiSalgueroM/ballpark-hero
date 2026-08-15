@@ -263,7 +263,13 @@ export function simSeason(
     // to 14, and bad starters 18 to 20. The steeper slope hits all three.
     line.ints = Math.max(1, Math.round((18.5 - (form - 62) * 0.36 + rng() * 4) * g));
   } else if (c.pos === 'RB') {
-    line.rushYds = Math.round((260 + (form - 62) * 46 + rng() * 260) * g);
+    /* Round 127: the same cap the quarterback line has had since Round 98,
+       which the running back line never got. Eric Dickerson ran for 2105 in
+       1984 and nobody has beaten it since, so a career year here scrapes it
+       and never passes it. Without the cap a peak back cleared the record by
+       one to twenty six yards in roughly three runs out of five, and
+       simCareerRealism has been failing on it for a while. */
+    line.rushYds = Math.min(2080, Math.round((260 + (form - 62) * 46 + rng() * 260) * g));
     line.rushTd = Math.max(0, Math.round((1 + (form - 62) * 0.42 + rng() * 3) * g));
     line.rec = Math.round((14 + (form - 62) * 1.1 + rng() * 12) * g);
     line.recYds = Math.round((line.rec ?? 0) * (6.5 + rng() * 3));

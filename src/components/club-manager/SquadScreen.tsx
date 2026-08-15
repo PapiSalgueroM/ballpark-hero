@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { ROLE_INFO, roleOf, promiseMood } from '@/lib/clubManager';
 import type { CMPlayer } from '@/lib/clubManager';
 
 export function ratingTint(r: number): string {
@@ -52,9 +53,17 @@ export function SquadScreen({ squad, xiIds }: SquadScreenProps) {
               {p.transferStatus === 'listed' && <span className="text-[8px] font-bold text-gold border border-gold/60 rounded px-1 shrink-0">LISTED</span>}
               {p.transferStatus === 'loanListed' && <span className="text-[8px] font-bold text-sky-400 border border-sky-400/60 rounded px-1 shrink-0">LOAN LIST</span>}
               {p.transferStatus === 'blocked' && <span className="text-[8px] font-bold text-red-400 border border-red-400/60 rounded px-1 shrink-0">BLOCKED</span>}
+              {/* Round 127: he handed in a transfer request off his own bat. */}
+              {p.wantsOut && <span className="text-[8px] font-bold text-red-400 border border-red-400/60 rounded px-1 shrink-0">WANTS OUT</span>}
             </div>
             {/* Round 73: the full stat line. */}
             <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+              {/* Round 127: the rung you put him on, and whether he is getting it. */}
+              <span className="text-[9px] text-muted-foreground shrink-0">
+                {ROLE_INFO[roleOf(p)].emoji} {ROLE_INFO[roleOf(p)].label}
+                {promiseMood(p).tone === 'bad' ? ' · ' : ''}
+                {promiseMood(p).tone === 'bad' && <span className="text-red-400 font-semibold">{promiseMood(p).text}</span>}
+              </span>
               <span className="text-[9px] text-muted-foreground">{p.age}y</span>
               <span className="text-[9px] text-muted-foreground">
                 {p.apps ?? 0} apps · {p.seasonGoals}g {p.seasonAssists}a

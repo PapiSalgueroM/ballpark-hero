@@ -122,7 +122,104 @@ export interface CMPlayer {
   potential?: number;
   /** Round 116: he came through your academy or your scouting network. */
   academyGrad?: boolean;
+  /**
+   * Round 127: what you have told him he is. Undefined on a save made before
+   * this existed, and handed out by ensureRoles.
+   */
+  role?: SquadRole;
+  /**
+   * Round 127: one entry for each of the last ten matches he was FIT for. A 1
+   * means he was involved, a 0 means he watched it. Newest last. Matches he
+   * was injured, banned or out on loan for never go in, because a player does
+   * not sulk about a game he could not have played in.
+   */
+  lastTen?: number[];
+  /** Round 127: he has asked to leave, and the papers know about it. */
+  wantsOut?: boolean;
 }
+
+/* ---------- Round 127: squad roles and playing time promises ---------- */
+
+/**
+ * The rung you have put a player on.
+ *
+ * The ladder is the one both games this is competing with use, cut down to
+ * five rungs so it fits on a phone. Football Manager runs Star Player,
+ * Important Player, Regular Starter, Squad Player, Impact Sub, Fringe Player,
+ * Breakthrough Prospect and more besides, and its manual is blunt about why
+ * any of it exists: "Playing time is at the heart of a player's happiness.
+ * Give it to them and they're satisfied; take it away and problems will almost
+ * certainly arise." EA's career mode asks the same question at the contract
+ * table, where the choices read Crucial first team player, Squad rotation
+ * player, Sporadic first team player and Future first team player.
+ *
+ * Names here are the words a manager would actually use in a press room, not
+ * config keys with a label bolted on.
+ */
+export type SquadRole = 'star' | 'key' | 'rotation' | 'backup' | 'prospect';
+
+export interface RoleDef {
+  id: SquadRole;
+  label: string;
+  emoji: string;
+  /** What he was told, in one line. */
+  promise: string;
+  /**
+   * The share of the matches he is FIT for that he expects to be involved in.
+   *
+   * These are measured, not invented. Round 127 ran thirty full seasons across
+   * five clubs and logged, for every squad rank, the share of the matches he
+   * was available for that he actually played: the top five ranks played 100
+   * percent of them, ranks six to eight came out between 62 and 81 percent,
+   * ranks nine to fifteen landed between 20 and 60 percent depending on where
+   * they play, and everyone from sixteen down sat on 1 to 20 percent. So the
+   * default ladder handed to a squad on day one is honest about that squad,
+   * and nobody starts a save already furious. That is the Round 105 lesson:
+   * anchor a new number on the squad you were handed, not on a number that
+   * happens to be nearby.
+   */
+  share: number;
+}
+
+export const ROLE_LADDER: SquadRole[] = ['star', 'key', 'rotation', 'backup', 'prospect'];
+
+export const ROLE_INFO: Record<SquadRole, RoleDef> = {
+  star: {
+    id: 'star',
+    label: 'Star man',
+    emoji: '⭐',
+    promise: 'First name on the teamsheet. He plays unless he cannot walk.',
+    share: 0.88,
+  },
+  key: {
+    id: 'key',
+    label: 'Key first teamer',
+    emoji: '\u{1F525}',
+    promise: 'In the side most weeks. He will take the odd rest, not a spell out.',
+    share: 0.74,
+  },
+  rotation: {
+    id: 'rotation',
+    label: 'Rotation option',
+    emoji: '\u{1F504}',
+    promise: 'In and out depending on the week. He knows the score.',
+    share: 0.32,
+  },
+  backup: {
+    id: 'backup',
+    label: 'Backup',
+    emoji: '\u{1F9E5}',
+    promise: 'Cover. A few starts, cup nights, and he is fine with that.',
+    share: 0.12,
+  },
+  prospect: {
+    id: 'prospect',
+    label: 'One for the future',
+    emoji: '\u{1F331}',
+    promise: 'Learning his trade. Minutes when they come, no promises made.',
+    share: 0.05,
+  },
+};
 
 /** Round 73: one line in the season's fixture and result log. */
 export interface ResultLogEntry {
@@ -134,19 +231,21 @@ export interface ResultLogEntry {
   res: FormResult;
 }
 
-export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support' | 'laugh';
+export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support' | 'laugh' | 'setRole';
 
 /** Round 73: players slide into your DMs. */
 export interface PlayerMessage {
   id: string;
   playerName: string;
   playerId: string;
-  kind: 'startMe' | 'wantMove' | 'drama' | 'praise';
+  kind: 'startMe' | 'wantMove' | 'drama' | 'praise' | 'roleTalk';
   text: string;
   options: { label: string; effect: MessageEffect }[];
   week: number;
   /** Set once answered (or auto-resolved): the outcome line shown in the UI. */
   resolved?: string;
+  /** Round 127: the rung the setRole option would move him to. */
+  roleOffer?: SquadRole;
 }
 
 /* ---------- Round 116: the academy, the scouts and the training ground ---------- */
@@ -1396,16 +1495,286 @@ export function expiringPlayers(career: CareerState): CMPlayer[] {
     .sort((a, b) => b.rating - a.rating);
 }
 
+/* ================================================================== */
+/* Round 127: squad roles, playing time promises, the dressing room   */
+/* ================================================================== */
+
+/**
+ * What we know he is, with a sensible answer for a player who has not been
+ * given a rung yet (a signing who arrived this morning, a kid just promoted).
+ */
+export function roleOf(p: CMPlayer): SquadRole {
+  if (p.role) return p.role;
+  return p.isYouth || p.age <= 19 ? 'prospect' : 'rotation';
+}
+
+/** How many matches of his last ten we need before anybody starts counting. */
+export const PROMISE_WINDOW_MIN = 4;
+/** How long the window is. Ten games is the unit football already thinks in. */
+export const PROMISE_WINDOW = 10;
+
+/**
+ * The share of his last ten he was actually involved in, or null if there is
+ * not enough of a run yet to say anything. A match he was injured or banned
+ * for never entered the window in the first place.
+ */
+export function playingShare(p: CMPlayer): number | null {
+  const w = p.lastTen ?? [];
+  if (w.length < PROMISE_WINDOW_MIN) return null;
+  return w.reduce((s, x) => s + x, 0) / w.length;
+}
+
+/**
+ * Promise minus reality. Positive means he is playing more than he was
+ * told he would, negative means you are not keeping your end of it.
+ */
+export function promiseGap(p: CMPlayer): number {
+  const share = playingShare(p);
+  if (share === null) return 0;
+  return share - ROLE_INFO[roleOf(p)].share;
+}
+
+/** The gap in words, because a decimal means nothing to anybody. */
+export function promiseMood(p: CMPlayer): { text: string; tone: 'good' | 'ok' | 'bad' | 'none' } {
+  if (playingShare(p) === null) return { text: 'Too early to say', tone: 'none' };
+  const gap = promiseGap(p);
+  if (gap >= 0.2) return { text: 'Delighted', tone: 'good' };
+  if (gap >= -0.08) return { text: 'Happy enough', tone: 'good' };
+  if (gap >= -0.2) return { text: 'Getting restless', tone: 'ok' };
+  if (gap >= -0.4) return { text: 'Not happy', tone: 'bad' };
+  return { text: 'Furious', tone: 'bad' };
+}
+
+/**
+ * The rung he reckons he has earned, off where he sits in this dressing room.
+ *
+ * This exists because without it the whole system has a hole straight through
+ * the middle of it, and the hole was found by measuring rather than by
+ * thinking about it. If happiness reads nothing but minutes against the
+ * promise, then the winning move is to tell your entire first eleven they are
+ * backups and then play them every week: they are all wildly over-delivering
+ * against what they were told, so they are all delighted, and it costs
+ * nothing. Measured over forty seasons that exploit was worth three and a half
+ * league points and eight fewer sackings.
+ *
+ * Football does not work like that and neither do the games this borrows from.
+ * Telling your best player he is a squad man is an insult on its own, whatever
+ * minutes he ends up getting. So a rung below the one his football says he has
+ * earned is a standing drag every single week, and it is deliberately big
+ * enough to swallow the whole of the over-delivery bonus.
+ *
+ * A teenager is softer about it. He is nineteen, he will take a rung below
+ * what his rating says and be glad of it.
+ */
+function deservedFromRank(rank: number, p: CMPlayer): SquadRole {
+  if (p.isYouth) return 'prospect';
+  const base: SquadRole = rank <= 1 ? 'star' : rank <= 7 ? 'key' : rank <= 13 ? 'rotation' : 'backup';
+  if (p.age <= 19) return ROLE_LADDER[Math.min(ROLE_LADDER.indexOf(base) + 1, ROLE_LADDER.length - 1)];
+  return base;
+}
+
+/** Rating rank among the senior players on the books, best first. */
+function seniorRanks(squad: CMPlayer[]): Map<string, number> {
+  const out = new Map<string, number>();
+  squad
+    .filter(x => !x.onLoan && !x.isYouth)
+    .sort((a, b) => b.rating - a.rating)
+    .forEach((x, i) => out.set(x.id, i));
+  return out;
+}
+
+export function deservedRole(career: CareerState, p: CMPlayer): SquadRole {
+  const rank = seniorRanks(career.squad).get(p.id);
+  return deservedFromRank(rank === undefined ? 99 : rank, p);
+}
+
+/** Rungs below what he thinks he has earned. Negative means you flattered him. */
+export function standingGap(career: CareerState, p: CMPlayer): number {
+  return ROLE_LADDER.indexOf(roleOf(p)) - ROLE_LADDER.indexOf(deservedRole(career, p));
+}
+
+/**
+ * Round 127: a save made before roles existed gets a squad that agrees with
+ * itself, and running it twice changes nothing. Same house pattern as
+ * ensureContracts and ensureAcademy.
+ *
+ * The default ladder is built off THE ELEVEN, not off raw ratings, and the
+ * difference between those two turned out to be the whole ball game. Ranking a
+ * squad by rating and handing the top eight the top rungs looks sensible and
+ * is wrong, because a squad's seventh best player is very often a third
+ * striker who is never going to start ahead of the two in front of him. Doing
+ * it that way, measured over forty Everton seasons, produced an average of
+ * 5.9 transfer requests a season in a save where the manager had done nothing
+ * at all, which is the exact complaint EA's own forum has about FC 26. Off the
+ * eleven instead, the squad you are handed on day one is one that agrees with
+ * the team you are going to pick, and nobody is furious before a ball is
+ * kicked. That is Round 105's lesson again: anchor on the squad you were
+ * handed, not on a number that happens to be nearby.
+ */
+export function ensureRoles(state: CareerState): void {
+  const missing = state.squad.filter(p => !p.role);
+  if (missing.length) {
+    const formation = FORMATIONS[state.formationIndex] ?? FORMATIONS[0];
+    const picked = state.xiIds.filter((id): id is string => !!id);
+    const xiIds = picked.length >= 11
+      ? picked
+      : autoPickXI(state.squad, formation).filter((id): id is string => !!id);
+    const inXi = new Set(xiIds);
+    const xiRanked = state.squad
+      .filter(p => inXi.has(p.id))
+      .sort((a, b) => b.rating - a.rating)
+      .map(p => p.id);
+    const topThree = new Set(xiRanked.slice(0, 3));
+    /* Outside the eleven: the four best of them are the rotation, everybody
+       else is cover, and a teenager who is nowhere near the side is a
+       prospect. A freshly repaired save therefore has nobody in it who is
+       more than one rung below what he thinks he has earned, which is inside
+       the tolerance the pride drag allows. That invariant is worth keeping: it
+       is the difference between a dressing room you have to manage and a
+       dressing room that was already on fire when they handed you the keys. */
+    const outside = state.squad
+      .filter(p => !inXi.has(p.id) && !p.onLoan)
+      .sort((a, b) => b.rating - a.rating)
+      .map(p => p.id);
+    const rotationIds = new Set(outside.slice(0, 4));
+    for (const p of missing) {
+      if (inXi.has(p.id)) p.role = topThree.has(p.id) ? 'star' : 'key';
+      else if (p.isYouth) p.role = 'prospect';
+      else if (rotationIds.has(p.id)) p.role = 'rotation';
+      else if (p.age <= 19) p.role = 'prospect';
+      else p.role = 'backup';
+    }
+  }
+  for (const p of state.squad) {
+    if (!Array.isArray(p.lastTen)) p.lastTen = [];
+  }
+}
+
+/**
+ * What it costs to go back on what you told him, in millions.
+ *
+ * Anchored on his WAGE, not on the transfer budget, which is the mistake
+ * Round 105 made once already: a transfer budget and a weekly wage are not on
+ * the same scale. A settlement is six weeks of his money per rung you drop
+ * him, so telling a two hundred grand a week star he is now a rotation option
+ * costs about two and a half million, and doing the same to a squad man on
+ * fifteen grand costs almost nothing. Moving a player UP costs no money at
+ * all, because the bill for that arrives later, in minutes you now owe him.
+ */
+export function roleChangeCost(p: CMPlayer, to: SquadRole): number {
+  const from = ROLE_LADDER.indexOf(roleOf(p));
+  const next = ROLE_LADDER.indexOf(to);
+  if (next <= from) return 0;
+  const wage = p.wage ?? wageFor(p);
+  return Math.max(0.1, Math.round((wage * 6 * (next - from)) / 1000 * 10) / 10);
+}
+
+/**
+ * Move him up or down the ladder.
+ *
+ * Up is free and he is delighted, and from that moment you owe him the
+ * minutes. Down costs a settlement out of the transfer budget and wounds him,
+ * and the better and happier he was the more it wounds, so a mistake is
+ * recoverable without being free. Returns null if you cannot afford it.
+ */
+export function setSquadRole(career: CareerState, playerId: string, to: SquadRole): CareerState | null {
+  const p = career.squad.find(x => x.id === playerId);
+  if (!p) return null;
+  if (p.onLoan) return null;
+  const current = roleOf(p);
+  if (current === to) return null;
+  const from = ROLE_LADDER.indexOf(current);
+  const next = ROLE_LADDER.indexOf(to);
+  const cost = roleChangeCost(p, to);
+  if (cost > career.budget) return null;
+
+  const rungs = Math.abs(next - from);
+  let moraleDelta: number;
+  if (next < from) {
+    // Promoted. A nice moment, and deliberately small: you cannot buy a happy
+    // dressing room by making everybody a star, because the bill lands in
+    // ten matches time when none of them are playing.
+    moraleDelta = 3 + rungs * 2;
+  } else {
+    // Demoted. Worse the higher he was and the happier he had been.
+    moraleDelta = -(6 + rungs * 4 + (p.rating >= 78 ? 5 : 0) + (p.morale >= 70 ? 3 : 0));
+  }
+
+  return {
+    ...career,
+    budget: Math.round((career.budget - cost) * 10) / 10,
+    squad: career.squad.map(x => (
+      x.id === playerId
+        ? {
+            ...x,
+            role: to,
+            morale: clamp(x.morale + moraleDelta, 5, 99),
+            /* Sitting down and renegotiating takes the request off the table.
+               It does not solve anything on its own: if the new arrangement is
+               just as broken as the old one he will hand in another. */
+            wantsOut: undefined,
+          }
+        : x
+    )),
+  };
+}
+
+/** Everyone on the books, grouped by rung, best first, for the dressing room screen. */
+export function squadByRole(career: CareerState): { role: SquadRole; players: CMPlayer[] }[] {
+  return ROLE_LADDER.map(role => ({
+    role,
+    players: career.squad
+      .filter(p => !p.onLoan && roleOf(p) === role)
+      .sort((a, b) => b.rating - a.rating),
+  }));
+}
+
+/** The players you are letting down, worst first. Drives the tile and the screen. */
+export function brokenPromises(career: CareerState): CMPlayer[] {
+  return career.squad
+    .filter(p => !p.onLoan && promiseGap(p) <= -0.15)
+    .sort((a, b) => promiseGap(a) - promiseGap(b));
+}
+
+/**
+ * The morale swing a match is worth to one player, purely on the gap between
+ * what he was told and what he is getting.
+ *
+ * Breaking it stings harder than keeping it pleases, which is both how people
+ * work and how both games this borrows from behave. The clamp matters as much
+ * as the multiplier: a win already moves everybody by five and a defeat by
+ * six, so this had to land in the same neighbourhood rather than drowning the
+ * results out. A star who has not played any of his last ten loses four and a
+ * half a week on top of the result, so two months on the bench genuinely
+ * finishes him. A backup playing every week gains about two and a half.
+ */
+function promiseMoraleDelta(p: CMPlayer, standing: number): number {
+  const gap = promiseGap(p);
+  const minutes = gap === 0 ? 0 : clamp(gap >= 0 ? gap * 3.2 : gap * 5.6, -4.5, 2.5);
+  /* Pride. A rung below what he has earned drags on him every week whatever
+     his minutes look like, and it is set to swallow the whole over-delivery
+     bonus so that under-promising can never be farmed. A rung ABOVE what he
+     has earned is worth a little, because being told you are the main man is
+     nice, but not as much as the extra football you now owe him costs. */
+  const pride = standing > 0
+    ? clamp(-1.6 * (standing - 0.5), -4.5, 0)
+    : clamp(-0.3 * standing, 0, 0.6);
+  return minutes + pride;
+}
+
 /** What we bank when selling: 90% of real value (youth products fetch less). */
 export function sellValue(p: CMPlayer): number {
   // Round 105: a year left and everyone knows they can wait and get him for
   // nothing, so the fee collapses. This is the cost of letting a deal run.
   const runDown = (p.contractYears ?? 9) <= 1 ? 0.45 : 1;
+  // Round 127: and a man who has publicly asked to leave is a man every
+  // sporting director in Europe knows you have to sell. They bid accordingly.
+  const wantsOut = p.wantsOut ? 0.82 : 1;
   if (p.value !== undefined) {
-    return Math.max(0.3, Math.round(p.value * 0.9 * runDown * 10) / 10);
+    return Math.max(0.3, Math.round(p.value * 0.9 * runDown * wantsOut * 10) / 10);
   }
   const youthF = p.isYouth ? 0.4 : 1;
-  return Math.max(1, Math.round(baseValue(p.rating, p.age) * 0.9 * youthF * runDown));
+  return Math.max(1, Math.round(baseValue(p.rating, p.age) * 0.9 * youthF * runDown * wantsOut));
 }
 
 let MARKET_BASE_CACHE: MarketPlayer[] | null = null;
@@ -1619,7 +1988,49 @@ function pushMessage(state: CareerState, msg: Omit<PlayerMessage, 'id' | 'week'>
 /** Rolled after each match: someone in the squad has something to say. */
 function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean, margin: number): void {
   const unresolved = (state.inbox ?? []).filter(m => !m.resolved).length;
-  if (unresolved >= 3 || Math.random() > 0.38) return;
+  if (unresolved >= 3) return;
+
+  /* Round 127: the corridor conversation gets first refusal, ahead of the
+     dice roll that decides whether anybody speaks to you at all. It has to,
+     or it never happens: a man you are letting down only qualifies for the
+     two or three weeks between his run of games getting long enough to judge
+     and him putting a transfer request in writing, and behind a thirty eight
+     percent gate followed by another coin flip that window closes without a
+     word being said. Measured before this: zero corridor conversations across
+     a whole season of benching a man you had called a star. */
+  if (Math.random() < 0.34) {
+    const letDown = state.squad
+      .filter(p => !p.isYouth && !p.onLoan && !p.wantsOut && isAvailable(p)
+        && (p.lastTen ?? []).length >= 5 && promiseGap(p) <= -0.22 && p.morale < 70)
+      .sort((a, b) => promiseGap(a) - promiseGap(b))[0];
+    if (letDown) {
+      const rung = ROLE_LADDER.indexOf(roleOf(letDown));
+      const honest = ROLE_LADDER[Math.min(rung + 1, ROLE_LADDER.length - 1)];
+      const played = (letDown.lastTen ?? []).reduce((s, x) => s + x, 0);
+      const of = (letDown.lastTen ?? []).length;
+      const options: { label: string; effect: MessageEffect }[] = [
+        { label: 'Promise him a start', effect: 'promise' },
+        { label: 'Hear him out', effect: 'listen' },
+      ];
+      if (honest !== roleOf(letDown)) {
+        options.splice(1, 0, {
+          label: `Be straight: he is a ${ROLE_INFO[honest].label.toLowerCase()}`,
+          effect: 'setRole',
+        });
+      }
+      pushMessage(state, {
+        playerName: letDown.name,
+        playerId: letDown.id,
+        kind: 'roleTalk',
+        text: `${letDown.name} caught you in the corridor. "You told me I was a ${ROLE_INFO[roleOf(letDown)].label.toLowerCase()} here. ${played} of the last ${of}, boss. Which is it?"`,
+        options,
+        roleOffer: honest,
+      });
+      return;
+    }
+  }
+
+  if (Math.random() > 0.38) return;
   const xiIds = new Set(xi.map(p => p.id));
   const roll = Math.random();
 
@@ -1728,7 +2139,34 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
     case 'listen':
       bump(msg.playerId, 4);
       resolved = 'You heard him out. Sometimes that is all it takes.';
+      /* Round 127: talking a man out of a transfer request buys you time, not
+         a solution. The request comes off the table, but nothing about his
+         football has changed, so if you still are not playing him he will hand
+         in another one. */
+      if (msg.kind === 'wantMove') {
+        squad = squad.map(p => (p.id === msg.playerId ? { ...p, wantsOut: undefined } : p));
+        resolved = 'He pulled the request for now. Nothing about his week has changed though.';
+      }
       break;
+    /* Round 127: being honest with him, and paying for it. */
+    case 'setRole': {
+      const to = msg.roleOffer;
+      const target = squad.find(x => x.id === msg.playerId);
+      if (!to || !target) { resolved = 'Nothing came of it.'; break; }
+      const cost = roleChangeCost(target, to);
+      const applied = setSquadRole({ ...career, squad, budget }, msg.playerId, to);
+      if (applied) {
+        squad = applied.squad;
+        budget = applied.budget;
+        resolved = cost > 0
+          ? `You told him the truth. He is a ${ROLE_INFO[to].label.toLowerCase()} now and the settlement cost you ${money(cost)}. He did not enjoy hearing it.`
+          : `You told him the truth. He is a ${ROLE_INFO[to].label.toLowerCase()} now.`;
+      } else {
+        bump(msg.playerId, -6);
+        resolved = `You cannot cover the ${money(cost)} settlement, so his role stands and so does the problem.`;
+      }
+      break;
+    }
     case 'fine': {
       const fine = Math.max(0.1, Math.round((0.1 + Math.random() * 0.4) * 10) / 10);
       budget = Math.round((budget + fine) * 10) / 10;
@@ -2098,8 +2536,28 @@ function generateIncomingBids(state: CareerState): void {
   const taken = new Set<string>();
   const available = state.squad.filter(p => !p.onLoan && p.transferStatus !== 'blocked');
 
+  /* Round 127: a player who has handed in a transfer request is shopping
+     himself whether you like it or not, so the phone rings for him the same
+     way it rings for a man you listed. This is the part of a broken promise
+     you can actually point at: you did not put him on the market, he did. */
+  for (const p of available.filter(x => x.wantsOut && x.transferStatus !== 'listed' && x.transferStatus !== 'loanListed')) {
+    if (Math.random() > 0.75) continue;
+    const base = sellValue(p);
+    const club = pick(buyers);
+    bids.push({
+      playerId: p.id,
+      playerName: p.name,
+      club,
+      offer: Math.max(0.3, Math.round(base * (0.9 + Math.random() * 0.3) * 10) / 10),
+      status: 'open',
+      fromListing: true,
+    });
+    taken.add(p.id);
+  }
+
   // 1. Listed players: the phone actually rings.
   for (const p of available.filter(x => x.transferStatus === 'listed')) {
+    if (taken.has(p.id)) continue;
     if (Math.random() > 0.85) continue;
     const base = sellValue(p);
     const pool = buyers.filter(n => n !== state.clubName);
@@ -3195,6 +3653,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   const isKnockout = fx.competition === 'cup' || fx.competition === 'uclKo';
 
   const suspendedNow = state.squad.filter(p => p.suspendedMatches > 0).map(p => p.id);
+  /* Round 127: who could actually have played today, taken before the match
+     hands anybody an injury. A fixture he was never fit for does not go into
+     his last ten at all, because no player sulks about a game he could not
+     have played in, and a system that punished you for a hamstring would have
+     been unusable. */
+  const fitAtKickoff = new Set(
+    state.squad.filter(p => isAvailable(p) && !p.onLoan).map(p => p.id),
+  );
   const oppS = strengthOf(state, fx.opponent);
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
@@ -3408,8 +3874,87 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   }
 
   /* ----- squad after-effects ----- */
+  /* Round 127: the result still moves everybody the same way it always has,
+     and on top of it every player now gets his own number, which is the gap
+     between the rung you put him on and the football he is actually getting.
+     Before this round the ONLY thing separating a man who played every minute
+     from a man who never got off the bench, across a whole season, was three
+     morale for scoring a goal. Measured over eight Everton seasons, players
+     with fifteen or more appearances finished on an average of four and a half
+     morale more than players with none, and in three of the eight runs the gap
+     was under one and a half. Leaving your best striker out was free. */
   const moraleShift = won ? 5 : drawn ? -1 : -6;
-  state.squad = state.squad.map(p => ({ ...p, morale: clamp(p.morale + moraleShift, 5, 99) }));
+  const ranks = seniorRanks(state.squad);
+  const standingOf = (p: CMPlayer): number => {
+    const rank = ranks.get(p.id);
+    return ROLE_LADDER.indexOf(roleOf(p))
+      - ROLE_LADDER.indexOf(deservedFromRank(rank === undefined ? 99 : rank, p));
+  };
+  state.squad = state.squad.map(p => {
+    const lastTen = fitAtKickoff.has(p.id)
+      ? [...(p.lastTen ?? []), xiIdSet.has(p.id) ? 1 : 0].slice(-PROMISE_WINDOW)
+      : (p.lastTen ?? []);
+    const withWindow = { ...p, lastTen };
+    return {
+      ...withWindow,
+      morale: clamp(p.morale + moraleShift + promiseMoraleDelta(withWindow, standingOf(p)), 5, 99),
+    };
+  });
+
+  /* Round 127: the dressing room. Football Manager's own manual on an unhappy
+     player: "Their reaction can and often does influence other players in the
+     squad." So a senior man who is miserable AND being let down drags on
+     everybody around him. Capped at three sulkers so a bad month cannot spiral
+     into a squad nobody could rescue. */
+  const sulkers = state.squad.filter(p =>
+    !p.onLoan && !p.isYouth && p.rating >= 70 && p.morale < 32
+    && (promiseGap(p) <= -0.2 || standingOf(p) >= 2));
+  if (sulkers.length) {
+    const bleed = Math.min(sulkers.length, 3) * 0.45;
+    const sulkIds = new Set(sulkers.map(p => p.id));
+    state.squad = state.squad.map(p => (
+      sulkIds.has(p.id) ? p : { ...p, morale: clamp(p.morale - bleed, 5, 99) }
+    ));
+    if (sulkers.length >= 2 && Math.random() < 0.3) {
+      events.push(`\u{1F636} The mood in the dressing room is flat. ${sulkers[0].name} is not the only one who has stopped talking to you.`);
+    }
+  }
+
+  /* Round 127: and the loudest of them asks to leave. This is the thing FC 26
+     players complain about on EA's own forums, that "every player regardless
+     of Squad Role requests to leave if you don't play them 95% of the time",
+     so the trigger here reads the rung he is on and not just his minutes: a
+     backup who barely plays is doing exactly what he agreed to and never asks
+     for anything. */
+  for (const p of state.squad) {
+    if (p.wantsOut || p.onLoan || p.isYouth) continue;
+    if (p.rating < 68 || p.morale >= 34) continue;
+    const starved = (p.lastTen ?? []).length >= 8 && promiseGap(p) <= -0.25;
+    /* Two rungs below what his football says he has earned is an insult on its
+       own, and a man who has been insulted asks to leave even if he is playing
+       every week. Without this you could label your whole first eleven backups,
+       play them all anyway, and farm a delighted dressing room out of nothing. */
+    const insulted = standingOf(p) >= 2;
+    if (!starved && !insulted) continue;
+    if (Math.random() > 0.22) continue;
+    p.wantsOut = true;
+    const why = starved
+      ? `He was promised ${ROLE_INFO[roleOf(p)].label.toLowerCase()} football and has not had it.`
+      : `He does not believe he is a ${ROLE_INFO[roleOf(p)].label.toLowerCase()} at this club, and the table agrees with him.`;
+    events.push(`\u{1F9F3} ${p.name} has handed in a transfer request. ${why}`);
+    pushMessage(state, {
+      playerName: p.name,
+      playerId: p.id,
+      kind: 'wantMove',
+      text: starved
+        ? `${p.name} put it in writing. "You told me I was a ${ROLE_INFO[roleOf(p)].label.toLowerCase()} here. I have played ${(p.lastTen ?? []).reduce((s, x) => s + x, 0)} of the last ${(p.lastTen ?? []).length}. I want to leave."`
+        : `${p.name} put it in writing. "Look at the squad list, boss. ${ROLE_INFO[roleOf(p)].label} is what you have me down as. I am worth more than that somewhere else."`,
+      options: [
+        { label: 'You are going nowhere', effect: 'refuse' },
+        { label: 'Sit down and sort it out', effect: 'listen' },
+      ],
+    });
+  }
 
   for (const id of suspendedNow) {
     const p = state.squad.find(x => x.id === id);
@@ -3479,9 +4024,16 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   // finds something new to message you about.
   const promised = state.promisedStarts ?? [];
   if (promised.length) {
+    /* Round 127: a promise used to be wiped after exactly one match whatever
+       happened, so promising a start to a man who then pulled up in training
+       quietly cancelled the promise and you owed him nothing. Now it waits
+       until he is fit enough to be picked. */
+    const stillOwed: string[] = [];
     for (const id of promised) {
       if (xiIdSet.has(id)) continue;
       const p = state.squad.find(x => x.id === id);
+      if (!p) continue;
+      if (!fitAtKickoff.has(id)) { stillOwed.push(id); continue; }
       if (p && isAvailable(p)) {
         p.morale = clamp(p.morale - 14, 5, 99);
         pushMessage(state, {
@@ -3494,7 +4046,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
         });
       }
     }
-    state.promisedStarts = [];
+    state.promisedStarts = stillOwed;
   }
   generatePlayerMessage(state, xi, won, margin);
 
@@ -4076,6 +4628,7 @@ export function startCareer(clubName: string): CareerState {
   };
   ensureContracts(state);
   ensureAcademy(state);
+  ensureRoles(state);
   state.wageCap = wageCapFrom(wageBill(state));
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length);
   state.cupBracket = buildCupBracket(state);
@@ -4099,6 +4652,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   ensureContracts(state);
   // Round 116: same story for the academy, the training plan and potentials.
   ensureAcademy(state);
+  // Round 127: and everybody gets told where he stands.
+  ensureRoles(state);
   while (state.week < state.calendar.length) {
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
@@ -4456,6 +5011,13 @@ function agePlayer(p: CMPlayer, career: CareerState): CMPlayer {
     ratingSum: 0,
     // Round 105: a year off the deal, and his wage tracks his new value.
     contractYears: Math.max(0, (p.contractYears ?? 3) - 1),
+    /* Round 127: a summer wipes the slate. The rung you put him on carries
+       over, because that is the promise and it is supposed to outlive one bad
+       run, but last season's ten games and last season's transfer request do
+       not follow him into August. Without this a grudge would compound
+       forever and no squad would ever recover from one bad autumn. */
+    lastTen: [],
+    wantsOut: undefined,
   };
 }
 
@@ -4558,6 +5120,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   // new cap, and the players you let walk lead the summer's news.
   ensureContracts(state);
   ensureAcademy(state);
+  /* Round 127: a manager who walks into a new club walks into a dressing room
+     that has never been told anything, so it gets the honest default ladder
+     off its own ratings. Staying put keeps every promise you already made. */
+  if (moving) {
+    for (const p of state.squad) p.role = undefined;
+  }
+  ensureRoles(state);
   // Round 116: intake day. What comes up is whatever your academy earned.
   const intakeNews = runYouthIntake(state);
   state.wageCap = wageCapFrom(wageBill(state));
@@ -4607,6 +5176,15 @@ export function loadCareer(): CareerState | null {
     ) {
       return null;
     }
+    /* Round 127: repair the save the moment it is opened rather than on the
+       first kick off. ensureRoles has always run at the top of playNextEntry,
+       which is the house pattern and is enough for the engine, but it is NOT
+       enough for the screens: an old save loaded straight into the dressing
+       room showed every single player as a rotation option, because nobody had
+       been given a rung yet and the fallback has to guess. Found by loading a
+       real half played save built on the committed pre Round 127 engine into a
+       browser, which is the only way anybody would ever have seen it. */
+    ensureRoles(parsed);
     return parsed;
   } catch {
     return null;

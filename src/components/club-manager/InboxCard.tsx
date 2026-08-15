@@ -3,7 +3,7 @@ import { MessageSquare } from 'lucide-react';
 import type { CareerState } from '@/lib/clubManager';
 
 const KIND_ICON: Record<string, string> = {
-  startMe: '😤', wantMove: '🧳', drama: '🍿', praise: '💐',
+  startMe: '😤', wantMove: '🧳', drama: '🍿', praise: '💐', roleTalk: '🤝',
 };
 
 interface InboxCardProps {

@@ -81,13 +81,25 @@ if (ONLY.length) {
   }
 }
 
+/* ONLY means "which harnesses do I run" to this file and "which game route do I
+   play" to playGames.mjs, and the two meanings are not compatible. Running
+   ONLY=playGames to chase one failure handed playGames the string
+   "sweepGames,playGames,simTactics,playClubManager" as a URL path and it died on
+   an invalid URL, which reads exactly like a broken harness and is not one.
+   A runner has to hand its children a clean environment rather than leaking the
+   flags that were meant for itself, so both of this file's own controls are
+   stripped on the way down. */
+const OWN_CONTROLS = ['ONLY', 'BROWSER'];
+
 function run(file, extraEnv = {}) {
   return new Promise((resolve) => {
     const started = Date.now();
     let out = '';
+    const childEnv = { ...process.env, ...extraEnv };
+    for (const k of OWN_CONTROLS) if (!(k in extraEnv)) delete childEnv[k];
     const child = spawn(process.execPath, [path.join(HERE, file)], {
       cwd: ROOT,
-      env: { ...process.env, ...extraEnv },
+      env: childEnv,
     });
     child.stdout.on('data', (d) => { out += d; });
     child.stderr.on('data', (d) => { out += d; });
@@ -171,8 +183,18 @@ if (browserGroup.length && !WANT_BROWSER) {
     console.log(`Nothing came up on ${PORT}, so the browser harnesses cannot run.`);
     process.exit(1);
   }
+  /* Round 127: SWEEP_BASE as well as BASE. Every browser harness in the repo
+     reads SWEEP_BASE and falls back to a hardcoded 127.0.0.1:4173, so this only
+     ever worked on the default port. Running the suite with PORT set to
+     anything else served dist on the new port and then sent all four harnesses
+     at 4173, where they got connection refused on every single route and came
+     back with hundreds of failures that had nothing to do with anything. */
   const browserResults = await pool(browserGroup, 1, (f) =>
-    run(f, { BASE: `http://127.0.0.1:${PORT}`, PORT: String(PORT) }),
+    run(f, {
+      BASE: `http://127.0.0.1:${PORT}`,
+      SWEEP_BASE: `http://127.0.0.1:${PORT}`,
+      PORT: String(PORT),
+    }),
   );
   report(browserResults);
   failures.push(...browserResults.filter((r) => r.verdict !== 'PASS'));

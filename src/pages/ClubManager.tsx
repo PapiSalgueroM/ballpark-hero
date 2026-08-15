@@ -10,6 +10,7 @@ import {
   isAvailable, xiAverageRating, sortedTable,
   NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
+  brokenPromises,
 } from '@/lib/clubManager';
 import type { NationDef, ObjectiveStatus, CupRound } from '@/lib/clubManager';
 import { FlagImg } from '@/components/FlagImg';
@@ -33,6 +34,7 @@ import { HalftimeScreen } from '@/components/club-manager/HalftimeScreen';
 import { MatchReportCard } from '@/components/club-manager/MatchReportCard';
 import { AcademyScreen } from '@/components/club-manager/AcademyScreen';
 import { TrainingScreen } from '@/components/club-manager/TrainingScreen';
+import { RolesScreen } from '@/components/club-manager/RolesScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
@@ -70,7 +72,7 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -110,6 +112,15 @@ const ClubManager = () => {
   const trainingLabel = g.career?.training
     ? `${INTENSITY_INFO[g.career.training.intensity].label} · ${FOCUS_INFO[g.career.training.focus].label}`
     : 'Not set';
+  // Round 127: who you are letting down, and who has already asked to go.
+  const letDown = useMemo(
+    () => (g.career ? brokenPromises(g.career) : []),
+    [g.career],
+  );
+  const wantAway = useMemo(
+    () => (g.career ? g.career.squad.filter(p => p.wantsOut) : []),
+    [g.career],
+  );
 
   const shell = (inner: ReactNode) => (
     <>
@@ -126,6 +137,7 @@ const ClubManager = () => {
               <p>📋 <span className="font-semibold text-foreground">The board hands you a list of objectives</span>: league finish, a cup run, Europe, finishing above your rival, a goals quota. Hit them and your stock rises; miss them and the confidence meter drains.</p>
               <p>📅 <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>: the actual Premier League, La Liga, Serie A, Bundesliga or Ligue 1 clubs, plus the domestic cup and the Champions League if you qualify.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
+              <p>🤝 <span className="font-semibold text-foreground">Tell every player what he is</span>: star man, key first teamer, rotation option, backup or one for the future. Each rung is a promise about minutes, and the dressing room keeps score over your last ten matches. Keep your word and they play for you. Break it and they sulk, drag the room down and hand in transfer requests. You can buy your way out of a promise, but it costs six weeks of his wages a rung.</p>
               <p>💰 <span className="font-semibold text-foreground">Buy and sell in the summer and January windows.</span> Nearly 2,000 real players are on the market at their real values. Stay under budget and keep at least 14 players.</p>
               <p>📉 <span className="font-semibold text-foreground">Watch the board confidence meter.</span> Fall too far below expectations and you're sacked. Overachieve and bigger clubs come calling, from any of the five leagues.</p>
               <p>🏆 <span className="font-semibold text-foreground">Season score</span> = league points + 10 per trophy (max 130). Careers span multiple seasons; your save is kept on this device.</p>
@@ -727,6 +739,16 @@ const ClubManager = () => {
                 sub={rivalName && rivalIdx >= 0 ? `They sit #${rivalIdx + 1}` : 'Tap any club in the table'}
                 onClick={rivalName ? () => setClubView(rivalName) : () => g.setActiveTab('table')}
               />
+              {/* Round 127: what you told each of them he was, and whether you
+                  have kept your word. */}
+              <HubTile
+                icon="🤝" title="Dressing room" accent={wantAway.length > 0 || letDown.length > 2}
+                value={wantAway.length > 0
+                  ? `${wantAway.length} want${wantAway.length === 1 ? 's' : ''} out`
+                  : letDown.length > 0 ? `${letDown.length} unhappy` : 'Word kept'}
+                sub={wantAway[0] ? wantAway[0].name : letDown[0] ? letDown[0].name : 'Set everyone a role'}
+                onClick={() => setHubPanel('roles')}
+              />
               {/* Round 116: the academy and the training ground, the two
                   things every real manager sim has and this one did not. */}
               <HubTile
@@ -805,6 +827,8 @@ const ClubManager = () => {
               )}
 
               {hubPanel === 'training' && <TrainingScreen career={c} onSetPlan={g.setTraining} />}
+
+              {hubPanel === 'roles' && <RolesScreen career={c} onSetRole={g.setRole} />}
 
               {hubPanel === 'treatment' && (
                 <div className="bg-card border border-border rounded-xl p-3">

@@ -119,8 +119,20 @@ console.log('1) Stopping at halftime and changing nothing must not change the ga
   const gap = Math.abs(sp - wp);
   console.log(`   difference ${gap.toFixed(2)} points, 3 standard errors is ${(3 * se).toFixed(2)}`);
   if (gap > 3 * se) fail(`splitting the match into halves moved the league by ${gap.toFixed(2)} points on its own`);
-  if (Math.abs(sg - wg) > 4) fail(`goals scored moved by ${Math.abs(sg - wg).toFixed(1)} just from playing two halves`);
-  if (Math.abs(sa - wa) > 4) fail(`goals conceded moved by ${Math.abs(sa - wa).toFixed(1)} just from playing two halves`);
+  /* Round 127: these two used to be a flat "more than four goals is a shift",
+     and four goals is only about two and a bit standard errors on a stat whose
+     season to season spread is ten. It failed on noise alone in roughly one run
+     in four, and it did that on the code as it stood BEFORE Round 127 as well,
+     measured three runs an arm against the committed file: same means, same
+     spread, and a 5.08 goal gap on the old code in one of them. So it gets the
+     same three standard error treatment the points line above it already had,
+     which is Round 125's lesson written down again: pick the margin from
+     measured headroom, not from a round number that sounds strict. */
+  const seG = Math.sqrt(sd(skip.map(r => r.gf)) ** 2 / RUNS + sd(watch.map(r => r.gf)) ** 2 / RUNS);
+  const seA = Math.sqrt(sd(skip.map(r => r.ga)) ** 2 / RUNS + sd(watch.map(r => r.ga)) ** 2 / RUNS);
+  console.log(`   goals for gap ${Math.abs(sg - wg).toFixed(2)} against 3se of ${(3 * seG).toFixed(2)}, goals against gap ${Math.abs(sa - wa).toFixed(2)} against 3se of ${(3 * seA).toFixed(2)}`);
+  if (Math.abs(sg - wg) > 3 * seG) fail(`goals scored moved by ${Math.abs(sg - wg).toFixed(1)} just from playing two halves`);
+  if (Math.abs(sa - wa) > 3 * seA) fail(`goals conceded moved by ${Math.abs(sa - wa).toFixed(1)} just from playing two halves`);
   if (mean(watch.map(r => r.breaks)) < 30) fail('the watching manager barely saw any halftimes, so this measured nothing');
   if (mean(skip.map(r => r.breaks)) > 0) fail('skipHalftime still stopped at halftime');
 }
@@ -146,7 +158,19 @@ console.log('2) A manager who works the break finishes ahead of one who does not
      lesson is the same one this file already learned once: when an effect and
      its error bar are the same size, take more samples before believing a
      story about why the number moved. */
-  const RUNS = 500;
+  /* Round 127: 800 an arm now, and the reason is the same one that took this
+     block from 250 to 500. The payoff was measured properly against the
+     committed pre Round 127 engine, three readings of 500 an arm on each side:
+     the old code gained 2.45, 2.20 and 2.91 points and the new code 3.05, 2.77
+     and 3.20, so the break is worth MORE since players started noticing whether
+     they get on the pitch, which is exactly what you would expect when a half
+     time substitution is now a promise kept. But the bar here is two standard
+     errors, which at 500 an arm is about 1.47, and an effect of two and a half
+     against a bar of one and a half fails on an unlucky draw roughly one run in
+     ten. It did, twice, and it would have done on the old code too. Eight
+     hundred drops two standard errors to about 1.15 and gives the real effect
+     more than double the headroom it needs. */
+  const RUNS = 800;
   const ignore = [], react = [];
   for (let i = 0; i < RUNS; i++) ignore.push(playSeason('Everton', 'skip'));
   for (let i = 0; i < RUNS; i++) react.push(playSeason('Everton', 'react'));
