@@ -58,6 +58,7 @@ import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
+import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";
 
 /* ─── Constants ─── */
 // Round 76: 131 nations (was 49), every one with a real flag in FlagImg,
@@ -178,8 +179,8 @@ function getPositionStatBars(pos: string, s: { pace: number; shooting: number; p
 }
 
 /* ─── Position-specific career stats display ─── */
-function getPositionCareerStats(pos: string, totals: { apps: number; goals: number; assists: number; cleanSheets: number; leagueTitles: number; domesticCups: number; championsLeagues: number; worldCups: number; yellowCards: number; redCards: number }) {
-  const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups;
+function getPositionCareerStats(pos: string, totals: { apps: number; goals: number; assists: number; cleanSheets: number; leagueTitles: number; domesticCups: number; championsLeagues: number; worldCups: number; continentalCups: number; yellowCards: number; redCards: number }) {
+  const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups;
   // Derive approximate stats from existing data
   const saves = totals.cleanSheets * 4 + Math.round(totals.apps * 2.5); // ~estimated saves
   const pensSaved = Math.max(0, Math.floor(totals.cleanSheets / 5)); // ~1 per 5 clean sheets
@@ -237,7 +238,7 @@ function StatBarGame({ label, value, color }: { label: string; value: number; co
 /* ─── Timeline Entry ─── */
 function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; isCurrent: boolean; isLast: boolean }) {
   const label = season.type === "youth" ? "A" : season.type === "retired" ? "R" : null;
-  const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.worldCup && "🌍", season.ballonDor && "🏅"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.worldCup && "🌍", season.continentalCup && "🌐", season.ballonDor && "🏅"].filter(Boolean);
 
   return (
     <div className={`relative flex items-start gap-3 py-2 px-3 rounded-lg transition-colors ${isCurrent ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`}>
@@ -356,7 +357,7 @@ function NewspaperCard({ articles, onContinue }: { articles: NewsArticle[]; onCo
 /* ─── Season Summary Card ─── */
 function SeasonSummaryCard({ season, position, onContinue, appearance }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null }) {
   const isGK = position === "GK";
-  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.worldCup && "🌍 World Cup", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
   const celebration = appearance ? getCelebration(appearance.celebration) : null;
 
   return (
@@ -1501,7 +1502,8 @@ function WorldCupResultCard({ wc, career, onDismiss, onSpeech }: { wc: WorldCupR
 /* ─── International Stats Panel ─── */
 function InternationalStatsPanel({ career, onRetire }: { career: CareerState; onRetire: () => void }) {
   const is = career.intStats;
-  if (!career.internationalCareer && !is.isRetired && is.caps === 0) return null;
+  const hasHistory = (career.intlHistory ?? []).length > 0;
+  if (!career.internationalCareer && !is.isRetired && is.caps === 0 && !hasHistory) return null;
   const isLegend = is.caps >= 100;
   return (
     <div className={`bg-card border rounded-xl p-4 space-y-3 ${isLegend ? "border-amber-500/30" : "border-border"}`}>
@@ -1524,11 +1526,23 @@ function InternationalStatsPanel({ career, onRetire }: { career: CareerState; on
         ))}
       </div>
       {(is.worldCups > 0 || is.continentals > 0) && (
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          {is.worldCups > 0 && <span>🌍 Competed in {is.worldCups} | Won {is.worldCupWins}</span>}
-          {is.continentals > 0 && <span>🏆 {is.continentals} Continental ({is.continentalWins} won)</span>}
+        <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-xs text-muted-foreground">
+          {is.worldCups > 0 && <span>🌍 {is.worldCups} World Cup{is.worldCups === 1 ? "" : "s"}, won {is.worldCupWins}</span>}
+          {is.continentals > 0 && <span>🏆 {is.continentals} continental, won {is.continentalWins}</span>}
         </div>
       )}
+      {/* Round 124: the summers that went against you are part of the story. */}
+      {((is.squadSnubs ?? 0) > 0 || (is.failedQualifications ?? 0) > 0) && (
+        <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-[11px] text-muted-foreground">
+          {(is.failedQualifications ?? 0) > 0 && <span>😞 Missed out {is.failedQualifications} time{is.failedQualifications === 1 ? "" : "s"} on qualifying</span>}
+          {(is.squadSnubs ?? 0) > 0 && <span>📋 Left out of {is.squadSnubs} squad{is.squadSnubs === 1 ? "" : "s"}</span>}
+        </div>
+      )}
+      <InternationalHistoryTile
+        history={career.intlHistory ?? []}
+        nation={career.nationality}
+        last={career.lastTournament ?? null}
+      />
       {is.isRetired && <div className="text-[11px] text-muted-foreground italic">Retired from international football</div>}
       {career.internationalCareer && !is.isRetired && (
         <Button variant="outline" onClick={onRetire} className="w-full h-8 text-xs">
@@ -1906,7 +1920,7 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
       <div className="grid grid-cols-3 gap-2 text-center">
         {[
           { l: "Apps", v: totals.apps }, { l: "Goals", v: totals.goals }, { l: "Assists", v: totals.assists },
-          { l: "Trophies", v: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups },
+          { l: "Trophies", v: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups },
           { l: "Ballon d'Or", v: totals.ballonDors }, { l: "Int'l Caps", v: career.intStats.caps },
         ].map(s => (
           <div key={s.l} className="bg-muted/20 rounded-lg p-2">
@@ -2064,7 +2078,7 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
   const tierEmoji: Record<LegacyTier, string> = { "GOAT": "🐐", "LEGEND": "🏛️", "GREAT": "⭐", "SOLID PRO": "💪", "JOURNEYMAN": "🎒" };
   const tierBorder: Record<LegacyTier, string> = { "GOAT": "border-amber-400/50", "LEGEND": "border-purple-400/40", "GREAT": "border-emerald-400/40", "SOLID PRO": "border-blue-400/30", "JOURNEYMAN": "border-border" };
 
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups;
 
   return (
     <div className={`rounded-xl border-2 ${tierBorder[legacy.tier]} bg-card p-5 space-y-4`}>
@@ -2692,8 +2706,13 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <InternationalDebutCard career={career} onDismiss={onDismissDebut} />
           )}
 
-          {/* OVERLAY: World Cup */}
-          {career.phase === "world_cup" && career.pendingWorldCup && (
+          {/* OVERLAY: International tournament (Round 124). pendingWorldCup is
+              the pre Round 124 shape, still rendered so a save made mid World
+              Cup before this round is not left with no way forward. */}
+          {career.phase === "world_cup" && career.pendingTournament && (
+            <TournamentCard t={career.pendingTournament} onDismiss={onDismissWorldCup} onSpeech={onWorldCupSpeech} />
+          )}
+          {career.phase === "world_cup" && !career.pendingTournament && career.pendingWorldCup && (
             <WorldCupResultCard wc={career.pendingWorldCup} career={career} onDismiss={onDismissWorldCup} onSpeech={onWorldCupSpeech} />
           )}
 
@@ -2914,12 +2933,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* Trophies */}
           <div className="bg-card border border-border rounded-xl p-4">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Trophy Cabinet</span>
-            <div className="grid grid-cols-5 gap-2 mt-3">
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mt-3">
               {[
                 { emoji: "🏆", l: "Leagues", v: totals.leagueTitles },
                 { emoji: "🏆", l: "Cups", v: totals.domesticCups },
                 { emoji: "⭐", l: "UCL", v: totals.championsLeagues },
                 { emoji: "🌍", l: "World Cup", v: totals.worldCups },
+                // Round 124: continental championships are a trophy too.
+                { emoji: "🌐", l: "Continental", v: totals.continentalCups },
                 { emoji: "🏅", l: "Ballon d'Or", v: totals.ballonDors },
               ].map(t => (
                 <div key={t.l} className={`text-center rounded-lg p-2 ${t.v > 0 ? 'bg-amber-500/10 border border-amber-500/20' : 'bg-muted/20 opacity-40'}`}>

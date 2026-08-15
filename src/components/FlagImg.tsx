@@ -50,6 +50,13 @@ const FLAG_CODES: Record<string, string> = {
   "Uganda": "ug", "Tanzania": "tz", "Ethiopia": "et", "Madagascar": "mg",
   "Andorra": "ad", "San Marino": "sm", "Liechtenstein": "li",
   "North Korea": "kp", "Korea, North": "kp",
+  /* Round 124: the other ten OFC full members, so an Oceania qualifying group
+     shows real flags instead of bare country names. Tahiti plays under the
+     French Polynesia flag (pf). */
+  "New Caledonia": "nc", "Tahiti": "pf", "Solomon Islands": "sb",
+  "Papua New Guinea": "pg", "Vanuatu": "vu", "Samoa": "ws",
+  "American Samoa": "as", "Cook Islands": "ck", "Tonga": "to",
+  "Syria": "sy", "Palestine": "ps",
 };
 
 /* ─── Round 106: flags that actually appear ───

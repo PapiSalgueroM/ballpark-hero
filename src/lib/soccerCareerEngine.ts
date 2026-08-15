@@ -17,6 +17,22 @@ import {
 import type { PlayerAppearance } from "./soccerCareerAppearance";
 import { getCorruptionEvents } from "./soccerCareerCorruption";
 import { getRealismEvents } from "./soccerCareerRealism";
+import {
+  runInternationalSummer, tournamentForYear, offYearCaps, toHistoryEntry,
+  nationStrength as intlNationStrength, confederationOf, pickSquad,
+} from "./soccerInternational";
+import type {
+  IntlTournament, IntlHistoryEntry, PlayerForm,
+} from "./soccerInternational";
+
+export type {
+  IntlTournament, IntlHistoryEntry, IntlTie, IntlTableRow, IntlMatch,
+  IntlRound, QualifyingCampaign, SquadCall, Confederation, TournamentFormat,
+} from "./soccerInternational";
+export {
+  confederationOf, nationStrength, fifaRankOf, hasPublishedRank,
+  tournamentForYear,
+} from "./soccerInternational";
 
 export interface ClubData {
   id: string;
@@ -57,6 +73,9 @@ export interface SeasonRecord {
   intRating: number;
   tournament: string | null; // "World Cup", "Continental", or null
   tournamentResult: string | null; // "Winner", "Runner-up", "Semi-final", "Quarter-final", "Group Stage", "Best Player"
+  /** Round 124: won your continental championship this summer. Kept separate
+      from worldCup so the cabinet does not pretend a Euros is a World Cup. */
+  continentalCup?: boolean;
 }
 
 export interface ContractOffer {
@@ -295,6 +314,10 @@ export interface InternationalStats {
   debutYear: number | null;
   debutAge: number | null;
   worldCupResults: WorldCupResult[];
+  /** Round 124: summers you were fit and available but the manager left you
+      out, and summers your country simply did not make it. Both are stories. */
+  squadSnubs?: number;
+  failedQualifications?: number;
 }
 
 export type LifestyleLevel = "Humble" | "Comfortable" | "Wealthy" | "Superstar" | "Billionaire";
@@ -498,7 +521,16 @@ export interface CareerState {
   hasRelationship: boolean;
   // International career
   intStats: InternationalStats;
+  /** Legacy field, kept so a save made before Round 124 still renders its
+      half finished World Cup screen instead of throwing. Nothing sets it now. */
   pendingWorldCup: WorldCupResult | null;
+  /** Round 124: the tournament waiting on the "world_cup" screen. */
+  pendingTournament?: IntlTournament | null;
+  /** The most recent tournament, kept in full so the bracket stays readable
+      from the International tile all season. */
+  lastTournament?: IntlTournament | null;
+  /** One compact row per tournament ever played, player in it or not. */
+  intlHistory?: IntlHistoryEntry[];
   // Rivalry system
   rival: RivalPlayer | null;
   rivalCreated: boolean;
@@ -3164,8 +3196,12 @@ export function initCareer(
       caps: 0, goals: 0, assists: 0, tournaments: 0, worldCups: 0, continentals: 0,
       worldCupWins: 0, continentalWins: 0, isCaptain: false, isRetired: false,
       debutYear: null, debutAge: null, worldCupResults: [],
+      squadSnubs: 0, failedQualifications: 0,
     },
     pendingWorldCup: null,
+    pendingTournament: null,
+    lastTournament: null,
+    intlHistory: [],
     rival: null, rivalCreated: false, pendingRivalryEvent: null, lastRivalryEventId: null, rivalrySummary: null,
     netWorth: 0, lifestyleLevel: "Humble" as LifestyleLevel, lifestyleCostPerYear: 0.02,
     socialMediaFollowers: 0, sponsorshipIncome: 0, properties: [], investments: [],
@@ -3280,231 +3316,20 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   return s;
 }
 
-/* ─── Nation strength tiers for World Cup ─── */
-const TOP_NATIONS_WC = ["Brazil", "France", "Argentina", "Germany", "Spain", "England", "Portugal", "Netherlands", "Belgium", "Italy", "Croatia", "Uruguay"];
-const STRONG_NATIONS_WC = ["USA", "Mexico", "Colombia", "Senegal", "Morocco", "Japan", "South Korea", "Denmark", "Switzerland", "Austria", "Poland", "Serbia", "Ecuador", "Peru", "Chile", "Nigeria", "Ghana", "Ivory Coast", "Egypt", "Algeria"];
-const ALL_WC_POOL = [...TOP_NATIONS_WC, ...STRONG_NATIONS_WC, "Norway", "Sweden", "Turkey", "Scotland", "Wales", "Ireland", "Czech Republic", "Romania", "Greece", "Russia", "Ukraine", "Cameroon", "Tunisia", "Australia", "New Zealand", "Canada", "Jamaica", "Costa Rica"];
+/* ─── Round 124: international football lives in soccerInternational.ts ───
 
-function getNationStrength(nation: string): number {
-  if (TOP_NATIONS_WC.includes(nation)) return rand(85, 92);
-  if (STRONG_NATIONS_WC.includes(nation)) return rand(78, 86);
-  return rand(60, 74);
-}
+   What used to sit here was three hardcoded nation tiers, a getNationStrength
+   that rolled a fresh random number every call (so the same nation could be
+   strong in the group stage and weak in the final), a one line qualification
+   coin flip, and a simulateWorldCup that returned the moment the player's
+   nation went out, which meant nobody ever lifted the trophy in the seasons
+   you did not reach the final. All of it is replaced by a real four year
+   cycle with verified formats, a qualifying campaign you can fail and a
+   squad you can be dropped from. See src/lib/soccerInternational.ts.
 
-/* ─── Qualification chance by nation tier + player boost ─── */
-function getQualificationChance(nation: string, playerOverall: number, isPlayerNation: boolean): number {
-  let base: number;
-  if (TOP_NATIONS_WC.includes(nation)) {
-    base = 0.90;
-  } else if (STRONG_NATIONS_WC.includes(nation)) {
-    base = 0.70;
-  } else {
-    base = 0.25;
-    // Player carrying a weaker nation
-    if (isPlayerNation) {
-      if (playerOverall >= 90) base = 0.75;
-      else if (playerOverall >= 80) base = 0.55;
-    }
-  }
-  return base;
-}
-
-function get32WCTeams(playerNation: string, playerOverall: number): string[] {
-  const teams: string[] = [];
-  
-  // Check if player's nation qualifies
-  const playerQualChance = getQualificationChance(playerNation, playerOverall, true);
-  const playerQualified = Math.random() < playerQualChance;
-  if (playerQualified) teams.push(playerNation);
-  
-  // Fill remaining spots from pool
-  const pool = ALL_WC_POOL.filter(n => n !== playerNation);
-  const qualifiedFromPool: string[] = [];
-  
-  for (const nation of pool) {
-    const chance = getQualificationChance(nation, 0, false);
-    if (Math.random() < chance) qualifiedFromPool.push(nation);
-  }
-  
-  // Shuffle qualified nations and take enough to fill 32
-  const needed = 32 - teams.length;
-  const shuffled = qualifiedFromPool.sort(() => Math.random() - 0.5);
-  
-  if (shuffled.length >= needed) {
-    teams.push(...shuffled.slice(0, needed));
-  } else {
-    // Not enough qualified, fill remainder from pool by strength
-    teams.push(...shuffled);
-    const remaining = pool.filter(n => !teams.includes(n))
-      .map(n => ({ n, w: getNationStrength(n) + rand(0, 15) }))
-      .sort((a, b) => b.w - a.w);
-    for (const r of remaining) {
-      if (teams.length >= 32) break;
-      teams.push(r.n);
-    }
-  }
-  
-  return teams.slice(0, 32);
-}
-
-function simulateMatch(teamA: string, teamB: string, strA: number, strB: number, isKnockout: boolean): { scoreA: number; scoreB: number } {
-  const diff = (strA - strB) / 100;
-  const baseA = 1.2 + diff * 2;
-  const baseB = 1.2 - diff * 2;
-  let scoreA = Math.max(0, Math.round(baseA + (Math.random() - 0.4) * 2));
-  let scoreB = Math.max(0, Math.round(baseB + (Math.random() - 0.4) * 2));
-  if (isKnockout && scoreA === scoreB) {
-    // Penalties, 50/50 weighted by strength
-    if (Math.random() < 0.5 + diff * 0.15) scoreA += 1;
-    else scoreB += 1;
-  }
-  return { scoreA, scoreB };
-}
-
-function playerMatchStats(overall: number, position: string, isWinner: boolean): { goals: number; assists: number; rating: number } {
-  const isAttacker = ["ST", "CAM", "LW", "RW"].includes(position);
-  const isMid = ["CM", "CDM"].includes(position);
-  const bonus = isWinner ? 0.3 : 0;
-  let goals = 0, assists = 0;
-  if (isAttacker) {
-    goals = Math.random() < (0.3 + overall / 300) ? rand(1, 2) : 0;
-    assists = Math.random() < 0.25 ? 1 : 0;
-  } else if (isMid) {
-    goals = Math.random() < 0.12 ? 1 : 0;
-    assists = Math.random() < 0.3 ? 1 : 0;
-  } else if (position === "GK") {
-    goals = 0; assists = 0;
-  } else {
-    goals = Math.random() < 0.08 ? 1 : 0;
-    assists = Math.random() < 0.15 ? 1 : 0;
-  }
-  const rating = clamp(parseFloat((6.0 + (overall - 70) * 0.05 + bonus + (Math.random() - 0.3) * 1.5 + goals * 0.5 + assists * 0.3).toFixed(1)), 4.0, 10.0);
-  return { goals, assists, rating };
-}
-
-/* ─── Simulate full World Cup tournament ─── */
-export function simulateWorldCup(state: CareerState): WorldCupResult {
-  const nation = state.nationality;
-  const teams = get32WCTeams(nation, state.overall);
-  
-  // Check if player's nation didn't qualify
-  if (!teams.includes(nation)) {
-    const year = state.seasons[state.seasons.length - 1]?.year + 1 || 2022;
-    return {
-      year, nation, matches: [], playerApps: 0, playerGoals: 0, playerAssists: 0,
-      playerAvgRating: 0, result: "Did Not Qualify", bestPlayer: false,
-    };
-  }
-  
-  const strengths: Record<string, number> = {};
-  teams.forEach(t => strengths[t] = getNationStrength(t));
-  // Player boosts own nation
-  strengths[nation] = Math.min(95, strengths[nation] + Math.round((state.overall - 75) * 0.3));
-
-  // Group stage: 8 groups of 4
-  const shuffled = [...teams].sort(() => Math.random() - 0.5);
-  const groups: string[][] = [];
-  for (let i = 0; i < 8; i++) groups.push(shuffled.slice(i * 4, i * 4 + 4));
-
-  const matches: WCMatch[] = [];
-  const groupPoints: Record<string, number> = {};
-  teams.forEach(t => groupPoints[t] = 0);
-
-  // Find player's group
-  const playerGroupIdx = groups.findIndex(g => g.includes(nation));
-  const playerGroup = groups[playerGroupIdx];
-
-  // Simulate group stage
-  for (const group of groups) {
-    const groupLabel = `Group ${String.fromCharCode(65 + groups.indexOf(group))}`;
-    for (let i = 0; i < group.length; i++) {
-      for (let j = i + 1; j < group.length; j++) {
-        const { scoreA, scoreB } = simulateMatch(group[i], group[j], strengths[group[i]], strengths[group[j]], false);
-        const isPlayerMatch = group === playerGroup && (group[i] === nation || group[j] === nation);
-        const playerWon = isPlayerMatch && ((group[i] === nation && scoreA > scoreB) || (group[j] === nation && scoreB > scoreA));
-        const ps = isPlayerMatch ? playerMatchStats(state.overall, state.position, playerWon) : { goals: 0, assists: 0, rating: 0 };
-        if (isPlayerMatch) {
-          matches.push({
-            teamA: group[i], teamB: group[j], scoreA, scoreB,
-            playerGoals: ps.goals, playerAssists: ps.assists, playerRating: ps.rating, round: groupLabel,
-          });
-        }
-        if (scoreA > scoreB) { groupPoints[group[i]] += 3; }
-        else if (scoreA < scoreB) { groupPoints[group[j]] += 3; }
-        else { groupPoints[group[i]] += 1; groupPoints[group[j]] += 1; }
-      }
-    }
-  }
-
-  // Top 2 from each group advance
-  const r16Teams: string[] = [];
-  for (const group of groups) {
-    const sorted = [...group].sort((a, b) => groupPoints[b] - groupPoints[a] || Math.random() - 0.5);
-    r16Teams.push(sorted[0], sorted[1]);
-  }
-
-  if (!r16Teams.includes(nation)) {
-    const totalApps = matches.length;
-    const totalGoals = matches.reduce((s, m) => s + m.playerGoals, 0);
-    const totalAssists = matches.reduce((s, m) => s + m.playerAssists, 0);
-    const avgRating = totalApps > 0 ? parseFloat((matches.reduce((s, m) => s + m.playerRating, 0) / totalApps).toFixed(1)) : 0;
-    return {
-      year: state.seasons[state.seasons.length - 1]?.year + 1 || 2022,
-      nation, matches, playerApps: totalApps, playerGoals: totalGoals, playerAssists: totalAssists,
-      playerAvgRating: avgRating, result: "Group Stage", bestPlayer: false,
-    };
-  }
-
-  // Knockout rounds
-  const roundNames = ["R16", "QF", "SF", "Final"];
-  let currentTeams = [...r16Teams];
-
-  for (let roundIdx = 0; roundIdx < 4; roundIdx++) {
-    const roundName = roundNames[roundIdx];
-    const nextRound: string[] = [];
-    for (let i = 0; i < currentTeams.length; i += 2) {
-      const tA = currentTeams[i], tB = currentTeams[i + 1];
-      if (!tA || !tB) { if (tA) nextRound.push(tA); continue; }
-      const { scoreA, scoreB } = simulateMatch(tA, tB, strengths[tA] || 70, strengths[tB] || 70, true);
-      const isPlayerMatch = tA === nation || tB === nation;
-      const playerWon = isPlayerMatch && ((tA === nation && scoreA > scoreB) || (tB === nation && scoreB > scoreA));
-      if (isPlayerMatch) {
-        const ps = playerMatchStats(state.overall, state.position, playerWon);
-        matches.push({ teamA: tA, teamB: tB, scoreA, scoreB, playerGoals: ps.goals, playerAssists: ps.assists, playerRating: ps.rating, round: roundName });
-      }
-      nextRound.push(scoreA > scoreB ? tA : tB);
-    }
-    currentTeams = nextRound;
-
-    // Check if player eliminated
-    if (!currentTeams.includes(nation) && roundIdx < 3) {
-      const resultMap: Record<string, string> = { "R16": "Round of 16", "QF": "Quarter-final", "SF": "Semi-final" };
-      const totalApps = matches.length;
-      const totalGoals = matches.reduce((s, m) => s + m.playerGoals, 0);
-      const totalAssists = matches.reduce((s, m) => s + m.playerAssists, 0);
-      const avgRating = totalApps > 0 ? parseFloat((matches.reduce((s, m) => s + m.playerRating, 0) / totalApps).toFixed(1)) : 0;
-      return {
-        year: state.seasons[state.seasons.length - 1]?.year + 1 || 2022,
-        nation, matches, playerApps: totalApps, playerGoals: totalGoals, playerAssists: totalAssists,
-        playerAvgRating: avgRating, result: resultMap[roundName] || roundName, bestPlayer: false,
-      };
-    }
-  }
-
-  // Final result
-  const won = currentTeams[0] === nation;
-  const totalApps = matches.length;
-  const totalGoals = matches.reduce((s, m) => s + m.playerGoals, 0);
-  const totalAssists = matches.reduce((s, m) => s + m.playerAssists, 0);
-  const avgRating = totalApps > 0 ? parseFloat((matches.reduce((s, m) => s + m.playerRating, 0) / totalApps).toFixed(1)) : 0;
-  const bestPlayer = avgRating >= 7.5 && totalGoals >= 3;
-
-  return {
-    year: state.seasons[state.seasons.length - 1]?.year + 1 || 2022,
-    nation, matches, playerApps: totalApps, playerGoals: totalGoals, playerAssists: totalAssists,
-    playerAvgRating: avgRating, result: won ? "Winner" : "Runner-up", bestPlayer,
-  };
-}
+   WorldCupResult and WCMatch stay as types because a save written before this
+   round can still be sitting on one. simulateWorldCup is gone.
+*/
 
 /* ─── International call-up check ─── */
 function shouldGetCallUp(state: CareerState): boolean {
@@ -3514,36 +3339,133 @@ function shouldGetCallUp(state: CareerState): boolean {
   return state.overall >= threshold;
 }
 
+/** Everything the international code needs to know about the player. */
+function playerFormOf(state: CareerState): PlayerForm {
+  const last = state.seasons[state.seasons.length - 1];
+  return {
+    overall: state.overall,
+    position: state.position,
+    lastRating: last?.rating ?? 6.8,
+    lastGoals: last?.goals ?? 0,
+    age: state.age,
+    isCaptain: state.intStats.isCaptain,
+  };
+}
+
 /* ─── International season stats ─── */
 function generateIntSeasonStats(state: CareerState, year: number): { intApps: number; intGoals: number; intAssists: number; intRating: number; tournament: string | null; tournamentResult: string | null } {
   if (!state.internationalCareer || state.intStats.isRetired) {
     return { intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null };
   }
-  const apps = rand(6, 10);
+  /* Friendlies and qualifiers. The tournament itself is simulated separately
+     and adds its own caps on top, so this no longer invents a continental
+     championship result out of a random number.
+
+     Round 124: these caps are earned, not automatic. Before this round, one
+     call-up at 18 meant five to nine caps EVERY year until you retired, so an
+     average career finished on 111 caps whether the manager rated you or not.
+     A player who cannot get into the squad does not get called up for the
+     friendlies either. */
+  const form = playerFormOf(state);
+  if (!pickSquad(state.nationality, form).called) {
+    return { intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null };
+  }
+  const apps = offYearCaps(form);
   const goals = calcGoals(state.position, apps);
   const assists = calcAssists(state.position, apps);
   const rating = clamp(parseFloat((6.5 + (state.overall - 72) * 0.06 + (Math.random() - 0.3) * 1.0).toFixed(1)), 4.0, 10.0);
+  return { intApps: apps, intGoals: goals, intAssists: assists, intRating: rating, tournament: null, tournamentResult: null };
+}
 
-  // Tournament detection
-  const isWCYear = year % 4 === 2; // 2022, 2026, 2030...
-  const isContinental = year % 2 === 0 && !isWCYear; // even non-WC years
-  let tournament: string | null = null;
-  let tournamentResult: string | null = null;
 
-  if (isContinental) {
-    tournament = "Continental Championship";
-    const nationStr = getNationStrength(state.nationality);
-    if (Math.random() < 0.08 + (nationStr - 70) * 0.005) {
-      tournamentResult = "Winner";
-    } else if (Math.random() < 0.15) {
-      tournamentResult = "Semi-final";
-    } else {
-      tournamentResult = Math.random() < 0.5 ? "Quarter-final" : "Group Stage";
-    }
+/* ─── Round 124: one international summer ───
+
+   Called every tournament year, ALWAYS. If the player has no international
+   career the tournament still runs and still crowns a champion, exactly the
+   way the Champions League bracket in Club Manager finishes without you.
+   Three things can go wrong for the player and all three are real football:
+   the country misses out, the manager leaves you at home, or you go and lose.
+*/
+function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number): void {
+  const fmt = tournamentForYear(s.nationality, year);
+  if (!fmt) return;
+  const eligible = s.internationalCareer && !s.intStats.isRetired && !s.retired;
+  const t = runInternationalSummer(s.nationality, year, eligible ? playerFormOf(s) : null);
+  if (!t) return;
+
+  s.lastTournament = t;
+  s.intlHistory = [...(s.intlHistory ?? []), toHistoryEntry(t, eligible)];
+  season.tournament = t.name;
+  season.tournamentResult = eligible ? t.myResult : null;
+
+  // The champion is announced whether you were there or not.
+  if (t.champion === s.nationality && !eligible) {
+    s.events.push(`🏆 ${s.nationality} won the ${t.name} without you.`);
+  } else if (t.champion !== s.nationality) {
+    s.events.push(`🌍 ${t.champion} won the ${t.name}.`);
   }
-  // WC handled separately via simulateWorldCup
 
-  return { intApps: apps, intGoals: goals, intAssists: assists, intRating: rating, tournament, tournamentResult };
+  if (!eligible) return;
+  // Only show the screen to a player the tournament actually concerns.
+  s.pendingTournament = t;
+
+  if (!t.qualified) {
+    s.intStats = {
+      ...s.intStats,
+      failedQualifications: (s.intStats.failedQualifications ?? 0) + 1,
+    };
+    s.events.push(`😞 ${s.nationality} did not qualify for the ${t.name}. Your summer is free.`);
+    s.morale = clamp(s.morale - 8, 0, 100);
+    return;
+  }
+
+  if (!t.squad?.called) {
+    s.intStats = { ...s.intStats, squadSnubs: (s.intStats.squadSnubs ?? 0) + 1 };
+    s.events.push(`📋 Left out of the ${s.nationality} squad for the ${t.name}. You watch it at home.`);
+    s.morale = clamp(s.morale - 12, 0, 100);
+    return;
+  }
+
+  // You are in it.
+  const isWC = t.kind === "World Cup";
+  s.intStats = {
+    ...s.intStats,
+    caps: s.intStats.caps + t.playerApps,
+    goals: s.intStats.goals + t.playerGoals,
+    assists: s.intStats.assists + t.playerAssists,
+    tournaments: s.intStats.tournaments + 1,
+    worldCups: s.intStats.worldCups + (isWC ? 1 : 0),
+    continentals: s.intStats.continentals + (isWC ? 0 : 1),
+  };
+  season.intApps += t.playerApps;
+  season.intGoals += t.playerGoals;
+  season.intAssists += t.playerAssists;
+
+  if (t.myResult === "Winner") {
+    if (isWC) {
+      s.intStats = { ...s.intStats, worldCupWins: s.intStats.worldCupWins + 1 };
+      season.worldCup = true;
+      s.events.push(`🏆 WORLD CUP WINNER with ${s.nationality}!`);
+    } else {
+      s.intStats = { ...s.intStats, continentalWins: s.intStats.continentalWins + 1 };
+      season.continentalCup = true;
+      s.events.push(`🏆 Won the ${t.name} with ${s.nationality}!`);
+    }
+    s.popularity = clamp(s.popularity + (isWC ? 20 : 12), 0, 100);
+    s.morale = clamp(s.morale + 15, 0, 100);
+  } else if (t.myResult === "Runner-up") {
+    s.events.push(`🥈 Lost the ${t.name} final with ${s.nationality}.`);
+    s.morale = clamp(s.morale - 5, 0, 100);
+  }
+
+  if (t.bestPlayer) {
+    s.events.push(`🌟 Named Best Player of the ${t.name}!`);
+    s.awards = [...s.awards, { year, name: `${t.short} Best Player`, emoji: "🌟" }];
+  }
+  if (t.goldenBoot) {
+    s.awards = [...s.awards, { year, name: `${t.short} Golden Boot`, emoji: "👟" }];
+    s.events.push(`👟 Won the ${t.name} Golden Boot with ${t.playerGoals} goals!`);
+  }
 }
 
 /* ─── Advance pro season ─── */
@@ -3780,7 +3702,6 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   // International season stats
   const lastYear = s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year : season.year - 1;
   const thisYear = lastYear + 1;
-  const isWCYear = thisYear % 4 === 2;
   const intSeason = generateIntSeasonStats(s, thisYear);
 
   // Update international totals
@@ -3796,14 +3717,9 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       s.events.push(`©️ Named captain of ${s.nationality}! Legacy +15`);
       s.popularity = clamp(s.popularity + 15, 0, 100);
     }
-    // Continental tournament
-    if (intSeason.tournament && intSeason.tournamentResult) {
-      s.intStats = { ...s.intStats, tournaments: s.intStats.tournaments + 1, continentals: s.intStats.continentals + 1 };
-      if (intSeason.tournamentResult === "Winner") {
-        s.intStats = { ...s.intStats, continentalWins: s.intStats.continentalWins + 1 };
-        s.events.push(`🏆 Won the Continental Championship with ${s.nationality}!`);
-      }
-    }
+    // Round 124: the continental championship used to be decided right here
+    // by one call to Math.random, with no opponents and no bracket. It is a
+    // real tournament now, run by runTournamentSummer below.
     // 100 caps milestone
     const prevCaps = s.intStats.caps - intSeason.intApps;
     if (s.intStats.caps >= 100 && prevCaps < 100) {
@@ -4020,39 +3936,11 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   simulateSeasonFinances(s, season);
   if (s.contractYearsLeft <= 1) s.events.push("⚠️ Your contract is expiring!");
 
-  // World Cup year, trigger after summary (hard cap: 5 World Cups per career)
-  if (isWCYear && s.internationalCareer && !s.intStats.isRetired && s.intStats.worldCups < 5) {
-    const wcResult = simulateWorldCup(s);
-    wcResult.year = thisYear;
-    s.pendingWorldCup = wcResult;
-    
-    if (wcResult.result === "Did Not Qualify") {
-      s.events.push(`😞 ${s.nationality} failed to qualify for the World Cup`);
-      s.intStats = { ...s.intStats, tournaments: s.intStats.tournaments + 1, worldCups: s.intStats.worldCups + 1 };
-    } else {
-      s.intStats = { ...s.intStats,
-        caps: s.intStats.caps + wcResult.playerApps,
-        goals: s.intStats.goals + wcResult.playerGoals,
-        assists: s.intStats.assists + wcResult.playerAssists,
-        tournaments: s.intStats.tournaments + 1,
-        worldCups: s.intStats.worldCups + 1,
-      };
-      if (wcResult.result === "Winner") {
-        s.intStats = { ...s.intStats, worldCupWins: s.intStats.worldCupWins + 1 };
-        season.worldCup = true;
-      }
-      if (wcResult.bestPlayer) {
-        s.events.push(`🌟 Named Best Player of the World Cup!`);
-        s.awards = [...s.awards, { year: thisYear, name: "World Cup Best Player", emoji: "🌟" }];
-      }
-      // World Cup Golden Boot
-      if (wcResult.playerGoals >= 4 && Math.random() < 0.4) {
-        s.awards = [...s.awards, { year: thisYear, name: "World Cup Golden Boot", emoji: "👟" }];
-        s.events.push(`👟 Won the World Cup Golden Boot!`);
-      }
-    }
-    s.intStats = { ...s.intStats, worldCupResults: [...s.intStats.worldCupResults, wcResult] };
-  }
+  /* ─── Round 124: the international summer ───
+     Runs every tournament year whether the player is involved or not, so the
+     World Cup and the continental championships crown a winner across a whole
+     career even if you never get a cap. */
+  runTournamentSummer(s, season, thisYear);
 
   // Ballon d'Or calculation
   const bdorResult = calculateBallonDor(s, season, thisYear);
@@ -4886,6 +4774,9 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   if (season.championsLeague) playerTrophies.push("UCL");
   if (season.domesticCup) playerTrophies.push("Cup");
   if (season.worldCup) playerTrophies.push("World Cup");
+  // Round 124: winning the Euros or the Copa in the summer is a real Ballon
+  // d'Or argument, worth less than a World Cup but a long way above nothing.
+  if (season.continentalCup) playerTrophies.push("Continental");
 
   let playerPoints = 0;
   if (playerCanContend) {
@@ -4981,6 +4872,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   const productionScore = (goals: number, assists: number, trophies: string[]): number => {
     let p = goals + assists * 0.5;
     if (trophies.includes("World Cup")) p += 22;
+    if (trophies.includes("Continental")) p += 11;
     if (trophies.includes("UCL")) p += 18;
     if (trophies.includes("League")) p += 9;
     if (trophies.includes("Cup")) p += 3;
@@ -4999,7 +4891,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // Outscored every single nominee, the plainest version of "best stats".
   const fieldTopGoals = allNomineeData.reduce((mx, n) => Math.max(mx, n.goals), 0);
   const outscoredEveryone = season.goals > fieldTopGoals;
-  const wonMajor = season.leagueTitle || season.championsLeague || season.worldCup;
+  const wonMajor = season.leagueTitle || season.championsLeague || season.worldCup || !!season.continentalCup;
   // Led the world on production, or outscored the entire field while winning a
   // major, or posted a monster line and at least matched the best of the field,
   // or won a domestic treble while staying in touch.
@@ -5129,8 +5021,9 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
     s.phase = "international_debut";
     return s;
   }
-  // Check for World Cup result screen
-  if (s.pendingWorldCup && s.phase !== "world_cup") {
+  // Check for the international tournament screen. pendingWorldCup is the
+  // pre Round 124 field, still honoured so an old save is not left stranded.
+  if ((s.pendingTournament || s.pendingWorldCup) && s.phase !== "world_cup") {
     s.phase = "world_cup";
     return s;
   }
@@ -5245,18 +5138,19 @@ export function dismissDebut(prev: CareerState, clubs: ClubData[]): CareerState 
   const s = { ...prev };
   // Clear the debut trigger by nullifying it so we don't re-show
   s.intStats = { ...s.intStats, debutYear: -1 };
-  // Check for World Cup
-  if (s.pendingWorldCup) {
+  // Check for the international tournament
+  if (s.pendingTournament || s.pendingWorldCup) {
     s.phase = "world_cup";
     return s;
   }
   return advanceToNextPhase(s, clubs);
 }
 
-/* ─── Dismiss World Cup screen ─── */
+/* ─── Dismiss the international tournament screen ─── */
 export function dismissWorldCup(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev };
   s.pendingWorldCup = null;
+  s.pendingTournament = null;
   return advanceToNextPhase(s, clubs);
 }
 
@@ -5303,6 +5197,7 @@ export function applyWorldCupSpeech(prev: CareerState, choice: WorldCupSpeechCho
       break;
   }
   s.pendingWorldCup = null;
+  s.pendingTournament = null;
   return advanceToNextPhase(s, clubs);
 }
 
@@ -5661,7 +5556,10 @@ export function getCareerTotals(seasons: SeasonRecord[]) {
     leagueTitles: t.leagueTitles + (s.leagueTitle ? 1 : 0), domesticCups: t.domesticCups + (s.domesticCup ? 1 : 0),
     championsLeagues: t.championsLeagues + (s.championsLeague ? 1 : 0),
     worldCups: t.worldCups + (s.worldCup ? 1 : 0), ballonDors: t.ballonDors + (s.ballonDor ? 1 : 0),
-  }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, domesticCups: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0 });
+    // Round 124: continental championships are counted, and counted separately
+    // so a Euros never quietly reads as a World Cup in the cabinet.
+    continentalCups: t.continentalCups + (s.continentalCup ? 1 : 0),
+  }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, domesticCups: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0, continentalCups: 0 });
 }
 
 /* ─── Legacy Calculation ─── */
@@ -5714,9 +5612,16 @@ function calculateLegacy(state: CareerState): LegacyResult {
   breakdown.push({ label: "Ballon d'Or", points: Math.round(bdorPoints) });
   score += bdorPoints;
 
-  // International trophies
-  const intTrophyPoints = Math.min(10, (state.intStats.worldCupWins * 6) + (state.intStats.continentalWins * 3));
-  breakdown.push({ label: "International Trophies", points: Math.round(intTrophyPoints) });
+  /* International trophies. Round 124 raised this ceiling from 10 to 16 and
+     added caps, because before this round two identical club careers scored
+     the same whether one of them had a World Cup winner's medal or not, and
+     that is not how anybody talks about a footballer. A World Cup is now the
+     single biggest line a player can put on this list, and a hundred caps for
+     a country is a legacy on its own even without a trophy. */
+  const capPoints = Math.min(4, state.intStats.caps * 0.035);
+  const intTrophyPoints = Math.min(16,
+    (state.intStats.worldCupWins * 8) + (state.intStats.continentalWins * 4) + capPoints);
+  breakdown.push({ label: "International", points: Math.round(intTrophyPoints) });
   score += intTrophyPoints;
 
   // Club loyalty (bonus for 5+ years at one club)

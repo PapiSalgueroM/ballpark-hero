@@ -6,12 +6,29 @@
 */
 import { build } from "esbuild";
 import { writeFileSync, unlinkSync } from "node:fs";
-import { pathToFileURL } from "node:url";
+import path from "node:path";
+import { pathToFileURL, fileURLToPath } from "node:url";
 
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = "/tmp/sc-engine.mjs";
+const ENTRY = "/tmp/sc-engine-entry.mjs";
+
+/* Round 124: this harness died on import with "localStorage is not defined",
+   and it had been dead at origin/main before this round touched anything. The
+   engine imports managerJobMarket, which imports clubManager, which imports
+   squadDeal, which imports the Supabase client, which reads localStorage the
+   moment the module loads. Nothing here needs Supabase, so the fix is the
+   same two stage entry with a localStorage stub that scripts/simCup.mjs has
+   used since Round 102. If you ever see this harness "pass" instantly with no
+   output, it did not run. */
+writeFileSync(ENTRY, `
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+const mod = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
+export const engine = mod;
+`);
 
 await build({
-  entryPoints: ["src/lib/soccerCareerEngine.ts"],
+  entryPoints: [ENTRY],
   bundle: true,
   format: "esm",
   platform: "node",
@@ -20,7 +37,7 @@ await build({
   alias: { "@": "./src" },
 });
 
-const engine = await import(pathToFileURL(OUT).href);
+const { engine } = await import(pathToFileURL(OUT).href);
 const {
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, dismissNewspaper, dismissDebut, dismissWorldCup,
