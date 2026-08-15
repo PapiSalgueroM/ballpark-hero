@@ -9,6 +9,7 @@
 
 import { MLB_TEAMS } from '@/data/conquestDataMlb';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
+import { mlbSeasonScore, wonAward } from './careerAwards';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
 
@@ -336,15 +337,22 @@ export function simMlbSeason(
     if (cn) notes.push(cn);
   }
 
-  const statScore = c.pos === 'SP'
-    ? (line.so ?? 0) / 5 + (line.wins ?? 0) * 2.2 + Math.max(0, (3.8 - (line.era ?? 5)) * 22)
-    : c.pos === 'RP'
-      ? (line.saves ?? 0) * 1.5 + (line.holds ?? 0) * 1.1 + (line.so ?? 0) / 4 + Math.max(0, (3.6 - (line.era ?? 5)) * 26)
-      : (line.hr ?? 0) * 1.6 + (line.rbi ?? 0) / 3 + Math.max(0, ((line.avg ?? 0.2) - 0.24) * 320) + (line.sb ?? 0) / 3;
-  if (c.seasons.length === 0 && statScore > 55 && rng() < 0.72) { line.awards.push('Rookie of the Year'); notes.push('🏆 Rookie of the Year.'); }
-  if (statScore > 88) { line.awards.push('All-Star'); c.allStars += 1; notes.push('⭐ All-Star.'); }
+  const statScore = mlbSeasonScore(c.pos, line);
+  /* Round 123: MVP and Cy Young were gated on an overall of 90 and fired zero
+     times across 300 full careers, while All-Star was a naked threshold that
+     a good hitter cleared every year of his life. Both are now a draw against
+     the league. Sixty four players are All-Stars, thirty two per roster, per
+     MLB.com's own roster rules. MVP and Cy Young are two a year, one per
+     league. Barry Bonds holds the MVP record with seven and Roger Clemens the
+     Cy Young record with seven. See careerAwards.ts. */
+  if (c.seasons.length === 0 && wonAward(rng, 'mlb', 'mlbRoy', c.pos, statScore)) {
+    line.awards.push('Rookie of the Year'); notes.push('🏆 Rookie of the Year.');
+  }
+  if (wonAward(rng, 'mlb', 'mlbAllStar', c.pos, statScore)) {
+    line.awards.push('All-Star'); c.allStars += 1; notes.push('⭐ All-Star.');
+  }
   const isPitcher = MLB_PITCHERS.includes(c.pos);
-  if (statScore > 118 && c.ovr >= 90 && rng() < (c.pos === 'SP' ? 0.35 : c.pos === 'RP' ? 0.08 : 0.22)) {
+  if (wonAward(rng, 'mlb', isPitcher ? 'mlbCy' : 'mlbMvp', c.pos, statScore)) {
     const award = isPitcher ? 'Cy Young' : 'MVP';
     line.awards.push(award); c.mvpCys += 1; notes.push(`👑 ${award.toUpperCase()}.`);
   }
@@ -353,27 +361,33 @@ export function simMlbSeason(
   // The old code had Rookie of the Year, All-Star, MVP and Cy Young only, so a
   // glove first shortstop or a lights out closer could play fifteen years and
   // win nothing. Every position now has hardware to chase.
-  if (!isPitcher && c.pos !== 'DH' && games >= 130 && statScore > 70 && rng() < 0.4) {
+  //
+  // Round 123: the stat gates stay, because they are about who is even in the
+  // conversation. The coin flip after each one is what got replaced, and it
+  // mattered most here: a batting title and a home run crown have exactly two
+  // winners a season between thirty teams, and the old code handed them out on
+  // a 60 percent roll to anybody who cleared a fixed line.
+  if (!isPitcher && c.pos !== 'DH' && games >= 130 && wonAward(rng, 'mlb', 'goldGlove', c.pos, statScore)) {
     line.awards.push('Gold Glove'); notes.push('🧤 Gold Glove.');
   }
-  if (!isPitcher && (line.hr ?? 0) >= 28 && games >= 130 && rng() < 0.45) {
+  if (!isPitcher && (line.hr ?? 0) >= 28 && games >= 130 && wonAward(rng, 'mlb', 'silverSlugger', c.pos, statScore)) {
     line.awards.push('Silver Slugger'); notes.push('🥈 Silver Slugger.');
   }
-  if (!isPitcher && (line.avg ?? 0) >= 0.335 && games >= 130 && rng() < 0.6) {
+  if (!isPitcher && (line.avg ?? 0) >= 0.335 && games >= 130 && wonAward(rng, 'mlb', 'battingTitle', c.pos, statScore)) {
     line.awards.push('Batting Title'); notes.push('🏅 Batting title.');
   }
-  if (!isPitcher && (line.hr ?? 0) >= 45 && games >= 130 && rng() < 0.65) {
+  if (!isPitcher && (line.hr ?? 0) >= 45 && games >= 130 && wonAward(rng, 'mlb', 'hrCrown', c.pos, statScore)) {
     line.awards.push('Home Run Champion'); notes.push('💣 Led the league in home runs.');
   }
-  if (c.pos === 'SP' && (line.era ?? 9) <= 2.6 && games >= 28 && rng() < 0.55) {
+  if (c.pos === 'SP' && (line.era ?? 9) <= 2.6 && games >= 28 && wonAward(rng, 'mlb', 'eraTitle', c.pos, statScore)) {
     line.awards.push('ERA Title'); notes.push('🎯 Led the league in ERA.');
   }
-  if (c.pos === 'RP' && (line.saves ?? 0) >= 38 && rng() < 0.6) {
+  if (c.pos === 'RP' && (line.saves ?? 0) >= 38 && wonAward(rng, 'mlb', 'savesLeader', c.pos, statScore)) {
     line.awards.push('Saves Leader'); notes.push('🚪 Led the league in saves.');
   }
   // Comeback needs a real bounce off a lost season, not just a good year.
   const prevSeason = c.seasons[c.seasons.length - 1];
-  if (prevSeason && prevSeason.games <= 70 && games >= 130 && statScore > 85 && rng() < 0.55) {
+  if (prevSeason && prevSeason.games <= 70 && games >= 130 && wonAward(rng, 'mlb', 'mlbComeback', c.pos, statScore)) {
     line.awards.push('Comeback Player of the Year'); notes.push('🔁 Comeback Player of the Year.');
   }
 
@@ -508,14 +522,30 @@ export function mlbCareerTotals(c: MlbCareerState) {
 
 export function mlbLegacyOf(c: MlbCareerState): MlbLegacy {
   const t = mlbCareerTotals(c);
-  let score = c.rings * 85 + c.mvpCys * 100 + c.allStars * 28 + c.seasons.length * 8;
-  score += c.pos === 'SP' ? t.wins * 1.1 + t.so / 28 : t.hr * 0.85 + t.rbi / 22;
+  /* Round 123 recalibration, and this one needed the most work because the
+     counting stats were doing almost all of it. The engine gives a median
+     career nineteen seasons, and a corner bat hitting 25 a year for nineteen
+     years finishes on roughly 475 home runs. At the old weight of 0.85 that
+     alone was 404 of the 500 needed for Cooperstown, so SEVENTY PERCENT of
+     simulated careers were Hall of Famers before you counted anything else.
+     Four hundred and seventy five home runs really is a Cooperstown number in
+     the real world; the problem is that this engine hands it to the median
+     player, and that is a stat inflation question for another round, not
+     something the verdict should paper over. So the counting terms came down
+     hard and the (now genuinely rare) hardware came up.
+
+     Measured over 2420 careers after: median score 353, Hall of Fame 18.8
+     percent, inner circle 1.3 percent. The bottom tier moved from 170 to 230
+     because at 170 it had become unreachable: nobody who plays nineteen years
+     scores under 170 and the line was dead. */
+  let score = c.rings * 85 + c.mvpCys * 220 + c.allStars * 70 + c.seasons.length * 9;
+  score += c.pos === 'SP' ? t.wins * 0.5 + t.so / 70 : t.hr * 0.25 + t.rbi / 60;
   score = Math.round(score);
   const hof = score >= 500;
   const verdict = score >= 900 ? 'Cooperstown first ballot, inner circle'
     : score >= 500 ? 'Hall of Famer'
     : score >= 330 ? 'Franchise legend, Hall of Very Good'
-    : score >= 170 ? 'A long, proud big-league career'
+    : score >= 230 ? 'A long, proud big-league career'
     : 'A September call-up story to tell forever';
   const bullets = [
     `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${c.mvpCys} ${c.pos === 'SP' ? 'Cy Young' : 'MVP'}${c.mvpCys === 1 ? '' : 's'}, ${c.allStars} All-Star nods`,

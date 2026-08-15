@@ -525,7 +525,15 @@ export function getNflCorruptionEvents(c: CareerState, rng: () => number): Caree
     });
   }
 
-  if (c.mvps >= 1 && rng() < 0.35) {
+  /* Round 123: this used to be gated on c.mvps alone, back when a median NFL
+     career won 1.45 of them and 39 percent of all careers had at least one.
+     Awards are scarce now, so that gate would have taken this event from
+     common to a 2 percent curiosity. The event is about a PR firm lobbying
+     award voters on your behalf, which is a thing that happens to a player
+     who is IN the conversation, not only to one who already won. So the gate
+     is the conversation: an MVP, a Defensive Player of the Year, or a first
+     team All-Pro season. */
+  if ((c.mvps >= 1 || c.allPros >= 1) && rng() < 0.35) {
     deck.push({
       id: 'corr_vote_lobby',
       title: 'The voters are people',

@@ -305,17 +305,50 @@ export function careerVolumeScore(sport: UsSport, pos: string, seasons: UsSeason
  *     is worth, because the day those gates get retuned this should be
  *     correct without anyone remembering to come back here.
  *
+ * ─── Round 123: that day arrived, and this table had to be rebuilt ───
+ *
+ * careerAwards.ts made every award something you have to beat the rest of
+ * the league to win, so the counts above are gone. Measured over 1760 NFL,
+ * 1100 NBA, 2420 MLB and 1100 NHL full careers in August 2026, after:
+ *
+ *   sport  rings(p50/max)  major(mean/max)  allLeague(mean/max)  peak(p50)
+ *   NFL       0 / 5           0.03 / 2          0.20 / 3           80
+ *   NBA       0 / 6           0.10 / 5          1.32 / 12          84
+ *   MLB       0 / 6           0.01 / 2          0.82 / 9           80
+ *   NHL       0 / 6           0.06 / 2          1.01 / 9           84
+ *
+ * All-Pro fell by a factor of forty four and the NHL All-Star nod by a
+ * factor of eight, so leaving this table alone would have sent every retiring
+ * player to the coaching market with almost nothing and quietly killed the
+ * Round 113 feature. Two things changed and the second one is the important
+ * one.
+ *
+ * The award weights went up, a lot, because an award is now worth what an
+ * award is worth. A first team All-Pro season is 8 rather than 1.3 because
+ * you now have to be the best in the league at your job to get one.
+ *
+ * And the LONGEVITY terms went up in the three sports whose median career now
+ * wins nothing at all, because something has to carry the middle of the
+ * distribution and it can no longer be hardware. That is not a fudge, it is
+ * what a front office is actually looking at when it interviews a man who
+ * played seventeen years and never made an All-Pro team: how long you lasted,
+ * how good you got, and how much you piled up. Awards are now the thing that
+ * separates the top, which is what they are for.
+ *
  * Calibrated so a median career lands near 40, a very good one near 70, and
- * only a career the sport would argue about clears 90.
+ * only a career the sport would argue about clears 90. Measured medians after
+ * the rebuild: NFL 45, NBA 39, MLB 38, NHL 48, against the documented 45, 38,
+ * 37 and 49 from Round 113. Share of retirees who skip the staff route and
+ * start as a head coach: NFL 14 percent, NBA 20, MLB 8, NHL 27.
  */
 const REP_WEIGHTS: Record<UsSport, {
   ring: number; major: number; finalsMvp: number; allLeague: number;
   season: number; peak: number; volume: number;
 }> = {
-  nfl: { ring: 7, major: 4, finalsMvp: 8, allLeague: 1.3, season: 0.5, peak: 0.75, volume: 5 },
-  nba: { ring: 7, major: 14, finalsMvp: 8, allLeague: 4.5, season: 0.5, peak: 0.75, volume: 5 },
-  mlb: { ring: 7, major: 14, finalsMvp: 8, allLeague: 3.0, season: 0.5, peak: 0.75, volume: 5 },
-  nhl: { ring: 7, major: 12, finalsMvp: 8, allLeague: 1.3, season: 0.5, peak: 0.75, volume: 5 },
+  nfl: { ring: 7, major: 16, finalsMvp: 8, allLeague: 8, season: 0.85, peak: 1.1, volume: 6.5 },
+  nba: { ring: 7, major: 16, finalsMvp: 10, allLeague: 6, season: 0.5, peak: 0.75, volume: 5 },
+  mlb: { ring: 7, major: 20, finalsMvp: 8, allLeague: 4, season: 0.65, peak: 0.9, volume: 5.5 },
+  nhl: { ring: 7, major: 18, finalsMvp: 10, allLeague: 7, season: 0.6, peak: 0.85, volume: 6 },
 };
 
 /**

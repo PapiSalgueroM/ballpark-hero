@@ -9,6 +9,7 @@
 
 import { NHL_TEAMS } from '@/data/conquestDataNhl';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
+import { nhlSeasonScore, wonAward } from './careerAwards';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
 
@@ -225,6 +226,10 @@ export function simNhlSeason(
     line.assists = Math.min(90, Math.max(2, Math.round((7 + (form - 62) * 1.5) * (c.pos === 'D' ? 1.15 : 1.05 - (mult - 1) * 0.5) * g + rng() * 7)));
     line.points = (line.goals ?? 0) + (line.assists ?? 0);
   }
+  // Round 123: computed up here rather than down with the rest of the awards
+  // because the Conn Smythe is decided inside the playoff block below and it
+  // needs the same number everything else is judged on.
+  const statScore = nhlSeasonScore(c.pos, line);
 
   const strength = teamQuality + (c.ovr - 76) * 0.4;
   const playoffOdds = Math.max(0.05, Math.min(0.9, (strength - 66) / 28));
@@ -240,7 +245,12 @@ export function simNhlSeason(
       c.cups += 1;
       c.fanbase = Math.min(100, c.fanbase + 15);
       notes.push('🏆 THE CUP. Your day with it is coming.');
-      if (c.ovr >= 88 && rng() < 0.5) { line.awards.push('Conn Smythe'); c.connSmythes += 1; notes.push('🏆 CONN SMYTHE.'); }
+      // Round 123: winning the Cup already narrowed the field to your own
+      // dressing room, so that is what you are drawn against. Patrick Roy is
+      // the only man to win it three times.
+      if (wonAward(rng, 'nhl', 'connSmythe', c.pos, statScore)) {
+        line.awards.push('Conn Smythe'); c.connSmythes += 1; notes.push('🏆 CONN SMYTHE.');
+      }
     }
   }
   line.teamResult = result;
@@ -268,12 +278,22 @@ export function simNhlSeason(
     if (cn) notes.push(cn);
   }
 
-  const statScore = c.pos === 'G'
-    ? (line.wins ?? 0) * 1.8 + Math.max(0, ((line.svpct ?? 0.9) - 0.9) * 2400)
-    : (line.points ?? 0) * (c.pos === 'D' ? 1.35 : 1);
-  if (c.seasons.length === 0 && statScore > 48 && rng() < 0.72) { line.awards.push('Calder Trophy'); notes.push('🏆 Calder Trophy.'); }
-  if (statScore > 82) { line.awards.push('All-Star'); c.allStars += 1; notes.push('⭐ All-Star.'); }
-  if (statScore > 105 && c.ovr >= 91 && rng() < 0.3) {
+  /* Round 123: the All-Star nod was a naked threshold and a MEDIAN career
+     collected eight of them, with the best of 300 careers on twenty one.
+     Gordie Howe holds the real record at twenty one selections, twelve first
+     team and nine second, over twenty six seasons, and nobody else is close.
+     Twelve players make it a year, six positions across two teams, so the
+     draw is against the other men who play your position. The major was
+     gated on an overall of 91 and fired twice in 300 careers. Wayne Gretzky
+     won nine Harts, Bobby Orr eight Norrises, Jacques Plante seven Vezinas.
+     See careerAwards.ts. */
+  if (c.seasons.length === 0 && wonAward(rng, 'nhl', 'calder', c.pos, statScore)) {
+    line.awards.push('Calder Trophy'); notes.push('🏆 Calder Trophy.');
+  }
+  if (wonAward(rng, 'nhl', 'nhlAllStar', c.pos, statScore)) {
+    line.awards.push('All-Star'); c.allStars += 1; notes.push('⭐ All-Star.');
+  }
+  if (wonAward(rng, 'nhl', 'nhlMajor', c.pos, statScore)) {
     const award = majorAwardName(c.pos);
     line.awards.push(award); c.harts += 1; notes.push(`👑 THE ${award.toUpperCase()}.`);
   }
@@ -282,26 +302,32 @@ export function simNhlSeason(
   // The game had Calder, All-Star, one major and Conn Smythe only, so a
   // shutdown defenseman or a backup who took the job could play fifteen years
   // and win nothing. Every seat on the bench now has hardware to chase.
+  //
+  // Round 123: the stat gates stay, because a man who scored 30 is not in the
+  // Rocket Richard conversation whatever else happened. What got replaced is
+  // the coin flip after the gate, and this is where it was most obviously
+  // wrong: the Rocket Richard and the Art Ross have exactly one winner each
+  // per season and the old code gave them out on a 60 percent roll.
   const isSkater = c.pos !== 'G';
   const pts = (line.points ?? 0);
-  if (isSkater && (line.goals ?? 0) >= 45 && games >= 70 && rng() < 0.6) {
+  if (isSkater && (line.goals ?? 0) >= 45 && games >= 70 && wonAward(rng, 'nhl', 'rocketRichard', c.pos, statScore)) {
     line.awards.push('Rocket Richard'); notes.push('🚀 Rocket Richard, most goals in the league.');
   }
-  if (isSkater && pts >= 100 && games >= 70 && rng() < 0.55) {
+  if (isSkater && pts >= 100 && games >= 70 && wonAward(rng, 'nhl', 'artRoss', c.pos, statScore)) {
     line.awards.push('Art Ross'); notes.push('🎩 Art Ross, league scoring title.');
   }
-  if (c.pos === 'C' && games >= 70 && statScore > 70 && rng() < 0.3) {
+  if (c.pos === 'C' && games >= 70 && wonAward(rng, 'nhl', 'selke', c.pos, statScore)) {
     line.awards.push('Selke Trophy'); notes.push('🛡️ Selke Trophy, best defensive forward.');
   }
-  if (c.pos === 'G' && (line.svpct ?? 0) >= 0.925 && games >= 50 && rng() < 0.45) {
+  if (c.pos === 'G' && (line.svpct ?? 0) >= 0.925 && games >= 50 && wonAward(rng, 'nhl', 'jennings', c.pos, statScore)) {
     line.awards.push('William Jennings'); notes.push('🧱 Jennings Trophy, fewest goals against.');
   }
-  if (isSkater && games >= 78 && c.health >= 80 && rng() < 0.25) {
+  if (isSkater && games >= 78 && c.health >= 80 && wonAward(rng, 'nhl', 'masterton', c.pos, statScore)) {
     line.awards.push('Masterton Nominee'); notes.push('🎖️ Masterton nomination for perseverance.');
   }
   // A real bounce off a lost season, not just a good year.
   const prevSeason = c.seasons[c.seasons.length - 1];
-  if (prevSeason && prevSeason.games <= 35 && games >= 70 && statScore > 75 && rng() < 0.5) {
+  if (prevSeason && prevSeason.games <= 35 && games >= 70 && wonAward(rng, 'nhl', 'nhlComeback', c.pos, statScore)) {
     line.awards.push('Comeback Player of the Year'); notes.push('🔁 Comeback Player of the Year.');
   }
 
@@ -433,14 +459,26 @@ export function nhlCareerTotals(c: NhlCareerState) {
 
 export function nhlLegacyOf(c: NhlCareerState): NhlLegacy {
   const t = nhlCareerTotals(c);
-  let score = c.cups * 85 + c.harts * 95 + c.connSmythes * 60 + c.allStars * 26 + c.seasons.length * 8;
-  score += c.pos === 'G' ? t.wins / 3.2 : t.points / 9;
+  /* Round 123 recalibration. A median career used to collect eight All-Star
+     selections, so allStars * 26 was 208 free points for being ordinary and
+     69 percent of careers retired to the Hall of Fame. An All-Star nod is
+     now worth 45 because you have to be one of forty four players in the
+     league to get one, the major is worth 160 because Gretzky only managed
+     nine of them in twenty seasons, and the points term came down because
+     twenty one seasons of hockey adds up whoever you are.
+
+     Measured over 1100 careers after: median score 307, Hall of Fame 16.5
+     percent, Rushmore tier 2.5 percent, forced 90 ceiling career gets in 70
+     percent of the time. The bottom tier moved from 170 to 230 for the same
+     reason as baseball: at 170 nobody could reach it and the line was dead. */
+  let score = c.cups * 85 + c.harts * 160 + c.connSmythes * 85 + c.allStars * 45 + c.seasons.length * 7;
+  score += c.pos === 'G' ? t.wins / 6.5 : t.points / 18;
   score = Math.round(score);
   const hof = score >= 500;
   const verdict = score >= 900 ? 'Rushmore of the sport, the debate is over'
     : score >= 500 ? 'Hockey Hall of Famer'
     : score >= 330 ? 'Franchise icon, Hall of Very Good'
-    : score >= 170 ? 'A long, honest NHL career'
+    : score >= 230 ? 'A long, honest NHL career'
     : 'A cup of coffee and a great story';
   const bullets = [
     `${c.seasons.length} seasons, ${c.cups} Cup${c.cups === 1 ? '' : 's'}, ${c.harts} ${majorAwardName(c.pos)}${c.harts === 1 ? '' : 's'}, ${c.connSmythes} Conn Smythe${c.connSmythes === 1 ? '' : 's'}, ${c.allStars} All-Star nods`,

@@ -188,7 +188,15 @@ console.log('\nNFL');
   check('NFL', 'WR', 'recYds', acc.WR.recYds ?? [], { ceiling: 1964, medLo: 250, medHi: 1200, spread: 1.8 });
   check('NFL', 'TE', 'rec', acc.TE.rec ?? [], { ceiling: 149, medLo: 15, medHi: 80 });
   check('NFL', 'LB', 'tackles', acc.LB.tackles ?? [], { ceiling: 200, medLo: 40, medHi: 140 });
-  check('NFL', 'EDGE', 'sacks', acc.EDGE.sacks ?? [], { ceiling: 22.5, medLo: 1, medHi: 12 });
+  // Round 123: this bound was stale and was failing about one run in four.
+  // It said 22.5, which was the record when Round 97 wrote it, shared by
+  // Michael Strahan in 2001 and T.J. Watt in 2021. Myles Garrett has it now
+  // at 23.0 in 2025, per Pro Football Reference's single season leaders. Al
+  // Baker also had 23.0 in 1978, but sacks did not become an official stat
+  // until 1982, so Garrett's is the one that counts. Verified by web search,
+  // not from memory. Any other bound in this file is only as fresh as the day
+  // it was checked, and that is worth remembering before trusting one.
+  check('NFL', 'EDGE', 'sacks', acc.EDGE.sacks ?? [], { ceiling: 23, medLo: 1, medHi: 12, note: 'Myles Garrett, 23.0 in 2025' });
   check('NFL', 'CB', 'picks', acc.CB.picks ?? [], { ceiling: 14, medLo: 0, medHi: 5 });
   check('NFL', 'K', 'fgMade', acc.K.fgMade ?? [], { ceiling: 44, medLo: 10, medHi: 32 });
 }

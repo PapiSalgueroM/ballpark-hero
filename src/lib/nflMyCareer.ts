@@ -15,6 +15,7 @@
 // they are real career paths and not reskins of a receiver.
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
+import { nflSeasonScore, wonAward } from './careerAwards';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
 import { getNflLifeEventsA } from './nflCareerLifeA';
@@ -286,7 +287,24 @@ export function simSeason(
     line.passDef = Math.round((7 + (form - 62) * 0.5 + rng() * 9) * g);
     line.forcedFum = Math.max(0, Math.round((rng() * 2) * g));
   } else if (c.pos === 'EDGE') {
-    line.sacks = Math.max(0, Math.round(((form - 64) * 0.52 + rng() * 5) * g * 10) / 10);
+    /* Round 123: capped at the real single season record, which nothing in
+       this game should ever cross. Myles Garrett has it at 23.0 in 2025, per
+       Pro Football Reference's single season leaders; Michael Strahan in 2001
+       and T.J. Watt in 2021 share the previous mark at 22.5, and Al Baker's
+       23.0 in 1978 sits above both but predates 1982, when sacks became an
+       official statistic.
+
+       This came out of Round 123 by accident. simCareerRealism.mjs was going
+       red about one run in four on "EDGE sacks: 22.6 beats the real single
+       season record of 22.5", and the first assumption was that this round
+       had broken something. It had not: measured over 56,000 EDGE seasons,
+       the unmodified engine at Round 122 crossed 22.5 three times and topped
+       out at 23.1, and this round's engine crossed it once. The bug was two
+       separate things wearing each other's coat. The harness bound was STALE,
+       written in Round 97 when 22.5 really was the record, and the engine had
+       no cap at all, so on the day somebody broke the record in real life the
+       harness became both wrong and still, occasionally, right. */
+    line.sacks = Math.min(23, Math.max(0, Math.round(((form - 64) * 0.52 + rng() * 5) * g * 10) / 10));
     line.tackles = Math.round((32 + (form - 62) * 1.1 + rng() * 16) * g);
     line.forcedFum = Math.max(0, Math.round(((form - 74) * 0.06 + rng() * 3) * g));
     line.passDef = Math.max(0, Math.round((rng() * 4) * g));
@@ -348,31 +366,33 @@ export function simSeason(
   }
 
   // awards
-  // Round 56: every position is scored on its own currency, normalised so a
-  // dominant corner and a dominant quarterback land in the same range.
-  const statScore = c.pos === 'QB'
-    ? (line.passYds ?? 0) / 48 + (line.passTd ?? 0) * 2.4 - (line.ints ?? 0)
-    : c.pos === 'RB'
-      ? ((line.rushYds ?? 0) + (line.recYds ?? 0)) / 16 + (line.rushTd ?? 0) * 3
-      : c.pos === 'WR' || c.pos === 'TE'
-        ? (line.recYds ?? 0) / 14 + (line.recTd ?? 0) * 3 + (c.pos === 'TE' ? 12 : 0)
-        : c.pos === 'LB'
-          ? (line.tackles ?? 0) / 1.15 + (line.sacks ?? 0) * 5 + (line.picks ?? 0) * 9 + (line.forcedFum ?? 0) * 5
-          : c.pos === 'CB'
-            ? (line.picks ?? 0) * 15 + (line.passDef ?? 0) * 3.2 + (line.tackles ?? 0) / 2 + (line.forcedFum ?? 0) * 6
-            : c.pos === 'EDGE'
-              ? (line.sacks ?? 0) * 8.5 + (line.tackles ?? 0) / 1.6 + (line.forcedFum ?? 0) * 6
-              : ((line.fgMade ?? 0) * 3.4 + ((line.longFg ?? 0) - 45) * 1.6);
+  // Round 56: every position is scored on its own currency. Round 123 moved
+  // the formula itself into careerAwards.ts, unchanged, because the award
+  // model and the harness both have to score a season exactly the way this
+  // engine does and two copies of a formula is two formulas.
+  const statScore = nflSeasonScore(c.pos, line);
   const isDef = DEFENSIVE_POS.includes(c.pos);
   const royLabel = isDef ? 'Defensive Rookie of the Year' : 'Offensive Rookie of the Year';
-  if (c.seasons.length === 0 && statScore > 68 && rng() < 0.7) { line.awards.push(royLabel); notes.push(`🏆 ${royLabel}.`); }
+  /* Round 123: every one of these used to be a threshold on your own numbers
+     plus a coin flip, which is why a median career here collected TEN first
+     team All-Pro seasons. Jerry Rice and Jim Otto share the real record with
+     ten, across twenty and fifteen years. Now you have to beat the field:
+     one first team quarterback a year out of thirty two starters, three wide
+     receivers out of ninety six, and so on. See careerAwards.ts. */
+  if (c.seasons.length === 0 && wonAward(rng, 'nfl', 'nflRoy', c.pos, statScore)) {
+    line.awards.push(royLabel); notes.push(`🏆 ${royLabel}.`);
+  }
   // Round 56: defenders chase Defensive Player of the Year instead of MVP.
-  if (isDef && statScore > 112 && games >= 15 && rng() < 0.35) {
+  if (isDef && games >= 15 && wonAward(rng, 'nfl', 'nflDpoy', c.pos, statScore)) {
     line.awards.push('Defensive Player of the Year'); c.mvps += 1; notes.push('🛡️ DEFENSIVE PLAYER OF THE YEAR.');
   }
-  if (statScore > 105 && games >= 15) { line.awards.push('All-Pro'); c.allPros += 1; notes.push('⭐ First-team All-Pro.'); }
-  // Kickers and defenders do not win MVP. Neither do most people.
-  if (!isDef && c.pos !== 'K' && statScore > 118 && games >= 15 && (c.pos === 'QB' ? c.ovr >= 90 && rng() < 0.28 : rng() < 0.06)) {
+  if (games >= 15 && wonAward(rng, 'nfl', 'allPro', c.pos, statScore)) {
+    line.awards.push('All-Pro'); c.allPros += 1; notes.push('⭐ First-team All-Pro.');
+  }
+  // Kickers and defenders do not win MVP. Neither do most people. That gate
+  // lives in the MVP table in careerAwards.ts now, which returns nothing at
+  // all for a kicker or a defender.
+  if (games >= 15 && wonAward(rng, 'nfl', 'nflMvp', c.pos, statScore)) {
     line.awards.push('MVP'); c.mvps += 1; notes.push('👑 LEAGUE MVP.');
   }
 
@@ -669,7 +689,18 @@ export interface Legacy {
 
 export function legacyOf(c: CareerState): Legacy {
   const totals = careerTotals(c);
-  let score = c.rings * 90 + c.mvps * 110 + c.allPros * 45 + c.seasons.length * 8;
+  /* Round 123 recalibration. The old weights were written when a median
+     career collected ten first team All-Pro seasons, so allPros * 45 alone
+     was 450 of the 520 needed for Canton and SIXTY NINE PERCENT of simulated
+     careers retired as Hall of Famers, 42 percent of them inner circle. That
+     is not a Hall of Fame, that is a mailing list.
+
+     Awards are scarce now, so each one is worth far more and longevity does
+     more of the middle. Measured over 1760 careers after the change: median
+     score 266, Hall of Fame 11.9 percent, inner circle 1.4 percent, and a
+     forced elite career (90 ceiling) goes in at 70 percent. A great career
+     still comes out great, which was the thing to protect. */
+  let score = c.rings * 80 + c.mvps * 230 + c.allPros * 150 + c.seasons.length * 11;
   if (c.pos === 'QB') score += totals.passYds / 800 + totals.passTd * 0.5;
   if (c.pos === 'RB') score += totals.rushYds / 120;
   if (c.pos === 'WR') score += totals.recYds / 140;

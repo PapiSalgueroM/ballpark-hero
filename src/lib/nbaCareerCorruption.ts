@@ -342,7 +342,12 @@ export function getNbaCorruptionEvents(c: NbaCareerState, rng: () => number): Nb
     });
   }
 
-  if (c.mvps >= 1 && rng() < 0.4) {
+  /* Round 123: the same widening the football version got, for the opposite
+     reason. NBA MVP was gated on an overall of 92 that the engine could not
+     reach, so c.mvps was zero in all 300 careers measured and this event had
+     never fired ONCE. It fires now, and adding All-NBA to the gate means a
+     player the voters actually know can get it without having won already. */
+  if ((c.mvps >= 1 || c.allNbas >= 1) && rng() < 0.4) {
     deck.push({
       id: 'ncorr_award_lobby',
       title: 'The voters are people',

@@ -9,6 +9,7 @@
 
 import { NBA_TEAMS } from '@/data/conquestDataNba';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
+import { nbaSeasonScore, wonAward } from './careerAwards';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
 
@@ -326,6 +327,10 @@ export function simNbaSeason(
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     ppg, rpg, apg, awards: [], teamResult: '', salary: c.salary,
   };
+  // Round 123: computed up here rather than down with the rest of the awards
+  // because Finals MVP is decided inside the playoff block below and it needs
+  // the same number everything else is judged on.
+  const statScore = nbaSeasonScore(line);
 
   const strength = teamQuality + (c.ovr - 78) * 0.5;
   const playoffOdds = Math.max(0.05, Math.min(0.92, (strength - 66) / 28));
@@ -341,7 +346,14 @@ export function simNbaSeason(
       c.rings += 1;
       c.fanbase = Math.min(100, c.fanbase + 15);
       notes.push('💍 A RING.');
-      if (c.ovr >= 88 && rng() < 0.65) { line.awards.push('Finals MVP'); c.finalsMvps += 1; notes.push('🏆 FINALS MVP.'); }
+      // Round 123: you have already won the title to be standing here, so the
+      // field is the handful of people on your own team who could take it off
+      // you. The old ovr >= 88 gate meant a title team's best player could be
+      // ineligible for the trophy his own run earned. Michael Jordan holds the
+      // record with six.
+      if (wonAward(rng, 'nba', 'finalsMvp', c.pos, statScore)) {
+        line.awards.push('Finals MVP'); c.finalsMvps += 1; notes.push('🏆 FINALS MVP.');
+      }
     }
   }
   line.teamResult = result;
@@ -363,41 +375,58 @@ export function simNbaSeason(
     if (cn) notes.push(cn);
   }
 
-  const statScore = ppg * 1.6 + rpg * 1.4 + apg * 1.7;
-  if (c.seasons.length === 0 && statScore > 42 && rng() < 0.72) { line.awards.push('Rookie of the Year'); notes.push('🏆 Rookie of the Year.'); }
-  if (statScore > 62 && games >= 62) { line.awards.push('All-NBA'); c.allNbas += 1; notes.push('⭐ All-NBA.'); }
-  if (statScore > 74 && games >= 62 && c.ovr >= 92 && rng() < 0.3) { line.awards.push('MVP'); c.mvps += 1; notes.push('👑 LEAGUE MVP.'); }
+  /* Round 123: MVP used to be gated on an overall of 92, and across 300 full
+     careers the highest peak the engine ever produced was 91, so it fired
+     exactly zero times. Not rarely. Never. All-NBA was a bare threshold, so
+     once you cleared it you cleared it every year forever. Both are now a
+     draw against the rest of the league: fifteen players are All-NBA out of
+     roughly a hundred and fifty starters, one man is MVP. See
+     careerAwards.ts. */
+  if (c.seasons.length === 0 && wonAward(rng, 'nba', 'nbaRoy', c.pos, statScore)) {
+    line.awards.push('Rookie of the Year'); notes.push('🏆 Rookie of the Year.');
+  }
+  if (games >= 62 && wonAward(rng, 'nba', 'allNba', c.pos, statScore)) {
+    line.awards.push('All-NBA'); c.allNbas += 1; notes.push('⭐ All-NBA.');
+  }
+  if (games >= 62 && wonAward(rng, 'nba', 'nbaMvp', c.pos, statScore)) {
+    line.awards.push('MVP'); c.mvps += 1; notes.push('👑 LEAGUE MVP.');
+  }
 
   // ── Round 57: the rest of the trophy case ──
   // The old code only had Rookie of the Year, All-NBA, MVP and Finals MVP, so a
   // rim protecting center or a bench scorer could put together a great career
   // and never win anything. Every archetype now has something to chase.
+  //
+  // Round 123: the archetype and stat gates below are kept exactly as they
+  // were, because they are about WHO is even in the running for a given
+  // trophy, which is a different question from whether he beat anybody. The
+  // coin flip that used to follow each one is what got replaced.
   const isBig = c.pos === 'C' || c.pos === 'PF';
-  if (a.rebounding >= 1.3 && rpg >= 11 && games >= 62 && rng() < 0.45) {
+  if (a.rebounding >= 1.3 && rpg >= 11 && games >= 62 && wonAward(rng, 'nba', 'nbaDpoy', c.pos, statScore)) {
     line.awards.push('Defensive Player of the Year'); notes.push('🛡️ DEFENSIVE PLAYER OF THE YEAR.');
   }
-  if (games >= 62 && statScore > 52 && rng() < 0.4) {
+  if (games >= 62 && wonAward(rng, 'nba', 'allDefensive', c.pos, statScore)) {
     line.awards.push('All-Defensive Team'); notes.push('🔒 All-Defensive Team.');
   }
-  if (ppg >= 28 && games >= 62 && rng() < 0.5) {
+  if (ppg >= 28 && games >= 62 && wonAward(rng, 'nba', 'scoringTitle', c.pos, statScore)) {
     line.awards.push('Scoring Champion'); notes.push('🔥 Scoring champion.');
   }
-  if (apg >= 10 && games >= 62 && rng() < 0.55) {
+  if (apg >= 10 && games >= 62 && wonAward(rng, 'nba', 'assistsTitle', c.pos, statScore)) {
     line.awards.push('Assists Leader'); notes.push('🎯 Led the league in assists.');
   }
-  if (isBig && rpg >= 12.5 && games >= 62 && rng() < 0.55) {
+  if (isBig && rpg >= 12.5 && games >= 62 && wonAward(rng, 'nba', 'reboundsTitle', c.pos, statScore)) {
     line.awards.push('Rebounding Champion'); notes.push('🧲 Led the league in rebounds.');
   }
   // Most Improved needs a real jump from last season, not just a good year.
   const prev = c.seasons[c.seasons.length - 1];
-  if (prev && prev.games >= 40 && ppg - prev.ppg >= 6 && games >= 62 && rng() < 0.6) {
+  if (prev && prev.games >= 40 && ppg - prev.ppg >= 6 && games >= 62 && wonAward(rng, 'nba', 'mostImproved', c.pos, statScore)) {
     line.awards.push('Most Improved Player'); notes.push('📈 Most Improved Player.');
   }
   // Sixth Man is for solid production on a low usage archetype.
-  if (a.scoring <= 0.9 && ppg >= 14 && games >= 62 && rng() < 0.35) {
+  if (a.scoring <= 0.9 && ppg >= 14 && games >= 62 && wonAward(rng, 'nba', 'sixthMan', c.pos, statScore)) {
     line.awards.push('Sixth Man of the Year'); notes.push('🪑 Sixth Man of the Year.');
   }
-  if (c.age >= 22 && c.seasons.length <= 1 && statScore > 34 && rng() < 0.5) {
+  if (c.age >= 22 && c.seasons.length <= 1 && wonAward(rng, 'nba', 'allRookie', c.pos, statScore)) {
     line.awards.push('All-Rookie Team'); notes.push('🌱 All-Rookie Team.');
   }
 
@@ -543,7 +572,13 @@ export function nbaCareerTotals(c: NbaCareerState) {
 
 export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
   const t = nbaCareerTotals(c);
-  let score = c.rings * 95 + c.mvps * 120 + c.finalsMvps * 70 + c.allNbas * 40 + c.seasons.length * 8 + t.pts / 320;
+  /* Round 123 recalibration. MVP used to be unreachable here, so mvps * 120
+     was a term that never once fired and the whole verdict leant on All-NBA
+     and raw points. Now that an MVP is a real thing you can win, it is worth
+     what it should be. Measured over 1100 careers after: median score 295,
+     Hall of Fame 18.0 percent, GOAT tier 2.4 percent, and a forced 90
+     ceiling career gets in 66 percent of the time. */
+  let score = c.rings * 95 + c.mvps * 155 + c.finalsMvps * 90 + c.allNbas * 48 + c.seasons.length * 8 + t.pts / 430;
   score = Math.round(score);
   const hof = score >= 500;
   const verdict = score >= 950 ? 'On the short list. The GOAT debate has your name in it'
