@@ -565,7 +565,13 @@ function familiarity(p: CoachProfile, team: string): number {
   return 0.9;
 }
 
-function briefFor(tier: CoachTier, sport: UsSport, rng: () => number): string {
+/**
+ * Round 126: exported so the wiring layer can write an honest brief when a
+ * bigger job comes and takes you mid career. Before this the poached coach
+ * carried his old job's brief into the new building, so a man being handed a
+ * franchise was still being told to run his side of the ball.
+ */
+export function briefFor(tier: CoachTier, sport: UsSport, rng: () => number = Math.random): string {
   const trophy = titleWord(sport);
   const pool: Record<CoachTier, string[]> = {
     1: [`Win ${trophy}. There is no other version of a good season here.`,
@@ -584,7 +590,8 @@ function briefFor(tier: CoachTier, sport: UsSport, rng: () => number): string {
   return pick(pool[tier], rng);
 }
 
-function rosterFor(tier: CoachTier, rng: () => number): string {
+/** Round 126: exported for the same reason briefFor is. */
+export function rosterFor(tier: CoachTier, rng: () => number = Math.random): string {
   const pool: Record<CoachTier, string[]> = {
     1: ['A finished roster with a real star and no excuses left.',
         'Veterans, money spent, and a front office that expects a parade.'],

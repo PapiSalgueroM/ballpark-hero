@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Crown, Dumbbell, RotateCcw, Sparkles } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import {
@@ -14,13 +14,18 @@ import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppe
 import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
 import AppearanceBuilder from '@/components/soccer-career/AppearanceBuilder';
 import { Confetti, CountUp } from '@/components/soccer-career/CareerFx';
+import CoachCareerPanel, { CoachStartCard } from '@/components/us-career/CoachCareerPanel';
+import { startCoachCareer, ensureCoachCareer } from '@/lib/usCoachCareer';
+import type { CoachCareerState } from '@/lib/usCoachCareer';
 import { cn } from '@/lib/utils';
 
-type Phase = 'create' | 'season' | 'event' | 'retired';
+/* Round 126: 'coach' is new. Retirement used to be the last screen in the
+   game. Now it hands you to a job board and the save keeps going. */
+type Phase = 'create' | 'season' | 'event' | 'retired' | 'coach';
 
 const SAVE_KEY = 'nhl-my-career-save-v1';
 
-interface SaveShape { c: NhlCareerState; phase: Phase; teamQuality: number | null }
+interface SaveShape { c: NhlCareerState; phase: Phase; teamQuality: number | null; coach?: CoachCareerState | null }
 
 export default function NhlMyCareerBoard() {
   const [phase, setPhase] = useState<Phase>('create');
@@ -36,6 +41,12 @@ export default function NhlMyCareerBoard() {
   const [feed, setFeed] = useState<string[]>([]);
   const [pendingEvent, setPendingEvent] = useState<NhlCareerEvent | null>(null);
   const [lastLine, setLastLine] = useState<NhlSeasonLine | null>(null);
+  /* Round 126: the coaching career. It lives in a ref as well as in state so
+     persist can always write the current one without every existing call site
+     having to learn about it. */
+  const [coach, setCoach] = useState<CoachCareerState | null>(null);
+  const [coachFeed, setCoachFeed] = useState<string[]>([]);
+  const coachRef = useRef<CoachCareerState | null>(null);
   // Round 61: the owner's no scroll rule. When a new crossroads or a new
   // season result lands, it pulls itself into view instead of rendering
   // below the fold where a phone player never sees it.
@@ -54,12 +65,19 @@ export default function NhlMyCareerBoard() {
       if (!s.c) return;
       setCareer(s.c);
       setTeamQuality(s.teamQuality);
-      setPhase(s.c.retired ? 'retired' : 'season');
+      /* Round 126, house pattern from ensureContracts and ensureAcademy in
+         clubManager.ts: repair whatever is on disk instead of trusting it. A
+         save written before this round has no coaching career at all, comes
+         back null, and opens on the retirement screen with one new button. */
+      const co = ensureCoachCareer(s.coach, 'nhl');
+      coachRef.current = co;
+      setCoach(co);
+      setPhase(!s.c.retired ? 'season' : s.phase === 'coach' && co ? 'coach' : 'retired');
     } catch { /* fresh */ }
   }, []);
 
   const persist = useCallback((c: NhlCareerState, ph: Phase, tq: number | null) => {
-    try { localStorage.setItem(SAVE_KEY, JSON.stringify({ c, phase: ph, teamQuality: tq } satisfies SaveShape)); } catch { /* full */ }
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify({ c, phase: ph, teamQuality: tq, coach: coachRef.current } satisfies SaveShape)); } catch { /* full */ }
   }, []);
 
   const create = () => {
@@ -146,10 +164,45 @@ export default function NhlMyCareerBoard() {
     setLastLine(null);
     setPendingEvent(null);
     setPanel('none');
+    coachRef.current = null;
+    setCoach(null);
+    setCoachFeed([]);
   };
 
+  /* Round 126: the second life. */
+  const startCoaching = () => {
+    if (!career) return;
+    const co = startCoachCareer('nhl', career, career.year, Math.random);
+    coachRef.current = co;
+    setCoach(co);
+    setCoachFeed([co.offerNote]);
+    setPhase('coach');
+    persist(career, 'coach', teamQuality);
+  };
+  const openCoaching = () => {
+    if (!career) return;
+    setPhase('coach');
+    persist(career, 'coach', teamQuality);
+  };
+  const onCoachChange = (next: CoachCareerState, notes: string[]) => {
+    if (!career) return;
+    coachRef.current = next;
+    setCoach(next);
+    setCoachFeed(f => [...notes, ...f].slice(0, 6));
+    persist(career, 'coach', teamQuality);
+  };
+  const leaveCoaching = () => {
+    if (!career) return;
+    setPhase('retired');
+    persist(career, 'retired', teamQuality);
+  };
+
+  /* Round 126: see the note in NflMyCareerBoard. A suspended season has no
+     stat fields, so this printed "undefined G, undefined A" on the retirement
+     screen. */
   const statLine = (s: NhlSeasonLine, p: NhlCareerPos) =>
-    p === 'G' ? `${s.wins} W, .${String(Math.round((s.svpct ?? 0.9) * 1000))} SV%`
+    s.teamResult === 'SUSPENDED' ? 'Suspended, no season played'
+      : p === 'G' ? `${s.wins} W, .${String(Math.round((s.svpct ?? 0.9) * 1000))} SV%`
       : `${s.goals} G, ${s.assists} A, ${s.points} P`;
 
   /* ------------------------------ create ------------------------------ */
@@ -213,6 +266,19 @@ export default function NhlMyCareerBoard() {
   const totals = nhlCareerTotals(career);
   const legacy = nhlLegacyOf(career);
 
+  /* ------------------- Round 126: the coaching career ------------------- */
+  if (phase === 'coach' && coach) {
+    return (
+      <CoachCareerPanel
+        state={coach}
+        playerName={career.name}
+        feed={coachFeed}
+        onChange={onCoachChange}
+        onBack={leaveCoaching}
+      />
+    );
+  }
+
   /* ------------------------------ retired ------------------------------ */
   if (phase === 'retired') {
     return (
@@ -240,6 +306,8 @@ export default function NhlMyCareerBoard() {
             />
           </div>
         </div>
+        {/* Round 126: the save does not end here any more. */}
+        <CoachStartCard sport="nhl" existing={coach} onStart={startCoaching} onResume={openCoaching} />
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Season by season</p>
           <div className="max-h-72 space-y-0.5 overflow-y-auto">
