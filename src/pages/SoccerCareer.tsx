@@ -396,7 +396,12 @@ function SeasonSummaryCard({ season, position, onContinue, appearance }: { seaso
 
       {celebration && !isGK && season.goals > 0 && (
         <p className="text-[11px] text-muted-foreground text-center leading-snug animate-fade-in">
-          {celebration.emoji} {season.goals} time{season.goals === 1 ? "" : "s"} this season you {celebration.line}.
+          {/* Round 129: "7 times this season you rip off toward the corner flag"
+              was the shape he flagged. Goals are the thing being counted, so
+              count goals, and let the celebration finish the sentence. */}
+          {celebration.emoji} {season.goals === 1
+            ? <>One goal this season, and you {celebration.line}.</>
+            : <>{season.goals} goals this season, and every one of them you {celebration.line}.</>}
         </p>
       )}
 
@@ -411,6 +416,62 @@ function SeasonSummaryCard({ season, position, onContinue, appearance }: { seaso
       </Button>
     </div>
   );
+}
+
+/* ─── Round 129: how far to lift anything welded to the bottom of the screen ───
+
+   This page pins three things to the bottom edge on a phone: the action bar
+   with Next Season and Retire, the training ground button and the phone button.
+   All three used to keep sitting there once you reached the site footer, on top
+   of the About, Contact, Privacy and Terms links, which is the exact thing
+   Round 86 was complaining about when it un-stuck the action bar.
+
+   So instead of any of them being switched off, they all move. This returns how
+   many pixels the footer has climbed into the bottom of the window, and every
+   pinned control translates up by that much, coming to rest directly on top of
+   the footer rather than over it. Nobody loses a control and nobody loses a
+   link.
+
+   Measured live rather than derived from a class name, for the same reason
+   useRevealScroll measures its insets: the footer is App.tsx's, it is shared by
+   all 118 routes, and its height changes with the width of the screen because
+   the legal paragraph rewraps. 323px tall at 320 wide, less further up.
+
+   It reads on scroll behind a requestAnimationFrame, which is the whole cost:
+   one getBoundingClientRect per painted frame while the page is moving, and
+   nothing at all when it is still. It never writes to layout, only to a
+   transform, so it cannot feed back into what it just measured. That matters:
+   the version of this that toggled position instead of translating handed 60px
+   of height back to the document every time it fired, which moved the footer,
+   which un-fired it, which moved the footer back. */
+function useFooterLift(enabled: boolean): number {
+  const [lift, setLift] = useState(0);
+
+  useEffect(() => {
+    if (!enabled) { setLift(0); return; }
+    let raf = 0;
+    const measure = () => {
+      raf = 0;
+      const foot = document.querySelector('footer');
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      if (!foot) { setLift(0); return; }
+      /* Clamped at half the window so a page that is somehow almost all footer
+         cannot throw the controls off the top of the screen. */
+      const next = Math.max(0, Math.min(Math.round(vh - foot.getBoundingClientRect().top), Math.round(vh * 0.5)));
+      setLift((prev) => (prev === next ? prev : next));
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(measure); };
+    measure();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [enabled]);
+
+  return lift;
 }
 
 /* ─── Main Component ─── */
@@ -455,6 +516,11 @@ export default function SoccerCareer() {
   const [trainingOpen, setTrainingOpen] = useState(false);
   const [showNewCareerConfirm, setShowNewCareerConfirm] = useState(false);
   const timelineRef = useRef<HTMLDivElement>(null);
+  /* Round 129: the training and phone buttons are pinned to the bottom right on
+     every screen of this game, so they were sitting over the footer's Privacy
+     and Terms links at the end of the page in exactly the way the action bar
+     was. Same lift, same reason. */
+  const floatingButtonLift = useFooterLift(!!career);
 
   // Score tracking on retirement
   const isRetired = career?.retired === true && career?.phase === "retired";
@@ -751,7 +817,17 @@ export default function SoccerCareer() {
         path="/soccer-career"
       />
 
-      <div className="min-h-screen bg-background text-foreground flex flex-col">
+      {/* Round 129: clearance under the last of the page content. The action bar
+          rides the bottom of the screen for the whole page now and comes to rest
+          on top of the footer, and at the very end of the document that means it
+          is parked over the 85px directly above the footer's top edge. The
+          footer already carries mt-12, so 48 of those 85 pixels are empty margin
+          and only 37 were real content, but 37px of the last FAQ answer is still
+          37px he cannot read. 88px of padding here, only while a career is
+          loaded, puts the whole thing back in the clear. It is a static class,
+          not something that changes as you scroll, so it cannot interact with
+          the lift measurement. */}
+      <div className={`min-h-screen bg-background text-foreground flex flex-col ${career ? 'pb-[88px]' : ''}`}>
         <GameNavbar />
         <main className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {!career ? (
@@ -820,6 +896,12 @@ export default function SoccerCareer() {
               <button
                 onClick={() => setTrainingOpen(true)}
                 aria-label="Open the training ground"
+                /* Round 129: the lift rides on the `translate` longhand, not on
+                   `transform`. These two buttons carry hover:scale-105 and
+                   active:scale-95, which Tailwind writes into `transform`, so an
+                   inline transform here would silently delete the press
+                   animation. `translate` composes with it instead. */
+                style={floatingButtonLift ? { translate: `0 -${floatingButtonLift}px` } : undefined}
                 className="fixed bottom-[5.5rem] right-4 z-40 w-14 h-14 rounded-2xl bg-zinc-900 border-2 border-zinc-700 shadow-xl flex items-center justify-center text-2xl hover:scale-105 active:scale-95 transition-transform"
               >
                 🏋️
@@ -831,6 +913,7 @@ export default function SoccerCareer() {
             <button
               onClick={() => setPhoneOpen(true)}
               aria-label="Open your phone"
+              style={floatingButtonLift ? { translate: `0 -${floatingButtonLift}px` } : undefined}
               className="fixed bottom-5 right-4 z-40 w-14 h-14 rounded-2xl bg-zinc-900 border-2 border-zinc-700 shadow-xl flex items-center justify-center text-2xl hover:scale-105 active:scale-95 transition-transform"
             >
               📱
@@ -855,7 +938,7 @@ export default function SoccerCareer() {
         )}
         <GameSeoContent
           title="Soccer Career Simulator | DoUKnowBall"
-          description="Live out your soccer dream in this BitLife-style career simulator. Create a player, join a youth academy, develop skills, sign contracts, win trophies, and compete for the Ballon d'Or."
+          description="Live out your soccer dream in a season by season career simulator. Create a player, join a youth academy, develop skills, sign contracts, win trophies, and compete for the Ballon d'Or."
           howToPlay={[
             "Create your player: choose name, nationality, position, and starting era to begin your career.",
             "Each season, develop your skills through training, handle contract offers, and compete for trophies.",
@@ -1208,7 +1291,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
           ); })()}
           {rolledOvr !== null && !isRolling && (
             <Button variant="outline" className="w-full h-10 text-sm font-bold" onClick={() => setBuildOpen(true)}>
-              🎮 Customize build (2K style)
+              🎮 Customize your build
             </Button>
           )}
         </div>
@@ -2560,24 +2643,83 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
   const [showRetireConfirm, setShowRetireConfirm] = useState(false);
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
-  const [isActionBarSticky, setIsActionBarSticky] = useState(true);
-  const actionBarSentinelRef = useRef<HTMLDivElement>(null);
+  /* ─── Round 129: the controls that walked off when he scrolled ───
 
-  useEffect(() => {
-    const sentinel = actionBarSentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      // Round 86: sticky ONLY while the bar's natural spot is still below the
-      // fold (sentinel under the viewport). The old check also re-stuck the
-      // bar after you scrolled PAST the game into the footer, where it sat
-      // over the Privacy and footer links as an invisible full-width click
-      // shield with a lone floating AGE tile. His report, his screenshot.
-      ([entry]) => { setIsActionBarSticky(!entry.isIntersecting && entry.boundingClientRect.top > 0); },
-      { threshold: 0.1 }
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
+     His report: "if I'm just on my screen and don't touch anything then I can
+     see the phone and next year and retire and what not. But if I scroll down
+     then it disappears."
+
+     MEASURED FIRST, on the built site at 390x844 with a real mid career save,
+     before anything was changed. The page is 8500px tall on an 844px screen.
+     The bar sat pinned to the bottom from scrollY 0 to about 2300, let go
+     somewhere before 2400, and from 3050 all the way to the end of the document
+     at 7656 there were no controls on the screen at all. That is 4600px, sixty
+     percent of everything he can scroll, with no Next Season and no Retire
+     anywhere. The site footer does not even begin until document y 8312, so for
+     nearly all of that dead zone he was still inside the game reading its own
+     How To Play and FAQ.
+
+     ROUND 86 WAS NOT WRONG, IT PICKED THE WRONG LANDMARK. Its rule was: float
+     the bar only while the bar's own natural position is still below the fold,
+     so that once you have scrolled past it the bar stops floating and can never
+     sit over the Privacy links as an invisible full width click shield. That
+     concern is real and it is still satisfied below. The flaw is where this
+     bar's natural position happens to be. It lives at the end of the career
+     panel, document y 3050 of 8500, so "you have scrolled past the bar" fires
+     at 36 percent of the page and the remaining 64 percent is game content, not
+     footer. The release was tied to the bar's own address instead of to the
+     thing it was supposed to keep clear of.
+
+     SO IT NOW WATCHES THE FOOTER ITSELF, the single global <footer> App.tsx
+     renders on every route. The bar rides the bottom of the screen for the
+     whole page, and the moment the footer climbs into the bottom of the window
+     the bar is lifted so it comes to rest directly on top of it. Lifted, not
+     hidden. The controls are reachable at every single scroll position on the
+     page, and the footer links are never underneath them, which is strictly
+     better than either of the two states we have shipped before.
+
+     THINGS TRIED AND THROWN AWAY, with the numbers that killed them.
+
+     One, keep the fixed/inline switch and just move the trigger to the footer.
+     It oscillates, and this is the whole reason the answer is a transform.
+     Going from fixed back into the flow hands 60px of measured height back to
+     the document, which pushes the footer 60px further down, which un-triggers
+     the observer, which re-pins, which pulls the footer back up. A bar
+     flickering through a 60px band of scroll. Two observers 200px apart would
+     have given enough hysteresis to cover a 60px shift, but that is two
+     observers plus a magic gap that has to stay bigger than a height nobody
+     will remember to re-measure.
+
+     Two, hide it (translate it off the bottom) once the footer shows. No
+     oscillation, because a transform costs the layout nothing, but the controls
+     still vanish at the end of the page. That is his exact complaint moved 5000
+     pixels further down rather than fixed.
+
+     Three, delete the JS and use position: sticky; bottom: 0. This is the right
+     shape, and it is why what follows behaves like sticky. It cannot work here:
+     a sticky box is clamped to its containing block, this bar's containing
+     block is the career panel, and the panel ends at 3135. Sticky would have
+     released at the same place the old code did, give or take 85px. Making it
+     work means lifting the bar out of the dashboard and rendering it as a
+     sibling of the SEO block, which is a large refactor of a 3100 line file to
+     solve a 30 line problem.
+
+     What is left is this: measure where the footer's top edge is on each scroll
+     frame and translate the bar up by however much of it is in the way. It
+     never touches layout, so nothing it does can feed back into what it
+     measures, so it cannot oscillate. If the footer ever disappears the lift is
+     zero and the bar simply stays pinned at the bottom, which is the safe
+     failure.
+
+     ONE AGREEMENT TO KEEP. useRevealScroll subtracts pinned bottom bars from
+     the readable window before deciding whether newly revealed content needs
+     scrolling to, and Round 128 measured this bar at 85px at 390 wide. A
+     transform leaves position: fixed and the height alone, so that reading is
+     unchanged while the bar is down at the bottom, and once it has been lifted
+     clear of the bottom edge the hook stops counting it, which is right,
+     because at that point it is not covering anything down there. */
+  const actionBarFloats = showActionButton || career.phase === "retired";
+  const footerLift = useFooterLift(actionBarFloats);
 
   return (
     <div className="space-y-3 pb-20">
@@ -3058,14 +3200,21 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
 
-      {/* Sentinel, when this is visible, unstick the action bar */}
-      <div ref={actionBarSentinelRef} className="h-1" />
-
       {/* Action bar */}
       {/* Round 86: the bar only floats when it actually has buttons to offer.
           In button-less phases it stays inline, so no orphan AGE tile ever
-          hovers over the page blocking clicks. */}
-      <div className={`flex items-center gap-3 ${isActionBarSticky && (showActionButton || career.phase === "retired") ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 sm:px-4 py-3 max-w-5xl mx-auto' : ''}`}>
+          hovers over the page blocking clicks. That rule is untouched.
+          Round 129: when it does float it now floats for the whole page and
+          steps up onto the footer instead of vanishing. The old 1px sentinel
+          and its IntersectionObserver are gone with it. The measurements are in
+          the long note above actionBarFloats, and the lift itself is in
+          useFooterLift near the top of this file, shared with the training and
+          phone buttons because they were parked on the footer too. */}
+      <div
+        data-career-action-bar={actionBarFloats ? 'floating' : 'inline'}
+        className={`flex items-center gap-3 ${actionBarFloats ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 sm:px-4 py-3 max-w-5xl mx-auto' : ''}`}
+        style={actionBarFloats && footerLift ? { transform: `translateY(-${footerLift}px)` } : undefined}
+      >
         {career.phase === "retired" ? (
           <div className="flex-1 flex gap-2">
             <Button onClick={onShare} variant="outline" className="flex-1 h-12 text-sm font-bold">

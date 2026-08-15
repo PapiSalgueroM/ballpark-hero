@@ -38,7 +38,7 @@ export const FOOTBALL_CONNECT4_BOARDS: FootballConnect4Board[] = [
     rowAttributes: [
       'World Cup Winner',
       'Champions League Winner',
-      'Has/Had a 90+ Rated FIFA Card',
+      'Has/Had a 90+ Rated Player Card',
       'Played with Lionel Messi (same club)',
       'South American Nationality',
       'Scored 30+ Goals in a Single Season (all comps)',
@@ -104,7 +104,7 @@ export const FOOTBALL_CONNECT4_BOARDS: FootballConnect4Board[] = [
       'French',
       'Champions League Winner',
       'World Cup Winner',
-      'Has/Had a 90+ Rated FIFA Card',
+      'Has/Had a 90+ Rated Player Card',
     ],
   },
   {
@@ -122,7 +122,7 @@ export const FOOTBALL_CONNECT4_BOARDS: FootballConnect4Board[] = [
     rowAttributes: [
       'World Cup Winner',
       'African Nationality',
-      'Has/Had a 90+ Rated FIFA Card',
+      'Has/Had a 90+ Rated Player Card',
       'Scored 30+ Goals in a Single Season (all comps)',
       'French',
       'South American Nationality',
@@ -185,7 +185,7 @@ export const FOOTBALL_CONNECT4_BOARDS: FootballConnect4Board[] = [
     rowAttributes: [
       'Active Player (as of 2025-26)',
       'Market Value Has Exceeded €100M',
-      'Has/Had a 90+ Rated FIFA Card',
+      'Has/Had a 90+ Rated Player Card',
       'Won the Premier League',
       'Scored in a Champions League Final',
       'Cost €50M+ Transfer Fee',
@@ -235,9 +235,9 @@ export const FOOTBALL_CONNECT4_BOARDS: FootballConnect4Board[] = [
   },
   {
     id: 'classic-11',
-    name: 'FIFA Ratings & Stats',
+    name: 'Player Ratings & Stats',
     columnAttributes: [
-      'Has/Had a 90+ Rated FIFA Card',
+      'Has/Had a 90+ Rated Player Card',
       'Played for Real Madrid',
       'Played for Barcelona',
       'Played for Man City',
@@ -271,7 +271,7 @@ export const FOOTBALL_CONNECT4_BOARDS: FootballConnect4Board[] = [
       'French',
       'Market Value Has Exceeded €100M',
       'Champions League Winner',
-      'Has/Had a 90+ Rated FIFA Card',
+      'Has/Had a 90+ Rated Player Card',
       'Played with Neymar (same club)',
     ],
   },
@@ -292,7 +292,7 @@ export const FOOTBALL_CONNECT4_BOARDS: FootballConnect4Board[] = [
       'Played for Barcelona',
       'Played for Juventus',
       'Played in the Premier League',
-      'Has/Had a 90+ Rated FIFA Card',
+      'Has/Had a 90+ Rated Player Card',
       'Scored 200+ Career Goals',
     ],
   },
@@ -322,7 +322,7 @@ export const FOOTBALL_CONNECT4_BOARDS: FootballConnect4Board[] = [
     name: 'All-Time Greats',
     columnAttributes: [
       'Won the Ballon d\'Or',
-      'Has/Had a 90+ Rated FIFA Card',
+      'Has/Had a 90+ Rated Player Card',
       'Scored 300+ Career Goals',
       'Played for Real Madrid',
       'Played for Barcelona',

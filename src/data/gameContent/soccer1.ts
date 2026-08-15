@@ -94,7 +94,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     ],
     rules: [
       "The cap is 62 percent of the priciest possible XI for your era, formation and pool, rounded to the nearest 10 million, never below 100 million, and always shown on screen.",
-      "Team rating is the average of your eleven ratings, on a FIFA style curve topping out at 96.",
+      "Team rating is the average of your eleven ratings, on a ratings curve that tops out at 96.",
       "One board demand runs per day, worth 100 bonus score if the finished XI meets it. It never blocks a signing.",
       "Final score is rating times 10, plus 1 point per 20 million unspent, plus the demand bonus, plus 150 for a series win or 50 for a draw.",
     ],

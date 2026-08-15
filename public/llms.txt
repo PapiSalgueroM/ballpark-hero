@@ -9,7 +9,7 @@
 
 ## Popular games
 
-- [Soccer Career](https://douknowball.com/soccer-career): BitLife-style football life sim, the site's flagship
+- [Soccer Career](https://douknowball.com/soccer-career): season by season football life sim, the site's flagship
 - [College Grid](https://douknowball.com/college-grid): college football 3x3 grid puzzle
 - [Footle](https://douknowball.com/footle): daily guess-the-player with feedback tiles
 - [NFL Conquest](https://douknowball.com/conquest): imperialism map where winners annex whole empires

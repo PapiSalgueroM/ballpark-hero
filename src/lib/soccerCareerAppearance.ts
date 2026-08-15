@@ -99,7 +99,10 @@ export const BOOTS: (AppearanceOption & { color: string; flavor: string })[] = [
    toward the corner flag", "you stands frozen", "you throws a backflip".
    All ten are second person now, which is how they were always rendered. */
 export const CELEBRATIONS: (AppearanceOption & { emoji: string; line: string })[] = [
-  { id: "knee_slide", label: "Knee Slide", emoji: "🛝", line: "rip off toward the corner flag and slide on the knees" },
+  /* Round 129: he flagged this one as reading badly and it did. "you rip off
+     toward the corner flag and slide on the knees" is nobody's knees in
+     particular. Second person, own knees, same as the other nine. */
+  { id: "knee_slide", label: "Knee Slide", emoji: "🛝", line: "tear off toward the corner flag and slide across the grass on your knees" },
   { id: "statue", label: "The Statue", emoji: "🗿", line: "stand frozen, arms crossed, dead serious, while your teammates mob the pose" },
   { id: "backflip", label: "Backflip", emoji: "🤸", line: "throw a full backflip that makes the physio cover their eyes" },
   { id: "shush", label: "The Shush", emoji: "🤫", line: "shush the away end with one finger. They deserved it" },

@@ -133,13 +133,13 @@ TASK: Determine if a given soccer player matches BOTH of these two attributes:
 
 The player MUST satisfy BOTH attributes to be valid.
 
-IMPORTANT — INCLUSIVE PLAYER ACCEPTANCE POLICY:
+IMPORTANT, INCLUSIVE PLAYER ACCEPTANCE POLICY:
 - When an attribute says "Played for [Club]" or involves a national team, accept ANY player who has been part of that club's or national team's senior squad, including:
   • Backup players, rotation players, squad players
   • Players who made even a small number of appearances (5+ appearances is sufficient)
   • Players on loan at the club
   • Youth academy graduates who played for the senior team
-- Do NOT limit answers to only starters or star players. Backup goalkeepers, reserve defenders, rotation midfielders — all count as long as they genuinely played for the team.
+- Do NOT limit answers to only starters or star players. Backup goalkeepers, reserve defenders, rotation midfielders, all count as long as they genuinely played for the team.
 - For national teams, include players who were called up and played, even if they only earned a handful of caps.
 - When in doubt about whether a lesser-known player played for a team, lean toward accepting them if it's plausible they were in the squad.
 
@@ -162,7 +162,7 @@ ATTRIBUTE DEFINITIONS:
 - "Scored in a World Cup" = scored at least one goal in a FIFA World Cup match.
 - "Scored in a Champions League Final" = scored in a UCL/European Cup final.
 - "Played in La Liga" / "Played in Serie A" / "Played in the Premier League" / "Played in MLS" = played senior soccer in that league.
-- "Has/Had a 90+ Rated FIFA Card" = had a base gold card rated 90 or above in ANY edition of EA Sports FIFA / EA FC (not special/TOTS cards, only the standard gold base card).
+- "Has/Had a 90+ Rated Player Card" = had a base gold card rated 90 or above in ANY edition of the big annual football video game (EA Sports FIFA / EA FC), not special or Team of the Season cards, only the standard gold base card. Round 129 renamed this attribute on the site because product names were pulled out of everything a player can read; the key here MUST stay spelled the way the client sends it or this definition stops being found.
 - "Market Value Has Exceeded €100M" = peak Transfermarkt market value reached €100M or more at any point.
 - "Cost €50M+ Transfer Fee" = was transferred for a fee of €50M or more at least once.
 - "Played with Lionel Messi (same club)" = was on the same club squad as Messi at the same time (Barcelona, PSG, or Inter Miami).
@@ -223,7 +223,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
 
     if (!response.ok) {
       return new Response(
-        JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
+        JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -238,10 +238,10 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
       parsed = JSON.parse(jsonMatch[1].trim());
       aiVerdict = true;
     } catch {
-      parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." };
+      parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again." };
     }
 
-    // cache VERIFIED verdicts only — never the unverified fallbacks
+    // cache VERIFIED verdicts only, never the unverified fallbacks
     if (aiVerdict && parsed && typeof parsed === "object") {
       try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict: parsed }); } catch { /* non-fatal */ }
     }
@@ -252,7 +252,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
   } catch (e) {
     console.error("football-connect4-validate error:", e);
     return new Response(
-      JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
+      JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again." }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
