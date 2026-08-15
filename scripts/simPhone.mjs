@@ -100,7 +100,12 @@ console.log('3) initCareer seeds the phone');
       if (def.minAge !== undefined && def.minAge > 16) fail('seeded an age-locked text at 16');
       if (!c.phoneUsedIds?.includes(def.id)) fail('seed id not marked used');
     }
-    if (unreadPhoneCount(c) !== 1) fail('unread count wrong at creation');
+    /* Round 130 changed what this number means. It used to count unanswered
+       Round 80 texts; it now counts CONVERSATIONS waiting on you, and a new
+       career starts with the seeded text plus one thread somebody has already
+       opened, so the phone is alive on day one in the new sense too. */
+    if (unreadPhoneCount(c) < 1) fail('unread count wrong at creation');
+    if (unreadPhoneCount(c) > 3) fail(`unread count ${unreadPhoneCount(c)} at creation, that is a chore not a phone`);
   }
 }
 

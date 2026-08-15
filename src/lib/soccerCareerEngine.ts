@@ -6,6 +6,15 @@ import {
   BDOR_WIN_MIN_GOALS, rollPotential, pickPhoneTexts,
 } from "./careerEras";
 import type { PhoneChoiceDef } from "./careerEras";
+/* Round 130: the phone is a real phone now. Threads, contacts, a relationship
+   that cools when you ignore people, and a sports feed driven by a world model
+   that actually moves players between clubs. All of it lives in soccerPhone so
+   this file only has to call four functions. */
+import {
+  ensurePhone, phoneSeasonTick, phoneReply, phoneOpen, mirrorLegacyMessage,
+  worldSeasonTick, worldClubOf, phoneAppsSwing, takePhoneOffers, unreadThreads,
+} from "./soccerPhone";
+import type { PhoneState, WorldSeason } from "./soccerPhone";
 import { managerProfileFromCareer } from './soccerCareerToManager';
 import { realJobOffers } from './managerJobMarket';
 import { managerStanding } from './managerOffers';
@@ -574,6 +583,10 @@ export interface CareerState {
   karma?: number;              // 0-100 public karma, starts 50
   phoneInbox?: PhoneMessage[]; // waiting texts + answered thread log
   phoneUsedIds?: string[];     // pool ids already received this career
+  /** Round 130: threads, contacts, relationships and the world feed. Optional
+   *  for the same reason: a save from before this round has none and
+   *  ensurePhone hands back an empty one on both the read and write paths. */
+  phone?: PhoneState;
   /** Round 81: last season-year a training mini game was played (one per season). */
   trainingSeasonYear?: number;
   peakOverall: number;
@@ -646,8 +659,10 @@ export interface PhoneMessage {
 
 export function karmaOf(s: CareerState): number { return s.karma ?? 50; }
 
+/** Round 130: the badge counts conversations waiting on you, not just Round
+ *  80 texts, so a thread nobody has answered still shows up on the handset. */
 export function unreadPhoneCount(s: CareerState): number {
-  return (s.phoneInbox ?? []).filter(m => m.answered === undefined).length;
+  return unreadThreads(s);
 }
 
 /** Season tick: karma drift + coupling, then deliver up to 2 new texts. */
@@ -662,18 +677,30 @@ function receivePhoneTexts(s: CareerState, phase: "youth" | "pro"): void {
   const unanswered = inbox.filter(m => m.answered === undefined).length;
   const want = Math.max(0, 2 - unanswered);
   const year = s.seasons[s.seasons.length - 1]?.year ?? 2020;
+  const fresh: PhoneMessage[] = [];
   for (const def of pickPhoneTexts(s.age, phase, used, want)) {
-    inbox.push({ id: `${def.id}-${year}`, defId: def.id, from: def.from, emoji: def.emoji, text: def.text, year, choices: def.choices });
+    const msg: PhoneMessage = { id: `${def.id}-${year}`, defId: def.id, from: def.from, emoji: def.emoji, text: def.text, year, choices: def.choices };
+    inbox.push(msg);
+    fresh.push(msg);
     used.push(def.id);
   }
-  // Keep the thread tidy: cap at 18 messages, dropping oldest ANSWERED first
-  while (inbox.length > 18) {
+  /* Keep the thread tidy: dropping oldest ANSWERED first. Round 80 kept 18,
+     which is about 8 KB of choice arrays in a save that is already tight, and
+     since Round 130 the conversation itself lives in the thread list, so the
+     only reason to hold a legacy message at all is so an unanswered one stays
+     answerable. Six is plenty for that. */
+  while (inbox.length > 6) {
     const idx = inbox.findIndex(m => m.answered !== undefined);
     if (idx === -1) break;
     inbox.splice(idx, 1);
   }
   s.phoneInbox = inbox;
   s.phoneUsedIds = used;
+  /* Round 130: a Round 80 text is now the FIRST line of a conversation rather
+     than a dead end, so mirror it into the thread list and let the thread
+     system carry it on once you answer. */
+  for (const m of fresh) mirrorLegacyMessage(s, m.id, m.from, m.text, m.year);
+  phoneSeasonTick(s, phase);
 }
 
 /* ─── Round 81: training ground mini games ───
@@ -711,15 +738,56 @@ export function applyTrainingResult(prev: CareerState, drill: TrainingDrill, sco
   return s;
 }
 
+/* ─── Round 130: one write path for every tap in the Messages app ───
+   The panel only ever gets (msgId, choiceIdx) from SoccerCareer.tsx, which
+   another agent owns this round, so the two new actions ride on the same two
+   arguments rather than on new props:
+     th_<contact>   reply inside a thread, choiceIdx picks the preset
+     open:<contact> start a conversation yourself, choiceIdx picks which one
+   Anything else is a Round 80 message id and behaves exactly as it always
+   did, so an old save's unanswered texts stay answerable. */
 export function answerPhoneText(prev: CareerState, msgId: string, choiceIdx: number): CareerState {
-  const s = { ...prev };
+  const phase: "youth" | "pro" = prev.phase === "youth" ? "youth" : "pro";
+
+  if (msgId.startsWith("open:")) {
+    const s = { ...prev };
+    const res = phoneOpen(s, msgId.slice(5), phase, choiceIdx);
+    return res.ok ? s : prev;
+  }
+
+  if (msgId.startsWith("th_")) {
+    const s = { ...prev };
+    const res = phoneReply(s, msgId, choiceIdx, phase);
+    if (!res.ok) return prev;
+    if (res.legacyMsgId !== undefined) {
+      // The reply landed on a Round 80 text, so its karma effects still run
+      // through the original path below. The thread has already carried on.
+      const carried = answerLegacyText(s, res.legacyMsgId, res.legacyChoiceIdx ?? 0);
+      return carried ?? s;
+    }
+    if (res.event) s.events = [...s.events, res.event];
+    return s;
+  }
+
+  /* A bare Round 80 id. If a thread is holding that text, answer it through
+     the thread so the conversation carries on the way it should. */
+  const holder = ensurePhone(prev).threads.find(
+    t => t.pending && t.pending.kind === "legacy" && t.pending.msgId === msgId,
+  );
+  if (holder) return answerPhoneText(prev, holder.id, choiceIdx);
+  const legacy = answerLegacyText({ ...prev }, msgId, choiceIdx);
+  return legacy ?? prev;
+}
+
+/** The Round 80 karma path, unchanged. Returns null when nothing applied. */
+function answerLegacyText(s: CareerState, msgId: string, choiceIdx: number): CareerState | null {
   const inbox = [...(s.phoneInbox ?? [])];
   const i = inbox.findIndex(m => m.id === msgId);
-  if (i === -1) return prev;
+  if (i === -1) return null;
   const msg = inbox[i];
-  if (msg.answered !== undefined) return prev;
+  if (msg.answered !== undefined) return null;
   const choice = msg.choices[choiceIdx];
-  if (!choice) return prev;
+  if (!choice) return null;
   inbox[i] = { ...msg, answered: choiceIdx };
   s.phoneInbox = inbox;
   s.karma = clamp((s.karma ?? 50) + choice.karma, 0, 100);
@@ -2745,6 +2813,11 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
 
   let leagueApps = rand(leagueMin, leagueMax);
 
+  /* Round 130: a happy dressing room gets you picked, a cold one does not.
+     Two appearances out of thirty is on purpose. It is enough to measure and
+     small enough that it cannot undo thirty rounds of balance work. */
+  if (state) leagueApps = clamp(leagueApps + phoneAppsSwing(state), 0, 38);
+
   // --- UCL appearances (0-13), only Tier 1-2 clubs qualify ---
   let uclApps = 0;
   if (clubTier <= 2) {
@@ -3134,7 +3207,13 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
     }
   }
 
-  const interestChance = aboveLevel >= 15 ? 0.7 : aboveLevel >= 5 ? 0.5 : aboveLevel >= 0 ? 0.3 : 0.1;
+  /* Round 130: an agent you actually talk to works harder. Every banked
+     conversation with him is one window where somebody picks up the phone
+     that otherwise would not have. Capped at three banked, spent one at a
+     time, so it is a nudge and not a cheat. */
+  const banked = takePhoneOffers(state);
+  const interestChance = (aboveLevel >= 15 ? 0.7 : aboveLevel >= 5 ? 0.5 : aboveLevel >= 0 ? 0.3 : 0.1)
+    + (banked > 0 ? 0.3 : 0);
   if (Math.random() < interestChance) {
     const offer = makeOffer(clubs, pick(interestedTiers), overall, age, exclude, marketValue);
     if (offer) return { type: "one_offer", offer };
@@ -3165,7 +3244,7 @@ export function initCareer(
   const academyClub = getYouthAcademyClub(adjustClubsForYear(clubs, startYear), nationality, overall);
   // Round 80: one text waiting on day one so the phone is alive immediately
   const seedTexts = pickPhoneTexts(16, "youth", [], 1);
-  return {
+  const created: CareerState = {
     playerName, nationality, position, era, age: 16,
     // Round 78: the hidden ceiling this career will fight to reach.
     // Round 79: clamped above the final overall, since the 2K style build
@@ -3245,7 +3324,22 @@ export function initCareer(
     ownerState: null,
     peakOverall: overall,
     retirementSuggested: false,
+    /* Round 130: the phone gets its own random stream so replying to a text
+       can never shift the world sim's dice. That is what makes a "did I bother
+       messaging" A/B test in the harness honest. */
+    phone: {
+      threads: [], feed: [], world: null, clubs: {}, rivalClub: null,
+      seed: (Math.floor(Math.random() * 4294967295) >>> 0) || 7,
+      offers: 0, perksTaken: 0,
+    },
   };
+  /* Day one: the Round 80 text is now the opening line of a thread, and mum
+     is already mid conversation, so the Messages app is never empty. */
+  for (const m of created.phoneInbox ?? []) {
+    mirrorLegacyMessage(created, m.id, m.from, m.text, m.year);
+  }
+  phoneSeasonTick(created, "youth");
+  return created;
 }
 
 /* ─── Advance youth year ─── */
@@ -3942,8 +4036,19 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
      career even if you never get a cap. */
   runTournamentSummer(s, season, thisYear);
 
+  /* ─── Round 130: the rest of the football world has a season too ───
+     Runs BEFORE the Ballon d'Or on purpose. It decides who won each league,
+     who won Europe and which of the era's names changed clubs, and the Ballon
+     d'Or below reads the same answers, so the phone's sports feed and the
+     awards screen can never contradict each other. */
+  const world = worldSeasonTick(s, {
+    year: thisYear,
+    playerLeagueTitle: season.leagueTitle,
+    playerUcl: season.championsLeague,
+  });
+
   // Ballon d'Or calculation
-  const bdorResult = calculateBallonDor(s, season, thisYear);
+  const bdorResult = calculateBallonDor(s, season, thisYear, world);
   s.pendingBallonDor = bdorResult;
   if (bdorResult.playerRank !== null) {
     season.ballonDorRank = bdorResult.playerRank;
@@ -4748,17 +4853,22 @@ function calcBdorPoints(goals: number, assists: number, overall: number, clubTie
   return Math.round(pts);
 }
 
-function calculateBallonDor(state: CareerState, season: SeasonRecord, year: number): BallonDorResult {
+function calculateBallonDor(state: CareerState, season: SeasonRecord, year: number, world?: WorldSeason): BallonDorResult {
   const yearOffset = year - 2024;
   const eraTopClubs = getEraTopClubs(year);
   const eraLeagues = getEraLeagueClubs(year);
 
-  // --- Determine season's trophy winners (one club per competition), era-correct ---
-  const uclWinnerClub = pick(eraTopClubs);
+  /* --- This season's trophy winners, era-correct ---
+     Round 130: these used to be picked here, in private, which meant the phone
+     could not report them without inventing a second answer. They are decided
+     by worldSeasonTick now and simply read here. Same uniform pick over the
+     same era pools, so the shape of the award is unchanged. The fallback keeps
+     this function usable on its own. */
+  const uclWinnerClub = world?.ucl ?? pick(eraTopClubs);
   // One league winner per league
   const leagueWinners: Record<string, string> = {};
   for (const [league, clubs] of Object.entries(eraLeagues)) {
-    leagueWinners[league] = pick(clubs);
+    leagueWinners[league] = world?.leagues?.[league] ?? pick(clubs);
   }
   const isWorldCupYear = year % 4 === 2;
 
@@ -4798,20 +4908,23 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       usedNames.add(star.name);
       const goals = rand(star.baseGoals[0], star.baseGoals[1]);
       const assists = rand(3, 18);
+      /* Round 130: if the sim has moved him, he is at the club the sim moved
+         him to. One truth, shared with the phone's transfer feed. */
+      const starClub = worldClubOf(state, star.name) ?? star.club;
 
       // Assign trophies based on this season's era-correct winners, no conflicts
       const trophies: string[] = [];
-      if (star.club === uclWinnerClub && Math.random() < 0.85) trophies.push("UCL");
-      const starLeague = getClubLeagueEra(star.club, eraLeagues);
-      if (starLeague && leagueWinners[starLeague] === star.club && Math.random() < 0.8) trophies.push("League");
+      if (starClub === uclWinnerClub && Math.random() < 0.85) trophies.push("UCL");
+      const starLeague = getClubLeagueEra(starClub, eraLeagues);
+      if (starLeague && leagueWinners[starLeague] === starClub && Math.random() < 0.8) trophies.push("League");
       if (isWorldCupYear && Math.random() < 0.04) trophies.push("World Cup");
       if (Math.random() < 0.15) trophies.push("Cup");
 
       const overall = clamp(82 + star.power + rand(-2, 2), 78, 96);
-      const pts = calcBdorPoints(goals, assists, overall, 1, trophies, star.club, eraTopClubs) + star.power * rand(1, 3);
+      const pts = calcBdorPoints(goals, assists, overall, 1, trophies, starClub, eraTopClubs) + star.power * rand(1, 3);
       allNomineeData.push({
         name: star.name, nationality: star.nationality, position: star.position,
-        club: star.club, points: pts, goals, trophies, isPlayer: false,
+        club: starClub, points: pts, goals, trophies, isPlayer: false,
       });
     }
   } else {
