@@ -345,7 +345,9 @@ export function buildAnalysis(
     `"${best.name} dragged this roster further than it had any right to go."`,
   ];
   const strugglerTakes = [
-    `"I blame the ${worst.slotLabel.toLowerCase()} spot. ${worst.name} competed, but the tape does not lie."`,
+    /* Round 137: a negative verdict on a real player is no longer written as
+       a quote from a made up pundit. The ${worst.slotLabel} spot carries it. */
+    `"I blame the ${worst.slotLabel.toLowerCase()} spot. That is where this roster ran out of answers."`,
     `"${best.name} deserved a better supporting cast. The trade-demand clock starts now."`,
     `"You cannot lose ${losses} games with that talent. Unless, apparently, you can."`,
   ];

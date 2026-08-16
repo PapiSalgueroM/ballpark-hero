@@ -2872,45 +2872,101 @@ export function loanIn(career: CareerState, mp: MarketPlayer): CareerState | nul
 
 let msgSeq = 0;
 
+/* ---------- Round 137: nobody real gets words put in his mouth ----------
+ *
+ * The rule, and it is a legal one rather than a taste one. Club Manager squads
+ * are REAL people, baked out of the market value table in clubManagerRosters.
+ * A real player's name next to a factual number is reporting and it is fine.
+ * A real player's name next to an invented sentence he supposedly said, or an
+ * invented thing he supposedly did on a Tuesday night, is neither, and this
+ * repo and this site are both public and both indexable.
+ *
+ * So the line these pools are written to:
+ *
+ *   FOOTBALL EVENTS INSIDE THE SIM KEEP THE NAME. Minutes, selection, morale,
+ *   a transfer request, a bid. That is what a management sim IS, and the name
+ *   is doing honest work: it tells you which of your players this is about.
+ *
+ *   INVENTED SPEECH AND INVENTED OFF PITCH CONDUCT LOSE THE NAME. Anything
+ *   with a speaker, and anything about his car, his marriage, his night out or
+ *   his side business, is attributed to a squad ROLE instead. No real name
+ *   ever appears in the same string.
+ *
+ * The drama is still here and it is still the fun part. It is just told the
+ * way an unsourced dressing room story actually gets told, about "one of your
+ * midfielders" rather than about a man you could look up. Six entries that
+ * alleged something genuinely damaging (drink driving shaped car crashes, a
+ * casino night before a match, missing training, a marriage falling out) came
+ * out altogether rather than being reworded, because "one of your defenders"
+ * is still uncomfortably close to a named man when the claim is that serious
+ * and your squad only has four of them.
+ *
+ * scripts/simNoInventedQuotes.mjs is the permanent guard. It drives real
+ * seasons, collects every line this file can put on screen, and fails if a
+ * roster name ever lands next to speech. Read its header before touching any
+ * string in here.
+ */
+
+/** Position to the word a manager would actually use for that part of the pitch. */
+const POSITION_GROUP: Record<string, string> = {
+  GK: 'keepers',
+  CB: 'defenders', LB: 'defenders', RB: 'defenders', LWB: 'defenders', RWB: 'defenders',
+  CDM: 'midfielders', CM: 'midfielders', CAM: 'midfielders', LM: 'midfielders', RM: 'midfielders',
+  LW: 'forwards', RW: 'forwards', ST: 'forwards', CF: 'forwards',
+};
+
+/** {P} and {Q} in the drama pool. Never a name, always the job he does. */
+function squadDescriptor(p: CMPlayer): string {
+  if (p.isYouth) return 'one of the academy lads';
+  if (roleOf(p) === 'star') return 'your star man';
+  return `one of your ${POSITION_GROUP[p.position] ?? 'senior lads'}`;
+}
+
+/** A second descriptor that will not read as the same man as the first. */
+function otherDescriptor(p: CMPlayer, taken: string): string {
+  const d = squadDescriptor(p);
+  if (d !== taken) return d;
+  return p.isYouth ? 'one of the academy lads' : 'another of the senior lads';
+}
+
 const DRAMA_POOL: { text: string; options: { label: string; effect: MessageEffect }[] }[] = [
-  { text: '{P} crashed his brand new Lamborghini into the training ground fountain at 2am. The fountain lost.', options: [{ label: 'Fine him two weeks wages', effect: 'fine' }, { label: 'Laugh it off in the press', effect: 'laugh' }] },
   { text: '{P} got caught selling his match worn boots on eBay. Buy it now, no returns.', options: [{ label: 'Fine him', effect: 'fine' }, { label: 'Buy a pair yourself', effect: 'laugh' }] },
-  { text: "{P}'s wife and {Q}'s wife are feuding on Instagram and the dressing room has picked sides.", options: [{ label: 'Order everyone offline', effect: 'refuse' }, { label: 'Stay out of it', effect: 'laugh' }] },
-  { text: '{P} wants to skip Saturday to attend his cousin\'s album release party. The cousin raps under the name Lil Nutmeg.', options: [{ label: 'Absolutely not', effect: 'refuse' }, { label: 'Let him go', effect: 'support' }] },
   { text: '{P} showed up to training in a full chrome wrap on his car with his own face printed on the hood.', options: [{ label: 'Fine him for the parking spot he took', effect: 'fine' }, { label: 'Respect it, honestly', effect: 'laugh' }] },
-  { text: '{P} has started a podcast. Episode one is called "Why My Manager Does Not Understand Football".', options: [{ label: 'Make him listen to it in front of everyone', effect: 'fine' }, { label: 'Go on the podcast', effect: 'support' }] },
+  { text: '{P} has started a podcast. Episode one is called Why My Manager Does Not Understand Football.', options: [{ label: 'Make him listen to it in front of everyone', effect: 'fine' }, { label: 'Go on the podcast', effect: 'support' }] },
   { text: '{P} adopted an emotional support alpaca and wants to bring it to the training ground.', options: [{ label: 'No farm animals', effect: 'refuse' }, { label: 'The alpaca stays, morale is up', effect: 'support' }] },
-  { text: '{P} was spotted at a casino until 4am two nights before the match. He says he was "networking".', options: [{ label: 'Fine him', effect: 'fine' }, { label: 'Have a quiet word', effect: 'listen' }] },
   { text: '{P} bought the apartment building next to the stadium and is renting flats to away fans on matchday.', options: [{ label: 'Make him stop', effect: 'refuse' }, { label: 'Business is business', effect: 'laugh' }] },
   { text: '{P} got a tattoo of the club badge. The tattoo artist misspelled the club name.', options: [{ label: 'Pay for the fix', effect: 'support' }, { label: 'It stays, as a lesson', effect: 'laugh' }] },
   { text: '{P} challenged a fan who criticized him to a race. The fan won. It is everywhere.', options: [{ label: 'Ban him from social media', effect: 'refuse' }, { label: 'Sign the fan for the youth team', effect: 'laugh' }] },
   { text: '{P} says his personal chef was poached by {Q} and now they are not speaking.', options: [{ label: 'Hire a team chef for everyone', effect: 'fine' }, { label: 'Let them sort it out', effect: 'laugh' }] },
-  { text: '{P} missed training because he flew to Milan "for a haircut". The haircut is admittedly immaculate.', options: [{ label: 'Fine him', effect: 'fine' }, { label: "Ask for the barber's number", effect: 'laugh' }] },
   { text: '{P} has been teaching the youth players a goal celebration so elaborate it needs a permit.', options: [{ label: 'Ban it', effect: 'refuse' }, { label: 'Ask for a role in it', effect: 'support' }] },
-  { text: "{P} accidentally liked a rival fan account's post calling for your sacking. Says his phone was hacked. Sure.", options: [{ label: 'Fine him', effect: 'fine' }, { label: 'Let it slide, but he knows', effect: 'listen' }] },
-  { text: '{P} turned up with a personal documentary crew. They want to film team talks "for the arc".', options: [{ label: 'No cameras inside', effect: 'refuse' }, { label: 'Give them one episode', effect: 'support' }] },
-  { text: '{P} is selling his own brand of protein cereal in the players lounge. {Q} says it tastes like drywall.', options: [{ label: 'Shut the stand down', effect: 'refuse' }, { label: 'Invest early', effect: 'laugh' }] },
+  { text: '{P} turned up with a personal documentary crew. They want to film team talks for the arc.', options: [{ label: 'No cameras inside', effect: 'refuse' }, { label: 'Give them one episode', effect: 'support' }] },
+  { text: '{P} is selling his own brand of protein cereal in the players lounge. {Q} reckons it tastes like drywall.', options: [{ label: 'Shut the stand down', effect: 'refuse' }, { label: 'Invest early', effect: 'laugh' }] },
   { text: '{P} got stuck in the stadium elevator for two hours and live streamed the whole thing. Record viewership.', options: [{ label: 'Check on him', effect: 'support' }, { label: 'Clip it for the club account', effect: 'laugh' }] },
-  { text: '{P} wants the club to sign his brother. His brother is 34 and plays Sunday league. He is, however, "in the best shape of his life".', options: [{ label: 'Politely decline', effect: 'refuse' }, { label: 'Offer a trial, for the content', effect: 'laugh' }] },
-  { text: '{P} rated his own performance 10/10 in the club app after a 4-0 defeat.', options: [{ label: 'Make him explain it to the squad', effect: 'fine' }, { label: 'Confidence is confidence', effect: 'laugh' }] },
+  { text: '{P} wants the club to sign his brother. His brother is 34 and plays Sunday league, and is reportedly in the best shape of his life.', options: [{ label: 'Politely decline', effect: 'refuse' }, { label: 'Offer a trial, for the content', effect: 'laugh' }] },
+  { text: '{P} rated his own performance 10 out of 10 in the club app after a 4-0 defeat.', options: [{ label: 'Make him explain it to the squad', effect: 'fine' }, { label: 'Confidence is confidence', effect: 'laugh' }] },
   { text: '{P} has been parking in your spot all month and putting a traffic cone on his own.', options: [{ label: 'Tow it', effect: 'fine' }, { label: 'Take the cone spot, be the bigger man', effect: 'laugh' }] },
   { text: '{P} announced his retirement on social media by accident. He meant to post his dinner.', options: [{ label: 'Get the club to clarify', effect: 'support' }, { label: 'Let the rumors run a day', effect: 'laugh' }] },
   { text: '{P} and {Q} got matching tattoos to celebrate a win. Neither remembers deciding this.', options: [{ label: 'Fine them both', effect: 'fine' }, { label: 'Team bonding is team bonding', effect: 'support' }] },
   { text: '{P} claims a fortune teller told him he will score a hat-trick this weekend, and he has already ordered the match ball display case.', options: [{ label: 'Manage expectations', effect: 'listen' }, { label: 'Start him. Fate is fate', effect: 'promise' }] },
+  { text: '{P} has taken up open water swimming in January and keeps posting about it at six in the morning.', options: [{ label: 'Ask the physio to have a word', effect: 'refuse' }, { label: 'Join him once, for the group chat', effect: 'laugh' }] },
+  { text: '{P} brought a chess board into the dressing room and has beaten every member of staff, including you.', options: [{ label: 'Demand a rematch', effect: 'laugh' }, { label: 'Put him in charge of set pieces', effect: 'support' }] },
+  { text: '{P} keeps changing the dressing room playlist thirty seconds into every song and {Q} has hidden the speaker.', options: [{ label: 'Confiscate the aux', effect: 'fine' }, { label: 'Let the squad vote on it', effect: 'support' }] },
 ];
 
+/* Football intent, narrated. The name stays because this is a squad event you
+   need to act on, and nothing here is presented as words he said. */
 const START_ME_TEXTS = [
-  'Gaffer. {P} here. I am the best player at this club and I am watching from the bench. Start me Saturday or we have a problem.',
-  '{P} knocked on your office door: "I did not join this club to model the warmup jacket. I want to start."',
-  "{P}'s agent texts you at midnight: my client trains like a machine and sits like furniture. Start him.",
+  '{P} has asked for a meeting about his place in the side. He is training well and he does not think the teamsheet reflects it.',
+  '{P} pulled you aside after training. The short version: he wants to start on Saturday.',
+  "{P}'s agent has been in touch about his minutes. Politely, for now.",
 ];
 const WANT_MOVE_TEXTS = [
-  '{P} has requested a meeting. He is not happy, and the word "transfer" was used twice before he sat down.',
-  "{P}'s camp has been whispering to journalists. He wants out unless things change fast.",
+  '{P} has requested a meeting. He is not happy, and the word transfer came up before he had even sat down.',
+  '{P} has let it be known through his agent that he wants out unless things change fast.',
 ];
 const PRAISE_TEXTS = [
-  '{P} after the win: "That one was for you, boss. The lads would run through a wall for you right now."',
-  '{P} left a bottle of very expensive wine on your desk with a note: "More of that, yeah?"',
+  '{P} made a point of finding you after the win. Whatever you did at half time, he is buying into it.',
+  '{P} left a bottle of very expensive wine on your desk. No note, no explanation, message received.',
 ];
 
 function pushMessage(state: CareerState, msg: Omit<PlayerMessage, 'id' | 'week'>): void {
@@ -2957,7 +3013,10 @@ function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean,
         playerName: letDown.name,
         playerId: letDown.id,
         kind: 'roleTalk',
-        text: `${letDown.name} caught you in the corridor. "You told me I was a ${ROLE_INFO[roleOf(letDown)].label.toLowerCase()} here. ${played} of the last ${of}, boss. Which is it?"`,
+        /* Round 137: narrated, not quoted. The numbers are the point and they
+           are real; the corridor conversation is reported rather than put in
+           his mouth. */
+        text: `${letDown.name} caught you in the corridor. He is down as a ${ROLE_INFO[roleOf(letDown)].label.toLowerCase()} and he has started ${played} of the last ${of}. He wants to know which of those two is the truth.`,
         options,
         roleOffer: honest,
       });
@@ -3036,11 +3095,19 @@ function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean,
   let tries = 0;
   while (p2.id === p1.id && tries < 5) { p2 = pick(nonYouth); tries += 1; }
   const drama = pick(DRAMA_POOL);
+  /* Round 137: the drama is told about a role, never about a named real man.
+     playerName stays on the message because the morale hit still has to land
+     on somebody, but it is metadata now: InboxCard renders text and nothing
+     else, so no roster name reaches the screen through this branch. */
+  const d1 = squadDescriptor(p1);
+  const text = drama.text
+    .replace('{P}', d1)
+    .replace('{Q}', otherDescriptor(p2, d1));
   pushMessage(state, {
     playerName: p1.name,
     playerId: p1.id,
     kind: 'drama',
-    text: drama.text.replace('{P}', p1.name).replace('{Q}', p2.name),
+    text: text.charAt(0).toUpperCase() + text.slice(1),
     options: drama.options,
   });
 }
@@ -4949,8 +5016,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
       playerId: p.id,
       kind: 'wantMove',
       text: starved
-        ? `${p.name} put it in writing. "You told me I was a ${ROLE_INFO[roleOf(p)].label.toLowerCase()} here. I have played ${(p.lastTen ?? []).reduce((s, x) => s + x, 0)} of the last ${(p.lastTen ?? []).length}. I want to leave."`
-        : `${p.name} put it in writing. "Look at the squad list, boss. ${ROLE_INFO[roleOf(p)].label} is what you have me down as. I am worth more than that somewhere else."`,
+        /* Round 137: the request is a real squad event and keeps his name.
+           The reasoning behind it is narrated from his minutes instead of
+           being written as something he said. */
+        ? `${p.name} put it in writing. He is down as a ${ROLE_INFO[roleOf(p)].label.toLowerCase()} and he has started ${(p.lastTen ?? []).reduce((s, x) => s + x, 0)} of the last ${(p.lastTen ?? []).length}, so he wants to leave.`
+        : `${p.name} put it in writing. Being listed as a ${ROLE_INFO[roleOf(p)].label.toLowerCase()} is the part he cannot get past, and he reckons somewhere else rates him higher.`,
       options: [
         { label: 'You are going nowhere', effect: 'refuse' },
         { label: 'Sit down and sort it out', effect: 'listen' },
@@ -5042,7 +5112,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
           playerName: p.name,
           playerId: p.id,
           kind: 'drama',
-          text: `${p.name} sat in the dressing room long after everyone left. You promised him a start. He counted the teamsheet twice.`,
+          /* Round 137: the broken promise is the football event, so the name
+             stays. What he did about it afterwards was invented, so it goes. */
+          text: `You promised ${p.name} a start and he was not on the teamsheet. He noticed, and so did the dressing room.`,
           options: [],
           resolved: 'He will remember this.',
         });

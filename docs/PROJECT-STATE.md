@@ -1,7 +1,8 @@
 # Project state
 
-**As of 2026-08-16.** This is the volatile file. Update it in the same round as any change, so
-the next session (or the next account) picks up cleanly.
+**As of 2026-08-16 (second update that day, after Round 137).** This is the volatile file.
+Update it in the same round as any change, so the next session (or the next account) picks up
+cleanly.
 
 **Precedence.** On any question of *current state* (the head, round numbers, what is pending,
 what is broken, what is next) **this file wins over every other document in the repo, including
@@ -22,10 +23,10 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `e7fe005` = **Round 130** |
-| Packaged and delivered but **not pushed** | Rounds **131 through 136** |
-| One-click to ship all of them | **`SHIP6.bat`** (logs to `ship_log6.txt`). Supersedes `SHIP4.bat` and `SHIP5.bat`. Safe to re-run; every `RUNnn.bat` self-skips. |
-| Live site is serving | **Round 128.** As of this file's date Lovable was still stuck at `9494d8e`; assume it still is until you verify otherwise. |
-| Next free round number | **137** |
+| Packaged and delivered but **not pushed** | Rounds **131 through 137** |
+| One-click to ship all of them | **`SHIP7.bat`** (logs to `ship_log7.txt`). Supersedes `SHIP4`, `SHIP5` and `SHIP6`. Safe to re-run; every `RUNnn.bat` self-skips. |
+| Live site is serving | **Round 128.** Confirmed 2026-08-16 through `mcp__Lovable__get_project`: `latest_commit_sha` is `9494d8e`, so Lovable is two commits behind GitHub and nine behind what is packaged. The next push is the nudge. |
+| Next free round number | **138** |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### What each pending round is
@@ -38,6 +39,7 @@ true on the date above; re-measure rather than quoting them.
 | 134 | Money becomes a real system: five assets that move between seasons, a savings vault, fees each way so churning costs you. Calibrated so the best money player finishes about 1.6x richer than one who ignores it, with a guard that fails above 3.2 so money can never become the whole game. My Life moved onto the phone. DoUKnowBall inside DoUKnowBall, generated from your own save. Gambling is deliberately small and unfun to grind: once a season, capped at the lower of 50k or 4 percent of net worth, blocked under 250k, 42 percent win rate and 1.15x payout both printed on screen, closes permanently at 500k down. Career average is minus 92k. The upside is dressing room morale, not money. |
 | 135 | Press conferences and team talks. Morale was worth nearly 18 league points floor to ceiling but nothing reached the whole squad. Four tones, before the match and at half time, press questions built from your save. Reading the room is worth about 3 points a season, misreading costs 3.8, and spamming one tone is worth 1.6 against 4.3 for reading the situation. Skipping a presser costs exactly zero versus never opening it, which is what makes the skip button honest. |
 | 136 | **This documentation round.** `CLAUDE.md`, `docs/SHIP-PIPELINE.md`, `docs/PROJECT-STATE.md`. |
+| 137 | **The legal round.** No real player is quoted or accused anywhere on the site any more. See below. |
 
 The three documentation files were also written directly onto Anthony's disk when they were
 packaged, so they are readable from the local folder whether or not Round 136 has been
@@ -56,9 +58,48 @@ session start.** If one is there, another session is live. Take a number above i
 overwrite a `SHIP` wrapper without reading what it currently ships. The scheduled build task
 fires on cron `57 */3 * * *`, so it is running more often than you would guess.
 
+### Round 137, what it actually did
+
+The item that had been sitting at the top of "Decisions owed by Anthony" as the highest
+priority open exposure. It is now closed and the decision is off the list.
+
+The Club Manager inbox was rendering invented speech and invented off-pitch conduct against
+**real named professionals** out of `clubManagerRosters.ts`, on a public site out of a public
+repo. The reported example (*"You told me I was a star here"*) was real and was in
+`clubManager.ts`. The drama pool was worse than the quotes: it had named men crashing cars into
+the training ground at 2am, sitting in a casino two nights before a match, missing training,
+and falling out with their wives on Instagram. None of it happened to any of them.
+
+The line the code now holds to, and it is written into the file so it survives:
+
+- **Football events inside the sim keep the name.** Minutes, selection, morale, transfer
+  requests, bids. That is what a management sim is, and the name is doing honest work.
+- **Invented speech and invented off-pitch conduct lose the name.** Attributed to a squad role
+  instead ("your star man", "one of your midfielders"), so no roster name shares a string with
+  them.
+
+Six drama entries that alleged something genuinely damaging were cut rather than reworded,
+because a role descriptor is still uncomfortably close to a named man when the claim is that
+serious. Three harmless ones were written to replace them. Every quote in the inbox, the
+transfer-request copy and the broken-promise line was rewritten as narration.
+
+**`scripts/simNoInventedQuotes.mjs` is the permanent guard.** Read its header before touching
+narrative copy. It runs three passes, and the third is what makes it worth having: it drives
+real seasons and checks rendered output (not source) against the real roster, it scans src for
+literal names beside speech, **and it self-tests against the exact strings Round 137 removed**.
+A detector that finds nothing passes either because the code is clean or because the detector
+is broken, so the known-bad lines are kept as fixtures and it fails loudly if it stops catching
+them. It also carries known-good fixtures, because a guard with false positives gets deleted.
+
+Two calibration notes for whoever touches it. The harvest floor is 150, set from ten measured
+trials that ranged 221 to 248, not from a number that felt right. And accents matter: `\b`
+treats `é` as a word break, so "Jérémy" parsed as J, r, my and the guard read the "my" in his
+own first name as him talking. Names are accent-folded before any boundary test now, which also
+means copy writing "Mbappe" for "Mbappé" is caught rather than missed.
+
 **Two things need doing the moment someone picks this up:**
 
-1. Anthony runs **`SHIP6.bat`**, which lands 131 through 136 in order.
+1. Anthony runs **`SHIP7.bat`**, which lands 131 through 137 in order.
 2. Then `deploy_project` and verify live properly per `docs/SHIP-PIPELINE.md`, because the live
    site is several rounds behind the repo. The next push doubles as the nudge that unsticks
    Lovable.
@@ -118,19 +159,14 @@ reaches a match in Club Manager (120).
 This is the registry `CLAUDE.md` points at. **These are the only things you may ask him about
 besides money. Everything else, decide yourself.** When one is resolved, delete it from here.
 
-1. **Invented quotes attributed to real players.** Inbox and narrative copy from earlier rounds
-   puts words in real footballers' mouths, lines like *"You told me I was a star here"*. Names
-   plus factual stats are defensible; invented quotes attributed to real people are not, and the
-   site and repo are both public. Found during Round 135, not fixed. **This is the highest
-   priority open item and deserves its own round**: sweep every generated narrative surface,
-   rewrite to role attribution or narration, and add a harness that fails on a quoted string
-   next to a real player name. The Round 135 press copy already avoids it, so it is the model
-   to follow.
-2. **Competitor names in the public repo.** `docs/research/R1_soccer_sites.md` and
+1. **Competitor names in the public repo.** `docs/research/R1_soccer_sites.md` and
    `docs/research/R3_creator_formats.md` name competitors by name in a public repo. Delete or
    gitignore. Do not silently delete his research, ask him.
-3. **ESPN-style score ticker data source.** Needs a paid feed decision. Money.
-4. **Apple sign-in.** Parked on the $99/yr Apple developer account. Money.
+2. **ESPN-style score ticker data source.** Needs a paid feed decision. Money.
+3. **Apple sign-in.** Parked on the $99/yr Apple developer account. Money.
+
+*Closed 2026-08-16: invented quotes attributed to real players. Was item 1 and the highest
+priority open exposure. Fixed and guarded in Round 137, see above.*
 
 ---
 
@@ -237,6 +273,14 @@ change. If they are not running, they need recreating. Full prompts are in
 `_claude-migration/SCHEDULED-TASKS-TO-RECREATE.md` in Anthony's local folder (gitignored,
 because it contains account emails).
 
+**Recreated 2026-08-16 on the new account**, all three, after the migration. The build-loop
+prompt was rewritten in the process: the archived copy hardcodes head `9da1788` and rounds 101
+to 110 as pending, which is nine months of drift, so the live version now carries **no round
+numbers at all** and points at this file instead. Do not paste the archived prompt back in.
+
+Supabase and Lovable connectors are both connected on the new account as of the same date, so
+the polls task can write and deploys can run.
+
 | Task | Schedule |
 |---|---|
 | DoUKnowBall: continue the career epic (the main build loop) | cron `57 */3 * * *` |
@@ -255,3 +299,6 @@ today rather than adding alongside them.
 
 - **2026-08-16** created, as part of Round 134. Pulled the live project state out of assistant
   memory and into the repo so any session or account can pick the project up cold.
+- **2026-08-16** Round 137. Closed the invented-quotes exposure and recorded the guard. Noted
+  the account migration, the three recreated scheduled tasks, and Lovable confirmed stuck at
+  `9494d8e`. Wrapper moved to `SHIP7.bat`.
