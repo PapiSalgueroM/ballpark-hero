@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ArrowLeftRight, Gauge, Play } from 'lucide-react';
-import { benchForHalftime, tiringAtHalftime, MAX_HALFTIME_SUBS } from '@/lib/clubManager';
-import type { CareerState, CMPlayer, Mentality } from '@/lib/clubManager';
+import { benchForHalftime, tiringAtHalftime, MAX_HALFTIME_SUBS, pressOf } from '@/lib/clubManager';
+import type { CareerState, CMPlayer, Mentality, TalkTone } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
 
 interface HalftimeScreenProps {
   career: CareerState;
   onSub: (outId: string, inId: string) => void;
   onShape: (m: Mentality) => void;
+  onTalk: (tone: TalkTone) => void;
   onSecondHalf: () => void;
 }
 
@@ -33,7 +35,7 @@ function fitnessTone(f: number): string {
  * stands, who is running on empty, and two things you can actually do about
  * it before they go back out.
  */
-export function HalftimeScreen({ career, onSub, onShape, onSecondHalf }: HalftimeScreenProps) {
+export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }: HalftimeScreenProps) {
   const live = career.live;
   const [picking, setPicking] = useState<string | null>(null);
   const benchRef = useRevealScroll<HTMLDivElement>(`sub:${picking ?? ''}`, { skipFirst: true });
@@ -48,6 +50,7 @@ export function HalftimeScreen({ career, onSub, onShape, onSecondHalf }: Halftim
   const subsLeft = MAX_HALFTIME_SUBS - live.subsUsed;
   const started = new Set(live.startXi);
 
+  const press = pressOf(career);
   const venue = live.home === true ? 'at home' : live.home === false ? 'away' : 'neutral';
   const leading = live.myGoals > live.oppGoals;
   const level = live.myGoals === live.oppGoals;
@@ -168,6 +171,23 @@ export function HalftimeScreen({ career, onSub, onShape, onSecondHalf }: Halftim
           </div>
         )}
       </div>
+
+      {/* ---- Round 135: the last thing you do before they go back out ----
+           It sits HERE and not up next to the scoreline on purpose. The break
+           runs in the order a real one does: read the score, pick a shape, make
+           your changes, then say your piece and send them out. Putting the talk
+           last also puts it directly above the button that ends the break, so
+           the owner's no scroll rule holds: whatever you tap last, the way out
+           is the next thing under your thumb. The read is repeated here because
+           on a 390 wide phone the eleven names in the list above mean the line
+           at the top of the screen is long gone by the time you get down here. */}
+      <TeamTalkRow
+        tone={live.talk ?? null}
+        onTone={onTalk}
+        read={live.read}
+        when="at the interval"
+        stale={press.lastTone === live.talk && press.toneRun >= 3}
+      />
 
       <button
         onClick={onSecondHalf}

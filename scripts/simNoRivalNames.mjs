@@ -57,6 +57,13 @@ const RIVAL_NAMES = [
   'efootball',
   'ea ?sports',
   'ea ?fc\\b',
+  // Round 135: two shapes the list missed for eight rounds, both of them sitting
+  // in Club Manager comments the whole time. "EA's own forum" never contained
+  // "ea sports" or "ea fc", and "FC 26" on its own has no "ea" in front of it to
+  // catch. The leading word boundary is what keeps the first one off Chelsea's,
+  // Swansea's and the five other possessives in the repo that end in "ea".
+  "ea['\u2019]s",
+  'fc ?2[0-9]\\b',
   'ultimate team',
 
   // --- daily word and grid games ---

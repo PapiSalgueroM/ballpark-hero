@@ -9,9 +9,10 @@ import {
   answerMessage, setTransferStatus, loanOutPlayer, renewContract,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
   resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
+  setTeamTalk, giveHalftimeTalk, answerPress, duckPress,
   DEFAULT_ERA_ID,
 } from '@/lib/clubManager';
-import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole } from '@/lib/clubManager';
+import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow } from '@/lib/clubManager';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
@@ -350,6 +351,25 @@ export function useClubManager() {
     }
   }, [career]);
 
+  /* ---------- Round 135: the microphone and the dressing room ---------- */
+  /* Tapping the tone you already picked takes it back, so a mis-tap is not a
+     decision you are stuck with for ninety minutes. */
+  const talk = useCallback((tone: TalkTone) => {
+    setCareer(prev => (prev ? setTeamTalk(prev, tone) : prev));
+  }, []);
+
+  const halftimeTalk = useCallback((tone: TalkTone) => {
+    setCareer(prev => (prev ? giveHalftimeTalk(prev, tone) : prev));
+  }, []);
+
+  const sayIt = useCallback((optionIdx: number) => {
+    setCareer(prev => (prev ? answerPress(prev, optionIdx) : prev));
+  }, []);
+
+  const sendAssistant = useCallback(() => {
+    setCareer(prev => (prev ? duckPress(prev) : prev));
+  }, []);
+
   /* ---------- Round 73: the inbox ---------- */
   const answer = useCallback((messageId: string, optionIdx: number) => {
     setCareer(prev => (prev ? answerMessage(prev, messageId, optionIdx) : prev));
@@ -368,6 +388,7 @@ export function useClubManager() {
     setStatus, loanOut, renew, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
     subAtHalftime, shapeAtHalftime, secondHalf,
+    talk, halftimeTalk, sayIt, sendAssistant,
     answer,
   };
 }

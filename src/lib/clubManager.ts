@@ -658,6 +658,17 @@ export interface CareerState {
   retiredNames?: string[];
   /** Round 132: who retired at the most recent summer, for the season screen. */
   retiredLastSummer?: { name: string; age: number; rating: number }[];
+  /**
+   * Round 135: the microphone. How the papers are treating you, the question
+   * sitting on your desk, and anything you have promised out loud. Undefined on
+   * a save made before this existed and repaired by ensurePress.
+   */
+  press?: PressState;
+  /**
+   * Round 135: what you said to them before kick off. Cleared at the final
+   * whistle, so it only ever covers the match it was given for.
+   */
+  teamTalk?: TalkTone | null;
 }
 
 export type NextFixtureInfo =
@@ -693,6 +704,8 @@ export interface LiveMatch {
   home: boolean | null;
   /** What the first half felt like, in words, so the screen has something to say. */
   read: string;
+  /** Round 135: what you said to them in the dressing room at the interval. */
+  talk?: TalkTone | null;
 }
 
 export interface PlayResult {
@@ -1732,7 +1745,8 @@ export function standingGap(career: CareerState, p: CMPlayer): number {
  * striker who is never going to start ahead of the two in front of him. Doing
  * it that way, measured over forty Everton seasons, produced an average of
  * 5.9 transfer requests a season in a save where the manager had done nothing
- * at all, which is the exact complaint EA's own forum has about FC 26. Off the
+ * at all, which is the exact complaint players of the big licensed football
+ * career mode make about it on that publisher's own forum. Off the
  * eleven instead, the squad you are handed on day one is one that agrees with
  * the team you are going to pick, and nobody is furious before a ball is
  * kicked. That is Round 105's lesson again: anchor on the squad you were
@@ -1888,6 +1902,785 @@ function promiseMoraleDelta(p: CMPlayer, standing: number): number {
     : clamp(-0.3 * standing, 0, 0.6);
   return minutes + pride;
 }
+
+/* ================================================================== */
+/* Round 135: the microphone and the dressing room                    */
+/* ================================================================== */
+
+/**
+ * Two jobs a manager does that this game had no room for at all.
+ *
+ * Everything Club Manager has built for twelve rounds happens in a menu. You
+ * buy, you sell, you set a shape, you tell a man where he stands, and morale
+ * and board confidence move underneath you as a RESULT. The other half of the
+ * job is talking: to a room full of reporters on a Friday, and to eleven men in
+ * a dressing room at ten to four. Neither existed, so the emotional side of
+ * management was a thing that happened TO you.
+ *
+ * What the research turned up, and what it changed:
+ *
+ * TEAM TALKS. The management sims that do this properly all run the same
+ * shape: a TONE, from taking the pressure off at one end to a full blast at the
+ * other, and the right tone is a function of the situation rather than a
+ * setting you find once and keep. The written guidance for those games is
+ * consistent and specific about it. Take the pressure off when you are at a
+ * better side. Be demanding when you are the favourite, because complacency is
+ * what beats you. Passion is the safe middle and belongs in a game between
+ * equals. And the full blast only ever works when the side genuinely
+ * underperformed, not merely when it is losing, because a squad already on the
+ * floor cannot be shouted up off it. One line from that guidance is worth
+ * writing straight into the design: NO REACTION IS BETTER THAN A BAD REACTION.
+ * Getting it wrong has to cost more than getting it right pays, or the safe
+ * play is to hammer the same button every week.
+ *
+ * The same games also agree that words wear out. Repeating a shout match after
+ * match stops moving anybody, which is why TALK_STALE_AFTER exists.
+ *
+ * PRESS CONFERENCES. Here the research was mostly a list of what NOT to do. The
+ * loudest complaint about press conferences in both of the big management games
+ * is the same complaint, in the same words: there is one right answer and you
+ * click it every week. Written guides for the current versions say it outright,
+ * that you can safely pick the second positive option forever, and that the
+ * humble answers have downsides and no upsides. A question whose answer never
+ * changes is not a decision, it is a toll booth, and after twenty seasons of it
+ * anybody would delegate the whole thing and never look at it again.
+ *
+ * So the shape here is deliberately the opposite. The questions are built from
+ * what has actually happened in YOUR save, and every answer spends one thing to
+ * buy another. Backing your players publicly lifts the dressing room and costs
+ * you with the board. Calling them out buys board patience with dressing room
+ * morale. Taking it on yourself keeps everybody happy today and hands the press
+ * a manager under pressure, which makes every future bad result read worse
+ * upstairs. Talking your side up before a derby fires the other lot up.
+ * Which one is right depends entirely on which of those three things is about
+ * to kill you, and that changes week to week.
+ */
+
+/** How you said it. Four rungs from an arm round the shoulder to a blast. */
+export type TalkTone = 'calm' | 'rally' | 'demand' | 'blast';
+
+export interface TalkToneDef {
+  id: TalkTone;
+  label: string;
+  emoji: string;
+  /** One line, in the words a manager would use. */
+  blurb: string;
+}
+
+/**
+ * Ordered SOFTEST FIRST, and the order is load bearing: the fit of a talk is
+ * how close its rung is to what the situation is asking for, so these have to
+ * sit on a line rather than in a set.
+ */
+export const TALK_TONES: TalkToneDef[] = [
+  { id: 'calm', label: 'Calm them', emoji: '\u{1F9CA}', blurb: 'No pressure. Play your football and see where it takes you.' },
+  { id: 'rally', label: 'Fire them up', emoji: '\u{1F525}', blurb: 'Passion. Do it for each other and for the people in the stands.' },
+  { id: 'demand', label: 'Demand more', emoji: '\u{1F4E3}', blurb: 'Standards. This is what you are paid for, so go and show me.' },
+  { id: 'blast', label: 'Hairdryer', emoji: '\u{1F4A2}', blurb: 'Both barrels. Risky, and only ever right when they deserve it.' },
+];
+
+export const TALK_ORDER: TalkTone[] = ['calm', 'rally', 'demand', 'blast'];
+
+/**
+ * How far off you can be before a talk stops helping and starts hurting.
+ *
+ * One rung is the zero line: dead on is worth the full swing, one rung out does
+ * nothing at all, two rungs out is the full negative. That is the "no reaction
+ * beats a bad reaction" rule made concrete.
+ *
+ * It started at one and a half, and the measurement is worth keeping because it
+ * is exactly the failure this round was told to watch for. At 1.5 a tone one
+ * rung off the mark still scored plus a third, and since the situation asks for
+ * something in the middle of the ladder most weeks, that made EVERY tone a free
+ * gain. Measured over eighty Everton seasons an arm: saying nothing was worth
+ * 42.3 points, and hammering the same button all season was worth 46.9 on calm,
+ * 45.4 on rally, 48.0 on demand and 43.7 on blast. Four dominant strategies, no
+ * judgement required, which is precisely the complaint every guide written
+ * about the big management games makes about their press conferences.
+ */
+const TALK_TOLERANCE = 1;
+
+/** Match strength a perfectly judged talk is worth, in rating points. */
+const TALK_EDGE = 0.95;
+
+/**
+ * Morale a perfectly judged talk is worth to the men who heard it.
+ *
+ * Small on purpose, and the reason is arithmetic rather than taste. There are
+ * about fifty fixtures in a season and up to two talks in each of them, so
+ * anything that adds a flat number to every player every week compounds into a
+ * squad pinned at the ceiling by Christmas. Measured before this round: the
+ * full morale range from floor to ceiling is worth 17.8 league points at
+ * Everton and 16.8 at Manchester City, so a lever that moves morale freely
+ * moves the whole game. This one is scaled by HEADROOM, so a delighted squad
+ * cannot be talked any higher and a squad already on the floor cannot be talked
+ * any lower, which gives the two arms an equilibrium instead of both of them
+ * drifting into a clamp.
+ */
+const TALK_MORALE = 0.52;
+
+/**
+ * What an ordinary Saturday looks like, in rating points of advantage.
+ *
+ * MEASURED, not assumed, and it has to be. My XI's strength and an AI club's
+ * strength are two different scales that the match engine has always compared
+ * directly, and the human side sits systematically above the other one: over
+ * 1,572 fixtures across six clubs and thirty six seasons the median advantage
+ * going into a match was 7.03 points, quartiles 0.56 and 13.62. Judging
+ * "are you the favourite here" against zero would therefore have called you the
+ * favourite in three matches out of four, at Burnley as well as at Real Madrid,
+ * and the answer to every team talk would have been the same one. So a
+ * favourite is a club ahead of the USUAL gap, not a club ahead of nothing.
+ * Round 105's rule, again: anchor on what you measured, not on the number that
+ * happens to be lying nearby.
+ */
+const EDGE_LEVEL = 7;
+
+/** Same tone this many times running and it stops landing. */
+const TALK_STALE_AFTER = 3;
+/** What is left of it once they have heard it too often. */
+const TALK_STALE_FACTOR = 0.55;
+
+/* ---------------- the press room ---------------- */
+
+export type PressQuestionKind =
+  | 'slump' | 'roll' | 'dropped' | 'bid' | 'derby' | 'boardHeat' | 'request' | 'bigGame';
+
+/** One thing you can say back, and everything it costs and buys. */
+export interface PressAnswer {
+  label: string;
+  /** Morale, to everybody on the books. */
+  squad: number;
+  /** Extra morale, to the player the question was about. */
+  subject: number;
+  /** Board confidence. */
+  board: number;
+  /** How the back pages take it. */
+  mood: number;
+  /** Talking big fires the other lot up for the next match, in rating points. */
+  fire?: number;
+  /** Keeping their feet on the ground sharpens your own side for it instead. */
+  sharpen?: number;
+  /** You have promised a result out loud. Settled at the next final whistle. */
+  promise?: boolean;
+  /** Saying it puts him on the transfer list there and then. */
+  list?: boolean;
+  /** What the papers made of it, shown once you have said it. */
+  line: string;
+}
+
+export interface PressQuestion {
+  id: string;
+  kind: PressQuestionKind;
+  /** The question, in the words a reporter in the room would use. */
+  text: string;
+  /** Who it is about, when it is about somebody. */
+  playerId?: string;
+  playerName?: string;
+  options: PressAnswer[];
+}
+
+export interface PressState {
+  /** 0 to 100. How the papers are treating you. 50 is nobody has an opinion. */
+  mood: number;
+  /** The question waiting on your desk, or nothing to answer. */
+  pending: PressQuestion | null;
+  /** The calendar entry the last one was put to you, so it is not every week. */
+  lastWeek: number;
+  /** How many you have fronted up to, and how many the assistant took. */
+  answered: number;
+  ducked: number;
+  /** What the papers ran with last time, for the screen. */
+  lastLine?: string;
+  /** Rating points the next opponent has been handed by your mouth. */
+  nextFire: number;
+  /** Rating points your own side goes into the next match with. */
+  nextSharpen: number;
+  /** You told the country you would win. Settled at the next final whistle. */
+  promised: boolean;
+  /** The tone of the last talk you gave, and how many in a row it has been. */
+  lastTone?: TalkTone | null;
+  toneRun: number;
+}
+
+/** How often the press can put something to you, in calendar entries. */
+const PRESS_GAP = 3;
+
+/**
+ * What not fronting up costs, in press mood, and it is deliberately tiny.
+ *
+ * The same number is charged whether you send your assistant or simply never
+ * open the room and let the question go stale, and those two HAVE to cost the
+ * same. The first version charged only the assistant, which meant a manager who
+ * clicked the skip button finished a season a point and a half behind one who
+ * never looked at the screen at all: the game was punishing the honest answer
+ * to "I do not want to do this today" and rewarding pretending the feature did
+ * not exist. Measured at Everton over a hundred seasons an arm, that was 43.1
+ * points against 44.5 and eleven more sackings.
+ *
+ * At this size a manager who ducks every single one all season settles around a
+ * press mood of thirty, which reads as "sharpening up" on the tile and costs
+ * about four board confidence across a whole year. Felt, and survivable.
+ */
+const PRESS_NO_SHOW = 1.2;
+
+/**
+ * Round 135: a save from before any of this existed gets a press room, and
+ * running it a second time changes nothing. Same house pattern as
+ * ensureContracts, ensureAcademy, ensureRoles and ensureClock, and it runs in
+ * loadCareer as well as playNextEntry for the reason Round 127 found out the
+ * hard way: a screen can be opened before a ball is kicked.
+ */
+export function ensurePress(state: CareerState): void {
+  /* Before the early return, not after it. This line lived at the bottom of
+     the function and a save with no press room at all took the branch below and
+     jumped straight out over it, so teamTalk stayed undefined, the second call
+     set it and the repair was not idempotent. Every ensure in this file is
+     called twice on every load; one that changes something the second time is
+     a bug that only shows up as a save that will not settle. */
+  if (state.teamTalk === undefined) state.teamTalk = null;
+  const p = state.press;
+  if (!p || typeof p !== 'object') {
+    state.press = {
+      mood: 50, pending: null, lastWeek: -PRESS_GAP, answered: 0, ducked: 0,
+      nextFire: 0, nextSharpen: 0, promised: false, lastTone: null, toneRun: 0,
+    };
+    return;
+  }
+  if (typeof p.mood !== 'number' || !Number.isFinite(p.mood)) p.mood = 50;
+  p.mood = clamp(p.mood, 0, 100);
+  if (p.pending === undefined) p.pending = null;
+  if (typeof p.lastWeek !== 'number') p.lastWeek = -PRESS_GAP;
+  if (typeof p.answered !== 'number') p.answered = 0;
+  if (typeof p.ducked !== 'number') p.ducked = 0;
+  if (typeof p.nextFire !== 'number') p.nextFire = 0;
+  if (typeof p.nextSharpen !== 'number') p.nextSharpen = 0;
+  if (typeof p.promised !== 'boolean') p.promised = false;
+  if (p.lastTone === undefined) p.lastTone = null;
+  if (typeof p.toneRun !== 'number') p.toneRun = 0;
+}
+
+/** The press room, with a sensible answer for a save that has not got one yet. */
+export function pressOf(career: CareerState): PressState {
+  return career.press ?? {
+    mood: 50, pending: null, lastWeek: -PRESS_GAP, answered: 0, ducked: 0,
+    nextFire: 0, nextSharpen: 0, promised: false, lastTone: null, toneRun: 0,
+  };
+}
+
+/** The mood in words, because a number out of a hundred means nothing. */
+export function pressMoodLabel(mood: number): string {
+  if (mood >= 78) return 'They love you';
+  if (mood >= 60) return 'Onside';
+  if (mood >= 42) return 'Nobody has an opinion';
+  if (mood >= 25) return 'Sharpening up';
+  return 'They are after you';
+}
+
+/**
+ * How hard a bad result reads upstairs once the papers have had their say.
+ *
+ * The board do not watch every match, they read about it. A manager the press
+ * are behind gets the benefit of the doubt on a defeat, and one they have
+ * turned on gets it in the neck. Reaches exactly 1 at a mood of 50, which is
+ * where every save starts and where a manager who never opens the press room
+ * stays, so ignoring this whole feature leaves the twelve rounds of balance
+ * underneath it exactly where they were. That is Round 95's rule: a multiplier
+ * that cannot reach 1 is a hidden tax on playing the game.
+ */
+export function pressPatience(mood: number): number {
+  /* Written as a swing AROUND fifty rather than as 1.15 minus a fraction,
+     because the obvious form does not come out at exactly one: in binary
+     floating point 1.15 - 0.15 is 0.9999999999999999, which fails the guard
+     that says ignoring this feature costs nothing, and would have quietly
+     nudged twelve rounds of balance in the sixteenth decimal place forever. */
+  return clamp(1 + (50 - mood) * 0.003, 0.85, 1.15);
+}
+
+/* ---------------- reading the situation ---------------- */
+
+/** Average morale of the men who will actually be on the pitch. */
+function xiMood(state: CareerState, xi: CMPlayer[]): number {
+  if (!xi.length) return 60;
+  return xi.reduce((s, p) => s + p.morale, 0) / xi.length;
+}
+
+/**
+ * How far ahead of the other lot you are, in rating points, venue included.
+ *
+ * Positive means you are the favourite. This is the same number the match
+ * engine uses to decide the scoreline, so a talk is being judged against the
+ * game that is actually about to be played rather than against a label.
+ *
+ * One wrinkle worth knowing about: nextFixture rounds the opponent's strength
+ * to a whole number for the screen, so this can sit up to half a point away from
+ * the figure the engine itself uses at kick off, which is six hundredths of a
+ * rung on the tone ladder. It is far too small to change which tone is nearest
+ * except on an exact tie, and it errs the safe way, because the only thing that
+ * reads this rather than the raw number is the read line and the harness.
+ */
+export function matchEdge(career: CareerState): number | null {
+  const fx = nextFixture(career);
+  if (fx.kind !== 'match') return null;
+  const xi = effectiveXI(career);
+  const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
+  return myMatchStrength(career, xi) + venue - fx.oppStrength;
+}
+
+/**
+ * What the situation is asking for, on the same 0 to 3 line the tones sit on.
+ *
+ * Every term here comes straight out of the written guidance for the games that
+ * do this well, and none of it is invented. Underdog, take the pressure off.
+ * Favourite, be demanding, because the thing that beats a good side against a
+ * bad one is thinking it is already won. Level, passion. A squad whose heads
+ * are down cannot be shouted at. And the full blast has exactly one home: a
+ * side that should be winning and is not, whose players are not so far gone
+ * that a rollicking finishes them off.
+ */
+function preMatchTarget(edge: number, mood: number, form: FormResult[]): number {
+  let target = 1;
+  // Underdog or favourite, graded rather than a switch, and measured against
+  // what a NORMAL week looks like rather than against zero. See EDGE_LEVEL.
+  target += clamp((edge - EDGE_LEVEL) / 8, -1.1, 1.1);
+  // Heads down. Words that would sharpen a confident squad flatten a fragile
+  // one, which is the single most common way a real team talk backfires.
+  if (mood < 45) target -= 0.7;
+  else if (mood > 78) target += 0.35;
+  // Underperforming: losing matches you should be winning is what earns a
+  // rollicking, and nothing else does.
+  const recent = form.slice(-3);
+  const bad = recent.filter(r => r === 'L').length;
+  if (bad >= 2 && edge > EDGE_LEVEL) target += 1;
+  else if (bad >= 2) target -= 0.2;
+  return clamp(target, 0, 3);
+}
+
+/**
+ * The same idea at the interval, where the scoreline is the loudest fact in the
+ * room. Behind to a side you should be beating is the one place a blast belongs.
+ */
+function halftimeTarget(myGoals: number, oppGoals: number, edge: number, mood: number): number {
+  let target = 1.4;
+  const rel = edge - EDGE_LEVEL;
+  const lead = myGoals - oppGoals;
+  if (lead < 0) {
+    // Behind. How hard depends entirely on whether you should be.
+    target += 0.6 + clamp(rel / 5, -1.4, 1.6);
+    if (lead <= -2 && rel > 0) target += 0.5;
+  } else if (lead === 0) {
+    target += clamp(rel / 10, -0.8, 0.9);
+  } else if (lead === 1) {
+    // A one goal lead is the most fragile thing in football. Steady heads, not
+    // a party and not a rollicking.
+    target -= 0.5;
+  } else {
+    // Comfortable. The job now is that nobody switches off, which is a demand
+    // and not a round of applause.
+    target += 0.5;
+  }
+  if (mood < 45) target -= 0.6;
+  return clamp(target, 0, 3);
+}
+
+/**
+ * How well a tone fits, from plus one (spot on) through zero (harmless) to
+ * minus one (you have lost them).
+ */
+function talkFit(tone: TalkTone, target: number): number {
+  const idx = TALK_ORDER.indexOf(tone);
+  if (idx < 0) return 0;
+  return clamp(1 - Math.abs(idx - target) / TALK_TOLERANCE, -1, 1);
+}
+
+/**
+ * Where on the 0 to 3 line the room is right now: half time if a match is
+ * paused, otherwise the Saturday coming.
+ *
+ * This is NOT shown anywhere on any screen and it is not meant to be. It exists
+ * so the harness can pick the best and the worst tone for a situation without
+ * keeping its own copy of the rules, because a harness that reimplements the
+ * thing it is checking only ever proves that two copies of a bug agree.
+ */
+export function talkTargetNow(career: CareerState): number | null {
+  const live = career.live;
+  if (live) {
+    const second = squadByIds(career, live.onPitch);
+    const venue = live.home === true ? 3 : live.home === false ? -1.5 : 0;
+    const edge = myMatchStrength(career, second) + venue - strengthOf(career, live.opponent);
+    return halftimeTarget(live.myGoals, live.oppGoals, edge, xiMood(career, second));
+  }
+  const edge = matchEdge(career);
+  if (edge === null) return null;
+  const xi = effectiveXI(career);
+  return preMatchTarget(edge, xiMood(career, xi), career.form);
+}
+
+/** The read before kick off, so the choice is a judgement and not a guess. */
+export function preMatchRead(career: CareerState): string | null {
+  const edge = matchEdge(career);
+  if (edge === null) return null;
+  const xi = effectiveXI(career);
+  const mood = xiMood(career, xi);
+  const bad = career.form.slice(-3).filter(r => r === 'L').length;
+  const rel = edge - EDGE_LEVEL;
+  if (bad >= 2 && rel > 0) return 'Two defeats in three, against a side you are better than. They know it and so do you.';
+  if (mood < 45 && rel < 0) return 'Heads are down and this is a hard afternoon. Do not add to it.';
+  if (mood < 45) return 'The dressing room is flat. Whatever you say, they are not in the mood to be shouted at.';
+  if (rel >= 7) return 'You are much the better side. The only thing that beats you today is thinking it is already won.';
+  if (rel <= -7) return 'They are better than you. Nobody expects anything, so there is nothing to lose.';
+  if (rel >= 3) return 'Slight favourites. Enough in it that a flat start would cost you.';
+  if (rel <= -3) return 'Slight underdogs. A point here would do nicely.';
+  return 'Nothing between the sides. This is a game about who wants it more.';
+}
+
+/* ---------------- giving the talk ---------------- */
+
+/** Set what you are going to say before kick off. Tap it again to take it back. */
+export function setTeamTalk(career: CareerState, tone: TalkTone | null): CareerState {
+  return { ...career, teamTalk: career.teamTalk === tone ? null : tone };
+}
+
+/** Say something at the interval. Tap it again and you said nothing. */
+export function giveHalftimeTalk(career: CareerState, tone: TalkTone | null): CareerState {
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  if (state.live) state.live.talk = state.live.talk === tone ? null : tone;
+  return state;
+}
+
+/**
+ * What a talk is actually worth once the squad has heard it, and how tired they
+ * are of hearing it. Returns the fit already scaled, so callers do not have to
+ * remember the staleness rule.
+ */
+function talkWeight(state: CareerState, tone: TalkTone | null, target: number): number {
+  if (!tone) return 0;
+  const press = state.press;
+  const run = press && press.lastTone === tone ? press.toneRun : 0;
+  const stale = run >= TALK_STALE_AFTER ? TALK_STALE_FACTOR : 1;
+  return talkFit(tone, target) * stale;
+}
+
+/** Book the tone so the next one knows whether they have heard it before. */
+function noteTone(state: CareerState, tone: TalkTone | null): void {
+  if (!state.press || !tone) return;
+  state.press.toneRun = state.press.lastTone === tone ? state.press.toneRun + 1 : 1;
+  state.press.lastTone = tone;
+}
+
+/* ---------------- the questions ---------------- */
+
+let pressSeq = 0;
+
+/** Nothing spicy on the desk this week. */
+const PRESS_SILENCE = 'Nothing on the desk. The press only come when there is something to ask about.';
+
+/**
+ * What they want to know about, built from what has actually happened in this
+ * save. If nothing has happened, nobody asks anything, which is the whole point:
+ * a question that fires every single week whatever the state of the club is the
+ * thing that turns this into a chore.
+ */
+function buildPressQuestion(state: CareerState): PressQuestion | null {
+  const fx = nextFixture(state);
+  const opponent = fx.kind === 'match' ? fx.opponent : null;
+  const senior = state.squad.filter(p => !p.onLoan && !p.isYouth);
+  const mk = (q: Omit<PressQuestion, 'id'>): PressQuestion => {
+    pressSeq += 1;
+    return { ...q, id: `pq-${state.season}-${state.week}-${pressSeq}` };
+  };
+
+  /* 1. Somebody has put it in writing. Loudest story in the building. */
+  const wantsOut = senior.filter(p => p.wantsOut).sort((a, b) => b.rating - a.rating)[0];
+  if (wantsOut) {
+    return mk({
+      kind: 'request', playerId: wantsOut.id, playerName: wantsOut.name,
+      text: `Word is ${wantsOut.name} has asked to leave. Is he still your player?`,
+      options: [
+        {
+          label: 'He is going nowhere', squad: 0.85, subject: 2, board: -0.65, mood: 0.5,
+          line: 'You slammed the door shut in public. He is flattered. The board wanted the money.',
+        },
+        {
+          label: 'If he wants out, he can go', squad: -0.7, subject: -8, board: 0.9, mood: 3, list: true,
+          line: 'You put him on the list live on air. Ruthless, and the room respected it.',
+        },
+        {
+          label: 'We are talking. Leave it with us', squad: 0.15, subject: 0, board: 0.1, mood: -1.5,
+          line: 'You said nothing at all, at length. Tomorrow they will write it themselves.',
+        },
+      ],
+    });
+  }
+
+  /* 2. Somebody is circling one of yours. */
+  const bid = (state.incomingBids ?? [])[0];
+  const target = bid ? state.squad.find(p => p.id === bid.playerId) : null;
+  if (bid && target) {
+    return mk({
+      kind: 'bid', playerId: target.id, playerName: target.name,
+      text: `${bid.club} have put ${money(bid.offer)} on the table for ${target.name}. Is he for sale?`,
+      options: [
+        {
+          label: 'Not for sale at any price', squad: 1, subject: 6, board: -0.8, mood: 0.5,
+          line: 'You told the country he is staying. He walked in this morning a foot taller.',
+        },
+        {
+          label: 'Everyone has a price', squad: -0.55, subject: -7, board: 0.95, mood: 2,
+          line: 'The board liked hearing it. He read it on his phone like everybody else.',
+        },
+        {
+          label: 'That is between the two clubs', squad: 0, subject: -1, board: 0.15, mood: -1.5,
+          line: 'A straight bat. Nobody learned anything and nobody wrote a headline.',
+        },
+      ],
+    });
+  }
+
+  /* 3. A run of defeats, which is when the room gets uncomfortable. */
+  const last5 = state.form.slice(-5);
+  const losses = last5.filter(r => r === 'L').length;
+  if (last5.length >= 3 && losses >= 3) {
+    return mk({
+      kind: 'slump',
+      text: `${losses} defeats in your last ${last5.length}. Have you lost the dressing room?`,
+      options: [
+        {
+          label: 'These players are with me', squad: 1.5, subject: 0, board: -1, mood: 1,
+          line: 'You put your arm round the lot of them in public. Upstairs, that read as excuses.',
+        },
+        {
+          label: 'That one is on me', squad: 0.9, subject: 0, board: 0.65, mood: -3.5,
+          line: 'You took it on the chin. The board respect it. The press smell a man under pressure.',
+        },
+        {
+          label: 'Some of them were not at it', squad: -2.2, subject: 0, board: 1.2, mood: 3,
+          line: 'You named no names and everybody knew who you meant. It went round the dressing room by teatime.',
+        },
+        {
+          label: 'We go again Saturday', squad: 0, subject: 0, board: 0, mood: -1.5,
+          line: 'Four words and a walk out. They will find something else to write about.',
+        },
+      ],
+    });
+  }
+
+  /* 4. The board are the story, which is a different question entirely. */
+  if (state.boardConfidence < 32) {
+    return mk({
+      kind: 'boardHeat',
+      text: 'The bookmakers have you favourite for the sack. Are you worried about your job?',
+      options: [
+        {
+          label: 'I am going nowhere', squad: 1.25, subject: 0, board: -0.7, mood: 2.5,
+          line: 'Defiant, and the room enjoyed it. The people who actually decide did not.',
+        },
+        {
+          label: 'The board have backed me all the way', squad: -0.35, subject: 0, board: 1.4, mood: -2,
+          line: 'Loyal to a fault. It bought you time upstairs and bored everybody else.',
+        },
+        {
+          label: 'Judge me in May', squad: 0.4, subject: 0, board: 0.5, mood: 0.5, sharpen: 0.6,
+          line: 'Nobody got a headline out of it, and the squad heard a manager who is not panicking.',
+        },
+      ],
+    });
+  }
+
+  /* 5. A man you have stopped picking. */
+  const dropped = senior
+    .filter(p => isAvailable(p) && (p.lastTen ?? []).length >= 5 && promiseGap(p) <= -0.25)
+    .sort((a, b) => promiseGap(a) - promiseGap(b))[0];
+  if (dropped) {
+    const played = (dropped.lastTen ?? []).reduce((s, x) => s + x, 0);
+    const of = (dropped.lastTen ?? []).length;
+    return mk({
+      kind: 'dropped', playerId: dropped.id, playerName: dropped.name,
+      text: `${dropped.name} has started ${played} of the last ${of}. Is he finished at this club?`,
+      options: [
+        {
+          label: 'He is still my player', squad: 0.55, subject: 8, board: -0.3, mood: -0.5,
+          line: 'You backed him in front of everybody. He will run through a wall on Saturday.',
+        },
+        {
+          label: 'He has to earn it back', squad: 1.1, subject: -6, board: 0.55, mood: 2,
+          line: 'Standards, in public. Ten of them heard it as a warning and one heard it as a demotion.',
+        },
+        {
+          label: 'You would have to ask him', squad: -0.4, subject: 0, board: 0, mood: -2,
+          line: 'A shrug and a next question. He was not wounded by it and nobody else was impressed either.',
+        },
+      ],
+    });
+  }
+
+  /* 6. The derby, or whatever the biggest match on the horizon is. */
+  const rival = nearestRival(state.clubName);
+  if (opponent && rival && opponent === rival) {
+    return mk({
+      kind: 'derby',
+      text: `${opponent} at the weekend. What is your message to the supporters?`,
+      options: [
+        {
+          label: 'We are winning this one', squad: 1.7, subject: 0, board: 0.55, mood: 4, fire: 2.6, promise: true,
+          line: 'You put it in print. Their dressing room has already pinned it to the wall.',
+        },
+        {
+          label: 'They are a good side and we respect them', squad: 0.3, subject: 0, board: 0.1, mood: 1, sharpen: 0.8,
+          line: 'Nothing for them to get angry about, and your lot went out with clear heads.',
+        },
+        {
+          label: 'It is three points, same as any other', squad: -0.3, subject: 0, board: 0.15, mood: -2.5,
+          line: 'Try telling the supporters that. They were not impressed and neither were the papers.',
+        },
+      ],
+    });
+  }
+
+  /* 7. A run of wins, which is its own kind of trap. */
+  const wins = last5.filter(r => r === 'W').length;
+  if (last5.length >= 4 && wins >= 4) {
+    return mk({
+      kind: 'roll',
+      text: `${wins} wins on the bounce. How far can this side go?`,
+      options: [
+        {
+          label: 'We will take some stopping', squad: 1.5, subject: 0, board: 0.5, mood: 3.5, fire: 2.2,
+          line: 'Bold, and it went down a storm everywhere except in the next dressing room you visit.',
+        },
+        {
+          label: 'One game at a time', squad: 0.3, subject: 0, board: 0.2, mood: -1,
+          line: 'The oldest answer in football, and it has never once caused anybody a problem.',
+        },
+        {
+          label: 'We are nowhere near where we need to be', squad: -1, subject: 0, board: 0.55, mood: 1.5, sharpen: 1.2,
+          line: 'Nobody got carried away. They trained like it was nought all on Monday morning.',
+        },
+      ],
+    });
+  }
+
+  /* 8. Anything big enough to be worth asking about. */
+  if (opponent && fx.kind === 'match') {
+    const edge = matchEdge(state);
+    if (edge !== null && edge - EDGE_LEVEL <= -6) {
+      return mk({
+        kind: 'bigGame',
+        text: `${opponent} on paper are a level above you. Realistically, what are you going there for?`,
+        options: [
+          {
+            label: 'Nobody gives us a prayer, and that suits us', squad: 1.25, subject: 0, board: 0.1, mood: 2, sharpen: 0.9,
+            line: 'Underdogs and happy about it. Exactly the week your squad needed.',
+          },
+          {
+            label: 'We are going to win it', squad: 0.85, subject: 0, board: 0.8, mood: 3, fire: 2.8, promise: true,
+            line: 'A big call in front of a big audience. They have seen it too.',
+          },
+          {
+            label: 'We will do our jobs and see', squad: 0, subject: 0, board: 0.35, mood: -1.5,
+            line: 'Dull, safe and forgotten by Friday teatime. The board like a man who promises nothing.',
+          },
+        ],
+      });
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Roll a question onto the desk, if there is one worth asking and they have not
+ * had you in front of a microphone too recently.
+ */
+function maybeAskPress(state: CareerState): void {
+  const press = state.press;
+  if (!press) return;
+  /* A story has a shelf life. A question nobody ever answered stops being a
+     question after a few weeks rather than sitting on the desk for twenty
+     seasons, and it costs nothing to let it go, because a manager who never
+     wants to do this is allowed to never do it. */
+  if (press.pending) {
+    if (state.week - press.lastWeek > 4) {
+      press.pending = null;
+      press.ducked += 1;
+      press.mood = clamp(press.mood - PRESS_NO_SHOW, 0, 100);
+    }
+    return;
+  }
+  if (state.week - press.lastWeek < PRESS_GAP) return;
+  const q = buildPressQuestion(state);
+  if (!q) return;
+  press.pending = q;
+  press.lastWeek = state.week;
+}
+
+/** Say it. Pure: returns the new state. */
+export function answerPress(career: CareerState, optionIdx: number): CareerState {
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  ensurePress(state);
+  const press = state.press!;
+  const q = press.pending;
+  if (!q) return career;
+  const opt = q.options[optionIdx];
+  if (!opt) return career;
+
+  state.squad = state.squad.map(p => {
+    let delta = opt.squad;
+    if (q.playerId && p.id === q.playerId) delta += opt.subject;
+    let out = { ...p, morale: clamp(p.morale + delta, 5, 99) };
+    if (opt.list && q.playerId && p.id === q.playerId) {
+      out = { ...out, transferStatus: 'listed' as TransferStatus };
+    }
+    return out;
+  });
+  state.boardConfidence = clamp(state.boardConfidence + opt.board, 0, 100);
+  press.mood = clamp(press.mood + opt.mood, 0, 100);
+  press.nextFire += opt.fire ?? 0;
+  press.nextSharpen += opt.sharpen ?? 0;
+  if (opt.promise) press.promised = true;
+  press.answered += 1;
+  press.lastLine = opt.line;
+  press.pending = null;
+  return state;
+}
+
+/**
+ * Send your assistant instead.
+ *
+ * This exists because the alternative is a feature that becomes a chore, and a
+ * chore is worse than nothing. It costs a little and it never blocks anything,
+ * so a player who does not want to do this can play twenty seasons and never
+ * open the room, and lose about as much as he would from one flat afternoon.
+ */
+export function duckPress(career: CareerState): CareerState {
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  ensurePress(state);
+  const press = state.press!;
+  if (!press.pending) return career;
+  press.mood = clamp(press.mood - PRESS_NO_SHOW, 0, 100);
+  press.ducked += 1;
+  press.lastLine = 'Your assistant took it. He said nothing wrong and nothing at all.';
+  press.pending = null;
+  /* The story still has to run its course. Without this line, ducking cleared
+     the desk on the spot and the next reporter turned up three fixtures later,
+     while simply never opening the screen left the question sitting there for
+     five, so the man who pressed the skip button was charged the no-show
+     roughly twice as often as the man who pretended the room did not exist.
+     Measured at Manchester City over 160 seasons an arm before the fix: 66.7
+     league points against 69.8, fifteen more sackings, and a guard that
+     was going to flap forever on the difference. */
+  press.lastWeek = state.week + 2;
+  return state;
+}
+
+/** The line for the press room tile on the hub. */
+export function pressHeadline(career: CareerState): string {
+  const press = pressOf(career);
+  if (press.pending) return 'They want a word';
+  return pressMoodLabel(press.mood);
+}
+
+export { PRESS_SILENCE };
 
 /** What we bank when selling: 90% of real value (youth products fetch less). */
 export function sellValue(p: CMPlayer): number {
@@ -3821,17 +4614,49 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   let mine: number;
   let myGoals: number;
   let oppGoals: number;
+  /* Round 135: what was said, and what it was worth. The pre match talk covers
+     the whole match unless you said something else at the interval, in which
+     case the newer one is the one in the players' ears. Both are remembered
+     here so the full time morale swing can settle up for each of them. */
+  const press135 = state.press;
+  const preTone: TalkTone | null = state.teamTalk ?? null;
+  const halfTone: TalkTone | null = live ? (live.talk ?? null) : null;
+  const fire = press135?.nextFire ?? 0;
+  const sharpen = press135?.nextSharpen ?? 0;
+  let preFit = 0;
+  let halfFit = 0;
   /* Round 121: every match is two halves now, whichever way it is played. It
      has to be, or fast forwarding a fixture and playing it out would be two
      different games: the opposition only reacts at a break, so a single shot
      match would be one where he never does. The ONLY difference between the
      two paths is whether you got a say at the interval. */
+  const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
   if (live) {
+    const started = squadByIds(state, live.startXi);
     const second = squadByIds(state, live.onPitch);
-    mine = myMatchStrength(state, second);
+    /* Round 135: the fit of the pre match talk is judged on the eleven who
+       kicked off, and the half time one on the state of the match the men still
+       out there are walking back into. Whichever talk is NEWER is the one in
+       their ears for the second half; the older one has been overtaken by
+       events. Both are settled up separately at the final whistle, because they
+       were two separate things you said. */
+    preFit = talkWeight(state, preTone, preMatchTarget(
+      myMatchStrength(state, started) + venue - oppS, xiMood(state, started), state.form,
+    ));
+    const htTarget = halftimeTarget(
+      live.myGoals, live.oppGoals,
+      myMatchStrength(state, second) + venue - oppS, xiMood(state, second),
+    );
+    halfFit = talkWeight(state, halfTone, htTarget);
+    const inForce = halfTone
+      ? halfFit
+      : talkWeight(state, preTone, preMatchTarget(
+          myMatchStrength(state, second) + venue - oppS, xiMood(state, second), state.form,
+        ));
+    mine = myMatchStrength(state, second) + inForce * TALK_EDGE + sharpen;
     const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
     const opp2 = oppositionShape(live.oppGoals, live.myGoals);
-    const [m2, o2] = simHalf(mine, oppS, ment2.atk + homeAtk + opp2.def, ment2.def + oppAtk + opp2.atk);
+    const [m2, o2] = simHalf(mine, oppS + fire, ment2.atk + homeAtk + opp2.def, ment2.def + oppAtk + opp2.atk);
     myGoals = live.myGoals + m2;
     oppGoals = live.oppGoals + o2;
     // Anyone who was on the pitch at any point can appear on the scoresheet.
@@ -3839,11 +4664,17 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     xi = squadByIds(state, ids);
   } else {
     xi = effectiveXI(state);
-    mine = myMatchStrength(state, xi);
+    /* Fast forward, or a save from before the interval existed. The pre match
+       talk covers both halves because there was never a chance to give another,
+       which is exactly how it behaves when you play the match out and say
+       nothing at the break. */
+    const preEdge = myMatchStrength(state, xi) + venue - oppS;
+    preFit = talkWeight(state, preTone, preMatchTarget(preEdge, xiMood(state, xi), state.form));
+    mine = myMatchStrength(state, xi) + preFit * TALK_EDGE + sharpen;
     const ment = MENT_MOD[state.mentality] ?? MENT_MOD.balanced;
-    const [m1, o1] = simHalf(mine, oppS, ment.atk + homeAtk, ment.def + oppAtk);
+    const [m1, o1] = simHalf(mine, oppS + fire, ment.atk + homeAtk, ment.def + oppAtk);
     const opp2 = oppositionShape(o1, m1);
-    const [m2, o2] = simHalf(mine, oppS, ment.atk + homeAtk + opp2.def, ment.def + oppAtk + opp2.atk);
+    const [m2, o2] = simHalf(mine, oppS + fire, ment.atk + homeAtk + opp2.def, ment.def + oppAtk + opp2.atk);
     myGoals = m1 + m2;
     oppGoals = o1 + o2;
   }
@@ -4049,6 +4880,28 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     };
   });
 
+  /* Round 135: and what you SAID to them lands on top of that.
+     Only the men who actually heard it, which is the eleven who played, and
+     scaled by headroom in both directions. A squad already delighted cannot be
+     talked any higher and one already on the floor cannot be talked any lower,
+     which is both true of people and the thing that stops two talks a week for
+     fifty weeks compounding into a squad pinned at a clamp. The two talks
+     settle up separately because they were two separate things you said. */
+  const talkSwing = preFit + halfFit;
+  if (talkSwing !== 0) {
+    state.squad = state.squad.map(p => {
+      if (!xiIdSet.has(p.id)) return p;
+      const head = talkSwing > 0 ? (99 - p.morale) / 94 : (p.morale - 5) / 94;
+      return { ...p, morale: clamp(p.morale + talkSwing * TALK_MORALE * head, 5, 99) };
+    });
+    /* Something a player can feel without reading a number. */
+    if (talkSwing >= 0.75) {
+      events.push('\u{1F5E3}️ They came out of that dressing room like a side that would run through a wall for you.');
+    } else if (talkSwing <= -0.75) {
+      events.push('\u{1F649} Whatever you said in there did not land. Half of them had stopped listening.');
+    }
+  }
+
   /* Round 127: the dressing room. An unhappy player does not sulk quietly, his
      reaction spreads to the men around him. So a senior man who is miserable
      AND being let down drags on everybody around him. Capped at three sulkers so a bad month cannot spiral
@@ -4067,10 +4920,12 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     }
   }
 
-  /* Round 127: and the loudest of them asks to leave. This is the thing FC 26
-     players complain about on EA's own forums, that "every player regardless
-     of Squad Role requests to leave if you don't play them 95% of the time",
-     so the trigger here reads the rung he is on and not just his minutes: a
+  /* Round 127: and the loudest of them asks to leave. This is the single
+     loudest complaint about the squad role system in the big licensed football
+     career mode, made over and over on that publisher's own forum: that every
+     player asks to leave whatever rung you put him on unless you play him
+     almost every week. So the trigger here reads the rung he is on rather than
+     just his minutes, and a
      backup who barely plays is doing exactly what he agreed to and never asks
      for anything. */
   for (const p of state.squad) {
@@ -4214,6 +5069,13 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   }
   const patience = club.tier === 1 ? 1.3 : club.tier === 2 ? 1.15 : club.tier === 3 ? 1 : 0.85;
   if (confDelta < 0) confDelta *= patience;
+  /* Round 135: and the board read about it in the morning. A manager the press
+     are behind gets the benefit of the doubt on a defeat and one they have
+     turned on gets it in the neck. Only ever on the way DOWN, because a board
+     needs no help noticing a win, and it reaches exactly 1 at the mood every
+     save starts on, so a manager who never opens the press room plays the game
+     the previous twelve rounds calibrated. */
+  if (confDelta < 0 && state.press) confDelta *= pressPatience(state.press.mood);
   confDelta = Math.round(confDelta * 10) / 10;
   state.boardConfidence = clamp(state.boardConfidence + confDelta, 0, 100);
   if (state.boardConfidence <= 0) {
@@ -4223,6 +5085,43 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     events.push('📉 The board is running out of patience. Results, now.');
   }
 
+  /* ----- Round 135: settling up with the microphone ----- */
+  if (state.press) {
+    const press = state.press;
+    // A promise made out loud is a promise the whole country heard.
+    if (press.promised) {
+      if (won) {
+        state.boardConfidence = clamp(state.boardConfidence + 2.5, 0, 100);
+        press.mood = clamp(press.mood + 6, 0, 100);
+        state.squad = state.squad.map(p => ({ ...p, morale: clamp(p.morale + 1.5, 5, 99) }));
+        events.push('\u{1F4F0} You said you would win it and you won it. That will be everywhere in the morning.');
+      } else {
+        state.boardConfidence = clamp(state.boardConfidence - 4, 0, 100);
+        press.mood = clamp(press.mood - 9, 0, 100);
+        state.squad = state.squad.map(p => ({ ...p, morale: clamp(p.morale - 2, 5, 99) }));
+        events.push('\u{1F4F0} You told the country you would win this one. They have not forgotten and neither has the board.');
+      }
+      press.promised = false;
+    }
+    noteTone(state, preTone);
+    noteTone(state, halfTone);
+    press.nextFire = 0;
+    press.nextSharpen = 0;
+    /* The news cycle. Nothing stays a story for long, so the mood drifts back
+       toward nobody having an opinion, which stops one good week or one bad one
+       from following you around for a decade. */
+    press.mood += (50 - press.mood) * 0.06;
+    press.mood = clamp(Math.round(press.mood * 10) / 10, 0, 100);
+    if (press.mood <= 18 && Math.random() < 0.3) {
+      state.aiHeadlines = [
+        `\u{1F5DE}️ The back pages have made their mind up about you. "${state.clubName} need a new manager" is on three of them.`,
+        ...state.aiHeadlines,
+      ].slice(0, 8);
+    }
+  }
+  // The talk only ever covered the match it was given for.
+  state.teamTalk = null;
+
   tickWeek(state, new Set(xi.map(p => p.id)));
   // Round 71: playing a match shuts the window; live deals and bids die with
   // it (the negotiation table clears, sellers forget grudges by January).
@@ -4230,6 +5129,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   state.negotiation = null;
   state.incomingBids = [];
   state.coldNames = [];
+  // Round 135: and the room fills up again, once there is something to ask.
+  maybeAskPress(state);
 
   const iAmHome = fx.home !== false; // neutral finals list us first
   return {
@@ -4787,6 +5688,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID): C
   ensureContracts(state);
   ensureAcademy(state);
   ensureRoles(state);
+  ensurePress(state);
   state.wageCap = wageCapFrom(wageBill(state));
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length);
   state.cupBracket = buildCupBracket(state);
@@ -4814,6 +5716,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   ensureRoles(state);
   // Round 132: and a save made before the world had a clock gets put on one.
   ensureClock(state);
+  // Round 135: and one from before the press room existed gets one of those.
+  ensurePress(state);
   while (state.week < state.calendar.length) {
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
@@ -4821,6 +5725,9 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       tickWeek(state, null);
       state.transferWindow = 'january';
       generateHeadlines(state);
+      // Round 135: a January window is exactly when somebody gets asked whether
+      // his best player is going anywhere.
+      maybeAskPress(state);
       return { state, kind: 'window' };
     }
     if (!entryInvolvesMe(state, entry) || !fixtureFor(state, entry)) {
@@ -4879,8 +5786,12 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
 function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
   const fx = fixtureFor(state, entry)!;
   const xi = effectiveXI(state);
-  const mine = myMatchStrength(state, xi);
-  const oppS = strengthOf(state, fx.opponent);
+  /* Round 135: whatever you said before kick off, and whatever you said into a
+     microphone this week, is on the pitch with them for the first half. */
+  const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
+  const press = state.press;
+  const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);
+  const oppS = strengthOf(state, fx.opponent) + (press?.nextFire ?? 0);
   const ment = MENT_MOD[state.mentality] ?? MENT_MOD.balanced;
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
@@ -4899,7 +5810,23 @@ function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
     compLabel: fx.compLabel,
     home: fx.home,
     read: halftimeRead(state, xi, myGoals, oppGoals, mine, oppS),
+    talk: null,
   };
+}
+
+/**
+ * Round 135: the rating points a pre match talk is worth to this XI, against
+ * this opponent, this week. Zero when nothing was said, which is what keeps the
+ * untouched engine untouched.
+ */
+function talkEdgeFor(
+  state: CareerState, xi: CMPlayer[], fx: MyFixture, tone: TalkTone | null,
+): number {
+  if (!tone) return 0;
+  const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
+  const edge = myMatchStrength(state, xi) + venue - strengthOf(state, fx.opponent);
+  const target = preMatchTarget(edge, xiMood(state, xi), state.form);
+  return talkWeight(state, tone, target) * TALK_EDGE;
 }
 
 /** What the first half looked like, in the language a manager would use. */
@@ -5454,6 +6381,21 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   }
   ensureRoles(state);
   ensureClock(state);
+  ensurePress(state);
+  /* Round 135: a reputation follows you, so the press mood carries over the
+     summer rather than resetting, but it fades most of the way back toward
+     nobody having an opinion because last season is last season. A manager who
+     changes club walks in with a clean slate at his new one. */
+  if (state.press) {
+    const carried = moving ? 50 : 50 + (pressOf(career).mood - 50) * 0.4;
+    state.press = {
+      ...state.press,
+      mood: clamp(Math.round(carried * 10) / 10, 0, 100),
+      pending: null, lastWeek: -PRESS_GAP, nextFire: 0, nextSharpen: 0,
+      promised: false, lastTone: null, toneRun: 0, lastLine: undefined,
+    };
+  }
+  state.teamTalk = null;
   // Round 116: intake day. What comes up is whatever your academy earned.
   const intakeNews = runYouthIntake(state);
   state.wageCap = wageCapFrom(wageBill(state));
@@ -5537,6 +6479,9 @@ export function loadCareer(): CareerState | null {
        real half played save built on the committed pre Round 127 engine into a
        browser, which is the only way anybody would ever have seen it. */
     ensureRoles(parsed);
+    /* Round 135: and the press room, for exactly the same reason. The hub tile
+       and the press screen both read it before a ball is kicked. */
+    ensurePress(parsed);
     /* Round 132: same reason, same place. A save from before the clock existed
        has no start year, and the squad screen, the transfer screen and the hub
        all read the world year now, so it has to be right before any of them

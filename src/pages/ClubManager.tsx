@@ -11,7 +11,7 @@ import {
   NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
-  worldSeasonLabel,
+  worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
 } from '@/lib/clubManager';
 import type { NationDef, ObjectiveStatus, CupRound } from '@/lib/clubManager';
 import { eraRealShareLabel, eraHonestyLine } from '@/lib/clubManagerEras';
@@ -37,6 +37,8 @@ import { MatchReportCard } from '@/components/club-manager/MatchReportCard';
 import { AcademyScreen } from '@/components/club-manager/AcademyScreen';
 import { TrainingScreen } from '@/components/club-manager/TrainingScreen';
 import { RolesScreen } from '@/components/club-manager/RolesScreen';
+import { PressScreen } from '@/components/club-manager/PressScreen';
+import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
@@ -74,7 +76,7 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -130,6 +132,12 @@ const ClubManager = () => {
     () => (g.career ? g.career.squad.filter(p => p.wantsOut) : []),
     [g.career],
   );
+  // Round 135: the press room and the team talk.
+  const press = g.career ? pressOf(g.career) : null;
+  const matchRead = useMemo(
+    () => (g.career && !g.career.live ? preMatchRead(g.career) : null),
+    [g.career],
+  );
 
   const shell = (inner: ReactNode) => (
     <>
@@ -149,6 +157,7 @@ const ClubManager = () => {
               <p>📅 <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>: the actual Premier League, La Liga, Serie A, Bundesliga or Ligue 1 clubs, plus the domestic cup and the Champions League if you qualify.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
               <p>🤝 <span className="font-semibold text-foreground">Tell every player what he is</span>: star man, key first teamer, rotation option, backup or one for the future. Each rung is a promise about minutes, and the dressing room keeps score over your last ten matches. Keep your word and they play for you. Break it and they sulk, drag the room down and hand in transfer requests. You can buy your way out of a promise, but it costs six weeks of his wages a rung.</p>
+              <p>🎙️ <span className="font-semibold text-foreground">Front up to the press, and talk to your players.</span> The reporters only turn up when something has happened: a losing run, a man you have stopped picking, a club circling one of your stars, a derby, or the bookmakers making you favourite for the sack. Every answer spends one thing to buy another, so backing your players costs you with the board and calling them out costs you the dressing room, and talking big before a derby puts your words on the other lot's wall. Before every match and again at half time you pick a tone: calm them, fire them up, demand more, or the hairdryer. Read the afternoon right and they play above themselves. Read it wrong and you lose them, and the wrong one hurts more than the right one helps.</p>
               <p>💰 <span className="font-semibold text-foreground">Buy and sell in the summer and January windows.</span> Nearly 2,000 real players are on the market at their real values. Stay under budget and keep at least 14 players.</p>
               <p>📉 <span className="font-semibold text-foreground">Watch the board confidence meter.</span> Fall too far below expectations and you're sacked. Overachieve and bigger clubs come calling, from any of the five leagues.</p>
               <p>🏆 <span className="font-semibold text-foreground">Season score</span> = league points + 10 per trophy (max 130). Careers span multiple seasons; your save is kept on this device.</p>
@@ -166,6 +175,7 @@ const ClubManager = () => {
             'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
             'Set your formation, mentality and XI, then play through the full season week by week.',
             'Work the market: negotiate fees, pay release clauses, take loans, and field bids for your own stars.',
+            'Handle the press when they come for you, and pick your team talk before kick off and again at half time.',
             'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
           ]}
         />
@@ -468,6 +478,7 @@ const ClubManager = () => {
           career={g.career}
           onSub={g.subAtHalftime}
           onShape={g.shapeAtHalftime}
+          onTalk={g.halftimeTalk}
           onSecondHalf={g.secondHalf}
         />
       </div>
@@ -746,6 +757,20 @@ const ClubManager = () => {
                 <div className="text-[10px] text-muted-foreground mt-0.5">
                   {fx.home === null ? 'Neutral venue' : fx.home ? 'Home' : 'Away'} · their strength ~{fx.oppStrength} · your XI avg {xiAverageRating(c)}
                 </div>
+                {/* Round 135: what you say to them before they go out, right here
+                    and not behind a tile. It is one tap and it has to leave the
+                    Play Match button under your thumb, because a manager gives a
+                    team talk fifty times a season and anything longer than that
+                    stops being a decision and becomes a toll gate. */}
+                <div className="mt-3">
+                  <TeamTalkRow
+                    tone={c.teamTalk ?? null}
+                    onTone={g.talk}
+                    read={matchRead}
+                    when="before kick off"
+                    stale={!!press && press.lastTone === c.teamTalk && press.toneRun >= 3}
+                  />
+                </div>
                 <button
                   onClick={g.play}
                   className="mt-3 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold text-lg hover:opacity-90 transition-opacity"
@@ -832,6 +857,14 @@ const ClubManager = () => {
                 value={rivalName ?? 'Scout clubs'}
                 sub={rivalName && rivalIdx >= 0 ? `They sit #${rivalIdx + 1}` : 'Tap any club in the table'}
                 onClick={rivalName ? () => setClubView(rivalName) : () => g.setActiveTab('table')}
+              />
+              {/* Round 135: the microphone. Accented when somebody actually
+                  wants a word, which is nothing like every week. */}
+              <HubTile
+                icon="🎙️" title="Press room" accent={!!press?.pending}
+                value={pressHeadline(c)}
+                sub={press?.pending ? 'One question, one tap' : `${press?.answered ?? 0} fronted up this career`}
+                onClick={() => setHubPanel('press')}
               />
               {/* Round 127: what you told each of them he was, and whether you
                   have kept your word. */}
@@ -923,6 +956,10 @@ const ClubManager = () => {
               {hubPanel === 'training' && <TrainingScreen career={c} onSetPlan={g.setTraining} />}
 
               {hubPanel === 'roles' && <RolesScreen career={c} onSetRole={g.setRole} />}
+
+              {hubPanel === 'press' && (
+                <PressScreen career={c} onAnswer={g.sayIt} onDuck={g.sendAssistant} />
+              )}
 
               {hubPanel === 'treatment' && (
                 <div className="bg-card border border-border rounded-xl p-3">

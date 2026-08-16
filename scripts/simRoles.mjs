@@ -295,7 +295,7 @@ console.log('5) Two managers, the same rotation, one of them keeps his word');
     // These two gaps are enormous and never flap, so they carry the assertions.
     if (h.mor <= b.mor + 10) fail(`${club}: over-promising costs only ${(h.mor - b.mor).toFixed(1)} squad morale`);
     if (h.req >= b.req * 0.5) fail(`${club}: over-promising produced ${b.req.toFixed(2)} transfer requests against ${h.req.toFixed(2)}, which is not a cost`);
-    if (h.req > 4) fail(`${club}: a manager who keeps his word still gets ${h.req.toFixed(2)} transfer requests a season, which is the FC 26 complaint`);
+    if (h.req > 4) fail(`${club}: a manager who keeps his word still gets ${h.req.toFixed(2)} transfer requests a season, which is the complaint players make about the big licensed career mode`);
 
   }
 
