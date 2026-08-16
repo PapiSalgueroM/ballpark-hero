@@ -30,8 +30,23 @@ import {
   phoneStanding, standingLabel, relLabel, unreadThreads,
 } from "@/lib/soccerPhone";
 import type { PhoneThread } from "@/lib/soccerPhone";
+/* Round 134: the phone is where you live now. The bank got a savings account
+   and a statement, the market arrived beside it, My Life moved off the season
+   page and into a tile, and two small things your player does on his own phone
+   sit next to them. All of those screens live in MoneyScreens so this file
+   stays a home screen and a router. */
+import {
+  BankScreen, MarketScreen, AssetScreen, ShopScreen, ShopCategoryScreen,
+  ArcadeScreen, CardsScreen,
+} from "@/components/soccer-career/MoneyScreens";
+import type { MoneyAction } from "@/lib/soccerMoney";
+import { moneyWealth } from "@/lib/soccerMoney";
+import type { SpendingCategory } from "@/lib/soccerCareerEngine";
 
-type AppId = "home" | "messages" | "thread" | "contacts" | "contact" | "news" | "bank" | "social" | "player" | "life";
+type AppId =
+  | "home" | "messages" | "thread" | "contacts" | "contact" | "news"
+  | "bank" | "social" | "player" | "life"
+  | "market" | "asset" | "shop" | "shopcat" | "arcade" | "cards";
 
 const fmtFollowers = (m: number) => m >= 1 ? `${m.toFixed(1)}M` : `${Math.round(m * 1000)}K`;
 const fmtMoney = (m: number) => {
@@ -57,14 +72,20 @@ function AppHeader({ title, backLabel, onBack }: { title: string; backLabel: str
   );
 }
 
-export default function PhonePanel({ career, onAnswer, onClose }: {
+export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClose }: {
   career: CareerState;
   onAnswer: (msgId: string, choiceIdx: number) => void;
+  /** Round 134: every money tap, on one prop, the same way every message tap
+   *  rides on onAnswer. */
+  onMoney: (action: MoneyAction) => void;
+  onBuyItem: (itemId: string) => void;
   onClose: () => void;
 }) {
   const [app, setApp] = useState<AppId>("home");
   const [openThread, setOpenThread] = useState<string | null>(null);
   const [openContact, setOpenContact] = useState<string | null>(null);
+  const [openAsset, setOpenAsset] = useState<string | null>(null);
+  const [openCat, setOpenCat] = useState<SpendingCategory | null>(null);
   const karma = karmaOf(career);
   const kt = karmaTier(karma);
   const phase: "youth" | "pro" = career.phase === "youth" ? "youth" : "pro";
@@ -83,11 +104,18 @@ export default function PhonePanel({ career, onAnswer, onClose }: {
     [career, phase],
   );
 
+  /* Tile rule: small tiles, each one opening its own screen with a back
+     button. Eleven of them fit on the handset at 390 wide without the home
+     screen becoming a page you scroll, which is the whole point of tiles. */
   const APPS: { id: AppId; label: string; emoji: string; badge?: number }[] = [
     { id: "messages", label: "Messages", emoji: "💬", badge: waiting },
     { id: "contacts", label: "Contacts", emoji: "👥" },
     { id: "news", label: "SportsFeed", emoji: "📰" },
     { id: "bank", label: "Bank", emoji: "🏦" },
+    { id: "market", label: "Market", emoji: "📈" },
+    { id: "shop", label: "My Life", emoji: "🛒" },
+    { id: "arcade", label: "Ball Quiz", emoji: "🎮" },
+    { id: "cards", label: "Cards", emoji: "🃏" },
     { id: "social", label: "SocialGram", emoji: "📸" },
     { id: "player", label: "My Player", emoji: "⭐" },
     { id: "life", label: "Life", emoji: kt.emoji },
@@ -127,25 +155,28 @@ export default function PhonePanel({ career, onAnswer, onClose }: {
         {/* screen */}
         <div className="flex-1 min-h-0 flex flex-col">
           {app === "home" && (
-            <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ background: `linear-gradient(160deg, ${clubColor}33, transparent 55%)` }}>
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-3 text-center">
-                <div className="text-2xl font-black">{career.playerName}</div>
+            <div className="flex-1 overflow-y-auto p-3.5 space-y-3" style={{ background: `linear-gradient(160deg, ${clubColor}33, transparent 55%)` }}>
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-2.5 text-center">
+                <div className="text-xl font-black leading-tight">{career.playerName}</div>
                 <div className="text-[11px] text-white/60">{career.currentClub} · OVR {career.overall}</div>
+                <div className="text-[10px] text-emerald-300 font-bold pt-0.5">
+                  {fmtMoney(career.netWorth + moneyWealth(career))} to your name
+                </div>
               </div>
-              <div className="grid grid-cols-3 gap-3 pt-1">
+              <div className="grid grid-cols-3 gap-2.5">
                 {APPS.map(a => (
-                  <button key={a.id} onClick={() => setApp(a.id)} className="relative flex flex-col items-center gap-1 group">
-                    <div className="w-16 h-16 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-3xl group-hover:bg-white/20 transition-colors">
+                  <button key={a.id} onClick={() => setApp(a.id)} className="relative flex flex-col items-center gap-0.5 group">
+                    <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-2xl group-hover:bg-white/20 transition-colors">
                       {a.emoji}
                     </div>
                     {a.badge ? (
-                      <span className="absolute -top-1 right-1 min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black flex items-center justify-center">{a.badge}</span>
+                      <span className="absolute -top-1 right-2 min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black flex items-center justify-center">{a.badge}</span>
                     ) : null}
-                    <span className="text-[10px] font-bold text-white/80">{a.label}</span>
+                    <span className="text-[9.5px] font-bold text-white/80">{a.label}</span>
                   </button>
                 ))}
               </div>
-              <p className="text-center text-[10px] text-white/40 pt-2">Keep in touch and people look after you. Go quiet and they notice.</p>
+              <p className="text-center text-[9.5px] text-white/40">Keep in touch and people look after you. Money you leave sitting still does nothing.</p>
             </div>
           )}
 
@@ -265,22 +296,37 @@ export default function PhonePanel({ career, onAnswer, onClose }: {
           )}
 
           {app === "bank" && (
-            <>
-              <AppHeader title="🏦 Bank" backLabel="Home" onBack={() => setApp("home")} />
-              <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                <div className="rounded-2xl border border-white/10 p-4 text-center" style={{ background: `linear-gradient(135deg, ${clubColor}44, transparent)` }}>
-                  <div className="text-[10px] uppercase tracking-widest text-white/50 font-bold">Net worth</div>
-                  <div className="text-3xl font-black">{fmtMoney(career.netWorth)}</div>
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-center">
-                  <div className="rounded-xl bg-white/5 p-2.5"><div className="text-sm font-black">£{career.weeklyWage.toLocaleString()}</div><div className="text-[9px] text-white/50">per week</div></div>
-                  <div className="rounded-xl bg-white/5 p-2.5"><div className="text-sm font-black">{fmtMoney(career.totalEarnings)}</div><div className="text-[9px] text-white/50">career earnings</div></div>
-                  <div className="rounded-xl bg-white/5 p-2.5"><div className="text-sm font-black">{fmtMoney(career.sponsorshipIncome)}</div><div className="text-[9px] text-white/50">sponsors / yr</div></div>
-                  <div className="rounded-xl bg-white/5 p-2.5"><div className="text-sm font-black">{career.properties.length + career.investments.length}</div><div className="text-[9px] text-white/50">assets owned</div></div>
-                </div>
-                <p className="text-[10px] text-white/40 text-center">Spending and investing live in the season menus, this is just your statement.</p>
-              </div>
-            </>
+            <BankScreen career={career} onBack={() => setApp("home")} onMoney={onMoney} />
+          )}
+
+          {app === "market" && (
+            <MarketScreen
+              career={career}
+              onBack={() => setApp("home")}
+              onOpen={id => { setOpenAsset(id); setApp("asset"); }}
+            />
+          )}
+          {app === "asset" && openAsset && (
+            <AssetScreen career={career} assetId={openAsset} onBack={() => setApp("market")} onMoney={onMoney} />
+          )}
+
+          {app === "shop" && (
+            <ShopScreen
+              career={career}
+              onBack={() => setApp("home")}
+              onOpen={cat => { setOpenCat(cat); setApp("shopcat"); }}
+            />
+          )}
+          {app === "shopcat" && openCat && (
+            <ShopCategoryScreen career={career} cat={openCat} onBack={() => setApp("shop")} onBuy={onBuyItem} />
+          )}
+
+          {app === "arcade" && (
+            <ArcadeScreen career={career} onBack={() => setApp("home")} onMoney={onMoney} />
+          )}
+
+          {app === "cards" && (
+            <CardsScreen career={career} onBack={() => setApp("home")} onMoney={onMoney} />
           )}
 
           {app === "social" && (

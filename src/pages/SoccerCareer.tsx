@@ -44,7 +44,10 @@ import {
   answerPhoneText, unreadPhoneCount,
   applyTrainingResult, trainingAvailable, type TrainingDrill,
   repairCareer, effectivePotential, careerBuildEffects,
+  applyMoneyAction,
 } from "@/lib/soccerCareerEngine";
+import type { MoneyAction } from "@/lib/soccerMoney";
+import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
 import TrainingPanel from "@/components/soccer-career/TrainingPanel";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
@@ -799,12 +802,30 @@ export default function SoccerCareer() {
     if (!career) return;
     const result = purchaseSpendingItem(career, itemId);
     if (result !== career) {
+      const item = SPENDING_ITEMS.find(i => i.id === itemId);
       setCareer(result);
-      toast.success("Purchase complete!");
+      toast.success(item ? `${item.emoji} ${item.name} is yours` : "Done");
     } else {
-      toast.error("Can't purchase this item right now");
+      toast.error("You cannot buy that right now");
     }
   };
+
+  /* Round 134: every money tap on the phone, on one handler. The engine runs
+     the action once and hands back both the new state and the line to show,
+     because asking twice would burn two draws of the money random stream and
+     a hand of cards would be decided on a roll nobody ever saw. */
+  const handleMoney = useCallback((action: MoneyAction) => {
+    setCareer(prev => {
+      if (!prev) return prev;
+      const res = applyMoneyAction(prev, action);
+      if (res.state === prev) {
+        toast.error("That one will not go through");
+        return prev;
+      }
+      if (res.toast) toast.success(res.toast);
+      return res.state;
+    });
+  }, []);
 
   const handleSocialMediaAction = (actionId: string) => {
     if (!career) return;
@@ -959,7 +980,7 @@ export default function SoccerCareer() {
               onEndManager={handleEndManager}
               onShare={handleShare}
               onNewCareer={handleNewCareer}
-              onPurchase={handlePurchase}
+              onOpenPhone={() => setPhoneOpen(true)}
               onSocialMediaAction={handleSocialMediaAction}
               onCoverAthlete={handleCoverAthlete}
               onDismissSocialMedia={handleDismissSocialMedia}
@@ -1013,7 +1034,13 @@ export default function SoccerCareer() {
               )}
             </button>
             {phoneOpen && (
-              <PhonePanel career={career} onAnswer={handlePhoneAnswer} onClose={() => setPhoneOpen(false)} />
+              <PhonePanel
+                career={career}
+                onAnswer={handlePhoneAnswer}
+                onMoney={handleMoney}
+                onBuyItem={handlePurchase}
+                onClose={() => setPhoneOpen(false)}
+              />
             )}
             {trainingOpen && (
               <TrainingPanel
@@ -2657,137 +2684,48 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
   );
 }
 
-/* ─── My Life Panel, Spending & Lifestyle ─── */
-function MyLifePanel({ career, onPurchase }: { career: CareerState; onPurchase: (id: string) => void }) {
-  const [activeTab, setActiveTab] = useState<SpendingCategory>("property");
-  const categories: { key: SpendingCategory; label: string; emoji: string }[] = [
-    { key: "property", label: "Property", emoji: "🏠" },
-    { key: "vehicle", label: "Vehicles", emoji: "🏎️" },
-    { key: "investment", label: "Invest", emoji: "📈" },
-    { key: "lifestyle", label: "Lifestyle", emoji: "✨" },
-    { key: "performance", label: "Performance", emoji: "⚡" },
-    // Round 54: three new aisles of the shop
-    { key: "flex", label: "Flex", emoji: "💎" },
-    { key: "family", label: "Family", emoji: "❤️" },
-    { key: "shady", label: "Shady", emoji: "🕶️" },
-  ];
-
-  // The shady aisle only exists once you have actually done something shady.
-  const visibleCategories = categories.filter(c =>
-    c.key !== "shady" || (career.corruptionHeat ?? 0) > 0 || (career.dirtyMoney ?? 0) > 0
-  );
-
-  const items = SPENDING_ITEMS.filter(i => i.category === activeTab);
-  const owned = career.purchasedItems || [];
-  const totalAssets = career.totalAssetValue || 0;
-  const monthlyCosts = career.customYearlyCosts || 0;
-
+/* ─── Round 134: the door to the money ───
+   What used to sit here was the whole shop: eight tabs, a hundred and ten
+   rows, and a scroll a mile long in the middle of the season page. It is a
+   phone app now. What is left is one card that tells you what you are worth
+   and opens the phone, because the tile rule says a page is a set of doors and
+   not a warehouse. */
+function MoneyDoor({ career, onOpenPhone }: { career: CareerState; onOpenPhone: () => void }) {
+  const bank = bankSummary(career);
+  const owned = (career.purchasedItems ?? []).length;
   return (
     <div className="bg-card border border-border rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">🏠 My Life</span>
-        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-          <span>Assets: <strong className="text-emerald-400">{formatNetWorth(totalAssets)}</strong></span>
-          {monthlyCosts > 0 && <span>· Costs: <strong className="text-red-400">€{(monthlyCosts * 1000).toFixed(0)}k/yr</strong></span>}
+        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">🏠 My Life & Money</span>
+        <span className="text-[10px] text-muted-foreground">{owned} things owned</span>
+      </div>
+      <div className="grid grid-cols-3 gap-2 text-center">
+        <div className="bg-muted/20 rounded-lg p-2">
+          <div className="text-sm font-black">{formatNetWorth(bank.cash)}</div>
+          <div className="text-[9px] text-muted-foreground">in the account</div>
+        </div>
+        <div className="bg-muted/20 rounded-lg p-2">
+          <div className="text-sm font-black text-emerald-400">{formatNetWorth(bank.vault)}</div>
+          <div className="text-[9px] text-muted-foreground">savings</div>
+        </div>
+        <div className="bg-muted/20 rounded-lg p-2">
+          <div className="text-sm font-black text-blue-400">{formatNetWorth(bank.invested)}</div>
+          <div className="text-[9px] text-muted-foreground">invested</div>
         </div>
       </div>
-
-      {/* Category tabs */}
-      <div className="grid grid-cols-4 gap-1">
-        {visibleCategories.map(c => (
-          <button
-            key={c.key}
-            onClick={() => setActiveTab(c.key)}
-            className={`text-[10px] sm:text-xs font-bold py-1.5 rounded-lg transition-all ${
-              activeTab === c.key
-                ? c.key === "shady"
-                  ? "bg-red-500/20 text-red-400 border border-red-500/30"
-                  : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                : "bg-muted/20 text-muted-foreground hover:bg-muted/40"
-            }`}
-          >
-            {c.emoji} {c.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Items */}
-      <div className="space-y-2">
-        {items.map(item => {
-          const isOwned = item.oneTime && owned.includes(item.id);
-          const canAfford = item.cost === 0 || career.netWorth >= item.cost * 0.5;
-          const meetsMin = !item.minNetWorth || career.netWorth >= item.minNetWorth;
-          // Round 54 gates, mirrored from purchaseSpendingItem so the button
-          // never lies about what it will do
-          const meetsFame = !item.minPopularity || career.popularity >= item.minPopularity;
-          const meetsDirty = !item.requiresDirty || (career.dirtyMoney ?? 0) > 0;
-          const disabled = isOwned || !canAfford || !meetsMin || !meetsFame || !meetsDirty;
-          const lockNote = !meetsFame
-            ? `Needs ${item.minPopularity} popularity`
-            : !meetsDirty
-              ? "Needs untraceable money to move"
-              : !meetsMin
-                ? `Needs ${formatNetWorth(item.minNetWorth || 0)} net worth`
-                : null;
-
-          return (
-            <div key={item.id} className={`rounded-lg border p-3 transition-all ${
-              isOwned ? "border-emerald-500/30 bg-emerald-500/5" :
-              disabled ? "border-border/50 bg-muted/10 opacity-50" :
-              "border-border bg-muted/20 hover:border-emerald-500/30"
-            }`}>
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-sm">{item.emoji}</span>
-                    <span className="text-xs font-bold truncate">{item.name}</span>
-                    {isOwned && <span className="text-[9px] px-1 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold">OWNED</span>}
-                  </div>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">{item.description}</p>
-                  {item.effect && <p className="text-[10px] text-amber-400 mt-0.5">⚡ {item.effect}</p>}
-                  {!isOwned && lockNote && <p className="text-[10px] text-red-400/80 mt-0.5">🔒 {lockNote}</p>}
-                </div>
-                {!isOwned && (
-                  <button
-                    onClick={() => onPurchase(item.id)}
-                    disabled={disabled}
-                    className={`shrink-0 text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all ${
-                      disabled
-                        ? "bg-muted/30 text-muted-foreground cursor-not-allowed"
-                        : "bg-emerald-600 hover:bg-emerald-500 text-white active:scale-95"
-                    }`}
-                  >
-                    {item.cost > 0 ? (item.cost >= 1 ? `€${item.cost.toFixed(0)}M` : `€${Math.round(item.cost * 1000)}k`) : "Hire"}
-                  </button>
-                )}
-              </div>
-              {item.monthlyCost && item.monthlyCost > 0 && !isOwned && (
-                <div className="text-[9px] text-muted-foreground mt-1">
-                  + €{(item.monthlyCost * 1000).toFixed(0)}k/year ongoing
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Owned items summary */}
-      {owned.length > 0 && (
-        <div className="border-t border-border pt-2">
-          <div className="text-[10px] text-muted-foreground font-bold mb-1">Owned ({owned.length})</div>
-          <div className="flex flex-wrap gap-1">
-            {owned.map((id, i) => {
-              const item = SPENDING_ITEMS.find(si => si.id === id);
-              if (!item) return null;
-              return (
-                <span key={`${id}_${i}`} className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400">
-                  {item.emoji} {item.name}
-                </span>
-              );
-            })}
-          </div>
-        </div>
-      )}
+      <button
+        type="button"
+        onClick={onOpenPhone}
+        className="w-full flex items-center justify-between rounded-lg border border-border bg-muted/20 px-3 py-2.5 text-left active:scale-[0.99] transition-transform"
+      >
+        <span className="min-w-0">
+          <span className="block text-xs font-bold">Open your phone</span>
+          <span className="block text-[10px] text-muted-foreground truncate">
+            Bank, market, everything you can buy, and the card school
+          </span>
+        </span>
+        <ChevronRight className="w-4 h-4 shrink-0 opacity-60" />
+      </button>
     </div>
   );
 }
@@ -3006,7 +2944,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -3031,7 +2969,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onEndManager: () => void;
   onShare: () => void;
   onNewCareer: () => void;
-  onPurchase: (itemId: string) => void;
+  onOpenPhone: () => void;
   onSocialMediaAction: (actionId: string) => void;
   onCoverAthlete: (accept: boolean) => void;
   onDismissSocialMedia: () => void;
@@ -3474,9 +3412,13 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <FinancialPanel career={career} />
           )}
 
-          {/* My Life, Spending & Lifestyle */}
+          {/* Round 134: My Life used to be a wall of eight tabs and a hundred
+              and ten rows sitting in the middle of the season page. His note
+              was "all those options that appear on your my life should be on ur
+              phone instead", so it is a phone app now, and what is left here is
+              a door to it. */}
           {(career.phase === "playing") && (
-            <MyLifePanel career={career} onPurchase={onPurchase} />
+            <MoneyDoor career={career} onOpenPhone={onOpenPhone} />
           )}
 
           {/* Stats. Round 131: six family bars on the page and the whole tree

@@ -15,6 +15,15 @@ import {
   worldSeasonTick, worldClubOf, phoneAppsSwing, takePhoneOffers, unreadThreads,
 } from "./soccerPhone";
 import type { PhoneState, WorldSeason } from "./soccerPhone";
+/* Round 134: money stops being a number that only goes up. A savings account,
+   a market of five things whose prices move every season whether you are
+   watching or not, a statement with a limit on it, and the two small things
+   his player does on his own phone. Same shape as the phone: its own random
+   stream, its own bounded slice of the save, repaired lazily. */
+import {
+  ensureMoney, moneySeasonTick, moneyWealth, moneyAct,
+} from "./soccerMoney";
+import type { MoneyAction, MoneyState } from "./soccerMoney";
 import { managerProfileFromCareer } from './soccerCareerToManager';
 import { realJobOffers } from './managerJobMarket';
 import { managerStanding } from './managerOffers';
@@ -373,6 +382,27 @@ export interface SpendingItem {
   heatChange?: number;      // corruption heat delta (shady items run hot)
   minPopularity?: number;   // some purchases need fame, not just money
   requiresDirty?: boolean;  // only appears once you have dirty money to move
+  /** Round 134 generic per season effects, applied every season for as long as
+      you own the thing. This is the difference between a purchase that changes
+      the game and a purchase that is a receipt. Applied in one place, in
+      applyPerSeasonItems, so a new item never needs engine surgery.
+      Deliberately small numbers: every one of these compounds over a career. */
+  perSeason?: {
+    morale?: number;
+    popularity?: number;
+    /** Added to statBoostNextSeason, so it lands with next season's growth.
+        "main" means whichever stat this player's position actually lives on,
+        so a keeper's own pitch improves his handling and not his finishing. */
+    stat?: "pace" | "shooting" | "passing" | "dribbling" | "defending" | "physical" | "reflexes" | "main";
+    statAmount?: number;
+    /** Legacy credit, the same currency the charity items already pay in. */
+    integrity?: number;
+  };
+  /** Multiplies sponsorship income while owned. Total across everything owned
+      is capped in sponsorItemMult, so stacking agents is not a strategy. */
+  sponsorMult?: number;
+  /** Subtracted from the season injury chance while owned. */
+  injuryDrop?: number;
 }
 
 export interface InvestmentHolding {
@@ -489,6 +519,35 @@ export const SPENDING_ITEMS: SpendingItem[] = [
   { id: "inv_burger_franchise", name: "Burger Franchise", emoji: "🍔", category: "investment", cost: 1.5, description: "Your celebration is on the cups. 55% chance 2x, else break even", oneTime: true, minNetWorth: 3 },
   { id: "inv_womens_club", name: "Fund A Women's Team", emoji: "⚽", category: "investment", cost: 3, description: "Build the women's side of a club properly. Steady 6% and huge respect", oneTime: true, minNetWorth: 6, popularityBoost: 5, effect: "+5 Popularity" },
   { id: "inv_stadium_naming", name: "Stadium Naming Rights", emoji: "🏟️", category: "investment", cost: 15, description: "A real stadium, your name on it, 10 years. Steady 5% a year", oneTime: true, minNetWorth: 25, popularityBoost: 6, effect: "+6 Popularity" },
+  /* ── Round 134: money that buys you something rather than a receipt ──
+     His note was "there should be a lot more things u can do with ur money",
+     and the half of that sentence that matters is what the money DOES. Every
+     item below changes a number every season for as long as you own it: where
+     you live, what you drive, who works for you and what you give away. The
+     numbers are small because they compound over fifteen seasons, and a few of
+     them cost you something as well as paying you, because a house nobody can
+     find is worse for your fame and better for your head. */
+  // Where you live
+  { id: "home_by_training", name: "House By The Training Ground", emoji: "🏘️", category: "property", cost: 2.5, description: "Ten minutes door to door, €2.5M", oneTime: true, minNetWorth: 2, perSeason: { morale: 2 }, injuryDrop: 0.005, effect: "+2 Morale every season, and you turn up warm" },
+  { id: "home_gym", name: "Gym In The Basement", emoji: "🏋️‍♂️", category: "property", cost: 1.2, description: "Plates, bikes, a physio bed, €1.2M", oneTime: true, minNetWorth: 1, perSeason: { stat: "physical", statAmount: 1 }, effect: "+1 Physical every season" },
+  { id: "home_pitch", name: "Full Size Pitch In The Garden", emoji: "🥅", category: "property", cost: 4, description: "Floodlit, and the neighbours have opinions, €4M", oneTime: true, minNetWorth: 6, perSeason: { stat: "main", statAmount: 1 }, effect: "+1 to your main stat every season" },
+  { id: "home_quiet", name: "Quiet Place Out Of Town", emoji: "🌲", category: "property", cost: 3, description: "Nobody knows the postcode, €3M", oneTime: true, minNetWorth: 4, perSeason: { morale: 3, popularity: -1 }, effect: "+3 Morale a season, and the cameras forget you a bit" },
+  // What you drive
+  { id: "driver_car", name: "A Driver And A Quiet Car", emoji: "🚘", category: "vehicle", cost: 0, monthlyCost: 0.12, description: "You stop driving yourself home at 1am, €120k/yr", oneTime: true, perSeason: { morale: 1 }, injuryDrop: 0.003, effect: "+1 Morale a season, you arrive rested" },
+  { id: "classic_car", name: "Restored Classic", emoji: "🚙", category: "vehicle", cost: 0.9, description: "The one off your bedroom wall, rebuilt, €900k", oneTime: true, popularityBoost: 2, perSeason: { morale: 1 }, effect: "+2 Popularity now, +1 Morale a season" },
+  // Who you employ
+  { id: "staff_perf_team", name: "Your Own Performance Team", emoji: "🧪", category: "performance", cost: 6, monthlyCost: 0.4, description: "Four people whose whole job is you, €6M + €400k/yr", oneTime: true, minNetWorth: 10, perSeason: { stat: "main", statAmount: 1, morale: 1 }, effect: "+1 to your main stat and +1 Morale every season" },
+  { id: "staff_analyst", name: "Your Own Analyst", emoji: "💻", category: "performance", cost: 0, monthlyCost: 0.2, description: "Every opponent, clipped and sent to your phone, €200k/yr", oneTime: true, perSeason: { stat: "passing", statAmount: 1 }, effect: "+1 Passing every season" },
+  { id: "staff_physio_call", name: "Private Physio On Call", emoji: "🧊", category: "performance", cost: 0, monthlyCost: 0.25, description: "Answers at midnight, €250k/yr", oneTime: true, minNetWorth: 3, injuryDrop: 0.02, effect: "Meaningfully fewer injuries" },
+  { id: "staff_media", name: "Media Manager", emoji: "🎤", category: "lifestyle", cost: 0, monthlyCost: 0.15, description: "Says no to the wrong things and yes to the right ones, €150k/yr", oneTime: true, sponsorMult: 1.12, perSeason: { popularity: 1 }, effect: "Sponsors pay 12% more, +1 Popularity a season" },
+  { id: "staff_family_cook", name: "Family Cook", emoji: "🍲", category: "family", cost: 0, monthlyCost: 0.06, description: "Everybody eats properly, not just you, €60k/yr", oneTime: true, perSeason: { morale: 1 }, effect: "+1 Morale every season" },
+  { id: "staff_kids_tutor", name: "A Tutor For The Kids", emoji: "📖", category: "family", cost: 0, monthlyCost: 0.09, description: "Six moves in ten years is hard on a school report, €90k/yr", oneTime: true, perSeason: { morale: 1, integrity: 1 }, effect: "+1 Morale a season and it counts toward your legacy" },
+  // What you give away
+  { id: "give_kid_career", name: "Pay For A Kid's Whole Youth Career", emoji: "🧒", category: "family", cost: 0.3, description: "Boots, subs, travel, all of it, until he is sixteen, €300k", oneTime: true, perSeason: { integrity: 2, popularity: 1 }, effect: "Legacy credit every season, quietly" },
+  { id: "give_home_club", name: "Cover The Hometown Club's Season", emoji: "🏟️", category: "family", cost: 0, monthlyCost: 0.25, description: "Kit, pitch, minibus, the lot, €250k/yr", oneTime: true, minNetWorth: 2, perSeason: { integrity: 2, popularity: 2 }, effect: "Legacy and popularity every season you keep paying" },
+  { id: "give_food_bank", name: "Fund The Food Bank Down Your Road", emoji: "🥫", category: "family", cost: 0, monthlyCost: 0.08, description: "The one you walked past every day as a kid, €80k/yr", oneTime: true, perSeason: { integrity: 2, morale: 1 }, effect: "Legacy credit and it helps you sleep" },
+  { id: "give_ward", name: "A Children's Ward, Not Named After You", emoji: "🏥", category: "family", cost: 8, description: "You asked them to leave your name off it, €8M", oneTime: true, minNetWorth: 12, popularityBoost: 6, perSeason: { integrity: 3 }, effect: "+6 Popularity now, big legacy credit every season" },
+  { id: "biz_five_a_side", name: "Five A Side Place Back Home", emoji: "🥅", category: "investment", cost: 1.5, description: "Four pitches and a bad vending machine, €1.5M", oneTime: true, minNetWorth: 2, perSeason: { morale: 1, integrity: 1 }, effect: "A business you actually visit. +1 Morale a season" },
 ];
 
 export function getSpendingItem(id: string): SpendingItem | undefined {
@@ -806,6 +865,33 @@ export function answerPhoneText(prev: CareerState, msgId: string, choiceIdx: num
   if (holder) return answerPhoneText(prev, holder.id, choiceIdx);
   const legacy = answerLegacyText({ ...prev }, msgId, choiceIdx);
   return legacy ?? prev;
+}
+
+/* ─── Round 134: one write path for every money tap on the phone ───
+   Same shape as answerPhoneText above, and for the same reason: the phone is
+   one component with one write prop, and everything it can do to your money
+   goes through here. Buying something in the shop is still the old purchase
+   function, because that catalogue and its gates already exist and splitting
+   them would be two ways to spend one balance. */
+export function applyMoneyAction(
+  prev: CareerState,
+  action: MoneyAction | { t: "buyItem"; id: string },
+): { state: CareerState; toast: string | null } {
+  if (action.t === "buyItem") {
+    const next = purchaseSpendingItem(prev, action.id);
+    if (next === prev) return { state: prev, toast: null };
+    const item = getSpendingItem(action.id);
+    return { state: next, toast: item ? `${item.emoji} ${item.name} is yours` : "Done" };
+  }
+  /* Run once and once only. An earlier version of this asked the question
+     twice, once on a throwaway copy to get the toast text, and that quietly
+     burned two draws of the money random stream on every tap, so a hand of
+     cards was resolved on a roll nobody ever saw. */
+  const s = { ...prev, events: [...prev.events] };
+  const res = moneyAct(s, action);
+  if (!res.ok) return { state: prev, toast: null };
+  if (res.event) s.events.push(res.event);
+  return { state: s, toast: res.toast };
 }
 
 /** The Round 80 karma path, unchanged. Returns null when nothing applied. */
@@ -2060,6 +2146,13 @@ export function repairCareer<T extends CareerState>(state: T): T {
   if (Number.isFinite(start)) s.startingOverall = Math.round(clamp(start, 1, 99));
   else delete s.startingOverall;
   if (typeof s.peakOverall !== "number" || !Number.isFinite(s.peakOverall)) s.peakOverall = s.overall;
+  /* Round 134: the bank, the market and the statement. Written here as well as
+     read lazily by every screen, because Round 127's lesson is that repairing
+     only in the step function fails the moment a player can open a screen
+     first, and the phone's Bank and Market tiles are exactly that screen. A
+     save from before this round arrives with no market at all and comes out of
+     here with every price at par and an empty statement. */
+  (s as CareerState & { money?: MoneyState }).money = ensureMoney(s);
   return state;
 }
 
@@ -2265,14 +2358,17 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
   // Wage income (52 weeks, in millions)
   const wageIncome = (s.weeklyWage * 52) / 1_000_000;
   // Sponsorship income
-  s.sponsorshipIncome = Math.round(calcSponsorshipIncome(s.popularity, s.socialMediaFollowers, s.sponsorDeal, s.activeSponsorship) * personalitySponsorMult(s.personality) * 100) / 100;
+  s.sponsorshipIncome = Math.round(calcSponsorshipIncome(s.popularity, s.socialMediaFollowers, s.sponsorDeal, s.activeSponsorship) * personalitySponsorMult(s.personality) * sponsorItemMult(s) * 100) / 100;
   const grossIncome = wageIncome + s.sponsorshipIncome;
   // Round 49: the agent takes a yearly cut of wage + sponsorship income
   const agentCut = Math.round(grossIncome * agentIncomeCutRate(s.agentId) * 100) / 100;
   if (agentCut > 0) s.agentFeesPaid = Math.round((s.agentFeesPaid + agentCut) * 100) / 100;
   const totalIncome = grossIncome - agentCut;
-  // Lifestyle cost (auto + custom spending)
-  s.lifestyleLevel = calcLifestyleLevel(s.netWorth + (s.totalAssetValue || 0));
+  /* Lifestyle cost (auto + custom spending). Round 134: money parked in the
+     savings account or in the market counts toward the level, because
+     otherwise the cheapest way to live like a monk was to hide everything in
+     a vault and let the game bill you as if you were skint. */
+  s.lifestyleLevel = calcLifestyleLevel(s.netWorth + (s.totalAssetValue || 0) + moneyWealth(s));
   s.lifestyleCostPerYear = calcLifestyleCost(s.lifestyleLevel) + (s.customYearlyCosts || 0);
   // Net
   const netThisYear = totalIncome - s.lifestyleCostPerYear;
@@ -2300,6 +2396,19 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
   if (s.purchasedItems.includes("personal_chef")) {
     s.morale = clamp(s.morale + 2, 0, 100);
   }
+  /* Round 134: the generic per season effects, so a new item that hires
+     somebody or changes where you live applies itself instead of needing
+     another branch in this function. Everything hardcoded above is left where
+     it is on purpose: rewriting it would quietly move numbers that thirty
+     rounds of balance work were measured against. */
+  applyPerSeasonItems(s);
+  /* Round 134: the market has its own season, and it runs here so that the
+     wages and the lifestyle bill have already landed. If the bill has put the
+     balance under water, the tick sells savings and then holdings to cover it,
+     which is the only reason a market in this game can never bankrupt anybody.
+     It carries its own random stream, so nothing in it shifts the world sim. */
+  const moneyTick = moneySeasonTick(s, season.year);
+  for (const line of moneyTick.events) s.events.push(line);
   // Deficit tracking
   if (netThisYear < 0) {
     s.consecutiveDeficitYears += 1;
@@ -2567,6 +2676,55 @@ export function purchaseSpendingItem(prev: CareerState, itemId: string): CareerS
   }
 
   return s;
+}
+
+/* ─── Round 134: the generic per season effects of what you own ───
+   One place, so an item added later changes the game by being written down
+   rather than by somebody remembering to edit four functions. */
+
+const MAIN_STAT_FOR_POS = (pos: string): "shooting" | "passing" | "defending" | "reflexes" =>
+  pos === "GK" ? "reflexes" :
+  ["ST", "LW", "RW", "CAM"].includes(pos) ? "shooting" :
+  ["CM", "CDM"].includes(pos) ? "passing" : "defending";
+
+function applyPerSeasonItems(s: CareerState): void {
+  for (const id of s.purchasedItems ?? []) {
+    const item = getSpendingItem(id);
+    const per = item?.perSeason;
+    if (!per) continue;
+    if (per.morale) s.morale = clamp(s.morale + per.morale, 0, 100);
+    if (per.popularity) s.popularity = clamp(s.popularity + per.popularity, 0, 100);
+    if (per.integrity) s.integrityBonus += per.integrity;
+    if (per.stat && per.statAmount) {
+      const key = per.stat === "main" ? MAIN_STAT_FOR_POS(s.position) : per.stat;
+      s.statBoostNextSeason = {
+        ...s.statBoostNextSeason,
+        [key]: (s.statBoostNextSeason[key] || 0) + per.statAmount,
+      };
+    }
+  }
+}
+
+/** What everything you own does to sponsorship money, capped so that stacking
+ *  people whose job is your image never turns into the whole income. */
+function sponsorItemMult(s: CareerState): number {
+  let mult = 1;
+  for (const id of s.purchasedItems ?? []) {
+    const item = getSpendingItem(id);
+    if (item?.sponsorMult) mult *= item.sponsorMult;
+  }
+  return Math.min(mult, 1.35);
+}
+
+/** Injury chance taken off by what you own. Capped for the same reason. */
+function injuryDropFromItems(s: CareerState | undefined | null): number {
+  if (!s) return 0;
+  let drop = 0;
+  for (const id of s.purchasedItems ?? []) {
+    const item = getSpendingItem(id);
+    if (item?.injuryDrop) drop += item.injuryDrop;
+  }
+  return Math.min(drop, 0.03);
 }
 
 function calcTotalAssets(s: CareerState): number {
@@ -2982,6 +3140,13 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
   }
   // Cryotherapy reduces injury risk by 15%
   if (state?.purchasedItems?.includes("perf_cryo")) injuryChance -= 0.03;
+  /* Round 134: the same idea, generic. A house ten minutes from the training
+     ground, a driver instead of a 1am motorway, a physio who answers his
+     phone. Capped at three points of injury chance in total, which is about
+     the same as the cryo chamber on its own, so buying every single one of
+     them is a small edge rather than immunity. */
+  injuryChance -= injuryDropFromItems(state);
+  injuryChance = clamp(injuryChance, 0.04, 0.42);
   const injuryRoll = rollSeasonInjury(injuryChance);
   if (injuryRoll) {
     injured = true;
@@ -3515,6 +3680,11 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   }];
   s.events.push(`📈 Stats improved during youth development (OVR ${s.overall})`);
+  /* Round 134: the market has a season even while you are still in the
+     academy. It has to, or a sixteen year old who opens the Market tile sees
+     five prices frozen at par for two years and learns that nothing in there
+     moves. He has no money to put in yet, which is the point of looking. */
+  moneySeasonTick(s, s.seasons[s.seasons.length - 1].year);
   if (s.age >= 17) {
     s.events.push("📩 Professional contract offers received!");
     // Round 54: old saves predate academyClubName, so recover it from the
