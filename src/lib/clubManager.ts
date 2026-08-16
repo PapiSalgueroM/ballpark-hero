@@ -8,6 +8,15 @@ import { players as RAW_POOL } from '@/data/players';
 // imports nothing but types, so reading it at module scope is safe.
 import { CM_ROSTERS, CM_ROSTER_META, CM_PARTIAL } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
+// Round 132: the world clock. Everything about ageing, retirement, eras and
+// the projected future world lives in clubManagerEras, which imports nothing
+// from this file, so there is no cycle.
+import {
+  CM_BASE_YEAR, CM_ERAS, DEFAULT_ERA_ID, eraById, seasonLabel,
+  projectedRoster, projectedWorld, projectedXIAvg,
+  ageDriftBand, declineScale, retireChance,
+} from '@/lib/clubManagerEras';
+import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
 
 /**
  * Club Manager engine.
@@ -36,6 +45,8 @@ export type UclKoState = UclKoRound | 'out' | 'won' | null;
 export { FORMATIONS };
 export type { Formation, FormationSlot };
 export { CM_ROSTER_META, CM_ROSTERS, CM_PARTIAL };
+export { CM_BASE_YEAR, CM_ERAS, DEFAULT_ERA_ID, eraById, seasonLabel, projectedRoster, projectedXIAvg };
+export type { ProjectedPlayer, CMEra };
 
 /**
  * Round 94: what you have told the world about a player.
@@ -136,6 +147,12 @@ export interface CMPlayer {
   lastTen?: number[];
   /** Round 127: he has asked to leave, and the papers know about it. */
   wantsOut?: boolean;
+  /**
+   * Round 132: this game made him up. Real footballers from the August 2026
+   * data never carry this. Every screen that shows a name reads it, because
+   * the player is owed a straight answer about which of these people exist.
+   */
+  generated?: boolean;
 }
 
 /* ---------- Round 127: squad roles and playing time promises ---------- */
@@ -371,6 +388,8 @@ export interface MarketPlayer {
   price: number;
   /** Real market value in £m (Round 70, baked data). */
   value?: number;
+  /** Round 132: this game made him up, and the transfer screen says so. */
+  generated?: boolean;
 }
 
 export interface TransferRecord { dir: 'in' | 'out'; name: string; fee: number; loan?: boolean; }
@@ -619,6 +638,28 @@ export interface CareerState {
   training?: TrainingPlan;
   /** Round 116: how many of your own kids you have promoted, all time. */
   academyGraduates?: number;
+  /**
+   * Round 132: the world clock.
+   *
+   * startYear is the calendar year season one runs in, so the real world year
+   * is startYear + season - 1, and how far the world has been aged from the
+   * baked roster year is that minus CM_BASE_YEAR. Everything era shaped falls
+   * out of this one number: the squad you are handed, how strong every other
+   * club is, and who is on the transfer market. Undefined on any save made
+   * before this round, and repaired to the roster year by ensureClock.
+   */
+  startYear?: number;
+  /** Which era tile was picked, for the labelling. */
+  eraId?: string;
+  /**
+   * Round 132: everyone who has hung up his boots out of MY squad. He never
+   * comes back, so the market has to know about it. Without this a player who
+   * retired at thirty seven reappeared on the transfer list the following
+   * morning at the age the data has him.
+   */
+  retiredNames?: string[];
+  /** Round 132: who retired at the most recent summer, for the season screen. */
+  retiredLastSummer?: { name: string; age: number; rating: number }[];
 }
 
 export type NextFixtureInfo =
@@ -1036,7 +1077,17 @@ export function isPartialClub(clubName: string): boolean {
   return CM_PARTIAL.includes(clubName);
 }
 
-/** Average rating of the club's best XI from the baked real rosters. */
+/**
+ * Average rating of the club's best XI from the baked real rosters.
+ *
+ * Round 132: this is now the YEAR ZERO answer specifically, and it stays that
+ * way on purpose. It backs clubDefMap, which sets every club's budget, tier
+ * and the finish its board expects, and those describe the club's stature
+ * rather than this season's XI. Nothing in the data can tell us whether Wrexham
+ * are a bigger club in 2041 than they are now, so the honest thing is to leave
+ * stature where the real data puts it and let the squads move. For "how good
+ * is this club right now", use projectedXIAvg with the career's world year.
+ */
 export function bakedXIAvg(clubName: string): number | null {
   const roster = CM_ROSTERS[clubName];
   if (!roster || !roster.length) return null;
@@ -1114,6 +1165,21 @@ const SAVE_KEY = 'dukb-club-manager-save';
 // old-curve squads that would be ~10 points weak against the new strengths,
 // so they must start fresh.
 const SAVE_VERSION = 3;
+
+/** The most players you are allowed on the books. Signings have always checked
+ *  this; Round 132 makes the summer rollover respect it too. */
+export const SQUAD_LIMIT = 30;
+
+/**
+ * How far the club will top its own squad up to over the summer, out of the
+ * thirty you are allowed. The six slots above this are YOURS, and leaving them
+ * clear is not a nicety: the first version let the automatic intake fill the
+ * books all the way to thirty, which meant promoteProspect started refusing
+ * and simAcademy went red because an engaged manager finished six seasons with
+ * 0.8 academy graduates instead of four or five. The club covers itself, the
+ * manager still does the signing.
+ */
+const AUTO_SQUAD_TARGET = 22;
 
 /* ================================================================== */
 /* Small utilities                                                    */
@@ -1256,8 +1322,14 @@ function toCMPlayer(p: Player): CMPlayer {
   };
 }
 
-/** Round 70: a squad player from the baked real-roster data. */
-function bakedToCMPlayer(b: BakedPlayer): CMPlayer {
+/**
+ * Round 70: a squad player from the baked real-roster data.
+ * Round 132: which is now the PROJECTED real-roster data, so it may be a real
+ * footballer aged forward or a player this game invented. `g` rides all the
+ * way through to the squad screen either way.
+ */
+function bakedToCMPlayer(b: BakedPlayer | ProjectedPlayer): CMPlayer {
+  const gen = (b as ProjectedPlayer).g === true;
   return {
     id: `p-${slug(b.n)}`,
     name: b.n,
@@ -1272,6 +1344,7 @@ function bakedToCMPlayer(b: BakedPlayer): CMPlayer {
     seasonGoals: 0,
     seasonAssists: 0,
     value: b.v,
+    generated: gen || undefined,
   };
 }
 
@@ -1300,14 +1373,15 @@ function ensureSquadCoverage(squad: CMPlayer[]): CMPlayer[] {
   return out;
 }
 
-function buildSquad(clubName: string): CMPlayer[] {
+function buildSquad(clubName: string, yearsOnNow = 0): CMPlayer[] {
   // Round 70: baked real rosters first (with real market values); the old
   // static pool only backs up clubs outside the bake. Round 72: cap the
   // start at the 26 most valuable so deep baked squads (Real Madrid has 29
   // dataset players) leave room under the 30-man limit to actually sign
-  // people.
-  const baked = CM_ROSTERS[clubName];
-  const real = baked && baked.length
+  // people. Round 132: at yearsOn 0 the projection IS the bake, so a career
+  // in the current era gets exactly the squad it always got.
+  const baked = projectedRoster(clubName, yearsOnNow);
+  const real = baked.length
     ? baked.slice(0, 26).map(bakedToCMPlayer)
     : getPool().filter(p => p.club === clubName).map(toCMPlayer);
   return ensureSquadCoverage(real);
@@ -1446,6 +1520,51 @@ export function wageCapFrom(bill: number): number {
  * rather than showing everybody on zero years. Staggered on a name hash so a
  * squad does not all expire in the same summer.
  */
+/* ================================================================== */
+/* Round 132: the world clock                                         */
+/* ================================================================== */
+
+/**
+ * Puts a clock on a save that never had one, and does nothing at all the
+ * second time it is called.
+ *
+ * Round 127 learned the hard way that repairing only inside playNextEntry is
+ * not enough, because a screen can be opened before a ball is kicked, so this
+ * runs at the top of playNextEntry AND inside loadCareer AND at the top of
+ * every screen level accessor that depends on it. A pre Round 132 save has no
+ * startYear, and the only honest answer for one is the year its squads were
+ * baked from, which is 2026: that save WAS the current era, it just did not
+ * know it. So it carries on in the current era with the world aged forward
+ * from the season it is already on, which is exactly what a save started fresh
+ * today would do.
+ */
+export function ensureClock(state: CareerState): void {
+  if (typeof state.startYear !== 'number' || !Number.isFinite(state.startYear)) {
+    state.startYear = CM_BASE_YEAR;
+  }
+  if (!state.eraId || !CM_ERAS.some(e => e.id === state.eraId)) {
+    state.eraId = CM_ERAS.find(e => e.startYear === state.startYear)?.id ?? DEFAULT_ERA_ID;
+  }
+  if (!Array.isArray(state.retiredNames)) state.retiredNames = [];
+  if (!Array.isArray(state.retiredLastSummer)) state.retiredLastSummer = [];
+}
+
+/** The calendar year this season is being played in. */
+export function worldYear(career: CareerState): number {
+  const start = typeof career.startYear === 'number' ? career.startYear : CM_BASE_YEAR;
+  return start + Math.max(0, career.season - 1);
+}
+
+/** How far the world has moved from the real baked roster year. */
+export function yearsOn(career: CareerState): number {
+  return Math.max(0, worldYear(career) - CM_BASE_YEAR);
+}
+
+/** "2031-32", for anywhere a season number is shown. */
+export function worldSeasonLabel(career: CareerState): string {
+  return seasonLabel(worldYear(career));
+}
+
 export function ensureContracts(state: CareerState): void {
   for (const p of state.squad) {
     if (p.wage === undefined) p.wage = wageFor(p);
@@ -1465,7 +1584,17 @@ export function renewalTerms(p: CMPlayer): { years: number; wage: number; fee: n
   // A player in form and in his prime knows it. An over-30 takes what he can.
   const leverage = p.age <= 23 ? 1.15 : p.age <= 29 ? 1.3 : 0.95;
   const wage = Math.max(1, Math.round(Math.max(current, market) * leverage));
-  const years = p.age >= 32 ? 1 : p.age >= 29 ? 2 : 4;
+  /* Round 132: the shortest deal you can hand anybody is two years, and the
+     reason is a bug this round found by accident while measuring what happens
+     to a thirty three year old. Contract years tick down at the summer
+     rollover, BEFORE the season is played, so a deal signed at one year went
+     straight to zero at the next rollover and the player walked without ever
+     kicking a ball under it. Measured on the shipped engine: renewing every
+     expiring player every season for twelve seasons, Mohamed Salah still left
+     Liverpool in season four and no player aged thirty two or over could be
+     kept by ANY club under ANY circumstances. Two years here means one year
+     signed is one year played, which is what the screen has always implied. */
+  const years = p.age >= 32 ? 2 : p.age >= 29 ? 2 : 4;
   // Signing on fee, out of the transfer budget, in millions.
   const fee = Math.max(0.1, Math.round(wage * years * 0.045 * 10) / 10);
   return { years, wage, fee };
@@ -1777,19 +1906,29 @@ export function sellValue(p: CMPlayer): number {
   return Math.max(1, Math.round(baseValue(p.rating, p.age) * 0.9 * youthF * runDown * wantsOut));
 }
 
-let MARKET_BASE_CACHE: MarketPlayer[] | null = null;
+const MARKET_BASE_CACHE = new Map<number, MarketPlayer[]>();
 
 /**
  * Round 70: the purchasable universe is every baked real player across all
  * five leagues plus the European flavor clubs, nearly 2,000 players with
  * real market-value pricing (was: a 716-player static pool with curve
  * prices). Built once and cached; buildMarket filters it per career.
+ *
+ * Round 132: and it is now built once PER WORLD YEAR, because the frozen
+ * version of this function was the sharpest single instance of the thing the
+ * owner reported. Measured on the shipped engine: in season eleven of a
+ * Liverpool career, Mohamed Salah was still on the transfer list at thirty
+ * three years old, rated 83, for twenty one and a half million pounds, exactly
+ * as he is in the August 2026 data, because this list never knew what year it
+ * was. The whole 2,936 name market sat at an average age of 25.2 forever.
  */
-function marketBase(): MarketPlayer[] {
-  if (MARKET_BASE_CACHE) return MARKET_BASE_CACHE;
+function marketBase(yearsOnNow: number): MarketPlayer[] {
+  const y = Math.max(0, Math.round(yearsOnNow));
+  const hit = MARKET_BASE_CACHE.get(y);
+  if (hit) return hit;
   const out: MarketPlayer[] = [];
   const seen = new Set<string>();
-  for (const [club, roster] of Object.entries(CM_ROSTERS)) {
+  for (const [club, roster] of Object.entries(projectedWorld(y))) {
     for (const b of roster) {
       if (seen.has(b.n)) continue;
       seen.add(b.n);
@@ -1801,23 +1940,28 @@ function marketBase(): MarketPlayer[] {
         rating: b.r,
         price: askingPrice(b.v, b.a),
         value: b.v,
+        generated: b.g || undefined,
       });
     }
   }
   out.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
-  MARKET_BASE_CACHE = out;
+  MARKET_BASE_CACHE.set(y, out);
   return out;
 }
 
 /**
- * Deterministic view of who is purchasable right now: the baked player
- * universe minus my squad and minus anyone already transferred (goneNames).
- * Called from a useMemo on every career change, so it must be pure.
+ * Deterministic view of who is purchasable right now: the projected player
+ * universe for THIS world year, minus my squad, minus anyone already
+ * transferred (goneNames) and minus anyone who has retired out of my squad.
+ * Called from a useMemo on every career change, so it must be pure: the
+ * projection is a pure function of the year and nothing in here rolls a dice.
  */
 export function buildMarket(career: CareerState): MarketPlayer[] {
   const squadNames = new Set(career.squad.map(p => p.name));
   const gone = new Set(career.goneNames);
-  return marketBase().filter(p => !squadNames.has(p.name) && !gone.has(p.name));
+  const retired = new Set(career.retiredNames ?? []);
+  return marketBase(yearsOn(career))
+    .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name));
 }
 
 /** Round 71: append a line to the Latest Transfers feed (capped at 80). */
@@ -2676,10 +2820,15 @@ function generateHeadlines(state: CareerState): void {
  * average of the value-derived ratings), so the data drives the sim. The
  * old priors only back up anything outside the bake.
  */
-function genClubStrengths(myLeague: LeagueDef): Record<string, number> {
+function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0): Record<string, number> {
   const out: Record<string, number> = {};
+  // Round 132: from the PROJECTED roster for this world year, not from the
+  // frozen 2026 bake. Before this, every AI club in the game was recomputed
+  // from August 2026 every single summer, so Arsenal were 89.5 in season one
+  // and 89.5 in season thirteen while my own squad was ageing underneath me.
+  // At yearsOn 0 the projection is the bake, so season one has not moved.
   const baseFor = (name: string): number =>
-    bakedXIAvg(name) ?? STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
+    projectedXIAvg(name, yearsOnNow) ?? STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
   for (const name of myLeague.clubs) {
     out[name] = clamp(baseFor(name) + ri(-2, 2), 52, 95);
   }
@@ -3504,12 +3653,13 @@ function generateMyScorers(
   return { lines, goalCounts, assistCounts };
 }
 
-function generateOppScorers(opp: string, goals: number): ScorerLine[] {
+function generateOppScorers(opp: string, goals: number, yearsOnNow = 0): ScorerLine[] {
   const minutes = Array.from({ length: goals }, () => ri(1, 90)).sort((a, b) => a - b);
   // Round 70: opponent scorers are their real attackers from the baked
   // rosters, weighted toward the expensive ones, so "Semenyo 63'" instead of
-  // "Bournemouth No. 9".
-  const baked = (CM_ROSTERS[opp] ?? []).filter(p =>
+  // "Bournemouth No. 9". Round 132: from the projected roster, so a 2036 match
+  // report does not name a scorer who retired eight years earlier.
+  const baked = projectedRoster(opp, yearsOnNow).filter(p =>
     groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID');
   const oppPool = getPool().filter(p =>
     p.club === opp && (groupOf(p.position) === 'ATT' || groupOf(p.position) === 'MID'));
@@ -3716,7 +3866,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   let trophyWon: string | null = null;
 
   const { lines: myScorers, goalCounts, assistCounts } = generateMyScorers(state, xi, myGoals);
-  const oppScorers = generateOppScorers(fx.opponent, oppGoals);
+  const oppScorers = generateOppScorers(fx.opponent, oppGoals, yearsOn(state));
   const tally = new Map<string, number>();
   for (const sc of myScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
   tally.forEach((count, name) => {
@@ -4573,10 +4723,17 @@ export function developingPlayers(career: CareerState): CMPlayer[] {
     .sort((a, b) => ((b.potential ?? b.rating) - b.rating) - ((a.potential ?? a.rating) - a.rating));
 }
 
-export function startCareer(clubName: string): CareerState {
+export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID): CareerState {
   // Round 70: any club in the five real leagues is a valid start.
   const club = clubDefFor(clubName);
-  const squad = buildSquad(club.name);
+  /* Round 132: the era decides what year season one is, and the year decides
+     everything else: the squad you are handed, how good every other club is,
+     and who is on the market. The default era is the current one and its
+     yearsOn is zero, where the projection is the identity, so a normal new
+     career is exactly the career this game has always started. */
+  const era = eraById(eraId);
+  const startYearsOn = Math.max(0, era.startYear - CM_BASE_YEAR);
+  const squad = buildSquad(club.name, startYearsOn);
   // Owner task 61: the league is the club's REAL league with its real clubs.
   const league = leagueOf(club.name);
   const leagueClubs = shuffle([...league.clubs]);
@@ -4585,6 +4742,10 @@ export function startCareer(clubName: string): CareerState {
     clubName: club.name,
     season: 1,
     week: 0,
+    startYear: era.startYear,
+    eraId: era.id,
+    retiredNames: [],
+    retiredLastSummer: [],
     budget: club.budget,
     boardConfidence: 60,
     sacked: false,
@@ -4596,7 +4757,7 @@ export function startCareer(clubName: string): CareerState {
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length),
-    clubStrengths: genClubStrengths(league),
+    clubStrengths: genClubStrengths(league, startYearsOn),
     transferWindow: 'summer',
     aiHeadlines: [],
     goneNames: [],
@@ -4654,6 +4815,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   ensureAcademy(state);
   // Round 127: and everybody gets told where he stands.
   ensureRoles(state);
+  // Round 132: and a save made before the world had a clock gets put on one.
+  ensureClock(state);
   while (state.week < state.calendar.length) {
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
@@ -4968,14 +5131,22 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
  */
 function agePlayer(p: CMPlayer, career: CareerState): CMPlayer {
   const age = p.age + 1;
-  let drift = 0;
-  if (age <= 19) drift = ri(1, 4);
-  else if (age <= 21) drift = ri(1, 3);
-  else if (age <= 23) drift = ri(0, 3);
-  else if (age <= 26) drift = ri(0, 2);
-  else if (age <= 29) drift = ri(0, 1);
-  else if (age >= 33) drift = -ri(1, 3);
-  else if (age >= 30) drift = -ri(0, 2);
+  /* Round 132: the same single curve the projected world runs on, so my squad
+     and every AI squad in the game age on identical rules. That symmetry is
+     Round 95's lesson in a different coat: the moment the human team and the
+     computer teams are scored on different numbers, the human loses ten
+     seasons out of ten and nobody can see why.
+
+     The old shape here was a flat minus two a season from thirty three all the
+     way to forty three, which is not a decline, it is a ramp. MEASURED on the
+     shipped engine over twenty four seasons at eight clubs with contracts
+     disabled so nothing else could remove anybody: mean drift per season was
+     -1.98 at 33, -2.02 at 34, -1.98 at 35, -2.02 at 36, -2.04 at 37, -1.97 at
+     38, -1.83 at 40 and -1.69 at 43. A perfectly straight line, and nobody
+     ever stopped playing. */
+  const [lo, hi] = ageDriftBand(age);
+  let drift = ri(lo, hi);
+  if (drift < 0) drift = Math.round(drift * declineScale(p.position));
   const potential = p.potential ?? rollPotential(p.rating, p.age);
   if (drift > 0) {
     drift = Math.round(drift * developmentRate(p, career));
@@ -5022,6 +5193,96 @@ function agePlayer(p: CMPlayer, career: CareerState): CMPlayer {
 }
 
 /**
+ * Below this many senior bodies the club stops waiting for the manager.
+ *
+ * Deliberately low, and it took two goes to get it there. The first version
+ * filled the squad up to eighteen with the best free agents inside a band, and
+ * at Everton that produced a twenty five man squad of journeymen rated 78 to
+ * 84 which was BETTER than the real Everton squad, wiped out the entire value
+ * of running your own academy (simAcademy measured the gap collapsing from
+ * 4.31 rating points to 0.38) and turned neglect into a strategy. The floor is
+ * not there to build you a squad. It is there so that a manager who has never
+ * opened the contracts screen still has eleven grown men to pick from instead
+ * of a team of sixteen year olds, and no further.
+ */
+const SENIOR_FLOOR = 12;
+
+/**
+ * Round 132: the club recruits when the manager will not.
+ *
+ * This is the other half of succession, and it took measuring to find. Play
+ * twelve seasons without ever opening the contracts screen and the shipped
+ * engine leaves you with seventeen players whose average age is eighteen and
+ * an XI rated 64, because every starting deal runs one to four years, everyone
+ * walks for free when it ends, and the only thing coming the other way is two
+ * or three academy kids a summer. Meanwhile every AI club in the league is
+ * sitting on the high eighties. That is not a hard save, it is a broken one,
+ * and "no club runs out of players" has to mean my club too.
+ *
+ * So when the squad falls below a real football squad, the sporting director
+ * goes and gets bodies: free agents off the market at this club's level minus
+ * a chunk, on short deals, and the news says exactly what happened. They are
+ * deliberately worse than what you let walk, so letting your squad rot still
+ * costs you, it just does not end the save. In a squad that is being managed
+ * this never fires at all, which is why it cannot move the balance.
+ */
+function fillSquadGaps(
+  clubName: string, season: number, squad: CMPlayer[], yearsOnNow: number,
+  retiredNames: string[],
+): { squad: CMPlayer[]; signed: string[] } {
+  const seniors = squad.filter(p => !p.isYouth && p.age >= 20).length;
+  if (seniors >= SENIOR_FLOOR) return { squad, signed: [] };
+  const baseline = projectedXIAvg(clubName, yearsOnNow)
+    ?? STRENGTH_PRIORS[clubName] ?? 66;
+  const taken = new Set(squad.map(p => p.name));
+  const retired = new Set(retiredNames);
+  // Well below what this club would normally field: these are the players
+  // nobody else wanted in August, and they should feel like it.
+  const pool = marketBase(yearsOnNow)
+    .filter(p => !taken.has(p.name) && !retired.has(p.name)
+      && p.rating <= baseline - 14 && p.rating >= baseline - 26)
+    .sort((a, b) => a.rating - b.rating);
+  if (!pool.length) return { squad, signed: [] };
+  const want = clamp(SENIOR_FLOOR - seniors, 0, 4);
+  const out = [...squad];
+  const signed: string[] = [];
+  for (let i = 0; i < want; i++) {
+    // The thinnest position first, so an emergency window does not hand you
+    // six strikers and no keeper.
+    const counts: Record<PosGroup, number> = { GK: 0, DEF: 0, MID: 0, ATT: 0 };
+    for (const p of out) counts[groupOf(p.position)] += 1;
+    const needs: Record<PosGroup, number> = { GK: 2, DEF: 6, MID: 6, ATT: 4 };
+    const thin = (['GK', 'DEF', 'MID', 'ATT'] as PosGroup[])
+      .sort((a, b) => (counts[a] - needs[a]) - (counts[b] - needs[b]))[0];
+    const fits = pool.filter(p => groupOf(p.position) === thin && !signed.includes(p.name));
+    const mp = (fits.length ? fits : pool.filter(p => !signed.includes(p.name)))[0];
+    if (!mp) break;
+    signed.push(mp.name);
+    const player: CMPlayer = {
+      id: `fa-${slug(mp.name)}-s${season}`,
+      name: mp.name,
+      position: mp.position,
+      rating: mp.rating,
+      age: mp.age,
+      fitness: 100,
+      morale: 68,
+      injuryWeeks: 0,
+      suspendedMatches: 0,
+      isYouth: false,
+      seasonGoals: 0,
+      seasonAssists: 0,
+      value: mp.value,
+      generated: mp.generated,
+      contractYears: mp.age >= 31 ? 2 : 3,
+      wage: 0,
+    };
+    player.wage = wageFor(player);
+    out.push(player);
+  }
+  return { squad: out, signed };
+}
+
+/**
  * Rolls the career into the next season, optionally at a new club if a job
  * offer was accepted. Ages the squad, runs the youth intake, resets the
  * competitions and reopens the summer window.
@@ -5038,26 +5299,89 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const objs = summary?.objectives ?? [];
   const objNet = objs.reduce((s, o) => s + (o.hit ? 1 : -1), 0);
 
+  /* Round 132: the world clock ticks here and only here. The new season is one
+     year further from the baked roster year, which moves every AI squad, the
+     whole transfer market and the ages of my own players together. */
+  const nextYearsOn = Math.max(0, (career.startYear ?? CM_BASE_YEAR) + season - 1 - CM_BASE_YEAR);
+
   let squad: CMPlayer[];
   const freeAgentNews: string[] = [];
+  const releasedNews: string[] = [];
+  const freeAgentsIn: string[] = [];
+  const retiredNow: { name: string; age: number; rating: number }[] = [];
   // Round 71: loan players go back to their parent clubs at season's end.
   const afterLoans = career.squad.filter(p => !p.onLoan);
   // Round 94: and MY loanees come home, with a season of football in them.
   const homeFromLoan = returnLoanedPlayers(career);
   if (moving) {
-    squad = buildSquad(clubName);
+    squad = buildSquad(clubName, nextYearsOn);
   } else {
     // Round 105: deals run down over the summer and the expired walk for
     // nothing. This is the price of never sitting down with your own players.
     const aged = [...afterLoans, ...homeFromLoan].map(p => agePlayer(p, career));
-    const walked = aged.filter(p => (p.contractYears ?? 1) <= 0);
+    /* Round 132: and some of them stop playing altogether. Before this the
+       ONLY way a player ever left on age was the line below, "age < 38 or
+       rated 70 plus", which meant a good veteran simply never went: measured
+       on the shipped engine with contracts disabled, eight squads ran twenty
+       four seasons and finished with players of 37, 42, 37, 37, 37, 45, 43 and
+       42. Nobody in the game had ever retired. Now they do, on odds that read
+       his age, what he is still worth to you and where he plays, because
+       keepers last and wingers do not. */
+    const stillPlaying: CMPlayer[] = [];
+    for (const p of aged) {
+      if (Math.random() < retireChance(p.age, p.rating, p.position)) {
+        retiredNow.push({ name: p.name, age: p.age, rating: p.rating });
+      } else {
+        stillPlaying.push(p);
+      }
+    }
+    const walked = stillPlaying.filter(p => (p.contractYears ?? 1) <= 0);
     for (const p of walked) freeAgentNews.push(p.name);
-    squad = aged.filter(p => (p.contractYears ?? 1) > 0).filter(p => p.age < 38 || p.rating >= 70);
-    const intake = ri(2, 3);
+    squad = stillPlaying.filter(p => (p.contractYears ?? 1) > 0);
+    /* Round 132: the club replaces what it lost. The old intake was a flat two
+       or three kids a summer whatever happened, so a squad that lost six
+       players to retirement and expiry came back six lighter and the auto top
+       up filled it with fifty five rated teenagers. A real club signs to
+       replace. This tops the intake up so the squad does not shrink, and every
+       extra body is still a kid off your own training ground, which keeps the
+       academy the thing that feeds you. */
+    const lost = (afterLoans.length + homeFromLoan.length) - squad.length;
+    const room = Math.max(0, AUTO_SQUAD_TARGET - squad.length);
+    const intake = clamp(Math.min(ri(2, 3) + Math.max(0, lost - 2), room), 0, 7);
     for (let i = 0; i < intake; i++) {
       squad.push(makeYouth(pick([...POS_DEF, ...POS_MID, ...POS_ATT, 'GK' as Position])));
     }
+    const emergency = fillSquadGaps(
+      clubName, season, squad, nextYearsOn,
+      [...(career.retiredNames ?? []), ...retiredNow.map(r => r.name)],
+    );
+    squad = emergency.squad;
+    freeAgentsIn.push(...emergency.signed);
     squad = ensureSquadCoverage(squad);
+    /* Round 132: and the books get balanced. Keeping veterans alive (see
+       renewalTerms) plus a bigger intake pushed a well managed squad to 41
+       players over twelve seasons, well past the thirty you are allowed to
+       sign up to, so the club releases its surplus fringe players the way a
+       real one does. Youth padding goes first, then the lowest rated, and it
+       never touches a squad that is inside the limit. */
+    if (squad.length > SQUAD_LIMIT) {
+      /* Only ever the genuinely surplus: youth padding first, then finished
+         players with no growth left in them. A kid out of your own academy is
+         NEVER released, whatever he is rated today, and neither is anybody
+         still carrying headroom. The first version of this sorted purely on
+         rating and quietly binned the academy graduates, which simAcademy
+         caught immediately: an engaged manager finished six seasons with 0.8
+         graduates in the squad instead of four or five, because a seventeen
+         year old you have just promoted IS the lowest rated senior on the
+         books. If there is nothing surplus to release, the squad simply runs
+         one or two over, which is what it did before this round. */
+      const spare = squad.filter(p =>
+        !p.academyGrad && (p.isYouth || (p.potential ?? p.rating) <= p.rating));
+      spare.sort((a, b) => (a.isYouth ? 0 : 1) - (b.isYouth ? 0 : 1) || a.rating - b.rating);
+      const cut = new Set(spare.slice(0, squad.length - SQUAD_LIMIT).map(p => p.id));
+      for (const p of squad) if (cut.has(p.id)) releasedNews.push(p.name);
+      squad = squad.filter(p => !cut.has(p.id));
+    }
   }
 
   const seasonTrophyCount = career.trophies.filter(t => t.season === career.season).length;
@@ -5082,10 +5406,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length),
-    clubStrengths: genClubStrengths(league),
+    clubStrengths: genClubStrengths(league, nextYearsOn),
     transferWindow: 'summer',
     aiHeadlines: [],
-    goneNames: [],
+    // Round 132: anybody the club had to go and get is off the market now.
+    goneNames: [...freeAgentsIn],
     seasonSignings: [],
     cupRound: 'R16',
     cupDraw: {},
@@ -5105,6 +5430,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     resultLog: [],
     inbox: [],
     promisedStarts: [],
+    // Round 132: a retired player never comes back, so the market has to be
+    // told, and the list has to survive the rollover it was written in.
+    retiredNames: [...(career.retiredNames ?? []), ...retiredNow.map(r => r.name)],
+    retiredLastSummer: retiredNow,
   };
   // Round 71: track every club this manager has run.
   const managed = new Set(state.careerStats.clubsManaged ?? [career.clubName]);
@@ -5127,6 +5456,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     for (const p of state.squad) p.role = undefined;
   }
   ensureRoles(state);
+  ensureClock(state);
   // Round 116: intake day. What comes up is whatever your academy earned.
   const intakeNews = runYouthIntake(state);
   state.wageCap = wageCapFrom(wageBill(state));
@@ -5138,6 +5468,31 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       `📰 ${freeAgentNews.length} player${freeAgentNews.length === 1 ? '' : 's'} left ${career.clubName} for nothing: ${freeAgentNews.slice(0, 4).join(', ')}.`,
       ...state.aiHeadlines,
     ];
+  }
+  /* Round 132: retirements lead the summer, because they are the biggest thing
+     that can happen to a squad and the old engine never mentioned them for the
+     simple reason that they never happened. */
+  if (retiredNow.length) {
+    const names = retiredNow.map(r => `${r.name} (${r.age})`);
+    state.aiHeadlines = [
+      `\u{1F45F} ${names.slice(0, 3).join(', ')}${names.length > 3 ? ` and ${names.length - 3} more` : ''} ${retiredNow.length === 1 ? 'has' : 'have'} retired.`,
+      ...state.aiHeadlines,
+    ].slice(0, 8);
+  }
+  if (releasedNews.length) {
+    state.aiHeadlines = [
+      `\u{1F4CB} ${clubName} trimmed the squad back to ${SQUAD_LIMIT}: ${releasedNews.slice(0, 4).join(', ')} released.`,
+      ...state.aiHeadlines,
+    ].slice(0, 8);
+  }
+  if (freeAgentsIn.length) {
+    state.aiHeadlines = [
+      `\u{1F4DD} The squad was too thin to start a season, so ${clubName} went and signed ${freeAgentsIn.length} free agent${freeAgentsIn.length === 1 ? '' : 's'}: ${freeAgentsIn.slice(0, 4).join(', ')}.`,
+      ...state.aiHeadlines,
+    ].slice(0, 8);
+    for (const name of freeAgentsIn) {
+      pushNews(state, { name, from: 'a free transfer', to: clubName, fee: 0 });
+    }
   }
   if (intakeNews.length) state.aiHeadlines = [...intakeNews, ...state.aiHeadlines].slice(0, 8);
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length);
@@ -5185,6 +5540,11 @@ export function loadCareer(): CareerState | null {
        real half played save built on the committed pre Round 127 engine into a
        browser, which is the only way anybody would ever have seen it. */
     ensureRoles(parsed);
+    /* Round 132: same reason, same place. A save from before the clock existed
+       has no start year, and the squad screen, the transfer screen and the hub
+       all read the world year now, so it has to be right before any of them
+       renders rather than at the first kick off. */
+    ensureClock(parsed);
     return parsed;
   } catch {
     return null;

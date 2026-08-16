@@ -2,6 +2,27 @@ import { cn } from '@/lib/utils';
 import { ROLE_INFO, roleOf, promiseMood } from '@/lib/clubManager';
 import type { CMPlayer } from '@/lib/clubManager';
 
+/**
+ * Round 132: the one label this round is really about.
+ *
+ * Once the world has a clock, some of the people on your teamsheet are real
+ * footballers and some are players this game invented to fill the space the
+ * real ones left when they retired. Nobody should have to guess which is
+ * which, so every screen that shows a name shows this next to the made up
+ * ones. Same spirit as the "partial data" flag on the club picker: if the data
+ * is thin, say it is thin, right there, rather than hoping nobody notices.
+ */
+export function MadeUpTag({ className }: { className?: string }) {
+  return (
+    <span
+      title="Not a real player. This game made him up because the real August 2026 data cannot tell us who is playing this far ahead."
+      className={cn('text-[8px] font-bold text-sky-300/90 border border-sky-400/50 rounded px-1 shrink-0', className)}
+    >
+      MADE UP
+    </span>
+  );
+}
+
 export function ratingTint(r: number): string {
   if (r >= 78) return 'text-primary';
   if (r >= 70) return 'text-emerald-400';
@@ -47,6 +68,7 @@ export function SquadScreen({ squad, xiIds }: SquadScreenProps) {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
               <span className={cn('text-xs truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>{p.name}</span>
+              {p.generated && <MadeUpTag />}
               {inXI.has(p.id) && <span className="text-[8px] font-bold text-primary border border-primary/50 rounded px-1 shrink-0">XI</span>}
               {p.onLoan && <span className="text-[8px] font-bold text-muted-foreground border border-border rounded px-1 shrink-0">LOAN</span>}
               {/* Round 94: what you have told the market about him. */}

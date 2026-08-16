@@ -5,7 +5,7 @@ import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp
 import { money, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, MarketPlayer, TransferStatus } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
-import { ratingTint } from '@/components/club-manager/SquadScreen';
+import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
 
 type PosFilter = 'ALL' | 'GK' | 'DEF' | 'MID' | 'ATT';
 
@@ -263,7 +263,12 @@ export function TransferScreen({
                 <div key={m.name} className="flex items-center gap-2 py-1.5 border-b border-border/30 last:border-0">
                   <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{m.position}</span>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-foreground truncate">{m.name}</div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs text-foreground truncate">{m.name}</span>
+                      {/* Round 132: you are about to spend real money on him, so
+                          you get told whether he is a real person. */}
+                      {m.generated && <MadeUpTag />}
+                    </div>
                     <div className="text-[9px] text-muted-foreground truncate">
                       {m.club} · {m.age}y{m.value !== undefined ? <> · worth {money(m.value)}</> : null}
                     </div>
@@ -427,6 +432,7 @@ export function TransferScreen({
                       <div className="flex-1 min-w-0">
                         <div className={cn('text-xs truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>
                           {p.name}
+                          {p.generated && <MadeUpTag className="ml-1" />}
                           {p.onLoan && <span className="text-[9px] text-muted-foreground ml-1">(borrowed)</span>}
                           {st && <span className={cn('text-[8px] font-bold rounded px-1 ml-1 border', STATUS_META[st].tint)}>{STATUS_META[st].short}</span>}
                         </div>

@@ -9,6 +9,7 @@ import {
   answerMessage, setTransferStatus, loanOutPlayer, renewContract,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
   resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
+  DEFAULT_ERA_ID,
 } from '@/lib/clubManager';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow } from '@/lib/clubManager';
@@ -81,9 +82,11 @@ export function useClubManager() {
     setPendingClub(clubName);
   }, []);
 
-  const confirmClub = useCallback(() => {
+  /* Round 132: the era rides in from the picker. Nothing passed means the
+     current era, which is the world this game has always started in. */
+  const confirmClub = useCallback((eraId?: string) => {
     if (!pendingClub) return;
-    const s = startCareer(pendingClub);
+    const s = startCareer(pendingClub, eraId ?? DEFAULT_ERA_ID);
     setCareer(s);
     setActiveTab('overview');
     setPhase('hub');

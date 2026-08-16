@@ -2,10 +2,11 @@ import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Eye } from 'lucide-react';
 import {
-  CM_ROSTERS, clubDefFor, leagueOf, bakedXIAvg, money, sortedTable, isPartialClub, TIER_INFO,
+  clubDefFor, leagueOf, money, sortedTable, isPartialClub, TIER_INFO,
+  projectedRoster, projectedXIAvg, yearsOn, worldSeasonLabel,
 } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
-import { ratingTint } from '@/components/club-manager/SquadScreen';
+import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
 
 interface ClubDetailScreenProps {
   clubName: string;
@@ -21,8 +22,13 @@ interface ClubDetailScreenProps {
 export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenProps) {
   const def = clubDefFor(clubName);
   const league = leagueOf(clubName);
-  const roster = CM_ROSTERS[clubName] ?? [];
-  const xiAvg = bakedXIAvg(clubName);
+  /* Round 132: the rival viewer shows the rival AS HE IS THIS SEASON. Before
+     the clock existed this read the frozen August 2026 bake, so in 2036 you
+     could open Liverpool and be looking at a squad list a decade out of date
+     while the league table next to it was being decided by something else. */
+  const onYears = yearsOn(career);
+  const roster = projectedRoster(clubName, onYears);
+  const xiAvg = projectedXIAvg(clubName, onYears);
   const squadValue = useMemo(() => roster.reduce((s, p) => s + p.v, 0), [roster]);
 
   const table = sortedTable(career.table);
@@ -92,7 +98,10 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
           <div key={p.n} className="flex items-center gap-2 py-1.5 border-b border-border/30 last:border-0">
             <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{p.p}</span>
             <div className="flex-1 min-w-0">
-              <div className="text-xs text-foreground truncate">{p.n}</div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-foreground truncate">{p.n}</span>
+                {p.g && <MadeUpTag />}
+              </div>
               <div className="text-[9px] text-muted-foreground">{p.a}y</div>
             </div>
             <span className="text-[10px] font-bold text-gold shrink-0">{money(p.v)}</span>
@@ -104,6 +113,12 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
         )}
         {isPartialClub(clubName) && roster.length > 0 && (
           <p className="text-[9px] text-yellow-500/80 pt-2">The market data covers only part of this squad.</p>
+        )}
+        {onYears > 0 && roster.length > 0 && (
+          <p className="text-[9px] text-yellow-500/80 pt-2">
+            {worldSeasonLabel(career)} squad. Real players from August 2026 aged forward, with anyone who retired replaced by
+            players this game made up, marked above.
+          </p>
         )}
       </div>
     </div>

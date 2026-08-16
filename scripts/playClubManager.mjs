@@ -104,6 +104,10 @@ await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
 await page.waitForTimeout(1200);
 await clearRoom();
 
+/* Round 132: the picker asks WHEN before it asks where. The default era is
+   the current one, and this harness wants the real 2026-27 world, so it takes
+   the first tile. */
+await tap(/2026-27/i, 'the 2026-27 era');
 await tap(/England/i, 'England');
 await tap(/Premier League/i, 'Premier League');
 await page.waitForTimeout(600);
@@ -121,7 +125,25 @@ if (!/Season 1/i.test(t)) {
   note('BLOCKED', 'could not get past the club picker, so nothing below ran');
 } else {
   const head = t.replace(/DOUKNOWBALL Track stats Back /, '');
-  myClub = (head.match(/^([A-Za-z][A-Za-z .'-]*?)\s+Season \d/) || [])[1] || null;
+  /* Round 132: read the club off the hub pill, which now says what CALENDAR
+     year the save is in as well as how many seasons you have managed:
+     "Brighton 2026-27 . Season 1".
+
+     Anchoring on the start of the string was always fragile, because whatever
+     the shared navbar happens to render sits in front of the club name and its
+     word order has changed at least once. So this walks BACKWARDS from the
+     year, taking capitalised words until it hits a navbar word, which handles
+     "Manchester City" and "Nottingham Forest" as well as "Brighton". */
+  const NAVBAR = new Set(['DOUKNOWBALL', 'Back', 'Track', 'stats', 'Home']);
+  const before = head.split(/\s\d{4}-\d{2}\s/)[0] ?? '';
+  const words = before.trim().split(/\s+/);
+  const parts = [];
+  for (let i = words.length - 1; i >= 0 && parts.length < 3; i--) {
+    const w = words[i];
+    if (NAVBAR.has(w) || !/^[A-Z]/.test(w)) break;
+    parts.unshift(w);
+  }
+  myClub = parts.length ? parts.join(' ') : null;
   console.log(`   in the job at ${myClub ?? '(club name not read)'}: ` + head.slice(0, 80));
   if (!myClub) note('BROKEN ', 'could not read which club I am managing off the hub');
 }

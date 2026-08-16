@@ -52,6 +52,10 @@ async function openTactics(ctx) {
   await page.getByRole('button', { name: /essential only|accept/i }).first().click({ timeout: 2000 }).catch(() => {});
   await page.waitForTimeout(300);
   await page.getByRole('button', { name: /Start Fresh/i }).first().click({ timeout: 1500 }).catch(() => {});
+  /* Round 132: the picker asks WHEN before it asks where. This wants the real
+     current squads, so it takes the 2026-27 tile. */
+  await page.getByRole('button', { name: /2026-27/ }).first().click({ timeout: 6000 }).catch(() => {});
+  await page.waitForTimeout(500);
   await page.getByRole('button', { name: /Spain/ }).first().click({ timeout: 6000 });
   await page.waitForTimeout(500);
   await page.getByRole('button', { name: /La Liga/ }).first().click({ timeout: 6000 });

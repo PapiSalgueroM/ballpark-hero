@@ -10,9 +10,11 @@ import {
   isAvailable, xiAverageRating, sortedTable,
   NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
-  brokenPromises,
+  brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
+  worldSeasonLabel,
 } from '@/lib/clubManager';
 import type { NationDef, ObjectiveStatus, CupRound } from '@/lib/clubManager';
+import { eraRealShareLabel, eraHonestyLine } from '@/lib/clubManagerEras';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
@@ -83,10 +85,17 @@ const ClubManager = () => {
   // Round 70: the nation -> league -> team picker. Each step change pulls the
   // new step into view (skipFirst so landing on the page stays put).
   // Round 72: nations can hold more than one league (England, the USA).
-  const [pickStep, setPickStep] = useState<'nation' | 'league' | 'team'>('nation');
+  /* Round 132: the era comes first, because it decides what every later screen
+     is looking at: which squads, which players, how good each club is. Same
+     idea as the era choice on the My Career create screen, laid out as tiles
+     because this game is tiles. */
+  const [pickStep, setPickStep] = useState<'era' | 'nation' | 'league' | 'team'>('era');
+  const [pickEra, setPickEra] = useState<string>(DEFAULT_ERA_ID);
   const [pickNation, setPickNation] = useState<NationDef | null>(null);
   const [pickLeagueId, setPickLeagueId] = useState<string | null>(null);
-  const pickRef = useRevealScroll<HTMLDivElement>(`pick:${pickStep}:${pickNation?.id ?? ''}:${pickLeagueId ?? ''}`, { skipFirst: true });
+  const pickRef = useRevealScroll<HTMLDivElement>(`pick:${pickStep}:${pickEra}:${pickNation?.id ?? ''}:${pickLeagueId ?? ''}`, { skipFirst: true });
+  const era = eraById(pickEra);
+  const eraYearsOn = Math.max(0, era.startYear - CM_BASE_YEAR);
   // Round 74: FIFA-style hub. Boxes on the home screen open their own
   // screens, and any club anywhere opens the rival viewer.
   const [hubPanel, setHubPanel] = useState<HubPanel | null>(null);
@@ -134,6 +143,8 @@ const ClubManager = () => {
           <HowToPlayPopover title="How to Play Club Manager" triggerSide="right">
             <div className="space-y-3 text-left">
               <p>🌍 <span className="font-semibold text-foreground">Pick any club in nine real leagues.</span> The big five (2026-27 lineups with promotions and relegations applied), the EFL Championship, the Saudi Pro League, both MLS conferences and the Eredivisie: 186 clubs, each with its real squad and market values as of August 2026, after the summer window. Giants get huge budgets and zero patience; underdogs get small budgets and a low bar.</p>
+              <p>📅 <span className="font-semibold text-foreground">Pick when you start.</span> 2026-27 is the real thing, every name and every value. You can also start five, ten or fifteen years down the line, and that is the same real data aged forward: players get older and worse, they retire, and the holes get filled with players we made up. Anyone we made up is marked MADE UP wherever he appears, so you always know who is real. There are no past eras because we do not hold real squads from the past and we are not going to invent them.</p>
+              <p>👟 <span className="font-semibold text-foreground">Players age and they stop playing.</span> A thirty year old slips a point a season, a thirty five year old slips three or four, and how fast depends on where he plays: keepers last for years, wingers and full backs go first. Somewhere around thirty four to thirty seven most of them retire for good. Sign the young ones early, get your kids in, or your best XI will quietly rot underneath you.</p>
               <p>📋 <span className="font-semibold text-foreground">The board hands you a list of objectives</span>: league finish, a cup run, Europe, finishing above your rival, a goals quota. Hit them and your stock rises; miss them and the confidence meter drains.</p>
               <p>📅 <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>: the actual Premier League, La Liga, Serie A, Bundesliga or Ligue 1 clubs, plus the domestic cup and the Champions League if you qualify.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
@@ -150,6 +161,7 @@ const ClubManager = () => {
           title="Club Manager: Football Management Sim"
           description="A full club-management sim in your browser: 186 clubs across nine real leagues, from the Premier League and the EFL Championship to the Saudi Pro League, MLS and the Eredivisie, each with its real squad and market values as of August 2026. Negotiate transfers, survive bidding wars, hit the board's objectives, and chase titles season after season."
           howToPlay={[
+            'Pick your starting year: 2026-27 with real squads, or five, ten or fifteen years on with those squads aged forward.',
             'Pick your nation, then your league, then your club: 186 clubs across nine real leagues with 2026-27 lineups.',
             'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
             'Set your formation, mentality and XI, then play through the full season week by week.',
@@ -180,7 +192,7 @@ const ClubManager = () => {
           <div className="text-3xl mb-2">💼</div>
           <div className="text-xl font-bold font-display text-foreground">{c.clubName}</div>
           <div className="text-sm text-muted-foreground mt-1">
-            Season {c.season} · Week {Math.min(c.week + 1, c.calendar.length)} of {c.calendar.length} · Board {Math.round(c.boardConfidence)}/100
+            {worldSeasonLabel(c)} · Season {c.season} · Week {Math.min(c.week + 1, c.calendar.length)} of {c.calendar.length} · Board {Math.round(c.boardConfidence)}/100
           </div>
           <div className="text-xs text-muted-foreground mt-0.5">🏆 {c.trophies.length} trophies won so far</div>
           <div className="flex gap-3 mt-5">
@@ -199,8 +211,9 @@ const ClubManager = () => {
   /* ================= CLUB SELECT (Round 70: nation -> league -> team) ================= */
   if (g.phase === 'clubSelect' || (g.phase === 'resume' && !g.career)) {
     const confirmAndReset = () => {
-      g.confirmClub();
-      setPickStep('nation');
+      g.confirmClub(pickEra);
+      setPickStep('era');
+      setPickEra(DEFAULT_ERA_ID);
       setPickNation(null);
       setPickLeagueId(null);
     };
@@ -212,26 +225,81 @@ const ClubManager = () => {
         <header className="text-center mb-6">
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">CLUB MANAGER</h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Nine real leagues, {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} clubs, squads as of {CM_ROSTER_META.asOf}. Pick your nation, your league, your club.
+            Nine real leagues, {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} clubs, squads as of {CM_ROSTER_META.asOf}. Pick when you start, then your nation, your league, your club.
           </p>
         </header>
 
         {/* Step breadcrumb */}
-        <div className="flex items-center justify-center gap-1.5 mb-5 text-[11px] font-bold">
-          {(['nation', 'league', 'team'] as const).map((s, i) => (
+        <div className="flex items-center justify-center gap-1.5 mb-5 text-[10px] font-bold flex-wrap">
+          {(['era', 'nation', 'league', 'team'] as const).map((s, i) => (
             <span key={s} className="inline-flex items-center gap-1.5">
               {i > 0 && <ChevronRight className="w-3 h-3 text-muted-foreground/50" />}
               <span className={cn(
                 'px-2.5 py-1 rounded-full border',
                 pickStep === s ? 'bg-primary/10 border-primary text-primary' : 'bg-card border-border text-muted-foreground',
               )}>
-                {i + 1}. {s === 'nation' ? 'Nation' : s === 'league' ? 'League' : 'Team'}
+                {i + 1}. {s === 'era' ? 'When' : s === 'nation' ? 'Nation' : s === 'league' ? 'League' : 'Team'}
               </span>
             </span>
           ))}
         </div>
 
+        {/* -------- Step 0 (Round 132): when do you start -------- */}
+        {pickStep === 'era' && (
+          <div className="max-w-2xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {CM_ERAS.map(e => (
+                <button
+                  key={e.id}
+                  onClick={() => { setPickEra(e.id); setPickStep('nation'); }}
+                  className="rounded-xl border bg-card border-border hover:border-primary px-4 py-3 text-left transition-all"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-xl leading-none">{e.emoji}</span>
+                    <div className="min-w-0">
+                      <div className="text-base font-bold font-display text-foreground">{e.label}</div>
+                      <div className="text-[10px] text-muted-foreground">{e.blurb}</div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
+                  </div>
+                  {/* Kept to one line on purpose: at 390x844 all four tiles
+                      have to sit above the fold, and the full measured wording
+                      is one tap away on the team step. */}
+                  <div className={cn(
+                    'mt-1.5 inline-block text-[9px] font-bold px-1.5 py-0.5 rounded border',
+                    e.startYear === CM_BASE_YEAR
+                      ? 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10'
+                      : 'text-yellow-500 border-yellow-500/50 bg-yellow-500/10',
+                  )}>
+                    {e.startYear === CM_BASE_YEAR ? 'REAL DATA' : 'PROJECTION'} · {eraRealShareLabel(e)}
+                  </div>
+                </button>
+              ))}
+            </div>
+            {/* The honest note about what is NOT here, which matters more than
+                what is. There are no real historical squads anywhere in this
+                game, so there is no past era, and saying nothing about that
+                would be the dishonest option. */}
+            <p className="text-[9px] text-muted-foreground text-center mt-2.5 leading-snug max-w-lg mx-auto">
+              No past eras, on purpose. We hold one set of real squads, {CM_ROSTER_META.asOf}, so a 2010 start would mean making up
+              twenty five players a club and putting real badges on them. The future ones are that same real data aged forward:
+              players get older, they retire, and the gaps get filled with players we invented, every one of them marked wherever
+              you see him.
+            </p>
+          </div>
+        )}
+
         {/* -------- Step 1: nation -------- */}
+        {pickStep === 'nation' && (
+          <div className="max-w-2xl mx-auto mb-2.5">
+            <button
+              onClick={() => setPickStep('era')}
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" /> {era.emoji} Starting {era.label}
+            </button>
+          </div>
+        )}
         {pickStep === 'nation' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-2xl mx-auto">
             {NATIONS.map(n => {
@@ -338,7 +406,12 @@ const ClubManager = () => {
                     </div>
                     <div className="flex items-center justify-between mt-1.5">
                       <span className="text-[10px] text-muted-foreground">Squad</span>
-                      <span className="text-sm font-bold font-display text-foreground">{clubPreviewRating(c.name)}</span>
+                      {/* Round 132: the squad number is the squad in the era you
+                          picked, not the 2026 one, or the tile would be lying
+                          about the team you are about to take over. */}
+                      <span className="text-sm font-bold font-display text-foreground">
+                        {Math.round(projectedXIAvg(c.name, eraYearsOn) ?? clubPreviewRating(c.name))}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] text-muted-foreground">Budget</span>
@@ -354,6 +427,9 @@ const ClubManager = () => {
             </div>
             <p className="text-[9px] text-muted-foreground text-center mt-3">
               Squads, ratings and values from market data plus the verified summer window: {CM_ROSTER_META.players} players as of {CM_ROSTER_META.asOf}, refreshed {CM_ROSTER_META.generated}.
+              {eraYearsOn > 0 && (
+                <> Starting {era.label}, so those squads have been aged {eraYearsOn} years: {eraHonestyLine(era)}</>
+              )}
             </p>
 
             {/* Round 70: no scrolling to confirm. The confirm bar pins to the
@@ -591,10 +667,14 @@ const ClubManager = () => {
     <div>
       {/* Header */}
       <header className="mb-4">
-        <div className="flex items-center justify-center gap-2 mb-1">
+        <div className="flex items-center justify-center gap-2 mb-1 flex-wrap">
           <span className="w-3 h-3 rounded-full" style={{ backgroundColor: club.color }} />
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">{c.clubName}</h1>
-          <span className="text-[10px] font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5">Season {c.season}</span>
+          {/* Round 132: the save now knows what year it is, so it says so, next
+              to the season count it has always shown. */}
+          <span className="text-[10px] font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
+            {worldSeasonLabel(c)} · Season {c.season}
+          </span>
         </div>
         <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground flex-wrap">
           {/* Round 99: found by playing it. Before a ball is kicked every
@@ -633,6 +713,20 @@ const ClubManager = () => {
 
         {/* -------- Overview -------- */}
         <TabsContent value="overview" className="space-y-4">
+          {/* Round 132: who stopped playing over the summer. It sits at the top
+              of the first screen of the new season because losing a thirty
+              seven year old you have had since day one is the biggest thing
+              that happened between May and August, and until this round it was
+              a thing that could never happen at all. */}
+          {c.week === 0 && (c.retiredLastSummer ?? []).length > 0 && (
+            <div className="rounded-xl border border-border bg-card p-2.5">
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">👟 Hung up their boots</div>
+              <div className="text-xs text-foreground">
+                {(c.retiredLastSummer ?? []).map(r => `${r.name} (${r.age}, rated ${r.rating})`).join(' · ')}
+              </div>
+              <div className="text-[9px] text-muted-foreground mt-1">That is the end of their careers. You will need to replace them.</div>
+            </div>
+          )}
           {c.transferWindow !== null && (
             <button
               onClick={() => g.setActiveTab('transfers')}
