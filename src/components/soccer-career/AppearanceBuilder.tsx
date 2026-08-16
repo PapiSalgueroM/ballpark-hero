@@ -94,8 +94,15 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981" }: Prop
         ))}
       </div>
 
-      {/* Options */}
-      <div className="min-h-[92px]">
+      {/* Options.
+          Round 131: the lists roughly doubled (23 cuts, 16 hair colours, 14
+          beards, 16 extras, 18 boot lines, 19 celebrations), and left alone
+          that would have added about six hundred pixels to a creation screen
+          that is already the longest page in the game. So the option area is a
+          fixed window with its own scroll: the tabs, the preview and the
+          buttons underneath never move no matter which tab you are on, which
+          is the whole point of the tile rule. */}
+      <div className="min-h-[92px] max-h-[190px] overflow-y-auto scrollbar-thin pr-0.5">
         {tab === "face" && (
           <div className="flex flex-wrap gap-2">
             {SKIN_TONES.map(s => (

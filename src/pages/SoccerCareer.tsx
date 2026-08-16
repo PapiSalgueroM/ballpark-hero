@@ -43,10 +43,18 @@ import {
   FALLBACK_CLUBS,
   answerPhoneText, unreadPhoneCount,
   applyTrainingResult, trainingAvailable, type TrainingDrill,
+  repairCareer, effectivePotential, careerBuildEffects,
 } from "@/lib/soccerCareerEngine";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
 import TrainingPanel from "@/components/soccer-career/TrainingPanel";
-import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocRowsFor, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike } from "@/lib/careerEras";
+import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
+/* Round 131: height, weight and the specifics under each family. */
+import {
+  type PlayerPhysique, type AttrShape,
+  attrTreeFor, deriveAttributes, buildEffects, effectsSummary, safePhysique,
+  applyFamilyOffset, defaultPhysique, heightLabel, weightLabel, buildLabel,
+  POSITION_OFFSETS, SHAPE_MAX, HEIGHT_MIN, HEIGHT_MAX, WEIGHT_MIN, WEIGHT_MAX,
+} from "@/lib/soccerCareerAttributes";
 import {
   type PlayerAppearance, defaultAppearance, getCelebration,
 } from "@/lib/soccerCareerAppearance";
@@ -102,20 +110,12 @@ const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min
 type Stats = { pace: number; shooting: number; passing: number; dribbling: number; defending: number; physical: number; reflexes: number };
 
 function generateStatsFromOverall(overall: number, position: string): Stats {
-  // Position-specific offsets: [pace, shooting, passing, dribbling, defending, physical, reflexes]
-  const offsets: Record<string, number[]> = {
-    ST:  [+5, +8, -3, +2, -10, +3, -5],
-    LW:  [+8, +3, 0, +6, -10, -2, -5],
-    RW:  [+8, +3, 0, +6, -10, -2, -5],
-    CAM: [+2, +3, +6, +6, -12, 0, -5],
-    CM:  [-4, -3, +6, +3, 0, +3, -5],
-    CDM: [-1, -8, +3, -3, +8, +6, -5],
-    CB:  [-2, -10, 0, -6, +10, +8, 0],
-    LB:  [+5, -8, +3, -4, +6, +2, -4],
-    RB:  [+5, -8, +3, -4, +6, +2, -4],
-    GK:  [-4, -14, 0, -8, 0, +4, +12],
-  };
-  const o = offsets[position] || [0, 0, 0, 0, 0, 0, 0];
+  /* Round 131: the offsets moved into soccerCareerAttributes because the
+     engine now needs the same table to work out what a neutral player at this
+     overall looks like. One copy, imported in both places, so the reference
+     the season maths measures a build against can never drift from the line
+     the creation screen hands out. */
+  const o = POSITION_OFFSETS[position] || [0, 0, 0, 0, 0, 0, 0];
   const clamp = (v: number) => Math.max(25, Math.min(99, v));
   const keys: (keyof Stats)[] = ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"];
   const vals = o.map(off => clamp(overall + off));
@@ -141,41 +141,47 @@ function generateStatsFromOverall(overall: number, position: string): Stats {
   return s;
 }
 
-/* ─── Position-specific attribute display ─── */
-function getPositionStatBars(pos: string, s: { pace: number; shooting: number; passing: number; dribbling: number; defending: number; physical: number; reflexes: number }) {
-  if (pos === "GK") return [
-    { l: "Reflexes", v: s.reflexes, c: "bg-cyan-500" },
-    { l: "Positioning", v: s.defending, c: "bg-purple-500" },
-    { l: "Shot Stopping", v: s.shooting, c: "bg-red-500" },
-    { l: "Distribution", v: s.passing, c: "bg-blue-500" },
-    { l: "Aerial Ability", v: s.physical, c: "bg-orange-500" },
-    { l: "Penalty Saving", v: s.dribbling, c: "bg-yellow-500" },
-  ];
-  if (["CB", "LB", "RB"].includes(pos)) return [
-    { l: "Tackling", v: s.defending, c: "bg-purple-500" },
-    { l: "Interceptions", v: s.passing, c: "bg-blue-500" },
-    { l: "Heading", v: s.shooting, c: "bg-red-500" },
-    { l: "Positioning", v: s.dribbling, c: "bg-yellow-500" },
-    { l: "Pace", v: s.pace, c: "bg-emerald-500" },
-    { l: "Physical", v: s.physical, c: "bg-orange-500" },
-  ];
-  if (["CDM", "CM", "CAM"].includes(pos)) return [
-    { l: "Passing", v: s.passing, c: "bg-blue-500" },
-    { l: "Vision", v: s.dribbling, c: "bg-yellow-500" },
-    { l: "Stamina", v: s.physical, c: "bg-orange-500" },
-    { l: "Pressing", v: s.defending, c: "bg-purple-500" },
-    { l: "Dribbling", v: s.shooting, c: "bg-red-500" },
-    { l: "Composure", v: s.reflexes, c: "bg-cyan-500" },
-  ];
-  // Forwards: ST, LW, RW
-  return [
-    { l: "Finishing", v: s.shooting, c: "bg-red-500" },
-    { l: "Pace", v: s.pace, c: "bg-emerald-500" },
-    { l: "Dribbling", v: s.dribbling, c: "bg-yellow-500" },
-    { l: "Shot Power", v: s.physical, c: "bg-orange-500" },
-    { l: "Off The Ball", v: s.defending, c: "bg-purple-500" },
-    { l: "Composure", v: s.passing, c: "bg-blue-500" },
-  ];
+/* ─── Position-specific attribute display ───
+
+   Round 131 rebuilt this. It used to hand back six hardcoded rows per position
+   group with labels invented on the spot, so a midfielder's "Dribbling" bar
+   was secretly reading his shooting stat and his "Composure" bar was reading
+   his reflexes, which for an outfielder is a number nothing else in the game
+   touches. It looked like six attributes and it was six mislabelled ones.
+
+   Now it reads the real family list for the position and, under each family,
+   names the specific attribute that stands out. Still six rows, because a
+   phone screen is a phone screen and the tile rule is the tile rule, but every
+   row is honest and the whole tree is one tap away on its own screen. */
+type AttrHolder = {
+  pace: number; shooting: number; passing: number; dribbling: number;
+  defending: number; physical: number; reflexes: number;
+  position?: string; physique?: PlayerPhysique | null; attrShape?: AttrShape | null;
+};
+
+const FAMILY_COLORS: Record<string, string> = {
+  pace: "bg-emerald-500",
+  shooting: "bg-red-500",
+  passing: "bg-blue-500",
+  dribbling: "bg-yellow-500",
+  defending: "bg-purple-500",
+  physical: "bg-orange-500",
+  reflexes: "bg-cyan-500",
+};
+
+function getPositionStatBars(pos: string, s: AttrHolder) {
+  const derived = deriveAttributes(s, pos, s.physique, s.attrShape);
+  return attrTreeFor(pos).map(fam => {
+    const kids = derived.filter(d => d.family === fam.key);
+    let top = kids[0];
+    for (const k of kids) if (k.value > top.value) top = k;
+    return {
+      l: fam.label,
+      v: Math.round((s as any)[fam.key]) || 0,
+      c: FAMILY_COLORS[fam.key] || "bg-emerald-500",
+      top: top ? `${top.label} ${top.value}` : "",
+    };
+  });
 }
 
 /* ─── Position-specific career stats display ─── */
@@ -222,15 +228,84 @@ function getPositionCareerStats(pos: string, totals: { apps: number; goals: numb
 }
 
 /* ─── Stat Bar ─── */
-function StatBarGame({ label, value, color }: { label: string; value: number; color: string }) {
+function StatBarGame({ label, value, color, top }: { label: string; value: number; color: string; top?: string }) {
   const rc = value >= 80 ? "text-green-400" : value >= 65 ? "text-emerald-400" : value >= 50 ? "text-yellow-400" : "text-red-400";
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs w-[4.5rem] text-muted-foreground truncate">{label}</span>
+      <span className="w-[5.5rem] shrink-0 min-w-0">
+        <span className="block text-xs text-muted-foreground truncate">{label}</span>
+        {top && <span className="block text-[9px] text-muted-foreground/70 truncate">{top}</span>}
+      </span>
       <div className="flex-1 h-2 rounded-full bg-muted/40 overflow-hidden">
         <div className={`h-full rounded-full ${color} transition-all duration-500`} style={{ width: `${value}%` }} />
       </div>
       <span className={`text-xs font-bold w-6 text-right ${rc}`}>{value}</span>
+    </div>
+  );
+}
+
+/* ─── Round 131: the stepper he asked for ───
+
+   His words: "It takes forever to manually change the overall of stuff, I
+   would prefer if we had like a jump by 5 feature too, or just write the
+   number u wanna start with."
+
+   Both, because both are cheap. Minus five, minus one, a box you can type
+   straight into, plus one, plus five. The typing is the part that has to be
+   careful: the box holds whatever you type as text while you are typing, so
+   backspacing to empty does not slam the value to the minimum under your
+   finger, but the VALUE it reports is always a clamped whole number, never
+   NaN and never out of the legal window. Blur or Enter tidies the text back up
+   to the committed number.
+
+   The clamp window is passed in rather than assumed, because on the build
+   screen the top of the window is not a constant: it is whichever comes first
+   out of the per stat cap and how many points you still have left to spend. */
+function NumberStepper({ value, min, max, onChange, label, disabled, wide }: {
+  value: number;
+  min: number;
+  max: number;
+  onChange: (next: number) => void;
+  label: string;
+  disabled?: boolean;
+  wide?: boolean;
+}) {
+  const [draft, setDraft] = useState<string | null>(null);
+  const clampTo = (v: number) => Math.max(min, Math.min(max, Math.round(v)));
+  const commit = (raw: string) => {
+    /* Keep a leading minus, because the shaping steppers run from -12 to +12,
+       and throw away everything that is not a digit. */
+    const digits = (raw.match(/-?\d*/) || [""])[0];
+    if (digits === "" || digits === "-") { setDraft(digits); return; }
+    const n = Number(digits);
+    if (!Number.isFinite(n)) { setDraft(""); return; }
+    const c = clampTo(n);
+    onChange(c);
+    /* Found by driving it at 390 wide: typing 99999 into the overall box left
+       99999 sitting in it while the career underneath was correctly 99, which
+       reads as a broken control even though nothing was broken. The box keeps
+       what you typed only while what you typed is legal. */
+    setDraft(c === n ? digits : String(c));
+  };
+  const btn = "h-8 w-8 shrink-0 rounded-md border border-border bg-muted/20 text-[11px] font-black text-foreground disabled:opacity-30 active:scale-95 transition-transform";
+  return (
+    <div className="flex items-center gap-1">
+      <button type="button" aria-label={`${label} down 5`} disabled={disabled || value <= min} onClick={() => onChange(clampTo(value - 5))} className={btn}>-5</button>
+      <button type="button" aria-label={`${label} down 1`} disabled={disabled || value <= min} onClick={() => onChange(clampTo(value - 1))} className={btn}>-1</button>
+      <input
+        aria-label={label}
+        inputMode="numeric"
+        pattern="[0-9]*"
+        disabled={disabled}
+        value={draft ?? String(value)}
+        onChange={(e) => commit(e.target.value)}
+        onFocus={(e) => e.currentTarget.select()}
+        onBlur={() => setDraft(null)}
+        onKeyDown={(e) => { if (e.key === "Enter") { setDraft(null); (e.currentTarget as HTMLInputElement).blur(); } }}
+        className={`${wide ? "w-16" : "w-12"} h-8 shrink-0 rounded-md border border-border bg-background text-center text-sm font-black tabular-nums outline-none focus:border-emerald-500`}
+      />
+      <button type="button" aria-label={`${label} up 1`} disabled={disabled || value >= max} onClick={() => onChange(clampTo(value + 1))} className={btn}>+1</button>
+      <button type="button" aria-label={`${label} up 5`} disabled={disabled || value >= max} onClick={() => onChange(clampTo(value + 5))} className={btn}>+5</button>
     </div>
   );
 }
@@ -487,6 +562,11 @@ export default function SoccerCareer() {
   const [previewStats, setPreviewStats] = useState<Stats | null>(null);
   // Round 54: the look you build on the creation screen, carried into initCareer
   const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
+  /* Round 131: the frame and the shaping live up here beside the look, because
+     they have to survive closing the build screen and reopening it, and they
+     both go into initCareer at the end. */
+  const [physique, setPhysique] = useState<PlayerPhysique>(() => defaultPhysique("ST"));
+  const [attrShape, setAttrShape] = useState<AttrShape>({});
   const [previewOvr, setPreviewOvr] = useState(0);
   const [saving, setSaving] = useState(false);
   const [career, setCareer] = useState<CareerState | null>(() => {
@@ -494,12 +574,13 @@ export default function SoccerCareer() {
       const saved = localStorage.getItem(SAVE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved) as CareerState;
-        // Migrate old saves missing primeType
-        if (!parsed.primeType) {
-          const primeTypes: Array<"early" | "normal" | "late" | "extended"> = ["early", "normal", "late", "extended"];
-          parsed.primeType = primeTypes[Math.floor(Math.random() * 4)] as any;
-        }
-        return parsed;
+        /* Round 127's lesson, and Round 131 keeps learning it: repairing a save
+           only inside the step function is not enough, because the player can
+           open the training ground, the phone or the attributes screen before
+           taking a single step. repairCareer fills every optional field this
+           game has grown, including the primeType migration that used to live
+           here, and it runs again at the top of both step functions. */
+        return repairCareer(parsed);
       }
     } catch {}
     return null;
@@ -567,6 +648,12 @@ export default function SoccerCareer() {
     setPreviewOvr(0);
     setRolledOvr(null);
     setRolledPot(null);
+    /* Round 131: the specifics under each family are different for a keeper
+       than for anybody else, and a normal frame for a keeper is not a normal
+       frame for a winger, so switching position resets both rather than
+       carrying over a shape whose attribute names no longer exist. */
+    setPhysique(defaultPhysique(pos));
+    setAttrShape({});
   }, []);
 
   useEffect(() => {
@@ -579,7 +666,7 @@ export default function SoccerCareer() {
     // Guests can play; careers live in local state. Sign-in is only a nice-to-have.
     if (!previewStats || !isFormValid || clubs.length === 0 || rolledOvr === null) return;
     const startYear = ERAS.find(e => e.value === era)?.startYear ?? 2020;
-    const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs, appearance, rolledPot ?? undefined);
+    const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs, appearance, rolledPot ?? undefined, physique, attrShape);
     setCareer(newCareer);
     toast.success(`Joined ${newCareer.currentClub}!`);
   };
@@ -843,6 +930,8 @@ export default function SoccerCareer() {
               onRolledOvr={(ovr: number, pot: number) => { setRolledOvr(ovr); setRolledPot(pot); }}
               onStatsGenerated={(stats: Stats, ovr: number) => { setPreviewStats(stats); setPreviewOvr(ovr); }}
               appearance={appearance} setAppearance={setAppearance}
+              physique={physique} setPhysique={setPhysique}
+              attrShape={attrShape} setAttrShape={setAttrShape}
             />
           ) : (
             <GameScreen
@@ -982,93 +1071,312 @@ function getOverallTier(ovr: number): { label: string; color: string; bgColor: s
   return { label: "Raw Talent: Rough Around the Edges", color: "text-muted-foreground", bgColor: "bg-muted/20 border-border" };
 }
 
-/* ─── Round 79: 2K style build editor, a full screen drill-in per the tile
-   rule. You get the rolled points as a budget and move them between the
-   stats your position actually uses. Outfield overall never drifts (it is
-   the average, so a fixed pool pins it); a keeper's overall is weighted, so
-   where you put points genuinely matters, exactly like a 2K build. ─── */
-function BuildEditor({ position, targetOvr, baseStats, potLabel, onConfirm, onCancel }: {
+/* ─── Round 79 build editor, rebuilt in Round 131 ───
+
+   Three things changed and all three came straight off his list.
+
+   ONE, THE OVERALL CAP IS GONE. "And there shouldn't be a cap on overalls.
+   Like 99 obviously, but when ur building ur player there shouldn't." So the
+   starting overall is a control now and it runs all the way to 99.
+
+   That is the easy half. The honest half is that a career which starts at 99
+   with nothing left to chase is a WORSE game than one that starts at 62, and
+   permitting the choice without answering it would have been the lazy version.
+   So the screen answers it in three ways, in view, at the moment you make the
+   choice. It shows you your headroom, and the headroom is the whole growth
+   economy: at 99 you have none, so training, the shop, the ceiling push and
+   every development system in the game are switched off for you on day one. It
+   shows you the ceiling the roll gave you and how a high start eats the
+   distance to it. And when you retire, the verdict knows what you started at,
+   so climbing from 54 to 91 reads as a bigger career than being handed 99 and
+   staying there, which is exactly how anybody actually talks about a
+   footballer.
+
+   TWO, THE STEPPERS. Minus five, minus one, type it, plus one, plus five, on
+   every row including the overall itself.
+
+   THREE, THE SHAPE UNDERNEATH. Each family opens its own screen where you
+   split it between the specifics a football person would name, and the frame
+   tile sets your height and weight. Both feed real multipliers on goals,
+   assists, games played, rating and injury risk, so two strikers with the same
+   overall genuinely play differently.
+
+   The tile rule is why all of that is behind three small tiles instead of
+   stacked into one enormous scroll. */
+
+type BuildScreen = { kind: "root" } | { kind: "family"; key: string } | { kind: "frame" };
+
+const BUILD_OVR_MIN = 40;
+const BUILD_OVR_MAX = 99;
+
+function BuildEditor({ position, targetOvr, baseStats, rolledPot, physique, onPhysique, shape, onShape, onConfirm, onCancel }: {
   position: string;
   targetOvr: number;
   baseStats: Stats;
-  potLabel: { label: string; color: string } | null;
+  rolledPot: number | null;
+  physique: PlayerPhysique;
+  onPhysique: (p: PlayerPhysique) => void;
+  shape: AttrShape;
+  onShape: (s: AttrShape) => void;
   onConfirm: (stats: Stats, calcOvr: number) => void;
   onCancel: () => void;
 }) {
-  const rows = allocRowsFor(position);
-  const startRef = useRef<Stats | null>(null);
-  if (startRef.current === null) startRef.current = normalizeAllocation(baseStats, position, targetOvr) as Stats;
-  const [alloc, setAlloc] = useState<Stats>(startRef.current);
-  const budget = rows.reduce((a, r) => a + (startRef.current as any)[r.key], 0);
-  const spent = rows.reduce((a, r) => a + (alloc as any)[r.key], 0);
+  /* Round 131: the six rows are named off the attribute tree rather than off
+     allocRowsFor. Same keys, same maths, but the tree is the canonical shape
+     now, so the row on the build screen, the screen it opens and the bars on
+     the career page all use the one set of names. Before this, a striker's
+     shooting row was labelled "Finishing", it opened a screen headed
+     "Shooting", and the first attribute inside that screen was also called
+     "Finishing", which is three names for two different things. */
+  const rows = attrTreeFor(position).map(f => ({ key: f.key as string, label: f.label }));
+  const sumOf = (s: Stats) => rows.reduce((a, r) => a + ((s as any)[r.key] as number), 0);
+  const startRef = useRef<{ stats: Stats; ovr: number } | null>(null);
+  if (startRef.current === null) startRef.current = { stats: normalizeAllocation(baseStats, position, targetOvr) as Stats, ovr: targetOvr };
+
+  const [target, setTarget] = useState(targetOvr);
+  const [alloc, setAlloc] = useState<Stats>(startRef.current.stats);
+  const [budget, setBudget] = useState(() => sumOf(startRef.current!.stats));
+  const [screen, setScreen] = useState<BuildScreen>({ kind: "root" });
+  /* NO SCROLL RULE, and this one was found by driving it at 390 wide rather
+     than by reading the code. The Customize your build button sits near the
+     bottom of a long creation screen, so by the time you reach it the page is
+     three thousand pixels down. Swapping in a shorter full screen editor left
+     the window exactly where it was, which put the player in the middle of the
+     page's own How To Play copy with the thing he just opened somewhere above
+     him. Same for every drill in from here. The house hook does the right
+     thing already: it puts the top of the new screen just under whatever is
+     pinned to the top of the window, and it does nothing at all when the new
+     screen is already readable. skipFirst is off because a fresh mount IS the
+     reveal here, unlike an overlay that appears inside a page. */
+  const revealRef = useRevealScroll<HTMLDivElement>(
+    screen.kind === "family" ? `family:${screen.key}` : screen.kind,
+    { skipFirst: false },
+  );
+
+  const spent = sumOf(alloc);
   const pool = budget - spent;
-  const maxStat = allocMax(targetOvr);
+  const maxStat = allocMax(target);
   const liveOvr = allocOverall(alloc, position);
   const comp = playsLike(alloc, position);
+  const ceiling = Math.min(99, Math.max(rolledPot ?? liveOvr + 6, liveOvr + 2));
+  const headroom = Math.max(0, ceiling - liveOvr);
+  const fx = buildEffects(alloc, position, liveOvr, physique, shape);
+  const fxLines = effectsSummary(fx, position);
 
-  const bump = (key: string, delta: number) => {
-    setAlloc(prev => {
-      const cur = (prev as any)[key] as number;
-      let next = cur + delta;
-      if (delta > 0) next = Math.min(next, maxStat, cur + pool);
-      else next = Math.max(next, ALLOC_MIN);
-      if (next === cur) return prev;
-      return { ...prev, [key]: next };
-    });
+  /* Changing the starting overall renormalizes the whole line onto the new
+     number and resets the pool to match, so you can never end up with a budget
+     that belongs to an overall you have since moved away from. */
+  const retarget = (next: number) => {
+    const t = Math.max(BUILD_OVR_MIN, Math.min(BUILD_OVR_MAX, Math.round(next)));
+    if (t === target) return;
+    const line = normalizeAllocation(alloc, position, t) as Stats;
+    setTarget(t);
+    setAlloc(line);
+    setBudget(sumOf(line));
   };
 
-  return (
-    <div className="max-w-xl mx-auto space-y-4 animate-fade-in">
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="sm" onClick={onCancel} className="h-8 px-2 text-muted-foreground">← Back</Button>
-        <h1 className="text-lg font-black">🎮 Build Your Player</h1>
-      </div>
+  /* Both of these are one line because the rules they enforce live in the libs
+     rather than in this component. That is deliberate: scripts/simCreation.mjs
+     fuzzes the exact same two functions a quarter of a million times, which it
+     could not do if the rules only existed inside a React handler. */
+  const setStat = (key: string, next: number) => {
+    setAlloc(prev => stepAllocation(prev as any, position, key as any, next, budget, target) as Stats);
+  };
 
-      <div className="bg-card border border-border rounded-xl p-4 flex items-center justify-between">
-        <div>
-          <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Points to spend</div>
-          <div className={`text-3xl font-black tabular-nums ${pool > 0 ? "text-emerald-400" : "text-foreground"}`}>{pool}</div>
-        </div>
-        <div className="text-center">
-          <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Overall</div>
-          <div className="text-3xl font-black tabular-nums">{liveOvr}</div>
-          {position === "GK" && <div className="text-[9px] text-muted-foreground">weighted by where points go</div>}
-        </div>
-        {potLabel && (
-          <div className="text-right">
-            <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Ceiling</div>
-            <div className={`text-xs font-bold ${potLabel.color}`}>{potLabel.label}</div>
+  const setOffset = (famKey: string, id: string, next: number) => {
+    onShape(applyFamilyOffset(position, shape, famKey, id, next));
+  };
+
+  const backBar = (title: string, onBack: () => void) => (
+    <div className="flex items-center gap-2">
+      <Button variant="ghost" size="sm" onClick={onBack} className="h-8 px-2 text-muted-foreground">← Back</Button>
+      <h1 className="text-base font-black truncate">{title}</h1>
+    </div>
+  );
+
+  /* ── Frame screen: height and weight ── */
+  if (screen.kind === "frame") {
+    const derived = deriveAttributes(alloc, position, physique, shape).filter(d => d.frameDelta !== 0);
+    derived.sort((a, b) => Math.abs(b.frameDelta) - Math.abs(a.frameDelta));
+    return (
+      <div ref={revealRef} className="max-w-xl mx-auto space-y-3 animate-fade-in">
+        {backBar("Height and Weight", () => setScreen({ kind: "root" }))}
+        <div className="bg-card border border-border rounded-xl p-4 space-y-3">
+          <div className="space-y-1.5">
+            <div className="flex items-baseline justify-between">
+              <span className="text-xs font-bold">Height</span>
+              <span className="text-[11px] text-muted-foreground tabular-nums">{heightLabel(physique.heightCm)}</span>
+            </div>
+            <NumberStepper label="Height in centimetres" value={physique.heightCm} min={HEIGHT_MIN} max={HEIGHT_MAX} wide
+              onChange={(v) => onPhysique(safePhysique(position, { ...physique, heightCm: v }))} />
           </div>
-        )}
+          <div className="space-y-1.5">
+            <div className="flex items-baseline justify-between">
+              <span className="text-xs font-bold">Weight</span>
+              <span className="text-[11px] text-muted-foreground tabular-nums">{weightLabel(physique.weightKg)}</span>
+            </div>
+            <NumberStepper label="Weight in kilograms" value={physique.weightKg} min={WEIGHT_MIN} max={WEIGHT_MAX} wide
+              onChange={(v) => onPhysique(safePhysique(position, { ...physique, weightKg: v }))} />
+          </div>
+          <div className="rounded-lg bg-muted/20 px-3 py-2 text-center">
+            <span className="text-xs font-bold">{buildLabel(physique)}</span>
+          </div>
+        </div>
+        <div className="bg-card border border-border rounded-xl p-4 space-y-2">
+          <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">What your frame is doing</div>
+          {derived.length === 0 && <p className="text-[11px] text-muted-foreground">Textbook size for this position, so nothing is pushed either way.</p>}
+          <div className="grid grid-cols-2 gap-x-3 gap-y-1">
+            {derived.slice(0, 12).map(d => (
+              <div key={d.id} className="flex items-center justify-between gap-1">
+                <span className="text-[11px] text-muted-foreground truncate">{d.label}</span>
+                <span className={`text-[11px] font-black tabular-nums ${d.frameDelta > 0 ? "text-emerald-400" : "text-red-400"}`}>
+                  {d.frameDelta > 0 ? "+" : ""}{d.frameDelta}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <Button variant="outline" className="w-full h-11 text-sm font-bold"
+          onClick={() => onPhysique(defaultPhysique(position))}>↩️ Back to a normal frame</Button>
+        <Button className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white" onClick={() => setScreen({ kind: "root" })}>Done</Button>
+      </div>
+    );
+  }
+
+  /* ── Family screen: split one family between its specifics ── */
+  if (screen.kind === "family") {
+    const fam = attrTreeFor(position).find(f => f.key === screen.key);
+    if (!fam) { setScreen({ kind: "root" }); return null; }
+    const famValue = (alloc as any)[fam.key] as number;
+    const derived = deriveAttributes(alloc, position, physique, shape);
+    return (
+      <div ref={revealRef} className="max-w-xl mx-auto space-y-3 animate-fade-in">
+        {backBar(fam.label, () => setScreen({ kind: "root" }))}
+        <div className="bg-card border border-border rounded-xl p-3 flex items-center justify-between">
+          <div>
+            <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">{fam.label}</div>
+            <div className="text-2xl font-black tabular-nums">{famValue}</div>
+          </div>
+          <p className="text-[10px] text-muted-foreground text-right max-w-[62%] leading-snug">
+            Push one up and the others come down. The average never moves, so shaping your player here cannot change your overall.
+          </p>
+        </div>
+        <div className="bg-card border border-border rounded-xl p-3 space-y-2.5">
+          {fam.children.map(c => {
+            const d = derived.find(x => x.id === c.id);
+            const off = shape[c.id] ?? 0;
+            return (
+              <div key={c.id} className="rounded-lg border border-border/60 bg-muted/10 p-2 space-y-1.5">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-xs font-bold truncate">{c.label}</span>
+                  <span className="text-sm font-black tabular-nums shrink-0">{d?.value ?? famValue}</span>
+                </div>
+                <p className="text-[10px] text-muted-foreground leading-snug">{c.does}</p>
+                <NumberStepper label={`${c.label} shaping`} value={off} min={-SHAPE_MAX} max={SHAPE_MAX}
+                  onChange={(v) => setOffset(fam.key, c.id, v)} />
+              </div>
+            );
+          })}
+        </div>
+        <Button className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white" onClick={() => setScreen({ kind: "root" })}>Done</Button>
+      </div>
+    );
+  }
+
+  /* ── Root ── */
+  return (
+    <div ref={revealRef} className="max-w-xl mx-auto space-y-3 animate-fade-in">
+      {backBar("🎮 Build Your Player", onCancel)}
+
+      <div className="bg-card border border-border rounded-xl p-3 space-y-2">
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Starting overall</div>
+            <div className="text-3xl font-black tabular-nums leading-none">{liveOvr}</div>
+          </div>
+          <div className="text-right">
+            <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Room to grow</div>
+            <div className={`text-3xl font-black tabular-nums leading-none ${headroom >= 20 ? "text-emerald-400" : headroom >= 8 ? "text-amber-400" : "text-red-400"}`}>{headroom}</div>
+          </div>
+        </div>
+        <NumberStepper label="Starting overall" value={target} min={BUILD_OVR_MIN} max={BUILD_OVR_MAX} wide onChange={retarget} />
+        <p className="text-[10px] text-muted-foreground leading-snug">
+          {headroom <= 2
+            ? `Start here and you are finished before you begin. Scouts have you at a ${ceiling} ceiling, so there is nothing left to train for and the whole development side of the game is switched off for you. Your legacy is judged on how far you climbed, and this is a climb of ${Math.max(0, ceiling - liveOvr)}.`
+            : headroom <= 10
+              ? `Scouts have you at a ${ceiling} ceiling, so there are ${headroom} points left in you. Starting this high buys the good years now and spends most of the climb.`
+              : `Scouts have you at a ${ceiling} ceiling, so there are ${headroom} points left in you. Start low and the climb is the game.`}
+        </p>
       </div>
 
-      <div className="bg-card border border-border rounded-xl p-4 space-y-3">
+      <div className="bg-card border border-border rounded-xl p-3 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Points to spend</span>
+          <span className={`text-lg font-black tabular-nums ${pool > 0 ? "text-emerald-400" : "text-foreground"}`}>{pool}</span>
+        </div>
         {rows.map(r => {
           const v = (alloc as any)[r.key] as number;
+          const famTop = deriveAttributes(alloc, position, physique, shape)
+            .filter(d => d.family === r.key)
+            .reduce((best, d) => (best && best.value >= d.value ? best : d), null as any);
+          /* Found at 320 wide: the name, the bar and the standout attribute all
+             on one line pushed a keeper's build screen 68px off the side of the
+             phone, because "Aerial Command" and "Claiming Crosses 62" are both
+             long and neither of them can shrink. The bar gets its own line
+             instead, which is easier to read anyway. */
           return (
-            <div key={r.key} className="flex items-center gap-2">
-              <div className="w-28 shrink-0 text-xs font-bold">{r.label}</div>
-              <Button variant="outline" size="sm" className="h-7 w-7 p-0 shrink-0 font-black" disabled={v <= ALLOC_MIN} onClick={() => bump(r.key, -1)}>−</Button>
-              <div className="flex-1 h-2.5 rounded-full bg-muted/30 overflow-hidden">
+            <div key={r.key} className="rounded-lg border border-border/60 bg-muted/10 p-2 space-y-1.5">
+              <div className="flex items-center gap-2 min-w-0">
+                <button type="button" onClick={() => setScreen({ kind: "family", key: r.key })} className="flex items-center gap-1 min-w-0 flex-1 text-left">
+                  <span className="text-xs font-bold truncate">{r.label}</span>
+                  <ChevronRight className="w-3 h-3 shrink-0 opacity-60" />
+                </button>
+                <span className="text-[10px] text-muted-foreground truncate max-w-[52%] tabular-nums">{famTop ? `${famTop.label} ${famTop.value}` : ""}</span>
+              </div>
+              <div className="h-2 rounded-full bg-muted/30 overflow-hidden">
                 <div className="h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${Math.min(100, v)}%` }} />
               </div>
-              <div className="w-8 text-center text-sm font-black tabular-nums">{v}</div>
-              <Button variant="outline" size="sm" className="h-7 w-7 p-0 shrink-0 font-black" disabled={v >= maxStat || pool <= 0} onClick={() => bump(r.key, +1)}>+</Button>
+              <NumberStepper label={r.label} value={v} min={ALLOC_MIN} max={Math.min(maxStat, v + Math.max(0, pool))} onChange={(n) => setStat(r.key, n)} />
             </div>
           );
         })}
-        <p className="text-[10px] text-muted-foreground text-center pt-1">Take points out of one stat to spend on another. Cap {maxStat} per stat at your age.</p>
+        <p className="text-[10px] text-muted-foreground text-center">Take points out of one to spend on another. Cap {maxStat} per attribute at this overall. Tap a name to shape what is underneath it.</p>
       </div>
 
-      <div className="bg-card border border-border rounded-xl p-4 text-center space-y-1">
-        <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Scouts say you play like</div>
-        <div className="text-lg font-black">{comp.name}</div>
-        <div className="text-[11px] text-muted-foreground">{comp.pct > 0 ? `${comp.pct}% style match · ` : ""}{comp.style}</div>
+      <button type="button" onClick={() => setScreen({ kind: "frame" })} className="w-full bg-card border border-border rounded-xl p-3 flex items-center justify-between text-left active:scale-[0.99] transition-transform">
+        <div className="min-w-0">
+          <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Height and weight</div>
+          <div className="text-sm font-black truncate">{physique.heightCm} cm · {physique.weightKg} kg</div>
+          <div className="text-[10px] text-muted-foreground truncate">{buildLabel(physique)}</div>
+        </div>
+        <ChevronRight className="w-4 h-4 shrink-0 opacity-60" />
+      </button>
+
+      <div className="bg-card border border-border rounded-xl p-3 space-y-1.5">
+        <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">What this build does to your seasons</div>
+        <div className="flex flex-wrap gap-1.5">
+          {fxLines.map(l => (
+            <span key={l} className="px-2 py-1 rounded-md bg-muted/30 text-[11px] font-bold">{l}</span>
+          ))}
+        </div>
+        <div className="pt-1 text-[11px] text-muted-foreground">
+          Scouts say you play like <span className="font-black text-foreground">{comp.name}</span>
+          {comp.pct > 0 ? ` (${comp.pct}% match)` : ""}
+        </div>
       </div>
 
-      <div className="flex gap-2">
-        <Button variant="outline" className="flex-1 h-11 text-sm font-bold" onClick={() => setAlloc(startRef.current as Stats)}>↩️ Reset to scout build</Button>
-        <Button className="flex-1 h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-40" disabled={pool !== 0} onClick={() => onConfirm(alloc, liveOvr)}>
+      {/* Stacked on a narrow phone. These two have sat side by side since
+          Round 79 and shadcn's Button carries whitespace-nowrap, so at 320
+          wide the Lock In button ran 68px off the right hand edge of the
+          screen and could not be pressed. Nobody had measured this screen at
+          320 before. */}
+      <div className="flex flex-col sm:flex-row gap-2">
+        <Button variant="outline" className="w-full sm:flex-1 h-11 text-sm font-bold" onClick={() => {
+          const s = startRef.current as { stats: Stats; ovr: number };
+          setTarget(s.ovr); setAlloc(s.stats); setBudget(sumOf(s.stats));
+          onPhysique(defaultPhysique(position)); onShape({});
+        }}>↩️ Reset to scout build</Button>
+        <Button className="w-full sm:flex-1 h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-40" disabled={pool !== 0} onClick={() => onConfirm(alloc, liveOvr)}>
           {pool !== 0 ? `Spend your ${pool} points first` : "✅ Lock in build"}
         </Button>
       </div>
@@ -1076,24 +1384,119 @@ function BuildEditor({ position, targetOvr, baseStats, potLabel, onConfirm, onCa
   );
 }
 
+
+/* ─── Round 131: every number, on its own screen ───
+   The career page shows six family bars because that is what fits on a phone.
+   This is where the rest of it lives: the specifics under each family with
+   their real values, the frame that is pushing some of them around, and the
+   plain english summary of what the whole build is worth in a season. One tap
+   in, one tap back, nothing stacked under anything else. */
+function AttributesScreen({ career, onBack }: { career: CareerState; onBack: () => void }) {
+  // Same reason as the build screen: a full screen swap has to bring its own top with it.
+  const revealRef = useRevealScroll<HTMLDivElement>("attributes", { skipFirst: false });
+  const tree = attrTreeFor(career.position);
+  const derived = deriveAttributes(career, career.position, career.physique, career.attrShape);
+  const phys = safePhysique(career.position, career.physique);
+  const fx = careerBuildEffects(career);
+  const lines = effectsSummary(fx, career.position);
+  const ceiling = effectivePotential(career);
+  const earned = career.potentialEarned ?? 0;
+
+  return (
+    <div ref={revealRef} className="max-w-xl mx-auto space-y-3 animate-fade-in pb-20">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="sm" onClick={onBack} className="h-8 px-2 text-muted-foreground">← Back</Button>
+        <h1 className="text-base font-black truncate">{career.playerName}, full attributes</h1>
+      </div>
+
+      <div className="bg-card border border-border rounded-xl p-3 grid grid-cols-3 gap-2 text-center">
+        <div>
+          <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Overall</div>
+          <div className="text-2xl font-black tabular-nums">{career.overall}</div>
+        </div>
+        <div>
+          <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Height</div>
+          <div className="text-sm font-black tabular-nums pt-1.5">{heightLabel(phys.heightCm)}</div>
+        </div>
+        <div>
+          <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Weight</div>
+          <div className="text-sm font-black tabular-nums pt-1.5">{weightLabel(phys.weightKg)}</div>
+        </div>
+      </div>
+
+      <div className="bg-card border border-border rounded-xl p-3 space-y-1.5">
+        <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">What this build is worth</div>
+        <div className="flex flex-wrap gap-1.5">
+          {lines.map(l => <span key={l} className="px-2 py-1 rounded-md bg-muted/30 text-[11px] font-bold">{l}</span>)}
+        </div>
+        <div className="pt-1 text-[11px] text-muted-foreground">
+          {buildLabel(phys)}. Scouts have your ceiling at {ceiling}
+          {earned > 0 ? `, and ${earned} of that you earned by playing your way past what they first wrote down.` : "."}
+        </div>
+      </div>
+
+      {tree.map(fam => (
+        <div key={fam.key} className="bg-card border border-border rounded-xl p-3 space-y-2">
+          <div className="flex items-baseline justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{fam.label}</span>
+            <span className="text-lg font-black tabular-nums">{Math.round((career as any)[fam.key]) || 0}</span>
+          </div>
+          {fam.children.map(c => {
+            const d = derived.find(x => x.id === c.id);
+            const v = d?.value ?? 0;
+            const rc = v >= 80 ? "text-green-400" : v >= 65 ? "text-emerald-400" : v >= 50 ? "text-yellow-400" : "text-red-400";
+            return (
+              <div key={c.id} className="flex items-center gap-2">
+                <span className="w-[6.5rem] shrink-0 text-[11px] text-muted-foreground truncate">{c.label}</span>
+                <div className="flex-1 h-2 rounded-full bg-muted/40 overflow-hidden">
+                  <div className={`h-full rounded-full ${FAMILY_COLORS[fam.key] || "bg-emerald-500"}`} style={{ width: `${v}%` }} />
+                </div>
+                {d && d.frameDelta !== 0 && (
+                  <span className={`text-[9px] font-bold shrink-0 tabular-nums ${d.frameDelta > 0 ? "text-emerald-400/70" : "text-red-400/70"}`}>
+                    {d.frameDelta > 0 ? "+" : ""}{d.frameDelta}
+                  </span>
+                )}
+                <span className={`text-xs font-bold w-6 text-right shrink-0 ${rc}`}>{v}</span>
+              </div>
+            );
+          })}
+        </div>
+      ))}
+
+      <Button onClick={onBack} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">Back to your career</Button>
+    </div>
+  );
+}
+
 /* ─── Creation Screen ─── */
-function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, clubsLoading, clubsError, onRolledOvr, onStatsGenerated, appearance, setAppearance }: any) {
+function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, clubsLoading, clubsError, onRolledOvr, onStatsGenerated, appearance, setAppearance, physique, setPhysique, attrShape, setAttrShape }: any) {
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
   const [rolledPot, setRolledPot] = useState<number | null>(null);
-  const [rollsLeft, setRollsLeft] = useState(3);
+  const [rollCount, setRollCount] = useState(0);
+  const [bestPotSeen, setBestPotSeen] = useState(0);
   const [isRolling, setIsRolling] = useState(false);
   const [displayOvr, setDisplayOvr] = useState(0);
   const [academyClub, setAcademyClub] = useState<ClubData | null>(null);
   // Round 79: the 2K style build editor drill-in
   const [buildOpen, setBuildOpen] = useState(false);
+  /* Coming back OUT of the build editor has the same problem in reverse, so
+     the creation screen brings its own top with it too. skipFirst stays on
+     here, because the very first render is just the page loading and nobody
+     wants a game that scrolls the moment it opens. */
+  const creationRef = useRevealScroll<HTMLDivElement>(buildOpen ? "build" : "creation");
 
   const canGenerate = playerName.trim().length > 0 && nationality && position && era;
 
   const doRoll = useCallback(() => {
-    // Round 78: scouts only look so many times. 3 rolls total, then you
-    // commit to what you got. Makes the rare high-potential rolls mean
-    // something instead of reroll-until-generational.
-    if (!canGenerate || clubs.length === 0 || isRolling || rollsLeft <= 0) return;
+    /* Round 78 gave everybody three looks from the scouts and then locked it.
+       Round 131 takes the lock off, because he asked for it and because he was
+       right: "have unlimited rerolls so people can try to get someone with a
+       higher potential." Somebody chasing a dice roll is going to chase it
+       either way, and the three roll version only ever meant closing the tab
+       and opening it again, which is a worse game and the same outcome. The
+       odds behind the roll have not moved a point, so a generational ceiling is
+       exactly as rare per roll as it has always been. */
+    if (!canGenerate || clubs.length === 0 || isRolling) return;
     setIsRolling(true);
     setAcademyClub(null);
     // Slot machine animation: cycle through random numbers
@@ -1111,7 +1514,8 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         setDisplayOvr(finalOvr);
         setRolledOvr(finalOvr);
         setRolledPot(pot);
-        setRollsLeft(prev => prev - 1);
+        setRollCount(prev => prev + 1);
+        setBestPotSeen(prev => Math.max(prev, pot));
         onRolledOvr?.(finalOvr, pot);
         // Generate stats that average to exactly this overall
         const stats = generateStatsFromOverall(finalOvr, position);
@@ -1123,7 +1527,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         setAcademyClub(club);
       }
     }, 60);
-  }, [canGenerate, clubs, nationality, position, isRolling, era, rollsLeft]);
+  }, [canGenerate, clubs, nationality, position, isRolling, era]);
 
   const tier = rolledOvr !== null ? getOverallTier(rolledOvr) : (isRolling ? getOverallTier(displayOvr) : null);
 
@@ -1133,6 +1537,11 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
     onRolledOvr?.(calcOvr, rolledPot ?? calcOvr + 6);
     onStatsGenerated?.(stats, calcOvr);
     setBuildOpen(false);
+    /* Round 131: the academy that takes you depends on how good you are, and
+       the build screen can now move that by fifty points, so the placement
+       preview underneath has to be recalculated or it is quietly lying. */
+    const startYr = ERAS.find(er => er.value === era)?.startYear ?? 2020;
+    setAcademyClub(getYouthAcademyClub(adjustClubsForYear(clubs, startYr), nationality, calcOvr));
   };
 
   // Tile rule: the build editor takes over the whole screen with a back button
@@ -1142,7 +1551,11 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         position={position}
         targetOvr={rolledOvr}
         baseStats={previewStats}
-        potLabel={rolledPot !== null ? potentialTier(rolledPot) : null}
+        rolledPot={rolledPot}
+        physique={physique}
+        onPhysique={setPhysique}
+        shape={attrShape}
+        onShape={setAttrShape}
         onConfirm={handleBuildConfirm}
         onCancel={() => setBuildOpen(false)}
       />
@@ -1150,7 +1563,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
   }
 
   return (
-    <div className="max-w-xl mx-auto space-y-5">
+    <div ref={creationRef} className="max-w-xl mx-auto space-y-5">
       <div className="text-center space-y-1">
         <h1 className="text-3xl sm:text-4xl font-black tracking-tight">⚽ Soccer Career</h1>
         <p className="text-muted-foreground text-sm">Create your player. Build your legend.</p>
@@ -1241,15 +1654,18 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
           <div className="flex gap-2">
             <Button
               onClick={doRoll}
-              disabled={isRolling || clubsLoading || rollsLeft <= 0}
+              disabled={isRolling || clubsLoading}
               className={`flex-1 h-11 text-sm font-bold text-white ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
               variant={rolledOvr !== null ? "outline" : "default"}
             >
-              {clubsLoading ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? (rollsLeft > 0 ? `🎲 Reroll (${rollsLeft} left)` : "🔒 Scouts have made up their mind") : "🎲 Generate Starting Potential"}
+              {clubsLoading ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Roll again" : "🎲 Generate Starting Potential"}
             </Button>
           </div>
-          {rolledOvr !== null && rollsLeft === 0 && (
-            <p className="text-[11px] text-muted-foreground text-center">No rerolls left. This is your player, make it work.</p>
+          {rolledOvr !== null && !isRolling && (
+            <p className="text-[11px] text-muted-foreground text-center">
+              Roll {rollCount}. Reroll as many times as you like, it costs nothing.
+              {bestPotSeen > (rolledPot ?? 0) ? ` Best ceiling you have turned up so far: ${potentialTier(bestPotSeen).label.toLowerCase()}.` : ""}
+            </p>
           )}
 
           {/* Academy preview */}
@@ -1279,7 +1695,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
             <span className={`text-2xl font-black ${previewOvr >= 55 ? 'text-green-400' : 'text-yellow-400'}`}>{previewOvr}</span>
           </div>
           <div className="space-y-2">
-            {getPositionStatBars(position, previewStats).map(s => <StatBarGame key={s.l} label={s.l} value={s.v} color={s.c} />)}
+            {getPositionStatBars(position, { ...previewStats, physique, attrShape }).map(s => <StatBarGame key={s.l} label={s.l} value={s.v} color={s.c} top={s.top} />)}
           </div>
           {/* Round 79: who your build plays like, live off the actual numbers */}
           {!isRolling && (() => { const comp = playsLike(previewStats, position); return (
@@ -2642,6 +3058,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const statBars = getPositionStatBars(career.position, career);
 
   const [showRetireConfirm, setShowRetireConfirm] = useState(false);
+  // Round 131: the whole attribute tree on its own screen with a back button
+  const [attrsOpen, setAttrsOpen] = useState(false);
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
   /* ─── Round 129: the controls that walked off when he scrolled ───
 
@@ -2720,9 +3138,17 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
      because at that point it is not covering anything down there. */
   const actionBarFloats = showActionButton || career.phase === "retired";
   const footerLift = useFooterLift(actionBarFloats);
+  // Coming back out of the attributes screen lands at the top of the career page.
+  const screenRef = useRevealScroll<HTMLDivElement>(attrsOpen ? "attrs" : "career");
+
+  /* Tile rule: the whole attribute tree takes over the screen with a back
+     button rather than stacking two dozen more bars under the six. */
+  if (attrsOpen) {
+    return <AttributesScreen career={career} onBack={() => setAttrsOpen(false)} />;
+  }
 
   return (
-    <div className="space-y-3 pb-20">
+    <div ref={screenRef} className="space-y-3 pb-20">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5 min-w-0">
@@ -3053,10 +3479,25 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <MyLifePanel career={career} onPurchase={onPurchase} />
           )}
 
-          {/* Stats */}
+          {/* Stats. Round 131: six family bars on the page and the whole tree
+              one tap away on its own screen, because two dozen bars stacked
+              here is exactly the endless scroll the tile rule exists to stop. */}
           <div className="bg-card border border-border rounded-xl p-4 space-y-2.5">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Attributes</span>
-            {statBars.map(s => <StatBarGame key={s.l} label={s.l} value={s.v} color={s.c} />)}
+            {statBars.map(s => <StatBarGame key={s.l} label={s.l} value={s.v} color={s.c} top={s.top} />)}
+            <button
+              type="button"
+              onClick={() => setAttrsOpen(true)}
+              className="w-full mt-1 flex items-center justify-between rounded-lg border border-border bg-muted/20 px-3 py-2 text-left active:scale-[0.99] transition-transform"
+            >
+              <span className="min-w-0">
+                <span className="block text-xs font-bold">Full attributes</span>
+                <span className="block text-[10px] text-muted-foreground truncate">
+                  {career.physique?.heightCm ?? 180} cm · {career.physique?.weightKg ?? 76} kg · every number under the six
+                </span>
+              </span>
+              <ChevronRight className="w-4 h-4 shrink-0 opacity-60" />
+            </button>
           </div>
 
           {/* Career totals, position-specific */}

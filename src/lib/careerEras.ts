@@ -476,7 +476,13 @@ export interface AllocStats { pace: number; shooting: number; passing: number; d
 export interface AllocRow { key: AllocKey; label: string }
 
 export const ALLOC_MIN = 25;
-export function allocMax(ovr: number): number { return Math.min(85, ovr + 18); }
+/* Round 131: the ceiling on a single attribute was 85, which quietly made the
+   overall cap 85 too, because six attributes capped at 85 cannot average more
+   than 85. His note was "there shouldn't be a cap on overalls. Like 99
+   obviously, but when ur building ur player there shouldn't", so 99 it is. The
+   plus eighteen is still there and still does the real work: it stops a 48
+   overall academy kid from having one attribute at 99 and five at the floor. */
+export function allocMax(ovr: number): number { return Math.min(99, ovr + 18); }
 
 /** The stats a position can actually spend points on, with labels that say
     what the engine key DOES for that role. GK spends on all seven (weighted
@@ -550,6 +556,55 @@ export function normalizeAllocation(stats: AllocStats, position: string, targetO
     }
   }
   return s;
+}
+
+/* ─── Round 131: one place that decides what a legal allocation move is ───
+
+   The build screen has three ways to change a number now: minus one, minus or
+   plus five, and typing straight into the box. All three go through here, and
+   so does the fuzz harness, which is the point: a rule that lives inside a
+   React component can only ever be tested by driving a browser, and the thing
+   that has to be true (you can never reach an illegal state, and you can never
+   strand yourself unable to spend what you have left) is exactly the kind of
+   thing you want to hit a hundred thousand times.
+
+   The rule itself: never below the floor, never above this overall's per
+   attribute cap, and never more than the points you actually have left. */
+export function stepAllocation(
+  alloc: AllocStats, position: string, key: AllocKey, next: number, budget: number, target: number,
+): AllocStats {
+  const rows = allocRowsFor(position);
+  if (!rows.some(r => r.key === key)) return alloc;
+  const cur = alloc[key];
+  const spent = rows.reduce((a, r) => a + alloc[r.key], 0);
+  const pool = budget - spent;
+  const max = Math.min(allocMax(target), cur + Math.max(0, pool));
+  const raw = Math.round(Number(next));
+  if (!Number.isFinite(raw)) return alloc;
+  const v = clamp(raw, ALLOC_MIN, max);
+  if (v === cur) return alloc;
+  return { ...alloc, [key]: v };
+}
+
+/** How many points are still waiting to be spent. Zero is the only state the
+    build screen will let you leave with. */
+export function allocationPool(alloc: AllocStats, position: string, budget: number): number {
+  return budget - allocRowsFor(position).reduce((a, r) => a + alloc[r.key], 0);
+}
+
+/** Can this state still be spent all the way down to zero using nothing but
+    legal moves? It always can, and the harness proves it rather than trusting
+    it: the budget is the sum of a line that was itself clamped under the same
+    cap, so there is always at least as much room across the row as there are
+    points left over. */
+export function canSettleAllocation(alloc: AllocStats, position: string, budget: number, target: number): boolean {
+  const rows = allocRowsFor(position);
+  let pool = allocationPool(alloc, position, budget);
+  if (pool < 0) return false;
+  const max = allocMax(target);
+  let room = 0;
+  for (const r of rows) room += Math.max(0, max - alloc[r.key]);
+  return room >= pool;
 }
 
 /* ─── The "plays like" bank ───

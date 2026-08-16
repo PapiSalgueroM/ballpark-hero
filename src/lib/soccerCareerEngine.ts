@@ -24,6 +24,15 @@ import {
   agentWageMult, agentIncomeCutRate, agentTransferCutRate,
 } from "./soccerCareerLife";
 import type { PlayerAppearance } from "./soccerCareerAppearance";
+/* Round 131: height, weight and the specific attributes under each of the six
+   families. buildEffects turns a build into the handful of multipliers the
+   season simulation reads, and it returns exactly 1.00 on everything for a
+   player who changed nothing, which is what makes it safe to bolt onto maths
+   that was balanced before it existed. */
+import {
+  buildEffects, safePhysique, safeShape, defaultPhysique, NEUTRAL_EFFECTS,
+} from "./soccerCareerAttributes";
+import type { PlayerPhysique, AttrShape, BuildEffects } from "./soccerCareerAttributes";
 import { getCorruptionEvents } from "./soccerCareerCorruption";
 import { getRealismEvents } from "./soccerCareerRealism";
 import {
@@ -579,6 +588,26 @@ export interface CareerState {
   /** Round 78: the hidden ceiling rolled at creation. Growth stalls hard as
    *  overall approaches it. Old saves have none and default generously. */
   potential?: number;
+  /** Round 131: ceiling points earned back by an exceptional career. The
+   *  rolled number is where you are expected to top out, not a wall welded
+   *  shut: back to back seasons that are elite AND decorated, while already
+   *  pressed against the ceiling, buy one point at a time. 99 is still the
+   *  hard wall and nothing can push past it. */
+  potentialEarned?: number;
+  /** Consecutive seasons that were both elite and decorated. Sustained is the
+   *  whole point, so the first one never counts. */
+  eliteStreak?: number;
+  /** The overall this career actually began at, so the legacy verdict can tell
+   *  a kid who climbed from 55 apart from a player who was handed 99 on the
+   *  creation screen. Absent on saves from before Round 131, and the verdict
+   *  simply leaves the line out rather than guessing. */
+  startingOverall?: number;
+  /** Round 131: height and weight, and the specifics under each family stored
+   *  as offsets that add to zero inside their family, so shaping a player can
+   *  never move his overall. Both optional: an old save derives the position
+   *  default and a completely neutral shape. */
+  physique?: PlayerPhysique;
+  attrShape?: AttrShape;
   /** Round 80: the phone. All optional so older saves keep loading. */
   karma?: number;              // 0-100 public karma, starts 50
   phoneInbox?: PhoneMessage[]; // waiting texts + answered thread log
@@ -1976,8 +2005,58 @@ function isPastPrime(age: number, primeType: PrimeType): boolean {
  *     from the bench, and a 7.6 rated season is worth a lot more than a 6.0.
  *  3. THE TRAINING GROUND. Elite clubs develop players faster.
  */
+/* ─── Round 131: the ceiling, and the repair that makes old saves safe ─── */
+
+/** The ceiling this career is actually fighting, rolled number plus anything
+    an exceptional career has earned back, and never above 99. */
+export function effectivePotential(s: CareerState): number {
+  const base = s.potential ?? Math.max(90, s.overall + 3);
+  const earned = Number(s.potentialEarned);
+  return Math.min(99, base + (Number.isFinite(earned) ? Math.max(0, earned) : 0));
+}
+
+/** The build multipliers for this career, safe on a save that has neither a
+    physique nor a shape (which is every save written before Round 131): those
+    come back as the position default and an empty shape, which is exactly the
+    reference, so every multiplier is 1.00 and nothing about an old career
+    changes. */
+export function careerBuildEffects(s: CareerState): BuildEffects {
+  try {
+    return buildEffects(s, s.position, s.overall, s.physique, s.attrShape);
+  } catch {
+    return NEUTRAL_EFFECTS;
+  }
+}
+
+/**
+ * Round 127's lesson, applied again: repairing a save only inside the step
+ * function is not enough, because a screen can be opened before any step is
+ * taken. This runs on load AND at the top of both step functions, and it is
+ * deliberately total rather than clever. Everything it touches is optional on
+ * the type, so a save that already has the fields comes out identical.
+ */
+export function repairCareer<T extends CareerState>(state: T): T {
+  if (!state || typeof state !== "object") return state;
+  const s = state as CareerState;
+  if (!s.primeType) s.primeType = rollPrimeType();
+  const earned = Number(s.potentialEarned);
+  s.potentialEarned = Number.isFinite(earned) ? Math.max(0, Math.round(earned)) : 0;
+  const streak = Number(s.eliteStreak);
+  s.eliteStreak = Number.isFinite(streak) ? Math.max(0, Math.round(streak)) : 0;
+  s.physique = safePhysique(s.position, s.physique);
+  s.attrShape = safeShape(s.position, s.attrShape);
+  const start = Number(s.startingOverall);
+  /* Left undefined on purpose when a save predates the field. There is no
+     honest way to recover the overall a 2024 save began at, and inventing one
+     would hand somebody a legacy line they did not earn either way. */
+  if (Number.isFinite(start)) s.startingOverall = Math.round(clamp(start, 1, 99));
+  else delete s.startingOverall;
+  if (typeof s.peakOverall !== "number" || !Number.isFinite(s.peakOverall)) s.peakOverall = s.overall;
+  return state;
+}
+
 function developmentRate(s: CareerState): number {
-  const pot = s.potential ?? Math.max(90, s.overall + 3);
+  const pot = effectivePotential(s);
   const gap = pot - s.overall;
   const headroom =
     gap <= 0 ? 0.15 :
@@ -2787,7 +2866,7 @@ export const FALLBACK_CLUBS: ClubData[] = [
 ];
 
 /* ─── Appearances, league + UCL + cups for realistic totals ─── */
-function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState): { apps: number; injured: boolean; injuryWeeks: number; injuryName: string | null; injurySevere: boolean } {
+function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState, fx: BuildEffects = NEUTRAL_EFFECTS): { apps: number; injured: boolean; injuryWeeks: number; injuryName: string | null; injurySevere: boolean } {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
 
@@ -2817,6 +2896,7 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
      Two appearances out of thirty is on purpose. It is enough to measure and
      small enough that it cannot undo thirty rounds of balance work. */
   if (state) leagueApps = clamp(leagueApps + phoneAppsSwing(state), 0, 38);
+
 
   // --- UCL appearances (0-13), only Tier 1-2 clubs qualify ---
   let uclApps = 0;
@@ -2854,11 +2934,44 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
 
   let apps = leagueApps + uclApps + cupApps;
 
+  /* Round 131: stamina, strength and balance decide whether you are still
+     standing in April. Deliberately the smallest of the build effects, plus or
+     minus seven percent at the extremes, because availability compounds across
+     a whole career and it would run away with the game if it were any bigger.
+
+     Applied to the total rather than to the league games on their own, which
+     is not a detail: a first choice player at a big club is regularly already
+     on 36 or 37 of a possible 38 in the league, so a multiplier applied there
+     was being eaten by the ceiling and a build that should have been notably
+     more durable came out two games better across twelve seasons. */
+  apps = Math.max(0, Math.round(apps * fx.appsMult));
+
   let injured = false;
   let injuryWeeks = 0;
   let injuryName: string | null = null;
   let injurySevere = false;
-  let injuryChance = 0.20;
+  let injuryChance = clamp(0.20 + fx.injuryDelta, 0.05, 0.40);
+  /* ─── Round 131: the wonderkid tax ───
+
+     The build screen will now let you start at 99, and it should, because he
+     asked for it. But the world has to react to a seventeen year old who is
+     already the best player alive rather than shrugging, and what actually
+     happens to that kid is that he plays every minute of every competition,
+     every defender in the league goes through him, and his body pays for it.
+
+     So this reads the overall the career BEGAN at, never the one it has grown
+     to. That is the whole point: a player who climbed to 90 by twenty three
+     earned it season by season and is not touched by this at all, while a
+     player who was handed 90 on the creation screen carries the risk of it
+     from his first pro season to his twenty fourth birthday. A 99 start adds
+     seventeen points of injury chance a year for seven years. A 62 start adds
+     one. Saves from before this round have no starting overall recorded and so
+     are never affected, which is also correct: nobody was handed anything
+     before this round, the cap was 85. */
+  const startedAt = state?.startingOverall;
+  if (typeof startedAt === "number" && startedAt > 60 && age <= 23) {
+    injuryChance = clamp(injuryChance + clamp(startedAt - 60, 0, 39) * 0.0045, 0.05, 0.42);
+  }
   // Cryotherapy reduces injury risk by 15%
   if (state?.purchasedItems?.includes("perf_cryo")) injuryChance -= 0.03;
   const injuryRoll = rollSeasonInjury(injuryChance);
@@ -2883,8 +2996,11 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
   return { apps, injured, injuryWeeks, injuryName, injurySevere };
 }
 
-/* ─── Goals per 38 apps by position & overall rating ─── */
-function calcGoals(position: string, apps: number, overall?: number): number {
+/* ─── Goals per 38 apps by position & overall rating ───
+   Round 131: the last argument is the build multiplier. It is 1 for everybody
+   who did not shape their player, and for the rival simulation and the
+   international stub, which have no build to read. */
+function calcGoals(position: string, apps: number, overall?: number, mult = 1): number {
   const ovr = overall ?? 75;
   let lo: number, hi: number;
 
@@ -2923,17 +3039,17 @@ function calcGoals(position: string, apps: number, overall?: number): number {
     default: lo = 0; hi = 3;
   }
 
-  const rawGoals = Math.max(0, Math.round(rand(lo, hi) * apps / 38));
+  const rawGoals = Math.max(0, Math.round(rand(lo, hi) * apps / 38 * mult));
 
   // Floor for 90+ attackers in a full season (20+ apps)
   if (ovr >= 90 && apps >= 20 && ["ST", "LW", "RW", "CAM"].includes(position)) {
-    return Math.max(15, rawGoals);
+    return Math.max(Math.round(15 * mult), rawGoals);
   }
   return rawGoals;
 }
 
 /* ─── Assists per 38 apps by position ─── */
-function calcAssists(position: string, apps: number, overall?: number): number {
+function calcAssists(position: string, apps: number, overall?: number, mult = 1): number {
   const ovr = overall ?? 75;
   let lo: number, hi: number;
 
@@ -2951,11 +3067,11 @@ function calcAssists(position: string, apps: number, overall?: number): number {
     };
     [lo, hi] = per38[position] || [1, 4];
   }
-  return Math.max(0, Math.round(rand(lo, hi) * apps / 38));
+  return Math.max(0, Math.round(rand(lo, hi) * apps / 38 * mult));
 }
 
 /* ─── Season rating 1-10 ─── */
-function calcSeasonRating(position: string, apps: number, goals: number, assists: number, cleanSheets: number, overall: number, clubTier: number): number {
+function calcSeasonRating(position: string, apps: number, goals: number, assists: number, cleanSheets: number, overall: number, clubTier: number, buildDelta = 0): number {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
   let base = 6.0 + diff * 0.06;
@@ -2964,6 +3080,10 @@ function calcSeasonRating(position: string, apps: number, goals: number, assists
   else { base += goals * 0.06 + assists * 0.04; }
   if (apps >= 30) base += 0.3;
   else if (apps < 15) base -= 0.4;
+  /* Round 131: a build that suits the job reads better in the ratings than a
+     build that does not, even at the same overall. A centre back is judged on
+     his defending, a winger on what he does at the other end. */
+  base += buildDelta;
   base += (Math.random() - 0.5) * 0.8;
   return clamp(parseFloat(base.toFixed(1)), 3.0, 10.0);
 }
@@ -2974,15 +3094,21 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
   const isGK = position === "GK";
   const lastYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year : 0;
 
-  const { apps, injured, injuryWeeks, injuryName, injurySevere } = calcAppearances(overall, currentClubTier, age, state);
-  let goals = calcGoals(position, apps, overall);
+  /* Round 131: this is where the build stops being decoration. Two strikers on
+     the same overall, one shaped for finishing and a light frame, one shaped
+     for strength and a big one, now come out of this function with different
+     numbers of games, goals, assists and a different rating. */
+  const fx = careerBuildEffects(state);
+
+  const { apps, injured, injuryWeeks, injuryName, injurySevere } = calcAppearances(overall, currentClubTier, age, state, fx);
+  let goals = calcGoals(position, apps, overall, fx.goalMult);
   // Diving reputation: +2 goals from penalties
   if (state.divingActive && !isGK) goals += 2;
-  const assists = calcAssists(position, apps, overall);
-  const cleanSheets = isGK ? Math.round(apps * rand(20, 45) / 100) : 0;
+  const assists = calcAssists(position, apps, overall, fx.assistMult);
+  const cleanSheets = isGK ? clamp(Math.round(apps * rand(20, 45) / 100 * fx.cleanSheetMult), 0, apps) : 0;
   const yellowCards = rand(0, Math.min(8, Math.round(apps * 0.25)));
   const redCards = Math.random() < 0.08 ? 1 : 0;
-  const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier);
+  const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier, fx.ratingDelta);
 
   // --- Trophy realism ---
   const isElite = ELITE_CLUBS.includes(state.currentClub);
@@ -3240,6 +3366,11 @@ export function initCareer(
   overall: number, startYear: number, clubs: ClubData[],
   appearance?: PlayerAppearance | null,
   potential?: number,
+  /* Round 131: the frame you picked and the way you shaped the specifics under
+     each family. Both optional so every existing caller, including four sim
+     harnesses, keeps working untouched. */
+  physique?: PlayerPhysique | null,
+  attrShape?: AttrShape | null,
 ): CareerState {
   const academyClub = getYouthAcademyClub(adjustClubsForYear(clubs, startYear), nationality, overall);
   // Round 80: one text waiting on day one so the phone is alive immediately
@@ -3249,7 +3380,16 @@ export function initCareer(
     // Round 78: the hidden ceiling this career will fight to reach.
     // Round 79: clamped above the final overall, since the 2K style build
     // editor can nudge a keeper's overall a few points past the roll.
-    potential: Math.max(potential ?? rollPotential(overall), overall + 2),
+    /* Round 131: clamped at 99 as well as floored above the overall. Without
+       the clamp a player who built himself to 99 on the creation screen was
+       handed a ceiling of 101, a number the growth code can never reach, which
+       quietly turned the wall off for exactly the player who most needs it. */
+    potential: Math.min(99, Math.max(potential ?? rollPotential(overall), overall + 2)),
+    potentialEarned: 0,
+    eliteStreak: 0,
+    startingOverall: overall,
+    physique: safePhysique(position, physique ?? defaultPhysique(position)),
+    attrShape: safeShape(position, attrShape),
     // Round 80: the phone starts neutral with one text waiting on day one
     karma: 50,
     phoneUsedIds: seedTexts.map(d => d.id),
@@ -3344,11 +3484,11 @@ export function initCareer(
 
 /* ─── Advance youth year ─── */
 export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerState {
-  const s = { ...prev }; s.age += 1; s.events = [];
+  const s = repairCareer({ ...prev }); s.age += 1; s.events = [];
   receivePhoneTexts(s, "youth");
   // Round 78: legacy saves get a generous default so mid-career players are
   // not suddenly nerfed; new careers carry their rolled ceiling.
-  const pot = s.potential ?? Math.max(90, s.overall + 3);
+  const pot = effectivePotential(s);
   const devY = developmentRate(s);
   s.pace = growStat(s.pace, s.age, true, true, s.primeType, pot, s.overall, devY);
   s.shooting = growStat(s.shooting, s.age, true, false, s.primeType, pot, s.overall, devY);
@@ -3564,7 +3704,7 @@ function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number)
 
 /* ─── Advance pro season ─── */
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
-  const s = { ...prev }; s.age += 1; s.events = [];
+  const s = repairCareer({ ...prev }); s.age += 1; s.events = [];
   receivePhoneTexts(s, "pro");
   // Reset social media action for new season
   s.socialMediaActionUsedThisSeason = false;
@@ -3768,7 +3908,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   }
   s.statBoostNextSeason = {};
   // Round 78: growth respects the rolled potential (legacy default generous).
-  const potWall = s.potential ?? Math.max(90, s.overall + 3);
+  const potWall = effectivePotential(s);
   // Round 96: the season you just played decides how much you improve.
   const dev = developmentRate(s);
   s.pace = growStat(s.pace, s.age, false, true, s.primeType, potWall, s.overall, dev);
@@ -4068,8 +4208,63 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.events.push(`🇺🇳 First international call-up for ${s.nationality}!`);
   }
 
+  /* Round 131: last thing that happens, because it needs the Champions League,
+     the Ballon d'Or and the league title, all of which are decided above. */
+  pushCeiling(s, season);
+
   if (s.events.length === 0) s.events.push(`⚽ Solid season at ${s.currentClub}`);
   return s;
+}
+
+/* ─── Round 131: breaking your own ceiling ───
+
+   His note: "For your starting overall and ur potential cap. I would say u
+   shouldn't have a cap and you can go past it but u gotta do a lot of things."
+
+   So the rolled ceiling is soft now, and this is the only door through it.
+   Three things have to be true in the same season, and then it has to happen
+   again the season after, because one enormous year is a purple patch and two
+   in a row is a player who has genuinely outgrown what he was scouted as.
+
+   1. PRESSING. You are within two of your own ceiling already. A player with
+      fifteen points of room left has somewhere to go and does not need this.
+   2. ELITE. Thirty games and a 7.5 season rating. You cannot do it from the
+      bench and you cannot do it having a quiet year.
+   3. DECORATED. A league title, a Champions League, a World Cup, a Ballon
+      d'Or, thirty goals or an 8.2 rated season. Something that goes on the
+      wall.
+
+   Miss any one of them and the streak resets to zero, so drifting cannot get
+   you there no matter how many seasons you play. 99 is a hard wall and this
+   never opens it. */
+function pushCeiling(s: CareerState, season: SeasonRecord): void {
+  const ceiling = effectivePotential(s);
+  const elite = (season.rating ?? 0) >= 7.5 && (season.apps ?? 0) >= 30;
+  /* The level matters, and this is the bit the harness caught. Season rating
+     is measured against the club's own average, so a 72 overall centre back
+     dropping into the fourth tier rates 8.5 every year and wins the odd
+     divisional title without ever being tested by anything. Left as it was,
+     one drifting career in two hundred and fifty quietly bought a ceiling
+     point off the back of that, which is precisely the thing this was written
+     to make impossible. So everything except the three trophies nobody can win
+     by accident has to happen in the top two tiers. */
+  const topLevel = (season.clubTier ?? 4) <= 2;
+  const decorated = !!(season.championsLeague || season.worldCup || season.ballonDor)
+    || (topLevel && (
+      !!season.leagueTitle
+      || (season.goals ?? 0) >= 30
+      || (season.rating ?? 0) >= 8.2
+    ));
+  const pressing = s.overall >= ceiling - 2;
+
+  if (elite && decorated) s.eliteStreak = (s.eliteStreak ?? 0) + 1;
+  else { s.eliteStreak = 0; return; }
+
+  if (!pressing || ceiling >= 99) return;
+  if ((s.eliteStreak ?? 0) < 2) return;
+
+  s.potentialEarned = (s.potentialEarned ?? 0) + 1;
+  s.events.push("🔓 Another season like that at your ceiling. The coaches say there is more in you than anybody thought");
 }
 
 /* ─── Newspaper Article Generation ─── */
@@ -5766,10 +5961,41 @@ function calculateLegacy(state: CareerState): LegacyResult {
     score += 5;
   }
 
-  // FIFA Cover Athlete bonus
+  /* Cover star bonus. Round 129 scrubbed the offer card itself of the real
+     game's name and missed this label, which is on the retirement screen every
+     player who took the deal reads. Same rule, so it says what it is. */
   if (state.fifaCoverAccepted) {
-    breakdown.push({ label: "FIFA Cover Athlete", points: 10 });
+    breakdown.push({ label: "Cover Star", points: 10 });
     score += 10;
+  }
+
+  /* ─── Round 131: the climb ───
+
+     He asked for the overall cap on the build screen to go, and it has gone,
+     so somebody can now start a career at 99. Permitting that without
+     answering it would be the lazy version: a 99 start with nothing left to
+     chase is a worse game than a 62 start, and the game should say so rather
+     than pretend the two are the same story.
+
+     So the verdict knows where you began. A kid who came out of an academy at
+     54 and finished at 91 climbed 37 points and that is most of what people
+     will remember about him. A player handed 99 on the creation screen climbed
+     nothing, and the same trophy haul reads differently because of it. Worth
+     up to eight points on a hundred point score, and it can cost you six.
+
+     Saves from before this round have no starting overall recorded and there
+     is no honest way to work one out after the fact, so they simply do not get
+     this line, and their score is exactly what it always was. */
+  let climbPoints = 0;
+  if (typeof state.startingOverall === "number" && state.startingOverall > 0) {
+    const climb = Math.max(0, state.peakOverall - state.startingOverall);
+    /* Two halves. What you climbed, against the dozen points a normal academy
+       career picks up, and what you were HANDED, measured against 67, which is
+       the highest overall the scouts can roll a sixteen year old at. Anything
+       above 67 could not have come from a roll, so it came from the build
+       screen, and the verdict knows the difference. */
+    const handed = clamp(state.startingOverall - 67, 0, 32);
+    climbPoints = clamp(Math.round((climb - 12) * 0.42 - handed * 0.34), -18, 8);
   }
 
   // Integrity bonus from moral dilemmas
@@ -5780,6 +6006,17 @@ function calculateLegacy(state: CareerState): LegacyResult {
   }
 
   score = Math.round(clamp(score, 0, 100));
+  /* The climb is applied AFTER the hundred point clamp, and that is not a
+     detail. A career that wins everything sums to about a hundred and fifty
+     before the clamp, so a climb line added in with the rest would have been
+     swallowed whole and a player handed 99 on the creation screen would still
+     have come out a flat GOAT. Applied here it actually lands: win the lot
+     having been given your peak for free and the verdict says LEGEND rather
+     than the greatest of all time, which is the honest read. */
+  if (climbPoints !== 0) {
+    breakdown.push({ label: "The Climb", points: climbPoints });
+    score = Math.round(clamp(score + climbPoints, 0, 100));
+  }
   return { score, tier: getLegacyTier(score), breakdown };
 }
 
