@@ -22,12 +22,48 @@ true on the date above; re-measure rather than quoting them.
 
 | | |
 |---|---|
-| `origin/main` head | `e7fe005` = **Round 130** |
-| Packaged and delivered but **not pushed** | Rounds **131 through 137** |
-| One-click to ship all of them | **`SHIP7.bat`** (logs to `ship_log7.txt`). Supersedes `SHIP4`, `SHIP5` and `SHIP6`. Safe to re-run; every `RUNnn.bat` self-skips. |
-| Live site is serving | **Round 128.** Confirmed 2026-08-16 through `mcp__Lovable__get_project`: `latest_commit_sha` is `9494d8e`, so Lovable is two commits behind GitHub and nine behind what is packaged. The next push is the nudge. |
-| Next free round number | **138** |
+| `origin/main` head | `6397a77` = **Round 137** |
+| Packaged and delivered but **not pushed** | **Nothing.** The queue is empty for the first time in weeks. |
+| One-click wrapper | `SHIP7.bat` shipped 131 through 137 and is spent. The next round needs a fresh `RUNnn.bat`, and a new wrapper only if a queue builds up again. |
+| Live site | Publish triggered twice on 2026-08-16 after Lovable synced Round 137. **Not independently verified from the cloud**, see the note below. |
+| Next free round number | **139** |
 | Round missing from history | 115. Never existed, do not go looking for it. |
+
+### ⚠ The live deploy was triggered but not proven
+
+Lovable was stuck on `9494d8e` (Round 128) for days. The Round 131 to 137 push unstuck it and it
+resynced commit by commit up to Round 137, confirmed by reading `scripts/simNoInventedQuotes.mjs`
+back out of it, a file that exists in no earlier commit. Note that its `latest_commit_sha` field
+lagged one commit behind its actual file tree throughout, so **do not trust that field alone**,
+read a file the round changed.
+
+`deploy_project` was then called and returned `pending`, which the pipeline doc correctly says
+is not proof. The usual live check (fetch the site, read the `index-*.js` name out of the HTML,
+grep the chunk for a marker) **could not be completed from the cloud session**: the fetch tool
+converts pages to markdown and strips script tags, so the asset name is unreachable, and
+Lovable's build hashes do not match a local `npm run build`, so the name cannot be guessed
+either. Whoever picks this up should confirm the live bundle moved before assuming it did.
+
+### A pipeline capability that was not known before 2026-08-16
+
+**A cloud session can get rounds pushed after all, without Anthony clicking anything.** It still
+cannot push directly and it still has no credentials, so everything above about bats stands. But
+the desktop bridge exposes computer-use tools, and File Explorer can be granted at `click` tier,
+which is enough to double-click `SHIP7.bat` and let the existing chain run itself. That is how
+131 through 137 landed.
+
+The limits are real and worth writing down so nobody wastes a session rediscovering them:
+
+- **Terminals, IDEs and the Windows shell are capped at `click` tier by the platform.** Visible
+  plus plain left-click only. No typing, no key presses, no right-click, no drag and drop. So
+  there is no typing a git command into a terminal, and no typing a path into the Explorer
+  address bar. Navigate by clicking, and launch work by double-clicking a file.
+- **`device_bash` cannot push.** It runs in a Linux VM on his machine with the folder mounted,
+  but it has no network: `git ls-remote` fails with a 403 at the proxy. It is for file work
+  only.
+- This means the bat pipeline is not a workaround to be removed, it is the mechanism. Keep
+  writing `RUNnn.bat` files exactly as `docs/SHIP-PIPELINE.md` describes. The only thing that
+  changed is that a session can now click one instead of waiting a day for Anthony to.
 
 ### What each pending round is
 
@@ -97,16 +133,13 @@ treats `é` as a word break, so "Jérémy" parsed as J, r, my and the guard read
 own first name as him talking. Names are accent-folded before any boundary test now, which also
 means copy writing "Mbappe" for "Mbappé" is caught rather than missed.
 
-**Two things need doing the moment someone picks this up:**
+**Done as of 2026-08-16.** Rounds 131 to 137 are pushed and the publish was triggered. The
+queue is empty. Pick the next thing off the roadmap and build it.
 
-1. Anthony runs **`SHIP7.bat`**, which lands 131 through 137 in order.
-2. Then `deploy_project` and verify live properly per `docs/SHIP-PIPELINE.md`, because the live
-   site is several rounds behind the repo. The next push doubles as the nudge that unsticks
-   Lovable.
-
-Tell him once that the bats are waiting, then **get on with building the next round without
-waiting for him.** He works shifts and may not get to it for a day. Do not block, and do not nag
-more than once.
+Anthony's own next step, in his words, is that he wants to **review all the games and come back
+with tweaks**. Expect a batch of feedback rather than a single bug, and expect it to be worth
+more than anything on the roadmap below, because it is the owner playing his own site. When it
+arrives, triage it into rounds rather than trying to fix everything in one.
 
 ### What the pending rounds contain
 
@@ -153,6 +186,13 @@ reaches a match in Club Manager (120).
 | `scripts/testBallonDorFairness.mjs` dies on import | No localStorage stub. Also named `test*` so `runAllSims` silently skips it. Rename to `sim*` when fixing. |
 | `playGames` stalls on `/nfl-my-career` and `/nba-my-career` | Pre-existing, not a regression. |
 | `RebuildBoard.tsx:41` unattached `revealRef` | Small, but it means the no-scroll rule is not actually applied there. |
+*Checked and NOT a bug, 2026-08-16, recorded so nobody flags it twice: `public/sitemap.xml`
+still lists `/jeopardy` and looks stale at first glance. It is correct. Round 133 renamed the
+files and the on-screen label to QuizBoard but deliberately kept the **route** at `/jeopardy`,
+because it is on the `LIVE_IDENTIFIERS` allowlist in `scripts/simNoRivalNames.mjs` and changing
+it is a migration with redirects and a backfill, not a copy edit. The counts also reconcile
+exactly: 118 registry paths, minus the retired `/deal-or-no-deal` redirect, plus the root and
+six static pages, is the 124 entries in the file.*
 
 ### Decisions owed by Anthony
 
@@ -302,3 +342,10 @@ today rather than adding alongside them.
 - **2026-08-16** Round 137. Closed the invented-quotes exposure and recorded the guard. Noted
   the account migration, the three recreated scheduled tasks, and Lovable confirmed stuck at
   `9494d8e`. Wrapper moved to `SHIP7.bat`.
+- **2026-08-16** Round 138. Docs only, and it exists because Round 137's own copy of this file
+  went stale the moment 131 to 137 were pushed: it still claimed the head was `e7fe005` with
+  seven rounds pending. Corrected to `6397a77` with an empty queue, plus the computer-use
+  clicking discovery, the Lovable `latest_commit_sha` lag, the note that live was not
+  independently verified, and a retraction of a sitemap "bug" that turned out to be the
+  `LIVE_IDENTIFIERS` allowlist working as designed. **Lesson worth keeping: a round that pushes
+  a queue invalidates this file's own header, so the next round has to fix it.**
