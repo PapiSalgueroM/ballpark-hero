@@ -6,7 +6,7 @@
    US sports' own language, built once.
 
    House rules it follows:
-     FIFA TILE RULE. The hub is four small boxes. Each opens its own screen
+     THE TILE RULE. The hub is four small boxes. Each opens its own screen
      with a back button. Nothing stacks.
      NO SCROLL RULE. The thing you do next is in the action card at the top,
      including the offers themselves when you are out of work, and the card

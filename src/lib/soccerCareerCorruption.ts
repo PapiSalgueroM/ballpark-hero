@@ -1,7 +1,8 @@
 /* ────────────────────────────────────────────────────────────────────────────
    soccerCareerCorruption.ts, the dirty side of Soccer Career (Round 54)
-   Owner brief: "imagine everything BitLife has and make it ten times better
-   and more out of pocket. add corruption and more things to spend money on."
+   Owner brief: take everything a full life sim does, make it ten times
+   better and more out of pocket, add corruption and more things to spend
+   money on.
 
    This is the crime layer. Multi-season arcs where money, power and very bad
    decisions compound: bribing officials, laundering through your own

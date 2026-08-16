@@ -43,10 +43,10 @@ export const CATEGORIES: GameCategory[] = [
       // naming the most famous player in the pool scored a perfect 0 and the
       // winning strategy was the opposite of the premise. Fixed, plus the board
       // reveal (what the rarest answer actually was) is now shown after every
-      // round, which is Pointless's real payoff and was missing entirely.
+      // round, which is the real payoff of a rarity game and was missing entirely.
       { path: '/rarity-round', label: 'Rarity Round', emoji: '💎', description: 'Name the answer nobody else would. Rarest wins', daily: true, isNew: true },
       { path: '/missing-xi', label: 'Missing XI', emoji: '🧩', description: 'Name the missing player from a famous real lineup', daily: true, isNew: true },
-      { path: '/sign-the-player', label: 'Sign the Player', emoji: '🔨', description: 'The box2box auction: outbid two AI moguls, £1B each, then sim the showdown', isNew: true },
+      { path: '/sign-the-player', label: 'Sign the Player', emoji: '🔨', description: 'A blind auction: outbid two AI moguls, £1B each, then sim the showdown', isNew: true },
       { path: '/footle', label: 'Footle', emoji: '🎯', description: 'Guess the soccer player from stats' },
       { path: '/career', label: 'Career Quiz', emoji: '📜', description: 'Guess from career history' },
       { path: '/higher-lower', label: 'Higher or Lower', emoji: '📊', description: 'Compare all-time career stats' },
@@ -77,10 +77,11 @@ export const CATEGORIES: GameCategory[] = [
       // deleted 2026-08-05 per owner review: "Guess the value [doesn't] even load and I would say u should delete it."
       // { path: '/guess-transfer-value', label: 'Guess The Value', emoji: '💰', description: 'Guess a player's transfer market value', daily: true, isNew: true },
       // moved from the retired Game Shows tab 2026-07-08 (owner: game-show games belong in their sport)
-      { path: '/squad-deal', label: 'Squad Deal', emoji: '🏟️', description: 'Build an XI, Deal or No Deal style', isNew: true },
+      { path: '/squad-deal', label: 'Squad Deal', emoji: '🏟️', description: 'Build an XI out of mystery boxes', isNew: true },
       { path: '/player-stock-market', label: 'Player Stock Market', emoji: '📈', description: 'Buy 3 players at real past values, then the market moves a real year', daily: true, isNew: true },
-      // deleted 2026-08-05 per owner review: "delete the normal deal or no deal." (Squad Deal stays)
-      // { path: '/deal-or-no-deal', label: 'Deal or No Deal', emoji: '💼', description: 'Bank or gamble against the Banker', isNew: true },
+      // deleted 2026-08-05 per owner review: he asked for the standalone box
+      // game to go and for Squad Deal to stay.
+      // { path: '/deal-or-no-deal', label: 'Mystery Box', emoji: '💼', description: 'Bank or gamble against the Banker', isNew: true },
       // deleted 2026-07-08 per owner review: "discard this". Route kept for direct links; uncomment to revive.
       // { path: '/pack-battle', label: 'Pack Battle', emoji: '🃏', description: 'Call higher or lower before each card flips. One miss busts the pack', daily: true, isNew: true },
     ],
@@ -239,7 +240,7 @@ export const CATEGORIES: GameCategory[] = [
     ],
   },
   // Game Shows category removed 2026-07-08 per owner review, its games now
-  // live inside their sports (Squad Deal + Deal or No Deal → Soccer,
+  // live inside their sports (Squad Deal + the retired box game → Soccer,
   // Name Them All + Sports Millionaire → World & Olympic Games).
 ];
 

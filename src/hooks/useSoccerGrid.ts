@@ -142,8 +142,8 @@ export function useSoccerGrid() {
 
   // --- Timer mode ---------------------------------------------------------
   // Unlimited (mode 0) never starts a clock. Timed modes start counting from
-  // the first guess (not from page load), matching the Futbol11 convention
-  // that idle time before you start typing doesn't cost you. The start
+  // the first guess (not from page load), on the principle that idle time
+  // before you start typing shouldn't cost you. The start
   // epoch is persisted so a mid-timer refresh resumes with the correct
   // remaining time instead of granting a fresh clock. Read synchronously
   // (useState initializer) for the same reason settings is read

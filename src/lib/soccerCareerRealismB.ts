@@ -1,7 +1,7 @@
 /* ────────────────────────────────────────────────────────────────────────────
    soccerCareerRealismB.ts, between seasons life catalog batch B (ids 450-494)
-   Owner brief: "imagine everything BitLife has and make it ten times better
-   and more out of pocket."
+   Owner brief: take everything a full life sim does, make it ten times
+   better and more out of pocket.
 
    Forty five events about the parts of a career that are not the football:
    the federation that cannot pay its bonuses, the club record an old man has

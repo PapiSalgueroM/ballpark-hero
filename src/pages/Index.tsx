@@ -21,8 +21,8 @@ import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
  * Matching is case/diacritic-insensitive and scores across four fields
  * (label, description, category title, path fragments) with label matches
  * weighted highest. Exact/prefix matches on label outrank plain substring
- * hits, and a small alias table maps obvious shorthand ("wordle", "grid",
- * "xi", "quiz", league abbreviations, common spellings) onto the terms that
+ * hits, and a small alias table maps obvious shorthand ("grid", "xi",
+ * "quiz", league abbreviations, common spellings) onto the terms that
  * actually appear in the registry, since the registry itself doesn't use
  * every synonym a player might type.
  */
@@ -51,7 +51,6 @@ function normalizeSearchText(s: string): string {
  * than exhaustive, this is a quality pass, not a synonym engine.
  */
 const SEARCH_ALIASES: Record<string, string[]> = {
-  wordle: ['footle'], // Footle is this site's Wordle-style guessing game
   grid: ['grid'],
   deal: ['deal'],
   xi: ['xi', 'lineup', 'squad'],
@@ -61,7 +60,7 @@ const SEARCH_ALIASES: Record<string, string[]> = {
   basketball: ['nba', 'basketball', 'cbb', 'college basketball'],
   nfl: ['nfl', 'football', 'pro football'],
   football: ['nfl', 'football', 'college football'],
-  soccer: ['soccer', 'football', 'fifa', 'club', 'transfer'],
+  soccer: ['soccer', 'football', 'club', 'transfer'],
   // Only the unaccented form is needed here: normQuery has already been run
   // through normalizeSearchText() (NFD + strip diacritics) before this table
   // is consulted, so a search for "futbol" always normalizes to this exact key.
@@ -78,8 +77,8 @@ const SEARCH_ALIASES: Record<string, string[]> = {
   nascar: ['nascar', 'racing', 'driver'],
   gameshow: ['deal', 'name them all', 'squad deal'],
   connections: ['connections', 'connect 4'],
-  wheel: ['deal or no deal'],
-  banker: ['deal or no deal'],
+  wheel: ['squad deal', 'mystery box'],
+  banker: ['squad deal', 'mystery box'],
 };
 
 interface SearchableGame {

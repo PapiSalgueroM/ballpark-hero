@@ -463,8 +463,9 @@ export function potentialTier(pot: number): { label: string; color: string } {
   return { label: "Honest pro ceiling", color: "text-muted-foreground" };
 }
 
-/* ─── Round 79: 2K style stat allocation + "plays like" (his ask: "pick ur
-   starting stats like on 2k and it tell u who u play like") ───
+/* ─── Round 79: spend a point budget on your own attributes, then get told
+   who you play like (his ask: pick your starting stats yourself and have the
+   game tell you which real player that build resembles) ───
    The roll gives you a point budget; the build screen lets you move points
    between the stats that actually feed the engine's overall. allocOverall
    mirrors soccerCareerEngine.calcOverall EXACTLY (same weights) and the sim
@@ -700,7 +701,7 @@ export function playsLike(stats: AllocStats, position: string): { name: string; 
   return { name: best.name, pct, style: best.style };
 }
 
-/* ─── Round 80: the phone. GTA/BitLife style life layer for Soccer Career.
+/* ─── Round 80: the phone. An in-world phone as the life layer for Soccer Career.
    Texts arrive between seasons; how you reply moves your karma (0-100,
    starts 50) plus small morale/popularity/cash effects. Casual PG-13 tone,
    never em dashes (the sim harness lints the whole pool for them). ─── */

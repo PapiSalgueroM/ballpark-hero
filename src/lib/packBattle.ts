@@ -3,8 +3,8 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
 /**
  * Pack Battle (R6 build plan, Part 1 item 9; MASTER_PLAN Wave 15d, the final
- * unbuilt R6 item). Source: R3 Format 1 "Pack Battle" / playfootball.games'
- * "Pack 11" daily football-trumps game.
+ * unbuilt R6 item). The format is daily football top-trumps: you get a pack of
+ * mystery cards and play them off against an opponent, one stat at a time.
  *
  * MECHANIC
  * A daily pack of 5 mystery player cards, revealed one at a time. The player

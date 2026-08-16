@@ -106,7 +106,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
 
   '/mlb-grid': {
     intro: [
-      "Nine cells, nine legends. Every cell crosses two categories, and you need a player whose career checks both boxes. Think of it as an MLB immaculate grid tuned for the legends era.",
+      "Nine cells, nine legends. Every cell crosses two categories, and you need a player whose career checks both boxes. Think of it as an MLB team grid tuned for the legends era.",
       "The whole answer pool finished playing by 2019, so this is a history test, not a current-roster quiz.",
     ],
     howToPlay: [

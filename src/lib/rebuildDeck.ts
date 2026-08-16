@@ -3,7 +3,7 @@ import { FORMATIONS, playerRating, type Formation, type FormationSlot } from '@/
 import type { RebuildClub, ClubTier } from '@/lib/fetchRebuild';
 
 /**
- * Rebuild Challenge expansion (owner 2026-08-05, box2box format):
+ * Rebuild Challenge expansion (owner 2026-08-05, the rebuild-a-club format):
  *  - Coach step: keep your caretaker or pay for one of three candidates.
  *  - Board objectives: two "management cards" dealt at the start. Miss one
  *    and the board force-sells a player at the end. Brutal, like the videos.
@@ -79,7 +79,7 @@ export const KEEP_COACH: CoachOption = {
   bonus: 0,
 };
 
-/* ---------------- Tier budgets (Round 51, box2box rule: budgets by club size) ---------------- */
+/* ---------------- Tier budgets (Round 51 rule: budgets scale with club size) ---------------- */
 
 export const TIER_BUDGET: Record<ClubTier, number> = {
   elite: 200,
@@ -92,7 +92,7 @@ export function budgetFor(tier: ClubTier): number {
   return TIER_BUDGET[tier];
 }
 
-/* ---------------- Fortune cards (Round 51, box2box rule: flip one of ten) ---------------- */
+/* ---------------- Fortune cards (Round 51 rule: flip one of ten) ---------------- */
 
 export interface FortuneCard {
   id: string;
@@ -211,7 +211,7 @@ export function dealObjectives(seed: number): BoardObjective[] {
   return [first, second];
 }
 
-/* Round 51 (box2box rule): a third management card tied to the club's identity.
+/* Round 51 rule: a third management card tied to the club's identity.
    Elite boards demand galacticos, modest boards demand thrift, and missing it
    costs a player like every other card. */
 

@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
-import { fetchJeopardyClues, VALUES, type Clue, type ClueValue } from '@/lib/fetchJeopardy';
+import { fetchQuizBoardClues, VALUES, type Clue, type ClueValue } from '@/lib/fetchQuizBoard';
 
 export interface Tile {
   clue: Clue;
@@ -9,7 +9,7 @@ export interface Tile {
   correct: boolean | null;
 }
 
-export interface JeopardyState {
+export interface QuizBoardState {
   loading: boolean;
   categories: string[];
   board: Record<string, Record<ClueValue, Tile | undefined>>;
@@ -27,6 +27,11 @@ export interface JeopardyState {
 }
 
 const BOARD_CATEGORIES = 5;
+/* The game is called Sports Quiz Board everywhere a player can see it. This
+   storage key, the completion key below and the /jeopardy URL keep their old
+   spelling on purpose: changing them would wipe every player's saved board and
+   break their streak history. Renaming them is a data migration, not a copy
+   edit, so it is a job of its own. */
 const STORAGE_PREFIX = 'jeopardy-';
 
 /** Deterministic pick, same board for everyone on a given ET day. */
@@ -35,7 +40,7 @@ function pickDeterministic<T>(arr: T[], seed: number): T {
 }
 
 /**
- * Loose answer matching. Jeopardy answers are proper nouns typed by hand, so
+ * Loose answer matching. Quiz board answers are proper nouns typed by hand, so
  * we accept case/accent/punctuation differences and allow a surname-only match
  * for people ("Weah" for "George Weah"). Deliberately generous, being pedantic
  * about diacritics would just feel broken.
@@ -77,7 +82,7 @@ function save(today: string, results: Record<string, boolean>, score: number) {
   } catch { /* storage unavailable */ }
 }
 
-export function useJeopardy(): JeopardyState {
+export function useQuizBoard(): QuizBoardState {
   const today = useMemo(() => getTodayET(), []);
   const saved = useMemo(() => loadSaved(today), [today]);
 
@@ -90,7 +95,7 @@ export function useJeopardy(): JeopardyState {
 
   useEffect(() => {
     let cancelled = false;
-    fetchJeopardyClues().then(c => {
+    fetchQuizBoardClues().then(c => {
       if (cancelled) return;
       setClues(c);
       setLoading(false);
@@ -172,7 +177,7 @@ export function useJeopardy(): JeopardyState {
     if (!openTile) return;
     const ok = isCorrect(guess, openTile.clue.answer);
     const nextResults = { ...results, [openTile.clue.clueId]: ok };
-    // Jeopardy scoring: wrong answers subtract, which is what makes picking
+    // Quiz board scoring: wrong answers subtract, which is what makes picking
     // the 1000s a real decision rather than a free roll.
     const nextScore = score + (ok ? openTile.clue.value : -openTile.clue.value);
     setResults(nextResults);
@@ -193,7 +198,7 @@ export function useJeopardy(): JeopardyState {
         return t.correct ? '🟩' : '🟥';
       }).join(''),
     ).join('\n');
-    return `Sports Jeopardy, ${today}\n${grid}\n$${score}\ndouknowball.com/jeopardy`;
+    return `Sports Quiz Board, ${today}\n${grid}\n$${score}\ndouknowball.com/jeopardy`;
   }, [finished, categories, board, score, today]);
 
   return {

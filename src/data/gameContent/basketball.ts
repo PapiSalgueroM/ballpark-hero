@@ -213,7 +213,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
 
   '/nba-grid': {
     intro: [
-      "Nine cells, nine guesses, zero mercy. This is the NBA immaculate grid formula: every cell sits at the crossroads of a row and a column, and you need one player whose career satisfies both.",
+      "Nine cells, nine guesses, zero mercy. This is the NBA team grid formula: every cell sits at the crossroads of a row and a column, and you need one player whose career satisfies both.",
       "Sometimes that means two franchises, sometimes a franchise plus a milestone like 10,000 points. The obvious names run out fast.",
     ],
     howToPlay: [

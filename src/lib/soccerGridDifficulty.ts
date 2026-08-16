@@ -94,7 +94,7 @@ export const DIFFICULTY_TIERS: { tier: SoccerGridDifficulty; label: string; hint
 // Timer modes
 // ---------------------------------------------------------------------------
 
-/** 0 means Unlimited (no clock). Matches the Futbol11 40/60/90/unlimited convention. */
+/** 0 means Unlimited (no clock). The other three are 40, 60 and 90 seconds. */
 export type SoccerGridTimerMode = 0 | 40 | 60 | 90;
 
 export const TIMER_MODES: { mode: SoccerGridTimerMode; label: string }[] = [

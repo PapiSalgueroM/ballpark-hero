@@ -34,8 +34,8 @@ type PlayMode = 'daily' | 'unlimited';
 type Phase = 'boot' | 'error' | 'loading-round' | 'playing' | 'revealed' | 'done';
 
 /**
- * Rarity Round: Pointless-style rarity trivia ("Rarity Round" mode) with a
- * Fan-Favourites-style popularity mirror ("Crowd Says" mode). See
+ * Rarity Round: name the most obscure valid answer you can ("Rarity Round"
+ * mode), with a popularity mirror where famous wins ("Crowd Says" mode). See
  * src/lib/rarityRound.ts for the full scoring writeup and verified category
  * pool sizes. 5 rounds per run; total score across rounds is the final
  * result, lower is better in Rarity Round, higher is better in Crowd Says.
@@ -283,7 +283,7 @@ const RarityRound = () => {
     <>
       <PageSeo
         title="Rarity Round | DoUKnowBall"
-        description="Name a valid answer as obscure as possible, Pointless-style, or flip to Crowd Says and name the most famous answer you can. Five rounds, real soccer data, free to play."
+        description="Name a valid answer as obscure as possible, or flip to Crowd Says and name the most famous answer you can. Five rounds, real soccer data, free to play."
         path="/rarity-round"
       />
       <GameShell
@@ -458,7 +458,7 @@ const RarityRound = () => {
                   {rarityMode === 'rarity' ? 'points (lower is better)' : 'points (higher is better)'}
                 </p>
 
-                {/* The board reveal. Pointless's actual payoff: what you SHOULD
+                {/* The board reveal, the actual payoff: what you SHOULD
                     have said. Its absence is why this game read as "you guess
                     one guy and you're done" (owner review 2026-07-06). */}
                 {(() => {
@@ -562,7 +562,7 @@ const RarityRound = () => {
 
         <GameSeoContent
           title="Rarity Round: Soccer Rarity Trivia"
-          description="Pointless-style rarity trivia built on real soccer data. Name a valid answer to a category prompt, then see how obscure or how famous your pick was. Flip to Crowd Says for the popularity-scoring mirror mode."
+          description="Rarity trivia built on real soccer data. Name a valid answer to a category prompt, then see how obscure or how famous your pick was. Flip to Crowd Says for the popularity-scoring mirror mode."
           howToPlay={[
             'Read the category prompt.',
             'Search for and pick any real, valid answer.',

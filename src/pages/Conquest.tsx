@@ -27,7 +27,7 @@ const Conquest = () => {
     <>
       <PageSeo
         title="NFL Conquest - Territory Control Football Game | DoUKnowBall"
-        description="Risk-style NFL territory game. Draft players and conquer the US map. Strategy meets football trivia."
+        description="Territory conquest with NFL teams. Draft players and conquer the US map. Strategy meets football trivia."
         path="/conquest"
       />
       <div className="min-h-screen bg-background text-foreground">

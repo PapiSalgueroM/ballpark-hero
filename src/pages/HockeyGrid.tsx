@@ -201,7 +201,7 @@ const HockeyGrid = () => {
   return (
     <>
       <PageSeo
-        title="NHL Franchise Grid: Immaculate Grid Hockey Edition | DoUKnowBall"
+        title="NHL Franchise Grid: Daily Hockey Team Grid | DoUKnowBall"
         description="Fill a 3x3 NHL grid by naming players whose careers match both the row and column: franchises and career milestones. Free daily and unlimited hockey trivia grid."
         path="/hockey-grid"
       />
@@ -404,7 +404,7 @@ const HockeyGrid = () => {
         </div>
 
         <GameSeoContent
-          title="NHL Franchise Grid | Immaculate Grid Hockey Edition"
+          title="NHL Franchise Grid | Daily Hockey Team Grid"
           description="A 3x3 grid puzzle where each cell needs an NHL player whose career satisfies both the row and column. Rows and columns mix franchises with career milestones like 500 points, 300 goals or 1000 games played."
           howToPlay={[
             'Each cell in the 3x3 grid requires a player who satisfies both the row and column criteria.',

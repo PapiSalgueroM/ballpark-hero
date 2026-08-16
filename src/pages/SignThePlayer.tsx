@@ -232,7 +232,7 @@ const SignThePlayer = () => {
     <>
       <PageSeo
         title="Sign the Player: Auction House | DoUKnowBall"
-        description="Three bidders, £1B each, 33 players. Outbid two rivals position by position, then simulate the showdown. The box2box auction, playable."
+        description="Three bidders, £1B each, 33 players. Outbid two rivals position by position, then simulate the showdown. An auction you actually get to play."
         path="/sign-the-player"
       />
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(260 30% 8%) 0%, hsl(230 30% 7%) 55%, hsl(150 25% 6%) 100%)' }}>
@@ -247,7 +247,7 @@ const SignThePlayer = () => {
                   Sign the <span className="text-primary">Player</span>
                 </h1>
                 <p className="text-base sm:text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
-                  The box2box auction: you vs <b>The Sheikh</b> vs <b>Moneyball Mike</b>, £1B each.
+                  The auction: you vs <b>The Sheikh</b> vs <b>Moneyball Mike</b>, £1B each.
                   Every position sells its <b>good</b> player first, then the <b>superstar</b>,
                   and whoever misses out takes the stinker (and still pays the fee).
                 </p>

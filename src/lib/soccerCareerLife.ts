@@ -1,8 +1,8 @@
 /* ────────────────────────────────────────────────────────────────────────────
    soccerCareerLife.ts, the life layer for Soccer Career (Round 49)
    Personalities, agents, and the expanded off-pitch event catalog (ids 200+).
-   The goal: BitLife-grade chaos with real mechanical tradeoffs, so two
-   careers never read the same.
+   The goal: life-sim chaos on a scale you rarely see, with real mechanical
+   tradeoffs, so two careers never read the same.
    NOTE: this file only imports TYPES from soccerCareerEngine, so the
    engine -> soccerCareerLife runtime import has no cycle (same pattern
    as careerEras.ts).

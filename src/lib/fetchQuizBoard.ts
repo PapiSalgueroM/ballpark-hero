@@ -14,7 +14,8 @@ export interface Clue {
 }
 
 /**
- * Clue bank from public.jeopardy_clues, generated in SQL from the verified
+ * Clue bank from public.jeopardy_clues (the table name is the live one in
+ * Supabase and cannot change without a migration), generated in SQL from the verified
  * champions tables so the board can never drift from the source data.
  *
  * The view deliberately excludes most of soccer_league_champions. Audit
@@ -23,7 +24,7 @@ export interface Clue {
  * top_scorer column holds the RUNNER-UP for La Liga rather than a scorer. Don't
  * widen this query to other leagues without re-auditing them.
  */
-export async function fetchJeopardyClues(): Promise<Clue[]> {
+export async function fetchQuizBoardClues(): Promise<Clue[]> {
   try {
     const { data, error } = await fetchAllRows<{
       clue_id: string; category: string; clue: string;
@@ -38,7 +39,7 @@ export async function fetchJeopardyClues(): Promise<Clue[]> {
     );
 
     if (error || !data || data.length === 0) {
-      console.warn('[fetchJeopardyClues] empty/error', error);
+      console.warn('[fetchQuizBoardClues] empty/error', error);
       return [];
     }
 
@@ -53,7 +54,7 @@ export async function fetchJeopardyClues(): Promise<Clue[]> {
         value: r.value as ClueValue,
       }));
   } catch (err) {
-    console.warn('[fetchJeopardyClues] unexpected', err);
+    console.warn('[fetchQuizBoardClues] unexpected', err);
     return [];
   }
 }

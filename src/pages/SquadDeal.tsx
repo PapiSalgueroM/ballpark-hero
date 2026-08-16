@@ -81,14 +81,14 @@ const SquadDeal = () => {
 
   const shell = (inner: ReactNode) => (
     <>
-      <PageSeo title="Squad Deal: Deal or No Deal Team Builder | DoUKnowBall"
-        description="Build a full XI Deal-or-No-Deal style: pick a case per position, dodge the Banker, add a manager, stadium and fans, then simulate your squad."
+      <PageSeo title="Squad Deal: Mystery Box Team Builder | DoUKnowBall"
+        description="Build a full XI out of mystery boxes: pick a case per position, dodge the Banker, add a manager, stadium and fans, then simulate your squad."
         path="/squad-deal" />
       <GameShell width="wide">
         {inner}
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
-        <GameSeoContent title="Squad Deal: Deal or No Deal Team Builder"
-          description="A Deal or No Deal twist on building your dream team. Each position gives you 10 mystery cases of players tiered from elite to weak. Keep one, eliminate the rest, and weigh the Banker's player offers."
+        <GameSeoContent title="Squad Deal: Mystery Box Team Builder"
+          description="A mystery box twist on building your dream team. Each position gives you 10 mystery cases of players tiered from elite to weak. Keep one, eliminate the rest, and weigh the Banker's player offers."
           howToPlay={[
             'Pick a formation and an era (current or all-time legends).',
             'Tap any position on the pitch to draft it.',
@@ -106,7 +106,7 @@ const SquadDeal = () => {
       <div>
         <header className="text-center mb-7">
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">SQUAD DEAL</h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">Build a full XI, Deal-or-No-Deal style. Pick cases, dodge the Banker, assemble glory.</p>
+          <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">Build a full XI out of mystery boxes. Pick cases, dodge the Banker, assemble glory.</p>
         </header>
 
         <div className="mb-6">
@@ -152,7 +152,7 @@ const SquadDeal = () => {
 
   if (g.phase === 'loading') return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading players…</div>);
 
-  /* ---------- EXTRAS: mini Deal-or-No-Deal per category ---------- */
+  /* ---------- EXTRAS: a mini mystery box round per category ---------- */
   if (g.phase === 'extras') {
     const cat = g.currentExtraCat;
     const done = g.allExtrasChosen;
@@ -312,7 +312,7 @@ const SquadDeal = () => {
     );
   }
 
-  /* ---------- DRAFT: DEAL OR NO DEAL for the active slot ---------- */
+  /* ---------- DRAFT: the blind box round for the active slot ---------- */
   const slot = g.currentSlot;
   return shell(
     <div>

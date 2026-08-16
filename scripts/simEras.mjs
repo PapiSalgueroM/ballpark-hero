@@ -658,7 +658,7 @@ console.log('9) Copy check');
   // The dashes are written as escapes on purpose: a literal one in here would
   // trip the check on this very file, which is a funny way to spend an hour.
   const DASHES = /[\u2013\u2014]/;
-  const banned = /\b(2K|BitLife|FIFA|EA Sports|Madden|Football Manager)\b/;
+  const banned = /\b(2K|BitLife|FIFA|EA Sports|Madden|Football Manager)\b/; // rival-names-allow: this line is itself a brand guard
   let clean = 0;
   for (const file of files) {
     const src = fs.readFileSync(path.join(ROOT, file), 'utf8');

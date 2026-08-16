@@ -38,8 +38,8 @@ const REVEAL_SUSPENSE_MS = 1600;
 const REVEAL_FLASH_MS = 1400;
 
 /**
- * Sports Millionaire (MASTER_PLAN task #199): a Who Wants to Be a
- * Millionaire style 15-question money ladder, built on the shared
+ * Sports Millionaire (MASTER_PLAN task #199): a 15-question money ladder
+ * where each right answer doubles the stakes, built on the shared
  * triviaQuestionBank generator so the question pool scales with the site's
  * live Supabase data instead of a fixed hand-authored set. See
  * src/lib/sportsMillionaire.ts for the ladder/lifeline/scoring logic and
@@ -222,7 +222,7 @@ const SportsMillionaire = () => {
   return (
     <>
       <PageSeo
-        title="Sports Millionaire: Who Wants to Be a Sports Millionaire | DoUKnowBall"
+        title="Sports Millionaire: The Money Ladder Trivia Game | DoUKnowBall"
         description="Climb a 15-question money ladder built from real sports data. Use 50:50, Ask the Crowd, and Swap Question lifelines. Free, no sign-up, new questions every play."
         path="/sports-millionaire"
       />
@@ -499,7 +499,7 @@ const SportsMillionaire = () => {
 
         <GameSeoContent
           title="Sports Millionaire: The Money Ladder Trivia Game"
-          description="A sports take on the classic Who Wants to Be a Millionaire format. Climb a 15-question ladder built from real market values, nationalities, positions, and Ballon d'Or history. Use your lifelines wisely."
+          description="Climb a money ladder where every right answer raises the stakes. Fifteen questions built from real market values, nationalities, positions, and Ballon d'Or history. Use your lifelines wisely."
           howToPlay={[
             'Answer 15 multiple-choice sports questions in order, easiest to hardest.',
             'Each correct answer climbs the money ladder toward $1,000,000.',

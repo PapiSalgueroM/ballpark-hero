@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
-import { fetchJeopardyClues, type Clue, type ClueValue } from '@/lib/fetchJeopardy';
+import { fetchQuizBoardClues, type Clue, type ClueValue } from '@/lib/fetchQuizBoard';
 
 export interface Question {
   clue: Clue;
@@ -115,7 +115,7 @@ export function useBallIq(): BallIqState {
 
   useEffect(() => {
     let cancelled = false;
-    fetchJeopardyClues().then(c => {
+    fetchQuizBoardClues().then(c => {
       if (cancelled) return;
       setPool(c);
       setLoading(false);

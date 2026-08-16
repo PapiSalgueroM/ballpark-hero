@@ -1,9 +1,9 @@
 /* ────────────────────────────────────────────────────────────────────────────
    nflCareerCorruption.ts, the dirty side of NFL My Career (Round 56)
 
-   Owner brief: "imagine everything that bitlife has and then make it ten times
-   better and more out of pocket. add corruption and more things to spend money
-   on. at least 200 new additions to each game."
+   Owner brief: take everything a full life sim does, make it ten times
+   better and more out of pocket, add corruption and more things to spend
+   money on, at least 200 new additions to each game.
 
    The football version of the crime layer: betting on your own league, a
    bounty pool for big hits, PEDs the union cannot test for yet, shaving points

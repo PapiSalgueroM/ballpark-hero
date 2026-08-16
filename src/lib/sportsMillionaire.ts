@@ -10,7 +10,7 @@ import {
 import { getTodayET } from '@/lib/dateUtils';
 
 /**
- * Sports Millionaire: classic Who Wants to Be a Millionaire ladder built on
+ * Sports Millionaire: a climbing money ladder quiz built on
  * top of the shared triviaQuestionBank generator (MASTER_PLAN task #199,
  * "New games: game-show formats"). This module holds the display money
  * ladder, safe havens, lifeline mechanics, and pure game-state transitions.

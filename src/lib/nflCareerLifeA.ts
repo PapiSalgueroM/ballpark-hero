@@ -1,8 +1,8 @@
 /*
    nflCareerLifeA.ts, NFL My Career life deck A (Round 56)
 
-   Owner brief: "everything BitLife has, ten times better and more out of
-   pocket, at least 200 new additions". This file is 45 of them: the human
+   Owner brief: everything a full life sim does, ten times better and more
+   out of pocket, at least 200 new additions. This file is 45 of them: the human
    stuff around the football. Rookie tax and locker room politics, the media
    machine, the city that adopts you or turns on you, your body and your head,
    coordinators who do not know what you are, camp fights and primetime, and

@@ -43,8 +43,8 @@ const FootballGrid = () => {
   return (
     <>
       <PageSeo
-        title="NFL Grid - Football Immaculate Grid Game | DoUKnowBall"
-        description="NFL immaculate grid game. Name players who played for each team and match position or award criteria."
+        title="NFL Grid - Daily Football Team Grid Game | DoUKnowBall"
+        description="Daily NFL grid game. Name players who played for each team and match position or award criteria."
         path="/football-grid"
       />
       <GameShell

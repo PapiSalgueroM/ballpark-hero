@@ -160,15 +160,13 @@ export interface CMPlayer {
 /**
  * The rung you have put a player on.
  *
- * The ladder is the one both games this is competing with use, cut down to
- * five rungs so it fits on a phone. Football Manager runs Star Player,
- * Important Player, Regular Starter, Squad Player, Impact Sub, Fringe Player,
- * Breakthrough Prospect and more besides, and its manual is blunt about why
- * any of it exists: "Playing time is at the heart of a player's happiness.
- * Give it to them and they're satisfied; take it away and problems will almost
- * certainly arise." EA's career mode asks the same question at the contract
- * table, where the choices read Crucial first team player, Squad rotation
- * player, Sporadic first team player and Future first team player.
+ * The full ladder a management sim usually runs is seven or eight rungs long.
+ * This one is cut to five so it fits on a phone. The reason any of it exists is
+ * simple: playing time is the thing a player's happiness actually rests on.
+ * Give a man the minutes he was promised and he is content; take them away and
+ * you will hear about it, from him and eventually from the rest of the dressing
+ * room. The same question gets asked again at the contract table, which is why
+ * a role here is a promise and not just a label.
  *
  * Names here are the words a manager would actually use in a press room, not
  * config keys with a label bolted on.
@@ -271,7 +269,7 @@ export interface PlayerMessage {
  * A scout, either sitting in the office waiting to be sent somewhere (a
  * candidate, regionId empty) or out on a trip.
  *
- * Two numbers matter, and they are the two FIFA career mode has always used:
+ * Two numbers matter, and they are the two any scouting system rests on:
  * network is how likely he is to turn anyone up at all, judgement is how close
  * his read on a kid is to the truth. A cheap scout finds nobody and lies about
  * the ones he does find.
@@ -341,7 +339,7 @@ export interface TrainingPlan {
   focus: TrainingFocus;
 }
 
-/** Round 70: one board demand for the season, FIFA manager style. */
+/** Round 70: one board demand for the season. */
 export interface BoardObjective {
   id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals' | 'defence' | 'youth';
   /** What the board wants, e.g. "Finish top 4". */
@@ -2549,7 +2547,7 @@ export function rejectBid(career: CareerState, playerId: string): CareerState {
   return { ...career, squad, incomingBids: bids.filter(b => b.playerId !== playerId) };
 }
 
-/* ---------- Round 94: transfer status, the FIFA controls ---------- */
+/* ---------- Round 94: the transfer status controls ---------- */
 
 /** Every club that could plausibly come in for one of my players. */
 function buyerPool(state: CareerState): string[] {
@@ -3234,7 +3232,7 @@ function entryInvolvesMe(state: CareerState, entry: CalendarEntry): boolean {
 }
 
 /* ================================================================== */
-/* Round 70: board objectives, FIFA manager style                     */
+/* Round 70: board objectives, one demand per season                  */
 /* ================================================================== */
 
 const CUP_STAGE_RANK: Record<CupRound, number> = { R16: 0, QF: 1, SF: 2, F: 3 };
@@ -4051,10 +4049,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     };
   });
 
-  /* Round 127: the dressing room. Football Manager's own manual on an unhappy
-     player: "Their reaction can and often does influence other players in the
-     squad." So a senior man who is miserable AND being let down drags on
-     everybody around him. Capped at three sulkers so a bad month cannot spiral
+  /* Round 127: the dressing room. An unhappy player does not sulk quietly, his
+     reaction spreads to the men around him. So a senior man who is miserable
+     AND being let down drags on everybody around him. Capped at three sulkers so a bad month cannot spiral
      into a squad nobody could rescue. */
   const sulkers = state.squad.filter(p =>
     !p.onLoan && !p.isYouth && p.rating >= 70 && p.morale < 32
@@ -4269,8 +4266,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
  * production is.
  *
  * These numbers are OURS, not anybody's dataset: a rough 60 to 92 ranking of
- * how reliably each country turns out top level teenagers, which is the same
- * job Football Manager's youth rating does. They set how good a prospect from
+ * how reliably each country turns out top level teenagers, the job any youth
+ * rating does in a management sim. They set how good a prospect from
  * that country is likely to be, nothing else. Country names only, no badges
  * and no real kids.
  */

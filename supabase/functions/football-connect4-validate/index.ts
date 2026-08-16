@@ -162,7 +162,7 @@ ATTRIBUTE DEFINITIONS:
 - "Scored in a World Cup" = scored at least one goal in a FIFA World Cup match.
 - "Scored in a Champions League Final" = scored in a UCL/European Cup final.
 - "Played in La Liga" / "Played in Serie A" / "Played in the Premier League" / "Played in MLS" = played senior soccer in that league.
-- "Has/Had a 90+ Rated Player Card" = had a base gold card rated 90 or above in ANY edition of the big annual football video game (EA Sports FIFA / EA FC), not special or Team of the Season cards, only the standard gold base card. Round 129 renamed this attribute on the site because product names were pulled out of everything a player can read; the key here MUST stay spelled the way the client sends it or this definition stops being found.
+- "Has/Had a 90+ Rated Player Card" = had a base gold card rated 90 or above in ANY edition of the big annual football video game, on the standard gold base card only, not a special or seasonal card. The key here MUST stay spelled exactly the way the client sends it or this definition stops being found.
 - "Market Value Has Exceeded €100M" = peak Transfermarkt market value reached €100M or more at any point.
 - "Cost €50M+ Transfer Fee" = was transferred for a fee of €50M or more at least once.
 - "Played with Lionel Messi (same club)" = was on the same club squad as Messi at the same time (Barcelona, PSG, or Inter Miami).

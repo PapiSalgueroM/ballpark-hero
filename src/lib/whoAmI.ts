@@ -4,7 +4,7 @@ import type { PlayerEntity } from '@/lib/playerSearch';
 import { foldSpecialLatin } from '@/lib/nameFold';
 
 /**
- * Who Am I? (Goltexto / Contexto style secret-footballer game)
+ * Who Am I? (a secret-footballer game: each guess tells you how warm you are)
  *
  * Data source: player_market_values (player_name, nationality, position, club,
  * market_value_usd, age, year). Rows exist for 2004-2026; only CURRENT rows

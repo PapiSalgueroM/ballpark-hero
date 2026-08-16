@@ -381,7 +381,7 @@ const Index = () => {
   );
 };
 
-/** Builds a Wordle-style emoji grid from Footle's guess history: one row per
+/** Builds a shareable emoji grid from Footle's guess history: one row per
  *  guess, one colored square per revealed cell. Per R5 spec Problem 6, Footle
  *  previously sent no emojiGrid to ShareButtons/ResultScreen at all. */
 function footleEmojiGrid(guesses: GuessResult[], maxGuesses: number): string {

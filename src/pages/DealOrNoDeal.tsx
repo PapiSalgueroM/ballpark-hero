@@ -246,13 +246,13 @@ const DealOrNoDeal = () => {
   return (
     <>
       <PageSeo
-        title="Deal or No Deal: Bank or Gamble Against the Banker | DoUKnowBall"
-        description="Play Deal or No Deal free: classic cash mode or Player Edition, where every case hides a real footballer's market value. Beat the Banker."
+        title="Mystery Box: Bank or Gamble Against the Banker | DoUKnowBall"
+        description="Play Mystery Box free: classic cash mode or Player Edition, where every case hides a real footballer's market value. Beat the Banker."
         path="/deal-or-no-deal"
       />
       <GameShell
         width="wide"
-        title="DEAL OR NO DEAL"
+        title="MYSTERY BOX"
         subtitle="Pick your case, eliminate the rest, and decide: take the Banker's offer, or hold out for what's in your case?"
         headerExtra={
           stats.plays > 0 && (
@@ -469,10 +469,10 @@ const DealOrNoDeal = () => {
                     result.amount >= result.gaveUpValue ? 'Right call! 🎯' : 'Ouch. Wrong case 😈'
                   ) : undefined
                 }
-                emojiGrid={emojiGrid || `Deal or No Deal: ${fmtUsd(result.amount)}`}
+                emojiGrid={emojiGrid || `Mystery Box: ${fmtUsd(result.amount)}`}
                 share={{
                   score: fmtUsd(result.amount),
-                  gameName: 'Deal or No Deal',
+                  gameName: 'Mystery Box',
                   gamePath: '/deal-or-no-deal',
                 }}
                 onPlayAgain={() => init(mode, playerPool)}
@@ -496,12 +496,12 @@ const DealOrNoDeal = () => {
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
 
         <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="deal-or-no-deal" />
+          <ReportQuestion gameType="mystery-box" />
         </div>
 
         <GameSeoContent
-          title="Deal or No Deal: The Banker Game"
-          description="A sports take on the classic Deal or No Deal. Play for cash, or switch to Player Edition where every case hides a real footballer and you win their market value."
+          title="Mystery Box: The Banker Game"
+          description="A sports take on the classic box gamble. Play for cash, or switch to Player Edition where every case hides a real footballer and you win their market value."
           howToPlay={[
             'Pick one case to keep as your own.',
             'Open the other cases to eliminate their hidden amounts.',

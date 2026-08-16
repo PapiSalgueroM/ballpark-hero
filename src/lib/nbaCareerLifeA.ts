@@ -1,8 +1,8 @@
 /*
    nbaCareerLifeA.ts, NBA My Career life deck A (Round 57)
 
-   Owner brief: "everything BitLife has, ten times better and more out of
-   pocket, at least 200 new additions". This file is 45 of them, the human
+   Owner brief: everything a full life sim does, ten times better and more
+   out of pocket, at least 200 new additions. This file is 45 of them, the human
    stuff wrapped around the basketball. Rookie duties and locker room rank,
    the media machine that never sleeps, a city that adopts you or burns your
    jersey in a parking lot, your body and your head, deadline day and coach

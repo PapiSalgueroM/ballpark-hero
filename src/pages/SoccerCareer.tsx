@@ -34,7 +34,7 @@ import {
   advancePunditSeason, endPunditCareer,
   advanceOwnerSeason, endOwnerCareer,
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
-  applySocialMediaAction, handleFifaCoverDecision, dismissSocialMediaPhase,
+  applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,
   applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
   SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS,
   dismissAppealResult,
@@ -814,9 +814,9 @@ export default function SoccerCareer() {
     if (action) toast(action.emoji + " " + action.label);
   };
 
-  const handleFifaCover = (accept: boolean) => {
+  const handleCoverAthlete = (accept: boolean) => {
     if (!career) return;
-    setCareer(handleFifaCoverDecision(career, accept));
+    setCareer(handleCoverAthleteDecision(career, accept));
   };
 
   const handleDismissSocialMedia = () => {
@@ -961,7 +961,7 @@ export default function SoccerCareer() {
               onNewCareer={handleNewCareer}
               onPurchase={handlePurchase}
               onSocialMediaAction={handleSocialMediaAction}
-              onFifaCover={handleFifaCover}
+              onCoverAthlete={handleCoverAthlete}
               onDismissSocialMedia={handleDismissSocialMedia}
               onMoralDilemmaChoice={handleMoralDilemmaChoice}
               onDismissMoralDilemma={handleDismissMoralDilemma}
@@ -977,7 +977,7 @@ export default function SoccerCareer() {
           )}
         </main>
 
-        {/* Round 80: the phone, GTA style. Floating button + full overlay.
+        {/* Round 80: the phone, an in-world handset. Floating button + full overlay.
             Round 81: the training ground button stacks above it. */}
         {career && (
           <>
@@ -1477,7 +1477,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
   const [isRolling, setIsRolling] = useState(false);
   const [displayOvr, setDisplayOvr] = useState(0);
   const [academyClub, setAcademyClub] = useState<ClubData | null>(null);
-  // Round 79: the 2K style build editor drill-in
+  // Round 79: the attribute point-spend build editor drill-in
   const [buildOpen, setBuildOpen] = useState(false);
   /* Coming back OUT of the build editor has the same problem in reverse, so
      the creation screen brings its own top with it too. skipFirst stays on
@@ -2864,21 +2864,21 @@ function MoralDilemmaCard({ career, onChoice, onDismiss }: {
 }
 
 /* ─── Social Media Action Card ─── */
-function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
+function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: {
   career: CareerState;
   onAction: (actionId: string) => void;
-  onFifaCover: (accept: boolean) => void;
+  onCoverAthlete: (accept: boolean) => void;
   onDismiss: () => void;
 }) {
   const hasActed = career.socialMediaActionUsedThisSeason;
-  const showFifaCover = career.pendingFifaCoverEvent && hasActed;
+  const showCoverAthlete = career.pendingCoverAthleteEvent && hasActed;
   const currentFollowers = career.socialMediaFollowers;
   const activeTier = career.activeSponsorship;
   const activeTierInfo = SPONSORSHIP_TIERS.find(t => t.tier === activeTier);
   const nextTier = SPONSORSHIP_TIERS.find(t => currentFollowers * 1_000_000 < t.minFollowers);
 
-  // FIFA Cover special event
-  if (showFifaCover) {
+  // Cover athlete special event
+  if (showCoverAthlete) {
     return (
       <div className="rounded-xl border-2 border-amber-400/60 bg-gradient-to-b from-amber-500/20 to-transparent p-5 space-y-4">
         <div className="text-center space-y-2">
@@ -2889,7 +2889,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
         </div>
         <div className="space-y-2">
           <button
-            onClick={() => onFifaCover(true)}
+            onClick={() => onCoverAthlete(true)}
             className="w-full rounded-lg border-2 border-amber-500/40 bg-amber-500/15 p-3 text-left hover:bg-amber-500/25 transition-all active:scale-[0.98]"
           >
             <div className="flex items-center justify-between">
@@ -2901,7 +2901,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
             </div>
           </button>
           <button
-            onClick={() => onFifaCover(false)}
+            onClick={() => onCoverAthlete(false)}
             className="w-full rounded-lg border border-border bg-muted/20 p-3 text-left hover:bg-muted/40 transition-all active:scale-[0.98]"
           >
             <div className="flex items-center justify-between">
@@ -2917,7 +2917,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
     );
   }
 
-  // After action chosen (no FIFA cover), show continue button
+  // After action chosen (no cover athlete offer), show continue button
   if (hasActed) {
     return (
       <div className="rounded-xl border border-blue-500/30 bg-gradient-to-b from-blue-500/10 to-transparent p-5 space-y-4">
@@ -3006,7 +3006,7 @@ function SocialMediaActionCard({ career, onAction, onFifaCover, onDismiss }: {
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onFifaCover, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onPurchase, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -3033,7 +3033,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onNewCareer: () => void;
   onPurchase: (itemId: string) => void;
   onSocialMediaAction: (actionId: string) => void;
-  onFifaCover: (accept: boolean) => void;
+  onCoverAthlete: (accept: boolean) => void;
   onDismissSocialMedia: () => void;
   onMoralDilemmaChoice: (choiceIndex: number) => void;
   onDismissMoralDilemma: () => void;
@@ -3334,7 +3334,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <SocialMediaActionCard
               career={career}
               onAction={onSocialMediaAction}
-              onFifaCover={onFifaCover}
+              onCoverAthlete={onCoverAthlete}
               onDismiss={onDismissSocialMedia}
             />
           )}

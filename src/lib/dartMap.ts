@@ -7,7 +7,7 @@ import type { League, Player } from '@/types/game';
 /**
  * DART DRAFT: WORLD MAP engine, v2.
  *
- * The box2box "Hit the Country, Pick a Player" format, rebuilt on real
+ * The "hit the country, pick a player" format, rebuilt on real
  * geography: Natural Earth country boundaries projected once at build time
  * (src/data/worldMapGeo.ts). You call a position, throw a timed dart, and
  * wherever it sticks, that nation hands you its best available players at

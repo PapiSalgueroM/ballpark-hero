@@ -1,6 +1,6 @@
 /**
  * NFL My Career engine (2026-08-05, the career-for-every-sport push).
- * A BitLife-style player career: you are a fictional prospect (your name,
+ * A cradle to retirement player career: you are a fictional prospect (your name,
  * your position, your archetype) drafted into the real 32-team league.
  * Seasons simulate position-appropriate stat lines driven by your rating,
  * your role and your team's quality; between seasons you make career

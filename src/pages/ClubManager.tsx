@@ -51,7 +51,7 @@ const OBJ_CHIP: Record<ObjectiveStatus, { label: string; cls: string }> = {
   failed: { label: 'Failed', cls: 'bg-red-500/10 text-red-400 border-red-500/40' },
 };
 
-/** Round 74: one FIFA-style hub box. Tap it, it becomes its own screen. */
+/** Round 74: one hub box (the tile rule). Tap it, it becomes its own screen. */
 function HubTile({ icon, title, value, sub, accent, onClick }: {
   icon: string; title: string; value: string; sub?: string; accent?: boolean; onClick: () => void;
 }) {
@@ -96,7 +96,7 @@ const ClubManager = () => {
   const pickRef = useRevealScroll<HTMLDivElement>(`pick:${pickStep}:${pickEra}:${pickNation?.id ?? ''}:${pickLeagueId ?? ''}`, { skipFirst: true });
   const era = eraById(pickEra);
   const eraYearsOn = Math.max(0, era.startYear - CM_BASE_YEAR);
-  // Round 74: FIFA-style hub. Boxes on the home screen open their own
+  // Round 74: the tile rule. Boxes on the home screen open their own
   // screens, and any club anywhere opens the rival viewer.
   const [hubPanel, setHubPanel] = useState<HubPanel | null>(null);
   const [clubView, setClubView] = useState<string | null>(null);
@@ -779,10 +779,10 @@ const ClubManager = () => {
             )}
           </div>
 
-          {/* Round 74: FIFA style hub. Everything below the next match is a
+          {/* Round 74: the tile rule. Everything below the next match is a
               box; tapping one opens its own screen instead of one long page
               (his words: "make it smaller and with boxes and when they open
-              it takes u to see something different. just like on fifa"). */}
+              it takes u to see something different"). */}
           {hubPanel === null && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               <HubTile

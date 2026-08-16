@@ -1,5 +1,5 @@
 /* ─── Round 82: the Trade Finder ───
-   Madden style "shop this player" for all four Front Office GM sims. One
+   A "shop this player" trade finder for all four Front Office GM sims. One
    generic engine: probe every other franchise with the sport's REAL trade
    function on deep clones, collect the deals the AI would actually accept,
    rank them by how much value you gain, prefer deals that keep your picks.

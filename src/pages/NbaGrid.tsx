@@ -205,7 +205,7 @@ const NbaGrid = () => {
   return (
     <>
       <PageSeo
-        title="NBA Franchise Grid: Immaculate Grid Basketball Edition | DoUKnowBall"
+        title="NBA Franchise Grid: Daily Basketball Team Grid | DoUKnowBall"
         description="Fill a 3x3 NBA grid by naming players whose careers match both the row and column: franchises and career milestones. Free daily and unlimited basketball trivia grid."
         path="/nba-grid"
       />
@@ -404,7 +404,7 @@ const NbaGrid = () => {
         </div>
 
         <GameSeoContent
-          title="NBA Franchise Grid | Immaculate Grid Basketball Edition"
+          title="NBA Franchise Grid | Daily Basketball Team Grid"
           description="A 3x3 grid puzzle where each cell needs an NBA player whose career satisfies both the row and column. Rows and columns mix franchises with career milestones like 10,000 points, 5,000 rebounds or 900 games played."
           howToPlay={[
             'Each cell in the 3x3 grid requires a player who satisfies both the row and column criteria.',

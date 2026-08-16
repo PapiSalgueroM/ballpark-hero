@@ -1,7 +1,7 @@
 /* ==========================================================================
    nflCareerLifeB.ts, offseason deck B for NFL My Career (Round 56)
-   Owner brief: everything BitLife has, ten times better and more out of
-   pocket. This file is 45 offseason decisions across family and home,
+   Owner brief: everything a full life sim does, ten times better and more
+   out of pocket. This file is 45 offseason decisions across family and home,
    legacy and records, rivalries, clean business, offseason life, genuinely
    unhinged football stuff, and the contract forks that decide how a career
    actually ends.

@@ -227,7 +227,7 @@ const PlayerStockMarket = () => {
                 const bought = effectivePicks.includes(p.name);
                 const r = playerReturn(p);
                 const inBest = result?.bestPicks.includes(p.name);
-                // Owner 2026-08-05 (box2box rules): you invest BLIND. Names and
+                // Owner 2026-08-05: you invest BLIND. Names and
                 // clubs stay hidden until the market moves; you only get the
                 // numbers: position, age, nationality and the value history.
                 const mysteryLabel = `Mystery ${p.position} ${String.fromCharCode(65 + idx)}`;

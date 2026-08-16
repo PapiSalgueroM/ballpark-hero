@@ -131,7 +131,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
   '/football-grid': {
     intro: [
       "The grid looks harmless: three rows, three columns, nine cells. Each row and column is a pro football criterion, a franchise, a position, a college, an award, and every cell needs a player who satisfies both. Then you learn that naming a Cowboys quarterback with 3 or more Pro Bowls is harder than it sounds.",
-      "If immaculate grid puzzles ever owned your mornings, this is that same itch with a twist: a rarity score that rewards deep cuts over obvious answers. Anyone can finish a grid with superstars. Finishing it with the forgotten third receiver from 2009 is the flex.",
+      "If daily team grids ever owned your mornings, this is that same itch with a twist: a rarity score that rewards deep cuts over obvious answers. Anyone can finish a grid with superstars. Finishing it with the forgotten third receiver from 2009 is the flex.",
       "A new puzzle drops at midnight Eastern, and everyone plays the same one.",
     ],
     howToPlay: [
@@ -177,7 +177,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         a: "The grid ends and you keep the cells you filled plus their rarity score. A fresh grid lands at midnight Eastern.",
       },
       {
-        q: "Is this the same as the baseball immaculate grid?",
+        q: "Is this the same as the baseball grid?",
         a: "Same core idea, pointed at football history instead, with crowd sourced rarity built in and an unlimited mode for practice.",
       },
     ],

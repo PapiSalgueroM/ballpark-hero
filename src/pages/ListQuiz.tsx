@@ -331,7 +331,7 @@ const ListQuiz = () => {
 
         <GameSeoContent
           title="Name Them All: Sports List Quizzes"
-          description="Sporcle-style recall quizzes built on real records: champions, MVPs and title winners across ten sports. Play relaxed or race a three minute clock."
+          description="Timed recall quizzes built on real records: champions, MVPs and title winners across ten sports. Play relaxed or race a three minute clock."
           howToPlay={[
             'Pick a list, like every Super Bowl MVP or every F1 world champion.',
             'Type names into the box. Surnames and team nicknames are accepted when they are unique.',

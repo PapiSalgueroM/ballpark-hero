@@ -68,7 +68,7 @@ const SoccerGrid = () => {
   return (
     <>
       <PageSeo
-        title="Soccer Grid - Football Immaculate Grid Game | DoUKnowBall"
+        title="Soccer Grid - Daily Football Team Grid Game | DoUKnowBall"
         description="Fill the 3x3 soccer grid by naming players who match two criteria. Daily football trivia grid game."
         path="/soccer-grid"
       />

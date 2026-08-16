@@ -1,8 +1,8 @@
 /* ────────────────────────────────────────────────────────────────────────────
    soccerCareerRealism.ts, the Round 54 realism layer for Soccer Career.
 
-   Owner brief: "imagine everything that bitlife has and then make it ten times
-   better and more out of pocket... at least 200 new additions to each game".
+   Owner brief: take everything a full life sim does, make it ten times
+   better and more out of pocket, at least 200 new additions to each game.
 
    90 new self-gated life events split across two batch files purely to keep
    each file readable:

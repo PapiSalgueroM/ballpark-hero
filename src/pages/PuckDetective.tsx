@@ -287,7 +287,7 @@ const PuckDetective = () => {
     <>
       <PageSeo
         title="Puck Detective: Guess the NHL Player | DoUKnowBall"
-        description="A Wordle-style NHL guessing game. Guess the mystery skater in 8 tries. Every guess reveals team, position, nationality, age and jersey number clues with directional arrows. Free daily and unlimited modes."
+        description="Guess the mystery NHL skater in 8 tries. Every guess reveals team, position, nationality, age and jersey number clues with directional arrows. Free daily and unlimited modes."
         path="/puck-detective"
       />
       <GameShell
@@ -491,7 +491,7 @@ const PuckDetective = () => {
         </div>
 
         <GameSeoContent
-          title="Puck Detective: NHL Wordle-Style Guessing Game"
+          title="Puck Detective: Guess the NHL Player in 8 Tries"
           description="Guess the mystery NHL player in 8 tries. Every guess compares team, position, nationality, age and jersey number against the secret player, with directional arrows on the numeric clues. Play the daily challenge or unlimited mode."
           howToPlay={[
             'Type a player name and pick them from the suggestions.',

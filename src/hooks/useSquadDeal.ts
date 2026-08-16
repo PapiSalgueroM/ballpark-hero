@@ -133,7 +133,7 @@ export function useSquadDeal() {
   const allFilled = squad.length > 0 && squad.every(Boolean);
   const goToExtras = () => { if (allFilled) { setExtraCat(0); setExtraStage('pick'); setExtraKept(null); setExtraElim([]); setExtraOffer(null); setPhase('extras'); } };
 
-  // --- extras as mini Deal-or-No-Deal boards (one per category) ---
+  // --- extras as mini mystery box boards (one per category) ---
   const [extraCat, setExtraCat] = useState(0);
   const [extraStage, setExtraStage] = useState<'pick' | 'reveal' | 'offer' | 'finalSwap'>('pick');
   const [extraKept, setExtraKept] = useState<number | null>(null);

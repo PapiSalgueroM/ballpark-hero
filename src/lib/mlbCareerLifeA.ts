@@ -1,8 +1,8 @@
 /*
    mlbCareerLifeA.ts, MLB My Career life deck A (Round 58)
 
-   Owner brief: "everything BitLife has, ten times better and more out of
-   pocket, at least 200 new additions". This file is 45 of them, the human
+   Owner brief: everything a full life sim does, ten times better and more
+   out of pocket, at least 200 new additions. This file is 45 of them, the human
    half of a baseball life. The bus leagues and the call up, a clubhouse that
    writes its own laws, the media machine, an arm and a back that keep a
    private diary, 162 games in 187 days, the sport's beautiful nonsense, and

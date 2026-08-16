@@ -95,7 +95,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
   '/hockey-grid': {
     intro: [
       "Nine cells, nine chances to prove your hockey memory runs deeper than last season.",
-      "Every row and column is a franchise or a career milestone, and each cell wants a player who satisfies both. If you have played an immaculate grid before, this is the NHL immaculate grid, built on a full all-era career database.",
+      "Every row and column is a franchise or a career milestone, and each cell wants a player who satisfies both. If you have played a team grid before, this is the NHL one, built on a full all-era career database.",
     ],
     howToPlay: [
       "Look at where a row meets a column, like Bruins plus Canadiens, or Oilers plus 500+ Career Points.",

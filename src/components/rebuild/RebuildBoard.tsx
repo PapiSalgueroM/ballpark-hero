@@ -70,7 +70,7 @@ export function RebuildBoard() {
           Pick a club to rebuild
         </p>
         <p className="mt-1 text-center text-sm text-muted-foreground">
-          Box2box rules: bigger clubs hand you a bigger war chest, then you flip a fortune card,
+          The rules: bigger clubs hand you a bigger war chest, then you flip a fortune card,
           commit your sales before the market opens, and answer to the board.
         </p>
 
@@ -114,7 +114,7 @@ export function RebuildBoard() {
     );
   }
 
-  // ---- Coach hire (box2box step, owner 2026-08-05) ----
+  // ---- Coach hire (owner 2026-08-05) ----
   if (phase === 'pick-coach') {
     return (
       <div className="mx-auto max-w-2xl px-4 py-8">
@@ -167,7 +167,7 @@ export function RebuildBoard() {
     );
   }
 
-  // ---- Fortune card flip (Round 51, box2box: pick one of ten) ----
+  // ---- Fortune card flip (Round 51: pick one of ten) ----
   if (phase === 'fortune') {
     return (
       <div className="mx-auto max-w-2xl px-4 py-8">
@@ -219,7 +219,7 @@ export function RebuildBoard() {
     );
   }
 
-  // ---- Keep/sell commitment (Round 51, box2box: commit before the market opens) ----
+  // ---- Keep/sell commitment (Round 51: commit before the market opens) ----
   if (phase === 'cuts') {
     const sorted = [...squad].sort((a, b) => b.marketValue - a.marketValue);
     const fundsNow = baseBudget + (flippedFortune?.delta ?? 0) - (coach?.cost ?? 0);
@@ -229,7 +229,7 @@ export function RebuildBoard() {
           Commit your sales. Right now.
         </p>
         <p className="mt-1 text-center text-sm text-muted-foreground">
-          Box2box rules: you decide who goes BEFORE you see a single transfer target.
+          The rules: you decide who goes BEFORE you see a single transfer target.
           Once the market opens, nobody else leaves.
         </p>
         <div className="sticky top-2 z-10 mt-4 flex items-center justify-between gap-2 rounded-xl border border-gold/40 bg-card/95 px-4 py-2.5 backdrop-blur">

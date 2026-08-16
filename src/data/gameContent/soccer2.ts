@@ -5,7 +5,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
   '/sign-the-player': {
     intro: [
       "Three bidders, one billion pounds each: you, The Sheikh, and Moneyball Mike. Thirty three players go under the hammer, then a simulated mini league decides who spent it best.",
-      "It is the box2box auction format: each position sells its solid player first, then the superstar, and whoever misses both gets stuck with the leftover, fee included.",
+      "The auction runs in a fixed order: each position sells its solid player first, then the superstar, and whoever misses both gets stuck with the leftover, fee included.",
     ],
     howToPlay: [
       "Pick a theme: Current Stars, All-Time Legends, or World Cup 2026.",
@@ -49,7 +49,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
   '/footle': {
     intro: [
       "Footle gives you 8 guesses to name a mystery soccer player. Each guess is a real player, and colored tiles compare it to the answer across eight attributes, from club to kit number.",
-      "It plays like Wordle for football, with richer feedback: arrows say whether the answer is older, scores more, or wears a higher number. Everyone gets the same new player every day.",
+      "You get eight goes at one mystery player and every guess comes back colour coded: arrows say whether the answer is older, scores more, or wears a higher number. Everyone gets the same new player every day.",
     ],
     howToPlay: [
       "Type a player's name and pick him from the suggestions.",
@@ -312,7 +312,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
 
   '/soccer-grid': {
     intro: [
-      "Soccer Grid is the immaculate grid idea rebuilt for football: a daily 3x3 board where every cell needs a player who satisfies its row and its column at once.",
+      "Soccer Grid is the team grid idea rebuilt for football: a daily 3x3 board where every cell needs a player who satisfies its row and its column at once.",
       "Filling it is half the game. Every correct answer shows how many others picked the same name, and the flex is a low rarity score from picks nobody thought of.",
     ],
     howToPlay: [
@@ -572,7 +572,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
 
   '/squad-deal': {
     intro: [
-      "Squad Deal crosses building an XI with Deal or No Deal. Every position is a wall of mystery boxes, you claim one blind, and a banker keeps ringing with tempting named alternatives.",
+      "Squad Deal crosses building an XI with a blind box gamble. Every position is a wall of mystery boxes, you claim one blind, and a banker keeps ringing with tempting named alternatives.",
       "You never quite know what you are holding until it is too late, which is the point. The finished squad gets simulated, graded, and logged on a leaderboard saved to your device.",
     ],
     howToPlay: [

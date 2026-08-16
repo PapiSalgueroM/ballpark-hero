@@ -6,7 +6,8 @@ export { normalizeName };
 /**
  * Stat Detective (NBA): a real player-season is shown with the name removed,
  * only the era, position and a per-36 stat line. Identify the player within
- * eight guesses, with Poeltl-style feedback chips after every miss.
+ * eight guesses, with feedback chips after every miss that tell you how close
+ * you were on each attribute.
  *
  * Data source: bref_nba_player_seasons (checked in SQL on 2026-07-02):
  * - One row per player-team-season. Every stat column is a SEASON TOTAL and

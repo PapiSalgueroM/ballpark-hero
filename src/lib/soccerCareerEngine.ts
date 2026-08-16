@@ -623,8 +623,8 @@ export interface CareerState {
   // Social media action system
   socialMediaActionUsedThisSeason: boolean;
   socialMediaFocusBoost: boolean; // "Stay off social media" gives +2 all stats next season
-  pendingFifaCoverEvent: boolean;
-  fifaCoverAccepted: boolean;
+  pendingCoverAthleteEvent: boolean;
+  coverAthleteAccepted: boolean;
   activeSponsorship: SponsorshipTier | null;
   // Moral dilemma system
   moralDilemmasTriggered: string[];
@@ -668,7 +668,7 @@ export interface MoralDilemma {
   choices: MoralDilemmaChoice[];
 }
 
-/* ─── Round 80: the phone (GTA/BitLife style life layer) ───
+/* ─── Round 80: the phone (an in-world phone as the life layer) ───
    Texts arrive between seasons from the PHONE_POOL in careerEras; replying
    moves karma (0-100, neutral 50) plus small morale/popularity/cash effects.
    Karma drifts back toward 50 a little every season and gently couples into
@@ -1748,7 +1748,7 @@ export interface SocialMediaAction {
   extraEffect?: string;
 }
 
-export type SponsorshipTier = "local_brand" | "nike_adidas" | "global_ambassador" | "merchandise_line" | "fifa_cover";
+export type SponsorshipTier = "local_brand" | "nike_adidas" | "global_ambassador" | "merchandise_line" | "cover_athlete";
 
 export const SOCIAL_MEDIA_ACTIONS: SocialMediaAction[] = [
   { id: "training_video", label: "Post training video", emoji: "🏋️", description: "Show off your skills in the gym", followerGain: [50_000, 200_000], reputationChange: 0 },
@@ -1765,7 +1765,7 @@ export const SPONSORSHIP_TIERS: { tier: SponsorshipTier; name: string; emoji: st
   { tier: "nike_adidas", name: "Global Boot Deal", emoji: "👟", minFollowers: 5_000_000, income: 3 },
   { tier: "global_ambassador", name: "Global Brand Ambassador", emoji: "🌍", minFollowers: 15_000_000, income: 8 },
   { tier: "merchandise_line", name: "Own Merchandise Line", emoji: "👕", minFollowers: 30_000_000, income: 15 },
-  { tier: "fifa_cover", name: "Game Cover Athlete", emoji: "🎮", minFollowers: 50_000_000, income: 25 },
+  { tier: "cover_athlete", name: "Game Cover Athlete", emoji: "🎮", minFollowers: 50_000_000, income: 25 },
 ];
 
 function getActiveSponsorshipTier(followers: number): SponsorshipTier | null {
@@ -1818,13 +1818,13 @@ export function applySocialMediaAction(prev: CareerState, actionId: string): Car
     s.events = [...s.events, `${tierInfo.emoji} NEW SPONSORSHIP: ${tierInfo.name}, €${tierInfo.income}M/year!`];
   }
 
-  // FIFA Cover event check
-  if (s.socialMediaFollowers * 1_000_000 >= 50_000_000 && s.overall >= 90 && !s.fifaCoverAccepted && !s.pendingFifaCoverEvent) {
-    s.pendingFifaCoverEvent = true;
+  // Cover athlete event check
+  if (s.socialMediaFollowers * 1_000_000 >= 50_000_000 && s.overall >= 90 && !s.coverAthleteAccepted && !s.pendingCoverAthleteEvent) {
+    s.pendingCoverAthleteEvent = true;
   }
 
-  // If FIFA cover event triggered, stay on social media action phase to show it
-  if (s.pendingFifaCoverEvent) {
+  // If the cover athlete event triggered, stay on social media action phase to show it
+  if (s.pendingCoverAthleteEvent) {
     s.phase = "social_media_action";
   } else {
     // Mark as needing to continue via dismissSocialMediaPhase
@@ -1833,11 +1833,11 @@ export function applySocialMediaAction(prev: CareerState, actionId: string): Car
   return s;
 }
 
-export function handleFifaCoverDecision(prev: CareerState, accept: boolean): CareerState {
+export function handleCoverAthleteDecision(prev: CareerState, accept: boolean): CareerState {
   const s = { ...prev };
-  s.pendingFifaCoverEvent = false;
+  s.pendingCoverAthleteEvent = false;
   if (accept) {
-    s.fifaCoverAccepted = true;
+    s.coverAthleteAccepted = true;
     s.netWorth = Math.round((s.netWorth + 25) * 100) / 100;
     s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 5) * 100) / 100;
     s.events = [...s.events, "🎮 You are the cover athlete of the world's biggest football video game! €25M + 5M followers + Legacy +10"];
@@ -2039,6 +2039,14 @@ export function repairCareer<T extends CareerState>(state: T): T {
   if (!state || typeof state !== "object") return state;
   const s = state as CareerState;
   if (!s.primeType) s.primeType = rollPrimeType();
+  /* Round 133 renamed the top sponsorship tier off a product name. Saves
+     written before that still carry the old value, and without this line those
+     players silently lose a 25M a year deal they had already earned. */
+  const legacySponsor = s as unknown as { activeSponsorship?: string };
+  if (legacySponsor.activeSponsorship === 'fifa_cover') s.activeSponsorship = 'cover_athlete';
+  const legacyCover = s as unknown as Record<string, unknown>;
+  if (legacyCover.fifaCoverAccepted === true) s.coverAthleteAccepted = true; // rival-names-allow: old save field name, read only
+  if (legacyCover.pendingFifaCoverEvent === true) s.pendingCoverAthleteEvent = true; // rival-names-allow: old save field name, read only
   const earned = Number(s.potentialEarned);
   s.potentialEarned = Number.isFinite(earned) ? Math.max(0, Math.round(earned)) : 0;
   const streak = Number(s.eliteStreak);
@@ -3378,7 +3386,7 @@ export function initCareer(
   const created: CareerState = {
     playerName, nationality, position, era, age: 16,
     // Round 78: the hidden ceiling this career will fight to reach.
-    // Round 79: clamped above the final overall, since the 2K style build
+    // Round 79: clamped above the final overall, since the point-spend build
     // editor can nudge a keeper's overall a few points past the roll.
     /* Round 131: clamped at 99 as well as floored above the overall. Without
        the clamp a player who built himself to 99 on the creation screen was
@@ -3439,8 +3447,8 @@ export function initCareer(
     primeType: rollPrimeType(),
     socialMediaActionUsedThisSeason: false,
     socialMediaFocusBoost: false,
-    pendingFifaCoverEvent: false,
-    fifaCoverAccepted: false,
+    pendingCoverAthleteEvent: false,
+    coverAthleteAccepted: false,
     activeSponsorship: null,
     personality: null,
     agentId: null,
@@ -5345,8 +5353,8 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
     s.phase = "social_media_action";
     return s;
   }
-  // FIFA cover event
-  if (s.pendingFifaCoverEvent) {
+  // Cover athlete event
+  if (s.pendingCoverAthleteEvent) {
     // handled in UI as a special overlay within social_media_action flow
   }
   // Moral dilemma, triggered before random events
@@ -5964,7 +5972,7 @@ function calculateLegacy(state: CareerState): LegacyResult {
   /* Cover star bonus. Round 129 scrubbed the offer card itself of the real
      game's name and missed this label, which is on the retirement screen every
      player who took the deal reads. Same rule, so it says what it is. */
-  if (state.fifaCoverAccepted) {
+  if (state.coverAthleteAccepted) {
     breakdown.push({ label: "Cover Star", points: 10 });
     score += 10;
   }

@@ -2,8 +2,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
 
 /**
- * Data layer + evaluation logic for Puck Detective, a Poeltl-style daily
- * attribute guesser built on nhl_players.
+ * Data layer + evaluation logic for Puck Detective, a daily guess-the-player
+ * game with attribute feedback, built on nhl_players.
  *
  * DATA NOTE (verified live against flawuiqbvjobmkfkauhw on 2026-07-03):
  * nhl_players has 1752 rows but only 876 distinct player_id values. Every

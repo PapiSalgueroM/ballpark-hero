@@ -70,7 +70,7 @@ let failures = 0;
 const fail = msg => { failures += 1; console.error('  FAIL: ' + msg); };
 const flat = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
 const DASH = /[–—]/;
-const BRANDS = /\b(2K|BitLife|FIFA\s*\d|EA\s+Sports|Madden|Football\s+Manager|NBA\s*2K)\b/i;
+const BRANDS = /\b(2K|BitLife|FIFA\s*\d|EA\s+Sports|Madden|Football\s+Manager|NBA\s*2K)\b/i;  // rival-names-allow: this list IS the check, same as the dash lint sims
 const NATIONS = ['England', 'Spain', 'France', 'Brazil', 'Germany', 'Argentina', 'Portugal', 'Italy'];
 const POSITIONS = ['ST', 'CM', 'CB', 'LW', 'GK', 'CAM', 'RB'];
 

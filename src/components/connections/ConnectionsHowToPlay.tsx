@@ -59,7 +59,7 @@ export function ConnectionsHowToPlay({ open, onOpenChange }: ConnectionsHowToPla
           </p>
 
           <p className="text-xs text-muted-foreground italic">
-            Inspired by the New York Times' Connections game.
+            Sixteen names, four hidden groups, four wrong guesses to spare.
           </p>
         </div>
       </DialogContent>

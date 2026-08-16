@@ -5,7 +5,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
   '/college-grid': {
     intro: [
       "The College Football Grid is a daily 3x3 puzzle for fans who remember where guys played on Saturdays. Rows are schools like Alabama, or sometimes whole conferences. Columns are positions, awards, and draft credentials. Each of the 9 cells needs one player who fits both.",
-      "If you searched for a college football immaculate grid, this is that idea built on campus careers instead of pro rosters. The pool covers players from 2000 to 2026, and the criteria run from Heisman Winner and All-American to First Round Pick and Went Undrafted. A cfb grid tests where a guy wore a helmet first, not who drafted him.",
+      "If you came looking for a college football grid, this is that idea built on campus careers instead of pro rosters. The pool covers players from 2000 to 2026, and the criteria run from Heisman Winner and All-American to First Round Pick and Went Undrafted. A cfb grid tests where a guy wore a helmet first, not who drafted him.",
       "One grid a day, the same for everyone, 15 guesses, and a rarity score for style points. A fresh college football grid game lands every day at midnight Eastern.",
     ],
     howToPlay: [
@@ -37,8 +37,8 @@ export const COLLEGE_CONTENT: GameContentMap = {
     ],
     faqs: [
       {
-        q: "How is this different from the NFL Immaculate Grid?",
-        a: "Same 3x3 bones, different resume. A college football immaculate grid asks what a player did in college, so rows are programs or conferences and columns are positions, awards, and draft outcomes. This cfb grid is home turf for people who know where every first rounder went to school.",
+        q: "How is this different from the NFL grid?",
+        a: "Same 3x3 bones, different resume. A college football grid asks what a player did in college, so rows are programs or conferences and columns are positions, awards, and draft outcomes. This cfb grid is home turf for people who know where every first rounder went to school.",
       },
       {
         q: "What does the rarity percentage mean?",

@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, Copy, X } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
-import { VALUES } from '@/lib/fetchJeopardy';
-import { useJeopardy } from '@/hooks/useJeopardy';
+import { VALUES } from '@/lib/fetchQuizBoard';
+import { useQuizBoard } from '@/hooks/useQuizBoard';
 
-export function JeopardyBoard() {
+export function QuizBoard() {
   const {
     loading, categories, board, openTile, score, answeredCount, totalTiles,
     finished, guess, setGuess, select, submit, closeTile, shareText,
-  } = useJeopardy();
+  } = useQuizBoard();
   const [copied, setCopied] = useState(false);
 
   const copyShare = async () => {

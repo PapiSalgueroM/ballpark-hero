@@ -56,7 +56,15 @@ const MIN_LINES = 4;
    time somebody adds a harness and forgets this one exists. */
 function needsBrowser(file) {
   const src = readFileSync(path.join(HERE, file), 'utf8');
-  return /playwright/i.test(src);
+  /* Round 133: this used to be a plain search for the word "playwright"
+     anywhere in the file, and it had a real victim. simNoRivalNames.mjs lists
+     '.playwright-mcp' among the directories it skips, so it matched, got filed
+     as a browser harness, and was quietly left out of every default run. A
+     guard that never runs is not a guard, and the way it failed was silent:
+     the suite still printed "all green" while skipping the newest check in it.
+     What actually makes a harness need a browser is IMPORTING playwright, so
+     that is what gets asked now. */
+  return /(?:import|require)\s*(?:[\w{},*\s]*from\s*)?['"][^'"]*playwright/i.test(src);
 }
 
 const all = readdirSync(HERE)

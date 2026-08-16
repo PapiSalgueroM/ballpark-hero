@@ -36,7 +36,7 @@ function adjustedXi(xi: (Player | null)[], oop: boolean[]): (Player | null)[] {
   return xi.map((p, i) => (p && oop[i] ? { ...p, marketValue: Math.max(1, Math.round(p.marketValue / 3)) } : p));
 }
 
-/** One rating everywhere: fillers keep their pinned overall, everyone else FIFA-curve minus the OOP tax. */
+/** One rating everywhere: fillers keep their pinned overall, everyone else the shared card curve minus the OOP tax. */
 const shownRating = (p: Player, isOop: boolean) =>
   p.fixedOverall ?? Math.max(35, playerRating(p) - (isOop ? 8 : 0));
 

@@ -29,7 +29,7 @@ interface TransferScreenProps {
   onLoan: (mp: MarketPlayer) => void;
   onAcceptBid: (playerId: string) => void;
   onRejectBid: (playerId: string) => void;
-  /* Round 94: the FIFA controls. */
+  /* Round 94: the transfer-status controls. */
   onSetStatus: (playerId: string, status: TransferStatus | null) => void;
   onLoanOut: (playerId: string) => void;
 }

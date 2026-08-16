@@ -109,7 +109,7 @@ function playCareer({ position = 'ST', overall, potential, physique = null, shap
       pendingSummary: null, pendingNews: [], pendingEvents: [], transferSituation: null,
       pendingBallonDor: null, pendingTournament: null, pendingWorldCup: null,
       pendingRivalryEvent: null, pendingMoralDilemma: null, pendingAppealResult: null,
-      pendingFifaCoverEvent: false,
+      pendingCoverAthleteEvent: false,
     };
   }
   const totals = getCareerTotals(c.seasons);
@@ -726,7 +726,7 @@ console.log('13) Copy rules on everything this round wrote');
   ];
   /* Names of other companies' games. The plays like bank is real footballers,
      which is a sporting fact and fine; this is about product names. */
-  const BRANDS = /\b(FIFA|EA Sports|EA FC|Football Manager|PES|eFootball|Madden|NBA 2K|Fortnite)\b/;
+  const BRANDS = /\b(FIFA|EA Sports|EA FC|Football Manager|PES|eFootball|Madden|NBA 2K|Fortnite)\b/; // rival-names-allow: this line is itself a brand guard
   let dashes = 0, brands = 0;
   for (const f of FILES) {
     const src = fs.readFileSync(path.join(ROOT, f), 'utf8');

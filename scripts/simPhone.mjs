@@ -1,5 +1,5 @@
 /**
- * Round 80 harness: the phone (GTA/BitLife life layer) + karma.
+ * Round 80 harness: the phone (the in-world life layer) + karma.
  * Asserts what tsc can't:
  *  - the text pool is clean: unique ids, 2-3 choices, karma bounded, and NOT
  *    ONE em dash anywhere in any player-facing string (house rule)

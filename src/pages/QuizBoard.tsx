@@ -1,9 +1,9 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
-import { JeopardyBoard } from '@/components/jeopardy/JeopardyBoard';
+import { QuizBoard } from '@/components/quiz-board/QuizBoard';
 
-export default function Jeopardy() {
+export default function QuizBoardPage() {
   return (
     <>
       <PageSeo
@@ -12,7 +12,7 @@ export default function Jeopardy() {
         path="/jeopardy"
       />
       <GameNavbar />
-      <JeopardyBoard />
+      <QuizBoard />
       <GameSeoContent
         title="Sports Quiz Board | DoUKnowBall"
         description="A daily quiz-show board across five sports categories, Ballon d'Or, Premier League, NBA Finals, Super Bowl and more. Clues are worth $200 to $1000 depending on how far back they go. Get it right and bank the money, get it wrong and lose it."

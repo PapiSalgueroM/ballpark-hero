@@ -1,9 +1,9 @@
 /* ────────────────────────────────────────────────────────────────────────────
    nbaCareerCorruption.ts, the dirty side of NBA My Career (Round 57)
 
-   Owner brief: "imagine everything that bitlife has and then make it ten times
-   better and more out of pocket. add corruption and more things to spend money
-   on. at least 200 new additions to each game."
+   Owner brief: take everything a full life sim does, make it ten times
+   better and more out of pocket, add corruption and more things to spend
+   money on, at least 200 new additions to each game.
 
    The basketball version of the crime layer: prop betting on your own rebound
    totals, faking a load management injury for a bettor, tanking on purpose,

@@ -4,7 +4,7 @@ import { flagFor, fmtCompactUsd } from '@/lib/dealPlayers';
 
 /**
  * Shared multiple-choice question GENERATOR for game-show format games
- * (Sports Millionaire first; Beat the Chaser and others to follow per
+ * (Sports Millionaire first, with more ladder and buzzer formats to follow per
  * MASTER_PLAN task #199). Rather than hand-authoring a fixed question pool,
  * this builds questions on the fly from live Supabase tables so the pool is
  * effectively as large as the underlying data (player_market_values alone has

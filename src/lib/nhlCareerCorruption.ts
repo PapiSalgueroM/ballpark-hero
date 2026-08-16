@@ -1,9 +1,9 @@
 /* ────────────────────────────────────────────────────────────────────────────
    nhlCareerCorruption.ts, the dirty side of NHL My Career (Round 59)
 
-   Owner brief: "imagine everything that bitlife has and then make it ten times
-   better and more out of pocket. add corruption and more things to spend money
-   on. at least 200 new additions to each game."
+   Owner brief: take everything a full life sim does, make it ten times
+   better and more out of pocket, add corruption and more things to spend
+   money on, at least 200 new additions to each game.
 
    Hockey's own flavour of trouble: a bounty on a star's head, salary cap
    circumvention through a fake retirement year, a doctor in Europe with a

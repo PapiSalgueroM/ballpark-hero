@@ -63,7 +63,7 @@ export interface RebuildState {
   shareText: string;
   /** Tier-scaled starting money before sales and swings (Round 51). */
   baseBudget: number;
-  // Fortune card flip (Round 51, box2box: pick one of ten)
+  // Fortune card flip (Round 51: pick one of ten)
   fortuneDeck: FortuneCard[];
   flippedFortune: FortuneCard | null;
   flippedIndex: number | null;
@@ -74,7 +74,7 @@ export interface RebuildState {
   cutsValue: number;
   toggleCut: (p: Player) => void;
   lockCuts: () => void;
-  // Box2box expansion (owner 2026-08-05)
+  // Rebuild expansion (owner 2026-08-05)
   coachOptions: CoachOption[];
   keepCoach: CoachOption;
   coach: CoachOption | null;
@@ -149,7 +149,7 @@ export function useRebuild(): RebuildState {
   const [activeSlot, setActiveSlot] = useState<number | null>(null);
   const [search, setSearch] = useState('');
 
-  // Box2box expansion state (owner 2026-08-05)
+  // Rebuild expansion state (owner 2026-08-05)
   const [seed, setSeed] = useState(0);
   const [coachOptions, setCoachOptions] = useState<CoachOption[]>([]);
   const [coach, setCoach] = useState<CoachOption | null>(null);
@@ -210,7 +210,7 @@ export function useRebuild(): RebuildState {
     [startingXi, coachBonus],
   );
 
-  // Round 51 (box2box): the war chest scales with club size.
+  // Round 51: the war chest scales with club size.
   const baseBudget = useMemo(() => (club ? budgetFor(club.tier) : BASE_BUDGET), [club]);
 
   const budget = useMemo(
@@ -310,7 +310,7 @@ export function useRebuild(): RebuildState {
     setPhase('cuts');
   }, [flippedFortune]);
 
-  /** Round 51: commit keep/sell BEFORE the market opens (box2box rule). */
+  /** Round 51: commit keep/sell BEFORE the market opens. */
   const toggleCut = useCallback((p: Player) => {
     setCuts(prev => {
       const next = new Set(prev);

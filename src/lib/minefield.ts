@@ -1,5 +1,5 @@
 /**
- * MINEFIELD - Sporcle/KOT4Q-style quiz board with hidden mines
+ * MINEFIELD - a category quiz board with hidden mines
  * (docs/YOUTUBER_FORMATS.md). A board shows one category and 12-16 name
  * tiles. Most tiles genuinely belong to the category; 4-6 are MINES -
  * plausible names from the same domain that do NOT belong. Click every

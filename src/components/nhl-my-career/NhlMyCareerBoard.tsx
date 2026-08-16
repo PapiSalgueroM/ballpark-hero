@@ -31,7 +31,7 @@ export default function NhlMyCareerBoard() {
   const [phase, setPhase] = useState<Phase>('create');
   // Round 59: build your player's face before the draft
   const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
-  // Round 85: FIFA tile rule. The season hub is boxes; each opens its own screen.
+  // Round 85: the tile rule. The season hub is boxes; each opens its own screen.
   const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'news'>('none');
   const [career, setCareer] = useState<NhlCareerState | null>(null);
   const [teamQuality, setTeamQuality] = useState<number | null>(null);
@@ -323,7 +323,7 @@ export default function NhlMyCareerBoard() {
     );
   }
 
-  /* ---------------- Round 85: tile drill-in screens (the FIFA rule) ---------------- */
+  /* ---------------- Round 85: tile drill-in screens (the tile rule) ---------------- */
   if (panel !== 'none' && phase !== 'event') {
     const meters: [string, number][] = [['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health]];
     return (
@@ -480,7 +480,7 @@ export default function NhlMyCareerBoard() {
         </div>
       )}
 
-      {/* Round 85: FIFA style boxes. Tap one, it opens its own screen. */}
+      {/* Round 85: the tile rule. Tap a box, it opens its own screen. */}
       <div className="grid grid-cols-2 gap-2">
         <button onClick={() => setPanel('stats')} className="relative rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
           <span className="text-xl">📊</span>

@@ -104,7 +104,7 @@ const Minefield = lazy(() => import("./pages/Minefield"));
 const OverratedUnderrated = lazy(() => import("./pages/OverratedUnderrated"));
 const TierList = lazy(() => import("./pages/TierList"));
 const BudgetBuilder = lazy(() => import("./pages/BudgetBuilder"));
-const Jeopardy = lazy(() => import("./pages/Jeopardy"));
+const QuizBoard = lazy(() => import("./pages/QuizBoard"));
 const BallIq = lazy(() => import("./pages/BallIq"));
 const Rebuild = lazy(() => import("./pages/Rebuild"));
 const EmojiGuess = lazy(() => import("./pages/EmojiGuess"));
@@ -374,7 +374,7 @@ const AppContent = () => {
         <Route path="/tier-list" element={<TierList />} />
         <Route path="/budget-builder" element={<BudgetBuilder />} />
         <Route path="/grade-transfer" element={<Navigate to="/" replace />} />
-        <Route path="/jeopardy" element={<Jeopardy />} />
+        <Route path="/jeopardy" element={<QuizBoard />} />
         <Route path="/ball-iq" element={<BallIq />} />
         <Route path="/rebuild" element={<Rebuild />} />
         <Route path="/emoji-guess" element={<EmojiGuess />} />

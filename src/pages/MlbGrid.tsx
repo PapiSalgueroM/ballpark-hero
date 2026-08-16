@@ -206,7 +206,7 @@ const MlbGrid = () => {
   return (
     <>
       <PageSeo
-        title="MLB Franchise Grid: Immaculate Grid Baseball Legends Edition | DoUKnowBall"
+        title="MLB Franchise Grid: Daily Baseball Legends Grid | DoUKnowBall"
         description="Fill a 3x3 MLB grid by naming baseball legends whose careers match both the row and column: franchises and career milestones. Free daily and unlimited baseball trivia grid."
         path="/mlb-grid"
       />
@@ -406,7 +406,7 @@ const MlbGrid = () => {
         </div>
 
         <GameSeoContent
-          title="MLB Franchise Grid | Immaculate Grid Baseball Legends Edition"
+          title="MLB Franchise Grid | Daily Baseball Legends Grid"
           description="A 3x3 grid puzzle where each cell needs an MLB legend whose career satisfies both the row and column. Franchises count across relocations, and milestones include 2,000 hits, 300 home runs and 2,000 games."
           howToPlay={[
             'Each cell in the 3x3 grid requires a player who satisfies both the row and column criteria.',

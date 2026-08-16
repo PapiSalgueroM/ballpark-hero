@@ -71,10 +71,10 @@ export const FORMATIONS: Formation[] = [
  *   mv=230 -> 83   (was 99)   Messi/Ronaldo-tier ceiling
  */
 export function playerRating(p: Player): number {
-  // FIFA-style scale (owner 2026-08-05): "ur ratings should more closely
-  // follow what fifa and madden and 2k rate their players". Anchors chosen to
-  // land on familiar card numbers: £1M→62, £5M→71, £15M→77, £40M→82, £80M→86,
-  // £200M→91, capped at 96. Bottom pros sit around 55-65 like real FC cards.
+  // 0-99 player card scale (owner 2026-08-05): he wanted our ratings to sit
+  // where a player expects them to, so the anchors land on familiar card
+  // numbers: £1M→62, £5M→71, £15M→77, £40M→82, £80M→86, £200M→91, capped at
+  // 96. Bottom pros sit around 55-65.
   //
   // Age correction (owner: "just because people are old dosent mean their
   // value should be so low. ur giving lewa such a low rating even though he's
@@ -377,9 +377,10 @@ export const EXTRAS: ExtraCategory[] = [
   ]},
 ];
 
-/* ---------------- Extras as Deal-or-No-Deal boards (owner 2026-07-10) ----------------
-   "I wanted a deal or no deal for those too. Like Klopp and Sir Alex Ferguson and
-   Chelsea budget and Boca junior fans", 6 named cases per category, keep one,
+/* ---------------- Extras as mystery box boards (owner 2026-07-10) ----------------
+   He wanted the same blind box round for the non-player categories too, in his
+   words "Like Klopp and Sir Alex Ferguson and Chelsea budget and Boca junior
+   fans", 6 named cases per category, keep one,
    three get flipped, the Banker tempts you with a known alternative. */
 export const EXTRA_DEALS: ExtraCategory[] = [
   { key: 'manager', title: 'Manager', emoji: '🎩', options: [

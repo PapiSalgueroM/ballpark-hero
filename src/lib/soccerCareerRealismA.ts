@@ -1,7 +1,7 @@
 /* ────────────────────────────────────────────────────────────────────────────
    soccerCareerRealismA.ts, the realism layer for Soccer Career, batch A
-   Owner brief: "everything BitLife has, ten times better and more out of
-   pocket." This is the human half of that: the training ground, the press
+   Owner brief: everything a full life sim does, ten times better and more
+   out of pocket. This is the human half of that: the training ground, the press
    pack, the away end, the dressing room, the bad away trips, your own head,
    and the money that is not crooked, just badly spent.
 

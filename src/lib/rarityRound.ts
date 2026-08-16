@@ -3,8 +3,8 @@ import { normalizeName, displayName, SOCCER_MARKET_VALUE_SOURCE, type PlayerSour
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
 
 /**
- * Rarity Round: a Pointless-style rarity trivia game (Mode 1) with a
- * Fan-Favourites-style popularity mirror (Mode 2, "Crowd Says").
+ * Rarity Round: name the most obscure valid answer you can (Mode 1), with a
+ * popularity mirror where the most obvious answer wins (Mode 2, "Crowd Says").
  *
  * MECHANIC
  * Each round shows a category prompt ("Name a Ballon d'Or winner", "Name a
@@ -15,8 +15,8 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
  * survey-based rarity percentage we use a verified proxy: rank within the
  * category's full pool by prominence (peak market value in USD, the same
  * number every other game on the site already uses to mean "how famous is
- * this player"). A low prominence rank means an obscure pick, exactly what
- * Pointless rewards. Ballon d'Or winners (who have no market-value column
+ * this player"). A low prominence rank means an obscure pick, which is exactly
+ * what this game rewards. Ballon d'Or winners (who have no market-value column
  * tied to the award itself) are scored by joining to the same market-value
  * table so every category shares one scoring mechanism.
  *
@@ -28,13 +28,12 @@ import { getTodayET, dateSeed } from '@/lib/dateUtils';
  * SCORING (corrected 2026-07-15, see scoreRound for the bug this fixes)
  * Every category pool is ranked by prominence descending (rank 1 = most
  * famous player in the pool, rank poolSize = most obscure). Both modes score
- * the SAME axis and differ only in which end wins, exactly like the real
- * formats, where your Pointless score and your Family Feud score are both
- * "how many people said this", just with opposite goals:
+ * the SAME axis and differ only in which end wins. Both are really the same
+ * number, "how many people said this", just with opposite goals:
  *   fameScore = round(100 - ((rank - 1) / (poolSize - 1)) * 100)
  *               // 100 = rank 1 (most famous), 0 = last rank (most obscure)
- * Rarity Round: LOWER total is better, matching Pointless convention ("you
- * found a 12 point answer" being a great, rare pick), an obscure pick scores
+ * Rarity Round: LOWER total is better ("you found a 12 point answer" being a
+ * great, rare pick), an obscure pick scores
  * near 0. Crowd Says: HIGHER total is better, rewarding the most obvious,
  * famous answer. It is on a clean 0-100 scale per category regardless of pool
  * size, so a 5-round total is always out of 500.
@@ -113,8 +112,8 @@ export interface RoundResult {
 }
 
 /**
- * What the player SHOULD have said. Pointless's whole payoff is the board
- * reveal, "you found a 12, but there was a 3 sitting there", and its absence
+ * What the player SHOULD have said. The whole payoff of a rarity game is the
+ * board reveal, "you found a 12, but there was a 3 sitting there", and its absence
  * is the other half of why this game read as "you guess one guy and you're
  * done" (owner review, 2026-07-06). The pool is already ranked, so this costs
  * nothing to surface.
@@ -553,13 +552,12 @@ export { ROUNDS_PER_RUN };
  * Scores one round given the pool and the rank of the picked answer.
  *
  * Both modes measure ONE axis, how famous the pick is, and differ only in
- * which end of it wins. That mirrors the real formats: in Pointless your score
- * IS how many people said your answer (low = obscure = good); in Family Feud
- * it's the same number, but high wins.
+ * which end of it wins. Both are really the same number, how many people would
+ * have said your answer. Rarity wants that number low, Crowd Says wants it high.
  *
  *   fameScore: 100 at rank 1 (most famous) -> 0 at the last rank (most obscure)
- *   - 'rarity' (Pointless):       LOWER is better. An obscure pick scores ~0.
- *   - 'crowd'  (Fan Favourites):  HIGHER is better. A famous pick scores ~100.
+ *   - 'rarity' (Rarity Round): LOWER is better. An obscure pick scores ~0.
+ *   - 'crowd'  (Crowd Says):   HIGHER is better. A famous pick scores ~100.
  *
  * BUG FIX 2026-07-15, this was inverted for 'rarity' and it is almost
  * certainly why the game was retired on 2026-07-06 as "you guess one guy and
@@ -618,7 +616,7 @@ export function buildEmojiGrid(rounds: RoundResult[], mode: RarityMode): string 
   return [`${label}: ${totalScore(rounds)} pts`, ...bars].join('\n');
 }
 
-/** Human-readable per-round line for the result screen, Pointless convention ("You found a 12 point answer"). */
+/** Human-readable per-round line for the result screen ("You found a 12 point answer"). */
 export function roundSummaryLine(r: RoundResult, mode: RarityMode): string {
   const pointsWord = mode === 'rarity' ? 'point' : 'popularity point';
   return `${r.answerName}: a ${r.points} ${pointsWord}${r.points === 1 ? '' : 's'} answer (rank ${r.rank} of ${r.poolSize})`;

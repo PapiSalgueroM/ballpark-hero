@@ -1,5 +1,5 @@
 /**
- * Round 79 harness: 2K style stat allocation + plays-like.
+ * Round 79 harness: spend-your-own-points stat allocation + plays-like.
  * Asserts what tsc can't:
  *  - allocOverall NEVER drifts from the engine's calcOverall (exact mirror)
  *  - allocRowsFor gives every position the right editable keys

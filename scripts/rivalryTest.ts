@@ -30,8 +30,8 @@ function baseState(): CareerState {
     awards: [], pendingBallonDor: null, lastUCLResult: null, legacy: null, postRetirementChoice: null,
     managerState: null, punditState: null, ownerState: null, isFinalSeason: false, isPundit: false,
     punditEvents: [], primeType: 'normal' as any, peakOverall: 89, retirementSuggested: false,
-    socialMediaActionUsedThisSeason: false, socialMediaFocusBoost: false, pendingFifaCoverEvent: false,
-    fifaCoverAccepted: false, activeSponsorship: null, moralDilemmasTriggered: [], pendingMoralDilemma: null,
+    socialMediaActionUsedThisSeason: false, socialMediaFocusBoost: false, pendingCoverAthleteEvent: false,
+    coverAthleteAccepted: false, activeSponsorship: null, moralDilemmasTriggered: [], pendingMoralDilemma: null,
     pedSeasonsRemaining: 0, pedActive: false, matchFixBanned: 0, divingActive: false, integrityBonus: 0,
     childEventsSeen: [], pregnancyAnnounced: false,
   } as unknown as CareerState;

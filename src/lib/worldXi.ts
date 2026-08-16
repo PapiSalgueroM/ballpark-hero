@@ -5,7 +5,7 @@ import { normalizeName } from '@/lib/whoAmI';
 import { rng, winProbability } from '@/lib/perfectSeason';
 
 /**
- * World XI (futbol11-style Build-a-XI)
+ * World XI (build an XI, one slot at a time)
  *
  * Pick a formation, get 11 random countries (one per slot, revealed in random
  * order), and name a real footballer of that nationality who can play the slot.
@@ -37,7 +37,7 @@ export interface WxPlayer {
   position: Position;
   club: string;
   value: number; // market value in USD from the row we kept
-  /** Age from the same market-value row; feeds the age-aware FIFA-style rating. */
+  /** Age from the same market-value row; feeds the age-aware card rating. */
   age?: number;
 }
 
@@ -442,7 +442,7 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
   const seed = squadSeed(players);
   const rand = rng(seed);
 
-  // Squad rating: the shared FIFA-style age-aware curve from
+  // Squad rating: the shared age-aware card rating curve from
   // squadDeal.playerRating, averaged across the XI, so ratings here read the
   // same as everywhere else on the site (owner 2026-08-05).
   const playerRatings = players.map(p =>

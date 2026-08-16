@@ -4,8 +4,8 @@
    with a map skin: the best team snowballs, and once a team is landless the
    rest of the season is a formality with no way back.
 
-   What Risk-likes and the EA/2K franchise modes actually do, and what this
-   adds, is make the board state feed back into the fight:
+   What territory-conquest board games and sports franchise modes actually do,
+   and what this adds, is make the board state feed back into the fight:
 
      1. MOMENTUM. Rolling up territory builds belief, so a growing empire gets
         a small edge.
