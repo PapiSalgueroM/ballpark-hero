@@ -8,7 +8,7 @@ import type { HubTab } from '@/hooks/useClubManager';
 import {
   TIER_INFO, clubByName, clubPreviewRating, leagueOf, money, confidenceLabel,
   isAvailable, xiAverageRating, sortedTable,
-  NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
+  NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub, EURO_SLOTS,
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
@@ -287,14 +287,14 @@ const ClubManager = () => {
               ))}
             </div>
             {/* The honest note about what is NOT here, which matters more than
-                what is. There are no real historical squads anywhere in this
-                game, so there is no past era, and saying nothing about that
-                would be the dishonest option. */}
+                what is. Round 139: the future starts are gone on the owner's
+                call (nobody knows the future), and past eras are coming from
+                real history rather than being faked in early. */}
             <p className="text-[9px] text-muted-foreground text-center mt-2.5 leading-snug max-w-lg mx-auto">
-              No past eras, on purpose. We hold one set of real squads, {CM_ROSTER_META.asOf}, so a 2010 start would mean making up
-              twenty five players a club and putting real badges on them. The future ones are that same real data aged forward:
-              players get older, they retire, and the gaps get filled with players we invented, every one of them marked wherever
-              you see him.
+              No past eras yet, and no future ones at all. Right now we hold one set of real squads, {CM_ROSTER_META.asOf},
+              and we would rather give you one honest start than a made up one. Classic seasons built from real historical
+              records are in the works, so you will get to walk into an older dressing room without a single invented name
+              on the teamsheet.
             </p>
           </div>
         )}
@@ -1002,7 +1002,7 @@ const ClubManager = () => {
                   {/* Round 95: the knockout stage as a real bracket. */}
                   <UclBracketCard career={c} onClubClick={setClubView} />
                   {!uclAlive && c.uclKoRound !== 'won' && c.uclGroup === null && (
-                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{leagueOf(c.clubName).euro ? '. Finish top 4 to change that' : ' in this league'}.</div>
+                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{leagueOf(c.clubName).euro ? `. Finish top ${EURO_SLOTS[leagueOf(c.clubName).id]?.ucl ?? 4} to change that` : ' in this league'}.</div>
                   )}
                 </div>
               )}
@@ -1090,7 +1090,6 @@ const ClubManager = () => {
           <TransferScreen
             career={c}
             market={g.market}
-            onSell={g.sell}
             onNegotiate={g.negotiate}
             onOffer={g.offer}
             onWalk={g.walk}

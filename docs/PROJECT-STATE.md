@@ -1,6 +1,85 @@
 # Project state
 
-**As of 2026-08-16 (second update that day, after Round 137).** This is the volatile file.
+## Owner feedback, 2026-08-16
+
+Anthony reviewed the whole site and gave direct feedback. **This list outranks the roadmap
+further down.** Work it top to bottom before touching anything else, and keep the DONE marks
+current so the 3-hourly build sessions do not redo finished work.
+
+His closing direction, which applies to every game, not just the items below: *"Just keep
+adding to every game and more more realism and more info and more minigames and more of
+everything. think gta, btlife, 2k, madden, fifa, and much more in ur idea of building better
+games."* Treat the depth of the big life sims and franchise modes as the bar. Never write
+those product names into `src/` (the rival names guard fails the build); the FEATURES are the
+target, not the names.
+
+1. **DONE (no round needed). Polls of the day: corny answers.** His words: "some of ur answers
+   are so corny. It should be like a yes or no question or choose this athlete or other not a
+   whole as sentence." Fixed 2026-08-16 directly in the `daily_polls` table (today's rows and
+   the pre-stocked bank were swept; options over 20 characters: zero) and the generator task
+   prompt now hard-requires options of at most 3 words, a name, a team, Yes or No, never a
+   sentence, never a joke option. If corny options reappear, the generator prompt is the place
+   to look, not the site code.
+
+2. **DONE, Round 139. Club Manager eras: no future.** His words: "u could take control of
+   diffrent teams in diffrent eras meaning current or the pass. Not the future since we dont
+   know the future. So please remove that." The 2031, 2036 and 2041 starts are gone. The
+   ageing engine stays (a save that starts today still needs the world to age around it).
+   simEras now FAILS if anybody adds a future era back.
+
+3. **OPEN, the big one: PAST eras, built honestly.** What he actually wants from item 2 is to
+   manage in past seasons. This is now known to be buildable with real data:
+   `player_market_values` in Supabase holds about 6,000 real named players a year, every year
+   back to 2004, over 1,000 distinct clubs a year (measured 2026-08-16). The work is a baking
+   round: per-year rosters plus per-year league memberships with promotions and relegations
+   applied, packaged like `clubManagerRosters.ts` is today, with thin squads carrying
+   generated-and-labelled fillers exactly like the future projection did. Start with a few
+   marquee season sets (2010, 2014, 2018 say) rather than all 22 years at once, and give it a
+   harness that proves year-zero identity against the table.
+
+4. **DONE, Round 139. Board objectives talk like boards.** His words: "no team is looking for
+   top 2. There looking to win it all... win the league or get champions league football or
+   Europa league or conference league or finish mid table or dont get related." The demand
+   ladder is now named competitions with per-league European slots (Ligue 1 sends 3 to the CL,
+   England 4, the Eredivisie 2, the Championship demands promotion, MLS can never threaten
+   relegation, the Saudi league points at the AFC). Also MORE wants, which he asked for twice:
+   points floors, the league-and-cup double for the biggest boards, turn-a-profit mandates for
+   selling clubs, on top of goals, defence, youth and the rival. Job offers now carry the same
+   named demands. `simBoardObjectives.mjs` guards all of it.
+
+5. **DONE, Round 139. No more instant selling, and windows that actually span weeks.** His
+   words: "U shouldnt be able to just quickly sell someone. U need offers and put them on the
+   transfer market." `sellPlayer` is deleted. Selling is: transfer list him, offers arrive
+   (70 percent on window open, 35 a week after, and open offers now PERSIST week to week),
+   accept one. To make waiting possible at all, windows now span real match weeks (4 in
+   summer, 3 in January) with a deadline instead of slamming shut at the first fixture. The
+   transfer screen shows weeks-to-deadline.
+
+6. **OPEN: way way way more leagues.** "There's many leagues u must add with correct data. And
+   some second divisions too and maybe up to 5." Coverage confirmed in the same Supabase
+   table: Porto, Benfica, Sporting, Celtic, Rangers, Galatasaray, Fenerbahce, Besiktas,
+   Brugge, Anderlecht, Flamengo, Palmeiras, Boca, River, Hamburg, Copenhagen, Olympiacos,
+   Salzburg all have 2026 rows. So Primeira Liga, Scottish Premiership, Turkish Super Lig,
+   Belgian Pro League, Brazilian Serie A, Argentine Primera, and second divisions (2. Bundesliga
+   at minimum: Hamburg and Schalke are already baked) are all buildable through the existing
+   `bakeClubManagerRosters.mjs` pipeline plus league metadata (name, cup, euro slots,
+   relegation count, strength priors). This also fixes his "so many players from the transfer
+   market missing" complaint, since the market IS the baked league set. Do it league by
+   league, verified 2026-27 memberships each time, and extend `EURO_SLOTS` and
+   `relegationSpots` for each.
+
+7. **OPEN: way more headlines.** More variety in the news feed: derby previews, form stories,
+   record fees, managerial pressure elsewhere, title race framing. Mind the two permanent
+   guards: no invented quotes from real people (simNoInventedQuotes) and no rival product
+   names (simNoRivalNames).
+
+8. **OPEN, standing: every game gets deeper.** More realism, more info, more minigames, in
+   every game on the site, career modes first. Use the franchise-mode checklist as the gap
+   list per game: training plans, form and morale loops, media, contracts, injuries and
+   recovery choices, rivalries, awards races, offseason depth, save-spanning records.
+
+
+**As of 2026-08-16 (third update that day, after Round 139, the review round).** This is the volatile file.
 Update it in the same round as any change, so the next session (or the next account) picks up
 cleanly.
 
@@ -22,11 +101,10 @@ true on the date above; re-measure rather than quoting them.
 
 | | |
 |---|---|
-| `origin/main` head | `6397a77` = **Round 137** |
-| Packaged and delivered but **not pushed** | **Nothing.** The queue is empty for the first time in weeks. |
-| One-click wrapper | `SHIP7.bat` shipped 131 through 137 and is spent. The next round needs a fresh `RUNnn.bat`, and a new wrapper only if a queue builds up again. |
-| Live site | Publish triggered twice on 2026-08-16 after Lovable synced Round 137. **Not independently verified from the cloud**, see the note below. |
-| Next free round number | **139** |
+| `origin/main` head | `03afbfd` = **Round 138** when this was written |
+| Packaged queue | Round **139**, the review round: owner feedback items 2, 4 and 5 in one commit because they interlock in the same files. `RUN139.bat` alone ships it. |
+| Live site | Publish triggered 2026-08-16 after Round 137 synced. Re-publish and verify after 139 lands. |
+| Next free round number | **140** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

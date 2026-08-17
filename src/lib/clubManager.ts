@@ -339,10 +339,10 @@ export interface TrainingPlan {
   focus: TrainingFocus;
 }
 
-/** Round 70: one board demand for the season. */
+/** Round 70: one board demand for the season. Round 140: more of them. */
 export interface BoardObjective {
-  id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals' | 'defence' | 'youth';
-  /** What the board wants, e.g. "Finish top 4". */
+  id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals' | 'defence' | 'youth' | 'points' | 'double' | 'netSpend';
+  /** What the board wants, e.g. "Qualify for the Europa League (top 5)". */
   label: string;
   /** League position / cup stage rank / goal count the objective needs. */
   target: number;
@@ -586,6 +586,10 @@ export interface CareerState {
   /** Per-season strength rating for every club (league + UCL flavor clubs). */
   clubStrengths: Record<string, number>;
   transferWindow: 'summer' | 'january' | null;
+  /** Round 141: match weeks the open window still spans. Real windows run
+   *  through early season fixtures, so listing a man and waiting for offers
+   *  is now an actual strategy instead of a single-screen gamble. */
+  windowWeeksLeft?: number;
   aiHeadlines: string[];
   /** Names no longer purchasable (bought by me or by AI clubs this season). */
   goneNames: string[];
@@ -3532,10 +3536,19 @@ function returnLoanedPlayers(career: CareerState): CMPlayer[] {
  *  - and a genuine star can still be approached out of the blue, exactly
  *    as before, at a price that has to tempt you
  */
-function generateIncomingBids(state: CareerState): void {
-  const bids: IncomingBid[] = [];
+/**
+ * Round 141: `topUp` is the mid-window weekly pass. It KEEPS every open bid
+ * whose player is still here (an offer on the table stays on the table), and
+ * rolls new interest at a gentler weekly rate. The window-open pass is the
+ * loud one: everybody who was waiting for the market to open calls at once.
+ */
+function generateIncomingBids(state: CareerState, topUp = false): void {
+  const surviving = topUp
+    ? (state.incomingBids ?? []).filter(b => b.status === 'open' && state.squad.some(p => p.id === b.playerId))
+    : [];
+  const bids: IncomingBid[] = [...surviving];
   const buyers = buyerPool(state);
-  const taken = new Set<string>();
+  const taken = new Set<string>(surviving.map(b => b.playerId));
   const available = state.squad.filter(p => !p.onLoan && p.transferStatus !== 'blocked');
 
   /* Round 127: a player who has handed in a transfer request is shopping
@@ -3543,7 +3556,8 @@ function generateIncomingBids(state: CareerState): void {
      way it rings for a man you listed. This is the part of a broken promise
      you can actually point at: you did not put him on the market, he did. */
   for (const p of available.filter(x => x.wantsOut && x.transferStatus !== 'listed' && x.transferStatus !== 'loanListed')) {
-    if (Math.random() > 0.75) continue;
+    if (taken.has(p.id)) continue;
+    if (Math.random() > (topUp ? 0.25 : 0.6)) continue;
     const base = sellValue(p);
     const club = pick(buyers);
     bids.push({
@@ -3557,10 +3571,18 @@ function generateIncomingBids(state: CareerState): void {
     taken.add(p.id);
   }
 
-  // 1. Listed players: the phone actually rings.
+  /* 1. Listed players: the phone actually rings.
+     Round 141 calibration, and mind the direction of the gate: the random
+     draw SKIPS when it exceeds the threshold, so the threshold IS the bid
+     probability. The window-open rush stays strong (70 percent, close to the
+     original engine), the NEW parts are the 35 percent weekly top-up and the
+     fact that open offers persist week to week. Together a man listed for a
+     whole 4 week window goes unbid about one time in a hundred, and that
+     matters more than it used to because the instant sell button is gone and
+     listing is now the ONLY way to move a player. */
   for (const p of available.filter(x => x.transferStatus === 'listed')) {
     if (taken.has(p.id)) continue;
-    if (Math.random() > 0.85) continue;
+    if (Math.random() > (topUp ? 0.35 : 0.7)) continue;
     const base = sellValue(p);
     const pool = buyers.filter(n => n !== state.clubName);
     const club = pick(pool);
@@ -3581,7 +3603,8 @@ function generateIncomingBids(state: CareerState): void {
 
   // 2. Loan-listed players: someone will take him for the season.
   for (const p of available.filter(x => x.transferStatus === 'loanListed')) {
-    if (Math.random() > 0.8) continue;
+    if (taken.has(p.id)) continue;
+    if (Math.random() > (topUp ? 0.2 : 0.6)) continue;
     bids.push({
       playerId: p.id,
       playerName: p.name,
@@ -3595,11 +3618,13 @@ function generateIncomingBids(state: CareerState): void {
   }
 
   // 3. Out of the blue, for the players everyone can see are good.
+  // Weekly top-ups pester less than the window-open rush, but a big club can
+  // still come for your star in week three, exactly the way it happens.
   const targets = available
     .filter(p => !taken.has(p.id) && !p.isYouth && !p.transferStatus && p.rating >= 74)
     .sort((a, b) => (b.value ?? 0) - (a.value ?? 0))
     .slice(0, 8);
-  const count = Math.random() < 0.45 ? 0 : ri(1, 2);
+  const count = Math.random() < (topUp ? 0.8 : 0.45) ? 0 : ri(1, 2);
   for (const p of shuffle(targets).slice(0, count)) {
     const base = sellValue(p);
     bids.push({
@@ -3613,21 +3638,12 @@ function generateIncomingBids(state: CareerState): void {
   state.incomingBids = bids;
 }
 
-/** Returns the new state, or null if the sale is not allowed. */
-export function sellPlayer(career: CareerState, playerId: string): CareerState | null {
-  if (career.transferWindow === null) return null;
-  const p = career.squad.find(x => x.id === playerId);
-  if (!p) return null;
-  if (!canLeaveSquad(career, p)) return null;
-  const fee = sellValue(p);
-  return {
-    ...career,
-    budget: Math.round((career.budget + fee) * 10) / 10,
-    squad: career.squad.filter(x => x.id !== playerId),
-    xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
-    seasonSignings: [...career.seasonSignings, { dir: 'out', name: p.name, fee }],
-  };
-}
+/* Round 141: sellPlayer is GONE, on the owner's review: "U shouldnt be able
+   to just quickly sell someone. U need offers and put them on the transfer
+   market." Selling now has exactly one path: transfer list the player, wait
+   for clubs to bid (generateIncomingBids), and accept a bid you like
+   (acceptBid). No function in this file converts a player straight to cash,
+   and the harness checks the export stays dead. */
 
 /**
  * 3-6 AI transfers between the other clubs. Each headline removes that player
@@ -4151,26 +4167,82 @@ function relegationSpots(leagueId: string): number {
   return 3;
 }
 
+/**
+ * Round 140, from his review: "in real life Barca and no team is looking for
+ * top 2. There looking to win it all... So time teams should be like win the
+ * league or get champions league football or Europa league or conference
+ * league or finish mid table or dont get relegated."
+ *
+ * So the ladder is named competitions now, not positions. The number in
+ * brackets stays because the game grades by table position and the player
+ * deserves to know the line, but the DEMAND is the competition.
+ *
+ * European places per league, 2026-27 shapes, simplified on purpose: the cup
+ * winner routes and coefficient bonus spots move year to year, so each league
+ * gets its stable league-position core and the label says which competition
+ * that position feeds. Ligue 1 sends fewer straight to the group stage than
+ * England or Spain, the Eredivisie champion goes in but third place is
+ * qualifying rounds, and that difference is the realism he is asking for.
+ */
+interface EuroSlots { ucl: number; uel: number; uecl: number }
+export const EURO_SLOTS: Record<string, EuroSlots> = {
+  premier:    { ucl: 4, uel: 5, uecl: 6 },
+  laliga:     { ucl: 4, uel: 5, uecl: 6 },
+  seriea:     { ucl: 4, uel: 5, uecl: 6 },
+  bundesliga: { ucl: 4, uel: 5, uecl: 6 },
+  ligue1:     { ucl: 3, uel: 4, uecl: 5 },
+  eredivisie: { ucl: 2, uel: 3, uecl: 4 },
+};
+
 function leagueDemand(rank: number, tier: number, size: number, league: LeagueDef): { target: number; label: string } {
-  // Heavyweights: the badge demands the title, full stop.
+  const half = Math.floor(size / 2);
+  const drop = relegationSpots(league.id);
+
+  // The second division is its own world: the prize is going UP.
+  if (league.id === 'championship') {
+    if (rank <= 2 || (rank <= 4 && tier <= 2)) {
+      // A club this big in this division exists to leave it immediately.
+      return { target: 2, label: `Win automatic promotion (top 2)` };
+    }
+    if (rank <= 8) return { target: 6, label: `Make the promotion playoffs (top 6)` };
+    if (rank <= Math.round(size * 0.65)) return { target: half, label: `Finish in the top half` };
+    return { target: size - drop, label: `Stay up. Avoid relegation` };
+  }
+
+  // MLS: no relegation exists, so no board can honestly threaten it.
+  if (league.id.startsWith('mls')) {
+    if (rank <= 2) return { target: 1, label: `Win the ${league.name}` };
+    if (rank <= 9) return { target: 8, label: `Make the playoffs (top 8)` };
+    return { target: size - 4, label: `Finish mid-table or better` };
+  }
+
+  // Heavyweights everywhere else: the badge demands the title, full stop.
   if (rank <= 2 || (rank <= 4 && tier <= 2)) {
     return { target: 1, label: `Win the ${league.name}` };
   }
-  const uclSlots = league.euro ? (size >= 18 ? 4 : 3) : 0;
-  if (league.euro && rank <= uclSlots + 1) {
-    return { target: uclSlots, label: `Qualify for the Champions League (top ${uclSlots})` };
+
+  const slots = EURO_SLOTS[league.id];
+  if (league.euro && slots) {
+    if (rank <= slots.ucl + 1) {
+      return { target: slots.ucl, label: `Qualify for the Champions League (top ${slots.ucl})` };
+    }
+    if (rank <= slots.uel + 2) {
+      return { target: slots.uel, label: `Qualify for the Europa League (top ${slots.uel})` };
+    }
+    if (rank <= slots.uecl + 3) {
+      return { target: slots.uecl, label: `Qualify for the Conference League (top ${slots.uecl})` };
+    }
   }
-  if (rank <= Math.max(6, Math.round(size * 0.35))) {
-    const t = Math.max(5, Math.round(size * 0.35));
-    return { target: t, label: league.euro ? `Push for Europe (top ${t})` : `Challenge at the top (top ${t})` };
+
+  // Saudi Pro League: the continental prize is the AFC Champions League.
+  if (league.id === 'saudi' && rank <= 5) {
+    return { target: 3, label: `Qualify for the AFC Champions League Elite (top 3)` };
   }
-  const half = Math.floor(size / 2);
+
   if (rank <= Math.round(size * 0.65)) {
     return { target: half, label: `Finish in the top half` };
   }
-  const drop = relegationSpots(league.id);
   if (drop === 0) {
-    // No relegation here, so the honest ask is a respectable finish.
     return { target: Math.max(half, size - 3), label: `Finish mid-table or better` };
   }
   return { target: size - drop, label: `Stay up. Avoid relegation` };
@@ -4215,21 +4287,44 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
   let h = 0;
   for (let i = 0; i < clubName.length; i++) h = (h * 31 + clubName.charCodeAt(i)) >>> 0;
 
-  if (h % 2 === 0) {
+  /* Round 140: a third mandate shape, the points floor, joins goals and
+     defence, because "add more on board wants" was asked twice. Which one a
+     club gets is still deterministic from its name. */
+  const mode = h % 3;
+  if (mode === 0) {
     const goalsBase = club.tier === 1 ? 78 : club.tier === 2 ? 70 : club.tier === 3 ? 62 : 50;
     // Round 72: quota scales with the real season length (28 to 46 rounds now).
     const goals = Math.max(30, Math.round(goalsBase * (rounds / 38)));
     objs.push({ id: 'goals', target: goals, label: `Score ${goals}+ league goals` });
-  } else {
+  } else if (mode === 1) {
     const gaBase = club.tier === 1 ? 34 : club.tier === 2 ? 40 : club.tier === 3 ? 48 : 58;
     const ga = Math.max(18, Math.round(gaBase * (rounds / 38)));
     objs.push({ id: 'defence', target: ga, label: `Concede fewer than ${ga} league goals` });
+  } else {
+    // The floor tracks the demand band, so the points ask never contradicts
+    // the league ask sitting right above it.
+    const ptsBase = demand.target === 1 ? 80 : demand.target <= 4 ? 68 : demand.target <= 6 ? 60 : demand.target <= Math.floor(leagueSize / 2) ? 50 : 40;
+    const pts = Math.max(24, Math.round(ptsBase * (rounds / 38)));
+    objs.push({ id: 'points', target: pts, label: `Bank ${pts}+ league points` });
+  }
+
+  /* Round 140: the biggest clubs sometimes want history, not just the title.
+     Deterministic and rare, so it reads as an event when your board asks. */
+  if (club.tier === 1 && demand.target === 1 && h % 5 === 0) {
+    objs.push({ id: 'double', target: 0, label: `Win the ${league.name} and ${league.cupName} double` });
   }
 
   // Smaller clubs are told to build, not just to survive.
   if (club.tier >= 3) {
     const youth = club.tier === 4 ? 3 : 2;
     objs.push({ id: 'youth', target: youth, label: `Blood ${youth} under-21 players in the league` });
+  }
+
+  /* Round 140: selling clubs are run as businesses, and the board says so.
+     Grades against the season's ins and outs, so player trading is a stated
+     expectation rather than an accident of the budget screen. */
+  if (club.tier === 4 || (club.tier === 3 && h % 2 === 1)) {
+    objs.push({ id: 'netSpend', target: 0, label: `Turn a profit in the transfer market` });
   }
   return objs;
 }
@@ -4290,6 +4385,39 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
         // once the run-in starts and the kids are still not playing.
         const late = played > roundsTotal * 0.6;
         status = late ? 'behind' : 'onTrack';
+      }
+    } else if (objective.id === 'points') {
+      // Round 140: a floor, graded on pace exactly like the goals quota.
+      const pts = myRow ? myRow.pts : 0;
+      if (pts >= objective.target) {
+        status = 'done';
+      } else if (seasonDone) {
+        status = 'failed';
+      } else {
+        const pace = played > 0 ? (pts / played) * roundsTotal : objective.target;
+        status = pace >= objective.target * 0.92 ? 'onTrack' : 'behind';
+      }
+    } else if (objective.id === 'double') {
+      /* Round 140: both trophies or nothing. Alive while both are alive. */
+      const cup = cupProgressRank(career);
+      const wonCup = career.cupRound === 'won';
+      const top = myPos === 1;
+      if (wonCup && top && seasonDone) {
+        status = 'done';
+      } else if (career.cupRound === 'out' || (seasonDone && (!top || !wonCup))) {
+        status = 'failed';
+      } else {
+        status = top && (cup.alive || wonCup) ? 'onTrack' : 'behind';
+      }
+    } else if (objective.id === 'netSpend') {
+      /* Round 140: sell for more than you spend, graded off the season's
+         actual ins and outs. Loans count at their fee, which is the cash. */
+      const net = (career.seasonSignings ?? []).reduce(
+        (s, x) => s + (x.dir === 'out' ? x.fee : -x.fee), 0);
+      if (seasonDone) {
+        status = net >= 0 ? 'done' : 'failed';
+      } else {
+        status = net >= 0 ? 'onTrack' : 'behind';
       }
     } else {
       const gf = myRow ? myRow.gf : 0;
@@ -5195,12 +5323,30 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   state.teamTalk = null;
 
   tickWeek(state, new Set(xi.map(p => p.id)));
-  // Round 71: playing a match shuts the window; live deals and bids die with
-  // it (the negotiation table clears, sellers forget grudges by January).
-  state.transferWindow = null;
-  state.negotiation = null;
-  state.incomingBids = [];
-  state.coldNames = [];
+  /* Round 141: a window no longer slams shut the moment you play a match,
+     because real windows run through the early fixtures and because the
+     instant sell is gone, so listing a man needs actual weeks for offers to
+     arrive. The window now spans a few match weeks (4 in summer, 3 in
+     January), fresh bids can land in any of them, and open offers stay on
+     the table instead of being wiped every Saturday. When the weeks run out
+     the deadline hits: deals die, bids die, grudges are forgotten. */
+  if (state.transferWindow !== null) {
+    const left = (state.windowWeeksLeft ?? 1) - 1;
+    state.windowWeeksLeft = Math.max(0, left);
+    if (left <= 0) {
+      state.transferWindow = null;
+      state.negotiation = null;
+      state.incomingBids = [];
+      state.coldNames = [];
+      state.aiHeadlines = [
+        `\u{23F0} Deadline day is done. The window is shut until ${state.calendar.slice(state.week).some(e => e.type === 'window') ? 'January' : 'the summer'}.`,
+        ...state.aiHeadlines,
+      ].slice(0, 8);
+    } else {
+      // The market keeps moving mid-window: new offers can arrive weekly.
+      generateIncomingBids(state, true);
+    }
+  }
   // Round 135: and the room fills up again, once there is something to ask.
   maybeAskPress(state);
 
@@ -5729,6 +5875,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID): C
     calendar: buildCalendar(league.clubs.length),
     clubStrengths: genClubStrengths(league, startYearsOn),
     transferWindow: 'summer',
+    windowWeeksLeft: 4,
     aiHeadlines: [],
     goneNames: [],
     seasonSignings: [],
@@ -5796,6 +5943,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       state.week += 1;
       tickWeek(state, null);
       state.transferWindow = 'january';
+      // Round 141: January runs three match weeks before the deadline.
+      state.windowWeeksLeft = 3;
       generateHeadlines(state);
       // Round 135: a January window is exactly when somebody gets asked whether
       // his best player is going anywhere.
@@ -6077,9 +6226,14 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     const suitors = shuffle(everyClub.filter(c => c.tier < club.tier && c.name !== state.clubName));
     for (const s of suitors.slice(0, ri(1, 2))) {
       const abroad = !leagueOf(state.clubName).clubs.includes(s.name);
+      /* Round 140: job offers stopped saying "board expects Top 14", because
+         no board on earth talks like that. The offer now carries the same
+         named demand the club would actually hand you on day one. */
+      const sLeague = leagueOf(s.name);
+      const ask = leagueDemand(s.expectation, s.tier, sLeague.clubs.length, sLeague);
       offers.push({
         club: s.name,
-        blurb: `${TIER_INFO[s.tier].emoji} ${TIER_INFO[s.tier].label} club · ${leagueOf(s.name).name}${abroad ? ' (abroad)' : ''} · ${money(s.budget)} budget · board expects Top ${s.expectation}`,
+        blurb: `${TIER_INFO[s.tier].emoji} ${TIER_INFO[s.tier].label} club · ${sLeague.name}${abroad ? ' (abroad)' : ''} · ${money(s.budget)} budget · the board wants: ${ask.label}`,
       });
     }
   }
@@ -6404,6 +6558,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     calendar: buildCalendar(league.clubs.length),
     clubStrengths: genClubStrengths(league, nextYearsOn),
     transferWindow: 'summer',
+    windowWeeksLeft: 4,
     aiHeadlines: [],
     // Round 132: anybody the club had to go and get is off the market now.
     goneNames: [...freeAgentsIn],

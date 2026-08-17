@@ -19,7 +19,6 @@ const POS_GROUPS: Record<Exclude<PosFilter, 'ALL'>, Position[]> = {
 interface TransferScreenProps {
   career: CareerState;
   market: MarketPlayer[];
-  onSell: (playerId: string) => void;
   /* Round 71: the market grew a brain. */
   onNegotiate: (mp: MarketPlayer) => void;
   onOffer: (amount: number) => void;
@@ -55,7 +54,7 @@ const STATUS_META: Record<TransferStatus, { short: string; tint: string; blurb: 
 
 /** Buy/sell/news hub, shown inside the transfers tab. */
 export function TransferScreen({
-  career, market, onSell,
+  career, market,
   onNegotiate, onOffer, onWalk, onDismissNegotiation, onClause, onLoan,
   onAcceptBid, onRejectBid, onSetStatus, onLoanOut,
 }: TransferScreenProps) {
@@ -121,7 +120,9 @@ export function TransferScreen({
               : '🔒 Transfer window closed'}
           </div>
           <div className="text-[10px] text-muted-foreground">
-            {windowOpen ? `Closes when you play your next match · loans used ${loansUsed}/2` : 'Reopens in January / next summer'}
+            {windowOpen
+              ? `${(career.windowWeeksLeft ?? 1) <= 1 ? 'DEADLINE: shuts after your next match' : `${career.windowWeeksLeft} match weeks until the deadline`} · offers can arrive any week · loans used ${loansUsed}/2`
+              : 'Reopens in January / next summer'}
           </div>
         </div>
         <div className="text-right">
@@ -403,7 +404,7 @@ export function TransferScreen({
           <div className="bg-card border border-border rounded-xl p-2 max-h-[28rem] overflow-y-auto">
               <p className="text-[9px] text-muted-foreground px-1 pb-1.5 border-b border-border/40">
                 {windowOpen
-                  ? 'Sell cashes out now at 90 percent of his value. Listing him takes longer but the market decides the fee, and a bidding war beats any instant sale.'
+                  ? 'Nobody sells a player over the counter. Transfer list him and clubs will come to you with offers, sometimes two of them fighting over the same man, and the bids land in Incoming above.'
                   : 'The window is shut, so nobody moves today. You can still tell the club who is available, who is off limits and who you want out on loan, and it will be waiting when it reopens.'}
               </p>
               {sellable.map(p => {
@@ -441,15 +442,6 @@ export function TransferScreen({
                         </div>
                       </div>
                       <span className={cn('text-sm font-bold font-display', ratingTint(p.rating))}>{p.rating}</span>
-                      <button
-                        onClick={() => onSell(p.id)}
-                        disabled={!free}
-                        title={free ? 'Cash out now' : 'Squad rules block this right now'}
-                        className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all min-w-[62px]',
-                          free ? 'bg-destructive text-destructive-foreground hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
-                      >
-                        Sell
-                      </button>
                     </div>
                     <div className="flex items-center gap-1 mt-1.5 pl-11 flex-wrap">
                       {pill('listed', 'Transfer list')}

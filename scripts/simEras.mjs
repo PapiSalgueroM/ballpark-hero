@@ -480,13 +480,17 @@ console.log('6) Real names become made up ones gracefully, and it is labelled');
   if (makeGeneratedName('a') === makeGeneratedName('b')) fail('the name generator ignores its seed');
   if (makeGeneratedName('a') !== makeGeneratedName('a')) fail('the name generator is not deterministic');
 
-  // The flag survives into the engine, into a squad and into the market.
-  const s = startCareer('Liverpool', 'plus10');
-  const squadGen = s.squad.filter(p => p.generated).length;
-  const market = buildMarket(s);
+  // The flag survives into the engine and into the market. Round 139 removed
+  // the future START dates, but a save that starts today still reaches 2036 by
+  // playing ten seasons, so the 2036 world must still exist and still be
+  // honestly flagged. A career ten seasons in is the shape that reaches it.
+  const deep = { ...startCareer('Liverpool'), season: 11 };
+  const roster10 = projectedRoster('Liverpool', 10);
+  const squadGen = roster10.filter(p => p.g).length;
+  const market = buildMarket(deep);
   const marketGen = market.filter(p => p.generated).length;
-  console.log(`   a 2036-37 Liverpool save: ${squadGen}/${s.squad.length} made up in the squad, ${marketGen}/${market.length} on the market`);
-  if (squadGen < 3) fail('a 2036 squad has almost nobody made up in it, the flag is not surviving');
+  console.log(`   season 11 of a Liverpool save (2036-37 world): ${squadGen}/${roster10.length} made up in the projected squad, ${marketGen}/${market.length} on the market`);
+  if (squadGen < 3) fail('a 2036 projected squad has almost nobody made up in it, the flag is not surviving');
   if (marketGen < 500) fail('the 2036 market is barely flagged');
   if (market.some(p => p.generated && realNames.has(p.name))) fail('a flagged market player has a real name');
   // The default era must never carry the flag at all.
@@ -513,68 +517,53 @@ console.log('6) Real names become made up ones gracefully, and it is labelled');
 }
 
 /* ================================================================== */
-console.log('7) Every era on the menu is one the data can support');
+console.log('7) The era menu is exactly what the owner asked for and the data supports');
 /* ================================================================== */
 {
-  console.log(`   ${CM_ERAS.length} eras: ${CM_ERAS.map(e => e.label).join(', ')}`);
-  if (CM_ERAS.length < 3) fail('there is barely an era choice at all');
+  console.log(`   ${CM_ERAS.length} era(s): ${CM_ERAS.map(e => e.label).join(', ')}`);
+
+  /* ⚠ THE TWO RULES, both dated so nobody relitigates them blind.
+
+     No FUTURE eras. Owner, 2026-08-16: "Not the future since we dont know
+     the future. So please remove that." Round 132 offered plus5/plus10/plus15
+     and Round 139 removed them. This is the guard that keeps a later round
+     from quietly adding one back.
+
+     No PAST eras UNTIL a real historical bake exists. player_market_values
+     in Supabase holds real rosters back to 2004, so past eras are buildable,
+     but they arrive as baked real data with their own harness, not as
+     invented squads wearing real badges. When that lands, this section gets
+     rewritten on purpose, with eyes open, and startYear < CM_BASE_YEAR stops
+     being a failure. */
+  for (const e of CM_ERAS) {
+    if (e.startYear > CM_BASE_YEAR) fail(`era ${e.label} starts in the FUTURE, which the owner removed on 2026-08-16`);
+    if (e.startYear < CM_BASE_YEAR) fail(`era ${e.label} is BEFORE the roster year, and no historical bake exists yet`);
+  }
+
+  if (CM_ERAS.length !== 1) fail(`${CM_ERAS.length} eras on the menu; with no past bake and no future allowed there is exactly one honest start`);
   if (eraById(DEFAULT_ERA_ID).startYear !== CM_BASE_YEAR) fail('the default era is not the real data');
   if (eraById('nonsense-id').id !== CM_ERAS[0].id) fail('an unknown era id does not fall back to the real one');
-  let real = 0;
-  for (const e of CM_ERAS) {
-    // ⚠ THE RULE. A past era would mean inventing whole squads and putting
-    // real club badges on them, and there is no historical roster data in
-    // this repo to do it honestly. So there are none, and this is the guard
-    // that keeps a future round from quietly adding one.
-    if (e.startYear < CM_BASE_YEAR) fail(`era ${e.label} is BEFORE the roster year, and there is no real data for it`);
-    if (e.startYear === CM_BASE_YEAR) real += 1;
-    const label = eraRealShareLabel(e);
-    const line = eraHonestyLine(e);
-    console.log(`   ${e.label}  ${label}  |  ${line}`);
-    if (!label || !line) fail(`era ${e.label} has no honesty copy`);
-    if (e.startYear > CM_BASE_YEAR && !/projection/i.test(line)) fail(`era ${e.label} does not say it is a projection`);
-    if (e.startYear === CM_BASE_YEAR && !/real/i.test(line)) fail(`era ${e.label} does not say it is real data`);
-    // The printed number has to BE the measured number.
-    if (e.startYear > CM_BASE_YEAR) {
-      const pct = Math.round(realStarterShare(e.startYear - CM_BASE_YEAR) * 100);
-      if (!line.includes(`${pct}%`)) fail(`era ${e.label} prints a share that is not the measured ${pct}%`);
-    }
+  // Round 132 saves may still carry the removed era ids. They must not crash,
+  // they must land on the real era.
+  for (const legacy of ['plus5', 'plus10', 'plus15']) {
+    if (eraById(legacy).id !== CM_ERAS[0].id) fail(`removed era id ${legacy} does not fall back to the real one, old saves would break`);
   }
-  if (real !== 1) fail(`${real} eras claim to be real data, there is exactly one real roster set`);
 
-  // Each era is a genuinely different starting world.
-  const worlds = CM_ERAS.map(e => {
-    clearSeed();
-    const s = startCareer('Real Madrid', e.id);
-    return {
-      era: e,
-      names: new Set(s.squad.filter(p => !p.isYouth).map(p => p.name)),
-      xi: xiAverageRating(s),
-      gen: s.squad.filter(p => p.generated).length,
-      year: s.startYear,
-      label: worldSeasonLabel(s),
-    };
-  });
-  for (const w of worlds) {
-    console.log(`   ${w.label}: XI ${w.xi}, ${w.gen} made up in a ${w.names.size} man senior squad`);
-    if (w.year !== w.era.startYear) fail(`${w.era.label} started in ${w.year}`);
-    if (w.xi < 70) fail(`${w.era.label} handed Real Madrid an XI of ${w.xi}`);
-  }
-  for (let i = 1; i < worlds.length; i++) {
-    const a = worlds[i - 1];
-    const b = worlds[i];
-    const shared = [...b.names].filter(n => a.names.has(n)).length;
-    const overlap = shared / Math.max(1, b.names.size);
-    console.log(`   ${a.label} to ${b.label}: ${fx(overlap * 100, 0)}% of the squad is the same players`);
-    if (overlap > 0.75) fail(`${a.era.label} and ${b.era.label} are basically the same squad (${fx(overlap * 100, 0)}% shared)`);
-    if (b.gen <= a.gen) fail(`${b.era.label} is not more invented than ${a.era.label}`);
-  }
-  // Later eras must be further from the real data than earlier ones.
-  for (let i = 1; i < CM_ERAS.length; i++) {
-    const prev = realNameShare(CM_ERAS[i - 1].startYear - CM_BASE_YEAR);
-    const here = realNameShare(CM_ERAS[i].startYear - CM_BASE_YEAR);
-    if (here >= prev) fail(`${CM_ERAS[i].label} is not further from the real data than ${CM_ERAS[i - 1].label}`);
-  }
+  const e = CM_ERAS[0];
+  const label = eraRealShareLabel(e);
+  const line = eraHonestyLine(e);
+  console.log(`   ${e.label}  ${label}  |  ${line}`);
+  if (!label || !line) fail(`era ${e.label} has no honesty copy`);
+  if (!/real/i.test(line)) fail(`era ${e.label} does not say it is real data`);
+
+  clearSeed();
+  const s = startCareer('Real Madrid', e.id);
+  const xi = xiAverageRating(s);
+  const gen = s.squad.filter(p => p.generated).length;
+  console.log(`   ${worldSeasonLabel(s)}: XI ${xi}, ${gen} made up players in the squad`);
+  if (s.startYear !== e.startYear) fail(`${e.label} started in ${s.startYear}`);
+  if (xi < 70) fail(`${e.label} handed Real Madrid an XI of ${xi}`);
+  if (gen !== 0) fail(`the real-data era contains ${gen} made up players on day one`);
 }
 
 /* ================================================================== */
@@ -631,12 +620,15 @@ console.log('8) A save from before the clock existed still opens and still works
     if (worldYear(finished) !== CM_BASE_YEAR + 4) fail(`the repaired save rolled to ${worldYear(finished)}`);
     if (finished.squad.length < 16) fail('the repaired save came out of the summer with no squad');
   }
-  // A save that never had a clock but was started in a future era keeps it.
-  const future = startCareer('Arsenal', 'plus10');
-  if (worldYear(future) !== CM_BASE_YEAR + 10) fail('a future era career does not know what year it is');
-  const rolled = startNextSeason(playSeason(future, { renew: false }).state);
-  if (worldYear(rolled) !== CM_BASE_YEAR + 11) fail('a future era career does not advance its year');
-  if (yearsOn(rolled) !== 11) fail('a future era career does not age its world');
+  /* Round 139 removed the future starts, but Round 132 shipped for a day, so
+     a save that STARTED in 2036 can exist on somebody's device. Opening it
+     must not crash and must not lie about its own year: the stored startYear
+     is honoured even though the era is off the menu. */
+  const orphan = { ...startCareer('Arsenal'), startYear: CM_BASE_YEAR + 10, eraId: 'plus10' };
+  if (worldYear(orphan) !== CM_BASE_YEAR + 10) fail('an orphaned future save does not know what year it is');
+  const rolled = startNextSeason(playSeason(orphan, { renew: false }).state);
+  if (worldYear(rolled) !== CM_BASE_YEAR + 11) fail('an orphaned future save does not advance its year');
+  if (yearsOn(rolled) !== 11) fail('an orphaned future save does not age its world');
 }
 
 /* ================================================================== */

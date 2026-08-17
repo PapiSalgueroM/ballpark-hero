@@ -534,16 +534,25 @@ export interface CMEra {
 /**
  * Every era this game can honestly offer, and no others.
  *
- * The rule that decided this list: an era is offerable if the data in this
- * repo can actually produce it. There is one real roster set, August 2026, so
- * exactly one era is real data. Everything after it is that same real data
- * aged forward by a curve, which is a projection and is labelled as one on the
- * tile, in the picker footnote and on the squad screen for the rest of the
- * save. Everything BEFORE it is nothing at all: this codebase holds no
- * historical squads, so a 2010 or a 1998 start would mean inventing twenty
- * five players per club and putting real badges on them. That is not a
- * shortcut worth taking, so it is not on the menu, and the picker says so
- * rather than quietly leaving a gap somebody will ask about later.
+ * Round 139, and this list got shorter on the owner's direct instruction
+ * (2026-08-16): "u could take control of diffrent teams in diffrent eras
+ * meaning current or the pass. Not the future since we dont know the future.
+ * So please remove that." So the plus5, plus10 and plus15 future starts that
+ * Round 132 offered are gone. He is right about what they were: a projection
+ * dressed up as a start date. The projection ENGINE below survives in full,
+ * because it has a legitimate job this list never changed: a save that starts
+ * today and runs deep still needs the world to age, retire and refill around
+ * it, season by season, inside the sim.
+ *
+ * The PAST is the part he actually wants, and it is now genuinely buildable:
+ * the Supabase table player_market_values holds real Transfermarkt history,
+ * about six thousand real named players a year, every year back to 2004,
+ * over a thousand clubs a year (measured 2026-08-16). A 2010 era built from
+ * that is real data with thin patches, not invention. It needs its own baking
+ * round (per-year rosters plus per-year league memberships, promotions and
+ * relegations applied), so it is on the roadmap rather than in this array.
+ * Until that bake lands, today is the only start the data supports, and the
+ * picker says so out loud rather than quietly leaving a gap.
  */
 export const CM_ERAS: CMEra[] = [
   {
@@ -553,30 +562,6 @@ export const CM_ERAS: CMEra[] = [
     emoji: '\u{1F4C5}',
     blurb: 'Today. Every squad exactly as it really is.',
     honesty: 'Real data. Every name, age and value is the real thing as of August 2026.',
-  },
-  {
-    id: 'plus5',
-    label: seasonLabel(CM_BASE_YEAR + 5),
-    startYear: CM_BASE_YEAR + 5,
-    emoji: '\u{23E9}',
-    blurb: 'Five years on. The old guard is thinning out.',
-    honesty: 'A projection. Real 2026 squads aged five years, with the ones who retired replaced by made up players.',
-  },
-  {
-    id: 'plus10',
-    label: seasonLabel(CM_BASE_YEAR + 10),
-    startYear: CM_BASE_YEAR + 10,
-    emoji: '\u{1F52E}',
-    blurb: 'Ten years on. A different generation runs the game.',
-    honesty: 'A projection. Real 2026 squads aged ten years, with the ones who retired replaced by made up players.',
-  },
-  {
-    id: 'plus15',
-    label: seasonLabel(CM_BASE_YEAR + 15),
-    startYear: CM_BASE_YEAR + 15,
-    emoji: '\u{1F680}',
-    blurb: 'Fifteen years on. Almost nobody you know is left.',
-    honesty: 'A projection. Real 2026 squads aged fifteen years, with the ones who retired replaced by made up players.',
   },
 ];
 

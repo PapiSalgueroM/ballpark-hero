@@ -30,7 +30,7 @@ execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --pla
 const cm = (await import(BUNDLE)).engine;
 const {
   REAL_LEAGUES, NATIONS, playableClubs, clubPreviewRating, startCareer, playNextEntry,
-  finishSeason, startNextSeason, buildMarket, buyPlayer, sellPlayer, objectiveStatuses,
+  finishSeason, startNextSeason, buildMarket, buyPlayer, objectiveStatuses,
   xiAverageRating, sortedTable, leagueOf, nextFixture,
   startNegotiation, makeOffer, walkAway, payClause, releaseClauseOf, loanIn, loanEligible,
   loanFeeOf, activeLoans, acceptBid, rejectBid,
@@ -138,9 +138,15 @@ console.log('3) Transfer market');
     if (!bought) fail('buyPlayer refused an affordable summer signing');
     else {
       if (!bought.squad.some(p => p.name === affordable.name)) fail('bought player not in squad');
+      /* Round 141: sales complete through an accepted bid, never instantly. */
       const sellable = bought.squad.filter(p => p.position !== 'GK');
-      const sold = sellPlayer(bought, sellable[sellable.length - 1].id);
-      if (!sold) fail('sellPlayer refused a legal sale');
+      const leaver = sellable[sellable.length - 1];
+      const withBid = {
+        ...bought,
+        incomingBids: [{ playerId: leaver.id, playerName: leaver.name, club: 'Everton', offer: 5, status: 'open' }],
+      };
+      const sold = acceptBid(withBid, leaver.id);
+      if (!sold) fail('acceptBid refused a legal sale');
       else if (!isNum(sold.budget) || sold.budget < 0) fail(`budget after sale: ${sold.budget}`);
     }
   }
@@ -356,20 +362,37 @@ console.log('6) Negotiations and the deadline-day machinery');
   }
   if (!found) fail('no incoming bids generated across 40 window opens');
 
-  // Window close kills the machinery.
+  /* Round 141: the window spans real match weeks now (4 in summer), so the
+     machinery must SURVIVE the first match, and then die precisely at the
+     deadline, not a week early and not a week late. */
   let w = startCareer('Lyon');
   const t = buildMarket(w).find(m => m.price <= w.budget);
   w = startNegotiation(w, t) ?? w;
+  let matches = 0;
   let guard = 0;
+  // First match: the window and the live negotiation both stay up.
   for (;;) {
     guard += 1;
     if (guard > 20) { fail('never played a match'); break; }
     const res = playNextEntry(w, { skipHalftime: true });
     w = res.state;
-    if (res.kind === 'match') break;
+    if (res.kind === 'match') { matches += 1; break; }
   }
-  if (w.negotiation !== null) fail('negotiation survived the window closing');
-  if ((w.incomingBids ?? []).length !== 0) fail('incoming bids survived the window closing');
+  if (w.transferWindow === null) fail('one match slammed the summer window shut, the deadline model is gone');
+  if (w.negotiation === null) fail('the live negotiation died a week before the deadline');
+  // Play to the deadline: the window shuts and everything shuts with it.
+  guard = 0;
+  while (w.transferWindow !== null && guard < 30) {
+    guard += 1;
+    const res = playNextEntry(w, { skipHalftime: true });
+    w = res.state;
+    if (res.kind === 'match') matches += 1;
+  }
+  console.log(`   summer window survived ${matches} match weeks, then the deadline hit`);
+  if (w.transferWindow !== null) fail('the summer window never closed at all');
+  if (matches < 3 || matches > 5) fail(`the summer window spanned ${matches} match weeks, expected about 4`);
+  if (w.negotiation !== null) fail('negotiation survived the deadline');
+  if ((w.incomingBids ?? []).length !== 0) fail('incoming bids survived the deadline');
 }
 
 /* ---------- 7. Round 73: stat lines, calendar log, the inbox ---------- */

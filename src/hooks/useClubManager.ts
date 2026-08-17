@@ -3,7 +3,7 @@ import { recordCompletion } from '@/lib/completions';
 import {
   CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
-  buildMarket, buyPlayer, sellPlayer, autoPickXI, nextFixture, sortedTable,
+  buildMarket, buyPlayer, autoPickXI, nextFixture, sortedTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
   startNegotiation, makeOffer, walkAway, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract,
@@ -245,13 +245,9 @@ export function useClubManager() {
     });
   }, []);
 
-  const sell = useCallback((playerId: string) => {
-    setCareer(prev => {
-      if (!prev) return prev;
-      const next = sellPlayer(prev, playerId);
-      return next ?? prev;
-    });
-  }, []);
+  /* Round 141: the instant sell action is gone. Selling is: transfer list
+     him (setTransferStatus), let bids arrive, accept one (acceptBid below).
+     The owner asked for exactly this: offers or nothing. */
 
   /* ---------- Round 71: negotiations, clauses, loans, incoming bids ---------- */
   const negotiate = useCallback((mp: MarketPlayer) => {
@@ -382,7 +378,7 @@ export function useClubManager() {
     resume, startNew, chooseClub, confirmClub,
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
     play, continueFromReport, nextSeason,
-    buy, sell,
+    buy,
     negotiate, offer, walk, dismissNegotiation, clause, loan,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, setRole,

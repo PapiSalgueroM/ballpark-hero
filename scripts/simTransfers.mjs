@@ -31,11 +31,21 @@ const { cm } = await import(BUNDLE);
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason,
   setTransferStatus, loanOutPlayer, loanOutFee, canLeaveSquad,
-  acceptBid, rejectBid, sellPlayer, sellValue,
+  acceptBid, rejectBid, sellValue,
 } = cm;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+
+/* Round 141: the instant sale is dead and stays dead. Every player leaves
+   through a bid he attracted; this helper is how the harness sells someone,
+   and it is deliberately the same door the game uses. */
+if ('sellPlayer' in cm) fail('sellPlayer is exported again. The owner removed instant selling on 2026-08-16; sales go through listing and acceptBid only.');
+const sellViaBid = (s, p) =>
+  acceptBid(
+    { ...s, incomingBids: [{ playerId: p.id, playerName: p.name, club: 'Everton', offer: sellValue(p), status: 'open' }] },
+    p.id,
+  );
 
 /** Roll a career forward to the next open window (or give up). */
 function toWindow(s) {
@@ -91,32 +101,49 @@ console.log('1) A blocked player never gets a bid');
 /* ---------- 2. Listing a player actually brings clubs in ---------- */
 console.log('2) Listing brings the market to you');
 {
-  // Same player, same club, listed vs not. The difference has to be large.
+  /* Same player, same club, listed vs not. Round 141 changed what "listed"
+     means: the instant sell is gone and windows span real match weeks, so
+     the player experience being promised is "list him and offers will come
+     across the window". That is exactly what gets measured: list the man,
+     play through the summer window and into January, and count whether a
+     bid for HIM ever arrived. Margin note: at the shipped rates (70 percent
+     on window open, 35 a week mid-window, offers persisting) the measured
+     hit rate across both windows sits near 0.97, so the 0.75 floor is far
+     more than three standard errors of headroom at 120 samples, while a
+     single-shot engine with no weekly top-ups would hover near the floor
+     and flag the regression. */
   const measure = (listIt) => {
     let got = 0, tries = 0;
     for (let i = 0; i < 120; i++) {
       let s = startCareer('Everton');
-      // a mid squad player the OLD engine (rating >= 74) would never bid for
+      // a mid squad player the unsolicited pass (rating >= 74) never touches
       const target = [...s.squad].sort((a, b) => a.rating - b.rating).find(p => p.rating < 74 && !p.isYouth);
       if (!target) continue;
       if (listIt) s = setTransferStatus(s, target.id, 'listed');
-      // reroll the opening window's bids by starting a fresh career state:
-      // startCareer already generated bids, so re-run the January window.
-      s = toWindow(s);
-      const r = playNextEntry(s, { skipHalftime: true });
-      s = toWindow(r.state);
       tries++;
-      if ((s.incomingBids ?? []).some(b => b.playerId === target.id)) got++;
+      let found = false;
+      let windowsSeen = 0;
+      let guard = 0;
+      while (guard < 40 && windowsSeen < 2 && !found) {
+        guard++;
+        if ((s.incomingBids ?? []).some(b => b.playerId === target.id)) { found = true; break; }
+        const wasOpen = s.transferWindow !== null;
+        const r = playNextEntry(s, { skipHalftime: true });
+        s = r.state;
+        if (wasOpen && s.transferWindow === null) windowsSeen++;
+        if (r.kind === 'seasonOver') break;
+      }
+      if (found) got++;
     }
     return { got, tries };
   };
   const off = measure(false);
   const on = measure(true);
-  console.log(`   squad player unlisted: ${off.got}/${off.tries} windows brought a bid`);
-  console.log(`   squad player listed:   ${on.got}/${on.tries} windows brought a bid`);
+  console.log(`   squad player unlisted: ${off.got}/${off.tries} careers ever saw a bid for him`);
+  console.log(`   squad player listed:   ${on.got}/${on.tries} careers saw a bid inside two windows`);
   if (on.tries < 50) fail('not enough samples to judge listing');
-  if (on.got / Math.max(1, on.tries) < 0.6) fail('listing a player barely brings anyone in');
-  if (on.got <= off.got * 3) fail('listing makes almost no difference to interest');
+  if (on.got / Math.max(1, on.tries) < 0.75) fail('listing a player barely brings anyone in, and there is no instant sell to fall back on');
+  if (off.got / Math.max(1, off.tries) > 0.05) fail('unlisted squad players are getting shopped around');
 }
 
 /* ---------- 3. Loaning out: he leaves, pays, and comes home better ---------- */
@@ -169,13 +196,13 @@ console.log('3) Loan out, then home developed');
 console.log('4) Squad rules hold on sell, loan and accept');
 {
   let s = startCareer('Wolves');
-  // strip down toward the floor with instant sales
+  // strip down toward the floor through the only door left: accepted bids
   let guard = 0;
   while (s.squad.length > 14 && guard < 40) {
     guard++;
     const p = [...s.squad].sort((a, b) => a.rating - b.rating).find(x => canLeaveSquad(s, x));
     if (!p) break;
-    const next = sellPlayer(s, p.id);
+    const next = sellViaBid(s, p);
     if (!next) break;
     s = next;
   }
@@ -183,16 +210,16 @@ console.log('4) Squad rules hold on sell, loan and accept');
   if (s.squad.length < 14) fail(`squad fell below the floor: ${s.squad.length}`);
   if (s.squad.filter(p => p.position === 'GK').length < 1) fail('sold the last keeper');
   for (const p of s.squad) {
-    if (sellPlayer(s, p.id)) fail(`${p.name} was sellable at the squad floor`);
+    if (sellViaBid(s, p)) fail(`${p.name} was sellable at the squad floor`);
     if (loanOutPlayer(s, p.id)) fail(`${p.name} was loanable at the squad floor`);
   }
   // last keeper is protected even with a big squad
   let t = startCareer('Wolves');
   const keepers = t.squad.filter(p => p.position === 'GK');
-  for (const k of keepers.slice(1)) { const n = sellPlayer(t, k.id); if (n) t = n; }
+  for (const k of keepers.slice(1)) { const n = sellViaBid(t, k); if (n) t = n; }
   const lastGk = t.squad.filter(p => p.position === 'GK');
   if (lastGk.length !== 1) fail(`expected exactly one keeper left, got ${lastGk.length}`);
-  if (sellPlayer(t, lastGk[0].id)) fail('the last keeper was sellable');
+  if (sellViaBid(t, lastGk[0])) fail('the last keeper was sellable');
   if (loanOutPlayer(t, lastGk[0].id)) fail('the last keeper was loanable');
 }
 
