@@ -13,8 +13,9 @@ import type { BakedPlayer } from '@/data/clubManagerRosters';
 // from this file, so there is no cycle.
 import {
   CM_BASE_YEAR, CM_ERAS, DEFAULT_ERA_ID, eraById, seasonLabel,
-  projectedRoster, projectedWorld, projectedXIAvg,
+  projectedRoster, projectedWorld, projectedXIAvg, projectedWorldFor,
   ageDriftBand, declineScale, retireChance,
+  isHistoricEra, eraRosters, HISTORIC_PARTIAL,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
 
@@ -342,7 +343,7 @@ export interface TrainingPlan {
 /** Round 70: one board demand for the season. Round 140: more of them. */
 export interface BoardObjective {
   id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals' | 'defence' | 'youth' | 'points' | 'double' | 'netSpend';
-  /** What the board wants, e.g. "Qualify for the Europa League (top 5)". */
+  /** What the board wants, e.g. "Qualify for the Europa League". */
   label: string;
   /** League position / cup stage rank / goal count the objective needs. */
   target: number;
@@ -999,8 +1000,138 @@ const STRENGTH_PRIORS: Record<string, number> = {
 
 /** The real league a club plays in. Every playable club is covered. */
 export function leagueOf(clubName: string): LeagueDef {
-  return REAL_LEAGUES.find(l => l.clubs.includes(clubName)) ?? REAL_LEAGUES[0];
+  return REAL_LEAGUES.find(l => l.clubs.includes(clubName))
+    // Round 146: clubs that only exist in a historic era (Blackpool, Hercules,
+    // Zaragoza...) resolve to their era league. REAL_LEAGUES wins for clubs in
+    // both worlds; a historic save reads its own league through eraLeagueOf
+    // and its own club list through career.leagueClubs, so this fallback only
+    // ever serves the era-exclusive names.
+    ?? Object.values(ERA_LEAGUES).flat().find(l => l.clubs.includes(clubName))
+    ?? REAL_LEAGUES[0];
 }
+
+/* ================================================================== */
+/* Round 146: historic era leagues (docs/PAST-ERAS-DESIGN.md phase 1) */
+/* ================================================================== */
+
+/**
+ * The league worlds of each historic era, keyed by era id. Memberships are
+ * the real 2010-11 lineups, verified against the season records AND against
+ * the market values table itself (every club dense with real year-2010
+ * players, measured 2026-08-17). Names match the era bake exactly, and
+ * shared clubs reuse the 2026 spelling so colors and rivalries carry over.
+ */
+export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
+  era2010: [
+    {
+      id: 'premier2010', name: 'Premier League', cupName: 'FA Cup', euro: true,
+      clubs: ['Arsenal', 'Aston Villa', 'Birmingham City', 'Blackburn Rovers', 'Blackpool', 'Bolton Wanderers', 'Chelsea', 'Everton', 'Fulham', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Stoke City', 'Sunderland', 'Tottenham', 'West Brom', 'West Ham', 'Wigan Athletic', 'Wolves'],
+    },
+    {
+      id: 'laliga2010', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
+      clubs: ['Almería', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Hércules', 'Levante', 'Málaga', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Sporting Gijón', 'Valencia', 'Villarreal', 'Zaragoza'],
+    },
+  ],
+};
+
+/** The league a club plays in within a given era. Null when the era is not
+ *  historic or the club is not in it, so callers fall back to leagueOf. */
+export function eraLeagueOf(clubName: string, eraId: string | undefined): LeagueDef | null {
+  if (!eraId || !ERA_LEAGUES[eraId]) return null;
+  return ERA_LEAGUES[eraId].find(l => l.clubs.includes(clubName)) ?? null;
+}
+
+/** The league def for a save: its era league when historic, else the real one. */
+export function careerLeagueOf(career: Pick<CareerState, 'clubName' | 'eraId'>): LeagueDef {
+  return eraLeagueOf(career.clubName, career.eraId) ?? leagueOf(career.clubName);
+}
+
+/** Best XI average straight off an era bake, same math as bakedXIAvg. */
+function eraXIAvg(eraId: string, clubName: string): number | null {
+  const roster = eraRosters(eraId)[clubName];
+  if (!roster || !roster.length) return null;
+  const rs = roster.map(p => p.r).sort((a, b) => b - a).slice(0, 11);
+  while (rs.length < 11) rs.push(60);
+  return Math.round((rs.reduce((s, r) => s + r, 0) / 11) * 10) / 10;
+}
+
+const ERA_DEF_CACHE = new Map<string, Map<string, ClubDef>>();
+
+/**
+ * ClubDefs for a historic era, computed from the era's own bake the same way
+ * clubDefMap computes today's: expectation is the strength rank inside the
+ * era league, budget a slice of squad value. Tier is the era-RELATIVE gap to
+ * the era's best XI (within 4 points elite, 8 strong, 13 solid, else small),
+ * because 2010 market values run lower than 2026 ones across the board, so
+ * the absolute thresholds of 2026 would file 2010 Barcelona as a mid tier
+ * club, and no tier system that does that is describing football.
+ */
+function eraClubDefMap(eraId: string): Map<string, ClubDef> {
+  const hit = ERA_DEF_CACHE.get(eraId);
+  if (hit) return hit;
+  const map = new Map<string, ClubDef>();
+  const leagues = ERA_LEAGUES[eraId] ?? [];
+  const rosters = eraRosters(eraId);
+  let topXI = 0;
+  for (const lg of leagues) for (const c of lg.clubs) topXI = Math.max(topXI, eraXIAvg(eraId, c) ?? 0);
+  for (const lg of leagues) {
+    const ranked = lg.clubs
+      .map(name => ({ name, xi: eraXIAvg(eraId, name) ?? 60 }))
+      .sort((a, b) => b.xi - a.xi);
+    ranked.forEach((entry, i) => {
+      const roster = rosters[entry.name] ?? [];
+      const squadValue = roster.reduce((s, p) => s + p.v, 0);
+      const gap = topXI - entry.xi;
+      const tier: 1 | 2 | 3 | 4 = gap <= 4 ? 1 : gap <= 8 ? 2 : gap <= 13 ? 3 : 4;
+      map.set(entry.name, {
+        name: entry.name,
+        tier,
+        color: CLUB_COLORS[entry.name] ?? '#8899aa',
+        budget: Math.min(200, Math.max(8, Math.round(squadValue * 0.16))),
+        expectation: i + 1,
+      });
+    });
+  }
+  ERA_DEF_CACHE.set(eraId, map);
+  return map;
+}
+
+/** ClubDef inside an era, falling back to the modern def for odd states. */
+export function eraClubDefFor(clubName: string, eraId: string | undefined): ClubDef {
+  if (eraId && isHistoricEra(eraId)) {
+    const def = eraClubDefMap(eraId).get(clubName);
+    if (def) return def;
+  }
+  return clubDefFor(clubName);
+}
+
+/** The era's leagues, optionally narrowed to one nation (matched by the
+ *  modern league id prefix: 'premier2010' belongs to whoever owns 'premier'). */
+export function eraLeaguesFor(eraId: string, nation?: NationDef): LeagueDef[] {
+  const leagues = ERA_LEAGUES[eraId] ?? [];
+  if (!nation) return leagues;
+  return leagues.filter(el => nation.leagueIds.some(id => el.id.startsWith(id)));
+}
+
+/** Era clubs for a picker screen, strongest first, with era stature. */
+export function eraPlayableClubs(eraId: string, leagueId: string): ClubDef[] {
+  const lg = (ERA_LEAGUES[eraId] ?? []).find(l => l.id === leagueId);
+  if (!lg) return [];
+  return lg.clubs.map(c => eraClubDefFor(c, eraId)).sort((a, b) => a.expectation - b.expectation);
+}
+
+/** What the board would demand of this club on day one, as one label. The
+ *  picker tiles and the rival viewer both quote this instead of a raw rank,
+ *  because "Top 20" on a tile is exactly the phrasing the owner banned. */
+export function boardWantLabel(clubName: string, eraId?: string): string {
+  const historic = !!eraId && isHistoricEra(eraId);
+  const club = historic ? eraClubDefFor(clubName, eraId) : clubDefFor(clubName);
+  const league = (historic && eraLeagueOf(clubName, eraId)) || leagueOf(clubName);
+  return leagueDemand(club.expectation, club.tier, league.clubs.length, league, titleGapFor(clubName, league, eraId), eraId).label;
+}
+
+// Round 146: the picker needs these era helpers alongside the modern ones.
+export { isHistoricEra } from '@/lib/clubManagerEras';
 
 /* ================================================================== */
 /* Round 70: every club is playable. Nations, colors, rivals, defs.   */
@@ -1182,7 +1313,12 @@ const RIVALS: Record<string, string> = {
  * Round 72: clubs where the market value dataset runs thin get youth-padded
  * squads; the picker labels them honestly instead of pretending.
  */
-export function isPartialClub(clubName: string): boolean {
+export function isPartialClub(clubName: string, eraId?: string): boolean {
+  // Round 146: each era carries its own thin list. 2010 Blackpool is thin in
+  // the 2010 data; 2026 Blackpool does not exist at all.
+  if (eraId && isHistoricEra(eraId)) {
+    return (HISTORIC_PARTIAL[eraId] ?? []).includes(clubName);
+  }
   return CM_PARTIAL.includes(clubName);
 }
 
@@ -1482,14 +1618,15 @@ function ensureSquadCoverage(squad: CMPlayer[]): CMPlayer[] {
   return out;
 }
 
-function buildSquad(clubName: string, yearsOnNow = 0): CMPlayer[] {
+function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now'): CMPlayer[] {
   // Round 70: baked real rosters first (with real market values); the old
   // static pool only backs up clubs outside the bake. Round 72: cap the
   // start at the 26 most valuable so deep baked squads (Real Madrid has 29
   // dataset players) leave room under the 30-man limit to actually sign
   // people. Round 132: at yearsOn 0 the projection IS the bake, so a career
-  // in the current era gets exactly the squad it always got.
-  const baked = projectedRoster(clubName, yearsOnNow);
+  // in the current era gets exactly the squad it always got. Round 146: the
+  // era picks the bake, so a 2010 save is handed the real 2010 squad.
+  const baked = projectedRoster(clubName, yearsOnNow, eraId);
   const real = baked.length
     ? baked.slice(0, 26).map(bakedToCMPlayer)
     : getPool().filter(p => p.club === clubName).map(toCMPlayer);
@@ -1664,9 +1801,14 @@ export function worldYear(career: CareerState): number {
   return start + Math.max(0, career.season - 1);
 }
 
-/** How far the world has moved from the real baked roster year. */
+/** How far the world has moved from the real baked roster year. Round 146:
+ *  a historic save measures from its OWN era's bake year, so season two of a
+ *  2010 career ages the 2010 world by one year instead of serving a frozen
+ *  2010 forever (the clamp used to eat the negative distance to 2026). */
 export function yearsOn(career: CareerState): number {
-  return Math.max(0, worldYear(career) - CM_BASE_YEAR);
+  const era = eraById(career.eraId);
+  const base = isHistoricEra(era.id) ? era.startYear : CM_BASE_YEAR;
+  return Math.max(0, worldYear(career) - base);
 }
 
 /** "2031-32", for anywhere a season number is shown. */
@@ -2813,7 +2955,7 @@ export function sellValue(p: CMPlayer): number {
   return Math.max(1, Math.round(baseValue(p.rating, p.age) * 0.9 * youthF * runDown * wantsOut));
 }
 
-const MARKET_BASE_CACHE = new Map<number, MarketPlayer[]>();
+const MARKET_BASE_CACHE = new Map<string, MarketPlayer[]>();
 
 /**
  * Round 70: the purchasable universe is every baked real player across all
@@ -2829,13 +2971,19 @@ const MARKET_BASE_CACHE = new Map<number, MarketPlayer[]>();
  * as he is in the August 2026 data, because this list never knew what year it
  * was. The whole 2,936 name market sat at an average age of 25.2 forever.
  */
-function marketBase(yearsOnNow: number): MarketPlayer[] {
+/* Round 146: the market is era-keyed. A 2010 save's purchasable universe is
+   the 2010 world (802 real players across the two era leagues), never the
+   2026 one, so Bellingham cannot be signed in 2010 and 2010 Messi cannot be
+   signed today. The cache key carries the era for the same reason the world
+   cache does. */
+function marketBase(yearsOnNow: number, eraId: string = 'now'): MarketPlayer[] {
   const y = Math.max(0, Math.round(yearsOnNow));
-  const hit = MARKET_BASE_CACHE.get(y);
+  const key = `${isHistoricEra(eraId) ? eraId : 'now'}|${y}`;
+  const hit = MARKET_BASE_CACHE.get(key);
   if (hit) return hit;
   const out: MarketPlayer[] = [];
   const seen = new Set<string>();
-  for (const [club, roster] of Object.entries(projectedWorld(y))) {
+  for (const [club, roster] of Object.entries(projectedWorldFor(eraId, y))) {
     for (const b of roster) {
       if (seen.has(b.n)) continue;
       seen.add(b.n);
@@ -2852,7 +3000,7 @@ function marketBase(yearsOnNow: number): MarketPlayer[] {
     }
   }
   out.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
-  MARKET_BASE_CACHE.set(y, out);
+  MARKET_BASE_CACHE.set(key, out);
   return out;
 }
 
@@ -2867,7 +3015,7 @@ export function buildMarket(career: CareerState): MarketPlayer[] {
   const squadNames = new Set(career.squad.map(p => p.name));
   const gone = new Set(career.goneNames);
   const retired = new Set(career.retiredNames ?? []);
-  return marketBase(yearsOn(career))
+  return marketBase(yearsOn(career), career.eraId)
     .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name));
 }
 
@@ -3527,6 +3675,17 @@ export function rejectBid(career: CareerState, playerId: string): CareerState {
 
 /** Every club that could plausibly come in for one of my players. */
 function buyerPool(state: CareerState): string[] {
+  // Round 146: bids for a 2010 player come from 2010 clubs.
+  if (state.eraId && isHistoricEra(state.eraId)) {
+    const leagues = ERA_LEAGUES[state.eraId] ?? [];
+    return leagues
+      .flatMap(l => l.clubs
+        .map(c => eraClubDefFor(c, state.eraId))
+        .sort((a, b) => a.expectation - b.expectation)
+        .slice(0, 8)
+        .map(c => c.name))
+      .filter(n => n !== state.clubName);
+  }
   return REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 8).map(c => c.name))
     .filter(n => n !== state.clubName);
 }
@@ -3784,7 +3943,7 @@ export function generateWeeklyNews(state: CareerState): void {
   const myRow = myIdx >= 0 ? table[myIdx] : null;
   const played = myRow ? myRow.w + myRow.d + myRow.l : 0;
   const rounds = state.leagueClubs.length > 1 ? 2 * (state.leagueClubs.length - 1) : 38;
-  const league = leagueOf(state.clubName);
+  const league = careerLeagueOf(state);
   if (played < 3) return;
 
   // Derby week beats everything: the fixture list says so, not a dice roll.
@@ -3898,7 +4057,7 @@ function generateHeadlines(state: CareerState): void {
  * average of the value-derived ratings), so the data drives the sim. The
  * old priors only back up anything outside the bake.
  */
-function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0): Record<string, number> {
+function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = 'now'): Record<string, number> {
   const out: Record<string, number> = {};
   // Round 132: from the PROJECTED roster for this world year, not from the
   // frozen 2026 bake. Before this, every AI club in the game was recomputed
@@ -3906,9 +4065,21 @@ function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0): Record<string, n
   // and 89.5 in season thirteen while my own squad was ageing underneath me.
   // At yearsOn 0 the projection is the bake, so season one has not moved.
   const baseFor = (name: string): number =>
-    projectedXIAvg(name, yearsOnNow) ?? STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
+    projectedXIAvg(name, yearsOnNow, eraId) ?? STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
   for (const name of myLeague.clubs) {
     out[name] = clamp(baseFor(name) + ri(-2, 2), 52, 95);
+  }
+  // Round 146: a historic save's world IS its era leagues. The 2026 world and
+  // the flavor pool stay out of it, so no 2010 table ever contains a club
+  // that did not exist there.
+  if (isHistoricEra(eraId)) {
+    for (const league of ERA_LEAGUES[eraId] ?? []) {
+      for (const name of league.clubs) {
+        if (out[name] !== undefined) continue;
+        out[name] = clamp(baseFor(name) + ri(-2, 2), 52, 95);
+      }
+    }
+    return out;
   }
   for (const league of REAL_LEAGUES) {
     for (const name of league.clubs) {
@@ -4007,11 +4178,14 @@ export function leagueRounds(size: number): number {
   return 2 * (eff - 1);
 }
 
-/** Blank standings for every league except my own. */
-function initWorld(myClub: string): Record<string, WorldLeague> {
-  const mine = leagueOf(myClub).id;
+/** Blank standings for every league except my own. Round 146: a historic
+ *  save's world is its era's other league, not the 2026 league set. */
+function initWorld(myClub: string, eraId?: string): Record<string, WorldLeague> {
+  const historic = !!eraId && isHistoricEra(eraId);
+  const leagues = historic ? (ERA_LEAGUES[eraId!] ?? []) : REAL_LEAGUES;
+  const mine = ((historic && eraLeagueOf(myClub, eraId)) || leagueOf(myClub)).id;
   const world: Record<string, WorldLeague> = {};
-  for (const lg of REAL_LEAGUES) {
+  for (const lg of leagues) {
     if (lg.id === mine) continue;
     world[lg.id] = { round: 0, table: lg.clubs.map(emptyRow) };
   }
@@ -4040,7 +4214,7 @@ function myRoundsPlayed(state: CareerState, upto: number): number {
  * Mutates state.
  */
 function syncWorld(state: CareerState, myPlayed: number): void {
-  if (!state.world) state.world = initWorld(state.clubName);
+  if (!state.world) state.world = initWorld(state.clubName, state.eraId);
   const myTotal = leagueRounds(leagueOf(state.clubName).clubs.length);
   const frac = myTotal > 0 ? Math.min(1, myPlayed / myTotal) : 0;
   for (const lg of REAL_LEAGUES) {
@@ -4062,11 +4236,26 @@ function syncWorld(state: CareerState, myPlayed: number): void {
 
 /* ---------- Round 95: a real Champions League bracket ---------- */
 
+/** Round 146: the continental pool for a historic era is the era's own best
+ *  clubs (both its leagues, strongest first), so a 2010 European night is
+ *  Chelsea or Valencia and never a club from a 2026 flavor list. */
+function eraEuroPool(eraId: string): string[] {
+  const leagues = ERA_LEAGUES[eraId] ?? [];
+  return leagues
+    .flatMap(l => l.clubs)
+    .map(c => ({ c, xi: eraXIAvg(eraId, c) ?? 60 }))
+    .sort((a, b) => b.xi - a.xi)
+    .slice(0, 16)
+    .map(e => e.c);
+}
+
 /** The eight clubs in the knockout draw: me (if through) plus Europe's best. */
 function uclBracketField(state: CareerState, includeMe: boolean): string[] {
   const taken = new Set<string>([state.clubName, ...(state.uclGroup?.opponents ?? [])]);
-  const bigLeague = CLUBS.filter(c => c.tier <= 2).map(c => c.name);
-  const pool = shuffle([...new Set([...EURO_CLUBS, ...bigLeague])].filter(c => !taken.has(c)));
+  const historic = !!state.eraId && isHistoricEra(state.eraId);
+  const pool = historic
+    ? shuffle(eraEuroPool(state.eraId!).filter(c => !taken.has(c)))
+    : shuffle([...new Set([...EURO_CLUBS, ...CLUBS.filter(c => c.tier <= 2).map(c => c.name)])].filter(c => !taken.has(c)));
   const others = pool.slice(0, includeMe ? 7 : 8);
   const field = includeMe ? [state.clubName, ...others] : others;
   // Guard against a thin pool: never hand back fewer than eight names.
@@ -4147,9 +4336,16 @@ function recordMyUclTie(state: CareerState, round: UclKoRound, opponent: string,
   tie.winner = iWon ? state.clubName : opponent;
 }
 
-function initUclGroup(qualified: boolean, myClub: string): UclGroupState | null {
+function initUclGroup(qualified: boolean, myClub: string, eraId?: string): UclGroupState | null {
   if (!qualified) return null;
   // Groups avoid clubs from my own league, like the real group/league phase.
+  // Round 146: a historic era draws from its own continental pool.
+  if (eraId && isHistoricEra(eraId)) {
+    const myLeague = new Set((eraLeagueOf(myClub, eraId) ?? leagueOf(myClub)).clubs);
+    const pool = eraEuroPool(eraId).filter(c => c !== myClub && !myLeague.has(c));
+    const opponents = shuffle(pool).slice(0, 3);
+    return { opponents, table: [myClub, ...opponents].map(emptyRow), matchday: 0 };
+  }
   const myLeagueClubs = new Set(leagueOf(myClub).clubs);
   const bigForeign = CLUBS.map(c => c.name).filter(c => c !== myClub && !myLeagueClubs.has(c));
   const pool = [...new Set([...EURO_CLUBS, ...bigForeign])].filter(c => c !== myClub && !myLeagueClubs.has(c));
@@ -4170,6 +4366,13 @@ function drawCupOpponent(state: CareerState): string {
 
 /** Which league tiers of this country the cup draws from. */
 function cupCountryClubs(state: CareerState): ClubDef[] {
+  // Round 146: a historic era's cup draws from its own league only. We have
+  // no 2010 second division bake, and a made up one would be exactly the
+  // invention the data rule forbids, so the era cup is a top flight affair.
+  if (state.eraId && isHistoricEra(state.eraId)) {
+    const lg = eraLeagueOf(state.clubName, state.eraId);
+    if (lg) return lg.clubs.map(c => eraClubDefFor(c, state.eraId));
+  }
   const myLeague = leagueOf(state.clubName);
   const nation = NATIONS.find(n => n.leagueIds.includes(myLeague.id));
   const ids = nation ? nation.leagueIds : [myLeague.id];
@@ -4337,12 +4540,16 @@ function uclProgressRank(state: CareerState): { rank: number; alive: boolean } {
 }
 
 /** The league club whose squad strength sits closest to mine. */
-function nearestRival(clubName: string): string | null {
-  const league = leagueOf(clubName);
-  const myXi = bakedXIAvg(clubName) ?? 65;
+function nearestRival(clubName: string, eraId?: string): string | null {
+  // Round 146: in a historic save the rival comes from the era's own league
+  // and the era's own strengths, so 2010 Bolton hates a 2010 neighbour and
+  // not whoever shares its 2026 division.
+  const league = (eraId && eraLeagueOf(clubName, eraId)) || leagueOf(clubName);
+  const xiOf = xiChainFor(eraId);
+  const myXi = xiOf(clubName);
   const others = league.clubs
     .filter(c => c !== clubName)
-    .map(c => ({ c, d: Math.abs((bakedXIAvg(c) ?? 65) - myXi) }))
+    .map(c => ({ c, d: Math.abs(xiOf(c) - myXi) }))
     .sort((a, b) => a.d - b.d);
   return others.length ? others[0].c : null;
 }
@@ -4378,9 +4585,11 @@ function relegationSpots(leagueId: string): number {
  * league or get champions league football or Europa league or conference
  * league or finish mid table or dont get relegated."
  *
- * So the ladder is named competitions now, not positions. The number in
- * brackets stays because the game grades by table position and the player
- * deserves to know the line, but the DEMAND is the competition.
+ * So the ladder is named competitions now, not positions. Round 145 finished
+ * the job: the bracketed positions are gone from the labels too, because his
+ * second pass said "stop with this top 20 or top 2 nonsense". The game still
+ * grades by table position through the target number, the words just name
+ * the prize.
  *
  * European places per league, 2026-27 shapes, simplified on purpose: the cup
  * winner routes and coefficient bonus spots move year to year, so each league
@@ -4402,29 +4611,94 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
   scottish:   { ucl: 1, uel: 2, uecl: 3 },
   superlig:   { ucl: 1, uel: 2, uecl: 3 },
   proleague:  { ucl: 1, uel: 2, uecl: 3 },
+  // Round 146: the 2010-11 era. No Conference League existed until 2021, so
+  // uecl is 0 and the demand ladder skips that band entirely.
+  premier2010: { ucl: 4, uel: 5, uecl: 0 },
+  laliga2010:  { ucl: 4, uel: 6, uecl: 0 },
 };
 
-function leagueDemand(rank: number, tier: number, size: number, league: LeagueDef): { target: number; label: string } {
+/* Round 145: the title band is measured, not guessed. His review, 2026-08-17:
+   "The second highest overall team dosent want to be top 2. They also want to
+   win it. The same with 3rd place." What separates Sporting CP (who should be
+   told to win it) from Aberdeen (who should not) is not absolute strength, it
+   is the GAP to their own league's best XI. Measured over all 13 leagues on
+   2026-08-17: the league-relative giants sit 0.4 to 2.3 rating points off the
+   top XI (Liverpool 0.8, Sporting CP 0.8, Union Saint-Gilloise 1.1, Juventus
+   1.3, Ajax 1.9, AC Milan 2.1, Feyenoord 2.2), while the genuinely outgunned
+   sit 3.4 and beyond (Anderlecht 3.4, Trabzonspor 4.4, Besiktas 7.2, Monaco
+   7.7 behind PSG, Aberdeen 13.7). 2.5 splits those clusters. A club inside
+   the gap demands the title no matter what its absolute tier says. If a
+   roster re-bake moves the clusters, re-measure and retune this number, do
+   not delete the rule. */
+const TITLE_GAP = 2.5;
+
+/** The XI strength chain for a world: the era bake when historic, else the
+ * same chain clubDefMap ranks with. Round 146 threading. */
+function xiChainFor(eraId?: string): (n: string) => number {
+  if (eraId && isHistoricEra(eraId)) {
+    return n => eraXIAvg(eraId, n) ?? 60;
+  }
+  return n => bakedXIAvg(n) ?? STRENGTH_PRIORS[n] ?? 65;
+}
+
+/** Round 145: how far a club sits from its own league's best XI, on the same
+ * strength chain clubDefMap ranks with. Because expectation rank IS the XI
+ * rank, the set of clubs inside TITLE_GAP is always a prefix of the ranks,
+ * which keeps the demand ladder monotone by construction. */
+function titleGapFor(clubName: string, league: LeagueDef, eraId?: string): number {
+  const xiOf = xiChainFor(eraId);
+  let topXI = 0;
+  for (const n of league.clubs) topXI = Math.max(topXI, xiOf(n));
+  return topXI - xiOf(clubName);
+}
+
+/** One predicate for "this board demands the title", used both to hand a club
+ * its demand and to measure how wide the whole band is, so the two can never
+ * drift apart. */
+function demandsTitle(rank: number, tier: number, titleGap: number): boolean {
+  return rank <= 2 || (rank <= 4 && tier <= 2) || titleGap <= TITLE_GAP;
+}
+
+/** How many clubs in this league demand the title. The euro windows below
+ * slide down by this band's overshoot, so a league with five title-class
+ * clubs still runs a Champions League race just below the title fight
+ * instead of the title band swallowing the CL demand whole. */
+function titleBandSize(league: LeagueDef, eraId?: string): number {
+  let n = 0;
+  for (const c of league.clubs) {
+    const d = eraId && isHistoricEra(eraId) ? eraClubDefFor(c, eraId) : clubDefFor(c);
+    if (demandsTitle(d.expectation, d.tier, titleGapFor(c, league, eraId))) n += 1;
+  }
+  return n;
+}
+
+/* Round 145: every positional parenthetical is gone from these labels. His
+   words: "stop with this top 20 or top 2 nonsense." The board names the
+   prize. The table screen already shows where you are against it. */
+function leagueDemand(rank: number, tier: number, size: number, league: LeagueDef, titleGap: number, eraId?: string): { target: number; label: string } {
   const half = Math.floor(size / 2);
   const drop = relegationSpots(league.id);
 
   // The second divisions are their own world: the prize is going UP.
   if (league.id === 'championship') {
+    // The single biggest club in the division is not aiming for second.
+    if (rank <= 1) return { target: 1, label: `Win the ${league.name}` };
     if (rank <= 2 || (rank <= 4 && tier <= 2)) {
       // A club this big in this division exists to leave it immediately.
-      return { target: 2, label: `Win automatic promotion (top 2)` };
+      return { target: 2, label: `Win automatic promotion` };
     }
-    if (rank <= 8) return { target: 6, label: `Make the promotion playoffs (top 6)` };
+    if (rank <= 8) return { target: 6, label: `Make the promotion playoffs` };
     if (rank <= Math.round(size * 0.65)) return { target: half, label: `Finish in the top half` };
     return { target: size - drop, label: `Stay up. Avoid relegation` };
   }
   // Round 142: Germany's second tier sends two straight up and the third
   // placed side into a playoff against the Bundesliga's sixteenth.
   if (league.id === 'bundesliga2') {
+    if (rank <= 1) return { target: 1, label: `Win the ${league.name}` };
     if (rank <= 2 || (rank <= 4 && tier <= 2)) {
-      return { target: 2, label: `Win automatic promotion (top 2)` };
+      return { target: 2, label: `Win automatic promotion` };
     }
-    if (rank <= 6) return { target: 3, label: `Reach the promotion playoff (3rd)` };
+    if (rank <= 6) return { target: 3, label: `Reach the promotion playoff` };
     if (rank <= Math.round(size * 0.65)) return { target: half, label: `Finish in the top half` };
     return { target: size - drop, label: `Stay up. Avoid relegation` };
   }
@@ -4432,31 +4706,40 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
   // MLS: no relegation exists, so no board can honestly threaten it.
   if (league.id.startsWith('mls')) {
     if (rank <= 2) return { target: 1, label: `Win the ${league.name}` };
-    if (rank <= 9) return { target: 8, label: `Make the playoffs (top 8)` };
+    if (rank <= 9) return { target: 8, label: `Make the playoffs` };
     return { target: size - 4, label: `Finish mid-table or better` };
   }
 
   // Heavyweights everywhere else: the badge demands the title, full stop.
-  if (rank <= 2 || (rank <= 4 && tier <= 2)) {
+  // Rank catches the top two, tier catches the misplaced giant, and the
+  // measured XI gap catches the club that is title-class inside its own
+  // league even when its absolute rating is modest (Sporting CP, Feyenoord).
+  if (demandsTitle(rank, tier, titleGap)) {
     return { target: 1, label: `Win the ${league.name}` };
   }
 
   const slots = EURO_SLOTS[league.id];
   if (league.euro && slots) {
-    if (rank <= slots.ucl + 1) {
-      return { target: slots.ucl, label: `Qualify for the Champions League (top ${slots.ucl})` };
+    // The windows shift down by the title band's overshoot past the CL
+    // places. A one-slot league never hands the CL demand to a non giant,
+    // because "qualify for the Champions League" there just means "finish
+    // first", and that demand belongs to the title band alone.
+    const over = Math.max(0, titleBandSize(league, eraId) - slots.ucl);
+    if (slots.ucl >= 2 && rank <= slots.ucl + 1 + over) {
+      return { target: slots.ucl, label: `Qualify for the Champions League` };
     }
-    if (rank <= slots.uel + 2) {
-      return { target: slots.uel, label: `Qualify for the Europa League (top ${slots.uel})` };
+    if (rank <= slots.uel + 2 + over) {
+      return { target: slots.uel, label: `Qualify for the Europa League` };
     }
-    if (rank <= slots.uecl + 3) {
-      return { target: slots.uecl, label: `Qualify for the Conference League (top ${slots.uecl})` };
+    // uecl 0 means the era predates the Conference League: no such band.
+    if (slots.uecl && rank <= slots.uecl + 3 + over) {
+      return { target: slots.uecl, label: `Qualify for the Conference League` };
     }
   }
 
   // Saudi Pro League: the continental prize is the AFC Champions League.
   if (league.id === 'saudi' && rank <= 5) {
-    return { target: 3, label: `Qualify for the AFC Champions League Elite (top 3)` };
+    return { target: 3, label: `Qualify for the AFC Champions League Elite` };
   }
 
   if (rank <= Math.round(size * 0.65)) {
@@ -4468,11 +4751,16 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
   return { target: size - drop, label: `Stay up. Avoid relegation` };
 }
 
-export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSize: number): BoardObjective[] {
-  const club = clubDefFor(clubName);
-  const league = leagueOf(clubName);
+export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSize: number, eraId?: string): BoardObjective[] {
+  /* Round 146: a historic save's board reads the era's own world: the era
+     league (so a 2010 club is never promised the Conference League, which
+     did not exist), the era club defs (2010 stature, 2010 budgets) and the
+     era XI gaps. A modern save passes no eraId and nothing changes. */
+  const historic = !!eraId && isHistoricEra(eraId);
+  const club = historic ? eraClubDefFor(clubName, eraId) : clubDefFor(clubName);
+  const league = (historic && eraLeagueOf(clubName, eraId)) || leagueOf(clubName);
   const objs: BoardObjective[] = [];
-  const demand = leagueDemand(club.expectation, club.tier, leagueSize, league);
+  const demand = leagueDemand(club.expectation, club.tier, leagueSize, league, titleGapFor(clubName, league, eraId), eraId);
   objs.push({ id: 'league', target: demand.target, label: demand.label });
   const cupTarget = club.tier === 1 ? 4 : club.tier === 2 ? 3 : club.tier === 3 ? 2 : 1;
   objs.push({
@@ -4493,7 +4781,7 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
     });
   }
   const mapped = RIVALS[clubName];
-  const rival = mapped && league.clubs.includes(mapped) ? mapped : nearestRival(clubName);
+  const rival = mapped && league.clubs.includes(mapped) ? mapped : nearestRival(clubName, eraId);
   if (rival) {
     objs.push({ id: 'rival', target: 0, rivalName: rival, label: `Finish above ${rival}` });
   }
@@ -4859,13 +5147,14 @@ function generateMyScorers(
   return { lines, goalCounts, assistCounts };
 }
 
-function generateOppScorers(opp: string, goals: number, yearsOnNow = 0): ScorerLine[] {
+function generateOppScorers(opp: string, goals: number, yearsOnNow = 0, eraId: string = 'now'): ScorerLine[] {
   const minutes = Array.from({ length: goals }, () => ri(1, 90)).sort((a, b) => a - b);
   // Round 70: opponent scorers are their real attackers from the baked
   // rosters, weighted toward the expensive ones, so "Semenyo 63'" instead of
   // "Bournemouth No. 9". Round 132: from the projected roster, so a 2036 match
-  // report does not name a scorer who retired eight years earlier.
-  const baked = projectedRoster(opp, yearsOnNow).filter(p =>
+  // report does not name a scorer who retired eight years earlier. Round 146:
+  // from the era's roster, so a 2010 match report names 2010 players.
+  const baked = projectedRoster(opp, yearsOnNow, eraId).filter(p =>
     groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID');
   const oppPool = getPool().filter(p =>
     p.club === opp && (groupOf(p.position) === 'ATT' || groupOf(p.position) === 'MID'));
@@ -5110,7 +5399,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   let trophyWon: string | null = null;
 
   const { lines: myScorers, goalCounts, assistCounts } = generateMyScorers(state, xi, myGoals);
-  const oppScorers = generateOppScorers(fx.opponent, oppGoals, yearsOn(state));
+  const oppScorers = generateOppScorers(fx.opponent, oppGoals, yearsOn(state), state.eraId);
   const tally = new Map<string, number>();
   for (const sc of myScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
   tally.forEach((count, name) => {
@@ -6062,18 +6351,22 @@ export function developingPlayers(career: CareerState): CMPlayer[] {
 }
 
 export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID): CareerState {
-  // Round 70: any club in the five real leagues is a valid start.
-  const club = clubDefFor(clubName);
   /* Round 132: the era decides what year season one is, and the year decides
      everything else: the squad you are handed, how good every other club is,
      and who is on the market. The default era is the current one and its
      yearsOn is zero, where the projection is the identity, so a normal new
-     career is exactly the career this game has always started. */
+     career is exactly the career this game has always started.
+     Round 146: a HISTORIC era swaps the whole world underneath the same
+     machinery: its own bake (real 2010 squads), its own league defs, its own
+     stature ladder, its own continental pool. Its yearsOn is zero too,
+     because year zero of the 2010 world is the real 2010 data untouched. */
   const era = eraById(eraId);
-  const startYearsOn = Math.max(0, era.startYear - CM_BASE_YEAR);
-  const squad = buildSquad(club.name, startYearsOn);
+  const historic = isHistoricEra(era.id);
+  const club = historic ? eraClubDefFor(clubName, era.id) : clubDefFor(clubName);
+  const startYearsOn = historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
+  const squad = buildSquad(club.name, startYearsOn, era.id);
   // Owner task 61: the league is the club's REAL league with its real clubs.
-  const league = leagueOf(club.name);
+  const league = (historic && eraLeagueOf(club.name, era.id)) || leagueOf(club.name);
   const leagueClubs = shuffle([...league.clubs]);
   const state: CareerState = {
     saveVersion: SAVE_VERSION,
@@ -6095,7 +6388,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID): C
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length),
-    clubStrengths: genClubStrengths(league, startYearsOn),
+    clubStrengths: genClubStrengths(league, startYearsOn, era.id),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
@@ -6104,12 +6397,12 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID): C
     cupRound: 'R16',
     cupDraw: {},
     // Round 72: only clubs in UCL-eligible leagues start in Europe.
-    uclGroup: initUclGroup(club.tier <= 2 && league.euro, club.name),
+    uclGroup: initUclGroup(club.tier <= 2 && league.euro, club.name, era.id),
     uclKoRound: null,
     uclDraw: {},
     uclBracket: undefined,
     cupBracket: undefined,
-    world: initWorld(club.name),
+    world: initWorld(club.name, era.id),
     trophies: [],
     history: [],
     careerStats: { played: 0, wins: 0, draws: 0, losses: 0, clubsManaged: [club.name] },
@@ -6131,7 +6424,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID): C
   ensureRoles(state);
   ensurePress(state);
   state.wageCap = wageCapFrom(wageBill(state));
-  state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length);
+  state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id);
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex]);
@@ -6400,7 +6693,10 @@ const VERDICTS: Record<'A' | 'B' | 'C' | 'D' | 'F', string[]> = {
  */
 export function finishSeason(career: CareerState): { state: CareerState; summary: SeasonSummary } {
   const state: CareerState = JSON.parse(JSON.stringify(career));
-  const club = clubDefFor(state.clubName);
+  // Round 146: a historic save grades against its era's stature ladder.
+  const club = state.eraId && isHistoricEra(state.eraId)
+    ? eraClubDefFor(state.clubName, state.eraId)
+    : clubDefFor(state.clubName);
   const table = sortedTable(state.table);
   const myRow = table.find(r => r.club === state.clubName) ?? emptyRow(state.clubName);
   const position = Math.max(1, table.findIndex(r => r.club === state.clubName) + 1);
@@ -6444,15 +6740,21 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   const offers: JobOffer[] = [];
   if (overshoot >= 2 || seasonTrophies.length > 0) {
     // Round 70: suitors can come from any of the five leagues now.
-    const everyClub = REAL_LEAGUES.flatMap(l => playableClubs(l.id));
+    // Round 146: inside a historic save they come from the era's own two
+    // leagues, because a 2010 manager cannot be poached by a 2026 club.
+    const eraHist = !!state.eraId && isHistoricEra(state.eraId);
+    const everyClub = eraHist
+      ? (ERA_LEAGUES[state.eraId!] ?? []).flatMap(l => l.clubs.map(c => eraClubDefFor(c, state.eraId)))
+      : REAL_LEAGUES.flatMap(l => playableClubs(l.id));
     const suitors = shuffle(everyClub.filter(c => c.tier < club.tier && c.name !== state.clubName));
     for (const s of suitors.slice(0, ri(1, 2))) {
-      const abroad = !leagueOf(state.clubName).clubs.includes(s.name);
+      const myLeague = (eraHist && eraLeagueOf(state.clubName, state.eraId)) || leagueOf(state.clubName);
+      const abroad = !myLeague.clubs.includes(s.name);
       /* Round 140: job offers stopped saying "board expects Top 14", because
          no board on earth talks like that. The offer now carries the same
          named demand the club would actually hand you on day one. */
-      const sLeague = leagueOf(s.name);
-      const ask = leagueDemand(s.expectation, s.tier, sLeague.clubs.length, sLeague);
+      const sLeague = (eraHist && eraLeagueOf(s.name, state.eraId)) || leagueOf(s.name);
+      const ask = leagueDemand(s.expectation, s.tier, sLeague.clubs.length, sLeague, titleGapFor(s.name, sLeague, state.eraId), state.eraId);
       offers.push({
         club: s.name,
         blurb: `${TIER_INFO[s.tier].emoji} ${TIER_INFO[s.tier].label} club · ${sLeague.name}${abroad ? ' (abroad)' : ''} · ${money(s.budget)} budget · the board wants: ${ask.label}`,
@@ -6600,17 +6902,17 @@ const SENIOR_FLOOR = 12;
  */
 function fillSquadGaps(
   clubName: string, season: number, squad: CMPlayer[], yearsOnNow: number,
-  retiredNames: string[],
+  retiredNames: string[], eraId: string = 'now',
 ): { squad: CMPlayer[]; signed: string[] } {
   const seniors = squad.filter(p => !p.isYouth && p.age >= 20).length;
   if (seniors >= SENIOR_FLOOR) return { squad, signed: [] };
-  const baseline = projectedXIAvg(clubName, yearsOnNow)
+  const baseline = projectedXIAvg(clubName, yearsOnNow, eraId)
     ?? STRENGTH_PRIORS[clubName] ?? 66;
   const taken = new Set(squad.map(p => p.name));
   const retired = new Set(retiredNames);
   // Well below what this club would normally field: these are the players
   // nobody else wanted in August, and they should feel like it.
-  const pool = marketBase(yearsOnNow)
+  const pool = marketBase(yearsOnNow, eraId)
     .filter(p => !taken.has(p.name) && !retired.has(p.name)
       && p.rating <= baseline - 14 && p.rating >= baseline - 26)
     .sort((a, b) => a.rating - b.rating);
@@ -6662,9 +6964,16 @@ function fillSquadGaps(
 export function startNextSeason(career: CareerState, acceptOfferClub?: string): CareerState {
   const summary = career.pendingSummary;
   const prevPos = summary ? summary.position : Math.max(1, leaguePosition(career));
-  const moving = !!(acceptOfferClub && clubByName(acceptOfferClub) && acceptOfferClub !== career.clubName);
+  /* Round 146: inside a historic save, a "playable club" is an era club, so
+     the move guard consults the era world before the modern one. */
+  const eraId = career.eraId;
+  const historic = !!eraId && isHistoricEra(eraId);
+  const validTarget = !!acceptOfferClub && (historic
+    ? !!eraLeagueOf(acceptOfferClub, eraId)
+    : !!clubByName(acceptOfferClub));
+  const moving = !!(acceptOfferClub && validTarget && acceptOfferClub !== career.clubName);
   const clubName = moving && acceptOfferClub ? acceptOfferClub : career.clubName;
-  const club = clubDefFor(clubName);
+  const club = historic ? eraClubDefFor(clubName, eraId) : clubDefFor(clubName);
   const season = career.season + 1;
   // Round 70: hitting or missing board objectives carries into next season's
   // starting confidence.
@@ -6673,8 +6982,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
 
   /* Round 132: the world clock ticks here and only here. The new season is one
      year further from the baked roster year, which moves every AI squad, the
-     whole transfer market and the ages of my own players together. */
-  const nextYearsOn = Math.max(0, (career.startYear ?? CM_BASE_YEAR) + season - 1 - CM_BASE_YEAR);
+     whole transfer market and the ages of my own players together.
+     Round 146: a historic save counts from its own era's bake year. */
+  const eraBase = historic ? eraById(eraId).startYear : CM_BASE_YEAR;
+  const nextYearsOn = Math.max(0, (career.startYear ?? CM_BASE_YEAR) + season - 1 - eraBase);
 
   let squad: CMPlayer[];
   const freeAgentNews: string[] = [];
@@ -6686,7 +6997,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   // Round 94: and MY loanees come home, with a season of football in them.
   const homeFromLoan = returnLoanedPlayers(career);
   if (moving) {
-    squad = buildSquad(clubName, nextYearsOn);
+    squad = buildSquad(clubName, nextYearsOn, eraId);
   } else {
     // Round 105: deals run down over the summer and the expired walk for
     // nothing. This is the price of never sitting down with your own players.
@@ -6726,6 +7037,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     const emergency = fillSquadGaps(
       clubName, season, squad, nextYearsOn,
       [...(career.retiredNames ?? []), ...retiredNow.map(r => r.name)],
+      eraId,
     );
     squad = emergency.squad;
     freeAgentsIn.push(...emergency.signed);
@@ -6760,8 +7072,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const budget = moving
     ? Math.round(club.budget * 1.1)
     : Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12));
-  const qualifiedUcl = (summary ? summary.qualifiedUcl : prevPos <= 4) && leagueOf(clubName).euro;
-  const league = leagueOf(clubName);
+  const nextLeague = (historic && eraLeagueOf(clubName, eraId)) || leagueOf(clubName);
+  const qualifiedUcl = (summary ? summary.qualifiedUcl : prevPos <= 4) && nextLeague.euro;
+  const league = nextLeague;
   const leagueClubs = shuffle([...league.clubs]);
 
   const state: CareerState = {
@@ -6778,7 +7091,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length),
-    clubStrengths: genClubStrengths(league, nextYearsOn),
+    clubStrengths: genClubStrengths(league, nextYearsOn, eraId),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
@@ -6787,12 +7100,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     seasonSignings: [],
     cupRound: 'R16',
     cupDraw: {},
-    uclGroup: initUclGroup(qualifiedUcl, clubName),
+    uclGroup: initUclGroup(qualifiedUcl, clubName, eraId),
     uclKoRound: null,
     uclDraw: {},
     uclBracket: undefined,
     cupBracket: undefined,
-    world: initWorld(clubName),
+    world: initWorld(clubName, eraId),
     pendingSummary: null,
     cupExit: null,
     uclExit: null,
@@ -6883,7 +7196,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     }
   }
   if (intakeNews.length) state.aiHeadlines = [...intakeNews, ...state.aiHeadlines].slice(0, 8);
-  state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length);
+  state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length, eraId);
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);

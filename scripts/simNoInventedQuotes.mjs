@@ -63,8 +63,11 @@ fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const mod = await import('${ROOT}/src/lib/clubManager.ts');
 const rosters = await import('${ROOT}/src/data/clubManagerRosters.ts');
+const era2010 = await import('${ROOT}/src/data/clubManagerEra2010.ts');
 export const cm = mod;
-export const rs = rosters;
+// Round 146: the 2010 era ships real people too, so its 802 names join the
+// never-quote set through the same {"n":"..."} harvest below.
+export const rs = { modern: rosters, era2010 };
 `);
 execSync(
   `${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`,
@@ -95,6 +98,10 @@ const SURNAME_STOPLIST = new Set([
   'March', 'Small', 'Young', 'Palmer', 'Doku', 'Silva', 'Santos', 'Costa',
   'Moreno', 'Sarr', 'Bright', 'Church', 'Cash', 'Dean', 'Fry', 'Long',
   'Love', 'Mount', 'Reed', 'Rice', 'Sharp', 'Ward', 'White', 'Wood',
+  // Round 146: the 2010 bake brought David Villa, whose surname is also a
+  // club (Aston Villa), and Minefield's trivia line about the club tripped
+  // the guard. The full name check still protects the man himself.
+  'Villa',
 ]);
 
 function realNames() {

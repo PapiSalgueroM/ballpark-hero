@@ -1,10 +1,53 @@
 # Project state
 
-## Owner feedback, 2026-08-16
+## Owner feedback, second review 2026-08-17 (5 AM, after rounds 139-144 went live)
 
-Anthony reviewed the whole site and gave direct feedback. **This list outranks the roadmap
-further down.** Work it top to bottom before touching anything else, and keep the DONE marks
-current so the 3-hourly build sessions do not redo finished work.
+He reviewed again about twenty minutes after the deploy, so items he calls unfixed may be his
+browser cache: rounds 139-144 went live at 08:00 UTC and his message landed 08:2x. He was told
+to hard refresh. His NEW asks, worked in order:
+
+A. **DONE, Round 145: past eras.** "U should have diffrent era like u can be the manager for
+   clubs in 2010 and 2000 and so on with all correct lineups and everything like that and
+   values and just everything." Phase one shipped: the 2010-11 era, Premier League + La Liga,
+   802 real year-2010 players across all 40 clubs, famous summer 2010 moves corrected against
+   the table's own 2011 rows (Villa to Barcelona, Ozil and Di Maria to Madrid, Ibrahimovic
+   out to Milan), era-sealed market, 2010 boards (no Conference League, it did not exist),
+   era continental pool, era cups. `simEra2010.mjs` guards identity, isolation, ladder and
+   playability. DATA FLOOR: player_market_values reaches 2004, so 2005 and 2015 eras are
+   buildable next by the same recipe (scripts/bakeEra2010.mjs), an exact 2000 era is NOT
+   possible honestly, and he was told so.
+
+B. **DONE, Round 145 (same round as A, one review, one commit): top clubs demand the title
+   itself.** "The second highest overall team
+   dosent want to be top 2. They also want to win it. The same with 3rd place... stop with
+   this top 20 or top 2 nonsense." The title band now runs on the measured XI gap to the
+   league's best (TITLE_GAP in clubManager.ts, threshold 2.5 measured over all 13 leagues),
+   so Liverpool, Chelsea, United, AC Milan, Feyenoord, Sporting CP, Union SG all demand the
+   title, the euro windows slide down below a wide title band, and every positional
+   parenthetical is gone from every label. The two worst "Top N" offenders were UI lines:
+   the club picker tile and the rival viewer both printed raw ranks ("Top 20"); both now
+   quote the board's named demand. simBoardObjectives 1b pins 26 giants to target 1.
+
+C. **OPEN: "look up all the leagues fifa has" and add more.** See item 6 below for the wave
+   recipe and remaining candidates. (Never write that product name into src.)
+
+D. **OPEN: create-a-club.** "Create my team for the manger game and its full customizatable
+   with crests and stadium and starting money and everything." Custom name, colors, an SVG
+   crest builder (original shapes only, no real crests), stadium name, starting budget,
+   league choice, generated starting squad, real transfer market. Big feature, own round.
+
+E. **OPEN: the idle stadium game.** He sent two reference screenshots of an idle sports
+   tycoon (income per second, upgrade tracks, live toy match, gem currency, leaderboards)
+   and wants ours, animation-heavy: "Suprise me on how ur going to do it but add so many
+   things to it." Original mechanics and art only. New game page + engine + harness.
+
+F. **STANDING: more animation everywhere, more depth everywhere.** "Add more animation
+   especially to the idle game... and all the games."
+
+## Owner feedback, 2026-08-16 (first review)
+
+Anthony reviewed the whole site and gave direct feedback. **Worked top to bottom; DONE marks
+below are current** so the 3-hourly build sessions do not redo finished work.
 
 His closing direction, which applies to every game, not just the items below: *"Just keep
 adding to every game and more more realism and more info and more minigames and more of
@@ -27,15 +70,17 @@ target, not the names.
    ageing engine stays (a save that starts today still needs the world to age around it).
    simEras now FAILS if anybody adds a future era back.
 
-3. **OPEN, the big one: PAST eras, built honestly. READ `docs/PAST-ERAS-DESIGN.md` FIRST.**
-   That file is the complete build plan, written the same day the era system was reworked:
-   verified 2010-11 memberships for both phase one leagues with their exact DB name variants,
-   the dump queries, every engine integration point mapped against the real code (leagueOf,
-   nearestRival, marketBase, the 2010 EURO_SLOTS with no Conference League), the harness
-   spec, and the traps already hit once. Phase one is one era (2010-11) and two leagues
-   (Premier League, La Liga). Data confirmed: every 2010-11 club in both leagues has rows,
-   Barcelona 29 players with Messi at 108M USD. The design doc ships to git inside
-   Round 144, so once that round lands the plan is in the repo for good.
+3. **DONE, Round 145: PAST eras phase one, built honestly per `docs/PAST-ERAS-DESIGN.md`.**
+   See item A in the 2026-08-17 review above for what shipped. The design doc remains the
+   recipe for further eras (2005, 2015): dump the year's rows per league through the MCP,
+   bake with scripts/bakeEra2010.mjs adapted, add the era's leagues to ERA_LEAGUES and its
+   bake to HISTORIC_ROSTERS, extend simEra2010-style checks, done. The engine threading
+   (era-keyed market, era boards, era continental pool, era cup, era job offers, era-relative
+   yearsOn) is general now and needs no further surgery per era. Traps hit in phase one,
+   recorded for phase two: year-2010 value snapshots can predate the summer window, so
+   verify marquee movers against the NEXT year's rows and correct clubs (values stay the
+   era snapshot); and cross-era same-name different-person collisions are real (Aaron
+   Ramsey twice), harmless across worlds, and allowlisted in simEra2010's NAMESAKES.
 
 4. **DONE, Round 139. Board objectives talk like boards.** His words: "no team is looking for
    top 2. There looking to win it all... win the league or get champions league football or
@@ -149,10 +194,11 @@ true on the date above; re-measure rather than quoting them.
 
 | | |
 |---|---|
-| `origin/main` head | `03afbfd` = **Round 138** when this was written |
-| Packaged queue | Rounds **139** (review), **140** (leagues wave 1), **141** (news feed), **142** (2. Bundesliga), **143** (Belgium) and **144** (full-suite verification fixes). One click ships all six: **`SHIP13.bat`** (logs to `ship_log13.txt`). |
-| Live site | Publish triggered 2026-08-16 after Round 137 synced. Re-publish and verify after 139 to 144 land. |
-| Next free round number | **145** (check the folder first, the 3-hourly build task may have taken it) |
+| `origin/main` head | `34b2198` = **Round 144** when this was written (2026-08-17 morning) |
+| How 139-144 landed | SHIP13 clicked via computer-use 2026-08-17 ~07:50 UTC. First run failed closed on a bad RUN139 assertion (bare `plus10` matched the removal comment); pattern fixed to `id: 'plus10'`, re-clicked, all six pushed clean. Lesson in SHIP-PIPELINE terms: absence assertions must target the old DEFINITION shape, and every bat's patterns get tested against the actual zip contents before delivery. |
+| Live site | douknowball.com published 2026-08-17 ~08:00 UTC at Round 144 (two deploy calls, second after sync was file-verified). Republish after 145+146 land. |
+| Packaged queue | Round **145** (title band + positional copy purge + the 2010-11 era, one commit because one review drove both and they share files). One click ships it: **`SHIP14.bat`** (logs to `ship_log14.txt`). |
+| Next free round number | **146** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

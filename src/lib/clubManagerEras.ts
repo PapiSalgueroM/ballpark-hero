@@ -31,10 +31,12 @@
        player aged forward is still a real player with a made up rating, and a
        generated player is not real at all. realNameShare() measures the split
        so the UI can print the true number rather than a vibe.
-     - The PAST cannot be done here at all. There is no historical roster data
-       in this codebase, so a 2010 Barcelona squad would be twenty five invented
-       players wearing real names. That is exactly the thing the owner's number
-       one rule forbids, so no past era is offered and the picker says why.
+     - The PAST is real where, and only where, a real bake backs it. Round 146
+       added clubManagerEra2010.ts: real year-2010 rows for the 2010-11
+       Premier League and La Liga, so THAT past is offered. Any past without
+       its own bake stays impossible, because a 2000 Barcelona squad would be
+       invented players wearing real names, which the owner's number one rule
+       forbids.
 
    Everything in here is a PURE function of its arguments. buildMarket runs
    inside a useMemo on every career change, so the projected world has to come
@@ -43,6 +45,7 @@
 import type { Position } from '@/types/game';
 import { CM_ROSTERS, CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
+import { ERA2010_ROSTERS, ERA2010_META, ERA2010_PARTIAL } from '@/data/clubManagerEra2010';
 
 /**
  * The calendar year the baked rosters describe. CM_ROSTER_META.asOf reads
@@ -283,12 +286,19 @@ const GEN_LAST = [
 
 let REAL_NAME_SET: Set<string> | null = null;
 
-/** Every name that appears anywhere in the baked real data. */
+/** Every name that appears anywhere in the baked real data, every era.
+ *  Round 146: historic bakes joined the set, so a generated player can never
+ *  wear the name of a real 2010 footballer either. */
 function realNames(): Set<string> {
   if (REAL_NAME_SET) return REAL_NAME_SET;
   const set = new Set<string>();
   for (const roster of Object.values(CM_ROSTERS)) {
     for (const p of roster) set.add(p.n);
+  }
+  for (const world of Object.values(HISTORIC_ROSTERS)) {
+    for (const roster of Object.values(world)) {
+      for (const p of roster) set.add(p.n);
+    }
   }
   REAL_NAME_SET = set;
   return set;
@@ -418,7 +428,37 @@ function generateFor(club: string, slot: ProjectedPlayer, year: number, idx: num
   };
 }
 
-const WORLD_CACHE = new Map<number, Record<string, ProjectedPlayer[]>>();
+/* ================================================================== */
+/* Historic era backing (Round 146)                                   */
+/* ================================================================== */
+
+/**
+ * Round 146: the first PAST era, and the reason the ⚠ DATA HONESTY note
+ * above stopped saying the past cannot be done. It can now, because the
+ * 2010-11 world was baked from real year-2010 rows (see
+ * scripts/bakeEra2010.mjs). Each entry here is a complete separate world:
+ * the era decides which roster file is read, so the engine's one name, one
+ * player rule holds WITHIN each era while Messi exists in both at different
+ * ages.
+ */
+export const HISTORIC_ROSTERS: Record<string, Record<string, BakedPlayer[]>> = {
+  era2010: ERA2010_ROSTERS,
+};
+
+export const HISTORIC_PARTIAL: Record<string, string[]> = {
+  era2010: ERA2010_PARTIAL,
+};
+
+export function isHistoricEra(id: string | undefined): boolean {
+  return !!id && Object.prototype.hasOwnProperty.call(HISTORIC_ROSTERS, id);
+}
+
+/** The roster source for an era: its own bake if historic, else today's. */
+export function eraRosters(eraId: string | undefined): Record<string, BakedPlayer[]> {
+  return (eraId && HISTORIC_ROSTERS[eraId]) || CM_ROSTERS;
+}
+
+const WORLD_CACHE = new Map<string, Record<string, ProjectedPlayer[]>>();
 
 /**
  * The whole football world, N years on from the baked roster year.
@@ -430,11 +470,22 @@ const WORLD_CACHE = new Map<number, Record<string, ProjectedPlayer[]>>();
  * and none of the eleven rounds of scoreline calibration moved.
  */
 export function projectedWorld(yearsOn: number): Record<string, ProjectedPlayer[]> {
+  return projectedWorldFor('now', yearsOn);
+}
+
+/**
+ * Round 146: the same projection, anchored on an era's own bake. A 2010 save
+ * that runs deep ages the 2010 squads with the same curve the current era
+ * uses, and its year zero is the real 2010 data untouched. The cache key
+ * carries the era so the two worlds can never bleed into each other.
+ */
+export function projectedWorldFor(eraId: string, yearsOn: number): Record<string, ProjectedPlayer[]> {
   const y = Math.max(0, Math.round(yearsOn));
-  const hit = WORLD_CACHE.get(y);
+  const key = `${isHistoricEra(eraId) ? eraId : 'now'}|${y}`;
+  const hit = WORLD_CACHE.get(key);
   if (hit) return hit;
   const out: Record<string, ProjectedPlayer[]> = {};
-  for (const [club, baked] of Object.entries(CM_ROSTERS)) {
+  for (const [club, baked] of Object.entries(eraRosters(eraId))) {
     const scale = valueScaleFor(club, baked);
     let roster: ProjectedPlayer[] = baked.map(b => ({
       n: b.n, p: b.p, a: b.a, v: b.v, r: b.r, anchor: b.r, since: 0,
@@ -462,18 +513,18 @@ export function projectedWorld(yearsOn: number): Record<string, ProjectedPlayer[
     }
     out[club] = roster;
   }
-  WORLD_CACHE.set(y, out);
+  WORLD_CACHE.set(key, out);
   return out;
 }
 
 /** The projected roster for one club, or an empty list if it is not in the data. */
-export function projectedRoster(club: string, yearsOn: number): ProjectedPlayer[] {
-  return projectedWorld(yearsOn)[club] ?? [];
+export function projectedRoster(club: string, yearsOn: number, eraId: string = 'now'): ProjectedPlayer[] {
+  return projectedWorldFor(eraId, yearsOn)[club] ?? [];
 }
 
 /** Best XI average of a projected roster. Null when there is no data at all. */
-export function projectedXIAvg(club: string, yearsOn: number): number | null {
-  const roster = projectedRoster(club, yearsOn);
+export function projectedXIAvg(club: string, yearsOn: number, eraId: string = 'now'): number | null {
+  const roster = projectedRoster(club, yearsOn, eraId);
   if (!roster.length) return null;
   const rs = roster.map(p => p.r).sort((a, b) => b - a).slice(0, 11);
   while (rs.length < 11) rs.push(60);
@@ -544,15 +595,16 @@ export interface CMEra {
  * today and runs deep still needs the world to age, retire and refill around
  * it, season by season, inside the sim.
  *
- * The PAST is the part he actually wants, and it is now genuinely buildable:
- * the Supabase table player_market_values holds real Transfermarkt history,
- * about six thousand real named players a year, every year back to 2004,
- * over a thousand clubs a year (measured 2026-08-16). A 2010 era built from
- * that is real data with thin patches, not invention. It needs its own baking
- * round (per-year rosters plus per-year league memberships, promotions and
- * relegations applied), so it is on the roadmap rather than in this array.
- * Until that bake lands, today is the only start the data supports, and the
- * picker says so out loud rather than quietly leaving a gap.
+ * The PAST is the part he actually wants, and Round 146 delivered phase one
+ * (2026-08-17, his words that morning: "U should have diffrent era like u can
+ * be the manager for clubs in 2010 and 2000 and so on with all correct
+ * lineups and everything like that and values and just everything"). The
+ * 2010-11 era below is real year-2010 Transfermarkt rows for all forty clubs
+ * of that season's Premier League and La Liga, with the famous summer 2010
+ * moves corrected against the table's own year-2011 rows. More eras follow
+ * the same recipe (scripts/bakeEra2010.mjs); the table reaches back to 2004,
+ * so a 2005 era is buildable and an exact 2000 era is NOT, and we say that
+ * rather than invent one.
  */
 export const CM_ERAS: CMEra[] = [
   {
@@ -562,6 +614,14 @@ export const CM_ERAS: CMEra[] = [
     emoji: '\u{1F4C5}',
     blurb: 'Today. Every squad exactly as it really is.',
     honesty: 'Real data. Every name, age and value is the real thing as of August 2026.',
+  },
+  {
+    id: 'era2010',
+    label: seasonLabel(2010),
+    startYear: 2010,
+    emoji: '\u{1F570}\u{FE0F}',
+    blurb: 'Prime Messi. Mourinho\'s Madrid. Rooney\'s United. Premier League and La Liga, 2010-11.',
+    honesty: `Real data. ${ERA2010_META.players} real players with their real 2010 ages and values, all 40 clubs of the 2010-11 Premier League and La Liga. Thin squads are padded with made up youth players and say so.`,
   },
 ];
 
@@ -582,6 +642,9 @@ export function eraForYear(year: number): CMEra {
  * curve is ever retuned the copy retunes itself.
  */
 export function eraRealShareLabel(era: CMEra): string {
+  // A historic era's year zero is its own bake: real by construction, like
+  // today's. The projection share math only describes futures.
+  if (era.startYear <= CM_BASE_YEAR) return 'Every player is real';
   const pct = Math.round(realStarterShare(era.startYear - CM_BASE_YEAR) * 100);
   if (pct >= 100) return 'Every player is real';
   if (pct <= 2) return 'Real clubs, made up players';
@@ -591,7 +654,7 @@ export function eraRealShareLabel(era: CMEra): string {
 /** The long version, both measurements, for the picker footnote. */
 export function eraHonestyLine(era: CMEra): string {
   const yearsOn = era.startYear - CM_BASE_YEAR;
-  if (yearsOn === 0) return era.honesty;
+  if (yearsOn <= 0) return era.honesty;
   const starters = Math.round(realStarterShare(yearsOn) * 100);
   const all = Math.round(realNameShare(yearsOn) * 100);
   return `${era.honesty} Measured right now: ${starters}% of first team players and ${all}% of all squad players are real footballers.`;

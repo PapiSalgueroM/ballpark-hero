@@ -63,7 +63,7 @@ const {
   CM_BASE_YEAR, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedWorld, projectedRoster,
   projectedXIAvg, realNameShare, realStarterShare, ageDriftBand, declineScale,
   retireChance, rawCurveValue, eraRealShareLabel, eraHonestyLine, makeGeneratedName,
-  seasonLabel, CM_CLOCK_META,
+  seasonLabel, CM_CLOCK_META, isHistoricEra, HISTORIC_ROSTERS,
 } = E;
 
 let failures = 0;
@@ -512,7 +512,7 @@ console.log('6) Real names become made up ones gracefully, and it is labelled');
     'src/components/club-manager/SquadScreen.tsx': ['MADE UP', 'p.generated'],
     'src/components/club-manager/TransferScreen.tsx': ['MadeUpTag', 'm.generated', 'p.generated'],
     'src/components/club-manager/ClubDetailScreen.tsx': ['MadeUpTag', 'p.g &&'],
-    'src/pages/ClubManager.tsx': ['REAL DATA', 'PROJECTION', 'No past eras'],
+    'src/pages/ClubManager.tsx': ['REAL DATA', 'PROJECTION', 'No future eras'],
   };
   for (const [file, needles] of Object.entries(files)) {
     const src = fs.readFileSync(path.join(ROOT, file), 'utf8');
@@ -534,20 +534,33 @@ console.log('7) The era menu is exactly what the owner asked for and the data su
      No FUTURE eras. Owner, 2026-08-16: "Not the future since we dont know
      the future. So please remove that." Round 132 offered plus5/plus10/plus15
      and Round 139 removed them. This is the guard that keeps a later round
-     from quietly adding one back.
+     from quietly adding one back. It is ABSOLUTE.
 
-     No PAST eras UNTIL a real historical bake exists. player_market_values
-     in Supabase holds real rosters back to 2004, so past eras are buildable,
-     but they arrive as baked real data with their own harness, not as
-     invented squads wearing real badges. When that lands, this section gets
-     rewritten on purpose, with eyes open, and startYear < CM_BASE_YEAR stops
-     being a failure. */
+     A PAST era exists ONLY with a real historical bake behind it. Round 146
+     landed the first one (era2010, from clubManagerEra2010.ts), exactly the
+     way this comment always said it would arrive: baked real data with its
+     own harness (simEra2010.mjs). startYear < CM_BASE_YEAR is now a failure
+     ONLY for an era with no bake in HISTORIC_ROSTERS, because that era would
+     be invented squads wearing real badges. */
   for (const e of CM_ERAS) {
     if (e.startYear > CM_BASE_YEAR) fail(`era ${e.label} starts in the FUTURE, which the owner removed on 2026-08-16`);
-    if (e.startYear < CM_BASE_YEAR) fail(`era ${e.label} is BEFORE the roster year, and no historical bake exists yet`);
+    if (e.startYear < CM_BASE_YEAR && !isHistoricEra(e.id)) {
+      fail(`era ${e.label} is BEFORE the roster year with NO historical bake behind it`);
+    }
+    if (isHistoricEra(e.id)) {
+      const world = HISTORIC_ROSTERS[e.id] ?? {};
+      const clubs = Object.keys(world).length;
+      const players = Object.values(world).reduce((s, r) => s + r.length, 0);
+      console.log(`   ${e.label}: historical bake, ${players} real players across ${clubs} clubs`);
+      if (clubs < 30) fail(`historic era ${e.label} bake holds only ${clubs} clubs`);
+      if (players < 500) fail(`historic era ${e.label} bake holds only ${players} players`);
+    }
   }
 
-  if (CM_ERAS.length !== 1) fail(`${CM_ERAS.length} eras on the menu; with no past bake and no future allowed there is exactly one honest start`);
+  const historicCount = CM_ERAS.filter(e => isHistoricEra(e.id)).length;
+  if (CM_ERAS.length !== 1 + historicCount) {
+    fail(`${CM_ERAS.length} eras on the menu but only ${historicCount} historical bakes plus today; something is offered without data`);
+  }
   if (eraById(DEFAULT_ERA_ID).startYear !== CM_BASE_YEAR) fail('the default era is not the real data');
   if (eraById('nonsense-id').id !== CM_ERAS[0].id) fail('an unknown era id does not fall back to the real one');
   // Round 132 saves may still carry the removed era ids. They must not crash,
@@ -556,14 +569,16 @@ console.log('7) The era menu is exactly what the owner asked for and the data su
     if (eraById(legacy).id !== CM_ERAS[0].id) fail(`removed era id ${legacy} does not fall back to the real one, old saves would break`);
   }
 
-  const e = CM_ERAS[0];
-  const label = eraRealShareLabel(e);
-  const line = eraHonestyLine(e);
-  console.log(`   ${e.label}  ${label}  |  ${line}`);
-  if (!label || !line) fail(`era ${e.label} has no honesty copy`);
-  if (!/real/i.test(line)) fail(`era ${e.label} does not say it is real data`);
+  for (const e of CM_ERAS) {
+    const label = eraRealShareLabel(e);
+    const line = eraHonestyLine(e);
+    console.log(`   ${e.label}  ${label}  |  ${line.slice(0, 90)}...`);
+    if (!label || !line) fail(`era ${e.label} has no honesty copy`);
+    if (!/real/i.test(line)) fail(`era ${e.label} does not say it is real data`);
+  }
 
   clearSeed();
+  const e = CM_ERAS[0];
   const s = startCareer('Real Madrid', e.id);
   const xi = xiAverageRating(s);
   const gen = s.squad.filter(p => p.generated).length;

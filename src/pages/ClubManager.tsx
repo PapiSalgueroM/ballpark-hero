@@ -8,7 +8,8 @@ import type { HubTab } from '@/hooks/useClubManager';
 import {
   TIER_INFO, clubByName, clubPreviewRating, leagueOf, money, confidenceLabel,
   isAvailable, xiAverageRating, sortedTable,
-  NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub, EURO_SLOTS,
+  NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
+  isHistoricEra, eraLeaguesFor, eraPlayableClubs, boardWantLabel,
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
@@ -227,15 +228,22 @@ const ClubManager = () => {
       setPickNation(null);
       setPickLeagueId(null);
     };
-    const league = pickLeagueId ? REAL_LEAGUES.find(l => l.id === pickLeagueId) : null;
-    const teams = league ? playableClubs(league.id) : [];
+    /* Round 146: a historic era swaps the whole picker world: its nations,
+       its leagues, its clubs, its stature. The modern path is untouched. */
+    const historicPick = isHistoricEra(pickEra);
+    const league = pickLeagueId
+      ? (historicPick ? eraLeaguesFor(pickEra) : REAL_LEAGUES).find(l => l.id === pickLeagueId)
+      : null;
+    const teams = league
+      ? (historicPick ? eraPlayableClubs(pickEra, league.id) : playableClubs(league.id))
+      : [];
 
     return shell(
       <div ref={pickRef}>
         <header className="text-center mb-6">
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">CLUB MANAGER</h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Nine real leagues, {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} clubs, squads as of {CM_ROSTER_META.asOf}. Pick when you start, then your nation, your league, your club.
+            {REAL_LEAGUES.length} real league tables and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} clubs today, squads as of {CM_ROSTER_META.asOf}, plus the real 2010-11 season. Pick when you start, then your nation, your league, your club.
           </p>
         </header>
 
@@ -275,26 +283,28 @@ const ClubManager = () => {
                   {/* Kept to one line on purpose: at 390x844 all four tiles
                       have to sit above the fold, and the full measured wording
                       is one tap away on the team step. */}
+                  {/* Round 146: the past is REAL DATA too, because it comes off
+                      its own bake. Only a future would be a projection, and we
+                      do not offer futures. */}
                   <div className={cn(
                     'mt-1.5 inline-block text-[9px] font-bold px-1.5 py-0.5 rounded border',
-                    e.startYear === CM_BASE_YEAR
+                    e.startYear <= CM_BASE_YEAR
                       ? 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10'
                       : 'text-yellow-500 border-yellow-500/50 bg-yellow-500/10',
                   )}>
-                    {e.startYear === CM_BASE_YEAR ? 'REAL DATA' : 'PROJECTION'} · {eraRealShareLabel(e)}
+                    {e.startYear <= CM_BASE_YEAR ? 'REAL DATA' : 'PROJECTION'} · {eraRealShareLabel(e)}
                   </div>
                 </button>
               ))}
             </div>
             {/* The honest note about what is NOT here, which matters more than
-                what is. Round 139: the future starts are gone on the owner's
-                call (nobody knows the future), and past eras are coming from
-                real history rather than being faked in early. */}
+                what is. Round 139 removed the future starts on the owner's call
+                (nobody knows the future). Round 146 delivered the first real
+                past season from real historical records. */}
             <p className="text-[9px] text-muted-foreground text-center mt-2.5 leading-snug max-w-lg mx-auto">
-              No past eras yet, and no future ones at all. Right now we hold one set of real squads, {CM_ROSTER_META.asOf},
-              and we would rather give you one honest start than a made up one. Classic seasons built from real historical
-              records are in the works, so you will get to walk into an older dressing room without a single invented name
-              on the teamsheet.
+              No future eras, ever: nobody knows the future and we will not pretend to. The 2010-11 season is built from
+              real market data records, real squads with their real 2010 ages and values, not recreations. More classic
+              seasons arrive as we verify their data, and none will carry an invented name on the teamsheet.
             </p>
           </div>
         )}
@@ -312,10 +322,15 @@ const ClubManager = () => {
         )}
         {pickStep === 'nation' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-2xl mx-auto">
-            {NATIONS.map(n => {
-              const leagues = n.leagueIds
-                .map(id => REAL_LEAGUES.find(l => l.id === id))
-                .filter((l): l is typeof REAL_LEAGUES[number] => !!l);
+            {NATIONS.filter(n => !historicPick || eraLeaguesFor(pickEra, n).length > 0).map(n => {
+              /* Round 146: in a historic era a nation offers its era leagues,
+                 so 2010 England is the 20 club Premier League and the other
+                 ten nations are simply not on the board. */
+              const leagues = historicPick
+                ? eraLeaguesFor(pickEra, n)
+                : n.leagueIds
+                  .map(id => REAL_LEAGUES.find(l => l.id === id))
+                  .filter((l): l is typeof REAL_LEAGUES[number] => !!l);
               const clubCount = leagues.reduce((s, l) => s + l.clubs.length, 0);
               // Round 106: his note, in his words: "dont be saying teams. just
               // the leagues". A nation card is a nation and what you can manage
@@ -353,10 +368,13 @@ const ClubManager = () => {
             >
               <ChevronLeft className="w-3.5 h-3.5" /> All nations
             </button>
-            {pickNation.leagueIds.map(id => {
-              const lg = REAL_LEAGUES.find(l => l.id === id);
+            {(historicPick
+              ? eraLeaguesFor(pickEra, pickNation).map(l => l.id)
+              : pickNation.leagueIds
+            ).map(id => {
+              const lg = (historicPick ? eraLeaguesFor(pickEra) : REAL_LEAGUES).find(l => l.id === id);
               if (!lg) return null;
-              const lgTeams = playableClubs(lg.id);
+              const lgTeams = historicPick ? eraPlayableClubs(pickEra, lg.id) : playableClubs(lg.id);
               return (
                 <button
                   key={lg.id}
@@ -394,7 +412,7 @@ const ClubManager = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {teams.map(c => {
                 const sel = g.pendingClub === c.name;
-                const partial = isPartialClub(c.name);
+                const partial = isPartialClub(c.name, historicPick ? pickEra : undefined);
                 return (
                   <button
                     key={c.name}
@@ -420,23 +438,32 @@ const ClubManager = () => {
                           picked, not the 2026 one, or the tile would be lying
                           about the team you are about to take over. */}
                       <span className="text-sm font-bold font-display text-foreground">
-                        {Math.round(projectedXIAvg(c.name, eraYearsOn) ?? clubPreviewRating(c.name))}
+                        {Math.round(projectedXIAvg(c.name, eraYearsOn, pickEra) ?? clubPreviewRating(c.name))}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] text-muted-foreground">Budget</span>
                       <span className="text-xs font-bold text-gold">{money(c.budget)}</span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] text-muted-foreground">Board wants</span>
-                      <span className="text-[10px] font-bold text-foreground">{c.expectation === 1 ? 'The title' : `Top ${c.expectation}`}</span>
+                    {/* Round 145: this line said "Top 20" at a rank 20 club,
+                        which is exactly the phrasing he told us to stop using.
+                        It now quotes the board's actual named demand. */}
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] text-muted-foreground shrink-0">Board wants</span>
+                      <span className="text-[10px] font-bold text-foreground truncate" title={boardWantLabel(c.name, historicPick ? pickEra : undefined)}>
+                        {boardWantLabel(c.name, historicPick ? pickEra : undefined)}
+                      </span>
                     </div>
                   </button>
                 );
               })}
             </div>
             <p className="text-[9px] text-muted-foreground text-center mt-3">
-              Squads, ratings and values from market data plus the verified summer window: {CM_ROSTER_META.players} players as of {CM_ROSTER_META.asOf}, refreshed {CM_ROSTER_META.generated}.
+              {historicPick ? (
+                <>{eraHonestyLine(era)}</>
+              ) : (
+                <>Squads, ratings and values from market data plus the verified summer window: {CM_ROSTER_META.players} players as of {CM_ROSTER_META.asOf}, refreshed {CM_ROSTER_META.generated}.</>
+              )}
               {eraYearsOn > 0 && (
                 <> Starting {era.label}, so those squads have been aged {eraYearsOn} years: {eraHonestyLine(era)}</>
               )}
@@ -1002,7 +1029,7 @@ const ClubManager = () => {
                   {/* Round 95: the knockout stage as a real bracket. */}
                   <UclBracketCard career={c} onClubClick={setClubView} />
                   {!uclAlive && c.uclKoRound !== 'won' && c.uclGroup === null && (
-                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{leagueOf(c.clubName).euro ? `. Finish top ${EURO_SLOTS[leagueOf(c.clubName).id]?.ucl ?? 4} to change that` : ' in this league'}.</div>
+                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{leagueOf(c.clubName).euro ? '. Reach the Champions League places to change that' : ' in this league'}.</div>
                   )}
                 </div>
               )}

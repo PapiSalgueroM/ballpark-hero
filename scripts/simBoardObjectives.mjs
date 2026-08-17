@@ -13,6 +13,12 @@
  * the distribution of demands over the real 196-club world and about grading
  * flipping at exactly the right table states.
  *
+ * Round 145 second pass, owner review 2026-08-17: the title band now runs on
+ * the measured XI gap (TITLE_GAP in clubManager.ts), so Sporting CP, Feyenoord
+ * and Union Saint-Gilloise demand the title like their stature says, and every
+ * positional parenthetical ("(top 4)") is gone from every label. Section 1b
+ * pins the giants list directly to target 1.
+ *
  * What would catch a real regression here:
  *  - a heavyweight told to finish second (the exact complaint)
  *  - any label containing the league size ("top 20" on a 20 team league)
@@ -72,6 +78,10 @@ console.log('1) The demand ladder over all playable clubs');
       if (lg.target < 1 || lg.target > size) fail(`${club.name}: target ${lg.target} is outside the table`);
       // Boards demand competitions, so every label is words, not a bare rank.
       if (/^Finish top \d+$/i.test(lg.label)) fail(`${club.name}: "${lg.label}" is a bare rank, boards do not talk like that`);
+      /* Round 145, his second pass on this screen: "stop with this top 20 or
+         top 2 nonsense." No league demand may carry a positional phrase at
+         all, not even as a parenthetical after the named prize. */
+      if (/top \d+/i.test(lg.label)) fail(`${club.name}: "${lg.label}" still carries a positional phrase`);
 
       const key = lg.label.replace(/\d+/g, 'N');
       perLeague[key] = (perLeague[key] ?? 0) + 1;
@@ -115,6 +125,52 @@ console.log('1) The demand ladder over all playable clubs');
   console.log(`   ${total} clubs graded, ${Object.keys(bandCounts).length} distinct demand shapes`);
   if (total < 150) fail(`only ${total} clubs graded, the world shrank`);
   if (Object.keys(bandCounts).length < 8) fail('the whole world shares a handful of demands, the ladder collapsed');
+}
+
+/* ---------- 1b. The giants all demand the title itself ---------- */
+console.log('1b) Every league-relative giant is told to win it');
+{
+  /* Round 145, his words: "The second highest overall team dosent want to be
+     top 2. They also want to win it. The same with 3rd place." These clubs
+     all sit within the measured TITLE_GAP of their league's best XI (or in
+     the top two ranks), so every one of them must carry a target 1 league
+     demand. If this fails after a roster re-bake, re-measure the gap table
+     (the TITLE_GAP comment in clubManager.ts says how) and retune, do not
+     silently let a giant's board start asking for a Champions League spot. */
+  const GIANTS = [
+    'Arsenal', 'Manchester City', 'Liverpool', 'Chelsea',
+    'Real Madrid', 'Barcelona',
+    'Inter Milan', 'Juventus', 'AC Milan',
+    'Bayern Munich', 'Borussia Dortmund',
+    'PSG', 'Marseille',
+    'PSV', 'Ajax', 'Feyenoord',
+    'Porto', 'Benfica', 'Sporting CP',
+    'Celtic', 'Rangers',
+    'Galatasaray', 'Fenerbahçe',
+    'Club Brugge', 'Genk', 'Union Saint-Gilloise',
+  ];
+  /* And the sanity mirror: clubs miles off their league's top XI must NOT be
+     told to win it, or the band stopped meaning anything. Measured gaps on
+     2026-08-17: Aberdeen 13.7, Hearts 13.7, Basaksehir 11.1, Casa Pia deep
+     in the primeira tail. */
+  const NOT_TITLE = ['Aberdeen', 'Hearts', 'Başakşehir', 'Casa Pia', 'St Mirren', 'Kortrijk'];
+  for (const name of GIANTS) {
+    const league = REAL_LEAGUES.find(l => l.clubs.includes(name));
+    if (!league) { fail(`${name} is in the giants list but not in any league`); continue; }
+    const lg = buildBoardObjectives(name, false, league.clubs.length).find(o => o.id === 'league');
+    if (!lg || lg.target !== 1) {
+      fail(`${name}: a giant's board is asking for "${lg ? lg.label : 'nothing'}" instead of the title`);
+    }
+  }
+  for (const name of NOT_TITLE) {
+    const league = REAL_LEAGUES.find(l => l.clubs.includes(name));
+    if (!league) { fail(`${name} is in the sanity list but not in any league`); continue; }
+    const lg = buildBoardObjectives(name, false, league.clubs.length).find(o => o.id === 'league');
+    if (lg && lg.target === 1) {
+      fail(`${name} is being told to win the league from ${(lg && lg.label) || '?'}, the title band lost its meaning`);
+    }
+  }
+  console.log(`   ${GIANTS.length} giants all demand the title, ${NOT_TITLE.length} outsiders correctly do not`);
 }
 
 /* ---------- 2. More wants than before, and varied ---------- */
@@ -187,6 +243,9 @@ console.log('4) Copy rules hold in every label');
         labels += 1;
         if (/[–—]/.test(o.label)) fail(`em or en dash in "${o.label}"`);
         if (o.label.length > 70) fail(`label is a paragraph: "${o.label}"`);
+        // Round 145: the positional-phrase ban covers EVERY objective label,
+        // so "(top 4)" can never ride back in on a cup or euro want either.
+        if (/top \d+/i.test(o.label)) fail(`positional phrase in "${o.label}"`);
       }
     }
   }

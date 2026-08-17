@@ -2,8 +2,9 @@ import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Eye } from 'lucide-react';
 import {
-  clubDefFor, leagueOf, money, sortedTable, isPartialClub, TIER_INFO,
+  money, sortedTable, isPartialClub, TIER_INFO,
   projectedRoster, projectedXIAvg, yearsOn, worldSeasonLabel,
+  boardWantLabel, careerLeagueOf, eraClubDefFor,
 } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
@@ -20,21 +21,33 @@ interface ClubDetailScreenProps {
  * rivals just by clicking on their team."
  */
 export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenProps) {
-  const def = clubDefFor(clubName);
-  const league = leagueOf(clubName);
+  /* Round 146: everything in this viewer reads the SAVE's world. In a 2010
+     career the def is the 2010 def, the league is the 2010 league and the
+     roster is the 2010 squad aged to the save's season. */
+  const def = eraClubDefFor(clubName, career.eraId);
+  const league = careerLeagueOf({ clubName, eraId: career.eraId });
   /* Round 132: the rival viewer shows the rival AS HE IS THIS SEASON. Before
      the clock existed this read the frozen August 2026 bake, so in 2036 you
      could open Liverpool and be looking at a squad list a decade out of date
      while the league table next to it was being decided by something else. */
   const onYears = yearsOn(career);
-  const roster = projectedRoster(clubName, onYears);
-  const xiAvg = projectedXIAvg(clubName, onYears);
+  const roster = projectedRoster(clubName, onYears, career.eraId);
+  const xiAvg = projectedXIAvg(clubName, onYears, career.eraId);
   const squadValue = useMemo(() => roster.reduce((s, p) => s + p.v, 0), [roster]);
+  /* Round 145: the board line quotes the real league demand for this club,
+     lowercased into the sentence, instead of a raw "top N" rank. */
+  const boardWant = useMemo(() => {
+    const label = boardWantLabel(clubName, career.eraId);
+    // The relegation label is two sentences, which reads wrong mid line. Note
+    // "Win the 2. Bundesliga" also contains a period, so no generic split.
+    if (label === 'Stay up. Avoid relegation') return 'stay up, avoid relegation';
+    return label.charAt(0).toLowerCase() + label.slice(1);
+  }, [clubName, career.eraId]);
 
   const table = sortedTable(career.table);
   const rowIdx = table.findIndex(r => r.club === clubName);
   const row = rowIdx >= 0 ? table[rowIdx] : null;
-  const inMyLeague = leagueOf(career.clubName).clubs.includes(clubName);
+  const inMyLeague = careerLeagueOf(career).clubs.includes(clubName);
 
   return (
     <div>
@@ -83,8 +96,11 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
             <div><span className="text-xs font-bold text-foreground">{row.pts}</span> <span className="text-[9px] text-muted-foreground">points</span></div>
           </div>
         )}
+        {/* Round 145: this line used to print the raw strength rank ("top 20"
+            at a rank 20 club), which is exactly the phrasing the owner told us
+            to kill. It now says what the board actually demands. */}
         <div className="text-[9px] text-muted-foreground mt-2">
-          Board expects: <span className="text-foreground font-semibold">{def.expectation === 1 ? 'the title' : `top ${def.expectation}`}</span> · transfer budget around {money(def.budget)}
+          Board wants: <span className="text-foreground font-semibold">{boardWant}</span> · transfer budget around {money(def.budget)}
         </div>
       </div>
 
@@ -111,7 +127,7 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
         {roster.length === 0 && (
           <p className="text-xs text-muted-foreground text-center py-4">No scouted data on this squad yet.</p>
         )}
-        {isPartialClub(clubName) && roster.length > 0 && (
+        {isPartialClub(clubName, career.eraId) && roster.length > 0 && (
           <p className="text-[9px] text-yellow-500/80 pt-2">The market data covers only part of this squad.</p>
         )}
         {onYears > 0 && roster.length > 0 && (
