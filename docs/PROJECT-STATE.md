@@ -51,6 +51,24 @@ E. **DONE, Round 146: Stadium Tycoon, the idle game.** He sent two reference scr
    corrupt saves fall back safely. Live-verified in Chromium at 390x844: money grows,
    tiles buy, floaters fire, zero page errors.
 
+G. **DONE, Round 148: the Search Console redirect failure, fixed at the root.** His
+   screenshots (2026-08-17, 9:53 AM): 41 indexed and climbing, 88 not indexed, and a FAILED
+   validation on "Page with redirect". Root cause found in the repo: the r54 sitemap was
+   generated once by hand and drifted, submitting SIX routes that had since become 301
+   redirects (/world-cup, /football-draft, /guess-soccer-club, /guess-transfer-value,
+   /perfect-lineup, /grade-transfer; Google sampled 3 for the validation), plus five
+   retired orphan pages feeding the "crawled, currently not indexed" pile, and NO new
+   games since r54 (Stadium Tycoon was invisible to Google). Now: scripts/genSitemap.mjs
+   regenerates public/sitemap.xml mechanically from App.tsx routes plus the registry
+   (redirects excluded by construction), and scripts/simSitemap.mjs fails the suite if a
+   redirect is ever submitted, a registry game is ever missing, or an orphan sneaks in.
+   114 URLs now: 107 games, 7 static, /jeopardy legacy. EXPECTATIONS for whoever reads
+   the next screenshots: the failed validation heals after the next crawl of the new
+   sitemap (or tap VALIDATE FIX again in Search Console to hurry it), the 17 "Started"
+   resolve on their own, and the big "crawled not indexed" bucket is normal for a young
+   site: it shrinks as content and internal links age, which the 47k words of game
+   content are for. Nothing else actionable from our side today.
+
 F. **STANDING: more animation everywhere, more depth everywhere.** "Add more animation
    especially to the idle game... and all the games." First pass DONE, Round 147: Club
    Manager full time is staged now (verdict slams in after a beat, scorers stagger in
@@ -224,8 +242,8 @@ true on the date above; re-measure rather than quoting them.
 | `origin/main` head | `34b2198` = **Round 144** when this was written (2026-08-17 morning) |
 | How 139-144 landed | SHIP13 clicked via computer-use 2026-08-17 ~07:50 UTC. First run failed closed on a bad RUN139 assertion (bare `plus10` matched the removal comment); pattern fixed to `id: 'plus10'`, re-clicked, all six pushed clean. Lesson in SHIP-PIPELINE terms: absence assertions must target the old DEFINITION shape, and every bat's patterns get tested against the actual zip contents before delivery. |
 | Live site | douknowball.com published 2026-08-17 ~08:00 UTC at Round 144 (two deploy calls, second after sync was file-verified). Republish after 145+146 land. |
-| Packaged queue | Round **145** (title band + positional copy purge + the 2010-11 era), Round **146** (Stadium Tycoon) and Round **147** (the Club Manager animation pass). One click ships all three: **`SHIP14.bat`** (logs to `ship_log14.txt`). |
-| Next free round number | **148** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged queue | Round **145** (title band + positional copy purge + the 2010-11 era), Round **146** (Stadium Tycoon), Round **147** (the Club Manager animation pass) and Round **148** (the sitemap generator + Search Console redirect fix). One click ships all four: **`SHIP14.bat`** (logs to `ship_log14.txt`). |
+| Next free round number | **149** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven
