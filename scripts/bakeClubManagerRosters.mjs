@@ -121,15 +121,39 @@ const DB_TO_ENGINE = {
   'Go Ahead Eagles': 'Go Ahead Eagles', 'Fortuna Sittard': 'Fortuna Sittard',
   'SC Heerenveen': 'Heerenveen', 'PEC Zwolle': 'PEC Zwolle', 'FC Groningen': 'Groningen',
   'Excelsior Rotterdam': 'Excelsior', 'SC Telstar': 'Telstar', 'Willem II Tilburg': 'Willem II',
-  // UCL flavor clubs outside the baked leagues
+  // Primeira Liga 2026-27 (Round 140: promoted Marítimo + Académico de Viseu
+  // replace relegated Tondela + AVS; Casa Pia survived the playoff)
   'SL Benfica': 'Benfica', 'FC Porto': 'Porto', 'Sporting CP': 'Sporting CP',
-  'Celtic FC': 'Celtic', 'Rangers FC': 'Rangers', 'Galatasaray': 'Galatasaray',
-  'Fenerbahce': 'Fenerbahçe', 'Club Brugge KV': 'Club Brugge', 'Red Bull Salzburg': 'RB Salzburg',
+  'SC Braga': 'Braga', 'Vitória Guimarães SC': 'Vitória Guimarães',
+  'FC Famalicão': 'Famalicão', 'Rio Ave FC': 'Rio Ave', 'Casa Pia AC': 'Casa Pia',
+  'GD Estoril Praia': 'Estoril', 'Moreirense FC': 'Moreirense', 'FC Arouca': 'Arouca',
+  'Gil Vicente FC': 'Gil Vicente', 'CD Santa Clara': 'Santa Clara', 'CD Nacional': 'Nacional',
+  'CF Estrela Amadora': 'Estrela Amadora', 'FC Alverca': 'Alverca',
+  // Scottish Premiership 2026-27 (St Johnstone up, Livingston down,
+  // St Mirren survived the playoff)
+  'Celtic FC': 'Celtic', 'Rangers FC': 'Rangers', 'Aberdeen FC': 'Aberdeen',
+  'Heart of Midlothian FC': 'Hearts', 'Hibernian FC': 'Hibernian',
+  'Dundee United FC': 'Dundee United', 'Dundee FC': 'Dundee', 'Motherwell FC': 'Motherwell',
+  'Kilmarnock FC': 'Kilmarnock', 'Falkirk FC': 'Falkirk', 'St. Johnstone FC': 'St Johnstone',
+  // Süper Lig 2026-27 (Erzurumspor, Amedspor and Çorum FK up; Antalyaspor,
+  // Kayserispor and Fatih Karagümrük down)
+  'Galatasaray': 'Galatasaray', 'Fenerbahce': 'Fenerbahçe', 'Besiktas JK': 'Beşiktaş',
+  'Trabzonspor': 'Trabzonspor', 'Basaksehir FK': 'Başakşehir', 'Samsunspor': 'Samsunspor',
+  'Eyüpspor': 'Eyüpspor', 'Göztepe': 'Göztepe', 'Kasimpasa': 'Kasımpaşa',
+  'Alanyaspor': 'Alanyaspor', 'Konyaspor': 'Konyaspor', 'Gaziantep FK': 'Gaziantep FK',
+  'Genclerbirligi Ankara': 'Gençlerbirliği', 'Caykur Rizespor': 'Rizespor',
+  // UCL flavor clubs outside the baked leagues
+  'Club Brugge KV': 'Club Brugge', 'Red Bull Salzburg': 'RB Salzburg',
   'Olympiacos Piraeus': 'Olympiacos',
 };
 
-/** Engine clubs with no dataset rows at all: baked as empty, youth-padded in game. */
-const KNOWN_EMPTY = ['Abha', 'ADO Den Haag', 'Cambuur'];
+/** Engine clubs with no dataset rows at all: baked as empty, youth-padded in game.
+ *  Round 140 additions: the import ranks players by value worldwide, so newly
+ *  promoted sides and the smallest top flight squads sit below its floor.
+ *  They are real clubs in verified 2026-27 memberships, marked CM_PARTIAL. */
+const KNOWN_EMPTY = ['Abha', 'ADO Den Haag', 'Cambuur',
+  'Marítimo', 'Académico de Viseu', 'St Mirren',
+  'Erzurumspor', 'Amedspor', 'Çorum FK', 'Kocaelispor'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([
@@ -173,22 +197,40 @@ function gbpM(usd) {
 /* ------------------------------------------------------------------ */
 const dbNames = Object.keys(DB_TO_ENGINE);
 const rows = [];
-for (let from = 0; ; from += 1000) {
-  const { data, error } = await supabase
-    .from('player_market_values_dedup')
-    .select('id,player_name,club,position,age,market_value_usd,year')
-    .in('year', [2025, 2026])
-    .in('club', dbNames)
-    .order('id', { ascending: true })
-    .range(from, from + 999);
-  if (error) {
-    console.error('FATAL: query failed:', error.message);
-    process.exit(1);
+
+/* Round 140: `--dump=path.json` runs the bake OFFLINE from a rows dump,
+ * because the cloud sandbox's network egress does not reach Supabase
+ * directly. The dump is produced through the Supabase MCP with:
+ *   SELECT id,player_name,club,position,age,market_value_usd,year
+ *   FROM player_market_values_dedup WHERE year IN (2025,2026)
+ * saved as {"rows":[...]}. Same columns, same source view, so the two
+ * paths bake identical files. With no flag it fetches live as always. */
+const dumpArg = process.argv.find(a => a.startsWith('--dump='));
+if (dumpArg) {
+  const dumpPath = dumpArg.slice('--dump='.length);
+  const dump = JSON.parse(fs.readFileSync(dumpPath, 'utf8'));
+  const all = dump.rows ?? dump;
+  const nameSet = new Set(dbNames);
+  rows.push(...all.filter(r => [2025, 2026].includes(r.year) && nameSet.has(r.club)));
+  console.log(`Loaded ${rows.length} usable rows from dump ${dumpPath} (${all.length} in file)`);
+} else {
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await supabase
+      .from('player_market_values_dedup')
+      .select('id,player_name,club,position,age,market_value_usd,year')
+      .in('year', [2025, 2026])
+      .in('club', dbNames)
+      .order('id', { ascending: true })
+      .range(from, from + 999);
+    if (error) {
+      console.error('FATAL: query failed:', error.message);
+      process.exit(1);
+    }
+    rows.push(...(data ?? []));
+    if (!data || data.length < 1000) break;
   }
-  rows.push(...(data ?? []));
-  if (!data || data.length < 1000) break;
+  console.log(`Fetched ${rows.length} rows (2025+2026)`);
 }
-console.log(`Fetched ${rows.length} rows (2025+2026)`);
 
 /* ------------------------------------------------------------------ */
 /* Assemble: per player keep the 2026 row, else discounted 2025       */

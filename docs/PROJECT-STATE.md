@@ -55,18 +55,31 @@ target, not the names.
    summer, 3 in January) with a deadline instead of slamming shut at the first fixture. The
    transfer screen shows weeks-to-deadline.
 
-6. **OPEN: way way way more leagues.** "There's many leagues u must add with correct data. And
-   some second divisions too and maybe up to 5." Coverage confirmed in the same Supabase
-   table: Porto, Benfica, Sporting, Celtic, Rangers, Galatasaray, Fenerbahce, Besiktas,
-   Brugge, Anderlecht, Flamengo, Palmeiras, Boca, River, Hamburg, Copenhagen, Olympiacos,
-   Salzburg all have 2026 rows. So Primeira Liga, Scottish Premiership, Turkish Super Lig,
-   Belgian Pro League, Brazilian Serie A, Argentine Primera, and second divisions (2. Bundesliga
-   at minimum: Hamburg and Schalke are already baked) are all buildable through the existing
-   `bakeClubManagerRosters.mjs` pipeline plus league metadata (name, cup, euro slots,
-   relegation count, strength priors). This also fixes his "so many players from the transfer
-   market missing" complaint, since the market IS the baked league set. Do it league by
-   league, verified 2026-27 memberships each time, and extend `EURO_SLOTS` and
-   `relegationSpots` for each.
+6. **IN PROGRESS: way way way more leagues.** "There's many leagues u must add with correct
+   data. And some second divisions too and maybe up to 5."
+
+   **Wave 1 DONE, Round 140: Primeira Liga, Scottish Premiership and the Süper Lig.** 48 new
+   playable clubs (234 total), 205 newly baked real players (3,147 total). Memberships
+   verified for 2026-27: Portugal (Marítimo and Académico de Viseu up, Tondela and AVS down,
+   Casa Pia survived the playoff), Scotland (St Johnstone up, Livingston down, St Mirren
+   survived the playoff), Turkey (Erzurumspor, Amedspor and Çorum FK up; Antalyaspor,
+   Kayserispor and Fatih Karagümrük down). Every new league carries proper euro slots,
+   relegation counts (Scotland drops 1, Portugal 2, Turkey 3), cup names, priors and colors,
+   and the thin tails are marked in CM_PARTIAL exactly like the Championship has always been.
+
+   **How wave 1 was built, because wave 2 repeats it:** the sandbox cannot reach Supabase
+   directly, so rows were pulled through the Supabase MCP and baked offline.
+   `bakeClubManagerRosters.mjs` now takes `--dump=rows.json` for exactly this, and its
+   DB_TO_ENGINE map already carries all wave 1 names. The dataset ranks players by value
+   worldwide, so small clubs sit below its floor: that is why St Mirren and the promoted
+   sides bake empty and youth-pad in game, the Abha and Cambuur precedent.
+
+   **Wave 2 queue, coverage already confirmed in the table:** Belgian Pro League (Club Brugge,
+   Anderlecht rows exist), Brazilian Serie A (Flamengo, Palmeiras), Argentine Primera (Boca,
+   River), 2. Bundesliga as the first extra second division (Hamburg and Schalke are already
+   baked; note both are in the 2026-27 Bundesliga, so the second division list needs its own
+   verification pass). Same recipe: verify membership via web plus the table, extend
+   DB_TO_ENGINE, dump, bake, wire metadata, extend EURO_SLOTS and relegationSpots.
 
 7. **OPEN: way more headlines.** More variety in the news feed: derby previews, form stories,
    record fees, managerial pressure elsewhere, title race framing. Mind the two permanent
@@ -102,9 +115,9 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `03afbfd` = **Round 138** when this was written |
-| Packaged queue | Round **139**, the review round: owner feedback items 2, 4 and 5 in one commit because they interlock in the same files. `RUN139.bat` alone ships it. |
-| Live site | Publish triggered 2026-08-16 after Round 137 synced. Re-publish and verify after 139 lands. |
-| Next free round number | **140** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged queue | Rounds **139** (the review round: feedback items 2, 4 and 5) and **140** (leagues wave 1). One click ships both: **`SHIP9.bat`** (logs to `ship_log9.txt`). |
+| Live site | Publish triggered 2026-08-16 after Round 137 synced. Re-publish and verify after 139 and 140 land. |
+| Next free round number | **141** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

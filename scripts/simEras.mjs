@@ -327,9 +327,16 @@ console.log('4) Twenty seasons out, the league is still a league');
     const xis = Object.keys(world).map(c => projectedXIAvg(c, y)).filter(v => v !== null);
     const oldPerClub = Object.values(world).filter(r => r.length).map(r => Math.max(...r.map(p => p.a)));
     console.log(`   world +${String(y).padStart(2)}y: ${all.length} players, mean age ${fx(mean(all.map(p => p.a)), 1)}, club XI mean ${fx(mean(xis), 1)} (min ${Math.min(...xis)}, max ${Math.max(...xis)}), oldest club man median ${oldPerClub.sort((a, b) => a - b)[Math.floor(oldPerClub.length / 2)]}`);
-    // Three clubs are empty in the bake itself and are youth padded by the
-    // engine, so the count must not GROW: nobody new may run dry.
-    if (empty > 3) fail(`${empty} clubs have no players at all at +${y} years`);
+    /* Some clubs are empty in the bake itself (the dataset ranks players by
+       value worldwide and the smallest squads sit under its floor) and the
+       engine youth-pads them. The honest bound is the bake's own truth, not
+       a number pinned in a harness: every empty club must be one that baked
+       empty AND is disclosed in CM_PARTIAL. Round 140 grew that set from 3
+       to 10 when Portugal, Scotland and Turkey arrived. */
+    const bakedEmpty = Object.entries(DATA.CM_ROSTERS).filter(([, r]) => r.length === 0).map(([c]) => c);
+    const undisclosed = bakedEmpty.filter(c => !DATA.CM_PARTIAL.includes(c));
+    if (undisclosed.length) fail(`empty clubs not disclosed in CM_PARTIAL: ${undisclosed.join(', ')}`);
+    if (empty > bakedEmpty.length) fail(`${empty} clubs have no players at all at +${y} years, but only ${bakedEmpty.length} baked empty: somebody new ran dry`);
     if (all.length < DATA.CM_ROSTER_META.players * 0.98) fail(`the world lost players by +${y} years (${all.length})`);
     if (mean(all.map(p => p.a)) > 27.5) fail(`the whole world averages ${fx(mean(all.map(p => p.a)), 1)} years old at +${y}`);
     if (Math.abs(mean(xis) - 74.1) > 2.5) fail(`club strength drifted to ${fx(mean(xis), 1)} at +${y} years, it starts at 74.1`);

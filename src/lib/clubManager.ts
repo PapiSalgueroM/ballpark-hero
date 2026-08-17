@@ -905,6 +905,28 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'mlsWest', name: 'MLS Western Conference', cupName: 'U.S. Open Cup', euro: false,
     clubs: ['Austin FC', 'Colorado Rapids', 'FC Dallas', 'Houston Dynamo', 'LA Galaxy', 'LAFC', 'Minnesota United', 'Portland Timbers', 'Real Salt Lake', 'San Diego FC', 'San Jose Earthquakes', 'Seattle Sounders', 'Sporting Kansas City', 'St. Louis City', 'Vancouver Whitecaps'],
   },
+  /* Round 140, from the owner's review: "way way way more leagues... with
+     correct data." Memberships verified 2026-08-16 against published season
+     coverage: Primeira Liga (Marítimo and Académico de Viseu up, Tondela and
+     AVS down, Casa Pia survived the playoff), Scottish Premiership
+     (St Johnstone up, Livingston down, St Mirren survived the playoff) and
+     the Süper Lig (Erzurumspor, Amedspor and Çorum FK up; Antalyaspor,
+     Kayserispor and Fatih Karagümrük down). Rosters come from the same
+     Transfermarkt-derived table as every other league; the smallest squads
+     sit below that dataset's value floor and are marked in CM_PARTIAL, the
+     same honesty rule the Championship has shipped with since Round 72. */
+  {
+    id: 'primeira', name: 'Primeira Liga', cupName: 'Taça de Portugal', euro: true,
+    clubs: ['Porto', 'Benfica', 'Sporting CP', 'Braga', 'Vitória Guimarães', 'Famalicão', 'Rio Ave', 'Casa Pia', 'Estoril', 'Moreirense', 'Arouca', 'Gil Vicente', 'Santa Clara', 'Nacional', 'Estrela Amadora', 'Alverca', 'Marítimo', 'Académico de Viseu'],
+  },
+  {
+    id: 'scottish', name: 'Scottish Premiership', cupName: 'Scottish Cup', euro: true,
+    clubs: ['Celtic', 'Rangers', 'Aberdeen', 'Hearts', 'Hibernian', 'Dundee United', 'Dundee', 'Motherwell', 'St Mirren', 'Kilmarnock', 'Falkirk', 'St Johnstone'],
+  },
+  {
+    id: 'superlig', name: 'Süper Lig', cupName: 'Turkish Cup', euro: true,
+    clubs: ['Galatasaray', 'Fenerbahçe', 'Beşiktaş', 'Trabzonspor', 'Başakşehir', 'Samsunspor', 'Eyüpspor', 'Göztepe', 'Kasımpaşa', 'Alanyaspor', 'Konyaspor', 'Gaziantep FK', 'Gençlerbirliği', 'Kocaelispor', 'Rizespor', 'Erzurumspor', 'Amedspor', 'Çorum FK'],
+  },
 ];
 
 /** Strength priors for league clubs the player pool cannot rate. */
@@ -934,6 +956,22 @@ const STRENGTH_PRIORS: Record<string, number> = {
   'Nice': 75, 'Lens': 74, 'Rennes': 74, 'Strasbourg': 72, 'Brest': 71,
   'Toulouse': 70, 'Nantes': 69, 'Auxerre': 68, 'Angers': 67, 'Le Havre': 67,
   'Metz': 66, 'Lorient': 66, 'Paris FC': 66,
+  /* Round 140: priors for the new leagues' thin-data clubs, so a squad the
+     value table barely covers still lands at a sane strength instead of the
+     generic 65. Set from league standing common knowledge, deliberately
+     conservative; clubs with rich baked squads (Porto, Celtic, Galatasaray
+     and co) rate from their data and ignore these. */
+  // Primeira Liga
+  'Vitória Guimarães': 72, 'Casa Pia': 66, 'Estoril': 67, 'Moreirense': 66,
+  'Arouca': 65, 'Santa Clara': 66, 'Nacional': 64, 'Estrela Amadora': 63,
+  'Alverca': 63, 'Marítimo': 63, 'Académico de Viseu': 62,
+  // Scottish Premiership
+  'Aberdeen': 69, 'Hearts': 69, 'Hibernian': 68, 'Dundee United': 66, 'Dundee': 65,
+  'Motherwell': 65, 'St Mirren': 65, 'Kilmarnock': 64, 'Falkirk': 63, 'St Johnstone': 63,
+  // Süper Lig
+  'Kasımpaşa': 67, 'Alanyaspor': 66, 'Konyaspor': 66, 'Gaziantep FK': 65,
+  'Gençlerbirliği': 64, 'Kocaelispor': 64, 'Rizespor': 65, 'Eyüpspor': 66,
+  'Erzurumspor': 63, 'Amedspor': 63, 'Çorum FK': 62,
 };
 
 /** The real league a club plays in. Every playable club is covered. */
@@ -956,6 +994,10 @@ export const NATIONS: NationDef[] = [
   { id: 'netherlands', name: 'Netherlands', flag: '🇳🇱', leagueIds: ['eredivisie'] },
   { id: 'saudi', name: 'Saudi Arabia', flag: '🇸🇦', leagueIds: ['saudi'] },
   { id: 'usa', name: 'United States', flag: '🇺🇸', leagueIds: ['mlsEast', 'mlsWest'] },
+  // Round 140
+  { id: 'portugal', name: 'Portugal', flag: '🇵🇹', leagueIds: ['primeira'] },
+  { id: 'scotland', name: 'Scotland', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', leagueIds: ['scottish'] },
+  { id: 'turkey', name: 'Turkey', flag: '🇹🇷', leagueIds: ['superlig'] },
 ];
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
@@ -1028,6 +1070,22 @@ const CLUB_COLORS: Record<string, string> = {
   'Go Ahead Eagles': '#f2c200', 'Fortuna Sittard': '#f6c500', 'Heerenveen': '#1560bd',
   'PEC Zwolle': '#1660a8', 'Groningen': '#009651', 'Excelsior': '#c41f30', 'Telstar': '#d9d9d9',
   'ADO Den Haag': '#0d8a4e', 'Cambuur': '#f5d800', 'Willem II': '#2f4d8f',
+  // Round 140: Primeira Liga
+  'Porto': '#1a4c9d', 'Benfica': '#e30613', 'Sporting CP': '#0a7857', 'Braga': '#d02128',
+  'Vitória Guimarães': '#d9d9d9', 'Famalicão': '#1660a8', 'Rio Ave': '#0a8a4e', 'Casa Pia': '#2b2b2b',
+  'Estoril': '#f5d800', 'Moreirense': '#0a7040', 'Arouca': '#f2b705', 'Gil Vicente': '#c41f30',
+  'Santa Clara': '#d02128', 'Nacional': '#2b2b2b', 'Estrela Amadora': '#d02128', 'Alverca': '#d02128',
+  'Marítimo': '#0a7040', 'Académico de Viseu': '#2f4d8f',
+  // Round 140: Scottish Premiership
+  'Celtic': '#0a7857', 'Rangers': '#1b458f', 'Aberdeen': '#e2001a', 'Hearts': '#7d1c2a',
+  'Hibernian': '#0a7040', 'Dundee United': '#f26522', 'Dundee': '#1b458f', 'Motherwell': '#fbb914',
+  'St Mirren': '#2b2b2b', 'Kilmarnock': '#1b458f', 'Falkirk': '#1b3f8f', 'St Johnstone': '#1b458f',
+  // Round 140: Süper Lig
+  'Galatasaray': '#e30613', 'Fenerbahçe': '#163962', 'Beşiktaş': '#2b2b2b', 'Trabzonspor': '#7d1c2a',
+  'Başakşehir': '#163962', 'Samsunspor': '#d02128', 'Eyüpspor': '#5c2d91', 'Göztepe': '#f2b705',
+  'Kasımpaşa': '#163962', 'Alanyaspor': '#f26522', 'Konyaspor': '#0a7040', 'Gaziantep FK': '#d02128',
+  'Gençlerbirliği': '#d02128', 'Kocaelispor': '#0a7040', 'Rizespor': '#0a7040',
+  'Erzurumspor': '#163962', 'Amedspor': '#0a7040', 'Çorum FK': '#d02128',
 };
 
 /**
@@ -4161,9 +4219,10 @@ function nearestRival(clubName: string): string | null {
  * heavyweights are all told to win it, not to finish second.
  */
 function relegationSpots(leagueId: string): number {
-  // MLS conferences do not relegate; everyone else drops 2-3.
+  // MLS conferences do not relegate; everyone else drops 1-3.
   if (leagueId.startsWith('mls')) return 0;
-  if (leagueId === 'bundesliga' || leagueId === 'eredivisie') return 2;
+  if (leagueId === 'scottish') return 1;
+  if (leagueId === 'bundesliga' || leagueId === 'eredivisie' || leagueId === 'primeira') return 2;
   return 3;
 }
 
@@ -4192,6 +4251,10 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
   bundesliga: { ucl: 4, uel: 5, uecl: 6 },
   ligue1:     { ucl: 3, uel: 4, uecl: 5 },
   eredivisie: { ucl: 2, uel: 3, uecl: 4 },
+  // Round 140. Simplified like the rest: qualifying-round routes count as in.
+  primeira:   { ucl: 2, uel: 3, uecl: 4 },
+  scottish:   { ucl: 1, uel: 2, uecl: 3 },
+  superlig:   { ucl: 1, uel: 2, uecl: 3 },
 };
 
 function leagueDemand(rank: number, tier: number, size: number, league: LeagueDef): { target: number; label: string } {

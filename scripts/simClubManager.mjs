@@ -42,7 +42,14 @@ const isNum = v => typeof v === 'number' && Number.isFinite(v);
 
 /* ---------- 1. Static shape ---------- */
 console.log('1) Nations and leagues');
-if (NATIONS.length !== 8) fail(`expected 8 nations, got ${NATIONS.length}`);
+/* Round 140 added Portugal, Scotland and Turkey. Every nation must map to
+   real leagues and every league to a nation, so the count is derived rather
+   than pinned, and a nation with no playable league is the failure mode. */
+if (NATIONS.length !== 11) fail(`expected 11 nations, got ${NATIONS.length}`);
+const mappedLeagueIds = new Set(NATIONS.flatMap(n => n.leagueIds));
+for (const lg of REAL_LEAGUES) {
+  if (!mappedLeagueIds.has(lg.id)) fail(`league ${lg.id} belongs to no nation, it is unreachable from the picker`);
+}
 let totalClubs = 0;
 for (const n of NATIONS) {
   for (const leagueId of n.leagueIds) {
@@ -60,7 +67,7 @@ for (const n of NATIONS) {
     }
   }
 }
-if (totalClubs !== 186) fail(`expected 186 playable clubs, got ${totalClubs}`);
+if (totalClubs !== 234) fail(`expected 234 playable clubs (186 plus Round 140's 48), got ${totalClubs}`);
 const ordering = [
   ['Real Madrid', 'Racing Santander'], ['Bayern Munich', 'Paderborn'], ['PSG', 'Le Havre'],
   ['Liverpool', 'Hull City'], ['Wolves', 'Lincoln City'], ['Al-Hilal', 'Al-Riyadh'],
