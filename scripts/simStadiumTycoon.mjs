@@ -44,6 +44,7 @@ const {
   TRACKS, newTycoon, tick, buy, tap, costOf, canBuy, incomePerSec,
   prestige, canPrestige, prestigeThreshold, offlineEarnings,
   serializeTycoon, deserializeTycoon, repMult, attendance, capacity,
+  activateBoost, boostReady, boostActive, BOOST_CHARGE_SEC, BOOST_DURATION_SEC,
 } = T;
 
 let failures = 0;
@@ -209,6 +210,45 @@ console.log('5) Save plumbing');
   if (deserializeTycoon('not json at all', 0) !== null) fail('garbage parsed as a save');
   if (deserializeTycoon(JSON.stringify({ v: 99 }), 0) !== null) fail('a future save version loaded into this engine');
   console.log('   roundtrip identity holds, corruption falls back safely');
+}
+
+/* ---------- 6. Matchday Hype pays exactly double, exactly once ---------- */
+console.log('6) The boost is honest');
+{
+  const roll = seeded(77);
+  let s = playFor(newTycoon(0), 300, roll).s;
+  // Not ready early: five minutes of play is under the eight minute charge.
+  if (boostReady(s)) fail('hype was ready before its charge time');
+  if (activateBoost(s) !== s) fail('a partial charge still activated');
+  // Charge to full with pure ticking (no purchases needed to charge).
+  while (!boostReady(s)) s = tick(s, 10, roll).state;
+  const base = incomePerSec(s);
+  const lit = activateBoost(s);
+  if (!boostActive(lit)) fail('activation did not light the boost');
+  const ratio = incomePerSec(lit) / base;
+  if (Math.abs(ratio - 2) > 1e-9) fail(`boost pays x${ratio}, the button says x2`);
+  if (activateBoost(lit) !== lit) fail('an active boost re-activated (stacking)');
+  // It burns out on schedule and the charge starts from zero.
+  let cooled = lit;
+  for (let t = 0; t < BOOST_DURATION_SEC + 5; t += 5) cooled = tick(cooled, 5, roll).state;
+  if (boostActive(cooled)) fail('the boost outlived its sixty seconds');
+  if (cooled.boostChargeSec > 20) fail(`the charge did not restart near zero (${cooled.boostChargeSec.toFixed(1)}s)`);
+  // The multiplier is exactly the boostLeftSec flag and nothing else: the
+  // same burnt-out state relit by hand doubles again, precisely.
+  const relit = { ...cooled, boostLeftSec: 1 };
+  if (Math.abs(incomePerSec(relit) / incomePerSec(cooled) - 2) > 1e-9) {
+    fail('the multiplier is not cleanly keyed to the boost clock');
+  }
+  // Away pay ignores an active boost entirely.
+  const withB = { ...lit, savedAt: 1000000 };
+  const withoutB = { ...lit, boostLeftSec: 0, savedAt: 1000000 };
+  const payB = offlineEarnings(withB, 1000000 + 3600 * 1000);
+  const payN = offlineEarnings(withoutB, 1000000 + 3600 * 1000);
+  if (payB !== payN) fail(`an active boost changed away pay: ${payB} vs ${payN}`);
+  // And the clocks survive a save.
+  const back = deserializeTycoon(serializeTycoon(lit, 5), 5);
+  if (!back || Math.abs(back.boostLeftSec - lit.boostLeftSec) > 0.001) fail('the boost clock did not survive a save');
+  console.log(`   x${ratio.toFixed(2)} while lit, no stacking, burns out on time, away pay unchanged`);
 }
 
 console.log('');

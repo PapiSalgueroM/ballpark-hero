@@ -19,6 +19,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
   TRACKS, levelOf, costOf, canBuy, capacity, attendance, incomePerSec,
   tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney,
+  boostReady, boostActive, BOOST_CHARGE_SEC,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 
@@ -145,13 +146,40 @@ export default function StadiumTycoon() {
         <div className="flex items-end justify-between mb-2 px-1">
           <div>
             <div className="text-3xl md:text-4xl font-bold font-display text-gold tabular-nums">{fmtMoney(money)}</div>
-            <div className="text-[11px] text-muted-foreground">+{fmtMoney(rate)}/s{s.streak >= 2 && <span className="text-orange-400 font-bold"> · streak x{streakMult(s).toFixed(2)}</span>}</div>
+            <div className="text-[11px] text-muted-foreground">
+              +{fmtMoney(rate)}/s
+              {boostActive(s) && <span className="text-yellow-400 font-bold"> · HYPE x2 ({Math.ceil(s.boostLeftSec)}s)</span>}
+              {s.streak >= 2 && <span className="text-orange-400 font-bold"> · streak x{streakMult(s).toFixed(2)}</span>}
+            </div>
           </div>
           <div className="text-right">
             <div className="text-sm font-bold text-foreground tabular-nums">{fans.toLocaleString()} <span className="text-[10px] text-muted-foreground font-normal">/ {cap.toLocaleString()} seats</span></div>
             <div className="text-[11px] text-muted-foreground">{Math.floor(s.fanbase).toLocaleString()} fans follow you</div>
           </div>
         </div>
+
+        {/* Round 150: Matchday Hype. Charges over eight minutes of play,
+            one press pays double for a minute. The button is the genre's
+            heartbeat and his reference screenshots had it front and center. */}
+        <button
+          onClick={g.doBoost}
+          disabled={!boostReady(s)}
+          className={cn(
+            'relative w-full mb-2 py-2 rounded-xl font-bold text-sm overflow-hidden border transition-all',
+            boostActive(s) ? 'border-yellow-500 bg-yellow-500/15 text-yellow-400'
+              : boostReady(s) ? 'border-yellow-500 bg-yellow-500 text-black st-glow'
+              : 'border-border bg-card text-muted-foreground',
+          )}
+        >
+          {!boostActive(s) && !boostReady(s) && (
+            <span className="absolute inset-y-0 left-0 bg-yellow-500/15 transition-all duration-700" style={{ width: `${Math.min(100, ((s.boostChargeSec ?? 0) / BOOST_CHARGE_SEC) * 100)}%` }} />
+          )}
+          <span className="relative">
+            {boostActive(s) ? `🔥 HYPE IS LIVE: everything pays x2 (${Math.ceil(s.boostLeftSec)}s)`
+              : boostReady(s) ? '📣 MATCHDAY HYPE READY: press for x2'
+              : `📣 Matchday Hype charging: ${Math.floor(((s.boostChargeSec ?? 0) / BOOST_CHARGE_SEC) * 100)}%`}
+          </span>
+        </button>
 
         {/* The stadium: stand + pitch + all the motion */}
         <div ref={pitchRef} onClick={onPitchClick} className="relative rounded-2xl overflow-hidden border border-border cursor-pointer select-none mb-3 group">
@@ -293,6 +321,7 @@ export default function StadiumTycoon() {
               <p>You run a tiny club's matchday money machine. Fans show up if there are seats and things to spend on; every fan pays you every second.</p>
               <p>The match on screen is real: your Squad level drives goals, goals pay a bonus scaled by the crowd, wins extend a streak that multiplies everything and pulls in new fans. Opponents get harder forever.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
+              <p>Matchday Hype charges over eight minutes of play. Press it and everything pays double for sixty seconds: income, taps, goal and win bonuses. It does not charge or burn while you are away.</p>
               <p>When lifetime earnings hit the bar, sell up: everything resets except a permanent Reputation star worth +50% income, forever, each.</p>
               <p>Away from the game, you earn at half speed for up to 8 hours. Progress saves on this device.</p>
               <p>Worked example: at 400 fans and $12/s, one goal pays about $240, a win about $880, and Stands level 10 (adding 40 seats) pays itself back in under two minutes if the ground was full.</p>

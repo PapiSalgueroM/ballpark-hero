@@ -673,7 +673,8 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Attendance is the smaller of your seats and your fanbase, so Stands matter only when the ground is full and spending tracks matter only when it is not.",
       "Matches run about two real minutes. Your Squad level drives your goal chance; opponents get harder with every match played, forever.",
       "A win extends the streak, a draw keeps it alive without extending it, a loss ends it. The streak multiplier caps at ten wins.",
-      "Away earnings run at half your income rate, capped at eight hours, and only count after you have been gone at least thirty seconds.",
+      "Matchday Hype charges over eight minutes of play; pressing it doubles all money for sixty seconds. It never charges or burns while you are away, and it cannot stack.",
+      "Away earnings run at half your unboosted income rate, capped at eight hours, and only count after you have been gone at least thirty seconds.",
       "Progress saves on this device automatically. Selling up is permanent: only Reputation and your lifetime totals survive.",
     ],
     example: [

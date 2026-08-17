@@ -9,6 +9,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
+  activateBoost,
 } from '@/lib/stadiumTycoon';
 
 export interface Floater {
@@ -123,6 +124,16 @@ export function useStadiumTycoon() {
     setState(after);
   }, [pushFloater]);
 
+  const doBoost = useCallback(() => {
+    const before = stateRef.current;
+    const after = activateBoost(before);
+    if (after !== before) {
+      pushFloater('MATCHDAY HYPE x2!', 'win', 30, 18);
+      setConfetti(c => c + 1);
+      setState(after);
+    }
+  }, [pushFloater]);
+
   const doPrestige = useCallback(() => {
     setState(s => {
       const next = prestige(s, Date.now());
@@ -133,5 +144,5 @@ export function useStadiumTycoon() {
 
   const dismissAway = useCallback(() => setAwayPay(null), []);
 
-  return { state, floaters, awayPay, dismissAway, confetti, doBuy, doTap, doPrestige };
+  return { state, floaters, awayPay, dismissAway, confetti, doBuy, doTap, doPrestige, doBoost };
 }

@@ -74,6 +74,12 @@ export interface TycoonState {
   totalGoals: number;
   totalWins: number;
   totalTaps: number;
+  /** Round 150, Matchday Hype: seconds of charge banked toward the boost
+   *  (full at BOOST_CHARGE_SEC), and seconds left on an active boost. Both
+   *  advance only inside tick, so the lib stays pure and offline time never
+   *  charges or spends hype. */
+  boostChargeSec: number;
+  boostLeftSec: number;
 }
 
 export const TYCOON_SAVE_KEY = 'stadiumTycoonSaveV1';
@@ -96,7 +102,31 @@ export function newTycoon(now: number): TycoonState {
     totalGoals: 0,
     totalWins: 0,
     totalTaps: 0,
+    boostChargeSec: 0,
+    boostLeftSec: 0,
   };
+}
+
+/* Round 150: Matchday Hype. The crowd builds it over eight minutes of play,
+ * one button spends it, and for sixty seconds everything pays double: the
+ * per-second income, the taps that scale off it, the goal and win bonuses.
+ * The numbers sit where the harness measured them fair: a dedicated player
+ * gets about one boost per upgrade wall, never a boost economy. */
+export const BOOST_CHARGE_SEC = 8 * 60;
+export const BOOST_DURATION_SEC = 60;
+
+export function boostReady(s: TycoonState): boolean {
+  return (s.boostChargeSec ?? 0) >= BOOST_CHARGE_SEC && (s.boostLeftSec ?? 0) <= 0;
+}
+
+export function boostActive(s: TycoonState): boolean {
+  return (s.boostLeftSec ?? 0) > 0;
+}
+
+/** Spend a full charge. No-op unless genuinely ready, so no stacking. */
+export function activateBoost(s: TycoonState): TycoonState {
+  if (!boostReady(s)) return s;
+  return { ...s, boostChargeSec: 0, boostLeftSec: BOOST_DURATION_SEC };
 }
 
 export function trackById(id: string): TycoonTrack {
@@ -147,7 +177,10 @@ export function incomePerSec(s: TycoonState): number {
   const fans = attendance(s);
   const perFan = perFanRate(s);
   const parking = levelOf(s, 'parking') * 0.9;
-  return (fans * perFan + parking) * repMult(s) * streakMult(s);
+  // Round 150: an active Matchday Hype doubles everything downstream of
+  // this line, which is deliberately ALL money (taps and bonuses included).
+  const hype = boostActive(s) ? 2 : 1;
+  return (fans * perFan + parking) * repMult(s) * streakMult(s) * hype;
 }
 
 /** One tap on the stadium. Megaphone makes taps matter deep into a run. */
@@ -241,6 +274,16 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
   st.lifetime += earned;
   st.fanbase += fanGrowthPerSec(st) * dt;
 
+  // Round 150: hype charges while you play and burns while it is lit. Both
+  // clocks only move here, so background tabs and offline stretches never
+  // charge or waste a boost (dt is already clamped by the caller and the
+  // fast-forward guard below).
+  if ((st.boostLeftSec ?? 0) > 0) {
+    st.boostLeftSec = Math.max(0, (st.boostLeftSec ?? 0) - dt);
+  } else {
+    st.boostChargeSec = Math.min(BOOST_CHARGE_SEC, (st.boostChargeSec ?? 0) + dt);
+  }
+
   // The match advances minute by minute.
   const MIN_LEN = 1.4;
   let minutes = Math.floor((st.minute * MIN_LEN + dt) / MIN_LEN) - st.minute;
@@ -320,12 +363,15 @@ export function prestige(s: TycoonState, now: number): TycoonState {
 
 /* ---------------- offline earnings ---------------- */
 
-/** Away pay: half rate, capped at eight hours. Returns whole pounds. */
+/** Away pay: half rate, capped at eight hours. Returns whole pounds.
+ *  Round 150: computed at the UNboosted rate on purpose. Saving mid-hype
+ *  and leaving must not turn sixty seconds of double pay into eight hours
+ *  of it. */
 export function offlineEarnings(s: TycoonState, now: number): number {
   const elapsed = Math.max(0, (now - s.savedAt) / 1000);
   const capped = Math.min(elapsed, 8 * 3600);
   if (capped < 30) return 0; // a tab refresh is not a trip away
-  return Math.round(incomePerSec(s) * capped * 0.5);
+  return Math.round(incomePerSec({ ...s, boostLeftSec: 0 }) * capped * 0.5);
 }
 
 /* ---------------- save plumbing ---------------- */
@@ -350,6 +396,11 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
       if (!Number.isFinite(s[k]) || s[k] < 0) s[k] = base[k];
     }
     if (!Number.isFinite(s.rep) || s.rep < 0 || s.rep > 50) s.rep = 0;
+    // Round 150: hype clocks come back sane whatever the save says.
+    if (!Number.isFinite(s.boostChargeSec) || s.boostChargeSec < 0) s.boostChargeSec = 0;
+    s.boostChargeSec = Math.min(s.boostChargeSec, BOOST_CHARGE_SEC);
+    if (!Number.isFinite(s.boostLeftSec) || s.boostLeftSec < 0) s.boostLeftSec = 0;
+    s.boostLeftSec = Math.min(s.boostLeftSec, BOOST_DURATION_SEC);
     return s;
   } catch {
     return null;

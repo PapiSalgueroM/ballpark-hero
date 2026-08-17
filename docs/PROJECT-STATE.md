@@ -36,6 +36,14 @@ D. **OPEN: create-a-club.** "Create my team for the manger game and its full cus
    crest builder (original shapes only, no real crests), stadium name, starting budget,
    league choice, generated starting squad, real transfer market. Big feature, own round.
 
+E2. **DONE, Round 150: Matchday Hype, the tycoon's boost.** He nudged "Dont forget the idle
+   game" the same afternoon, so it got the genre's heartbeat from his reference shots: a
+   boost that charges over eight minutes of play and pays exactly double for sixty seconds
+   when pressed (income, taps, goal and win bonuses, all downstream of one multiplier).
+   Charges only while playing, never stacks, away pay stays unboosted by construction, and
+   simStadiumTycoon section 6 pins all of it (x2.00 measured, burnout on schedule, save
+   roundtrip). The button fills like a battery, glows when ready, burns while lit.
+
 E. **DONE, Round 146: Stadium Tycoon, the idle game.** He sent two reference screenshots of
    an idle sports tycoon and asked to be surprised, with animation named twice. Shipped
    original: /stadium-tycoon, a matchday-economy idle game where attendance is min(seats,
@@ -248,8 +256,8 @@ true on the date above; re-measure rather than quoting them.
 | `origin/main` head | `34b2198` = **Round 144** when this was written (2026-08-17 morning) |
 | How 139-144 landed | SHIP13 clicked via computer-use 2026-08-17 ~07:50 UTC. First run failed closed on a bad RUN139 assertion (bare `plus10` matched the removal comment); pattern fixed to `id: 'plus10'`, re-clicked, all six pushed clean. Lesson in SHIP-PIPELINE terms: absence assertions must target the old DEFINITION shape, and every bat's patterns get tested against the actual zip contents before delivery. |
 | Live site | douknowball.com published 2026-08-17 ~08:00 UTC at Round 144 (two deploy calls, second after sync was file-verified). Republish after 145+146 land. |
-| Packaged queue | Round **145** (title band + positional copy purge + the 2010-11 era), Round **146** (Stadium Tycoon), Round **147** (the Club Manager animation pass), Round **148** (the sitemap generator + Search Console redirect fix) and Round **149** (site-wide win celebrations on the shared ResultScreen). One click ships all five: **`SHIP14.bat`** (logs to `ship_log14.txt`). |
-| Next free round number | **150** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged queue | Round **145** (title band + positional copy purge + the 2010-11 era), Round **146** (Stadium Tycoon), Round **147** (the Club Manager animation pass), Round **148** (the sitemap generator + Search Console redirect fix), Round **149** (site-wide win celebrations) and Round **150** (Matchday Hype, the tycoon boost). One click ships all six: **`SHIP14.bat`** (logs to `ship_log14.txt`). |
+| Next free round number | **151** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven
