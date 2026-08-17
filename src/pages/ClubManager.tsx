@@ -24,6 +24,7 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { ConfettiBurst } from '@/components/club-manager/Celebration';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { WorldTablesCard } from '@/components/club-manager/WorldTablesCard';
 import { UclBracketCard } from '@/components/club-manager/UclBracketCard';
@@ -530,7 +531,9 @@ const ClubManager = () => {
     // Round 66: same treatment as full time. Only one phase screen renders at a
     // time, so the shared ref is safe here too.
     return shell(
-      <div ref={revealRef} className="text-center">
+      <div ref={revealRef} className="text-center relative">
+        {/* Round 147: a season that ends with silverware rains on the summary. */}
+        {sm.trophies.length > 0 && <ConfettiBurst seed={sm.season * 13 + sm.trophies.length} count={40} />}
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">SEASON {sm.season} COMPLETE</h1>
         <p className="text-muted-foreground text-sm mb-5">{sm.club} · finished <span className="text-foreground font-bold">#{sm.position}</span> with {sm.points} pts</p>
         <ResultScreen

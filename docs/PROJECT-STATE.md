@@ -52,7 +52,17 @@ E. **DONE, Round 146: Stadium Tycoon, the idle game.** He sent two reference scr
    tiles buy, floaters fire, zero page errors.
 
 F. **STANDING: more animation everywhere, more depth everywhere.** "Add more animation
-   especially to the idle game... and all the games."
+   especially to the idle game... and all the games." First pass DONE, Round 147: Club
+   Manager full time is staged now (verdict slams in after a beat, scorers stagger in
+   minute order, wins pulse, defeats shake once, trophies pour confetti, and season end
+   rains confetti over silverware) via a shared Celebration component ready for other
+   games. LESSON, paid for immediately: the first draft counted the scoreboard up from
+   0-0 and playClubManager flagged it as "the score went backwards" within the hour,
+   because for a moment the screen contradicted the sim. The scoreboard now shows the
+   true final from frame one and the theatre lives around it. The rule for future juice
+   passes: animate emphasis, never animate a number through false values. Verified: a
+   full 48-half-time interface playthrough with 0 findings. Next candidates: Soccer
+   Career match moments, NBA/NFL career result screens, home page tiles.
 
 ## Owner feedback, 2026-08-16 (first review)
 
@@ -214,8 +224,8 @@ true on the date above; re-measure rather than quoting them.
 | `origin/main` head | `34b2198` = **Round 144** when this was written (2026-08-17 morning) |
 | How 139-144 landed | SHIP13 clicked via computer-use 2026-08-17 ~07:50 UTC. First run failed closed on a bad RUN139 assertion (bare `plus10` matched the removal comment); pattern fixed to `id: 'plus10'`, re-clicked, all six pushed clean. Lesson in SHIP-PIPELINE terms: absence assertions must target the old DEFINITION shape, and every bat's patterns get tested against the actual zip contents before delivery. |
 | Live site | douknowball.com published 2026-08-17 ~08:00 UTC at Round 144 (two deploy calls, second after sync was file-verified). Republish after 145+146 land. |
-| Packaged queue | Round **145** (title band + positional copy purge + the 2010-11 era) and Round **146** (Stadium Tycoon, the idle game). One click ships both: **`SHIP14.bat`** (logs to `ship_log14.txt`). |
-| Next free round number | **147** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged queue | Round **145** (title band + positional copy purge + the 2010-11 era), Round **146** (Stadium Tycoon) and Round **147** (the Club Manager animation pass). One click ships all three: **`SHIP14.bat`** (logs to `ship_log14.txt`). |
+| Next free round number | **148** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven
