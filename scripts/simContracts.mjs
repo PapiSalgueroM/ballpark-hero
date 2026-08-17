@@ -148,14 +148,20 @@ console.log('4) Renewing costs money and resets the clock');
 /* ---------- 5. The wage bill moves the board ---------- */
 console.log('5) An overspent wage bill costs board confidence');
 {
-  // Measured over a run of matches at a strong club, so RESULTS do not swamp
-  // the thing being measured. Averaged over FORTY runs, which sounds like a
-  // lot until you watch it: results move confidence by plus or minus fifteen
-  // a season and the wage penalty is worth about eight, so at twelve runs the
-  // noise won a quarter of the time and this check flapped.
+  /* Measured over a run of matches at a strong club, so RESULTS do not swamp
+     the thing being measured. Round 151 seeded this section after it flapped
+     once in a full-suite run on 2026-08-17: forty unseeded runs per arm
+     still lose to plus-or-minus fifteen points of results noise against a
+     signal worth about eight, roughly one suite run in a few dozen. Now the
+     arms run PAIRED SEEDS (run k of each arm sees the identical random
+     stream, the simEras pattern), so the match results cancel and the
+     difference between the arms is the wage penalty and nothing else. */
+  const seededRng = s0 => { let x = (s0 >>> 0) || 1; return () => { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 4294967296; }; };
+  const REAL_RANDOM = Math.random;
   const measure = (mult) => {
     let total = 0;
     for (let k = 0; k < 40; k++) {
+      Math.random = seededRng(k * 6151 + 17);
       let s = startCareer('Manchester City');
       s = { ...s, wageCap: Math.round(wageBill(s) / mult) };
       const start = s.boardConfidence;
@@ -172,6 +178,7 @@ console.log('5) An overspent wage bill costs board confidence');
   };
   const within = measure(0.7);   // bill is 70 percent of cap
   const over = measure(2.0);     // bill is double the cap
+  Math.random = REAL_RANDOM;
   console.log(`   inside the cap: confidence moved ${within.toFixed(1)}, well over it: ${over.toFixed(1)}`);
   if (over >= within) fail('blowing the wage budget costs nothing');
 }

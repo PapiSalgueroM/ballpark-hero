@@ -218,12 +218,12 @@ target, not the names.
    while reading the room stays worth about plus 3, which is the Round 135 calibration
    restored.
 
-9b. **OPEN, small: simContracts has a rare flake window.** Observed once on 2026-08-17 in a
-   full-suite run: "FAIL: blowing the wage budget costs nothing", green on immediate rerun
-   and not touched by any recent round. Its wage-consequence check appears to sit on an
-   unseeded roll with a small losing window. Next session that touches contracts: seed the
-   section or widen the measured window properly (the simHeadlines derby fix from the same
-   day is the pattern: seed with a verified precondition and a readable guard message).
+9b. **DONE, Round 151: the simContracts flake window is closed.** Its wage-bill section ran
+   forty UNSEEDED runs per arm against results noise of plus or minus fifteen points and a
+   signal worth about eight, so it flapped roughly one full-suite run in a few dozen
+   (observed 2026-08-17). The arms now run paired seeds (run k of each arm sees the same
+   random stream, the simEras pattern), so results cancel and the measured difference is
+   the wage penalty alone. Three consecutive greens after the fix.
 
 10. **OPEN, standing: every game gets deeper.** More realism, more info, more minigames, in
    every game on the site, career modes first. Use the franchise-mode checklist as the gap
@@ -256,8 +256,9 @@ true on the date above; re-measure rather than quoting them.
 | `origin/main` head | `34b2198` = **Round 144** when this was written (2026-08-17 morning) |
 | How 139-144 landed | SHIP13 clicked via computer-use 2026-08-17 ~07:50 UTC. First run failed closed on a bad RUN139 assertion (bare `plus10` matched the removal comment); pattern fixed to `id: 'plus10'`, re-clicked, all six pushed clean. Lesson in SHIP-PIPELINE terms: absence assertions must target the old DEFINITION shape, and every bat's patterns get tested against the actual zip contents before delivery. |
 | Live site | douknowball.com published 2026-08-17 ~08:00 UTC at Round 144 (two deploy calls, second after sync was file-verified). Republish after 145+146 land. |
-| Packaged queue | Round **145** (title band + positional copy purge + the 2010-11 era), Round **146** (Stadium Tycoon), Round **147** (the Club Manager animation pass), Round **148** (the sitemap generator + Search Console redirect fix), Round **149** (site-wide win celebrations) and Round **150** (Matchday Hype, the tycoon boost). One click ships all six: **`SHIP14.bat`** (logs to `ship_log14.txt`). |
-| Next free round number | **151** (check the folder first, the 3-hourly build task may have taken it) |
+| Shipped 2026-08-17 | Rounds 139 through 150 all pushed and published the same day (SHIP13 morning, SHIP14 16:02 UTC). Head was `d486a09` Round 150 when this was written. |
+| Packaged queue | Round **151** (the What's New page catches up with the twelve-round day, plus the simContracts deflake). One click ships it: **`SHIP15.bat`** (logs to `ship_log15.txt`). |
+| Next free round number | **152** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven
