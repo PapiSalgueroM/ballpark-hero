@@ -2138,6 +2138,21 @@ const EDGE_LEVEL = 7;
 const TALK_STALE_AFTER = 3;
 /** What is left of it once they have heard it too often. */
 const TALK_STALE_FACTOR = 0.55;
+/**
+ * Round 144: and past that point it does not just fade, it grates. The old
+ * rule only DAMPED a spammed tone (times 0.55), so a tone that fit the
+ * situation stayed mildly positive forever and, measured at Manchester City,
+ * only one of the four tones actually cost anything when spammed all season.
+ * That broke Round 135's founding calibration ("spamming one tone is worth
+ * 1.6 against 4.3 for reading the situation", and the skip button is honest
+ * because silence costs zero). A dressing room that has heard the same speech
+ * four matches running is not neutral about the fifth, so a stale tone now
+ * carries a flat drag on top of the damping, deep enough that even a well
+ * fitting tone goes net negative against saying nothing. Sized against
+ * talkFit's [-1, 1] range: 0.35 pushes a perfectly fitting stale talk
+ * (0.55 damped) just under water, exactly the design intent.
+ */
+const TALK_STALE_DRAG = 0.35;
 
 /* ---------------- the press room ---------------- */
 
@@ -2455,8 +2470,11 @@ function talkWeight(state: CareerState, tone: TalkTone | null, target: number): 
   if (!tone) return 0;
   const press = state.press;
   const run = press && press.lastTone === tone ? press.toneRun : 0;
-  const stale = run >= TALK_STALE_AFTER ? TALK_STALE_FACTOR : 1;
-  return talkFit(tone, target) * stale;
+  const stale = run >= TALK_STALE_AFTER;
+  const w = talkFit(tone, target) * (stale ? TALK_STALE_FACTOR : 1);
+  // Round 144: a speech they have heard too often actively grates. See the
+  // note on TALK_STALE_DRAG for the measurement that forced this.
+  return stale ? w - TALK_STALE_DRAG : w;
 }
 
 /** Book the tone so the next one knows whether they have heard it before. */

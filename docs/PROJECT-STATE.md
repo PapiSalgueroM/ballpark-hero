@@ -27,15 +27,15 @@ target, not the names.
    ageing engine stays (a save that starts today still needs the world to age around it).
    simEras now FAILS if anybody adds a future era back.
 
-3. **OPEN, the big one: PAST eras, built honestly.** What he actually wants from item 2 is to
-   manage in past seasons. This is now known to be buildable with real data:
-   `player_market_values` in Supabase holds about 6,000 real named players a year, every year
-   back to 2004, over 1,000 distinct clubs a year (measured 2026-08-16). The work is a baking
-   round: per-year rosters plus per-year league memberships with promotions and relegations
-   applied, packaged like `clubManagerRosters.ts` is today, with thin squads carrying
-   generated-and-labelled fillers exactly like the future projection did. Start with a few
-   marquee season sets (2010, 2014, 2018 say) rather than all 22 years at once, and give it a
-   harness that proves year-zero identity against the table.
+3. **OPEN, the big one: PAST eras, built honestly. READ `docs/PAST-ERAS-DESIGN.md` FIRST.**
+   That file is the complete build plan, written the same day the era system was reworked:
+   verified 2010-11 memberships for both phase one leagues with their exact DB name variants,
+   the dump queries, every engine integration point mapped against the real code (leagueOf,
+   nearestRival, marketBase, the 2010 EURO_SLOTS with no Conference League), the harness
+   spec, and the traps already hit once. Phase one is one era (2010-11) and two leagues
+   (Premier League, La Liga). Data confirmed: every 2010-11 club in both leagues has rows,
+   Barcelona 29 players with Messi at 108M USD. The design doc ships to git inside
+   Round 144, so once that round lands the plan is in the repo for good.
 
 4. **DONE, Round 139. Board objectives talk like boards.** His words: "no team is looking for
    top 2. There looking to win it all... win the league or get champions league football or
@@ -109,13 +109,25 @@ target, not the names.
    now harvests aiHeadlines too, so a future headline that quotes a real player fails the
    build. The card renamed from "Window headlines" to "Around the league".
 
-8. **OPEN, standing: every game gets deeper.** More realism, more info, more minigames, in
+9. **DONE, Round 144: the full-suite verification pass over everything above.** All 40
+   harnesses were run end to end over the complete five-round tree, plus a real-browser
+   click-through of the Club Manager picker (12 nations, Belgium down to club level, partial
+   marking visible, zero page errors). Two failures surfaced and both got ENGINE fixes, not
+   harness softening: an NFL linebacker could out-tackle the record book about once in a few
+   thousand seasons (now capped at the realism guard's 200, the same treatment EDGE sacks got
+   in Round 123), and spamming one press tone had quietly become nearly free because staleness
+   only damped a talk instead of ever costing anything. A stale tone now carries a flat drag
+   (TALK_STALE_DRAG), and measured at Manchester City all four tones lose points when spammed
+   while reading the room stays worth about plus 3, which is the Round 135 calibration
+   restored.
+
+10. **OPEN, standing: every game gets deeper.** More realism, more info, more minigames, in
    every game on the site, career modes first. Use the franchise-mode checklist as the gap
    list per game: training plans, form and morale loops, media, contracts, injuries and
    recovery choices, rivalries, awards races, offseason depth, save-spanning records.
 
 
-**As of 2026-08-16 (evening update, after Round 143).** This is the volatile file.
+**As of 2026-08-16 (night update, after Round 144).** This is the volatile file.
 Update it in the same round as any change, so the next session (or the next account) picks up
 cleanly.
 
@@ -138,9 +150,9 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `03afbfd` = **Round 138** when this was written |
-| Packaged queue | Rounds **139** (review), **140** (leagues wave 1), **141** (news feed), **142** (2. Bundesliga) and **143** (Belgium). One click ships all five: **`SHIP12.bat`** (logs to `ship_log12.txt`). |
-| Live site | Publish triggered 2026-08-16 after Round 137 synced. Re-publish and verify after 139 to 143 land. |
-| Next free round number | **144** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged queue | Rounds **139** (review), **140** (leagues wave 1), **141** (news feed), **142** (2. Bundesliga), **143** (Belgium) and **144** (full-suite verification fixes). One click ships all six: **`SHIP13.bat`** (logs to `ship_log13.txt`). |
+| Live site | Publish triggered 2026-08-16 after Round 137 synced. Re-publish and verify after 139 to 144 land. |
+| Next free round number | **145** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

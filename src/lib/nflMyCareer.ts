@@ -283,7 +283,13 @@ export function simSeason(
     line.recYds = Math.round((line.rec ?? 0) * (9 + rng() * 3.5));
     line.recTd = Math.max(0, Math.round((2 + (form - 62) * 0.3 + rng() * 3) * g));
   } else if (c.pos === 'LB') {
-    line.tackles = Math.round((62 + (form - 62) * 3.1 + rng() * 26) * g);
+    /* Round 144: same treatment the EDGE sack line got in Round 123 (see the
+       long note below): the tail of this curve brushed past the harness's
+       200 tackle ceiling about once in a few thousand seasons, and a sim
+       should never out-stat the record book. Tackles are an unofficial stat
+       counted differently across eras, so 200 is the conservative bound the
+       realism harness has always used, and the engine now agrees with it. */
+    line.tackles = Math.min(200, Math.round((62 + (form - 62) * 3.1 + rng() * 26) * g));
     line.sacks = Math.max(0, Math.round(((form - 66) * 0.18 + rng() * 3) * g * 10) / 10);
     line.picks = Math.max(0, Math.round(((form - 70) * 0.05 + rng() * 2) * g));
     line.forcedFum = Math.max(0, Math.round((rng() * 3) * g));
