@@ -285,31 +285,34 @@ export const SOCCER_CONTENT_1: GameContentMap = {
 
   '/club-manager': {
     intro: [
-      "Club Manager is the site's big one: a full management sim in your browser. Take charge of one of 20 famous clubs, set the tactics, work the market, and answer to the board.",
-      "Your club plays its real league rivals, with the domestic cup and the Champions League on top, season after season until you retire or the sack race catches you.",
+      "Club Manager is the site's big one: a full management sim in your browser. 270 real clubs across 14 leagues in 12 countries, over 3,300 real players with their real August 2026 ages and market values, and a board that talks like a board.",
+      "Pick when you start too: today's game, or the real 2010-11 season with all 40 Premier League and La Liga clubs and 800 plus real year-2010 players, prime Messi and Rooney included. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.",
     ],
     howToPlay: [
-      "Pick a club from four tiers, elite giants down to underdogs.",
-      "Before each match set formation, mentality and your starting XI, or use auto pick.",
-      "Play the match and read the report: goals, injuries, red cards and the board's reaction.",
-      "Buy and sell in the summer and January windows before AI clubs grab your targets.",
-      "Keep the confidence meter alive, collect trophies, and roll into next season.",
+      "Pick your era (today or 2010-11), then your nation, your league, and your club. Every tile quotes what that board will actually demand.",
+      "Or tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium, and one of three budgets. Your club takes the league place of the division's weakest side.",
+      "Before each match set formation, mentality and your starting XI, or use auto pick, and give a team talk when it matters.",
+      "Play the match, read the report, answer the press, and manage the dressing room between games.",
+      "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
+      "Keep the confidence meter alive, hit the board's objectives, collect trophies, and roll into next season while the whole world ages around you.",
     ],
     rules: [
-      "20 clubs in 4 tiers, budgets from 180 million pounds at Real Madrid to 25 million at Marseille, expectations from Top 1 to Top 14.",
-      "Premier League, La Liga and Serie A clubs play 38 league games, Bundesliga and Ligue 1 play 34, plus a domestic cup from a round of 16 to the final.",
-      "Top tier clubs start in the Champions League, everyone else needs a top 4 finish. Groups play 6 matchdays and the top 2 advance.",
+      "Boards demand the actual prize, never a number: win the league, qualify for the Champions League or Europa League, reach mid table, or stay up, plus cup targets, a rival to finish above, and squad-building mandates.",
+      "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
+      "The 2010-11 era is a sealed world: real 2010 squads and values, no Conference League because it did not exist, and no 2026 player can leak into your market.",
+      "A club you create starts with 24 generated players, honestly marked as made up. Every real player stays real, and the transfer market is where you sign them. Budgets run 15, 40 or 90 million pounds.",
       "Board confidence starts at 60 of 100 and swings with results, cup runs and position against expectation. At zero you are sacked.",
-      "Season score is league points plus 10 per trophy, capped at 130. Selling banks 90 percent of a player's value, and the squad never drops below 14.",
+      "Players carry contracts, wages, form, fitness and opinions. They retire, walk on expired deals, and your academy feeds the first team if you invest in it.",
     ],
     example: [
-      "You take Newcastle: 40 million and a board asking for Top 12. A summer winger signing and a cup run to the semis keep confidence healthy.",
-      "You rotate too late and injuries bite, but 9th place beats expectation by three: an A verdict, and a bigger club offers you the job for season 2.",
+      "You take Newcastle and the board asks you to qualify for the Europa League. A summer winger signing and a cup run to the semis keep confidence healthy even in seventh.",
+      "Or you found a club in the Eredivisie on the biggest budget, and the board wants the title from day one, because a squad built with 90 million should win that league. In the Premier League the same money gets told to survive first, because that league is deeper than any wallet.",
     ],
     tips: [
       "Fitness is a resource. Starters drain it every match and recover on rest weeks, so rotate early.",
       "Attacking mentality raises goals at both ends, defensive strangles the game. Match it to the opponent.",
       "Injured starters get auto replaced, so check the treatment room before kickoff.",
+      "Creating a club? The weaker the league you choose, the faster your money turns into trophies.",
     ],
     faqs: [
       {
@@ -319,6 +322,10 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         q: "Does my career save?",
         a: "One save on this device. Close the tab mid season and the game resumes where you stopped.",
+      },
+      {
+        q: "Are the players real?",
+        a: "Yes, with real market values, in both eras. The only invented players are the ones the game clearly marks: youth padding, deep-future projections, and the starting squad of a club you create yourself.",
       },
     ],
   },

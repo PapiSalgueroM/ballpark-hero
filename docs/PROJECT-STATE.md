@@ -204,12 +204,20 @@ target, not the names.
    Tresoldi to Club Brugge. Lesson recorded: when a new league wave lands, check whether any
    of its 2026 rows name players already baked elsewhere off 2025 fallbacks, and move them.
 
-   **Leagues remaining with confirmed data:** Brazilian Serie A and Argentine Primera
-   (Flamengo, Palmeiras, Boca, River rows exist, but BOTH run calendar-year seasons, so they
-   need engine thought first; do not wire them in blind). Beyond those, candidate leagues with
-   partial coverage: Greek, Austrian, Danish, Swiss (flavor clubs already baked). Same recipe
-   every time: verify membership via web plus the table, extend DB_TO_ENGINE, dump through the
-   MCP, supplement bake, wire metadata.
+   **Wave 3 candidates, densities MEASURED 2026-08-17** (Supabase MCP, DISTINCT ON player,
+   years 2025-26, top-club real-player counts). Six European-calendar leagues fit the engine
+   as is, dense tops with thin tails (CM_PARTIAL precedent applies): Czechia (Sparta Prague
+   25, Slavia Prague 24, Viktoria Plzeň 13), Austria (Red Bull Salzburg 23, Sturm Graz 14,
+   LASK 8), Denmark (Copenhagen 20, Midtjylland 13, Nordsjælland 13), Greece (Panathinaikos
+   18, Olympiacos 17, PAOK 15, AEK Athens 15), Switzerland (Basel 18, Young Boys 14, Lugano
+   8), Croatia (Dinamo Zagreb 15, Hajduk Split 11, Rijeka 8). Liga MX is the deepest pool of
+   all (América 19, Monterrey 18, Cruz Azul 16, Guadalajara 15, Toluca 14) BUT plays split
+   Apertura/Clausura short tournaments, the same engine-shape problem as Brazilian Serie A
+   and Argentine Primera (calendar-year seasons); none of those three gets wired in blind.
+   Same recipe every time: verify membership via web plus the table, extend DB_TO_ENGINE,
+   dump through the MCP, supplement bake, wire EURO_SLOTS, relegationSpots, NATIONS, colors,
+   priors, cup names, and check for players already baked elsewhere off 2025 fallbacks (the
+   Özcan lesson above).
 
 7. **DONE, Round 141: way more headlines.** The feed lives all season now instead of only at
    window opens: every match week can add a line, read straight off the sim's real state.
@@ -273,8 +281,8 @@ true on the date above; re-measure rather than quoting them.
 | How 139-144 landed | SHIP13 clicked via computer-use 2026-08-17 ~07:50 UTC. First run failed closed on a bad RUN139 assertion (bare `plus10` matched the removal comment); pattern fixed to `id: 'plus10'`, re-clicked, all six pushed clean. Lesson in SHIP-PIPELINE terms: absence assertions must target the old DEFINITION shape, and every bat's patterns get tested against the actual zip contents before delivery. |
 | Live site | douknowball.com published 2026-08-17 ~08:00 UTC at Round 144 (two deploy calls, second after sync was file-verified). Republish after 145+146 land. |
 | Shipped 2026-08-17 | Rounds 139 through 150 all pushed and published the same day (SHIP13 morning, SHIP14 16:02 UTC). Head was `d486a09` Round 150 when this was written. |
-| Packaged queue | Round **151** (the What's New page catches up with the big day, plus the simContracts deflake) and Round **152** (Stadium Tycoon milestones plus named opposition: ten career firsts that pay exactly once, and every opponent is an invented club like Ironbridge Rovers, 288 possible names proven collision-free against all 277 real clubs in the manager world). Plus Round **153**: `scripts/playEra2010.mjs`, the browser harness that walks the 2010 era picker like a person (14 checks: era tile, nations shrunk to England and Spain, Blackpool pickable and marked partial, the title demand on the United tile, Rooney in the dressing room, no 2026 leak). One click ships all three: **`SHIP15.bat`** (logs to `ship_log15.txt`). Then Round **154** (create-a-club, owner item D) rides alone as `RUN154.bat`, chain-guarded on 153, so the click order is SHIP15.bat then RUN154.bat. |
-| Next free round number | **155** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged queue | Round **151** (the What's New page catches up with the big day, plus the simContracts deflake) and Round **152** (Stadium Tycoon milestones plus named opposition: ten career firsts that pay exactly once, and every opponent is an invented club like Ironbridge Rovers, 288 possible names proven collision-free against all 277 real clubs in the manager world). Plus Round **153**: `scripts/playEra2010.mjs`, the browser harness that walks the 2010 era picker like a person (14 checks: era tile, nations shrunk to England and Spain, Blackpool pickable and marked partial, the title demand on the United tile, Rooney in the dressing room, no 2026 leak). One click ships all three: **`SHIP15.bat`** (logs to `ship_log15.txt`). Then Round **154** (create-a-club, owner item D) rides alone as `RUN154.bat`, chain-guarded on 153, and Round **155** (the content layer catches up: Club Manager's SEO copy rewritten for 270 clubs, eras and create-a-club after sitting at the 20-club version with "Top 14" phrasing; a What's New entry; the wave-3 league probe folded into item 6) as `RUN155.bat`. Click order: SHIP15.bat, RUN154.bat, RUN155.bat, each one self-guards. |
+| Next free round number | **156** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven
