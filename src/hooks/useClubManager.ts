@@ -13,7 +13,7 @@ import {
   DEFAULT_ERA_ID,
 } from '@/lib/clubManager';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone } from '@/lib/clubManager';
-import type { NextFixtureInfo, TableRow } from '@/lib/clubManager';
+import type { NextFixtureInfo, TableRow, CustomClubSpec } from '@/lib/clubManager';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
@@ -92,6 +92,16 @@ export function useClubManager() {
     setActiveTab('overview');
     setPhase('hub');
   }, [pendingClub]);
+
+  /* Round 154: founding your own club skips the pending-club dance, because
+     the create form is its own confirmation. */
+  const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec) => {
+    const s = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec);
+    setCareer(s);
+    setPendingClub(null);
+    setActiveTab('overview');
+    setPhase('hub');
+  }, []);
 
   /* ---------- tactics ---------- */
   const setFormationIndex = useCallback((idx: number) => {
@@ -375,7 +385,7 @@ export function useClubManager() {
     quickSim,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition,
-    resume, startNew, chooseClub, confirmClub,
+    resume, startNew, chooseClub, confirmClub, confirmCustomClub,
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
     play, continueFromReport, nextSeason,
     buy,

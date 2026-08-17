@@ -31,10 +31,26 @@ B. **DONE, Round 145 (same round as A, one review, one commit): top clubs demand
 C. **OPEN: "look up all the leagues fifa has" and add more.** See item 6 below for the wave
    recipe and remaining candidates. (Never write that product name into src.)
 
-D. **OPEN: create-a-club.** "Create my team for the manger game and its full customizatable
-   with crests and stadium and starting money and everything." Custom name, colors, an SVG
-   crest builder (original shapes only, no real crests), stadium name, starting budget,
-   league choice, generated starting squad, real transfer market. Big feature, own round.
+D. **DONE, Round 154: create-a-club.** "Create my team for the manger game and its full
+   customizatable with crests and stadium and starting money and everything." Shipped as a
+   fourth picker step: any league (eras included), club name with a collision guard that
+   folds diacritics, badge prefixes and famous alternate spellings (an engine keyed on names
+   cannot allow a second "Arsenal", and "Paris Saint-Germain" must collide with the in-game
+   "PSG"), an original SVG crest builder (6 abstract shields x 6 patterns x palette x your
+   initials, sanitized so nothing a form passes can reach markup), stadium name, three
+   budget tiers. The club REPLACES the weakest club of its league for that save only, its
+   24-man day-one squad is generated players (all tagged made up), and the real market is
+   where real players come from. Boards read the squad, not the wallet: measured day one,
+   a big-money startup ranks about 20th in the Premier League but 4th in the Eredivisie
+   ("Win the Eredivisie") and 1st in Scotland, and the create form quotes the live demand
+   before you commit. The displaced club is out of the world entirely: not in the table,
+   the cup, the results, the buyers, the suitors, season after season (the swap recomputes
+   every summer; leave for another job and your club dissolves with your tenure).
+   `simCreateClub.mjs` (7 sections) guards the name wall, the swap, the generated squad,
+   honest boards at every tier, tier separation where the league allows it, save/load with
+   zero bleed into real careers, and crest injection-proofing. Browser-walked 12/12 at
+   390x844: form, live validation, honest replaced-club line, crest in the hub header,
+   stadium chip, made-up tags on every squad row.
 
 E2. **DONE, Round 150: Matchday Hype, the tycoon's boost.** He nudged "Dont forget the idle
    game" the same afternoon, so it got the genre's heartbeat from his reference shots: a
@@ -257,8 +273,8 @@ true on the date above; re-measure rather than quoting them.
 | How 139-144 landed | SHIP13 clicked via computer-use 2026-08-17 ~07:50 UTC. First run failed closed on a bad RUN139 assertion (bare `plus10` matched the removal comment); pattern fixed to `id: 'plus10'`, re-clicked, all six pushed clean. Lesson in SHIP-PIPELINE terms: absence assertions must target the old DEFINITION shape, and every bat's patterns get tested against the actual zip contents before delivery. |
 | Live site | douknowball.com published 2026-08-17 ~08:00 UTC at Round 144 (two deploy calls, second after sync was file-verified). Republish after 145+146 land. |
 | Shipped 2026-08-17 | Rounds 139 through 150 all pushed and published the same day (SHIP13 morning, SHIP14 16:02 UTC). Head was `d486a09` Round 150 when this was written. |
-| Packaged queue | Round **151** (the What's New page catches up with the big day, plus the simContracts deflake) and Round **152** (Stadium Tycoon milestones plus named opposition: ten career firsts that pay exactly once, and every opponent is an invented club like Ironbridge Rovers, 288 possible names proven collision-free against all 277 real clubs in the manager world). Plus Round **153**: `scripts/playEra2010.mjs`, the browser harness that walks the 2010 era picker like a person (14 checks: era tile, nations shrunk to England and Spain, Blackpool pickable and marked partial, the title demand on the United tile, Rooney in the dressing room, no 2026 leak). One click ships all three: **`SHIP15.bat`** (logs to `ship_log15.txt`). |
-| Next free round number | **154** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged queue | Round **151** (the What's New page catches up with the big day, plus the simContracts deflake) and Round **152** (Stadium Tycoon milestones plus named opposition: ten career firsts that pay exactly once, and every opponent is an invented club like Ironbridge Rovers, 288 possible names proven collision-free against all 277 real clubs in the manager world). Plus Round **153**: `scripts/playEra2010.mjs`, the browser harness that walks the 2010 era picker like a person (14 checks: era tile, nations shrunk to England and Spain, Blackpool pickable and marked partial, the title demand on the United tile, Rooney in the dressing room, no 2026 leak). One click ships all three: **`SHIP15.bat`** (logs to `ship_log15.txt`). Then Round **154** (create-a-club, owner item D) rides alone as `RUN154.bat`, chain-guarded on 153, so the click order is SHIP15.bat then RUN154.bat. |
+| Next free round number | **155** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

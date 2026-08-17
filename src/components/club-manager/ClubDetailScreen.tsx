@@ -25,14 +25,21 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
      career the def is the 2010 def, the league is the 2010 league and the
      roster is the 2010 squad aged to the save's season. */
   const def = eraClubDefFor(clubName, career.eraId);
-  const league = careerLeagueOf({ clubName, eraId: career.eraId });
+  const league = careerLeagueOf({ clubName, eraId: career.eraId, customClub: career.customClub });
   /* Round 132: the rival viewer shows the rival AS HE IS THIS SEASON. Before
      the clock existed this read the frozen August 2026 bake, so in 2036 you
      could open Liverpool and be looking at a squad list a decade out of date
      while the league table next to it was being decided by something else. */
   const onYears = yearsOn(career);
-  const roster = projectedRoster(clubName, onYears, career.eraId);
-  const xiAvg = projectedXIAvg(clubName, onYears, career.eraId);
+  /* Round 154: a club you founded has no projected world entry, its squad IS
+     the save's squad, so the viewer reads that directly. */
+  const isMyCustom = !!career.customClub && clubName === career.customClub.name;
+  const roster = isMyCustom
+    ? career.squad.map(p => ({ n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating, g: p.generated }))
+    : projectedRoster(clubName, onYears, career.eraId);
+  const xiAvg = isMyCustom
+    ? (roster.length ? Math.round([...roster].sort((a, b) => b.r - a.r).slice(0, 11).reduce((s, p) => s + p.r, 0) / Math.min(11, roster.length)) : null)
+    : projectedXIAvg(clubName, onYears, career.eraId);
   const squadValue = useMemo(() => roster.reduce((s, p) => s + p.v, 0), [roster]);
   /* Round 145: the board line quotes the real league demand for this club,
      lowercased into the sentence, instead of a raw "top N" rank. */
@@ -130,7 +137,13 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
         {isPartialClub(clubName, career.eraId) && roster.length > 0 && (
           <p className="text-[9px] text-yellow-500/80 pt-2">The market data covers only part of this squad.</p>
         )}
-        {onYears > 0 && roster.length > 0 && (
+        {isMyCustom && (
+          <p className="text-[9px] text-yellow-500/80 pt-2">
+            The club you founded. Its original squad was generated for it and is marked as made up;
+            every real player in it arrived through the transfer market.
+          </p>
+        )}
+        {!isMyCustom && onYears > 0 && roster.length > 0 && (
           <p className="text-[9px] text-yellow-500/80 pt-2">
             {worldSeasonLabel(career)} squad. Real players from August 2026 aged forward, with anyone who retired replaced by
             players this game made up, marked above.

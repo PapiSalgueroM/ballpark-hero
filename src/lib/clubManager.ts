@@ -16,6 +16,7 @@ import {
   projectedRoster, projectedWorld, projectedXIAvg, projectedWorldFor,
   ageDriftBand, declineScale, retireChance,
   isHistoricEra, eraRosters, HISTORIC_PARTIAL,
+  makeGeneratedName,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
 
@@ -674,6 +675,15 @@ export interface CareerState {
    * whistle, so it only ever covers the match it was given for.
    */
   teamTalk?: TalkTone | null;
+  /**
+   * Round 154: the club YOU built, when this save was started from the
+   * create-your-own-club form. It replaces the weakest club of its chosen
+   * league for this save only (replacedClub says which), its squad is
+   * generated players top to bottom, and the spec here is everything needed
+   * to rebuild its identity on load: crest, colors, stadium, budget tier.
+   * Absent on every save that picked a real club, and nothing changes there.
+   */
+  customClub?: CustomClubSpec;
 }
 
 export type NextFixtureInfo =
@@ -1042,7 +1052,14 @@ export function eraLeagueOf(clubName: string, eraId: string | undefined): League
 }
 
 /** The league def for a save: its era league when historic, else the real one. */
-export function careerLeagueOf(career: Pick<CareerState, 'clubName' | 'eraId'>): LeagueDef {
+export function careerLeagueOf(career: Pick<CareerState, 'clubName' | 'eraId'> & { customClub?: CustomClubSpec }): LeagueDef {
+  /* Round 154: a custom club is in NO league def, so leagueOf would fall back
+     to the Premier League whatever league the save actually plays in. The
+     save carries the truth. */
+  if (career.customClub && career.customClub.name === career.clubName) {
+    const lg = customLeagueDef(career.customClub, career.eraId);
+    if (lg) return lg;
+  }
   return eraLeagueOf(career.clubName, career.eraId) ?? leagueOf(career.clubName);
 }
 
@@ -1096,8 +1113,11 @@ function eraClubDefMap(eraId: string): Map<string, ClubDef> {
   return map;
 }
 
-/** ClubDef inside an era, falling back to the modern def for odd states. */
+/** ClubDef inside an era, falling back to the modern def for odd states.
+ *  Round 154: a custom club outranks the era map here too, because a custom
+ *  save inside a historic era still has to color and rank its own club. */
 export function eraClubDefFor(clubName: string, eraId: string | undefined): ClubDef {
+  if (ACTIVE_CUSTOM && ACTIVE_CUSTOM.def.name === clubName) return ACTIVE_CUSTOM.def;
   if (eraId && isHistoricEra(eraId)) {
     const def = eraClubDefMap(eraId).get(clubName);
     if (def) return def;
@@ -1385,8 +1405,12 @@ export function playableClubs(leagueId: string): ClubDef[] {
     .sort((a, b) => a.expectation - b.expectation);
 }
 
-/** ClubDef for any playable club, with a safe fallback for odd save states. */
+/** ClubDef for any playable club, with a safe fallback for odd save states.
+ *  Round 154: the active save's custom club answers first, so its color, tier
+ *  and expectation show correctly on every screen without threading the save
+ *  through a hundred callsites. */
 export function clubDefFor(name: string): ClubDef {
+  if (ACTIVE_CUSTOM && ACTIVE_CUSTOM.def.name === name) return ACTIVE_CUSTOM.def;
   return clubDefMap().get(name)
     ?? CLUBS.find(c => c.name === name)
     ?? { name, tier: 4, color: '#8899aa', budget: 20, expectation: 10 };
@@ -1616,6 +1640,376 @@ function ensureSquadCoverage(squad: CMPlayer[]): CMPlayer[] {
     out.push(makeYouth(pick([...POS_DEF, ...POS_MID, ...POS_ATT])));
   }
   return out;
+}
+
+/* ================================================================== */
+/* Round 154: create your own club                                     */
+/* ================================================================== */
+
+/* His ask, 2026-08-17: "create a create my team for the manger game and its
+   full customizatable with crests and stadium and starting money and
+   everything if everything." The design rides the rails the era work built:
+   career.leagueClubs is already the one source of truth for fixtures, table,
+   news, cup field and suitors, so a custom club is one swap at startCareer
+   (it REPLACES the weakest club of its league for that save only) plus a
+   career-aware club def. The squad is generated players top to bottom, all
+   honestly tagged, and the real transfer market is where the fantasy lives:
+   your own club, buying real players.
+
+   Legal line, non negotiable: the crest builder is abstract geometry plus
+   the user's own initials. No preset in here may trace or echo a real crest,
+   and the initials are sanitized to bare letters and digits before they go
+   anywhere near markup. */
+
+export type CustomBudgetTier = 'small' | 'mid' | 'big';
+
+export interface CrestSpec {
+  /** Index into the shield shape table. */
+  shape: number;
+  /** Index into the pattern table. */
+  pattern: number;
+  /** Field color, also the club's color dot everywhere. */
+  color1: string;
+  /** Pattern color. */
+  color2: string;
+  /** 1-3 characters, letters and digits only, uppercased. */
+  initials: string;
+}
+
+export interface CustomClubSpec {
+  name: string;
+  stadium: string;
+  crest: CrestSpec;
+  budgetTier: CustomBudgetTier;
+  /** The league def id this club plays in (real or era league). */
+  leagueId: string;
+  /** The club it displaced this season. Recomputed every summer. */
+  replacedClub: string;
+}
+
+/** What the money buys. Anchor is the squad level the generated players are
+ *  built around; budget is the day-one war chest. The anchors sit deliberately
+ *  BELOW the big leagues' established sides, because a brand new club that
+ *  outrates half the division would be a lie about how football works, and
+ *  the fun of this mode is buying your way up with real players. */
+export const CUSTOM_TIERS: Record<CustomBudgetTier, { label: string; blurb: string; budget: number; anchor: number }> = {
+  small: { label: 'Local money', blurb: 'A shoestring and a dream. Survive first.', budget: 15, anchor: 62 },
+  mid: { label: 'Solid backing', blurb: 'Real investors, mid-table tools.', budget: 40, anchor: 68 },
+  big: { label: 'Serious investment', blurb: 'Deep pockets. Build fast, spend big.', budget: 90, anchor: 74 },
+};
+
+/** Deterministic FNV-1a + one xorshift round, local copy of the eras hash so
+ *  the custom squad is a pure function of its spec. */
+function cHash32(s: string): number {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  h ^= h << 13; h >>>= 0;
+  h ^= h >>> 17;
+  h ^= h << 5; h >>>= 0;
+  return h >>> 0;
+}
+
+/** Deterministic integer in [lo,hi] from a seed string. */
+function cInt(seed: string, lo: number, hi: number): number {
+  return lo + Math.floor((cHash32(seed) / 4294967296) * (hi - lo + 1));
+}
+
+/** Fold a club name for collision checks: lowercase, accents stripped both
+ *  ways (NFD plus the special Latin letters NFD misses), spaces collapsed. */
+function foldClubName(s: string): string {
+  return foldSpecialLatin(s)
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+/* Famous alternate forms of clubs this game names differently ("PSG" is the
+   in-game name, so "Paris Saint-Germain" would otherwise validate). Folded
+   spellings only; each one denotes a real club in the game's world. */
+const CLUB_NAME_ALIASES = [
+  'paris saint germain', 'paris sg', 'internazionale', 'inter',
+  'man united', 'man utd', 'man city', 'spurs', 'barca', 'bayern', 'juve',
+  'tottenham hotspur', 'newcastle united', 'west ham united',
+  'wolverhampton wanderers', 'brighton hove albion', 'leeds',
+  'atletico de madrid', 'sporting lisbon', 'real sociedad de futbol',
+];
+
+let REAL_CLUB_FOLDED: Set<string> | null = null;
+
+/** Every real club name this game knows, folded: the modern leagues, every
+ *  era league, the continental flavor pool and the legacy defs. A custom club
+ *  may not wear any of these names, because the engine is name-keyed and a
+ *  second "Arsenal" would merge with the real one in every map. */
+function realClubNamesFolded(): Set<string> {
+  if (REAL_CLUB_FOLDED) return REAL_CLUB_FOLDED;
+  const set = new Set<string>();
+  const add = (n: string): void => {
+    const f = foldClubName(n);
+    set.add(f);
+    // "FC Barcelona" must collide with "Barcelona", so index the stripped
+    // form too. Tokens only ever come off the ends, never the middle.
+    const stripped = f.replace(/^(fc|cf|afc|ac|as|sc|cd|rc) /, '').replace(/ (fc|cf|afc|ac|sc)$/, '');
+    if (stripped) set.add(stripped);
+  };
+  for (const lg of REAL_LEAGUES) for (const c of lg.clubs) add(c);
+  for (const leagues of Object.values(ERA_LEAGUES)) for (const lg of leagues) for (const c of lg.clubs) add(c);
+  for (const c of EURO_CLUBS) add(c);
+  for (const c of CLUBS) add(c.name);
+  for (const c of CLUB_NAME_ALIASES) set.add(c);
+  REAL_CLUB_FOLDED = set;
+  return set;
+}
+
+/** The error a name earns, or null when it is usable. The folding means
+ *  "Málaga", "Malaga" and "malaga fc" all collide with the real club. */
+export function validateCustomClubName(name: string): string | null {
+  const trimmed = (name ?? '').trim();
+  if (trimmed.length < 3) return 'Give the club a name, at least 3 characters.';
+  if (trimmed.length > 24) return 'Keep the name under 25 characters.';
+  if (!/^[\p{L}\p{N}][\p{L}\p{N} .'&-]*$/u.test(trimmed)) {
+    return 'Letters, numbers, spaces and . \' & - only.';
+  }
+  const folded = foldClubName(trimmed);
+  if (!folded) return 'Give the club a name, at least 3 characters.';
+  const stripped = folded.replace(/^(fc|cf|afc|ac|as|sc|cd|rc) /, '').replace(/ (fc|cf|afc|ac|sc)$/, '');
+  if (realClubNamesFolded().has(folded) || realClubNamesFolded().has(stripped)) {
+    return 'That club already exists. This one is yours, so name it yours.';
+  }
+  return null;
+}
+
+/** Initials sanitized to what the crest may render: letters and digits only,
+ *  at most three, uppercased. Runs at spec build AND again inside crestSvg,
+ *  so nothing a form ever passes can put markup inside the SVG. */
+export function sanitizeCrestInitials(raw: string): string {
+  return (raw ?? '').replace(/[^\p{L}\p{N}]/gu, '').slice(0, 3).toUpperCase();
+}
+
+/* The crest kit. Six shield silhouettes and six field patterns, all abstract,
+   drawn in a 100x120 box. Combined with two colors and the user's initials
+   that is 36 geometries x a color grid, and none of it references any real
+   badge: no stars, no eagles, no wreaths, no club iconography of any kind. */
+export const CREST_SHAPES: { id: string; label: string; path: string }[] = [
+  { id: 'classic', label: 'Classic', path: 'M50 4 L96 20 V64 Q96 100 50 116 Q4 100 4 64 V20 Z' },
+  { id: 'round', label: 'Rounded', path: 'M10 8 H90 V68 Q90 110 50 116 Q10 110 10 68 Z' },
+  { id: 'point', label: 'Pointed', path: 'M50 2 L94 26 V80 L50 118 L6 80 V26 Z' },
+  { id: 'circle', label: 'Roundel', path: 'M50 6 A52 52 0 1 1 49.9 6 Z' },
+  { id: 'banner', label: 'Banner', path: 'M8 6 H92 V94 L50 116 L8 94 Z' },
+  { id: 'diamond', label: 'Diamond', path: 'M50 2 L98 60 L50 118 L2 60 Z' },
+];
+
+export const CREST_PATTERNS: { id: string; label: string }[] = [
+  { id: 'plain', label: 'Plain' },
+  { id: 'halves', label: 'Halves' },
+  { id: 'stripes', label: 'Stripes' },
+  { id: 'hoops', label: 'Hoops' },
+  { id: 'chevron', label: 'Chevron' },
+  { id: 'sash', label: 'Sash' },
+];
+
+/** The inner geometry for a pattern, as SVG elements in the second color.
+ *  Everything renders inside a clipPath of the shield, so patterns can
+ *  overdraw the box freely. */
+function crestPatternMarkup(pattern: number, color2: string): string {
+  const p = CREST_PATTERNS[pattern]?.id ?? 'plain';
+  const c = color2;
+  if (p === 'halves') return `<rect x="50" y="0" width="50" height="120" fill="${c}"/>`;
+  if (p === 'stripes') return `<rect x="14" y="0" width="12" height="120" fill="${c}"/><rect x="44" y="0" width="12" height="120" fill="${c}"/><rect x="74" y="0" width="12" height="120" fill="${c}"/>`;
+  if (p === 'hoops') return `<rect x="0" y="16" width="100" height="14" fill="${c}"/><rect x="0" y="52" width="100" height="14" fill="${c}"/><rect x="0" y="88" width="100" height="14" fill="${c}"/>`;
+  if (p === 'chevron') return `<path d="M0 34 L50 64 L100 34 V56 L50 86 L0 56 Z" fill="${c}"/>`;
+  if (p === 'sash') return `<path d="M-10 14 L74 130 L104 130 L20 14 Z" fill="${c}"/>`;
+  return '';
+}
+
+/** A hex color the crest will actually accept. Anything else falls back, so
+ *  no form input can smuggle markup through a color attribute either. */
+function safeHex(c: string, fallback: string): string {
+  return /^#[0-9a-fA-F]{3,8}$/.test(c ?? '') ? c : fallback;
+}
+
+/**
+ * The whole crest as a self-contained SVG string: shield, pattern, initials,
+ * outline. Pure function of the spec, safe against any input (colors are
+ * whitelisted to hex, initials reduced to bare letters and digits), and no
+ * external reference of any kind, so it renders identically everywhere from
+ * the picker form to the league table.
+ */
+export function crestSvg(crest: CrestSpec, size = 40): string {
+  const shape = CREST_SHAPES[crest.shape]?.path ?? CREST_SHAPES[0].path;
+  const c1 = safeHex(crest.color1, '#1d4ed8');
+  const c2 = safeHex(crest.color2, '#f8fafc');
+  const initials = sanitizeCrestInitials(crest.initials);
+  const clipId = `cc${cHash32(`${crest.shape}|${crest.pattern}|${c1}|${c2}|${initials}`).toString(36)}`;
+  const h = Math.round(size * 1.2);
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${h}" viewBox="0 0 100 120" role="img" aria-label="club crest">`,
+    `<defs><clipPath id="${clipId}"><path d="${shape}"/></clipPath></defs>`,
+    `<g clip-path="url(#${clipId})">`,
+    `<rect x="-2" y="-2" width="104" height="124" fill="${c1}"/>`,
+    crestPatternMarkup(crest.pattern, c2),
+    `<rect x="-2" y="-2" width="104" height="124" fill="rgba(0,0,0,0.10)"/>`,
+    `</g>`,
+    `<text x="50" y="70" text-anchor="middle" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="${initials.length >= 3 ? 30 : 36}" fill="#ffffff" stroke="rgba(0,0,0,0.5)" stroke-width="2.5" paint-order="stroke">${initials}</text>`,
+    `<path d="${shape}" fill="none" stroke="rgba(0,0,0,0.55)" stroke-width="4"/>`,
+    `</svg>`,
+  ].join('');
+}
+
+/* The generated squad: 24 slots with rating offsets around the tier anchor.
+   The first eleven are the intended XI (a touch over the anchor), the next
+   seven rotate, the last six are depth kids with room to grow. Positions
+   cover every formation the game runs, so ensureSquadCoverage never has to
+   pad a custom squad with extra youth. */
+const CUSTOM_SLOTS: { pos: Position; off: number }[] = [
+  { pos: 'GK', off: 3 }, { pos: 'CB', off: 3 }, { pos: 'CB', off: 2 }, { pos: 'LB', off: 2 },
+  { pos: 'RB', off: 2 }, { pos: 'CDM', off: 3 }, { pos: 'CM', off: 3 }, { pos: 'CM', off: 2 },
+  { pos: 'LW', off: 3 }, { pos: 'RW', off: 2 }, { pos: 'ST', off: 4 },
+  { pos: 'GK', off: -2 }, { pos: 'CB', off: -1 }, { pos: 'LB', off: -3 }, { pos: 'RB', off: -3 },
+  { pos: 'CM', off: -1 }, { pos: 'CAM', off: 0 }, { pos: 'ST', off: -2 },
+  { pos: 'GK', off: -7 }, { pos: 'CB', off: -6 }, { pos: 'CM', off: -6 }, { pos: 'LW', off: -6 },
+  { pos: 'RW', off: -7 }, { pos: 'ST', off: -6 },
+];
+
+/**
+ * The day-one squad of a custom club: every player generated, every player
+ * tagged as generated, no real footballer anywhere near it. Deterministic
+ * from the spec, so the same club name at the same tier is always handed the
+ * same players, which is what lets the save be rebuilt from its spec.
+ */
+export function buildCustomSquad(spec: CustomClubSpec): CMPlayer[] {
+  const t = CUSTOM_TIERS[spec.budgetTier] ?? CUSTOM_TIERS.mid;
+  const used = new Set<string>();
+  return CUSTOM_SLOTS.map((slot, i) => {
+    const seed = `custom|${spec.name}|${i}|${slot.pos}`;
+    let name = makeGeneratedName(seed);
+    for (let k = 1; used.has(name) && k < 25; k++) name = makeGeneratedName(`${seed}|${k}`);
+    used.add(name);
+    const rating = clamp(t.anchor + slot.off + cInt(`${seed}|r`, -2, 2), 48, 84);
+    // Starters arrive in their prime, rotation a little younger, depth are
+    // kids. Same intake logic a real newly assembled squad would show.
+    const age = slot.off >= 2 ? cInt(`${seed}|a`, 24, 30)
+      : slot.off >= -3 ? cInt(`${seed}|a`, 21, 28)
+      : cInt(`${seed}|a`, 18, 21);
+    return {
+      id: `p-${slug(name)}`,
+      name,
+      position: slot.pos,
+      rating,
+      age,
+      fitness: 100,
+      morale: 74,
+      injuryWeeks: 0,
+      suspendedMatches: 0,
+      isYouth: false,
+      seasonGoals: 0,
+      seasonAssists: 0,
+      value: Math.max(0.3, Math.round(baseValue(rating, age) * 10) / 10),
+      generated: true,
+    };
+  });
+}
+
+/** Best XI average of an actual squad, same math as bakedXIAvg. */
+function squadXIAvg(squad: CMPlayer[]): number {
+  const rs = squad.map(p => p.rating).sort((a, b) => b - a).slice(0, 11);
+  while (rs.length < 11) rs.push(60);
+  return Math.round((rs.reduce((s, r) => s + r, 0) / 11) * 10) / 10;
+}
+
+/** The league def a custom spec plays in, era leagues first. */
+function customLeagueDef(spec: Pick<CustomClubSpec, 'leagueId'>, eraId?: string): LeagueDef | null {
+  if (eraId && ERA_LEAGUES[eraId]) {
+    const el = ERA_LEAGUES[eraId].find(l => l.id === spec.leagueId);
+    if (el) return el;
+  }
+  return REAL_LEAGUES.find(l => l.id === spec.leagueId) ?? null;
+}
+
+/**
+ * The ClubDef a custom club has EARNED, not the one it paid for: expectation
+ * is its generated XI ranked honestly against the league it joined, tier is
+ * the same era-relative gap rule the 2010 world uses. A "big" budget club in
+ * the Premier League still ranks near the bottom on day one, because a squad
+ * built around 74 does, and the board's demands follow from that instead of
+ * from the owner's wallet.
+ */
+function buildCustomDef(spec: CustomClubSpec, eraId?: string, xiOverride?: number): { def: ClubDef; xi: number; gap: number } {
+  const t = CUSTOM_TIERS[spec.budgetTier] ?? CUSTOM_TIERS.mid;
+  const xi = xiOverride ?? squadXIAvg(buildCustomSquad(spec));
+  const league = customLeagueDef(spec, eraId);
+  const chainEra = eraId && isHistoricEra(eraId) ? eraId : undefined;
+  const xiOf = xiChainFor(chainEra);
+  // The replaced club is out of the world, so it neither counts toward the
+  // rank nor (being the weakest) moves the top of the league.
+  const others = (league?.clubs ?? []).filter(c => c !== spec.replacedClub);
+  let topXI = xi;
+  let above = 0;
+  for (const c of others) {
+    const v = xiOf(c);
+    if (v > topXI) topXI = v;
+    if (v > xi) above += 1;
+  }
+  const gap = topXI - xi;
+  const tier: 1 | 2 | 3 | 4 = gap <= 4 ? 1 : gap <= 8 ? 2 : gap <= 13 ? 3 : 4;
+  return {
+    def: {
+      name: spec.name,
+      tier,
+      color: safeHex(spec.crest.color1, '#1d4ed8'),
+      budget: t.budget,
+      expectation: above + 1,
+    },
+    xi,
+    gap,
+  };
+}
+
+/* The one piece of session state in this file, and it is deliberate. The
+   engine is name-keyed everywhere (clubDefFor, colors, strengths, leagues),
+   and a custom club's identity lives in the SAVE, not in any static table.
+   Threading the save into every def lookup would touch a hundred callsites,
+   so instead the active save's custom club is REGISTERED here: startCareer
+   and loadCareer both call this, exactly one career exists at a time (one
+   localStorage save slot), and everything derived is a pure function of the
+   registered spec. Registering null clears it, which every non-custom load
+   path does, so a stale registration can never color a real career. */
+let ACTIVE_CUSTOM: { spec: CustomClubSpec; def: ClubDef; xi: number } | null = null;
+
+export function registerCustomClub(spec: CustomClubSpec | null, eraId?: string, xiOverride?: number): void {
+  if (!spec) { ACTIVE_CUSTOM = null; return; }
+  /* xiOverride is the club's CURRENT squad strength when the caller has one
+     (a loaded save, a summer rollover). Without it the def is measured from
+     the day-one generated squad, which is only right on day one. */
+  const built = buildCustomDef(spec, eraId, xiOverride);
+  ACTIVE_CUSTOM = { spec, def: built.def, xi: built.xi };
+}
+
+/** The registered custom spec, if the active save has one. UI convenience. */
+export function activeCustomClub(): CustomClubSpec | null {
+  return ACTIVE_CUSTOM ? ACTIVE_CUSTOM.spec : null;
+}
+
+/**
+ * What the board would demand of a custom club before it exists, for the
+ * create form's live preview. Pure: registers nothing, touches nothing.
+ */
+export function customBoardPreview(spec: Omit<CustomClubSpec, 'replacedClub'>, eraId?: string): { label: string; replaced: string | null } {
+  const historic = !!eraId && isHistoricEra(eraId);
+  const ranked = historic ? eraPlayableClubs(eraId!, spec.leagueId) : playableClubs(spec.leagueId);
+  const replaced = ranked.length ? ranked[ranked.length - 1].name : null;
+  const full: CustomClubSpec = { ...spec, replacedClub: replaced ?? '' };
+  const { def, gap } = buildCustomDef(full, eraId);
+  const league = customLeagueDef(full, eraId);
+  if (!league) return { label: 'Finish in the top half', replaced };
+  // The same measured gap the live board will use, so the preview can never
+  // promise a demand the real board then walks back.
+  const demand = leagueDemand(def.expectation, def.tier, league.clubs.length, league, gap, historic ? eraId : undefined);
+  return { label: demand.label, replaced };
 }
 
 function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now'): CMPlayer[] {
@@ -2773,7 +3167,7 @@ function buildPressQuestion(state: CareerState): PressQuestion | null {
   }
 
   /* 6. The derby, or whatever the biggest match on the horizon is. */
-  const rival = nearestRival(state.clubName);
+  const rival = nearestRival(state.clubName, state.eraId, state.leagueClubs);
   if (opponent && rival && opponent === rival) {
     return mk({
       kind: 'derby',
@@ -4014,8 +4408,15 @@ function generateHeadlines(state: CareerState): void {
   // Doue for 88m". Promoted sides and mid table Eredivisie clubs do not sign
   // 80m superstars, and a feed that says they do reads as fake immediately.
   // A club can only be in for a player its budget could plausibly cover.
-  const myLeagueNames = leagueOf(state.clubName).clubs;
-  const allClubs = REAL_LEAGUES.flatMap(l => playableClubs(l.id));
+  const myLeagueNames = careerLeagueOf(state).clubs;
+  /* Round 154: the club a custom save displaced is out of the world, so it
+     cannot be signing anybody either. Its players still show it as their
+     label on the market (they exist, their club is just not in your game),
+     but it never ACTS: no buying, no job offers. */
+  const droppedClub = state.customClub && state.clubName === state.customClub.name
+    ? state.customClub.replacedClub
+    : null;
+  const allClubs = REAL_LEAGUES.flatMap(l => playableClubs(l.id)).filter(c => c.name !== droppedClub);
   for (const mp of candidates) {
     const fee = Math.max(1, Math.round(mp.price * (0.9 + Math.random() * 0.25)));
     // Who could actually afford him. One player can eat a club's entire
@@ -4180,10 +4581,13 @@ export function leagueRounds(size: number): number {
 
 /** Blank standings for every league except my own. Round 146: a historic
  *  save's world is its era's other league, not the 2026 league set. */
-function initWorld(myClub: string, eraId?: string): Record<string, WorldLeague> {
+function initWorld(myClub: string, eraId?: string, myLeagueId?: string): Record<string, WorldLeague> {
   const historic = !!eraId && isHistoricEra(eraId);
   const leagues = historic ? (ERA_LEAGUES[eraId!] ?? []) : REAL_LEAGUES;
-  const mine = ((historic && eraLeagueOf(myClub, eraId)) || leagueOf(myClub)).id;
+  /* Round 154: callers that know my league pass it, because a custom club is
+     in no league def and the leagueOf fallback would exclude the WRONG league
+     from the world, running my real division twice. */
+  const mine = myLeagueId ?? ((historic && eraLeagueOf(myClub, eraId)) || leagueOf(myClub)).id;
   const world: Record<string, WorldLeague> = {};
   for (const lg of leagues) {
     if (lg.id === mine) continue;
@@ -4214,8 +4618,8 @@ function myRoundsPlayed(state: CareerState, upto: number): number {
  * Mutates state.
  */
 function syncWorld(state: CareerState, myPlayed: number): void {
-  if (!state.world) state.world = initWorld(state.clubName, state.eraId);
-  const myTotal = leagueRounds(leagueOf(state.clubName).clubs.length);
+  if (!state.world) state.world = initWorld(state.clubName, state.eraId, careerLeagueOf(state).id);
+  const myTotal = leagueRounds(careerLeagueOf(state).clubs.length);
   const frac = myTotal > 0 ? Math.min(1, myPlayed / myTotal) : 0;
   for (const lg of REAL_LEAGUES) {
     const w = state.world[lg.id];
@@ -4366,17 +4770,24 @@ function drawCupOpponent(state: CareerState): string {
 
 /** Which league tiers of this country the cup draws from. */
 function cupCountryClubs(state: CareerState): ClubDef[] {
+  /* Round 154: the replaced club does not exist in a custom save's world, so
+     it cannot be drawn in the cup either. The custom club itself needs no
+     entry here, buildCupBracket seeds field[0] with my name directly. */
+  const dropped = state.customClub && state.clubName === state.customClub.name
+    ? state.customClub.replacedClub
+    : null;
   // Round 146: a historic era's cup draws from its own league only. We have
   // no 2010 second division bake, and a made up one would be exactly the
   // invention the data rule forbids, so the era cup is a top flight affair.
   if (state.eraId && isHistoricEra(state.eraId)) {
-    const lg = eraLeagueOf(state.clubName, state.eraId);
-    if (lg) return lg.clubs.map(c => eraClubDefFor(c, state.eraId));
+    const lg = careerLeagueOf(state);
+    return lg.clubs.filter(c => c !== dropped && c !== state.clubName)
+      .map(c => eraClubDefFor(c, state.eraId));
   }
-  const myLeague = leagueOf(state.clubName);
+  const myLeague = careerLeagueOf(state);
   const nation = NATIONS.find(n => n.leagueIds.includes(myLeague.id));
   const ids = nation ? nation.leagueIds : [myLeague.id];
-  return ids.flatMap(id => playableClubs(id));
+  return ids.flatMap(id => playableClubs(id)).filter(c => c.name !== dropped);
 }
 
 /**
@@ -4387,7 +4798,9 @@ function cupCountryClubs(state: CareerState): ClubDef[] {
  */
 function buildCupBracket(state: CareerState): CupTie[] {
   const all = cupCountryClubs(state).filter(c => c.name !== state.clubName);
-  const myLeagueNames = new Set(leagueOf(state.clubName).clubs);
+  // Round 154: careerLeagueOf, because a custom club resolves to its real
+  // league here where bare leagueOf would fall back to the Premier League.
+  const myLeagueNames = new Set(careerLeagueOf(state).clubs);
   const top = shuffle(all.filter(c => myLeagueNames.has(c.name)));
   const lower = shuffle(all.filter(c => !myLeagueNames.has(c.name)));
   const field = [state.clubName];
@@ -4420,7 +4833,7 @@ function buildCupBracket(state: CareerState): CupTie[] {
 
 /** True when the winner came from a lower division than the loser. */
 function isCupUpset(state: CareerState, winner: string, loser: string): boolean {
-  const top = new Set(leagueOf(state.clubName).clubs);
+  const top = new Set(careerLeagueOf(state).clubs);
   const w = clubByName(winner);
   const l = clubByName(loser);
   if (!w || !l) return false;
@@ -4540,14 +4953,17 @@ function uclProgressRank(state: CareerState): { rank: number; alive: boolean } {
 }
 
 /** The league club whose squad strength sits closest to mine. */
-function nearestRival(clubName: string, eraId?: string): string | null {
+function nearestRival(clubName: string, eraId?: string, clubsOverride?: string[]): string | null {
   // Round 146: in a historic save the rival comes from the era's own league
   // and the era's own strengths, so 2010 Bolton hates a 2010 neighbour and
   // not whoever shares its 2026 division.
-  const league = (eraId && eraLeagueOf(clubName, eraId)) || leagueOf(clubName);
+  // Round 154: a custom save passes its ACTUAL league list, because its club
+  // is in no league def and the club it replaced must never be picked as the
+  // rival of the club that replaced it.
+  const clubs = clubsOverride ?? ((eraId && eraLeagueOf(clubName, eraId)) || leagueOf(clubName)).clubs;
   const xiOf = xiChainFor(eraId);
   const myXi = xiOf(clubName);
-  const others = league.clubs
+  const others = clubs
     .filter(c => c !== clubName)
     .map(c => ({ c, d: Math.abs(xiOf(c) - myXi) }))
     .sort((a, b) => a.d - b.d);
@@ -4633,12 +5049,14 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
 const TITLE_GAP = 2.5;
 
 /** The XI strength chain for a world: the era bake when historic, else the
- * same chain clubDefMap ranks with. Round 146 threading. */
+ * same chain clubDefMap ranks with. Round 146 threading. Round 154: the
+ * active custom club answers with its measured generated XI, so title gaps
+ * and rival distances read its real strength instead of a 65 fallback. */
 function xiChainFor(eraId?: string): (n: string) => number {
-  if (eraId && isHistoricEra(eraId)) {
-    return n => eraXIAvg(eraId, n) ?? 60;
-  }
-  return n => bakedXIAvg(n) ?? STRENGTH_PRIORS[n] ?? 65;
+  const base: (n: string) => number = eraId && isHistoricEra(eraId)
+    ? n => eraXIAvg(eraId, n) ?? 60
+    : n => bakedXIAvg(n) ?? STRENGTH_PRIORS[n] ?? 65;
+  return n => (ACTIVE_CUSTOM && n === ACTIVE_CUSTOM.def.name ? ACTIVE_CUSTOM.xi : base(n));
 }
 
 /** Round 145: how far a club sits from its own league's best XI, on the same
@@ -4751,14 +5169,20 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
   return { target: size - drop, label: `Stay up. Avoid relegation` };
 }
 
-export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSize: number, eraId?: string): BoardObjective[] {
+export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSize: number, eraId?: string, leagueClubs?: string[]): BoardObjective[] {
   /* Round 146: a historic save's board reads the era's own world: the era
      league (so a 2010 club is never promised the Conference League, which
      did not exist), the era club defs (2010 stature, 2010 budgets) and the
-     era XI gaps. A modern save passes no eraId and nothing changes. */
+     era XI gaps. A modern save passes no eraId and nothing changes.
+     Round 154: a custom save passes its actual leagueClubs so the rival pick
+     draws from the league as it really is this save (custom club in, the
+     replaced club out). The def side already answers through the registry. */
   const historic = !!eraId && isHistoricEra(eraId);
   const club = historic ? eraClubDefFor(clubName, eraId) : clubDefFor(clubName);
-  const league = (historic && eraLeagueOf(clubName, eraId)) || leagueOf(clubName);
+  const isCustom = !!ACTIVE_CUSTOM && ACTIVE_CUSTOM.def.name === clubName;
+  const league = (isCustom && customLeagueDef(ACTIVE_CUSTOM!.spec, eraId))
+    || (historic && eraLeagueOf(clubName, eraId))
+    || leagueOf(clubName);
   const objs: BoardObjective[] = [];
   const demand = leagueDemand(club.expectation, club.tier, leagueSize, league, titleGapFor(clubName, league, eraId), eraId);
   objs.push({ id: 'league', target: demand.target, label: demand.label });
@@ -4781,7 +5205,8 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
     });
   }
   const mapped = RIVALS[clubName];
-  const rival = mapped && league.clubs.includes(mapped) ? mapped : nearestRival(clubName, eraId);
+  const rivalPool = leagueClubs ?? league.clubs;
+  const rival = mapped && rivalPool.includes(mapped) ? mapped : nearestRival(clubName, eraId, leagueClubs);
   if (rival) {
     objs.push({ id: 'rival', target: 0, rivalName: rival, label: `Finish above ${rival}` });
   }
@@ -5248,7 +5673,7 @@ function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null 
     const home = mine[0] === state.clubName;
     return {
       competition: 'league',
-      compLabel: `${leagueOf(state.clubName).name} · Round ${entry.round + 1}`,
+      compLabel: `${careerLeagueOf(state).name} · Round ${entry.round + 1}`,
       opponent: home ? mine[1] : mine[0],
       home,
     };
@@ -5258,7 +5683,7 @@ function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null 
     if (!opponent) return null;
     return {
       competition: 'cup',
-      compLabel: `${leagueOf(state.clubName).cupName} · ${CUP_LABELS[entry.cupRound]}`,
+      compLabel: `${careerLeagueOf(state).cupName} · ${CUP_LABELS[entry.cupRound]}`,
       opponent,
       home: cupVenue(entry.cupRound),
     };
@@ -5476,7 +5901,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
       const i = CUP_ORDER.indexOf(entry.cupRound!);
       if (entry.cupRound === 'F') {
         state.cupRound = 'won';
-        const cupName = leagueOf(state.clubName).cupName;
+        const cupName = careerLeagueOf(state).cupName;
         trophyWon = cupName;
         state.trophies.push({ name: cupName, emoji: '🏅', season: state.season });
         events.push(`🏅 The ${cupName} is yours!`);
@@ -5491,7 +5916,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     } else {
       state.cupRound = 'out';
       state.cupExit = entry.cupRound ?? 'R16';
-      events.push(`❌ Knocked out of the ${leagueOf(state.clubName).cupName} at the ${CUP_LABELS[entry.cupRound ?? 'R16'].toLowerCase()} stage.`);
+      events.push(`❌ Knocked out of the ${careerLeagueOf(state).cupName} at the ${CUP_LABELS[entry.cupRound ?? 'R16'].toLowerCase()} stage.`);
       confDelta -= entry.cupRound === 'R16' ? 3 : 4.5;
     }
   }
@@ -6350,7 +6775,7 @@ export function developingPlayers(career: CareerState): CMPlayer[] {
     .sort((a, b) => ((b.potential ?? b.rating) - b.rating) - ((a.potential ?? a.rating) - a.rating));
 }
 
-export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID): CareerState {
+export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec): CareerState {
   /* Round 132: the era decides what year season one is, and the year decides
      everything else: the squad you are handed, how good every other club is,
      and who is on the market. The default era is the current one and its
@@ -6359,15 +6784,39 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID): C
      Round 146: a HISTORIC era swaps the whole world underneath the same
      machinery: its own bake (real 2010 squads), its own league defs, its own
      stature ladder, its own continental pool. Its yearsOn is zero too,
-     because year zero of the 2010 world is the real 2010 data untouched. */
+     because year zero of the 2010 world is the real 2010 data untouched.
+     Round 154: a CUSTOM club takes one more step on the same rails: it swaps
+     itself in for the weakest club of its chosen league in leagueClubs, and
+     everything downstream (fixtures, table, cup, news, suitors) reads
+     leagueClubs, so the world simply is the world with your club in it. */
   const era = eraById(eraId);
   const historic = isHistoricEra(era.id);
-  const club = historic ? eraClubDefFor(clubName, era.id) : clubDefFor(clubName);
+  if (custom) {
+    const ranked = historic ? eraPlayableClubs(era.id, custom.leagueId) : playableClubs(custom.leagueId);
+    const spec: CustomClubSpec = {
+      ...custom,
+      name: custom.name.trim(),
+      stadium: custom.stadium.trim() || `${custom.name.trim()} Park`,
+      crest: { ...custom.crest, initials: sanitizeCrestInitials(custom.crest.initials) },
+      replacedClub: ranked.length ? ranked[ranked.length - 1].name : custom.replacedClub,
+    };
+    registerCustomClub(spec, era.id);
+    custom = spec;
+  } else {
+    // A fresh real-club career must never inherit a previous save's club.
+    registerCustomClub(null);
+  }
+  const club = custom ? clubDefFor(custom.name)
+    : historic ? eraClubDefFor(clubName, era.id) : clubDefFor(clubName);
   const startYearsOn = historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
-  const squad = buildSquad(club.name, startYearsOn, era.id);
+  const squad = custom ? buildCustomSquad(custom) : buildSquad(club.name, startYearsOn, era.id);
   // Owner task 61: the league is the club's REAL league with its real clubs.
-  const league = (historic && eraLeagueOf(club.name, era.id)) || leagueOf(club.name);
-  const leagueClubs = shuffle([...league.clubs]);
+  const league = (custom && customLeagueDef(custom, era.id))
+    || (historic && eraLeagueOf(club.name, era.id))
+    || leagueOf(club.name);
+  const leagueClubs = shuffle(custom
+    ? league.clubs.map(c => (c === custom!.replacedClub ? custom!.name : c))
+    : [...league.clubs]);
   const state: CareerState = {
     saveVersion: SAVE_VERSION,
     clubName: club.name,
@@ -6388,7 +6837,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID): C
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length),
-    clubStrengths: genClubStrengths(league, startYearsOn, era.id),
+    clubStrengths: genClubStrengths(custom ? { ...league, clubs: leagueClubs } : league, startYearsOn, era.id),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
@@ -6397,12 +6846,14 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID): C
     cupRound: 'R16',
     cupDraw: {},
     // Round 72: only clubs in UCL-eligible leagues start in Europe.
-    uclGroup: initUclGroup(club.tier <= 2 && league.euro, club.name, era.id),
+    // Round 154: a brand new custom club starts outside Europe whatever its
+    // money says, because it has not qualified for anything yet.
+    uclGroup: custom ? null : initUclGroup(club.tier <= 2 && league.euro, club.name, era.id),
     uclKoRound: null,
     uclDraw: {},
     uclBracket: undefined,
     cupBracket: undefined,
-    world: initWorld(club.name, era.id),
+    world: initWorld(club.name, era.id, league.id),
     trophies: [],
     history: [],
     careerStats: { played: 0, wins: 0, draws: 0, losses: 0, clubsManaged: [club.name] },
@@ -6419,12 +6870,18 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID): C
     inbox: [],
     promisedStarts: [],
   };
+  if (custom) {
+    state.customClub = custom;
+    /* The generated squad's own measured strength, because the name-keyed
+       chain in genClubStrengths cannot know a club that is in no bake. */
+    state.clubStrengths[custom.name] = clamp(Math.round(squadXIAvg(squad)) + ri(-2, 2), 52, 95);
+  }
   ensureContracts(state);
   ensureAcademy(state);
   ensureRoles(state);
   ensurePress(state);
   state.wageCap = wageCapFrom(wageBill(state));
-  state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id);
+  state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex]);
@@ -6746,9 +7203,14 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     const everyClub = eraHist
       ? (ERA_LEAGUES[state.eraId!] ?? []).flatMap(l => l.clubs.map(c => eraClubDefFor(c, state.eraId)))
       : REAL_LEAGUES.flatMap(l => playableClubs(l.id));
-    const suitors = shuffle(everyClub.filter(c => c.tier < club.tier && c.name !== state.clubName));
+    /* Round 154: the displaced club of a custom save does not exist, so it
+       cannot come offering you a job either. */
+    const droppedClub = state.customClub && state.clubName === state.customClub.name
+      ? state.customClub.replacedClub
+      : null;
+    const suitors = shuffle(everyClub.filter(c => c.tier < club.tier && c.name !== state.clubName && c.name !== droppedClub));
     for (const s of suitors.slice(0, ri(1, 2))) {
-      const myLeague = (eraHist && eraLeagueOf(state.clubName, state.eraId)) || leagueOf(state.clubName);
+      const myLeague = careerLeagueOf(state);
       const abroad = !myLeague.clubs.includes(s.name);
       /* Round 140: job offers stopped saying "board expects Top 14", because
          no board on earth talks like that. The offer now carries the same
@@ -6778,7 +7240,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     trophies: seasonTrophies,
     topScorer,
     topAssister,
-    qualifiedUcl: position <= 4 && leagueOf(state.clubName).euro,
+    qualifiedUcl: position <= 4 && careerLeagueOf(state).euro,
     signings: state.seasonSignings,
     offers,
     seasonScore: Math.min(130, myRow.pts + seasonTrophies.length * 10),
@@ -6973,7 +7435,16 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     : !!clubByName(acceptOfferClub));
   const moving = !!(acceptOfferClub && validTarget && acceptOfferClub !== career.clubName);
   const clubName = moving && acceptOfferClub ? acceptOfferClub : career.clubName;
-  const club = historic ? eraClubDefFor(clubName, eraId) : clubDefFor(clubName);
+  /* Round 154: the custom club lives exactly as long as you manage it. Stay
+     and it re-registers for the new season (its def re-measured against the
+     aged world); walk to another job and the spec is dropped, so next season
+     the real league is simply the real league again. */
+  const custom = !moving && career.customClub && career.customClub.name === clubName
+    ? career.customClub
+    : undefined;
+  registerCustomClub(custom ?? null, eraId);
+  const club = custom ? clubDefFor(clubName)
+    : historic ? eraClubDefFor(clubName, eraId) : clubDefFor(clubName);
   const season = career.season + 1;
   // Round 70: hitting or missing board objectives carries into next season's
   // starting confidence.
@@ -7072,10 +7543,25 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const budget = moving
     ? Math.round(club.budget * 1.1)
     : Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12));
-  const nextLeague = (historic && eraLeagueOf(clubName, eraId)) || leagueOf(clubName);
+  const nextLeague = (custom && customLeagueDef(custom, eraId))
+    || (historic && eraLeagueOf(clubName, eraId))
+    || leagueOf(clubName);
   const qualifiedUcl = (summary ? summary.qualifiedUcl : prevPos <= 4) && nextLeague.euro;
   const league = nextLeague;
-  const leagueClubs = shuffle([...league.clubs]);
+  /* Round 154: the swap is recomputed every summer, because the weakest club
+     of the league can change as the world ages. The spec remembers who is
+     out this season so the cup and the def math agree with the fixture list. */
+  const nextReplaced = custom
+    ? (() => {
+        const ranked = historic ? eraPlayableClubs(eraId!, league.id) : playableClubs(league.id);
+        return ranked.length ? ranked[ranked.length - 1].name : custom.replacedClub;
+      })()
+    : null;
+  const nextCustom = custom && nextReplaced ? { ...custom, replacedClub: nextReplaced } : custom;
+  if (nextCustom) registerCustomClub(nextCustom, eraId);
+  const leagueClubs = shuffle(nextCustom
+    ? league.clubs.map(c => (c === nextCustom.replacedClub ? nextCustom.name : c))
+    : [...league.clubs]);
 
   const state: CareerState = {
     ...JSON.parse(JSON.stringify(career)) as CareerState,
@@ -7091,7 +7577,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length),
-    clubStrengths: genClubStrengths(league, nextYearsOn, eraId),
+    clubStrengths: genClubStrengths(nextCustom ? { ...league, clubs: leagueClubs } : league, nextYearsOn, eraId),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
@@ -7105,7 +7591,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     uclDraw: {},
     uclBracket: undefined,
     cupBracket: undefined,
-    world: initWorld(clubName, eraId),
+    world: initWorld(clubName, eraId, league.id),
     pendingSummary: null,
     cupExit: null,
     uclExit: null,
@@ -7121,6 +7607,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     retiredNames: [...(career.retiredNames ?? []), ...retiredNow.map(r => r.name)],
     retiredLastSummer: retiredNow,
   };
+  /* Round 154: the deep copy above carried the old spec either way, so make
+     the outcome explicit: staying keeps the re-measured spec, moving drops
+     the club you built. */
+  if (nextCustom) state.customClub = nextCustom;
+  else delete state.customClub;
   // Round 71: track every club this manager has run.
   const managed = new Set(state.careerStats.clubsManaged ?? [career.clubName]);
   managed.add(clubName);
@@ -7196,7 +7687,16 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     }
   }
   if (intakeNews.length) state.aiHeadlines = [...intakeNews, ...state.aiHeadlines].slice(0, 8);
-  state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length, eraId);
+  /* Round 154: the custom club's league strength is its ACTUAL squad this
+     summer, aged, sold into and bought for, not a fallback constant, and the
+     registered def is re-measured from the same squad so the new season's
+     board ranks the club you have now, not the one you founded. */
+  if (nextCustom) {
+    const liveXI = squadXIAvg(state.squad);
+    state.clubStrengths[nextCustom.name] = clamp(Math.round(liveXI) + ri(-2, 2), 52, 95);
+    registerCustomClub(nextCustom, eraId, liveXI);
+  }
+  state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length, eraId, nextCustom ? leagueClubs : undefined);
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
@@ -7249,6 +7749,17 @@ export function loadCareer(): CareerState | null {
        all read the world year now, so it has to be right before any of them
        renders rather than at the first kick off. */
     ensureClock(parsed);
+    /* Round 154: the custom club's identity is rebuilt from the save the
+       moment it is opened, measured against the squad as saved, and cleared
+       just as firmly when the save is a normal one, so a stale registration
+       from an earlier custom career can never color a real club's screens. */
+    if (parsed.customClub && typeof parsed.customClub.name === 'string'
+      && parsed.customClub.name === parsed.clubName && parsed.customClub.crest) {
+      registerCustomClub(parsed.customClub, parsed.eraId, squadXIAvg(parsed.squad));
+    } else {
+      if (parsed.customClub) delete parsed.customClub;
+      registerCustomClub(null);
+    }
     return parsed;
   } catch {
     return null;
@@ -7256,6 +7767,7 @@ export function loadCareer(): CareerState | null {
 }
 
 export function clearCareer(): void {
+  registerCustomClub(null);
   try {
     localStorage.removeItem(SAVE_KEY);
   } catch {

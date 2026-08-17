@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClubManager } from '@/hooks/useClubManager';
 import type { HubTab } from '@/hooks/useClubManager';
 import {
-  TIER_INFO, clubByName, clubPreviewRating, leagueOf, money, confidenceLabel,
+  TIER_INFO, clubDefFor, clubPreviewRating, leagueOf, money, confidenceLabel,
   isAvailable, xiAverageRating, sortedTable,
   NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
   isHistoricEra, eraLeaguesFor, eraPlayableClubs, boardWantLabel,
@@ -25,6 +25,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ConfettiBurst } from '@/components/club-manager/Celebration';
+import { CustomClubForm, CrestBadge } from '@/components/club-manager/CustomClubForm';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { WorldTablesCard } from '@/components/club-manager/WorldTablesCard';
 import { UclBracketCard } from '@/components/club-manager/UclBracketCard';
@@ -93,7 +94,7 @@ const ClubManager = () => {
      is looking at: which squads, which players, how good each club is. Same
      idea as the era choice on the My Career create screen, laid out as tiles
      because this game is tiles. */
-  const [pickStep, setPickStep] = useState<'era' | 'nation' | 'league' | 'team'>('era');
+  const [pickStep, setPickStep] = useState<'era' | 'nation' | 'league' | 'team' | 'custom'>('era');
   const [pickEra, setPickEra] = useState<string>(DEFAULT_ERA_ID);
   const [pickNation, setPickNation] = useState<NationDef | null>(null);
   const [pickLeagueId, setPickLeagueId] = useState<string | null>(null);
@@ -106,7 +107,10 @@ const ClubManager = () => {
   const [clubView, setClubView] = useState<string | null>(null);
   const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
 
-  const club = g.career ? clubByName(g.career.clubName) : null;
+  /* Round 154: clubDefFor, not clubByName, because a custom club has no
+     entry in any static table and resolves through the save's registered
+     spec instead (color, tier, expectation all correct, never null). */
+  const club = g.career ? clubDefFor(g.career.clubName) : null;
   const unavailable = useMemo(
     () => (g.career ? g.career.squad.filter(p => !isAvailable(p)) : []),
     [g.career],
@@ -458,6 +462,19 @@ const ClubManager = () => {
                   </button>
                 );
               })}
+              <button
+                onClick={() => { g.chooseClub(''); setPickStep('custom'); }}
+                className="rounded-xl border border-dashed border-primary/50 p-3 text-left transition-all bg-card hover:border-primary hover:bg-primary/5"
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base leading-none">✨</span>
+                  <span className="text-xs font-bold text-primary truncate">Create your own club</span>
+                </div>
+                <div className="text-[9px] text-muted-foreground mt-1">
+                  Your name, your crest, your stadium, your money. It takes the place of the league's weakest side.
+                </div>
+                <div className="text-[10px] font-bold text-foreground mt-1.5">Full customization →</div>
+              </button>
             </div>
             <p className="text-[9px] text-muted-foreground text-center mt-3">
               {historicPick ? (
@@ -489,6 +506,17 @@ const ClubManager = () => {
               </div>
             )}
           </div>
+        )}
+
+        {/* -------- Step 4 (optional): found your own club (Round 154) -------- */}
+        {pickStep === 'custom' && pickNation && league && (
+          <CustomClubForm
+            leagueName={league.name}
+            leagueId={league.id}
+            eraId={historicPick ? pickEra : undefined}
+            onBack={() => setPickStep('team')}
+            onCreate={spec => g.confirmCustomClub(pickEra, spec)}
+          />
         )}
       </div>
     );
@@ -709,7 +737,11 @@ const ClubManager = () => {
       {/* Header */}
       <header className="mb-4">
         <div className="flex items-center justify-center gap-2 mb-1 flex-wrap">
-          <span className="w-3 h-3 rounded-full" style={{ backgroundColor: club.color }} />
+          {/* Round 154: a club you founded wears its crest where every other
+              club wears its color dot. */}
+          {c.customClub && c.customClub.name === c.clubName
+            ? <CrestBadge crest={c.customClub.crest} size={22} />
+            : <span className="w-3 h-3 rounded-full" style={{ backgroundColor: club.color }} />}
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">{c.clubName}</h1>
           {/* Round 132: the save now knows what year it is, so it says so, next
               to the season count it has always shown. */}
@@ -723,6 +755,9 @@ const ClubManager = () => {
               shuffled table happened to put you: a brand new Manchester City
               save opened on "#15 in league", which reads as broken. */}
           <span>{c.week === 0 ? 'Season not started' : `#${g.myPosition || '-'} in league`}</span>
+          {c.customClub && c.customClub.name === c.clubName && (
+            <span className="inline-flex items-center gap-1">🏟 {c.customClub.stadium}</span>
+          )}
           <span className="text-gold font-semibold">{money(c.budget)}</span>
           <span className="inline-flex items-center gap-1">
             {c.form.length === 0 && <span>No matches yet</span>}
