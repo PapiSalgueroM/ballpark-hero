@@ -36,10 +36,20 @@ D. **OPEN: create-a-club.** "Create my team for the manger game and its full cus
    crest builder (original shapes only, no real crests), stadium name, starting budget,
    league choice, generated starting squad, real transfer market. Big feature, own round.
 
-E. **OPEN: the idle stadium game.** He sent two reference screenshots of an idle sports
-   tycoon (income per second, upgrade tracks, live toy match, gem currency, leaderboards)
-   and wants ours, animation-heavy: "Suprise me on how ur going to do it but add so many
-   things to it." Original mechanics and art only. New game page + engine + harness.
+E. **DONE, Round 146: Stadium Tycoon, the idle game.** He sent two reference screenshots of
+   an idle sports tycoon and asked to be surprised, with animation named twice. Shipped
+   original: /stadium-tycoon, a matchday-economy idle game where attendance is min(seats,
+   fanbase), every fan pays per second, a live toy match (player dots chasing a ball,
+   real sim state) pays crowd-scaled goal bonuses, win streaks multiply income and pull
+   fans, nine upgrade tracks, tap income with a Megaphone track, prestige into Reputation
+   stars (+50% each, permanent), away earnings at half rate capped at 8h, versioned
+   localStorage saves. Animations: seat-by-seat crowd fill, floaters off every earn,
+   goal confetti, count-up cash, streak flame, glow on the prestige button. Tuned WITH
+   the harness (simStadiumTycoon.mjs): first prestige minute ~15 on a greedy floor
+   strategy, no pre-prestige purchase ever more than 60s away, the post-prestige wall
+   measured 253s max on a 2h refuser (ceiling 420s), offline pay capped and honest,
+   corrupt saves fall back safely. Live-verified in Chromium at 390x844: money grows,
+   tiles buy, floaters fire, zero page errors.
 
 F. **STANDING: more animation everywhere, more depth everywhere.** "Add more animation
    especially to the idle game... and all the games."
@@ -166,6 +176,13 @@ target, not the names.
    while reading the room stays worth about plus 3, which is the Round 135 calibration
    restored.
 
+9b. **OPEN, small: simContracts has a rare flake window.** Observed once on 2026-08-17 in a
+   full-suite run: "FAIL: blowing the wage budget costs nothing", green on immediate rerun
+   and not touched by any recent round. Its wage-consequence check appears to sit on an
+   unseeded roll with a small losing window. Next session that touches contracts: seed the
+   section or widen the measured window properly (the simHeadlines derby fix from the same
+   day is the pattern: seed with a verified precondition and a readable guard message).
+
 10. **OPEN, standing: every game gets deeper.** More realism, more info, more minigames, in
    every game on the site, career modes first. Use the franchise-mode checklist as the gap
    list per game: training plans, form and morale loops, media, contracts, injuries and
@@ -197,8 +214,8 @@ true on the date above; re-measure rather than quoting them.
 | `origin/main` head | `34b2198` = **Round 144** when this was written (2026-08-17 morning) |
 | How 139-144 landed | SHIP13 clicked via computer-use 2026-08-17 ~07:50 UTC. First run failed closed on a bad RUN139 assertion (bare `plus10` matched the removal comment); pattern fixed to `id: 'plus10'`, re-clicked, all six pushed clean. Lesson in SHIP-PIPELINE terms: absence assertions must target the old DEFINITION shape, and every bat's patterns get tested against the actual zip contents before delivery. |
 | Live site | douknowball.com published 2026-08-17 ~08:00 UTC at Round 144 (two deploy calls, second after sync was file-verified). Republish after 145+146 land. |
-| Packaged queue | Round **145** (title band + positional copy purge + the 2010-11 era, one commit because one review drove both and they share files). One click ships it: **`SHIP14.bat`** (logs to `ship_log14.txt`). |
-| Next free round number | **146** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged queue | Round **145** (title band + positional copy purge + the 2010-11 era) and Round **146** (Stadium Tycoon, the idle game). One click ships both: **`SHIP14.bat`** (logs to `ship_log14.txt`). |
+| Next free round number | **147** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

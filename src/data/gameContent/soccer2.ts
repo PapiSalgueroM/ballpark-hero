@@ -657,4 +657,53 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
     ],
   },
+  '/stadium-tycoon': {
+    intro: [
+      "Stadium Tycoon is an idle game about the part of football nobody streams: the turnstiles. You start with a fence, two benches and ninety loyal fans, and you grow that into a ground that hums, one upgrade at a time, while a live toy match plays out on screen and pays you for every goal.",
+      "It is built to be alive. The crowd fills the stand seat by seat as your real attendance grows, money floats off everything that earns, goals throw confetti, and a win streak lights a flame that multiplies the lot. Leave the tab and the turnstiles keep spinning at half speed for up to eight hours.",
+    ],
+    howToPlay: [
+      "Watch the money counter climb. Every fan in the ground pays you every second.",
+      "Tap the stadium for instant cash. The Megaphone track makes every tap stronger.",
+      "Buy upgrades from the nine tiles: Stands add seats, Ticket Office, Snack Bar and Club Shop raise what each fan spends, Parking pays flat money, Floodlights and Academy grow the fanbase, Squad wins matches, Megaphone boosts taps.",
+      "Follow the match at the top of the pitch. Goals pay a bonus scaled by the crowd, wins extend your streak, and the streak multiplies income and pulls in new fans.",
+      "When lifetime earnings fill the yellow bar, sell up and move grounds: everything resets except a permanent Reputation star worth plus 50 percent income each, forever.",
+    ],
+    rules: [
+      "Attendance is the smaller of your seats and your fanbase, so Stands matter only when the ground is full and spending tracks matter only when it is not.",
+      "Matches run about two real minutes. Your Squad level drives your goal chance; opponents get harder with every match played, forever.",
+      "A win extends the streak, a draw keeps it alive without extending it, a loss ends it. The streak multiplier caps at ten wins.",
+      "Away earnings run at half your income rate, capped at eight hours, and only count after you have been gone at least thirty seconds.",
+      "Progress saves on this device automatically. Selling up is permanent: only Reputation and your lifetime totals survive.",
+    ],
+    example: [
+      "You open the game to 90 fans and about six dollars a second. The first Stands level costs 30 and adds 40 seats nobody fills yet, so you buy the Ticket Office instead and watch the rate tick up.",
+      "Ten minutes in, Floodlights have pulled your fanbase past your 280 seats, the ground is full, and Stands become the best purchase on the board. Your striker puts one in, the crowd of 280 pays a 168 dollar goal bonus, and the streak hits three.",
+      "Around twenty minutes in, lifetime earnings crest four million and the yellow bar glows. You sell up, keep a star, and the ninety-fan fence starts again at one and a half times the speed.",
+    ],
+    tips: [
+      "Balance seats against spend. A full ground with a poor Snack Bar wastes fans; a rich concourse with empty seats wastes upgrades.",
+      "Squad is quietly the best economy track: goals pay crowd-scaled bonuses, and the streak multiplier compounds everything else.",
+      "Do not sit on the sell-up button. The first star is worth more than a few minutes of squeezing the old ground.",
+      "Tap during big crowds. Taps scale with your income rate, so a tap at 400 fans is worth many times a tap at 90.",
+    ],
+    faqs: [
+      {
+        q: "Do I lose everything when I sell up?",
+        a: "Levels, money and fanbase reset. Reputation stars, lifetime goals, wins and taps stay. Each star is a permanent 50 percent income boost, so runs get faster every time.",
+      },
+      {
+        q: "Does it earn while the tab is closed?",
+        a: "Yes, at half rate for up to eight hours, paid out the next time you open the game on the same device.",
+      },
+      {
+        q: "Can the opponents be beaten forever?",
+        a: "They scale without end, so eventually a run stops winning every match. That is the signal the current ground has peaked and the sell-up bar is the way forward.",
+      },
+      {
+        q: "Is anything in it real players or clubs?",
+        a: "No. Stadium Tycoon is entirely our own toy world, which is exactly why the crowd can throw confetti at whatever it likes.",
+      },
+    ],
+  },
 };
