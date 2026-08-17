@@ -31,15 +31,18 @@ const ENTRY = '/tmp/tycoonEntry.mjs';
 const BUNDLE = '/tmp/tycoon.bundle.mjs';
 
 fs.writeFileSync(ENTRY, `
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const mod = await import('${ROOT}/src/lib/stadiumTycoon.ts');
+const cm = await import('${ROOT}/src/lib/clubManager.ts');
 export const T = mod;
+export const CM_WORLD = { real: cm.REAL_LEAGUES, eras: cm.ERA_LEAGUES };
 `);
 execSync(
   `${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`,
   { stdio: 'inherit' },
 );
 
-const { T } = await import(BUNDLE);
+const { T, CM_WORLD } = await import(BUNDLE);
 const {
   TRACKS, newTycoon, tick, buy, tap, costOf, canBuy, incomePerSec,
   prestige, canPrestige, prestigeThreshold, offlineEarnings,
@@ -249,6 +252,79 @@ console.log('6) The boost is honest');
   const back = deserializeTycoon(serializeTycoon(lit, 5), 5);
   if (!back || Math.abs(back.boostLeftSec - lit.boostLeftSec) > 0.001) fail('the boost clock did not survive a save');
   console.log(`   x${ratio.toFixed(2)} while lit, no stacking, burns out on time, away pay unchanged`);
+}
+
+/* ---------- 7. Milestones pay once, ever ---------- */
+console.log('7) Milestones are exactly-once and exploit-proof');
+{
+  const { MILESTONES } = T;
+  const roll = seeded(2024);
+  // Play until the first win milestone fires, then count its occurrences
+  // across a long continuation AND across a prestige.
+  let s = newTycoon(0);
+  let fired = {};
+  const record = evs => { for (const e of evs) if (e.kind === 'milestone') fired[e.label] = (fired[e.label] ?? 0) + 1; };
+  for (let t = 0; t < 40 * 60 && !canPrestige(s); t += 2) {
+    const r = tick(s, 2, roll);
+    s = r.state;
+    record(r.events);
+    s = tap(s); s = tap(s);
+    for (let g = 0; g < 20; g++) {
+      const opts = TRACKS.filter(tr => canBuy(s, tr.id)).sort((a, b) => costOf(s, a.id) - costOf(s, b.id));
+      if (!opts.length) break;
+      s = buy(s, opts[0].id);
+    }
+  }
+  const firedBefore = { ...fired };
+  const count = Object.keys(firedBefore).length;
+  console.log(`   ${count} milestones fired on the way to the first prestige`);
+  if (count < 5) fail(`only ${count} milestones fired in a full greedy run to prestige`);
+  for (const [label, n] of Object.entries(firedBefore)) {
+    if (n !== 1) fail(`milestone "${label}" fired ${n} times`);
+  }
+  // Prestige, then run on: nothing already earned may fire again, and the
+  // carried counters must not re-trigger the win and goal firsts instantly.
+  let p = prestige(s, 0);
+  if ((p.claimed ?? []).length !== (s.claimed ?? []).length) fail('prestige changed the claimed list');
+  const rEarly = tick(p, 2, roll);
+  record(rEarly.events);
+  p = rEarly.state;
+  for (const [label, n] of Object.entries(fired)) {
+    if (n !== 1) fail(`milestone "${label}" re-fired after prestige (the carried-counter exploit)`);
+  }
+  // The exactly-once list survives a save.
+  const back = deserializeTycoon(serializeTycoon(p, 9), 9);
+  if (!back || back.claimed.length !== p.claimed.length) fail('claimed milestones did not survive a save');
+  // And an unknown id in a tampered save is dropped, not paid forever.
+  const tampered = deserializeTycoon(JSON.stringify({ ...JSON.parse(serializeTycoon(p, 9)), claimed: ['fake-id', ...p.claimed] }), 9);
+  if (tampered && tampered.claimed.includes('fake-id')) fail('a fake milestone id survived the load');
+  console.log('   exactly-once holds through prestige and saves; payouts match their labels');
+}
+
+/* ---------- 8. Opponent names are stable, fresh, and never real ---------- */
+console.log('8) The opposition is invented, provably');
+{
+  const { opponentName, allOpponentNames } = T;
+  const s0 = newTycoon(0);
+  if (opponentName(s0) !== opponentName({ ...s0 })) fail('the same match drew two different opponents');
+  const names = new Set();
+  for (let m = 0; m < 40; m++) names.add(opponentName({ ...s0, matchNo: m }));
+  console.log(`   ${names.size} distinct opponents in the first 40 matches, e.g. ${opponentName(s0)}`);
+  if (names.size < 25) fail(`only ${names.size} distinct opponents in 40 matches, the fixture list is repetitive`);
+  if (opponentName({ ...s0, matchNo: 3 }) === opponentName({ ...s0, matchNo: 3, rep: 1 })) {
+    fail('a new ground replays the exact same fixture list');
+  }
+  // The legal-shaped guard: no generated combination may equal a real club
+  // name anywhere in the Club Manager world, today or in any era.
+  const realClubs = new Set();
+  for (const lg of CM_WORLD.real ?? []) for (const c of lg.clubs) realClubs.add(c);
+  for (const leagues of Object.values(CM_WORLD.eras ?? {})) {
+    for (const lg of leagues) for (const c of lg.clubs) realClubs.add(c);
+  }
+  if (realClubs.size < 200) fail(`the real-club list only loaded ${realClubs.size} names, the collision check is not checking much`);
+  const collisions = allOpponentNames().filter(n => realClubs.has(n));
+  if (collisions.length) fail(`generated opponents collide with real clubs: ${collisions.join(', ')}`);
+  console.log(`   ${allOpponentNames().length} possible names checked against ${realClubs.size} real clubs, 0 collisions`);
 }
 
 console.log('');

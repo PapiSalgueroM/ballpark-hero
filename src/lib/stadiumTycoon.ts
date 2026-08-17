@@ -80,6 +80,9 @@ export interface TycoonState {
    *  charges or spends hype. */
   boostChargeSec: number;
   boostLeftSec: number;
+  /** Round 152: milestone ids already paid this CAREER. Survives prestige,
+   *  because the counters they read survive prestige too. */
+  claimed: string[];
 }
 
 export const TYCOON_SAVE_KEY = 'stadiumTycoonSaveV1';
@@ -104,7 +107,73 @@ export function newTycoon(now: number): TycoonState {
     totalTaps: 0,
     boostChargeSec: 0,
     boostLeftSec: 0,
+    claimed: [],
   };
+}
+
+/* Round 152: milestones. One-time payouts for the club's firsts, so growth
+ * has punctuation: the moment the thousandth fan squeezes in or the tenth
+ * win lands, the game says so and pays for it. Each fires exactly once per
+ * CAREER, surviving prestige on purpose: the win and goal counters carry
+ * across grounds, so a per-ground reset would re-pay "first win" the
+ * instant you sold up, at the rep multiplier, for free. Payouts are sized
+ * as a nudge, roughly a minute of income at the stage they unlock, never an
+ * economy of their own. The harness pins the exactly-once rule. */
+export interface TycoonMilestone {
+  id: string;
+  label: string;
+  /** Payout in dollars BEFORE the reputation multiplier. */
+  pay: number;
+  /** Does this state qualify? Pure check against the current state. */
+  hit: (s: TycoonState) => boolean;
+}
+
+export const MILESTONES: TycoonMilestone[] = [
+  { id: 'fans500', label: '500 fans follow the club', pay: 400, hit: s => s.fanbase >= 500 },
+  { id: 'fans2k', label: '2,000 fans follow the club', pay: 2500, hit: s => s.fanbase >= 2000 },
+  { id: 'fans10k', label: '10,000 fans follow the club', pay: 20000, hit: s => s.fanbase >= 10000 },
+  { id: 'full', label: 'First full house', pay: 600, hit: s => capacity(s) > 120 && attendance(s) >= capacity(s) },
+  { id: 'win1', label: 'First win', pay: 250, hit: s => s.totalWins >= 1 },
+  { id: 'win10', label: '10 wins', pay: 3000, hit: s => s.totalWins >= 10 },
+  { id: 'win50', label: '50 wins', pay: 30000, hit: s => s.totalWins >= 50 },
+  { id: 'goals25', label: '25 goals scored', pay: 4000, hit: s => s.totalGoals >= 25 },
+  { id: 'streak5', label: 'Five wins in a row', pay: 6000, hit: s => s.streak >= 5 },
+  { id: 'allTracks', label: 'Every upgrade owned at least once', pay: 8000, hit: s => TRACKS.every(t => (s.levels[t.id] ?? 0) >= 1) },
+];
+
+/* Round 153: the opposition gets a name. "THEM" was doing the job, but a
+ * scoreboard that says Ironbridge Rovers is a world and a scoreline is just
+ * math. Names are generated from two banks, deterministic per match number
+ * and reputation (a new ground meets a fresh fixture list), and the banks
+ * are invented places and suffixes on purpose: simStadiumTycoon asserts no
+ * generated combination collides with any real club name in the Club
+ * Manager world, so this game can never accidentally put a real badge on a
+ * toy opponent. */
+const OPP_PLACES = [
+  'Ironbridge', 'Harborview', 'Redmoor', 'Saltcliff', 'Windmere', 'Ashvale',
+  'Stonegate', 'Brightwater', 'Fernhill', 'Oldmarket', 'Kestrel Park', 'Duskfield',
+  'Northquay', 'Silverbeck', 'Crowhurst', 'Emberton', 'Foxglove', 'Greyharbor',
+  'Hollowbrook', 'Larkspur', 'Mistral', 'Pinecrest', 'Quarryside', 'Thornbury',
+];
+const OPP_SUFFIXES = [
+  'Rovers', 'Athletic', 'Wanderers', 'Town', 'County', 'Albion',
+  'Harriers', 'Corinthians', 'Swifts', 'Rangers', 'Olympic', 'Victoria',
+];
+
+/** The name of the opponent for a given match, stable for that match. */
+export function opponentName(s: TycoonState): string {
+  const k = (s.matchNo ?? 0) + (s.rep ?? 0) * 137;
+  const h = ((k * 2654435761) >>> 0);
+  const place = OPP_PLACES[h % OPP_PLACES.length];
+  const suffix = OPP_SUFFIXES[Math.floor(h / OPP_PLACES.length) % OPP_SUFFIXES.length];
+  return `${place} ${suffix}`;
+}
+
+/** Every combination the generator can produce, for the collision harness. */
+export function allOpponentNames(): string[] {
+  const out: string[] = [];
+  for (const p of OPP_PLACES) for (const sfx of OPP_SUFFIXES) out.push(`${p} ${sfx}`);
+  return out;
 }
 
 /* Round 150: Matchday Hype. The crowd builds it over eight minutes of play,
@@ -255,8 +324,10 @@ export function tap(s: TycoonState): TycoonState {
 }
 
 export interface TickEvent {
-  kind: 'goal' | 'conceded' | 'win' | 'loss' | 'draw';
+  kind: 'goal' | 'conceded' | 'win' | 'loss' | 'draw' | 'milestone';
   amount?: number;
+  /** For milestone events: the label to celebrate on screen. */
+  label?: string;
 }
 
 /**
@@ -328,6 +399,22 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
       st.goalsAgainst = 0;
     }
   }
+
+  // Round 152: milestones settle last, so a goal or win inside this very
+  // tick can be the thing that crosses the line. Exactly once per ground.
+  const claimed = st.claimed ?? [];
+  let newlyClaimed: string[] | null = null;
+  for (const m of MILESTONES) {
+    if (claimed.includes(m.id) || (newlyClaimed && newlyClaimed.includes(m.id))) continue;
+    if (!m.hit(st)) continue;
+    const pay = Math.round(m.pay * repMult(st));
+    st.money += pay;
+    st.lifetime += pay;
+    if (!newlyClaimed) newlyClaimed = [...claimed];
+    newlyClaimed.push(m.id);
+    events.push({ kind: 'milestone', amount: pay, label: m.label });
+  }
+  if (newlyClaimed) st.claimed = newlyClaimed;
   return { state: st, events };
 }
 
@@ -358,6 +445,8 @@ export function prestige(s: TycoonState, now: number): TycoonState {
     totalGoals: s.totalGoals,
     totalWins: s.totalWins,
     totalTaps: s.totalTaps,
+    // Round 152: firsts stay first. See the MILESTONES comment for why.
+    claimed: [...(s.claimed ?? [])],
   };
 }
 
@@ -401,6 +490,9 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
     s.boostChargeSec = Math.min(s.boostChargeSec, BOOST_CHARGE_SEC);
     if (!Number.isFinite(s.boostLeftSec) || s.boostLeftSec < 0) s.boostLeftSec = 0;
     s.boostLeftSec = Math.min(s.boostLeftSec, BOOST_DURATION_SEC);
+    // Round 152: only real milestone ids survive a load.
+    if (!Array.isArray(s.claimed)) s.claimed = [];
+    s.claimed = s.claimed.filter(id => MILESTONES.some(m => m.id === id));
     return s;
   } catch {
     return null;

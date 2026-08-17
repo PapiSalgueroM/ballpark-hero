@@ -93,6 +93,9 @@ export function useStadiumTycoon() {
       } else if (e.kind === 'win') {
         pushFloater(`FULL TIME WIN +$${e.amount}`, 'win', 32, 12);
         setConfetti(c => c + 1);
+      } else if (e.kind === 'milestone') {
+        pushFloater(`🏁 ${e.label} +$${e.amount}`, 'win', 18, 30);
+        setConfetti(c => c + 1);
       } else if (e.kind === 'conceded') {
         pushFloater('they score', 'bad', 25 + Math.random() * 50, 55 + Math.random() * 25);
       } else if (e.kind === 'loss') {

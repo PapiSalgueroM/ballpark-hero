@@ -19,7 +19,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
   TRACKS, levelOf, costOf, canBuy, capacity, attendance, incomePerSec,
   tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney,
-  boostReady, boostActive, BOOST_CHARGE_SEC,
+  boostReady, boostActive, BOOST_CHARGE_SEC, MILESTONES, opponentName,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 
@@ -199,10 +199,10 @@ export default function StadiumTycoon() {
             <div className="absolute left-0 top-1/4 bottom-1/4 w-8 border border-white/40 border-l-0" />
             <div className="absolute right-0 top-1/4 bottom-1/4 w-8 border border-white/40 border-r-0" />
             {/* scoreboard */}
-            <div className="absolute top-1.5 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/50 rounded-full px-3 py-1 text-xs font-bold text-white tabular-nums">
-              <span className="text-primary">YOU {s.goalsFor}</span>
-              <span className="text-white/70">{Math.min(s.minute, 90)}'</span>
-              <span className="text-red-400">{s.goalsAgainst} THEM</span>
+            <div className="absolute top-1.5 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/50 rounded-full px-3 py-1 text-xs font-bold text-white tabular-nums max-w-[92%]">
+              <span className="text-primary shrink-0">YOU {s.goalsFor}</span>
+              <span className="text-white/70 shrink-0">{Math.min(s.minute, 90)}'</span>
+              <span className="text-red-400 truncate">{s.goalsAgainst} {opponentName(s)}</span>
               {s.streak >= 2 && <span className="inline-flex items-center text-orange-400"><Flame className={cn('w-3.5 h-3.5', s.streak >= 5 && 'animate-pulse')} />{s.streak}</span>}
             </div>
             {/* players */}
@@ -287,7 +287,7 @@ export default function StadiumTycoon() {
 
         {/* lifetime line */}
         <div className="text-[10px] text-muted-foreground text-center pb-4">
-          lifetime {fmtMoney(s.lifetime)} · {s.totalWins} wins · {s.totalGoals} goals · {s.totalTaps} taps · match #{s.matchNo + 1}
+          lifetime {fmtMoney(s.lifetime)} · {s.totalWins} wins · {s.totalGoals} goals · {s.totalTaps} taps · match #{s.matchNo + 1} · milestones {(s.claimed ?? []).length}/{MILESTONES.length}
         </div>
 
         <GameSeoContent
@@ -322,6 +322,7 @@ export default function StadiumTycoon() {
               <p>The match on screen is real: your Squad level drives goals, goals pay a bonus scaled by the crowd, wins extend a streak that multiplies everything and pulls in new fans. Opponents get harder forever.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>Matchday Hype charges over eight minutes of play. Press it and everything pays double for sixty seconds: income, taps, goal and win bonuses. It does not charge or burn while you are away.</p>
+              <p>Milestones pay once each for the club's firsts: the first win, the first full house, 10,000 fans, five wins in a row. Ten in all, and they stay earned even after you sell up.</p>
               <p>When lifetime earnings hit the bar, sell up: everything resets except a permanent Reputation star worth +50% income, forever, each.</p>
               <p>Away from the game, you earn at half speed for up to 8 hours. Progress saves on this device.</p>
               <p>Worked example: at 400 fans and $12/s, one goal pays about $240, a win about $880, and Stands level 10 (adding 40 seats) pays itself back in under two minutes if the ground was full.</p>
