@@ -935,6 +935,14 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'bundesliga2', name: '2. Bundesliga', cupName: 'DFB-Pokal', euro: false,
     clubs: ['Wolfsburg', 'Heidenheim', 'St. Pauli', 'Bochum', 'Hertha BSC', 'Magdeburg', 'Kaiserslautern', 'Holstein Kiel', 'Hannover 96', 'Dynamo Dresden', 'Braunschweig', 'Greuther Fürth', 'Nürnberg', 'Darmstadt', 'Arminia Bielefeld', 'Karlsruhe', 'Osnabrück', 'Energie Cottbus'],
   },
+  /* Round 143: Belgium's reformed top flight. 2026-27 is the expansion
+     season: 18 clubs, straight round robin, no playoffs, which happens to be
+     exactly the shape this engine plays. Beveren, Kortrijk and Lommel came
+     up, Dender went down via the playoff Lommel won. */
+  {
+    id: 'proleague', name: 'Belgian Pro League', cupName: 'Belgian Cup', euro: true,
+    clubs: ['Club Brugge', 'Union Saint-Gilloise', 'Anderlecht', 'Genk', 'Gent', 'Antwerp', 'Standard Liège', 'Mechelen', 'Charleroi', 'Westerlo', 'Sint-Truiden', 'OH Leuven', 'Cercle Brugge', 'La Louvière', 'Zulte Waregem', 'Beveren', 'Kortrijk', 'Lommel'],
+  },
 ];
 
 /** Strength priors for league clubs the player pool cannot rate. */
@@ -984,6 +992,9 @@ const STRENGTH_PRIORS: Record<string, number> = {
   'Magdeburg': 66, 'Kaiserslautern': 67, 'Dynamo Dresden': 65, 'Braunschweig': 64,
   'Greuther Fürth': 64, 'Nürnberg': 66, 'Darmstadt': 65, 'Arminia Bielefeld': 64,
   'Karlsruhe': 65, 'Osnabrück': 62, 'Energie Cottbus': 62, 'Hertha BSC': 69, 'Bochum': 67,
+  // Belgian Pro League (Round 143): thin-data clubs
+  'Standard Liège': 69, 'Westerlo': 66, 'OH Leuven': 65, 'La Louvière': 63,
+  'Zulte Waregem': 63, 'Beveren': 62, 'Kortrijk': 62, 'Lommel': 61,
 };
 
 /** The real league a club plays in. Every playable club is covered. */
@@ -1010,6 +1021,7 @@ export const NATIONS: NationDef[] = [
   { id: 'portugal', name: 'Portugal', flag: '🇵🇹', leagueIds: ['primeira'] },
   { id: 'scotland', name: 'Scotland', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', leagueIds: ['scottish'] },
   { id: 'turkey', name: 'Turkey', flag: '🇹🇷', leagueIds: ['superlig'] },
+  { id: 'belgium', name: 'Belgium', flag: '🇧🇪', leagueIds: ['proleague'] },
 ];
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
@@ -1104,6 +1116,12 @@ const CLUB_COLORS: Record<string, string> = {
   'Braunschweig': '#f5d800', 'Greuther Fürth': '#0a7040', 'Nürnberg': '#7d1c2a',
   'Darmstadt': '#005ca9', 'Arminia Bielefeld': '#2b2b2b', 'Karlsruhe': '#005ca9',
   'Osnabrück': '#5c2d91', 'Energie Cottbus': '#d02128',
+  // Round 143: Belgian Pro League
+  'Club Brugge': '#1b458f', 'Union Saint-Gilloise': '#f5d800', 'Anderlecht': '#5c2d91',
+  'Genk': '#1b458f', 'Gent': '#1b458f', 'Antwerp': '#d02128', 'Standard Liège': '#d02128',
+  'Mechelen': '#f2b705', 'Charleroi': '#2b2b2b', 'Westerlo': '#f5d800', 'Sint-Truiden': '#f2b705',
+  'OH Leuven': '#2b2b2b', 'Cercle Brugge': '#0a7857', 'La Louvière': '#0a7040',
+  'Zulte Waregem': '#d02128', 'Beveren': '#f5d800', 'Kortrijk': '#d02128', 'Lommel': '#0a7040',
 };
 
 /**
@@ -4331,7 +4349,7 @@ function nearestRival(clubName: string): string | null {
 function relegationSpots(leagueId: string): number {
   // MLS conferences do not relegate; everyone else drops 1-3.
   if (leagueId.startsWith('mls')) return 0;
-  if (leagueId === 'scottish') return 1;
+  if (leagueId === 'scottish' || leagueId === 'proleague') return 1;
   if (leagueId === 'bundesliga' || leagueId === 'bundesliga2' || leagueId === 'eredivisie' || leagueId === 'primeira') return 2;
   return 3;
 }
@@ -4365,6 +4383,7 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
   primeira:   { ucl: 2, uel: 3, uecl: 4 },
   scottish:   { ucl: 1, uel: 2, uecl: 3 },
   superlig:   { ucl: 1, uel: 2, uecl: 3 },
+  proleague:  { ucl: 1, uel: 2, uecl: 3 },
 };
 
 function leagueDemand(rank: number, tier: number, size: number, league: LeagueDef): { target: number; label: string } {

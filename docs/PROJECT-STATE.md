@@ -81,12 +81,22 @@ target, not the names.
    ladder speaks German second tier: automatic promotion top 2, the promotion playoff for 3rd,
    two go down. Germany now has two playable divisions like England.
 
-   **Wave 2 remainder, coverage already confirmed in the table:** Belgian Pro League (Club
-   Brugge, Anderlecht rows exist), Brazilian Serie A and Argentine Primera (Flamengo,
-   Palmeiras, Boca, River rows exist, but BOTH run calendar-year seasons, so they need thought
-   about how the Aug to May season engine represents them; do not wire them in blind). Same
-   recipe as waves 1 and 2: verify membership via web plus the table, extend DB_TO_ENGINE,
-   dump through the MCP, supplement bake, wire metadata.
+   **Wave 2 part two DONE, Round 143: the Belgian Pro League.** 18 clubs (270 playable), 127
+   more real players (3,367 total). And 2026-27 is the perfect year to add Belgium: the league
+   reformed to 18 clubs in a straight round robin with no playoffs, exactly the shape this
+   engine plays. Beveren, Kortrijk and Lommel up, Dender down via the playoff Lommel won.
+   Genk bake 19 real players (Karetsas at 38m), Anderlecht 18, Union Saint-Gilloise 16.
+   This round also fixed three stale entries where a player's real 2026 move superseded the
+   2025 row an earlier wave baked him under: Özcan to Anderlecht, Muja to Sint-Truiden,
+   Tresoldi to Club Brugge. Lesson recorded: when a new league wave lands, check whether any
+   of its 2026 rows name players already baked elsewhere off 2025 fallbacks, and move them.
+
+   **Leagues remaining with confirmed data:** Brazilian Serie A and Argentine Primera
+   (Flamengo, Palmeiras, Boca, River rows exist, but BOTH run calendar-year seasons, so they
+   need engine thought first; do not wire them in blind). Beyond those, candidate leagues with
+   partial coverage: Greek, Austrian, Danish, Swiss (flavor clubs already baked). Same recipe
+   every time: verify membership via web plus the table, extend DB_TO_ENGINE, dump through the
+   MCP, supplement bake, wire metadata.
 
 7. **DONE, Round 141: way more headlines.** The feed lives all season now instead of only at
    window opens: every match week can add a line, read straight off the sim's real state.
@@ -105,7 +115,7 @@ target, not the names.
    recovery choices, rivalries, awards races, offseason depth, save-spanning records.
 
 
-**As of 2026-08-16 (evening update, after Round 142).** This is the volatile file.
+**As of 2026-08-16 (evening update, after Round 143).** This is the volatile file.
 Update it in the same round as any change, so the next session (or the next account) picks up
 cleanly.
 
@@ -128,9 +138,9 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `03afbfd` = **Round 138** when this was written |
-| Packaged queue | Rounds **139** (review round), **140** (leagues wave 1), **141** (living news feed) and **142** (2. Bundesliga). One click ships all four: **`SHIP11.bat`** (logs to `ship_log11.txt`). |
-| Live site | Publish triggered 2026-08-16 after Round 137 synced. Re-publish and verify after 139 to 142 land. |
-| Next free round number | **143** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged queue | Rounds **139** (review), **140** (leagues wave 1), **141** (news feed), **142** (2. Bundesliga) and **143** (Belgium). One click ships all five: **`SHIP12.bat`** (logs to `ship_log12.txt`). |
+| Live site | Publish triggered 2026-08-16 after Round 137 synced. Re-publish and verify after 139 to 143 land. |
+| Next free round number | **144** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven
