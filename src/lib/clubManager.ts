@@ -927,6 +927,14 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'superlig', name: 'Süper Lig', cupName: 'Turkish Cup', euro: true,
     clubs: ['Galatasaray', 'Fenerbahçe', 'Beşiktaş', 'Trabzonspor', 'Başakşehir', 'Samsunspor', 'Eyüpspor', 'Göztepe', 'Kasımpaşa', 'Alanyaspor', 'Konyaspor', 'Gaziantep FK', 'Gençlerbirliği', 'Kocaelispor', 'Rizespor', 'Erzurumspor', 'Amedspor', 'Çorum FK'],
   },
+  /* Round 142: the second division he asked for by name ("some second
+     divisions too"). 2026-27 membership from the league's own published
+     season preview: Wolfsburg, Heidenheim and St. Pauli down from the
+     Bundesliga, Osnabrück and Energie Cottbus up from 3. Liga. */
+  {
+    id: 'bundesliga2', name: '2. Bundesliga', cupName: 'DFB-Pokal', euro: false,
+    clubs: ['Wolfsburg', 'Heidenheim', 'St. Pauli', 'Bochum', 'Hertha BSC', 'Magdeburg', 'Kaiserslautern', 'Holstein Kiel', 'Hannover 96', 'Dynamo Dresden', 'Braunschweig', 'Greuther Fürth', 'Nürnberg', 'Darmstadt', 'Arminia Bielefeld', 'Karlsruhe', 'Osnabrück', 'Energie Cottbus'],
+  },
 ];
 
 /** Strength priors for league clubs the player pool cannot rate. */
@@ -972,6 +980,10 @@ const STRENGTH_PRIORS: Record<string, number> = {
   'Kasımpaşa': 67, 'Alanyaspor': 66, 'Konyaspor': 66, 'Gaziantep FK': 65,
   'Gençlerbirliği': 64, 'Kocaelispor': 64, 'Rizespor': 65, 'Eyüpspor': 66,
   'Erzurumspor': 63, 'Amedspor': 63, 'Çorum FK': 62,
+  // 2. Bundesliga (Round 142): thin-data clubs
+  'Magdeburg': 66, 'Kaiserslautern': 67, 'Dynamo Dresden': 65, 'Braunschweig': 64,
+  'Greuther Fürth': 64, 'Nürnberg': 66, 'Darmstadt': 65, 'Arminia Bielefeld': 64,
+  'Karlsruhe': 65, 'Osnabrück': 62, 'Energie Cottbus': 62, 'Hertha BSC': 69, 'Bochum': 67,
 };
 
 /** The real league a club plays in. Every playable club is covered. */
@@ -989,7 +1001,7 @@ export const NATIONS: NationDef[] = [
   { id: 'england', name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', leagueIds: ['premier', 'championship'] },
   { id: 'spain', name: 'Spain', flag: '🇪🇸', leagueIds: ['laliga'] },
   { id: 'italy', name: 'Italy', flag: '🇮🇹', leagueIds: ['seriea'] },
-  { id: 'germany', name: 'Germany', flag: '🇩🇪', leagueIds: ['bundesliga'] },
+  { id: 'germany', name: 'Germany', flag: '🇩🇪', leagueIds: ['bundesliga', 'bundesliga2'] },
   { id: 'france', name: 'France', flag: '🇫🇷', leagueIds: ['ligue1'] },
   { id: 'netherlands', name: 'Netherlands', flag: '🇳🇱', leagueIds: ['eredivisie'] },
   { id: 'saudi', name: 'Saudi Arabia', flag: '🇸🇦', leagueIds: ['saudi'] },
@@ -1086,6 +1098,12 @@ const CLUB_COLORS: Record<string, string> = {
   'Kasımpaşa': '#163962', 'Alanyaspor': '#f26522', 'Konyaspor': '#0a7040', 'Gaziantep FK': '#d02128',
   'Gençlerbirliği': '#d02128', 'Kocaelispor': '#0a7040', 'Rizespor': '#0a7040',
   'Erzurumspor': '#163962', 'Amedspor': '#0a7040', 'Çorum FK': '#d02128',
+  // Round 142: 2. Bundesliga (Wolfsburg, Heidenheim and St. Pauli kept theirs)
+  'Bochum': '#005ca9', 'Hertha BSC': '#004d9e', 'Magdeburg': '#1b458f', 'Kaiserslautern': '#d02128',
+  'Holstein Kiel': '#1b458f', 'Hannover 96': '#0a7040', 'Dynamo Dresden': '#f5d800',
+  'Braunschweig': '#f5d800', 'Greuther Fürth': '#0a7040', 'Nürnberg': '#7d1c2a',
+  'Darmstadt': '#005ca9', 'Arminia Bielefeld': '#2b2b2b', 'Karlsruhe': '#005ca9',
+  'Osnabrück': '#5c2d91', 'Energie Cottbus': '#d02128',
 };
 
 /**
@@ -4314,7 +4332,7 @@ function relegationSpots(leagueId: string): number {
   // MLS conferences do not relegate; everyone else drops 1-3.
   if (leagueId.startsWith('mls')) return 0;
   if (leagueId === 'scottish') return 1;
-  if (leagueId === 'bundesliga' || leagueId === 'eredivisie' || leagueId === 'primeira') return 2;
+  if (leagueId === 'bundesliga' || leagueId === 'bundesliga2' || leagueId === 'eredivisie' || leagueId === 'primeira') return 2;
   return 3;
 }
 
@@ -4353,13 +4371,23 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
   const half = Math.floor(size / 2);
   const drop = relegationSpots(league.id);
 
-  // The second division is its own world: the prize is going UP.
+  // The second divisions are their own world: the prize is going UP.
   if (league.id === 'championship') {
     if (rank <= 2 || (rank <= 4 && tier <= 2)) {
       // A club this big in this division exists to leave it immediately.
       return { target: 2, label: `Win automatic promotion (top 2)` };
     }
     if (rank <= 8) return { target: 6, label: `Make the promotion playoffs (top 6)` };
+    if (rank <= Math.round(size * 0.65)) return { target: half, label: `Finish in the top half` };
+    return { target: size - drop, label: `Stay up. Avoid relegation` };
+  }
+  // Round 142: Germany's second tier sends two straight up and the third
+  // placed side into a playoff against the Bundesliga's sixteenth.
+  if (league.id === 'bundesliga2') {
+    if (rank <= 2 || (rank <= 4 && tier <= 2)) {
+      return { target: 2, label: `Win automatic promotion (top 2)` };
+    }
+    if (rank <= 6) return { target: 3, label: `Reach the promotion playoff (3rd)` };
     if (rank <= Math.round(size * 0.65)) return { target: half, label: `Finish in the top half` };
     return { target: size - drop, label: `Stay up. Avoid relegation` };
   }

@@ -67,7 +67,7 @@ for (const n of NATIONS) {
     }
   }
 }
-if (totalClubs !== 234) fail(`expected 234 playable clubs (186 plus Round 140's 48), got ${totalClubs}`);
+if (totalClubs !== 252) fail(`expected 252 playable clubs (186, plus Round 140's 48, plus Round 142's 18), got ${totalClubs}`);
 const ordering = [
   ['Real Madrid', 'Racing Santander'], ['Bayern Munich', 'Paderborn'], ['PSG', 'Le Havre'],
   ['Liverpool', 'Hull City'], ['Wolves', 'Lincoln City'], ['Al-Hilal', 'Al-Riyadh'],

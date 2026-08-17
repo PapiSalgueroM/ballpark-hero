@@ -74,12 +74,19 @@ target, not the names.
    worldwide, so small clubs sit below its floor: that is why St Mirren and the promoted
    sides bake empty and youth-pad in game, the Abha and Cambuur precedent.
 
-   **Wave 2 queue, coverage already confirmed in the table:** Belgian Pro League (Club Brugge,
-   Anderlecht rows exist), Brazilian Serie A (Flamengo, Palmeiras), Argentine Primera (Boca,
-   River), 2. Bundesliga as the first extra second division (Hamburg and Schalke are already
-   baked; note both are in the 2026-27 Bundesliga, so the second division list needs its own
-   verification pass). Same recipe: verify membership via web plus the table, extend
-   DB_TO_ENGINE, dump, bake, wire metadata, extend EURO_SLOTS and relegationSpots.
+   **Wave 2 part one DONE, Round 142: the 2. Bundesliga.** 18 more clubs (252 playable), 93
+   more real players (3,240 total). Membership from the league's own 2026-27 season preview:
+   Wolfsburg, Heidenheim and St. Pauli down from the Bundesliga, Osnabrück and Energie Cottbus
+   up from 3. Liga. Wolfsburg bakes 20 real players including Amoura and Eriksen. The board
+   ladder speaks German second tier: automatic promotion top 2, the promotion playoff for 3rd,
+   two go down. Germany now has two playable divisions like England.
+
+   **Wave 2 remainder, coverage already confirmed in the table:** Belgian Pro League (Club
+   Brugge, Anderlecht rows exist), Brazilian Serie A and Argentine Primera (Flamengo,
+   Palmeiras, Boca, River rows exist, but BOTH run calendar-year seasons, so they need thought
+   about how the Aug to May season engine represents them; do not wire them in blind). Same
+   recipe as waves 1 and 2: verify membership via web plus the table, extend DB_TO_ENGINE,
+   dump through the MCP, supplement bake, wire metadata.
 
 7. **DONE, Round 141: way more headlines.** The feed lives all season now instead of only at
    window opens: every match week can add a line, read straight off the sim's real state.
@@ -98,7 +105,7 @@ target, not the names.
    recovery choices, rivalries, awards races, offseason depth, save-spanning records.
 
 
-**As of 2026-08-16 (evening update, after Round 141).** This is the volatile file.
+**As of 2026-08-16 (evening update, after Round 142).** This is the volatile file.
 Update it in the same round as any change, so the next session (or the next account) picks up
 cleanly.
 
@@ -121,9 +128,9 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `03afbfd` = **Round 138** when this was written |
-| Packaged queue | Rounds **139** (review round), **140** (leagues wave 1) and **141** (living news feed). One click ships all three: **`SHIP10.bat`** (logs to `ship_log10.txt`). |
-| Live site | Publish triggered 2026-08-16 after Round 137 synced. Re-publish and verify after 139 to 141 land. |
-| Next free round number | **142** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged queue | Rounds **139** (review round), **140** (leagues wave 1), **141** (living news feed) and **142** (2. Bundesliga). One click ships all four: **`SHIP11.bat`** (logs to `ship_log11.txt`). |
+| Live site | Publish triggered 2026-08-16 after Round 137 synced. Re-publish and verify after 139 to 142 land. |
+| Next free round number | **143** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

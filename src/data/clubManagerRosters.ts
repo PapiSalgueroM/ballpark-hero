@@ -25,14 +25,14 @@ export interface BakedPlayer {
 export const CM_ROSTER_META = {
   generated: '2026-08-13',
   asOf: 'August 2026, after the summer window',
-  players: 3147,
-  clubs: 237,
+  players: 3240,
+  clubs: 255,
   overlayMoves: 37,
 };
 
 /** Clubs where the dataset runs thin (under 8 real players); the game pads
  *  these squads with youth players and the picker says so. */
-export const CM_PARTIAL: string[] = ["ADO Den Haag","Aberdeen","Abha","Académico de Viseu","Al-Diriyah","Al-Ettifaq","Al-Faisaly","Al-Fateh","Al-Fayha","Al-Hazem","Al-Khaleej","Al-Kholood","Al-Riyadh","Al-Taawoun","Alverca","Amedspor","Arouca","Bolton Wanderers","Cambuur","Cardiff City","Casa Pia","Charlton Athletic","D.C. United","Deportivo La Coruña","Dundee","Dundee United","Elversberg","Erzurumspor","Estoril","Estrela Amadora","Excelsior","Eyüpspor","FC Cincinnati","Falkirk","Fortuna Sittard","Frosinone","Gaziantep FK","Gençlerbirliği","Go Ahead Eagles","Groningen","Hearts","Hibernian","Kasımpaşa","Kilmarnock","Kocaelispor","Konyaspor","LA Galaxy","Le Mans","Lincoln City","Marítimo","Moreirense","Motherwell","Málaga","Nacional","Nashville SC","PEC Zwolle","Philadelphia Union","Portsmouth","Real Salt Lake","Rizespor","San Jose Earthquakes","Santa Clara","Sporting Kansas City","St Johnstone","St Mirren","St. Louis City","Telstar","Toronto FC","Willem II","Çorum FK"];
+export const CM_PARTIAL: string[] = ["ADO Den Haag","Aberdeen","Abha","Académico de Viseu","Al-Diriyah","Al-Ettifaq","Al-Faisaly","Al-Fateh","Al-Fayha","Al-Hazem","Al-Khaleej","Al-Kholood","Al-Riyadh","Al-Taawoun","Alverca","Amedspor","Arminia Bielefeld","Arouca","Bochum","Bolton Wanderers","Braunschweig","Cambuur","Cardiff City","Casa Pia","Charlton Athletic","D.C. United","Darmstadt","Deportivo La Coruña","Dundee","Dundee United","Dynamo Dresden","Elversberg","Energie Cottbus","Erzurumspor","Estoril","Estrela Amadora","Excelsior","Eyüpspor","FC Cincinnati","Falkirk","Fortuna Sittard","Frosinone","Gaziantep FK","Gençlerbirliği","Go Ahead Eagles","Greuther Fürth","Groningen","Hearts","Hertha BSC","Hibernian","Kaiserslautern","Karlsruhe","Kasımpaşa","Kilmarnock","Kocaelispor","Konyaspor","LA Galaxy","Le Mans","Lincoln City","Magdeburg","Marítimo","Moreirense","Motherwell","Málaga","Nacional","Nashville SC","Nürnberg","Osnabrück","PEC Zwolle","Philadelphia Union","Portsmouth","Real Salt Lake","Rizespor","San Jose Earthquakes","Santa Clara","Sporting Kansas City","St Johnstone","St Mirren","St. Louis City","Telstar","Toronto FC","Willem II","Çorum FK"];
 
 export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   'AC Milan': [
@@ -3656,6 +3656,137 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   'Çorum FK': [
   ],
   'Kocaelispor': [
+  ],
+
+  /* ---- Round 142: 2. Bundesliga ---- */
+  'Wolfsburg': [
+    { n: 'Mohamed Amoura', p: 'ST', a: 25, v: 21.8, r: 83 },
+    { n: 'Konstantinos Koulierakis', p: 'CB', a: 22, v: 20.3, r: 82 },
+    { n: 'Patrick Wimmer', p: 'RW', a: 24, v: 12, r: 79 },
+    { n: 'Andreas Skov Olsen', p: 'RW', a: 26, v: 10.7, r: 79 },
+    { n: 'Kamil Grabara', p: 'GK', a: 26, v: 9.8, r: 78 },
+    { n: 'Dzenan Pejcinovic', p: 'ST', a: 20, v: 8.3, r: 77 },
+    { n: 'Lovro Majer', p: 'CAM', a: 27, v: 8.3, r: 77 },
+    { n: 'Mattias Svanberg', p: 'CM', a: 26, v: 7.5, r: 77 },
+    { n: 'Kento Shiogai', p: 'ST', a: 20, v: 6.8, r: 76 },
+    { n: 'Bence Dárdai', p: 'CAM', a: 19, v: 6, r: 76 },
+    { n: 'Joakim Maehle', p: 'LB', a: 28, v: 6, r: 76 },
+    { n: 'Kevin Paredes', p: 'LM', a: 20, v: 6, r: 76 },
+    { n: 'Denis Vavro', p: 'CB', a: 29, v: 3.8, r: 73 },
+    { n: 'Jonas Wind', p: 'ST', a: 26, v: 3.8, r: 73 },
+    { n: 'Kilian Fischer', p: 'RB', a: 25, v: 3.8, r: 73 },
+    { n: 'Maximilian Arnold', p: 'CM', a: 31, v: 3.8, r: 73 },
+    { n: 'Jan Bürger', p: 'RB', a: 18, v: 2.3, r: 70 },
+    { n: 'Pharell Hensel', p: 'CM', a: 18, v: 2.3, r: 70 },
+    { n: 'Rogério', p: 'LB', a: 27, v: 2.1, r: 70 },
+    { n: 'Marius Müller', p: 'GK', a: 32, v: 1.4, r: 68 },
+  ],
+  'Heidenheim': [
+    { n: 'Diant Ramaj', p: 'GK', a: 24, v: 6, r: 76 },
+    { n: 'Arijon Ibrahimovic', p: 'CAM', a: 20, v: 4.5, r: 74 },
+    { n: 'Jan Schöppner', p: 'CM', a: 26, v: 3, r: 72 },
+    { n: 'Marvin Pieringer', p: 'ST', a: 26, v: 3, r: 72 },
+    { n: 'Omar Traoré', p: 'RB', a: 27, v: 2.3, r: 70 },
+    { n: 'Adrian Beck', p: 'CAM', a: 28, v: 1.5, r: 68 },
+    { n: 'Christian Conteh', p: 'RW', a: 26, v: 1.5, r: 68 },
+    { n: 'Hennes Behrens', p: 'LB', a: 20, v: 1.5, r: 68 },
+    { n: 'Mathias Honsak', p: 'LW', a: 29, v: 1.5, r: 68 },
+    { n: 'Sirlord Conteh', p: 'RW', a: 29, v: 1.5, r: 68 },
+    { n: 'Jonas Föhrenbach', p: 'LB', a: 29, v: 1.4, r: 68 },
+  ],
+  'St. Pauli': [
+    { n: 'Joel Chima Fujita', p: 'CM', a: 23, v: 8.3, r: 77 },
+    { n: 'Andréas Hountondji', p: 'ST', a: 23, v: 3.8, r: 73 },
+    { n: 'Eric Smith', p: 'CB', a: 28, v: 3.8, r: 73 },
+    { n: 'Nikola Vasilj', p: 'GK', a: 30, v: 3.8, r: 73 },
+    { n: 'Arkadiusz Pyrka', p: 'RB', a: 23, v: 3, r: 72 },
+    { n: 'Oladapo Afolayan', p: 'RW', a: 28, v: 2.9, r: 71 },
+    { n: 'Danel Sinani', p: 'CAM', a: 28, v: 2.3, r: 70 },
+    { n: 'Louis Oppie', p: 'LB', a: 23, v: 2.3, r: 70 },
+    { n: 'Manolis Saliakas', p: 'RB', a: 29, v: 2.3, r: 70 },
+    { n: 'Carlo Boukhalfa', p: 'CAM', a: 26, v: 2.1, r: 70 },
+    { n: 'Robert Wagner', p: 'CM', a: 22, v: 2.1, r: 70 },
+  ],
+  'Bochum': [
+    { n: 'Francis Onyeka', p: 'CAM', a: 18, v: 8.3, r: 77 },
+    { n: 'Matus Bero', p: 'CM', a: 30, v: 2.9, r: 71 },
+    { n: 'Farid Alfa-Ruprecht', p: 'RW', a: 19, v: 2.3, r: 70 },
+    { n: 'Mats Pannewig', p: 'CM', a: 21, v: 2.3, r: 70 },
+    { n: 'Felix Passlack', p: 'RB', a: 27, v: 2.1, r: 70 },
+    { n: 'Oliver Olsen', p: 'RB', a: 25, v: 1.5, r: 68 },
+    { n: 'Koji Miyoshi', p: 'RM', a: 28, v: 0.8, r: 64 },
+  ],
+  'Hertha BSC': [
+    { n: 'Maurice Krattenmacher', p: 'CAM', a: 20, v: 3, r: 72 },
+    { n: 'Michaël Cuisance', p: 'CM', a: 26, v: 3, r: 72 },
+    { n: 'Tjark Ernst', p: 'GK', a: 22, v: 3, r: 72 },
+    { n: 'Jonjoe Kenny', p: 'RB', a: 28, v: 2.1, r: 70 },
+    { n: 'Michał Karbownik', p: 'RB', a: 24, v: 1.5, r: 68 },
+  ],
+  'Magdeburg': [
+    { n: 'Martijn Kaars', p: 'ST', a: 26, v: 2.9, r: 71 },
+  ],
+  'Kaiserslautern': [
+    { n: 'Naatan Skyttä', p: 'CAM', a: 23, v: 3.8, r: 73 },
+    { n: 'Mika Haas', p: 'LB', a: 20, v: 2.3, r: 70 },
+    { n: 'Frank Ronstadt', p: 'LM', a: 26, v: 0.8, r: 64 },
+    { n: 'Julian Krahl', p: 'GK', a: 25, v: 0.8, r: 64 },
+  ],
+  'Holstein Kiel': [
+    { n: 'Phil Harres', p: 'ST', a: 23, v: 3.6, r: 73 },
+    { n: 'Alexander Bernhardsson', p: 'RW', a: 27, v: 2.3, r: 70 },
+    { n: 'John Tolkin', p: 'LB', a: 23, v: 2.3, r: 70 },
+    { n: 'Armin Gigovic', p: 'CM', a: 23, v: 2.1, r: 70 },
+    { n: 'Jonas Therkelsen', p: 'CAM', a: 22, v: 1.5, r: 68 },
+    { n: 'Lasse Rosenboom', p: 'RB', a: 23, v: 1.4, r: 68 },
+    { n: 'Jonas Krumrey', p: 'GK', a: 22, v: 0.8, r: 64 },
+    { n: 'Niklas Niehoff', p: 'RM', a: 21, v: 0.8, r: 64 },
+    { n: 'Marvin Schulz', p: 'RM', a: 30, v: 0.7, r: 64 },
+  ],
+  'Hannover 96': [
+    { n: 'Benjamin Källman', p: 'ST', a: 27, v: 3, r: 72 },
+    { n: 'Elias Saad', p: 'LW', a: 26, v: 2.3, r: 70 },
+    { n: 'Enzo Leopold', p: 'CM', a: 25, v: 2.3, r: 70 },
+    { n: 'Noah Weißhaupt', p: 'LW', a: 24, v: 2.3, r: 70 },
+    { n: 'Daisuke Yokota', p: 'RW', a: 25, v: 1.5, r: 68 },
+    { n: 'Hayate Matsuda', p: 'RM', a: 22, v: 1.5, r: 68 },
+    { n: 'Husseyn Chakroun', p: 'LW', a: 21, v: 1.5, r: 68 },
+    { n: 'Nahuel Noll', p: 'GK', a: 22, v: 1.5, r: 68 },
+    { n: 'Rabbi Matondo', p: 'LW', a: 25, v: 1.4, r: 68 },
+    { n: 'Kolja Oudenne', p: 'LM', a: 22, v: 0.8, r: 64 },
+  ],
+  'Dynamo Dresden': [
+  ],
+  'Braunschweig': [
+    { n: 'Ron-Thorben Hoffmann', p: 'GK', a: 26, v: 0.8, r: 64 },
+  ],
+  'Greuther Fürth': [
+    { n: 'Noel Futkeu', p: 'ST', a: 23, v: 3.8, r: 73 },
+    { n: 'Aaron Keller', p: 'LM', a: 21, v: 1.5, r: 68 },
+    { n: 'Felix Klaus', p: 'RM', a: 33, v: 0.8, r: 64 },
+    { n: 'Lukas Reich', p: 'RB', a: 19, v: 0.8, r: 64 },
+    { n: 'Denis Pfaffenrot', p: 'RM', a: 20, v: 0.7, r: 64 },
+  ],
+  'Darmstadt': [
+    { n: 'Fraser Hornby', p: 'ST', a: 26, v: 3.8, r: 73 },
+    { n: 'Isac Lidberg', p: 'ST', a: 27, v: 3.8, r: 73 },
+    { n: 'Fabian Nürnberger', p: 'LM', a: 24, v: 2.3, r: 70 },
+  ],
+  'Arminia Bielefeld': [
+    { n: 'Monju Momuluh', p: 'RW', a: 23, v: 1.5, r: 68 },
+    { n: 'Jonas Kersken', p: 'GK', a: 25, v: 0.8, r: 64 },
+  ],
+  'Karlsruhe': [
+    { n: 'Rafael Pinto Pedrosa', p: 'RB', a: 18, v: 3.8, r: 73 },
+    { n: 'David Herold', p: 'LB', a: 22, v: 3, r: 72 },
+    { n: 'Louey Ben Farhat', p: 'CF', a: 19, v: 2.1, r: 70 },
+    { n: 'Hans Christian Bernat', p: 'GK', a: 25, v: 0.8, r: 64 },
+  ],
+  'Nürnberg': [
+  ],
+  'Osnabrück': [
+  ],
+  'Energie Cottbus': [
   ],
 
 };
