@@ -269,6 +269,7 @@ console.log('1) Runtime: every line real seasons can put on screen');
         const r = playNextEntry(s, { skipHalftime: true });
         s = r.state;
         for (const e of r.result?.events ?? []) keep(e);
+        for (const h of s.aiHeadlines ?? []) keep(h);
         for (const m of s.inbox ?? []) { keep(m.text); keep(m.resolved); }
         /* Answer things, because half the copy in this system only exists
            after a decision and an unanswered inbox never renders it. */

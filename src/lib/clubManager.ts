@@ -3707,6 +3707,89 @@ function generateIncomingBids(state: CareerState, topUp = false): void {
  * 3-6 AI transfers between the other clubs. Each headline removes that player
  * from the market for the rest of the season. Mutates state (internal use).
  */
+/* ---------- Round 141: the news feed lives all season ----------
+ *
+ * From the review: "I would like to see way more headlines." Before this,
+ * aiHeadlines only filled up when a transfer window opened, so for most of
+ * the season the card sat frozen on week-one gossip. Now every match week
+ * can add a line, and every line is read straight off the sim's real state:
+ * the actual table, the actual gap, the actual fixture list. Nothing here
+ * invents an event, it narrates the ones the engine already produced, which
+ * is what keeps it inside the two permanent guards (no invented quotes from
+ * real people, no rival product names).
+ */
+function pushHeadline(state: CareerState, line: string): void {
+  if (state.aiHeadlines.includes(line)) return;
+  state.aiHeadlines = [line, ...state.aiHeadlines].slice(0, 8);
+}
+
+export function generateWeeklyNews(state: CareerState): void {
+  const table = sortedTable(state.table);
+  if (table.length < 4) return;
+  const myIdx = table.findIndex(r => r.club === state.clubName);
+  const myRow = myIdx >= 0 ? table[myIdx] : null;
+  const played = myRow ? myRow.w + myRow.d + myRow.l : 0;
+  const rounds = state.leagueClubs.length > 1 ? 2 * (state.leagueClubs.length - 1) : 38;
+  const league = leagueOf(state.clubName);
+  if (played < 3) return;
+
+  // Derby week beats everything: the fixture list says so, not a dice roll.
+  const rival = RIVALS[state.clubName];
+  if (rival && played < rounds) {
+    const fx = nextFixture(state);
+    if (fx.kind === 'match' && fx.opponent === rival) {
+      pushHeadline(state, `\u{1F52A} Derby week. ${state.clubName} against ${rival}, and the table will not save anybody.`);
+      return;
+    }
+  }
+
+  // Deadline countdown while the window runs.
+  if (state.transferWindow !== null && (state.windowWeeksLeft ?? 0) === 1) {
+    pushHeadline(state, `\u{23F3} Deadline week. Any business left undone stays undone until the next window.`);
+    return;
+  }
+
+  const leader = table[0];
+  const second = table[1];
+  const gap = leader.pts - second.pts;
+  const stage = played / rounds;
+
+  // Title race, roughly every third week so it moves with the table.
+  if (played % 3 === 0) {
+    if (stage > 0.7 && gap >= 8) {
+      pushHeadline(state, `\u{1F3C6} ${leader.club} are ${gap} points clear with the run-in on. The league is starting to look decided.`);
+    } else if (gap <= 2 && stage > 0.25) {
+      pushHeadline(state, `\u{1F3C6} ${leader.club} lead ${second.club} by ${gap === 0 ? 'goal difference alone' : `${gap} ${gap === 1 ? 'point' : 'points'}`}. Title race.`);
+    } else {
+      pushHeadline(state, `\u{1F4CA} ${leader.club} top the ${league.name} on ${leader.pts} points after ${played} rounds.`);
+    }
+    return;
+  }
+
+  // The other end of the table, once the season has shape.
+  const drop = relegationSpots(league.id);
+  if (drop > 0 && stage > 0.4 && played % 3 === 1) {
+    const bottom = table[table.length - 1];
+    const safeRow = table[table.length - 1 - drop];
+    const adrift = safeRow.pts - bottom.pts;
+    if (adrift >= 6 && stage > 0.6) {
+      pushHeadline(state, `\u{1F6A8} ${bottom.club} are ${adrift} points from safety and running out of games.`);
+    } else {
+      pushHeadline(state, `\u{1F6A8} The relegation scrap: ${bottom.club} bottom on ${bottom.pts}, ${adrift} ${adrift === 1 ? 'point' : 'points'} from safety.`);
+    }
+    return;
+  }
+
+  // Numbers stories off the real table: sharpest attack, meanest defence.
+  const byGf = [...table].sort((a, b) => b.gf - a.gf)[0];
+  const byGa = [...table].sort((a, b) => a.ga - b.ga)[0];
+  if (played % 2 === 0 && byGf.gf > 0) {
+    pushHeadline(state, `\u{26BD} ${byGf.club} have the sharpest attack in the ${league.name}: ${byGf.gf} scored in ${played} rounds.`);
+  } else if (byGa.ga >= 0) {
+    pushHeadline(state, `\u{1F9F1} Nobody is harder to score on than ${byGa.club}: ${byGa.ga} conceded all season.`);
+  }
+}
+
 function generateHeadlines(state: CareerState): void {
   const market = buildMarket(state);
   const count = Math.min(ri(3, 6), market.length);
@@ -3736,6 +3819,15 @@ function generateHeadlines(state: CareerState): void {
     state.goneNames.push(mp.name);
     // Round 71: every AI deal lands in the Latest Transfers feed too.
     pushNews(state, { name: mp.name, from: mp.club, to: buyer, fee });
+  }
+  /* Round 141: the window's own record deal gets a line, read off the same
+     transferLog the Latest Transfers card shows, so the two never disagree. */
+  const seasonDeals = (state.transferLog ?? []).filter(t => t.season === state.season && !t.loan);
+  if (seasonDeals.length) {
+    const record = seasonDeals.reduce((a, b) => (b.fee > a.fee ? b : a));
+    if (record.fee >= 25) {
+      heads.push(`\u{1F4B0} The window's biggest deal so far: ${record.name} to ${record.to} for ${money(record.fee)}.`);
+    }
   }
   state.aiHeadlines = heads;
   // Round 71: a fresh window also means AI clubs come sniffing at my squad.
@@ -5410,6 +5502,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
       generateIncomingBids(state, true);
     }
   }
+  // Round 141: the news feed reads the week's table and says something true.
+  generateWeeklyNews(state);
   // Round 135: and the room fills up again, once there is something to ask.
   maybeAskPress(state);
 

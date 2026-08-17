@@ -200,7 +200,7 @@ export function TransferScreen({
       {career.aiHeadlines.length > 0 && (
         <div className="bg-card border border-border rounded-xl p-3">
           <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
-            <Newspaper className="w-3 h-3" /> Window headlines
+            <Newspaper className="w-3 h-3" /> Around the league
           </div>
           {career.aiHeadlines.map((h, i) => (
             <p key={i} className="text-xs text-foreground py-0.5">📰 {h}</p>

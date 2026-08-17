@@ -81,10 +81,16 @@ target, not the names.
    verification pass). Same recipe: verify membership via web plus the table, extend
    DB_TO_ENGINE, dump, bake, wire metadata, extend EURO_SLOTS and relegationSpots.
 
-7. **OPEN: way more headlines.** More variety in the news feed: derby previews, form stories,
-   record fees, managerial pressure elsewhere, title race framing. Mind the two permanent
-   guards: no invented quotes from real people (simNoInventedQuotes) and no rival product
-   names (simNoRivalNames).
+7. **DONE, Round 141: way more headlines.** The feed lives all season now instead of only at
+   window opens: every match week can add a line, read straight off the sim's real state.
+   Title race framing with the exact gap, relegation scrap with points from safety, derby
+   week previews from the actual fixture list, sharpest attack and meanest defence off the
+   real table, deadline countdown, and the window's record deal off the transfer log.
+   Measured: fresh news in about 30 of 39 match weeks against 2 refreshes a season before,
+   11 to 13 distinct story shapes. `simHeadlines.mjs` guards liveness AND truth (doctored
+   tables must produce lines carrying exactly the table's numbers), and simNoInventedQuotes
+   now harvests aiHeadlines too, so a future headline that quotes a real player fails the
+   build. The card renamed from "Window headlines" to "Around the league".
 
 8. **OPEN, standing: every game gets deeper.** More realism, more info, more minigames, in
    every game on the site, career modes first. Use the franchise-mode checklist as the gap
@@ -92,7 +98,7 @@ target, not the names.
    recovery choices, rivalries, awards races, offseason depth, save-spanning records.
 
 
-**As of 2026-08-16 (third update that day, after Round 139, the review round).** This is the volatile file.
+**As of 2026-08-16 (evening update, after Round 141).** This is the volatile file.
 Update it in the same round as any change, so the next session (or the next account) picks up
 cleanly.
 
@@ -115,9 +121,9 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `03afbfd` = **Round 138** when this was written |
-| Packaged queue | Rounds **139** (the review round: feedback items 2, 4 and 5) and **140** (leagues wave 1). One click ships both: **`SHIP9.bat`** (logs to `ship_log9.txt`). |
-| Live site | Publish triggered 2026-08-16 after Round 137 synced. Re-publish and verify after 139 and 140 land. |
-| Next free round number | **141** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged queue | Rounds **139** (review round), **140** (leagues wave 1) and **141** (living news feed). One click ships all three: **`SHIP10.bat`** (logs to `ship_log10.txt`). |
+| Live site | Publish triggered 2026-08-16 after Round 137 synced. Re-publish and verify after 139 to 141 land. |
+| Next free round number | **142** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven
