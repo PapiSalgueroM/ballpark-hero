@@ -70,7 +70,13 @@ G. **DONE, Round 148: the Search Console redirect failure, fixed at the root.** 
    content are for. Nothing else actionable from our side today.
 
 F. **STANDING: more animation everywhere, more depth everywhere.** "Add more animation
-   especially to the idle game... and all the games." First pass DONE, Round 147: Club
+   especially to the idle game... and all the games." Second pass DONE, Round 149: the
+   shared ResultScreen (the end card of about 56 games) now celebrates every WIN site
+   wide: confetti with a per-game deterministic fall, the outcome emoji slams in, the
+   headline rises, stat rows stagger. Losses stay deliberately quiet, because 56 games
+   shaking at you gets old in an afternoon. Verified: full sweep of 119 routes across 3
+   viewports with zero non-network errors, plus a complete Club Manager season played to
+   its ResultScreen with 0 findings. First pass DONE, Round 147: Club
    Manager full time is staged now (verdict slams in after a beat, scorers stagger in
    minute order, wins pulse, defeats shake once, trophies pour confetti, and season end
    rains confetti over silverware) via a shared Celebration component ready for other
@@ -242,8 +248,8 @@ true on the date above; re-measure rather than quoting them.
 | `origin/main` head | `34b2198` = **Round 144** when this was written (2026-08-17 morning) |
 | How 139-144 landed | SHIP13 clicked via computer-use 2026-08-17 ~07:50 UTC. First run failed closed on a bad RUN139 assertion (bare `plus10` matched the removal comment); pattern fixed to `id: 'plus10'`, re-clicked, all six pushed clean. Lesson in SHIP-PIPELINE terms: absence assertions must target the old DEFINITION shape, and every bat's patterns get tested against the actual zip contents before delivery. |
 | Live site | douknowball.com published 2026-08-17 ~08:00 UTC at Round 144 (two deploy calls, second after sync was file-verified). Republish after 145+146 land. |
-| Packaged queue | Round **145** (title band + positional copy purge + the 2010-11 era), Round **146** (Stadium Tycoon), Round **147** (the Club Manager animation pass) and Round **148** (the sitemap generator + Search Console redirect fix). One click ships all four: **`SHIP14.bat`** (logs to `ship_log14.txt`). |
-| Next free round number | **149** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged queue | Round **145** (title band + positional copy purge + the 2010-11 era), Round **146** (Stadium Tycoon), Round **147** (the Club Manager animation pass), Round **148** (the sitemap generator + Search Console redirect fix) and Round **149** (site-wide win celebrations on the shared ResultScreen). One click ships all five: **`SHIP14.bat`** (logs to `ship_log14.txt`). |
+| Next free round number | **150** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

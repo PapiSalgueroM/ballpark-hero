@@ -1,6 +1,12 @@
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import ShareButtons from '@/components/game/ShareButtons';
+/* Round 149: the celebration kit was born in Club Manager (Round 147) and
+ * graduated site-wide the next day: every one of the ~56 games ending on
+ * this screen now celebrates a win the same way. It keeps its club-manager
+ * home so Round 147's package stays byte-stable; a future tidy round can
+ * move the file without changing a single behavior. */
+import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 
 interface ResultScreenStat {
   label: string;
@@ -70,19 +76,28 @@ export function ResultScreen({
   className,
 }: ResultScreenProps) {
   const headlineColor = won === true ? 'text-correct' : won === false ? 'text-destructive' : 'text-primary';
+  /* Round 149: a stable per-game confetti seed, so the fall pattern is
+     deterministic for a given game rather than reshuffling every render. */
+  let seed = 1;
+  for (let i = 0; i < share.gameName.length; i++) seed = (seed * 31 + share.gameName.charCodeAt(i)) >>> 0;
 
   return (
     <div
       className={cn(
-        'bg-surface-1 border border-border rounded-2xl p-5 md:p-6 max-w-md w-full mx-auto text-center shadow-xl animate-in fade-in zoom-in-95 duration-300',
+        'relative bg-surface-1 border border-border rounded-2xl p-5 md:p-6 max-w-md w-full mx-auto text-center shadow-xl animate-in fade-in zoom-in-95 duration-300',
         className,
       )}
     >
+      <CelebrationStyles />
+      {/* Round 149: wins rain, everywhere, and only wins. A loss stays
+          quiet, because 56 games shaking at you gets old in an afternoon. */}
+      {won === true && <ConfettiBurst seed={seed % 997} count={28} />}
+
       {/* 1. Emoji / icon, tuned per outcome tier */}
-      <div className="text-5xl mb-3">{outcomeEmoji}</div>
+      <div className={cn('text-5xl mb-3', won === true && 'cm-slam')}>{outcomeEmoji}</div>
 
       {/* 2. Headline */}
-      <h2 className={cn('text-2xl font-display font-bold mb-1', headlineColor)}>
+      <h2 className={cn('text-2xl font-display font-bold mb-1 cm-rise', headlineColor)} style={{ animationDelay: '0.08s' }}>
         {headline}
       </h2>
 
@@ -96,7 +111,7 @@ export function ResultScreen({
       {statRow && statRow.length > 0 && (
         <div className="flex items-center justify-center gap-4 mt-2 mb-1">
           {statRow.map((stat, i) => (
-            <div key={i} className="flex flex-col items-center">
+            <div key={i} className="flex flex-col items-center cm-rise" style={{ animationDelay: `${0.16 + i * 0.09}s` }}>
               <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{stat.label}</span>
               <span className="text-base font-bold font-display text-foreground">{stat.value}</span>
             </div>
