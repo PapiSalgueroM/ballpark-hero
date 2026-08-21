@@ -404,6 +404,7 @@ const HockeyGrid = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="NHL Franchise Grid | Daily Hockey Team Grid"
           description="A 3x3 grid puzzle where each cell needs an NHL player whose career satisfies both the row and column. Rows and columns mix franchises with career milestones like 500 points, 300 goals or 1000 games played."
           howToPlay={[

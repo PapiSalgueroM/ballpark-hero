@@ -286,6 +286,7 @@ const NhlConnect4 = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="NHL Connect 4 | DoUKnowBall"
           description="Connect four hockey answers in a row: every cell needs a player matching both the franchise column and the trophy or milestone row."
           howToPlay={[

@@ -14,6 +14,7 @@ export default function GuessTheNation() {
       <GameNavbar />
       <GuessTheNationBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Guess The Sporting Nation | DoUKnowBall"
         description="Identify the mystery nation from progressive clues about their Olympic history, medal count, famous sporting moments, and best sports."
         howToPlay={[

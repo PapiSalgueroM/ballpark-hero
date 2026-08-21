@@ -357,6 +357,7 @@ const Index = () => {
 
         {/* Game Navigation */}
         <GameSeoContent
+          pageHasOwnH1
           title="Footle: Soccer Player Guessing Game"
           description="Guess the mystery soccer player in 8 tries. Each guess reveals clues about the player's club, league, nationality, position, and age. One of 100+ free sports games on DoUKnowBall."
           howToPlay={[

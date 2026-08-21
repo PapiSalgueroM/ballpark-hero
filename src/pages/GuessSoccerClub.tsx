@@ -14,6 +14,7 @@ export default function GuessSoccerClub() {
       <GameNavbar />
       <GuessSoccerClubBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Guess The Football Club | DoUKnowBall"
         description="Identify the mystery soccer club from progressive text clues about their vibe, league, trophies, kit colors, and notable current players. Covers all major European leagues and MLS."
         howToPlay={[

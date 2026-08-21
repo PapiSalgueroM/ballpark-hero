@@ -227,6 +227,7 @@ const Minefield = () => {
         </main>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Minefield: Click Everyone Who Belongs | DoUKnowBall"
           description="The minefield quiz: every board shows a sports category and a wall of names. Most really belong - Ballon d'Or winners, Super Bowl champions, the 3,000-hit club - but the mines hiding among them explode on contact. Clear three boards with two lives each, daily and unlimited."
           howToPlay={[

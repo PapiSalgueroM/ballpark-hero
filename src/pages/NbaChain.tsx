@@ -241,6 +241,7 @@ const NbaChain = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Pro Basketball Chain Game | DoUKnowBall"
           description="Chain together players who shared a team. How long can you keep the chain going before you get stuck?"
           howToPlay={[

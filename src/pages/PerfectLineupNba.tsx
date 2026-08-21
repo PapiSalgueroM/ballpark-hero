@@ -21,6 +21,7 @@ const PerfectLineupNba = () => {
         <GenericLineupBoard config={NBA_LINEUP_CONFIG} />
 
         <GameSeoContent
+          pageHasOwnH1
           title="Perfect Lineup: NBA Daily Basketball Squad Builder"
           description="Perfect Lineup: NBA gives you a starting five where most slots are locked to a specific franchise or era. Pick a real eligible player for every position, then run a simulation that scores your squad on talent and chemistry and turns it into a shareable scoreline."
           howToPlay={[

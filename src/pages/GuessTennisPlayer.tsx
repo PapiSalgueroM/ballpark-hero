@@ -14,6 +14,7 @@ export default function GuessTennisPlayer() {
       <GameNavbar />
       <TennisPlayerBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Guess The Tennis Player | DoUKnowBall"
         description="Identify the mystery tennis player from progressive clues about their Grand Slam record, nationality, era, and famous moments. Covers ATP and WTA from 1970 to 2025."
         howToPlay={[

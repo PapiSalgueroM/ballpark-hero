@@ -397,6 +397,7 @@ const NbaLineup = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Pro Basketball Starting 5 | DoUKnowBall"
           description="Build the starting five that matches all the given criteria. Tests your knowledge of NBA rosters, positions and player history."
           howToPlay={[

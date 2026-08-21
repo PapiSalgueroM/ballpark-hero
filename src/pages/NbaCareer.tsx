@@ -192,6 +192,7 @@ const NbaCareer = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="NBA Career Path | DoUKnowBall"
           description="A daily game where you guess a mystery NBA player from progressive clues: position, country, draft, teams, stats, and awards."
           howToPlay={[

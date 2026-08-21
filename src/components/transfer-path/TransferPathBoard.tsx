@@ -4,7 +4,6 @@ import { useTransferPath } from '@/hooks/useTransferPath';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import ReportQuestion from '@/components/game/ReportQuestion';
-import GameSeoContent from '@/components/seo/GameSeoContent';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { TRANSFER_PATH_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { RotateCcw, ArrowRight, Lightbulb } from 'lucide-react';
@@ -239,21 +238,6 @@ export function TransferPathBoard() {
         />
       </div>
 
-      <GameSeoContent
-        title="Transfer Path | DoUKnowBall"
-        description="Build a chain connecting two football players through shared clubs. Name players who played at the same club to create the shortest transfer path possible."
-        howToPlay={[
-          "You're given two players: a start and an end target.",
-          "Name a player who shared a club with the last player in your chain.",
-          "Keep building the chain until you connect to the target player.",
-          "Score 1000 points for the optimal path. Lose 100 points for each extra step."
-        ]}
-        examples={[
-          "Zlatan → Rooney: Both played at Manchester United (1 step)",
-          "Gerrard → Ronaldo: Gerrard (Liverpool) → Torres (Liverpool & Atlético) → Ronaldo (2 steps)",
-          "Lampard → Messi: Lampard (Chelsea) → Fàbregas (Chelsea & Barcelona) → Messi (2 steps)"
-        ]}
-      />
     </GameShell>
   );
 }

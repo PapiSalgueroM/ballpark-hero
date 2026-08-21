@@ -330,6 +330,7 @@ const ListQuiz = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Name Them All: Sports List Quizzes"
           description="Timed recall quizzes built on real records: champions, MVPs and title winners across ten sports. Play relaxed or race a three minute clock."
           howToPlay={[

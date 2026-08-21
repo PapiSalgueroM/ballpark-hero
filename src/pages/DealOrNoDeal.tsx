@@ -500,6 +500,7 @@ const DealOrNoDeal = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Mystery Box: The Banker Game"
           description="A sports take on the classic box gamble. Play for cash, or switch to Player Edition where every case hides a real footballer and you win their market value."
           howToPlay={[

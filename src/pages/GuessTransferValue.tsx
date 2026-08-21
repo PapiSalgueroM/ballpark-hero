@@ -268,6 +268,7 @@ const GuessTransferValue = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Guess The Transfer Value: Daily Soccer Market Value Game"
           description="Read a real soccer player's profile and guess their transfer market value in 6 tries. After each guess, see higher/lower and a hot/cold cue to narrow in."
           howToPlay={[

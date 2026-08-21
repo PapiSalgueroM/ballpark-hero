@@ -91,6 +91,7 @@ const ConquestNba = () => {
           {mode === 'imperialism' && <ImperialismBoardNba />}
           {mode === 'arcade' && <ConquestBoardNba />}
           <GameSeoContent
+          pageHasOwnH1
             title="NBA Conquest: Territory Domination Game"
             description="Two ways to conquer America. Imperialism mode plays the classic map format: every territory starts with its nearest NBA arena, winners annex the loser's entire empire, wiped-out teams can storm back with one win, and a territory-seeded playoff crowns the ruler of the map. Arcade mode is the original battle sim with player steals and power-ups."
             howToPlay={[

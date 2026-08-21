@@ -427,6 +427,7 @@ export default function Profile() {
         title={`${viewingProfile.display_name || viewingProfile.username || 'Player'}'s Profile | DoUKnowBall`}
         description="View player stats, streaks, and badges on DoUKnowBall"
         path={username ? `/profile/${username}` : '/profile'}
+        noindex
       />
       <div className="min-h-screen bg-background">
         <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">

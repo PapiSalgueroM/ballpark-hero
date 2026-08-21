@@ -356,6 +356,7 @@ const GuessTheCollege = () => {
           )}
 
           <GameSeoContent
+          pageHasOwnH1
             title="Guess The College: D1 Trivia | DoUKnowBall"
             description="Guess the Division 1 college from progressive clues about their conference, mascot, location, and athletic history. Covers all Power 4 and Group of 5 schools."
             howToPlay={[

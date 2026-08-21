@@ -241,6 +241,7 @@ const GuessTheGolfer = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Guess The Golfer | DoUKnowBall"
           description="Six clues stand between you and a mystery major champion: era, nationality, major count, which majors, initials, first name. How few do you need?"
           howToPlay={[

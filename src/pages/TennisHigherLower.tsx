@@ -137,6 +137,7 @@ const TennisHigherLower = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Tennis Higher or Lower | DoUKnowBall"
           description="Two tennis greats, side by side. Which one won more Grand Slam singles titles? Men's and women's legends in one pool, from Bill Tilden to Carlos Alcaraz."
           howToPlay={[

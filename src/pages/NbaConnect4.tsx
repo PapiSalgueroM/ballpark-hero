@@ -268,6 +268,7 @@ const NbaConnect4 = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Pro Basketball Connect 4 | DoUKnowBall"
           description="Connect four basketball players in a row by finding what links them together: teams, awards, colleges or stats."
           howToPlay={[

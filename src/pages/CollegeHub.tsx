@@ -56,6 +56,7 @@ const CollegeHub = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="College Sports Games on DoUKnowBall"
           description="The College Games Hub gathers every college football and college basketball game on DoUKnowBall into a single entry point: grids, program guessers, and clue games for fans of CFB and CBB."
           howToPlay={[

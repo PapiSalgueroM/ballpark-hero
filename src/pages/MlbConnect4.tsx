@@ -286,6 +286,7 @@ const MlbConnect4 = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="MLB Connect 4 | DoUKnowBall"
           description="Connect four baseball answers in a row: every cell needs a player matching both the franchise column and the achievement row."
           howToPlay={[

@@ -1060,6 +1060,7 @@ export default function SoccerCareer() {
           </>
         )}
         <GameSeoContent
+          pageHasOwnH1
           title="Soccer Career Simulator | DoUKnowBall"
           description="Live out your soccer dream in a season by season career simulator. Create a player, join a youth academy, develop skills, sign contracts, win trophies, and compete for the Ballon d'Or."
           howToPlay={[

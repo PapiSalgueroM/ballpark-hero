@@ -214,6 +214,7 @@ const NflConnections = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="NFL Connections | DoUKnowBall"
           description="A daily puzzle where you group NFL players by what connects them: same franchise, same college, same draft slot, or same career milestone."
           howToPlay={[

@@ -28,10 +28,17 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://douknowball.com';
 
-/* Non-game pages, with their crawl hints. */
+/* Non-game pages, with their crawl hints.
+   Round 198: /college joined the list. It is a real hub with its own copy
+   and links to every college game, but it was in no menu and no sitemap,
+   so nothing on the web pointed at it and nothing ever would. It got a
+   link from the home page's College Sports heading in the same round,
+   because a sitemap entry with no inbound link is a page Google is
+   entitled to ignore. */
 const STATIC_PAGES = [
   { p: '/', freq: 'daily', pri: '1.0' },
   { p: '/leaderboard', freq: 'daily', pri: '0.7' },
+  { p: '/college', freq: 'weekly', pri: '0.6' },
   { p: '/whats-new', freq: 'weekly', pri: '0.5' },
   { p: '/about', freq: 'yearly', pri: '0.4' },
   { p: '/contact', freq: 'yearly', pri: '0.4' },
@@ -81,7 +88,11 @@ for (const p of LEGACY_LIVE) {
 
 const today = new Date().toISOString().slice(0, 10);
 const row = (p, freq, pri) =>
-  `  <url><loc>${SITE}${p === '/' ? '' : p}</loc><lastmod>${today}</lastmod><changefreq>${freq}</changefreq><priority>${pri}</priority></url>`;
+  /* Round 198: the root is submitted WITH its trailing slash, because that
+     is exactly what PageSeo puts in the home page's canonical tag. The two
+     disagreed until now (sitemap bare, canonical slashed), which is a
+     crawler being told about one URL and pointed at another. */
+  `  <url><loc>${SITE}${p === '/' ? '/' : p}</loc><lastmod>${today}</lastmod><changefreq>${freq}</changefreq><priority>${pri}</priority></url>`;
 
 const seen = new Set();
 const rows = [];

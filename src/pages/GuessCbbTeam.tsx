@@ -14,6 +14,7 @@ export default function GuessCbbTeam() {
       <GameNavbar />
       <CbbProgramBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Guess The College Basketball Program | DoUKnowBall"
         description="Identify the mystery college basketball program from progressive clues about their conference, mascot, tournament history, and championships."
         howToPlay={[

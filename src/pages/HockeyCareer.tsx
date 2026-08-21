@@ -188,6 +188,7 @@ const HockeyCareer = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Hockey Career Path | DoUKnowBall"
           description="A daily game where you guess a mystery hockey player from progressive clues: position, country, draft, teams, stats, and awards."
           howToPlay={[

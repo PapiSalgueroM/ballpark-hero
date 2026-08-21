@@ -390,6 +390,7 @@ const FantasyDraft = () => {
         </main>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Fantasy Draft: Soccer Team Builder | DoUKnowBall"
           description="Draft your ultimate soccer squad against an AI opponent. Pick 11 players in a snake draft, then simulate a full season to see who built the better team."
           howToPlay={[

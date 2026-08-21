@@ -24,6 +24,7 @@ const ConquestNhl = () => {
           </div>
           <ImperialismBoardNhl />
           <GameSeoContent
+          pageHasOwnH1
             title="NHL Conquest: Imperialism Territory Game"
             description="The classic imperialism map format for hockey. Every US territory starts with its nearest NHL rink, winners annex the loser's entire empire, wiped-out teams can storm back with one win, and a territory-seeded playoff crowns the ruler of the map. Toronto, Ottawa, Edmonton, Vancouver and Buffalo start landless as the invaders."
             howToPlay={[

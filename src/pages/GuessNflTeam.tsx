@@ -9,9 +9,11 @@ export default function GuessNflTeam() {
         title="Guess the NFL Team - Daily Football Puzzle | DoUKnowBall"
         description="Guess the NFL team from clues about their city, stadium, players, and history."
         path="/guess-nfl-team"
+        noindex
       />
       <GuessNflTeamBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Guess The Pro Football Team | DoUKnowBall"
         description="Identify the mystery NFL team from progressive clues about their division, stadium, history, Super Bowl record, and iconic players."
         howToPlay={[

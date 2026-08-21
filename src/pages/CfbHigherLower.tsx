@@ -134,6 +134,7 @@ const CfbHigherLower = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="College Football Higher or Lower | DoUKnowBall"
           description="Two college QBs, side by side. Which one threw for more career yards? Record-book legends against famous NFL names with surprising college totals."
           howToPlay={[

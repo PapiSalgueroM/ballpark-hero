@@ -295,6 +295,7 @@ const MissingNine = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Missing Nine | DoUKnowBall"
           description="A verified real World Series starting nine is shown in batting order with one name blanked out. Remember who actually started, including the surprise starters history forgot."
           howToPlay={[

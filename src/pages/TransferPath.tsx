@@ -12,6 +12,7 @@ export default function TransferPath() {
       />
       <TransferPathBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Transfer Path: Connect Soccer Players Through Shared Clubs"
         description="Link two soccer players by walking through the clubs they share with other players. Like Six Degrees of Kevin Bacon, but for football transfers."
       />

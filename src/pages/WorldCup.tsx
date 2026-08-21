@@ -345,6 +345,7 @@ const WorldCup = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="World Cup Trivia Game | DoUKnowBall"
           description="Guess the mystery World Cup player from progressive clues spanning every tournament from 1970 to 2026. Daily challenge: the same puzzle for everyone, resetting at midnight."
           howToPlay={[

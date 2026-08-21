@@ -326,6 +326,7 @@ const FootballDraft = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Pro Football Draft Guesser | DoUKnowBall"
           description="A daily game where you guess what round NFL players were drafted based on progressively revealed clues: college, combine stats, and more."
           howToPlay={[

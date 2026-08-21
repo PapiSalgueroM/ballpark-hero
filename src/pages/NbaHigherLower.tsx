@@ -135,6 +135,7 @@ const NbaHigherLower = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="NBA Higher or Lower | DoUKnowBall"
           description="Two NBA players, side by side. Which one scored more career points? Daily challenge and unlimited mode with streak bonuses, drawn from the all-time top 80 scorers."
           howToPlay={[

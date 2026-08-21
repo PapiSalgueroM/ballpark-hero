@@ -23,6 +23,7 @@ const FrontOffice = () => {
           </div>
           <FrontOfficeBoard />
           <GameSeoContent
+          pageHasOwnH1
             title="NFL Front Office: the GM Sim"
             description="Take over a real NFL franchise with rosters rated from two seasons of real production. Manage the salary cap, cut and sign players, negotiate trades the AI actually evaluates, ride out the weekly injury report, scout a draft class where the grades can lie, and chase titles across unlimited saved seasons with aging, breakouts and retirements."
             howToPlay={[

@@ -142,6 +142,7 @@ const NflHigherLower = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="NFL Higher or Lower | DoUKnowBall"
           description="A different stat every round: passing yards, passing TDs, rushing yards, receiving yards, receptions and touchdowns scored. Which NFL star has the bigger career number?"
           howToPlay={[

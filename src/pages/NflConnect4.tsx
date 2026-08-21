@@ -295,6 +295,7 @@ const NflConnect4 = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="NFL Connect 4 | DoUKnowBall"
           description="Connect four football answers in a row: every cell needs a player matching both the franchise column and the achievement row."
           howToPlay={[

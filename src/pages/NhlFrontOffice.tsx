@@ -23,6 +23,7 @@ const NhlFrontOffice = () => {
           </div>
           <NhlFrontOfficeBoard />
           <GameSeoContent
+          pageHasOwnH1
             title="NHL Front Office: the GM Sim"
             description="Take over a real NHL club with its actual 2026-27 roster, every player rated off real 2025-26 stats pulled from the league's own data. Work under the hard salary cap, waive contracts, sign free agents, swing trades the AI weighs on age, position and rating, then chase points through an 82-game-shaped season where overtime losses still pay. Make the real divisional bracket: top three per division plus two wild cards per conference, four best-of-7 rounds, the Stanley Cup at the end. Draft prospects whose scouting grades can lie, manage aging curves where goalies last longer, and stack Cups across unlimited saved seasons."
             howToPlay={[

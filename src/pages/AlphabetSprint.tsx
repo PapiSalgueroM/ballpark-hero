@@ -407,6 +407,7 @@ const AlphabetSprint = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Alphabet Sprint: Name a Footballer for Every Letter"
           description="A quickfire football trivia race. Random letters appear, weighted by how many real players carry them, and you name anyone whose surname starts with the letter before the clock runs out. Streak bonuses reward five in a row, skips are free but reset the streak, and every player can only be used once per run."
           howToPlay={[

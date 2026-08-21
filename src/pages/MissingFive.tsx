@@ -280,6 +280,7 @@ const MissingFive = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Missing Five | DoUKnowBall"
           description="A verified real NBA starting five is shown with one name blanked out. Remember who actually started, including the surprise starters history forgot."
           howToPlay={[

@@ -352,6 +352,7 @@ const LineupBuilder = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Build Your XI | DoUKnowBall"
           description="Build your ultimate starting eleven from players who match specific criteria. Test your football knowledge across positions, teams and eras."
           howToPlay={[

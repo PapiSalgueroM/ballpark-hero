@@ -126,6 +126,7 @@ const HigherLowerTransfers = () => {
         title="Higher or Lower: Transfer Market | DoUKnowBall"
         description="Who is worth more? Guess higher or lower on real player market values and build the longest streak you can. Free, endless, no sign-up."
         path="/higher-lower-transfers"
+        noindex
       />
       <GameShell
         width="narrow"
@@ -223,6 +224,7 @@ const HigherLowerTransfers = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Higher or Lower: Transfer Market Edition"
           description="An endless streak game built on real market values from the world of football. See one player's value, then decide if the next player is worth more or less."
           howToPlay={[

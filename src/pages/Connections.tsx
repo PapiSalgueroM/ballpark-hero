@@ -276,6 +276,7 @@ const Connections = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Sports Connections Game | DoUKnowBall"
           description="Find the four groups of connected sports players. Each group shares something in common: a team, award, position or era."
           howToPlay={[

@@ -601,6 +601,7 @@ const CareerLadder = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Career Ladder: Guess the Footballer from Their Career"
           description="Every round hides a real footballer behind their career ladder. You start with a single early stint, just a club, a season and a stat line, and work out who climbed it. The fewer clues you need, the bigger your score."
           howToPlay={[

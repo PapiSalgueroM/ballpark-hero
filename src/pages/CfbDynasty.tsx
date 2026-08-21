@@ -23,6 +23,7 @@ const CfbDynasty = () => {
           </div>
           <CfbDynastyBoard />
           <GameSeoContent
+          pageHasOwnH1
             title="CFB Dynasty: the College Program Sim"
             description="Take over one of 44 real programs in the post-realignment landscape: the loaded SEC and Big Ten, the ACC and Big 12 cores, and a Group of Five path for giant killers. Every player is a generated recruit with a class year, so rosters actually churn: freshmen develop, seniors graduate, elite juniors declare early, and the transfer portal giveth and taketh. Recruit with an NIL budget that grows with prestige and winning, sweat scouting error on high school grades, chase conference championships, and fight through the real 12-team College Football Playoff with byes for the top four seeds. Win Heismans, stack natties, build the dynasty."
             howToPlay={[

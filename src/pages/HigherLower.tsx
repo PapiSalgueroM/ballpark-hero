@@ -137,6 +137,7 @@ const HigherLowerGame = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Higher or Lower Sports Game | DoUKnowBall"
           description="Guess whether the next player's stat is higher or lower. Tests your knowledge of player stats across football, NBA and UFC."
           howToPlay={[

@@ -807,6 +807,7 @@ const PerfectSeasonNfl = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="17-0: The Perfect Season Challenge (NFL)"
           description="Draft an offense across the modern NFL. The wheel decides which team-season you draft from, one player per spin, no repeats. Then the sim decides your fate over 17 games."
           howToPlay={[

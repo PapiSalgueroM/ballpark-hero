@@ -14,6 +14,7 @@ export default function UfcChain() {
       <GameNavbar />
       <CombatChainBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="MMA Combat Chain Game | DoUKnowBall"
         description="Build the longest chain of MMA fighters by naming someone who defeated the current fighter. Covers UFC, Bellator, and all major promotions."
         howToPlay={[

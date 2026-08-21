@@ -168,6 +168,7 @@ const PackBattle = () => {
         title="Pack Battle | DoUKnowBall"
         description="Open a daily 5-card pack of real footballers. Call higher or lower on market value before each flip. One wrong call busts the pack. Free, no sign-up."
         path="/pack-battle"
+        noindex
       />
       <GameShell
         width="narrow"
@@ -327,6 +328,7 @@ const PackBattle = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Pack Battle: Football Trumps"
           description="A daily pack-opening trivia game built on real market values from the world of football. Call higher or lower before each card flips. One wrong call busts the pack."
           howToPlay={[

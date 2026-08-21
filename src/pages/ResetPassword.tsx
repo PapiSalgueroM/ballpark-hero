@@ -96,6 +96,7 @@ export default function ResetPassword() {
         title="Reset Password | DoUKnowBall"
         description="Set a new DoUKnowBall password"
         path="/reset-password"
+        noindex
       />
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <Card className="w-full max-w-md border-border/60">

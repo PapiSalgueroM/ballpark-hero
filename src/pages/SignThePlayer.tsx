@@ -403,6 +403,7 @@ const SignThePlayer = () => {
         </main>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Sign the Player: The Auction House | DoUKnowBall"
           description="A three-way transfer auction: you against two AI moguls with £1B each. Positions sell good-player-first then superstar, leftovers get assigned with a fee, and the three finished squads simulate a mini-league showdown."
           howToPlay={[

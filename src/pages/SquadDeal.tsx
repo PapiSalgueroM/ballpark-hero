@@ -87,7 +87,8 @@ const SquadDeal = () => {
       <GameShell width="wide">
         {inner}
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
-        <GameSeoContent title="Squad Deal: Mystery Box Team Builder"
+        <GameSeoContent
+          pageHasOwnH1 title="Squad Deal: Mystery Box Team Builder"
           description="A mystery box twist on building your dream team. Each position gives you 10 mystery cases of players tiered from elite to weak. Keep one, eliminate the rest, and weigh the Banker's player offers."
           howToPlay={[
             'Pick a formation and an era (current or all-time legends).',

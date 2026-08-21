@@ -14,6 +14,7 @@ export default function F1Constructor() {
       <GameNavbar />
       <F1ConstructorBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Guess The F1 Constructor | DoUKnowBall"
         description="Identify the mystery Formula 1 constructor from progressive clues about their championship history, drivers, and iconic moments."
         howToPlay={[

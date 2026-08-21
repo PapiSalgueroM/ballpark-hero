@@ -23,6 +23,7 @@ const NbaMyCareer = () => {
           </div>
           <NbaMyCareerBoard />
           <GameSeoContent
+          pageHasOwnH1
             title="NBA My Career: the Player Life Sim"
             description="Build a fictional prospect and live a full NBA career inside the real league. Your position and archetype drive realistic per-game lines, and every summer brings one big decision: hometown discount or the max somewhere new, surgery or load management, the podcast or the gym. Chase rings, MVPs, Finals MVPs and All-NBA nods, fight Father Time, and retire to a verdict that runs from ten-day contracts to the GOAT debate."
             howToPlay={[

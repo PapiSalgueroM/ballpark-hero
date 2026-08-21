@@ -9,6 +9,20 @@ interface GameSeoContentProps {
   description: string;
   howToPlay?: string[];
   examples?: string[];
+  /**
+   * Round 198: does the page already print its own first level heading?
+   *
+   * This block's heading used to be an h1 on every page, which was right
+   * for the eighty two games whose board has no headline of its own and
+   * wrong for the forty that do: those shipped two competing page titles.
+   * Making it an h2 everywhere would have been worse, because it would
+   * have left those eighty two pages with no h1 at all, which is weaker
+   * than having two. So the level follows the page: pass this flag from a
+   * page that already has an h1 and the block drops to h2 underneath it.
+   * simIndexing checks the flag against the real headings in every page
+   * and its components, so neither state can drift.
+   */
+  pageHasOwnH1?: boolean;
 }
 
 // Round 48 (AdSense content build): this block grew from title + description only
@@ -20,7 +34,7 @@ interface GameSeoContentProps {
 // and only render as a small fallback when a page has no gameContent entry.
 // The visible FAQ list and the FAQPage JSON-LD are built from the same array so
 // the structured data always matches what is actually on the page.
-const GameSeoContent = ({ title, description, howToPlay }: GameSeoContentProps) => {
+const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeoContentProps) => {
   const location = useLocation();
   const path = location.pathname;
 
@@ -76,9 +90,18 @@ const GameSeoContent = ({ title, description, howToPlay }: GameSeoContentProps) 
   return (
     <section className="max-w-2xl mx-auto mt-12 mb-8 px-4">
       <div className="text-center">
-        <h1 className="text-lg font-semibold text-muted-foreground font-display mb-2">
-          {title}
-        </h1>
+        {/* Round 198: the heading level follows the page, see the prop's
+            comment above. Identical classes either way, so nothing moves
+            on screen; only the level a crawler reads changes. */}
+        {pageHasOwnH1 ? (
+          <h2 className="text-lg font-semibold text-muted-foreground font-display mb-2">
+            {title}
+          </h2>
+        ) : (
+          <h1 className="text-lg font-semibold text-muted-foreground font-display mb-2">
+            {title}
+          </h1>
+        )}
         <p className="text-sm text-muted-foreground leading-relaxed">
           {description}
         </p>

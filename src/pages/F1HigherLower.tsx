@@ -137,6 +137,7 @@ const F1HigherLower = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="F1 Higher or Lower | DoUKnowBall"
           description="Two Formula 1 drivers, side by side. Which one won more Grands Prix? Every driver with 8+ career wins, from Fangio and Moss to Hamilton and Verstappen."
           howToPlay={[

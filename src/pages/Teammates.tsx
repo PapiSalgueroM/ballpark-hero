@@ -173,6 +173,7 @@ const Teammates = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Teammates or Not? | DoUKnowBall"
           description="Test your sports knowledge: were these two athletes ever on the same team? Covers NFL, NBA, and soccer with fun facts and shareable scores."
           howToPlay={[

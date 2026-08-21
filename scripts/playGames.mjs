@@ -70,9 +70,16 @@ const LEAKS = [
   [/\bNaN\b/, 'renders NaN'],
   [/\[object Object\]/, 'renders [object Object]'],
   [/\{\{|\}\}/, 'unsubstituted template braces'],
-  [/\byou (?:is|has|does|rips|stands|throws|makes|hits|rocks|scans|picks|lies|goes|gets|wins|scores|plays)\b/i, 'second person verb disagreement'],
+  /* Round 198: "you" has to be the SUBJECT for this to be an error. The
+     sweep flagged "the man ahead of you is as good as your team is", which
+     is correct English: "you" is the object of "ahead of" and the verb
+     belongs to "the man". A preposition in front of "you" now clears it,
+     and a real subject-verb clash ("you is", "you has") still fails. */
+  [/(?<!\b(?:of|to|for|with|than|like|behind|near|beside|against|from|at|on|by|about|around|past|before|after|beyond|below|above|under|over|between|among|through|toward|towards|upon|within|without|into|onto|off)\s)\byou (?:is|has|does|rips|stands|throws|makes|hits|rocks|scans|picks|lies|goes|gets|wins|scores|plays)\b/i, 'second person verb disagreement'],
   [/\bInfinity\b/, 'renders Infinity'],
-  [/[–—]/, 'em or en dash'],
+  /* By codepoint, the simEras convention: a harness that hunts dashes
+     must not contain one, or the project's own scan flags it. */
+  [/[\u2013\u2014]/, 'em or en dash'],
   [/\bNULL\b|\bnull\b/, 'renders null'],
 ];
 

@@ -21,6 +21,7 @@ const PerfectLineupF1 = () => {
         <GenericLineupBoard config={F1_LINEUP_CONFIG} />
 
         <GameSeoContent
+          pageHasOwnH1
           title="Perfect Lineup: F1 Daily Driver Squad Builder"
           description="Perfect Lineup: F1 hands you five driver slots, most locked to a specific constructor, era, or nationality. Pick a real eligible driver for each, then run a simulation that scores your squad on pace and chemistry and turns it into a shareable result."
           howToPlay={[

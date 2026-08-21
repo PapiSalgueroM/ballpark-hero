@@ -23,6 +23,7 @@ const NbaFrontOffice = () => {
           </div>
           <NbaFrontOfficeBoard />
           <GameSeoContent
+          pageHasOwnH1
             title="NBA Front Office: the GM Sim"
             description="Take over a real NBA franchise with its actual curated roster. Manage the cap, waive and sign, propose trades the AI weighs on age and rating, play the season in stretches, survive the modern play-in for seeds 7 to 10, win four best-of-seven rounds, then hit a draft where the scouting grades can lie. Aging, breakouts, retirements and rising caps across unlimited saved seasons."
             howToPlay={[

@@ -277,6 +277,7 @@ const SoccerGrid = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Soccer Grid | DoUKnowBall"
           description="A daily 3×3 grid puzzle where each cell requires a soccer player matching both the row and column criteria. Features clubs, leagues, nationalities, and achievements."
           howToPlay={[

@@ -342,6 +342,7 @@ const MissingXi = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Missing XI: Guess the Famous Lineup's Missing Player"
           description="A real, famous starting XI from soccer history with one player blanked out. Name the missing man with escalating hints that never repeat what the card already shows. Champions League finals, World Cup finals, Euros finals and iconic title deciders."
           howToPlay={[

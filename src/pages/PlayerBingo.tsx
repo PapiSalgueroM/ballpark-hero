@@ -460,6 +460,7 @@ const PlayerBingo = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Player Bingo: Fill a Line with Real Footballers"
           description="A 5 by 5 bingo board built from hard football facts. Real players are revealed by name only, one at a time, and completing any row, column, or diagonal calls bingo. After your first line you can keep the same board alive for bonus lines and a full-board blackout."
           howToPlay={[

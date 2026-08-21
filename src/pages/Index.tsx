@@ -473,6 +473,15 @@ export default function Index() {
                     <span className="text-xs font-normal text-muted-foreground ml-1">
                       ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
                     </span>
+                    {/* Round 198: the College hub existed with real copy and
+                        links to every college game, but nothing on the site
+                        pointed at it, so no crawler could reach it and no
+                        person could find it. One link fixes both. */}
+                    {cat.title === 'College Sports' && (
+                      <Link to="/college" className="ml-auto text-xs font-normal text-primary hover:underline">
+                        Hub
+                      </Link>
+                    )}
                   </h2>
                   <RevealSection>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

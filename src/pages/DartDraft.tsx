@@ -619,6 +619,7 @@ const DartDraft = () => {
           </div>
         </main>
         <GameSeoContent
+          pageHasOwnH1
           title="Dart Draft: throw darts at the world, draft who you hit"
           description="A timed crosshair sweeps a real world map. Lock left to right, then top to bottom, and the dart lands with a wobble. Hit France and you choose from the best French players at the position you called before the throw. Hit a tiny island and its academy kid steps up. Continent rounds zoom the map for precision throws, gold zones over the ocean pay out legends, wonderkids, free picks and mystery gambles, red zones bite back with sharks and storms, and after 11 throws your XI plays a three match series against The Machine. All-Time mode adds the legends of every nation to their squads."
           howToPlay={[

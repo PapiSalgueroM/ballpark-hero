@@ -210,6 +210,7 @@ const BaseballConnections = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Baseball Connections | DoUKnowBall"
           description="A daily puzzle where you group baseball players by what connects them: same team, same award, same country, or same era."
           howToPlay={[

@@ -434,6 +434,7 @@ const ClueAuction = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Clue Auction: The Secret Footballer Market"
           description="One secret footballer and a bank of 100 points. Every clue has a price, every wrong guess burns 10, and whatever you are still holding when you name him is your score. Spend like a scout, not like a sheikh."
           howToPlay={[

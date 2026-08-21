@@ -287,6 +287,7 @@ const CareerGame = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Career Path Game | DoUKnowBall"
           description="Guess the mystery sports player from their career history. Each clue reveals a team they played for. The fewer clues you need, the higher your score."
           howToPlay={[

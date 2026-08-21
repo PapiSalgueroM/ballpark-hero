@@ -182,6 +182,7 @@ const ClubManager = () => {
         </div>
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
         <GameSeoContent
+          pageHasOwnH1
           title="Club Manager: Football Management Sim"
           description="A full club-management sim in your browser: 330 clubs across 20 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Croatia, Denmark, Switzerland, Austria and Greece, each with its real squad and market values as of August 2026. Manage today or in a real past season: 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
           howToPlay={[

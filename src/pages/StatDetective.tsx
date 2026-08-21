@@ -383,6 +383,7 @@ const StatDetective = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Stat Detective: Guess the NBA Player from an Anonymized Stat Line"
           description="Every case file is a real NBA season pulled from the record books, stripped down to its era, position and per 36 minute numbers. Read the line, work the clues and name the player within eight guesses. Feedback chips compare each guess by era, position and franchise history, and extra clues unlock as the misses pile up. Play Stars mode for famous seasons or Deep Cuts for the connoisseur pool."
           howToPlay={[

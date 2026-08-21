@@ -23,6 +23,7 @@ const MlbMyCareer = () => {
           </div>
           <MlbMyCareerBoard />
           <GameSeoContent
+          pageHasOwnH1
             title="MLB My Career: the Player Life Sim"
             description="Build a fictional prospect and live a whole MLB career inside the real league. Archetypes drive realistic season lines, choices drive everything else, and the legacy verdict at the end tells you exactly what your career meant."
             howToPlay={[

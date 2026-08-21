@@ -14,6 +14,7 @@ export default function GuessNascarDriver() {
       <GameNavbar />
       <NascarDriverBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Guess The NASCAR Driver | DoUKnowBall"
         description="Identify the mystery NASCAR Cup Series driver from progressive clues about their era, wins, car number, championships, and famous moments."
         howToPlay={[

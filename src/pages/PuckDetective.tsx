@@ -491,6 +491,7 @@ const PuckDetective = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Puck Detective: Guess the NHL Player in 8 Tries"
           description="Guess the mystery NHL player in 8 tries. Every guess compares team, position, nationality, age and jersey number against the secret player, with directional arrows on the numeric clues. Play the daily challenge or unlimited mode."
           howToPlay={[

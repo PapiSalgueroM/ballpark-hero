@@ -134,6 +134,7 @@ const MlbHigherLower = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="MLB Higher or Lower | DoUKnowBall"
           description="Two baseball legends, side by side. Which one hit more career home runs? Every 399+ HR career that finished by 2019, from Babe Ruth to David Ortiz."
           howToPlay={[

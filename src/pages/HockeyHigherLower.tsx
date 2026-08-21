@@ -151,6 +151,7 @@ const HockeyHigherLower = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Hockey Higher or Lower | DoUKnowBall"
           description="Two hockey players, side by side. Which one has more career points? Daily challenge and unlimited mode with streak bonuses."
           howToPlay={[

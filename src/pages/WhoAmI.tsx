@@ -538,6 +538,7 @@ const WhoAmI = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Who Am I? The Secret Footballer Game"
           description="Guess the secret footballer. You can search any soccer player, big name or obscure, and every guess gets a similarity score from 0 to 100 built on nationality, position, club, age and market value. Score gets higher the closer you are. 100 means you found him."
           howToPlay={[

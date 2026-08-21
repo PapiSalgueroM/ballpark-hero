@@ -21,6 +21,7 @@ const PerfectLineupNhl = () => {
         <GenericLineupBoard config={NHL_LINEUP_CONFIG} />
 
         <GameSeoContent
+          pageHasOwnH1
           title="Perfect Lineup: NHL Daily Hockey Line Builder"
           description="Perfect Lineup: NHL gives you a six-slot hockey line where most slots are locked to a specific franchise or era. Pick a real eligible player for every position, then run a simulation that scores your line on talent and chemistry and turns it into a shareable result."
           howToPlay={[

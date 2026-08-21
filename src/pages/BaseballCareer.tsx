@@ -232,6 +232,7 @@ const BaseballCareer = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Baseball Career Path | DoUKnowBall"
           description="A daily game where you guess a mystery baseball player from progressive clues: position, draft info, teams, stats, and awards."
           howToPlay={[

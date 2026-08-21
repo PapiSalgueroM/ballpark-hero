@@ -23,6 +23,7 @@ const NhlMyCareer = () => {
           </div>
           <NhlMyCareerBoard />
           <GameSeoContent
+          pageHasOwnH1
             title="NHL My Career: the Player Life Sim"
             description="Build a fictional prospect and live a whole NHL career inside the real league. Archetypes drive realistic season lines, choices drive everything else, and the legacy verdict at the end tells you exactly what your career meant."
             howToPlay={[

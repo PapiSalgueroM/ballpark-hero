@@ -10,7 +10,14 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
+# Round 198: one wildcard group, not two. Splitting the rules across two
+# "User-agent: *" records is merged by Google and misread by other
+# parsers, so the admin disallow lives inside the group it belongs to.
+# The admin screens are staff only and carry their own noindex tag; every
+# other page stays crawlable, because a page that should not be indexed
+# has to be reachable to say so.
 User-agent: *
 Allow: /
+Disallow: /admin/
 
 Sitemap: https://douknowball.com/sitemap.xml

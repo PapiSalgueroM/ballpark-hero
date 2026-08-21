@@ -174,6 +174,7 @@ const NFLCareer = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="NFL Career Path | DoUKnowBall"
           description="Guess the mystery NFL player from progressive career clues. Draft round, college, teams, stats, and jersey numbers."
           howToPlay={[

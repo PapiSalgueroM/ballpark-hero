@@ -220,6 +220,7 @@ const FootballConnect4 = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Football Connect 4 | DoUKnowBall"
           description="Connect four football players in a row by finding the common link: teams played for, draft class, position or awards."
           howToPlay={[

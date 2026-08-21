@@ -404,6 +404,7 @@ const NbaGrid = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="NBA Franchise Grid | Daily Basketball Team Grid"
           description="A 3x3 grid puzzle where each cell needs an NBA player whose career satisfies both the row and column. Rows and columns mix franchises with career milestones like 10,000 points, 5,000 rebounds or 900 games played."
           howToPlay={[

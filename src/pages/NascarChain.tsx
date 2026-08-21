@@ -14,6 +14,7 @@ export default function NascarChain() {
       <GameNavbar />
       <NascarChainBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="NASCAR Chain Game | DoUKnowBall"
         description="Build the longest chain of NASCAR Cup Series drivers by naming someone who raced against the current driver. Test your knowledge of stock car racing history."
         howToPlay={[

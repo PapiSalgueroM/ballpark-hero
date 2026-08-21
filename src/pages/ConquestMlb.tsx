@@ -24,6 +24,7 @@ const ConquestMlb = () => {
           </div>
           <ImperialismBoardMlb />
           <GameSeoContent
+          pageHasOwnH1
             title="MLB Conquest: Imperialism Territory Game"
             description="The classic imperialism map format for baseball. Every US territory starts with its nearest MLB park, winners annex the loser's entire empire, wiped-out teams can storm back with one win, and a territory-seeded playoff crowns the ruler of the map. Toronto and San Diego start landless as the invaders."
             howToPlay={[

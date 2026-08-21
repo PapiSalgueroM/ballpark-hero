@@ -219,6 +219,7 @@ const RankEm = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Rank 'Em | DoUKnowBall"
           description="A stat is named and you get five players near the top of it. Put them in the exact order, most to fewest. Every ranking is real career totals from the database, no opinions, one right answer."
           howToPlay={[

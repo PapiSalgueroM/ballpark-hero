@@ -135,6 +135,7 @@ const GolfHigherLower = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Golf Higher or Lower | DoUKnowBall"
           description="Two major champions, side by side. Which one won more majors? From Old Tom Morris to Scottie Scheffler, the whole history of championship golf is in the pool."
           howToPlay={[

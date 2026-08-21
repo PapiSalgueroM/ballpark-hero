@@ -23,6 +23,7 @@ const MlbFrontOffice = () => {
           </div>
           <MlbFrontOfficeBoard />
           <GameSeoContent
+          pageHasOwnH1
             title="MLB Front Office: the GM Sim"
             description="Take over a real MLB club with its actual 2026 roster, every player rated off real 2025 stats pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 162 in simulated stretches. Win your division for a bye, survive the best-of-3 Wild Card round, the Division Series, the LCS and the World Series. Draft prospects whose scouting grades can lie, ride aging curves and retirements, and stack rings across unlimited saved seasons."
             howToPlay={[

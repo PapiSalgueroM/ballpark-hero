@@ -310,6 +310,7 @@ const PlayerStockMarket = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Player Stock Market | DoUKnowBall"
           description="Six real players at a real past year with their actual market values and value history. Buy three, watch the market advance one real year, and get scored against the optimal portfolio."
           howToPlay={[

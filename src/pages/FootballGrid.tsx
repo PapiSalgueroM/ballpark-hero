@@ -136,6 +136,7 @@ const FootballGrid = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Pro Football Grid | DoUKnowBall"
           description="A daily 3×3 grid puzzle where each cell requires a pro football player matching both the row and column criteria. Features a rarity scoring system based on real player selections."
           howToPlay={[

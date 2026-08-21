@@ -23,6 +23,7 @@ const CbbDynasty = () => {
           </div>
           <CbbDynastyBoard />
           <GameSeoContent
+          pageHasOwnH1
             title="CBB Dynasty: the College Hoops Program Sim"
             description="Take over one of 40 real programs across six leagues, from the blue bloods to a Mid-Major bucket built for Cinderella stories. Every player is a generated recruit with a class year: elite freshmen are one-and-done, seniors graduate, stars leave early, and the transfer portal reshapes your rotation every spring. Recruit with an NIL budget that grows with prestige and wins, sweat the scouting error on high school grades, fight through your conference tournament, and then survive a 32-team single-elimination March where six tournament champions auto-qualify and one bad night ends everything. National Player of the Year races, Cinderella tracking and title counts across unlimited seasons."
             howToPlay={[

@@ -14,6 +14,7 @@ export default function TennisChain() {
       <GameNavbar />
       <TennisChainBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Tennis Chain Game | DoUKnowBall"
         description="Build the longest chain of tennis players by naming someone who defeated the current player at a Grand Slam. Covers ATP and WTA tours from 1970 to 2025."
         howToPlay={[

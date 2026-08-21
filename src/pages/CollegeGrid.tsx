@@ -124,6 +124,7 @@ const CollegeGrid = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="College Football Grid | DoUKnowBall"
           description="A daily 3×3 grid puzzle where each cell requires a college football player matching both the row and column criteria: schools, Heisman winners, All-Americans, draft picks and more."
           howToPlay={[

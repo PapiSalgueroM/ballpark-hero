@@ -214,6 +214,7 @@ const NhlConnections = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="NHL Connections | DoUKnowBall"
           description="A daily puzzle where you group NHL players by what connects them: same franchise or same career milestone."
           howToPlay={[

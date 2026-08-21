@@ -14,6 +14,7 @@ export default function F1Driver() {
       <GameNavbar />
       <F1DriverBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Guess The F1 Driver | DoUKnowBall"
         description="Identify the mystery Formula 1 driver from progressive clues about their career, nationality, teams, and race wins. Daily and unlimited modes available."
         howToPlay={[

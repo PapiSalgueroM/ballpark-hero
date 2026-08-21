@@ -321,6 +321,7 @@ const MissingEleven = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Missing Eleven | DoUKnowBall"
           description="A verified real Super Bowl starting lineup, offense or defense, is shown with one name blanked out. Remember who actually started, including the surprise starters history forgot."
           howToPlay={[

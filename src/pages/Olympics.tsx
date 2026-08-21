@@ -245,6 +245,7 @@ export default function Olympics() {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Olympic Athlete Trivia | DoUKnowBall"
           description="Guess the mystery Olympic athlete from progressive clues about their sport, medal count, nationality, and iconic moments. Covers Summer and Winter Games."
           howToPlay={[

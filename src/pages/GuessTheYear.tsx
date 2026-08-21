@@ -14,6 +14,7 @@ export default function GuessTheYear() {
       <GameNavbar />
       <GuessTheYearBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Guess The Year | DoUKnowBall"
         description="Test your sports history knowledge by guessing the year famous moments happened. Covers NFL, NBA, MLB, NHL, UFC, college football, soccer, and more."
         howToPlay={[

@@ -480,6 +480,7 @@ export default function StadiumTycoon() {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Stadium Tycoon"
           description="Grow a tiny football club into an empire: live toy matches, ten divisions to climb, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks."
         />

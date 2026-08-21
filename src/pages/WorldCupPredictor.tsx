@@ -1497,6 +1497,7 @@ const WorldCupPredictor = () => {
       </div>
       <div className="max-w-5xl mx-auto px-4">
         <GameSeoContent
+          pageHasOwnH1
           title="World Cup 2026 Bracket Builder | DoUKnowBall"
           description="Build your complete World Cup 2026 bracket: predict every match from the group stage through the knockout rounds to the final. Share your bracket with friends and compare predictions."
           howToPlay={[

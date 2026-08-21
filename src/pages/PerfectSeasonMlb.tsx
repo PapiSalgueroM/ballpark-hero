@@ -636,6 +636,7 @@ const PerfectSeasonMlb = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="162-0: The Perfect Season Challenge"
           description="Draft across every era of baseball history. The wheel decides which team-season you draft from, one player per spin, no repeats. Then the sim decides your fate over 162 games."
           howToPlay={[

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, LogIn } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -42,6 +43,12 @@ const AdminLogin = () => {
   };
 
   return (
+    <>
+    {/* Round 198: staff only, never a search result. */}
+    <Helmet>
+      <title>Admin sign in | DoUKnowBall</title>
+      <meta name="robots" content="noindex, nofollow" />
+    </Helmet>
     <main className="min-h-screen bg-background flex items-center justify-center px-4">
       <form onSubmit={handleLogin} className="w-full max-w-sm space-y-4 bg-card border border-border rounded-2xl p-8 shadow-xl">
         <h1 className="text-2xl font-bold text-center text-foreground font-display">Admin Login</h1>
@@ -72,6 +79,7 @@ const AdminLogin = () => {
         </button>
       </form>
     </main>
+    </>
   );
 };
 

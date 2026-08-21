@@ -158,6 +158,7 @@ const UfcGame = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Combat Sports Trivia Game | DoUKnowBall"
           description="Test your UFC and MMA knowledge with daily trivia puzzles covering fighters, records, weight classes and championship history."
           howToPlay={[

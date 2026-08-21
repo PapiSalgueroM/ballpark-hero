@@ -214,6 +214,7 @@ const NbaConnections = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="NBA Connections | DoUKnowBall"
           description="A daily puzzle where you group NBA players by what connects them: same franchise, same milestone, same country, or same draft slot."
           howToPlay={[

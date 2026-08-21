@@ -43,6 +43,7 @@ const FootballTimeline = () => {
         title="NFL Timeline - Drag and Drop Draft Year Puzzle | DoUKnowBall"
         description="Put NFL players in order by their draft year. Free daily NFL trivia puzzle."
         path="/football-timeline"
+        noindex
       />
       <GameShell
         width="narrow"
@@ -169,6 +170,7 @@ const FootballTimeline = () => {
         )}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Pro Football Timeline | DoUKnowBall"
           description="A daily puzzle where you order 5 NFL players by the year they were drafted. Test your football knowledge with this chronological challenge."
           howToPlay={[

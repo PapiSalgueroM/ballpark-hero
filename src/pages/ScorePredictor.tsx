@@ -14,6 +14,7 @@ export default function ScorePredictor() {
       <GameNavbar />
       <ScorePredictorBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Score Predictor | DoUKnowBall"
         description="Test your sports memory by predicting the final score of legendary matches across soccer, NFL, and NBA history."
         howToPlay={[

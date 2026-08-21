@@ -354,6 +354,7 @@ const PerfectLineup = () => {
         {view === 'classic' ? <PerfectLineupBoard /> : <UnbeatenTab game={unbeatenGame} />}
 
         <GameSeoContent
+          pageHasOwnH1
           title="Perfect Lineup: Daily Soccer Squad Builder"
           description="Perfect Lineup is a daily soccer puzzle inspired by viral squad-builders. Each day you get a 4-3-3 where most slots are locked to a specific league or nationality. Pick a real, eligible player for every position, then run a simulation that scores your squad on star power and chemistry and turns it into a shareable scoreline. Or switch to Go Unbeaten and chase a 38 match season with no losses."
           howToPlay={[

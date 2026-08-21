@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { CheckCircle, Clock, LogOut, Loader2, Flag } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Helmet } from 'react-helmet-async';
 
 interface Report {
   id: string;
@@ -82,6 +83,12 @@ const AdminReports = () => {
   });
 
   return (
+    <>
+    {/* Round 198: staff only, never a search result. */}
+    <Helmet>
+      <title>Bug reports | DoUKnowBall</title>
+      <meta name="robots" content="noindex, nofollow" />
+    </Helmet>
     <main className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
@@ -187,6 +194,7 @@ const AdminReports = () => {
         )}
       </div>
     </main>
+    </>
   );
 };
 

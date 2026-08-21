@@ -14,6 +14,7 @@ export default function HofOrBust() {
       <GameNavbar />
       <HofOrBustBoard />
       <GameSeoContent
+          pageHasOwnH1
         title="Hall of Fame or Bust? | DoUKnowBall"
         description="Review anonymized career stats from players across NFL, NBA, MLB, NHL, and Soccer. Decide if they're a Hall of Famer or a bust, then see the community consensus."
         howToPlay={[

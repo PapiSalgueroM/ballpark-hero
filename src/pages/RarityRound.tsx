@@ -561,6 +561,7 @@ const RarityRound = () => {
         </div>
 
         <GameSeoContent
+          pageHasOwnH1
           title="Rarity Round: Soccer Rarity Trivia"
           description="Rarity trivia built on real soccer data. Name a valid answer to a category prompt, then see how obscure or how famous your pick was. Flip to Crowd Says for the popularity-scoring mirror mode."
           howToPlay={[
