@@ -13,7 +13,7 @@ import {
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
-  TICKET_TIERS, groundUpgradeCost, gatePricePerFan, sponsorOffers,
+  TICKET_TIERS, groundUpgradeCost, gatePricePerFan, sponsorOffers, nationOfferFor,
 } from '@/lib/clubManager';
 import type { NationDef, ObjectiveStatus, CupRound } from '@/lib/clubManager';
 import { eraRealShareLabel, eraHonestyLine } from '@/lib/clubManagerEras';
@@ -175,6 +175,7 @@ const ClubManager = () => {
               <p>📝 <span className="font-semibold text-foreground">Every player is on a real deal.</span> Wages sit on a curve, the board sets a ceiling, and contracts tick down: a man you never sit down with walks for free in the summer, with his sale value already collapsed. The contracts desk on the Squad tab re-signs anyone in his final year, two ways: the full-wage deal, or 12 percent cheaper with a release clause written in at 1.5 times his value that day. The clause is a real exit door. Any club can pay it, it cannot be rejected or blocked, an unanswered one executes itself on deadline day, and the only way to delete it is a full price renewal later. Grow a star past his own clause and the phone will ring.</p>
               <p>🤝 <span className="font-semibold text-foreground">Sponsors pay the other half of the bills.</span> The Finances desk puts three shirt sponsor offers on the table whenever the club has no deal, and they are three different shapes: the most guaranteed money, less money with a real bonus for winning the league, or the smallest cheque locked in for four seasons with a little for a top half finish. The money lands in the same kitty as everything else, once a season, and the bonus lands at the season end that earns it. The offers grow as the club does: stature, the league, Europe and the trophy cabinet all count. Leave the club and the deal stays behind, because it was the club's and not yours.</p>
               <p>🎟️ <span className="font-semibold text-foreground">The club earns while you manage.</span> Every home crowd pays a gate into the transfer kitty: attendance times your ticket prices. The Finances desk sets the policy (fair prices fill the ground for less a head, premium squeezes more from fewer) and expands the ground up to three times, each one growing your crowds from the next home game. The board reads ambition into a bigger ground, and it is all one kitty: gates in, transfers, scouts, the academy and the builders out.</p>
+              <p>🌐 <span className="font-semibold text-foreground">Win enough and your country calls.</span> A national federation can offer you the international job alongside your club. Club football does not change at all: the country plays between seasons, in the real tournaments, with the real qualifying groups and the slot counts each confederation actually gets. A good manager makes his country more likely to win one, but the players still decide most of it. Win a tournament and it goes in the same cabinet as a league title. Miss one your country should have reached and the federation moves on.</p>
               <p>🧳 <span className="font-semibold text-foreground">And if they do sack you, that is not the end.</span> You go out of work with your record intact and clubs start calling: real clubs from the real pyramid, with the job they are actually offering written out. Trophies and title finishes open doors, relegations shut them. Every week you wait for a better job cools the market a little, and somebody always takes a chance on you in the end. Take one and you start next season there.</p>
               <p>📉 <span className="font-semibold text-foreground">Watch the board confidence meter.</span> Fall too far below expectations and you're sacked. Overachieve and bigger clubs come calling, from any league in the game, and some of them call MID-SEASON: an approach lands in the Manager panel, and committing to it is a summer pre-agreement your current board will hear about on the radio. They can even walk away again if your season collapses after the handshake.</p>
               <p>🏆 <span className="font-semibold text-foreground">Season score</span> = league points + 10 per trophy (max 130). Careers span multiple seasons; your save is kept on this device.</p>
@@ -195,6 +196,7 @@ const ClubManager = () => {
             'Work the market: negotiate fees, pay release clauses, take loans, and field bids for your own stars, with deep filters down to exact position, age, price, league and nationality, every player under his real flag.',
             'Run the contracts desk: re-sign expiring players at full wage, or cheaper with a release clause any club can trigger, and delete a bargain clause with a full price renewal before the phone rings.',
             'Run the money: gate receipts from every home crowd, a ticket policy, three ground expansions, and a shirt sponsor chosen from three real shapes (the biggest cheque, a title bonus, or four locked in seasons).',
+            'Win enough and manage your country as well: real tournaments between seasons, real qualifying groups, and a place in the cabinet if you lift one.',
             'Handle the press when they come for you, and pick your team talk before kick off and again at half time.',
             'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
           ]}
@@ -806,6 +808,9 @@ const ClubManager = () => {
   const c = g.career;
   const conf = Math.round(c.boardConfidence);
   const confTone = conf >= 60 ? 'bg-emerald-500' : conf >= 30 ? 'bg-yellow-500' : 'bg-red-500';
+  /* Round 202: does a federation want him this season? Recomputed on every
+     render because it depends on the record, which moves every week. */
+  const nationOffer = nationOfferFor(c);
   const fx = g.nextFx;
   const objStatuses = objectiveStatuses(c);
   // Round 74: tile summaries.
@@ -1053,9 +1058,15 @@ const ClubManager = () => {
                 onClick={() => setHubPanel('finance')}
               />
               <HubTile
-                icon="🧢" title="Manager" accent={!!c.approach}
-                value={c.approach ? '📞 A club is calling' : `${c.careerStats.wins}W ${c.careerStats.losses}L`}
-                sub={c.approach ? `${c.approach.club} want you` : c.careerStats.played > 0 ? `${Math.round((c.careerStats.wins / c.careerStats.played) * 100)}% win rate` : 'New in the job'}
+                icon="🧢" title="Manager" accent={!!c.approach || !!nationOffer}
+                value={c.approach ? '📞 A club is calling' : nationOffer ? '🌐 Your country is calling' : `${c.careerStats.wins}W ${c.careerStats.losses}L`}
+                sub={c.approach
+                  ? `${c.approach.club} want you`
+                  : nationOffer
+                    ? `${nationOffer.nation} want you for the summer`
+                    : c.nationJob
+                      ? `${c.nationJob.nation} manager · ${c.careerStats.wins}W ${c.careerStats.losses}L`
+                      : c.careerStats.played > 0 ? `${Math.round((c.careerStats.wins / c.careerStats.played) * 100)}% win rate` : 'New in the job'}
                 onClick={() => setHubPanel('manager')}
               />
               <HubTile
@@ -1358,6 +1369,44 @@ const ClubManager = () => {
 
               {hubPanel === 'manager' && (
                 <>
+                {/* Round 202: the international job. Club football is
+                    unchanged; the country only plays in the summer. */}
+                {c.nationJob ? (
+                  <div data-nation-job className="bg-card border border-primary/40 rounded-xl p-3 mb-2">
+                    <div className="text-[10px] text-primary uppercase tracking-wider mb-1.5 font-bold">🌐 {c.nationJob.nation} manager</div>
+                    <p className="text-xs text-foreground">
+                      In charge since season {c.nationJob.since}. {c.nationJob.played === 0
+                        ? 'Your first tournament summer is still to come.'
+                        : `${c.nationJob.played} tournament${c.nationJob.played === 1 ? '' : 's'} taken charge of, ${c.nationJob.won} won.`}
+                    </p>
+                    {c.nationJob.lastResult && (
+                      <p className="text-[11px] text-muted-foreground mt-1">
+                        Last summer ({c.nationJob.lastYear}): {c.nationJob.lastResult}.
+                      </p>
+                    )}
+                    <p className="text-[10px] text-muted-foreground mt-1">
+                      Tournaments run between club seasons. Miss one your country should have reached and the federation will not wait around.
+                    </p>
+                    <button
+                      onClick={g.resignNation}
+                      className="mt-2 w-full py-2 rounded-lg bg-secondary text-foreground text-xs font-bold hover:opacity-90 transition-opacity"
+                    >
+                      Step down from the national team
+                    </button>
+                  </div>
+                ) : nationOffer ? (
+                  <div data-nation-offer className="bg-card border border-primary/50 rounded-xl p-3 mb-2">
+                    <div className="text-[10px] text-primary uppercase tracking-wider mb-1.5 font-bold">🌐 Your country is calling</div>
+                    <p className="text-sm text-foreground font-bold mb-0.5">{nationOffer.nation} want you.</p>
+                    <p className="text-[11px] text-muted-foreground mb-2">{nationOffer.blurb}</p>
+                    <button
+                      onClick={g.acceptNation}
+                      className="w-full py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
+                    >
+                      🌐 Take the {nationOffer.nation} job as well
+                    </button>
+                  </div>
+                ) : null}
                 {/* Round 168: mid-season approaches land here, his CM-10. */}
                 {c.approach && (
                   <div className="bg-card border border-primary/50 rounded-xl p-3 mb-2">

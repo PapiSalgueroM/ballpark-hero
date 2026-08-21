@@ -205,7 +205,25 @@ export function fifaRankOf(nation: string): number {
    getNationStrength, which rolled a fresh random number every time it was
    called, so the same nation could be strong in the group stage and weak in
    the final of the very same tournament. */
+/* Round 202: a temporary strength override, used only by the manager
+   summer so a manager's lift reaches qualifying, the draw and the bracket
+   consistently instead of being injected match by match. It is always
+   restored, including when the tournament throws. */
+const STRENGTH_OVERRIDE = new Map<string, number>();
+
+export function overrideNationStrength(nation: string, value: number): () => void {
+  const had = STRENGTH_OVERRIDE.has(nation);
+  const prev = STRENGTH_OVERRIDE.get(nation);
+  STRENGTH_OVERRIDE.set(nation, value);
+  return () => {
+    if (had && prev !== undefined) STRENGTH_OVERRIDE.set(nation, prev);
+    else STRENGTH_OVERRIDE.delete(nation);
+  };
+}
+
 export function nationStrength(nation: string): number {
+  const forced = STRENGTH_OVERRIDE.get(nation);
+  if (forced !== undefined) return forced;
   const pts = fifaPointsOf(nation);
   return Math.round(clamp(60 + ((pts - 1300) / 700) * 32, 55, 95) * 10) / 10;
 }
@@ -1107,6 +1125,36 @@ export function runInternationalSummer(
   const qualifying = runQualifying(nation, fmt, form);
   const squad = qualifying.qualified ? pickSquad(nation, form) : null;
   return simulateTournament(nation, fmt, year, qualifying, squad, form);
+}
+
+/**
+ * Round 202: the same summer, run for a MANAGER rather than a player.
+ *
+ * Club Manager can now hand you a country, and a manager is not in the
+ * squad, so `form` is null throughout and nothing in the tournament reads
+ * a player's rating, goals or minutes. What a manager brings instead is
+ * `lift`, a small addition to his nation's strength for that summer, which
+ * is how a good one drags a side past a better one and a poor one does
+ * not. It is deliberately small: a country's players decide most of this,
+ * whoever is holding the clipboard. simNationJob pins the size of it.
+ */
+export function runManagerSummer(
+  nation: string, year: number, lift: number,
+): IntlTournament | null {
+  const fmt = tournamentForYear(nation, year);
+  if (!fmt) return null;
+  const bump = clamp(lift, 0, 6);
+  /* The lift is applied by temporarily reading this nation as a stronger
+     one. Everything downstream (qualifying, the draw, the bracket) then
+     treats it consistently, which is why it is done here and not injected
+     match by match. */
+  const restore = overrideNationStrength(nation, nationStrength(nation) + bump);
+  try {
+    const qualifying = runQualifying(nation, fmt, null);
+    return simulateTournament(nation, fmt, year, qualifying, null, null);
+  } finally {
+    restore();
+  }
 }
 
 /** Friendlies and qualifiers in an off year: caps without a tournament. */

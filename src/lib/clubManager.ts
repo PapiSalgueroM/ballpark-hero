@@ -3,6 +3,9 @@ import { foldSpecialLatin } from '@/lib/nameFold';
    player path already had, so a sacked manager gets real clubs with real
    briefs instead of a bespoke second offer engine. */
 import { realJobOffers, allOfferClubs } from '@/lib/managerJobMarket';
+/* Round 202: the national team job runs on the international engine Soccer
+   Career has used since Round 124, rather than a second thinner one. */
+import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';
 import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier } from '@/lib/managerOffers';
 import type { Player, Position } from '@/types/game';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
@@ -947,6 +950,120 @@ export const TICKET_TIERS = [
   { label: 'Premium', emoji: '\u{1F4BC}', priceMult: 1.3, crowdMult: 0.91, blurb: 'More per seat, a few empty ones up in the corners.' },
 ] as const;
 
+/* ---------- Round 202: the international job ----------
+
+   The one line of "international competitions inside Club Manager" that the
+   Round 199 audit found genuinely unbuilt: club football has had European
+   nights since Round 163, but you could never manage a country.
+
+   How it works. Do well enough for long enough and a national federation
+   calls at the end of a season. Take it and you hold both jobs, the way a
+   real manager occasionally does: the club pays you week to week, and every
+   other summer there is a tournament to win. The summers run on the
+   international engine Soccer Career has used since Round 124, so the
+   qualifying groups, the confederation slot counts, the draw and the
+   bracket are the real ones rather than a second, thinner version written
+   for this game.
+
+   What the manager actually brings is a small lift to his nation's
+   strength for that summer, sized by his standing, because a country's
+   players decide most of a tournament whoever is holding the clipboard.
+   Winning one goes in the same cabinet as a league title. Missing a
+   tournament your nation should have reached costs you the job. */
+
+export interface NationJob {
+  nation: string;
+  /** Season the job started, for the tile and the cabinet. */
+  since: number;
+  /** Tournaments taken charge of. */
+  played: number;
+  /** The most recent summer's result, in the engine's own words. */
+  lastResult: string | null;
+  lastYear: number | null;
+  /** Tournaments won. */
+  won: number;
+}
+
+/** An open international post, offered at a season end. */
+export interface NationOffer {
+  nation: string;
+  blurb: string;
+}
+
+/* A manager's standing in the eyes of a federation: what he has won, how
+   long he has been at it, and how big the club he is at right now is. The
+   thresholds are deliberately high. A country is not a first job. */
+export function nationStanding(career: CareerState): number {
+  const def = clubDefFor(career.clubName);
+  const tierWorth = [26, 16, 8, 3][def.tier - 1] ?? 3;
+  const trophies = career.trophies.length * 14;
+  const seasons = Math.min(career.history.length, 12) * 3;
+  const wins = career.careerStats.played > 0
+    ? (career.careerStats.wins / career.careerStats.played) * 30
+    : 0;
+  return Math.round((tierWorth + trophies + seasons + wins) * 10) / 10;
+}
+
+/**
+ * Which country would have him, if any. A manager is offered his club's own
+ * country: the federation that can watch him every week is the one that
+ * calls, which keeps this honest without inventing a nationality for a
+ * manager the game has never asked to name.
+ */
+export function nationOfferFor(career: CareerState): NationOffer | null {
+  if (career.nationJob) return null;
+  if (career.eraId && isHistoricEra(career.eraId)) return null;
+  const standing = nationStanding(career);
+  if (standing < 70) return null;
+  /* The federation that can watch him every week is the one that calls, so
+     the offer is his club's own country, read off the same NATIONS table the
+     picker uses. That keeps this honest without inventing a nationality for
+     a manager the game has never asked to name. */
+  const league = leagueOf(career.clubName);
+  const nationDef = league ? NATIONS.find(n => n.leagueIds.includes(league.id)) : null;
+  const nation = nationDef?.name ?? null;
+  /* And only a country the international engine actually knows how to run a
+     tournament for: it carries the confederations and the slot counts. */
+  if (!nation || !NATION_CONFED[nation]) return null;
+  return {
+    nation,
+    blurb: `${nation} want you for the national team alongside the ${career.clubName} job. Tournament summers only: club football stays exactly as it is.`,
+  };
+}
+
+/** Accept the international post. */
+export function takeNationJob(career: CareerState): CareerState {
+  const offer = nationOfferFor(career);
+  if (!offer) return career;
+  return {
+    ...career,
+    nationJob: { nation: offer.nation, since: career.season, played: 0, lastResult: null, lastYear: null, won: 0 },
+    aiHeadlines: [
+      `\u{1F310} ${offer.nation} have their manager: you take the national team job alongside ${career.clubName}.`,
+      ...career.aiHeadlines,
+    ].slice(0, 8),
+  };
+}
+
+/** Walk away from the country, keeping the club. */
+export function leaveNationJob(career: CareerState): CareerState {
+  if (!career.nationJob) return career;
+  return {
+    ...career,
+    nationJob: null,
+    aiHeadlines: [
+      `\u{1F310} You have stepped down as ${career.nationJob.nation} manager.`,
+      ...career.aiHeadlines,
+    ].slice(0, 8),
+  };
+}
+
+/** The lift a manager gives his country, 0 to 6 points of strength. */
+export function nationLift(career: CareerState): number {
+  const standing = nationStanding(career);
+  return Math.round(clamp((standing - 60) / 14, 0, 6) * 10) / 10;
+}
+
 /* ---------- Round 201: the wilderness, what happens after the sack ----------
 
    Being sacked ended the save. That is the one moment in a manager's life
@@ -1383,6 +1500,8 @@ export interface CareerState {
   sponsor?: SponsorDeal | null;
   /** Round 201: set while you are out of work, null while you are employed. */
   wilderness?: WildernessState | null;
+  /** Round 202: the national team post, held alongside the club job. */
+  nationJob?: NationJob | null;
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
   /** Round 105: the weekly wage bill the board will tolerate, in thousands. */
@@ -9886,6 +10005,40 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       ].slice(0, 8);
     }
   }
+  /* Round 202: the international summer, if you hold a country. It runs
+     between club seasons on the same engine Soccer Career uses, and the
+     result follows the same rule the club game already has: winning it
+     goes in the cabinet, and missing a tournament your nation should have
+     reached costs you the job. A manager who changes club keeps the
+     country: federations do not care who pays your club wages. */
+  if (career.nationJob) {
+    const job = career.nationJob;
+    const t = runManagerSummer(job.nation, state.season, nationLift(career));
+    if (t) {
+      const won = t.champion === job.nation;
+      const missed = t.myResult === 'Did Not Qualify';
+      state.nationJob = {
+        ...job,
+        played: job.played + 1,
+        lastResult: t.myResult,
+        lastYear: t.year,
+        won: job.won + (won ? 1 : 0),
+      };
+      if (won) {
+        state.trophies = [...state.trophies, { season: state.season, name: t.name, emoji: '\u{1F310}' }];
+      }
+      state.aiHeadlines = [
+        won
+          ? `\u{1F310} ${job.nation} are ${t.name} champions. You lifted it.`
+          : missed
+            ? `\u{1F310} ${job.nation} did not qualify for the ${t.name}. The federation has seen enough.`
+            : `\u{1F310} ${job.nation} went out at the ${t.myResult.toLowerCase()} of the ${t.name}. ${t.champion} won it.`,
+        ...state.aiHeadlines,
+      ].slice(0, 8);
+      if (missed) state.nationJob = null;
+    }
+  }
+
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
