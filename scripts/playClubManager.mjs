@@ -354,7 +354,7 @@ for (let step = 0; step < MAX_STEPS; step++) {
       if (!/Possession/i.test(tq)) note('BROKEN ', 'no possession line on the report');
       if (!/Expected goals/i.test(tq)) note('BROKEN ', 'no expected goals line on the report');
       if (!/Player of the match/i.test(tq)) note('BROKEN ', 'the report names no player of the match');
-      if (!/Momentum/i.test(tq)) note('BROKEN ', 'no momentum strip on the report');
+      if (!/Balance of play/i.test(tq)) note('BROKEN ', 'no balance of play chart on the report'); // Round 169 renamed the strip
     }
     continue;
   }

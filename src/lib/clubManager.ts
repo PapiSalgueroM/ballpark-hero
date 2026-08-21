@@ -696,7 +696,13 @@ export interface TransferNews {
 
 export interface Trophy { name: string; emoji: string; season: number; }
 
-export interface ScorerLine { name: string; minute: number; }
+export interface ScorerLine {
+  name: string;
+  minute: number;
+  /** Round 169: who set it up, when somebody did. Credited at the same
+   *  moment the assist lands on his season line, so the two agree. */
+  assist?: string;
+}
 
 export interface OtherResult { home: string; away: string; hg: number; ag: number; }
 
@@ -756,6 +762,15 @@ export interface MatchDetail {
   myRatings: PlayerRatingLine[];
   /** Their best on the day (top scorer), or null when they had nothing. */
   oppBest: string | null;
+  /** Round 169: stoppage time shown on the clock, per half. */
+  added?: { h1: number; h2: number };
+  /** Round 169: the sim's own crowd for this fixture. */
+  attendance?: number;
+  /** Ground capacity when the save knows it (custom clubs); null otherwise.
+   *  Real grounds carry no invented capacity, per the data rules. */
+  capacity?: number | null;
+  /** Whose ground it was. */
+  venue?: 'home' | 'away' | 'neutral';
 }
 
 export interface MatchWeekReport {
@@ -6279,9 +6294,12 @@ function creditMyScorers(
   state: CareerState,
   xi: CMPlayer[],
   lines: { id: string; name: string; minute: number }[],
-): { goalCounts: Map<string, number>; assistCounts: Map<string, number> } {
+): { goalCounts: Map<string, number>; assistCounts: Map<string, number>; assistNames: (string | null)[] } {
   const goalCounts = new Map<string, number>();
   const assistCounts = new Map<string, number>();
+  /* Round 169: remember WHO assisted each goal, in line order, so the
+     report's timeline can print the assist the season stats were paid for. */
+  const assistNames: (string | null)[] = [];
   for (const line of lines) {
     goalCounts.set(line.id, (goalCounts.get(line.id) ?? 0) + 1);
     const sq = state.squad.find(p => p.id === line.id);
@@ -6289,6 +6307,7 @@ function creditMyScorers(
       sq.seasonGoals += 1;
       sq.morale = clamp(sq.morale + 3, 5, 99);
     }
+    let assistedBy: string | null = null;
     if (Math.random() < 0.7) {
       const others = xi.filter(p => p.id !== line.id && p.position !== 'GK');
       const assister = weightedPick(others, p => scorerWeight(p) * 0.6 + 0.5);
@@ -6296,10 +6315,12 @@ function creditMyScorers(
         assistCounts.set(assister.id, (assistCounts.get(assister.id) ?? 0) + 1);
         const aq = state.squad.find(p => p.id === assister.id);
         if (aq) aq.seasonAssists += 1;
+        assistedBy = assister.name;
       }
     }
+    assistNames.push(assistedBy);
   }
-  return { goalCounts, assistCounts };
+  return { goalCounts, assistCounts, assistNames };
 }
 
 function generateMyScorers(
@@ -6318,9 +6339,9 @@ function generateMyScorers(
     : pickMyScorerLines(xi, h1, 1, 45);
   const h2Lines = pickMyScorerLines(xi, goals - h1, 46, 90);
   const full = [...h1Lines, ...h2Lines];
-  const { goalCounts, assistCounts } = creditMyScorers(state, xi, full);
+  const { goalCounts, assistCounts, assistNames } = creditMyScorers(state, xi, full);
   return {
-    lines: full.map(l => ({ name: l.name, minute: l.minute })),
+    lines: full.map((l, i) => ({ name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined })),
     goalCounts,
     assistCounts,
   };
@@ -6496,6 +6517,8 @@ function buildMatchDetail(args: {
   ratings: PlayerRatingLine[];
   decidedBy: 'regular' | 'pens'; won: boolean;
   clubName: string; opponent: string;
+  /** Round 169: crowd and clock context, computed by the caller who has the save. */
+  attendance?: number; capacity?: number | null; venue?: 'home' | 'away' | 'neutral';
 }): MatchDetail {
   const { myGoals, oppGoals, lamMine, lamOpp } = args;
   const round2 = (n: number) => Math.round(n * 100) / 100;
@@ -6522,18 +6545,24 @@ function buildMatchDetail(args: {
   const oppFouls = ri(6, 14);
 
   /* The timeline: everything above, in minute order, ready to replay. */
+  /* Round 169: the referee's board, like his match app models show. Pure
+     clock flavor, deterministic in range, never touching event minutes. */
+  const added = { h1: ri(1, 4), h2: ri(2, 6) };
+
   const timeline: TimelineEvent[] = [];
   timeline.push({ minute: 0, side: 'none', kind: 'kickoff', text: 'Kick off' });
-  for (const sc of args.myScorers) timeline.push({ minute: sc.minute, side: 'me', kind: 'goal', text: sc.name });
+  for (const sc of args.myScorers) {
+    timeline.push({ minute: sc.minute, side: 'me', kind: 'goal', text: sc.assist ? `${sc.name} (assist: ${sc.assist})` : sc.name });
+  }
   for (const sc of args.oppScorers) timeline.push({ minute: sc.minute, side: 'opp', kind: 'goal', text: sc.name });
   for (const c of args.cards) timeline.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name });
   for (const inj of args.injuries) timeline.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name });
   for (const s of args.subs) timeline.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}` });
-  timeline.push({ minute: 45, side: 'none', kind: 'halftime', text: 'Half time' });
+  timeline.push({ minute: 45, side: 'none', kind: 'halftime', text: `Half time (+${added.h1}')` });
   if (args.decidedBy === 'pens') {
     timeline.push({ minute: 90, side: args.won ? 'me' : 'opp', kind: 'pens', text: args.won ? `${args.clubName} win on penalties` : `${args.opponent} win on penalties` });
   }
-  timeline.push({ minute: 90, side: 'none', kind: 'fulltime', text: 'Full time' });
+  timeline.push({ minute: 90, side: 'none', kind: 'fulltime', text: `Full time (+${added.h2}')` });
   const KIND_ORDER: Record<TimelineKind, number> = {
     kickoff: 0, goal: 1, yellow: 1, red: 1, injury: 1, sub: 1, halftime: 2, pens: 3, fulltime: 4,
   };
@@ -6571,7 +6600,40 @@ function buildMatchDetail(args: {
     momentum,
     myRatings: [...args.ratings].sort((a, b) => b.rating - a.rating),
     oppBest,
+    added,
+    attendance: args.attendance,
+    capacity: args.capacity ?? null,
+    venue: args.venue,
   };
+}
+
+/**
+ * Round 169: the sim's own crowd for a fixture. Attendance is simulation,
+ * like the score, and it is banded by the HOST's stature; capacity is only
+ * ever stated when the save genuinely knows it (a custom club's chosen
+ * ground). Real grounds get no invented capacity and no invented name,
+ * because a stadium's size and name are checkable real-world facts and the
+ * data rules ban inventing those.
+ */
+function matchAttendance(state: CareerState, fx: { home: boolean | null; opponent: string }): { attendance: number; capacity: number | null; venue: 'home' | 'away' | 'neutral' } {
+  const venue: 'home' | 'away' | 'neutral' = fx.home === true ? 'home' : fx.home === false ? 'away' : 'neutral';
+  if (venue === 'neutral') return { attendance: ri(64000, 78000), capacity: null, venue };
+  const hostName = venue === 'home' ? state.clubName : fx.opponent;
+  const custom = state.customClub && hostName === state.customClub.name ? state.customClub : null;
+  if (custom && custom.capacity) {
+    const cap = custom.capacity;
+    return { attendance: ri(Math.round(cap * 0.74), cap), capacity: cap, venue };
+  }
+  const eraHist = !!state.eraId && isHistoricEra(state.eraId);
+  const def = eraHist ? eraClubDefFor(hostName, state.eraId) : clubDefFor(hostName);
+  const bands: Record<number, [number, number]> = {
+    1: [56000, 78000],
+    2: [36000, 56000],
+    3: [21000, 36000],
+    4: [9000, 21000],
+  };
+  const [lo, hi] = bands[def.tier] ?? bands[4];
+  return { attendance: ri(lo, hi), capacity: null, venue };
 }
 
 /**
@@ -7265,6 +7327,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
       }
     }
   }
+  // Round 169: the crowd and the venue, like his match app models carry.
+  const crowd = matchAttendance(state, fx);
   const detail = buildMatchDetail({
     myGoals, oppGoals, lamMine, lamOpp,
     myScorers, oppScorers,
@@ -7272,6 +7336,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     ratings: ratingLines,
     decidedBy, won,
     clubName: state.clubName, opponent: fx.opponent,
+    attendance: crowd.attendance, capacity: crowd.capacity, venue: crowd.venue,
   });
 
   const iAmHome = fx.home !== false; // neutral finals list us first

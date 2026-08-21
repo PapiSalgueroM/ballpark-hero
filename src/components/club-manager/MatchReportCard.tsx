@@ -41,6 +41,44 @@ function StatsBlock({ stats }: { stats: MatchStats }) {
   );
 }
 
+/**
+ * Round 169: momentum as a continuous area chart, the way his match app
+ * models draw it: one smooth flow line, our spells filled above the middle,
+ * theirs below. Pure SVG from the same nine buckets the bars used, so the
+ * data did not move, only the picture.
+ */
+function MomentumArea({ momentum }: { momentum: number[] }) {
+  const W = 100;
+  const H = 40;
+  const MID = H / 2;
+  const AMP = 16;
+  const pts = momentum.map((m, i) => ({
+    x: momentum.length > 1 ? (i / (momentum.length - 1)) * W : 0,
+    y: MID - m * AMP,
+  }));
+  // A smooth line through the buckets: quadratic segments via midpoints.
+  let line = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i = 1; i < pts.length; i++) {
+    const mx = (pts[i - 1].x + pts[i].x) / 2;
+    const my = (pts[i - 1].y + pts[i].y) / 2;
+    line += ` Q ${pts[i - 1].x} ${pts[i - 1].y} ${mx} ${my}`;
+  }
+  line += ` L ${pts[pts.length - 1].x} ${pts[pts.length - 1].y}`;
+  const area = `${line} L ${W} ${MID} L 0 ${MID} Z`;
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-10" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <clipPath id="cmMomUp"><rect x="0" y="0" width={W} height={MID} /></clipPath>
+        <clipPath id="cmMomDown"><rect x="0" y={MID} width={W} height={MID} /></clipPath>
+      </defs>
+      <path d={area} className="fill-primary/45" clipPath="url(#cmMomUp)" />
+      <path d={area} className="fill-red-400/40" clipPath="url(#cmMomDown)" />
+      <line x1="0" y1={MID} x2={W} y2={MID} className="stroke-border" strokeWidth="0.5" />
+      <path d={line} className="stroke-primary fill-none" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+    </svg>
+  );
+}
+
 interface MatchReportCardProps {
   report: MatchWeekReport;
   clubName: string;
@@ -95,6 +133,15 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
       )}>
         {verdict && r.trophyWon && <ConfettiBurst seed={r.homeGoals * 7 + r.awayGoals * 3 + 1} count={34} />}
         <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">{r.compLabel}</div>
+        {/* Round 169: the venue line his match app models lead with. */}
+        {detail?.attendance !== undefined && (
+          <div className="text-[9px] text-muted-foreground mb-1">
+            🏟️ {detail.venue === 'home' ? 'Your ground' : detail.venue === 'away' ? 'Away day' : 'Neutral venue'}
+            {' · '}crowd {detail.attendance.toLocaleString()}
+            {detail.capacity ? ` of ${detail.capacity.toLocaleString()}` : ''}
+            {detail.added ? ` · +${detail.added.h1}' & +${detail.added.h2}' added` : ''}
+          </div>
+        )}
         {/* Laid out at final size from frame one; only opacity moves in. */}
         <h2 className={cn('text-2xl font-display font-bold mb-3', resultTone, verdict ? 'cm-slam' : 'opacity-0')}>
           {resultWord}{r.decidedBy === 'pens' ? ' (PENS)' : ''}
@@ -118,7 +165,10 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">{clubName} scorers</div>
               {r.myScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
               {r.myScorers.map((sc, i) => (
-                <p key={i} className="text-[11px] text-foreground cm-rise" style={{ animationDelay: `${0.35 + i * 0.14}s` }}>⚽ {sc.name} {sc.minute}'</p>
+                <p key={i} className="text-[11px] text-foreground cm-rise" style={{ animationDelay: `${0.35 + i * 0.14}s` }}>
+                  ⚽ {sc.name} {sc.minute}'
+                  {sc.assist && <span className="text-[9px] text-muted-foreground"> · 🅰️ {sc.assist}</span>}
+                </p>
               ))}
             </div>
             <div>
@@ -150,7 +200,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
             ))}
             {detail.subs.map((s, i) => (
               <span key={`s${i}`} className="text-[10px] rounded-full px-2 py-0.5 border bg-secondary border-border text-muted-foreground">
-                🔁 {s.on} {s.minute}'
+                <span className="text-emerald-400">▲ {s.on}</span> <span className="text-red-400">▼ {s.off}</span> {s.minute}'
               </span>
             ))}
           </div>
@@ -172,25 +222,11 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               <span className="font-bold normal-case">Them</span>
             </div>
             <StatsBlock stats={detail.stats} />
-            {/* Momentum, ten minutes a bar: up is us, down is them. */}
+            {/* Round 169: momentum as one continuous flow, us above the
+                line, them below, like his match app models draw it. */}
             <div className="mt-3">
-              <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 text-left">Momentum</div>
-              <div className="flex items-center gap-0.5 h-8">
-                {detail.momentum.map((m, i) => (
-                  <div key={i} className="flex-1 flex flex-col justify-center h-full">
-                    <div className="relative h-full flex flex-col justify-center">
-                      <div
-                        className={cn('w-full rounded-sm', m >= 0 ? 'bg-primary/80' : 'bg-red-400/70')}
-                        style={{
-                          height: `${Math.max(6, Math.abs(m) * 46)}%`,
-                          marginTop: m >= 0 ? 'auto' : '50%',
-                          marginBottom: m >= 0 ? '50%' : 'auto',
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 text-left">Balance of play</div>
+              <MomentumArea momentum={detail.momentum} />
               <div className="flex justify-between text-[8px] text-muted-foreground/70">
                 <span>0'</span><span>45'</span><span>90'</span>
               </div>

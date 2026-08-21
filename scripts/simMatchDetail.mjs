@@ -250,6 +250,83 @@ if ((next.resultLog ?? []).length > 0) {
   fail(`resultLog carried ${(next.resultLog ?? []).length} entries into the new season`);
 }
 
+
+/* ---------- 5. Round 169: assists, the clock and the crowd ---------- */
+console.log('5) Assists are real teammates, stoppage and attendance stay in band');
+{
+  let s = startCareer('Real Madrid');
+  let matches = 0;
+  let assistsSeen = 0;
+  let guard = 0;
+  while (matches < 25 && guard < 90) {
+    guard += 1;
+    const res = playNextEntry(s, { skipHalftime: true });
+    s = res.state;
+    if (res.kind !== 'match' || !res.report) continue;
+    const rep = res.report;
+    const d = rep.detail;
+    matches += 1;
+    if (!d) { fail('a match arrived with no detail'); continue; }
+    const squadNames = new Set(s.squad.map(p => p.name));
+    const gkNames = new Set(s.squad.filter(p => p.position === 'GK').map(p => p.name));
+    // Every assist credits a real teammate who is not the scorer or a keeper.
+    for (const sc of rep.myScorers) {
+      if (!sc.assist) continue;
+      assistsSeen += 1;
+      if (!squadNames.has(sc.assist)) fail(`assist by ${sc.assist}, who is not in the squad`);
+      if (sc.assist === sc.name) fail(`${sc.name} assisted his own goal`);
+      if (gkNames.has(sc.assist)) fail(`the keeper ${sc.assist} was credited with an outfield assist`);
+      const row = d.timeline.find(e => e.kind === 'goal' && e.side === 'me' && e.minute === sc.minute && e.text.includes(sc.name));
+      if (!row || !row.text.includes(`assist: ${sc.assist}`)) fail(`the timeline does not carry ${sc.name}'s assist`);
+    }
+    // The referee's board stays in its bands and the clock rows carry it.
+    if (!d.added) fail('no stoppage time on the detail');
+    else {
+      if (d.added.h1 < 1 || d.added.h1 > 4) fail(`h1 stoppage ${d.added.h1} out of band`);
+      if (d.added.h2 < 2 || d.added.h2 > 6) fail(`h2 stoppage ${d.added.h2} out of band`);
+      const ht = d.timeline.find(e => e.kind === 'halftime');
+      const ft = d.timeline.find(e => e.kind === 'fulltime');
+      if (!ht || !ht.text.includes(`+${d.added.h1}'`)) fail('half time row does not show its stoppage');
+      if (!ft || !ft.text.includes(`+${d.added.h2}'`)) fail('full time row does not show its stoppage');
+    }
+    // The crowd: banded, never an invented capacity for a real ground.
+    if (d.attendance === undefined) fail('no attendance on the detail');
+    else {
+      if (d.attendance < 9000 || d.attendance > 78000) fail(`attendance ${d.attendance} outside every band`);
+      if (d.capacity !== null && d.capacity !== undefined) fail('a real ground was given an invented capacity');
+    }
+  }
+  if (matches < 20) fail(`only ${matches} matches sampled`);
+  if (assistsSeen < 5) fail(`only ${assistsSeen} assists across ${matches} matches, the 70 percent roll looks broken`);
+  console.log(`   ${matches} matches, ${assistsSeen} assists verified, stoppage and crowds in band`);
+
+  // A custom club's ground DOES know its capacity, and the crowd fits it.
+  const spec = {
+    name: 'Harbour City FC', stadium: 'Harbour Park',
+    crest: { shape: 0, pattern: 2, color1: '#224488', color2: '#ffffff', initials: 'HC' },
+    budgetTier: 'mid', leagueId: 'eredivisie', replacedClub: '',
+    quality: 70, identity: 'balanced', capacity: 28000,
+  };
+  let c = startCareer('Harbour City FC', undefined, spec);
+  let seenHome = 0;
+  guard = 0;
+  while (seenHome < 3 && guard < 40) {
+    guard += 1;
+    const res = playNextEntry(c, { skipHalftime: true });
+    c = res.state;
+    if (res.kind !== 'match' || !res.report?.detail) continue;
+    const d = res.report.detail;
+    if (d.venue === 'home') {
+      seenHome += 1;
+      if (d.capacity !== 28000) fail(`the custom ground's capacity reads ${d.capacity}`);
+      if (d.attendance > 28000) fail(`crowd ${d.attendance} in a 28000 seat ground`);
+      if (d.attendance < 28000 * 0.7) fail(`crowd ${d.attendance} under 70 percent of a custom ground`);
+    }
+  }
+  if (seenHome < 3) fail('never saw three custom home matches');
+  console.log(`   custom ground: ${seenHome} home crowds fit the chosen 28k capacity`);
+}
+
 if (failures > 0) {
   console.error(`simMatchDetail: ${failures} FAILURES`);
   process.exit(1);

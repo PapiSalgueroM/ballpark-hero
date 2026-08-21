@@ -20,12 +20,20 @@ Three things in one message, mid session:
   exact formulas, saves tamper-proofed) and the old bands were re-measured on the new economy
   (30 min growth about 530x, first prestige minute 14, worst post-star wait 203s). Browser
   probe: 19/19 including catching a forced whistle and seeing the DERBY DAY chip.
-- **Five more match-app screenshots** (top rated players both sides, venue and attendance card,
-  full event timeline with sub arrows and assists and added minutes, continuous momentum area
-  chart with possession and xG and shots and box touches, player of the match card). These are
-  his models for upgrading the CM match screens further: queued as refinements to CM-1/CM-2
-  (sub arrows and assists in the timeline, a venue card that reads the custom capacity, the
-  momentum graph as a continuous area not ten buckets, added minutes on the clock).
+- **Five more match-app screenshots, MOSTLY DONE in Round 169.** Shipped: assists credited by
+  name on the report and in the timeline (captured at the same moment the season assist is
+  paid, so the two can never disagree), sub arrows (▲ on ▼ off) on the sub chips, stoppage
+  time per half on the clock rows and the header (+2' & +5' style, bands 1-4 and 2-6), a
+  venue and crowd line (the sim's own attendance banded by the HOST club's stature; a custom
+  club's chosen ground shows its real capacity and the crowd fits it; real grounds get NO
+  invented capacity or stadium name, per the data rules; neutral finals get a big-final
+  band), and the momentum strip redrawn as a continuous two-tone area chart ("Balance of
+  play") from the same nine buckets. simMatchDetail grew section 5 (39 assists verified
+  teammate-true across 25 matches, timeline carries the exact credited assist, stoppage in
+  band on both clock rows, crowds in band, custom 28k ground fits three home crowds, no
+  capacity ever claimed for a real ground). playClubManager updated for the renamed strip.
+  Browser probed 7 for 7. Still open from the screenshots: top-rated players BOTH sides
+  (needs an opposition ratings model), and possession/shots inside the momentum chart itself.
 - **Three Search Console shots** (88 not indexed vs 41 indexed and climbing; a "Page with
   redirect" validation started 8/12 and FAILED 8/15 on 3 pages). Read: the 3 failures are the
   301 redirects working exactly as designed (a redirecting URL can never validate as indexed,
@@ -540,8 +548,9 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, afternoon | **Round 165** (award races, CM-12: the golden boot board, the one-formula player of the season watch, the Ballon d'Or watch and all three honours named in the season review, era aware, race goals provably bounded by the simulated tables). `RUN165.bat`, chain-guarded on 164. |
 | Packaged 2026-08-18, later afternoon | **Round 166** (era legends rate like legends, the CM-5 rating half: prime Messi and Ronaldo at 97 above the modern best of 94, monotone load-time uplift, stature and values untouched, ageing ceiling follows the anchor). `RUN166.bat`, chain-guarded on 165. |
 | Packaged 2026-08-18, evening | **Round 167** (The Ticker, his S-2 ask: the site's own scrolling wire on top of every screen, personal save lines, daily rotation, live registry counts, hostile-save-proof). `RUN167.bat`, chain-guarded on 166. |
-| Packaged 2026-08-18, night | **Round 168** (mid-season approaches, CM-10: hot managers get called by bigger clubs, commit for a summer pre-agreement the board hears about, honored or publicly withdrawn at season end, all gates harness-proven). `RUN168.bat`, chain-guarded on 167. **SHIP26.bat is the current wrapper: it runs 157 through 168.** Older SHIP wrappers still work, then click the later RUN bats after. |
-| Next free round number | **169** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, night | **Round 168** (mid-season approaches, CM-10: hot managers get called by bigger clubs, commit for a summer pre-agreement the board hears about, honored or publicly withdrawn at season end, all gates harness-proven). `RUN168.bat`, chain-guarded on 167. |
+| Packaged 2026-08-18, late night | **Round 169** (the match report catches his five newest screenshots: named assists, sub arrows, stoppage time, the venue and crowd line with honest capacity rules, and the continuous Balance of play area chart). `RUN169.bat`, chain-guarded on 168. **SHIP27.bat is the current wrapper: it runs 157 through 169.** Older SHIP wrappers still work, then click the later RUN bats after. |
+| Next free round number | **170** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven
