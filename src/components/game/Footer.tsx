@@ -20,6 +20,10 @@ export function Footer() {
           What's New
         </Link>
         <span>·</span>
+        <Link to="/records" className="underline hover:text-foreground transition-colors">
+          Record Books
+        </Link>
+        <span>·</span>
         <Link to="/privacy" className="underline hover:text-foreground transition-colors">
           Privacy Policy
         </Link>

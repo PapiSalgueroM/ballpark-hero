@@ -40,6 +40,7 @@ const STATIC_PAGES = [
   { p: '/leaderboard', freq: 'daily', pri: '0.7' },
   { p: '/college', freq: 'weekly', pri: '0.6' },
   { p: '/whats-new', freq: 'weekly', pri: '0.5' },
+  { p: '/records', freq: 'weekly', pri: '0.6' },
   { p: '/about', freq: 'yearly', pri: '0.4' },
   { p: '/contact', freq: 'yearly', pri: '0.4' },
   { p: '/privacy', freq: 'yearly', pri: '0.3' },
