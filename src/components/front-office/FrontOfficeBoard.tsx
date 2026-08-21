@@ -6,6 +6,7 @@ import {
   initLeague, simGame, injuryPass, standings, runPlayoffs, runOffseason,
   generateDraftClass, draftOrder, prospectToPlayer, teamStrength, capUsed, capRoom,
   releasePlayer, signPlayer, proposeTrade, tradeValue, aiWeeklyMoves, divisionOf,
+  conferenceOf, conferenceSeeds,
   REGULAR_WEEKS,
   type LeagueState, type GmGame, type Prospect, type PlayoffRound,
 } from '@/lib/frontOffice';
@@ -13,11 +14,21 @@ import { findTrades, type FinderOffer } from '@/lib/tradeFinder';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+// Round 180: the owner upstairs, shared engine and card.
+import {
+  buildOwnerMandate, strengthRank, mandatePace, gradeSeason, applyMandateResult,
+  firedLine, nflPostseason, FO_TRUST_START, type OwnerMandate, type FoSportWords,
+} from '@/lib/foOwnerMandate';
+import OwnerMandateCard from '@/components/front-office-shared/OwnerMandateCard';
 
-type Phase = 'pick' | 'hub' | 'draft' | 'recap';
+/* Round 180: 'fired' is new. Zero trust upstairs ends the save the way a
+   Club Manager sacking does. */
+type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
 type Tab = 'team' | 'market' | 'trade' | 'week' | 'standings';
 
 const SAVE_KEY = 'front-office-save-v1';
+
+const NFL_WORDS: FoSportWords = { title: 'the Super Bowl', playoffs: 'the playoffs', round: 'a playoff round', games: 17 };
 
 interface SaveShape {
   league: LeagueState;
@@ -27,6 +38,10 @@ interface SaveShape {
   seasonsPlayed: number;
   draftClass: Prospect[] | null;
   picksLeft: number;
+  /* Round 180. Optional so pre-180 saves keep loading; repaired on load. */
+  mandate?: OwnerMandate | null;
+  trust?: number;
+  fired?: boolean;
 }
 
 export default function FrontOfficeBoard() {
@@ -54,8 +69,19 @@ export default function FrontOfficeBoard() {
   const [titles, setTitles] = useState(0);
   const [seasonsPlayed, setSeasonsPlayed] = useState(0);
   const [wonTitleNow, setWonTitleNow] = useState(false);
+  /* Round 180: the owner upstairs. */
+  const [mandate, setMandate] = useState<OwnerMandate | null>(null);
+  const [trust, setTrust] = useState(FO_TRUST_START);
+  const [fired, setFired] = useState(false);
+  const [gradeLine, setGradeLine] = useState<string | null>(null);
 
   useGameCompletion('front-office', wonTitleNow, titles * 100 + seasonsPlayed * 5);
+
+  /* Round 180: rank my roster against the league and let ownership set the ask. */
+  const mandateFor = (lg: LeagueState, team: string, defendingChamp: boolean): OwnerMandate => {
+    const strengths = Object.fromEntries(Object.entries(lg.teams).map(([a, tm]) => [a, teamStrength(tm)]));
+    return buildOwnerMandate(strengthRank(strengths, team), Object.keys(lg.teams).length, defendingChamp, NFL_WORDS, lg.season);
+  };
 
   // ---- persistence ----
   useEffect(() => {
@@ -66,12 +92,19 @@ export default function FrontOfficeBoard() {
       if (!s.league || !s.myTeam) return;
       setLeague(s.league);
       setMyTeam(s.myTeam);
-      setPhase(s.phase === 'recap' ? 'hub' : s.phase);
+      setPhase(s.fired ? 'fired' : s.phase === 'recap' ? 'hub' : s.phase);
       setTitles(s.titles ?? 0);
       setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null);
       setPicksLeft(s.picksLeft ?? 0);
+      /* Round 180, repair-on-load house pattern: a pre-180 save has no owner
+         yet, so ownership walks in and sets the ask from the roster as it
+         stands today. */
+      setMandate(s.mandate ?? mandateFor(s.league, s.myTeam, false));
+      setTrust(s.trust ?? FO_TRUST_START);
+      setFired(s.fired ?? false);
     } catch { /* fresh start */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const persist = useCallback((patch: Partial<SaveShape>, lg: LeagueState | null, team: string) => {
@@ -79,25 +112,34 @@ export default function FrontOfficeBoard() {
       if (!lg) return;
       const base: SaveShape = {
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
+        mandate, trust, fired,
         ...patch,
       };
       localStorage.setItem(SAVE_KEY, JSON.stringify(base));
     } catch { /* storage full: play on */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired]);
 
   const start = (abbr: string) => {
     const lg = initLeague();
+    const m = mandateFor(lg, abbr, false);
     setLeague(lg);
     setMyTeam(abbr);
     setPhase('hub');
     setTab('team');
     setWeekResults([]);
-    setNewsFeed([`Welcome to the ${label(abbr)} front office. The ${lg.season} season starts now.`]);
+    setNewsFeed([
+      `Welcome to the ${label(abbr)} front office. The ${lg.season} season starts now.`,
+      `🏛️ The ownership mandate: ${m.text}`,
+    ]);
     setChampion('');
     setPlayoffRounds([]);
     setTitles(0);
     setSeasonsPlayed(0);
-    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0 }, lg, abbr);
+    setMandate(m);
+    setTrust(FO_TRUST_START);
+    setFired(false);
+    setGradeLine(null);
+    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false }, lg, abbr);
   };
 
   const label = (abbr: string) => {
@@ -131,9 +173,21 @@ export default function FrontOfficeBoard() {
       const newSeasons = seasonsPlayed + 1;
       setTitles(newTitles);
       setSeasonsPlayed(newSeasons);
+      /* Round 180: ownership grades the season against the mandate. */
+      let newTrust = trust, nowFired = fired;
+      if (mandate) {
+        const post = nflPostseason(rounds, myTeam);
+        const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
+        const applied = applyMandateResult(trust, grade);
+        newTrust = applied.trust;
+        nowFired = applied.fired;
+        setTrust(applied.trust);
+        setFired(applied.fired);
+        setGradeLine(grade.verdict);
+      }
       setPhase('recap');
       setLeague(lg);
-      persist({ phase: 'recap', titles: newTitles, seasonsPlayed: newSeasons }, lg, myTeam);
+      persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired }, lg, myTeam);
       return;
     }
     lg.week += 1;
@@ -184,8 +238,14 @@ export default function FrontOfficeBoard() {
     setNewsFeed(f => [note, ...f].slice(0, 6));
     if (nextPicks <= 0) {
       const news = runOffseason(lg, Math.random);
+      /* Round 180: ownership re-reads the roster after the offseason churn
+         and sets next season's ask. A defending champ is never asked for
+         less than a deep run. */
+      const m = mandateFor(lg, myTeam, champion === myTeam);
+      setMandate(m);
       const feed = [
         note,
+        `🏛️ The new mandate: ${m.text}`,
         ...news.retired.filter(r => r.team === myTeam).map(r => `👋 ${r.player} retires.`),
         ...news.expired.filter(r => r.team === myTeam).map(r => `🚪 ${r.player} walks in free agency.`),
         ...news.developed.filter(r => r.team === myTeam).map(r => `📈 ${r.player} develops ${r.from} to ${r.to}.`),
@@ -198,7 +258,7 @@ export default function FrontOfficeBoard() {
       setPhase('hub');
       setTab('team');
       setLeague(lg);
-      persist({ phase: 'hub', draftClass: null, picksLeft: 0 }, lg, myTeam);
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m }, lg, myTeam);
       return;
     }
     setLeague(lg);
@@ -263,6 +323,10 @@ export default function FrontOfficeBoard() {
     setPhase('pick');
     setLeague(null);
     setMyTeam('');
+    setMandate(null);
+    setTrust(FO_TRUST_START);
+    setFired(false);
+    setGradeLine(null);
   };
 
   /* ------------------------------ pick screen ------------------------------ */
@@ -297,6 +361,22 @@ export default function FrontOfficeBoard() {
   const room = capRoom(my, league.cap);
   const strength = Math.round(teamStrength(my));
 
+  /* ---------------- Round 180: the reload path after a firing ---------------- */
+  if (phase === 'fired') {
+    return (
+      <div className="space-y-4">
+        <div className="rounded-2xl border border-destructive/50 bg-card p-5 text-center">
+          <p className="text-3xl">🪑</p>
+          <p className="mt-2 font-display text-2xl font-black text-foreground">Fired by {label(myTeam)}</p>
+          <p className="mt-2 text-sm text-muted-foreground">{firedLine(seasonsPlayed, titles)}</p>
+          <button onClick={reset} className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+            <RotateCcw className="h-4 w-4" /> Take another front office
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   /* ------------------------------ recap screen ------------------------------ */
   if (phase === 'recap') {
     const table = standings(league.teams);
@@ -313,6 +393,13 @@ export default function FrontOfficeBoard() {
               ? 'Your build. Your rings. The city is painted in your colors.'
               : `Your ${label(myTeam)} finished ${my.wins}-${my.losses}, No. ${myRank} overall.`}
           </p>
+          {/* Round 180: ownership's verdict on the mandate. */}
+          {gradeLine && (
+            <p className={cn('mt-2 text-sm font-bold', fired ? 'text-destructive' : 'text-gold')}>{gradeLine}</p>
+          )}
+          {mandate && !fired && (
+            <p className="mt-1 text-[11px] text-muted-foreground">Trust upstairs: {trust} of 100{trust <= 25 ? '. The seat is hot.' : '.'}</p>
+          )}
           <div className="mt-3 space-y-1 text-xs text-muted-foreground">
             {playoffRounds.map((r, i) => (
               <p key={i}>
@@ -325,17 +412,27 @@ export default function FrontOfficeBoard() {
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Titles <b className="text-gold">{titles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{seasonsPlayed}</b></span>
           </div>
-          <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <button onClick={startDraft} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
-              <Briefcase className="h-4 w-4" /> Go to the draft
-            </button>
-            <ShareButtons
-              gameName="NFL Front Office"
-              gamePath="/front-office"
-              score={`${titles} titles in ${seasonsPlayed} seasons`}
-              customText={`NFL Front Office 🏈 ${champion === myTeam ? `My ${label(myTeam)} just won it all!` : `${label(champion)} took the title.`} ${titles} rings in ${seasonsPlayed} seasons as a GM. douknowball.com/front-office`}
-            />
-          </div>
+          {/* Round 180: zero trust ends the save here instead of a draft. */}
+          {fired ? (
+            <div className="mt-4 rounded-2xl border border-destructive/50 bg-destructive/5 p-4">
+              <p className="text-sm font-bold text-destructive">🪑 {firedLine(seasonsPlayed, titles)}</p>
+              <button onClick={reset} className="mt-3 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+                <RotateCcw className="h-4 w-4" /> Take another front office
+              </button>
+            </div>
+          ) : (
+            <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <button onClick={startDraft} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+                <Briefcase className="h-4 w-4" /> Go to the draft
+              </button>
+              <ShareButtons
+                gameName="NFL Front Office"
+                gamePath="/front-office"
+                score={`${titles} titles in ${seasonsPlayed} seasons`}
+                customText={`NFL Front Office 🏈 ${champion === myTeam ? `My ${label(myTeam)} just won it all!` : `${label(champion)} took the title.`} ${titles} rings in ${seasonsPlayed} seasons as a GM. douknowball.com/front-office`}
+              />
+            </div>
+          )}
         </div>
       </div>
     );
@@ -394,6 +491,17 @@ export default function FrontOfficeBoard() {
           Cap room <b>${room}M</b>
         </span>
       </div>
+
+      {/* Round 180: the owner card, always visible on the hub. */}
+      {mandate && (
+        <OwnerMandateCard
+          mandate={mandate}
+          trust={trust}
+          pace={league.week > 1 && league.week <= REGULAR_WEEKS
+            ? mandatePace(mandate, my.wins, (league.week - 1) / REGULAR_WEEKS, conferenceSeeds(league.teams, conferenceOf(myTeam)).includes(myTeam))
+            : null}
+        />
+      )}
 
       {/* tabs */}
       <div className="flex items-center justify-center gap-1 rounded-full bg-secondary p-1 text-xs">

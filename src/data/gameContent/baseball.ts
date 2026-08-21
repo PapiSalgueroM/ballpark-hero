@@ -258,8 +258,9 @@ export const BASEBALL_CONTENT: GameContentMap = {
     ],
     howToPlay: [
       "Choose a franchise and inherit its actual lineup, rotation and bullpen.",
+      "Read the ownership mandate: a stacked roster is told to win the World Series, a mid one to make October, a thin one to hit an honest win number. It resets every offseason.",
       "Work the roster: DFA dead weight, sign free agents, and pitch trades with a pick sweetener when needed.",
-      "Play the 162 in stretches: each round simulates about a week and a half of baseball, 27 rounds total.",
+      "Play the 162 in stretches: each round simulates about a week and a half of baseball, 27 rounds total, with a live read on whether you are on pace.",
       "Make October. Division winners seed 1 to 3, three wild cards follow, and the top two seeds skip the Wild Card round.",
     ],
     rules: [
@@ -268,6 +269,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "Trades weigh rating, age and position, with premiums on aces, shortstops and catchers.",
       "You hold 2 picks a year, and scout grades carry error. True ratings show only after you pick.",
       "Injuries cost one to four rounds on the IL, and your franchise saves automatically.",
+      "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a ring fixes almost anything, and at zero you are fired and the save ends.",
     ],
     example: [
       "You take a club 8 million under the line. A DFA clears a bloated deal, the savings sign a 79 rated reliever, and your aging ace becomes a 26 year old shortstop.",
@@ -283,6 +285,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       { q: "Are the contracts real?", a: "Rosters and ratings come from real data, but every salary, contract and transaction in the sim is fictional." },
       { q: "Can I go over the tax line?", a: "No. Moves that break the line do not go through. That squeeze is most of the job." },
       { q: "Why did my trade get rejected?", a: "The AI wants a premium on rating, age and position. Add one of your 2 picks, or offer someone younger." },
+      { q: "Can I get fired?", a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. A 70 win season on a win-the-World-Series payroll costs real trust, and at zero the save ends and you take another job." },
     ],
   },
 

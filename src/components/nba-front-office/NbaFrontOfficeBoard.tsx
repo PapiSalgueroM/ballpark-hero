@@ -12,15 +12,26 @@ import {
 import { findTrades, type FinderOffer } from '@/lib/tradeFinder';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
+// Round 180: the owner upstairs, shared engine and card.
+import {
+  buildOwnerMandate, strengthRank, mandatePace, gradeSeason, applyMandateResult,
+  firedLine, seriesPostseason, FO_TRUST_START, type OwnerMandate, type FoSportWords,
+} from '@/lib/foOwnerMandate';
+import OwnerMandateCard from '@/components/front-office-shared/OwnerMandateCard';
 
-type Phase = 'pick' | 'hub' | 'draft' | 'recap';
+/* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
+type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
 type Tab = 'team' | 'market' | 'trade' | 'round' | 'standings';
 
 const SAVE_KEY = 'nba-front-office-save-v1';
 
+const NBA_WORDS: FoSportWords = { title: 'the Finals', playoffs: 'the playoffs', round: 'a series', games: 80 };
+
 interface SaveShape {
   league: NbaLeague; myTeam: string; phase: Phase; titles: number; seasonsPlayed: number;
   draftClass: NbaProspect[] | null; picksLeft: number;
+  /* Round 180. Optional so pre-180 saves keep loading; repaired on load. */
+  mandate?: OwnerMandate | null; trust?: number; fired?: boolean;
 }
 
 export default function NbaFrontOfficeBoard() {
@@ -41,8 +52,19 @@ export default function NbaFrontOfficeBoard() {
   const [titles, setTitles] = useState(0);
   const [seasonsPlayed, setSeasonsPlayed] = useState(0);
   const [wonNow, setWonNow] = useState(false);
+  /* Round 180: the owner upstairs. */
+  const [mandate, setMandate] = useState<OwnerMandate | null>(null);
+  const [trust, setTrust] = useState(FO_TRUST_START);
+  const [fired, setFired] = useState(false);
+  const [gradeLine, setGradeLine] = useState<string | null>(null);
 
   useGameCompletion('nba-front-office', wonNow, titles * 100 + seasonsPlayed * 5);
+
+  /* Round 180: rank my roster against the league and let ownership set the ask. */
+  const mandateFor = (lg: NbaLeague, team: string, defendingChamp: boolean): OwnerMandate => {
+    const strengths = Object.fromEntries(Object.entries(lg.teams).map(([a, tm]) => [a, nbaStrength(tm)]));
+    return buildOwnerMandate(strengthRank(strengths, team), Object.keys(lg.teams).length, defendingChamp, NBA_WORDS, lg.season);
+  };
 
   useEffect(() => {
     try {
@@ -51,20 +73,26 @@ export default function NbaFrontOfficeBoard() {
       const s = JSON.parse(raw) as SaveShape;
       if (!s.league || !s.myTeam) return;
       setLeague(s.league); setMyTeam(s.myTeam);
-      setPhase(s.phase === 'recap' ? 'hub' : s.phase);
+      setPhase(s.fired ? 'fired' : s.phase === 'recap' ? 'hub' : s.phase);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
+      /* Round 180, repair-on-load: a pre-180 save gets an owner today. */
+      setMandate(s.mandate ?? mandateFor(s.league, s.myTeam, false));
+      setTrust(s.trust ?? FO_TRUST_START);
+      setFired(s.fired ?? false);
     } catch { /* fresh */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const persist = useCallback((patch: Partial<SaveShape>, lg: NbaLeague | null, team: string) => {
     try {
       if (!lg) return;
       localStorage.setItem(SAVE_KEY, JSON.stringify({
-        league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft, ...patch,
+        league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
+        mandate, trust, fired, ...patch,
       } satisfies SaveShape));
     } catch { /* full */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired]);
 
   const label = (abbr: string) => {
     const t = NBA_TEAM_MAP.get(abbr);
@@ -73,10 +101,15 @@ export default function NbaFrontOfficeBoard() {
 
   const start = (abbr: string) => {
     const lg = initNbaLeague();
+    const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab('team');
-    setFeed([`Welcome to the ${label(abbr)} front office. The ${lg.season} season tips off now.`]);
+    setFeed([
+      `Welcome to the ${label(abbr)} front office. The ${lg.season} season tips off now.`,
+      `🏛️ The ownership mandate: ${m.text}`,
+    ]);
     setChampion(''); setSeries([]); setTitles(0); setSeasonsPlayed(0);
-    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0 }, lg, abbr);
+    setMandate(m); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
+    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false }, lg, abbr);
   };
 
   const my = league?.teams[myTeam];
@@ -98,10 +131,20 @@ export default function NbaFrontOfficeBoard() {
       const nt = titles + (won ? 1 : 0);
       const ns = seasonsPlayed + 1;
       setTitles(nt); setSeasonsPlayed(ns);
+      /* Round 180: ownership grades the season. Play-in games do not count
+         as playoff appearances or wins. */
+      let newTrust = trust, nowFired = fired;
+      if (mandate) {
+        const post = seriesPostseason(sr, myTeam, 'Play-In');
+        const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
+        const applied = applyMandateResult(trust, grade);
+        newTrust = applied.trust; nowFired = applied.fired;
+        setTrust(applied.trust); setFired(applied.fired); setGradeLine(grade.verdict);
+      }
       setPhase('recap');
       setLeague(lg);
       setFeed(newFeed);
-      persist({ phase: 'recap', titles: nt, seasonsPlayed: ns }, lg, myTeam);
+      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired }, lg, myTeam);
       return;
     }
     lg.round += 1;
@@ -133,11 +176,14 @@ export default function NbaFrontOfficeBoard() {
     setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`, ...f].slice(0, 6));
     if (nextPicks <= 0) {
       const notes = nbaOffseason(lg, Math.random);
-      setFeed(notes.slice(0, 6));
+      /* Round 180: ownership re-reads the roster and sets next season's ask. */
+      const m = mandateFor(lg, myTeam, champion === myTeam);
+      setMandate(m);
+      setFeed([`🏛️ The new mandate: ${m.text}`, ...notes].slice(0, 6));
       setSeries([]); setChampion(''); setWonNow(false);
       setPhase('hub'); setTab('team');
       setLeague(lg);
-      persist({ phase: 'hub', draftClass: null, picksLeft: 0 }, lg, myTeam);
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m }, lg, myTeam);
       return;
     }
     setLeague(lg);
@@ -190,6 +236,7 @@ export default function NbaFrontOfficeBoard() {
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
     setPhase('pick'); setLeague(null); setMyTeam('');
+    setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
   };
 
   if (phase === 'pick' || !league || !my) {
@@ -218,6 +265,22 @@ export default function NbaFrontOfficeBoard() {
   const room = nbaCapRoom(my, league.cap);
   const strength = Math.round(nbaStrength(my));
 
+  /* ---------------- Round 180: the reload path after a firing ---------------- */
+  if (phase === 'fired') {
+    return (
+      <div className="space-y-4">
+        <div className="rounded-2xl border border-destructive/50 bg-card p-5 text-center">
+          <p className="text-3xl">🪑</p>
+          <p className="mt-2 font-display text-2xl font-black text-foreground">Fired by {label(myTeam)}</p>
+          <p className="mt-2 text-sm text-muted-foreground">{firedLine(seasonsPlayed, titles)}</p>
+          <button onClick={reset} className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+            <RotateCcw className="h-4 w-4" /> Take another front office
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (phase === 'recap') {
     const finals = series.find(s => s.name === 'NBA Finals');
     const myConf = EAST.includes(myTeam) ? 'East' : 'West';
@@ -232,6 +295,13 @@ export default function NbaFrontOfficeBoard() {
               ? 'Your roster. Your banner. Raise it.'
               : `Your ${label(myTeam)} finished ${my.wins}-${my.losses}, No. ${myRank} in the ${myConf}.`}
           </p>
+          {/* Round 180: ownership's verdict on the mandate. */}
+          {gradeLine && (
+            <p className={cn('mt-2 text-sm font-bold', fired ? 'text-destructive' : 'text-gold')}>{gradeLine}</p>
+          )}
+          {mandate && !fired && (
+            <p className="mt-1 text-[11px] text-muted-foreground">Trust upstairs: {trust} of 100{trust <= 25 ? '. The seat is hot.' : '.'}</p>
+          )}
           {finals && (
             <p className="mt-2 text-xs text-muted-foreground">
               Finals: {label(finals.winner)} beat {label(finals.winner === finals.home ? finals.away : finals.home)} {Math.max(finals.homeWins, finals.awayWins)}-{Math.min(finals.homeWins, finals.awayWins)}
@@ -246,17 +316,27 @@ export default function NbaFrontOfficeBoard() {
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Titles <b className="text-gold">{titles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{seasonsPlayed}</b></span>
           </div>
-          <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <button onClick={startDraft} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
-              <Briefcase className="h-4 w-4" /> Go to the draft
-            </button>
-            <ShareButtons
-              gameName="NBA Front Office"
-              gamePath="/nba-front-office"
-              score={`${titles} titles in ${seasonsPlayed} seasons`}
-              customText={`NBA Front Office 🏀 ${champion === myTeam ? `My ${label(myTeam)} just won it all!` : `${label(champion)} took the title.`} ${titles} banners in ${seasonsPlayed} seasons. douknowball.com/nba-front-office`}
-            />
-          </div>
+          {/* Round 180: zero trust ends the save here instead of a draft. */}
+          {fired ? (
+            <div className="mt-4 rounded-2xl border border-destructive/50 bg-destructive/5 p-4">
+              <p className="text-sm font-bold text-destructive">🪑 {firedLine(seasonsPlayed, titles)}</p>
+              <button onClick={reset} className="mt-3 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+                <RotateCcw className="h-4 w-4" /> Take another front office
+              </button>
+            </div>
+          ) : (
+            <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <button onClick={startDraft} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+                <Briefcase className="h-4 w-4" /> Go to the draft
+              </button>
+              <ShareButtons
+                gameName="NBA Front Office"
+                gamePath="/nba-front-office"
+                score={`${titles} titles in ${seasonsPlayed} seasons`}
+                customText={`NBA Front Office 🏀 ${champion === myTeam ? `My ${label(myTeam)} just won it all!` : `${label(champion)} took the title.`} ${titles} banners in ${seasonsPlayed} seasons. douknowball.com/nba-front-office`}
+              />
+            </div>
+          )}
         </div>
       </div>
     );
@@ -302,6 +382,18 @@ export default function NbaFrontOfficeBoard() {
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">Strength <b className="text-primary">{strength}</b></span>
         <span className={cn('rounded-full border border-border bg-card px-3 py-1', room < 5 ? 'text-destructive' : 'text-muted-foreground')}>Cap room <b>${room}M</b></span>
       </div>
+
+      {/* Round 180: the owner card, always visible on the hub. */}
+      {mandate && (
+        <OwnerMandateCard
+          mandate={mandate}
+          trust={trust}
+          pace={league.round > 1 && league.round <= NBA_ROUNDS
+            ? mandatePace(mandate, my.wins, (league.round - 1) / NBA_ROUNDS,
+                nbaStandings(league, EAST.includes(myTeam) ? 'East' : 'West').slice(0, 8).some(x => x.abbr === myTeam))
+            : null}
+        />
+      )}
 
       <div className="flex items-center justify-center gap-1 rounded-full bg-secondary p-1 text-xs">
         {([

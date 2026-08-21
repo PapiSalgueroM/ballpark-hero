@@ -380,10 +380,11 @@ export const HOCKEY_CONTENT: GameContentMap = {
     ],
     howToPlay: [
       "Pick any of the 32 clubs and inherit its actual roster.",
+      "Read the ownership mandate: a contender is told to win the Cup, a bubble club to make the bracket, a rebuild to hit an honest win number. It resets every offseason from where the roster really stands.",
       "Shape it: waive players, sign free agents, offer one-for-one trades, sweeten with a draft pick.",
-      "Sim the season in 20 rounds of roughly four games each.",
+      "Sim the season in 20 rounds of roughly four games each, with a live read on whether you are on pace.",
       "Qualify for the playoffs: top three per division plus two wild cards per conference.",
-      "Win four best-of-7 rounds to lift the Stanley Cup, then draft and go again.",
+      "Win four best-of-7 rounds to lift the Stanley Cup, then draft and go again, as long as ownership keeps you.",
     ],
     rules: [
       "The hard cap starts at 104M and rises about 9 percent a season; every move must fit.",
@@ -391,6 +392,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Rosters run between 8 and 15 players, floor and ceiling both enforced.",
       "Trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes.",
       "At the draft you make 2 picks, and scouting grades carry error; the true rating appears only after you commit.",
+      "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired and the save ends.",
     ],
     example: [
       "Say you take Buffalo. You waive a fading winger, sign a 79 rated defenseman, then package your third line center plus a pick for a younger blueliner. The AI takes the deal because the value clears its price.",
@@ -407,8 +409,12 @@ export const HOCKEY_CONTENT: GameContentMap = {
         a: "It wants a premium. Centers cost the most, age tanks value fast, and adding a pick often flips a no into a yes.",
       },
       {
+        q: "Can I get fired?",
+        a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. Missing the bracket with a Cup-or-bust roster costs real trust, and at zero the save ends and you take another chair.",
+      },
+      {
         q: "How long can one franchise run?",
-        a: "As long as you want. Seasons chain through the draft and offseason, the game autosaves in your browser, and your Cup count carries over.",
+        a: "As long as ownership keeps you. Seasons chain through the draft and offseason, the game autosaves in your browser, and your Cup count carries over.",
       },
     ],
   },

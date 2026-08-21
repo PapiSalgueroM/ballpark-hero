@@ -438,10 +438,11 @@ export const BASKETBALL_CONTENT: GameContentMap = {
     ],
     howToPlay: [
       "Pick any of the 30 franchises and inherit its real rotation, rated player by player.",
+      "Read the ownership mandate: a loaded roster is told to win the Finals, a mid one to make the playoffs, a thin one to hit an honest win number. It resets every offseason.",
       "Work the roster. Waive contracts, sign free agents with your cap room, and propose trades.",
-      "Sim the season in 20 short stretches, watching the conference standings tighten.",
+      "Sim the season in 20 short stretches, watching the conference standings tighten and the mandate's live pace read.",
       "Finish top 6 for a direct playoff seed, or 7th through 10th for the play-in.",
-      "Win four best of 7 rounds, then draft and rebuild for the repeat.",
+      "Win four best of 7 rounds, then draft and rebuild for the repeat, as long as ownership keeps you.",
     ],
     rules: [
       "The cap starts at 155 million and rises 7 percent every season. Rosters hold 8 to 15 players.",
@@ -449,6 +450,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "The play-in covers seeds 7 through 10, with one last game deciding the 8 seed.",
       "Draft classes have 24 prospects, you pick twice, and scouting grades can miss the truth by a few points either way.",
       "Everyone ages each summer: young players develop toward potential, decline starts at 32, veterans retire.",
+      "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a banner fixes almost anything, and at zero you are fired and the save ends.",
     ],
     example: [
       "You take a bubble team and ship an aging star for a 24 year old, pick attached. The season starts ugly.",
@@ -462,6 +464,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
     faqs: [
       { q: "Are the rosters real?", a: "The players are real, about ten curated per franchise. Contracts, salaries and ages in the sim are explicitly fictional." },
       { q: "Why did my trade get rejected?", a: "The engine values rating adjusted for age and wants to come out ahead. Offer youth, take back age, or add a pick." },
+      { q: "Can I get fired?", a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. Losing the play-in when the ask was a banner costs real trust, and at zero the save ends and you take another job." },
       { q: "Does my save persist?", a: "Yes, the league auto saves in your browser across unlimited seasons. Clearing site data wipes the franchise." },
     ],
   },

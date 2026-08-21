@@ -52,16 +52,18 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     ],
     howToPlay: [
       "Pick a franchise. Its players carry fictional contracts against a 260 million dollar cap that rises 5 percent each season.",
+      "Read the ownership mandate. A loaded roster is told to win the Super Bowl, a mid one to make the playoffs, a bare one to hit an honest win number. It resets every offseason from where your roster really stands.",
       "Shape the roster: cut bloated deals, sign free agents, and offer one for one trades, sweetened with a pick.",
-      "Play week by week as scores, injuries, and rival moves roll in.",
+      "Play week by week as scores, injuries, and rival moves roll in, with a live read on whether you are on pace for the mandate.",
       "After the Super Bowl, spend 3 picks on a 40 prospect class where scout grades can lie. Defensive picks boost your defense unit rather than adding a player.",
-      "Run the offseason, where young players grow and veterans fade, then chase the next title. Seasons are unlimited.",
+      "Run the offseason, where young players grow and veterans fade, then chase the next title. Seasons are unlimited, as long as ownership keeps you.",
     ],
     rules: [
       "The season runs 17 weeks: home and away against your division rivals plus 11 crossover games.",
       "Playoffs use the real 14 team format: 7 seeds per conference, byes for the 1 seeds, four knockout rounds.",
       "Trades are judged on rating, age, and position, with quarterbacks at a premium. The AI only accepts a clear win.",
       "Grades can miss by up to 4 points either way, injuries cost players 1 to 4 weeks, and rosters cannot drop below six players.",
+      "Trust upstairs runs 0 to 100. Beating the mandate raises it, missing it drops it, a championship fixes almost anything, and at zero you are fired and the save ends. A fresh GM always survives one bad year, never three.",
     ],
     example: [
       "You inherit a 6-11 roster with no cap room, cut an aging receiver, and sign the best lineman available. When your quarterback goes down, you flip a backup and a pick for a veteran starter.",
@@ -76,6 +78,10 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         q: "Are the players real?",
         a: "Yes, real 2025 rosters rated from real 2023 and 2024 production. Contracts, trades, and draft prospects are all fictional.",
+      },
+      {
+        q: "Can I get fired?",
+        a: "Yes. Ownership sets a mandate from your roster's honest strength, grades it every season, and tracks trust from 0 to 100. Miss badly enough for long enough and the seat goes, the save ends, and you take another front office.",
       },
       {
         q: "Does my franchise save?",
