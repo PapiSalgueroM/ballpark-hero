@@ -29,6 +29,7 @@ import { CustomClubForm, CrestBadge } from '@/components/club-manager/CustomClub
 import { WorldTablesCard } from '@/components/club-manager/WorldTablesCard';
 import { UclBracketCard } from '@/components/club-manager/UclBracketCard';
 import { UclGroupsCard } from '@/components/club-manager/UclGroupsCard';
+import { StatsScreen } from '@/components/club-manager/StatsScreen';
 import { CalendarScreen } from '@/components/club-manager/CalendarScreen';
 import { InboxCard } from '@/components/club-manager/InboxCard';
 import { ClubDetailScreen } from '@/components/club-manager/ClubDetailScreen';
@@ -80,7 +81,7 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -157,7 +158,7 @@ const ClubManager = () => {
         <div className="relative">
           <HowToPlayPopover title="How to Play Club Manager" triggerSide="right">
             <div className="space-y-3 text-left">
-              <p>🌍 <span className="font-semibold text-foreground">Pick any club in 14 real leagues.</span> The big five (2026-27 lineups with promotions and relegations applied), the EFL Championship and the 2. Bundesliga, the Primeira Liga, the Scottish Premiership, the Süper Lig, the Belgian Pro League, the Saudi Pro League, both MLS conferences and the Eredivisie: 270 clubs and over 3,300 real players, each squad at its real market values as of August 2026, after the summer window. Giants get huge budgets and zero patience; underdogs get small budgets and a low bar.</p>
+              <p>🌍 <span className="font-semibold text-foreground">Pick any club in 15 real leagues.</span> The big five (2026-27 lineups with promotions and relegations applied), the EFL Championship and the 2. Bundesliga, the Primeira Liga, the Scottish Premiership, the Süper Lig, the Belgian Pro League, the Saudi Pro League, both MLS conferences and the Eredivisie: 270 clubs and over 3,300 real players, each squad at its real market values as of August 2026, after the summer window. Giants get huge budgets and zero patience; underdogs get small budgets and a low bar.</p>
               <p>📅 <span className="font-semibold text-foreground">Pick when you start.</span> 2026-27 is the real thing, every name and every value. Or start in 2010-11: the real Premier League and La Liga of that season, all 40 clubs, over 800 real players at their real 2010 ages and values, with the famous summer moves applied. It is a sealed world, so no 2026 player can leak into your 2010 market, and there is no Conference League there because it did not exist yet. We only offer a past we hold real data for, and we never invent one. As your save runs deep, players age, retire and get replaced; anyone the game makes up is marked MADE UP wherever he appears, so you always know who is real.</p>
               <p>✨ <span className="font-semibold text-foreground">Or create your own club.</span> Any league, either era: name it, build the crest (shape, pattern, your colors, your initials), name your stadium, and choose your backing. Your club takes the league place of the division's weakest side and starts with 24 generated players, all marked as made up. Every real player stays real, and the market is where you sign them. The board reads your squad, not your wallet: big money in a smaller league gets told to win it, the same money in the Premier League gets told to survive first.</p>
               <p>👟 <span className="font-semibold text-foreground">Players age and they stop playing.</span> A thirty year old slips a point a season, a thirty five year old slips three or four, and how fast depends on where he plays: keepers last for years, wingers and full backs go first. Somewhere around thirty four to thirty seven most of them retire for good. Sign the young ones early, get your kids in, or your best XI will quietly rot underneath you.</p>
@@ -165,6 +166,7 @@ const ClubManager = () => {
               <p>🗓️ <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>, at its real length, against its real clubs, plus the domestic cup and the Champions League if you qualify, while every other league in the world plays out alongside yours. In Europe you can watch all eight groups, and a projected knockout bracket tracks the leaders until the real draw locks in after matchday 6.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
               <p>📊 <span className="font-semibold text-foreground">Play it your way.</span> Quick Sim gives you the full result in one tap: scorers, cards, injuries, possession, shots, expected goals, momentum and every player's rating. Watch Live plays the match as moving circles on a pitch at 0.5x to 4x speed, with goals, cards and subs landing at their real minutes and the dressing room at the break. Play Match skips the theatre and stops at half time. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
+              <p>📈 <span className="font-semibold text-foreground">The stats centre keeps the season's numbers.</span> The club's record split by league, cup and Europe, the top scorer, the assist king, the best average rating and the most carded man, plus every player's full line (apps, goals, assists, cards, average rating), sortable by any column and filterable by competition.</p>
               <p>🤝 <span className="font-semibold text-foreground">Tell every player what he is</span>: star man, key first teamer, rotation option, backup or one for the future. Each rung is a promise about minutes, and the dressing room keeps score over your last ten matches. Keep your word and they play for you. Break it and they sulk, drag the room down and hand in transfer requests. You can buy your way out of a promise, but it costs six weeks of his wages a rung.</p>
               <p>🎙️ <span className="font-semibold text-foreground">Front up to the press, and talk to your players.</span> The reporters only turn up when something has happened: a losing run, a man you have stopped picking, a club circling one of your stars, a derby, or the bookmakers making you favourite for the sack. Every answer spends one thing to buy another, so backing your players costs you with the board and calling them out costs you the dressing room, and talking big before a derby puts your words on the other lot's wall. Before every match and again at half time you pick a tone: calm them, fire them up, demand more, or the hairdryer. Read the afternoon right and they play above themselves. Read it wrong and you lose them, and the wrong one hurts more than the right one helps.</p>
               <p>💰 <span className="font-semibold text-foreground">Buy and sell in the summer and January windows.</span> Over 3,300 real players are on the market at their real values. Stay under budget and keep at least 14 players.</p>
@@ -177,10 +179,10 @@ const ClubManager = () => {
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
         <GameSeoContent
           title="Club Manager: Football Management Sim"
-          description="A full club-management sim in your browser: 270 clubs across 14 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS and the Belgian Pro League, each with its real squad and market values as of August 2026. Manage today or in the real 2010-11 season, or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
+          description="A full club-management sim in your browser: 270 clubs across 15 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS and the Belgian Pro League, each with its real squad and market values as of August 2026. Manage today or in the real 2010-11 season, or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
           howToPlay={[
             'Pick your era: 2026-27 with real squads, or the real 2010-11 Premier League and La Liga.',
-            'Pick your nation, league and club (270 clubs across 14 real leagues), or create your own club with its own crest, stadium and budget.',
+            'Pick your nation, league and club (270 clubs across 15 real leagues), or create your own club with its own crest, stadium and budget.',
             'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
             'Set your formation, mentality and XI, then play through the full season week by week.',
             'Work the market: negotiate fees, pay release clauses, take loans, and field bids for your own stars.',
@@ -971,6 +973,15 @@ const ClubManager = () => {
                 onClick={() => setHubPanel('cups')}
               />
               <HubTile
+                icon="📊" title="Stats"
+                value={`${c.squad.reduce((n, p) => n + p.seasonGoals, 0)} goals`}
+                sub={(() => {
+                  const ts = [...c.squad].sort((a, b) => b.seasonGoals - a.seasonGoals)[0];
+                  return ts && ts.seasonGoals > 0 ? `${ts.name} leads with ${ts.seasonGoals}` : 'Goals, assists, ratings';
+                })()}
+                onClick={() => setHubPanel('stats')}
+              />
+              <HubTile
                 icon="🧢" title="Manager"
                 value={`${c.careerStats.wins}W ${c.careerStats.losses}L`}
                 sub={c.careerStats.played > 0 ? `${Math.round((c.careerStats.wins / c.careerStats.played) * 100)}% win rate` : 'New in the job'}
@@ -1140,6 +1151,8 @@ const ClubManager = () => {
                   )}
                 </div>
               )}
+
+              {hubPanel === 'stats' && <StatsScreen career={c} />}
 
               {hubPanel === 'trophies' && (
                 <div className="bg-card border border-border rounded-xl p-3">

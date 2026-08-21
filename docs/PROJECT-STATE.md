@@ -139,8 +139,22 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   probe 14 for 14 on the real built site.
 - CM-10 A job offers screen in season (offers exist at season end; he wants a place where
   approaches land during the season too).
-- CM-11 Team and player stats centre: per competition and total goals, assists, cards,
-  average match rating (all already tracked per player since Round 73; needs screens).
+- CM-11 **DONE, Round 164: the stats centre.** A Stats tile on the hub opens one screen with
+  competition filter chips (All, League, the real cup name, Europe when the club is in it):
+  the club's record in that view (P, W D L, scored, conceded, diff) derived from the fixture
+  log by a typed competition field (old label-only entries bucket by their label prefix),
+  leader cards (top scorer, most assists, best average rating at 3+ apps, most carded), and
+  every player's full line (apps, goals, assists, Y/R, clean sheets, average rating),
+  sortable by any column. The engine grew per-competition stat splits on CMPlayer
+  (comp.league/cup/ucl), credited at the SAME code sites at the SAME moments as the season
+  totals (the ratings map for apps/goals/assists/rating, the card sites for yellows and
+  reds), so the two books cannot disagree: simStatsCentre reconciles every player both ways
+  over a full 50 match season (worst rating drift measured 0.00), pins 11 apps per match in
+  every bucket, the team record reconciliation, the typed-vs-label agreement, the old-save
+  path (stripped saves keep counting season totals and grow splits from the update forward,
+  with the screen saying so), and the summer reset. Help popover updated, and it also fixed
+  a Round 156 miscount: the game has FIFTEEN leagues since the 2. Bundesliga landed in
+  Round 142, and the help, SEO block and site copy all said 14. Browser probe 12 for 12.
 - CM-12 Award races: Ballon d'Or style leaders, golden boot, league player of the season,
   era aware.
 
@@ -466,8 +480,9 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, later still | **Round 160** (create-a-club depth: quality slider, football identity, stadium size, plus the boardWantLabel wrong-league fix its harness caught). `RUN160.bat`, chain-guarded on 159. SHIP18.bat runs 157 through 160. |
 | Packaged 2026-08-18, small hours | **Round 161** (structured transfer deals: add-ons, sell-on clauses, part exchange, plus the deep market filters). `RUN161.bat`, chain-guarded on 160. |
 | Packaged 2026-08-18, morning | **Round 162** (Stadium Tycoon goes massive, his direct ask: ten named divisions with exact income multipliers and promotion bonuses, an eight tier staff payroll, the catchable golden whistle with five prizes, 47 badges at a permanent 2 percent each, a Badges drawer, a Club records drawer, and the game's help plus SEO copy rewritten to match). `RUN162.bat`, chain-guarded on 161. |
-| Packaged 2026-08-18, midday | **Round 163** (league views, CM-9 in full: pre-season alphabetical tables with the star for all fifteen leagues, flags on every league chip, all eight UCL groups simulated in lockstep, the projected quarter-final bracket, and the knockout draw seeded from the real group winners). `RUN163.bat`, chain-guarded on 162. **SHIP21.bat is the current wrapper: it runs 157 through 163.** Older SHIP19/SHIP20 still work, then click the later RUN bats after. |
-| Next free round number | **164** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, midday | **Round 163** (league views, CM-9 in full: pre-season alphabetical tables with the star for all fifteen leagues, flags on every league chip, all eight UCL groups simulated in lockstep, the projected quarter-final bracket, and the knockout draw seeded from the real group winners). `RUN163.bat`, chain-guarded on 162. |
+| Packaged 2026-08-18, early afternoon | **Round 164** (the stats centre, CM-11: per-competition team record, leader cards, full sortable player lines, engine-level per-comp stat splits that cannot disagree with the season totals, plus the 14-vs-15 league count fix in the help and SEO copy). `RUN164.bat`, chain-guarded on 163. **SHIP22.bat is the current wrapper: it runs 157 through 164.** Older SHIP wrappers still work, then click the later RUN bats after. |
+| Next free round number | **165** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

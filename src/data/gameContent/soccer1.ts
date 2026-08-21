@@ -285,7 +285,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
 
   '/club-manager': {
     intro: [
-      "Club Manager is the site's big one: a full management sim in your browser. 270 real clubs across 14 leagues in 12 countries, over 3,300 real players with their real August 2026 ages and market values, and a board that talks like a board.",
+      "Club Manager is the site's big one: a full management sim in your browser. 270 real clubs across 15 leagues in 12 countries, over 3,300 real players with their real August 2026 ages and market values, and a board that talks like a board.",
       "Pick when you start too: today's game, or the real 2010-11 season with all 40 Premier League and La Liga clubs and 800 plus real year-2010 players, prime Messi and Rooney included. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.",
     ],
     howToPlay: [

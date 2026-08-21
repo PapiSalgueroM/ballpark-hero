@@ -39,6 +39,61 @@ import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
 export type Mentality = 'defensive' | 'balanced' | 'attacking';
 export type FormResult = 'W' | 'D' | 'L';
 export type Competition = 'league' | 'cup' | 'uclGroup' | 'uclKo';
+
+/** Round 164: how the stats centre buckets football. The two UCL phases are
+ *  one competition to a fan, so they share a bucket. */
+export type CompBucket = 'league' | 'cup' | 'ucl';
+
+export interface CompStatLine {
+  apps: number;
+  goals: number;
+  assists: number;
+  yellows: number;
+  reds: number;
+  /** Sum of match ratings in this competition; average = ratingSum / apps. */
+  ratingSum: number;
+}
+
+export function compBucketOf(c: Competition): CompBucket {
+  return c === 'league' ? 'league' : c === 'cup' ? 'cup' : 'ucl';
+}
+
+export interface TeamCompLine {
+  p: number;
+  w: number;
+  d: number;
+  l: number;
+  gf: number;
+  ga: number;
+}
+
+/**
+ * Round 164: the club's record this season, bucketed by competition,
+ * derived from the fixture log the calendar card has kept since Round 73.
+ * Entries logged before the typed competition field existed are bucketed
+ * from their display label, which always starts with the competition name.
+ */
+export function teamCompRecord(state: CareerState, cupName: string): Record<CompBucket | 'all', TeamCompLine> {
+  const mk = (): TeamCompLine => ({ p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0 });
+  const out: Record<CompBucket | 'all', TeamCompLine> = { all: mk(), league: mk(), cup: mk(), ucl: mk() };
+  for (const e of state.resultLog ?? []) {
+    const bucket: CompBucket = e.competition
+      ? compBucketOf(e.competition)
+      : e.comp.startsWith('Champions League') ? 'ucl'
+      : e.comp.startsWith(cupName) ? 'cup'
+      : 'league';
+    const [gf, ga] = e.score.split('-').map(n => parseInt(n, 10) || 0);
+    for (const line of [out.all, out[bucket]]) {
+      line.p += 1;
+      line.gf += gf;
+      line.ga += ga;
+      if (e.res === 'W') line.w += 1;
+      else if (e.res === 'D') line.d += 1;
+      else line.l += 1;
+    }
+  }
+  return out;
+}
 export type CupRound = 'R16' | 'QF' | 'SF' | 'F';
 export type CupState = CupRound | 'out' | 'won';
 export type UclKoRound = 'QF' | 'SF' | 'F';
@@ -127,6 +182,10 @@ export interface CMPlayer {
   cleanSheets?: number;
   /** Sum of match ratings; average = ratingSum / apps. */
   ratingSum?: number;
+  /** Round 164: the same stat line split by competition, credited at the
+   *  same moments the season totals are, so the two can never disagree.
+   *  Absent until the player's first match after this existed. */
+  comp?: Partial<Record<CompBucket, CompStatLine>>;
   /**
    * Round 116: the ceiling. Growth can never take a player past this, and how
    * fast he closes the gap is what training and game time decide. Undefined on
@@ -252,6 +311,9 @@ export interface ResultLogEntry {
   home: boolean | null;
   score: string;
   res: FormResult;
+  /** Round 164: the typed competition, so the stats centre can bucket
+   *  without parsing display labels. Absent on entries logged before it. */
+  competition?: Competition;
 }
 
 export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support' | 'laugh' | 'setRole';
@@ -6579,6 +6641,15 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   /* ----- Round 73: full stat lines for everyone who played ----- */
   const cleanSheet = oppGoals === 0;
   const xiIdSet = new Set(xi.map(p => p.id));
+  /* Round 164: the same numbers land in the competition bucket at the same
+     moment, so the stats centre's splits can never disagree with the season
+     totals. */
+  const statBucket = compBucketOf(fx.competition);
+  const bumpComp = (p: CMPlayer, f: (line: CompStatLine) => void): void => {
+    const comp = p.comp ?? (p.comp = {});
+    const line = comp[statBucket] ?? (comp[statBucket] = { apps: 0, goals: 0, assists: 0, yellows: 0, reds: 0, ratingSum: 0 });
+    f(line);
+  };
   /* Round 157: the same match rating that feeds his season average is kept
      for the report, so the ratings screen and the season stats can never
      disagree about the same afternoon. */
@@ -6600,11 +6671,22 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
       goals: g,
       assists: a,
     });
+    const prior = p.comp?.[statBucket] ?? { apps: 0, goals: 0, assists: 0, yellows: 0, reds: 0, ratingSum: 0 };
     return {
       ...p,
       apps: (p.apps ?? 0) + 1,
       ratingSum: Math.round(((p.ratingSum ?? 0) + matchRating) * 10) / 10,
       cleanSheets: (p.cleanSheets ?? 0) + (cleanSheet && defensive ? 1 : 0),
+      comp: {
+        ...(p.comp ?? {}),
+        [statBucket]: {
+          ...prior,
+          apps: prior.apps + 1,
+          goals: prior.goals + g,
+          assists: prior.assists + a,
+          ratingSum: Math.round((prior.ratingSum + matchRating) * 10) / 10,
+        },
+      },
     };
   });
   if (ratingLines.length) {
@@ -6624,7 +6706,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
       p.position === 'GK' ? 0.1 : groupOf(p.position) === 'DEF' ? 2.2 : p.position === 'CDM' ? 2.4 : groupOf(p.position) === 'MID' ? 1.4 : 0.8);
     if (victim) {
       const sq = state.squad.find(p => p.id === victim.id);
-      if (sq) sq.seasonYellows = (sq.seasonYellows ?? 0) + 1;
+      if (sq) {
+        sq.seasonYellows = (sq.seasonYellows ?? 0) + 1;
+        bumpComp(sq, l => { l.yellows += 1; });
+      }
       cardLines.push({ name: victim.name, minute: ri(12, 88), kind: 'yellow' });
     }
   }
@@ -6759,6 +6844,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     if (p && p.injuryWeeks === 0) {
       p.suspendedMatches = ri(1, 2);
       p.seasonReds = (p.seasonReds ?? 0) + 1;
+      bumpComp(p, l => { l.reds += 1; });
       cardLines.push({ name: p.name, minute: ri(25, 88), kind: 'red' });
       events.push(`🟥 ${p.name} was sent off, suspended for ${p.suspendedMatches} match${p.suspendedMatches > 1 ? 'es' : ''}.`);
     }
@@ -6773,6 +6859,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     home: fx.home,
     score: `${myGoals}-${oppGoals}`,
     res: won ? 'W' : drawn ? 'D' : 'L',
+    // Round 164: typed, so the stats centre buckets without label parsing.
+    competition: fx.competition,
   });
   state.resultLog = log.slice(-60);
 
@@ -8145,6 +8233,8 @@ function agePlayer(p: CMPlayer, career: CareerState): CMPlayer {
     seasonReds: 0,
     cleanSheets: 0,
     ratingSum: 0,
+    // Round 164: the competition splits reset with it.
+    comp: undefined,
     // Round 105: a year off the deal, and his wage tracks his new value.
     contractYears: Math.max(0, (p.contractYears ?? 3) - 1),
     /* Round 127: a summer wipes the slate. The rung you put him on carries
