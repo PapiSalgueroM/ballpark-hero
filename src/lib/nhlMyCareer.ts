@@ -20,6 +20,8 @@ import { getNhlCorruptionEvents } from './nhlCareerCorruption';
 // Round 179: the shared free agency engine, one implementation for all four sports.
 import { buildFaWindow } from './usCareerFreeAgency';
 import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
+// Round 184: the shared press room, same one-engine pattern.
+import { buildPressMoment, pressFactsFrom, applyPressChoice } from './usCareerPress';
 
 // Round 59: wings split into left and right, and the blue line splits into
 // offensive and shutdown roles, so every seat on the bench is its own career.
@@ -580,6 +582,22 @@ export function nhlFaPushArgs(c: NhlCareerState, rng: () => number = Math.random
 export function drawNhlEvent(c: NhlCareerState, rng: () => number): NhlCareerEvent {
   const deck: NhlCareerEvent[] = [];
   /* Round 179: the 'contract' card left this deck for the free agency window. */
+
+  /* Round 184: the press room reads the season. Big moments take the floor
+     outright; the smaller questions join the deck. */
+  const press = buildPressMoment('nhl', pressFactsFrom(c, nhlTeamLabelOf(c.team, c.eraId)), rng);
+  if (press) {
+    const ev: NhlCareerEvent = {
+      id: press.id, title: press.title, body: press.body,
+      options: press.options.map(o => ({
+        label: o.label, effect: o.effectLine,
+        apply: (cc: NhlCareerState, r: () => number) => applyPressChoice(cc, o, r),
+      })),
+    };
+    if (press.big) return ev;
+    deck.push(ev);
+  }
+
   deck.push({
     id: 'training',
     title: 'Summer plan',

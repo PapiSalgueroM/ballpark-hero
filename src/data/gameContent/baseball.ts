@@ -232,6 +232,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "You start at 21 in 2026 with 6 years of team control before free agency. The throwback starts in 2004 instead, inside a sealed 30 team league verified against the real season, with 2004 sized contracts.",
       "Three meters run your life: morale, fanbase and health. Low health means shortened seasons.",
       "The lineup card is real: a bench season is about half the games, a spot starter gets a dozen turns, springs have memory both ways, and signing with a stacked contender can cost a mid player the everyday job.",
+      "The press reads your actual season: a ring puts you on the podium, missing October badly puts you in the scrum, a bench year brings the role question. Three answers each time, safe, honest or fiery, and fiery gambles your fanbase for real.",
       "Players grow toward their potential through age 26 and decline from 32 on, faster after 37.",
       "Retirement hits at 42, after 21 seasons, or when your rating collapses. You can walk away after season 6.",
       "One career at a time, saved automatically in your browser.",

@@ -341,6 +341,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Careers start in 2026 at age 18 or 19 and last up to 22 seasons. The throwback starts in 2006 instead, inside a sealed 30 team league verified against the real season, with 2006 sized contracts.",
       "You improve toward your potential through age 25; decline starts at 31 for skaters, 34 for goalies.",
       "The lineup is real: fourth-line seasons run on half the ice time, a backup goalie gets twenty-odd starts, camps have memory both ways, and signing with a stacked Cup contender can cost a mid player his spot.",
+      "The press reads your actual season: lift the Cup and you take the podium, miss badly and you face the scrum, sit down the lineup and the role question finds you. Three answers each time, safe, honest or fiery, and fiery gambles your fanbase for real.",
       "Retirement hits at 40 for skaters, 41 for goalies, or earlier if your rating collapses; you can walk away after 6 seasons.",
       "The legacy score weighs Cups, majors (Hart, Norris or Vezina), Conn Smythes, All-Star nods, seasons and production; 500 or more means the Hall of Fame.",
       "One career saves automatically in your browser; a new one replaces it.",

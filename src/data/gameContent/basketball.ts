@@ -492,6 +492,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "All-NBA needs 62 games played, and MVP talk starts at a 92 rating.",
       "Growth runs to age 25, decline starts at 32, and health erodes late unless you invest in it.",
       "The rotation is real: the man ahead of you is as good as your roster is, camps have memory both ways, bench seasons run at about 60 percent of a starter's numbers, and Sixth Man of the Year goes to actual second-unit seasons now. Joining a loaded contender can cost a mid player his spot in the five.",
+      "The press reads your actual season: a banner puts you on the podium, a collapse puts you in the scrum, a second-unit year brings the role question. Three answers every time, safe, honest or fiery, and the fiery one gambles your fanbase for real.",
       "Careers end at 41, after 21 seasons, or when the rating craters. You can also walk anytime.",
       "The 2003-04 throwback is a sealed 29 team world, verified against the real season: every draft, trade and signing stays inside it, and contracts pay 2003 money, about a third of today's.",
     ],

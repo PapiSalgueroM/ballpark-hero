@@ -20,6 +20,8 @@ import { getMlbCorruptionEvents } from './mlbCareerCorruption';
 // Round 179: the shared free agency engine, one implementation for all four sports.
 import { buildFaWindow } from './usCareerFreeAgency';
 import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
+// Round 184: the shared press room, same one-engine pattern.
+import { buildPressMoment, pressFactsFrom, applyPressChoice } from './usCareerPress';
 
 // Round 58: a real diamond instead of four sample positions. Relievers,
 // catchers and corner bats all live different careers now.
@@ -646,6 +648,22 @@ export function mlbFaPushArgs(c: MlbCareerState, rng: () => number = Math.random
 export function drawMlbEvent(c: MlbCareerState, rng: () => number): MlbCareerEvent {
   const deck: MlbCareerEvent[] = [];
   /* Round 179: the 'contract' card left this deck for the free agency window. */
+
+  /* Round 184: the press room reads the season. Big moments take the floor
+     outright; the smaller questions join the deck. */
+  const press = buildPressMoment('mlb', pressFactsFrom(c, mlbTeamLabelOf(c.team, c.eraId)), rng);
+  if (press) {
+    const ev: MlbCareerEvent = {
+      id: press.id, title: press.title, body: press.body,
+      options: press.options.map(o => ({
+        label: o.label, effect: o.effectLine,
+        apply: (cc: MlbCareerState, r: () => number) => applyPressChoice(cc, o, r),
+      })),
+    };
+    if (press.big) return ev;
+    deck.push(ev);
+  }
+
   deck.push({
     id: 'training',
     title: 'Winter plan',
