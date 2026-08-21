@@ -139,6 +139,16 @@ console.log("1) Grade the Transfer deals the whole bank now");
       else if (hit.moveYear !== year) fail(`${who} ${from} to ${to} is dated ${hit.moveYear}, the real year is ${year}`);
     }
     console.log(`   ${PINNED.length} famous moves pinned to their real years`);
+
+    /* Round 230: merged-identity blobs are excluded at the source. These
+       names are the poster children (the pool once carried a Fernandinho
+       "Atletico Mineiro to Manchester City" move that never happened);
+       any row for them means the taint rule fell out of the rebuild. */
+    for (const ghost of ["Paulinho", "Fernandinho", "Marcelo", "Robinho"]) {
+      const rows = pool.filter(c => c.playerName === ghost && c.nationality === "Brazil");
+      if (rows.length) fail(`${ghost} (Brazil) is back in the pool with ${rows.length} row(s); the merged-identity exclusion is gone`);
+    }
+    console.log("   4 merged-identity ghosts confirmed out");
   }
 }
 

@@ -1,5 +1,5 @@
--- ALREADY APPLIED to the live project on 2026-08-20 (Rounds 224 and 225),
--- in five steps whose end state this file reproduces. Safe to re-run: it
+-- ALREADY APPLIED to the live project on 2026-08-20 (Rounds 224, 225 and
+-- 230), in six steps whose end state this file reproduces. Safe to re-run: it
 -- rebuilds the pool from the source tables, which is also how to REFRESH
 -- it after soccer_player_club_stints or player_market_values change.
 --
@@ -42,13 +42,38 @@ DROP VIEW IF EXISTS public.transfer_grade_pool;
 DROP TABLE IF EXISTS public.transfer_grade_pool;
 
 CREATE TABLE public.transfer_grade_pool AS
-WITH moves AS (
+WITH per_year AS (
+  -- Round 230: a (name, nationality) pair with 3+ distinct clubs in one
+  -- calendar year, or a span past 22 years, is provably MULTIPLE merged
+  -- people (the mononym roll call: Paulinho, Fernandinho, Marcelo...).
+  -- Their transitions fabricate transfers (an "Atletico Mineiro to Man
+  -- City" Fernandinho move that never happened), so every transition in
+  -- such a blob is excluded. person_key backfill was investigated and
+  -- rejected: debut_year carries no identity signal (derived per pair)
+  -- and lane inference would be plausible-but-wrong; a true split needs
+  -- external person ids the source does not carry.
+  SELECT s.player_name, s.nationality, y.yr, count(DISTINCT s.club) AS clubs_that_year
+  FROM soccer_player_club_stints s
+  CROSS JOIN LATERAL generate_series(s.first_year, s.last_year) AS y(yr)
+  WHERE s.club <> 'Retired'
+  GROUP BY 1, 2, 3
+), tainted AS (
+  SELECT DISTINCT player_name, nationality FROM per_year WHERE clubs_that_year >= 3
+  UNION
+  SELECT player_name, nationality
+  FROM soccer_player_club_stints WHERE club <> 'Retired'
+  GROUP BY 1, 2 HAVING max(last_year) - min(first_year) > 22
+), moves AS (
   SELECT s.player_name, s.nationality, s."position",
          s.club AS from_club,
          s.last_year AS move_year,
          lead(s.club) OVER w AS to_club,
          lead(s.first_year) OVER w AS next_first
   FROM soccer_player_club_stints s
+  WHERE NOT EXISTS (
+    SELECT 1 FROM tainted t
+    WHERE t.player_name = s.player_name AND t.nationality = s.nationality
+  )
   WINDOW w AS (PARTITION BY s.player_name, s.nationality ORDER BY s.first_year)
 ), joined AS (
   SELECT m.player_name, m.nationality, m."position", m.from_club, m.to_club, m.move_year,
