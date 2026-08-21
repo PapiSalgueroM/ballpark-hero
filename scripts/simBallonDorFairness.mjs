@@ -1,9 +1,40 @@
-/* Targeted regression test for the Round 54 Ballon d'Or fairness fix.
-   Owner report: "you can have the best stats that season and they won't give
-   you the award". This drives calculateBallonDor through advanceProSeason by
-   handing it monster seasons and asserting the player is never snubbed.
-   Run: node scripts/testBallonDorFairness.mjs
+/* Ballon d'Or fairness harness (Round 54 rule, revived in Round 226).
+   Owner report behind it: "you can have the best stats that season and they
+   won't give you the award".
+
+   This file spent months dead and invisible: it was named test*, which
+   runAllSims silently skips by design, and its bundle import died on
+   localStorage at module scope, so even running it by hand failed. Round
+   226 renamed it sim* so the runner discovers it, stubbed storage before
+   the import, and it has been green since. The naming rule it tripped is
+   documented in CLAUDE.md: a harness named test* does not exist.
+
+   Round 226 also brought it up to the house harness rules it predates:
+   the engine's own randomness made the verdict flip run to run (measured:
+   one run snubbed a 38 goal season at rank 3, the next run was 85 for 85),
+   so Math.random is seeded and every run is the same run; and the
+   must-win trigger keyed off the FIELD MAXIMUM, which the rules ban
+   because a one goal edge over a max is noise, so winning now requires
+   outscoring the field by five or more with a major won before the
+   harness demands the trophy. The must-podium rule (45+ goals or 55+
+   involvements) was solid and is unchanged.
+
+   Run: node scripts/simBallonDorFairness.mjs
 */
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+
+/* seeded, so the verdict cannot flip between runs (house rule: seed the
+   arms rather than widen the bars) */
+{
+  let a = 0xb4110 >>> 0;
+  Math.random = () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
 import { build } from "esbuild";
 import { unlinkSync } from "node:fs";
 import { pathToFileURL } from "node:url";
@@ -97,7 +128,9 @@ if (dominantRuns === 0) {
         //  2. any monster line (45+ goals, or 55+ G/A) must at least podium
         const fieldTopGoals = bd.nominees.reduce((mx, n) => n.isPlayer ? mx : Math.max(mx, n.goals), 0);
         const wonMajor = season.leagueTitle || season.championsLeague || season.worldCup;
-        const mustWin = season.goals > fieldTopGoals && wonMajor;
+        /* five clear of the field, not one: a bare edge over a maximum is
+           noise and the house rules ban asserting on it */
+        const mustWin = season.goals >= fieldTopGoals + 5 && wonMajor;
         const mustPodium = ga >= 55 || season.goals >= 45;
         if (mustWin) {
           dominantRuns++;

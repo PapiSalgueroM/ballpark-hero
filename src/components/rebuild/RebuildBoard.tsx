@@ -117,7 +117,7 @@ export function RebuildBoard() {
   // ---- Coach hire (owner 2026-08-05) ----
   if (phase === 'pick-coach') {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-8">
+      <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
         <p className="text-center font-display text-xl font-bold text-foreground">
           First call: the dugout
         </p>
@@ -170,7 +170,7 @@ export function RebuildBoard() {
   // ---- Fortune card flip (Round 51: pick one of ten) ----
   if (phase === 'fortune') {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-8">
+      <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
         <p className="text-center font-display text-xl font-bold text-foreground">
           The board hands you ten envelopes
         </p>
@@ -224,7 +224,7 @@ export function RebuildBoard() {
     const sorted = [...squad].sort((a, b) => b.marketValue - a.marketValue);
     const fundsNow = baseBudget + (flippedFortune?.delta ?? 0) - (coach?.cost ?? 0);
     return (
-      <div className="mx-auto max-w-2xl px-4 py-8">
+      <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
         <p className="text-center font-display text-xl font-bold text-foreground">
           Commit your sales. Right now.
         </p>
@@ -285,7 +285,7 @@ export function RebuildBoard() {
   if (phase === 'done') {
     const hit = currentRating >= target;
     return (
-      <div className="mx-auto max-w-2xl px-4 py-8">
+      <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
         <div className="rounded-2xl border border-border bg-card p-6 text-center">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             {club.club}
@@ -419,7 +419,7 @@ export function RebuildBoard() {
   const onTrack = currentRating >= target;
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6">
+    <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-6">
       <div className="rounded-2xl border border-border bg-card p-4">
         <div className="flex items-center justify-between">
           <div>
