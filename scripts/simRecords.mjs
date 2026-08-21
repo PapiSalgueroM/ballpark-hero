@@ -54,6 +54,7 @@ const COMPLETE = {
      every finals names its beaten side, triple-verified before backfill */
   nba: ["series", "runnerUp"],
   ws: ["series", "runnerUp"],
+  cup: ["series", "runnerUp"],
   nrl: ["competition"],
 };
 

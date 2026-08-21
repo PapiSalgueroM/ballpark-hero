@@ -108,14 +108,14 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'cup', emoji: '🏒', title: 'Stanley Cup Champions',
-    blurb: 'Cup winners since 1915. The 1919 final was abandoned for the flu pandemic and 2005 was lost to the lockout, so neither year appears.',
+    blurb: 'Cup winners since 1915 with the beaten finalist, PCHA and WCHL challengers included. The 1919 final was abandoned for the flu pandemic and 2005 was lost to the lockout, so neither year appears.',
     yearLabel: 'Year',
-    columns: [['series', 'Series']],
+    columns: [['runnerUp', 'Runner-up'], ['series', 'Series']],
     play: [
       { path: '/champ-or-not', label: 'Champ or Not' },
       { path: '/list-quiz', label: 'Name Them All' },
     ],
-    fetch: () => rows('stanley_cup_finals_v2', 'year', 'winner', { series: 'series_result' }),
+    fetch: () => rows('stanley_cup_finals_v2', 'year', 'winner', { runnerUp: 'loser', series: 'series_result' }),
   },
   {
     key: 'wnba', emoji: '🏀', title: 'WNBA Champions',
