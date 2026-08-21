@@ -487,6 +487,57 @@ export const WORLD_CONTENT: GameContentMap = {
     ],
   },
 
+  '/hall-of-champions': {
+    intro: [
+      "Most idle games have you clicking a number until it goes up. This one has you building a museum, and every single thing you hang on the wall actually happened. Acquire Super Bowl I and the plaque tells you Green Bay won it and who they beat. Acquire the 1985 Bears and it is the 1985 Bears, because the exhibit list is read straight out of our audited record books.",
+      "Visitors pay admission every second, admission money buys more history, and more history brings more visitors. Ten wings, hundreds of real champions from the nineteenth century to this year, and the hall keeps earning while your phone is in your pocket.",
+    ],
+    howToPlay: [
+      "Acquire champions one at a time, oldest first in each wing. Each costs more and earns more than the last.",
+      "Every ten exhibits in a wing doubles that wing's income.",
+      "Open new wings when the money allows, from the Super Bowl through to the NRL and the AFL.",
+      "Tap the anniversary banner when it lights up: admissions triple for a few seconds.",
+      "Spend on tours, the curator's network, the gift shop and the archive vault to raise everything at once.",
+      "Rededicate once the hall is big enough to trade every exhibit for permanent renown stars.",
+    ],
+    rules: [
+      "Nothing in this museum is invented. Every year, team and result comes from the same checked champion tables our quiz games and Record Books run on.",
+      "The hall earns while you are away, at half speed, capped at eight hours. The gift shop raises that rate.",
+      "Finishing a wing hangs a plaque worth a permanent income bonus, and a plaque survives every rededication.",
+      "Rededicating clears the exhibits, the funds, the wings and the upgrades. Renown stars and plaques are the only things that carry over, and they carry over forever.",
+      "The price quoted on a button is the price charged. No hidden fees, no fake discounts.",
+    ],
+    example: [
+      "Your first purchase is the oldest Super Bowl on the books, for ten coins. Ten Super Bowls later that wing pays double, and the money starts arriving fast enough to open the WNBA wing next door.",
+      "Sixty Super Bowls in, the wing is complete and its plaque is permanent: a quarter more admissions across the whole museum, forever, even after you rededicate and start the walls again.",
+    ],
+    tips: [
+      "Wide beats deep early. Opening a new wing is usually worth more than the next expensive exhibit in your best one.",
+      "Watch the milestone counter on each buy button. Being two exhibits away from doubling a wing is the best money in the game.",
+      "Save the anniversary tap for right after a big acquisition run, when your per second number is at its highest.",
+      "The gift shop only pays if you actually leave. If you play in long sittings, tours and the network are worth more.",
+      "Do not rush the first rededication. Stars are paid per twenty exhibits, so one late rededication beats two early ones.",
+    ],
+    faqs: [
+      {
+        q: "Are the championships real?",
+        a: "Every one. The exhibit list is fetched from the same audited tables behind our Record Books page, which were checked season by season against the official record. If a season was never played, it is not in the museum either.",
+      },
+      {
+        q: "Does it keep going when I close the tab?",
+        a: "Yes, at half speed for up to eight hours, and the gift shop upgrade raises that rate. You get a note on the door when you come back telling you exactly what the hall took while you were out.",
+      },
+      {
+        q: "What is the point of rededicating?",
+        a: "Renown. You trade a full museum for permanent stars, one per twenty exhibits, each worth ten percent more admissions for the rest of the save. Completed wings keep their plaques too, so a second run through the same history is far faster than the first.",
+      },
+      {
+        q: "Do I lose progress if I stop playing?",
+        a: "No. The save lives on your device and nothing decays. Come back in a month and the hall is exactly as you left it, plus eight hours of admissions.",
+      },
+    ],
+  },
+
   '/minefield': {
     intro: [
       "The board looks friendly: one category, a wall of names, most of them belong. Some of them are mines. Minefield asks you to click everyone who truly fits while dodging the plausible fakes planted among them.",
