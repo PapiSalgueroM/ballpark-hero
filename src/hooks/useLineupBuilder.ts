@@ -103,6 +103,16 @@ export function useLineupBuilder() {
           }
         );
 
+        if (!resp.ok) {
+          // A rate limit or server error body has no verdict in it. Without
+          // this guard the code below read `valid` off an error object and
+          // told the player his TRUE answer was wrong ("hasn't played for"),
+          // when the honest message is that nothing was checked at all.
+          setValidationError("Couldn't verify that answer. Try again in a second.");
+          setIsValidating(false);
+          return;
+        }
+
         const result = await resp.json();
 
         if (!result.valid) {
