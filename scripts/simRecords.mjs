@@ -7,9 +7,11 @@
  *      measured that simChampOrNot uses), every row has a sane year and
  *      a named champion, and rows arrive newest first.
  *   2. Column completeness where the repair made it exact: every Super
- *      Bowl row carries runner-up, score and MVP; every CFB row carries
- *      selector, result and coach; every NBA row a winner-first series;
- *      every NRL row its competition era.
+ *      Bowl row carries runner-up, score, MVP, venue and host city (the
+ *      city pinned era-accurate: Miami before the Gardens incorporated,
+ *      Miami Gardens after); every CFB row carries selector, result and
+ *      coach; every NBA row a winner-first series; every NRL row its
+ *      competition era.
  *   3. NOTHING RENDERED CARRIES A LONG DASH: the shape repair normalized
  *      every score, and the site style bans em and en dashes, so a dash
  *      reappearing in any cell is a regression worth failing on.
@@ -48,9 +50,10 @@ const fail = m => { failures += 1; console.error("  FAIL: " + m); };
 const FLOORS = { sb: 30, nba: 40, ws: 60, cup: 55, wnba: 14, cfb: 24, cbb: 40, epl: 60, afl: 64, nrl: 58 };
 /* columns the repairs made exactly complete: every row must carry them */
 const COMPLETE = {
-  /* sb venue joined in Round 247: era-accurate stadium names with the
-     times-hosted debris stripped */
-  sb: ["runnerUp", "score", "mvp", "venue"],
+  /* sb venue joined in Round 247 (era-accurate stadium names with the
+     times-hosted debris stripped), city in Round 248 (host city plus
+     state, era-accurate municipality, rendered joined) */
+  sb: ["runnerUp", "score", "mvp", "venue", "city"],
   cfb: ["selector", "record", "coach"],
   /* nba runnerUp joined the complete set in Round 239, ws in Round 240:
      every finals names its beaten side, triple-verified before backfill */
@@ -108,6 +111,27 @@ for (const def of RECORD_SECTIONS) {
     }
     if (r.extra.score && !/^[0-9]+-[0-9]+$/.test(r.extra.score)) fail(`${def.key} ${r.year}: score ${r.extra.score} is not a plain score`);
     if (r.extra.series && !/^[0-9]+-[0-9]+(-[0-9]+)?$/.test(r.extra.series)) fail(`${def.key} ${r.year}: series ${r.extra.series} is not winner-first games`);
+    /* Round 248: the sb city cell is "City, ST", never a stadium name
+       and never a digit. Catches a venue-city swap at the source. */
+    if (def.key === "sb" && r.extra.city) {
+      if (!/^[A-Za-z .']+, [A-Z]{2}$/.test(r.extra.city)) fail(`sb ${r.year}: city ${r.extra.city} is not City, ST`);
+      if (/(Stadium|Bowl|Dome|Field|Coliseum)/.test(r.extra.city)) fail(`sb ${r.year}: city ${r.extra.city} looks like a venue`);
+    }
+  }
+  /* Round 248 pins: the era-accurate municipality can never quietly
+     drift. Miami until the Gardens incorporated in 2003, Miami Gardens
+     after; Stanford and Las Vegas as the settled source disputes. */
+  if (def.key === "sb" && rows && rows.length) {
+    const CITY_PINS = {
+      1967: "Los Angeles, CA", 1985: "Stanford, CA", 1989: "Miami, FL",
+      1999: "Miami, FL", 2007: "Miami Gardens, FL", 2014: "East Rutherford, NJ",
+      2024: "Las Vegas, NV", 2026: "Santa Clara, CA",
+    };
+    for (const [yr, want] of Object.entries(CITY_PINS)) {
+      const row = rows.find(r => r.year === Number(yr));
+      if (!row) fail(`sb: no ${yr} row to pin the city on`);
+      else if (row.extra.city !== want) fail(`sb ${yr}: city ${row.extra.city}, the record says ${want}`);
+    }
   }
   if (rows) console.log(`   ${def.key}: ${rows.length} rows, columns complete, no long dashes`);
 }

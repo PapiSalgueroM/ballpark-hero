@@ -69,19 +69,25 @@ async function rows(
 export const RECORD_SECTIONS: RecordSection[] = [
   {
     key: 'sb', emoji: '🏈', title: 'Super Bowl Champions',
-    blurb: 'Every Super Bowl by the year it was played, with the final score, the MVP and the stadium as it was named that day.',
+    blurb: 'Every Super Bowl by the year it was played, with the final score, the MVP, the stadium as it was named that day and the host city as it was that day too: Miami until the Gardens incorporated, Stanford for XIX, Las Vegas for LVIII.',
     yearLabel: 'Year',
-    columns: [['runnerUp', 'Runner-up'], ['score', 'Score'], ['mvp', 'MVP'], ['venue', 'Venue']],
+    columns: [['runnerUp', 'Runner-up'], ['score', 'Score'], ['mvp', 'MVP'], ['venue', 'Venue'], ['city', 'City']],
     play: [
       { path: '/champ-or-not', label: 'Champ or Not' },
       { path: '/whod-they-beat', label: "Who'd They Beat?" },
       { path: '/list-quiz', label: 'Name Them All' },
     ],
     fetch: async () => {
-      const base = await rows('super_bowls', 'year', 'winner', { runnerUp: 'loser', mvp: 'mvp', venue: 'venue', ws: 'winner_score', ls: 'loser_score' });
+      const base = await rows('super_bowls', 'year', 'winner', { runnerUp: 'loser', mvp: 'mvp', venue: 'venue', city: 'city', st: 'state', ws: 'winner_score', ls: 'loser_score' });
       return base.map(r => {
-        const { ws, ls, ...rest } = r.extra;
-        return { ...r, extra: ws && ls ? { ...rest, score: `${ws}-${ls}` } : rest };
+        const { ws, ls, city, st, ...rest } = r.extra;
+        const extra: Record<string, string> = { ...rest };
+        if (ws && ls) extra.score = `${ws}-${ls}`;
+        /* city and state ship as separate verified columns and join here,
+           so Glendale reads as Glendale, AZ and nobody pictures the
+           wrong one */
+        if (city && st) extra.city = `${city}, ${st}`;
+        return { ...r, extra };
       });
     },
   },
