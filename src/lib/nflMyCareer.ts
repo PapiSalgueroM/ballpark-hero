@@ -24,6 +24,7 @@ import { getNflCorruptionEvents } from './nflCareerCorruption';
 // Round 179: the shared free agency engine, one implementation for all four sports.
 import { buildFaWindow } from './usCareerFreeAgency';
 import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
+import { buildExtension, type ExtensionTalk, type ExtPushArgs } from './usCareerExtension';
 // Round 184: the shared press room, same one-engine pattern.
 import { buildPressMoment, pressFactsFrom, applyPressChoice } from './usCareerPress';
 
@@ -771,6 +772,28 @@ export function buildNflFaWindow(c: CareerState, incumbentQuality: number, rng: 
 }
 
 export function nflFaPushArgs(c: CareerState, rng: () => number = Math.random): FaPushArgs {
+  return { ovr: c.ovr, age: c.age, accolades: c.allPros, cliffAge: POS_CLIFF_AGE[c.pos] ?? 31, rng };
+}
+
+/* Round 207: the extension talk, the decision that comes BEFORE free
+   agency. Same wrapper shape as the window above: this file owns the
+   sport's numbers, usCareerExtension.ts owns the rules. */
+export function buildNflExtension(c: CareerState, rng: () => number = Math.random): ExtensionTalk {
+  return buildExtension({
+    sport: 'nfl',
+    team: c.team,
+    label: teamLabelOf(c.team, c.eraId),
+    market: marketSalary(c),
+    minSalary: 0.4,
+    ovr: c.ovr,
+    age: c.age,
+    accolades: c.allPros,
+    cliffAge: POS_CLIFF_AGE[c.pos] ?? 31,
+    rng,
+  });
+}
+
+export function nflExtPushArgs(c: CareerState, rng: () => number = Math.random): ExtPushArgs {
   return { ovr: c.ovr, age: c.age, accolades: c.allPros, cliffAge: POS_CLIFF_AGE[c.pos] ?? 31, rng };
 }
 

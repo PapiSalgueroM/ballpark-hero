@@ -5,7 +5,7 @@ import { NBA_ERAS,
   NBA_ARCHETYPES, startNbaCareer, simNbaSeason, nbaProgress, drawNbaEvent,
   NBA_SPEND_ITEMS, buyNbaItem, type NbaSpendCategory,
   nbaShouldRetire, nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaTeamLabelOf, nbaMarketSalary,
-  buildNbaFaWindow, nbaFaPushArgs,
+  buildNbaFaWindow, nbaFaPushArgs, buildNbaExtension, nbaExtPushArgs,
   nbaAssignRole, nbaCampBattle,
   type NbaCareerPos, type NbaCareerState, type NbaCareerEvent, type NbaSeasonLine,
 } from '@/lib/nbaMyCareer';
@@ -13,6 +13,9 @@ import { NBA_ERAS,
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
 import FreeAgencyPanel from '@/components/us-career/FreeAgencyPanel';
+/* Round 207: the extension talk, shared engine and shared card. */
+import { extensionDue, pushExtension, type ExtensionTalk } from '@/lib/usCareerExtension';
+import ExtensionCard from '@/components/us-career/ExtensionCard';
 // Round 186: the season curtain, shared engine and shared card.
 import { buildSeasonReveal, type SeasonReveal } from '@/lib/usCareerReveal';
 import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
@@ -33,7 +36,9 @@ import { cn } from '@/lib/utils';
    game. Now it hands you to a job board and the save keeps going.
    Round 179: 'freeagency' is new. An expired deal now opens a real market
    window before the next season. */
-type Phase = 'create' | 'season' | 'event' | 'freeagency' | 'retired' | 'coach';
+/* Round 207: 'extension' is new. The final year of a deal now opens a
+   real fork: sign on, or play it out and reach free agency. */
+type Phase = 'create' | 'season' | 'event' | 'extension' | 'freeagency' | 'retired' | 'coach';
 
 const SAVE_KEY = 'nba-my-career-save-v1';
 
@@ -58,6 +63,13 @@ export default function NbaMyCareerBoard() {
   /* Round 179: the open market. Not persisted on purpose: a reload lands on
      the season hub and the next Play click rebuilds a fresh window. */
   const [faWindow, setFaWindow] = useState<FaWindow | null>(null);
+  /* Round 207: the extension on the table. Transient like the trade
+     talks it borrows its single-push rule from: a reload ends the
+     conversation and pressing Play opens a fresh one. */
+  const [extTalk, setExtTalk] = useState<ExtensionTalk | null>(null);
+  /* Set when you have turned an extension down, so the same season
+     does not ask twice. Cleared the moment a season is actually played. */
+  const extDeclinedRef = useRef(false);
   const [talkLine, setTalkLine] = useState<string | null>(null);
   /* Round 186: the season curtain. Transient like the market window: never
      persisted, so a reload mid-reveal opens on the save's real screen. */
@@ -155,6 +167,19 @@ export default function NbaMyCareerBoard() {
     /* Round 179: no deal, no tipoff. The window is guaranteed here, which
        also closes the old hole where the event deck could skip the contract
        card and let you play years on an expired contract. */
+    /* Round 207: the last year of a deal is a decision, not just another
+       season. Offered before the season is played, because that is when a
+       club and a player actually have this conversation. */
+    if (extensionDue(c) && !extDeclinedRef.current) {
+      setExtTalk(buildNbaExtension(c, Math.random));
+      /* Persisted as 'season' on purpose: a reload puts you back on the hub
+         with the season still unplayed, and Play opens a fresh talk. */
+      setPhase('extension');
+      persist(c, 'season', teamQuality);
+      return;
+    }
+    extDeclinedRef.current = false;
+
     if (c.contractYears <= 0) {
       setFaWindow(buildNbaFaWindow(c, teamQuality, Math.random));
       setTalkLine(null);
@@ -208,6 +233,35 @@ export default function NbaMyCareerBoard() {
 
   /* Round 179: the market handlers. Signing writes the offer onto the career
      and the offer's roster quality becomes the real teamQuality. */
+  /* Round 207: the three answers to an extension. Signing writes the deal
+     onto the career (the year being played plus the new years); pushing
+     spends the one negotiation; turning it down plays the season out, which
+     is what sends you to free agency next summer. */
+  const signExt = () => {
+    if (!career || !extTalk?.offer) return;
+    const c: NbaCareerState = JSON.parse(JSON.stringify(career));
+    const o = extTalk.offer;
+    c.contractYears = 1 + o.years;
+    c.salary = o.salary;
+    setCareer(c);
+    setFeed(f => [`\u{1F58A}\uFE0F Extension signed: ${o.years} more year${o.years === 1 ? '' : 's'} at $${o.salary}M a year.`, ...f].slice(0, 6));
+    setExtTalk(null);
+    setPhase('season');
+    persist(c, 'season', teamQuality);
+  };
+
+  const pushExt = () => {
+    if (!career || !extTalk) return;
+    setExtTalk(pushExtension(extTalk, nbaExtPushArgs(career, Math.random)));
+  };
+
+  const declineExt = () => {
+    extDeclinedRef.current = true;
+    setExtTalk(null);
+    setPhase('season');
+    playSeason();
+  };
+
   const signFa = (idx: number) => {
     if (!career || !faWindow) return;
     const offer = faWindow.offers[idx];
@@ -556,7 +610,11 @@ export default function NbaMyCareerBoard() {
 
 
 
-      {phase === 'freeagency' && faWindow ? (
+      {phase === 'extension' && extTalk ? (
+        <div ref={revealRef}>
+          <ExtensionCard talk={extTalk} seasonWord="season" onPush={pushExt} onSign={signExt} onDecline={declineExt} />
+        </div>
+      ) : phase === 'freeagency' && faWindow ? (
         <div ref={revealRef}>
           <FreeAgencyPanel window={faWindow} sportNoun="franchise" talkLine={talkLine} onPush={pushFa} onSign={signFa} />
         </div>

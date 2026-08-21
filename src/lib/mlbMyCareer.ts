@@ -20,6 +20,7 @@ import { getMlbCorruptionEvents } from './mlbCareerCorruption';
 // Round 179: the shared free agency engine, one implementation for all four sports.
 import { buildFaWindow } from './usCareerFreeAgency';
 import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
+import { buildExtension, type ExtensionTalk, type ExtPushArgs } from './usCareerExtension';
 // Round 184: the shared press room, same one-engine pattern.
 import { buildPressMoment, pressFactsFrom, applyPressChoice } from './usCareerPress';
 
@@ -642,6 +643,28 @@ export function buildMlbFaWindow(c: MlbCareerState, incumbentQuality: number, rn
 }
 
 export function mlbFaPushArgs(c: MlbCareerState, rng: () => number = Math.random): FaPushArgs {
+  return { ovr: c.ovr, age: c.age, accolades: c.allStars, cliffAge: (MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF).cliff, rng };
+}
+
+/* Round 207: the extension talk, the decision that comes BEFORE free
+   agency. Same wrapper shape as the window above: this file owns the
+   sport's numbers, usCareerExtension.ts owns the rules. */
+export function buildMlbExtension(c: MlbCareerState, rng: () => number = Math.random): ExtensionTalk {
+  return buildExtension({
+    sport: 'mlb',
+    team: c.team,
+    label: mlbTeamLabelOf(c.team, c.eraId),
+    market: mlbMarketSalary(c),
+    minSalary: mlbEraById(c.eraId).moneyScale < 1 ? 0.5 : 1,
+    ovr: c.ovr,
+    age: c.age,
+    accolades: c.allStars,
+    cliffAge: (MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF).cliff,
+    rng,
+  });
+}
+
+export function mlbExtPushArgs(c: MlbCareerState, rng: () => number = Math.random): ExtPushArgs {
   return { ovr: c.ovr, age: c.age, accolades: c.allStars, cliffAge: (MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF).cliff, rng };
 }
 
