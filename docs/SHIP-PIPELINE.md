@@ -235,6 +235,12 @@ snapshot, which does not move on its own.
 2. Call `mcp__Lovable__deploy_project` on `c29d224f-a662-4a15-b809-d86fa3b3f0ad`.
 3. Wait about 5 minutes.
 4. Verify **live**, properly. See below.
+5. Once live is verified, run `node scripts/indexnowSubmit.mjs` from the cloud session. Bing is
+   the number one traffic source and IndexNow (its push protocol, added Round 222) tells it and
+   DuckDuckGo and Yahoo to recrawl in minutes instead of days. The script fails closed: it
+   refuses to submit until it can read `public/<key>.txt` off the live site itself, so running
+   it before the publish landed cannot mis-ping. After a small round, `URLS=/route1,/route2`
+   scopes the ping to the pages that changed. Google ignores IndexNow and needs nothing here.
 
 **`deploy_project` returning "pending" is not proof of anything.** It has returned pending while
 Lovable sat on a commit several rounds old. If a publish hangs, the fallback is clicking Publish
