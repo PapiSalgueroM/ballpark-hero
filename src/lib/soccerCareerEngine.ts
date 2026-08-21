@@ -622,6 +622,16 @@ export interface CareerState {
   popularity: number;
   morale: number;
   isLeader: boolean;
+  /** Round 244: the club captaincy arc. isClubCaptain means the armband is
+      currently his and captainClub names whose it is; a transfer or a loan
+      hands it over honestly and decline at 33+ passes it on. captainSeasons
+      counts the full seasons of the CURRENT stint (it resets when a new
+      armband arrives), and each stint that lasted a season leaves its own
+      cabinet line. All optional so a save from before this round loads
+      untouched. */
+  isClubCaptain?: boolean;
+  captainClub?: string | null;
+  captainSeasons?: number;
   hasRelationship: boolean;
   // International career
   intStats: InternationalStats;
@@ -2163,6 +2173,16 @@ export function repairCareer<T extends CareerState>(state: T): T {
      the exact old behaviour: no loan running, no offers pending. */
   if (s.loan === undefined) s.loan = null;
   if (s.pendingLoanOffers === undefined) s.pendingLoanOffers = null;
+  /* Round 244: captaincy fields are optional and default to "never worn it".
+     If a save somehow claims the armband at a club he no longer plays for,
+     drop the flag quietly rather than let it follow him. */
+  if ((s.isClubCaptain ?? false) && s.captainClub !== s.currentClub) {
+    s.isClubCaptain = false;
+    s.captainClub = null;
+  }
+  if (s.captainSeasons !== undefined && (typeof s.captainSeasons !== "number" || !Number.isFinite(s.captainSeasons) || s.captainSeasons < 0)) {
+    s.captainSeasons = 0;
+  }
   /* Round 133 renamed the top sponsorship tier off a product name. Saves
      written before that still carry the old value, and without this line those
      players silently lose a 25M a year deal they had already earned. */
@@ -3572,6 +3592,9 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
   s.phase = "playing"; s.pendingOffers = []; s.transferSituation = null; s.pendingLoanOffers = null;
   s.morale = clamp(s.morale + 6, 0, 100);
   s.events = [`🛫 Off on loan to ${offer.club.name} ${getFlag(offer.club.country)} for the season. The message from upstairs was simple: go and play.`];
+  // Round 244: a captain who leaves on loan hands the armband over; it can
+  // be earned back, it is never kept warm.
+  endClubCaptaincy(s, "loan");
   return s;
 }
 
@@ -3847,6 +3870,9 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   } else {
     s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)})`];
   }
+  // Round 244: the armband never travels. Stripped after the events reset
+  // above so the handover line survives onto the fresh list.
+  endClubCaptaincy(s, "transfer");
   // Round 54: staying loyal to the badge that raised you pays off in the
   // fans' hearts, and coming home later is an instant love story.
   if (offer.isHomegrown) {
@@ -4013,6 +4039,48 @@ function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number)
 }
 
 /* ─── Advance pro season ─── */
+/* ─── Round 244: the club captaincy arc ───
+   One captaincy truth. The armband arrives two ways: earned by seniority in
+   the season loop below (age, tenure and standing open the door; leaders and
+   academy sons get the nod sooner), or voted early via random event 3, and
+   both land here so the state can never disagree with itself. It leaves
+   honestly: a transfer or a loan hands it over, decline at 33+ passes it on,
+   retirement closes it, and a career that wore it for at least a full season
+   gets a cabinet line saying where and for how long. */
+function awardClubCaptaincy(s: CareerState, viaVote: boolean): void {
+  if (s.isClubCaptain ?? false) return;
+  s.isClubCaptain = true;
+  s.captainClub = s.currentClub;
+  s.captainSeasons = 0; // a fresh stint counts its own seasons
+
+  s.isLeader = true;
+  s.morale = clamp(s.morale + 10, 0, 100);
+  s.popularity = clamp(s.popularity + 5, 0, 100);
+  s.events.push(viaVote
+    ? "©️ Voted club captain by the dressing room"
+    : `©️ Handed the ${s.currentClub} armband. The manager wants his voice on the pitch`);
+}
+
+function endClubCaptaincy(s: CareerState, reason: "transfer" | "loan" | "handover" | "retirement", year?: number): void {
+  if (!(s.isClubCaptain ?? false)) return;
+  const n = s.captainSeasons ?? 0;
+  const club = s.captainClub ?? s.currentClub;
+  if (n >= 1) {
+    const endYear = year ?? (s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year : 0);
+    s.awards = [...(s.awards ?? []), {
+      year: endYear,
+      name: `Club Captain of ${club} (${n} season${n === 1 ? "" : "s"})`,
+      emoji: "©️",
+    }];
+  }
+  s.isClubCaptain = false;
+  s.captainClub = null;
+  if (reason === "transfer") s.events.push(`©️ The ${club} armband stays behind. A new captain will be chosen`);
+  else if (reason === "loan") s.events.push(`©️ The armband stays at ${club} while he is away`);
+  else if (reason === "handover") s.events.push(`©️ Passed the captaincy on after ${n} season${n === 1 ? "" : "s"} wearing it. The dressing room stood and clapped`);
+  else s.events.push(n >= 1 ? `©️ Retires as a club captain: ${n} season${n === 1 ? "" : "s"} with the ${club} armband` : "©️ Hands back the armband on the way out");
+}
+
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = repairCareer({ ...prev }); s.age += 1; s.events = [];
   receivePhoneTexts(s, "pro");
@@ -4179,12 +4247,13 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "retired",
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }];
+    endClubCaptaincy(s, "retirement");
     if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
     s.legacy = calculateLegacy(s);
     s.phase = "retirement_ceremony";
     return s;
   }
-  
+
   // Retirement suggestion, when overall drops 10+ from peak OR drops to 75 or below (age 30+)
   if (!s.retirementSuggested && s.age >= 30) {
     const dropFromPeak = s.peakOverall - s.overall;
@@ -4269,6 +4338,21 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     const prevCaps = s.intStats.caps - intSeason.intApps;
     if (s.intStats.caps >= 100 && prevCaps < 100) {
       s.events.push(`🎖️ INTERNATIONAL LEGEND: reached 100 caps for ${s.nationality}!`);
+    }
+  }
+
+  // Round 244: the club armband, earned rather than random. Tenure counts
+  // the seasons already in the book at this club, so 2 means he is playing
+  // his third year there. Leaders and academy sons get the nod sooner, and
+  // a loan season never hands out a parent club's armband.
+  if (!(s.isClubCaptain ?? false) && !s.loan && s.age >= 24 && s.overall >= 76) {
+    const tenure = s.seasons.filter(ss => ss.club === s.currentClub && ss.type === "playing").length;
+    if (tenure >= 2) {
+      const chance = 0.18
+        + (s.isLeader ? 0.15 : 0)
+        + (s.academyClubName === s.currentClub ? 0.10 : 0)
+        + Math.min(0.15, (tenure - 2) * 0.05);
+      if (Math.random() < chance) awardClubCaptaincy(s, false);
     }
   }
 
@@ -4473,6 +4557,19 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   if (totalApps >= 500 && totalApps - season.apps < 500) s.events.push("🎖️ Made 500th career appearance!");
   /* Round 217: a loan season carries its parent on the record forever */
   if (s.loan) season.onLoanFrom = s.loan.parentClub;
+  /* Round 244: a full season worn is a season counted; a club change that
+     slipped past the transfer flow (prison, anything unusual) ends the
+     captaincy honestly instead of letting the armband follow him; and a
+     declining captain at 33+ passes it on before it is taken. */
+  if ((s.isClubCaptain ?? false) && s.captainClub === s.currentClub) {
+    s.captainSeasons = (s.captainSeasons ?? 0) + 1;
+  } else if ((s.isClubCaptain ?? false) && s.captainClub !== s.currentClub) {
+    endClubCaptaincy(s, "transfer", season.year);
+  }
+  if ((s.isClubCaptain ?? false) && s.age >= 33 && s.overall <= 74) {
+    endClubCaptaincy(s, "handover", season.year);
+    s.popularity = clamp(s.popularity + 3, 0, 100);
+  }
   s.seasons = [...s.seasons, season];
   s.pendingSummary = season;
   // Generate newspaper articles
@@ -4857,7 +4954,10 @@ function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 3, emoji: "©️", title: "Club Captain!", description: "You are voted captain of your club.",
       category: "positive", choices: [
         { label: "Accept the armband", emoji: "💪", color: "bg-emerald-600", consequence: "Leadership role, Defending +2, Physical +2",
-          apply: s => { s.isLeader = true; s.defending = clamp(s.defending + 2, 20, 99); s.physical = clamp(s.physical + 2, 20, 99); s.events = [...s.events, "©️ Named club captain"]; return s; } },
+          /* Round 244: the vote lands in the same captaincy truth as the
+             earned path, so the armband, the season count and the cabinet
+             line all agree wherever it came from. */
+          apply: s => { s.events = [...s.events]; awardClubCaptaincy(s, true); s.defending = clamp(s.defending + 2, 20, 99); s.physical = clamp(s.physical + 2, 20, 99); return s; } },
       ] },
     { id: 4, emoji: "🏆", title: "Player of the Month!", description: "You win Player of the Month.",
       category: "positive", choices: [
@@ -5146,7 +5246,7 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
       if (e.id === 19 && !state.internationalCareer) return false;
     }
     if (e.id === 20 && state.hasRelationship) return false;
-    if (e.id === 3 && state.isLeader) return false;
+    if (e.id === 3 && (state.isLeader || (state.isClubCaptain ?? false))) return false;
     if (e.id === 5 && state.sponsorDeal) return false;
     if (e.id === 2 && state.overall < 75) return false;
     if (e.id === 7 && state.overall < 70) return false;
@@ -6325,6 +6425,7 @@ export function manualRetire(prev: CareerState): CareerState {
   const s = { ...prev };
   s.retired = true;
   s.events = [...s.events, "👋 Announced retirement from professional football"];
+  endClubCaptaincy(s, "retirement");
   if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
   s.legacy = calculateLegacy(s);
   s.phase = "retirement_ceremony";
@@ -6408,6 +6509,7 @@ export function acceptRetirementSuggestion(prev: CareerState): CareerState {
     leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "retired",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   }];
+  endClubCaptaincy(s, "retirement");
   if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
   s.legacy = calculateLegacy(s);
   s.phase = "retirement_ceremony";

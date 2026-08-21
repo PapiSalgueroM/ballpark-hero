@@ -3494,7 +3494,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 {career.currentClub.includes("Youth") ? "YA" : career.currentClub.slice(0, 2).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-bold text-sm truncate flex items-center gap-1"><FlagImg name={career.currentClubCountry} size={16} />{career.currentClub}</div>
+                <div className="font-bold text-sm truncate flex items-center gap-1"><FlagImg name={career.currentClubCountry} size={16} />{career.currentClub}{(career.isClubCaptain ?? false) && <span title="Club captain" className="text-gold shrink-0">©️</span>}</div>
                 <div className="text-xs text-muted-foreground">
                   {career.retired ? "Retired" : career.phase === "youth" ? "Youth Academy" : `${career.currentLeague} · ${career.contractYearsLeft}yr left · ${formatWage(career.weeklyWage)} · €${career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M`}
                 </div>
