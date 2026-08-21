@@ -195,10 +195,24 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   flexible side tracks, phone layout untouched, simMobileChrome still green across all
   five widths. STILL OPEN: the American careers and Stadium Tycoon record only at their
   natural end points; give them the same per-session marks.
-- S-2 A score ticker across the top of the site. The paid-feed decision stays parked (money,
-  his call). But a v1 that carries OUR OWN world is free: what's new on the site, today's
-  polls, the daily legend, live lines from the player's own Club Manager save. Never write
-  the rival broadcaster's name into src.
+- S-2 **DONE (v1), Round 167: The Ticker.** A thin scrolling wire across the top of every
+  screen (site-wide at desktop, home page only on phones so game play areas stay clean, off
+  on admin paths). Every line is derived or personal, never hand-typed to rot: your own
+  Club Manager save (club, computed league position and points, or "awaits kick off" at
+  zero games, plus the golden boot leader from the Round 165 race), your Stadium Tycoon
+  bank and rep stars, your Soccer Career player and OVR, four fresh dailies rotated by the
+  calendar day, live game counts read off the registry, and a pointer to /whats-new. CSS
+  marquee (pause on hover, off under prefers-reduced-motion with plain overflow scrolling),
+  seamless loop via a non-focusable ghost copy, fixed 28px height so no layout jump.
+  simTicker (51st harness) proves: a fresh visitor still gets a full wire, every daily line
+  is a real daily game at its real path, save lines reconcile against independently
+  computed truth (position by the same tiebreaks), zero-game saves say so instead of
+  claiming 1st, EIGHT hostile or garbage saves absorbed without a throw (the ticker renders
+  on every route, so a throw would kill the whole app shell), and the rival broadcaster's
+  name appears nowhere in the file, not even in a comment. Browser probed 10 for 10 across
+  desktop and phone including the personal lines and the hidden-on-phone-game rule;
+  simMobileChrome still green across all widths. The paid real-scores feed stays parked
+  (money, his call).
 - S-3 More animation everywhere, standing item F from the first review.
 - S-4 **DONE, Round 159: the Soccer Career fix pack from his screenshots.** The ceiling can
   never sit below the man: the build editor used to keep the ORIGINAL roll's ceiling when
@@ -509,8 +523,9 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, midday | **Round 163** (league views, CM-9 in full: pre-season alphabetical tables with the star for all fifteen leagues, flags on every league chip, all eight UCL groups simulated in lockstep, the projected quarter-final bracket, and the knockout draw seeded from the real group winners). `RUN163.bat`, chain-guarded on 162. |
 | Packaged 2026-08-18, early afternoon | **Round 164** (the stats centre, CM-11: per-competition team record, leader cards, full sortable player lines, engine-level per-comp stat splits that cannot disagree with the season totals, plus the 14-vs-15 league count fix in the help and SEO copy). `RUN164.bat`, chain-guarded on 163. |
 | Packaged 2026-08-18, afternoon | **Round 165** (award races, CM-12: the golden boot board, the one-formula player of the season watch, the Ballon d'Or watch and all three honours named in the season review, era aware, race goals provably bounded by the simulated tables). `RUN165.bat`, chain-guarded on 164. |
-| Packaged 2026-08-18, later afternoon | **Round 166** (era legends rate like legends, the CM-5 rating half: prime Messi and Ronaldo at 97 above the modern best of 94, monotone load-time uplift, stature and values untouched, ageing ceiling follows the anchor). `RUN166.bat`, chain-guarded on 165. **SHIP24.bat is the current wrapper: it runs 157 through 166.** Older SHIP wrappers still work, then click the later RUN bats after. |
-| Next free round number | **167** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, later afternoon | **Round 166** (era legends rate like legends, the CM-5 rating half: prime Messi and Ronaldo at 97 above the modern best of 94, monotone load-time uplift, stature and values untouched, ageing ceiling follows the anchor). `RUN166.bat`, chain-guarded on 165. |
+| Packaged 2026-08-18, evening | **Round 167** (The Ticker, his S-2 ask: the site's own scrolling wire on top of every screen, personal save lines, daily rotation, live registry counts, hostile-save-proof). `RUN167.bat`, chain-guarded on 166. **SHIP25.bat is the current wrapper: it runs 157 through 167.** Older SHIP wrappers still work, then click the later RUN bats after. |
+| Next free round number | **168** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven
