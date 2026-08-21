@@ -4,6 +4,7 @@ import { ChevronRight, ChevronDown } from 'lucide-react';
 import { confidenceLabel } from '@/lib/clubManager';
 import type { MatchWeekReport, MatchStats } from '@/lib/clubManager';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 
 /** Round 157: one stat as two bars meeting in the middle, matchday-app style. */
 function StatBar({ label, mine, theirs, decimals = 0 }: {
@@ -223,12 +224,23 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
             </div>
             <StatsBlock stats={detail.stats} />
             {/* Round 169: momentum as one continuous flow, us above the
-                line, them below, like his match app models draw it. */}
+                line, them below, like his match app models draw it.
+                Round 178: possession and shots ride ON the chart now, the
+                same numbers the stats block carries, read from one place. */}
             <div className="mt-3">
-              <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 text-left">Balance of play</div>
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-bold text-primary tabular-nums">{detail.stats.possession}%</span>
+                <span className="text-[9px] text-muted-foreground uppercase tracking-wider">Balance of play</span>
+                <span className="text-[10px] font-bold text-muted-foreground tabular-nums">{100 - detail.stats.possession}%</span>
+              </div>
               <MomentumArea momentum={detail.momentum} />
               <div className="flex justify-between text-[8px] text-muted-foreground/70">
                 <span>0'</span><span>45'</span><span>90'</span>
+              </div>
+              <div className="flex items-center justify-between text-[9px] mt-0.5">
+                <span className="text-foreground tabular-nums font-bold">{detail.stats.shots} <span className="font-normal text-muted-foreground">({detail.stats.onTarget})</span></span>
+                <span className="text-muted-foreground uppercase tracking-wider text-[8px]">Shots (on target)</span>
+                <span className="text-muted-foreground tabular-nums font-bold">{detail.stats.oppShots} <span className="font-normal">({detail.stats.oppOnTarget})</span></span>
               </div>
             </div>
           </div>
@@ -244,9 +256,34 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               </div>
               <span className="text-xs font-bold font-display text-gold tabular-nums">{motm.rating.toFixed(1)}</span>
             </div>
-            {detail.oppBest && (
+            {/* Round 178: top rated BOTH sides, like his match app models.
+                The opposition sheet only exists when their world can field a
+                real eleven; thin worlds keep the old one-liner. */}
+            {detail.oppRatings && detail.oppRatings.length > 0 ? (
+              <div className="mt-2 grid grid-cols-2 gap-2 text-left">
+                <div>
+                  <div className="text-[8px] text-muted-foreground uppercase tracking-wider mb-0.5">Our top rated</div>
+                  {detail.myRatings.slice(0, 3).map((p, i) => (
+                    <div key={i} className="flex items-center gap-1 text-[10px]">
+                      <span className="text-foreground truncate">{p.name}</span>
+                      <span className="ml-auto shrink-0 font-bold tabular-nums text-emerald-400">{p.rating.toFixed(1)}</span>
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <div className="text-[8px] text-muted-foreground uppercase tracking-wider mb-0.5">Their top rated</div>
+                  {detail.oppRatings.slice(0, 3).map((p, i) => (
+                    <div key={i} className="flex items-center gap-1 text-[10px]">
+                      <span className="text-muted-foreground truncate">{p.name}</span>
+                      {p.gen && <MadeUpTag />}
+                      <span className="ml-auto shrink-0 font-bold tabular-nums text-muted-foreground">{p.rating.toFixed(1)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : detail.oppBest ? (
               <div className="text-[10px] text-muted-foreground mt-1">Their danger man on the day: {detail.oppBest}</div>
-            )}
+            ) : null}
             <button
               onClick={() => setShowRatings(v => !v)}
               className="mt-2 inline-flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary transition-colors"
@@ -270,6 +307,26 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                     </span>
                   </div>
                 ))}
+                {/* Round 178: the other dressing room's full sheet. */}
+                {detail.oppRatings && detail.oppRatings.length > 0 && (
+                  <>
+                    <div className="text-[8px] text-muted-foreground uppercase tracking-wider pt-1.5">{r.won || r.drawn ? 'Them' : 'Them (they enjoyed it more)'}</div>
+                    {detail.oppRatings.map((p, i) => (
+                      <div key={`o${i}`} className="flex items-center gap-2 text-[10px]">
+                        <span className="w-7 shrink-0 text-muted-foreground">{p.pos}</span>
+                        <span className="text-muted-foreground truncate">{p.name}</span>
+                        {p.gen && <MadeUpTag />}
+                        {p.goals > 0 && <span className="shrink-0">{'⚽'.repeat(Math.min(p.goals, 3))}</span>}
+                        <span className={cn(
+                          'ml-auto shrink-0 font-bold tabular-nums rounded px-1',
+                          p.rating >= 7.5 ? 'text-emerald-300/80' : p.rating >= 6.3 ? 'text-muted-foreground' : 'text-red-400/80',
+                        )}>
+                          {p.rating.toFixed(1)}
+                        </span>
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
             )}
           </div>

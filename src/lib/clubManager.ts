@@ -747,6 +747,9 @@ export interface PlayerRatingLine {
   goals: number;
   assists: number;
   motm?: boolean;
+  /** Round 178: true when this is a player the game made up (projected
+   *  worlds and thin squads), so the report can say so out loud. */
+  gen?: boolean;
 }
 
 export interface MatchDetail {
@@ -762,6 +765,13 @@ export interface MatchDetail {
   myRatings: PlayerRatingLine[];
   /** Their best on the day (top scorer), or null when they had nothing. */
   oppBest: string | null;
+  /** Round 178: match ratings for the OPPOSITION XI, his match app models'
+   *  "top rated both sides". Built from the opponent's own projected roster
+   *  (era aware) with every scorer guaranteed on the pitch, and only when a
+   *  full eleven of named players exists: a youth-padded thin club whose
+   *  roster cannot field eleven gets no invented ratings sheet. Absent on
+   *  pre-178 saves. */
+  oppRatings?: PlayerRatingLine[];
   /** Round 169: stoppage time shown on the clock, per half. */
   added?: { h1: number; h2: number };
   /** Round 169: the sim's own crowd for this fixture. */
@@ -6698,6 +6708,10 @@ function buildMatchDetail(args: {
   clubName: string; opponent: string;
   /** Round 169: crowd and clock context, computed by the caller who has the save. */
   attendance?: number; capacity?: number | null; venue?: 'home' | 'away' | 'neutral';
+  /** Round 178: the opponent's projected roster (era aware), for the
+   *  opposition ratings sheet. The caller passes the same source the
+   *  opposition scorers are drawn from, so the two can never disagree. */
+  oppRoster?: { n: string; p: Position; r: number; g?: boolean }[];
 }): MatchDetail {
   const { myGoals, oppGoals, lamMine, lamOpp } = args;
   const round2 = (n: number) => Math.round(n * 100) / 100;
@@ -6759,9 +6773,65 @@ function buildMatchDetail(args: {
     momentum.push(round2(clamp(v, -1, 1)));
   }
 
-  /* Their best on the day: whoever hurt you most. */
-  let oppBest: string | null = null;
-  if (args.oppScorers.length) {
+  /* ----- Round 178: the opposition ratings sheet ----- */
+  /* Built from the opponent's own projected roster (the same source their
+     scorers are drawn from), so a rated name is always a name that world
+     really holds, at that era, in that projected year. The XI is scorers
+     first (a man who scored was provably on the pitch), then the best
+     available in a sane shape. Only a full eleven ships: a thin club whose
+     roster cannot field one gets no invented sheet. */
+  let oppRatings: PlayerRatingLine[] | undefined;
+  {
+    const roster = args.oppRoster ?? [];
+    const scorerNames = new Set(args.oppScorers.map(s => s.name));
+    const xi: { n: string; p: Position; g?: boolean }[] = [];
+    const taken = new Set<string>();
+    for (const pl of roster) {
+      if (scorerNames.has(pl.n) && !taken.has(pl.n)) { xi.push(pl); taken.add(pl.n); }
+    }
+    const fill = (want: (p: { p: Position }) => boolean, count: number): void => {
+      for (const pl of roster) {
+        if (xi.length >= 11) return;
+        if (taken.has(pl.n) || !want(pl)) continue;
+        if (count-- <= 0) return;
+        xi.push(pl); taken.add(pl.n);
+      }
+    };
+    fill(p => p.p === 'GK', 1);
+    fill(p => groupOf(p.p) === 'DEF', 4);
+    fill(p => groupOf(p.p) === 'MID', 4 - Math.min(3, args.oppScorers.length));
+    fill(p => groupOf(p.p) === 'ATT', 3);
+    // Whatever shape is left, take the best remaining outfielders.
+    for (const pl of roster) {
+      if (xi.length >= 11) break;
+      if (!taken.has(pl.n) && pl.p !== 'GK') { xi.push(pl); taken.add(pl.n); }
+    }
+    // Every scorer accounted for and a full eleven, or no sheet at all.
+    const allScorersIn = [...scorerNames].every(n => taken.has(n));
+    if (xi.length === 11 && allScorersIn && xi.some(p => p.p === 'GK')) {
+      const theirGoalsBy = new Map<string, number>();
+      for (const sc of args.oppScorers) theirGoalsBy.set(sc.name, (theirGoalsBy.get(sc.name) ?? 0) + 1);
+      const theyWon = oppGoals > myGoals && args.decidedBy === 'regular' ? true : args.decidedBy === 'pens' ? !args.won : oppGoals > myGoals;
+      const theyDrew = myGoals === oppGoals && args.decidedBy === 'regular';
+      const base = theyWon ? 7.0 : theyDrew ? 6.4 : 5.7;
+      const theirCleanSheet = myGoals === 0;
+      oppRatings = xi.map(pl => {
+        const g = theirGoalsBy.get(pl.n) ?? 0;
+        const defensive = pl.p === 'GK' || groupOf(pl.p) === 'DEF';
+        const saveBonus = pl.p === 'GK' ? clamp((onTarget - myGoals) * 0.14, 0, 0.9) : 0;
+        const r = clamp(
+          base + g * 0.9 + (Math.random() * 1.2 - 0.6) + (theirCleanSheet && defensive ? 0.5 : 0) + saveBonus,
+          4.5, 10,
+        );
+        return { name: pl.n, pos: pl.p, rating: Math.round(r * 10) / 10, goals: g, assists: 0, ...(pl.g ? { gen: true } : {}) };
+      }).sort((a, b) => b.rating - a.rating);
+    }
+  }
+
+  /* Their best on the day: the top of the ratings sheet when one exists,
+     else whoever hurt you most (the pre-178 fallback for thin worlds). */
+  let oppBest: string | null = oppRatings?.[0]?.name ?? null;
+  if (!oppBest && args.oppScorers.length) {
     const tally = new Map<string, number>();
     for (const sc of args.oppScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
     oppBest = [...tally.entries()].sort((a, b) => b[1] - a[1])[0][0];
@@ -6779,6 +6849,7 @@ function buildMatchDetail(args: {
     momentum,
     myRatings: [...args.ratings].sort((a, b) => b.rating - a.rating),
     oppBest,
+    oppRatings,
     added,
     attendance: args.attendance,
     capacity: args.capacity ?? null,
@@ -7533,6 +7604,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     decidedBy, won,
     clubName: state.clubName, opponent: fx.opponent,
     attendance: crowd.attendance, capacity: crowd.capacity, venue: crowd.venue,
+    // Round 178: same era-aware source their scorers came from.
+    oppRoster: projectedRoster(fx.opponent, yearsOn(state), state.eraId ?? 'now'),
   });
 
   const iAmHome = fx.home !== false; // neutral finals list us first

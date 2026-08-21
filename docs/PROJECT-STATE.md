@@ -32,8 +32,18 @@ Three things in one message, mid session:
   teammate-true across 25 matches, timeline carries the exact credited assist, stoppage in
   band on both clock rows, crowds in band, custom 28k ground fits three home crowds, no
   capacity ever claimed for a real ground). playClubManager updated for the renamed strip.
-  Browser probed 7 for 7. Still open from the screenshots: top-rated players BOTH sides
-  (needs an opposition ratings model), and possession/shots inside the momentum chart itself.
+  Browser probed 7 for 7. **The two leftovers landed in Round 178:** the opposition ratings
+  model (their XI built from the opponent's own era-aware projected roster, scorers guaranteed
+  on the pitch, ratings from the same base-plus-goals shape my players use, keeper floored by
+  the clean sheet and lifted by saves faced, generated players wearing the MADE UP tag, and
+  the sheet only shipping when the world can field a real named eleven, so a youth-padded thin
+  club gets no invented sheet, harness-pinned both directions) and possession plus shots
+  riding directly on the Balance of play chart. The report now shows top rated BOTH sides with
+  the full opposition sheet under the ratings toggle, and oppBest is derived from the top of
+  the sheet when one exists. simMatchDetail grew section 6 (12 league sheets checked, XIs of
+  eleven with a keeper, sorted, scorers all present with goals reconciled, clean-sheet keepers
+  floored right, and the Lustenau thin-world control proving absence where honesty demands
+  it). That closes his five match-app screenshots completely.
 - **Three Search Console shots** (88 not indexed vs 41 indexed and climbing; a "Page with
   redirect" validation started 8/12 and FAILED 8/15 on 3 pages). Read: the 3 failures are the
   301 redirects working exactly as designed (a redirecting URL can never validate as indexed,
@@ -670,7 +680,8 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, past midnight | **Round 175** (the 2015-16 era for Club Manager, CM-5's biggest remaining half: the Leicester season baked from 767 real year-2015 rows with 56 two-way-verified window corrections, era uplift at measured 0.6, the What's New page catching up on all the era work, and two new harnesses: simEra2015 and the playEra2015 browser walk. Plus a simUsCoaching deflake its suite run caught: section 4's offer-count noise margin sat at 1.7 sigma on the tightest pair at 300 samples, so the row sample grew to 1500 where the same margin sits past 3, with the measurement in the comment; the deterministic standing check was always the real assertion). `RUN175.bat`, chain-guarded on 174. **SHIP33.bat is the current wrapper: it runs 157 through 175.** |
 | Packaged 2026-08-19, small hours | **Round 176** (the 2005-06 era, completing CM-5 to the data floor: Ronaldinho's season with 747 real year-2005 players, 26 two-way-verified window corrections, period-correct UEFA Cup vocabulary via the new uelName field, the steepest measured uplift, Cadiz and Alaves honestly partial, simEra2005 and playEra2005 as harnesses 56 and the fourth browser walk, plus kit colors for the era-only clubs both new and previously gray). `RUN176.bat`, chain-guarded on 175. **SHIP34.bat is the current wrapper: it runs 157 through 176.** |
 | Packaged 2026-08-19, deeper small hours | **Round 177** (CM-6 wave 3 first pair: the Austrian Bundesliga and the Super League Greece, 24 new clubs and 105 new players by the standing bake curve, 16 supersession moves and 17 stale-row drops from the Ozcan check, 296 clubs across 17 leagues with the copy caught up, Czechia parked with the reason documented). `RUN177.bat`, chain-guarded on 176. **SHIP35.bat is the current wrapper: it runs 157 through 177.** |
-| Next free round number | **178** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-19, before dawn | **Round 178** (the last two FotMob screenshot items: the opposition ratings model with top rated both sides on the report, the full their-XI sheet under the toggle with MADE UP tags and honest absence for thin worlds, and possession plus shots riding on the Balance of play chart. Plus the permanent fix for the suite's one recurring tail: simOpposition's league tolerance re-derived from its own accepted effect plus its own error bar, 1.5 to 2.0 with the arithmetic and all three observed tail reads in the comment). `RUN178.bat`, chain-guarded on 177. **SHIP36.bat is the current wrapper: it runs 157 through 178.** |
+| Next free round number | **179** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

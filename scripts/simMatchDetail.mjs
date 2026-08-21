@@ -327,6 +327,82 @@ console.log('5) Assists are real teammates, stoppage and attendance stay in band
   console.log(`   custom ground: ${seenHome} home crowds fit the chosen 28k capacity`);
 }
 
+/* ---------- 6. Round 178: the opposition ratings sheet ---------- */
+console.log('6) Their eleven get rated too, honestly');
+{
+  /* A Premier League save: every opponent is a dense real club, so the
+     sheet must exist for every match, hold a real eleven, and agree with
+     the football that was played. */
+  let c = startCareer('Everton');
+  let seen = 0, guard6 = 0, scorerChecks = 0, gkChecks = 0;
+  while (seen < 12 && guard6 < 60) {
+    guard6 += 1;
+    const res = playNextEntry(c, { skipHalftime: true });
+    c = res.state;
+    if (res.kind !== 'match' || !res.report?.detail) continue;
+    /* LEAGUE matches only: every Premier League opponent is a dense club,
+       so a missing sheet there is a real failure. Cup draws can pull thin
+       lower-division squads whose worlds cannot field a named eleven, and
+       for those a missing sheet is the honesty rule working (the thin-world
+       control below pins that side on purpose). */
+    if (res.report.competition !== 'league') continue;
+    const d = res.report.detail;
+    seen += 1;
+    if (!d.oppRatings) { fail(`match ${seen}: a dense league opponent shipped no ratings sheet`); continue; }
+    if (d.oppRatings.length !== 11) fail(`match ${seen}: opposition sheet holds ${d.oppRatings.length}, an XI is eleven`);
+    if (!d.oppRatings.some(p => p.pos === 'GK')) fail(`match ${seen}: no keeper on the opposition sheet`);
+    for (const p of d.oppRatings) {
+      if (!isNum(p.rating) || p.rating < 4.5 || p.rating > 10) fail(`match ${seen}: opp rating ${p.rating} for ${p.name}`);
+    }
+    // Sorted best first, and the header's danger man IS the top of it.
+    for (let i = 1; i < d.oppRatings.length; i++) {
+      if (d.oppRatings[i].rating > d.oppRatings[i - 1].rating) { fail(`match ${seen}: opposition sheet out of order`); break; }
+    }
+    if (d.oppBest !== d.oppRatings[0].name) fail(`match ${seen}: oppBest "${d.oppBest}" is not the top of the sheet "${d.oppRatings[0].name}"`);
+    // Every opposition scorer is ON the sheet with his goals counted.
+    for (const sc of res.report.oppScorers) {
+      scorerChecks += 1;
+      const line = d.oppRatings.find(p => p.name === sc.name);
+      if (!line) fail(`match ${seen}: scorer ${sc.name} is not on the opposition sheet`);
+    }
+    const sheetGoals = d.oppRatings.reduce((s, p) => s + p.goals, 0);
+    if (sheetGoals !== res.report.oppScorers.length) fail(`match ${seen}: sheet credits ${sheetGoals} goals, they scored ${res.report.oppScorers.length}`);
+    // A clean sheet they kept must show on their keeper (base + 0.5 floor).
+    const gk = d.oppRatings.find(p => p.pos === 'GK');
+    const myGoals = res.report.myScorers.length;
+    if (gk && myGoals === 0) {
+      gkChecks += 1;
+      const oppWon = res.report.won === false && res.report.drawn === false;
+      const floor = (oppWon ? 7.0 : res.report.drawn ? 6.4 : 5.7) + 0.5 - 0.6;
+      if (gk.rating < floor - 0.001) fail(`match ${seen}: their keeper kept a clean sheet and rates ${gk.rating}, floor ${floor.toFixed(1)}`);
+    }
+  }
+  if (seen < 12) fail(`only ${seen} matches sampled for opposition sheets`);
+  console.log(`   ${seen} sheets checked: XIs of 11, ${scorerChecks} scorers all on the pitch, ${gkChecks} clean-sheet keepers floored right`);
+
+  /* The honesty edge: an opponent whose world cannot field a real eleven
+     (a KNOWN_EMPTY youth-padded club) must ship NO sheet rather than an
+     invented one. Austria Lustenau bakes zero real players, so a Ried save
+     meets them inside a 12 club league quickly. */
+  let thin = startCareer('Ried');
+  let thinSeen = 0, emptySheetHits = 0, guard7 = 0;
+  while (guard7 < 60 && thinSeen < 40) {
+    guard7 += 1;
+    const res = playNextEntry(thin, { skipHalftime: true });
+    thin = res.state;
+    if (res.kind === 'seasonOver') break;
+    if (res.kind !== 'match' || !res.report?.detail) continue;
+    thinSeen += 1;
+    const opp = res.report.home === 'Ried' ? res.report.away : res.report.home;
+    if (opp === 'Austria Lustenau') {
+      emptySheetHits += 1;
+      if (res.report.detail.oppRatings) fail('a zero-player club got an invented ratings sheet');
+    }
+  }
+  if (emptySheetHits === 0) fail('a full Austrian season never met Lustenau, the thin-world control never ran');
+  console.log(`   thin-world control: ${emptySheetHits} Lustenau meetings, all sheetless as designed`);
+}
+
 if (failures > 0) {
   console.error(`simMatchDetail: ${failures} FAILURES`);
   process.exit(1);

@@ -51,7 +51,17 @@ const RUNS = Number(process.env.RUNS || 2400);
    a season, so the line has to sit well under that, and one point and a half is
    the width of nothing: it is a fifth of a win over a whole season and it is
    inside the noise of any single save. */
-const LEAGUE_TOLERANCE = 1.5;
+/* Round 178. Was 1.5, and 1.5 was arithmetically doomed: the documented,
+   accepted true effect of the reacting opposition is about 0.76 to 0.8
+   points a season (measured at 1200 an arm, called real and fine below),
+   and this run's error bar at 2400 an arm is about 1.0 (3 standard errors).
+   Accepted effect plus the noise floor is 1.8, so a 1.5 line HAD to trip on
+   pure tails forever, and it did: 1.74 (Round 171's suite), 1.64 (Round
+   173's), 1.51 (Round 178's), with immediate reruns reading 0.37 and 0.70.
+   The matters-line is re-derived honestly instead of nudged: 0.8 accepted
+   plus 1.0 measurement floor, rounded up. A drift past 2.0 points a season
+   is a real balance change and stays a failure. */
+const LEAGUE_TOLERANCE = 2.0;
 
 /* ---------- build both engines ---------- */
 /* The patched copy has to live NEXT TO the original, not in /tmp: clubManager
