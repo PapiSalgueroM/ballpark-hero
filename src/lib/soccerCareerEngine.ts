@@ -24,6 +24,7 @@ import {
   ensureMoney, moneySeasonTick, moneyWealth, moneyAct,
 } from "./soccerMoney";
 import type { MoneyAction, MoneyState } from "./soccerMoney";
+import { intlName, familyFor } from './intlNames';
 import { managerProfileFromCareer } from './soccerCareerToManager';
 import { realJobOffers } from './managerJobMarket';
 import { managerStanding } from './managerOffers';
@@ -5135,49 +5136,21 @@ const REPLACEMENT_YOUNG_PLAYERS: RealContender[] = [
   { name: "Xavi Simons", nationality: "Netherlands", position: "CAM", club: "PSG", baseGoals: [10, 20], startAge: 21 },
 ];
 
-/* ─── Generated player name pools by nationality ─── */
-const GEN_FIRST_NAMES: Record<string, string[]> = {
-  Brazil: ["Lucas", "Matheus", "Gabriel", "Rafael", "Vinícius", "Kaio", "Thiago", "Rodrigo", "Enzo", "Danilo"],
-  France: ["Antoine", "Théo", "Aurélien", "Ousmane", "Kylian", "Adrien", "Hugo", "Ethan", "Rayan", "Loïc"],
-  England: ["Marcus", "Jack", "Callum", "James", "Harry", "Oliver", "George", "Charlie", "Ethan", "Alfie"],
-  Spain: ["Pablo", "Álvaro", "Carlos", "Adrián", "Hugo", "Marcos", "Iker", "Diego", "Álex", "Sergio"],
-  Germany: ["Leon", "Kai", "Maximilian", "Florian", "Niklas", "Lukas", "Jonas", "Felix", "Tim", "Moritz"],
-  Argentina: ["Santiago", "Valentín", "Thiago", "Matías", "Nicolás", "Franco", "Lautaro", "Emiliano", "Julián", "Tomás"],
-  Portugal: ["Diogo", "Gonçalo", "Rúben", "Bernardo", "Pedro", "Rafael", "Francisco", "André", "Nuno", "Tiago"],
-  Netherlands: ["Jurriën", "Xavi", "Quinten", "Donyell", "Tijjani", "Noa", "Lutsharel", "Jeremie", "Ryan", "Kenneth"],
-  Italy: ["Marco", "Nicolò", "Gianluca", "Federico", "Sandro", "Matteo", "Lorenzo", "Alessandro", "Davide", "Andrea"],
-  Norway: ["Martin", "Sander", "Jonas", "Oscar", "Alexander", "Fredrik", "Erling", "Kristian", "Emil", "Henrik"],
-  Belgium: ["Kevin", "Youri", "Amadou", "Leandro", "Charles", "Loïs", "Dodi", "Arthur", "Alexis", "Michy"],
-  Croatia: ["Luka", "Mateo", "Ivan", "Lovro", "Joško", "Mario", "Dominik", "Ante", "Nikola", "Borna"],
-  Uruguay: ["Federico", "Darwin", "Rodrigo", "Nicolás", "Ronald", "José", "Matías", "Giorgian", "Agustín", "Manuel"],
-  Egypt: ["Mohamed", "Ahmed", "Omar", "Mostafa", "Mahmoud", "Trezeguet", "Ibrahim", "Amr", "Ramadan", "Karim"],
-  Colombia: ["Luis", "James", "Juan", "Duván", "Rafael", "Jhon", "Miguel", "Yerry", "David", "Falcao"],
-  Nigeria: ["Victor", "Samuel", "Ademola", "Kelechi", "Alex", "Ola", "Taiwo", "Wilfred", "Calvin", "Moses"],
-  Senegal: ["Sadio", "Ismaïla", "Kalidou", "Abdou", "Pape", "Idrissa", "Cheikhou", "Famara", "Boulaye", "Habib"],
-  Japan: ["Takumi", "Kaoru", "Ritsu", "Daichi", "Takefusa", "Wataru", "Junya", "Ao", "Keito", "Yuki"],
-  "South Korea": ["Son", "Hwang", "Kim", "Lee", "Park", "Cho", "Jeong", "Kwon", "Na", "Paik"],
-};
-const GEN_LAST_NAMES: Record<string, string[]> = {
-  Brazil: ["Silva", "Santos", "Oliveira", "Souza", "Costa", "Ferreira", "Pereira", "Almeida", "Nascimento", "Ribeiro"],
-  France: ["Dupont", "Martin", "Lefèvre", "Moreau", "Girard", "Bonnet", "Fournier", "Mercier", "Durand", "Leroy"],
-  England: ["Smith", "Palmer", "Wilson", "Taylor", "Brown", "Davies", "Evans", "Walker", "Thompson", "Robinson"],
-  Spain: ["García", "Martínez", "López", "González", "Hernández", "Ruiz", "Navarro", "Moreno", "Romero", "Torres"],
-  Germany: ["Müller", "Schmidt", "Schneider", "Fischer", "Weber", "Meyer", "Wagner", "Becker", "Schäfer", "Koch"],
-  Argentina: ["González", "Fernández", "Rodríguez", "López", "Martínez", "García", "Romero", "Pereyra", "Díaz", "Acuña"],
-  Portugal: ["Silva", "Santos", "Ferreira", "Pereira", "Oliveira", "Costa", "Rodrigues", "Martins", "Fernandes", "Sousa"],
-  Netherlands: ["de Jong", "van Dijk", "Bakker", "Visser", "de Boer", "Jansen", "Smit", "Meijer", "de Groot", "Mulder"],
-  Italy: ["Rossi", "Romano", "Colombo", "Ferrari", "Bianchi", "Ricci", "Gallo", "Conti", "Esposito", "Greco"],
-  Norway: ["Hansen", "Johansen", "Olsen", "Larsen", "Andersen", "Pedersen", "Nilsen", "Kristiansen", "Berg", "Haugen"],
-  Belgium: ["Janssen", "Peeters", "Maes", "Jacobs", "Willems", "Claes", "Goossens", "Wouters", "Mertens", "Leclercq"],
-  Croatia: ["Kovačić", "Horvat", "Babić", "Marić", "Jurić", "Tomić", "Knežević", "Pavlović", "Matić", "Perić"],
-  Uruguay: ["Fernández", "Rodríguez", "Martínez", "González", "López", "Suárez", "Pérez", "Álvarez", "Núñez", "Cavani"],
-  Egypt: ["Hassan", "Ali", "Ibrahim", "Mostafa", "Abdel", "Fathy", "Salah", "Zaki", "Tawfik", "Hegazi"],
-  Colombia: ["García", "Rodríguez", "Martínez", "López", "Hernández", "Díaz", "Moreno", "Ramírez", "Torres", "Ospina"],
-  Nigeria: ["Osimhen", "Okocha", "Ndidi", "Iheanacho", "Onyeka", "Bassey", "Chukwueze", "Aribo", "Awoniyi", "Simon"],
-  Senegal: ["Diallo", "Diop", "Ndiaye", "Sarr", "Gueye", "Ba", "Sy", "Sow", "Cissé", "Fall"],
-  Japan: ["Tanaka", "Suzuki", "Watanabe", "Takahashi", "Sato", "Ito", "Yamamoto", "Nakamura", "Kobayashi", "Yoshida"],
-  "South Korea": ["Heung-min", "Hee-chan", "Min-jae", "Jae-sung", "In-beom", "Woo-yeong", "Young-gwon", "Seung-ho", "Jun-ho", "Ui-jo"],
-};
+/* ─── Generated player name pools by nationality ───
+
+   ROUND 197, A REAL FIND, FIXED: these two banks were combined freely, and
+   an audit that enumerated all 1,900 pairings against the 5,622 real players
+   baked into the Club Manager worlds found SEVENTY SIX of them landing on a
+   living footballer's exact name, Mohamed Salah and Victor Osimhen and
+   Lautaro Martinez among them. An invented contender with invented goals
+   was therefore able to appear under a real man's name, which is the one
+   thing this project has never allowed. The pools are kept ONLY as the
+   nationality list they always were; every generated name now comes from
+   src/lib/intlNames.ts, whose whole combination space is enumerated by
+   scripts/simStartingXi.mjs and proven to collide with nothing real. The
+   same audit found four more in the rivalry generator, fixed the same way.
+
+   Do not reintroduce free pairing here. If a name is needed, ask intlNames. */
 const GEN_NATIONALITIES = ["Brazil", "France", "England", "Spain", "Germany", "Argentina", "Portugal", "Netherlands", "Italy", "Norway", "Belgium", "Croatia", "Uruguay", "Egypt", "Colombia", "Nigeria", "Senegal", "Japan", "South Korea"];
 const GEN_CLUBS = ["Real Madrid", "Man City", "Barcelona", "Bayern Munich", "Arsenal", "Liverpool", "PSG", "Inter Milan", "Chelsea", "Dortmund", "Atletico Madrid", "Juventus", "AC Milan", "Tottenham", "Man United", "Napoli", "Leverkusen"];
 const GEN_POSITIONS: Array<{ pos: string; goals: [number, number] }> = [
@@ -5187,16 +5160,16 @@ const GEN_POSITIONS: Array<{ pos: string; goals: [number, number] }> = [
 
 function generateContender(usedNames: Set<string>, seed: number): RealContender {
   const nat = GEN_NATIONALITIES[(seed * 7 + 3) % GEN_NATIONALITIES.length];
-  const firsts = GEN_FIRST_NAMES[nat] || GEN_FIRST_NAMES["England"];
-  const lasts = GEN_LAST_NAMES[nat] || GEN_LAST_NAMES["England"];
+  /* Round 197: names come from the guarded pools now. The loop still walks
+     until it finds one this career has not used, so two contenders never
+     share a name; the fallback suffix stays for the impossible case where
+     a family is exhausted. */
   let name = "";
-  for (let i = 0; i < 20; i++) {
-    const f = firsts[(seed + i * 3) % firsts.length];
-    const l = lasts[(seed + i * 5 + 1) % lasts.length];
-    const candidate = `${f} ${l}`;
+  for (let i = 0; i < 40; i++) {
+    const candidate = intlName(nat, seed + i);
     if (!usedNames.has(candidate)) { name = candidate; break; }
   }
-  if (!name) name = `${firsts[seed % firsts.length]} ${lasts[(seed + 1) % lasts.length]} Jr.`;
+  if (!name) name = `${intlName(nat, seed)} Jr.`;
   const p = GEN_POSITIONS[(seed * 11) % GEN_POSITIONS.length];
   const club = GEN_CLUBS[(seed * 13 + 2) % GEN_CLUBS.length];
   return { name, nationality: nat, position: p.pos, club, baseGoals: p.goals, startAge: rand(19, 28) };
@@ -5776,11 +5749,18 @@ export function signExtension(prev: CareerState): CareerState {
 
 /* ─── Rivalry System Functions ─── */
 
-const RIVAL_FIRST_NAMES = ["Marco","Lucas","João","Karim","Antoine","Jamal","Kylian","Erling","Lamine","Rodri","Phil","Jude","Bukayo","Florian","Rafael","Dušan","Álvaro","Leroy","Ousmane","Federico"];
-const RIVAL_LAST_NAMES = ["Silva","Fernandez","Müller","Santos","Rossi","Andersen","Johansson","López","Martínez","Hernández","Dubois","Weber","Petrov","Nielsen","Eriksen","Moreno","Torres","Schmidt","Costa","Bernard"];
+/* Round 197: the rivalry generator used to pair twenty famous first names
+   with twenty famous surnames, which could produce Lucas Silva, Lucas
+   Hernandez, Joao Costa and Florian Muller, four men who exist. A career
+   rival is invented, so he is named from the guarded pools like every other
+   invented man on this site. The nationality list is what remains of the
+   old banks, and it decides which naming tradition the rival comes from. */
+const RIVAL_NATIONS = ["Brazil","France","England","Spain","Germany","Argentina","Portugal","Netherlands","Italy","Norway","Belgium","Croatia","Uruguay","Egypt","Colombia","Nigeria","Senegal","Japan","South Korea"];
 
 function generateRivalName(): string {
-  return `${pick(RIVAL_FIRST_NAMES)} ${pick(RIVAL_LAST_NAMES)}`;
+  const nat = pick(RIVAL_NATIONS);
+  const fam = familyFor(nat);
+  return intlName(nat, rand(0, fam.firsts.length * fam.lasts.length - 1));
 }
 
 function createRival(state: CareerState, clubs: ClubData[]): RivalPlayer {

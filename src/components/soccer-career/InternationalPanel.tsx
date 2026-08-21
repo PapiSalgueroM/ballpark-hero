@@ -151,22 +151,43 @@ export function TournamentCard({
             {t.squad ? (
               <>
                 <p className="text-xs">{t.squad.reason}</p>
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { l: "Your rank", v: `${t.squad.myRank}` },
-                    { l: "Places", v: `${t.squad.places}` },
-                    { l: "Your score", v: `${t.squad.myScore}` },
-                  ].map(s => (
-                    <div key={s.l} className="text-center bg-muted/20 rounded-lg p-2">
-                      <div className="text-lg font-black">{s.v}</div>
-                      <div className="text-[9px] text-muted-foreground">{s.l}</div>
+                {/* Round 197, his direct ask: the actual starting eleven,
+                    not a rank and a score. The sheet reads the way a team
+                    sheet does, front line at the top, keeper at the back. */}
+                {t.squad.xi ? (
+                  <div data-team-sheet className="rounded-xl border border-border/60 bg-gradient-to-b from-emerald-950/40 to-background p-2.5 space-y-1.5">
+                    <div className="flex items-center justify-between text-[9px] uppercase tracking-wide text-muted-foreground">
+                      <span>{t.nation} starting eleven</span>
+                      <span>{t.squad.xi.formation}</span>
                     </div>
-                  ))}
-                </div>
+                    {[t.squad.xi.att, t.squad.xi.mid, t.squad.xi.def, t.squad.xi.gk].map((line, li) => (
+                      <div key={li} className="flex justify-center gap-1.5">
+                        {line.map((m, mi) => (
+                          <div
+                            key={`${li}-${mi}`}
+                            data-xi-man={m.me ? "me" : "other"}
+                            className={[
+                              "flex-1 min-w-0 rounded-lg px-1.5 py-1 text-center border",
+                              m.me
+                                ? "border-gold bg-gold/15 text-foreground"
+                                : "border-border/50 bg-background/60 text-muted-foreground",
+                            ].join(" ")}
+                          >
+                            <div className="text-[8px] font-bold uppercase tracking-wide opacity-70">{m.slot}</div>
+                            <div className={`truncate text-[10px] ${m.me ? "font-black" : "font-semibold"}`}>{m.name}</div>
+                            <div className="text-[9px] tabular-nums opacity-80">{m.ovr}</div>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
                 <p className="text-[11px] text-muted-foreground">
-                  {t.squad.called
-                    ? `Named as a ${t.squad.role?.toLowerCase()}. The last man in scored ${t.squad.cutScore}.`
-                    : `The last man in scored ${t.squad.cutScore}. You scored ${t.squad.myScore}. Rating and form, nothing else.`}
+                  {t.squad.xi?.mySlot
+                    ? `You start at ${t.squad.xi.mySlot}${t.squad.role === "Captain" ? ", with the armband" : ""}.`
+                    : t.squad.called
+                      ? `You are in the squad but not the eleven${t.squad.xi?.aheadOfMe ? `: ${t.squad.xi.aheadOfMe} keeps you out` : ""}. Play your way in.`
+                      : `You are watching this one from home. Rating and form, nothing else.`}
                 </p>
               </>
             ) : (

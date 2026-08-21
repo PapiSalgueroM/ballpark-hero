@@ -28,6 +28,8 @@
    table below. Nothing in this file is written from memory.
 */
 
+import { intlName } from './intlNames';
+
 /* ─── Confederations ─────────────────────────────────────────────────────── */
 
 export type Confederation = 'UEFA' | 'CONMEBOL' | 'CAF' | 'AFC' | 'CONCACAF' | 'OFC';
@@ -406,6 +408,31 @@ export interface QualifyingCampaign {
   automatic: boolean;
 }
 
+/** Round 197: one man on the team sheet. */
+export interface XiMan {
+  /** The shirt he wears in the shape: GK, RB, CB, LB, CDM, CM, RW, ST, LW,
+   *  or the player's own position when the manager shifts it for him. */
+  slot: string;
+  name: string;
+  ovr: number;
+  /** True for exactly one man, and only when the player actually starts. */
+  me: boolean;
+}
+
+/** Round 197: the actual starting eleven, his direct ask. Rank and score
+ *  told him where he stood without ever showing him the team. */
+export interface StartingEleven {
+  formation: string;
+  gk: XiMan[];
+  def: XiMan[];
+  mid: XiMan[];
+  att: XiMan[];
+  /** The shirt he starts in, or null when he does not start. */
+  mySlot: string | null;
+  /** When he is in the squad but not the eleven, the man keeping him out. */
+  aheadOfMe: string | null;
+}
+
 export interface SquadCall {
   called: boolean;
   role: 'Captain' | 'Starter' | 'Squad player' | 'Fringe' | null;
@@ -419,6 +446,9 @@ export interface SquadCall {
   /** My score and the score of the player who took the last place. */
   myScore: number;
   cutScore: number;
+  /** Round 197: the team sheet. Absent on saves made before that round,
+   *  which the panel handles by falling back to the written lines. */
+  xi?: StartingEleven;
 }
 
 export interface IntlTournament {
@@ -663,6 +693,123 @@ export function runQualifying(
 
 /* ─── The squad announcement ─────────────────────────────────────────────── */
 
+/* ─── Round 197: the starting eleven ─────────────────────────────────────── */
+
+/** The shape every national side lines up in here. One shape on purpose:
+ *  the screen is about WHO, not about tactics, and eleven shirts a player
+ *  recognises beats a formation picker he did not ask for. */
+const XI_SHAPE: { slot: string; group: 'GK' | 'DEF' | 'MID' | 'ATT' }[] = [
+  { slot: 'GK', group: 'GK' },
+  { slot: 'RB', group: 'DEF' }, { slot: 'CB', group: 'DEF' }, { slot: 'CB', group: 'DEF' }, { slot: 'LB', group: 'DEF' },
+  { slot: 'CDM', group: 'MID' }, { slot: 'CM', group: 'MID' }, { slot: 'CM', group: 'MID' },
+  { slot: 'RW', group: 'ATT' }, { slot: 'ST', group: 'ATT' }, { slot: 'LW', group: 'ATT' },
+];
+
+/** Starters per position group, and the order the best men fill the shirts:
+ *  the two centre halves are a nation's best defenders, its best midfielder
+ *  plays higher than its holder, and its best forward leads the line. */
+const XI_FILL: Record<'GK' | 'DEF' | 'MID' | 'ATT', string[]> = {
+  GK: ['GK'],
+  DEF: ['CB', 'CB', 'RB', 'LB'],
+  MID: ['CM', 'CM', 'CDM'],
+  ATT: ['ST', 'RW', 'LW'],
+};
+
+/** Where a player's own position sits in the shape. A number ten has no
+ *  shirt of his own in a 4-3-3, so he takes a central midfield one and the
+ *  sheet calls it what he actually is, the way a manager shifts a shape
+ *  around the one player he will not leave out. */
+function slotForPosition(pos: string): string {
+  if (pos === 'GK') return 'GK';
+  if (pos === 'CAM') return 'CM';
+  if (pos === 'CF') return 'ST';
+  if (XI_SHAPE.some(x => x.slot === pos)) return pos;
+  return positionGroup(pos) === 'ATT' ? 'ST' : positionGroup(pos) === 'MID' ? 'CM' : 'CB';
+}
+
+/**
+ * Build the team sheet. `rivals` is the pool pickSquad already generated for
+ * the player's own position group, reused rather than redrawn so the eleven
+ * can never contradict the rank the same function just calculated.
+ */
+function buildStartingXi(
+  nation: string, form: PlayerForm | null, myScore: number, myRank: number,
+  rivals: number[], called: boolean,
+): StartingEleven {
+  const str = nationStrength(nation);
+  const poolTop = 0.65 * str + 28.6;
+  const myGroup = form ? positionGroup(form.position) : null;
+  const rows: Record<'GK' | 'DEF' | 'MID' | 'ATT', XiMan[]> = { GK: [], DEF: [], MID: [], ATT: [] };
+  let mySlot: string | null = null;
+  let aheadOfMe: string | null = null;
+  /* One running index across the whole eleven so no two men share a name:
+     the generator steps its two pools by co-prime strides, so eleven
+     consecutive indices are eleven different men. */
+  let nameIdx = 0;
+
+  for (const group of ['GK', 'DEF', 'MID', 'ATT'] as const) {
+    const shirts = [...XI_FILL[group]];
+    const starters = shirts.length;
+    /* This group's men, best first. The player's own group reuses the pool
+       his rank was measured against; the others are drawn on the same curve
+       a nation of this strength produces. */
+    const others = group === myGroup
+      ? [...rivals].sort((a, b) => b - a)
+      : Array.from({ length: starters }, (_, i) => poolTop - i * 1.4 + (Math.random() * 4 - 2)).sort((a, b) => b - a);
+
+    const iStart = called && group === myGroup && myRank <= starters;
+    if (iStart && form) {
+      /* He takes the shirt his position says, and the invented men fill the
+         rest in order of what they are worth. */
+      const want = slotForPosition(form.position);
+      const idx = shirts.indexOf(want);
+      const takes = idx >= 0 ? idx : shirts.length - 1;
+      const label = form.position === 'CAM' || !shirts.includes(form.position) ? form.position : shirts[takes];
+      mySlot = label;
+      const mine: XiMan = { slot: label, name: 'You', ovr: Math.round(form.overall), me: true };
+      shirts.splice(takes, 1);
+      const rest = shirts.map((slot, i) => ({
+        slot, name: intlName(nation, nameIdx + i), ovr: Math.round(others[i] ?? poolTop), me: false,
+      }));
+      nameIdx += shirts.length;
+      rows[group] = [mine, ...rest];
+    } else {
+      rows[group] = shirts.map((slot, i) => ({
+        slot, name: intlName(nation, nameIdx + i), ovr: Math.round(others[i] ?? poolTop), me: false,
+      }));
+      nameIdx += shirts.length;
+      if (called && group === myGroup) {
+        /* In the squad, not in the eleven: the last man in the line is the
+           one keeping him out, and the screen names him. */
+        aheadOfMe = rows[group][rows[group].length - 1].name;
+      }
+    }
+  }
+
+  /* Render order is the shape, not the pecking order. */
+  const order = (group: 'GK' | 'DEF' | 'MID' | 'ATT') => {
+    const want = XI_SHAPE.filter(x => x.group === group).map(x => x.slot);
+    const men = [...rows[group]];
+    const out: XiMan[] = [];
+    for (const slot of want) {
+      const i = men.findIndex(m => m.slot === slot);
+      if (i >= 0) out.push(...men.splice(i, 1));
+    }
+    return [...out, ...men];
+  };
+
+  return {
+    formation: '4-3-3',
+    gk: order('GK'), def: order('DEF'), mid: order('MID'), att: order('ATT'),
+    mySlot, aheadOfMe,
+  };
+}
+
+/** Every man on a sheet, for the harness and for counting. */
+export function xiMen(xi: StartingEleven): XiMan[] {
+  return [...xi.gk, ...xi.def, ...xi.mid, ...xi.att];
+}
+
 /**
  * Being left out of a squad is one of the most real things in football, so it
  * is decided the way a manager decides it: your rating and your form against
@@ -690,6 +837,9 @@ export function pickSquad(nation: string, form: PlayerForm | null): SquadCall {
       called: false, role: null, myRank: poolSize, poolSize, places,
       myScore: 0, cutScore: Math.round(rivals[places - 1] ?? str),
       reason: `You are not in the ${nation} setup.`,
+      /* Round 197: the eleven exists whether or not he is in it. Watching
+         the team you are not in is the point of being left out. */
+      xi: buildStartingXi(nation, null, 0, poolSize, rivals, false),
     };
   }
   // Form is the last club season: a rating above 7.0 and goals both help, and
@@ -719,6 +869,7 @@ export function pickSquad(nation: string, form: PlayerForm | null): SquadCall {
   return {
     called, role, reason, myRank, poolSize, places,
     myScore: Math.round(myScore), cutScore: Math.round(cut),
+    xi: buildStartingXi(nation, form, myScore, myRank, rivals, called),
   };
 }
 
