@@ -170,6 +170,26 @@ for (const [r, html] of docs) {
 }
 console.log(`   no error cards and no personal state in any of the ${docs.size} documents`);
 
+console.log('6) no snapshot pins itself to one build');
+/* Round 257. A snapshot lives in public/ and is copied verbatim into every
+   future build, so a hashed path inside one is a promise about a file that
+   the next build renames. Proved in a browser: served against a fresh build,
+   a snapshot carrying the old <script src="/assets/index-HASH.js"> 404s on
+   the entry bundle and on every lazy chunk, and the app never starts. The
+   page keeps its words and stops being a site. simPrerenderBoot proves the
+   replacement works in a real browser; this is the cheap version that runs
+   on every build and states the property exactly. */
+let hashed = 0;
+for (const [r, html] of docs) {
+  if (r === '/') continue;   // the root is vite's own output, hashes and all
+  const refs = html.match(/(?:src|href)="\/assets\/[^"]+"/g);
+  if (refs) { hashed += 1; fail(`${r}: pinned to one build by ${refs.length} hashed path(s), first ${refs[0]}`); }
+  if (!html.includes('/prerender-boot.js')) {
+    fail(`${r}: no boot script, so nothing will ever inject the real bundle`);
+  }
+}
+console.log(`   ${docs.size - 1} snapshots, ${hashed} carrying a hashed path`);
+
 console.log('');
 if (failures > 0) {
   console.error(`simPrerender: ${failures} failure${failures === 1 ? '' : 's'}`);

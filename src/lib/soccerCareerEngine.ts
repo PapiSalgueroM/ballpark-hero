@@ -78,6 +78,12 @@ export interface SeasonRecord {
   clubCountry: string;
   clubTier: number;
   apps: number;
+  /** Round 257: league games only, out of the same 38 the projection quotes.
+      `apps` has always been every competition added together, which made it
+      useless for asking whether a player was actually being picked: 8 league
+      games plus a European run reads as 20. Optional, so a save from before
+      this round loads untouched and simply cannot be judged on minutes. */
+  leagueApps?: number;
   goals: number;
   assists: number;
   cleanSheets: number;
@@ -130,7 +136,16 @@ export type TransferSituation =
   | { type: "bidding_war"; offerA: ContractOffer; offerB: ContractOffer }
   | { type: "dream_club"; offer: ContractOffer }
   | { type: "contract_expiry"; offers: ContractOffer[] }
-  | { type: "request_result"; offer: ContractOffer | null };
+  | { type: "request_result"; offer: ContractOffer | null }
+  /** Round 257: the club has made the decision for you. `reasons` are the
+      measured facts the verdict was built from, printed to the player so a
+      release never reads as the game being arbitrary. */
+  | {
+      type: "frozen_out";
+      mode: "released" | "transfer_listed" | "loan_listed";
+      reasons: string[];
+      offers: ContractOffer[];
+    };
 
 /* ─── Random Event System ─── */
 export interface EventChoice {
@@ -629,6 +644,18 @@ export interface CareerState {
   seriousInjuries?: SeriousInjury[];
   /** permanent extra season injury chance bought by rushing rehabs */
   rehabFragility?: number;
+  /**
+   * Round 257, his ask in full: "make it that if u play poorly enough. A team
+   * just drops u from the squad and ur a free agent or they list for
+   * transfers or loans." Until now the club never had an opinion: you could
+   * rate 5.9 across six games and still be told nobody wants you but your
+   * club is happy to keep you. Both of these are optional, so saves written
+   * before this round load with no verdict and no streak against them.
+   */
+  /** Seasons of crushed minutes left to serve for refusing to leave. */
+  frozenOut?: number;
+  /** Consecutive seasons that finished below the club's bar. */
+  badSeasonStreak?: number;
   phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "retirement_suggestion" | "post_retirement" | "manager_season" | "pundit_season" | "owner_season" | "social_media_action" | "moral_dilemma" | "red_card_appeal_result" | "rehab_choice" | "retired";
   pendingAppealResult: { success: boolean; banLength: number } | null;
   pendingNews: NewsArticle[];
@@ -2268,6 +2295,9 @@ export function repairCareer<T extends CareerState>(state: T): T {
      the exact old behaviour: no loan running, no offers pending. */
   if (s.loan === undefined) s.loan = null;
   if (s.pendingLoanOffers === undefined) s.pendingLoanOffers = null;
+  /* Round 257: no verdict has ever been passed on a save from before it. */
+  if (s.frozenOut === undefined) s.frozenOut = 0;
+  if (s.badSeasonStreak === undefined) s.badSeasonStreak = 0;
   /* Round 244: captaincy fields are optional and default to "never worn it".
      If a save somehow claims the armband at a club he no longer plays for,
      drop the flag quietly rather than let it follow him. */
@@ -2666,9 +2696,18 @@ function simulateFamilyLife(s: CareerState): void {
 }
 
 export function formatNetWorth(nw: number): string {
-  if (nw >= 1000) return `€${(nw / 1000).toFixed(1)}B`;
-  if (nw >= 1) return `€${nw.toFixed(1)}M`;
-  return `€${Math.round(nw * 1000)}k`;
+  /* Round 257, owner report: a net worth of minus 1.34 million rendered as
+     "EUR -1340k". The comparisons were run on the SIGNED number, so every
+     negative balance fell past the millions branch into the thousands one
+     and came out as an absurd four figure k. Debt is normal in this game
+     (wages, standing costs, a bad transfer), so it has to read like money:
+     the sign comes out front and the size decides the unit. Small amounts
+     keep two decimals so 1.34 stays 1.34 rather than rounding to 1.3. */
+  const sign = nw < 0 ? '-' : '';
+  const v = Math.abs(nw);
+  if (v >= 1000) return `${sign}€${(v / 1000).toFixed(1)}B`;
+  if (v >= 1) return `${sign}€${v.toFixed(v < 10 ? 2 : 1)}M`;
+  return `${sign}€${Math.round(v * 1000)}k`;
 }
 
 export function formatFollowers(m: number): string {
@@ -3248,6 +3287,14 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
      small enough that it cannot undo thirty rounds of balance work. */
   if (state) leagueApps = clamp(leagueApps + phoneAppsSwing(state), 0, 38);
 
+  /* Round 257: frozen out. You told the club you were staying, the club told
+     you what that means. A quarter of the minutes you would otherwise have
+     had, and never more than eight games, because the point of a freeze out
+     is that you are not in the plans, not that you are playing a bit less. */
+  if (state?.frozenOut && state.frozenOut > 0) {
+    leagueApps = Math.min(8, Math.round(leagueApps * 0.25));
+  }
+
 
   // --- UCL appearances (0-13), only Tier 1-2 clubs qualify ---
   let uclApps = 0;
@@ -3462,7 +3509,7 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
      numbers of games, goals, assists and a different rating. */
   const fx = careerBuildEffects(state);
 
-  const { apps, injured, injuryWeeks, injuryName, injurySevere } = calcAppearances(overall, currentClubTier, age, state, fx);
+  const { apps, leagueApps, injured, injuryWeeks, injuryName, injurySevere } = calcAppearances(overall, currentClubTier, age, state, fx);
   let goals = calcGoals(position, apps, overall, fx.goalMult);
   // Diving reputation: +2 goals from penalties
   if (state.divingActive && !isGK) goals += 2;
@@ -3493,7 +3540,7 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
   return {
     year: lastYear + 1, age,
     club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
-    apps, goals, assists, cleanSheets, yellowCards, redCards, rating,
+    apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating,
     injury: injured ? injuryName : null, injuryWeeks: injured ? injuryWeeks : 0, injurySevere: injured ? injurySevere : false,
     leagueTitle: winLeague, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
     type: "playing",
@@ -3644,8 +3691,30 @@ function feeDescription(feeMillions: number): string {
    loan is not a stat cheat, it is minutes. */
 function enterTransferWindow(s: CareerState, clubs: ClubData[]): void {
   if (s.age >= 18) {
+    /* Round 257: the streak is read by clubVerdict below and written here, so
+       it has to be updated BEFORE the verdict is taken, and it counts the
+       season that has just finished. Three strikes is a bad season whether or
+       not it produced a verdict, which is what makes a second one an
+       escalation rather than a coin flip. */
+    const strikes = seasonStrikes(s);
     s.transferSituation = determineTransferSituation(s, clubs);
-    s.pendingLoanOffers = determineLoanOffers(s, clubs);
+    s.badSeasonStreak = strikes.length >= 3 ? (s.badSeasonStreak ?? 0) + 1 : 0;
+    const sit = s.transferSituation;
+    if (sit.type === "frozen_out") {
+      s.morale = clamp(s.morale - 12, 0, 100);
+      s.events.push(
+        sit.mode === "released"
+          ? `📄 ${s.currentClub} have torn up your contract. You are a free agent.`
+          : sit.mode === "loan_listed"
+            ? `📤 ${s.currentClub} have told your agent to find you a loan for next season.`
+            : `📤 ${s.currentClub} have put you on the transfer list.`,
+      );
+    }
+    /* An ordinary loan offer alongside a verdict would just be noise: the
+       verdict screen carries its own. */
+    s.pendingLoanOffers = s.transferSituation.type === "frozen_out"
+      ? null
+      : determineLoanOffers(s, clubs);
     s.phase = "transfer_window";
   } else { s.phase = "playing"; }
 }
@@ -3689,6 +3758,10 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
   s.currentClub = offer.club.name; s.currentClubCountry = offer.club.country;
   s.currentClubTier = offer.club.tier; s.currentClubColor = offer.club.color; s.currentLeague = offer.club.league;
   s.phase = "playing"; s.pendingOffers = []; s.transferSituation = null; s.pendingLoanOffers = null;
+  /* Round 257: same rule as a transfer. The freeze out was the parent club's,
+     and you are not at the parent club any more. */
+  s.frozenOut = 0;
+  s.badSeasonStreak = 0;
   s.morale = clamp(s.morale + 6, 0, 100);
   s.events = [`🛫 Off on loan to ${offer.club.name} ${getFlag(offer.club.country)} for the season. The message from upstairs was simple: go and play.`];
   // Round 244: a captain who leaves on loan hands the armband over; it can
@@ -3708,6 +3781,104 @@ function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number
   return { club, contractYears: rand(1, 5), wage, transferFee: fee, isDreamClub: isDream, isPayCut: isDream };
 }
 
+/* ─── Round 257: the club gets an opinion ────────────────────────────────────
+
+   Owner report, in full: "make it that if u play poorly enough. A team just
+   drops u from the squad and ur a free agent or they list for transfers or
+   loans."
+
+   He is describing a hole in the game. Every transfer window before this one
+   was written from the player's side: clubs bid for you, nobody bids for you,
+   or your contract runs out. A season could finish with six appearances and a
+   5.9 rating and the window would still open with "no clubs have made an
+   offer, your club wants to keep you", which is the one thing that would
+   never happen.
+
+   So the club now files a verdict, and it is built from measured facts rather
+   than a mood roll. Three strikes are available, all of them things the
+   player can see on his own season card:
+
+     MINUTES   apps came in under half the projection for his rating at this
+               club, using the same projectLeagueApps band the transfer window
+               already quotes at him, so the bar was never hidden.
+     FORM      the season rating finished at or under 6.3.
+     LEVEL     he is more than three points below the club's standard rating.
+
+   Two strikes is a warning that costs nothing on its own. Three is a verdict.
+   A second verdict in consecutive seasons escalates whatever it would have
+   been to a release, because a club that has already tried to move you on and
+   watched another year of it does not offer a third.
+
+   WHICH VERDICT: under 23 goes out on loan (a young player is an asset to
+   develop, not a contract to dump), a short contract or a repeat offence gets
+   torn up, everything else gets listed. Every one of them names its reasons
+   on screen. A player who gets released should be able to point at the three
+   lines that did it.
+*/
+export interface ClubVerdict {
+  mode: "released" | "transfer_listed" | "loan_listed";
+  reasons: string[];
+}
+
+/** The strikes against the last season, in the club's words. Exported so the
+    harness can measure the trigger rate rather than trusting the shape. */
+export function seasonStrikes(state: CareerState): string[] {
+  const last = state.seasons[state.seasons.length - 1];
+  if (!last || last.type !== "playing") return [];
+  const strikes: string[] = [];
+  const seasonsHere = state.seasons.filter(s => s.club === last.club && s.type === "playing").length;
+  const band = projectLeagueApps(state.overall, last.clubTier, last.club, Math.max(0, seasonsHere - 1));
+  /* League games only, against a league projection. Comparing total
+     appearances to this band was the first draft and it was wrong in the
+     player's favour: a fringe man at a giant plays eight league games, six in
+     Europe and two in the cup, and 16 sails past a band whose floor is 8.
+     A save from before Round 257 has no league figure at all, and the honest
+     answer there is to not judge him on minutes rather than to guess. */
+  const league = last.leagueApps;
+  const floor = Math.max(6, Math.round(band.min * 0.6));
+  if (league !== undefined && league < floor) {
+    strikes.push(`${league} league games all season, and the projection here was ${band.min} to ${band.max}`);
+  }
+  if (last.rating <= 6.3) {
+    strikes.push(`You averaged ${last.rating.toFixed(1)} across the season`);
+  }
+  if (state.overall < clubAverageRating(last.clubTier) - 3) {
+    strikes.push(`You are ${Math.round(clubAverageRating(last.clubTier) - state.overall)} rating points under what this squad expects`);
+  }
+  if ((last.redCards ?? 0) >= 2) {
+    strikes.push(`${last.redCards} red cards, and the last one cost the manager a result`);
+  }
+  return strikes;
+}
+
+/** null when the club is content. Pure: works out the verdict, changes nothing. */
+export function clubVerdict(state: CareerState): ClubVerdict | null {
+  /* Never while out on loan: the loan club sends you back, that is the whole
+     arrangement, and the parent club has not watched you. */
+  if (state.loan) return null;
+  const strikes = seasonStrikes(state);
+  if (strikes.length < 3) return null;
+  const repeat = (state.badSeasonStreak ?? 0) >= 1;
+  /* Tuned in the harness, not by feel. The first draft released on two years
+     left or fewer and measured 25 releases against 1 listing and 0 loans
+     across a 220 career fleet, which is not the mechanic he asked for, it is
+     one third of it. A club with real contract still to run sells you or
+     loans you out, because tearing up three years of wages is the expensive
+     way to solve the problem. One year left, or a second bad season after
+     they already tried to move you on, is when the contract goes. */
+  /* The loan road also needs somewhere to loan him TO. A club in the fourth
+     tier has nothing below it, so "go and play somewhere" would open a screen
+     with no offers on it. Loans go out of the top two tiers, which is the
+     same gate the ordinary loan window already uses. */
+  const canLoan = state.age <= 23 && state.currentClubTier <= 2;
+  const mode: ClubVerdict["mode"] = repeat || state.contractYearsLeft <= 1
+    ? "released"
+    : canLoan
+      ? "loan_listed"
+      : "transfer_listed";
+  return { mode, reasons: strikes };
+}
+
 /* ─── Determine transfer situation ─── */
 export function determineTransferSituation(state: CareerState, clubs: ClubData[]): TransferSituation {
   const { overall, age, currentClub, currentClubTier, marketValue, contractYearsLeft } = state;
@@ -3715,6 +3886,55 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
   clubs = adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1);
   const exclude = new Set<string>([currentClub]);
   const interestedTiers = getInterestedTiers(overall, age);
+
+  /* Round 257: the club's verdict outranks everything below, including an
+     expiring contract, because a club that is tearing the contract up is not
+     going to sit through a renewal conversation first. */
+  const verdict = clubVerdict(state);
+  if (verdict) {
+    const offers: ContractOffer[] = [];
+    if (verdict.mode === "loan_listed") {
+      /* Same shape as the ordinary loan window: the contract and the wage
+         stay where they are, only the football moves. */
+      for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {
+        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
+        if (!candidates.length) continue;
+        const club = pick(candidates);
+        exclude.add(club.name);
+        offers.push({ club, contractYears: 1, wage: state.weeklyWage, transferFee: 0, isLoan: true });
+      }
+    } else {
+      /* A listed or released player does not get his pick of the division he
+         has just been dropped out of. Offers start one tier below whatever
+         his rating would normally attract and the money is worse. */
+      const tiers = [...new Set(getInterestedTiers(overall, age).map(t => Math.min(4, t + 1)))];
+      for (let i = 0; i < 3 && offers.length < 3; i++) {
+        const offer = makeOffer(clubs, pick(tiers), overall, age, exclude, marketValue);
+        if (!offer) continue;
+        if (verdict.mode === "released") { offer.transferFee = 0; offer.isPayCut = true; }
+        offer.wage = Math.round(offer.wage * (verdict.mode === "released" ? 0.7 : 0.85));
+        offers.push(offer);
+      }
+      /* A released player with nowhere to go would be stuck on this screen
+         forever, so the bottom of the pyramid always answers the phone. */
+      if (verdict.mode === "released" && !offers.length) {
+        const last = makeOffer(clubs, 4, overall, age, exclude, 0);
+        if (last) {
+          last.transferFee = 0;
+          last.isPayCut = true;
+          last.wage = Math.round(last.wage * 0.7);
+          offers.push(last);
+        }
+      }
+    }
+    /* Nobody at all wants a listed player: that is a real outcome and the
+       screen says so, but a release with zero offers would be a dead end, so
+       it falls back to being listed and staying put. */
+    if (offers.length || verdict.mode !== "released") {
+      return { type: "frozen_out", mode: verdict.mode, reasons: verdict.reasons, offers };
+    }
+    return { type: "frozen_out", mode: "transfer_listed", reasons: verdict.reasons, offers: [] };
+  }
 
   if (contractYearsLeft <= 1) {
     const offers: ContractOffer[] = [];
@@ -3959,6 +4179,10 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   s.contractYearsLeft = offer.contractYears;
   // Round 49: your agent's negotiating skill decides the final wage
   s.weeklyWage = Math.round(offer.wage * agentWageMult(prev.agentId));
+  /* Round 257: a freeze out belongs to the club that imposed it. Walk out of
+     the door and it does not follow you. */
+  s.frozenOut = 0;
+  s.badSeasonStreak = 0;
   s.phase = "playing"; s.pendingOffers = []; s.transferSituation = null; s.pendingLoanOffers = null;
   // Agent fee on the transfer (rate depends on who represents you; legacy saves keep 10%)
   const feeRate = agentTransferCutRate(prev.agentId);
@@ -4683,6 +4907,16 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.popularity = clamp(s.popularity + 3, 0, 100);
   }
   s.seasons = [...s.seasons, season];
+  /* Round 257: a freeze out is one season long. It is served here, after the
+     season it crushed has been recorded, so the next window opens on a man
+     who is free to be picked again and carrying the record of a year he was
+     not. */
+  if (s.frozenOut && s.frozenOut > 0) {
+    s.frozenOut -= 1;
+    if (s.frozenOut === 0) {
+      s.events.push(`🧊 A season in the cold at ${s.currentClub} is over. You are back in the group and back in the reckoning.`);
+    }
+  }
   s.pendingSummary = season;
   // Generate newspaper articles
   const news = generateNewsArticles(s, season, totalGoals, totalApps);
@@ -6073,6 +6307,15 @@ export function dismissAppealResult(prev: CareerState, clubs: ClubData[]): Caree
 /* ─── Stay at current club ─── */
 export function stayAtClub(prev: CareerState): CareerState {
   const s = { ...prev }; s.pendingOffers = []; s.transferSituation = null; s.pendingLoanOffers = null; s.phase = "playing";
+  /* Round 257: refusing to leave when the club has listed you is a real
+     choice with a real price. The verdict is read off the situation that was
+     still on the state a line ago, so the UI needs no extra plumbing. */
+  const was = prev.transferSituation;
+  if (was?.type === "frozen_out" && was.mode !== "released") {
+    s.frozenOut = 1;
+    s.morale = clamp(s.morale - 10, 0, 100);
+    s.events = [...s.events, `🧊 Refused to leave ${s.currentClub} after being listed. You train with the group and travel with nobody.`];
+  }
   if (s.contractYearsLeft <= 0) {
     s.contractYearsLeft = rand(2, 4);
     s.events = [...s.events, `📝 Renewed contract with ${s.currentClub} for ${s.contractYearsLeft} years`];

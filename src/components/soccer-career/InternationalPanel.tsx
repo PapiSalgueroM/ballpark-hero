@@ -98,6 +98,12 @@ function TableCard({ rows, nation, title }: { rows: IntlTableRow[]; nation: stri
 
 type Screen = "home" | "qualifying" | "squad" | "bracket" | "matches";
 
+/** 1st, 2nd, 3rd, 4th. */
+function ordinal(n: number): string {
+  const s = n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th";
+  return `${n}${s}`;
+}
+
 /**
  * The tournament screen. Headline, then tiles. Each tile is its own screen.
  */
@@ -109,9 +115,21 @@ export function TournamentCard({
   onSpeech: (choice: "for_the_country" | "shirt_to_the_fans" | "call_out_doubters" | "quiet_lap") => void;
 }) {
   const [screen, setScreen] = useState<Screen>("home");
+  /* Round 257: which table the first tile is showing. Defaults to the one he
+     actually wanted. Declared up here with the other hooks on purpose: this
+     component returns early for every non-home screen, and a useState below
+     that return is React error #310. */
+  const [table, setTable] = useState<"group" | "road">("group");
   const revealRef = useRevealScroll<HTMLDivElement>(screen);
   const isWinner = t.myResult === "Winner";
   const missed = t.myResult === "Did Not Qualify" || t.myResult === "Not Selected";
+  /* Saves written before Round 257 carry a tournament with no groupTable at
+     all, and a nation that never qualified has an empty one, so the group
+     screen only exists when there is a real table to print. */
+  const hasGroup = (t.groupTable?.length ?? 0) > 0;
+  const myGroupPos = hasGroup
+    ? t.groupTable.findIndex(r => r.nation === t.nation) + 1
+    : 0;
 
   const border = isWinner ? "border-amber-400/60" : missed ? "border-red-500/40" : "border-blue-500/40";
   const grad = isWinner ? "from-amber-500/15" : missed ? "from-red-500/10" : "from-blue-500/10";
@@ -127,19 +145,54 @@ export function TournamentCard({
       <div ref={revealRef} className={`rounded-xl border-2 ${border} bg-gradient-to-b ${grad} to-transparent p-4 space-y-3`}>
         {screen === "qualifying" && (
           <>
-            <h3 className="text-sm font-black uppercase tracking-wide">Qualifying</h3>
-            {t.qualifying.automatic ? (
+            {/* Round 257, owner report: "U should show the group stage table
+                not the qualifying table." He was right, and the annoying part
+                is the group table was already there in the save, it just had
+                no screen. This tile now leads with the finals group and keeps
+                the qualifying road one tap away rather than dropping it. */}
+            <h3 className="text-sm font-black uppercase tracking-wide">
+              {hasGroup ? `${t.groupLabel ?? "Group stage"}` : "Qualifying"}
+            </h3>
+            {hasGroup && (
+              <div className="grid grid-cols-2 gap-1.5">
+                {([
+                  { k: "group", label: "Group stage" },
+                  { k: "road", label: "Qualifying" },
+                ] as const).map(b => (
+                  <button
+                    key={b.k}
+                    onClick={() => setTable(b.k)}
+                    className={`rounded-lg border px-2 py-1 text-[11px] font-bold transition-colors ${
+                      table === b.k
+                        ? "border-primary/50 bg-primary/15 text-foreground"
+                        : "border-border bg-muted/20 text-muted-foreground hover:bg-muted/40"
+                    }`}
+                  >
+                    {b.label}
+                  </button>
+                ))}
+              </div>
+            )}
+            {hasGroup && table === "group" ? (
+              <>
+                <p className="text-xs text-muted-foreground">
+                  {t.groupLabel ?? "Your group"} at the finals, one game against each side. Top two go
+                  through{(t.thirdsThrough ?? 0) > 0 ? `, plus the ${t.thirdsThrough} best third placed sides` : ""}.
+                  {" "}{t.nation} finished {ordinal(myGroupPos)} of {t.groupTable.length}.
+                </p>
+                <TableCard rows={t.groupTable} nation={t.nation} title={t.groupLabel ?? "Group table"} />
+              </>
+            ) : t.qualifying.automatic ? (
               <p className="text-xs text-muted-foreground">
                 Every side in your confederation goes straight to this one. No qualifying to play.
               </p>
             ) : (
               <>
                 <p className="text-xs text-muted-foreground">
-                  {t.qualifying.confederation} group, home and away. Top {t.qualifying.through} go to the finals.
-                  You finished {t.qualifying.myPosition}
-                  {t.qualifying.myPosition === 1 ? "st" : t.qualifying.myPosition === 2 ? "nd" : t.qualifying.myPosition === 3 ? "rd" : "th"}.
+                  {t.qualifying.confederation} qualifying group, home and away. Top {t.qualifying.through} go
+                  to the finals. You finished {ordinal(t.qualifying.myPosition)}.
                 </p>
-                <TableCard rows={t.qualifying.table} nation={t.nation} title="Group table" />
+                <TableCard rows={t.qualifying.table} nation={t.nation} title="Qualifying table" />
               </>
             )}
             {back}
@@ -264,8 +317,12 @@ export function TournamentCard({
 
   const tiles: { key: Screen; emoji: string; label: string; sub: string }[] = [
     {
-      key: "qualifying", emoji: "🎫", label: "Qualifying",
-      sub: t.qualifying.automatic ? "Straight in" : `${t.qualifying.myPosition} of ${t.qualifying.table.length}`,
+      key: "qualifying",
+      emoji: hasGroup ? "📊" : "🎫",
+      label: hasGroup ? "Group Stage" : "Qualifying",
+      sub: hasGroup
+        ? `${ordinal(myGroupPos)} of ${t.groupTable.length}`
+        : t.qualifying.automatic ? "Straight in" : `${t.qualifying.myPosition} of ${t.qualifying.table.length}`,
     },
     {
       key: "squad", emoji: "📋", label: "The Squad",

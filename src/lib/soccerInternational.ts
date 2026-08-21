@@ -198,6 +198,17 @@ export function fifaRankOf(nation: string): number {
   return i < 0 ? RANK_ORDER.length + 1 : i + 1;
 }
 
+/** Round 257: every nation the published table puts at least `gap` places
+ *  above this one, best first. The second passport event tells the player
+ *  the other federation is ranked higher, so it has to be able to prove it
+ *  off the same table the rest of the game uses rather than asserting it.
+ *  Returns an empty list for a nation nobody outranks by that much, which
+ *  is the signal to not make the offer at all. */
+export function nationsRankedAbove(nation: string, gap = 1): string[] {
+  const mine = fifaRankOf(nation);
+  return RANK_ORDER.filter(n => n !== nation && fifaRankOf(n) <= mine - gap);
+}
+
 /* Rating points onto the 0 to 99 scale the rest of the game speaks. The
    published table runs from about 1996 down to 1225 at 100th place, and that
    whole span maps onto roughly 58 to 92, so Spain is a 92 and a nation nobody
@@ -482,6 +493,17 @@ export interface IntlTournament {
   squad: SquadCall | null;
   /** My nation's group table, empty when they are not there. */
   groupTable: IntlTableRow[];
+  /* Round 257, owner report: "U should show the group stage table not the
+     qualifying table." The group table was already being simulated and
+     stored, it just never reached a screen, so the only table he could
+     open was the qualifying road. These two carry the labelling the panel
+     needs to print it honestly: which group it was, and whether any third
+     placed sides went through in this format. Optional because saves made
+     before this round hold a tournament without them. */
+  /** "Group A", "Group B" and so on. */
+  groupLabel?: string;
+  /** Best third placed sides that also advance in this format, often 0. */
+  thirdsThrough?: number;
   bracket: IntlTie[];
   champion: string;
   runnerUp: string;
@@ -717,10 +739,18 @@ export function runQualifying(
  *  the screen is about WHO, not about tactics, and eleven shirts a player
  *  recognises beats a formation picker he did not ask for. */
 const XI_SHAPE: { slot: string; group: 'GK' | 'DEF' | 'MID' | 'ATT' }[] = [
+  /* Round 257, owner report: "I'm a right winger but I'm in the position
+     of a left winger. Also cdm isn't in the correct spot."
+     This array is ALSO the left-to-right render order of each line (see
+     order() below), and it was listing the right side first, so every
+     sheet was mirrored: the right winger sat on the left of the screen
+     and the holding midfielder sat out on a flank. A team sheet is drawn
+     the way a camera behind your own goal sees it, so the left-sided
+     shirts come first and the holder sits in the middle of his three. */
   { slot: 'GK', group: 'GK' },
-  { slot: 'RB', group: 'DEF' }, { slot: 'CB', group: 'DEF' }, { slot: 'CB', group: 'DEF' }, { slot: 'LB', group: 'DEF' },
-  { slot: 'CDM', group: 'MID' }, { slot: 'CM', group: 'MID' }, { slot: 'CM', group: 'MID' },
-  { slot: 'RW', group: 'ATT' }, { slot: 'ST', group: 'ATT' }, { slot: 'LW', group: 'ATT' },
+  { slot: 'LB', group: 'DEF' }, { slot: 'CB', group: 'DEF' }, { slot: 'CB', group: 'DEF' }, { slot: 'RB', group: 'DEF' },
+  { slot: 'CM', group: 'MID' }, { slot: 'CDM', group: 'MID' }, { slot: 'CM', group: 'MID' },
+  { slot: 'LW', group: 'ATT' }, { slot: 'ST', group: 'ATT' }, { slot: 'RW', group: 'ATT' },
 ];
 
 /** Starters per position group, and the order the best men fill the shirts:
@@ -1108,6 +1138,8 @@ export function simulateTournament(
     year, name: fmt.name, short: fmt.short, kind: fmt.kind,
     confederation: fmt.confederation, nation, teams: fmt.teams,
     qualifying, qualified, squad, groupTable, bracket, champion, runnerUp,
+    groupLabel: myGroupIdx >= 0 ? `Group ${String.fromCharCode(65 + myGroupIdx)}` : undefined,
+    thirdsThrough: fmt.thirdsThrough,
     myResult, matches, playerApps, playerGoals, playerAssists, playerAvgRating,
     goldenBoot, bestPlayer,
   };

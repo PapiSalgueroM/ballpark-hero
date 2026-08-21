@@ -16,6 +16,10 @@
    with the engine.
    ──────────────────────────────────────────────────────────────────────────── */
 import type { CareerState, RandomEvent } from "./soccerCareerEngine";
+/* Value import, and safe: soccerInternational only imports intlNames, so it
+   cannot reach back into the engine and there is no runtime cycle. Nothing
+   below is evaluated at module scope. */
+import { fifaRankOf, nationsRankedAbove } from "./soccerInternational";
 
 /* ─── tiny local helpers (duplicated on purpose: no runtime import cycle) ─── */
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
@@ -27,6 +31,32 @@ const setFlag = (s: CareerState, key: string, value: number) => {
 /** rivalry temperature, optional field so pre-expansion saves keep loading */
 const feud = (s: CareerState, delta: number) => {
   s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + delta, 0, 100);
+};
+
+/* ─── Round 257: the second passport needs a country ───
+   Owner report on event 452, in full: "What's the nation". He was staring at
+   an offer to switch international allegiance that never said who to. So the
+   offer now names a real nation, quotes the ranking it actually holds in the
+   table the rest of the game already uses, and the switch changes who he
+   plays for instead of quietly handing him caps for the same flag.
+   The nation is picked from the player's name, so one career always gets the
+   same offer no matter how many times the season is replayed, and it is
+   always a side ranked comfortably above his own, which is the only reason
+   the event's own pitch ("they qualify in their sleep") is true. */
+const ordinalRank = (n: number) => {
+  const teen = n % 100 >= 11 && n % 100 <= 13;
+  const suf = teen ? "th" : n % 10 === 1 ? "st" : n % 10 === 2 ? "nd" : n % 10 === 3 ? "rd" : "th";
+  return `${n}${suf}`;
+};
+const secondPassportNation = (s: CareerState): string | null => {
+  /* 12 places clear, so the other side is genuinely the stronger one and
+     not a neighbour one point up the table. */
+  const pool = nationsRankedAbove(s.nationality, 12);
+  if (!pool.length) return null;
+  const key = `${s.playerName}|${s.nationality}`;
+  let h = 0;
+  for (let i = 0; i < key.length; i++) h = (Math.imul(h, 31) + key.charCodeAt(i)) | 0;
+  return pool[Math.abs(h) % pool.length];
 };
 
 /* ─── The batch B catalog (ids 450-494) ─── */
@@ -69,16 +99,24 @@ export function getRealismEventsB(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.age <= 27 && state.overall >= 72 && flag(state, "natSwitch") === 0) {
+  /* The caps gate is Round 257 too, and it is the realistic one: a switch is
+     only open to a player who has barely been capped by the first nation, so
+     offering it to a 40 cap international was nonsense on its own terms. */
+  const secondNation = state.age <= 27 && state.overall >= 72 && state.intStats.caps <= 3
+    && flag(state, "natSwitch") === 0
+    ? secondPassportNation(state)
+    : null;
+  if (secondNation) {
+    const born = state.nationality;
     push({ id: 452, emoji: "🛂", title: "Two Flags, One Passport",
-      description: `A second federation traced a grandparent and wants you now. They are ranked higher, they qualify in their sleep, and they will fly your whole family to every tournament. ${state.nationality} fans have already found the story.`,
+      description: `${secondNation} traced a grandmother of yours and want you now. They sit ${ordinalRank(fifaRankOf(secondNation))} in the world where ${born} sit ${ordinalRank(fifaRankOf(born))}, they qualify in their sleep, and they will fly your whole family to every tournament. ${born} fans have already found the story.`,
       category: "international", choices: [
-        { label: "Declare for your grandmother's country", emoji: "🌍", color: "bg-purple-600", consequence: "Caps +6, Morale +6, Popularity -12 back home",
-          apply: s => { setFlag(s, "natSwitch", 1); s.internationalCareer = true; s.intStats = { ...s.intStats, caps: s.intStats.caps + 6, isRetired: false }; s.morale = clamp(s.morale + 6, 0, 100); s.popularity = clamp(s.popularity - 12, 0, 100); s.events = [...s.events, "🛂 Declared for your grandmother's country. Six caps in a year and one very cold homecoming"]; return s; } },
-        { label: "Stay loyal to where you were born", emoji: "🏠", color: "bg-emerald-600", consequence: "Popularity +11, Morale +5, zero tournament guarantees",
-          apply: s => { setFlag(s, "natSwitch", 2); s.popularity = clamp(s.popularity + 11, 0, 100); s.morale = clamp(s.morale + 5, 0, 100); s.integrityBonus += 5; s.events = [...s.events, "🏠 Turned down the switch. You want the hard flag or none at all"]; return s; } },
-        { label: "Stall a year and let them bid against each other", emoji: "⏳", color: "bg-amber-600", consequence: "Birth nation panics and caps you: Caps +2, Morale -5",
-          apply: s => { setFlag(s, "natSwitch", 3); s.internationalCareer = true; s.intStats = { ...s.intStats, caps: s.intStats.caps + 2 }; s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🛂 Stalled both federations for a year. Your birth nation panicked and capped you twice"]; return s; } },
+        { label: `Declare for ${secondNation}`, emoji: "🌍", color: "bg-purple-600", consequence: `You play for ${secondNation} from now on. Caps +6, Morale +6, Popularity -12 back home`,
+          apply: s => { setFlag(s, "natSwitch", 1); s.nationality = secondNation; s.internationalCareer = true; s.intStats = { ...s.intStats, caps: s.intStats.caps + 6, isRetired: false }; s.morale = clamp(s.morale + 6, 0, 100); s.popularity = clamp(s.popularity - 12, 0, 100); s.events = [...s.events, `🛂 Switched to ${secondNation}. Six caps in a year and one very cold homecoming in ${born}`]; return s; } },
+        { label: `Stay loyal to ${born}`, emoji: "🏠", color: "bg-emerald-600", consequence: "Popularity +11, Morale +5, zero tournament guarantees",
+          apply: s => { setFlag(s, "natSwitch", 2); s.popularity = clamp(s.popularity + 11, 0, 100); s.morale = clamp(s.morale + 5, 0, 100); s.integrityBonus += 5; s.events = [...s.events, `🏠 Turned ${secondNation} down and stayed with ${born}. You want the hard flag or none at all`]; return s; } },
+        { label: "Stall a year and let them bid against each other", emoji: "⏳", color: "bg-amber-600", consequence: `${born} panic and cap you: Caps +2, Morale -5`,
+          apply: s => { setFlag(s, "natSwitch", 3); s.internationalCareer = true; s.intStats = { ...s.intStats, caps: s.intStats.caps + 2 }; s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, `🛂 Stalled ${secondNation} for a year. ${born} panicked and capped you twice`]; return s; } },
       ] });
   }
 

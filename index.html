@@ -113,7 +113,77 @@
   <meta name="twitter:description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
 </head>
   <body>
-    <div id="root"></div>
+    <!--
+      Round 257: the home page's static content.
+
+      Every other page on this site is prerendered to a real document after
+      the build (scripts/prerender.mjs) so a crawler can read it without
+      running JavaScript. The home page cannot be done that way: vite
+      generates dist/index.html from THIS file on whatever machine builds
+      the site, so a snapshot written over it would be thrown away, and a
+      snapshot written into public/ would collide with it. Measured on
+      2026-08-21, before this block existed, the built home page carried
+      exactly 43 characters of readable text: its own title. The most
+      important page on the site was the emptiest.
+
+      So the home page carries its content here, in the template, and React
+      replaces the whole of #root the moment it mounts. A visitor sees this
+      for the instant before the app draws, which is the same thing that
+      happens on every prerendered route.
+
+      RULES FOR EDITING THIS BLOCK. Nothing in it may be a figure that goes
+      stale: the game counts are deliberately phrased as floors ("more than
+      120") rather than exact numbers, because the exact ones change most
+      weeks and the live ticker computes them anyway. Every link here is a
+      real route in src/App.tsx. No data, no dates, no results.
+    -->
+    <div id="root">
+      <h1>DoUKnowBall: free daily sports trivia, puzzles and career sims</h1>
+      <p>
+        More than 120 free sports games in the browser. No sign-up, no downloads, no app to
+        install. New games and content ship almost every week, and the daily puzzles reset for
+        everyone at the same time, so you and everyone else get the same board.
+      </p>
+      <h2>Career and management sims</h2>
+      <p>
+        Play a whole career out season by season: contracts, transfers, injuries, international
+        call-ups, the lot.
+      </p>
+      <ul>
+        <li><a href="/soccer-career">Soccer Career</a>, the biggest one here: start at 16 and play until you hang them up</li>
+        <li><a href="/club-manager">Club Manager</a>, run a club through a season of real fixtures</li>
+        <li><a href="/nba-my-career">NBA My Career</a> and <a href="/nfl-my-career">NFL My Career</a>, draft night to the rafters</li>
+        <li><a href="/stadium-tycoon">Stadium Tycoon</a> and <a href="/hall-of-champions">Hall of Champions</a>, the idle ones</li>
+      </ul>
+      <h2>Daily puzzles</h2>
+      <ul>
+        <li><a href="/soccer-grid">Soccer Grid</a>, a three by three of clubs and countries</li>
+        <li><a href="/transfer-path">Transfer Path</a>, get from one player to another through real moves</li>
+        <li><a href="/minefield">Minefield</a>, name as many as you dare before you hit a wrong one</li>
+        <li><a href="/silverware-sort">Silverware Sort</a>, stack five teams by titles won</li>
+        <li><a href="/champ-or-not">Champ or Not</a> and <a href="/whod-they-beat">Who'd They Beat?</a></li>
+      </ul>
+      <h2>The history behind the games</h2>
+      <p>
+        The champion tables our quizzes run on are open to read in
+        <a href="/records">The Record Books</a>: every winner year by year across ten competitions,
+        checked against the official record before anything was allowed to serve it. Where history
+        is odd we keep it odd, so seasons that were never played are missing on purpose and stripped
+        titles stay vacant with a note saying why.
+      </p>
+      <h2>Every sport we cover</h2>
+      <p>
+        Soccer is the deepest section by a distance, with nearly forty games of its own. Alongside
+        it: pro football, pro basketball, baseball, hockey, college sports, Formula 1, tennis, golf,
+        Aussie rules, NASCAR, combat sports, and a World and Olympic Games section.
+      </p>
+      <p>
+        <a href="/whats-new">See what shipped recently</a> ·
+        <a href="/about">About this site</a> ·
+        <a href="/contact">Contact</a> ·
+        <a href="/privacy">Privacy</a>
+      </p>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

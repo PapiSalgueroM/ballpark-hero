@@ -1846,6 +1846,88 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
         </div>
       )}
 
+      {/* Round 257, his ask: "make it that if u play poorly enough. A team
+          just drops u from the squad and ur a free agent or they list for
+          transfers or loans." The club's verdict, with the facts it was
+          built from printed underneath it, so a release can always be
+          traced back to the season card that caused it. */}
+      {situation.type === "frozen_out" && (
+        <div className="space-y-3">
+          <div className="bg-red-500/10 border-2 border-red-500/40 rounded-xl p-4 space-y-2">
+            <div className="text-center space-y-1">
+              <div className="text-3xl">{situation.mode === "released" ? "📄" : situation.mode === "loan_listed" ? "🛫" : "📤"}</div>
+              <h3 className="text-base font-black">
+                {situation.mode === "released"
+                  ? `${career.currentClub} have released you`
+                  : situation.mode === "loan_listed"
+                    ? `${career.currentClub} want you out on loan`
+                    : `${career.currentClub} have transfer listed you`}
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                {situation.mode === "released"
+                  ? "Contract torn up. You are a free agent and the phone is quieter than it was."
+                  : situation.mode === "loan_listed"
+                    ? "You are not in the plans. Go and play somewhere, then we will talk."
+                    : "You can stay. You will not play."}
+              </p>
+            </div>
+            <div className="bg-background/40 rounded-lg p-2.5 space-y-1">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">What they said</div>
+              {situation.reasons.map((r, i) => (
+                <div key={i} className="text-[11px] flex gap-1.5">
+                  <span className="text-red-400 shrink-0">▪</span>
+                  <span>{r}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {situation.offers.map(offer => (
+            offer.isLoan ? (
+              <div key={offer.club.name} className="bg-card border border-border rounded-xl p-3 space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="font-bold text-sm truncate flex items-center gap-1"><FlagImg name={offer.club.country} size={16} />{offer.club.name}</div>
+                    <div className="text-xs text-muted-foreground">{offer.club.league} · season long loan</div>
+                  </div>
+                  <div className="text-right text-xs shrink-0">
+                    <div className="font-bold text-foreground">about {projectLeagueApps(career.overall, offer.club.tier, offer.club.name, 0).min} to {projectLeagueApps(career.overall, offer.club.tier, offer.club.name, 0).max}</div>
+                    <div className="text-muted-foreground">league games</div>
+                  </div>
+                </div>
+                <Button onClick={() => onAcceptLoan(offer)} className="w-full h-9 text-sm bg-sky-500 hover:bg-sky-400 text-black">
+                  Go on loan 🛫
+                </Button>
+              </div>
+            ) : (
+              <OfferCard
+                key={offer.club.name}
+                offer={offer}
+                onAccept={() => onAcceptOffer(offer)}
+                actionLabel={situation.mode === "released" ? "Sign as a free agent ✍️" : "Accept and go ✍️"}
+              />
+            )
+          ))}
+
+          {situation.offers.length === 0 && (
+            <div className="bg-card border border-border rounded-xl p-4 text-center">
+              <p className="text-sm">Nobody has come in for you. You are staying whether the club likes it or not.</p>
+            </div>
+          )}
+
+          {situation.mode !== "released" && (
+            <Button variant="outline" onClick={onStay} className="w-full h-9 text-sm">
+              Refuse to leave {career.currentClub} 🧊
+            </Button>
+          )}
+          {situation.mode !== "released" && (
+            <p className="text-[11px] text-muted-foreground text-center">
+              Staying means a season of reserve football: a quarter of the minutes, eight league games at the very most.
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Situation: No Interest */}
       {situation.type === "no_interest" && (
         <div className="bg-card border border-border rounded-xl p-4 space-y-3">
@@ -3191,17 +3273,23 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   return (
     <div ref={screenRef} className="space-y-3 pb-20">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2.5 min-w-0">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5 min-w-0 flex-1">
           {/* Round 54: your face, on your career, everywhere */}
           {career.appearance && (
             <div className="shrink-0 rounded-xl overflow-hidden border border-border bg-muted/20">
               <PlayerAvatar appearance={career.appearance} clubColor={career.currentClubColor} size={52} animate />
             </div>
           )}
-          <div className="min-w-0">
-            <h1 className="text-xl sm:text-2xl font-black flex items-center gap-2 truncate">
-              <FlagImg name={career.nationality} size={24} />{career.playerName}
+          <div className="min-w-0 flex-1">
+            {/* Round 257, owner report: "Can't even see my name". truncate on
+                a flex CONTAINER does nothing for the text inside it, so the
+                name was being crushed to two characters by the buttons on
+                the right of the same row. The flag holds its size, the name
+                takes the rest and truncates properly if it has to. */}
+            <h1 className="text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0">
+              <FlagImg name={career.nationality} size={24} />
+              <span className="truncate min-w-0">{career.playerName}</span>
             </h1>
             <p className="text-xs text-muted-foreground">{career.position} · Age {career.age} · {career.nationality}</p>
           </div>
