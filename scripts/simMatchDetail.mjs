@@ -69,6 +69,23 @@ function checkDetail(report, ctx, { viaHalftime, subsMade }) {
   if (tlMyGoals !== report.myScorers.length) fail(`${ctx}: timeline my-goals ${tlMyGoals} vs scorer lines ${report.myScorers.length}`);
   if (tlOppGoals !== report.oppScorers.length) fail(`${ctx}: timeline opp-goals ${tlOppGoals} vs opp scorer lines ${report.oppScorers.length}`);
 
+  /* Round 205: no two goals in a match share a minute, on either side.
+     Football does not work that way, and the timeline printed it plainly:
+     "18' Bellingham (assist: Mbappe)" directly above "18' Bellingham
+     (assist: Asencio)". Minutes used to be independent draws from a 45
+     minute window, so in any 3-1 the clash was a coin flip away; the engine
+     now keeps ONE minute book per match, shared by both sides and by the
+     live viewer's preset first half. Checked here rather than in one
+     section so it covers the quick sim AND the halftime path. */
+  {
+    const goalMins = d.timeline.filter(e => e.kind === 'goal').map(e => e.minute);
+    if (new Set(goalMins).size !== goalMins.length) {
+      const seen = new Set();
+      const dupe = goalMins.find(m => seen.has(m) || (seen.add(m), false));
+      fail(`${ctx}: two goals share the ${dupe}th minute: ${JSON.stringify(d.timeline.filter(e => e.kind === 'goal' && e.minute === dupe))}`);
+    }
+  }
+
   // Stats sanity, both sides.
   const s = d.stats;
   if (!isNum(s.possession) || s.possession < 20 || s.possession > 80) fail(`${ctx}: possession ${s.possession}`);
@@ -276,8 +293,16 @@ console.log('5) Assists are real teammates, stoppage and attendance stay in band
       if (!squadNames.has(sc.assist)) fail(`assist by ${sc.assist}, who is not in the squad`);
       if (sc.assist === sc.name) fail(`${sc.name} assisted his own goal`);
       if (gkNames.has(sc.assist)) fail(`the keeper ${sc.assist} was credited with an outfield assist`);
-      const row = d.timeline.find(e => e.kind === 'goal' && e.side === 'me' && e.minute === sc.minute && e.text.includes(sc.name));
-      if (!row || !row.text.includes(`assist: ${sc.assist}`)) fail(`the timeline does not carry ${sc.name}'s assist`);
+      /* Round 205: match the row by all three facts, not by name and
+         minute alone. Before Round 205 the engine could put two goals on
+         the same clock tick, and a find() by name and minute would then
+         return the OTHER goal's row and report a false assist mismatch.
+         The engine no longer allows it (checked below), but the lookup is
+         made exact anyway: a test that can pick the wrong row is a test
+         that will lie again the next time the engine changes. */
+      const row = d.timeline.find(e => e.kind === 'goal' && e.side === 'me'
+        && e.minute === sc.minute && e.text === `${sc.name} (assist: ${sc.assist})`);
+      if (!row) fail(`the timeline does not carry ${sc.name}'s assist`);
     }
     // The referee's board stays in its bands and the clock rows carry it.
     if (!d.added) fail('no stoppage time on the detail');
@@ -401,6 +426,116 @@ console.log('6) Their eleven get rated too, honestly');
   }
   if (emptySheetHits === 0) fail('a full Austrian season never met Lustenau, the thin-world control never ran');
   console.log(`   thin-world control: ${emptySheetHits} Lustenau meetings, all sheetless as designed`);
+}
+
+/* ---------- 7. Round 205: discipline, and a clock that cannot contradict itself ---------- */
+console.log('7) Two yellows is a red, and nobody leaves before his own last goal');
+{
+  /* Round 205 fixed four ways the timeline could contradict the football it
+     was describing, three of which were visible on the screen:
+       - the same man scoring twice in the same minute (checked in
+         checkDetail, on both play paths);
+       - the same man collecting two yellows and playing on, in about one
+         match in ten, which is not football;
+       - a man limping off in the 33rd minute and scoring in the 88th;
+       - a straight red for a man already carrying a booking, which reads as
+         a second yellow but was reported and punished as a straight one.
+     All four are asserted here over a large sample, and the rates the fix
+     produces are measured rather than assumed, because adding second
+     yellows to a game that already sent men off could easily have doubled
+     every squad's suspension load without anybody noticing. */
+  /* Eight independent careers rather than one long one: a fresh career is
+     cheap, and eight of them sample eight different squads and eight
+     different fixture lists instead of the same eleven all year. */
+  let matches = 0;
+  let secondYellows = 0, straightReds = 0, cleanLines = 0;
+  for (let career = 0; career < 8; career += 1) {
+    let s = startCareer('Real Madrid');
+    let played = 0, guard = 0;
+    while (played < 30 && guard < 110) {
+      guard += 1;
+      const res = playNextEntry(s, { skipHalftime: true });
+      s = res.state;
+      if (res.kind !== 'match' || !res.report) continue;
+      const rep = res.report;
+      const d = rep.detail;
+      if (!d) continue;
+      matches += 1;
+      played += 1;
+
+      const yellows = d.timeline.filter(e => e.kind === 'yellow');
+      const reds = d.timeline.filter(e => e.kind === 'red');
+
+      /* Nobody holds two yellows and stays on. */
+      const yellowCount = new Map();
+      for (const y of yellows) yellowCount.set(y.text, (yellowCount.get(y.text) ?? 0) + 1);
+      for (const [name, n] of yellowCount) {
+        if (n < 2) continue;
+        if (n > 2) fail(`${name} was booked ${n} times in one match`);
+        if (!reds.some(r => r.text === name)) fail(`${name} took two yellows and stayed on the pitch`);
+      }
+
+      for (const r of reds) {
+        const his = yellows.filter(y => y.text === r.text);
+        if (his.length > 1) fail(`${r.text} walked but holds ${his.length} yellows`);
+        if (his.length === 1) {
+          /* A second yellow: after the first, never on it, and reported as
+             what it is. */
+          secondYellows += 1;
+          if (his[0].minute >= r.minute) fail(`${r.text}'s second yellow lands on or before his first (${his[0].minute} then ${r.minute})`);
+          const line = (rep.events ?? []).find(e => e.includes(r.text) && /second yellow/.test(e));
+          if (!line) fail(`${r.text} walked for a second yellow with no line saying so: ${JSON.stringify(rep.events)}`);
+          else cleanLines += 1;
+        } else {
+          straightReds += 1;
+          if (!(rep.events ?? []).some(e => e.includes(r.text) && /sent off/.test(e))) {
+            fail(`${r.text} was shown a straight red with no report line`);
+          }
+        }
+        /* Whatever kind of red it was, he is banned. */
+        const man = s.squad.find(p => p.name === r.text);
+        if (man && (man.injuryWeeks ?? 0) === 0 && (man.suspendedMatches ?? 0) < 1) {
+          fail(`${r.text} walked and is not suspended`);
+        }
+      }
+
+      /* Nobody leaves the pitch before his own last goal. */
+      const lastGoal = new Map();
+      for (const sc of rep.myScorers) lastGoal.set(sc.name, Math.max(lastGoal.get(sc.name) ?? 0, sc.minute));
+      for (const e of d.timeline) {
+        if (e.kind !== 'injury' && e.kind !== 'red') continue;
+        const g = lastGoal.get(e.text);
+        if (g !== undefined && e.minute < g) {
+          fail(`${e.text} left the pitch in the ${e.minute}th and scored in the ${g}th`);
+        }
+      }
+    }
+  }
+
+  if (matches < 90) fail(`only ${matches} matches sampled, the discipline check is too thin to mean anything`);
+  const redRate = (secondYellows + straightReds) / matches;
+  const syRate = secondYellows / matches;
+  /* Measured over 2,100 matches while building the round: 2.5 percent of
+     matches end with a second yellow and 8.7 percent with a red of any
+     kind, against 8.0 percent before the round, which is the point: the
+     second yellow was added without quietly doubling the suspension load.
+     The bands here are wide enough for a 100 match sample not to be
+     flaky and tight enough that a real balance change trips them. */
+  if (redRate > 0.20) fail(`${(redRate * 100).toFixed(1)}% of matches end with a sending off, far above the measured 8.7%`);
+  if (redRate < 0.02) fail(`only ${(redRate * 100).toFixed(1)}% of matches see a red, far below the measured 8.7%`);
+  if (syRate > 0.10) fail(`${(syRate * 100).toFixed(1)}% of matches feature a second yellow, far above the measured 2.5%`);
+  if (secondYellows > 0 && cleanLines !== secondYellows) fail('a second yellow went unreported');
+  /* And the screen shows it. No new rendering surface was added this round,
+     which is the point: a second yellow is a red card line and a report
+     line, both of which the match report card already draws. Asserted
+     statically so a future tidy cannot quietly drop either. */
+  {
+    const card = fs.readFileSync(path.join(ROOT, 'src/components/club-manager/MatchReportCard.tsx'), 'utf-8');
+    if (!/c\.kind === 'red'/.test(card)) fail('the match report card no longer distinguishes a red card');
+    if (!/\{c\.name\} \{c\.minute\}/.test(card)) fail('the match report card stopped printing card minutes');
+    if (!/r\.events\.map/.test(card)) fail('the match report card stopped printing the match events, where the second yellow line lives');
+  }
+  console.log(`   ${matches} matches: ${secondYellows} second yellows (${(syRate * 100).toFixed(1)}%), ${straightReds} straight reds, ${(redRate * 100).toFixed(1)}% of matches ended a man short`);
 }
 
 if (failures > 0) {

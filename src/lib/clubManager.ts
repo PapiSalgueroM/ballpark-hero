@@ -7041,15 +7041,54 @@ function weightedPick(xi: CMPlayer[], weight: (p: CMPlayer) => number): CMPlayer
 /** Generates my scorers, bumps their season tallies, credits some assists.
  *  Round 73: also returns per-player goal/assist counts so match ratings can
  *  reward the players who actually produced. */
+/**
+ * Round 205: how often a referee who is about to book an already booked man
+ * actually goes through with it rather than booking somebody else. Set so
+ * that second yellows are a real event you will see a few times a season
+ * without becoming the way most matches end. Measured below in simMatchDetail.
+ */
+const SECOND_YELLOW_CHANCE = 0.25;
+
 /** Round 157: goal minutes that respect the interval. The first
  *  `firstHalfGoals` land in 1-45 and the rest in 46-90, so a match that was
  *  1-0 at the break can never later claim its only goal came in the 80th.
  *  Before this, minutes were drawn across the whole match blind, and the
  *  full time report could contradict the halftime scoreboard. */
-function splitMinutes(goals: number, firstHalfGoals: number): number[] {
+/**
+ * Round 205: distinct minutes, so no two goals in a match share a clock.
+ *
+ * Every minute used to be an independent draw out of a 45 minute window, so
+ * in a 3-1 game the odds of a collision are not small, and the collision is
+ * visible: the timeline printed "18' Bellingham (assist: Mbappe)" directly
+ * above "18' Bellingham (assist: Asencio)", which reads as a bug because it
+ * is one. The same man cannot score twice in the same minute, and neither
+ * can two different men on the same clock tick.
+ *
+ * Draw, and on a clash walk forward to the next free minute, wrapping inside
+ * the window. `taken` is shared across both sides of one match, so the
+ * opposition cannot land on our minute either. If a window somehow fills up
+ * (it cannot: 45 minutes, at most a handful of goals) the draw falls back to
+ * a plain one rather than looping forever.
+ */
+function distinctMinutes(count: number, lo: number, hi: number, taken: Set<number>): number[] {
+  const span = hi - lo + 1;
+  const out: number[] = [];
+  for (let i = 0; i < count; i++) {
+    let m = ri(lo, hi);
+    if (taken.size < span) {
+      let steps = 0;
+      while (taken.has(m) && steps < span) { m = m === hi ? lo : m + 1; steps += 1; }
+    }
+    taken.add(m);
+    out.push(m);
+  }
+  return out.sort((a, b) => a - b);
+}
+
+function splitMinutes(goals: number, firstHalfGoals: number, taken: Set<number>): number[] {
   const h1 = clamp(firstHalfGoals, 0, goals);
-  const first = Array.from({ length: h1 }, () => ri(1, 45));
-  const second = Array.from({ length: goals - h1 }, () => ri(46, 90));
+  const first = distinctMinutes(h1, 1, 45, taken);
+  const second = distinctMinutes(goals - h1, 46, 90, taken);
   return [...first, ...second].sort((a, b) => a - b);
 }
 
@@ -7057,9 +7096,11 @@ function splitMinutes(goals: number, firstHalfGoals: number): number[] {
  *  kick off can decide the first half's scorers for the live viewer without
  *  crediting anybody twice. */
 function pickMyScorerLines(
-  xi: CMPlayer[], count: number, minLo: number, minHi: number,
+  xi: CMPlayer[], count: number, minLo: number, minHi: number, taken: Set<number>,
 ): { id: string; name: string; minute: number }[] {
-  const minutes = Array.from({ length: count }, () => ri(minLo, minHi)).sort((a, b) => a - b);
+  /* Round 205: distinct, and sharing the match's minute book with the
+     opposition so no two goals anywhere land on the same clock. */
+  const minutes = distinctMinutes(count, minLo, minHi, taken);
   const lines: { id: string; name: string; minute: number }[] = [];
   for (let g = 0; g < count; g++) {
     const scorer = weightedPick(xi, scorerWeight);
@@ -7110,6 +7151,7 @@ function generateMyScorers(
   goals: number,
   firstHalfGoals: number,
   presetH1?: { id: string; name: string; minute: number }[],
+  taken: Set<number> = new Set(),
 ): { lines: ScorerLine[]; goalCounts: Map<string, number>; assistCounts: Map<string, number> } {
   const h1 = clamp(firstHalfGoals, 0, goals);
   /* Round 158: a live match decided its first half scorers at kick off, so
@@ -7117,8 +7159,10 @@ function generateMyScorers(
      Everything else picks them here, exactly as before. */
   const h1Lines = presetH1 && presetH1.length === h1
     ? presetH1
-    : pickMyScorerLines(xi, h1, 1, 45);
-  const h2Lines = pickMyScorerLines(xi, goals - h1, 46, 90);
+    : pickMyScorerLines(xi, h1, 1, 45, taken);
+  /* A preset first half already happened, so its minutes are spoken for. */
+  if (presetH1 && presetH1.length === h1) for (const l of h1Lines) taken.add(l.minute);
+  const h2Lines = pickMyScorerLines(xi, goals - h1, 46, 90, taken);
   const full = [...h1Lines, ...h2Lines];
   const { goalCounts, assistCounts, assistNames } = creditMyScorers(state, xi, full);
   return {
@@ -7128,8 +7172,8 @@ function generateMyScorers(
   };
 }
 
-function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now'): ScorerLine[] {
-  const minutes = splitMinutes(goals, firstHalfGoals);
+function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set()): ScorerLine[] {
+  const minutes = splitMinutes(goals, firstHalfGoals, taken);
   // Round 70: opponent scorers are their real attackers from the baked
   // rosters, weighted toward the expensive ones, so "Semenyo 63'" instead of
   // "Bournemouth No. 9". Round 132: from the projected roster, so a 2036 match
@@ -7621,14 +7665,20 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   const events: string[] = [];
   let trophyWon: string | null = null;
 
+  /* Round 205: one minute book for the whole match, so no two goals on
+     either side can be printed on the same clock tick. */
+  const takenMinutes = new Set<number>();
   const { lines: myScorers, goalCounts, assistCounts } = generateMyScorers(
-    state, xi, myGoals, h1My, live?.h1My,
+    state, xi, myGoals, h1My, live?.h1My, takenMinutes,
   );
   /* Round 158: same for the opposition, whose first half lines were decided
      at kick off on a watched match. */
   const oppScorers = live?.h1Opp && live.h1Opp.length === h1Opp
-    ? [...live.h1Opp, ...generateOppScorers(fx.opponent, oppGoals - h1Opp, 0, yearsOn(state), state.eraId)]
-    : generateOppScorers(fx.opponent, oppGoals, h1Opp, yearsOn(state), state.eraId);
+    ? (() => {
+      for (const l of live.h1Opp) takenMinutes.add(l.minute);
+      return [...live.h1Opp, ...generateOppScorers(fx.opponent, oppGoals - h1Opp, 0, yearsOn(state), state.eraId, takenMinutes)];
+    })()
+    : generateOppScorers(fx.opponent, oppGoals, h1Opp, yearsOn(state), state.eraId, takenMinutes);
   const tally = new Map<string, number>();
   for (const sc of myScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
   tally.forEach((count, name) => {
@@ -7826,16 +7876,63 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   // Yellow cards: 0-3 a match, defenders and holders pick up most of them.
   const cardLines: CardLine[] = [];
   const yellows = ri(0, 3);
+  /* Round 205: the second yellow is a red, which is how football works and
+     which this game did not do. Roughly one match in ten used to hand the
+     same man two yellows and leave him on the pitch, printed one above the
+     other on the timeline. Now the second one dismisses him, with the
+     suspension a sending off carries, and he takes no further part. */
+  const yellowMinutes = new Map<string, number>();
+  const dismissed = new Set<string>();
   for (let i = 0; i < yellows; i++) {
-    const victim = weightedPick(xi, p =>
+    const eligible = xi.filter(p => !dismissed.has(p.id));
+    if (!eligible.length) break;
+    const victim = weightedPick(eligible, p =>
       p.position === 'GK' ? 0.1 : groupOf(p.position) === 'DEF' ? 2.2 : p.position === 'CDM' ? 2.4 : groupOf(p.position) === 'MID' ? 1.4 : 0.8);
-    if (victim) {
-      const sq = state.squad.find(p => p.id === victim.id);
+    if (!victim) continue;
+    const sq = state.squad.find(p => p.id === victim.id);
+    const first = yellowMinutes.get(victim.id);
+    if (first === undefined) {
+      const minute = ri(12, 88);
+      yellowMinutes.set(victim.id, minute);
       if (sq) {
         sq.seasonYellows = (sq.seasonYellows ?? 0) + 1;
         bumpComp(sq, l => { l.yellows += 1; });
       }
-      cardLines.push({ name: victim.name, minute: ri(12, 88), kind: 'yellow' });
+      cardLines.push({ name: victim.name, minute, kind: 'yellow' });
+    } else if (Math.random() >= SECOND_YELLOW_CHANCE) {
+      /* Most of the time the referee books somebody else instead. Without
+         this the collision rate of the draw itself would decide how often
+         men walk, and that rate is high: about one match in ten used to
+         hand the same man two cards. */
+      const clean = eligible.filter(p => !yellowMinutes.has(p.id));
+      const other = clean.length ? weightedPick(clean, p =>
+        p.position === 'GK' ? 0.1 : groupOf(p.position) === 'DEF' ? 2.2 : p.position === 'CDM' ? 2.4 : groupOf(p.position) === 'MID' ? 1.4 : 0.8) : null;
+      if (other) {
+        const minute = ri(12, 88);
+        yellowMinutes.set(other.id, minute);
+        const osq = state.squad.find(p => p.id === other.id);
+        if (osq) {
+          osq.seasonYellows = (osq.seasonYellows ?? 0) + 1;
+          bumpComp(osq, l => { l.yellows += 1; });
+        }
+        cardLines.push({ name: other.name, minute, kind: 'yellow' });
+      }
+    } else {
+      /* Second yellow: it still counts as a booking in his season figures,
+         because it is one, and it also sends him off. Always after the
+         first, never before it. */
+      const minute = first >= 90 ? 90 : ri(first + 1, 90);
+      dismissed.add(victim.id);
+      if (sq) {
+        sq.seasonYellows = (sq.seasonYellows ?? 0) + 1;
+        sq.seasonReds = (sq.seasonReds ?? 0) + 1;
+        bumpComp(sq, l => { l.yellows += 1; l.reds += 1; });
+        /* A second yellow is a one match ban, not the two a straight red
+           can carry, and an injured man is already unavailable. */
+        if (sq.injuryWeeks === 0) sq.suspendedMatches = Math.max(sq.suspendedMatches ?? 0, 1);
+      }
+      cardLines.push({ name: victim.name, minute, kind: 'red' });
+      events.push(`🟥 ${victim.name} picked up a second yellow and walked.`);
     }
   }
 
@@ -7963,15 +8060,61 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
       events.push(`🩹 ${p.name} limped off, out for ~${p.injuryWeeks} week${p.injuryWeeks > 1 ? 's' : ''}.`);
     }
   }
-  if (xi.length && Math.random() < 0.08) {
-    const hothead = pick(xi.filter(p => p.position !== 'GK').length ? xi.filter(p => p.position !== 'GK') : xi);
-    const p = state.squad.find(x => x.id === hothead.id);
+  /* Round 205: 0.08 before this round, when a second yellow could not send
+     anybody off. Trimmed so that adding second yellows leaves the total
+     number of men walking roughly where the game already had it, rather
+     than quietly doubling every squad's suspension load. */
+  if (xi.length && Math.random() < 0.06) {
+    /* Round 205: a man already off for two yellows cannot also be sent off,
+       and a man already carrying a booking cannot take a STRAIGHT red: on
+       the timeline a yellow followed by a red is a second yellow to anyone
+       reading it, so the two paths are kept apart at the source rather than
+       producing a dismissal whose card says one thing and whose report line
+       says another. With at most three bookings in an eleven there is
+       always somebody clean to send off. */
+    const onPitch = xi.filter(p => !dismissed.has(p.id) && !yellowMinutes.has(p.id));
+    const outfield = onPitch.filter(p => p.position !== 'GK');
+    const hothead = onPitch.length ? pick(outfield.length ? outfield : onPitch) : null;
+    const p = hothead ? state.squad.find(x => x.id === hothead.id) : null;
     if (p && p.injuryWeeks === 0) {
+      dismissed.add(hothead.id);
       p.suspendedMatches = ri(1, 2);
       p.seasonReds = (p.seasonReds ?? 0) + 1;
       bumpComp(p, l => { l.reds += 1; });
       cardLines.push({ name: p.name, minute: ri(25, 88), kind: 'red' });
       events.push(`🟥 ${p.name} was sent off, suspended for ${p.suspendedMatches} match${p.suspendedMatches > 1 ? 'es' : ''}.`);
+    }
+  }
+
+  /* Round 205: nobody leaves the pitch before his own last goal.
+     Injuries and sendings off were drawn on their own clocks, blind to the
+     goal minutes drawn earlier, so about one match in fifty printed a man
+     limping off in the 33rd minute and scoring in the 88th. The exit is the
+     flavour and the goal is the thing you care about, so the exit moves,
+     never the goal, and it moves to his last goal's minute at the earliest,
+     which is always a legal spot on a 90 minute clock. */
+  {
+    const lastGoal = new Map<string, number>();
+    for (const sc of myScorers) {
+      lastGoal.set(sc.name, Math.max(lastGoal.get(sc.name) ?? 0, sc.minute));
+    }
+    for (const inj of injuryLines) {
+      const g = lastGoal.get(inj.name);
+      if (g !== undefined && inj.minute < g) inj.minute = g;
+    }
+    /* A sending off also comes after any booking the same man already has,
+       and never on the same tick as it: a straight red for a man who is
+       already carrying a yellow reads as a second yellow otherwise. */
+    const bookedAt = new Map<string, number>();
+    for (const c of cardLines) {
+      if (c.kind === 'yellow') bookedAt.set(c.name, Math.max(bookedAt.get(c.name) ?? 0, c.minute));
+    }
+    for (const c of cardLines) {
+      if (c.kind !== 'red') continue;
+      const g = lastGoal.get(c.name);
+      if (g !== undefined && c.minute < g) c.minute = g;
+      const y = bookedAt.get(c.name);
+      if (y !== undefined && c.minute <= y) c.minute = Math.min(90, y + 1);
     }
   }
 
@@ -8964,8 +9107,14 @@ function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
     /* Round 158: the first half's scorers, decided now so the live viewer
        shows the same football the full time report will. Stats are credited
        once, at the whistle, never here. */
-    h1My: pickMyScorerLines(xi, myGoals, 1, 45),
-    h1Opp: generateOppScorers(fx.opponent, oppGoals, oppGoals, yearsOn(state), state.eraId),
+    /* Round 205: the live viewer's first half shares one minute book too. */
+    ...(() => {
+      const taken = new Set<number>();
+      return {
+        h1My: pickMyScorerLines(xi, myGoals, 1, 45, taken),
+        h1Opp: generateOppScorers(fx.opponent, oppGoals, oppGoals, yearsOn(state), state.eraId, taken),
+      };
+    })(),
   };
 }
 
