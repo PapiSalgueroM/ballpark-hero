@@ -119,14 +119,14 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'wnba', emoji: '🏀', title: 'WNBA Champions',
-    blurb: 'Every WNBA Finals since the league began in 1997, with the beaten finalist.',
+    blurb: 'Every WNBA Finals since the league began in 1997, with the beaten finalist and every Finals MVP from Cynthia Cooper on.',
     yearLabel: 'Year',
-    columns: [['runnerUp', 'Runner-up'], ['series', 'Series']],
+    columns: [['runnerUp', 'Runner-up'], ['series', 'Series'], ['mvp', 'Finals MVP']],
     play: [
       { path: '/champ-or-not', label: 'Champ or Not' },
       { path: '/list-quiz', label: 'Name Them All' },
     ],
-    fetch: () => rows('wnba_finals', 'year', 'winner', { runnerUp: 'loser', series: 'series_result' }),
+    fetch: () => rows('wnba_finals', 'year', 'winner', { runnerUp: 'loser', series: 'series_result', mvp: 'finals_mvp' }),
   },
   {
     key: 'cfb', emoji: '🏈', title: 'College Football National Champions',

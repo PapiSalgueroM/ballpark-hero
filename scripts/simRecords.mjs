@@ -55,6 +55,9 @@ const COMPLETE = {
   nba: ["series", "runnerUp"],
   ws: ["series", "runnerUp"],
   cup: ["series", "runnerUp"],
+  /* wnba joined in full in Round 245: runner-up and series completed in
+     Rounds 233/242, and all 29 Finals MVPs verified and filled */
+  wnba: ["runnerUp", "series", "mvp"],
   nrl: ["competition"],
 };
 
