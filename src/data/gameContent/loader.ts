@@ -131,6 +131,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   /* world */
   '/ball-iq': 'world',
   '/champ-or-not': 'world',
+  '/whod-they-beat': 'world',
   '/emoji-guess': 'world',
   '/guess-the-nation': 'world',
   '/guess-the-year': 'world',

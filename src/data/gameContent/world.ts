@@ -400,6 +400,49 @@ export const WORLD_CONTENT: GameContentMap = {
     ],
   },
 
+  '/whod-they-beat': {
+    intro: [
+      "History has a short memory and it only keeps one name per year. Who'd They Beat? is about the other name: the team that made the final, shook hands, and watched the confetti fall on somebody else.",
+      "We give you the champion and the year, across five competitions: the Super Bowl, the NBA Finals, the World Series, the Stanley Cup and the WNBA Finals. You pick who they beat from four options, and every single option is a real beaten finalist from that competition's record books.",
+    ],
+    howToPlay: [
+      "Read the final: a champion and a year.",
+      "Pick which of the four teams lost to them.",
+      "The reveal names the answer and the series result straight away.",
+      "Ten finals per day, two from each competition, one point per correct pick.",
+      "The daily set is the same for everyone. Unlimited mode keeps dealing.",
+    ],
+    rules: [
+      "Every option is a genuine finals loser from that same competition. No invented teams, ever.",
+      "The wrong options are real runners up from other years, which is what makes the near misses cruel: the 1995 Magic show up as an option for the 1994 question.",
+      "One pick per final, no second chances, and the daily locks your result once you finish.",
+    ],
+    example: [
+      'The card asks: "The Houston Rockets won the 1994 NBA Finals. Who did they beat?" You remember the Knicks going to seven, pick New York, and the reveal confirms it, series 4-3.',
+      "Next card is hockey: the 1942 Maple Leafs. If you know the only final ever won from three games down, you know Detroit was on the wrong end of it.",
+    ],
+    tips: [
+      "Work out the era first, then the conference or league. Half the wrong options die on geography.",
+      "Dynasty years are the easy ones: everyone knows who kept losing to the Bulls. The 40s and 50s are where scores are made.",
+      "The reveal teaches the series result too, which quietly makes you better at Champ or Not.",
+      "The trap options are usually from a year or two away. If two answers feel right, pick the one that fits the exact year.",
+    ],
+    faqs: [
+      {
+        q: "Are the wrong answers made up?",
+        a: "No. Every option genuinely lost a final in that competition at some point. The game is picking the right year's runner up, not spotting a fake team.",
+      },
+      {
+        q: "Where does the data come from?",
+        a: "The same audited record books behind our Record Books page: every finals loser was verified against independent lists and known history before this game was allowed to ask about it.",
+      },
+      {
+        q: "Why these five competitions?",
+        a: "They are the ones where our records carry every beaten finalist, all the way back: 121 World Series, 110 Stanley Cup Finals, 80 NBA Finals, 60 Super Bowls and every WNBA Finals since 1997.",
+      },
+    ],
+  },
+
   '/minefield': {
     intro: [
       "The board looks friendly: one category, a wall of names, most of them belong. Some of them are mines. Minefield asks you to click everyone who truly fits while dodging the plausible fakes planted among them.",
