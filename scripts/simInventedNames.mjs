@@ -237,6 +237,94 @@ console.log('5) No em or en dash in the banks');
   }
 }
 
+/* ---------- 6. Round 206: and no two of them share a name ---------- */
+console.log('6) No two men on the same team are called the same thing');
+{
+  /* The sibling of the rule this file was built for. Round 199 stopped an
+     invented man carrying a REAL person's name; this stops him carrying
+     ANOTHER INVENTED man's name on the same team, which was happening and
+     was visible: a thin club ships a squad of sixteen academy kids, the
+     bank held 400 combinations, and the birthday problem does the rest.
+     Measured before the fix: about ONE DAY ONE SQUAD IN FIVE at Kifisia or
+     Volos contained two men with identical names and identical "(Youth)"
+     suffixes, indistinguishable when picking an eleven or selling one.
+     Fixed by a hard uniqueness guard, with the bank widened from 400 to
+     1,296 so the guard rarely has to do anything. */
+  const ENTRY = '/tmp/dupeNameEntry.mjs';
+  const BUNDLE = '/tmp/dupeName.bundle.mjs';
+  fs.writeFileSync(ENTRY, `
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+export * from '${ROOT}/src/lib/clubManager.ts';
+`);
+  execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+  const cmEngine = await import(BUNDLE);
+
+  const dupesIn = list => {
+    const counts = new Map();
+    for (const n of list) counts.set(n, (counts.get(n) ?? 0) + 1);
+    return [...counts.entries()].filter(([, c]) => c > 1).map(([n, c]) => `${n} x${c}`);
+  };
+
+  /* The two clubs that ship fully youth-padded squads, plus a normal club
+     as the control. */
+  let padded = 0, squadsChecked = 0;
+  for (const club of ['Kifisia', 'Volos', 'Everton']) {
+    for (let i = 0; i < 25; i += 1) {
+      let st;
+      try { st = cmEngine.startCareer(club); } catch (e) { fail(`${club} would not start: ${e.message}`); break; }
+      squadsChecked += 1;
+      padded += st.squad.filter(p => p.isYouth).length;
+      const d = dupesIn(st.squad.map(p => p.name));
+      if (d.length) fail(`${club} day one: two men called the same thing (${d.join(', ')})`);
+    }
+  }
+
+  /* And across seasons, where the summer intake, the academy and the
+     scouting network all add names to a squad that already has some. */
+  let seasons = 0, playersSeen = 0;
+  for (let career = 0; career < 3; career += 1) {
+    let st = cmEngine.startCareer('Everton');
+    for (let season = 0; season < 3; season += 1) {
+      let guard = 0;
+      while (guard < 260) {
+        guard += 1;
+        const res = cmEngine.playNextEntry(st, { skipHalftime: true });
+        st = res.state;
+        /* Squad and academy books together: a scouted boy who shares a name
+           with a first teamer is the same bug wearing a different shirt. */
+        const all = [...st.squad.map(p => p.name), ...(st.academy?.prospects ?? []).map(p => p.name)];
+        const d = dupesIn(all);
+        if (d.length) { fail(`season ${season}: two men called the same thing (${d.join(', ')})`); guard = 999; break; }
+        if (st.pendingSummary || res.kind === 'seasonEnd' || res.kind === 'seasonOver') break;
+      }
+      playersSeen += st.squad.length;
+      seasons += 1;
+      try {
+        const fin = cmEngine.finishSeason(st);
+        st = cmEngine.startNextSeason(fin.state ?? fin);
+      } catch { break; }
+      if (st.sacked) break;
+    }
+  }
+
+  /* The guard itself is in the source, not just its effect, so a future
+     tidy cannot delete it and pass on luck alone. */
+  const cmSrc = read('src/lib/clubManager.ts');
+  if (!/function uniqueYouthName\(/.test(cmSrc)) fail('the youth name uniqueness guard is gone');
+  if (!/makeYouth\(position: Position, minRating = 55, maxRating = 68, taken: Set<string>/.test(cmSrc)) {
+    fail('makeYouth no longer takes the name book');
+  }
+  if (/`\$\{pick\(YOUTH_FIRST\)\} \$\{pick\(YOUTH_LAST\)\}/.test(cmSrc)) {
+    fail('something is building an academy name by picking blind again');
+  }
+  const firsts = (bankOf(cmSrc, 'YOUTH_FIRST') ?? []).length;
+  const lasts = (bankOf(cmSrc, 'YOUTH_LAST') ?? []).length;
+  /* The bank has to comfortably outsize the biggest squad it fills, or the
+     guard spends its life walking the cross product. */
+  if (firsts * lasts < 900) fail(`the academy bank is down to ${firsts * lasts} names, too few for a padded squad`);
+  console.log(`   ${squadsChecked} day one squads (${padded} academy kids in them), ${seasons} seasons, ${playersSeen} squad places, 0 shared names; bank is ${firsts}x${lasts} = ${firsts * lasts}`);
+}
+
 console.log('');
 if (failures > 0) {
   console.error(`simInventedNames: ${failures} failure${failures === 1 ? '' : 's'}`);

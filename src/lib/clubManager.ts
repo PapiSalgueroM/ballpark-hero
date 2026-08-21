@@ -2669,9 +2669,20 @@ function groupOf(pos: Position): PosGroup {
   return 'ATT';
 }
 
+/* Round 206: 20 by 20 was 400 possible academy names, and a thin club ships
+   a squad of sixteen of them, which by the birthday problem meant about one
+   day-one squad in five contained two men with the SAME name and the same
+   "(Youth)" suffix: two identical rows you could not tell apart when picking
+   an eleven. The bank is 36 by 36 now, 1,296 combinations, and a hard
+   uniqueness guard sits on top of it so the odds no longer matter at all.
+   Every pairing here is enumerated against the real-name wall by
+   simInventedNames on each suite run, which is why nothing in these two
+   lists may be added without that harness agreeing to it. */
 const YOUTH_FIRST = [
   'Jamie', 'Leo', 'Sam', 'Alfie', 'Marco', 'Theo', 'Noah', 'Kofi', 'Mats', 'Diego',
   'Enzo', 'Luca', 'Tyler', 'Oscar', 'Ravi', 'Jude', 'Milo', 'Andres', 'Yusuf', 'Kaan',
+  'Emeka', 'Ondrej', 'Nils', 'Tariq', 'Matteo', 'Aleks', 'Rune', 'Hugo',
+  'Kwame', 'Dimitri', 'Soren', 'Anton', 'Felix', 'Zane', 'Omar', 'Jonas',
 ];
 /* Round 199: 'Okafor' and 'Costa' left this bank. Paired with the Noah and
    the Diego above they produced two men who exist, so an academy kid in
@@ -2681,15 +2692,52 @@ const YOUTH_FIRST = [
 const YOUTH_LAST = [
   'Weston', 'Ashworth', 'Silva', 'Berg', 'Keane', 'Moretti', 'Dubois', 'Novak', 'Ferreira', 'Vargas',
   'Sato', 'Hansen', 'Adeyemi', 'Lindqvist', 'Petrov', 'Walsh', 'Kimura', 'Marchetti', 'Diallo', 'Reyes',
+  'Ravenhill', 'Okonjo', 'Vaszary', 'Lindholm', 'Baptiste', 'Ferreiro', 'Nyman', 'Ozturk',
+  'Calvet', 'Brennan', 'Voskuil', 'Hallberg', 'Tarrant', 'Miclea', 'Sundgren', 'Achebe',
 ];
 
 let youthSeq = 0;
 
+/**
+ * Round 206: a name no man on this team already has.
+ *
+ * Roll first, because a random pick out of 1,296 almost always lands clean
+ * and keeps the feel of the bank. If it does not, walk the cross product
+ * from a rolled starting point and take the first free pairing, which is
+ * guaranteed to terminate and cannot loop: a squad has tens of players and
+ * the bank has over a thousand names. Only if the whole bank were somehow
+ * spoken for does it fall back to a numbered name, which is still better
+ * than two identical rows.
+ *
+ * `taken` is the set of names already on this team, and the chosen name is
+ * added to it, so one set threaded through a squad build is all it takes.
+ */
+function uniqueYouthName(taken: Set<string>, suffix = ''): string {
+  const build = (f: string, l: string) => `${f} ${l}${suffix}`;
+  for (let i = 0; i < 12; i += 1) {
+    const n = build(pick(YOUTH_FIRST), pick(YOUTH_LAST));
+    if (!taken.has(n)) { taken.add(n); return n; }
+  }
+  const f0 = Math.floor(Math.random() * YOUTH_FIRST.length);
+  const l0 = Math.floor(Math.random() * YOUTH_LAST.length);
+  for (let a = 0; a < YOUTH_FIRST.length; a += 1) {
+    for (let b = 0; b < YOUTH_LAST.length; b += 1) {
+      const n = build(YOUTH_FIRST[(f0 + a) % YOUTH_FIRST.length], YOUTH_LAST[(l0 + b) % YOUTH_LAST.length]);
+      if (!taken.has(n)) { taken.add(n); return n; }
+    }
+  }
+  let n = 2;
+  while (taken.has(build(YOUTH_FIRST[f0], `${YOUTH_LAST[l0]} ${n}`))) n += 1;
+  const out = build(YOUTH_FIRST[f0], `${YOUTH_LAST[l0]} ${n}`);
+  taken.add(out);
+  return out;
+}
+
 // Round 70: youth pads sit at 55-68 so they slot below a club's real players
 // on the new value curve instead of outranking half the squad.
-function makeYouth(position: Position, minRating = 55, maxRating = 68): CMPlayer {
+function makeYouth(position: Position, minRating = 55, maxRating = 68, taken: Set<string> = new Set()): CMPlayer {
   youthSeq += 1;
-  const name = `${pick(YOUTH_FIRST)} ${pick(YOUTH_LAST)} (Youth)`;
+  const name = uniqueYouthName(taken, ' (Youth)');
   return {
     id: `youth-${Date.now().toString(36)}-${youthSeq}-${ri(100, 999)}`,
     name,
@@ -2759,17 +2807,22 @@ function ensureSquadCoverage(squad: CMPlayer[]): CMPlayer[] {
     MID: ['CM', 'CDM', 'CAM', 'CM', 'CM'],
     ATT: ['ST', 'RW', 'LW', 'ST'],
   };
+  /* Round 206: one name book for the whole squad, real players included, so
+     a padded club cannot ship two men called the same thing. This is the
+     path that produced them: sixteen academy names out of a bank of four
+     hundred meant about one squad in five had a pair. */
+  const takenNames = new Set(out.map(p => p.name));
   (['GK', 'DEF', 'MID', 'ATT'] as PosGroup[]).forEach(gr => {
     let count = out.filter(p => groupOf(p.position) === gr).length;
     let i = 0;
     while (count < need[gr]) {
-      out.push(makeYouth(fill[gr][i % fill[gr].length]));
+      out.push(makeYouth(fill[gr][i % fill[gr].length], 55, 68, takenNames));
       count += 1;
       i += 1;
     }
   });
   while (out.length < 16) {
-    out.push(makeYouth(pick([...POS_DEF, ...POS_MID, ...POS_ATT])));
+    out.push(makeYouth(pick([...POS_DEF, ...POS_MID, ...POS_ATT]), 55, 68, takenNames));
   }
   return out;
 }
@@ -8640,6 +8693,13 @@ function reportBand(potential: number, judgement: number): { lowGuess: number; h
   };
 }
 
+/** Round 206: every name this club already uses, squad and academy books. */
+function squadAndBookNames(state: CareerState): Set<string> {
+  const out = new Set<string>(state.squad.map(p => p.name));
+  for (const pr of state.academy?.prospects ?? []) out.add(pr.name);
+  return out;
+}
+
 function makeProspect(
   potential: number,
   source: string,
@@ -8647,13 +8707,15 @@ function makeProspect(
   judgement: number,
   fee: number,
   season: number,
+  taken: Set<string> = new Set(),
 ): Prospect {
   const age = ri(15, 18);
   const rating = clamp(potential - ri(8, 22), 40, 76);
   const band = reportBand(potential, judgement);
   return {
     id: `pr-${Date.now().toString(36)}-${ri(1000, 9999)}-${ri(100, 999)}`,
-    name: `${pick(YOUTH_FIRST)} ${pick(YOUTH_LAST)}`,
+    /* Round 206: never a name already on the books or in the squad. */
+    name: uniqueYouthName(taken),
     position: prospectPosition(),
     age,
     rating,
@@ -8699,7 +8761,9 @@ function tickScouting(state: CareerState): void {
       );
       if (Math.random() < 0.06) potential = clamp(potential + ri(3, 8), 54, 95);
       const fee = Math.max(0.2, Math.round((potential - 52) * 0.14 * 10) / 10);
-      addProspect(a, makeProspect(potential, region.name, region.flag, s.judgement, fee, state.season));
+      /* Round 206: a scout cannot come home with a boy who has the name of
+         somebody already on the books or already in the first team. */
+      addProspect(a, makeProspect(potential, region.name, region.flag, s.judgement, fee, state.season, squadAndBookNames(state)));
       s.found += 1;
     }
     if (s.weeksLeft <= 0) home.push(`${s.name} is back from ${region.name} with ${s.found} name${s.found === 1 ? '' : 's'} for you.`);
@@ -8740,7 +8804,7 @@ function runYouthIntake(state: CareerState): string[] {
     let potential = clamp(50 + Math.round(q * 1.55) + ri(0, 10), 52, 92);
     if (Math.random() < 0.07) potential = clamp(potential + ri(3, 9), 52, 95);
     best = Math.max(best, potential);
-    addProspect(a, makeProspect(potential, 'Academy', flag, judgement, 0, state.season));
+    addProspect(a, makeProspect(potential, 'Academy', flag, judgement, 0, state.season, squadAndBookNames(state)));
   }
   a.preview = intakePreview(a);
   return [
@@ -9888,8 +9952,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     const lost = (afterLoans.length + homeFromLoan.length) - squad.length;
     const room = Math.max(0, AUTO_SQUAD_TARGET - squad.length);
     const intake = clamp(Math.min(ri(2, 3) + Math.max(0, lost - 2), room), 0, 7);
+    /* Round 206: the summer intake reads the squad it is joining. */
+    const intakeNames = new Set(squad.map(p => p.name));
     for (let i = 0; i < intake; i++) {
-      squad.push(makeYouth(pick([...POS_DEF, ...POS_MID, ...POS_ATT, 'GK' as Position])));
+      squad.push(makeYouth(pick([...POS_DEF, ...POS_MID, ...POS_ATT, 'GK' as Position]), 55, 68, intakeNames));
     }
     const emergency = fillSquadGaps(
       clubName, season, squad, nextYearsOn,
