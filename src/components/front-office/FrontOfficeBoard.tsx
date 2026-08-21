@@ -10,6 +10,7 @@ import {
   REGULAR_WEEKS,
   type LeagueState, type GmGame, type Prospect, type PlayoffRound,
 } from '@/lib/frontOffice';
+import { leagueNames } from '@/lib/foNames';
 import { findTrades, type FinderOffer } from '@/lib/tradeFinder';
 /* Round 190: true negotiations, shared engine and shared card. The direct
    propose is a phone call now, not a coin flip. */
@@ -267,7 +268,10 @@ export default function FrontOfficeBoard() {
 
   const startDraft = () => {
     if (!league) return;
-    const cls = generateDraftClass(Math.random);
+    const cls = /* Round 211: the class is drawn against every name already in the
+       league, so a prospect cannot arrive sharing a name with a man on a
+       roster or in the market. */
+    generateDraftClass(Math.random, 40, leagueNames(league));
     setDraftClass(cls);
     setPicksLeft(3);
     setPhase('draft');

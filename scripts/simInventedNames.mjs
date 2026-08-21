@@ -317,6 +317,75 @@ export * from '${ROOT}/src/lib/clubManager.ts';
   if (/`\$\{pick\(YOUTH_FIRST\)\} \$\{pick\(YOUTH_LAST\)\}/.test(cmSrc)) {
     fail('something is building an academy name by picking blind again');
   }
+  /* ---- Round 211: the same rule in the four GM games ---- */
+  {
+    /* Their banks were TEN first names by TEN surnames, which is a hundred
+       possible people, and a new league deals fourteen free agents out of
+       that hundred before you press anything. Measured before the fix,
+       over thirty fresh leagues each: the same man appeared twice in 6 of
+       30 NFL leagues, 8 of 30 MLB, 13 of 30 NBA and 10 of 30 NHL. */
+    const FO_ENTRY = '/tmp/foNamesEntry.mjs';
+    const FO_BUNDLE = '/tmp/foNames.bundle.mjs';
+    fs.writeFileSync(FO_ENTRY, `
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+const nfl = await import('${ROOT}/src/lib/frontOffice.ts');
+const mlb = await import('${ROOT}/src/lib/mlbFrontOffice.ts');
+const nba = await import('${ROOT}/src/lib/nbaFrontOffice.ts');
+const nhl = await import('${ROOT}/src/lib/nhlFrontOffice.ts');
+export { nfl, mlb, nba, nhl };
+`);
+    execSync(`${ROOT}/node_modules/.bin/esbuild ${FO_ENTRY} --bundle --format=esm --platform=node --outfile=${FO_BUNDLE} --log-level=error`, { stdio: 'inherit' });
+    const fo = await import(FO_BUNDLE);
+
+    const leagueDupes = lg => {
+      const names = [];
+      for (const t of Object.values(lg.teams)) for (const p of t.players) names.push(p.name);
+      for (const p of lg.freeAgents) names.push(p.name);
+      const c = new Map();
+      for (const n of names) c.set(n, (c.get(n) ?? 0) + 1);
+      return [...c.entries()].filter(([, v]) => v > 1).map(([n, v]) => `${n} x${v}`);
+    };
+
+    const SPORTS = [
+      ['NFL', fo.nfl, 'initLeague', lg => { fo.nfl.runOffseason(lg, Math.random); fo.nfl.replenishRosters(lg, Math.random); }],
+      ['MLB', fo.mlb, 'initMlbLeague', lg => fo.mlb.mlbOffseason(lg, Math.random)],
+      ['NBA', fo.nba, 'initNbaLeague', lg => fo.nba.nbaOffseason(lg, Math.random)],
+      ['NHL', fo.nhl, 'initNhlLeague', lg => fo.nhl.nhlOffseason(lg, Math.random)],
+    ];
+    let leagues = 0, men = 0;
+    for (const [tag, mod, init, offseason] of SPORTS) {
+      for (let i = 0; i < 12; i += 1) {
+        const lg = mod[init]();
+        leagues += 1;
+        let d = leagueDupes(lg);
+        if (d.length) fail(`${tag}: a fresh league already contains the same man twice (${d.slice(0, 2).join(', ')})`);
+        /* And through four offseasons, where the men who arrive to fill
+           rosters are the ones most likely to collide. */
+        for (let season = 0; season < 4; season += 1) {
+          offseason(lg);
+          d = leagueDupes(lg);
+          if (d.length) { fail(`${tag}: offseason ${season + 1} produced the same man twice (${d.slice(0, 2).join(', ')})`); break; }
+        }
+        men += Object.values(lg.teams).reduce((n, t) => n + t.players.length, 0) + lg.freeAgents.length;
+      }
+    }
+    /* The banks have to comfortably outsize what a league deals out of
+       them, or the guard spends its life walking the cross product. */
+    const BANKS = [
+      ['src/lib/frontOffice.ts', 'FIRST', 'LAST'],
+      ['src/lib/mlbFrontOffice.ts', 'FA_FIRST', 'FA_LAST'],
+      ['src/lib/nbaFrontOffice.ts', 'FA_FIRST', 'FA_LAST'],
+      ['src/lib/nhlFrontOffice.ts', 'FA_FIRST', 'FA_LAST'],
+    ];
+    for (const [file, f, l] of BANKS) {
+      const src = read(file);
+      const nf = (bankOf(src, f) ?? []).length, nl = (bankOf(src, l) ?? []).length;
+      if (nf * nl < 700) fail(`${file}: the invented name bank is down to ${nf * nl} names, too few for a league`);
+      if (!/from '\.\/foNames'/.test(src)) fail(`${file} no longer imports the uniqueness guard`);
+    }
+    console.log(`   ${leagues} GM leagues, ${men} men in them, 4 offseasons each, 0 shared names`);
+  }
+
   const firsts = (bankOf(cmSrc, 'YOUTH_FIRST') ?? []).length;
   const lasts = (bankOf(cmSrc, 'YOUTH_LAST') ?? []).length;
   /* The bank has to comfortably outsize the biggest squad it fills, or the

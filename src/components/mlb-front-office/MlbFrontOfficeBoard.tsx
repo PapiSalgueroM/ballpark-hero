@@ -9,6 +9,7 @@ import {
   MLB_ROUNDS,
   type MlbLeague, type MlbProspect, type MlbSeriesResult, mlbExecuteTalksTrade,
 } from '@/lib/mlbFrontOffice';
+import { leagueNames } from '@/lib/foNames';
 import { findTrades, type FinderOffer } from '@/lib/tradeFinder';
 /* Round 190: true negotiations, shared engine and shared card. The direct
    propose is a phone call now, not a coin flip. */
@@ -221,7 +222,10 @@ export default function MlbFrontOfficeBoard() {
 
   const startDraft = () => {
     if (!league) return;
-    const cls = mlbDraftClass(Math.random);
+    const cls = /* Round 211: the class is drawn against every name already in the
+       league, so a prospect cannot arrive sharing a name with a man on a
+       roster or in the market. */
+    mlbDraftClass(Math.random, 24, leagueNames(league));
     setDraftClass(cls); setPicksLeft(2); setPhase('draft');
     persist({ phase: 'draft', draftClass: cls, picksLeft: 2 }, league, myTeam);
   };

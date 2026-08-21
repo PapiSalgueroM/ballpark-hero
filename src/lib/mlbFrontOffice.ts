@@ -1,4 +1,6 @@
 import { MLB_FO_ROSTERS } from '@/data/mlbFoPlayers';
+/* Round 211: no two men in one league share a name. */
+import { leagueNames, uniqueName } from './foNames';
 
 /**
  * MLB Front Office engine (2026-08-05). Baseball sibling of the NFL and NBA
@@ -99,25 +101,45 @@ export function initMlbLeague(rng: () => number = Math.random): MlbLeague {
     season: 2026,
     cap: MLB_TAX_BASE,
     teams,
-    freeAgents: initialFaPool(rng),
+    /* Round 211: dealt against the names already on the rosters. */
+    freeAgents: initialFaPool(rng, leagueNames({ teams, freeAgents: [] })),
     round: 1,
     champions: [],
   };
 }
 
-const FA_FIRST = ['Luis', 'Marcus', 'Tanner', 'Yohan', 'Brooks', 'Dai', 'Ramon', 'Cole', 'Ezra', 'Trey'];
-const FA_LAST = ['Villar', 'Hollis', 'Okada', 'Reyes', 'Calloway', 'Barrero', 'Whitfield', 'Nakamura', 'Prieto', 'Sandoval'];
-export function mlbGenName(rng: () => number): string {
+/* Round 211: widened from 10x10 to 28x28. A hundred possible people is
+   not enough to deal a fourteen man free agent pool out of: the same man
+   turned up twice in about a third of new leagues. Every pairing below is
+   enumerated against the real-name wall by simInventedNames on each suite
+   run, so nothing goes in here without that harness agreeing. */
+const FA_FIRST = [
+  'Luis', 'Marcus', 'Tanner', 'Yohan', 'Brooks', 'Dai', 'Ramon', 'Cole', 'Ezra', 'Trey',
+  'Emilio', 'Wyatt', 'Hideki', 'Rafa', 'Deacon', 'Brandt', 'Nico', 'Sol', 'Bennett', 'Kip',
+  'Ronan', 'Tavi', 'Marek', 'Osvaldo', 'Junior', 'Case', 'Wilmer', 'Tomas',
+];
+const FA_LAST = [
+  'Villar', 'Hollis', 'Okada', 'Reyes', 'Calloway', 'Barrero', 'Whitfield', 'Nakamura', 'Prieto', 'Sandoval',
+  'Escalante', 'Bingham', 'Ferraro', 'Achterberg', 'Delgadillo', 'Kestrel', 'Mabry', 'Novotny', 'Quintero', 'Rademacher',
+  'Sturdivant', 'Tillery', 'Urrutia', 'Vandegrift', 'Wexler', 'Yamashiro', 'Zaragoza', 'Ballinger',
+];
+/**
+ * Round 211: a name nobody in this league already has when a book is
+ * passed. Optional so harnesses and any caller wanting a plausible string
+ * still work; every caller inside the engine passes one.
+ */
+export function mlbGenName(rng: () => number, taken?: Set<string>): string {
+  if (taken) return uniqueName(rng, FA_FIRST, FA_LAST, taken);
   return `${FA_FIRST[Math.floor(rng() * FA_FIRST.length)]} ${FA_LAST[Math.floor(rng() * FA_LAST.length)]}`;
 }
 
-function initialFaPool(rng: () => number): MlbGmPlayer[] {
+function initialFaPool(rng: () => number, taken: Set<string>): MlbGmPlayer[] {
   const out: MlbGmPlayer[] = [];
   const POS = ['SP', 'RP', 'C', '1B', 'SS', 'OF', 'OF', '3B', 'SP', 'DH'];
   for (let i = 0; i < 10; i++) {
     const ovr = 72 + Math.floor(rng() * 10);
     out.push({
-      id: fid(), name: mlbGenName(rng), pos: POS[i % POS.length],
+      id: fid(), name: mlbGenName(rng, taken), pos: POS[i % POS.length],
       age: 27 + Math.floor(rng() * 7), ovr, salary: mlbSalaryFor(ovr),
       years: 1 + Math.floor(rng() * 2), out: 0, pot: ovr,
     });
@@ -304,13 +326,13 @@ export function mlbExecuteTalksTrade(
 
 export interface MlbProspect { id: string; name: string; pos: MlbPos; age: number; grade: number; trueOvr: number }
 
-export function mlbDraftClass(rng: () => number, size = 24): MlbProspect[] {
+export function mlbDraftClass(rng: () => number, size = 24, taken: Set<string> = new Set()): MlbProspect[] {
   const POS = ['SP', 'SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'OF', 'OF'];
   const out: MlbProspect[] = [];
   for (let i = 0; i < size; i++) {
     const trueOvr = 69 + Math.floor(rng() * 18);
     out.push({
-      id: fid(), name: mlbGenName(rng), pos: POS[Math.floor(rng() * POS.length)],
+      id: fid(), name: mlbGenName(rng, taken), pos: POS[Math.floor(rng() * POS.length)],
       age: 18 + Math.floor(rng() * 4),
       grade: Math.max(65, Math.min(93, trueOvr + Math.floor(rng() * 9) - 4)),
       trueOvr,
@@ -330,6 +352,9 @@ export function mlbProspectToPlayer(pr: MlbProspect, rng: () => number): MlbGmPl
 
 export function mlbOffseason(league: MlbLeague, rng: () => number): string[] {
   const notes: string[] = [];
+  /* Round 211: one name book for the whole offseason, so the men who
+     arrive to fill rosters cannot duplicate each other or anybody left. */
+  const taken = leagueNames(league);
   for (const t of Object.values(league.teams)) {
     const keep: MlbGmPlayer[] = [];
     for (const p of t.players) {
@@ -348,7 +373,7 @@ export function mlbOffseason(league: MlbLeague, rng: () => number): string[] {
     }
     t.players = keep;
     t.wins = 0; t.losses = 0; t.picks = [1, 2];
-    replenishMlbRoster(t, rng);
+    replenishMlbRoster(t, rng, taken);
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
   for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 33) fa.ovr = Math.max(63, fa.ovr - 1); }
@@ -359,11 +384,11 @@ export function mlbOffseason(league: MlbLeague, rng: () => number): string[] {
 }
 
 /** Keep every club playable: at least 6 bats, 3 SP, 2 relievers, 11 players. */
-export function replenishMlbRoster(t: MlbGmTeam, rng: () => number): void {
+export function replenishMlbRoster(t: MlbGmTeam, rng: () => number, taken: Set<string> = new Set()): void {
   const add = (pos: string) => {
     const ovr = 69 + Math.floor(rng() * 7);
     t.players.push({
-      id: fid(), name: mlbGenName(rng), pos,
+      id: fid(), name: mlbGenName(rng, taken), pos,
       age: 24 + Math.floor(rng() * 8), ovr, salary: mlbSalaryFor(ovr),
       years: 1 + Math.floor(rng() * 2), out: 0, pot: ovr,
     });

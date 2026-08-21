@@ -29,6 +29,10 @@
  * same thing) lives in simInventedNames section 6, next to the real-name
  * wall it is a sibling of.
  *
+ * Round 211 widened this file past Club Manager: the four GM leagues get
+ * the same watch, because they are closed worlds too and nothing was
+ * checking that their wins matched their defeats either.
+ *
  * Run: node scripts/simBooks.mjs
  */
 import { execSync } from 'node:child_process';
@@ -190,9 +194,91 @@ console.log('2) And the books are not balancing because nothing happens');
   console.log(`   ${played} club-matches, ${goals} goals and ${worlds} other leagues in the control sample, so the balance means something`);
 }
 
+/* ---------- 4. Round 211: the same watch on the four GM leagues ---------- */
+console.log('3) The four front office leagues add up too');
+{
+  /* Round 211 found the same man twice in a third of new GM leagues, which
+     is fixed and guarded in simInventedNames. While that probe was running
+     it checked a dozen other things that turned out to be fine, and those
+     are fenced here for the same reason section 1 fences Club Manager: an
+     invariant nobody is watching is an invariant that will break quietly.
+     A GM league is a CLOSED world, which makes these checkable: every win
+     is somebody's defeat, every man has exactly one employer, and nobody
+     is rated 140 or paid a negative salary. */
+  const FO_ENTRY = '/tmp/booksFoEntry.mjs';
+  const FO_BUNDLE = '/tmp/booksFo.bundle.mjs';
+  fs.writeFileSync(FO_ENTRY, `
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+const nfl = await import('${ROOT}/src/lib/frontOffice.ts');
+const mlb = await import('${ROOT}/src/lib/mlbFrontOffice.ts');
+const nba = await import('${ROOT}/src/lib/nbaFrontOffice.ts');
+const nhl = await import('${ROOT}/src/lib/nhlFrontOffice.ts');
+export { nfl, mlb, nba, nhl };
+`);
+  execSync(`${ROOT}/node_modules/.bin/esbuild ${FO_ENTRY} --bundle --format=esm --platform=node --outfile=${FO_BUNDLE} --log-level=error`, { stdio: 'inherit' });
+  const fo = await import(FO_BUNDLE);
+
+  function auditGm(tag, lg) {
+    const ids = [];
+    for (const [abbr, t] of Object.entries(lg.teams)) {
+      if (t.abbr !== abbr) fail(`${tag}: ${abbr} is filed under ${t.abbr}`);
+      if (t.wins < 0 || t.losses < 0) fail(`${tag}: ${abbr} has a negative record`);
+      if (!t.players.length) fail(`${tag}: ${abbr} has nobody on the roster`);
+      for (const p of t.players) {
+        ids.push(p.id);
+        if (!Number.isFinite(p.ovr) || p.ovr < 1 || p.ovr > 99) fail(`${tag}: ${p.name} is rated ${p.ovr}`);
+        if (!Number.isFinite(p.salary) || p.salary < 0) fail(`${tag}: ${p.name} is paid ${p.salary}`);
+        if (!Number.isFinite(p.age) || p.age < 15 || p.age > 50) fail(`${tag}: ${p.name} is ${p.age} years old`);
+        if (p.out < 0) fail(`${tag}: ${p.name} is injured for ${p.out} weeks`);
+        if (p.years < 0) fail(`${tag}: ${p.name} has ${p.years} years on his deal`);
+      }
+    }
+    for (const p of lg.freeAgents) ids.push(p.id);
+    if (new Set(ids).size !== ids.length) fail(`${tag}: two men share an id`);
+    /* A closed league: every win came out of somebody else's column. */
+    const w = Object.values(lg.teams).reduce((a, t) => a + t.wins, 0);
+    const l = Object.values(lg.teams).reduce((a, t) => a + t.losses, 0);
+    if (w !== l) fail(`${tag}: ${w} wins against ${l} defeats`);
+  }
+
+  let leagues = 0, seasons = 0;
+  {
+    /* The NFL board's own loop: injuries, AI moves, then the week's games. */
+    const lg = fo.nfl.initLeague();
+    leagues += 1;
+    auditGm('NFL fresh', lg);
+    for (let w = 1; w <= fo.nfl.REGULAR_WEEKS; w += 1) {
+      fo.nfl.injuryPass(lg.teams, Math.random);
+      fo.nfl.aiWeeklyMoves(lg, Object.keys(lg.teams)[0], Math.random);
+      lg.schedule[lg.week - 1] = lg.schedule[lg.week - 1].map(g => fo.nfl.simGame(g, lg.teams, Math.random));
+      lg.week += 1;
+      auditGm(`NFL w${w}`, lg);
+    }
+    fo.nfl.runOffseason(lg, Math.random);
+    fo.nfl.replenishRosters(lg, Math.random);
+    seasons += 1;
+    auditGm('NFL after the summer', lg);
+  }
+  for (const [tag, mod, init, offseason] of [
+    ['MLB', fo.mlb, 'initMlbLeague', lg => fo.mlb.mlbOffseason(lg, Math.random)],
+    ['NBA', fo.nba, 'initNbaLeague', lg => fo.nba.nbaOffseason(lg, Math.random)],
+    ['NHL', fo.nhl, 'initNhlLeague', lg => fo.nhl.nhlOffseason(lg, Math.random)],
+  ]) {
+    const lg = mod[init]();
+    leagues += 1;
+    auditGm(`${tag} fresh`, lg);
+    for (let season = 0; season < 3; season += 1) {
+      offseason(lg);
+      seasons += 1;
+      auditGm(`${tag} summer ${season + 1}`, lg);
+    }
+  }
+  console.log(`   ${leagues} GM leagues, ${seasons} summers, every roster, contract and record consistent`);
+}
+
 console.log('');
 if (failures > 0) {
   console.error(`simBooks: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log('simBooks: green. Every number Club Manager shows agrees with every other number it shows.');
+console.log('simBooks: green. Every number these games show agrees with every other number they show.');

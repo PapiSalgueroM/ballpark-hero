@@ -1,4 +1,6 @@
 import { FO_TEAMS, FO_TEAM_MAP, type FoPlayer, type FoTeam } from '@/data/frontOfficePlayers';
+/* Round 211: no two men in one league share a name. */
+import { leagueNames, uniqueName } from './foNames';
 
 /**
  * NFL Front Office engine (2026-08-05, the manager-for-every-sport push).
@@ -95,7 +97,10 @@ export function initLeague(rng: () => number = Math.random): LeagueState {
     season: 2026,
     cap: SALARY_CAP_BASE,
     teams,
-    freeAgents: buildInitialFreeAgents(rng),
+    /* Round 211: the pool is dealt against the names already on the
+       thirty two rosters, so an invented free agent can never share a name
+       with a real player either. */
+    freeAgents: buildInitialFreeAgents(rng, leagueNames({ teams, freeAgents: [] })),
     schedule: buildSchedule(rng),
     week: 1,
     champions: [],
@@ -103,7 +108,7 @@ export function initLeague(rng: () => number = Math.random): LeagueState {
 }
 
 /** A believable opening FA pool: fictional veterans at every position. */
-function buildInitialFreeAgents(rng: () => number): GmPlayer[] {
+function buildInitialFreeAgents(rng: () => number, taken: Set<string>): GmPlayer[] {
   const out: GmPlayer[] = [];
   const POS: GmPlayer['pos'][] = ['QB', 'RB', 'WR', 'WR', 'TE', 'OL', 'OL'];
   for (let i = 0; i < 14; i++) {
@@ -111,7 +116,7 @@ function buildInitialFreeAgents(rng: () => number): GmPlayer[] {
     const ovr = 70 + Math.floor(rng() * 12);
     out.push({
       id: freshId(),
-      name: prospectName(rng),
+      name: prospectName(rng, taken),
       pos,
       age: 27 + Math.floor(rng() * 6),
       ovr,
@@ -443,14 +448,37 @@ export function executeTalksTrade(
 // Draft (fictional prospects, clearly generated)
 // ---------------------------------------------------------------------------
 
-const FIRST = ['Jalen', 'Marcus', 'Tyrese', 'Caden', 'DeShawn', 'Malik', 'Brock', 'Xavier', 'Trey', 'Jaxon', 'Amari', 'Kai', 'Darius', 'Cooper', 'Zion', 'Roman', 'Elijah', 'Nico', 'Grant', 'Omar'];
-const LAST = ['Whitfield', 'Calloway', 'Bridgewater', 'Sterling', 'Maddox', 'Rourke', 'Delacroix', 'Okafor', 'Vandermeer', 'Holloway', 'Kingsley', 'Beaumont', 'Ashford', 'Winslow', 'Marchetti', 'Duvall', 'Slater', 'Redmond', 'Crowder', 'Bishop'];
+/* Round 211: widened from 20x20 to 34x34. Four hundred possible people
+   still put the same man in a new league's free agent pool twice in six of
+   thirty measured leagues. Every pairing is enumerated against the
+   real-name wall by simInventedNames on each suite run. */
+const FIRST = [
+  'Jalen', 'Marcus', 'Tyrese', 'Caden', 'DeShawn', 'Malik', 'Brock', 'Xavier', 'Trey', 'Jaxon',
+  'Amari', 'Kai', 'Darius', 'Cooper', 'Zion', 'Roman', 'Elijah', 'Nico', 'Grant', 'Omar',
+  'Bo', 'Cade', 'Deion', 'Ezra', 'Finn', 'Hollis', 'Isaiah', 'Jamari', 'Keegan', 'Lincoln',
+  'Maddox', 'Nash', 'Quincy', 'Rashad',
+];
+const LAST = [
+  'Whitfield', 'Calloway', 'Bridgewater', 'Sterling', 'Maddox', 'Rourke', 'Delacroix', 'Okafor', 'Vandermeer', 'Holloway',
+  'Kingsley', 'Beaumont', 'Ashford', 'Winslow', 'Marchetti', 'Duvall', 'Slater', 'Redmond', 'Crowder', 'Bishop',
+  'Ravensworth', 'Sutcliffe', 'Thackery', 'Underhill', 'Valentine', 'Wexford', 'Yarborough', 'Zimmerman', 'Aldridge', 'Braddock',
+  'Chesterton', 'Draycott', 'Eastmond', 'Fenwick',
+];
 
-export function prospectName(rng: () => number): string {
+/**
+ * Round 211: a name nobody in this league already has.
+ *
+ * The `taken` book is optional so the harnesses and any caller that only
+ * wants a plausible string still work, but every caller inside the engine
+ * passes one, because a free agent who shares a name with a man on a
+ * roster is the same bug as two free agents sharing one.
+ */
+export function prospectName(rng: () => number, taken?: Set<string>): string {
+  if (taken) return uniqueName(rng, FIRST, LAST, taken);
   return `${FIRST[Math.floor(rng() * FIRST.length)]} ${LAST[Math.floor(rng() * LAST.length)]}`;
 }
 
-export function generateDraftClass(rng: () => number, size = 40): Prospect[] {
+export function generateDraftClass(rng: () => number, size = 40, taken: Set<string> = new Set()): Prospect[] {
   const POS: Prospect['pos'][] = ['QB', 'RB', 'WR', 'WR', 'TE', 'OL', 'OL', 'DEF'];
   const out: Prospect[] = [];
   for (let i = 0; i < size; i++) {
@@ -459,7 +487,7 @@ export function generateDraftClass(rng: () => number, size = 40): Prospect[] {
     const noise = Math.floor(rng() * 9) - 4;     // scouting error -4..+4
     out.push({
       id: freshId(),
-      name: prospectName(rng),
+      name: prospectName(rng, taken),
       pos,
       age: 21 + Math.floor(rng() * 3),
       grade: Math.max(62, Math.min(92, trueOvr + noise)),
@@ -558,12 +586,14 @@ export function runOffseason(league: LeagueState, rng: () => number): OffseasonN
  * journeymen (same fictional-name pool as the draft).
  */
 export function replenishRosters(league: LeagueState, rng: () => number): void {
+  /* Round 211: one name book for the whole replenishment pass. */
+  const taken = leagueNames(league);
   for (const t of Object.values(league.teams)) {
     const addDepth = (pos: GmPlayer['pos']) => {
       const ovr = 66 + Math.floor(rng() * 8);
       t.players.push({
         id: freshId(),
-        name: prospectName(rng),
+        name: prospectName(rng, taken),
         pos,
         age: 24 + Math.floor(rng() * 8),
         ovr,

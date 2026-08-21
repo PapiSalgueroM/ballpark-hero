@@ -1,4 +1,6 @@
 import { NHL_FO_ROSTERS } from '@/data/nhlFoPlayers';
+/* Round 211: no two men in one league share a name. */
+import { leagueNames, uniqueName } from './foNames';
 
 /**
  * NHL Front Office engine (2026-08-05). Hockey sibling of the NFL, NBA and
@@ -97,27 +99,47 @@ export function initNhlLeague(rng: () => number = Math.random): NhlLeague {
     season: 2026,
     cap: NHL_CAP_BASE,
     teams,
-    freeAgents: initialFaPool(rng),
+    /* Round 211: dealt against the names already on the rosters. */
+    freeAgents: initialFaPool(rng, leagueNames({ teams, freeAgents: [] })),
     round: 1,
     champions: [],
   };
 }
 
-const FA_FIRST = ['Anders', 'Miro', 'Brady', 'Ilya', 'Cole', 'Juuso', 'Marek', 'Liam', 'Dmitri', 'Nolan'];
+/* Round 211: widened from 10x10 to 28x28. A hundred possible people is
+   not enough to deal a fourteen man free agent pool out of: the same man
+   turned up twice in about a third of new leagues. Every pairing below is
+   enumerated against the real-name wall by simInventedNames on each suite
+   run, so nothing goes in here without that harness agreeing. */
+const FA_FIRST = [
+  'Anders', 'Miro', 'Brady', 'Ilya', 'Cole', 'Juuso', 'Marek', 'Liam', 'Dmitri', 'Nolan',
+  'Tuukka', 'Rasmus', 'Emil', 'Kasper', 'Lucas', 'Nikita', 'Oskar', 'Petteri', 'Rurik', 'Sten',
+  'Torsten', 'Ulf', 'Valter', 'Wilhelm', 'Aleks', 'Bjorn', 'Casper', 'Eino',
+];
 /* Round 199: 'Sorokin' left this bank. With the Ilya above it, it produced
    a real NHL goaltender, and these free agents are invented men. */
-const FA_LAST = ['Lindqvist', 'Kovac', 'Tremblay', 'Vasko', 'Bergeron', 'Halonen', 'Novak', 'Gallagher', 'Fedorov', 'Byfield'];
-export function nhlGenName(rng: () => number): string {
+const FA_LAST = [
+  'Lindqvist', 'Kovac', 'Tremblay', 'Vasko', 'Bergeron', 'Halonen', 'Novak', 'Gallagher', 'Fedorov', 'Byfield',
+  'Ahlberg', 'Brannstrom', 'Cederholm', 'Dahlstrom', 'Eklund', 'Forsell', 'Grahn', 'Hjalmarsen', 'Ivarsson', 'Jokela',
+  'Karlstrom', 'Lehtinen', 'Mikkola', 'Nyholm', 'Ostberg', 'Palmgren', 'Ranta', 'Sjodin',
+];
+/**
+ * Round 211: a name nobody in this league already has when a book is
+ * passed. Optional so harnesses and any caller wanting a plausible string
+ * still work; every caller inside the engine passes one.
+ */
+export function nhlGenName(rng: () => number, taken?: Set<string>): string {
+  if (taken) return uniqueName(rng, FA_FIRST, FA_LAST, taken);
   return `${FA_FIRST[Math.floor(rng() * FA_FIRST.length)]} ${FA_LAST[Math.floor(rng() * FA_LAST.length)]}`;
 }
 
-function initialFaPool(rng: () => number): NhlGmPlayer[] {
+function initialFaPool(rng: () => number, taken: Set<string>): NhlGmPlayer[] {
   const out: NhlGmPlayer[] = [];
   const POS: NhlPos[] = ['C', 'W', 'W', 'D', 'D', 'G', 'C', 'W', 'D', 'W'];
   for (let i = 0; i < 10; i++) {
     const ovr = 72 + Math.floor(rng() * 9);
     out.push({
-      id: fid(), name: nhlGenName(rng), pos: POS[i % POS.length],
+      id: fid(), name: nhlGenName(rng, taken), pos: POS[i % POS.length],
       age: 26 + Math.floor(rng() * 8), ovr, salary: nhlSalaryFor(ovr),
       years: 1 + Math.floor(rng() * 2), out: 0, pot: ovr,
     });
@@ -318,13 +340,13 @@ export function nhlExecuteTalksTrade(
 
 export interface NhlProspect { id: string; name: string; pos: NhlPos; age: number; grade: number; trueOvr: number }
 
-export function nhlDraftClass(rng: () => number, size = 24): NhlProspect[] {
+export function nhlDraftClass(rng: () => number, size = 24, taken: Set<string> = new Set()): NhlProspect[] {
   const POS: NhlPos[] = ['C', 'W', 'W', 'D', 'D', 'G'];
   const out: NhlProspect[] = [];
   for (let i = 0; i < size; i++) {
     const trueOvr = 69 + Math.floor(rng() * 18);
     out.push({
-      id: fid(), name: nhlGenName(rng), pos: POS[Math.floor(rng() * POS.length)],
+      id: fid(), name: nhlGenName(rng, taken), pos: POS[Math.floor(rng() * POS.length)],
       age: 18 + Math.floor(rng() * 3),
       grade: Math.max(65, Math.min(93, trueOvr + Math.floor(rng() * 9) - 4)),
       trueOvr,
@@ -344,6 +366,8 @@ export function nhlProspectToPlayer(pr: NhlProspect, rng: () => number): NhlGmPl
 
 export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
   const notes: string[] = [];
+  /* Round 211: one name book for the whole offseason. */
+  const taken = leagueNames(league);
   for (const t of Object.values(league.teams)) {
     const keep: NhlGmPlayer[] = [];
     for (const p of t.players) {
@@ -363,7 +387,7 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
     }
     t.players = keep;
     t.wins = 0; t.losses = 0; t.otLosses = 0; t.picks = [1, 2];
-    replenishNhlRoster(t, rng);
+    replenishNhlRoster(t, rng, taken);
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
   for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(63, fa.ovr - 1); }
@@ -374,11 +398,11 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
 }
 
 /** Keep every club playable: at least 5 forwards, 3 D, 1 goalie, 10 players. */
-export function replenishNhlRoster(t: NhlGmTeam, rng: () => number): void {
+export function replenishNhlRoster(t: NhlGmTeam, rng: () => number, taken: Set<string> = new Set()): void {
   const add = (pos: NhlPos) => {
     const ovr = 69 + Math.floor(rng() * 7);
     t.players.push({
-      id: fid(), name: nhlGenName(rng), pos,
+      id: fid(), name: nhlGenName(rng, taken), pos,
       age: 23 + Math.floor(rng() * 8), ovr, salary: nhlSalaryFor(ovr),
       years: 1 + Math.floor(rng() * 2), out: 0, pot: ovr,
     });
