@@ -1,6 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { normalizeName, displayName, SOCCER_MARKET_VALUE_SOURCE } from '@/lib/playerSearch';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
 
 /**
  * Missing XI: a famous real starting lineup is shown with ONE player
@@ -5566,7 +5566,10 @@ function seededRandom(seed: number): () => number {
  * same ET date, matching the sitewide daily-reset convention.
  */
 export function pickDailyPuzzle(lineups: Lineup[] = LINEUPS): ActivePuzzle {
-  const seed = dateSeed(getTodayET());
+  /* Round 212: the HASHED date, not the raw one. A raw date seed makes a
+     Lehmer generator's first draw a straight line in the date, which froze
+     this puzzle for months at a time. See dailyPrngSeed in dateUtils. */
+  const seed = dailyPrngSeed(getTodayET());
   const rand = seededRandom(seed);
   const lineupIndex = Math.floor(rand() * lineups.length);
   const lineup = lineups[lineupIndex];

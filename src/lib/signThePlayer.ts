@@ -1,5 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
 import { FORMATIONS, type Formation, type FormationSlot } from '@/lib/squadDeal';
 import type { Position } from '@/types/game';
 
@@ -274,7 +274,10 @@ function buildSlate(pool: MarketPlayer[], formation: Formation, rng: () => numbe
 
 /** Daily slate: date-seeded formation choice + date-seeded player draw, identical for every player on the same ET date. */
 export function buildDailySlate(pool: MarketPlayer[]): Slate {
-  const seed = dateSeed(getTodayET());
+  /* Round 212: the HASHED date, not the raw one. A raw date seed makes a
+     Lehmer generator's first draw a straight line in the date, which froze
+     this puzzle for months at a time. See dailyPrngSeed in dateUtils. */
+  const seed = dailyPrngSeed(getTodayET());
   const formation = seededShuffle(FORMATIONS, seed)[0];
   let s = (seed * 48271) % 2147483647;
   if (s <= 0) s += 2147483646;

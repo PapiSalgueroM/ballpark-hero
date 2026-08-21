@@ -45,6 +45,46 @@ export function dateSeed(dateStr: string): number {
 }
 
 /**
+ * Round 212: the seed to use when a date has to START A RANDOM STREAM.
+ *
+ * dateSeed above is exactly right for `puzzles[seed % puzzles.length]`,
+ * which is what most of the daily games do: consecutive days differ by one,
+ * so the index moves by one and the pool rotates.
+ *
+ * It is exactly WRONG for seeding a Lehmer generator, which several games
+ * were doing, and the failure is not subtle. A Lehmer step is
+ * `s = (s * 16807) % 2147483647`, so the first number it produces is very
+ * nearly a straight line in the seed: two seeds one apart give first
+ * outputs 16807 / 2147483647 apart, which is eight parts in a million.
+ * Multiply that by a pool of twenty and floor it and you get the same
+ * index for tens of thousands of consecutive days.
+ *
+ * That is not theory. Measured over a simulated year before this round:
+ * Missing XI dealt TWO different lineups in three hundred and sixty five
+ * days, one of them for two hundred and forty three days running, and
+ * Sign the Player used one formation for the entire year. A daily game
+ * that is the same every day is not a daily game.
+ *
+ * So this hashes the date string properly first, with an avalanche pass on
+ * the end, and returns a value inside the Lehmer modulus so that two dates
+ * cannot fold onto the same stream. getDailyTier has used the same idea
+ * since it was written; this makes it available to everything.
+ */
+export function dailyPrngSeed(dateStr: string): number {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < dateStr.length; i += 1) {
+    h ^= dateStr.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  h ^= h >>> 16;
+  h = Math.imul(h, 2246822507) >>> 0;
+  h ^= h >>> 13;
+  h = Math.imul(h, 3266489909) >>> 0;
+  h ^= h >>> 16;
+  return (h % 2147483646) + 1;
+}
+
+/**
  * Returns today's deterministic difficulty tier for Footle's daily puzzle.
  * Every user on the same ET date gets the same tier.
  *

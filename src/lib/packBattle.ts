@@ -1,5 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
 
 /**
  * Pack Battle (R6 build plan, Part 1 item 9; MASTER_PLAN Wave 15d, the final
@@ -135,7 +135,10 @@ const PACK_SIZE = 5;
 
 /** Daily pack: date-seeded 5-card draw, identical for every player on the same ET date. */
 export function buildDailyPack(pool: PackCard[]): PackCard[] {
-  const seed = dateSeed(getTodayET());
+  /* Round 212: the HASHED date, not the raw one. A raw date seed makes a
+     Lehmer generator's first draw a straight line in the date, which froze
+     this puzzle for months at a time. See dailyPrngSeed in dateUtils. */
+  const seed = dailyPrngSeed(getTodayET());
   return seededShuffle(pool, seed).slice(0, PACK_SIZE);
 }
 
