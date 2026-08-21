@@ -490,9 +490,22 @@ export function mulberry32(seed: number): () => number {
 }
 
 export function daySeed(date = new Date()): number {
-  // ET-anchored day number so the daily flips at the same moment as the polls
-  const et = new Date(date.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-  return Math.floor(Date.UTC(et.getFullYear(), et.getMonth(), et.getDate()) / 86_400_000);
+  /* ET-anchored day number so the daily flips at the same moment as the polls.
+   *
+   * Round 203: this used to be new Date(date.toLocaleString('en-US', ...)),
+   * which builds a string like "8/19/2026, 10:00:00 PM" and hands it back to
+   * the Date parser. That round trip is the classic cross-browser trap: the
+   * format is not one the spec requires any engine to parse, Safari has
+   * historically returned Invalid Date for it, and an Invalid Date here
+   * would make this seed NaN and take the whole daily board down on iPhone,
+   * which is the device this site is mostly played on. Reading the parts
+   * directly is defined behaviour everywhere and needs no parsing at all. */
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/New_York',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+  }).formatToParts(date);
+  const get = (t: string) => Number(parts.find(p => p.type === t)?.value ?? 0);
+  return Math.floor(Date.UTC(get('year'), get('month') - 1, get('day')) / 86_400_000);
 }
 
 function shuffle<T>(items: T[], rng: () => number): T[] {

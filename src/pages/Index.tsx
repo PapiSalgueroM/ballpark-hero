@@ -478,7 +478,13 @@ export default function Index() {
                         pointed at it, so no crawler could reach it and no
                         person could find it. One link fixes both. */}
                     {cat.title === 'College Sports' && (
-                      <Link to="/college" className="ml-auto text-xs font-normal text-primary hover:underline">
+                      <Link
+                        to="/college"
+                        /* Round 203: this link was 16px tall, which is half
+                           the height a thumb needs. Padded to a real tap
+                           target without changing where it sits. */
+                        className="ml-auto inline-flex items-center rounded-lg px-2.5 py-2 text-xs font-normal leading-5 text-primary hover:underline"
+                      >
                         Hub
                       </Link>
                     )}
