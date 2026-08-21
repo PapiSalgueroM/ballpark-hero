@@ -942,6 +942,143 @@ export const TICKET_TIERS = [
   { label: 'Premium', emoji: '\u{1F4BC}', priceMult: 1.3, crowdMult: 0.91, blurb: 'More per seat, a few empty ones up in the corners.' },
 ] as const;
 
+/* ---------- Round 200: sponsors, the last line of his CM epic ----------
+
+   The finance layer his CM-8 asked for shipped in Round 171 with gates,
+   ticket policy and ground expansions. The one thing on his original list
+   that was never built is the commercial side, and it is the half of a
+   club's money that a manager actually negotiates.
+
+   The design, in one paragraph: at the start of every season a club with no
+   deal receives three offers on the table at once, and they are genuinely
+   different shapes rather than three numbers. A SAFE deal pays the most up
+   front and nothing else. A PERFORMANCE deal pays less but adds a bonus for
+   the season's honours, so it is the deal to take when you believe in the
+   squad. A LONG deal pays least per year and locks the money in for four
+   seasons, which is either security for a small club or a mistake for one
+   about to be promoted. Every offer is scaled by the club's stature, its
+   league, whether it plays in Europe and how the last season actually went,
+   so the offers get better as the club does. Money lands in the same single
+   kitty everything else uses, once a season, and the bonus lands at the
+   season end that earns it.
+
+   Every sponsor is invented. simSponsors enumerates the whole name space and
+   fails on any collision with a real company this project knows of, the same
+   rule Round 199 put around every invented player on the site. */
+
+export type SponsorShape = 'safe' | 'performance' | 'long';
+
+export interface SponsorOffer {
+  id: string;
+  brand: string;
+  shape: SponsorShape;
+  /** Guaranteed money per season, in millions. */
+  perSeason: number;
+  /** Extra millions if the season earns the bonus, 0 on a safe deal. */
+  bonus: number;
+  /** What the bonus is paid for. */
+  bonusFor: 'title' | 'europe' | 'topHalf' | null;
+  years: number;
+  pitch: string;
+}
+
+export interface SponsorDeal {
+  brand: string;
+  shape: SponsorShape;
+  perSeason: number;
+  bonus: number;
+  bonusFor: 'title' | 'europe' | 'topHalf' | null;
+  /** Seasons remaining, counting the one being played. */
+  yearsLeft: number;
+  /** Total paid out by this deal so far, in millions, for the desk. */
+  paid: number;
+}
+
+/* Invented brands. Nothing here is a real company: the harness enumerates
+   every one of them against a list of real sponsors, kit makers and the
+   betting firms that cover half the shirts in Europe, and fails on a match.
+   They read like sponsors without being any. */
+const SPONSOR_BRANDS = [
+  'Northgate Insurance', 'Verdanta Energy', 'Blue Harbour Bank', 'Kestrel Air',
+  'Halcyon Telecom', 'Ironvale Steel', 'Solstice Motors', 'Meridian Freight',
+  'Quarry Lane Coffee', 'Amberline Rail', 'Thornbury Mutual', 'Larkspur Health',
+  'Copperfield Tools', 'Silverbeck Foods', 'Windmere Solar', 'Foxglove Media',
+  'Emberton Textiles', 'Greyharbor Shipping', 'Duskfield Optics', 'Pinecrest Timber',
+];
+
+/** How rich the club looks to a marketing department: stature, the league it
+ *  plays in, Europe, and last season's finish. */
+function sponsorPull(state: CareerState): number {
+  const eraHist = !!state.eraId && isHistoricEra(state.eraId);
+  const def = eraHist ? eraClubDefFor(state.clubName, state.eraId) : clubDefFor(state.clubName);
+  const byTier = [1, 0.62, 0.4, 0.26][def.tier - 1] ?? 0.26;
+  const europe = state.uclGroup ? 1.35 : 1;
+  /* A club that just won something is worth more in the room. */
+  const trophies = (state.trophies?.length ?? 0);
+  const form = 1 + Math.min(trophies, 6) * 0.04;
+  const era = eraHist ? 0.7 : 1;
+  return byTier * europe * form * era;
+}
+
+/**
+ * Three offers, always three shapes, deterministic per club and season so a
+ * reload cannot reroll a better table. Money is in millions per season.
+ */
+export function sponsorOffers(state: CareerState): SponsorOffer[] {
+  const pull = sponsorPull(state);
+  const base = Math.max(0.6, Math.round(pull * 34 * 10) / 10);
+  const key = `${state.clubName}|${state.season}|sponsors`;
+  let seed = 0;
+  for (let i = 0; i < key.length; i++) seed = ((seed * 31) + key.charCodeAt(i)) >>> 0;
+  const pick = (i: number) => SPONSOR_BRANDS[(seed + i * 7) % SPONSOR_BRANDS.length];
+  const r1 = Math.round(base * 1.0 * 10) / 10;
+  const r2 = Math.round(base * 0.72 * 10) / 10;
+  const r3 = Math.round(base * 0.6 * 10) / 10;
+  return [
+    {
+      id: 'safe', brand: pick(0), shape: 'safe',
+      perSeason: r1, bonus: 0, bonusFor: null, years: 2,
+      pitch: 'Money in the account, nothing riding on results.',
+    },
+    {
+      id: 'performance', brand: pick(1), shape: 'performance',
+      perSeason: r2, bonus: Math.round(base * 0.9 * 10) / 10, bonusFor: 'title', years: 2,
+      pitch: 'Less up front, a serious bonus if you win the league.',
+    },
+    {
+      id: 'long', brand: pick(2), shape: 'long',
+      perSeason: r3, bonus: Math.round(base * 0.25 * 10) / 10, bonusFor: 'topHalf', years: 4,
+      pitch: 'The smallest cheque, locked in for four seasons, with a little for a top half finish.',
+    },
+  ];
+}
+
+/** Sign one. The first season's guaranteed money lands immediately. */
+export function signSponsor(career: CareerState, offerId: string): CareerState | null {
+  const offer = sponsorOffers(career).find(o => o.id === offerId);
+  if (!offer || career.sponsor) return null;
+  const state: CareerState = { ...career };
+  state.sponsor = {
+    brand: offer.brand, shape: offer.shape, perSeason: offer.perSeason,
+    bonus: offer.bonus, bonusFor: offer.bonusFor, yearsLeft: offer.years, paid: offer.perSeason,
+  };
+  state.budget = Math.round((state.budget + offer.perSeason) * 100) / 100;
+  state.aiHeadlines = [
+    `\u{1F91D} ${state.clubName} have signed with ${offer.brand}: ${money(offer.perSeason)} a season for ${offer.years} seasons.`,
+    ...state.aiHeadlines,
+  ].slice(0, 8);
+  return state;
+}
+
+/** Did the season just played earn the sponsor bonus? */
+export function sponsorBonusEarned(state: CareerState, position: number, clubs: number): boolean {
+  const deal = state.sponsor;
+  if (!deal || !deal.bonusFor || deal.bonus <= 0) return false;
+  if (deal.bonusFor === 'title') return position === 1;
+  if (deal.bonusFor === 'europe') return position <= 4;
+  return position <= Math.floor(clubs / 2);
+}
+
 export interface ClubFinance {
   /** Index into TICKET_TIERS. */
   ticketTier: TicketTier;
@@ -1108,6 +1245,8 @@ export interface CareerState {
   pendingMove?: { club: string; blurb: string } | null;
   /** Round 171: tickets, the gate and the ground. */
   finance?: ClubFinance;
+  /** Round 200: the commercial deal, or none while the club is shopping. */
+  sponsor?: SponsorDeal | null;
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
   /** Round 105: the weekly wage bill the board will tolerate, in thousands. */
@@ -9576,6 +9715,41 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   state.finance = moving || !career.finance
     ? undefined
     : { ...career.finance, seasonGate: 0, lastGate: null };
+  /* Round 200: the sponsor's year ticks over here. The bonus for the season
+     just finished is paid FIRST, off the position that season really
+     reached, then a year comes off the deal and the next year's guaranteed
+     money lands. A deal that runs out leaves the club shopping again, and a
+     manager who walks to another club leaves the deal behind, because the
+     contract was the club's and not his. */
+  if (moving) {
+    state.sponsor = null;
+  } else if (career.sponsor) {
+    const deal = career.sponsor;
+    /* The size of the league the season was played in, for the top half
+       bonus. The league table is the honest source and always has a row per
+       club; twenty is only the floor if a save somehow has no table. */
+    const clubsInLeague = Math.max(10, career.table?.length ?? 20);
+    const earned = sponsorBonusEarned(career, prevPos, clubsInLeague);
+    const yearsLeft = deal.yearsLeft - 1;
+    let paid = deal.paid;
+    let credit = 0;
+    if (earned) { credit += deal.bonus; paid += deal.bonus; }
+    if (yearsLeft > 0) { credit += deal.perSeason; paid += deal.perSeason; }
+    state.budget = Math.round((state.budget + credit) * 100) / 100;
+    state.sponsor = yearsLeft > 0 ? { ...deal, yearsLeft, paid } : null;
+    if (earned) {
+      state.aiHeadlines = [
+        `\u{1F4B7} ${deal.brand} pay out: ${money(deal.bonus)} in bonuses for the season just gone.`,
+        ...state.aiHeadlines,
+      ].slice(0, 8);
+    }
+    if (yearsLeft <= 0) {
+      state.aiHeadlines = [
+        `\u{1F4DD} The ${deal.brand} deal is up. The commercial desk is taking calls.`,
+        ...state.aiHeadlines,
+      ].slice(0, 8);
+    }
+  }
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);

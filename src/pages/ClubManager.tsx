@@ -13,7 +13,7 @@ import {
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
-  TICKET_TIERS, groundUpgradeCost, gatePricePerFan,
+  TICKET_TIERS, groundUpgradeCost, gatePricePerFan, sponsorOffers,
 } from '@/lib/clubManager';
 import type { NationDef, ObjectiveStatus, CupRound } from '@/lib/clubManager';
 import { eraRealShareLabel, eraHonestyLine } from '@/lib/clubManagerEras';
@@ -173,6 +173,7 @@ const ClubManager = () => {
               <p>🎙️ <span className="font-semibold text-foreground">Front up to the press, and talk to your players.</span> The reporters only turn up when something has happened: a losing run, a man you have stopped picking, a club circling one of your stars, a derby, or the bookmakers making you favourite for the sack. Every answer spends one thing to buy another, so backing your players costs you with the board and calling them out costs you the dressing room, and talking big before a derby puts your words on the other lot's wall. Before every match and again at half time you pick a tone: calm them, fire them up, demand more, or the hairdryer. Read the afternoon right and they play above themselves. Read it wrong and you lose them, and the wrong one hurts more than the right one helps.</p>
               <p>💰 <span className="font-semibold text-foreground">Buy and sell in the summer and January windows.</span> Over 3,600 real players are on the market at their real values, each one wearing his real nationality's flag, and the deep filters go all the way down: position group or exact position, age, price, selling league, nationality (132 real nations, drawn from your world's own market) and four sorts. Stay under budget and keep at least 14 players.</p>
               <p>📝 <span className="font-semibold text-foreground">Every player is on a real deal.</span> Wages sit on a curve, the board sets a ceiling, and contracts tick down: a man you never sit down with walks for free in the summer, with his sale value already collapsed. The contracts desk on the Squad tab re-signs anyone in his final year, two ways: the full-wage deal, or 12 percent cheaper with a release clause written in at 1.5 times his value that day. The clause is a real exit door. Any club can pay it, it cannot be rejected or blocked, an unanswered one executes itself on deadline day, and the only way to delete it is a full price renewal later. Grow a star past his own clause and the phone will ring.</p>
+              <p>🤝 <span className="font-semibold text-foreground">Sponsors pay the other half of the bills.</span> The Finances desk puts three shirt sponsor offers on the table whenever the club has no deal, and they are three different shapes: the most guaranteed money, less money with a real bonus for winning the league, or the smallest cheque locked in for four seasons with a little for a top half finish. The money lands in the same kitty as everything else, once a season, and the bonus lands at the season end that earns it. The offers grow as the club does: stature, the league, Europe and the trophy cabinet all count. Leave the club and the deal stays behind, because it was the club's and not yours.</p>
               <p>🎟️ <span className="font-semibold text-foreground">The club earns while you manage.</span> Every home crowd pays a gate into the transfer kitty: attendance times your ticket prices. The Finances desk sets the policy (fair prices fill the ground for less a head, premium squeezes more from fewer) and expands the ground up to three times, each one growing your crowds from the next home game. The board reads ambition into a bigger ground, and it is all one kitty: gates in, transfers, scouts, the academy and the builders out.</p>
               <p>📉 <span className="font-semibold text-foreground">Watch the board confidence meter.</span> Fall too far below expectations and you're sacked. Overachieve and bigger clubs come calling, from any league in the game, and some of them call MID-SEASON: an approach lands in the Manager panel, and committing to it is a summer pre-agreement your current board will hear about on the radio. They can even walk away again if your season collapses after the handshake.</p>
               <p>🏆 <span className="font-semibold text-foreground">Season score</span> = league points + 10 per trophy (max 130). Careers span multiple seasons; your save is kept on this device.</p>
@@ -192,6 +193,7 @@ const ClubManager = () => {
             'Set your formation, mentality and XI, then play through the full season week by week.',
             'Work the market: negotiate fees, pay release clauses, take loans, and field bids for your own stars, with deep filters down to exact position, age, price, league and nationality, every player under his real flag.',
             'Run the contracts desk: re-sign expiring players at full wage, or cheaper with a release clause any club can trigger, and delete a bargain clause with a full price renewal before the phone rings.',
+            'Run the money: gate receipts from every home crowd, a ticket policy, three ground expansions, and a shirt sponsor chosen from three real shapes (the biggest cheque, a title bonus, or four locked in seasons).',
             'Handle the press when they come for you, and pick your team talk before kick off and again at half time.',
             'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
           ]}
@@ -1222,6 +1224,51 @@ const ClubManager = () => {
                       ))}
                     </div>
                     <p className="text-[9px] text-muted-foreground mt-1.5">Cheaper seats pull a bigger, louder crowd for less money a head. Premium squeezes more from fewer. Change it any week.</p>
+                  </div>
+
+                  {/* Round 200: the commercial desk, the last line of his
+                      Club Manager list. Three shapes, not three numbers. */}
+                  <div data-sponsor-desk className="bg-card border border-border rounded-xl p-3">
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">🤝 Shirt sponsor</div>
+                    {c.sponsor ? (
+                      <>
+                        <p className="text-xs text-foreground">
+                          <span className="font-bold">{c.sponsor.brand}</span> pay {money(c.sponsor.perSeason)} a season.
+                          {c.sponsor.bonus > 0 && c.sponsor.bonusFor
+                            ? ` Plus ${money(c.sponsor.bonus)} for ${c.sponsor.bonusFor === 'title' ? 'winning the league' : c.sponsor.bonusFor === 'europe' ? 'reaching Europe' : 'a top half finish'}.`
+                            : ' No bonuses, just the cheque.'}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground mt-1">
+                          {c.sponsor.yearsLeft === 1 ? 'Final season of the deal.' : `${c.sponsor.yearsLeft} seasons left.`} Paid so far: <span className="font-bold text-foreground">{money(c.sponsor.paid)}</span>.
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-[10px] text-muted-foreground mb-2">
+                          Three offers on the table. The money lands in the same kitty as everything else, this season and every season the deal runs.
+                        </p>
+                        <div className="space-y-1.5">
+                          {sponsorOffers(c).map(o => (
+                            <div key={o.id} data-sponsor-offer={o.id} className="rounded-lg border border-border bg-background/40 p-2">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="text-[11px] font-bold text-foreground truncate">{o.brand}</span>
+                                <span className="text-[11px] font-bold text-gold tabular-nums shrink-0">{money(o.perSeason)}/season</span>
+                              </div>
+                              <p className="text-[9px] text-muted-foreground mt-0.5 leading-snug">
+                                {o.pitch} {o.years} season{o.years === 1 ? '' : 's'}.
+                                {o.bonus > 0 && o.bonusFor ? ` Bonus ${money(o.bonus)} for ${o.bonusFor === 'title' ? 'the title' : o.bonusFor === 'europe' ? 'Europe' : 'a top half finish'}.` : ''}
+                              </p>
+                              <button
+                                onClick={() => g.takeSponsor(o.id)}
+                                className="mt-1.5 w-full py-1.5 rounded-lg text-[11px] font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+                              >
+                                Sign with {o.brand.split(' ')[0]}
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   <div className="bg-card border border-border rounded-xl p-3">

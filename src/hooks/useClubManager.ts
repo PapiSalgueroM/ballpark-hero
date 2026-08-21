@@ -5,7 +5,7 @@ import {
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
   buildMarket, buyPlayer, autoPickXI, nextFixture, sortedTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
-  startNegotiation, makeOffer, walkAway, respondApproach, setTicketTier, expandGround, payClause, loanIn, acceptBid, rejectBid,
+  startNegotiation, makeOffer, walkAway, respondApproach, setTicketTier, expandGround, signSponsor, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
   resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
@@ -307,6 +307,10 @@ export function useClubManager() {
   const expandStadium = useCallback(() => {
     setCareer(prev => (prev ? expandGround(prev) ?? prev : prev));
   }, []);
+  /* Round 200: the commercial desk. */
+  const takeSponsor = useCallback((offerId: string) => {
+    setCareer(prev => (prev ? signSponsor(prev, offerId) ?? prev : prev));
+  }, []);
 
   const dismissNegotiation = useCallback(() => {
     setCareer(prev => (prev ? { ...prev, negotiation: null } : prev));
@@ -432,7 +436,7 @@ export function useClubManager() {
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
-    negotiate, offer, walk, answerApproach, setTickets, expandStadium, dismissNegotiation, clause, loan,
+    negotiate, offer, walk, answerApproach, setTickets, expandStadium, takeSponsor, dismissNegotiation, clause, loan,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
