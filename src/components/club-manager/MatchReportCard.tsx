@@ -1,9 +1,45 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, ChevronDown } from 'lucide-react';
 import { confidenceLabel } from '@/lib/clubManager';
-import type { MatchWeekReport } from '@/lib/clubManager';
+import type { MatchWeekReport, MatchStats } from '@/lib/clubManager';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+
+/** Round 157: one stat as two bars meeting in the middle, matchday-app style. */
+function StatBar({ label, mine, theirs, decimals = 0 }: {
+  label: string; mine: number; theirs: number; decimals?: number;
+}) {
+  const total = mine + theirs;
+  const myShare = total > 0 ? (mine / total) * 100 : 50;
+  const fmt = (n: number) => decimals ? n.toFixed(decimals) : String(n);
+  return (
+    <div>
+      <div className="flex items-center justify-between text-[10px] mb-0.5">
+        <span className="font-bold text-foreground tabular-nums">{fmt(mine)}</span>
+        <span className="text-muted-foreground uppercase tracking-wider text-[9px]">{label}</span>
+        <span className="font-bold text-muted-foreground tabular-nums">{fmt(theirs)}</span>
+      </div>
+      <div className="flex h-1.5 rounded-full overflow-hidden bg-secondary gap-px">
+        <div className="bg-primary rounded-l-full" style={{ width: `${myShare}%` }} />
+        <div className="bg-muted-foreground/40 rounded-r-full" style={{ width: `${100 - myShare}%` }} />
+      </div>
+    </div>
+  );
+}
+
+/** The full stats block, only when the report carries the Round 157 detail. */
+function StatsBlock({ stats }: { stats: MatchStats }) {
+  return (
+    <div className="space-y-2 text-left">
+      <StatBar label="Possession" mine={stats.possession} theirs={100 - stats.possession} />
+      <StatBar label="Shots" mine={stats.shots} theirs={stats.oppShots} />
+      <StatBar label="On target" mine={stats.onTarget} theirs={stats.oppOnTarget} />
+      <StatBar label="Expected goals" mine={stats.xg} theirs={stats.oppXg} decimals={2} />
+      <StatBar label="Corners" mine={stats.corners} theirs={stats.oppCorners} />
+      <StatBar label="Fouls" mine={stats.fouls} theirs={stats.oppFouls} />
+    </div>
+  );
+}
 
 interface MatchReportCardProps {
   report: MatchWeekReport;
@@ -28,6 +64,11 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
   const r = report;
   const resultTone = r.won ? 'text-correct' : r.drawn ? 'text-yellow-400' : 'text-destructive';
   const resultWord = r.won ? 'VICTORY' : r.drawn ? 'DRAW' : 'DEFEAT';
+  /* Round 157: the ratings list folds away because ten rows of numbers is a
+     lot of card, but the man of the match is always on show. */
+  const [showRatings, setShowRatings] = useState(false);
+  const detail = r.detail ?? null;
+  const motm = detail?.myRatings.find(x => x.motm) ?? null;
 
   /* The staged reveal, second draft. The first draft counted the score up
      from 0-0, and playClubManager flagged it within the hour: for a moment
@@ -90,9 +131,111 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
           </div>
         )}
 
+        {/* Round 157: cards, injuries and subs with their minutes, right under
+            the scorers where a matchday app puts them. */}
+        {detail && (detail.cards.length > 0 || detail.injuries.length > 0 || detail.subs.length > 0) && (
+          <div className="flex flex-wrap justify-center gap-1.5 mt-3">
+            {detail.cards.map((c, i) => (
+              <span key={`c${i}`} className={cn(
+                'text-[10px] rounded-full px-2 py-0.5 border',
+                c.kind === 'red' ? 'bg-red-500/10 border-red-500/40 text-red-400' : 'bg-yellow-500/10 border-yellow-500/40 text-yellow-500',
+              )}>
+                {c.kind === 'red' ? '🟥' : '🟨'} {c.name} {c.minute}'
+              </span>
+            ))}
+            {detail.injuries.map((inj, i) => (
+              <span key={`i${i}`} className="text-[10px] rounded-full px-2 py-0.5 border bg-secondary border-border text-foreground">
+                🩹 {inj.name} {inj.minute}' ({inj.weeks}w)
+              </span>
+            ))}
+            {detail.subs.map((s, i) => (
+              <span key={`s${i}`} className="text-[10px] rounded-full px-2 py-0.5 border bg-secondary border-border text-muted-foreground">
+                🔁 {s.on} {s.minute}'
+              </span>
+            ))}
+          </div>
+        )}
+
         {r.trophyWon && (
           <div className={cn('mt-4 py-2.5 px-3 rounded-xl bg-gold/10 border border-gold/40 text-gold font-bold text-sm', verdict && 'cm-gold-glow')}>
             🏆 {r.trophyWon} WON!
+          </div>
+        )}
+
+        {/* Round 157: the numbers behind the scoreline, derived once inside
+            the sim from the same lambdas the goals were drawn from. */}
+        {detail && (
+          <div className="mt-4 bg-surface-2 border border-border/60 rounded-xl p-3">
+            <div className="flex items-center justify-between text-[9px] text-muted-foreground uppercase tracking-wider mb-2">
+              <span className="text-primary font-bold normal-case">{clubName}</span>
+              <span>Match stats</span>
+              <span className="font-bold normal-case">Them</span>
+            </div>
+            <StatsBlock stats={detail.stats} />
+            {/* Momentum, ten minutes a bar: up is us, down is them. */}
+            <div className="mt-3">
+              <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 text-left">Momentum</div>
+              <div className="flex items-center gap-0.5 h-8">
+                {detail.momentum.map((m, i) => (
+                  <div key={i} className="flex-1 flex flex-col justify-center h-full">
+                    <div className="relative h-full flex flex-col justify-center">
+                      <div
+                        className={cn('w-full rounded-sm', m >= 0 ? 'bg-primary/80' : 'bg-red-400/70')}
+                        style={{
+                          height: `${Math.max(6, Math.abs(m) * 46)}%`,
+                          marginTop: m >= 0 ? 'auto' : '50%',
+                          marginBottom: m >= 0 ? '50%' : 'auto',
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-between text-[8px] text-muted-foreground/70">
+                <span>0'</span><span>45'</span><span>90'</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Round 157: the man of the match, and everyone's number behind him. */}
+        {detail && motm && (
+          <div className="mt-3 text-left bg-surface-2 border border-border/60 rounded-xl p-3">
+            <div className="flex items-center justify-between">
+              <div className="text-[11px] text-foreground">
+                ⭐ <span className="font-bold">{motm.name}</span>
+                <span className="text-muted-foreground"> · Player of the match</span>
+              </div>
+              <span className="text-xs font-bold font-display text-gold tabular-nums">{motm.rating.toFixed(1)}</span>
+            </div>
+            {detail.oppBest && (
+              <div className="text-[10px] text-muted-foreground mt-1">Their danger man on the day: {detail.oppBest}</div>
+            )}
+            <button
+              onClick={() => setShowRatings(v => !v)}
+              className="mt-2 inline-flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary transition-colors"
+            >
+              <ChevronDown className={cn('w-3 h-3 transition-transform', showRatings && 'rotate-180')} />
+              {showRatings ? 'Hide player ratings' : 'All player ratings'}
+            </button>
+            {showRatings && (
+              <div className="mt-1.5 space-y-0.5">
+                {detail.myRatings.map((p, i) => (
+                  <div key={i} className="flex items-center gap-2 text-[10px]">
+                    <span className="w-7 shrink-0 text-muted-foreground">{p.pos}</span>
+                    <span className="text-foreground truncate">{p.name}</span>
+                    {p.goals > 0 && <span className="shrink-0">{'⚽'.repeat(Math.min(p.goals, 3))}</span>}
+                    {p.assists > 0 && <span className="shrink-0 text-muted-foreground">🅰️{p.assists > 1 ? `x${p.assists}` : ''}</span>}
+                    <span className={cn(
+                      'ml-auto shrink-0 font-bold tabular-nums rounded px-1',
+                      p.rating >= 7.5 ? 'text-emerald-400' : p.rating >= 6.3 ? 'text-foreground' : 'text-red-400',
+                    )}>
+                      {p.rating.toFixed(1)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 

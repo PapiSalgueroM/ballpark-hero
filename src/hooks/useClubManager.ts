@@ -10,8 +10,10 @@ import {
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
   resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
   setTeamTalk, giveHalftimeTalk, answerPress, duckPress,
+  matchFacts,
   DEFAULT_ERA_ID,
 } from '@/lib/clubManager';
+import type { MatchFacts } from '@/lib/clubManager';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec } from '@/lib/clubManager';
 
@@ -58,6 +60,12 @@ export function useClubManager() {
   );
   const myPosition = useMemo(
     () => (career ? leaguePosition(career) : 0),
+    [career],
+  );
+  /* Round 157: everything the pre-match facts screen shows, derived from the
+     save itself: real form, real head-to-head, the engine's own odds. */
+  const facts: MatchFacts | null = useMemo(
+    () => (career && !career.live ? matchFacts(career) : null),
     [career],
   );
 
@@ -153,19 +161,25 @@ export function useClubManager() {
   }, []);
 
   /* ---------- season progression ---------- */
-  const play = useCallback(() => {
+  const runEntry = useCallback((skipHalftime: boolean) => {
     if (!career) return;
-    const res = playNextEntry(career);
+    const res = playNextEntry(career, skipHalftime ? { skipHalftime: true } : undefined);
     setCareer(res.state);
     /* Round 119: the match stops at the interval now. Everything this game has
        built for eleven rounds happens between fixtures; this is the one moment
-       inside one where the manager gets to manage. */
+       inside one where the manager gets to manage. Round 157: unless you asked
+       for the quick sim, which plays it in one shot and shows the report. */
     if (res.kind === 'halftime') {
       setPhase('halftime');
     } else if (res.kind === 'window') {
       setActiveTab('transfers');
       setPhase('hub');
     } else if (res.kind === 'match' && res.report) {
+      /* Round 157: a played match counts as playing the game TODAY, not only
+         at the end of a 50-fixture season. This is what feeds the header's
+         games-played, points and rank, which sat at zero all session for
+         anyone mid-season (his screenshot, 2026-08-18). */
+      recordCompletion('/club-manager', currentSeasonScore(res.state));
       setReport(res.report);
       setPhase('matchResult');
     } else if (res.kind === 'seasonOver') {
@@ -176,6 +190,10 @@ export function useClubManager() {
       setPhase('seasonEnd');
     }
   }, [career]);
+
+  const play = useCallback(() => runEntry(false), [runEntry]);
+  /** Round 157: the quick sim. One tap, full result, no dressing room stop. */
+  const quickPlay = useCallback(() => runEntry(true), [runEntry]);
 
   /* Round 93: his calendar complaint. "u can click through and sim much
      faster... simulate through date or play match or whatever." Quick sim
@@ -211,6 +229,8 @@ export function useClubManager() {
     }
     setCareer(state);
     if (lastReport) {
+      // Round 157: a fast-forwarded run still counts as playing today.
+      recordCompletion('/club-manager', currentSeasonScore(state));
       setReport(lastReport);
       setPhase('matchResult');
     }
@@ -350,6 +370,8 @@ export function useClubManager() {
     const res = resumeMatch(career);
     setCareer(res.state);
     if (res.report) {
+      // Round 157: a finished match counts toward today, mid-season included.
+      recordCompletion('/club-manager', currentSeasonScore(res.state));
       setReport(res.report);
       setPhase('matchResult');
     } else {
@@ -384,10 +406,10 @@ export function useClubManager() {
   return {
     quickSim,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
-    market, nextFx, tableRows, myPosition,
+    market, nextFx, tableRows, myPosition, facts,
     resume, startNew, chooseClub, confirmClub, confirmCustomClub,
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
-    play, continueFromReport, nextSeason,
+    play, quickPlay, continueFromReport, nextSeason,
     buy,
     negotiate, offer, walk, dismissNegotiation, clause, loan,
     acceptIncomingBid, rejectIncomingBid,

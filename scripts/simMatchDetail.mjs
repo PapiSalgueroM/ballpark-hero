@@ -1,0 +1,257 @@
+/**
+ * Round 157 harness: the structured match detail.
+ *
+ * The report grew a detail block (stats, cards, timeline, momentum, player
+ * ratings) that every match screen now renders, and the rule it must hold is
+ * the repo's oldest one: the screen never lies about the sim. So this drives
+ * real careers down BOTH play paths (quick sim and the halftime interval,
+ * with subs made) and asserts internal consistency between the detail block
+ * and the match it decorates, plus the two Round 157 state books (last-5
+ * form for every simulated club, cross-season head-to-head).
+ *
+ * What it checks, per match:
+ *  - detail present, goals in the timeline equal the scoreline exactly
+ *  - stats sane: possession within bounds and consistent, shots >= on target
+ *    >= goals on both sides, xG positive and finite
+ *  - every card and injury names a player who was actually in my XI, minutes
+ *    in 1..90, cards sorted
+ *  - halftime subs recorded exactly when subs were made, and never on quick sim
+ *  - ratings: one line per starter, 4.5..10, exactly one man of the match
+ *  - momentum: 9 buckets, all within [-1, 1]
+ * And across a season:
+ *  - xG tracks goals (mean absolute gap under a measured ceiling)
+ *  - clubForm holds at most 5 entries per club and my own form matches state.form
+ *  - h2h survives into season two while resultLog resets
+ * Run: node scripts/simMatchDetail.mjs
+ */
+import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ENTRY = '/tmp/cmDetailEntry.mjs';
+const BUNDLE = '/tmp/cmDetail.bundle.mjs';
+
+fs.writeFileSync(ENTRY, `
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+const mod = await import('${ROOT}/src/lib/clubManager.ts');
+export const engine = mod;
+`);
+execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+
+const cm = (await import(BUNDLE)).engine;
+const {
+  startCareer, playNextEntry, resumeMatch, makeHalftimeSub, finishSeason,
+  startNextSeason, matchFacts, benchForHalftime,
+} = cm;
+
+let failures = 0;
+const fail = msg => { failures += 1; console.error('  FAIL: ' + msg); };
+const isNum = v => typeof v === 'number' && Number.isFinite(v);
+
+function checkDetail(report, ctx, { viaHalftime, subsMade }) {
+  const d = report.detail;
+  if (!d) { fail(`${ctx}: report has no detail block`); return; }
+  const myGoals = report.home === report.away ? 0 : (report.homeGoals + report.awayGoals) - (report.won || report.drawn ? 0 : 0);
+  // Read my goals off the report the same way the screen does.
+  const iAmHome = report.homeGoals >= 0 && report.home && report.away && report.home !== report.away
+    ? null : null;
+  void myGoals; void iAmHome;
+
+  // Timeline goals must equal the scoreline exactly, side by side.
+  const tlMyGoals = d.timeline.filter(e => e.kind === 'goal' && e.side === 'me').length;
+  const tlOppGoals = d.timeline.filter(e => e.kind === 'goal' && e.side === 'opp').length;
+  const total = report.homeGoals + report.awayGoals;
+  if (tlMyGoals + tlOppGoals !== total) {
+    fail(`${ctx}: timeline holds ${tlMyGoals + tlOppGoals} goals, scoreline says ${total}`);
+  }
+  if (tlMyGoals !== report.myScorers.length) fail(`${ctx}: timeline my-goals ${tlMyGoals} vs scorer lines ${report.myScorers.length}`);
+  if (tlOppGoals !== report.oppScorers.length) fail(`${ctx}: timeline opp-goals ${tlOppGoals} vs opp scorer lines ${report.oppScorers.length}`);
+
+  // Stats sanity, both sides.
+  const s = d.stats;
+  if (!isNum(s.possession) || s.possession < 20 || s.possession > 80) fail(`${ctx}: possession ${s.possession}`);
+  for (const [shots, sot, goals, tag] of [
+    [s.shots, s.onTarget, report.myScorers.length, 'mine'],
+    [s.oppShots, s.oppOnTarget, report.oppScorers.length, 'theirs'],
+  ]) {
+    if (!isNum(shots) || shots < goals) fail(`${ctx}: ${tag} shots ${shots} below goals ${goals}`);
+    if (!isNum(sot) || sot < goals || sot > shots) fail(`${ctx}: ${tag} on target ${sot} vs shots ${shots}, goals ${goals}`);
+  }
+  if (!isNum(s.xg) || s.xg <= 0) fail(`${ctx}: xg ${s.xg}`);
+  if (!isNum(s.oppXg) || s.oppXg <= 0) fail(`${ctx}: oppXg ${s.oppXg}`);
+  if (!isNum(s.fouls) || !isNum(s.oppFouls)) fail(`${ctx}: fouls not numbers`);
+
+  // Cards and injuries: real XI names, real minutes, sorted cards.
+  const xiNames = new Set(d.myRatings.map(r => r.name));
+  for (const c of d.cards) {
+    if (!xiNames.has(c.name)) fail(`${ctx}: card for ${c.name}, who has no rating line (not in XI)`);
+    if (!isNum(c.minute) || c.minute < 1 || c.minute > 90) fail(`${ctx}: card minute ${c.minute}`);
+  }
+  for (let i = 1; i < d.cards.length; i++) {
+    if (d.cards[i].minute < d.cards[i - 1].minute) fail(`${ctx}: cards out of minute order`);
+  }
+  for (const inj of d.injuries) {
+    if (!xiNames.has(inj.name)) fail(`${ctx}: injury for ${inj.name}, not in the XI`);
+    if (!isNum(inj.weeks) || inj.weeks < 1) fail(`${ctx}: injury weeks ${inj.weeks}`);
+  }
+
+  // Subs: recorded exactly when made, never invented on a quick sim.
+  if (!viaHalftime && d.subs.length > 0) fail(`${ctx}: quick sim reported ${d.subs.length} subs, none were possible`);
+  if (viaHalftime && subsMade > 0 && d.subs.length !== subsMade) {
+    fail(`${ctx}: made ${subsMade} halftime subs, report shows ${d.subs.length}`);
+  }
+
+  // Ratings: bounded, exactly one man of the match.
+  if (d.myRatings.length < 7) fail(`${ctx}: only ${d.myRatings.length} rating lines`);
+  for (const r of d.myRatings) {
+    if (!isNum(r.rating) || r.rating < 4.5 || r.rating > 10) fail(`${ctx}: rating ${r.rating} for ${r.name}`);
+  }
+  const motm = d.myRatings.filter(r => r.motm).length;
+  if (motm !== 1) fail(`${ctx}: ${motm} men of the match`);
+
+  // Momentum: 9 buckets in [-1, 1].
+  if (d.momentum.length !== 9) fail(`${ctx}: ${d.momentum.length} momentum buckets`);
+  for (const m of d.momentum) if (!isNum(m) || m < -1 || m > 1) fail(`${ctx}: momentum ${m}`);
+
+  // Timeline bookends.
+  if (d.timeline[0]?.kind !== 'kickoff') fail(`${ctx}: timeline does not open with kickoff`);
+  if (d.timeline[d.timeline.length - 1]?.kind !== 'fulltime') fail(`${ctx}: timeline does not close with fulltime`);
+  for (let i = 1; i < d.timeline.length; i++) {
+    if (d.timeline[i].minute < d.timeline[i - 1].minute) { fail(`${ctx}: timeline out of order`); break; }
+  }
+}
+
+/* ---------- 1. Quick sim path: a full season of detail ---------- */
+console.log('1) Quick sim path (Everton, full season)');
+let state = startCareer('Everton');
+let matches = 0;
+let xgGapSum = 0;
+let goalsSum = 0;
+let guard = 0;
+while (state.week < state.calendar.length && guard < 90) {
+  guard += 1;
+  const res = playNextEntry(state, { skipHalftime: true });
+  state = res.state;
+  if (res.kind === 'window') continue;
+  if (res.kind === 'seasonOver') break;
+  if (res.kind === 'match' && res.report) {
+    matches += 1;
+    checkDetail(res.report, `QS match ${matches}`, { viaHalftime: false, subsMade: 0 });
+    const d = res.report.detail;
+    if (d) {
+      const myGoals = res.report.myScorers.length;
+      xgGapSum += Math.abs(d.stats.xg - myGoals);
+      goalsSum += myGoals;
+    }
+  }
+}
+if (matches < 30) fail(`only ${matches} matches played in a season`);
+/* xG must TRACK goals, not equal them. Measured over five full Everton
+   seasons the mean absolute gap ran 0.44 to 0.53 with the 0.55/0.45 blend,
+   so 0.85 is about 60 percent of headroom above the worst observed run while
+   still failing a detached xG (a pure-lambda xG would sit near the lambda's
+   own mean absolute deviation from goals, which is Poisson-wide: measured
+   about 0.95 on the same seasons). */
+const meanGap = matches ? xgGapSum / matches : 99;
+console.log(`   ${matches} matches, mean |xG - goals| = ${meanGap.toFixed(2)}, ${goalsSum} goals scored`);
+if (meanGap > 0.85) fail(`xG has come detached from the football: mean gap ${meanGap.toFixed(2)}`);
+
+/* Form book: capped at 5 everywhere, and my own book matches state.form. */
+const formBook = state.clubForm ?? {};
+const formClubs = Object.keys(formBook);
+if (formClubs.length < 20) fail(`clubForm only covers ${formClubs.length} clubs after a season`);
+for (const club of formClubs) {
+  if (formBook[club].length > 5) fail(`${club} carries ${formBook[club].length} form entries`);
+}
+const myBook = (formBook['Everton'] ?? []).join('');
+const myForm = (state.form ?? []).join('');
+if (myBook !== myForm) fail(`my clubForm "${myBook}" disagrees with state.form "${myForm}"`);
+
+/* ---------- 2. Halftime path with subs ---------- */
+console.log('2) Halftime path with substitutions');
+let ht = startCareer('Fulham');
+let htMatches = 0;
+let htGuard = 0;
+while (htMatches < 6 && ht.week < ht.calendar.length && htGuard < 40) {
+  htGuard += 1;
+  const res = playNextEntry(ht);
+  ht = res.state;
+  if (res.kind === 'window') continue;
+  if (res.kind === 'seasonOver') break;
+  if (res.kind === 'halftime') {
+    let subs = 0;
+    const htMy = ht.live?.myGoals ?? 0;
+    const htOpp = ht.live?.oppGoals ?? 0;
+    const bench = benchForHalftime(ht);
+    const onPitch = ht.live?.onPitch ?? [];
+    if (bench.length > 0 && onPitch.length > 0) {
+      const next = makeHalftimeSub(ht, onPitch[onPitch.length - 1], bench[0].id);
+      if (next) { ht = next; subs = 1; }
+    }
+    const done = resumeMatch(ht);
+    ht = done.state;
+    if (done.report) {
+      htMatches += 1;
+      checkDetail(done.report, `HT match ${htMatches}`, { viaHalftime: true, subsMade: subs });
+      /* Round 157's half-split fix: the scorer minutes must agree with the
+         scoreboard the manager saw at the break. Before it, a match that
+         stood 1-0 at the interval could report its only goal in the 80th. */
+      const h1MyLines = done.report.myScorers.filter(sc => sc.minute <= 45).length;
+      const h1OppLines = done.report.oppScorers.filter(sc => sc.minute <= 45).length;
+      if (h1MyLines !== htMy) fail(`HT match ${htMatches}: saw ${htMy}-${htOpp} at the break but ${h1MyLines} of my scorer minutes are first half`);
+      if (h1OppLines !== htOpp) fail(`HT match ${htMatches}: saw ${htMy}-${htOpp} at the break but ${h1OppLines} of their scorer minutes are first half`);
+      if (subs > 0) {
+        const d = done.report.detail;
+        if (d && d.subs[0] && d.subs[0].minute !== 46) fail(`sub minute ${d.subs[0].minute}, expected 46`);
+      }
+    }
+  }
+}
+if (htMatches < 4) fail(`only ${htMatches} halftime-path matches exercised`);
+
+/* ---------- 3. The pre-match facts ---------- */
+console.log('3) Pre-match facts');
+const facts = matchFacts(ht);
+if (!facts) fail('matchFacts returned null with a fixture on the calendar');
+else {
+  const o = facts.odds;
+  if (o.win + o.draw + o.loss !== 100) fail(`odds sum to ${o.win + o.draw + o.loss}`);
+  if (o.win <= 0 || o.loss <= 0) fail(`degenerate odds ${JSON.stringify(o)}`);
+  if (!facts.opponent) fail('facts carry no opponent');
+  if (facts.myForm.length > 5 || facts.oppForm.length > 5) fail('facts form longer than 5');
+  if (facts.oppDanger.length === 0) fail(`no danger men listed for ${facts.opponent}`);
+  console.log(`   next: ${facts.opponent}, odds ${o.win}/${o.draw}/${o.loss}, they have ${facts.oppDanger.length} names to watch`);
+}
+
+/* ---------- 4. Head-to-head survives the summer, the result log does not ---------- */
+console.log('4) H2H across seasons');
+let s2 = state;
+if (s2.week < s2.calendar.length) {
+  // Fast-forward the remainder so the season can be closed out.
+  let g2 = 0;
+  while (s2.week < s2.calendar.length && g2 < 90) {
+    g2 += 1;
+    const res = playNextEntry(s2, { skipHalftime: true });
+    s2 = res.state;
+    if (res.kind === 'seasonOver') break;
+  }
+}
+const beforeH2h = (s2.h2h ?? []).length;
+if (beforeH2h < 30) fail(`h2h book holds only ${beforeH2h} entries after a full season`);
+const fin = finishSeason(s2);
+const next = startNextSeason(fin.state);
+if ((next.h2h ?? []).length !== beforeH2h) {
+  fail(`h2h shrank over the summer: ${beforeH2h} -> ${(next.h2h ?? []).length}`);
+}
+if ((next.resultLog ?? []).length > 0) {
+  // The season fixture log has always reset; h2h is the book that survives.
+  fail(`resultLog carried ${(next.resultLog ?? []).length} entries into the new season`);
+}
+
+if (failures > 0) {
+  console.error(`simMatchDetail: ${failures} FAILURES`);
+  process.exit(1);
+}
+console.log('simMatchDetail: all green');

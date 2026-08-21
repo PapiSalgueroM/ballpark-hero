@@ -41,7 +41,7 @@ import { AcademyScreen } from '@/components/club-manager/AcademyScreen';
 import { TrainingScreen } from '@/components/club-manager/TrainingScreen';
 import { RolesScreen } from '@/components/club-manager/RolesScreen';
 import { PressScreen } from '@/components/club-manager/PressScreen';
-import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
+import { MatchCentre } from '@/components/club-manager/MatchCentre';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
@@ -79,7 +79,7 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -163,6 +163,7 @@ const ClubManager = () => {
               <p>📋 <span className="font-semibold text-foreground">The board names the actual prize</span>: win the league, qualify for the Champions League or Europa League, reach the top half, or stay up, plus a cup target, a rival to finish above, and squad mandates. Hit them and your stock rises; miss them and the confidence meter drains.</p>
               <p>🗓️ <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>, at its real length, against its real clubs, plus the domestic cup and the Champions League if you qualify, while every other league in the world plays out alongside yours.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
+              <p>📊 <span className="font-semibold text-foreground">Play it your way.</span> Quick Sim gives you the full result in one tap: scorers, cards, injuries, possession, shots, expected goals, momentum and every player's rating. Play Match stops at half time so you can change shape and make subs. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
               <p>🤝 <span className="font-semibold text-foreground">Tell every player what he is</span>: star man, key first teamer, rotation option, backup or one for the future. Each rung is a promise about minutes, and the dressing room keeps score over your last ten matches. Keep your word and they play for you. Break it and they sulk, drag the room down and hand in transfer requests. You can buy your way out of a promise, but it costs six weeks of his wages a rung.</p>
               <p>🎙️ <span className="font-semibold text-foreground">Front up to the press, and talk to your players.</span> The reporters only turn up when something has happened: a losing run, a man you have stopped picking, a club circling one of your stars, a derby, or the bookmakers making you favourite for the sack. Every answer spends one thing to buy another, so backing your players costs you with the board and calling them out costs you the dressing room, and talking big before a derby puts your words on the other lot's wall. Before every match and again at half time you pick a tone: calm them, fire them up, demand more, or the hairdryer. Read the afternoon right and they play above themselves. Read it wrong and you lose them, and the wrong one hurts more than the right one helps.</p>
               <p>💰 <span className="font-semibold text-foreground">Buy and sell in the summer and January windows.</span> Over 3,300 real players are on the market at their real values. Stay under budget and keep at least 14 players.</p>
@@ -790,6 +791,26 @@ const ClubManager = () => {
 
         {/* -------- Overview -------- */}
         <TabsContent value="overview" className="space-y-4">
+          {/* Round 157: the Match Centre takes the whole overview when open:
+              facts, form, head to head, engine odds, the optional team talk,
+              and both ways to play. */}
+          {hubPanel === 'matchCentre' && g.facts ? (
+            <div ref={panelRef}>
+              <MatchCentre
+                career={c}
+                facts={g.facts}
+                clubColor={club.color}
+                tone={c.teamTalk ?? null}
+                onTone={g.talk}
+                talkRead={matchRead}
+                talkStale={!!press && press.lastTone === c.teamTalk && press.toneRun >= 3}
+                onQuickSim={() => { setHubPanel(null); g.quickPlay(); }}
+                onPlay={() => { setHubPanel(null); g.play(); }}
+                onBack={() => setHubPanel(null)}
+              />
+            </div>
+          ) : (
+          <>
           {/* Round 132: who stopped playing over the summer. It sits at the top
               of the first screen of the new season because losing a thirty
               seven year old you have had since day one is the biggest thing
@@ -823,25 +844,30 @@ const ClubManager = () => {
                 <div className="text-[10px] text-muted-foreground mt-0.5">
                   {fx.home === null ? 'Neutral venue' : fx.home ? 'Home' : 'Away'} · their strength ~{fx.oppStrength} · your XI avg {xiAverageRating(c)}
                 </div>
-                {/* Round 135: what you say to them before they go out, right here
-                    and not behind a tile. It is one tap and it has to leave the
-                    Play Match button under your thumb, because a manager gives a
-                    team talk fifty times a season and anything longer than that
-                    stops being a decision and becomes a toll gate. */}
-                <div className="mt-3">
-                  <TeamTalkRow
-                    tone={c.teamTalk ?? null}
-                    onTone={g.talk}
-                    read={matchRead}
-                    when="before kick off"
-                    stale={!!press && press.lastTone === c.teamTalk && press.toneRun >= 3}
-                  />
+                {/* Round 157: the team talk moved into the Match Centre, because
+                    the owner said it was being pushed on him before every match.
+                    The hub keeps the two ways to play: quick sim the result, or
+                    play it with the half time stop. Facts, form, head-to-head
+                    and the talk all live one tap away. */}
+                <div className="mt-3 grid grid-cols-2 gap-2 max-w-xs mx-auto">
+                  <button
+                    onClick={g.quickPlay}
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-3 bg-secondary text-foreground rounded-full font-bold hover:bg-secondary/70 transition-colors"
+                  >
+                    ⚡ Quick Sim
+                  </button>
+                  <button
+                    onClick={g.play}
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90 transition-opacity"
+                  >
+                    <Play className="w-4 h-4" /> Play Match
+                  </button>
                 </div>
                 <button
-                  onClick={g.play}
-                  className="mt-3 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold text-lg hover:opacity-90 transition-opacity"
+                  onClick={() => setHubPanel('matchCentre')}
+                  className="mt-2 text-[11px] font-bold text-primary hover:underline"
                 >
-                  <Play className="w-5 h-5" /> Play Match
+                  📊 Match Centre: form, head to head, odds, team talk
                 </button>
               </>
             )}
@@ -1125,6 +1151,8 @@ const ClubManager = () => {
                 </div>
               )}
             </div>
+          )}
+          </>
           )}
         </TabsContent>
 

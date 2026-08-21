@@ -1,5 +1,92 @@
 # Project state
 
+## Owner feedback, third review 2026-08-18 (his biggest list yet, with screenshots)
+
+He sent a long review overnight with four screenshots: a matchday app's pre and post match
+screens (his model for what a match should show), a phone month calendar (his model for the
+season calendar), his Club Manager header reading "Points: 0, Rank: -" while he was mid save,
+and a Soccer Career creation roll where a 99 potential showed "89 ceiling". Worked as a queue,
+top items first. Marks: DONE means shipped and verified, NEXT means the very next rounds.
+
+**Club Manager (he said "first up is club manager"):**
+
+- CM-1 **DONE, Round 157: Quick Sim and the Match Centre.** One tap gives the full result:
+  scorers, cards and injuries with minutes, possession, shots, on target, expected goals read
+  off the same lambdas the goals were drawn from, corners, fouls, momentum by ten minute
+  bucket, player of the match and a full ratings list. The Match Centre before kick off shows
+  both clubs' REAL last-5 form (tracked for every club whose results this save simulated),
+  your own head to head (kept across seasons now), the engine's own win odds (labelled engine
+  odds, never a fake fan vote), danger men both sides, and the team talk, which he did not
+  want forced on him, so it moved off the hub into the centre and is optional. Playing a match
+  also records a completion now, so the site header counts a mid season session (his
+  screenshot showed 0/107 after six rounds of football). And scorer minutes now respect the
+  halftime scoreboard (first half goals get minutes 1-45), which they quietly did not since
+  Round 119. `simMatchDetail.mjs` guards all of it (45 harnesses now).
+- CM-2 **NEXT: the Live Sim.** His words: "u see the little circles moving about and they'll
+  do things like throwing and goals kicks and penalties". A 2D animated match viewer: both
+  formations as dots, the ball, event choreography from the report's timeline, speed control
+  (0.5x, 1x, 2x, 4x), pause, live stats and xG and momentum, stamina visible, and the
+  halftime break embedded so subs and shape changes happen inside the viewer. Engine support
+  to build first: first half scorers must be assigned at kick off (names and minutes into
+  LiveMatch) WITHOUT double-counting season stats at full time.
+- CM-3 **NEXT: the real calendar.** Like the phone month grid he sent: fixtures on dates,
+  transfer deadline day marked, season start and end, training days with a cone icon between
+  fixtures, a rest policy the player sets (full rest, alternate days, full training, feeding
+  the existing training intensity), and fast forward controls that go anywhere: next match,
+  one week, to the window, to season end.
+- CM-4 Create-a-club depth: a squad quality slider (start with a team of 90s, 80s, 70s, on
+  down), a tactical identity pick (gegenpress, tiki taka, low block, counter, balanced), and
+  stadium size. Board expectations already read the squad, so a slider squad gets honest
+  demands for free.
+- CM-5 More eras, correct data always, and the 2010 era must STOP underrating the legends:
+  his words, "ur undermining the fact that these are legends of the game and way better than
+  anyone in the current generation". The era bake maps 2010 market values through a curve
+  built for 2026 money, so peak Messi lands in the low 90s next to 2026's best. Fix: an
+  era-specific normalization so the era's top players sit 95-99 with the distribution
+  preserved. Then 2015 and 2005 by the bakeEra2010 recipe (data floor 2004, no honest 2000).
+- CM-6 More leagues (wave 3 list in item 6 of the previous review, densities measured).
+- CM-7 Transfer depth: true multi-step negotiations (counter offers, add ons, sell on
+  clauses, player plus cash swaps), release clauses on MY OWN contracts, way more market
+  filters (age range sliders, league, nation, price range, free agents, loan listed,
+  transfer listed, has release clause, position-specific search like LW vs RW, name search).
+  Round 71/94/105 built the skeleton (negotiation, statuses, clauses, contracts); this is
+  the full body.
+- CM-8 Money allocation: budget split between transfer kitty, scouts, stadium expansion,
+  ticket prices, academy. Needs a small club-finance layer (gate income from stadium size).
+- CM-9 League views: tables visible before a ball is kicked, alphabetical with my club
+  starred until games exist, a flag on every league, all UCL groups visible (not just mine),
+  and a projected knockout bracket from current group standings that finalizes when the
+  groups do.
+- CM-10 A job offers screen in season (offers exist at season end; he wants a place where
+  approaches land during the season too).
+- CM-11 Team and player stats centre: per competition and total goals, assists, cards,
+  average match rating (all already tracked per player since Round 73; needs screens).
+- CM-12 Award races: Ballon d'Or style leaders, golden boot, league player of the season,
+  era aware.
+
+**Site wide:**
+
+- S-1 **DONE for Club Manager in Round 157:** playing counts toward the header. Every played
+  match records a completion with the running season score, and the anonymous completion
+  path now dispatches the same header-refresh event the auth path always had. STILL OPEN:
+  audit the OTHER long sims (soccer career, the American careers, tycoon) for the same
+  "never counts until the very end" gap, and the header centering nit from his screenshot.
+- S-2 A score ticker across the top of the site. The paid-feed decision stays parked (money,
+  his call). But a v1 that carries OUR OWN world is free: what's new on the site, today's
+  polls, the daily legend, live lines from the player's own Club Manager save. Never write
+  the rival broadcaster's name into src.
+- S-3 More animation everywhere, standing item F from the first review.
+- S-4 Soccer Career fix pack from his screenshots: a 99 potential roll must never print
+  "89 ceiling" (the scout projection line caps at the band label, not his roll), retire and
+  new career buttons are too small on My Career, the cone slalom training game needs its
+  stopwatch visible and ticking, and training games should go position specific (keepers
+  save penalties).
+- S-5 The other career and manager games are "so way behind compared to the soccer ones":
+  standing parity item, pull the CM systems (roles, press, talks, market, boards) into their
+  sports one at a time.
+- S-6 Indexing: keep the sitemap green (Round 148 fixed the root cause), give Search Console
+  time, and add internal links between related games.
+
 ## Owner feedback, second review 2026-08-17 (5 AM, after rounds 139-144 went live)
 
 He reviewed again about twenty minutes after the deploy, so items he calls unfixed may be his
@@ -277,12 +364,13 @@ true on the date above; re-measure rather than quoting them.
 
 | | |
 |---|---|
-| `origin/main` head | `34b2198` = **Round 144** when this was written (2026-08-17 morning) |
+| `origin/main` head | `e3e9201` = **Round 156**, pushed and published 2026-08-17 night (this row updated 2026-08-18 with Round 157) |
 | How 139-144 landed | SHIP13 clicked via computer-use 2026-08-17 ~07:50 UTC. First run failed closed on a bad RUN139 assertion (bare `plus10` matched the removal comment); pattern fixed to `id: 'plus10'`, re-clicked, all six pushed clean. Lesson in SHIP-PIPELINE terms: absence assertions must target the old DEFINITION shape, and every bat's patterns get tested against the actual zip contents before delivery. |
 | Live site | douknowball.com published 2026-08-17 ~08:00 UTC at Round 144 (two deploy calls, second after sync was file-verified). Republish after 145+146 land. |
 | Shipped 2026-08-17 | Rounds 139 through 150 all pushed and published the same day (SHIP13 morning, SHIP14 16:02 UTC). Head was `d486a09` Round 150 when this was written. |
 | Packaged queue | Round **151** (the What's New page catches up with the big day, plus the simContracts deflake) and Round **152** (Stadium Tycoon milestones plus named opposition: ten career firsts that pay exactly once, and every opponent is an invented club like Ironbridge Rovers, 288 possible names proven collision-free against all 277 real clubs in the manager world). Plus Round **153**: `scripts/playEra2010.mjs`, the browser harness that walks the 2010 era picker like a person (14 checks: era tile, nations shrunk to England and Spain, Blackpool pickable and marked partial, the title demand on the United tile, Rooney in the dressing room, no 2026 leak). One click ships all three: **`SHIP15.bat`** (logs to `ship_log15.txt`). Then Round **154** (create-a-club, owner item D) rides alone as `RUN154.bat`, chain-guarded on 153, and Round **155** (the content layer catches up: Club Manager's SEO copy rewritten for 270 clubs, eras and create-a-club after sitting at the 20-club version with "Top 14" phrasing; a What's New entry; the wave-3 league probe folded into item 6) as `RUN155.bat`, and Round **156** (the game's own help catches up: the in-game "?" popover still said nine leagues and 186 clubs, still offered the future starts Round 139 removed, and still DENIED the 2010 era Round 146 shipped; the on-page SEO block had the same rot. Both rewritten from the live engine, browser-checked 8/8) as `RUN156.bat`. Click order: SHIP15.bat, RUN154.bat, RUN155.bat, RUN156.bat, each one self-guards. |
-| Next free round number | **157** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18 | **Round 157** (Quick Sim, Match Centre, match stats and ratings, header counting, halftime-consistent scorer minutes). `RUN157.bat`, chain-guarded on 156. |
+| Next free round number | **158** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

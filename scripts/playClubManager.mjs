@@ -152,6 +152,8 @@ if (!/Season 1/i.test(t)) {
 console.log('2) Playing a season through the interface');
 let halftimes = 0, fullTimes = 0, subsMade = 0, shapeChanges = 0, windows = 0, seasonEnd = false, sacked = false;
 let lastHt = null;
+/* Round 157: the two new match-day surfaces get walked once each. */
+let centreChecked = false, quickSimChecked = false;
 
 for (let step = 0; step < MAX_STEPS; step++) {
   t = await screen();
@@ -264,6 +266,39 @@ for (let step = 0; step < MAX_STEPS; step++) {
   if (/SACKED!/.test(t)) { sacked = true; break; }
 
   if (/TRANSFER WINDOW|window is open/i.test(t)) windows++;
+
+  /* --- Round 157: the Match Centre, once. Facts, form, the engine's own
+         odds and the optional talk all live here now. --- */
+  if (!centreChecked && /Match Centre/i.test(t) && !/FULL TIME|HALF TIME/i.test(t)) {
+    centreChecked = true;
+    if (await tapText(/Match Centre/i, 'the match centre')) {
+      const tc = await screen();
+      if (!/Engine odds/i.test(tc)) note('BROKEN ', 'the match centre shows no engine odds line');
+      if (!/Form/i.test(tc)) note('BROKEN ', 'the match centre shows no form guide');
+      if (!/Quick Sim/i.test(tc)) note('BROKEN ', 'the match centre offers no quick sim');
+      if (!/Team talk/i.test(tc)) note('BROKEN ', 'the team talk is not in the match centre');
+      if (!await tap(/Club home/i, 'back out of the match centre')) {
+        note('BROKEN ', 'no way back out of the match centre');
+      }
+    }
+    continue;
+  }
+
+  /* --- Round 157: quick sim, once. One tap, full report, no interval. --- */
+  if (!quickSimChecked && centreChecked && /Quick Sim/i.test(t) && !/FULL TIME|HALF TIME/i.test(t)) {
+    quickSimChecked = true;
+    if (await tapText(/Quick Sim/i, 'quick sim')) {
+      await page.waitForTimeout(700);
+      const tq = await screen();
+      if (!/FULL TIME/i.test(tq)) note('BROKEN ', 'quick sim did not land on a full time report');
+      if (!/Match stats/i.test(tq)) note('BROKEN ', 'the quick sim report carries no stats block');
+      if (!/Possession/i.test(tq)) note('BROKEN ', 'no possession line on the report');
+      if (!/Expected goals/i.test(tq)) note('BROKEN ', 'no expected goals line on the report');
+      if (!/Player of the match/i.test(tq)) note('BROKEN ', 'the report names no player of the match');
+      if (!/Momentum/i.test(tq)) note('BROKEN ', 'no momentum strip on the report');
+    }
+    continue;
+  }
 
   /* The January window replaces the play button on the hub with Open the
      Window, and the season does not move until it has been dealt with. Two

@@ -100,6 +100,13 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
         if (error) {
           // Swallow silently, this must never surface to the player.
           console.debug('[completions] insert failed (ignored):', error);
+        } else {
+          /* Round 157: tell the header a play just landed, so games-played,
+             points and rank move while you are actually playing instead of
+             waiting for the next poll. useGameCompletion already dispatches
+             this for its own auth-gated saves; the anonymous path never did,
+             which is why long sims looked like they never counted. */
+          try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ }
         }
       });
 

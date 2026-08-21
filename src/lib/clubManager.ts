@@ -447,6 +447,64 @@ export interface ScorerLine { name: string; minute: number; }
 
 export interface OtherResult { home: string; away: string; hg: number; ag: number; }
 
+/* ---------- Round 157: the structured match detail ---------- */
+/* The report used to be a scoreline, scorer names and a list of prose events.
+   Every number below is derived ONCE, inside the sim, from the sim's own
+   state (the same lambdas the goals were drawn from), then carried on the
+   report so every screen that shows the match shows the same match. Nothing
+   here is recomputed by the UI, because two computations drift and the rule
+   in this repo is that the screen never lies about the sim. */
+
+export interface CardLine { name: string; minute: number; kind: 'yellow' | 'red'; }
+export interface SubLine { off: string; on: string; minute: number; }
+export interface InjuryLine { name: string; minute: number; weeks: number; }
+
+export interface MatchStats {
+  /** My share of the ball, 0-100. Theirs is 100 minus this. */
+  possession: number;
+  shots: number; oppShots: number;
+  onTarget: number; oppOnTarget: number;
+  /** Expected goals, 2dp, seeded from the same lambdas the score was drawn from. */
+  xg: number; oppXg: number;
+  corners: number; oppCorners: number;
+  fouls: number; oppFouls: number;
+}
+
+export type TimelineKind =
+  | 'kickoff' | 'goal' | 'yellow' | 'red' | 'injury' | 'sub' | 'halftime' | 'fulltime' | 'pens';
+
+export interface TimelineEvent {
+  minute: number;
+  side: 'me' | 'opp' | 'none';
+  kind: TimelineKind;
+  text: string;
+}
+
+export interface PlayerRatingLine {
+  name: string;
+  pos: Position;
+  /** Match rating out of 10, 1dp, the same number that feeds his season average. */
+  rating: number;
+  goals: number;
+  assists: number;
+  motm?: boolean;
+}
+
+export interface MatchDetail {
+  stats: MatchStats;
+  /** My cards only. The sim tracks my discipline (suspensions are real);
+      it holds no per-player state for the opposition, so it does not invent any. */
+  cards: CardLine[];
+  injuries: InjuryLine[];
+  subs: SubLine[];
+  timeline: TimelineEvent[];
+  /** Momentum per 10-minute bucket, -1 (all them) to +1 (all us), 9 buckets. */
+  momentum: number[];
+  myRatings: PlayerRatingLine[];
+  /** Their best on the day (top scorer), or null when they had nothing. */
+  oppBest: string | null;
+}
+
 export interface MatchWeekReport {
   competition: Competition;
   compLabel: string;
@@ -465,6 +523,20 @@ export interface MatchWeekReport {
   confidence: number;
   confidenceDelta: number;
   otherResults: OtherResult[];
+  /** Round 157: stats, cards, timeline, ratings. Optional so saves and
+      fixtures from before this round stay readable. */
+  detail?: MatchDetail;
+}
+
+/** Round 157: one past meeting with an opponent, kept across seasons. */
+export interface H2HEntry {
+  opp: string;
+  res: FormResult;
+  /** Always from my point of view: "2-1" is me 2, them 1. */
+  score: string;
+  season: number;
+  comp: Competition;
+  home: boolean | null;
 }
 
 export interface CalendarEntry {
@@ -676,6 +748,18 @@ export interface CareerState {
    */
   teamTalk?: TalkTone | null;
   /**
+   * Round 157: rolling last-5 form for every club whose results this save
+   * has actually simulated (league rounds, world leagues, my group). Oldest
+   * first, capped at 5. Feeds the pre-match facts screen. Absent on older
+   * saves; it simply fills in as new results happen.
+   */
+  clubForm?: Record<string, FormResult[]>;
+  /**
+   * Round 157: every meeting I have played, kept across seasons so the
+   * pre-match screen can show a real head-to-head. Newest last, capped.
+   */
+  h2h?: H2HEntry[];
+  /**
    * Round 154: the club YOU built, when this save was started from the
    * create-your-own-club form. It replaces the weakest club of its chosen
    * league for this save only (replacedClub says which), its squad is
@@ -721,6 +805,13 @@ export interface LiveMatch {
   read: string;
   /** Round 135: what you said to them in the dressing room at the interval. */
   talk?: TalkTone | null;
+  /** Round 157: the first half's true expected-goals lambdas, saved at kick
+      off so the full time xG line is derived from the exact process that
+      produced the goals rather than a reconstruction. Absent on a save paused
+      at the interval before this round existed; the report falls back to
+      recomputing them from the same formula. */
+  lamMine?: number;
+  lamOpp?: number;
 }
 
 export interface PlayResult {
@@ -4632,6 +4723,7 @@ function syncWorld(state: CareerState, myPlayed: number): void {
       for (const [h, a] of roundPairs(lg.clubs, w.round)) {
         const [hg, ag] = simAiMatch(state, h, a);
         applyResult(w.table, h, a, hg, ag);
+        noteForm(state, h, a, hg, ag);
       }
       w.round += 1;
     }
@@ -5442,9 +5534,18 @@ function oppositionShape(oppGoals: number, myGoals: number): { atk: number; def:
   return MENT_MOD.balanced;
 }
 
+/** Round 157: the half's lambdas on their own, so the xG line on the report
+ *  is read off the exact process the goals were drawn from. Same formula
+ *  simHalf has always used, split out rather than duplicated. */
+function halfLambdas(sA: number, sB: number, boostA: number, boostB: number): [number, number] {
+  return [
+    clamp(1.25 + (sA - sB) * 0.055 + boostA, 0.12, 4.2) / 2,
+    clamp(1.25 + (sB - sA) * 0.055 + boostB, 0.12, 4.2) / 2,
+  ];
+}
+
 function simHalf(sA: number, sB: number, boostA: number, boostB: number): [number, number] {
-  const lA = clamp(1.25 + (sA - sB) * 0.055 + boostA, 0.12, 4.2) / 2;
-  const lB = clamp(1.25 + (sB - sA) * 0.055 + boostB, 0.12, 4.2) / 2;
+  const [lA, lB] = halfLambdas(sA, sB, boostA, boostB);
   return [poisson(lA), poisson(lB)];
 }
 
@@ -5540,12 +5641,25 @@ function weightedPick(xi: CMPlayer[], weight: (p: CMPlayer) => number): CMPlayer
 /** Generates my scorers, bumps their season tallies, credits some assists.
  *  Round 73: also returns per-player goal/assist counts so match ratings can
  *  reward the players who actually produced. */
+/** Round 157: goal minutes that respect the interval. The first
+ *  `firstHalfGoals` land in 1-45 and the rest in 46-90, so a match that was
+ *  1-0 at the break can never later claim its only goal came in the 80th.
+ *  Before this, minutes were drawn across the whole match blind, and the
+ *  full time report could contradict the halftime scoreboard. */
+function splitMinutes(goals: number, firstHalfGoals: number): number[] {
+  const h1 = clamp(firstHalfGoals, 0, goals);
+  const first = Array.from({ length: h1 }, () => ri(1, 45));
+  const second = Array.from({ length: goals - h1 }, () => ri(46, 90));
+  return [...first, ...second].sort((a, b) => a - b);
+}
+
 function generateMyScorers(
   state: CareerState,
   xi: CMPlayer[],
   goals: number,
+  firstHalfGoals: number,
 ): { lines: ScorerLine[]; goalCounts: Map<string, number>; assistCounts: Map<string, number> } {
-  const minutes = Array.from({ length: goals }, () => ri(1, 90)).sort((a, b) => a - b);
+  const minutes = splitMinutes(goals, firstHalfGoals);
   const lines: ScorerLine[] = [];
   const goalCounts = new Map<string, number>();
   const assistCounts = new Map<string, number>();
@@ -5572,8 +5686,8 @@ function generateMyScorers(
   return { lines, goalCounts, assistCounts };
 }
 
-function generateOppScorers(opp: string, goals: number, yearsOnNow = 0, eraId: string = 'now'): ScorerLine[] {
-  const minutes = Array.from({ length: goals }, () => ri(1, 90)).sort((a, b) => a - b);
+function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now'): ScorerLine[] {
+  const minutes = splitMinutes(goals, firstHalfGoals);
   // Round 70: opponent scorers are their real attackers from the baked
   // rosters, weighted toward the expensive ones, so "Semenyo 63'" instead of
   // "Bournemouth No. 9". Round 132: from the projected roster, so a 2036 match
@@ -5637,6 +5751,22 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     return { ...p, fitness, injuryWeeks };
   });
   tickScouting(state);
+}
+
+/** Round 157: roll a simulated result into both clubs' last-5 form. Called
+ *  wherever the save actually simulates a result, so form only ever reflects
+ *  matches this world really played. */
+function noteFormOne(state: CareerState, club: string, r: FormResult): void {
+  if (!state.clubForm) state.clubForm = {};
+  const arr = state.clubForm[club] ?? [];
+  arr.push(r);
+  if (arr.length > 5) arr.shift();
+  state.clubForm[club] = arr;
+}
+
+function noteForm(state: CareerState, home: string, away: string, hg: number, ag: number): void {
+  noteFormOne(state, home, hg > ag ? 'W' : hg === ag ? 'D' : 'L');
+  noteFormOne(state, away, ag > hg ? 'W' : hg === ag ? 'D' : 'L');
 }
 
 function applyResult(table: TableRow[], home: string, away: string, hg: number, ag: number): void {
@@ -5714,6 +5844,97 @@ function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null 
 }
 
 /**
+ * Round 157: assemble the structured detail block from what the sim actually
+ * did. Every number is derived from the sim's own lambdas and event rolls,
+ * once, here, so no screen can ever recompute a different match.
+ */
+function buildMatchDetail(args: {
+  myGoals: number; oppGoals: number;
+  lamMine: number; lamOpp: number;
+  myScorers: ScorerLine[]; oppScorers: ScorerLine[];
+  cards: CardLine[]; injuries: InjuryLine[]; subs: SubLine[];
+  ratings: PlayerRatingLine[];
+  decidedBy: 'regular' | 'pens'; won: boolean;
+  clubName: string; opponent: string;
+}): MatchDetail {
+  const { myGoals, oppGoals, lamMine, lamOpp } = args;
+  const round2 = (n: number) => Math.round(n * 100) / 100;
+
+  /* xG tracks both the process (the lambda the goals were drawn from) and the
+     finishing (the goals that actually went in), like shot-based xG does. */
+  const xg = Math.max(0.05, round2(0.55 * lamMine + 0.45 * myGoals + (Math.random() * 0.5 - 0.22)));
+  const oppXg = Math.max(0.05, round2(0.55 * lamOpp + 0.45 * oppGoals + (Math.random() * 0.5 - 0.22)));
+
+  const possession = clamp(Math.round(50 + (lamMine - lamOpp) * 9 + ri(-3, 3)), 28, 72);
+
+  const shotsFor = (x: number, goals: number): number =>
+    clamp(Math.round(x * 5.5 + ri(2, 6)), Math.max(goals, 1), 28);
+  const shots = shotsFor(xg, myGoals);
+  const oppShots = shotsFor(oppXg, oppGoals);
+  const onTargetFor = (all: number, goals: number): number =>
+    clamp(goals + Math.round((all - goals) * 0.36), goals, all);
+  const onTarget = onTargetFor(shots, myGoals);
+  const oppOnTarget = onTargetFor(oppShots, oppGoals);
+  const corners = clamp(Math.round(shots * 0.5 + ri(-1, 2)), 0, 15);
+  const oppCorners = clamp(Math.round(oppShots * 0.5 + ri(-1, 2)), 0, 15);
+  const myYellows = args.cards.filter(c => c.kind === 'yellow').length;
+  const fouls = Math.max(ri(6, 14), myYellows * 2);
+  const oppFouls = ri(6, 14);
+
+  /* The timeline: everything above, in minute order, ready to replay. */
+  const timeline: TimelineEvent[] = [];
+  timeline.push({ minute: 0, side: 'none', kind: 'kickoff', text: 'Kick off' });
+  for (const sc of args.myScorers) timeline.push({ minute: sc.minute, side: 'me', kind: 'goal', text: sc.name });
+  for (const sc of args.oppScorers) timeline.push({ minute: sc.minute, side: 'opp', kind: 'goal', text: sc.name });
+  for (const c of args.cards) timeline.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name });
+  for (const inj of args.injuries) timeline.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name });
+  for (const s of args.subs) timeline.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}` });
+  timeline.push({ minute: 45, side: 'none', kind: 'halftime', text: 'Half time' });
+  if (args.decidedBy === 'pens') {
+    timeline.push({ minute: 90, side: args.won ? 'me' : 'opp', kind: 'pens', text: args.won ? `${args.clubName} win on penalties` : `${args.opponent} win on penalties` });
+  }
+  timeline.push({ minute: 90, side: 'none', kind: 'fulltime', text: 'Full time' });
+  const KIND_ORDER: Record<TimelineKind, number> = {
+    kickoff: 0, goal: 1, yellow: 1, red: 1, injury: 1, sub: 1, halftime: 2, pens: 3, fulltime: 4,
+  };
+  timeline.sort((a, b) => a.minute - b.minute || KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
+
+  /* Momentum: the base flow is the lambda gap, goals spike it their way. */
+  const base = clamp((lamMine - lamOpp) * 0.35, -0.6, 0.6);
+  const momentum: number[] = [];
+  for (let b = 0; b < 9; b++) {
+    let v = base + (Math.random() * 0.3 - 0.15);
+    const lo = b * 10;
+    const hi = lo + 10;
+    for (const sc of args.myScorers) if (sc.minute > lo && sc.minute <= hi) v += 0.45;
+    for (const sc of args.oppScorers) if (sc.minute > lo && sc.minute <= hi) v -= 0.45;
+    momentum.push(round2(clamp(v, -1, 1)));
+  }
+
+  /* Their best on the day: whoever hurt you most. */
+  let oppBest: string | null = null;
+  if (args.oppScorers.length) {
+    const tally = new Map<string, number>();
+    for (const sc of args.oppScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
+    oppBest = [...tally.entries()].sort((a, b) => b[1] - a[1])[0][0];
+  }
+
+  return {
+    stats: {
+      possession, shots, oppShots, onTarget, oppOnTarget,
+      xg, oppXg, corners, oppCorners, fouls, oppFouls,
+    },
+    cards: [...args.cards].sort((a, b) => a.minute - b.minute),
+    injuries: args.injuries,
+    subs: args.subs,
+    timeline,
+    momentum,
+    myRatings: [...args.ratings].sort((a, b) => b.rating - a.rating),
+    oppBest,
+  };
+}
+
+/**
  * Plays my match for this entry, mutating state (tables, squad, cups, board)
  * and returning the report. state must already be a private copy.
  */
@@ -5743,6 +5964,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   let mine: number;
   let myGoals: number;
   let oppGoals: number;
+  /* Round 157: the summed expected-goals lambdas for the whole match, read
+     off the exact draws below. They seed the stats block on the report. */
+  let lamMine = 0;
+  let lamOpp = 0;
+  /* And the first half's share of the goals, so scorer minutes can never
+     contradict the halftime scoreboard. */
+  let h1My = 0;
+  let h1Opp = 0;
   /* Round 135: what was said, and what it was worth. The pre match talk covers
      the whole match unless you said something else at the interval, in which
      case the newer one is the one in the players' ears. Both are remembered
@@ -5785,9 +6014,18 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     mine = myMatchStrength(state, second) + inForce * TALK_EDGE + sharpen;
     const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
     const opp2 = oppositionShape(live.oppGoals, live.myGoals);
-    const [m2, o2] = simHalf(mine, oppS + fire, ment2.atk + homeAtk + opp2.def, ment2.def + oppAtk + opp2.atk);
+    const [l2m, l2o] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def, ment2.def + oppAtk + opp2.atk);
+    const m2 = poisson(l2m);
+    const o2 = poisson(l2o);
     myGoals = live.myGoals + m2;
     oppGoals = live.oppGoals + o2;
+    h1My = live.myGoals;
+    h1Opp = live.oppGoals;
+    /* First half lambdas were saved at kick off. A save paused at the interval
+       before they existed falls back to the second half's shape, which is the
+       closest number the sim still holds. */
+    lamMine = (live.lamMine ?? l2m) + l2m;
+    lamOpp = (live.lamOpp ?? l2o) + l2o;
     // Anyone who was on the pitch at any point can appear on the scoresheet.
     const ids = [...new Set([...live.startXi, ...live.onPitch])];
     xi = squadByIds(state, ids);
@@ -5801,11 +6039,19 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     preFit = talkWeight(state, preTone, preMatchTarget(preEdge, xiMood(state, xi), state.form));
     mine = myMatchStrength(state, xi) + preFit * TALK_EDGE + sharpen;
     const ment = MENT_MOD[state.mentality] ?? MENT_MOD.balanced;
-    const [m1, o1] = simHalf(mine, oppS + fire, ment.atk + homeAtk, ment.def + oppAtk);
+    const [l1m, l1o] = halfLambdas(mine, oppS + fire, ment.atk + homeAtk, ment.def + oppAtk);
+    const m1 = poisson(l1m);
+    const o1 = poisson(l1o);
     const opp2 = oppositionShape(o1, m1);
-    const [m2, o2] = simHalf(mine, oppS + fire, ment.atk + homeAtk + opp2.def, ment.def + oppAtk + opp2.atk);
+    const [l2m, l2o] = halfLambdas(mine, oppS + fire, ment.atk + homeAtk + opp2.def, ment.def + oppAtk + opp2.atk);
+    const m2 = poisson(l2m);
+    const o2 = poisson(l2o);
     myGoals = m1 + m2;
     oppGoals = o1 + o2;
+    h1My = m1;
+    h1Opp = o1;
+    lamMine = l1m + l2m;
+    lamOpp = l1o + l2o;
   }
 
   let decidedBy: 'regular' | 'pens' = 'regular';
@@ -5823,8 +6069,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   const events: string[] = [];
   let trophyWon: string | null = null;
 
-  const { lines: myScorers, goalCounts, assistCounts } = generateMyScorers(state, xi, myGoals);
-  const oppScorers = generateOppScorers(fx.opponent, oppGoals, yearsOn(state), state.eraId);
+  const { lines: myScorers, goalCounts, assistCounts } = generateMyScorers(state, xi, myGoals, h1My);
+  const oppScorers = generateOppScorers(fx.opponent, oppGoals, h1Opp, yearsOn(state), state.eraId);
   const tally = new Map<string, number>();
   for (const sc of myScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
   tally.forEach((count, name) => {
@@ -5845,9 +6091,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
         const hg = fx.home ? myGoals : oppGoals;
         const ag = fx.home ? oppGoals : myGoals;
         applyResult(state.table, h, a, hg, ag);
+        /* My own form entry is written once, below, for every competition. */
       } else {
         const [hg, ag] = simAiMatch(state, h, a);
         applyResult(state.table, h, a, hg, ag);
+        noteForm(state, h, a, hg, ag);
         otherResults.push({ home: h, away: a, hg, ag });
       }
     }
@@ -5868,6 +6116,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     if (others.length === 2) {
       const [hg, ag] = simAiMatch(state, others[0], others[1]);
       applyResult(group.table, others[0], others[1], hg, ag);
+      noteForm(state, others[0], others[1], hg, ag);
       otherResults.push({ home: others[0], away: others[1], hg, ag });
     }
     group.matchday = Math.min(6, group.matchday + 1);
@@ -5953,6 +6202,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   /* ----- Round 73: full stat lines for everyone who played ----- */
   const cleanSheet = oppGoals === 0;
   const xiIdSet = new Set(xi.map(p => p.id));
+  /* Round 157: the same match rating that feeds his season average is kept
+     for the report, so the ratings screen and the season stats can never
+     disagree about the same afternoon. */
+  const ratingLines: PlayerRatingLine[] = [];
   state.squad = state.squad.map(p => {
     if (!xiIdSet.has(p.id)) return p;
     const g = goalCounts.get(p.id) ?? 0;
@@ -5963,6 +6216,13 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
       4.5, 10,
     );
     const defensive = p.position === 'GK' || groupOf(p.position) === 'DEF';
+    ratingLines.push({
+      name: p.name,
+      pos: p.position,
+      rating: Math.round(matchRating * 10) / 10,
+      goals: g,
+      assists: a,
+    });
     return {
       ...p,
       apps: (p.apps ?? 0) + 1,
@@ -5970,7 +6230,17 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
       cleanSheets: (p.cleanSheets ?? 0) + (cleanSheet && defensive ? 1 : 0),
     };
   });
+  if (ratingLines.length) {
+    let bestIdx = 0;
+    for (let i = 1; i < ratingLines.length; i++) {
+      const b = ratingLines[bestIdx];
+      const r = ratingLines[i];
+      if (r.rating > b.rating || (r.rating === b.rating && r.goals > b.goals)) bestIdx = i;
+    }
+    ratingLines[bestIdx].motm = true;
+  }
   // Yellow cards: 0-3 a match, defenders and holders pick up most of them.
+  const cardLines: CardLine[] = [];
   const yellows = ri(0, 3);
   for (let i = 0; i < yellows; i++) {
     const victim = weightedPick(xi, p =>
@@ -5978,6 +6248,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     if (victim) {
       const sq = state.squad.find(p => p.id === victim.id);
       if (sq) sq.seasonYellows = (sq.seasonYellows ?? 0) + 1;
+      cardLines.push({ name: victim.name, minute: ri(12, 88), kind: 'yellow' });
     }
   }
 
@@ -6095,11 +6366,13 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     if (p) p.suspendedMatches = Math.max(0, p.suspendedMatches - 1);
   }
 
+  const injuryLines: InjuryLine[] = [];
   if (xi.length && Math.random() < 0.22) {
     const victim = pick(xi);
     const p = state.squad.find(x => x.id === victim.id);
     if (p) {
       p.injuryWeeks = ri(1, 5);
+      injuryLines.push({ name: p.name, minute: ri(8, 85), weeks: p.injuryWeeks });
       events.push(`🩹 ${p.name} limped off, out for ~${p.injuryWeeks} week${p.injuryWeeks > 1 ? 's' : ''}.`);
     }
   }
@@ -6109,6 +6382,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     if (p && p.injuryWeeks === 0) {
       p.suspendedMatches = ri(1, 2);
       p.seasonReds = (p.seasonReds ?? 0) + 1;
+      cardLines.push({ name: p.name, minute: ri(25, 88), kind: 'red' });
       events.push(`🟥 ${p.name} was sent off, suspended for ${p.suspendedMatches} match${p.suspendedMatches > 1 ? 'es' : ''}.`);
     }
   }
@@ -6127,6 +6401,18 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
 
   const res: FormResult = won ? 'W' : drawn ? 'D' : 'L';
   state.form = [...state.form, res].slice(-5);
+  /* Round 157: the meeting goes into the head-to-head book, which unlike the
+     resultLog survives season after season. */
+  const h2hLog = state.h2h ?? [];
+  h2hLog.push({
+    opp: fx.opponent, res, score: `${myGoals}-${oppGoals}`,
+    season: state.season, comp: fx.competition, home: fx.home,
+  });
+  state.h2h = h2hLog.slice(-300);
+  /* And both sides' last-5 form, whatever the competition, because a cup
+     hiding matters to the next opponent reading the form guide. */
+  noteFormOne(state, state.clubName, res);
+  noteFormOne(state, fx.opponent, won ? 'L' : drawn ? 'D' : 'W');
   // Round 71: spread keeps the manager-career extremes (biggest win, priciest
   // buy...) instead of wiping them every match.
   state.careerStats = {
@@ -6286,6 +6572,27 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   // Round 135: and the room fills up again, once there is something to ask.
   maybeAskPress(state);
 
+  /* Round 157: halftime substitutions, read off the live match the manager
+     actually paused. On a fast forward there are none, honestly. */
+  const subLines: SubLine[] = [];
+  if (live) {
+    for (let i = 0; i < live.startXi.length; i++) {
+      if (live.onPitch[i] !== live.startXi[i]) {
+        const off = state.squad.find(p => p.id === live.startXi[i]);
+        const on = state.squad.find(p => p.id === live.onPitch[i]);
+        if (off && on) subLines.push({ off: off.name, on: on.name, minute: 46 });
+      }
+    }
+  }
+  const detail = buildMatchDetail({
+    myGoals, oppGoals, lamMine, lamOpp,
+    myScorers, oppScorers,
+    cards: cardLines, injuries: injuryLines, subs: subLines,
+    ratings: ratingLines,
+    decidedBy, won,
+    clubName: state.clubName, opponent: fx.opponent,
+  });
+
   const iAmHome = fx.home !== false; // neutral finals list us first
   return {
     competition: fx.competition,
@@ -6305,6 +6612,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     confidence: state.boardConfidence,
     confidenceDelta: confDelta,
     otherResults,
+    detail,
   };
 }
 
@@ -6932,6 +7240,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
           if (h === state.clubName || a === state.clubName) continue;
           const [hg, ag] = simAiMatch(state, h, a);
           applyResult(state.table, h, a, hg, ag);
+          noteForm(state, h, a, hg, ag);
         }
         syncWorld(state, myRoundsPlayed(state, state.week + 1));
       }
@@ -6988,7 +7297,11 @@ function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
   const ment = MENT_MOD[state.mentality] ?? MENT_MOD.balanced;
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
-  const [myGoals, oppGoals] = simHalf(mine, oppS, ment.atk + homeAtk, ment.def + oppAtk);
+  /* Round 157: keep the half's lambdas on the live match, so the full time
+     xG line is read off the exact process that produced these goals. */
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk, ment.def + oppAtk);
+  const myGoals = poisson(lamMine);
+  const oppGoals = poisson(lamOpp);
 
   const ids = xi.map(p => p.id);
   return {
@@ -7004,6 +7317,8 @@ function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
     home: fx.home,
     read: halftimeRead(state, xi, myGoals, oppGoals, mine, oppS),
     talk: null,
+    lamMine,
+    lamOpp,
   };
 }
 
@@ -7110,6 +7425,129 @@ export function nextFixture(career: CareerState): NextFixtureInfo {
     }
   }
   return { kind: 'seasonOver' };
+}
+
+/* ---------- Round 157: the pre-match facts screen ---------- */
+
+export interface MatchFacts {
+  compLabel: string;
+  competition: Competition;
+  opponent: string;
+  home: boolean | null;
+  myForm: FormResult[];
+  oppForm: FormResult[];
+  /** League positions. Mine always; theirs when the save has a table for them. */
+  myPos: number | null;
+  oppPos: number | null;
+  /** Where they play, for a cup or European opponent from another league. */
+  oppLeagueName: string | null;
+  /** The engine's own chances for this match, whole percents summing to 100. */
+  odds: { win: number; draw: number; loss: number };
+  /** Past meetings with them in this save, newest first, capped at 6. */
+  h2h: H2HEntry[];
+  /** Names to watch: my in-form scorers and their most valuable attackers. */
+  myDanger: string[];
+  oppDanger: string[];
+  myStrength: number;
+  oppStrength: number;
+}
+
+function poissonPmf(lambda: number, k: number): number {
+  let p = Math.exp(-lambda);
+  for (let i = 1; i <= k; i++) p *= lambda / i;
+  return p;
+}
+
+/**
+ * Everything the pre-match screen shows, computed from the save's own state:
+ * real form from results this world actually simulated, real head-to-head
+ * from matches you actually played, and win chances from the exact formula
+ * the match itself will be drawn from. No invented votes, no fake crowd
+ * percentages: these are the engine's own odds and they are labelled as such.
+ */
+export function matchFacts(career: CareerState): MatchFacts | null {
+  for (let w = career.week; w < career.calendar.length; w++) {
+    const entry = career.calendar[w];
+    if (entry.type === 'window') return null;
+    if (!entryInvolvesMe(career, entry)) continue;
+    const fx = fixtureFor(career, entry);
+    if (!fx) continue;
+
+    const xi = effectiveXI(career);
+    const mine = myMatchStrength(career, xi);
+    const oppS = strengthOf(career, fx.opponent);
+    const ment = MENT_MOD[career.mentality] ?? MENT_MOD.balanced;
+    const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
+    const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
+    /* The full-match lambdas, exactly as the two halves will draw them
+       (before any team talk, which has not been given yet). */
+    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk, 0.12, 4.2);
+    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk, 0.12, 4.2);
+    let pWin = 0, pDraw = 0, pLoss = 0;
+    for (let a = 0; a <= 9; a++) {
+      for (let b = 0; b <= 9; b++) {
+        const p = poissonPmf(lamMe, a) * poissonPmf(lamOpp, b);
+        if (a > b) pWin += p; else if (a === b) pDraw += p; else pLoss += p;
+      }
+    }
+    const total = pWin + pDraw + pLoss;
+    let win = Math.round((pWin / total) * 100);
+    let draw = Math.round((pDraw / total) * 100);
+    let loss = 100 - win - draw;
+    if (loss < 0) { draw += loss; loss = 0; }
+
+    const table = sortedTable(career.table);
+    const myPos = career.week === 0 ? null : Math.max(1, table.findIndex(r => r.club === career.clubName) + 1) || null;
+    const myLeague = careerLeagueOf(career);
+    let oppPos: number | null = null;
+    let oppLeagueName: string | null = null;
+    const inMyLeague = career.leagueClubs.includes(fx.opponent);
+    if (inMyLeague) {
+      const idx = table.findIndex(r => r.club === fx.opponent);
+      oppPos = career.week === 0 ? null : idx >= 0 ? idx + 1 : null;
+    } else {
+      const oppLeague = career.eraId && isHistoricEra(career.eraId)
+        ? eraLeagueOf(fx.opponent, career.eraId)
+        : REAL_LEAGUES.find(l => l.clubs.includes(fx.opponent)) ?? null;
+      if (oppLeague && oppLeague.id !== myLeague.id) {
+        oppLeagueName = oppLeague.name;
+        const w2 = career.world?.[oppLeague.id];
+        if (w2) {
+          const idx = sortedTable(w2.table).findIndex(r => r.club === fx.opponent);
+          if (idx >= 0 && w2.round > 0) oppPos = idx + 1;
+        }
+      }
+    }
+
+    const myDanger = [...career.squad]
+      .filter(p => isAvailable(p) && p.position !== 'GK')
+      .sort((a, b) => (b.seasonGoals - a.seasonGoals) || (b.rating - a.rating))
+      .slice(0, 2)
+      .map(p => p.name);
+    const oppDanger = projectedRoster(fx.opponent, yearsOn(career), career.eraId ?? 'now')
+      .filter(p => groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID')
+      .slice(0, 2)
+      .map(p => p.n);
+
+    return {
+      compLabel: fx.compLabel,
+      competition: fx.competition,
+      opponent: fx.opponent,
+      home: fx.home,
+      myForm: career.clubForm?.[career.clubName] ?? career.form ?? [],
+      oppForm: career.clubForm?.[fx.opponent] ?? [],
+      myPos,
+      oppPos,
+      oppLeagueName,
+      odds: { win, draw, loss },
+      h2h: [...(career.h2h ?? [])].filter(h => h.opp === fx.opponent).slice(-6).reverse(),
+      myDanger,
+      oppDanger,
+      myStrength: Math.round(mine),
+      oppStrength: Math.round(oppS),
+    };
+  }
+  return null;
 }
 
 /** min(130, current league points + 10 per trophy won this season). */
