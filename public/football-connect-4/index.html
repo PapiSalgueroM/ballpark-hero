@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Soccer Connect 4 - Football Trivia Grid Game | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
+    
+    
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/QoR51Qt7jzapeGsKzww79gBj3lK2/social-images/social-1773044240034-Sports_trivia_banner.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    
+    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/QoR51Qt7jzapeGsKzww79gBj3lK2/social-images/social-1773044240034-Sports_trivia_banner.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Consent-gated AdSense loader: only load the ad script if the visitor
+      // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
+      // New visitors (no choice yet) do not get the script until they accept;
+      // the banner reloads ads on acceptance via the page lifecycle.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            var s = document.createElement('script');
+            s.async = true;
+            s.crossOrigin = 'anonymous';
+            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
+            document.head.appendChild(s);
+          }
+        } catch (e) { /* storage blocked: default to no ads script */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="DoUKnowBall: Free Daily Sports Trivia Games">
+  <meta name="twitter:title" content="DoUKnowBall: Free Daily Sports Trivia Games">
+  <meta property="og:description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
+  <meta name="twitter:description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
+  <script type="module" crossorigin="" src="/assets/index-CRgX024h.js"></script>
+  <link rel="stylesheet" crossorigin="" href="/assets/index-BMPgYZKM.css">
+<meta property="og:type" content="website" data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+
+
+<link rel="modulepreload" as="script" crossorigin="" href="/assets/FootballConnect4-w9KS7MyL.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/useGameCompletion-CTxmZk8L.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/badges-MiPyDmVR.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/useDailyPuzzle-BY82aesr.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/playerSearch-Brj0-VSd.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/GameNav-BFeajxzu.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/arrow-right-B6YXtqVZ.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/GameShell-B_nVyPti.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/GameNavbar-CG507CEp.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/arrow-left-COz9pSdz.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/star-LbJ241sE.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/medal-dPyEPwBr.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/ResultScreen-CmIOB8YF.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/ShareButtons-BX_p6yla.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/copy-DXghxRxg.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/Celebration-DY7Pn_lx.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/PlayerAutocomplete-DYY5JFOF.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/AdBanner-P9uvoBGd.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/ReportQuestion-Bo1h8V6Z.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/flag-NyFHfRfW.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/GameSeoContent-BA7ffd9K.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/circle-help-CdzDtkyO.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/skip-forward-DSXf1xSK.js"><link rel="canonical" href="https://douknowball.com/football-connect-4" data-rh="true"><meta name="description" content="Play Connect 4 with soccer trivia. Name players matching club and league criteria to claim cells." data-rh="true"><meta property="og:url" content="https://douknowball.com/football-connect-4" data-rh="true"><meta property="og:title" content="Soccer Connect 4 - Football Trivia Grid Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Play Connect 4 with soccer trivia. Name players matching club and league criteria to claim cells." data-rh="true"><meta name="twitter:title" content="Soccer Connect 4 - Football Trivia Grid Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Play Connect 4 with soccer trivia. Name players matching club and league criteria to claim cells." data-rh="true"><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Soccer Connect 4 - Football Trivia Grid Game | DoUKnowBall","description":"Play Connect 4 with soccer trivia. Name players matching club and league criteria to claim cells.","url":"https://douknowball.com/football-connect-4","isAccessibleForFree":true,"gamePlatform":"Web Browser"}</script>
+</head>
+<body>
+<div id="root">
+<a href="/perfect-lineup-f1">🗓️ Fresh daily: Perfect Lineup: F1 ·</a>
+<a href="/rank-em">🗓️ Fresh daily: Rank 'Em ·</a>
+<a href="/silverware-sort">🗓️ Fresh daily: Silverware Sort ·</a>
+<a href="/mystery-box">🗓️ Fresh daily: Mystery Box ·</a>
+<a href="/">🎮 113 free games, no sign-up, no downloads ·</a>
+<a href="/">⚽ 30 soccer games and counting ·</a>
+<a href="/whats-new">📰 New stuff ships almost daily. See what changed ·</a>
+<a href="/">DOUKNOWBALL</a>
+<h1>SOCCER CONNECT 4</h1>
+<p>Two players, trivia, and 4 in a row</p>
+<h2>Football Connect 4 | DoUKnowBall</h2>
+<p>Connect four football players in a row by finding the common link: teams played for, draft class, position or awards.</p>
+<p>This is the Connect 4 you grew up with, except every square is earned with a soccer answer. Blue against Red on one board, four in a row wins.</p>
+<p>Each of the 7 columns and 6 rows carries an attribute. To claim a cell you name a player matching both, and gravity still applies: pieces fall to the lowest open row.</p>
+<h2>How to play Connect 4</h2>
+<li>Grab an opponent. Blue and Red alternate turns on the same device, Blue first.</li>
+<li>Pick a column and the game highlights where your piece would drop.</li>
+<li>Name a player fitting both the column attribute and the row attribute.</li>
+<li>A valid answer claims the cell. A rejection lets you try another name or cancel.</li>
+<li>Connect 4 of your color in any direction to win.</li>
+<h2>Rules to know</h2>
+<li>The board is 7 columns by 6 rows.</li>
+<li>Each player name works once per game, for either side.</li>
+<li>You can skip a turn, and a full board with no winner is a draw.</li>
+<li>Answers are AI verified. Rejections do not pass your turn, and network errors never count against you.</li>
+<h2>Example walkthrough</h2>
+<p>The column says Played for Barcelona, the row says World Cup Winner, and the drop spot blocks Red's line. Ronaldinho verifies, and the threat dies.</p>
+<p>Red answers Brazilian plus Champions League Winner with Roberto Carlos to keep a diagonal alive. Every answer is also a tactical move, and knowing the name is only half the battle.</p>
+<h2>Strategy tips</h2>
+<li>Play the board first, trivia second. A brilliant answer in a useless column is wasted.</li>
+<li>Center columns touch the most lines of four, so spend your deepest knowledge there.</li>
+<li>Track burned names. Spending a do everything legend early starves your endgame.</li>
+<li>Skipping beats dropping a piece that sets up your opponent.</li>
+<h2>Connect 4 FAQ</h2>
+<h3>Can I play solo?</h3>
+<p>There is no AI opponent; it is built for two people sharing a screen. Playing both sides yourself works fine as practice.</p>
+<h3>What is the daily mode?</h3>
+<p>Everyone gets the same daily board, and your game in progress saves in your browser. Unlimited mode deals random boards for rematches.</p>
+<h3>What if a correct player is rejected?</h3>
+<p>The AI referee is strict and occasionally wrong. A rejection never ends your turn, so rephrase or pick someone else, and report the cell if a fair answer got robbed.</p>
+<h3>Is Connect 4 free to play?</h3>
+<p>Yes. Connect 4 is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/soccer-grid">⚽ Soccer Grid 3×3 grid puzzle with rarity scores</a>
+<a href="/world-cup-bracket">🌍 2026 Bracket Predict every World Cup 2026 match</a>
+<a href="/soccer-career">⚽ Soccer Career Create your look, sign for your boyhood club, get rich, get shady, retire a legend.</a>
+<a href="/nfl-career">🏈 NFL Career Path Guess the NFL player from clues</a>
+<a href="/silverware-sort">🥇 Silverware Sort Stack five teams in order by real title counts</a>
+<a href="/mlb-connect-4">⚾ MLB Connect 4 Baseball trivia meets Connect 4</a>
+<p>PLAY NEXT</p>
+<a href="/golf-higher-lower">📊 Golf Higher or Lower Which legend won more majors? Play Now</a>
+<h3>Golf Higher or Lower</h3>
+<p>Which legend won more majors?</p>
+<a href="/guess-tennis-player">🎾 Guess The Player Guess the mystery tennis player from clues Play Now</a>
+<h3>Guess The Player</h3>
+<p>Guess the mystery tennis player from clues</p>
+<a href="/perfect-lineup-f1">🏎️ Perfect Lineup: F1 Build a 5-driver dream squad under random team/era/country constraints Play Now</a>
+<h3>Perfect Lineup: F1</h3>
+<p>Build a 5-driver dream squad under random team/era/country constraints</p>
+<p>Next puzzle in 14:36:20</p>
+<p>See all games →</p>
+<a href="/">See all games →</a>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<p>We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy. Learn More</p>
+<a href="/privacy">Learn More</a>
+</div>
+</body>
+</html>

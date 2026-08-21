@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Build Your XI - Soccer Lineup Builder Game | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
+    
+    
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/QoR51Qt7jzapeGsKzww79gBj3lK2/social-images/social-1773044240034-Sports_trivia_banner.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    
+    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/QoR51Qt7jzapeGsKzww79gBj3lK2/social-images/social-1773044240034-Sports_trivia_banner.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Consent-gated AdSense loader: only load the ad script if the visitor
+      // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
+      // New visitors (no choice yet) do not get the script until they accept;
+      // the banner reloads ads on acceptance via the page lifecycle.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            var s = document.createElement('script');
+            s.async = true;
+            s.crossOrigin = 'anonymous';
+            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
+            document.head.appendChild(s);
+          }
+        } catch (e) { /* storage blocked: default to no ads script */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="DoUKnowBall: Free Daily Sports Trivia Games">
+  <meta name="twitter:title" content="DoUKnowBall: Free Daily Sports Trivia Games">
+  <meta property="og:description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
+  <meta name="twitter:description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
+  <script type="module" crossorigin="" src="/assets/index-CRgX024h.js"></script>
+  <link rel="stylesheet" crossorigin="" href="/assets/index-BMPgYZKM.css">
+<meta property="og:type" content="website" data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+
+
+<link rel="modulepreload" as="script" crossorigin="" href="/assets/LineupBuilder-DaYT_0ym.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/localLineupEval-CvXLS9yt.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/useGameCompletion-CTxmZk8L.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/badges-MiPyDmVR.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/GameNav-BFeajxzu.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/arrow-right-B6YXtqVZ.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/GameShell-B_nVyPti.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/GameNavbar-CG507CEp.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/arrow-left-COz9pSdz.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/star-LbJ241sE.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/medal-dPyEPwBr.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/ResultScreen-CmIOB8YF.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/ShareButtons-BX_p6yla.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/copy-DXghxRxg.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/Celebration-DY7Pn_lx.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/PlayerAutocomplete-DYY5JFOF.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/playerSearch-Brj0-VSd.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/AdBanner-P9uvoBGd.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/ReportQuestion-Bo1h8V6Z.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/flag-NyFHfRfW.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/GameSeoContent-BA7ffd9K.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/chemistry-HAhrmUOM.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/circle-help-CdzDtkyO.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/shuffle-BXQVkDdK.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/rotate-ccw-DyAR8hX0.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/send-Du5PyWnQ.js"><link rel="canonical" href="https://douknowball.com/build-your-xi" data-rh="true"><meta name="description" content="Spin a random challenge, pick two teams, and build the ultimate starting XI. AI rates your lineup." data-rh="true"><meta property="og:url" content="https://douknowball.com/build-your-xi" data-rh="true"><meta property="og:title" content="Build Your XI - Soccer Lineup Builder Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Spin a random challenge, pick two teams, and build the ultimate starting XI. AI rates your lineup." data-rh="true"><meta name="twitter:title" content="Build Your XI - Soccer Lineup Builder Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Spin a random challenge, pick two teams, and build the ultimate starting XI. AI rates your lineup." data-rh="true"><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Build Your XI - Soccer Lineup Builder Game | DoUKnowBall","description":"Spin a random challenge, pick two teams, and build the ultimate starting XI. AI rates your lineup.","url":"https://douknowball.com/build-your-xi","isAccessibleForFree":true,"gamePlatform":"Web Browser"}</script>
+</head>
+<body>
+<div id="root">
+<a href="/perfect-lineup-f1">🗓️ Fresh daily: Perfect Lineup: F1 ·</a>
+<a href="/rank-em">🗓️ Fresh daily: Rank 'Em ·</a>
+<a href="/silverware-sort">🗓️ Fresh daily: Silverware Sort ·</a>
+<a href="/mystery-box">🗓️ Fresh daily: Mystery Box ·</a>
+<a href="/">🎮 113 free games, no sign-up, no downloads ·</a>
+<a href="/">⚽ 30 soccer games and counting ·</a>
+<a href="/whats-new">📰 New stuff ships almost daily. See what changed ·</a>
+<a href="/">DOUKNOWBALL</a>
+<h1>BUILD YOUR XI</h1>
+<p>Pick a formation, fill each position with a player from the given club or nation</p>
+<h2>Choose Your Formation</h2>
+<h2>Build Your XI | DoUKnowBall</h2>
+<p>Build your ultimate starting eleven from players who match specific criteria. Test your football knowledge across positions, teams and eras.</p>
+<p>Build Your XI hands you a formation, then a slot machine assigns a random club or country to every position. Your job is naming a player from that exact team who fits each slot.</p>
+<p>When the eleventh name lands, an AI referee grades the lineup and writes a short scouting report. No two teams ever come out alike.</p>
+<h2>How to play Build Your XI</h2>
+<li>Choose one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.</li>
+<li>Tap a position. The spinner shows which club or national team that slot is locked to.</li>
+<li>Type a player from that team who fits. The game verifies the answer before it counts.</li>
+<li>Hate an assignment? Reroll it for a different team.</li>
+<li>Fill all 11 slots, review your chemistry links, then submit for the AI rating.</li>
+<h2>Rules to know</h2>
+<li>Wrong answers are rejected with a reason but cost nothing. Retry until a valid name lands.</li>
+<li>No duplicate players across your XI.</li>
+<li>Chemistry: each pair sharing a club is worth 3 points, a league 2, a nationality 1, capped at 9 per player.</li>
+<li>If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends.</li>
+<h2>Example walkthrough</h2>
+<p>You take 4-3-3. Liverpool lands on the goalkeeper slot, so Alisson goes in. Arsenal on the right wing is Saka. Then the striker slot spins a national team, and you weigh Harry Kane against saving England for a harder slot.</p>
+<p>The finished XI leans Premier League, chemistry pays you for it, and the verdict praises the spine while roasting your left back. You run it back in a 3-5-2.</p>
+<h2>Strategy tips</h2>
+<li>Reroll thin assignments before typing, knowing the spin can land somewhere worse.</li>
+<li>Small club on the wheel? Goalkeepers are easy to name, elite wingers are not.</li>
+<li>Stacking one league quietly adds chemistry points to the final screen.</li>
+<li>If a right sounding name is rejected, let the search autocomplete the spelling for you.</li>
+<h2>Build Your XI FAQ</h2>
+<h3>Who checks my answers?</h3>
+<p>An AI validator confirms the player really played for the assigned club or country. If the check cannot complete, you simply retry; it never fills a slot with a wrong answer.</p>
+<h3>Can I reroll more than once?</h3>
+<p>Yes, rerolls are unlimited, and each spin picks a team not already used in your lineup.</p>
+<h3>What does the rating look like?</h3>
+<p>A rating headline, a short written analysis of your picks, and your chemistry line. Brutal verdicts make the best screenshots.</p>
+<h3>Is Build Your XI free to play?</h3>
+<p>Yes. Build Your XI is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/football-connect-4">🔴 Connect 4 Soccer trivia meets Connect 4</a>
+<a href="/soccer-grid">⚽ Soccer Grid 3×3 grid puzzle with rarity scores</a>
+<a href="/world-cup-bracket">🌍 2026 Bracket Predict every World Cup 2026 match</a>
+<a href="/front-office">🏢 NFL Front Office Full GM sim with real rosters: cap, trades, drafts, dynasties</a>
+<a href="/mlb-higher-lower">📊 MLB Higher or Lower Which legend hit more career home runs?</a>
+<a href="/guess-nascar-driver">🏁 Guess The Driver Guess the mystery NASCAR driver from clues</a>
+<p>PLAY NEXT</p>
+<a href="/guess-tennis-player">🎾 Guess The Player Guess the mystery tennis player from clues Play Now</a>
+<h3>Guess The Player</h3>
+<p>Guess the mystery tennis player from clues</p>
+<a href="/ufc-chain">🔗 Combat Chain Build a chain of fighters who beat each other Play Now</a>
+<h3>Combat Chain</h3>
+<p>Build a chain of fighters who beat each other</p>
+<a href="/guess-the-golfer">⛳ Guess The Golfer A mystery major champion, six clues, fewer is better Play Now</a>
+<h3>Guess The Golfer</h3>
+<p>A mystery major champion, six clues, fewer is better</p>
+<p>Next puzzle in 14:36:37</p>
+<p>See all games →</p>
+<a href="/">See all games →</a>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<p>We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy. Learn More</p>
+<a href="/privacy">Learn More</a>
+</div>
+</body>
+</html>

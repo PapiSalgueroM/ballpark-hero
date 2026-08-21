@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>NHL Connect 4 - Hockey Trivia Grid Game | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
+    
+    
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/QoR51Qt7jzapeGsKzww79gBj3lK2/social-images/social-1773044240034-Sports_trivia_banner.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    
+    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/QoR51Qt7jzapeGsKzww79gBj3lK2/social-images/social-1773044240034-Sports_trivia_banner.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Consent-gated AdSense loader: only load the ad script if the visitor
+      // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
+      // New visitors (no choice yet) do not get the script until they accept;
+      // the banner reloads ads on acceptance via the page lifecycle.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            var s = document.createElement('script');
+            s.async = true;
+            s.crossOrigin = 'anonymous';
+            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
+            document.head.appendChild(s);
+          }
+        } catch (e) { /* storage blocked: default to no ads script */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="DoUKnowBall: Free Daily Sports Trivia Games">
+  <meta name="twitter:title" content="DoUKnowBall: Free Daily Sports Trivia Games">
+  <meta property="og:description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
+  <meta name="twitter:description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
+  <script type="module" crossorigin="" src="/assets/index-CRgX024h.js"></script>
+  <link rel="stylesheet" crossorigin="" href="/assets/index-BMPgYZKM.css">
+<meta property="og:type" content="website" data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+
+
+<link rel="modulepreload" as="script" crossorigin="" href="/assets/NhlConnect4-CQl4d2Dj.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/useGameCompletion-CTxmZk8L.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/badges-MiPyDmVR.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/playerSearch-Brj0-VSd.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/GameNav-BFeajxzu.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/arrow-right-B6YXtqVZ.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/GameShell-B_nVyPti.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/GameNavbar-CG507CEp.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/arrow-left-COz9pSdz.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/star-LbJ241sE.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/medal-dPyEPwBr.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/PlayerAutocomplete-DYY5JFOF.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/hockeyGrid-Kml3FkH5.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/ShareButtons-BX_p6yla.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/copy-DXghxRxg.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/AdBanner-P9uvoBGd.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/ReportQuestion-Bo1h8V6Z.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/flag-NyFHfRfW.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/GameSeoContent-BA7ffd9K.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/circle-help-CdzDtkyO.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/skip-forward-DSXf1xSK.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/arrow-down-NfUTKcR1.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/rotate-ccw-DyAR8hX0.js"><link rel="canonical" href="https://douknowball.com/nhl-connect-4" data-rh="true"><meta name="description" content="Play Connect 4 with NHL trivia. Name players matching franchise and trophy criteria to claim cells." data-rh="true"><meta property="og:url" content="https://douknowball.com/nhl-connect-4" data-rh="true"><meta property="og:title" content="NHL Connect 4 - Hockey Trivia Grid Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Play Connect 4 with NHL trivia. Name players matching franchise and trophy criteria to claim cells." data-rh="true"><meta name="twitter:title" content="NHL Connect 4 - Hockey Trivia Grid Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Play Connect 4 with NHL trivia. Name players matching franchise and trophy criteria to claim cells." data-rh="true"><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"NHL Connect 4 - Hockey Trivia Grid Game | DoUKnowBall","description":"Play Connect 4 with NHL trivia. Name players matching franchise and trophy criteria to claim cells.","url":"https://douknowball.com/nhl-connect-4","isAccessibleForFree":true,"gamePlatform":"Web Browser"}</script>
+</head>
+<body>
+<div id="root">
+<a href="/perfect-lineup-f1">🗓️ Fresh daily: Perfect Lineup: F1 ·</a>
+<a href="/rank-em">🗓️ Fresh daily: Rank 'Em ·</a>
+<a href="/silverware-sort">🗓️ Fresh daily: Silverware Sort ·</a>
+<a href="/mystery-box">🗓️ Fresh daily: Mystery Box ·</a>
+<a href="/">🎮 113 free games, no sign-up, no downloads ·</a>
+<a href="/">⚽ 30 soccer games and counting ·</a>
+<a href="/whats-new">📰 New stuff ships almost daily. See what changed ·</a>
+<a href="/">DOUKNOWBALL</a>
+<h1>NHL CONNECT 4</h1>
+<p>Play Connect 4 with hockey trivia: name players matching franchise and trophy criteria to claim cells and get four in a row.</p>
+<p>BOARD: BETWEEN THE PIPES</p>
+<h2>NHL Connect 4 | DoUKnowBall</h2>
+<p>Connect four hockey answers in a row: every cell needs a player matching both the franchise column and the trophy or milestone row.</p>
+<p>Connect 4 grew a hockey brain. The gravity is the same and four in a row still wins, but every cell must be earned by naming a real NHL player.</p>
+<p>Grab a friend for pass and play, pick a column, and answer the trivia question waiting on the row where your piece lands.</p>
+<h2>How to play NHL Connect 4</h2>
+<li>Red and blue take turns on one device.</li>
+<li>Pick a column. Your piece falls to the lowest open row.</li>
+<li>Name a player matching both labels, like Canadiens plus Hall of Famer.</li>
+<li>A verified answer claims the cell. A miss costs nothing, so retry or hit Skip.</li>
+<li>Connect four of your color in any direction to win; a full board is a draw.</li>
+<h2>Rules to know</h2>
+<li>The board is 7 columns by 6 rows, dealt from a set of themed boards: Original Six matchups, trophies, birth countries, goalies.</li>
+<li>Every player name can be used exactly once per game.</li>
+<li>Wrong answers never cost your turn; only Skip passes it.</li>
+<li>Franchise history survives relocation: Nordiques answers count for the Avalanche, Whalers for the Hurricanes, Thrashers for the Jets.</li>
+<li>An AI referee checks each answer, and when it cannot verify one, nothing is placed and you simply try again.</li>
+<h2>Example walkthrough</h2>
+<p>Say the Original Six board comes up. Red opens in the Canadiens column and lands on the Hall of Famer row: Patrick Roy, easy money. Blue answers Penguins plus 500+ Career Goals with Mario Lemieux.</p>
+<p>Ten moves later red needs one diagonal cell, and the landing row is Hart Trophy under the Rangers column. Mark Messier, the 1992 Hart winner as a Ranger, ends it.</p>
+<h2>Strategy tips</h2>
+<li>Think one row ahead. The stack height decides which row your answer must satisfy, so a column's question changes with every drop.</li>
+<li>Ration your universal legends. A name that answers many cells is gone for the whole game once played.</li>
+<li>Goalies are missing from the suggestion list; type the full name and press Enter.</li>
+<li>Block like it is real Connect 4. Sometimes the right move is claiming a cell just to deny the row.</li>
+<h2>NHL Connect 4 FAQ</h2>
+<h3>Is there a computer opponent?</h3>
+<p>No. It is pass and play for two people, or you can run both colors and battle yourself.</p>
+<h3>What happens if the referee cannot verify my answer?</h3>
+<p>It fails safe. No piece is placed, no turn is lost, and you can try the same cell again.</p>
+<h3>Is NHL Connect 4 free to play?</h3>
+<p>Yes. NHL Connect 4 is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/perfect-lineup-nhl">🏒 Perfect Lineup: NHL Build a dream line under random team &amp; era constraints, then simulate</a>
+<a href="/perfect-season-nhl">🏆 82-0 Perfect Season Spin franchises and eras, chase 82-0</a>
+<a href="/puck-detective">🏒 Puck Detective Guess the mystery NHL player with attribute clues</a>
+<a href="/perfect-lineup-f1">🏎️ Perfect Lineup: F1 Build a 5-driver dream squad under random team/era/country constraints</a>
+<a href="/football-connect-4">🔴 Connect 4 Soccer trivia meets Connect 4</a>
+<a href="/nba-connect-4">🏀 NBA Connect 4 NBA trivia meets Connect 4</a>
+<p>PLAY NEXT</p>
+<a href="/overrated-underrated">🔥 Overrated or Underrated Ten players, ten verdicts. See if the crowd agrees with you Play Now</a>
+<h3>Overrated or Underrated</h3>
+<p>Ten players, ten verdicts. See if the crowd agrees with you</p>
+<a href="/ufc-chain">🔗 Combat Chain Build a chain of fighters who beat each other Play Now</a>
+<h3>Combat Chain</h3>
+<p>Build a chain of fighters who beat each other</p>
+<a href="/perfect-lineup-nba">🏀 Perfect Lineup: NBA Build a starting 5 under random team &amp; era constraints, then simulate Play Now</a>
+<h3>Perfect Lineup: NBA</h3>
+<p>Build a starting 5 under random team &amp; era constraints, then simulate</p>
+<p>Next puzzle in 14:20:35</p>
+<p>See all games →</p>
+<a href="/">See all games →</a>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<p>We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy. Learn More</p>
+<a href="/privacy">Learn More</a>
+</div>
+</body>
+</html>
