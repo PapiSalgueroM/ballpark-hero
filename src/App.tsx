@@ -68,6 +68,7 @@ const TransferPath = lazy(() => import("./pages/TransferPath"));
 const SquadDeal = lazy(() => import("./pages/SquadDeal"));
 const ClubManager = lazy(() => import("./pages/ClubManager"));
 const StadiumTycoon = lazy(() => import("./pages/StadiumTycoon"));
+const WonderkidFactory = lazy(() => import("./pages/WonderkidFactory"));
 const ListQuiz = lazy(() => import("./pages/ListQuiz"));
 const PerfectSeasonMlb = lazy(() => import("./pages/PerfectSeasonMlb"));
 const HigherLowerTransfers = lazy(() => import("./pages/HigherLowerTransfers"));
@@ -344,6 +345,7 @@ const AppContent = () => {
         <Route path="/squad-deal" element={<SquadDeal />} />
         <Route path="/club-manager" element={<ClubManager />} />
         <Route path="/stadium-tycoon" element={<StadiumTycoon />} />
+        <Route path="/wonderkid-factory" element={<WonderkidFactory />} />
         <Route path="/list-quiz" element={<ListQuiz />} />
         <Route path="/perfect-season-mlb" element={<PerfectSeasonMlb />} />
         <Route path="/higher-lower-transfers" element={<HigherLowerTransfers />} />

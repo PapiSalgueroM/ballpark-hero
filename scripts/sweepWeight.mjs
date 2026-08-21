@@ -48,6 +48,9 @@ const BUDGETS = [
   ['/club-manager', 620],
   ['/soccer-career', 750],
   ['/stadium-tycoon', 290],
+  /* Round 216: the new idle game. Measured 243K on the day it shipped,
+     mostly the shared index chunk. */
+  ['/wonderkid-factory', 270],
   ['/minefield', 290],
   ['/footle', 330],
   ['/nfl-my-career', 400],

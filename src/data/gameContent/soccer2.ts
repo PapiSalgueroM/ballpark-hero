@@ -720,4 +720,49 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
     ],
   },
+
+  '/wonderkid-factory': {
+    intro: [
+      'Wonderkid Factory is a free idle football academy game. Scouts bring kids through the door, coaches make every one of them a little better every second, and each kid has a ceiling he will never grow past. The whole game is one repeated decision: sell him now, or let him cook a bit longer.',
+      'A transfer fee pays for the rating on the day plus a promise premium for the room he still has to grow, and that premium is fattest while he is young. From 21 it starts to fade, at 23 it is gone completely, and on his 24th birthday he walks out on a free and pays you nothing. Patience prints money right up until it does not.',
+      'Cash buys four upgrades, reputation stars make every future run faster, and six regions raise the ceilings your scouts can find, from District Fields all the way to the World Stage. Every kid is generated, so no real footballer ever appears in your academy.',
+    ],
+    howToPlay: [
+      'Wait for the scouts: kids arrive on their own, faster with every Scouting network level.',
+      'Watch each kid grow toward his hidden ceiling. Scouting level 3 reads the ceiling as a range, level 6 reads it exactly.',
+      'Press Sell on a kid when the price looks right. The fee is quoted live on his card.',
+      'Spend the cash on Scouting, Coaching, Dorms and the Agent office. Costs climb with every level.',
+      'Press Showcase Day when it charges: training runs x3 for 25 seconds.',
+      'Hold your best kids for Deadline Day, which arrives every few minutes and pays x1.5 on every fee for 50 seconds.',
+      'Earn the region target, then move the academy up in the Reputation box: kids, cash and facilities stay behind, the star is forever.',
+    ],
+    rules: [
+      'Every kid has a fixed hidden ceiling. Training slows as he approaches it and can never pass it.',
+      'The promise premium fades from age 21 and is gone at 23. At 24 a kid leaves on a free.',
+      'A full academy stops scouting: beds come from the Dorms.',
+      'Reputation stars pay +15% training speed and +10% on every fee, each, forever.',
+      'Each region raises the ceilings scouts can find. The World Stage can produce a 99.',
+      'Away from the game, scouting and training run at half speed for up to 8 hours, and nobody ages while you are gone. Nothing sells itself either.',
+      'Progress saves on this device. No sign-up.',
+    ],
+    example: [
+      'Say the scouts drop off a 17 year old midfielder rated 58, and your level 3 scouts read his ceiling as somewhere between 68 and 75. Selling on the spot pays a modest fee: decent rating, healthy promise premium.',
+      'You leave him with the coaches while you upgrade the Agent office. By the time he is 19 he is rated 71 and the growth has visibly slowed, which tells you the ceiling is close. His card now quotes roughly triple the day one fee.',
+      'Deadline Day lights up. You press Sell inside the window and the fee pays half as much again. That one sale funds two Scouting levels, and the next kid through the door is found faster and read more precisely.',
+    ],
+    tips: [
+      'Early on, sell quickly and often: volume beats patience until Coaching has some levels.',
+      'Scouting level 3 changes the game. Knowing the ceiling range tells you who is worth the wait.',
+      'A kid within a point of his ceiling has stopped earning you anything by waiting. Sell him on the next Deadline Day.',
+      'Dorms are quietly the best value when your academy keeps sitting full: a stopped scout earns nothing.',
+      'Do not move up the moment the target clears. One more big sale first travels with you as a head start toward the NEXT star, because career earnings never reset.',
+    ],
+    faqs: [
+      { q: 'Are the players real?', a: 'No. Every kid is generated, names and all, and the game checks its generated names against every real player on the site so a made up kid can never wear a real name.' },
+      { q: 'What do reputation stars do?', a: 'Each star is +15% training speed and +10% on every fee, forever, and stars also unlock the next region, where scouts find kids with higher ceilings.' },
+      { q: 'Do I lose everything when I move up?', a: 'Cash, facility levels and the kids in the academy stay behind. Stars, your career totals and your best sale record travel with you.' },
+      { q: 'Does the game progress while I am away?', a: 'Scouting and training keep running at half speed for up to 8 hours, and the calendar pauses so nobody ages out while you sleep. Sales are always yours to make, so no money moves while you are gone.' },
+      { q: 'When exactly should I sell?', a: 'The fee peaks somewhere between rating growth and age decay. A young kid far from his ceiling gains value fast; past 21 the promise premium drains away, and at 24 he leaves for nothing.' },
+    ],
+  },
 };

@@ -35,6 +35,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', isNew: true },
       { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Manage any of 330 real clubs across 20 leagues, today or in a real past season: negotiations, board objectives, trophies and the sack race', isNew: true, featured: true },
       { path: '/stadium-tycoon', label: 'Stadium Tycoon', emoji: '🏟️', description: 'Idle empire: grow a tiny club through live toy matches, ten divisions, reputation stars and a legacy boardroom', isNew: true },
+      { path: '/wonderkid-factory', label: 'Wonderkid Factory', emoji: '🔭', description: 'Idle academy: scout generated kids, grow them toward hidden ceilings and sell at the perfect moment', isNew: true },
       { path: '/world-xi', label: 'World XI', emoji: '🌍', description: 'Pick a formation, fill 11 random countries', isNew: true },
       { path: '/player-bingo', label: 'Player Bingo', emoji: '🎱', description: 'Complete a line on a 5x5 board before 3 strikes', isNew: true },
       { path: '/alphabet-sprint', label: 'Alphabet Sprint', emoji: '⚡', description: 'Name a player per letter against the clock', isNew: true },
