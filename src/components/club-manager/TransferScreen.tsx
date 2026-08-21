@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
-import { money, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad } from '@/lib/clubManager';
-import type { CareerState, CMPlayer, MarketPlayer, TransferStatus } from '@/lib/clubManager';
+import { money, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf } from '@/lib/clubManager';
+import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
 
@@ -16,12 +16,32 @@ const POS_GROUPS: Record<Exclude<PosFilter, 'ALL'>, Position[]> = {
   ATT: ['LW', 'RW', 'ST', 'CF'],
 };
 
+/* Round 161: his ask, filters that go all the way down: "age range... what
+   league... what price... search by name or position not just attack but
+   left and right wing and such". Exact positions, age bands, price bands,
+   the selling club's league, and a sort. */
+const EXACT_POSITIONS: Position[] = ['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'CAM', 'LM', 'RM', 'LW', 'RW', 'ST', 'CF'];
+const AGE_BANDS = [
+  { id: 'any', label: 'Any age', lo: 0, hi: 99 },
+  { id: 'u21', label: 'U21', lo: 0, hi: 21 },
+  { id: 'u24', label: 'U24', lo: 0, hi: 24 },
+  { id: 'u28', label: 'U28', lo: 0, hi: 28 },
+  { id: 'vets', label: '29 plus', lo: 29, hi: 99 },
+] as const;
+const PRICE_BANDS = [
+  { id: 'any', label: 'Any price', max: Infinity },
+  { id: 'p10', label: 'Under 10m', max: 10 },
+  { id: 'p25', label: 'Under 25m', max: 25 },
+  { id: 'p60', label: 'Under 60m', max: 60 },
+] as const;
+type SortKey = 'rating' | 'value' | 'young' | 'cheap';
+
 interface TransferScreenProps {
   career: CareerState;
   market: MarketPlayer[];
   /* Round 71: the market grew a brain. */
   onNegotiate: (mp: MarketPlayer) => void;
-  onOffer: (amount: number) => void;
+  onOffer: (amount: number, extras?: DealExtras) => void;
   onWalk: () => void;
   onDismissNegotiation: () => void;
   onClause: (mp: MarketPlayer) => void;
@@ -62,19 +82,54 @@ export function TransferScreen({
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<'buy' | 'sell' | 'news'>('buy');
   const [newsSort, setNewsSort] = useState<'recent' | 'fee'>('recent');
+  /* Round 161: the deep filters. */
+  const [posExact, setPosExact] = useState<'any' | Position>('any');
+  const [ageBand, setAgeBand] = useState<(typeof AGE_BANDS)[number]['id']>('any');
+  const [priceBand, setPriceBand] = useState<(typeof PRICE_BANDS)[number]['id']>('any');
+  const [leaguePick, setLeaguePick] = useState('any');
+  const [sortKey, setSortKey] = useState<SortKey>('rating');
+  /* Round 161: the deal structure being offered right now. */
+  const [addOn, setAddOn] = useState(0);
+  const [sellOnPct, setSellOnPct] = useState(0);
+  const [swapId, setSwapId] = useState<string | null>(null);
 
   const windowOpen = career.transferWindow !== null;
   const neg = career.negotiation ?? null;
   const bids = career.incomingBids ?? [];
   const log = career.transferLog ?? [];
 
+  /* A fresh negotiation starts with a clean structure. */
+  const negName = neg?.player.name ?? null;
+  useEffect(() => {
+    setAddOn(0);
+    setSellOnPct(0);
+    setSwapId(null);
+  }, [negName]);
+
+  const marketLeagues = useMemo(() => {
+    const names = new Set<string>();
+    for (const m of market) names.add(leagueOf(m.club).name);
+    return [...names].sort();
+  }, [market]);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return market
+    const age = AGE_BANDS.find(b => b.id === ageBand) ?? AGE_BANDS[0];
+    const price = PRICE_BANDS.find(b => b.id === priceBand) ?? PRICE_BANDS[0];
+    const list = market
       .filter(m => filter === 'ALL' || POS_GROUPS[filter].includes(m.position))
-      .filter(m => !q || m.name.toLowerCase().includes(q) || m.club.toLowerCase().includes(q))
-      .slice(0, 50);
-  }, [market, filter, query]);
+      .filter(m => posExact === 'any' || m.position === posExact)
+      .filter(m => m.age >= age.lo && m.age <= age.hi)
+      .filter(m => m.price <= price.max)
+      .filter(m => leaguePick === 'any' || leagueOf(m.club).name === leaguePick)
+      .filter(m => !q || m.name.toLowerCase().includes(q) || m.club.toLowerCase().includes(q));
+    const sorted = [...list];
+    if (sortKey === 'rating') sorted.sort((a, b) => b.rating - a.rating);
+    else if (sortKey === 'value') sorted.sort((a, b) => (b.value ?? b.price) - (a.value ?? a.price));
+    else if (sortKey === 'young') sorted.sort((a, b) => a.age - b.age || b.rating - a.rating);
+    else sorted.sort((a, b) => a.price - b.price || b.rating - a.rating);
+    return sorted.slice(0, 50);
+  }, [market, filter, posExact, ageBand, priceBand, leaguePick, sortKey, query]);
 
   const sellable = useMemo(
     () => [...career.squad].sort((a, b) => b.rating - a.rating),
@@ -91,10 +146,19 @@ export function TransferScreen({
   const loansUsed = activeLoans(career);
   const out = career.loanedOut ?? [];
 
+  /* Round 161: the structure travels with every offer button. */
+  const dealExtras: DealExtras | undefined =
+    addOn > 0 || sellOnPct > 0 || swapId
+      ? { addOn: addOn || undefined, sellOnPct: sellOnPct || undefined, swapId: swapId ?? undefined }
+      : undefined;
+  const structureBonus = neg && neg.status === 'open'
+    ? dealPackageValue(career, neg.theirAsk, 0, dealExtras)
+    : 0;
+
   const offerBtn = (label: string, amount: number, tone: 'safe' | 'risky' | 'close' = 'safe') => (
     <button
       key={label}
-      onClick={() => onOffer(Math.round(amount * 10) / 10)}
+      onClick={() => onOffer(Math.round(amount * 10) / 10, dealExtras)}
       className={cn(
         'px-2.5 py-1.5 rounded-lg text-[10px] font-bold border transition-all',
         tone === 'close' && 'bg-primary text-primary-foreground border-primary hover:opacity-90',
@@ -104,6 +168,14 @@ export function TransferScreen({
     >
       {label} · {money(Math.round(amount * 10) / 10)}
     </button>
+  );
+
+  const swapPool = useMemo(
+    () => [...career.squad]
+      .filter(p => canLeaveSquad(career, p))
+      .sort((a, b) => sellValue(b) - sellValue(a))
+      .slice(0, 10),
+    [career],
   );
 
   return (
@@ -165,13 +237,66 @@ export function TransferScreen({
                 </div>
               )}
               <p className="text-[11px] italic text-muted-foreground mb-2">"{neg.note}"</p>
+
+              {/* Round 161: structure the deal. His words: "true negations not
+                  just 3 buttons that say haggle... add ons and u can swap
+                  players plus money". Everything below rides on top of
+                  whichever cash button you press. */}
+              <div className="rounded-lg border border-border/60 bg-background/40 p-2 mb-2 space-y-1.5">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-[9px] text-muted-foreground uppercase tracking-wider w-14 shrink-0">Add-ons</span>
+                  {[0, 2, 5, 10].map(a => (
+                    <button
+                      key={a}
+                      onClick={() => setAddOn(a)}
+                      className={cn('px-2 py-0.5 rounded text-[9px] font-bold border transition-all',
+                        addOn === a ? 'bg-primary/15 border-primary text-primary' : 'border-border text-muted-foreground hover:border-primary/50')}
+                    >
+                      {a === 0 ? 'None' : money(a)}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-[9px] text-muted-foreground uppercase tracking-wider w-14 shrink-0">Sell-on</span>
+                  {[0, 10, 20, 30].map(s => (
+                    <button
+                      key={s}
+                      onClick={() => setSellOnPct(s)}
+                      className={cn('px-2 py-0.5 rounded text-[9px] font-bold border transition-all',
+                        sellOnPct === s ? 'bg-primary/15 border-primary text-primary' : 'border-border text-muted-foreground hover:border-primary/50')}
+                    >
+                      {s === 0 ? 'None' : `${s}%`}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[9px] text-muted-foreground uppercase tracking-wider w-14 shrink-0">Swap</span>
+                  <select
+                    value={swapId ?? ''}
+                    onChange={e => setSwapId(e.target.value || null)}
+                    className="flex-1 bg-secondary border border-border rounded px-1.5 py-1 text-[10px] text-foreground outline-none"
+                    aria-label="Part exchange player"
+                  >
+                    <option value="">No part exchange</option>
+                    {swapPool.map(p => (
+                      <option key={p.id} value={p.id}>{p.name} ({p.rating}, {money(sellValue(p))})</option>
+                    ))}
+                  </select>
+                </div>
+                {structureBonus > 0 && (
+                  <div className="text-[9px] text-muted-foreground">
+                    This structure reads like <span className="text-gold font-bold">{money(structureBonus)}</span> to them, on top of whatever cash you press below. Add-ons cost real money in later summers; a sell-on takes its cut when you resell him.
+                  </div>
+                )}
+              </div>
+
               <div className="flex flex-wrap gap-1.5">
                 {offerBtn('Lowball', neg.theirAsk * 0.72, 'risky')}
                 {offerBtn('Haggle', neg.theirAsk * 0.88)}
                 {neg.myOffer !== null && offerBtn('Split it', (neg.theirAsk + neg.myOffer) / 2)}
                 {neg.rivalBidder && neg.rivalOffer !== null
-                  ? offerBtn('Beat rival', Math.max(neg.rivalOffer * 1.06, neg.theirAsk * 0.97), 'close')
-                  : offerBtn('Meet ask', neg.theirAsk, 'close')}
+                  ? offerBtn('Beat rival', Math.max(neg.rivalOffer * 1.06 - structureBonus, neg.theirAsk * 0.97 - structureBonus), 'close')
+                  : offerBtn('Meet ask', Math.max(0.1, neg.theirAsk - structureBonus), 'close')}
                 <button
                   onClick={onWalk}
                   className="px-2.5 py-1.5 rounded-lg text-[10px] font-bold border border-border bg-card text-muted-foreground hover:text-foreground transition-all"
@@ -236,17 +361,66 @@ export function TransferScreen({
 
       {mode === 'buy' && (windowOpen ? (
         <div className="space-y-2">
-          <div className="flex gap-1.5">
+          <div className="flex gap-1.5 flex-wrap items-center">
             {(['ALL', 'GK', 'DEF', 'MID', 'ATT'] as PosFilter[]).map(f => (
               <button
                 key={f}
-                onClick={() => setFilter(f)}
+                onClick={() => { setFilter(f); setPosExact('any'); }}
                 className={cn('px-2.5 py-1 rounded-full border text-[10px] font-bold transition-all',
-                  filter === f ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-muted-foreground hover:border-primary')}
+                  filter === f && posExact === 'any' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-muted-foreground hover:border-primary')}
               >
                 {f}
               </button>
             ))}
+            {/* Round 161: exact positions, "not just attack but left and
+                right wing and such". Picking one overrides the group chip. */}
+            <select
+              value={posExact}
+              onChange={e => { setPosExact(e.target.value as 'any' | Position); if (e.target.value !== 'any') setFilter('ALL'); }}
+              className="bg-card border border-border rounded-full px-2 py-1 text-[10px] font-bold text-foreground outline-none"
+              aria-label="Exact position"
+            >
+              <option value="any">Exact position…</option>
+              {EXACT_POSITIONS.map(p => <option key={p} value={p}>{p}</option>)}
+            </select>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+            <select
+              value={ageBand}
+              onChange={e => setAgeBand(e.target.value as (typeof AGE_BANDS)[number]['id'])}
+              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground outline-none"
+              aria-label="Age range"
+            >
+              {AGE_BANDS.map(b => <option key={b.id} value={b.id}>{b.label}</option>)}
+            </select>
+            <select
+              value={priceBand}
+              onChange={e => setPriceBand(e.target.value as (typeof PRICE_BANDS)[number]['id'])}
+              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground outline-none"
+              aria-label="Price range"
+            >
+              {PRICE_BANDS.map(b => <option key={b.id} value={b.id}>{b.label}</option>)}
+            </select>
+            <select
+              value={leaguePick}
+              onChange={e => setLeaguePick(e.target.value)}
+              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground outline-none"
+              aria-label="Selling league"
+            >
+              <option value="any">Any league</option>
+              {marketLeagues.map(l => <option key={l} value={l}>{l}</option>)}
+            </select>
+            <select
+              value={sortKey}
+              onChange={e => setSortKey(e.target.value as SortKey)}
+              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground outline-none"
+              aria-label="Sort players"
+            >
+              <option value="rating">Best first</option>
+              <option value="value">Priciest first</option>
+              <option value="young">Youngest first</option>
+              <option value="cheap">Cheapest first</option>
+            </select>
           </div>
           <Input
             value={query}
@@ -439,6 +613,10 @@ export function TransferScreen({
                         </div>
                         <div className="text-[9px] text-muted-foreground">
                           {p.age}y · {p.seasonGoals}g {p.seasonAssists}a · worth {money(sellValue(p))}
+                          {/* Round 161: the clause his old club took travels with him. */}
+                          {p.sellOnOwed && (
+                            <span className="text-gold"> · {p.sellOnOwed.pct}% sell-on owed to {p.sellOnOwed.club}</span>
+                          )}
                         </div>
                       </div>
                       <span className={cn('text-sm font-bold font-display', ratingTint(p.rating))}>{p.rating}</span>

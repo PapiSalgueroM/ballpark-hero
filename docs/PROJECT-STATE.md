@@ -70,12 +70,21 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   era-specific normalization so the era's top players sit 95-99 with the distribution
   preserved. Then 2015 and 2005 by the bakeEra2010 recipe (data floor 2004, no honest 2000).
 - CM-6 More leagues (wave 3 list in item 6 of the previous review, densities measured).
-- CM-7 Transfer depth: true multi-step negotiations (counter offers, add ons, sell on
-  clauses, player plus cash swaps), release clauses on MY OWN contracts, way more market
-  filters (age range sliders, league, nation, price range, free agents, loan listed,
-  transfer listed, has release clause, position-specific search like LW vs RW, name search).
-  Round 71/94/105 built the skeleton (negotiation, statuses, clauses, contracts); this is
-  the full body.
+- CM-7 **MOSTLY DONE, Round 161: structured deals and deep filters.** Negotiations take
+  PACKAGES now: cash plus add-ons (weigh 60p on the pound, queue up and come due in later
+  summers at a measured 0.65 rate, leading the summer news), a sell-on clause (worth about
+  a third of face to the seller, rides on the signing, and takes its exact cut off the top
+  when you resell him), and a part-exchange player (85 percent of sell value, leaves with
+  the deal, cannot be bought back). One dealPackageValue function feeds the offer, the
+  acceptance line, the rival war and the UI preview so no screen can disagree with the
+  table, and Meet Ask offers LESS CASH when the structure covers the gap, which is the
+  whole point. Market filters went all the way down: exact positions (LW vs RW), age bands,
+  price bands, the selling club's league, four sorts, plus the existing name search.
+  simDealDepth.mjs pins identity (extras-free offers behave exactly as eleven calibrated
+  rounds always did), the cash-only budget hit, the queue, the resale cut and the due rate,
+  and its FIRST RUN caught generateHeadlines eating the add-on news at the summer rollover.
+  STILL OPEN from his list: release clauses on MY OWN contract renewals, and a nationality
+  filter (the baked market rows carry no nationality; needs a data pass).
 - CM-8 Money allocation: budget split between transfer kitty, scouts, stadium expansion,
   ticket prices, academy. Needs a small club-finance layer (gate income from stadium size).
 - CM-9 League views: tables visible before a ball is kicked, alphabetical with my club
@@ -409,7 +418,8 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18 | **Round 157** (Quick Sim, Match Centre, match stats and ratings, header counting, halftime-consistent scorer minutes) and **Round 158** (Watch Live, the animated 2D match viewer with the dressing room embedded at the break, PLUS the month calendar with training cones and the long fast forward: the two shipped together because they share the page files). `RUN157.bat` then `RUN158.bat`, each chain-guarded. `SHIP16.bat` runs both. |
 | Packaged 2026-08-18, later | **Round 159** (the fix pack off his screenshots: ceiling repair, real Retire and New Career buttons, the slalom stopwatch, keeper Shot Stopping, Passing Gates, true header centering at desktop, Soccer Career counting toward the header per season). `RUN159.bat`, chain-guarded on 158. `SHIP16.bat` runs 157 and 158; click RUN159 after, or use SHIP17.bat which runs all three. |
 | Packaged 2026-08-18, later still | **Round 160** (create-a-club depth: quality slider, football identity, stadium size, plus the boardWantLabel wrong-league fix its harness caught). `RUN160.bat`, chain-guarded on 159. SHIP18.bat runs 157 through 160. |
-| Next free round number | **161** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, small hours | **Round 161** (structured transfer deals: add-ons, sell-on clauses, part exchange, plus the deep market filters). `RUN161.bat`, chain-guarded on 160. **SHIP19.bat is the current wrapper: it runs 157 through 161.** |
+| Next free round number | **162** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

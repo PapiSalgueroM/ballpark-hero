@@ -155,6 +155,12 @@ export interface CMPlayer {
    * the player is owed a straight answer about which of these people exist.
    */
   generated?: boolean;
+  /**
+   * Round 161: the sell-on clause his old club took when you signed him.
+   * Sell him later and that percentage of the fee goes straight back to
+   * them, off the top.
+   */
+  sellOnOwed?: { club: string; pct: number };
 }
 
 /* ---------- Round 127: squad roles and playing time promises ---------- */
@@ -396,6 +402,16 @@ export interface TransferRecord { dir: 'in' | 'out'; name: string; fee: number; 
 
 /* ---------- Round 71: the transfer market grows a brain ---------- */
 
+/** Round 161: everything a deal can carry beyond the cash. */
+export interface DealExtras {
+  /** Performance add-ons in £m: paid later if they come due, not now. */
+  addOn?: number;
+  /** Sell-on percentage promised to the seller, 0-30. */
+  sellOnPct?: number;
+  /** One of MY players offered in part exchange. */
+  swapId?: string;
+}
+
 /** One live fee negotiation with a selling club. */
 export interface Negotiation {
   /** Snapshot of the target so the deal survives market rebuilds. */
@@ -412,6 +428,10 @@ export interface Negotiation {
   rivalOffer: number | null;
   /** The seller's last response, shown in the UI. */
   note: string;
+  /** Round 161: the structure of my last package, for the table's display. */
+  lastExtras?: DealExtras;
+  /** Round 161: what the whole package read as to the seller. */
+  lastPackage?: number;
 }
 
 /** An AI club bidding for one of MY players while the window is open. */
@@ -734,6 +754,7 @@ export interface CareerState {
    * morning at the age the data has him.
    */
   retiredNames?: string[];
+  /* (Round 161's sellOnOwed lives on CMPlayer; see that interface.) */
   /** Round 132: who retired at the most recent summer, for the season screen. */
   retiredLastSummer?: { name: string; age: number; rating: number }[];
   /**
@@ -754,6 +775,13 @@ export interface CareerState {
    * saves; it simply fills in as new results happen.
    */
   clubForm?: Record<string, FormResult[]>;
+  /**
+   * Round 161: add-ons promised in deals, waiting to come due. Each summer
+   * every entry rolls: about two thirds trigger (the player played, the
+   * clauses hit) and the money leaves next season's budget. Cleared as they
+   * resolve either way.
+   */
+  pendingAddOns?: { name: string; to: string; amount: number }[];
   /**
    * Round 157: every meeting I have played, kept across seasons so the
    * pre-match screen can show a real head-to-head. Newest last, capped.
@@ -4046,11 +4074,36 @@ export function startNegotiation(career: CareerState, mp: MarketPlayer): CareerS
 }
 
 /**
+ * Round 161: what a structured package reads as to the selling club. Cash is
+ * cash. Add-ons are money that might never arrive, so they weigh 60p on the
+ * pound. A sell-on is a lottery ticket on a resale, worth about a third of
+ * its face against the ask. A part-exchange player is valued off his sell
+ * value with a haircut, because they wanted money and got a footballer.
+ * One function, used by the offer, the acceptance line and the UI preview,
+ * so the screen can never disagree with the table.
+ */
+export function dealPackageValue(career: CareerState, ask: number, amount: number, extras?: DealExtras): number {
+  const addOn = clamp(Math.round((extras?.addOn ?? 0) * 10) / 10, 0, 40);
+  const sellOnPct = clamp(Math.round(extras?.sellOnPct ?? 0), 0, 30);
+  const swap = extras?.swapId ? career.squad.find(p => p.id === extras.swapId) : null;
+  const swapVal = swap && canLeaveSquad(career, swap) ? Math.round(sellValue(swap) * 0.85 * 10) / 10 : 0;
+  const sellOnVal = Math.round(ask * (sellOnPct / 100) * 0.35 * 10) / 10;
+  return Math.round((amount + addOn * 0.6 + sellOnVal + swapVal) * 10) / 10;
+}
+
+/**
  * Make an offer in the live negotiation. Meet ~97% of the ask and the deal
  * is done; lowball and patience burns; anything in between drags the ask
  * down but can wake up a rival bidder who tries to hijack the deal.
+ *
+ * Round 161: the offer can be a PACKAGE now, his ask: "true negations not
+ * just 3 buttons that say haggle... add ons and u can swap players plus
+ * money". Cash plus add-ons plus a sell-on plus a part-exchange player,
+ * weighed by dealPackageValue. The cash is all the budget pays today; the
+ * add-ons queue up and come due in later summers; the sell-on rides on the
+ * signed player; the swapped man leaves with the deal.
  */
-export function makeOffer(career: CareerState, amount: number): CareerState | null {
+export function makeOffer(career: CareerState, amount: number, extras?: DealExtras): CareerState | null {
   const neg = career.negotiation;
   if (!neg || neg.status !== 'open') return null;
   if (career.transferWindow === null) return null;
@@ -4061,11 +4114,24 @@ export function makeOffer(career: CareerState, amount: number): CareerState | nu
       negotiation: { ...neg, note: `You do not have ${money(amount)}. The budget is ${money(career.budget)}.` },
     };
   }
+  const swap = extras?.swapId ? career.squad.find(p => p.id === extras.swapId) : null;
+  if (extras?.swapId && (!swap || !canLeaveSquad(career, swap))) {
+    return {
+      ...career,
+      negotiation: { ...neg, note: 'That player cannot go in the deal right now.' },
+    };
+  }
+  const packageValue = dealPackageValue(career, neg.theirAsk, amount, extras);
 
-  const next: Negotiation = { ...neg, stage: neg.stage + 1, myOffer: amount };
+  const next: Negotiation = {
+    ...neg, stage: neg.stage + 1, myOffer: amount,
+    lastExtras: extras && (extras.addOn || extras.sellOnPct || extras.swapId) ? { ...extras } : undefined,
+    lastPackage: packageValue,
+  };
 
-  // Beat-the-rival check comes first when a war is on.
-  if (next.rivalBidder && next.rivalOffer !== null && amount <= next.rivalOffer) {
+  // Beat-the-rival check comes first when a war is on. The rival bids cash;
+  // your package weighs against it.
+  if (next.rivalBidder && next.rivalOffer !== null && packageValue <= next.rivalOffer) {
     next.note = `${next.rivalBidder} are still ahead at ${money(next.rivalOffer)}. Beat it or lose him.`;
     // Dithering lets the rival close: 30% they win the race right now.
     if (Math.random() < 0.3) {
@@ -4081,16 +4147,42 @@ export function makeOffer(career: CareerState, amount: number): CareerState | nu
     return { ...career, negotiation: next };
   }
 
-  // Deal done.
-  if (amount >= next.theirAsk * 0.97) {
+  // Deal done: the PACKAGE meets the ask.
+  if (packageValue >= next.theirAsk * 0.97) {
     const signed = completeSigning(career, next.player, amount);
     if (!signed) return null;
-    signed.negotiation = { ...next, status: 'agreed', note: `Done at ${money(amount)}. Welcome to ${career.clubName}, ${next.player.name}.` };
+    /* Round 161: settle the structure. The swapped man leaves with the deal,
+       the sell-on rides on the new arrival, the add-ons join the queue. */
+    if (swap) {
+      signed.squad = signed.squad.filter(p => p.id !== swap.id);
+      signed.xiIds = signed.xiIds.map(id => (id === swap.id ? null : id));
+      signed.goneNames = [...signed.goneNames, swap.name];
+      const swapVal = Math.round(sellValue(swap) * 0.85 * 10) / 10;
+      signed.seasonSignings = [...signed.seasonSignings, { dir: 'out', name: swap.name, fee: swapVal }];
+      pushNews(signed, { name: swap.name, from: career.clubName, to: next.player.club, fee: swapVal });
+    }
+    const sellOnPct = clamp(Math.round(extras?.sellOnPct ?? 0), 0, 30);
+    if (sellOnPct > 0) {
+      signed.squad = signed.squad.map(p =>
+        p.name === next.player.name ? { ...p, sellOnOwed: { club: next.player.club, pct: sellOnPct } } : p);
+    }
+    const addOn = clamp(Math.round((extras?.addOn ?? 0) * 10) / 10, 0, 40);
+    if (addOn > 0) {
+      signed.pendingAddOns = [...(signed.pendingAddOns ?? []), { name: next.player.name, to: next.player.club, amount: addOn }];
+    }
+    const bits: string[] = [`${money(amount)} up front`];
+    if (addOn > 0) bits.push(`${money(addOn)} in add-ons`);
+    if (sellOnPct > 0) bits.push(`a ${sellOnPct} percent sell-on`);
+    if (swap) bits.push(`${swap.name} going the other way`);
+    signed.negotiation = {
+      ...next, status: 'agreed',
+      note: `Done: ${bits.join(', ')}. Welcome to ${career.clubName}, ${next.player.name}.`,
+    };
     return signed;
   }
 
-  // Insulting lowball.
-  if (amount < next.theirAsk * 0.75) {
+  // Insulting lowball, judged on the whole package.
+  if (packageValue < next.theirAsk * 0.75) {
     next.patience -= 1;
     if (next.patience <= 0) {
       return {
@@ -4104,10 +4196,10 @@ export function makeOffer(career: CareerState, amount: number): CareerState | nu
     return { ...career, negotiation: next };
   }
 
-  // A real offer: the ask moves toward it.
+  // A real offer: the ask moves toward the package.
   next.theirAsk = Math.max(
-    Math.round(amount * 1.02 * 10) / 10,
-    Math.round((next.theirAsk - (next.theirAsk - amount) * 0.55) * 10) / 10,
+    Math.round(packageValue * 1.02 * 10) / 10,
+    Math.round((next.theirAsk - (next.theirAsk - packageValue) * 0.55) * 10) / 10,
   );
   next.note = pick(SELLER_COUNTER);
 
@@ -4119,14 +4211,14 @@ export function makeOffer(career: CareerState, amount: number): CareerState | nu
       next.rivalBidder = null;
       next.rivalOffer = null;
     } else {
-      next.rivalOffer = Math.round(amount * (1.05 + Math.random() * 0.07) * 10) / 10;
+      next.rivalOffer = Math.round(packageValue * (1.05 + Math.random() * 0.07) * 10) / 10;
       next.note = `${next.rivalBidder} raised to ${money(next.rivalOffer)}.`;
     }
   } else if (!next.rivalBidder && next.stage >= 1 && Math.random() < 0.22) {
     const spenders = REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 5).map(c => c.name))
       .filter(n => n !== career.clubName && n !== next.player.club);
     next.rivalBidder = pick(spenders);
-    next.rivalOffer = Math.round(amount * (1.06 + Math.random() * 0.1) * 10) / 10;
+    next.rivalOffer = Math.round(packageValue * (1.06 + Math.random() * 0.1) * 10) / 10;
     next.note = `${next.rivalBidder} just entered the race at ${money(next.rivalOffer)}. Bidding war.`;
   }
 
@@ -4171,18 +4263,29 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
     if (!loaned) return null;
     return { ...loaned, incomingBids: bids.filter(b => b.playerId !== playerId) };
   }
+  /* Round 161: the sell-on his old club took when you signed him comes off
+     the top of the fee, exactly as promised at that table. */
+  const cutPct = p.sellOnOwed?.pct ?? 0;
+  const cut = cutPct > 0 ? Math.round(bid.offer * (cutPct / 100) * 10) / 10 : 0;
+  const netFee = Math.round((bid.offer - cut) * 10) / 10;
   const state: CareerState = {
     ...career,
-    budget: Math.round((career.budget + bid.offer) * 10) / 10,
+    budget: Math.round((career.budget + netFee) * 10) / 10,
     squad: career.squad.filter(x => x.id !== playerId),
     xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
-    seasonSignings: [...career.seasonSignings, { dir: 'out', name: p.name, fee: bid.offer }],
+    seasonSignings: [...career.seasonSignings, { dir: 'out', name: p.name, fee: netFee }],
     incomingBids: bids.filter(b => b.playerId !== playerId),
     careerStats: { ...career.careerStats },
     transferLog: [...(career.transferLog ?? [])],
   };
   pushNews(state, { name: p.name, from: career.clubName, to: bid.club, fee: bid.offer });
-  trackDealExtremes(state, 'out', p.name, bid.offer);
+  if (cut > 0 && p.sellOnOwed) {
+    state.aiHeadlines = [
+      `${p.sellOnOwed.club} collect ${money(cut)} from the ${p.name} sale: the sell-on clause they took when you signed him.`,
+      ...state.aiHeadlines,
+    ].slice(0, 8);
+  }
+  trackDealExtremes(state, 'out', p.name, netFee);
   return state;
 }
 
@@ -8090,9 +8193,26 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   }
 
   const seasonTrophyCount = career.trophies.filter(t => t.season === career.season).length;
-  const budget = moving
+  let budget = moving
     ? Math.round(club.budget * 1.1)
     : Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12));
+  /* Round 161: the summer the add-ons come due. Each promise rolls once:
+     about two thirds trigger (he played, the clauses hit) and the money
+     comes off the new budget; the rest lapse quietly. Walking to a new job
+     does not dodge them: the promises were the CLUB's, but this sim tracks
+     one career, so they follow the save and are all settled or dropped here
+     either way. */
+  const addOnNews: string[] = [];
+  for (const due of career.pendingAddOns ?? []) {
+    if (moving) continue; // the old club's promises stay with the old club
+    if (Math.random() < 0.65) {
+      const paid = Math.min(budget - 5, due.amount);
+      if (paid > 0) {
+        budget = Math.round((budget - paid) * 10) / 10;
+        addOnNews.push(`💸 The ${due.name} add-ons came due: ${money(paid)} to ${due.to}.`);
+      }
+    }
+  }
   const nextLeague = (custom && customLeagueDef(custom, eraId))
     || (historic && eraLeagueOf(clubName, eraId))
     || leagueOf(clubName);
@@ -8162,6 +8282,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      the club you built. */
   if (nextCustom) state.customClub = nextCustom;
   else delete state.customClub;
+  /* Round 161: the add-on ledger settled above; every entry resolved or
+     lapsed. The news lines join the feed at the very end of this function,
+     AFTER generateHeadlines, because that call rebuilds aiHeadlines from
+     scratch and would eat them (which is exactly what simDealDepth's first
+     run caught). */
+  state.pendingAddOns = [];
   // Round 71: track every club this manager has run.
   const managed = new Set(state.careerStats.clubsManaged ?? [career.clubName]);
   managed.add(clubName);
@@ -8251,6 +8377,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
   generateHeadlines(state);
+  /* Round 161: the add-ons that came due lead the summer's news. This sits
+     after generateHeadlines on purpose: that call rebuilds the feed. */
+  if (addOnNews.length) state.aiHeadlines = [...addOnNews, ...state.aiHeadlines].slice(0, 8);
   return state;
 }
 

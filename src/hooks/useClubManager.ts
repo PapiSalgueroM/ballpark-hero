@@ -14,7 +14,7 @@ import {
   DEFAULT_ERA_ID,
 } from '@/lib/clubManager';
 import type { MatchFacts } from '@/lib/clubManager';
-import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone } from '@/lib/clubManager';
+import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec } from '@/lib/clubManager';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
@@ -284,8 +284,11 @@ export function useClubManager() {
     setCareer(prev => (prev ? startNegotiation(prev, mp) ?? prev : prev));
   }, []);
 
-  const offer = useCallback((amount: number) => {
-    setCareer(prev => (prev ? makeOffer(prev, amount) ?? prev : prev));
+  /* Round 161: an offer can be a package: cash plus add-ons plus a sell-on
+     plus a part-exchange player. Extras default to nothing, which is the
+     exact deal this hook has always sent. */
+  const offer = useCallback((amount: number, extras?: DealExtras) => {
+    setCareer(prev => (prev ? makeOffer(prev, amount, extras) ?? prev : prev));
   }, []);
 
   const walk = useCallback(() => {
