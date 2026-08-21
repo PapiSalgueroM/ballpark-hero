@@ -509,16 +509,21 @@ export function TransferScreen({
                 const p = career.squad.find(x => x.id === b.playerId);
                 const blocked = !p || !canSell(p);
                 return (
-                  <div key={b.playerId} className="flex items-center gap-2">
+                  <div key={b.playerId} className={cn('flex items-center gap-2', b.clauseMet && 'rounded-lg border border-red-500/40 bg-red-500/5 px-2 py-1.5')}>
                     <div className="flex-1 min-w-0 text-xs text-foreground">
                       <div className="truncate">
                         <span className="font-bold">{b.club}</span>
-                        {b.loan ? ' want ' : ' bid '}
+                        {b.clauseMet ? ' trigger the ' : b.loan ? ' want ' : ' bid '}
                         <span className="font-bold text-gold">{money(b.offer)}</span>
-                        {b.loan ? ' to take ' : ' for '}{b.playerName}
+                        {b.clauseMet ? ' release clause in ' : b.loan ? ' to take ' : ' for '}{b.playerName}
+                        {b.clauseMet ? "'s contract" : ''}
                         {b.loan && <span className="text-[9px] text-sky-400 ml-1">(season loan)</span>}
                         {b.status === 'improved' && <span className="text-[9px] text-emerald-400 ml-1">(improved, final)</span>}
                       </div>
+                      {/* Round 193: a met clause is not a negotiation. */}
+                      {b.clauseMet && (
+                        <div className="text-[9px] text-red-400 truncate">You signed this exit door at his renewal. It cannot be rejected, and it executes itself on deadline day.</div>
+                      )}
                       {b.rival && (
                         <div className="text-[9px] text-emerald-400 truncate">
                           {b.rival} are in the race too, which is why the number is that high.
@@ -531,18 +536,20 @@ export function TransferScreen({
                     <button
                       onClick={() => onAcceptBid(b.playerId)}
                       disabled={blocked}
-                      title={blocked ? 'Squad rules block this sale right now' : 'Accept the bid'}
+                      title={blocked ? 'Squad rules block this sale right now' : b.clauseMet ? 'Shake his hand now instead of on deadline day' : 'Accept the bid'}
                       className={cn('shrink-0 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all',
                         !blocked ? 'bg-emerald-600 text-white hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
                     >
-                      Accept
+                      {b.clauseMet ? 'Let him go' : 'Accept'}
                     </button>
-                    <button
-                      onClick={() => onRejectBid(b.playerId)}
-                      className="shrink-0 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-secondary text-foreground hover:bg-secondary/70 transition-all"
-                    >
-                      Reject
-                    </button>
+                    {!b.clauseMet && (
+                      <button
+                        onClick={() => onRejectBid(b.playerId)}
+                        className="shrink-0 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-secondary text-foreground hover:bg-secondary/70 transition-all"
+                      >
+                        Reject
+                      </button>
+                    )}
                   </div>
                 );
               })}

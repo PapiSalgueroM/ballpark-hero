@@ -345,6 +345,12 @@ export interface CMPlayer {
   contractYears?: number;
   /** Round 105: what he costs you every week, in thousands. */
   wage?: number;
+  /** Round 193: a release clause YOU granted at a renewal, in millions. It
+      bought a cheaper wage, and the price is that any club can meet it:
+      a met clause cannot be rejected, and blocking him cannot kill it.
+      A plain renewal deletes it, which is the counter-move once his value
+      has grown past the number. */
+  releaseClause?: number;
   /** Round 73: full per-season stat line. */
   apps?: number;
   seasonYellows?: number;
@@ -681,6 +687,10 @@ export interface IncomingBid {
   rival?: string;
   /** Round 94: they came because you listed him, not out of the blue. */
   fromListing?: boolean;
+  /** Round 193: they met his release clause. The offer IS the clause to the
+      decimal, reject is impossible, and an unanswered one executes itself
+      on deadline day. You signed the exit door, they walked through it. */
+  clauseMet?: boolean;
 }
 
 /** A line in the Latest Transfers feed. */
@@ -3010,7 +3020,30 @@ export function renewalTerms(p: CMPlayer): { years: number; wage: number; fee: n
   return { years, wage, fee };
 }
 
-/** Sign him again. Costs the fee up front and resets his deal. */
+/* Round 193: the other half of CM-7's negotiation depth, his open item
+   "release clauses on my own contract renewals". The market's buy side has
+   had deterministic clauses since Round 71 (releaseClauseOf: 1.5x to 2.5x
+   value on about a third of players). This is the sell side mirror: at any
+   renewal you can GRANT a clause at the bottom of that same range, 1.5x
+   his current sell value, and the player signs for 88 percent of the wage
+   he would otherwise demand, because the exit door is worth money to him.
+   The trade-off has teeth in both directions: the wage bill breathes now,
+   but sell value grows while the clause stands still, so a good young
+   player's clause quietly becomes a bargain other clubs WILL trigger, and
+   the only way to delete it is a full-price plain renewal. */
+
+/** The clause deal on the table: cheaper wage, and the exit door number. */
+export function renewalTermsWithClause(p: CMPlayer): { years: number; wage: number; fee: number; clause: number } {
+  const base = renewalTerms(p);
+  const wage = Math.max(1, Math.round(base.wage * 0.88));
+  const fee = Math.max(0.1, Math.round(wage * base.years * 0.045 * 10) / 10);
+  const clause = Math.max(0.5, Math.round(sellValue(p) * 1.5 * 10) / 10);
+  return { years: base.years, wage, fee, clause };
+}
+
+/** Sign him again. Costs the fee up front and resets his deal. A plain
+    renewal DELETES any release clause he carried: that is the counter-move
+    once his value has grown past the number, and it costs full wage. */
 export function renewContract(career: CareerState, playerId: string): CareerState | null {
   const p = career.squad.find(x => x.id === playerId);
   if (!p || p.onLoan) return null;
@@ -3021,7 +3054,25 @@ export function renewContract(career: CareerState, playerId: string): CareerStat
     budget: Math.round((career.budget - terms.fee) * 10) / 10,
     squad: career.squad.map(x => (
       x.id === playerId
-        ? { ...x, contractYears: terms.years, wage: terms.wage, morale: clamp(x.morale + 9, 5, 99) }
+        ? { ...x, contractYears: terms.years, wage: terms.wage, morale: clamp(x.morale + 9, 5, 99), releaseClause: undefined }
+        : x
+    )),
+  };
+}
+
+/** Sign him again WITH the clause: the discounted wage, and the exit door
+    written into the deal at 1.5x today's sell value. */
+export function renewContractWithClause(career: CareerState, playerId: string): CareerState | null {
+  const p = career.squad.find(x => x.id === playerId);
+  if (!p || p.onLoan) return null;
+  const terms = renewalTermsWithClause(p);
+  if (terms.fee > career.budget) return null;
+  return {
+    ...career,
+    budget: Math.round((career.budget - terms.fee) * 10) / 10,
+    squad: career.squad.map(x => (
+      x.id === playerId
+        ? { ...x, contractYears: terms.years, wage: terms.wage, morale: clamp(x.morale + 9, 5, 99), releaseClause: terms.clause }
         : x
     )),
   };
@@ -4886,6 +4937,9 @@ export function rejectBid(career: CareerState, playerId: string): CareerState {
   const bids = career.incomingBids ?? [];
   const bid = bids.find(b => b.playerId === playerId);
   if (!bid) return career;
+  /* Round 193: a met release clause cannot be rejected. The UI never shows
+     the button; this is the engine keeping the promise anyway. */
+  if (bid.clauseMet) return career;
   if (bid.status === 'open' && Math.random() < 0.5) {
     const improved: IncomingBid = {
       ...bid,
@@ -4952,9 +5006,10 @@ export function setTransferStatus(
       ? { ...x, transferStatus: status ?? undefined, morale: clamp(x.morale - moraleHit, 5, 99) }
       : x
   ));
-  // Blocking him kills any bid already on the table.
+  // Blocking him kills any bid already on the table. Round 193: except a
+  // met release clause, which no status can touch. You signed that door.
   const bids = status === 'blocked'
-    ? (career.incomingBids ?? []).filter(b => b.playerId !== playerId)
+    ? (career.incomingBids ?? []).filter(b => b.playerId !== playerId || b.clauseMet)
     : (career.incomingBids ?? []);
   return { ...career, squad, incomingBids: bids };
 }
@@ -5047,7 +5102,10 @@ function returnLoanedPlayers(career: CareerState): CMPlayer[] {
  * rolls new interest at a gentler weekly rate. The window-open pass is the
  * loud one: everybody who was waiting for the market to open calls at once.
  */
-function generateIncomingBids(state: CareerState, topUp = false): void {
+/* Exported for simReleaseClause, which measures the clause-trigger rates
+   directly instead of replaying whole windows. Game code should keep
+   calling it through the window lifecycle only. */
+export function generateIncomingBids(state: CareerState, topUp = false): void {
   const surviving = topUp
     ? (state.incomingBids ?? []).filter(b => b.status === 'open' && state.squad.some(p => p.id === b.playerId))
     : [];
@@ -5055,6 +5113,30 @@ function generateIncomingBids(state: CareerState, topUp = false): void {
   const buyers = buyerPool(state);
   const taken = new Set<string>(surviving.map(b => b.playerId));
   const available = state.squad.filter(p => !p.onLoan && p.transferStatus !== 'blocked');
+
+  /* Round 193: release clauses get hunted FIRST, and the scan deliberately
+     ignores transferStatus, because blocking a man cannot un-sign the
+     clause you granted him. The trigger chance follows the bargain: a
+     fresh clause sits at 1.5x value (ratio 0.67, about a 6 percent window
+     shot), a clause his growth has caught (ratio 1.0) draws roughly a
+     third of windows, and a clause his value has left behind (ratio 1.5)
+     is met three windows in four. Formula: 0.9 x (ratio - 0.6), clamped
+     to [0.03, 0.75], a third of that on the weekly top-up. */
+  for (const p of state.squad.filter(x => !x.onLoan && (x.releaseClause ?? 0) > 0)) {
+    if (taken.has(p.id)) continue;
+    const ratio = sellValue(p) / (p.releaseClause as number);
+    const shot = Math.min(0.75, Math.max(0.03, 0.9 * (ratio - 0.6)));
+    if (Math.random() > (topUp ? shot / 3 : shot)) continue;
+    bids.push({
+      playerId: p.id,
+      playerName: p.name,
+      club: pick(buyers),
+      offer: p.releaseClause as number,
+      status: 'open',
+      clauseMet: true,
+    });
+    taken.add(p.id);
+  }
 
   /* Round 127: a player who has handed in a transfer request is shopping
      himself whether you like it or not, so the phone rings for him the same
@@ -7663,6 +7745,27 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     const left = (state.windowWeeksLeft ?? 1) - 1;
     state.windowWeeksLeft = Math.max(0, left);
     if (left <= 0) {
+      /* Round 193: an unanswered met clause executes itself on deadline
+         day, because ignoring the phone was the one way left to dodge a
+         door you signed. acceptBid does the whole job (fee, sell-on cut,
+         XI cleanup, the news) so this path can never drift from a manual
+         accept. The one thing that still stops it is the squad floor
+         (canLeaveSquad), and that collapse makes the news instead. */
+      for (const b of [...(state.incomingBids ?? [])].filter(x => x.clauseMet)) {
+        const sold = acceptBid(state, b.playerId);
+        if (sold) {
+          Object.assign(state, sold);
+          state.aiHeadlines = [
+            `\u{1F4A5} Deadline day: ${b.club} trigger the ${money(b.offer)} release clause in ${b.playerName}'s contract. The deal was done the moment they paid it.`,
+            ...state.aiHeadlines,
+          ].slice(0, 8);
+        } else {
+          state.aiHeadlines = [
+            `\u{23F0} ${b.club} met ${b.playerName}'s release clause, but the move collapsed on deadline day: the squad could not legally spare him.`,
+            ...state.aiHeadlines,
+          ].slice(0, 8);
+        }
+      }
       state.transferWindow = null;
       state.negotiation = null;
       state.incomingBids = [];

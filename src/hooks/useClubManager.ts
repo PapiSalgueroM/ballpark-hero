@@ -6,7 +6,7 @@ import {
   buildMarket, buyPlayer, autoPickXI, nextFixture, sortedTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
   startNegotiation, makeOffer, walkAway, respondApproach, setTicketTier, expandGround, payClause, loanIn, acceptBid, rejectBid,
-  answerMessage, setTransferStatus, loanOutPlayer, renewContract,
+  answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
   resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
   setTeamTalk, giveHalftimeTalk, answerPress, duckPress,
@@ -342,6 +342,11 @@ export function useClubManager() {
     setCareer(prev => (prev ? renewContract(prev, playerId) ?? prev : prev));
   }, []);
 
+  /* Round 193: the clause renewal, cheaper wage for an exit door. */
+  const renewWithClause = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? renewContractWithClause(prev, playerId) ?? prev : prev));
+  }, []);
+
   /* ---------- Round 127: squad roles and playing time promises ---------- */
   const setRole = useCallback((playerId: string, role: SquadRole) => {
     setCareer(prev => (prev ? setSquadRole(prev, playerId, role) ?? prev : prev));
@@ -429,7 +434,7 @@ export function useClubManager() {
     buy,
     negotiate, offer, walk, answerApproach, setTickets, expandStadium, dismissNegotiation, clause, loan,
     acceptIncomingBid, rejectIncomingBid,
-    setStatus, loanOut, renew, setRole,
+    setStatus, loanOut, renew, renewWithClause, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
     subAtHalftime, shapeAtHalftime, secondHalf,
     talk, halftimeTalk, sayIt, sendAssistant,
