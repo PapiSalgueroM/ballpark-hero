@@ -574,6 +574,25 @@ export function getSpendingItem(id: string): SpendingItem | undefined {
   return SPENDING_ITEMS.find(i => i.id === id);
 }
 
+/** Round 253: a serious injury waiting on the player's rehab decision. */
+export interface PendingRehab {
+  name: string;
+  weeks: number;
+  year: number;
+  /** what the specialist would cost, in millions; null when unaffordable */
+  specialistCost: number | null;
+}
+
+/** Round 253: one serious injury, and how the career answered it. */
+export interface SeriousInjury {
+  year: number;
+  name: string;
+  weeks: number;
+  path: "rushed" | "plan" | "specialist";
+  /** a rushed return that broke down again */
+  setback: boolean;
+}
+
 export interface CareerState {
   playerName: string;
   nationality: string;
@@ -599,7 +618,18 @@ export interface CareerState {
   seasons: SeasonRecord[];
   events: string[];
   retired: boolean;
-  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "retirement_suggestion" | "post_retirement" | "manager_season" | "pundit_season" | "owner_season" | "social_media_action" | "moral_dilemma" | "red_card_appeal_result" | "retired";
+  /**
+   * Round 253: the injury arc. A serious injury used to be a stat penalty
+   * with a name on it; now it is a chapter with a decision in it. These are
+   * all optional, so every save written before this round loads untouched
+   * and simply has no injury history yet.
+   */
+  pendingRehab?: PendingRehab | null;
+  /** every serious injury this career has come back from */
+  seriousInjuries?: SeriousInjury[];
+  /** permanent extra season injury chance bought by rushing rehabs */
+  rehabFragility?: number;
+  phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "retirement_suggestion" | "post_retirement" | "manager_season" | "pundit_season" | "owner_season" | "social_media_action" | "moral_dilemma" | "red_card_appeal_result" | "rehab_choice" | "retired";
   pendingAppealResult: { success: boolean; banLength: number } | null;
   pendingNews: NewsArticle[];
   pendingOffers: ContractOffer[];
@@ -1268,6 +1298,71 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     ],
   },
 ];
+
+/**
+ * Round 253: the three roads back from a serious injury, and the whole
+ * point of the arc: each one is a real trade, none is free.
+ *
+ *   0 RUSH IT. You are back in roughly 60% of the time, which means real
+ *     matches this season. But a body that is not ready breaks: a setback
+ *     costs more weeks than you saved, takes another 3 of pace, and every
+ *     rushed return leaves the career permanently more fragile.
+ *   1 FOLLOW THE PLAN. The stated weeks, and the honest toll a long
+ *     layoff takes (pace -2, physical -1). This is the old behaviour, now
+ *     as a deliberate choice rather than the only outcome.
+ *   2 THE SPECIALIST. Money buys the best surgeon and a rehab team.
+ *     Costs cash, keeps the physical intact and halves the pace loss. Only
+ *     offered when he can actually afford it.
+ *
+ * Every road records the injury in the career's history, so a comeback is
+ * something the save remembers rather than a line that scrolls away.
+ */
+export function applyRehabChoice(prev: CareerState, choiceIndex: number): CareerState {
+  const s = { ...prev };
+  const r = s.pendingRehab;
+  s.pendingRehab = null;
+  s.phase = "playing";
+  if (!r) return s;
+
+  const history = [...(s.seriousInjuries ?? [])];
+  s.events = [...s.events];
+
+  if (choiceIndex === 0) {
+    const backIn = Math.max(2, Math.round(r.weeks * 0.6));
+    /* a rushed return breaks down often enough to hurt, not so often that
+       the choice is a trap: measured over thousands of careers */
+    const setback = Math.random() < 0.45;
+    s.rehabFragility = Math.min(0.06, (s.rehabFragility ?? 0) + 0.02);
+    if (setback) {
+      s.pace = clamp(s.pace - 5, 20, 99);
+      s.physical = clamp(s.physical - 2, 20, 99);
+      s.morale = clamp(s.morale - 12, 0, 100);
+      s.events.push(`⚠️ You came back in ${backIn} weeks and broke down again in training. Pace -5, Physical -2, and the medical staff are not hiding what they think.`);
+    } else {
+      s.pace = clamp(s.pace - 2, 20, 99);
+      s.morale = clamp(s.morale + 4, 0, 100);
+      s.events.push(`🏃 Back in ${backIn} weeks instead of ${r.weeks}, and it held. Pace -2, and the manager noticed who wanted it.`);
+    }
+    history.push({ year: r.year, name: r.name, weeks: setback ? r.weeks + 6 : backIn, path: "rushed", setback });
+  } else if (choiceIndex === 2 && r.specialistCost !== null && s.netWorth >= r.specialistCost) {
+    s.netWorth = Math.round((s.netWorth - r.specialistCost) * 100) / 100;
+    s.pace = clamp(s.pace - 1, 20, 99);
+    s.morale = clamp(s.morale + 6, 0, 100);
+    s.events.push(`✈️ You paid for the specialist and the full rehab team. ${r.weeks} weeks, done properly: Pace -1 and the knee feels like yours again.`);
+    history.push({ year: r.year, name: r.name, weeks: r.weeks, path: "specialist", setback: false });
+  } else {
+    s.pace = clamp(s.pace - 2, 20, 99);
+    s.physical = clamp(s.physical - 1, 20, 99);
+    s.events.push(`🏥 ${r.weeks} weeks, the club's plan, no shortcuts. Pace -2, Physical -1, and you walk back in whole.`);
+    history.push({ year: r.year, name: r.name, weeks: r.weeks, path: "plan", setback: false });
+  }
+
+  s.seriousInjuries = history;
+  if (history.length >= 2) {
+    s.events.push(`⭐ That is ${history.length} serious injuries you have come back from.`);
+  }
+  return s;
+}
 
 export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number): CareerState {
   const s = { ...prev };
@@ -3236,6 +3331,10 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
      the same as the cryo chamber on its own, so buying every single one of
      them is a small edge rather than immunity. */
   injuryChance -= injuryDropFromItems(state);
+  /* Round 253: every rushed comeback leaves the body permanently more
+     fragile, capped at six points so a career of shortcuts is a real
+     handicap rather than a death sentence. */
+  injuryChance += state?.rehabFragility ?? 0;
   injuryChance = clamp(injuryChance, 0.04, 0.42);
   const injuryRoll = rollSeasonInjury(injuryChance);
   if (injuryRoll) {
@@ -4274,10 +4373,23 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   if (season.injury) {
     s.events.push(`🚑 Injury: ${season.injury}, out ${season.injuryWeeks} weeks, missed matches`);
     if (season.injurySevere) {
-      s.pace = clamp(s.pace - 2, 20, 99);
-      s.physical = clamp(s.physical - 1, 20, 99);
+      /* Round 253: a serious injury is a chapter, not a stat line. The
+         season pauses here and the player chooses how to come back, and
+         the stat cost is applied by THAT choice rather than automatically,
+         so the three roads genuinely differ. The morale hit of the
+         diagnosis lands now either way, because being told is the blow. */
       s.morale = clamp(s.morale - 10, 0, 100);
-      s.events.push("🏥 Long rehab took a toll: Pace -2, Physical -1");
+      s.pendingRehab = {
+        name: season.injury,
+        weeks: season.injuryWeeks ?? 16,
+        /* the season being played is one past the last one recorded; the
+           2020 fallback matches the convention used elsewhere in this
+           file for a career with no seasons behind it yet */
+        year: s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year + 1 : 2020,
+        specialistCost: s.netWorth >= 1.6 ? 0.8 : null,
+      };
+      s.phase = "rehab_choice";
+      return s;
     }
   }
   // Apply stat boosts from previous season's events

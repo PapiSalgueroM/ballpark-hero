@@ -47,7 +47,7 @@ const {
   dismissSummary, dismissNewspaper, dismissDebut, dismissWorldCup,
   dismissRivalryEvent, applyEventChoice, dismissMoralDilemma,
   dismissSocialMediaPhase, dismissAppealResult, applyWorldCupSpeech,
-  acceptRetirementSuggestion, repairCareer,
+  acceptRetirementSuggestion, repairCareer, applyRehabChoice,
   FALLBACK_CLUBS,
 } = engine;
 
@@ -230,6 +230,13 @@ for (let c = 0; c < CAREERS; c++) {
           step(x => (c % 2 === 0 ? acceptRetirementSuggestion(x) : engine.declineRetirementSuggestion(x)), "retire");
           break;
         case "retirement_ceremony": s.retired = true; break;
+        /* Round 253: a serious injury now pauses the season for a rehab
+           decision. An unknown phase falls into the default below and
+           marks the career retired, which made this harness INVENT a
+           retirement mid-career and fail its own armband invariant. The
+           captaincy arc does not care which road back is taken, so this
+           always follows the club's plan. */
+        case "rehab_choice": step(x => applyRehabChoice(x, 1), "ui"); break;
         default: s.retired = true; break;
       }
     }

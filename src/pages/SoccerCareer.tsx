@@ -37,6 +37,7 @@ import {
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
   applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,
   applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
+  applyRehabChoice,
   SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS,
   dismissAppealResult,
   generateShareText, getYouthAcademyClub,
@@ -864,6 +865,11 @@ export default function SoccerCareer() {
     setCareer(applyMoralDilemmaChoice(career, choiceIndex));
   };
 
+  const handleRehabChoice = (choiceIndex: number) => {
+    if (!career) return;
+    setCareer(applyRehabChoice(career, choiceIndex));
+  };
+
   const handleDismissMoralDilemma = () => {
     if (!career) return;
     setCareer(dismissMoralDilemma(career, clubs));
@@ -1000,6 +1006,7 @@ export default function SoccerCareer() {
               onCoverAthlete={handleCoverAthlete}
               onDismissSocialMedia={handleDismissSocialMedia}
               onMoralDilemmaChoice={handleMoralDilemmaChoice}
+              onRehabChoice={handleRehabChoice}
               onDismissMoralDilemma={handleDismissMoralDilemma}
               onDismissAppeal={handleDismissAppeal}
               onAcceptRetirement={handleAcceptRetirement}
@@ -3038,7 +3045,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -3069,6 +3076,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onCoverAthlete: (accept: boolean) => void;
   onDismissSocialMedia: () => void;
   onMoralDilemmaChoice: (choiceIndex: number) => void;
+  onRehabChoice: (choiceIndex: number) => void;
   onDismissMoralDilemma: () => void;
   onDismissAppeal: () => void;
   onAcceptRetirement: () => void;
@@ -3337,6 +3345,60 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               onChoice={onMoralDilemmaChoice}
               onDismiss={onDismissMoralDilemma}
             />
+          )}
+
+          {/* OVERLAY: Rehab choice (Round 253). A serious injury stops the
+              season and asks the one question a real footballer gets asked:
+              how badly do you want to be back. */}
+          {career.phase === "rehab_choice" && career.pendingRehab && (
+            <div className="rounded-xl border-2 border-red-500/60 bg-gradient-to-b from-red-500/15 to-transparent p-5 space-y-4">
+              <div className="text-center space-y-1">
+                <div className="text-5xl">{"\u{1F691}"}</div>
+                <h3 className="text-xl font-black tracking-tight">{career.pendingRehab.name.toUpperCase()}</h3>
+                <p className="text-sm text-muted-foreground">
+                  The scan is back. The club's medical team says {career.pendingRehab.weeks} weeks.
+                </p>
+                <p className="text-xs text-muted-foreground">How do you want to come back?</p>
+              </div>
+
+              <button
+                onClick={() => onRehabChoice(0)}
+                className="w-full text-left rounded-lg border border-amber-500/50 bg-amber-500/10 p-3 hover:bg-amber-500/20 transition-colors"
+              >
+                <div className="font-bold text-sm">{"\u{1F3C3}"} Rush it back</div>
+                <div className="text-xs text-muted-foreground mt-0.5">
+                  Back in about {Math.max(2, Math.round(career.pendingRehab.weeks * 0.6))} weeks and into real matches.
+                  Roughly half of players who do this break down again, and every shortcut leaves you carrying more risk for good.
+                </div>
+              </button>
+
+              <button
+                onClick={() => onRehabChoice(1)}
+                className="w-full text-left rounded-lg border border-border bg-secondary/40 p-3 hover:bg-secondary/70 transition-colors"
+              >
+                <div className="font-bold text-sm">{"\u{1F3E5}"} Follow the club's plan</div>
+                <div className="text-xs text-muted-foreground mt-0.5">
+                  All {career.pendingRehab.weeks} weeks, no shortcuts. A long layoff takes its toll (Pace -2, Physical -1) but you walk back in whole.
+                </div>
+              </button>
+
+              {career.pendingRehab.specialistCost !== null && career.netWorth >= career.pendingRehab.specialistCost && (
+                <button
+                  onClick={() => onRehabChoice(2)}
+                  className="w-full text-left rounded-lg border border-emerald-500/50 bg-emerald-500/10 p-3 hover:bg-emerald-500/20 transition-colors"
+                >
+                  <div className="font-bold text-sm">{"\u{2708}\u{FE0F}"} Pay for the specialist ({"\u{20AC}"}{career.pendingRehab.specialistCost}M)</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">
+                    The best surgeon and your own rehab team for the full {career.pendingRehab.weeks} weeks. Costs real money, and you come back closest to yourself (Pace -1 only).
+                  </div>
+                </button>
+              )}
+              {career.pendingRehab.specialistCost !== null && career.netWorth < career.pendingRehab.specialistCost && (
+                <p className="text-[10px] text-muted-foreground text-center">
+                  A specialist abroad would cost {"\u{20AC}"}{career.pendingRehab.specialistCost}M. You cannot cover it.
+                </p>
+              )}
+            </div>
           )}
 
           {/* OVERLAY: Red Card Appeal Result */}

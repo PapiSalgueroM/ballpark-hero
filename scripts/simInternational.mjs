@@ -68,6 +68,7 @@ const {
 
 const {
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
+  applyRehabChoice,
   dismissSummary, dismissNewspaper, dismissDebut, dismissWorldCup,
   dismissRivalryEvent, dismissBallonDor, applyEventChoice, dismissMoralDilemma,
   dismissSocialMediaPhase, dismissAppealResult, applyBdorSpeech, applyWorldCupSpeech,
@@ -350,6 +351,10 @@ function runCareer(seed, { nation, intlOff = false } = {}) {
         break;
       }
       case 'playing': s = advanceProSeason(s, clubs); break;
+      /* Round 253: a serious injury pauses the season for a rehab
+         decision. This walk is about caps and tournaments, not the
+         road back, so it always takes the club's plan. */
+      case 'rehab_choice': s = applyRehabChoice(s, 1); break;
       case 'newspaper': s = dismissNewspaper(s); break;
       case 'season_summary': s = dismissSummary(s, clubs); break;
       case 'international_debut': s = dismissDebut(s, clubs); break;
