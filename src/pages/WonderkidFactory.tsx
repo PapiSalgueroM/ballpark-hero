@@ -281,7 +281,9 @@ const WonderkidFactory = () => {
       {/* rules modal, shown before first play and reopenable from the ? */}
       {showHelp && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={() => setShowHelp(false)}>
-          <div className="bg-card border border-border rounded-2xl p-5 max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+          {/* Round 220: a real dialog to the platform, not just a styled div,
+              and the house bottom button every rules screen carries. */}
+          <div role="dialog" data-state="open" aria-modal="true" aria-label="How Wonderkid Factory works" className="bg-card border border-border rounded-2xl p-5 max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-2">
               <div className="text-lg font-bold font-display text-foreground">How Wonderkid Factory works</div>
               <button onClick={() => setShowHelp(false)} aria-label="Close the rules"><X className="w-4 h-4 text-muted-foreground" /></button>
@@ -295,6 +297,12 @@ const WonderkidFactory = () => {
               <p>Away from the game the scouts and coaches keep working at half speed for up to 8 hours, and the calendar waits for you: nobody ages while you are gone. Nothing sells itself either, the money moments are always yours.</p>
               <p>Worked example: a 17 year old rated 58 with a ceiling of 74 sells for about {fmtCash(salePriceExample(58, 74))} today. Coached to 71 he is worth about {fmtCash(salePriceExample(71, 74))}, and on deadline day that fee pays half as much again. Held to 23, the promise premium is gone and only the rating pays.</p>
             </div>
+            <button
+              onClick={() => setShowHelp(false)}
+              className="mt-4 w-full py-3 rounded-xl font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+            >
+              Let's go
+            </button>
           </div>
         </div>
       )}

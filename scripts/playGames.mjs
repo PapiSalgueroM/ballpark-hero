@@ -240,7 +240,7 @@ const CHROME = /^(back|home|track stats|douknowball|menu|accept|essential only|s
    progress, so both are off the table. Note this deliberately does not blanket
    block "reveal": "Reveal Next Clue" is how you actually play the career path
    games, and only the give-up phrasings are listed. */
-const SURRENDER = /^(give up|quit|forfeit|surrender|yes,? reveal|reveal the answer|show (the )?answer|see the answer|play again|new game|restart|start over)/i;
+const SURRENDER = /^(give up|quit|forfeit|surrender|abandon|yes,? reveal|reveal the answer|show (the )?answer|see the answer|play again|new game|restart|start over)/i;
 /* "How to play" matches /play/, so the old WANT regex made the how-to-play
    button the single most attractive control on most of the site. Anchor the
    play words so they cannot be reached through it. */
@@ -494,6 +494,23 @@ async function playOnce(game) {
         duds.add(pressed);
         loopers.add(pressed);
         if (process.env.VERBOSE) console.log(`      ^ "${pressed}" only went back to a screen already seen`);
+      } else if (duds.size > 0 || loopers.size > 0) {
+        /* Round 220: the hub-and-spoke rule. The nine tile dashboards and
+           the academy hub took this harness somewhere it had never been:
+           screens whose DOORS legitimately lead back to places already seen,
+           while the world BEHIND those doors changes when something real
+           happens elsewhere (play a week, sell a kid, sign a man). The old
+           rule condemned a door forever the first time it led backwards, so
+           after one lap of the boxes every door was a dud and the run read
+           STALL on a healthy game. New rule: reaching a genuinely NEW screen
+           is proof the world moved, so every condemned door gets its second
+           chance. The cbb ping-pong pathology this file exists to catch
+           stays caught, because a create-and-reset pair mints exactly two
+           new screens once and then never again: after one amnesty both
+           doors are re-condemned with no new screen left to earn another. */
+        duds.clear();
+        loopers.clear();
+        if (process.env.VERBOSE) console.log('      ^ new ground reached, condemned doors get another chance');
       }
       seen.add(idBefore);
       seen.add(idAfter);
