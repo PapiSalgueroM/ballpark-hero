@@ -194,7 +194,7 @@ const WorldCup = () => {
                       : 'border-border bg-card'
                   )}
                 >
-                  <span className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--wc-green))]">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--wc-green-ink))]">
                     {clue.label}
                   </span>
                   <p className={cn(

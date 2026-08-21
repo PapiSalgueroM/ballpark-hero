@@ -77,10 +77,19 @@ export function FootballConnect4Board({
                   key={col}
                   onClick={() => !cell && onSelectColumn(col)}
                   disabled={disabled || !!cell}
+                  /* Round 215: an empty square has no text in it, so a screen
+                     reader announced 42 of these as nothing at all. The label
+                     carries the pair of clues a sighted player reads off the
+                     edges of the grid. */
+                  aria-label={
+                    cell
+                      ? `${cell.playerName}, ${boardConfig.rowAttributes[row]} and ${boardConfig.columnAttributes[col]}`
+                      : `Empty square, ${boardConfig.rowAttributes[row]} and ${boardConfig.columnAttributes[col]}`
+                  }
                   className={cn(
                     'rounded-lg border min-h-[52px] flex items-center justify-center p-1 transition-all text-[9px] sm:text-[11px] font-medium leading-tight text-center',
-                    cell?.team === 'blue' && 'bg-blue-500/90 text-white border-blue-600',
-                    cell?.team === 'red' && 'bg-red-500/90 text-white border-red-600',
+                    cell?.team === 'blue' && 'bg-blue-500/90 text-black border-blue-600',
+                    cell?.team === 'red' && 'bg-red-500/90 text-black border-red-600',
                     !cell && isTarget && currentTurn === 'blue' && 'border-blue-400 bg-blue-500/10 ring-1 ring-blue-400',
                     !cell && isTarget && currentTurn === 'red' && 'border-red-400 bg-red-500/10 ring-1 ring-red-400',
                     !cell && !isTarget && 'border-border bg-card hover:bg-card/80',

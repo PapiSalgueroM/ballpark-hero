@@ -11,22 +11,33 @@
     --popover: 225 20% 11%;
     --popover-foreground: 210 20% 95%;
     --primary: 152 60% 42%;
-    --primary-foreground: 0 0% 100%;
+    /* Round 215: white on the brand green measured 2.93 to 1, well under the
+       4.5 normal text needs. The green itself is untouched; the words on it
+       are now the page's own near black, which measures 6.38. */
+    --primary-foreground: 225 25% 8%;
     --secondary: 225 15% 16%;
     --secondary-foreground: 210 20% 90%;
     --muted: 225 15% 14%;
-    --muted-foreground: 215 15% 50%;
+    /* Round 215: 50 percent measured 4.13 on a card and 3.55 on the lightest
+       surface. 58 measures 5.49 on a card, 4.73 on secondary. */
+    --muted-foreground: 215 15% 58%;
     --accent: 152 40% 20%;
     --accent-foreground: 152 60% 85%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
+    /* Round 215: as ink on a card the old 51 percent red measured 3.66, so
+       every couldn't-load and validation line sat under the bar. 65 measures
+       5.36 as ink; as a fill it now takes near black words (5.72) because
+       white on it is 3.27. */
+    --destructive: 0 72% 65%;
+    --destructive-foreground: 225 25% 8%;
     --border: 225 15% 18%;
     --input: 225 15% 20%;
     --ring: 152 60% 42%;
     --radius: 0.75rem;
 
     --correct: 142 71% 45%;
-    --correct-foreground: 0 0% 100%;
+    /* Round 215: white on the success green was 2.30 to 1, the worst pair on
+       the whole site. Near black on the same green is 8.13. */
+    --correct-foreground: 225 25% 8%;
     --close: 45 93% 47%;
     --close-foreground: 0 0% 8%;
     --incorrect: 220 20% 90%;
@@ -35,21 +46,30 @@
     --sidebar-background: 225 20% 8%;
     --sidebar-foreground: 210 20% 90%;
     --sidebar-primary: 152 60% 42%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary-foreground: 225 25% 8%;
     --sidebar-accent: 225 15% 14%;
     --sidebar-accent-foreground: 210 20% 90%;
     --sidebar-border: 225 15% 18%;
     --sidebar-ring: 152 60% 42%;
 
-    --wc-green: 145 55% 36%;
+    /* Round 215: one value cannot be both a fill and ink. A fill has to be
+       dark enough for white to sit on it and ink has to be light enough to
+       read on a card. So the fills keep the old names and the ink gets its
+       own token. White on the 31 percent green fill measures 5.25; the green
+       ink on a card measures 5.15; the red ink on a card measures 4.88. */
+    --wc-green: 145 55% 31%;
+    --wc-green-ink: 145 55% 40%;
     --wc-gold: 43 85% 52%;
     --fg-navy: 225 50% 20%;
     --fg-gold: 43 80% 55%;
-    --cg-green: 145 50% 40%;
+    /* Round 215: ink only, and its real surface is the green tinted header,
+       where 40 percent measured 3.83. 48 measures 5.42 there. */
+    --cg-green: 145 50% 48%;
     --cg-header: 145 30% 15%;
     --ft-navy: 225 50% 20%;
     --ft-gold: 43 85% 55%;
     --bb-red: 0 72% 50%;
+    --bb-red-ink: 0 72% 62%;
     --bb-navy: 225 55% 22%;
     --hk-blue: 220 55% 18%;
     --hk-silver: 210 15% 72%;
@@ -67,7 +87,8 @@
 
     --success-glow: 142 71% 45% / 0.35;   /* correct-colored glow, used in box-shadow on win states */
     --warn: 25 90% 55%;                    /* orange, distinct from --close gold-yellow, for streak/fire icons */
-    --warn-foreground: 0 0% 100%;
+    /* Round 215: white on the warn orange measured 2.72; near black is 6.87. */
+    --warn-foreground: 225 25% 8%;
 
     --focus-ring-width: 3px;
   }
@@ -83,6 +104,35 @@
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Grotesk', system-ui, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  }
+
+  /* Round 215: no page on the site drew a focus ring, so a keyboard player
+     had no idea where they were. One global rule instead of per component
+     classes. transition-property none matters: most cards here carry
+     transition-all, which animated the outline width and made the ring fade
+     in behind a fast tab. */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    transition-property: none;
+  }
+
+  /* Round 215: the skip link. First element in the tree, invisible until it
+     is the thing focused, jumps past the nav straight to the page's main
+     content at #dukb-main. */
+  .dukb-skip-link {
+    position: fixed;
+    top: -100px;
+    left: 8px;
+    z-index: 100;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    font-weight: 600;
+  }
+  .dukb-skip-link:focus-visible {
+    top: 8px;
   }
 }
 

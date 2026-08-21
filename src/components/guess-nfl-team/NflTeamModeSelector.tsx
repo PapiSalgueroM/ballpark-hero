@@ -128,7 +128,7 @@ export function NflTeamModeSelector({ onStart }: Props) {
             className="flex-1"
           >
             Easy
-            <span className="ml-2 text-xs opacity-70">32 Teams</span>
+            <span className="ml-2 text-xs">32 Teams</span>
           </Button>
           <Button
             onClick={() => setDifficulty('hard')}
@@ -136,7 +136,7 @@ export function NflTeamModeSelector({ onStart }: Props) {
             className="flex-1"
           >
             Hard
-            <span className="ml-2 text-xs opacity-70">+ Relocated</span>
+            <span className="ml-2 text-xs">+ Relocated</span>
           </Button>
         </div>
       </div>
@@ -152,7 +152,7 @@ export function NflTeamModeSelector({ onStart }: Props) {
             className="w-full h-16 text-lg"
           >
             🗓️ Daily Challenge
-            <span className="ml-2 text-xs opacity-70">Same for everyone</span>
+            <span className="ml-2 text-xs">Same for everyone</span>
           </Button>
           <Button
             onClick={() => onStart('unlimited', difficulty)}
@@ -160,7 +160,7 @@ export function NflTeamModeSelector({ onStart }: Props) {
             className="w-full h-16 text-lg"
           >
             🔄 Unlimited
-            <span className="ml-2 text-xs opacity-70">Random teams</span>
+            <span className="ml-2 text-xs">Random teams</span>
           </Button>
           <Button
             onClick={() => setShowConferenceOptions(true)}
@@ -168,7 +168,7 @@ export function NflTeamModeSelector({ onStart }: Props) {
             className="w-full h-16 text-lg"
           >
             🏆 Conference Mode
-            <span className="ml-2 text-xs opacity-70">AFC/NFC or division</span>
+            <span className="ml-2 text-xs">AFC/NFC or division</span>
           </Button>
         </div>
       </div>

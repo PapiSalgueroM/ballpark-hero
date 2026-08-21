@@ -16,6 +16,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { hslToRgb, readableL } from "@/lib/readableColor";
 
 /* ───── types ───── */
 
@@ -244,11 +245,34 @@ const GROUP_COLORS: Record<string, { h: number; s: number; l: number }> = {
   L: { h: 260, s: 70, l: 50 },    // indigo
 };
 
+/* Round 215: the old version derived the heading and subtitle colours by
+   SUBTRACTING lightness with no floor, so Group H (navy) printed its own
+   title at 1.83 to 1 and its Predict Scores line at 1.24, a hue with no word
+   inside it. Now the hue and saturation stay and only the lightness rises
+   until the words clear the contrast bar against the surface they actually
+   sit on: the heading on the tinted header, the small lines on the card
+   body. The header is a gradient from the tint down to the card colour, so
+   both ends are checked and the stricter one wins. Twelve groups stay twelve
+   colours. Borders and glows are decorative, not words, and keep their old
+   arithmetic. */
+const WC_CARD_BODY = hslToRgb(220, 15, 10);
+
 function gc(letter: string) {
   const c = GROUP_COLORS[letter] || { h: 0, s: 0, l: 50 };
+  const headerRgb = hslToRgb(c.h, c.s - 10, Math.max(c.l - 30, 12));
+  const accentL = Math.max(
+    readableL(c.h, c.s, c.l, headerRgb),
+    readableL(c.h, c.s, c.l, WC_CARD_BODY),
+  );
+  const dimS = Math.max(c.s - 20, 0);
+  const dimStart = Math.max(c.l - 15, 0);
+  const dimL = Math.max(
+    readableL(c.h, dimS, dimStart, headerRgb),
+    readableL(c.h, dimS, dimStart, WC_CARD_BODY),
+  );
   return {
-    accent: `hsl(${c.h}, ${c.s}%, ${c.l}%)`,
-    accentDim: `hsl(${c.h}, ${c.s - 20}%, ${c.l - 15}%)`,
+    accent: `hsl(${c.h}, ${c.s}%, ${accentL}%)`,
+    accentDim: `hsl(${c.h}, ${dimS}%, ${dimL}%)`,
     headerBg: `hsl(${c.h}, ${c.s - 10}%, ${Math.max(c.l - 30, 12)}%)`,
     border: `hsl(${c.h}, ${c.s - 15}%, ${c.l - 20}%)`,
     inputBorder: `hsl(${c.h}, ${c.s - 10}%, ${c.l - 10}%)`,
@@ -441,20 +465,20 @@ const PlayoffSlotsPanel = ({ picks, onPick, onAutoPickPlayoffs }: PlayoffSlotsPa
                         picked === m.teamA
                           ? "bg-[hsl(140,55%,25%)] text-white border-2 border-[hsl(140,60%,45%)] shadow-md shadow-[hsl(140,60%,40%)]/20"
                           : picked === m.teamB
-                          ? "bg-[hsl(220,10%,18%)] text-[hsl(0,0%,40%)] border-2 border-transparent cursor-pointer hover:bg-[hsl(220,10%,22%)]"
+                          ? "bg-[hsl(220,10%,18%)] text-[hsl(0,0%,64%)] border-2 border-transparent cursor-pointer hover:bg-[hsl(220,10%,22%)]"
                           : "bg-[hsl(220,12%,18%)] text-white border-2 border-[hsl(220,12%,28%)] hover:border-[hsl(140,40%,40%)] hover:bg-[hsl(220,12%,22%)] cursor-pointer"
                       }`}
                     >
                       <FlagImg name={m.teamA} />{m.teamA}
                     </button>
-                    <span className="text-[hsl(0,0%,35%)] text-xs font-semibold">vs</span>
+                    <span className="text-[hsl(0,0%,52%)] text-xs font-semibold">vs</span>
                     <button
                       onClick={() => onPick(m.slot, m.teamB)}
                       className={`flex-1 text-sm font-bold py-2 px-2 rounded-md transition-all ${
                         picked === m.teamB
                           ? "bg-[hsl(140,55%,25%)] text-white border-2 border-[hsl(140,60%,45%)] shadow-md shadow-[hsl(140,60%,40%)]/20"
                           : picked === m.teamA
-                          ? "bg-[hsl(220,10%,18%)] text-[hsl(0,0%,40%)] border-2 border-transparent cursor-pointer hover:bg-[hsl(220,10%,22%)]"
+                          ? "bg-[hsl(220,10%,18%)] text-[hsl(0,0%,64%)] border-2 border-transparent cursor-pointer hover:bg-[hsl(220,10%,22%)]"
                           : "bg-[hsl(220,12%,18%)] text-white border-2 border-[hsl(220,12%,28%)] hover:border-[hsl(140,40%,40%)] hover:bg-[hsl(220,12%,22%)] cursor-pointer"
                       }`}
                     >
@@ -539,7 +563,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                 <FlagImg name={team.name} />{team.name}
               </span>
               {team.isTBD && (
-                <Badge variant="outline" className="text-[10px] border-[hsl(0,0%,40%)] text-[hsl(0,0%,50%)] px-1.5 py-0">
+                <Badge variant="outline" className="text-[10px] border-[hsl(0,0%,40%)] text-[hsl(0,0%,52%)] px-1.5 py-0">
                   TBD
                 </Badge>
               )}
@@ -568,7 +592,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                   />
                   <button
                     onClick={(e) => { e.stopPropagation(); onAutoFillGroup(group.letter); }}
-                    className="flex items-center gap-1 text-[10px] px-2 py-2 rounded bg-[hsl(150,12%,20%)] hover:bg-[hsl(150,12%,25%)] text-[hsl(150,15%,60%)] transition-colors"
+                    className="flex items-center gap-1 text-[10px] px-2 py-2 rounded bg-[hsl(150,12%,20%)] hover:bg-[hsl(150,12%,25%)] text-[hsl(150,15%,68%)] transition-colors"
                     title="World Cup 2026 Bracket Predictor | DoUKnowBall"
                   >
                     <Shuffle className="w-3 h-3" /> Random
@@ -578,7 +602,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
               {hasAnyScore && (
                 <button
                   onClick={(e) => { e.stopPropagation(); onResetGroup(group.letter); }}
-                  className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(0,40%,20%)] hover:bg-[hsl(0,40%,25%)] text-[hsl(0,60%,65%)] transition-colors"
+                  className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(0,40%,20%)] hover:bg-[hsl(0,40%,25%)] text-[hsl(0,60%,72%)] transition-colors"
                   title="Reset group scores"
                 >
                   <RotateCcw className="w-3 h-3" /> Reset
@@ -606,24 +630,26 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                     min={0}
                     max={9}
                     value={score.homeGoals}
+                    aria-label={`Goals for ${homeName} against ${awayName}`}
                     onChange={(e) => {
                       const v = e.target.value;
                       onScoreChange(key, "homeGoals", v === "" ? "" : Math.min(9, Math.max(0, Number(v))));
                     }}
-                    className="w-11 h-11 sm:w-8 sm:h-7 text-center text-sm font-bold rounded text-white focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="w-11 h-11 sm:w-8 sm:h-7 text-center text-sm font-bold rounded text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     style={{ backgroundColor: "hsl(220, 15%, 15%)", borderWidth: 2, borderColor: colors.inputBorder }}
                   />
-                  <span className="text-[hsl(0,0%,40%)] text-[10px] font-bold">vs</span>
+                  <span className="text-[hsl(0,0%,52%)] text-[10px] font-bold">vs</span>
                   <input
                     type="number"
                     min={0}
                     max={9}
                     value={score.awayGoals}
+                    aria-label={`Goals for ${awayName} against ${homeName}`}
                     onChange={(e) => {
                       const v = e.target.value;
                       onScoreChange(key, "awayGoals", v === "" ? "" : Math.min(9, Math.max(0, Number(v))));
                     }}
-                    className="w-11 h-11 sm:w-8 sm:h-7 text-center text-sm font-bold rounded text-white focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="w-11 h-11 sm:w-8 sm:h-7 text-center text-sm font-bold rounded text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     style={{ backgroundColor: "hsl(220, 15%, 15%)", borderWidth: 2, borderColor: colors.inputBorder }}
                   />
                   <span className="text-white text-[11px] font-semibold flex-1 truncate" title={awayName}>
@@ -643,7 +669,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
               <div className="overflow-x-auto">
                 <table className="w-full text-[11px]">
                   <thead>
-                    <tr className="text-[hsl(150,15%,45%)]">
+                    <tr className="text-[hsl(150,15%,48%)]">
                       <th className="text-left py-1 pr-1">#</th>
                       <th className="text-left py-1 pr-1">Team</th>
                       <th className="text-center py-1 px-1">P</th>
@@ -665,15 +691,15 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                       const shortTeam = s.team.length > 14 ? s.team.slice(0, 12) + "…" : s.team;
                       return (
                         <tr key={s.team} className="border-b border-[hsl(220,10%,15%)]" style={{ backgroundColor: rowBg }}>
-                          <td className="py-1 pr-1 text-[hsl(0,0%,50%)]">{pos + 1}</td>
-                          <td className={`py-1 pr-1 font-semibold truncate max-w-[100px] ${s.isTBD ? "italic text-[hsl(0,0%,50%)]" : "text-white"}`} title={s.team}>
+                          <td className="py-1 pr-1 text-[hsl(0,0%,52%)]">{pos + 1}</td>
+                          <td className={`py-1 pr-1 font-semibold truncate max-w-[100px] ${s.isTBD ? "italic text-[hsl(0,0%,52%)]" : "text-white"}`} title={s.team}>
                             <FlagImg name={s.team} />{shortTeam}
                           </td>
                           <td className="text-center py-1 px-1 text-[hsl(0,0%,60%)]">{s.played}</td>
                           <td className="text-center py-1 px-1 text-[hsl(0,0%,60%)]">{s.won}</td>
                           <td className="text-center py-1 px-1 text-[hsl(0,0%,60%)]">{s.drawn}</td>
                           <td className="text-center py-1 px-1 text-[hsl(0,0%,60%)]">{s.lost}</td>
-                          <td className={`text-center py-1 px-1 ${s.gd > 0 ? "text-[hsl(140,60%,55%)]" : s.gd < 0 ? "text-[hsl(0,60%,55%)]" : "text-[hsl(0,0%,50%)]"}`}>
+                          <td className={`text-center py-1 px-1 ${s.gd > 0 ? "text-[hsl(140,60%,55%)]" : s.gd < 0 ? "text-[hsl(0,60%,60%)]" : "text-[hsl(0,0%,52%)]"}`}>
                             {s.gd > 0 ? `+${s.gd}` : s.gd}
                           </td>
                           <td className="text-center py-1 px-1 text-[hsl(0,0%,60%)]">{s.gf}</td>
@@ -684,7 +710,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                   </tbody>
                 </table>
               </div>
-              <div className="flex gap-3 mt-2 text-[9px] text-[hsl(0,0%,50%)]">
+              <div className="flex gap-3 mt-2 text-[9px] text-[hsl(0,0%,52%)]">
                 <span className="flex items-center gap-1">
                   <span className="w-2 h-2 rounded-sm bg-[hsl(140,50%,18%)] inline-block" /> Qualified
                 </span>
@@ -1199,7 +1225,7 @@ const WorldCupPredictor = () => {
           <div className="flex-1 overflow-y-auto">
             <table className="w-full text-xs">
               <thead className="sticky top-0 bg-[hsl(220,18%,10%)]">
-                <tr className="text-[hsl(150,15%,45%)] border-b border-[hsl(220,15%,18%)]">
+                <tr className="text-[hsl(150,15%,48%)] border-b border-[hsl(220,15%,18%)]">
                   <th className="text-left py-2 px-3 font-semibold">#</th>
                   <th className="text-left py-2 font-semibold">Team</th>
                   <th className="text-center py-2 px-3 font-semibold">Grp</th>
@@ -1315,7 +1341,7 @@ const WorldCupPredictor = () => {
               </button>
               <button
                 onClick={handleResetEverything}
-                className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(0,40%,15%)] hover:bg-[hsl(0,40%,20%)] text-[hsl(0,60%,65%)] border border-[hsl(0,30%,25%)] transition-colors"
+                className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(0,40%,15%)] hover:bg-[hsl(0,40%,20%)] text-[hsl(0,60%,72%)] border border-[hsl(0,30%,25%)] transition-colors"
               >
                 <Trash2 className="w-3.5 h-3.5" /> Reset All
               </button>
@@ -1372,7 +1398,7 @@ const WorldCupPredictor = () => {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-[hsl(150,15%,18%)] text-[hsl(150,15%,45%)] text-xs">
+                      <tr className="border-b border-[hsl(150,15%,18%)] text-[hsl(150,15%,48%)] text-xs">
                         <th className="text-center py-3 px-3 w-10"></th>
                         <th className="text-left py-3 px-2">#</th>
                         <th className="text-left py-3 px-2">Team</th>
@@ -1408,21 +1434,21 @@ const WorldCupPredictor = () => {
                                 {isSelected && <Check className="w-3 h-3 text-white" />}
                               </div>
                             </td>
-                            <td className="py-2.5 px-2 font-bold text-[hsl(0,0%,50%)]">{idx + 1}</td>
+                            <td className="py-2.5 px-2 font-bold text-[hsl(0,0%,52%)]">{idx + 1}</td>
                             <td className={`py-2.5 px-2 font-semibold ${isSelected ? "text-white" : "text-[hsl(0,0%,55%)]"}`}>
                               <FlagImg name={t.team} />{t.team}
                             </td>
                             <td className="py-2.5 px-2 text-center text-[hsl(45,90%,55%)] font-semibold">{t.group}</td>
                             <td className="py-2.5 px-2 text-center font-bold text-white">{t.pts}</td>
-                            <td className={`py-2.5 px-2 text-center ${t.gd > 0 ? "text-[hsl(140,60%,55%)]" : t.gd < 0 ? "text-[hsl(0,60%,55%)]" : "text-[hsl(0,0%,50%)]"}`}>
+                            <td className={`py-2.5 px-2 text-center ${t.gd > 0 ? "text-[hsl(140,60%,55%)]" : t.gd < 0 ? "text-[hsl(0,60%,60%)]" : "text-[hsl(0,0%,52%)]"}`}>
                               {t.gd > 0 ? `+${t.gd}` : t.gd}
                             </td>
                             <td className="py-2.5 px-2 text-center text-[hsl(0,0%,60%)]">{t.gf}</td>
                             <td className="py-2.5 px-4 text-right">
                               <Badge className={`text-[10px] ${
                                 isSelected
-                                  ? "bg-[hsl(140,60%,30%)] text-[hsl(140,80%,90%)] hover:bg-[hsl(140,60%,35%)]"
-                                  : "bg-[hsl(0,0%,25%)] text-[hsl(0,0%,55%)] hover:bg-[hsl(0,0%,30%)]"
+                                  ? "bg-[hsl(140,60%,24%)] text-[hsl(140,80%,92%)] hover:bg-[hsl(140,60%,28%)]"
+                                  : "bg-[hsl(0,0%,25%)] text-[hsl(0,0%,78%)] hover:bg-[hsl(0,0%,30%)]"
                               }`}>
                                 {isSelected ? "Qualified" : "Eliminated"}
                               </Badge>
@@ -1452,7 +1478,7 @@ const WorldCupPredictor = () => {
 
         {allGroupsFilled && selectedThirds.length < 8 && !showBracket && (
           <div className="text-center mt-6">
-            <p className="text-[hsl(150,15%,40%)] text-sm">
+            <p className="text-[hsl(150,15%,48%)] text-sm">
               Select 8 third-place teams to unlock the knockout bracket ({selectedThirds.length}/8)
             </p>
           </div>
@@ -1460,7 +1486,7 @@ const WorldCupPredictor = () => {
 
         {!allGroupsFilled && (
           <div className="text-center mt-6">
-            <p className="text-[hsl(150,15%,40%)] text-sm">
+            <p className="text-[hsl(150,15%,48%)] text-sm">
               Fill in all group match scores to unlock the knockout bracket
             </p>
           </div>

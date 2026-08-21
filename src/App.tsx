@@ -265,6 +265,10 @@ const AppContent = () => {
   const { pathname } = useLocation();
   return (
     <>
+      {/* Round 215: the first tab stop on every page jumps a keyboard player
+          past the ticker and nav straight to the content. Invisible until
+          focused, styled in index.css. */}
+      <a href="#dukb-main" className="dukb-skip-link">Skip to main content</a>
       <ScrollToTop />
       <CookieConsent />
       {/* Round 167: the site's own wire across the top of every screen. */}

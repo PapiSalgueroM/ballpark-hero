@@ -18,7 +18,7 @@ const CollegeHub = () => {
         path="/college"
       />
       <GameNavbar />
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 pt-6 pb-16">
+      <main id="dukb-main" className="flex-1 max-w-4xl mx-auto w-full px-4 pt-6 pb-16">
         <header className="text-center mb-8">
           <h1 className="text-3xl font-black text-foreground">🎓 College Games Hub</h1>
           <p className="text-muted-foreground mt-1 max-w-xl mx-auto">

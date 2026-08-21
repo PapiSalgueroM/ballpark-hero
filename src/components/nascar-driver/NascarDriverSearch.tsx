@@ -69,7 +69,7 @@ export function NascarDriverSearch({ onGuess, guesses, drivers }: Props) {
         onFocus={() => setShowSuggestions(true)}
         onKeyDown={handleKeyDown}
         placeholder="Type driver name..."
-        className="w-full px-4 py-3 rounded-xl border border-red-500/30 bg-neutral-900 text-white placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-red-500/50 transition-all"
+        className="w-full px-4 py-3 rounded-xl border border-red-500/30 bg-neutral-900 text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 transition-all"
       />
       {showSuggestions && filtered.length > 0 && (
         <div className="absolute z-50 w-full mt-1 bg-neutral-900 border border-neutral-700 rounded-xl shadow-lg max-h-48 overflow-y-auto">
@@ -85,7 +85,7 @@ export function NascarDriverSearch({ onGuess, guesses, drivers }: Props) {
         </div>
       )}
       {showSuggestions && input.trim().length >= 3 && filtered.length === 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-neutral-900 border border-neutral-700 rounded-xl shadow-lg p-3 text-center text-neutral-600 text-sm">
+        <div className="absolute z-50 w-full mt-1 bg-neutral-900 border border-neutral-700 rounded-xl shadow-lg p-3 text-center text-neutral-400 text-sm">
           No drivers found
         </div>
       )}

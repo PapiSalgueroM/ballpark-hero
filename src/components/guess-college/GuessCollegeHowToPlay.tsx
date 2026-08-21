@@ -12,7 +12,9 @@ const GuessCollegeHowToPlay = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon" className="rounded-full">
+        {/* Round 215: the whole body of this button is an svg, so a screen
+            reader announced it as nothing at all. */}
+        <Button variant="outline" size="icon" className="rounded-full" aria-label="How to play">
           <HelpCircle className="h-5 w-5" />
         </Button>
       </DialogTrigger>

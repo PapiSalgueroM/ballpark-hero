@@ -69,7 +69,7 @@ export function TennisPlayerSearch({ onGuess, guesses, players }: Props) {
         onFocus={() => setShowSuggestions(true)}
         onKeyDown={handleKeyDown}
         placeholder="Type player name..."
-        className="w-full px-4 py-3 rounded-xl border border-purple-500/30 bg-green-950 text-white placeholder:text-green-700 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
+        className="w-full px-4 py-3 rounded-xl border border-purple-500/30 bg-green-950 text-white placeholder:text-green-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
       />
       {showSuggestions && filtered.length > 0 && (
         <div className="absolute z-50 w-full mt-1 bg-green-950 border border-green-800 rounded-xl shadow-lg max-h-48 overflow-y-auto">
@@ -85,7 +85,7 @@ export function TennisPlayerSearch({ onGuess, guesses, players }: Props) {
         </div>
       )}
       {showSuggestions && input.trim().length >= 3 && filtered.length === 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-green-950 border border-green-800 rounded-xl shadow-lg p-3 text-center text-green-700 text-sm">
+        <div className="absolute z-50 w-full mt-1 bg-green-950 border border-green-800 rounded-xl shadow-lg p-3 text-center text-green-400 text-sm">
           No players found
         </div>
       )}

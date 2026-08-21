@@ -26,7 +26,7 @@ export function HowToPlay({ open, onOpenChange }: HowToPlayProps) {
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-correct flex-shrink-0" />
                 <div>
-                  <span className="font-semibold text-correct-foreground">Green</span>
+                  <span className="font-semibold text-correct">Green</span>
                   <span className="text-muted-foreground">: exact match</span>
                 </div>
               </div>

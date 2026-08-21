@@ -191,7 +191,7 @@ const AlphabetSprint = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background">
+    <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
         title="Alphabet Sprint | DoUKnowBall"
@@ -313,7 +313,7 @@ const AlphabetSprint = () => {
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck={false}
-                className="flex-1 min-w-0 px-4 py-3 rounded-xl bg-background border border-border text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary"
+                className="flex-1 min-w-0 px-4 py-3 rounded-xl bg-background border border-border text-foreground placeholder:text-muted-foreground/60 focus:border-primary"
               />
               <button
                 type="button"

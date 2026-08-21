@@ -89,7 +89,7 @@ const AdminReports = () => {
       <title>Bug reports | DoUKnowBall</title>
       <meta name="robots" content="noindex, nofollow" />
     </Helmet>
-    <main className="min-h-screen bg-background">
+    <main id="dukb-main" className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-foreground font-display flex items-center gap-2">

@@ -288,7 +288,7 @@ const WhoAmI = () => {
   );
 
   return (
-    <main className="min-h-screen bg-background">
+    <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
         title="Who Am I? Secret Footballer Guessing Game | DoUKnowBall"

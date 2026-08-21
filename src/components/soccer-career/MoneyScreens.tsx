@@ -395,7 +395,7 @@ export function ShopCategoryScreen({ career, cat, onBack, onBuy }: {
                     onClick={() => onBuy(item.id)}
                     disabled={blocked}
                     className={`shrink-0 text-[10px] font-black px-2.5 py-1.5 rounded-lg transition-colors ${
-                      blocked ? "bg-white/5 text-white/25" : "bg-emerald-600 hover:bg-emerald-500 text-white active:scale-95"
+                      blocked ? "bg-white/5 text-white/25" : "bg-emerald-600 hover:bg-emerald-500 text-black active:scale-95"
                     }`}
                   >
                     {item.cost > 0 ? (item.cost >= 1 ? `€${item.cost.toFixed(0)}M` : `€${Math.round(item.cost * 1000)}k`) : "Hire"}

@@ -223,8 +223,8 @@ export default function StadiumTycoon() {
             <div className="absolute right-0 top-1/4 bottom-1/4 w-8 border border-white/40 border-r-0" />
             {/* scoreboard */}
             <div className="absolute top-1.5 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/50 rounded-full px-3 py-1 text-xs font-bold text-white tabular-nums max-w-[92%]">
-              <span className="text-primary shrink-0">YOU {s.goalsFor}</span>
-              <span className="text-white/70 shrink-0">{Math.min(s.minute, 90)}'</span>
+              <span className="text-[hsl(152,60%,52%)] shrink-0">YOU {s.goalsFor}</span>
+              <span className="text-white/90 shrink-0">{Math.min(s.minute, 90)}'</span>
               <span className="text-red-400 truncate">{s.goalsAgainst} {opponentName(s)}</span>
               {s.streak >= 2 && <span className="inline-flex items-center text-orange-400"><Flame className={cn('w-3.5 h-3.5', s.streak >= 5 && 'animate-pulse')} />{s.streak}</span>}
             </div>
@@ -239,7 +239,7 @@ export default function StadiumTycoon() {
             {/* ball */}
             <span className="absolute w-2 h-2 rounded-full bg-white shadow transition-all ease-in-out" style={{ left: `${ball.x}%`, top: `${ball.y}%`, transitionDuration: '1700ms' }} />
             {/* tap hint */}
-            <div className="absolute bottom-1.5 right-2 text-[10px] text-white/70 group-hover:text-white transition-colors">tap anywhere: +{fmtMoney(tapValue(s))}</div>
+            <div className="absolute bottom-1.5 right-2 text-[10px] text-white/90 group-hover:text-white transition-colors">tap anywhere: +{fmtMoney(tapValue(s))}</div>
             {/* floaters */}
             {g.floaters.map(f => (
               <span

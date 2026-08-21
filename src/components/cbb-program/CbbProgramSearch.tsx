@@ -45,7 +45,7 @@ export function CbbProgramSearch({ onGuess, guesses, programs }: Props) {
           onChange={e => { setInput(e.target.value); setShowSuggestions(true); }}
           onFocus={() => setShowSuggestions(true)}
           placeholder="Type school name..."
-          className="w-full px-4 py-3 rounded-xl border border-amber-500/30 bg-slate-900 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all"
+          className="w-full px-4 py-3 rounded-xl border border-amber-500/30 bg-slate-900 text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all"
         />
       </form>
       {showSuggestions && filtered.length > 0 && (

@@ -16,7 +16,7 @@ export function BaseballCareerHowToPlay({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-center text-[hsl(var(--bb-red))] text-xl font-display">
+          <DialogTitle className="text-center text-[hsl(var(--bb-red-ink))] text-xl font-display">
             ⚾ How to Play
           </DialogTitle>
           <DialogDescription className="text-center text-muted-foreground">
@@ -25,11 +25,11 @@ export function BaseballCareerHowToPlay({ open, onOpenChange }: Props) {
         </DialogHeader>
         <div className="space-y-4 text-sm text-foreground">
           <div className="space-y-2">
-            <p className="font-semibold text-[hsl(var(--bb-red))]">Goal</p>
+            <p className="font-semibold text-[hsl(var(--bb-red-ink))]">Goal</p>
             <p>Guess the mystery baseball player from clues revealed one at a time. Guess early for more points.</p>
           </div>
           <div className="space-y-2">
-            <p className="font-semibold text-[hsl(var(--bb-red))]">Clues, in order</p>
+            <p className="font-semibold text-[hsl(var(--bb-red-ink))]">Clues, in order</p>
             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
               <li>Position</li>
               <li>Draft round and year</li>
@@ -40,11 +40,11 @@ export function BaseballCareerHowToPlay({ open, onOpenChange }: Props) {
             </ul>
           </div>
           <div className="space-y-2">
-            <p className="font-semibold text-[hsl(var(--bb-red))]">Scoring</p>
+            <p className="font-semibold text-[hsl(var(--bb-red-ink))]">Scoring</p>
             <p className="text-muted-foreground">You start at 1,000 points and lose points with each clue you reveal.</p>
           </div>
           <div className="space-y-2">
-            <p className="font-semibold text-[hsl(var(--bb-red))]">Daily Challenge</p>
+            <p className="font-semibold text-[hsl(var(--bb-red-ink))]">Daily Challenge</p>
             <p className="text-muted-foreground">New player every midnight, same one for everyone. Share your score.</p>
           </div>
         </div>

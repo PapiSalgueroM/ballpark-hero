@@ -49,12 +49,13 @@ const AdminLogin = () => {
       <title>Admin sign in | DoUKnowBall</title>
       <meta name="robots" content="noindex, nofollow" />
     </Helmet>
-    <main className="min-h-screen bg-background flex items-center justify-center px-4">
+    <main id="dukb-main" className="min-h-screen bg-background flex items-center justify-center px-4">
       <form onSubmit={handleLogin} className="w-full max-w-sm space-y-4 bg-card border border-border rounded-2xl p-8 shadow-xl">
         <h1 className="text-2xl font-bold text-center text-foreground font-display">Admin Login</h1>
         <input
           type="email"
           value={email}
+          aria-label="Email"
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
           required
@@ -63,6 +64,7 @@ const AdminLogin = () => {
         <input
           type="password"
           value={password}
+          aria-label="Password"
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           required

@@ -289,7 +289,7 @@ const PerfectSeasonMlb = () => {
     : '';
 
   return (
-    <main className="min-h-screen bg-background">
+    <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
         title="162-0: Perfect Season Baseball | DoUKnowBall"

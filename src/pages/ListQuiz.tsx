@@ -230,7 +230,7 @@ const ListQuiz = () => {
                       autoComplete="off"
                       autoCorrect="off"
                       className={cn(
-                        'flex-1 min-w-0 px-4 py-3 rounded-xl bg-background border text-foreground text-center font-semibold outline-none transition-colors',
+                        'flex-1 min-w-0 px-4 py-3 rounded-xl bg-background border text-foreground text-center font-semibold transition-colors',
                         flash === 'hit' && 'border-correct ring-1 ring-correct',
                         flash === 'miss' && 'border-destructive ring-1 ring-destructive',
                         flash === 'dupe' && 'border-yellow-500 ring-1 ring-yellow-500',

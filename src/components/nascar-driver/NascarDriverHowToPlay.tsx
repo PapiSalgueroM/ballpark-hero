@@ -5,7 +5,7 @@ export function NascarDriverHowToPlay() {
 
   return (
     <>
-      <button onClick={() => setOpen(true)} className="inline-flex items-center rounded-full px-3 py-2 text-sm text-neutral-500 underline transition-colors hover:text-red-400">
+      <button onClick={() => setOpen(true)} className="inline-flex items-center rounded-full px-3 py-2 text-sm text-neutral-400 underline transition-colors hover:text-red-400">
         How to play
       </button>
       {open && (
@@ -19,7 +19,7 @@ export function NascarDriverHowToPlay() {
               <li>Guess early for more points</li>
               <li>Clues: Vibe, Era, Car Number, Wins, Championships, Famous Moment</li>
             </ol>
-            <div className="text-xs text-neutral-500 space-y-1">
+            <div className="text-xs text-neutral-400 space-y-1">
               <p>🏆 1000 pts on clue 1, down to 100 pts on clue 6</p>
               <p>Covers Cup Series drivers from 1970 to 2025</p>
             </div>

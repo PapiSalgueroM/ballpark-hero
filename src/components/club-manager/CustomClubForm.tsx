@@ -148,7 +148,7 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
               onChange={e => setName(e.target.value)}
               maxLength={24}
               placeholder="Real Anthony"
-              className="w-full bg-secondary border border-border rounded-lg px-3 py-2 text-sm text-foreground outline-none focus:border-primary"
+              className="w-full bg-secondary border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:border-primary"
             />
             {(triedSubmit || name.length >= 3) && nameError && (
               <div className="text-[10px] text-red-400 mt-1">{nameError}</div>
@@ -161,7 +161,7 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
               onChange={e => setStadium(e.target.value)}
               maxLength={30}
               placeholder={name.trim() ? `${name.trim()} Park` : 'Name your ground'}
-              className="w-full bg-secondary border border-border rounded-lg px-3 py-2 text-sm text-foreground outline-none focus:border-primary"
+              className="w-full bg-secondary border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:border-primary"
             />
           </div>
         </div>
@@ -215,7 +215,7 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
               onChange={e => { setInitialsTouched(true); setInitialsRaw(e.target.value); }}
               maxLength={3}
               placeholder="RA"
-              className="w-24 bg-secondary border border-border rounded-lg px-3 py-2 text-sm font-bold tracking-widest text-foreground outline-none focus:border-primary uppercase"
+              className="w-24 bg-secondary border border-border rounded-lg px-3 py-2 text-sm font-bold tracking-widest text-foreground focus:border-primary uppercase"
             />
           </div>
         </div>

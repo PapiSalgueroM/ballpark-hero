@@ -77,7 +77,7 @@ const BaseballCareer = () => {
           <>
             <button
               onClick={() => setShowRules(true)}
-              className="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground hover:text-[hsl(var(--bb-red))] transition-colors"
+              className="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground hover:text-[hsl(var(--bb-red-ink))] transition-colors"
               aria-label="How to play"
             >
               <HelpCircle className="w-4 h-4" /> How to play
@@ -124,7 +124,7 @@ const BaseballCareer = () => {
           {status === 'playing' && (
             <div className="text-center mb-4">
               <span className="text-sm text-muted-foreground">Current score if correct: </span>
-              <span className="font-bold text-[hsl(var(--bb-red))]">
+              <span className="font-bold text-[hsl(var(--bb-red-ink))]">
                 {1000 - clueLevel * 150 > 0 ? 1000 - clueLevel * 150 : 0} pts
               </span>
             </div>
@@ -137,7 +137,7 @@ const BaseballCareer = () => {
                 key={clue.label}
                 className="flex items-start gap-3 px-4 py-3 rounded-xl bg-[hsl(var(--bb-navy)/0.15)] border border-[hsl(var(--bb-navy)/0.2)] animate-cell-reveal"
               >
-                <span className="text-xs font-bold text-[hsl(var(--bb-red))] uppercase w-24 shrink-0 pt-0.5">
+                <span className="text-xs font-bold text-[hsl(var(--bb-red-ink))] uppercase w-24 shrink-0 pt-0.5">
                   {clue.label}
                 </span>
                 <span className="font-semibold text-foreground text-sm">{clue.value}</span>
@@ -150,7 +150,7 @@ const BaseballCareer = () => {
             <div className="flex items-center justify-center gap-3 mb-4">
               <button
                 onClick={revealNextClue}
-                className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg border border-[hsl(var(--bb-red)/0.3)] text-[hsl(var(--bb-red))] hover:bg-[hsl(var(--bb-navy)/0.2)] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg border border-[hsl(var(--bb-red)/0.3)] text-[hsl(var(--bb-red-ink))] hover:bg-[hsl(var(--bb-navy)/0.2)] transition-colors"
               >
                 <Eye className="w-4 h-4" />
                 Reveal Next Clue (−150 pts)

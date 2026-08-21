@@ -25,7 +25,7 @@ interface GameShellProps {
 /**
  * Shared page shell for every game: GameNavbar + a width-constrained content
  * container + Footer. Replaces the copy-pasted
- * <main className="min-h-screen bg-background"><GameNavbar />...<Footer /></main>
+ * <main id="dukb-main" className="min-h-screen bg-background"><GameNavbar />...<Footer /></main>
  * boilerplate per R5 spec 3.1.
  */
 export function GameShell({ width, title, emoji, subtitle, headerExtra, children, className }: GameShellProps) {

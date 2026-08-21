@@ -370,7 +370,7 @@ const DartDraft = () => {
       />
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(222 40% 7%) 0%, hsl(210 35% 9%) 55%, hsl(222 35% 6%) 100%)' }}>
         <GameNavbar />
-        <main className="flex-1 flex flex-col items-center px-3 py-5 sm:py-8">
+        <main id="dukb-main" className="flex-1 flex flex-col items-center px-3 py-5 sm:py-8">
           <div className="w-full max-w-3xl mx-auto space-y-4 text-center">
 
             {phase === 'intro' && (

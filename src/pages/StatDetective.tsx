@@ -151,7 +151,7 @@ const StatDetective = () => {
   );
 
   return (
-    <main className="min-h-screen bg-background">
+    <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
         title="Stat Detective NBA: Guess the Player from the Stat Line | DoUKnowBall"

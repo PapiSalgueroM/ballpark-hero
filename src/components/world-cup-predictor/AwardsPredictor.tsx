@@ -176,18 +176,18 @@ function AwardDropdown({
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-lg flex-shrink-0">{emoji}</span>
           <div className="min-w-0">
-            <p className="text-[10px] uppercase tracking-wider text-[hsl(150,15%,45%)] font-semibold">{label}</p>
+            <p className="text-[10px] uppercase tracking-wider text-[hsl(150,15%,56%)] font-semibold">{label}</p>
             {selected ? (
               <p className="text-sm text-white font-medium truncate">
                 <FlagImg name={selected.nation} size={16} />
-                {selected.name} <span className="text-[hsl(150,15%,40%)]">({selected.nation})</span>
+                {selected.name} <span className="text-[hsl(150,15%,56%)]">({selected.nation})</span>
               </p>
             ) : (
-              <p className="text-sm text-[hsl(150,15%,35%)]">Select a player...</p>
+              <p className="text-sm text-[hsl(150,15%,56%)]">Select a player...</p>
             )}
           </div>
         </div>
-        <ChevronDown className={`w-4 h-4 text-[hsl(150,15%,40%)] transition-transform flex-shrink-0 ${open ? "rotate-180" : ""}`} />
+        <ChevronDown className={`w-4 h-4 text-[hsl(150,15%,56%)] transition-transform flex-shrink-0 ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open && (
@@ -198,8 +198,9 @@ function AwardDropdown({
               placeholder="Search players..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              aria-label="Search players"
               className="w-full px-3 py-2 rounded-lg bg-[hsl(220,15%,16%)] border border-[hsl(220,15%,25%)]
-                text-white text-xs placeholder:text-[hsl(150,15%,35%)] focus:outline-none focus:border-[hsl(45,60%,40%)]"
+                text-white text-xs placeholder:text-[hsl(150,15%,62%)] focus:border-[hsl(45,60%,40%)]"
               autoFocus
             />
           </div>
@@ -217,11 +218,11 @@ function AwardDropdown({
               >
                 <FlagImg name={p.nation} size={16} />
                 <span className="font-medium">{p.name}</span>
-                <span className="text-[hsl(150,15%,40%)] ml-auto">{p.nation}</span>
+                <span className="text-[hsl(150,15%,56%)] ml-auto">{p.nation}</span>
               </button>
             ))}
             {filtered.length === 0 && (
-              <p className="px-4 py-3 text-xs text-[hsl(150,15%,35%)]">No players found</p>
+              <p className="px-4 py-3 text-xs text-[hsl(150,15%,56%)]">No players found</p>
             )}
           </div>
         </div>
@@ -264,7 +265,7 @@ export default function AwardsPredictor({ champion }: { champion: string }) {
           <div className="flex items-center gap-2">
             <span className="text-lg">🏆</span>
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-[hsl(150,15%,45%)] font-semibold">
+              <p className="text-[10px] uppercase tracking-wider text-[hsl(150,15%,56%)] font-semibold">
                 Tournament Winner
               </p>
               {champion ? (
@@ -273,7 +274,7 @@ export default function AwardsPredictor({ champion }: { champion: string }) {
                   {champion}
                 </p>
               ) : (
-                <p className="text-sm text-[hsl(150,15%,35%)]">Pick a champion in the bracket above</p>
+                <p className="text-sm text-[hsl(150,15%,56%)]">Pick a champion in the bracket above</p>
               )}
             </div>
           </div>
@@ -330,14 +331,14 @@ function SummaryRow({ emoji, label, value, nation }: { emoji: string; label: str
     <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-[hsl(220,15%,13%)]">
       <span className="text-base">{emoji}</span>
       <div className="min-w-0">
-        <p className="text-[10px] uppercase tracking-wider text-[hsl(150,15%,40%)] font-semibold">{label}</p>
+        <p className="text-[10px] uppercase tracking-wider text-[hsl(150,15%,56%)] font-semibold">{label}</p>
         {value ? (
           <p className="text-sm text-white font-medium truncate">
             {nation && <FlagImg name={nation} size={14} />}
             {value}
           </p>
         ) : (
-          <p className="text-xs text-[hsl(150,15%,30%)]">Not selected</p>
+          <p className="text-xs text-[hsl(150,15%,56%)]">Not selected</p>
         )}
       </div>
     </div>

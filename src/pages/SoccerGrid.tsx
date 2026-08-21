@@ -225,7 +225,7 @@ const SoccerGrid = () => {
                   </p>
                   <button
                     onClick={startOvertime}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 min-h-[44px] bg-amber-500 text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 min-h-[44px] bg-amber-500 text-black rounded-full font-semibold hover:opacity-90 transition-opacity"
                   >
                     Start Overtime
                   </button>

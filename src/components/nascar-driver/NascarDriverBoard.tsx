@@ -47,7 +47,7 @@ export function NascarDriverBoard() {
               <span className="text-neutral-300">Guess The</span>{' '}
               <span className="text-red-500">NASCAR Driver</span>
             </h1>
-            <p className="text-neutral-600">How well do you know NASCAR?</p>
+            <p className="text-neutral-400">How well do you know NASCAR?</p>
           </div>
 
           <NascarDriverHowToPlay />
@@ -70,7 +70,7 @@ export function NascarDriverBoard() {
           </div>
 
           {status === 'loading' && (
-            <p className="text-sm text-neutral-700">Loading drivers...</p>
+            <p className="text-sm text-neutral-400">Loading drivers...</p>
           )}
           {status === 'error' && (
             <button onClick={reloadDrivers} className="inline-flex items-center px-3 py-2 text-sm text-red-400 underline">
@@ -78,7 +78,7 @@ export function NascarDriverBoard() {
             </button>
           )}
           {status === 'ready' && allDrivers.length === 0 && (
-            <p className="text-sm text-neutral-700">No drivers available yet. Check back soon.</p>
+            <p className="text-sm text-neutral-400">No drivers available yet. Check back soon.</p>
           )}
 
           <GameNav />
@@ -106,7 +106,7 @@ export function NascarDriverBoard() {
             <span className="text-red-500">NASCAR Driver</span>
           </h1>
           {!isOver && (
-            <p className="text-sm text-neutral-600 mt-1">
+            <p className="text-sm text-neutral-400 mt-1">
               Clue {revealedClues}/{MAX_CLUES} · {pointsForCurrentClue} pts available
             </p>
           )}
@@ -125,17 +125,17 @@ export function NascarDriverBoard() {
                 }`}
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <span className={`text-xs font-semibold uppercase tracking-wider ${isRevealed ? 'text-red-400' : 'text-neutral-700'}`}>
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${isRevealed ? 'text-red-400' : 'text-neutral-400'}`}>
                     {CLUE_LABELS[i]}
                   </span>
-                  {!isRevealed && <span className="text-xs text-neutral-700">🔒</span>}
+                  {!isRevealed && <span className="text-xs text-neutral-400">🔒</span>}
                 </div>
                 {isRevealed ? (
                   <p className={`text-sm ${i === 0 ? 'text-lg font-bold text-red-400 italic' : 'text-neutral-300'}`}>
                     {clue}
                   </p>
                 ) : (
-                  <p className="text-sm text-neutral-700">Guess correctly or wait for this clue...</p>
+                  <p className="text-sm text-neutral-400">Guess correctly or wait for this clue...</p>
                 )}
               </div>
             );
@@ -162,7 +162,7 @@ export function NascarDriverBoard() {
               {hasGuessed && !showGiveUpConfirm && (
                 <button
                   onClick={() => setShowGiveUpConfirm(true)}
-                  className="text-sm text-neutral-600 hover:text-red-400 transition-colors"
+                  className="text-sm text-neutral-400 hover:text-red-400 transition-colors"
                 >
                   🏳️ Give Up
                 </button>
@@ -191,7 +191,7 @@ export function NascarDriverBoard() {
         {guesses.length > 0 && !isOver && (
           <div className="flex flex-wrap gap-2 justify-center">
             {guesses.map((g, i) => (
-              <span key={i} className="px-3 py-1 rounded-full bg-neutral-900 text-neutral-600 text-xs line-through">
+              <span key={i} className="px-3 py-1 rounded-full bg-neutral-900 text-neutral-400 text-xs line-through">
                 {g}
               </span>
             ))}

@@ -190,6 +190,7 @@ export default function Olympics() {
                     onChange={(e) => { setGuessInput(e.target.value); setShowSuggestions(true); }}
                     onFocus={() => setShowSuggestions(true)}
                     placeholder="Type athlete name..."
+                    aria-label="Type athlete name"
                     className={`w-full px-4 py-3 rounded-xl bg-card border ${wrongGuess ? 'border-destructive' : 'border-border'} text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(43,85%,55%)/0.5]`}
                   />
                   {showSuggestions && filtered.length > 0 && (

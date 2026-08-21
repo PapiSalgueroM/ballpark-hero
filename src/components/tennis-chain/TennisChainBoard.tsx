@@ -198,12 +198,12 @@ export function TennisChainBoard() {
                       onChange={(e) => setNickname(e.target.value)}
                       placeholder="Nickname"
                       maxLength={30}
-                      className="flex-1 min-w-0 bg-gray-800 border border-gray-600 rounded-md px-3 py-2 text-white placeholder:text-gray-500 focus:outline-none focus:border-emerald-500"
+                      className="flex-1 min-w-0 bg-gray-800 border border-gray-600 rounded-md px-3 py-2 text-white placeholder:text-gray-400 focus:border-emerald-500"
                     />
                     <Button
                       onClick={handleSaveScore}
                       disabled={!nickname.trim() || saving}
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                      className="bg-emerald-600 hover:bg-emerald-700 text-black"
                     >
                       {saving ? '...' : 'Save'}
                     </Button>
@@ -235,7 +235,7 @@ export function TennisChainBoard() {
               )}
 
               <div className="space-y-4">
-                <Button onClick={handleReset} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
+                <Button onClick={handleReset} className="w-full bg-emerald-600 hover:bg-emerald-700 text-black">
                   Play Again
                 </Button>
                 <ShareButtons

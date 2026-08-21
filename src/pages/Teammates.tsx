@@ -82,7 +82,7 @@ const Teammates = () => {
               </div>
 
               {/* VS */}
-              <div className="text-2xl md:text-3xl font-bold text-muted-foreground/40 font-display shrink-0">
+              <div className="text-2xl md:text-3xl font-bold text-muted-foreground/70 font-display shrink-0">
                 VS
               </div>
 
@@ -103,13 +103,13 @@ const Teammates = () => {
                 <div className="flex justify-center gap-4">
                   <button
                     onClick={() => answer(true)}
-                    className="px-8 py-3 rounded-xl bg-correct text-white font-bold text-lg hover:opacity-90 transition-opacity"
+                    className="px-8 py-3 rounded-xl bg-correct text-correct-foreground font-bold text-lg hover:opacity-90 transition-opacity"
                   >
                     ✅ YES
                   </button>
                   <button
                     onClick={() => answer(false)}
-                    className="px-8 py-3 rounded-xl bg-destructive text-white font-bold text-lg hover:opacity-90 transition-opacity"
+                    className="px-8 py-3 rounded-xl bg-destructive text-destructive-foreground font-bold text-lg hover:opacity-90 transition-opacity"
                   >
                     ❌ NO
                   </button>

@@ -306,7 +306,7 @@ function NumberStepper({ value, min, max, onChange, label, disabled, wide }: {
         onFocus={(e) => e.currentTarget.select()}
         onBlur={() => setDraft(null)}
         onKeyDown={(e) => { if (e.key === "Enter") { setDraft(null); (e.currentTarget as HTMLInputElement).blur(); } }}
-        className={`${wide ? "w-16" : "w-12"} h-8 shrink-0 rounded-md border border-border bg-background text-center text-sm font-black tabular-nums outline-none focus:border-emerald-500`}
+        className={`${wide ? "w-16" : "w-12"} h-8 shrink-0 rounded-md border border-border bg-background text-center text-sm font-black tabular-nums focus:border-emerald-500`}
       />
       <button type="button" aria-label={`${label} up 1`} disabled={disabled || value >= max} onClick={() => onChange(clampTo(value + 1))} className={btn}>+1</button>
       <button type="button" aria-label={`${label} up 5`} disabled={disabled || value >= max} onClick={() => onChange(clampTo(value + 5))} className={btn}>+5</button>
@@ -325,7 +325,7 @@ function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; is
       <div className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black z-10 ${
         label === "A" ? "bg-amber-500/80 text-amber-950" :
         label === "R" ? "bg-muted text-muted-foreground" :
-        isCurrent ? "bg-emerald-500 text-white" : "bg-muted/60 text-muted-foreground"
+        isCurrent ? "bg-emerald-500 text-black" : "bg-muted/60 text-muted-foreground"
       }`}>
         {label || (season.year % 100).toString().padStart(2, "0")}
       </div>
@@ -370,7 +370,7 @@ function OfferCard({ offer, onAccept, actionLabel }: { offer: ContractOffer; onA
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40">Tier {offer.club.tier}</span>
       </div>
       {offer.isPayCut && <div className="text-[11px] text-amber-400">⚠️ Lower wages, but it's a dream move</div>}
-      <Button onClick={onAccept} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+      <Button onClick={onAccept} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
         {actionLabel || "Sign Contract ✍️"}
       </Button>
     </div>
@@ -426,7 +426,7 @@ function NewspaperCard({ articles, onContinue }: { articles: NewsArticle[]; onCo
           </div>
         </div>
       ))}
-      <Button onClick={onContinue} className="w-full h-10 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+      <Button onClick={onContinue} className="w-full h-10 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
         Continue to Season Summary →
       </Button>
     </div>
@@ -490,7 +490,7 @@ function SeasonSummaryCard({ season, position, onContinue, appearance }: { seaso
         </ShineWrap>
       )}
 
-      <Button onClick={onContinue} className="w-full h-10 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+      <Button onClick={onContinue} className="w-full h-10 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
         Continue →
       </Button>
     </div>
@@ -944,7 +944,7 @@ export default function SoccerCareer() {
           the lift measurement. */}
       <div className={`min-h-screen bg-background text-foreground flex flex-col ${career ? 'pb-[88px]' : ''}`}>
         <GameNavbar />
-        <main className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
+        <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {!career ? (
             <CreationScreen
               playerName={playerName} setPlayerName={setPlayerName}
@@ -1035,7 +1035,7 @@ export default function SoccerCareer() {
             >
               📱
               {unreadPhoneCount(career) > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-white flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center">
                   {unreadPhoneCount(career)}
                 </span>
               )}
@@ -1088,7 +1088,7 @@ export default function SoccerCareer() {
             <p className="text-sm text-muted-foreground text-center">Are you sure? This will delete your current career. All progress will be lost forever.</p>
             <div className="flex gap-3">
               <Button onClick={() => setShowNewCareerConfirm(false)} variant="outline" className="flex-1 h-10 font-bold">Cancel</Button>
-              <Button onClick={handleConfirmNewCareer} className="flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-white">Delete & Start Over</Button>
+              <Button onClick={handleConfirmNewCareer} className="flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-black">Delete & Start Over</Button>
             </div>
           </div>
         </div>
@@ -1273,7 +1273,7 @@ function BuildEditor({ position, targetOvr, baseStats, rolledPot, physique, onPh
         </div>
         <Button variant="outline" className="w-full h-11 text-sm font-bold"
           onClick={() => onPhysique(defaultPhysique(position))}>↩️ Back to a normal frame</Button>
-        <Button className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white" onClick={() => setScreen({ kind: "root" })}>Done</Button>
+        <Button className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black" onClick={() => setScreen({ kind: "root" })}>Done</Button>
       </div>
     );
   }
@@ -1313,7 +1313,7 @@ function BuildEditor({ position, targetOvr, baseStats, rolledPot, physique, onPh
             );
           })}
         </div>
-        <Button className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white" onClick={() => setScreen({ kind: "root" })}>Done</Button>
+        <Button className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black" onClick={() => setScreen({ kind: "root" })}>Done</Button>
       </div>
     );
   }
@@ -1411,7 +1411,7 @@ function BuildEditor({ position, targetOvr, baseStats, rolledPot, physique, onPh
           setTarget(s.ovr); setAlloc(s.stats); setBudget(sumOf(s.stats));
           onPhysique(defaultPhysique(position)); onShape({});
         }}>↩️ Reset to scout build</Button>
-        <Button className="w-full sm:flex-1 h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-40" disabled={pool !== 0} onClick={() => onConfirm(alloc, liveOvr)}>
+        <Button className="w-full sm:flex-1 h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black disabled:opacity-40" disabled={pool !== 0} onClick={() => onConfirm(alloc, liveOvr)}>
           {pool !== 0 ? `Spend your ${pool} points first` : "✅ Lock in build"}
         </Button>
       </div>
@@ -1498,7 +1498,7 @@ function AttributesScreen({ career, onBack }: { career: CareerState; onBack: () 
         </div>
       ))}
 
-      <Button onClick={onBack} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">Back to your career</Button>
+      <Button onClick={onBack} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">Back to your career</Button>
     </div>
   );
 }
@@ -1697,7 +1697,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
             <Button
               onClick={doRoll}
               disabled={isRolling || clubsLoading}
-              className={`flex-1 h-11 text-sm font-bold text-white ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
+              className={`flex-1 h-11 text-sm font-bold text-black ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
               variant={rolledOvr !== null ? "outline" : "default"}
             >
               {clubsLoading ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Roll again" : "🎲 Generate Starting Potential"}
@@ -1756,7 +1756,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
       )}
 
       <Button onClick={onBegin} disabled={!isFormValid || saving || rolledOvr === null}
-        className="w-full h-12 text-lg font-bold bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-40">
+        className="w-full h-12 text-lg font-bold bg-emerald-600 hover:bg-emerald-500 text-black disabled:opacity-40">
         {saving ? "Creating..." : "⚽ Begin Career"}
       </Button>
       {rolledOvr === null && canGenerate && <p className="text-xs text-muted-foreground text-center">Generate your starting potential to begin</p>}
@@ -1795,7 +1795,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
         <div className="bg-card border border-border rounded-xl p-4 space-y-3">
           <p className="text-sm text-center">No clubs have made an offer. Your club wants to keep you.</p>
           <div className="flex gap-2">
-            <Button onClick={onStay} className="flex-1 h-9 text-sm bg-emerald-600 hover:bg-emerald-500 text-white">
+            <Button onClick={onStay} className="flex-1 h-9 text-sm bg-emerald-600 hover:bg-emerald-500 text-black">
               Stay and fight for place 💪
             </Button>
             <Button variant="outline" onClick={onRequestTransfer} className="flex-1 h-9 text-sm">
@@ -1860,7 +1860,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
             <span className="text-sm font-bold">⚠️ Contract Expiring!</span>
             <p className="text-xs text-muted-foreground mt-1">You can sign an extension or leave on a free transfer</p>
           </div>
-          <Button onClick={onSignExtension} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+          <Button onClick={onSignExtension} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
             Sign Extension with {career.currentClub} 📝
           </Button>
           {situation.offers.map((offer) => (
@@ -1948,7 +1948,7 @@ function InternationalDebutCard({ career, onDismiss }: { career: CareerState; on
       <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
         <p className="text-xs text-amber-300">🎉 Massive morale boost! Your international journey begins.</p>
       </div>
-      <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-amber-600 hover:bg-amber-500 text-white">
+      <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-amber-600 hover:bg-amber-500 text-black">
         Continue →
       </Button>
     </div>
@@ -2018,13 +2018,13 @@ function WorldCupResultCard({ wc, career, onDismiss, onSpeech }: { wc: WorldCupR
       {isWinner ? (
         <div className="space-y-1.5">
           <p className="text-center text-[11px] font-bold uppercase tracking-wider text-amber-300 animate-fade-in">The microphone is yours. The speech:</p>
-          <Button onClick={() => onSpeech("for_the_country")} className="w-full h-auto py-2.5 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
+          <Button onClick={() => onSpeech("for_the_country")} className="w-full h-auto py-2.5 text-xs font-bold text-black bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
             🏆 Dedicate it to every kid back home
           </Button>
-          <Button onClick={() => onSpeech("shirt_to_the_fans")} className="w-full h-auto py-2.5 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
+          <Button onClick={() => onSpeech("shirt_to_the_fans")} className="w-full h-auto py-2.5 text-xs font-bold text-black bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
             🎽 Throw your shirt into the away end
           </Button>
-          <Button onClick={() => onSpeech("call_out_doubters")} className="w-full h-auto py-2.5 text-xs font-bold text-white bg-amber-700 hover:bg-amber-600 justify-start text-left whitespace-normal">
+          <Button onClick={() => onSpeech("call_out_doubters")} className="w-full h-auto py-2.5 text-xs font-bold text-black bg-amber-700 hover:bg-amber-600 justify-start text-left whitespace-normal">
             📢 Name the pundits who wrote you off
           </Button>
           <Button onClick={() => onSpeech("quiet_lap")} className="w-full h-auto py-2.5 text-xs font-bold text-white bg-muted hover:bg-muted/80 justify-start text-left whitespace-normal">
@@ -2032,7 +2032,7 @@ function WorldCupResultCard({ wc, career, onDismiss, onSpeech }: { wc: WorldCupR
           </Button>
         </div>
       ) : (
-        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-500">
+        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold text-black bg-emerald-600 hover:bg-emerald-500">
           Continue →
         </Button>
       )}
@@ -2118,7 +2118,7 @@ function RivalryEventCard({ event, rival, career, onDismiss }: { event: RivalryE
           <div className="text-2xl font-black text-orange-400">{rival.overall}</div>
         </div>
       </div>
-      <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-orange-600 hover:bg-orange-500 text-white">
+      <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-orange-600 hover:bg-orange-500 text-black">
         Continue →
       </Button>
     </div>
@@ -2421,7 +2421,7 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: Ba
         ))}
       </div>
       
-      <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-white ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
+      <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-black ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
         Continue →
       </Button>
     </div>
@@ -2503,7 +2503,7 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
       {/* Post-retirement choices */}
       <div className="space-y-2">
         <div className="text-xs text-center text-muted-foreground font-bold uppercase">What's Next?</div>
-        <Button onClick={() => onPostRetirement("retire")} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+        <Button onClick={() => onPostRetirement("retire")} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
           🏖️ Retire and Enjoy Life
         </Button>
         <Button onClick={() => onPostRetirement("manager")} variant="outline" className="w-full h-11 text-sm font-bold">
@@ -2527,7 +2527,7 @@ function PostRetirementCard({ career, onChoice }: { career: CareerState; onChoic
   return (
     <div className="rounded-xl border border-border p-5 space-y-3 text-center">
       <h3 className="text-lg font-black">What's Next?</h3>
-      <Button onClick={() => onChoice("retire")} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white">🏖️ Retire and Enjoy Life</Button>
+      <Button onClick={() => onChoice("retire")} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">🏖️ Retire and Enjoy Life</Button>
       <Button onClick={() => onChoice("manager")} variant="outline" className="w-full h-11 text-sm font-bold">📋 Become a Manager</Button>
       <Button onClick={() => onChoice("pundit")} variant="outline" className="w-full h-11 text-sm font-bold">🎙️ Become a TV Pundit</Button>
       {career.netWorth >= 200 && (
@@ -2762,7 +2762,7 @@ function MoralDilemmaCard({ career, onChoice, onDismiss }: {
           <h3 className="text-lg font-black">Decision Made</h3>
           <p className="text-xs text-muted-foreground">The consequences of your choice will unfold...</p>
         </div>
-        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-red-600 hover:bg-red-500 text-white">
+        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-red-600 hover:bg-red-500 text-black">
           Continue →
         </Button>
       </div>
@@ -2882,7 +2882,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
             <div className="text-xs text-emerald-400 font-bold">{activeTierInfo.emoji} {activeTierInfo.name}: €{activeTierInfo.income}M/year</div>
           )}
         </div>
-        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white">
+        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-black">
           Continue →
         </Button>
       </div>
@@ -3315,7 +3315,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 <div className="bg-muted/20 rounded-lg p-2"><div className="font-black text-lg text-amber-400">{career.overall}</div><div className="text-muted-foreground">Current OVR</div></div>
               </div>
               <div className="space-y-2">
-                <Button onClick={onAcceptRetirement} className="w-full h-11 text-sm font-bold bg-amber-600 hover:bg-amber-500 text-white">
+                <Button onClick={onAcceptRetirement} className="w-full h-11 text-sm font-bold bg-amber-600 hover:bg-amber-500 text-black">
                   👋 Hang Up the Boots: Retire
                 </Button>
                 <Button onClick={onDeclineRetirement} variant="outline" className="w-full h-11 text-sm font-bold">
@@ -3621,7 +3621,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <Button onClick={onShare} variant="outline" className="flex-1 h-12 text-sm font-bold">
               📤 Share Legacy
             </Button>
-            <Button onClick={onNewCareer} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+            <Button onClick={onNewCareer} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
               ⚽ New Career
             </Button>
           </div>
@@ -3630,7 +3630,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             {/* Round 112: when you are out of work you are not managing a
                 season, you are waiting for a phone call, and the button
                 should say which one of those is happening. */}
-            <Button onClick={onAdvanceManager} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
+            <Button onClick={onAdvanceManager} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2">
               {career.managerState?.unemployed ? "Sit Out A Season" : "Next Manager Season"} <ChevronRight className="w-5 h-5" />
             </Button>
             <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold">
@@ -3639,14 +3639,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
         ) : career.phase === "owner_season" ? (
           <div className="flex-1 flex gap-2">
-            <Button onClick={onAdvanceOwner} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
+            <Button onClick={onAdvanceOwner} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2">
               Next Owner Season <ChevronRight className="w-5 h-5" />
             </Button>
             <Button onClick={onEndOwner} variant="outline" className="h-12 text-sm font-bold">Sell Club</Button>
           </div>
         ) : showActionButton ? (
           <div className="flex-1 flex gap-2">
-            <Button onClick={onNextSeason} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
+            <Button onClick={onNextSeason} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2">
               {career.phase === "youth" ? "Next Year" : "Next Season"} <ChevronRight className="w-5 h-5" />
             </Button>
             {(career.phase === "youth" || career.phase === "playing") && (
@@ -3675,7 +3675,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <p className="text-sm text-muted-foreground text-center">Are you sure you want to retire? Your career will end here.</p>
             <div className="flex gap-3">
               <Button onClick={() => setShowRetireConfirm(false)} variant="outline" className="flex-1 h-10 font-bold">Cancel</Button>
-              <Button onClick={() => { setShowRetireConfirm(false); onManualRetire(); }} className="flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-white">Confirm Retirement</Button>
+              <Button onClick={() => { setShowRetireConfirm(false); onManualRetire(); }} className="flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-black">Confirm Retirement</Button>
             </div>
           </div>
         </div>

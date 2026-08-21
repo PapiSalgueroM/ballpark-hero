@@ -305,7 +305,7 @@ export function LiveSimScreen({
         {banner && (
           <div className={cn(
             'absolute left-1/2 top-3 -translate-x-1/2 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-lg animate-in fade-in slide-in-from-top-2',
-            banner.tone === 'me' ? 'bg-emerald-500 text-white' : banner.tone === 'opp' ? 'bg-red-500 text-white' : 'bg-background/90 text-foreground border border-border',
+            banner.tone === 'me' ? 'bg-emerald-500 text-black' : banner.tone === 'opp' ? 'bg-red-500 text-black' : 'bg-background/90 text-foreground border border-border',
           )}>
             {banner.text}
           </div>

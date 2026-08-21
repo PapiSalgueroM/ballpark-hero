@@ -218,7 +218,7 @@ const ClueAuction = () => {
   ) : null;
 
   return (
-    <main className="min-h-screen bg-background">
+    <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
         title="Clue Auction: Buy Clues, Guess the Footballer | DoUKnowBall"
@@ -295,7 +295,7 @@ const ClueAuction = () => {
                     }
                   }}
                   placeholder="Name the secret player (2+ letters)"
-                  className="w-full bg-transparent py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  className="w-full bg-transparent py-3 text-sm text-foreground placeholder:text-muted-foreground"
                   autoComplete="off"
                   autoCorrect="off"
                   spellCheck={false}

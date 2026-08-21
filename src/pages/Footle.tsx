@@ -117,7 +117,7 @@ const Index = () => {
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-correct flex-shrink-0" />
                     <div>
-                      <span className="font-semibold text-correct-foreground">Green</span>
+                      <span className="font-semibold text-correct">Green</span>
                       <span className="text-muted-foreground">: Exact match!</span>
                     </div>
                   </div>
@@ -212,7 +212,7 @@ const Index = () => {
                         ? d === 'easy'
                           ? 'bg-correct text-correct-foreground'
                           : d === 'hard'
-                            ? 'bg-yellow-500 text-white'
+                            ? 'bg-yellow-500 text-black'
                             : 'bg-destructive text-destructive-foreground'
                         : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                     )}

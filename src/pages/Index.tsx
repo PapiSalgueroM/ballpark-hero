@@ -331,7 +331,8 @@ export default function Index() {
         path="/"
       />
       <HomeTileStyles />
-      <div className="min-h-screen bg-background text-foreground">
+      {/* Round 215: the skip link in App.tsx points here. */}
+      <div id="dukb-main" className="min-h-screen bg-background text-foreground">
         
         
         {/* ─── HERO ─── */}
@@ -404,6 +405,7 @@ export default function Index() {
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
+              aria-label="Search games"
               placeholder='Search games... e.g. soccer, grid, NBA'
               className="w-full pl-10 pr-10 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all"
             />

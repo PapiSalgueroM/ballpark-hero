@@ -362,6 +362,7 @@ export default function NbaMyCareerBoard() {
             value={nameInput}
             onChange={e => setNameInput(e.target.value)}
             placeholder="Your player's name"
+            aria-label="Your player name"
             maxLength={24}
             className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
           />

@@ -70,7 +70,7 @@ export function TennisPlayerBoard() {
           </div>
 
           {status === 'loading' && (
-            <p className="text-sm text-green-700">Loading players...</p>
+            <p className="text-sm text-green-400">Loading players...</p>
           )}
           {status === 'error' && (
             <button onClick={reloadPlayers} className="inline-flex items-center px-3 py-2 text-sm text-red-400 underline">
@@ -78,7 +78,7 @@ export function TennisPlayerBoard() {
             </button>
           )}
           {status === 'ready' && allPlayers.length === 0 && (
-            <p className="text-sm text-green-700">No players available yet. Check back soon.</p>
+            <p className="text-sm text-green-400">No players available yet. Check back soon.</p>
           )}
 
           <GameNav />
@@ -106,7 +106,7 @@ export function TennisPlayerBoard() {
             <span className="text-purple-400">Tennis Player</span>
           </h1>
           {!isOver && (
-            <p className="text-sm text-green-700 mt-1">
+            <p className="text-sm text-green-400 mt-1">
               Clue {revealedClues}/{MAX_CLUES} · {pointsForCurrentClue} pts available
             </p>
           )}
@@ -125,17 +125,17 @@ export function TennisPlayerBoard() {
                 }`}
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <span className={`text-xs font-semibold uppercase tracking-wider ${isRevealed ? 'text-purple-400' : 'text-green-800'}`}>
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${isRevealed ? 'text-purple-400' : 'text-green-400'}`}>
                     {CLUE_LABELS[i]}
                   </span>
-                  {!isRevealed && <span className="text-xs text-green-800">🔒</span>}
+                  {!isRevealed && <span className="text-xs text-green-400">🔒</span>}
                 </div>
                 {isRevealed ? (
                   <p className={`text-sm ${i === 0 ? 'text-lg font-bold text-purple-400 italic' : 'text-green-300'}`}>
                     {clue}
                   </p>
                 ) : (
-                  <p className="text-sm text-green-800">Guess correctly or wait for this clue...</p>
+                  <p className="text-sm text-green-400">Guess correctly or wait for this clue...</p>
                 )}
               </div>
             );
@@ -162,7 +162,7 @@ export function TennisPlayerBoard() {
               {hasGuessed && !showGiveUpConfirm && (
                 <button
                   onClick={() => setShowGiveUpConfirm(true)}
-                  className="text-sm text-green-800 hover:text-red-400 transition-colors"
+                  className="text-sm text-green-400 hover:text-red-400 transition-colors"
                 >
                   🏳️ Give Up
                 </button>

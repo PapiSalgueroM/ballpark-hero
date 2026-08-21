@@ -276,7 +276,7 @@ const WorldXi = () => {
   );
 
   return (
-    <main className="min-h-screen bg-background">
+    <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
         title="World XI: Build a Squad From 11 Random Nations | DoUKnowBall"
@@ -435,7 +435,7 @@ const WorldXi = () => {
                 autoCorrect="off"
                 spellCheck={false}
                 disabled={spinning}
-                className="w-full px-4 py-3 rounded-xl bg-background border border-border text-foreground focus:outline-none focus:border-primary disabled:opacity-60"
+                className="w-full px-4 py-3 rounded-xl bg-background border border-border text-foreground focus:border-primary disabled:opacity-60"
               />
 
               {suggestions.length > 0 && (

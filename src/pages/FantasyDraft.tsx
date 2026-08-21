@@ -226,7 +226,7 @@ const FantasyDraft = () => {
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(145 40% 8%) 0%, hsl(152 35% 6%) 50%, hsl(225 25% 6%) 100%)' }}>
         <GameNavbar />
 
-        <main className="flex-1 flex flex-col items-center px-4 py-6 sm:py-10 relative overflow-hidden">
+        <main id="dukb-main" className="flex-1 flex flex-col items-center px-4 py-6 sm:py-10 relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] rounded-full border-2 border-foreground" />
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-foreground" />

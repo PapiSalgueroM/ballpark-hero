@@ -88,7 +88,7 @@ const BaseballConnections = () => {
 
             <div className="flex items-center justify-center gap-4 mt-3 text-sm">
               <span className="text-muted-foreground">
-                Groups found: <span className="font-semibold text-[hsl(var(--bb-red))]">{foundGroups}</span>/4
+                Groups found: <span className="font-semibold text-[hsl(var(--bb-red-ink))]">{foundGroups}</span>/4
               </span>
               <span className="text-muted-foreground">
                 Lives: <span className="font-semibold text-foreground">{'❤️'.repeat(lives)}{'🖤'.repeat(Math.max(0, 4 - lives))}</span>
@@ -97,7 +97,7 @@ const BaseballConnections = () => {
 
             <button
               onClick={() => setShowRules(true)}
-              className="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground hover:text-[hsl(var(--bb-red))] transition-colors"
+              className="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground hover:text-[hsl(var(--bb-red-ink))] transition-colors"
               aria-label="How to play"
             >
               <HelpCircle className="w-4 h-4" /> How to play
@@ -193,7 +193,7 @@ const BaseballConnections = () => {
               headline={lives > 0 ? 'All Groups Found!' : 'Out of Lives!'}
               statLine={
                 <>
-                  Found <span className="font-bold text-[hsl(var(--bb-red))]">{solvedGroups.filter((_, i) => i < puzzle.groups.length && lives > 0 || lives <= 0).length}</span>/4 groups
+                  Found <span className="font-bold text-[hsl(var(--bb-red-ink))]">{solvedGroups.filter((_, i) => i < puzzle.groups.length && lives > 0 || lives <= 0).length}</span>/4 groups
                   {lives > 0 && ` with ${lives} ${lives === 1 ? 'life' : 'lives'} remaining`}
                 </>
               }

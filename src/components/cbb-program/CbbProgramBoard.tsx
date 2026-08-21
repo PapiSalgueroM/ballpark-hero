@@ -58,7 +58,7 @@ export function CbbProgramBoard() {
           </div>
 
           {programsStatus === 'loading' && (
-            <p className="text-sm text-slate-500">Loading programs...</p>
+            <p className="text-sm text-slate-400">Loading programs...</p>
           )}
           {programsStatus === 'error' && (
             <div className="space-y-2">
@@ -72,7 +72,7 @@ export function CbbProgramBoard() {
             </div>
           )}
           {programsStatus === 'ready' && allPrograms.length === 0 && (
-            <p className="text-sm text-slate-500">No programs available yet. Check back soon.</p>
+            <p className="text-sm text-slate-400">No programs available yet. Check back soon.</p>
           )}
 
           <GameNav />
@@ -98,7 +98,7 @@ export function CbbProgramBoard() {
             <span className="text-amber-400">CBB Program</span>
           </h1>
           {!isOver && (
-            <p className="text-sm text-slate-500 mt-1">
+            <p className="text-sm text-slate-400 mt-1">
               Clue {revealedClues}/{MAX_CLUES} · {pointsForCurrentClue} pts available
             </p>
           )}
@@ -117,17 +117,17 @@ export function CbbProgramBoard() {
                 }`}
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <span className={`text-xs font-semibold uppercase tracking-wider ${isRevealed ? 'text-amber-400' : 'text-slate-600'}`}>
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${isRevealed ? 'text-amber-400' : 'text-slate-400'}`}>
                     {CLUE_LABELS[i]}
                   </span>
-                  {!isRevealed && <span className="text-xs text-slate-600">🔒</span>}
+                  {!isRevealed && <span className="text-xs text-slate-400">🔒</span>}
                 </div>
                 {isRevealed ? (
                   <p className={`text-sm ${i === 0 ? 'text-lg font-bold text-amber-400 italic' : 'text-slate-300'}`}>
                     {clue}
                   </p>
                 ) : (
-                  <p className="text-sm text-slate-700">Guess correctly or wait for this clue...</p>
+                  <p className="text-sm text-slate-400">Guess correctly or wait for this clue...</p>
                 )}
               </div>
             );
@@ -144,7 +144,7 @@ export function CbbProgramBoard() {
             <div className="flex justify-center">
               <button
                 onClick={giveUp}
-                className="px-4 py-2 text-sm rounded-lg border border-slate-700 text-slate-500 hover:text-amber-400 hover:border-amber-500/30 transition-colors"
+                className="px-4 py-2 text-sm rounded-lg border border-slate-700 text-slate-400 hover:text-amber-400 hover:border-amber-500/30 transition-colors"
               >
                 🏳️ Give Up
               </button>

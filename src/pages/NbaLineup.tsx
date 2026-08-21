@@ -162,7 +162,7 @@ const NbaLineup = () => {
                       className={cn(
                         'w-12 h-12 rounded-xl flex items-center justify-center text-sm font-bold transition-all',
                         isFilled
-                          ? 'bg-orange-500 text-white cursor-default'
+                          ? 'bg-orange-500 text-black cursor-default'
                           : isSelected
                             ? 'bg-primary text-primary-foreground scale-110 ring-2 ring-primary/50'
                             : 'bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground'

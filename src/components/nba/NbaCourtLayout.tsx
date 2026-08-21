@@ -42,7 +42,7 @@ const NbaCourtLayout = ({ positions, filledSlots, selectedPosition, challengeUni
               'absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-300',
               'flex flex-col items-center justify-center rounded-lg text-center min-w-[4.5rem] px-2 py-1.5',
               filled
-                ? 'bg-orange-500 text-white shadow-md shadow-orange-500/30'
+                ? 'bg-orange-500 text-black shadow-md shadow-orange-500/30'
                 : isSelected
                   ? 'bg-primary text-primary-foreground shadow-lg scale-110 ring-2 ring-primary/50 animate-pulse'
                   : 'bg-card border border-border text-foreground opacity-60'

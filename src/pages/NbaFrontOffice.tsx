@@ -14,7 +14,7 @@ const NbaFrontOffice = () => {
       />
       <div className="min-h-screen bg-background text-foreground">
         <GameNavbar />
-        <main className="container max-w-2xl mx-auto px-4 py-6 pb-20">
+        <main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-6 pb-20">
           <div className="text-center mb-4">
             <h1 className="text-2xl font-display font-bold text-primary">NBA Front Office</h1>
             <p className="text-xs text-muted-foreground mt-1">

@@ -348,6 +348,7 @@ export function PlayerAutocomplete({
             if (normalizeName(value).length >= minChars) setOpen(true);
           }}
           placeholder={placeholder}
+          aria-label={placeholder || 'Search players'}
           disabled={disabled}
           autoFocus={autoFocus}
           autoComplete="off"

@@ -144,7 +144,7 @@ const NbaChain = () => {
                   className={cn(
                     'inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm transition-all',
                     i === 0
-                      ? 'bg-primary/20 text-primary border border-primary/30'
+                      ? 'bg-primary/20 text-[hsl(152,60%,52%)] border border-primary/30'
                       : i === chain.length - 1
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-secondary text-foreground'

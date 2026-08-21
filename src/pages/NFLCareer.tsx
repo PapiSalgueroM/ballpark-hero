@@ -101,10 +101,10 @@ const NFLCareer = () => {
               key={`hidden-${i}`}
               className="bg-card/40 border border-border/50 rounded-xl px-5 py-4 flex items-center gap-4"
             >
-              <span className="text-xs font-bold text-muted-foreground/50 uppercase tracking-wider w-24 shrink-0">
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider w-24 shrink-0">
                 Clue {cluesRevealed + i + 1}
               </span>
-              <span className="text-muted-foreground/30 text-sm">???</span>
+              <span className="text-muted-foreground text-sm">???</span>
             </div>
           ))}
         </div>

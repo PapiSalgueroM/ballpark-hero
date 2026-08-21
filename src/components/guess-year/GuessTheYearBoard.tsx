@@ -118,6 +118,7 @@ export function GuessTheYearBoard() {
                 <Button
                   variant="outline"
                   size="icon"
+                  aria-label="Back ten years"
                   onClick={() => handleYearChange(-10)}
                   disabled={selectedYear - 10 < yearRange.min}
                 >
@@ -127,6 +128,7 @@ export function GuessTheYearBoard() {
                 <Button
                   variant="outline"
                   size="icon"
+                  aria-label="Back one year"
                   onClick={() => handleYearChange(-1)}
                   disabled={selectedYear <= yearRange.min}
                 >
@@ -143,6 +145,7 @@ export function GuessTheYearBoard() {
                 <Button
                   variant="outline"
                   size="icon"
+                  aria-label="Forward one year"
                   onClick={() => handleYearChange(1)}
                   disabled={selectedYear >= yearRange.max}
                 >
@@ -151,6 +154,7 @@ export function GuessTheYearBoard() {
                 <Button
                   variant="outline"
                   size="icon"
+                  aria-label="Forward ten years"
                   onClick={() => handleYearChange(10)}
                   disabled={selectedYear + 10 > yearRange.max}
                 >

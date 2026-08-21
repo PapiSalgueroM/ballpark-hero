@@ -88,7 +88,7 @@ export function F1ConstructorBoard() {
         <div className="text-center">
           <h1 className="text-3xl font-display font-bold text-red-500">Guess The F1 Constructor</h1>
           {!isOver && (
-            <p className="text-sm text-zinc-500 mt-1">
+            <p className="text-sm text-zinc-400 mt-1">
               Clue {revealedClues}/{MAX_CLUES} · {pointsForCurrentClue} pts available
             </p>
           )}
@@ -107,17 +107,17 @@ export function F1ConstructorBoard() {
                 }`}
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <span className={`text-xs font-semibold uppercase tracking-wider ${isRevealed ? 'text-red-400' : 'text-zinc-600'}`}>
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${isRevealed ? 'text-red-400' : 'text-zinc-400'}`}>
                     {CLUE_LABELS[i]}
                   </span>
-                  {!isRevealed && <span className="text-xs text-zinc-600">🔒</span>}
+                  {!isRevealed && <span className="text-xs text-zinc-400">🔒</span>}
                 </div>
                 {isRevealed ? (
                   <p className={`text-sm ${i === 0 ? 'text-lg font-bold text-red-400 italic' : 'text-zinc-300'}`}>
                     {clue}
                   </p>
                 ) : (
-                  <p className="text-sm text-zinc-700">Guess correctly or wait for this clue...</p>
+                  <p className="text-sm text-zinc-400">Guess correctly or wait for this clue...</p>
                 )}
               </div>
             );
@@ -144,7 +144,7 @@ export function F1ConstructorBoard() {
               {hasGuessed && !showGiveUpConfirm && (
                 <button
                   onClick={() => setShowGiveUpConfirm(true)}
-                  className="text-sm text-zinc-600 hover:text-red-400 transition-colors"
+                  className="text-sm text-zinc-400 hover:text-red-400 transition-colors"
                 >
                   🏳️ Give Up
                 </button>

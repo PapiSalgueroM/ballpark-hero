@@ -97,14 +97,14 @@ export function NascarChainBoard() {
               className="w-full p-6 rounded-xl border-2 border-red-600 bg-red-900/20 hover:bg-red-900/40 transition-all text-left"
             >
               <div className="text-lg font-bold text-red-400">🗓️ Daily Challenge</div>
-              <p className="text-sm text-neutral-500 mt-1">Same starting driver for everyone today</p>
+              <p className="text-sm text-neutral-400 mt-1">Same starting driver for everyone today</p>
             </button>
             <button
               onClick={() => startGame('unlimited')}
               className="w-full p-6 rounded-xl border-2 border-neutral-600 bg-neutral-900/20 hover:bg-neutral-900/40 transition-all text-left"
             >
               <div className="text-lg font-bold text-neutral-300">🔄 Unlimited</div>
-              <p className="text-sm text-neutral-500 mt-1">Random starting driver, play as many times as you like</p>
+              <p className="text-sm text-neutral-400 mt-1">Random starting driver, play as many times as you like</p>
             </button>
           </div>
 
@@ -125,7 +125,7 @@ export function NascarChainBoard() {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold text-red-500 mb-2">🏁 NASCAR Chain</h1>
-          <p className="text-sm text-neutral-500">
+          <p className="text-sm text-neutral-400">
             {gameState.mode === 'daily' ? '🗓️ Daily Challenge' : '🔄 Unlimited'}
           </p>
         </div>
@@ -145,7 +145,7 @@ export function NascarChainBoard() {
               <div className="bg-neutral-900 rounded-xl p-6 border border-red-600 max-w-md mx-auto">
                 <h2 className="text-xl font-bold text-red-400 mb-2">Current Champion</h2>
                 <div className="text-2xl font-bold text-white mb-2">{gameState.currentDriver}</div>
-                <p className="text-neutral-500 text-sm">Who beat this driver to the Cup Series title?</p>
+                <p className="text-neutral-400 text-sm">Who beat this driver to the Cup Series title?</p>
               </div>
             </div>
 
@@ -196,7 +196,7 @@ export function NascarChainBoard() {
 
               {!scoreSubmitted ? (
                 <div className="mb-6">
-                  <p className="text-neutral-500 mb-2">Enter your nickname to save your score</p>
+                  <p className="text-neutral-400 mb-2">Enter your nickname to save your score</p>
                   <div className="flex gap-2 max-w-xs mx-auto">
                     <input
                       type="text"
@@ -204,7 +204,7 @@ export function NascarChainBoard() {
                       onChange={(e) => setNickname(e.target.value)}
                       placeholder="Nickname"
                       maxLength={30}
-                      className="flex-1 min-w-0 bg-neutral-800 border border-neutral-600 rounded-md px-3 py-2 text-white placeholder:text-neutral-600 focus:outline-none focus:border-red-500"
+                      className="flex-1 min-w-0 bg-neutral-800 border border-neutral-600 rounded-md px-3 py-2 text-white placeholder:text-neutral-400 focus:border-red-500"
                     />
                     <Button
                       onClick={handleSaveScore}
@@ -225,7 +225,7 @@ export function NascarChainBoard() {
                 <div className="mb-6 text-left">
                   <h3 className="text-lg font-bold text-red-400 mb-3 text-center">🏆 Today's Top 10</h3>
                   <div className="bg-neutral-800 rounded-lg overflow-hidden">
-                    <div className="grid grid-cols-[40px_1fr_80px_80px] gap-1 p-2 text-xs text-neutral-500 font-semibold border-b border-neutral-700">
+                    <div className="grid grid-cols-[40px_1fr_80px_80px] gap-1 p-2 text-xs text-neutral-400 font-semibold border-b border-neutral-700">
                       <div>#</div><div>Nickname</div><div className="text-right">Chain</div><div className="text-right">Score</div>
                     </div>
                     {leaderboard.map((entry, i) => (

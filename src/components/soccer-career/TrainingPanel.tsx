@@ -325,7 +325,7 @@ export default function TrainingPanel({ career, available, onComplete, onClose }
               {CONES.map((c, i) => (
                 <button key={i} onClick={() => clickCone(i)}
                   className={`absolute w-9 h-9 -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center text-sm font-black transition-all ${
-                    i < coneIdx ? "bg-emerald-500/40 text-white/50 scale-90" :
+                    i < coneIdx ? "bg-emerald-500/40 text-black/50 scale-90" :
                     i === coneIdx ? "bg-amber-400 text-black animate-pulse scale-110 shadow-lg" :
                     "bg-white/15 text-white/70"
                   }`}
@@ -464,7 +464,7 @@ export default function TrainingPanel({ career, available, onComplete, onClose }
             {!banked ? (
               <button
                 onClick={() => { setBanked(true); onComplete(drill, score); }}
-                className="w-full h-11 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-black">
+                className="w-full h-11 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-black text-sm font-black">
                 Bank the session
               </button>
             ) : (

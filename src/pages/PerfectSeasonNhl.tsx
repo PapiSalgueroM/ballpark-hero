@@ -289,7 +289,7 @@ const PerfectSeasonNhl = () => {
     : '';
 
   return (
-    <main className="min-h-screen bg-background">
+    <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
         title="82-0: Perfect Season Hockey | DoUKnowBall"

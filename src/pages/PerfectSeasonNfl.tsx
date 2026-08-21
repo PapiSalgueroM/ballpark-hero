@@ -366,7 +366,7 @@ const PerfectSeasonNfl = () => {
     : '';
 
   return (
-    <main className="min-h-screen bg-background">
+    <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
         title="17-0: Perfect Season Football | DoUKnowBall"

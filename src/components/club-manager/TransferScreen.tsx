@@ -66,7 +66,7 @@ const STATUS_META: Record<TransferStatus, { short: string; tint: string; blurb: 
   },
   loanListed: {
     short: 'Loan',
-    tint: 'bg-sky-500 text-white border-sky-500',
+    tint: 'bg-sky-500 text-black border-sky-500',
     blurb: 'Available on loan. He plays elsewhere all season and comes back better.',
   },
   blocked: {
@@ -292,7 +292,7 @@ export function TransferScreen({
                   <select
                     value={swapId ?? ''}
                     onChange={e => setSwapId(e.target.value || null)}
-                    className="flex-1 bg-secondary border border-border rounded px-1.5 py-1 text-[10px] text-foreground outline-none"
+                    className="flex-1 bg-secondary border border-border rounded px-1.5 py-1 text-[10px] text-foreground"
                     aria-label="Part exchange player"
                   >
                     <option value="">No part exchange</option>
@@ -395,7 +395,7 @@ export function TransferScreen({
             <select
               value={posExact}
               onChange={e => { setPosExact(e.target.value as 'any' | Position); if (e.target.value !== 'any') setFilter('ALL'); }}
-              className="bg-card border border-border rounded-full px-2 py-1 text-[10px] font-bold text-foreground outline-none"
+              className="bg-card border border-border rounded-full px-2 py-1 text-[10px] font-bold text-foreground"
               aria-label="Exact position"
             >
               <option value="any">Exact position…</option>
@@ -406,7 +406,7 @@ export function TransferScreen({
             <select
               value={ageBand}
               onChange={e => setAgeBand(e.target.value as (typeof AGE_BANDS)[number]['id'])}
-              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground outline-none"
+              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground"
               aria-label="Age range"
             >
               {AGE_BANDS.map(b => <option key={b.id} value={b.id}>{b.label}</option>)}
@@ -414,7 +414,7 @@ export function TransferScreen({
             <select
               value={priceBand}
               onChange={e => setPriceBand(e.target.value as (typeof PRICE_BANDS)[number]['id'])}
-              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground outline-none"
+              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground"
               aria-label="Price range"
             >
               {PRICE_BANDS.map(b => <option key={b.id} value={b.id}>{b.label}</option>)}
@@ -422,7 +422,7 @@ export function TransferScreen({
             <select
               value={leaguePick}
               onChange={e => setLeaguePick(e.target.value)}
-              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground outline-none"
+              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground"
               aria-label="Selling league"
             >
               <option value="any">Any league</option>
@@ -431,7 +431,7 @@ export function TransferScreen({
             <select
               value={natPick}
               onChange={e => setNatPick(e.target.value)}
-              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground outline-none"
+              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground"
               aria-label="Nationality"
               data-nat-filter
             >
@@ -441,7 +441,7 @@ export function TransferScreen({
             <select
               value={sortKey}
               onChange={e => setSortKey(e.target.value as SortKey)}
-              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground outline-none"
+              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground"
               aria-label="Sort players"
             >
               <option value="rating">Best first</option>
@@ -569,7 +569,7 @@ export function TransferScreen({
                       disabled={blocked}
                       title={blocked ? 'Squad rules block this sale right now' : b.clauseMet ? 'Shake his hand now instead of on deadline day' : 'Accept the bid'}
                       className={cn('shrink-0 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all',
-                        !blocked ? 'bg-emerald-600 text-white hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
+                        !blocked ? 'bg-emerald-600 text-black hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
                     >
                       {b.clauseMet ? 'Let him go' : 'Accept'}
                     </button>

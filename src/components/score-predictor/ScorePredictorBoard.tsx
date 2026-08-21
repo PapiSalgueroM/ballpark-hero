@@ -98,6 +98,7 @@ export function ScorePredictorBoard() {
                   min={0}
                   max={200}
                   value={inputHome}
+                  aria-label={`${puzzle.homeTeam} score`}
                   onChange={e => setInputHome(e.target.value)}
                   placeholder="0"
                   className="w-full px-3 py-3 rounded-xl border border-border bg-card text-foreground text-center text-2xl font-bold placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -114,6 +115,7 @@ export function ScorePredictorBoard() {
                   min={0}
                   max={200}
                   value={inputAway}
+                  aria-label={`${puzzle.awayTeam} score`}
                   onChange={e => setInputAway(e.target.value)}
                   placeholder="0"
                   className="w-full px-3 py-3 rounded-xl border border-border bg-card text-foreground text-center text-2xl font-bold placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"

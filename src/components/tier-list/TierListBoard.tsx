@@ -6,11 +6,11 @@ import { GameNav } from '@/components/game/GameNav';
 import { TIERS, useTierList, type Tier } from '@/hooks/useTierList';
 
 const TIER_STYLE: Record<Tier, string> = {
-  S: 'bg-red-500/85 text-white',
-  A: 'bg-orange-500/85 text-white',
+  S: 'bg-red-500/85 text-black',
+  A: 'bg-orange-500/85 text-black',
   B: 'bg-amber-400/85 text-black',
   C: 'bg-lime-500/85 text-black',
-  D: 'bg-sky-500/85 text-white',
+  D: 'bg-sky-500/85 text-black',
 };
 
 export function TierListBoard() {

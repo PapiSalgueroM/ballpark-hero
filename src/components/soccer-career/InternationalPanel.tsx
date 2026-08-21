@@ -333,13 +333,13 @@ export function TournamentCard({
       {isWinner ? (
         <div className="space-y-1.5">
           <p className="text-center text-[11px] font-bold uppercase tracking-wider text-amber-300">The microphone is yours</p>
-          <Button onClick={() => onSpeech("for_the_country")} className="w-full h-auto py-2 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
+          <Button onClick={() => onSpeech("for_the_country")} className="w-full h-auto py-2 text-xs font-bold text-black bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
             🏆 Dedicate it to every kid back home
           </Button>
-          <Button onClick={() => onSpeech("shirt_to_the_fans")} className="w-full h-auto py-2 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
+          <Button onClick={() => onSpeech("shirt_to_the_fans")} className="w-full h-auto py-2 text-xs font-bold text-black bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
             🎽 Throw your shirt into the away end
           </Button>
-          <Button onClick={() => onSpeech("call_out_doubters")} className="w-full h-auto py-2 text-xs font-bold text-white bg-amber-700 hover:bg-amber-600 justify-start text-left whitespace-normal">
+          <Button onClick={() => onSpeech("call_out_doubters")} className="w-full h-auto py-2 text-xs font-bold text-black bg-amber-700 hover:bg-amber-600 justify-start text-left whitespace-normal">
             📢 Name the pundits who wrote you off
           </Button>
           <Button onClick={() => onSpeech("quiet_lap")} className="w-full h-auto py-2 text-xs font-bold text-white bg-muted hover:bg-muted/80 justify-start text-left whitespace-normal">
@@ -347,7 +347,7 @@ export function TournamentCard({
           </Button>
         </div>
       ) : (
-        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-500">
+        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold text-black bg-emerald-600 hover:bg-emerald-500">
           Continue →
         </Button>
       )}

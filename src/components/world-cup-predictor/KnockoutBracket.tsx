@@ -330,7 +330,7 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, autoFillRef }: K
                 <span className="text-[hsl(45,90%,55%)] text-[10px] sm:text-xs font-bold uppercase tracking-wider">
                   {ROUND_NAMES[rIdx]}
                 </span>
-                <span className="block text-[hsl(150,15%,40%)] text-[9px]">
+                <span className="block text-[hsl(150,15%,48%)] text-[9px]">
                   {ROUND_MATCH_COUNTS[rIdx]} match{ROUND_MATCH_COUNTS[rIdx] > 1 ? "es" : ""}
                 </span>
                 {/* Per-round auto-fill button */}
@@ -355,7 +355,7 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, autoFillRef }: K
                 {round.map((match, mIdx) => (
                   <div key={match.id} className="flex flex-col">
                     {rIdx === 0 && (
-                      <span className="text-[9px] font-bold text-[hsl(150,15%,40%)] uppercase tracking-wider mb-1 text-center">
+                      <span className="text-[9px] font-bold text-[hsl(150,15%,48%)] uppercase tracking-wider mb-1 text-center">
                         Match {mIdx + 1}
                       </span>
                     )}
@@ -440,7 +440,7 @@ const MatchCard = ({ match, onPick, isFinal }: MatchCardProps) => {
               ? isWinner
                 ? "text-[hsl(140,60%,65%)]"
                 : "text-white"
-              : "text-[hsl(0,0%,35%)] italic"
+              : "text-[hsl(0,0%,52%)] italic"
           }`}
           title={team}
         >

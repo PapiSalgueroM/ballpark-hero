@@ -232,6 +232,7 @@ const GuessTheCollege = () => {
                 onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
                 onKeyDown={handleKeyDown}
                 placeholder="Type a college name..."
+                aria-label="Type a college name"
                 className="w-full"
                 autoComplete="off"
               />

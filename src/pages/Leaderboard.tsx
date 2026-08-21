@@ -187,7 +187,7 @@ export default function Leaderboard() {
         path="/leaderboard"
       />
       <div className="min-h-screen bg-background">
-        <main className="max-w-4xl mx-auto px-4 py-8">
+        <main id="dukb-main" className="max-w-4xl mx-auto px-4 py-8">
           <h1 className="text-3xl md:text-4xl font-display font-bold mb-2 text-center">World Leaderboard</h1>
           <p className="text-center text-muted-foreground text-sm mb-6">
             One board, every game. Each game pays up to 100 pts a day: your best run counts, spamming doesn't.

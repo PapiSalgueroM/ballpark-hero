@@ -44,7 +44,7 @@ export function ModeSelector({ onSelectMode }: ModeSelectorProps) {
           className="bg-red-600 hover:bg-red-700 text-white h-auto py-4 flex flex-col"
         >
           <span className="text-lg font-bold">🗓️ Daily</span>
-          <span className="text-xs opacity-80 mt-1">Same fighter for everyone</span>
+          <span className="text-xs mt-1">Same fighter for everyone</span>
         </Button>
         
         <Button
@@ -52,7 +52,7 @@ export function ModeSelector({ onSelectMode }: ModeSelectorProps) {
           className="bg-gray-800 hover:bg-gray-700 text-white border border-red-600 h-auto py-4 flex flex-col"
         >
           <span className="text-lg font-bold">🔄 Unlimited</span>
-          <span className="text-xs opacity-80 mt-1">Random fighter each game</span>
+          <span className="text-xs mt-1">Random fighter each game</span>
         </Button>
         
         <Button
@@ -60,7 +60,7 @@ export function ModeSelector({ onSelectMode }: ModeSelectorProps) {
           className="bg-gray-800 hover:bg-gray-700 text-white border border-red-600 h-auto py-4 flex flex-col"
         >
           <span className="text-lg font-bold">⚖️ Weight Class</span>
-          <span className="text-xs opacity-80 mt-1">Stay within one division</span>
+          <span className="text-xs mt-1">Stay within one division</span>
         </Button>
         
         <Button
@@ -68,7 +68,7 @@ export function ModeSelector({ onSelectMode }: ModeSelectorProps) {
           className="bg-gray-800 hover:bg-gray-700 text-white border border-red-600 h-auto py-4 flex flex-col"
         >
           <span className="text-lg font-bold">🏆 Hall of Fame</span>
-          <span className="text-xs opacity-80 mt-1">Legends only</span>
+          <span className="text-xs mt-1">Legends only</span>
         </Button>
       </div>
     </div>
