@@ -47,6 +47,7 @@ import { CM_ROSTERS, CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 import { ERA2010_ROSTERS, ERA2010_META, ERA2010_PARTIAL } from '@/data/clubManagerEra2010';
 import { ERA2015_ROSTERS, ERA2015_META, ERA2015_PARTIAL } from '@/data/clubManagerEra2015';
+import { ERA2005_ROSTERS, ERA2005_META, ERA2005_PARTIAL } from '@/data/clubManagerEra2005';
 
 /**
  * The calendar year the baked rosters describe. CM_ROSTER_META.asOf reads
@@ -449,11 +450,13 @@ function generateFor(club: string, slot: ProjectedPlayer, year: number, idx: num
 export const HISTORIC_ROSTERS: Record<string, Record<string, BakedPlayer[]>> = {
   era2010: ERA2010_ROSTERS,
   era2015: ERA2015_ROSTERS,
+  era2005: ERA2005_ROSTERS,
 };
 
 export const HISTORIC_PARTIAL: Record<string, string[]> = {
   era2010: ERA2010_PARTIAL,
   era2015: ERA2015_PARTIAL,
+  era2005: ERA2005_PARTIAL,
 };
 
 export function isHistoricEra(id: string | undefined): boolean {
@@ -481,6 +484,15 @@ const ERA_RATING_UPLIFT: Record<string, { pivot: number; gain: number }> = {
      numbers above the modern best of 94, with Neymar and Suarez at 96 and
      the pre-title Leicester squad untouched below the pivot. */
   era2015: { pivot: 80, gain: 0.6 },
+  /* Round 176, calibrated off the measured 2005 bake: 2005 money is the
+     smallest of all (the era's biggest value is 40 million pounds), so raw
+     Ronaldinho and Henry read just 86 and the gain has to be the steepest.
+     At 1.67 the two Ballon d'Or class giants land at 96, above the modern
+     best of 94, Eto'o, Lampard and the Brazilian Ronaldo reach 91, and the
+     17 year old Messi stays an honest 73 far below the pivot. The gain per
+     era tracks how far that era's money sits below 2026's, which is why it
+     climbs as the seasons get older: 0.6, 0.7, 1.67. */
+  era2005: { pivot: 80, gain: 1.67 },
 };
 
 export function eraUpliftRating(eraId: string | undefined, r: number): number {
@@ -684,6 +696,14 @@ export const CM_ERAS: CMEra[] = [
     emoji: '\u{1F570}\u{FE0F}',
     blurb: 'Prime Messi. Mourinho\'s Madrid. Rooney\'s United. Premier League and La Liga, 2010-11.',
     honesty: `Real data. ${ERA2010_META.players} real players with their real 2010 ages and values, all 40 clubs of the 2010-11 Premier League and La Liga. Thin squads are padded with made up youth players and say so.`,
+  },
+  {
+    id: 'era2005',
+    label: seasonLabel(2005),
+    startYear: 2005,
+    emoji: '\u{1F4FC}',
+    blurb: 'Ronaldinho\'s Ballon d\'Or. Mourinho\'s Chelsea. A 17 year old Messi. Premier League and La Liga, 2005-06.',
+    honesty: `Real data. ${ERA2005_META.players} real players with their real 2005 ages and values, all 40 clubs of the 2005-06 Premier League and La Liga. Thin squads are padded with made up youth players and say so.`,
   },
 ];
 

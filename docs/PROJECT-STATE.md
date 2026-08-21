@@ -176,8 +176,26 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   names shared between 2010 and 2015 all age about five years, with verified namesakes
   allowlisted) and playEra2015 walks the UI branch (23 checks, both nations, the thin
   Las Palmas marker, August Leicester NOT told to win, Vardy and Schmeichel in the squad).
-  STILL OPEN from CM-5: era 2005 by the same recipe (data floor 2004, no honest 2000), and
-  more era leagues.
+  **2005 DONE, Round 176: CM-5 is COMPLETE as far as the data honestly reaches.** The fourth
+  era tile is 2005-06 (Ronaldinho's Ballon d'Or, Mourinho's back to back Chelsea, a 17 year
+  old Messi at 73 rated honestly): 747 real year-2005 players, both memberships verified
+  against Wikipedia plus worldfootball plus RSSSF, 26 window corrections all two-way verified
+  against year-2006 rows (Owen to Newcastle, Ramos and Baptista to Madrid, Villa to Valencia,
+  the Liverpool rebuild of Reina, Sissoko, Crouch and Morientes, Essien and SWP to Chelsea,
+  Park to United, van Bommel to Barcelona, Vieira and Figo out, and Newcastle's outgoing side
+  of the Owen summer: Bellamy, Jenas, Kluivert). Era vocabulary is period-correct: EURO_SLOTS
+  grew a uelName field, so 2005 boards demand the UEFA CUP and provably never say Europa or
+  Conference League. Uplift at the steepest measured gain (pivot 80, 1.67): raw Ronaldinho
+  and Henry 86 lift to 96 over the modern best of 94, and the gain-per-era comment documents
+  the pattern (0.6 / 0.7 / 1.67 tracking how far each era's money sits below 2026). Cadiz
+  (ONE real 2005 row) and Alaves (seven) ship as declared partial squads. simEra2005 is the
+  56th harness (the four-world isolation matrix: 2005 names checked against 2026, 2015 AND
+  2010 with per-pair verified namesake allowlists) and playEra2005 walks the UI (25 checks
+  including the UEFA Cup vocabulary read off the actual club tiles). 2005-06 is the floor:
+  the table bottoms at 2004 and the two-way verification needs the year after, so there is
+  no honest 2000 era and the picker footnote says so.
+  STILL OPEN from CM-5: more era leagues (a third league for an existing era by the same
+  recipe), nothing else.
 - CM-6 More leagues (wave 3 list in item 6 of the previous review, densities measured).
 - CM-7 **MOSTLY DONE, Round 161: structured deals and deep filters.** Negotiations take
   PACKAGES now: cash plus add-ons (weigh 60p on the pound, queue up and come due in later
@@ -630,7 +648,8 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, night again | **Round 173** (era starts for NHL and MLB, completing "add eras to nfl and nba and eveyr sport" across all four US sports: the 2006-07 NHL and the 2004 MLB, two-source verified, sealed era worlds end to end, era money at documented scales, era pickers on both create screens. Plus a simApproaches deflake its suite run caught: the "nobody courts a struggler" control now clears any approach earned during its ten UNDOCTORED setup weeks before counting, because a genuinely hot Everton start could earn a real call the section then blamed on the struggler. And for the record: simOpposition read 1.64 against its 1.5 equivalence tolerance in this suite run and 0.70 on the immediate rerun, same unseeded tail as Round 171, error bar 1.02, no Club Manager path was touched this round). `RUN173.bat`, chain-guarded on 172. **SHIP31.bat is the current wrapper: it runs 157 through 173.** |
 | Packaged 2026-08-18, late night | **Round 174** (the era words: all four sports' SEO copy and FAQs teach the throwbacks with the verified franchise facts, plus the stale-copy sweep it surfaced: the NFL page's 3-position claim, the NBA page's G/F/C claim, and leftover duplicate create steps in the hockey and baseball howToPlay lists). `RUN174.bat`, chain-guarded on 173. **SHIP32.bat is the current wrapper: it runs 157 through 174.** |
 | Packaged 2026-08-18, past midnight | **Round 175** (the 2015-16 era for Club Manager, CM-5's biggest remaining half: the Leicester season baked from 767 real year-2015 rows with 56 two-way-verified window corrections, era uplift at measured 0.6, the What's New page catching up on all the era work, and two new harnesses: simEra2015 and the playEra2015 browser walk. Plus a simUsCoaching deflake its suite run caught: section 4's offer-count noise margin sat at 1.7 sigma on the tightest pair at 300 samples, so the row sample grew to 1500 where the same margin sits past 3, with the measurement in the comment; the deterministic standing check was always the real assertion). `RUN175.bat`, chain-guarded on 174. **SHIP33.bat is the current wrapper: it runs 157 through 175.** |
-| Next free round number | **176** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-19, small hours | **Round 176** (the 2005-06 era, completing CM-5 to the data floor: Ronaldinho's season with 747 real year-2005 players, 26 two-way-verified window corrections, period-correct UEFA Cup vocabulary via the new uelName field, the steepest measured uplift, Cadiz and Alaves honestly partial, simEra2005 and playEra2005 as harnesses 56 and the fourth browser walk, plus kit colors for the era-only clubs both new and previously gray). `RUN176.bat`, chain-guarded on 175. **SHIP34.bat is the current wrapper: it runs 157 through 176.** |
+| Next free round number | **177** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

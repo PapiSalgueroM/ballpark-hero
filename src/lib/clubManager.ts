@@ -1583,6 +1583,20 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
       clubs: ['Athletic Club', 'Atlético Madrid', 'Barcelona', 'Celta Vigo', 'Deportivo La Coruña', 'Eibar', 'Espanyol', 'Getafe', 'Granada', 'Las Palmas', 'Levante', 'Málaga', 'Rayo Vallecano', 'Real Betis', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Sporting Gijón', 'Valencia', 'Villarreal'],
     },
   ],
+  /* Round 176: the 2005-06 season, memberships verified against the season
+     records (Wikipedia and worldfootball plus RSSSF final tables, checked
+     2026-08-19) AND against the market values table itself. Cadiz and
+     Alaves are the two thin squads and the picker says so. */
+  era2005: [
+    {
+      id: 'premier2005', name: 'Premier League', cupName: 'FA Cup', euro: true,
+      clubs: ['Arsenal', 'Aston Villa', 'Birmingham City', 'Blackburn Rovers', 'Bolton Wanderers', 'Charlton Athletic', 'Chelsea', 'Everton', 'Fulham', 'Liverpool', 'Manchester City', 'Manchester United', 'Middlesbrough', 'Newcastle', 'Portsmouth', 'Sunderland', 'Tottenham', 'West Brom', 'West Ham', 'Wigan Athletic'],
+    },
+    {
+      id: 'laliga2005', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
+      clubs: ['Alavés', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Cádiz', 'Celta Vigo', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Málaga', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Betis', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Valencia', 'Villarreal', 'Zaragoza'],
+    },
+  ],
 };
 
 /** The league a club plays in within a given era. Null when the era is not
@@ -1836,6 +1850,9 @@ const CLUB_COLORS: Record<string, string> = {
   // crest art anywhere, per the legal rules).
   'Leicester City': '#0053a0', 'Eibar': '#8f2242', 'Granada': '#c8102e',
   'Las Palmas': '#fee23e', 'Sporting Gijón': '#e30613',
+  // Round 176: 2005-06 era clubs not covered above.
+  'Cádiz': '#ffe100', 'Zaragoza': '#2b5da8', 'Wigan Athletic': '#1d59af',
+  'Almería': '#d02128', 'Hércules': '#1d59af',
 };
 
 /**
@@ -5825,7 +5842,13 @@ function relegationSpots(leagueId: string): number {
  * England or Spain, the Eredivisie champion goes in but third place is
  * qualifying rounds, and that difference is the realism he is asking for.
  */
-interface EuroSlots { ucl: number; uel: number; uecl: number }
+interface EuroSlots {
+  ucl: number; uel: number; uecl: number;
+  /** Round 176: what the second UEFA competition was CALLED in this
+   *  league's era. Absent means Europa League (its name since 2009). The
+   *  2005-06 era ran the UEFA Cup, and a 2005 board must say so. */
+  uelName?: string;
+}
 export const EURO_SLOTS: Record<string, EuroSlots> = {
   premier:    { ucl: 4, uel: 5, uecl: 6 },
   laliga:     { ucl: 4, uel: 5, uecl: 6 },
@@ -5846,6 +5869,10 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
   // did not exist (it began in 2021), so uecl stays 0 here too.
   premier2015: { ucl: 4, uel: 5, uecl: 0 },
   laliga2015:  { ucl: 4, uel: 6, uecl: 0 },
+  // Round 176: 2005-06. No Conference League, and the second competition
+  // was still called the UEFA Cup (it became the Europa League in 2009).
+  premier2005: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' },
+  laliga2005:  { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' },
 };
 
 /* Round 145: the title band is measured, not guessed. His review, 2026-08-17:
@@ -5962,7 +5989,7 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
       return { target: slots.ucl, label: `Qualify for the Champions League` };
     }
     if (rank <= slots.uel + 2 + over) {
-      return { target: slots.uel, label: `Qualify for the Europa League` };
+      return { target: slots.uel, label: `Qualify for the ${slots.uelName ?? 'Europa League'}` };
     }
     // uecl 0 means the era predates the Conference League: no such band.
     if (slots.uecl && rank <= slots.uecl + 3 + over) {
