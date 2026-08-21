@@ -335,6 +335,23 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     fetch: () => col('wnba_finals', 'winner'),
   },
   {
+    id: 'afl-premiers',
+    title: 'VFL/AFL Premiers',
+    blurb: 'Every club to win the flag, under the name it wore at the time.',
+    sport: 'AFL', emoji: '🏉', minAnswers: 12,
+    // afl_premiers: built Round 234. 129 rows, one premier per season
+    // 1897-2025 with no gaps, two-source verified 2026-08-20 against
+    // afl.com.au and aflonline.com.au, which agree on every year. 18
+    // distinct names because clubs are recorded as they were at the time
+    // (South Melbourne before the Sydney move, Footscray before the
+    // Western Bulldogs rename), the same convention the NBA list uses
+    // for the Minneapolis Lakers. Famous counts hold: Essendon, Carlton
+    // and Collingwood 16 flags each. simListQuizSources ratchets the
+    // table at exactly 129 rows and pins the counts; when the 2026
+    // grand final is played, the new row and the ratchet move together.
+    fetch: () => col('afl_premiers', 'premier'),
+  },
+  {
     id: 'usopen-tennis-champs',
     title: 'US Open Singles Champions',
     blurb: 'Every singles champion at the US Open in our records.',

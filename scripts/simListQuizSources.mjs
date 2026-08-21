@@ -130,6 +130,8 @@ if (!reachable && listsById.size === 0) {
     ["cfb-champs", "texas"], ["cfb-champs", "indiana"], ["cfb-champs", "penn state"],
     ["cbb-champs", "ucla"], ["cbb-champs", "duke"], ["cbb-champs", "florida"],
     ["wnba-champs", "aces"],
+    ["afl-premiers", "collingwood"], ["afl-premiers", "brisbane lions"],
+    ["afl-premiers", "west coast"], ["afl-premiers", "st kilda"], ["afl-premiers", "footscray"],
     ["ballon-dor-winners", "messi"], ["ballon-dor-winners", "rodri"], ["ballon-dor-winners", "dembele"],
     ["heisman-winners", "travis hunter"], ["heisman-winners", "mendoza"],
   ];
@@ -172,7 +174,39 @@ if (!reachable && listsById.size === 0) {
   await yearPin("ballon_dor", "year", 2025, "player_name", "dembele", q => q.eq("rank", 1).eq("award_type", "Men"));
   await yearPin("cfb_heisman_winners", "year", 2024, "winner", "travis hunter");
   await yearPin("cfb_heisman_winners", "year", 2025, "winner", "mendoza");
+  await yearPin("afl_premiers", "year", 2025, "premier", "brisbane");
   console.log("   pins done");
+
+  /* the AFL premiers roll is a Round 234 build, two-source verified
+     (afl.com.au against aflonline.com.au, 2026-08-20, agreeing on every
+     year). Exact ratchet: 129 seasons 1897 through 2025, each year once,
+     18 names because clubs are recorded as they were at the time, and
+     the famous flag counts. When the 2026 grand final is played, the new
+     row and these numbers move together, on purpose. */
+  try {
+    const { data, error } = await supabase.from("afl_premiers").select("year, premier");
+    if (error) throw new Error(error.message);
+    const rows = data ?? [];
+    if (rows.length !== 129) fail(`afl_premiers: ${rows.length} rows, the verified roll is exactly 129 (1897 to 2025)`);
+    const years = new Set(rows.map(r => r.year));
+    if (years.size !== rows.length) fail("afl_premiers: a season appears twice");
+    for (let y = 1897; y <= 2025; y++) if (!years.has(y)) fail(`afl_premiers: season ${y} is missing`);
+    const counts = new Map();
+    for (const r of rows) counts.set(r.premier, (counts.get(r.premier) ?? 0) + 1);
+    if (counts.size !== 18) fail(`afl_premiers: ${counts.size} distinct names, the roll has 18`);
+    const FLAGS = [
+      ["Essendon", 16], ["Carlton", 16], ["Collingwood", 16],
+      ["Richmond", 13], ["Hawthorn", 13], ["Melbourne", 13],
+      ["Geelong", 10], ["Fitzroy", 8], ["St Kilda", 1], ["Western Bulldogs", 1],
+    ];
+    for (const [club, n] of FLAGS) {
+      if ((counts.get(club) ?? 0) !== n) fail(`afl_premiers: ${club} shows ${counts.get(club) ?? 0} flags, the record says ${n}`);
+    }
+    console.log("   afl_premiers: 129 seasons, 18 names, famous counts hold");
+  } catch {
+    console.log("   afl_premiers: UNREACHABLE, NOT CHECKED.");
+    reachable = false;
+  }
 
   /* ------------------------------------ 4: the finals-table shape fences */
   console.log("3) shape fences on the finals-series tables");

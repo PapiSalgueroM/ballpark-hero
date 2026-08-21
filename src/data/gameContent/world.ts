@@ -314,7 +314,7 @@ export const WORLD_CONTENT: GameContentMap = {
   '/list-quiz': {
     intro: [
       "Pick a list, empty your brain into the box. Name Them All is the classic recall quiz: every Super Bowl MVP, every F1 world champion, every Masters winner, and you versus the blanks.",
-      "There are 26 lists across a dozen sports, all built from the site's records database, so the answer key is real history.",
+      "There are 27 lists across a dozen sports, from Heisman winners to VFL/AFL premiers, all built from the site's records database, so the answer key is real history.",
     ],
     howToPlay: [
       "Choose a list from the menu, anything from Heisman winners to Stanley Cup champions.",
