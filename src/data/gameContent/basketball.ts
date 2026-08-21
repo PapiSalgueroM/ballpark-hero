@@ -480,6 +480,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Get drafted by a real NBA team. Stronger prospects go higher and earn more.",
       "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
       "Handle the offseason event, one big decision per summer.",
+      "When the contract runs out, work a real free agency window: competing offers from named franchises with their own money, length and roster quality, and one push for more on any of them.",
       "Retire when the body or the fire quits, and face the legacy verdict.",
     ],
     rules: [
@@ -496,11 +497,12 @@ export const BASKETBALL_CONTENT: GameContentMap = {
     tips: [
       "Pick the archetype for the career you want to live. Durability differences are real.",
       "Do not sit on low health. Injuries shred seasons, and awards need games played.",
-      "Team quality moves your stats and playoff odds. Free agency is a basketball decision, not just money.",
+      "Team quality moves your stats and playoff odds. Free agency is a basketball decision, not just money: the contender offers less than the rebuild, and the roster number on the card is what your next seasons actually run on.",
     ],
     faqs: [
       { q: "Can I play as a real NBA star?", a: "No, your player is fictional by design. The teams around you are real, 30 of them today and 29 in the throwback, but the career is yours to invent." },
       { q: "Can I start in a different era?", a: "Yes. The create screen has a 2003-04 throwback: the 29 team league with the Seattle SuperSonics, the New Jersey Nets and the New Orleans Hornets, and no Charlotte franchise yet. An era career never meets a team that did not exist then." },
+      { q: "How does free agency work?", a: "An expired deal opens a window of real offers: your team's re-sign number plus named suitors, each with its own salary, years and roster quality. You can push any offer for more once. A weak case can get an offer pulled, but your own team never walks, so there is always a deal to sign." },
       { q: "What does the legacy score reward most?", a: "MVPs and rings move it hardest, then Finals MVPs and All-NBA nods, plus longevity and points. The top verdict is the GOAT conversation, and it takes a stacked case." },
       { q: "Is my career saved?", a: "Yes, progress auto saves in your browser. One career at a time, and starting fresh means retiring first." },
     ],

@@ -21,6 +21,9 @@ import type { CareerRival } from './careerRival';
 import { getNflLifeEventsA } from './nflCareerLifeA';
 import { getNflLifeEventsB } from './nflCareerLifeB';
 import { getNflCorruptionEvents } from './nflCareerCorruption';
+// Round 179: the shared free agency engine, one implementation for all four sports.
+import { buildFaWindow } from './usCareerFreeAgency';
+import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
 
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
@@ -670,33 +673,38 @@ export function marketSalary(c: CareerState): number {
   return Math.max(0.4, Math.round(((c.ovr - 64) * 1.55 - 6) * posMult * scale * 10) / 10);
 }
 
+/* Round 179: the real free agency window. Replaces the old two-button
+   contract card that used to hide in the event deck (and could fail to be
+   drawn at all, letting you play years on an expired deal). The board now
+   opens this window before any season starts with no contract. */
+export function buildNflFaWindow(c: CareerState, incumbentQuality: number, rng: () => number = Math.random): FaWindow {
+  return buildFaWindow({
+    sport: 'nfl',
+    currentTeam: c.team,
+    pool: nflEraById(c.eraId).teams.map(t => ({ id: t.abbr, label: t.label })),
+    market: marketSalary(c),
+    discount: 0.88,
+    minSalary: 0.4,
+    ovr: c.ovr,
+    age: c.age,
+    accolades: c.allPros,
+    cliffAge: POS_CLIFF_AGE[c.pos] ?? 31,
+    incumbentQuality,
+    rng,
+  });
+}
+
+export function nflFaPushArgs(c: CareerState, rng: () => number = Math.random): FaPushArgs {
+  return { ovr: c.ovr, age: c.age, accolades: c.allPros, cliffAge: POS_CLIFF_AGE[c.pos] ?? 31, rng };
+}
+
 /** Between-season decision deck. One event is drawn per offseason. */
 export function drawEvent(c: CareerState, rng: () => number): CareerEvent {
   const deck: CareerEvent[] = [];
 
-  if (c.contractYears <= 0) {
-    const market = marketSalary(c);
-    deck.push({
-      id: 'contract',
-      title: 'Contract time',
-      body: `Your deal is up. ${teamLabelOf(c.team, c.eraId)} offer ${Math.round(market * 0.88 * 10) / 10}M to stay. Free agency could pay ${market}M, on a contender or a rebuild, nobody knows.`,
-      options: [
-        {
-          label: 'Re-sign at a hometown discount', effect: 'Loyalty, morale up',
-          apply: (cc) => { cc.salary = Math.round(market * 0.88 * 10) / 10; cc.contractYears = 3; cc.morale += 8; cc.fanbase = Math.min(100, cc.fanbase + 10); return `Re-signed with ${teamLabelOf(cc.team, cc.eraId)} for ${cc.salary}M x3.`; },
-        },
-        {
-          label: 'Test free agency', effect: 'Max money, new city',
-          apply: (cc, r) => {
-            const pool = nflEraById(cc.eraId).teams;
-            const newTeam = pool[Math.floor(r() * pool.length)].abbr;
-            cc.team = newTeam; cc.salary = market; cc.contractYears = 3; cc.fanbase = 40;
-            return `Signed with ${teamLabelOf(newTeam, cc.eraId)} for ${market}M x3. New city, new pressure.`;
-          },
-        },
-      ],
-    });
-  }
+  /* Round 179: the 'contract' card left this deck. Contract summers are now
+     the free agency window (buildNflFaWindow), which the board guarantees
+     before the next season instead of hoping the deck draws it. */
 
   deck.push({
     id: 'training',

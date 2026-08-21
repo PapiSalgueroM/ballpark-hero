@@ -332,7 +332,8 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
       "Get drafted by a real club; your slot reflects your starting ability.",
       "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
-      "Face one big offseason decision each year: contracts, training, trade requests, media noise.",
+      "Face one big offseason decision each year: training, trade requests, media noise.",
+      "When the deal expires, hit July 1 for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
       "Age, decline, retire, then read the legacy verdict.",
     ],
     rules: [
@@ -350,7 +351,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Durability is baked into the archetype. Power forwards break down; two-way types last.",
       "Skills coach summers add rating while you are young; from 31 on they quietly become body maintenance.",
       "Morale feeds the stat engine, so playing miserable costs real production.",
-      "Free agency pays top dollar, but the destination is a lottery. Staying keeps the fans on your side.",
+      "In free agency the rebuild pays the most and the contender pays the least. The roster number on each offer is the exact quality your next seasons run on, so the choice is money against playoff springs.",
     ],
     faqs: [
       {

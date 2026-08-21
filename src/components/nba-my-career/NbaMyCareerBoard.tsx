@@ -5,8 +5,13 @@ import { NBA_ERAS,
   NBA_ARCHETYPES, startNbaCareer, simNbaSeason, nbaProgress, drawNbaEvent,
   NBA_SPEND_ITEMS, buyNbaItem, type NbaSpendCategory,
   nbaShouldRetire, nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaTeamLabelOf, nbaMarketSalary,
+  buildNbaFaWindow, nbaFaPushArgs,
   type NbaCareerPos, type NbaCareerState, type NbaCareerEvent, type NbaSeasonLine,
 } from '@/lib/nbaMyCareer';
+// Round 179: real free agency, shared engine and shared screen.
+import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
+import type { FaWindow } from '@/lib/usCareerFreeAgency';
+import FreeAgencyPanel from '@/components/us-career/FreeAgencyPanel';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { nbaHeatLabel } from '@/lib/nbaCareerCorruption';
@@ -20,8 +25,10 @@ import type { CoachCareerState } from '@/lib/usCoachCareer';
 import { cn } from '@/lib/utils';
 
 /* Round 126: 'coach' is new. Retirement used to be the last screen in the
-   game. Now it hands you to a job board and the save keeps going. */
-type Phase = 'create' | 'season' | 'event' | 'retired' | 'coach';
+   game. Now it hands you to a job board and the save keeps going.
+   Round 179: 'freeagency' is new. An expired deal now opens a real market
+   window before the next season. */
+type Phase = 'create' | 'season' | 'event' | 'freeagency' | 'retired' | 'coach';
 
 const SAVE_KEY = 'nba-my-career-save-v1';
 
@@ -43,6 +50,10 @@ export default function NbaMyCareerBoard() {
   const [feed, setFeed] = useState<string[]>([]);
   const [pendingEvent, setPendingEvent] = useState<NbaCareerEvent | null>(null);
   const [lastLine, setLastLine] = useState<NbaSeasonLine | null>(null);
+  /* Round 179: the open market. Not persisted on purpose: a reload lands on
+     the season hub and the next Play click rebuilds a fresh window. */
+  const [faWindow, setFaWindow] = useState<FaWindow | null>(null);
+  const [talkLine, setTalkLine] = useState<string | null>(null);
   /* Round 126: the coaching career. It lives in a ref as well as in state so
      persist can always write the current one without every existing call site
      having to learn about it. */
@@ -118,6 +129,17 @@ export default function NbaMyCareerBoard() {
       return;
     }
 
+    /* Round 179: no deal, no tipoff. The window is guaranteed here, which
+       also closes the old hole where the event deck could skip the contract
+       card and let you play years on an expired contract. */
+    if (c.contractYears <= 0) {
+      setFaWindow(buildNbaFaWindow(c, teamQuality, Math.random));
+      setTalkLine(null);
+      setPhase('freeagency');
+      persist(c, 'season', teamQuality);
+      return;
+    }
+
     const { line, notes } = simNbaSeason(c, teamQuality, Math.random);
     const progressNotes = nbaProgress(c, Math.random);
     setLastLine(line);
@@ -151,6 +173,29 @@ export default function NbaMyCareerBoard() {
     persist(c, 'season', tq);
   };
 
+  /* Round 179: the market handlers. Signing writes the offer onto the career
+     and the offer's roster quality becomes the real teamQuality. */
+  const signFa = (idx: number) => {
+    if (!career || !faWindow) return;
+    const offer = faWindow.offers[idx];
+    if (!offer || offer.gone) return;
+    const c: NbaCareerState = JSON.parse(JSON.stringify(career));
+    const line = applyFaSigning(c, offer);
+    setCareer(c);
+    setTeamQuality(offer.quality);
+    setFeed(f => [line, ...f].slice(0, 6));
+    setFaWindow(null);
+    setTalkLine(null);
+    setPhase('season');
+    persist(c, 'season', offer.quality);
+  };
+  const pushFa = (idx: number) => {
+    if (!career || !faWindow) return;
+    const res = pushFaOffer(faWindow, idx, nbaFaPushArgs(career, Math.random));
+    setFaWindow(res.window);
+    setTalkLine(res.line);
+  };
+
   const retireNow = () => {
     if (!career) return;
     const c: NbaCareerState = JSON.parse(JSON.stringify(career));
@@ -167,6 +212,8 @@ export default function NbaMyCareerBoard() {
     setFeed([]);
     setLastLine(null);
     setPendingEvent(null);
+    setFaWindow(null);
+    setTalkLine(null);
     setPanel('none');
     coachRef.current = null;
     setCoach(null);
@@ -338,8 +385,10 @@ export default function NbaMyCareerBoard() {
     );
   }
 
-  /* ---------------- Round 85: tile drill-in screens (the tile rule) ---------------- */
-  if (panel !== 'none' && phase !== 'event') {
+  /* ---------------- Round 85: tile drill-in screens (the tile rule) ----------------
+     Round 179: freeagency joins event in the guard, so an open panel can
+     never hide the market screen. */
+  if (panel !== 'none' && phase !== 'event' && phase !== 'freeagency') {
     const meters: [string, number][] = [['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health]];
     return (
       <div className="space-y-3">
@@ -455,7 +504,11 @@ export default function NbaMyCareerBoard() {
 
 
 
-      {phase === 'event' && pendingEvent ? (
+      {phase === 'freeagency' && faWindow ? (
+        <div ref={revealRef}>
+          <FreeAgencyPanel window={faWindow} sportNoun="franchise" talkLine={talkLine} onPush={pushFa} onSign={signFa} />
+        </div>
+      ) : phase === 'event' && pendingEvent ? (
         <div ref={revealRef} className="rounded-2xl border border-gold/40 bg-card p-4">
           <p className="text-center text-sm font-bold text-foreground"><Sparkles className="mr-1 inline h-4 w-4 text-gold" />{pendingEvent.title}</p>
           <p className="mt-1 text-center text-xs text-muted-foreground">{pendingEvent.body}</p>

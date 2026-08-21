@@ -17,6 +17,9 @@ import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getMlbLifeEventsA } from './mlbCareerLifeA';
 import { getMlbLifeEventsB } from './mlbCareerLifeB';
 import { getMlbCorruptionEvents } from './mlbCareerCorruption';
+// Round 179: the shared free agency engine, one implementation for all four sports.
+import { buildFaWindow } from './usCareerFreeAgency';
+import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
 
 // Round 58: a real diamond instead of four sample positions. Relievers,
 // catchers and corner bats all live different careers now.
@@ -536,20 +539,33 @@ export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
   return notes;
 }
 
+/* Round 179: the real hot stove. Replaces the old two-button 'contract' card
+   in the event deck; the board now guarantees this screen before any season
+   starts with no deal. */
+export function buildMlbFaWindow(c: MlbCareerState, incumbentQuality: number, rng: () => number = Math.random): FaWindow {
+  return buildFaWindow({
+    sport: 'mlb',
+    currentTeam: c.team,
+    pool: mlbEraTeamIds(c.eraId).map(id => ({ id, label: mlbTeamLabelOf(id, c.eraId) })),
+    market: mlbMarketSalary(c),
+    discount: 0.85,
+    minSalary: mlbEraById(c.eraId).moneyScale < 1 ? 0.5 : 1,
+    ovr: c.ovr,
+    age: c.age,
+    accolades: c.allStars,
+    cliffAge: (MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF).cliff,
+    incumbentQuality,
+    rng,
+  });
+}
+
+export function mlbFaPushArgs(c: MlbCareerState, rng: () => number = Math.random): FaPushArgs {
+  return { ovr: c.ovr, age: c.age, accolades: c.allStars, cliffAge: (MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF).cliff, rng };
+}
+
 export function drawMlbEvent(c: MlbCareerState, rng: () => number): MlbCareerEvent {
   const deck: MlbCareerEvent[] = [];
-  if (c.contractYears <= 0) {
-    const market = mlbMarketSalary(c);
-    deck.push({
-      id: 'contract',
-      title: 'Free agency, finally',
-      body: `Six years of team control are done. ${mlbTeamLabelOf(c.team)} offer ${Math.round(market * 0.85 * 10) / 10}M a year. The open market whispers ${market}M.`,
-      options: [
-        { label: 'Stay home', effect: 'Legacy with one club', apply: (cc) => { cc.salary = Math.round(market * 0.85 * 10) / 10; cc.contractYears = 4; cc.fanbase = Math.min(100, cc.fanbase + 12); cc.morale += 6; return `Re-signed with ${mlbTeamLabelOf(cc.team)} for ${cc.salary}M x4.`; } },
-        { label: 'Take the biggest deal', effect: 'New city, top dollar', apply: (cc, r) => { const pool = mlbEraTeamIds(cc.eraId); const nt = pool[Math.floor(r() * pool.length)]; cc.team = nt; cc.salary = market; cc.contractYears = 4; cc.fanbase = 40; return `Signed with ${mlbTeamLabelOf(nt, cc.eraId)} for ${market}M x4. Back page of every paper.`; } },
-      ],
-    });
-  }
+  /* Round 179: the 'contract' card left this deck for the free agency window. */
   deck.push({
     id: 'training',
     title: 'Winter plan',

@@ -374,7 +374,10 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   simCreation, simSoccerCareer and simMobileChrome all green.
 - S-5 The other career and manager games are "so way behind compared to the soccer ones":
   standing parity item, pull the CM systems (roles, press, talks, market, boards) into their
-  sports one at a time.
+  sports one at a time. STARTED: Round 179 pulled the market and the talks into all four
+  My Career games (real free agency with competing offers and push-for-more negotiation).
+  Still open for the careers: press moments, role/depth-chart identity. Still open for the
+  Front Office GM games: boards/owner objectives, press, negotiation depth.
 - S-6 Indexing: keep the sitemap green (Round 148 fixed the root cause), give Search Console
   time, and add internal links between related games.
 
@@ -681,7 +684,8 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-19, small hours | **Round 176** (the 2005-06 era, completing CM-5 to the data floor: Ronaldinho's season with 747 real year-2005 players, 26 two-way-verified window corrections, period-correct UEFA Cup vocabulary via the new uelName field, the steepest measured uplift, Cadiz and Alaves honestly partial, simEra2005 and playEra2005 as harnesses 56 and the fourth browser walk, plus kit colors for the era-only clubs both new and previously gray). `RUN176.bat`, chain-guarded on 175. **SHIP34.bat is the current wrapper: it runs 157 through 176.** |
 | Packaged 2026-08-19, deeper small hours | **Round 177** (CM-6 wave 3 first pair: the Austrian Bundesliga and the Super League Greece, 24 new clubs and 105 new players by the standing bake curve, 16 supersession moves and 17 stale-row drops from the Ozcan check, 296 clubs across 17 leagues with the copy caught up, Czechia parked with the reason documented). `RUN177.bat`, chain-guarded on 176. **SHIP35.bat is the current wrapper: it runs 157 through 177.** |
 | Packaged 2026-08-19, before dawn | **Round 178** (the last two FotMob screenshot items: the opposition ratings model with top rated both sides on the report, the full their-XI sheet under the toggle with MADE UP tags and honest absence for thin worlds, and possession plus shots riding on the Balance of play chart. Plus the permanent fix for the suite's one recurring tail: simOpposition's league tolerance re-derived from its own accepted effect plus its own error bar, 1.5 to 2.0 with the arithmetic and all three observed tail reads in the comment). `RUN178.bat`, chain-guarded on 177. **SHIP36.bat is the current wrapper: it runs 157 through 178.** |
-| Next free round number | **179** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-19, morning | **Round 179** (S-5 parity opens: real free agency in all four US career games. One shared engine, usCareerFreeAgency.ts, following the usCoachCareer pattern: an expired deal opens a window of competing offers from named era-aware franchises, each with its own salary, length and roster quality, and the signed offer's quality becomes the exact teamQuality the season sim runs on. Contenders lowball, rebuilds overpay, one push-for-more per offer with leverage from rating, accolades and age, and two fail-closed rules: the incumbent never rescinds and the last live offer never rescinds, so a career can never be stranded. The old two-button 'contract' card left all four event decks, and the boards now refuse to start a season with no deal, which also closes the old hole where the deck could skip the card and let you play years on an expired contract. simFreeAgency is harness 57, margins from a measured 3000-window run; playFreeAgency is the fifth browser walk, 26 checks, scoped to the market screen because the ticker legitimately talks about Vegas and signings). `RUN179.bat`, chain-guarded on 178. **SHIP37.bat is the current wrapper: it runs 157 through 179.** |
+| Next free round number | **180** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

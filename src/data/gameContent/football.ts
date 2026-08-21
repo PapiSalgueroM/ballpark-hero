@@ -96,7 +96,8 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.",
       "Enter the draft. Your hidden rating decides the slot, and a real team calls your name.",
       "Play each season with one tap: yards, touchdowns, awards, how far the team went.",
-      "Make the offseason call: re-sign at a discount or test free agency, train skills or body, fix the knee or play through it, take the envelope or report it.",
+      "When the deal expires, work a real free agency window: competing offers from named teams with their own money, length and roster quality, and one push for more on any of them.",
+      "Make the offseason call: train skills or body, fix the knee or play through it, take the envelope or report it.",
       "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
       "Retire, or get forced out, and face the legacy verdict.",
     ],
@@ -117,6 +118,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "Running back careers are a sprint. Cash in early, because the cliff at 28 is real.",
       "Body work is boring and correct. Health protects games played, and games played protect everything else.",
       "MVPs move the legacy score most, rings close behind. Stat padding on bad teams only goes so far.",
+      "In free agency the contender offers less and the rebuild offers more. The roster number on the card is the exact quality your next seasons run on, so you are choosing between money and January.",
     ],
     faqs: [
       {
@@ -126,6 +128,10 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         q: "Can I start in a different era?",
         a: "Yes. The create screen has a 2005 throwback: the league exactly as it stood that season, with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis. An era career never meets a franchise that did not exist yet, and the money is 2005 sized.",
+      },
+      {
+        q: "How does free agency work?",
+        a: "When your deal is up you get a window of real offers: your team's re-sign number plus named suitors, each with its own salary, length and roster quality. Contenders lowball because they can, rebuilds overpay because they must. You can push any offer for more once, but push a weak case and it can be pulled. Your own team never walks away, so you always have somewhere to sign.",
       },
       {
         q: "What decides the legacy verdict?",

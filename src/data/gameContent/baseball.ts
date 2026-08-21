@@ -223,7 +223,8 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "Pick your league: today's MLB, or the 2004 throwback with the Expos in Montreal, the Anaheim Angels, the Florida Marlins and the Devil Rays.",
       "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
       "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
-      "Handle the offseason event: contracts, winter training, surgery calls, trade rumors.",
+      "Handle the offseason event: winter training, surgery calls, trade rumors.",
+      "When team control ends, hit the open market for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
       "Stack awards and rings, fight aging, and retire to a verdict.",
     ],
     rules: [
@@ -244,7 +245,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
     ],
     faqs: [
       { q: "What decides the legacy verdict?", a: "One score from rings, MVPs or Cy Youngs, All-Star nods, seasons and stats. Reach 500 and Cooperstown calls. At 900 you are inner circle, first ballot." },
-      { q: "Can I change teams?", a: "Yes. Low morale can trigger trade rumors where you ask out, and free agency offers a hometown discount or the biggest deal somewhere new." },
+      { q: "Can I change teams?", a: "Yes. Low morale can trigger trade rumors where you ask out, and when the contract expires you get a real market: named clubs bidding with their own money, years and roster quality, plus your own club's re-sign number. You can push any offer for more once, and your own club never walks away." },
       { q: "Is the player real?", a: "No, the prospect is fictional on purpose. The 30 teams are real, the career is yours." },
       { q: "Can I start in a different era?", a: "Yes. The create screen has a 2004 throwback: the league in the Expos' last Montreal summer, with the Anaheim Angels, the Florida Marlins, the Tampa Bay Devil Rays and the Oakland Athletics. An era career never meets a franchise identity that did not exist then." },
     ],

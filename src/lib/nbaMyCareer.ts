@@ -17,6 +17,9 @@ import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNbaLifeEventsA } from './nbaCareerLifeA';
 import { getNbaLifeEventsB } from './nbaCareerLifeB';
 import { getNbaCorruptionEvents } from './nbaCareerCorruption';
+// Round 179: the shared free agency engine, one implementation for all four sports.
+import { buildFaWindow } from './usCareerFreeAgency';
+import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
 
 // Round 57: five real positions instead of three buckets. Each has its own
 // archetypes, stat flavour and aging curve, so a point guard career and a
@@ -566,20 +569,33 @@ export function nbaProgress(c: NbaCareerState, rng: () => number): string[] {
   return notes;
 }
 
+/* Round 179: the real free agency window. Replaces the old two-button
+   'contract' card in the event deck; the board now guarantees this screen
+   before any season starts with no deal. */
+export function buildNbaFaWindow(c: NbaCareerState, incumbentQuality: number, rng: () => number = Math.random): FaWindow {
+  return buildFaWindow({
+    sport: 'nba',
+    currentTeam: c.team,
+    pool: nbaEraTeamIds(c.eraId).map(id => ({ id, label: nbaTeamLabelOf(id, c.eraId) })),
+    market: nbaMarketSalary(c),
+    discount: 0.9,
+    minSalary: 0.8,
+    ovr: c.ovr,
+    age: c.age,
+    accolades: c.allNbas,
+    cliffAge: NBA_POS_CLIFF_AGE[c.pos] ?? 32,
+    incumbentQuality,
+    rng,
+  });
+}
+
+export function nbaFaPushArgs(c: NbaCareerState, rng: () => number = Math.random): FaPushArgs {
+  return { ovr: c.ovr, age: c.age, accolades: c.allNbas, cliffAge: NBA_POS_CLIFF_AGE[c.pos] ?? 32, rng };
+}
+
 export function drawNbaEvent(c: NbaCareerState, rng: () => number): NbaCareerEvent {
   const deck: NbaCareerEvent[] = [];
-  if (c.contractYears <= 0) {
-    const market = nbaMarketSalary(c);
-    deck.push({
-      id: 'contract',
-      title: 'Contract summer',
-      body: `${nbaTeamLabelOf(c.team)} can offer ${Math.round(market * 0.9 * 10) / 10}M to stay. The open market says ${market}M somewhere new.`,
-      options: [
-        { label: 'Stay loyal', effect: 'Fanbase loves it', apply: (cc) => { cc.salary = Math.round(market * 0.9 * 10) / 10; cc.contractYears = 3; cc.fanbase = Math.min(100, cc.fanbase + 12); cc.morale += 6; return `Re-signed with ${nbaTeamLabelOf(cc.team)} for ${cc.salary}M x3.`; } },
-        { label: 'Hit free agency', effect: 'Max money, new city', apply: (cc, r) => { const ids = nbaEraTeamIds(cc.eraId); const nt = ids[Math.floor(r() * ids.length)]; cc.team = nt; cc.salary = market; cc.contractYears = 3; cc.fanbase = 42; return `Signed with ${nbaTeamLabelOf(nt, cc.eraId)} for ${market}M x3. The decision gets its own show.`; } },
-      ],
-    });
-  }
+  /* Round 179: the 'contract' card left this deck for the free agency window. */
   deck.push({
     id: 'training',
     title: 'Summer plan',

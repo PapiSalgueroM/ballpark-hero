@@ -17,6 +17,9 @@ import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNhlLifeEventsA } from './nhlCareerLifeA';
 import { getNhlLifeEventsB } from './nhlCareerLifeB';
 import { getNhlCorruptionEvents } from './nhlCareerCorruption';
+// Round 179: the shared free agency engine, one implementation for all four sports.
+import { buildFaWindow } from './usCareerFreeAgency';
+import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
 
 // Round 59: wings split into left and right, and the blue line splits into
 // offensive and shutdown roles, so every seat on the bench is its own career.
@@ -468,20 +471,33 @@ export function nhlProgress(c: NhlCareerState, rng: () => number): string[] {
   return notes;
 }
 
+/* Round 179: the real July 1. Replaces the old two-button 'contract' card in
+   the event deck; the board now guarantees this screen before any season
+   starts with no deal. */
+export function buildNhlFaWindow(c: NhlCareerState, incumbentQuality: number, rng: () => number = Math.random): FaWindow {
+  return buildFaWindow({
+    sport: 'nhl',
+    currentTeam: c.team,
+    pool: nhlEraTeamIds(c.eraId).map(id => ({ id, label: nhlTeamLabelOf(id, c.eraId) })),
+    market: nhlMarketSalary(c),
+    discount: 0.88,
+    minSalary: 0.4,
+    ovr: c.ovr,
+    age: c.age,
+    accolades: c.allStars,
+    cliffAge: (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).cliff,
+    incumbentQuality,
+    rng,
+  });
+}
+
+export function nhlFaPushArgs(c: NhlCareerState, rng: () => number = Math.random): FaPushArgs {
+  return { ovr: c.ovr, age: c.age, accolades: c.allStars, cliffAge: (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).cliff, rng };
+}
+
 export function drawNhlEvent(c: NhlCareerState, rng: () => number): NhlCareerEvent {
   const deck: NhlCareerEvent[] = [];
-  if (c.contractYears <= 0) {
-    const market = nhlMarketSalary(c);
-    deck.push({
-      id: 'contract',
-      title: 'Contract talks',
-      body: `${nhlTeamLabelOf(c.team)} table ${Math.round(market * 0.88 * 10) / 10}M a year. July 1 could bring ${market}M somewhere else.`,
-      options: [
-        { label: 'Stay and build it here', effect: 'Loyalty', apply: (cc) => { cc.salary = Math.round(market * 0.88 * 10) / 10; cc.contractYears = 4; cc.fanbase = Math.min(100, cc.fanbase + 12); cc.morale += 6; return `Re-signed with ${nhlTeamLabelOf(cc.team)} for ${cc.salary}M x4.`; } },
-        { label: 'Go to market', effect: 'Top dollar', apply: (cc, r) => { const pool = nhlEraTeamIds(cc.eraId); const nt = pool[Math.floor(r() * pool.length)]; cc.team = nt; cc.salary = market; cc.contractYears = 4; cc.fanbase = 40; return `Signed with ${nhlTeamLabelOf(nt, cc.eraId)} for ${market}M x4. July 1 fireworks.`; } },
-      ],
-    });
-  }
+  /* Round 179: the 'contract' card left this deck for the free agency window. */
   deck.push({
     id: 'training',
     title: 'Summer plan',
