@@ -280,6 +280,28 @@ export function mlbTrade(
   return 'accepted';
 }
 
+/* Round 190: execute a deal the trade TALKS agreed. The negotiation
+   already settled the value question, so this enforces only the hard
+   rules, roster floor and salary matching, exactly mlbTrade's, and
+   moves the agreed pick when the package includes one. */
+export function mlbExecuteTalksTrade(
+  my: MlbGmTeam, their: MlbGmTeam, myId: string, theirId: string, addPick: boolean, cap: number,
+): 'done' | 'invalid' {
+  const mine = my.players.find(p => p.id === myId);
+  const theirs = their.players.find(p => p.id === theirId);
+  if (!mine || !theirs || my.players.length <= 9 || their.players.length <= 9) return 'invalid';
+  if (addPick && !my.picks.length) return 'invalid';
+  const fitsMe = mlbCapRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
+  const fitsThem = mlbCapRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;
+  if (!fitsMe || !fitsThem) return 'invalid';
+  my.players = my.players.filter(p => p.id !== myId);
+  their.players = their.players.filter(p => p.id !== theirId);
+  my.players.push(theirs);
+  their.players.push(mine);
+  if (addPick) { their.picks.push(my.picks.pop()!); }
+  return 'done';
+}
+
 export interface MlbProspect { id: string; name: string; pos: MlbPos; age: number; grade: number; trueOvr: number }
 
 export function mlbDraftClass(rng: () => number, size = 24): MlbProspect[] {

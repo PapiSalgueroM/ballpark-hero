@@ -80,40 +80,50 @@ console.log('1) Home gates reconcile to the pound; nobody pays for away days');
 /* ---------- 2. Ticket policy is a real trade-off ---------- */
 console.log('2) Fair fills the ground, premium squeezes it');
 {
-  // Same club, same weeks, three policies: measure attendance and income.
+  /* Same club, three policies. Round 190 re-derivation, after this
+     section tailed TWICE (Rounds 188 and 190) on ten-game samples: a home
+     crowd is uniform on the tier band (sigma about 4,330 at Everton's),
+     so with n=10 per tier the fair-vs-premium RATIO has sigma about
+     0.086 while the old bar sat 1.2 sigma under the true mean (1.165
+     from multipliers 1.06 vs 0.91), an eleven percent flake per run.
+     The engine offers no rng injection here, so per the standing rule
+     the SAMPLE widens instead of the bar getting nudged blind: 40 home
+     gates per tier (four careers each) puts ratio sigma near 0.037, and
+     the re-derived bar of 1.04 sits 3.4 sigma under the mean, about one
+     spurious failure in three thousand runs. Both directions of the
+     trade-off stay guarded: fair fills a measurably bigger house, and
+     premium still banks more money on the smaller crowd (1.3x price
+     beats 0.8x, gate ratio about 1.6, nowhere near the noise floor). */
+  const HOME_GATES_PER_TIER = 40;
   const results = [];
   for (const tier of [0, 1, 2]) {
-    let s = startCareer('Everton');
-    s = setTicketTier(s, tier);
     let att = 0;
     let gate = 0;
     let n = 0;
-    let guard = 0;
-    while (n < 10 && guard < 50) {
-      guard++;
-      const r = playNextEntry(s, { skipHalftime: true });
-      s = r.state;
-      if (r.kind !== 'match' || !r.report?.detail) continue;
-      const d = r.report.detail;
-      if (d.venue !== 'home') continue;
-      n++;
-      att += d.attendance;
-      gate = s.finance?.seasonGate ?? 0;
+    for (let career = 0; career < 8 && n < HOME_GATES_PER_TIER; career++) {
+      let s = startCareer('Everton');
+      s = setTicketTier(s, tier);
+      let guard = 0;
+      while (n < HOME_GATES_PER_TIER && guard < 60) {
+        guard++;
+        const r = playNextEntry(s, { skipHalftime: true });
+        s = r.state;
+        if (r.kind !== 'match' || !r.report?.detail) continue;
+        const d = r.report.detail;
+        if (d.venue !== 'home') continue;
+        n++;
+        att += d.attendance;
+      }
+      gate += s.finance?.seasonGate ?? 0;
     }
+    if (n < HOME_GATES_PER_TIER) fail(`tier ${tier}: only ${n} home gates sampled`);
     results.push({ tier, att: att / Math.max(1, n), gate });
   }
   const [fair, std, prem] = results;
-  console.log(`   avg crowds: fair ${Math.round(fair.att)}, standard ${Math.round(std.att)}, premium ${Math.round(prem.att)}`);
-  console.log(`   season gates: fair ${fair.gate}m, standard ${std.gate}m, premium ${prem.gate}m`);
-  /* The fair-vs-standard crowd gap is 6 percent against band noise, too
-     thin to assert on ten unseeded games without flaking (the runs use
-     three independent random streams). The gaps with teeth: fair fills a
-     measurably bigger house than premium (multipliers 1.06 vs 0.91,
-     measured 30.5k vs 24.9k), and premium still banks more money on the
-     smaller crowd (1.3x price beats 0.8x price, measured 7.8m vs 5.9m).
-     Both directions guarded, so the trade-off can never become one-sided. */
-  if (!(fair.att > prem.att * 1.06)) fail(`fair prices drew ${Math.round(fair.att)} against premium's ${Math.round(prem.att)}, the crowd effect is gone`);
-  if (!(prem.gate > fair.gate)) fail(`premium earned ${prem.gate}m against fair's ${fair.gate}m, the pricing math is upside down`);
+  console.log(`   avg crowds over ${HOME_GATES_PER_TIER} gates: fair ${Math.round(fair.att)}, standard ${Math.round(std.att)}, premium ${Math.round(prem.att)} (ratio ${(fair.att / prem.att).toFixed(3)})`);
+  console.log(`   summed gates: fair ${fair.gate.toFixed(1)}m, standard ${std.gate.toFixed(1)}m, premium ${prem.gate.toFixed(1)}m`);
+  if (!(fair.att > prem.att * 1.04)) fail(`fair prices drew ${Math.round(fair.att)} against premium's ${Math.round(prem.att)}, the crowd effect is gone`);
+  if (!(prem.gate > fair.gate)) fail(`premium earned ${prem.gate.toFixed(1)}m against fair's ${fair.gate.toFixed(1)}m, the pricing math is upside down`);
 }
 
 /* ---------- 3. Expansions cost, grow, and respect the bands ---------- */

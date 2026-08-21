@@ -388,7 +388,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
     howToPlay: [
       "Pick any of the 32 clubs and inherit its actual roster.",
       "Read the ownership mandate: a contender is told to win the Cup, a bubble club to make the bracket, a rebuild to hit an honest win number. It resets every offseason from where the roster really stands.",
-      "Shape it: waive players, sign free agents, offer one-for-one trades, sweeten with a draft pick.",
+      "Shape it: waive players, sign free agents, and work the phone on trades, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.",
       "Sim the season in 20 rounds of roughly four games each, with a live read on whether you are on pace.",
       "Qualify for the playoffs: top three per division plus two wild cards per conference.",
       "Win four best-of-7 rounds to lift the Stanley Cup, then draft and go again, as long as ownership keeps you.",

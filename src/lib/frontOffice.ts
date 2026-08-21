@@ -411,6 +411,34 @@ export function proposeTrade(
   return 'accepted';
 }
 
+/* Round 190: execute a deal the trade TALKS agreed. The negotiation
+   already settled the value question (that is what the phone call was
+   for), so this enforces only the hard rules, roster floor and salary
+   matching, exactly proposeTrade's, and moves the agreed pick when the
+   package includes one. An agreed 1.02 deal executes here where the old
+   1.08 threshold would have hung up, which the harness pins. */
+export function executeTalksTrade(
+  my: GmTeamState, their: GmTeamState, myPlayerId: string, theirPlayerId: string,
+  addPick: boolean, cap: number,
+): 'done' | 'invalid' {
+  const mine = my.players.find(p => p.id === myPlayerId);
+  const theirs = their.players.find(p => p.id === theirPlayerId);
+  if (!mine || !theirs || my.players.length <= 6 || their.players.length <= 6) return 'invalid';
+  if (addPick && my.picks.length === 0) return 'invalid';
+  const fitsMe = capRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
+  const fitsThem = capRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;
+  if (!fitsMe || !fitsThem) return 'invalid';
+  my.players = my.players.filter(p => p.id !== myPlayerId);
+  their.players = their.players.filter(p => p.id !== theirPlayerId);
+  my.players.push(theirs);
+  their.players.push(mine);
+  if (addPick) {
+    their.picks.push(my.picks.pop()!);
+    their.picks.sort();
+  }
+  return 'done';
+}
+
 // ---------------------------------------------------------------------------
 // Draft (fictional prospects, clearly generated)
 // ---------------------------------------------------------------------------

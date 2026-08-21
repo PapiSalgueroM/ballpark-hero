@@ -7,9 +7,13 @@ import {
   mlbDraftClass, mlbProspectToPlayer, mlbStrength, mlbCapUsed, mlbCapRoom,
   mlbRelease, mlbSign, mlbTrade, mlbTradeValue, mlbAiMoves, AL, MLB_DIVISIONS,
   MLB_ROUNDS,
-  type MlbLeague, type MlbProspect, type MlbSeriesResult,
+  type MlbLeague, type MlbProspect, type MlbSeriesResult, mlbExecuteTalksTrade,
 } from '@/lib/mlbFrontOffice';
 import { findTrades, type FinderOffer } from '@/lib/tradeFinder';
+/* Round 190: true negotiations, shared engine and shared card. The direct
+   propose is a phone call now, not a coin flip. */
+import { openTalks, standFirm, type TalksState } from '@/lib/foTradeTalks';
+import { TradeTalksCard } from '@/components/front-office-shared/TradeTalksCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
 // Round 180: the owner upstairs, shared engine and card.
@@ -55,6 +59,9 @@ export default function MlbFrontOfficeBoard() {
   const [shopOffers, setShopOffers] = useState<FinderOffer[]>([]);
   const [shopTried, setShopTried] = useState(false);
   const [myTradePiece, setMyTradePiece] = useState('');
+  /* Round 190: the live phone call. Transient like the market window:
+     never persisted, a reload simply ends the call. */
+  const [talks, setTalks] = useState<{ state: TalksState; partner: string; myPieceId: string; wantId: string } | null>(null);
   const [titles, setTitles] = useState(0);
   const [seasonsPlayed, setSeasonsPlayed] = useState(0);
   const [wonNow, setWonNow] = useState(false);
@@ -206,17 +213,48 @@ export default function MlbFrontOfficeBoard() {
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
     if (mlbSign(lg.teams[myTeam], lg.freeAgents, pid, lg.cap)) { setLeague(lg); persist({}, lg, myTeam); }
   };
-  const doTrade = (theirPid: string, sweeten: boolean) => {
-    if (!league || !tradePartner || !myTradePiece) return;
+  /* Round 190: the direct deal is a phone call now. The instant verdict
+     that lived here is exactly the three-button haggle the owner banned
+     from Club Manager, so the same negotiation engine answers instead. */
+  const talksArgsFor = (partner: string, myPieceId: string, wantId: string) => {
+    if (!league) return null;
+    const mySide = league.teams[myTeam];
+    const their = league.teams[partner];
+    const mine = mySide.players.find(p => p.id === myPieceId);
+    const want = their.players.find(p => p.id === wantId);
+    if (!mine || !want) return null;
+    return {
+      mine, want, theirRoster: their.players,
+      myPickCount: mySide.picks.length, pickValue: 13, value: mlbTradeValue,
+      theirCoverAtMyPos: their.players.filter(p => p.pos === mine.pos && p.ovr >= mine.ovr - 2).length,
+      openPremium: 1.07,
+    };
+  };
+  const openTradeTalks = (theirPid: string) => {
+    if (!tradePartner || !myTradePiece) return;
+    const args = talksArgsFor(tradePartner, myTradePiece, theirPid);
+    if (!args) return;
+    setTalks({ state: openTalks(args), partner: tradePartner, myPieceId: myTradePiece, wantId: theirPid });
+  };
+  const standFirmTalks = () => {
+    if (!talks) return;
+    const args = talksArgsFor(talks.partner, talks.myPieceId, talks.wantId);
+    if (!args) return;
+    setTalks({ ...talks, state: standFirm(talks.state, args, Math.random) });
+  };
+  const acceptTalks = () => {
+    if (!league || !talks || !talks.state.pkg) return;
+    const pkg = talks.state.pkg;
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
-    const res = mlbTrade(lg.teams[myTeam], lg.teams[tradePartner], myTradePiece, theirPid, sweeten, lg.cap);
-    if (res === 'accepted') {
-      setFeed(f => [`🤝 Trade completed with ${label(tradePartner)}.`, ...f].slice(0, 6));
+    const res = mlbExecuteTalksTrade(lg.teams[myTeam], lg.teams[talks.partner], talks.myPieceId, pkg.theirPlayerId, pkg.addPick, lg.cap);
+    if (res === 'done') {
+      setFeed(f => [`🤝 Deal done with ${label(talks.partner)}: ${pkg.theirPlayerName} arrives${pkg.addPick ? ', and a pick goes the other way' : ''}.`, ...f].slice(0, 6));
       setMyTradePiece(''); setShopOffers([]); setShopTried(false);
       setLeague(lg); persist({}, lg, myTeam);
     } else {
-      setFeed(f => [res === 'rejected' ? `❌ ${label(tradePartner)} pass on that offer.` : '❌ That deal breaks payroll or roster rules.', ...f].slice(0, 6));
+      setFeed(f => ['❌ The agreed deal no longer fits (payroll or roster rules).', ...f].slice(0, 6));
     }
+    setTalks(null);
   };
 
   // Round 82: shop a player league-wide with the real trade rules
@@ -516,9 +554,23 @@ export default function MlbFrontOfficeBoard() {
               </button>
             ))}
           </div>
-          {tradePartner && (
+          {/* Round 190: an open call takes over the desk until it ends. */}
+          {talks && (() => {
+            const minePiece = my.players.find(p => p.id === talks.myPieceId);
+            return minePiece ? (
+              <TradeTalksCard
+                talks={talks.state}
+                partnerLabel={label(talks.partner)}
+                mine={minePiece}
+                onAccept={acceptTalks}
+                onStandFirm={standFirmTalks}
+                onWalkAway={() => setTalks(null)}
+              />
+            ) : null;
+          })()}
+          {tradePartner && !talks && (
             <>
-              <p className="text-center text-[10px] text-muted-foreground">1. Pick who YOU send. 2. Tap who you want back. Add a pick to sweeten.</p>
+              <p className="text-center text-[10px] text-muted-foreground">1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: a pick to close the gap, a lesser man instead, or the dial tone.</p>
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You send</p>
@@ -533,10 +585,7 @@ export default function MlbFrontOfficeBoard() {
                   {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
                     <div key={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
                       <span className="truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
-                      <span className="flex shrink-0 gap-1">
-                        <button onClick={() => doTrade(p.id, false)} disabled={!myTradePiece} className="rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Offer</button>
-                        <button onClick={() => doTrade(p.id, true)} disabled={!myTradePiece || my.picks.length === 0} className="rounded-full border border-gold px-2 py-0.5 text-[9px] font-bold text-gold disabled:opacity-40">+Pick</button>
-                      </span>
+                      <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
                     </div>
                   ))}
                 </div>

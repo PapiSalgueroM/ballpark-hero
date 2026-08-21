@@ -53,7 +53,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     howToPlay: [
       "Pick a franchise. Its players carry fictional contracts against a 260 million dollar cap that rises 5 percent each season.",
       "Read the ownership mandate. A loaded roster is told to win the Super Bowl, a mid one to make the playoffs, a bare one to hit an honest win number. It resets every offseason from where your roster really stands.",
-      "Shape the roster: cut bloated deals, sign free agents, and offer one for one trades, sweetened with a pick.",
+      "Shape the roster: cut bloated deals, sign free agents, and take trades to the phone: the other GM counters like a person, asking for a pick, offering a lesser man, or hanging up.",
       "Play week by week as scores, injuries, and rival moves roll in, with a live read on whether you are on pace for the mandate.",
       "After the Super Bowl, spend 3 picks on a 40 prospect class where scout grades can lie. Defensive picks boost your defense unit rather than adding a player.",
       "Run the offseason, where young players grow and veterans fade, then chase the next title. Seasons are unlimited, as long as ownership keeps you.",
@@ -72,7 +72,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     tips: [
       "Build around the quarterback. Team strength leans on that slot more than anything else.",
       "Young players with hidden upside beat expensive 31 year olds, because decline starts there and never stops.",
-      "If a trade gets rejected, do not sweeten it out of pride. Target a team that needs what you are selling.",
+      "In trade talks, stand firm only when you hold leverage: a young piece, or a partner thin at his position. Push a weak hand and the price goes up.",
     ],
     faqs: [
       {

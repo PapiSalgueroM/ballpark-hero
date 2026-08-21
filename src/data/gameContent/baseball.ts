@@ -263,7 +263,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
     howToPlay: [
       "Choose a franchise and inherit its actual lineup, rotation and bullpen.",
       "Read the ownership mandate: a stacked roster is told to win the World Series, a mid one to make October, a thin one to hit an honest win number. It resets every offseason.",
-      "Work the roster: DFA dead weight, sign free agents, and pitch trades with a pick sweetener when needed.",
+      "Work the roster: DFA dead weight, sign free agents, and take trades to the phone, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.",
       "Play the 162 in stretches: each round simulates about a week and a half of baseball, 27 rounds total, with a live read on whether you are on pace.",
       "Make October. Division winners seed 1 to 3, three wild cards follow, and the top two seeds skip the Wild Card round.",
     ],

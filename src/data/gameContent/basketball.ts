@@ -446,7 +446,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
     ],
     rules: [
       "The cap starts at 155 million and rises 7 percent every season. Rosters hold 8 to 15 players.",
-      "Trades are player for player with an optional pick sweetener. The other side weighs age and rating and only takes deals that favor them.",
+      "Trades are a negotiation now: open talks and the other GM answers with a handshake, a pick demand, a lesser man, or the dial tone. You can stand firm exactly once per call, and it genuinely gambles: they blink and the price drops, or they dig in and it rises.",
       "The play-in covers seeds 7 through 10, with one last game deciding the 8 seed.",
       "Draft classes have 24 prospects, you pick twice, and scouting grades can miss the truth by a few points either way.",
       "Everyone ages each summer: young players develop toward potential, decline starts at 32, veterans retire.",
