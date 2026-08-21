@@ -352,6 +352,24 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     fetch: () => col('afl_premiers', 'premier'),
   },
   {
+    id: 'nrl-premiers',
+    title: 'NRL/NSWRL Premiers',
+    blurb: "Every club to win Australian rugby league's top grade, under the name it wore at the time.",
+    sport: 'NRL', emoji: '🏉', minAnswers: 12,
+    // nrl_premiers: built Round 236. 117 rows, 1908-2025, two-source
+    // verified 2026-08-20 (Wikipedia's premiers roll against Topend
+    // Sports, agreeing on every year). 1997 carries BOTH premiers (ARL
+    // Newcastle, Super League Brisbane); 2007 and 2009 are absent
+    // because Melbourne's titles were stripped and stay vacant. Names
+    // are canonical per continuous club (Canterbury-Bankstown Bulldogs
+    // covers its Sydney Bulldogs and Bulldogs branding years), with
+    // genuine renames and mergers as separate answers (Eastern Suburbs
+    // then Sydney Roosters; St George then St George Illawarra), which
+    // lands every famous count: Souths 21, St George 15, Easts and
+    // Balmain 11. simListQuizSources ratchets the table exactly.
+    fetch: () => col('nrl_premiers', 'premier'),
+  },
+  {
     id: 'usopen-tennis-champs',
     title: 'US Open Singles Champions',
     blurb: 'Every singles champion at the US Open in our records.',

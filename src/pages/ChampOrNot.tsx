@@ -167,7 +167,7 @@ const ChampOrNot = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Champ or Not | DoUKnowBall"
-          description="A daily true or false gauntlet over real title history. Every claim names a genuine champion; the catch is whether they won THAT year. Covers the Super Bowl, NBA, World Series, Stanley Cup, WNBA, college football and hoops, English soccer and the AFL."
+          description="A daily true or false gauntlet over real title history. Every claim names a genuine champion; the catch is whether they won THAT year. Covers the Super Bowl, NBA, World Series, Stanley Cup, WNBA, college football and hoops, English soccer, the AFL and the NRL."
           howToPlay={[
             'Read the claim: a team, a title, a year',
             'Tap CHAMP if it really happened, NOT if it did not',

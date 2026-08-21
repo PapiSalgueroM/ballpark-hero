@@ -314,7 +314,7 @@ export const WORLD_CONTENT: GameContentMap = {
   '/list-quiz': {
     intro: [
       "Pick a list, empty your brain into the box. Name Them All is the classic recall quiz: every Super Bowl MVP, every F1 world champion, every Masters winner, and you versus the blanks.",
-      "There are 27 lists across a dozen sports, from Heisman winners to VFL/AFL premiers, all built from the site's records database, so the answer key is real history.",
+      "There are 28 lists across a dozen sports, from Heisman winners to VFL/AFL and NRL premiers, all built from the site's records database, so the answer key is real history.",
     ],
     howToPlay: [
       "Choose a list from the menu, anything from Heisman winners to Stanley Cup champions.",
@@ -346,7 +346,7 @@ export const WORLD_CONTENT: GameContentMap = {
       },
       {
         q: "Is there a daily list?",
-        a: "No. All 27 lists are open all the time, and you can retry any of them as often as you like.",
+        a: "No. All 28 lists are open all the time, and you can retry any of them as often as you like.",
       },
       {
         q: "What are the tiers?",
@@ -358,7 +358,7 @@ export const WORLD_CONTENT: GameContentMap = {
   '/champ-or-not': {
     intro: [
       "Champ or Not deals ten claims about champions, one at a time, and every single one sounds right. The Bulls in 1994? The Islanders in 1982? Leicester in 2016? Two of those happened. Your job is knowing which.",
-      "Every claim is built from real title history across nine competitions: the Super Bowl, the NBA, the World Series, the Stanley Cup, the WNBA, college football and college hoops, the English title and the VFL/AFL flag. The fakes are the cruelest kind: a real champion of that competition, dropped into a year they did not win.",
+      "Every claim is built from real title history across ten competitions: the Super Bowl, the NBA, the World Series, the Stanley Cup, the WNBA, college football and college hoops, the English title, the VFL/AFL flag and the NRL premiership. The fakes are the cruelest kind: a real champion of that competition, dropped into a year they did not win.",
     ],
     howToPlay: [
       "Read the claim: a team, a title, a year.",

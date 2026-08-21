@@ -73,7 +73,7 @@ console.log("1) live pools through the game's own fetch");
    wnba 29, cfb 49, cbb 87, epl 127 (the filter covers the whole English
    top flight, which the claim phrasing is deliberately neutral about),
    afl 129 */
-const FLOORS = { sb: 30, nba: 40, ws: 60, cup: 55, wnba: 14, cfb: 24, cbb: 40, epl: 60, afl: 64 };
+const FLOORS = { sb: 30, nba: 40, ws: 60, cup: 55, wnba: 14, cfb: 24, cbb: 40, epl: 60, afl: 64, nrl: 58 };
 const rowsByKey = new Map();
 let reachable = true;
 for (const def of COMPETITIONS) {

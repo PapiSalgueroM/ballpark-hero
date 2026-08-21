@@ -77,6 +77,15 @@ export const COMPETITIONS: CompetitionDef[] = [
     table: 'afl_premiers', yearCol: 'year', winCol: 'premier',
     phrase: (t, y) => `${t} won the ${y} VFL/AFL premiership.`,
   },
+  {
+    key: 'nrl', emoji: '🏉', label: 'Australian rugby league premiers',
+    table: 'nrl_premiers', yearCol: 'year', winCol: 'premier',
+    // Phrased for the whole 1908 on era, and safe on the special years:
+    // 1997 has two rows (ARL and Super League premiers, both true), and
+    // the stripped 2007 and 2009 seasons have no row at all, so no claim
+    // about them can ever be dealt.
+    phrase: (t, y) => `${t} won the top grade rugby league premiership in ${y}.`,
+  },
 ];
 
 export interface ChampRow {

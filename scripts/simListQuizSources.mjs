@@ -132,6 +132,8 @@ if (!reachable && listsById.size === 0) {
     ["wnba-champs", "aces"],
     ["afl-premiers", "collingwood"], ["afl-premiers", "brisbane lions"],
     ["afl-premiers", "west coast"], ["afl-premiers", "st kilda"], ["afl-premiers", "footscray"],
+    ["nrl-premiers", "south sydney"], ["nrl-premiers", "penrith"],
+    ["nrl-premiers", "north sydney"], ["nrl-premiers", "newtown"], ["nrl-premiers", "st george illawarra"],
     ["ballon-dor-winners", "messi"], ["ballon-dor-winners", "rodri"], ["ballon-dor-winners", "dembele"],
     ["heisman-winners", "travis hunter"], ["heisman-winners", "mendoza"],
   ];
@@ -175,7 +177,49 @@ if (!reachable && listsById.size === 0) {
   await yearPin("cfb_heisman_winners", "year", 2024, "winner", "travis hunter");
   await yearPin("cfb_heisman_winners", "year", 2025, "winner", "mendoza");
   await yearPin("afl_premiers", "year", 2025, "premier", "brisbane");
+  await yearPin("nrl_premiers", "year", 2025, "premier", "brisbane broncos");
   console.log("   pins done");
+
+  /* the NRL premiers roll is a Round 236 build, two-source verified
+     (Wikipedia's premiers roll against Topend Sports, 2026-08-20,
+     agreeing on every year). Exact ratchet: 117 rows covering 1908 to
+     2025, with 1997 twice (ARL and Super League premiers are both
+     real), 2007 and 2009 ABSENT FOREVER (Melbourne's stripped titles
+     stay vacant, so the table must never teach them), 20 canonical
+     names, and the famous counts. When the 2026 grand final is played,
+     the new row and these numbers move together, on purpose. */
+  try {
+    const { data, error } = await supabase.from("nrl_premiers").select("year, premier");
+    if (error) throw new Error(error.message);
+    const rows = data ?? [];
+    if (rows.length !== 117) fail(`nrl_premiers: ${rows.length} rows, the verified roll is exactly 117`);
+    const byYear = new Map();
+    for (const r of rows) byYear.set(r.year, (byYear.get(r.year) ?? 0) + 1);
+    for (let y = 1908; y <= 2025; y++) {
+      const want = y === 1997 ? 2 : (y === 2007 || y === 2009 ? 0 : 1);
+      if ((byYear.get(y) ?? 0) !== want) {
+        fail(`nrl_premiers: season ${y} has ${byYear.get(y) ?? 0} rows, the record says ${want}${want === 0 ? " (stripped title, must stay vacant)" : ""}`);
+      }
+    }
+    const counts = new Map();
+    for (const r of rows) counts.set(r.premier, (counts.get(r.premier) ?? 0) + 1);
+    if (counts.size !== 20) fail(`nrl_premiers: ${counts.size} distinct names, the roll has 20`);
+    const FLAGS = [
+      ["South Sydney Rabbitohs", 21], ["St George", 15],
+      ["Eastern Suburbs", 11], ["Balmain", 11],
+      ["Canterbury-Bankstown Bulldogs", 8], ["Manly-Warringah Sea Eagles", 8],
+      ["Brisbane Broncos", 7], ["Penrith Panthers", 6],
+      ["Melbourne Storm", 4], ["Sydney Roosters", 4],
+      ["North Sydney", 2], ["St George Illawarra Dragons", 1],
+    ];
+    for (const [club, n] of FLAGS) {
+      if ((counts.get(club) ?? 0) !== n) fail(`nrl_premiers: ${club} shows ${counts.get(club) ?? 0} premierships, the record says ${n}`);
+    }
+    console.log("   nrl_premiers: 117 rows, 20 names, stripped years vacant, famous counts hold");
+  } catch {
+    console.log("   nrl_premiers: UNREACHABLE, NOT CHECKED.");
+    reachable = false;
+  }
 
   /* the AFL premiers roll is a Round 234 build, two-source verified
      (afl.com.au against aflonline.com.au, 2026-08-20, agreeing on every
