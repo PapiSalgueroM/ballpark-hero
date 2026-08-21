@@ -91,6 +91,50 @@ No em dashes. No conventional-commit prefixes. No bullet lists.
 
 ---
 
+## The findstr assertion rules, learned the expensive way (Round 251, 2026-08-21)
+
+**Read this before you hand-write or hand-edit any assertion.** Four separate bugs in this one
+line shape kept a 97 round backlog off the live site for weeks. Each one made a fail-closed
+check STOP a run that should have passed, so a ship looked like it worked and quietly quit
+partway. Each was reproduced on Windows before it was fixed, and `pkg/mkbat.py` now emits the
+correct shape while `pkg/verifybat.py` refuses to bless a bat carrying any of them.
+
+The rules, all four:
+
+1. **The file argument must use BACKSLASHES.** `findstr /C:"x" "src/lib/f.ts"` returns
+   errorlevel 1 whether or not the pattern is there, because findstr rejects forward slash
+   paths. Measured: same file, same pattern, forward slash quoted gives 1, backslash quoted
+   gives 0. This alone killed 56 bats at Round 179, every attempt, for weeks.
+2. **A double quote in the pattern must be escaped as `\"`.** cmd ends the quoted argument at
+   the first raw quote, so any assertion quoting real code (an aria-label, a JSX prop, an array
+   of strings) reaches findstr mangled. Escaped quotes match correctly AND a missing file or a
+   wrong pattern still fail, so the check stays fail closed.
+3. **Never mix a quote with a cmd operator (`>` `<` `|` `&`) in one pattern.** cmd tracks
+   quoting by COUNTING quote characters and knows nothing about `\"`, so it believes the
+   argument ended at the escape and treats a later `>` as a redirection. RUN209 asserted on a
+   class string ending `">` and its check silently wrote a file instead of running. There is no
+   reliable escape for this mix: pick a quote-free marker instead. mkbat refuses it.
+4. **Never put a percent sign in a pattern.** cmd strips a lone `%` as variable expansion
+   syntax, so the assertion looks for text the file does not contain. RUN251 asserted on a
+   comment reading "the 40% wash measured 3.80" and stopped on a file that contained it
+   verbatim. mkbat refuses it; pick another marker.
+
+Two more constraints that are not bugs but will stop a run:
+
+- **Patterns must be ASCII and single line.** The bat writer is ASCII only, so an emoji in a
+  pattern cannot be emitted at all, and findstr matches per line, so a pattern spanning a
+  wrapped comment can never match.
+- **A SHIP wrapper must start at the FIRST UNCOMMITTED round.** Each bat's chain guard greps
+  `git log --oneline -80`, so a wrapper beginning at an old round fails immediately once the
+  head is more than 80 commits past that round's predecessor. After the big backlog landed, a
+  157-to-253 wrapper died at RUN157 with "Round 156 is not in the log yet"; a 251-to-253
+  wrapper ran clean.
+
+**When a fifth one appears, test it, do not reason about it.** The method that worked every
+time: write a throwaway bat that runs the candidate shapes against a known file, echo
+`%errorlevel%` after each into a log, double-click it, read the log. Three of these four were
+diagnosed in minutes that way after much longer spent guessing.
+
 ## Anatomy of a RUNnn.bat
 
 Every one of these elements is required. Each exists because its absence broke something.
