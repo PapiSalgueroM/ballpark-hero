@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Briefcase, Crown, ListOrdered, RotateCcw, ShieldHalf, Swords, Users } from 'lucide-react';
+import { Briefcase, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { NHL_TEAMS, NHL_TEAM_MAP } from '@/data/conquestDataNhl';
 import {
@@ -32,6 +32,10 @@ import { stageVerdict } from '@/lib/usCareerReveal';
 import { buildGmPresser, applyGmPressChoice, type GmPresser } from '@/lib/foGmPress';
 import { GmPressCard } from '@/components/front-office-shared/GmPressCard';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+/* Round 204: the hub is boxes now, the same boxes Club Manager has had
+   since Round 74. What each box says lives in the engine, not here. */
+import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
+import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHubTiles';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
 type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
@@ -54,7 +58,10 @@ interface SaveShape {
 
 export default function NhlFrontOfficeBoard() {
   const [phase, setPhase] = useState<Phase>('pick');
-  const [tab, setTab] = useState<Tab>('team');
+  /* Round 204: the hub is tiles now, so null means the hub itself and a
+     tab key means you have opened that box. Club Manager's Round 74 rule,
+     brought to the four GM games. */
+  const [tab, setTab] = useState<Tab | null>(null);
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<NhlLeague | null>(null);
   const [feed, setFeed] = useState<string[]>([]);
@@ -129,7 +136,7 @@ export default function NhlFrontOfficeBoard() {
   const start = (abbr: string) => {
     const lg = initNhlLeague();
     const m = mandateFor(lg, abbr, false);
-    setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab('team');
+    setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     setFeed([
       `Welcome to the ${label(abbr)} front office. The ${lg.season}-${(lg.season + 1) % 100} season drops the puck now.`,
       `🏛️ The ownership mandate: ${m.text}`,
@@ -247,7 +254,7 @@ export default function NhlFrontOfficeBoard() {
       ].slice(0, 6));
       setPressTilt(0); setSeasonTradeLine(null);
       setSeries([]); setChampion(''); setWonNow(false);
-      setPhase('hub'); setTab('team');
+      setPhase('hub'); setTab(null);
       setLeague(lg);
       persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null }, lg, myTeam);
       return;
@@ -500,6 +507,35 @@ export default function NhlFrontOfficeBoard() {
 
   const t = NHL_TEAM_MAP.get(myTeam)!;
 
+  /* Round 204: the facts each box carries, decided in src/lib/foHub.ts so
+     the wording is harnessed rather than eyeballed. Eight of each
+     conference make the playoffs, which is the real format and the cut the
+     table box warns about. */
+  const myConfName = EASTERN.includes(myTeam) ? 'East' : 'West';
+  const confTable = nhlFoStandings(league, EASTERN.includes(myTeam) ? EASTERN : WESTERN);
+  const tiles = foHubTiles({
+    roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    freeAgents: league.freeAgents.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    capRoom: room,
+    wins: my.wins,
+    losses: my.losses,
+    period: league.round,
+    periods: NHL_FO_ROUNDS,
+    playWord: 'Play',
+    periodWord: 'round',
+    /* A round here is a stretch of the whole league, not one fixture. */
+    hasFixtures: false,
+    nextOpponent: null,
+    lastResult: null,
+    place: confTable.findIndex(x => x.abbr === myTeam) + 1,
+    cut: 8,
+    tableName: myConfName,
+    tradeLine: seasonTradeLine,
+    titles,
+  });
+  const openPanel = (key: FoPanelKey) => setTab(key === 'play' ? 'round' : key);
+  const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
@@ -526,19 +562,11 @@ export default function NhlFrontOfficeBoard() {
       {/* Round 192: the introduction presser waits on the hub until answered. */}
       {presser && <GmPressCard presser={presser} onAnswer={answerPress} />}
 
-      <div className="flex items-center justify-center gap-1 rounded-full bg-secondary p-1 text-xs">
-        {([
-          ['team', 'Roster', Users],
-          ['market', 'Free agency', Briefcase],
-          ['trade', 'Trades', Swords],
-          ['round', 'Play', ShieldHalf],
-          ['standings', 'Standings', ListOrdered],
-        ] as [Tab, string, typeof Users][]).map(([key, lbl, Icon]) => (
-          <button key={key} onClick={() => setTab(key)} className={cn('inline-flex items-center gap-1 rounded-full px-3 py-1.5 font-semibold transition-all', tab === key ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground')}>
-            <Icon className="h-3.5 w-3.5" /> {lbl}
-          </button>
-        ))}
-      </div>
+      {/* Round 204: boxes, not pills. Each one already tells you the thing
+          you used to have to tap to find out. */}
+      {tab === null
+        ? <FoHubTiles tiles={tiles} onOpen={openPanel} />
+        : <FoPanelHeader title={panelTitle} onBack={() => setTab(null)} />}
 
       {feed.length > 0 && (
         <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">

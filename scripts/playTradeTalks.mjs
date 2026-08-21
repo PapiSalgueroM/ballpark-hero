@@ -24,6 +24,14 @@ const say = (ok, what) => {
   if (!ok) failures += 1;
 };
 
+/* Round 204: the front office hub is boxes now, and opening a box replaces
+   the grid. Any hop from one box to another goes back through the hub
+   first, which is exactly what a player does with their thumb. */
+const toHub = async p => {
+  const back = p.locator('button:has-text("Hub")');
+  if (await back.count()) { await back.first().click(); await p.waitForTimeout(350); }
+};
+
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
 const errors = [];
@@ -61,12 +69,14 @@ await page.waitForTimeout(600);
 say(await page.locator('[data-trade-talks]').count() === 0, 'the call ended with the deal');
 const feedText = await page.locator('body').innerText();
 say(/Deal done with/.test(feedText), 'the feed carries the deal');
+await toHub(page);
 await page.locator('button:has-text("Roster")').first().click();
 await page.waitForTimeout(400);
 const roster = await page.locator('body').innerText();
 say(!!arriving && roster.includes(arriving), `${arriving ?? '(unread)'} actually arrived on the roster`);
 
 console.log('2) The push spends its one shot in the UI');
+await toHub(page);
 await page.locator('button:has-text("Trades")').first().click();
 await page.waitForTimeout(400);
 await page.locator('p:has-text("Or build your own deal") ~ div button').first().click();

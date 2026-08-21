@@ -72,7 +72,8 @@ const unscored = (m, game) =>
   say(marks.length === 0, `no mark for picking a franchise (${marks.length} sent)`);
 
   console.log('2) A played week marks unscored, and every week counts');
-  /* The hub opens on the team tab; the play button lives on This week. */
+  /* Round 204: the hub opens on boxes now, and the play button lives
+     behind the This week box. */
   await page.locator('button:has-text("This week")').click();
   await page.waitForTimeout(400);
   say(marks.length === 0, `no mark for looking at the fixture (${marks.length} sent)`);

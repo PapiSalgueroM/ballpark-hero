@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Briefcase, Crown, ListOrdered, RotateCcw, ShieldHalf, Swords, Users } from 'lucide-react';
+import { Briefcase, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { FO_TEAMS, FO_TEAM_MAP } from '@/data/frontOfficePlayers';
 import {
@@ -34,6 +34,10 @@ import { stageVerdict } from '@/lib/usCareerReveal';
 import { buildGmPresser, applyGmPressChoice, type GmPresser } from '@/lib/foGmPress';
 import { GmPressCard } from '@/components/front-office-shared/GmPressCard';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+/* Round 204: the hub is boxes now, the same boxes Club Manager has had
+   since Round 74. What each box says lives in the engine, not here. */
+import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
+import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHubTiles';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save the way a
    Club Manager sacking does. */
@@ -65,7 +69,10 @@ interface SaveShape {
 
 export default function FrontOfficeBoard() {
   const [phase, setPhase] = useState<Phase>('pick');
-  const [tab, setTab] = useState<Tab>('team');
+  /* Round 204: the hub is tiles now, so null means the hub itself and a
+     tab key means you have opened that box. Club Manager's Round 74 rule,
+     brought to the four GM games. */
+  const [tab, setTab] = useState<Tab | null>(null);
   const [myTeam, setMyTeam] = useState<string>('');
   const [league, setLeague] = useState<LeagueState | null>(null);
   const [weekResults, setWeekResults] = useState<GmGame[]>([]);
@@ -154,7 +161,7 @@ export default function FrontOfficeBoard() {
     setLeague(lg);
     setMyTeam(abbr);
     setPhase('hub');
-    setTab('team');
+    setTab(null);
     setWeekResults([]);
     setNewsFeed([
       `Welcome to the ${label(abbr)} front office. The ${lg.season} season starts now.`,
@@ -194,6 +201,8 @@ export default function FrontOfficeBoard() {
     const t = FO_TEAM_MAP.get(abbr);
     return t ? `${t.city} ${t.name}` : abbr;
   };
+  /* Round 204: the short form, for the hub boxes. */
+  const nickname = (abbr: string) => FO_TEAM_MAP.get(abbr)?.name ?? abbr;
 
   const my = league?.teams[myTeam];
 
@@ -322,7 +331,7 @@ export default function FrontOfficeBoard() {
       setPressTilt(0);
       setSeasonTradeLine(null);
       setPhase('hub');
-      setTab('team');
+      setTab(null);
       setLeague(lg);
       persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null }, lg, myTeam);
       return;
@@ -607,6 +616,46 @@ export default function FrontOfficeBoard() {
     ? league.schedule[league.week - 1].find(g => g.home === myTeam || g.away === myTeam)
     : undefined;
 
+  /* Round 204: the facts each box carries. Flattened here, decided in
+     src/lib/foHub.ts so the wording is harnessed rather than eyeballed.
+     The conference table is the one the playoffs are drawn from, and the
+     NFL sends seven of each. */
+  const conf = conferenceOf(myTeam);
+  const confTable = standings(league.teams).filter(x => conferenceOf(x.abbr) === conf);
+  const myLast = weekResults.find(g => g.home === myTeam || g.away === myTeam);
+  const tiles = foHubTiles({
+    roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    freeAgents: league.freeAgents.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    capRoom: room,
+    wins: my.wins,
+    losses: my.losses,
+    period: league.week,
+    periods: REGULAR_WEEKS,
+    playWord: 'This week',
+    periodWord: 'week',
+    hasFixtures: true,
+    /* The nickname alone, because "at Tennessee Titans" does not fit a box
+       two columns wide on a phone and "at Titans" is what people say. */
+    nextOpponent: myGameThisWeek
+      ? { label: nickname(myGameThisWeek.home === myTeam ? myGameThisWeek.away : myGameThisWeek.home), home: myGameThisWeek.home === myTeam }
+      : null,
+    lastResult: myLast
+      ? {
+        won: myLast.winner === myTeam,
+        us: myLast.home === myTeam ? myLast.homeScore : myLast.awayScore,
+        them: myLast.home === myTeam ? myLast.awayScore : myLast.homeScore,
+        opponent: label(myLast.home === myTeam ? myLast.away : myLast.home),
+      }
+      : null,
+    place: confTable.findIndex(x => x.abbr === myTeam) + 1,
+    cut: 7,
+    tableName: conf,
+    tradeLine: seasonTradeLine,
+    titles,
+  });
+  const openPanel = (key: FoPanelKey) => setTab(key === 'play' ? 'week' : key);
+  const panelTitle = tiles.find(x => (x.key === 'play' ? 'week' : x.key) === tab)?.title ?? '';
+
   return (
     <div className="space-y-4">
       {/* status bar */}
@@ -634,27 +683,11 @@ export default function FrontOfficeBoard() {
       {/* Round 192: the introduction presser waits on the hub until answered. */}
       {presser && <GmPressCard presser={presser} onAnswer={answerPress} />}
 
-      {/* tabs */}
-      <div className="flex items-center justify-center gap-1 rounded-full bg-secondary p-1 text-xs">
-        {([
-          ['team', 'Roster', Users],
-          ['market', 'Free agency', Briefcase],
-          ['trade', 'Trades', Swords],
-          ['week', 'This week', ShieldHalf],
-          ['standings', 'Standings', ListOrdered],
-        ] as [Tab, string, typeof Users][]).map(([key, lbl, Icon]) => (
-          <button
-            key={key}
-            onClick={() => setTab(key)}
-            className={cn(
-              'inline-flex items-center gap-1 rounded-full px-3 py-1.5 font-semibold transition-all',
-              tab === key ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
-            )}
-          >
-            <Icon className="h-3.5 w-3.5" /> {lbl}
-          </button>
-        ))}
-      </div>
+      {/* Round 204: boxes, not pills. Each one already tells you the thing
+          you used to have to tap to find out. */}
+      {tab === null
+        ? <FoHubTiles tiles={tiles} onOpen={openPanel} />
+        : <FoPanelHeader title={panelTitle} onBack={() => setTab(null)} />}
 
       {newsFeed.length > 0 && (
         <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">

@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Briefcase, Crown, ListOrdered, RotateCcw, ShieldHalf, Swords, Users } from 'lucide-react';
+import { Briefcase, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { MLB_TEAMS, MLB_TEAM_MAP } from '@/data/conquestDataMlb';
 import {
   initMlbLeague, simMlbRound, mlbStandings, runMlbPlayoffs, mlbOffseason,
   mlbDraftClass, mlbProspectToPlayer, mlbStrength, mlbCapUsed, mlbCapRoom,
-  mlbRelease, mlbSign, mlbTrade, mlbTradeValue, mlbAiMoves, AL, MLB_DIVISIONS,
+  mlbRelease, mlbSign, mlbTrade, mlbTradeValue, mlbAiMoves, AL, NL, MLB_DIVISIONS,
   MLB_ROUNDS,
   type MlbLeague, type MlbProspect, type MlbSeriesResult, mlbExecuteTalksTrade,
 } from '@/lib/mlbFrontOffice';
@@ -32,6 +32,10 @@ import { stageVerdict } from '@/lib/usCareerReveal';
 import { buildGmPresser, applyGmPressChoice, type GmPresser } from '@/lib/foGmPress';
 import { GmPressCard } from '@/components/front-office-shared/GmPressCard';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+/* Round 204: the hub is boxes now, the same boxes Club Manager has had
+   since Round 74. What each box says lives in the engine, not here. */
+import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
+import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHubTiles';
 import { mlbLeagueSeeds } from '@/lib/mlbFrontOffice';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
@@ -55,7 +59,10 @@ interface SaveShape {
 
 export default function MlbFrontOfficeBoard() {
   const [phase, setPhase] = useState<Phase>('pick');
-  const [tab, setTab] = useState<Tab>('team');
+  /* Round 204: the hub is tiles now, so null means the hub itself and a
+     tab key means you have opened that box. Club Manager's Round 74 rule,
+     brought to the four GM games. */
+  const [tab, setTab] = useState<Tab | null>(null);
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<MlbLeague | null>(null);
   const [feed, setFeed] = useState<string[]>([]);
@@ -130,7 +137,7 @@ export default function MlbFrontOfficeBoard() {
   const start = (abbr: string) => {
     const lg = initMlbLeague();
     const m = mandateFor(lg, abbr, false);
-    setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab('team');
+    setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     setFeed([
       `Welcome to the ${label(abbr)} front office. Opening Day of the ${lg.season} season is here.`,
       `🏛️ The ownership mandate: ${m.text}`,
@@ -248,7 +255,7 @@ export default function MlbFrontOfficeBoard() {
       ].slice(0, 6));
       setPressTilt(0); setSeasonTradeLine(null);
       setSeries([]); setChampion(''); setWonNow(false);
-      setPhase('hub'); setTab('team');
+      setPhase('hub'); setTab(null);
       setLeague(lg);
       persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null }, lg, myTeam);
       return;
@@ -501,6 +508,35 @@ export default function MlbFrontOfficeBoard() {
 
   const t = MLB_TEAM_MAP.get(myTeam)!;
 
+  /* Round 204: the facts each box carries, decided in src/lib/foHub.ts so
+     the wording is harnessed rather than eyeballed. Six of each league
+     reach October under the current format, three division winners and
+     three wildcards, so six is the cut the table box warns about. */
+  const myLeagueName = AL.includes(myTeam) ? 'AL' : 'NL';
+  const confTable = mlbStandings(league, AL.includes(myTeam) ? AL : NL);
+  const tiles = foHubTiles({
+    roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    freeAgents: league.freeAgents.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    capRoom: room,
+    wins: my.wins,
+    losses: my.losses,
+    period: league.round,
+    periods: MLB_ROUNDS,
+    playWord: 'Play',
+    periodWord: 'round',
+    /* A round here is a stretch of the whole league, not one fixture. */
+    hasFixtures: false,
+    nextOpponent: null,
+    lastResult: null,
+    place: confTable.findIndex(x => x.abbr === myTeam) + 1,
+    cut: 6,
+    tableName: myLeagueName,
+    tradeLine: seasonTradeLine,
+    titles,
+  });
+  const openPanel = (key: FoPanelKey) => setTab(key === 'play' ? 'round' : key);
+  const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
@@ -527,19 +563,11 @@ export default function MlbFrontOfficeBoard() {
       {/* Round 192: the introduction presser waits on the hub until answered. */}
       {presser && <GmPressCard presser={presser} onAnswer={answerPress} />}
 
-      <div className="flex items-center justify-center gap-1 rounded-full bg-secondary p-1 text-xs">
-        {([
-          ['team', 'Roster', Users],
-          ['market', 'Free agency', Briefcase],
-          ['trade', 'Trades', Swords],
-          ['round', 'Play', ShieldHalf],
-          ['standings', 'Standings', ListOrdered],
-        ] as [Tab, string, typeof Users][]).map(([key, lbl, Icon]) => (
-          <button key={key} onClick={() => setTab(key)} className={cn('inline-flex items-center gap-1 rounded-full px-3 py-1.5 font-semibold transition-all', tab === key ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground')}>
-            <Icon className="h-3.5 w-3.5" /> {lbl}
-          </button>
-        ))}
-      </div>
+      {/* Round 204: boxes, not pills. Each one already tells you the thing
+          you used to have to tap to find out. */}
+      {tab === null
+        ? <FoHubTiles tiles={tiles} onOpen={openPanel} />
+        : <FoPanelHeader title={panelTitle} onBack={() => setTab(null)} />}
 
       {feed.length > 0 && (
         <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
