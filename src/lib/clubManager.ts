@@ -1678,6 +1678,16 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
       id: 'laliga2015', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
       clubs: ['Athletic Club', 'Atlético Madrid', 'Barcelona', 'Celta Vigo', 'Deportivo La Coruña', 'Eibar', 'Espanyol', 'Getafe', 'Granada', 'Las Palmas', 'Levante', 'Málaga', 'Rayo Vallecano', 'Real Betis', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Sporting Gijón', 'Valencia', 'Villarreal'],
     },
+    /* Round 191: the era's third league, by the same recipe. Membership
+       verified 2026-08-20 against the Wikipedia season page (Juventus the
+       champions, their fifth straight; Carpi, Frosinone and Bologna up)
+       and worldfootball's fixture list, which names exactly these twenty,
+       AND against the market values table itself (Frosinone is the one
+       thin squad and the picker says so). */
+    {
+      id: 'seriea2015', name: 'Serie A', cupName: 'Coppa Italia', euro: true,
+      clubs: ['Juventus', 'Napoli', 'Roma', 'Inter Milan', 'AC Milan', 'Fiorentina', 'Lazio', 'Torino', 'Genoa', 'Sampdoria', 'Sassuolo', 'Udinese', 'Empoli', 'Chievo Verona', 'Palermo', 'Atalanta', 'Bologna', 'Hellas Verona', 'Carpi', 'Frosinone'],
+    },
   ],
   /* Round 176: the 2005-06 season, memberships verified against the season
      records (Wikipedia and worldfootball plus RSSSF final tables, checked
@@ -1954,6 +1964,9 @@ const CLUB_COLORS: Record<string, string> = {
   // crest art anywhere, per the legal rules).
   'Leicester City': '#0053a0', 'Eibar': '#8f2242', 'Granada': '#c8102e',
   'Las Palmas': '#fee23e', 'Sporting Gijón': '#e30613',
+  // Round 191: 2015-16 Serie A clubs not covered above.
+  'Sampdoria': '#1b5497', 'Empoli': '#1a5dad', 'Chievo Verona': '#f7d417',
+  'Palermo': '#e75ba5', 'Hellas Verona': '#002d72', 'Carpi': '#d02128',
   // Round 176: 2005-06 era clubs not covered above.
   'Cádiz': '#ffe100', 'Zaragoza': '#2b5da8', 'Wigan Athletic': '#1d59af',
   'Almería': '#d02128', 'Hércules': '#1d59af',
@@ -6013,6 +6026,10 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
   // did not exist (it began in 2021), so uecl stays 0 here too.
   premier2015: { ucl: 4, uel: 5, uecl: 0 },
   laliga2015:  { ucl: 4, uel: 6, uecl: 0 },
+  // Round 191: 2015-16 Serie A sent two straight to the group stage and
+  // third into qualifying (counted as in, per the simplification above);
+  // no Conference League existed.
+  seriea2015:  { ucl: 3, uel: 5, uecl: 0 },
   // Round 176: 2005-06. No Conference League, and the second competition
   // was still called the UEFA Cup (it became the Europa League in 2009).
   premier2005: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' },

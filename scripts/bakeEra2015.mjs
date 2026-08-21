@@ -51,14 +51,49 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
+/* ================= Round 191: the Serie A extension ================= */
+/* The era grows its third league IN PLACE. The original --pl/--laliga
+   full-bake path below still documents how the first forty clubs were
+   made, but its input dumps were session files that no longer exist, so
+   regenerating from scratch would mean re-transcribing seven hundred
+   rows by hand, and every hand-copied row is a chance to corrupt a world
+   that already shipped verified. The extend mode treats the SHIPPED
+   clubManagerEra2015.ts as the source of truth for the Premier League
+   and La Liga (it IS the byte-exact output of the original bake), adds
+   the 2015-16 Serie A from a fresh dump (same documented SQL shape, base
+   table, year = 2015 exact, DISTINCT ON), and applies ONLY the
+   cross-window corrections below, every one verified against the table's
+   own year-2016 rows on 2026-08-20. Run:
+
+     node scripts/bakeEra2015.mjs --extend-seriea=seriea2015.json
+
+   Corrections follow the Round 175 rules exactly: values stay the
+   year-2015 snapshot for every player, moved or not; a mover needs
+   common history AND a year-2016 row naming the destination; players
+   who left the (now three-league) world are removed, not relocated.
+   TWO removals are single-source by documented exception: Andrea Pirlo
+   (to New York City) and Samuel Eto'o (to Antalyaspor) have NO year-2016
+   row anywhere because the table does not track those leagues, so the
+   two-way rule cannot fire; but KEEPING them at Juventus and Sampdoria
+   would be affirmatively false, and a removal, unlike a placement,
+   cannot invent anything. The asymmetry is the point.
+   THE SHAQIRI FOLD: his year-2015 row surfaces in the Serie A dump at
+   Inter, but the shipped Premier League world already carries him at
+   Stoke via the Round 175 arrivals list, from the same row's data. The
+   dump row is dropped in favor of the shipped line, one man, one club. */
+
+const extendArg = process.argv.find(a => a.startsWith('--extend-seriea='));
+
 const plArg = process.argv.find(a => a.startsWith('--pl='));
 const llArg = process.argv.find(a => a.startsWith('--laliga='));
-if (!plArg || !llArg) {
-  console.error('Usage: node scripts/bakeEra2015.mjs --pl=pl2015.json --laliga=laliga2015.json');
+if (!extendArg && (!plArg || !llArg)) {
+  console.error('Usage: node scripts/bakeEra2015.mjs --extend-seriea=seriea2015.json');
+  console.error('   or (superseded full bake): node scripts/bakeEra2015.mjs --pl=pl2015.json --laliga=laliga2015.json');
   process.exit(1);
 }
 
@@ -163,6 +198,136 @@ const ERA_ARRIVALS_2015 = [
   { n: 'André Ayew', to: 'Swansea City', position: 'Centre-Forward', age: 25, usd: 14000000 },
 ];
 
+/* ---- Round 191: Serie A extension data ---- */
+
+/* DB club name -> era engine club name for the 2015-16 Serie A, membership
+ * verified 2026-08-20 against the Wikipedia season page (Juventus champions,
+ * their fifth straight; Carpi, Frosinone and Bologna up) and worldfootball's
+ * fixture list, which names exactly these twenty. Shared clubs reuse the
+ * 2026 world spelling; 2015-only clubs get their natural short names. */
+const DB_TO_ERA_SA = {
+  'Juventus FC': 'Juventus', 'SSC Napoli': 'Napoli', 'AS Roma': 'Roma',
+  'Inter Milan': 'Inter Milan', 'AC Milan': 'AC Milan',
+  'ACF Fiorentina': 'Fiorentina', 'SS Lazio': 'Lazio', 'Torino FC': 'Torino',
+  'Genoa CFC': 'Genoa', 'UC Sampdoria': 'Sampdoria', 'US Sassuolo': 'Sassuolo',
+  'Udinese Calcio': 'Udinese', 'FC Empoli': 'Empoli',
+  'Chievo Verona': 'Chievo Verona', 'Palermo FC': 'Palermo',
+  'Atalanta BC': 'Atalanta', 'Bologna FC 1909': 'Bologna',
+  'Hellas Verona': 'Hellas Verona', 'AC Carpi': 'Carpi',
+  'Frosinone Calcio': 'Frosinone',
+};
+
+/* The verified summer 2015 corrections the Serie A extension needs, every
+ * one checked against year-2016 rows on 2026-08-20. Three kinds:
+ * within-Serie-A, Serie A <-> the existing two leagues (both directions),
+ * and out of the world (to: null). See the mode header for the two
+ * documented single-source removals. */
+const SA_EXTEND_MOVES = [
+  // The Juventus rebuild, both directions.
+  { n: 'Paulo Dybala', to: 'Juventus' },          // Palermo -> Juve, 2016 row Juventus FC
+  { n: 'Juan Cuadrado', to: 'Juventus' },         // Fiorentina row -> Juve, 2016 confirms
+  { n: 'Neto', to: 'Juventus' },                  // Fiorentina -> Juve, 2016 confirms
+  { n: 'Daniele Rugani', to: 'Juventus' },        // Empoli -> Juve, 2016 confirms
+  { n: 'Simone Zaza', to: 'Juventus' },           // Sassuolo -> Juve, 2016 confirms
+  { n: 'Arturo Vidal', to: null },                // -> Bayern, 2016 confirms
+  { n: 'Carlos Tévez', to: null },                // -> Boca, 2016 confirms
+  { n: 'Kingsley Coman', to: null },              // -> Bayern, 2016 confirms
+  { n: 'Fernando Llorente', to: null },           // -> Sevilla... in-world! See below.
+  { n: 'Angelo Ogbonna', to: 'West Ham' },        // -> West Ham, 2016 confirms
+  { n: 'Sebastian Giovinco', to: null },          // -> Toronto, 2016 confirms (left Feb 2015)
+  { n: 'Andrea Pirlo', to: null },                // -> New York City; single-source, see header
+  // Milan's window.
+  { n: 'Alessio Romagnoli', to: 'AC Milan' },     // Sampdoria row -> Milan, 2016 confirms
+  { n: 'Andrea Bertolacci', to: 'AC Milan' },     // Genoa -> Milan, 2016 confirms
+  { n: 'Juraj Kucka', to: 'AC Milan' },           // Genoa -> Milan, 2016 confirms
+  { n: 'Adil Rami', to: null },                   // -> Sevilla... in-world! See below.
+  { n: 'Marco van Ginkel', to: 'Stoke City' },    // loan end -> Stoke loan, 2016 confirms
+  { n: 'Pablo Armero', to: 'Udinese' },           // 2016 row Udinese Calcio
+  { n: 'Salvatore Bocchetti', to: null },         // -> Spartak Moscow, 2016 confirms
+  // Inter's window.
+  { n: 'Miranda', to: 'Inter Milan' },            // Atletico -> Inter, 2016 confirms
+  { n: 'Stevan Jovetić', to: 'Inter Milan' },     // Man City -> Inter, 2016 confirms
+  { n: 'Adem Ljajic', to: 'Inter Milan' },        // Roma -> Inter, 2016 confirms
+  { n: 'Mateo Kovacic', to: 'Real Madrid' },      // Inter -> Real, 2016 confirms
+  { n: 'Lukas Podolski', to: null },              // -> Galatasaray, 2016 confirms
+  { n: 'Daniel Osvaldo', to: null },              // -> Boca, 2016 confirms
+  { n: 'Xherdan Shaqiri', to: 'DROP_DUPLICATE' }, // the Shaqiri fold, see header
+  { n: "Yann M'Vila", to: 'Sunderland' },         // 2016 row Sunderland AFC
+  { n: 'Zdravko Kuzmanovic', to: 'Udinese' },     // 2016 row Udinese Calcio
+  // Roma's window, both directions.
+  { n: 'Edin Dzeko', to: 'Roma' },                // Man City -> Roma, 2016 confirms
+  { n: 'Mohamed Salah', to: 'Roma' },             // Fiorentina row -> Roma, 2016 confirms
+  { n: 'Wojciech Szczęsny', to: 'Roma' },         // Arsenal -> Roma, 2016 confirms
+  { n: 'Iago Falque', to: 'Roma' },               // Genoa -> Roma, 2016 confirms
+  { n: 'Mattia Destro', to: 'Bologna' },          // 2016 row Bologna FC 1909
+  { n: 'Davide Astori', to: 'Fiorentina' },       // 2016 row ACF Fiorentina
+  { n: 'Seydou Doumbia', to: null },              // loan back east, 2016 row not at Roma
+  { n: 'Mapou Yanga-Mbiwa', to: null },           // -> Lyon, 2016 confirms
+  { n: 'Salih Uçan', to: null },                  // -> Fenerbahce, 2016 confirms
+  { n: 'Jose Cholevas', to: 'Watford' },          // 2016 row Watford FC
+  { n: 'Víctor Ibarbo', to: 'Watford' },          // loan, 2016 row Watford FC
+  // Napoli's window, both directions.
+  { n: 'Elseid Hysaj', to: 'Napoli' },            // Empoli -> Napoli, 2016 confirms
+  { n: 'Allan', to: 'Napoli' },                   // Udinese -> Napoli, 2016 confirms
+  { n: 'Mirko Valdifiori', to: 'Napoli' },        // Empoli -> Napoli, 2016 confirms
+  { n: 'Gökhan Inler', to: 'Leicester City' },    // the champions bought him, 2016 confirms
+  { n: 'Miguel Britos', to: 'Watford' },          // 2016 row Watford FC
+  { n: 'Duván Zapata', to: 'Udinese' },           // loan, 2016 row Udinese Calcio
+  { n: 'Jonathan de Guzmán', to: 'Carpi' },       // loan, 2016 row AC Carpi
+  { n: 'Walter Gargano', to: null },              // -> Monterrey, 2016 confirms
+  { n: 'Mariano Andújar', to: null },             // -> Estudiantes, 2016 confirms
+  { n: 'Henrique', to: null },                    // -> Fluminense, 2016 confirms
+  { n: 'Giandomenico Mesto', to: null },          // -> Panathinaikos, 2016 confirms
+  // Fiorentina's clear-out beyond the above.
+  { n: 'Stefan Savic', to: 'Atlético Madrid' },   // the Vietto counterweight, 2016 confirms
+  { n: 'Mario Gómez', to: null },                 // -> Besiktas, 2016 confirms
+  { n: 'Joaquín', to: 'Real Betis' },             // 2016 row Real Betis Balompie
+  { n: 'Juan Manuel Vargas', to: 'Real Betis' },  // 2016 row Real Betis Balompie
+  { n: 'Micah Richards', to: 'Aston Villa' },     // loan end, 2016 confirms
+  { n: 'José María Basanta', to: null },          // -> Monterrey, 2016 confirms
+  { n: 'Matías Vecino', to: 'Fiorentina' },       // Empoli row -> Fiorentina, 2016 confirms
+  // The rest of the league's window.
+  { n: 'Matteo Darmian', to: 'Manchester United' }, // Torino -> United, 2016 confirms
+  { n: 'Andrea Belotti', to: 'Torino' },          // Palermo -> Torino, 2016 confirms
+  { n: 'Alessandro Matri', to: 'Lazio' },         // Genoa row -> Lazio, 2016 confirms
+  { n: 'Jasmin Kurtic', to: 'Atalanta' },         // Fiorentina row -> Atalanta, 2016 confirms
+  { n: 'Yohan Benalouane', to: 'Leicester City' },// Atalanta -> the champions, 2016 confirms
+  { n: 'Pedro Obiang', to: 'West Ham' },          // Sampdoria -> West Ham, 2016 confirms
+  { n: 'Sergio Romero', to: 'Manchester United' },// Sampdoria -> United, 2016 confirms
+  { n: 'Stefano Okaka', to: null },               // -> Anderlecht, 2016 confirms
+  { n: "Samuel Eto'o", to: null },                // -> Antalyaspor; single-source, see header
+  { n: 'Maxime Lestienne', to: null },            // -> PSV, 2016 confirms
+  { n: 'Lucas Evangelista', to: null },           // -> Panathinaikos, 2016 confirms
+];
+
+/* Fernando Llorente and Adil Rami both moved to SEVILLA, which is in this
+ * world. They are moves, not removals; the entries above that said null
+ * are overridden here so the intent reads clearly in one place. */
+for (const m of SA_EXTEND_MOVES) {
+  if (m.n === 'Fernando Llorente') m.to = 'Sevilla';
+  if (m.n === 'Adil Rami') m.to = 'Sevilla';
+}
+
+/* Arrivals into the Serie A from outside the three-league world, each with
+ * its own year-2015 row data, destinations verified via year-2016 rows. */
+const SA_ARRIVALS = [
+  /* Five of these are RE-ADDITIONS: Round 175 removed them from the
+     two-league world as "left for clubs outside it", and the club they
+     left FOR is Serie A, which exists now. Their year-2015 rows are
+     restored verbatim from the table (queried 2026-08-20), destinations
+     verified via year-2016 rows like every other correction. */
+  { n: 'Mario Mandžukić', to: 'Juventus', position: 'Centre-Forward', age: 28, usd: 28000000 },
+  { n: 'Sami Khedira', to: 'Juventus', position: 'Central Midfield', age: 27, usd: 27000000 },
+  { n: 'Carlos Bacca', to: 'AC Milan', position: 'Centre-Forward', age: 28, usd: 27000000 },
+  { n: 'Mario Balotelli', to: 'AC Milan', position: 'Centre-Forward', age: 24, usd: 16000000 },
+  { n: 'Jeison Murillo', to: 'Inter Milan', position: 'Centre-Back', age: 22, usd: 11000000 },
+  { n: 'Alex Sandro', to: 'Juventus', position: 'Left-Back', age: 23, usd: 26000000 },
+  { n: 'Geoffrey Kondogbia', to: 'Inter Milan', position: 'Defensive Midfield', age: 21, usd: 26000000 },
+  { n: 'Ivan Perišić', to: 'Inter Milan', position: 'Left Winger', age: 25, usd: 17000000 },
+  { n: 'Nikola Kalinić', to: 'Fiorentina', position: 'Centre-Forward', age: 26, usd: 11000000 },
+  { n: 'Pepe Reina', to: 'Napoli', position: 'Goalkeeper', age: 32, usd: 4000000 },
+];
+
 /* Same curves as bakeClubManagerRosters.mjs, verbatim, so a 2015 value and a
  * 2026 value mean the same thing on the rating scale. */
 const POS_MAP = {
@@ -179,6 +344,187 @@ function ratingOf(usd) {
 function gbpM(usd) {
   const m = (usd * 0.75) / 1e6;
   return Math.round(m * 10) / 10;
+}
+
+/* ------------------- Round 191: the extend mode ------------------- */
+if (extendArg) {
+  const SA_CLUBS = [...new Set(Object.values(DB_TO_ERA_SA))];
+
+  /* 1. The shipped file is the truth for the first forty clubs. */
+  fs.writeFileSync('/tmp/era2015ExtendEntry.mjs',
+    `const m = await import('${ROOT}/src/data/clubManagerEra2015.ts');\nexport const R = m.ERA2015_ROSTERS;\nexport const META = m.ERA2015_META;\n`);
+  execSync(`${ROOT}/node_modules/.bin/esbuild /tmp/era2015ExtendEntry.mjs --bundle --format=esm --platform=node --outfile=/tmp/era2015Extend.bundle.mjs --log-level=error`);
+  const { R: EXISTING, META: OLD_META } = await import('/tmp/era2015Extend.bundle.mjs');
+  if (SA_CLUBS.some(c => EXISTING[c])) {
+    console.error('FATAL: the shipped file already holds a Serie A club; extend must not run twice');
+    process.exit(1);
+  }
+  const world = {};
+  for (const [club, list] of Object.entries(EXISTING)) world[club] = list.map(p => ({ ...p }));
+  for (const c of SA_CLUBS) world[c] = [];
+  const clubOfExisting = new Map();
+  for (const [club, list] of Object.entries(EXISTING)) for (const p of list) clubOfExisting.set(p.n, club);
+
+  /* 2. The fresh Serie A dump. */
+  const dumpPath = extendArg.slice(extendArg.indexOf('=') + 1);
+  const saRows = JSON.parse(fs.readFileSync(dumpPath, 'utf8')).rows ?? [];
+  const saPool = new Map();
+  for (const r of saRows) {
+    const engine = DB_TO_ERA_SA[r.club];
+    if (!engine) { console.error(`FATAL: Serie A dump row at unmapped club "${r.club}"`); process.exit(1); }
+    const prev = saPool.get(r.player_name);
+    if (!prev || r.market_value_usd > prev.usd) {
+      saPool.set(r.player_name, { engine, position: r.position, age: r.age, usd: r.market_value_usd });
+    }
+  }
+  console.log(`Serie A 2015 dump: ${saPool.size} distinct names`);
+
+  /* 3. The corrections. */
+  let moved = 0, removed = 0, arrived = 0, folded = 0;
+  const bake = (name, rec) => ({ n: name, p: POS_MAP[rec.position], a: rec.age, v: gbpM(rec.usd), r: ratingOf(rec.usd) });
+  for (const mv of SA_EXTEND_MOVES) {
+    const inSa = saPool.get(mv.n);
+    const oldClub = clubOfExisting.get(mv.n);
+    if (!inSa && !oldClub) { console.error(`FATAL: mover "${mv.n}" not found in either world, the list is stale`); process.exit(1); }
+    if (mv.to === 'DROP_DUPLICATE') {
+      if (!inSa || !oldClub) { console.error(`FATAL: fold "${mv.n}" expected on both sides`); process.exit(1); }
+      saPool.delete(mv.n); folded += 1; continue;
+    }
+    if (inSa) {
+      saPool.delete(mv.n);
+      if (mv.to === null) { removed += 1; continue; }
+      if (!POS_MAP[inSa.position]) { console.error(`FATAL: unmapped position "${inSa.position}" (${mv.n})`); process.exit(1); }
+      if (!world[mv.to]) { console.error(`FATAL: mover "${mv.n}" bound for unknown club "${mv.to}"`); process.exit(1); }
+      world[mv.to].push(bake(mv.n, inSa));
+      moved += 1;
+      continue;
+    }
+    /* The mover lives in the shipped forty (Dzeko, Szczesny, Jovetic, Miranda). */
+    const list = world[oldClub];
+    const idx = list.findIndex(p => p.n === mv.n);
+    const [row] = list.splice(idx, 1);
+    if (mv.to === null) { removed += 1; continue; }
+    if (!world[mv.to]) { console.error(`FATAL: mover "${mv.n}" bound for unknown club "${mv.to}"`); process.exit(1); }
+    world[mv.to].push(row);
+    moved += 1;
+  }
+  for (const ar of SA_ARRIVALS) {
+    if (saPool.has(ar.n) || clubOfExisting.has(ar.n)) {
+      console.error(`FATAL: arrival "${ar.n}" already in a dump, remove the duplicate entry`);
+      process.exit(1);
+    }
+    if (!world[ar.to]) { console.error(`FATAL: arrival "${ar.n}" bound for unknown club "${ar.to}"`); process.exit(1); }
+    world[ar.to].push(bake(ar.n, { position: ar.position, age: ar.age, usd: ar.usd }));
+    arrived += 1;
+  }
+
+  /* 4. One name, one player, per era world: a Serie A name colliding with a
+     shipped name is two real men wearing one string (Hellas Verona's
+     Fernandinho against Manchester City's, their Rafael against United's),
+     and the era engine keys players by name, so only one can exist. Same
+     rule as the original merge: the higher value stays, and the drop is
+     logged out loud. */
+  let collisions = 0;
+  for (const [name, rec] of [...saPool.entries()]) {
+    const oldClub = clubOfExisting.get(name);
+    if (!oldClub || !world[oldClub]?.some(p => p.n === name)) continue;
+    const oldRow = world[oldClub].find(p => p.n === name);
+    if (gbpM(rec.usd) > oldRow.v) {
+      world[oldClub] = world[oldClub].filter(p => p.n !== name);
+      console.log(`  name collision: '${name}' kept at Serie A value over ${oldClub}'s ${oldRow.v}m`);
+    } else {
+      saPool.delete(name);
+      console.log(`  name collision: '${name}' kept at ${oldClub} (${oldRow.v}m) over the Serie A row`);
+    }
+    collisions += 1;
+  }
+
+  /* 5. Bake the rest of the league. */
+  for (const [name, rec] of saPool) {
+    if (!POS_MAP[rec.position]) { console.error(`FATAL: unmapped position "${rec.position}" (${name})`); process.exit(1); }
+    world[rec.engine].push(bake(name, rec));
+  }
+  for (const list of Object.values(world)) list.sort((a, b) => b.v - a.v || a.n.localeCompare(b.n));
+
+  /* 6. Anchors: a 2015-16 Serie A without its own headline is not one. */
+  const anchor2 = (club, name) => {
+    if (!(world[club] ?? []).some(pl => pl.n === name)) {
+      console.error(`FATAL: anchor ${name} missing from 2015 ${club}`);
+      process.exit(1);
+    }
+  };
+  anchor2('Juventus', 'Paul Pogba');
+  anchor2('Juventus', 'Paulo Dybala');
+  anchor2('Juventus', 'Gianluigi Buffon');
+  anchor2('Napoli', 'Gonzalo Higuaín');
+  anchor2('Napoli', 'Marek Hamsik');
+  anchor2('Roma', 'Francesco Totti');
+  anchor2('Roma', 'Edin Dzeko');
+  anchor2('Inter Milan', 'Mauro Icardi');
+  anchor2('AC Milan', 'Carlos Bacca');
+  anchor2('Fiorentina', 'Nikola Kalinić');
+  anchor2('Leicester City', 'Gökhan Inler');
+  anchor2('Leicester City', 'Jamie Vardy');
+  anchor2('Barcelona', 'Lionel Messi');
+
+  /* 7. Thin only where the table itself is thin. */
+  const EXPECTED_THIN_ALL = new Set(['Las Palmas', 'Frosinone']);
+  const partialAll = [];
+  let totalAll = 0;
+  const clubsAll = Object.keys(world).sort((a, b) => a.localeCompare(b));
+  for (const club of clubsAll) {
+    const n = world[club].length;
+    totalAll += n;
+    if (n < 8) {
+      partialAll.push(club);
+      if (!EXPECTED_THIN_ALL.has(club)) {
+        console.error(`FATAL: ${club} has only ${n} real 2015 players and was not expected thin`);
+        process.exit(1);
+      }
+    }
+  }
+
+  /* 8. Emit the sixty-club world. */
+  const escX = s => s.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  const movesAll = OLD_META.moves + moved + removed + arrived + folded;
+  let outX = `// AUTO-GENERATED by scripts/bakeEra2015.mjs (Round 175, extended Round 191).
+// The 2015-16 era world: real year-2015 Transfermarkt rows from
+// player_market_values for all 60 clubs of the 2015-16 Premier League,
+// La Liga and Serie A (the Serie A joined via the extend mode, see the
+// script header; membership verified against the Wikipedia season page
+// and worldfootball's fixture list, dump 2026-08-20). The verified
+// summer 2015 window corrections are applied across all three leagues
+// (${movesAll} rows moved, removed, arrived or folded in total). Values in £m
+// at the year-2015 snapshot, ratings 48-94 on the same curve as the 2026
+// bake. Regenerate per the header of scripts/bakeEra2015.mjs.
+// DO NOT EDIT BY HAND.
+import type { BakedPlayer } from '@/data/clubManagerRosters';
+
+export const ERA2015_META = {
+  year: 2015,
+  players: ${totalAll},
+  clubs: ${clubsAll.length},
+  moves: ${movesAll},
+};
+
+/** 2015 clubs where the year-2015 table runs thin (under 8 real players);
+ *  the game pads these squads with youth players and the picker says so. */
+export const ERA2015_PARTIAL: string[] = ${JSON.stringify(partialAll.sort())};
+
+export const ERA2015_ROSTERS: Record<string, BakedPlayer[]> = {
+`;
+  for (const club of clubsAll) {
+    outX += `  '${escX(club)}': [\n`;
+    for (const p of world[club]) {
+      outX += `    { n: '${escX(p.n)}', p: '${p.p}', a: ${p.a}, v: ${p.v}, r: ${p.r} },\n`;
+    }
+    outX += `  ],\n`;
+  }
+  outX += `};\n`;
+  fs.writeFileSync(path.join(ROOT, 'src/data/clubManagerEra2015.ts'), outX);
+  console.log(`Extended to ${totalAll} players across ${clubsAll.length} clubs (${partialAll.length} partial).`);
+  console.log(`Serie A corrections: ${moved} moved, ${removed} removed, ${arrived} arrived, ${folded} folded, ${collisions} name collisions resolved.`);
+  process.exit(0);
 }
 
 /* ------------------------------------------------------------------ */

@@ -165,7 +165,19 @@ console.log('2) Three worlds now, and none of them leak');
      the Cruzeiro one) vs Luzern's Portuguese academy midfielder Lucas
      Manuel Silva Ferreira (b. 2006), confirmed distinct on his Soccerway
      profile and Luzern's July 2026 contract-extension news. */
-  const NAMESAKES_2026 = new Set(['Aaron Ramsey', 'Luis Suárez', 'Javi López', 'Javi Guerra', 'Beto', 'Lucas Silva']);
+  /* Round 191 additions, verified 2026-08-20 with the Serie A bake: every
+     pair below is two independently sourced real rows whose ages cannot be
+     one human. Diego Lopez the Milan keeper (b. 1981) vs Valencia's winger
+     (b. 2002); Carpi's keeper Gabriel (b. 1992) vs Arsenal's centre-back
+     (b. 1997); Inter's left-back Dodo (b. 1992) vs Fiorentina's right-back
+     (b. 1998); Juventus' midfielder Romulo (b. 1987) vs the young Leipzig
+     forward; Lazio's Brazilian playmaker Ederson (b. 1986) vs the modern
+     goalkeeper (b. 1993); Udinese's centre-back Danilo (b. 1984) vs the
+     Forest midfielder; Udinese's Brazilian left-back Gabriel Silva
+     (b. 1991) vs Santa Clara's; and one of Brazil's many Guilhermes
+     against another. */
+  const NAMESAKES_2026 = new Set(['Aaron Ramsey', 'Luis Suárez', 'Javi López', 'Javi Guerra', 'Beto', 'Lucas Silva',
+    'Diego López', 'Gabriel', 'Dodô', 'Rômulo', 'Ederson', 'Danilo', 'Gabriel Silva', 'Guilherme']);
   const eraByName = new Map();
   for (const roster of Object.values(ERA2015_ROSTERS)) for (const p of roster) eraByName.set(p.n, p);
   const modByName = new Map();
@@ -191,7 +203,7 @@ console.log('2) Three worlds now, and none of them leak');
      2026-08-18: the 2010 Atletico winger Simao (b. 1979) vs Levante's 2015
      Simao Mate Junior (b. 1988); the 2010 Fernando (b. 1980 vintage row) vs
      Manchester City's 2015 Brazilian Fernando (b. 1987). */
-  const NAMESAKES_2010 = new Set(['Simão', 'Fernando']);
+  const NAMESAKES_2010 = new Set(['Simão', 'Fernando', 'David López']); // Round 191: Athletic's 2010 winger (b. 1982) vs Napoli's 2015 defender (b. 1989)
   const oldByName = new Map();
   for (const roster of Object.values(ERA2010_ROSTERS)) for (const p of roster) oldByName.set(p.n, p);
   let shared10 = 0, weird10 = 0, namesakes10 = 0;
@@ -216,7 +228,8 @@ console.log('2) Three worlds now, and none of them leak');
 console.log('3) Boards talk 2015: title for Barcelona, survival talk for August Leicester');
 {
   const leagues = ERA_LEAGUES['era2015'] ?? [];
-  if (leagues.length !== 2) fail(`era2015 has ${leagues.length} leagues`);
+  /* Round 191: the Serie A joined, so the era holds three leagues now. */
+  if (leagues.length !== 3) fail(`era2015 has ${leagues.length} leagues`);
   let labels = 0;
   for (const lg of leagues) {
     const targets = [];
@@ -236,12 +249,12 @@ console.log('3) Boards talk 2015: title for Barcelona, survival talk for August 
       }
     }
   }
-  console.log(`   ${labels} club demands checked across both 2015 leagues`);
+  console.log(`   ${labels} club demands checked across the three 2015 leagues`);
   const leagueTargetOf = name => {
     const lg = leagues.find(l => l.clubs.includes(name));
     return buildBoardObjectives(name, false, lg.clubs.length, 'era2015').find(o => o.id === 'league')?.target ?? 99;
   };
-  for (const giant of ['Barcelona', 'Real Madrid']) {
+  for (const giant of ['Barcelona', 'Real Madrid', 'Juventus']) {
     if (leagueTargetOf(giant) !== 1) fail(`2015 ${giant} is not told to win the league`);
   }
   /* The whole point of this season: in August 2015 NOBODY told Leicester to

@@ -110,6 +110,55 @@ const browser = await chromium.launch();
   await page.close();
 }
 
+/* ---------- Walk three: Round 191, Italy and the five-straight champions ---------- */
+{
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const errors = [];
+  page.on('pageerror', e => errors.push(String(e)));
+  await page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(1500);
+  const fresh = await page.locator('text=Start Fresh').count();
+  if (fresh) { await page.locator('text=Start Fresh').click(); await page.waitForTimeout(800); }
+  await page.locator('button:has-text("2015-16")').first().click();
+  await page.waitForTimeout(700);
+
+  console.log('5) Italy in 2015');
+  say(await page.locator('text=Italy').count() >= 1, 'Italy joined the 2015 nations');
+  await page.locator('text=Italy').first().click();
+  await page.waitForTimeout(700);
+  say(await page.locator('text=Serie A').count() >= 1, 'the 2015 Serie A is offered');
+  await page.locator('text=Serie A').first().click();
+  await page.waitForTimeout(700);
+  say(await page.locator('button:has-text("Juventus")').count() === 1, '2015 Juventus are a pickable club');
+  say(await page.locator('button:has-text("Carpi")').count() === 1, '2015 Carpi are a pickable club (their one top flight season)');
+  say(await page.locator('button:has-text("Chievo Verona")').count() === 1, '2015 Chievo are a pickable club');
+  say(await page.locator('button:has-text("Como")').count() === 0, '2026 Como correctly absent from 2015 Serie A');
+  const frosi = await page.locator('button:has-text("Frosinone")').first().textContent();
+  say(/partial data/i.test(frosi ?? ''), 'the thin-squad marker shows for Frosinone');
+  const juve = await page.locator('button:has-text("Juventus")').first().textContent();
+  say(/Win the Serie A/i.test(juve ?? ''), 'the Juventus tile demands the title');
+
+  console.log('6) Into the 2015 Turin dressing room');
+  await page.locator('button:has-text("Juventus")').first().click();
+  await page.waitForTimeout(500);
+  const essential = page.locator('button:has-text("Essential only")');
+  if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
+  await page.locator('text=Take the job').click();
+  await page.waitForTimeout(2000);
+  const body = await page.locator('body').textContent();
+  say(/2015-16/.test(body ?? ''), 'the career header says 2015-16');
+  const squadTab = page.locator('text=Squad').first();
+  if (await squadTab.count()) { await squadTab.click(); await page.waitForTimeout(900); }
+  const body2 = await page.locator('body').textContent();
+  say(/Dybala/.test(body2 ?? ''), 'Dybala arrived from Palermo, the window correction landed');
+  say(/Buffon/.test(body2 ?? ''), 'Buffon is in goal');
+  say(/Pogba/.test(body2 ?? ''), 'Pogba stayed for 2015-16, exactly as in real life');
+  say(!/Vidal/.test(body2 ?? ''), 'Vidal is gone to a league outside this world');
+  const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
+  say(pageErrors.length === 0, `no real page errors on the Italy walk (${pageErrors.length ? pageErrors[0] : 'clean'})`);
+  await page.close();
+}
+
 await browser.close();
 console.log('');
 if (failures > 0) {

@@ -686,8 +686,8 @@ export const CM_ERAS: CMEra[] = [
     label: seasonLabel(2015),
     startYear: 2015,
     emoji: '\u{1F98A}',
-    blurb: 'The Leicester season. MSN Barcelona, Vardy at 5000 to 1. Premier League and La Liga, 2015-16.',
-    honesty: `Real data. ${ERA2015_META.players} real players with their real 2015 ages and values, all 40 clubs of the 2015-16 Premier League and La Liga. Thin squads are padded with made up youth players and say so.`,
+    blurb: 'The Leicester season. MSN Barcelona, Vardy at 5000 to 1, Juventus chasing five straight. Premier League, La Liga and Serie A, 2015-16.',
+    honesty: `Real data. ${ERA2015_META.players} real players with their real 2015 ages and values, all 60 clubs of the 2015-16 Premier League, La Liga and Serie A. Thin squads are padded with made up youth players and say so.`,
   },
   {
     id: 'era2010',
