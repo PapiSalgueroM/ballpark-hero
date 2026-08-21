@@ -48,10 +48,21 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   its FIRST run caught a real bug: one Saturday per entry stretched a 52 entry season to
   July 31, which is why cups went midweek. The browser walk opens the calendar and checks
   grid, cones, policy and the long fast forward.
-- CM-4 Create-a-club depth: a squad quality slider (start with a team of 90s, 80s, 70s, on
-  down), a tactical identity pick (gegenpress, tiki taka, low block, counter, balanced), and
-  stadium size. Board expectations already read the squad, so a slider squad gets honest
-  demands for free.
+- CM-4 **DONE, Round 160: create-a-club depth.** A squad quality slider (55 to 88 average:
+  88 hands you starters in the low 90s, decoupled from the money, and the create form's
+  live board line moves as you drag), a football identity picked at the founding
+  (Gegenpress, Tiki-taka, Park the bus, Counter attack, Balanced: sets day-one formation
+  and mentality, changeable any week, deliberately NO hidden strength modifier), and the
+  ground's size (9k, 28k, 62k, shown on the hub, ready for the finance layer). Boards read
+  the squad, so a slider superteam in the Eredivisie is told to win it and a 55 squad in
+  the Premier League is told to stay up. simCreateClub grew section 8 (slider reach, cap at
+  93, honest demands both directions, identity applied, capacity persisted, determinism,
+  legacy anchor intact), and its first run caught a LATENT Round 154 bug: boardWantLabel
+  read leagueOf, whose fallback is the Premier League, so a tier-one custom club in any
+  other league was told to win the wrong country's title. Fixed at the source (the label
+  reads the registered spec like careerLeagueOf does) and pinned. Browser-checked end to
+  end: form sections render, slider flips the live demand, founding lands on the hub with
+  the capacity chip.
 - CM-5 More eras, correct data always, and the 2010 era must STOP underrating the legends:
   his words, "ur undermining the fact that these are legends of the game and way better than
   anyone in the current generation". The era bake maps 2010 market values through a curve
@@ -397,7 +408,8 @@ true on the date above; re-measure rather than quoting them.
 | Packaged queue | Round **151** (the What's New page catches up with the big day, plus the simContracts deflake) and Round **152** (Stadium Tycoon milestones plus named opposition: ten career firsts that pay exactly once, and every opponent is an invented club like Ironbridge Rovers, 288 possible names proven collision-free against all 277 real clubs in the manager world). Plus Round **153**: `scripts/playEra2010.mjs`, the browser harness that walks the 2010 era picker like a person (14 checks: era tile, nations shrunk to England and Spain, Blackpool pickable and marked partial, the title demand on the United tile, Rooney in the dressing room, no 2026 leak). One click ships all three: **`SHIP15.bat`** (logs to `ship_log15.txt`). Then Round **154** (create-a-club, owner item D) rides alone as `RUN154.bat`, chain-guarded on 153, and Round **155** (the content layer catches up: Club Manager's SEO copy rewritten for 270 clubs, eras and create-a-club after sitting at the 20-club version with "Top 14" phrasing; a What's New entry; the wave-3 league probe folded into item 6) as `RUN155.bat`, and Round **156** (the game's own help catches up: the in-game "?" popover still said nine leagues and 186 clubs, still offered the future starts Round 139 removed, and still DENIED the 2010 era Round 146 shipped; the on-page SEO block had the same rot. Both rewritten from the live engine, browser-checked 8/8) as `RUN156.bat`. Click order: SHIP15.bat, RUN154.bat, RUN155.bat, RUN156.bat, each one self-guards. |
 | Packaged 2026-08-18 | **Round 157** (Quick Sim, Match Centre, match stats and ratings, header counting, halftime-consistent scorer minutes) and **Round 158** (Watch Live, the animated 2D match viewer with the dressing room embedded at the break, PLUS the month calendar with training cones and the long fast forward: the two shipped together because they share the page files). `RUN157.bat` then `RUN158.bat`, each chain-guarded. `SHIP16.bat` runs both. |
 | Packaged 2026-08-18, later | **Round 159** (the fix pack off his screenshots: ceiling repair, real Retire and New Career buttons, the slalom stopwatch, keeper Shot Stopping, Passing Gates, true header centering at desktop, Soccer Career counting toward the header per season). `RUN159.bat`, chain-guarded on 158. `SHIP16.bat` runs 157 and 158; click RUN159 after, or use SHIP17.bat which runs all three. |
-| Next free round number | **160** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, later still | **Round 160** (create-a-club depth: quality slider, football identity, stadium size, plus the boardWantLabel wrong-league fix its harness caught). `RUN160.bat`, chain-guarded on 159. SHIP18.bat runs 157 through 160. |
+| Next free round number | **161** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

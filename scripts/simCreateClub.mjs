@@ -334,6 +334,60 @@ console.log('7) Crest markup is deterministic, self-contained and injection-proo
   console.log(`   ${checked} shape x pattern combos sealed, injection attempts neutralized`);
 }
 
+/* ---------- 8. Round 160: the quality slider, the identity, the ground ---------- */
+console.log('8) Round 160: quality slider, identity, stadium size');
+{
+  Math.random = seeded(160160);
+  // A team of 90s: quality 88 in the Eredivisie must produce low-90s starters
+  // and a board that names the title, whatever the wallet says.
+  const superclub = startCareer('Real Anthony', 'now', spec({
+    budgetTier: 'small', leagueId: 'eredivisie', quality: 88, identity: 'gegenpress', capacity: 62000,
+  }));
+  const ratings = superclub.squad.map(p => p.rating).sort((a, b) => b - a);
+  if (ratings[0] < 89) fail(`quality 88 produced a best player of ${ratings[0]}, expected low 90s`);
+  if (ratings[0] > 93) fail(`quality 88 produced a ${ratings[0]}, above the 93 cap`);
+  const xiAvg = ratings.slice(0, 11).reduce((s, r) => s + r, 0) / 11;
+  if (xiAvg < 86) fail(`quality 88 XI averages ${xiAvg.toFixed(1)}, the slider is not reaching the squad`);
+  const wants = boardWantLabel('Real Anthony');
+  if (!/win|title|champion/i.test(wants)) fail(`a division-topping slider squad is told "${wants}", not the title`);
+  /* And the demand names the RIGHT league. The old label read leagueOf, whose
+     fallback is the Premier League, so an Eredivisie superclub was told to
+     win the wrong country's title. Caught by this harness's first run. */
+  if (/premier/i.test(wants)) fail(`an Eredivisie club is told "${wants}", the label is reading the fallback league`);
+  if (!/eredivisie/i.test(wants)) fail(`expected the Eredivisie named in "${wants}"`);
+  // The identity set the day-one shape: gegenpress is 4-2-3-1 attacking.
+  if (superclub.formationIndex !== 2) fail(`gegenpress opened in formation index ${superclub.formationIndex}, expected 2`);
+  if (superclub.mentality !== 'attacking') fail(`gegenpress opened ${superclub.mentality}, expected attacking`);
+  if (superclub.customClub?.capacity !== 62000) fail('the chosen capacity did not reach the save');
+
+  // And the same money with the slider LOW gets a survival brief in England.
+  const minnows = startCareer('Real Anthony', 'now', spec({
+    budgetTier: 'big', leagueId: 'premier', quality: 55, identity: 'lowblock', capacity: 9000,
+  }));
+  const wants2 = boardWantLabel('Real Anthony');
+  if (/win the|title/i.test(wants2)) fail(`a 55-quality squad in the Premier League is told "${wants2}"`);
+  if (minnows.mentality !== 'defensive') fail(`park the bus opened ${minnows.mentality}`);
+  const r2 = minnows.squad.map(p => p.rating).sort((a, b) => b - a);
+  if (r2[0] > 62) fail(`quality 55 produced a ${r2[0]}, the slider is not holding the squad down`);
+
+  // Determinism: the same spec builds the same squad, quality included.
+  const again = startCareer('Real Anthony', 'now', spec({
+    budgetTier: 'small', leagueId: 'eredivisie', quality: 88, identity: 'gegenpress', capacity: 62000,
+  }));
+  const names1 = superclub.squad.map(p => p.name).join('|');
+  const names2 = again.squad.map(p => p.name).join('|');
+  if (names1 !== names2) fail('the same spec produced two different squads');
+  const rat2 = again.squad.map(p => p.rating).join(',');
+  const rat1 = superclub.squad.map(p => p.rating).join(',');
+  if (rat1 !== rat2) fail('the same spec produced two different rating sheets');
+
+  // A Round 154 save (no quality field) still builds the tier-anchor squad.
+  const legacy = startCareer('Real Anthony', 'now', spec({ budgetTier: 'mid', leagueId: 'premier' }));
+  const lr = legacy.squad.map(p => p.rating).sort((a, b) => b - a);
+  if (lr[0] > 78) fail(`a legacy no-quality spec produced a ${lr[0]}, the old anchor path drifted`);
+  console.log(`   slider 88: best ${ratings[0]}, XI ${xiAvg.toFixed(1)}, told "${wants}" · slider 55 in the PL told "${wants2}" · legacy anchor intact`);
+}
+
 Math.random = REAL_RANDOM;
 registerCustomClub(null);
 console.log('');

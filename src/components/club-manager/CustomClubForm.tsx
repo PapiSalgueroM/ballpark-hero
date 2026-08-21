@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Sparkles } from 'lucide-react';
 import {
-  CREST_SHAPES, CREST_PATTERNS, CUSTOM_TIERS, crestSvg,
+  CREST_SHAPES, CREST_PATTERNS, CUSTOM_TIERS, CLUB_IDENTITIES, CUSTOM_STADIUMS, crestSvg,
   validateCustomClubName, sanitizeCrestInitials, customBoardPreview, money,
 } from '@/lib/clubManager';
-import type { CrestSpec, CustomClubSpec, CustomBudgetTier } from '@/lib/clubManager';
+import type { CrestSpec, CustomClubSpec, CustomBudgetTier, ClubIdentity } from '@/lib/clubManager';
 
 /**
  * Round 154, his ask verbatim: "create a create my team for the manger game
@@ -51,6 +51,11 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
   const [initialsRaw, setInitialsRaw] = useState('');
   const [tier, setTier] = useState<CustomBudgetTier>('mid');
   const [triedSubmit, setTriedSubmit] = useState(false);
+  /* Round 160: how good the squad starts (decoupled from the money), the
+     club's football identity, and the size of the ground. */
+  const [quality, setQuality] = useState(66);
+  const [identity, setIdentity] = useState<ClubIdentity>('balanced');
+  const [capacity, setCapacity] = useState(CUSTOM_STADIUMS[1].capacity);
 
   // Initials follow the name until the user takes them over.
   const autoInitials = useMemo(() => {
@@ -65,9 +70,12 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
   );
 
   const nameError = useMemo(() => validateCustomClubName(name), [name]);
+  /* The quality slider feeds the SAME preview the live board reads, so
+     dragging it visibly moves the demand: a division-topping squad gets told
+     to win the thing, honestly, before you commit. */
   const preview = useMemo(
-    () => customBoardPreview({ name: name || 'Your Club', stadium, crest, budgetTier: tier, leagueId }, eraId),
-    [name, stadium, crest, tier, leagueId, eraId],
+    () => customBoardPreview({ name: name || 'Your Club', stadium, crest, budgetTier: tier, leagueId, quality, identity, capacity }, eraId),
+    [name, stadium, crest, tier, leagueId, eraId, quality, identity, capacity],
   );
 
   const submit = () => {
@@ -80,6 +88,9 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
       budgetTier: tier,
       leagueId,
       replacedClub: preview.replaced ?? '',
+      quality,
+      identity,
+      capacity,
     });
   };
 
@@ -206,6 +217,83 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
               placeholder="RA"
               className="w-24 bg-secondary border border-border rounded-lg px-3 py-2 text-sm font-bold tracking-widest text-foreground outline-none focus:border-primary uppercase"
             />
+          </div>
+        </div>
+
+        {/* Round 160: squad quality, decoupled from the wallet. */}
+        <div className="bg-card border border-border rounded-2xl p-3">
+          <div className="flex items-center justify-between mb-1">
+            <div className="text-[10px] text-muted-foreground uppercase tracking-wider">How good do you start</div>
+            <div className="text-sm font-bold font-display text-foreground tabular-nums">~{quality}</div>
+          </div>
+          <input
+            type="range"
+            min={55}
+            max={88}
+            step={1}
+            value={quality}
+            onChange={e => setQuality(Number(e.target.value))}
+            aria-label="Starting squad quality"
+            className="w-full accent-[var(--primary,#22c55e)]"
+          />
+          <div className="flex justify-between text-[9px] text-muted-foreground mt-0.5">
+            <span>Minnows (55s)</span>
+            <span>Mid table</span>
+            <span>Team of 90s</span>
+          </div>
+          <p className="text-[9px] text-muted-foreground mt-1">
+            The squad average. Your best players land a couple of points above it, so 88 hands you starters in the low 90s. The board reads the squad you build here, and the demand above moves as you drag.
+          </p>
+        </div>
+
+        {/* Round 160: the football identity. */}
+        <div className="bg-card border border-border rounded-2xl p-3">
+          <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">How you play</div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+            {(Object.keys(CLUB_IDENTITIES) as ClubIdentity[]).map(k => {
+              const it = CLUB_IDENTITIES[k];
+              const sel = identity === k;
+              return (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => setIdentity(k)}
+                  className={cn(
+                    'rounded-xl border p-2 text-left transition-all',
+                    sel ? 'bg-primary/10 border-primary' : 'bg-card border-border hover:border-primary',
+                  )}
+                >
+                  <div className={cn('text-xs font-bold', sel ? 'text-primary' : 'text-foreground')}>{it.emoji} {it.label}</div>
+                  <div className="text-[9px] text-muted-foreground mt-0.5 leading-tight">{it.blurb}</div>
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-[9px] text-muted-foreground mt-1.5">Sets your day-one formation and mentality. Change both any week on the tactics screen.</p>
+        </div>
+
+        {/* Round 160: the ground. */}
+        <div className="bg-card border border-border rounded-2xl p-3">
+          <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">How big is the ground</div>
+          <div className="grid grid-cols-3 gap-2">
+            {CUSTOM_STADIUMS.map(s => {
+              const sel = capacity === s.capacity;
+              return (
+                <button
+                  key={s.capacity}
+                  type="button"
+                  onClick={() => setCapacity(s.capacity)}
+                  className={cn(
+                    'rounded-xl border p-2.5 text-left transition-all',
+                    sel ? 'bg-primary/10 border-primary' : 'bg-card border-border hover:border-primary',
+                  )}
+                >
+                  <div className={cn('text-xs font-bold', sel ? 'text-primary' : 'text-foreground')}>🏟 {s.label}</div>
+                  <div className="text-sm font-bold font-display text-foreground mt-0.5">{(s.capacity / 1000).toFixed(0)}k</div>
+                  <div className="text-[9px] text-muted-foreground mt-0.5">{s.blurb}</div>
+                </button>
+              );
+            })}
           </div>
         </div>
 

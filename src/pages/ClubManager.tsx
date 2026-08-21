@@ -790,7 +790,9 @@ const ClubManager = () => {
               save opened on "#15 in league", which reads as broken. */}
           <span>{c.week === 0 ? 'Season not started' : `#${g.myPosition || '-'} in league`}</span>
           {c.customClub && c.customClub.name === c.clubName && (
-            <span className="inline-flex items-center gap-1">🏟 {c.customClub.stadium}</span>
+            <span className="inline-flex items-center gap-1">
+              🏟 {c.customClub.stadium}{c.customClub.capacity ? ` (${Math.round(c.customClub.capacity / 1000)}k)` : ''}
+            </span>
           )}
           <span className="text-gold font-semibold">{money(c.budget)}</span>
           <span className="inline-flex items-center gap-1">

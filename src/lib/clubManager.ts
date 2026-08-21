@@ -1244,7 +1244,16 @@ export function eraPlayableClubs(eraId: string, leagueId: string): ClubDef[] {
 export function boardWantLabel(clubName: string, eraId?: string): string {
   const historic = !!eraId && isHistoricEra(eraId);
   const club = historic ? eraClubDefFor(clubName, eraId) : clubDefFor(clubName);
-  const league = (historic && eraLeagueOf(clubName, eraId)) || leagueOf(clubName);
+  /* Round 160: a custom club is in no static league list, and leagueOf's
+     fallback is the Premier League, so a quality-slider superteam founded in
+     the Eredivisie was told to "Win the Premier League". Round 154 fixed the
+     same fallback in careerLeagueOf; this label reads the registered spec
+     the same way now. Latent until the slider made tier-one customs
+     possible, because the lower bands' labels never name the league. */
+  const custom = activeCustomClub();
+  const league = (custom && custom.name === clubName && customLeagueDef(custom, eraId))
+    || (historic && eraLeagueOf(clubName, eraId))
+    || leagueOf(clubName);
   return leagueDemand(club.expectation, club.tier, league.clubs.length, league, titleGapFor(clubName, league, eraId), eraId).label;
 }
 
@@ -1783,7 +1792,42 @@ export interface CustomClubSpec {
   leagueId: string;
   /** The club it displaced this season. Recomputed every summer. */
   replacedClub: string;
+  /**
+   * Round 160: how good the squad starts, decoupled from the money. The
+   * average rating the generated squad is built around, 55 to 88 (starters
+   * land a couple of points above it, so 88 hands you a team of 90s). Absent
+   * on a Round 154 save, where the budget tier's anchor applies as before.
+   */
+  quality?: number;
+  /** Round 160: the club's football identity, picked at the founding. Sets
+   *  the day-one formation and mentality; you can change both any week. */
+  identity?: ClubIdentity;
+  /** Round 160: how many the ground holds. Display and future finance. */
+  capacity?: number;
 }
+
+export type ClubIdentity = 'gegenpress' | 'tikitaka' | 'lowblock' | 'counter' | 'balanced';
+
+/** Round 160: what each identity means on day one. formationIndex points
+ *  into FORMATIONS; the mentality is the standing instruction. No hidden
+ *  strength modifier lives here on purpose: identity is a starting point
+ *  and a badge, and the football is still played by the calibrated engine. */
+export const CLUB_IDENTITIES: Record<ClubIdentity, {
+  label: string; emoji: string; blurb: string; formationIndex: number; mentality: Mentality;
+}> = {
+  gegenpress: { label: 'Gegenpress', emoji: '⚡', blurb: 'Win it back in five seconds. High line, high risk.', formationIndex: 2, mentality: 'attacking' },
+  tikitaka: { label: 'Tiki-taka', emoji: '🔄', blurb: 'A thousand passes. The ball does the running.', formationIndex: 0, mentality: 'balanced' },
+  lowblock: { label: 'Park the bus', emoji: '🚌', blurb: 'Two banks, no gaps, break their hearts.', formationIndex: 7, mentality: 'defensive' },
+  counter: { label: 'Counter attack', emoji: '🗡️', blurb: 'Soak it up, then three passes and in.', formationIndex: 1, mentality: 'defensive' },
+  balanced: { label: 'Balanced', emoji: '⚖️', blurb: 'Play what the afternoon asks for.', formationIndex: 1, mentality: 'balanced' },
+};
+
+/** Round 160: the three grounds on offer at the founding. */
+export const CUSTOM_STADIUMS: { capacity: number; label: string; blurb: string }[] = [
+  { capacity: 9000, label: 'Compact', blurb: 'Nine thousand, all noise.' },
+  { capacity: 28000, label: 'Proper', blurb: 'Twenty eight thousand seats.' },
+  { capacity: 62000, label: 'Colosseum', blurb: 'Sixty two thousand. Fill it.' },
+];
 
 /** What the money buys. Anchor is the squad level the generated players are
  *  built around; budget is the day-one war chest. The anchors sit deliberately
@@ -1981,13 +2025,20 @@ const CUSTOM_SLOTS: { pos: Position; off: number }[] = [
  */
 export function buildCustomSquad(spec: CustomClubSpec): CMPlayer[] {
   const t = CUSTOM_TIERS[spec.budgetTier] ?? CUSTOM_TIERS.mid;
+  /* Round 160: the quality slider outranks the wallet's default anchor.
+     Clamped to the slider's own range so a doctored save cannot smuggle in
+     a squad of 99s, and the per-player cap rises to 93 so an 88 anchor
+     genuinely produces starters in the low 90s (his ask: "a team full of 90
+     overalls"). The board reads the squad either way, so a slider superteam
+     gets told to win it all, honestly. */
+  const anchor = spec.quality !== undefined ? clamp(Math.round(spec.quality), 55, 88) : t.anchor;
   const used = new Set<string>();
   return CUSTOM_SLOTS.map((slot, i) => {
     const seed = `custom|${spec.name}|${i}|${slot.pos}`;
     let name = makeGeneratedName(seed);
     for (let k = 1; used.has(name) && k < 25; k++) name = makeGeneratedName(`${seed}|${k}`);
     used.add(name);
-    const rating = clamp(t.anchor + slot.off + cInt(`${seed}|r`, -2, 2), 48, 84);
+    const rating = clamp(anchor + slot.off + cInt(`${seed}|r`, -2, 2), 48, 93);
     // Starters arrive in their prime, rotation a little younger, depth are
     // kids. Same intake logic a real newly assembled squad would show.
     const age = slot.off >= 2 ? cInt(`${seed}|a`, 24, 30)
@@ -7232,6 +7283,13 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     /* The generated squad's own measured strength, because the name-keyed
        chain in genClubStrengths cannot know a club that is in no bake. */
     state.clubStrengths[custom.name] = clamp(Math.round(squadXIAvg(squad)) + ri(-2, 2), 52, 95);
+    /* Round 160: the founding identity sets the day-one shape and mentality.
+       A starting point, not a lock: the tactics screen changes both. */
+    const identity = custom.identity ? CLUB_IDENTITIES[custom.identity] : null;
+    if (identity) {
+      state.formationIndex = clamp(identity.formationIndex, 0, FORMATIONS.length - 1);
+      state.mentality = identity.mentality;
+    }
   }
   ensureContracts(state);
   ensureAcademy(state);
