@@ -126,6 +126,9 @@ export interface NhlCareerState {
   rival?: CareerRival;
   /** Round 173: which league the career lives in. Absent means today's. */
   eraId?: string;
+  /** Round 183: the lineup. Absent (pre-183 saves, harness careers) means
+      first choice, byte for byte unchanged. */
+  role?: 'starter' | 'backup';
 }
 
 export interface NhlCareerEvent {
@@ -261,6 +264,65 @@ export function nhlRollTeamQuality(prev: number | null, rng: () => number): numb
   return Math.max(64, Math.min(95, Math.round(prev + (rng() * 12 - 6))));
 }
 
+/* ─── Round 183: the lineup ───
+   The depth chart the NFL and NBA careers got in 182, in hockey's shape.
+   The man ahead of you tracks the roster's quality, camps have hysteresis
+   both ways, and the goalie nuance is real: a backup goalie is a genuine
+   half-role (twenty-odd starts), and NO rookie netminder walks into a
+   number one job on draft capital alone, top pick or not, because that is
+   not how goalies are handled. An absent role (pre-183 saves, harness
+   careers) means first choice, byte for byte. */
+
+function nhlIncumbentOvr(teamQuality: number, rng: () => number): number {
+  return Math.round(teamQuality - 7 + rng() * 8);
+}
+
+/** Draft-day lineup spot. Mutates c.role, returns the feed line. */
+export function nhlAssignRole(c: NhlCareerState, teamQuality: number, rng: () => number = Math.random): string {
+  const incumbent = nhlIncumbentOvr(teamQuality, rng);
+  if (c.pos === 'G') {
+    /* Goalies apprentice. Only outplaying the veteran opens the crease. */
+    if (c.ovr >= incumbent + 2) { c.role = 'starter'; return '📋 The veteran lost the crease in camp. You are the number one.'; }
+    c.role = 'backup';
+    return '📋 You open as the backup goalie: twenty-odd starts and a clipboard cap.';
+  }
+  if (c.draftPick <= 10) {
+    c.role = 'starter';
+    return '📋 Top ten picks step straight into the top of the lineup.';
+  }
+  if (c.ovr >= incumbent + 2) {
+    c.role = 'starter';
+    return '📋 You outplayed the veteran in camp. Big minutes from night one.';
+  }
+  c.role = 'backup';
+  return '📋 You open down the lineup: fourth-line shifts while you earn trust.';
+}
+
+/** The offseason camp fight. Mutates c.role, returns a line or null. */
+export function nhlCampBattle(c: NhlCareerState, teamQuality: number, rng: () => number = Math.random): string | null {
+  if (!c.role) c.role = 'starter'; /* pre-183 save repair */
+  const incumbent = nhlIncumbentOvr(teamQuality, rng);
+  if (c.role === 'starter') {
+    if (c.ovr < incumbent - 5) {
+      c.role = 'backup';
+      c.morale = Math.max(20, c.morale - 10);
+      return c.pos === 'G'
+        ? '🪑 The crease belongs to the new man now. You are the backup again.'
+        : '🪑 Bumped down the lineup. The new arrival took your minutes in camp.';
+    }
+    return null;
+  }
+  const p = Math.max(0.05, Math.min(0.9, 0.1 + (c.ovr - incumbent) * 0.07));
+  if (c.ovr >= incumbent - 1 || rng() < p) {
+    c.role = 'starter';
+    c.morale = Math.min(100, c.morale + 10);
+    return c.pos === 'G'
+      ? '🚀 The crease is yours. Number one, opening night.'
+      : '🚀 You won the camp battle. Top of the lineup, big minutes.';
+  }
+  return '🪑 Another camp down the lineup. The gap is closing.';
+}
+
 export function nhlMarketSalary(c: NhlCareerState): number {
   // Round 59: centres and defencemen get paid, wingers slightly less.
   // Round 173: era careers earn era money at the documented scale.
@@ -284,8 +346,22 @@ export function simNhlSeason(
   c: NhlCareerState, teamQuality: number, rng: () => number,
 ): { line: NhlSeasonLine; notes: string[] } {
   const notes: string[] = [];
-  const { games, note } = gamesFor(c, rng);
+  let { games, note } = gamesFor(c, rng);
   if (note) { notes.push(`🚑 ${note}`); c.health -= 7; }
+  /* Round 183: the lineup decides the workload. A backup goalie gets the
+     twenty-odd starts the role really carries; a skater down the lineup
+     plays every night but on fourth-line ice time, so production scales
+     instead of games. Absent role = first choice, byte for byte. */
+  let iceShare = 1;
+  if (c.role === 'backup') {
+    if (c.pos === 'G') {
+      games = Math.max(12, Math.round(games * 0.35));
+      notes.push(`🪑 The backup's crease: ${games} starts behind the number one.`);
+    } else {
+      iceShare = 0.5 + rng() * 0.12;
+      notes.push('🪑 Fourth-line minutes: every night, none of the power play.');
+    }
+  }
   const swing = seasonSwing(rng, c.age);
   const form = c.ovr + (c.morale - 60) / 12 + (teamQuality - 78) / 9
     // Round 98: the season itself gets a say, so career years and lost
@@ -306,8 +382,8 @@ export function simNhlSeason(
     // goals, roughly what a first line winger scores. Assists deliberately
     // stay high for a defenceman, because that is how they actually produce.
     const off = (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).offense;
-    line.goals = Math.min(72, Math.max(1, Math.round((4 + (form - 62) * 1.35) * mult * off * g + rng() * 5)));
-    line.assists = Math.min(90, Math.max(2, Math.round((7 + (form - 62) * 1.5) * (c.pos === 'D' ? 1.15 : 1.05 - (mult - 1) * 0.5) * g + rng() * 7)));
+    line.goals = Math.min(72, Math.max(1, Math.round((4 + (form - 62) * 1.35) * mult * off * g * iceShare + rng() * 5)));
+    line.assists = Math.min(90, Math.max(2, Math.round((7 + (form - 62) * 1.5) * (c.pos === 'D' ? 1.15 : 1.05 - (mult - 1) * 0.5) * g * iceShare + rng() * 7)));
     line.points = (line.goals ?? 0) + (line.assists ?? 0);
   }
   // Round 123: computed up here rather than down with the rest of the awards
@@ -450,6 +526,12 @@ export function nhlProgress(c: NhlCareerState, rng: () => number): string[] {
   c.year += 1;
   c.contractYears -= 1;
   c.morale = Math.max(20, Math.min(100, c.morale + Math.round(rng() * 10 - 4)));
+  /* Round 183: a year down the lineup wears on you and the crowd learns
+     other names. */
+  if (c.role === 'backup') {
+    c.morale = Math.max(20, c.morale - 3);
+    c.fanbase = Math.max(0, c.fanbase - 2);
+  }
   // ── Round 59: the corruption meter resolves here ──
   const heat = c.heat ?? 0;
   if (heat > 0) {

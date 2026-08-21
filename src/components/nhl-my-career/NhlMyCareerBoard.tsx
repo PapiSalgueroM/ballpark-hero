@@ -6,6 +6,7 @@ import {
   NHL_SPEND_ITEMS, buyNhlItem, type NhlSpendCategory,
   nhlShouldRetire, nhlLegacyOf, nhlCareerTotals, nhlRollTeamQuality, nhlTeamLabelOf, nhlMarketSalary,
   buildNhlFaWindow, nhlFaPushArgs,
+  nhlAssignRole, nhlCampBattle,
   type NhlCareerPos, type NhlCareerState, type NhlCareerEvent, type NhlSeasonLine,
 } from '@/lib/nhlMyCareer';
 // Round 179: real free agency, shared engine and shared screen.
@@ -75,6 +76,8 @@ export default function NhlMyCareerBoard() {
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s.c) return;
+      /* Round 183, repair-on-load: a pre-183 career was first choice. */
+      if (!s.c.role) s.c.role = 'starter';
       setCareer(s.c);
       setTeamQuality(s.teamQuality);
       /* Round 126, house pattern from ensureContracts and ensureAcademy in
@@ -96,11 +99,14 @@ export default function NhlMyCareerBoard() {
     const arch = NHL_ARCHETYPES[pos].find(a => a.id === archetypeId) ?? NHL_ARCHETYPES[pos][0];
     const c = startNhlCareer(nameInput.trim() || 'Gordie Blaze', pos, arch, Math.random, appearance, eraId);
     const tq = nhlRollTeamQuality(null, Math.random);
+    /* Round 183: the lineup is set the day you arrive. */
+    const roleNote = nhlAssignRole(c, tq, Math.random);
     setCareer(c);
     setTeamQuality(tq);
     setFeed([
       `🎓 With pick ${c.draftPick}, the ${nhlTeamLabelOf(c.team)} select ${c.name}.`,
       c.draftPick <= 10 ? 'The city expects a savior.' : c.draftPick <= 32 ? 'First round money, first round pressure.' : 'Late pick. Everything must be earned.',
+      roleNote,
     ]);
     setPhase('season');
     persist(c, 'season', tq);
@@ -138,10 +144,12 @@ export default function NhlMyCareerBoard() {
       return;
     }
 
+    /* Round 183: every season starts with a camp, and camps have losers. */
+    const campNote = nhlCampBattle(c, teamQuality, Math.random);
     const { line, notes } = simNhlSeason(c, teamQuality, Math.random);
     const progressNotes = nhlProgress(c, Math.random);
     setLastLine(line);
-    const newFeed = [...notes, ...progressNotes];
+    const newFeed = [...(campNote ? [campNote] : []), ...notes, ...progressNotes];
     if (nhlShouldRetire(c)) {
       c.retired = true;
       setCareer(c);
@@ -179,9 +187,12 @@ export default function NhlMyCareerBoard() {
     if (!offer || offer.gone) return;
     const c: NhlCareerState = JSON.parse(JSON.stringify(career));
     const line = applyFaSigning(c, offer);
+    /* Round 183: the new room has its own lineup. A mid player chasing the
+       Cup on a stacked roster can find himself down it. */
+    const roleNote = nhlCampBattle(c, offer.quality, Math.random);
     setCareer(c);
     setTeamQuality(offer.quality);
-    setFeed(f => [line, ...f].slice(0, 6));
+    setFeed(f => [line, ...(roleNote ? [roleNote] : []), ...f].slice(0, 6));
     setFaWindow(null);
     setTalkLine(null);
     setPhase('season');
@@ -481,6 +492,10 @@ export default function NhlMyCareerBoard() {
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{career.year} · age {career.age}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">OVR <b className="text-primary">{career.ovr}</b></span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">${career.salary}M x{Math.max(0, career.contractYears)}</span>
+        {/* Round 183: the lineup, on the shirt. */}
+        <span className={cn('rounded-full border px-3 py-1 font-bold', career.role === 'backup' ? 'border-border bg-card text-muted-foreground' : 'border-gold/40 bg-card text-gold')}>
+          {career.role === 'backup' ? (career.pos === 'G' ? '🪑 Backup goalie' : '🪑 Fourth line') : (career.pos === 'G' ? '⭐ Number one' : '⭐ Top of the lineup')}
+        </span>
       </div>
 
       {/* Round 59: the heat meter, only once you have something to hide */}

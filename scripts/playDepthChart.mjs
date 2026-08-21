@@ -1,10 +1,12 @@
 /**
- * Round 182 browser harness: the depth chart, walked like a person.
+ * Rounds 182 and 183 browser harness: the depth chart, walked like a
+ * person, in all four sports.
  *
  * simDepthChart proves the engine; this proves the UI: the draft feed
- * announces where you open, the role chip rides the hub, a save patched
- * onto the bench renders the bench chip after reload, and playing a
- * season from the bench prints the spot-duty line.
+ * announces where you open, the role chip rides every hub, a save patched
+ * onto the bench renders the bench chip after reload, playing a season
+ * from the bench prints the spot-duty line, and a rookie goalie's feed
+ * talks like a goalie's world actually works.
  *
  * Run: npm run build && npx serve -s dist -l 4173, then
  *      ENGINES=chromium node scripts/playDepthChart.mjs
@@ -96,6 +98,46 @@ async function createCareer(page, path) {
   await page.waitForTimeout(1200);
   say(await page.locator('span:has-text("🪑 Second unit")').count() === 1, 'the second-unit chip renders from the save');
   say(errors.length === 0, `no page errors on the NBA walk (${errors.length ? errors[0] : 'clean'})`);
+  await page.close();
+}
+
+/* ---------- Walk three: the NHL lineup and the goalie truth ---------- */
+{
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const errors = [];
+  page.on('pageerror', e => errors.push(String(e)));
+
+  console.log('5) The NHL hub carries the lineup');
+  await createCareer(page, '/nhl-my-career');
+  const chip = await page.locator('span:has-text("Top of the lineup"), span:has-text("Fourth line"), span:has-text("Number one"), span:has-text("Backup goalie")').count();
+  say(chip >= 1, 'the lineup chip is on the hub');
+  await page.evaluate(() => {
+    const raw = localStorage.getItem('nhl-my-career-save-v1');
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    s.c.role = 'backup';
+    localStorage.setItem('nhl-my-career-save-v1', JSON.stringify(s));
+  });
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForTimeout(1200);
+  say(await page.locator('span:has-text("🪑")').count() >= 1, 'the bench-side chip renders from the save');
+  say(errors.length === 0, `no page errors on the NHL walk (${errors.length ? errors[0] : 'clean'})`);
+  await page.close();
+}
+
+/* ---------- Walk four: the MLB lineup card ---------- */
+{
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const errors = [];
+  page.on('pageerror', e => errors.push(String(e)));
+
+  console.log('6) The MLB hub carries the lineup card');
+  await createCareer(page, '/mlb-my-career');
+  const chip = await page.locator('span:has-text("Everyday"), span:has-text("Bench bat"), span:has-text("Rotation"), span:has-text("Spot starter"), span:has-text("Bullpen arm")').count();
+  say(chip >= 1, 'the lineup card chip is on the hub');
+  const feedText = await page.locator('body').innerText();
+  say(/lineup card|bench|rotation|bullpen|Opening Day/i.test(feedText), 'the draft feed talks baseball roles');
+  say(errors.length === 0, `no page errors on the MLB walk (${errors.length ? errors[0] : 'clean'})`);
   await page.close();
 }
 

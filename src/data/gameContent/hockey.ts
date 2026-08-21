@@ -331,6 +331,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Pick your league: today's NHL, or the 2006-07 throwback with the Thrashers in Atlanta and the Coyotes in Phoenix, before Vegas or Seattle existed.",
       "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
       "Get drafted by a real club; your slot reflects your starting ability.",
+      "Check the lineup. Top ten skaters step straight in; everyone else fights the incumbent in camp every fall. Goalies always apprentice first, because no rookie walks into a number one crease.",
       "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
       "Face one big offseason decision each year: training, trade requests, media noise.",
       "When the deal expires, hit July 1 for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
@@ -339,6 +340,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
     rules: [
       "Careers start in 2026 at age 18 or 19 and last up to 22 seasons. The throwback starts in 2006 instead, inside a sealed 30 team league verified against the real season, with 2006 sized contracts.",
       "You improve toward your potential through age 25; decline starts at 31 for skaters, 34 for goalies.",
+      "The lineup is real: fourth-line seasons run on half the ice time, a backup goalie gets twenty-odd starts, camps have memory both ways, and signing with a stacked Cup contender can cost a mid player his spot.",
       "Retirement hits at 40 for skaters, 41 for goalies, or earlier if your rating collapses; you can walk away after 6 seasons.",
       "The legacy score weighs Cups, majors (Hart, Norris or Vezina), Conn Smythes, All-Star nods, seasons and production; 500 or more means the Hall of Fame.",
       "One career saves automatically in your browser; a new one replaces it.",
@@ -365,6 +367,10 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         q: "Can a goalie reach the Hall?",
         a: "Yes. Wins, Vezinas and Cups carry goalie legacies.",
+      },
+      {
+        q: "Why am I the backup goalie?",
+        a: "Because that is how goalies come up: nobody hands a rookie the crease, top pick or not. You open behind the veteran, take your twenty-odd starts, and win the number one job in camp when your level passes his. Skaters fight the same fight for top-line minutes; a fourth-line year is half the ice time and it wears on you.",
       },
       {
         q: "Can I start in a different era?",

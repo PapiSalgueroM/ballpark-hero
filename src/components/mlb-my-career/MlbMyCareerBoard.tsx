@@ -6,6 +6,7 @@ import {
   MLB_SPEND_ITEMS, buyMlbItem, type MlbSpendCategory,
   mlbShouldRetire, mlbLegacyOf, mlbCareerTotals, mlbRollTeamQuality, mlbTeamLabelOf, mlbMarketSalary,
   buildMlbFaWindow, mlbFaPushArgs,
+  mlbAssignRole, mlbCampBattle,
   type MlbCareerPos, type MlbCareerState, type MlbCareerEvent, type MlbSeasonLine,
 } from '@/lib/mlbMyCareer';
 // Round 179: real free agency, shared engine and shared screen.
@@ -75,6 +76,8 @@ export default function MlbMyCareerBoard() {
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s.c) return;
+      /* Round 183, repair-on-load: a pre-183 career was everyday. */
+      if (!s.c.role) s.c.role = 'starter';
       setCareer(s.c);
       setTeamQuality(s.teamQuality);
       /* Round 126, house pattern from ensureContracts and ensureAcademy in
@@ -96,11 +99,14 @@ export default function MlbMyCareerBoard() {
     const arch = MLB_ARCHETYPES[pos].find(a => a.id === archetypeId) ?? MLB_ARCHETYPES[pos][0];
     const c = startMlbCareer(nameInput.trim() || 'Ace Diamond', pos, arch, Math.random, appearance, eraId);
     const tq = mlbRollTeamQuality(null, Math.random);
+    /* Round 183: the lineup card is set the day you arrive. */
+    const roleNote = mlbAssignRole(c, tq, Math.random);
     setCareer(c);
     setTeamQuality(tq);
     setFeed([
       `🎓 With pick ${c.draftPick}, the ${mlbTeamLabelOf(c.team)} select ${c.name}.`,
       c.draftPick <= 10 ? 'The city expects a savior.' : c.draftPick <= 32 ? 'First round money, first round pressure.' : 'Late pick. Everything must be earned.',
+      roleNote,
     ]);
     setPhase('season');
     persist(c, 'season', tq);
@@ -138,10 +144,12 @@ export default function MlbMyCareerBoard() {
       return;
     }
 
+    /* Round 183: every season starts with a spring, and springs have losers. */
+    const campNote = mlbCampBattle(c, teamQuality, Math.random);
     const { line, notes } = simMlbSeason(c, teamQuality, Math.random);
     const progressNotes = mlbProgress(c, Math.random);
     setLastLine(line);
-    const newFeed = [...notes, ...progressNotes];
+    const newFeed = [...(campNote ? [campNote] : []), ...notes, ...progressNotes];
     if (mlbShouldRetire(c)) {
       c.retired = true;
       setCareer(c);
@@ -179,9 +187,12 @@ export default function MlbMyCareerBoard() {
     if (!offer || offer.gone) return;
     const c: MlbCareerState = JSON.parse(JSON.stringify(career));
     const line = applyFaSigning(c, offer);
+    /* Round 183: the new clubhouse has its own lineup card. Chasing a ring
+       on a stacked roster can cost a mid player the everyday job. */
+    const roleNote = mlbCampBattle(c, offer.quality, Math.random);
     setCareer(c);
     setTeamQuality(offer.quality);
-    setFeed(f => [line, ...f].slice(0, 6));
+    setFeed(f => [line, ...(roleNote ? [roleNote] : []), ...f].slice(0, 6));
     setFaWindow(null);
     setTalkLine(null);
     setPhase('season');
@@ -481,6 +492,13 @@ export default function MlbMyCareerBoard() {
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{career.year} · age {career.age}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">OVR <b className="text-primary">{career.ovr}</b></span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">${career.salary}M x{Math.max(0, career.contractYears)}</span>
+        {/* Round 183: the lineup card, on the shirt. Relievers show their
+            bullpen identity; the ladder there is the archetype's. */}
+        <span className={cn('rounded-full border px-3 py-1 font-bold', career.role === 'backup' ? 'border-border bg-card text-muted-foreground' : 'border-gold/40 bg-card text-gold')}>
+          {career.pos === 'RP' ? '⭐ Bullpen arm'
+            : career.role === 'backup' ? (career.pos === 'SP' ? '🪑 Spot starter' : '🪑 Bench bat')
+            : (career.pos === 'SP' ? '⭐ In the rotation' : '⭐ Everyday')}
+        </span>
       </div>
 
       {/* Round 58: the heat meter, only once you have something to hide */}

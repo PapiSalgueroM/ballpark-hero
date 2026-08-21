@@ -164,6 +164,10 @@ export interface MlbCareerState {
   rival?: CareerRival;
   /** Round 173: which league the career lives in. Absent means today's. */
   eraId?: string;
+  /** Round 183: the lineup card. Absent (pre-183 saves, harness careers)
+      means everyday, byte for byte unchanged. Relievers are always
+      'starter' by design; the bullpen hierarchy lives in the archetype. */
+  role?: 'starter' | 'backup';
 }
 
 export interface MlbCareerEvent {
@@ -302,6 +306,64 @@ export function mlbRollTeamQuality(prev: number | null, rng: () => number): numb
   return Math.max(64, Math.min(95, Math.round(prev + (rng() * 12 - 6))));
 }
 
+/* ─── Round 183: the lineup card ───
+   The depth chart the other careers got, in baseball's shape: position
+   players are everyday men or bench bats, starting pitchers are in the
+   rotation or stretched out for spot starts. RELIEVERS ARE EXEMPT on
+   purpose: the bullpen already carries its own hierarchy through the
+   closer archetype (saves) versus everyone else (holds), and a "backup
+   reliever" is not a thing a stat line can say that holds do not already
+   say. An absent role (pre-183 saves, harness careers) means everyday,
+   byte for byte. */
+
+function mlbIncumbentOvr(teamQuality: number, rng: () => number): number {
+  return Math.round(teamQuality - 7 + rng() * 8);
+}
+
+/** Draft-day lineup card. Mutates c.role, returns the feed line. */
+export function mlbAssignRole(c: MlbCareerState, teamQuality: number, rng: () => number = Math.random): string {
+  if (c.pos === 'RP') { c.role = 'starter'; return '📋 The bullpen has its own ladder. Your arm decides the inning you get.'; }
+  const incumbent = mlbIncumbentOvr(teamQuality, rng);
+  if (c.draftPick <= 10) {
+    c.role = 'starter';
+    return c.pos === 'SP'
+      ? '📋 Top ten picks jump the queue. You break camp in the rotation.'
+      : '📋 Top ten picks play. Your name is on the lineup card every day.';
+  }
+  if (c.ovr >= incumbent + 2) {
+    c.role = 'starter';
+    return '📋 You outhit the veteran all spring. The job is yours from Opening Day.';
+  }
+  c.role = 'backup';
+  return c.pos === 'SP'
+    ? '📋 You open stretched out in long relief: spot starts until the rotation opens up.'
+    : '📋 You open on the bench: pinch hits and spot starts until you force the issue.';
+}
+
+/** The spring training fight. Mutates c.role, returns a line or null. */
+export function mlbCampBattle(c: MlbCareerState, teamQuality: number, rng: () => number = Math.random): string | null {
+  if (c.pos === 'RP') { c.role = 'starter'; return null; }
+  if (!c.role) c.role = 'starter'; /* pre-183 save repair */
+  const incumbent = mlbIncumbentOvr(teamQuality, rng);
+  if (c.role === 'starter') {
+    if (c.ovr < incumbent - 5) {
+      c.role = 'backup';
+      c.morale = Math.max(20, c.morale - 10);
+      return '🪑 The new man took your spot in spring. Bench role until you win it back.';
+    }
+    return null;
+  }
+  const p = Math.max(0.05, Math.min(0.9, 0.1 + (c.ovr - incumbent) * 0.07));
+  if (c.ovr >= incumbent - 1 || rng() < p) {
+    c.role = 'starter';
+    c.morale = Math.min(100, c.morale + 10);
+    return c.pos === 'SP'
+      ? '🚀 You pitched your way into the rotation. Every fifth day is yours.'
+      : '🚀 You hit your way onto the lineup card. Everyday job, yours.';
+  }
+  return '🪑 Another spring on the bench. The gap is closing.';
+}
+
 export function mlbMarketSalary(c: MlbCareerState): number {
   // Round 58: position matters. Aces and shortstops get paid, relievers and
   // designated hitters do not, which is exactly how the market works.
@@ -331,8 +393,21 @@ export function simMlbSeason(
   c: MlbCareerState, teamQuality: number, rng: () => number,
 ): { line: MlbSeasonLine; notes: string[] } {
   const notes: string[] = [];
-  const { games, note } = gamesFor(c, rng);
+  let { games, note } = gamesFor(c, rng);
   if (note) { notes.push(`🚑 ${note}`); c.health -= 8; }
+  /* Round 183: the lineup card decides the workload. A bench bat gets
+     half the games, a long-relief arm gets spot starts, relievers are
+     exempt (their hierarchy is the archetype). Absent role = everyday,
+     byte for byte. */
+  if (c.role === 'backup' && c.pos !== 'RP') {
+    if (c.pos === 'SP') {
+      games = Math.max(6, Math.round(games * 0.4));
+      notes.push(`🪑 Long relief and spot duty: ${games} starts when the phone rang.`);
+    } else {
+      games = Math.max(40, Math.round(games * (0.45 + rng() * 0.1)));
+      notes.push(`🪑 A bench season: ${games} games of pinch hits and spot starts.`);
+    }
+  }
   const swing = seasonSwing(rng, c.age);
   const form = c.ovr + (c.morale - 60) / 12 + (teamQuality - 78) / 10
     // Round 98: the season itself gets a say, so career years and lost
@@ -517,6 +592,11 @@ export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
   c.year += 1;
   c.contractYears -= 1;
   c.morale = Math.max(20, Math.min(100, c.morale + Math.round(rng() * 10 - 4)));
+  /* Round 183: a bench year wears on you and the crowd learns other names. */
+  if (c.role === 'backup') {
+    c.morale = Math.max(20, c.morale - 3);
+    c.fanbase = Math.max(0, c.fanbase - 2);
+  }
 
   // ── Round 58: the corruption meter resolves here ──
   const heat = c.heat ?? 0;

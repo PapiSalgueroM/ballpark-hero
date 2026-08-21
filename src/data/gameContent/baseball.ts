@@ -223,6 +223,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "Pick your league: today's MLB, or the 2004 throwback with the Expos in Montreal, the Anaheim Angels, the Florida Marlins and the Devil Rays.",
       "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
       "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
+      "Check the lineup card. Top ten picks play from Opening Day; everyone else fights the veteran in spring, with bench bats and long-relief arms waiting on spot starts until the job flips. Relievers climb their own bullpen ladder instead.",
       "Handle the offseason event: winter training, surgery calls, trade rumors.",
       "When team control ends, hit the open market for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
       "Stack awards and rings, fight aging, and retire to a verdict.",
@@ -230,6 +231,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
     rules: [
       "You start at 21 in 2026 with 6 years of team control before free agency. The throwback starts in 2004 instead, inside a sealed 30 team league verified against the real season, with 2004 sized contracts.",
       "Three meters run your life: morale, fanbase and health. Low health means shortened seasons.",
+      "The lineup card is real: a bench season is about half the games, a spot starter gets a dozen turns, springs have memory both ways, and signing with a stacked contender can cost a mid player the everyday job.",
       "Players grow toward their potential through age 26 and decline from 32 on, faster after 37.",
       "Retirement hits at 42, after 21 seasons, or when your rating collapses. You can walk away after season 6.",
       "One career at a time, saved automatically in your browser.",
@@ -247,6 +249,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       { q: "What decides the legacy verdict?", a: "One score from rings, MVPs or Cy Youngs, All-Star nods, seasons and stats. Reach 500 and Cooperstown calls. At 900 you are inner circle, first ballot." },
       { q: "Can I change teams?", a: "Yes. Low morale can trigger trade rumors where you ask out, and when the contract expires you get a real market: named clubs bidding with their own money, years and roster quality, plus your own club's re-sign number. You can push any offer for more once, and your own club never walks away." },
       { q: "Is the player real?", a: "No, the prospect is fictional on purpose. The 30 teams are real, the career is yours." },
+      { q: "Why am I on the bench?", a: "Because the veteran is better, for now. Late picks usually open as bench bats or long-relief arms behind an incumbent whose level tracks the roster. Grow your rating and you take the job in spring. Relievers never sit; the bullpen ladder is about whether you become the closer, which is your archetype's fight." },
       { q: "Can I start in a different era?", a: "Yes. The create screen has a 2004 throwback: the league in the Expos' last Montreal summer, with the Anaheim Angels, the Florida Marlins, the Tampa Bay Devil Rays and the Oakland Athletics. An era career never meets a franchise identity that did not exist then." },
     ],
   },
