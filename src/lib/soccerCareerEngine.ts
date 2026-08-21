@@ -263,7 +263,20 @@ export interface ManagerState {
   season: number;
   trophies: number;
   promotions: number;
-  seasonResults: { year: number; club: string; tier: number; result: string; trophy: boolean }[];
+  /* Round 227: a manager season carries its table now. The optional fields
+     keep every pre-227 save loading exactly as it did. */
+  seasonResults: {
+    year: number; club: string; tier: number; result: string; trophy: boolean;
+    /** Final table around the manager: the leaders plus his own row. */
+    table?: { club: string; pts: number; pos: number; you?: boolean }[];
+    playerPos?: number; playerPts?: number;
+    /** How many clubs the league had, so percentages read true. */
+    leagueSize?: number;
+    /** W-D-L line for the league season. */
+    record?: string;
+    /** How far the domestic cup run went. */
+    cup?: string;
+  }[];
   nationalTeamOffer: boolean;
   managingNationalTeam: boolean;
   /* ─── Round 111: being out of work is a real place you can be ───
@@ -6499,71 +6512,154 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     return s;
   }
   
-  const promotionChance = ms.clubTier >= 3 ? 0.30 : ms.clubTier === 2 ? 0.20 : 0.15;
-  const trophyChance = ms.clubTier <= 2 ? 0.20 : 0.10;
-  const sacked = ms.season >= 2 && Math.random() < 0.15; // 15% sack chance
-  const promoted = !sacked && ms.clubTier > 1 && Math.random() < promotionChance;
-  const wonTrophy = !sacked && Math.random() < trophyChance;
-  const scoutInterest = ms.season >= 2 && ms.clubTier >= 2 && Math.random() < 0.25;
-  
+  /* ─── Round 227: the dugout season is simulated, not adjectives ───
+     For a hundred rounds this was three independent coin flips: 15% sacked,
+     maybe promoted, maybe a league trophy out of nowhere, else an adjective
+     like "mid-table". A manager career next to a fully simulated playing
+     career read like a slot machine. Now the season is a table: his club and
+     the era clubs at his level each play the league out, every outcome below
+     is DERIVED from where he actually finished, and the panel shows the
+     table. Rules that fall out of that for free: the trophy exists only if
+     he finished first, promotion only from the top two of a lower tier,
+     the sack only from a finish a board genuinely acts on, and none of the
+     three can contradict each other again. */
+
+  const leagueMates = clubs.filter(c => c.tier === ms.clubTier && c.name !== ms.club);
+  /* thin tiers get topped up from the neighbouring tier so the league is
+     always a real field rather than a three horse race */
+  const topUp = clubs.filter(c => Math.abs(c.tier - ms.clubTier) === 1 && c.name !== ms.club);
+  const field = [...leagueMates, ...topUp].slice(0, 19);
+  const games = field.length * 2; // home and away vs each rival
+
+  /* His edge comes from what he has actually done: dugout honours, the
+     playing legacy that gets boards dreaming, and time in the job. */
+  const legacy = (s.awards ?? []).filter(a => a.name === "Ballon d'Or").length;
+  const edge = Math.min(9,
+    ms.trophies * 2 + ms.promotions + Math.min(2, legacy) + Math.min(3, ms.season - 1) * 0.5);
+
+  /* Points for every club: base spread a real league produces, the player's
+     club nudged by the edge. Position is the SORT of the points, so the
+     table can never disagree with itself. */
+  const maxPts = games * 3;
+  const ptsOf = (bonus: number) => {
+    const r = (Math.random() + Math.random() + Math.random()) / 3; // bell-ish
+    let v = Math.max(Math.round(games * 0.35), Math.min(maxPts, Math.round(games * (0.7 + r * 1.6) + bonus)));
+    /* every total must be reachable in `games` games: 3W + D = v needs
+       W + D <= games, which knocks out totals like 3g - 1 */
+    while ((v - (v % 3)) / 3 + (v % 3) > games) v -= 1;
+    return v;
+  };
+  const rows = field.map(c => ({ club: c.name, pts: ptsOf(0), you: false }));
+  rows.push({ club: ms.club, pts: ptsOf(edge), you: true });
+  rows.sort((a, b) => b.pts - a.pts || (a.you ? -1 : 1));
+  const table = rows.map((r, i) => ({ club: r.club, pts: r.pts, pos: i + 1, you: r.you || undefined }));
+  const me = table.find(r => r.you)!;
+  const leagueSize = table.length;
+  const relegationLine = leagueSize - 2;
+
+  /* W-D-L that adds up: 3W + D = pts forces D to share pts's remainder
+     mod 3. ptsOf guarantees the minimal split fits in the games played;
+     a few extra draw-triples go in when there is room, for realism. */
+  let draws = me.pts % 3;
+  for (let k = 0; k < 3; k += 1) {
+    if (Math.random() < 0.6 && (me.pts - (draws + 3)) >= 0 && (me.pts - (draws + 3)) / 3 + (draws + 3) <= games) draws += 3;
+  }
+  const wins = (me.pts - draws) / 3;
+  const losses = games - wins - draws;
+  const record = `${wins}W ${draws}D ${losses}L`;
+
+  /* The domestic cup: a knockout run, each round a real toss shaded by the
+     same edge, so a giant sometimes falls early and a small club sometimes
+     goes all the way, which is what cups are for. */
+  const CUP_ROUNDS = ["out in the 3rd round", "out in the 4th round", "out in the quarter-final", "out in the semi-final", "beaten in the final", "WON the cup"];
+  let cupWins = 0;
+  const winChance = 0.44 + edge * 0.03 + (2 - Math.min(2, ms.clubTier)) * 0.05;
+  while (cupWins < 5 && Math.random() < winChance) cupWins += 1;
+  const cup = CUP_ROUNDS[cupWins];
+  const wonCup = cupWins === 5;
+
+  const champion = me.pos === 1;
+  const promoted = ms.clubTier > 1 && me.pos <= 2;
+  const relegated = me.pos >= relegationLine && ms.clubTier < 4;
+  /* The sack, from the finish: relegation usually does it, a bottom-half
+     season at a big club sometimes does, a decent finish never does. */
+  const sacked =
+    (relegated && Math.random() < 0.6) ||
+    (!relegated && ms.clubTier <= 2 && ms.season >= 2 && me.pos > Math.ceil(leagueSize * 0.6) && Math.random() < 0.35);
+
   let result = "";
+  const posLabel = me.pos === 1 ? "1st" : me.pos === 2 ? "2nd" : me.pos === 3 ? "3rd" : `${me.pos}th`;
+  /* awards elsewhere carry calendar years, so the dugout's do too */
+  const calYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + ms.season;
+
+  if (champion) {
+    ms.trophies += 1;
+    result = `CHAMPIONS. ${me.pts} points, ${posLabel} of ${leagueSize}. 🏆`;
+    s.awards = [...(s.awards ?? []), { year: calYear, name: "League Title (Manager)", emoji: "📋" }];
+  } else {
+    result = `Finished ${posLabel} of ${leagueSize} on ${me.pts} points.`;
+  }
+  if (wonCup) {
+    ms.trophies += 1;
+    result += " Won the cup. 🏆";
+    s.awards = [...(s.awards ?? []), { year: calYear, name: "Domestic Cup (Manager)", emoji: "📋" }];
+  }
+
   if (sacked) {
     // Round 111: no more instant rehire. You are out of work, and whether
     // anyone calls depends on what you did as a player, what you have won in
     // the dugout, how badly this ended and how long you sit.
-    const wentDown = ms.clubTier >= 3 && Math.random() < 0.45;
-    result = wentDown ? 'Relegated, and sacked on the spot.' : 'Sacked after a bad run.';
+    result += relegated ? " Relegated, and sacked on the spot." : " The board ran out of patience. Sacked.";
     ms.unemployed = true;
     ms.seasonsOut = 0;
-    ms.departure = wentDown ? 'relegated' : 'sacked';
-    if (wentDown) ms.relegations = (ms.relegations ?? 0) + 1;
+    ms.departure = relegated ? 'relegated' : 'sacked';
+    if (relegated) ms.relegations = (ms.relegations ?? 0) + 1;
     refreshManagerOffers(s, ms);
     result += ms.offers && ms.offers.length
       ? ` ${ms.offers.length} club${ms.offers.length === 1 ? '' : 's'} came in.`
       : ' Nobody has called.';
+  } else if (relegated) {
+    ms.clubTier += 1;
+    result += " Relegated, but the board kept faith. Going down with the club.";
   } else if (promoted) {
     ms.promotions += 1;
     ms.clubTier -= 1;
-    const newClubs = clubs.filter(c => c.tier === ms.clubTier);
-    if (newClubs.length > 0) ms.club = pick(newClubs).name;
-    result = `Promoted! Now managing ${ms.club} in Tier ${ms.clubTier}`;
-  } else if (wonTrophy) {
-    ms.trophies += 1;
-    result = `Won the league trophy! 🏆`;
-  } else {
-    const positions = ["2nd", "3rd", "4th", "mid-table", "lower half"];
-    result = `Finished ${pick(positions)}`;
-  }
-  
-  if (scoutInterest && !sacked) {
+    result += ` Promoted with ${ms.club} to Tier ${ms.clubTier}!`;
+  } else if (!champion && ms.clubTier >= 2 && me.pos <= 4 && ms.season >= 2) {
+    /* A top four finish down the pyramid gets noticed. Round 111 rule kept:
+       a bigger club only MOVES if the record justifies it. */
     const biggerClubs = clubs.filter(c => c.tier < ms.clubTier && c.tier >= 1);
-    if (biggerClubs.length > 0) {
+    if (biggerClubs.length > 0 && Math.random() < 0.35) {
       const offer = pick(biggerClubs);
-      result += ` · 👀 Scouts from ${offer.name} watching your sessions`;
-      // Round 111: a bigger club only moves for you if your record justifies
-      // it. Watching a session is not the same as offering the job.
+      result += ` 👀 Scouts from ${offer.name} watching.`;
       const earned = ms.trophies + ms.promotions * 2 + Math.max(0, 4 - ms.clubTier);
       if (offer.tier <= 2 && earned >= 3 && Math.random() < 0.45) {
         ms.club = offer.name;
         ms.clubTier = offer.tier;
         ms.departure = 'poached';
-        result += ` and HIRED by ${offer.name}`;
+        result += ` And HIRED by ${offer.name}.`;
       }
     }
   }
-  
-  ms.seasonResults = [...ms.seasonResults, { year: ms.season, club: ms.club, tier: ms.clubTier, result, trophy: wonTrophy }];
-  
-  // National team offer
-  if (ms.season >= 3 && ms.clubTier <= 2 && !ms.nationalTeamOffer && Math.random() < 0.3) {
+
+  ms.seasonResults = [...ms.seasonResults, {
+    year: ms.season, club: me.club,
+    tier: ms.clubTier, result, trophy: champion || wonCup,
+    table: table.slice(0, 5).some(r => r.you) ? table.slice(0, 5) : [...table.slice(0, 4), me],
+    playerPos: me.pos, playerPts: me.pts, leagueSize, record, cup,
+  }];
+
+  // National team offer, now earned by the season rather than rolled blind:
+  // a title, or a top three finish at a top two tier club.
+  if (!ms.nationalTeamOffer && (champion || (me.pos <= 3 && ms.clubTier <= 2)) && ms.season >= 3 && Math.random() < 0.4) {
     ms.nationalTeamOffer = true;
     ms.managingNationalTeam = true;
     result += ` · 🇺🇳 Called to manage ${s.nationality} national team!`;
   }
-  
+
   s.managerState = ms;
   s.events = [...s.events, `📋 Manager Season ${ms.season}: ${result}`];
-  
+
   return s;
 }
 

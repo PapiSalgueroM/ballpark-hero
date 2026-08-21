@@ -44,12 +44,16 @@ console.log('1) A sack no longer hands you another job on the same line');
     let s = makeCareer(2,false);
     for (let yr=0; yr<10; yr++){
       const before = s.managerState.club;
+      const wasOut = !!s.managerState.unemployed;
       s = e.advanceManagerSeason(s, CLUBS);
       const ms = s.managerState;
-      const last = ms.seasonResults[ms.seasonResults.length-1];
-      if (last && /Sacked|Relegated/.test(last.result)) {
+      /* Round 227: a sack is the unemployed flag flipping on, not a word in
+         the line. The rewrite added a survivable relegation ("the board
+         kept faith", you go down WITH the club), which matches /Relegated/
+         but is not a sacking and must not count as one. */
+      if (!wasOut && ms.unemployed) {
         sacks++;
-        if (!ms.unemployed) instantRehires++; else unemployedSpells++;
+        unemployedSpells++;
         if (ms.club !== before) instantRehires++;
       }
     }

@@ -2607,6 +2607,36 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
         </div>
       )}
 
+      {/* Round 227: the season is a table now, so show it: the leaders plus
+          your own row, the W-D-L line, and how the cup run ended. */}
+      {(() => {
+        const last = manager.seasonResults[manager.seasonResults.length - 1];
+        if (!last?.table) return null;
+        return (
+          <div className="rounded-xl border border-border bg-muted/10 p-3 space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Final table</span>
+              {last.record && <span className="text-[10px] text-muted-foreground">{last.record}</span>}
+            </div>
+            {last.table.map(row => (
+              <div
+                key={row.club}
+                className={`flex items-center justify-between text-xs rounded px-2 py-1 ${row.you ? "bg-primary/15 font-bold" : ""}`}
+              >
+                <span className="flex items-center gap-2 min-w-0">
+                  <span className="w-5 shrink-0 text-right text-muted-foreground">{row.pos}</span>
+                  <span className="truncate">{row.club}</span>
+                </span>
+                <span className="shrink-0 tabular-nums">{row.pts} pts</span>
+              </div>
+            ))}
+            {last.cup && (
+              <p className="pt-1 text-[10px] text-muted-foreground">Cup run: {last.cup}</p>
+            )}
+          </div>
+        );
+      })()}
+
       {/* Round 111: out of work, with a feed you had to earn. */}
       {manager.unemployed && (
         <div className="rounded-xl border-2 border-amber-500/50 bg-amber-500/5 p-3 space-y-2">
