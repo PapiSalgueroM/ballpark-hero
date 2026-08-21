@@ -1485,6 +1485,27 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'greece', name: 'Super League Greece', cupName: 'Greek Cup', euro: true,
     clubs: ['Olympiacos', 'Panathinaikos', 'AEK Athens', 'PAOK', 'Aris', 'Asteras Tripolis', 'Atromitos', 'Iraklis', 'Kalamata', 'Kifisia', 'Levadiakos', 'OFI', 'Panetolikos', 'Volos'],
   },
+  /* Round 185: wave three, second pair. Memberships verified 2026-08-19
+     against two agreeing sources each (the Wikipedia season page plus
+     worldfootball's live table for Denmark: Lyngby and AC Horsens up,
+     Fredericia and Vejle down, AGF the reigning champions; the Wikipedia
+     season page plus Swiss press coverage for Switzerland: Vaduz up after
+     five years, Winterthur down, Thun the reigning champions). Both play
+     split-format seasons in real life; the engine plays them as straight
+     round robins, the same simplification Austria and Greece shipped with.
+     Vaduz are the Swiss league's Liechtenstein guests exactly as in real
+     life; the engine treats them as a league member like any other, and
+     does not model their real-world cup-only European route. Two verified
+     members with zero usable dataset rows (AC Horsens, SønderjyskE) ship
+     as fully youth-padded squads that say so. */
+  {
+    id: 'denmark', name: 'Danish Superliga', cupName: 'Danish Cup', euro: true,
+    clubs: ['FC Copenhagen', 'FC Midtjylland', 'Brøndby IF', 'AGF', 'FC Nordsjælland', 'Viborg FF', 'Randers FC', 'OB', 'Silkeborg IF', 'Lyngby', 'AC Horsens', 'SønderjyskE'],
+  },
+  {
+    id: 'switzerland', name: 'Swiss Super League', cupName: 'Swiss Cup', euro: true,
+    clubs: ['Basel', 'Young Boys', 'Thun', 'St. Gallen', 'Lugano', 'Servette', 'Luzern', 'Lausanne-Sport', 'FC Zürich', 'Grasshopper', 'Sion', 'Vaduz'],
+  },
 ];
 
 /**
@@ -1510,6 +1531,8 @@ export const LEAGUE_NATIONS: Record<string, string> = {
   proleague: 'Belgium',
   austria: 'Austria',
   greece: 'Greece',
+  denmark: 'Denmark',
+  switzerland: 'Switzerland',
 };
 
 /** Strength priors for league clubs the player pool cannot rate. */
@@ -1571,6 +1594,17 @@ const STRENGTH_PRIORS: Record<string, number> = {
   'Aris': 70, 'Asteras Tripolis': 65, 'Atromitos': 65, 'OFI': 64,
   'Levadiakos': 64, 'Panetolikos': 63, 'Volos': 63, 'Kifisia': 62,
   'Iraklis': 61, 'Kalamata': 61,
+  // Round 185: Danish Superliga thin-data clubs (Copenhagen, Midtjylland,
+  // Brøndby, AGF and Nordsjælland rate from their baked squads). Viborg get
+  // a prior too in case padding thins their read.
+  'Viborg FF': 66, 'Randers FC': 65, 'OB': 65, 'Silkeborg IF': 64,
+  'Lyngby': 62, 'AC Horsens': 61, 'SønderjyskE': 62,
+  // Round 185: Swiss Super League thin-data clubs (Basel, Young Boys and
+  // St. Gallen rate from their baked squads). Thun's prior respects the
+  // reigning champions even though their dataset squad runs thin.
+  'Thun': 70, 'Lugano': 69, 'Servette': 68, 'Luzern': 67,
+  'Lausanne-Sport': 67, 'FC Zürich': 67, 'Grasshopper': 65, 'Sion': 65,
+  'Vaduz': 60,
 };
 
 /** The real league a club plays in. Every playable club is covered. */
@@ -1789,6 +1823,9 @@ export const NATIONS: NationDef[] = [
   // Round 177
   { id: 'austria', name: 'Austria', flag: '🇦🇹', leagueIds: ['austria'] },
   { id: 'greece', name: 'Greece', flag: '🇬🇷', leagueIds: ['greece'] },
+  // Round 185
+  { id: 'denmark', name: 'Denmark', flag: '🇩🇰', leagueIds: ['denmark'] },
+  { id: 'switzerland', name: 'Switzerland', flag: '🇨🇭', leagueIds: ['switzerland'] },
 ];
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
@@ -1907,6 +1944,16 @@ const CLUB_COLORS: Record<string, string> = {
   'Atromitos': '#1b458f', 'Iraklis': '#1b458f', 'Kalamata': '#2b2b2b',
   'Kifisia': '#d02128', 'Levadiakos': '#0a7040', 'OFI': '#2b2b2b',
   'Panetolikos': '#f5d800', 'Volos': '#d02128',
+  // Round 185: Danish Superliga
+  'FC Copenhagen': '#12294a', 'FC Midtjylland': '#b60f1f', 'Brøndby IF': '#f6d500',
+  'AGF': '#1c63b7', 'FC Nordsjælland': '#f1c933', 'Viborg FF': '#0f7a3a',
+  'Randers FC': '#1f5fa6', 'OB': '#0e4c92', 'Silkeborg IF': '#c8102e',
+  'Lyngby': '#1d4f91', 'AC Horsens': '#f2c500', 'SønderjyskE': '#63b1e5',
+  // Round 185: Swiss Super League
+  'Basel': '#d02128', 'Young Boys': '#ffd500', 'Thun': '#da291c',
+  'St. Gallen': '#009654', 'Lugano': '#2b2b2b', 'Servette': '#8d1b3d',
+  'Luzern': '#1667b1', 'Lausanne-Sport': '#0b63b2', 'FC Zürich': '#0a3e86',
+  'Grasshopper': '#0053a0', 'Sion': '#d2232a', 'Vaduz': '#ce1126',
 };
 
 /**
@@ -5872,8 +5919,11 @@ function nearestRival(clubName: string, eraId?: string, clubsOverride?: string[]
 function relegationSpots(leagueId: string): number {
   // MLS conferences do not relegate; everyone else drops 1-3.
   if (leagueId.startsWith('mls')) return 0;
-  if (leagueId === 'scottish' || leagueId === 'proleague' || leagueId === 'austria') return 1;
-  if (leagueId === 'bundesliga' || leagueId === 'bundesliga2' || leagueId === 'eredivisie' || leagueId === 'primeira' || leagueId === 'greece') return 2;
+  /* Round 185: Switzerland sent one straight down last season (Winterthur,
+     with 11th place playing a barrage the engine does not model), so 1;
+     Denmark sent two down (Fredericia and Vejle), so 2 below. */
+  if (leagueId === 'scottish' || leagueId === 'proleague' || leagueId === 'austria' || leagueId === 'switzerland') return 1;
+  if (leagueId === 'bundesliga' || leagueId === 'bundesliga2' || leagueId === 'eredivisie' || leagueId === 'primeira' || leagueId === 'greece' || leagueId === 'denmark') return 2;
   return 3;
 }
 
@@ -5919,6 +5969,9 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
   // one-ticket leagues: qualifying-round routes count as in.
   austria:    { ucl: 1, uel: 2, uecl: 3 },
   greece:     { ucl: 1, uel: 2, uecl: 3 },
+  // Round 185. Same one-ticket shape; qualifying routes count as in.
+  denmark:     { ucl: 1, uel: 2, uecl: 3 },
+  switzerland: { ucl: 1, uel: 2, uecl: 3 },
   // Round 146: the 2010-11 era. No Conference League existed until 2021, so
   // uecl is 0 and the demand ladder skips that band entirely.
   premier2010: { ucl: 4, uel: 5, uecl: 0 },

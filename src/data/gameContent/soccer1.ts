@@ -285,7 +285,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
 
   '/club-manager': {
     intro: [
-      "Club Manager is the site's big one: a full management sim in your browser. 296 real clubs across 17 leagues in 14 countries, over 3,400 real players with their real August 2026 ages and market values, and a board that talks like a board.",
+      "Club Manager is the site's big one: a full management sim in your browser. 320 real clubs across 19 leagues in 16 countries, from the Premier League to the Danish Superliga and the Swiss Super League, over 3,500 real players with their real August 2026 ages and market values, and a board that talks like a board.",
       "Pick when you start too: today's game, or one of three real past seasons. 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. Each past season holds all 40 Premier League and La Liga clubs and hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.",
     ],
     howToPlay: [

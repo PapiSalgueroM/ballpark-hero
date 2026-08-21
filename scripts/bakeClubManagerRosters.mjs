@@ -160,6 +160,27 @@ const DB_TO_ENGINE = {
   'Aris Thessaloniki': 'Aris', 'Asteras Aktor': 'Asteras Tripolis',
   'Atromitos Athens': 'Atromitos', 'Levadiakos': 'Levadiakos',
   'OFI Crete': 'OFI', 'Panetolikos': 'Panetolikos',
+  // Round 185: Danish Superliga 2026-27. Membership verified 2026-08-19
+  // against the Wikipedia season page and worldfootball's live table, which
+  // agree on all twelve (Lyngby and AC Horsens up, Fredericia and Vejle
+  // down; AGF the reigning champions). The dataset spells two clubs with
+  // ö for ø, mapped here as found.
+  'Bröndby IF': 'Brøndby IF', 'FC Copenhagen': 'FC Copenhagen',
+  'FC Midtjylland': 'FC Midtjylland', 'FC Nordsjaelland': 'FC Nordsjælland',
+  'Aarhus GF': 'AGF', 'Viborg FF': 'Viborg FF', 'Randers FC': 'Randers FC',
+  'Odense Boldklub': 'OB', 'Silkeborg IF': 'Silkeborg IF',
+  'Lyngby Boldklub': 'Lyngby',
+  // Round 185: Swiss Super League 2026-27. Membership verified 2026-08-19
+  // against the Wikipedia season page and Swiss press coverage (Nau.ch),
+  // which agree on all twelve (Vaduz up after five years, Winterthur down;
+  // Thun the reigning champions; Vaduz are the league's Liechtenstein
+  // guests exactly as in real life).
+  'FC Basel 1893': 'Basel', 'BSC Young Boys': 'Young Boys',
+  'FC St. Gallen 1879': 'St. Gallen', 'FC Luzern': 'Luzern',
+  'FC Lausanne-Sport': 'Lausanne-Sport', 'Servette FC': 'Servette',
+  'Grasshopper Club Zurich': 'Grasshopper', 'FC Lugano': 'Lugano',
+  'FC Sion': 'Sion', 'FC Thun': 'Thun', 'FC Zürich': 'FC Zürich',
+  'FC Vaduz': 'Vaduz',
   // UCL flavor clubs outside the baked leagues
   'Club Brugge KV': 'Club Brugge',
 };
@@ -172,7 +193,10 @@ const KNOWN_EMPTY = ['Abha', 'ADO Den Haag', 'Cambuur',
   'Marítimo', 'Académico de Viseu', 'St Mirren',
   'Erzurumspor', 'Amedspor', 'Çorum FK', 'Kocaelispor',
   // Round 177: verified 2026-27 members with zero current dataset rows.
-  'Austria Lustenau', 'Iraklis', 'Kalamata', 'Kifisia', 'Volos'];
+  'Austria Lustenau', 'Iraklis', 'Kalamata', 'Kifisia', 'Volos',
+  // Round 185: verified 2026-27 members with zero usable (2025/2026) rows.
+  // AC Horsens have 28 rows in the dataset, every one from older seasons.
+  'AC Horsens', 'SønderjyskE'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([
@@ -341,6 +365,9 @@ const xiAvg = club => {
 if (!(xiAvg('Real Madrid') > xiAvg('Racing Santander'))) errors.push('SANITY: Real Madrid <= Racing');
 if (!(xiAvg('Al-Hilal') > xiAvg('Al-Riyadh'))) errors.push('SANITY: Al-Hilal <= Al-Riyadh');
 if (!(xiAvg('Inter Miami') > xiAvg('San Jose Earthquakes'))) errors.push('SANITY: Miami <= San Jose');
+// Round 185: the new pair's giants outrate their thinnest members.
+if (!(xiAvg('FC Copenhagen') > xiAvg('Lyngby'))) errors.push('SANITY: Copenhagen <= Lyngby');
+if (!(xiAvg('Basel') > xiAvg('Vaduz'))) errors.push('SANITY: Basel <= Vaduz');
 
 const total = [...byClub.values()].reduce((s, l) => s + l.length, 0);
 if (total < 2800) errors.push(`Only ${total} players total (expected 2800+)`);
@@ -362,8 +389,11 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // 5% discount) PLUS the verified summer 2026 transfer overlay
 // (scripts/transferOverlay2026.mjs), so squads reflect August 2026 after the
 // window. ${total} players, ${clubsSorted.length} clubs across the big five leagues
-// (2026-27 memberships), EFL Championship, Saudi Pro League, MLS and the
-// Eredivisie. Values in £m, ratings 48-94 from the value curve.
+// (2026-27 memberships), EFL Championship, Saudi Pro League, MLS East and
+// West, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig,
+// 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
+// Greece, Danish Superliga and the Swiss Super League.
+// Values in £m, ratings 48-94 from the value curve.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.
 import type { Position } from '@/types/game';

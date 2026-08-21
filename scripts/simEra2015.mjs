@@ -160,8 +160,12 @@ console.log('2) Three worlds now, and none of them leak');
      Valencia's midfielder (b. 2003); Sevilla's 2015 keeper Beto (b. 1982)
      vs the modern striker (b. 1998). A NEW name failing here after a
      re-bake stays failed until somebody verifies it is a genuine namesake
-     and adds it deliberately. */
-  const NAMESAKES_2026 = new Set(['Aaron Ramsey', 'Luis Suárez', 'Javi López', 'Javi Guerra', 'Beto']);
+     and adds it deliberately. Verified 2026-08-19 after the Round 185
+     Swiss bake: Real Madrid's 2015 Brazilian CDM Lucas Silva (b. 1993,
+     the Cruzeiro one) vs Luzern's Portuguese academy midfielder Lucas
+     Manuel Silva Ferreira (b. 2006), confirmed distinct on his Soccerway
+     profile and Luzern's July 2026 contract-extension news. */
+  const NAMESAKES_2026 = new Set(['Aaron Ramsey', 'Luis Suárez', 'Javi López', 'Javi Guerra', 'Beto', 'Lucas Silva']);
   const eraByName = new Map();
   for (const roster of Object.values(ERA2015_ROSTERS)) for (const p of roster) eraByName.set(p.n, p);
   const modByName = new Map();
