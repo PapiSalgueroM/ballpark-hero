@@ -113,12 +113,32 @@ console.log("1) Grade the Transfer deals the whole bank now");
       }
       prev = { key, set: new Set(names) };
     }
-    /* floors halfway between uniform (about 718 reached of 800, 4.97 new
+    /* floors halfway between uniform (about 700 reached of 760, 4.97 new
        a day) and the measured broken values (81 reached, 4.62 new) */
-    if (seen.size < 400) fail(`reached only ${seen.size} of ${pool.length} cases in a year (uniform: about 718, the old walk: 81)`);
+    if (seen.size < 400) fail(`reached only ${seen.size} of ${pool.length} cases in a year (uniform: about 700, the old walk: 81)`);
     if (ident > 0) fail(`dealt an identical board on consecutive days ${ident} time(s)`);
     if (newSum / 364 < 4.8) fail(`turns over ${(newSum / 364).toFixed(2)} of 5 cases a day`);
     console.log(`   ${pool.length} cases fetched, ${seen.size} reached in a year, ${(newSum / 364).toFixed(2)}/5 fresh a day`);
+
+    /* Round 225: move years are dated by the selling club's last season,
+       which the famous moves prove out. These exact rows regressed once
+       (Neymar's Santos to Barcelona was shown as 2015), so they are
+       pinned: a pool rebuild that drifts the dating rule goes red here.
+       Winter-window moves stay ambiguous by a few weeks in yearly
+       snapshot data; these five are all summer moves and exact. */
+    const PINNED = [
+      ["Neymar", "Santos FC", "FC Barcelona", 2013],
+      ["Neymar", "FC Barcelona", "Paris Saint-Germain", 2017],
+      ["Eden Hazard", "LOSC Lille", "Chelsea FC", 2012],
+      ["Erling Haaland", "Borussia Dortmund", "Manchester City", 2022],
+      ["Jude Bellingham", "Birmingham City", "Borussia Dortmund", 2020],
+    ];
+    for (const [who, from, to, year] of PINNED) {
+      const hit = pool.find(c => c.playerName === who && c.fromClub === from && c.toClub === to);
+      if (!hit) fail(`pinned move missing from the pool: ${who} ${from} to ${to}`);
+      else if (hit.moveYear !== year) fail(`${who} ${from} to ${to} is dated ${hit.moveYear}, the real year is ${year}`);
+    }
+    console.log(`   ${PINNED.length} famous moves pinned to their real years`);
   }
 }
 

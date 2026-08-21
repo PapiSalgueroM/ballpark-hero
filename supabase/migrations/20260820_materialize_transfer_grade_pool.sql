@@ -1,7 +1,7 @@
--- ALREADY APPLIED to the live project on 2026-08-20 (Round 224), in four
--- steps whose end state this file reproduces. Safe to re-run: it rebuilds
--- the pool from the source tables, which is also how to REFRESH it after
--- soccer_player_club_stints or player_market_values change.
+-- ALREADY APPLIED to the live project on 2026-08-20 (Rounds 224 and 225),
+-- in five steps whose end state this file reproduces. Safe to re-run: it
+-- rebuilds the pool from the source tables, which is also how to REFRESH
+-- it after soccer_player_club_stints or player_market_values change.
 --
 -- Why the pool is a table and not the view it used to be: the view's
 -- computation measured 27.9 seconds (window functions over 80,586 stint
@@ -23,6 +23,18 @@
 -- 2. Stint rows repeat the same move with different position labels, so
 --    the move identity is collapsed first (one row per name, nationality,
 --    year, from, to).
+-- 3. Round 225: each move is dated by the SELLING club's last recorded
+--    season, which is the year the player actually left. Dating by the
+--    buying club's first season, the old rule, ran a year late on the
+--    26,130 standard summer moves and up to two late across data holes
+--    (Neymar's Santos to Barcelona was shown as 2015; the real year is
+--    2013). value_at_move is his value in his final season at the selling
+--    club, the honest pre-move number, and value_after is three years on.
+--    128 transitions with overlapping stints (negative gaps) are excluded
+--    as noise. Winter-window moves remain ambiguous by a few weeks in
+--    yearly snapshot data; that is source granularity, not an error to
+--    paper over. Zero crowd votes existed when the dating changed, so no
+--    vote keys migrated.
 
 BEGIN;
 
@@ -33,8 +45,9 @@ CREATE TABLE public.transfer_grade_pool AS
 WITH moves AS (
   SELECT s.player_name, s.nationality, s."position",
          s.club AS from_club,
+         s.last_year AS move_year,
          lead(s.club) OVER w AS to_club,
-         lead(s.first_year) OVER w AS move_year
+         lead(s.first_year) OVER w AS next_first
   FROM soccer_player_club_stints s
   WINDOW w AS (PARTITION BY s.player_name, s.nationality ORDER BY s.first_year)
 ), joined AS (
@@ -52,6 +65,7 @@ WITH moves AS (
   JOIN player_market_values v0 ON v0.player_name::text = m.player_name AND v0.nationality::text = m.nationality::text AND v0.year = m.move_year
   JOIN player_market_values v3 ON v3.player_name::text = m.player_name AND v3.nationality::text = m.nationality::text AND v3.year = (m.move_year + 3)
   WHERE m.to_club IS NOT NULL AND m.to_club <> m.from_club
+    AND m.next_first >= m.move_year
     AND m.move_year >= 2010 AND m.move_year <= 2023
     AND v0.market_value_usd >= 15000000
 ), one_per_move AS (
@@ -66,7 +80,9 @@ WITH moves AS (
       AND (k.nationality <> j.nationality OR k.from_club <> j.from_club OR k.to_club <> j.to_club)
   )
 ), ranked AS (
-  SELECT solo.*, percent_rank() OVER (PARTITION BY value_band ORDER BY pct_change) AS pr
+  SELECT solo.player_name, solo.nationality, solo."position", solo.from_club, solo.to_club,
+         solo.move_year, solo.value_at_move, solo.value_after, solo.pct_change, solo.value_band,
+         percent_rank() OVER (PARTITION BY solo.value_band ORDER BY solo.pct_change) AS pr
   FROM solo
 )
 SELECT player_name, nationality, "position", from_club, to_club, move_year,
