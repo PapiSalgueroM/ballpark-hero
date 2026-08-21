@@ -443,6 +443,50 @@ export const WORLD_CONTENT: GameContentMap = {
     ],
   },
 
+  '/silverware-sort': {
+    intro: [
+      "Every fan can name the most decorated club in their league. Silverware Sort asks the harder question: can you put five of them in order? The gap between knowing the Yankees lead baseball and knowing whether the Dodgers or the Red Sox come next is where this game lives.",
+      "Five teams from one competition, a shuffled pile, and a ladder with the most titles at the top. Every count is counted straight out of the same audited record books the rest of the site runs on, across the Super Bowl, the NBA, the World Series, the Stanley Cup, college football and hoops, the English title, the AFL and the NRL.",
+    ],
+    howToPlay: [
+      "Read the board: one competition, five teams, one right order.",
+      "Tap teams into the ladder, most titles at the top, fewest at the bottom.",
+      "Submit. Rungs you placed right lock in green, and you get a second try at the rest.",
+      "One point per correct rung on your final answer, fifteen points across the day's three boards.",
+      "The daily boards are the same for everyone. Unlimited mode keeps dealing fresh ones.",
+    ],
+    rules: [
+      "No two teams on a board are ever tied. Every board has exactly one right order, so a miss is a miss on the record, never on a coin flip.",
+      "Counts follow the name the club wore at the time, the same convention as our Record Books and Name Them All: South Melbourne's flags and Sydney's flags are separate stacks.",
+      "Two tries per board. The first submit locks your greens; the second is final.",
+      "The reveal always shows every team's real count, so you leave each board knowing the actual cabinet.",
+    ],
+    example: [
+      'A World Series board deals the Yankees, the Cardinals, the Dodgers, the Cubs and the Marlins. The top is a gift: 27 Yankees titles, then the Cardinals on 11. The bottom half is the game: Dodgers, then Cubs, then the Marlins with 2.',
+      "An AFL board will never hand you Essendon, Carlton and Collingwood together: all three sit on 16 flags, and tied teams never share a board. Same reason a Super Bowl board never deals the Steelers next to the Patriots.",
+    ],
+    tips: [
+      "Anchor the ends first. The most decorated team and the clear minnow are usually easy; the middle rungs are where points die.",
+      "Watch for era names. Eastern Suburbs and the Sydney Roosters are the same club but separate stacks here, and old-name entries usually carry the smaller count.",
+      "A first-try miss is information: your greens lock, so the second try is a smaller puzzle. Count what is left before you tap.",
+      "Reading the Record Books page once a week is basically training camp for this game.",
+    ],
+    faqs: [
+      {
+        q: "What happens if two teams have the same number of titles?",
+        a: "They will never appear on the same board. The board builder only picks five teams with strictly different counts, so the right order is always a fact, never a tiebreak we invented.",
+      },
+      {
+        q: "Where do the counts come from?",
+        a: "Counted row by row from the same audited champion tables behind our Record Books page, the ones verified season by season against the official record. No count on a board is typed in by hand.",
+      },
+      {
+        q: "Why is the WNBA not in this game?",
+        a: "Its history is real but young: there are not yet five different title counts to build an honest board from. The moment there are, it qualifies automatically.",
+      },
+    ],
+  },
+
   '/minefield': {
     intro: [
       "The board looks friendly: one category, a wall of names, most of them belong. Some of them are mines. Minefield asks you to click everyone who truly fits while dodging the plausible fakes planted among them.",

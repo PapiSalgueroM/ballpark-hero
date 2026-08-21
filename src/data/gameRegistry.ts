@@ -239,6 +239,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/hof-or-bust', label: 'Hall of Fame or Bust?', emoji: '🏆', description: 'Is this player a legend or a letdown?', daily: true, isNew: true },
       { path: '/champ-or-not', label: 'Champ or Not', emoji: '🏆', description: 'Ten title claims, true or false. Spot the fakes', daily: true, isNew: true },
       { path: '/whod-they-beat', label: "Who'd They Beat?", emoji: '🥈', description: 'The champ is given. Name the team they beat in the finals', daily: true, isNew: true },
+      { path: '/silverware-sort', label: 'Silverware Sort', emoji: '🥇', description: 'Stack five teams in order by real title counts', daily: true, isNew: true },
       { path: '/score-predictor', label: 'Score Predictor', emoji: '📊', description: 'Predict the final score of famous matches', daily: true, isNew: true },
       // moved from the retired Game Shows tab 2026-07-08 (owner: game-show games belong with their sport; these two span all sports)
       { path: '/list-quiz', label: 'Name Them All', emoji: '📝', description: 'How many champions can you name?', isNew: true },

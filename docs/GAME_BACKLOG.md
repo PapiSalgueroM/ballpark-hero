@@ -3,7 +3,8 @@
 Source: the 73-concept research idea bank (Box2BoxShow / playfootball.games /
 competitor analysis, 2026-06-22), exported from its structured data.json.
 
-This file holds the 52 concepts NOT yet built or individually tracked.
+This file holds the 51 concepts NOT yet built or individually tracked.
+(Order the List shipped as Silverware Sort, Round 250, on the audited title counts.)
 Already shipped or tracked as tasks (not listed here): Overrated or Underrated,
 Tier List, Budget Builder, Grade the Transfer, Jeopardy, Ball Knowledge IQ,
 Rebuild Challenge, Emoji Guess (all LIVE 2026-07-22); Rarity Round covers
@@ -205,7 +206,9 @@ Have? legend: New = not on site · Have* = on site, port wider · Partial = weak
 - **Notes:** You have Perfect Lineup; ship these as preset 'constraint packs' = many games from one engine.
 
 ### Order the List (Factle)
-- **Category:** List / Ranking · **Effort:** Med · **Mode:** Solo · **Status:** New
+- **SHIPPED, Round 250, as Silverware Sort (/silverware-sort):** ordering by audited title
+  counts with a distinct-counts rule so every board has one right order.
+- **Category:** List / Ranking · **Effort:** Med · **Mode:** Solo · **Status:** Built
 - **Ports to:** All sports
 - **How it plays:** Rank 5 items in correct order by a stat; wrong order ends the run.
 - **Inspiration:** Factle; you have 'Timeline' (by year)
