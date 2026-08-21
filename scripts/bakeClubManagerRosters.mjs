@@ -181,6 +181,19 @@ const DB_TO_ENGINE = {
   'Grasshopper Club Zurich': 'Grasshopper', 'FC Lugano': 'Lugano',
   'FC Sion': 'Sion', 'FC Thun': 'Thun', 'FC Zürich': 'FC Zürich',
   'FC Vaduz': 'Vaduz',
+  // Round 189: SuperSport HNL 2026-27. Membership verified 2026-08-19
+  // against rezultati.com's live 2026-27 fixture list, which names exactly
+  // these ten, agreeing with the season math (Vukovar 1991 relegated 10th
+  // of 10 per their Wikipedia club page; Rudeš promoted per Index.hr and
+  // Vrisak.info, both 2026-05-23; Dinamo Zagreb the reigning champions,
+  // their 26th). The dataset's Croatia traps: FK Istra is a DIFFERENT
+  // club (Serbia), ND Gorica is Slovenian, and the Dinamo family spans
+  // eight countries, so every mapping below is the exact full DB name.
+  'GNK Dinamo Zagreb': 'Dinamo Zagreb', 'HNK Hajduk Split': 'Hajduk Split',
+  'HNK Rijeka': 'Rijeka', 'NK Osijek': 'Osijek', 'NK Varazdin': 'Varaždin',
+  'Slaven Belupo Koprivnica': 'Slaven Belupo', 'NK Istra 1961': 'Istra 1961',
+  'NK Lokomotiva Zagreb': 'Lokomotiva Zagreb', 'HNK Gorica': 'Gorica',
+  'NK Rudes': 'Rudeš',
   // UCL flavor clubs outside the baked leagues
   'Club Brugge KV': 'Club Brugge',
 };
@@ -196,7 +209,11 @@ const KNOWN_EMPTY = ['Abha', 'ADO Den Haag', 'Cambuur',
   'Austria Lustenau', 'Iraklis', 'Kalamata', 'Kifisia', 'Volos',
   // Round 185: verified 2026-27 members with zero usable (2025/2026) rows.
   // AC Horsens have 28 rows in the dataset, every one from older seasons.
-  'AC Horsens', 'SønderjyskE'];
+  'AC Horsens', 'SønderjyskE',
+  // Round 189: verified 2026-27 HNL members with zero usable rows. Istra
+  // 1961's single 2025 row (Moris Valincic) is superseded by his own 2026
+  // row at Dinamo Zagreb, which empties them honestly.
+  'Varaždin', 'Lokomotiva Zagreb', 'Gorica', 'Rudeš', 'Istra 1961'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([
@@ -368,6 +385,9 @@ if (!(xiAvg('Inter Miami') > xiAvg('San Jose Earthquakes'))) errors.push('SANITY
 // Round 185: the new pair's giants outrate their thinnest members.
 if (!(xiAvg('FC Copenhagen') > xiAvg('Lyngby'))) errors.push('SANITY: Copenhagen <= Lyngby');
 if (!(xiAvg('Basel') > xiAvg('Vaduz'))) errors.push('SANITY: Basel <= Vaduz');
+// Round 189: the HNL giants outrate the promoted side.
+if (!(xiAvg('Dinamo Zagreb') > xiAvg('Rudeš'))) errors.push('SANITY: Dinamo <= Rudeš');
+if (!(xiAvg('Hajduk Split') > xiAvg('Gorica'))) errors.push('SANITY: Hajduk <= Gorica');
 
 const total = [...byClub.values()].reduce((s, l) => s + l.length, 0);
 if (total < 2800) errors.push(`Only ${total} players total (expected 2800+)`);
@@ -392,7 +412,7 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // (2026-27 memberships), EFL Championship, Saudi Pro League, MLS East and
 // West, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig,
 // 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
-// Greece, Danish Superliga and the Swiss Super League.
+// Greece, Danish Superliga, Swiss Super League and SuperSport HNL.
 // Values in £m, ratings 48-94 from the value curve.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.

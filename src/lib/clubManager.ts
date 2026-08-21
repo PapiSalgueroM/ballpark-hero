@@ -1506,6 +1506,21 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'switzerland', name: 'Swiss Super League', cupName: 'Swiss Cup', euro: true,
     clubs: ['Basel', 'Young Boys', 'Thun', 'St. Gallen', 'Lugano', 'Servette', 'Luzern', 'Lausanne-Sport', 'FC Zürich', 'Grasshopper', 'Sion', 'Vaduz'],
   },
+  /* Round 189: wave three, last verifiable candidate. Membership verified
+     2026-08-19 against two agreeing sources: rezultati.com's live 2026-27
+     fixture list names exactly these ten, matching the season math
+     (Vukovar 1991 relegated 10th of 10 per their own Wikipedia page;
+     Rudeš promoted per Index.hr and Vrisak.info, both dated 2026-05-23;
+     Dinamo Zagreb the reigning champions, their 26th title, per the
+     Croatian league's Wikipedia overview and the April 2026 press). The
+     real HNL plays each other four times over 36 rounds and settles 9th
+     place in a barrage; the engine plays a straight double round robin
+     and sends one straight down, the same simplification Switzerland
+     shipped with. */
+  {
+    id: 'croatia', name: 'SuperSport HNL', cupName: 'Croatian Cup', euro: true,
+    clubs: ['Dinamo Zagreb', 'Hajduk Split', 'Rijeka', 'Osijek', 'Varaždin', 'Slaven Belupo', 'Istra 1961', 'Lokomotiva Zagreb', 'Gorica', 'Rudeš'],
+  },
 ];
 
 /**
@@ -1533,6 +1548,7 @@ export const LEAGUE_NATIONS: Record<string, string> = {
   greece: 'Greece',
   denmark: 'Denmark',
   switzerland: 'Switzerland',
+  croatia: 'Croatia',
 };
 
 /** Strength priors for league clubs the player pool cannot rate. */
@@ -1605,6 +1621,12 @@ const STRENGTH_PRIORS: Record<string, number> = {
   'Thun': 70, 'Lugano': 69, 'Servette': 68, 'Luzern': 67,
   'Lausanne-Sport': 67, 'FC Zürich': 67, 'Grasshopper': 65, 'Sion': 65,
   'Vaduz': 60,
+  // Round 189: SuperSport HNL thin-data clubs (Dinamo Zagreb and Hajduk
+  // Split rate from their baked squads). Rijeka's prior respects a club
+  // that won the league in 2025 even though their dataset squad runs thin
+  // after the summer sales; Rudeš come up as the promoted side.
+  'Rijeka': 72, 'Osijek': 68, 'Varaždin': 67, 'Slaven Belupo': 66,
+  'Istra 1961': 65, 'Lokomotiva Zagreb': 65, 'Gorica': 64, 'Rudeš': 61,
 };
 
 /** The real league a club plays in. Every playable club is covered. */
@@ -1826,6 +1848,8 @@ export const NATIONS: NationDef[] = [
   // Round 185
   { id: 'denmark', name: 'Denmark', flag: '🇩🇰', leagueIds: ['denmark'] },
   { id: 'switzerland', name: 'Switzerland', flag: '🇨🇭', leagueIds: ['switzerland'] },
+  // Round 189
+  { id: 'croatia', name: 'Croatia', flag: '🇭🇷', leagueIds: ['croatia'] },
 ];
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
@@ -1954,6 +1978,11 @@ const CLUB_COLORS: Record<string, string> = {
   'St. Gallen': '#009654', 'Lugano': '#2b2b2b', 'Servette': '#8d1b3d',
   'Luzern': '#1667b1', 'Lausanne-Sport': '#0b63b2', 'FC Zürich': '#0a3e86',
   'Grasshopper': '#0053a0', 'Sion': '#d2232a', 'Vaduz': '#ce1126',
+  // Round 189: SuperSport HNL
+  'Dinamo Zagreb': '#1b4fa0', 'Hajduk Split': '#d9d9d9', 'Rijeka': '#009fe3',
+  'Osijek': '#0f4c81', 'Varaždin': '#12294a', 'Slaven Belupo': '#0e6eb8',
+  'Istra 1961': '#0a7a3c', 'Lokomotiva Zagreb': '#e2001a', 'Gorica': '#12294a',
+  'Rudeš': '#1f9d55',
 };
 
 /**
@@ -5921,8 +5950,10 @@ function relegationSpots(leagueId: string): number {
   if (leagueId.startsWith('mls')) return 0;
   /* Round 185: Switzerland sent one straight down last season (Winterthur,
      with 11th place playing a barrage the engine does not model), so 1;
-     Denmark sent two down (Fredericia and Vejle), so 2 below. */
-  if (leagueId === 'scottish' || leagueId === 'proleague' || leagueId === 'austria' || leagueId === 'switzerland') return 1;
+     Denmark sent two down (Fredericia and Vejle), so 2 below.
+     Round 189: Croatia sent one straight down (Vukovar 1991, 10th of 10,
+     with 9th place playing a barrage the engine does not model), so 1. */
+  if (leagueId === 'scottish' || leagueId === 'proleague' || leagueId === 'austria' || leagueId === 'switzerland' || leagueId === 'croatia') return 1;
   if (leagueId === 'bundesliga' || leagueId === 'bundesliga2' || leagueId === 'eredivisie' || leagueId === 'primeira' || leagueId === 'greece' || leagueId === 'denmark') return 2;
   return 3;
 }
@@ -5972,6 +6003,8 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
   // Round 185. Same one-ticket shape; qualifying routes count as in.
   denmark:     { ucl: 1, uel: 2, uecl: 3 },
   switzerland: { ucl: 1, uel: 2, uecl: 3 },
+  // Round 189. Same one-ticket shape; qualifying routes count as in.
+  croatia:     { ucl: 1, uel: 2, uecl: 3 },
   // Round 146: the 2010-11 era. No Conference League existed until 2021, so
   // uecl is 0 and the demand ladder skips that band entirely.
   premier2010: { ucl: 4, uel: 5, uecl: 0 },
@@ -6096,14 +6129,22 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
     // because "qualify for the Champions League" there just means "finish
     // first", and that demand belongs to the title band alone.
     const over = Math.max(0, titleBandSize(league, eraId) - slots.ucl);
-    if (slots.ucl >= 2 && rank <= slots.ucl + 1 + over) {
+    /* Round 189: the windows ALSO stop at the top-half line. simBoard
+       caught the hole the day Croatia's ten club league arrived: the
+       sliding Conference window (uecl + 3 + over) reached rank 8 of 10,
+       which is two places off the drop, and a board there talking about
+       Europe is lying to itself. In the 14-to-20 club leagues this floor
+       sits below every window and changes nothing; it only bites where
+       the league is small enough for the arithmetic to overreach. */
+    const euroFloor = Math.round(size * 0.65);
+    if (slots.ucl >= 2 && rank <= Math.min(slots.ucl + 1 + over, euroFloor)) {
       return { target: slots.ucl, label: `Qualify for the Champions League` };
     }
-    if (rank <= slots.uel + 2 + over) {
+    if (rank <= Math.min(slots.uel + 2 + over, euroFloor)) {
       return { target: slots.uel, label: `Qualify for the ${slots.uelName ?? 'Europa League'}` };
     }
     // uecl 0 means the era predates the Conference League: no such band.
-    if (slots.uecl && rank <= slots.uecl + 3 + over) {
+    if (slots.uecl && rank <= Math.min(slots.uecl + 3 + over, euroFloor)) {
       return { target: slots.uecl, label: `Qualify for the Conference League` };
     }
   }

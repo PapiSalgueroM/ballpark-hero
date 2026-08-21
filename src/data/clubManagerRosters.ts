@@ -29,14 +29,14 @@ export interface BakedPlayer {
 export const CM_ROSTER_META = {
   generated: '2026-08-13',
   asOf: 'August 2026, after the summer window',
-  players: 3589,
-  clubs: 320,
+  players: 3615,
+  clubs: 330,
   overlayMoves: 37,
 };
 
 /** Clubs where the dataset runs thin (under 8 real players); the game pads
  *  these squads with youth players and the picker says so. */
-export const CM_PARTIAL: string[] = ["Aberdeen","Abha","AC Horsens","Académico de Viseu","ADO Den Haag","AGF","Al-Diriyah","Al-Ettifaq","Al-Faisaly","Al-Fateh","Al-Fayha","Al-Hazem","Al-Khaleej","Al-Kholood","Al-Riyadh","Al-Taawoun","Altach","Alverca","Amedspor","Aris","Arminia Bielefeld","Arouca","Asteras Tripolis","Atromitos","Austria Lustenau","Austria Wien","Beveren","Bochum","Bolton Wanderers","Braunschweig","Cambuur","Cardiff City","Casa Pia","Charlton Athletic","Çorum FK","D.C. United","Darmstadt","Deportivo La Coruña","Dundee","Dundee United","Dynamo Dresden","Elversberg","Energie Cottbus","Erzurumspor","Estoril","Estrela Amadora","Excelsior","Eyüpspor","Falkirk","FC Cincinnati","FC Zürich","Fortuna Sittard","Frosinone","Gaziantep FK","Gençlerbirliği","Go Ahead Eagles","Grasshopper","Grazer AK","Greuther Fürth","Groningen","Hartberg","Hearts","Hertha BSC","Hibernian","Iraklis","Kaiserslautern","Kalamata","Karlsruhe","Kasımpaşa","Kifisia","Kilmarnock","Kocaelispor","Konyaspor","Kortrijk","LA Galaxy","La Louvière","LASK","Lausanne-Sport","Le Mans","Levadiakos","Lincoln City","Lommel","Lugano","Lyngby","Magdeburg","Málaga","Marítimo","Moreirense","Motherwell","Nacional","Nashville SC","Nürnberg","OB","OFI","OH Leuven","Osnabrück","Panetolikos","PEC Zwolle","Philadelphia Union","Portsmouth","Randers FC","Real Salt Lake","Ried","Rizespor","San Jose Earthquakes","Santa Clara","Servette","Silkeborg IF","Sion","SønderjyskE","Sporting Kansas City","St Johnstone","St Mirren","St. Louis City","Standard Liège","Telstar","Thun","Toronto FC","Vaduz","Viborg FF","Volos","Westerlo","Willem II","Wolfsberger AC","WSG Tirol","Zulte Waregem"];
+export const CM_PARTIAL: string[] = ["Aberdeen","Abha","AC Horsens","Académico de Viseu","ADO Den Haag","AGF","Al-Diriyah","Al-Ettifaq","Al-Faisaly","Al-Fateh","Al-Fayha","Al-Hazem","Al-Khaleej","Al-Kholood","Al-Riyadh","Al-Taawoun","Altach","Alverca","Amedspor","Aris","Arminia Bielefeld","Arouca","Asteras Tripolis","Atromitos","Austria Lustenau","Austria Wien","Beveren","Bochum","Bolton Wanderers","Braunschweig","Cambuur","Cardiff City","Casa Pia","Charlton Athletic","Çorum FK","D.C. United","Darmstadt","Deportivo La Coruña","Dundee","Dundee United","Dynamo Dresden","Elversberg","Energie Cottbus","Erzurumspor","Estoril","Estrela Amadora","Excelsior","Eyüpspor","Falkirk","FC Cincinnati","FC Zürich","Fortuna Sittard","Frosinone","Gaziantep FK","Gençlerbirliği","Go Ahead Eagles","Gorica","Grasshopper","Grazer AK","Greuther Fürth","Groningen","Hartberg","Hearts","Hertha BSC","Hibernian","Iraklis","Istra 1961","Kaiserslautern","Kalamata","Karlsruhe","Kasımpaşa","Kifisia","Kilmarnock","Kocaelispor","Konyaspor","Kortrijk","LA Galaxy","La Louvière","LASK","Lausanne-Sport","Le Mans","Levadiakos","Lincoln City","Lokomotiva Zagreb","Lommel","Lugano","Lyngby","Magdeburg","Málaga","Marítimo","Moreirense","Motherwell","Nacional","Nashville SC","Nürnberg","OB","OFI","OH Leuven","Osijek","Osnabrück","Panetolikos","PEC Zwolle","Philadelphia Union","Portsmouth","Randers FC","Real Salt Lake","Ried","Rijeka","Rizespor","Rudeš","San Jose Earthquakes","Santa Clara","Servette","Silkeborg IF","Sion","Slaven Belupo","SønderjyskE","Sporting Kansas City","St Johnstone","St Mirren","St. Louis City","Standard Liège","Telstar","Thun","Toronto FC","Vaduz","Varaždin","Viborg FF","Volos","Westerlo","Willem II","Wolfsberger AC","WSG Tirol","Zulte Waregem"];
 
 export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   'AC Milan': [
@@ -556,7 +556,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Thomas Müller', p: 'CF', a: 36, v: 4.3, r: 74 },
     { n: 'Wisdom Mike', p: 'LW', a: 17, v: 3.6, r: 73 },
     { n: 'Manuel Neuer', p: 'GK', a: 39, v: 3, r: 72 },
-    { n: 'Gabriel Vidovic', p: 'LW', a: 22, v: 2.1, r: 70 },
   ],
   'Benfica': [
     { n: 'Vangelis Pavlidis', p: 'ST', a: 27, v: 26.3, r: 84 },
@@ -1224,7 +1223,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Ederson', p: 'GK', a: 32, v: 10.5, r: 79 },
     { n: 'Sebastian Szymanski', p: 'CAM', a: 26, v: 9.8, r: 78 },
     { n: 'Milan Škriniar', p: 'CB', a: 30, v: 9, r: 78 },
-    { n: 'Dominik Livakovic', p: 'GK', a: 30, v: 7.8, r: 77 },
     { n: 'Archie Brown', p: 'LB', a: 23, v: 7.5, r: 77 },
     { n: 'Oğuz Aydın', p: 'LW', a: 25, v: 6.8, r: 76 },
     { n: 'İrfan Can Kahveci', p: 'RW', a: 30, v: 6.4, r: 76 },
@@ -2039,7 +2037,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Dany Mota', p: 'ST', a: 27, v: 2.9, r: 71 },
     { n: 'Kevin Zeroli', p: 'CM', a: 20, v: 2.9, r: 71 },
     { n: 'Samuele Birindelli', p: 'RB', a: 26, v: 2.3, r: 70 },
-    { n: 'Samuele Vignato', p: 'CAM', a: 21, v: 2.1, r: 70 },
     { n: 'Demba Thiam', p: 'GK', a: 27, v: 1.5, r: 68 },
     { n: 'Gianluca Caprari', p: 'CF', a: 32, v: 1.4, r: 68 },
     { n: 'Omari Forson', p: 'RW', a: 21, v: 1.4, r: 68 },
@@ -3948,7 +3945,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Nikolaus Wurmbrand', p: 'RW', a: 19, v: 3.6, r: 73 },
     { n: 'Serge-Philippe Raux-Yao', p: 'CB', a: 26, v: 3.6, r: 73 },
     { n: 'Romeo Amane', p: 'CM', a: 22, v: 3.0, r: 72 },
-    { n: 'Dion Beljo', p: 'ST', a: 23, v: 2.9, r: 71 },
     { n: 'Matthias Seidl', p: 'CM', a: 24, v: 2.9, r: 71 },
     { n: 'Petter Nosa Dahl', p: 'LW', a: 22, v: 2.2, r: 70 },
     { n: 'Tobias Gulliksen', p: 'CAM', a: 22, v: 2.2, r: 70 },
@@ -3974,7 +3970,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Emanuel Schreiner', p: 'LM', a: 34, v: 0.7, r: 64 },
   ],
   'Austria Wien': [
-    { n: 'Matteo Pérez Vinlöf', p: 'LB', a: 20, v: 2.1, r: 70 },
     { n: 'Tae-seok Lee', p: 'LB', a: 23, v: 1.5, r: 68 },
     { n: 'Marijan Österreicher', p: 'RM', a: 19, v: 0.8, r: 64 },
   ],
@@ -4282,5 +4277,61 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   'Vaduz': [
     { n: 'Gabriele De Donno', p: 'RM', a: 23, v: 0.8, r: 64 },
     { n: 'Joël Ris', p: 'LM', a: 22, v: 0.7, r: 64 },
+  ],
+  /* ---- Round 189: SuperSport HNL (membership verified 2026-08-19:
+     rezultati.com's live 2026-27 fixtures name exactly these ten, agreeing
+     with the season math: Vukovar 1991 relegated 10th of 10 per their own
+     Wikipedia page, Rudes promoted per Index.hr and Vrisak.info, both
+     2026-05-23; Dinamo Zagreb the reigning champions, their 26th) ---- */
+  'Dinamo Zagreb': [
+    { n: 'Dion Beljo', p: 'ST', a: 23, v: 3, r: 72 },
+    { n: 'Dominik Livakovic', p: 'GK', a: 30, v: 3, r: 72 },
+    { n: 'Arbër Hoxha', p: 'LW', a: 27, v: 2.3, r: 70 },
+    { n: 'Gabriel Vidovic', p: 'LW', a: 22, v: 2.3, r: 70 },
+    { n: 'Luka Stojkovic', p: 'CAM', a: 22, v: 2.3, r: 70 },
+    { n: 'Matteo Pérez Vinlöf', p: 'LB', a: 20, v: 2.3, r: 70 },
+    { n: 'Ronaël Pierre-Gabriel', p: 'RB', a: 27, v: 2.3, r: 70 },
+    { n: 'Moris Valincic', p: 'RB', a: 23, v: 1.5, r: 68 },
+    { n: 'Ivan Nevistic', p: 'GK', a: 27, v: 1.4, r: 68 },
+    { n: 'Lukas Kacavenda', p: 'CAM', a: 22, v: 1.4, r: 68 },
+    { n: 'Bruno Goda', p: 'LB', a: 27, v: 0.8, r: 64 },
+  ],
+  'Hajduk Split': [
+    { n: 'Rokas Pukstas', p: 'CAM', a: 21, v: 3.8, r: 73 },
+    { n: 'Marko Livaja', p: 'ST', a: 32, v: 3.6, r: 73 },
+    { n: 'Bruno Durdov', p: 'RW', a: 18, v: 2.3, r: 70 },
+    { n: 'Simun Hrgovic', p: 'LB', a: 21, v: 2.3, r: 70 },
+    { n: 'Stipe Biuk', p: 'LW', a: 23, v: 2.1, r: 70 },
+    { n: 'Abdoulie Sanyang', p: 'RW', a: 26, v: 1.5, r: 68 },
+    { n: 'Ivica Ivusic', p: 'GK', a: 30, v: 1.5, r: 68 },
+    { n: 'Michele Sego', p: 'LW', a: 25, v: 1.5, r: 68 },
+    { n: 'Ivan Lucic', p: 'GK', a: 30, v: 0.7, r: 64 },
+  ],
+  'Rijeka': [
+    { n: 'Toni Fruk', p: 'CAM', a: 24, v: 7.5, r: 77 },
+    { n: 'Niko Jankovic', p: 'CAM', a: 24, v: 5, r: 75 },
+    { n: 'Samuele Vignato', p: 'CAM', a: 21, v: 2.3, r: 70 },
+    { n: 'Tiago Dantas', p: 'CM', a: 25, v: 2.3, r: 70 },
+    { n: 'Ante Orec', p: 'RB', a: 24, v: 1.5, r: 68 },
+    { n: 'Martin Zlomislic', p: 'GK', a: 27, v: 1.5, r: 68 },
+  ],
+  'Osijek': [
+    { n: 'Anton Matkovic', p: 'ST', a: 19, v: 2.3, r: 70 },
+    { n: 'Nail Omerovic', p: 'LW', a: 23, v: 2.3, r: 70 },
+    { n: 'Roko Jurisic', p: 'LB', a: 24, v: 1.4, r: 68 },
+  ],
+  'Varaždin': [
+  ],
+  'Slaven Belupo': [
+    { n: 'Adriano Jagusic', p: 'CAM', a: 20, v: 3.8, r: 73 },
+    { n: 'Luka Lucic', p: 'LM', a: 30, v: 0.7, r: 64 },
+  ],
+  'Istra 1961': [
+  ],
+  'Lokomotiva Zagreb': [
+  ],
+  'Gorica': [
+  ],
+  'Rudeš': [
   ],
 };
