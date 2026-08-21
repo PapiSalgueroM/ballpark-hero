@@ -45,7 +45,7 @@ console.log('1) Nations and leagues');
 /* Round 140 added Portugal, Scotland and Turkey. Every nation must map to
    real leagues and every league to a nation, so the count is derived rather
    than pinned, and a nation with no playable league is the failure mode. */
-if (NATIONS.length !== 12) fail(`expected 12 nations, got ${NATIONS.length}`);
+if (NATIONS.length !== 14) fail(`expected 14 nations, got ${NATIONS.length}`);  // Round 177: Austria and Greece
 const mappedLeagueIds = new Set(NATIONS.flatMap(n => n.leagueIds));
 for (const lg of REAL_LEAGUES) {
   if (!mappedLeagueIds.has(lg.id)) fail(`league ${lg.id} belongs to no nation, it is unreachable from the picker`);
@@ -67,7 +67,7 @@ for (const n of NATIONS) {
     }
   }
 }
-if (totalClubs !== 270) fail(`expected 270 playable clubs (186, plus 48 in Round 140, 18 in Round 142, 18 in Round 143), got ${totalClubs}`);
+if (totalClubs !== 296) fail(`expected 296 playable clubs (186, plus 48 in Round 140, 18 in Round 142, 18 in Round 143, 12 plus 14 in Round 177), got ${totalClubs}`);
 const ordering = [
   ['Real Madrid', 'Racing Santander'], ['Bayern Munich', 'Paderborn'], ['PSG', 'Le Havre'],
   ['Liverpool', 'Hull City'], ['Wolves', 'Lincoln City'], ['Al-Hilal', 'Al-Riyadh'],

@@ -142,9 +142,26 @@ const DB_TO_ENGINE = {
   'Eyüpspor': 'Eyüpspor', 'Göztepe': 'Göztepe', 'Kasimpasa': 'Kasımpaşa',
   'Alanyaspor': 'Alanyaspor', 'Konyaspor': 'Konyaspor', 'Gaziantep FK': 'Gaziantep FK',
   'Genclerbirligi Ankara': 'Gençlerbirliği', 'Caykur Rizespor': 'Rizespor',
+  // Round 177: Austrian Bundesliga 2026-27 (Rapid, LASK and co join; RB
+  // Salzburg was already baked as a UCL flavor club and keeps its name).
+  // Membership verified 2026-08-19 against worldfootball's live table and
+  // Soccerway's fixtures, which agree on all twelve.
+  'Red Bull Salzburg': 'RB Salzburg', 'SK Sturm Graz': 'Sturm Graz',
+  'Rapid Vienna': 'Rapid Wien', 'LASK': 'LASK', 'Wolfsberger AC': 'Wolfsberger AC',
+  'SCR Altach': 'Altach', 'Austria Vienna': 'Austria Wien',
+  'Grazer AK 1902': 'Grazer AK', 'SV Ried': 'Ried', 'WSG Tirol': 'WSG Tirol',
+  'TSV Hartberg': 'Hartberg',
+  // Round 177: Super League Greece 2026-27 (Olympiacos was already baked as
+  // a UCL flavor club and keeps its name). Membership verified 2026-08-19
+  // against Soccerway's fixtures and the Wikipedia season page (Iraklis and
+  // Kalamata up, AEL and Panserraikos down).
+  'Olympiacos Piraeus': 'Olympiacos', 'Panathinaikos': 'Panathinaikos',
+  'AEK Athens': 'AEK Athens', 'PAOK Thessaloniki': 'PAOK',
+  'Aris Thessaloniki': 'Aris', 'Asteras Aktor': 'Asteras Tripolis',
+  'Atromitos Athens': 'Atromitos', 'Levadiakos': 'Levadiakos',
+  'OFI Crete': 'OFI', 'Panetolikos': 'Panetolikos',
   // UCL flavor clubs outside the baked leagues
-  'Club Brugge KV': 'Club Brugge', 'Red Bull Salzburg': 'RB Salzburg',
-  'Olympiacos Piraeus': 'Olympiacos',
+  'Club Brugge KV': 'Club Brugge',
 };
 
 /** Engine clubs with no dataset rows at all: baked as empty, youth-padded in game.
@@ -153,7 +170,9 @@ const DB_TO_ENGINE = {
  *  They are real clubs in verified 2026-27 memberships, marked CM_PARTIAL. */
 const KNOWN_EMPTY = ['Abha', 'ADO Den Haag', 'Cambuur',
   'Marítimo', 'Académico de Viseu', 'St Mirren',
-  'Erzurumspor', 'Amedspor', 'Çorum FK', 'Kocaelispor'];
+  'Erzurumspor', 'Amedspor', 'Çorum FK', 'Kocaelispor',
+  // Round 177: verified 2026-27 members with zero current dataset rows.
+  'Austria Lustenau', 'Iraklis', 'Kalamata', 'Kifisia', 'Volos'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([

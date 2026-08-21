@@ -1456,6 +1456,25 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'proleague', name: 'Belgian Pro League', cupName: 'Belgian Cup', euro: true,
     clubs: ['Club Brugge', 'Union Saint-Gilloise', 'Anderlecht', 'Genk', 'Gent', 'Antwerp', 'Standard Liège', 'Mechelen', 'Charleroi', 'Westerlo', 'Sint-Truiden', 'OH Leuven', 'Cercle Brugge', 'La Louvière', 'Zulte Waregem', 'Beveren', 'Kortrijk', 'Lommel'],
   },
+  /* Round 177: wave three, first pair. Memberships verified 2026-08-19
+     against two agreeing sources each (worldfootball's live table plus
+     Soccerway fixtures for Austria; Soccerway plus the season records for
+     Greece: Iraklis and Kalamata up, AEL and Panserraikos down). Both play
+     split-format seasons in real life; the engine plays them as straight
+     double round robins, the same simplification the Belgian league shipped
+     with. Salzburg and Olympiacos were already in the game as continental
+     flavor clubs and simply gained their home leagues. The thin tails are
+     marked in CM_PARTIAL per the standing honesty rule, and five verified
+     members with no dataset rows at all (Lustenau, Iraklis, Kalamata,
+     Kifisia, Volos) ship as fully youth-padded squads that say so. */
+  {
+    id: 'austria', name: 'Austrian Bundesliga', cupName: 'ÖFB Cup', euro: true,
+    clubs: ['RB Salzburg', 'Sturm Graz', 'Rapid Wien', 'LASK', 'Wolfsberger AC', 'Austria Wien', 'Grazer AK', 'Hartberg', 'Ried', 'Altach', 'WSG Tirol', 'Austria Lustenau'],
+  },
+  {
+    id: 'greece', name: 'Super League Greece', cupName: 'Greek Cup', euro: true,
+    clubs: ['Olympiacos', 'Panathinaikos', 'AEK Athens', 'PAOK', 'Aris', 'Asteras Tripolis', 'Atromitos', 'Iraklis', 'Kalamata', 'Kifisia', 'Levadiakos', 'OFI', 'Panetolikos', 'Volos'],
+  },
 ];
 
 /**
@@ -1479,6 +1498,8 @@ export const LEAGUE_NATIONS: Record<string, string> = {
   scottish: 'Scotland',
   superlig: 'Türkiye',
   proleague: 'Belgium',
+  austria: 'Austria',
+  greece: 'Greece',
 };
 
 /** Strength priors for league clubs the player pool cannot rate. */
@@ -1531,6 +1552,15 @@ const STRENGTH_PRIORS: Record<string, number> = {
   // Belgian Pro League (Round 143): thin-data clubs
   'Standard Liège': 69, 'Westerlo': 66, 'OH Leuven': 65, 'La Louvière': 63,
   'Zulte Waregem': 63, 'Beveren': 62, 'Kortrijk': 62, 'Lommel': 61,
+  // Round 177: Austrian Bundesliga thin-data clubs (Salzburg, Sturm, Rapid
+  // and LASK rate from their baked squads and ignore these)
+  'Wolfsberger AC': 68, 'Austria Wien': 68, 'Hartberg': 64, 'Grazer AK': 64,
+  'Ried': 63, 'Altach': 63, 'WSG Tirol': 63, 'Austria Lustenau': 61,
+  // Round 177: Super League Greece thin-data clubs (the Athens and
+  // Thessaloniki big four rate from their baked squads)
+  'Aris': 70, 'Asteras Tripolis': 65, 'Atromitos': 65, 'OFI': 64,
+  'Levadiakos': 64, 'Panetolikos': 63, 'Volos': 63, 'Kifisia': 62,
+  'Iraklis': 61, 'Kalamata': 61,
 };
 
 /** The real league a club plays in. Every playable club is covered. */
@@ -1746,6 +1776,9 @@ export const NATIONS: NationDef[] = [
   { id: 'scotland', name: 'Scotland', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', leagueIds: ['scottish'] },
   { id: 'turkey', name: 'Turkey', flag: '🇹🇷', leagueIds: ['superlig'] },
   { id: 'belgium', name: 'Belgium', flag: '🇧🇪', leagueIds: ['proleague'] },
+  // Round 177
+  { id: 'austria', name: 'Austria', flag: '🇦🇹', leagueIds: ['austria'] },
+  { id: 'greece', name: 'Greece', flag: '🇬🇷', leagueIds: ['greece'] },
 ];
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
@@ -1853,6 +1886,17 @@ const CLUB_COLORS: Record<string, string> = {
   // Round 176: 2005-06 era clubs not covered above.
   'Cádiz': '#ffe100', 'Zaragoza': '#2b5da8', 'Wigan Athletic': '#1d59af',
   'Almería': '#d02128', 'Hércules': '#1d59af',
+  // Round 177: Austrian Bundesliga
+  'RB Salzburg': '#d02128', 'Sturm Graz': '#2b2b2b', 'Rapid Wien': '#0a7040',
+  'LASK': '#2b2b2b', 'Wolfsberger AC': '#d9d9d9', 'Austria Wien': '#5c2d91',
+  'Grazer AK': '#d02128', 'Hartberg': '#1b458f', 'Ried': '#0a7040',
+  'Altach': '#2b2b2b', 'WSG Tirol': '#0a7040', 'Austria Lustenau': '#0a7040',
+  // Round 177: Super League Greece
+  'Olympiacos': '#d02128', 'Panathinaikos': '#0a7857', 'AEK Athens': '#f5d800',
+  'PAOK': '#2b2b2b', 'Aris': '#f5d800', 'Asteras Tripolis': '#f5d800',
+  'Atromitos': '#1b458f', 'Iraklis': '#1b458f', 'Kalamata': '#2b2b2b',
+  'Kifisia': '#d02128', 'Levadiakos': '#0a7040', 'OFI': '#2b2b2b',
+  'Panetolikos': '#f5d800', 'Volos': '#d02128',
 };
 
 /**
@@ -5818,8 +5862,8 @@ function nearestRival(clubName: string, eraId?: string, clubsOverride?: string[]
 function relegationSpots(leagueId: string): number {
   // MLS conferences do not relegate; everyone else drops 1-3.
   if (leagueId.startsWith('mls')) return 0;
-  if (leagueId === 'scottish' || leagueId === 'proleague') return 1;
-  if (leagueId === 'bundesliga' || leagueId === 'bundesliga2' || leagueId === 'eredivisie' || leagueId === 'primeira') return 2;
+  if (leagueId === 'scottish' || leagueId === 'proleague' || leagueId === 'austria') return 1;
+  if (leagueId === 'bundesliga' || leagueId === 'bundesliga2' || leagueId === 'eredivisie' || leagueId === 'primeira' || leagueId === 'greece') return 2;
   return 3;
 }
 
@@ -5861,6 +5905,10 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
   scottish:   { ucl: 1, uel: 2, uecl: 3 },
   superlig:   { ucl: 1, uel: 2, uecl: 3 },
   proleague:  { ucl: 1, uel: 2, uecl: 3 },
+  // Round 177. Same simplified single-champion shape as the other
+  // one-ticket leagues: qualifying-round routes count as in.
+  austria:    { ucl: 1, uel: 2, uecl: 3 },
+  greece:     { ucl: 1, uel: 2, uecl: 3 },
   // Round 146: the 2010-11 era. No Conference League existed until 2021, so
   // uecl is 0 and the demand ladder skips that band entirely.
   premier2010: { ucl: 4, uel: 5, uecl: 0 },

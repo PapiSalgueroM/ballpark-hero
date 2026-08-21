@@ -196,7 +196,27 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   no honest 2000 era and the picker footnote says so.
   STILL OPEN from CM-5: more era leagues (a third league for an existing era by the same
   recipe), nothing else.
-- CM-6 More leagues (wave 3 list in item 6 of the previous review, densities measured).
+- CM-6 **WAVE 3 FIRST PAIR DONE, Round 177: Austria and Greece.** Two leagues from the
+  measured wave-3 list: the Austrian Bundesliga (12 clubs, membership verified against
+  worldfootball's live table plus Soccerway) and the Super League Greece (14, verified against
+  Soccerway plus the season records; Iraklis and Kalamata up, AEL and Panserraikos down). 105
+  players appended to the bake by the standing curve; Salzburg and Olympiacos simply gained
+  home leagues (they were already baked as UCL flavor clubs). The Ozcan check earned its keep
+  at scale: 16 players moved because their 2026 rows superseded stale bakes at old clubs
+  (Jovic and Marin to AEK, Dessers, Calabria, Zaroury and Kyriakopoulos to Panathinaikos,
+  Ivanusec, Taylor, Kenny and Bianco to PAOK, all real summer 2026 moves) and 17 stale wave-3
+  rows were dropped the same way. World now 296 clubs, 17 leagues, 3,456 players; copy updated
+  everywhere it counts things; simEras' year-zero strength anchor re-measured (74.1 was the
+  272-club world, the padded tails settle it at 71.6, comment documents it). Five verified
+  members with zero dataset rows ship as declared youth-padded squads (Lustenau, Iraklis,
+  Kalamata, Kifisia, Volos), the Championship's own honesty rule. Browser probed 16 for 16:
+  both nations, both leagues, dense and thin clubs pickable, partial markers, Salzburg and
+  Olympiacos told to win it, careers started in both. **Czechia is deliberately parked:** the
+  2026-27 Chance Liga membership is genuinely unsettled in the sources (Karvina's match-fixing
+  relegation, appeal dropped July 6, replacement invitations still unresolved in anything
+  citable), and we do not bake a league whose lineup we cannot verify. Remaining wave-3
+  candidates when their data or memberships firm up: Czechia, Denmark, Switzerland, Croatia,
+  and Liga MX (blocked on the split-season engine shape, same as Brazil and Argentina).
 - CM-7 **MOSTLY DONE, Round 161: structured deals and deep filters.** Negotiations take
   PACKAGES now: cash plus add-ons (weigh 60p on the pound, queue up and come due in later
   summers at a measured 0.65 rate, leading the summer news), a sell-on clause (worth about
@@ -649,7 +669,8 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, late night | **Round 174** (the era words: all four sports' SEO copy and FAQs teach the throwbacks with the verified franchise facts, plus the stale-copy sweep it surfaced: the NFL page's 3-position claim, the NBA page's G/F/C claim, and leftover duplicate create steps in the hockey and baseball howToPlay lists). `RUN174.bat`, chain-guarded on 173. **SHIP32.bat is the current wrapper: it runs 157 through 174.** |
 | Packaged 2026-08-18, past midnight | **Round 175** (the 2015-16 era for Club Manager, CM-5's biggest remaining half: the Leicester season baked from 767 real year-2015 rows with 56 two-way-verified window corrections, era uplift at measured 0.6, the What's New page catching up on all the era work, and two new harnesses: simEra2015 and the playEra2015 browser walk. Plus a simUsCoaching deflake its suite run caught: section 4's offer-count noise margin sat at 1.7 sigma on the tightest pair at 300 samples, so the row sample grew to 1500 where the same margin sits past 3, with the measurement in the comment; the deterministic standing check was always the real assertion). `RUN175.bat`, chain-guarded on 174. **SHIP33.bat is the current wrapper: it runs 157 through 175.** |
 | Packaged 2026-08-19, small hours | **Round 176** (the 2005-06 era, completing CM-5 to the data floor: Ronaldinho's season with 747 real year-2005 players, 26 two-way-verified window corrections, period-correct UEFA Cup vocabulary via the new uelName field, the steepest measured uplift, Cadiz and Alaves honestly partial, simEra2005 and playEra2005 as harnesses 56 and the fourth browser walk, plus kit colors for the era-only clubs both new and previously gray). `RUN176.bat`, chain-guarded on 175. **SHIP34.bat is the current wrapper: it runs 157 through 176.** |
-| Next free round number | **177** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-19, deeper small hours | **Round 177** (CM-6 wave 3 first pair: the Austrian Bundesliga and the Super League Greece, 24 new clubs and 105 new players by the standing bake curve, 16 supersession moves and 17 stale-row drops from the Ozcan check, 296 clubs across 17 leagues with the copy caught up, Czechia parked with the reason documented). `RUN177.bat`, chain-guarded on 176. **SHIP35.bat is the current wrapper: it runs 157 through 177.** |
+| Next free round number | **178** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

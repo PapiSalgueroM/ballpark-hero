@@ -339,7 +339,13 @@ console.log('4) Twenty seasons out, the league is still a league');
     if (empty > bakedEmpty.length) fail(`${empty} clubs have no players at all at +${y} years, but only ${bakedEmpty.length} baked empty: somebody new ran dry`);
     if (all.length < DATA.CM_ROSTER_META.players * 0.98) fail(`the world lost players by +${y} years (${all.length})`);
     if (mean(all.map(p => p.a)) > 27.5) fail(`the whole world averages ${fx(mean(all.map(p => p.a)), 1)} years old at +${y}`);
-    if (Math.abs(mean(xis) - 74.1) > 2.5) fail(`club strength drifted to ${fx(mean(xis), 1)} at +${y} years, it starts at 74.1`);
+    /* The anchor is the measured year-zero mean club XI of the CURRENT
+       world and moves when the world's composition does. 74.1 was the
+       272-club world; Round 177 added Austria and Greece, 24 clubs whose
+       thin tails run youth-padded, and the measured mean settled at 71.6.
+       The check still catches what it exists to catch: the PROJECTION
+       drifting away from year zero across the three horizons. */
+    if (Math.abs(mean(xis) - 71.6) > 2.5) fail(`club strength drifted to ${fx(mean(xis), 1)} at +${y} years, it starts at 71.6`);
     // The pecking order itself, not just the average.
     const strong = projectedXIAvg('Real Madrid', y);
     const weak = projectedXIAvg('Lincoln City', y);
