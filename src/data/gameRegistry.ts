@@ -205,6 +205,13 @@ export const CATEGORIES: GameCategory[] = [
     ],
   },
   {
+    title: 'Aussie Rules',
+    emoji: '🏉',
+    games: [
+      { path: '/afl-higher-lower', label: 'AFL Higher or Lower', emoji: '📊', description: 'Which legend kicked more career goals?', daily: true, isNew: true },
+    ],
+  },
+  {
     title: 'NASCAR',
     emoji: '🏁',
     games: [

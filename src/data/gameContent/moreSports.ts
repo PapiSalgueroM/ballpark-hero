@@ -388,6 +388,46 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
     ],
   },
 
+  '/afl-higher-lower': {
+    intro: [
+      "Footy's goal kicking arguments, settled 10 rounds at a time. Two VFL/AFL greats appear side by side and you pick the one who kicked more career goals.",
+      "The pool is 60 retired legends, everyone from Gordon Coventry in the 1920s to Buddy Franklin, and only retired players make the list so no total ever moves under you.",
+    ],
+    howToPlay: [
+      "Choose Daily for the shared matchups or Unlimited for random pairs.",
+      "Each card shows the player's clubs and the years of their career.",
+      "Tap the player you believe kicked more career goals.",
+      "The real counts reveal, points land, and the next pair appears.",
+      "Stack correct answers for streak bonuses.",
+    ],
+    rules: [
+      "10 rounds, 10 points per correct answer, plus a streak bonus growing by 5 with each straight correct after the first. A perfect game is 325.",
+      "Exact ties score as correct on either side, and this pool has real ones: Wayne Carey and Peter Hudson both finished on 727.",
+      "Hard mode lives in Unlimited only and pairs players with close goal counts.",
+      "New daily matchups arrive at midnight Eastern.",
+    ],
+    example: [
+      "Round one gives you Tony Lockett against Matthew Lloyd, and the counts land 1,360 to 926 for Plugger, the only man in history past 1,300.",
+      "Later it's Gordon Coventry against Jack Riewoldt. Recency pulls you toward Jack, but Coventry kicked 1,299 before World War Two. That's the trap this game sets over and over.",
+      "You stop trusting recency, start trusting eras, and grind out 7 of 10.",
+    ],
+    tips: [
+      "Memorize the podium: Lockett 1,360, Coventry 1,299, Dunstall 1,254.",
+      "Only five men have ever kicked 1,000: those three plus Doug Wade and Gary Ablett Sr, with Buddy Franklin's 1,066 among them.",
+      "Full forwards from the high scoring 80s stack huge numbers. A key forward from the 2010s on the same games usually sits lower.",
+      "Ties pay both ways, so identical-feeling pairs are free points, not landmines.",
+    ],
+    faqs: [
+      {
+        q: 'Where do the goal totals come from?',
+        a: 'Career VFL/AFL regular season and finals goals as carried by the all time leading goalkicker records, cross-checked before shipping. Only retired players are included so the numbers are final.',
+      },
+      {
+        q: 'Why is a current star not in the pool?',
+        a: 'Active players are left out on purpose. Their totals move every week, and this site does not ship numbers that quietly go wrong.',
+      },
+    ],
+  },
   '/guess-nascar-driver': {
     intro: [
       "There's a Cup Series driver on the other side of the screen, and you get six clues to figure out who. It could be a modern playoff regular or a legend from the golden eras of stock car racing.",

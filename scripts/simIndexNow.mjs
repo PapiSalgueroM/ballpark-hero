@@ -17,7 +17,7 @@
  *   2. the KEY constant in indexnowSubmit.mjs equals that file's key, and
  *      the HOST constant is douknowball.com
  *   3. the sitemap parses, every <loc> is on https://douknowball.com, and
- *      the URL count ratchet holds: 116 measured 2026-08-20. A shrink is
+ *      the URL count ratchet holds: 117 as of Round 231. A shrink is
  *      lost coverage; growth without raising the floor here is a page
  *      nobody fenced. Raise the floor in the round that adds pages.
  *
@@ -28,7 +28,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SITEMAP_FLOOR = 116;
+const SITEMAP_FLOOR = 117; /* raised R231: /afl-higher-lower joined */
 
 let failures = 0;
 const fail = m => { failures += 1; console.error("  FAIL: " + m); };

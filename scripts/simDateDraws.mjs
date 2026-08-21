@@ -69,6 +69,7 @@ export { cfbHLPlayers } from '${ROOT}/src/data/cfbHLPlayers.ts';
 export { f1HLDrivers } from '${ROOT}/src/data/f1HLDrivers.ts';
 export { golfLegends } from '${ROOT}/src/data/golfLegends.ts';
 export { hockeyHLPlayers } from '${ROOT}/src/data/hockeyHLPlayers.ts';
+export { aflGoalKickers } from '${ROOT}/src/data/aflGoalKickers.ts';
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",
@@ -261,6 +262,7 @@ console.log("5) the seven Higher/Lower dailies: adequate, and held there");
     ["f1", "useF1HL.ts", mods.f1HLDrivers],
     ["golf", "useGolfHL.ts", mods.golfLegends],
     ["hockey", "useHockeyHL.ts", mods.hockeyHLPlayers],
+    ["afl", "useAflHL.ts", mods.aflGoalKickers],
   ];
   const dateSeed = s => parseInt(s.replace(/-/g, ""), 10);
   for (const [name, file, pool] of HL) {
@@ -302,6 +304,9 @@ console.log("6) the overflow constant is allowlisted, everywhere else it is bann
     "src/hooks/useNbaHL.ts", "src/hooks/useMlbHL.ts", "src/hooks/useTennisHL.ts",
     "src/hooks/useCfbHL.ts", "src/hooks/useF1HL.ts", "src/hooks/useGolfHL.ts",
     "src/hooks/useHockeyHL.ts", "src/hooks/useNflHL.ts", "src/hooks/useQuizBoard.ts",
+    /* Round 231: the AFL HL joined the family with the same measured-adequate
+       iterated shuffle; fenced in section 5 like its siblings */
+    "src/hooks/useAflHL.ts",
   ]);
   const offenders = [];
   const walk = d => {
