@@ -122,6 +122,9 @@ export interface NbaCareerState {
   appearance?: PlayerAppearance | null;
   /** Round 172: which era this career started in. Absent means today. */
   eraId?: string;
+  /** Round 182: the rotation. Absent (pre-182 saves, harness careers)
+      means starter, so old behavior is byte for byte unchanged. */
+  role?: 'starter' | 'backup';
   yearlyCosts?: number;
   /** Round 104: the player drafted alongside you, measured against you every season. */
   rival?: CareerRival;
@@ -366,6 +369,55 @@ export function nbaRollTeamQuality(prev: number | null, rng: () => number): numb
   return Math.max(64, Math.min(95, Math.round(prev + (rng() * 12 - 6))));
 }
 
+/* ─── Round 182: the rotation ───
+   Same depth chart the NFL career got, in basketball's shape: the man
+   ahead of you is modeled off the roster's quality, top-five picks open
+   in the starting five, camps have hysteresis both ways, and a bench
+   season is real minutes (about 60 percent of a starter's) rather than a
+   full stat line, which finally makes the Sixth Man award mean what it
+   says. An absent role (pre-182 saves, harness careers) means starter,
+   byte for byte. */
+
+function nbaIncumbentOvr(teamQuality: number, rng: () => number): number {
+  return Math.round(teamQuality - 7 + rng() * 8);
+}
+
+/** Draft-night rotation spot. Mutates c.role, returns the feed line. */
+export function nbaAssignRole(c: NbaCareerState, teamQuality: number, rng: () => number = Math.random): string {
+  const incumbent = nbaIncumbentOvr(teamQuality, rng);
+  if (c.draftPick <= 5) {
+    c.role = 'starter';
+    return '📋 Top five picks do not sit. You open in the starting five.';
+  }
+  if (c.ovr >= incumbent + 2) {
+    c.role = 'starter';
+    return '📋 Preseason settled it. You start opening night.';
+  }
+  c.role = 'backup';
+  return '📋 The veteran keeps the spot for now. You open with the second unit.';
+}
+
+/** The training camp fight. Mutates c.role, returns a line or null. */
+export function nbaCampBattle(c: NbaCareerState, teamQuality: number, rng: () => number = Math.random): string | null {
+  if (!c.role) c.role = 'starter'; /* pre-182 save repair */
+  const incumbent = nbaIncumbentOvr(teamQuality, rng);
+  if (c.role === 'starter') {
+    if (c.ovr < incumbent - 5) {
+      c.role = 'backup';
+      c.morale = Math.max(20, c.morale - 10);
+      return '🪑 Moved to the second unit. The new arrival took your spot in camp.';
+    }
+    return null;
+  }
+  const p = Math.max(0.05, Math.min(0.9, 0.1 + (c.ovr - incumbent) * 0.07));
+  if (c.ovr >= incumbent - 1 || rng() < p) {
+    c.role = 'starter';
+    c.morale = Math.min(100, c.morale + 10);
+    return '🚀 You cracked the starting five. Opening night, your name gets called.';
+  }
+  return '🪑 Still the second unit. The minutes will come, keep pushing.';
+}
+
 export function nbaMarketSalary(c: NbaCareerState): number {
   const posMult = NBA_POS_SALARY_MULT[c.pos] ?? 1;
   /* Round 172: era money. A 2003 deal pays 2003 money, about a third. */
@@ -401,9 +453,14 @@ export function simNbaSeason(
   // shallower slope lands on real reference points: a solid starter around 17,
   // an All Star around 25, an MVP season around 31, with 38 still reachable
   // only by an all time scorer having a career year.
-  const ppg = Math.min(38, Math.max(4, Math.round((5 + (form - 64) * 0.62) * a.scoring + rng() * 3)));
-  const rpg = Math.min(16, Math.max(1, Math.round(((2 + (form - 64) * 0.2) * a.rebounding + rng() * 2) * 10) / 10));
-  const apg = Math.min(13, Math.max(0.5, Math.round(((1.5 + (form - 64) * 0.22) * a.playmaking + rng() * 2) * 10) / 10));
+  /* Round 182: bench minutes are real minutes, about 60 percent of a
+     starter's, so the per-game line scales with the role. An absent role
+     is a starter, byte for byte. */
+  const minutesShare = c.role === 'backup' ? 0.55 + rng() * 0.1 : 1;
+  const ppg = Math.min(38, Math.max(4, Math.round((5 + (form - 64) * 0.62) * a.scoring * minutesShare + rng() * 3)));
+  const rpg = Math.min(16, Math.max(1, Math.round(((2 + (form - 64) * 0.2) * a.rebounding * minutesShare + rng() * 2) * 10) / 10));
+  const apg = Math.min(13, Math.max(0.5, Math.round(((1.5 + (form - 64) * 0.22) * a.playmaking * minutesShare + rng() * 2) * 10) / 10));
+  if (c.role === 'backup') notes.push('🪑 Second unit season: your numbers come in bench minutes.');
   const line: NbaSeasonLine = {
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     ppg, rpg, apg, awards: [], teamResult: '', salary: c.salary,
@@ -503,8 +560,12 @@ export function simNbaSeason(
   if (prev && prev.games >= 40 && ppg - prev.ppg >= 6 && games >= 62 && wonAward(rng, 'nba', 'mostImproved', c.pos, statScore)) {
     line.awards.push('Most Improved Player'); notes.push('📈 Most Improved Player.');
   }
-  // Sixth Man is for solid production on a low usage archetype.
-  if (a.scoring <= 0.9 && ppg >= 14 && games >= 62 && wonAward(rng, 'nba', 'sixthMan', c.pos, statScore)) {
+  // Sixth Man is for solid production on a low usage archetype, and since
+  // Round 182 for ACTUAL bench players, which is what the award is: a real
+  // second-unit season of 14 a night finally has its trophy. The old
+  // archetype gate stays so pre-182 saves and harness careers keep their
+  // eligibility unchanged.
+  if ((c.role === 'backup' || a.scoring <= 0.9) && ppg >= 14 && games >= 62 && wonAward(rng, 'nba', 'sixthMan', c.pos, statScore)) {
     line.awards.push('Sixth Man of the Year'); notes.push('🪑 Sixth Man of the Year.');
   }
   if (c.age >= 22 && c.seasons.length <= 1 && wonAward(rng, 'nba', 'allRookie', c.pos, statScore)) {
@@ -547,6 +608,11 @@ export function nbaProgress(c: NbaCareerState, rng: () => number): string[] {
   c.year += 1;
   c.contractYears -= 1;
   c.morale = Math.max(20, Math.min(100, c.morale + Math.round(rng() * 10 - 4)));
+  /* Round 182: a second-unit year wears on you and the crowd learns other names. */
+  if (c.role === 'backup') {
+    c.morale = Math.max(20, c.morale - 3);
+    c.fanbase = Math.max(0, c.fanbase - 2);
+  }
 
   // ── Round 57: the corruption meter resolves here ──
   const heat = c.heat ?? 0;

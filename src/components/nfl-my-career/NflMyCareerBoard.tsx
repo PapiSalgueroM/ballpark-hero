@@ -6,6 +6,7 @@ import { NFL_ERAS,
   shouldRetire, legacyOf, careerTotals, rollTeamQuality, teamLabelOf, marketSalary,
   NFL_SPEND_ITEMS, buyNflItem, type NflSpendCategory,
   buildNflFaWindow, nflFaPushArgs,
+  nflAssignRole, nflCampBattle,
   type CareerPos, type CareerState, type CareerEvent, type SeasonLine,
 } from '@/lib/nflMyCareer';
 // Round 179: real free agency, shared engine and shared screen.
@@ -78,6 +79,8 @@ export default function NflMyCareerBoard() {
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s.c) return;
+      /* Round 182, repair-on-load: a pre-182 career was a de facto starter. */
+      if (!s.c.role) s.c.role = 'starter';
       setCareer(s.c);
       setTeamQuality(s.teamQuality);
       /* Round 126, house pattern from ensureContracts and ensureAcademy in
@@ -99,11 +102,14 @@ export default function NflMyCareerBoard() {
     const arch = ARCHETYPES[pos].find(a => a.id === archetypeId) ?? ARCHETYPES[pos][0];
     const c = startCareer(nameInput.trim() || 'Ryder Blaze', pos, arch, Math.random, appearance, eraId);
     const tq = rollTeamQuality(null, Math.random);
+    /* Round 182: the depth chart is set the day you arrive. */
+    const roleNote = nflAssignRole(c, tq, Math.random);
     setCareer(c);
     setTeamQuality(tq);
     setFeed([
       `🎓 With pick ${c.draftPick}, the ${teamLabelOf(c.team)} select ${c.name}.`,
       c.draftPick <= 10 ? 'The city expects a savior.' : c.draftPick <= 32 ? 'First round money, first round pressure.' : 'Late pick. Everything must be earned.',
+      roleNote,
     ]);
     setPhase('season');
     persist(c, 'season', tq);
@@ -145,10 +151,12 @@ export default function NflMyCareerBoard() {
       return;
     }
 
+    /* Round 182: every season starts with a camp, and camps have losers. */
+    const campNote = nflCampBattle(c, teamQuality, Math.random);
     const { line, notes } = simSeason(c, teamQuality, Math.random);
     const progressNotes = progress(c, Math.random);
     setLastLine(line);
-    const newFeed = [...notes, ...progressNotes];
+    const newFeed = [...(campNote ? [campNote] : []), ...notes, ...progressNotes];
     if (shouldRetire(c)) {
       c.retired = true;
       setCareer(c);
@@ -187,9 +195,13 @@ export default function NflMyCareerBoard() {
     if (!offer || offer.gone) return;
     const c: CareerState = JSON.parse(JSON.stringify(career));
     const line = applyFaSigning(c, offer);
+    /* Round 182: the new locker room has its own depth chart. A star walks
+       in as the starter; a 78 joining a 91 contender can find out the ring
+       chase costs him the huddle. */
+    const roleNote = nflCampBattle(c, offer.quality, Math.random);
     setCareer(c);
     setTeamQuality(offer.quality);
-    setFeed(f => [line, ...f].slice(0, 6));
+    setFeed(f => [line, ...(roleNote ? [roleNote] : []), ...f].slice(0, 6));
     setFaWindow(null);
     setTalkLine(null);
     setPhase('season');
@@ -500,6 +512,10 @@ export default function NflMyCareerBoard() {
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{career.year} · age {career.age}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">OVR <b className="text-primary">{career.ovr}</b></span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">${career.salary}M x{Math.max(0, career.contractYears)}</span>
+        {/* Round 182: the depth chart, on the shirt. */}
+        <span className={cn('rounded-full border px-3 py-1 font-bold', career.role === 'backup' ? 'border-border bg-card text-muted-foreground' : 'border-gold/40 bg-card text-gold')}>
+          {career.role === 'backup' ? '🪑 Backup' : '⭐ Starter'}
+        </span>
       </div>
 
       {/* Round 56: the heat meter, only once you have something to hide */}

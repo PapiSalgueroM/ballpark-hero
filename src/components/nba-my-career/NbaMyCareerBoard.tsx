@@ -6,6 +6,7 @@ import { NBA_ERAS,
   NBA_SPEND_ITEMS, buyNbaItem, type NbaSpendCategory,
   nbaShouldRetire, nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaTeamLabelOf, nbaMarketSalary,
   buildNbaFaWindow, nbaFaPushArgs,
+  nbaAssignRole, nbaCampBattle,
   type NbaCareerPos, type NbaCareerState, type NbaCareerEvent, type NbaSeasonLine,
 } from '@/lib/nbaMyCareer';
 // Round 179: real free agency, shared engine and shared screen.
@@ -76,6 +77,8 @@ export default function NbaMyCareerBoard() {
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s.c) return;
+      /* Round 182, repair-on-load: a pre-182 career was a de facto starter. */
+      if (!s.c.role) s.c.role = 'starter';
       setCareer(s.c);
       setTeamQuality(s.teamQuality);
       /* Round 126, house pattern from ensureContracts and ensureAcademy in
@@ -97,11 +100,14 @@ export default function NbaMyCareerBoard() {
     const arch = NBA_ARCHETYPES[pos].find(a => a.id === archetypeId) ?? NBA_ARCHETYPES[pos][0];
     const c = startNbaCareer(nameInput.trim() || 'Trey Buckets', pos, arch, Math.random, appearance, eraId);
     const tq = nbaRollTeamQuality(null, Math.random);
+    /* Round 182: the rotation is set the night you arrive. */
+    const roleNote = nbaAssignRole(c, tq, Math.random);
     setCareer(c);
     setTeamQuality(tq);
     setFeed([
       `🎓 With pick ${c.draftPick}, the ${nbaTeamLabelOf(c.team)} select ${c.name}.`,
       c.draftPick <= 10 ? 'The city expects a savior.' : c.draftPick <= 32 ? 'First round money, first round pressure.' : 'Late pick. Everything must be earned.',
+      roleNote,
     ]);
     setPhase('season');
     persist(c, 'season', tq);
@@ -140,10 +146,12 @@ export default function NbaMyCareerBoard() {
       return;
     }
 
+    /* Round 182: every season starts with a camp, and camps have losers. */
+    const campNote = nbaCampBattle(c, teamQuality, Math.random);
     const { line, notes } = simNbaSeason(c, teamQuality, Math.random);
     const progressNotes = nbaProgress(c, Math.random);
     setLastLine(line);
-    const newFeed = [...notes, ...progressNotes];
+    const newFeed = [...(campNote ? [campNote] : []), ...notes, ...progressNotes];
     if (nbaShouldRetire(c)) {
       c.retired = true;
       setCareer(c);
@@ -181,9 +189,12 @@ export default function NbaMyCareerBoard() {
     if (!offer || offer.gone) return;
     const c: NbaCareerState = JSON.parse(JSON.stringify(career));
     const line = applyFaSigning(c, offer);
+    /* Round 182: the new roster has its own rotation. Chasing a ring on a
+       loaded team can cost a mid player his starting spot. */
+    const roleNote = nbaCampBattle(c, offer.quality, Math.random);
     setCareer(c);
     setTeamQuality(offer.quality);
-    setFeed(f => [line, ...f].slice(0, 6));
+    setFeed(f => [line, ...(roleNote ? [roleNote] : []), ...f].slice(0, 6));
     setFaWindow(null);
     setTalkLine(null);
     setPhase('season');
@@ -476,6 +487,10 @@ export default function NbaMyCareerBoard() {
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{career.year} · age {career.age}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">OVR <b className="text-primary">{career.ovr}</b></span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">${career.salary}M x{Math.max(0, career.contractYears)}</span>
+        {/* Round 182: the rotation, on the shirt. */}
+        <span className={cn('rounded-full border px-3 py-1 font-bold', career.role === 'backup' ? 'border-border bg-card text-muted-foreground' : 'border-gold/40 bg-card text-gold')}>
+          {career.role === 'backup' ? '🪑 Second unit' : '⭐ Starting five'}
+        </span>
       </div>
 
       {/* Round 57: the heat meter, only once you have something to hide */}

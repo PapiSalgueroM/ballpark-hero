@@ -101,6 +101,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "Pick your league: today's NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis.",
       "Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.",
       "Enter the draft. Your hidden rating decides the slot, and a real team calls your name.",
+      "Check the depth chart. Top twelve picks open as starters; everyone else fights the incumbent in camp, every single summer, and backup seasons are spot duty until you take the job.",
       "Play each season with one tap: yards, touchdowns, awards, how far the team went.",
       "When the deal expires, work a real free agency window: competing offers from named teams with their own money, length and roster quality, and one push for more on any of them.",
       "Make the offseason call: train skills or body, fix the knee or play through it, take the envelope or report it.",
@@ -114,6 +115,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "Decline starts at 31, or 28 for running backs, and it hits them harder.",
       "Injuries can erase 2 to 10 games a season and leave permanent wear on your health bar.",
       "Retirement is forced at rating 64, age 40, 34 for backs, or 19 seasons. You can walk away after 6, and progress saves automatically.",
+      "The depth chart is real: the man ahead of you is as good as your team is, camps have memory (a starter is not benched over a small gap, a backup does not need a miracle), backup quarterbacks hold clipboards, and signing with a stacked contender can cost a mid player the job. Kickers never sit.",
       "The 2005 throwback is a sealed world: all 32 franchises exactly as they stood that season, verified against the real records, and every draft, trade and signing stays inside it. Contracts pay 2005 money, about a third of today's.",
     ],
     example: [
@@ -138,6 +140,10 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         q: "How does free agency work?",
         a: "When your deal is up you get a window of real offers: your team's re-sign number plus named suitors, each with its own salary, length and roster quality. Contenders lowball because they can, rebuilds overpay because they must. You can push any offer for more once, but push a weak case and it can be pulled. Your own team never walks away, so you always have somewhere to sign.",
+      },
+      {
+        q: "Why am I not starting?",
+        a: "Because the man ahead of you is better, for now. Late picks usually open on the bench behind an incumbent whose level tracks your team's quality. Grow your rating and you will win a camp; backup years are spot duty with slower fame and sagging morale, which is exactly why they sting. A rebuild with a bare roster is the fastest route to the job.",
       },
       {
         q: "What decides the legacy verdict?",

@@ -230,6 +230,10 @@ export interface CareerState {
   rival?: CareerRival;
   /** Round 172: which era this career started in. Absent means today. */
   eraId?: string;
+  /** Round 182: the depth chart. Absent (pre-182 saves, harness careers)
+      means starter, so every old save and every existing sim path keeps
+      its exact behavior. Kickers are always starters. */
+  role?: 'starter' | 'backup';
 }
 
 export interface CareerEvent {
@@ -302,6 +306,61 @@ export function rollTeamQuality(prev: number | null, rng: () => number): number 
   return Math.max(62, Math.min(94, Math.round(prev + (rng() * 14 - 7))));
 }
 
+/* ─── Round 182: the depth chart ───
+   Nobody is handed a job. The man ahead of you on the chart is modeled off
+   the team's quality (a 90 roster has a real starter, a 64 roster has a
+   guy), draft capital buys a rookie the benefit of the doubt, and every
+   camp is a new fight with hysteresis both ways: an incumbent starter is
+   not benched over a small gap, and a backup does not need to be twice the
+   player to finally get the nod. Kickers are exempt because teams carry
+   one kicker. */
+
+/** The player ahead of you on the chart, drawn from the roster's quality. */
+function nflIncumbentOvr(teamQuality: number, rng: () => number): number {
+  return Math.round(teamQuality - 7 + rng() * 8);
+}
+
+/** Draft-day depth chart. Mutates c.role, returns the feed line. */
+export function nflAssignRole(c: CareerState, teamQuality: number, rng: () => number = Math.random): string {
+  if (c.pos === 'K') { c.role = 'starter'; return '🎯 Kickers do not sit. The job is yours from day one.'; }
+  const incumbent = nflIncumbentOvr(teamQuality, rng);
+  if (c.draftPick <= 12) {
+    c.role = 'starter';
+    return '📋 Top pick money buys the keys. You open the season as the starter.';
+  }
+  if (c.ovr >= incumbent + 2) {
+    c.role = 'starter';
+    return '📋 You outplayed the veteran in camp. The chart has your name on top.';
+  }
+  c.role = 'backup';
+  return '📋 The veteran holds the job for now. You open on the bench, learning.';
+}
+
+/** The offseason camp battle. Mutates c.role, returns a feed line or null
+    when nothing changed quietly (a starter safely holding is silent). */
+export function nflCampBattle(c: CareerState, teamQuality: number, rng: () => number = Math.random): string | null {
+  if (c.pos === 'K') { c.role = 'starter'; return null; }
+  if (!c.role) c.role = 'starter'; /* pre-182 save repair */
+  const incumbent = nflIncumbentOvr(teamQuality, rng);
+  if (c.role === 'starter') {
+    /* Hysteresis: you lose the job only when you are clearly worse. */
+    if (c.ovr < incumbent - 5) {
+      c.role = 'backup';
+      c.morale = Math.max(20, c.morale - 10);
+      return '🪑 Benched. The new man outplayed you all camp and the coaches went with him.';
+    }
+    return null;
+  }
+  /* The backup's push: close the gap and the job flips. */
+  const p = Math.max(0.05, Math.min(0.9, 0.1 + (c.ovr - incumbent) * 0.07));
+  if (c.ovr >= incumbent - 1 || rng() < p) {
+    c.role = 'starter';
+    c.morale = Math.min(100, c.morale + 10);
+    return '🚀 You won the camp battle. The huddle is yours now.';
+  }
+  return '🪑 Another camp, another year behind the starter. The gap is closing.';
+}
+
 function seasonGames(c: CareerState, rng: () => number): { games: number; injuryNote: string | null } {
   const risk = (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 260 + (c.pos === 'RB' ? 0.07 : 0);
   if (rng() < risk) {
@@ -315,8 +374,17 @@ export function simSeason(
   c: CareerState, teamQuality: number, rng: () => number,
 ): { line: SeasonLine; notes: string[] } {
   const notes: string[] = [];
-  const { games, injuryNote } = seasonGames(c, rng);
+  let { games, injuryNote } = seasonGames(c, rng);
   if (injuryNote) { notes.push(`🚑 ${injuryNote}`); c.health -= 6; }
+  /* Round 182: a backup's season is spot duty. Quarterbacks hold clipboards
+     (a few starts when the man goes down), other positions rotate in for
+     about half a season's snaps. Kickers never sit and an absent role
+     (pre-182 saves, harness careers) means starter, byte for byte. */
+  if (c.role === 'backup' && c.pos !== 'K') {
+    const share = c.pos === 'QB' ? 0.18 + rng() * 0.14 : 0.45 + rng() * 0.15;
+    games = Math.max(1, Math.round(games * share));
+    notes.push(`🪑 A backup season: ${games} game${games === 1 ? '' : 's'} of real action.`);
+  }
   const swing = seasonSwing(rng, c.age);
   const form = c.ovr + (c.morale - 60) / 10 + (teamQuality - 78) / 5
     // Round 98: the season itself gets a say, so career years and lost
@@ -523,6 +591,12 @@ export function progress(c: CareerState, rng: () => number): string[] {
   c.year += 1;
   c.contractYears -= 1;
   c.morale = Math.max(20, Math.min(100, c.morale + Math.round(rng() * 10 - 4)));
+  /* Round 182: a year of holding the clipboard wears on you and the fans
+     quietly forget the name on the back. */
+  if (c.role === 'backup') {
+    c.morale = Math.max(20, c.morale - 3);
+    c.fanbase = Math.max(0, c.fanbase - 2);
+  }
 
   // ── Round 56: the corruption meter resolves here ──
   const heat = c.heat ?? 0;
