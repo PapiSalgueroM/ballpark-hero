@@ -83,6 +83,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/perfect-season-nhl': 'hockey',
   '/puck-detective': 'hockey',
   /* moreSports */
+  '/afl-higher-lower': 'moreSports',
   '/f1-constructor': 'moreSports',
   '/f1-driver': 'moreSports',
   '/f1-higher-lower': 'moreSports',
@@ -132,6 +133,8 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/ball-iq': 'world',
   '/champ-or-not': 'world',
   '/whod-they-beat': 'world',
+  '/silverware-sort': 'world',
+  '/hall-of-champions': 'world',
   '/emoji-guess': 'world',
   '/guess-the-nation': 'world',
   '/guess-the-year': 'world',

@@ -55,7 +55,7 @@ function SectionTable({ def, st }: { def: RecordSection; st: SectionState }) {
       {st.rows.length > 12 && (
         <button
           onClick={() => setOpen(o => !o)}
-          className="mt-2 text-xs font-semibold text-primary hover:underline"
+          className="mt-1 inline-flex items-center min-h-[32px] px-1.5 text-xs font-semibold text-primary hover:underline"
         >
           {open ? 'Show fewer' : `Show all ${st.rows.length} seasons`}
         </button>
@@ -103,9 +103,13 @@ const Records = () => {
       <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
         Every champion, year by year, across ten competitions. These are the same tables our trivia games run on, checked season by season against the official record before anything was allowed to serve them. Where history is odd we keep it odd: split titles get one row per selector, seasons that were never played are missing on purpose, and stripped titles stay vacant.
       </p>
-      <nav className="flex flex-wrap gap-x-3 gap-y-1 mb-8 text-xs">
+      {/* Round 251: every control here is a real thumb target. The phone
+          sweep finally ran in this sandbox and flagged the whole page at
+          15-16px tall, so the nav chips, the show-all buttons and the
+          play links all carry a 32px minimum box now. */}
+      <nav className="flex flex-wrap gap-x-2 gap-y-1 mb-8 text-xs">
         {RECORD_SECTIONS.map(s => (
-          <a key={s.key} href={`#${s.key}`} className="text-primary hover:underline">{s.emoji} {s.title}</a>
+          <a key={s.key} href={`#${s.key}`} className="inline-flex items-center min-h-[32px] px-1.5 text-primary hover:underline">{s.emoji} {s.title}</a>
         ))}
       </nav>
 
@@ -118,12 +122,12 @@ const Records = () => {
             {def.note && (
               <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{def.note}</p>
             )}
-            <p className="text-xs text-muted-foreground mt-2">
-              Play with this history:{' '}
+            <p className="text-xs text-muted-foreground mt-1 flex flex-wrap items-center gap-x-1">
+              <span>Play with this history:</span>
               {def.play.map((g, i) => (
-                <span key={g.path}>
-                  {i > 0 && ' · '}
-                  <Link to={g.path} className="text-primary hover:underline">{g.label}</Link>
+                <span key={g.path} className="inline-flex items-center">
+                  {i > 0 && <span className="mr-1">·</span>}
+                  <Link to={g.path} className="inline-flex items-center min-h-[32px] px-1 text-primary hover:underline">{g.label}</Link>
                 </span>
               ))}
             </p>

@@ -431,7 +431,7 @@ export function simulateRival(
     if (signings.length >= 3 + wonInWars.length) break;
     if (cand.marketValue > budget) continue;
     // A rival skips a candidate now and then so runs differ per seed.
-    if ((hashSeed(cand.name) ^ seed) % 5 === 0) continue;
+    if (((hashSeed(cand.name) ^ seed) >>> 0) % 5 === 0) continue;
     squad.push(cand);
     budget -= cand.marketValue;
     signings.push(cand.name);
@@ -454,18 +454,28 @@ export function contestChance(p: Player): number {
 }
 
 /** Seeded per run + player, so a run can't reroll the same deal. */
+/* Round 251: every one of these mixes hashSeed with the run seed via
+   XOR, and JS XOR works on SIGNED 32-bit ints, so a hash with the top
+   bit set went negative and so did the remainder. warRivalIndex then
+   returned -1 for roughly a quarter of all players, rivalPlans[-1] came
+   back undefined, and the first tap on such a player's Sign button threw
+   reading rival.emoji and froze the market. The browser board's first
+   run in this sandbox caught it (playGames, a signing at step 8).
+   Forcing the XOR result unsigned fixes the crash AND the quieter
+   corruptions next door: a negative remainder made isContested always
+   true and rivalCapFor bid BELOW market for the same players. */
 export function isContested(p: Player, seed: number): boolean {
-  return (hashSeed(p.name) ^ seed) % 100 < contestChance(p);
+  return ((hashSeed(p.name) ^ seed) >>> 0) % 100 < contestChance(p);
 }
 
 /** Which of the two rivals picks the fight over this player. */
 export function warRivalIndex(p: Player, seed: number): number {
-  return (hashSeed(p.name) ^ (seed >>> 3)) % 2;
+  return ((hashSeed(p.name) ^ (seed >>> 3)) >>> 0) % 2;
 }
 
 /** The rival's hidden ceiling: 112% to 157% of market value. */
 export function rivalCapFor(p: Player, seed: number): number {
-  const wiggle = ((hashSeed(p.name) ^ (seed >>> 5)) % 46) / 100;
+  const wiggle = (((hashSeed(p.name) ^ (seed >>> 5)) >>> 0) % 46) / 100;
   return Math.round(p.marketValue * (1.12 + wiggle));
 }
 

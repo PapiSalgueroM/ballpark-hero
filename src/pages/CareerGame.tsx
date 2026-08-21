@@ -211,6 +211,7 @@ const CareerGame = () => {
                       onChange={(e) => { setInput(e.target.value); setShowSuggestions(true); }}
                       onFocus={() => input.length >= 2 && setShowSuggestions(true)}
                       onKeyDown={handleKeyDown}
+                      aria-label="Guess the player by name"
                       placeholder="Type player name to guess..."
                       className="w-full pl-10 pr-4 py-3 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                       autoComplete="off"

@@ -191,14 +191,21 @@ const MissingFive = () => {
                     style={{ left: `${slot.x}%`, top: `${100 - slot.y}%` }}
                   >
                     <div className={cn(
-                      'px-2.5 py-2 rounded-xl border text-xs font-bold min-w-[86px] leading-tight',
+                      'relative px-2.5 py-2 rounded-xl border text-xs font-bold min-w-[86px] leading-tight',
                       isBlank
-                        ? 'bg-primary/15 border-primary text-primary animate-pulse'
+                        ? 'bg-primary/15 border-primary text-primary'
                         : revealed
                           ? (won ? 'bg-correct/20 border-correct text-foreground' : 'bg-destructive/15 border-destructive/50 text-foreground')
                           : 'bg-card/90 border-border text-foreground'
                     )}>
-                      <span className="block text-[9px] uppercase tracking-wider opacity-70">{hard && !over ? '?' : slot.position}</span>
+                      {/* Round 251: the pulse dimmed the whole tile, text
+                          included (the sweep measured the position tag at
+                          3.70 mid-pulse). Background layer pulses; words
+                          hold still. */}
+                      {isBlank && (
+                        <span aria-hidden="true" className="absolute inset-0 rounded-xl bg-primary/15 animate-pulse pointer-events-none" />
+                      )}
+                      <span className="block text-[9px] uppercase tracking-wider text-[hsl(152,60%,58%)]">{hard && !over ? '?' : slot.position}</span>
                       {isBlank ? '?' : slot.name}
                     </div>
                   </div>
@@ -229,6 +236,7 @@ const MissingFive = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Who was the missing starter?"
+                    aria-label="Who was the missing starter?"
                     className={cn(
                       'flex-1 min-w-0 px-4 py-3 rounded-xl bg-secondary border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 transition-all',
                       wrongFlash ? 'border-destructive ring-destructive/30' : 'border-border focus:ring-primary/40'

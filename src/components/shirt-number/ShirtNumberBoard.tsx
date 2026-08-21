@@ -111,6 +111,7 @@ export function ShirtNumberBoard() {
               type="number"
               min={1}
               max={99}
+              aria-label="Your shirt number guess, 1 to 99"
               value={input}
               onChange={e => setInput(e.target.value)}
               placeholder="Enter shirt number (1-99)"

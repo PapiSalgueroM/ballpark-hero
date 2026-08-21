@@ -113,7 +113,10 @@ const HigherLowerTransfers = () => {
       <div className="text-xs text-muted-foreground truncate mb-3">{p.club}</div>
       <div className={cn(
         'text-2xl font-bold font-display',
-        showValue ? 'text-primary' : 'text-muted-foreground/40'
+        /* Round 251: the phone contrast sweep finally ran here and the
+           40% wash measured 1.94:1. The question marks carry the mystery
+           on their own; the ink stays readable. */
+        showValue ? 'text-primary' : 'text-muted-foreground'
       )}>
         {showValue ? fmtCompactUsd(p.value) : '???'}
       </div>

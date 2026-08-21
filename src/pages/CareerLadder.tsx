@@ -505,6 +505,7 @@ const CareerLadder = () => {
                     type="text"
                     value={input}
                     onChange={e => setInput(e.target.value)}
+                    aria-label="Guess the player by name"
                     placeholder="Who is it? Type at least 2 letters..."
                     className="w-full px-4 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
                   />

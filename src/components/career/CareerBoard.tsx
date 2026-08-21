@@ -18,10 +18,15 @@ const COLUMNS = [
   { key: 'marketValue', label: 'VALUE', emoji: '💰' },
 ];
 
-function CoveredCell({ onClick }: { onClick: () => void }) {
+function CoveredCell({ onClick, label }: { onClick: () => void; label: string }) {
   return (
     <button
       onClick={onClick}
+      /* Round 251: the browser board's first run in this sandbox flagged
+         every covered cell as a nameless control (icon-only button), 30
+         of them on a fresh board. A screen reader now hears which cell
+         it is about to spend. */
+      aria-label={label}
       className="flex items-center justify-center rounded-lg h-14 bg-secondary hover:bg-secondary/80 border border-border/50 transition-all cursor-pointer group"
     >
       <Eye className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -66,7 +71,7 @@ export function CareerBoard({ career, revealedCells, onReveal, gameOver }: Caree
               const isRevealed = col.key === 'season' || revealedCells.has(cellKey) || gameOver;
 
               if (!isRevealed) {
-                return <CoveredCell key={col.key} onClick={() => onReveal(cellKey)} />;
+                return <CoveredCell key={col.key} onClick={() => onReveal(cellKey)} label={`Reveal ${col.label.toLowerCase()} for career row ${rowIdx + 1}`} />;
               }
 
               let value = '';

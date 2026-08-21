@@ -387,14 +387,21 @@ function MissingXiPitch({ puzzle, revealed }: { puzzle: ActivePuzzle; revealed: 
           >
             <div
               className={cn(
-                'w-full rounded-lg px-1.5 py-1 text-center border shadow-sm',
+                'relative w-full rounded-lg px-1.5 py-1 text-center border shadow-sm',
                 isBlank
                   ? revealed
                     ? 'bg-primary/20 border-primary animate-pop-correct'
-                    : 'bg-destructive/10 border-destructive/50 animate-pulse'
+                    : 'bg-destructive/10 border-destructive/50'
                   : 'bg-card border-border',
               )}
             >
+              {/* Round 251: the pulse used to sit on the whole tile, which
+                  dimmed the text with it (the contrast sweep measured the
+                  position tag at 3.36 mid-pulse). The attention pulse now
+                  lives on a background layer; the words hold still. */}
+              {isBlank && !revealed && (
+                <span aria-hidden="true" className="absolute inset-0 rounded-lg bg-destructive/15 animate-pulse pointer-events-none" />
+              )}
               <p
                 className={cn(
                   'text-[10px] md:text-xs font-bold leading-tight truncate',
@@ -403,7 +410,10 @@ function MissingXiPitch({ puzzle, revealed }: { puzzle: ActivePuzzle; revealed: 
               >
                 {isBlank ? (revealed ? candidate.name : '?') : slot.name}
               </p>
-              <p className="text-[9px] md:text-[10px] text-muted-foreground uppercase tracking-wide">
+              {/* Round 215: the slot chips sit on the pitch tint, not on a
+                  card, and the muted grey measured 3.97 there. One shade up
+                  clears the bar on every slot state. */}
+              <p className="text-[9px] md:text-[10px] text-[hsl(215,15%,68%)] uppercase tracking-wide">
                 {slot.position}
               </p>
             </div>

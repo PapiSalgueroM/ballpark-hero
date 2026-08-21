@@ -169,7 +169,10 @@ export function BudgetBuilderBoard() {
               ) : (
                 <>
                   <div className="text-[10px] font-bold text-white/70">{slot.label}</div>
-                  <div className="text-[9px] text-white/40">tap</div>
+                  {/* Round 251: the contrast sweep finally ran on this
+                      board and the 40% wash measured 3.80 on the pitch
+                      tint. Size keeps the hierarchy; the ink reads. */}
+                  <div className="text-[9px] text-white/70">tap</div>
                 </>
               )}
             </button>

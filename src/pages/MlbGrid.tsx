@@ -331,6 +331,10 @@ const MlbGrid = () => {
                           key={`${r.id}-${c.id}`}
                           onClick={() => { if (!filled && !gameOver) { setActiveCell(idx); setQuery(''); } }}
                           disabled={Boolean(filled) || gameOver}
+                          /* Round 251: same nameless-control fix as NbaGrid,
+                             applied to the identical sibling before the sweep
+                             has to say it twice. */
+                          aria-label={filled ? `${r.label} and ${c.label}: ${filled.playerName}` : `Answer for ${r.label} and ${c.label}`}
                           className={cn(
                             'min-h-[64px] sm:min-h-[80px] rounded-lg border-2 flex items-center justify-center text-center px-1.5 py-1.5 transition-all',
                             filled ? 'bg-correct/10 border-correct' : isWrong ? 'bg-destructive/10 border-destructive animate-pulse' : isActive ? 'border-primary bg-primary/5' : 'border-border bg-card hover:border-primary/40',

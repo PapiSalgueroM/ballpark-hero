@@ -354,9 +354,12 @@ export function useRebuild(): RebuildState {
     if (p.marketValue > budget || war) return;
     // A rival can hijack the deal and start a live bidding war (seeded per
     // run + player; stars attract wars, squad players mostly do not).
-    if (rivalPlans.length === 2 && playerRating(p) >= 72 && isContested(p, seed)) {
-      const rivalIdx = warRivalIndex(p, seed);
-      const rival = rivalPlans[rivalIdx];
+    const rivalIdx = warRivalIndex(p, seed);
+    const rival = rivalPlans[rivalIdx];
+    // The rival lookup can never be allowed to eat a signing: if it ever
+    // comes back empty again (the Round 251 signed-XOR bug did exactly
+    // that), the deal simply completes uncontested. Fail safe, not shut.
+    if (rival && rivalPlans.length === 2 && playerRating(p) >= 72 && isContested(p, seed)) {
       const opening = nextRaise(p.marketValue);
       setWar({
         player: p,

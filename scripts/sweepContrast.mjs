@@ -303,6 +303,29 @@ for (const route of ROUTES) {
         new Promise(r2 => setTimeout(r2, 2500)),
       ]);
     });
+    /* Round 251: one wait is not enough once the browser has real
+       network egress. Data-driven boards (the career table) mount their
+       cells AFTER the first animation wait and animate on mount, and the
+       first honest run of this sweep read those season cells at 2.50 mid
+       fade when their settled state measures over 10. So settle in
+       rounds while new finite animations keep appearing, bounded, then
+       jump any finite stragglers to their end state. Infinite pulses are
+       left running, same as ever. */
+    await page.evaluate(async () => {
+      const finiteOf = () => document.getAnimations().filter(a => {
+        const t = a.effect && a.effect.getTiming ? a.effect.getTiming() : null;
+        return t && t.iterations !== Infinity;
+      });
+      const deadline = Date.now() + 6000;
+      while (finiteOf().length > 0 && Date.now() < deadline) {
+        await Promise.race([
+          Promise.all(finiteOf().map(a => a.finished.catch(() => {}))),
+          new Promise(r2 => setTimeout(r2, 1200)),
+        ]);
+        await new Promise(r2 => setTimeout(r2, 250));
+      }
+      for (const a of finiteOf()) { try { a.finish(); } catch { /* not finishable: leave it */ } }
+    });
     await page.waitForTimeout(120);
     r = await page.evaluate(() => {
       /* the whole measurement bails out with what it has rather than spin:

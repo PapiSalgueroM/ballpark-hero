@@ -92,8 +92,33 @@ const clickExact = async (name) => {
   return true;
 };
 let sacked = false;
-for (let i = 0; i < 60 && !sacked; i++) {
+/* Round 251: 60 iterations was measured headroom in a sandbox whose
+   browser had no egress, where pages settled fast. With real egress the
+   cycle is slower, and a doctored board still holds its nerve in some
+   runs (the sack is the engine's stochastic call, and the live game
+   SAVES ITS OWN recovering confidence over the doctored number). So the
+   walk polices itself instead of hoping: every 40 iterations without a
+   sack, the save is doctored back to the floor and the career resumed,
+   which keeps the trigger inside the engine while making the outcome
+   inevitable inside a bounded walk. */
+for (let i = 0; i < 120 && !sacked; i++) {
   if (await page.locator('[data-wilderness]').count()) { sacked = true; break; }
+  if (i > 0 && i % 40 === 0) {
+    await page.evaluate(() => {
+      const key = 'dukb-club-manager-save';
+      const raw = localStorage.getItem(key);
+      if (!raw) return;
+      const c = JSON.parse(raw);
+      c.boardConfidence = 0.05;
+      for (const p of c.squad ?? []) p.ovr = 40;
+      localStorage.setItem(key, JSON.stringify(c));
+    });
+    await page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
+    await page.waitForTimeout(1200);
+    const again = page.locator('button:has-text("Resume Career")');
+    if (await again.count()) { await again.first().click({ timeout: 4000 }).catch(() => {}); await page.waitForTimeout(1000); }
+    continue;
+  }
   if (await clickExact('⚡ Quick Sim')) { await page.waitForTimeout(600); continue; }
   const onward = page.locator('button:visible').filter({ hasText: /^(Continue|Next|Play on|Back to the club|Go to)/ });
   if (await onward.count()) { await onward.first().click({ timeout: 4000 }).catch(() => {}); await page.waitForTimeout(500); continue; }
