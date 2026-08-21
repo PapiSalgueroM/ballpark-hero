@@ -1,5 +1,5 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { Trophy, Flame, Sparkles, Users, Search, X, Globe } from 'lucide-react';
@@ -330,6 +330,7 @@ export default function Index() {
         description="100+ free sports trivia games and career sims covering NFL, NBA, MLB, NHL, Soccer, College Sports, UFC, F1, Tennis, NASCAR and more. Daily challenges, no login required."
         path="/"
       />
+      <HomeTileStyles />
       <div className="min-h-screen bg-background text-foreground">
         
         
@@ -454,11 +455,14 @@ export default function Index() {
                 <p className="text-xs text-muted-foreground mb-4">
                   Not quizzes. Whole universes: run a franchise, live a career, build a dynasty. Every one saves your progress.
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {FEATURED_GAMES.map(game => (
-                    <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} />
-                  ))}
-                </div>
+                {/* Round 188: the tile curtain, once per section on scroll. */}
+                <RevealSection>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {FEATURED_GAMES.map((game, i) => (
+                      <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} />
+                    ))}
+                  </div>
+                </RevealSection>
               </section>
 
               {VISIBLE_CATEGORIES.map(cat => (
@@ -470,11 +474,13 @@ export default function Index() {
                       ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
                     </span>
                   </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {cat.games.map(game => (
-                      <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} />
-                    ))}
-                  </div>
+                  <RevealSection>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {cat.games.map((game, i) => (
+                        <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} />
+                      ))}
+                    </div>
+                  </RevealSection>
                 </section>
               ))}
             </>
@@ -542,12 +548,55 @@ function MostPlayedToday() {
   );
 }
 
+/* ─── Round 188: the tile curtain (S-3's home page pass) ───
+   Each game section reveals once as it scrolls into view: tiles rise in a
+   short stagger, capped by a modulo so a 20-tile grid does not take five
+   seconds to settle. Rules of the house: transforms and opacity only (no
+   layout shift), the animation is emphasis on entrance and never hides
+   anything from a user who prefers reduced motion (the media query kills
+   it dead and shows everything instantly), and search results get NO
+   curtain because search must feel instant. The observer disconnects
+   after firing, so a section only ever performs its entrance once. */
+function HomeTileStyles() {
+  return (
+    <style>{`
+      [data-tile-reveal="out"] .home-tile { opacity: 0; }
+      @keyframes homeTileIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: none; } }
+      [data-tile-reveal="in"] .home-tile { animation: homeTileIn 0.45s ease-out both; }
+      @media (prefers-reduced-motion: reduce) {
+        [data-tile-reveal="out"] .home-tile, [data-tile-reveal="in"] .home-tile { animation: none; opacity: 1; transform: none; }
+      }
+    `}</style>
+  );
+}
+
+function RevealSection({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    /* No observer, no theatre: everything simply shows. */
+    if (typeof IntersectionObserver === 'undefined') { setInView(true); return; }
+    const io = new IntersectionObserver(entries => {
+      if (entries.some(e => e.isIntersecting)) { setInView(true); io.disconnect(); }
+    }, { rootMargin: '0px 0px -8% 0px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return <div ref={ref} data-tile-reveal={inView ? 'in' : 'out'}>{children}</div>;
+}
+
+/** Stagger inside a section, capped so deep grids settle fast. */
+const tileDelay = (i: number) => `${(i % 9) * 0.06}s`;
+
 /* ─── GAME CARD ─── */
-function GameCard({ game, bestScore }: { game: GameDef; bestScore?: number }) {
+function GameCard({ game, bestScore, revealIndex }: { game: GameDef; bestScore?: number; revealIndex?: number }) {
   return (
     <Link
       to={game.path}
-      className="group flex items-start gap-3 rounded-xl border border-border bg-surface-1 p-4 hover:border-primary/40 hover:bg-surface-2 hover:-translate-y-0.5 transition-all duration-200"
+      className="home-tile group flex items-start gap-3 rounded-xl border border-border bg-surface-1 p-4 hover:border-primary/40 hover:bg-surface-2 hover:-translate-y-0.5 transition-all duration-200"
+      style={revealIndex != null ? { animationDelay: tileDelay(revealIndex) } : undefined}
     >
       <span className="text-2xl shrink-0 mt-0.5">{game.emoji}</span>
       <div className="min-w-0 flex-1">
