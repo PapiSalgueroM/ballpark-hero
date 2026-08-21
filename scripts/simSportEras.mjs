@@ -1,15 +1,18 @@
 /**
- * Round 172 harness: the NFL and NBA era starts are sealed worlds.
+ * Rounds 172 and 173 harness: the era starts in all four US sports are
+ * sealed worlds.
  *
  * His words: "add eras to nfl and nba and every sport", and the house rule
- * is correct data always. So the era team lists were verified against two
- * sources each (the 2005 NFL season on Wikipedia and Pro Football
- * Reference; the 2003-04 NBA season on Wikipedia and Basketball Reference)
- * and this file enforces what the verification promised: an era career is
- * drafted into era franchises only, traded and signed around era franchises
- * only, never meets a franchise that did not exist yet, prints era names
- * even from code that never learned about eras, pays era money at the
- * documented scale, and leaves the modern game byte-for-byte alone.
+ * is correct data always. So every era team list was verified against two
+ * sources (the 2005 NFL season on Wikipedia and Pro Football Reference;
+ * the 2003-04 NBA season on Wikipedia and Basketball Reference; the
+ * 2006-07 NHL season on Wikipedia and Hockey Reference; the 2004 MLB
+ * season on Wikipedia and Baseball Reference) and this file enforces what
+ * the verification promised: an era career is drafted into era franchises
+ * only, traded and signed around era franchises only, never meets a
+ * franchise that did not exist yet, prints era names even from code that
+ * never learned about eras, pays era money at the documented scale, and
+ * leaves the modern game byte-for-byte alone.
  *
  * Run: node scripts/simSportEras.mjs
  */
@@ -26,11 +29,13 @@ fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const nfl = await import('${ROOT}/src/lib/nflMyCareer.ts');
 const nba = await import('${ROOT}/src/lib/nbaMyCareer.ts');
-export { nfl, nba };
+const nhl = await import('${ROOT}/src/lib/nhlMyCareer.ts');
+const mlb = await import('${ROOT}/src/lib/mlbMyCareer.ts');
+export { nfl, nba, nhl, mlb };
 `);
 execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
 
-const { nfl, nba } = await import(BUNDLE);
+const { nfl, nba, nhl, mlb } = await import(BUNDLE);
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -205,6 +210,160 @@ console.log('5) NBA: careers stay sealed on both sides');
     if (['SEA', 'NJN', 'NOH'].includes(c2.team)) fail('a modern career was drafted into 2003');
   }
   console.log(`   era career visited ${teamsSeen.size} franchises, all 2003-legal; 30 modern drafts clean`);
+}
+
+/* ---------- 6. The 2006-07 NHL is the 2006-07 NHL ---------- */
+console.log('6) NHL 2006-07: 30 teams, Thrashers in Atlanta, Coyotes in Phoenix');
+{
+  const { NHL_TEAMS_2006, startNhlCareer, nhlTeamLabelOf, nhlMarketSalary, NHL_ERAS, nhlEraTeamIds } = nhl;
+  if (NHL_TEAMS_2006.length !== 30) fail(`the 2006-07 list holds ${NHL_TEAMS_2006.length} teams, that season had 30`);
+  const eraIds = new Set(NHL_TEAMS_2006.map(t => t.id));
+  // The verified differences, both directions.
+  for (const must of ['ATL', 'PHX']) if (!eraIds.has(must)) fail(`2006-07 list is missing ${must}`);
+  for (const not of ['VGK', 'SEA', 'WPG', 'UTA']) if (eraIds.has(not)) fail(`${not} is in the 2006-07 list but did not exist then`);
+  if (nhlTeamLabelOf('ATL') !== 'Atlanta Thrashers') fail(`ATL prints ${nhlTeamLabelOf('ATL')}`);
+  if (nhlTeamLabelOf('PHX') !== 'Phoenix Coyotes') fail(`PHX prints ${nhlTeamLabelOf('PHX')}`);
+  // Anaheim had renamed by 2006-07; the era list must NOT carry the older name.
+  if (NHL_TEAMS_2006.find(t => t.id === 'ANA')?.name !== 'Ducks') fail('the 2006-07 Anaheim entry is not plain Ducks');
+
+  const rng = seeded(13);
+  let sawEraOnly = 0;
+  for (let i = 0; i < 40; i++) {
+    const c = startNhlCareer('Test Skater', 'C', nhl.NHL_ARCHETYPES.C[0], rng, null, 'y2006');
+    if (c.year !== 2006) fail(`era career started in ${c.year}`);
+    if (!eraIds.has(c.team)) fail(`drafted by ${c.team}, not a 2006-07 franchise`);
+    if (c.eraId !== 'y2006') fail('era tag missing');
+    if (['ATL', 'PHX'].includes(c.team)) sawEraOnly++;
+  }
+  if (sawEraOnly === 0) fail('forty drafts never landed on Atlanta or Phoenix');
+  // The modern pool still holds all 32 and no ghosts.
+  const modernIds = nhlEraTeamIds();
+  if (modernIds.length !== 32) fail(`the modern pool holds ${modernIds.length} teams`);
+  if (modernIds.includes('PHX')) fail('the Coyotes leaked into the modern league');
+  // Era money at the documented scale, on a doctored star (a rookie floors
+  // at the minimum in both eras, which proves nothing).
+  const scale = NHL_ERAS.find(e => e.id === 'y2006').moneyScale;
+  const vetNow = { ...startNhlCareer('A', 'C', nhl.NHL_ARCHETYPES.C[0], seeded(6), null), ovr: 92 };
+  const vetEra = { ...vetNow, eraId: 'y2006' };
+  const mNow = nhlMarketSalary(vetNow);
+  const mEra = nhlMarketSalary(vetEra);
+  const ratio = mEra / mNow;
+  if (Math.abs(ratio - scale) > 0.05) fail(`era star money is ${(ratio * 100).toFixed(0)} percent of modern, the documented scale is ${(scale * 100).toFixed(0)}`);
+  console.log(`   40 era drafts clean, era-only franchises drawn ${sawEraOnly} times, market ${mEra}M vs modern ${mNow}M`);
+}
+
+/* ---------- 7. A full 2006 NHL career stays in-era; modern untouched ---------- */
+console.log('7) NHL: careers stay sealed on both sides');
+{
+  const { startNhlCareer, simNhlSeason, drawNhlEvent, NHL_TEAMS_2006, nhlEraTeamIds } = nhl;
+  const eraIds = new Set(NHL_TEAMS_2006.map(t => t.id));
+  const rng = seeded(41);
+  let c = startNhlCareer('Era Skater', 'RW', nhl.NHL_ARCHETYPES.RW[0], rng, null, 'y2006');
+  const teamsSeen = new Set([c.team]);
+  for (let season = 0; season < 20 && !c.retired; season++) {
+    /* simNhlSeason pushes the line itself (the board relies on that). */
+    simNhlSeason(c, 78, rng);
+    c.year += 1;
+    c.age += 1;
+    c.contractYears -= 1;
+    const ev = drawNhlEvent(c, rng);
+    const opt = ev.options[season % ev.options.length] ?? ev.options[0];
+    opt.apply(c, rng);
+    teamsSeen.add(c.team);
+  }
+  for (const t of teamsSeen) {
+    if (!eraIds.has(t)) fail(`a 2006 career passed through ${t}, not a 2006-07 franchise`);
+  }
+  const lastYear = c.seasons[c.seasons.length - 1]?.year ?? 0;
+  if (lastYear < 2011) fail(`twenty seasons only reached ${lastYear}`);
+  // Modern draws stay modern.
+  const rng2 = seeded(8);
+  for (let i = 0; i < 30; i++) {
+    const c2 = startNhlCareer('Modern Skater', 'G', nhl.NHL_ARCHETYPES.G[0], rng2, null);
+    if (c2.year !== 2026) fail(`default NHL career started in ${c2.year}`);
+    if (!nhlEraTeamIds().includes(c2.team)) fail(`default career drafted by ${c2.team}`);
+    if (c2.eraId !== undefined) fail('a default NHL career carries an era tag');
+    if (['ATL', 'PHX'].includes(c2.team)) fail('a modern career was drafted into 2006');
+  }
+  console.log(`   era career visited ${teamsSeen.size} franchises, all 2006-legal, reached ${lastYear}; 30 modern drafts clean`);
+}
+
+/* ---------- 8. The 2004 MLB is the 2004 MLB ---------- */
+console.log('8) MLB 2004: 30 teams, the Expos last Montreal summer');
+{
+  const { MLB_TEAMS_2004, startMlbCareer, mlbTeamLabelOf, mlbMarketSalary, MLB_ERAS, mlbEraTeamIds } = mlb;
+  if (MLB_TEAMS_2004.length !== 30) fail(`the 2004 list holds ${MLB_TEAMS_2004.length} teams, 2004 had 30`);
+  const eraIds = new Set(MLB_TEAMS_2004.map(t => t.id));
+  // The verified differences, both directions.
+  for (const must of ['MON', 'ANA', 'FLA', 'TBD', 'OAK', 'CLV']) if (!eraIds.has(must)) fail(`2004 list is missing ${must}`);
+  for (const not of ['WSN', 'LAA', 'MIA', 'TBR', 'ATH', 'CLE']) if (eraIds.has(not)) fail(`${not} is in the 2004 list but that franchise identity did not exist in 2004`);
+  if (mlbTeamLabelOf('MON') !== 'Montreal Expos') fail(`MON prints ${mlbTeamLabelOf('MON')}`);
+  if (mlbTeamLabelOf('ANA') !== 'Anaheim Angels') fail(`ANA prints ${mlbTeamLabelOf('ANA')}`);
+  if (mlbTeamLabelOf('TBD') !== 'Tampa Bay Devil Rays') fail(`TBD prints ${mlbTeamLabelOf('TBD')}`);
+  if (mlbTeamLabelOf('FLA') !== 'Florida Marlins') fail(`FLA prints ${mlbTeamLabelOf('FLA')}`);
+  if (mlbTeamLabelOf('OAK') !== 'Oakland Athletics') fail(`OAK prints ${mlbTeamLabelOf('OAK')}`);
+  // Era-only ids stay unique against the modern league.
+  const modernIds2 = new Set(mlbEraTeamIds());
+  for (const a of ['MON', 'ANA', 'FLA', 'TBD', 'OAK', 'CLV']) {
+    if (modernIds2.has(a)) fail(`${a} collides with a modern id, era labels would be ambiguous`);
+  }
+
+  const rng = seeded(17);
+  let sawEraOnly = 0;
+  for (let i = 0; i < 40; i++) {
+    const c = startMlbCareer('Test Slugger', 'CF', mlb.MLB_ARCHETYPES.CF[0], rng, null, 'y2004');
+    if (c.year !== 2004) fail(`era career started in ${c.year}`);
+    if (!eraIds.has(c.team)) fail(`drafted by ${c.team}, not a 2004 franchise`);
+    if (c.eraId !== 'y2004') fail('era tag missing');
+    if (['MON', 'ANA', 'FLA', 'TBD', 'OAK', 'CLV'].includes(c.team)) sawEraOnly++;
+  }
+  if (sawEraOnly === 0) fail('forty drafts never landed on an era-only franchise, the pool looks wrong');
+  // Era money at the documented scale, on a doctored ace.
+  const scale = MLB_ERAS.find(e => e.id === 'y2004').moneyScale;
+  const vetNow = { ...startMlbCareer('A', 'SP', mlb.MLB_ARCHETYPES.SP[0], seeded(2), null), ovr: 92 };
+  const vetEra = { ...vetNow, eraId: 'y2004' };
+  const mNow = mlbMarketSalary(vetNow);
+  const mEra = mlbMarketSalary(vetEra);
+  const ratio = mEra / mNow;
+  if (Math.abs(ratio - scale) > 0.05) fail(`era star money is ${(ratio * 100).toFixed(0)} percent of modern, the documented scale is ${(scale * 100).toFixed(0)}`);
+  console.log(`   40 era drafts clean, era-only franchises drawn ${sawEraOnly} times, market ${mEra}M vs modern ${mNow}M`);
+}
+
+/* ---------- 9. A full 2004 MLB career stays in-era; modern untouched ---------- */
+console.log('9) MLB: careers stay sealed on both sides');
+{
+  const { startMlbCareer, simMlbSeason, drawMlbEvent, MLB_TEAMS_2004, mlbEraTeamIds } = mlb;
+  const eraIds = new Set(MLB_TEAMS_2004.map(t => t.id));
+  const rng = seeded(23);
+  let c = startMlbCareer('Era Slugger', 'SS', mlb.MLB_ARCHETYPES.SS[0], rng, null, 'y2004');
+  const teamsSeen = new Set([c.team]);
+  for (let season = 0; season < 18 && !c.retired; season++) {
+    /* simMlbSeason pushes the line itself (the board relies on that). */
+    simMlbSeason(c, 78, rng);
+    c.year += 1;
+    c.age += 1;
+    c.contractYears -= 1;
+    const ev = drawMlbEvent(c, rng);
+    const opt = ev.options[season % ev.options.length] ?? ev.options[0];
+    opt.apply(c, rng);
+    teamsSeen.add(c.team);
+  }
+  for (const t of teamsSeen) {
+    /* Yomiuri Giants is the one legal non-franchise stop: the Japan offer
+       is a real club that existed in 2004, stored by name not id. */
+    if (t === 'Yomiuri Giants') continue;
+    if (!eraIds.has(t)) fail(`a 2004 career passed through ${t}, not a 2004 franchise`);
+  }
+  // Modern draws stay modern.
+  const rng2 = seeded(14);
+  for (let i = 0; i < 30; i++) {
+    const c2 = startMlbCareer('Modern Slugger', '1B', mlb.MLB_ARCHETYPES['1B'][0], rng2, null);
+    if (c2.year !== 2026) fail(`default MLB career started in ${c2.year}`);
+    if (!mlbEraTeamIds().includes(c2.team)) fail(`default career drafted by ${c2.team}`);
+    if (c2.eraId !== undefined) fail('a default MLB career carries an era tag');
+    if (['MON', 'ANA', 'FLA', 'TBD', 'OAK', 'CLV'].includes(c2.team)) fail('a modern career was drafted into 2004');
+  }
+  console.log(`   era career visited ${teamsSeen.size} stops, all 2004-legal; 30 modern drafts clean`);
 }
 
 console.log(failures === 0 ? '\nALL SPORT ERA CHECKS PASSED' : `\n${failures} FAILURES`);

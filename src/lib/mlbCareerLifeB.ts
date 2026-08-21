@@ -16,7 +16,7 @@
    ever called inside function bodies. Never hoist it into a constant.
    ========================================================================== */
 import type { MlbCareerState, MlbCareerEvent } from './mlbMyCareer';
-import { mlbTeamLabelOf } from './mlbMyCareer';
+import { mlbTeamLabelOf, mlbEraTeamIds } from './mlbMyCareer';
 
 /* Round 58 money and flag fields ride on the save object. Old saves predate
    them and the engine interface has not caught up yet, so every read goes
@@ -51,15 +51,11 @@ const bumpHealth = (c: MlbCareerState, d: number) => { c.health = clamp(c.health
 const bumpOvr = (c: MlbCareerState, d: number) => { c.ovr = Math.min(c.pot + 1, c.ovr + d); };
 const dropOvr = (c: MlbCareerState, d: number) => { c.ovr = Math.max(60, c.ovr - d); };
 
-/* Local club id list so this file imports nothing but types and one label
-   helper. Same 30 ids the conquest data uses. */
-const CLUB_IDS = [
-  'NYY', 'BOS', 'TOR', 'TBR', 'BAL', 'CLE', 'DET', 'KCR', 'MIN', 'CHW',
-  'HOU', 'SEA', 'TEX', 'LAA', 'ATH', 'ATL', 'PHI', 'NYM', 'MIA', 'WSN',
-  'MIL', 'CHC', 'STL', 'CIN', 'PIT', 'LAD', 'SDP', 'SFG', 'ARI', 'COL',
-];
+/* Round 173: the club pool now comes from the career's own era, read
+   through a lazy function call inside the body (never at module scope, per
+   the circular import warning in this file's header). */
 const otherClub = (c: MlbCareerState, r: () => number): string => {
-  const pool = CLUB_IDS.filter(a => a !== c.team);
+  const pool = mlbEraTeamIds(c.eraId).filter(a => a !== c.team);
   return pool[Math.floor(r() * pool.length)];
 };
 

@@ -14,8 +14,7 @@
  */
 
 import type { NhlCareerState, NhlCareerEvent } from './nhlMyCareer';
-import { nhlTeamLabelOf } from './nhlMyCareer';
-import { NHL_TEAMS } from '@/data/conquestDataNhl';
+import { nhlTeamLabelOf, nhlEraTeamIds } from './nhlMyCareer';
 
 /** Round 59 life fields are not on NhlCareerState yet, so read them through here. */
 type LifeState = NhlCareerState & {
@@ -76,10 +75,12 @@ function hp(c: NhlCareerState, d: number): number {
   return c.health;
 }
 
-/** Random NHL club that is not the one you play for. Called only at runtime. */
+/** Random NHL club that is not the one you play for. Called only at runtime.
+ *  Round 173: drawn from the career's own era, read lazily (the function
+ *  call happens inside event bodies, never at module scope). */
 function otherTeam(c: NhlCareerState, r: () => number): string {
-  const pool = NHL_TEAMS.filter(t => t.id !== c.team);
-  return pool[Math.floor(r() * pool.length)].id;
+  const pool = nhlEraTeamIds(c.eraId).filter(id => id !== c.team);
+  return pool[Math.floor(r() * pool.length)];
 }
 
 export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCareerEvent[] {

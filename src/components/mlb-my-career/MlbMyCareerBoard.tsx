@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Crown, Dumbbell, RotateCcw, Sparkles } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import {
-  MLB_ARCHETYPES, startMlbCareer, simMlbSeason, mlbProgress, drawMlbEvent,
+  MLB_ARCHETYPES, MLB_ERAS, startMlbCareer, simMlbSeason, mlbProgress, drawMlbEvent,
   MLB_SPEND_ITEMS, buyMlbItem, type MlbSpendCategory,
   mlbShouldRetire, mlbLegacyOf, mlbCareerTotals, mlbRollTeamQuality, mlbTeamLabelOf, mlbMarketSalary,
   type MlbCareerPos, type MlbCareerState, type MlbCareerEvent, type MlbSeasonLine,
@@ -38,6 +38,7 @@ export default function MlbMyCareerBoard() {
   const [nameInput, setNameInput] = useState('');
   const [pos, setPos] = useState<MlbCareerPos>('CF');
   const [archetypeId, setArchetypeId] = useState(MLB_ARCHETYPES.CF[0].id);
+  const [eraId, setEraId] = useState<'now' | 'y2004'>('now');
   const [feed, setFeed] = useState<string[]>([]);
   const [pendingEvent, setPendingEvent] = useState<MlbCareerEvent | null>(null);
   const [lastLine, setLastLine] = useState<MlbSeasonLine | null>(null);
@@ -82,7 +83,7 @@ export default function MlbMyCareerBoard() {
 
   const create = () => {
     const arch = MLB_ARCHETYPES[pos].find(a => a.id === archetypeId) ?? MLB_ARCHETYPES[pos][0];
-    const c = startMlbCareer(nameInput.trim() || 'Ace Diamond', pos, arch, Math.random, appearance);
+    const c = startMlbCareer(nameInput.trim() || 'Ace Diamond', pos, arch, Math.random, appearance, eraId);
     const tq = mlbRollTeamQuality(null, Math.random);
     setCareer(c);
     setTeamQuality(tq);
@@ -224,6 +225,24 @@ export default function MlbMyCareerBoard() {
             maxLength={24}
             className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
+          {/* Round 173: pick WHEN, before you pick what. Same pattern as Club
+              Manager's era picker: the default is today, the throwback is a
+              sealed 2004 league with its franchises and its money. */}
+          <div className="grid grid-cols-2 gap-1.5">
+            {MLB_ERAS.map(e => (
+              <button
+                key={e.id}
+                onClick={() => setEraId(e.id)}
+                className={cn(
+                  'rounded-xl border-2 px-3 py-2 text-left',
+                  eraId === e.id ? 'border-gold bg-gold/10' : 'border-border bg-card hover:border-primary/50',
+                )}
+              >
+                <span className="block text-sm font-bold text-foreground">{e.id === 'now' ? '⚾ ' : '⏪ '}{e.label}</span>
+                <span className="block text-[10px] text-muted-foreground">{e.blurb}</span>
+              </button>
+            ))}
+          </div>
           <div className="grid grid-cols-6 gap-1 rounded-2xl bg-secondary p-1">
             {(['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'] as MlbCareerPos[]).map(p => (
               <button

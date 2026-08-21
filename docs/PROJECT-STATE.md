@@ -61,10 +61,23 @@ A separate line in the same burst of messages. Status by sport:
   verified in both directions, 40 era drafts per sport all landing on era franchises with the
   era-only ones actually drawn, 20 season careers never leaving the era, the modern game
   provably untouched, and star money at the documented scale. Browser probed 17 for 17.
-- **NHL and MLB, NEXT.** Same recipe: one verified throwback season each (the era-only
-  franchises are the point: Atlanta Thrashers-era NHL, Montreal Expos-era MLB are the obvious
-  candidates, verify before building), era pickers on their create screens, era-aware team
-  draws end to end, a harness section per sport.
+- **NHL and MLB, DONE in Round 173. All four sports now have era starts.** Same recipe as 172.
+  NHL: the 30 team league of 2006-07 (the Thrashers in Atlanta, the Coyotes in Phoenix, no
+  Vegas, Seattle, Winnipeg or Utah), verified against the 2006-07 season pages on Wikipedia
+  and Hockey Reference; 2006-07 was picked over 2005-06 deliberately because Anaheim had
+  already renamed to plain Ducks by then, so no franchise needs a name this site would rather
+  not print. MLB: the 2004 league (the Expos' last Montreal summer, the Anaheim Angels, the
+  Florida Marlins, the Tampa Bay Devil Rays, the Oakland Athletics, Cleveland under its 2004
+  name which the record books still print, reasoning documented in the code comment), verified
+  against Wikipedia and Baseball Reference. Era money: NHL at 0.42 (the 44 million cap of
+  2006-07 against the announced 104 for 2026-27), MLB at 0.43 (average salary 2.31 million by
+  the players association's table against the AP study's 5.34 for 2026), documented in code
+  comments only. Era-aware team draws end to end including both life sims' rival club draws;
+  the one legal non-franchise stop is the Japan offer's Yomiuri Giants, a real 2004 club,
+  exempted in the harness with a comment. simSportEras now runs 9 sections over all four
+  sports. Browser probed 24 for 24. Still open across all four sports: the per-game SEO copy
+  and help popovers do not mention the era starts yet; fold that into the next words-catch-up
+  round (the era tiles carry their own blurbs, so nothing on screen is wrong, just quiet).
 
 ## Owner feedback, third review 2026-08-18 (his biggest list yet, with screenshots)
 
@@ -594,7 +607,8 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, pre-AdSense sweep | **Round 170** (site health for Wednesday's AdSense review: the FULL route sweep ran clean, 119 routes x 3 viewports = 357 checks, ZERO findings on the future site with all pending rounds applied. Two fixes shipped: sweepGames grew an OFFLINE=1 mode for sandboxes with no route to Supabase, so environment noise cannot bury real findings, and Dart Draft stopped failing SILENTLY when the player pool cannot load: the mode tile used to bounce back to the intro with no explanation, and now the screen says the pool could not load and to try again. Fail closed, never silently.) `RUN170.bat`, chain-guarded on 169. |
 | Packaged 2026-08-18, later still | **Round 171** (the finance layer, CM-8: home gates pay the kitty, ticket policy with real trade-offs, three ground expansions the board loves and the club keeps, custom capacities genuinely grow, era prices run smaller). `RUN171.bat`, chain-guarded on 170. **SHIP29.bat is the current wrapper: it runs 157 through 171.** |
 | Packaged 2026-08-18, evening again | **Round 172** (era starts for NFL and NBA My Career, his "add eras to nfl and nba and eveyr sport": the 2005 NFL and the 29 team 2003-04 NBA, two-source verified franchise lists, sealed era worlds end to end including trades, free agency, life sim rivals and the corruption arc, era money at documented scale, era pickers on both create screens). `RUN172.bat`, chain-guarded on 171. **SHIP30.bat is the current wrapper: it runs 157 through 172.** |
-| Next free round number | **173** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, night again | **Round 173** (era starts for NHL and MLB, completing "add eras to nfl and nba and eveyr sport" across all four US sports: the 2006-07 NHL and the 2004 MLB, two-source verified, sealed era worlds end to end, era money at documented scales, era pickers on both create screens. Plus a simApproaches deflake its suite run caught: the "nobody courts a struggler" control now clears any approach earned during its ten UNDOCTORED setup weeks before counting, because a genuinely hot Everton start could earn a real call the section then blamed on the struggler. And for the record: simOpposition read 1.64 against its 1.5 equivalence tolerance in this suite run and 0.70 on the immediate rerun, same unseeded tail as Round 171, error bar 1.02, no Club Manager path was touched this round). `RUN173.bat`, chain-guarded on 172. **SHIP31.bat is the current wrapper: it runs 157 through 173.** |
+| Next free round number | **174** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

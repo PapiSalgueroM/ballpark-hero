@@ -121,6 +121,8 @@ export interface NhlCareerState {
   yearlyCosts?: number;
   /** Round 104: the player drafted alongside you, measured against you every season. */
   rival?: CareerRival;
+  /** Round 173: which league the career lives in. Absent means today's. */
+  eraId?: string;
 }
 
 export interface NhlCareerEvent {
@@ -130,9 +132,81 @@ export interface NhlCareerEvent {
   options: { label: string; effect: string; apply: (c: NhlCareerState, rng: () => number) => string }[];
 }
 
-export function nhlTeamLabelOf(id: string): string {
+/* ---------- Round 173: era starts, his "add eras to every sport" ask ---------- */
+
+/**
+ * The 2006-07 league: 30 teams, verified against the 2006-07 season pages
+ * on Wikipedia and Hockey Reference. The Thrashers still in Atlanta, the
+ * Coyotes still in Phoenix, and no Vegas, Seattle, Winnipeg or Utah
+ * franchises at all. Anaheim had already renamed to plain Ducks by 2006-07,
+ * which is exactly why this season was picked over 2005-06. Era-only ids
+ * (ATL, PHX) are unique against the modern list on purpose.
+ */
+export const NHL_TEAMS_2006: { id: string; city: string; name: string }[] = [
+  { id: 'NJD', city: 'New Jersey', name: 'Devils' }, { id: 'PIT', city: 'Pittsburgh', name: 'Penguins' },
+  { id: 'NYR', city: 'New York', name: 'Rangers' }, { id: 'NYI', city: 'New York', name: 'Islanders' },
+  { id: 'PHI', city: 'Philadelphia', name: 'Flyers' }, { id: 'BUF', city: 'Buffalo', name: 'Sabres' },
+  { id: 'OTT', city: 'Ottawa', name: 'Senators' }, { id: 'TOR', city: 'Toronto', name: 'Maple Leafs' },
+  { id: 'MTL', city: 'Montreal', name: 'Canadiens' }, { id: 'BOS', city: 'Boston', name: 'Bruins' },
+  { id: 'ATL', city: 'Atlanta', name: 'Thrashers' }, { id: 'TBL', city: 'Tampa Bay', name: 'Lightning' },
+  { id: 'CAR', city: 'Carolina', name: 'Hurricanes' }, { id: 'FLA', city: 'Florida', name: 'Panthers' },
+  { id: 'WSH', city: 'Washington', name: 'Capitals' }, { id: 'DET', city: 'Detroit', name: 'Red Wings' },
+  { id: 'NSH', city: 'Nashville', name: 'Predators' }, { id: 'STL', city: 'St. Louis', name: 'Blues' },
+  { id: 'CBJ', city: 'Columbus', name: 'Blue Jackets' }, { id: 'CHI', city: 'Chicago', name: 'Blackhawks' },
+  { id: 'VAN', city: 'Vancouver', name: 'Canucks' }, { id: 'MIN', city: 'Minnesota', name: 'Wild' },
+  { id: 'CGY', city: 'Calgary', name: 'Flames' }, { id: 'COL', city: 'Colorado', name: 'Avalanche' },
+  { id: 'EDM', city: 'Edmonton', name: 'Oilers' }, { id: 'ANA', city: 'Anaheim', name: 'Ducks' },
+  { id: 'SJS', city: 'San Jose', name: 'Sharks' }, { id: 'DAL', city: 'Dallas', name: 'Stars' },
+  { id: 'LAK', city: 'Los Angeles', name: 'Kings' }, { id: 'PHX', city: 'Phoenix', name: 'Coyotes' },
+];
+
+export interface NhlEraDef {
+  id: 'now' | 'y2006';
+  label: string;
+  startYear: number;
+  blurb: string;
+  /** Contract money scale against the modern game: the 2006-07 salary cap
+   *  was 44 million against the announced 104 for 2026-27, which is about
+   *  0.42. No cap number appears on screen. */
+  moneyScale: number;
+  teams: { id: string; city: string; name: string }[];
+}
+
+export const NHL_ERAS: NhlEraDef[] = [
+  {
+    id: 'now', label: '2026', startYear: 2026, moneyScale: 1,
+    teams: [],
+    blurb: 'The league as it is today. Full money, all 32 franchises.',
+  },
+  {
+    id: 'y2006', label: '2006-07 throwback', startYear: 2006, moneyScale: 0.42, teams: NHL_TEAMS_2006,
+    blurb: 'The 30 team league of 2006-07: the Thrashers in Atlanta, the Coyotes in Phoenix, no Vegas or Seattle yet. Contracts pay 2006 money.',
+  },
+];
+
+export function nhlEraById(id?: string): NhlEraDef {
+  return NHL_ERAS.find(e => e.id === id) ?? NHL_ERAS[0];
+}
+
+/** The team pool for an era. The modern era reads the live NHL_TEAMS list
+ *  lazily (never at module scope, per the import-order lesson). */
+export function nhlEraTeamIds(eraId?: string): string[] {
+  const era = nhlEraById(eraId);
+  if (era.id === 'now') return NHL_TEAMS.map(x => x.id);
+  return era.teams.map(x => x.id);
+}
+
+export function nhlTeamLabelOf(id: string, eraId?: string): string {
+  /* Round 173: era names first when asked, then the modern league, then the
+     2006-07 list, so era-only ids always print a real name even from code
+     that never learned about eras. */
+  const era = nhlEraById(eraId);
+  const inEra = era.teams.find(x => x.id === id);
+  if (inEra) return `${inEra.city} ${inEra.name}`;
   const t = NHL_TEAMS.find(x => x.id === id);
-  return t ? `${t.city} ${t.name}` : id;
+  if (t) return `${t.city} ${t.name}`;
+  const old = NHL_TEAMS_2006.find(x => x.id === id);
+  return old ? `${old.city} ${old.name}` : id;
 }
 
 export function majorAwardName(pos: NhlCareerPos): string {
@@ -141,18 +215,22 @@ export function majorAwardName(pos: NhlCareerPos): string {
 
 export function startNhlCareer(
   name: string, pos: NhlCareerPos, archetype: NhlArchetype, rng: () => number = Math.random,
-  appearance?: PlayerAppearance | null,
+  appearance?: PlayerAppearance | null, eraId?: string,
 ): NhlCareerState {
+  /* Round 173: the era decides the year, the league you are drafted into
+     and the money. Leaving it off is today's league, byte for byte. */
+  const era = nhlEraById(eraId);
+  const pool = nhlEraTeamIds(eraId);
   const base = 66 + Math.floor(rng() * 8) + archetype.ovrBoost;
   const pot = Math.min(99, base + 11 + Math.floor(rng() * 13) + archetype.potBoost);
   const stock = Math.max(1, Math.round(50 - (base - 64) * 4.5 + rng() * 24));
-  const team = NHL_TEAMS[Math.floor(rng() * NHL_TEAMS.length)].id;
+  const team = pool[Math.floor(rng() * pool.length)];
   const c: NhlCareerState = {
     name, pos, archetype, team,
-    year: 2026, age: 18 + Math.floor(rng() * 2),
+    year: era.startYear, age: 18 + Math.floor(rng() * 2),
     ovr: base, pot,
     morale: 70, fanbase: stock <= 10 ? 55 : 32, health: 100,
-    salary: stock <= 10 ? 3.5 : 0.9,
+    salary: Math.max(0.3, Math.round((stock <= 10 ? 3.5 : 0.9) * era.moneyScale * 10) / 10),
     contractYears: 3,
     seasons: [],
     cups: 0, harts: 0, allStars: 0, connSmythes: 0,
@@ -169,6 +247,7 @@ export function startNhlCareer(
     appearance: appearance ?? null,
     yearlyCosts: 0,
   };
+  if (era.id !== 'now') c.eraId = era.id;
   // Round 104: draft the rival at the same moment the player is created.
   c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
   return c;
@@ -181,9 +260,11 @@ export function nhlRollTeamQuality(prev: number | null, rng: () => number): numb
 
 export function nhlMarketSalary(c: NhlCareerState): number {
   // Round 59: centres and defencemen get paid, wingers slightly less.
+  // Round 173: era careers earn era money at the documented scale.
   const mult = (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).salary;
+  const scale = nhlEraById(c.eraId).moneyScale;
   const base = Math.max(1, Math.round(((c.ovr - 66) * 0.62 - 1) * 10) / 10);
-  return Math.round(base * mult * 10) / 10;
+  return Math.max(0.4, Math.round(base * mult * scale * 10) / 10);
 }
 
 function gamesFor(c: NhlCareerState, rng: () => number): { games: number; note: string | null } {
@@ -397,7 +478,7 @@ export function drawNhlEvent(c: NhlCareerState, rng: () => number): NhlCareerEve
       body: `${nhlTeamLabelOf(c.team)} table ${Math.round(market * 0.88 * 10) / 10}M a year. July 1 could bring ${market}M somewhere else.`,
       options: [
         { label: 'Stay and build it here', effect: 'Loyalty', apply: (cc) => { cc.salary = Math.round(market * 0.88 * 10) / 10; cc.contractYears = 4; cc.fanbase = Math.min(100, cc.fanbase + 12); cc.morale += 6; return `Re-signed with ${nhlTeamLabelOf(cc.team)} for ${cc.salary}M x4.`; } },
-        { label: 'Go to market', effect: 'Top dollar', apply: (cc, r) => { const nt = NHL_TEAMS[Math.floor(r() * NHL_TEAMS.length)].id; cc.team = nt; cc.salary = market; cc.contractYears = 4; cc.fanbase = 40; return `Signed with ${nhlTeamLabelOf(nt)} for ${market}M x4. July 1 fireworks.`; } },
+        { label: 'Go to market', effect: 'Top dollar', apply: (cc, r) => { const pool = nhlEraTeamIds(cc.eraId); const nt = pool[Math.floor(r() * pool.length)]; cc.team = nt; cc.salary = market; cc.contractYears = 4; cc.fanbase = 40; return `Signed with ${nhlTeamLabelOf(nt, cc.eraId)} for ${market}M x4. July 1 fireworks.`; } },
       ],
     });
   }
@@ -417,7 +498,7 @@ export function drawNhlEvent(c: NhlCareerState, rng: () => number): NhlCareerEve
       title: 'It is not working here',
       body: 'The system, the minutes, the losing. Your agent is on the phone.',
       options: [
-        { label: 'Request a trade', effect: 'Fresh sheet of ice', apply: (cc, r) => { const nt = NHL_TEAMS[Math.floor(r() * NHL_TEAMS.length)].id; cc.team = nt; cc.morale = 74; cc.fanbase = 38; return `Traded to ${nhlTeamLabelOf(nt)}.`; } },
+        { label: 'Request a trade', effect: 'Fresh sheet of ice', apply: (cc, r) => { const pool = nhlEraTeamIds(cc.eraId); const nt = pool[Math.floor(r() * pool.length)]; cc.team = nt; cc.morale = 74; cc.fanbase = 38; return `Traded to ${nhlTeamLabelOf(nt, cc.eraId)}.`; } },
         { label: 'Say nothing, work', effect: 'Room respect', apply: (cc) => { cc.morale += 7; cc.fanbase += 4; return 'Heads down. The room respects it.'; } },
       ],
     });

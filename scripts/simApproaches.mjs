@@ -142,6 +142,13 @@ console.log('4) Nobody courts a struggler');
   // Doctor the save COLD: bottom of the table, dire form.
   s.table = s.table.map(r => r.club === s.clubName ? { ...r, pts: 0, w: 0, d: 0, l: r.w + r.d + r.l, gf: 2, ga: 30 } : r);
   s.form = ['L', 'L', 'L', 'L', 'L'];
+  /* The ten setup weeks above run UNDOCTORED, and a genuinely hot Everton
+     start can earn a real approach in them (it did, about once in forty
+     suite runs). That call belongs to the hot spell, not to the struggler
+     this section is about, so clear it before counting. Leaving it in made
+     this negative control flaky for the wrong reason. */
+  s.approach = null;
+  s.pendingMove = null;
   let calls = 0;
   for (let w = 0; w < 18; w++) {
     s = playWeeks(s, 1);

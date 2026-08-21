@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Crown, Dumbbell, RotateCcw, Sparkles } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import {
-  NHL_ARCHETYPES, startNhlCareer, simNhlSeason, nhlProgress, drawNhlEvent,
+  NHL_ARCHETYPES, NHL_ERAS, startNhlCareer, simNhlSeason, nhlProgress, drawNhlEvent,
   NHL_SPEND_ITEMS, buyNhlItem, type NhlSpendCategory,
   nhlShouldRetire, nhlLegacyOf, nhlCareerTotals, nhlRollTeamQuality, nhlTeamLabelOf, nhlMarketSalary,
   type NhlCareerPos, type NhlCareerState, type NhlCareerEvent, type NhlSeasonLine,
@@ -38,6 +38,7 @@ export default function NhlMyCareerBoard() {
   const [nameInput, setNameInput] = useState('');
   const [pos, setPos] = useState<NhlCareerPos>('C');
   const [archetypeId, setArchetypeId] = useState(NHL_ARCHETYPES.C[0].id);
+  const [eraId, setEraId] = useState<'now' | 'y2006'>('now');
   const [feed, setFeed] = useState<string[]>([]);
   const [pendingEvent, setPendingEvent] = useState<NhlCareerEvent | null>(null);
   const [lastLine, setLastLine] = useState<NhlSeasonLine | null>(null);
@@ -82,7 +83,7 @@ export default function NhlMyCareerBoard() {
 
   const create = () => {
     const arch = NHL_ARCHETYPES[pos].find(a => a.id === archetypeId) ?? NHL_ARCHETYPES[pos][0];
-    const c = startNhlCareer(nameInput.trim() || 'Gordie Blaze', pos, arch, Math.random, appearance);
+    const c = startNhlCareer(nameInput.trim() || 'Gordie Blaze', pos, arch, Math.random, appearance, eraId);
     const tq = nhlRollTeamQuality(null, Math.random);
     setCareer(c);
     setTeamQuality(tq);
@@ -224,6 +225,24 @@ export default function NhlMyCareerBoard() {
             maxLength={24}
             className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
+          {/* Round 173: pick WHEN, before you pick what. Same pattern as Club
+              Manager's era picker: the default is today, the throwback is a
+              sealed 2006-07 league with its franchises and its money. */}
+          <div className="grid grid-cols-2 gap-1.5">
+            {NHL_ERAS.map(e => (
+              <button
+                key={e.id}
+                onClick={() => setEraId(e.id)}
+                className={cn(
+                  'rounded-xl border-2 px-3 py-2 text-left',
+                  eraId === e.id ? 'border-gold bg-gold/10' : 'border-border bg-card hover:border-primary/50',
+                )}
+              >
+                <span className="block text-sm font-bold text-foreground">{e.id === 'now' ? '🏒 ' : '⏪ '}{e.label}</span>
+                <span className="block text-[10px] text-muted-foreground">{e.blurb}</span>
+              </button>
+            ))}
+          </div>
           <div className="grid grid-cols-5 gap-1 rounded-2xl bg-secondary p-1">
             {(['C', 'LW', 'RW', 'D', 'G'] as NhlCareerPos[]).map(p => (
               <button

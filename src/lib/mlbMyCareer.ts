@@ -159,6 +159,8 @@ export interface MlbCareerState {
   yearlyCosts?: number;
   /** Round 104: the player drafted alongside you, measured against you every season. */
   rival?: CareerRival;
+  /** Round 173: which league the career lives in. Absent means today's. */
+  eraId?: string;
 }
 
 export interface MlbCareerEvent {
@@ -168,25 +170,108 @@ export interface MlbCareerEvent {
   options: { label: string; effect: string; apply: (c: MlbCareerState, rng: () => number) => string }[];
 }
 
-export function mlbTeamLabelOf(id: string): string {
+/* ---------- Round 173: era starts, his "add eras to every sport" ask ---------- */
+
+/**
+ * The 2004 league: 30 teams, verified against the 2004 season pages on
+ * Wikipedia and Baseball Reference. The Expos' final summer in Montreal,
+ * the Anaheim Angels (renamed Los Angeles the next January), the Florida
+ * Marlins, the Tampa Bay Devil Rays, the Oakland Athletics, and no
+ * Washington, Miami or Sacramento baseball at all. Cleveland carries its
+ * 2004 name here because that is the name the record books, the almanacs
+ * and mainstream historical coverage still print for those seasons; it is
+ * a retired name, not the different and harder case the NFL's Washington
+ * franchise presents, which this site writes around entirely. Era-only ids
+ * (MON, ANA, FLA, TBD, OAK, CLV) are unique against the modern list on
+ * purpose.
+ */
+export const MLB_TEAMS_2004: { id: string; city: string; name: string }[] = [
+  { id: 'NYY', city: 'New York', name: 'Yankees' }, { id: 'BOS', city: 'Boston', name: 'Red Sox' },
+  { id: 'BAL', city: 'Baltimore', name: 'Orioles' }, { id: 'TBD', city: 'Tampa Bay', name: 'Devil Rays' },
+  { id: 'TOR', city: 'Toronto', name: 'Blue Jays' }, { id: 'MIN', city: 'Minnesota', name: 'Twins' },
+  { id: 'CHW', city: 'Chicago', name: 'White Sox' }, { id: 'CLV', city: 'Cleveland', name: 'Indians' },
+  { id: 'DET', city: 'Detroit', name: 'Tigers' }, { id: 'KCR', city: 'Kansas City', name: 'Royals' },
+  { id: 'ANA', city: 'Anaheim', name: 'Angels' }, { id: 'OAK', city: 'Oakland', name: 'Athletics' },
+  { id: 'TEX', city: 'Texas', name: 'Rangers' }, { id: 'SEA', city: 'Seattle', name: 'Mariners' },
+  { id: 'ATL', city: 'Atlanta', name: 'Braves' }, { id: 'PHI', city: 'Philadelphia', name: 'Phillies' },
+  { id: 'FLA', city: 'Florida', name: 'Marlins' }, { id: 'NYM', city: 'New York', name: 'Mets' },
+  { id: 'MON', city: 'Montreal', name: 'Expos' }, { id: 'STL', city: 'St. Louis', name: 'Cardinals' },
+  { id: 'HOU', city: 'Houston', name: 'Astros' }, { id: 'CHC', city: 'Chicago', name: 'Cubs' },
+  { id: 'CIN', city: 'Cincinnati', name: 'Reds' }, { id: 'PIT', city: 'Pittsburgh', name: 'Pirates' },
+  { id: 'MIL', city: 'Milwaukee', name: 'Brewers' }, { id: 'LAD', city: 'Los Angeles', name: 'Dodgers' },
+  { id: 'SFG', city: 'San Francisco', name: 'Giants' }, { id: 'SDP', city: 'San Diego', name: 'Padres' },
+  { id: 'COL', city: 'Colorado', name: 'Rockies' }, { id: 'ARI', city: 'Arizona', name: 'Diamondbacks' },
+];
+
+export interface MlbEraDef {
+  id: 'now' | 'y2004';
+  label: string;
+  startYear: number;
+  blurb: string;
+  /** Contract money scale against the modern game. Baseball has no salary
+   *  cap, so the scale comes from average player salary: about 2.31 million
+   *  in 2004 by the players association's own table, against the AP study's
+   *  record 5.34 million for 2026, which is about 0.43. Neither figure
+   *  appears on screen. */
+  moneyScale: number;
+  teams: { id: string; city: string; name: string }[];
+}
+
+export const MLB_ERAS: MlbEraDef[] = [
+  {
+    id: 'now', label: '2026', startYear: 2026, moneyScale: 1,
+    teams: [],
+    blurb: 'The league as it is today. Full money, all 30 franchises.',
+  },
+  {
+    id: 'y2004', label: '2004 throwback', startYear: 2004, moneyScale: 0.43, teams: MLB_TEAMS_2004,
+    blurb: 'The 2004 league: the Expos in their last Montreal summer, the Devil Rays, the Florida Marlins, the Anaheim Angels. Contracts pay 2004 money.',
+  },
+];
+
+export function mlbEraById(id?: string): MlbEraDef {
+  return MLB_ERAS.find(e => e.id === id) ?? MLB_ERAS[0];
+}
+
+/** The team pool for an era. The modern era reads the live MLB_TEAMS list
+ *  lazily (never at module scope, per the import-order lesson). */
+export function mlbEraTeamIds(eraId?: string): string[] {
+  const era = mlbEraById(eraId);
+  if (era.id === 'now') return MLB_TEAMS.map(x => x.id);
+  return era.teams.map(x => x.id);
+}
+
+export function mlbTeamLabelOf(id: string, eraId?: string): string {
+  /* Round 173: era names first when asked, then the modern league, then the
+     2004 list, so era-only ids always print a real name even from code
+     that never learned about eras. */
+  const era = mlbEraById(eraId);
+  const inEra = era.teams.find(x => x.id === id);
+  if (inEra) return `${inEra.city} ${inEra.name}`;
   const t = MLB_TEAMS.find(x => x.id === id);
-  return t ? `${t.city} ${t.name}` : id;
+  if (t) return `${t.city} ${t.name}`;
+  const old = MLB_TEAMS_2004.find(x => x.id === id);
+  return old ? `${old.city} ${old.name}` : id;
 }
 
 export function startMlbCareer(
   name: string, pos: MlbCareerPos, archetype: MlbArchetype, rng: () => number = Math.random,
-  appearance?: PlayerAppearance | null,
+  appearance?: PlayerAppearance | null, eraId?: string,
 ): MlbCareerState {
+  /* Round 173: the era decides the year, the league you are drafted into
+     and the money. Leaving it off is today's league, byte for byte. */
+  const era = mlbEraById(eraId);
+  const pool = mlbEraTeamIds(eraId);
   const base = 64 + Math.floor(rng() * 8) + archetype.ovrBoost;
   const pot = Math.min(99, base + 12 + Math.floor(rng() * 14) + archetype.potBoost);
   const stock = Math.max(1, Math.round(45 - (base - 62) * 4 + rng() * 25));
-  const team = MLB_TEAMS[Math.floor(rng() * MLB_TEAMS.length)].id;
+  const team = pool[Math.floor(rng() * pool.length)];
   const c: MlbCareerState = {
     name, pos, archetype, team,
-    year: 2026, age: 21,
+    year: era.startYear, age: 21,
     ovr: base, pot,
     morale: 70, fanbase: stock <= 10 ? 50 : 30, health: 100,
-    salary: 0.8,
+    salary: Math.max(0.3, Math.round(0.8 * era.moneyScale * 10) / 10),
     contractYears: 6, // team control years, baseball-style
     seasons: [],
     rings: 0, mvpCys: 0, allStars: 0,
@@ -203,6 +288,7 @@ export function startMlbCareer(
     appearance: appearance ?? null,
     yearlyCosts: 0,
   };
+  if (era.id !== 'now') c.eraId = era.id;
   // Round 104: draft the rival at the same moment the player is created.
   c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
   return c;
@@ -216,8 +302,10 @@ export function mlbRollTeamQuality(prev: number | null, rng: () => number): numb
 export function mlbMarketSalary(c: MlbCareerState): number {
   // Round 58: position matters. Aces and shortstops get paid, relievers and
   // designated hitters do not, which is exactly how the market works.
+  // Round 173: era careers earn era money at the documented scale.
   const mult = (MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF).salary;
-  return Math.max(1, Math.round(((c.ovr - 64) * 1.5 - 6) * mult * 10) / 10);
+  const scale = mlbEraById(c.eraId).moneyScale;
+  return Math.max(scale < 1 ? 0.5 : 1, Math.round(((c.ovr - 64) * 1.5 - 6) * mult * scale * 10) / 10);
 }
 
 function gamesFor(c: MlbCareerState, rng: () => number): { games: number; note: string | null } {
@@ -458,7 +546,7 @@ export function drawMlbEvent(c: MlbCareerState, rng: () => number): MlbCareerEve
       body: `Six years of team control are done. ${mlbTeamLabelOf(c.team)} offer ${Math.round(market * 0.85 * 10) / 10}M a year. The open market whispers ${market}M.`,
       options: [
         { label: 'Stay home', effect: 'Legacy with one club', apply: (cc) => { cc.salary = Math.round(market * 0.85 * 10) / 10; cc.contractYears = 4; cc.fanbase = Math.min(100, cc.fanbase + 12); cc.morale += 6; return `Re-signed with ${mlbTeamLabelOf(cc.team)} for ${cc.salary}M x4.`; } },
-        { label: 'Take the biggest deal', effect: 'New city, top dollar', apply: (cc, r) => { const nt = MLB_TEAMS[Math.floor(r() * MLB_TEAMS.length)].id; cc.team = nt; cc.salary = market; cc.contractYears = 4; cc.fanbase = 40; return `Signed with ${mlbTeamLabelOf(nt)} for ${market}M x4. Back page of every paper.`; } },
+        { label: 'Take the biggest deal', effect: 'New city, top dollar', apply: (cc, r) => { const pool = mlbEraTeamIds(cc.eraId); const nt = pool[Math.floor(r() * pool.length)]; cc.team = nt; cc.salary = market; cc.contractYears = 4; cc.fanbase = 40; return `Signed with ${mlbTeamLabelOf(nt, cc.eraId)} for ${market}M x4. Back page of every paper.`; } },
       ],
     });
   }
@@ -489,7 +577,7 @@ export function drawMlbEvent(c: MlbCareerState, rng: () => number): MlbCareerEve
       title: 'Trade deadline rumors',
       body: 'The team is selling and your name leads every rumor column.',
       options: [
-        { label: 'Ask out', effect: 'Contender bound', apply: (cc, r) => { const nt = MLB_TEAMS[Math.floor(r() * MLB_TEAMS.length)].id; cc.team = nt; cc.morale = 74; cc.fanbase = 38; return `Dealt to ${mlbTeamLabelOf(nt)} at the deadline.`; } },
+        { label: 'Ask out', effect: 'Contender bound', apply: (cc, r) => { const pool = mlbEraTeamIds(cc.eraId); const nt = pool[Math.floor(r() * pool.length)]; cc.team = nt; cc.morale = 74; cc.fanbase = 38; return `Dealt to ${mlbTeamLabelOf(nt, cc.eraId)} at the deadline.`; } },
         { label: 'Be the franchise guy', effect: 'Loyalty points', apply: (cc) => { cc.morale += 6; cc.fanbase += 6; return 'You stay and say the right things. The city loves it.'; } },
       ],
     });
