@@ -878,6 +878,25 @@ export interface CareerStats {
 
 export interface JobOffer { club: string; blurb: string; }
 
+/**
+ * Round 168: a mid-season approach, his CM-10. Real clubs tap up managers in
+ * October, not just in May, so when your stock runs hot one comes calling.
+ * Committing is a summer pre-agreement (the move itself happens through the
+ * season-end offer flow, like real football's announced-in-March moves), and
+ * the board hears about it. Turning it down buys a little goodwill.
+ */
+export interface Approach {
+  club: string;
+  leagueName: string;
+  tierLabel: string;
+  /** The suitor's pitch: stature, budget, the board's named demand. */
+  blurb: string;
+  /** Week the approach landed. */
+  week: number;
+  /** It quietly expires if ignored past this week. */
+  expiresWeek: number;
+}
+
 export interface SeasonSummary {
   season: number;
   club: string;
@@ -970,6 +989,10 @@ export interface CareerState {
   uclWorld?: UclAiGroup[];
   /** Round 165: the league's golden boot race, AI entries only. */
   scorerRace?: RaceScorer[];
+  /** Round 168: the live mid-season approach, if a club is courting me. */
+  approach?: Approach | null;
+  /** Round 168: the summer pre-agreement I shook hands on mid-season. */
+  pendingMove?: { club: string; blurb: string } | null;
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
   /** Round 105: the weekly wage bill the board will tolerate, in thousands. */
@@ -7226,6 +7249,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   generateWeeklyNews(state);
   // Round 135: and the room fills up again, once there is something to ask.
   maybeAskPress(state);
+  // Round 168: and sometimes, when you are flying, the phone rings.
+  const approachLine = maybeApproach(state);
+  if (approachLine) events.push(approachLine);
 
   /* Round 157: halftime substitutions, read off the live match the manager
      actually paused. On a fast forward there are none, honestly. */
@@ -8255,6 +8281,90 @@ const VERDICTS: Record<'A' | 'B' | 'C' | 'D' | 'F', string[]> = {
   ],
 };
 
+/* ---------- Round 168: mid-season approaches ---------- */
+
+/** The suitor pool: bigger clubs than mine, era aware, custom-safe. */
+function approachSuitors(state: CareerState): ClubDef[] {
+  const eraHist = !!state.eraId && isHistoricEra(state.eraId);
+  const club = eraHist ? eraClubDefFor(state.clubName, state.eraId) : clubDefFor(state.clubName);
+  const everyClub = eraHist
+    ? (ERA_LEAGUES[state.eraId!] ?? []).flatMap(l => l.clubs.map(c => eraClubDefFor(c, state.eraId)))
+    : REAL_LEAGUES.flatMap(l => playableClubs(l.id));
+  const droppedClub = state.customClub && state.clubName === state.customClub.name
+    ? state.customClub.replacedClub
+    : null;
+  return everyClub.filter(c => c.tier < club.tier && c.name !== state.clubName && c.name !== droppedClub);
+}
+
+/**
+ * Once a week, after the football: is anyone courting me? Only when the
+ * season is old enough to mean something, only when I am overachieving or
+ * on a tear, one approach at a time, and never once a pre-agreement exists.
+ * Returns the event line for the week's report, or null.
+ */
+function maybeApproach(state: CareerState): string | null {
+  // Expiry first: an ignored approach quietly moves on.
+  if (state.approach && state.week >= state.approach.expiresWeek) {
+    const gone = state.approach.club;
+    state.approach = null;
+    state.aiHeadlines = [
+      `📞 ${gone} have stopped waiting for an answer and moved down their shortlist.`,
+      ...state.aiHeadlines,
+    ].slice(0, 8);
+  }
+  if (state.approach || state.pendingMove || state.sacked) return null;
+  const playedLeague = state.calendar.slice(0, state.week + 1).filter(e => e.type === 'league').length;
+  if (playedLeague < 8) return null;
+  const eraHist = !!state.eraId && isHistoricEra(state.eraId);
+  const club = eraHist ? eraClubDefFor(state.clubName, state.eraId) : clubDefFor(state.clubName);
+  const pos = leaguePosition(state);
+  const overshoot = club.expectation - pos;
+  const hotForm = state.form.slice(-5).filter(r => r === 'W').length >= 4;
+  if (overshoot < 3 && !hotForm) return null;
+  if (Math.random() > 0.06) return null;
+  const suitor = pick(shuffle(approachSuitors(state)).slice(0, 6));
+  if (!suitor) return null;
+  const sLeague = (eraHist && eraLeagueOf(suitor.name, state.eraId)) || leagueOf(suitor.name);
+  const ask = leagueDemand(suitor.expectation, suitor.tier, sLeague.clubs.length, sLeague, titleGapFor(suitor.name, sLeague, state.eraId), state.eraId);
+  state.approach = {
+    club: suitor.name,
+    leagueName: sLeague.name,
+    tierLabel: TIER_INFO[suitor.tier].label,
+    blurb: `${TIER_INFO[suitor.tier].emoji} ${TIER_INFO[suitor.tier].label} club · ${sLeague.name} · ${money(suitor.budget)} budget · the board wants: ${ask.label}`,
+    week: state.week,
+    expiresWeek: state.week + 5,
+  };
+  return `📞 ${suitor.name} have made an approach for you. Answer it from the Manager panel before it goes cold.`;
+}
+
+/**
+ * Answer the live approach. Committing shakes hands on a summer move: the
+ * pre-agreement leads your season-end offers, the news breaks, and the
+ * board's confidence takes the hit a lame duck manager takes. Declining
+ * buys a little boardroom goodwill and the story dies.
+ */
+export function respondApproach(career: CareerState, commit: boolean): CareerState {
+  const state: CareerState = { ...career };
+  const app = state.approach;
+  if (!app) return career;
+  state.approach = null;
+  if (commit) {
+    state.pendingMove = { club: app.club, blurb: app.blurb };
+    state.boardConfidence = clamp(state.boardConfidence - 6, 0, 100);
+    state.aiHeadlines = [
+      `🤝 Done deal for the summer: you will take over at ${app.club} when the season ends. The ${state.clubName} board heard it from the radio, and they are furious.`,
+      ...state.aiHeadlines,
+    ].slice(0, 8);
+  } else {
+    state.boardConfidence = clamp(state.boardConfidence + 2, 0, 100);
+    state.aiHeadlines = [
+      `🙏 You turned ${app.club} down flat. "My work at ${state.clubName} is not finished." The board noticed.`,
+      ...state.aiHeadlines,
+    ].slice(0, 8);
+  }
+  return state;
+}
+
 /**
  * Wraps up the season: final standings, league title check, verdict, awards,
  * job offers, history entry. Stores the summary on state.pendingSummary so a
@@ -8307,6 +8417,24 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   }));
 
   const offers: JobOffer[] = [];
+  /* Round 168: the summer pre-agreement leads the offers, honored even in a
+     flat season, because you shook hands on it. The one out is a genuine
+     collapse: finish six or more places below expectation and they watched
+     it happen and walk away, publicly. */
+  if (state.pendingMove) {
+    if (position - club.expectation >= 6) {
+      state.aiHeadlines = [
+        `📰 ${state.pendingMove.club} have walked away from their pre-agreement with you after the collapse. Their statement is one sentence long.`,
+        ...state.aiHeadlines,
+      ].slice(0, 8);
+      state.pendingMove = null;
+    } else {
+      offers.push({
+        club: state.pendingMove.club,
+        blurb: `🤝 The pre-agreement you shook hands on mid-season · ${state.pendingMove.blurb}`,
+      });
+    }
+  }
   if (overshoot >= 2 || seasonTrophies.length > 0) {
     // Round 70: suitors can come from any of the five leagues now.
     // Round 146: inside a historic save they come from the era's own two
@@ -8320,7 +8448,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     const droppedClub = state.customClub && state.clubName === state.customClub.name
       ? state.customClub.replacedClub
       : null;
-    const suitors = shuffle(everyClub.filter(c => c.tier < club.tier && c.name !== state.clubName && c.name !== droppedClub));
+    const suitors = shuffle(everyClub.filter(c => c.tier < club.tier && c.name !== state.clubName && c.name !== droppedClub && c.name !== offers[0]?.club));
     for (const s of suitors.slice(0, ri(1, 2))) {
       const myLeague = careerLeagueOf(state);
       const abroad = !myLeague.clubs.includes(s.name);
@@ -8886,6 +9014,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   state.uclWorld = initUclWorld(state);
   // Round 165: a fresh golden boot race too (the new table is all zeros).
   state.scorerRace = initScorerRace(state);
+  // Round 168: last season's phone calls do not follow you into the new one.
+  state.approach = null;
+  state.pendingMove = null;
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);

@@ -147,8 +147,23 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   projection, catch-up, rollover redraw, flag map coverage both directions) and its first
   run caught the pool being one group short and the unmapped 2. Bundesliga id. Browser
   probe 14 for 14 on the real built site.
-- CM-10 A job offers screen in season (offers exist at season end; he wants a place where
-  approaches land during the season too).
+- CM-10 **DONE, Round 168: mid-season approaches.** When your stock runs hot (overachieving
+  the board's expectation by 3+ places, or four wins in the last five, after at least 8
+  league rounds) a bigger club calls: about 6 percent per week, one approach at a time,
+  never while a pre-agreement exists, suitors drawn from the same tier-ranked era-aware
+  pool the season-end offers use, custom-safe (a displaced club cannot call). The approach
+  lands in the week's events, lights the Manager tile, and sits in the Manager panel with
+  the suitor's stature, budget and named board demand. Committing is a SUMMER
+  pre-agreement, like real football's announced-in-March moves: the news breaks, your
+  current board drops 6 confidence, and at season end the pre-agreement leads the offers,
+  honored even in a flat season, with one out: finish 6+ places below expectation and they
+  publicly walk away. Declining pays +2 confidence and a loyalty headline. Ignored
+  approaches expire in 5 weeks with a shortlist headline. Nothing crosses the summer.
+  simApproaches (52nd harness) proves the gates: bigger-club-only suitors with named
+  demands, exact confidence costs both ways, the pre-agreement leading the offers and the
+  collapse voiding it, expiry, ZERO approaches across a doctored relegation season, and a
+  2010 save courted only by 2010 clubs. Browser probed 8 for 8 including answering the
+  card on the real page.
 - CM-11 **DONE, Round 164: the stats centre.** A Stats tile on the hub opens one screen with
   competition filter chips (All, League, the real cup name, Europe when the club is in it):
   the club's record in that view (P, W D L, scored, conceded, diff) derived from the fixture
@@ -524,8 +539,9 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, early afternoon | **Round 164** (the stats centre, CM-11: per-competition team record, leader cards, full sortable player lines, engine-level per-comp stat splits that cannot disagree with the season totals, plus the 14-vs-15 league count fix in the help and SEO copy). `RUN164.bat`, chain-guarded on 163. |
 | Packaged 2026-08-18, afternoon | **Round 165** (award races, CM-12: the golden boot board, the one-formula player of the season watch, the Ballon d'Or watch and all three honours named in the season review, era aware, race goals provably bounded by the simulated tables). `RUN165.bat`, chain-guarded on 164. |
 | Packaged 2026-08-18, later afternoon | **Round 166** (era legends rate like legends, the CM-5 rating half: prime Messi and Ronaldo at 97 above the modern best of 94, monotone load-time uplift, stature and values untouched, ageing ceiling follows the anchor). `RUN166.bat`, chain-guarded on 165. |
-| Packaged 2026-08-18, evening | **Round 167** (The Ticker, his S-2 ask: the site's own scrolling wire on top of every screen, personal save lines, daily rotation, live registry counts, hostile-save-proof). `RUN167.bat`, chain-guarded on 166. **SHIP25.bat is the current wrapper: it runs 157 through 167.** Older SHIP wrappers still work, then click the later RUN bats after. |
-| Next free round number | **168** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, evening | **Round 167** (The Ticker, his S-2 ask: the site's own scrolling wire on top of every screen, personal save lines, daily rotation, live registry counts, hostile-save-proof). `RUN167.bat`, chain-guarded on 166. |
+| Packaged 2026-08-18, night | **Round 168** (mid-season approaches, CM-10: hot managers get called by bigger clubs, commit for a summer pre-agreement the board hears about, honored or publicly withdrawn at season end, all gates harness-proven). `RUN168.bat`, chain-guarded on 167. **SHIP26.bat is the current wrapper: it runs 157 through 168.** Older SHIP wrappers still work, then click the later RUN bats after. |
+| Next free round number | **169** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

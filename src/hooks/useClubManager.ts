@@ -5,7 +5,7 @@ import {
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
   buildMarket, buyPlayer, autoPickXI, nextFixture, sortedTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
-  startNegotiation, makeOffer, walkAway, payClause, loanIn, acceptBid, rejectBid,
+  startNegotiation, makeOffer, walkAway, respondApproach, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
   resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
@@ -295,6 +295,11 @@ export function useClubManager() {
     setCareer(prev => (prev ? walkAway(prev) : prev));
   }, []);
 
+  /* Round 168: answer the mid-season approach from the Manager panel. */
+  const answerApproach = useCallback((commit: boolean) => {
+    setCareer(prev => (prev ? respondApproach(prev, commit) : prev));
+  }, []);
+
   const dismissNegotiation = useCallback(() => {
     setCareer(prev => (prev ? { ...prev, negotiation: null } : prev));
   }, []);
@@ -414,7 +419,7 @@ export function useClubManager() {
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
-    negotiate, offer, walk, dismissNegotiation, clause, loan,
+    negotiate, offer, walk, answerApproach, dismissNegotiation, clause, loan,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,

@@ -170,7 +170,7 @@ const ClubManager = () => {
               <p>🤝 <span className="font-semibold text-foreground">Tell every player what he is</span>: star man, key first teamer, rotation option, backup or one for the future. Each rung is a promise about minutes, and the dressing room keeps score over your last ten matches. Keep your word and they play for you. Break it and they sulk, drag the room down and hand in transfer requests. You can buy your way out of a promise, but it costs six weeks of his wages a rung.</p>
               <p>🎙️ <span className="font-semibold text-foreground">Front up to the press, and talk to your players.</span> The reporters only turn up when something has happened: a losing run, a man you have stopped picking, a club circling one of your stars, a derby, or the bookmakers making you favourite for the sack. Every answer spends one thing to buy another, so backing your players costs you with the board and calling them out costs you the dressing room, and talking big before a derby puts your words on the other lot's wall. Before every match and again at half time you pick a tone: calm them, fire them up, demand more, or the hairdryer. Read the afternoon right and they play above themselves. Read it wrong and you lose them, and the wrong one hurts more than the right one helps.</p>
               <p>💰 <span className="font-semibold text-foreground">Buy and sell in the summer and January windows.</span> Over 3,300 real players are on the market at their real values. Stay under budget and keep at least 14 players.</p>
-              <p>📉 <span className="font-semibold text-foreground">Watch the board confidence meter.</span> Fall too far below expectations and you're sacked. Overachieve and bigger clubs come calling, from any league in the game.</p>
+              <p>📉 <span className="font-semibold text-foreground">Watch the board confidence meter.</span> Fall too far below expectations and you're sacked. Overachieve and bigger clubs come calling, from any league in the game, and some of them call MID-SEASON: an approach lands in the Manager panel, and committing to it is a summer pre-agreement your current board will hear about on the radio. They can even walk away again if your season collapses after the handshake.</p>
               <p>🏆 <span className="font-semibold text-foreground">Season score</span> = league points + 10 per trophy (max 130). Careers span multiple seasons; your save is kept on this device.</p>
             </div>
           </HowToPlayPopover>
@@ -998,9 +998,9 @@ const ClubManager = () => {
                 onClick={() => setHubPanel('stats')}
               />
               <HubTile
-                icon="🧢" title="Manager"
-                value={`${c.careerStats.wins}W ${c.careerStats.losses}L`}
-                sub={c.careerStats.played > 0 ? `${Math.round((c.careerStats.wins / c.careerStats.played) * 100)}% win rate` : 'New in the job'}
+                icon="🧢" title="Manager" accent={!!c.approach}
+                value={c.approach ? '📞 A club is calling' : `${c.careerStats.wins}W ${c.careerStats.losses}L`}
+                sub={c.approach ? `${c.approach.club} want you` : c.careerStats.played > 0 ? `${Math.round((c.careerStats.wins / c.careerStats.played) * 100)}% win rate` : 'New in the job'}
                 onClick={() => setHubPanel('manager')}
               />
               <HubTile
@@ -1185,6 +1185,35 @@ const ClubManager = () => {
               )}
 
               {hubPanel === 'manager' && (
+                <>
+                {/* Round 168: mid-season approaches land here, his CM-10. */}
+                {c.approach && (
+                  <div className="bg-card border border-primary/50 rounded-xl p-3 mb-2">
+                    <div className="text-[10px] text-primary uppercase tracking-wider mb-1.5 font-bold">📞 An approach has come in</div>
+                    <p className="text-sm text-foreground font-bold mb-0.5">{c.approach.club} want you as their manager.</p>
+                    <p className="text-[11px] text-muted-foreground mb-2">{c.approach.blurb}</p>
+                    <p className="text-[10px] text-muted-foreground mb-2">Commit and it becomes a summer pre-agreement: the move happens when the season ends, the news breaks today, and your current board will not love it. Ignore it and they move on in a few weeks.</p>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => g.answerApproach(true)}
+                        className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
+                      >
+                        🤝 Shake hands for the summer
+                      </button>
+                      <button
+                        onClick={() => g.answerApproach(false)}
+                        className="flex-1 py-2 rounded-lg border border-border bg-card text-xs font-bold text-foreground hover:border-primary transition-colors"
+                      >
+                        Turn them down
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {c.pendingMove && (
+                  <div className="bg-card border border-gold/40 rounded-xl p-3 mb-2 text-xs text-foreground">
+                    🤝 <span className="font-bold">Pre-agreement signed:</span> you take over at <span className="font-bold">{c.pendingMove.club}</span> when the season ends. Finish the job here first.
+                  </div>
+                )}
                 <div className="bg-card border border-border rounded-xl p-3">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💼 Manager career</div>
                   <div className="grid grid-cols-3 gap-2 text-center mb-2">
@@ -1220,6 +1249,7 @@ const ClubManager = () => {
                     {c.careerStats.played === 0 && <p>Take charge of your first match and the numbers start here.</p>}
                   </div>
                 </div>
+                </>
               )}
             </div>
           )}
