@@ -175,6 +175,7 @@ const ClubManager = () => {
               <p>📝 <span className="font-semibold text-foreground">Every player is on a real deal.</span> Wages sit on a curve, the board sets a ceiling, and contracts tick down: a man you never sit down with walks for free in the summer, with his sale value already collapsed. The contracts desk on the Squad tab re-signs anyone in his final year, two ways: the full-wage deal, or 12 percent cheaper with a release clause written in at 1.5 times his value that day. The clause is a real exit door. Any club can pay it, it cannot be rejected or blocked, an unanswered one executes itself on deadline day, and the only way to delete it is a full price renewal later. Grow a star past his own clause and the phone will ring.</p>
               <p>🤝 <span className="font-semibold text-foreground">Sponsors pay the other half of the bills.</span> The Finances desk puts three shirt sponsor offers on the table whenever the club has no deal, and they are three different shapes: the most guaranteed money, less money with a real bonus for winning the league, or the smallest cheque locked in for four seasons with a little for a top half finish. The money lands in the same kitty as everything else, once a season, and the bonus lands at the season end that earns it. The offers grow as the club does: stature, the league, Europe and the trophy cabinet all count. Leave the club and the deal stays behind, because it was the club's and not yours.</p>
               <p>🎟️ <span className="font-semibold text-foreground">The club earns while you manage.</span> Every home crowd pays a gate into the transfer kitty: attendance times your ticket prices. The Finances desk sets the policy (fair prices fill the ground for less a head, premium squeezes more from fewer) and expands the ground up to three times, each one growing your crowds from the next home game. The board reads ambition into a bigger ground, and it is all one kitty: gates in, transfers, scouts, the academy and the builders out.</p>
+              <p>🧳 <span className="font-semibold text-foreground">And if they do sack you, that is not the end.</span> You go out of work with your record intact and clubs start calling: real clubs from the real pyramid, with the job they are actually offering written out. Trophies and title finishes open doors, relegations shut them. Every week you wait for a better job cools the market a little, and somebody always takes a chance on you in the end. Take one and you start next season there.</p>
               <p>📉 <span className="font-semibold text-foreground">Watch the board confidence meter.</span> Fall too far below expectations and you're sacked. Overachieve and bigger clubs come calling, from any league in the game, and some of them call MID-SEASON: an approach lands in the Manager panel, and committing to it is a summer pre-agreement your current board will hear about on the radio. They can even walk away again if your season collapses after the handshake.</p>
               <p>🏆 <span className="font-semibold text-foreground">Season score</span> = league points + 10 per trophy (max 130). Careers span multiple seasons; your save is kept on this device.</p>
             </div>
@@ -740,6 +741,45 @@ const ClubManager = () => {
           onPlayAgain={g.startNew}
           playAgainLabel="Start New Career"
         >
+          {/* Round 201: the wilderness. A sacking used to end the save here,
+              which is the one moment in a manager's life that should not end
+              anything. Your record follows you and decides who calls. */}
+          <div data-wilderness className="text-left rounded-xl border border-border bg-card p-3 mb-3">
+            <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">🧳 Out of work</div>
+            <p className="text-xs text-foreground">
+              {(c.wilderness?.weeksOut ?? 0) === 0
+                ? 'You are between jobs. Clubs will call, but the longer you sit out the quieter the phone gets.'
+                : `${c.wilderness?.weeksOut} week${c.wilderness?.weeksOut === 1 ? '' : 's'} without a club. ${(c.wilderness?.offers.length ?? 0) > 0 ? 'The phone has rung.' : 'Nobody has called yet.'}`}
+            </p>
+            <div className="mt-2 space-y-1.5">
+              {(c.wilderness?.offers ?? []).map(o => (
+                <div key={o.club} data-wilderness-offer={o.club} className="rounded-lg border border-border bg-background/40 p-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[11px] font-bold text-foreground truncate">{o.club}</span>
+                    <span className="text-[9px] text-muted-foreground shrink-0">{o.league}</span>
+                  </div>
+                  <p className="text-[9px] text-muted-foreground mt-0.5 leading-snug">{o.reason}</p>
+                  <p className="text-[9px] text-foreground mt-0.5 leading-snug"><span className="text-muted-foreground">The brief:</span> {o.brief}</p>
+                  <button
+                    onClick={() => g.takeJob(o.club)}
+                    className="mt-1.5 w-full py-1.5 rounded-lg text-[11px] font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+                  >
+                    Take the {o.club} job
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={g.waitAWeek}
+              data-wait-week
+              className="mt-2 w-full py-2 rounded-lg text-xs font-bold bg-secondary text-foreground hover:opacity-90 transition-opacity"
+            >
+              ⏭️ Wait a week for the phone to ring
+            </button>
+            <p className="text-[9px] text-muted-foreground mt-1.5">
+              Trophies and promotions open doors; relegations shut them. Waiting costs you standing, so the job you hold out for may not be there when you finally say yes. Somebody always needs a manager in the end.
+            </p>
+          </div>
           <div className="text-left space-y-1.5 mb-2">
             <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Career record</div>
             {c.history.length === 0 && <p className="text-xs text-muted-foreground">Sacked before finishing a single season. Brutal.</p>}

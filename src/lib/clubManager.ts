@@ -1,4 +1,9 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
+/* Round 201: the wilderness reuses the manager job market the retired
+   player path already had, so a sacked manager gets real clubs with real
+   briefs instead of a bespoke second offer engine. */
+import { realJobOffers, allOfferClubs } from '@/lib/managerJobMarket';
+import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier } from '@/lib/managerOffers';
 import type { Player, Position } from '@/types/game';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
 import type { Formation, FormationSlot } from '@/lib/squadDeal';
@@ -942,6 +947,135 @@ export const TICKET_TIERS = [
   { label: 'Premium', emoji: '\u{1F4BC}', priceMult: 1.3, crowdMult: 0.91, blurb: 'More per seat, a few empty ones up in the corners.' },
 ] as const;
 
+/* ---------- Round 201: the wilderness, what happens after the sack ----------
+
+   Being sacked ended the save. That is the one moment in a manager's life
+   that should NOT end anything: getting the phone call, sitting out the
+   rest of the season, and working your way back in at a smaller club is
+   the most recognisable arc the job has, and this game simply stopped.
+
+   So a sacking now opens the wilderness. Your record follows you, good and
+   bad, and it decides who calls. The offers come from the SAME engine the
+   retired-player manager path uses (managerJobMarket + managerOffers), so
+   they are real clubs from the real pyramid with real briefs, sized by
+   what you actually did: trophies and promotions open doors, relegations
+   shut them, and a big job lost with a decent record still counts for
+   more than a small one lost badly.
+
+   The tension is waiting. Each week out, another club may call, but your
+   standing decays a little, so holding out for the job you want costs you
+   the jobs you could have had. There is a floor: the market never dries up
+   completely, because a manager who can never work again is a dead save
+   wearing a different hat, which is the thing this round exists to end.
+
+   Taking a job starts the NEXT season at that club through the same
+   rollover every other move uses. Nobody takes over in March here, which
+   is the honest limit of an engine built around whole seasons. */
+
+export interface WildernessState {
+  /** Weeks spent out of work since the sacking. */
+  weeksOut: number;
+  /** The club that let you go, who will not be calling. */
+  formerClub: string;
+  /** Live offers, best first. These are market offers (club, brief,
+   *  reason, budget), not the one line Approach the hub uses. */
+  offers: MarketJobOffer[];
+  /** Names already offered, so the same club does not call twice. */
+  seen: string[];
+}
+
+/** The manager profile a Club Manager career presents to the job market. */
+export function wildernessProfile(career: CareerState): ManagerProfile {
+  /* SeasonRecord keeps season, club, position, points and trophies, so
+     promotions and relegations are read off the finishes rather than
+     invented: a title in a season is the promotion story at the lower end,
+     and a bottom three finish is the relegation one. The table size is not
+     stored per season, so twenty is the honest divisor here. */
+  const promotions = career.history.filter(h => h.position === 1).length;
+  const relegations = career.history.filter(h => h.position >= 18).length;
+  const def = clubDefFor(career.clubName);
+  const out = career.wilderness?.weeksOut ?? 0;
+  return {
+    playingRep: 0,
+    seasonsSinceRetired: 0,
+    managerTrophies: career.trophies.length,
+    promotions,
+    relegations,
+    seasonsManaged: Math.max(0, career.season - 1) + (career.history.length ? 0 : 0),
+    lastTier: def.tier as ClubTier,
+    departure: (career.history[career.history.length - 1]?.position ?? 0) >= 18 ? 'relegated' : 'sacked',
+    /* A week out is not a season out, but the market does cool. Four weeks
+       of silence reads to a board like a season on the sofa. */
+    seasonsOut: Math.floor(out / 4),
+    nationality: 'England',
+    workedIn: [...new Set(career.history.map(h => h.club))].slice(0, 6),
+  };
+}
+
+/** Open the wilderness. Called the moment the board pulls the trigger. */
+export function enterWilderness(career: CareerState): CareerState {
+  if (career.wilderness) return career;
+  return {
+    ...career,
+    wilderness: { weeksOut: 0, formerClub: career.clubName, offers: [], seen: [] },
+  };
+}
+
+/**
+ * Another week without a job. Offers may arrive, and standing quietly
+ * slides, so waiting is a real cost rather than a free reroll. The market
+ * never closes: at eight weeks and no offers at all, the floor opens a job
+ * somewhere, because a save that can never continue is not a game.
+ */
+export function wildernessWeek(career: CareerState, rng: () => number = Math.random): CareerState {
+  const w = career.wilderness ?? enterWilderness(career).wilderness!;
+  const weeksOut = w.weeksOut + 1;
+  const profile = wildernessProfile({ ...career, wilderness: { ...w, weeksOut } });
+  const exclude = [w.formerClub, ...w.seen];
+  let offers: MarketJobOffer[] = [...w.offers];
+  const fresh: MarketJobOffer[] = realJobOffers(profile, rng, exclude);
+  /* One call a week at most: a flood of offers would make waiting free. */
+  if (fresh.length && rng() < 0.55) {
+    offers = [...offers, fresh[0]].slice(-4);
+  }
+  if (!offers.length && weeksOut >= 8) {
+    /* The floor. Somebody always needs a manager in the end. */
+    const bottom = allOfferClubs()
+      .filter(c => c.tier >= 3 && !exclude.includes(c.name))
+      .sort((a, b) => b.tier - a.tier);
+    const pick = bottom[Math.floor(rng() * Math.max(1, Math.min(20, bottom.length)))] ?? bottom[0];
+    if (pick) {
+      offers = [{
+        club: pick.name, country: pick.country, tier: pick.tier as ClubTier, league: pick.league,
+        brief: 'Steady the ship and keep us up. Nobody here expects miracles.',
+        reason: 'They need a manager, you need a job, and neither of you is in a position to be fussy.',
+        budget: pick.budget, keenness: 40,
+      }] as MarketJobOffer[];
+    }
+  }
+  return {
+    ...career,
+    wilderness: {
+      ...w,
+      weeksOut,
+      offers,
+      seen: [...new Set([...w.seen, ...offers.map(o => o.club)])],
+    },
+  };
+}
+
+/**
+ * Take one. The new job starts next season through the same rollover every
+ * other move uses, which is why this returns whatever startNextSeason makes
+ * of it rather than transplanting a manager into a half played table.
+ */
+export function acceptWildernessJob(career: CareerState, club: string): CareerState | null {
+  const w = career.wilderness;
+  if (!w || !w.offers.some(o => o.club === club)) return null;
+  const next = startNextSeason({ ...career, sacked: false }, club);
+  return { ...next, sacked: false, wilderness: null };
+}
+
 /* ---------- Round 200: sponsors, the last line of his CM epic ----------
 
    The finance layer his CM-8 asked for shipped in Round 171 with gates,
@@ -1247,6 +1381,8 @@ export interface CareerState {
   finance?: ClubFinance;
   /** Round 200: the commercial deal, or none while the club is shopping. */
   sponsor?: SponsorDeal | null;
+  /** Round 201: set while you are out of work, null while you are employed. */
+  wilderness?: WildernessState | null;
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
   /** Round 105: the weekly wage bill the board will tolerate, in thousands. */
