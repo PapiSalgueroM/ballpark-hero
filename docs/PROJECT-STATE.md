@@ -160,8 +160,24 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   for byte unchanged. simEra2010 section 1 asserts identity THROUGH the uplift, and its new
   section 6 pins all of it; section 4's balance IMPROVED (Barcelona finishes 2,2,1,1,1,1).
   Browser probed: Messi reads 97 on the squad screen of a real 2010 save.
-  STILL OPEN from CM-5: eras 2015 and 2005 by the bakeEra2010 recipe (data floor 2004, no
-  honest 2000), and more era leagues.
+  **2015 DONE, Round 175: the Leicester season.** The era picker's third tile is 2015-16,
+  built by the same recipe as 2010 (scripts/bakeEra2015.mjs): 767 real year-2015 players
+  across all 40 clubs of that Premier League and La Liga, two-source verified memberships,
+  and 56 verified summer 2015 window corrections (25 in-world moves like Sterling to City
+  and Pedro to Chelsea, 17 departures like Di Maria and Xavi, 14 arrivals like De Bruyne,
+  Kante, Son, Firmino and Payet, every one checked against the table's own year-2016 rows).
+  Two data honesty calls documented in the bake header: Wes Morgan has NO year-2015 row at
+  all so the champions' captain is absent rather than invented, and two first-choice
+  keepers' rows sit under U21 club variants (Schmeichel, Mannone), folded in with the
+  variant mapped and the reasoning written down. Era uplift pivot 80 gain 0.6, measured off
+  the bake: raw Messi and Ronaldo 91 lift to 98 above the modern best of 94, pre-title
+  Vardy (74), Mahrez (78) and Kante (76) sit below the pivot untouched, which IS the story.
+  simEra2015 is the 55th harness (six sections, including the first cross-past check: 226
+  names shared between 2010 and 2015 all age about five years, with verified namesakes
+  allowlisted) and playEra2015 walks the UI branch (23 checks, both nations, the thin
+  Las Palmas marker, August Leicester NOT told to win, Vardy and Schmeichel in the squad).
+  STILL OPEN from CM-5: era 2005 by the same recipe (data floor 2004, no honest 2000), and
+  more era leagues.
 - CM-6 More leagues (wave 3 list in item 6 of the previous review, densities measured).
 - CM-7 **MOSTLY DONE, Round 161: structured deals and deep filters.** Negotiations take
   PACKAGES now: cash plus add-ons (weigh 60p on the pound, queue up and come due in later
@@ -613,7 +629,8 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, evening again | **Round 172** (era starts for NFL and NBA My Career, his "add eras to nfl and nba and eveyr sport": the 2005 NFL and the 29 team 2003-04 NBA, two-source verified franchise lists, sealed era worlds end to end including trades, free agency, life sim rivals and the corruption arc, era money at documented scale, era pickers on both create screens). `RUN172.bat`, chain-guarded on 171. **SHIP30.bat is the current wrapper: it runs 157 through 172.** |
 | Packaged 2026-08-18, night again | **Round 173** (era starts for NHL and MLB, completing "add eras to nfl and nba and eveyr sport" across all four US sports: the 2006-07 NHL and the 2004 MLB, two-source verified, sealed era worlds end to end, era money at documented scales, era pickers on both create screens. Plus a simApproaches deflake its suite run caught: the "nobody courts a struggler" control now clears any approach earned during its ten UNDOCTORED setup weeks before counting, because a genuinely hot Everton start could earn a real call the section then blamed on the struggler. And for the record: simOpposition read 1.64 against its 1.5 equivalence tolerance in this suite run and 0.70 on the immediate rerun, same unseeded tail as Round 171, error bar 1.02, no Club Manager path was touched this round). `RUN173.bat`, chain-guarded on 172. **SHIP31.bat is the current wrapper: it runs 157 through 173.** |
 | Packaged 2026-08-18, late night | **Round 174** (the era words: all four sports' SEO copy and FAQs teach the throwbacks with the verified franchise facts, plus the stale-copy sweep it surfaced: the NFL page's 3-position claim, the NBA page's G/F/C claim, and leftover duplicate create steps in the hockey and baseball howToPlay lists). `RUN174.bat`, chain-guarded on 173. **SHIP32.bat is the current wrapper: it runs 157 through 174.** |
-| Next free round number | **175** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, past midnight | **Round 175** (the 2015-16 era for Club Manager, CM-5's biggest remaining half: the Leicester season baked from 767 real year-2015 rows with 56 two-way-verified window corrections, era uplift at measured 0.6, the What's New page catching up on all the era work, and two new harnesses: simEra2015 and the playEra2015 browser walk. Plus a simUsCoaching deflake its suite run caught: section 4's offer-count noise margin sat at 1.7 sigma on the tightest pair at 300 samples, so the row sample grew to 1500 where the same margin sits past 3, with the measurement in the comment; the deterministic standing check was always the real assertion). `RUN175.bat`, chain-guarded on 174. **SHIP33.bat is the current wrapper: it runs 157 through 175.** |
+| Next free round number | **176** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

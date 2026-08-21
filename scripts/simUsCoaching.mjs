@@ -167,14 +167,20 @@ console.log('4) Every season out of work costs you');
 {
   const rows = [0, 1, 2, 3, 4].map(out => {
     const p = profile('nhl', { playingRep: 58, seasonsCoached: 8, playoffBerths: 3, playoffRoundsWon: 2, lastTier: 2, departure: 'firedLosing', seasonsOut: out });
-    const s = sample(p, 300);
+    /* 1500 cycles per row, not 300. At 300 the between-row true gaps run as
+       small as a few hundredths of an offer while the difference of two
+       sample means carries a standard error near 0.06, so the +0.08 noise
+       margin sat around 1.7 sigma on the tightest pair and tripped about
+       once in thirty suite runs (it did, 2026-08-18, on a round that
+       touched no coaching file). At 1500 the difference SE is about 0.026
+       and the same margin sits past 3 sigma. The deterministic standing
+       check below still carries the real monotonicity assertion. */
+    const s = sample(p, 1500);
     return { out, standing: coachStanding(p), ceiling: bestCoachTierAvailable(p), avg: s.avg, empty: s.emptyPct };
   });
   for (const r of rows) console.log(`   ${r.out} seasons out: standing ${r.standing.toFixed(1).padStart(5)}, ceiling T${r.ceiling}, ${r.avg.toFixed(2)} offers, ${r.empty.toFixed(0)} percent empty`);
   for (let i = 1; i < rows.length; i++) {
     if (rows[i].standing >= rows[i - 1].standing) fail(`sitting out ${rows[i].out} seasons did not cost more than ${rows[i - 1].out}`);
-    // Offer counts are a small sample roll, so allow a little noise and let
-    // the deterministic standing check above carry the real assertion.
     if (rows[i].avg > rows[i - 1].avg + 0.08) fail('offers went UP after another season out of work');
   }
   if (rows[4].empty < 40) fail('four seasons out and the phone still rings most cycles');

@@ -160,7 +160,7 @@ const ClubManager = () => {
           <HowToPlayPopover title="How to Play Club Manager" triggerSide="right">
             <div className="space-y-3 text-left">
               <p>🌍 <span className="font-semibold text-foreground">Pick any club in 15 real leagues.</span> The big five (2026-27 lineups with promotions and relegations applied), the EFL Championship and the 2. Bundesliga, the Primeira Liga, the Scottish Premiership, the Süper Lig, the Belgian Pro League, the Saudi Pro League, both MLS conferences and the Eredivisie: 270 clubs and over 3,300 real players, each squad at its real market values as of August 2026, after the summer window. Giants get huge budgets and zero patience; underdogs get small budgets and a low bar.</p>
-              <p>📅 <span className="font-semibold text-foreground">Pick when you start.</span> 2026-27 is the real thing, every name and every value. Or start in 2010-11: the real Premier League and La Liga of that season, all 40 clubs, over 800 real players at their real 2010 ages and values, with the famous summer moves applied. The era's giants rate like the legends they are: prime Messi and prime Ronaldo sit at 97, above anyone in the current generation, with the whole era scaled around them. It is a sealed world, so no 2026 player can leak into your 2010 market, and there is no Conference League there because it did not exist yet. We only offer a past we hold real data for, and we never invent one. As your save runs deep, players age, retire and get replaced; anyone the game makes up is marked MADE UP wherever he appears, so you always know who is real.</p>
+              <p>📅 <span className="font-semibold text-foreground">Pick when you start.</span> 2026-27 is the real thing, every name and every value. Or go back: 2015-16 is the season Leicester won at 5000 to 1, with Vardy, Mahrez and Kante at their real pre-title values, MSN at Barcelona and De Bruyne newly at City; 2010-11 is prime Messi, Mourinho's Madrid and Rooney's United. Each past season is the real Premier League and La Liga of that year, all 40 clubs, hundreds of real players at their real ages and values from that year, with the famous summer moves applied. Each era's giants rate like the legends they are, above anyone in the current generation, with the whole era scaled around them. Every era is a sealed world, so no 2026 player can leak into your past market, and there is no Conference League back there because it did not exist yet. We only offer a past we hold real data for, and we never invent one. As your save runs deep, players age, retire and get replaced; anyone the game makes up is marked MADE UP wherever he appears, so you always know who is real.</p>
               <p>✨ <span className="font-semibold text-foreground">Or create your own club.</span> Any league, either era: name it, build the crest (shape, pattern, your colors, your initials), name your stadium, and choose your backing. Your club takes the league place of the division's weakest side and starts with 24 generated players, all marked as made up. Every real player stays real, and the market is where you sign them. The board reads your squad, not your wallet: big money in a smaller league gets told to win it, the same money in the Premier League gets told to survive first.</p>
               <p>👟 <span className="font-semibold text-foreground">Players age and they stop playing.</span> A thirty year old slips a point a season, a thirty five year old slips three or four, and how fast depends on where he plays: keepers last for years, wingers and full backs go first. Somewhere around thirty four to thirty seven most of them retire for good. Sign the young ones early, get your kids in, or your best XI will quietly rot underneath you.</p>
               <p>📋 <span className="font-semibold text-foreground">The board names the actual prize</span>: win the league, qualify for the Champions League or Europa League, reach the top half, or stay up, plus a cup target, a rival to finish above, and squad mandates. Hit them and your stock rises; miss them and the confidence meter drains.</p>
@@ -181,9 +181,9 @@ const ClubManager = () => {
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
         <GameSeoContent
           title="Club Manager: Football Management Sim"
-          description="A full club-management sim in your browser: 270 clubs across 15 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS and the Belgian Pro League, each with its real squad and market values as of August 2026. Manage today or in the real 2010-11 season, or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
+          description="A full club-management sim in your browser: 270 clubs across 15 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS and the Belgian Pro League, each with its real squad and market values as of August 2026. Manage today, in the real 2015-16 Leicester season, or in the real 2010-11 season, or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
           howToPlay={[
-            'Pick your era: 2026-27 with real squads, or the real 2010-11 Premier League and La Liga.',
+            'Pick your era: 2026-27 with real squads, or the real 2015-16 or 2010-11 Premier League and La Liga.',
             'Pick your nation, league and club (270 clubs across 15 real leagues), or create your own club with its own crest, stadium and budget.',
             'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
             'Set your formation, mentality and XI, then play through the full season week by week.',
@@ -255,7 +255,7 @@ const ClubManager = () => {
         <header className="text-center mb-6">
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">CLUB MANAGER</h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            {REAL_LEAGUES.length} real league tables and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} clubs today, squads as of {CM_ROSTER_META.asOf}, plus the real 2010-11 season. Pick when you start, then your nation, your league, your club.
+            {REAL_LEAGUES.length} real league tables and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} clubs today, squads as of {CM_ROSTER_META.asOf}, plus the real 2015-16 and 2010-11 seasons. Pick when you start, then your nation, your league, your club.
           </p>
         </header>
 
@@ -314,9 +314,10 @@ const ClubManager = () => {
                 (nobody knows the future). Round 146 delivered the first real
                 past season from real historical records. */}
             <p className="text-[9px] text-muted-foreground text-center mt-2.5 leading-snug max-w-lg mx-auto">
-              No future eras, ever: nobody knows the future and we will not pretend to. The 2010-11 season is built from
-              real market data records, real squads with their real 2010 ages and values, not recreations. More classic
-              seasons arrive as we verify their data, and none will carry an invented name on the teamsheet.
+              No future eras, ever: nobody knows the future and we will not pretend to. The 2015-16 and 2010-11 seasons
+              are built from real market data records, real squads with their real ages and values from those years, not
+              recreations. More classic seasons arrive as we verify their data, and none will carry an invented name on
+              the teamsheet.
             </p>
           </div>
         )}

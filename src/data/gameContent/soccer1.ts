@@ -286,10 +286,10 @@ export const SOCCER_CONTENT_1: GameContentMap = {
   '/club-manager': {
     intro: [
       "Club Manager is the site's big one: a full management sim in your browser. 270 real clubs across 15 leagues in 12 countries, over 3,300 real players with their real August 2026 ages and market values, and a board that talks like a board.",
-      "Pick when you start too: today's game, or the real 2010-11 season with all 40 Premier League and La Liga clubs and 800 plus real year-2010 players, prime Messi and Rooney included. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.",
+      "Pick when you start too: today's game, the real 2015-16 season (the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona), or the real 2010-11 season with prime Messi and Rooney. Each past season holds all 40 Premier League and La Liga clubs and hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.",
     ],
     howToPlay: [
-      "Pick your era (today or 2010-11), then your nation, your league, and your club. Every tile quotes what that board will actually demand.",
+      "Pick your era (today, 2015-16 or 2010-11), then your nation, your league, and your club. Every tile quotes what that board will actually demand.",
       "Or tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium, and one of three budgets. Your club takes the league place of the division's weakest side.",
       "Before each match set formation, mentality and your starting XI, or use auto pick, and give a team talk when it matters.",
       "Play the match, read the report, answer the press, and manage the dressing room between games.",
@@ -299,7 +299,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     rules: [
       "Boards demand the actual prize, never a number: win the league, qualify for the Champions League or Europa League, reach mid table, or stay up, plus cup targets, a rival to finish above, and squad-building mandates.",
       "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
-      "The 2010-11 era is a sealed world: real 2010 squads and values, no Conference League because it did not exist, and no 2026 player can leak into your market.",
+      "Each past era is a sealed world: real squads and values from its own year, no Conference League because it did not exist back then, and no 2026 player can leak into your market. In 2015-16 the era's giants rate like the legends they were, prime Messi and Ronaldo above anyone today, while Leicester start at their honest pre-title level.",
       "A club you create starts with 24 generated players, honestly marked as made up. Every real player stays real, and the transfer market is where you sign them. Budgets run 15, 40 or 90 million pounds.",
       "Board confidence starts at 60 of 100 and swings with results, cup runs and position against expectation. At zero you are sacked.",
       "Players carry contracts, wages, form, fitness and opinions. They retire, walk on expired deals, and your academy feeds the first team if you invest in it.",

@@ -46,6 +46,7 @@ import type { Position } from '@/types/game';
 import { CM_ROSTERS, CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 import { ERA2010_ROSTERS, ERA2010_META, ERA2010_PARTIAL } from '@/data/clubManagerEra2010';
+import { ERA2015_ROSTERS, ERA2015_META, ERA2015_PARTIAL } from '@/data/clubManagerEra2015';
 
 /**
  * The calendar year the baked rosters describe. CM_ROSTER_META.asOf reads
@@ -447,10 +448,12 @@ function generateFor(club: string, slot: ProjectedPlayer, year: number, idx: num
  */
 export const HISTORIC_ROSTERS: Record<string, Record<string, BakedPlayer[]>> = {
   era2010: ERA2010_ROSTERS,
+  era2015: ERA2015_ROSTERS,
 };
 
 export const HISTORIC_PARTIAL: Record<string, string[]> = {
   era2010: ERA2010_PARTIAL,
+  era2015: ERA2015_PARTIAL,
 };
 
 export function isHistoricEra(id: string | undefined): boolean {
@@ -472,6 +475,12 @@ export function isHistoricEra(id: string | undefined): boolean {
  */
 const ERA_RATING_UPLIFT: Record<string, { pivot: number; gain: number }> = {
   era2010: { pivot: 80, gain: 0.7 },
+  /* Round 175, calibrated off the measured 2015 bake: raw Messi and Ronaldo
+     read 91 (2015 money runs closer to 2026 money than 2010 money did, so
+     the gain is gentler than 2010's). At 0.6 they land at 98, peak MSN-era
+     numbers above the modern best of 94, with Neymar and Suarez at 96 and
+     the pre-title Leicester squad untouched below the pivot. */
+  era2015: { pivot: 80, gain: 0.6 },
 };
 
 export function eraUpliftRating(eraId: string | undefined, r: number): number {
@@ -659,6 +668,14 @@ export const CM_ERAS: CMEra[] = [
     emoji: '\u{1F4C5}',
     blurb: 'Today. Every squad exactly as it really is.',
     honesty: 'Real data. Every name, age and value is the real thing as of August 2026.',
+  },
+  {
+    id: 'era2015',
+    label: seasonLabel(2015),
+    startYear: 2015,
+    emoji: '\u{1F98A}',
+    blurb: 'The Leicester season. MSN Barcelona, Vardy at 5000 to 1. Premier League and La Liga, 2015-16.',
+    honesty: `Real data. ${ERA2015_META.players} real players with their real 2015 ages and values, all 40 clubs of the 2015-16 Premier League and La Liga. Thin squads are padded with made up youth players and say so.`,
   },
   {
     id: 'era2010',

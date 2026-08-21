@@ -1567,6 +1567,22 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
       clubs: ['Almería', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Hércules', 'Levante', 'Málaga', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Sporting Gijón', 'Valencia', 'Villarreal', 'Zaragoza'],
     },
   ],
+  /* Round 175: the 2015-16 season, memberships verified against the season
+     records (Wikipedia and worldfootball final tables, checked 2026-08-18)
+     AND against the market values table itself (every club dense with real
+     year-2015 players; Las Palmas is the one thin squad and the picker says
+     so). Names reuse the 2026 and 2010 spellings where the club exists
+     there, so colors and rivalries carry over. */
+  era2015: [
+    {
+      id: 'premier2015', name: 'Premier League', cupName: 'FA Cup', euro: true,
+      clubs: ['Arsenal', 'Aston Villa', 'Bournemouth', 'Chelsea', 'Crystal Palace', 'Everton', 'Leicester City', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Norwich City', 'Southampton', 'Stoke City', 'Sunderland', 'Swansea City', 'Tottenham', 'Watford', 'West Brom', 'West Ham'],
+    },
+    {
+      id: 'laliga2015', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
+      clubs: ['Athletic Club', 'Atlético Madrid', 'Barcelona', 'Celta Vigo', 'Deportivo La Coruña', 'Eibar', 'Espanyol', 'Getafe', 'Granada', 'Las Palmas', 'Levante', 'Málaga', 'Rayo Vallecano', 'Real Betis', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Sporting Gijón', 'Valencia', 'Villarreal'],
+    },
+  ],
 };
 
 /** The league a club plays in within a given era. Null when the era is not
@@ -1816,6 +1832,10 @@ const CLUB_COLORS: Record<string, string> = {
   'Mechelen': '#f2b705', 'Charleroi': '#2b2b2b', 'Westerlo': '#f5d800', 'Sint-Truiden': '#f2b705',
   'OH Leuven': '#2b2b2b', 'Cercle Brugge': '#0a7857', 'La Louvière': '#0a7040',
   'Zulte Waregem': '#d02128', 'Beveren': '#f5d800', 'Kortrijk': '#d02128', 'Lommel': '#0a7040',
+  // Round 175: 2015-16 era clubs not covered above (plain kit accents, no
+  // crest art anywhere, per the legal rules).
+  'Leicester City': '#0053a0', 'Eibar': '#8f2242', 'Granada': '#c8102e',
+  'Las Palmas': '#fee23e', 'Sporting Gijón': '#e30613',
 };
 
 /**
@@ -5822,6 +5842,10 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
   // uecl is 0 and the demand ladder skips that band entirely.
   premier2010: { ucl: 4, uel: 5, uecl: 0 },
   laliga2010:  { ucl: 4, uel: 6, uecl: 0 },
+  // Round 175: 2015-16 ran the same shape, and the Conference League still
+  // did not exist (it began in 2021), so uecl stays 0 here too.
+  premier2015: { ucl: 4, uel: 5, uecl: 0 },
+  laliga2015:  { ucl: 4, uel: 6, uecl: 0 },
 };
 
 /* Round 145: the title band is measured, not guessed. His review, 2026-08-17:
