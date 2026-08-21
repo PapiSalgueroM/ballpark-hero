@@ -1,6 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
-import { CATEGORIES, ALL_GAMES } from '@/data/gameRegistry';
+import { ALL_GAMES } from '@/data/gameRegistry';
 import { GAME_CONTENT } from '@/data/gameContent';
+// Round 181: the deterministic related-games graph (S-6 internal links).
+import { relatedGamesFor } from '@/lib/relatedGames';
 
 interface GameSeoContentProps {
   title: string;
@@ -23,7 +25,6 @@ const GameSeoContent = ({ title, description, howToPlay }: GameSeoContentProps) 
   const path = location.pathname;
 
   const game = ALL_GAMES.find(g => g.path === path);
-  const category = CATEGORIES.find(c => c.games.some(g => g.path === path));
   const content = GAME_CONTENT[path];
 
   const gameLabel = game?.label || title;
@@ -64,8 +65,13 @@ const GameSeoContent = ({ title, description, howToPlay }: GameSeoContentProps) 
     })),
   };
 
-  // Deterministic, not random: first 3 sibling games in registry order, self excluded.
-  const siblings = (category?.games || []).filter(g => g.path !== path).slice(0, 3);
+  /* Round 181: the old picker here took the FIRST three siblings in registry
+     order, so every page in a category pointed at the same three games and
+     most games had zero inbound internal links. relatedGamesFor builds a
+     deterministic graph instead: a ring through my category, a link into the
+     next category (so the whole site is one crawlable component, proven by
+     simRelatedGames with a real BFS), and two hash-spread variety picks. */
+  const related = relatedGamesFor(path);
 
   return (
     <section className="max-w-2xl mx-auto mt-12 mb-8 px-4">
@@ -173,17 +179,24 @@ const GameSeoContent = ({ title, description, howToPlay }: GameSeoContentProps) 
         })}</script>
       )}
 
-      {siblings.length > 0 && (
-        <nav aria-label="More games" className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-          {siblings.map(sibling => (
-            <Link
-              key={sibling.path}
-              to={sibling.path}
-              className="text-xs text-muted-foreground hover:text-primary transition-colors"
-            >
-              {sibling.emoji} {sibling.label}
-            </Link>
-          ))}
+      {/* Round 181: real tiles instead of three bare text links, per the
+          tile rule. Plain anchors via Link so crawlers walk the graph. */}
+      {related.length > 0 && (
+        <nav aria-label="More games" data-related-games className="mt-10">
+          <h2 className="mb-3 text-center text-base font-semibold text-foreground">More games to play</h2>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {related.map(r => (
+              <Link
+                key={r.path}
+                to={r.path}
+                className="rounded-xl border border-border bg-card px-3 py-2.5 transition-colors hover:border-primary/50"
+              >
+                <span className="block text-lg">{r.emoji}</span>
+                <span className="mt-0.5 block truncate text-xs font-bold text-foreground">{r.label}</span>
+                <span className="mt-0.5 block text-[10px] leading-snug text-muted-foreground line-clamp-2">{r.description}</span>
+              </Link>
+            ))}
+          </div>
         </nav>
       )}
     </section>
