@@ -27,6 +27,13 @@ export interface CompetitionDef {
   winCol: string;
   filter?: (q: unknown) => unknown;
   phrase: (team: string, year: number) => string;
+  /**
+   * Round 249: for the five finals competitions whose loser and series
+   * columns were completed and triple-verified in Rounds 239 to 242, the
+   * reveal can also teach who the real champion beat. Absent for the
+   * list competitions (no beaten side exists in those tables).
+   */
+  finals?: { loseCol: string; seriesCol?: string; scoreCols?: [string, string] };
 }
 
 export const COMPETITIONS: CompetitionDef[] = [
@@ -34,26 +41,31 @@ export const COMPETITIONS: CompetitionDef[] = [
     key: 'sb', emoji: '🏈', label: 'Super Bowl winners',
     table: 'super_bowls', yearCol: 'year', winCol: 'winner',
     phrase: (t, y) => `The ${t} won the Super Bowl played in ${y}.`,
+    finals: { loseCol: 'loser', scoreCols: ['winner_score', 'loser_score'] },
   },
   {
     key: 'nba', emoji: '🏀', label: 'NBA champions',
     table: 'nba_finals', yearCol: 'year', winCol: 'winner',
     phrase: (t, y) => `The ${t} won the ${y} NBA Finals.`,
+    finals: { loseCol: 'loser', seriesCol: 'series_result' },
   },
   {
     key: 'ws', emoji: '⚾', label: 'World Series winners',
     table: 'world_series_v2', yearCol: 'year', winCol: 'winner',
     phrase: (t, y) => `The ${t} won the ${y} World Series.`,
+    finals: { loseCol: 'loser', seriesCol: 'series_result' },
   },
   {
     key: 'cup', emoji: '🏒', label: 'Stanley Cup winners',
     table: 'stanley_cup_finals_v2', yearCol: 'year', winCol: 'winner',
     phrase: (t, y) => `The ${t} won the Stanley Cup in ${y}.`,
+    finals: { loseCol: 'loser', seriesCol: 'series_result' },
   },
   {
     key: 'wnba', emoji: '🏀', label: 'WNBA champions',
     table: 'wnba_finals', yearCol: 'year', winCol: 'winner',
     phrase: (t, y) => `The ${t} won the ${y} WNBA Finals.`,
+    finals: { loseCol: 'loser', seriesCol: 'series_result' },
   },
   {
     key: 'cfb', emoji: '🏈', label: 'college football national champions',
@@ -91,6 +103,13 @@ export const COMPETITIONS: CompetitionDef[] = [
 export interface ChampRow {
   year: number;
   team: string;
+  /**
+   * "the {beaten side} {series or score}", e.g. "the Denver Broncos
+   * 42-10" or "the Miami Heat 4-2". Only set for finals competitions,
+   * only when the row carries both the loser and the result, and always
+   * describing THIS row's real final.
+   */
+  beat?: string;
 }
 
 export interface ChampRound {
@@ -103,10 +122,22 @@ export interface ChampRound {
   shownTeam: string;
   /** every real champion of that year in that competition (splits included) */
   realTeams: string[];
+  /**
+   * Round 249: what the real champion did in the final, e.g. "the Denver
+   * Broncos 42-10". Only for finals competitions; the reveal renders it
+   * as "They beat {beatLine}." after the truth line.
+   */
+  beatLine?: string;
 }
 
 export async function fetchCompetitionRows(def: CompetitionDef): Promise<ChampRow[]> {
-  let q: unknown = supabase.from(def.table as never).select(`${def.yearCol}, ${def.winCol}`);
+  const cols = [def.yearCol, def.winCol];
+  if (def.finals) {
+    cols.push(def.finals.loseCol);
+    if (def.finals.seriesCol) cols.push(def.finals.seriesCol);
+    if (def.finals.scoreCols) cols.push(...def.finals.scoreCols);
+  }
+  let q: unknown = supabase.from(def.table as never).select(cols.join(', '));
   if (def.filter) q = def.filter(q);
   const { data, error } = await (q as { limit: (n: number) => PromiseLike<{ data: unknown; error: unknown }> }).limit(5000);
   if (error || !Array.isArray(data)) throw new Error(`${def.table} unavailable`);
@@ -115,7 +146,23 @@ export async function fetchCompetitionRows(def: CompetitionDef): Promise<ChampRo
     const year = r[def.yearCol];
     const team = r[def.winCol];
     if (typeof year === 'number' && Number.isFinite(year) && typeof team === 'string' && team.trim().length >= 3) {
-      out.push({ year, team: team.trim() });
+      const row: ChampRow = { year, team: team.trim() };
+      if (def.finals) {
+        const loser = r[def.finals.loseCol];
+        let result = '';
+        if (def.finals.seriesCol) {
+          const s = r[def.finals.seriesCol];
+          if (typeof s === 'string' && /^[0-9]+-[0-9]+(-[0-9]+)?$/.test(s.trim())) result = s.trim();
+        } else if (def.finals.scoreCols) {
+          const ws = r[def.finals.scoreCols[0]];
+          const ls = r[def.finals.scoreCols[1]];
+          if (typeof ws === 'number' && typeof ls === 'number' && Number.isFinite(ws) && Number.isFinite(ls)) result = `${ws}-${ls}`;
+        }
+        if (typeof loser === 'string' && loser.trim() && result) {
+          row.beat = `the ${loser.trim()} ${result}`;
+        }
+      }
+      out.push(row);
     }
   }
   return out;
@@ -141,12 +188,15 @@ export function buildRound(def: CompetitionDef, rows: ChampRow[], label: string,
   if (rows.length < 8) return null;
   const row = rows[dailyDraw(rows.length, `${label}:row`)];
   const realTeams = rows.filter(r => r.year === row.year).map(r => r.team);
+  // row is always a REAL row of the claimed year (a decoy only swaps the
+  // shown team), so its beat string describes the real final either way.
+  const beatLine = row.beat;
   const wantTrue = dailyDraw(2, `${label}:truth`) === 0;
   if (wantTrue) {
     return {
       compKey: def.key, emoji: def.emoji, sourceLabel: def.label,
       statement: def.phrase(row.team, row.year),
-      isTrue: true, year: row.year, shownTeam: row.team, realTeams,
+      isTrue: true, year: row.year, shownTeam: row.team, realTeams, beatLine,
     };
   }
   // The decoy is a real winner of this same competition who did NOT win
@@ -155,7 +205,7 @@ export function buildRound(def: CompetitionDef, rows: ChampRow[], label: string,
   const falseRound = (t: string): ChampRound => ({
     compKey: def.key, emoji: def.emoji, sourceLabel: def.label,
     statement: def.phrase(t, row.year),
-    isTrue: false, year: row.year, shownTeam: t, realTeams,
+    isTrue: false, year: row.year, shownTeam: t, realTeams, beatLine,
   });
   if (hard) {
     const near = [...new Set(rows
@@ -179,7 +229,7 @@ export function buildRound(def: CompetitionDef, rows: ChampRow[], label: string,
   return {
     compKey: def.key, emoji: def.emoji, sourceLabel: def.label,
     statement: def.phrase(row.team, row.year),
-    isTrue: true, year: row.year, shownTeam: row.team, realTeams,
+    isTrue: true, year: row.year, shownTeam: row.team, realTeams, beatLine,
   };
 }
 

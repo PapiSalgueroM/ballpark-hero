@@ -21,6 +21,13 @@ export interface FinalsCompDef {
   winCol: string;
   loseCol: string;
   seriesCol: string;
+  /**
+   * Round 249: extra verified columns for a richer reveal. Only the
+   * Super Bowl uses this, for the score (both columns complete since the
+   * table shipped) and the venue and host city (completed and
+   * era-verified in Rounds 247 and 248).
+   */
+  extraCols?: string[];
   question: (winner: string, year: number) => string;
 }
 
@@ -28,6 +35,7 @@ export const FINALS_COMPS: FinalsCompDef[] = [
   {
     key: 'sb', emoji: '🏈', label: 'Super Bowl',
     table: 'super_bowls', yearCol: 'year', winCol: 'winner', loseCol: 'loser', seriesCol: 'sb_number',
+    extraCols: ['winner_score', 'loser_score', 'venue', 'city', 'state'],
     question: (w, y) => `The ${w} won the Super Bowl played in ${y}. Who did they beat?`,
   },
   {
@@ -57,6 +65,26 @@ export interface FinalsRow {
   winner: string;
   loser: string;
   series: string;
+  /** Super Bowl only: the final score, winner first, e.g. "42-10" */
+  score?: string;
+  /** Super Bowl only: the stadium as it was named that day */
+  venue?: string;
+  /** Super Bowl only: the host city as it was that day, "City, ST" */
+  place?: string;
+}
+
+/**
+ * "at the Rose Bowl in Pasadena, CA" / "at Tampa Stadium". The article
+ * follows the venue's head noun (a Bowl, Dome or Coliseum takes "the", a
+ * named Stadium or Field does not), and the city is dropped when the
+ * venue name already starts with it, so San Diego-Jack Murphy Stadium is
+ * never followed by "in San Diego".
+ */
+export function venuePhrase(venue: string, place: string): string {
+  const article = /(Bowl|dome|Coliseum)$/i.test(venue) ? 'the ' : '';
+  const city = place.includes(',') ? place.slice(0, place.indexOf(',')) : place;
+  const where = city && venue.startsWith(city) ? '' : ` in ${place}`;
+  return `at ${article}${venue}${where}`;
 }
 
 export interface BeatQuestion {
@@ -72,9 +100,10 @@ export interface BeatQuestion {
 }
 
 export async function fetchFinalsRows(def: FinalsCompDef): Promise<FinalsRow[]> {
+  const cols = [def.yearCol, def.winCol, def.loseCol, def.seriesCol, ...(def.extraCols ?? [])];
   const q = supabase
     .from(def.table as never)
-    .select(`${def.yearCol}, ${def.winCol}, ${def.loseCol}, ${def.seriesCol}`);
+    .select(cols.join(', '));
   const { data, error } = await (q as unknown as { limit: (n: number) => PromiseLike<{ data: unknown; error: unknown }> }).limit(5000);
   if (error || !Array.isArray(data)) throw new Error(`${def.table} unavailable`);
   const out: FinalsRow[] = [];
@@ -85,7 +114,18 @@ export async function fetchFinalsRows(def: FinalsCompDef): Promise<FinalsRow[]> 
     const series = r[def.seriesCol];
     if (typeof year !== 'number' || typeof winner !== 'string' || typeof loser !== 'string') continue;
     if (!winner.trim() || !loser.trim()) continue;
-    out.push({ year, winner: winner.trim(), loser: loser.trim(), series: typeof series === 'string' ? series.trim() : '' });
+    const row: FinalsRow = { year, winner: winner.trim(), loser: loser.trim(), series: typeof series === 'string' ? series.trim() : '' };
+    if (def.extraCols) {
+      const ws = r['winner_score'];
+      const ls = r['loser_score'];
+      if (typeof ws === 'number' && typeof ls === 'number' && Number.isFinite(ws) && Number.isFinite(ls)) row.score = `${ws}-${ls}`;
+      const venue = r['venue'];
+      if (typeof venue === 'string' && venue.trim()) row.venue = venue.trim();
+      const city = r['city'];
+      const state = r['state'];
+      if (typeof city === 'string' && city.trim() && typeof state === 'string' && state.trim()) row.place = `${city.trim()}, ${state.trim()}`;
+    }
+    out.push(row);
   }
   return out;
 }
@@ -113,7 +153,15 @@ export function buildQuestion(def: FinalsCompDef, rows: FinalsRow[], label: stri
     options: shuffled,
     correctIndex: shuffled.indexOf(row.loser),
     year: row.year, winner: row.winner,
-    detail: def.key === 'sb' ? (row.series ? `Super Bowl ${row.series}` : '') : (row.series ? `Series: ${row.series}` : ''),
+    // The Super Bowl reveal reads like the almanac line the record can
+    // now back: numeral, score, stadium as named that day, host city
+    // (Rounds 247 and 248). Falls back a piece at a time if any part is
+    // ever missing rather than dropping the whole line.
+    detail: def.key === 'sb'
+      ? (row.series
+        ? `Super Bowl ${row.series}${row.score ? `, ${row.score}` : ''}${row.venue && row.place ? ` ${venuePhrase(row.venue, row.place)}` : ''}`
+        : '')
+      : (row.series ? `Series: ${row.series}` : ''),
   };
 }
 

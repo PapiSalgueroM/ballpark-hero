@@ -20,6 +20,11 @@
  *      and the same day rebuilt is identical (determinism).
  *   4. STYLE: no statement may carry an em or en dash, and every reveal
  *      names at least one real champion.
+ *   5. THE BEAT LINE (Round 249): every finals-competition reveal also
+ *      teaches who the real champion beat and the series or score, and
+ *      the line is checked against the finals tables read through the
+ *      OTHER game's fetcher (whodTheyBeat.ts), so the two games can
+ *      never disagree about a final. List competitions never carry one.
  *
  * SKIPS LOUDLY IN CAPITALS when Supabase is unreachable.
  *
@@ -38,12 +43,13 @@ writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 export const lib = await import('${ROOT}/src/lib/champOrNot.ts');
 export const hookmod = await import('${ROOT}/src/hooks/useChampOrNot.ts');
+export const beatlib = await import('${ROOT}/src/lib/whodTheyBeat.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",
   outfile: OUT, logLevel: "error", alias: { "@": path.join(ROOT, "src") },
 });
-const { lib, hookmod } = await import(pathToFileURL(OUT).href);
+const { lib, hookmod, beatlib } = await import(pathToFileURL(OUT).href);
 const { COMPETITIONS, DAILY_ROUNDS, buildRounds, fetchCompetitionRows } = lib;
 
 let failures = 0;
@@ -111,6 +117,18 @@ for (const [key, rows] of rowsByKey) {
   truth.set(key, m);
 }
 
+/* Round 249: independent truth for the reveal's beat line, read through
+   the OTHER game's fetcher (whodTheyBeat.ts), a separate code path over
+   the same audited tables. comp -> year -> {loser, series, score}. */
+const FINALS_KEYS = new Set(["sb", "nba", "ws", "cup", "wnba"]);
+const beatTruth = new Map();
+for (const def of beatlib.FINALS_COMPS) {
+  const rows = await beatlib.fetchFinalsRows(def);
+  const m = new Map();
+  for (const r of rows) m.set(r.year, r);
+  beatTruth.set(def.key, m);
+}
+
 /* ------------------------------------------------- 2 + 3: a year of days */
 console.log("2) a simulated year of dailies");
 const BASE = Date.UTC(2026, 7, 20);
@@ -151,7 +169,22 @@ for (const day of dates) {
       if (!allTeams.has(r.shownTeam)) fail(`${day} slot ${i}: decoy ${r.shownTeam} is not a real ${r.compKey} winner`);
     }
     if (r.realTeams.length === 0) fail(`${day} slot ${i}: reveal has no real champion to name`);
-    for (const ch of r.statement) {
+    /* Round 249: finals competitions must teach the real final on the
+       reveal, and the line must match the finals table read through the
+       other game's fetcher exactly: right loser, right series or score,
+       winner first. List competitions must never carry one. */
+    if (FINALS_KEYS.has(r.compKey)) {
+      const bt = beatTruth.get(r.compKey)?.get(r.year);
+      const tail = r.compKey === "sb" ? bt?.score : bt?.series;
+      if (!bt || !bt.loser || !tail) {
+        fail(`${day} slot ${i}: no independent finals truth for ${r.compKey} ${r.year}, those columns are complete`);
+      } else if (r.beatLine !== `the ${bt.loser} ${tail}`) {
+        fail(`${day} slot ${i}: beatLine ${JSON.stringify(r.beatLine)}, the finals table says ${JSON.stringify(`the ${bt.loser} ${tail}`)}`);
+      }
+    } else if (r.beatLine) {
+      fail(`${day} slot ${i}: ${r.compKey} carries a beat line with no beaten-side data behind it`);
+    }
+    for (const ch of r.statement + (r.beatLine ?? "")) {
       const code = ch.charCodeAt(0);
       if (code === 8211 || code === 8212) fail(`${day} slot ${i}: statement carries a long dash: ${r.statement}`);
     }

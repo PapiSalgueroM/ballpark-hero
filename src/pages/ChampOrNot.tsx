@@ -82,7 +82,7 @@ const ChampOrNot = () => {
               <li>Every team named is a real champion of that competition. The lie is only ever the year.</li>
               <li>Tap CHAMP if the claim is true, NOT if it is false.</li>
               <li>One point per correct call, ten claims a day, same claims for everyone.</li>
-              <li>The reveal always shows who really won that year.</li>
+              <li>The reveal always shows who really won that year, and for the finals leagues, who they beat and by what.</li>
               <li>Hard mode (Unlimited only): the fake winner really did win, just a season or three away from the year on the card.</li>
             </ul>
             <p className="font-semibold text-foreground">Worked example:</p>
@@ -141,6 +141,7 @@ const ChampOrNot = () => {
                     {current.isTrue
                       ? 'That one really happened.'
                       : `Nope. ${current.year} went to ${current.realTeams.join(' and ')}.`}
+                    {current.beatLine ? ` They beat ${current.beatLine}.` : ''}
                   </p>
                 </div>
               )}
@@ -189,7 +190,7 @@ const ChampOrNot = () => {
           howToPlay={[
             'Read the claim: a team, a title, a year',
             'Tap CHAMP if it really happened, NOT if it did not',
-            'The reveal shows who actually won that year',
+            'The reveal shows who actually won that year, and in the finals leagues who they beat',
             'Ten claims a day, one point each, same set for everyone',
             'Unlimited mode deals fresh claims all day',
           ]}

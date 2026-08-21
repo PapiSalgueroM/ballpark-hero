@@ -122,7 +122,22 @@ for (const day of dates) {
       if (!loserSet.has(o)) fail(`${day} slot ${i}: option ${o} never lost a ${q.compKey} final`);
       if (o === q.winner) fail(`${day} slot ${i}: the champion is an option`);
     }
-    if (q.compKey !== "sb" && t.series && q.detail !== `Series: ${t.series}`) {
+    if (q.compKey === "sb") {
+      /* Round 249: the reveal is the full almanac line, rebuilt here
+         from the table row so a drift in numeral, score, venue, city or
+         the article/duplicate-city rules fails loudly. The score, venue
+         and place columns are complete (Rounds 247 and 248), so their
+         absence from a fetched row is itself a failure. */
+      if (!t.score || !t.venue || !t.place) {
+        fail(`${day} slot ${i}: sb ${q.year} row missing score, venue or place, those columns are complete`);
+      } else {
+        const city = t.place.slice(0, t.place.indexOf(","));
+        const where = t.venue.startsWith(city) ? "" : ` in ${t.place}`;
+        const article = /(Bowl|dome|Coliseum)$/i.test(t.venue) ? "the " : "";
+        const want = `Super Bowl ${t.series}, ${t.score} at ${article}${t.venue}${where}`;
+        if (q.detail !== want) fail(`${day} slot ${i}: detail ${JSON.stringify(q.detail)}, the table says ${JSON.stringify(want)}`);
+      }
+    } else if (t.series && q.detail !== `Series: ${t.series}`) {
       fail(`${day} slot ${i}: detail ${JSON.stringify(q.detail)} vs table series ${t.series}`);
     }
     posCounts[q.correctIndex] += 1;
