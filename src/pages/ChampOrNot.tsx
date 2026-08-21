@@ -20,6 +20,7 @@ const ChampOrNot = () => {
   const {
     loadState, mode, switchMode, rounds, roundIdx, current, showingResult,
     lastPick, answers, done, score, answer, playAgain,
+    hard, hardActive, toggleHard,
   } = useChampOrNot();
 
   const total = rounds.length;
@@ -51,11 +52,22 @@ const ChampOrNot = () => {
                   mode === 'unlimited' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border'
                 )}
               >Unlimited</button>
+              <button
+                onClick={toggleHard}
+                title="Hard mode: the fake winner really won a nearby year (unlimited only)"
+                className={cn('px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all',
+                  hard ? 'bg-destructive/15 text-destructive border-destructive/40' : 'bg-secondary text-muted-foreground border-border'
+                )}
+              >😈 Hard</button>
             </div>
+            {hard && mode === 'daily' && (
+              <p className="text-xs text-muted-foreground mt-2">Hard kicks in on Unlimited. The daily stays the same ten for everyone.</p>
+            )}
             {loadState === 'ready' && !done && (
               <div className="flex items-center justify-center gap-4 mt-3 text-sm">
                 <span className="text-muted-foreground">Claim: <span className="font-semibold text-foreground">{Math.min(roundIdx + 1, total)}</span>/{total}</span>
                 <span className="text-muted-foreground">Right: <span className="font-semibold text-gold">{score}</span></span>
+                {hardActive && <span className="text-destructive font-semibold">😈 Hard</span>}
               </div>
             )}
           </>
@@ -70,6 +82,7 @@ const ChampOrNot = () => {
               <li>Tap CHAMP if the claim is true, NOT if it is false.</li>
               <li>One point per correct call, ten claims a day, same claims for everyone.</li>
               <li>The reveal always shows who really won that year.</li>
+              <li>Hard mode (Unlimited only): the fake winner really did win, just a season or three away from the year on the card.</li>
             </ul>
             <p className="font-semibold text-foreground">Worked example:</p>
             <p>"The Chicago Bulls won the 1994 NBA Finals." Sounds close, but that is the year Jordan was playing baseball: the Rockets won it, so the call is NOT. If the claim had said 1993, the call would be CHAMP.</p>
@@ -152,9 +165,9 @@ const ChampOrNot = () => {
               outcomeEmoji={score >= 9 ? '🏆' : score >= 7 ? '👏' : '😅'}
               headline={`${score}/${total} Called Right!`}
               statLine={<>You can smell a fake title from a mile away{score >= 9 ? '.' : score >= 7 ? ', mostly.' : '... eventually.'}</>}
-              emojiGrid={`🏆 Champ or Not: ${score}/${total}\n${answers.map(a => (a ? '✅' : '❌')).join('')}`}
+              emojiGrid={`🏆 Champ or Not${hardActive ? ' 😈' : ''}: ${score}/${total}\n${answers.map(a => (a ? '✅' : '❌')).join('')}`}
               share={{
-                score: `${score}/${total} on today's Champ or Not`,
+                score: `${score}/${total} on ${mode === 'daily' ? "today's" : 'an unlimited run of'} Champ or Not${hardActive ? ' in hard mode' : ''}`,
                 gameName: 'Champ or Not',
                 gamePath: '/champ-or-not',
               }}

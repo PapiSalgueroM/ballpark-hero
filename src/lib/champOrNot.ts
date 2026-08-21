@@ -121,11 +121,23 @@ export async function fetchCompetitionRows(def: CompetitionDef): Promise<ChampRo
   return out;
 }
 
+export const HARD_WINDOW = 3;
+
 /**
  * One round for one competition. Deterministic per label. Returns null
  * only when the competition is too thin to decoy honestly.
+ *
+ * Hard mode changes only the FALSE claims: instead of any winner from
+ * this competition's whole history, the decoy is a team that won within
+ * HARD_WINDOW years of the claimed year but not the year itself, which
+ * is the difference between "the Newtown Jets won the 2023 NBA Finals"
+ * easy and "the Penrith Panthers won the 2020 premiership" cruel (they
+ * won the four either side; 2020 was Melbourne). Every hard decoy is
+ * still checked against every real winner of the claimed year, so the
+ * honesty guarantee is identical; when no close decoy exists the round
+ * falls back to the whole-history decoy rather than serving nothing.
  */
-export function buildRound(def: CompetitionDef, rows: ChampRow[], label: string): ChampRound | null {
+export function buildRound(def: CompetitionDef, rows: ChampRow[], label: string, hard: boolean = false): ChampRound | null {
   if (rows.length < 8) return null;
   const row = rows[dailyDraw(rows.length, `${label}:row`)];
   const realTeams = rows.filter(r => r.year === row.year).map(r => r.team);
@@ -140,15 +152,27 @@ export function buildRound(def: CompetitionDef, rows: ChampRow[], label: string)
   // The decoy is a real winner of this same competition who did NOT win
   // this particular year. Checked against EVERY champion of the year, so
   // split titles can never produce a "false" statement that is true.
+  const falseRound = (t: string): ChampRound => ({
+    compKey: def.key, emoji: def.emoji, sourceLabel: def.label,
+    statement: def.phrase(t, row.year),
+    isTrue: false, year: row.year, shownTeam: t, realTeams,
+  });
+  if (hard) {
+    const near = [...new Set(rows
+      .filter(r => Math.abs(r.year - row.year) <= HARD_WINDOW)
+      .map(r => r.team))]
+      .filter(t => !realTeams.includes(t));
+    if (near.length > 0) {
+      return falseRound(near[dailyDraw(near.length, `${label}:neardecoy`)]);
+    }
+    // no winner close to this year other than the champions themselves:
+    // fall through to the whole-history decoy below
+  }
   const teams = [...new Set(rows.map(r => r.team))];
   for (const i of shuffledRange(teams.length, `${label}:decoy`)) {
     const t = teams[i];
     if (!realTeams.includes(t)) {
-      return {
-        compKey: def.key, emoji: def.emoji, sourceLabel: def.label,
-        statement: def.phrase(t, row.year),
-        isTrue: false, year: row.year, shownTeam: t, realTeams,
-      };
+      return falseRound(t);
     }
   }
   // Unreachable unless one club won every season on record; serve truth.
@@ -182,6 +206,7 @@ export function buildRounds(
   rowsByKey: Map<string, ChampRow[]>,
   seedPrefix: string,
   count: number = DAILY_ROUNDS,
+  hard: boolean = false,
 ): ChampRound[] {
   const usable = COMPETITIONS.filter(c => (rowsByKey.get(c.key)?.length ?? 0) >= 8);
   if (usable.length === 0) return [];
@@ -191,7 +216,7 @@ export function buildRounds(
     const def = COMPETITIONS.find(c => c.key === key);
     const rows = rowsByKey.get(key);
     if (!def || !rows) return;
-    const r = buildRound(def, rows, `${seedPrefix}:slot${i}`);
+    const r = buildRound(def, rows, `${seedPrefix}:slot${i}`, hard);
     if (r) out.push(r);
   });
   return out;

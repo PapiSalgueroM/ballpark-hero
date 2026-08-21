@@ -365,10 +365,11 @@ export const WORLD_CONTENT: GameContentMap = {
       "Tap CHAMP if it really happened, or NOT if it did not.",
       "The reveal tells you straight away, and if the claim was fake it names the team that really won that year.",
       "Ten claims per day, one point per correct call, and everyone in the world gets the same ten.",
-      "Unlimited mode deals fresh sets as long as you want to keep calling.",
+      "Unlimited mode deals fresh sets as long as you want to keep calling, and its Hard toggle makes every fake a team that really won a nearby season.",
     ],
     rules: [
       "Every team named is a genuine champion of that competition at some point in history. The lie, when there is one, is only ever the year.",
+      "Hard mode (Unlimited only) tightens the fakes: the wrong team still won for real, within about three seasons of the year on the card.",
       "Split titles count as true: if two schools share a college football crown, a claim about either one is a real claim.",
       "The daily set is the same for everyone and locks in your result for the day once you finish.",
       "No hints, no lifelines, no second guesses. One tap per claim.",

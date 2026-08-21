@@ -69,9 +69,15 @@ export function relatedGamesFor(path: string): RelatedPick[] {
   const nextCat = CATEGORIES[(ci + 1) % CATEGORIES.length];
   add(nextCat.games[h % nextCat.games.length]);
 
-  /* 3. Two variety picks from anywhere else on the site. */
+  /* 3. Variety picks from anywhere else on the site, walking until the
+     block is full. A normal category reaches 6 after two picks exactly as
+     before (ring 3 + next-category 1 + variety 2), so existing pages keep
+     their links and crawlers see no churn. A tiny category has no ring to
+     lean on (Round 237: the one-game Aussie Rules section shipped a
+     3-link block and failed the out-degree floor), so the same walk just
+     keeps going until the page offers its full six. */
   const elsewhere = ALL_GAMES.filter(g => !taken.has(g.path) && !cat.games.some(x => x.path === g.path));
-  for (let k = 0; k < 2 && elsewhere.length > 0; k++) {
+  for (let k = 0; k < 5 && picked.length < 6 && elsewhere.length > 0; k++) {
     const idx = (h * 7 + k * 131) % elsewhere.length;
     const g = elsewhere[idx];
     add(g);

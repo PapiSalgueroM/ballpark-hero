@@ -184,6 +184,48 @@ const again = buildRounds(rowsByKey, `champ-or-not:${dates[0]}`, DAILY_ROUNDS);
 const first = buildRounds(rowsByKey, `champ-or-not:${dates[0]}`, DAILY_ROUNDS);
 if (JSON.stringify(again) !== JSON.stringify(first)) fail("the same day rebuilt differently, determinism is broken");
 
+/* ------------------------------------------- 3b: hard mode (Round 237) */
+console.log("3) hard mode: the fakes are close AND still honest");
+const HW = lib.HARD_WINDOW;
+let hardFalse = 0, hardClose = 0, hardFallback = 0;
+for (let run = 0; run < 120; run++) {
+  const prefix = `champ-or-not:unlimited:sim:${run}:hard`;
+  const rounds = buildRounds(rowsByKey, prefix, DAILY_ROUNDS, true);
+  if (rounds.length !== DAILY_ROUNDS) fail(`hard run ${run}: ${rounds.length} rounds`);
+  for (const r of rounds) {
+    const winners = truth.get(r.compKey)?.get(r.year);
+    if (!winners) { fail(`hard run ${run}: year ${r.year} has no ${r.compKey} row`); continue; }
+    if (r.isTrue && !winners.has(r.shownTeam)) fail(`hard run ${run}: TRUE claim wrong: ${r.statement}`);
+    if (!r.isTrue) {
+      hardFalse += 1;
+      if (winners.has(r.shownTeam)) fail(`hard run ${run}: FALSE claim actually true: ${r.statement}`);
+      /* closeness: when a near decoy exists it MUST be used */
+      const rows = rowsByKey.get(r.compKey);
+      const nearTeams = new Set(rows.filter(x => Math.abs(x.year - r.year) <= HW).map(x => x.team));
+      for (const w of winners) nearTeams.delete(w);
+      const isClose = rows.some(x => x.team === r.shownTeam && Math.abs(x.year - r.year) <= HW);
+      if (nearTeams.size > 0 && !isClose) {
+        fail(`hard run ${run}: decoy ${r.shownTeam} is not close to ${r.year} though close winners exist`);
+      }
+      if (isClose) hardClose += 1; else hardFallback += 1;
+    }
+  }
+}
+const hardSame = JSON.stringify(buildRounds(rowsByKey, "champ-or-not:unlimited:sim:0:hard", DAILY_ROUNDS, true));
+if (hardSame !== JSON.stringify(buildRounds(rowsByKey, "champ-or-not:unlimited:sim:0:hard", DAILY_ROUNDS, true))) {
+  fail("hard mode: same labels rebuilt differently");
+}
+console.log(`   ${hardFalse} hard fakes: ${hardClose} within ${HW} seasons, ${hardFallback} fell back to whole history`);
+/* with 10 dense tables a close decoy nearly always exists; the fallback
+   is for degenerate stretches where one club won everything in the
+   window, which really happens: deep inside St George's eleven straight
+   (1956-1966) there is no other winner within 3 seasons to borrow.
+   Measured 2026-08-20: 616 close of 622, fallback 6. Floor: at least
+   95% of hard fakes are close. */
+if (hardFalse > 0 && hardClose / hardFalse < 0.95) {
+  fail(`only ${((hardClose / hardFalse) * 100).toFixed(1)}% of hard fakes are close, the floor is 95%`);
+}
+
 console.log("");
 if (failures > 0) {
   console.error(`simChampOrNot: ${failures} failure${failures === 1 ? "" : "s"}`);

@@ -39,6 +39,7 @@ export function useChampOrNot() {
   const [lastPick, setLastPick] = useState<boolean | null>(null);
   const [showingResult, setShowingResult] = useState(false);
   const [unlimitedRun, setUnlimitedRun] = useState(0);
+  const [hard, setHard] = useState(false);
   const unlimitedNonce = useRef(String(Date.now() % 1000000007));
 
   useEffect(() => {
@@ -77,14 +78,17 @@ export function useChampOrNot() {
     if (saved) setAnswers(saved.answers);
   }, [loadState, mode, today]);
 
+  // hard is an unlimited-only spice, same convention as the higher-lower
+  // games: the shared daily stays one board for everyone
+  const hardActive = hard && mode === 'unlimited';
   const seedPrefix = mode === 'daily'
     ? `champ-or-not:${today}`
-    : `champ-or-not:unlimited:${unlimitedNonce.current}:${unlimitedRun}`;
+    : `champ-or-not:unlimited:${unlimitedNonce.current}:${unlimitedRun}${hardActive ? ':hard' : ''}`;
 
   const rounds: ChampRound[] = useMemo(() => {
     if (!rowsByKey) return [];
-    return buildRounds(rowsByKey, seedPrefix, DAILY_ROUNDS);
-  }, [rowsByKey, seedPrefix]);
+    return buildRounds(rowsByKey, seedPrefix, DAILY_ROUNDS, hardActive);
+  }, [rowsByKey, seedPrefix, hardActive]);
 
   const roundIdx = Math.min(answers.length, rounds.length);
   const current = roundIdx < rounds.length ? rounds[roundIdx] : null;
@@ -133,8 +137,20 @@ export function useChampOrNot() {
     setUnlimitedRun(r => r + 1);
   }, [mode]);
 
+  const toggleHard = useCallback(() => {
+    setHard(h => !h);
+    // a new difficulty means a fresh unlimited set, mid-run included
+    if (mode === 'unlimited') {
+      setAnswers([]);
+      setShowingResult(false);
+      setLastPick(null);
+      setUnlimitedRun(r => r + 1);
+    }
+  }, [mode]);
+
   return {
     loadState, mode, switchMode, rounds, roundIdx, current, showingResult,
     lastPick, answers, done, score, answer, playAgain, today,
+    hard, hardActive, toggleHard,
   };
 }
