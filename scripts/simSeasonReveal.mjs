@@ -47,7 +47,7 @@ export { nfl, nba, nhl, mlb, reveal };
 execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
 
 const { nfl, nba, nhl, mlb, reveal } = await import(BUNDLE);
-const { buildSeasonReveal, toneOfLine } = reveal;
+const { buildSeasonReveal, toneOfLine, stageVerdict } = reveal;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -179,6 +179,26 @@ console.log('5) Across seeded careers in all four sports, confetti tracks the ri
     if (seasons < 120) fail(`${S.key}: only ${seasons} seasons simmed`);
     console.log(`   ${S.key}: ${seasons} seasons across ${careers} careers, ${confettis} title reveals, confetti tracked the ring count exactly`);
   }
+}
+
+/* ---------- 6. Round 187: the Front Office verdict staging ---------- */
+console.log('6) The GM verdict: confetti belongs to the champion GM and to nobody else');
+{
+  const combos = [
+    [{ iAmChampion: true, fired: false }, { confetti: true, cardTone: 'title' }],
+    [{ iAmChampion: false, fired: false }, { confetti: false, cardTone: 'plain' }],
+    [{ iAmChampion: false, fired: true }, { confetti: false, cardTone: 'fired' }],
+    /* Belt and braces: the engine's own +40 on a title makes this state
+       unreachable, but the presentation layer must not trust that. */
+    [{ iAmChampion: true, fired: true }, { confetti: false, cardTone: 'fired' }],
+  ];
+  for (const [input, want] of combos) {
+    const got = stageVerdict(input);
+    if (got.confetti !== want.confetti || got.cardTone !== want.cardTone) {
+      fail(`stageVerdict(${JSON.stringify(input)}) gave ${JSON.stringify(got)}, wanted ${JSON.stringify(want)}`);
+    }
+  }
+  console.log('   all four combinations: a good grade is not a parade, and fired kills confetti outright');
 }
 
 if (failures > 0) { console.error(`\nsimSeasonReveal: ${failures} FAILURES`); process.exit(1); }

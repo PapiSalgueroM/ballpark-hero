@@ -18,6 +18,11 @@ import {
   firedLine, seriesPostseason, FO_TRUST_START, type OwnerMandate, type FoSportWords,
 } from '@/lib/foOwnerMandate';
 import OwnerMandateCard from '@/components/front-office-shared/OwnerMandateCard';
+/* Round 187: the verdict curtain. stageVerdict decides the presentation
+   facts (confetti only for the champion GM, fired kills it outright) so
+   the rule lives in the harnessed engine, not in this JSX. */
+import { stageVerdict } from '@/lib/usCareerReveal';
+import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 import { mlbLeagueSeeds } from '@/lib/mlbFrontOffice';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
@@ -271,10 +276,12 @@ export default function MlbFrontOfficeBoard() {
   if (phase === 'fired') {
     return (
       <div className="space-y-4">
-        <div className="rounded-2xl border border-destructive/50 bg-card p-5 text-center">
+        {/* Round 187: the door shuts with one honest shake, nothing more. */}
+        <div className="cm-loss-shake rounded-2xl border border-destructive/50 bg-card p-5 text-center">
+          <CelebrationStyles />
           <p className="text-3xl">🪑</p>
-          <p className="mt-2 font-display text-2xl font-black text-foreground">Fired by {label(myTeam)}</p>
-          <p className="mt-2 text-sm text-muted-foreground">{firedLine(seasonsPlayed, titles)}</p>
+          <p className="cm-slam mt-2 font-display text-2xl font-black text-foreground" style={{ animationDelay: '0.1s' }}>Fired by {label(myTeam)}</p>
+          <p className="cm-rise mt-2 text-sm text-muted-foreground" style={{ animationDelay: '0.35s' }}>{firedLine(seasonsPlayed, titles)}</p>
           <button onClick={reset} className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
             <RotateCcw className="h-4 w-4" /> Take another front office
           </button>
@@ -289,47 +296,59 @@ export default function MlbFrontOfficeBoard() {
     const myRank = mlbStandings(league, AL.includes(myTeam) ? AL : undefined)
       .filter(x => AL.includes(myTeam) ? true : !AL.includes(x.abbr))
       .findIndex(x => x.abbr === myTeam) + 1;
+    /* Round 187: the verdict curtain. Every string below is exactly what
+       Round 180 wrote; stageVerdict only decides confetti and tone. */
+    const staging = stageVerdict({ iAmChampion: champion === myTeam, fired });
     return (
       <div className="space-y-4">
-        <div className="rounded-2xl border border-gold/50 bg-card p-5 text-center">
+        <div
+          data-verdict-reveal
+          className={cn(
+            'relative overflow-hidden rounded-2xl border bg-card p-5 text-center',
+            staging.cardTone === 'fired' ? 'border-destructive/50' : 'border-gold/50',
+            staging.cardTone === 'title' && 'cm-win-pulse',
+          )}
+        >
+          <CelebrationStyles />
+          {staging.confetti && <ConfettiBurst seed={13} count={34} />}
           <Crown className="mx-auto h-10 w-10 text-gold" />
-          <p className="mt-2 font-display text-2xl font-black text-foreground">{label(champion)} win the {league.season} World Series</p>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="cm-slam mt-2 font-display text-2xl font-black text-foreground" style={{ animationDelay: '0.05s' }}>{label(champion)} win the {league.season} World Series</p>
+          <p className="cm-rise mt-1 text-sm text-muted-foreground" style={{ animationDelay: '0.3s' }}>
             {champion === myTeam
               ? 'Your roster. Your rings. Raise the trophy.'
               : `Your ${label(myTeam)} finished ${my.wins}-${my.losses}, No. ${myRank} in the ${myLeague}.`}
           </p>
           {/* Round 180: ownership's verdict on the mandate. */}
           {gradeLine && (
-            <p className={cn('mt-2 text-sm font-bold', fired ? 'text-destructive' : 'text-gold')}>{gradeLine}</p>
+            <p className={cn('cm-slam mt-2 text-sm font-bold', fired ? 'text-destructive' : 'text-gold')} style={{ animationDelay: '0.5s' }}>{gradeLine}</p>
           )}
           {mandate && !fired && (
-            <p className="mt-1 text-[11px] text-muted-foreground">Trust upstairs: {trust} of 100{trust <= 25 ? '. The seat is hot.' : '.'}</p>
+            <p className="cm-rise mt-1 text-[11px] text-muted-foreground" style={{ animationDelay: '0.7s' }}>Trust upstairs: {trust} of 100{trust <= 25 ? '. The seat is hot.' : '.'}</p>
           )}
           {ws && (
-            <p className="mt-2 text-xs text-muted-foreground">
+            <p className="cm-tick-in mt-2 text-xs text-muted-foreground" style={{ animationDelay: '0.8s' }}>
               World Series: {label(ws.winner)} beat {label(ws.winner === ws.home ? ws.away : ws.home)} {Math.max(ws.homeWins, ws.awayWins)}-{Math.min(ws.homeWins, ws.awayWins)}
             </p>
           )}
-          <div className="mt-2 max-h-40 space-y-0.5 overflow-y-auto text-[11px] text-muted-foreground">
+          <div className="cm-rise mt-2 max-h-40 space-y-0.5 overflow-y-auto text-[11px] text-muted-foreground" style={{ animationDelay: '0.95s' }}>
             {series.filter(s => s.name !== 'World Series').map((s, i) => (
               <p key={i}>{s.name}: {label(s.winner)} {s.winner === s.home ? s.homeWins : s.awayWins}-{s.winner === s.home ? s.awayWins : s.homeWins}</p>
             ))}
           </div>
-          <div className="mt-3 flex items-center justify-center gap-3 text-sm">
+          <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: '1.2s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Rings <b className="text-gold">{titles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{seasonsPlayed}</b></span>
           </div>
           {/* Round 180: zero trust ends the save here instead of a draft. */}
           {fired ? (
-            <div className="mt-4 rounded-2xl border border-destructive/50 bg-destructive/5 p-4">
+            <div className="cm-loss-shake mt-4 rounded-2xl border border-destructive/50 bg-destructive/5 p-4">
               <p className="text-sm font-bold text-destructive">🪑 {firedLine(seasonsPlayed, titles)}</p>
               <button onClick={reset} className="mt-3 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
                 <RotateCcw className="h-4 w-4" /> Take another front office
               </button>
             </div>
           ) : (
-            <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <div className="cm-rise mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center" style={{ animationDelay: '1.35s' }}>
               <button onClick={startDraft} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
                 <Briefcase className="h-4 w-4" /> Go to the draft
               </button>

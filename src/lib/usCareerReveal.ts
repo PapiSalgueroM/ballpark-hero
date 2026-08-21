@@ -91,6 +91,33 @@ export interface RevealBuildArgs {
   progressNotes: string[];
 }
 
+/* ---------------- Round 187: the Front Office verdict ----------------
+   The GM games' season-end recap is the same beat one desk over: the
+   champion is crowned, ownership grades your season, and either the
+   draft opens or the door does. The recap keeps every string it had;
+   this helper only decides the presentation facts, so the confetti rule
+   is harnessable exactly like the career one.
+
+   Rules: confetti belongs to the GM whose BUILD won the title, and to
+   nobody else. A good grade is not a parade. And fired kills confetti
+   unconditionally, belt and braces: the engine's own arithmetic already
+   makes a title firing impossible (a title is always +40 trust), but a
+   presentation layer should not have to trust that from a distance. */
+
+export interface VerdictStaging {
+  /** Your roster won the title and you still have the job. */
+  confetti: boolean;
+  /** 'title' pulses gold, 'fired' goes destructive, 'plain' stays calm. */
+  cardTone: 'title' | 'fired' | 'plain';
+}
+
+export function stageVerdict(a: { iAmChampion: boolean; fired: boolean }): VerdictStaging {
+  return {
+    confetti: a.iAmChampion && !a.fired,
+    cardTone: a.fired ? 'fired' : a.iAmChampion ? 'title' : 'plain',
+  };
+}
+
 export function buildSeasonReveal(a: RevealBuildArgs): SeasonReveal {
   const banned = a.teamResult === 'SUSPENDED';
   const confetti = !banned && a.teamResult.startsWith('WON THE');

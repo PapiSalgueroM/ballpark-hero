@@ -89,6 +89,11 @@ const browser = await chromium.launch();
   say(recapText.includes('Ownership made the call'), 'the firing block replaced the draft path');
   say(await page.locator('button:has-text("Go to the draft")').count() === 0, 'a fired GM gets no draft button');
   say(await page.locator('button:has-text("Take another front office")').count() >= 1, 'the way out is another job');
+  /* Round 187: the recap is the staged verdict card now, and its confetti
+     rule is the harness's business: a fired GM whose team did not win the
+     title gets ZERO confetti pieces, whatever else animates. */
+  say(await page.locator('[data-verdict-reveal]').count() === 1, 'the recap is the staged verdict card');
+  say(await page.locator('[data-verdict-reveal] .cm-confetti').count() === 0, 'a firing gets no confetti, the rule holds in the DOM');
 
   console.log('4) A reload after the firing stays fired');
   await page.reload({ waitUntil: 'networkidle' });
