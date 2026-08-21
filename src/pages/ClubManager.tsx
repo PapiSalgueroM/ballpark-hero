@@ -26,9 +26,9 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ConfettiBurst } from '@/components/club-manager/Celebration';
 import { CustomClubForm, CrestBadge } from '@/components/club-manager/CustomClubForm';
-import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { WorldTablesCard } from '@/components/club-manager/WorldTablesCard';
 import { UclBracketCard } from '@/components/club-manager/UclBracketCard';
+import { UclGroupsCard } from '@/components/club-manager/UclGroupsCard';
 import { CalendarScreen } from '@/components/club-manager/CalendarScreen';
 import { InboxCard } from '@/components/club-manager/InboxCard';
 import { ClubDetailScreen } from '@/components/club-manager/ClubDetailScreen';
@@ -120,10 +120,6 @@ const ClubManager = () => {
     () => (g.career ? g.career.squad.filter(p => !isAvailable(p)) : []),
     [g.career],
   );
-  const groupRows = useMemo(
-    () => (g.career && g.career.uclGroup ? sortedTable(g.career.uclGroup.table) : []),
-    [g.career],
-  );
   // Round 116: the academy and the training ground feed their own hub tiles.
   const academy = g.career?.academy ?? null;
   const prospectCount = academy ? academy.prospects.length : 0;
@@ -166,7 +162,7 @@ const ClubManager = () => {
               <p>✨ <span className="font-semibold text-foreground">Or create your own club.</span> Any league, either era: name it, build the crest (shape, pattern, your colors, your initials), name your stadium, and choose your backing. Your club takes the league place of the division's weakest side and starts with 24 generated players, all marked as made up. Every real player stays real, and the market is where you sign them. The board reads your squad, not your wallet: big money in a smaller league gets told to win it, the same money in the Premier League gets told to survive first.</p>
               <p>👟 <span className="font-semibold text-foreground">Players age and they stop playing.</span> A thirty year old slips a point a season, a thirty five year old slips three or four, and how fast depends on where he plays: keepers last for years, wingers and full backs go first. Somewhere around thirty four to thirty seven most of them retire for good. Sign the young ones early, get your kids in, or your best XI will quietly rot underneath you.</p>
               <p>📋 <span className="font-semibold text-foreground">The board names the actual prize</span>: win the league, qualify for the Champions League or Europa League, reach the top half, or stay up, plus a cup target, a rival to finish above, and squad mandates. Hit them and your stock rises; miss them and the confidence meter drains.</p>
-              <p>🗓️ <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>, at its real length, against its real clubs, plus the domestic cup and the Champions League if you qualify, while every other league in the world plays out alongside yours.</p>
+              <p>🗓️ <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>, at its real length, against its real clubs, plus the domestic cup and the Champions League if you qualify, while every other league in the world plays out alongside yours. In Europe you can watch all eight groups, and a projected knockout bracket tracks the leaders until the real draw locks in after matchday 6.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
               <p>📊 <span className="font-semibold text-foreground">Play it your way.</span> Quick Sim gives you the full result in one tap: scorers, cards, injuries, possession, shots, expected goals, momentum and every player's rating. Watch Live plays the match as moving circles on a pitch at 0.5x to 4x speed, with goals, cards and subs landing at their real minutes and the dressing room at the break. Play Match skips the theatre and stops at half time. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
               <p>🤝 <span className="font-semibold text-foreground">Tell every player what he is</span>: star man, key first teamer, rotation option, backup or one for the future. Each rung is a promise about minutes, and the dressing room keeps score over your last ten matches. Keep your word and they play for you. Break it and they sulk, drag the room down and hand in transfer requests. You can buy your way out of a promise, but it costs six weeks of his wages a rung.</p>
@@ -1126,9 +1122,9 @@ const ClubManager = () => {
                       <>🏅 <span className="font-bold">{leagueOf(c.clubName).cupName}</span>: out{c.cupExit ? ` at the ${c.cupExit === 'F' ? 'final' : c.cupExit === 'SF' ? 'semi-final' : c.cupExit === 'QF' ? 'quarter-final' : 'Round of 16'}` : ''}. Next year.</>
                     )}
                   </div>
-                  {c.uclGroup && c.uclKoRound === null && (
-                    <LeagueTableCard rows={groupRows} myClub={c.clubName} title={`UCL Group · MD${c.uclGroup.matchday}/6`} onClubClick={setClubView} />
-                  )}
+                  {/* Round 163: every group in the draw, not just mine, plus
+                      the projected bracket that locks in after matchday 6. */}
+                  <UclGroupsCard career={c} onClubClick={setClubView} />
                   {c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won' && (
                     <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
                       ⭐ Alive in the Champions League. Next knockout round: <span className="font-bold">{c.uclKoRound === 'F' ? 'Final' : c.uclKoRound === 'SF' ? 'Semi-final' : 'Quarter-final'}</span>

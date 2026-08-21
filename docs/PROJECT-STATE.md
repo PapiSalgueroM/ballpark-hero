@@ -120,10 +120,23 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   filter (the baked market rows carry no nationality; needs a data pass).
 - CM-8 Money allocation: budget split between transfer kitty, scouts, stadium expansion,
   ticket prices, academy. Needs a small club-finance layer (gate income from stadium size).
-- CM-9 League views: tables visible before a ball is kicked, alphabetical with my club
-  starred until games exist, a flag on every league, all UCL groups visible (not just mine),
-  and a projected knockout bracket from current group standings that finalizes when the
-  groups do.
+- CM-9 **DONE, Round 163: league views.** Tables exist before a ball is kicked: pre-season
+  every league (mine and all fourteen others) shows its full membership in alphabetical
+  order with my club starred and a note that positions arrive with round one, replacing the
+  old "kicks off with your next round" placeholder. Every league picker chip wears its
+  nation's real flag (flagcdn via the existing FlagImg machinery, LEAGUE_NATIONS mapping
+  all fifteen ids including 2. Bundesliga). And Europe is WHOLE now: seven AI groups (B to
+  H) of four real clubs each, drawn from the same continental pool as mine, playing their
+  two fixtures the same nights my group plays, tables in lockstep, old saves caught up
+  mid-campaign. The knockout bracket is EARNED: quarter-finalists are the eight group
+  winners in group order (a runner-up me takes the last slot, never a slot-0 rematch), with
+  the old shuffled pool kept only as filler for thin historic-era worlds. A projected
+  bracket pairs the eight current leaders A v B, C v D style all group stage, marked "if
+  the groups ended today", and goes silent the moment the real bracket exists. simWorld
+  grew section 8 (lockstep, reconciling tables, no invented clubs, earned bracket, honest
+  projection, catch-up, rollover redraw, flag map coverage both directions) and its first
+  run caught the pool being one group short and the unmapped 2. Bundesliga id. Browser
+  probe 14 for 14 on the real built site.
 - CM-10 A job offers screen in season (offers exist at season end; he wants a place where
   approaches land during the season too).
 - CM-11 Team and player stats centre: per competition and total goals, assists, cards,
@@ -452,8 +465,9 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, later | **Round 159** (the fix pack off his screenshots: ceiling repair, real Retire and New Career buttons, the slalom stopwatch, keeper Shot Stopping, Passing Gates, true header centering at desktop, Soccer Career counting toward the header per season). `RUN159.bat`, chain-guarded on 158. `SHIP16.bat` runs 157 and 158; click RUN159 after, or use SHIP17.bat which runs all three. |
 | Packaged 2026-08-18, later still | **Round 160** (create-a-club depth: quality slider, football identity, stadium size, plus the boardWantLabel wrong-league fix its harness caught). `RUN160.bat`, chain-guarded on 159. SHIP18.bat runs 157 through 160. |
 | Packaged 2026-08-18, small hours | **Round 161** (structured transfer deals: add-ons, sell-on clauses, part exchange, plus the deep market filters). `RUN161.bat`, chain-guarded on 160. |
-| Packaged 2026-08-18, morning | **Round 162** (Stadium Tycoon goes massive, his direct ask: ten named divisions with exact income multipliers and promotion bonuses, an eight tier staff payroll, the catchable golden whistle with five prizes, 47 badges at a permanent 2 percent each, a Badges drawer, a Club records drawer, and the game's help plus SEO copy rewritten to match). `RUN162.bat`, chain-guarded on 161. **SHIP20.bat is the current wrapper: it runs 157 through 162.** SHIP19.bat (157-161) still works if already downloaded, then click RUN162 after. |
-| Next free round number | **163** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, morning | **Round 162** (Stadium Tycoon goes massive, his direct ask: ten named divisions with exact income multipliers and promotion bonuses, an eight tier staff payroll, the catchable golden whistle with five prizes, 47 badges at a permanent 2 percent each, a Badges drawer, a Club records drawer, and the game's help plus SEO copy rewritten to match). `RUN162.bat`, chain-guarded on 161. |
+| Packaged 2026-08-18, midday | **Round 163** (league views, CM-9 in full: pre-season alphabetical tables with the star for all fifteen leagues, flags on every league chip, all eight UCL groups simulated in lockstep, the projected quarter-final bracket, and the knockout draw seeded from the real group winners). `RUN163.bat`, chain-guarded on 162. **SHIP21.bat is the current wrapper: it runs 157 through 163.** Older SHIP19/SHIP20 still work, then click the later RUN bats after. |
+| Next free round number | **164** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

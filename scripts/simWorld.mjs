@@ -30,6 +30,7 @@ const { cm } = await import(BUNDLE);
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason,
   REAL_LEAGUES, leagueOf, sortedTable, leagueRounds,
+  projectedUclBracket, EURO_CLUBS, LEAGUE_NATIONS,
 } = cm;
 
 let failures = 0;
@@ -263,6 +264,7 @@ console.log('7) Copy check');
   const files = [
     'src/components/club-manager/WorldTablesCard.tsx',
     'src/components/club-manager/UclBracketCard.tsx',
+    'src/components/club-manager/UclGroupsCard.tsx',
   ];
   for (const f of files) {
     const text = fs.readFileSync(path.join(ROOT, f), 'utf8');
@@ -271,6 +273,156 @@ console.log('7) Copy check');
     });
   }
   console.log(`   ${files.length} files checked`);
+}
+
+/* ---------- 8. Round 163: the whole group stage is real ---------- */
+console.log('8) All eight UCL groups play, and the bracket is earned');
+{
+  /* A full playable pool for cross-checking that no AI group club is
+     invented: every real league's membership plus the euro flavor list. */
+  const realPool = new Set(EURO_CLUBS);
+  for (const lg of REAL_LEAGUES) for (const c of lg.clubs) realPool.add(c);
+
+  // Day one: the whole draw exists before a ball is kicked.
+  let s = startCareer('Real Madrid');
+  const world0 = s.uclWorld ?? [];
+  console.log(`   fresh career: ${world0.length} AI groups alongside mine`);
+  if (world0.length !== 7) fail(`expected 7 AI groups, got ${world0.length}`);
+  const myFour = new Set([s.clubName, ...(s.uclGroup?.opponents ?? [])]);
+  const seen = new Set();
+  for (const g of world0) {
+    if (g.clubs.length !== 4) fail(`group ${g.letter} has ${g.clubs.length} clubs`);
+    if (g.matchday !== 0) fail(`group ${g.letter} started at matchday ${g.matchday}`);
+    if (g.table.some(r => r.pts !== 0 || r.w + r.d + r.l !== 0)) fail(`group ${g.letter} has pre-played rows`);
+    for (const c of g.clubs) {
+      if (myFour.has(c)) fail(`${c} is in my group AND group ${g.letter}`);
+      if (seen.has(c)) fail(`${c} appears in two AI groups`);
+      seen.add(c);
+      if (!realPool.has(c)) fail(`invented club in group ${g.letter}: ${c}`);
+    }
+  }
+  const letters = world0.map(g => g.letter).join('');
+  if (letters !== 'BCDEFGH') fail(`group letters read ${letters}`);
+
+  // Pre-groups projection: eight leaders, paired A v B, C v D and so on.
+  const proj0 = projectedUclBracket(s);
+  if (!proj0 || proj0.length !== 4) fail(`day one projection has ${proj0?.length ?? 0} pairs, expected 4`);
+
+  // Play into the group stage and stop mid-campaign: lockstep + projection.
+  let guard = 0;
+  while ((s.uclGroup?.matchday ?? 6) < 3 && guard < 60) {
+    guard++;
+    const r = playNextEntry(s, { skipHalftime: true });
+    s = r.state;
+    if (r.kind === 'seasonOver') break;
+  }
+  const mid = s.uclGroup?.matchday ?? 0;
+  if (mid < 3) fail('never reached matchday 3, the loop guard tripped');
+  for (const g of s.uclWorld ?? []) {
+    if (g.matchday !== mid) fail(`group ${g.letter} is at MD${g.matchday} while mine is at MD${mid}, lockstep broke`);
+    for (const row of g.table) {
+      if (row.w + row.d + row.l !== mid) fail(`group ${g.letter} ${row.club} played ${row.w + row.d + row.l} of ${mid}`);
+      if (row.pts !== row.w * 3 + row.d) fail(`group ${g.letter} ${row.club}: points do not reconcile`);
+    }
+    const gf = g.table.reduce((n, r) => n + r.gf, 0);
+    const ga = g.table.reduce((n, r) => n + r.ga, 0);
+    if (gf !== ga) fail(`group ${g.letter}: goals for ${gf} != goals against ${ga}`);
+  }
+  const projMid = projectedUclBracket(s);
+  if (!projMid || projMid.length !== 4) fail('mid-groups projection is not four pairs');
+  else {
+    const leaders = [
+      sortedTable(s.uclGroup.table)[0].club,
+      ...(s.uclWorld ?? []).map(g => sortedTable(g.table)[0].club),
+    ];
+    const projClubs = projMid.flatMap(p => [p.home, p.away]);
+    if (projClubs.join('|') !== leaders.join('|')) {
+      fail('the projection is not the eight current leaders in group order');
+    }
+    if (projMid[0].home !== leaders[0] || projMid[0].away !== leaders[1]) fail('pair one is not A leader v B leader');
+  }
+
+  // Finish the season: the real bracket must be EARNED by the group tables.
+  let over = false;
+  guard = 0;
+  while (!over && guard < 140) {
+    guard++;
+    const r = playNextEntry(s, { skipHalftime: true });
+    s = r.state;
+    if (r.kind === 'seasonOver') over = true;
+    if (s.week >= s.calendar.length) break;
+  }
+  if (projectedUclBracket(s) !== null) fail('the projection kept projecting after the real bracket existed');
+  for (const g of s.uclWorld ?? []) {
+    if (g.matchday !== 6) fail(`group ${g.letter} finished at MD${g.matchday}`);
+  }
+  const qf = (s.uclBracket ?? []).filter(t => t.round === 'QF');
+  if (qf.length !== 4) fail('no full quarter-final round to check');
+  else {
+    const winners = new Set([
+      sortedTable(s.uclGroup.table)[0].club,
+      ...(s.uclWorld ?? []).map(g => sortedTable(g.table)[0].club),
+    ]);
+    const field = qf.flatMap(t => [t.home, t.away]);
+    let nonWinners = 0;
+    for (const c of field) {
+      if (c === s.clubName) continue; // I can be there as a runner-up
+      if (!winners.has(c)) nonWinners++;
+    }
+    // At most one winner can be displaced, and only by me as a runner-up.
+    if (nonWinners > 0) fail(`${nonWinners} bracket clubs won no group`);
+    const meIn = field.includes(s.clubName);
+    const iAdvanced = s.uclKoRound !== null && s.uclKoRound !== 'out';
+    const iWasEliminatedAtGroup = s.uclExit === 'group';
+    if (iWasEliminatedAtGroup && meIn) fail('out at the groups but in the bracket');
+    if (iAdvanced && !meIn && s.uclExit === null) fail('through the groups but missing from the bracket');
+  }
+
+  // An old save mid-campaign is caught up, not broken.
+  let o = startCareer('Real Madrid');
+  guard = 0;
+  while ((o.uclGroup?.matchday ?? 6) < 2 && guard < 60) {
+    guard++;
+    const r = playNextEntry(o, { skipHalftime: true });
+    o = r.state;
+  }
+  delete o.uclWorld;
+  guard = 0;
+  const before = o.uclGroup?.matchday ?? 0;
+  while ((o.uclGroup?.matchday ?? 6) < before + 1 && guard < 60) {
+    guard++;
+    const r = playNextEntry(o, { skipHalftime: true });
+    o = r.state;
+  }
+  const rebuilt = o.uclWorld ?? [];
+  if (rebuilt.length !== 7) fail('an old save did not grow its AI groups');
+  for (const g of rebuilt) {
+    if (g.matchday !== o.uclGroup.matchday) fail(`caught-up group ${g.letter} sits at MD${g.matchday}, mine at MD${o.uclGroup.matchday}`);
+    for (const row of g.table) {
+      if (row.pts !== row.w * 3 + row.d) fail(`caught-up group ${g.letter} table inconsistent`);
+    }
+  }
+
+  // Rollover: a fresh draw, zeroed, next season.
+  let n = runSeason(startCareer('Real Madrid'));
+  n = finishSeason(n).state;
+  n = startNextSeason(n);
+  if (n.uclGroup) {
+    const w = n.uclWorld ?? [];
+    if (w.length !== 7) fail('the new season did not redraw the AI groups');
+    if (w.some(g => g.matchday !== 0 || g.table.some(r => r.pts !== 0))) fail('AI groups carried results across the summer');
+  } else if ((n.uclWorld ?? []).length) {
+    fail('no group stage next season but AI groups exist anyway');
+  }
+
+  // The flag map covers every league id, with no strays.
+  for (const lg of REAL_LEAGUES) {
+    if (!LEAGUE_NATIONS[lg.id]) fail(`league ${lg.id} has no nation flag mapping`);
+  }
+  for (const id of Object.keys(LEAGUE_NATIONS)) {
+    if (!REAL_LEAGUES.some(lg => lg.id === id)) fail(`LEAGUE_NATIONS names an unknown league id: ${id}`);
+  }
+  console.log('   groups lockstep, projection honest, bracket earned, old saves caught up, flags mapped');
 }
 
 console.log(failures === 0 ? '\nALL WORLD CHECKS PASSED' : `\n${failures} FAILURES`);

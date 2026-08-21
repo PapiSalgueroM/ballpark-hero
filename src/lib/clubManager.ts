@@ -576,6 +576,21 @@ export interface UclGroupState {
 }
 
 /**
+ * Round 163: the REST of the Champions League draw. His ask: "all UCL groups
+ * visible, not just mine". Every group is four real clubs playing a real
+ * double round robin in lockstep with my own group's matchdays, and the
+ * knockout bracket is seeded from these tables instead of a hat.
+ */
+export interface UclAiGroup {
+  /** B, C, D... my own group is always Group A. */
+  letter: string;
+  clubs: string[];
+  table: TableRow[];
+  /** Matchdays played (0-6), kept in lockstep with my group. */
+  matchday: number;
+}
+
+/**
  * Round 95: one other league, simulated week by week alongside mine so the
  * world outside my dugout is a real place with real standings.
  */
@@ -714,6 +729,8 @@ export interface CareerState {
   world?: Record<string, WorldLeague>;
   /** Round 95: the full Champions League knockout bracket. */
   uclBracket?: UclTie[];
+  /** Round 163: every OTHER Champions League group, simulated alongside mine. */
+  uclWorld?: UclAiGroup[];
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
   /** Round 105: the weekly wage bill the board will tolerate, in thousands. */
@@ -958,8 +975,10 @@ export function lineLabel(m: Mentality): string {
   return m === 'attacking' ? 'High line' : m === 'defensive' ? 'Low block' : 'Standard line';
 }
 
-/** European flavor clubs used for UCL groups/knockouts (not in the league). */
-const EURO_CLUBS = [
+/** European flavor clubs used for UCL groups/knockouts (not in the league).
+ *  Exported since Round 163 so the world harness can prove every club in
+ *  every AI group is a real one. */
+export const EURO_CLUBS = [
   'Benfica', 'Porto', 'Sporting CP', 'Ajax', 'PSV', 'Feyenoord', 'Celtic', 'Rangers',
   'Galatasaray', 'Fenerbahçe', 'Club Brugge', 'RB Salzburg', 'Olympiacos', 'RB Leipzig',
   'Bayer Leverkusen', 'Monaco', 'Lille', 'Atalanta', 'Lazio', 'Sevilla',
@@ -1081,6 +1100,29 @@ export const REAL_LEAGUES: LeagueDef[] = [
     clubs: ['Club Brugge', 'Union Saint-Gilloise', 'Anderlecht', 'Genk', 'Gent', 'Antwerp', 'Standard Liège', 'Mechelen', 'Charleroi', 'Westerlo', 'Sint-Truiden', 'OH Leuven', 'Cercle Brugge', 'La Louvière', 'Zulte Waregem', 'Beveren', 'Kortrijk', 'Lommel'],
   },
 ];
+
+/**
+ * Round 163: the nation behind every league id, for the flag on the league
+ * picker. Names match the FlagImg lookup table exactly. Era leagues reuse
+ * these ids, and a custom league wears the id of the league it joined.
+ */
+export const LEAGUE_NATIONS: Record<string, string> = {
+  premier: 'England',
+  championship: 'England',
+  laliga: 'Spain',
+  seriea: 'Italy',
+  bundesliga: 'Germany',
+  ligue1: 'France',
+  eredivisie: 'Netherlands',
+  bundesliga2: 'Germany',
+  saudi: 'Saudi Arabia',
+  mlsEast: 'USA',
+  mlsWest: 'USA',
+  primeira: 'Portugal',
+  scottish: 'Scotland',
+  superlig: 'Türkiye',
+  proleague: 'Belgium',
+};
 
 /** Strength priors for league clubs the player pool cannot rate. */
 const STRENGTH_PRIORS: Record<string, number> = {
@@ -4906,22 +4948,53 @@ function eraEuroPool(eraId: string): string[] {
     .map(e => e.c);
 }
 
-/** The eight clubs in the knockout draw: me (if through) plus Europe's best. */
+/**
+ * The eight clubs in the knockout draw. Round 163: the draw is EARNED now.
+ * The field is the group winners in group order (my group is A), so the
+ * projected bracket people watched all group stage is the bracket they get.
+ * When I qualify as a runner-up I take the last slot, so I never face my own
+ * group's winner in the quarter-final rematch slot 0 would create. Thin
+ * worlds (old saves mid-season, historic eras with small pools) fill the
+ * remaining slots from the continental pool exactly as before.
+ */
 function uclBracketField(state: CareerState, includeMe: boolean): string[] {
-  const taken = new Set<string>([state.clubName, ...(state.uclGroup?.opponents ?? [])]);
-  const historic = !!state.eraId && isHistoricEra(state.eraId);
-  const pool = historic
-    ? shuffle(eraEuroPool(state.eraId!).filter(c => !taken.has(c)))
-    : shuffle([...new Set([...EURO_CLUBS, ...CLUBS.filter(c => c.tier <= 2).map(c => c.name)])].filter(c => !taken.has(c)));
-  const others = pool.slice(0, includeMe ? 7 : 8);
-  const field = includeMe ? [state.clubName, ...others] : others;
+  const winners: string[] = [];
+  if (state.uclGroup) {
+    const w = sortedTable(state.uclGroup.table)[0]?.club;
+    if (w) winners.push(w);
+  }
+  for (const g of state.uclWorld ?? []) {
+    const w = sortedTable(g.table)[0]?.club;
+    if (w) winners.push(w);
+  }
+  let field = winners.slice(0, 8);
+  if (includeMe && !field.includes(state.clubName)) {
+    // A runner-up replaces the weakest slot rather than shoving everyone.
+    if (field.length >= 8) field = [...field.slice(0, 7), state.clubName];
+    else field = [...field, state.clubName];
+  }
+  if (field.length < 8) {
+    const taken = new Set<string>([
+      state.clubName,
+      ...(state.uclGroup?.opponents ?? []),
+      ...(state.uclWorld ?? []).flatMap(g => g.clubs),
+      ...field,
+    ]);
+    const historic = !!state.eraId && isHistoricEra(state.eraId);
+    const pool = historic
+      ? shuffle(eraEuroPool(state.eraId!).filter(c => !taken.has(c)))
+      : shuffle([...new Set([...EURO_CLUBS, ...CLUBS.filter(c => c.tier <= 2).map(c => c.name)])].filter(c => !taken.has(c)));
+    field = [...field, ...pool.slice(0, 8 - field.length)];
+  }
   // Guard against a thin pool: never hand back fewer than eight names.
   let n = 1;
   while (field.length < 8) field.push(`Continental XI ${n++}`);
   return field;
 }
 
-/** Build the quarter-final ties. My club always sits in slot 0 when I am in. */
+/** Build the quarter-final ties, pairing the field in group order (A v B,
+ *  C v D and so on), the same pairing the projected bracket showed all
+ *  group stage. */
 function buildUclBracket(state: CareerState, includeMe: boolean): UclTie[] {
   const field = uclBracketField(state, includeMe);
   const ties: UclTie[] = [];
@@ -5012,6 +5085,105 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string): UclGr
     table: [myClub, ...opponents].map(emptyRow),
     matchday: 0,
   };
+}
+
+/* ---------- Round 163: the whole group stage, not just my corner ---------- */
+
+const GROUP_LETTERS = ['B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
+/**
+ * Build the OTHER Champions League groups from the same continental pool my
+ * own group was drawn from, minus every club already in my group. Four clubs
+ * per group, up to seven groups (a full eight group draw with mine), fewer
+ * when a historic era's pool runs thin. Returns undefined when I am not in
+ * Europe, so the save carries nothing it does not need.
+ */
+export function initUclWorld(state: CareerState): UclAiGroup[] | undefined {
+  const group = state.uclGroup;
+  if (!group) return undefined;
+  const taken = new Set<string>([state.clubName, ...group.opponents]);
+  const historic = !!state.eraId && isHistoricEra(state.eraId);
+  let pool: string[];
+  if (historic) {
+    // A historic era's continental pool is sixteen clubs, so its group
+    // stage is honestly smaller rather than padded with relegation fodder.
+    pool = shuffle(eraEuroPool(state.eraId!).filter(c => !taken.has(c)));
+  } else {
+    const primary = shuffle([...new Set([...EURO_CLUBS, ...CLUBS.filter(c => c.tier <= 2).map(c => c.name)])].filter(c => !taken.has(c)));
+    const inPrimary = new Set(primary);
+    // The heavyweights alone are about six groups' worth, so the last spots
+    // go to real clubs from the UCL eligible leagues, like the real draw's
+    // fourth pot.
+    const extras = shuffle(REAL_LEAGUES.filter(l => l.euro).flatMap(l => l.clubs).filter(c => !taken.has(c) && !inPrimary.has(c)));
+    pool = [...primary, ...extras];
+  }
+  const groups: UclAiGroup[] = [];
+  for (let i = 0; i < GROUP_LETTERS.length; i++) {
+    const clubs = pool.slice(i * 4, i * 4 + 4);
+    if (clubs.length < 4) break;
+    groups.push({ letter: GROUP_LETTERS[i], clubs, table: clubs.map(emptyRow), matchday: 0 });
+  }
+  return groups;
+}
+
+/** The two fixtures of one matchday in a four club double round robin.
+ *  Every club plays every matchday, and every pairing happens exactly twice
+ *  with the venue swapped. */
+function groupFixtures(clubs: string[], md: number): [string, string][] {
+  const [a, b, c, d] = clubs;
+  const rounds: [string, string][][] = [
+    [[a, b], [c, d]],
+    [[c, a], [b, d]],
+    [[a, d], [b, c]],
+    [[b, a], [d, c]],
+    [[a, c], [d, b]],
+    [[d, a], [c, b]],
+  ];
+  return rounds[clamp(md, 0, 5)];
+}
+
+/**
+ * Bring every AI group up to my own group's matchday. Lockstep on a normal
+ * week, catch-up when an old save arrives without a uclWorld mid campaign.
+ */
+function advanceUclWorld(state: CareerState): void {
+  const group = state.uclGroup;
+  if (!group) return;
+  if (!state.uclWorld) state.uclWorld = initUclWorld(state);
+  for (const g of state.uclWorld ?? []) {
+    while (g.matchday < Math.min(6, group.matchday)) {
+      for (const [h, a] of groupFixtures(g.clubs, g.matchday)) {
+        const [hg, ag] = simAiMatch(state, h, a);
+        applyResult(g.table, h, a, hg, ag);
+        noteForm(state, h, a, hg, ag);
+      }
+      g.matchday += 1;
+    }
+  }
+}
+
+/**
+ * Round 163: the bracket people argue about BEFORE the groups are done. The
+ * current leader of every group, paired exactly the way the real draw will
+ * pair them (A v B, C v D...), so watching a leader change hands is watching
+ * your quarter-final opponent change. Null once the real bracket exists or
+ * when there is no group stage to project from.
+ */
+export function projectedUclBracket(state: CareerState): { home: string; away: string }[] | null {
+  if (state.uclBracket && state.uclBracket.length) return null;
+  if (!state.uclGroup) return null;
+  const leaders: string[] = [];
+  const mine = sortedTable(state.uclGroup.table)[0]?.club;
+  if (mine) leaders.push(mine);
+  for (const g of state.uclWorld ?? []) {
+    const w = sortedTable(g.table)[0]?.club;
+    if (w) leaders.push(w);
+  }
+  const pairs: { home: string; away: string }[] = [];
+  for (let i = 0; i + 1 < leaders.length && pairs.length < 4; i += 2) {
+    pairs.push({ home: leaders[i], away: leaders[i + 1] });
+  }
+  return pairs.length ? pairs : null;
 }
 
 function drawCupOpponent(state: CareerState): string {
@@ -6323,6 +6495,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
       otherResults.push({ home: others[0], away: others[1], hg, ag });
     }
     group.matchday = Math.min(6, group.matchday + 1);
+    // Round 163: the other seven groups play their matchday the same night.
+    advanceUclWorld(state);
     if (group.matchday >= 6) {
       const pos = sortedTable(group.table).findIndex(r => r.club === state.clubName) + 1;
       if (pos <= 2) {
@@ -7400,6 +7574,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   ensurePress(state);
   state.wageCap = wageCapFrom(wageBill(state));
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
+  // Round 163: the rest of the Champions League draw exists from day one.
+  state.uclWorld = initUclWorld(state);
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex]);
@@ -8373,6 +8549,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     registerCustomClub(nextCustom, eraId, liveXI);
   }
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length, eraId, nextCustom ? leagueClubs : undefined);
+  // Round 163: a fresh Champions League draw for the new season.
+  state.uclWorld = initUclWorld(state);
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);

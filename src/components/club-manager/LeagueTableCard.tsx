@@ -7,6 +7,9 @@ interface LeagueTableCardProps {
   /** Show only a slice of rows centered on my club (for the overview tab). */
   compact?: boolean;
   title?: string;
+  /** Round 163: zero games played, alphabetical order, my club starred,
+   *  position colors off because the numbers mean nothing yet. */
+  preseason?: boolean;
   /** Round 74: tap any club to open its detail screen (the rival viewer). */
   onClubClick?: (club: string) => void;
 }
@@ -14,7 +17,7 @@ interface LeagueTableCardProps {
 /**
  * League (or UCL group) standings. Top 4 = UCL zone marker, 1st = title.
  */
-export function LeagueTableCard({ rows, myClub, compact = false, title, onClubClick }: LeagueTableCardProps) {
+export function LeagueTableCard({ rows, myClub, compact = false, title, preseason = false, onClubClick }: LeagueTableCardProps) {
   const myIdx = rows.findIndex(r => r.club === myClub);
   let visible = rows.map((r, i) => ({ r, pos: i + 1 }));
   if (compact) {
@@ -46,9 +49,9 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, onClubCl
           >
             <span className={cn(
               'font-bold',
-              pos === 1 ? 'text-gold' : pos <= 4 ? 'text-emerald-400' : 'text-muted-foreground',
-            )}>{pos}</span>
-            <span className={cn('truncate', mine ? 'text-primary font-bold' : 'text-foreground')}>{r.club}</span>
+              preseason ? 'text-muted-foreground' : pos === 1 ? 'text-gold' : pos <= 4 ? 'text-emerald-400' : 'text-muted-foreground',
+            )}>{preseason ? '·' : pos}</span>
+            <span className={cn('truncate', mine ? 'text-primary font-bold' : 'text-foreground')}>{preseason && mine ? '⭐ ' : ''}{r.club}</span>
             <span className="text-center text-muted-foreground">{r.w}</span>
             <span className="text-center text-muted-foreground">{r.d}</span>
             <span className="text-center text-muted-foreground">{r.l}</span>
