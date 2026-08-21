@@ -3,7 +3,7 @@ import { nbaConnectionsPuzzles } from '@/data/nbaConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchNbaConnectionsPuzzles } from '@/lib/fetchNbaConnectionsPuzzles';
-import { dateSeed, getTodayET } from '@/lib/dateUtils';
+import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 
 /**
  * NBA Connections, direct port of useBaseballConnections (task #26).
@@ -66,7 +66,7 @@ export function useNbaConnections() {
   }, []);
 
   const todaysPuzzle = useMemo(
-    () => (puzzlePool.length > 0 ? puzzlePool[dateSeed(getTodayET()) % puzzlePool.length] : null),
+    () => (puzzlePool.length > 0 ? puzzlePool[dailyIndex(getTodayET(), puzzlePool.length)] : null),
     [puzzlePool],
   );
 

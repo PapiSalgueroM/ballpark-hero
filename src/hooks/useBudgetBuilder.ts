@@ -5,7 +5,7 @@ import {
   type Formation, type FormationSlot, type Topic,
 } from '@/lib/squadDeal';
 import { simulateSeries, type SeriesResult } from '@/lib/dartDraft';
-import { dateSeed, getTodayET } from '@/lib/dateUtils';
+import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 /**
@@ -183,7 +183,7 @@ export function useBudgetBuilder(): BudgetBuilderState {
   /** Today's board demand, date-seeded; era-safe list. */
   const criterion = useMemo(() => {
     const eligible = CRITERIA.filter(c => !c.todayOnly || era.id === 'today');
-    return eligible[dateSeed(getTodayET()) % eligible.length];
+    return eligible[dailyIndex(getTodayET(), eligible.length)];
   }, [era.id]);
 
   const criterionMet = useMemo(() => {

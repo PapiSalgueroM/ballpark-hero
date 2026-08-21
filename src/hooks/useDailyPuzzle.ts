@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { getTodayET, dailyIndex } from '@/lib/dateUtils';
 
 // ---------------------------------------------------------------------------
 // Schema version
@@ -173,9 +173,12 @@ function selectDailyPuzzle<T>(
     return { puzzle: null, index: 0 };
   }
 
-  // Core date-seed: deterministic, same result for every user on the same ET date
-  const seed = dateSeed(todayStr); // e.g. 20260525
-  const index = seed % puzzles.length;
+  /* Deterministic, same result for every user on the same ET date.
+     Round 213: the walk through the pool is shuffled per cycle rather than
+     +1 a day. Every puzzle still comes up exactly once before any comes up
+     twice, which is what a small pool needs, but tomorrow is no longer
+     today plus one on every game on the site at once. */
+  const index = dailyIndex(todayStr, puzzles.length);
   return { puzzle: puzzles[index], index };
 }
 

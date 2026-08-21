@@ -1,5 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
-import { dateSeed, getTodayET } from '@/lib/dateUtils';
+import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 
 /**
  * Data layer + evaluation logic for Puck Detective, a daily guess-the-player
@@ -300,8 +300,7 @@ export async function fetchPuckDetectivePool(): Promise<PuckDetectivePlayer[] | 
 /** Date-seeded daily pick, stable across all users on the same ET date. */
 export function pickDailyMystery(pool: PuckDetectivePlayer[]): PuckDetectivePlayer {
   const sorted = [...pool].sort((a, b) => a.playerId - b.playerId);
-  const seed = dateSeed(getTodayET());
-  return sorted[seed % sorted.length];
+  return sorted[dailyIndex(getTodayET(), sorted.length)];
 }
 
 /** Random pick for unlimited mode, optionally avoiding the immediately-previous mystery. */

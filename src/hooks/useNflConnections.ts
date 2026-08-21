@@ -3,7 +3,7 @@ import { nflConnectionsPuzzles } from '@/data/nflConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchNflConnectionsPuzzles } from '@/lib/fetchNflConnectionsPuzzles';
-import { dateSeed, getTodayET } from '@/lib/dateUtils';
+import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 
 /**
  * NFL Connections, direct port of useNbaConnections (task #26).
@@ -66,7 +66,7 @@ export function useNflConnections() {
   }, []);
 
   const todaysPuzzle = useMemo(
-    () => (puzzlePool.length > 0 ? puzzlePool[dateSeed(getTodayET()) % puzzlePool.length] : null),
+    () => (puzzlePool.length > 0 ? puzzlePool[dailyIndex(getTodayET(), puzzlePool.length)] : null),
     [puzzlePool],
   );
 

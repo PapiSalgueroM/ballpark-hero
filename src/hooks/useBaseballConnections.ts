@@ -3,7 +3,7 @@ import { baseballConnectionsPuzzles } from '@/data/baseballConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchBaseballConnectionsPuzzles } from '@/lib/fetchBaseballConnectionsPuzzles';
-import { dateSeed, getTodayET } from '@/lib/dateUtils';
+import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 
 function isValidBBPuzzle(p: { groups: { players: string[] }[] }): boolean {
   const all = p.groups.flatMap((g) => g.players);
@@ -62,7 +62,7 @@ export function useBaseballConnections() {
   }, []);
 
   const todaysPuzzle = useMemo(
-    () => (puzzlePool.length > 0 ? puzzlePool[dateSeed(getTodayET()) % puzzlePool.length] : null),
+    () => (puzzlePool.length > 0 ? puzzlePool[dailyIndex(getTodayET(), puzzlePool.length)] : null),
     [puzzlePool],
   );
 

@@ -1,5 +1,5 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { dailyIndex, dateSeed, getTodayET } from '@/lib/dateUtils';
 
 /**
  * Missing Five (task #39, the NBA port of Missing XI): a famous real NBA
@@ -456,7 +456,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
 
 export function getDailyFivePuzzle(): ActiveFivePuzzle {
   const seed = dateSeed(getTodayET());
-  const lineup = FIVE_LINEUPS[seed % FIVE_LINEUPS.length];
+  const lineup = FIVE_LINEUPS[dailyIndex(getTodayET(), FIVE_LINEUPS.length)];
   // Independent pick of which candidate is blanked, per the Missing XI convention.
   const candidate = lineup.blankCandidates[Math.floor(seed / 7) % lineup.blankCandidates.length];
   return { lineup, candidate };

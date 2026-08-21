@@ -31,6 +31,15 @@
  *   4. No raw date seed is ever handed to a Lehmer generator again, which
  *      is the rule that stops the whole class of bug coming back.
  *
+ * Round 213 added a third section. Every daily game used to pick its board
+ * with pool[dateSeed % n], which covers the pool properly but makes
+ * tomorrow today plus one, on every game at once, next to a leaderboard.
+ * dailyIndex keeps the coverage and drops the predictability by cutting
+ * the days into cycles the length of the pool and shuffling each cycle.
+ * Section 3 checks BOTH halves, because losing either would be a
+ * regression: a shuffle that repeats inside a cycle starves a small pool,
+ * and a walk that is still plus one a day has fixed nothing.
+ *
  * Run: node scripts/simDaily.mjs
  */
 import { execSync } from 'node:child_process';
@@ -205,6 +214,67 @@ console.log('2) The date is hashed before it seeds a random stream, everywhere')
   }
   console.log(`   ${checked} source files scanned, ${lehmerFiles} with a Lehmer step, 0 seeded from a raw date`);
   console.log(`   hashed seed reaches ${distinctBuckets}/20 buckets in 60 days; the raw seed reaches ${rawBuckets.size}`);
+}
+
+console.log('3) The order through the pool is a real shuffle, not a straight line');
+{
+  /* Round 213. Every daily game used to pick with `pool[dateSeed % n]`,
+     which covers the pool properly but means tomorrow is today plus one,
+     on every game on the site, forever, next to a leaderboard. dailyIndex
+     keeps the coverage and drops the predictability: the days are cut into
+     cycles the length of the pool and each cycle is its own shuffle.
+     Both halves of that are checked here, because dropping either one
+     would be a regression: a shuffle that repeats inside a cycle starves a
+     small pool, and a walk that is still +1 a day has not fixed anything. */
+  const dayStr = day => new RealDate(day * 86_400_000).toISOString().slice(0, 10);
+  for (const pool of [3, 10, 14, 18, 40, 150]) {
+    const first = Math.ceil(20450 / pool) * pool;
+    const seq = [];
+    for (let d = first; d < first + pool * 6; d += 1) seq.push(mods.du.dailyIndex(dayStr(d), pool));
+
+    /* Coverage: every board exactly once per cycle. */
+    for (let c = 0; c < 6; c += 1) {
+      const chunk = seq.slice(c * pool, (c + 1) * pool);
+      if (new Set(chunk).size !== pool) {
+        fail(`pool of ${pool}: cycle ${c} showed ${new Set(chunk).size} of ${pool} boards, so some board was skipped and another repeated`);
+        break;
+      }
+    }
+    /* Never the same board two days running, including across the seam
+       between two cycles, which is the case that needed the extra rule. */
+    for (let i = 1; i < seq.length; i += 1) {
+      if (seq[i] === seq[i - 1]) { fail(`pool of ${pool}: the same board on two consecutive days at position ${i}`); break; }
+    }
+    /* And it is not just the old straight line wearing a hat. */
+    let stepOne = 0;
+    for (let i = 1; i < seq.length; i += 1) if (seq[i] === (seq[i - 1] + 1) % pool) stepOne += 1;
+    if (pool >= 10 && stepOne > seq.length * 0.4) {
+      fail(`pool of ${pool}: ${stepOne} of ${seq.length - 1} days simply moved one place on, which is the pattern this replaced`);
+    }
+  }
+  /* Deterministic across calls, or two players see different puzzles. */
+  const a = mods.du.dailyIndex('2026-07-04', 14);
+  const b = mods.du.dailyIndex('2026-07-04', 14);
+  if (a !== b) fail('dailyIndex is not deterministic for one date');
+  /* A pool that cannot be indexed must not throw or return junk. */
+  for (const bad of [0, 1, -3, NaN]) {
+    const v = mods.du.dailyIndex('2026-07-04', bad);
+    if (!Number.isFinite(v) || v < 0) fail(`dailyIndex returned ${v} for a pool of ${bad}`);
+  }
+  /* And the games really use it rather than the old modulo. */
+  const USERS = [
+    'src/hooks/useDailyPuzzle.ts', 'src/hooks/useConnections.ts', 'src/hooks/useNbaConnections.ts',
+    'src/hooks/useNflConnections.ts', 'src/hooks/useNhlConnections.ts', 'src/hooks/useBaseballConnections.ts',
+    'src/hooks/useBudgetBuilder.ts', 'src/hooks/useGuessSoccerClub.ts',
+    'src/lib/missingFive.ts', 'src/lib/missingNine.ts', 'src/lib/missingEleven.ts',
+    'src/lib/orderTheList.ts', 'src/lib/puckDetective.ts',
+  ];
+  for (const rel of USERS) {
+    const t = fs.readFileSync(path.join(ROOT, rel), 'utf-8');
+    if (!/dailyIndex\(/.test(t)) fail(`${rel}: no longer picks its board with dailyIndex`);
+    if (/dateSeed\(getTodayET\(\)\) % /.test(t)) fail(`${rel}: went back to the predictable +1 a day walk`);
+  }
+  console.log(`   6 pool sizes walked through 6 cycles each, full coverage, no repeats, no straight line; ${USERS.length} games on it`);
 }
 
 console.log('');

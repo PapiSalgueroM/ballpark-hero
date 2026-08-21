@@ -1,5 +1,5 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { dailyIndex, dateSeed, getTodayET } from '@/lib/dateUtils';
 
 /**
  * Missing Nine (task #39, the MLB port of Missing XI/Five): a famous real
@@ -382,7 +382,7 @@ export const NINE_LINEUPS: NineLineup[] = [
 
 export function getDailyNinePuzzle(): ActiveNinePuzzle {
   const seed = dateSeed(getTodayET());
-  const lineup = NINE_LINEUPS[seed % NINE_LINEUPS.length];
+  const lineup = NINE_LINEUPS[dailyIndex(getTodayET(), NINE_LINEUPS.length)];
   const candidate = lineup.blankCandidates[Math.floor(seed / 7) % lineup.blankCandidates.length];
   return { lineup, candidate };
 }

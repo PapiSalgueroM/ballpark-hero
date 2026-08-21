@@ -10,7 +10,7 @@ import {
 import { soccerClubPuzzles } from '@/data/soccerClubPuzzles';
 import { fetchSoccerClubPuzzles } from '@/lib/fetchSoccerClubPuzzles';
 import { fetchNotablePlayersForClubs } from '@/lib/fetchSoccerClubNotablePlayers';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 import {
   ClubQuestionId,
   scoreQuestionTreeRound,
@@ -87,7 +87,7 @@ export function useGuessSoccerClub() {
 
   const getDailyPuzzle = useCallback((): SoccerClubPuzzle => {
     // UTC-safe: all users share same rollover at midnight ET
-    const idx = dateSeed(getTodayET()) % puzzlePool.length;
+    const idx = dailyIndex(getTodayET(), puzzlePool.length);
     return puzzlePool[idx];
   }, [puzzlePool]);
 

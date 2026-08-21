@@ -1,4 +1,4 @@
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 
 /**
  * "Rank 'Em" (backlog: Order the List / Factle). Put five players in order by
@@ -138,8 +138,7 @@ export const RANK_ROUNDS: RankRound[] = [
 export const RANK_POINTS_PER_SLOT = 200; // 5 of 5 correct = 1000
 
 export function getDailyRankRound(): RankRound {
-  const seed = dateSeed(getTodayET());
-  return RANK_ROUNDS[seed % RANK_ROUNDS.length];
+  return RANK_ROUNDS[dailyIndex(getTodayET(), RANK_ROUNDS.length)];
 }
 
 export function getRandomRankRound(): RankRound {

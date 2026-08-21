@@ -84,6 +84,84 @@ export function dailyPrngSeed(dateStr: string): number {
   return (h % 2147483646) + 1;
 }
 
+/** Whole days since the epoch for an ET date string. Calendar arithmetic,
+    not clock arithmetic, so daylight saving cannot move it. */
+export function dayNumber(dateStr: string): number {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return Math.floor(Date.UTC(y, (m || 1) - 1, d || 1) / 86_400_000);
+}
+
+/**
+ * Round 213: which puzzle today is, when the pool is walked in an order
+ * nobody can guess.
+ *
+ * Nearly every daily game on this site picked its board with
+ * `pool[dateSeed(today) % pool.length]`. That has one good property and one
+ * bad one. The good one is COVERAGE: the index moves by one a day, so a
+ * pool of fourteen shows all fourteen before it shows any of them twice,
+ * which matters a lot when a pool is small. The bad one is that it is
+ * completely predictable. Tomorrow is today plus one, forever, on every
+ * game, and there is a leaderboard.
+ *
+ * This keeps the good property and drops the bad one. The days are cut into
+ * cycles the length of the pool; each cycle is a full shuffle of the pool,
+ * seeded from the cycle number, so within any run of `pool.length` days you
+ * still see every board exactly once, and the order is different every
+ * cycle and cannot be worked out from yesterday.
+ *
+ * One extra rule: if a new cycle would open on the board the last one
+ * closed with, it is rotated by one. Otherwise the one thing this was
+ * supposed to prevent, the same puzzle two days running, could still
+ * happen at a cycle boundary about once per pool length.
+ */
+export function dailyIndex(dateStr: string, poolSize: number): number {
+  if (!Number.isFinite(poolSize) || poolSize <= 1) return 0;
+  const day = dayNumber(dateStr);
+  const cycle = Math.floor(day / poolSize);
+  const pos = ((day % poolSize) + poolSize) % poolSize;
+  return cycleOrder(cycle, poolSize)[pos];
+}
+
+/**
+ * One cycle's shuffled walk of the pool, deterministic in the cycle number.
+ *
+ * The first two entries are swapped when the cycle would otherwise open on
+ * the board the previous cycle closed with. Swapping rather than skipping
+ * matters: skipping would drop one board from the cycle and show another
+ * twice, which is the exact thing this is here to prevent.
+ */
+function cycleOrder(cycle: number, poolSize: number): number[] {
+  const out = shuffledRange(poolSize, `cycle:${cycle}:${poolSize}`);
+  if (poolSize > 2) {
+    const previous = shuffledRange(poolSize, `cycle:${cycle - 1}:${poolSize}`);
+    if (out[0] === previous[poolSize - 1]) {
+      [out[0], out[1]] = [out[1], out[0]];
+    }
+  }
+  return out;
+}
+
+/** 0..n-1 shuffled by a well mixed generator seeded from a label. */
+function shuffledRange(n: number, label: string): number[] {
+  const out = Array.from({ length: n }, (_, i) => i);
+  /* mulberry32, not a Lehmer step: this is exactly the situation Round 212
+     was about, and a multiplicative generator seeded from a short label
+     does not scatter well enough to shuffle with. */
+  let a = dailyPrngSeed(label) >>> 0;
+  const next = () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  for (let i = out.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(next() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
 /**
  * Returns today's deterministic difficulty tier for Footle's daily puzzle.
  * Every user on the same ET date gets the same tier.

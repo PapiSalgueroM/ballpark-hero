@@ -3,7 +3,7 @@ import { nhlConnectionsPuzzles } from '@/data/nhlConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchNhlConnectionsPuzzles } from '@/lib/fetchNhlConnectionsPuzzles';
-import { dateSeed, getTodayET } from '@/lib/dateUtils';
+import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 
 /**
  * NHL Connections, direct port of useNbaConnections/useNflConnections
@@ -64,7 +64,7 @@ export function useNhlConnections() {
   }, []);
 
   const todaysPuzzle = useMemo(
-    () => (puzzlePool.length > 0 ? puzzlePool[dateSeed(getTodayET()) % puzzlePool.length] : null),
+    () => (puzzlePool.length > 0 ? puzzlePool[dailyIndex(getTodayET(), puzzlePool.length)] : null),
     [puzzlePool],
   );
 

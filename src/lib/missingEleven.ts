@@ -1,5 +1,5 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { dailyIndex, dateSeed, getTodayET } from '@/lib/dateUtils';
 
 /**
  * Missing Eleven (task #39, the NFL port of Missing XI): a famous real
@@ -678,7 +678,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
 
 export function getDailyElevenPuzzle(): ActiveElevenPuzzle {
   const seed = dateSeed(getTodayET());
-  const lineup = ELEVEN_LINEUPS[seed % ELEVEN_LINEUPS.length];
+  const lineup = ELEVEN_LINEUPS[dailyIndex(getTodayET(), ELEVEN_LINEUPS.length)];
   const candidate = lineup.blankCandidates[Math.floor(seed / 7) % lineup.blankCandidates.length];
   return { lineup, candidate };
 }

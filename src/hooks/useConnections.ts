@@ -4,7 +4,7 @@ import type { ConnectionGroup, ConnectionDifficulty } from '@/types/connections'
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchConnectionsPuzzles } from '@/lib/fetchConnectionsPuzzles';
-import { dateSeed, getTodayET } from '@/lib/dateUtils';
+import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 
 function isValidPuzzle(p: { groups: { players: string[] }[] }): boolean {
   const all = p.groups.flatMap((g) => g.players);
@@ -50,8 +50,7 @@ export function useConnections() {
   }, []);
 
   const todaysPuzzle = useMemo(() => {
-    const seed = dateSeed(getTodayET());
-    return puzzlePool.length > 0 ? puzzlePool[seed % puzzlePool.length] : null;
+    return puzzlePool.length > 0 ? puzzlePool[dailyIndex(getTodayET(), puzzlePool.length)] : null;
   }, [puzzlePool]);
 
   // ── Daily ──────────────────────────────────────────────────────────────────
