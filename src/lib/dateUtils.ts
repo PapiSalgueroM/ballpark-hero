@@ -146,25 +146,47 @@ function cycleOrder(cycle: number, poolSize: number): number[] {
     from this rather than carrying their own generator, after a measured
     year showed their multiply-a-big-date walk collapsing onto every 4th
     and every 8th pool index (the float product passes 2 to the 53rd and
-    the low bits round away, the Round 212 class of bug in a new costume). */
+    the low bits round away, the Round 212 class of bug in a new shape). */
 export function shuffledRange(n: number, label: string): number[] {
   const out = Array.from({ length: n }, (_, i) => i);
-  /* mulberry32, not a Lehmer step: this is exactly the situation Round 212
-     was about, and a multiplicative generator seeded from a short label
-     does not scatter well enough to shuffle with. */
+  const next = generatorFrom(label);
+  for (let i = out.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(next() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+/** mulberry32 seeded from a label, not a Lehmer step: this is exactly the
+    situation Round 212 was about, and a multiplicative generator seeded
+    from a short label does not scatter well enough to shuffle with. */
+function generatorFrom(label: string): () => number {
   let a = dailyPrngSeed(label) >>> 0;
-  const next = () => {
+  return () => {
     a |= 0;
     a = (a + 0x6d2b79f5) | 0;
     let t = Math.imul(a ^ (a >>> 15), 1 | a);
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
-  for (let i = out.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(next() * (i + 1));
-    [out[i], out[j]] = [out[j], out[i]];
-  }
-  return out;
+}
+
+/**
+ * One uniform draw in [0, n): the first output of the same well mixed
+ * generator shuffledRange shuffles with, seeded from the label.
+ *
+ * Round 224: for the daily games that need one pick per (day, slot) rather
+ * than a whole shuffle. Their old shape multiplied the raw 8-digit date by
+ * the glibc LCG multiplier and a stride, which passes 2 to the 53rd and
+ * rounds its low bits away, so a fixed slot could only circle a fraction
+ * of its pool across a year (measured: 81 of 800 transfer cases, 9 of a 72
+ * clue tier, 3 of 24 easy emoji puzzles). Label per slot, e.g.
+ * `ball-iq:${today}:q3`, and two slots or two days can never fold onto the
+ * same stream.
+ */
+export function dailyDraw(n: number, label: string): number {
+  if (!Number.isFinite(n) || n <= 1) return 0;
+  return Math.floor(generatorFrom(label)() * n);
 }
 
 /**

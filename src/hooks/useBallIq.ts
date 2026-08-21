@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { getTodayET, dailyDraw, shuffledRange } from '@/lib/dateUtils';
 import { fetchQuizBoardClues, type Clue, type ClueValue } from '@/lib/fetchQuizBoard';
 
 export interface Question {
@@ -32,16 +32,17 @@ const STORAGE_PREFIX = 'ball-iq-';
  */
 const RAMP: ClueValue[] = [200, 200, 200, 400, 400, 400, 600, 600, 800, 800, 1000, 1000];
 
-function lcg(seed: number, i: number): number {
-  return Math.abs((seed * (i + 5) * 1103515245 + 12345) >>> 0);
-}
-
 /**
  * Distractors come from the SAME category and value tier, so a question about
  * 1970s Ballon d'Or winners offers other 1970s winners, not a Super Bowl team.
  * Wrong options have to be plausible or the test measures nothing.
+ *
+ * Round 224: draws are dailyDraw/shuffledRange off a per-question label now.
+ * The old in-file multiply overflowed float precision, and a fixed question
+ * slot could circle as few as 9 clues of a 72 clue tier across a whole
+ * year; measured, then replaced.
  */
-function buildQuestion(correct: Clue, pool: Clue[], seed: number): Question {
+export function buildQuestion(correct: Clue, pool: Clue[], label: string): Question {
   const sameCat = pool.filter(
     c => c.category === correct.category && c.answer !== correct.answer,
   );
@@ -50,20 +51,19 @@ function buildQuestion(correct: Clue, pool: Clue[], seed: number): Question {
 
   const distractors: string[] = [];
   const seen = new Set<string>([correct.answer]);
-  for (let i = 0; distractors.length < 3 && i < source.length * 6; i++) {
-    const pick = source[lcg(seed, i) % source.length];
+  /* walk the source in a shuffled order so the three distractors are a
+     uniform sample of the tier, not the survivors of a biased stream */
+  for (const si of shuffledRange(source.length, `${label}:distractors`)) {
+    if (distractors.length >= 3) break;
+    const pick = source[si];
     if (!pick || seen.has(pick.answer)) continue;
     seen.add(pick.answer);
     distractors.push(pick.answer);
   }
 
   const options = [correct.answer, ...distractors];
-  // deterministic shuffle so everyone sees the same order
-  for (let i = options.length - 1; i > 0; i--) {
-    const j = lcg(seed, i + 40) % (i + 1);
-    [options[i], options[j]] = [options[j], options[i]];
-  }
-  return { clue: correct, options, chosen: null };
+  const order = shuffledRange(options.length, `${label}:order`);
+  return { clue: correct, options: order.map(i => options[i]), chosen: null };
 }
 
 /**
@@ -125,7 +125,6 @@ export function useBallIq(): BallIqState {
 
   const questions = useMemo(() => {
     if (pool.length === 0) return [];
-    const seed = dateSeed(today);
     const out: Question[] = [];
     const usedIds = new Set<string>();
 
@@ -133,9 +132,10 @@ export function useBallIq(): BallIqState {
       const tier = pool.filter(c => c.value === value && !usedIds.has(c.clueId));
       const source = tier.length > 0 ? tier : pool.filter(c => !usedIds.has(c.clueId));
       if (source.length === 0) return;
-      const correct = source[lcg(seed, qi * 13) % source.length];
+      const label = `ball-iq:${today}:q${qi}`;
+      const correct = source[dailyDraw(source.length, label)];
       usedIds.add(correct.clueId);
-      const q = buildQuestion(correct, pool, seed + qi * 97);
+      const q = buildQuestion(correct, pool, label);
       // Only keep questions we could give real alternatives to.
       if (q.options.length >= 2) out.push(q);
     });

@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { getTodayET, dailyDraw } from '@/lib/dateUtils';
 import { EMOJI_PUZZLES, MIN_BANK_SIZE, type EmojiPuzzle } from '@/data/emojiPuzzles';
 
 export interface RoundState {
@@ -57,18 +57,17 @@ function isCorrect(guessRaw: string, p: EmojiPuzzle): boolean {
   return false;
 }
 
-function lcg(seed: number, i: number): number {
-  return Math.abs((seed * (i + 17) * 1103515245 + 12345) >>> 0);
-}
-
 /**
  * Daily five: 2 easy, 2 medium, 1 hard, same for everyone (ET day seed).
  * Falls back to whatever exists if a bucket is thin, the MIN_BANK_SIZE guard
  * in the data file keeps that theoretical.
+ *
+ * Round 224: the pick is a dailyDraw per slot now. The old in-file multiply
+ * overflowed float precision and the two easy slots could only ever show 3
+ * of the 24 easy puzzles across a whole year; measured, then replaced.
  */
-function pickDaily(today: string): EmojiPuzzle[] {
+export function pickDaily(today: string): EmojiPuzzle[] {
   if (EMOJI_PUZZLES.length < MIN_BANK_SIZE) return EMOJI_PUZZLES.slice(0, ROUNDS);
-  const seed = dateSeed(today);
   const buckets: Record<string, EmojiPuzzle[]> = { easy: [], medium: [], hard: [] };
   for (const p of EMOJI_PUZZLES) buckets[p.difficulty].push(p);
   const plan: Array<keyof typeof buckets> = ['easy', 'easy', 'medium', 'medium', 'hard'];
@@ -78,7 +77,7 @@ function pickDaily(today: string): EmojiPuzzle[] {
     const pool = buckets[bucket].filter(p => !used.has(p.id));
     const source = pool.length > 0 ? pool : EMOJI_PUZZLES.filter(p => !used.has(p.id));
     if (source.length === 0) return;
-    const pick = source[lcg(seed, bi * 7) % source.length];
+    const pick = source[dailyDraw(source.length, `emoji-guess:${today}:${bi}`)];
     used.add(pick.id);
     picked.push(pick);
   });

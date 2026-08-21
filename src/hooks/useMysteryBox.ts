@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { getTodayET, dailyDraw } from '@/lib/dateUtils';
 import { FORMATIONS, playerRating, type FormationSlot } from '@/lib/squadDeal';
 import { fetchPackPool, type PackPlayer, type PackTier } from '@/lib/fetchPackPool';
 
@@ -40,13 +40,12 @@ export interface MysteryBoxState {
   shareText: string;
 }
 
-function lcg(seed: number, i: number): number {
-  return Math.abs((seed * (i + 29) * 1103515245 + 12345) >>> 0);
-}
-
-/** Deterministic tier for pack i, same sequence for everyone on a given day. */
-function tierFor(seed: number, i: number): PackTier {
-  const r = (lcg(seed, i * 3 + 1) % 10000) / 10000;
+/** Deterministic tier for pack i, same sequence for everyone on a given day.
+    Round 224: rolls come from dailyDraw per (day, pack) label; the old
+    in-file multiply overflowed float precision and each slot could only
+    circle a sliver of its bucket. Measured, then replaced. */
+export function tierFor(today: string, i: number): PackTier {
+  const r = dailyDraw(10000, `mystery-box:${today}:tier:${i}`) / 10000;
   let acc = 0;
   for (const [tier, p] of ODDS) {
     acc += p;
@@ -76,7 +75,6 @@ function save(today: string, s: Saved) {
 
 export function useMysteryBox(): MysteryBoxState {
   const today = useMemo(() => getTodayET(), []);
-  const seed = useMemo(() => dateSeed(today), [today]);
   const formation = FORMATIONS[0]; // 4-3-3, fixed so everyone's run is comparable
 
   const [pool, setPool] = useState<PackPlayer[]>([]);
@@ -112,7 +110,7 @@ export function useMysteryBox(): MysteryBoxState {
     const out: PackPlayer[] = [];
     const used = new Set<string>();
     for (let i = 0; i < TOTAL_PACKS; i++) {
-      let tier = tierFor(seed, i);
+      const tier = tierFor(today, i);
       // walk down tiers if a bucket is exhausted (superstar bucket is ~130)
       const order: PackTier[] = ['superstar', 'star', 'quality', 'squad', 'fringe'];
       let bucket = byTier[tier].filter(p => !used.has(p.name));
@@ -122,12 +120,12 @@ export function useMysteryBox(): MysteryBoxState {
         bucket = byTier[order[oi]].filter(p => !used.has(p.name));
       }
       if (bucket.length === 0) break;
-      const pick = bucket[lcg(seed, i * 7 + 3) % bucket.length];
+      const pick = bucket[dailyDraw(bucket.length, `mystery-box:${today}:pick:${i}`)];
       used.add(pick.name);
       out.push(pick);
     }
     return out;
-  }, [pool, byTier, seed]);
+  }, [pool, byTier, today]);
 
   const packIndex = decisions.length;
   const finished = packs.length > 0 && packIndex >= packs.length;
