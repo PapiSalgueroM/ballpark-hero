@@ -50,7 +50,9 @@ export interface BbCriterion {
   todayOnly?: boolean;
 }
 
-const CRITERIA: BbCriterion[] = [
+/** Exported for simTopDailies, which proves every demand is winnable in
+    every era against the live pool. */
+export const CRITERIA: BbCriterion[] = [
   { id: 'youth', emoji: '🌱', label: 'Sign at least 3 players aged 23 or under', check: p => p.filter(x => x.age > 0 && x.age <= 23).length >= 3 },
   { id: 'no-galactico', emoji: '🧾', label: 'No single player may cost over a third of the budget', check: (p, b) => p.every(x => x.marketValue <= b / 3) },
   { id: 'nation-core', emoji: '🤝', label: 'Build a core: 4+ players sharing a nationality', check: p => { const m = new Map<string, number>(); p.forEach(x => m.set(x.nationality, (m.get(x.nationality) ?? 0) + 1)); return [...m.values()].some(n => n >= 4); } },
@@ -59,7 +61,10 @@ const CRITERIA: BbCriterion[] = [
   { id: 'in-the-black', emoji: '🏦', label: 'Leave at least 10% of the budget unspent', check: (_p, b, r) => r >= b * 0.1 },
   { id: 'world-tour', emoji: '🌍', label: 'At least 6 different nationalities', check: p => new Set(p.map(x => x.nationality)).size >= 6 },
   { id: 'club-rule', emoji: '🚫', label: 'No two players from the same club', check: p => new Set(p.map(x => x.club)).size === p.length },
-  { id: 'star-power', emoji: '⭐', label: 'At least one player rated 90 or higher', check: p => p.some(x => playerRating(x) >= 90) },
+  /* todayOnly because ratings anchor on market value and era money is small:
+     the 2015 pool tops out around 88 and 2007 lower still, so this demand is
+     IMPOSSIBLE there. Found by simTopDailies against the live era pools. */
+  { id: 'star-power', emoji: '⭐', label: 'At least one player rated 90 or higher', check: p => p.some(x => playerRating(x) >= 90), todayOnly: true },
   { id: 'league-spread', emoji: '🗺️', label: 'No more than 4 players from one league', check: p => { const m = new Map<string, number>(); p.forEach(x => m.set(x.league, (m.get(x.league) ?? 0) + 1)); return [...m.values()].every(n => n <= 4); }, todayOnly: true },
 ];
 
@@ -101,8 +106,9 @@ export interface BudgetBuilderState {
   shareText: string;
 }
 
-/** Greedy most-expensive XI for a formation: what money with no limit buys. */
-function moneyXiFor(pool: Player[], formation: Formation): (Player | null)[] {
+/** Greedy most-expensive XI for a formation: what money with no limit buys.
+    Exported for simTopDailies. */
+export function moneyXiFor(pool: Player[], formation: Formation): (Player | null)[] {
   const used = new Set<string>();
   return formation.slots.map(slot => {
     const p = pool
@@ -111,6 +117,14 @@ function moneyXiFor(pool: Player[], formation: Formation): (Player | null)[] {
     if (p) used.add(p.name);
     return p ?? null;
   });
+}
+
+/** Budget = 62% of the unconstrained best-XI cost, rounded to 10M, min 100M.
+    One formula, used by the hook and by the harness that proves every daily
+    demand can be met inside it. */
+export function budgetFor(moneyXi: (Player | null)[]): number {
+  const naive = moneyXi.reduce((s, p) => s + (p?.marketValue ?? 0), 0);
+  return Math.max(100, Math.round((naive * 0.62) / 10) * 10);
 }
 
 export function useBudgetBuilder(): BudgetBuilderState {
@@ -154,11 +168,7 @@ export function useBudgetBuilder(): BudgetBuilderState {
 
   const moneyXi = useMemo(() => moneyXiFor(topicPool, formation), [topicPool, formation]);
 
-  /** Budget = 62% of the unconstrained best-XI cost, rounded to 10M, min 100M. */
-  const budget = useMemo(() => {
-    const naive = moneyXi.reduce((s, p) => s + (p?.marketValue ?? 0), 0);
-    return Math.max(100, Math.round((naive * 0.62) / 10) * 10);
-  }, [moneyXi]);
+  const budget = useMemo(() => budgetFor(moneyXi), [moneyXi]);
 
   const spent = useMemo(
     () => Object.values(squad).reduce((s, p) => s + (p?.marketValue ?? 0), 0),

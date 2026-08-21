@@ -141,8 +141,13 @@ function cycleOrder(cycle: number, poolSize: number): number[] {
   return out;
 }
 
-/** 0..n-1 shuffled by a well mixed generator seeded from a label. */
-function shuffledRange(n: number, label: string): number[] {
+/** 0..n-1 shuffled by a well mixed generator seeded from a label.
+    Exported since Round 223: the Overrated and Tier List daily picks draw
+    from this rather than carrying their own generator, after a measured
+    year showed their multiply-a-big-date walk collapsing onto every 4th
+    and every 8th pool index (the float product passes 2 to the 53rd and
+    the low bits round away, the Round 212 class of bug in a new costume). */
+export function shuffledRange(n: number, label: string): number[] {
   const out = Array.from({ length: n }, (_, i) => i);
   /* mulberry32, not a Lehmer step: this is exactly the situation Round 212
      was about, and a multiplicative generator seeded from a short label

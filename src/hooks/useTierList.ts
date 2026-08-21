@@ -1,8 +1,8 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
-import { fetchOverratedPool, type OverratedPlayer } from '@/lib/fetchOverratedPool';
+import { getTodayET } from '@/lib/dateUtils';
+import { fetchOverratedPool, tierListDailyIndices, type OverratedPlayer } from '@/lib/fetchOverratedPool';
 
 export const TIERS = ['S', 'A', 'B', 'C', 'D'] as const;
 export type Tier = (typeof TIERS)[number];
@@ -30,40 +30,22 @@ export interface TierListState {
   shareText: string;
 }
 
-const SIZE = 8;
 const STORAGE_PREFIX = 'tier-list-';
 
 /**
  * Same 8 players for everyone on a given ET day. Never Math.random().
  *
  * Owner 2026-08-05: "u used the exact names as the ones in overrated and
- * underrated. There's so many people and u are reusing people." Two fixes:
- * the seed is salted so this game walks a different path through the pool
- * than Overrated/Underrated does, and the exact indexes Overrated picks
- * today (its i+1 LCG, first 10) are EXCLUDED outright so the two dailies
- * can never share a player on the same day.
+ * underrated. There's so many people and u are reusing people." The rule
+ * that came out of that (the two dailies never share a player on a day)
+ * now lives in tierListDailyIndices next to the Overrated pick, enforced
+ * by construction rather than by this file mirroring the sibling's
+ * arithmetic. Round 223 also replaced the old salted walk, which could
+ * only ever reach every 8th pool index and repeated yesterday's board
+ * outright 17 days a year; see the note in fetchOverratedPool.
  */
 function pickDaily(pool: OverratedPlayer[], today: string): OverratedPlayer[] {
-  if (pool.length === 0) return [];
-  const seed = dateSeed(today);
-
-  // Mirror useOverratedUnderrated's pickDaily walk to learn today's taken set.
-  const takenByOverrated = new Set<number>();
-  for (let i = 0; takenByOverrated.size < 10 && i < pool.length * 4; i++) {
-    const idx = Math.abs((seed * (i + 1) * 1103515245 + 12345) >>> 0) % pool.length;
-    takenByOverrated.add(idx);
-  }
-
-  const salted = (seed ^ 0x5f3759df) >>> 1; // different day-walk than the sibling game
-  const picked: OverratedPlayer[] = [];
-  const used = new Set<number>();
-  for (let i = 0; picked.length < SIZE && i < pool.length * 6; i++) {
-    const idx = Math.abs((salted * (i + 13) * 1103515245 + 12345) >>> 0) % pool.length;
-    if (used.has(idx) || takenByOverrated.has(idx)) continue;
-    used.add(idx);
-    picked.push(pool[idx]);
-  }
-  return picked;
+  return tierListDailyIndices(pool.length, today).map(i => pool[i]);
 }
 
 function loadSaved(today: string): { placements: Record<string, Tier>; submitted: boolean } | null {

@@ -1,8 +1,8 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
-import { fetchOverratedPool, type OverratedPlayer } from '@/lib/fetchOverratedPool';
+import { getTodayET } from '@/lib/dateUtils';
+import { fetchOverratedPool, overratedDailyIndices, type OverratedPlayer } from '@/lib/fetchOverratedPool';
 
 export type Vote = 'over' | 'under';
 
@@ -34,22 +34,14 @@ const ROUNDS = 10;
 const STORAGE_PREFIX = 'overrated-underrated-';
 
 /**
- * Deterministic shuffle, same 10 players for every visitor on a given ET day.
- * Never Math.random(), matching how every other daily game here works.
+ * Deterministic pick, same 10 players for every visitor on a given ET day.
+ * Never Math.random(). The indices come from overratedDailyIndices so this
+ * game and Tier List agree, from one place, on who is taken today; see the
+ * note there for why the old in-file walk had to go (it could only reach
+ * every 4th pool index).
  */
 function pickDaily(pool: OverratedPlayer[], today: string): OverratedPlayer[] {
-  if (pool.length === 0) return [];
-  const seed = dateSeed(today);
-  const picked: OverratedPlayer[] = [];
-  const used = new Set<number>();
-  for (let i = 0; picked.length < ROUNDS && i < pool.length * 4; i++) {
-    // Cheap LCG off the day seed so the set is stable but not the top 10 by value.
-    const idx = Math.abs((seed * (i + 1) * 1103515245 + 12345) >>> 0) % pool.length;
-    if (used.has(idx)) continue;
-    used.add(idx);
-    picked.push(pool[idx]);
-  }
-  return picked;
+  return overratedDailyIndices(pool.length, today).map(i => pool[i]);
 }
 
 function loadSaved(today: string): { votes: (Vote | null)[]; index: number } | null {
