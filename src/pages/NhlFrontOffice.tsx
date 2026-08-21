@@ -31,6 +31,7 @@ const NhlFrontOffice = () => {
               'Play the season in stretches; wins are two points, OT losses one.',
               'Finish top three in the division or grab a wild card to make the bracket.',
               'Win four best-of-7 rounds for the Cup, then draft, develop and go again.',
+              'Face the room: the podium, the accountability scrum and the trade question move your trust upstairs, and what you promise can raise or soften next season\'s mandate.',
             ]}
             examples={[
               'Flip an aging winger for a young defenseman at the deadline',

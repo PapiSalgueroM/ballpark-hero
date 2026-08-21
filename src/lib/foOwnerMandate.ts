@@ -63,8 +63,20 @@ export function strengthRank(strengths: Record<string, number>, myTeam: string):
   return 1 + Object.entries(strengths).filter(([id, s]) => id !== myTeam && s > mine).length;
 }
 
+/** One step up or down the mandate ladder, clamped at both ends. Round
+    192: what a GM says at the podium can move next season's ask. */
+export function tiltTier(tier: FoTier, tilt: -1 | 0 | 1): FoTier {
+  const ladder: FoTier[] = ['rebuild', 'respect', 'playoffs', 'contend', 'title'];
+  const i = ladder.indexOf(tier);
+  return ladder[Math.max(0, Math.min(ladder.length - 1, i + tilt))];
+}
+
 export function buildOwnerMandate(
   rank: number, teamCount: number, defendingChamp: boolean, words: FoSportWords, season: number,
+  /* Round 192: the press tilt. Talk big at season end and the ask ratchets
+     one tier up; ask for patience and it softens one. 0 everywhere else,
+     so every pre-192 call site is byte-identical in behavior. */
+  tilt: -1 | 0 | 1 = 0,
 ): OwnerMandate {
   const frac = (rank - 1) / Math.max(1, teamCount - 1);
   let tier: FoTier =
@@ -74,6 +86,11 @@ export function buildOwnerMandate(
     : frac <= 0.82 ? 'respect'
     : 'rebuild';
   /* A defending champion's owner never asks for less than a deep run. */
+  if (defendingChamp && (tier === 'playoffs' || tier === 'respect' || tier === 'rebuild')) tier = 'contend';
+  /* Round 192: apply the press tilt, then re-apply the champion floor,
+     because tempering the dynasty talk still never buys a champion an ask
+     below a deep run. Ownership hears what it wants to hear. */
+  tier = tiltTier(tier, tilt);
   if (defendingChamp && (tier === 'playoffs' || tier === 'respect' || tier === 'rebuild')) tier = 'contend';
 
   const winFloor = tier === 'respect' ? round0(words.games * 0.44)

@@ -31,6 +31,7 @@ const MlbFrontOffice = () => {
               'Play the season in stretches and watch six division races tighten.',
               'Win the division for a top-3 seed; the top two skip the Wild Card round entirely.',
               'Survive three playoff rounds and the World Series, then draft and go again.',
+              'Face the room: the podium, the accountability scrum and the trade question move your trust upstairs, and what you promise can raise or soften next season\'s mandate.',
             ]}
             examples={[
               'Trade an aging ace for a young shortstop before the deadline',

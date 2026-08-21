@@ -26,6 +26,10 @@ import OwnerMandateCard from '@/components/front-office-shared/OwnerMandateCard'
    facts (confetti only for the champion GM, fired kills it outright) so
    the rule lives in the harnessed engine, not in this JSX. */
 import { stageVerdict } from '@/lib/usCareerReveal';
+/* Round 192: the GM faces the room. Shared engine and card; answers move
+   trust and can tilt next season's mandate one tier. */
+import { buildGmPresser, applyGmPressChoice, type GmPresser } from '@/lib/foGmPress';
+import { GmPressCard } from '@/components/front-office-shared/GmPressCard';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
@@ -41,6 +45,10 @@ interface SaveShape {
   draftClass: NhlProspect[] | null; picksLeft: number;
   /* Round 180. Optional so pre-180 saves keep loading; repaired on load. */
   mandate?: OwnerMandate | null; trust?: number; fired?: boolean;
+  /* Round 192. The presser itself is transient (a reload ends the scrum,
+     same rule as trade talks), but an ANSWERED tilt and the season's
+     headline deal survive, so the next mandate honors what was said. */
+  pressTilt?: -1 | 0 | 1; seasonTradeLine?: string | null;
 }
 
 export default function NhlFrontOfficeBoard() {
@@ -69,13 +77,17 @@ export default function NhlFrontOfficeBoard() {
   const [trust, setTrust] = useState(FO_TRUST_START);
   const [fired, setFired] = useState(false);
   const [gradeLine, setGradeLine] = useState<string | null>(null);
+  /* Round 192: the room. Presser transient; tilt and trade line persist. */
+  const [presser, setPresser] = useState<GmPresser | null>(null);
+  const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
+  const [seasonTradeLine, setSeasonTradeLine] = useState<string | null>(null);
 
   useGameCompletion('nhl-front-office', wonNow, titles * 100 + seasonsPlayed * 5);
 
   /* Round 180: rank my roster against the league and let ownership set the ask. */
-  const mandateFor = (lg: NhlLeague, team: string, defendingChamp: boolean): OwnerMandate => {
+  const mandateFor = (lg: NhlLeague, team: string, defendingChamp: boolean, tilt: -1 | 0 | 1 = 0): OwnerMandate => {
     const strengths = Object.fromEntries(Object.entries(lg.teams).map(([a, tm]) => [a, nhlStrength(tm)]));
-    return buildOwnerMandate(strengthRank(strengths, team), Object.keys(lg.teams).length, defendingChamp, NHL_WORDS, lg.season);
+    return buildOwnerMandate(strengthRank(strengths, team), Object.keys(lg.teams).length, defendingChamp, NHL_WORDS, lg.season, tilt);
   };
 
   useEffect(() => {
@@ -92,6 +104,8 @@ export default function NhlFrontOfficeBoard() {
       setMandate(s.mandate ?? mandateFor(s.league, s.myTeam, false));
       setTrust(s.trust ?? FO_TRUST_START);
       setFired(s.fired ?? false);
+      setPressTilt(s.pressTilt ?? 0);
+      setSeasonTradeLine(s.seasonTradeLine ?? null);
     } catch { /* fresh */ }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -101,10 +115,10 @@ export default function NhlFrontOfficeBoard() {
       if (!lg) return;
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
-        mandate, trust, fired, ...patch,
+        mandate, trust, fired, pressTilt, seasonTradeLine, ...patch,
       } satisfies SaveShape));
     } catch { /* full */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine]);
 
   const label = (abbr: string) => {
     const t = NHL_TEAM_MAP.get(abbr);
@@ -121,7 +135,25 @@ export default function NhlFrontOfficeBoard() {
     ]);
     setChampion(''); setSeries([]); setTitles(0); setSeasonsPlayed(0);
     setMandate(m); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
-    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false }, lg, abbr);
+    /* Round 192: the introduction presser. First day, full room. */
+    setPresser(buildGmPresser(NHL_WORDS, {
+      justHired: true, teamLabel: label(abbr), fired: false, wonTitle: false,
+      gradeResult: null, tradeLine: null, seasonsPlayed: 0,
+    }));
+    setPressTilt(0); setSeasonTradeLine(null);
+    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
+  };
+
+  /* Round 192: one answer, three registers. Trust moves now, the tilt
+     waits for the next mandate build. */
+  const answerPress = (i: 0 | 1 | 2) => {
+    if (!presser || !league) return;
+    const res = applyGmPressChoice(trust, presser.options[i], Math.random);
+    setTrust(res.trust);
+    setPressTilt(res.tilt);
+    setFeed(f => [res.line, ...f].slice(0, 6));
+    setPresser(null);
+    persist({ trust: res.trust, pressTilt: res.tilt }, league, myTeam);
   };
 
   const my = league?.teams[myTeam];
@@ -146,13 +178,22 @@ export default function NhlFrontOfficeBoard() {
       setTitles(nt); setSeasonsPlayed(ns);
       /* Round 180: ownership grades the season against the mandate. */
       let newTrust = trust, nowFired = fired;
+      let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
       if (mandate) {
         const post = seriesPostseason(sr, myTeam);
         const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
         const applied = applyMandateResult(trust, grade);
         newTrust = applied.trust; nowFired = applied.fired;
+        gradeResult = grade.result;
         setTrust(applied.trust); setFired(applied.fired); setGradeLine(grade.verdict);
       }
+      /* Round 192: the room reacts to the season that actually happened.
+         A fired GM gets no presser, and a quiet, mandate-met, no-news
+         summer gets provably nothing. */
+      setPresser(buildGmPresser(NHL_WORDS, {
+        justHired: false, teamLabel: label(myTeam), fired: nowFired, wonTitle: won,
+        gradeResult, tradeLine: seasonTradeLine, seasonsPlayed: ns,
+      }));
       setPhase('recap');
       setLeague(lg);
       setFeed(newFeed);
@@ -189,13 +230,21 @@ export default function NhlFrontOfficeBoard() {
     if (nextPicks <= 0) {
       const notes = nhlOffseason(lg, Math.random);
       /* Round 180: ownership re-reads the roster and sets next season's ask. */
-      const m = mandateFor(lg, myTeam, champion === myTeam);
+      /* Round 192: what you said at the podium tilts the ask, then the
+         tilt is spent. */
+      const m = mandateFor(lg, myTeam, champion === myTeam, pressTilt);
       setMandate(m);
-      setFeed([`🏛️ The new mandate: ${m.text}`, ...notes].slice(0, 6));
+      setFeed([
+        `🏛️ The new mandate: ${m.text}`,
+        ...(pressTilt === 1 ? ['🎙️ Your season-end answer raised the bar upstairs.']
+          : pressTilt === -1 ? ['🎙️ Your ask for patience was heard. The bar sits softer.'] : []),
+        ...notes,
+      ].slice(0, 6));
+      setPressTilt(0); setSeasonTradeLine(null);
       setSeries([]); setChampion(''); setWonNow(false);
       setPhase('hub'); setTab('team');
       setLeague(lg);
-      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m }, lg, myTeam);
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null }, lg, myTeam);
       return;
     }
     setLeague(lg);
@@ -249,7 +298,10 @@ export default function NhlFrontOfficeBoard() {
     if (res === 'done') {
       setFeed(f => [`🤝 Deal done with ${label(talks.partner)}: ${pkg.theirPlayerName} arrives${pkg.addPick ? ', and a pick goes the other way' : ''}.`, ...f].slice(0, 6));
       setMyTradePiece(''); setShopOffers([]); setShopTried(false);
-      setLeague(lg); persist({}, lg, myTeam);
+      /* Round 192: the room remembers the season's headline deal. */
+      const line = `the deal that brought ${pkg.theirPlayerName} in`;
+      setSeasonTradeLine(line);
+      setLeague(lg); persist({ seasonTradeLine: line }, lg, myTeam);
     } else {
       setFeed(f => ['❌ The agreed deal no longer fits (cap or roster rules).', ...f].slice(0, 6));
     }
@@ -269,7 +321,10 @@ export default function NhlFrontOfficeBoard() {
     if (res === 'accepted') {
       setFeed(f => [`🤝 Trade finder deal done with ${label(o.teamId)}.`, ...f].slice(0, 6));
       setMyTradePiece(''); setShopOffers([]); setShopTried(false);
-      setLeague(lg); persist({}, lg, myTeam);
+      /* Round 192: the room remembers the season's headline deal. */
+      const line = `the deal that brought ${o.playerName} in`;
+      setSeasonTradeLine(line);
+      setLeague(lg); persist({ seasonTradeLine: line }, lg, myTeam);
     } else {
       setFeed(f => ['❌ That offer went stale, shop him again.', ...f].slice(0, 6));
       setShopOffers([]); setShopTried(false);
@@ -280,6 +335,7 @@ export default function NhlFrontOfficeBoard() {
     localStorage.removeItem(SAVE_KEY);
     setPhase('pick'); setLeague(null); setMyTeam('');
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
+    setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
   };
 
   if (phase === 'pick' || !league || !my) {
@@ -384,6 +440,12 @@ export default function NhlFrontOfficeBoard() {
                 <RotateCcw className="h-4 w-4" /> Take another front office
               </button>
             </div>
+          ) : presser ? (
+            /* Round 192: the room stands between the season and the draft.
+               Answer it (or reload, which ends the scrum) to move on. */
+            <div className="cm-rise mt-4 text-left" style={{ animationDelay: '1.35s' }}>
+              <GmPressCard presser={presser} onAnswer={answerPress} />
+            </div>
           ) : (
             <div className="cm-rise mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center" style={{ animationDelay: '1.35s' }}>
               <button onClick={startDraft} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
@@ -455,6 +517,9 @@ export default function NhlFrontOfficeBoard() {
             : null}
         />
       )}
+
+      {/* Round 192: the introduction presser waits on the hub until answered. */}
+      {presser && <GmPressCard presser={presser} onAnswer={answerPress} />}
 
       <div className="flex items-center justify-center gap-1 rounded-full bg-secondary p-1 text-xs">
         {([
