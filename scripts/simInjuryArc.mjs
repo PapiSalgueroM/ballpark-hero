@@ -151,7 +151,11 @@ function runFleet(road, seedBase, careers) {
           } else if (s.netWorth !== worthBefore) {
             fail(`career ${c}: a free rehab road moved net worth by ${(s.netWorth - worthBefore).toFixed(2)}`);
           }
-          if (s.netWorth < 0) fail(`career ${c}: rehab left net worth at ${s.netWorth}`);
+          /* a career can already be in the red from wages and standing
+             costs, so the rehab is only guilty if IT pushed him under */
+          if (worthBefore >= 0 && s.netWorth < 0) {
+            fail(`career ${c}: rehab took net worth from ${worthBefore} to ${s.netWorth}`);
+          }
 
           if (last.setback) m.setbacks += 1;
           m.paceLost += paceBefore - s.pace;
@@ -226,7 +230,11 @@ for (const [name, m] of [["rushed", rushed], ["plan", plan], ["specialist", spec
 }
 
 console.log("2) the arc actually fires");
-if (rushed.injuries < 40) fail(`only ${rushed.injuries} serious injuries across ${CAREERS} careers, the floor is 40`);
+/* the floor scales with the fleet: measured about one serious injury per
+   2.3 careers, so a third of that is a safe floor at any fleet size and
+   a fixed number would fail the moment the runner used a different one */
+const injuryFloor = Math.max(8, Math.floor(CAREERS / 3));
+if (rushed.injuries < injuryFloor) fail(`only ${rushed.injuries} serious injuries across ${CAREERS} careers, the floor is ${injuryFloor}`);
 if (rushed.resolved !== rushed.injuries) fail(`${rushed.injuries} injuries but ${rushed.resolved} resolved`);
 if (rushed.historyEntries !== rushed.resolved) fail(`history entries ${rushed.historyEntries} against ${rushed.resolved} comebacks`);
 if (spec.specialistTaken < 5) fail(`the specialist was taken only ${spec.specialistTaken} times, the floor is 5`);

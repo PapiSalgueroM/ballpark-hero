@@ -108,6 +108,11 @@ function runCareer(seed, mode) {
         break;
       }
       case 'playing': s = advanceProSeason(s, clubs); break;
+      /* Round 253's injury arc pauses the season for a rehab decision.
+         An undriven phase counts as stuck here, which is the harness
+         doing its job; this walk is about engagement, not the road
+         back, so it always takes the club's plan. */
+      case 'rehab_choice': s = engine.applyRehabChoice(s, 1); break;
       case 'newspaper': s = dismissNewspaper(s); break;
       case 'season_summary': s = dismissSummary(s, clubs); break;
       /* Round 124: both of these take clubs as their LAST argument and were

@@ -57,7 +57,7 @@ const HallOfChampions = () => {
         'Rededicate when the hall is big enough to trade the exhibits for permanent renown',
       ]}
       examples={[
-        'The first exhibit is Super Bowl I, and the plaque names who Green Bay beat and by how much',
+        'The first exhibit is Super Bowl I, and the plaque names the champion, the beaten team and the score',
         'Finishing a wing hangs a permanent plaque worth +25% income that survives every rededication',
         'Anniversary weekends triple admissions for a few seconds, and the archive vault makes them last longer',
       ]}
