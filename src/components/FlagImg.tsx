@@ -1,6 +1,9 @@
 import { flagEmojiToIso, splitFlagSegments } from '@/lib/flagUtils';
 
-const FLAG_CODES: Record<string, string> = {
+/* Round 194: exported so bakeNationalities.mjs and simNationalities can
+   fail closed on any nationality string that has no flag, instead of the
+   market quietly rendering text where a flag should be. */
+export const FLAG_CODES: Record<string, string> = {
   "England": "gb-eng", "Scotland": "gb-sct", "Wales": "gb-wls",
   "Spain": "es", "France": "fr", "Germany": "de", "Brazil": "br",
   "Argentina": "ar", "Portugal": "pt", "Italy": "it", "Netherlands": "nl",
@@ -57,6 +60,15 @@ const FLAG_CODES: Record<string, string> = {
   "Papua New Guinea": "pg", "Vanuatu": "vu", "Samoa": "ws",
   "American Samoa": "as", "Cook Islands": "ck", "Tonga": "to",
   "Syria": "sy", "Palestine": "ps",
+  /* Round 194: nationalities surfaced by the player_market_values pass
+     that had no flag yet. Codes are ISO 3166-1 alpha-2 as flagcdn serves
+     them (Martinique mq, Guadeloupe gp and Saint-Martin mf are the French
+     overseas codes flagcdn carries; football federations list players
+     under them). */
+  "Guyana": "gy", "Central African Republic": "cf", "Gibraltar": "gi",
+  "Barbados": "bb", "St. Kitts & Nevis": "kn", "Grenada": "gd",
+  "Seychelles": "sc", "Martinique": "mq", "Chad": "td", "Burundi": "bi",
+  "Yemen": "ye", "Mauritania": "mr", "Saint-Martin": "mf",
 };
 
 /* ─── Round 106: flags that actually appear ───

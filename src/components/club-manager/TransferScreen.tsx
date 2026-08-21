@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
+/* Round 194: the nationality filter, CM-7's last open line. Per-world maps
+   so a 2010 name never wears a 2026 flag. */
+import { nationalityOf } from '@/data/playerNationalities';
+import { FlagImg } from '@/components/FlagImg';
 import { Input } from '@/components/ui/input';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
 import { money, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf } from '@/lib/clubManager';
@@ -87,6 +91,7 @@ export function TransferScreen({
   const [ageBand, setAgeBand] = useState<(typeof AGE_BANDS)[number]['id']>('any');
   const [priceBand, setPriceBand] = useState<(typeof PRICE_BANDS)[number]['id']>('any');
   const [leaguePick, setLeaguePick] = useState('any');
+  const [natPick, setNatPick] = useState('any');
   const [sortKey, setSortKey] = useState<SortKey>('rating');
   /* Round 161: the deal structure being offered right now. */
   const [addOn, setAddOn] = useState(0);
@@ -112,6 +117,18 @@ export function TransferScreen({
     return [...names].sort();
   }, [market]);
 
+  /* Round 194: every nationality actually present in THIS world's market,
+     busiest first, so the dropdown never offers a nation with no players.
+     Era markets automatically offer era nations only. */
+  const marketNations = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const m of market) {
+      const nat = nationalityOf(career.eraId, m.name);
+      if (nat) counts.set(nat, (counts.get(nat) ?? 0) + 1);
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  }, [market, career.eraId]);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     const age = AGE_BANDS.find(b => b.id === ageBand) ?? AGE_BANDS[0];
@@ -122,6 +139,7 @@ export function TransferScreen({
       .filter(m => m.age >= age.lo && m.age <= age.hi)
       .filter(m => m.price <= price.max)
       .filter(m => leaguePick === 'any' || leagueOf(m.club).name === leaguePick)
+      .filter(m => natPick === 'any' || nationalityOf(career.eraId, m.name) === natPick)
       .filter(m => !q || m.name.toLowerCase().includes(q) || m.club.toLowerCase().includes(q));
     const sorted = [...list];
     if (sortKey === 'rating') sorted.sort((a, b) => b.rating - a.rating);
@@ -129,7 +147,7 @@ export function TransferScreen({
     else if (sortKey === 'young') sorted.sort((a, b) => a.age - b.age || b.rating - a.rating);
     else sorted.sort((a, b) => a.price - b.price || b.rating - a.rating);
     return sorted.slice(0, 50);
-  }, [market, filter, posExact, ageBand, priceBand, leaguePick, sortKey, query]);
+  }, [market, filter, posExact, ageBand, priceBand, leaguePick, natPick, sortKey, query, career.eraId]);
 
   const sellable = useMemo(
     () => [...career.squad].sort((a, b) => b.rating - a.rating),
@@ -384,7 +402,7 @@ export function TransferScreen({
               {EXACT_POSITIONS.map(p => <option key={p} value={p}>{p}</option>)}
             </select>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
             <select
               value={ageBand}
               onChange={e => setAgeBand(e.target.value as (typeof AGE_BANDS)[number]['id'])}
@@ -409,6 +427,16 @@ export function TransferScreen({
             >
               <option value="any">Any league</option>
               {marketLeagues.map(l => <option key={l} value={l}>{l}</option>)}
+            </select>
+            <select
+              value={natPick}
+              onChange={e => setNatPick(e.target.value)}
+              className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground outline-none"
+              aria-label="Nationality"
+              data-nat-filter
+            >
+              <option value="any">Any nation</option>
+              {marketNations.map(([nat, n]) => <option key={nat} value={nat}>{nat} ({n})</option>)}
             </select>
             <select
               value={sortKey}
@@ -439,6 +467,9 @@ export function TransferScreen({
                   <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{m.position}</span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
+                      {/* Round 194: his real nationality's flag, from this
+                          world's own map. Made-up players honestly get none. */}
+                      {(() => { const nat = nationalityOf(career.eraId, m.name); return nat ? <FlagImg name={nat} size={14} /> : null; })()}
                       <span className="text-xs text-foreground truncate">{m.name}</span>
                       {/* Round 132: you are about to spend real money on him, so
                           you get told whether he is a real person. */}

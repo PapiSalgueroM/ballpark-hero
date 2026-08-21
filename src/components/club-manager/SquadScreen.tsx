@@ -1,4 +1,7 @@
 import { cn } from '@/lib/utils';
+/* Round 194: real players wear their real flag, from this world's map. */
+import { nationalityOf } from '@/data/playerNationalities';
+import { FlagImg } from '@/components/FlagImg';
 import { ROLE_INFO, roleOf, promiseMood } from '@/lib/clubManager';
 import type { CMPlayer } from '@/lib/clubManager';
 
@@ -49,10 +52,12 @@ function FitnessBar({ value }: { value: number }) {
 interface SquadScreenProps {
   squad: CMPlayer[];
   xiIds: (string | null)[];
+  /* Round 194: which sealed world's nationality map to read. */
+  eraId?: string;
 }
 
 /** Full squad list with fitness, morale and availability status. */
-export function SquadScreen({ squad, xiIds }: SquadScreenProps) {
+export function SquadScreen({ squad, xiIds, eraId }: SquadScreenProps) {
   const inXI = new Set(xiIds.filter((id): id is string => !!id));
   const sorted = [...squad].sort((a, b) => b.rating - a.rating);
 
@@ -67,6 +72,7 @@ export function SquadScreen({ squad, xiIds }: SquadScreenProps) {
           <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{p.position}</span>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
+              {(() => { const nat = nationalityOf(eraId, p.name); return nat ? <FlagImg name={nat} size={13} /> : null; })()}
               <span className={cn('text-xs truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>{p.name}</span>
               {p.generated && <MadeUpTag />}
               {inXI.has(p.id) && <span className="text-[8px] font-bold text-primary border border-primary/50 rounded px-1 shrink-0">XI</span>}
