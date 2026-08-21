@@ -20,6 +20,9 @@ import {
   TRACKS, levelOf, costOf, canBuy, capacity, attendance, incomePerSec,
   tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney,
   boostReady, boostActive, BOOST_CHARGE_SEC, MILESTONES, opponentName,
+  DIVISIONS, divisionOf, divisionIndex, winsToNextDivision,
+  STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,
+  ACHIEVEMENTS, achMult, goldenActive, GOLDEN_INFO,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 
@@ -59,12 +62,18 @@ export default function StadiumTycoon() {
   const s = g.state;
   const money = useCountUp(s.money);
   const [showHelp, setShowHelp] = useState(false);
+  /* Round 162: the two drawers. Tiles per the house style: each opens its
+     own panel instead of stretching the page. */
+  const [drawer, setDrawer] = useState<'none' | 'ach' | 'stats'>('none');
   const [burst, setBurst] = useState<{ id: number; pieces: { x: number; d: number; c: string; r: number }[] } | null>(null);
   const pitchRef = useRef<HTMLDivElement | null>(null);
 
   const fans = attendance(s);
   const cap = capacity(s);
   const rate = incomePerSec(s);
+  const div = divisionOf(s);
+  const nextDivIn = winsToNextDivision(s);
+  const achCount = (s.ach ?? []).length;
 
   // Goal confetti: a fresh burst every time the hook's counter moves.
   useEffect(() => {
@@ -130,14 +139,22 @@ export default function StadiumTycoon() {
       <GameNavbar />
       <PageSeo
         title="Stadium Tycoon: Free Idle Soccer Club Game | DoUKnowBall"
-        description="Grow a tiny football club into an empire. Live toy matches, nine upgrade tracks, win streaks, reputation stars and away earnings. Free idle game, no sign-up."
+        description="Grow a tiny football club into an empire. Live toy matches, ten divisions, a staff payroll, golden whistles, 47 badges, reputation stars and away earnings. Free idle game, no sign-up."
         path="/stadium-tycoon"
       />
       <div className="max-w-2xl mx-auto px-4 py-4 md:py-8">
         <header className="text-center mb-3">
           <h1 className="text-3xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display">STADIUM TYCOON</h1>
+          {/* Round 162: the ladder this ground is climbing, front and center. */}
+          <div className="inline-flex items-center gap-1.5 mt-1 text-xs font-bold text-foreground bg-secondary rounded-full px-3 py-0.5">
+            {div.emoji} {div.name}
+            <span className="text-[10px] text-muted-foreground font-normal">
+              {nextDivIn !== null ? `· ${nextDivIn} win${nextDivIn === 1 ? '' : 's'} to go up` : '· the top of the pyramid'}
+            </span>
+          </div>
           <div className="flex items-center justify-center gap-3 mt-1 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1">{Array.from({ length: Math.min(s.rep, 6) }, (_, i) => <Star key={i} className="w-3 h-3 fill-yellow-500 text-yellow-500" />)}{s.rep > 6 && <span className="font-bold text-yellow-500">x{s.rep}</span>}{s.rep > 0 && <span className="text-yellow-500 font-bold">rep {Math.round((repMult(s) - 1) * 100)}%</span>}</span>
+            {achCount > 0 && <span className="text-emerald-400 font-bold">badges +{achCount * 2}%</span>}
             <button onClick={() => setShowHelp(true)} className="inline-flex items-center gap-1 hover:text-foreground transition-colors"><HelpCircle className="w-3.5 h-3.5" /> How it works</button>
           </div>
         </header>
@@ -149,7 +166,11 @@ export default function StadiumTycoon() {
             <div className="text-[11px] text-muted-foreground">
               +{fmtMoney(rate)}/s
               {boostActive(s) && <span className="text-yellow-400 font-bold"> · HYPE x2 ({Math.ceil(s.boostLeftSec)}s)</span>}
+              {goldenActive(s) && s.goldenKind && (
+                <span className="text-amber-300 font-bold"> · {GOLDEN_INFO[s.goldenKind].label} ({Math.ceil(s.goldenLeftSec ?? 0)}s)</span>
+              )}
               {s.streak >= 2 && <span className="text-orange-400 font-bold"> · streak x{streakMult(s).toFixed(2)}</span>}
+              {divisionIndex(s) > 0 && <span className="text-sky-400 font-bold"> · stage x{div.incomeMult.toFixed(2)}</span>}
             </div>
           </div>
           <div className="text-right">
@@ -238,6 +259,17 @@ export default function StadiumTycoon() {
             {burst && burst.pieces.map((p, i) => (
               <span key={`${burst.id}-${i}`} className="absolute top-0 w-1.5 h-2.5 st-confetti" style={{ left: `${p.x}%`, backgroundColor: p.c, animationDuration: `${p.d + 0.7}s`, transform: `rotate(${p.r}deg)` }} />
             ))}
+            {/* Round 162: the golden whistle, drifting until caught or gone. */}
+            {g.golden && (
+              <button
+                onClick={e => { e.stopPropagation(); g.doCatchGolden(); }}
+                aria-label="Catch the golden whistle"
+                className="absolute z-10 text-2xl st-goldwob drop-shadow-[0_0_10px_rgba(251,191,36,0.95)]"
+                style={{ left: `${g.golden.x}%`, top: `${g.golden.y}%` }}
+              >
+                🪙
+              </button>
+            )}
           </div>
         </div>
 
@@ -285,14 +317,114 @@ export default function StadiumTycoon() {
           })}
         </div>
 
+        {/* Round 162: the payroll. Staff earn every second, forever, and the
+            tiers escalate the way an idle game should: each one about five
+            times the price and four and a half times the pay of the last. */}
+        <div className="mb-1 flex items-center justify-between px-1">
+          <div className="text-xs font-bold text-foreground">🧑‍🤝‍🧑 The payroll</div>
+          <div className="text-[10px] text-muted-foreground">{totalStaffLevels(s)} hired · earning {fmtMoney(STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id) * t.rate, 0))}/s base</div>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pb-4">
+          {STAFF.map(t => {
+            const lvl = staffLevelOf(s, t.id);
+            const cost = staffCostOf(s, t.id);
+            const ok = canHire(s, t.id);
+            return (
+              <button
+                key={t.id}
+                onClick={() => g.doHire(t.id)}
+                disabled={!ok}
+                className={cn(
+                  'relative rounded-xl border p-2.5 text-left transition-all active:scale-[0.97]',
+                  ok ? 'bg-card border-border hover:border-primary' : 'bg-card/50 border-border/50 opacity-70',
+                )}
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base leading-none">{t.emoji}</span>
+                  <span className="text-[11px] font-bold text-foreground truncate">{t.name}</span>
+                  <span className="ml-auto text-[9px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5">{lvl}</span>
+                </div>
+                <div className="text-[9px] text-muted-foreground mt-1 leading-snug min-h-[22px]">{t.blurb}</div>
+                <div className="flex items-center justify-between mt-1">
+                  <span className={cn('text-[11px] font-bold tabular-nums', ok ? 'text-gold' : 'text-muted-foreground')}>{fmtMoney(cost)}</span>
+                  <span className="text-[9px] text-emerald-400 tabular-nums">+{fmtMoney(t.rate)}/s</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Round 162: the drawers. Achievements are the long game's long game:
+            every badge is +2% income, forever, across every ground. */}
+        <div className="grid grid-cols-2 gap-2 mb-3">
+          <button
+            onClick={() => setDrawer(d => (d === 'ach' ? 'none' : 'ach'))}
+            className={cn('rounded-xl border py-2 text-xs font-bold transition-all',
+              drawer === 'ach' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
+          >
+            🏅 Badges {achCount}/{ACHIEVEMENTS.length} (+{achCount * 2}%)
+          </button>
+          <button
+            onClick={() => setDrawer(d => (d === 'stats' ? 'none' : 'stats'))}
+            className={cn('rounded-xl border py-2 text-xs font-bold transition-all',
+              drawer === 'stats' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
+          >
+            📊 Club records
+          </button>
+        </div>
+
+        {drawer === 'ach' && (
+          <div className="bg-card border border-border rounded-xl p-3 mb-3">
+            <div className="text-[10px] text-muted-foreground mb-2">Every badge is a permanent +2% to everything you earn, on every ground, forever. {achCount} of {ACHIEVEMENTS.length} earned.</div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 max-h-72 overflow-y-auto pr-1">
+              {ACHIEVEMENTS.map(a => {
+                const got = (s.ach ?? []).includes(a.id);
+                return (
+                  <div
+                    key={a.id}
+                    className={cn('rounded-lg border px-2 py-1.5 text-[10px] flex items-center gap-1.5',
+                      got ? 'border-emerald-500/40 bg-emerald-500/10 text-foreground' : 'border-border/60 bg-background/40 text-muted-foreground')}
+                  >
+                    <span className="text-sm leading-none">{got ? a.emoji : '🔒'}</span>
+                    <span className="truncate">{a.label}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {drawer === 'stats' && (
+          <div className="bg-card border border-border rounded-xl p-3 mb-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-center">
+              {[
+                ['Lifetime, this ground', fmtMoney(s.lifetime)],
+                ['Career wins', s.totalWins.toLocaleString()],
+                ['Career goals', s.totalGoals.toLocaleString()],
+                ['Matches played', (s.totalMatches ?? 0).toLocaleString()],
+                ['Taps', s.totalTaps.toLocaleString()],
+                ['Best division', `${DIVISIONS[Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1)].emoji} ${DIVISIONS[Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1)].name}`],
+                ['Golden whistles caught', (s.goldenCaught ?? 0).toLocaleString()],
+                ['Hype boosts pressed', (s.boostsUsed ?? 0).toLocaleString()],
+                ['Reputation stars', s.rep.toLocaleString()],
+              ].map(([label, value]) => (
+                <div key={label as string} className="rounded-lg bg-secondary/50 px-2 py-2">
+                  <div className="text-xs font-bold font-display text-foreground truncate">{value}</div>
+                  <div className="text-[9px] text-muted-foreground">{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* lifetime line */}
         <div className="text-[10px] text-muted-foreground text-center pb-4">
-          lifetime {fmtMoney(s.lifetime)} · {s.totalWins} wins · {s.totalGoals} goals · {s.totalTaps} taps · match #{s.matchNo + 1} · milestones {(s.claimed ?? []).length}/{MILESTONES.length}
+          lifetime {fmtMoney(s.lifetime)} · {s.totalWins} wins · {s.totalGoals} goals · {s.totalTaps} taps · match #{s.matchNo + 1} · milestones {(s.claimed ?? []).length}/{MILESTONES.length} · badges {achCount}/{ACHIEVEMENTS.length}
         </div>
 
         <GameSeoContent
           title="Stadium Tycoon"
-          description="Grow a tiny football club into an empire: live toy matches, nine upgrade tracks, win streaks, reputation stars and away earnings."
+          description="Grow a tiny football club into an empire: live toy matches, ten divisions to climb, a staff payroll, golden whistles, 47 badges and reputation stars."
         />
       </div>
 
@@ -322,8 +454,12 @@ export default function StadiumTycoon() {
               <p>The match on screen is real: your Squad level drives goals, goals pay a bonus scaled by the crowd, wins extend a streak that multiplies everything and pulls in new fans. Opponents get harder forever.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>Matchday Hype charges over eight minutes of play. Press it and everything pays double for sixty seconds: income, taps, goal and win bonuses. It does not charge or burn while you are away.</p>
+              <p>Wins at your ground climb a ladder of ten divisions, from the Muddy Meadows League to The Summit. Every division multiplies all income, up to x5.5 at the top, and going up pays a promotion bonus on the spot. Higher divisions send tougher opponents.</p>
+              <p>The payroll hires eight staff, from a matchday steward to a club legend. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
+              <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about 12 seconds to catch it, for one of five prizes: DERBY DAY (everything pays x7 for 77 seconds), CROWD SURGE (taps pay x25 for 30 seconds), TV WINDFALL (fifteen minutes of income, instantly), WONDERGOAL GOES VIRAL (the fanbase jumps) or SPONSOR GIFT (a free upgrade level).</p>
               <p>Milestones pay once each for the club's firsts: the first win, the first full house, 10,000 fans, five wins in a row. Ten in all, and they stay earned even after you sell up.</p>
-              <p>When lifetime earnings hit the bar, sell up: everything resets except a permanent Reputation star worth +50% income, forever, each.</p>
+              <p>Badges are the long game: 47 of them, from 500 fans to promotion into The Summit, and each one earned is +2% income forever. Check them in the Badges drawer, and your career numbers in Club records.</p>
+              <p>When lifetime earnings hit the bar, sell up: fans, ground, staff and division reset, but you keep a permanent Reputation star worth +50% income each, every badge, and your club records. The ladder is faster every run.</p>
               <p>Away from the game, you earn at half speed for up to 8 hours. Progress saves on this device.</p>
               <p>Worked example: at 400 fans and $12/s, one goal pays about $240, a win about $880, and Stands level 10 (adding 40 seats) pays itself back in under two minutes if the ground was full.</p>
             </div>
@@ -339,6 +475,8 @@ export default function StadiumTycoon() {
         .st-confetti { animation-name: stConfetti; animation-timing-function: ease-in; animation-fill-mode: forwards; }
         @keyframes stGlow { 0%, 100% { box-shadow: 0 0 6px rgba(234,179,8,0.5); } 50% { box-shadow: 0 0 22px rgba(234,179,8,0.9); } }
         .st-glow { animation: stGlow 1.6s ease-in-out infinite; }
+        @keyframes stGoldwob { 0%, 100% { transform: rotate(-14deg) scale(1); filter: brightness(1); } 25% { transform: rotate(10deg) scale(1.22); filter: brightness(1.35); } 50% { transform: rotate(-8deg) scale(1.05); filter: brightness(1.1); } 75% { transform: rotate(12deg) scale(1.18); filter: brightness(1.3); } }
+        .st-goldwob { animation: stGoldwob 0.9s ease-in-out infinite; }
       `}</style>
     </div>
   );

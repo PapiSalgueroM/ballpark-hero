@@ -11,9 +11,16 @@
  *    after the bar fills the slowdown is the intended wall, capped at four
  *    minutes so it can never become a cliff
  *  - progression: income at 30 minutes is a large multiple of income at
- *    minute 1 (measured 2026-08-17 after tuning: about 370x; floor 8x)
+ *    minute 1 (measured 2026-08-18 on the division-era economy: about 530x;
+ *    floor 8x)
  *  - the carrot: greedy active play reaches the first prestige inside 45
- *    minutes (measured after tuning: minute 15)
+ *    minutes (measured 2026-08-18: minute 14)
+ *
+ * Round 162 grew the game (divisions, payroll, golden whistle, badges) and
+ * sections 9 to 12 pin each new system to its exact formula: the division
+ * multiplier and promotion bonus to the digit, staff income deltas to the
+ * rate card, all five whistle prizes with no stacking and no offline leak,
+ * and badges at +2% each, exactly once, forever.
  *  - prestige math: a star really multiplies, thresholds really grow
  *  - offline pay: capped at 8h half-rate, zero for sub-30s blips
  *  - save roundtrip: serialize/deserialize is identity on the fields that
@@ -48,6 +55,10 @@ const {
   prestige, canPrestige, prestigeThreshold, offlineEarnings,
   serializeTycoon, deserializeTycoon, repMult, attendance, capacity,
   activateBoost, boostReady, boostActive, BOOST_CHARGE_SEC, BOOST_DURATION_SEC,
+  DIVISIONS, divisionIndex, divisionOf, winsToNextDivision,
+  STAFF, staffCostOf, canHire, hire, staffBaseIncome, totalStaffLevels,
+  GOLDEN_INFO, rollGoldenKind, goldenActive, catchGolden,
+  ACHIEVEMENTS, ACH_BONUS, achMult, tapValue, oppChancePerMin, levelOf,
 } = T;
 
 let failures = 0;
@@ -108,11 +119,13 @@ console.log('1) Something is always affordable soon');
       fail(`minute ${min}: pre-prestige, cheapest purchase is ${wait.toFixed(0)}s away, that is a dead screen`);
       break;
     }
-    /* Measured 2026-08-17: a player who refuses a glowing prestige button
-       for a FULL HOUR AND THREE QUARTERS past the first star sees a 253s
-       wait at worst. The ceiling sits at 420s: enough headroom that the
-       intended wall never trips it, low enough that a genuinely runaway
-       cost curve (20 minute waits) still fails loudly. */
+    /* Measured 2026-08-18 on the division-era economy: a player who refuses
+       a glowing prestige button for a FULL HOUR AND THREE QUARTERS past the
+       first star sees a 203s wait at worst (the division multipliers pay
+       the wall down faster than the flat economy did). The ceiling sits at
+       420s: enough headroom that the intended wall never trips it, low
+       enough that a genuinely runaway cost curve (20 minute waits) still
+       fails loudly. */
     if (wait > 420) {
       fail(`minute ${min}: cheapest purchase is ${wait.toFixed(0)}s away even for a prestige refuser, that is a cliff`);
       break;
@@ -131,8 +144,10 @@ console.log('2) The curve moves and the carrot arrives');
   const r30 = playFor(r1.s, 29 * 60, roll);
   const income30 = incomePerSec(r30.s);
   console.log(`   income at 1 min: ${income1.toFixed(1)}/s, at 30 min: ${income30.toFixed(1)}/s (${(income30 / income1).toFixed(1)}x)`);
-  // Measured 2026-08-17: about 40x at 30 minutes on the greedy floor
-  // strategy. 8x keeps honest daylight under it; below that the curve died.
+  // Measured 2026-08-18 on the division-era economy: about 530x at 30
+  // minutes on the greedy floor strategy (divisions and badges compound on
+  // top of the old curve). 8x keeps honest daylight under it; below that
+  // the curve died.
   if (income30 < income1 * 8) fail(`30 minute growth is only ${(income30 / income1).toFixed(1)}x`);
 
   // First prestige timing.
@@ -325,6 +340,223 @@ console.log('8) The opposition is invented, provably');
   const collisions = allOpponentNames().filter(n => realClubs.has(n));
   if (collisions.length) fail(`generated opponents collide with real clubs: ${collisions.join(', ')}`);
   console.log(`   ${allOpponentNames().length} possible names checked against ${realClubs.size} real clubs, 0 collisions`);
+}
+
+/* ---------- 9. Divisions: the ladder is real and pays exactly ---------- */
+console.log('9) Ten divisions, exact multipliers, promotion pays');
+{
+  // The table itself: monotonic wins, monotonic pay, monotonic danger.
+  if (DIVISIONS.length !== 10) fail(`expected 10 divisions, found ${DIVISIONS.length}`);
+  for (let i = 1; i < DIVISIONS.length; i++) {
+    if (DIVISIONS[i].winsNeeded <= DIVISIONS[i - 1].winsNeeded) fail(`division ${i} needs no more wins than division ${i - 1}`);
+    if (DIVISIONS[i].incomeMult <= DIVISIONS[i - 1].incomeMult) fail(`division ${i} does not pay more than division ${i - 1}`);
+    if (DIVISIONS[i].oppBoost <= DIVISIONS[i - 1].oppBoost) fail(`division ${i} is not harder than division ${i - 1}`);
+  }
+  const s0 = newTycoon(0);
+  if (divisionIndex(s0) !== 0) fail('a new club is not in the bottom division');
+  if (divisionIndex({ ...s0, groundWins: 5 }) !== 0) fail('5 wins already promoted');
+  if (divisionIndex({ ...s0, groundWins: 6 }) !== 1) fail('6 wins did not promote to division 2');
+  if (divisionIndex({ ...s0, groundWins: 500 }) !== 9) fail('500 wins is not The Summit');
+  if (winsToNextDivision({ ...s0, groundWins: 4 }) !== 2) fail('wins-to-next arithmetic is off');
+  if (winsToNextDivision({ ...s0, groundWins: 200 }) !== null) fail('The Summit still shows a next division');
+
+  // The multiplier is exact: the same club lifted to Silverline (60 wins,
+  // x2.25) earns exactly 2.25x, nothing else about it changed.
+  const base = { ...newTycoon(0), fanbase: 900, money: 0 };
+  const lifted = { ...base, groundWins: 60 };
+  const ratio = incomePerSec(lifted) / incomePerSec(base);
+  if (Math.abs(ratio - 2.25) > 1e-9) fail(`Silverline pays x${ratio}, the table says x2.25`);
+
+  // And it shoots back: the opposition chance gap is exactly the oppBoost
+  // gap while both sit inside the clamp window.
+  const oppGap = oppChancePerMin(lifted) - oppChancePerMin(base);
+  if (Math.abs(oppGap - DIVISIONS[5].oppBoost) > 1e-9) fail(`Silverline oppBoost lands as ${oppGap}, table says ${DIVISIONS[5].oppBoost}`);
+
+  // Promotion pays on the spot: exactly attendance x8 x stage x rep, once.
+  let p = { ...newTycoon(0), fanbase: 2000, groundWins: 5, minute: 89, goalsFor: 1, goalsAgainst: 0 };
+  const noGoals = () => 0.999; // one quiet minute, straight to full time
+  const r = tick(p, 1.4, noGoals);
+  const promo = r.events.find(e => e.kind === 'promoted');
+  if (!promo) fail('winning the sixth match did not raise a promotion');
+  else {
+    const expect = Math.round(attendance(r.state) * 8 * DIVISIONS[1].incomeMult * repMult(r.state));
+    if (promo.amount !== expect) fail(`promotion paid ${promo.amount}, the formula says ${expect}`);
+    if (!promo.label.includes('Gravel Lane')) fail(`promotion label reads "${promo.label}"`);
+    if (r.state.bestDivision !== 1) fail('bestDivision did not record the climb');
+  }
+  // A won match that does NOT cross a line pays no promotion.
+  const rQuiet = tick({ ...p, groundWins: 7 }, 1.4, noGoals);
+  if (rQuiet.events.some(e => e.kind === 'promoted')) fail('a mid-table win paid a promotion');
+
+  // Selling up starts the ladder over but the record book remembers.
+  const climbed = { ...newTycoon(0), groundWins: 90, bestDivision: 6, lifetime: 1e12, rep: 0 };
+  const sold = prestige(climbed, 0);
+  if ((sold.groundWins ?? 0) !== 0) fail('prestige kept the ground wins, the new climb is fake');
+  if (sold.bestDivision !== 6) fail('prestige forgot the best division reached');
+  console.log(`   x2.25 exact at Silverline, promotion paid ${promo ? promo.amount : '?'} on the line, ladder resets on sale, record survives`);
+}
+
+/* ---------- 10. Staff: the payroll earns exactly what it says ---------- */
+console.log('10) Payroll math is exact and resets on sale');
+{
+  if (STAFF.length !== 8) fail(`expected 8 staff, found ${STAFF.length}`);
+  for (let i = 1; i < STAFF.length; i++) {
+    if (STAFF[i].baseCost <= STAFF[i - 1].baseCost) fail(`staff tier ${i} is not dearer than tier ${i - 1}`);
+    if (STAFF[i].rate <= STAFF[i - 1].rate) fail(`staff tier ${i} does not out-earn tier ${i - 1}`);
+  }
+  let s = { ...newTycoon(0), money: 1000 };
+  if (!canHire(s, 'steward')) fail('cannot hire a steward with $1000 in hand');
+  if (canHire({ ...s, money: 50 }, 'steward')) fail('hired a steward the club cannot afford');
+  const before = incomePerSec(s);
+  const hired = hire(s, 'steward');
+  if (hired.money !== 1000 - 100) fail(`the first steward cost ${1000 - hired.money}, the card says $100`);
+  if (totalStaffLevels(hired) !== 1) fail('the hire did not land on the books');
+  // The delta is the rate times every global multiplier, to the digit.
+  const mults = repMult(hired) * T.streakMult(hired) * divisionOf(hired).incomeMult * achMult(hired);
+  const delta = incomePerSec(hired) - before;
+  if (Math.abs(delta - 0.6 * mults) > 1e-9) fail(`steward level 1 adds ${delta}/s, the rate card says ${0.6 * mults}`);
+  // Next level costs more by exactly the growth factor.
+  if (staffCostOf(hired, 'steward') !== Math.round(100 * 1.13)) fail('steward level 2 is not priced by the growth curve');
+  // Payback: $100 at 0.6/s is about 167 seconds at day one multipliers.
+  // Measured 2026-08-18: 166.7s. Anything past 10 minutes would mean the
+  // bottom tier is dead weight at the stage it unlocks.
+  const payback = 100 / delta;
+  if (payback > 600) fail(`the first steward takes ${payback.toFixed(0)}s to pay for itself`);
+  // Broke stays broke: a refused hire returns the same state object.
+  const broke = { ...s, money: 3 };
+  if (hire(broke, 'legend') !== broke) fail('a refused hire still changed state');
+  // The payroll walks out the day you sell up.
+  const rich = { ...hired, lifetime: 1e12 };
+  const sold = prestige(rich, 0);
+  if (totalStaffLevels(sold) !== 0) fail('prestige kept the payroll');
+  console.log(`   steward pays back in ${payback.toFixed(0)}s, delta exact to the rate card, payroll resets on sale`);
+}
+
+/* ---------- 11. The golden whistle: five prizes, zero lies ---------- */
+console.log('11) Golden whistle effects are exact, unstackable, and save-safe');
+{
+  // The weight table maps fixed rolls to fixed prizes.
+  const kinds = [0.1, 0.4, 0.6, 0.85, 0.95].map(v => rollGoldenKind(() => v));
+  if (kinds.join(',') !== 'frenzy,tapRush,windfall,fanWave,freeLevel') {
+    fail(`the weight table drew ${kinds.join(',')}`);
+  }
+  const roll = seeded(31);
+  const s = playFor(newTycoon(0), 240, roll).s;
+
+  // DERBY DAY: exactly x7 on income, and only while the clock burns.
+  const derby = catchGolden(s, 'frenzy').state;
+  if (!goldenActive(derby)) fail('a caught DERBY DAY did not light');
+  const dRatio = incomePerSec(derby) / incomePerSec(s);
+  if (Math.abs(dRatio - 7) > 1e-9) fail(`DERBY DAY pays x${dRatio}, the whistle says x7`);
+  if (catchGolden(derby, 'windfall').state !== derby) fail('a second whistle stacked on a lit one');
+  let cooled = derby;
+  for (let t = 0; t < 90; t += 5) cooled = tick(cooled, 5, roll).state;
+  if (goldenActive(cooled)) fail('DERBY DAY outlived its 77 seconds');
+  if (cooled.goldenKind !== null) fail('a burnt out whistle left its kind behind');
+
+  // CROWD SURGE: x25 on the tap and only the tap, exact to the rounding.
+  const surge = catchGolden(s, 'tapRush').state;
+  if (Math.abs(incomePerSec(surge) - incomePerSec(s)) > 1e-9) fail('CROWD SURGE leaked into passive income');
+  const mg = levelOf(s, 'megaphone');
+  const expectTap = Math.max(1, Math.round((incomePerSec(surge) * 0.7 + mg * 2) * repMult(surge) * 25));
+  if (tapValue(surge) !== expectTap) fail(`CROWD SURGE tap pays ${tapValue(surge)}, the formula says ${expectTap}`);
+
+  // TV WINDFALL: fifteen minutes of the current rate, instantly, capped.
+  const { state: paid, amount } = catchGolden(s, 'windfall');
+  const expectPay = Math.round(Math.min(incomePerSec(s) * 900, 1e15));
+  if (amount !== expectPay) fail(`TV WINDFALL paid ${amount}, the formula says ${expectPay}`);
+  if (Math.abs(paid.money - (s.money + expectPay)) > 0.001) fail('the windfall receipt does not match the wallet');
+  if (Math.abs(paid.lifetime - (s.lifetime + expectPay)) > 0.001) fail('the windfall skipped the lifetime books');
+  if (amount > 1e15) fail('the windfall cap failed');
+
+  // WONDERGOAL: +12% fans with a floor of 50 for tiny clubs.
+  const wave = catchGolden(s, 'fanWave');
+  const expectBump = Math.max(50, Math.round(s.fanbase * 0.12));
+  if (Math.abs(wave.state.fanbase - (s.fanbase + expectBump)) > 0.001) fail('the fan wave bump is off the formula');
+  const tinyWave = catchGolden({ ...newTycoon(0), fanbase: 40 }, 'fanWave');
+  if (Math.abs(tinyWave.state.fanbase - 90) > 0.001) fail('a tiny club did not get the 50 fan floor');
+
+  // SPONSOR GIFT: one free level on the cheapest open track, wallet untouched.
+  const gift = catchGolden(s, 'freeLevel').state;
+  if (Math.abs(gift.money - s.money) > 0.001) fail('the free level was not free');
+  const levelSum = st => TRACKS.reduce((n, t) => n + levelOf(st, t.id), 0);
+  if (levelSum(gift) !== levelSum(s) + 1) fail('the sponsor gift did not land one level');
+
+  // Catches are counted, and away pay ignores a lit whistle entirely.
+  if ((derby.goldenCaught ?? 0) !== (s.goldenCaught ?? 0) + 1) fail('the caught counter did not move');
+  const litSave = { ...derby, savedAt: 1000000 };
+  const drySave = { ...derby, goldenKind: null, goldenLeftSec: 0, savedAt: 1000000 };
+  const litPay = offlineEarnings(litSave, 1000000 + 3600 * 1000);
+  const dryPay = offlineEarnings(drySave, 1000000 + 3600 * 1000);
+  if (litPay !== dryPay) fail(`saving mid DERBY DAY changed away pay: ${litPay} vs ${dryPay}`);
+
+  // Saves: a timed whistle survives, a doctored one comes back sane.
+  const back = deserializeTycoon(serializeTycoon(derby, 5), 5);
+  if (!back || back.goldenKind !== 'frenzy' || Math.abs(back.goldenLeftSec - derby.goldenLeftSec) > 0.001) {
+    fail('a lit whistle did not survive a save');
+  }
+  const doctored = deserializeTycoon(JSON.stringify({ ...JSON.parse(serializeTycoon(derby, 5)), goldenKind: 'windfall', goldenLeftSec: 99999 }), 5);
+  if (doctored && (doctored.goldenKind !== null || doctored.goldenLeftSec !== 0)) {
+    fail('a doctored instant-kind whistle survived as a timed one');
+  }
+  console.log(`   x7 exact for 77s, taps x25 exact, windfall ${amount} on the nose, no stacking, saves sane`);
+}
+
+/* ---------- 12. Achievements: 2% each, forever, exactly once ---------- */
+console.log('12) Badges pay 2% each and never fire twice');
+{
+  if (ACHIEVEMENTS.length !== 47) fail(`expected 47 badges, found ${ACHIEVEMENTS.length}`);
+  const ids = new Set(ACHIEVEMENTS.map(a => a.id));
+  if (ids.size !== ACHIEVEMENTS.length) fail('duplicate badge ids');
+
+  // The multiplier is exact: five badges is x1.10, to the digit.
+  const s0 = newTycoon(0);
+  const five = { ...s0, ach: ACHIEVEMENTS.slice(0, 5).map(a => a.id) };
+  const mRatio = incomePerSec(five) / incomePerSec(s0);
+  if (Math.abs(mRatio - (1 + 5 * ACH_BONUS)) > 1e-9) fail(`five badges pay x${mRatio}, expected x1.10`);
+
+  // A crossed line fires once, with no cash attached, and never refires.
+  let near = { ...newTycoon(0), fanbase: 500.5 };
+  const r1 = tick(near, 2, () => 0.999);
+  const achEvents = r1.events.filter(e => e.kind === 'ach');
+  if (!achEvents.some(e => e.label.includes('500 fans'))) fail('crossing 500 fans did not raise the badge');
+  if (achEvents.some(e => e.amount !== undefined)) fail('a badge paid cash, the multiplier is the payout');
+  const r2 = tick(r1.state, 2, () => 0.999);
+  if (r2.events.some(e => e.kind === 'ach' && e.label.includes('500 fans'))) fail('the 500 fan badge fired twice');
+
+  // A long greedy run collects a stack of them, each exactly once.
+  const roll = seeded(64);
+  let g = newTycoon(0);
+  const fired = {};
+  for (let t = 0; t < 30 * 60; t += 2) {
+    const r = tick(g, 2, roll);
+    g = r.state;
+    for (const e of r.events) if (e.kind === 'ach') fired[e.label] = (fired[e.label] ?? 0) + 1;
+    g = tap(g); g = tap(g); g = tap(g); g = tap(g);
+    for (let guard = 0; guard < 20; guard++) {
+      const opts = TRACKS.filter(tr => canBuy(g, tr.id)).sort((a, b) => costOf(g, a.id) - costOf(g, b.id));
+      if (!opts.length) break;
+      g = buy(g, opts[0].id);
+    }
+  }
+  const gCount = Object.keys(fired).length;
+  // Measured 2026-08-18: 13 badges inside 30 greedy minutes. 8 keeps honest
+  // daylight; a first session that earns fewer has lost its drip feed.
+  if (gCount < 8) fail(`only ${gCount} badges in 30 greedy minutes, the drip feed is broken`);
+  for (const [label, n] of Object.entries(fired)) {
+    if (n !== 1) fail(`badge "${label}" fired ${n} times`);
+  }
+  if ((g.ach ?? []).length !== gCount) fail(`the books hold ${(g.ach ?? []).length} badges but ${gCount} fired`);
+  if (Math.abs(achMult(g) - (1 + gCount * ACH_BONUS)) > 1e-9) fail('the badge multiplier does not match the badge count');
+
+  // Badges are forever: the full list rides through a sale.
+  const sold = prestige({ ...g, lifetime: 1e12 }, 0);
+  if ((sold.ach ?? []).join(',') !== (g.ach ?? []).join(',')) fail('prestige touched the badge list');
+
+  // And a tampered save cannot mint one.
+  const fake = deserializeTycoon(JSON.stringify({ ...JSON.parse(serializeTycoon(g, 9)), ach: ['made-up', ...(g.ach ?? [])] }), 9);
+  if (fake && fake.ach.includes('made-up')) fail('a fake badge id survived the load');
+  console.log(`   ${gCount} badges in 30 min, x${achMult(g).toFixed(2)} exact, exactly-once, forever, tamper-proof`);
 }
 
 console.log('');

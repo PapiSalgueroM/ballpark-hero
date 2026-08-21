@@ -1,5 +1,38 @@
 # Project state
 
+## Owner feedback, fourth message 2026-08-18 morning (nine screenshots)
+
+Three things in one message, mid session:
+
+- **The idle game, DONE in Round 162.** His words: "work on that idle game. A full game like a
+  massive idle game, a ton better" (naming two famous browser clickers as the bar to clear:
+  keep those names out of src, the spirit is scale and depth). Shipped: ten named divisions
+  climbed by home wins (exact income multipliers up to x5.5, promotion bonuses, tougher
+  opposition per stage, ladder resets on prestige but best division is recorded forever), an
+  eight tier staff payroll (Turnstile Steward to Club Legend Ambassador, flat income per level
+  before the multipliers), the golden whistle (drifts in about every 150s of real play, 12s to
+  catch, five weighted prizes: DERBY DAY x7 for 77s, CROWD SURGE taps x25 for 30s, TV WINDFALL
+  15 minutes of income instantly, WONDERGOAL +12 percent fans, SPONSOR GIFT a free level; no
+  stacking, excluded from away pay, clock burns in play time only), and 47 badges at a
+  permanent +2 percent each, riding through every prestige. Two drawers (Badges, Club records),
+  the income line names every live multiplier, help modal and SEO copy rewritten truthful.
+  simStadiumTycoon grew sections 9-12 (division/promotion/staff/whistle/badge math pinned to
+  exact formulas, saves tamper-proofed) and the old bands were re-measured on the new economy
+  (30 min growth about 530x, first prestige minute 14, worst post-star wait 203s). Browser
+  probe: 19/19 including catching a forced whistle and seeing the DERBY DAY chip.
+- **Five more match-app screenshots** (top rated players both sides, venue and attendance card,
+  full event timeline with sub arrows and assists and added minutes, continuous momentum area
+  chart with possession and xG and shots and box touches, player of the match card). These are
+  his models for upgrading the CM match screens further: queued as refinements to CM-1/CM-2
+  (sub arrows and assists in the timeline, a venue card that reads the custom capacity, the
+  momentum graph as a continuous area not ten buckets, added minutes on the clock).
+- **Three Search Console shots** (88 not indexed vs 41 indexed and climbing; a "Page with
+  redirect" validation started 8/12 and FAILED 8/15 on 3 pages). Read: the 3 failures are the
+  301 redirects working exactly as designed (a redirecting URL can never validate as indexed,
+  and should not), the sitemap has been clean since Round 148, and the indexed count is the
+  number that matters and it is rising. No code change needed; tell him not to sweat that
+  validation email.
+
 ## Owner feedback, third review 2026-08-18 (his biggest list yet, with screenshots)
 
 He sent a long review overnight with four screenshots: a matchday app's pre and post match
@@ -418,8 +451,9 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18 | **Round 157** (Quick Sim, Match Centre, match stats and ratings, header counting, halftime-consistent scorer minutes) and **Round 158** (Watch Live, the animated 2D match viewer with the dressing room embedded at the break, PLUS the month calendar with training cones and the long fast forward: the two shipped together because they share the page files). `RUN157.bat` then `RUN158.bat`, each chain-guarded. `SHIP16.bat` runs both. |
 | Packaged 2026-08-18, later | **Round 159** (the fix pack off his screenshots: ceiling repair, real Retire and New Career buttons, the slalom stopwatch, keeper Shot Stopping, Passing Gates, true header centering at desktop, Soccer Career counting toward the header per season). `RUN159.bat`, chain-guarded on 158. `SHIP16.bat` runs 157 and 158; click RUN159 after, or use SHIP17.bat which runs all three. |
 | Packaged 2026-08-18, later still | **Round 160** (create-a-club depth: quality slider, football identity, stadium size, plus the boardWantLabel wrong-league fix its harness caught). `RUN160.bat`, chain-guarded on 159. SHIP18.bat runs 157 through 160. |
-| Packaged 2026-08-18, small hours | **Round 161** (structured transfer deals: add-ons, sell-on clauses, part exchange, plus the deep market filters). `RUN161.bat`, chain-guarded on 160. **SHIP19.bat is the current wrapper: it runs 157 through 161.** |
-| Next free round number | **162** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, small hours | **Round 161** (structured transfer deals: add-ons, sell-on clauses, part exchange, plus the deep market filters). `RUN161.bat`, chain-guarded on 160. |
+| Packaged 2026-08-18, morning | **Round 162** (Stadium Tycoon goes massive, his direct ask: ten named divisions with exact income multipliers and promotion bonuses, an eight tier staff payroll, the catchable golden whistle with five prizes, 47 badges at a permanent 2 percent each, a Badges drawer, a Club records drawer, and the game's help plus SEO copy rewritten to match). `RUN162.bat`, chain-guarded on 161. **SHIP20.bat is the current wrapper: it runs 157 through 162.** SHIP19.bat (157-161) still works if already downloaded, then click RUN162 after. |
+| Next free round number | **163** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

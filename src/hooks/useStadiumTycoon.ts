@@ -9,8 +9,22 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
-  activateBoost,
+  activateBoost, hire, catchGolden, rollGoldenKind, goldenActive,
+  GOLDEN_INFO, fmtMoney,
 } from '@/lib/stadiumTycoon';
+import type { GoldenKind } from '@/lib/stadiumTycoon';
+
+/** Round 162: a golden whistle drifting across the pitch, waiting to be
+ *  caught. Purely presentational until the tap: the engine only hears about
+ *  it if the player actually catches it. */
+export interface PendingGolden {
+  id: number;
+  kind: GoldenKind;
+  x: number;
+  y: number;
+  /** performance.now() when it drifts away uncaught. */
+  expiresAt: number;
+}
 
 export interface Floater {
   id: number;
@@ -35,8 +49,11 @@ export function useStadiumTycoon() {
   const [floaters, setFloaters] = useState<Floater[]>([]);
   const [awayPay, setAwayPay] = useState<number | null>(null);
   const [confetti, setConfetti] = useState(0);
+  const [golden, setGolden] = useState<PendingGolden | null>(null);
   const stateRef = useRef(state);
   stateRef.current = state;
+  const goldenRef = useRef(golden);
+  goldenRef.current = golden;
 
   const pushFloater = useCallback((text: string, kind: Floater['kind'], x?: number, y?: number) => {
     const f: Floater = {
@@ -79,6 +96,20 @@ export function useStadiumTycoon() {
         const { state: next, events } = tick(stateRef.current, use, Math.random);
         for (const e of events) reactToEvent(e);
         setState(next);
+        /* Round 162: the golden whistle. One drifts in every couple of
+           minutes of real play (mean ~150s), only while nothing golden is
+           already lit, and it drifts away after 12 seconds uncaught. */
+        const g = goldenRef.current;
+        if (g && t > g.expiresAt) setGolden(null);
+        else if (!g && !goldenActive(next) && Math.random() < use / 150) {
+          setGolden({
+            id: Date.now(),
+            kind: rollGoldenKind(Math.random),
+            x: 12 + Math.random() * 70,
+            y: 24 + Math.random() * 45,
+            expiresAt: t + 12000,
+          });
+        }
         if (sinceSave >= 5) {
           sinceSave = 0;
           try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); } catch { /* full/blocked storage never kills the game */ }
@@ -95,6 +126,13 @@ export function useStadiumTycoon() {
         setConfetti(c => c + 1);
       } else if (e.kind === 'milestone') {
         pushFloater(`🏁 ${e.label} +$${e.amount}`, 'win', 18, 30);
+        setConfetti(c => c + 1);
+      } else if (e.kind === 'promoted') {
+        // Round 162: the loudest moment the game has.
+        pushFloater(`${e.label} +$${e.amount}`, 'win', 16, 20);
+        setConfetti(c => c + 2);
+      } else if (e.kind === 'ach') {
+        pushFloater(`${e.label}: +2% forever`, 'win', 22, 36);
         setConfetti(c => c + 1);
       } else if (e.kind === 'conceded') {
         pushFloater('they score', 'bad', 25 + Math.random() * 50, 55 + Math.random() * 25);
@@ -119,6 +157,27 @@ export function useStadiumTycoon() {
   const doBuy = useCallback((id: string) => {
     setState(s => buy(s, id));
   }, []);
+
+  /* Round 162: the payroll. */
+  const doHire = useCallback((id: string) => {
+    setState(s => hire(s, id));
+  }, []);
+
+  /* Round 162: catching the whistle. The floater says what it was worth. */
+  const doCatchGolden = useCallback(() => {
+    const g = goldenRef.current;
+    if (!g) return;
+    setGolden(null);
+    const { state: next, amount } = catchGolden(stateRef.current, g.kind);
+    if (next === stateRef.current) return;
+    const info = GOLDEN_INFO[g.kind];
+    if (g.kind === 'windfall') pushFloater(`🪙 ${info.label} +${fmtMoney(amount ?? 0)}`, 'win', g.x, g.y);
+    else if (g.kind === 'fanWave') pushFloater(`🪙 ${info.label}: +${(amount ?? 0).toLocaleString()} fans`, 'win', g.x, g.y);
+    else if (g.kind === 'freeLevel') pushFloater(`🪙 ${info.label}: ${info.blurb}`, 'win', g.x, g.y);
+    else pushFloater(`🪙 ${info.label}: ${info.blurb}!`, 'win', g.x, g.y);
+    setConfetti(c => c + 1);
+    setState(next);
+  }, [pushFloater]);
 
   const doTap = useCallback((xPct: number, yPct: number) => {
     const before = stateRef.current;
@@ -147,5 +206,9 @@ export function useStadiumTycoon() {
 
   const dismissAway = useCallback(() => setAwayPay(null), []);
 
-  return { state, floaters, awayPay, dismissAway, confetti, doBuy, doTap, doPrestige, doBoost };
+  return {
+    state, floaters, awayPay, dismissAway, confetti,
+    doBuy, doTap, doPrestige, doBoost,
+    golden, doCatchGolden, doHire,
+  };
 }

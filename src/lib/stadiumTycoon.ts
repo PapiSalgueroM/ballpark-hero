@@ -50,6 +50,269 @@ export const TRACKS: TycoonTrack[] = [
 
 export type TrackId = typeof TRACKS[number]['id'];
 
+/* ================================================================== */
+/* Round 162: the massive version. His words: "a full game like a     */
+/* Massive idle game... a ton better." Four new systems, every one    */
+/* additive, every one pure, every one measured by the harness:       */
+/* DIVISIONS to climb (the long arc), STAFF to hire (income that      */
+/* scales into the billions), ACHIEVEMENTS (each one a permanent      */
+/* income bonus, forever, across grounds), and the GOLDEN WHISTLE     */
+/* (a catch-it-quick bonus that drifts across the pitch).             */
+/* ================================================================== */
+
+/* ---------- divisions: the ladder this ground is climbing ---------- */
+
+export interface TycoonDivision {
+  name: string;
+  emoji: string;
+  /** Wins at THIS ground to sit in this division. */
+  winsNeeded: number;
+  /** Everything earns this much more here: bigger stage, bigger money. */
+  incomeMult: number;
+  /** Opponents up here are better, permanently. */
+  oppBoost: number;
+}
+
+/* Invented league names, checked by the harness against every real club
+ * and league in the Club Manager world. Climbing is per GROUND: sell up
+ * and the new club starts at the bottom with the rep multiplier for company. */
+export const DIVISIONS: TycoonDivision[] = [
+  { name: 'Muddy Meadows League', emoji: '🌧️', winsNeeded: 0, incomeMult: 1, oppBoost: 0 },
+  { name: 'Gravel Lane League', emoji: '🧱', winsNeeded: 6, incomeMult: 1.15, oppBoost: 0.006 },
+  { name: 'Tin Cup Division', emoji: '🥫', winsNeeded: 14, incomeMult: 1.32, oppBoost: 0.012 },
+  { name: 'Ironworks League', emoji: '⚙️', winsNeeded: 25, incomeMult: 1.55, oppBoost: 0.019 },
+  { name: 'Granite Division', emoji: '🪨', winsNeeded: 40, incomeMult: 1.85, oppBoost: 0.027 },
+  { name: 'Silverline League', emoji: '🥈', winsNeeded: 60, incomeMult: 2.25, oppBoost: 0.036 },
+  { name: 'Floodlit League', emoji: '💡', winsNeeded: 85, incomeMult: 2.8, oppBoost: 0.046 },
+  { name: 'Velvet Division', emoji: '🎩', winsNeeded: 115, incomeMult: 3.5, oppBoost: 0.057 },
+  { name: 'Crown Circuit', emoji: '👑', winsNeeded: 150, incomeMult: 4.4, oppBoost: 0.069 },
+  { name: 'The Summit', emoji: '🏔️', winsNeeded: 200, incomeMult: 5.5, oppBoost: 0.082 },
+];
+
+/** Index into DIVISIONS for the current ground. */
+export function divisionIndex(s: TycoonState): number {
+  const wins = s.groundWins ?? 0;
+  let idx = 0;
+  for (let i = 0; i < DIVISIONS.length; i++) {
+    if (wins >= DIVISIONS[i].winsNeeded) idx = i;
+  }
+  return idx;
+}
+
+export function divisionOf(s: TycoonState): TycoonDivision {
+  return DIVISIONS[divisionIndex(s)];
+}
+
+/** Wins still needed for the next division, or null at the top. */
+export function winsToNextDivision(s: TycoonState): number | null {
+  const idx = divisionIndex(s);
+  if (idx >= DIVISIONS.length - 1) return null;
+  return DIVISIONS[idx + 1].winsNeeded - (s.groundWins ?? 0);
+}
+
+/* ---------- staff: the payroll that earns while you sleep ---------- */
+
+export interface TycoonStaff {
+  id: string;
+  name: string;
+  emoji: string;
+  blurb: string;
+  baseCost: number;
+  growth: number;
+  /** Dollars per second per level, before the global multipliers. */
+  rate: number;
+  maxLevel: number;
+}
+
+/* Classic idle-building economics: each tier costs about 5x the last and
+ * pays about 4.5x, so every tier is worth reaching and none is ever the
+ * only answer. Rates and costs tuned with the harness: every tier pays
+ * itself back inside a few minutes at the stage it unlocks. */
+export const STAFF: TycoonStaff[] = [
+  { id: 'steward', name: 'Turnstile Steward', emoji: '🧍', blurb: 'Keeps the queue moving and the coins counted', baseCost: 100, growth: 1.13, rate: 0.6, maxLevel: 300 },
+  { id: 'pieChef', name: 'Pie Chef', emoji: '👨‍🍳', blurb: 'The half time pie that people cross town for', baseCost: 650, growth: 1.13, rate: 3.5, maxLevel: 300 },
+  { id: 'kitman', name: 'Kit Man', emoji: '🧺', blurb: 'Shirts washed, boots ready, fines for lost socks', baseCost: 3500, growth: 1.13, rate: 16, maxLevel: 300 },
+  { id: 'groundsman', name: 'Groundskeeper', emoji: '🌱', blurb: 'A pitch so good visiting teams ask for a photo', baseCost: 18000, growth: 1.135, rate: 70, maxLevel: 300 },
+  { id: 'photographer', name: 'Club Photographer', emoji: '📷', blurb: 'Every goal framed and sold by the exit', baseCost: 95000, growth: 1.135, rate: 300, maxLevel: 300 },
+  { id: 'megastore', name: 'Megastore Manager', emoji: '🏬', blurb: 'Third kits, fourth kits, a candle that smells of grass', baseCost: 520000, growth: 1.14, rate: 1300, maxLevel: 300 },
+  { id: 'commercial', name: 'Commercial Director', emoji: '💼', blurb: 'Shakes hands, signs deals, never watches the match', baseCost: 2800000, growth: 1.14, rate: 5800, maxLevel: 300 },
+  { id: 'legend', name: 'Club Legend Ambassador', emoji: '🐐', blurb: 'Retired, beloved, worth a stand full of season ticket renewals', baseCost: 15000000, growth: 1.145, rate: 26000, maxLevel: 300 },
+];
+
+export function staffById(id: string): TycoonStaff {
+  return STAFF.find(t => t.id === id) ?? STAFF[0];
+}
+
+export function staffLevelOf(s: TycoonState, id: string): number {
+  return (s.staffLevels ?? {})[id] ?? 0;
+}
+
+export function staffCostOf(s: TycoonState, id: string): number {
+  const t = staffById(id);
+  return Math.round(t.baseCost * Math.pow(t.growth, staffLevelOf(s, id)));
+}
+
+export function canHire(s: TycoonState, id: string): boolean {
+  return staffLevelOf(s, id) < staffById(id).maxLevel && s.money >= staffCostOf(s, id);
+}
+
+export function hire(s: TycoonState, id: string): TycoonState {
+  if (!canHire(s, id)) return s;
+  const cost = staffCostOf(s, id);
+  return {
+    ...s,
+    money: s.money - cost,
+    staffLevels: { ...(s.staffLevels ?? {}), [id]: staffLevelOf(s, id) + 1 },
+  };
+}
+
+export function totalStaffLevels(s: TycoonState): number {
+  return STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id), 0);
+}
+
+/** Staff base income before the global multipliers. */
+export function staffBaseIncome(s: TycoonState): number {
+  return STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id) * t.rate, 0);
+}
+
+/* ---------- the golden whistle: catch it before it drifts away ---------- */
+
+export type GoldenKind = 'frenzy' | 'tapRush' | 'windfall' | 'fanWave' | 'freeLevel';
+
+export const GOLDEN_INFO: Record<GoldenKind, { label: string; blurb: string; duration: number }> = {
+  frenzy: { label: 'DERBY DAY', blurb: 'everything pays x7', duration: 77 },
+  tapRush: { label: 'CROWD SURGE', blurb: 'taps pay x25', duration: 30 },
+  windfall: { label: 'TV WINDFALL', blurb: 'fifteen minutes of income, instantly', duration: 0 },
+  fanWave: { label: 'WONDERGOAL GOES VIRAL', blurb: 'the fanbase jumps', duration: 0 },
+  freeLevel: { label: 'SPONSOR GIFT', blurb: 'a free upgrade level', duration: 0 },
+};
+
+/** What a fresh whistle carries. Weighted toward the fun ones. */
+export function rollGoldenKind(roll: () => number): GoldenKind {
+  const r = roll();
+  if (r < 0.34) return 'frenzy';
+  if (r < 0.54) return 'tapRush';
+  if (r < 0.79) return 'windfall';
+  if (r < 0.91) return 'fanWave';
+  return 'freeLevel';
+}
+
+export function goldenActive(s: TycoonState): boolean {
+  return (s.goldenLeftSec ?? 0) > 0 && !!s.goldenKind;
+}
+
+/**
+ * Catch a whistle. Timed kinds light their clock; instant kinds pay on the
+ * spot. No-op while one is already lit, so effects never stack.
+ * The windfall pays fifteen minutes of the CURRENT rate (no golden active
+ * by construction here), capped so a doctored state cannot print money.
+ */
+export function catchGolden(s: TycoonState, kind: GoldenKind): { state: TycoonState; amount?: number } {
+  if (goldenActive(s)) return { state: s };
+  const st: TycoonState = { ...s, goldenCaught: (s.goldenCaught ?? 0) + 1 };
+  if (kind === 'frenzy' || kind === 'tapRush') {
+    st.goldenKind = kind;
+    st.goldenLeftSec = GOLDEN_INFO[kind].duration;
+    return { state: st };
+  }
+  if (kind === 'windfall') {
+    const pay = Math.round(Math.min(incomePerSec(s) * 900, 1e15));
+    st.money += pay;
+    st.lifetime += pay;
+    return { state: st, amount: pay };
+  }
+  if (kind === 'fanWave') {
+    const bump = Math.max(50, Math.round(s.fanbase * 0.12));
+    st.fanbase = s.fanbase + bump;
+    return { state: st, amount: bump };
+  }
+  // freeLevel: the cheapest still-buyable track levels up, on the house.
+  const open = TRACKS.filter(t => levelOf(s, t.id) < t.maxLevel);
+  if (!open.length) return { state: st };
+  const cheapest = open.sort((a, b) => costOf(s, a.id) - costOf(s, b.id))[0];
+  st.levels = { ...st.levels, [cheapest.id]: levelOf(s, cheapest.id) + 1 };
+  return { state: st };
+}
+
+/* ---------- achievements: every first is worth 2% forever ---------- */
+
+export interface TycoonAchievement {
+  id: string;
+  label: string;
+  emoji: string;
+  hit: (s: TycoonState) => boolean;
+}
+
+/** Each earned achievement is a permanent +2% income, across every ground,
+ *  forever. Forty seven of them: the long game's long game. */
+export const ACH_BONUS = 0.02;
+
+export const ACHIEVEMENTS: TycoonAchievement[] = [
+  // The fanbase.
+  { id: 'af500', label: '500 fans', emoji: '👥', hit: s => s.fanbase >= 500 },
+  { id: 'af2k', label: '2,000 fans', emoji: '👥', hit: s => s.fanbase >= 2000 },
+  { id: 'af10k', label: '10,000 fans', emoji: '👥', hit: s => s.fanbase >= 10000 },
+  { id: 'af50k', label: '50,000 fans', emoji: '🌆', hit: s => s.fanbase >= 50000 },
+  { id: 'af250k', label: 'A quarter million fans', emoji: '🌇', hit: s => s.fanbase >= 250000 },
+  { id: 'af1m', label: 'A million fans', emoji: '🌍', hit: s => s.fanbase >= 1000000 },
+  // The ground.
+  { id: 'ac500', label: '500 seats', emoji: '🏟️', hit: s => capacity(s) >= 500 },
+  { id: 'ac2000', label: '2,000 seats', emoji: '🏟️', hit: s => capacity(s) >= 2000 },
+  { id: 'ac8000', label: '8,000 seats', emoji: '🏟️', hit: s => capacity(s) >= 8000 },
+  // Wins, career.
+  { id: 'aw1', label: 'First career win', emoji: '🏁', hit: s => s.totalWins >= 1 },
+  { id: 'aw10', label: '10 career wins', emoji: '🏁', hit: s => s.totalWins >= 10 },
+  { id: 'aw50', label: '50 career wins', emoji: '🏁', hit: s => s.totalWins >= 50 },
+  { id: 'aw150', label: '150 career wins', emoji: '🏆', hit: s => s.totalWins >= 150 },
+  { id: 'aw400', label: '400 career wins', emoji: '🏆', hit: s => s.totalWins >= 400 },
+  // Goals.
+  { id: 'ag25', label: '25 goals', emoji: '⚽', hit: s => s.totalGoals >= 25 },
+  { id: 'ag100', label: '100 goals', emoji: '⚽', hit: s => s.totalGoals >= 100 },
+  { id: 'ag500', label: '500 goals', emoji: '⚽', hit: s => s.totalGoals >= 500 },
+  { id: 'ag2000', label: '2,000 goals', emoji: '🥅', hit: s => s.totalGoals >= 2000 },
+  // Streaks.
+  { id: 'as5', label: 'Five straight wins', emoji: '🔥', hit: s => s.streak >= 5 },
+  { id: 'as10', label: 'Ten straight wins', emoji: '🔥', hit: s => s.streak >= 10 },
+  // Taps.
+  { id: 'at100', label: '100 taps', emoji: '👆', hit: s => s.totalTaps >= 100 },
+  { id: 'at1k', label: '1,000 taps', emoji: '👆', hit: s => s.totalTaps >= 1000 },
+  { id: 'at10k', label: '10,000 taps', emoji: '🖐️', hit: s => s.totalTaps >= 10000 },
+  // Money, lifetime this ground.
+  { id: 'am10k', label: '$10K lifetime', emoji: '💵', hit: s => s.lifetime >= 1e4 },
+  { id: 'am1m', label: '$1M lifetime', emoji: '💰', hit: s => s.lifetime >= 1e6 },
+  { id: 'am100m', label: '$100M lifetime', emoji: '💰', hit: s => s.lifetime >= 1e8 },
+  { id: 'am10b', label: '$10B lifetime', emoji: '🤑', hit: s => s.lifetime >= 1e10 },
+  { id: 'am1t', label: '$1T lifetime', emoji: '🏦', hit: s => s.lifetime >= 1e12 },
+  // Matches.
+  { id: 'amt25', label: '25 matches played', emoji: '📅', hit: s => (s.totalMatches ?? 0) >= 25 },
+  { id: 'amt100', label: '100 matches played', emoji: '📅', hit: s => (s.totalMatches ?? 0) >= 100 },
+  { id: 'amt400', label: '400 matches played', emoji: '📅', hit: s => (s.totalMatches ?? 0) >= 400 },
+  // Staff.
+  { id: 'ast10', label: '10 staff hired', emoji: '🧑‍🤝‍🧑', hit: s => totalStaffLevels(s) >= 10 },
+  { id: 'ast50', label: '50 staff hired', emoji: '🧑‍🤝‍🧑', hit: s => totalStaffLevels(s) >= 50 },
+  { id: 'ast150', label: '150 staff hired', emoji: '🏢', hit: s => totalStaffLevels(s) >= 150 },
+  { id: 'astall', label: 'Every role filled at least once', emoji: '📋', hit: s => STAFF.every(t => staffLevelOf(s, t.id) >= 1) },
+  // Divisions (career best, survives selling up).
+  { id: 'ad2', label: 'Reach the Tin Cup Division', emoji: '🥫', hit: s => (s.bestDivision ?? 0) >= 2 },
+  { id: 'ad4', label: 'Reach the Granite Division', emoji: '🪨', hit: s => (s.bestDivision ?? 0) >= 4 },
+  { id: 'ad6', label: 'Reach the Floodlit League', emoji: '💡', hit: s => (s.bestDivision ?? 0) >= 6 },
+  { id: 'ad8', label: 'Reach the Crown Circuit', emoji: '👑', hit: s => (s.bestDivision ?? 0) >= 8 },
+  { id: 'ad9', label: 'Reach The Summit', emoji: '🏔️', hit: s => (s.bestDivision ?? 0) >= 9 },
+  // Reputation.
+  { id: 'ar1', label: 'First reputation star', emoji: '⭐', hit: s => s.rep >= 1 },
+  { id: 'ar3', label: 'Three reputation stars', emoji: '⭐', hit: s => s.rep >= 3 },
+  { id: 'ar6', label: 'Six reputation stars', emoji: '🌟', hit: s => s.rep >= 6 },
+  // Hype and gold.
+  { id: 'ab3', label: 'Three hype boosts pressed', emoji: '📣', hit: s => (s.boostsUsed ?? 0) >= 3 },
+  { id: 'ab20', label: 'Twenty hype boosts pressed', emoji: '📣', hit: s => (s.boostsUsed ?? 0) >= 20 },
+  { id: 'agw5', label: 'Five golden whistles caught', emoji: '🪙', hit: s => (s.goldenCaught ?? 0) >= 5 },
+  { id: 'agw25', label: 'Twenty five golden whistles caught', emoji: '🪙', hit: s => (s.goldenCaught ?? 0) >= 25 },
+];
+
+export function achMult(s: TycoonState): number {
+  return 1 + (s.ach ?? []).length * ACH_BONUS;
+}
+
 export interface TycoonState {
   v: number;
   money: number;
@@ -83,6 +346,23 @@ export interface TycoonState {
   /** Round 152: milestone ids already paid this CAREER. Survives prestige,
    *  because the counters they read survive prestige too. */
   claimed: string[];
+  /** Round 162: wins at THIS ground, the division ladder's fuel. Resets
+   *  when you sell up: a new club starts at the bottom again. */
+  groundWins?: number;
+  /** Round 162: the best division index ever reached, career-wide. */
+  bestDivision?: number;
+  /** Round 162: staff levels by id. Payroll survives nothing: selling up
+   *  means a new club and a new staff room. */
+  staffLevels?: Record<string, number>;
+  /** Round 162: achievement ids earned, career-wide, each +2% forever. */
+  ach?: string[];
+  /** Round 162: the golden whistle's live effect, if one is lit. */
+  goldenKind?: GoldenKind | null;
+  goldenLeftSec?: number;
+  /** Round 162: career counters for the achievement wall. */
+  goldenCaught?: number;
+  boostsUsed?: number;
+  totalMatches?: number;
 }
 
 export const TYCOON_SAVE_KEY = 'stadiumTycoonSaveV1';
@@ -108,6 +388,15 @@ export function newTycoon(now: number): TycoonState {
     boostChargeSec: 0,
     boostLeftSec: 0,
     claimed: [],
+    groundWins: 0,
+    bestDivision: 0,
+    staffLevels: {},
+    ach: [],
+    goldenKind: null,
+    goldenLeftSec: 0,
+    goldenCaught: 0,
+    boostsUsed: 0,
+    totalMatches: 0,
   };
 }
 
@@ -195,7 +484,13 @@ export function boostActive(s: TycoonState): boolean {
 /** Spend a full charge. No-op unless genuinely ready, so no stacking. */
 export function activateBoost(s: TycoonState): TycoonState {
   if (!boostReady(s)) return s;
-  return { ...s, boostChargeSec: 0, boostLeftSec: BOOST_DURATION_SEC };
+  return {
+    ...s,
+    boostChargeSec: 0,
+    boostLeftSec: BOOST_DURATION_SEC,
+    // Round 162: counted for the achievement wall.
+    boostsUsed: (s.boostsUsed ?? 0) + 1,
+  };
 }
 
 export function trackById(id: string): TycoonTrack {
@@ -249,7 +544,14 @@ export function incomePerSec(s: TycoonState): number {
   // Round 150: an active Matchday Hype doubles everything downstream of
   // this line, which is deliberately ALL money (taps and bonuses included).
   const hype = boostActive(s) ? 2 : 1;
-  return (fans * perFan + parking) * repMult(s) * streakMult(s) * hype;
+  /* Round 162: the payroll earns alongside the crowd, the division you have
+     climbed to pays its stage multiplier, every achievement is +2 percent
+     forever, and a lit DERBY DAY golden whistle multiplies the lot by 7.
+     Order matters not at all (it is one product), but the frenzy sits last
+     in the line so the code reads the way the screen explains it. */
+  const golden = goldenActive(s) && s.goldenKind === 'frenzy' ? 7 : 1;
+  return (fans * perFan + parking + staffBaseIncome(s))
+    * repMult(s) * streakMult(s) * divisionOf(s).incomeMult * achMult(s) * hype * golden;
 }
 
 /** One tap on the stadium. Megaphone makes taps matter deep into a run. */
@@ -260,7 +562,10 @@ export function tapValue(s: TycoonState): number {
   // income per tap and the harness measured a bored thumb TRIPLING the
   // economy, with first prestige landing at minute three. Now a tap pays
   // about 0.7s of income plus the megaphone's flat power.
-  return Math.max(1, Math.round((incomePerSec(s) * 0.7 + mg * 2) * repMult(s)));
+  // Round 162: a CROWD SURGE golden whistle makes taps the whole show for
+  // thirty seconds. x25 on the tap only, never on the passive line.
+  const rush = goldenActive(s) && s.goldenKind === 'tapRush' ? 25 : 1;
+  return Math.max(1, Math.round((incomePerSec(s) * 0.7 + mg * 2) * repMult(s) * rush));
 }
 
 /** How fast the fanbase grows per second, before capacity pressure. */
@@ -286,7 +591,9 @@ export function goalChancePerMin(s: TycoonState): number {
 /** Chance the opponent scores in one minute; opponents scale forever. */
 export function oppChancePerMin(s: TycoonState): number {
   const sq = levelOf(s, 'squad');
-  const opp = 0.024 + s.matchNo * 0.0011;
+  // Round 162: the division you climbed into shoots back. Promotion is a
+  // real thing, not a bigger number with the same Sunday opposition.
+  const opp = 0.024 + s.matchNo * 0.0011 + divisionOf(s).oppBoost;
   // Your squad defends too: half its levels push the opponent back down.
   return Math.max(0.008, Math.min(0.14, opp - sq * 0.0008));
 }
@@ -324,9 +631,9 @@ export function tap(s: TycoonState): TycoonState {
 }
 
 export interface TickEvent {
-  kind: 'goal' | 'conceded' | 'win' | 'loss' | 'draw' | 'milestone';
+  kind: 'goal' | 'conceded' | 'win' | 'loss' | 'draw' | 'milestone' | 'promoted' | 'ach';
   amount?: number;
-  /** For milestone events: the label to celebrate on screen. */
+  /** For milestone, promotion and achievement events: the on-screen label. */
   label?: string;
 }
 
@@ -354,6 +661,11 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
   } else {
     st.boostChargeSec = Math.min(BOOST_CHARGE_SEC, (st.boostChargeSec ?? 0) + dt);
   }
+  // Round 162: the golden whistle's clock burns the same way: play-time only.
+  if ((st.goldenLeftSec ?? 0) > 0) {
+    st.goldenLeftSec = Math.max(0, (st.goldenLeftSec ?? 0) - dt);
+    if (st.goldenLeftSec <= 0) st.goldenKind = null;
+  }
 
   // The match advances minute by minute.
   const MIN_LEN = 1.4;
@@ -378,12 +690,14 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
     }
     if (st.minute >= 90) {
       // Full time: settle, pay, reset.
+      const divBefore = divisionIndex(st);
       if (st.goalsFor > st.goalsAgainst) {
         const b = winBonus(st);
         st.money += b;
         st.lifetime += b;
         st.streak += 1;
         st.totalWins += 1;
+        st.groundWins = (st.groundWins ?? 0) + 1;
         st.fanbase += 6 + st.streak * 2;
         events.push({ kind: 'win', amount: b });
       } else if (st.goalsFor < st.goalsAgainst) {
@@ -394,9 +708,22 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
         events.push({ kind: 'draw' });
       }
       st.matchNo += 1;
+      st.totalMatches = (st.totalMatches ?? 0) + 1;
       st.minute = 0;
       st.goalsFor = 0;
       st.goalsAgainst = 0;
+      /* Round 162: promotion. Crossing a division line is the loudest moment
+         this game has, so it pays like one: a promotion bonus scaled to the
+         crowd and the stage you just reached. */
+      const divAfter = divisionIndex(st);
+      if (divAfter > divBefore) {
+        const d = DIVISIONS[divAfter];
+        const payRise = Math.round(attendance(st) * 8 * d.incomeMult * repMult(st));
+        st.money += payRise;
+        st.lifetime += payRise;
+        st.bestDivision = Math.max(st.bestDivision ?? 0, divAfter);
+        events.push({ kind: 'promoted', amount: payRise, label: `${d.emoji} PROMOTED: ${d.name}` });
+      }
     }
   }
 
@@ -415,6 +742,20 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
     events.push({ kind: 'milestone', amount: pay, label: m.label });
   }
   if (newlyClaimed) st.claimed = newlyClaimed;
+
+  /* Round 162: achievements settle after everything else, exactly once per
+     career, each one a permanent +2 percent. No cash changes hands: the
+     multiplier IS the payout, forever. */
+  const achHave = st.ach ?? [];
+  let newAch: string[] | null = null;
+  for (const a of ACHIEVEMENTS) {
+    if (achHave.includes(a.id) || (newAch && newAch.includes(a.id))) continue;
+    if (!a.hit(st)) continue;
+    if (!newAch) newAch = [...achHave];
+    newAch.push(a.id);
+    events.push({ kind: 'ach', label: `${a.emoji} ${a.label}` });
+  }
+  if (newAch) st.ach = newAch;
   return { state: st, events };
 }
 
@@ -447,6 +788,16 @@ export function prestige(s: TycoonState, now: number): TycoonState {
     totalTaps: s.totalTaps,
     // Round 152: firsts stay first. See the MILESTONES comment for why.
     claimed: [...(s.claimed ?? [])],
+    /* Round 162: what survives selling up, and what does not. Achievements
+       and the career counters they read are FOREVER, that is their point.
+       The division ladder and the payroll are THIS CLUB's: the new ground
+       starts at the bottom of the Muddy Meadows League with an empty staff
+       room, and the climb back up is the game. */
+    ach: [...(s.ach ?? [])],
+    bestDivision: s.bestDivision ?? 0,
+    goldenCaught: s.goldenCaught ?? 0,
+    boostsUsed: s.boostsUsed ?? 0,
+    totalMatches: s.totalMatches ?? 0,
   };
 }
 
@@ -460,7 +811,9 @@ export function offlineEarnings(s: TycoonState, now: number): number {
   const elapsed = Math.max(0, (now - s.savedAt) / 1000);
   const capped = Math.min(elapsed, 8 * 3600);
   if (capped < 30) return 0; // a tab refresh is not a trip away
-  return Math.round(incomePerSec({ ...s, boostLeftSec: 0 }) * capped * 0.5);
+  // Round 162: same rule for the golden whistle as for hype: saving mid
+  // frenzy must not turn 77 seconds of x7 into eight hours of it.
+  return Math.round(incomePerSec({ ...s, boostLeftSec: 0, goldenLeftSec: 0, goldenKind: null }) * capped * 0.5);
 }
 
 /* ---------------- save plumbing ---------------- */
@@ -493,14 +846,39 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
     // Round 152: only real milestone ids survive a load.
     if (!Array.isArray(s.claimed)) s.claimed = [];
     s.claimed = s.claimed.filter(id => MILESTONES.some(m => m.id === id));
+    /* Round 162: the new books come back sane whatever the save says. Only
+       real achievement ids, only real staff ids at finite levels, clocks
+       clamped, counters non-negative. A doctored save gets a working game,
+       never a printing press. */
+    if (!Array.isArray(s.ach)) s.ach = [];
+    s.ach = s.ach.filter(id => ACHIEVEMENTS.some(a => a.id === id));
+    const cleanStaff: Record<string, number> = {};
+    for (const t of STAFF) {
+      const lvl = (s.staffLevels ?? {})[t.id];
+      cleanStaff[t.id] = Number.isFinite(lvl) && (lvl as number) > 0 ? Math.min(Math.floor(lvl as number), t.maxLevel) : 0;
+    }
+    s.staffLevels = cleanStaff;
+    for (const k of ['groundWins', 'bestDivision', 'goldenCaught', 'boostsUsed', 'totalMatches'] as const) {
+      if (!Number.isFinite(s[k]) || (s[k] as number) < 0) s[k] = 0;
+    }
+    s.bestDivision = Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1);
+    if (!Number.isFinite(s.goldenLeftSec) || (s.goldenLeftSec ?? 0) < 0) s.goldenLeftSec = 0;
+    s.goldenLeftSec = Math.min(s.goldenLeftSec ?? 0, GOLDEN_INFO.frenzy.duration);
+    if (s.goldenKind !== 'frenzy' && s.goldenKind !== 'tapRush') {
+      s.goldenKind = null;
+      s.goldenLeftSec = 0;
+    }
     return s;
   } catch {
     return null;
   }
 }
 
-/** Compact money formatting for the header and the tiles. */
+/** Compact money formatting for the header and the tiles.
+ *  Round 162: the numbers go further now, so the ladder does too. */
 export function fmtMoney(n: number): string {
+  if (n >= 1e15) return `$${(n / 1e15).toFixed(2)}Q`;
+  if (n >= 1e12) return `$${(n / 1e12).toFixed(2)}T`;
   if (n >= 1e9) return `$${(n / 1e9).toFixed(2)}B`;
   if (n >= 1e6) return `$${(n / 1e6).toFixed(2)}M`;
   if (n >= 1e4) return `$${(n / 1e3).toFixed(1)}K`;
