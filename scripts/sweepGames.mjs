@@ -82,7 +82,16 @@ for (const engineName of wantEngines) {
   const page = await ctx.newPage();
   const errs = [];
   page.on('pageerror', e => errs.push(String(e).split('\n')[0].slice(0, 160)));
-  page.on('console', m => { if (m.type() === 'error' && !/ERR_CERT|ERR_QUIC|ERR_NAME|Failed to load resource/.test(m.text())) errs.push(m.text().slice(0, 160)); });
+  page.on('console', m => {
+    if (m.type() !== 'error') return;
+    /* Round 170: OFFLINE=1 is for sandboxes with no route to Supabase at
+       all (curl gives 000). Every database call then dies as a CORS-shaped
+       console error on every page, which is environment noise, not the
+       site: the clients catch these and fail closed by design. Leave OFF
+       anywhere the network works, so a REAL CORS regression still fails. */
+    if (process.env.OFFLINE && /supabase\.co/.test(m.text())) return;
+    if (!/ERR_CERT|ERR_QUIC|ERR_NAME|Failed to load resource/.test(m.text())) errs.push(m.text().slice(0, 160));
+  });
   try {
     await page.goto(BASE + route, { waitUntil: 'domcontentloaded', timeout: 20000 });
     await page.waitForTimeout(1500);

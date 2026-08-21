@@ -42,6 +42,9 @@ const shownRating = (p: Player, isOop: boolean) =>
 
 const DartDraft = () => {
   const [phase, setPhase] = useState<Phase>('intro');
+  /* Round 170: the pool fetch can fail (offline, database blip). Fail closed
+     but never silently: this flag puts the reason on the screen. */
+  const [loadError, setLoadError] = useState(false);
   const [topic, setTopic] = useState<MapTopic>('current');
   const [pool, setPool] = useState<Player[]>([]);
   const [xi, setXi] = useState<(Player | null)[]>(Array(XI_SIZE).fill(null));
@@ -121,9 +124,13 @@ const DartDraft = () => {
   /* ---------------- game flow ---------------- */
   const start = async (t: MapTopic) => {
     setTopic(t);
+    setLoadError(false);
     setPhase('loading');
     const { current } = await fetchDartDraftPool();
-    if (!current.length) { setPhase('intro'); return; }
+    /* Round 170: an empty pool means the database was unreachable. Failing
+       closed is right (never invent players), but failing SILENTLY left the
+       tile looking dead, so now the screen says what happened. */
+    if (!current.length) { setLoadError(true); setPhase('intro'); return; }
     setPool(current);
     setXi(Array(XI_SIZE).fill(null));
     setOop(Array(XI_SIZE).fill(false));
@@ -389,6 +396,11 @@ const DartDraft = () => {
                     </button>
                   ))}
                 </div>
+                {loadError && (
+                  <p className="text-sm text-destructive max-w-md mx-auto" role="alert">
+                    Couldn't load the player pool just now. Check your connection and tap a mode to try again.
+                  </p>
+                )}
                 <div className="text-xs text-muted-foreground max-w-md mx-auto space-y-1">
                   <p>Gold rings pay out: 👑 legends, 💎 wonderkids, 🃏 free pick, 🎁 mystery gamble.</p>
                   <p>Red rings punish: 🦈 shark eats your dart, 🌪️ storm blows you into the bargain bin.</p>
