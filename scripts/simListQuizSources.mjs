@@ -262,7 +262,7 @@ if (!reachable && listsById.size === 0) {
     ["stanley_cup_finals_v2", null, 100, 20],
     ["world_series_v2", null, 110, 15],
     ["wnba_finals", "finals_mvp", 25, 25],
-    ["nba_finals", "winning_coach", 70, 12],
+    ["nba_finals", "winning_coach", 70, 70], /* loser floor raised R239: all 80 finals carry the beaten finalist */
   ];
   const SCOREISH = /^[0-9]/;
   const SERIES = /^([0-9]+)-([0-9]+)(-[0-9]+)?$/;

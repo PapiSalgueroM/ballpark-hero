@@ -50,7 +50,9 @@ const FLOORS = { sb: 30, nba: 40, ws: 60, cup: 55, wnba: 14, cfb: 24, cbb: 40, e
 const COMPLETE = {
   sb: ["runnerUp", "score", "mvp"],
   cfb: ["selector", "record", "coach"],
-  nba: ["series"],
+  /* nba runnerUp joined the complete set in Round 239: all 80 finals
+     name their beaten finalist, triple-verified before the backfill */
+  nba: ["series", "runnerUp"],
   nrl: ["competition"],
 };
 

@@ -86,14 +86,14 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'nba', emoji: '🏀', title: 'NBA Champions',
-    blurb: 'Champions back to the 1947 BAA, the series result winner first, and every Finals MVP since the award began in 1969.',
+    blurb: 'Every Finals back to the 1947 BAA with the beaten finalist, the series winner first, and every Finals MVP since the award began in 1969.',
     yearLabel: 'Year',
-    columns: [['series', 'Series'], ['mvp', 'Finals MVP']],
+    columns: [['runnerUp', 'Runner-up'], ['series', 'Series'], ['mvp', 'Finals MVP']],
     play: [
       { path: '/champ-or-not', label: 'Champ or Not' },
       { path: '/list-quiz', label: 'Name Them All' },
     ],
-    fetch: () => rows('nba_finals', 'year', 'winner', { series: 'series_result', mvp: 'finals_mvp' }),
+    fetch: () => rows('nba_finals', 'year', 'winner', { runnerUp: 'loser', series: 'series_result', mvp: 'finals_mvp' }),
   },
   {
     key: 'ws', emoji: '⚾', title: 'World Series Champions',
