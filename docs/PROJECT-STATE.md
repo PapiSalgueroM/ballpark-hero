@@ -96,12 +96,22 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   reads the registered spec like careerLeagueOf does) and pinned. Browser-checked end to
   end: form sections render, slider flips the live demand, founding lands on the hub with
   the capacity chip.
-- CM-5 More eras, correct data always, and the 2010 era must STOP underrating the legends:
-  his words, "ur undermining the fact that these are legends of the game and way better than
-  anyone in the current generation". The era bake maps 2010 market values through a curve
-  built for 2026 money, so peak Messi lands in the low 90s next to 2026's best. Fix: an
-  era-specific normalization so the era's top players sit 95-99 with the distribution
-  preserved. Then 2015 and 2005 by the bakeEra2010 recipe (data floor 2004, no honest 2000).
+- CM-5 **LEGENDS HALF DONE, Round 166.** His words: "ur undermining the fact that these are
+  legends of the game and way better than anyone in the current generation." Fixed with an
+  era rating uplift applied at LOAD (the AUTO-GENERATED bake file stays byte for byte the
+  real data): above a pivot of 80 the top of the era stretches by 0.7 per point, so prime
+  Messi and prime Ronaldo sit at 97 against the modern best of 94, the 88 class (Xavi,
+  Iniesta) lands 94-96, and the 732 sub-pivot players are untouched. Monotone, so no two
+  players ever swap order; values untouched (2010 money stays real); the modern world
+  provably does not wear it. Stature stayed calibrated: era tiers, budgets and expectations
+  deliberately read the RAW bake (eraRostersRaw) so no mid table club got refiled by the
+  stretched scale, and the ageing ceiling now follows the anchor (max(94, anchor+4)) so a
+  97 legend does not snap to the old 94 cap at the first summer, with modern ageing byte
+  for byte unchanged. simEra2010 section 1 asserts identity THROUGH the uplift, and its new
+  section 6 pins all of it; section 4's balance IMPROVED (Barcelona finishes 2,2,1,1,1,1).
+  Browser probed: Messi reads 97 on the squad screen of a real 2010 save.
+  STILL OPEN from CM-5: eras 2015 and 2005 by the bakeEra2010 recipe (data floor 2004, no
+  honest 2000), and more era leagues.
 - CM-6 More leagues (wave 3 list in item 6 of the previous review, densities measured).
 - CM-7 **MOSTLY DONE, Round 161: structured deals and deep filters.** Negotiations take
   PACKAGES now: cash plus add-ons (weigh 60p on the pound, queue up and come due in later
@@ -498,8 +508,9 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, morning | **Round 162** (Stadium Tycoon goes massive, his direct ask: ten named divisions with exact income multipliers and promotion bonuses, an eight tier staff payroll, the catchable golden whistle with five prizes, 47 badges at a permanent 2 percent each, a Badges drawer, a Club records drawer, and the game's help plus SEO copy rewritten to match). `RUN162.bat`, chain-guarded on 161. |
 | Packaged 2026-08-18, midday | **Round 163** (league views, CM-9 in full: pre-season alphabetical tables with the star for all fifteen leagues, flags on every league chip, all eight UCL groups simulated in lockstep, the projected quarter-final bracket, and the knockout draw seeded from the real group winners). `RUN163.bat`, chain-guarded on 162. |
 | Packaged 2026-08-18, early afternoon | **Round 164** (the stats centre, CM-11: per-competition team record, leader cards, full sortable player lines, engine-level per-comp stat splits that cannot disagree with the season totals, plus the 14-vs-15 league count fix in the help and SEO copy). `RUN164.bat`, chain-guarded on 163. |
-| Packaged 2026-08-18, afternoon | **Round 165** (award races, CM-12: the golden boot board, the one-formula player of the season watch, the Ballon d'Or watch and all three honours named in the season review, era aware, race goals provably bounded by the simulated tables). `RUN165.bat`, chain-guarded on 164. **SHIP23.bat is the current wrapper: it runs 157 through 165.** Older SHIP wrappers still work, then click the later RUN bats after. |
-| Next free round number | **166** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, afternoon | **Round 165** (award races, CM-12: the golden boot board, the one-formula player of the season watch, the Ballon d'Or watch and all three honours named in the season review, era aware, race goals provably bounded by the simulated tables). `RUN165.bat`, chain-guarded on 164. |
+| Packaged 2026-08-18, later afternoon | **Round 166** (era legends rate like legends, the CM-5 rating half: prime Messi and Ronaldo at 97 above the modern best of 94, monotone load-time uplift, stature and values untouched, ageing ceiling follows the anchor). `RUN166.bat`, chain-guarded on 165. **SHIP24.bat is the current wrapper: it runs 157 through 166.** Older SHIP wrappers still work, then click the later RUN bats after. |
+| Next free round number | **167** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

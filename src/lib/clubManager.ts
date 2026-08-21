@@ -15,7 +15,7 @@ import {
   CM_BASE_YEAR, CM_ERAS, DEFAULT_ERA_ID, eraById, seasonLabel,
   projectedRoster, projectedWorld, projectedXIAvg, projectedWorldFor,
   ageDriftBand, declineScale, retireChance,
-  isHistoricEra, eraRosters, HISTORIC_PARTIAL,
+  isHistoricEra, eraRosters, eraRostersRaw, eraUpliftRating, HISTORIC_PARTIAL,
   makeGeneratedName,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
@@ -1471,12 +1471,16 @@ export function careerLeagueOf(career: Pick<CareerState, 'clubName' | 'eraId'> &
 }
 
 /** Best XI average straight off an era bake, same math as bakedXIAvg. */
-function eraXIAvg(eraId: string, clubName: string): number | null {
-  const roster = eraRosters(eraId)[clubName];
+function eraXIAvgFrom(rosters: Record<string, BakedPlayer[]>, clubName: string): number | null {
+  const roster = rosters[clubName];
   if (!roster || !roster.length) return null;
   const rs = roster.map(p => p.r).sort((a, b) => b - a).slice(0, 11);
   while (rs.length < 11) rs.push(60);
   return Math.round((rs.reduce((s, r) => s + r, 0) / 11) * 10) / 10;
+}
+
+function eraXIAvg(eraId: string, clubName: string): number | null {
+  return eraXIAvgFrom(eraRosters(eraId), clubName);
 }
 
 const ERA_DEF_CACHE = new Map<string, Map<string, ClubDef>>();
@@ -1495,12 +1499,17 @@ function eraClubDefMap(eraId: string): Map<string, ClubDef> {
   if (hit) return hit;
   const map = new Map<string, ClubDef>();
   const leagues = ERA_LEAGUES[eraId] ?? [];
-  const rosters = eraRosters(eraId);
+  /* Round 166: tiers, budgets and expectations read the RAW bake on
+     purpose. The rating uplift stretches the top of the scale, and running
+     these gap thresholds over stretched numbers would file the era's mid
+     table as tier four. Stature keeps its original calibration; only the
+     ratings players see and matches feel wear the uplift. */
+  const rosters = eraRostersRaw(eraId);
   let topXI = 0;
-  for (const lg of leagues) for (const c of lg.clubs) topXI = Math.max(topXI, eraXIAvg(eraId, c) ?? 0);
+  for (const lg of leagues) for (const c of lg.clubs) topXI = Math.max(topXI, eraXIAvgFrom(rosters, c) ?? 0);
   for (const lg of leagues) {
     const ranked = lg.clubs
-      .map(name => ({ name, xi: eraXIAvg(eraId, name) ?? 60 }))
+      .map(name => ({ name, xi: eraXIAvgFrom(rosters, name) ?? 60 }))
       .sort((a, b) => b.xi - a.xi);
     ranked.forEach((entry, i) => {
       const roster = rosters[entry.name] ?? [];

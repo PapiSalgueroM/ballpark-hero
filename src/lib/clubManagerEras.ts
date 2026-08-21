@@ -399,7 +399,11 @@ function ageOne(club: string, pl: ProjectedPlayer, year: number, scale: number):
     // best side in Europe over fifteen simulated years.
     drift = Math.min(drift, Math.max(0, pl.anchor + 4 - pl.r));
   }
-  const r = clamp(pl.r + drift, 40, 94);
+  /* Round 166: the 94 ceiling assumed no anchor above 90 exists. Era
+     legends sit above it now, so the ceiling follows the slot: a modern
+     anchor still caps exactly where it always did, an uplifted era anchor
+     gets its own headroom and never snaps down to 94 at the first summer. */
+  const r = clamp(pl.r + drift, 40, Math.max(94, pl.anchor + 4));
   return { ...pl, a: age, r, v: Math.max(0.2, Math.round(rawCurveValue(r, age) * scale * 10) / 10) };
 }
 
@@ -453,9 +457,50 @@ export function isHistoricEra(id: string | undefined): boolean {
   return !!id && Object.prototype.hasOwnProperty.call(HISTORIC_ROSTERS, id);
 }
 
-/** The roster source for an era: its own bake if historic, else today's. */
-export function eraRosters(eraId: string | undefined): Record<string, BakedPlayer[]> {
+/* ---------- Round 166: era legends rate like legends ---------- */
+
+/**
+ * The owner's complaint, word for word: "ur undermining the fact that these
+ * are legends of the game and way better than anyone in the current
+ * generation." The bake maps 2010 market money through the same curve as
+ * 2026 money, which lands prime Messi at 90, level with today's best. This
+ * uplift stretches an era's TOP END above a pivot so its giants sit where
+ * legends sit (prime Messi and prime Ronaldo at 97) while the rank and file
+ * below the pivot stay exactly as baked. Monotone, so no two players ever
+ * swap order, and applied at load, so the AUTO-GENERATED data file stays
+ * byte for byte the real bake.
+ */
+const ERA_RATING_UPLIFT: Record<string, { pivot: number; gain: number }> = {
+  era2010: { pivot: 80, gain: 0.7 },
+};
+
+export function eraUpliftRating(eraId: string | undefined, r: number): number {
+  const u = eraId ? ERA_RATING_UPLIFT[eraId] : undefined;
+  if (!u || r <= u.pivot) return r;
+  return Math.min(99, Math.round(r + (r - u.pivot) * u.gain));
+}
+
+/** The UNtransformed roster source: tiers, budgets and expectations read
+ *  this so an era's club stature stays exactly as it calibrated. */
+export function eraRostersRaw(eraId: string | undefined): Record<string, BakedPlayer[]> {
   return (eraId && HISTORIC_ROSTERS[eraId]) || CM_ROSTERS;
+}
+
+const UPLIFTED_CACHE = new Map<string, Record<string, BakedPlayer[]>>();
+
+/** The roster source for an era: its own bake if historic (with the era's
+ *  rating uplift applied), else today's untouched. */
+export function eraRosters(eraId: string | undefined): Record<string, BakedPlayer[]> {
+  const raw = eraRostersRaw(eraId);
+  if (!eraId || !isHistoricEra(eraId) || !ERA_RATING_UPLIFT[eraId]) return raw;
+  const hit = UPLIFTED_CACHE.get(eraId);
+  if (hit) return hit;
+  const out: Record<string, BakedPlayer[]> = {};
+  for (const [club, list] of Object.entries(raw)) {
+    out[club] = list.map(b => ({ ...b, r: eraUpliftRating(eraId, b.r) }));
+  }
+  UPLIFTED_CACHE.set(eraId, out);
+  return out;
 }
 
 const WORLD_CACHE = new Map<string, Record<string, ProjectedPlayer[]>>();

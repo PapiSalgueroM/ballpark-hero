@@ -42,7 +42,8 @@ execSync(
   { stdio: 'inherit' },
 );
 
-const { engine: cm, era2010: E10, modern: MOD } = await import(BUNDLE);
+const { engine: cm, eras: ER, era2010: E10, modern: MOD } = await import(BUNDLE);
+const { eraUpliftRating, eraRosters, projectedRoster } = ER;
 const {
   startCareer, playNextEntry, startNextSeason, sortedTable, buildMarket,
   buildBoardObjectives, ERA_LEAGUES, eraPlayableClubs, worldSeasonLabel,
@@ -75,9 +76,12 @@ console.log('1) A fresh 2010 save is the real 2010 squad, untouched');
   for (const p of s.squad.filter(p => !p.isYouth)) {
     const b = bake.get(p.name);
     if (!b) { mismatches += 1; fail(`${p.name} is in the 2010 Barcelona squad but not in the bake`); continue; }
-    if (b.a !== p.age || b.r !== p.rating) {
+    /* Round 166: names, ages and values are the bake untouched. Ratings go
+       through the documented era uplift (legends rate like legends), which
+       is deterministic, so the identity check asserts THROUGH it. */
+    if (b.a !== p.age || eraUpliftRating('era2010', b.r) !== p.rating) {
       mismatches += 1;
-      fail(`${p.name}: bake says age ${b.a} rating ${b.r}, squad says ${p.age}/${p.rating}`);
+      fail(`${p.name}: bake says age ${b.a} rating ${b.r} (uplift ${eraUpliftRating('era2010', b.r)}), squad says ${p.age}/${p.rating}`);
     }
   }
   const gen = s.squad.filter(p => p.generated).length;
@@ -265,6 +269,48 @@ console.log('5) The bake file tells the truth about itself');
   if (ERA2010_ROSTERS['Valencia'].some(p => p.n === 'David Villa')) fail('Villa is still at Valencia');
   if (!ERA2010_ROSTERS['Real Madrid'].some(p => p.n === 'Mesut Özil')) fail('Ozil is not at 2010-11 Real Madrid');
   if (ERA2010_ROSTERS['Barcelona'].some(p => p.n === 'Zlatan Ibrahimović')) fail('Ibrahimovic is still at Barcelona, he left for Milan');
+}
+
+/* ---------- 6. Round 166: legends rate like legends ---------- */
+console.log('6) The era uplift: giants above the modern best, order preserved');
+{
+  const lifted = eraRosters('era2010');
+  const messi = lifted['Barcelona'].find(p => p.n === 'Lionel Messi');
+  const ronaldo = lifted['Real Madrid'].find(p => p.n === 'Cristiano Ronaldo');
+  const modernBest = Math.max(...Object.values(CM_ROSTERS).flat().map(p => p.r));
+  console.log(`   prime Messi ${messi?.r}, prime Ronaldo ${ronaldo?.r}, modern best ${modernBest}`);
+  if (!messi || messi.r < 95) fail(`prime Messi rates ${messi?.r}, a legend sits 95 plus`);
+  if (!ronaldo || ronaldo.r < 95) fail(`prime Ronaldo rates ${ronaldo?.r}`);
+  if (messi && messi.r <= modernBest) fail(`prime Messi (${messi.r}) does not outrate the modern best (${modernBest}), which is the owner's exact complaint`);
+  // The uplift is monotone: sort order inside every club is untouched.
+  for (const [club, raw] of Object.entries(ERA2010_ROSTERS)) {
+    const before = [...raw].sort((a, b) => b.r - a.r).map(p => p.n).join('|');
+    const after = [...lifted[club]].sort((a, b) => b.r - a.r).map(p => p.n).join('|');
+    if (before !== after) fail(`${club}: the uplift reordered the squad`);
+  }
+  // The rank and file below the pivot are byte for byte the bake.
+  let below = 0;
+  for (const [club, raw] of Object.entries(ERA2010_ROSTERS)) {
+    for (let i = 0; i < raw.length; i++) {
+      if (raw[i].r <= 80) {
+        below++;
+        if (lifted[club][i].r !== raw[i].r) fail(`${raw[i].n} rates ${raw[i].r} in the bake but ${lifted[club][i].r} lifted, below the pivot`);
+      }
+      if (lifted[club][i].v !== raw[i].v) fail(`${raw[i].n}: the uplift touched his VALUE, it must only touch ratings`);
+      if (lifted[club][i].r > 99) fail(`${raw[i].n} lifted past 99`);
+    }
+  }
+  console.log(`   ${below} sub-pivot players verified untouched, values identical throughout`);
+  // The modern world does not wear the uplift.
+  if (eraUpliftRating('now', 94) !== 94 || eraUpliftRating(undefined, 90) !== 90) fail('the uplift leaked outside its era');
+  // Ageing headroom: the projection must not snap a 97 legend to the old 94
+  // ceiling at the first summer.
+  const y1 = projectedRoster('Barcelona', 1, 'era2010');
+  const messiY1 = y1.find(p => p.n === 'Lionel Messi');
+  if (messiY1 && messiY1.r < 95) fail(`year-one Messi snapped to ${messiY1.r}, the ceiling did not follow the anchor`);
+  // Stature stayed calibrated: era tiers and expectations read the raw bake.
+  const barcaDef = cm.eraClubDefFor('Barcelona', 'era2010');
+  if (barcaDef.tier !== 1 || barcaDef.expectation !== 1) fail(`2010 Barcelona reads tier ${barcaDef.tier} expectation ${barcaDef.expectation}`);
 }
 
 Math.random = REAL_RANDOM;
