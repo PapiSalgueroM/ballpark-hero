@@ -30,6 +30,11 @@ import { useRevealScroll } from '@/hooks/useRevealScroll';
 import CoachCareerPanel, { CoachStartCard } from '@/components/us-career/CoachCareerPanel';
 import { startCoachCareer, ensureCoachCareer } from '@/lib/usCoachCareer';
 import type { CoachCareerState } from '@/lib/usCoachCareer';
+/* Round 208: the hub boxes, shared with the front offices and Club
+   Manager, and the trophy case they now open onto. */
+import { careerHubTiles } from '@/lib/careerHub';
+import { HubTiles, HubPanelHeader } from '@/components/hub/HubTiles';
+import TrophyCase from '@/components/us-career/TrophyCase';
 import { cn } from '@/lib/utils';
 
 /* Round 126: 'coach' is new. Retirement used to be the last screen in the
@@ -50,7 +55,7 @@ export default function NflMyCareerBoard() {
   // Round 56: build your player's face before the draft
   const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
   // Round 85: the tile rule. The season hub is boxes; each opens its own screen.
-  const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'news'>('none');
+  const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news'>('none');
   const [career, setCareer] = useState<CareerState | null>(null);
   const [teamQuality, setTeamQuality] = useState<number | null>(null);
   const [nameInput, setNameInput] = useState('');
@@ -519,12 +524,10 @@ export default function NflMyCareerBoard() {
     const meters: [string, number][] = [['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health]];
     return (
       <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <button onClick={() => setPanel('none')} className="rounded-full border border-border bg-card px-3 py-1 text-xs font-bold text-muted-foreground hover:text-foreground">‹ Back</button>
-          <p className="text-sm font-black text-foreground">
-            {panel === 'bank' ? '💰 The Bank' : panel === 'stats' ? '📊 My Player' : panel === 'log' ? '📜 Career Log' : '📰 News Feed'}
-          </p>
-        </div>
+        <HubPanelHeader
+          title={panel === 'bank' ? '\u{1F4B0} The Bank' : panel === 'stats' ? '\u{1F4CA} My Player' : panel === 'log' ? '\u{1F4DC} Career Log' : panel === 'trophies' ? '\u{1F3C6} Trophy Case' : '\u{1F4F0} News Feed'}
+          onBack={() => setPanel('none')}
+        />
         {panel === 'bank' && (
           <div className="space-y-3">
             <div className="rounded-2xl border border-border bg-card p-3 text-center">
@@ -574,6 +577,9 @@ export default function NflMyCareerBoard() {
             )}
           </div>
         )}
+        {panel === 'trophies' && (
+          <TrophyCase seasons={career.seasons} rings={career.rings} ringWord="ring" />
+        )}
         {panel === 'news' && (
           <div className="rounded-2xl border border-border bg-card p-3">
             {feed.length === 0 ? (
@@ -588,6 +594,33 @@ export default function NflMyCareerBoard() {
       </div>
     );
   }
+
+  /* Round 208: what the boxes say. Decided in src/lib/careerHub.ts so the
+     wording is harnessed rather than eyeballed, and shared by four games. */
+  const hubTiles = careerHubTiles({
+    ovr: career.ovr,
+    age: career.age,
+    pos: career.pos,
+    morale: career.morale,
+    health: career.health,
+    fanbase: career.fanbase,
+    netWorth: career.netWorth ?? 0,
+    salary: career.salary,
+    yearlyCosts: career.yearlyCosts ?? 0,
+    contractYears: Math.max(0, career.contractYears),
+    teamLabel: teamLabelOf(career.team),
+    seasonsPlayed: career.seasons.length,
+    /* Read off the SEASONS, not the transient lastLine state: that state
+       is empty after a reload, and a box that forgets your career the
+       moment you refresh is worse than no box. */
+    lastLine: career.seasons.length
+      ? statLine(career.seasons[career.seasons.length - 1], career.pos)
+      : null,
+    rings: career.rings,
+    ringWord: 'ring',
+    honours: [{ label: 'MVPs', n: career.mvps }, { label: 'All-Pros', n: career.allPros }],
+    headlines: feed,
+  });
 
   /* ------------------------------ season hub ------------------------------ */
   return (
@@ -683,33 +716,9 @@ export default function NflMyCareerBoard() {
         </div>
       )}
 
-      {/* Round 85: the tile rule. Tap a box, it opens its own screen. */}
-      <div className="grid grid-cols-2 gap-2">
-        <button onClick={() => setPanel('stats')} className="relative rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
-          <span className="text-xl">📊</span>
-          <span className="mt-0.5 block text-sm font-black text-foreground">My Player</span>
-          <span className="block text-[10px] text-muted-foreground">OVR {career.ovr} · morale {career.morale}</span>
-          {(career.morale <= 35 || career.health <= 35 || career.fanbase <= 35) && (
-            <span className="absolute right-2 top-2 h-2.5 w-2.5 animate-pulse rounded-full bg-destructive" />
-          )}
-        </button>
-        <button onClick={() => setPanel('bank')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
-          <span className="text-xl">💰</span>
-          <span className="mt-0.5 block text-sm font-black text-foreground">Bank</span>
-          <span className="block text-[10px] text-muted-foreground">${(career.netWorth ?? 0).toFixed(1)}M to spend</span>
-        </button>
-        <button onClick={() => setPanel('log')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
-          <span className="text-xl">📜</span>
-          <span className="mt-0.5 block text-sm font-black text-foreground">Career Log</span>
-          <span className="block text-[10px] text-muted-foreground">{career.seasons.length} seasons on the books</span>
-        </button>
-        <button onClick={() => setPanel('news')} className="relative rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
-          <span className="text-xl">📰</span>
-          <span className="mt-0.5 block text-sm font-black text-foreground">News</span>
-          <span className="block truncate text-[10px] text-muted-foreground">{feed[0] ?? 'No headlines yet'}</span>
-          {feed.length > 0 && <span className="absolute right-2 top-2 rounded-full bg-primary px-1.5 text-[9px] font-black text-primary-foreground">{feed.length}</span>}
-        </button>
-      </div>
+      {/* Round 208: the same boxes the rest of the site opens on, and every
+          one of them now carries the fact you used to have to tap for. */}
+      <HubTiles tiles={hubTiles} onOpen={k => setPanel(k as typeof panel)} />
 
     </div>
   );
