@@ -87,6 +87,9 @@ export interface SeasonRecord {
   injury?: string | null;
   injuryWeeks?: number;
   injurySevere?: boolean;
+  /** Round 217: set when this season was played out on loan, holding the
+      parent club's name, so the record always says where you really belonged. */
+  onLoanFrom?: string | null;
   leagueTitle: boolean;
   domesticCup: boolean;
   championsLeague: boolean;
@@ -116,6 +119,9 @@ export interface ContractOffer {
   /** Round 54: the senior side of the academy that raised you. Always on the
       table when you turn pro, and again later as a romantic homecoming. */
   isHomegrown?: boolean;
+  /** Round 217: a season long loan. Your contract and wage stay with the
+      parent club; only the football moves. */
+  isLoan?: boolean;
 }
 
 export type TransferSituation =
@@ -586,6 +592,13 @@ export interface CareerState {
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
   transferSituation: TransferSituation | null;
+  /* Round 217: the loan move. While `loan` is set, currentClub IS the loan
+     club and every part of the season (minutes, goals, trophies, ratings)
+     plays out there; the parent club's identity waits in here for the
+     summer. Absent on old saves, which repairCareer maps to null, so a save
+     from before this round behaves exactly as it always did. */
+  loan?: { parentClub: string; parentTier: number; parentLeague: string; parentCountry: string; parentColor: string } | null;
+  pendingLoanOffers?: ContractOffer[] | null;
   // Random events
   pendingEvents: RandomEvent[];
   lastEventId: number | null;
@@ -1759,10 +1772,7 @@ export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): Caree
     s.phase = "random_events";
     return s;
   }
-  if (s.age >= 18) {
-    s.transferSituation = determineTransferSituation(s, clubs);
-    s.phase = "transfer_window";
-  } else { s.phase = "playing"; }
+  enterTransferWindow(s, clubs);
   return s;
 }
 
@@ -2136,6 +2146,10 @@ export function repairCareer<T extends CareerState>(state: T): T {
   if (!state || typeof state !== "object") return state;
   const s = state as CareerState;
   if (!s.primeType) s.primeType = rollPrimeType();
+  /* Round 217: saves from before the loan move have neither field. Null is
+     the exact old behaviour: no loan running, no offers pending. */
+  if (s.loan === undefined) s.loan = null;
+  if (s.pendingLoanOffers === undefined) s.pendingLoanOffers = null;
   /* Round 133 renamed the top sponsorship tier off a product name. Saves
      written before that still carry the old value, and without this line those
      players silently lose a 25M a year deal they had already earned. */
@@ -2167,7 +2181,14 @@ export function repairCareer<T extends CareerState>(state: T): T {
   return state;
 }
 
-function developmentRate(s: CareerState): number {
+/* Round 217: the second parameter is the season JUST PLAYED. Round 96 wrote
+   "the season you just played decides how much you improve" and then read
+   s.seasons, which at the call site still ends on the season BEFORE: a one
+   year lag between playing well and growing from it, sitting under a comment
+   claiming otherwise. The lag is gone: the pro call site now hands this
+   the fresh record. The youth call has no season in hand and passes nothing,
+   which reads last season exactly as before. */
+function developmentRate(s: CareerState, justPlayed?: SeasonRecord): number {
   const pot = effectivePotential(s);
   const gap = pot - s.overall;
   const headroom =
@@ -2177,7 +2198,7 @@ function developmentRate(s: CareerState): number {
     gap <= 15 ? 1.5 : 1.9;
 
   let form = 1;
-  const last = s.seasons.length ? s.seasons[s.seasons.length - 1] : null;
+  const last = justPlayed ?? (s.seasons.length ? s.seasons[s.seasons.length - 1] : null);
   if (last && last.type !== "youth") {
     const apps = last.apps ?? 0;
     form *= apps >= 30 ? 1.25 : apps >= 18 ? 1 : apps >= 8 ? 0.78 : 0.5;
@@ -2185,7 +2206,18 @@ function developmentRate(s: CareerState): number {
     form *= r >= 7.6 ? 1.45 : r >= 7.1 ? 1.2 : r >= 6.6 ? 1 : r >= 6 ? 0.82 : 0.62;
   }
 
-  const tierF = s.currentClubTier === 1 ? 1.2 : s.currentClubTier === 2 ? 1.07 : 1;
+  /* Round 217: the big club training bonus now has to be EARNED with
+     minutes. It used to apply in full from the bench, and the loan cohort
+     measurement caught what that meant: six seasons benched at a giant
+     developed a kid as fast as six seasons of actual football, because 1.2
+     from the training ground outran the form arithmetic of playing. That is
+     not how careers work anywhere. Train with the best AND play and you get
+     the full bonus; train with the best from the stands and you get less
+     than half of it. Below 12 games you are barely in the building. */
+  const tierBase = s.currentClubTier === 1 ? 1.2 : s.currentClubTier === 2 ? 1.07 : 1;
+  const lastApps = last && last.type !== "youth" ? (last.apps ?? 0) : 25;
+  const tierShare = lastApps >= 25 ? 1 : lastApps >= 12 ? 0.5 : 0.25;
+  const tierF = 1 + (tierBase - 1) * tierShare;
   return clamp(headroom * form * tierF, 0.1, 2.6);
 }
 
@@ -3043,29 +3075,43 @@ export const FALLBACK_CLUBS: ClubData[] = [
 ];
 
 /* ─── Appearances, league + UCL + cups for realistic totals ─── */
-function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState, fx: BuildEffects = NEUTRAL_EFFECTS): { apps: number; injured: boolean; injuryWeeks: number; injuryName: string | null; injurySevere: boolean } {
+/* Round 217: the league appearance band, pulled out of calcAppearances so
+   the loan screen can QUOTE the same bands the simulation draws from. One
+   table, two readers, so the projection printed on an offer card can never
+   disagree with the season that follows it. Pure arithmetic, no rolls. */
+export function projectLeagueApps(overall: number, clubTier: number, clubName: string, seasonsAtClub: number): { min: number; max: number } {
+  const clubAvg = clubAverageRating(clubTier);
+  const diff = overall - clubAvg;
+  const isEliteClub = ELITE_CLUBS.includes(clubName);
+  if (overall >= 95) return { min: 34, max: 38 };
+  if (overall >= 90) return { min: 32, max: 38 };
+  if (overall >= 85 && clubTier <= 2) return { min: 30, max: 36 };
+  if (isEliteClub && diff <= -10) {
+    if (seasonsAtClub === 0) return { min: 8, max: 16 };
+    if (seasonsAtClub === 1) return { min: 14, max: 22 };
+    return { min: 12, max: 20 };
+  }
+  if (isEliteClub && diff <= -5) {
+    if (seasonsAtClub === 0) return { min: 14, max: 22 };
+    return { min: 20, max: 28 };
+  }
+  if (diff >= 15) return { min: 32, max: 38 };
+  if (diff >= 5) return { min: 26, max: 34 };
+  if (diff >= -5) return { min: 20, max: 30 };
+  return { min: 8, max: 18 };
+}
+
+/* exported for simLoanSpell, which proves the projection and the draw share one table */
+export function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState, fx: BuildEffects = NEUTRAL_EFFECTS): { apps: number; leagueApps: number; injured: boolean; injuryWeeks: number; injuryName: string | null; injurySevere: boolean } {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
 
   const isEliteClub = state ? ELITE_CLUBS.includes(state.currentClub) : false;
   const seasonsAtClub = state ? state.seasons.filter(s => s.club === state.currentClub && s.type === "playing").length : 0;
 
-  // --- League appearances (out of 38) ---
-  let leagueMin: number, leagueMax: number;
-  if (overall >= 95) { leagueMin = 34; leagueMax = 38; }
-  else if (overall >= 90) { leagueMin = 32; leagueMax = 38; }
-  else if (overall >= 85 && clubTier <= 2) { leagueMin = 30; leagueMax = 36; }
-  else if (isEliteClub && diff <= -10) {
-    if (seasonsAtClub === 0) { leagueMin = 8; leagueMax = 16; }
-    else if (seasonsAtClub === 1) { leagueMin = 14; leagueMax = 22; }
-    else { leagueMin = 12; leagueMax = 20; }
-  } else if (isEliteClub && diff <= -5) {
-    if (seasonsAtClub === 0) { leagueMin = 14; leagueMax = 22; }
-    else { leagueMin = 20; leagueMax = 28; }
-  } else if (diff >= 15) { leagueMin = 32; leagueMax = 38; }
-  else if (diff >= 5) { leagueMin = 26; leagueMax = 34; }
-  else if (diff >= -5) { leagueMin = 20; leagueMax = 30; }
-  else { leagueMin = 8; leagueMax = 18; }
+  // --- League appearances (out of 38), band shared with projectLeagueApps ---
+  const band = projectLeagueApps(overall, clubTier, state?.currentClub ?? "", seasonsAtClub);
+  const leagueMin = band.min, leagueMax = band.max;
 
   let leagueApps = rand(leagueMin, leagueMax);
 
@@ -3177,7 +3223,7 @@ function calcAppearances(overall: number, clubTier: number, age: number, state?:
     apps = Math.max(1, apps - clamp(missedApps, 0, injurySevere ? 34 : 12));
   }
 
-  return { apps, injured, injuryWeeks, injuryName, injurySevere };
+  return { apps, leagueApps, injured, injuryWeeks, injuryName, injurySevere };
 }
 
 /* ─── Goals per 38 apps by position & overall rating ───
@@ -3454,6 +3500,68 @@ function feeDescription(feeMillions: number): string {
 }
 
 /* ─── Make a single offer ─── */
+/* ─── Round 217: the loan move ───
+   The appearance model has benched overmatched kids at big clubs since the
+   early rounds; what never existed was the way out every real career has.
+   When the projection says fringe and the player is young with contract to
+   run, one or two clubs a division or two down call with the classic offer:
+   come play every week. The contract and wage stay with the parent club,
+   only the football moves, and the season genuinely plays out at the loan
+   club: its tier, its title chances, its dressing room. Development follows
+   through the existing form arithmetic, which pays players who PLAY, so the
+   loan is not a stat cheat, it is minutes. */
+function enterTransferWindow(s: CareerState, clubs: ClubData[]): void {
+  if (s.age >= 18) {
+    s.transferSituation = determineTransferSituation(s, clubs);
+    s.pendingLoanOffers = determineLoanOffers(s, clubs);
+    s.phase = "transfer_window";
+  } else { s.phase = "playing"; }
+}
+
+export function determineLoanOffers(state: CareerState, clubs: ClubData[]): ContractOffer[] | null {
+  if (state.loan) return null;
+  if (state.age > 23 || state.contractYearsLeft < 2) return null;
+  if (state.currentClubTier > 2) return null;
+  const seasonsAtClub = state.seasons.filter(ss => ss.club === state.currentClub && ss.type === "playing").length;
+  const here = projectLeagueApps(state.overall, state.currentClubTier, state.currentClub, seasonsAtClub);
+  /* real minutes already on the table means no loan market */
+  if (here.max >= 24) return null;
+  const lastSeason = state.seasons[state.seasons.length - 1];
+  const pool = adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1);
+  const exclude = new Set<string>([state.currentClub]);
+  /* every tier below the parent is a candidate market, because the tier
+     that can PROMISE a fringe kid real minutes depends on how good he
+     already is: a 66 at a giant needs the third or fourth tier, a 74 can
+     be a starter one step down. Two offers at most, best tiers first. */
+  const offers: ContractOffer[] = [];
+  for (let tier = state.currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {
+    const candidates = getClubsByTier(pool, tier).filter(c =>
+      !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0).min >= 20,
+    );
+    if (candidates.length === 0) continue;
+    const club = pick(candidates);
+    exclude.add(club.name);
+    /* wage unchanged: the parent club keeps paying the contract */
+    offers.push({ club, contractYears: 1, wage: state.weeklyWage, transferFee: 0, isLoan: true });
+  }
+  return offers.length > 0 ? offers : null;
+}
+
+export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState {
+  const s = { ...prev };
+  if (s.loan || !offer.isLoan) return s;
+  s.loan = {
+    parentClub: s.currentClub, parentTier: s.currentClubTier, parentLeague: s.currentLeague,
+    parentCountry: s.currentClubCountry, parentColor: s.currentClubColor,
+  };
+  s.currentClub = offer.club.name; s.currentClubCountry = offer.club.country;
+  s.currentClubTier = offer.club.tier; s.currentClubColor = offer.club.color; s.currentLeague = offer.club.league;
+  s.phase = "playing"; s.pendingOffers = []; s.transferSituation = null; s.pendingLoanOffers = null;
+  s.morale = clamp(s.morale + 6, 0, 100);
+  s.events = [`🛫 Off on loan to ${offer.club.name} ${getFlag(offer.club.country)} for the season. The message from upstairs was simple: go and play.`];
+  return s;
+}
+
 function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number, exclude: Set<string>, marketValue: number, isDream = false): ContractOffer | null {
   const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
   if (candidates.length === 0) return null;
@@ -3591,7 +3699,7 @@ export function initCareer(
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }],
     events: [`📋 Joined ${academyClub.name} Youth Academy aged 16`],
-    retired: false, phase: "youth", pendingOffers: [], pendingSummary: null, transferSituation: null,
+    retired: false, phase: "youth", pendingOffers: [], pendingSummary: null, transferSituation: null, loan: null, pendingLoanOffers: null,
     pendingEvents: [], lastEventId: null, statBoostNextSeason: {}, pendingNews: [],
     internationalCareer: false, sponsorDeal: null, totalEarnings: 0,
     popularity: 10, morale: 70, isLeader: false, hasRelationship: false,
@@ -3716,7 +3824,7 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   s.contractYearsLeft = offer.contractYears;
   // Round 49: your agent's negotiating skill decides the final wage
   s.weeklyWage = Math.round(offer.wage * agentWageMult(prev.agentId));
-  s.phase = "playing"; s.pendingOffers = []; s.transferSituation = null;
+  s.phase = "playing"; s.pendingOffers = []; s.transferSituation = null; s.pendingLoanOffers = null;
   // Agent fee on the transfer (rate depends on who represents you; legacy saves keep 10%)
   const feeRate = agentTransferCutRate(prev.agentId);
   const agentFee = offer.transferFee > 0 ? Math.round(offer.transferFee * feeRate * 100) / 100 : 0;
@@ -4099,7 +4207,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   // Round 78: growth respects the rolled potential (legacy default generous).
   const potWall = effectivePotential(s);
   // Round 96: the season you just played decides how much you improve.
-  const dev = developmentRate(s);
+  // Round 217: and now it really is the season just played, not last year's.
+  const dev = developmentRate(s, season);
   s.pace = growStat(s.pace, s.age, false, true, s.primeType, potWall, s.overall, dev);
   s.shooting = growStat(s.shooting, s.age, false, false, s.primeType, potWall, s.overall, dev);
   s.passing = growStat(s.passing, s.age, false, false, s.primeType, potWall, s.overall, dev);
@@ -4349,6 +4458,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   if (totalGoals >= 200 && totalGoals - season.goals < 200) s.events.push("🔥 Reached 200 career goals!");
   if (totalGoals >= 500 && totalGoals - season.goals < 500) s.events.push("👑 Reached 500 career goals!");
   if (totalApps >= 500 && totalApps - season.apps < 500) s.events.push("🎖️ Made 500th career appearance!");
+  /* Round 217: a loan season carries its parent on the record forever */
+  if (s.loan) season.onLoanFrom = s.loan.parentClub;
   s.seasons = [...s.seasons, season];
   s.pendingSummary = season;
   // Generate newspaper articles
@@ -4402,6 +4513,26 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   pushCeiling(s, season);
 
   if (s.events.length === 0) s.events.push(`⚽ Solid season at ${s.currentClub}`);
+
+  /* ─── Round 217: the loan ends with the season ───
+     One season, then home, the way nearly every real loan works. The verdict
+     line quotes the SAME projection the appearance model will draw from next
+     season, so the screen can promise nothing the simulation will not keep. */
+  if (s.loan) {
+    const back = s.loan;
+    s.currentClub = back.parentClub; s.currentClubTier = back.parentTier;
+    s.currentLeague = back.parentLeague; s.currentClubCountry = back.parentCountry;
+    s.currentClubColor = back.parentColor;
+    s.loan = null;
+    const backSeasons = s.seasons.filter(ss => ss.club === back.parentClub && ss.type === "playing").length;
+    const nextHere = projectLeagueApps(s.overall, back.parentTier, back.parentClub, backSeasons);
+    if (nextHere.min >= 20) {
+      s.morale = clamp(s.morale + 5, 0, 100);
+      s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and this time they are planning around you: about ${nextHere.min} to ${nextHere.max} league games on the table.`);
+    } else {
+      s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and the pecking order has not moved much: about ${nextHere.min} to ${nextHere.max} league games unless something changes.`);
+    }
+  }
   return s;
 }
 
@@ -5523,10 +5654,7 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
     return s;
   }
   // Transfer window
-  if (s.age >= 18) {
-    s.transferSituation = determineTransferSituation(s, clubs);
-    s.phase = "transfer_window";
-  } else { s.phase = "playing"; }
+  enterTransferWindow(s, clubs);
   return s;
 }
 
@@ -5547,10 +5675,7 @@ export function dismissSocialMediaPhase(prev: CareerState, clubs: ClubData[]): C
     s.phase = "random_events";
     return s;
   }
-  if (s.age >= 18) {
-    s.transferSituation = determineTransferSituation(s, clubs);
-    s.phase = "transfer_window";
-  } else { s.phase = "playing"; }
+  enterTransferWindow(s, clubs);
   return s;
 }
 
@@ -5694,10 +5819,7 @@ export function applyEventChoice(prev: CareerState, choiceIndex: number, clubs: 
   // If phase was set to red_card_appeal_result by the event, don't override
   if (s.phase === "red_card_appeal_result" as any) return s;
   // All events processed → transfer window
-  if (s.age >= 18) {
-    s.transferSituation = determineTransferSituation(s, clubs);
-    s.phase = "transfer_window";
-  } else { s.phase = "playing"; }
+  enterTransferWindow(s, clubs);
   return s;
 }
 
@@ -5719,16 +5841,13 @@ export function dismissAppealResult(prev: CareerState, clubs: ClubData[]): Caree
     s.phase = "random_events";
     return s;
   }
-  if (s.age >= 18) {
-    s.transferSituation = determineTransferSituation(s, clubs);
-    s.phase = "transfer_window";
-  } else { s.phase = "playing"; }
+  enterTransferWindow(s, clubs);
   return s;
 }
 
 /* ─── Stay at current club ─── */
 export function stayAtClub(prev: CareerState): CareerState {
-  const s = { ...prev }; s.pendingOffers = []; s.transferSituation = null; s.phase = "playing";
+  const s = { ...prev }; s.pendingOffers = []; s.transferSituation = null; s.pendingLoanOffers = null; s.phase = "playing";
   if (s.contractYearsLeft <= 0) {
     s.contractYearsLeft = rand(2, 4);
     s.events = [...s.events, `📝 Renewed contract with ${s.currentClub} for ${s.contractYearsLeft} years`];
@@ -5742,7 +5861,7 @@ export function signExtension(prev: CareerState): CareerState {
   const extraYears = rand(2, 4);
   s.contractYearsLeft = extraYears;
   s.weeklyWage = Math.round(s.weeklyWage * 1.15);
-  s.transferSituation = null; s.phase = "playing";
+  s.transferSituation = null; s.pendingLoanOffers = null; s.phase = "playing";
   s.events = [...s.events, `📝 Signed ${extraYears}-year extension with ${s.currentClub} (${formatWage(s.weeklyWage)})`];
   return s;
 }

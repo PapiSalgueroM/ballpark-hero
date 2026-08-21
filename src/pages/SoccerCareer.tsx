@@ -46,6 +46,7 @@ import {
   applyTrainingResult, trainingAvailable, type TrainingDrill,
   repairCareer, effectivePotential, careerBuildEffects,
   applyMoneyAction,
+  acceptLoan, projectLeagueApps,
 } from "@/lib/soccerCareerEngine";
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
@@ -332,7 +333,7 @@ function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; is
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
           <span className="text-[11px] text-muted-foreground">{season.age}y</span>
-          <span className="text-xs font-semibold truncate flex items-center gap-1"><FlagImg name={season.clubCountry} size={16} />{season.club}</span>
+          <span className="text-xs font-semibold truncate flex items-center gap-1"><FlagImg name={season.clubCountry} size={16} />{season.club}{season.onLoanFrom ? <span className="text-muted-foreground font-normal"> (loan)</span> : null}</span>
         </div>
         {season.type === "playing" && (
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
@@ -444,7 +445,7 @@ function SeasonSummaryCard({ season, position, onContinue, appearance }: { seaso
       {trophies.length > 0 && <Confetti pieces={trophies.length >= 2 ? 55 : 34} gold />}
       <div className="text-center">
         <h3 className="text-lg font-black">Season Summary</h3>
-        <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={season.clubCountry} size={14} />{season.club} · {season.year}/{(season.year + 1).toString().slice(-2)}</p>
+        <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={season.clubCountry} size={14} />{season.club}{season.onLoanFrom ? ` (on loan from ${season.onLoanFrom})` : ""} · {season.year}/{(season.year + 1).toString().slice(-2)}</p>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
@@ -712,6 +713,12 @@ export default function SoccerCareer() {
     toast("Staying at " + career.currentClub);
   };
 
+  const onAcceptLoan = (offer: ContractOffer) => {
+    if (!career) return;
+    setCareer(acceptLoan(career, offer));
+    toast.success(`Off on loan to ${offer.club.name} for the season`);
+  };
+
   const handleSignExtension = () => {
     if (!career) return;
     setCareer(signExtension(career));
@@ -970,6 +977,7 @@ export default function SoccerCareer() {
               onDismissSummary={handleDismissSummary}
               onDismissNewspaper={handleDismissNewspaper}
               onStay={handleStay}
+              onAcceptLoan={onAcceptLoan}
               onSignExtension={handleSignExtension}
               onRequestTransfer={handleRequestTransfer}
               onEventChoice={handleEventChoice}
@@ -1766,15 +1774,20 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
 }
 
 /* ─── Transfer Window Card ─── */
-function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignExtension, onRequestTransfer }: {
+function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignExtension, onRequestTransfer, onAcceptLoan }: {
   situation: TransferSituation;
   career: CareerState;
   onAcceptOffer: (offer: ContractOffer) => void;
   onStay: () => void;
   onSignExtension: () => void;
   onRequestTransfer: () => void;
+  onAcceptLoan: (offer: ContractOffer) => void;
 }) {
   const isExpiring = career.contractYearsLeft <= 1;
+  /* Round 217: the projection quoted here is drawn from the same band table
+     the season simulation rolls from, so this line can never overpromise. */
+  const seasonsHere = career.seasons.filter(ss => ss.club === career.currentClub && ss.type === "playing").length;
+  const projHere = projectLeagueApps(career.overall, career.currentClubTier, career.currentClub, seasonsHere);
 
   return (
     <div className="space-y-3">
@@ -1788,7 +1801,43 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
           <span>💰 {formatWage(career.weeklyWage)}</span>
           <span>🏷️ €{career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M value</span>
         </div>
+        <p className="text-xs text-muted-foreground mt-2">
+          Projected at {career.currentClub} next season: <span className="font-bold text-foreground">about {projHere.min} to {projHere.max} league games</span>
+        </p>
       </div>
+
+      {/* Round 217: the loan window. Only appears when the projection above
+          says fringe and the player is young with contract to run. */}
+      {career.pendingLoanOffers && career.pendingLoanOffers.length > 0 && (
+        <div className="space-y-2">
+          <div className="bg-sky-500/10 border border-sky-500/30 rounded-xl p-3 text-center">
+            <span className="text-sm font-bold">🛫 The loan window is open</span>
+            <p className="text-xs text-muted-foreground mt-1">
+              Clubs further down want to hand you the minutes {career.currentClub} will not. Contract and wage stay where they are, only the football moves. One season, then back.
+            </p>
+          </div>
+          {career.pendingLoanOffers.map(offer => {
+            const lp = projectLeagueApps(career.overall, offer.club.tier, offer.club.name, 0);
+            return (
+              <div key={offer.club.name} className="bg-card border border-border rounded-xl p-3 space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="font-bold text-sm truncate flex items-center gap-1"><FlagImg name={offer.club.country} size={16} />{offer.club.name}</div>
+                    <div className="text-xs text-muted-foreground">{offer.club.league} · season long loan</div>
+                  </div>
+                  <div className="text-right text-xs shrink-0">
+                    <div className="font-bold text-foreground">about {lp.min} to {lp.max}</div>
+                    <div className="text-muted-foreground">league games</div>
+                  </div>
+                </div>
+                <Button onClick={() => onAcceptLoan(offer)} className="w-full h-9 text-sm bg-sky-500 hover:bg-sky-400 text-black">
+                  Go on loan 🛫
+                </Button>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Situation: No Interest */}
       {situation.type === "no_interest" && (
@@ -2959,7 +3008,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -2969,6 +3018,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onStay: () => void;
   onSignExtension: () => void;
   onRequestTransfer: () => void;
+  onAcceptLoan: (offer: ContractOffer) => void;
   onEventChoice: (choiceIndex: number) => void;
   onDismissDebut: () => void;
   onDismissWorldCup: () => void;
@@ -3402,6 +3452,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               onStay={onStay}
               onSignExtension={onSignExtension}
               onRequestTransfer={onRequestTransfer}
+              onAcceptLoan={onAcceptLoan}
             />
           )}
 
