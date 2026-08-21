@@ -68,6 +68,22 @@ export interface TeamCompLine {
 }
 
 /**
+ * Round 165: one line in the golden boot race. AI entries live on the save
+ * and collect goals as their clubs' results are simulated; my own players
+ * are merged in at read time from their real per-competition stat lines, so
+ * the race can never disagree with the stats centre.
+ */
+export interface RaceScorer {
+  name: string;
+  club: string;
+  goals: number;
+  /** One of MY players (merged from the live squad at read time). */
+  mine?: boolean;
+  /** The tracked player is a generated one, shown marked as made up. */
+  gen?: boolean;
+}
+
+/**
  * Round 164: the club's record this season, bucketed by competition,
  * derived from the fixture log the calendar card has kept since Round 73.
  * Entries logged before the typed competition field existed are bucketed
@@ -90,6 +106,161 @@ export function teamCompRecord(state: CareerState, cupName: string): Record<Comp
       if (e.res === 'W') line.w += 1;
       else if (e.res === 'D') line.d += 1;
       else line.l += 1;
+    }
+  }
+  return out;
+}
+
+/* ---------- Round 165: award races ---------- */
+
+/** How a club's simulated league goals split among its tracked scorers.
+ *  The remainder goes untracked: defenders, subs, own goals. Tuned so a top
+ *  club's leading man lands in the twenties, where golden boots live. */
+const RACE_TOP_SHARE = 0.42;
+const RACE_SECOND_SHARE = 0.26;
+
+/**
+ * Build the golden boot race: two attack-minded men per rival club, taken
+ * from the same projected rosters the Match Centre's danger men use. On a
+ * fresh season everyone starts at zero. Attached to a RUNNING season (an
+ * old save meeting this feature mid campaign) it reconstructs each entry
+ * from the goals the league table already holds, at the same shares the
+ * weekly crediting uses, so the board is never eleven zero rows next to my
+ * striker's fifteen.
+ */
+export function initScorerRace(state: CareerState): RaceScorer[] {
+  const entries: RaceScorer[] = [];
+  const years = yearsOn(state);
+  const eraId = state.eraId ?? 'now';
+  for (const club of state.leagueClubs) {
+    if (club === state.clubName) continue;
+    const men = [...projectedRoster(club, years, eraId)]
+      .filter(p => groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID')
+      .sort((a, b) => b.r - a.r)
+      .slice(0, 2);
+    const gf = state.table.find(r => r.club === club)?.gf ?? 0;
+    men.forEach((m, i) => entries.push({
+      name: m.n,
+      club,
+      goals: Math.round(gf * (i === 0 ? RACE_TOP_SHARE : RACE_SECOND_SHARE)),
+      gen: m.g ? true : undefined,
+    }));
+  }
+  return entries;
+}
+
+function ensureScorerRace(state: CareerState): void {
+  if (!state.scorerRace && state.leagueClubs?.length) {
+    state.scorerRace = initScorerRace(state);
+  }
+}
+
+/** Split one simulated result's goals among the club's tracked scorers. */
+function creditRaceGoals(state: CareerState, club: string, goals: number): void {
+  if (club === state.clubName || goals <= 0 || !state.scorerRace) return;
+  const men = state.scorerRace.filter(e => e.club === club);
+  if (!men.length) return;
+  for (let i = 0; i < goals; i++) {
+    const r = Math.random();
+    if (r < RACE_TOP_SHARE) men[0].goals += 1;
+    else if (r < RACE_TOP_SHARE + RACE_SECOND_SHARE && men[1]) men[1].goals += 1;
+  }
+}
+
+/**
+ * The live golden boot board: AI entries plus every one of MY players with a
+ * league goal, read straight from his per-competition line so the race and
+ * the stats centre are one bookkeeping.
+ */
+export function goldenBootTable(state: CareerState, limit = 12): RaceScorer[] {
+  const rows: RaceScorer[] = [...(state.scorerRace ?? [])];
+  for (const p of state.squad) {
+    const lg = p.comp?.league?.goals ?? 0;
+    if (lg > 0) rows.push({ name: p.name, club: state.clubName, goals: lg, mine: true, gen: p.generated ? true : undefined });
+  }
+  return rows
+    .sort((a, b) => b.goals - a.goals || a.name.localeCompare(b.name))
+    .slice(0, limit);
+}
+
+export interface PotyLine {
+  name: string;
+  club: string;
+  goals: number;
+  score: number;
+  mine?: boolean;
+  gen?: boolean;
+}
+
+/**
+ * The player of the season argument: goals lead it, playing for a side high
+ * in the table carries weight. One formula for everyone, mine included, so
+ * the ranking cannot quietly favour my own squad.
+ */
+export function playerOfSeasonRace(state: CareerState, limit = 5): PotyLine[] {
+  const table = sortedTable(state.table);
+  const posOf = (club: string): number => {
+    const i = table.findIndex(r => r.club === club);
+    return i >= 0 ? i + 1 : table.length;
+  };
+  return goldenBootTable(state, 40)
+    .map(e => ({
+      name: e.name,
+      club: e.club,
+      goals: e.goals,
+      mine: e.mine,
+      gen: e.gen,
+      score: Math.round((e.goals + Math.max(0, 11 - posOf(e.club)) * 0.35) * 10) / 10,
+    }))
+    .sort((a, b) => b.score - a.score || b.goals - a.goals)
+    .slice(0, limit);
+}
+
+export interface BallonWatchLine {
+  name: string;
+  club: string;
+  note: string;
+  mine?: boolean;
+  gen?: boolean;
+}
+
+/**
+ * The world's individual award conversation, era aware because every name
+ * comes from the save's own projected rosters and simulated tables: the
+ * boot race leaders, then the star of every league's current leaders.
+ */
+export function ballonDorWatch(state: CareerState, limit = 5): BallonWatchLine[] {
+  const years = yearsOn(state);
+  const eraId = state.eraId ?? 'now';
+  const out: BallonWatchLine[] = [];
+  const seen = new Set<string>();
+  const push = (name: string, club: string, note: string, gen?: boolean, mine?: boolean): void => {
+    if (!name || seen.has(name) || out.length >= limit) return;
+    seen.add(name);
+    out.push({ name, club, note, gen: gen || undefined, mine: mine || undefined });
+  };
+  for (const e of goldenBootTable(state, 3)) {
+    if (e.goals > 0) push(e.name, e.club, `${e.goals} league goals`, e.gen, e.mine);
+  }
+  const leaders: { club: string; league: string }[] = [];
+  const myTable = sortedTable(state.table);
+  if (myTable.length && myTable[0].w + myTable[0].d + myTable[0].l > 0) {
+    leaders.push({ club: myTable[0].club, league: careerLeagueOf(state).name });
+  }
+  for (const [id, w] of Object.entries(state.world ?? {})) {
+    if (!w || w.round <= 0) continue;
+    const top = sortedTable(w.table)[0];
+    const lg = REAL_LEAGUES.find(l => l.id === id);
+    if (top && lg) leaders.push({ club: top.club, league: lg.name });
+  }
+  for (const l of leaders) {
+    if (out.length >= limit) break;
+    if (l.club === state.clubName) {
+      const best = [...state.squad].sort((a, b) => b.rating - a.rating)[0];
+      if (best) push(best.name, l.club, `carrying the ${l.league} leaders`, best.generated, true);
+    } else {
+      const star = [...projectedRoster(l.club, years, eraId)].sort((a, b) => b.r - a.r)[0];
+      if (star) push(star.n, l.club, `carrying the ${l.league} leaders`, star.g);
     }
   }
   return out;
@@ -730,6 +901,10 @@ export interface SeasonSummary {
   seasonScore: number;
   /** Round 70: how each board objective ended up. */
   objectives?: { label: string; hit: boolean }[];
+  /** Round 165: the season's individual honours, from the award races. */
+  goldenBoot?: { name: string; club: string; goals: number } | null;
+  playerOfSeason?: { name: string; club: string } | null;
+  ballonDor?: { name: string; club: string } | null;
 }
 
 export interface CareerState {
@@ -793,6 +968,8 @@ export interface CareerState {
   uclBracket?: UclTie[];
   /** Round 163: every OTHER Champions League group, simulated alongside mine. */
   uclWorld?: UclAiGroup[];
+  /** Round 165: the league's golden boot race, AI entries only. */
+  scorerRace?: RaceScorer[];
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
   /** Round 105: the weekly wage bill the board will tolerate, in thousands. */
@@ -6523,6 +6700,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
 
   if (fx.competition === 'league') {
     const pairs = roundPairs(state.leagueClubs, entry.round);
+    // Round 165: the race board exists before this round's goals land on it.
+    ensureScorerRace(state);
     for (const [h, a] of pairs) {
       if (h === state.clubName || a === state.clubName) {
         const hg = fx.home ? myGoals : oppGoals;
@@ -6533,6 +6712,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
         const [hg, ag] = simAiMatch(state, h, a);
         applyResult(state.table, h, a, hg, ag);
         noteForm(state, h, a, hg, ag);
+        creditRaceGoals(state, h, hg);
+        creditRaceGoals(state, a, ag);
         otherResults.push({ home: h, away: a, hg, ag });
       }
     }
@@ -7664,6 +7845,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
   // Round 163: the rest of the Champions League draw exists from day one.
   state.uclWorld = initUclWorld(state);
+  // Round 165: the golden boot race starts at zero with the season.
+  state.scorerRace = initScorerRace(state);
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex]);
@@ -7710,11 +7893,14 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       // still gets played, or the table comes up short for everyone else.
       if (entry.type === 'league') {
         const pairs = roundPairs(state.leagueClubs, entry.round);
+        ensureScorerRace(state);
         for (const [h, a] of pairs) {
           if (h === state.clubName || a === state.clubName) continue;
           const [hg, ag] = simAiMatch(state, h, a);
           applyResult(state.table, h, a, hg, ag);
           noteForm(state, h, a, hg, ag);
+          creditRaceGoals(state, h, hg);
+          creditRaceGoals(state, a, ag);
         }
         syncWorld(state, myRoundsPlayed(state, state.week + 1));
       }
@@ -8141,6 +8327,51 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     }
   }
 
+  /* ----- Round 165: the individual honours settle with the season ----- */
+  const bootTop = goldenBootTable(state, 1)[0] ?? null;
+  const goldenBoot = bootTop && bootTop.goals > 0
+    ? { name: bootTop.name, club: bootTop.club, goals: bootTop.goals }
+    : null;
+  const potyTop = playerOfSeasonRace(state, 1)[0] ?? null;
+  const playerOfSeason = potyTop && potyTop.goals > 0
+    ? { name: potyTop.name, club: potyTop.club }
+    : null;
+  /* The world award: Europe's crown weighs most, then league titles, then
+     the boot. Every candidate is the settled best of something, so the
+     winner always has a sentence-long case. */
+  const ballonDor = (() => {
+    const years = yearsOn(state);
+    const eraId = state.eraId ?? 'now';
+    const cands: { name: string; club: string; score: number }[] = [];
+    const add = (name: string | undefined, club: string, bonus: number): void => {
+      if (!name) return;
+      const existing = cands.find(c => c.name === name);
+      if (existing) { existing.score += bonus; return; }
+      // The candidate's own rating anchors the case, wherever he plays.
+      const rating = club === state.clubName
+        ? state.squad.find(p => p.name === name)?.rating ?? 70
+        : projectedRoster(club, years, eraId).find(p => p.n === name)?.r ?? 70;
+      cands.push({ name, club, score: rating + bonus });
+    };
+    const uclWinner = state.uclBracket?.find(t => t.round === 'F')?.winner ?? null;
+    if (uclWinner) {
+      const star = uclWinner === state.clubName
+        ? [...state.squad].sort((a, b) => b.rating - a.rating)[0]?.name
+        : [...projectedRoster(uclWinner, years, eraId)].sort((a, b) => b.r - a.r)[0]?.n;
+      add(star, uclWinner, 6);
+    }
+    if (table[0]) {
+      const champStar = table[0].club === state.clubName
+        ? [...state.squad].sort((a, b) => b.rating - a.rating)[0]?.name
+        : [...projectedRoster(table[0].club, years, eraId)].sort((a, b) => b.r - a.r)[0]?.n;
+      add(champStar, table[0].club, 3);
+    }
+    if (goldenBoot) add(goldenBoot.name, goldenBoot.club, 2 + goldenBoot.goals * 0.15);
+    if (!cands.length) return null;
+    const best = cands.sort((a, b) => b.score - a.score)[0];
+    return { name: best.name, club: best.club };
+  })();
+
   const summary: SeasonSummary = {
     season: state.season,
     club: state.clubName,
@@ -8162,6 +8393,9 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     offers,
     seasonScore: Math.min(130, myRow.pts + seasonTrophies.length * 10),
     objectives: objectiveResults,
+    goldenBoot,
+    playerOfSeason,
+    ballonDor,
   };
 
   state.history = [
@@ -8641,6 +8875,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length, eraId, nextCustom ? leagueClubs : undefined);
   // Round 163: a fresh Champions League draw for the new season.
   state.uclWorld = initUclWorld(state);
+  // Round 165: a fresh golden boot race too (the new table is all zeros).
+  state.scorerRace = initScorerRace(state);
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);

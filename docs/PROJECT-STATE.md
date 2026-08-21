@@ -155,8 +155,24 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   with the screen saying so), and the summer reset. Help popover updated, and it also fixed
   a Round 156 miscount: the game has FIFTEEN leagues since the 2. Bundesliga landed in
   Round 142, and the help, SEO block and site copy all said 14. Browser probe 12 for 12.
-- CM-12 Award races: Ballon d'Or style leaders, golden boot, league player of the season,
-  era aware.
+- CM-12 **DONE, Round 165: award races.** An Award races card tops the stats centre: the
+  league's golden boot board (two real attack-minded men per rival club tracked from the
+  same projected rosters the danger-men use, handed shares of the goals their clubs
+  actually score in the simulated season, my own scorers merged in from their real
+  per-competition stat lines so the race and the stats centre are one bookkeeping), a
+  player of the season watch scored by ONE formula for everyone (goals plus a lift for
+  table position, mine included, so the ranking cannot favour my squad), and a Ballon d'Or
+  watch (boot leaders plus the star of every league's current leaders, era aware because
+  every name comes from the save's own rosters and tables). All three settle in
+  finishSeason: the summary now names the golden boot, the player of the season and the
+  Ballon d'Or (Europe's crown weighs most, then titles, then the boot), and the season
+  review displays them. Old saves reconstruct the race from the goals the table already
+  holds at the same shares the weekly crediting uses. Generated players wear the MADE UP
+  tag on the board like everywhere else. simAwardRaces proves: roster-true names, a race
+  that can never outscore its club's table line (winners measured 26 to 31), the one-
+  formula POTY re-derived to the digit, all three honours present and earned at season
+  end, the 2010 era racing 2010 names, the mid-season rebuild, and the summer reset.
+  Browser probe 9 for 9.
 
 **Site wide:**
 
@@ -481,8 +497,9 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, small hours | **Round 161** (structured transfer deals: add-ons, sell-on clauses, part exchange, plus the deep market filters). `RUN161.bat`, chain-guarded on 160. |
 | Packaged 2026-08-18, morning | **Round 162** (Stadium Tycoon goes massive, his direct ask: ten named divisions with exact income multipliers and promotion bonuses, an eight tier staff payroll, the catchable golden whistle with five prizes, 47 badges at a permanent 2 percent each, a Badges drawer, a Club records drawer, and the game's help plus SEO copy rewritten to match). `RUN162.bat`, chain-guarded on 161. |
 | Packaged 2026-08-18, midday | **Round 163** (league views, CM-9 in full: pre-season alphabetical tables with the star for all fifteen leagues, flags on every league chip, all eight UCL groups simulated in lockstep, the projected quarter-final bracket, and the knockout draw seeded from the real group winners). `RUN163.bat`, chain-guarded on 162. |
-| Packaged 2026-08-18, early afternoon | **Round 164** (the stats centre, CM-11: per-competition team record, leader cards, full sortable player lines, engine-level per-comp stat splits that cannot disagree with the season totals, plus the 14-vs-15 league count fix in the help and SEO copy). `RUN164.bat`, chain-guarded on 163. **SHIP22.bat is the current wrapper: it runs 157 through 164.** Older SHIP wrappers still work, then click the later RUN bats after. |
-| Next free round number | **165** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, early afternoon | **Round 164** (the stats centre, CM-11: per-competition team record, leader cards, full sortable player lines, engine-level per-comp stat splits that cannot disagree with the season totals, plus the 14-vs-15 league count fix in the help and SEO copy). `RUN164.bat`, chain-guarded on 163. |
+| Packaged 2026-08-18, afternoon | **Round 165** (award races, CM-12: the golden boot board, the one-formula player of the season watch, the Ballon d'Or watch and all three honours named in the season review, era aware, race goals provably bounded by the simulated tables). `RUN165.bat`, chain-guarded on 164. **SHIP23.bat is the current wrapper: it runs 157 through 165.** Older SHIP wrappers still work, then click the later RUN bats after. |
+| Next free round number | **166** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

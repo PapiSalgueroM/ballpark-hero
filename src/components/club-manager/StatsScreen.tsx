@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { teamCompRecord, careerLeagueOf } from '@/lib/clubManager';
+import { teamCompRecord, careerLeagueOf, goldenBootTable, playerOfSeasonRace, ballonDorWatch } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, CompBucket, CompStatLine } from '@/lib/clubManager';
+import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 
 interface StatsScreenProps {
   career: CareerState;
@@ -52,6 +53,72 @@ function lineFor(p: CMPlayer, view: View): Line {
 }
 
 const avg = (l: Line): number => (l.apps > 0 ? l.ratingSum / l.apps : 0);
+
+/**
+ * Round 165, his CM-12: the award races. The golden boot board (AI scorers
+ * tracked by the engine as their clubs' results simulate, my own men merged
+ * from their real stat lines), the player of the season argument (one
+ * formula for everyone), and the world's individual award watch. Made up
+ * players are marked, exactly like everywhere else.
+ */
+function AwardRacesCard({ career }: { career: CareerState }) {
+  const boot = useMemo(() => goldenBootTable(career, 8), [career]);
+  const poty = useMemo(() => playerOfSeasonRace(career, 3), [career]);
+  const watch = useMemo(() => ballonDorWatch(career, 4), [career]);
+  const anyGoals = boot.some(e => e.goals > 0);
+  if (!anyGoals) {
+    return (
+      <div className="bg-card border border-border rounded-2xl p-3">
+        <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">🏅 Award races</div>
+        <p className="text-xs text-muted-foreground">The golden boot, the player of the season and the world award watch all start counting with the first league goals.</p>
+      </div>
+    );
+  }
+  return (
+    <div className="bg-card border border-border rounded-2xl p-3 space-y-2">
+      <div className="text-[10px] text-muted-foreground uppercase tracking-wider">🏅 Award races</div>
+      <div>
+        <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">👟 Golden boot</div>
+        {boot.filter(e => e.goals > 0).map((e, i) => (
+          <div key={`${e.name}-${e.club}`} className="flex items-center gap-1.5 text-xs py-0.5">
+            <span className="w-4 text-muted-foreground font-bold shrink-0">{i + 1}</span>
+            <span className={cn('truncate', e.mine ? 'text-primary font-bold' : 'text-foreground')}>{e.name}</span>
+            {e.gen && <MadeUpTag />}
+            <span className="text-[10px] text-muted-foreground truncate">{e.club}</span>
+            <span className="ml-auto font-bold text-foreground shrink-0">{e.goals}</span>
+          </div>
+        ))}
+      </div>
+      {poty.length > 0 && poty[0].goals > 0 && (
+        <div>
+          <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">🎖️ Player of the season watch</div>
+          {poty.map(e => (
+            <div key={`${e.name}-${e.club}`} className="flex items-center gap-1.5 text-xs py-0.5">
+              <span className={cn('truncate', e.mine ? 'text-primary font-bold' : 'text-foreground')}>{e.name}</span>
+              {e.gen && <MadeUpTag />}
+              <span className="text-[10px] text-muted-foreground truncate">{e.club}</span>
+              <span className="ml-auto text-[10px] text-muted-foreground shrink-0">{e.goals} gls · form score {e.score.toFixed(1)}</span>
+            </div>
+          ))}
+          <p className="text-[8px] text-muted-foreground mt-0.5">One formula for everyone: goals plus a lift for playing high in the table.</p>
+        </div>
+      )}
+      {watch.length > 0 && (
+        <div>
+          <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">🌍 Ballon d'Or watch</div>
+          {watch.map(e => (
+            <div key={`${e.name}-${e.club}`} className="flex items-center gap-1.5 text-xs py-0.5">
+              <span className={cn('truncate', e.mine ? 'text-primary font-bold' : 'text-foreground')}>{e.name}</span>
+              {e.gen && <MadeUpTag />}
+              <span className="text-[10px] text-muted-foreground truncate">{e.club} · {e.note}</span>
+            </div>
+          ))}
+          <p className="text-[8px] text-muted-foreground mt-0.5">Settled at the end of the season, when Europe has a winner and the leagues have champions.</p>
+        </div>
+      )}
+    </div>
+  );
+}
 
 /**
  * Round 164, his CM-11 word for word: "team and player stats: per competition
@@ -122,6 +189,9 @@ export function StatsScreen({ career }: StatsScreenProps) {
           </button>
         ))}
       </div>
+
+      {/* Round 165: the award races, on the All comps view where they live. */}
+      {view === 'all' && <AwardRacesCard career={career} />}
 
       {/* Team record in this view */}
       <div className="bg-card border border-border rounded-2xl p-3">
