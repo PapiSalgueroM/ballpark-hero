@@ -111,11 +111,20 @@ interface AwardPicks {
 }
 
 function loadAwards(): AwardPicks {
+  const fresh: AwardPicks = { goldenBoot: "", goldenGlove: "", goldenBall: "" };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : { goldenBoot: "", goldenGlove: "", goldenBall: "" };
+    if (!raw) return fresh;
+    const parsed = JSON.parse(raw);
+    // a save written by another version can hold anything, keep only string fields
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return fresh;
+    return {
+      goldenBoot: typeof parsed.goldenBoot === "string" ? parsed.goldenBoot : "",
+      goldenGlove: typeof parsed.goldenGlove === "string" ? parsed.goldenGlove : "",
+      goldenBall: typeof parsed.goldenBall === "string" ? parsed.goldenBall : "",
+    };
   } catch {
-    return { goldenBoot: "", goldenGlove: "", goldenBall: "" };
+    return fresh;
   }
 }
 

@@ -343,7 +343,9 @@ const STORAGE_KEY = "wc2026-predictions";
 function loadPredictions(): Predictions {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    const parsed = raw ? JSON.parse(raw) : {};
+    // a save written by another version can hold anything, only a plain object is usable
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
   } catch {
     return {};
   }
@@ -743,13 +745,16 @@ const WorldCupPredictor = () => {
   const [selectedThirds, setSelectedThirds] = useState<string[]>(() => {
     try {
       const raw = localStorage.getItem("wc2026-selected-thirds");
-      return raw ? JSON.parse(raw) : [];
+      const parsed = raw ? JSON.parse(raw) : [];
+      // only an array of strings is usable, anything else is a stale or mangled save
+      return Array.isArray(parsed) ? parsed.filter((t) => typeof t === "string") : [];
     } catch { return []; }
   });
   const [playoffPicks, setPlayoffPicks] = useState<Record<string, string>>(() => {
     try {
       const raw = localStorage.getItem("wc2026-playoff-picks");
-      return raw ? JSON.parse(raw) : {};
+      const parsed = raw ? JSON.parse(raw) : {};
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
     } catch { return {}; }
   });
   const [champion, setChampion] = useState("");
@@ -822,8 +827,8 @@ const WorldCupPredictor = () => {
         predictions,
         playoffPicks,
         selectedThirds,
-        knockoutPicks: (() => { try { return JSON.parse(localStorage.getItem("wc2026-knockout") || "{}"); } catch { return {}; } })(),
-        awards: (() => { try { return JSON.parse(localStorage.getItem("wc2026-awards") || "{}"); } catch { return {}; } })(),
+        knockoutPicks: (() => { try { const v = JSON.parse(localStorage.getItem("wc2026-knockout") || "{}"); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; } })(),
+        awards: (() => { try { const v = JSON.parse(localStorage.getItem("wc2026-awards") || "{}"); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; } })(),
         champion,
       };
       const { error } = await supabase.from("saved_brackets" as any).insert({

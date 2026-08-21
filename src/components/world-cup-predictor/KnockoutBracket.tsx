@@ -55,13 +55,16 @@ function loadPicks(): KnockoutPicks {
     const raw = localStorage.getItem(KO_STORAGE_KEY);
     if (!raw) return {};
     const parsed = JSON.parse(raw);
+    // a save written by another version can hold anything, only a plain object is usable
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
     // Migration: old format stored {scoreA, scoreB} objects, clear if detected
     const firstVal = Object.values(parsed)[0];
     if (firstVal && typeof firstVal === "object") {
       localStorage.removeItem(KO_STORAGE_KEY);
       return {};
     }
-    return parsed;
+    // drop any non string values so downstream string ops never see garbage
+    return Object.fromEntries(Object.entries(parsed).filter(([, v]) => typeof v === "string")) as KnockoutPicks;
   } catch {
     return {};
   }
