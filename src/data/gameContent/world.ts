@@ -346,11 +346,55 @@ export const WORLD_CONTENT: GameContentMap = {
       },
       {
         q: "Is there a daily list?",
-        a: "No. All 26 lists are open all the time, and you can retry any of them as often as you like.",
+        a: "No. All 27 lists are open all the time, and you can retry any of them as often as you like.",
       },
       {
         q: "What are the tiers?",
         a: "Gold means you named the entire list, Silver is 80 percent or more, Bronze is 60 percent or more. Below that you just get encouragement.",
+      },
+    ],
+  },
+
+  '/champ-or-not': {
+    intro: [
+      "Champ or Not deals ten claims about champions, one at a time, and every single one sounds right. The Bulls in 1994? The Islanders in 1982? Leicester in 2016? Two of those happened. Your job is knowing which.",
+      "Every claim is built from real title history across nine competitions: the Super Bowl, the NBA, the World Series, the Stanley Cup, the WNBA, college football and college hoops, the English title and the VFL/AFL flag. The fakes are the cruelest kind: a real champion of that competition, dropped into a year they did not win.",
+    ],
+    howToPlay: [
+      "Read the claim: a team, a title, a year.",
+      "Tap CHAMP if it really happened, or NOT if it did not.",
+      "The reveal tells you straight away, and if the claim was fake it names the team that really won that year.",
+      "Ten claims per day, one point per correct call, and everyone in the world gets the same ten.",
+      "Unlimited mode deals fresh sets as long as you want to keep calling.",
+    ],
+    rules: [
+      "Every team named is a genuine champion of that competition at some point in history. The lie, when there is one, is only ever the year.",
+      "Split titles count as true: if two schools share a college football crown, a claim about either one is a real claim.",
+      "The daily set is the same for everyone and locks in your result for the day once you finish.",
+      "No hints, no lifelines, no second guesses. One tap per claim.",
+    ],
+    example: [
+      "The card says: The Chicago Bulls won the 1994 NBA Finals. It smells right, the Bulls won everything in the 90s, but 1994 is the baseball year: Houston won it. You tap NOT and the reveal confirms it, one point.",
+      "Next card: The New York Islanders won the Stanley Cup in 1982. That is the middle of the four in a row, so you tap CHAMP. Another point, eight claims to go.",
+    ],
+    tips: [
+      "Work out the era first. Most fakes die the moment you remember who owned that stretch of years.",
+      "Dynasty gaps are the trap: the Bulls did not win in 1994 or 1995, and the Lakers missed 1990 to 1999 entirely.",
+      "The reveal names the real winner on every fake, so even a wrong call teaches you the year for next time.",
+      "Champions repeat. If you know the team has a pile of titles, the question is only whether THIS year is one of them.",
+    ],
+    faqs: [
+      {
+        q: "Are the wrong answers made up?",
+        a: "No. A false claim names a real winner of that same competition, just attached to a year they did not win. Every team you see genuinely lifted that trophy at some point.",
+      },
+      {
+        q: "What about seasons with two champions?",
+        a: "College football split its crown a few times, and those years count both schools as true champions. A claim about either one is a real claim, never a trick.",
+      },
+      {
+        q: "Where does the history come from?",
+        a: "The same records database behind Name Them All, checked season by season against the official record books before any game was allowed to read it.",
       },
     ],
   },

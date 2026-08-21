@@ -134,6 +134,7 @@ const PlayerStockMarket = lazy(() => import("./pages/PlayerStockMarket"));
 const NhlConnect4 = lazy(() => import("./pages/NhlConnect4"));
 const GolfHigherLower = lazy(() => import("./pages/GolfHigherLower"));
 const AflHigherLower = lazy(() => import("./pages/AflHigherLower"));
+const ChampOrNot = lazy(() => import("./pages/ChampOrNot"));
 const GuessTheGolfer = lazy(() => import("./pages/GuessTheGolfer"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
@@ -412,6 +413,7 @@ const AppContent = () => {
         <Route path="/player-stock-market" element={<PlayerStockMarket />} />
         <Route path="/golf-higher-lower" element={<GolfHigherLower />} />
         <Route path="/afl-higher-lower" element={<AflHigherLower />} />
+        <Route path="/champ-or-not" element={<ChampOrNot />} />
         <Route path="/guess-the-golfer" element={<GuessTheGolfer />} />
         <Route path="/nhl-connect-4" element={<NhlConnect4 />} />
         <Route path="*" element={<NotFound />} />

@@ -28,7 +28,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SITEMAP_FLOOR = 117; /* raised R231: /afl-higher-lower joined */
+const SITEMAP_FLOOR = 118; /* raised R235: /champ-or-not joined */
 
 let failures = 0;
 const fail = m => { failures += 1; console.error("  FAIL: " + m); };
