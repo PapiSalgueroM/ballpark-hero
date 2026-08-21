@@ -12,7 +12,7 @@
    choosing. Ids are all prefixed lifeB_ so they never collide with deck A.
    ========================================================================== */
 import type { CareerState, CareerEvent } from './nflMyCareer';
-import { teamLabelOf } from './nflMyCareer';
+import { teamLabelOf, nflEraById } from './nflMyCareer';
 
 /* Round 56 money and flag fields ride on the save object. Old saves predate
    them and some builds have not caught the engine interface up yet, so every
@@ -54,7 +54,10 @@ const ABBRS = [
   'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS',
 ];
 const otherTeam = (c: CareerState, r: () => number): string => {
-  const pool = ABBRS.filter(a => a !== c.team);
+  /* Round 172: a 2005 career gets traded around the 2005 league, never to a
+     franchise that did not exist yet. Era read lazily inside the function,
+     per the module-scope warning in nflCareerCorruption. */
+  const pool = nflEraById(c.eraId).teams.map(x => x.abbr).filter(a => a !== c.team);
   return pool[Math.floor(r() * pool.length)];
 };
 

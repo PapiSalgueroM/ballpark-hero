@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Crown, Dumbbell, RotateCcw, Sparkles } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
-import {
+import { NBA_ERAS,
   NBA_ARCHETYPES, startNbaCareer, simNbaSeason, nbaProgress, drawNbaEvent,
   NBA_SPEND_ITEMS, buyNbaItem, type NbaSpendCategory,
   nbaShouldRetire, nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaTeamLabelOf, nbaMarketSalary,
@@ -36,6 +36,8 @@ export default function NbaMyCareerBoard() {
   const [career, setCareer] = useState<NbaCareerState | null>(null);
   const [teamQuality, setTeamQuality] = useState<number | null>(null);
   const [nameInput, setNameInput] = useState('');
+  /* Round 172: which league you are drafted into. */
+  const [eraId, setEraId] = useState<'now' | 'y2004'>('now');
   const [pos, setPos] = useState<NbaCareerPos>('PG');
   const [archetypeId, setArchetypeId] = useState(NBA_ARCHETYPES.PG[0].id);
   const [feed, setFeed] = useState<string[]>([]);
@@ -82,7 +84,7 @@ export default function NbaMyCareerBoard() {
 
   const create = () => {
     const arch = NBA_ARCHETYPES[pos].find(a => a.id === archetypeId) ?? NBA_ARCHETYPES[pos][0];
-    const c = startNbaCareer(nameInput.trim() || 'Trey Buckets', pos, arch, Math.random, appearance);
+    const c = startNbaCareer(nameInput.trim() || 'Trey Buckets', pos, arch, Math.random, appearance, eraId);
     const tq = nbaRollTeamQuality(null, Math.random);
     setCareer(c);
     setTeamQuality(tq);
@@ -221,6 +223,22 @@ export default function NbaMyCareerBoard() {
             maxLength={24}
             className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
+          {/* Round 172: pick WHEN before what, same pattern as the NFL board. */}
+          <div className="grid grid-cols-2 gap-1.5">
+            {NBA_ERAS.map(e => (
+              <button
+                key={e.id}
+                onClick={() => setEraId(e.id)}
+                className={cn(
+                  'rounded-xl border-2 px-3 py-2 text-left',
+                  eraId === e.id ? 'border-gold bg-gold/10' : 'border-border bg-card hover:border-primary/50',
+                )}
+              >
+                <span className="block text-sm font-bold text-foreground">{e.id === 'now' ? '🏀 ' : '⏪ '}{e.label}</span>
+                <span className="block text-[10px] text-muted-foreground">{e.blurb}</span>
+              </button>
+            ))}
+          </div>
           <div className="grid grid-cols-5 gap-1 rounded-2xl bg-secondary p-1">
             {(['PG', 'SG', 'SF', 'PF', 'C'] as NbaCareerPos[]).map(p => (
               <button

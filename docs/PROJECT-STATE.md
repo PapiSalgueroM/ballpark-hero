@@ -41,6 +41,31 @@ Three things in one message, mid session:
   number that matters and it is rising. No code change needed; tell him not to sweat that
   validation email.
 
+## Owner instruction, same morning: "add eras to nfl and nba and eveyr sport"
+
+A separate line in the same burst of messages. Status by sport:
+
+- **NFL and NBA, DONE in Round 172.** Both create screens grew an era picker on the Club
+  Manager pattern: the default is today, the throwback is a sealed old league. NFL: the 2005
+  season, all 32 franchises as they stood (the Raiders in Oakland, the Chargers in San Diego,
+  the Rams in St. Louis, Washington listed by city alone because the 2005 nickname is retired
+  and stays off this site), verified against the 2005 season records on Wikipedia and Pro
+  Football Reference. NBA: the 29 team league of 2003-04 (the SuperSonics in Seattle, the Nets
+  in New Jersey, the Hornets in New Orleans, no Charlotte yet, no Oklahoma City or Brooklyn),
+  verified against the 2003-04 season pages on Wikipedia and Basketball Reference. An era
+  career starts in the era year and NEVER leaves its world: the draft, free agency moves,
+  trades, the life sim's rival team draws and the NFL corruption arc all read the era pool.
+  Era contracts pay era money (scales 0.32 and 0.31, derived from the verified caps, documented
+  in code comments only, never on screen). Era-only abbreviations are globally unique so every
+  label resolves without knowing the era. `simSportEras.mjs` is the 54th harness: both lists
+  verified in both directions, 40 era drafts per sport all landing on era franchises with the
+  era-only ones actually drawn, 20 season careers never leaving the era, the modern game
+  provably untouched, and star money at the documented scale. Browser probed 17 for 17.
+- **NHL and MLB, NEXT.** Same recipe: one verified throwback season each (the era-only
+  franchises are the point: Atlanta Thrashers-era NHL, Montreal Expos-era MLB are the obvious
+  candidates, verify before building), era pickers on their create screens, era-aware team
+  draws end to end, a harness section per sport.
+
 ## Owner feedback, third review 2026-08-18 (his biggest list yet, with screenshots)
 
 He sent a long review overnight with four screenshots: a matchday app's pre and post match
@@ -568,7 +593,8 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, late night | **Round 169** (the match report catches his five newest screenshots: named assists, sub arrows, stoppage time, the venue and crowd line with honest capacity rules, and the continuous Balance of play area chart). `RUN169.bat`, chain-guarded on 168. |
 | Packaged 2026-08-18, pre-AdSense sweep | **Round 170** (site health for Wednesday's AdSense review: the FULL route sweep ran clean, 119 routes x 3 viewports = 357 checks, ZERO findings on the future site with all pending rounds applied. Two fixes shipped: sweepGames grew an OFFLINE=1 mode for sandboxes with no route to Supabase, so environment noise cannot bury real findings, and Dart Draft stopped failing SILENTLY when the player pool cannot load: the mode tile used to bounce back to the intro with no explanation, and now the screen says the pool could not load and to try again. Fail closed, never silently.) `RUN170.bat`, chain-guarded on 169. |
 | Packaged 2026-08-18, later still | **Round 171** (the finance layer, CM-8: home gates pay the kitty, ticket policy with real trade-offs, three ground expansions the board loves and the club keeps, custom capacities genuinely grow, era prices run smaller). `RUN171.bat`, chain-guarded on 170. **SHIP29.bat is the current wrapper: it runs 157 through 171.** |
-| Next free round number | **172** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, evening again | **Round 172** (era starts for NFL and NBA My Career, his "add eras to nfl and nba and eveyr sport": the 2005 NFL and the 29 team 2003-04 NBA, two-source verified franchise lists, sealed era worlds end to end including trades, free agency, life sim rivals and the corruption arc, era money at documented scale, era pickers on both create screens). `RUN172.bat`, chain-guarded on 171. **SHIP30.bat is the current wrapper: it runs 157 through 172.** |
+| Next free round number | **173** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

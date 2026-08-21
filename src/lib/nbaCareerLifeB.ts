@@ -17,7 +17,7 @@
    module scope. nbaTeamLabelOf is only ever called inside a function body.
    ========================================================================== */
 import type { NbaCareerState, NbaCareerEvent } from './nbaMyCareer';
-import { nbaTeamLabelOf } from './nbaMyCareer';
+import { nbaEraTeamIds, nbaTeamLabelOf } from './nbaMyCareer';
 
 // Round 57 expanded the three position buckets into five. These keep the
 // original guard / wing / big flavour working across PG, SG, SF, PF and C.
@@ -64,7 +64,8 @@ const NBA_ABBRS = [
   'OKC', 'ORL', 'PHI', 'PHX', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS',
 ];
 const otherTeam = (c: NbaCareerState, r: () => number): string => {
-  const pool = NBA_ABBRS.filter(a => a !== c.team);
+  /* Round 172: trades stay inside the career's own era. Era read lazily. */
+  const pool = nbaEraTeamIds(c.eraId).filter(a => a !== c.team);
   return pool[Math.floor(r() * pool.length)];
 };
 

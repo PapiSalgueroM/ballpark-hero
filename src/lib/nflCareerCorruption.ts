@@ -22,7 +22,7 @@
    sees). It does not return the state.
    ──────────────────────────────────────────────────────────────────────────── */
 import type { CareerState, CareerEvent } from './nflMyCareer';
-import { teamLabelOf, NFL_TEAM_NAMES } from './nflMyCareer';
+import { nflEraById, teamLabelOf, NFL_TEAM_NAMES } from './nflMyCareer';
 
 /* CIRCULAR IMPORT GOTCHA (caught by scripts/simNflCareer.mjs, invisible to tsc):
    nflMyCareer imports this file for its event deck, and this file imports
@@ -32,8 +32,11 @@ import { teamLabelOf, NFL_TEAM_NAMES } from './nflMyCareer';
    undefined" and took the whole page down on load. Reading it lazily inside a
    function is safe, because by then both modules are fully initialised. Keep
    it that way: never touch an imported value at module scope in this file. */
-const randomTeamAbbr = (r: () => number): string =>
-  NFL_TEAM_NAMES[Math.floor(r() * NFL_TEAM_NAMES.length)].abbr;
+const randomTeamAbbr = (c: CareerState, r: () => number): string => {
+  /* Round 172: drawn from the career's own era, read lazily as warned above. */
+  const pool = nflEraById(c.eraId).teams;
+  return pool[Math.floor(r() * pool.length)].abbr;
+};
 
 /* The Round 56 fields are optional on CareerState, so read and write them
    through this view. Keeps old saves loading and keeps tsc honest. */
@@ -557,7 +560,7 @@ export function getNflCorruptionEvents(c: CareerState, rng: () => number): Caree
           apply: (cc) => { cc.salary = Math.round(cc.salary * 0.5 * 10) / 10; cc.contractYears = 3; heatUp(cc, -10); return 'You signed for half and neither of you ever said what it was about. Heat -10.'; } },
         { label: 'Walk and bet on yourself', effect: 'Free agency with a cloud over you',
           apply: (cc, r) => {
-            const team = randomTeamAbbr(r);
+            const team = randomTeamAbbr(cc, r);
             cc.team = team; cc.contractYears = 2; cc.fanbase = clamp(cc.fanbase - 5, 0, 100);
             return `You walked. Only one team called and ${teamLabelOf(team)} got you cheap, but you got to keep your name.`;
           } },

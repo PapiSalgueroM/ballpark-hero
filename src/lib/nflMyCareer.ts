@@ -48,6 +48,64 @@ export const NFL_TEAM_NAMES: { abbr: string; label: string }[] = [
   { abbr: 'TEN', label: 'Tennessee Titans' }, { abbr: 'WAS', label: 'Washington Commanders' },
 ];
 
+/* ---------- Round 172: era starts, his "add eras to nfl" ask ---------- */
+
+/**
+ * The 2005 league, all 32 franchises as they stood that season, verified
+ * against the 2005 season records on Wikipedia and Pro Football Reference:
+ * the Raiders in Oakland, the Chargers in San Diego, the Rams in St. Louis.
+ * Washington is listed by city alone: the franchise's 2005 nickname is
+ * retired and stays out of this site, and "Washington" is how the club is
+ * commonly referenced today when writing about those years. Everything else
+ * carried today's name in 2005 already.
+ */
+export const NFL_TEAMS_2005: { abbr: string; label: string }[] = [
+  { abbr: 'ARI', label: 'Arizona Cardinals' }, { abbr: 'ATL', label: 'Atlanta Falcons' },
+  { abbr: 'BAL', label: 'Baltimore Ravens' }, { abbr: 'BUF', label: 'Buffalo Bills' },
+  { abbr: 'CAR', label: 'Carolina Panthers' }, { abbr: 'CHI', label: 'Chicago Bears' },
+  { abbr: 'CIN', label: 'Cincinnati Bengals' }, { abbr: 'CLE', label: 'Cleveland Browns' },
+  { abbr: 'DAL', label: 'Dallas Cowboys' }, { abbr: 'DEN', label: 'Denver Broncos' },
+  { abbr: 'DET', label: 'Detroit Lions' }, { abbr: 'GB', label: 'Green Bay Packers' },
+  { abbr: 'HOU', label: 'Houston Texans' }, { abbr: 'IND', label: 'Indianapolis Colts' },
+  { abbr: 'JAX', label: 'Jacksonville Jaguars' }, { abbr: 'KC', label: 'Kansas City Chiefs' },
+  { abbr: 'STL', label: 'St. Louis Rams' }, { abbr: 'SD', label: 'San Diego Chargers' },
+  { abbr: 'OAK', label: 'Oakland Raiders' }, { abbr: 'MIA', label: 'Miami Dolphins' },
+  { abbr: 'MIN', label: 'Minnesota Vikings' }, { abbr: 'NE', label: 'New England Patriots' },
+  { abbr: 'NO', label: 'New Orleans Saints' }, { abbr: 'NYG', label: 'New York Giants' },
+  { abbr: 'NYJ', label: 'New York Jets' }, { abbr: 'PHI', label: 'Philadelphia Eagles' },
+  { abbr: 'PIT', label: 'Pittsburgh Steelers' }, { abbr: 'SEA', label: 'Seattle Seahawks' },
+  { abbr: 'SF', label: 'San Francisco 49ers' }, { abbr: 'TB', label: 'Tampa Bay Buccaneers' },
+  { abbr: 'TEN', label: 'Tennessee Titans' }, { abbr: 'WSH', label: 'Washington' },
+];
+
+export interface NflEraDef {
+  id: 'now' | 'y2005';
+  label: string;
+  startYear: number;
+  blurb: string;
+  /** Contract money scale against the modern game. The 2005 salary cap was
+   *  85.5 million against the modern game's roughly 280, which is about a
+   *  third, so era deals pay about a third. Nothing on screen quotes the
+   *  caps themselves. */
+  moneyScale: number;
+  teams: { abbr: string; label: string }[];
+}
+
+export const NFL_ERAS: NflEraDef[] = [
+  {
+    id: 'now', label: '2026', startYear: 2026, moneyScale: 1, teams: NFL_TEAM_NAMES,
+    blurb: 'The league as it is today. Full money, every current franchise.',
+  },
+  {
+    id: 'y2005', label: '2005 throwback', startYear: 2005, moneyScale: 0.32, teams: NFL_TEAMS_2005,
+    blurb: 'The 2005 league: the Raiders in Oakland, the Chargers in San Diego, the Rams in St. Louis. Contracts pay 2005 money, about a third of today.',
+  },
+];
+
+export function nflEraById(id?: string): NflEraDef {
+  return NFL_ERAS.find(e => e.id === id) ?? NFL_ERAS[0];
+}
+
 export interface Archetype {
   id: string;
   label: string;
@@ -167,6 +225,8 @@ export interface CareerState {
   yearlyCosts?: number;       // millions per year from purchased upkeep
   /** Round 104: the player drafted alongside you, measured against you every season. */
   rival?: CareerRival;
+  /** Round 172: which era this career started in. Absent means today. */
+  eraId?: string;
 }
 
 export interface CareerEvent {
@@ -178,24 +238,27 @@ export interface CareerEvent {
 
 export function startCareer(
   name: string, pos: CareerPos, archetype: Archetype, rng: () => number = Math.random,
-  appearance?: PlayerAppearance | null,
+  appearance?: PlayerAppearance | null, eraId?: string,
 ): CareerState {
+  /* Round 172: the era decides the year, the league you are drafted into
+     and the money. Leaving it off is today's league, byte for byte. */
+  const era = nflEraById(eraId);
   const base = 66 + Math.floor(rng() * 8) + archetype.ovrBoost;
   const pot = Math.min(99, base + 10 + Math.floor(rng() * 14) + archetype.potBoost);
   // draft stock from rating: better prospects go earlier
   const stock = Math.max(1, Math.round(90 - (base - 64) * 9 + rng() * 40));
-  const team = NFL_TEAM_NAMES[Math.floor(rng() * NFL_TEAM_NAMES.length)].abbr;
+  const team = era.teams[Math.floor(rng() * era.teams.length)].abbr;
   const firstRound = stock <= 32;
   const c: CareerState = {
     name, pos, archetype, team,
-    year: 2026,
+    year: era.startYear,
     age: 22,
     ovr: base,
     pot,
     morale: 70,
     fanbase: firstRound ? 55 : 35,
     health: 100,
-    salary: firstRound ? Math.round((33 - stock) * 0.9 + 4) : 1.2,
+    salary: Math.max(0.3, Math.round((firstRound ? (33 - stock) * 0.9 + 4 : 1.2) * era.moneyScale * 10) / 10),
     contractYears: 4,
     seasons: [],
     rings: 0, mvps: 0, allPros: 0,
@@ -212,13 +275,22 @@ export function startCareer(
     appearance: appearance ?? null,
     yearlyCosts: 0,
   };
+  if (era.id !== 'now') c.eraId = era.id;
   // Round 104: draft the rival at the same moment the player is created.
   c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
   return c;
 }
 
-export function teamLabelOf(abbr: string): string {
-  return NFL_TEAM_NAMES.find(t => t.abbr === abbr)?.label ?? abbr;
+export function teamLabelOf(abbr: string, eraId?: string): string {
+  /* Round 172: era lists first when asked, then the modern league, then the
+     2005 league. The era-only abbrs (STL, SD, OAK, WSH) are unique across
+     both lists on purpose, so a life event that never learned about eras
+     still prints the right 2005 name instead of a bare abbreviation. */
+  const era = nflEraById(eraId);
+  return era.teams.find(t => t.abbr === abbr)?.label
+    ?? NFL_TEAM_NAMES.find(t => t.abbr === abbr)?.label
+    ?? NFL_TEAMS_2005.find(t => t.abbr === abbr)?.label
+    ?? abbr;
 }
 
 /** Team quality random-walks per season so franchises rise and fall. */
@@ -593,7 +665,9 @@ export function buyNflItem(c: CareerState, itemId: string): { state: CareerState
 
 export function marketSalary(c: CareerState): number {
   const posMult = POS_SALARY_MULT[c.pos] ?? 1;
-  return Math.max(1.2, Math.round(((c.ovr - 64) * 1.55 - 6) * posMult * 10) / 10);
+  /* Round 172: era money. A 2005 deal pays 2005 money, about a third. */
+  const scale = nflEraById(c.eraId).moneyScale;
+  return Math.max(0.4, Math.round(((c.ovr - 64) * 1.55 - 6) * posMult * scale * 10) / 10);
 }
 
 /** Between-season decision deck. One event is drawn per offseason. */
@@ -605,18 +679,19 @@ export function drawEvent(c: CareerState, rng: () => number): CareerEvent {
     deck.push({
       id: 'contract',
       title: 'Contract time',
-      body: `Your deal is up. ${teamLabelOf(c.team)} offer ${Math.round(market * 0.88 * 10) / 10}M to stay. Free agency could pay ${market}M, on a contender or a rebuild, nobody knows.`,
+      body: `Your deal is up. ${teamLabelOf(c.team, c.eraId)} offer ${Math.round(market * 0.88 * 10) / 10}M to stay. Free agency could pay ${market}M, on a contender or a rebuild, nobody knows.`,
       options: [
         {
           label: 'Re-sign at a hometown discount', effect: 'Loyalty, morale up',
-          apply: (cc) => { cc.salary = Math.round(market * 0.88 * 10) / 10; cc.contractYears = 3; cc.morale += 8; cc.fanbase = Math.min(100, cc.fanbase + 10); return `Re-signed with ${teamLabelOf(cc.team)} for ${cc.salary}M x3.`; },
+          apply: (cc) => { cc.salary = Math.round(market * 0.88 * 10) / 10; cc.contractYears = 3; cc.morale += 8; cc.fanbase = Math.min(100, cc.fanbase + 10); return `Re-signed with ${teamLabelOf(cc.team, cc.eraId)} for ${cc.salary}M x3.`; },
         },
         {
           label: 'Test free agency', effect: 'Max money, new city',
           apply: (cc, r) => {
-            const newTeam = NFL_TEAM_NAMES[Math.floor(r() * NFL_TEAM_NAMES.length)].abbr;
+            const pool = nflEraById(cc.eraId).teams;
+            const newTeam = pool[Math.floor(r() * pool.length)].abbr;
             cc.team = newTeam; cc.salary = market; cc.contractYears = 3; cc.fanbase = 40;
-            return `Signed with ${teamLabelOf(newTeam)} for ${market}M x3. New city, new pressure.`;
+            return `Signed with ${teamLabelOf(newTeam, cc.eraId)} for ${market}M x3. New city, new pressure.`;
           },
         },
       ],
@@ -640,7 +715,7 @@ export function drawEvent(c: CareerState, rng: () => number): CareerEvent {
       title: 'Frustration boils',
       body: `Losing wears on you. Reporters smell it. What is the move?`,
       options: [
-        { label: 'Request a trade', effect: 'Fresh start, fans burn the jersey', apply: (cc, r) => { const nt = NFL_TEAM_NAMES[Math.floor(r() * NFL_TEAM_NAMES.length)].abbr; cc.team = nt; cc.morale = 72; cc.fanbase = 35; return `Traded to ${teamLabelOf(nt)}.`; } },
+        { label: 'Request a trade', effect: 'Fresh start, fans burn the jersey', apply: (cc, r) => { const pool = nflEraById(cc.eraId).teams; const nt = pool[Math.floor(r() * pool.length)].abbr; cc.team = nt; cc.morale = 72; cc.fanbase = 35; return `Traded to ${teamLabelOf(nt, cc.eraId)}.`; } },
         { label: 'Say the right things', effect: 'Stability', apply: (cc) => { cc.morale += 6; cc.fanbase += 5; return 'You take the high road. The locker room notices.'; } },
       ],
     });

@@ -117,6 +117,8 @@ export interface NbaCareerState {
   purchased?: string[];
   lifeFlags?: Record<string, number>;
   appearance?: PlayerAppearance | null;
+  /** Round 172: which era this career started in. Absent means today. */
+  eraId?: string;
   yearlyCosts?: number;
   /** Round 104: the player drafted alongside you, measured against you every season. */
   rival?: CareerRival;
@@ -129,26 +131,99 @@ export interface NbaCareerEvent {
   options: { label: string; effect: string; apply: (c: NbaCareerState, rng: () => number) => string }[];
 }
 
-export function nbaTeamLabelOf(id: string): string {
+/* ---------- Round 172: era starts, his "add eras to nba" ask ---------- */
+
+/**
+ * The 2003-04 league: 29 teams, verified against the 2003-04 season pages
+ * on Wikipedia and Basketball Reference. The SuperSonics still in Seattle,
+ * the Nets in New Jersey, the Hornets in New Orleans, and no Charlotte
+ * franchise at all (the Bobcats arrived the following season). Era-only ids
+ * (SEA, NJN, NOH) are unique against the modern list on purpose.
+ */
+export const NBA_TEAMS_2004: { id: string; city: string; name: string }[] = [
+  { id: 'ATL', city: 'Atlanta', name: 'Hawks' }, { id: 'BOS', city: 'Boston', name: 'Celtics' },
+  { id: 'CHI', city: 'Chicago', name: 'Bulls' }, { id: 'CLE', city: 'Cleveland', name: 'Cavaliers' },
+  { id: 'DAL', city: 'Dallas', name: 'Mavericks' }, { id: 'DEN', city: 'Denver', name: 'Nuggets' },
+  { id: 'DET', city: 'Detroit', name: 'Pistons' }, { id: 'GSW', city: 'Golden State', name: 'Warriors' },
+  { id: 'HOU', city: 'Houston', name: 'Rockets' }, { id: 'IND', city: 'Indiana', name: 'Pacers' },
+  { id: 'LAC', city: 'LA', name: 'Clippers' }, { id: 'LAL', city: 'Los Angeles', name: 'Lakers' },
+  { id: 'MEM', city: 'Memphis', name: 'Grizzlies' }, { id: 'MIA', city: 'Miami', name: 'Heat' },
+  { id: 'MIL', city: 'Milwaukee', name: 'Bucks' }, { id: 'MIN', city: 'Minnesota', name: 'Timberwolves' },
+  { id: 'NJN', city: 'New Jersey', name: 'Nets' }, { id: 'NOH', city: 'New Orleans', name: 'Hornets' },
+  { id: 'NYK', city: 'New York', name: 'Knicks' }, { id: 'ORL', city: 'Orlando', name: 'Magic' },
+  { id: 'PHI', city: 'Philadelphia', name: '76ers' }, { id: 'PHX', city: 'Phoenix', name: 'Suns' },
+  { id: 'POR', city: 'Portland', name: 'Trail Blazers' }, { id: 'SAC', city: 'Sacramento', name: 'Kings' },
+  { id: 'SAS', city: 'San Antonio', name: 'Spurs' }, { id: 'SEA', city: 'Seattle', name: 'SuperSonics' },
+  { id: 'TOR', city: 'Toronto', name: 'Raptors' }, { id: 'UTA', city: 'Utah', name: 'Jazz' },
+  { id: 'WAS', city: 'Washington', name: 'Wizards' },
+];
+
+export interface NbaEraDef {
+  id: 'now' | 'y2004';
+  label: string;
+  startYear: number;
+  blurb: string;
+  /** Contract money scale against the modern game: the 2003-04 cap was
+   *  about 44 million against the modern game's roughly 140, so era deals
+   *  pay about a third. No cap number appears on screen. */
+  moneyScale: number;
+  teams: { id: string; city: string; name: string }[];
+}
+
+export const NBA_ERAS: NbaEraDef[] = [
+  {
+    id: 'now', label: '2026', startYear: 2026, moneyScale: 1,
+    teams: [],
+    blurb: 'The league as it is today. Full money, all 30 franchises.',
+  },
+  {
+    id: 'y2004', label: '2003-04 throwback', startYear: 2003, moneyScale: 0.31, teams: NBA_TEAMS_2004,
+    blurb: 'The 29 team league of 2003-04: the SuperSonics in Seattle, the Nets in New Jersey, the Hornets in New Orleans, no Charlotte yet. Contracts pay 2003 money.',
+  },
+];
+
+export function nbaEraById(id?: string): NbaEraDef {
+  return NBA_ERAS.find(e => e.id === id) ?? NBA_ERAS[0];
+}
+
+/** The draft pool for an era. The modern era reads the live NBA_TEAMS list
+ *  lazily (never at module scope, per the import-order lesson). */
+export function nbaEraTeamIds(eraId?: string): string[] {
+  const era = nbaEraById(eraId);
+  if (era.id === 'now') return NBA_TEAMS.map(x => x.id);
+  return era.teams.map(x => x.id);
+}
+
+export function nbaTeamLabelOf(id: string, eraId?: string): string {
+  /* Round 172: era names first when asked, then the modern league, then the
+     2003-04 list, so era-only ids always print a real name. */
+  const era = nbaEraById(eraId);
+  const inEra = era.teams.find(x => x.id === id);
+  if (inEra) return `${inEra.city} ${inEra.name}`;
   const t = NBA_TEAMS.find(x => x.id === id);
-  return t ? `${t.city} ${t.name}` : id;
+  if (t) return `${t.city} ${t.name}`;
+  const old = NBA_TEAMS_2004.find(x => x.id === id);
+  return old ? `${old.city} ${old.name}` : id;
 }
 
 export function startNbaCareer(
   name: string, pos: NbaCareerPos, archetype: NbaArchetype, rng: () => number = Math.random,
-  appearance?: PlayerAppearance | null,
+  appearance?: PlayerAppearance | null, eraId?: string,
 ): NbaCareerState {
+  /* Round 172: the era decides the year, the draft pool and the money. */
+  const era = nbaEraById(eraId);
+  const teamIds = nbaEraTeamIds(eraId);
   const base = 68 + Math.floor(rng() * 8) + archetype.ovrBoost;
   const pot = Math.min(99, base + 10 + Math.floor(rng() * 13) + archetype.potBoost);
   const stock = Math.max(1, Math.round(62 - (base - 66) * 5.5 + rng() * 22));
-  const team = NBA_TEAMS[Math.floor(rng() * NBA_TEAMS.length)].id;
+  const team = teamIds[Math.floor(rng() * teamIds.length)];
   const lottery = stock <= 14;
   const c: NbaCareerState = {
     name, pos, archetype, team,
-    year: 2026, age: 19 + Math.floor(rng() * 3),
+    year: era.startYear, age: 19 + Math.floor(rng() * 3),
     ovr: base, pot,
     morale: 70, fanbase: lottery ? 60 : 35, health: 100,
-    salary: lottery ? Math.round((16 - stock) * 0.7 + 6) : 2.5,
+    salary: Math.max(0.5, Math.round((lottery ? (16 - stock) * 0.7 + 6 : 2.5) * era.moneyScale * 10) / 10),
     contractYears: 4,
     seasons: [],
     rings: 0, mvps: 0, allNbas: 0, finalsMvps: 0,
@@ -167,6 +242,7 @@ export function startNbaCareer(
   };
   // Round 104: draft the rival at the same moment the player is created.
   c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
+  if (era.id !== 'now') c.eraId = era.id;
   return c;
 }
 
@@ -289,7 +365,9 @@ export function nbaRollTeamQuality(prev: number | null, rng: () => number): numb
 
 export function nbaMarketSalary(c: NbaCareerState): number {
   const posMult = NBA_POS_SALARY_MULT[c.pos] ?? 1;
-  return Math.max(2.5, Math.round(((c.ovr - 66) * 2.3 - 6) * posMult * 10) / 10);
+  /* Round 172: era money. A 2003 deal pays 2003 money, about a third. */
+  const scale = nbaEraById(c.eraId).moneyScale;
+  return Math.max(0.8, Math.round(((c.ovr - 66) * 2.3 - 6) * posMult * scale * 10) / 10);
 }
 
 function gamesFor(c: NbaCareerState, rng: () => number): { games: number; note: string | null } {
@@ -498,7 +576,7 @@ export function drawNbaEvent(c: NbaCareerState, rng: () => number): NbaCareerEve
       body: `${nbaTeamLabelOf(c.team)} can offer ${Math.round(market * 0.9 * 10) / 10}M to stay. The open market says ${market}M somewhere new.`,
       options: [
         { label: 'Stay loyal', effect: 'Fanbase loves it', apply: (cc) => { cc.salary = Math.round(market * 0.9 * 10) / 10; cc.contractYears = 3; cc.fanbase = Math.min(100, cc.fanbase + 12); cc.morale += 6; return `Re-signed with ${nbaTeamLabelOf(cc.team)} for ${cc.salary}M x3.`; } },
-        { label: 'Hit free agency', effect: 'Max money, new city', apply: (cc, r) => { const nt = NBA_TEAMS[Math.floor(r() * NBA_TEAMS.length)].id; cc.team = nt; cc.salary = market; cc.contractYears = 3; cc.fanbase = 42; return `Signed with ${nbaTeamLabelOf(nt)} for ${market}M x3. The decision gets its own show.`; } },
+        { label: 'Hit free agency', effect: 'Max money, new city', apply: (cc, r) => { const ids = nbaEraTeamIds(cc.eraId); const nt = ids[Math.floor(r() * ids.length)]; cc.team = nt; cc.salary = market; cc.contractYears = 3; cc.fanbase = 42; return `Signed with ${nbaTeamLabelOf(nt, cc.eraId)} for ${market}M x3. The decision gets its own show.`; } },
       ],
     });
   }
@@ -518,7 +596,7 @@ export function drawNbaEvent(c: NbaCareerState, rng: () => number): NbaCareerEve
       title: 'The fit is broken',
       body: 'Losing, touches down, trade rumors everywhere.',
       options: [
-        { label: 'Demand a trade', effect: 'Fresh start', apply: (cc, r) => { const nt = NBA_TEAMS[Math.floor(r() * NBA_TEAMS.length)].id; cc.team = nt; cc.morale = 74; cc.fanbase = 38; return `Traded to ${nbaTeamLabelOf(nt)}. New chapter.`; } },
+        { label: 'Demand a trade', effect: 'Fresh start', apply: (cc, r) => { const ids = nbaEraTeamIds(cc.eraId); const nt = ids[Math.floor(r() * ids.length)]; cc.team = nt; cc.morale = 74; cc.fanbase = 38; return `Traded to ${nbaTeamLabelOf(nt, cc.eraId)}. New chapter.`; } },
         { label: 'Ride it out', effect: 'Respect', apply: (cc) => { cc.morale += 7; cc.fanbase += 4; return 'You stay professional. The league notices.'; } },
       ],
     });

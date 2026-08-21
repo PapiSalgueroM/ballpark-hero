@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Crown, Dumbbell, RotateCcw, Sparkles } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
-import {
+import { NFL_ERAS,
   ARCHETYPES, NFL_TEAM_NAMES, startCareer, simSeason, progress, drawEvent,
   shouldRetire, legacyOf, careerTotals, rollTeamQuality, teamLabelOf, marketSalary,
   NFL_SPEND_ITEMS, buyNflItem, type NflSpendCategory,
@@ -36,6 +36,8 @@ export default function NflMyCareerBoard() {
   const [career, setCareer] = useState<CareerState | null>(null);
   const [teamQuality, setTeamQuality] = useState<number | null>(null);
   const [nameInput, setNameInput] = useState('');
+  /* Round 172: which league you are drafted into. */
+  const [eraId, setEraId] = useState<'now' | 'y2005'>('now');
   const [pos, setPos] = useState<CareerPos>('QB');
   const [archetypeId, setArchetypeId] = useState(ARCHETYPES.QB[0].id);
   const [feed, setFeed] = useState<string[]>([]);
@@ -82,7 +84,7 @@ export default function NflMyCareerBoard() {
 
   const create = () => {
     const arch = ARCHETYPES[pos].find(a => a.id === archetypeId) ?? ARCHETYPES[pos][0];
-    const c = startCareer(nameInput.trim() || 'Ryder Blaze', pos, arch, Math.random, appearance);
+    const c = startCareer(nameInput.trim() || 'Ryder Blaze', pos, arch, Math.random, appearance, eraId);
     const tq = rollTeamQuality(null, Math.random);
     setCareer(c);
     setTeamQuality(tq);
@@ -231,6 +233,24 @@ export default function NflMyCareerBoard() {
             maxLength={24}
             className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
+          {/* Round 172: pick WHEN, before you pick what. Same pattern as Club
+              Manager's era picker: the default is today, the throwback is a
+              sealed 2005 league with 2005 franchises and 2005 money. */}
+          <div className="grid grid-cols-2 gap-1.5">
+            {NFL_ERAS.map(e => (
+              <button
+                key={e.id}
+                onClick={() => setEraId(e.id)}
+                className={cn(
+                  'rounded-xl border-2 px-3 py-2 text-left',
+                  eraId === e.id ? 'border-gold bg-gold/10' : 'border-border bg-card hover:border-primary/50',
+                )}
+              >
+                <span className="block text-sm font-bold text-foreground">{e.id === 'now' ? '🏈 ' : '⏪ '}{e.label}</span>
+                <span className="block text-[10px] text-muted-foreground">{e.blurb}</span>
+              </button>
+            ))}
+          </div>
           {/* Round 56: eight positions, each with its own stat line and money curve */}
           <div className="grid grid-cols-4 gap-1 rounded-2xl bg-secondary p-1">
             {(['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'] as CareerPos[]).map(p => (
