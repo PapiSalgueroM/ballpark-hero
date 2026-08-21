@@ -26,7 +26,8 @@ const NhlMyCareer = () => {
             title="NHL My Career: the Player Life Sim"
             description="Build a fictional prospect and live a whole NHL career inside the real league. Archetypes drive realistic season lines, choices drive everything else, and the legacy verdict at the end tells you exactly what your career meant."
             howToPlay={[
-              'Create your player: name, position and archetype.',
+              'Create your player: name, one of 5 positions (C, LW, RW, D, G) and archetype.',
+              'Pick your league first: today\'s NHL, or the 2006-07 throwback with the Thrashers in Atlanta and the Coyotes in Phoenix.',
               'Play each season for a realistic stat line driven by rating, health and team quality.',
               'One big decision arrives every offseason: contracts, trades, surgeries, fame.',
               'Stack awards and rings, fight the aging curve, and retire to the verdict.',

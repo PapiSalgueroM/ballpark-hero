@@ -328,15 +328,15 @@ export const HOCKEY_CONTENT: GameContentMap = {
     ],
     howToPlay: [
       "Create your player: name, one of 5 positions (C, LW, RW, D, G), and one of 17 archetypes, from Generational Talent to The Agitator to The Workhorse in net.",
+      "Pick your league: today's NHL, or the 2006-07 throwback with the Thrashers in Atlanta and the Coyotes in Phoenix, before Vegas or Seattle existed.",
       "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
-      "Create your player: name, position (C, W, D or G) and one of three archetypes, from Generational Talent to The Statue.",
       "Get drafted by a real club; your slot reflects your starting ability.",
       "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
       "Face one big offseason decision each year: contracts, training, trade requests, media noise.",
       "Age, decline, retire, then read the legacy verdict.",
     ],
     rules: [
-      "Careers start in 2026 at age 18 or 19 and last up to 22 seasons.",
+      "Careers start in 2026 at age 18 or 19 and last up to 22 seasons. The throwback starts in 2006 instead, inside a sealed 30 team league verified against the real season, with 2006 sized contracts.",
       "You improve toward your potential through age 25; decline starts at 31 for skaters, 34 for goalies.",
       "Retirement hits at 40 for skaters, 41 for goalies, or earlier if your rating collapses; you can walk away after 6 seasons.",
       "The legacy score weighs Cups, majors (Hart, Norris or Vezina), Conn Smythes, All-Star nods, seasons and production; 500 or more means the Hall of Fame.",
@@ -364,6 +364,10 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         q: "Can a goalie reach the Hall?",
         a: "Yes. Wins, Vezinas and Cups carry goalie legacies.",
+      },
+      {
+        q: "Can I start in a different era?",
+        a: "Yes. The create screen has a 2006-07 throwback: the 30 team league with the Atlanta Thrashers and the Phoenix Coyotes, before Vegas, Seattle or Utah existed. An era career never meets a franchise that did not exist then.",
       },
     ],
   },

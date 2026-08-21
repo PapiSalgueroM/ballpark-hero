@@ -26,7 +26,8 @@ const NflMyCareer = () => {
             title="NFL My Career: the Player Life Sim"
             description="Build a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls."
             howToPlay={[
-              'Create your player: name, position (QB, RB or WR) and archetype, then get drafted by a real team.',
+              'Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K) and an archetype, then get drafted by a real team.',
+              'Pick your league first: today\'s NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis.',
               'Play each season for a realistic stat line driven by your rating, your health and your team.',
               'Between seasons, one big decision arrives: contracts, trade requests, surgeries, podcasts, training focus.',
               'Running backs fall off a cliff early, field surgeons age like wine. Plan the career, not the season.',

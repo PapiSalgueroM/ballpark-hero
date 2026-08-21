@@ -220,15 +220,14 @@ export const BASEBALL_CONTENT: GameContentMap = {
     ],
     howToPlay: [
       "Create your player: name, one of 11 positions (SP, RP, C, 1B, 2B, 3B, SS, LF, CF, RF, DH), and one of 33 archetypes, from Flamethrower to The Framer to Pure Masher.",
+      "Pick your league: today's MLB, or the 2004 throwback with the Expos in Montreal, the Anaheim Angels, the Florida Marlins and the Devil Rays.",
       "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
-      "Name your player and pick a position: starting pitcher, center field, shortstop or first base.",
-      "Choose one of three archetypes per position. Each trades rating, ceiling and durability differently.",
       "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
       "Handle the offseason event: contracts, winter training, surgery calls, trade rumors.",
       "Stack awards and rings, fight aging, and retire to a verdict.",
     ],
     rules: [
-      "You start at 21 in 2026 with 6 years of team control before free agency.",
+      "You start at 21 in 2026 with 6 years of team control before free agency. The throwback starts in 2004 instead, inside a sealed 30 team league verified against the real season, with 2004 sized contracts.",
       "Three meters run your life: morale, fanbase and health. Low health means shortened seasons.",
       "Players grow toward their potential through age 26 and decline from 32 on, faster after 37.",
       "Retirement hits at 42, after 21 seasons, or when your rating collapses. You can walk away after season 6.",
@@ -247,6 +246,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       { q: "What decides the legacy verdict?", a: "One score from rings, MVPs or Cy Youngs, All-Star nods, seasons and stats. Reach 500 and Cooperstown calls. At 900 you are inner circle, first ballot." },
       { q: "Can I change teams?", a: "Yes. Low morale can trigger trade rumors where you ask out, and free agency offers a hometown discount or the biggest deal somewhere new." },
       { q: "Is the player real?", a: "No, the prospect is fictional on purpose. The 30 teams are real, the career is yours." },
+      { q: "Can I start in a different era?", a: "Yes. The create screen has a 2004 throwback: the league in the Expos' last Montreal summer, with the Anaheim Angels, the Florida Marlins, the Tampa Bay Devil Rays and the Oakland Athletics. An era career never meets a franchise identity that did not exist then." },
     ],
   },
 

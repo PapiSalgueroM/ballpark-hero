@@ -474,6 +474,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
     ],
     howToPlay: [
       "Create your player: name, one of 5 positions (PG, SG, SF, PF, C), and one of 15 archetypes, from Point God to Movement Sniper to Paint Beast.",
+      "Pick your league: today's NBA, or the 2003-04 throwback with the SuperSonics in Seattle, the Nets in New Jersey, the Hornets in New Orleans and no Charlotte yet.",
       "Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.",
       "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
       "Get drafted by a real NBA team. Stronger prospects go higher and earn more.",
@@ -486,6 +487,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "All-NBA needs 62 games played, and MVP talk starts at a 92 rating.",
       "Growth runs to age 25, decline starts at 32, and health erodes late unless you invest in it.",
       "Careers end at 41, after 21 seasons, or when the rating craters. You can also walk anytime.",
+      "The 2003-04 throwback is a sealed 29 team world, verified against the real season: every draft, trade and signing stays inside it, and contracts pay 2003 money, about a third of today's.",
     ],
     example: [
       "You roll a Two-Way Menace guard, go 11th, and win Rookie of the Year on a bad team. Year three, morale craters and you demand a trade. Villain arc unlocked.",
@@ -497,7 +499,8 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Team quality moves your stats and playoff odds. Free agency is a basketball decision, not just money.",
     ],
     faqs: [
-      { q: "Can I play as a real NBA star?", a: "No, your player is fictional by design. The 30 teams around you are real, but the career is yours to invent." },
+      { q: "Can I play as a real NBA star?", a: "No, your player is fictional by design. The teams around you are real, 30 of them today and 29 in the throwback, but the career is yours to invent." },
+      { q: "Can I start in a different era?", a: "Yes. The create screen has a 2003-04 throwback: the 29 team league with the Seattle SuperSonics, the New Jersey Nets and the New Orleans Hornets, and no Charlotte franchise yet. An era career never meets a team that did not exist then." },
       { q: "What does the legacy score reward most?", a: "MVPs and rings move it hardest, then Finals MVPs and All-NBA nods, plus longevity and points. The top verdict is the GOAT conversation, and it takes a stacked case." },
       { q: "Is my career saved?", a: "Yes, progress auto saves in your browser. One career at a time, and starting fresh means retiring first." },
     ],

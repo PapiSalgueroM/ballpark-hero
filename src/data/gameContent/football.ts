@@ -92,6 +92,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     ],
     howToPlay: [
       "Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K), and an archetype like Cannon Arm, Island Corner, Speed Bender or Ice in December that sets ceiling and durability.",
+      "Pick your league: today's NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis.",
       "Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.",
       "Enter the draft. Your hidden rating decides the slot, and a real team calls your name.",
       "Play each season with one tap: yards, touchdowns, awards, how far the team went.",
@@ -106,6 +107,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "Decline starts at 31, or 28 for running backs, and it hits them harder.",
       "Injuries can erase 2 to 10 games a season and leave permanent wear on your health bar.",
       "Retirement is forced at rating 64, age 40, 34 for backs, or 19 seasons. You can walk away after 6, and progress saves automatically.",
+      "The 2005 throwback is a sealed world: all 32 franchises exactly as they stood that season, verified against the real records, and every draft, trade and signing stays inside it. Contracts pay 2005 money, about a third of today's.",
     ],
     example: [
       "You make a Dual Threat quarterback and go 12th overall to a shaky roster. The leap comes at 25: 4,000 plus yards, an All-Pro nod, a run that dies in the Championship game. At contract time you take the discount.",
@@ -119,7 +121,11 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     faqs: [
       {
         q: "Which positions can I play?",
-        a: "Quarterback, running back, or wide receiver, each with three archetypes that shape rating, ceiling, and injury risk.",
+        a: "Eight of them: QB, RB, WR, TE, LB, CB, EDGE and K, each with its own archetypes, stat line, awards and aging curve.",
+      },
+      {
+        q: "Can I start in a different era?",
+        a: "Yes. The create screen has a 2005 throwback: the league exactly as it stood that season, with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis. An era career never meets a franchise that did not exist yet, and the money is 2005 sized.",
       },
       {
         q: "What decides the legacy verdict?",
