@@ -135,7 +135,7 @@ const LineupBuilder = () => {
           <div className="flex justify-center">
             <button
               onClick={() => setShowRules(true)}
-              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors mt-1"
+              className="mt-1 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
               aria-label="How to play"
             >
               <HelpCircle className="w-4 h-4" /> How to play

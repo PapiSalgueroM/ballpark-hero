@@ -208,11 +208,11 @@ export default function Leaderboard() {
 
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Period)}>
             <TabsList className="grid w-full grid-cols-2 mb-4">
-              <TabsTrigger value="today" className="gap-1.5 text-xs sm:text-sm">
+              <TabsTrigger value="today" className="gap-1.5 py-2 text-xs sm:text-sm">
                 <Calendar className="w-4 h-4" />
                 Today
               </TabsTrigger>
-              <TabsTrigger value="alltime" className="gap-1.5 text-xs sm:text-sm">
+              <TabsTrigger value="alltime" className="gap-1.5 py-2 text-xs sm:text-sm">
                 <Trophy className="w-4 h-4" />
                 All-Time
               </TabsTrigger>

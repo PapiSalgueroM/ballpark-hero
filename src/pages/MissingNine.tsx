@@ -149,7 +149,7 @@ const MissingNine = () => {
               onClick={() => setHard((h) => !h)}
               title="Hard mode: no hints, no suggestions, positions hidden"
               className={cn(
-                'mt-2 mx-auto block text-xs px-3 py-1 rounded-full border transition-all',
+                'mt-2 mx-auto block text-xs px-3 py-2 rounded-full border transition-all',
                 hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground'
               )}
             >
@@ -264,7 +264,7 @@ const MissingNine = () => {
                 )}
                 {wrongFlash && <p className="text-destructive text-sm text-center mt-2 animate-cell-reveal">Not that night. Try again!</p>}
                 <div className="flex justify-center mt-3">
-                  <button onClick={giveUp} className="text-xs text-muted-foreground hover:text-destructive transition-colors">Give up</button>
+                  <button onClick={giveUp} className="inline-flex items-center rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-destructive">Give up</button>
                 </div>
               </div>
             )}

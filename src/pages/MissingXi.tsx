@@ -403,7 +403,7 @@ function MissingXiPitch({ puzzle, revealed }: { puzzle: ActivePuzzle; revealed: 
               >
                 {isBlank ? (revealed ? candidate.name : '?') : slot.name}
               </p>
-              <p className="text-[8px] md:text-[9px] text-muted-foreground uppercase tracking-wide">
+              <p className="text-[9px] md:text-[10px] text-muted-foreground uppercase tracking-wide">
                 {slot.position}
               </p>
             </div>

@@ -77,7 +77,7 @@ const BaseballCareer = () => {
           <>
             <button
               onClick={() => setShowRules(true)}
-              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[hsl(var(--bb-red))] transition-colors"
+              className="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground hover:text-[hsl(var(--bb-red))] transition-colors"
               aria-label="How to play"
             >
               <HelpCircle className="w-4 h-4" /> How to play
@@ -103,7 +103,7 @@ const BaseballCareer = () => {
             <button
               onClick={toggleHard}
               title="Hard mode: the easiest clues stay hidden"
-              className={cn('mt-2 mx-auto block text-xs px-3 py-1 rounded-full border transition-all',
+              className={cn('mt-2 mx-auto block text-xs px-3 py-2 rounded-full border transition-all',
                 hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground'
               )}
             >😈 Hard mode: {hard ? 'ON' : 'off'}</button>

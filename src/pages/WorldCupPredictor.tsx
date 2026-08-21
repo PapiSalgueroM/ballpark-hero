@@ -332,7 +332,7 @@ function SmallAutoButton({ label, onClick, loading }: { label: string; onClick: 
     <button
       onClick={(e) => { e.stopPropagation(); onClick(); }}
       disabled={loading}
-      className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(220,20%,18%)] hover:bg-[hsl(220,20%,22%)] text-[hsl(45,80%,60%)] border border-[hsl(220,20%,28%)] transition-colors disabled:opacity-50"
+      className="flex items-center gap-1 text-[10px] px-2 py-2 rounded bg-[hsl(220,20%,18%)] hover:bg-[hsl(220,20%,22%)] text-[hsl(45,80%,60%)] border border-[hsl(220,20%,28%)] transition-colors disabled:opacity-50"
     >
       {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Zap className="w-3 h-3" />}
       {label}
@@ -568,7 +568,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                   />
                   <button
                     onClick={(e) => { e.stopPropagation(); onAutoFillGroup(group.letter); }}
-                    className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(150,12%,20%)] hover:bg-[hsl(150,12%,25%)] text-[hsl(150,15%,60%)] transition-colors"
+                    className="flex items-center gap-1 text-[10px] px-2 py-2 rounded bg-[hsl(150,12%,20%)] hover:bg-[hsl(150,12%,25%)] text-[hsl(150,15%,60%)] transition-colors"
                     title="World Cup 2026 Bracket Predictor | DoUKnowBall"
                   >
                     <Shuffle className="w-3 h-3" /> Random

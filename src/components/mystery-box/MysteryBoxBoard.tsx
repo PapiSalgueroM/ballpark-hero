@@ -210,7 +210,7 @@ export function MysteryBoxBoard() {
       )}
 
       <div className="mt-2 text-center">
-        <Link to="/" className="text-xs text-muted-foreground hover:text-primary">
+        <Link to="/" className="inline-flex items-center rounded-full px-4 py-2 text-xs text-muted-foreground hover:text-primary">
           See all games →
         </Link>
       </div>

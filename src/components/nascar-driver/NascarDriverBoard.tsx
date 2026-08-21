@@ -73,7 +73,7 @@ export function NascarDriverBoard() {
             <p className="text-sm text-neutral-700">Loading drivers...</p>
           )}
           {status === 'error' && (
-            <button onClick={reloadDrivers} className="text-sm text-red-400 underline">
+            <button onClick={reloadDrivers} className="inline-flex items-center px-3 py-2 text-sm text-red-400 underline">
               Couldn't load drivers. Tap to retry.
             </button>
           )}

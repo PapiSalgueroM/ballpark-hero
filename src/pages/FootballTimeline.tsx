@@ -53,7 +53,7 @@ const FootballTimeline = () => {
         headerExtra={
           <button
             onClick={() => setShowRules(true)}
-            className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[hsl(var(--ft-gold))] transition-colors"
+            className="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground hover:text-[hsl(var(--ft-gold))] transition-colors"
             aria-label="How to play"
           >
             <HelpCircle className="w-4 h-4" /> How to play

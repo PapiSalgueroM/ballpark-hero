@@ -157,7 +157,7 @@ export default function StadiumTycoon() {
           <div className="flex items-center justify-center gap-3 mt-1 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1">{Array.from({ length: Math.min(s.rep, 6) }, (_, i) => <Star key={i} className="w-3 h-3 fill-yellow-500 text-yellow-500" />)}{s.rep > 6 && <span className="font-bold text-yellow-500">x{s.rep}</span>}{s.rep > 0 && <span className="text-yellow-500 font-bold">rep {Math.round((repMult(s) - 1) * 100)}%</span>}</span>
             {achCount > 0 && <span className="text-emerald-400 font-bold">badges +{achCount * 2}%</span>}
-            <button onClick={() => setShowHelp(true)} className="inline-flex items-center gap-1 hover:text-foreground transition-colors"><HelpCircle className="w-3.5 h-3.5" /> How it works</button>
+            <button onClick={() => setShowHelp(true)} className="inline-flex items-center gap-1 px-2 py-2 transition-colors hover:text-foreground"><HelpCircle className="w-3.5 h-3.5" /> How it works</button>
           </div>
         </header>
 

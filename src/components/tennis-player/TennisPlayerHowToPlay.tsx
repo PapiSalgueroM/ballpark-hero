@@ -7,7 +7,7 @@ export function TennisPlayerHowToPlay() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="text-sm text-purple-400 underline underline-offset-2 hover:text-purple-300 transition-colors">
+        <button className="inline-flex items-center rounded-full px-3 py-2 text-sm text-purple-400 underline underline-offset-2 transition-colors hover:text-purple-300">
           How to Play
         </button>
       </DialogTrigger>

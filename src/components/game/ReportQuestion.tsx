@@ -69,7 +69,9 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+        /* Round 209: py-2, not py-1.5. The sweep measured 28px, two short of
+           the 30 a thumb needs, on 63 pages. */
+        className="inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-foreground"
         title="Report an issue"
       >
         <Flag className="w-3 h-3" />

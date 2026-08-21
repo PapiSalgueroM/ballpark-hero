@@ -73,7 +73,7 @@ export function TennisPlayerBoard() {
             <p className="text-sm text-green-700">Loading players...</p>
           )}
           {status === 'error' && (
-            <button onClick={reloadPlayers} className="text-sm text-red-400 underline">
+            <button onClick={reloadPlayers} className="inline-flex items-center px-3 py-2 text-sm text-red-400 underline">
               Couldn't load players. Tap to retry.
             </button>
           )}

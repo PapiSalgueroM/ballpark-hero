@@ -31,14 +31,14 @@ export function GiveUpButton({ onGiveUp, disabled, className, label = 'Give up' 
             setConfirming(false);
             onGiveUp();
           }}
-          className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-destructive text-destructive-foreground hover:opacity-90 transition-opacity"
+          className="px-3 py-2 text-xs font-semibold rounded-lg bg-destructive text-destructive-foreground hover:opacity-90 transition-opacity"
         >
           Yes, reveal it
         </button>
         <button
           type="button"
           onClick={() => setConfirming(false)}
-          className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-border text-muted-foreground hover:text-foreground transition-colors"
+          className="px-3 py-2 text-xs font-semibold rounded-lg border border-border text-muted-foreground hover:text-foreground transition-colors"
         >
           Keep playing
         </button>

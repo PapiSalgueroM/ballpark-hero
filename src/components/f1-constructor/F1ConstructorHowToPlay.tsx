@@ -16,7 +16,7 @@ export function F1ConstructorHowToPlay() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-white transition-colors"
+        className="inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm text-zinc-400 transition-colors hover:text-white"
       >
         <HelpCircle className="w-4 h-4" /> How to Play
       </button>

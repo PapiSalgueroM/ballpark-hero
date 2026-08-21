@@ -87,7 +87,7 @@ const NflConnect4 = () => {
         headerExtra={
           <button
             onClick={() => setShowHowToPlay(true)}
-            className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+            className="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
             aria-label="How to play"
           >
             <HelpCircle className="w-4 h-4" /> How to play
@@ -110,7 +110,7 @@ const NflConnect4 = () => {
             </span>
             <button
               onClick={skipTurn}
-              className="ml-2 inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+              className="ml-2 inline-flex items-center gap-1 text-xs px-3 py-2 rounded-lg bg-secondary text-muted-foreground hover:text-foreground transition-colors"
             >
               <SkipForward className="w-3 h-3" />
               Skip
@@ -162,7 +162,7 @@ const NflConnect4 = () => {
                   disabled={phase !== 'playing' || getTargetRow(c) === null}
                   onClick={() => selectColumn(c)}
                   className={cn(
-                    'text-[10px] md:text-xs font-bold text-center px-1 py-2 rounded-lg transition-all leading-tight',
+                    'text-[10px] md:text-xs font-bold text-center px-1 py-2.5 rounded-lg transition-all leading-tight',
                     selectedCol === c
                       ? 'bg-primary text-primary-foreground scale-105'
                       : getTargetRow(c) !== null && phase === 'playing'

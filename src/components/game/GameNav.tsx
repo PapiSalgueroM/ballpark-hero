@@ -140,7 +140,13 @@ export function GameNav({ currentPath, sportCategory }: GameNavProps = {}) {
         </div>
         {nextGames.some(g => g.daily) && <DailyCountdown />}
         <p className="text-center mt-4">
-          <Link to="/" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+          {/* Round 209: padded to a real tap target. The sitewide phone
+              sweep measured this at 14px on 82 pages, which is a third of
+              what a thumb needs, and it is the link back to everything. */}
+          <Link
+            to="/"
+            className="inline-flex items-center rounded-full px-4 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
+          >
             See all games →
           </Link>
         </p>

@@ -69,7 +69,7 @@ const FootballConnect4 = () => {
           <>
             <button
               onClick={() => setShowHowToPlay(true)}
-              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+              className="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
               title="How to Play"
             >
               <HelpCircle className="w-4 h-4" /> How to play

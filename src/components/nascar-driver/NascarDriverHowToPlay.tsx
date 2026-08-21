@@ -5,7 +5,7 @@ export function NascarDriverHowToPlay() {
 
   return (
     <>
-      <button onClick={() => setOpen(true)} className="text-sm text-neutral-500 hover:text-red-400 underline transition-colors">
+      <button onClick={() => setOpen(true)} className="inline-flex items-center rounded-full px-3 py-2 text-sm text-neutral-500 underline transition-colors hover:text-red-400">
         How to play
       </button>
       {open && (

@@ -55,7 +55,7 @@ const NFLCareer = () => {
           <>
             <button
               onClick={() => setShowHelp(true)}
-              className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+              className="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
               aria-label="How to play"
             >
               <HelpCircle className="w-4 h-4" /> How to play
@@ -63,16 +63,16 @@ const NFLCareer = () => {
             <div className="flex items-center justify-center gap-2 mt-2">
               <button
                 onClick={() => switchMode('daily')}
-                className={'px-3 py-1 rounded-full text-xs font-semibold border transition-all ' + (mode === 'daily' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border')}
+                className={'px-3 py-2 rounded-full text-xs font-semibold border transition-all ' + (mode === 'daily' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border')}
               >Daily</button>
               <button
                 onClick={() => switchMode('unlimited')}
-                className={'px-3 py-1 rounded-full text-xs font-semibold border transition-all ' + (mode === 'unlimited' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border')}
+                className={'px-3 py-2 rounded-full text-xs font-semibold border transition-all ' + (mode === 'unlimited' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border')}
               >Unlimited</button>
               <button
                 onClick={toggleHard}
                 title="Hard mode: the easiest clues stay hidden"
-                className={'text-xs px-3 py-1 rounded-full border transition-all ' + (hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground')}
+                className={'text-xs px-3 py-2 rounded-full border transition-all ' + (hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground')}
               >😈 Hard: {hard ? 'ON' : 'off'}</button>
             </div>
             <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">

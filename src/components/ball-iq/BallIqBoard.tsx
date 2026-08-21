@@ -30,7 +30,7 @@ export function BallIqBoard() {
     return (
       <div className="mx-auto max-w-xl px-4 py-16 text-center">
         <p className="text-sm text-muted-foreground">Couldn't load today's test. Try again shortly.</p>
-        <Link to="/" className="mt-4 inline-block text-sm text-primary hover:underline">
+        <Link to="/" className="mt-4 inline-flex items-center rounded-full px-4 py-2 text-sm text-primary hover:underline">
           Back to all games →
         </Link>
       </div>

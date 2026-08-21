@@ -33,7 +33,7 @@ export function QuizBoard() {
     return (
       <div className="mx-auto max-w-4xl px-4 py-16 text-center">
         <p className="text-sm text-muted-foreground">Couldn't build today's board. Try again shortly.</p>
-        <Link to="/" className="mt-4 inline-block text-sm text-primary hover:underline">
+        <Link to="/" className="mt-4 inline-flex items-center rounded-full px-4 py-2 text-sm text-primary hover:underline">
           Back to all games →
         </Link>
       </div>
