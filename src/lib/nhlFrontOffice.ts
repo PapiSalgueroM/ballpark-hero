@@ -104,7 +104,9 @@ export function initNhlLeague(rng: () => number = Math.random): NhlLeague {
 }
 
 const FA_FIRST = ['Anders', 'Miro', 'Brady', 'Ilya', 'Cole', 'Juuso', 'Marek', 'Liam', 'Dmitri', 'Nolan'];
-const FA_LAST = ['Lindqvist', 'Kovac', 'Tremblay', 'Sorokin', 'Bergeron', 'Halonen', 'Novak', 'Gallagher', 'Fedorov', 'Byfield'];
+/* Round 199: 'Sorokin' left this bank. With the Ilya above it, it produced
+   a real NHL goaltender, and these free agents are invented men. */
+const FA_LAST = ['Lindqvist', 'Kovac', 'Tremblay', 'Vasko', 'Bergeron', 'Halonen', 'Novak', 'Gallagher', 'Fedorov', 'Byfield'];
 export function nhlGenName(rng: () => number): string {
   return `${FA_FIRST[Math.floor(rng() * FA_FIRST.length)]} ${FA_LAST[Math.floor(rng() * FA_LAST.length)]}`;
 }

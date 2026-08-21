@@ -149,7 +149,11 @@ export const NAME_FAMILIES: NameFamily[] = [
   {
     id: 'southernAfrica',
     firsts: ['Bongani', 'Dumisani', 'Fanuel', 'Kagiso', 'Lehlohonolo', 'Mpho', 'Nkosinathi', 'Oscar', 'Sipho', 'Themba', 'Vusimuzi', 'Zwelakhe'],
-    lasts: ['Dlamini-Zuma', 'Khumalo-Sithole', 'Letsoalo', 'Mabaso', 'Mokoena-Radebe', 'Ndlovu-Mahlangu', 'Nyathi', 'Phiri-Banda', 'Sibanda', 'Tshabalala-Moloi', 'Zondi', 'Zwane'],
+    lasts: ['Dlamini-Zuma', 'Khumalo-Sithole', 'Letsoalo', 'Mabaso', 'Mokoena-Radebe', 'Ndlovu-Mahlangu', 'Nyathi', 'Phiri-Banda', 'Sibanda', 'Tshabalala-Moloi', 'Zondi', 'Mthethwa'],
+    /* 'Zwane' left this bank in Round 199: paired with Themba above it
+       matched a real South African international. The wider harvest that
+       caught it reads every real name shipped anywhere in src/data, not
+       just the four sealed worlds Round 197 checked against. */
   },
   {
     id: 'japanese',

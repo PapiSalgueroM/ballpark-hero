@@ -2279,9 +2279,14 @@ const YOUTH_FIRST = [
   'Jamie', 'Leo', 'Sam', 'Alfie', 'Marco', 'Theo', 'Noah', 'Kofi', 'Mats', 'Diego',
   'Enzo', 'Luca', 'Tyler', 'Oscar', 'Ravi', 'Jude', 'Milo', 'Andres', 'Yusuf', 'Kaan',
 ];
+/* Round 199: 'Okafor' and 'Costa' left this bank. Paired with the Noah and
+   the Diego above they produced two men who exist, so an academy kid in
+   your own squad could have carried a real player's name. Nothing else in
+   the bank collides, and simInventedNames now enumerates all 400 of these
+   pairings, and every other generator on the site, on each suite run. */
 const YOUTH_LAST = [
-  'Weston', 'Okafor', 'Silva', 'Berg', 'Keane', 'Moretti', 'Dubois', 'Novak', 'Ferreira', 'Vargas',
-  'Sato', 'Hansen', 'Adeyemi', 'Costa', 'Petrov', 'Walsh', 'Kimura', 'Marchetti', 'Diallo', 'Reyes',
+  'Weston', 'Ashworth', 'Silva', 'Berg', 'Keane', 'Moretti', 'Dubois', 'Novak', 'Ferreira', 'Vargas',
+  'Sato', 'Hansen', 'Adeyemi', 'Lindqvist', 'Petrov', 'Walsh', 'Kimura', 'Marchetti', 'Diallo', 'Reyes',
 ];
 
 let youthSeq = 0;

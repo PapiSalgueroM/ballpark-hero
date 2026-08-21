@@ -291,6 +291,24 @@ let REAL_NAME_SET: Set<string> | null = null;
 /** Every name that appears anywhere in the baked real data, every era.
  *  Round 146: historic bakes joined the set, so a generated player can never
  *  wear the name of a real 2010 footballer either. */
+/**
+ * Round 199: five names that are real people on OTHER parts of this site.
+ *
+ * The guard below builds its blocklist from the Club Manager rosters, which
+ * is the right universe for a Club Manager era world and misses everybody
+ * else the site ships. An enumeration of all 32,000 combinations against
+ * every real name in src/data found exactly five pairings that this
+ * generator could still emit: an NFL centre, an NHL defenceman, an MLB
+ * infielder, a Danish midfielder from a league Club Manager does not carry,
+ * and a Brazilian defender no longer in the modern rosters. Five names, so
+ * they are listed rather than gutting five useful surnames out of the pool.
+ * simInventedNames recomputes this set from the data on every suite run and
+ * fails if it is ever incomplete.
+ */
+const ALSO_REAL_ELSEWHERE = [
+  'Cesar Ruiz', 'Erik Karlsson', 'Isaac Paredes', 'Rasmus Falk', 'Thiago Silva',
+];
+
 function realNames(): Set<string> {
   if (REAL_NAME_SET) return REAL_NAME_SET;
   const set = new Set<string>();
@@ -302,6 +320,7 @@ function realNames(): Set<string> {
       for (const p of roster) set.add(p.n);
     }
   }
+  for (const n of ALSO_REAL_ELSEWHERE) set.add(n);
   REAL_NAME_SET = set;
   return set;
 }
