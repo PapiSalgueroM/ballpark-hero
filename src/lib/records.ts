@@ -142,14 +142,14 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'cbb', emoji: '🏀', title: "Men's NCAA Basketball Champions",
-    blurb: "Every men's national champion in our records, through the most recent tournament.",
+    blurb: "Every men's national title game since 1939 with the beaten finalist and the final score. The 2020 tournament was cancelled, so no year is missing by accident.",
     yearLabel: 'Year',
-    columns: [],
+    columns: [['runnerUp', 'Runner-up'], ['score', 'Score']],
     play: [
       { path: '/champ-or-not', label: 'Champ or Not' },
       { path: '/list-quiz', label: 'Name Them All' },
     ],
-    fetch: () => rows('ncaa_basketball_champions', 'year', 'champion', {},
+    fetch: () => rows('ncaa_basketball_champions', 'year', 'champion', { runnerUp: 'runner_up', score: 'score' },
       q => (q as { eq: (c: string, v: string) => unknown }).eq('division', "Men's D1")),
   },
   {

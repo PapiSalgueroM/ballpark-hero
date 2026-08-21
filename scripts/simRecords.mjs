@@ -58,6 +58,9 @@ const COMPLETE = {
   /* wnba joined in full in Round 245: runner-up and series completed in
      Rounds 233/242, and all 29 Finals MVPs verified and filled */
   wnba: ["runnerUp", "series", "mvp"],
+  /* cbb joined in Round 246: all 87 title games carry the beaten
+     finalist and the final score, 1939 through 2026 */
+  cbb: ["runnerUp", "score"],
   nrl: ["competition"],
 };
 
