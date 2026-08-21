@@ -260,7 +260,7 @@ if (!reachable && listsById.size === 0) {
      80/16), so they catch a truncation without flapping. */
   const SHAPES = [
     ["stanley_cup_finals_v2", null, 100, 20],
-    ["world_series_v2", null, 110, 15],
+    ["world_series_v2", null, 110, 110], /* loser floor raised R240: every series carries the beaten side */
     ["wnba_finals", "finals_mvp", 25, 25],
     ["nba_finals", "winning_coach", 70, 70], /* loser floor raised R239: all 80 finals carry the beaten finalist */
   ];

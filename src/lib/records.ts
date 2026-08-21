@@ -97,14 +97,14 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'ws', emoji: '⚾', title: 'World Series Champions',
-    blurb: 'Every World Series since 1903. There was no series in 1904 or 1994, and the early best-of-nine years read as they were played.',
+    blurb: 'Every World Series since 1903 with the beaten pennant winner. There was no series in 1904 or 1994, and the early best-of-nine years read as they were played.',
     yearLabel: 'Year',
-    columns: [['series', 'Series']],
+    columns: [['runnerUp', 'Runner-up'], ['series', 'Series']],
     play: [
       { path: '/champ-or-not', label: 'Champ or Not' },
       { path: '/list-quiz', label: 'Name Them All' },
     ],
-    fetch: () => rows('world_series_v2', 'year', 'winner', { series: 'series_result' }),
+    fetch: () => rows('world_series_v2', 'year', 'winner', { runnerUp: 'loser', series: 'series_result' }),
   },
   {
     key: 'cup', emoji: '🏒', title: 'Stanley Cup Champions',
