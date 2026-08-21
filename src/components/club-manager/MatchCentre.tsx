@@ -46,12 +46,14 @@ interface MatchCentreProps {
   talkRead: string | null;
   talkStale: boolean;
   onQuickSim: () => void;
+  /** Round 158: open the animated live viewer. */
+  onWatch: () => void;
   onPlay: () => void;
   onBack: () => void;
 }
 
 export function MatchCentre({
-  career, facts, clubColor, tone, onTone, talkRead, talkStale, onQuickSim, onPlay, onBack,
+  career, facts, clubColor, tone, onTone, talkRead, talkStale, onQuickSim, onWatch, onPlay, onBack,
 }: MatchCentreProps) {
   const f = facts;
   const venue = f.home === true ? 'Home' : f.home === false ? 'Away' : 'Neutral venue';
@@ -155,22 +157,28 @@ export function MatchCentre({
       <TeamTalkRow tone={tone} onTone={onTone} read={talkRead} when="before kick off" stale={talkStale} />
 
       {/* Actions */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-1.5">
         <button
           onClick={onQuickSim}
-          className="inline-flex items-center justify-center gap-2 px-4 py-3 bg-secondary text-foreground rounded-xl font-bold hover:bg-secondary/70 transition-colors"
+          className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-xs hover:bg-secondary/70 transition-colors"
         >
-          <Zap className="w-4 h-4" /> Quick Sim
+          <Zap className="w-3.5 h-3.5" /> Quick Sim
+        </button>
+        <button
+          onClick={onWatch}
+          className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-xs hover:opacity-90 transition-opacity"
+        >
+          📺 Watch Live
         </button>
         <button
           onClick={onPlay}
-          className="inline-flex items-center justify-center gap-2 px-4 py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity"
+          className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-xs hover:bg-secondary/70 transition-colors"
         >
-          <Play className="w-4 h-4" /> Play Match
+          <Play className="w-3.5 h-3.5" /> Play Match
         </button>
       </div>
       <p className="text-[9px] text-muted-foreground text-center">
-        Quick Sim plays it in one shot and shows the full report. Play Match stops at half time so you can make changes.
+        Quick Sim plays it in one shot and shows the full report. Watch Live shows the match as moving circles at your chosen speed, with the dressing room at the break. Play Match skips the theatre and stops at half time.
       </p>
     </div>
   );

@@ -154,6 +154,10 @@ let halftimes = 0, fullTimes = 0, subsMade = 0, shapeChanges = 0, windows = 0, s
 let lastHt = null;
 /* Round 157: the two new match-day surfaces get walked once each. */
 let centreChecked = false, quickSimChecked = false;
+/* Round 158: and the live viewer, once, end to end. */
+let watchChecked = false;
+/* Round 158: and the month calendar, once. */
+let calChecked = false;
 
 for (let step = 0; step < MAX_STEPS; step++) {
   t = await screen();
@@ -279,6 +283,61 @@ for (let step = 0; step < MAX_STEPS; step++) {
       if (!/Team talk/i.test(tc)) note('BROKEN ', 'the team talk is not in the match centre');
       if (!await tap(/Club home/i, 'back out of the match centre')) {
         note('BROKEN ', 'no way back out of the match centre');
+      }
+    }
+    continue;
+  }
+
+  /* --- Round 158: the month calendar, once: grid, cones, policy, the long
+         fast forward. Walked before anything is played so the month on
+         screen is August with the season ahead of it. --- */
+  if (!calChecked && /Calendar/i.test(t) && !/FULL TIME|HALF TIME|MATCH LIVE/i.test(t)) {
+    calChecked = true;
+    if (await tapText(/Calendar/i, 'the calendar tile')) {
+      await page.waitForTimeout(600);
+      const tc = await screen();
+      if (!/August|September|October|November|December|January|February|March|April|May/i.test(tc)) {
+        note('BROKEN ', 'the calendar shows no month name');
+      }
+      if (!/Fast forward/i.test(tc)) note('BROKEN ', 'the calendar has no fast forward');
+      if (!/Rest of season/i.test(tc)) note('BROKEN ', 'no rest-of-season fast forward');
+      if (!/Rest first|Balanced|Full training/i.test(tc)) note('BROKEN ', 'no training policy on the calendar');
+      if (!/match day/i.test(tc)) note('BROKEN ', 'no legend on the calendar');
+      if (!await tap(/Club home/i, 'back out of the calendar')) {
+        note('BROKEN ', 'no way back out of the calendar');
+      }
+    }
+    continue;
+  }
+
+  /* --- Round 158: watch a match live, once, all the way through: viewer,
+         speed controls, skip to the break, the embedded dressing room, the
+         second half replay, the full report handoff. --- */
+  if (!watchChecked && centreChecked && quickSimChecked && /Watch Live/i.test(t) && !/FULL TIME|HALF TIME|MATCH LIVE/i.test(t)) {
+    watchChecked = true;
+    if (await tapText(/Watch Live/i, 'watch live')) {
+      await page.waitForTimeout(900);
+      let tw = await screen();
+      if (!/MATCH LIVE/i.test(tw)) note('BROKEN ', 'watch live did not open the live viewer');
+      if (!/4x/.test(tw)) note('BROKEN ', 'no speed controls on the live viewer');
+      if (!/Balance of play/i.test(tw)) note('BROKEN ', 'no balance of play strip on the viewer');
+      await tapText(/^4x$/, '4x speed');
+      if (await tap(/skip/i, 'skip to the break')) await page.waitForTimeout(700);
+      tw = await screen();
+      if (!/Half time/i.test(tw)) note('BROKEN ', 'skipping the first half did not reach the interval');
+      if (!/SIT IN|AS YOU WERE|GO AT THEM/i.test(tw)) note('BROKEN ', 'the embedded interval has no shape controls');
+      if (!await tap(/second half/i, 'second half inside the viewer')) {
+        note('BROKEN ', 'no second half button inside the live viewer');
+      } else {
+        await page.waitForTimeout(800);
+        if (await tap(/skip/i, 'skip to full time')) await page.waitForTimeout(800);
+        tw = await screen();
+        if (!/Full report|FULL TIME/i.test(tw)) note('BROKEN ', 'the live viewer never reached full time');
+        if (await tap(/full report/i, 'full report')) {
+          await page.waitForTimeout(600);
+          tw = await screen();
+          if (!/FULL TIME/i.test(tw)) note('BROKEN ', 'full report did not open the full time card');
+        }
       }
     }
     continue;

@@ -812,6 +812,13 @@ export interface LiveMatch {
       recomputing them from the same formula. */
   lamMine?: number;
   lamOpp?: number;
+  /** Round 158: the first half's scorers, names and minutes, decided at kick
+      off so the live viewer can show a truthful first half as it plays. The
+      full time report reuses these exact lines (and credits the season stats
+      once, at the whistle). Absent on a save paused at the interval before
+      this round; the report falls back to picking them at full time. */
+  h1My?: { id: string; name: string; minute: number }[];
+  h1Opp?: ScorerLine[];
 }
 
 export interface PlayResult {
@@ -5653,28 +5660,40 @@ function splitMinutes(goals: number, firstHalfGoals: number): number[] {
   return [...first, ...second].sort((a, b) => a - b);
 }
 
-function generateMyScorers(
-  state: CareerState,
-  xi: CMPlayer[],
-  goals: number,
-  firstHalfGoals: number,
-): { lines: ScorerLine[]; goalCounts: Map<string, number>; assistCounts: Map<string, number> } {
-  const minutes = splitMinutes(goals, firstHalfGoals);
-  const lines: ScorerLine[] = [];
-  const goalCounts = new Map<string, number>();
-  const assistCounts = new Map<string, number>();
-  for (let g = 0; g < goals; g++) {
+/** Round 158: pick who scored, purely. No season stats move here, so the
+ *  kick off can decide the first half's scorers for the live viewer without
+ *  crediting anybody twice. */
+function pickMyScorerLines(
+  xi: CMPlayer[], count: number, minLo: number, minHi: number,
+): { id: string; name: string; minute: number }[] {
+  const minutes = Array.from({ length: count }, () => ri(minLo, minHi)).sort((a, b) => a - b);
+  const lines: { id: string; name: string; minute: number }[] = [];
+  for (let g = 0; g < count; g++) {
     const scorer = weightedPick(xi, scorerWeight);
     if (!scorer) break;
-    lines.push({ name: scorer.name, minute: minutes[g] });
-    goalCounts.set(scorer.id, (goalCounts.get(scorer.id) ?? 0) + 1);
-    const sq = state.squad.find(p => p.id === scorer.id);
+    lines.push({ id: scorer.id, name: scorer.name, minute: minutes[g] });
+  }
+  return lines;
+}
+
+/** Round 158: settle the season stats for a set of scorer lines, once, at
+ *  the final whistle: goals, the scorer's lift, and the assists. */
+function creditMyScorers(
+  state: CareerState,
+  xi: CMPlayer[],
+  lines: { id: string; name: string; minute: number }[],
+): { goalCounts: Map<string, number>; assistCounts: Map<string, number> } {
+  const goalCounts = new Map<string, number>();
+  const assistCounts = new Map<string, number>();
+  for (const line of lines) {
+    goalCounts.set(line.id, (goalCounts.get(line.id) ?? 0) + 1);
+    const sq = state.squad.find(p => p.id === line.id);
     if (sq) {
       sq.seasonGoals += 1;
       sq.morale = clamp(sq.morale + 3, 5, 99);
     }
     if (Math.random() < 0.7) {
-      const others = xi.filter(p => p.id !== scorer.id && p.position !== 'GK');
+      const others = xi.filter(p => p.id !== line.id && p.position !== 'GK');
       const assister = weightedPick(others, p => scorerWeight(p) * 0.6 + 0.5);
       if (assister) {
         assistCounts.set(assister.id, (assistCounts.get(assister.id) ?? 0) + 1);
@@ -5683,7 +5702,31 @@ function generateMyScorers(
       }
     }
   }
-  return { lines, goalCounts, assistCounts };
+  return { goalCounts, assistCounts };
+}
+
+function generateMyScorers(
+  state: CareerState,
+  xi: CMPlayer[],
+  goals: number,
+  firstHalfGoals: number,
+  presetH1?: { id: string; name: string; minute: number }[],
+): { lines: ScorerLine[]; goalCounts: Map<string, number>; assistCounts: Map<string, number> } {
+  const h1 = clamp(firstHalfGoals, 0, goals);
+  /* Round 158: a live match decided its first half scorers at kick off, so
+     the viewer's first half and the full time report are the same football.
+     Everything else picks them here, exactly as before. */
+  const h1Lines = presetH1 && presetH1.length === h1
+    ? presetH1
+    : pickMyScorerLines(xi, h1, 1, 45);
+  const h2Lines = pickMyScorerLines(xi, goals - h1, 46, 90);
+  const full = [...h1Lines, ...h2Lines];
+  const { goalCounts, assistCounts } = creditMyScorers(state, xi, full);
+  return {
+    lines: full.map(l => ({ name: l.name, minute: l.minute })),
+    goalCounts,
+    assistCounts,
+  };
 }
 
 function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now'): ScorerLine[] {
@@ -6069,8 +6112,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   const events: string[] = [];
   let trophyWon: string | null = null;
 
-  const { lines: myScorers, goalCounts, assistCounts } = generateMyScorers(state, xi, myGoals, h1My);
-  const oppScorers = generateOppScorers(fx.opponent, oppGoals, h1Opp, yearsOn(state), state.eraId);
+  const { lines: myScorers, goalCounts, assistCounts } = generateMyScorers(
+    state, xi, myGoals, h1My, live?.h1My,
+  );
+  /* Round 158: same for the opposition, whose first half lines were decided
+     at kick off on a watched match. */
+  const oppScorers = live?.h1Opp && live.h1Opp.length === h1Opp
+    ? [...live.h1Opp, ...generateOppScorers(fx.opponent, oppGoals - h1Opp, 0, yearsOn(state), state.eraId)]
+    : generateOppScorers(fx.opponent, oppGoals, h1Opp, yearsOn(state), state.eraId);
   const tally = new Map<string, number>();
   for (const sc of myScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
   tally.forEach((count, name) => {
@@ -7319,6 +7368,11 @@ function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
     talk: null,
     lamMine,
     lamOpp,
+    /* Round 158: the first half's scorers, decided now so the live viewer
+       shows the same football the full time report will. Stats are credited
+       once, at the whistle, never here. */
+    h1My: pickMyScorerLines(xi, myGoals, 1, 45),
+    h1Opp: generateOppScorers(fx.opponent, oppGoals, oppGoals, yearsOn(state), state.eraId),
   };
 }
 

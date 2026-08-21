@@ -22,18 +22,32 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   screenshot showed 0/107 after six rounds of football). And scorer minutes now respect the
   halftime scoreboard (first half goals get minutes 1-45), which they quietly did not since
   Round 119. `simMatchDetail.mjs` guards all of it (45 harnesses now).
-- CM-2 **NEXT: the Live Sim.** His words: "u see the little circles moving about and they'll
-  do things like throwing and goals kicks and penalties". A 2D animated match viewer: both
-  formations as dots, the ball, event choreography from the report's timeline, speed control
-  (0.5x, 1x, 2x, 4x), pause, live stats and xG and momentum, stamina visible, and the
-  halftime break embedded so subs and shape changes happen inside the viewer. Engine support
-  to build first: first half scorers must be assigned at kick off (names and minutes into
-  LiveMatch) WITHOUT double-counting season stats at full time.
-- CM-3 **NEXT: the real calendar.** Like the phone month grid he sent: fixtures on dates,
-  transfer deadline day marked, season start and end, training days with a cone icon between
-  fixtures, a rest policy the player sets (full rest, alternate days, full training, feeding
-  the existing training intensity), and fast forward controls that go anywhere: next match,
-  one week, to the window, to season end.
+- CM-2 **DONE, Round 158: the Live Sim.** His words: "u see the little circles moving about".
+  Watch Live on the hub and in the Match Centre: a 2D pitch, my real XI as dots in my real
+  formation (names under the circles), the opposition mirrored, a ball that moves with the
+  balance of play, goals, cards, injuries and subs landing at their true minutes with
+  banners, speed control (0.5x to 4x), pause, skip, a stamina drawer, xG line after the
+  break, and the REAL dressing room embedded at the interval (subs, shape and the talk all
+  change the second half, because it is the Round 119 halftime screen inside the viewer).
+  It is a replay of the match the engine decided, never a second simulation: kick off now
+  commits the first half's scorers onto LiveMatch (engine work) and the full time report
+  reuses those exact lines, with season stats credited once at the whistle. simLiveSim.mjs
+  pins the reuse verbatim and the exactly-once crediting; the browser walk watches a match
+  end to end (viewer, 4x, skip, dressing room, second half, full report). STILL OPEN for a
+  later pass: throw in and corner set piece scenes, live shot counters (needs the engine to
+  pre-commit a full-match event timeline at kick off), and a penalty shootout scene.
+- CM-3 **DONE, Round 158 (same round as CM-2): the real calendar.** Like the phone month
+  grid he sent: a month view with fixtures on their dates (league Saturdays, cups and
+  Europe midweek, exactly like a real season), played matches wearing their W/D/L, a drawn
+  training cone on training days, the January window and its deadline marked, season start
+  and end shown, a training policy picker (Rest first / Balanced / Full training, driving
+  the real training intensity), and fast forward that goes next match, about a month, to
+  the window, or the rest of the season (still stopping at the window and season review).
+  Dates are derived deterministically from the save's own clock with hand-rolled Gregorian
+  helpers, no Date object. simCalendar.mjs pins the date maths against known anchors, and
+  its FIRST run caught a real bug: one Saturday per entry stretched a 52 entry season to
+  July 31, which is why cups went midweek. The browser walk opens the calendar and checks
+  grid, cones, policy and the long fast forward.
 - CM-4 Create-a-club depth: a squad quality slider (start with a team of 90s, 80s, 70s, on
   down), a tactical identity pick (gegenpress, tiki taka, low block, counter, balanced), and
   stadium size. Board expectations already read the squad, so a slider squad gets honest
@@ -369,8 +383,8 @@ true on the date above; re-measure rather than quoting them.
 | Live site | douknowball.com published 2026-08-17 ~08:00 UTC at Round 144 (two deploy calls, second after sync was file-verified). Republish after 145+146 land. |
 | Shipped 2026-08-17 | Rounds 139 through 150 all pushed and published the same day (SHIP13 morning, SHIP14 16:02 UTC). Head was `d486a09` Round 150 when this was written. |
 | Packaged queue | Round **151** (the What's New page catches up with the big day, plus the simContracts deflake) and Round **152** (Stadium Tycoon milestones plus named opposition: ten career firsts that pay exactly once, and every opponent is an invented club like Ironbridge Rovers, 288 possible names proven collision-free against all 277 real clubs in the manager world). Plus Round **153**: `scripts/playEra2010.mjs`, the browser harness that walks the 2010 era picker like a person (14 checks: era tile, nations shrunk to England and Spain, Blackpool pickable and marked partial, the title demand on the United tile, Rooney in the dressing room, no 2026 leak). One click ships all three: **`SHIP15.bat`** (logs to `ship_log15.txt`). Then Round **154** (create-a-club, owner item D) rides alone as `RUN154.bat`, chain-guarded on 153, and Round **155** (the content layer catches up: Club Manager's SEO copy rewritten for 270 clubs, eras and create-a-club after sitting at the 20-club version with "Top 14" phrasing; a What's New entry; the wave-3 league probe folded into item 6) as `RUN155.bat`, and Round **156** (the game's own help catches up: the in-game "?" popover still said nine leagues and 186 clubs, still offered the future starts Round 139 removed, and still DENIED the 2010 era Round 146 shipped; the on-page SEO block had the same rot. Both rewritten from the live engine, browser-checked 8/8) as `RUN156.bat`. Click order: SHIP15.bat, RUN154.bat, RUN155.bat, RUN156.bat, each one self-guards. |
-| Packaged 2026-08-18 | **Round 157** (Quick Sim, Match Centre, match stats and ratings, header counting, halftime-consistent scorer minutes). `RUN157.bat`, chain-guarded on 156. |
-| Next free round number | **158** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18 | **Round 157** (Quick Sim, Match Centre, match stats and ratings, header counting, halftime-consistent scorer minutes) and **Round 158** (Watch Live, the animated 2D match viewer with the dressing room embedded at the break, PLUS the month calendar with training cones and the long fast forward: the two shipped together because they share the page files). `RUN157.bat` then `RUN158.bat`, each chain-guarded. `SHIP16.bat` runs both. |
+| Next free round number | **159** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

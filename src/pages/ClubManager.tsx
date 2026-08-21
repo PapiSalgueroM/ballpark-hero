@@ -29,7 +29,7 @@ import { CustomClubForm, CrestBadge } from '@/components/club-manager/CustomClub
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { WorldTablesCard } from '@/components/club-manager/WorldTablesCard';
 import { UclBracketCard } from '@/components/club-manager/UclBracketCard';
-import { CalendarCard } from '@/components/club-manager/CalendarCard';
+import { CalendarScreen } from '@/components/club-manager/CalendarScreen';
 import { InboxCard } from '@/components/club-manager/InboxCard';
 import { ClubDetailScreen } from '@/components/club-manager/ClubDetailScreen';
 import { SquadScreen } from '@/components/club-manager/SquadScreen';
@@ -42,6 +42,7 @@ import { TrainingScreen } from '@/components/club-manager/TrainingScreen';
 import { RolesScreen } from '@/components/club-manager/RolesScreen';
 import { PressScreen } from '@/components/club-manager/PressScreen';
 import { MatchCentre } from '@/components/club-manager/MatchCentre';
+import { LiveSimScreen } from '@/components/club-manager/LiveSimScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
@@ -105,6 +106,10 @@ const ClubManager = () => {
   // screens, and any club anywhere opens the rival viewer.
   const [hubPanel, setHubPanel] = useState<HubPanel | null>(null);
   const [clubView, setClubView] = useState<string | null>(null);
+  /* Round 158: watching the match live instead of jumping between screens.
+     While this is on, the halftime and full time phases render inside the
+     animated viewer; turning it off drops back to the classic screens. */
+  const [watchMode, setWatchMode] = useState(false);
   const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
 
   /* Round 154: clubDefFor, not clubByName, because a custom club has no
@@ -163,7 +168,7 @@ const ClubManager = () => {
               <p>📋 <span className="font-semibold text-foreground">The board names the actual prize</span>: win the league, qualify for the Champions League or Europa League, reach the top half, or stay up, plus a cup target, a rival to finish above, and squad mandates. Hit them and your stock rises; miss them and the confidence meter drains.</p>
               <p>🗓️ <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>, at its real length, against its real clubs, plus the domestic cup and the Champions League if you qualify, while every other league in the world plays out alongside yours.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
-              <p>📊 <span className="font-semibold text-foreground">Play it your way.</span> Quick Sim gives you the full result in one tap: scorers, cards, injuries, possession, shots, expected goals, momentum and every player's rating. Play Match stops at half time so you can change shape and make subs. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
+              <p>📊 <span className="font-semibold text-foreground">Play it your way.</span> Quick Sim gives you the full result in one tap: scorers, cards, injuries, possession, shots, expected goals, momentum and every player's rating. Watch Live plays the match as moving circles on a pitch at 0.5x to 4x speed, with goals, cards and subs landing at their real minutes and the dressing room at the break. Play Match skips the theatre and stops at half time. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
               <p>🤝 <span className="font-semibold text-foreground">Tell every player what he is</span>: star man, key first teamer, rotation option, backup or one for the future. Each rung is a promise about minutes, and the dressing room keeps score over your last ten matches. Keep your word and they play for you. Break it and they sulk, drag the room down and hand in transfer requests. You can buy your way out of a promise, but it costs six weeks of his wages a rung.</p>
               <p>🎙️ <span className="font-semibold text-foreground">Front up to the press, and talk to your players.</span> The reporters only turn up when something has happened: a losing run, a man you have stopped picking, a club circling one of your stars, a derby, or the bookmakers making you favourite for the sack. Every answer spends one thing to buy another, so backing your players costs you with the board and calling them out costs you the dressing room, and talking big before a derby puts your words on the other lot's wall. Before every match and again at half time you pick a tone: calm them, fire them up, demand more, or the hairdryer. Read the afternoon right and they play above themselves. Read it wrong and you lose them, and the wrong one hurts more than the right one helps.</p>
               <p>💰 <span className="font-semibold text-foreground">Buy and sell in the summer and January windows.</span> Over 3,300 real players are on the market at their real values. Stay under budget and keep at least 14 players.</p>
@@ -525,6 +530,33 @@ const ClubManager = () => {
   }
 
   /* ================= MATCH RESULT ================= */
+  /* ================= LIVE SIM (Round 158) ================= */
+  /* The animated viewer owns both match phases while watch mode is on: the
+     first half plays out, the interval is the real dressing room embedded,
+     the second half replays the report's own timeline, and Full report
+     hands over to the classic full time card. */
+  if (watchMode && g.career && (g.phase === 'halftime' || g.phase === 'matchResult')) {
+    const liveClub = clubDefFor(g.career.clubName);
+    return shell(
+      <div ref={revealRef}>
+        <header className="text-center mb-3">
+          <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">MATCH LIVE</h1>
+        </header>
+        <LiveSimScreen
+          career={g.career}
+          live={g.career.live ?? null}
+          report={g.phase === 'matchResult' ? g.report : null}
+          clubColor={liveClub.color}
+          onSub={g.subAtHalftime}
+          onShape={g.shapeAtHalftime}
+          onTalk={g.halftimeTalk}
+          onSecondHalf={g.secondHalf}
+          onExit={() => setWatchMode(false)}
+        />
+      </div>
+    );
+  }
+
   /* ================= HALF TIME (Round 119) ================= */
   if (g.phase === 'halftime' && g.career?.live) {
     return shell(
@@ -805,6 +837,7 @@ const ClubManager = () => {
                 talkRead={matchRead}
                 talkStale={!!press && press.lastTone === c.teamTalk && press.toneRun >= 3}
                 onQuickSim={() => { setHubPanel(null); g.quickPlay(); }}
+                onWatch={() => { setHubPanel(null); setWatchMode(true); g.play(); }}
                 onPlay={() => { setHubPanel(null); g.play(); }}
                 onBack={() => setHubPanel(null)}
               />
@@ -849,18 +882,25 @@ const ClubManager = () => {
                     The hub keeps the two ways to play: quick sim the result, or
                     play it with the half time stop. Facts, form, head-to-head
                     and the talk all live one tap away. */}
-                <div className="mt-3 grid grid-cols-2 gap-2 max-w-xs mx-auto">
+                <div className="mt-3 grid grid-cols-3 gap-1.5 max-w-sm mx-auto">
                   <button
                     onClick={g.quickPlay}
-                    className="inline-flex items-center justify-center gap-1.5 px-4 py-3 bg-secondary text-foreground rounded-full font-bold hover:bg-secondary/70 transition-colors"
+                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-xs sm:text-sm hover:bg-secondary/70 transition-colors"
                   >
                     ⚡ Quick Sim
                   </button>
+                  {/* Round 158: the little circles. Watch the match play out. */}
+                  <button
+                    onClick={() => { setWatchMode(true); g.play(); }}
+                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-xs sm:text-sm hover:opacity-90 transition-opacity"
+                  >
+                    📺 Watch Live
+                  </button>
                   <button
                     onClick={g.play}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90 transition-opacity"
+                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-xs sm:text-sm hover:bg-secondary/70 transition-colors"
                   >
-                    <Play className="w-4 h-4" /> Play Match
+                    <Play className="w-3.5 h-3.5" /> Play Match
                   </button>
                 </div>
                 <button
@@ -1032,7 +1072,11 @@ const ClubManager = () => {
                 <p className="text-xs text-muted-foreground text-center py-6">Nobody has texted you yet. Play some matches, the drama finds you.</p>
               )}
 
-              {hubPanel === 'calendar' && <CalendarCard career={c} onQuickSim={g.quickSim} />}
+              {/* Round 158: the season as a real month calendar, with training
+                  cones, window markers and the long fast forward. */}
+              {hubPanel === 'calendar' && (
+                <CalendarScreen career={c} onQuickSim={g.quickSim} onSetTraining={g.setTraining} />
+              )}
 
               {hubPanel === 'academy' && (
                 <AcademyScreen
