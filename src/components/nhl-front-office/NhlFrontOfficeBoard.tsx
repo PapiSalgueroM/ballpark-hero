@@ -15,6 +15,7 @@ import { findTrades, type FinderOffer } from '@/lib/tradeFinder';
 import { openTalks, standFirm, type TalksState } from '@/lib/foTradeTalks';
 import { TradeTalksCard } from '@/components/front-office-shared/TradeTalksCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { recordCompletion } from '@/lib/completions';
 import { cn } from '@/lib/utils';
 // Round 180: the owner upstairs, shared engine and card.
 import {
@@ -160,6 +161,10 @@ export default function NhlFrontOfficeBoard() {
 
   const playRound = () => {
     if (!league || !my) return;
+    /* Round 195: a played round counts as playing TODAY, the same per-session mark
+       Club Manager has had since Round 157. Unscored on purpose: the
+       scored completion stays the title. */
+    recordCompletion('/nhl-front-office');
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
     const report = simNhlRound(lg, myTeam, Math.random);
     nhlAiMoves(lg, myTeam, Math.random);

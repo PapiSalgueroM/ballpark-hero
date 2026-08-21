@@ -6,6 +6,7 @@
  * hide, so the away-earnings clock is honest.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { recordCompletion } from '@/lib/completions';
 import {
   TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
@@ -154,12 +155,25 @@ export function useStadiumTycoon() {
     };
   }, [pushFloater]);
 
+  /* Round 195: the idle game counts as playing TODAY. One unscored mark
+     per session, on the first meaningful action (a tap, a purchase or a
+     hire), the S-1 rule the header games have followed since Round 157.
+     A ref, not state: marking must never re-render the game loop. */
+  const sessionMarkedRef = useRef(false);
+  const markSessionPlay = useCallback(() => {
+    if (sessionMarkedRef.current) return;
+    sessionMarkedRef.current = true;
+    recordCompletion('/stadium-tycoon');
+  }, []);
+
   const doBuy = useCallback((id: string) => {
+    markSessionPlay();
     setState(s => buy(s, id));
   }, []);
 
   /* Round 162: the payroll. */
   const doHire = useCallback((id: string) => {
+    markSessionPlay();
     setState(s => hire(s, id));
   }, []);
 
@@ -180,6 +194,7 @@ export function useStadiumTycoon() {
   }, [pushFloater]);
 
   const doTap = useCallback((xPct: number, yPct: number) => {
+    markSessionPlay();
     const before = stateRef.current;
     const after = tap(before);
     pushFloater(`+$${after.money - before.money >= 1 ? Math.round(after.money - before.money) : 1}`, 'tap', xPct, yPct);
