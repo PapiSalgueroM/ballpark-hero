@@ -13,6 +13,9 @@ import { NFL_ERAS,
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
 import FreeAgencyPanel from '@/components/us-career/FreeAgencyPanel';
+// Round 186: the season curtain, shared engine and shared card.
+import { buildSeasonReveal, type SeasonReveal } from '@/lib/usCareerReveal';
+import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
 import { nflHeatLabel } from '@/lib/nflCareerCorruption';
 import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';
 import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
@@ -57,6 +60,9 @@ export default function NflMyCareerBoard() {
      way a pending event has always redrawn. */
   const [faWindow, setFaWindow] = useState<FaWindow | null>(null);
   const [talkLine, setTalkLine] = useState<string | null>(null);
+  /* Round 186: the season curtain. Transient like the market window: never
+     persisted, so a reload mid-reveal opens on the save's real screen. */
+  const [reveal, setReveal] = useState<SeasonReveal | null>(null);
   /* Round 126: the coaching career. It lives in a ref as well as in state so
      persist can always write the current one without every existing call site
      having to learn about it. */
@@ -135,6 +141,12 @@ export default function NflMyCareerBoard() {
         '🚫 Season served on the suspended list. No football, no money, no going back.',
         ...banNotes,
       ]);
+      /* Round 186: even a banned year gets its card, muted on purpose. */
+      setReveal(buildSeasonReveal({
+        year: banned.year,
+        subHeader: `${teamLabelOf(banned.team, c.eraId)} · age ${banned.age} · ${c.pos}`,
+        teamResult: 'SUSPENDED', statLine: '', campNote: null, notes: [], progressNotes: banNotes,
+      }));
       setPhase('season');
       persist(c, 'season', teamQuality);
       return;
@@ -156,6 +168,14 @@ export default function NflMyCareerBoard() {
     const { line, notes } = simSeason(c, teamQuality, Math.random);
     const progressNotes = progress(c, Math.random);
     setLastLine(line);
+    /* Round 186: the curtain. Every string in it is one the engine already
+       wrote; the true stat line is on screen from frame one. */
+    setReveal(buildSeasonReveal({
+      year: line.year,
+      subHeader: `${teamLabelOf(line.team, c.eraId)} · age ${line.age} · ${c.pos}`,
+      teamResult: line.teamResult, statLine: statLine(line, c.pos),
+      campNote, notes, progressNotes,
+    }));
     const newFeed = [...(campNote ? [campNote] : []), ...notes, ...progressNotes];
     if (shouldRetire(c)) {
       c.retired = true;
@@ -355,6 +375,18 @@ export default function NflMyCareerBoard() {
 
   const totals = careerTotals(career);
   const legacy = legacyOf(career);
+
+  /* ------------------- Round 186: the season curtain -------------------
+     Rendered ahead of every other screen so the season's story lands
+     before the crossroads, the market or the retirement card. Transient:
+     a reload skips straight to whichever of those the save is really on. */
+  if (reveal) {
+    return (
+      <div ref={revealRef}>
+        <SeasonRevealCard reveal={reveal} onContinue={() => setReveal(null)} />
+      </div>
+    );
+  }
 
   /* ------------------- Round 126: the coaching career ------------------- */
   if (phase === 'coach' && coach) {

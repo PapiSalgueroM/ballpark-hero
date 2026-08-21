@@ -54,9 +54,19 @@ await page.reload({ waitUntil: 'networkidle' });
 await page.waitForTimeout(1200);
 
 let sawScrum = false;
-for (let step = 0; step < 14 && !sawScrum; step++) {
+for (let step = 0; step < 18 && !sawScrum; step++) {
   const body = await page.locator('body').innerText();
   if (body.includes('The accountability scrum')) { sawScrum = true; break; }
+  /* Round 186: every played season now opens with the season curtain, and
+     the crossroads only shows after Continue. Without this click the walk
+     stalls on the reveal forever, which is exactly how the round was
+     caught: this file failed before the reveal shipped. */
+  const cont = page.locator('[data-season-reveal] button:has-text("Continue")');
+  if (await cont.count()) {
+    await cont.click();
+    await page.waitForTimeout(700);
+    continue;
+  }
   const play = page.locator('button:has-text("Play the")');
   if (await play.count()) {
     await play.first().click();
