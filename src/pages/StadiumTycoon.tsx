@@ -19,10 +19,12 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
   TRACKS, levelOf, costOf, canBuy, capacity, attendance, incomePerSec,
   tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney,
-  boostReady, boostActive, BOOST_CHARGE_SEC, MILESTONES, opponentName,
+  boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,
   DIVISIONS, divisionOf, divisionIndex, winsToNextDivision,
   STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,
   ACHIEVEMENTS, achMult, goldenActive, GOLDEN_INFO,
+  LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
+  totalPerkLevels, pointsForSale,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 
@@ -62,9 +64,9 @@ export default function StadiumTycoon() {
   const s = g.state;
   const money = useCountUp(s.money);
   const [showHelp, setShowHelp] = useState(false);
-  /* Round 162: the two drawers. Tiles per the house style: each opens its
-     own panel instead of stretching the page. */
-  const [drawer, setDrawer] = useState<'none' | 'ach' | 'stats'>('none');
+  /* Round 162: the drawers (Round 196 added the boardroom). Tiles per the
+     house style: each opens its own panel instead of stretching the page. */
+  const [drawer, setDrawer] = useState<'none' | 'ach' | 'stats' | 'legacy'>('none');
   const [burst, setBurst] = useState<{ id: number; pieces: { x: number; d: number; c: string; r: number }[] } | null>(null);
   const pitchRef = useRef<HTMLDivElement | null>(null);
 
@@ -139,7 +141,7 @@ export default function StadiumTycoon() {
       <GameNavbar />
       <PageSeo
         title="Stadium Tycoon: Free Idle Soccer Club Game | DoUKnowBall"
-        description="Grow a tiny football club into an empire. Live toy matches, ten divisions, a staff payroll, golden whistles, 47 badges, reputation stars and away earnings. Free idle game, no sign-up."
+        description="Grow a tiny football club into an empire. Live toy matches, ten divisions, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks. Free idle game, no sign-up."
         path="/stadium-tycoon"
       />
       <div className="max-w-2xl mx-auto px-4 py-4 md:py-8">
@@ -193,12 +195,12 @@ export default function StadiumTycoon() {
           )}
         >
           {!boostActive(s) && !boostReady(s) && (
-            <span className="absolute inset-y-0 left-0 bg-yellow-500/15 transition-all duration-700" style={{ width: `${Math.min(100, ((s.boostChargeSec ?? 0) / BOOST_CHARGE_SEC) * 100)}%` }} />
+            <span className="absolute inset-y-0 left-0 bg-yellow-500/15 transition-all duration-700" style={{ width: `${Math.min(100, ((s.boostChargeSec ?? 0) / boostChargeSecOf(s)) * 100)}%` }} />
           )}
           <span className="relative">
             {boostActive(s) ? `🔥 HYPE IS LIVE: everything pays x2 (${Math.ceil(s.boostLeftSec)}s)`
               : boostReady(s) ? '📣 MATCHDAY HYPE READY: press for x2'
-              : `📣 Matchday Hype charging: ${Math.floor(((s.boostChargeSec ?? 0) / BOOST_CHARGE_SEC) * 100)}%`}
+              : `📣 Matchday Hype charging: ${Math.floor(((s.boostChargeSec ?? 0) / boostChargeSecOf(s)) * 100)}%`}
           </span>
         </button>
 
@@ -276,8 +278,8 @@ export default function StadiumTycoon() {
         {/* Prestige bar */}
         <div className="mb-3">
           {canPrestige(s) ? (
-            <button onClick={g.doPrestige} className="w-full py-2.5 rounded-xl font-bold bg-yellow-500 text-black hover:opacity-90 transition-opacity st-glow">
-              ⭐ Sell up and move to a bigger ground (permanent +50% income)
+            <button onClick={g.doPrestige} data-sell-up className="w-full py-2.5 rounded-xl font-bold bg-yellow-500 text-black hover:opacity-90 transition-opacity st-glow">
+              ⭐ Sell up: permanent +50% income, +{pointsForSale(s)} legacy point{pointsForSale(s) === 1 ? '' : 's'}
             </button>
           ) : (
             <div className="relative h-2 rounded-full bg-secondary overflow-hidden" title="Progress to your next reputation star">
@@ -285,7 +287,9 @@ export default function StadiumTycoon() {
             </div>
           )}
           <div className="text-[10px] text-muted-foreground text-center mt-1">
-            {canPrestige(s) ? 'the club has outgrown this ground' : `next star at ${fmtMoney(prestigeThreshold(s))} lifetime earnings (${fmtMoney(s.lifetime)} so far)`}
+            {canPrestige(s)
+              ? `the club has outgrown this ground${winsToNextDivision(s) !== null ? `. One more division before selling would pay ${pointsForSale(s) + 1} legacy points instead` : ''}`
+              : `next star at ${fmtMoney(prestigeThreshold(s))} lifetime earnings (${fmtMoney(s.lifetime)} so far)`}
           </div>
         </div>
 
@@ -355,21 +359,31 @@ export default function StadiumTycoon() {
         </div>
 
         {/* Round 162: the drawers. Achievements are the long game's long game:
-            every badge is +2% income, forever, across every ground. */}
-        <div className="grid grid-cols-2 gap-2 mb-3">
+            every badge is +2% income, forever, across every ground.
+            Round 196: the boardroom joins them. */}
+        <div className="grid grid-cols-3 gap-2 mb-3">
           <button
             onClick={() => setDrawer(d => (d === 'ach' ? 'none' : 'ach'))}
             className={cn('rounded-xl border py-2 text-xs font-bold transition-all',
               drawer === 'ach' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
           >
-            🏅 Badges {achCount}/{ACHIEVEMENTS.length} (+{achCount * 2}%)
+            🏅 Badges {achCount}/{ACHIEVEMENTS.length}
+          </button>
+          <button
+            data-legacy-drawer
+            onClick={() => setDrawer(d => (d === 'legacy' ? 'none' : 'legacy'))}
+            className={cn('rounded-xl border py-2 text-xs font-bold transition-all',
+              drawer === 'legacy' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary',
+              legacyPointsOf(s) > 0 && drawer !== 'legacy' && 'border-gold text-gold')}
+          >
+            🏛️ Legacy{legacyPointsOf(s) > 0 ? ` (${legacyPointsOf(s)} pts)` : ''}
           </button>
           <button
             onClick={() => setDrawer(d => (d === 'stats' ? 'none' : 'stats'))}
             className={cn('rounded-xl border py-2 text-xs font-bold transition-all',
               drawer === 'stats' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
           >
-            📊 Club records
+            📊 Records
           </button>
         </div>
 
@@ -394,6 +408,47 @@ export default function StadiumTycoon() {
           </div>
         )}
 
+        {/* Round 196: the boardroom. Legacy points buy permanent perks. */}
+        {drawer === 'legacy' && (
+          <div data-legacy-board className="bg-card border border-border rounded-xl p-3 mb-3">
+            <div className="text-[10px] text-muted-foreground mb-2">
+              Selling up pays legacy points: 1 for the sale plus 1 per division that ground climbed, so a Summit sale pays 10.
+              Every perk bought here is permanent, on every future ground, forever.
+              You have <b className="text-gold">{legacyPointsOf(s)} point{legacyPointsOf(s) === 1 ? '' : 's'}</b> to spend.
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+              {LEGACY_PERKS.map(p => {
+                const lvl = perkLevelOf(s, p.id);
+                const cost = perkCostOf(s, p.id);
+                const ok = canBuyPerk(s, p.id);
+                return (
+                  <div key={p.id} data-perk={p.id} className={cn('rounded-lg border px-2 py-1.5 text-[10px] flex items-center gap-2',
+                    lvl > 0 ? 'border-gold/40 bg-gold/5' : 'border-border/60 bg-background/40')}>
+                    <span className="text-base leading-none shrink-0">{p.emoji}</span>
+                    <span className="min-w-0 flex-1">
+                      <span className="font-bold text-foreground">{p.name}</span>
+                      <span className="ml-1 text-muted-foreground">Lv {lvl}/{p.costs.length}</span>
+                      <span className="block text-muted-foreground leading-snug">{p.blurb}</span>
+                    </span>
+                    {cost === null ? (
+                      <span className="shrink-0 text-[9px] font-bold text-gold">MAXED</span>
+                    ) : (
+                      <button
+                        onClick={() => g.doLegacyPerk(p.id)}
+                        disabled={!ok}
+                        className={cn('shrink-0 rounded-full px-2.5 py-1 text-[9px] font-bold transition-all active:scale-95',
+                          ok ? 'bg-gold text-black hover:opacity-90' : 'bg-secondary text-muted-foreground')}
+                      >
+                        {cost} pt{cost === 1 ? '' : 's'}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {drawer === 'stats' && (
           <div className="bg-card border border-border rounded-xl p-3 mb-3">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-center">
@@ -407,6 +462,8 @@ export default function StadiumTycoon() {
                 ['Golden whistles caught', (s.goldenCaught ?? 0).toLocaleString()],
                 ['Hype boosts pressed', (s.boostsUsed ?? 0).toLocaleString()],
                 ['Reputation stars', s.rep.toLocaleString()],
+                ['Legacy points unspent', legacyPointsOf(s).toLocaleString()],
+                ['Legacy perk levels', totalPerkLevels(s).toLocaleString()],
               ].map(([label, value]) => (
                 <div key={label as string} className="rounded-lg bg-secondary/50 px-2 py-2">
                   <div className="text-xs font-bold font-display text-foreground truncate">{value}</div>
@@ -424,7 +481,7 @@ export default function StadiumTycoon() {
 
         <GameSeoContent
           title="Stadium Tycoon"
-          description="Grow a tiny football club into an empire: live toy matches, ten divisions to climb, a staff payroll, golden whistles, 47 badges and reputation stars."
+          description="Grow a tiny football club into an empire: live toy matches, ten divisions to climb, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks."
         />
       </div>
 
@@ -453,14 +510,15 @@ export default function StadiumTycoon() {
               <p>You run a tiny club's matchday money machine. Fans show up if there are seats and things to spend on; every fan pays you every second.</p>
               <p>The match on screen is real: your Squad level drives goals, goals pay a bonus scaled by the crowd, wins extend a streak that multiplies everything and pulls in new fans. Opponents get harder forever.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
-              <p>Matchday Hype charges over eight minutes of play. Press it and everything pays double for sixty seconds: income, taps, goal and win bonuses. It does not charge or burn while you are away.</p>
+              <p>Matchday Hype charges over eight minutes of play (Stadium Voltage in the boardroom trims that to seven, then six). Press it and everything pays double for sixty seconds: income, taps, goal and win bonuses. It does not charge or burn while you are away.</p>
               <p>Wins at your ground climb a ladder of ten divisions, from the Muddy Meadows League to The Summit. Every division multiplies all income, up to x5.5 at the top, and going up pays a promotion bonus on the spot. Higher divisions send tougher opponents.</p>
               <p>The payroll hires eight staff, from a matchday steward to a club legend. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
               <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about 12 seconds to catch it, for one of five prizes: DERBY DAY (everything pays x7 for 77 seconds), CROWD SURGE (taps pay x25 for 30 seconds), TV WINDFALL (fifteen minutes of income, instantly), WONDERGOAL GOES VIRAL (the fanbase jumps) or SPONSOR GIFT (a free upgrade level).</p>
               <p>Milestones pay once each for the club's firsts: the first win, the first full house, 10,000 fans, five wins in a row. Ten in all, and they stay earned even after you sell up.</p>
               <p>Badges are the long game: 47 of them, from 500 fans to promotion into The Summit, and each one earned is +2% income forever. Check them in the Badges drawer, and your career numbers in Club records.</p>
               <p>When lifetime earnings hit the bar, sell up: fans, ground, staff and division reset, but you keep a permanent Reputation star worth +50% income each, every badge, and your club records. The ladder is faster every run.</p>
-              <p>Away from the game, you earn at half speed for up to 8 hours. Progress saves on this device.</p>
+              <p>Selling up also pays legacy points: 1 for the sale plus 1 per division that ground climbed, so cashing out early pays 1 and a sale from The Summit pays 10. Spend them in the Legacy boardroom on eight permanent perks, from Boardroom Sway (+10% income per level, forever) to a Steady Dressing Room that keeps half your streak through a loss. The whole board costs exactly 100 points. Perks survive every future sale.</p>
+              <p>Away from the game, you earn at half speed for up to 8 hours (the Away Day Deal perk raises both, up to 80% for 12 hours). Progress saves on this device.</p>
               <p>Worked example: at 400 fans and $12/s, one goal pays about $240, a win about $880, and Stands level 10 (adding 40 seats) pays itself back in under two minutes if the ground was full.</p>
             </div>
           </div>

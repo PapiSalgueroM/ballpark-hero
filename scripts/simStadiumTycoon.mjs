@@ -59,6 +59,10 @@ const {
   STAFF, staffCostOf, canHire, hire, staffBaseIncome, totalStaffLevels,
   GOLDEN_INFO, rollGoldenKind, goldenActive, catchGolden,
   ACHIEVEMENTS, ACH_BONUS, achMult, tapValue, oppChancePerMin, levelOf,
+  LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, buyPerk,
+  legacyPointsOf, totalPerkLevels, pointsForSale, swayMult, rootsMult,
+  payrollMult, charmMult, boostChargeSecOf, offlineRateOf,
+  offlineCapHoursOf, startingMoneyOf, fanGrowthPerSec,
 } = T;
 
 let failures = 0;
@@ -557,6 +561,149 @@ console.log('12) Badges pay 2% each and never fire twice');
   const fake = deserializeTycoon(JSON.stringify({ ...JSON.parse(serializeTycoon(g, 9)), ach: ['made-up', ...(g.ach ?? [])] }), 9);
   if (fake && fake.ach.includes('made-up')) fail('a fake badge id survived the load');
   console.log(`   ${gCount} badges in 30 min, x${achMult(g).toFixed(2)} exact, exactly-once, forever, tamper-proof`);
+}
+
+/* ---------- 13. Round 196: the legacy boardroom ---------- */
+console.log('13) Legacy points pay by the climb and every perk does exactly what it says');
+{
+  // The board's shape: eight perks, unique ids, exactly 100 points to max.
+  if (LEGACY_PERKS.length !== 8) fail(`expected 8 perks, found ${LEGACY_PERKS.length}`);
+  const ids = new Set(LEGACY_PERKS.map(p => p.id));
+  if (ids.size !== LEGACY_PERKS.length) fail('duplicate perk ids');
+  const boardCost = LEGACY_PERKS.reduce((sum, p) => sum + p.costs.reduce((a, b) => a + b, 0), 0);
+  if (boardCost !== 100) fail(`the whole board costs ${boardCost} points, the design says exactly 100`);
+  const DASHES = /[\u2013\u2014]/; /* by codepoint, the simEras convention */
+  for (const p of LEGACY_PERKS) {
+    if (p.costs.some(c => !Number.isInteger(c) || c <= 0)) fail(`${p.id}: non-positive or fractional cost`);
+    if (DASHES.test(p.name) || DASHES.test(p.blurb)) fail(`${p.id}: dash in copy`);
+  }
+
+  // The sale pays by the climb: 1 at the bottom, 10 from The Summit.
+  const s0 = newTycoon(0);
+  if (pointsForSale(s0) !== 1) fail(`a bottom-league sale pays ${pointsForSale(s0)}, expected 1`);
+  const summit = { ...s0, groundWins: 200 };
+  if (divisionIndex(summit) !== 9) fail('200 wins is not The Summit');
+  if (pointsForSale(summit) !== 10) fail(`a Summit sale pays ${pointsForSale(summit)}, expected 10`);
+
+  // Prestige reads the ground BEFORE the reset and carries the boardroom.
+  const mid = { ...s0, groundWins: 60, lifetime: 1e12, legacyPoints: 3, legacyPerks: { sway: 2 } };
+  if (divisionIndex(mid) !== 5) fail('60 wins should sit in division 5');
+  const sold = prestige(mid, 0);
+  if (legacyPointsOf(sold) !== 3 + 6) fail(`the sale banked ${legacyPointsOf(sold)} points, expected 9 (3 held + 1 + division 5)`);
+  if (perkLevelOf(sold, 'sway') !== 2) fail('perks did not survive the sale');
+  if ((sold.groundWins ?? 0) !== 0) fail('the new ground kept the old wins');
+
+  // Buying: exact deduction, refusal when short, capped, unknown ids inert.
+  let b = { ...newTycoon(0), legacyPoints: 3 };
+  b = buyPerk(b, 'sway');
+  if (perkLevelOf(b, 'sway') !== 1 || legacyPointsOf(b) !== 0) fail('the first sway level did not cost exactly 3');
+  if (buyPerk(b, 'sway') !== b) fail('an unaffordable perk still sold');
+  if (buyPerk(b, 'notAPerk') !== b) fail('an invented perk id did something');
+  const maxedShield = { ...newTycoon(0), legacyPoints: 99, legacyPerks: { shield: 1 } };
+  if (buyPerk(maxedShield, 'shield') !== maxedShield) fail('a maxed perk sold past its cap');
+  if (perkCostOf(maxedShield, 'shield') !== null) fail('a maxed perk still quotes a price');
+
+  // Effects, to the digit, each measured at its cap.
+  const withPerk = (perks) => ({ ...newTycoon(0), legacyPerks: perks });
+  const swayRatio = incomePerSec(withPerk({ sway: 5 })) / incomePerSec(s0);
+  if (Math.abs(swayRatio - 1.5) > 1e-9) fail(`max Boardroom Sway pays x${swayRatio}, the card says x1.5`);
+  const rootsRatio = fanGrowthPerSec(withPerk({ roots: 3 })) / fanGrowthPerSec(s0);
+  if (Math.abs(rootsRatio - 1.45) > 1e-9) fail(`max Deep Roots grows x${rootsRatio}, the card says x1.45`);
+  const staffed = { ...newTycoon(0), staffLevels: { steward: 10, pieChef: 4 } };
+  const payRatio = staffBaseIncome({ ...staffed, legacyPerks: { payroll: 3 } }) / staffBaseIncome(staffed);
+  if (Math.abs(payRatio - 1.6) > 1e-9) fail(`max Veteran Payroll pays x${payRatio}, the card says x1.6`);
+
+  // Stadium Voltage: the charge target drops a minute per level and READY
+  // follows the perk, not the old constant.
+  if (boostChargeSecOf(s0) !== 480 || boostChargeSecOf(withPerk({ voltage: 1 })) !== 420 || boostChargeSecOf(withPerk({ voltage: 2 })) !== 360) {
+    fail('Stadium Voltage does not step 480/420/360');
+  }
+  const charged = { ...withPerk({ voltage: 2 }), boostChargeSec: 360 };
+  if (!boostReady(charged)) fail('a full Voltage charge did not light the button');
+  if (boostReady({ ...s0, boostChargeSec: 360 })) fail('360s lit the button with NO voltage perk');
+  // And the tick clamps the bank at the perk's own target.
+  let volt = withPerk({ voltage: 2 });
+  for (let t = 0; t < 500; t += 2) volt = tick(volt, 2, () => 0.999).state;
+  if (volt.boostChargeSec !== 360) fail(`the charge bank sits at ${volt.boostChargeSec}, the Voltage cap is 360`);
+
+  // Gold Polish stretches the timed whistles only.
+  const polished = withPerk({ charm: 2 });
+  const frenzy = catchGolden(polished, 'frenzy').state;
+  if (Math.abs((frenzy.goldenLeftSec ?? 0) - 77 * 1.5) > 1e-9) fail(`a polished DERBY DAY runs ${frenzy.goldenLeftSec}s, expected 115.5`);
+  const rush = catchGolden(polished, 'tapRush').state;
+  if (Math.abs((rush.goldenLeftSec ?? 0) - 45) > 1e-9) fail(`a polished CROWD SURGE runs ${rush.goldenLeftSec}s, expected 45`);
+  const backLit = deserializeTycoon(serializeTycoon(frenzy, 5), 5);
+  if (!backLit || Math.abs(backLit.goldenLeftSec - 115.5) > 0.6) fail('a polished frenzy clock did not survive a save');
+
+  // Away Day Deal: rate and cap step exactly, and the cap binds.
+  const base = { ...playFor(newTycoon(0), 120, seeded(7)).s, savedAt: 0 };
+  const hour = 3600 * 1000;
+  const payL0 = offlineEarnings(base, hour);
+  const payL1 = offlineEarnings({ ...base, legacyPerks: { away: 1 } }, hour);
+  if (Math.abs(payL1 / payL0 - 1.3) > 0.01) fail(`Away Deal level 1 pays x${(payL1 / payL0).toFixed(3)} for an hour, expected x1.3`);
+  const week = 7 * 24 * hour;
+  const capped2 = offlineEarnings({ ...base, legacyPerks: { away: 2 } }, week);
+  const expect2 = Math.round(incomePerSec(base) * 12 * 3600 * 0.8);
+  if (Math.abs(capped2 - expect2) > 2) fail(`a week away at level 2 paid ${capped2}, the 12h x 0.8 cap says ${expect2}`);
+  if (offlineCapHoursOf(s0) !== 8 || offlineRateOf(s0) !== 0.5) fail('the no-perk away rules moved');
+
+  // Rolling Investment: the seed lands in the NEXT till, exactly.
+  const seller = { ...newTycoon(0), lifetime: 1e12 };
+  if (prestige(seller, 0).money !== 40) fail('a no-perk sale did not open with the standard 40');
+  const seeded3 = prestige({ ...seller, legacyPerks: { rolling: 3 } }, 0);
+  if (seeded3.money !== 12040) fail(`max Rolling Investment opened with ${seeded3.money}, expected 12040`);
+  if (perkLevelOf(seeded3, 'rolling') !== 3) fail('the rolling perk itself did not survive its own sale');
+
+  // Steady Dressing Room: a loss halves the streak DOWN, never holds a 1.
+  const brink = (streak, perks) => {
+    const st = { ...newTycoon(0), minute: 89, goalsFor: 0, goalsAgainst: 1, streak, legacyPerks: perks };
+    return tick(st, 1.4, () => 0.999).state;
+  };
+  if (brink(8, {}).streak !== 0) fail('a loss without the perk kept the streak');
+  if (brink(8, { shield: 1 }).streak !== 4) fail(`a shielded loss at streak 8 kept ${brink(8, { shield: 1 }).streak}, expected 4`);
+  if (brink(1, { shield: 1 }).streak !== 0) fail('the shield held a streak of 1, it must die');
+
+  // Bounded by design: a maxed board on a fresh ground multiplies the
+  // income line by Sway's 1.5 and nothing else, never a printing press.
+  const maxed = withPerk(Object.fromEntries(LEGACY_PERKS.map(p => [p.id, p.costs.length])));
+  const maxRatio = incomePerSec(maxed) / incomePerSec(s0);
+  if (Math.abs(maxRatio - 1.5) > 1e-9) fail(`a maxed board multiplies fresh income x${maxRatio}, only Sway (x1.5) should touch it`);
+
+  // Save plumbing: roundtrip identity, tampering comes back sane.
+  const rich = { ...newTycoon(0), legacyPoints: 42, legacyPerks: { sway: 2, shield: 1 } };
+  const rt = deserializeTycoon(serializeTycoon(rich, 3), 3);
+  if (!rt || legacyPointsOf(rt) !== 42 || perkLevelOf(rt, 'sway') !== 2 || perkLevelOf(rt, 'shield') !== 1) {
+    fail('the boardroom did not survive a save roundtrip');
+  }
+  const tampered = deserializeTycoon(JSON.stringify({
+    ...JSON.parse(serializeTycoon(rich, 3)),
+    legacyPoints: 1e9, legacyPerks: { sway: 99, fake: 3, shield: -2 },
+  }), 3);
+  if (!tampered) fail('a tampered boardroom killed the load');
+  else {
+    if (legacyPointsOf(tampered) !== 5000) fail(`a billion doctored points loaded as ${legacyPointsOf(tampered)}, the clamp says 5000`);
+    if (perkLevelOf(tampered, 'sway') !== 5) fail('a doctored sway 99 was not clamped to its cap');
+    if (perkLevelOf(tampered, 'fake') !== 0) fail('an invented perk id survived the load');
+    if (perkLevelOf(tampered, 'shield') !== 0) fail('a negative perk level survived the load');
+  }
+  const nanPoints = deserializeTycoon(JSON.stringify({ ...JSON.parse(serializeTycoon(rich, 3)), legacyPoints: 'lots' }), 3);
+  if (!nanPoints || legacyPointsOf(nanPoints) !== 0) fail('non-numeric points did not fall back to zero');
+
+  // The migration grant: a save from before the boardroom gets one point
+  // per star on the shelf, exactly once, and never again after that.
+  const oldShape = JSON.parse(serializeTycoon({ ...newTycoon(0), rep: 6 }, 0));
+  delete oldShape.legacyPoints; delete oldShape.legacyPerks; delete oldShape.legacySeeded;
+  const migrated = deserializeTycoon(JSON.stringify(oldShape), 0);
+  if (!migrated || legacyPointsOf(migrated) !== 6) fail(`a six-star pre-boardroom save seeded ${migrated ? legacyPointsOf(migrated) : 'nothing'}, expected 6`);
+  if (migrated && migrated.legacySeeded !== true) fail('the migration latch did not set');
+  const again = migrated ? deserializeTycoon(serializeTycoon(migrated, 1), 1) : null;
+  if (!again || legacyPointsOf(again) !== 6) fail('the migration grant repeated on the second load');
+  const freshOld = JSON.parse(serializeTycoon(newTycoon(0), 0));
+  delete freshOld.legacyPoints; delete freshOld.legacyPerks; delete freshOld.legacySeeded;
+  const zeroMig = deserializeTycoon(JSON.stringify(freshOld), 0);
+  if (!zeroMig || legacyPointsOf(zeroMig) !== 0) fail('a starless old save seeded points from nowhere');
+
+  console.log(`   board costs exactly ${boardCost}, Summit sale pays 10, every effect exact, migration seeds once`);
 }
 
 console.log('');

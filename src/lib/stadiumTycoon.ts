@@ -170,9 +170,11 @@ export function totalStaffLevels(s: TycoonState): number {
   return STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id), 0);
 }
 
-/** Staff base income before the global multipliers. */
+/** Staff income before the global multipliers. Round 196: the Veteran
+ *  Payroll legacy perk raises every rate here, at the source, so the
+ *  payroll line and the income line can never disagree about it. */
 export function staffBaseIncome(s: TycoonState): number {
-  return STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id) * t.rate, 0);
+  return STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id) * t.rate, 0) * payrollMult(s);
 }
 
 /* ---------- the golden whistle: catch it before it drifts away ---------- */
@@ -212,7 +214,8 @@ export function catchGolden(s: TycoonState, kind: GoldenKind): { state: TycoonSt
   const st: TycoonState = { ...s, goldenCaught: (s.goldenCaught ?? 0) + 1 };
   if (kind === 'frenzy' || kind === 'tapRush') {
     st.goldenKind = kind;
-    st.goldenLeftSec = GOLDEN_INFO[kind].duration;
+    // Round 196: Gold Polish stretches the timed kinds, never the instant ones.
+    st.goldenLeftSec = GOLDEN_INFO[kind].duration * charmMult(s);
     return { state: st };
   }
   if (kind === 'windfall') {
@@ -313,6 +316,130 @@ export function achMult(s: TycoonState): number {
   return 1 + (s.ach ?? []).length * ACH_BONUS;
 }
 
+/* ================================================================== */
+/* Round 196: the legacy boardroom. His standing ask on the idle game */
+/* is "keep going", and the genre's deepest missing layer here was a  */
+/* prestige SHOP: selling up pays legacy points scaled by how high    */
+/* this ground climbed (1 point, plus 1 per division), and the points */
+/* buy permanent perks that survive every future sale. The tension is */
+/* the point: sell the moment the bar fills, or push divisions first  */
+/* for a fatter legacy. Every perk is a bounded multiplier or a small */
+/* quality-of-life rule, measured by the harness, never a printing    */
+/* press. Everything stays pure: the page renders, this file owns it. */
+/* ================================================================== */
+
+export interface TycoonLegacyPerk {
+  id: string;
+  name: string;
+  emoji: string;
+  /** What the perk does, one line, exact numbers, shown on the card. */
+  blurb: string;
+  /** Cost in legacy points of level i+1 is costs[i]; length is the cap. */
+  costs: number[];
+}
+
+/* Maxing the whole board costs exactly 100 points, about ten sales from
+ * The Summit or a long career of honest mid-table flips. */
+export const LEGACY_PERKS: TycoonLegacyPerk[] = [
+  { id: 'sway', name: 'Boardroom Sway', emoji: '\u{1F3DB}\u{FE0F}', blurb: 'Matchday income pays 10% more per level, forever', costs: [3, 5, 8, 12, 17] },
+  { id: 'rolling', name: 'Rolling Investment', emoji: '\u{1F4BC}', blurb: 'Every next ground opens with seed money in the till', costs: [1, 2, 4] },
+  { id: 'roots', name: 'Deep Roots', emoji: '\u{1F331}', blurb: 'The fanbase grows 15% faster per level, every ground', costs: [1, 3, 6] },
+  { id: 'payroll', name: 'Veteran Payroll', emoji: '\u{1F9D1}\u{200D}\u{1F4BC}', blurb: 'Every staff member earns 20% more per level', costs: [2, 4, 8] },
+  { id: 'shield', name: 'Steady Dressing Room', emoji: '\u{1F9E4}', blurb: 'A loss keeps half the win streak instead of ending it', costs: [3] },
+  { id: 'away', name: 'Away Day Deal', emoji: '\u{1F68C}', blurb: 'Away pay rises to 65 then 80 percent, trips cap at 10 then 12 hours', costs: [2, 4] },
+  { id: 'voltage', name: 'Stadium Voltage', emoji: '\u{26A1}', blurb: 'Matchday Hype charges a full minute faster per level', costs: [2, 4] },
+  { id: 'charm', name: 'Gold Polish', emoji: '\u{1FA99}', blurb: 'Timed golden whistles run 25% longer per level', costs: [3, 6] },
+];
+
+/** Seed money the Rolling Investment adds to a fresh ground, by level. */
+const ROLLING_SEED = [0, 500, 2500, 12000];
+
+export function perkById(id: string): TycoonLegacyPerk | null {
+  return LEGACY_PERKS.find(p => p.id === id) ?? null;
+}
+
+export function perkLevelOf(s: TycoonState, id: string): number {
+  return (s.legacyPerks ?? {})[id] ?? 0;
+}
+
+export function legacyPointsOf(s: TycoonState): number {
+  return s.legacyPoints ?? 0;
+}
+
+export function totalPerkLevels(s: TycoonState): number {
+  return LEGACY_PERKS.reduce((sum, p) => sum + perkLevelOf(s, p.id), 0);
+}
+
+/** Cost in points of the NEXT level, or null at the cap. */
+export function perkCostOf(s: TycoonState, id: string): number | null {
+  const p = perkById(id);
+  if (!p) return null;
+  const lvl = perkLevelOf(s, id);
+  return lvl >= p.costs.length ? null : p.costs[lvl];
+}
+
+export function canBuyPerk(s: TycoonState, id: string): boolean {
+  const cost = perkCostOf(s, id);
+  return cost !== null && legacyPointsOf(s) >= cost;
+}
+
+/** Spend points on one perk level. Same state back if not affordable. */
+export function buyPerk(s: TycoonState, id: string): TycoonState {
+  if (!canBuyPerk(s, id)) return s;
+  const cost = perkCostOf(s, id) as number;
+  return {
+    ...s,
+    legacyPoints: legacyPointsOf(s) - cost,
+    legacyPerks: { ...(s.legacyPerks ?? {}), [id]: perkLevelOf(s, id) + 1 },
+  };
+}
+
+/** What selling up RIGHT NOW pays in legacy points: one for the sale,
+ *  one per division this ground climbed. Sell early for the star, or
+ *  push the ladder first for the legacy. */
+export function pointsForSale(s: TycoonState): number {
+  return 1 + divisionIndex(s);
+}
+
+/** Boardroom Sway: a flat forever-multiplier on the income line. */
+export function swayMult(s: TycoonState): number {
+  return 1 + perkLevelOf(s, 'sway') * 0.10;
+}
+
+/** Deep Roots: the fanbase compounds faster. */
+export function rootsMult(s: TycoonState): number {
+  return 1 + perkLevelOf(s, 'roots') * 0.15;
+}
+
+/** Veteran Payroll: every staff rate up. */
+export function payrollMult(s: TycoonState): number {
+  return 1 + perkLevelOf(s, 'payroll') * 0.20;
+}
+
+/** Gold Polish: timed whistles burn longer. */
+export function charmMult(s: TycoonState): number {
+  return 1 + perkLevelOf(s, 'charm') * 0.25;
+}
+
+/** Stadium Voltage: seconds of play a full hype charge needs. */
+export function boostChargeSecOf(s: TycoonState): number {
+  return BOOST_CHARGE_SEC - perkLevelOf(s, 'voltage') * 60;
+}
+
+/** Away Day Deal: the away pay rate and its cap in hours. */
+export function offlineRateOf(s: TycoonState): number {
+  return [0.5, 0.65, 0.8][perkLevelOf(s, 'away')] ?? 0.5;
+}
+
+export function offlineCapHoursOf(s: TycoonState): number {
+  return [8, 10, 12][perkLevelOf(s, 'away')] ?? 8;
+}
+
+/** Rolling Investment: the till a fresh ground opens with. */
+export function startingMoneyOf(s: TycoonState): number {
+  return 40 + (ROLLING_SEED[perkLevelOf(s, 'rolling')] ?? 0);
+}
+
 export interface TycoonState {
   v: number;
   money: number;
@@ -363,6 +490,15 @@ export interface TycoonState {
   goldenCaught?: number;
   boostsUsed?: number;
   totalMatches?: number;
+  /** Round 196: unspent legacy points. Earned at every sale, spent in the
+   *  boardroom, forever like the badges. */
+  legacyPoints?: number;
+  /** Round 196: perk levels by id. Permanent, across every ground. */
+  legacyPerks?: Record<string, number>;
+  /** Round 196: migration latch. Saves from before the boardroom get one
+   *  point per already-earned star exactly once (the minimum any of those
+   *  sales could have paid); this flag stops the grant repeating. */
+  legacySeeded?: boolean;
 }
 
 export const TYCOON_SAVE_KEY = 'stadiumTycoonSaveV1';
@@ -397,6 +533,10 @@ export function newTycoon(now: number): TycoonState {
     goldenCaught: 0,
     boostsUsed: 0,
     totalMatches: 0,
+    /* Round 196: a brand-new career needs no migration grant. */
+    legacyPoints: 0,
+    legacyPerks: {},
+    legacySeeded: true,
   };
 }
 
@@ -474,7 +614,8 @@ export const BOOST_CHARGE_SEC = 8 * 60;
 export const BOOST_DURATION_SEC = 60;
 
 export function boostReady(s: TycoonState): boolean {
-  return (s.boostChargeSec ?? 0) >= BOOST_CHARGE_SEC && (s.boostLeftSec ?? 0) <= 0;
+  /* Round 196: Stadium Voltage shortens the charge a full hype needs. */
+  return (s.boostChargeSec ?? 0) >= boostChargeSecOf(s) && (s.boostLeftSec ?? 0) <= 0;
 }
 
 export function boostActive(s: TycoonState): boolean {
@@ -550,8 +691,9 @@ export function incomePerSec(s: TycoonState): number {
      Order matters not at all (it is one product), but the frenzy sits last
      in the line so the code reads the way the screen explains it. */
   const golden = goldenActive(s) && s.goldenKind === 'frenzy' ? 7 : 1;
+  /* Round 196: Boardroom Sway rides the same product as everything else. */
   return (fans * perFan + parking + staffBaseIncome(s))
-    * repMult(s) * streakMult(s) * divisionOf(s).incomeMult * achMult(s) * hype * golden;
+    * repMult(s) * streakMult(s) * divisionOf(s).incomeMult * achMult(s) * swayMult(s) * hype * golden;
 }
 
 /** One tap on the stadium. Megaphone makes taps matter deep into a run. */
@@ -579,7 +721,8 @@ export function fanGrowthPerSec(s: TycoonState): number {
   // they can never get into. Never zero, so progress never fully stalls.
   const room = capacity(s) * 3;
   const pressure = s.fanbase >= room ? 0.15 : 1;
-  return base * winPull * pressure;
+  /* Round 196: Deep Roots compounds the growth, never the pressure rule. */
+  return base * winPull * pressure * rootsMult(s);
 }
 
 /** Chance our toy team scores in one match minute. */
@@ -659,7 +802,9 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
   if ((st.boostLeftSec ?? 0) > 0) {
     st.boostLeftSec = Math.max(0, (st.boostLeftSec ?? 0) - dt);
   } else {
-    st.boostChargeSec = Math.min(BOOST_CHARGE_SEC, (st.boostChargeSec ?? 0) + dt);
+    // Round 196: the cap follows the Voltage perk, so the bar reads full
+    // exactly when the button lights.
+    st.boostChargeSec = Math.min(boostChargeSecOf(st), (st.boostChargeSec ?? 0) + dt);
   }
   // Round 162: the golden whistle's clock burns the same way: play-time only.
   if ((st.goldenLeftSec ?? 0) > 0) {
@@ -701,7 +846,10 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
         st.fanbase += 6 + st.streak * 2;
         events.push({ kind: 'win', amount: b });
       } else if (st.goalsFor < st.goalsAgainst) {
-        st.streak = 0;
+        /* Round 196: a Steady Dressing Room keeps half the run alive.
+           Halved DOWN, so a streak of 1 still dies and the perk can never
+           hold a streak forever on its own. */
+        st.streak = perkLevelOf(st, 'shield') > 0 ? Math.floor(st.streak / 2) : 0;
         events.push({ kind: 'loss' });
       } else {
         // A draw keeps the streak alive but does not extend it.
@@ -798,22 +946,30 @@ export function prestige(s: TycoonState, now: number): TycoonState {
     goldenCaught: s.goldenCaught ?? 0,
     boostsUsed: s.boostsUsed ?? 0,
     totalMatches: s.totalMatches ?? 0,
+    /* Round 196: the sale pays its legacy, read off the ground BEFORE the
+       reset, and the boardroom is forever like the badges. The Rolling
+       Investment perk seeds the new till. */
+    legacyPoints: legacyPointsOf(s) + pointsForSale(s),
+    legacyPerks: { ...(s.legacyPerks ?? {}) },
+    legacySeeded: true,
+    money: startingMoneyOf(s),
   };
 }
 
 /* ---------------- offline earnings ---------------- */
 
-/** Away pay: half rate, capped at eight hours. Returns whole pounds.
+/** Away pay: half rate, capped at eight hours, both raised by the Away
+ *  Day Deal legacy perk (65%/10h, then 80%/12h). Returns whole pounds.
  *  Round 150: computed at the UNboosted rate on purpose. Saving mid-hype
  *  and leaving must not turn sixty seconds of double pay into eight hours
  *  of it. */
 export function offlineEarnings(s: TycoonState, now: number): number {
   const elapsed = Math.max(0, (now - s.savedAt) / 1000);
-  const capped = Math.min(elapsed, 8 * 3600);
+  const capped = Math.min(elapsed, offlineCapHoursOf(s) * 3600);
   if (capped < 30) return 0; // a tab refresh is not a trip away
   // Round 162: same rule for the golden whistle as for hype: saving mid
   // frenzy must not turn 77 seconds of x7 into eight hours of it.
-  return Math.round(incomePerSec({ ...s, boostLeftSec: 0, goldenLeftSec: 0, goldenKind: null }) * capped * 0.5);
+  return Math.round(incomePerSec({ ...s, boostLeftSec: 0, goldenLeftSec: 0, goldenKind: null }) * capped * offlineRateOf(s));
 }
 
 /* ---------------- save plumbing ---------------- */
@@ -863,10 +1019,33 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
     }
     s.bestDivision = Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1);
     if (!Number.isFinite(s.goldenLeftSec) || (s.goldenLeftSec ?? 0) < 0) s.goldenLeftSec = 0;
-    s.goldenLeftSec = Math.min(s.goldenLeftSec ?? 0, GOLDEN_INFO.frenzy.duration);
+    /* Round 196: the honest ceiling is a frenzy at full Gold Polish. */
+    s.goldenLeftSec = Math.min(s.goldenLeftSec ?? 0, Math.ceil(GOLDEN_INFO.frenzy.duration * 1.5));
     if (s.goldenKind !== 'frenzy' && s.goldenKind !== 'tapRush') {
       s.goldenKind = null;
       s.goldenLeftSec = 0;
+    }
+    /* Round 196: the boardroom comes back sane whatever the save says.
+       Only real perk ids at integer levels within each cap, points finite
+       and bounded. A doctored save gets a working game, never a printing
+       press: every perk is capped, so a fat point balance buys at most
+       the same 100-point board everyone else can finish. */
+    const cleanPerks: Record<string, number> = {};
+    for (const perk of LEGACY_PERKS) {
+      const lvl = (s.legacyPerks ?? {})[perk.id];
+      cleanPerks[perk.id] = Number.isFinite(lvl) && (lvl as number) > 0 ? Math.min(Math.floor(lvl as number), perk.costs.length) : 0;
+    }
+    s.legacyPerks = cleanPerks;
+    if (!Number.isFinite(s.legacyPoints) || (s.legacyPoints ?? 0) < 0) s.legacyPoints = 0;
+    s.legacyPoints = Math.min(Math.floor(s.legacyPoints ?? 0), 5000);
+    /* Round 196: saves from before the boardroom get one point per star
+       already on the shelf, exactly once. One is the minimum ANY sale can
+       pay, so the grant never invents a climb that might not have happened.
+       The check reads the RAW save (p), because the base template already
+       carries legacySeeded: true and the spread would mask an old save. */
+    if ((p as { legacySeeded?: unknown }).legacySeeded !== true) {
+      s.legacyPoints = Math.min((s.legacyPoints ?? 0) + s.rep, 5000);
+      s.legacySeeded = true;
     }
     return s;
   } catch {

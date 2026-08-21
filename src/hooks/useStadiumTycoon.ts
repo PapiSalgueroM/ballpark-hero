@@ -11,7 +11,7 @@ import {
   TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
   activateBoost, hire, catchGolden, rollGoldenKind, goldenActive,
-  GOLDEN_INFO, fmtMoney,
+  GOLDEN_INFO, fmtMoney, buyPerk, perkById,
 } from '@/lib/stadiumTycoon';
 import type { GoldenKind } from '@/lib/stadiumTycoon';
 
@@ -156,8 +156,9 @@ export function useStadiumTycoon() {
   }, [pushFloater]);
 
   /* Round 195: the idle game counts as playing TODAY. One unscored mark
-     per session, on the first meaningful action (a tap, a purchase or a
-     hire), the S-1 rule the header games have followed since Round 157.
+     per session, on the first meaningful action (a tap, a purchase, a
+     hire or, since Round 196, a legacy buy), the S-1 rule the header
+     games have followed since Round 157.
      A ref, not state: marking must never re-render the game loop. */
   const sessionMarkedRef = useRef(false);
   const markSessionPlay = useCallback(() => {
@@ -219,11 +220,25 @@ export function useStadiumTycoon() {
     });
   }, []);
 
+  /* Round 196: the boardroom. Spending legacy is a meaningful action too,
+     so it marks the session like a tap or a hire does. */
+  const doLegacyPerk = useCallback((id: string) => {
+    markSessionPlay();
+    const before = stateRef.current;
+    const after = buyPerk(before, id);
+    if (after === before) return;
+    const p = perkById(id);
+    if (p) pushFloater(`${p.emoji} ${p.name}: locked in forever`, 'win', 24, 30);
+    setConfetti(c => c + 1);
+    setState(after);
+    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(after, Date.now())); } catch { /* ignore */ }
+  }, [pushFloater]);
+
   const dismissAway = useCallback(() => setAwayPay(null), []);
 
   return {
     state, floaters, awayPay, dismissAway, confetti,
     doBuy, doTap, doPrestige, doBoost,
-    golden, doCatchGolden, doHire,
+    golden, doCatchGolden, doHire, doLegacyPerk,
   };
 }

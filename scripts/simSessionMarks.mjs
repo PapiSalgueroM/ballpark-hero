@@ -113,15 +113,16 @@ console.log('3) Stadium Tycoon marks once per session, on the first real action'
     at = i;
   }
   if (!ok) fail('tycoon: the sessionMarkedRef guard shape is broken (guard, latch, mark, in order)');
-  /* first line of each meaningful action */
-  for (const action of ['doBuy', 'doHire', 'doTap']) {
+  /* first line of each meaningful action. Round 196 added the boardroom:
+     spending legacy points is playing too, so doLegacyPerk marks as well. */
+  for (const action of ['doBuy', 'doHire', 'doTap', 'doLegacyPerk']) {
     const i = t.indexOf(`const ${action} = useCallback(`);
     if (i < 0) { fail(`tycoon: ${action} not found`); continue; }
     const head = t.slice(i, i + 200);
     if (!head.includes('markSessionPlay();')) fail(`tycoon: ${action} does not mark the session first`);
   }
   const invocations = t.split('markSessionPlay();').length - 1;
-  if (invocations !== 3) fail(`tycoon: markSessionPlay() invoked ${invocations} times, expected exactly doBuy + doHire + doTap`);
+  if (invocations !== 4) fail(`tycoon: markSessionPlay() invoked ${invocations} times, expected exactly doBuy + doHire + doTap + doLegacyPerk`);
 }
 
 /* ---------- 4. Every marked path is a real route ---------- */
