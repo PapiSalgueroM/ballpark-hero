@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useWhodTheyBeat } from '@/hooks/useWhodTheyBeat';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
@@ -157,6 +158,10 @@ const WhodTheyBeat = () => {
             />
           </div>
         )}
+
+        <p className="text-center text-xs text-muted-foreground mt-6">
+          Every final in this game is in <Link to="/records" className="text-primary hover:underline">the Record Books</Link>, runner-up and all.
+        </p>
 
         <GameSeoContent
           pageHasOwnH1

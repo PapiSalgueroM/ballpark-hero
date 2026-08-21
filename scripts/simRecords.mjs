@@ -48,7 +48,9 @@ const fail = m => { failures += 1; console.error("  FAIL: " + m); };
 const FLOORS = { sb: 30, nba: 40, ws: 60, cup: 55, wnba: 14, cfb: 24, cbb: 40, epl: 60, afl: 64, nrl: 58 };
 /* columns the repairs made exactly complete: every row must carry them */
 const COMPLETE = {
-  sb: ["runnerUp", "score", "mvp"],
+  /* sb venue joined in Round 247: era-accurate stadium names with the
+     times-hosted debris stripped */
+  sb: ["runnerUp", "score", "mvp", "venue"],
   cfb: ["selector", "record", "coach"],
   /* nba runnerUp joined the complete set in Round 239, ws in Round 240:
      every finals names its beaten side, triple-verified before backfill */
@@ -95,6 +97,11 @@ for (const def of RECORD_SECTIONS) {
         const c = ch.charCodeAt(0);
         if (c === 8211 || c === 8212) fail(`${def.key} ${r.year}: rendered cell carries a long dash: ${v}`);
       }
+      /* Round 247: the venue column shipped once its times-hosted
+         annotations were stripped; no rendered cell may end in a bare
+         parenthesised count again. "(FL)" and "(interim)" style tags
+         are words, not counts, and pass. */
+      if (/ \(\d+\)$/.test(String(v))) fail(`${def.key} ${r.year}: cell ends in a bare count: ${v}`);
     }
     for (const k of COMPLETE[def.key] ?? []) {
       if (!r.extra[k]) fail(`${def.key} ${r.year}: missing ${k}, the repair made that column complete`);

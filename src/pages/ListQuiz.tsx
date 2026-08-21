@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Timer, Flag, Loader2, ListChecks } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
@@ -322,6 +323,10 @@ const ListQuiz = () => {
             )}
           </div>
         )}
+
+        <p className="text-center text-xs text-muted-foreground mt-6">
+          Studying for a Gold run? <Link to="/records" className="text-primary hover:underline">The Record Books</Link> lay out the team title lists year by year.
+        </p>
 
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
 

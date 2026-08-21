@@ -69,15 +69,16 @@ async function rows(
 export const RECORD_SECTIONS: RecordSection[] = [
   {
     key: 'sb', emoji: '🏈', title: 'Super Bowl Champions',
-    blurb: 'Every Super Bowl by the year it was played, with the final score and the MVP.',
+    blurb: 'Every Super Bowl by the year it was played, with the final score, the MVP and the stadium as it was named that day.',
     yearLabel: 'Year',
-    columns: [['runnerUp', 'Runner-up'], ['score', 'Score'], ['mvp', 'MVP']],
+    columns: [['runnerUp', 'Runner-up'], ['score', 'Score'], ['mvp', 'MVP'], ['venue', 'Venue']],
     play: [
       { path: '/champ-or-not', label: 'Champ or Not' },
+      { path: '/whod-they-beat', label: "Who'd They Beat?" },
       { path: '/list-quiz', label: 'Name Them All' },
     ],
     fetch: async () => {
-      const base = await rows('super_bowls', 'year', 'winner', { runnerUp: 'loser', mvp: 'mvp', ws: 'winner_score', ls: 'loser_score' });
+      const base = await rows('super_bowls', 'year', 'winner', { runnerUp: 'loser', mvp: 'mvp', venue: 'venue', ws: 'winner_score', ls: 'loser_score' });
       return base.map(r => {
         const { ws, ls, ...rest } = r.extra;
         return { ...r, extra: ws && ls ? { ...rest, score: `${ws}-${ls}` } : rest };
@@ -91,6 +92,7 @@ export const RECORD_SECTIONS: RecordSection[] = [
     columns: [['runnerUp', 'Runner-up'], ['series', 'Series'], ['mvp', 'Finals MVP']],
     play: [
       { path: '/champ-or-not', label: 'Champ or Not' },
+      { path: '/whod-they-beat', label: "Who'd They Beat?" },
       { path: '/list-quiz', label: 'Name Them All' },
     ],
     fetch: () => rows('nba_finals', 'year', 'winner', { runnerUp: 'loser', series: 'series_result', mvp: 'finals_mvp' }),
@@ -102,6 +104,7 @@ export const RECORD_SECTIONS: RecordSection[] = [
     columns: [['runnerUp', 'Runner-up'], ['series', 'Series']],
     play: [
       { path: '/champ-or-not', label: 'Champ or Not' },
+      { path: '/whod-they-beat', label: "Who'd They Beat?" },
       { path: '/list-quiz', label: 'Name Them All' },
     ],
     fetch: () => rows('world_series_v2', 'year', 'winner', { runnerUp: 'loser', series: 'series_result' }),
@@ -113,6 +116,7 @@ export const RECORD_SECTIONS: RecordSection[] = [
     columns: [['runnerUp', 'Runner-up'], ['series', 'Series']],
     play: [
       { path: '/champ-or-not', label: 'Champ or Not' },
+      { path: '/whod-they-beat', label: "Who'd They Beat?" },
       { path: '/list-quiz', label: 'Name Them All' },
     ],
     fetch: () => rows('stanley_cup_finals_v2', 'year', 'winner', { runnerUp: 'loser', series: 'series_result' }),
@@ -124,6 +128,7 @@ export const RECORD_SECTIONS: RecordSection[] = [
     columns: [['runnerUp', 'Runner-up'], ['series', 'Series'], ['mvp', 'Finals MVP']],
     play: [
       { path: '/champ-or-not', label: 'Champ or Not' },
+      { path: '/whod-they-beat', label: "Who'd They Beat?" },
       { path: '/list-quiz', label: 'Name Them All' },
     ],
     fetch: () => rows('wnba_finals', 'year', 'winner', { runnerUp: 'loser', series: 'series_result', mvp: 'finals_mvp' }),

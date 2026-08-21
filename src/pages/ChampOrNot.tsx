@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useChampOrNot } from '@/hooks/useChampOrNot';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
@@ -176,6 +177,10 @@ const ChampOrNot = () => {
             />
           </div>
         )}
+
+        <p className="text-center text-xs text-muted-foreground mt-6">
+          Want the source material? <Link to="/records" className="text-primary hover:underline">Browse the full Record Books</Link>, every champion year by year.
+        </p>
 
         <GameSeoContent
           pageHasOwnH1
