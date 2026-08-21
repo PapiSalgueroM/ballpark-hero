@@ -136,8 +136,24 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
   and its FIRST RUN caught generateHeadlines eating the add-on news at the summer rollover.
   STILL OPEN from his list: release clauses on MY OWN contract renewals, and a nationality
   filter (the baked market rows carry no nationality; needs a data pass).
-- CM-8 Money allocation: budget split between transfer kitty, scouts, stadium expansion,
-  ticket prices, academy. Needs a small club-finance layer (gate income from stadium size).
+- CM-8 **DONE, Round 171: the finance layer.** A Finances desk on the hub: every HOME crowd
+  now pays a gate into the transfer kitty (the Round 169 attendance times an average spend
+  per fan set by club stature and your ticket policy, about 25 to 40 million a season for a
+  mid table club, era-scaled down in 2010), a ticket policy with real trade-offs (Fair
+  fills a bigger louder ground for less a head, Premium banks more from fewer, both
+  directions harness-guarded so the choice can never go one-sided), and ground expansion:
+  three levels, priced by stature and rising each time, paid from the same kitty, +2 board
+  confidence for the ambition, crowds up about 12 percent a level from the next home game,
+  and a custom club's chosen capacity genuinely grows (+6,000 seats a level, crowd always
+  fits). Expansions belong to the CLUB: move jobs and the new ground is theirs as-is; stay
+  and they carry with fresh season books. Scouts and the academy already spend from the
+  kitty (Round 116); the desk says so. simFinance (53rd harness): gates reconcile to the
+  pound and only at home, the ticket trade-off is real both ways, builders charge and
+  crowds measurably grow inside the hard bands, books follow the club not the manager, old
+  saves default sanely, era prices run smaller. Browser probed 8 for 8. NOTE: the suite run
+  for this round had simOpposition read 1.74 against its 1.5 equivalence tolerance ONCE and
+  0.37 on the immediate rerun (its own error bar is about 1.0 and it runs unseeded); noise,
+  not a regression, and the engine path it measures gained no new random draws this round.
 - CM-9 **DONE, Round 163: league views.** Tables exist before a ball is kicked: pre-season
   every league (mine and all fourteen others) shows its full membership in alphabetical
   order with my club starred and a note that positions arrive with round one, replacing the
@@ -550,8 +566,9 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-18, evening | **Round 167** (The Ticker, his S-2 ask: the site's own scrolling wire on top of every screen, personal save lines, daily rotation, live registry counts, hostile-save-proof). `RUN167.bat`, chain-guarded on 166. |
 | Packaged 2026-08-18, night | **Round 168** (mid-season approaches, CM-10: hot managers get called by bigger clubs, commit for a summer pre-agreement the board hears about, honored or publicly withdrawn at season end, all gates harness-proven). `RUN168.bat`, chain-guarded on 167. |
 | Packaged 2026-08-18, late night | **Round 169** (the match report catches his five newest screenshots: named assists, sub arrows, stoppage time, the venue and crowd line with honest capacity rules, and the continuous Balance of play area chart). `RUN169.bat`, chain-guarded on 168. |
-| Packaged 2026-08-18, pre-AdSense sweep | **Round 170** (site health for Wednesday's AdSense review: the FULL route sweep ran clean, 119 routes x 3 viewports = 357 checks, ZERO findings on the future site with all pending rounds applied. Two fixes shipped: sweepGames grew an OFFLINE=1 mode for sandboxes with no route to Supabase, so environment noise cannot bury real findings, and Dart Draft stopped failing SILENTLY when the player pool cannot load: the mode tile used to bounce back to the intro with no explanation, and now the screen says the pool could not load and to try again. Fail closed, never silently.) `RUN170.bat`, chain-guarded on 169. **SHIP28.bat is the current wrapper: it runs 157 through 170.** |
-| Next free round number | **171** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, pre-AdSense sweep | **Round 170** (site health for Wednesday's AdSense review: the FULL route sweep ran clean, 119 routes x 3 viewports = 357 checks, ZERO findings on the future site with all pending rounds applied. Two fixes shipped: sweepGames grew an OFFLINE=1 mode for sandboxes with no route to Supabase, so environment noise cannot bury real findings, and Dart Draft stopped failing SILENTLY when the player pool cannot load: the mode tile used to bounce back to the intro with no explanation, and now the screen says the pool could not load and to try again. Fail closed, never silently.) `RUN170.bat`, chain-guarded on 169. |
+| Packaged 2026-08-18, later still | **Round 171** (the finance layer, CM-8: home gates pay the kitty, ticket policy with real trade-offs, three ground expansions the board loves and the club keeps, custom capacities genuinely grow, era prices run smaller). `RUN171.bat`, chain-guarded on 170. **SHIP29.bat is the current wrapper: it runs 157 through 171.** |
+| Next free round number | **172** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

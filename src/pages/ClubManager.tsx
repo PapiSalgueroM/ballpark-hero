@@ -13,6 +13,7 @@ import {
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
+  TICKET_TIERS, groundUpgradeCost, gatePricePerFan,
 } from '@/lib/clubManager';
 import type { NationDef, ObjectiveStatus, CupRound } from '@/lib/clubManager';
 import { eraRealShareLabel, eraHonestyLine } from '@/lib/clubManagerEras';
@@ -81,7 +82,7 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -170,6 +171,7 @@ const ClubManager = () => {
               <p>🤝 <span className="font-semibold text-foreground">Tell every player what he is</span>: star man, key first teamer, rotation option, backup or one for the future. Each rung is a promise about minutes, and the dressing room keeps score over your last ten matches. Keep your word and they play for you. Break it and they sulk, drag the room down and hand in transfer requests. You can buy your way out of a promise, but it costs six weeks of his wages a rung.</p>
               <p>🎙️ <span className="font-semibold text-foreground">Front up to the press, and talk to your players.</span> The reporters only turn up when something has happened: a losing run, a man you have stopped picking, a club circling one of your stars, a derby, or the bookmakers making you favourite for the sack. Every answer spends one thing to buy another, so backing your players costs you with the board and calling them out costs you the dressing room, and talking big before a derby puts your words on the other lot's wall. Before every match and again at half time you pick a tone: calm them, fire them up, demand more, or the hairdryer. Read the afternoon right and they play above themselves. Read it wrong and you lose them, and the wrong one hurts more than the right one helps.</p>
               <p>💰 <span className="font-semibold text-foreground">Buy and sell in the summer and January windows.</span> Over 3,300 real players are on the market at their real values. Stay under budget and keep at least 14 players.</p>
+              <p>🎟️ <span className="font-semibold text-foreground">The club earns while you manage.</span> Every home crowd pays a gate into the transfer kitty: attendance times your ticket prices. The Finances desk sets the policy (fair prices fill the ground for less a head, premium squeezes more from fewer) and expands the ground up to three times, each one growing your crowds from the next home game. The board reads ambition into a bigger ground, and it is all one kitty: gates in, transfers, scouts, the academy and the builders out.</p>
               <p>📉 <span className="font-semibold text-foreground">Watch the board confidence meter.</span> Fall too far below expectations and you're sacked. Overachieve and bigger clubs come calling, from any league in the game, and some of them call MID-SEASON: an approach lands in the Manager panel, and committing to it is a summer pre-agreement your current board will hear about on the radio. They can even walk away again if your season collapses after the handshake.</p>
               <p>🏆 <span className="font-semibold text-foreground">Season score</span> = league points + 10 per trophy (max 130). Careers span multiple seasons; your save is kept on this device.</p>
             </div>
@@ -998,6 +1000,12 @@ const ClubManager = () => {
                 onClick={() => setHubPanel('stats')}
               />
               <HubTile
+                icon="💰" title="Finances"
+                value={c.finance?.lastGate ? `Gate ${money(c.finance.lastGate)}` : money(c.budget)}
+                sub={c.finance?.seasonGate ? `${money(c.finance.seasonGate)} gate money this season` : 'Tickets, the gate, the ground'}
+                onClick={() => setHubPanel('finance')}
+              />
+              <HubTile
                 icon="🧢" title="Manager" accent={!!c.approach}
                 value={c.approach ? '📞 A club is calling' : `${c.careerStats.wins}W ${c.careerStats.losses}L`}
                 sub={c.approach ? `${c.approach.club} want you` : c.careerStats.played > 0 ? `${Math.round((c.careerStats.wins / c.careerStats.played) * 100)}% win rate` : 'New in the job'}
@@ -1165,6 +1173,78 @@ const ClubManager = () => {
                   {!uclAlive && c.uclKoRound !== 'won' && c.uclGroup === null && (
                     <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{leagueOf(c.clubName).euro ? '. Reach the Champions League places to change that' : ' in this league'}.</div>
                   )}
+                </div>
+              )}
+
+              {hubPanel === 'finance' && (
+                <div className="space-y-2">
+                  {/* Round 171: the finance desk, his CM-8. */}
+                  <div className="bg-card border border-border rounded-xl p-3">
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💰 The books</div>
+                    <div className="grid grid-cols-3 gap-2 text-center">
+                      <div>
+                        <div className="text-sm font-bold font-display text-foreground">{money(c.budget)}</div>
+                        <div className="text-[9px] text-muted-foreground">Transfer kitty</div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold font-display text-emerald-400">{c.finance?.seasonGate ? money(c.finance.seasonGate) : money(0)}</div>
+                        <div className="text-[9px] text-muted-foreground">Gate money this season</div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold font-display text-foreground">{c.finance?.lastGate ? money(c.finance.lastGate) : '-'}</div>
+                        <div className="text-[9px] text-muted-foreground">Last home gate</div>
+                      </div>
+                    </div>
+                    <p className="text-[9px] text-muted-foreground mt-1.5">Every home crowd pays the kitty: attendance times about {gatePricePerFan(c) > 0 ? `£${gatePricePerFan(c)}` : ''} a head at your prices. Scouts and the academy spend from the same kitty in their own tabs.</p>
+                  </div>
+
+                  <div className="bg-card border border-border rounded-xl p-3">
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">🎟️ Ticket policy</div>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {TICKET_TIERS.map((tt, i) => (
+                        <button
+                          key={tt.label}
+                          onClick={() => g.setTickets(i as 0 | 1 | 2)}
+                          className={cn(
+                            'rounded-lg border p-2 text-left transition-colors',
+                            (c.finance?.ticketTier ?? 1) === i ? 'border-primary bg-primary/10' : 'border-border bg-background/40 hover:border-primary',
+                          )}
+                        >
+                          <div className="text-base">{tt.emoji}</div>
+                          <div className="text-[11px] font-bold text-foreground">{tt.label}</div>
+                          <div className="text-[9px] text-muted-foreground mt-0.5">{tt.blurb}</div>
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-[9px] text-muted-foreground mt-1.5">Cheaper seats pull a bigger, louder crowd for less money a head. Premium squeezes more from fewer. Change it any week.</p>
+                  </div>
+
+                  <div className="bg-card border border-border rounded-xl p-3">
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">🏗️ The ground</div>
+                    <p className="text-xs text-foreground mb-1.5">
+                      Expansions bought here: <span className="font-bold">{c.finance?.groundUpgrades ?? 0} of 3</span>.
+                      {c.customClub && c.clubName === c.customClub.name && c.customClub.capacity
+                        ? ` ${c.customClub.stadium} holds ${(c.customClub.capacity + (c.finance?.groundUpgrades ?? 0) * 6000).toLocaleString()} now.`
+                        : ' Each one grows your home crowds about 12 percent, from the very next home game.'}
+                    </p>
+                    {groundUpgradeCost(c) !== null ? (
+                      <button
+                        onClick={g.expandStadium}
+                        disabled={c.budget < (groundUpgradeCost(c) ?? Infinity)}
+                        className={cn(
+                          'w-full py-2 rounded-lg text-xs font-bold transition-colors',
+                          c.budget >= (groundUpgradeCost(c) ?? Infinity)
+                            ? 'bg-primary text-primary-foreground hover:opacity-90'
+                            : 'bg-secondary text-muted-foreground cursor-not-allowed',
+                        )}
+                      >
+                        🏗️ Expand the ground for {money(groundUpgradeCost(c) ?? 0)}
+                      </button>
+                    ) : (
+                      <p className="text-[10px] text-muted-foreground">The ground is as big as this club can build it. The board is very proud of the brochure.</p>
+                    )}
+                    <p className="text-[9px] text-muted-foreground mt-1.5">Paid from the transfer kitty. The board reads ambition into it. Expansions belong to the club: move on and the new job starts at their ground, as it is.</p>
+                  </div>
                 </div>
               )}
 

@@ -912,6 +912,84 @@ export interface Approach {
   expiresWeek: number;
 }
 
+/* ---------- Round 171: the club finance layer, his CM-8 ---------- */
+
+export type TicketTier = 0 | 1 | 2;
+
+export const TICKET_TIERS = [
+  { label: 'Fair prices', emoji: '\u{1F39F}\uFE0F', priceMult: 0.8, crowdMult: 1.06, blurb: 'Cheaper seats, fuller ground, a louder day out.' },
+  { label: 'Standard', emoji: '\u{1F3AB}', priceMult: 1.0, crowdMult: 1.0, blurb: 'The going rate. Nobody writes to the paper about it.' },
+  { label: 'Premium', emoji: '\u{1F4BC}', priceMult: 1.3, crowdMult: 0.91, blurb: 'More per seat, a few empty ones up in the corners.' },
+] as const;
+
+export interface ClubFinance {
+  /** Index into TICKET_TIERS. */
+  ticketTier: TicketTier;
+  /** Ground expansions bought at THIS club, 0 to 3. They stay with the club. */
+  groundUpgrades: number;
+  /** Gate money collected this season, in millions. */
+  seasonGate: number;
+  /** The last home gate, in millions, or null before the first one. */
+  lastGate: number | null;
+}
+
+export function ensureFinance(state: CareerState): ClubFinance {
+  if (!state.finance) {
+    state.finance = { ticketTier: 1, groundUpgrades: 0, seasonGate: 0, lastGate: null };
+  }
+  return state.finance;
+}
+
+/** Average spend per fan through the gate, in pounds: stature times ticket
+ *  policy, scaled down inside a historic era where money ran smaller. */
+export function gatePricePerFan(state: CareerState): number {
+  const eraHist = !!state.eraId && isHistoricEra(state.eraId);
+  const def = eraHist ? eraClubDefFor(state.clubName, state.eraId) : clubDefFor(state.clubName);
+  const base = [38, 30, 24, 18][def.tier - 1] ?? 18;
+  const tier = TICKET_TIERS[state.finance?.ticketTier ?? 1];
+  return Math.round(base * tier.priceMult * (eraHist ? 0.75 : 1) * 100) / 100;
+}
+
+/** What the next ground expansion costs, in millions, or null at the cap. */
+export function groundUpgradeCost(state: CareerState): number | null {
+  const fin = state.finance ?? { groundUpgrades: 0 };
+  const level = fin.groundUpgrades ?? 0;
+  if (level >= 3) return null;
+  const eraHist = !!state.eraId && isHistoricEra(state.eraId);
+  const def = eraHist ? eraClubDefFor(state.clubName, state.eraId) : clubDefFor(state.clubName);
+  const tierFactor = [1.2, 1.0, 0.8, 0.6][def.tier - 1] ?? 0.6;
+  return Math.round([30, 48, 77][level] * tierFactor);
+}
+
+/** Change the ticket policy. Free, instant, honest trade-offs. */
+export function setTicketTier(career: CareerState, tier: TicketTier): CareerState {
+  const state: CareerState = { ...career };
+  const fin = ensureFinance(state);
+  state.finance = { ...fin, ticketTier: tier };
+  return state;
+}
+
+/**
+ * Put money in the ground. The board loves ambition (+2 confidence), the
+ * crowd bands grow about 12 percent per level, and a custom club's chosen
+ * capacity genuinely rises. Three levels, priced up each time. Returns null
+ * when the kitty cannot cover it or the ground is maxed.
+ */
+export function expandGround(career: CareerState): CareerState | null {
+  const cost = groundUpgradeCost(career);
+  if (cost === null || career.budget < cost) return null;
+  const state: CareerState = { ...career };
+  const fin = ensureFinance(state);
+  state.finance = { ...fin, groundUpgrades: (fin.groundUpgrades ?? 0) + 1 };
+  state.budget = Math.round((state.budget - cost) * 10) / 10;
+  state.boardConfidence = clamp(state.boardConfidence + 2, 0, 100);
+  state.aiHeadlines = [
+    `\u{1F3D7}\uFE0F The ground is growing: the club has signed off a ${money(cost)} expansion. Bigger crowds from the next home game.`,
+    ...state.aiHeadlines,
+  ].slice(0, 8);
+  return state;
+}
+
 export interface SeasonSummary {
   season: number;
   club: string;
@@ -1008,6 +1086,8 @@ export interface CareerState {
   approach?: Approach | null;
   /** Round 168: the summer pre-agreement I shook hands on mid-season. */
   pendingMove?: { club: string; blurb: string } | null;
+  /** Round 171: tickets, the gate and the ground. */
+  finance?: ClubFinance;
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
   /** Round 105: the weekly wage bill the board will tolerate, in thousands. */
@@ -6619,10 +6699,17 @@ function matchAttendance(state: CareerState, fx: { home: boolean | null; opponen
   const venue: 'home' | 'away' | 'neutral' = fx.home === true ? 'home' : fx.home === false ? 'away' : 'neutral';
   if (venue === 'neutral') return { attendance: ri(64000, 78000), capacity: null, venue };
   const hostName = venue === 'home' ? state.clubName : fx.opponent;
+  /* Round 171: MY home crowds feel my ticket policy and my expansions.
+     Away days and neutral finals are somebody else's till. */
+  const myGround = venue === 'home';
+  const fin = myGround ? state.finance : undefined;
+  const crowdMult = myGround ? (TICKET_TIERS[fin?.ticketTier ?? 1].crowdMult * (1 + 0.12 * (fin?.groundUpgrades ?? 0))) : 1;
   const custom = state.customClub && hostName === state.customClub.name ? state.customClub : null;
   if (custom && custom.capacity) {
-    const cap = custom.capacity;
-    return { attendance: ri(Math.round(cap * 0.74), cap), capacity: cap, venue };
+    /* The chosen ground genuinely grows: 6,000 seats per expansion. */
+    const cap = custom.capacity + (myGround ? (fin?.groundUpgrades ?? 0) * 6000 : 0);
+    const att = Math.min(cap, Math.round(ri(Math.round(cap * 0.74), cap) * TICKET_TIERS[fin?.ticketTier ?? 1].crowdMult));
+    return { attendance: att, capacity: cap, venue };
   }
   const eraHist = !!state.eraId && isHistoricEra(state.eraId);
   const def = eraHist ? eraClubDefFor(hostName, state.eraId) : clubDefFor(hostName);
@@ -6633,7 +6720,8 @@ function matchAttendance(state: CareerState, fx: { home: boolean | null; opponen
     4: [9000, 21000],
   };
   const [lo, hi] = bands[def.tier] ?? bands[4];
-  return { attendance: ri(lo, hi), capacity: null, venue };
+  const att = clamp(Math.round(ri(lo, hi) * crowdMult), Math.round(lo * 0.6), 78000);
+  return { attendance: att, capacity: null, venue };
 }
 
 /**
@@ -7329,6 +7417,15 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   }
   // Round 169: the crowd and the venue, like his match app models carry.
   const crowd = matchAttendance(state, fx);
+  /* Round 171: a home gate pays the kitty: crowd times the average spend
+     per fan, straight into the transfer budget. This is the finance layer
+     his CM-8 asked for, and it makes the ticket policy a real decision. */
+  if (crowd.venue === 'home') {
+    const fin = ensureFinance(state);
+    const gate = Math.round((crowd.attendance * gatePricePerFan(state)) / 1e6 * 100) / 100;
+    state.budget = Math.round((state.budget + gate) * 100) / 100;
+    state.finance = { ...fin, seasonGate: Math.round((fin.seasonGate + gate) * 100) / 100, lastGate: gate };
+  }
   const detail = buildMatchDetail({
     myGoals, oppGoals, lamMine, lamOpp,
     myScorers, oppScorers,
@@ -9082,6 +9179,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   // Round 168: last season's phone calls do not follow you into the new one.
   state.approach = null;
   state.pendingMove = null;
+  /* Round 171: the ground belongs to the CLUB. Stay and your expansions and
+     ticket policy carry with a fresh season's books; move and the new club
+     starts you on standard prices at its own unexpanded ground. */
+  state.finance = moving || !career.finance
+    ? undefined
+    : { ...career.finance, seasonGate: 0, lastGate: null };
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
