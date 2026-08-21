@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { useGameCompletion } from "@/hooks/useGameCompletion";
+import { recordCompletion } from "@/lib/completions";
 import PageSeo from "@/components/seo/PageSeo";
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from "@/components/game/GameNavbar";
@@ -681,6 +682,12 @@ export default function SoccerCareer() {
     } else if (career.phase === "playing") {
       setCareer(advanceProSeason(career, clubs));
     }
+    /* Round 159: a played season counts as playing TODAY. The header's games
+       played, points and rank only ever moved at retirement, so a whole
+       evening deep in a career read as never having played (his screenshot,
+       2026-08-18, showed 0/107 mid save). Unscored on purpose: the scored
+       completion stays the retirement legacy, this one just marks the play. */
+    recordCompletion('/soccer-career');
   };
 
   const handleAcceptOffer = (offer: ContractOffer) => {
@@ -1561,7 +1568,14 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
   const handleBuildConfirm = (stats: Stats, calcOvr: number) => {
     setRolledOvr(calcOvr);
     setDisplayOvr(calcOvr);
-    onRolledOvr?.(calcOvr, rolledPot ?? calcOvr + 6);
+    /* Round 159: the ceiling can never sit below the player. He typed a 99
+       overall in the build editor and the scout projection still quoted the
+       ORIGINAL roll's 89 ceiling next to it, which reads as broken because it
+       is: a ceiling below the floor. The ceiling now rises with the build,
+       capped at 99 like everything else. */
+    const pot = Math.min(99, Math.max(rolledPot ?? calcOvr + 6, calcOvr));
+    setRolledPot(pot);
+    onRolledOvr?.(calcOvr, pot);
     onStatsGenerated?.(stats, calcOvr);
     setBuildOpen(false);
     /* Round 131: the academy that takes you depends on how good you are, and
@@ -3104,12 +3118,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {/* Round 159: his note, "the retire and new career buttons on my
+              career are way too small". Real buttons now: bordered, readable,
+              44px tall on touch, still quiet enough not to fight the OVR. */}
           {career.phase !== "retired" && career.phase !== "retirement_ceremony" && career.phase !== "post_retirement" && (
-            <Button onClick={() => setShowRetireConfirm(true)} variant="ghost" className="text-[10px] text-muted-foreground hover:text-red-400 px-2 h-7">
+            <Button onClick={() => setShowRetireConfirm(true)} variant="outline" className="text-xs font-bold px-3 h-10 border-border text-muted-foreground hover:text-red-400 hover:border-red-400/60">
               🚪 Retire
             </Button>
           )}
-          <Button onClick={onNewCareer} variant="ghost" className="text-[10px] text-muted-foreground hover:text-red-400 px-2 h-7">
+          <Button onClick={onNewCareer} variant="outline" className="text-xs font-bold px-3 h-10 border-border text-muted-foreground hover:text-red-400 hover:border-red-400/60">
             🔄 New Career
           </Button>
           <div className="text-center">

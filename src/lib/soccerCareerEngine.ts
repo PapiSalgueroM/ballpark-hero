@@ -797,7 +797,10 @@ function receivePhoneTexts(s: CareerState, phase: "youth" | "pro"): void {
    to the drilled stat via the existing statBoostNextSeason pipeline, so the
    gain lands with next season's growth exactly like event boosts do. */
 
-export type TrainingDrill = "dribbling" | "pace" | "shooting";
+/* Round 159: "passing" joined (the gates drill), and the shooting drill is
+   position aware in the panel: keepers face shots instead of taking them,
+   feeding the same reflexes stat this mapping always sent them to. */
+export type TrainingDrill = "dribbling" | "pace" | "shooting" | "passing";
 
 export function trainingAvailable(s: CareerState): boolean {
   if (s.retired) return false;
@@ -812,10 +815,13 @@ export function applyTrainingResult(prev: CareerState, drill: TrainingDrill, sco
   if (s.trainingSeasonYear === year) return prev; // one session per season
   const sc = clamp(Math.round(score), 0, 100);
   const stat: keyof CareerState["statBoostNextSeason"] =
-    drill === "pace" ? "pace" : drill === "dribbling" ? "dribbling" : (s.position === "GK" ? "reflexes" : "shooting");
+    drill === "pace" ? "pace"
+    : drill === "dribbling" ? "dribbling"
+    : drill === "passing" ? "passing"
+    : (s.position === "GK" ? "reflexes" : "shooting");
   const boost = sc >= 80 ? 2 : sc >= 50 ? 1 : 0;
   s.trainingSeasonYear = year;
-  const label = stat === "reflexes" ? "Reflexes" : stat === "pace" ? "Pace" : stat === "dribbling" ? "Dribbling" : "Shooting";
+  const label = stat === "reflexes" ? "Reflexes" : stat === "pace" ? "Pace" : stat === "dribbling" ? "Dribbling" : stat === "passing" ? "Passing" : "Shooting";
   if (boost > 0) {
     s.statBoostNextSeason = { ...s.statBoostNextSeason, [stat]: (s.statBoostNextSeason[stat] || 0) + boost };
     s.morale = clamp(s.morale + 2, 0, 100);
@@ -2096,7 +2102,11 @@ function isPastPrime(age: number, primeType: PrimeType): boolean {
 /** The ceiling this career is actually fighting, rolled number plus anything
     an exceptional career has earned back, and never above 99. */
 export function effectivePotential(s: CareerState): number {
-  const base = s.potential ?? Math.max(90, s.overall + 3);
+  /* Round 159: floored at the player's own overall. A save written while the
+     build editor could out-type the scout roll carried a ceiling below the
+     floor (his screenshot: 99 overall, 89 ceiling), and every screen reading
+     this repeated the nonsense. The ceiling is at least the man himself. */
+  const base = Math.max(s.potential ?? Math.max(90, s.overall + 3), s.overall);
   const earned = Number(s.potentialEarned);
   return Math.min(99, base + (Number.isFinite(earned) ? Math.max(0, earned) : 0));
 }

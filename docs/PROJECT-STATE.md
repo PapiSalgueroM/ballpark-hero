@@ -80,21 +80,33 @@ top items first. Marks: DONE means shipped and verified, NEXT means the very nex
 
 **Site wide:**
 
-- S-1 **DONE for Club Manager in Round 157:** playing counts toward the header. Every played
-  match records a completion with the running season score, and the anonymous completion
-  path now dispatches the same header-refresh event the auth path always had. STILL OPEN:
-  audit the OTHER long sims (soccer career, the American careers, tycoon) for the same
-  "never counts until the very end" gap, and the header centering nit from his screenshot.
+- S-1 **DONE for Club Manager in Round 157, extended in Round 159:** playing counts toward
+  the header. Every CM match records a completion with the running season score, the
+  anonymous completion path dispatches the same header-refresh event the auth path always
+  had, and Round 159 gave Soccer Career the same treatment (every advanced season records
+  an unscored play, the scored completion stays the retirement legacy). The header itself
+  is truly centred at desktop now: at lg+ the bar is a three column grid with equal
+  flexible side tracks, phone layout untouched, simMobileChrome still green across all
+  five widths. STILL OPEN: the American careers and Stadium Tycoon record only at their
+  natural end points; give them the same per-session marks.
 - S-2 A score ticker across the top of the site. The paid-feed decision stays parked (money,
   his call). But a v1 that carries OUR OWN world is free: what's new on the site, today's
   polls, the daily legend, live lines from the player's own Club Manager save. Never write
   the rival broadcaster's name into src.
 - S-3 More animation everywhere, standing item F from the first review.
-- S-4 Soccer Career fix pack from his screenshots: a 99 potential roll must never print
-  "89 ceiling" (the scout projection line caps at the band label, not his roll), retire and
-  new career buttons are too small on My Career, the cone slalom training game needs its
-  stopwatch visible and ticking, and training games should go position specific (keepers
-  save penalties).
+- S-4 **DONE, Round 159: the Soccer Career fix pack from his screenshots.** The ceiling can
+  never sit below the man: the build editor used to keep the ORIGINAL roll's ceiling when
+  you typed a higher overall (his screenshot: 99 overall, "89 ceiling"), so the ceiling now
+  rises with the build, rollPotential is capped at 99 (it could project 101), and
+  effectivePotential floors at the player's own overall so old broken saves read repaired.
+  Retire and New Career became real bordered 40px buttons. The cone slalom shows a live
+  ticking stopwatch from the first cone. Keepers train position specific now: Shot Stopping
+  (read the striker's tell, dive by tapping a zone, tell honest 65 percent of the time)
+  replaces Penalty Placement for GKs, feeding the reflexes stat the engine always mapped
+  them to. And a fourth drill for everyone: Passing Gates, tap the lit gate before it
+  shuts, windows shrink, trains passing (new TrainingDrill member wired through
+  applyTrainingResult). simPotential grew a section pinning the ceiling band; simTraining,
+  simCreation, simSoccerCareer and simMobileChrome all green.
 - S-5 The other career and manager games are "so way behind compared to the soccer ones":
   standing parity item, pull the CM systems (roles, press, talks, market, boards) into their
   sports one at a time.
@@ -384,7 +396,8 @@ true on the date above; re-measure rather than quoting them.
 | Shipped 2026-08-17 | Rounds 139 through 150 all pushed and published the same day (SHIP13 morning, SHIP14 16:02 UTC). Head was `d486a09` Round 150 when this was written. |
 | Packaged queue | Round **151** (the What's New page catches up with the big day, plus the simContracts deflake) and Round **152** (Stadium Tycoon milestones plus named opposition: ten career firsts that pay exactly once, and every opponent is an invented club like Ironbridge Rovers, 288 possible names proven collision-free against all 277 real clubs in the manager world). Plus Round **153**: `scripts/playEra2010.mjs`, the browser harness that walks the 2010 era picker like a person (14 checks: era tile, nations shrunk to England and Spain, Blackpool pickable and marked partial, the title demand on the United tile, Rooney in the dressing room, no 2026 leak). One click ships all three: **`SHIP15.bat`** (logs to `ship_log15.txt`). Then Round **154** (create-a-club, owner item D) rides alone as `RUN154.bat`, chain-guarded on 153, and Round **155** (the content layer catches up: Club Manager's SEO copy rewritten for 270 clubs, eras and create-a-club after sitting at the 20-club version with "Top 14" phrasing; a What's New entry; the wave-3 league probe folded into item 6) as `RUN155.bat`, and Round **156** (the game's own help catches up: the in-game "?" popover still said nine leagues and 186 clubs, still offered the future starts Round 139 removed, and still DENIED the 2010 era Round 146 shipped; the on-page SEO block had the same rot. Both rewritten from the live engine, browser-checked 8/8) as `RUN156.bat`. Click order: SHIP15.bat, RUN154.bat, RUN155.bat, RUN156.bat, each one self-guards. |
 | Packaged 2026-08-18 | **Round 157** (Quick Sim, Match Centre, match stats and ratings, header counting, halftime-consistent scorer minutes) and **Round 158** (Watch Live, the animated 2D match viewer with the dressing room embedded at the break, PLUS the month calendar with training cones and the long fast forward: the two shipped together because they share the page files). `RUN157.bat` then `RUN158.bat`, each chain-guarded. `SHIP16.bat` runs both. |
-| Next free round number | **159** (check the folder first, the 3-hourly build task may have taken it) |
+| Packaged 2026-08-18, later | **Round 159** (the fix pack off his screenshots: ceiling repair, real Retire and New Career buttons, the slalom stopwatch, keeper Shot Stopping, Passing Gates, true header centering at desktop, Soccer Career counting toward the header per season). `RUN159.bat`, chain-guarded on 158. `SHIP16.bat` runs 157 and 158; click RUN159 after, or use SHIP17.bat which runs all three. |
+| Next free round number | **160** (check the folder first, the 3-hourly build task may have taken it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
 
 ### ⚠ The live deploy was triggered but not proven

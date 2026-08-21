@@ -99,11 +99,18 @@ export function GameNavbar() {
             keeping them on their own line on a phone: on the wrapped layout the
             first line is logo + Back and the stats drop underneath, and from
             1024 up the stats slot back into the middle and grow to fill. */}
-        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 px-3 py-2">
+        {/* Round 159: at lg and up the bar becomes a three column grid with
+            EQUAL flexible side tracks, so the stats block sits on the true
+            centre of the page instead of the centre of whatever space was
+            left after the logo (his note: "the points and rank and games
+            played is off centered"). Below lg nothing changes: the wrapping
+            flex layout that fixed the Round 129 overlap stays exactly as it
+            was, and simMobileChrome still measures every width. */}
+        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 px-3 py-2 lg:grid lg:grid-cols-[1fr_auto_1fr]">
           {/* Logo, left, bigger + stretched */}
           <Link
             to="/"
-            className="order-1 shrink-0 font-display font-black text-primary hover:opacity-80 transition-opacity"
+            className="order-1 shrink-0 font-display font-black text-primary hover:opacity-80 transition-opacity lg:justify-self-start"
           >
             <span className="text-base sm:text-2xl tracking-[0.18em] sm:tracking-[0.22em] uppercase">
               DoUKnowBall
@@ -116,7 +123,7 @@ export function GameNavbar() {
           <button
             onClick={() => navigate(-1)}
             aria-label="Go back"
-            className="order-2 lg:order-3 shrink-0 inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-[36px] text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm"
+            className="order-2 lg:order-3 shrink-0 inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-[36px] text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm lg:justify-self-end"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back</span>
@@ -128,7 +135,7 @@ export function GameNavbar() {
               stop causing a line break and start squeezing itself into whatever
               was left instead. flex-auto keeps the basis at the content width, so
               when it stops fitting it wraps, which is the safe failure. */}
-          <div className="order-3 lg:order-2 w-full lg:w-auto lg:flex-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 sm:gap-x-5">
+          <div className="order-3 lg:order-2 w-full lg:w-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 sm:gap-x-5 lg:justify-self-center">
             {!user ? (
               /* Guest: one honest chip instead of zeroed stats */
               <button

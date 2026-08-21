@@ -144,5 +144,27 @@ console.log('4) Legacy save without potential field');
   }
 }
 
+/* ---------- 5. Round 159: the ceiling can never sit below the man ---------- */
+console.log('5) Ceiling floors and caps (his 99 overall, 89 ceiling screenshot)');
+{
+  // The cap: a 95 overall used to project up to 101, a number the engine
+  // cannot reach. Every roll from every overall stays inside [overall, 99].
+  let capBreaks = 0;
+  for (let i = 0; i < 400; i++) {
+    for (const ovr of [40, 60, 80, 93, 95, 99]) {
+      const pot = rollPotential(ovr);
+      if (pot > 99 || pot < ovr) capBreaks++;
+    }
+  }
+  if (capBreaks > 0) fail(`${capBreaks} potential rolls left the [overall, 99] band`);
+  // The floor: a save carrying a ceiling below its own overall (the build
+  // editor could out-type the roll before Round 159) reads back repaired.
+  const stats = flatStats(60);
+  let c = initCareer('Ceiling', 'England', 'ST', 'modern', stats, 60, 2020, FALLBACK_CLUBS, null, 89);
+  c = { ...c, overall: 99, potential: 89 };
+  const eff = engine.effectivePotential(c);
+  if (eff < 99) fail(`a 99 overall save with a stale 89 ceiling reads effectivePotential ${eff}, expected at least 99`);
+}
+
 console.log(failures === 0 ? '\nALL POTENTIAL CHECKS PASSED' : `\n${failures} FAILURES`);
 process.exit(failures === 0 ? 0 : 1);

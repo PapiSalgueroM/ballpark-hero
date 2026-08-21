@@ -451,7 +451,9 @@ export function rollPotential(startingOvr: number): number {
   else if (r < 0.93) pot = rand(84, 89);    // star
   else if (r < 0.985) pot = rand(89, 93);   // world class, 5.5 percent
   else pot = rand(93, 97);                  // generational, 1.5 percent
-  return Math.max(pot, startingOvr + 6);
+  /* Round 159: capped at 99. A 95 roll used to project a 101 ceiling, which
+     is a number the engine itself can never reach. */
+  return Math.min(99, Math.max(pot, startingOvr + 6));
 }
 
 /** Scout-speak for a rolled potential, exact number never shown. */
