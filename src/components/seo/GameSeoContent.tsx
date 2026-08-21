@@ -1,6 +1,10 @@
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ALL_GAMES } from '@/data/gameRegistry';
-import { GAME_CONTENT } from '@/data/gameContent';
+/* Round 210: the guide arrives one sport at a time instead of every word
+   of prose on the site arriving on every page. See gameContent/loader.ts. */
+import { loadGameContent } from '@/data/gameContent/loader';
+import type { GameContent } from '@/data/gameContent/types';
 // Round 181: the deterministic related-games graph (S-6 internal links).
 import { relatedGamesFor } from '@/lib/relatedGames';
 
@@ -39,7 +43,16 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
   const path = location.pathname;
 
   const game = ALL_GAMES.find(g => g.path === path);
-  const content = GAME_CONTENT[path];
+  /* Fetched, not bundled. The block below renders its fallback copy while
+     the sport file is in flight, so the page is never empty and a crawler
+     that waits for the network (all of them do, this whole site is client
+     rendered) gets the full guide. */
+  const [content, setContent] = useState<GameContent | null>(null);
+  useEffect(() => {
+    let live = true;
+    loadGameContent(path).then(c => { if (live) setContent(c); });
+    return () => { live = false; };
+  }, [path]);
 
   const gameLabel = game?.label || title;
 

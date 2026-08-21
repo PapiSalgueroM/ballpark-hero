@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { Copy, Mail, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
-import html2canvas from 'html2canvas';
 import { ALL_GAMES } from '@/data/gameRegistry';
 import ShareCard from '@/components/game/ShareCard';
 
@@ -99,6 +98,11 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
     if (!cardRef.current || savingImage) return;
     setSavingImage(true);
     try {
+      /* Round 210: loaded on demand, not on page load. This library is
+         47KB gzipped and it sat in the bundle of EVERY game page on the
+         site to serve one button that most players never press. It arrives
+         in the time it takes to rasterize the card. */
+      const { default: html2canvas } = await import('html2canvas');
       const canvas = await html2canvas(cardRef.current, { backgroundColor: null, scale: 2 });
       const blob: Blob | null = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
       if (!blob) throw new Error('no blob');
