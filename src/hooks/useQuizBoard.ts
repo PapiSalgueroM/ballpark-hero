@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { getTodayET, dateSeed, dailyDraw } from '@/lib/dateUtils';
 import { fetchQuizBoardClues, VALUES, type Clue, type ClueValue } from '@/lib/fetchQuizBoard';
 
 export interface Tile {
@@ -33,11 +33,6 @@ const BOARD_CATEGORIES = 5;
    break their streak history. Renaming them is a data migration, not a copy
    edit, so it is a job of its own. */
 const STORAGE_PREFIX = 'jeopardy-';
-
-/** Deterministic pick, same board for everyone on a given ET day. */
-function pickDeterministic<T>(arr: T[], seed: number): T {
-  return arr[Math.abs(seed) % arr.length];
-}
 
 /**
  * Loose answer matching. Quiz board answers are proper nouns typed by hand, so
@@ -134,13 +129,17 @@ export function useQuizBoard(): QuizBoardState {
 
   const board = useMemo(() => {
     const out: Record<string, Record<ClueValue, Tile | undefined>> = {};
-    const seed = dateSeed(today);
     for (const cat of categories) {
       out[cat] = {} as Record<ClueValue, Tile | undefined>;
-      VALUES.forEach((v, vi) => {
+      VALUES.forEach(v => {
         const options = clues.filter(c => c.category === cat && c.value === v);
         if (options.length === 0) { out[cat][v] = undefined; return; }
-        const chosen = pickDeterministic(options, seed + vi * 31 + cat.length * 7);
+        /* Round 229: was pickDeterministic(options, rawSeed + offsets),
+           which walks +1 per day through the alternatives, so tomorrow's
+           tile was always simply the next clue. A labelled dailyDraw keeps
+           it deterministic per day and unguessable across days, same as
+           every other daily pick since Round 224. */
+        const chosen = options[dailyDraw(options.length, `quiz-board:${today}:${cat}:${v}`)];
         out[cat][v] = {
           clue: chosen,
           answered: chosen.clueId in results,
