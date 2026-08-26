@@ -93,6 +93,9 @@ console.log('1) Every player_market_values chain names a year, or is on the pinn
     allowed += unscoped;
   }
   console.log(`   ${scanned} chains scanned, ${scoped} year-scoped, ${allowed} pinned all-year`);
+  /* The runner files anything under four printed lines as EMPTY (it caught
+     this very harness on its first board), so the teeth print too: they ran. */
+  console.log(`   teeth: scanner floor 25 chains, every unscoped chain needs an allowlist entry with an exact count`);
   if (scanned < 25) fail(`only ${scanned} chains found; the scanner is likely broken, the repo had 31 when this was written`);
 
   if (control) {
