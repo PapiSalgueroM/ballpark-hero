@@ -324,6 +324,28 @@ in the Lovable editor by hand.
 
 ### Verifying live, properly
 
+**`node scripts/auditLive.mjs` is the tool for this.** It asks the live site, as Googlebot, what
+a crawler actually gets at each URL, and flags the five things that are always defects: a body
+byte identical to the home page, fewer readable characters than the home page's own static block,
+a missing or wrong canonical, more than one canonical or description, and anything that is not a
+200. It does NOT follow redirects, on purpose, because following them reports the destination's
+content under the source's name, which is the exact mistake it exists to catch.
+
+```
+node scripts/auditLive.mjs                 every URL in the sitemap
+node scripts/auditLive.mjs /a /b /c        just these
+BASE=https://staging.example.com node scripts/auditLive.mjs
+```
+
+It talks to the internet, so `runAllSims` never runs it. It is a tool for answering a question
+about the live site, not a guard on the repo.
+
+**Run it after every publish.** On its first run (2026-08-23) it found, in one command, that every
+page on the live site was carrying TWO description tags, which a hand-built probe an hour earlier
+had missed because that probe read the first tag instead of counting them. Round 276 fixes it, and
+the point stands regardless: check the live site, not the queue.
+
+
 Fetching the homepage and seeing it load proves nothing. Do this instead:
 
 1. Fetch `https://douknowball.com` with a cache-busting param.
