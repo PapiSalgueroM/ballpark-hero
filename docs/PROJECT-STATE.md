@@ -1334,6 +1334,45 @@ purge. Awards is still unbuilt. See the roadmap below.
 
 ---
 
+## Round 283: the home page asked for an account four times before it offered a game
+
+He sent a video of five design plugins and said add them. Four of the five are things this repo
+already does better (39 browser harnesses driving real Chromium beats a generic screenshot
+plugin), none of the five are in his plugin catalog, and they are handed out by DM from an
+anonymous account, which is not a channel to take executable code from on somebody's behalf. So
+instead of installing five unknowns, the round did the thing they were a proxy for: took real
+screenshots of the built site and measured what a visitor is actually given.
+
+**Measured on a 390 by 844 phone, before anything was changed: the first playable game tile sat
+at y=478.** Fifty seven percent of the way down the only screen most visitors ever see. Above it,
+four separate asks for an account: the nav's Log In and Sign Up, a full width green strip reading
+"Create a free account to save your scores", and a "Make a free account" button in the hero. On a
+site whose own pitch, in its own words, is "no sign-up, no downloads, no app to install", the
+first screen was a sign-up form with the product below the fold.
+
+Two more things came out of the same look. The hero repeated the wordmark that was already in the
+nav twelve pixels above it, five times larger, and captioned it "The Ultimate Sports Trivia Hub",
+which is the one line on the site that reads as a template and says nothing a person can act on.
+And all three "Most played today" tiles carried the identical subtitle "Popular pick", the same
+two words under three different games, because the fallback label was a constant while every game
+in the registry has its own one line description sitting unused.
+
+Fixed: the hero shrank and now says what the site is in words somebody would search for, the
+guest CTA became a line of text instead of a gate (the account is an upsell, and an upsell goes
+after somebody has played something), the green strip is suppressed on the home page only and
+kept everywhere else where a person has a score worth saving, and the tiles print the game's own
+description. **After: y=369 on a phone, y=365 on desktop, two places asking instead of four, and
+three tiles that say what the three games are.**
+
+`scripts/playHomeFold.mjs` holds it. Its ceiling is 430, not the measured 369, because a
+threshold set at today's number fails on the next honest word added to a sentence and trains
+people to raise it. Three of its four assertions were wrong on the first draft and each was
+caught by its own negative control: it measured the ticker's game links and reported the first
+tile at y=5, it counted the NEW badge as a placeholder subtitle (a repeated badge is a fact about
+several games, a repeated subtitle is a constant standing in for a description), and it counted
+account prompts as elements rather than as places, so it passed with the banner deliberately
+restored, because that banner's ask is a span rather than a button.
+
 ## Round 282: every address that does not exist was answering as the home page
 
 Asked as Googlebot on the live site, `/this-page-does-not-exist-12345` came back **200, 18,725

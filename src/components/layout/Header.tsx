@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -27,6 +27,9 @@ export function Header() {
     tab: 'login',
   });
   const navigate = useNavigate();
+  /* Round 283: the guest sign up strip below is suppressed on the home page.
+     See the comment at that block for the measurement behind it. */
+  const isHome = useLocation().pathname === '/';
 
   const handleSignOut = async () => {
     await signOut();
@@ -142,8 +145,20 @@ export function Header() {
           </div>
         </div>
 
-        {/* Sign up CTA for guests */}
-        {!loading && !user && (
+        {/* Sign up CTA for guests.
+
+            ROUND 283: NOT ON THE HOME PAGE. This strip runs sitewide, and on
+            the home page it was the third account ask inside three hundred
+            vertical pixels: the nav's Sign Up, then this, then the hero's own.
+            Measured on a 390 by 844 phone, the first game tile sat at y=478,
+            past halfway down the only screen most visitors ever see, on a site
+            whose whole pitch is that it needs no account. Somewhere on a game
+            page this line earns its space, because by then a person has a score
+            worth saving. Above the game list, before they have played anything,
+            it is a toll booth in front of a free car park. The hero says the
+            same thing in one line now, so nothing is lost by suppressing it
+            here. Guarded by scripts/playHomeFold.mjs. */}
+        {!loading && !user && !isHome && (
           <div className="bg-primary/5 border-t border-primary/10 py-2 px-4 text-center">
             <p className="text-xs text-muted-foreground">
               <span className="text-primary font-medium">Create a free account</span> to save your scores and track your streak! 🔥

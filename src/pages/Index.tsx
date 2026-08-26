@@ -353,12 +353,37 @@ export default function Index() {
         {/* ─── HERO ─── */}
         <section className="relative overflow-hidden border-b border-border">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-[hsl(43,85%,55%)]/5" />
-          <div className="relative max-w-3xl mx-auto px-4 py-12 md:py-20 text-center">
-            <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tight text-primary mb-3">
+          {/* ROUND 283: THIS HERO WAS THE REASON NOTHING PLAYABLE WAS ON SCREEN.
+
+              Measured on the built site before this change: on a 390 by 844
+              phone the first game tile sat at y=478, 57 percent of the way down
+              the only screen most visitors ever see, and three account prompts
+              sat above it (Log In, Sign Up, and a Make a free account button),
+              with a fourth in the banner above them. On a site whose entire
+              pitch is "no sign-up, no downloads", the first screen was a
+              sign-up form with the games below the fold.
+
+              Three things went, and none of them were carrying weight. The
+              wordmark at 5xl/7xl repeated, five times larger, the identical
+              green wordmark already sitting in the nav twelve pixels above it.
+              "The Ultimate Sports Trivia Hub" said nothing a person could act
+              on and was the one line on the page that read as a template. And
+              the guest CTA asked for the account before offering the thing the
+              account is for.
+
+              What replaced them says what the site is in words somebody
+              searching for it would use, and carries NO number, deliberately:
+              the template's counts are checked against the registry by
+              simHomeCopy, and a figure here would be a second copy with no
+              guard behind it. The signed-in stats bar below is untouched, it
+              was always the good half of this block. */}
+          <div className="relative max-w-3xl mx-auto px-4 py-6 md:py-10 text-center">
+            <h1 className="text-3xl md:text-5xl font-display font-bold tracking-tight text-primary mb-2">
               DoUKnowBall
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-md mx-auto mb-6">
-              The Ultimate Sports Trivia Hub
+            <p className="text-base md:text-lg text-muted-foreground max-w-lg mx-auto mb-4">
+              Free sports trivia, daily puzzles and full career sims. No sign-up, no downloads,
+              nothing to install.
             </p>
 
             {/* Stats bar: PERSONAL stats, signed-in only (owner 2026-08-05).
@@ -390,18 +415,20 @@ export default function Index() {
                 )}
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-2">
+              /* A line, not a gate. Everything on this site plays signed out,
+                 so the account is an upsell and belongs where an upsell goes:
+                 after somebody has played something. The nav still carries Sign
+                 Up for anyone who came here to make one. */
+              <p className="text-xs text-muted-foreground">
+                Everything below plays without an account.{' '}
                 <button
                   onClick={() => setAuthOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 active:scale-[0.98] transition-all"
+                  className="text-primary font-medium underline underline-offset-2 hover:opacity-80"
                 >
-                  <Flame className="w-4 h-4" />
-                  Make a free account
-                </button>
-                <p className="text-xs text-muted-foreground">
-                  Sign up and your streak, points and world rank actually count.
-                </p>
-              </div>
+                  Make a free one
+                </button>{' '}
+                and your streak, points and world rank start counting.
+              </p>
             )}
             <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} defaultTab="signup" />
           </div>
@@ -572,8 +599,15 @@ function MostPlayedToday() {
             <span className="text-lg shrink-0">{game.emoji}</span>
             <div className="min-w-0">
               <span className="text-xs font-bold text-foreground block truncate">{game.label}</span>
-              <span className="text-[10px] text-muted-foreground">
-                {isFallback ? 'Popular pick' : 'Trending today'}
+              {/* ROUND 283: all three of these tiles read "Popular pick", the
+                  same two words under three different games, because the
+                  fallback label is a constant. Every game in the registry
+                  carries its own one line description and that is what a
+                  person needs in order to choose between three tiles. The
+                  "Trending today" case keeps its label, because there the
+                  label IS the information: it says the ranking is real. */}
+              <span className="text-[10px] text-muted-foreground block truncate">
+                {isFallback ? game.description : 'Trending today'}
               </span>
             </div>
           </Link>

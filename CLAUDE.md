@@ -334,6 +334,26 @@ Consequence for the build order: the sitemap has to be generated **after** the p
 `build:seo` runs the generator twice, once with `--routes-only` (route list, ledger untouched)
 before the build and once for real afterwards. Do not collapse that back into one call.
 
+### The home page offers before it asks
+
+Everything on this site plays signed out. That is the pitch, it is what the copy says, and it is
+the reason to use it. So the account is an **upsell**, and an upsell goes after somebody has
+played something, not in front of the game list.
+
+Round 283 measured the opposite: on a 390 by 844 phone the first playable game tile was at y=478
+with four separate account asks above it. `scripts/playHomeFold.mjs` now fails if the first tile
+drops past y=430 or if more than two places above it ask for an account. The sitewide guest strip
+in `Header.tsx` is suppressed on `/` for this reason and belongs everywhere else.
+
+Two things learned writing that harness, both worth keeping:
+
+- **A repeated badge is not a repeated label.** "NEW" on three genuinely new games is a fact.
+  "Popular pick" under three different games is a constant standing in for a description. The
+  first draft flagged the first and would have made someone delete a true badge.
+- **Count places, not elements.** The guest strip's ask is a `<span>`, so a sweep of `a, button`
+  reported the same prompt count with the strip present and absent. Asks are bucketed by vertical
+  position now, so the nav's pair is one place and the strip is another.
+
 ### Product rules
 
 - **FIFA tile rule.** Small tiles plus a back button. Never long stacked pages.
