@@ -54,8 +54,8 @@ export interface SportsEvent {
   sources: [string, string];
 }
 
-/* Checked 2026-08-21. Every date below was read off both listed sources and
-   they agreed on it. */
+/* Checked 2026-08-21, extended 2026-08-22. Every date below was read off both
+   listed sources and they agreed on it. */
 export const SPORTS_EVENTS: SportsEvent[] = [
   {
     id: 'ucl-2627-league-phase-draw',
@@ -142,6 +142,30 @@ export const SPORTS_EVENTS: SportsEvent[] = [
     ],
   },
   {
+    id: 'nhl-2627-opening-night',
+    start: '2026-09-29',
+    end: '2026-09-29',
+    emoji: '🏒',
+    title: 'NHL season opener, Panthers at Hurricanes',
+    to: '/nhl-my-career',
+    sources: [
+      'https://www.nhl.com/news/nhl-home-openers-for-2026-27-season',
+      'https://thehockeynews.com/nhl/carolina-hurricanes/latest-news/hurricanes-to-open-2026-27-nhl-season',
+    ],
+  },
+  {
+    id: 'nba-2627-opening-night',
+    start: '2026-10-20',
+    end: '2026-10-20',
+    emoji: '🏀',
+    title: 'NBA opening night, Celtics at Pistons',
+    to: '/nba-my-career',
+    sources: [
+      'https://www.foxsports.com/stories/nba/when-does-2026-27-nba-season-start-opening-night-schedule',
+      'https://www.cbssports.com/nba/news/nba-2026-27-schedule-release-key-dates-knicks-76ers-spurs-thunder-lebron-james-giannis-antetokounmpo/',
+    ],
+  },
+  {
     id: 'mlb-2026-world-series-g1',
     start: '2026-10-23',
     end: '2026-10-23',
@@ -151,6 +175,18 @@ export const SPORTS_EVENTS: SportsEvent[] = [
     sources: [
       'https://www.mlb.com/news/2026-mlb-playoff-and-world-series-schedule',
       'https://www.cbssports.com/mlb/news/2026-mlb-playoff-schedule-bracket/',
+    ],
+  },
+  {
+    id: 'super-bowl-lxi',
+    start: '2027-02-14',
+    end: '2027-02-14',
+    emoji: '🏈',
+    title: 'Super Bowl LXI at SoFi Stadium',
+    to: '/whod-they-beat',
+    sources: [
+      'https://www.sofistadium.com/events/detail/super-bowl-lxi',
+      'https://en.wikipedia.org/wiki/2026_NFL_season',
     ],
   },
 ];

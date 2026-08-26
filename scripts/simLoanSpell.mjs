@@ -53,7 +53,7 @@ const {
   applyEventChoice, dismissMoralDilemma, dismissSocialMediaPhase,
   dismissAppealResult, acceptRetirementSuggestion, stayAtClub,
   determineLoanOffers, acceptLoan, projectLeagueApps, calcAppearances,
-  repairCareer, FALLBACK_CLUBS,
+  repairCareer, applyRehabChoice, FALLBACK_CLUBS,
 } = engine;
 
 let failures = 0;
@@ -171,9 +171,26 @@ console.log("3) the lifecycle and 4) the measured payoff");
           if (s.loan) windowLoanViolations += 1;
           const hereSeasons = s.seasons.filter(x => x.club === s.currentClub && x.type === "playing").length;
           const hereProj = projectLeagueApps(s.overall, s.currentClubTier, s.currentClub, hereSeasons);
-          if (takeLoans && hereProj.max <= 20 && s.pendingLoanOffers && s.pendingLoanOffers.length > 0) {
+          /* Round 264: a loan can now arrive down TWO roads. The ordinary loan
+             window puts it in pendingLoanOffers, and Round 257's club verdict
+             puts it on the situation itself when the club has decided to send
+             you out. This harness only knew the first road, so it could have
+             been under counting.
+             MEASURED, AND IT WAS NOT: adding the second road left the loan
+             count at exactly 121 of 150 and the payoff gap unchanged, so the
+             verdict reroute is NOT what moved the numbers below. The road is
+             still handled here because it is a real way the game offers a
+             loan and a future tuning change could start using it, but the
+             drift has another cause and this comment is not allowed to
+             pretend otherwise. */
+          const verdictLoan = s.transferSituation && s.transferSituation.type === "frozen_out"
+            ? (s.transferSituation.offers || []).find(o => o.isLoan) ?? null
+            : null;
+          const windowLoan = s.pendingLoanOffers && s.pendingLoanOffers.length > 0 ? s.pendingLoanOffers[0] : null;
+          const loanOffer = windowLoan ?? verdictLoan;
+          if (takeLoans && (verdictLoan || hereProj.max <= 20) && loanOffer) {
             const before = s.contractYearsLeft;
-            const offer = s.pendingLoanOffers[0];
+            const offer = loanOffer;
             s = acceptLoan(s, offer);
             loansTaken += 1;
             if (s.currentClub !== offer.club.name) fail("acceptLoan did not move the football");
@@ -233,13 +250,26 @@ console.log("3) the lifecycle and 4) the measured payoff");
   const dOverall = aOverall / N - bOverall / N;
   const dApps = aApps / N - bApps / N;
   console.log(`   ${aLoans} loans across ${N} careers; after ${SEASONS} seasons: overall gap +${dOverall.toFixed(1)}, football played gap +${Math.round(dApps)} apps`);
-  /* measured 2026-08-20 on the shipped tuning, three runs of 150 careers:
+  /* Measured 2026-08-20 on the tuning of the day, three runs of 150 careers:
      overall gap +0.5 to +0.9, apps gap +10 to +14. The loan is minutes and
      a head start, not a cheat code, and the elite training gate keeps the
      bench a real (if slower) path. Floors at half the smallest measured
      run, from headroom: what this check exists to catch is the gap going
      to ZERO or negative, which is exactly what it caught when the bench
-     still earned the full big club training bonus. */
+     still earned the full big club training bonus.
+
+     RE-MEASURED 2026-08-22: the same seeded arms now read +0.4 and +7, so
+     both numbers have come down while staying above their floors. The arms
+     are seeded, so this is not weather, it is the engine having changed
+     under them. Round 257's verdict rerouting some loans was the obvious
+     suspect and was TESTED AND CLEARED: teaching this harness the second
+     road left the loan count identical at 121 of 150. The next suspect is
+     Round 253's injury arc, which shipped between the two measurements and
+     costs appearances, and which would move the GAP rather than just the
+     level if it bites the loan arm harder for playing more football. That
+     is a hypothesis and it has not been measured, so it is written here as
+     one. If the gap keeps sliding, measure that before touching the floors:
+     the house policy is widen or seed, never loosen. */
   if (dOverall < 0.2) fail(`the loan cohort should end up better: gap ${dOverall.toFixed(2)} (floor 0.2)`);
   if (dApps < 5) fail(`the loan cohort should play more football: gap ${Math.round(dApps)} (floor 5)`);
 }
@@ -255,6 +285,15 @@ console.log("5) a save from before this round runs exactly as before");
   if (s.pendingLoanOffers !== null) fail("repairCareer did not default pendingLoanOffers to null");
   try {
     s = advanceProSeason(s, clubs);
+    /* Round 264: this is the FOURTH harness to trip over Round 253's injury
+       arc, and it took until now because it only fails when the injury roll
+       lands. A severe injury pauses the season on the rehab_choice phase and
+       RETURNS before the season is recorded, so an unlucky run saw no
+       "playing" season and reported that an old save could not play one. That
+       is the arc working, not a broken save. The check is that the repaired
+       save gets through a season, so a pause is answered and the season is
+       finished, exactly as a player would. */
+    if (s.phase === "rehab_choice") s = applyRehabChoice(s, 1);
     if (!s.seasons.some(x => x.type === "playing")) fail("the repaired save did not play a season");
   } catch (e) {
     fail(`the repaired save crashed the season: ${String(e).slice(0, 90)}`);
