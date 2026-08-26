@@ -742,7 +742,10 @@ true on the date above; re-measure rather than quoting them.
 
 | | |
 |---|---|
-| `origin/main` head | `f848aa0` = **Round 253**, pushed 2026-08-21 and PUBLISHED LIVE the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
+| **HOW YOU SHIP DEPENDS ON WHICH SESSION YOU ARE** | Read this before anything else in this file. **A claude.ai/code session has GitHub credentials: commit on your branch, `git push -u origin <branch>`, open a PR. Do NOT build a zip, a `RUNnn.bat` or a `SHIP` wrapper.** Only a **Cowork** session lacks credentials, and only Cowork uses the bat pipeline. Everything below that talks about packaging, extracting zips from Anthony's folder, or waiting for him to double-click something is **Cowork-path only**, including most of the ship history in this table. See the "Which pipeline are you on" section at the top of `docs/SHIP-PIPELINE.md`. |
+| `origin/main` head | `dadd94b` = **Round 257**, pushed 2026-08-21. Verified against `git log` on 2026-08-26, so trust this row over any round number quoted elsewhere in this file. Rounds **254** (docs catch up), **255** (three fixes the browser test board caught), **256** (prerendering, the fix for the AdSense low value content rejection) and **257** (Soccer Career club release verdict, five smaller bug fixes, two prerender bugs caught while packaging) all landed after the row below was written. |
+| ⚠ PUBLISH STATUS OF 254 TO 257 IS UNVERIFIED | Round 253 was published live. Whether `deploy_project` was called after 254 to 257 is **not recorded anywhere**, and it matters more than usual: 256 and 257 are almost entirely prerendering, which only reaches douknowball.com through a publish. Confirm the live bundle hash moved before assuming the AdSense fix went out. |
+| Round 253 and the backlog | `f848aa0` = **Round 253**, pushed 2026-08-21 and PUBLISHED LIVE the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
 | WHY THE BACKLOG SAT FOR WEEKS | **Four separate bugs in the RUN bats, not in the code and not on his machine.** Every one of them made a fail-closed assertion STOP a run that should have passed, so a click that looked like it worked shipped a handful of rounds and quit. All four were reproduced on Windows before being fixed, all four are fixed in the bats on his disk AND in pkg/mkbat.py, and pkg/verifybat.py now refuses to build or bless a bat carrying any of them: (1) FORWARD SLASHES in a findstr file argument: findstr rejects them outright and returns errorlevel 1 exactly as if the pattern were missing, which killed 56 bats at Round 179 every single time; (2) RAW DOUBLE QUOTES in a pattern: cmd ends the quoted argument at the first one, so any assertion quoting real code (an aria-label, a JSX prop, an array of strings) was mangled, killing 10 bats at Round 198; (3) A QUOTE FOLLOWED BY A CMD OPERATOR: cmd counts quotes and does not understand the \" escape, so a `>` after one becomes a redirection, which silently turned RUN209's check into a file write; (4) A PERCENT SIGN in a pattern: cmd strips a lone `%` as variable-expansion syntax, so the assertion hunts for text the file does not contain, which stopped RUN251 on a comment reading "the 40% wash". The empirical tests that proved 1, 2 and 3 are worth repeating if a fifth ever appears: write a throwaway bat that runs the shapes against a known file, log the errorlevels, and read the log. Guessing cost more time than testing. |
 | ONE MORE SHIP TRAP, NOT A BUG | Every RUN bat's chain guard greps `git log --oneline -80` for the previous round. A SHIP wrapper that starts at 157 therefore FAILS at RUN157 once the head is more than 80 commits past Round 156, which is exactly what happened after the backlog landed. Build the wrapper from the FIRST UNCOMMITTED round, not from 157. |
 | How 139-144 landed | SHIP13 clicked via computer-use 2026-08-17 ~07:50 UTC. First run failed closed on a bad RUN139 assertion (bare `plus10` matched the removal comment); pattern fixed to `id: 'plus10'`, re-clicked, all six pushed clean. Lesson in SHIP-PIPELINE terms: absence assertions must target the old DEFINITION shape, and every bat's patterns get tested against the actual zip contents before delivery. |
@@ -867,9 +870,13 @@ converts pages to markdown and strips script tags, so the asset name is unreacha
 Lovable's build hashes do not match a local `npm run build`, so the name cannot be guessed
 either. Whoever picks this up should confirm the live bundle moved before assuming it did.
 
-### A pipeline capability that was not known before 2026-08-16
+### A pipeline capability that was not known before 2026-08-16 (Cowork only)
 
-**A cloud session can get rounds pushed after all, without Anthony clicking anything.** It still
+**This whole section is about the Cowork path and only the Cowork path.** A claude.ai/code session
+has real GitHub credentials and does not need any of it: commit, push to your branch, open a PR.
+Do not go looking for a desktop bridge, you do not have one.
+
+**A Cowork session can get rounds pushed after all, without Anthony clicking anything.** It still
 cannot push directly and it still has no credentials, so everything above about bats stands. But
 the desktop bridge exposes computer-use tools, and File Explorer can be granted at `click` tier,
 which is enough to double-click `SHIP7.bat` and let the existing chain run itself. That is how
@@ -884,9 +891,17 @@ The limits are real and worth writing down so nobody wastes a session rediscover
 - **`device_bash` cannot push.** It runs in a Linux VM on his machine with the folder mounted,
   but it has no network: `git ls-remote` fails with a 403 at the proxy. It is for file work
   only.
-- This means the bat pipeline is not a workaround to be removed, it is the mechanism. Keep
-  writing `RUNnn.bat` files exactly as `docs/SHIP-PIPELINE.md` describes. The only thing that
-  changed is that a session can now click one instead of waiting a day for Anthony to.
+- This means the bat pipeline is not a workaround to be removed, it is the mechanism **on this
+  path**. A Cowork session keeps writing `RUNnn.bat` files exactly as `docs/SHIP-PIPELINE.md`
+  describes. The only thing that changed in August was that such a session can now click one
+  instead of waiting a day for Anthony to.
+
+**Superseded in part, 2026-08-26.** The sentence "a cloud session can never push" was written when
+Cowork was the only kind of session working on this repo, and it got read as a rule about all
+cloud sessions. It is not. A claude.ai/code session pushes normally, and on that path the bat
+pipeline is not just unnecessary, it is actively wrong: the zip goes to a folder that is not
+there, no one ever clicks it, and the real change sits uncommitted in a sandbox that gets
+reclaimed.
 
 ### What each pending round is
 
@@ -916,6 +931,12 @@ session's round.
 session start.** If one is there, another session is live. Take a number above it, and do not
 overwrite a `SHIP` wrapper without reading what it currently ships. The scheduled build task
 fires on cron `57 */3 * * *`, so it is running more often than you would guess.
+
+On the claude.ai/code path this failure mode is much milder, because there are no shared
+filenames to race over: each session works on its own branch, and two sessions picking the same
+round number surface as an ordinary merge rather than as a silently overwritten zip. Still check
+`git log` and the open branches before claiming a number, and note in the PR which number you
+took.
 
 ### Round 137, what it actually did
 
@@ -1275,3 +1296,14 @@ today rather than adding alongside them.
   independently verified, and a retraction of a sitemap "bug" that turned out to be the
   `LIVE_IDENTIFIERS` allowlist working as designed. **Lesson worth keeping: a round that pushes
   a queue invalidates this file's own header, so the next round has to fix it.**
+- **2026-08-26** The no-push rule got scoped, because it was only ever true of one kind of
+  session. **Cowork** has no GitHub credentials and keeps the zip plus `RUNnn.bat` plus `SHIP`
+  wrapper pipeline. **claude.ai/code** has push access: commit on the designated branch, push,
+  open a PR, and build none of those files. Changed here, in `CLAUDE.md` (the Shipping section
+  rewritten around the two paths, plus the bootstrap steps, the clone-revert trap, the sandbox
+  git index note and the 642-CRLF note all scoped to the path they actually describe), and in
+  `docs/SHIP-PIPELINE.md` (a new "Which pipeline are you on" section at the top, the old flow
+  relabelled Path B, and Deploying marked as shared). Also corrected this file's head row, which
+  still said `f848aa0` Round 253 while `git log` said `dadd94b` Round 257, and flagged that the
+  publish status of 254 to 257 is unrecorded. **The Round 138 lesson held again: this file went
+  stale the same way, four rounds this time.**
