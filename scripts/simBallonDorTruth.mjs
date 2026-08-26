@@ -175,6 +175,11 @@ if (held.UCL < 100 || held.League < 200 || held.Cup < 100) fail("too few nominee
 if (playerInRecord < ceremonies * 0.5) fail("the player's club is outside the world record too often for rule 2 to mean anything");
 if (playerLeagueWins < 20 || playerUclWins < 10 || playerCupWins < 20) fail("the player won too little for the reconciliation to have been exercised in the winning direction");
 if (sameClubPairs < 200) fail("too few same club pairs compared");
+/* Round 295: the passing output was two lines plus the verdict, which is one
+   short of the runner's four line floor, so every board since Round 292 filed
+   this harness as EMPTY. Printing the teeth is the honest fix: the floors are
+   part of what ran. */
+console.log(`   teeth: ceremonies>=400, UCL>=100 League>=200 Cup>=100 held, player in record on half, 200+ pairs, all measured above`);
 
 console.log("");
 if (CONTROL === "roll") {

@@ -25,7 +25,7 @@
  * Then: node scripts/simTactics.mjs
  * ENGINES=chromium narrows it while iterating.
  */
-import pw from '/home/claude/.npm-global/lib/node_modules/playwright/index.js';
+import pw from './lib/pwLoader.mjs';
 const { chromium, webkit } = pw;
 
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';

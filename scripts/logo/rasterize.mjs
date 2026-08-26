@@ -11,7 +11,15 @@
  */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import sharp from '/home/claude/.npm-global/lib/node_modules/sharp/lib/index.js';
+/* Round 295: resolve sharp normally first; the absolute path is the desktop
+   sandbox's global install and exists nowhere else. A cloud session that
+   needs to rasterize installs it with npm install --no-save sharp. */
+let sharp;
+try {
+  sharp = (await import('sharp')).default;
+} catch {
+  sharp = (await import('/home/claude/.npm-global/lib/node_modules/sharp/lib/index.js')).default;
+}
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.resolve(HERE, '..', '..', 'public');

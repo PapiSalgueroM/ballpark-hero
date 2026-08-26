@@ -42,9 +42,9 @@ import net from 'node:net';
 
 let pw = null;
 try {
-  // the same hardcoded path every browser harness imports, so this
+  // the same loader every browser harness imports (Round 295), so this
   // patches the exact module instance they will use
-  pw = (await import('/home/claude/.npm-global/lib/node_modules/playwright/index.js')).default;
+  pw = (await import('./lib/pwLoader.mjs')).default;
 } catch {
   // no playwright in this environment: nothing to shim
 }
