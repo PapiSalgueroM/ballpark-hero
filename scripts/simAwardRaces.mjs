@@ -23,6 +23,23 @@ const BUNDLE = '/tmp/ar.bundle.mjs';
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+
+/* Round 299: seeded, the same treatment simBallonDorFairness got. This
+   harness ran on ambient Math.random, and on the Round 299 board a boot
+   winner landed on 47 once, then three standalone reruns passed. A verdict
+   that flips run to run trains people to rerun until green, which the house
+   rules forbid; the fix is the house fix, seed the stream rather than widen
+   the bar. Same mulberry32 shape as simBallonDorFairness. */
+{
+  let a = 0xa11ce >>> 0;
+  Math.random = () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
 const mod = await import('${ROOT}/src/lib/clubManager.ts');
 export const cm = mod;
 `);
