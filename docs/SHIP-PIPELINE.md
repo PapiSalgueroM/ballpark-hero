@@ -306,6 +306,50 @@ failed when it worked, or worse, that it worked when it did not.
 
 ---
 
+## The prerender rules, learned the same expensive way (Round 257, 2026-08-21)
+
+Since Round 256 the site prerenders every sitemap route to a real HTML document so a crawler can
+read it without running JavaScript. Those documents live in `public/` and are copied verbatim into
+**every future build**, which is the source of all three traps below. Every one of them was
+reproduced before being fixed, and every one of them is now fenced by a harness.
+
+**1. A snapshot must contain no hashed path. Ever.**
+`vite build` names the entry bundle `assets/index-HASH.js` and the hash changes on every build.
+A snapshot that copied the built `<head>` verbatim therefore points at a file that will not exist
+the moment anything ships. Proved in a headless browser: serve a fresh build alongside the
+previous snapshot and `/soccer-career` 404s on the entry bundle **and on every lazy chunk**, and
+`#root`'s first child is still the snapshot's own markup. The page has words on it and nothing on
+it works, on every game, for anyone arriving from a search result. `public/prerender-boot.js` has
+a stable name no build renames, and it reads the real tags off the live root document and injects
+them. `simPrerender` section 6 fails on any `/assets/` reference in a snapshot; `simPrerenderBoot`
+serves the shipping files to a real browser and requires React to take `#root` over.
+
+**2. Never prerender the page you are serving as the SPA fallback.**
+`scripts/prerender.mjs` serves `dist/` to itself and falls back to `dist/index.html` for every
+route, because the routes do not exist as files yet. It also used to WRITE its snapshot of `/`
+over `dist/index.html`. From that moment the fallback was a finished document instead of the app
+shell, so the next 32 routes captured **the home page's text under their own names**. Caught only
+because three unrelated routes came out at exactly 17,578 bytes. Two fixes, either of which alone
+would have prevented it: the shell is read into memory once before anything is written, and the
+script refuses to start if `dist/index.html` is not a real vite shell (no hashed entry module).
+The home page is no longer prerendered at all, because the host regenerates it from the repo
+template every build; it carries its content in `index.html` itself instead.
+
+**3. Nothing dated may reach a snapshot.**
+A snapshot sits on disk for weeks. "Italian Grand Prix at Monza, in nine days" is true for about a
+day. Anything live or dated is marked `data-no-prerender` in the app and stripped by the
+prerenderer, and `simPrerender` section 7 reads the calendar's own titles out of the source and
+fails if one appears as a ticker line in a shipped file. The same principle as leaving the
+database requests hanging, applied to data that lives in the bundle.
+
+**Two operational notes.** The render browser dies on long runs (once at route 108 of 122,
+leaving 14 stale snapshots), so it is recreated every 25 routes and retries once on a fresh one;
+the run still exits non zero on any failure, so nothing stale can ship silently. And a full
+prerender takes roughly 45 minutes for 121 routes, so run it once at the END of a round, after
+every source change, not after each one. `PRERENDER_ONLY=/a,/b` re-renders a subset.
+
+---
+
 ## Standard round checklist
 
 Copy this into the round and tick it off.
