@@ -1,15 +1,76 @@
 # Ship pipeline
 
-How code gets from a cloud session to douknowball.com. Every rule here was paid for. Read the
-whole thing before packaging your first round.
+How code gets from a session to douknowball.com. Every rule here was paid for.
 
 ---
 
-## The shape of it
+## Which pipeline are you on
+
+**Read this section first. There are two, and most of this document only describes one of them.**
+
+| | Cowork session | claude.ai/code session |
+|---|---|---|
+| GitHub credentials | none | yes |
+| Anthony's Windows folder | connected through the desktop bridge | not there at all |
+| Route to `main` | zip plus bat, he double-clicks it | commit, push, PR |
+| Zip, `RUNnn.bat`, `SHIPnn.bat` | required | **never build them** |
+| Which chapters below apply | all of them | this one, plus **Deploying** |
+
+**How to tell.** A claude.ai/code session is handed a branch name to develop on, has the GitHub
+tools, and `git ls-remote origin` succeeds. A Cowork session has the desktop bridge tools and
+`C:\Users\antho\ballpark-hero` instead. If you genuinely cannot tell, try the push: if it is
+refused for want of credentials, you are on the Cowork path.
+
+**Do not run the wrong one.** Packaging a zip from a claude.ai/code session writes files nobody
+will ever click, into a folder that does not exist, while the actual change sits uncommitted.
+Trying to push from a Cowork session just fails.
+
+### Path A, claude.ai/code: commit and push
+
+This is the short one, and it is now the normal one.
 
 ```
-cloud session          Anthony's Windows machine        GitHub            Lovable            live
--------------          -------------------------        ------            -------            ----
+claude.ai/code session       GitHub                 Lovable            live
+----------------------       ------                 -------            ----
+edit the clone
+  |
+verification gates
+  |
+git commit
+  |
+git push -u origin <branch> --> your branch
+                                  |
+                             open a PR
+                                  |
+                             merged ----------> main
+                                                  |
+                                            preview rebuilds
+                                                  |
+                            you call deploy_project
+                                                  |
+                                            published --------> douknowball.com
+```
+
+Rules for this path:
+
+- **Push to the branch you were given and nothing else.** Never push to `main` directly.
+- **Do not produce `ROUNDnn_FILES.zip`, `RUNnn.bat` or a `SHIP` wrapper.** None of the packaging
+  chapters below apply to you: not the round number reservation dance, not the findstr assertion
+  rules, not the chain guard. They exist to make a Windows double-click safe, and you are not
+  doing a Windows double-click.
+- **The verification gates do not change.** Types, build, sims, sweeps, all still run before you
+  commit. The bat assertions were a second net under those gates, and on this path the gates are
+  the only net, so do not skip them.
+- **A round is still a round.** Keep numbering rounds, keep the commit message style below, and
+  keep updating `docs/PROJECT-STATE.md` in the same round.
+- **The PR is the handoff.** `main` does not move until it merges, so the preview does not
+  rebuild until it merges either, and `deploy_project` before that publishes the old code.
+
+### Path B, Cowork: package a bat
+
+```
+Cowork session         Anthony's Windows machine        GitHub            Lovable            live
+--------------         -------------------------        ------            -------            ----
 edit clone
   |
 package ROUNDnn_FILES.zip
@@ -28,9 +89,12 @@ device_commit_files -> C:\Users\antho\ballpark-hero
                                                                     published --------> douknowball.com
 ```
 
-**The cloud session can never push.** It has no credentials, by design. Every commit happens on
+**A Cowork session can never push.** It has no credentials, by design. Every commit happens on
 Anthony's machine when he double-clicks a bat. Do not try to work around this, and do not nag
 him about unrun bats more than once.
+
+**Everything from here to the Deploying section is Path B only.** Read the whole of it before
+packaging your first round.
 
 ---
 
@@ -77,6 +141,8 @@ Deliver via `SendUserFile` **and** `device_commit_files`. Both. The first puts i
 the second puts it on his disk where the bat can find it.
 
 ### Commit message style
+
+**This part applies on both paths.** The message is the same whether a bat writes it or you do.
 
 One line, lowercase after the round number, written as a plain sentence about what changed and
 why it mattered. Look at the real log for the voice:
@@ -303,8 +369,12 @@ the same from the cloud side, and you will waste a session guessing.
 
 ## Deploying
 
-Pushing to `main` rebuilds the Lovable **preview** only. douknowball.com serves the published
-snapshot, which does not move on its own.
+**Both paths run this section. It is the only part of the pipeline they share, and it is the part
+most often skipped.**
+
+Landing on `main` rebuilds the Lovable **preview** only. douknowball.com serves the published
+snapshot, which does not move on its own. On the claude.ai/code path, "landing on `main`" means
+the PR merged: deploying before the merge publishes the code that was already there.
 
 1. Confirm Lovable actually synced the commit. Use `mcp__Lovable__read_file` on a file the round
    changed and check the new content is there. Lovable has stuck on an old commit before.
@@ -499,9 +569,13 @@ if you did not save it, there is nothing to roll back to.
 
 ## When the Windows folder is not available
 
-The whole pipeline above assumes the device bridge and a connected `C:\Users\antho\ballpark-hero`.
-A web or mobile session, or one with no folder connected, has neither, and two procedures in
-these docs silently depend on it: picking the round number, and re-extracting pending zips.
+**First check whether you can push.** No folder plus working credentials is not a degraded Cowork
+session, it is Path A, and the answer is to commit and push, not to work around a missing bridge.
+The rest of this section is for the genuinely stuck case: no folder **and** no push.
+
+Path B assumes the device bridge and a connected `C:\Users\antho\ballpark-hero`. A session with
+neither has two procedures that silently depend on it: picking the round number, and re-extracting
+pending zips.
 
 In that situation:
 
@@ -516,3 +590,7 @@ In that situation:
 
 Do not treat a missing bridge as a reason to stop working. It is a reason to be explicit about
 what you could not verify.
+
+Note that the round number problem is much smaller on Path A: two sessions cannot quietly collide
+on a filename there, because each one is on its own branch and the collision surfaces as a normal
+merge, not as a silently overwritten zip.

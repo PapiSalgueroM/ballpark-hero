@@ -34,13 +34,19 @@ cd ballpark-hero
 npm install
 ```
 
+A claude.ai/code session already has the clone, so it only needs `npm install`.
+
 Then read `docs/PROJECT-STATE.md` and reconcile against reality:
 
-1. `git log --oneline -5` gives you the true head.
-2. List Anthony's folder (`C:\Users\antho\ballpark-hero`) and note every `ROUNDnn_FILES.zip`
+1. `git log --oneline -5` gives you the true head. **Trust this over the head recorded in
+   `docs/PROJECT-STATE.md`**, which goes stale the moment a queue lands.
+2. **Steps 2 and 3 are Cowork only.** They need Anthony's folder, which a claude.ai/code session
+   does not have. On that path skip straight to step 4: your clone is already current with
+   `origin/main` and there is nothing to extract.
+3. List Anthony's folder (`C:\Users\antho\ballpark-hero`) and note every `ROUNDnn_FILES.zip`
    **whose round number is above the head**. Those are the genuinely pending rounds. Extract
    those, in numeric order, onto the clone before you touch any code.
-3. **Do not extract a zip whose round number is at or below the head.** Old zips linger in that
+   **Do not extract a zip whose round number is at or below the head.** Old zips linger in that
    folder forever. `ROUND77_FILES.zip` and `ROUND87_FILES.zip` in particular are still sitting
    there unrun, and unpacking them over a Round 130-plus tree would silently revert fifty rounds
    of work in every file they happen to touch. It would look exactly like the clone-revert bug
@@ -56,10 +62,10 @@ environment traps ("unknown index entry format") shows up on **staging operation
 sandboxes, `git add` and `git status` in particular. If `clone` itself fails, fall back to
 `git clone --depth 1` or download the tarball; do not conclude the repo is broken.
 
-*The CRLF check.* Once you have extracted pending zips onto the clone,
-`git diff --ignore-cr-at-eol --stat` is **no longer empty**, and it stops being a clean proof
-that the only changes are line endings. Run that check **before** extracting anything, or scope
-it to files the pending rounds do not touch.
+*The CRLF check.* Cowork only, for the same reason. Once you have extracted pending zips onto the
+clone, `git diff --ignore-cr-at-eol --stat` is **no longer empty**, and it stops being a clean
+proof that the only changes are line endings. Run that check **before** extracting anything, or
+scope it to files the pending rounds do not touch.
 
 Playwright's Chromium is normally preinstalled (`PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers`), so
 do not reflexively run `playwright install`. If Chromium genuinely is not there, install it, it
@@ -173,17 +179,43 @@ rather than whole.
 
 ---
 
-## Shipping, in one paragraph
+## Shipping
 
-A cloud session can **never push**, it has no credentials. It packages a round as
+**There are two kinds of session and they ship differently. Work out which one you are before
+you write a line of code.** The old blanket rule ("a cloud session can never push") was wrong,
+it described only one of them, and following it from the other one produces zips nobody needs.
+
+| | Cowork session | claude.ai/code session |
+|---|---|---|
+| GitHub credentials | none | yes |
+| Anthony's Windows folder | connected through the desktop bridge | not there at all |
+| How a round lands | package a zip plus a bat, he double-clicks it | commit and push, then open a PR |
+| Zip, `RUNnn.bat`, `SHIPnn.bat` | required | **never build them** |
+
+**How to tell.** A claude.ai/code session is handed a branch name to develop on, has the GitHub
+tools, and `git ls-remote origin` succeeds against
+`https://github.com/PapiSalgueroM/ballpark-hero`. A Cowork session has the desktop bridge tools
+and `C:\Users\antho\ballpark-hero` instead. If you genuinely cannot tell, try the push: if it is
+refused for want of credentials, you are on the Cowork path and the bat pipeline applies.
+
+**Cowork.** It can **never push**, it has no credentials. It packages a round as
 `ROUNDnn_FILES.zip` plus `RUNnn.bat`, writes both to `C:\Users\antho\ballpark-hero`, and Anthony
-double-clicks the bats in numeric order. Pushing updates the Lovable **preview only**;
+double-clicks the bats in numeric order.
+
+**claude.ai/code.** Commit on the branch you were given, `git push -u origin <branch>`, then open
+a PR. **Do not write a zip, do not write a `RUNnn.bat`, do not write a `SHIP` wrapper, and do not
+try to reach Anthony's folder**, none of that applies to you and none of it exists on your
+machine. Nothing reaches `main` until the PR merges, so the preview does not rebuild before that.
+
+**Both paths end the same way.** Landing on `main` updates the Lovable **preview only**;
 douknowball.com serves the published snapshot and does not move until you call
 `deploy_project`. Skipping that final publish step is why the live site once served a June build
 for weeks while GitHub was current.
 
 **The full runbook, with every trap, is `docs/SHIP-PIPELINE.md`. Read it before you package
-anything.** The traps in there are not theoretical, each one cost real time.
+anything.** The traps in there are not theoretical, each one cost real time. Most of it is about
+the bat pipeline, so on the claude.ai/code path read the session-type section at the top and the
+deploy section, and skip the packaging chapters.
 
 ---
 
@@ -498,32 +530,42 @@ These are not preferences, they are the exposure.
 
 ## Environment traps
 
-- **The cloud clone silently reverts mid-turn.** Tracked files snap back to origin, untracked
-  files survive. Re-stage and extract the pending `ROUNDnn_FILES.zip` files from Anthony's
-  folder, in numeric order, at the start of every turn and after every agent fan-out. Early
-  warning sign: the tsc error count jumps from 0 to about 110. **His machine is the only source
-  of truth for unpushed rounds.**
+- **The cloud clone silently reverts mid-turn. Cowork only.** Tracked files snap back to origin,
+  untracked files survive. Re-stage and extract the pending `ROUNDnn_FILES.zip` files from
+  Anthony's folder, in numeric order, at the start of every turn and after every agent fan-out.
+  Early warning sign: the tsc error count jumps from 0 to about 110. **On the Cowork path his
+  machine is the only source of truth for unpushed rounds.**
 
   **"Pending" means round number above the current head, and nothing else.** Re-read the
   bootstrap section above before you extract anything. Old zips never leave that folder, and
   extracting one below the head is self-inflicted damage that presents as this bug.
-- **Never run `git checkout` in the cloud clone.** It is not an undo, it is a rollback to
+
+  On the claude.ai/code path none of this applies. The clone is fresh from `origin`, there are no
+  pending zips to extract because there is no folder to extract them from, and your own branch is
+  the source of truth for work in flight. Commit early so a revert cannot cost you anything.
+- **Never run `git checkout` in the Cowork cloud clone.** It is not an undo, it is a rollback to
   `origin/main`, which is however many unpushed rounds behind the tree you are working on. In
   Round 272 a `git checkout -- src/App.tsx` meant to undo a one line test edit silently took the
   file back fifteen rounds and deleted six routes, and tsc, the build and the sitemap generator
   all stayed green afterwards. Undo an edit by copying the file back from a copy you made first.
   Recovery is the same as for the clone-revert bug above: re-extract every pending zip in numeric
-  order, then compare every file the zips carry against the tree byte for byte.
+  order, then compare every file the zips carry against the tree byte for byte. On the
+  claude.ai/code path this trap does not exist, the clone sits at `origin` and checkout behaves
+  like ordinary git, but the habit of copying a file before experimenting on it is still a good
+  one.
 - **Bash reads can be stale or truncated** in the sandbox for files edited by the Write and Edit
   tools in the same session. A file once ended mid-word under `tail` while the Read tool showed
   it complete. **Verify file content with the Read and Grep tools, never with bash `cat`,
   `grep`, `ls` or `find`.** Do not panic over bogus syntax errors from a bash-side compile. A
   green bash build is not proof the code exists.
-- **Sandbox git cannot use the index** ("unknown index entry format"). Use `git ls-remote` and
-  `git cat-file` for remote truth, and run the commit bats on Windows.
-- **The repo permanently shows around 642 modified files.** That is pure CRLF, nothing else.
-  Prove it with `git diff --ignore-cr-at-eol --stat`, which comes back empty. **Never commit
-  them.**
+- **Sandbox git cannot use the index** ("unknown index entry format"), in **some** sandboxes and
+  **not** in all of them. Where it bites, use `git ls-remote` and `git cat-file` for remote truth
+  and run the commit bats on Windows. On the claude.ai/code path it has not been seen: `add`,
+  `commit`, `status` and `push` all work normally, so try them before assuming you are blocked.
+- **The repo permanently shows around 642 modified files, on Anthony's machine.** That is pure
+  CRLF, nothing else. Prove it with `git diff --ignore-cr-at-eol --stat`, which comes back empty.
+  **Never commit them.** A fresh claude.ai/code clone does not have this: it comes up clean, so
+  there a dirty `git status` means real edits and is worth reading rather than dismissing.
 - `npx serve -s` never serves a prerendered route: its single page rewrite runs before the
   filesystem is checked, so every route answers with `index.html`. The browser harnesses are
   served by `scripts/lib/hostLikeServer.mjs`, which behaves like the live host. Use that when

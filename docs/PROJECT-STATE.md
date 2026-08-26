@@ -742,10 +742,12 @@ true on the date above; re-measure rather than quoting them.
 
 | | |
 |---|---|
-| `origin/main` head | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
-| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 293** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP154.bat` runs all thirty six in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 153) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast, 288 Idle Arena, the first true incremental, plus the rules button off the Back button, 289 Face Off, the duel against a rival or a friend, 290 the manifest that makes the site installable, 291 the Brownlow and the Dally M on the records shelf, 292 the Ballon d'Or honours made consistent after two user reports, 293 your dailies on the home page. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
+| **HOW YOU SHIP DEPENDS ON WHICH SESSION YOU ARE** | Read this before anything else in this file. **A claude.ai/code session has GitHub credentials: commit, push, and it may merge to `main` under Anthony's standing 2026-08-26 authorization. Do NOT build a zip, a `RUNnn.bat` or a `SHIP` wrapper.** Only a **Cowork** session lacks credentials, and only Cowork uses the bat pipeline. Everything below that talks about packaging, extracting zips from Anthony's folder, or waiting for him to double-click something is **Cowork-path only**, including most of the ship history in this table. See the "Which pipeline are you on" section at the top of `docs/SHIP-PIPELINE.md`. |
+| `origin/main` head | `9f5dfad` = **Round 293**, the entire 258 to 293 backlog pushed 2026-08-26 (36 rounds, Anthony clicked `SHIP154.bat`, a cloud session watched main advance round by round to 293 and verified the count). Lovable sync was file-verified and `deploy_project` called the same day from the cloud session. Anthony's standing instruction from the same day: shipping and publishing happen without him, the build loop moves to cloud sessions, and his computer stops being part of the pipeline. |
+| PREVIOUS HEAD, FOR CONTEXT | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
+| HOW 258 TO 293 LANDED, AND WHAT EACH ONE WAS | DONE 2026-08-26. The queue that was waiting on one double click: rounds **258 through 293** were packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP154.bat` runs all thirty six in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 153) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast, 288 Idle Arena, the first true incremental, plus the rules button off the Back button, 289 Face Off, the duel against a rival or a friend, 290 the manifest that makes the site installable, 291 the Brownlow and the Dally M on the records shelf, 292 the Ballon d'Or honours made consistent after two user reports, 293 your dailies on the home page. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
-| PREVIOUS HEAD, FOR CONTEXT | `f848aa0` = Round 253, pushed 2026-08-21 morning and published the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
+| AND THE HEAD BEFORE THAT | `f848aa0` = Round 253, pushed 2026-08-21 morning and published the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
 | WHY THE BACKLOG SAT FOR WEEKS | **Four separate bugs in the RUN bats, not in the code and not on his machine.** Every one of them made a fail-closed assertion STOP a run that should have passed, so a click that looked like it worked shipped a handful of rounds and quit. All four were reproduced on Windows before being fixed, all four are fixed in the bats on his disk AND in pkg/mkbat.py, and pkg/verifybat.py now refuses to build or bless a bat carrying any of them: (1) FORWARD SLASHES in a findstr file argument: findstr rejects them outright and returns errorlevel 1 exactly as if the pattern were missing, which killed 56 bats at Round 179 every single time; (2) RAW DOUBLE QUOTES in a pattern: cmd ends the quoted argument at the first one, so any assertion quoting real code (an aria-label, a JSX prop, an array of strings) was mangled, killing 10 bats at Round 198; (3) A QUOTE FOLLOWED BY A CMD OPERATOR: cmd counts quotes and does not understand the \" escape, so a `>` after one becomes a redirection, which silently turned RUN209's check into a file write; (4) A PERCENT SIGN in a pattern: cmd strips a lone `%` as variable-expansion syntax, so the assertion hunts for text the file does not contain, which stopped RUN251 on a comment reading "the 40% wash". The empirical tests that proved 1, 2 and 3 are worth repeating if a fifth ever appears: write a throwaway bat that runs the shapes against a known file, log the errorlevels, and read the log. Guessing cost more time than testing. |
 | ONE MORE SHIP TRAP, NOT A BUG | Every RUN bat's chain guard greps `git log --oneline -80` for the previous round. A SHIP wrapper that starts at 157 therefore FAILS at RUN157 once the head is more than 80 commits past Round 156, which is exactly what happened after the backlog landed. Build the wrapper from the FIRST UNCOMMITTED round, not from 157. |
 | How 139-144 landed | SHIP13 clicked via computer-use 2026-08-17 ~07:50 UTC. First run failed closed on a bad RUN139 assertion (bare `plus10` matched the removal comment); pattern fixed to `id: 'plus10'`, re-clicked, all six pushed clean. Lesson in SHIP-PIPELINE terms: absence assertions must target the old DEFINITION shape, and every bat's patterns get tested against the actual zip contents before delivery. |
@@ -1222,9 +1224,13 @@ converts pages to markdown and strips script tags, so the asset name is unreacha
 Lovable's build hashes do not match a local `npm run build`, so the name cannot be guessed
 either. Whoever picks this up should confirm the live bundle moved before assuming it did.
 
-### A pipeline capability that was not known before 2026-08-16
+### A pipeline capability that was not known before 2026-08-16 (Cowork only)
 
-**A cloud session can get rounds pushed after all, without Anthony clicking anything.** It still
+**This whole section is about the Cowork path and only the Cowork path.** A claude.ai/code session
+has real GitHub credentials and does not need any of it: commit, push to your branch, open a PR.
+Do not go looking for a desktop bridge, you do not have one.
+
+**A Cowork session can get rounds pushed after all, without Anthony clicking anything.** It still
 cannot push directly and it still has no credentials, so everything above about bats stands. But
 the desktop bridge exposes computer-use tools, and File Explorer can be granted at `click` tier,
 which is enough to double-click `SHIP7.bat` and let the existing chain run itself. That is how
@@ -1239,9 +1245,17 @@ The limits are real and worth writing down so nobody wastes a session rediscover
 - **`device_bash` cannot push.** It runs in a Linux VM on his machine with the folder mounted,
   but it has no network: `git ls-remote` fails with a 403 at the proxy. It is for file work
   only.
-- This means the bat pipeline is not a workaround to be removed, it is the mechanism. Keep
-  writing `RUNnn.bat` files exactly as `docs/SHIP-PIPELINE.md` describes. The only thing that
-  changed is that a session can now click one instead of waiting a day for Anthony to.
+- This means the bat pipeline is not a workaround to be removed, it is the mechanism **on this
+  path**. A Cowork session keeps writing `RUNnn.bat` files exactly as `docs/SHIP-PIPELINE.md`
+  describes. The only thing that changed in August was that such a session can now click one
+  instead of waiting a day for Anthony to.
+
+**Superseded in part, 2026-08-26.** The sentence "a cloud session can never push" was written when
+Cowork was the only kind of session working on this repo, and it got read as a rule about all
+cloud sessions. It is not. A claude.ai/code session pushes normally, and on that path the bat
+pipeline is not just unnecessary, it is actively wrong: the zip goes to a folder that is not
+there, no one ever clicks it, and the real change sits uncommitted in a sandbox that gets
+reclaimed.
 
 ### What each pending round is
 
@@ -1271,6 +1285,12 @@ session's round.
 session start.** If one is there, another session is live. Take a number above it, and do not
 overwrite a `SHIP` wrapper without reading what it currently ships. The scheduled build task
 fires on cron `57 */3 * * *`, so it is running more often than you would guess.
+
+On the claude.ai/code path this failure mode is much milder, because there are no shared
+filenames to race over: each session works on its own branch, and two sessions picking the same
+round number surface as an ordinary merge rather than as a silently overwritten zip. Still check
+`git log` and the open branches before claiming a number, and note in the PR which number you
+took.
 
 ### Round 137, what it actually did
 
@@ -2436,3 +2456,22 @@ today rather than adding alongside them.
   independently verified, and a retraction of a sitemap "bug" that turned out to be the
   `LIVE_IDENTIFIERS` allowlist working as designed. **Lesson worth keeping: a round that pushes
   a queue invalidates this file's own header, so the next round has to fix it.**
+- **2026-08-26** The no-push rule got scoped, because it was only ever true of one kind of
+  session. **Cowork** has no GitHub credentials and keeps the zip plus `RUNnn.bat` plus `SHIP`
+  wrapper pipeline. **claude.ai/code** has push access: commit on the designated branch, push,
+  open a PR, and build none of those files. Changed here, in `CLAUDE.md` (the Shipping section
+  rewritten around the two paths, plus the bootstrap steps, the clone-revert trap, the sandbox
+  git index note and the 642-CRLF note all scoped to the path they actually describe), and in
+  `docs/SHIP-PIPELINE.md` (a new "Which pipeline are you on" section at the top, the old flow
+  relabelled Path B, and Deploying marked as shared). Merged after the 258 to 293 backlog
+  landed, so the head row was rewritten to `9f5dfad` Round 293 in the same edit.
+- **2026-08-26, later the same day** The big pipeline change, on Anthony's direct instruction
+  ("push everything on the computer and then once that's done we can solely work off here"). He
+  clicked `SHIP154.bat`, all 36 rounds landed clean, a cloud session verified the chain round by
+  round, republished the site, and then moved the build loop off his machine: the 3-hourly
+  scheduled task now fires fresh claude.ai/code cloud sessions that build, verify, push and
+  publish on their own, and the old desktop-bound behavior is retired. His computer is no longer
+  part of the pipeline. The Cowork path in these docs stays documented in case it is ever
+  revived, but nothing schedules it any more. ROUND77 and ROUND87 functionality (Club Manager
+  youth academy, scouts, facilities, sponsors, spies; real 2026 CFB rosters) still needs
+  rebuilding fresh from the roadmap, those zips died with the desktop pipeline.
