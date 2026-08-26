@@ -52,7 +52,10 @@ console.log('1) A brand new visitor still gets a live wire');
   if (items.some(i => i.text.includes('Your save') || i.text.includes('Your pro') || i.text.includes('stadium empire'))) {
     fail('a personal line appeared with no saves on the device');
   }
-  if (!items.some(i => i.text === `${all.length} free games, no sign-up, no downloads`)) {
+  /* Round 297 reworded this line: the owner called the flat "no sign-up" claim
+     a lie, since accounts exist. The check keeps its real job, the count must
+     come from the registry, against the honest wording. */
+  if (!items.some(i => i.text === `${all.length} free games, all playable without an account`)) {
     fail('the game count does not match the registry');
   }
   const dailyItems = items.filter(i => i.text.startsWith('Fresh daily:'));
