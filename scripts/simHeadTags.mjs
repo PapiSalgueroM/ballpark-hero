@@ -43,6 +43,11 @@ for (const e of readdirSync(PUBLIC, { withFileTypes: true })) {
   /* the 8 retired signposts from Round 272 are tiny redirect documents with a
      head of their own on purpose, so they are not part of this */
   if (!html.includes('/prerender-boot.js')) continue;
+  /* Round 278: nor are the noindexed pages. A page that asks not to be indexed
+     has no result to be shown in, so a description, an og:image and a share
+     card are furniture it will never use. The one thing that matters on those
+     is the noindex itself, and scripts/simHiddenPages.mjs owns that. */
+  if (/name="robots"[^>]*content="noindex/.test(html)) continue;
   docs.push([`/${e.name}`, html]);
 }
 console.log(`0) ${docs.length} shipped pages`);

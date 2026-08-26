@@ -47,7 +47,7 @@
  * Run: npm run build && node scripts/prerender.mjs
  */
 import { createServer } from 'node:http';
-import { readFileSync, existsSync, statSync, mkdirSync, writeFileSync } from 'node:fs';
+import { readFileSync, existsSync, statSync, mkdirSync, writeFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from '/home/claude/.npm-global/lib/node_modules/playwright/index.js';
@@ -66,13 +66,65 @@ if (!existsSync(path.join(DIST, 'index.html'))) {
 }
 
 /* the routes come from the sitemap, which is already the list of pages
-   this site wants indexed: noindexed pages (profile, admin, resets) are
-   not in it and must not be prerendered either */
+   this site wants indexed. */
 const sitemap = readFileSync(path.join(DIST, 'sitemap.xml'), 'utf8');
 const routes = [...sitemap.matchAll(/<loc>https?:\/\/[^/]+([^<]*)<\/loc>/g)]
   .map(m => m[1] || '/')
   .map(r => (r.endsWith('/') && r !== '/' ? r.slice(0, -1) : r));
-let unique = [...new Set(routes)];
+
+/* ROUND 278: THE NOINDEXED PAGES ARE PRERENDERED TOO NOW, and the reason is a
+   decision that stopped being right without anybody touching it.
+ *
+ * This used to say that noindexed pages (profile, admin, the password reset,
+ * five retired games) are not in the sitemap and must not be prerendered
+ * either. That was correct when it was written: a page with no snapshot served
+ * the SPA fallback, and the fallback was an empty shell with 43 characters in
+ * it. Harmless.
+ *
+ * Round 257 then moved the home page's content INTO that fallback, because the
+ * home page is the one route not prerendered and had nothing for a crawler
+ * otherwise. Correct on its own terms, and it turned these nine addresses into
+ * nine copies of the home page. Measured against Search Console on 2026-08-23:
+ * /guess-nfl-team is sitting in "Crawled, currently not indexed", last looked
+ * at in April, which is exactly what an address serving somebody else's content
+ * and declaring nothing looks like.
+ *
+ * The noindex these pages carry only exists after JavaScript runs. Prerendering
+ * them puts it in the HTML, where a crawler reads it without rendering, and the
+ * clean Search Console status for a page you do not want indexed is "excluded
+ * by noindex tag", not the ambiguous bucket that also holds real problems.
+ *
+ * They are still NOT in the sitemap, and that is the point: a sitemap is a list
+ * of pages you are asking for. This is a list of pages you are answering for. */
+const hiddenRoutes = (() => {
+  const app = readFileSync(path.join(ROOT, 'src/App.tsx'), 'utf8');
+  const live = [], retired = new Set();
+  for (const m of app.matchAll(/<Route\s+path="([^"]+)"\s+element={\s*(<Navigate\b)?/g)) {
+    const r = m[1];
+    if (!r.startsWith('/') || r.includes(':') || r === '*') continue;
+    if (m[2]) retired.add(r); else live.push(r);
+  }
+  const submitted = new Set(routes);
+  /* a route is hidden when it is live, unsubmitted, and its own page asks not
+     to be indexed. All three have to be true: an unsubmitted page that never
+     asked for noindex is a mistake in the sitemap, not a page to snapshot. */
+  const pagesWithNoindex = new Set();
+  for (const f of readdirSync(path.join(ROOT, 'src/pages'))) {
+    if (!f.endsWith('.tsx')) continue;
+    if (/noindex/.test(readFileSync(path.join(ROOT, 'src/pages', f), 'utf8'))) {
+      pagesWithNoindex.add(f.replace(/\.tsx$/, ''));
+    }
+  }
+  const componentOf = r => {
+    const m = app.match(new RegExp(`<Route\\s+path="${r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"\\s+element={\\s*<(\\w+)`));
+    return m ? m[1] : null;
+  };
+  return live.filter(r => !submitted.has(r) && !retired.has(r))
+    .filter(r => { const c = componentOf(r); return c && pagesWithNoindex.has(c); });
+})();
+if (hiddenRoutes.length) console.log(`  plus ${hiddenRoutes.length} noindexed routes that are not submitted: ${hiddenRoutes.join(', ')}`);
+
+let unique = [...new Set([...routes, ...hiddenRoutes])];
 /* PRERENDER_ONLY=/a,/b limits the run while measuring a change */
 if (process.env.PRERENDER_ONLY) {
   const want = new Set(process.env.PRERENDER_ONLY.split(',').map(x => x.trim()));
@@ -175,7 +227,7 @@ async function freshPage() {
 
 await freshPage();
 
-let written = 0, failed = 0, done = 0;
+let written = 0, failed = 0, done = 0, refused = 0;
 for (const route of unique) {
   const url = `http://127.0.0.1:${PORT}${route}`;
   if (done > 0 && done % 25 === 0) await freshPage();
@@ -382,6 +434,35 @@ for (const route of unique) {
        generates dist/index.html from the repo's index.html template, and
        a public/index.html would collide with it, so the home page keeps
        the shell and is covered by the static block in index.html. */
+    /* ROUND 278: A SNAPSHOT THAT IS NOT THIS PAGE IS NOT WRITTEN.
+     *
+     * The captured head has to canonicalise to the route being rendered. If it
+     * does not, the app navigated somewhere else while the snapshot was being
+     * taken and what came back is another page's content wearing this page's
+     * file name. Found immediately: /profile requires an account, so signed out
+     * it lands on the home page, and the first run of this wrote the home page's
+     * title and a canonical to / into public/profile/index.html. That would have
+     * shipped a permanent copy of the home page at /profile, which is the exact
+     * shape of the Round 257 bug where 32 routes captured the home page's text
+     * under their own names.
+     *
+     * Fail closed: nothing is written and the route is counted as failed, so a
+     * run that hits this cannot look like a clean run. */
+    const canon = (html.match(/<link[^>]+rel="canonical"[^>]+href="[^"]*?([^"/]*)"/) || [])[0] || '';
+    const wantUrl = `https://douknowball.com${route}`;
+    if (!canon.includes(`href="${wantUrl}"`)) {
+      /* A SITEMAP route doing this is a defect and counts as a failure. A
+         hidden route doing it is expected for the three that need an account:
+         /admin/login, /admin/reports and /profile all land on the home page
+         when signed out, which is the correct behaviour and simply means there
+         is no page here to photograph. scripts/genHiddenStubs.mjs gives those a
+         small noindex document instead, so the intent still reaches a crawler
+         without publishing a signed out admin screen. */
+      const expected = hiddenRoutes.includes(route);
+      if (!expected) failed += 1; else refused += 1;
+      console.error(`   NOT WRITTEN ${route}: it canonicalises somewhere else, so the app navigated away and this is not that page${expected ? ' (expected, it needs an account)' : ''}`);
+      continue;
+    }
     for (const base of [DIST, PUBLIC]) {
       const dir = path.join(base, route.replace(/^\//, ''));
       mkdirSync(dir, { recursive: true });
@@ -398,5 +479,5 @@ for (const route of unique) {
 await browser.close();
 server.close();
 
-console.log(`prerendered ${written} routes, ${failed} failed`);
+console.log(`prerendered ${written} routes, ${failed} failed${refused ? `, ${refused} hidden routes refused because they need an account` : ''}`);
 if (failed > 0) process.exit(1);

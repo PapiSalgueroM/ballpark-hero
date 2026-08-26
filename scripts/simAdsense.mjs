@@ -56,21 +56,24 @@ if (!/localStorage\.getItem\('cookie-consent'\)\s*===\s*'accepted'/.test(indexHt
   console.log('   note: the consent gate in index.html changed shape, re-read it before trusting this section');
 }
 const snapDir = path.join(ROOT, 'public');
-let withMeta = 0, snaps = 0;
+let withMeta = 0, snaps = 0, stubs = 0;
 for (const e of readdirSync(snapDir, { withFileTypes: true })) {
   if (!e.isDirectory()) continue;
   const f = path.join(snapDir, e.name, 'index.html');
   if (!existsSync(f)) continue;
+  const html = readFileSync(f, 'utf8');
+  /* Round 272's retired signposts and Round 278's noindex stubs are small
+     documents whose only job is to declare one thing. Head furniture the page
+     will never use is not missing from them, it was never wanted. Counted
+     separately rather than excluded silently, so the number stays honest. */
+  if (!html.includes('/prerender-boot.js') || /name="robots"[^>]*content="noindex/.test(html)) { stubs += 1; continue; }
   snaps += 1;
-  if (readFileSync(f, 'utf8').includes('google-adsense-account')) withMeta += 1;
+  if (html.includes('google-adsense-account')) withMeta += 1;
 }
-/* the 8 retired route signposts from Round 272 are tiny redirect documents and
-   deliberately carry no head furniture, so they are not counted against this */
-const RETIRED = 8;
-if (withMeta < snaps - RETIRED) {
-  fail(`${snaps - RETIRED - withMeta} prerendered pages have no verification meta tag`);
+if (withMeta < snaps) {
+  fail(`${snaps - withMeta} prerendered pages have no verification meta tag`);
 }
-console.log(`   meta tag in the template and on ${withMeta} of ${snaps} shipped documents (${RETIRED} retired signposts excluded by design)`);
+console.log(`   meta tag in the template and on ${withMeta} of ${snaps} shipped documents (${stubs} redirect and noindex stubs excluded by design)`);
 
 /* ── 3: ads.txt is exactly what Google reads ──────────────────────────── */
 console.log('3) ads.txt');
