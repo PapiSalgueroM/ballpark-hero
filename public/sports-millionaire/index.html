@@ -17,6 +17,16 @@
          visible to Google's crawler on the raw HTML, no consent needed. -->
     <meta name="google-adsense-account" content="ca-pub-2929318086316376">
     <meta name="description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    <link rel="canonical" href="https://douknowball.com/">
     
     
     <meta property="og:type" content="website">
@@ -120,17 +130,17 @@
 </head>
 <body>
 <div id="root">
-<a href="/perfect-lineup-f1">🗓️ Fresh daily: Perfect Lineup: F1 ·</a>
-<a href="/rank-em">🗓️ Fresh daily: Rank 'Em ·</a>
-<a href="/silverware-sort">🗓️ Fresh daily: Silverware Sort ·</a>
-<a href="/mystery-box">🗓️ Fresh daily: Mystery Box ·</a>
+<a href="/guess-tennis-player">🗓️ Fresh daily: Guess The Player ·</a>
+<a href="/olympics">🗓️ Fresh daily: The Medal Games ·</a>
+<a href="/score-predictor">🗓️ Fresh daily: Score Predictor ·</a>
+<a href="/overrated-underrated">🗓️ Fresh daily: Overrated or Underrated ·</a>
 <a href="/">🎮 113 free games, no sign-up, no downloads ·</a>
 <a href="/">⚽ 30 soccer games and counting ·</a>
 <a href="/whats-new">📰 New stuff ships almost daily. See what changed ·</a>
 <a href="/">DOUKNOWBALL</a>
 <h1>SPORTS MILLIONAIRE</h1>
 <p>Climb the ladder. Lock in your answer. Walk away anytime with what you've won.</p>
-<p>Today's ladder, 2026-08-21. Same 15 questions for everyone.</p>
+<p>Today's ladder, 2026-08-22. Same 15 questions for everyone.</p>
 <h2>Sports Millionaire: The Money Ladder Trivia Game</h2>
 <p>Climb a money ladder where every right answer raises the stakes. Fifteen questions built from real market values, nationalities, positions, and Ballon d'Or history. Use your lifelines wisely.</p>
 <p>Fifteen questions stand between you and a million pretend dollars. Sports Millionaire is a climb-the-ladder quiz in the classic TV style: each answer raises the stakes, and one wrong step sends you tumbling.</p>
@@ -171,16 +181,16 @@
 <a href="/baseball-connections">⚾ Connections Group baseball players</a>
 <a href="/afl-higher-lower">📊 AFL Higher or Lower Which legend kicked more career goals?</a>
 <p>PLAY NEXT</p>
-<a href="/tennis-higher-lower">📊 Tennis Higher or Lower Which legend won more Grand Slam titles? Play Now</a>
-<h3>Tennis Higher or Lower</h3>
-<p>Which legend won more Grand Slam titles?</p>
+<a href="/guess-the-golfer">⛳ Guess The Golfer A mystery major champion, six clues, fewer is better Play Now</a>
+<h3>Guess The Golfer</h3>
+<p>A mystery major champion, six clues, fewer is better</p>
+<a href="/ufc-chain">🔗 Combat Chain Build a chain of fighters who beat each other Play Now</a>
+<h3>Combat Chain</h3>
+<p>Build a chain of fighters who beat each other</p>
 <a href="/baseball-career">⚾ Career Path Guess the baseball player Play Now</a>
 <h3>Career Path</h3>
 <p>Guess the baseball player</p>
-<a href="/nfl-career">🏈 NFL Career Path Guess the NFL player from clues Play Now</a>
-<h3>NFL Career Path</h3>
-<p>Guess the NFL player from clues</p>
-<p>Next puzzle in 05:19:52</p>
+<p>Next puzzle in 23:07:09</p>
 <p>See all games →</p>
 <a href="/">See all games →</a>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
@@ -188,6 +198,8 @@
 <a href="/contact">Contact</a>
 <a href="/whats-new">What's New</a>
 <a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/college">College Hub</a>
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
 <p>We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy. Learn More</p>

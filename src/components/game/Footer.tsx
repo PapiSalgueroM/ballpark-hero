@@ -24,6 +24,23 @@ export function Footer() {
           Record Books
         </Link>
         <span>·</span>
+        {/* Round 266: these two were ORPHANS. Both are in the sitemap and
+            neither had a single inbound link from any page a crawler can read,
+            measured across all 122 prerendered documents, which is precisely
+            the shape that produces "discovered but not indexed": Google knows
+            the address from the sitemap and nothing on the site argues it is
+            worth having. They are real sections rather than filler, so the
+            footer is where they belong, and it puts them on every page at
+            once. simInternalLinks fails if any sitemap route ever goes back to
+            zero inbound links. */}
+        <Link to="/leaderboard" className="underline hover:text-foreground transition-colors">
+          Leaderboard
+        </Link>
+        <span>·</span>
+        <Link to="/college" className="underline hover:text-foreground transition-colors">
+          College Hub
+        </Link>
+        <span>·</span>
         <Link to="/privacy" className="underline hover:text-foreground transition-colors">
           Privacy Policy
         </Link>

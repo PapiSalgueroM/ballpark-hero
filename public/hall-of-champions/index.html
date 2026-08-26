@@ -17,6 +17,16 @@
          visible to Google's crawler on the raw HTML, no consent needed. -->
     <meta name="google-adsense-account" content="ca-pub-2929318086316376">
     <meta name="description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    <link rel="canonical" href="https://douknowball.com/">
     
     
     <meta property="og:type" content="website">
@@ -120,10 +130,10 @@
 </head>
 <body>
 <div id="root">
-<a href="/perfect-lineup-f1">🗓️ Fresh daily: Perfect Lineup: F1 ·</a>
-<a href="/rank-em">🗓️ Fresh daily: Rank 'Em ·</a>
-<a href="/silverware-sort">🗓️ Fresh daily: Silverware Sort ·</a>
-<a href="/mystery-box">🗓️ Fresh daily: Mystery Box ·</a>
+<a href="/guess-tennis-player">🗓️ Fresh daily: Guess The Player ·</a>
+<a href="/olympics">🗓️ Fresh daily: The Medal Games ·</a>
+<a href="/score-predictor">🗓️ Fresh daily: Score Predictor ·</a>
+<a href="/overrated-underrated">🗓️ Fresh daily: Overrated or Underrated ·</a>
 <a href="/">🎮 113 free games, no sign-up, no downloads ·</a>
 <a href="/">⚽ 30 soccer games and counting ·</a>
 <a href="/whats-new">📰 New stuff ships almost daily. See what changed ·</a>
@@ -179,6 +189,8 @@
 <a href="/contact">Contact</a>
 <a href="/whats-new">What's New</a>
 <a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/college">College Hub</a>
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
 <p>We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy. Learn More</p>
