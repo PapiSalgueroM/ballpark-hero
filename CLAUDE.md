@@ -465,6 +465,17 @@ These are not preferences, they are the exposure.
 - **Tables created with `CREATE TABLE AS` have RLS OFF by default.** That is a public-schema
   write hole through the anon key. Enable RLS immediately after creating any backup table.
   Run `get_advisors` after any DDL; that is what caught the 2026-07-22 backup tables.
+- **Never create a SECURITY DEFINER function that runs arbitrary SQL, and read the advisor's
+  function warnings, not just its table ones.** On 2026-08-25 `get_advisors` (run after adding
+  a table) showed `public.exec_sql(query text)`: SECURITY DEFINER, owned by postgres, body
+  `EXECUTE query`, with EXECUTE granted to PUBLIC, anon and authenticated. The anon key is in
+  every page bundle and in this public repo, so anyone could have POSTed any statement to
+  `/rest/v1/rpc/exec_sql` and run it as the table owner, including reading
+  `private.app_secrets`. Nothing in the repo called it (only the generated types listed it).
+  It was dropped the same minute, `handle_new_user` lost its anon and authenticated execute
+  for good measure, and the visible 24 hours of edge logs showed no call to it. If a helper
+  like that is ever wanted again, it does not go in the database: run SQL through the
+  Supabase MCP, which authenticates the session, never through an RPC the browser can reach.
 
 ### Never reintroduce these specific regressions
 

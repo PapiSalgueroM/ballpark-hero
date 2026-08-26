@@ -743,7 +743,7 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
-| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 288** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP149.bat` runs all thirty one in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 148) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast, 288 Idle Arena, the first true incremental, plus the rules button off the Back button. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
+| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 289** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP150.bat` runs all thirty two in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 149) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast, 288 Idle Arena, the first true incremental, plus the rules button off the Back button, 289 Face Off, the duel against a rival or a friend. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
 | PREVIOUS HEAD, FOR CONTEXT | `f848aa0` = Round 253, pushed 2026-08-21 morning and published the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
 | WHY THE BACKLOG SAT FOR WEEKS | **Four separate bugs in the RUN bats, not in the code and not on his machine.** Every one of them made a fail-closed assertion STOP a run that should have passed, so a click that looked like it worked shipped a handful of rounds and quit. All four were reproduced on Windows before being fixed, all four are fixed in the bats on his disk AND in pkg/mkbat.py, and pkg/verifybat.py now refuses to build or bless a bat carrying any of them: (1) FORWARD SLASHES in a findstr file argument: findstr rejects them outright and returns errorlevel 1 exactly as if the pattern were missing, which killed 56 bats at Round 179 every single time; (2) RAW DOUBLE QUOTES in a pattern: cmd ends the quoted argument at the first one, so any assertion quoting real code (an aria-label, a JSX prop, an array of strings) was mangled, killing 10 bats at Round 198; (3) A QUOTE FOLLOWED BY A CMD OPERATOR: cmd counts quotes and does not understand the \" escape, so a `>` after one becomes a redirection, which silently turned RUN209's check into a file write; (4) A PERCENT SIGN in a pattern: cmd strips a lone `%` as variable-expansion syntax, so the assertion hunts for text the file does not contain, which stopped RUN251 on a comment reading "the 40% wash". The empirical tests that proved 1, 2 and 3 are worth repeating if a fifth ever appears: write a throwaway bat that runs the shapes against a known file, log the errorlevels, and read the log. Guessing cost more time than testing. |
@@ -1333,6 +1333,89 @@ arrives, triage it into rounds rather than trying to fix everything in one.
 purge. Awards is still unbuilt. See the roadmap below.
 
 ---
+
+## Round 289: Face Off, the duel
+
+The second half of Anthony's 2026-08-25 ask ("a face off type of game"). Face Off is the
+site's oldest format, two names and one stat, with somebody in the other chair. A rival
+answers every round at its own speed and with its own hit rate, both of them dealt with the
+pairs, and the scoreboard decides it after ten rounds on a ten second shot clock.
+
+**No new data.** Every pair is drawn from the Higher or Lower pools the site already ships:
+soccer goals, appearances and caps (`higherLowerPlayers`, the assists and trophies fields
+left out on purpose, they are the softest numbers in that file), NBA points, MLB home runs,
+the six NFL categories, NHL points, college passing yards, F1 wins, Grand Slam titles, golf
+majors and VFL/AFL goals. Seventeen categories, ten sports, 1,284 athletes, and
+`src/lib/faceOff.ts` adds none of its own. A pair is legal when the bigger number is between
+1.04 and 4 times the smaller (no ties, no gimmes), no athlete appears twice in a match, no
+sport twice in a row.
+
+**The rival is a hit rate and a clock, both measured.** Each rival has a hit rate on the
+widest pair and on the closest, interpolated on how alike the two numbers are, and an
+answer time drawn uniformly from its band: Rookie 0.85 to 0.45 in 3 to 8 seconds, Pro 0.95
+to 0.60 in 2 to 6, Legend 0.99 to 0.75 in 1.5 to 4.5. Points are 100 for a right answer plus
+10 per whole second left, nothing for wrong or late, same formula both chairs. Measured over
+300 matches each: hit rates 62%, 75%, 85%; points a round 87, 117, 140; a modelled fan who is
+right 72% of the time in 4 seconds wins 76% against the Rookie, 47% against the Pro and 16%
+against the Legend. `scripts/simFaceOff.mjs` holds the ladder (each rival at least five
+points of hit rate and ten points a round above the last, the fan above 60% against the
+Rookie and under 40% against the Legend), the deal (500 seeded matches, every rule above,
+every sport at least 5% of the deck), the daily (same date same duel, sixty consecutive days
+all distinct and no two sharing more than three pairs), the arithmetic and the save.
+`FACEOFF_CONTROL=tie` hands the dealer pools where every number is 7 and section 2 must go
+red.
+
+**The generator is mulberry32, not the Lehmer step the older games use**, and the reason is
+in `dateUtils.ts`: a Lehmer stream's first output is nearly a straight line in its seed.
+Measured here before switching, five hundred consecutive seeds put their first draw in the
+same one of ten bins every time, which made soccer 19% of a deck that should have been 10%.
+mulberry32 mixes the seed through two multiplies before the first output; after the switch
+every sport sits at 9 to 11%.
+
+**Modes.** Three. The daily duel is the same ten pairs against The Pro for everyone, dealt from
+`dailyPrngSeed('face-off:' + date)` in Eastern time like every other daily, played once (the
+save records it and the menu shows the result instead of the button). Unlimited deals from
+`Math.random` against whichever rival is picked. Level on points after ten and it goes to
+sudden death, one round at a time, up to three, from the same stream so the daily's sudden
+death is shared too. `src/hooks/useFaceOff.ts` reads the clock from `performance.now()` at
+pick time (the interval only redraws the bar, a throttled tab cannot buy seconds) and books
+the match into `dukb-face-off-v1`: played, won, lost, drawn, best, streak, best streak, the
+daily, a record per rival. **Pass the phone** is the third mode and the one the word "face off"
+most literally means: two people on one device. Player 1 picks (or runs out of time), the hook
+moves to a `handoff` phase that hides the cards and stops the clock, Player 2 presses ready and
+gets their own ten seconds on the same pair, and `resolveVersus` scores both chairs with the
+same formula, the dealt rival ignored. A two player match is a play (it counts toward Most
+Played Today) but is never booked to the save, which tracks you against the three rivals.
+
+**A database hole closed on the way.** Running the security advisor after creating the
+Brownlow table for the next round surfaced `public.exec_sql(query text)`, a SECURITY DEFINER
+function owned by postgres whose whole body is `EXECUTE query`, executable by PUBLIC, anon
+and authenticated through `/rest/v1/rpc/exec_sql`. With the anon key public, that was
+arbitrary SQL as the table owner for anyone who looked, including a read of
+`private.app_secrets`. No caller anywhere in the repo, the functions or the scripts (only the
+generated `types.ts` listed it, and that line is removed in this round). Dropped 2026-08-25;
+`handle_new_user` also lost its anon and authenticated execute; the 24 hours of edge logs the
+tool can reach show zero calls to it. Recorded in CLAUDE.md's database rules so it is never
+recreated.
+
+**Adding a game no longer rewires the site.** Packaging Round 288 showed 99 of 127 pages
+re-dated in the sitemap for one new registry row: `relatedGamesFor` picked its variety links
+by `hash % elsewhere.length`, so any insertion anywhere moved the modulus and every page's
+"More games" block with it, which is exactly the "everything changed today" shape Round 280
+exists to prevent. The picks are rendezvous scored now (each candidate scored by a hash of the
+page and candidate paths, highest wins, ties to path order), and `simRelatedGames` section 6
+measures the claim against the registry with one extra game appended to each category in
+turn: worst case 7 of 115 pages move, against 99 before, and the newcomer is linked from six
+pages straight away. This round pays the one time re-dating of the switch; the next game
+should move a handful.
+
+**The screen** (`src/pages/FaceOff.tsx`) uses the shared shell: `GameShell`, `RulesGate`,
+`ResultScreen` with the share row and a score card grid of checks, crosses and stopwatches,
+`ReportQuestion` carrying the pair on screen. The rival's "has locked in" line appears when
+its dealt time passes, which is the pressure. Registered under World & Olympic Games at
+`/face-off` as a daily, guide in `world.ts`, `PATH_BUNDLE` entry, sitemap row from the
+registry. Ad slot `1234567917`, the 27th placeholder, on the same open decision as the other
+26.
 
 ## Round 288: Idle Arena, the first true incremental, and the "?" comes off the Back button
 
@@ -2136,6 +2219,9 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-25** Round 289. Face Off at /face-off: engine, hook, page, guide, harness with
+  control, three modes (daily v The Pro, unlimited v three rivals, pass the phone). Pending
+  row: 258 through 289 wait on `SHIP150.bat`.
 - **2026-08-25** Round 288. Idle Arena at /idle-arena: engine, hook, page, guide, harness.
   GameShell's column made relative so the rules trigger stops covering the Back button.
   Pending row: 258 through 288 wait on `SHIP149.bat`.

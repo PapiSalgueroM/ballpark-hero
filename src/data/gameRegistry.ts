@@ -278,6 +278,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/silverware-sort', label: 'Silverware Sort', emoji: '🥇', description: 'Stack five teams in order by real title counts', daily: true, isNew: true },
       { path: '/hall-of-champions', label: 'Hall of Champions', emoji: '🏛️', description: 'Idle museum: buy real championships, fill ten wings, earn while you are away', isNew: true },
       { path: '/idle-arena', label: 'Idle Arena', emoji: '👆', description: 'Tap to score, sign a squad that scores for you, lift trophies, earn while you are away', isNew: true },
+      { path: '/face-off', label: 'Face Off', emoji: '⚡', description: 'Two names, one stat, ten seconds. Beat the rival across ten sports', daily: true, isNew: true },
       { path: '/score-predictor', label: 'Score Predictor', emoji: '📊', description: 'Predict the final score of famous matches', daily: true, isNew: true },
       // moved from the retired Game Shows tab 2026-07-08 (owner: game-show games belong with their sport; these two span all sports)
       { path: '/list-quiz', label: 'Name Them All', emoji: '📝', description: 'How many champions can you name?', isNew: true },

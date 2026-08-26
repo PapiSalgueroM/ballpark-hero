@@ -9532,7 +9532,6 @@ export type Database = {
           total_rows: number
         }[]
       }
-      exec_sql: { Args: { query: string }; Returns: undefined }
       global_leaderboard: {
         Args: { p_games?: string[]; p_period?: string }
         Returns: {

@@ -22,9 +22,22 @@
    the path, so pages do not all point at the same handful of games.
    Everything is a pure function of (path, registry): no randomness, no
    dates, the same links on every render of the same page. Crawlers hate
-   churn. */
+   churn.
 
-import { CATEGORIES, ALL_GAMES, type GameDef } from '@/data/gameRegistry';
+   ROUND 289: STABLE UNDER INSERTION. The variety picks used to be
+   `hash % elsewhere.length`, and the next-category pick `hash % size`, so
+   the moment ANY game was added anywhere the modulus moved and the picks
+   moved with it. Measured when Round 288 registered one game: 99 of the
+   127 shipped pages had their related links rewired and were re-dated in
+   the sitemap, which is the "everything changed today" shape Round 280
+   exists to prevent, and it would have happened again on every game after.
+   Both picks are rendezvous choices now: each candidate is scored by a hash
+   of (this page, that candidate) and the highest scores win, so adding a
+   game only touches the few pages where the newcomer outscores a sitting
+   pick. simRelatedGames section 6 measures that against a registry with one
+   extra game. */
+
+import { CATEGORIES as LIVE_CATEGORIES, type GameDef, type GameCategory } from '@/data/gameRegistry';
 
 export interface RelatedPick {
   path: string;
@@ -46,13 +59,21 @@ const toPick = (g: GameDef): RelatedPick => ({
   path: g.path, label: g.label, emoji: g.emoji, description: g.description,
 });
 
-/** Up to 6 related games for a page, by the rules in the header comment. */
-export function relatedGamesFor(path: string): RelatedPick[] {
-  const ci = CATEGORIES.findIndex(c => c.games.some(g => g.path === path));
+/** The rendezvous score of a candidate for a page: high wins. Hashing the
+ *  pair rather than the page alone is what makes the pick stable when the
+ *  candidate list grows. Ties (a 32 bit collision) fall to path order. */
+const pairScore = (page: string, candidate: string) => stableHash(`${page}|${candidate}`);
+const byScoreFor = (page: string) => (x: GameDef, y: GameDef) =>
+  pairScore(page, y.path) - pairScore(page, x.path) || x.path.localeCompare(y.path);
+
+/** Up to 6 related games for a page, by the rules in the header comment.
+ *  The registry is a parameter so the harness can hand in one with an
+ *  extra game and measure how many pages move; the site never passes it. */
+export function relatedGamesFor(path: string, categories: GameCategory[] = LIVE_CATEGORIES): RelatedPick[] {
+  const ci = categories.findIndex(c => c.games.some(g => g.path === path));
   if (ci < 0) return [];
-  const cat = CATEGORIES[ci];
+  const cat = categories[ci];
   const gi = cat.games.findIndex(g => g.path === path);
-  const h = stableHash(path);
   const picked: GameDef[] = [];
   const taken = new Set<string>([path]);
   const add = (g: GameDef | undefined) => {
@@ -64,24 +85,23 @@ export function relatedGamesFor(path: string): RelatedPick[] {
     add(cat.games[(gi + k) % cat.games.length]);
   }
 
-  /* 2. The category cycle: one game from the next category, hash-spread
-     so its games share the inbound love. */
-  const nextCat = CATEGORIES[(ci + 1) % CATEGORIES.length];
-  add(nextCat.games[h % nextCat.games.length]);
+  /* 2. The category cycle: one game from the next category, the one that
+     scores highest for this page, so a category's games share the inbound
+     love and the pick holds still when that category grows. */
+  const nextCat = categories[(ci + 1) % categories.length];
+  add([...nextCat.games].filter(g => !taken.has(g.path)).sort(byScoreFor(path))[0]);
 
-  /* 3. Variety picks from anywhere else on the site, walking until the
-     block is full. A normal category reaches 6 after two picks exactly as
-     before (ring 3 + next-category 1 + variety 2), so existing pages keep
-     their links and crawlers see no churn. A tiny category has no ring to
+  /* 3. Variety picks from anywhere else on the site, best scores first,
+     until the block is full. A normal category reaches 6 after two picks
+     (ring 3 + next-category 1 + variety 2). A tiny category has no ring to
      lean on (Round 237: the one-game Aussie Rules section shipped a
      3-link block and failed the out-degree floor), so the same walk just
      keeps going until the page offers its full six. */
-  const elsewhere = ALL_GAMES.filter(g => !taken.has(g.path) && !cat.games.some(x => x.path === g.path));
-  for (let k = 0; k < 5 && picked.length < 6 && elsewhere.length > 0; k++) {
-    const idx = (h * 7 + k * 131) % elsewhere.length;
-    const g = elsewhere[idx];
+  const all = categories.flatMap(c => c.games);
+  const elsewhere = all.filter(g => !taken.has(g.path) && !cat.games.some(x => x.path === g.path)).sort(byScoreFor(path));
+  for (const g of elsewhere) {
+    if (picked.length >= 6) break;
     add(g);
-    elsewhere.splice(idx, 1);
   }
 
   return picked.slice(0, 6).map(toPick);

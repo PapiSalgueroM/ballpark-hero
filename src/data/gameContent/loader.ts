@@ -136,6 +136,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/silverware-sort': 'world',
   '/hall-of-champions': 'world',
   '/emoji-guess': 'world',
+  '/face-off': 'world',
   '/guess-the-nation': 'world',
   '/guess-the-year': 'world',
   '/hof-or-bust': 'world',

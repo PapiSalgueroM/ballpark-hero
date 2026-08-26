@@ -851,4 +851,58 @@ export const WORLD_CONTENT: GameContentMap = {
       },
     ],
   },
+  '/face-off': {
+    intro: [
+      "Higher or Lower with somebody in the other chair. Two athletes, one career stat, and ten seconds to tap the one with the bigger number. A rival answers every round too, at its own speed, with its own hit rate, and after ten rounds the scoreboard says who knows ball.",
+      "The pairs come from every corner of the site: soccer goals, NBA points, home runs, six different NFL stats, NHL points, college passing yards, F1 wins, Grand Slams, golf majors and VFL/AFL goals, never the same sport twice in a row. Every number is a career total that is already on the site in a Higher or Lower game, so nothing was made up for the duel.",
+    ],
+    howToPlay: [
+      "Pick the daily duel, which is the same ten pairs against The Pro for everyone, Unlimited, where you choose your rival, or Pass the phone, where the rival is whoever is sitting next to you.",
+      "Read the stat and the two names, then tap the athlete with the bigger number.",
+      "Watch the bar. Ten seconds a round, and a right answer scores 100 plus 10 for every whole second you had left.",
+      "The reveal shows both numbers, what the rival picked and how long it took.",
+      "After ten rounds the higher total wins. Level on points and it goes to sudden death, up to three extra rounds.",
+    ],
+    rules: [
+      "Wrong scores nothing. Out of time scores nothing. There is no penalty beyond that, so a guess at the buzzer is always better than no answer.",
+      "The rival is dealt its answers with the pairs, so in the daily duel everyone faces exactly the same rival performance. Beating a friend's score is beating them on the same ten questions.",
+      "Three rivals. The Rookie takes 3 to 8 seconds and guesses the close ones. The Pro takes 2 to 6 and is sharp on the obvious pairs. The Legend answers inside 5 seconds and almost never misses a wide gap.",
+      "No pair is a tie and no pair is a gimme: the bigger number is always at least 4% more than the smaller and never more than 4 times it.",
+      "No athlete appears twice in one duel, and the daily can only be played once. Unlimited never runs out.",
+      "Pass the phone is two people on one device. Player 1 answers, the pair is hidden while the phone changes hands, Player 2 presses ready to start their own ten seconds, and both picks are revealed together. It is a game between the two of you and it is not booked to your record against the rivals.",
+    ],
+    example: [
+      "Round one: who has more career NBA points, Kareem Abdul-Jabbar or Kobe Bryant. You tap Kareem with six seconds left, which is right, 160 points. The Pro took 3.4 seconds and got it too, 160 points. All square.",
+      "Round four is Formula 1 wins and you hesitate, then miss. The Pro misses too, so the round is 0 to 0 and the lead never changes hands. Round nine you tap Gordon Coventry at the buzzer, right with one second left, 110 points. Ten rounds later you have won by 30, because you were right as often and a shade faster.",
+    ],
+    tips: [
+      "Speed is the second stat. Two people who both know the answer are separated by the clock, and a second is ten points.",
+      "Do not freeze on the close ones. A wrong answer costs nothing more than a late one, and the rival is guessing those too.",
+      "Learn the deep ends of each pool. The wide gaps are free points; the duel is decided on the pairs where both names are legends.",
+      "Play the daily first. It is against The Pro every day, so your score means the same thing tomorrow and to everyone else.",
+      "Start Unlimited against The Rookie and move up when you are winning three in a row. The Legend is there to be beaten, not to be your first game.",
+    ],
+    faqs: [
+      {
+        q: "Is the rival a real person?",
+        a: "No. The Rookie, The Pro and The Legend are three settings for how fast and how often the computer gets it right, tuned so a decent fan beats the Rookie most of the time and loses to the Legend most of the time. Nobody is playing against you live.",
+      },
+      {
+        q: "Is the daily duel the same for everyone?",
+        a: "Yes. The ten pairs, the order, and the rival's answers and times are all dealt from the date, so anyone playing today faces exactly the same duel. It rolls over at midnight Eastern like the rest of our dailies.",
+      },
+      {
+        q: "Where do the numbers come from?",
+        a: "From the same pools our Higher or Lower games use, one per sport. Nothing was added for this game, so if a number is right there it is right here, and if you spot one that is wrong the report button at the bottom of the page reaches us.",
+      },
+      {
+        q: "Can two people play?",
+        a: "Yes. Pass the phone deals the same ten pairs to both of you, one at a time. Player 1 picks, hands the phone over, Player 2 picks on their own clock, and the reveal shows both. Nobody can see the other pick before their own, because the cards stay hidden during the handoff.",
+      },
+      {
+        q: "What happens on a tie?",
+        a: "Level on points after ten rounds and you play sudden death, one pair at a time, until somebody leads. If it is still level after three extra rounds it goes down as a draw.",
+      },
+    ],
+  },
 };

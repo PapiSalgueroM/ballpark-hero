@@ -113,6 +113,39 @@ console.log('5) A page outside the registry gets an empty block, not a crash');
   if (!Array.isArray(r) || r.length !== 0) fail('an unregistered path should return []');
 }
 
+/* ---------- 6. Adding a game rewires few pages ---------- */
+console.log('6) Registering one more game leaves nearly every page\'s links alone');
+{
+  /* Round 289. Before this, the variety picks were hash modulo the size of
+     the candidate list, so Round 288's one new game moved the picks on 99 of
+     127 shipped pages and re-dated them all in the sitemap. The picks are
+     rendezvous scored now, and this measures the claim rather than trusting
+     it: the same registry with one extra game appended to each category in
+     turn, and the pages whose block changed are counted. Measured on the
+     shipped registry: 3 to 7 pages move per insertion (the newcomer's own
+     category ring plus wherever it outscores a sitting pick); the ceiling
+     is 15 pages, about one in eight, against a before figure of 99. */
+  const before = new Map(ALL_GAMES.map(g => [g.path, JSON.stringify(relatedGamesFor(g.path))]));
+  let worst = 0, worstCat = '';
+  for (let ci = 0; ci < CATEGORIES.length; ci++) {
+    const grown = CATEGORIES.map((c, i) => i === ci
+      ? { ...c, games: [...c.games, { path: '/zz-new-game', label: 'New Game', emoji: '🆕', description: 'a newcomer' }] }
+      : c);
+    let moved = 0;
+    for (const g of ALL_GAMES) {
+      if (JSON.stringify(relatedGamesFor(g.path, grown)) !== before.get(g.path)) moved += 1;
+    }
+    if (moved > worst) { worst = moved; worstCat = CATEGORIES[ci].title; }
+  }
+  console.log(`   worst case: ${worst} of ${ALL_GAMES.length} pages change when a game joins ${worstCat}`);
+  if (worst > 15) fail(`adding one game to ${worstCat} rewires ${worst} pages, the picks are not stable under insertion`);
+  /* and the control on the claim itself: the newcomer must be reachable, so SOME page has to link it */
+  const grownAll = CATEGORIES.map((c, i) => i === 0 ? { ...c, games: [...c.games, { path: '/zz-new-game', label: 'New Game', emoji: '🆕', description: 'a newcomer' }] } : c);
+  const inbound = ALL_GAMES.filter(g => relatedGamesFor(g.path, grownAll).some(x => x.path === '/zz-new-game')).length;
+  if (inbound === 0) fail('a newly registered game gets no inbound related links at all');
+  console.log(`   the newcomer is linked from ${inbound} page(s) straight away`);
+}
+
 /* ---------- verdict ---------- */
 if (failures > 0) {
   console.error(`\n${failures} RELATED GAMES CHECK${failures === 1 ? '' : 'S'} FAILED`);

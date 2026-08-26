@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Face Off: Beat the Rival in a Sports Stats Duel</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Face Off","item":"https://douknowball.com/face-off"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is the rival a real person?","acceptedAnswer":{"@type":"Answer","text":"No. The Rookie, The Pro and The Legend are three settings for how fast and how often the computer gets it right, tuned so a decent fan beats the Rookie most of the time and loses to the Legend most of the time. Nobody is playing against you live."}},{"@type":"Question","name":"Is the daily duel the same for everyone?","acceptedAnswer":{"@type":"Answer","text":"Yes. The ten pairs, the order, and the rival's answers and times are all dealt from the date, so anyone playing today faces exactly the same duel. It rolls over at midnight Eastern like the rest of our dailies."}},{"@type":"Question","name":"Where do the numbers come from?","acceptedAnswer":{"@type":"Answer","text":"From the same pools our Higher or Lower games use, one per sport. Nothing was added for this game, so if a number is right there it is right here, and if you spot one that is wrong the report button at the bottom of the page reaches us."}},{"@type":"Question","name":"Can two people play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Pass the phone deals the same ten pairs to both of you, one at a time. Player 1 picks, hands the phone over, Player 2 picks on their own clock, and the reveal shows both. Nobody can see the other pick before their own, because the cards stay hidden during the handoff."}},{"@type":"Question","name":"What happens on a tie?","acceptedAnswer":{"@type":"Answer","text":"Level on points after ten rounds and you play sudden death, one pair at a time, until somebody leads. If it is still level after three extra rounds it goes down as a draw."}},{"@type":"Question","name":"Is Face Off free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Face Off is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Face Off: Beat the Rival in a Sports Stats Duel | DoUKnowBall","description":"Two athletes, one stat, ten seconds. Pick who has more before the rival does. Ten rounds across ten sports against a Rookie, a Pro or a Legend, plus a daily duel that is the same for everyone. Free, no sign-up.","url":"https://douknowball.com/face-off","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Consent-gated AdSense loader: only load the ad script if the visitor
+      // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
+      // New visitors (no choice yet) do not get the script until they accept;
+      // the banner reloads ads on acceptance via the page lifecycle.
+      //
+      // Round 285: Google Analytics rides on the same gate. The measurement
+      // id and the injection are duplicated in src/lib/consentedScripts.ts,
+      // which is what the banner calls the moment somebody accepts; this copy
+      // covers every later page load. simAdsense holds the two ids together
+      // and refuses a gtag script tag that is not behind this check, so the
+      // tag can never be loaded for a visitor who has not accepted.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            var s = document.createElement('script');
+            s.async = true;
+            s.crossOrigin = 'anonymous';
+            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
+            document.head.appendChild(s);
+
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: default to no ads script */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="canonical" href="https://douknowball.com/face-off" data-rh="true"><meta name="description" content="Two athletes, one stat, ten seconds. Pick who has more before the rival does. Ten rounds across ten sports against a Rookie, a Pro or a Legend, plus a daily duel that is the same for everyone. Free, no sign-up." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/face-off" data-rh="true"><meta property="og:title" content="Face Off: Beat the Rival in a Sports Stats Duel | DoUKnowBall" data-rh="true"><meta property="og:description" content="Two athletes, one stat, ten seconds. Pick who has more before the rival does. Ten rounds across ten sports against a Rookie, a Pro or a Legend, plus a daily duel that is the same for everyone. Free, no sign-up." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Face Off: Beat the Rival in a Sports Stats Duel | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Two athletes, one stat, ten seconds. Pick who has more before the rival does. Ten rounds across ten sports against a Rookie, a Pro or a Legend, plus a daily duel that is the same for everyone. Free, no sign-up." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/whats-new">📰 New stuff ships almost daily. See what changed</a>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>⚡ FACE OFF</h1>
+<p>Two names, one stat, ten seconds. Beat the rival in the other chair.</p>
+<h2>🗓️ Daily duel</h2>
+<p>Today's ten pairs, the same for everyone, once a day.</p>
+<h2>♾️ Unlimited</h2>
+<p>Fresh pairs every time. Pick your rival.</p>
+<h2>📱 Pass the phone</h2>
+<p>Two people, one device. Same ten pairs, your own clocks, no computer in the chair.</p>
+<p>Want the same stats without the clock? <a href="/higher-lower">Higher or Lower</a> has every pool on its own.</p>
+<h2>Face Off | DoUKnowBall</h2>
+<p>A head to head sports stats duel on a ten second shot clock. Two athletes, one career stat, pick who has more before the rival does, across soccer, the NBA, MLB, NFL, NHL, college football, F1, tennis, golf and the AFL. Three rivals to beat and a daily duel shared by everyone.</p>
+<p>Higher or Lower with somebody in the other chair. Two athletes, one career stat, and ten seconds to tap the one with the bigger number. A rival answers every round too, at its own speed, with its own hit rate, and after ten rounds the scoreboard says who knows ball.</p>
+<p>The pairs come from every corner of the site: soccer goals, NBA points, home runs, six different NFL stats, NHL points, college passing yards, F1 wins, Grand Slams, golf majors and VFL/AFL goals, never the same sport twice in a row. Every number is a career total that is already on the site in a Higher or Lower game, so nothing was made up for the duel.</p>
+<h2>How to play Face Off</h2>
+<li>Pick the daily duel, which is the same ten pairs against The Pro for everyone, Unlimited, where you choose your rival, or Pass the phone, where the rival is whoever is sitting next to you.</li>
+<li>Read the stat and the two names, then tap the athlete with the bigger number.</li>
+<li>Watch the bar. Ten seconds a round, and a right answer scores 100 plus 10 for every whole second you had left.</li>
+<li>The reveal shows both numbers, what the rival picked and how long it took.</li>
+<li>After ten rounds the higher total wins. Level on points and it goes to sudden death, up to three extra rounds.</li>
+<h2>Rules to know</h2>
+<li>Wrong scores nothing. Out of time scores nothing. There is no penalty beyond that, so a guess at the buzzer is always better than no answer.</li>
+<li>The rival is dealt its answers with the pairs, so in the daily duel everyone faces exactly the same rival performance. Beating a friend's score is beating them on the same ten questions.</li>
+<li>Three rivals. The Rookie takes 3 to 8 seconds and guesses the close ones. The Pro takes 2 to 6 and is sharp on the obvious pairs. The Legend answers inside 5 seconds and almost never misses a wide gap.</li>
+<li>No pair is a tie and no pair is a gimme: the bigger number is always at least 4% more than the smaller and never more than 4 times it.</li>
+<li>No athlete appears twice in one duel, and the daily can only be played once. Unlimited never runs out.</li>
+<li>Pass the phone is two people on one device. Player 1 answers, the pair is hidden while the phone changes hands, Player 2 presses ready to start their own ten seconds, and both picks are revealed together. It is a game between the two of you and it is not booked to your record against the rivals.</li>
+<h2>Example walkthrough</h2>
+<p>Round one: who has more career NBA points, Kareem Abdul-Jabbar or Kobe Bryant. You tap Kareem with six seconds left, which is right, 160 points. The Pro took 3.4 seconds and got it too, 160 points. All square.</p>
+<p>Round four is Formula 1 wins and you hesitate, then miss. The Pro misses too, so the round is 0 to 0 and the lead never changes hands. Round nine you tap Gordon Coventry at the buzzer, right with one second left, 110 points. Ten rounds later you have won by 30, because you were right as often and a shade faster.</p>
+<h2>Strategy tips</h2>
+<li>Speed is the second stat. Two people who both know the answer are separated by the clock, and a second is ten points.</li>
+<li>Do not freeze on the close ones. A wrong answer costs nothing more than a late one, and the rival is guessing those too.</li>
+<li>Learn the deep ends of each pool. The wide gaps are free points; the duel is decided on the pairs where both names are legends.</li>
+<li>Play the daily first. It is against The Pro every day, so your score means the same thing tomorrow and to everyone else.</li>
+<li>Start Unlimited against The Rookie and move up when you are winning three in a row. The Legend is there to be beaten, not to be your first game.</li>
+<h2>Face Off FAQ</h2>
+<h3>Is the rival a real person?</h3>
+<p>No. The Rookie, The Pro and The Legend are three settings for how fast and how often the computer gets it right, tuned so a decent fan beats the Rookie most of the time and loses to the Legend most of the time. Nobody is playing against you live.</p>
+<h3>Is the daily duel the same for everyone?</h3>
+<p>Yes. The ten pairs, the order, and the rival's answers and times are all dealt from the date, so anyone playing today faces exactly the same duel. It rolls over at midnight Eastern like the rest of our dailies.</p>
+<h3>Where do the numbers come from?</h3>
+<p>From the same pools our Higher or Lower games use, one per sport. Nothing was added for this game, so if a number is right there it is right here, and if you spot one that is wrong the report button at the bottom of the page reaches us.</p>
+<h3>Can two people play?</h3>
+<p>Yes. Pass the phone deals the same ten pairs to both of you, one at a time. Player 1 picks, hands the phone over, Player 2 picks on their own clock, and the reveal shows both. Nobody can see the other pick before their own, because the cards stay hidden during the handoff.</p>
+<h3>What happens on a tie?</h3>
+<p>Level on points after ten rounds and you play sudden death, one pair at a time, until somebody leads. If it is still level after three extra rounds it goes down as a draw.</p>
+<h3>Is Face Off free to play?</h3>
+<p>Yes. Face Off is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/score-predictor">📊 Score Predictor Predict the final score of famous matches</a>
+<a href="/list-quiz">📝 Name Them All How many champions can you name?</a>
+<a href="/minefield">💣 Minefield Click everyone who belongs. Some tiles explode</a>
+<a href="/transfer-path">🔄 Transfer Path Connect two players through shared clubs</a>
+<a href="/hockey-higher-lower">🏒 Higher / Lower Compare career points</a>
+<a href="/nba-starting-5">🏀 NBA Starting 5 Build a lineup with stat challenges</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>
