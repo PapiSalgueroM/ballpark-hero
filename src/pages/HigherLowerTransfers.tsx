@@ -197,6 +197,8 @@ const HigherLowerTransfers = () => {
             {phase === 'done' && (
               <div className="mt-4">
                 <ResultScreen
+                  recordCompletionOnMount
+                  completionScore={streak}
                   outcomeEmoji={streak >= 15 ? '🐐' : streak >= 8 ? '🔥' : streak >= 4 ? '👏' : '📉'}
                   headline={`Run over at ${streak}`}
                   statLine={

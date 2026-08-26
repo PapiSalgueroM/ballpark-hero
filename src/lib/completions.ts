@@ -38,18 +38,49 @@ function todayStr(): string {
  * Exported so Leaderboard.tsx (own-row highlight) and badges.ts / Profile.tsx
  * can read the same identity without duplicating the generation logic.
  */
+/* Round 299, off the owner's leaderboard note ("everyone is just called
+   baller and something... not a single person with an actual name"). Guests
+   dominate the board, and every guest was minted as Baller-NNNN, so the
+   whole board read as one person. New guests draw from a sports word pair
+   instead, over 1,600 combinations before the number against the old 9,000
+   copies of one name, so the board reads like a crowd. Existing stored handles are untouched: a returning guest keeps the
+   name their old rows are under, because renaming them would orphan their
+   own history in front of them. No real person's name and no product name
+   is in these lists, and none may ever be added: an invented handle that
+   collides with a real player reads as that player on a public board. */
+const HANDLE_LEFT = [
+  'Clinical', 'Rapid', 'Icy', 'Golden', 'Fearless', 'Crafty', 'Late', 'Prime',
+  'Rowdy', 'Silky', 'Humble', 'Electric', 'Stubborn', 'Lucky', 'Vintage', 'Sunday',
+  'Marauding', 'Tidy', 'Frozen', 'Wired', 'Casual', 'Furious', 'Patient', 'Slick',
+  'Roaming', 'Quiet', 'Bold', 'Scrappy', 'Steady', 'Wild', 'Sharp', 'Heavy',
+  'Nutmeg', 'Overtime', 'Backpost', 'Boxout', 'Curveball', 'Fadeaway', 'Offside', 'Powerplay', 'Baller',
+] as const;
+const HANDLE_RIGHT = [
+  'Volley', 'Winger', 'Keeper', 'Slugger', 'Playmaker', 'Sweeper', 'Anchor', 'Closer',
+  'Dime', 'Enforcer', 'Poacher', 'Regista', 'Southpaw', 'Snapper', 'Gaffer', 'Utility',
+  'Fullback', 'Shortstop', 'Blueliner', 'Sixthman', 'Returner', 'Libero', 'Pinch', 'Deke',
+  'Screamer', 'Worldie', 'Rebounder', 'Freekick', 'Slapshot', 'Buzzer', 'Handoff', 'Hatty',
+  'Rondo', 'Tifo', 'Boxscore', 'Dugout', 'Paint', 'Pocket', 'Glueguy', 'Grinder', 'Baller',
+] as const;
+
 export function getGuestHandle(): string {
+  const mint = () => {
+    const left = HANDLE_LEFT[Math.floor(Math.random() * HANDLE_LEFT.length)];
+    let right = HANDLE_RIGHT[Math.floor(Math.random() * HANDLE_RIGHT.length)];
+    if (right === left) right = 'Baller';
+    return `${left}${right}-${Math.floor(10 + Math.random() * 90)}`;
+  };
   try {
     const existing = localStorage.getItem(GUEST_HANDLE_KEY);
     if (existing) return existing;
-    const handle = `Baller-${Math.floor(1000 + Math.random() * 9000)}`;
+    const handle = mint();
     localStorage.setItem(GUEST_HANDLE_KEY, handle);
     return handle;
   } catch {
     // localStorage unavailable, fall back to a per-call random handle.
     // Not persisted, so it won't match across renders, but it still lets an
     // insert carry a name rather than null.
-    return `Baller-${Math.floor(1000 + Math.random() * 9000)}`;
+    return mint();
   }
 }
 

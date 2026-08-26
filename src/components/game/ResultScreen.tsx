@@ -1,6 +1,7 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import ShareButtons from '@/components/game/ShareButtons';
+import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 /* Round 149: the celebration kit was born in Club Manager (Round 147) and
  * graduated site-wide the next day: every one of the ~56 games ending on
  * this screen now celebrates a win the same way. It keeps its club-manager
@@ -50,6 +51,20 @@ interface ResultScreenProps {
    *  no replay). */
   onPlayAgain?: () => void;
   playAgainLabel?: string;
+  /**
+   * Round 299, the scoring audit: OPT IN completion recording on mount.
+   * Thirteen games never recorded a play, so they fed no streak day, no
+   * played-today count and no points. For a game whose end state IS this
+   * screen, mounting it is the completion moment: pass true (plus
+   * completionScore when the game has an honest number) and the screen
+   * records once per mount through the same pipeline every wired game uses.
+   * DELIBERATELY opt-in and default-off: the games that already record in
+   * their own hooks must not double-count a play.
+   */
+  recordCompletionOnMount?: boolean;
+  /** Numeric score for the ranked views; omit when the game has no honest
+   *  single number (the row still counts for streaks and played-today). */
+  completionScore?: number;
   /** Optional secondary slot rendered under the play-again button, e.g. a
    *  "come back tomorrow" note or a play-next link. */
   playNext?: ReactNode;
@@ -74,7 +89,18 @@ export function ResultScreen({
   playAgainLabel = 'Play Again',
   playNext,
   className,
+  recordCompletionOnMount = false,
+  completionScore,
 }: ResultScreenProps) {
+  /* One row per mount: play-again unmounts and remounts this screen, which
+     is a genuine second play. The ref guards re-renders, not replays. */
+  const recordedRef = useRef(false);
+  useEffect(() => {
+    if (!recordCompletionOnMount || recordedRef.current) return;
+    recordedRef.current = true;
+    recordCompletion(share.gamePath, completionScore, getCurrentPlayerName());
+  }, [recordCompletionOnMount, completionScore, share.gamePath]);
+
   const headlineColor = won === true ? 'text-correct' : won === false ? 'text-destructive' : 'text-primary';
   /* Round 149: a stable per-game confetti seed, so the fall pattern is
      deterministic for a given game rather than reshuffling every render. */
