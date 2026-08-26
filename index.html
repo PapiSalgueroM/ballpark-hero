@@ -132,15 +132,24 @@
       happens on every prerendered route.
 
       RULES FOR EDITING THIS BLOCK. Nothing in it may be a figure that goes
-      stale: the game counts are deliberately phrased as floors ("more than
-      120") rather than exact numbers, because the exact ones change most
-      weeks and the live ticker computes them anyway. Every link here is a
-      real route in src/App.tsx. No data, no dates, no results.
+      stale: the game counts are phrased as FLOORS ("more than 110") rather
+      than exact numbers, because the exact ones change most weeks and the
+      live ticker computes them anyway. Every link here is a real route in
+      src/App.tsx. No data, no dates, no results.
+
+      Round 260: the first version of this block said "more than 120" and
+      "nearly forty" soccer games, both read off a crude grep of the registry
+      file rather than off the registry itself. The real figures are 113 and
+      30, so both claims were live and wrong for a day. scripts/simHomeCopy
+      .mjs now reads every number in this block and checks it against the
+      registry the site actually renders from, and it fails if a floor has
+      been overtaken as well as if one is too high, because a floor that is
+      forty games behind reality is not much better than one that is ahead.
     -->
     <div id="root">
       <h1>DoUKnowBall: free daily sports trivia, puzzles and career sims</h1>
       <p>
-        More than 120 free sports games in the browser. No sign-up, no downloads, no app to
+        More than 110 free sports games in the browser. No sign-up, no downloads, no app to
         install. New games and content ship almost every week, and the daily puzzles reset for
         everyone at the same time, so you and everyone else get the same board.
       </p>
@@ -173,9 +182,9 @@
       </p>
       <h2>Every sport we cover</h2>
       <p>
-        Soccer is the deepest section by a distance, with nearly forty games of its own. Alongside
-        it: pro football, pro basketball, baseball, hockey, college sports, Formula 1, tennis, golf,
-        Aussie rules, NASCAR, combat sports, and a World and Olympic Games section.
+        Soccer is the deepest section by a distance, with more than twenty five games of its own.
+        Alongside it: pro football, pro basketball, baseball, hockey, college sports, Formula 1,
+        tennis, golf, Aussie rules, NASCAR, combat sports, and a World and Olympic Games section.
       </p>
       <p>
         <a href="/whats-new">See what shipped recently</a> ·
