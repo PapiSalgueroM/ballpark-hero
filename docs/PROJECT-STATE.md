@@ -743,7 +743,7 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
-| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 279** are packaged, md5 verified on his disk, and NOT pushed. **`SHIP138.bat` runs all twenty two in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 137) is a subset of the same queue. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
+| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 280** are packaged, md5 verified on his disk, and NOT pushed. **`SHIP139.bat` runs all twenty three in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 138) is a subset of the same queue. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
 | PREVIOUS HEAD, FOR CONTEXT | `f848aa0` = Round 253, pushed 2026-08-21 morning and published the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
 | WHY THE BACKLOG SAT FOR WEEKS | **Four separate bugs in the RUN bats, not in the code and not on his machine.** Every one of them made a fail-closed assertion STOP a run that should have passed, so a click that looked like it worked shipped a handful of rounds and quit. All four were reproduced on Windows before being fixed, all four are fixed in the bats on his disk AND in pkg/mkbat.py, and pkg/verifybat.py now refuses to build or bless a bat carrying any of them: (1) FORWARD SLASHES in a findstr file argument: findstr rejects them outright and returns errorlevel 1 exactly as if the pattern were missing, which killed 56 bats at Round 179 every single time; (2) RAW DOUBLE QUOTES in a pattern: cmd ends the quoted argument at the first one, so any assertion quoting real code (an aria-label, a JSX prop, an array of strings) was mangled, killing 10 bats at Round 198; (3) A QUOTE FOLLOWED BY A CMD OPERATOR: cmd counts quotes and does not understand the \" escape, so a `>` after one becomes a redirection, which silently turned RUN209's check into a file write; (4) A PERCENT SIGN in a pattern: cmd strips a lone `%` as variable-expansion syntax, so the assertion hunts for text the file does not contain, which stopped RUN251 on a comment reading "the 40% wash". The empirical tests that proved 1, 2 and 3 are worth repeating if a fifth ever appears: write a throwaway bat that runs the shapes against a known file, log the errorlevels, and read the log. Guessing cost more time than testing. |
@@ -1333,6 +1333,70 @@ arrives, triage it into rounds rather than trying to fix everything in one.
 purge. Awards is still unbuilt. See the roadmap below.
 
 ---
+
+## Round 280: what the site was still telling Google, and why Google stopped listening
+
+Three findings, all measured before anything was changed, all on pages that are shipping today.
+
+**1. The sitemap said all 127 pages changed today, every single time it was written.**
+`genSitemap.mjs` stamped `new Date()` on every row, so a regeneration for any reason at all
+re-dated the whole site. Google's sitemap documentation says `lastmod` must be consistently and
+verifiably accurate and that they may ignore it entirely where it is not, and ignoring it is the
+right call for a file that cries wolf 127 times at once. The specific Search Console complaint on
+this domain is nineteen pages sitting in "Crawled, currently not indexed", some last looked at in
+April, and the one lever a site has for asking to be re-crawled was the one being thrown away.
+A page's date is now derived, not asserted: the shipped snapshot is reduced to the text and links
+a crawler reads, hashed, and compared against `scripts/data/lastmod.json`. Same hash keeps the
+stored date however often the generator runs; a different hash gets today's. Proved by backdating
+all 127 entries to 1 July, regenerating (127 held), changing one paragraph in one snapshot,
+regenerating (126 held, that one page moved to today), and putting it back. The generator now runs
+twice in `build:seo`, once with `--routes-only` before the prerenderer so a new route reaches the
+file it needs to be in, and once for real afterwards against the documents that were just written.
+
+**2. Four lines on all 126 pages were wrong the day after they were written.**
+The ticker picks four "Fresh daily" games with `Date.now()`, and those lines were being captured
+into every snapshot, so every page on the site promised a crawler that today's puzzle is Tier List
+and would have gone on promising it for as long as the file lived. Round 258 built the exact
+mechanism to stop this and set it on the calendar lines only; the guard it added looks for the
+calendar's own titles, so it could never have found this. Found by rendering six routes twice with
+the page's own clock five days apart and diffing what was captured. Exactly those four lines moved,
+the same four on every route, and nothing else on any page moved at all, which is worth recording
+as a clean result: the corpus was date stable apart from one hole. The rule is mechanical now.
+Every `items.push` in the ticker either declares itself volatile or its text is a plain string with
+nothing interpolated into it, and `simPrerender` section 13 reads the source and fails otherwise, so
+the next computed line cannot be added without the question being asked. `playSnapshotDrift.mjs`
+runs the clock diff itself, asserts nothing about what should be there, and has a negative control
+that injects a paragraph printing its own date and fails if that goes unreported.
+
+**3. The home page had less than half the content of the pages it links to.**
+Measured across all 126 submitted documents: median 4,666 readable characters, most games between
+four and six thousand, and the home page 2,187. That is the page a crawler visits most often and the
+page an ad reviewer opens first. Twelve sports were named in a closing paragraph with not one link
+on any of them, so the seven sections with no hub page of their own had no path in from the home page
+at all. It is now 4,875 characters and 63 links, all 54 distinct destinations checked against the
+router, with front offices and dynasties, the quiz games, every sport linked where it was previously
+only named, and the five questions a first time visitor actually arrives with, answered in writing.
+`simHomeCopy` still passes: every number in it is a floor, and it is still under the real figure.
+
+**4. And the harness found a second one on its first real run, which is the argument for it.**
+Nothing had ever noticed that the "Play Next" trio at the foot of every game page is seeded with
+the date, so it too was frozen into 94 of the 143 shipped documents. Unlike the ticker it was not
+telling anybody a lie: three real links to three real games, true whichever three get picked. It
+still had to come out, because a block that rewrites itself daily re-dates every page in the
+sitemap on every build and hands straight back the "everything changed today" lie that finding 1
+exists to end. The visitor's rotation is untouched; only the photograph loses it. What the
+snapshot gives up was measured rather than waved at: simulating both seeds across all 113 games,
+this block leaves 27 games with no inbound link on a given day and hands one game 26, so it was
+a lumpy distributor either way, and the link graph a crawler actually needs is the date-free
+`relatedGamesFor` block that is proven to give every game inbound links and keep the whole site
+one connected component. That block stays.
+
+**And the thinnest submitted page on the site got a page.** `/leaderboard` carried 165 readable
+characters once the shared footer was discounted, 85 percent boilerplate, easily the thinnest of the
+126. Everything on it is live data and the prerenderer correctly refuses to freeze live data, so the
+fix is not more data, it is writing that does not depend on any: how the scoring works, why every
+game is capped at the same hundred points a day, what the two tabs mean, what the sport filter does,
+and how to get on the board. Nothing in it is a figure that can go stale.
 
 ## Recently shipped
 

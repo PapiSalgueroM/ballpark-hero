@@ -22,13 +22,33 @@ interface TickerItem {
   text: string;
   to: string;
   /**
-   * Round 258: this line is about the real world and it is dated, so it must
-   * never be frozen into a prerendered file that sits on disk for weeks. The
-   * strip marks these data-no-prerender and scripts/prerender.mjs drops them
-   * before writing a snapshot. simPrerender then checks the shipped files for
-   * the calendar's own titles, so the rule cannot quietly stop being true.
+   * THIS LINE'S TEXT IS COMPUTED FROM SOMETHING THAT CHANGES WITHOUT THIS FILE
+   * CHANGING, so it must never be frozen into a prerendered snapshot. The strip
+   * marks these data-no-prerender and scripts/prerender.mjs drops them before
+   * writing a document that will still be on disk next month.
+   *
+   * Round 258 introduced this as `dated` and set it on the real world calendar
+   * lines only. Round 280 measured what that missed, by rendering six routes
+   * twice with the page's own clock five days apart and diffing the captured
+   * blocks. Exactly one thing drifted, on every route: the four "Fresh daily"
+   * lines, which pick their games off `Date.now()`. They were sitting frozen in
+   * all 126 committed snapshots, so every page on the site was promising a
+   * crawler that today's puzzle is Tier List, and would have gone on promising
+   * it for as long as those files lived. Nothing else on any sampled page moved.
+   *
+   * The two catalog counts are volatile on a different axis, which no clock test
+   * can see: they are read off the registry and are right the day they are
+   * written, but a snapshot outlives the build that wrote it, so "113 free games"
+   * survives into a week when the registry says 130.
+   *
+   * THE RULE IS NOW MECHANICAL, not a list of known offenders: every items.push
+   * below either sets volatile, or its text is a plain string literal with
+   * nothing interpolated into it. simPrerender section 12 reads this file and
+   * fails if a push ever breaks that, so the next computed line cannot be added
+   * without deciding this question. playSnapshotDrift.mjs runs the clock test
+   * itself against the built site.
    */
-  dated?: boolean;
+  volatile?: boolean;
 }
 
 /** Tolerant localStorage JSON read: any failure is just "no line". */
@@ -71,7 +91,7 @@ export function buildItems(now: Date = new Date()): TickerItem[] {
       icon: ev.emoji,
       text: `${ev.title}, ${whenPhrase(ev, now)}`,
       to: ev.to,
-      dated: true,
+      volatile: true,
     });
   }
 
@@ -94,13 +114,14 @@ export function buildItems(now: Date = new Date()): TickerItem[] {
         icon: '🔴',
         text: `Your save: ${cm.clubName} sit ${ordinal(idx + 1)} on ${row.pts} pts`,
         to: '/club-manager',
+        volatile: true,
       });
     } else if (row) {
-      items.push({ icon: '🔴', text: `Your save: ${cm.clubName}, season ${cm.season ?? 1} awaits kick off`, to: '/club-manager' });
+      items.push({ icon: '🔴', text: `Your save: ${cm.clubName}, season ${cm.season ?? 1} awaits kick off`, to: '/club-manager', volatile: true });
     }
     const race = Array.isArray(cm.scorerRace) ? [...cm.scorerRace].sort((a, b) => b.goals - a.goals)[0] : null;
     if (race && race.goals > 0) {
-      items.push({ icon: '👟', text: `Golden boot race: ${race.name} leads on ${race.goals}`, to: '/club-manager' });
+      items.push({ icon: '👟', text: `Golden boot race: ${race.name} leads on ${race.goals}`, to: '/club-manager', volatile: true });
     }
   }
 
@@ -108,7 +129,7 @@ export function buildItems(now: Date = new Date()): TickerItem[] {
   const st = readSave<{ money?: number; rep?: number; fanbase?: number }>('stadiumTycoonSaveV1');
   if (st && typeof st.money === 'number' && st.money > 0) {
     const rep = typeof st.rep === 'number' && st.rep > 0 ? ` · ${st.rep}⭐ rep` : '';
-    items.push({ icon: '🏟️', text: `Your stadium empire: ${moneyShort(st.money)} banked${rep}`, to: '/stadium-tycoon' });
+    items.push({ icon: '🏟️', text: `Your stadium empire: ${moneyShort(st.money)} banked${rep}`, to: '/stadium-tycoon', volatile: true });
   }
 
   /* ---- Your Soccer Career player ---- */
@@ -118,6 +139,7 @@ export function buildItems(now: Date = new Date()): TickerItem[] {
       icon: '⚽',
       text: `Your pro: ${sc.playerName}, ${sc.overall} OVR${sc.currentClub ? ` at ${sc.currentClub}` : ''}`,
       to: '/soccer-career',
+      volatile: true,
     });
   }
 
@@ -127,15 +149,15 @@ export function buildItems(now: Date = new Date()): TickerItem[] {
     const day = Math.floor(Date.now() / 86400000);
     for (let i = 0; i < Math.min(4, dailies.length); i++) {
       const g = dailies[(day + i * 7) % dailies.length];
-      items.push({ icon: '🗓️', text: `Fresh daily: ${g.label}`, to: g.path });
+      items.push({ icon: '🗓️', text: `Fresh daily: ${g.label}`, to: g.path, volatile: true });
     }
   }
 
   /* ---- Live counts off the registry, so they can never go stale ---- */
   const all = CATEGORIES.flatMap(c => c.games);
-  items.push({ icon: '🎮', text: `${all.length} free games, no sign-up, no downloads`, to: '/' });
+  items.push({ icon: '🎮', text: `${all.length} free games, no sign-up, no downloads`, to: '/', volatile: true });
   const soccer = CATEGORIES.find(c => /soccer/i.test(c.title));
-  if (soccer) items.push({ icon: '⚽', text: `${soccer.games.length} soccer games and counting`, to: '/' });
+  if (soccer) items.push({ icon: '⚽', text: `${soccer.games.length} soccer games and counting`, to: '/', volatile: true });
   items.push({ icon: '📰', text: 'New stuff ships almost daily. See what changed', to: '/whats-new' });
 
   return items;
@@ -158,7 +180,7 @@ export function TopTicker() {
     <Link
       key={`${it.to}-${i}`}
       to={it.to}
-      data-no-prerender={it.dated ? 'true' : undefined}
+      data-no-prerender={it.volatile ? 'true' : undefined}
       className={`${itemClass} hover:text-foreground transition-colors`}
     >
       <span aria-hidden="true">{it.icon}</span>
@@ -169,7 +191,7 @@ export function TopTicker() {
   /* The second copy makes the loop seamless. Plain spans, not links, so a
      keyboard user never tabs through the strip twice. */
   const ghost = items.map((it, i) => (
-    <span key={`dup-${i}`} aria-hidden="true" data-no-prerender={it.dated ? 'true' : undefined} className={itemClass}>
+    <span key={`dup-${i}`} aria-hidden="true" data-no-prerender={it.volatile ? 'true' : undefined} className={itemClass}>
       <span>{it.icon}</span>
       <span className="whitespace-nowrap">{it.text}</span>
       <span className="text-border pl-4">·</span>

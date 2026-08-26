@@ -16,6 +16,7 @@
  * Run: node scripts/simSitemap.mjs
  */
 import { execSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -72,6 +73,76 @@ console.log('4) Every submitted URL has a real route');
   const missing = urls.filter(u => u !== '/' && !liveRoutes.has(u));
   if (missing.length) fail(`sitemap URLs with no route: ${missing.join(', ')}`);
   else console.log('   no orphans submitted');
+}
+
+console.log('5) every lastmod is a claim the shipped files back up');
+/* ROUND 280. Until this round every row carried the same lastmod, the day the
+   generator last ran, so the file asserted that all 127 pages changed on the
+   same day, every single time it was regenerated. Google's sitemap
+   documentation says the value has to be consistently and verifiably accurate
+   and that they may ignore it entirely where it is not, which is the correct
+   response to a file that cries wolf 127 times at once, and it costs this site
+   the only re-crawl hint it has while pages sit in "Crawled, currently not
+   indexed" having last been looked at in April.
+
+   The generator now derives each date from a hash of the page's own shipped
+   text and links, kept in scripts/data/lastmod.json. These three checks are
+   about the property that makes the claim worth making: every date is backed
+   by a recorded hash, that hash is the one the shipped file actually has, and
+   no date is in the future. What this deliberately does NOT do is require the
+   dates to be spread out. A round that genuinely rewrites every page, which is
+   exactly what this one does, is entitled to stamp every page with today. The
+   defect was never "all the dates match", it was "the dates are asserted rather
+   than derived", and a check on the spread would fire on honest work. */
+{
+  const LEDGER = path.join(ROOT, 'scripts/data/lastmod.json');
+  if (!fs.existsSync(LEDGER)) {
+    fail('scripts/data/lastmod.json is missing, so every lastmod in the sitemap is an unbacked assertion');
+  } else {
+    const ledger = JSON.parse(fs.readFileSync(LEDGER, 'utf8'));
+    const rows = [...xml.matchAll(/<loc>https:\/\/douknowball\.com([^<]*)<\/loc><lastmod>([^<]*)<\/lastmod>/g)]
+      .map(m => ({ route: m[1] || '/', date: m[2] }));
+    if (rows.length !== urls.length) fail(`${urls.length} URLs but only ${rows.length} carry a lastmod`);
+    const today = new Date().toISOString().slice(0, 10);
+    let unbacked = 0, mismatched = 0, future = 0, malformed = 0;
+    for (const { route, date } of rows) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { malformed += 1; fail(`${route} has a lastmod that is not a date: ${JSON.stringify(date)}`); continue; }
+      if (date > today) { future += 1; fail(`${route} claims it was modified on ${date}, which has not happened yet`); }
+      const entry = ledger[route];
+      if (!entry) { unbacked += 1; if (unbacked <= 3) fail(`${route} has a lastmod with no entry in the ledger behind it`); continue; }
+      if (entry.date !== date) { mismatched += 1; if (mismatched <= 3) fail(`${route} says ${date} but the ledger recorded ${entry.date}`); }
+    }
+    /* And the ledger's own hashes have to match the files on disk, or the dates
+       are backed by a record of some other version of the site. Recomputed here
+       with an independent copy of the reduction rather than by importing the
+       generator's, so a bug in that function cannot agree with itself. */
+    let stale = 0, unreadable = 0;
+    for (const [route, entry] of Object.entries(ledger)) {
+      if (!entry.hash) continue;
+      const file = route === '/'
+        ? path.join(ROOT, 'index.html')
+        : path.join(ROOT, 'public', route.replace(/^\//, ''), 'index.html');
+      let html;
+      try { html = fs.readFileSync(file, 'utf8'); } catch { unreadable += 1; continue; }
+      const marker = route === '/' ? '<div id="root">' : 'id="dukb-snapshot"';
+      const i2 = html.indexOf(marker);
+      const body = i2 < 0 ? html : html.slice(i2);
+      const title = (html.match(/<title[^>]*>([^<]*)<\/title>/) || [])[1] || '';
+      const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
+      const text = body
+        .replace(/<script[\s\S]*?<\/script>/g, ' ')
+        .replace(/<style[\s\S]*?<\/style>/g, ' ')
+        .replace(/<!--[\s\S]*?-->/g, ' ')
+        .replace(/<a\b[^>]*\bhref="([^"]*)"[^>]*>/g, ' [$1] ')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      const fp = createHash('sha256').update(`${title}\n${desc}\n${text}`).digest('hex').slice(0, 16);
+      if (fp !== entry.hash) { stale += 1; if (stale <= 3) fail(`${route}: the shipped file no longer matches the hash its lastmod was recorded against, so the sitemap is dating the wrong version`); }
+    }
+    console.log(`   ${rows.length} rows, ${Object.keys(ledger).length} ledger entries, ${unbacked} unbacked, ${mismatched} disagreeing, ${stale} pointing at a version that has been rewritten, ${future} in the future`);
+    if (unreadable) console.log(`   ${unreadable} ledger entries have no file to check, which is normal only for a route that has just been retired`);
+  }
 }
 
 console.log('');

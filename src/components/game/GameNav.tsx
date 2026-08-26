@@ -114,7 +114,34 @@ export function GameNav({ currentPath, sportCategory }: GameNavProps = {}) {
   if (nextGames.length === 0) return null;
 
   return (
-    <div className="mt-12 mb-6">
+    /* ROUND 280: THIS BLOCK ROTATES DAILY AND MUST NOT BE PHOTOGRAPHED.
+       The three picks are seeded with the ET date, so re-rendering the site
+       tomorrow gives every game page a different trio. That is exactly what the
+       owner asked for and nothing about it changes for a real visitor; the
+       problem is only that the prerenderer was capturing it, which had two
+       costs. The small one is the churn Round 274 already ruled a defect: 126
+       snapshots rewritten every run, burying whatever actually changed. The
+       large one arrived this round. The sitemap's lastmod is now derived from a
+       hash of each page's shipped text, so that Google is told the truth about
+       what changed; a block that rewrites itself daily would re-date all 126
+       pages on every build and hand back the exact "everything changed today"
+       lie that fix exists to end. Those two cannot both be true, so one had to
+       go, and it is not the visitor's rotation.
+
+       WHAT THE SNAPSHOT LOSES, MEASURED RATHER THAN WAVED AT. Simulating both
+       seeds across all 113 games: with the date in it this block leaves 27
+       games with no inbound link on any given day and hands one game 26; the
+       date-free variant leaves 32 and hands one 29. It is a lumpy distributor
+       either way. The link graph a crawler needs is carried by the "More games
+       to play" block from relatedGamesFor, which is deliberately date-free and
+       proven by simRelatedGames to give every game inbound links and to leave
+       the whole site one connected component. That block stays in the snapshot.
+       So the saved page keeps the links that were designed to be there and
+       loses three that happened to be picked on a Tuesday.
+
+       Found by scripts/playSnapshotDrift.mjs on its first real run, which is
+       the entire reason that harness was written this round. */
+    <div className="mt-12 mb-6" data-no-prerender="true">
       <div className="border-t border-border/50 pt-8">
         <p className="text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
           Play Next

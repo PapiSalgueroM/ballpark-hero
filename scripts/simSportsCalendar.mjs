@@ -194,7 +194,21 @@ if (!multi) {
 console.log('6) these lines are marked so a snapshot can never freeze them');
 const ticker = readFileSync(path.join(ROOT, 'src/components/layout/TopTicker.tsx'), 'utf8');
 if (!ticker.includes('upcomingEvents')) fail('the ticker does not read the calendar at all');
-if (!ticker.includes('dated: true')) fail('the ticker does not mark the real world lines as dated');
+/* Round 280 renamed this flag from `dated` to `volatile` and widened what it
+   means, because the calendar lines were never the only ones computed from
+   something outside the file: the four rotating daily games were too, and they
+   had been frozen into all 126 snapshots since Round 258. The check that
+   matters here is unchanged in substance, though: the calendar's own push has
+   to carry the flag, whatever the flag is called. It is located by the calendar
+   function it reads rather than by line number, so it cannot pass by finding
+   some other line's mark. simPrerender section 13 owns the general rule. */
+{
+  const i = ticker.indexOf('upcomingEvents(now)');
+  const call = i < 0 ? '' : ticker.slice(i, i + 400);
+  if (!/\bvolatile:\s*true\b/.test(call)) {
+    fail('the calendar line in the ticker does not declare itself volatile, so a snapshot will freeze a relative date into a file that outlives it');
+  }
+}
 const marks = (ticker.match(/data-no-prerender/g) ?? []).length;
 /* the visible line and its duplicate in the seamless loop both need it */
 if (marks < 2) fail(`only ${marks} data-no-prerender marks in the ticker, the loop renders each line twice`);

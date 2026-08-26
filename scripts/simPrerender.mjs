@@ -411,6 +411,93 @@ console.log('12) no shipped page has a running clock frozen into it');
   console.log(`   ${docs.size} documents, ${frozen} carrying a frozen clock`);
 }
 
+/* ── Round 280: every computed ticker line must declare itself volatile ── */
+/* WHAT WENT WRONG. Round 258 built the data-no-prerender mechanism and set it
+   on the calendar lines, and section 7 above checks those specific titles. That
+   is a check on ONE known offender, and it could never have caught the next one.
+   The next one was already there: the strip's four "Fresh daily" lines pick
+   their games with Date.now(), and they were frozen into all 126 committed
+   snapshots. Every page on the site was telling a crawler that today's puzzle is
+   Tier List, and would have gone on telling it for as long as the file lived.
+
+   MEASURED BEFORE FIXING, and the measurement is the reason this section is
+   shaped the way it is: six routes were rendered twice with the page's own clock
+   five days apart and the captured blocks diffed. Exactly four lines moved, the
+   same four on every route, and nothing else on any page moved at all. So the
+   corpus was date stable apart from one hole, and a check written as "look for
+   Fresh daily" would have closed that hole and left the next one open.
+
+   THE RULE IS SOURCE LEVEL AND MECHANICAL. Every items.push in TopTicker's
+   buildItems either sets volatile, or its text is a plain quoted string with
+   nothing interpolated into it. A line built out of a template literal is by
+   definition computed from something outside this file, so it has to answer the
+   question. This cannot be satisfied by accident and it extends itself: the next
+   ticker line anyone writes either declares itself or fails here.
+
+   It deliberately does NOT try to decide whether a computed line is really
+   volatile. That judgement belongs to the person writing it. What this refuses
+   to allow is the judgement never being made. */
+console.log('13) every computed ticker line declares itself volatile');
+{
+  const tickerPath = path.join(ROOT, 'src/components/layout/TopTicker.tsx');
+  if (!existsSync(tickerPath)) {
+    fail('src/components/layout/TopTicker.tsx is missing, so the ticker rule cannot be checked');
+  } else {
+    const src = readFileSync(tickerPath, 'utf8');
+    const start = src.indexOf('export function buildItems');
+    if (start < 0) {
+      fail('TopTicker has no buildItems, so this check is reading the wrong file');
+    } else {
+      /* Take each push and read forward to its matching close paren, counting
+         depth, so a nested object or a ternary inside the text does not end the
+         call early. */
+      const body = src.slice(start);
+      const pushes = [];
+      let i = 0;
+      while ((i = body.indexOf('items.push(', i)) !== -1) {
+        let depth = 0, j = i + 'items.push'.length;
+        for (; j < body.length; j++) {
+          const c = body[j];
+          if (c === '(') depth += 1;
+          else if (c === ')') { depth -= 1; if (depth === 0) break; }
+        }
+        pushes.push(body.slice(i, j + 1));
+        i = j + 1;
+      }
+      if (pushes.length < 8) fail(`only found ${pushes.length} ticker pushes, which cannot be right`);
+      let computed = 0, declared = 0, bare = 0;
+      for (const call of pushes) {
+        const text = call.match(/text:\s*([`'"])/);
+        if (!text) { fail(`a ticker push has no text field: ${JSON.stringify(call.slice(0, 60))}`); continue; }
+        const isTemplate = text[1] === '`' && /text:\s*`[^`]*\$\{/.test(call);
+        const declares = /\bvolatile:\s*true\b/.test(call);
+        if (isTemplate) {
+          computed += 1;
+          if (declares) declared += 1;
+          else fail(`a ticker line is built from a template literal and does not set volatile, so it will freeze into every snapshot: ${JSON.stringify(call.replace(/\s+/g, ' ').slice(0, 90))}`);
+        } else {
+          bare += 1;
+        }
+      }
+      console.log(`   ${pushes.length} ticker pushes, ${computed} computed (${declared} declaring volatile), ${bare} plain strings`);
+
+      /* And the shipped files must actually be clean of the one we know about,
+         because a declaration that the prerenderer ignores is worth nothing. The
+         prefix is read out of the component so it cannot drift from the code. */
+      const freshPrefix = (src.match(/text:\s*`([^`$]{4,})\$\{g\.label\}`/) || [])[1];
+      if (!freshPrefix) {
+        fail('could not read the daily rotation prefix out of TopTicker, so the shipped files cannot be checked for it');
+      } else {
+        let frozen = 0;
+        for (const [r, html] of docs) {
+          if (html.includes(freshPrefix)) { frozen += 1; if (frozen <= 4) fail(`${r} froze a rotating daily line into a file that outlives the day`); }
+        }
+        console.log(`   ${docs.size} documents, ${frozen} carrying ${JSON.stringify(freshPrefix.trim())}`);
+      }
+    }
+  }
+}
+
 console.log('');
 if (failures > 0) {
   console.error(`simPrerender: ${failures} failure${failures === 1 ? '' : 's'}`);

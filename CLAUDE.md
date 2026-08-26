@@ -243,6 +243,54 @@ exhausted.
 The same principle applies to the packaging content assertions in every `RUNnn.bat`. They fail
 closed on purpose. They are the only thing standing between a stale zip and a broken commit.
 
+### Nothing computed from a clock goes into a saved page
+
+Every route except the home page ships as a snapshot in `public/<route>/index.html`, written
+once and copied into every later build. A snapshot is therefore a promise held for weeks, and
+anything in it derived from `Date.now()` breaks that promise on a schedule.
+
+Two different costs, and it is worth keeping them apart when deciding what to do:
+
+- **The line is a claim about today.** "Fresh daily: Tier List" is false tomorrow. On every page.
+- **The line is a rotation that stays true.** The "Play Next" trio is three real links to three
+  real games whichever three get picked. Nothing about it is wrong later. But it rewrites 126
+  files on every build, which buries real changes in a diff, and since Round 280 it would also
+  re-date every URL in the sitemap and hand back the exact "all 127 pages changed today" lie
+  that `scripts/data/lastmod.json` exists to end.
+
+Both get `data-no-prerender`, which `scripts/prerender.mjs` strips. The visitor keeps the
+rotation; only the photograph loses it.
+
+**The rule that catches the next one: a check written for a known offender cannot find the next
+offender.** This was learned three times before it was written down. Round 258 marked the
+calendar lines and guarded them by looking for the calendar's own titles. Round 274 found a
+frozen countdown and guarded it by looking for `hh:mm:ss`. Both guards were green while the
+ticker's four rotating daily lines sat frozen on all 126 pages and a rotating trio sat frozen on
+94 of them. What found those was not a better string list, it was
+`scripts/playSnapshotDrift.mjs`: render the page twice with its own clock five days apart and
+diff what the prerenderer would capture. It asserts nothing about what should be there, so it
+does not need anyone to have thought of the failure first. `simPrerender` section 13 backs it up
+at source level, requiring every ticker line built from a template literal to declare itself
+volatile, so the question cannot go unasked.
+
+### The sitemap's lastmod is derived, never asserted
+
+`genSitemap.mjs` used to stamp `new Date()` on all 127 rows, so any regeneration claimed the
+whole site had changed. Google's sitemap documentation says the value must be verifiably
+accurate and that they may ignore it entirely otherwise, which is the right response to a file
+crying wolf 127 times at once, and it costs this site the only re-crawl lever it has while pages
+sit in "Crawled, currently not indexed".
+
+Each date now comes from a hash of that page's own shipped text and links, recorded in
+`scripts/data/lastmod.json`. **That ledger is committed and must stay committed**: it is the only
+memory of when a page last really changed, and losing it re-dates the whole site. `simSitemap`
+section 5 checks that every date has a ledger entry behind it, that the entry's hash still
+matches the file on disk, and that no date is in the future.
+
+Consequence for the build order: the sitemap has to be generated **after** the prerenderer, so
+`build:seo` runs the generator twice, once with `--routes-only` (route list, ledger untouched)
+before the build and once for real afterwards. Do not collapse that back into one call.
+
 ### Product rules
 
 - **FIFA tile rule.** Small tiles plus a back button. Never long stacked pages.

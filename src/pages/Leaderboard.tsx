@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { getCurrentPlayerName } from '@/lib/completions';
 import { useAuth } from '@/contexts/AuthContext';
@@ -252,8 +253,80 @@ export default function Leaderboard() {
           </Tabs>
         </main>
 
-        <div className="max-w-4xl mx-auto px-4">
-        </div>
+        {/* ---------------------------------------------------------------
+            ROUND 280: THIS PAGE'S PERMANENT COPY.
+
+            Every word above this block is live data, and the prerenderer
+            deliberately leaves database requests hanging so today's board is
+            never frozen into a file. That is the right call, and the cost of it
+            was that the saved copy of this page carried 165 characters a crawler
+            could read once the shared footer was discounted: a heading and one
+            sentence. Measured against all 126 submitted pages on 2026-08-23 it
+            was the thinnest by a distance, 85 percent boilerplate, and thin is
+            the exact complaint behind "Crawled, currently not indexed".
+
+            So the page now answers, in writing that does not depend on a single
+            row of data, the question anyone landing here actually has: how do I
+            get on this thing. Nothing below is a figure that can go stale, and
+            nothing below claims a number the database has to agree with.
+            --------------------------------------------------------------- */}
+        <section className="max-w-4xl mx-auto px-4 pb-16 prose-sm text-muted-foreground">
+          <h2 className="text-xl font-display font-bold text-foreground mt-4 mb-3">How the world leaderboard works</h2>
+          <p className="mb-3">
+            There is one board on this site and everybody is on it. Points from every game you
+            play add into the same total, so a run on <Link className="underline" to="/soccer-grid">Soccer Grid</Link> and a
+            run on <Link className="underline" to="/nhl-connect-4">NHL Connect 4</Link> count toward the same
+            standing. You do not need an account to appear: finish a game and you are on it under
+            whatever handle you are playing as.
+          </p>
+
+          <h3 className="text-base font-semibold text-foreground mt-5 mb-2">Every game is worth the same day</h3>
+          <p className="mb-3">
+            Each game pays up to 100 points a day and only your best run of that day counts. That
+            is deliberate and it decides two things at once. A thirty second game cannot be replayed
+            forty times for forty scores, so the board does not reward whoever had the most idle
+            afternoon. And a long career sim cannot bury a quick daily puzzle, because both top out
+            in the same place. What separates people on this board is how many different games they
+            played well, not how many times they hit retry.
+          </p>
+
+          <h3 className="text-base font-semibold text-foreground mt-5 mb-2">Today, all time, and your own rank</h3>
+          <p className="mb-3">
+            <strong className="text-foreground">Today</strong> resets for everyone at the same moment, so it is
+            a straight race on the same set of daily puzzles. <strong className="text-foreground">All-Time</strong> is
+            the running total and rewards turning up. Both tabs list the top 100, and your own rank
+            card sits above them whether you are 7th or 4,000th, with how many players you are being
+            measured against, because a rank with no field size behind it does not tell you anything.
+          </p>
+
+          <h3 className="text-base font-semibold text-foreground mt-5 mb-2">Filtering by sport</h3>
+          <p className="mb-3">
+            The filter narrows the board to one sport's games and nothing else changes: same scoring,
+            same daily cap, same top 100. It is there because the sitewide board is dominated by
+            whoever plays the most breadth, and someone who only plays hockey deserves a table where
+            that is the whole field. There is no per game leaderboard anywhere on this site, on
+            purpose, because a hundred separate boards is a hundred places to be first at nothing.
+          </p>
+
+          <h3 className="text-base font-semibold text-foreground mt-5 mb-2">Getting on the board today</h3>
+          <p className="mb-3">
+            The quickest way up is breadth. Pick a sport you know from the{' '}
+            <Link className="underline" to="/soccer">soccer</Link>,{' '}
+            <Link className="underline" to="/pro-basketball">basketball</Link>,{' '}
+            <Link className="underline" to="/pro-football">football</Link>,{' '}
+            <Link className="underline" to="/baseball">baseball</Link>,{' '}
+            <Link className="underline" to="/hockey">hockey</Link> or{' '}
+            <Link className="underline" to="/college">college</Link> sections, play the daily puzzles
+            there, then take one run at a game you have never tried. Four daily puzzles played
+            reasonably will out score one game played obsessively, every time.
+          </p>
+          <p className="mb-3">
+            If you want to know what the games are actually built on before you start,{' '}
+            <Link className="underline" to="/records">The Record Books</Link> holds the champion tables the
+            quizzes run on, checked against the official record, and{' '}
+            <Link className="underline" to="/whats-new">What's New</Link> lists what shipped recently.
+          </p>
+        </section>
       </div>
     </>
   );
