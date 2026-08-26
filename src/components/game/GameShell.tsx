@@ -41,7 +41,17 @@ export function GameShell({ width, title, emoji, subtitle, headerExtra, children
       >
         {title && (
           <header className="text-center mb-6 md:mb-8">
-            <h1 className="text-4xl md:text-6xl font-display font-bold tracking-[0.15em] uppercase text-primary mb-2">
+            {/* Round 263: this heading made six game pages scroll sideways on a
+                320px phone. "CONNECTIONS" is one unbreakable eleven letter word,
+                and at text-4xl with 0.15em of letter spacing it measured 352px
+                against a 256px container, pushing the whole document 64px wider
+                than the screen. Every game on the site draws its title through
+                this one component, so the bug was shared and only showed up on
+                the longest titles. The size and the spacing now step up rather
+                than starting at their largest, and break-words lets a title made
+                of several words wrap instead of shoving. Measured after the
+                change at 320, 390 and 1440. */}
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-display font-bold tracking-[0.1em] sm:tracking-[0.15em] uppercase text-primary mb-2 break-words">
               {emoji && <span className="mr-2">{emoji}</span>}
               {title}
             </h1>

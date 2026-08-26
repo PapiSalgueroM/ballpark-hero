@@ -1894,6 +1894,27 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
                   <span>{r}</span>
                 </div>
               ))}
+              {/* Round 263: the squad line, when we have the real squad for
+                  that club and season. DISPLAY ONLY and deliberately kept out
+                  of seasonStrikes, because that list decides the verdict and
+                  a fourth entry in it would move the trigger rate that Round
+                  257 measured and tuned. This just puts a name to the wall he
+                  was up against. */}
+              {(() => {
+                const year = career.seasons[career.seasons.length - 1]?.year;
+                if (!year) return null;
+                const chart = depthChart(career.currentClub, year, career.position, career.overall, career.playerName);
+                if (!chart || chart.ahead === 0) return null;
+                return (
+                  <div className="text-[11px] flex gap-1.5">
+                    <span className="text-red-400 shrink-0">▪</span>
+                    <span>
+                      You were {ordinalPlace(chart.ahead + 1)} of {chart.men.length} {GROUP_LABEL[chart.group]} at {chart.club}
+                      {chart.aheadOfMe ? `, behind ${chart.aheadOfMe.name}` : ""}
+                    </span>
+                  </div>
+                );
+              })()}
             </div>
           </div>
 
@@ -2379,6 +2400,13 @@ function RivalrySummaryCard({ summary, career }: { summary: RivalrySummary; care
    written map, a season outside the baked window, or a squad the data cannot
    fill. No generated teammates stand in, because there is no honest way to
    invent the squad of a real club in a real season. */
+/** 1st, 2nd, 3rd, 11th. Used by the verdict screen's squad line. */
+function ordinalPlace(n: number): string {
+  const teen = n % 100 >= 11 && n % 100 <= 13;
+  const suf = teen ? "th" : n % 10 === 1 ? "st" : n % 10 === 2 ? "nd" : n % 10 === 3 ? "rd" : "th";
+  return `${n}${suf}`;
+}
+
 function SquadManRow({ man, rank }: { man: SquadMan; rank: number }) {
   return (
     <div
