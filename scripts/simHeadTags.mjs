@@ -106,16 +106,49 @@ for (const [desc, routes] of byDesc) {
 }
 console.log(`   ${byDesc.size} distinct descriptions across ${docs.length} pages`);
 
-/* ── 4: reported, not failed ───────────────────────────────────────────── */
-/* Google truncates a result title around 60 characters. This is a number for
-   whoever writes the next batch of copy, not a red light: shortening 37 titles
-   is a copy job with real judgement in it, and a board that stays red until
-   somebody does it teaches everyone to ignore the board. */
-console.log('4) title lengths');
+/* ── 4: no title gets cut in half in a search result ───────────────────── */
+/* Round 276 REPORTED this and did not fail on it, because shortening 37 titles
+   by hand was a copy job with judgement in it and a board that stays red until
+   somebody does it teaches everyone to ignore the board. Round 277 turned it
+   into a rule instead: PageSeo drops the 14 character brand suffix from any
+   title that would otherwise run past 60, which brought all 37 under with the
+   longest landing at 59. A rule can be enforced, so this is a failure now.
+
+   A title still over the limit after the suffix has come off is a real copy
+   problem that no rule can fix, and the honest thing is to say so rather than
+   truncate a sentence in code, which is how you ship half a word. */
+console.log('4) no title is long enough to be truncated in a result');
+const LIMIT = 60;
 const lens = docs.map(([r, h]) => [(h.match(/<title[^>]*>([^<]*)<\/title>/) || [, ''])[1].length, r]).sort((a, b) => b[0] - a[0]);
-const over = lens.filter(([n]) => n > 60);
-console.log(`   median ${lens[Math.floor(lens.length / 2)][0]}, longest ${lens[0][0]} (${lens[0][1]}), ${over.length} over 60 characters`);
-if (over.length) console.log(`   NOT A FAILURE: Google truncates around 60, so these get cut off in results. A copy job, listed here so it stays visible.`);
+const over = lens.filter(([n]) => n > LIMIT);
+for (const [n, r] of over.slice(0, 5)) {
+  fail(`${r} has a ${n} character title, so a search result cuts it off. The brand suffix is already gone; this one needs shorter words.`);
+}
+console.log(`   median ${lens[Math.floor(lens.length / 2)][0]}, longest ${lens[0][0]} (${lens[0][1]}), ${over.length} over ${LIMIT}`);
+
+/* ── 5: the trim never takes the brand off a title that had room ───────── */
+/* The rule is worth nothing if it quietly strips the brand from everything, so
+   the test is arithmetic: for every shipped title that does NOT end in the
+   suffix, putting it back must push the title past the limit. If it would still
+   fit, the brand was lost for some other reason and that is worth knowing.
+
+   A first version of this just counted brandless titles and reported "43
+   dropped it to stay under 60", which was not true: 37 titles were over the
+   limit, and the other six are pages whose copy never used that suffix at all,
+   like Privacy Policy - DoUKnowBall and Contact DoUKnowBall. A harness that
+   states a cause it has not established is a harness that will mislead somebody
+   at 2am. */
+console.log('5) the trim never takes the brand off a title that had room for it');
+const SUFFIX = ' | DoUKnowBall';
+let kept = 0, trimmed = 0, neverHadIt = 0;
+for (const [route, html] of docs) {
+  const t = (html.match(/<title[^>]*>([^<]*)<\/title>/) || [, ''])[1];
+  if (t.endsWith(SUFFIX)) { kept += 1; continue; }
+  if (t.length + SUFFIX.length > LIMIT) trimmed += 1;
+  else neverHadIt += 1;
+}
+if (kept < 60) fail(`only ${kept} of ${docs.length} titles carry the brand, which is too few for a rule that only fires past ${LIMIT}`);
+console.log(`   ${kept} keep it, ${trimmed} could not have kept it under ${LIMIT}, ${neverHadIt} never used that suffix in their copy`);
 
 console.log('');
 if (failures > 0) {

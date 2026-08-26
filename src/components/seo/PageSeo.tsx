@@ -38,6 +38,36 @@ interface PageSeoProps {
 const BASE_URL = 'https://douknowball.com';
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
 
+/* Round 277: the brand suffix comes off a title that would otherwise be cut in
+ * half by Google.
+ *
+ * MEASURED across the 126 shipped pages: 37 of them run past 60 characters,
+ * which is roughly where a search result title gets truncated with an ellipsis.
+ * The longest was /soccer at 73. Every one of those 37 ends in the same 14
+ * character brand suffix, and dropping it brings ALL of them under: the longest
+ * becomes 59.
+ *
+ * So the rule is arithmetic rather than judgement, and it is applied here rather
+ * than by hand-editing 37 pages of copy, because a rule cannot drift when
+ * somebody writes the next title and a hand edit can. The brand stays wherever
+ * it fits, which is 89 of the 126 pages, and comes off only where its cost is a
+ * truncated title.
+ *
+ * It comes off the <title> ONLY. og:title and twitter:title keep the full text,
+ * because a social card has roughly 88 characters to play with and the brand is
+ * worth more there than the last few words of a game name.
+ *
+ * If a title is still too long after the suffix comes off, that is a real copy
+ * problem and no rule can fix it. simHeadTags fails on it rather than trimming
+ * further, because truncating a sentence in code is how you end up shipping
+ * half a word. */
+const BRAND_SUFFIX = ' | DoUKnowBall';
+const SEARCH_TITLE_LIMIT = 60;
+export const searchTitle = (full: string): string =>
+  full.length > SEARCH_TITLE_LIMIT && full.endsWith(BRAND_SUFFIX)
+    ? full.slice(0, -BRAND_SUFFIX.length)
+    : full;
+
 const PageSeo = ({ title, description, path, ogImage, noindex }: PageSeoProps) => {
   const canonicalUrl = `${BASE_URL}${path}`;
   const image = ogImage || DEFAULT_OG_IMAGE;
@@ -141,7 +171,7 @@ const PageSeo = ({ title, description, path, ogImage, noindex }: PageSeoProps) =
 
   return (
     <Helmet>
-      <title>{title}</title>
+      <title>{searchTitle(title)}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={canonicalUrl} />
       {noindex ? <meta name="robots" content="noindex, follow" /> : null}
