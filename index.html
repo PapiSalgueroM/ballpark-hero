@@ -361,6 +361,17 @@
       and drops everything else. That is exactly right: a real page must never
       run this.
 
+      ROUND 284: IT MUST NOT RUN UNDER THE PRERENDERER EITHER, and the first
+      time the prerenderer ran with this script in place it did. The prerender
+      server hands every route this bare template on purpose, so that React
+      can draw the real page into it. To this script that is indistinguishable
+      from a dead address: no snapshot block, a path that is not the root. It
+      fired on every route, and the noindex it wrote into the head went into
+      all 133 saved documents, sitemap pages included. The prerenderer sets
+      window.__DUKB_PRERENDER__ before any page code runs, and this returns
+      on it. A real visitor never has that flag. simPrerender section 14 is the
+      fence behind this: no document in the sitemap may ship a noindex.
+
       Guarded by scripts/playSoftFourOhFour.mjs, which checks the three cases
       that matter: a real route untouched, the home page untouched, and a dead
       address noindexed and stripped.
@@ -368,6 +379,7 @@
     <script>
       (function () {
         try {
+          if (window.__DUKB_PRERENDER__) return;
           var path = location.pathname.replace(/\/+$/, '') || '/';
           if (path === '/') return;
           if (document.getElementById('dukb-snapshot')) return;

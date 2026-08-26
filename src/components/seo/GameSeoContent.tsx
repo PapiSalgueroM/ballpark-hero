@@ -48,9 +48,20 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
      the sport file is in flight, so the page is never empty and a crawler
      that waits for the network (all of them do, this whole site is client
      rendered) gets the full guide. */
-  const [content, setContent] = useState<GameContent | null>(null);
+  /* Round 284: three states, not two. undefined is "still in flight", null is
+     "this route has no guide", and the section below says which on a data
+     attribute so the prerenderer can wait for the answer instead of guessing
+     at it with a timer. It had been guessing: the first three clock sample
+     run caught five pages whose head disagreed with itself, and every one
+     was the FAQ structured data captured before the sport file had landed on
+     one sample and after it on another. Nothing about that was the clock's
+     doing, it was a 3.5 second settle racing a lazy chunk on a busy machine,
+     and the single sample prerender had been exposed to the same race all
+     along with nothing to notice it. */
+  const [content, setContent] = useState<GameContent | null | undefined>(undefined);
   useEffect(() => {
     let live = true;
+    setContent(undefined);
     loadGameContent(path).then(c => { if (live) setContent(c); });
     return () => { live = false; };
   }, [path]);
@@ -102,7 +113,10 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
   const related = relatedGamesFor(path);
 
   return (
-    <section className="max-w-2xl mx-auto mt-12 mb-8 px-4">
+    <section
+      className="max-w-2xl mx-auto mt-12 mb-8 px-4"
+      data-seo-content={content === undefined ? 'loading' : 'ready'}
+    >
       <div className="text-center">
         {/* Round 198: the heading level follows the page, see the prop's
             comment above. Identical classes either way, so nothing moves

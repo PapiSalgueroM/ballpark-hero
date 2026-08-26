@@ -220,9 +220,26 @@ four separate stat-realism bugs. They are worth the effort, but only if written 
 - **Never assert non-significance.** That test gets easier the less data you feed it, which
   means it passes for the wrong reason.
 - **Never assert on a max.** Maxes are noise.
-- Set margins from **measured headroom**, not from a number that felt right.
+- Set margins from **measured headroom**, not from a number that felt right. Round 284's
+  example: a ceiling gap that must exceed 4 went red on healthy code at exactly 4.0. Measured
+  over repeated runs the gap sits between roughly 3.9 and 5.0, so the threshold was in the
+  middle of the distribution and the check was a coin toss dressed as a rule.
 - Runtime does not prove a harness ran. **Its output does.** Check the output.
 - Never evaluate an imported value at module scope. That is how the import cycle got in.
+- **Write a negative control for every new check, and assert that the control changed
+  something.** A control that replaces a string the file does not contain changes nothing, the
+  harness stays green, and green then means "the control did not fire" rather than "the check
+  works". `assert old in src` before the edit, or refuse to run. `simPrerender`
+  (`SIM_PRERENDER_CONTROL=noindex`), `prerender.mjs` (`PRERENDER_CONTROL=noflag`) and
+  `playSnapshotDrift` (`DRIFT_CONTROL=1`) all carry theirs.
+- **A guard that reads source must read the code, not the comments.** Four times in one day a
+  check was satisfied by the prose explaining why the check exists: a canonical count read its
+  own comment as a tag, a 404 harness read its documentation as a page marker, and two privacy
+  checks matched the comment saying they had been added. Prose about the code is the one place
+  the string a guard looks for is guaranteed to appear. Strip comments and scripts before
+  matching, and match the shape (a real `<meta name="robots">` element) rather than the word.
+- **Never run the harness suite while a build is running.** Two harnesses once reported
+  failures that were just them reading a half-written `dist`.
 
 ---
 
@@ -273,6 +290,20 @@ does not need anyone to have thought of the failure first. `simPrerender` sectio
 at source level, requiring every ticker line built from a template literal to declare itself
 volatile, so the question cannot go unasked.
 
+**Since Round 284 the prerenderer itself works this way.** `data-no-prerender` only ever covered
+what somebody had marked, and a board the page computes from the date (a daily puzzle, a
+"Today's lineup, 2026-08-24" caption) was frozen into fifteen saved pages that no rule about
+network data could see. `scripts/prerender.mjs` now draws every route three times with the
+page's own clock at 0, 5 and 11 days and writes only the blocks all three agree on. Nothing in
+it knows which games are daily, on purpose: a list of affected games has been written three
+times in this repo, and each time it covered what somebody had already found and nothing after.
+`data-no-prerender` still matters for the visitor-facing side (the rotation is kept on screen
+and only the photograph loses it) and it stays the cheap fix for a known line; the sampling is
+what catches the unknown one. Content picked with `Math.random` is a different case and gets a
+different treatment: the prerenderer seeds `Math.random` identically on every sample and every
+run, so a random pick is frozen the same way in every build rather than dropped. It is not
+false, and the only harm it could do was rewriting the file on every build.
+
 ### index.html is also the 404 page, and it has to say so before React runs
 
 The host answers every unknown address with `index.html` and a **200**. Since Round 257 that file
@@ -286,6 +317,15 @@ Three rules for anyone touching it:
 
 - **It must never fire on a real page.** A marker that noindexes a good page is far worse than
   the bug it fixes. `scripts/playSoftFourOhFour.mjs` section 4 walks real routes for exactly this.
+- **It must never fire under the prerenderer, and it did.** The prerender server hands every
+  route the bare template on purpose so React can draw into it, which to this script is exactly
+  a dead address. The first prerender after Round 282 wrote a noindex into all 133 saved
+  documents, sitemap pages included, and every existing check passed because none of them asked
+  the question. `prerender.mjs` now sets `window.__DUKB_PRERENDER__` before any page code runs
+  and the marker returns on it. **The check to keep is `simPrerender` section 14: no document
+  in the sitemap may ship a noindex.** It reads the files, not the marker, so it holds whatever
+  the mechanism is next time, and `PRERENDER_CONTROL=noflag` reproduces the near miss on demand
+  into `dist/` only.
 - **The canonical goes with the noindex.** The template canonicalises to `/`, and a noindex
   beside a canonical pointing at another page can propagate the noindex to that page. Same reason
   Round 272 left the retired-route stubs without one.
@@ -457,7 +497,10 @@ These are not preferences, they are the exposure.
 - **The repo permanently shows around 642 modified files.** That is pure CRLF, nothing else.
   Prove it with `git diff --ignore-cr-at-eol --stat`, which comes back empty. **Never commit
   them.**
-- `npx serve` caches `index.html` at startup, so restart it after a rebuild.
+- `npx serve -s` never serves a prerendered route: its single page rewrite runs before the
+  filesystem is checked, so every route answers with `index.html`. The browser harnesses are
+  served by `scripts/lib/hostLikeServer.mjs`, which behaves like the live host. Use that when
+  serving `dist/` by hand too.
 - Playwright `click()` scrolls first, which interacts with the no-scroll rule.
 
 ---

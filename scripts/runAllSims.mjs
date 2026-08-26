@@ -171,7 +171,13 @@ if (browserGroup.length && !WANT_BROWSER) {
     process.exit(1);
   }
   console.log(`\nServing dist on ${PORT} for ${browserGroup.length} browser harnesses`);
-  const server = spawn('npx', ['serve', '-s', 'dist', '-l', String(PORT)], {
+  /* Round 284: not `npx serve -s dist` any more. That flag rewrites every
+     extension-less path to index.html before it looks at the filesystem, so
+     the prerendered documents were never served and playSoftFourOhFour
+     reported the 404 marker firing on real pages. scripts/lib/hostLikeServer
+     does what the live host does: the route's own document if it has one,
+     index.html with a 200 if it does not. */
+  const server = spawn(process.execPath, [path.join(HERE, 'lib', 'hostLikeServer.mjs'), 'dist', String(PORT)], {
     cwd: ROOT,
     stdio: 'ignore',
   });

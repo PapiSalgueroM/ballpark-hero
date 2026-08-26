@@ -743,7 +743,7 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
-| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 280** are packaged, md5 verified on his disk, and NOT pushed. **`SHIP139.bat` runs all twenty three in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 138) is a subset of the same queue. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
+| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 285** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP146.bat` runs all twenty eight in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 145) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
 | PREVIOUS HEAD, FOR CONTEXT | `f848aa0` = Round 253, pushed 2026-08-21 morning and published the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
 | WHY THE BACKLOG SAT FOR WEEKS | **Four separate bugs in the RUN bats, not in the code and not on his machine.** Every one of them made a fail-closed assertion STOP a run that should have passed, so a click that looked like it worked shipped a handful of rounds and quit. All four were reproduced on Windows before being fixed, all four are fixed in the bats on his disk AND in pkg/mkbat.py, and pkg/verifybat.py now refuses to build or bless a bat carrying any of them: (1) FORWARD SLASHES in a findstr file argument: findstr rejects them outright and returns errorlevel 1 exactly as if the pattern were missing, which killed 56 bats at Round 179 every single time; (2) RAW DOUBLE QUOTES in a pattern: cmd ends the quoted argument at the first one, so any assertion quoting real code (an aria-label, a JSX prop, an array of strings) was mangled, killing 10 bats at Round 198; (3) A QUOTE FOLLOWED BY A CMD OPERATOR: cmd counts quotes and does not understand the \" escape, so a `>` after one becomes a redirection, which silently turned RUN209's check into a file write; (4) A PERCENT SIGN in a pattern: cmd strips a lone `%` as variable-expansion syntax, so the assertion hunts for text the file does not contain, which stopped RUN251 on a comment reading "the 40% wash". The empirical tests that proved 1, 2 and 3 are worth repeating if a fifth ever appears: write a throwaway bat that runs the shapes against a known file, log the errorlevels, and read the log. Guessing cost more time than testing. |
@@ -1334,6 +1334,101 @@ purge. Awards is still unbuilt. See the roadmap below.
 
 ---
 
+## Round 284: today's puzzle was frozen into seventeen saved pages, and a site-wide noindex nearly shipped
+
+Rebuilt on 2026-08-25 from the previous session's handoff notes, because the original Round 284
+was built, tested and delivered as chat downloads that never reached the folder. Everything
+below was measured again on the Round 283 tree rather than copied from those notes.
+
+**The frozen puzzles.** Round 256's rule against freezing live data covers anything that
+arrives over the network and does nothing for a board the page works out from the clock.
+`data-no-prerender`, the Round 258 mechanism, covers exactly what somebody has marked. So the
+prerenderer now draws every route three times with the page's own clock at 0, 5 and 11 days
+(the same Date replacement `playSnapshotDrift` proved in Round 280) and writes only the blocks
+all three renders agree on. Nothing in it knows which games are daily, on purpose: a list of
+affected games has been written three times in this repo and each one covered what somebody had
+already found and nothing after.
+
+Measured on the final full run: **13 routes carried date dependent blocks, 11 of them in the
+sitemap**, 43 blocks removed by the second sample and 3 more by the third (the first run
+reported 18, and the difference is the random content described below, which is now frozen
+rather than dropped). Three pages printed the literal date ("Today's lineup, 2026-08-25. Same
+puzzle for everyone." on /missing-xi, "Today's categories" on /rarity-round, "Today's ladder"
+on /sports-millionaire), /missing-xi had all seventeen lines of today's lineup in it, and
+/missing-five, /missing-nine, /missing-eleven and /score-predictor each carried one day's game.
+The sitemap ledger moved 17 dates and held 110, which is the ledger doing its job: the pages
+whose words changed are the pages that re-dated.
+
+Two decisions in there were measured rather than assumed. All three samples are always drawn;
+drawing the third only when the first two disagree would save about ten minutes a run and
+reopen a hole (a page keyed only to the week can agree with itself five days apart, and nothing
+would then ask for the sample that catches it), and the summary line reports what the third
+sample removed over and above the second so that cost stays visible. And the head has to agree
+with itself across samples or the route is not written; that check is what found the next two
+things.
+
+**The race that had been there for twenty eight rounds.** Five routes failed the first run
+because their head disagreed between samples, and on a quiet machine none of them could be made
+to disagree. The head carried the FAQ structured data, which lives in a lazy loaded sport file,
+and the block renders a generic three question fallback until that file lands. A fixed 3.5
+second settle was racing that chunk, and the single sample prerender had been running the same
+race since Round 256 with nothing to notice it. `GameSeoContent` now has three states rather
+than two (in flight, no guide, guide) and marks its section `data-seo-content="loading"` until
+the answer is in, and the prerenderer waits for the mark to clear before it settles. Two more
+transients on the second run, never the same routes twice, so a head disagreement now gets one
+full redraw before it fails the route, and whatever differed is printed so the next one can be
+named rather than guessed at.
+
+**The near miss, reproduced on purpose.** Round 282's soft 404 marker decides a document is a
+dead address by the absence of a snapshot block, and the prerender server hands every route the
+bare template so React can draw into it. Under the prerenderer every page therefore looked like
+a dead address, and the noindex went into the head of every saved document. The marker now
+returns on `window.__DUKB_PRERENDER__`, which the prerenderer sets before any page code runs.
+The fence is `simPrerender` section 14: no document in the sitemap may ship a noindex, read off
+the files with comments and scripts stripped, attribute order not assumed. Both sides carry a
+negative control that was run before anything shipped: `PRERENDER_CONTROL=noflag` leaves the
+flag unset and writes into `dist/` only, and on two routes it produced exactly the noindexed
+documents the original run produced, with a correct title and a single correct canonical, which
+is why thirteen sections passed them; section 14 then went red on both. In the other direction
+`SIM_PRERENDER_CONTROL=noindex` injects one in memory and the harness must report it.
+
+**Random content, frozen the same way every time.** Two full runs on the same day disagreed
+about /mlb-connect-4: its board is picked with `Math.random`, and on one run all three clock
+samples happened to draw the same board out of a small pool, so the line was written, and on the
+other they did not. A random pick is not false, so it does not need dropping; what it must not
+do is change from build to build, which rewrites the file and re-dates the page for nothing. The
+prerenderer now replaces `Math.random` with a seeded generator, same seed on every sample and
+every run, before any page code runs. Verified by rendering the two Connect 4 pages twice and
+comparing bytes: identical. Date driven content is still caught by the clocks; random content is
+simply the same photograph every time.
+
+**Stable structured data order.** The readiness change moved Helmet's mount order, and 79
+documents changed with not one word in them different because two JSON-LD scripts had swapped
+places. The ledger held every one of those dates (it sorts the blocks before hashing), but a diff
+that size hides the seventeen files that really changed. The prerenderer now writes the blocks
+sorted by their own text, so two builds of an unchanged page are the same bytes.
+
+**A threshold measured instead of felt.** `simCreation` section 1 required a 93 ceiling to peak
+more than 4 points above an 84 ceiling and went red on healthy code at exactly 4.0. Over 12 runs
+at the harness's own sample size the gap came out 4.26 to 5.07, an earlier 25 run series
+bottomed at 3.89, and at four times the sample it settles at 4.40 to 4.61. The true gap is about
+four and a half and a 300 career run wobbles by close to half a point either side of it, so the
+floor sat inside the wobble. It is 3 now, with the measurement in the comment.
+
+**The browser harnesses were being served the wrong site.** `runAllSims --browser` served
+`dist/` with `npx serve -s`, and in serve-handler 6.1.7 that flag rewrites every extension-less
+path to `index.html` before it looks at the filesystem, so `/about` answered with the fallback
+even though `dist/about/index.html` was right there. `playSoftFourOhFour` section 4 reported the
+404 marker firing on four real pages; it had not, the server had never handed the browser a real
+page. `scripts/lib/hostLikeServer.mjs` now serves the browser group the way the live host was
+measured to on 2026-08-21: the route's own document if it has one, `index.html` with a 200 if
+not. Both harnesses green on it, along with the boot check, the drift check and the home fold.
+
+**Also cleared while here.** `src/pages/CollegeHub.tsx` is `git rm`'d by RUN270 and RUN272 on
+Anthony's machine, which a zip cannot express, so any clone built by extracting the zips still
+has it and `simHubs` goes red on it. Remove it by hand after extracting. Full node suite on the
+Round 283 tree: 116 harnesses, all green once that file is gone.
+
 ## Round 283: the home page asked for an account four times before it offered a game
 
 He sent a video of five design plugins and said add them. Four of the five are things this repo
@@ -1820,6 +1915,10 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-25** Round 284. Rebuilt from the handoff after the previous session's 284 to 286
+  never reached the folder. Three clock sample prerender, the noindex fence (section 14) with
+  controls on both sides, the guide readiness mark, stable JSON-LD order, the simCreation
+  threshold measured. Pending row rewritten: 258 through 285 wait on `SHIP146.bat`.
 - **2026-08-16** created, as part of Round 134. Pulled the live project state out of assistant
   memory and into the repo so any session or account can pick the project up cold.
 - **2026-08-16** Round 137. Closed the invented-quotes exposure and recorded the guard. Noted

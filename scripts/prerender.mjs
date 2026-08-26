@@ -38,6 +38,17 @@
  *      nothing on it works. No /assets path is written here at all;
  *      /prerender-boot.js reads the real ones off the live root document.
  *
+ *   4. NOTHING COMPUTED FROM THE CLOCK IS WRITTEN (Round 284). Rule 1 covers
+ *      data that arrives over the network and does nothing for a board the
+ *      page works out from the date. Fifteen saved pages carried today's
+ *      puzzle, three of them printing the literal date ("Today's lineup,
+ *      2026-08-24"). Every route is now rendered three times with the
+ *      page's own clock at 0, 5 and 11 days and only the blocks all three
+ *      renders agree on are written. Nothing here knows which games are
+ *      daily, and that is deliberate: a list of affected games has been
+ *      written three times in this repo and each one covered what somebody
+ *      had already found and nothing after.
+ *
  * simPrerender.mjs is the cheap fence: it fails if a route is missing, if
  * two routes share a document, if a page's own words are absent from it, or
  * if any snapshot pins itself to one build. simPrerenderBoot.mjs is the
@@ -59,6 +70,20 @@ const PUBLIC = path.join(ROOT, 'public');
 const PORT = Number(process.env.PRERENDER_PORT || 4310);
 /** how long to let a page draw before the snapshot is taken */
 const SETTLE_MS = Number(process.env.PRERENDER_SETTLE || 3500);
+/* ROUND 284: THE CLOCK SAMPLES, in days from the real date. Every route is
+   drawn once at each and only the blocks all three renders agree on are
+   written. Five days crosses a daily rotation without crossing a season, a
+   transfer window or a year, which is the same shift playSnapshotDrift
+   settled on. Eleven days is a different weekday from both of the others and
+   more than a week clear of the first, so a puzzle keyed to the weekday or
+   to the week cannot agree with all three by luck.
+   All three are always drawn. Drawing the third only where the first two
+   disagree would save about ten minutes a run and reopen exactly that hole:
+   a page keyed only to the week can agree with itself five days apart, and
+   nothing would then ask for the sample that catches it. The run reports
+   what the third sample removed over and above the second, so the cost of
+   keeping it stays measured rather than assumed. */
+const SAMPLE_DAYS = [0, 5, 11];
 
 if (!existsSync(path.join(DIST, 'index.html'))) {
   console.error('No dist/index.html. Run npm run build first.');
@@ -196,73 +221,154 @@ await new Promise(r => server.listen(PORT, r));
    dead browser is a waste, and a fresh page every 25 routes keeps the
    memory flat enough that it stops happening. */
 let browser = null;
-let page = null;
+/* one page per clock sample, all in the same browser */
+let pages = [];
+
+/* ROUND 284: THE PAGE'S OWN CLOCK IS MOVED, NOT THE MACHINE'S. Date is
+   replaced before any of the app's code runs, the same shape
+   playSnapshotDrift proved in Round 280, so everything the page works out
+   from the date, a puzzle seed, a weekday, a "today" label, is worked out
+   from the shifted one. Timers are untouched, so the page draws exactly as
+   it would on that day.
+
+   The same script sets the flag the Round 282 soft 404 marker reads. That
+   marker decides a document is a dead address by the ABSENCE of a snapshot
+   block, and this server hands every route the bare template on purpose, so
+   without the flag every page rendered here looked like a dead address and
+   the noindex went into all 133 saved files. It was caught before it shipped
+   by the fence in simPrerender, section 14, which is the check to keep. */
+/* NEGATIVE CONTROL: PRERENDER_CONTROL=noflag leaves the flag unset, which
+   reproduces the near miss on purpose. The documents it writes go to dist/
+   only, never to public/, so nothing it produces can ship; they exist so that
+   simPrerender section 14 can be seen to fail on real output rather than on
+   a string somebody typed into a test. Pair it with PRERENDER_ONLY. */
+const CONTROL = process.env.PRERENDER_CONTROL || '';
+if (CONTROL && CONTROL !== 'noflag') {
+  console.error(`PRERENDER_CONTROL=${CONTROL} is not a control this script knows`);
+  process.exit(1);
+}
+if (CONTROL) console.log('NEGATIVE CONTROL ON: the prerender flag is NOT set, output goes to dist/ only, and section 14 of simPrerender must go red on it');
+
+/* ROUND 284, SECOND HALF OF THE SAME RULE: RANDOM CONTENT IS MADE THE SAME
+   ON EVERY BUILD. Some pages pick from a pool with Math.random rather than
+   the date (the Connect 4 boards, for one), and the clock samples only catch
+   that by luck: two runs of this script on the same day disagreed about
+   /mlb-connect-4, because on one of them all three samples happened to draw
+   the same board out of a small pool and the line was written. A pick that
+   is random is not false, so it does not need dropping; what it must not do
+   is change from one build to the next, which rewrites the file and re-dates
+   the page for no reason. Math.random is therefore replaced with a seeded
+   generator, the same seed on every sample and every run, before any page
+   code runs. Date driven content is still caught by the three clocks; random
+   content is simply frozen the same way every time. */
+const RANDOM_SEED = 284;
+const clockScript = days => `(() => {
+  ${CONTROL === 'noflag' ? '' : 'window.__DUKB_PRERENDER__ = true;'}
+  (function () {
+    let s = ${RANDOM_SEED} | 0;
+    Math.random = function () {
+      s = (s + 0x6D2B79F5) | 0;
+      let t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  })();
+  const SHIFT = ${days} * 86400000;
+  if (SHIFT === 0) return;
+  const RealDate = Date;
+  const D = function (...a) { return a.length ? new RealDate(...a) : new RealDate(RealDate.now() + SHIFT); };
+  D.now = () => RealDate.now() + SHIFT;
+  D.parse = RealDate.parse;
+  D.UTC = RealDate.UTC;
+  D.prototype = RealDate.prototype;
+  globalThis.Date = D;
+})();`;
 
 async function freshPage() {
-  if (page) { try { await page.close(); } catch { /* already gone */ } }
+  for (const p of pages) { try { await p.context().close(); } catch { /* already gone */ } }
+  pages = [];
   if (browser) { try { await browser.close(); } catch { /* already gone */ } }
   browser = await chromium.launch({
     executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
     args: ['--no-sandbox'],
   });
-  page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  for (const days of SAMPLE_DAYS) {
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    await ctx.addInitScript(clockScript(days));
+    const page = await ctx.newPage();
 
-  /* No visitor's state may end up in a file every visitor receives. The
-     first full pass baked "Your stadium empire: $54 banked" into the ticker
-     on every page, which is this browser's own save talking. Storage is
-     wiped before each document is drawn, so the snapshot shows only what a
-     brand new visitor would see. */
-  await page.addInitScript(() => {
-    try { localStorage.clear(); sessionStorage.clear(); } catch { /* blocked, nothing to clear */ }
-  });
+    /* No visitor's state may end up in a file every visitor receives. The
+       first full pass baked "Your stadium empire: $54 banked" into the ticker
+       on every page, which is this browser's own save talking. Storage is
+       wiped before each document is drawn, so the snapshot shows only what a
+       brand new visitor would see. */
+    await page.addInitScript(() => {
+      try { localStorage.clear(); sessionStorage.clear(); } catch { /* blocked, nothing to clear */ }
+    });
 
-  /* rule 1: let live data hang rather than land. A fulfilled request bakes
-     today's data into a file that outlives today; an aborted one trips the
-     fail-closed error cards into the snapshot. Hanging leaves the normal
-     loading state, which is honest and dateless. */
-  await page.route('**://*.supabase.co/**', () => { /* never settled on purpose */ });
-  await page.route('**://*.googletagmanager.com/**', r => r.abort());
-  await page.route('**://pagead2.googlesyndication.com/**', r => r.abort());
+    /* rule 1: let live data hang rather than land. A fulfilled request bakes
+       today's data into a file that outlives today; an aborted one trips the
+       fail-closed error cards into the snapshot. Hanging leaves the normal
+       loading state, which is honest and dateless. */
+    await page.route('**://*.supabase.co/**', () => { /* never settled on purpose */ });
+    await page.route('**://*.googletagmanager.com/**', r => r.abort());
+    await page.route('**://pagead2.googlesyndication.com/**', r => r.abort());
+    pages.push(page);
+  }
 }
 
 await freshPage();
 
-let written = 0, failed = 0, done = 0, refused = 0;
-for (const route of unique) {
-  const url = `http://127.0.0.1:${PORT}${route}`;
-  if (done > 0 && done % 25 === 0) await freshPage();
-  done += 1;
+/* Draw one route on one of the clock samples and hand back its head and
+   its blocks. The page is looked up by index each time rather than held,
+   because the retry below replaces every page in the browser. */
+async function draw(sample, route, url) {
   try {
-    try {
-      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
-    } catch (first) {
-      /* one retry on a fresh browser: a dead browser fails every remaining
-         route, and losing the whole tail to one crash is how 14 stale
-         snapshots nearly shipped */
-      console.error(`   retrying ${route} on a fresh browser`);
-      await freshPage();
-      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
-    }
-    /* wait for the app to actually mount something, then let the rest of
-       the page paint. #dukb-main is the game shell; the plain pages use
-       their own containers, so a body with real text is the fallback. */
-    await page.waitForFunction(
-      () => (document.body?.innerText ?? '').trim().length > 200,
-      { timeout: 20000 },
-    ).catch(() => {});
-    await page.waitForTimeout(SETTLE_MS);
-    /* THE SNAPSHOT IS DELIBERATELY LIGHT. A full DOM capture measured
-       96KB a page, 11.6MB across the site, which is far too heavy to
-       carry in the repo and would ship in every round's zip forever. A
-       crawler does not need the app's markup, it needs the words, the
-       headings, the links and the head. So the snapshot keeps the built
-       <head> exactly as vite produced it (title, description, canonical,
-       JSON-LD, the script tags) and rebuilds the body as plain semantic
-       HTML holding the page's own readable content in document order.
-       Nothing is added: every string below came off the rendered page.
-       React clears #root on mount, so a real visitor sees this for the
-       instant before the app draws over it. */
-    const payload = await page.evaluate(() => {
+    await pages[sample].goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
+  } catch (first) {
+    /* one retry on a fresh browser: a dead browser fails every remaining
+       route, and losing the whole tail to one crash is how 14 stale
+       snapshots nearly shipped */
+    console.error(`   retrying ${route} on a fresh browser`);
+    await freshPage();
+    await pages[sample].goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
+  }
+  const page = pages[sample];
+  /* wait for the app to actually mount something, then let the rest of
+     the page paint. #dukb-main is the game shell; the plain pages use
+     their own containers, so a body with real text is the fallback. */
+  await page.waitForFunction(
+    () => (document.body?.innerText ?? '').trim().length > 200,
+    { timeout: 20000 },
+  ).catch(() => {});
+  /* ROUND 284: THE PAGE SAYS WHEN ITS GUIDE HAS LANDED, and the capture waits
+     for it. The guide and its FAQ structured data arrive in a lazy chunk, and
+     until they do the block renders a generic three question fallback. A
+     fixed settle was racing that chunk: the first three sample run caught
+     five routes whose head disagreed with itself, every one of them the FAQ
+     markup captured before the chunk on one sample and after it on another.
+     The single sample prerender had been running the same race for twenty
+     eight rounds with nothing to notice it. GameSeoContent now marks its
+     section data-seo-content="loading" until the answer is in (ready covers
+     both a guide and a route that has none), and this waits for the mark to
+     clear. Pages without the block have nothing to wait for. */
+  await page.waitForFunction(
+    () => !document.querySelector('[data-seo-content="loading"]'),
+    { timeout: 15000 },
+  ).catch(() => {});
+  await page.waitForTimeout(SETTLE_MS);
+  /* THE SNAPSHOT IS DELIBERATELY LIGHT. A full DOM capture measured
+     96KB a page, 11.6MB across the site, which is far too heavy to
+     carry in the repo and would ship in every round's zip forever. A
+     crawler does not need the app's markup, it needs the words, the
+     headings, the links and the head. So the snapshot keeps the built
+     <head> exactly as vite produced it (title, description, canonical,
+     JSON-LD, the script tags) and rebuilds the body as plain semantic
+     HTML holding the page's own readable content in document order.
+     Nothing is added: every string below came off the rendered page.
+     React clears #root on mount, so a real visitor sees this for the
+     instant before the app draws over it. */
+  const captured = await page.evaluate(() => {
       for (const el of Array.from(document.querySelectorAll('[role="dialog"]'))) el.remove();
       /* Round 258: anything the app marks data-no-prerender is live or dated
          and must not be frozen into a file that will still be on disk next
@@ -382,9 +488,108 @@ for (const route of unique) {
         const url = el.getAttribute('src') || el.getAttribute('href') || '';
         if (url.startsWith('/assets/')) el.remove();
       }
+      /* ROUND 284: THE STRUCTURED DATA IS WRITTEN IN A STABLE ORDER. Helmet
+         emits head tags in the order the components that own them mounted,
+         and that order moved this round when the guide block started
+         declaring its readiness: 79 documents changed with not one word in
+         them different, because two JSON-LD scripts had swapped places. The
+         sitemap fingerprint already sorts these blocks before hashing, so no
+         date moved, but a diff that big hides the seventeen files that really
+         changed. Two builds of an unchanged page must produce the same bytes,
+         so the blocks are sorted here by their own text, in place, and the
+         mount order can never be seen in a file again. */
+      const lds = Array.from(doc.head.querySelectorAll('script[type="application/ld+json"]'));
+      if (lds.length > 1) {
+        const mark = doc.createComment('ld');
+        lds[0].parentNode.insertBefore(mark, lds[0]);
+        for (const el of lds) el.remove();
+        lds.sort((x, y) => (x.textContent < y.textContent ? -1 : x.textContent > y.textContent ? 1 : 0));
+        for (const el of lds) mark.parentNode.insertBefore(el, mark);
+        mark.remove();
+      }
       head = doc.head.innerHTML;
-      return { head, body: parts.join('\n') };
+      return { head, parts };
     });
+  /* Park the page. An idle sample left on a game page keeps its ticker, its
+     countdown and its animations running while the other two samples draw,
+     which on a small machine is enough to make the settle window mean
+     different things to different samples. */
+  await page.goto('about:blank').catch(() => {});
+  return captured;
+}
+
+let written = 0, failed = 0, done = 0, refused = 0;
+/* what the clock samples removed, for the summary line */
+let volatileRoutes = 0, droppedBySecond = 0, droppedByThird = 0, headRedraws = 0;
+for (const route of unique) {
+  const url = `http://127.0.0.1:${PORT}${route}`;
+  if (done > 0 && done % 25 === 0) await freshPage();
+  done += 1;
+  try {
+    let samples = [];
+    for (let s = 0; s < SAMPLE_DAYS.length; s++) samples.push(await draw(s, route, url));
+    /* THE HEAD HAS TO AGREE WITH ITSELF. Nothing in it is meant to depend on
+       the date, so a head that moves between two clocks is a defect this run
+       does not know how to write around: it fails the route rather than
+       picking one and hoping.
+
+       One redraw first, and it is a redraw of every sample rather than a
+       vote. Two full runs of this script each turned up a couple of routes
+       whose heads disagreed, never the same routes twice, and none of them
+       could be made to disagree on a quiet machine: a transient, not the
+       calendar. A real date dependence survives a redraw; a race does not.
+       Whatever differed is printed either way, so the next transient can be
+       named rather than guessed at. */
+    const headsAgree = xs => xs.every(x => x.head === xs[0].head);
+    if (!headsAgree(samples)) {
+      const tags = h => h.match(/<[^>]+>|[^<]+/g) || [];
+      const a = tags(samples[0].head);
+      for (let i = 1; i < samples.length; i++) {
+        const b = tags(samples[i].head);
+        const onlyA = a.filter(t => !b.includes(t)).slice(0, 3);
+        const onlyB = b.filter(t => !a.includes(t)).slice(0, 3);
+        if (onlyA.length || onlyB.length) {
+          console.error(`   ${route}: head differs between day ${SAMPLE_DAYS[0]} and day ${SAMPLE_DAYS[i]}`);
+          for (const t of onlyA) console.error(`      day ${SAMPLE_DAYS[0]} only: ${t.slice(0, 160)}`);
+          for (const t of onlyB) console.error(`      day ${SAMPLE_DAYS[i]} only: ${t.slice(0, 160)}`);
+        }
+      }
+      headRedraws += 1;
+      await freshPage();
+      samples = [];
+      for (let s = 0; s < SAMPLE_DAYS.length; s++) samples.push(await draw(s, route, url));
+      if (!headsAgree(samples)) {
+        failed += 1;
+        console.error(`   NOT WRITTEN ${route}: its head changes with the clock, so no one version of it is true for long`);
+        continue;
+      }
+      console.error(`   ${route}: the heads agreed on the redraw, so that was a race and not the calendar`);
+    }
+    /* ONLY THE BLOCKS EVERY SAMPLE AGREES ON ARE WRITTEN, in the first
+       sample's order. A block that appears on one date and not another is,
+       by construction, something a file written once cannot hold, and it
+       does not matter whether anybody thought of it in advance. The two
+       counts are kept apart so the third sample's own contribution is
+       visible in the summary. */
+    const first = samples[0].parts;
+    const inSecond = new Set(samples[1].parts);
+    const afterSecond = first.filter(p => inSecond.has(p));
+    let keep = afterSecond;
+    for (const later of samples.slice(2)) {
+      const inLater = new Set(later.parts);
+      keep = keep.filter(p => inLater.has(p));
+    }
+    const lostToSecond = first.length - afterSecond.length;
+    const lostToThird = afterSecond.length - keep.length;
+    if (lostToSecond + lostToThird > 0) {
+      volatileRoutes += 1;
+      droppedBySecond += lostToSecond;
+      droppedByThird += lostToThird;
+      const gone = first.filter(p => !keep.includes(p));
+      const show = gone.slice(0, 2).map(p => JSON.stringify(p.replace(/<[^>]+>/g, '').slice(0, 70))).join(', ');
+      console.log(`   ${route}: ${gone.length} block(s) change with the date and were left out: ${show}`);
+    }
+    const payload = { head: samples[0].head, body: keep.join('\n') };
     const html = [
       '<!DOCTYPE html>',
       '<html lang="en">',
@@ -463,7 +668,7 @@ for (const route of unique) {
       console.error(`   NOT WRITTEN ${route}: it canonicalises somewhere else, so the app navigated away and this is not that page${expected ? ' (expected, it needs an account)' : ''}`);
       continue;
     }
-    for (const base of [DIST, PUBLIC]) {
+    for (const base of (CONTROL ? [DIST] : [DIST, PUBLIC])) {
       const dir = path.join(base, route.replace(/^\//, ''));
       mkdirSync(dir, { recursive: true });
       writeFileSync(path.join(dir, 'index.html'), html);
@@ -480,4 +685,6 @@ await browser.close();
 server.close();
 
 console.log(`prerendered ${written} routes, ${failed} failed${refused ? `, ${refused} hidden routes refused because they need an account` : ''}`);
+console.log(`clock samples at ${SAMPLE_DAYS.join(', ')} days: ${volatileRoutes} route(s) carried date dependent blocks, ${droppedBySecond} removed by the second sample, ${droppedByThird} more by the third`);
+if (headRedraws) console.log(`${headRedraws} route(s) needed a redraw because their heads disagreed the first time`);
 if (failed > 0) process.exit(1);

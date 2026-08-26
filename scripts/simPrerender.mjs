@@ -66,6 +66,29 @@ for (const r of routes) {
 }
 console.log(`   ${docs.size} of ${routes.length} routes have a document`);
 
+/* ROUND 284 NEGATIVE CONTROL for section 14. Run with
+   SIM_PRERENDER_CONTROL=noindex and one sitemap document is given a noindex
+   in memory, which section 14 must then report. The edit is asserted to have
+   landed, because a control that changes nothing proves nothing: an earlier
+   control in this repo replaced a string that was not in the file, stayed
+   green, and green meant "the control did not fire", not "the check works". */
+const CONTROL = process.env.SIM_PRERENDER_CONTROL || '';
+if (CONTROL && CONTROL !== 'noindex') {
+  console.error(`SIM_PRERENDER_CONTROL=${CONTROL} is not a control this harness knows`);
+  process.exit(1);
+}
+if (CONTROL === 'noindex') {
+  const victim = [...docs.keys()].find(r => r !== '/');
+  const before = docs.get(victim);
+  const after = before.replace(/<head>/i, '<head><meta name="robots" content="noindex, follow">');
+  if (after === before) {
+    console.error(`control: could not inject a noindex into ${victim}, so this control would prove nothing`);
+    process.exit(1);
+  }
+  docs.set(victim, after);
+  console.log(`   NEGATIVE CONTROL ON: ${victim} has been given a noindex in memory and section 14 must report it`);
+}
+
 console.log('2) each document is a page, not the empty shell');
 /* the un-prerendered shell measured 7,494 characters of stripped text and
    almost all of it was code comments; a real page runs many times that.
@@ -512,7 +535,70 @@ console.log('13) every computed ticker line declares itself volatile');
   }
 }
 
+/* ── Round 284: a page in the sitemap never ships a noindex ─────────────── */
+/* WHAT NEARLY SHIPPED. Round 282's soft 404 marker decides a document is a
+   dead address by the ABSENCE of a snapshot block, and the prerenderer hands
+   every route the bare template on purpose so React can draw the real page
+   into it. Under the prerenderer every page therefore looked like a dead
+   address, the marker wrote a noindex into the head, and the head is exactly
+   what a snapshot keeps. All 133 saved documents came out asking not to be
+   indexed, the 126 sitemap pages included. Every section above passed,
+   because every section above asks whether a page has its words, its
+   canonical and its links, and none asked whether the page had told the
+   crawler to ignore all of it. A site that ships that has no search
+   presence at all, which is worse than the empty shell Round 256 fixed.
+
+   THE CHECK IS ON THE FILES, NOT ON THE MARKER. The marker is fixed by one
+   line (the prerenderer sets a flag it returns on) and one line is exactly
+   what a refactor loses. Reading the shipped documents holds whatever the
+   mechanism is next time, and whatever the next marker is.
+
+   Comments and scripts are stripped first, for the reason section 11 learned:
+   the template explains the marker in prose that contains the very string this
+   looks for, and a guard that can be tripped by a comment about itself is not
+   measuring the thing it names. The attribute order is not assumed either;
+   name before content is a convention, not a rule.
+
+   SIM_PRERENDER_CONTROL=noindex proves the check can fail. See the top. */
+console.log('14) no page in the sitemap ships a noindex');
+const failuresBefore14 = failures;
+{
+  let noindexed = 0;
+  for (const [r, doc] of docs) {
+    const html = doc
+      .replace(/<!--[\s\S]*?-->/g, ' ')
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ');
+    const directives = [];
+    for (const tag of html.matchAll(/<meta\b[^<>]*>/gi)) {
+      const name = (tag[0].match(/\bname\s*=\s*"([^"]*)"/i) || [])[1] || '';
+      if (name.toLowerCase() !== 'robots') continue;
+      const content = (tag[0].match(/\bcontent\s*=\s*"([^"]*)"/i) || [])[1] || '';
+      directives.push(content);
+    }
+    if (directives.some(c => /\bnoindex\b/i.test(c))) {
+      noindexed += 1;
+      if (noindexed <= 4) fail(`${r} is in the sitemap and ships robots ${JSON.stringify(directives.join('; '))}: it asks Google to come in and to stay away in the same document`);
+    }
+  }
+  if (noindexed > 4) fail(`${noindexed} sitemap documents carry a noindex in all`);
+  console.log(`   ${docs.size} sitemap documents, ${noindexed} carrying a noindex`);
+}
+
 console.log('');
+if (CONTROL === 'noindex') {
+  /* Inverted on purpose: under the control section 14 is SUPPOSED to fail,
+     so a clean section is the bug. Everything else has to stay clean, or a
+     real failure could hide behind the control's expected one. */
+  const caught = failures - failuresBefore14;
+  const elsewhere = failuresBefore14;
+  if (caught > 0 && elsewhere === 0) {
+    console.log(`simPrerender control: green. The injected noindex was reported (${caught} finding), so section 14 works.`);
+    process.exit(0);
+  }
+  if (caught === 0) console.error('simPrerender control: RED. A sitemap page carrying a noindex went unreported, so section 14 proves nothing.');
+  if (elsewhere > 0) console.error(`simPrerender control: RED. ${elsewhere} failure(s) outside section 14, which the control run must not hide.`);
+  process.exit(1);
+}
 if (failures > 0) {
   console.error(`simPrerender: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
