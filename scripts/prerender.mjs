@@ -341,13 +341,35 @@ for (const route of unique) {
       /* The stripped stylesheet comes back through the boot script, which
          means a fraction of a second of unstyled document first. Two lines
          of theme colour make that moment look like the site loading rather
-         than a white page, and they cost nothing. */
-      '<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:16px}a{color:#7dd3fc}</style>',
+         than a white page, and they cost nothing.
+
+         ROUND 271: THE PADDING USED TO BE ON html AND body AND IT NEVER LEFT.
+         This style block sits in the head for the life of the page. Tailwind's
+         reset zeroes body MARGIN and says nothing about body PADDING, so
+         16px on each of html and body survived the real stylesheet loading,
+         survived React mounting, and squeezed the live app by 64 pixels on
+         every one of the 121 prerendered pages. Measured on the live site at
+         390 pixels wide: body 358, and the home page, which is the one route
+         that is not prerendered, 390. It had been shipping since Round 257.
+         Nothing caught it because every check for a layout defect looks for
+         content WIDER than the screen, and this made everything narrower. It
+         only ever surfaced as an overflow on /leaderboard, where the header
+         could not fit into the reduced width, and only once Round 271 taught
+         the sweep to open pages that are not games.
+
+         The padding now lives on a wrapper INSIDE #root, which React throws
+         away the instant it mounts, so it lasts exactly as long as it is
+         useful and not one frame longer. html and body are pinned to zero on
+         purpose rather than left unset, so a future reset that adds padding
+         cannot bring this back. */
+      '<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>',
       '<script src="/prerender-boot.js" defer></script>',
       '</head>',
       '<body>',
       '<div id="root">',
+      '<div id="dukb-snapshot">',
       payload.body,
+      '</div>',
       '</div>',
       '</body>',
       '</html>',

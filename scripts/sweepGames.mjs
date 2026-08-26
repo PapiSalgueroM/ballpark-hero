@@ -45,7 +45,32 @@ const wantSizes = (process.env.SIZES || 'phone,tablet,desktop').split(',').map(s
    ships, with no list to keep in step. */
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';
 const registry = fs.readFileSync(new URL('../src/data/gameRegistry.ts', import.meta.url), 'utf8');
-const routes = [...new Set([...registry.matchAll(/path: '([^']+)'/g)].map(m => m[1]))].sort();
+const gameRoutes = [...new Set([...registry.matchAll(/path: '([^']+)'/g)].map(m => m[1]))];
+
+/* ROUND 271: THE SWEEP COULD NOT SEE A SINGLE PAGE THAT WAS NOT A GAME.
+   Routes came only out of the game registry, which meant the home page, the
+   Record Books, the leaderboard, the changelog, about, contact, privacy,
+   terms and every sport hub had NEVER been opened at 320 pixels by anything.
+   Round 263 found a real overflow bug that shoved whole pages 64 pixels off
+   the side of a phone, on game pages, because game pages are the only thing
+   this walked. Those other pages carry the same shared navbar and the same
+   shared title component and had exactly the same exposure, unmeasured.
+
+   They come out of the SITEMAP now, which is generated from App.tsx and the
+   registry together, so a new page of any kind is swept the day it ships and
+   there is still no hand kept list anywhere. The sitemap is also the honest
+   definition of "a page we are asking the world to visit". */
+const sitemapPath = new URL('../public/sitemap.xml', import.meta.url);
+let sitemapRoutes = [];
+try {
+  sitemapRoutes = [...fs.readFileSync(sitemapPath, 'utf8').matchAll(/<loc>https?:\/\/[^/]+([^<]*)<\/loc>/g)]
+    .map(m => m[1] || '/')
+    .map(r => (r.endsWith('/') && r !== '/' ? r.slice(0, -1) : r));
+} catch {
+  console.log('  NOTE  no public/sitemap.xml, sweeping the registry only. Run node scripts/genSitemap.mjs first.');
+}
+const routes = [...new Set([...gameRoutes, ...sitemapRoutes])].sort();
+console.log(`sweeping ${routes.length} routes (${gameRoutes.length} games, ${routes.length - gameRoutes.length} other pages)`);
 
 
 
@@ -59,12 +84,18 @@ const LEAKS = [
   [/\[object Object\]/, 'renders [object Object]'],
   [/\{\{|\}\}/, 'unsubstituted template braces'],
   // "you are" is correct, so only the third person -s forms are a smell.
-  /* Round 198: "you" has to be the SUBJECT for this to be an error. The
-     sweep flagged "the man ahead of you is as good as your team is", which
-     is correct English: "you" is the object of "ahead of" and the verb
-     belongs to "the man". A preposition in front of "you" now clears it,
-     and a real subject-verb clash ("you is", "you has") still fails. */
-  [/(?<!\b(?:of|to|for|with|than|like|behind|near|beside|against|from|at|on|by|about|around|past|before|after|beyond|below|above|under|over|between|among|through|toward|towards|upon|within|without|into|onto|off)\s)\byou (?:is|has|does|rips|stands|throws|makes|hits|rocks|scans|picks|lies|goes|gets|wins|scores|plays)\b/i, 'second person verb disagreement'],
+  /* Round 198 got the idea right and the method wrong: "you" has to be the
+     SUBJECT for this to be an error, and it tried to establish that by ruling
+     out a list of prepositions in front of it. A blocklist of the ways "you"
+     can be an OBJECT has no end, and Round 271 found the next hole in it. The
+     changelog sentence "A club wanting you is not the same as a club playing
+     you" is perfectly good English, and it failed, because a participle is not
+     a preposition and nobody had thought of participles.
+     So it is stated the other way round now: "you" is the subject when it
+     starts a sentence or follows a clause boundary, which is a SHORT and
+     CLOSED list, and everything else is an object and passes. Checked against
+     nine sentences, four wrong and five right, and it now gets all nine. */
+  [/(?:^|[.,;:!?]\s+|\b(?:and|but|or|if|when|while|that|because|so|then|unless|until|though|although|whether)\s)you (?:is|has|does|rips|stands|throws|makes|hits|rocks|scans|picks|lies|goes|gets|wins|scores|plays)\b/i, 'second person verb disagreement'],
   [/\bInfinity\b/, 'renders Infinity'],
   /* By codepoint, the simEras convention: a harness that hunts dashes
      must not contain one, or the project's own scan flags it. */

@@ -300,6 +300,44 @@ console.log('9) no link is written into a snapshot twice');
   console.log(`   the consumed-anchor guard is in place; ${adjacent} block-then-same-link adjacencies (reported, not asserted on: honest repeat linking looks identical)`);
 }
 
+console.log('10) the snapshot styling does not outlive the snapshot');
+/* ROUND 271, AND THIS ONE WAS LIVE FOR THIRTEEN ROUNDS. Every snapshot carries
+   a small <style> in its head so the readable text looks like the site for the
+   fraction of a second before the real stylesheet arrives. It set padding of
+   16px on html and body. That block stays in the head forever: Tailwind's
+   reset zeroes body MARGIN and says nothing about body PADDING, so the padding
+   survived the stylesheet, survived React mounting, and squeezed the live app
+   by 64 pixels on all 121 prerendered pages. Measured on douknowball.com at a
+   390 pixel viewport: body 358 wide on /records and /leaderboard, and 390 on
+   the home page, which is the one route that is not prerendered.
+
+   Nothing caught it because every layout check on this project hunts content
+   WIDER than the screen and this made everything narrower. The padding lives
+   on a wrapper inside #root now, which React discards on mount. Both halves
+   are asserted: html and body must be pinned to zero padding, and the wrapper
+   must actually be there, because either one alone would let it back. */
+{
+  let leaks = 0, missing = 0;
+  for (const [r, html] of docs) {
+    if (r === '/') continue; /* the home page is served from the template, not a snapshot */
+    const style = (html.match(/<style>([\s\S]*?)<\/style>/) ?? [])[1] ?? '';
+    const rule = style.match(/html,body\{([^}]*)\}/);
+    if (!rule) { fail(`${r}: no html,body boot rule in the snapshot at all, so the shape this checks has changed`); continue; }
+    const pad = rule[1].match(/padding:\s*([^;}]+)/);
+    if (pad && pad[1].trim() !== '0') {
+      leaks += 1;
+      if (leaks <= 3) fail(`${r}: the boot style sets padding ${pad[1].trim()} on html and body, which never goes away and shrinks the live app`);
+    }
+    if (!html.includes('<div id="dukb-snapshot">')) {
+      missing += 1;
+      if (missing <= 3) fail(`${r}: no dukb-snapshot wrapper, so the readable text has no padding before the app mounts`);
+    }
+  }
+  if (leaks > 3) fail(`${leaks} snapshots leak padding onto html and body`);
+  if (missing > 3) fail(`${missing} snapshots have no padded wrapper`);
+  console.log(`   ${docs.size - 1} snapshots, ${leaks} leaking padding onto the live app, ${missing} missing the wrapper`);
+}
+
 console.log('');
 if (failures > 0) {
   console.error(`simPrerender: ${failures} failure${failures === 1 ? '' : 's'}`);
