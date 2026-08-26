@@ -743,7 +743,7 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
-| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 291** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP152.bat` runs all thirty four in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 151) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast, 288 Idle Arena, the first true incremental, plus the rules button off the Back button, 289 Face Off, the duel against a rival or a friend, 290 the manifest that makes the site installable, 291 the Brownlow and the Dally M on the records shelf. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
+| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 292** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP153.bat` runs all thirty five in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 152) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast, 288 Idle Arena, the first true incremental, plus the rules button off the Back button, 289 Face Off, the duel against a rival or a friend, 290 the manifest that makes the site installable, 291 the Brownlow and the Dally M on the records shelf, 292 the Ballon d'Or honours made consistent after two user reports. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
 | PREVIOUS HEAD, FOR CONTEXT | `f848aa0` = Round 253, pushed 2026-08-21 morning and published the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
 | WHY THE BACKLOG SAT FOR WEEKS | **Four separate bugs in the RUN bats, not in the code and not on his machine.** Every one of them made a fail-closed assertion STOP a run that should have passed, so a click that looked like it worked shipped a handful of rounds and quit. All four were reproduced on Windows before being fixed, all four are fixed in the bats on his disk AND in pkg/mkbat.py, and pkg/verifybat.py now refuses to build or bless a bat carrying any of them: (1) FORWARD SLASHES in a findstr file argument: findstr rejects them outright and returns errorlevel 1 exactly as if the pattern were missing, which killed 56 bats at Round 179 every single time; (2) RAW DOUBLE QUOTES in a pattern: cmd ends the quoted argument at the first one, so any assertion quoting real code (an aria-label, a JSX prop, an array of strings) was mangled, killing 10 bats at Round 198; (3) A QUOTE FOLLOWED BY A CMD OPERATOR: cmd counts quotes and does not understand the \" escape, so a `>` after one becomes a redirection, which silently turned RUN209's check into a file write; (4) A PERCENT SIGN in a pattern: cmd strips a lone `%` as variable-expansion syntax, so the assertion hunts for text the file does not contain, which stopped RUN251 on a comment reading "the 40% wash". The empirical tests that proved 1, 2 and 3 are worth repeating if a fifth ever appears: write a throwaway bat that runs the shapes against a known file, log the errorlevels, and read the log. Guessing cost more time than testing. |
@@ -1333,6 +1333,55 @@ arrives, triage it into rounds rather than trying to fix everything in one.
 purge. Awards is still unbuilt. See the roadmap below.
 
 ---
+
+## Round 292: the Ballon d'Or honours come from one truth
+
+Two user reports through the footer button on `/soccer-career`, 2026-08-21 and 2026-08-24, in
+`public.question_reports`: "i won the ballondor and it shows the titles i got are league and
+cup with real madrid, and another real madrid player is second, but he didnt win either of
+those domestic titles and won a ucl", and "a liverpool player might be listed as winning a cup
+and league" when the season said otherwise. The report table is the first place to look for
+work now that the site has traffic; both of these were sitting unread.
+
+**The cause**, in `calculateBallonDor`: every nominee rolled his own honours in private. A star
+at the club the world record had as European champion got "UCL" with probability 0.85, a
+league winner's star got "League" with 0.8, and every nominee anywhere got "Cup" with a flat
+0.15, because no cup winner existed in the record at all. Two men at one club could therefore
+hold different medals, and worse, the world's own draw in `worldSeasonTick` could crown the
+player's club in the league or in Europe when the player's season card said he had won
+nothing: the reconciliation only ran in the winning direction.
+
+**The fix.** `WorldSeason` gains `cups` (league name to cup winner). `worldSeasonTick` takes
+`playerCup` alongside `playerLeagueTitle` and `playerUcl`, and reconciles both ways: if the
+player won it, his club is the winner; if he did not, his club is excluded from the draw. The
+ceremony then reads honours off the record through one `clubHonours(club)` (UCL, League, Cup,
+each if and only if the record says so) and one `intlHonour(nationality)` (World Cup or
+Continental if the summer's champion is that nation), for era stars, generated contenders and
+the rival alike; the random rolls are gone. A save from before this round has no `cups` in its
+record and hands out no cup, which is the safe direction.
+
+**A second bug the fix exposed.** With consistent honours the field holds more medals, and
+`simBallonDorFairness` promptly found a 43 goal, 14 assist league winner finishing third
+behind a treble. Not because of the treble: `fieldTopGoals` and `fieldBest` were computed over
+every name the era pool produced, and a 44 goal forward at a mid table club sat outside the
+shortlist on the points formula (goals cap at 28 points there) and was still counted as "the
+field", so `outscoredEveryone` was false for a player who had outscored everyone on the stage.
+Both are computed over the visible ten now, which is also what the harness measures.
+
+**Held by `simBallonDorTruth`** (new, seeded, 2 seconds): 300 careers driven through the
+engine's own phase machine to 1,465 ceremonies and 13,863 nominees. Rule 1, a nominee holds
+exactly his club's honours, checked against the world record; rule 2, the player's card is the
+record, in both directions, on the 916 ceremonies where his club is inside it; rule 3, the
+summer's champions are the players from the nation that won; rule 4, the counts are printed
+and floored so the check cannot pass vacuously. Run against the Round 291 engine it reports
+5,766 failures; against this one, none. `BDOR_CONTROL=roll` hands one nominee a cup his club
+did not win, in memory, and rule 1 must go red. `simBallonDorFairness`, `simWorld`, `simPhone`
+and `simPhone2` stay green.
+
+**Reports carry the guess now.** The third open report (2026-08-19, Transfer Path, "Wrong
+answer", Yaya Toure to Lamine Yamal) cannot be acted on because it says which puzzle and
+nothing else. `TransferPathBoard` keeps the last refused name and who it was meant to follow
+and sends both, with the chain so far, in the report context.
 
 ## Round 291: the Brownlow and the Dally M join the records shelf
 
@@ -1997,6 +2046,16 @@ reaches a match in Club Manager (120).
 
 ## Open bugs
 
+**Read `public.question_reports` first.** Since the site has had traffic, people have been
+using the footer button and the per game report button, and the rows were sitting unread:
+Round 292 came out of two of them. Ten were unresolved on 2026-08-25; the two Ballon d'Or
+ones are fixed by Round 292 (mark them resolved once it is live), the Transfer Path one
+(2026-08-19, tp-19) needs the guess, which reports carry from Round 292 on, and the older
+ones (Missing XI "LW was literally the player", NBA Connect 4 "anything you pick is wrong",
+Soccer Grid sg-678 Roberto Carlos and R9 refused, world-xi, higher-lower-transfers "outdated")
+are worth a look each with the validator logs beside them.
+
+
 **The whole table was swept in Round 226 (2026-08-20). Every row resolved or investigated:**
 
 | Was | Resolution |
@@ -2299,6 +2358,10 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-25** Round 292. Ballon d'Or honours read off the world record (cups added, reconciled
+  both ways), dominance judged against the shortlist, simBallonDorTruth with BDOR_CONTROL=roll,
+  Transfer Path reports carry the refused guess. Pending row: 258 through 292 wait on
+  `SHIP153.bat`.
 - **2026-08-25** Round 291. afl_brownlow (112) and nrl_dally_m (47) tables, two-source verified;
   Record Books sections, Name Them All lists, Champ or Not competitions, fences. The
   exec_sql hole (closed in Round 289's notes) came out of this round's advisor run. Pending

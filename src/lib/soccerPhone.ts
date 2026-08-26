@@ -138,6 +138,9 @@ export interface WorldSeason {
   ucl: string;
   /** League name to champion club. */
   leagues: Record<string, string>;
+  /** Round 292: league name to domestic cup winner. Absent on saves from before
+   *  this round, which the ceremony reads as "no cup honours to hand out". */
+  cups?: Record<string, string>;
   moves: WorldMove[];
   topScorer: { who: string; club: string; goals: number; league: string } | null;
   /** International tournament result, when the summer produced one. */
@@ -1593,7 +1596,7 @@ export function worldClubOf(s: CareerState, name: string): string | null {
  */
 export function worldSeasonTick(
   s: CareerState,
-  opts: { year: number; playerLeagueTitle: boolean; playerUcl: boolean },
+  opts: { year: number; playerLeagueTitle: boolean; playerUcl: boolean; playerCup?: boolean },
 ): WorldSeason {
   const p = ensurePhone(s);
   const rng = new Rng(p.seed || (Math.floor(Math.random() * 4294967295) >>> 0) || 11);
@@ -1652,18 +1655,32 @@ export function worldSeasonTick(
     moves.push({ who: st.name, from, to, fee });
   }
 
-  /* League champions and the Champions League. Uniform over the era's title
-     contenders, which is exactly what the Ballon d'Or used to do inline. */
+  /* League champions, domestic cups and the Champions League. Uniform over
+     the era's title contenders, which is exactly what the Ballon d'Or used to
+     do inline.
+
+     ROUND 292: THE PLAYER'S OWN SEASON WINS EVERY ARGUMENT, IN BOTH DIRECTIONS.
+     Before this round a player at Real Madrid whose season card said no league
+     title could still open the ceremony to find Real Madrid crowned champions
+     of Europe or Spain, because the draw below did not know to look away from
+     his club; and no cup winner existed at all, so the ceremony rolled a
+     private 15% "Cup" for every nominee. Two people reported the shape of it
+     from the footer button. Now: if the player won it, his club is the winner;
+     if he did not, his club cannot be drawn as the winner. */
+  const notMine = (clubs: string[], won: boolean): string[] => {
+    if (won) return [s.currentClub];
+    const rest = clubs.filter(c => c !== s.currentClub);
+    return rest.length ? rest : clubs;
+  };
+  const draw = (clubs: string[]): string => clubs[Math.floor(rng.next() * clubs.length)];
   const leagueWinners: Record<string, string> = {};
+  const cupWinners: Record<string, string> = {};
   for (const [name, clubs] of Object.entries(leagues)) {
-    leagueWinners[name] = clubs[Math.floor(rng.next() * clubs.length)];
+    const mine = name === s.currentLeague;
+    leagueWinners[name] = draw(mine ? notMine(clubs, opts.playerLeagueTitle) : clubs);
+    cupWinners[name] = draw(mine ? notMine(clubs, !!opts.playerCup) : clubs);
   }
-  let ucl = topClubs[Math.floor(rng.next() * topClubs.length)];
-  // What actually happened to the player wins any argument.
-  if (opts.playerUcl) ucl = s.currentClub;
-  if (opts.playerLeagueTitle && leagueWinners[s.currentLeague] !== undefined) {
-    leagueWinners[s.currentLeague] = s.currentClub;
-  }
+  const ucl = draw(notMine(topClubs, opts.playerUcl));
 
   /* Top scorer: one of the era's forwards, at whatever club he plays for in
      THIS sim, with a goal count inside his own range. */
@@ -1681,7 +1698,7 @@ export function worldSeasonTick(
     ? { name: t.name, champion: t.champion }
     : null;
 
-  const world: WorldSeason = { year, ucl, leagues: leagueWinners, moves, topScorer, intl };
+  const world: WorldSeason = { year, ucl, leagues: leagueWinners, cups: cupWinners, moves, topScorer, intl };
   p.world = world;
 
   /* Feed lines. Every one of them is read straight off `world`. */

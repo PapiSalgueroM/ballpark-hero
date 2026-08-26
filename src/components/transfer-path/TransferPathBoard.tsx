@@ -26,6 +26,11 @@ export function TransferPathBoard() {
 
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
+  /* Round 292: a report from this page used to arrive as "Wrong answer" with the two
+     endpoints and nothing else (2026-08-19, Yaya Toure to Lamine Yamal), which cannot
+     be acted on: the thing to check is the name the graph refused and who it was
+     meant to follow. Kept here and sent with the report. */
+  const [lastRejected, setLastRejected] = useState<{ name: string; after: string } | null>(null);
   const [showHint, setShowHint] = useState(false);
 
   const allNames = useMemo(() => getAllPlayerNames(), [getAllPlayerNames]);
@@ -40,6 +45,7 @@ export function TransferPathBoard() {
     const result = addPlayer(name);
     if (!result.ok) {
       setError(`${name} doesn't share a club with ${chain[chain.length - 1]}`);
+      setLastRejected({ name, after: chain[chain.length - 1] });
     }
   };
 
@@ -234,7 +240,7 @@ export function TransferPathBoard() {
 
         <ReportQuestion
           gameType="transfer-path"
-          gameContext={{ puzzleId: puzzle.id, playerA: puzzle.playerA, playerB: puzzle.playerB }}
+          gameContext={{ puzzleId: puzzle.id, playerA: puzzle.playerA, playerB: puzzle.playerB, chain, lastRejected }}
         />
       </div>
 

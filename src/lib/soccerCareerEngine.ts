@@ -4985,6 +4985,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     year: thisYear,
     playerLeagueTitle: season.leagueTitle,
     playerUcl: season.championsLeague,
+    playerCup: season.domesticCup,
   });
 
   // Ballon d'Or calculation
@@ -5860,7 +5861,31 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   for (const [league, clubs] of Object.entries(eraLeagues)) {
     leagueWinners[league] = world?.leagues?.[league] ?? pick(clubs);
   }
-  const isWorldCupYear = year % 4 === 2;
+  /* Round 292: a club's honours are a fact of the season, read once and
+     handed to every nominee who plays there. Until this round each nominee
+     rolled for them privately (85% for a UCL his club had won, 80% for a
+     league, and a flat 15% for a cup nobody had decided), so two men at the
+     same club could open the ceremony holding different medals, and a club
+     could be champions of Europe on the same screen where its own player,
+     whose season card said otherwise, had nothing. The world record is
+     reconciled with the player's season before this runs, so his club's
+     honours here are exactly his own. A save from before this round has no
+     cup record, and hands out no cup. */
+  const cupWinners: Record<string, string> = world?.cups ?? {};
+  const clubHonours = (club: string): string[] => {
+    const t: string[] = [];
+    if (club === uclWinnerClub) t.push("UCL");
+    const lg = getClubLeagueEra(club, eraLeagues);
+    if (lg && leagueWinners[lg] === club) t.push("League");
+    if (lg && cupWinners[lg] === club) t.push("Cup");
+    return t;
+  };
+  /* the summer's champions: a nominee of that nationality was in that squad */
+  const intlHonour = (nationality: string): string | null => {
+    const it = world?.intl;
+    if (!it || it.champion !== nationality) return null;
+    return it.name === "World Cup" ? "World Cup" : "Continental";
+  };
 
   // --- Player eligibility ---
   const isLowTierClub = state.currentClubTier >= 3;
@@ -5902,13 +5927,10 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
          him to. One truth, shared with the phone's transfer feed. */
       const starClub = worldClubOf(state, star.name) ?? star.club;
 
-      // Assign trophies based on this season's era-correct winners, no conflicts
-      const trophies: string[] = [];
-      if (starClub === uclWinnerClub && Math.random() < 0.85) trophies.push("UCL");
-      const starLeague = getClubLeagueEra(starClub, eraLeagues);
-      if (starLeague && leagueWinners[starLeague] === starClub && Math.random() < 0.8) trophies.push("League");
-      if (isWorldCupYear && Math.random() < 0.04) trophies.push("World Cup");
-      if (Math.random() < 0.15) trophies.push("Cup");
+      // The honours are the club's, read off the season record, not rolled
+      const trophies = clubHonours(starClub);
+      const starIntl = intlHonour(star.nationality);
+      if (starIntl) trophies.push(starIntl);
 
       const overall = clamp(82 + star.power + rand(-2, 2), 78, 96);
       const pts = calcBdorPoints(goals, assists, overall, 1, trophies, starClub, eraTopClubs) + star.power * rand(1, 3);
@@ -5925,12 +5947,9 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       usedNames.add(gen.name);
       const goals = rand(gen.baseGoals[0], gen.baseGoals[1]);
       const assists = rand(3, 18);
-      const trophies: string[] = [];
-      if (gen.club === uclWinnerClub && Math.random() < 0.85) trophies.push("UCL");
-      const genLeague = getClubLeagueEra(gen.club, eraLeagues);
-      if (genLeague && leagueWinners[genLeague] === gen.club && Math.random() < 0.8) trophies.push("League");
-      if (isWorldCupYear && Math.random() < 0.04) trophies.push("World Cup");
-      if (Math.random() < 0.15) trophies.push("Cup");
+      const trophies = clubHonours(gen.club);
+      const genIntl = intlHonour(gen.nationality);
+      if (genIntl) trophies.push(genIntl);
       const overall = clamp(rand(83, 93), 75, 95);
       const pts = calcBdorPoints(goals, assists, overall, 1, trophies, gen.club, eraTopClubs);
       allNomineeData.push({
@@ -5944,11 +5963,10 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   if (state.rival && !state.rival.retired && state.rival.clubTier <= 2) {
     const rivalGoals = state.rival.careerGoals > 0 ? rand(12, 30) : rand(5, 15);
     const rivalAssists = rand(3, 12);
-    const rivalTrophies: string[] = [];
-    // Check if rival's club won trophies this season
-    if (state.rival.club === uclWinnerClub && Math.random() < 0.8) rivalTrophies.push("UCL");
-    const rivalLeague = getClubLeagueEra(state.rival.club, eraLeagues);
-    if (rivalLeague && leagueWinners[rivalLeague] === state.rival.club && Math.random() < 0.75) rivalTrophies.push("League");
+    // The rival holds whatever his club won this season, nothing rolled
+    const rivalTrophies = clubHonours(state.rival.club);
+    const rivalIntl = intlHonour(state.rival.nationality);
+    if (rivalIntl) rivalTrophies.push(rivalIntl);
     const rivalPts = calcBdorPoints(rivalGoals, rivalAssists, state.rival.overall, state.rival.clubTier, rivalTrophies, state.rival.club, eraTopClubs);
     allNomineeData.push({
       name: state.rival.name, nationality: state.rival.nationality, position: state.rival.position,
@@ -5984,7 +6002,18 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   const playerProduction = productionScore(season.goals, season.assists, playerTrophies);
   // Nominees do not expose assists, so give every one of them a generous
   // benefit-of-the-doubt assist total (12) rather than assuming zero.
-  const fieldBest = allNomineeData.reduce(
+  /* Round 292: "the field" is the ten men the ceremony puts on screen, not
+     every name the era pool produced. A 44 goal forward at a mid table club
+     sits outside the shortlist on the points formula (goals are capped at 28
+     points there) and nobody ever sees him, yet he was quietly counted as
+     "the field" here, so a player who outscored every nominee on the stage
+     and won the league could still be told he had not outscored everyone.
+     Measured by simBallonDorFairness the round the honours were made
+     consistent: 43 goals, 14 assists and a title finished third behind a
+     treble, because of a forward who was not on the shortlist. The harness
+     and the engine now judge the same ten. */
+  const visibleField = allNomineeData.slice(0, 10);
+  const fieldBest = visibleField.reduce(
     (mx, n) => Math.max(mx, productionScore(n.goals, 12, n.trophies)),
     0,
   );
@@ -5992,7 +6021,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   const trebleSeason = season.leagueTitle && season.championsLeague && season.domesticCup;
   const statMonster = gaTotal >= 55 || season.goals >= 45 || (gaTotal >= 45 && (season.leagueTitle || season.championsLeague || season.worldCup));
   // Outscored every single nominee, the plainest version of "best stats".
-  const fieldTopGoals = allNomineeData.reduce((mx, n) => Math.max(mx, n.goals), 0);
+  const fieldTopGoals = visibleField.reduce((mx, n) => Math.max(mx, n.goals), 0);
   const outscoredEveryone = season.goals > fieldTopGoals;
   const wonMajor = season.leagueTitle || season.championsLeague || season.worldCup || !!season.continentalCup;
   // Led the world on production, or outscored the entire field while winning a
