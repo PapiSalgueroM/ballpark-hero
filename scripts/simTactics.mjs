@@ -38,9 +38,24 @@ const check = (ok, label, detail) => {
   else { fails.push(`${label} :: ${detail}`); console.log(`   FAIL ${label}  ${detail}`); }
 };
 
+/* Round 274: an engine that is not installed must SKIP LOUDLY, not kill the
+   run. WebKit cannot be installed in this sandbox (the download fails, and
+   docs/PROJECT-STATE.md has said so for many rounds), so this harness has been
+   dying on webkit.launch() every time the browser board runs, AFTER completing
+   its chromium passes. The board then reported the whole harness as a failure
+   and the chromium findings, which are the ones that exist, went in the bin
+   with it. A machine that does have WebKit still runs it: this catches the
+   launch rather than hardcoding chromium. */
 const launch = (name) => name === 'chromium'
   ? chromium.launch({ executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--no-sandbox', '--no-proxy-server'] })
   : webkit.launch();
+const launchOrSkip = async (name) => {
+  try { return await launch(name); }
+  catch (e) {
+    console.log(`   SKIPPED ${name}, it is not installed here: ${String(e).split('\n')[0].slice(0, 90)}`);
+    return null;
+  }
+};
 
 /** Walk a fresh save all the way to the tactics pitch. */
 async function openTactics(ctx) {
@@ -95,7 +110,8 @@ const centreOf = (page, slot) => page.$eval(`[data-cm-slot="${slot}"]`, e => {
 
 for (const engine of wantEngines) {
   console.log(`\n================ ${engine} ================`);
-  const browser = await launch(engine);
+  const browser = await launchOrSkip(engine);
+  if (!browser) continue;
 
   /* ---------- 1. real pointer drag with a mouse ---------- */
   console.log('\n1) Dragging a player across the pitch with a real pointer');

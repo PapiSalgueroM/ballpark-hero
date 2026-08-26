@@ -743,7 +743,7 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
-| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 273** are packaged, md5 verified on his disk, and NOT pushed. **`SHIP132.bat` runs all sixteen in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 131) is a subset of the same queue and can be ignored. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
+| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 274** are packaged, md5 verified on his disk, and NOT pushed. **`SHIP133.bat` runs all seventeen in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 132) is a subset of the same queue. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
 | PREVIOUS HEAD, FOR CONTEXT | `f848aa0` = Round 253, pushed 2026-08-21 morning and published the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
 | WHY THE BACKLOG SAT FOR WEEKS | **Four separate bugs in the RUN bats, not in the code and not on his machine.** Every one of them made a fail-closed assertion STOP a run that should have passed, so a click that looked like it worked shipped a handful of rounds and quit. All four were reproduced on Windows before being fixed, all four are fixed in the bats on his disk AND in pkg/mkbat.py, and pkg/verifybat.py now refuses to build or bless a bat carrying any of them: (1) FORWARD SLASHES in a findstr file argument: findstr rejects them outright and returns errorlevel 1 exactly as if the pattern were missing, which killed 56 bats at Round 179 every single time; (2) RAW DOUBLE QUOTES in a pattern: cmd ends the quoted argument at the first one, so any assertion quoting real code (an aria-label, a JSX prop, an array of strings) was mangled, killing 10 bats at Round 198; (3) A QUOTE FOLLOWED BY A CMD OPERATOR: cmd counts quotes and does not understand the \" escape, so a `>` after one becomes a redirection, which silently turned RUN209's check into a file write; (4) A PERCENT SIGN in a pattern: cmd strips a lone `%` as variable-expansion syntax, so the assertion hunts for text the file does not contain, which stopped RUN251 on a comment reading "the 40% wash". The empirical tests that proved 1, 2 and 3 are worth repeating if a fifth ever appears: write a throwaway bat that runs the shapes against a known file, log the errorlevels, and read the log. Guessing cost more time than testing. |
@@ -868,6 +868,69 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-22 | **Round 271** (EVERY PRERENDERED PAGE ON THE LIVE SITE WAS 64 PIXELS NARROWER THAN THE SCREEN, AND HAD BEEN SINCE ROUND 257. The snapshot head carries a small boot `<style>` so the readable text looks like the site for the moment before the real stylesheet arrives. It set `padding:16px` on html AND body. That block never leaves the head, and Tailwind's reset zeroes body MARGIN and says nothing about body PADDING, so the padding survived the stylesheet, survived React mounting, and squeezed the LIVE APP by 32px a side on all 121 prerendered pages. MEASURED ON douknowball.com AT 390px: body 358 on /records and /leaderboard, 390 on the home page, which is the one route that is not prerendered. That is 8% of a phone screen, on 121 of 122 pages, for thirteen rounds. WHY NOTHING CAUGHT IT: every layout check on this project hunts content WIDER than the viewport, because that is what makes a page slide sideways. This made everything NARROWER, which no check was looking for. FIX: the padding moved to `<div id="dukb-snapshot">` INSIDE #root, which React discards on mount, so it lasts exactly as long as it is useful; html and body are pinned to `padding:0` rather than left unset, so a future reset cannot bring it back. Verified after: body 390 of 390 on six sampled routes and the wrapper gone from the DOM once mounted. HOW IT WAS FOUND, which is the other half of the round: `scripts/sweepGames.mjs` took its routes from the GAME REGISTRY ONLY, so the home page, Record Books, leaderboard, changelog, about, contact, privacy, terms and every sport hub had NEVER been opened at 320px by anything. Round 263 found a real overflow that shoved whole pages 64px off a phone, on game pages, because game pages were all it walked. The sweep reads the SITEMAP now (generated from App.tsx plus the registry, so still no hand kept list): 139 routes instead of 125. First run with the non-game pages in it: /leaderboard overflowed 33px at 320, because the squeezed width could no longer fit the header's Log In and Sign Up. ALSO FIXED, A WOLF: the sweep's second-person verb check flagged the changelog sentence "A club wanting you is not the same as a club playing you", which is correct English. Round 198 had tried to establish subject position with a BLOCKLIST of prepositions, and a blocklist of the ways "you" can be an object has no end; it is stated the other way round now (a subject follows a clause boundary, a short closed list), checked against nine sentences, four wrong and five right, and it gets all nine. simPrerender gains section 10: no snapshot may leak padding onto html or body, and every snapshot must carry the wrapper, both asserted because either alone lets it back. Gates: tsc zero, simPrerender green, sweep clean, full sim board green, build green, all 126 routes re-prerendered.) `RUN271.bat`, chain-guarded on 270. **SHIP130.bat runs 258 through 271.** |
 | Next free round number | **272** (check the folder first before taking it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
+
+### ⚠ Every page was shipping TWO canonicals (Round 274, caught just in time)
+
+**126 of the 134 shipped documents carried two `rel="canonical"` tags**: `https://douknowball.com/`
+first, then their own. Google's stated behaviour for conflicting canonicals is to ignore all of
+them, and a crawler that simply takes the first was being told that `/privacy`, `/soccer-career`
+and every other page on this site IS the home page.
+
+Cause: Round 265 hardcoded a canonical to the home page in `index.html`, correctly, because the
+home page is the one route that is not prerendered and had no other way to declare one. But
+Helmet ADDS a canonical rather than replacing a static one, and every snapshot captures the head
+after the app has rendered, so both went into the file.
+
+**It never reached the live site**, because it sat inside the unpushed queue the whole time. Had
+`SHIP132` been clicked before this was found, all 126 pages would have gone out contradicting
+themselves, which would have undone most of what rounds 265 to 272 were for.
+
+Nothing caught it for nine rounds because every check asked whether a canonical was PRESENT and
+none asked how many there were. `scripts/simPrerender.mjs` section 11 now asserts exactly one per
+document, negative controlled both ways (two canonicals, and none).
+
+Fixed in `PageSeo`, which removes any canonical the page did not author once it mounts. One
+mechanism rather than two, and it fixes the live DOM as well as the snapshot. The home page loses
+nothing: PageSeo on `/` emits the same URL, and a crawler that runs no JavaScript never gets that
+far and keeps the template's tag, which is exactly why Round 265 put it there.
+
+### ⚠ A running clock was frozen into 90 shipped pages (Round 274)
+
+90 of the 134 shipped documents carried `Next puzzle in 22:04:46`, the daily countdown captured
+at the instant the snapshot was taken. Round 256's rule is explicit that no dated figure may be
+frozen into a file that will still be on disk next month, and this broke it in the most literal
+way possible.
+
+The second cost was invisible and worse for the process: it made every snapshot
+**non deterministic**. Re-rendering one route twice produced two different files, so every
+round's zip carried up to 90 files of pure countdown churn, which buries whatever actually
+changed and makes a byte comparison useless as a review tool.
+
+Fixed with `data-no-prerender`, the mechanism Round 258 built for exactly this and which the
+ticker's real world fixture lines already use. A visitor still sees the clock; only the copy a
+crawler reads leaves it out. Verified: 90 to 0, and re-rendering one route twice now produces
+byte identical files. Guarded by `simPrerender` section 12, negative controlled.
+
+### ⚠ Eight browser harnesses could not run at all (Round 274)
+
+The full board with `--browser` is rarely run. When Round 274 ran it, 29 of 37 passed and **8
+failed for reasons that had nothing to do with the site**. Both causes are worth knowing:
+
+- **Six died on `waitUntil: 'networkidle'`**, which on this site can never be reached.
+  Measured with pending-request logging: `/` had 6 requests still open, `/records` 10, all of
+  them Supabase, which HANGS rather than fails when there is no egress. It is not only a sandbox
+  problem: `useDailyLegend` opens a realtime websocket, and an open socket means a page that
+  mounts it is never network idle anywhere. Those six now abort Supabase requests instead of
+  letting them hang. **`playIndexing` was one of them, and the moment it could run it found the
+  duplicate canonical above.** A harness that cannot run is worse than no harness, because
+  everyone assumes it is watching.
+- **Two died launching WebKit**, which cannot be installed here and never could. They skip
+  loudly now and keep their chromium results, instead of throwing away a completed chromium pass.
+
+A third problem surfaced only once the first was fixed: `sweepPhone` and `sweepContrast` drive one
+browser through every route on the site, and chromium runs this container out of memory partway
+through. Both recreate the browser every 25 routes now, the same fix and the same number the
+prerenderer has used since Round 257.
 
 ### /soccer-career was shipping the whole Club Manager engine (Round 273, measured)
 

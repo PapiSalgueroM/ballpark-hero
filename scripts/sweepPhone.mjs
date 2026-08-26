@@ -64,15 +64,37 @@ const iPhone = devices['iPhone 13'] ?? {
   userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
 };
 
-const browser = await chromium.launch();
-const ctx = await browser.newContext({ ...iPhone });
-const page = await ctx.newPage();
+/* Round 274: recreate the browser every 25 routes. One browser, one context
+   and one page navigating 139 times runs this container out of memory: the
+   sweep measured 66 routes cleanly, then chromium died and every remaining
+   route reported "Target page, context or browser has been closed", which the
+   harness counted as 78 failures on pages that are fine. Same symptom and same
+   fix as the prerenderer in Round 257, which recreates its browser every 25
+   pages for exactly this reason. Recycling can only make a run slower, never
+   make a finding wrong. */
+const RECYCLE_EVERY = 25;
+let browser = await chromium.launch();
+let ctx = await browser.newContext({ ...iPhone });
+let page = await ctx.newPage();
+/* Round 274: Supabase is unreachable outside a browser with egress, and its
+     requests then HANG rather than fail, so waitUntil networkidle can never be
+     reached and this harness timed out at 30 seconds before asserting anything.
+     Measured: / had 6 requests still open, /records 10, all of them Supabase.
+     It is not only a sandbox problem: the daily legend hook opens a realtime
+     websocket, and an open socket means a page that mounts it can never be
+     network idle anywhere. Aborting is closer to what an offline visitor gets
+     than hanging is, and it makes this harness deterministic. */
+  await page.route('**://*.supabase.co/**', r => r.abort());
 const pageErrors = [];
-page.on('pageerror', e => pageErrors.push(String(e)));
+const wirePage = () => {
+  page.on('pageerror', e => pageErrors.push(String(e)));
+  return page.route('**://*.supabase.co/**', r => r.abort());
+};
+await wirePage();
 
 /* The consent bar eats the first tap on a fresh context, so it is dealt
    with once rather than on every page. */
-await page.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 20000 });
 await page.waitForTimeout(600);
 const consent = page.locator('button:has-text("Essential only")');
 if (await consent.count()) { await consent.first().click().catch(() => {}); await page.waitForTimeout(300); }
@@ -82,7 +104,20 @@ console.log(`Sweeping ${ROUTES.length} routes at 390x844 with touch`);
 const worst = { overflow: 0, route: '' };
 let smallTargets = 0, tinyText = 0, overlaps = 0, checked = 0;
 
+let sinceRecycle = 0;
 for (const route of ROUTES) {
+  if (sinceRecycle >= RECYCLE_EVERY) {
+    await browser.close().catch(() => {});
+    browser = await chromium.launch();
+    ctx = await browser.newContext({ ...iPhone });
+    page = await ctx.newPage();
+    await wirePage();
+    await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => {});
+    const c = page.locator('button:has-text("Essential only")');
+    if (await c.count()) { await c.first().click().catch(() => {}); await page.waitForTimeout(300); }
+    sinceRecycle = 0;
+  }
+  sinceRecycle += 1;
   let metrics;
   try {
     await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 20000 });

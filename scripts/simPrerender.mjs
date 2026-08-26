@@ -338,6 +338,64 @@ console.log('10) the snapshot styling does not outlive the snapshot');
   console.log(`   ${docs.size - 1} snapshots, ${leaks} leaking padding onto the live app, ${missing} missing the wrapper`);
 }
 
+/* ── Round 274: exactly one canonical per document ────────────────────── */
+/* Round 265 put a hardcoded canonical to the home page in index.html, for the
+   one route that is not prerendered and has no other way to declare one. It was
+   right for that page and quietly wrong for every other, because Helmet ADDS a
+   canonical rather than replacing a static one, so 126 of the 134 shipped
+   documents went out carrying two: the home page's first and their own second.
+   Google ignores conflicting canonicals, and a crawler that simply takes the
+   first was being told every page on this site IS the home page. It never
+   reached the live site because it sat in the unpushed queue. Nothing caught
+   it for nine rounds: every check here asked whether a canonical was PRESENT
+   and none asked how many there were. */
+console.log('11) exactly one canonical per shipped document');
+{
+  let worst = 0, offenders = 0;
+  for (const [r, html] of docs) {
+    const n = (html.match(/rel="canonical"/g) || []).length;
+    if (n > 1) {
+      offenders += 1;
+      worst = Math.max(worst, n);
+      if (offenders <= 4) {
+        const hrefs = [...html.matchAll(/<link[^>]+rel="canonical"[^>]+href="([^"]+)"/g)].map(m => m[1]);
+        fail(`${r} ships ${n} canonical tags (${hrefs.join(' and ')}), and a crawler taking the first is told this page is ${hrefs[0]}`);
+      }
+    }
+    if (n === 0) fail(`${r} ships no canonical at all`);
+  }
+  console.log(`   ${docs.size} documents, ${offenders} with more than one canonical, worst ${worst || 1}`);
+}
+
+/* ── Round 274: no running clock is frozen into a saved page ──────────── */
+/* 90 of the 134 shipped documents carried "Next puzzle in 22:04:46", a live
+   countdown captured at the instant the snapshot was taken. It is wrong within
+   a second of being written and absurd by the time anyone reads it, which is
+   exactly what Round 256's rule against freezing dated data forbids. It also
+   made every snapshot non deterministic: re-rendering one route twice produced
+   two different files, so each round's zip carried 90 files of countdown churn
+   that buried whatever had actually changed. The countdown is marked
+   data-no-prerender now, the mechanism Round 258 built for this.
+
+   The pattern is narrow on purpose. A short line whose text is a running clock
+   is ephemeral by definition; a scoreline is 2-1 and a match clock is 45:00,
+   neither of which is hh:mm:ss. */
+console.log('12) no shipped page has a running clock frozen into it');
+{
+  const CLOCK = /\b\d{1,2}:\d{2}:\d{2}\b/;
+  let frozen = 0;
+  for (const [r, html] of docs) {
+    for (const m of html.matchAll(/<(p|li|td|h[1-4])>([^<]{0,80})<\/\1>/g)) {
+      if (CLOCK.test(m[2])) {
+        frozen += 1;
+        if (frozen <= 4) fail(`${r} has a live clock frozen into it: ${JSON.stringify(m[2].trim().slice(0, 50))}`);
+        break;
+      }
+    }
+  }
+  console.log(`   ${docs.size} documents, ${frozen} carrying a frozen clock`);
+}
+
 console.log('');
 if (failures > 0) {
   console.error(`simPrerender: ${failures} failure${failures === 1 ? '' : 's'}`);

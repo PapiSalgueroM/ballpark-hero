@@ -257,11 +257,39 @@ function routes() {
 }
 const ROUTES = process.env.ROUTE ? [process.env.ROUTE] : routes();
 
-const browser = await chromium.launch();
-const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
-const page = await ctx.newPage();
+/* Round 274: recreate the browser every 25 routes. One browser, one context
+   and one page navigating every route in the site runs this container out of
+   memory: the sweep measured 58 routes cleanly, then chromium died and every
+   remaining check reported "Target page, context or browser has been closed",
+   which the harness counted as 87 failures on pages that are fine. Same
+   symptom and same fix as the prerenderer in Round 257. Recycling can only
+   make a run slower, never make a finding wrong. */
+const RECYCLE_EVERY = 25;
+const newPageSet = async () => {
+  const b = await chromium.launch();
+  const c = await b.newContext({ viewport: { width: 1280, height: 800 } });
+  const p2 = await c.newPage();
+  await p2.route('**://*.supabase.co/**', r => r.abort());
+  await p2.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => {});
+  await p2.waitForTimeout(400);
+  const consentBtn = p2.locator('button:has-text("Essential only")');
+  if (await consentBtn.count()) { await consentBtn.first().click().catch(() => {}); await p2.waitForTimeout(300); }
+  return { b, c, p2 };
+};
+let browser = await chromium.launch();
+let ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+let page = await ctx.newPage();
+/* Round 274: Supabase is unreachable outside a browser with egress, and its
+     requests then HANG rather than fail, so waitUntil networkidle can never be
+     reached and this harness timed out at 30 seconds before asserting anything.
+     Measured: / had 6 requests still open, /records 10, all of them Supabase.
+     It is not only a sandbox problem: the daily legend hook opens a realtime
+     websocket, and an open socket means a page that mounts it can never be
+     network idle anywhere. Aborting is closer to what an offline visitor gets
+     than hanging is, and it makes this harness deterministic. */
+  await page.route('**://*.supabase.co/**', r => r.abort());
 
-await page.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 20000 });
 await page.waitForTimeout(600);
 const consent = page.locator('button:has-text("Essential only")');
 if (await consent.count()) { await consent.first().click().catch(() => {}); await page.waitForTimeout(300); }
@@ -274,7 +302,15 @@ console.log(`\nSections 1 and 3: contrast and names across ${ROUTES.length} rout
 
 let unreadable = 0, unnamed = 0, unlabelled = 0, gradSkips = 0, routesChecked = 0;
 
+let sinceRecycle = 0;
 for (const route of ROUTES) {
+  if (sinceRecycle >= RECYCLE_EVERY) {
+    await browser.close().catch(() => {});
+    const fresh = await newPageSet();
+    browser = fresh.b; ctx = fresh.c; page = fresh.p2;
+    sinceRecycle = 0;
+  }
+  sinceRecycle += 1;
   let r;
   try {
     await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 20000 });

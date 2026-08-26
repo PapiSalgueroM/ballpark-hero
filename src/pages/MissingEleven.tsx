@@ -267,6 +267,8 @@ const MissingEleven = () => {
                 >
                   <input
                     type="text"
+                    /* Round 274: a placeholder is not an accessible name. */
+                    aria-label="Who was the missing starter"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Who was the missing starter?"

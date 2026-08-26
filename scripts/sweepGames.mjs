@@ -106,9 +106,24 @@ let done = 0;
 for (const engineName of wantEngines) {
  for (const sizeName of wantSizes) {
   const label = `${engineName}/${sizeName}`;
-  const browser = engineName === 'chromium'
-    ? await chromium.launch({ executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--no-sandbox', '--no-proxy-server'] })
-    : await webkit.launch();
+/* Round 274: an engine that is not installed must SKIP LOUDLY, not kill the
+   run. WebKit cannot be installed in this sandbox (the download fails, and
+   docs/PROJECT-STATE.md has said so for many rounds), so this harness has been
+   dying on webkit.launch() every time the browser board runs, AFTER completing
+   its chromium passes. The board then reported the whole harness as a failure
+   and the chromium findings, which are the ones that exist, went in the bin
+   with it. A machine that does have WebKit still runs it: this catches the
+   launch rather than hardcoding chromium. */
+  let browser;
+  try {
+    browser = engineName === 'chromium'
+      ? await chromium.launch({ executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--no-sandbox', '--no-proxy-server'] })
+      : await webkit.launch();
+  } catch (e) {
+    console.log(`\n== ${label} ==`);
+    console.log(`   SKIPPED, ${engineName} is not installed here: ${String(e).split('\n')[0].slice(0, 90)}`);
+    continue;
+  }
   /* Round 117: without ignoreHTTPSErrors a sandbox that inspects outbound TLS
      makes every Supabase call fail with ERR_CERT_AUTHORITY_INVALID, so this
      swept all 118 routes with the database effectively unreachable and passed

@@ -71,7 +71,16 @@ export function DailyCountdown() {
   }, []);
 
   return (
-    <p className="text-center text-xs text-muted-foreground mt-2" aria-live="off">
+    /* Round 274: data-no-prerender, the mechanism Round 258 built for exactly
+       this. A running clock must never be frozen into a saved copy of the page:
+       90 of the 134 documents this site ships were carrying a line reading
+       "Next puzzle in 22:04:46", which is wrong within a second of being
+       written and absurd by the time anyone reads it. It also made every
+       snapshot non deterministic, so each round's zip carried 90 files of pure
+       countdown churn that buried whatever had really changed. A visitor still
+       sees the clock; only the copy a crawler reads leaves it out, which is
+       honest, because that copy cannot tell the time. */
+    <p className="text-center text-xs text-muted-foreground mt-2" aria-live="off" data-no-prerender>
       Next puzzle in <span className="tabular-nums font-medium">{formatHms(remainingMs)}</span>
     </p>
   );

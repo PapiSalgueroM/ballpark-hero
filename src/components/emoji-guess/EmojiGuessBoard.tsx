@@ -128,6 +128,10 @@ export function EmojiGuessBoard() {
           >
             <input
               autoFocus
+              /* Round 274: a placeholder is not a name. It disappears the moment you
+                 type and screen readers treat it inconsistently, so sweepContrast
+                 counts a field with only a placeholder as unnamed, correctly. */
+              aria-label="Who or what is this"
               value={input}
               onChange={e => setInput(e.target.value)}
               placeholder="Who or what is this…"

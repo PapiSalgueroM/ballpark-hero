@@ -35,6 +35,15 @@ const browser = await chromium.launch();
 /* ---------- Walk one: the curtain, top to bottom ---------- */
 {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  /* Round 274: Supabase is unreachable outside a browser with egress, and its
+     requests then HANG rather than fail, so waitUntil networkidle can never be
+     reached and this harness timed out at 30 seconds before asserting anything.
+     Measured: / had 6 requests still open, /records 10, all of them Supabase.
+     It is not only a sandbox problem: the daily legend hook opens a realtime
+     websocket, and an open socket means a page that mounts it can never be
+     network idle anywhere. Aborting is closer to what an offline visitor gets
+     than hanging is, and it makes this harness deterministic. */
+  await page.route('**://*.supabase.co/**', r => r.abort());
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
 
@@ -92,6 +101,7 @@ const browser = await chromium.launch();
 /* ---------- Walk two: reduced motion means NO motion ---------- */
 {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+  await page.route('**://*.supabase.co/**', r => r.abort());
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
 
