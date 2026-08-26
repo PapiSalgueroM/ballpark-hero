@@ -13,7 +13,7 @@
  * than its own viewport, and any rendered "undefined" / "NaN" /
  * "[object Object]" / "null" leaking into copy.
  */
-import pw from './lib/pwLoader.mjs';
+import pw from './lib/playwrightLoader.mjs';
 const { chromium, webkit } = pw;
 import fs from 'node:fs';
 

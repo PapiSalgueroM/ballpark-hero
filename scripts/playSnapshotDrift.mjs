@@ -51,7 +51,7 @@
  * Run: node scripts/runAllSims.mjs --browser
  *      or BASE=http://127.0.0.1:4173 node scripts/playSnapshotDrift.mjs
  */
-import pw from './lib/pwLoader.mjs';
+import pw from './lib/playwrightLoader.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';

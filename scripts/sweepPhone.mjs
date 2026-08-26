@@ -38,7 +38,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import pw from './lib/pwLoader.mjs';
+import pw from './lib/playwrightLoader.mjs';
 
 const { chromium, devices } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');

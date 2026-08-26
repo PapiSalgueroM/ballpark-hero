@@ -1,5 +1,5 @@
 // Playwright smoke test for MLB + NHL Front Office boards (2026-08-05)
-import { chromium } from './lib/pwLoader.mjs';
+import { chromium } from './lib/playwrightLoader.mjs';
 
 const BASE = 'http://127.0.0.1:4173';
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
