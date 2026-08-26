@@ -27,6 +27,14 @@
  * on a document whose entire purpose is that its words are already there. That
  * is a bad trade and the harness now refuses to let anyone make it again.
  *
+ * ORDER MATTERS, and getting it wrong looks exactly like the bug. The
+ * prerenderer writes its snapshots into BOTH public/ and dist/, so running it
+ * after a build overwrites the copies the plugin just injected into and this
+ * harness then reports 126 pages with no assets. That is why npm run build:seo
+ * ends with a second vite build: the last thing to touch dist/ has to be the
+ * build, which is also the only order the host ever uses, since it runs
+ * vite build and nothing else.
+ *
  * Run: npm run build && node scripts/simSnapshotAssets.mjs
  */
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';

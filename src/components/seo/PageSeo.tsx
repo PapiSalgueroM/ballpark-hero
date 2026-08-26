@@ -66,11 +66,57 @@ const PageSeo = ({ title, description, path, ogImage, noindex }: PageSeoProps) =
    * JavaScript never gets this far and keeps the template's tag, which is the
    * whole reason Round 265 put it there.
    */
+  /* Round 276: the same fault, nine more times over.
+   *
+   * Round 274 removed the template's canonical once Helmet had added the page's
+   * own. It was the right fix for one tag and it stopped there, because that is
+   * the one tag the harness that found it happened to read. Measured across the
+   * 126 shipped pages afterwards: NINE more meta tags were duplicated on every
+   * single one of them, all authored by index.html and all re-authored by
+   * Helmet. description, og:type, og:title, og:description, og:image,
+   * twitter:card, twitter:title, twitter:description, twitter:image.
+   *
+   * What that costs is not theoretical. A reader takes the FIRST tag it finds,
+   * so every page was handing out the generic site description instead of its
+   * own, and every share of every game on Facebook, LinkedIn or X carried the
+   * same site wide title, blurb and picture rather than the game's. Footle's
+   * own line, "Guess the mystery soccer player in 8 tries", was sitting second
+   * in the file behind "How deep does your sports knowledge go".
+   *
+   * The rule below is deliberately narrow: a static tag is removed ONLY when a
+   * Helmet authored tag with the same key exists to replace it. So the tags the
+   * template owns outright and Helmet never sets, the viewport, the charset,
+   * the AdSense verification tag, are untouched by construction rather than by
+   * an allowlist somebody has to maintain.
+   */
+  /* WHY A HEAD OBSERVER AND NOT JUST AN EFFECT. The first version of this ran
+     the sweep in a plain effect, and it worked for the canonical and then only
+     for 9 of the 126 pages once it covered the other nine tags. Helmet writes
+     into the head asynchronously and this component does not re-render when it
+     does, so on most pages the sweep ran BEFORE the replacement tags existed
+     and found nothing to replace. Watching the head instead means the sweep
+     happens whenever Helmet actually lands, which is the only moment it can be
+     correct. Removing a node retriggers the observer, which then finds nothing
+     left to remove, so it settles rather than looping. */
   useEffect(() => {
-    for (const el of Array.from(document.querySelectorAll('link[rel="canonical"]'))) {
-      if (!el.hasAttribute('data-rh')) el.remove();
-    }
-  });
+    const keyOf = (el: Element) =>
+      el.tagName === 'LINK'
+        ? `link:${el.getAttribute('rel')}`
+        : `meta:${el.getAttribute('name') ?? el.getAttribute('property')}`;
+    const sweep = () => {
+      const owned = new Set<string>();
+      for (const el of Array.from(document.querySelectorAll('head [data-rh]'))) owned.add(keyOf(el));
+      if (!owned.size) return;
+      for (const el of Array.from(document.querySelectorAll('head meta, head link[rel="canonical"]'))) {
+        if (el.hasAttribute('data-rh')) continue;
+        if (owned.has(keyOf(el))) el.remove();
+      }
+    };
+    sweep();
+    const mo = new MutationObserver(sweep);
+    mo.observe(document.head, { childList: true, subtree: true });
+    return () => mo.disconnect();
+  }, []);
 
   const jsonLd = path === '/'
     ? {

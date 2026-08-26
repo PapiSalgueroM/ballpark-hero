@@ -12,7 +12,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "prerender": "node scripts/prerender.mjs",
-    "build:seo": "vite build && node scripts/prerender.mjs && node scripts/genRetiredStubs.mjs"
+    "build:seo": "vite build && node scripts/prerender.mjs && node scripts/genRetiredStubs.mjs && vite build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
