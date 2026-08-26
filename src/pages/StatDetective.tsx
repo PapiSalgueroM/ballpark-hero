@@ -39,6 +39,7 @@ import {
   statChips,
   suggestProfiles,
 } from '@/lib/statDetective';
+import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 
 type Phase = 'boot' | 'error' | 'pick' | 'playing' | 'done';
 
@@ -124,6 +125,22 @@ const StatDetective = () => {
       setPhase('done');
     }
   };
+
+  /* Round 299, the scoring audit: this page never recorded a play, so a
+     closed case earned no streak day, no played-today credit and no points.
+     A round ends when submitGuess moves the phase to done, won or not. The
+     ref arms on each new round (phase back to playing) so New case can
+     record again, and fires exactly once per round. No score on purpose:
+     the result shown is a guess count out of eight where lower is better,
+     and a loss has no number at all, so a raw guess count would rank
+     backwards in the max-scored leaderboard. */
+  const completionRef = useRef(false);
+  useEffect(() => {
+    if (phase === 'playing') completionRef.current = false;
+    if (phase !== 'done' || completionRef.current) return;
+    completionRef.current = true;
+    recordCompletion('/stat-detective', undefined, getCurrentPlayerName());
+  }, [phase]);
 
   const misses = guesses.filter(g => !g.isCorrect).length;
   const mysteryProfile = useMemo(

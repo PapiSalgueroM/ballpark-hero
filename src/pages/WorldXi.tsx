@@ -31,6 +31,7 @@ import {
   ordinal,
 } from '@/lib/worldXi';
 import { computeChemistry, formatChemistry } from '@/lib/chemistry';
+import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { SlotReel } from '@/components/world-xi/SlotReel';
 
 type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'won' | 'lost';
@@ -156,6 +157,25 @@ const WorldXi = () => {
 
   const filledCount = filled.filter(Boolean).length;
   const timedOut = timerMode.seconds > 0 && timeLeft <= 0;
+
+  /* Round 299, the scoring audit: this page never recorded a play, so a
+     finished run earned no streak day and no played-today credit. The end
+     moment is the phase landing on 'won' or 'lost' (timeout and Give Up both
+     end on 'lost'). Once per run: the ref re-arms only when a new run enters
+     'playing', so mount, the setup screen and the season sim never record.
+     Score is filledCount, the slots-covered count the result screen and the
+     share line both show as N/11. Placed below filledCount on purpose, the
+     TDZ rule from tonight. */
+  const recordedRef = useRef(false);
+  useEffect(() => {
+    if (phase === 'playing') {
+      recordedRef.current = false;
+      return;
+    }
+    if ((phase !== 'won' && phase !== 'lost') || recordedRef.current) return;
+    recordedRef.current = true;
+    recordCompletion('/world-xi', filledCount, getCurrentPlayerName());
+  }, [phase, filledCount]);
 
   const pick = (p: WxPlayer) => {
     if (phase !== 'playing' || !slot || slotIndex < 0) return;
