@@ -3223,26 +3223,42 @@ export const LINEUPS: Lineup[] = [
     opponent: 'Atalanta',
     scoreLine: 'Real Madrid 3-1 Atalanta (Real Madrid win 4-1 on aggregate)',
     venue: 'Alfredo Di Stefano Stadium, Madrid',
-    formationLabel: '4-3-3',
+    /* ROUND 295 CORRECTION, DO NOT REVERT TO THE 4-3-3. The original entry
+       here was the misremembered version of this match: a 4-3-3 with
+       Carvajal, Casemiro and Asensio starting and Asensio blanked at LW.
+       None of those three started. Asensio is precisely the super-sub trap
+       the file header warns about: he came off the bench and scored the 84th
+       minute goal, which is why memory promotes him into the XI. Madrid
+       actually started a 3-5-2: Courtois; Nacho, Varane, Ramos; Lucas
+       Vazquez and Mendy as wing backs; Valverde, Kroos, Modric; Benzema and
+       Vinicius Junior up front. Re-verified 2026-08-26 against ESPN's match
+       page and theScore's confirmed-lineups piece (which is headlined by the
+       3-5-2), after three July 2026 user reports ("LW was literally the
+       player") on the weeks this puzzle sat frozen pre-Round-212: players
+       who answered Vinicius for the blanked left forward were being told
+       they were wrong. They were right. Outlets list the back three in
+       differing orders; sides here follow the right-to-left teamsheet
+       reading (Nacho right, Varane centre, Ramos left). */
+    formationLabel: '3-5-2',
     slots: [
       GK('Thibaut Courtois'),
-      { position: 'RB', name: 'Daniel Carvajal', x: 84, y: 70 },
-      { position: 'CB', name: 'Raphael Varane', x: 62, y: 74 },
-      { position: 'CB', name: 'Sergio Ramos', x: 38, y: 74 },
-      { position: 'LB', name: 'Ferland Mendy', x: 16, y: 70 },
-      { position: 'CDM', name: 'Casemiro', x: 50, y: 58 },
-      { position: 'CM', name: 'Toni Kroos', x: 68, y: 50 },
-      { position: 'CM', name: 'Luka Modric', x: 32, y: 50 },
-      { position: 'RW', name: 'Lucas Vazquez', x: 80, y: 24 },
-      { position: 'ST', name: 'Karim Benzema', x: 50, y: 18 },
-      { position: 'LW', name: 'Marco Asensio', x: 20, y: 24 },
+      { position: 'CB', name: 'Nacho', x: 68, y: 76 },
+      { position: 'CB', name: 'Raphael Varane', x: 50, y: 78 },
+      { position: 'CB', name: 'Sergio Ramos', x: 32, y: 76 },
+      { position: 'RWB', name: 'Lucas Vazquez', x: 86, y: 52 },
+      { position: 'CM', name: 'Federico Valverde', x: 62, y: 56 },
+      { position: 'CM', name: 'Toni Kroos', x: 38, y: 56 },
+      { position: 'CM', name: 'Luka Modric', x: 50, y: 42 },
+      { position: 'LWB', name: 'Ferland Mendy', x: 14, y: 52 },
+      { position: 'ST', name: 'Karim Benzema', x: 60, y: 16 },
+      { position: 'ST', name: 'Vinicius Junior', x: 40, y: 16 },
     ],
     blankCandidates: [
-      { name: 'Lucas Vazquez', slotIndex: 8, nationality: 'Spain', clubAtTime: 'Real Madrid' },
-      { name: 'Marco Asensio', slotIndex: 10, nationality: 'Spain', clubAtTime: 'Real Madrid' },
-      { name: 'Ferland Mendy', slotIndex: 4, nationality: 'France', clubAtTime: 'Real Madrid' },
+      { name: 'Vinicius Junior', slotIndex: 10, nationality: 'Brazil', clubAtTime: 'Real Madrid' },
+      { name: 'Federico Valverde', slotIndex: 5, nationality: 'Uruguay', clubAtTime: 'Real Madrid' },
+      { name: 'Ferland Mendy', slotIndex: 8, nationality: 'France', clubAtTime: 'Real Madrid' },
     ],
-    source: 'Wikipedia dedicated match article + UEFA.com archive, agree on the starting XI for this quarterfinal-clinching win.',
+    source: 'ESPN match page + theScore confirmed lineups, both giving the 3-5-2 with Nacho, Valverde and Vinicius starting and Asensio scoring off the bench. Corrected Round 295 off three user reports; the old 4-3-3 entry was wrong.',
   },
 
   // 97. 2022-23 Champions League Semifinal 1st Leg - Manchester City 4-0 Real Madrid

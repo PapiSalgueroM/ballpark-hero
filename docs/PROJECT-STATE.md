@@ -743,7 +743,7 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | **HOW YOU SHIP DEPENDS ON WHICH SESSION YOU ARE** | Read this before anything else in this file. **A claude.ai/code session has GitHub credentials: commit, push, and it may merge to `main` under Anthony's standing 2026-08-26 authorization. Do NOT build a zip, a `RUNnn.bat` or a `SHIP` wrapper.** Only a **Cowork** session lacks credentials, and only Cowork uses the bat pipeline. Everything below that talks about packaging, extracting zips from Anthony's folder, or waiting for him to double-click something is **Cowork-path only**, including most of the ship history in this table. See the "Which pipeline are you on" section at the top of `docs/SHIP-PIPELINE.md`. |
-| `origin/main` head | **Round 294** (Transfer Path hints, pushed 2026-08-26 from Anthony's machine through `RUN294.bat`, rebased onto the docs commit `e8d3df6` that landed between 293 and 294; every round from 258 to 294 is on `main`). Before it, `9f5dfad` = **Round 293**, the entire 258 to 293 backlog pushed 2026-08-26 (36 rounds, Anthony clicked `SHIP154.bat`, a cloud session watched main advance round by round to 293 and verified the count). Lovable sync was file-verified and `deploy_project` called the same day from the cloud session. Anthony's standing instruction from the same day: shipping and publishing happen without him, the build loop moves to cloud sessions, and his computer stops being part of the pipeline. |
+| `origin/main` head | **Round 295** (the report queue: the Missing XI Atalanta teamsheet corrected off three user reports, `simMissingXi.mjs` added, six of eight open reports closed; the first round built, merged and published entirely from a claude.ai/code session). Before it, **Round 294** (Transfer Path hints, pushed 2026-08-26 from Anthony's machine through `RUN294.bat`, the desktop pipeline's last round; every round from 258 to 294 is on `main`). Before that, `9f5dfad` = **Round 293**, the entire 258 to 293 backlog pushed 2026-08-26 (36 rounds, Anthony clicked `SHIP154.bat`, a cloud session watched main advance round by round to 293 and verified the count). Lovable sync was file-verified and `deploy_project` called the same day from the cloud session. Anthony's standing instruction from the same day: shipping and publishing happen without him, the build loop moves to cloud sessions, and his computer stops being part of the pipeline. |
 | PREVIOUS HEAD, FOR CONTEXT | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
 | HOW 258 TO 293 LANDED, AND WHAT EACH ONE WAS | DONE 2026-08-26. The queue that was waiting on one double click: rounds **258 through 293** were packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP154.bat` runs all thirty six in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 153) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast, 288 Idle Arena, the first true incremental, plus the rules button off the Back button, 289 Face Off, the duel against a rival or a friend, 290 the manifest that makes the site installable, 291 the Brownlow and the Dally M on the records shelf, 292 the Ballon d'Or honours made consistent after two user reports, 293 your dailies on the home page. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
@@ -2158,12 +2158,23 @@ reaches a match in Club Manager (120).
 
 **Read `public.question_reports` first.** Since the site has had traffic, people have been
 using the footer button and the per game report button, and the rows were sitting unread:
-Round 292 came out of two of them. Ten were unresolved on 2026-08-25; the two Ballon d'Or
-ones are fixed by Round 292 (mark them resolved once it is live), the Transfer Path one
-(2026-08-19, tp-19) needs the guess, which reports carry from Round 292 on, and the older
-ones (Missing XI "LW was literally the player", NBA Connect 4 "anything you pick is wrong",
-Soccer Grid sg-678 Roberto Carlos and R9 refused, world-xi, higher-lower-transfers "outdated")
-are worth a look each with the validator logs beside them.
+Round 292 came out of two of them. **The queue was worked in Round 295 (2026-08-26):**
+
+- The two Ballon d'Or reports: fixed by Round 292, marked resolved once 292 was live.
+- The three Missing XI reports (two on 07-07, "LW was literally the player" on 07-29):
+  all three were the SAME puzzle. The pre-212 frozen seed served `cl-2021-r16-real` for
+  most of July with the left forward blanked, and the entry had a misremembered XI: a
+  4-3-3 with Asensio (the 84th minute super-sub) written in as a starter. Users answering
+  Vinicius were right. Corrected to the real 3-5-2 off ESPN plus theScore, candidates
+  re-verified against player_market_values, and `simMissingXi.mjs` now sweeps all 167
+  lineups structurally and pins this teamsheet with a negative control. All three resolved.
+- NBA Connect 4 "anything you pick is wrong" (07-21, classic-3): the board's every cell has
+  real answers (checked), and the date sits in the July validator outage the v8 fail-closed
+  rebuild fixed. Resolved with that reading; reopen if it recurs on the current validator.
+- STILL OPEN: world-xi "Wrong answer" (07-03, empty context, no logs that far back, not
+  actionable until a repeat arrives; reports carry the guess since Round 292) and
+  higher-lower-transfers "Outdated info" (07-05: real limitation, the transfer table is a
+  point-in-time scrape; a data refresh is roadmap-sized, do not hand patch single rows).
 
 
 **The whole table was swept in Round 226 (2026-08-20). Every row resolved or investigated:**
@@ -2545,3 +2556,15 @@ today rather than adding alongside them.
   revived, but nothing schedules it any more. ROUND77 and ROUND87 functionality (Club Manager
   youth academy, scouts, facilities, sponsors, spies; real 2026 CFB rosters) still needs
   rebuilding fresh from the roadmap, those zips died with the desktop pipeline.
+- **2026-08-26, Round 295.** The report queue, and the first round built end to end from a
+  claude.ai/code session. All eight unresolved `question_reports` triaged: the two Ballon
+  d'Or rows marked resolved (Round 292 live), the three Missing XI reports traced to ONE
+  frozen July puzzle whose lineup was genuinely wrong (the Atalanta second leg stored as the
+  misremembered 4-3-3 with the super-sub starting; corrected to the real 3-5-2, users who
+  answered Vinicius were right all along), the NBA Connect 4 report attributed to the fixed
+  July validator outage after checking every classic-3 cell has answers, and two left open
+  honestly (world-xi with no context, higher-lower-transfers pending a data refresh).
+  `simMissingXi.mjs` is the new permanent guard: full structural sweep of all 167 lineups
+  plus the pinned teamsheet with a negative control, discovered by runAllSims. The roadmap's
+  requested overnight simHalftime measurement (30 runs, means, sd and gap logged each time)
+  was started in the background the same night; read the log before touching that threshold.
