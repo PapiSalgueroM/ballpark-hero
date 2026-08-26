@@ -165,7 +165,21 @@ console.log('4) Nobody courts a struggler');
 console.log('5) A 2010 manager is courted by 2010 clubs');
 {
   let found = null;
-  for (let attempt = 0; attempt < 6 && !found; attempt++) {
+  /* ROUND 268 WIDENED THIS FROM SIX TO SIXTEEN, AND HERE IS THE ARITHMETIC.
+     This section was failing the board about once in every eighty runs with
+     "a table-topping 2010 Blackpool never got a call across six tries", and
+     the call it is waiting for is genuinely random: nothing here is seeded.
+     Measured 2026-08-22 by running the harness 150 times on its own: 2
+     failures, so 1.3% at six attempts, which puts the chance of ONE attempt
+     producing an approach at about 51% (0.487^6 = 0.013). At sixteen
+     attempts that is 0.487^16, roughly one run in a hundred thousand.
+
+     Widened, NOT loosened, which is the standing rule. The assertion is
+     exactly as strict as it was: an approach must arrive, and it must come
+     from a club that really exists in the 2010 world. All that changed is
+     how long it is willing to wait for a coin that lands heads half the
+     time. A red on this board has to mean something, and at 1.3% it did not. */
+  for (let attempt = 0; attempt < 16 && !found; attempt++) {
     let s = playWeeks(startCareer('Blackpool', 'era2010'), 12);
     s = makeHot(s);
     for (let w = 0; w < 20 && !s.approach; w++) {
@@ -175,7 +189,7 @@ console.log('5) A 2010 manager is courted by 2010 clubs');
     }
     if (s.approach) found = s.approach;
   }
-  if (!found) fail('a table-topping 2010 Blackpool never got a call across six tries');
+  if (!found) fail('a table-topping 2010 Blackpool never got a call across sixteen tries, which at the measured per-attempt rate is a real regression and not a tail');
   else {
     const eraClubs = new Set((cm.ERA_LEAGUES.era2010 ?? []).flatMap(l => l.clubs));
     if (!eraClubs.has(found.club)) fail(`${found.club} approached a 2010 manager but is not in the 2010 world`);

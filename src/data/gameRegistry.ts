@@ -9,8 +9,44 @@ export interface GameDef {
   featured?: boolean;
 }
 
+/**
+ * Every category title, as a type.
+ *
+ * ROUND 268, AND THIS IS NOT DECORATION. The College Games Hub filtered this
+ * registry for the titles 'College Football' and 'College Basketball'. Neither
+ * has ever existed: the category is called 'College Sports'. The filter matched
+ * nothing, so /college shipped to the live site reading "All 0 college football
+ * and college basketball games in one place" with not one game under it, and it
+ * stayed that way long enough that Round 266 added a footer link to it and sent
+ * the whole site's crawl budget at an empty page.
+ *
+ * Nothing caught it because nothing could. It is not a type error against
+ * `title: string`, it is not a crash, it is not a dead link, and the link
+ * harness counted the page's outbound links across the whole document, where
+ * the navbar and footer alone clear its floor twice over.
+ *
+ * So the titles are a union now. Filtering for a title that does not exist is
+ * a compile error, and adding a category without listing its title here is
+ * also a compile error, which is the trade: the union cannot drift out of sync
+ * with the array, because the array will not build until it matches.
+ */
+export type CategoryTitle =
+  | 'Soccer'
+  | 'Pro Football'
+  | 'College Sports'
+  | 'Pro Basketball'
+  | 'Baseball'
+  | 'Hockey'
+  | 'Formula 1'
+  | 'Tennis'
+  | 'Golf'
+  | 'Aussie Rules'
+  | 'NASCAR'
+  | 'Combat Sports'
+  | 'World & Olympic Games';
+
 export interface GameCategory {
-  title: string;
+  title: CategoryTitle;
   emoji: string;
   games: GameDef[];
 }
@@ -256,6 +292,19 @@ export const CATEGORIES: GameCategory[] = [
   // live inside their sports (Squad Deal + the retired box game → Soccer,
   // Name Them All + Sports Millionaire → World & Olympic Games).
 ];
+
+/**
+ * The categories with these exact titles, in registry order.
+ *
+ * Round 268. Use this rather than filtering CATEGORIES by a string literal of
+ * your own: the parameter is typed, so a title that does not exist will not
+ * compile, which is the entire failure the College Games Hub shipped on. It
+ * also never returns an empty array silently for a title that IS real, because
+ * a real title always has its category.
+ */
+export function categoriesByTitle(...titles: CategoryTitle[]): GameCategory[] {
+  return CATEGORIES.filter(c => titles.includes(c.title));
+}
 
 export const VISIBLE_CATEGORIES = CATEGORIES.filter(c => c.games.length > 0);
 export const ALL_GAMES = CATEGORIES.flatMap(c => c.games);

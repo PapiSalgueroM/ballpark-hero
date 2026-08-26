@@ -64,29 +64,24 @@ const RUNS = Number(process.env.RUNS || 2400);
 const LEAGUE_TOLERANCE = 2.0;
 
 /* ---------- build both engines ---------- */
-/* The patched copy has to live NEXT TO the original, not in /tmp: clubManager
-   imports its neighbours in src/lib, and a copy anywhere else cannot resolve
-   them. It is written, bundled and deleted again in the same breath, so the
-   repo is never left carrying it. */
-const scratch = [];
-process.on('exit', () => { for (const f of scratch) fs.rmSync(f, { force: true }); });
+/* ROUND 268 CHANGED HOW THIS WORKS, AND THE REASON IS WORTH KEEPING.
+   It used to write a patched COPY of clubManager.ts into src/lib and bundle
+   that, because clubManager imports its neighbours and a copy in /tmp cannot
+   resolve them. The copies were called src/lib/__oppArm_on.ts and
+   __oppArm_off.ts, and they existed on disk for exactly as long as esbuild
+   took. Seven harnesses on the board walk src, the board runs them
+   concurrently, and on the Round 268 run simInventedNames walked straight
+   into them and reported four unregistered name banks. Those banks do not
+   exist. A check that fails for a reason that is not true is worse than no
+   check at all, because the next real failure gets read as noise.
 
-function bundle(tag, transform) {
-  const src = fs.readFileSync(SRC, 'utf8');
-  const out = transform ? transform(src) : src;
-  const copy = path.join(ROOT, `src/lib/__oppArm_${tag}.ts`);
-  fs.writeFileSync(copy, out);
-  scratch.push(copy);
-  const entry = `/tmp/oppEntry-${tag}.mjs`;
-  fs.writeFileSync(entry, `
-globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${copy}');
-export const cm = mod;
-`);
-  const bundleFile = `/tmp/opp-${tag}.bundle.mjs`;
-  execSync(`${ROOT}/node_modules/.bin/esbuild ${entry} --bundle --format=esm --platform=node --outfile=${bundleFile} --log-level=error`, { stdio: 'inherit' });
-  return bundleFile;
-}
+   So nothing in src is touched now. The real file is bundled ONCE, and the
+   neutralised arm is made by patching that bundle instead of the source. The
+   rule text survives bundling byte for byte (esbuild is not minifying here)
+   and appears exactly once, and both of those are asserted below rather than
+   assumed, because if either stopped being true the two arms would quietly
+   become the same engine and every comparison in this file would read as
+   "the rule does nothing". */
 
 const LIVE_RULE = "  if (oppGoals < myGoals) return half(MENT_MOD.attacking);\n  if (oppGoals - myGoals >= 2) return half(MENT_MOD.defensive);\n  return MENT_MOD.balanced;";
 const DEAD_RULE = "  return MENT_MOD.balanced;";
@@ -94,12 +89,33 @@ const DEAD_RULE = "  return MENT_MOD.balanced;";
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
-const withRule = bundle('on', null);
-const withoutRule = bundle('off', s => {
-  if (!s.includes(LIVE_RULE)) {
-    // If this ever stops matching, the arms would be identical and every
-    // comparison below would read as "the rule does nothing". Loud, not quiet.
-    throw new Error('could not find the opposition rule to neutralise, so the two arms would have been the same engine');
+function baseBundle() {
+  const entry = '/tmp/oppEntry.mjs';
+  fs.writeFileSync(entry, `
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+const mod = await import('${SRC}');
+export const cm = mod;
+`);
+  const out = '/tmp/opp-base.bundle.mjs';
+  execSync(`${ROOT}/node_modules/.bin/esbuild ${entry} --bundle --format=esm --platform=node --outfile=${out} --log-level=error`, { stdio: 'inherit' });
+  return out;
+}
+
+const BASE = baseBundle();
+
+function arm(tag, transform) {
+  const base = fs.readFileSync(BASE, 'utf8');
+  const out = transform ? transform(base) : base;
+  const f = `/tmp/opp-${tag}.bundle.mjs`;
+  fs.writeFileSync(f, out);
+  return f;
+}
+
+const withRule = arm('on', null);
+const withoutRule = arm('off', s => {
+  const hits = s.split(LIVE_RULE).length - 1;
+  if (hits !== 1) {
+    throw new Error(`the opposition rule appears ${hits} times in the bundle, not once, so neutralising it would not have produced two different engines`);
   }
   return s.replace(LIVE_RULE, DEAD_RULE);
 });
