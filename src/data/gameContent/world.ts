@@ -800,4 +800,55 @@ export const WORLD_CONTENT: GameContentMap = {
       },
     ],
   },
+  '/idle-arena': {
+    intro: [
+      "This is the idle game the word usually means. Tap a ball and a number goes up. Spend the number on a squad and it goes up on its own. Spend what the squad makes on a bigger squad, and by the time you look up the number has more letters after it than you expected. There is no end and no losing, just a curve that keeps steepening.",
+      "Nobody in the arena is real. The squad is eight archetypes, a Ball Boy, a Sunday Striker, a Point Guard, a Slugger, a Sniper, a Quarterback, an Ace and a Champion, so there is no stat to check and nothing to argue about. That is on purpose: our other three idle games give you a museum, a club or an academy to run, and this one is built on nothing but the number.",
+    ],
+    howToPlay: [
+      "Tap the ball. Every tap scores a point, more once you own the tap upgrades.",
+      "Sign a squad. Each archetype scores every second, from 0.4 a second for a Ball Boy up to 176,000 a second for a Champion.",
+      "Switch the buy toggle to x10 or max when the points are coming faster than you can spend them.",
+      "Own five of an archetype and its own upgrade appears. Buy it and that whole line scores double.",
+      "Earn a million in one run and the trophy box lights up. Lift it, the run resets, and every trophy you hold is +5% on everything from then on.",
+      "Close the tab whenever you like. The squad keeps scoring at half speed for up to eight hours, and the door tells you what it made when you come back.",
+    ],
+    rules: [
+      "Your first Ball Boy is free, so something is always scoring, even for somebody who never taps at all.",
+      "Every archetype you sign costs 15% more than the last one of its kind. A Ball Boy costs 15, the tenth one costs 53, the hundredth costs about 15 million.",
+      "Trophies are paid on points earned in one run, not on points in hand. One trophy at a million, four at four million, nine at nine million: the square root of the millions, rounded down.",
+      "Lifting the trophy clears the points, the squad and the upgrades. Trophies, badges and the all time total are the only things that carry over, and they carry over forever.",
+      "Ten badges, each worth a permanent +1% on everything. They are earned by tapping, by squad size, by points and by trophies, and they survive every lift.",
+      "Offline earnings run at half speed and stop after eight hours. Being there matters.",
+    ],
+    example: [
+      "You tap eighteen times and sign a second Ball Boy. Two of them make 0.8 a second, which pays for a third in about twenty five seconds, and the three of them save toward a Sunday Striker at 100. Ten minutes in, the squad makes more in a second than your first minute of tapping did.",
+      "Fifteen or twenty minutes of steady buying gets a run past a million, which is the first trophy. Lift it and the arena empties, but every tap and every archetype now scores 5% more, so the second run reaches the same million faster than the first did, and the third faster still.",
+    ],
+    tips: [
+      "Read the rate against the price, not the price alone. A new archetype pays back slower than the tier below it at first, but the tier below has been getting 15% dearer with every signing, so the moment always comes when the bigger name is the better buy.",
+      "Five of anything is the magic number. That archetype's upgrade doubles the whole line, so buy to five before you spread out.",
+      "Muscle Memory turns taps into a share of the squad's rate. Once the squad is scoring thousands a second, it is the best tap upgrade on the board.",
+      "Do not lift at exactly one trophy. Four million pays two, nine million pays three, and the run you are in already has the squad built.",
+      "Leave it running before bed. Eight hours at half speed is four hours of income you did not have to be there for.",
+    ],
+    faqs: [
+      {
+        q: "Is there an end to Idle Arena?",
+        a: "No. The number keeps growing and the trophies keep stacking. The formatter goes up through K, M, B, T and onward, and the eighth archetype is only the last one we have named so far.",
+      },
+      {
+        q: "Does it keep going when I close the tab?",
+        a: "Yes, at half speed for up to eight hours. The catch up is worked out from the time your last session saved, so switching phones will not carry it over, but reopening the same browser will.",
+      },
+      {
+        q: "Why are there no real players in it?",
+        a: "Because a clicker does not need them, and the ones that use real names tend to get the numbers wrong. Our other idle games, Hall of Champions, Stadium Tycoon and Wonderkid Factory, give you something to manage. This one is just the curve.",
+      },
+      {
+        q: "Where is the save kept?",
+        a: "In your browser, on this device, with no account. It is written every five seconds and again when you leave the page. Clearing site data clears the arena.",
+      },
+    ],
+  },
 };

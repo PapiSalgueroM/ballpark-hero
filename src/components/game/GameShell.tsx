@@ -34,7 +34,13 @@ export function GameShell({ width, title, emoji, subtitle, headerExtra, children
       <GameNavbar />
       <div
         className={cn(
-          'mx-auto px-4 py-6 md:py-10',
+          /* Round 288: relative, so RulesGate's floating "?" (absolute top-0
+             right-0) lands at the top right of this column beside the game's
+             title, instead of resolving to the page corner on top of the
+             navbar's Back button, which is where it had been sitting on every
+             game drawn through this shell (measured at 390 wide: the "?" at x
+             354 to 390, the Back button underneath it). */
+          'relative mx-auto px-4 py-6 md:py-10',
           width === 'wide' ? 'max-w-4xl' : 'max-w-2xl',
           className,
         )}

@@ -139,6 +139,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/guess-the-nation': 'world',
   '/guess-the-year': 'world',
   '/hof-or-bust': 'world',
+  '/idle-arena': 'world',
   '/jeopardy': 'world',
   '/list-quiz': 'world',
   '/minefield': 'world',

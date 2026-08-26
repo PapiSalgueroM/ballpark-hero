@@ -743,7 +743,7 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
-| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 287** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP148.bat` runs all thirty in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 147) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
+| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 288** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP149.bat` runs all thirty one in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 148) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast, 288 Idle Arena, the first true incremental, plus the rules button off the Back button. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
 | PREVIOUS HEAD, FOR CONTEXT | `f848aa0` = Round 253, pushed 2026-08-21 morning and published the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
 | WHY THE BACKLOG SAT FOR WEEKS | **Four separate bugs in the RUN bats, not in the code and not on his machine.** Every one of them made a fail-closed assertion STOP a run that should have passed, so a click that looked like it worked shipped a handful of rounds and quit. All four were reproduced on Windows before being fixed, all four are fixed in the bats on his disk AND in pkg/mkbat.py, and pkg/verifybat.py now refuses to build or bless a bat carrying any of them: (1) FORWARD SLASHES in a findstr file argument: findstr rejects them outright and returns errorlevel 1 exactly as if the pattern were missing, which killed 56 bats at Round 179 every single time; (2) RAW DOUBLE QUOTES in a pattern: cmd ends the quoted argument at the first one, so any assertion quoting real code (an aria-label, a JSX prop, an array of strings) was mangled, killing 10 bats at Round 198; (3) A QUOTE FOLLOWED BY A CMD OPERATOR: cmd counts quotes and does not understand the \" escape, so a `>` after one becomes a redirection, which silently turned RUN209's check into a file write; (4) A PERCENT SIGN in a pattern: cmd strips a lone `%` as variable-expansion syntax, so the assertion hunts for text the file does not contain, which stopped RUN251 on a comment reading "the 40% wash". The empirical tests that proved 1, 2 and 3 are worth repeating if a fifth ever appears: write a throwaway bat that runs the shapes against a known file, log the errorlevels, and read the log. Guessing cost more time than testing. |
@@ -1333,6 +1333,51 @@ arrives, triage it into rounds rather than trying to fix everything in one.
 purge. Awards is still unbuilt. See the roadmap below.
 
 ---
+
+## Round 288: Idle Arena, the first true incremental, and the "?" comes off the Back button
+
+Anthony's ask on 2026-08-25: "also create a idle game and a face off type of game". The
+site already had three games with idle in the tile (Stadium Tycoon, Wonderkid Factory, Hall
+of Champions), and all three are management sims with passive income attached. None of them
+is the thing the word usually means. This one is: tap, buy, watch the number run, reset for a
+permanent edge, come back to find it kept going.
+
+**Nothing in it is real, on purpose.** The squad is eight archetypes (Ball Boy, Sunday
+Striker, Point Guard, Slugger, Sniper, Quarterback, Ace, Champion), so there is no name to
+verify, no stat to get wrong, and nothing for the legal rules to bite on. The copy says so.
+
+**The engine is `src/lib/idleArena.ts` and the numbers were measured, not felt.** Costs grow
+15% per unit (`GROWTH`), tiers cost about ten times the last and score five to ten times as
+much, fourteen upgrades (two tap doublers, one per archetype at five owned, a tap share, three
+global multipliers), ten badges at a permanent 1% each, trophies at `floor(sqrt(earned /
+1e6))` per run worth 5% each forever, offline earnings at half rate capped at eight hours. The
+first Ball Boy is free so a visitor who never taps still watches a number move.
+`scripts/simIdleArena.mjs` plays it in node with a payback greedy bot and holds the curve:
+a six tap a second player reaches the trophy floor in under 45 minutes (measured 15m53s), a
+twenty tap idler in under three hours (measured 20m47s), ten trophies make the next run at
+least 15% faster (the reset is not a trap), income never falls, the offline cap holds at
+exactly eight hours, and a save of any shape (garbage, negatives, unknown ids, NaN) loads as
+a playable arena. `src/hooks/useIdleArena.ts` ticks off real time every 100ms (a throttled
+tab still credits the right amount), saves every five seconds and on unload and on
+visibilitychange, and runs the offline catch up exactly once on load.
+
+**The screen** (`src/pages/IdleArena.tsx`) keeps the loop on the main surface: the score,
+the tap arena with floaters, the squad with a x1 / x10 / max toggle, and the next two
+archetypes always visible as the thing to save for. Upgrades, Trophy, Badges and Record are
+hub boxes; opening one replaces the boxes, with `useRevealScroll` on the panel. Lifting the
+trophy is a two tap confirm inline (Keep playing / Lift and reset), never a dialog. The rules
+card opens on the first visit only, like Hall of Champions, and reopens from "How it works".
+Registered under World & Olympic Games at `/idle-arena`, guide in `world.ts`, `PATH_BUNDLE`
+entry, sitemap row from the registry.
+
+**The "?" was sitting on the Back button.** Every game drawn through `GameShell` rendered
+`RulesGate`'s floating trigger `absolute top-0 right-0` with no positioned ancestor, so it
+resolved to the page corner, on top of the navbar's Back button (measured at 390 wide: the
+"?" at x 354 to 390, y 15 to 51, the Back button underneath it). The shell's content column
+is `relative` now, so the trigger lands at the top right of the column beside the game's
+title, which is where the component's own comment says it belongs. Screenshotted before and
+after on /silverware-sort and /face-off; sweepPhone's overlap check and simMobileChrome both
+stay green.
 
 ## Round 287: the ticker carries real scores, on the free plan, and looks like a broadcast strip
 
@@ -2091,6 +2136,9 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-25** Round 288. Idle Arena at /idle-arena: engine, hook, page, guide, harness.
+  GameShell's column made relative so the rules trigger stops covering the Back button.
+  Pending row: 258 through 288 wait on `SHIP149.bat`.
 - **2026-08-25** Round 287. Real scores on the ticker from the free API-Sports tier, polled
   server side every twenty minutes into `public.live_scores`, secrets in `private.app_secrets`
   only. The strip redrawn as a broadcast bar. Ticker feed decision closed. Pending row: 258
