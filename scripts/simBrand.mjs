@@ -18,6 +18,8 @@
  *   6. the shipped geometry is what the generator produces today, so the
  *      header and the files in public/ cannot have drifted apart
  *
+ * NEGATIVE CONTROL: BRAND_CONTROL=manifest points a manifest icon at a file that
+ * does not exist, in memory; section 7 must go red.
  * NEGATIVE CONTROL: BRAND_CONTROL=external rewrites the template's og:image to
  * an off domain host in memory; section 3 must then fail. The rewrite is
  * asserted to have landed.
@@ -25,6 +27,7 @@
  * Run: node scripts/simBrand.mjs
  */
 import { readFileSync, existsSync, statSync, mkdtempSync, rmSync } from 'node:fs';
+import { readRoutes } from './lib/retiredRoutes.mjs';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -37,7 +40,7 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const read = p => readFileSync(path.join(ROOT, p), 'utf8');
 
 const CONTROL = process.env.BRAND_CONTROL || '';
-if (CONTROL && CONTROL !== 'external') { console.error(`BRAND_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && CONTROL !== 'external' && CONTROL !== 'manifest') { console.error(`BRAND_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
 /* ── 1: the assets ────────────────────────────────────────────────────── */
 console.log('1) every brand asset exists and is what it says it is');
@@ -184,7 +187,57 @@ console.log('6) the shipped geometry and SVGs are exactly what the generator pro
   }
 }
 
+console.log('7) the manifest makes the site installable with the same face');
+{
+  /* Round 290. A manifest that names an icon that is not there installs a
+     blank tile, and a theme colour that disagrees with the template paints
+     two different bars. Both are read off disk and compared, not trusted. */
+  let raw = read('public/manifest.json');
+  if (CONTROL === 'manifest') {
+    const before = raw;
+    raw = raw.replace('"/icon-192.png"', '"/icon-192-missing.png"');
+    if (raw === before) { console.error('control: the 192 icon line was not found, so this control would prove nothing'); process.exit(1); }
+    console.log('   NEGATIVE CONTROL ON: the 192 icon pointed at a missing file in memory, this section must go red');
+  }
+  let m = null;
+  try { m = JSON.parse(raw); } catch { fail('public/manifest.json is not valid JSON'); }
+  if (m) {
+    if (m.name !== 'DoUKnowBall' || m.short_name !== 'DoUKnowBall') fail('the manifest does not name the site');
+    if (!m.start_url || !m.start_url.startsWith('/')) fail('the manifest start_url is not on this site');
+    if (m.display !== 'standalone') fail(`display is ${m.display}, expected standalone`);
+    const themeMeta = metas.find(t => attr(t, 'name') === 'theme-color');
+    if (!themeMeta || (attr(themeMeta, 'content') || '').toLowerCase() !== String(m.theme_color).toLowerCase()) fail(`the manifest theme colour ${m.theme_color} does not match the template's meta`);
+    if (!/^#[0-9a-f]{6}$/i.test(String(m.background_color))) fail('background_color is not a hex colour');
+    const icons = Array.isArray(m.icons) ? m.icons : [];
+    const sizes = new Set();
+    for (const ic of icons) {
+      const src = String(ic.src || '');
+      const file = path.join(PUBLIC, src.replace(/^\//, ''));
+      if (!src.startsWith('/') || !existsSync(file)) { fail(`manifest icon ${src} is not a file in public/`); continue; }
+      const want = String(ic.sizes || '').match(/^(\d+)x(\d+)$/);
+      const got = pngSize(file);
+      if (!want || !got || got.w !== Number(want[1]) || got.h !== Number(want[2])) fail(`manifest icon ${src} is declared ${ic.sizes} and the file is ${got ? `${got.w}x${got.h}` : 'unreadable'}`);
+      else sizes.add(ic.sizes);
+    }
+    if (!sizes.has('192x192') || !sizes.has('512x512')) fail('the manifest needs a 192 and a 512 icon for an install prompt');
+    const liveRoutes = readRoutes().live;
+    for (const sc of Array.isArray(m.shortcuts) ? m.shortcuts : []) {
+      const url = String(sc.url || '').split('?')[0];
+      if (!liveRoutes.has(url)) fail(`manifest shortcut ${sc.url} is not a live route`);
+      for (const ic of sc.icons || []) if (!existsSync(path.join(PUBLIC, String(ic.src || '').replace(/^\//, '')))) fail(`shortcut icon ${ic.src} is not a file in public/`);
+    }
+    if (!links.some(t => /\brel="manifest"/.test(t) && attr(t, 'href') === '/manifest.json')) fail('index.html does not link the manifest');
+    if (!metas.some(t => attr(t, 'name') === 'apple-mobile-web-app-title')) fail('index.html has no apple-mobile-web-app-title');
+    console.log(`   ${icons.length} icons at their declared sizes, ${(m.shortcuts || []).length} shortcuts on live routes, theme colour agrees with the template`);
+  }
+}
+
 console.log('');
+if (CONTROL === 'manifest') {
+  if (failures > 0) { console.log(`simBrand control: green. The missing manifest icon was reported (${failures} finding).`); process.exit(0); }
+  console.error('simBrand control: RED. A manifest icon pointing at nothing went unreported.');
+  process.exit(1);
+}
 if (CONTROL === 'external') {
   if (failures > 0) { console.log(`simBrand control: green. The off domain image was reported (${failures} finding).`); process.exit(0); }
   console.error('simBrand control: RED. An off domain og:image went unreported, so section 3 proves nothing.');

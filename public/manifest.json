@@ -1,0 +1,23 @@
+{
+  "name": "DoUKnowBall",
+  "short_name": "DoUKnowBall",
+  "description": "Free sports trivia, puzzles and career sims. Soccer, NFL, NBA, MLB, NHL, college, F1, tennis, golf and footy. No sign-up.",
+  "id": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0d14",
+  "theme_color": "#0b0d14",
+  "lang": "en",
+  "categories": ["games", "sports", "entertainment"],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "Soccer Career", "short_name": "Career", "url": "/soccer-career?source=pwa", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Club Manager", "short_name": "Manager", "url": "/club-manager?source=pwa", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Face Off daily", "short_name": "Face Off", "url": "/face-off?source=pwa", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
