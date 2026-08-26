@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { ruleForCriteria, pickIsLegal, anyLegalPick } from '@/lib/fantasyCriteria';
+import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 
 const TEAM_SIZE = 11;
 const TOTAL_PICKS = TEAM_SIZE * 2;
@@ -35,7 +36,7 @@ interface AnalysisData {
 
 const FantasyDraft = () => {
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [started, setStarted] = useState(false);
   const [criteria, setCriteria] = useState<string | null>(null);
   const [loadingCriteria, setLoadingCriteria] = useState(true);
@@ -68,6 +69,20 @@ const FantasyDraft = () => {
   const draftComplete = pickIndex >= TOTAL_PICKS;
   const currentTurn = draftComplete ? 'user' : getPickOwner(pickIndex, userFirst);
   const seasonSimulated = teamAStory !== null && teamBStory !== null;
+
+  /* Round 299, the scoring audit: this page never recorded a play, so a
+     full draft and season earned no streak day, no played-today credit and
+     no points. The season simulation landing (both stories set) is the
+     completion moment, it is when the results screen appears. There is no
+     restart on this page, so the ref just fires once per visit. No score
+     on purpose: the result is two narrated season stories and a community
+     vote, the page never shows a final number. */
+  const completionRef = useRef(false);
+  useEffect(() => {
+    if (!seasonSimulated || completionRef.current) return;
+    completionRef.current = true;
+    recordCompletion('/fantasy-draft', undefined, getCurrentPlayerName(profile));
+  }, [seasonSimulated, profile]);
 
   // Owner 2026-08-05: the daily criteria is a real rule, not decoration.
   // Illegal picks are blocked for BOTH the player and the AI. If a side has

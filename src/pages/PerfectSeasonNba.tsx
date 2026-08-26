@@ -27,6 +27,7 @@ import {
 import {
   PerfectSeasonTheme, getDailyTheme, applyTheme, buildVerificationLine, themesForSport,
 } from '@/lib/perfectSeasonThemes';
+import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 
 const SPORT_KEY = 'nba';
 
@@ -264,9 +265,22 @@ const PerfectSeasonNba = () => {
     });
   }, [mode, phase, sim, overall, spins, teamNames, dailyTheme]);
 
+  // Round 299, the scoring audit: finishing a season never recorded a play,
+  // so a run earned no streak day, no played-today credit and no points.
+  // The season landing on the final record is the completion moment. One
+  // row per run (the ref, reset by restart), score is the win count the
+  // result screen leads with.
+  const completionSaved = useRef(false);
+  useEffect(() => {
+    if (phase !== 'done' || !sim || completionSaved.current) return;
+    completionSaved.current = true;
+    recordCompletion('/perfect-season-nba', sim.wins, getCurrentPlayerName());
+  }, [phase, sim]);
+
   const skipSim = () => setRevealed(NBA_GAMES);
 
   const restart = () => {
+    completionSaved.current = false;
     setPicks(Object.fromEntries(NBA_SLOTS.map(s => [s.key, null])));
     setUsedNames(new Set());
     setSelected(null);

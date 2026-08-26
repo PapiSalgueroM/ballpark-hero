@@ -30,6 +30,7 @@ import {
   buildClueReveals,
 } from '@/lib/clueAuction';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
 
@@ -118,6 +119,22 @@ const ClueAuction = () => {
     if (nextBank <= 0) setPhase('lost');
     else inputRef.current?.focus();
   };
+
+  /* Round 299, the scoring audit: this page never recorded a play, so a
+     finished auction earned no streak day, no played-today credit and no
+     points. A round ends when submitGuess moves the phase to won or lost.
+     The ref arms on each new round (phase back to playing) so New case can
+     record again, and fires exactly once per round. The score is the same
+     number the end screen shows: the bank left on a win, and 0 on a loss
+     (the bank is literally at zero when the lost phase lands, both set in
+     the same submitGuess). */
+  const completionRef = useRef(false);
+  useEffect(() => {
+    if (phase === 'playing') completionRef.current = false;
+    if ((phase !== 'won' && phase !== 'lost') || completionRef.current) return;
+    completionRef.current = true;
+    recordCompletion('/clue-auction', phase === 'won' ? bank : 0, getCurrentPlayerName());
+  }, [phase, bank]);
 
   const won = phase === 'won';
   const cluesLine = `🛒 ${purchased.length} ${purchased.length === 1 ? 'clue' : 'clues'} bought · ❌ ${wrongGuesses.length} wrong`;

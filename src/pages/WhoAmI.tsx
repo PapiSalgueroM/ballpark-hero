@@ -1,5 +1,5 @@
 import { FlagImg } from '@/components/FlagImg';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { Loader2, RotateCcw, Check, X, ArrowUp, ArrowDown } from 'lucide-react';
@@ -15,6 +15,7 @@ import { GiveUpButton } from '@/components/game/GiveUpButton';
 import PlayerAutocomplete from '@/components/game/PlayerAutocomplete';
 import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity } from '@/lib/playerSearch';
 import { fmtCompactUsd } from '@/lib/dealPlayers';
+import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import {
   WhoAmIData,
   WhoAmIPlayer,
@@ -135,6 +136,25 @@ const WhoAmI = () => {
     if (phase !== 'playing') return;
     setPhase('lost');
   };
+
+  /* Round 299, the scoring audit: this page never recorded a play, so a
+     finished round earned no streak day and no played-today credit. The end
+     moment is the phase landing on 'won' or 'lost' (out of guesses and Give
+     Up both end on 'lost'). Once per round: the ref re-arms only when a new
+     round enters 'playing', so mount, the mode screen and re-renders of the
+     result screen never record. No score on purpose: the number this game
+     shows is guesses used, where lower is better, and the leaderboard ranks
+     by max score, so it would reward the worst detective. */
+  const recordedRef = useRef(false);
+  useEffect(() => {
+    if (phase === 'playing') {
+      recordedRef.current = false;
+      return;
+    }
+    if ((phase !== 'won' && phase !== 'lost') || recordedRef.current) return;
+    recordedRef.current = true;
+    recordCompletion('/who-am-i', undefined, getCurrentPlayerName());
+  }, [phase]);
 
   const lastGuess = guesses.length > 0 ? guesses[guesses.length - 1] : null;
   const bestScore = sortedGuesses.length > 0 ? sortedGuesses[0].breakdown.score : 0;

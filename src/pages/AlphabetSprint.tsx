@@ -10,6 +10,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { fetchWhoAmIPool } from '@/lib/whoAmI';
+import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 
 import {
   MODES,
@@ -110,6 +111,24 @@ const AlphabetSprint = () => {
   useEffect(() => {
     if (phase === 'running') inputRef.current?.focus();
   }, [phase, letter]);
+
+  /* Round 299, the scoring audit: this page never recorded a play, so a
+     finished sprint earned no streak day and no played-today credit. The end
+     moment is the phase landing on 'done', which only happens when the clock
+     hits zero (pool exhaustion also zeroes the clock). Once per run: the ref
+     re-arms only when a new run enters 'running', so mount, the mode screen
+     and result re-renders never record. Score is the run's points total, the
+     same number the result headline and the share line show. */
+  const recordedRef = useRef(false);
+  useEffect(() => {
+    if (phase === 'running') {
+      recordedRef.current = false;
+      return;
+    }
+    if (phase !== 'done' || recordedRef.current) return;
+    recordedRef.current = true;
+    recordCompletion('/alphabet-sprint', score, getCurrentPlayerName());
+  }, [phase, score]);
 
   const start = (id: SprintModeId) => {
     const empty = new Set<string>();
