@@ -82,15 +82,28 @@ function dedupe(rows: { player_name: string | null; nationality: string | null; 
 export async function fetchDealPlayers(): Promise<DealPlayer[] | null> {
   try {
     const cols = 'player_name, nationality, club, market_value_usd';
+    /* Round 296: both pools read the CURRENT snapshot year through the dedup
+       view. This was the one query on player_market_values in the whole repo
+       with no year constraint, and a player caught it from the outside
+       ("Outdated info", reported 2026-07-05): the table holds one row per
+       player per year back to 2004, so the all-years top 400 is dominated by
+       peak-year rows and the game showed 2018 clubs and 2018 fees as today's
+       market. Measured on the 2026 snapshot: 5,394 deduped rows, 3,014 in
+       the budget band, so both pulls stay full and the 60-player floor
+       holds. Same hardcoded snapshot-year convention as dartMap,
+       auctionHouse and fetchFootlePlayerPool; they all bump together when
+       the data refreshes. simMarketYearScope holds the line. */
     const [stars, budget] = await Promise.all([
       supabase
-        .from('player_market_values')
+        .from('player_market_values_dedup')
         .select(cols)
+        .eq('year', 2026)
         .order('market_value_usd', { ascending: false })
         .limit(400),
       supabase
-        .from('player_market_values')
+        .from('player_market_values_dedup')
         .select(cols)
+        .eq('year', 2026)
         .gt('market_value_usd', 100_000)
         .lt('market_value_usd', 5_000_000)
         .limit(400),
