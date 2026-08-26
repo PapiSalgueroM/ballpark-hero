@@ -55,6 +55,9 @@ import {
    transfer fee all follow the same chosen currency. Display only: every
    number in the save stays in euros. */
 import { localizeMoney as money, CURRENCIES, getCurrency, setCurrency, rateNote } from "@/lib/soccerCurrency";
+/* Round 262: the squad you are actually in. Display only, and it renders
+   nothing at all when we have no honest answer for that club and season. */
+import { depthChart, GROUP_LABEL, type DepthChart, type SquadMan } from "@/lib/soccerClubSquad";
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
@@ -2366,6 +2369,81 @@ function RivalrySummaryCard({ summary, career }: { summary: RivalrySummary; care
 }
 
 /* ─── Financial & Lifestyle Panel ─── */
+/* ─── Round 262: your place in the squad ───
+   Sign for Arsenal and the question that decides your whole season is who is
+   ahead of you. The game used to answer it with a projected number of games
+   and no names. This is the real squad, in the real season, with you slotted
+   in at your rating, and a tile for the whole thing.
+
+   It renders NOTHING when there is no honest answer: a club outside the hand
+   written map, a season outside the baked window, or a squad the data cannot
+   fill. No generated teammates stand in, because there is no honest way to
+   invent the squad of a real club in a real season. */
+function SquadManRow({ man, rank }: { man: SquadMan; rank: number }) {
+  return (
+    <div
+      data-squad-man={man.me ? "me" : "other"}
+      className={`grid grid-cols-[auto_1fr_auto_auto] gap-x-2 items-center text-[11px] rounded-md px-2 py-1 ${
+        man.me ? "bg-gold/15 border border-gold/50 font-bold" : "bg-muted/20"
+      }`}
+    >
+      <span className="text-muted-foreground w-4 shrink-0 tabular-nums">{rank}</span>
+      <span className="truncate">{man.name}</span>
+      <span className="text-[9px] uppercase tracking-wide text-muted-foreground w-8 text-right">{man.pos}</span>
+      <span className="w-6 text-right tabular-nums font-black">{man.ovr}</span>
+    </div>
+  );
+}
+
+function SquadDepthCard({ chart }: { chart: DepthChart }) {
+  const [open, setOpen] = useState(false);
+  const revealRef = useRevealScroll<HTMLDivElement>(open);
+  const label = GROUP_LABEL[chart.group];
+
+  if (open) {
+    return (
+      <div ref={revealRef} className="rounded-xl border border-border bg-card p-3 space-y-2">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+          {chart.club}, {chart.year}/{(chart.year + 1).toString().slice(-2)}
+        </div>
+        <div className="space-y-1 max-h-[300px] overflow-y-auto scrollbar-thin">
+          {chart.squad.map((m, i) => <SquadManRow key={`${m.name}-${i}`} man={m} rank={i + 1} />)}
+        </div>
+        <p className="text-[10px] text-muted-foreground">
+          The real {chart.club} squad that season, rated on the same scale as the rest of the site.
+        </p>
+        <Button variant="outline" onClick={() => setOpen(false)} className="w-full h-8 text-xs font-bold">← Back</Button>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={revealRef} className="rounded-xl border border-border bg-card p-3 space-y-2">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+          Your place in the squad
+        </span>
+        <span className="text-[9px] text-muted-foreground">{chart.year}/{(chart.year + 1).toString().slice(-2)}</span>
+      </div>
+      <p className="text-[11px] text-muted-foreground">
+        {chart.ahead === 0
+          ? `Nobody at ${chart.club} is rated above you among the ${label}. The shirt is yours to lose.`
+          : `${chart.ahead} of ${chart.club}'s ${label} are rated above you${chart.aheadOfMe ? `, and ${chart.aheadOfMe.name} is the one directly in front` : ""}.`}
+      </p>
+      <div className="space-y-1">
+        {chart.men.slice(0, 6).map((m, i) => <SquadManRow key={`${m.name}-${i}`} man={m} rank={i + 1} />)}
+      </div>
+      <button
+        onClick={() => setOpen(true)}
+        className="w-full bg-muted/20 hover:bg-muted/40 border border-border rounded-lg p-2 text-left transition-colors"
+      >
+        <div className="text-[11px] font-bold">👥 The whole squad</div>
+        <div className="text-[9px] text-muted-foreground">{chart.squad.length} players at {chart.club}</div>
+      </button>
+    </div>
+  );
+}
+
 function FinancialPanel({ career, onCurrencyChange }: { career: CareerState; onCurrencyChange?: () => void }) {
   const lifestyleEmoji: Record<string, string> = {
     "Humble": "🏚️", "Comfortable": "🏡", "Wealthy": "🏰", "Superstar": "✨", "Billionaire": "👑",
@@ -3690,6 +3768,17 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               </div>
             </div>
           )}
+
+          {/* Round 262: your place in the squad, above the money because on a
+              given season it matters more. Renders only while you are actually
+              at a club, and only when there is a real squad to show. */}
+          {career.phase === "playing" && (() => {
+            /* the season about to be played, which is the one the depth chart
+               is describing: the last recorded season plus one. */
+            const year = (career.seasons[career.seasons.length - 1]?.year ?? 0) + 1;
+            const chart = depthChart(career.currentClub, year, career.position, career.overall, career.playerName);
+            return chart ? <SquadDepthCard chart={chart} /> : null;
+          })()}
 
           {/* Financial & Lifestyle Panel */}
           {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (
