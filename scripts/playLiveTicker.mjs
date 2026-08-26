@@ -25,7 +25,7 @@
  * Run: node scripts/lib/hostLikeServer.mjs dist 4173 &
  *      node scripts/playLiveTicker.mjs
  */
-import pw from '/home/claude/.npm-global/lib/node_modules/playwright/index.js';
+import pw from './lib/pwLoader.mjs';
 
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';
 const CONTROL = process.env.TICKER_CONTROL || '';

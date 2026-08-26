@@ -34,7 +34,12 @@ cd ballpark-hero
 npm install
 ```
 
-A claude.ai/code session already has the clone, so it only needs `npm install`.
+A claude.ai/code session already has the clone, so it only needs `npm install`, plus two
+installs the clone does not carry, both learned on 2026-08-26 when the first cloud round hit
+them: `npm install --no-save playwright` (the prerenderer and the browser sweeps import it;
+the browsers themselves are preinstalled at `/opt/pw-browsers`, so this is just the package)
+and `pip3 install fonttools pillow` (simBrand runs the logo generator and fails closed
+without them).
 
 Then read `docs/PROJECT-STATE.md` and reconcile against reality:
 

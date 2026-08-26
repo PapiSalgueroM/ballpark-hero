@@ -33,7 +33,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
-import pw from '/home/claude/.npm-global/lib/node_modules/playwright/index.js';
+import pw from './lib/pwLoader.mjs';
 
 const { chromium, devices } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');

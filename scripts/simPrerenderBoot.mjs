@@ -39,7 +39,7 @@ import { readFileSync, existsSync, statSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readRoutes } from './lib/retiredRoutes.mjs';
-import pw from '/home/claude/.npm-global/lib/node_modules/playwright/index.js';
+import pw from './lib/pwLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');

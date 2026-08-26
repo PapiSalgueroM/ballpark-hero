@@ -2568,3 +2568,13 @@ today rather than adding alongside them.
   plus the pinned teamsheet with a negative control, discovered by runAllSims. The roadmap's
   requested overnight simHalftime measurement (30 runs, means, sd and gap logged each time)
   was started in the background the same night; read the log before touching that threshold.
+  The first full cloud board also surfaced three infrastructure repairs that shipped with the
+  round: all 45 browser harnesses plus the prerenderer imported playwright from the desktop
+  sandbox's absolute global path (`/home/claude/.npm-global/...`), which exists on no other
+  machine, so they now go through `scripts/lib/pwLoader.mjs` (bare specifier first, the old
+  path as fallback) and `rasterize.mjs` got the same treatment for sharp; `simBallonDorTruth`
+  had printed 3 lines since Round 292 against the runner's 4 line floor, so every board filed
+  it EMPTY, and it now prints its teeth; and a cloud session needs `npm install --no-save
+  playwright` plus `pip3 install fonttools pillow` after `npm install`, now recorded in the
+  CLAUDE.md bootstrap. Lesson worth the ink: `npm run build:seo | tail` reports tail's exit
+  code, not the build's, which is how the first prerender failure initially read as a success.

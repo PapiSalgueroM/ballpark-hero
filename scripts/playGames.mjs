@@ -22,7 +22,7 @@
  * Then: node scripts/playGames.mjs
  * ONLY=/route chases a single game, VERBOSE=1 prints every press.
  */
-import pw from '/home/claude/.npm-global/lib/node_modules/playwright/index.js';
+import pw from './lib/pwLoader.mjs';
 const { chromium } = pw;
 import fs from 'node:fs';
 
