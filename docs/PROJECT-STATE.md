@@ -1,5 +1,53 @@
 # Project state
 
+## Owner feedback, 2026-08-26 (the 51 page tweaks document, sent after Round 294 went live)
+
+**This list outranks everything below it. Work it top to bottom, in his order.** The document
+is three pages of direct feedback plus a 48 page feature encyclopedia he compiled from the
+big sports career games, the life sims and the idle genre as the depth bar for future rounds.
+The encyclopedia is full of rival product names; mine it for MECHANICS, never let its
+vocabulary into src, public or scripts (simNoRivalNames enforces this).
+
+The direct asks:
+
+1. **Ticker rework, cable sports network style.** A LIVE label with a small red dot top left.
+   No question mark button in the strip, no site promo lines ("113 free games...", "New stuff
+   ships..."), nothing about the site itself: ONLY that day's real games and sporting events.
+   Before a game: the matchup, start time, sport. During and after: the score. Broken up by
+   sport: a sport box (SOCCER, MLB, NFL...) expands, shows its games, collapses, next sport,
+   looping forever. His words: "truly checkout espn and how they do it or did it on cable tv."
+2. **The "no sign-up" line under the logo "is a lie", change it.** Accounts exist, so the
+   absolute claim reads false to him. Reword honestly (everything plays without an account,
+   an account is optional for streaks and rank).
+3. **Streaks, played today and points must all work, be accurate, and points must be earnable
+   from ANY game.** Audit the whole scoring pipeline game by game.
+4. **Everything on the profile page must be accurate and work.**
+5. **Leaderboard names: "everyone is just called baller and something... not a single person
+   with an actual name."** The anonymous default name generator dominates the board. Fix the
+   experience (surface real display names where they exist, rethink the default).
+6. **Most played today stays. "Your dailies" on the home page goes.** Remove the Round 293
+   home page dailies section.
+7. **Polls must be new and fun every day** (the polls routine owns this; keep it honest).
+8. **BUG, fix first: create-a-club placed in La Liga still says "Premier League" and "FA
+   Cup".** His words: "Bro I just created a team in La liga and it's saying premier league
+   and fa cup." Reproduce, fix, and sweep every league-conditional string in create-a-club.
+9. **Play every game (all 115) in a real browser and test every feature of each, then fix
+   what is broken, before he plays again.** The browser board plus playGames is the vehicle;
+   run it fully and work every finding.
+10. **Club Manager: far more leagues** (his pasted target list covers Liga Portugal,
+    Eredivisie, Scottish Premiership, the Scandinavian and central European leagues, MLS,
+    NWSL, Argentina, the Saudi league, K League, CSL, A League), **and not only for today:
+    for the 2015/16, 2010/11 and 05/06 eras too, plus more eras beyond those.** Data
+    correctness rules apply in full: verifiable rosters or CM_PARTIAL marking, never
+    invented players.
+11. **Managers as first class citizens:** play different managers at different clubs,
+    customize a created manager, and move teams between leagues (promotion style world
+    editing). Three separate arcs, all wanted.
+12. **The encyclopedia (pages 4 to 51): "i wanted at least like 50-100 things per each."**
+    Standing direction to keep deepening every sim toward those feature lists: player
+    creation depth, training systems, media and endorsements, staff and facilities, life
+    events, prestige loops. Treat it as the permanent backlog feeding every future round.
+
 ## Owner feedback, 2026-08-19 afternoon (one screenshot, Soccer Career national team)
 
 Two asks plus the standing "keep going":
