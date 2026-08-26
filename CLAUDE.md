@@ -114,6 +114,7 @@ What that means in practice:
 | Database | Supabase, project `flawuiqbvjobmkfkauhw` (Pro plan, spend cap ON) |
 | AdSense | publisher `pub-2929318086316376` |
 | Owner logins | site account `amsalguero10@icloud.com`, project mail `douknowball1@gmail.com` |
+| Scores feed | API-Sports free tier (Round 287). The key lives only in `private.app_secrets` on Supabase and is read by the `scores-poll` edge function; never paste it into the repo, an env var or a chat. `simLiveScores` scans for key shaped literals. |
 
 **The Lovable workspace is on the free plan with 0 credits. Never drive builds through the
 Lovable AI agent.** Lovable is used only as the host and the deploy trigger. All code changes

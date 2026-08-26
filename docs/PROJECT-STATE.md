@@ -743,7 +743,7 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
-| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 286** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP147.bat` runs all twenty nine in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 146) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
+| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 287** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP148.bat` runs all thirty in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 147) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
 | PREVIOUS HEAD, FOR CONTEXT | `f848aa0` = Round 253, pushed 2026-08-21 morning and published the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
 | WHY THE BACKLOG SAT FOR WEEKS | **Four separate bugs in the RUN bats, not in the code and not on his machine.** Every one of them made a fail-closed assertion STOP a run that should have passed, so a click that looked like it worked shipped a handful of rounds and quit. All four were reproduced on Windows before being fixed, all four are fixed in the bats on his disk AND in pkg/mkbat.py, and pkg/verifybat.py now refuses to build or bless a bat carrying any of them: (1) FORWARD SLASHES in a findstr file argument: findstr rejects them outright and returns errorlevel 1 exactly as if the pattern were missing, which killed 56 bats at Round 179 every single time; (2) RAW DOUBLE QUOTES in a pattern: cmd ends the quoted argument at the first one, so any assertion quoting real code (an aria-label, a JSX prop, an array of strings) was mangled, killing 10 bats at Round 198; (3) A QUOTE FOLLOWED BY A CMD OPERATOR: cmd counts quotes and does not understand the \" escape, so a `>` after one becomes a redirection, which silently turned RUN209's check into a file write; (4) A PERCENT SIGN in a pattern: cmd strips a lone `%` as variable-expansion syntax, so the assertion hunts for text the file does not contain, which stopped RUN251 on a comment reading "the 40% wash". The empirical tests that proved 1, 2 and 3 are worth repeating if a fifth ever appears: write a throwaway bat that runs the shapes against a known file, log the errorlevels, and read the log. Guessing cost more time than testing. |
@@ -1334,6 +1334,77 @@ purge. Awards is still unbuilt. See the roadmap below.
 
 ---
 
+## Round 287: the ticker carries real scores, on the free plan, and looks like a broadcast strip
+
+Two asks from Anthony on 2026-08-25: "what about fixing the ticker to more closely resemble
+espn's" and, when the paid feed came up, "i want the free version unless the 9 dollars is per
+year". So the money decision that had been parked since Round 167 is closed: the free tier of
+API-Sports (100 requests a day per sport API, no card), and the ticker is built so that the
+day it is not enough the strip simply says less rather than something wrong.
+
+**Where the data flows.** The edge function `supabase/functions/scores-poll` (deployed v2,
+`verify_jwt` off, it checks its own `x-poll-secret` header instead) asks the feed for today's
+fixtures in five sports and upserts them into `public.live_scores` (anon select only), writing
+one row per sport per run into `public.live_scores_runs` (http status, row count, note). A
+pg_cron job, `scores-poll-every-20-min`, calls it through `net.http_post` every twenty minutes,
+reading the poll secret from the table at fire time. The API key and the poll secret live in
+`private.app_secrets` (RLS on, no policies, anon and authenticated revoked) and are read
+through `public.app_secret(p_name)`, a SECURITY DEFINER function that only `service_role` may
+execute. **Neither secret is anywhere in this repo**, and `simLiveScores` section 3 scans the
+function and the client for anything shaped like one. The poll secret was rotated after being
+used in a URL during setup.
+
+Budget arithmetic: 72 runs a day times one request per sport is 72 of the 100 per sport per
+day. Soccer is one call for the whole day's fixtures, filtered to seven leagues in the parser
+(Premier League, LaLiga, Serie A, Bundesliga, Ligue 1, Champions League, MLS), so it is 72 of
+100 too. Nothing else calls the feed, and the
+browser never does.
+
+**What the free plan actually returns**, measured 2026-08-25: MLB gives today's slate (15
+rows) even though its own probe says "Free plans do not have access to this season"; soccer
+gives the day's fixtures across the seven leagues; NFL, NBA and NHL return zero rows in August
+because they are out of season, and the runs table records that as http 200 with 0 rows, which
+is the correct shape for "nothing on". Watch `live_scores_runs` when each season opens
+(NFL September, NHL and NBA October) to confirm the free plan serves them; if a sport ever
+returns 4xx it drops off the strip on its own.
+
+**The browser side.** `src/lib/liveScores.ts` reads `public.live_scores` over plain REST with
+the URL and anon key from `src/integrations/supabase/client` (never `VITE_SUPABASE_*`),
+windowed to games that started in the last twelve hours or start in the next twenty,
+`isShowable` drops anything that cannot be shown honestly (a live game with no score, a row
+missing a team), and `sortForTicker` puts games in play first, then today's kickoffs, then
+finals. `src/hooks/useLiveScores.ts` fetches on mount, every five minutes, and when the tab
+comes back into view. Every failure resolves to an empty list and the strip carries on with
+the site's own lines exactly as before. `LiveTicker.tsx` is the wrapper `App.tsx` mounts;
+`TopTicker` stays pure and takes the rows as a prop, so `simTicker` can still import
+`buildItems` into node without dragging a network client along.
+
+**The look.** A near black bar, the brand block on the left with the mark and either LIVE with
+a red pulse, SCORES, or THE TICKER; then cards separated by thin rules. A score card is a
+sport tag, two teams with their scores in tabular figures, and a state: a period from the
+feed, FINAL, or the start time in the visitor's own zone. American sports read away at home,
+soccer reads home v away. Every card is `data-no-prerender`, and it could not reach a snapshot
+anyway (the prerenderer has no database), but the rule is that anything computed from outside
+the file says so.
+
+**Held by** `simLiveScores` (the shaping, the server side boundary, no key shaped literal in
+the repo, `LIVE_CONTROL=leak` plants one and must be reported), `simTicker` (the strip's own
+lines unchanged), `simPrerender` section 13 (every interpolated ticker line still declares
+itself volatile), and `playLiveTicker`, the browser harness that is the only thing able to see
+a card: the sandbox has no route to the database, so it answers the scores request itself
+with six real row shapes and measures the order (live, fixtures by kickoff, final), the
+reading direction, the aria sentences, the hub links, the start time in the visitor's zone,
+every text run's contrast against the bar (the first draft had the sport tag at 4.31 to 1 and
+the separator at 2.34, both raised to 6.22), the `data-no-prerender` mark on every card, and
+the dead feed fallback. `TICKER_CONTROL=dim` fades the tags in the browser and it must go red.
+Cards carry `data-score-card` so a harness can tell them from the site's own volatile lines,
+which are also marked `data-no-prerender`.
+
+**Decision closed.** "ESPN-style score ticker data source" is removed from the list Anthony
+owes: he chose the free tier. The upgrade path if the free plan ever stops serving a sport is
+a paid API-Sports tier, priced per sport API per month on their site (read the current number
+there before quoting him one), and that is a money question again.
+
 ## Round 286: the site has a face, and the sitemap stops re-dating every page when the footer moves
 
 Anthony's ask on 2026-08-25: "also want a way better logo". The one in place was an AI banner
@@ -1756,8 +1827,11 @@ besides money. Everything else, decide yourself.** When one is resolved, delete 
 1. **Competitor names in the public repo.** `docs/research/R1_soccer_sites.md` and
    `docs/research/R3_creator_formats.md` name competitors by name in a public repo. Delete or
    gitignore. Do not silently delete his research, ask him.
-2. **ESPN-style score ticker data source.** Needs a paid feed decision. Money.
-3. **Apple sign-in.** Parked on the $99/yr Apple developer account. Money.
+2. **Apple sign-in.** Parked on the $99/yr Apple developer account. Money.
+
+*Closed 2026-08-25: the score ticker data source. He chose the free API-Sports tier ("i want the
+free version unless the 9 dollars is per year"); Round 287 built on it. Reopens only if the free
+plan stops serving a sport, and then it is a money question again.*
 
 *Closed 2026-08-16: invented quotes attributed to real players. Was item 1 and the highest
 priority open exposure. Fixed and guarded in Round 137, see above.*
@@ -1982,6 +2056,7 @@ per-game SEO copy, about 52 harnesses in `scripts/`, 53 files in `docs/`.
 | Google sign-in | live |
 | Apple sign-in | parked, needs the $99/yr developer account, this is a money question |
 | GA4 | `G-KZQK2G68YC`, wired in Round 285 behind the cookie Accept (same gate as the ads), pending push |
+| API-Sports | free tier, signed up 2026-08-25 with the project mail. Five sport APIs (football, basketball, baseball, hockey, american-football), 100 requests a day each. The key lives ONLY in `private.app_secrets` on Supabase (`api_sports_key`), read by the `scores-poll` edge function; it is not in the repo, not in Lovable, not in any env var. The dashboard shows daily usage; the cron spends 72 of 100 per sport. |
 
 ---
 
@@ -2016,6 +2091,10 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-25** Round 287. Real scores on the ticker from the free API-Sports tier, polled
+  server side every twenty minutes into `public.live_scores`, secrets in `private.app_secrets`
+  only. The strip redrawn as a broadcast bar. Ticker feed decision closed. Pending row: 258
+  through 287 wait on `SHIP148.bat`.
 - **2026-08-25** Round 286. The logo: mark, wordmark, icons, social image, all from one
   generator, held by simBrand. Site chrome excluded from the lastmod fingerprint (v3, dates held).
   Cookie banner copy made true.

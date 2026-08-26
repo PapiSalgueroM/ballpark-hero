@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CATEGORIES } from '@/data/gameRegistry';
 import { upcomingEvents, whenPhrase } from '@/data/sportsCalendar';
+import { LogoMark } from '@/components/layout/Logo';
+import { SPORT_HUB, SPORT_TAG, startLabel, teamShort, type LiveScoreRow } from '@/lib/liveScores';
 
 /**
  * Round 167, his ask from the first review: the scrolling news strip the big
@@ -165,17 +167,70 @@ export function buildItems(now: Date = new Date()): TickerItem[] {
 
 const HIDDEN_PREFIXES = ['/admin', '/reset-password'];
 
-export function TopTicker() {
+/* ROUND 287: THE STRIP LOOKS LIKE THE ONE ON A SPORTS BROADCAST NOW, and it
+   carries real scores. The owner asked for both. The look: a near black bar,
+   a brand block on the left with the mark, and a run of cards separated by
+   thin rules, each card a sport tag, two teams with their scores in tabular
+   figures, and a state (a time, a period, or FINAL). The scores come in as a
+   prop from LiveTicker so that this file stays pure: simTicker imports
+   buildItems into node and must never drag a network client in with it.
+
+   Every score card is data-no-prerender. It could not reach a snapshot anyway
+   (the prerenderer leaves the database hanging), but the rule is that
+   anything computed from something outside this file says so, and a card is
+   computed from a table that changes every twenty minutes. */
+export interface TopTickerProps {
+  scores?: LiveScoreRow[];
+}
+
+function ScoreCard({ row, ghost }: { row: LiveScoreRow; ghost?: boolean }) {
+  const tag = SPORT_TAG[row.sport] ?? row.sport.toUpperCase();
+  const to = SPORT_HUB[row.sport] ?? '/';
+  const home = teamShort(row.home, row.sport);
+  const away = teamShort(row.away, row.sport);
+  const state = row.live ? (row.status_long || 'Live') : row.finished ? 'Final' : startLabel(row.start_at);
+  /* American sports read away then home ("Astros at Yankees"); soccer reads
+     home then away. The strip follows the convention the fan expects. */
+  const first = row.sport === 'soccer' ? [home, row.home_score] : [away, row.away_score];
+  const second = row.sport === 'soccer' ? [away, row.away_score] : [home, row.home_score];
+  const inner = (
+    <>
+      <span className="text-[9px] font-black tracking-[0.14em] text-muted-foreground">{tag}</span>
+      <span className="inline-flex items-baseline gap-1.5">
+        <span className="font-semibold text-foreground whitespace-nowrap">{first[0]}</span>
+        {first[1] != null && <span className="tabular-nums font-bold text-foreground">{first[1]}</span>}
+        <span className="text-muted-foreground px-0.5" aria-hidden="true">{row.sport === 'soccer' ? 'v' : '@'}</span>
+        <span className="font-semibold text-foreground whitespace-nowrap">{second[0]}</span>
+        {second[1] != null && <span className="tabular-nums font-bold text-foreground">{second[1]}</span>}
+      </span>
+      <span className={`inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${row.live ? 'text-red-400' : row.finished ? 'text-muted-foreground' : 'text-primary'}`}>
+        {row.live && <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" aria-hidden="true" />}
+        {state}
+      </span>
+    </>
+  );
+  const cls = 'inline-flex items-center gap-2 h-full px-3 border-l border-border/60 text-[11px] shrink-0';
+  if (ghost) return <span aria-hidden="true" data-no-prerender="true" data-score-card="" className={cls}>{inner}</span>;
+  return (
+    <Link to={to} data-no-prerender="true" data-score-card="" className={`${cls} hover:bg-muted/40 transition-colors`} aria-label={`${tag}: ${first[0]} ${first[1] ?? ''} ${row.sport === 'soccer' ? 'v' : 'at'} ${second[0]} ${second[1] ?? ''}, ${state}`}>
+      {inner}
+    </Link>
+  );
+}
+
+export function TopTicker({ scores = [] }: TopTickerProps) {
   const { pathname } = useLocation();
   /* Rebuilt per navigation, which is exactly when a save line can change
      (you just played the game you are navigating away from). */
   const items = useMemo(() => buildItems(), [pathname]);
 
   if (HIDDEN_PREFIXES.some(p => pathname.startsWith(p))) return null;
-  if (!items.length) return null;
+  if (!items.length && !scores.length) return null;
 
   const home = pathname === '/';
-  const itemClass = 'inline-flex items-center gap-1.5 px-4 text-[11px] text-muted-foreground shrink-0';
+  const anyLive = scores.some(r => r.live);
+  const itemClass = 'inline-flex items-center gap-1.5 h-full px-3 border-l border-border/60 text-[11px] text-muted-foreground shrink-0';
+  const cards = scores.map(r => <ScoreCard key={r.id} row={r} />);
   const track = items.map((it, i) => (
     <Link
       key={`${it.to}-${i}`}
@@ -185,35 +240,42 @@ export function TopTicker() {
     >
       <span aria-hidden="true">{it.icon}</span>
       <span className="whitespace-nowrap">{it.text}</span>
-      <span className="text-border pl-4" aria-hidden="true">·</span>
     </Link>
   ));
   /* The second copy makes the loop seamless. Plain spans, not links, so a
      keyboard user never tabs through the strip twice. */
+  const ghostCards = scores.map(r => <ScoreCard key={`dup-${r.id}`} row={r} ghost />);
   const ghost = items.map((it, i) => (
     <span key={`dup-${i}`} aria-hidden="true" data-no-prerender={it.volatile ? 'true' : undefined} className={itemClass}>
       <span>{it.icon}</span>
       <span className="whitespace-nowrap">{it.text}</span>
-      <span className="text-border pl-4">·</span>
     </span>
   ));
+  const count = items.length + scores.length;
 
   return (
-    <div data-site-chrome="" className={`${home ? '' : 'hidden md:block'} bg-card border-b border-border overflow-hidden h-7 relative`} aria-label="Site ticker">
+    <div data-site-chrome="" className={`${home ? '' : 'hidden md:block'} bg-[hsl(225_25%_4%)] border-b border-border/60 overflow-hidden h-8 relative`} aria-label="Scores and site ticker">
       <div className="flex items-center h-full">
-        <span className="shrink-0 z-10 h-full inline-flex items-center gap-1 px-2.5 bg-primary text-primary-foreground text-[10px] font-bold tracking-widest uppercase">
-          <span className="w-1.5 h-1.5 rounded-full bg-primary-foreground animate-pulse" aria-hidden="true" /> The Ticker
+        <span className="shrink-0 z-10 h-full inline-flex items-center gap-1.5 pl-2 pr-3 bg-primary text-primary-foreground text-[10px] font-black tracking-[0.18em] uppercase">
+          <LogoMark size={16} className="shrink-0" />
+          {anyLive ? (
+            <>
+              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" aria-hidden="true" /> Live
+            </>
+          ) : scores.length ? 'Scores' : 'The Ticker'}
         </span>
         <div className="dukb-ticker-viewport flex-1 overflow-hidden h-full">
           <div className="dukb-ticker-track flex items-center h-full w-max">
+            {cards}
             {track}
+            {ghostCards}
             {ghost}
           </div>
         </div>
       </div>
       <style>{`
         @keyframes dukbTickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .dukb-ticker-track { animation: dukbTickerScroll ${Math.max(30, items.length * 6)}s linear infinite; }
+        .dukb-ticker-track { animation: dukbTickerScroll ${Math.max(30, count * 6)}s linear infinite; }
         .dukb-ticker-viewport:hover .dukb-ticker-track { animation-play-state: paused; }
         @media (prefers-reduced-motion: reduce) {
           .dukb-ticker-track { animation: none; }

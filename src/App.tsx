@@ -7,7 +7,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
-import { TopTicker } from "@/components/layout/TopTicker";
+import { LiveTicker } from "@/components/layout/LiveTicker";
 import { UpdateNudge } from "@/components/layout/UpdateNudge";
 import { Footer } from "@/components/game/Footer";
 import Index from "./pages/Index";
@@ -279,7 +279,7 @@ const AppContent = () => {
       <ScrollToTop />
       <CookieConsent />
       {/* Round 167: the site's own wire across the top of every screen. */}
-      <TopTicker />
+      <LiveTicker />
       {shouldShowHeader(pathname) && <Header />}
       <Suspense fallback={<RouteLoader />}>
       <Routes>

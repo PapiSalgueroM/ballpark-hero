@@ -71,7 +71,14 @@ async function look(width, height) {
   await page.waitForTimeout(2000);
   const out = await page.evaluate(({ nonGameSrc, vh }) => {
     const NON_GAME = new RegExp(nonGameSrc);
-    const inTicker = el => !!el.closest('[aria-label="Site ticker"]');
+    /* Round 287: the strip is labelled "Scores and site ticker" now that it
+       carries scores. The label is asserted to exist, because if this selector
+       ever matched nothing the ticker's own game links (at the very top of the
+       page) would be counted as the first playable tile and the check below
+       would pass for the wrong reason. */
+    const TICKER = '[aria-label="Scores and site ticker"]';
+    const tickerPresent = !!document.querySelector(TICKER);
+    const inTicker = el => !!el.closest(TICKER);
     const links = [...document.querySelectorAll('a[href^="/"]')].filter(a => !inTicker(a));
     const games = links
       .map(a => ({ p: a.getAttribute('href') || '', el: a }))
@@ -128,7 +135,7 @@ async function look(width, height) {
         return spans.length > 1 ? spans[spans.length - 1] : null;
       })
       .filter(t => t && t.length > 6);
-    return { first, prompts, subtitles, viewport: vh };
+    return { first, prompts, subtitles, viewport: vh, tickerPresent };
   }, { nonGameSrc: NON_GAME.source, vh: height });
   await ctx.close();
   return out;
@@ -139,6 +146,7 @@ console.log(`playHomeFold: what a visitor is offered before they are asked for a
 console.log('1) a phone sees something to play, high enough to see it');
 {
   const r = await look(390, 844);
+  say(r.tickerPresent, 'the ticker is on the page under its label, so its links were excluded and not counted as tiles');
   if (!r.first) {
     say(false, 'no playable game link on the home page at all, which cannot be right');
   } else {
