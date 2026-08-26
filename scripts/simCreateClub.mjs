@@ -388,6 +388,36 @@ console.log('8) Round 160: quality slider, identity, stadium size');
   console.log(`   slider 88: best ${ratings[0]}, XI ${xiAvg.toFixed(1)}, told "${wants}" · slider 55 in the PL told "${wants2}" · legacy anchor intact`);
 }
 
+/* ---------- 7. The dashboard can never call a custom club English ---------- */
+console.log('7) A custom club in any league resolves to ITS league and cup, never the Premier League fallback');
+/* Round 297, straight off the owner's report: "I just created a team in La
+   liga and it's saying premier league and fa cup." The dashboard and three
+   club-manager cards were resolving the player's own club with bare
+   leagueOf(clubName), and a custom club is in no league list, so leagueOf's
+   Premier League fallback answered for every created club in every league.
+   careerLeagueOf has carried the save's truth since Round 154; this section
+   pins that it works for every league, and its control is the bug itself:
+   bare leagueOf on the same name MUST still return the fallback, because if
+   it ever stops doing that, this section is no longer testing anything. */
+{
+  const { careerLeagueOf, leagueOf } = cm;
+  let wrong = 0;
+  for (const lg of REAL_LEAGUES) {
+    Math.random = seeded(lg.id.length * 131 + 7);
+    const s = startCareer('Real Anthony', 'now', spec({ leagueId: lg.id, budgetTier: 'mid' }));
+    const resolved = careerLeagueOf(s);
+    if (resolved.id !== lg.id) { wrong += 1; fail(`custom club placed in ${lg.name} resolves to ${resolved.name}`); }
+    if (resolved.cupName !== lg.cupName) { wrong += 1; fail(`custom club in ${lg.name} shows the ${resolved.cupName}, not the ${lg.cupName}`); }
+    clearCareer();
+  }
+  const control = startCareer('Real Anthony', 'now', spec({ leagueId: 'laliga', budgetTier: 'mid' }));
+  if (leagueOf(control.clubName).id === 'laliga') {
+    fail('control is dead: bare leagueOf resolved the custom club correctly, so this section cannot distinguish the fix from the bug');
+  }
+  clearCareer();
+  console.log(`   ${REAL_LEAGUES.length} leagues, each custom club resolves to its own league and cup, ${wrong} wrong; the bare-lookup control still returns the fallback`);
+}
+
 Math.random = REAL_RANDOM;
 registerCustomClub(null);
 console.log('');

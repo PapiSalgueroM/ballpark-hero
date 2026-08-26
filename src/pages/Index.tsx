@@ -9,7 +9,6 @@ import PageSeo from '@/components/seo/PageSeo';
 import { StreakReminder } from '@/components/game/StreakReminder';
 import { useMostPlayed } from '@/hooks/useMostPlayed';
 import { PollOfTheDay } from '@/components/home/PollOfTheDay';
-import { YourDailies } from '@/components/home/YourDailies';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
@@ -382,9 +381,12 @@ export default function Index() {
             <h1 className="text-3xl md:text-5xl font-display font-bold tracking-tight text-primary mb-2">
               DoUKnowBall
             </h1>
+            {/* Owner 2026-08-26: the old line said "No sign-up" flat out, and he
+                called it a lie, because accounts exist. The honest version of the
+                pitch is that every game plays without one. */}
             <p className="text-base md:text-lg text-muted-foreground max-w-lg mx-auto mb-4">
-              Free sports trivia, daily puzzles and full career sims. No sign-up, no downloads,
-              nothing to install.
+              Free sports trivia, daily puzzles and full career sims. Every game plays
+              without an account, nothing to download or install.
             </p>
 
             {/* Stats bar: PERSONAL stats, signed-in only (owner 2026-08-05).
@@ -445,10 +447,10 @@ export default function Index() {
         {/* ─── GAME CATEGORIES ─── */}
         <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
           <MostPlayedToday />
-          {/* Round 293: returning players get their own checklist here, under the
-              trio and above the poll; a first visit renders nothing, so the fold
-              playHomeFold measures on a fresh profile does not move. */}
-          <YourDailies />
+          {/* Round 293 put a personal dailies checklist here. Round 297 removed
+              it on the owner's direct instruction in the 2026-08-26 tweaks
+              document ("The your dailies I would say get rid of it"). Most
+              played stays, per the same document. */}
           <PollOfTheDay />
           <StreakReminder />
 
