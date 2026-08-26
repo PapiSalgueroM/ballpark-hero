@@ -22,6 +22,8 @@
  *
  * Run: node scripts/simUsCoachCareer.mjs
  */
+/* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
+import './lib/seedRandom.mjs';
 import { build } from 'esbuild';
 import fs from 'node:fs';
 import path from 'node:path';

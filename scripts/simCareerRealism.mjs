@@ -17,6 +17,8 @@
  * Every bound below is a real record or a real league norm, noted inline.
  * Run: node scripts/simCareerRealism.mjs [seasonsPerPos]
  */
+/* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
+import './lib/seedRandom.mjs';
 import { build } from 'esbuild';
 import { pathToFileURL } from 'node:url';
 
