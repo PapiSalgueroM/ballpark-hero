@@ -1334,6 +1334,45 @@ purge. Awards is still unbuilt. See the roadmap below.
 
 ---
 
+## Round 282: every address that does not exist was answering as the home page
+
+Asked as Googlebot on the live site, `/this-page-does-not-exist-12345` came back **200, 18,725
+bytes, the home page's title, the home page's readable copy, the home page's canonical, and no
+robots tag at all**. So did `/soccer-career/nonsense`. That is how a single page app is normally
+served, and Google has a name for it: a soft 404, with two complaints attached. It burns crawl
+budget on an unlimited number of addresses that do not exist, on a site whose real pages are
+already struggling to get looked at. And since Round 257 put real copy into the template, every
+one of those addresses now serves a full duplicate of the site's most important page, canonical
+included, which is the site telling a crawler that infinitely many URLs are copies of its home
+page.
+
+The app has rendered a proper noindexed 404 since Round 53. That only exists after React mounts.
+A small script in the template now runs before it, and **it needs no list of routes to go stale**:
+every real address is served from its own prerendered document and every one of those carries
+`id="dukb-snapshot"`, and the template does not, so a document with no snapshot block at any path
+other than the root is by construction the fallback wearing the home page's clothes. A real route
+whose saved document went missing would be caught too, and noindex is the safe direction there:
+same call Round 278 made, and it turns a silent failure into a visible one.
+
+**The canonical had to go with the noindex, not after it.** This template canonicalises to the
+home page, which on a dead address is a claim that the address *is* the home page. Leaving that
+next to a noindex is the exact pairing Round 272 refused for the retired routes, because Google's
+guidance is that a noindex can propagate along a canonical to its target, and the target here is
+the most important page on the site. The og:title and og:description are corrected for the same
+reason.
+
+**Two things the harness caught in its own author, and both are the reason to write one.** Its
+first draft looked for the string `id="dukb-snapshot"` in the served HTML, and reported the
+fallback as a real page, because the comment in `index.html` explaining this very mechanism
+mentions the id in prose: a guard that can be satisfied by its own documentation. And its first
+negative control exposed something worse. With the new script deleted entirely, five of its seven
+assertions still passed, because by the time it read the page React had mounted and Round 53's
+404 had supplied the title and the robots tag. The harness was measuring old work and crediting
+it to this round. It now aborts the app's own modules, so the document's inline scripts run,
+React never mounts, and what is left is exactly what a crawler holds before it decides whether to
+spend the effort of rendering. With the script deleted, all of section 1 fails, which is what a
+control is for.
+
 ## Round 281: the structured data was generated correctly and thrown away
 
 Three findings, all counted on the shipped files before anything was touched.

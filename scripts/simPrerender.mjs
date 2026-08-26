@@ -366,9 +366,23 @@ console.log('10) the snapshot styling does not outlive the snapshot');
    and none asked how many there were. */
 console.log('11) exactly one canonical per shipped document');
 {
+  /* ROUND 282 MADE THIS PRECISE, and it had to. The count was of the bare string
+     rel="canonical" anywhere in the file, which was right for as long as the only
+     place that string appeared was on a real tag. The soft 404 marker added to
+     index.html this round has to REMOVE the home page canonical from a dead
+     address, so the template now contains that string inside a querySelector and
+     inside the comment explaining why, and the home page was reported as
+     shipping two canonicals when it ships one. Comments and scripts are stripped
+     and the count is of real link elements, which is what the rule was always
+     about. The same trap caught the new 404 harness on the same afternoon: a
+     guard that can be tripped by prose about itself is not measuring the thing
+     it names. */
   let worst = 0, offenders = 0;
-  for (const [r, html] of docs) {
-    const n = (html.match(/rel="canonical"/g) || []).length;
+  for (const [r, doc] of docs) {
+    const html = doc
+      .replace(/<!--[\s\S]*?-->/g, ' ')
+      .replace(/<script[\s\S]*?<\/script>/g, ' ');
+    const n = (html.match(/<link[^<>]*\brel="canonical"/g) || []).length;
     if (n > 1) {
       offenders += 1;
       worst = Math.max(worst, n);

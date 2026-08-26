@@ -273,6 +273,28 @@ does not need anyone to have thought of the failure first. `simPrerender` sectio
 at source level, requiring every ticker line built from a template literal to declare itself
 volatile, so the question cannot go unasked.
 
+### index.html is also the 404 page, and it has to say so before React runs
+
+The host answers every unknown address with `index.html` and a **200**. Since Round 257 that file
+carries the home page's real copy and its canonical, so before Round 282 every dead address on
+the domain served a full duplicate of the most important page on the site, with no robots tag.
+A small script at the end of the template's body now marks those: no `#dukb-snapshot` in the
+document and a path other than `/` means the fallback, because every real address is served from
+its own prerendered document and every one of those carries that block.
+
+Three rules for anyone touching it:
+
+- **It must never fire on a real page.** A marker that noindexes a good page is far worse than
+  the bug it fixes. `scripts/playSoftFourOhFour.mjs` section 4 walks real routes for exactly this.
+- **The canonical goes with the noindex.** The template canonicalises to `/`, and a noindex
+  beside a canonical pointing at another page can propagate the noindex to that page. Same reason
+  Round 272 left the retired-route stubs without one.
+- **Test it with the app bundle blocked.** The app has rendered a noindexed 404 since Round 53,
+  so a harness that waits for React measures Round 53's work and credits it to whoever is
+  writing today. The harness aborts `**/assets/*.js` for this reason and its negative control
+  proves it: with the pre-boot script deleted, five of seven assertions still passed before that
+  change, and all of them fail after it.
+
 ### Anything a crawler must read goes in the HEAD, and the home page's goes in the template
 
 Two separate traps, both of which have now swallowed real work more than once.

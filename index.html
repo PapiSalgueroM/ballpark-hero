@@ -322,6 +322,103 @@
         <a href="/terms">Terms</a>
       </p>
     </div>
+    <!--
+      ROUND 282: THIS DOCUMENT IS ALSO THE 404 PAGE, AND UNTIL NOW IT NEVER SAID SO.
+
+      The host answers every unknown address with this file and a 200, which is
+      how a single page app is normally served. Measured on the live site as
+      Googlebot on 2026-08-24: /this-page-does-not-exist-12345 came back 200 with
+      18,725 bytes, the home page's title, the home page's readable copy, and no
+      robots tag at all. Google has a name for that answer, a soft 404, and two
+      complaints about it. One, it burns crawl budget on an unlimited number of
+      addresses that do not exist, on a site whose real pages are already
+      struggling to get looked at. Two, and worse since Round 257 put real copy
+      into this template, every one of those addresses now serves a full copy of
+      the home page, so the site is telling a crawler that infinitely many URLs
+      are duplicates of its most important one.
+
+      The app has rendered a proper noindexed 404 since Round 53, but that only
+      exists after React mounts. This runs before it.
+
+      HOW IT KNOWS, and it needs no list of routes to go stale. Every real
+      address on this site is served from its own prerendered document, and every
+      one of those carries id="dukb-snapshot" in its body. This template does not.
+      So a document with no snapshot block, at any path other than the root, is
+      by construction the fallback wearing the home page's clothes. A real route
+      whose saved document somehow went missing would also be caught, and being
+      noindexed is the safe direction for that: it is the same call Round 278
+      made, and it turns a silent failure into a visible one.
+
+      WHY THE CANONICAL HAS TO GO WITH IT. This template canonicalises to the
+      home page, which on a dead address is a claim that the address IS the home
+      page. Leaving that next to a noindex is the exact pairing Round 272 refused
+      for the retired routes, because Google's guidance is that a noindex can
+      propagate along a canonical to its target, and the target here is the most
+      important page on the site.
+
+      This script lives at the end of the body and therefore never reaches a
+      snapshot, because the prerenderer rebuilds bodies out of readable content
+      and drops everything else. That is exactly right: a real page must never
+      run this.
+
+      Guarded by scripts/playSoftFourOhFour.mjs, which checks the three cases
+      that matter: a real route untouched, the home page untouched, and a dead
+      address noindexed and stripped.
+    -->
+    <script>
+      (function () {
+        try {
+          var path = location.pathname.replace(/\/+$/, '') || '/';
+          if (path === '/') return;
+          if (document.getElementById('dukb-snapshot')) return;
+
+          var robots = document.createElement('meta');
+          robots.setAttribute('name', 'robots');
+          robots.setAttribute('content', 'noindex, follow');
+          document.head.appendChild(robots);
+
+          var canonical = document.querySelector('link[rel="canonical"]');
+          if (canonical) canonical.parentNode.removeChild(canonical);
+          /* Defensive rather than load bearing: this template carries no og:url,
+             and the harness therefore does not assert on it, because a check
+             that cannot fire is worse than no check. It is here so that adding
+             one later cannot quietly reintroduce a dead address claiming to be
+             the home page. */
+          var ogUrl = document.querySelector('meta[property="og:url"]');
+          if (ogUrl) ogUrl.parentNode.removeChild(ogUrl);
+
+          var NOT_FOUND_TITLE = 'Page Not Found | DoUKnowBall';
+          var NOT_FOUND_DESC = 'There is no page at this address on DoUKnowBall. Browse the free sports games instead.';
+          document.title = NOT_FOUND_TITLE;
+          var desc = document.querySelector('meta[name="description"]');
+          if (desc) desc.setAttribute('content', NOT_FOUND_DESC);
+          /* og:title and og:description DO exist here and both say the home
+             page's name, which on a dead address is the same false claim the
+             canonical was making. */
+          var ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', NOT_FOUND_TITLE);
+          var ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', NOT_FOUND_DESC);
+
+          var root = document.getElementById('root');
+          if (root) {
+            root.innerHTML =
+              '<h1>404: there is no page at this address</h1>' +
+              '<p>The link is either old or wrong. Everything on DoUKnowBall is free and needs no account, so try one of these instead.</p>' +
+              '<ul>' +
+              '<li><a href="/">All the games</a></li>' +
+              '<li><a href="/soccer">Soccer games</a></li>' +
+              '<li><a href="/pro-basketball">Basketball games</a></li>' +
+              '<li><a href="/pro-football">Football games</a></li>' +
+              '<li><a href="/baseball">Baseball games</a></li>' +
+              '<li><a href="/hockey">Hockey games</a></li>' +
+              '<li><a href="/college">College games</a></li>' +
+              '<li><a href="/records">The Record Books</a></li>' +
+              '</ul>';
+          }
+        } catch (e) { /* a broken 404 marker must never stop the app booting */ }
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
