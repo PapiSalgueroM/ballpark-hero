@@ -182,6 +182,49 @@ console.log('3) the tiles say what the games are');
   }
 }
 
+console.log('4) a returning player gets a checklist, and it never moves the first tile');
+{
+  /* Round 293. The section reads the local streak record, so a fresh profile
+     (sections 1 to 3 above) never sees it; this plants a record with three
+     played dailies and measures that the section appears, below the first
+     tile, with the first tile exactly where the fresh profile had it. */
+  const fresh = await look(390, 844);
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await ctx.newPage();
+  await page.route('**://*.supabase.co/**', r => r.abort());
+  await page.addInitScript(() => {
+    const et = d => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(d);
+    const today = et(new Date()), yesterday = et(new Date(Date.now() - 86400000));
+    localStorage.setItem('dukb-streaks-v1', JSON.stringify({ version: 1, global: { current: 3, longest: 5, lastDate: yesterday }, perGame: {
+      'champ-or-not': { current: 3, longest: 5, lastDate: yesterday },
+      'face-off': { current: 1, longest: 1, lastDate: today },
+      'guess-the-year': { current: 0, longest: 2, lastDate: '2026-08-01' },
+    }, loginDates: [], totalPlays: 12, totalPoints: 300 }));
+  });
+  await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await page.waitForFunction(() => !!document.querySelector('section[aria-label="Your dailies"]'), { timeout: 15000 }).catch(() => {});
+  const r = await page.evaluate(() => {
+    const sec = document.querySelector('section[aria-label="Your dailies"]');
+    if (!sec) return null;
+    const links = [...sec.querySelectorAll('a[href^="/"]')];
+    return {
+      top: sec.getBoundingClientRect().top + window.scrollY,
+      items: links.map(a => ({ href: a.getAttribute('href'), label: a.getAttribute('aria-label') })),
+      line: sec.querySelector('span')?.textContent || '',
+    };
+  });
+  await ctx.close();
+  say(!!r, 'the checklist renders for a planted record');
+  if (r) {
+    say(r.items.length === 3 && r.items.every(i => ['/champ-or-not', '/face-off', '/guess-the-year'].includes(i.href)), `it lists the three played dailies (${r.items.map(i => i.href).join(', ')})`);
+    say(r.items.some(i => /done today/.test(i.label || '')) && r.items.some(i => /not played yet today/.test(i.label || '')), 'each item says whether it is done today');
+    say(/1 done, 2 to go/.test(r.line), `the line under the heading counts what is left ("${r.line}")`);
+    say(!!fresh.first && r.top > fresh.first.top, `it sits below the first tile (checklist at y=${Math.round(r.top)}, first tile at y=${Math.round(fresh.first?.top ?? 0)})`);
+  }
+  const again = await look(390, 844);
+  say(!!fresh.first && !!again.first && Math.abs(again.first.top - fresh.first.top) <= 2, 'a fresh profile still gets its first tile in the same place');
+}
+
 await browser.close();
 
 console.log('');

@@ -28,7 +28,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SITEMAP_FLOOR = 127; /* raised R270: the five new sport hubs joined /college (was 122, raised R252 when /hall-of-champions joined) */
+const SITEMAP_FLOOR = 129; /* raised R293 for /idle-arena (R288) and /face-off (R289), two rounds that added a page without touching this ratchet; before that 127 (R270, the five sport hubs), 122 (R252, /hall-of-champions) */
 
 let failures = 0;
 const fail = m => { failures += 1; console.error("  FAIL: " + m); };

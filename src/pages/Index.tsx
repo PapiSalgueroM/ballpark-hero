@@ -9,6 +9,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import { StreakReminder } from '@/components/game/StreakReminder';
 import { useMostPlayed } from '@/hooks/useMostPlayed';
 import { PollOfTheDay } from '@/components/home/PollOfTheDay';
+import { YourDailies } from '@/components/home/YourDailies';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
@@ -444,6 +445,10 @@ export default function Index() {
         {/* ─── GAME CATEGORIES ─── */}
         <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
           <MostPlayedToday />
+          {/* Round 293: returning players get their own checklist here, under the
+              trio and above the poll; a first visit renders nothing, so the fold
+              playHomeFold measures on a fresh profile does not move. */}
+          <YourDailies />
           <PollOfTheDay />
           <StreakReminder />
 

@@ -207,6 +207,14 @@ errors.
 them must be green before a big ship. Note the naming rule: a harness named `test*` will be
 **silently skipped** by the runner. That is how `testBallonDorFairness.mjs` went unnoticed.
 
+Between big ships, when a round rebuilds `dist` and the snapshots in `public/`, run **all** of
+the harnesses that read those directories, not a hand picked few: `simAdsense`, `simBrand`,
+`simHeadTags`, `simHiddenPages`, `simHubs`, `simIndexNow`, `simIndexing`, `simInternalLinks`,
+`simNoRivalNames`, `simPrerender`, `simPrerenderBoot`, `simRetiredRoutes`, `simSchema`,
+`simSitemap`, `simSnapshotAssets`. Round 293 found `simIndexNow` had been red since Round 288
+because two rounds that added a page ran the sitemap fence and skipped this one. A hand picked
+list is exactly the kind of memory that fails.
+
 **Browser sweeps.** `scripts/sweepGames.mjs` walks every route across three viewports.
 `scripts/playGames.mjs` actually plays them. WebKit is not installed in a fresh sandbox, so use
 `ENGINES=chromium`. A full `playGames` run takes over 40 minutes; scope it with `ONLY=/route`
