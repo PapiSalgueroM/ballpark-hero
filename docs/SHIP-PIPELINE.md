@@ -224,6 +224,38 @@ removes something, assert its **absence** too. Round 133 does both.
 gets long; split it across several `git add --` lines with an errorlevel check after each, the
 way `RUN133.bat` does.
 
+### Deleting a file in a round (Round 272, first time this was needed)
+
+A round normally only ever adds or overwrites: the zip carries files, `tar -xf` writes them, and
+nothing is ever removed. Round 272 needed to remove one, `src/pages/CollegeHub.tsx`, which had
+been dead since Round 270 replaced every hub with one shared component and which two permanent
+harnesses were failing on. Leaving it meant either a permanently red board or widening two
+guards to accommodate dead code, and both are worse than deleting it.
+
+The shape, and it is deliberately not clever:
+
+```bat
+REM Round nn deletes src\pages\Foo.tsx. Guarded so a re-run cannot fail on it.
+if not exist "src\pages\Foo.tsx" goto :nodel
+git rm -q -- src/pages/Foo.tsx
+if errorlevel 1 ( echo STOP. git rm failed. & timeout /t 60 & exit /b 1 )
+:nodel
+if exist "src\pages\Foo.tsx" ( echo STOP. Foo.tsx is still on disk. & timeout /t 60 & exit /b 1 )
+```
+
+Three things about it:
+
+- **The existence guard is required, not defensive noise.** Bats get re-run. `git rm` on a file
+  that is already gone returns non zero, and without the guard a perfectly successful round
+  would refuse to run a second time before its self-skip could even help.
+- **`git rm` and not `del`.** `del` leaves the deletion unstaged, and the explicit `git add --`
+  list further down names only files that exist, so the removal would never reach the commit.
+- **Assert the absence afterwards, outside the guard.** That is the fail-closed half. The
+  positive assertions prove the new code arrived; this one proves the old code left.
+
+The file must of course NOT be in the zip. Check that before delivering: a zip that still carries
+it would write it back after `git rm` ran, and the absence assertion would then stop the round.
+
 ### Two more hard-won bat rules
 
 - **Never put a `.bat` inside a zip with the same name as the bat that is currently running.**

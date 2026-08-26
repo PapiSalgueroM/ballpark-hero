@@ -308,6 +308,27 @@ console.log("6) the overflow constant is allowlisted, everywhere else it is bann
        iterated shuffle; fenced in section 5 like its siblings */
     "src/hooks/useAflHL.ts",
   ]);
+  /* Round 272: this scan used to read the raw file text, and it went red on
+     src/lib/fetchOverratedPool.ts, which does not USE the constant. It has a
+     header comment explaining the Round 223 bug, and that comment quotes the
+     constant, as it should: the write-up of a fix is how the next person knows
+     not to redo it. So the guard was failing on its own documentation.
+     Widening the allowlist would have been the wrong fix twice over, because
+     it would then permit a real regression in that exact file. The guard reads
+     CODE now and comments are stripped first, which keeps it strict where it
+     matters and stops it punishing anyone for writing down what happened.
+     Negative controlled: a live `seed * 1103515245` added to a non allowlisted
+     source is still caught. */
+  const codeOnly = t => t
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .split('\n')
+    .map(line => {
+      /* a // inside a URL is not a comment, and cutting there would hide
+         whatever followed on the same line */
+      const i = line.indexOf('//');
+      return i >= 0 && !/https?:$/.test(line.slice(0, i + 1).trim().slice(-6)) && !line.includes('http') ? line.slice(0, i) : line;
+    })
+    .join('\n');
   const offenders = [];
   const walk = d => {
     for (const e of readdirSync(d, { withFileTypes: true })) {
@@ -316,7 +337,7 @@ console.log("6) the overflow constant is allowlisted, everywhere else it is bann
       else if (/\.tsx?$/.test(e.name)) {
         const rel = path.relative(ROOT, p).replaceAll("\\", "/");
         const t = readFileSync(p, "utf-8");
-        if (t.includes("1103515245") && !ALLOWED.has(rel)) offenders.push(rel);
+        if (codeOnly(t).includes("1103515245") && !ALLOWED.has(rel)) offenders.push(rel);
       }
     }
   };

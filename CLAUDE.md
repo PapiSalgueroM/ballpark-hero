@@ -329,6 +329,13 @@ These are not preferences, they are the exposure.
   **"Pending" means round number above the current head, and nothing else.** Re-read the
   bootstrap section above before you extract anything. Old zips never leave that folder, and
   extracting one below the head is self-inflicted damage that presents as this bug.
+- **Never run `git checkout` in the cloud clone.** It is not an undo, it is a rollback to
+  `origin/main`, which is however many unpushed rounds behind the tree you are working on. In
+  Round 272 a `git checkout -- src/App.tsx` meant to undo a one line test edit silently took the
+  file back fifteen rounds and deleted six routes, and tsc, the build and the sitemap generator
+  all stayed green afterwards. Undo an edit by copying the file back from a copy you made first.
+  Recovery is the same as for the clone-revert bug above: re-extract every pending zip in numeric
+  order, then compare every file the zips carry against the tree byte for byte.
 - **Bash reads can be stale or truncated** in the sandbox for files edited by the Write and Edit
   tools in the same session. A file once ended mid-word under `tail` while the Read tool showed
   it complete. **Verify file content with the Read and Grep tools, never with bash `cat`,

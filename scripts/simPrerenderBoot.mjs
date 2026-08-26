@@ -38,6 +38,7 @@ import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readRoutes } from './lib/retiredRoutes.mjs';
 import pw from '/home/claude/.npm-global/lib/node_modules/playwright/index.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -54,12 +55,22 @@ if (!existsSync(path.join(DIST, 'index.html')) || !existsSync(path.join(DIST, 'a
 }
 
 /* ── 1: the shipping files carry no hashed paths ──────────────────────── */
+/* Round 272: public/ now holds two shapes of document, not one. The 126
+   snapshots boot the real app. The 8 retired route signposts deliberately do
+   NOT, because a page that redirects twice, once by meta refresh and once by
+   the client side <Navigate> the app would mount and run, is a page nobody
+   can reason about afterwards. So each shape is checked for what it is meant
+   to be rather than one of them being skipped. */
 console.log('1) every snapshot in public/ is hash free');
+const retiredSet = new Set(readRoutes().retired.map(r => r.from));
 const snapshots = [];
+const stubs = [];
 for (const entry of readdirSync(PUBLIC, { withFileTypes: true })) {
   if (!entry.isDirectory()) continue;
   const f = path.join(PUBLIC, entry.name, 'index.html');
-  if (existsSync(f) && statSync(f).isFile()) snapshots.push([`/${entry.name}`, f]);
+  if (!existsSync(f) || !statSync(f).isFile()) continue;
+  const route = `/${entry.name}`;
+  (retiredSet.has(route) ? stubs : snapshots).push([route, f]);
 }
 if (snapshots.length < 50) {
   fail(`only ${snapshots.length} snapshots found in public/, the site has 122 routes`);
@@ -78,6 +89,20 @@ for (const [route, f] of snapshots) {
   }
 }
 console.log(`   ${snapshots.length} snapshots, ${bootRefs} referencing the stable boot script, 0 hashed paths`);
+
+if (stubs.length !== retiredSet.size) {
+  fail(`${retiredSet.size} retired routes in App.tsx but ${stubs.length} signposts in public/`);
+}
+for (const [route, f] of stubs) {
+  const html = readFileSync(f, 'utf8');
+  const hashed = html.match(/(?:src|href)="\/assets\/[^"]+"/g);
+  if (hashed) fail(`${route} is a signpost and carries ${hashed.length} hashed asset path(s)`);
+  if (html.includes('/prerender-boot.js')) {
+    fail(`${route} is a signpost and boots the app, so it would redirect twice by two different mechanisms`);
+  }
+  if (!/http-equiv="refresh"/i.test(html)) fail(`${route} is a signpost with no redirect in it`);
+}
+console.log(`   ${stubs.length} retired signposts, none booting the app`);
 if (!existsSync(path.join(PUBLIC, 'prerender-boot.js'))) {
   fail('public/prerender-boot.js does not exist, so every snapshot points at a 404');
 }
@@ -166,6 +191,53 @@ for (const route of SAMPLE) {
     const assetFails = broken.filter(b => b.includes('/assets/'));
     if (assetFails.length) fail(`${route}: ${assetFails.length} asset request(s) failed, first ${assetFails[0]}`);
     console.log(`   ${route.padEnd(16)} snapshot ${preText} chars, booted ${booted ? 'yes' : 'NO'}, ${after.nodes} nodes / ${after.classed} styled, ${after.styles} stylesheet(s), ${broken.length} failed requests`);
+  } catch (e) {
+    fail(`${route}: ${String(e).split('\n')[0].slice(0, 110)}`);
+  } finally {
+    await page.close();
+  }
+}
+
+/* ── 4: a retired address actually lands on its destination ───────────── */
+/* Round 272. The signposts are static documents with a meta refresh, and a
+   meta refresh either works or it does not: there is no partial credit and no
+   way to tell by reading the file. So a real browser walks all eight and the
+   check is on WHERE IT ENDS UP, plus that the page it ends up on is the
+   working app rather than a shell. The navigation count matters as much as
+   the destination: exactly two document navigations means signpost then
+   destination, and anything more is a loop, which is the specific way this
+   kind of redirect goes wrong. MEASURED: all eight report 3, because Playwright
+   counts the about:blank a fresh page starts on before either real one. So the
+   ceiling is 3 and not 2. Do not tighten it to 2 without re-measuring; it will
+   fail every route on the first run and it will look like a real defect. */
+console.log('4) every retired address lands on its destination in a real browser');
+for (const [route] of stubs) {
+  const to = readRoutes().retired.find(r => r.from === route).to;
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  let navs = 0;
+  const broken = [];
+  page.on('framenavigated', f => { if (f === page.mainFrame()) navs += 1; });
+  page.on('response', r => { if (r.status() >= 400) broken.push(`${r.status()} ${r.url().replace(`http://127.0.0.1:${PORT}`, '')}`); });
+  await page.route('**://*.supabase.co/**', () => {});
+  try {
+    await page.goto(`http://127.0.0.1:${PORT}${route}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
+    await page.waitForFunction(
+      dest => new URL(location.href).pathname === dest,
+      to,
+      { timeout: 15000 },
+    ).catch(() => {});
+    const landed = new URL(await page.url()).pathname;
+    if (landed !== to) {
+      fail(`${route} ended on ${landed}, not ${to}, so the signpost did not send anyone anywhere`);
+    }
+    await page.waitForFunction(() => !!document.querySelector('#root [class]'), { timeout: 20000 }).catch(() => {});
+    await page.waitForTimeout(1500);
+    const classed = await page.evaluate(() => document.querySelectorAll('#root [class]').length);
+    if (classed < 80) fail(`${route} landed on ${landed} with only ${classed} styled nodes, which is not the app`);
+    if (navs > 3) fail(`${route} made ${navs} document navigations, which is a redirect loop rather than a redirect`);
+    const assetFails = broken.filter(b => b.includes('/assets/'));
+    if (assetFails.length) fail(`${route}: ${assetFails.length} asset request(s) failed, first ${assetFails[0]}`);
+    console.log(`   ${route.padEnd(22)} -> ${landed.padEnd(20)} ${navs} navigation(s), ${classed} styled nodes`);
   } catch (e) {
     fail(`${route}: ${String(e).split('\n')[0].slice(0, 110)}`);
   } finally {

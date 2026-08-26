@@ -743,7 +743,7 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
-| WAITING ON ONE DOUBLE CLICK | Rounds **258, 259 and 260** are packaged, md5 verified on his disk, and NOT pushed. `SHIP119.bat` runs all three in order and is the only bat he needs (SHIP117 and SHIP118 are earlier subsets of the same queue and can be ignored). 258: real sport in the ticker plus display currency in Soccer Career. 259: real internationals on the national team sheet, 533 nation seasons over 2016-2026. 260: a correction, two wrong game counts in the home page's static block. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
+| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 272** are packaged, md5 verified on his disk, and NOT pushed. **`SHIP131.bat` runs all fifteen in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 130) is a subset of the same queue and can be ignored. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
 | PREVIOUS HEAD, FOR CONTEXT | `f848aa0` = Round 253, pushed 2026-08-21 morning and published the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
 | WHY THE BACKLOG SAT FOR WEEKS | **Four separate bugs in the RUN bats, not in the code and not on his machine.** Every one of them made a fail-closed assertion STOP a run that should have passed, so a click that looked like it worked shipped a handful of rounds and quit. All four were reproduced on Windows before being fixed, all four are fixed in the bats on his disk AND in pkg/mkbat.py, and pkg/verifybat.py now refuses to build or bless a bat carrying any of them: (1) FORWARD SLASHES in a findstr file argument: findstr rejects them outright and returns errorlevel 1 exactly as if the pattern were missing, which killed 56 bats at Round 179 every single time; (2) RAW DOUBLE QUOTES in a pattern: cmd ends the quoted argument at the first one, so any assertion quoting real code (an aria-label, a JSX prop, an array of strings) was mangled, killing 10 bats at Round 198; (3) A QUOTE FOLLOWED BY A CMD OPERATOR: cmd counts quotes and does not understand the \" escape, so a `>` after one becomes a redirection, which silently turned RUN209's check into a file write; (4) A PERCENT SIGN in a pattern: cmd strips a lone `%` as variable-expansion syntax, so the assertion hunts for text the file does not contain, which stopped RUN251 on a comment reading "the 40% wash". The empirical tests that proved 1, 2 and 3 are worth repeating if a fifth ever appears: write a throwaway bat that runs the shapes against a known file, log the errorlevels, and read the log. Guessing cost more time than testing. |
@@ -868,6 +868,87 @@ true on the date above; re-measure rather than quoting them.
 | Packaged 2026-08-22 | **Round 271** (EVERY PRERENDERED PAGE ON THE LIVE SITE WAS 64 PIXELS NARROWER THAN THE SCREEN, AND HAD BEEN SINCE ROUND 257. The snapshot head carries a small boot `<style>` so the readable text looks like the site for the moment before the real stylesheet arrives. It set `padding:16px` on html AND body. That block never leaves the head, and Tailwind's reset zeroes body MARGIN and says nothing about body PADDING, so the padding survived the stylesheet, survived React mounting, and squeezed the LIVE APP by 32px a side on all 121 prerendered pages. MEASURED ON douknowball.com AT 390px: body 358 on /records and /leaderboard, 390 on the home page, which is the one route that is not prerendered. That is 8% of a phone screen, on 121 of 122 pages, for thirteen rounds. WHY NOTHING CAUGHT IT: every layout check on this project hunts content WIDER than the viewport, because that is what makes a page slide sideways. This made everything NARROWER, which no check was looking for. FIX: the padding moved to `<div id="dukb-snapshot">` INSIDE #root, which React discards on mount, so it lasts exactly as long as it is useful; html and body are pinned to `padding:0` rather than left unset, so a future reset cannot bring it back. Verified after: body 390 of 390 on six sampled routes and the wrapper gone from the DOM once mounted. HOW IT WAS FOUND, which is the other half of the round: `scripts/sweepGames.mjs` took its routes from the GAME REGISTRY ONLY, so the home page, Record Books, leaderboard, changelog, about, contact, privacy, terms and every sport hub had NEVER been opened at 320px by anything. Round 263 found a real overflow that shoved whole pages 64px off a phone, on game pages, because game pages were all it walked. The sweep reads the SITEMAP now (generated from App.tsx plus the registry, so still no hand kept list): 139 routes instead of 125. First run with the non-game pages in it: /leaderboard overflowed 33px at 320, because the squeezed width could no longer fit the header's Log In and Sign Up. ALSO FIXED, A WOLF: the sweep's second-person verb check flagged the changelog sentence "A club wanting you is not the same as a club playing you", which is correct English. Round 198 had tried to establish subject position with a BLOCKLIST of prepositions, and a blocklist of the ways "you" can be an object has no end; it is stated the other way round now (a subject follows a clause boundary, a short closed list), checked against nine sentences, four wrong and five right, and it gets all nine. simPrerender gains section 10: no snapshot may leak padding onto html or body, and every snapshot must carry the wrapper, both asserted because either alone lets it back. Gates: tsc zero, simPrerender green, sweep clean, full sim board green, build green, all 126 routes re-prerendered.) `RUN271.bat`, chain-guarded on 270. **SHIP130.bat runs 258 through 271.** |
 | Next free round number | **272** (check the folder first before taking it) |
 | Round missing from history | 115. Never existed, do not go looking for it. |
+
+### ⚠ public/_redirects does nothing on this host (Round 272, measured)
+
+Do not spend a session on this again. Measured against the live site on 2026-08-22, asking as
+Googlebot with redirects not followed:
+
+| Address | Status | Bytes | Canonical | Title |
+|---|---|---|---|---|
+| `/world-cup` | 200 | 18,725 | none | the home page's |
+| `/football-draft` | 200 | 18,725 | none | the home page's |
+| `/guess-soccer-club` | 200 | 18,725 | none | the home page's |
+| `/guess-transfer-value` | 200 | 18,725 | none | the home page's |
+| `/perfect-lineup` | 200 | 18,725 | none | the home page's |
+| `/world-cup-predictor` | 200 | 18,725 | none | the home page's |
+| `/deal-or-no-deal` | 200 | 18,725 | none | the home page's |
+| `/grade-transfer` | 200 | 18,725 | none | the home page's |
+| an address that was never a route | 200 | 18,725 | none | the home page's |
+
+All nine bodies are byte identical to the home page. Two facts fall out of that table and both
+had been believed the other way round for many rounds:
+
+1. **`public/_redirects` is not honored.** Not one 301 in it fires. The decisive rule is
+   `/world-cup-predictor /world-cup-bracket 301`, because its source and target are different
+   pages, so a working rule would have to answer 301 with a Location header. It answered 200
+   with the home page. The trailing slash rules look like they work and do not: `/footle/` and
+   `/footle` come back byte identical because the host serves `public/footle/index.html` for
+   both, which is directory index serving and not a redirect. The file is **kept**, annotated
+   at the top, because its last line is the SPA fallback and it cannot be proved from outside
+   whether the fallback comes from that line or from the host. Deleting it to tidy up would
+   risk every deep link on the site to find out.
+2. **The only redirect these eight ever had was the client side `<Navigate>` in App.tsx**,
+   which a crawler finds only by rendering the page. That is a plausible source of the
+   "Redirect error" reason on the 8/16 Search Console screenshots, which is the one reason
+   attributed to the website rather than to Google.
+
+Round 272's fix and its limit: this host serves `public/<route>/index.html` at `/<route>`, which
+is how all 126 snapshots already work, so each retired address now has its own small document
+carrying a meta refresh and a canonical to its destination. A meta refresh is a redirect Google
+reads out of the HTML without rendering. It is **not** as good as a 301. If the host ever starts
+honoring `_redirects`, replace the stubs with real 301s in the same round.
+
+**No `noindex` on those stubs, on purpose.** It is the obvious next thing to reach for and it is
+a trap: Google's guidance is not to combine `noindex` with a canonical, because the `noindex` can
+carry across to the canonical target, and six of the eight point at the home page.
+
+Also worth knowing: an address that was never a route returns 200 with the home page too, so the
+whole URL space is a soft 404. Round 265's home page canonical is what stops that being an
+uncanonicalised duplicate, which is a second reason that round matters.
+
+Guarded by `scripts/simRetiredRoutes.mjs` (five sections, all five negative-controlled) and by
+section 4 of `scripts/simPrerenderBoot.mjs`, which drives a real browser through all eight and
+checks where it lands.
+
+### ⚠ Never run `git checkout` in the cloud clone (Round 272, self-inflicted)
+
+This cost real time in Round 272 and it presents exactly like the clone-revert bug in CLAUDE.md,
+so it is worth naming separately. A negative control script used `git checkout -- src/App.tsx`
+to undo a deliberate one line edit. It worked, and it reverted the file all the way to
+**origin/main, which is Round 257**, silently deleting Round 270's six sport hub routes along
+with the edit. The tree had fourteen unpushed rounds extracted onto it; git knows nothing about
+any of them.
+
+What makes it dangerous is that nothing noticed for a while:
+
+- `tsc` stayed at zero errors, because the hubs are mounted through one shared component and
+  removing the routes removes no types.
+- `npm run build` stayed green.
+- `genSitemap.mjs` produced a **byte identical** sitemap, because the six hubs are listed in
+  STATIC_PAGES rather than parsed out of App.tsx.
+- The new round's own harness stayed green, because the eight retired routes exist in Round 257
+  as well.
+
+It surfaced only when `simSitemap`, `simHubs` and `simInternalLinks` were run and all three
+failed at once, naming `/soccer`, `/pro-basketball`, `/pro-football`, `/baseball` and `/hockey`.
+The recovery is the same as for the clone-revert bug: re-extract every pending zip in numeric
+order, then verify. Do the verification properly rather than by eye. Walk every file carried by
+any pending zip, take the copy from the highest numbered zip that carries it, and compare bytes
+against the tree; the only file allowed to differ is one the current round is editing.
+
+**Undo an edit with a copy of the file, never with git.** In this tree, `git checkout` is not an
+undo, it is a fifteen round rollback of whatever file it is pointed at.
 
 ### ⚠ The live deploy was triggered but not proven
 

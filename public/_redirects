@@ -1,3 +1,31 @@
+# ============================================================================
+# READ THIS BEFORE TRUSTING ANYTHING BELOW.
+#
+# Round 272, measured against the live site on 2026-08-22 asking as Googlebot
+# with redirects not followed: THIS HOST DOES NOT HONOR THIS FILE. Not one of
+# the 301 rules below fires.
+#
+# The proof is the one rule that cannot be confused with normal static file
+# serving. "/world-cup-predictor /world-cup-bracket 301" has a source and a
+# target that are different pages, so if the rule fired the response would be
+# a 301 with a Location header. It returned 200 with the home page in the body.
+# The trailing slash rules look like they work and do not: /footle/ and /footle
+# come back byte identical because the host serves public/footle/index.html for
+# both, which is directory index serving, not a redirect.
+#
+# So do not add a rule here and consider a redirect done. It will do nothing
+# and it will read like it did, which is worse than having no file. Retired
+# routes are handled by real documents written into public/ by
+# scripts/genRetiredStubs.mjs, and scripts/simRetiredRoutes.mjs is the guard.
+#
+# The file is KEPT rather than deleted for one reason: the last line is the SPA
+# fallback, and it cannot be proved from the outside whether the fallback comes
+# from that line or from the host's own behaviour. Deleting it to tidy up would
+# risk every deep link on the site to find out. Not worth it. If the host ever
+# starts honoring this file, a real 301 is better than a meta refresh and the
+# stubs should be retired in the same round.
+# ============================================================================
+
 # Remove trailing slashes (301 redirect)
 /footle/ /footle 301
 /career/ /career 301

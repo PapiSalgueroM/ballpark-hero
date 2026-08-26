@@ -2,7 +2,7 @@
  * Round 148: the sitemap generator, built the day Search Console showed
  * "Page with redirect, validation failed" (owner screenshots, 2026-08-17).
  * The r54 sitemap was generated once and drifted two ways at once: six
- * retired routes that now 301 to other pages were still being submitted
+ * retired routes that point at other pages were still being submitted
  * (/world-cup, /football-draft, /guess-soccer-club, /guess-transfer-value,
  * /perfect-lineup, /grade-transfer), and games added after r54 (Stadium
  * Tycoon) were missing. Both drift classes end here:
@@ -19,11 +19,24 @@
  * scripts/simSitemap.mjs asserts all of this on every suite run, so the
  * next retired game or new release cannot recreate today's Search Console
  * failure quietly.
+ *
+ * Round 272 correction, and it matters: those retired routes never actually
+ * sent a 301. public/_redirects is not honored by this host, which was proved
+ * against the live site, so until Round 272 they returned 200 with the home
+ * page in the body. Excluding them from the sitemap was still exactly right,
+ * it just was not doing what the sentence above says it was. They now carry
+ * their own signpost documents; see scripts/genRetiredStubs.mjs.
+ *
+ * Round 272 also moved the App.tsx route parse into scripts/lib/retiredRoutes.mjs
+ * so that this generator, the stub generator and simRetiredRoutes cannot end
+ * up with three slightly different ideas of what is retired. That failure mode
+ * is not hypothetical: it is what shipped /college empty in Round 268.
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readRoutes } from './lib/retiredRoutes.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://douknowball.com';
@@ -57,19 +70,9 @@ const STATIC_PAGES = [
   { p: '/terms', freq: 'yearly', pri: '0.3' },
 ];
 
-/* ---- routes from App.tsx ---- */
-const app = fs.readFileSync(path.join(ROOT, 'src/App.tsx'), 'utf8');
-const redirects = new Set();
-const liveRoutes = new Set();
-for (const m of app.matchAll(/<Route\s+path="([^"]+)"\s+element={\s*(<Navigate\b)?/g)) {
-  const p = m[1];
-  if (p.includes(':') || p === '*') continue;
-  if (m[2]) redirects.add(p); else liveRoutes.add(p);
-}
-if (!liveRoutes.size || !redirects.size) {
-  console.error('FATAL: route parse found nothing, App.tsx shape changed');
-  process.exit(1);
-}
+/* ---- routes from App.tsx, via the one shared reader ---- */
+const { live: liveRoutes, retired } = readRoutes();
+const redirects = new Set(retired.map(r => r.from));
 
 /* ---- games from the registry (house bundle pattern) ---- */
 const ENTRY = '/tmp/sitemapEntry.mjs';
