@@ -474,64 +474,56 @@ console.log('12) no shipped page has a running clock frozen into it');
    It deliberately does NOT try to decide whether a computed line is really
    volatile. That judgement belongs to the person writing it. What this refuses
    to allow is the judgement never being made. */
-console.log('13) every computed ticker line declares itself volatile');
+console.log('13) everything the ticker computes declares itself volatile');
 {
+  /* ROUND 298 RESHAPED THIS SECTION WITHOUT CHANGING ITS QUESTION. The old
+     ticker was a list of items.push lines and the rule was per push: a
+     template literal either sets volatile or fails here. The owner's tweaks
+     document replaced that strip with a scores-only wire (a LIVE chip, sport
+     boxes, score cards), so there are no pushes left to audit. The question
+     survives the mechanism: every element the component computes from the
+     scores feed must carry data-no-prerender in its own tag, and the old
+     mechanism must stay gone, because a reintroduced push list would dodge
+     this check entirely. */
   const tickerPath = path.join(ROOT, 'src/components/layout/TopTicker.tsx');
   if (!existsSync(tickerPath)) {
     fail('src/components/layout/TopTicker.tsx is missing, so the ticker rule cannot be checked');
   } else {
-    const src = readFileSync(tickerPath, 'utf8');
-    const start = src.indexOf('export function buildItems');
-    if (start < 0) {
-      fail('TopTicker has no buildItems, so this check is reading the wrong file');
-    } else {
-      /* Take each push and read forward to its matching close paren, counting
-         depth, so a nested object or a ternary inside the text does not end the
-         call early. */
-      const body = src.slice(start);
-      const pushes = [];
-      let i = 0;
-      while ((i = body.indexOf('items.push(', i)) !== -1) {
-        let depth = 0, j = i + 'items.push'.length;
-        for (; j < body.length; j++) {
-          const c = body[j];
-          if (c === '(') depth += 1;
-          else if (c === ')') { depth -= 1; if (depth === 0) break; }
+    const raw = readFileSync(tickerPath, 'utf8');
+    const src2 = raw.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+    if (/items\.push\(/.test(src2)) {
+      fail('TopTicker grew an items.push line list again; every such line must answer the volatility question, see the Round 280 story above');
+    }
+    const tags = [...src2.matchAll(/<(Link|span|div)\b[^>]*>/g)].map(m => m[0]);
+    const dynamicMarkers = ['data-score-card', 'data-sport-box'];
+    let checked = 0;
+    for (const marker of dynamicMarkers) {
+      const carriers = tags.filter(t => t.includes(marker));
+      if (!carriers.length) { fail(`TopTicker has no ${marker} element; the wire is not rendering what this check expects, re-read it`); continue; }
+      for (const t of carriers) {
+        checked += 1;
+        const wrapped = t.includes('data-no-prerender');
+        if (marker === 'data-sport-box' && !wrapped) {
+          /* The sport box link itself is static text; its data-no-prerender
+             lives on the wrapping span that mounts with the feed. */
+          const wrapper = src2.indexOf('data-no-prerender', Math.max(0, src2.indexOf(t) - 400));
+          if (wrapper === -1 || wrapper > src2.indexOf(t)) fail(`a ${marker} element has no data-no-prerender on itself or its wrapper: ${JSON.stringify(t.replace(/\s+/g, ' ').slice(0, 80))}`);
+        } else if (marker !== 'data-sport-box' && !wrapped) {
+          fail(`a ${marker} element does not carry data-no-prerender: ${JSON.stringify(t.replace(/\s+/g, ' ').slice(0, 80))}`);
         }
-        pushes.push(body.slice(i, j + 1));
-        i = j + 1;
-      }
-      if (pushes.length < 8) fail(`only found ${pushes.length} ticker pushes, which cannot be right`);
-      let computed = 0, declared = 0, bare = 0;
-      for (const call of pushes) {
-        const text = call.match(/text:\s*([`'"])/);
-        if (!text) { fail(`a ticker push has no text field: ${JSON.stringify(call.slice(0, 60))}`); continue; }
-        const isTemplate = text[1] === '`' && /text:\s*`[^`]*\$\{/.test(call);
-        const declares = /\bvolatile:\s*true\b/.test(call);
-        if (isTemplate) {
-          computed += 1;
-          if (declares) declared += 1;
-          else fail(`a ticker line is built from a template literal and does not set volatile, so it will freeze into every snapshot: ${JSON.stringify(call.replace(/\s+/g, ' ').slice(0, 90))}`);
-        } else {
-          bare += 1;
-        }
-      }
-      console.log(`   ${pushes.length} ticker pushes, ${computed} computed (${declared} declaring volatile), ${bare} plain strings`);
-
-      /* And the shipped files must actually be clean of the one we know about,
-         because a declaration that the prerenderer ignores is worth nothing. The
-         prefix is read out of the component so it cannot drift from the code. */
-      const freshPrefix = (src.match(/text:\s*`([^`$]{4,})\$\{g\.label\}`/) || [])[1];
-      if (!freshPrefix) {
-        fail('could not read the daily rotation prefix out of TopTicker, so the shipped files cannot be checked for it');
-      } else {
-        let frozen = 0;
-        for (const [r, html] of docs) {
-          if (html.includes(freshPrefix)) { frozen += 1; if (frozen <= 4) fail(`${r} froze a rotating daily line into a file that outlives the day`); }
-        }
-        console.log(`   ${docs.size} documents, ${frozen} carrying ${JSON.stringify(freshPrefix.trim())}`);
       }
     }
+    if (!/data-live-chip/.test(src2)) fail('the LIVE chip marker is gone from TopTicker');
+    console.log(`   no push list, ${checked} computed elements checked for data-no-prerender, LIVE chip present`);
+
+    /* And the shipped files must be clean of the strip's dynamic content:
+       no document may carry a score card, which is the one shape that would
+       freeze a twenty minute number into a month old file. */
+    let frozen = 0;
+    for (const [r, html] of docs) {
+      if (html.includes('data-score-card')) { frozen += 1; if (frozen <= 4) fail(`${r} froze a live score card into a file that outlives the game`); }
+    }
+    console.log(`   ${docs.size} documents, ${frozen} carrying a frozen score card`);
   }
 }
 

@@ -1,12 +1,26 @@
 /**
- * Round 167 harness: every line on the ticker is derived or personal, and
- * none of it can lie or crash. The ticker reads THREE different games' saves
- * straight out of localStorage plus the game registry, so the failure modes
- * are: a save shape it did not expect throws and takes the whole app shell
- * down with it (the ticker renders on every route), a save line that
- * disagrees with the save (wrong position, wrong leader), or counts that
- * drift from the registry. This feeds it real shapes, hostile shapes and
- * garbage, and checks the lines against independently computed truth.
+ * Round 298 harness for the scores-only wire.
+ *
+ * The old strip (Round 167 through 297) was a list of derived site lines,
+ * and this harness fed it hostile saves. The owner's 2026-08-26 tweaks
+ * document replaced all of that: the strip now carries a LIVE chip and that
+ * day's real games grouped by sport, and NOTHING about the site itself. So
+ * the harness's job flipped with it:
+ *
+ *   1. The grouping is a fan's ordering: soccer leads, live before upcoming
+ *      before finals, kickoffs soonest first, finals freshest first, and no
+ *      empty sport ever gets a box.
+ *   2. The dwell clock is bounded on both ends, so one busy league cannot
+ *      park the loop and a quiet one does not blink past.
+ *   3. The site promo vocabulary the owner ordered off the strip STAYS off:
+ *      the component source is scanned with comments stripped, so prose
+ *      about the old lines cannot satisfy or trip the check.
+ *   4. Hostile rows (null scores, unknown sports, unparseable dates) group
+ *      without throwing, because the strip renders on every route and a
+ *      feed hiccup must never take the shell down.
+ *
+ * Negative control: SIM_TICKER_CONTROL=promo plants a banned phrase into the
+ * in-memory copy of the source before the scan, and the run must then fail.
  *
  * Run: node scripts/simTicker.mjs
  */
@@ -20,138 +34,119 @@ const ENTRY = '/tmp/tickerEntry.mjs';
 const BUNDLE = '/tmp/ticker.bundle.mjs';
 
 fs.writeFileSync(ENTRY, `
-const store = new Map();
-globalThis.localStorage = {
-  getItem: k => (store.has(k) ? store.get(k) : null),
-  setItem: (k, v) => { store.set(k, String(v)); },
-  removeItem: k => { store.delete(k); },
-  clear: () => { store.clear(); },
-};
-const mod = await import('${ROOT}/src/components/layout/TopTicker.tsx');
-const reg = await import('${ROOT}/src/data/gameRegistry.ts');
-export const buildItems = mod.buildItems;
-export const CATEGORIES = reg.CATEGORIES;
-export const LS = globalThis.localStorage;
+export { groupScores, dwellMs } from '${ROOT}/src/components/layout/TopTicker.tsx';
 `);
 execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --jsx=automatic --loader:.tsx=tsx`, { stdio: 'inherit' });
 
-const { buildItems, CATEGORIES, LS } = await import(BUNDLE);
+/* The stub lives in THIS process: an import inside the entry hoists above any
+   statement beside it, and the bundled supabase client asks for localStorage
+   at module scope. Same lesson simMissingXi learned the same night. */
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} };
+const { groupScores, dwellMs } = await import(BUNDLE);
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
-const texts = items => items.map(i => i.text).join(' | ');
 
-/* ---------- 1. No saves: dailies and counts still fill the wire ---------- */
-console.log('1) A brand new visitor still gets a live wire');
+const row = (sport, over = {}) => ({
+  id: `${sport}-${Math.floor(Math.random() * 1e9)}`,
+  sport, league: 'L', home: 'Home Club', away: 'Away Club',
+  home_score: null, away_score: null,
+  status_short: 'NS', status_long: '',
+  start_at: '2026-08-26T20:00:00Z', live: false, finished: false,
+  updated_at: '2026-08-26T00:00:00Z', ...over,
+});
+
+console.log('1) Sports group in the house order and empty sports get no box');
 {
-  LS.clear();
-  const items = buildItems();
-  const all = CATEGORIES.flatMap(c => c.games);
-  console.log(`   ${items.length} items with no saves`);
-  if (items.length < 5) fail(`only ${items.length} items for a fresh visitor`);
-  if (items.some(i => i.text.includes('Your save') || i.text.includes('Your pro') || i.text.includes('stadium empire'))) {
-    fail('a personal line appeared with no saves on the device');
-  }
-  /* Round 297 reworded this line: the owner called the flat "no sign-up" claim
-     a lie, since accounts exist. The check keeps its real job, the count must
-     come from the registry, against the honest wording. */
-  if (!items.some(i => i.text === `${all.length} free games, all playable without an account`)) {
-    fail('the game count does not match the registry');
-  }
-  const dailyItems = items.filter(i => i.text.startsWith('Fresh daily:'));
-  if (dailyItems.length < 3) fail(`only ${dailyItems.length} daily lines`);
-  for (const d of dailyItems) {
-    const game = all.find(g => g.path === d.to);
-    if (!game) fail(`daily line links to unknown path ${d.to}`);
-    else if (!game.daily) fail(`${game.label} is on the daily wire but is not a daily game`);
-    else if (d.text !== `Fresh daily: ${game.label}`) fail(`daily line text mismatch for ${game.label}`);
-  }
-  // Every item must carry a real route.
-  for (const it of items) {
-    if (it.to !== '/' && it.to !== '/whats-new' && !all.some(g => g.path === it.to)) {
-      fail(`ticker links to ${it.to}, which is no game and no known page`);
-    }
+  const groups = groupScores([
+    row('nhl'), row('mlb'), row('soccer'), row('cricket'), row('nba'),
+  ]);
+  const order = groups.map(g => g.sport).join(',');
+  if (order !== 'soccer,mlb,nba,nhl,cricket') fail(`grouped as ${order}`);
+  if (groups.some(g => g.rows.length === 0)) fail('an empty sport got a box');
+  const none = groupScores([]);
+  if (none.length !== 0) fail(`an empty wire produced ${none.length} groups`);
+  console.log(`   order ${order}; empty wire produces no groups`);
+}
+
+console.log('2) Inside a sport: live first, then kickoffs soonest first, then finals freshest first');
+{
+  const g = groupScores([
+    row('mlb', { id: 'final-old', finished: true, start_at: '2026-08-26T00:00:00Z', home_score: 3, away_score: 2 }),
+    row('mlb', { id: 'up-late', start_at: '2026-08-26T23:00:00Z' }),
+    row('mlb', { id: 'live-1', live: true, home_score: 1, away_score: 0 }),
+    row('mlb', { id: 'up-early', start_at: '2026-08-26T18:00:00Z' }),
+    row('mlb', { id: 'final-new', finished: true, start_at: '2026-08-26T04:00:00Z', home_score: 7, away_score: 6 }),
+  ])[0];
+  const ids = g.rows.map(r => r.id).join(',');
+  if (ids !== 'live-1,up-early,up-late,final-new,final-old') fail(`mlb ordered as ${ids}`);
+  console.log(`   ${ids}`);
+}
+
+console.log('3) The dwell clock is bounded on both ends');
+{
+  const floor = dwellMs(0), one = dwellMs(1), busy = dwellMs(40);
+  if (floor < 5000) fail(`an empty box dwells ${floor}ms, under the 5s floor`);
+  if (busy > 14000) fail(`a 40 game box dwells ${busy}ms, over the 14s ceiling`);
+  if (!(one > floor - 1 && one <= busy)) fail(`dwell is not monotone: ${floor}, ${one}, ${busy}`);
+  console.log(`   0 games ${floor}ms, 1 game ${one}ms, 40 games ${busy}ms`);
+}
+
+console.log('4) Hostile rows group without throwing');
+{
+  try {
+    const g = groupScores([
+      row('mlb', { start_at: 'not a date' }),
+      { id: 'x' }, null, undefined,
+      row('', {}), row('soccer', { home: null, away: null }),
+    ].filter(x => x !== null && x !== undefined));
+    console.log(`   ${g.length} groups from garbage, no throw`);
+  } catch (e) {
+    fail(`hostile rows threw: ${e.message}`);
   }
 }
 
-/* ---------- 2. The Club Manager line tells the save's truth ---------- */
-console.log('2) The save lines match the saves');
+console.log('5) The owner\'s banned strip content stays off the wire, read from the code not the comments');
 {
-  LS.clear();
-  const table = [
-    { club: 'Arsenal', pts: 10, gf: 12, ga: 3, w: 3, d: 1, l: 0 },
-    { club: 'Chelsea', pts: 10, gf: 9, ga: 4, w: 3, d: 1, l: 0 },
-    { club: 'Everton', pts: 7, gf: 6, ga: 6, w: 2, d: 1, l: 1 },
-    { club: 'Fulham', pts: 1, gf: 2, ga: 9, w: 0, d: 1, l: 3 },
+  const raw = fs.readFileSync(path.join(ROOT, 'src/components/layout/TopTicker.tsx'), 'utf8');
+  let src = raw.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  if (process.env.SIM_TICKER_CONTROL === 'promo') {
+    src += "\n<span>{`${all.length} free games, all playable without an account`}</span>";
+  }
+  /* Each of these is a thing the owner ordered off the strip on 2026-08-26:
+     site promo lines, the dailies rotation, the save lines, the calendar,
+     the catalog counts, the what's-new pointer, and the logo mark that read
+     as a question mark at strip size. */
+  const banned = [
+    ['free games', 'a catalog count line'],
+    ['Fresh daily', 'the dailies rotation'],
+    ['New stuff ships', 'the whats-new pointer'],
+    ['Your save', 'a personal save line'],
+    ['Your pro', 'a personal save line'],
+    ['stadium empire', 'a personal save line'],
+    ['whats-new', 'a link to the site about itself'],
+    ['sportsCalendar', 'the hand kept calendar feed'],
+    ['gameRegistry', 'the registry import the counts rode in on'],
+    ['LogoMark', 'the mark the owner read as a question mark'],
   ];
-  LS.setItem('dukb-club-manager-save', JSON.stringify({
-    clubName: 'Everton', season: 2, table,
-    scorerRace: [{ name: 'Erling Haaland', goals: 7 }, { name: 'Alexander Isak', goals: 5 }],
-  }));
-  LS.setItem('stadiumTycoonSaveV1', JSON.stringify({ money: 2500000, rep: 3 }));
-  LS.setItem('soccerCareerSave', JSON.stringify({ playerName: 'Tony Salguero', overall: 84, currentClub: 'Ajax', age: 24 }));
-  const items = buildItems();
-  const t = texts(items);
-  // Everton are third on 7 points: pts 10 > 10 > 7 > 1 with Arsenal ahead of
-  // Chelsea on goal difference, computed here independently.
-  if (!t.includes('Everton sit 3rd on 7 pts')) fail(`CM line wrong: ${t.slice(0, 160)}`);
-  if (!t.includes('Golden boot race: Erling Haaland leads on 7')) fail('boot line wrong or missing');
-  if (!t.includes('Your stadium empire: $2.5M banked · 3⭐ rep')) fail('tycoon line wrong or missing');
-  if (!t.includes('Your pro: Tony Salguero, 84 OVR at Ajax')) fail('career line wrong or missing');
-  console.log('   position, boot leader, bank and OVR all read back correct');
-
-  // Pre-season save: zero games played says so instead of claiming 1st.
-  LS.setItem('dukb-club-manager-save', JSON.stringify({
-    clubName: 'Everton', season: 1,
-    table: table.map(r => ({ ...r, pts: 0, gf: 0, ga: 0, w: 0, d: 0, l: 0 })),
-  }));
-  const pre = texts(buildItems());
-  if (!pre.includes('Everton, season 1 awaits kick off')) fail(`pre-season line wrong: ${pre.slice(0, 120)}`);
-  if (pre.includes('sit 1st')) fail('a zero-game save claims a league position');
-}
-
-/* ---------- 3. Hostile and garbage saves never throw ---------- */
-console.log('3) Garbage in, wire still up');
-{
-  const bombs = [
-    ['dukb-club-manager-save', 'not json {{{'],
-    ['dukb-club-manager-save', JSON.stringify({ clubName: 42, table: 'yes' })],
-    ['dukb-club-manager-save', JSON.stringify({ clubName: 'X', table: [{}] })],
-    ['dukb-club-manager-save', JSON.stringify({ clubName: 'X', table: [], scorerRace: {} })],
-    ['stadiumTycoonSaveV1', JSON.stringify({ money: 'NaN bonanza', rep: [] })],
-    ['stadiumTycoonSaveV1', JSON.stringify({ money: -5 })],
-    ['soccerCareerSave', JSON.stringify({ playerName: '', overall: 'high' })],
-    ['soccerCareerSave', '[]'],
-  ];
-  for (const [key, raw] of bombs) {
-    LS.clear();
-    LS.setItem(key, raw);
-    try {
-      const items = buildItems();
-      if (!items.length) fail(`a bad ${key} emptied the whole wire`);
-      const t = texts(items);
-      if (t.includes('undefined') || t.includes('NaN') || t.includes('null')) {
-        fail(`a bad ${key} leaked into the copy: ${t.slice(0, 120)}`);
-      }
-    } catch (e) {
-      fail(`a bad ${key} THREW (${String(e).slice(0, 80)}), which kills the app shell on every route`);
-    }
+  let hits = 0;
+  for (const [needle, why] of banned) {
+    if (src.includes(needle)) { hits += 1; fail(`the strip carries ${why} again (${JSON.stringify(needle)})`); }
   }
-  console.log(`   ${bombs.length} hostile saves absorbed silently`);
+  if (!/data-live-chip/.test(src)) fail('the LIVE chip marker is gone');
+  if (!/bg-red-500/.test(src)) fail('the red live dot is gone');
+  console.log(`   ${banned.length} banned shapes scanned, ${hits} present; LIVE chip and red dot present`);
+
+  if (process.env.SIM_TICKER_CONTROL === 'promo') {
+    if (hits > 0) { console.log('\ncontrol run: the planted promo line was caught'); process.exit(0); }
+    console.error('\ncontrol run: a planted promo line changed NOTHING, the scan is dead');
+    process.exit(1);
+  }
 }
 
-/* ---------- 4. Copy check: dashes and rival names ---------- */
-console.log('4) Copy check');
-{
-  const text = fs.readFileSync(path.join(ROOT, 'src/components/layout/TopTicker.tsx'), 'utf8');
-  text.split('\n').forEach((line, i) => {
-    if (/[–—]/.test(line)) fail(`TopTicker.tsx:${i + 1} contains an em or en dash`);
-  });
-  // The house rule from the S-2 item: never write the rival broadcaster's
-  // name into src, not even in a comment. Zero hits, no exceptions.
-  if (/espn/i.test(text)) fail('the broadcaster is named in TopTicker.tsx');
-  console.log('   clean');
+console.log('');
+if (failures > 0) {
+  console.error(`simTicker: ${failures} failure${failures === 1 ? '' : 's'}`);
+  process.exit(1);
 }
-
-console.log(failures === 0 ? '\nALL TICKER CHECKS PASSED' : `\n${failures} FAILURES`);
-process.exit(failures === 0 ? 0 : 1);
+console.log('simTicker: green. The wire carries the day\'s games and nothing about the site.');

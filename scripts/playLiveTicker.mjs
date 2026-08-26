@@ -1,26 +1,27 @@
 /**
- * Round 287 browser harness: the score cards on the strip, which no other
- * check can see.
+ * Round 298 browser harness: the cable-style wire, driven like a viewer.
  *
- * The sandbox has no route to the database, so every other browser harness
- * aborts the Supabase host and the ticker they measure carries the site's own
- * lines and nothing else. sweepContrast therefore never measured a score card.
- * This harness answers the scores request itself with a fixture of real row
- * shapes (a live game, a final, four fixtures across soccer, MLB and the NFL)
- * and then measures what the strip does with them:
+ * The sandbox has no route to the database, so this harness answers the
+ * scores request itself with a fixture of real row shapes (a live soccer
+ * game, an MLB final, fixtures across three sports, and a live row with no
+ * score that the fetch hook must drop) and then watches the strip behave:
  *
- *   1. THE CARDS ARE THERE AND IN THE RIGHT ORDER: live first, then the
- *      fixtures by kickoff, then the final; the brand block says LIVE; every
- *      card is a link to its sport's hub with an aria-label that reads as a
- *      sentence; American sports read away at home and soccer home v away.
- *   2. EVERY WORD ON EVERY CARD CLEARS 4.5 TO 1 against the bar, alpha
- *      composited, the same bar sweepContrast holds the rest of the site to.
- *   3. THE CARDS NEVER REACH A SNAPSHOT: every card carries data-no-prerender.
- *   4. THE STRIP SURVIVES A DEAD FEED: with the request failing, the bar is
- *      still there with the site's own lines and no card.
+ *   1. THE CHIP AND THE BOXES: the strip leads with the LIVE chip and its
+ *      red dot, one sport box per sport with games, soccer's box open first,
+ *      its games in fan order (live first, then kickoffs), soccer reading
+ *      home v away, and every card linking to its sport's hub with a
+ *      sentence for a screen reader.
+ *   2. THE LOOP ACTUALLY LOOPS: within one dwell the open box hands off to
+ *      the next sport, whose cards then read away at home with the fixture
+ *      time in the visitor's own zone and the final marked Final.
+ *   3. EVERY WORD CLEARS THE CONTRAST BAR, alpha composited, 4.5 to 1.
+ *   4. THE CARDS NEVER REACH A SNAPSHOT: data-no-prerender on every card.
+ *   5. A DEAD FEED DEGRADES HONESTLY: chip still up, no cards, the quiet
+ *      no-games line, and nothing about the site fills the gap.
+ *   6. REDUCED MOTION GETS EVERYTHING AT ONCE: no cycling, every box open.
  *
- * NEGATIVE CONTROL: TICKER_CONTROL=dim injects a stylesheet that fades the
- * sport tag to half alpha; section 2 must go red.
+ * NEGATIVE CONTROL: TICKER_CONTROL=dim fades the card text to half alpha in
+ * the browser; section 3 must go red.
  *
  * Run: node scripts/lib/hostLikeServer.mjs dist 4173 &
  *      node scripts/playLiveTicker.mjs
@@ -33,6 +34,7 @@ if (CONTROL && CONTROL !== 'dim') { console.error(`TICKER_CONTROL=${CONTROL} is 
 let failures = 0;
 const say = (ok, what) => { console.log(`  ${ok ? 'PASS ' : 'FAIL '} ${what}`); if (!ok) failures += 1; };
 
+const BAR = '[aria-label="Live scores ticker"]';
 const today = new Date();
 const at = (h, m = 0) => { const d = new Date(today); d.setHours(h, m, 0, 0); return d.toISOString(); };
 const ROWS = [
@@ -41,14 +43,18 @@ const ROWS = [
   { id: 'mlb:next', sport: 'mlb', league: 'MLB', home: 'New York Yankees', away: 'Houston Astros', home_score: null, away_score: null, status_short: 'NS', status_long: 'Not Started', start_at: at(today.getHours() + 2, 5), live: false, finished: false, updated_at: at(today.getHours()) },
   { id: 'nfl:next', sport: 'nfl', league: 'NFL', home: 'Buffalo Bills', away: 'Kansas City Chiefs', home_score: null, away_score: null, status_short: 'NS', status_long: 'Not Started', start_at: at(today.getHours() + 4), live: false, finished: false, updated_at: at(today.getHours()) },
   { id: 'soccer:next', sport: 'soccer', league: 'Bundesliga', home: 'Borussia Monchengladbach', away: 'Bayern Munich', home_score: null, away_score: null, status_short: 'NS', status_long: 'Not Started', start_at: at(today.getHours() + 3), live: false, finished: false, updated_at: at(today.getHours()) },
-  /* a row that must not be shown: live with no score */
+  /* a row that must not be shown: live with no score, dropped by the hook */
   { id: 'nhl:broken', sport: 'nhl', league: 'NHL', home: 'Boston Bruins', away: 'Toronto Maple Leafs', home_score: null, away_score: null, status_short: 'P1', status_long: '1st Period', start_at: at(today.getHours()), live: true, finished: false, updated_at: at(today.getHours()) },
 ];
 
 const browser = await pw.chromium.launch();
 
-async function open(withScores) {
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, timezoneId: 'America/New_York' });
+async function open(withScores, reducedMotion = false) {
+  const ctx = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    timezoneId: 'America/New_York',
+    reducedMotion: reducedMotion ? 'reduce' : 'no-preference',
+  });
   const page = await ctx.newPage();
   await page.route('**://*.supabase.co/**', r => r.abort());
   if (withScores) {
@@ -56,59 +62,72 @@ async function open(withScores) {
   }
   await page.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* fine */ } });
   await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await page.waitForFunction(() => !!document.querySelector('[aria-label="Scores and site ticker"]'), { timeout: 20000 }).catch(() => {});
+  await page.waitForFunction(sel => !!document.querySelector(sel), BAR, { timeout: 20000 }).catch(() => {});
   await page.waitForTimeout(1500);
   if (CONTROL === 'dim' && withScores) {
-    await page.addStyleTag({ content: '[aria-label="Scores and site ticker"] a[data-score-card] > span:first-child { color: rgba(132,145,164,0.5) !important; }' });
-    const dimmed = await page.evaluate(() => getComputedStyle(document.querySelector('[aria-label="Scores and site ticker"] a[data-score-card] > span')).color);
-    if (!/0\.5\)$/.test(dimmed)) { console.error(`control changed nothing: tag color is ${dimmed}`); process.exit(1); }
-    console.log('   NEGATIVE CONTROL ON: sport tags faded to half alpha in the browser, section 2 must go red');
+    await page.addStyleTag({ content: `${BAR} a[data-score-card] span { color: rgba(132,145,164,0.5) !important; }` });
+    const dimmed = await page.evaluate(sel => getComputedStyle(document.querySelector(`${sel} a[data-score-card] span`)).color, BAR);
+    if (!/0\.5\)$/.test(dimmed)) { console.error(`control changed nothing: card color is ${dimmed}`); process.exit(1); }
+    console.log('   NEGATIVE CONTROL ON: card text faded to half alpha in the browser, section 3 must go red');
   }
   return { ctx, page };
 }
 
-console.log('playLiveTicker: the score cards on the strip');
+console.log('playLiveTicker: the cable wire, driven like a viewer');
 
-console.log('1) the cards are there, in order, and read like a broadcast');
+console.log('1) the chip leads, the boxes group by sport, soccer opens first in fan order');
 const { ctx, page } = await open(true);
 {
-  const cards = await page.evaluate(() => {
-    const bar = document.querySelector('[aria-label="Scores and site ticker"]');
+  const state = await page.evaluate(sel => {
+    const bar = document.querySelector(sel);
     if (!bar) return null;
-    const links = [...bar.querySelectorAll('a[data-score-card]')];
+    const chip = bar.querySelector('[data-live-chip]');
+    const boxes = [...bar.querySelectorAll('a[data-sport-box]')].map(b => b.innerText.trim());
+    const cards = [...bar.querySelectorAll('a[data-score-card]')].map(a => ({ href: a.getAttribute('href'), label: a.getAttribute('aria-label'), text: a.innerText.replace(/\s+/g, ' ').trim(), live: !!a.querySelector('.animate-pulse') }));
     return {
-      brand: (bar.querySelector('.bg-primary')?.innerText || '').trim(),
-      cards: links.map(a => ({ href: a.getAttribute('href'), label: a.getAttribute('aria-label'), text: a.innerText.replace(/\s+/g, ' ').trim(), live: !!a.querySelector('.animate-pulse') })),
-      ghosts: bar.querySelectorAll('span[data-score-card][aria-hidden="true"]').length,
+      chipText: chip ? chip.innerText.trim() : '',
+      chipDot: !!chip?.querySelector('.bg-red-500'),
+      chipPulsing: !!chip?.querySelector('.animate-pulse'),
+      boxes, cards,
     };
-  });
-  say(!!cards, 'the strip is on the page');
-  if (cards) {
-    say(cards.cards.length === 5, `${cards.cards.length} score cards drawn from 6 rows (the live game with no score must be dropped)`);
-    say(/LIVE/i.test(cards.brand), `the brand block says LIVE while a game is on ("${cards.brand}")`);
-    const order = cards.cards.map(c => c.href);
-    say(order[0] === '/soccer' && cards.cards[0].live, `the live game leads: ${cards.cards[0]?.text}`);
-    say(order[order.length - 1] === '/baseball' && /Final/i.test(cards.cards[4]?.text || ''), `the final comes last: ${cards.cards[4]?.text}`);
-    const mid = cards.cards.slice(1, 4).map(c => c.text);
-    say(/Astros/.test(mid[0]) && /Monchengl/.test(mid[1]) && /Chiefs/.test(mid[2]), `the fixtures sit between them in kickoff order: ${mid.join(' | ')}`);
-    say(/Astros @ Yankees/.test(mid[0]), `American sports read away at home: ${mid[0]}`);
-    say(/Valencia 1 v Real Betis 2/.test(cards.cards[0]?.text || ''), `soccer reads home v away with the scores beside the names: ${cards.cards[0]?.text}`);
-    say(cards.cards.every(c => /^[A-Z]+: .+, .+$/.test(c.label || '')), `every card has a sentence for a screen reader: "${cards.cards[0]?.label}"`);
-    say(cards.cards.every(c => ['/soccer', '/baseball', '/pro-football', '/hockey', '/pro-basketball'].includes(c.href)), 'every card links to a sport hub');
-    say(/\d{1,2}:\d{2} [AP]M/.test(mid[0]), `a fixture shows its start time in the visitor's own zone: ${mid[0]}`);
-    say(cards.ghosts >= 5, `${cards.ghosts} hidden duplicates keep the loop seamless without a second tab stop`);
+  }, BAR);
+  say(!!state, 'the strip is on the page');
+  if (state) {
+    say(/^Live$/i.test(state.chipText), `the chip says Live and nothing else ("${state.chipText}")`);
+    say(state.chipDot, 'the chip carries the little red circle');
+    say(state.chipPulsing, 'the circle pulses while a game is genuinely live');
+    say(state.boxes.join(',') === 'SOCCER,MLB,NFL', `one box per sport with games, soccer first: ${state.boxes.join(',')}`);
+    say(state.cards.length === 2, `${state.cards.length} cards visible: only the open sport's games are on the wire`);
+    say(state.cards[0]?.live && /Valencia 1 v Real Betis 2/.test(state.cards[0]?.text || ''), `the live game leads its sport, home v away with scores: ${state.cards[0]?.text}`);
+    say(/Monchengl/.test(state.cards[1]?.text || ''), `the kickoff follows: ${state.cards[1]?.text}`);
+    say(state.cards.every(c => c.href === '/soccer'), 'every open card links to its sport hub');
+    say(state.cards.every(c => /, .+$/.test(c.label || '')), `every card has a sentence for a screen reader: "${state.cards[0]?.label}"`);
   }
 }
 
-console.log('2) every word on every card clears the contrast bar');
+console.log('2) the loop hands the wire to the next sport on its own');
 {
-  const runs = await page.evaluate(() => {
+  const handed = await page.waitForFunction(sel => {
+    const cards = [...document.querySelectorAll(`${sel} a[data-score-card]`)];
+    return cards.some(a => /Astros|Pirates|Cubs/.test(a.innerText)) ? cards.map(a => a.innerText.replace(/\s+/g, ' ').trim()) : false;
+  }, BAR, { timeout: 20000 }).then(h => h.jsonValue()).catch(() => null);
+  say(!!handed, 'the mlb box opened by itself within one dwell');
+  if (handed) {
+    say(/Astros @ Yankees/.test(handed[0] || ''), `American sports read away at home: ${handed[0]}`);
+    say(/\d{1,2}:\d{2} [AP]M/.test(handed[0] || ''), `a fixture shows its start time in the visitor's own zone: ${handed[0]}`);
+    say(/Final/i.test(handed[1] || '') && /Cubs 6 @ Pirates 3/.test(handed[1] || ''), `the final closes the box with its score: ${handed[1]}`);
+  }
+}
+
+console.log('3) every word on every visible card clears the contrast bar');
+{
+  const runs = await page.evaluate(sel => {
     const lum = (r, g, b) => { const f = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
     const parse = s => { const m = s.match(/rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)(?:,\s*([\d.]+))?\)/); return m ? [+m[1], +m[2], +m[3], m[4] === undefined ? 1 : +m[4]] : null; };
-    const bar = document.querySelector('[aria-label="Scores and site ticker"]');
+    const bar = document.querySelector(sel);
     const bg = parse(getComputedStyle(bar).backgroundColor);
     const out = [];
-    for (const el of bar.querySelectorAll('a[data-score-card] span')) {
+    for (const el of bar.querySelectorAll('a[data-score-card] span, a[data-sport-box]')) {
       const own = [...el.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent.trim()).join('');
       if (!own) continue;
       const fg = parse(getComputedStyle(el).color);
@@ -118,44 +137,61 @@ console.log('2) every word on every card clears the contrast bar');
       out.push({ text: own.slice(0, 24), ratio: (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05) });
     }
     return out;
-  });
+  }, BAR);
   const bad = runs.filter(r => r.ratio < 4.5);
-  say(runs.length >= 20, `${runs.length} text runs measured on the cards`);
+  say(runs.length >= 8, `${runs.length} text runs measured on the open box`);
   say(bad.length === 0, bad.length ? `${bad.length} run(s) under 4.5 to 1: ${bad.slice(0, 4).map(b => `"${b.text}" ${b.ratio.toFixed(2)}`).join(', ')}` : `lowest ratio ${Math.min(...runs.map(r => r.ratio)).toFixed(2)} to 1`);
 }
 
-console.log('3) the cards never reach a snapshot');
+console.log('4) the cards never reach a snapshot');
 {
-  const n = await page.evaluate(() => {
-    const bar = document.querySelector('[aria-label="Scores and site ticker"]');
-    const links = [...bar.querySelectorAll('a')].filter(a => /\d/.test(a.innerText) && /@| v /.test(a.innerText));
+  const n = await page.evaluate(sel => {
+    const links = [...document.querySelectorAll(`${sel} a[data-score-card]`)];
     return { cards: links.length, marked: links.filter(a => a.getAttribute('data-no-prerender') === 'true').length };
-  });
+  }, BAR);
   say(n.cards > 0 && n.marked === n.cards, `${n.marked} of ${n.cards} score cards carry data-no-prerender`);
 }
 await ctx.close();
 
-console.log('4) the strip survives a dead feed');
+console.log('5) a dead feed degrades honestly: chip, quiet line, and nothing about the site');
 {
   const { ctx: c2, page: p2 } = await open(false);
-  const r = await p2.evaluate(() => {
-    const bar = document.querySelector('[aria-label="Scores and site ticker"]');
-    return bar ? { cards: bar.querySelectorAll('a[data-score-card]').length, lines: bar.querySelectorAll('a').length, brand: (bar.querySelector('.bg-primary')?.innerText || '').trim() } : null;
-  });
+  const r = await p2.evaluate(sel => {
+    const bar = document.querySelector(sel);
+    return bar ? {
+      cards: bar.querySelectorAll('a[data-score-card]').length,
+      chip: (bar.querySelector('[data-live-chip]')?.innerText || '').trim(),
+      text: bar.innerText.replace(/\s+/g, ' ').trim(),
+    } : null;
+  }, BAR);
   say(!!r, 'the strip is still on the page with the feed dead');
   if (r) {
     say(r.cards === 0, `${r.cards} score cards (none, the request failed)`);
-    say(r.lines >= 5, `${r.lines} of the site's own lines still scroll`);
-    say(/TICKER/i.test(r.brand), `the brand block falls back to the plain label ("${r.brand}")`);
+    say(/No games on the board right now/.test(r.text), `the quiet line shows: "${r.text.slice(0, 60)}"`);
+    say(!/free games|Fresh daily|New stuff/.test(r.text), 'no site promo fills the gap');
   }
   await c2.close();
+}
+
+console.log('6) reduced motion gets every box open at once, no cycling');
+{
+  const { ctx: c3, page: p3 } = await open(true, true);
+  const r = await p3.evaluate(sel => {
+    const bar = document.querySelector(sel);
+    return bar ? {
+      cards: bar.querySelectorAll('a[data-score-card]').length,
+      boxes: bar.querySelectorAll('a[data-sport-box]').length,
+    } : null;
+  }, BAR);
+  say(!!r && r.boxes === 3 && r.cards === 5, r ? `${r.boxes} boxes and all ${r.cards} cards mounted at once` : 'the strip is missing under reduced motion');
+  await c3.close();
 }
 
 await browser.close();
 console.log('');
 if (CONTROL === 'dim') {
-  if (failures > 0) { console.log(`playLiveTicker control: green. The faded tag was reported (${failures} finding).`); process.exit(0); }
+  if (failures > 0) { console.log(`playLiveTicker control: green. The faded text was reported (${failures} finding).`); process.exit(0); }
   console.error('playLiveTicker control: RED. Half alpha text on the cards went unreported.'); process.exit(1);
 }
 if (failures > 0) { console.error(`playLiveTicker: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
-console.log('playLiveTicker: green. Real scores lead the strip, read like a broadcast, clear the contrast bar, and never touch a snapshot.');
+console.log('playLiveTicker: green. The wire is the day\'s games, sport by sport, and nothing else.');
