@@ -325,8 +325,18 @@ export default function Index() {
 
   return (
     <>
+      {/* Round 265: this title must MATCH the one in index.html. A crawler
+          with JavaScript off reads the template's title and one that renders
+          reads this one, and until now they said two different things, so
+          Google was choosing between "The Ultimate Sports Trivia Hub" and
+          "Free Daily Sports Trivia Games" depending on how it fetched the
+          page. The template's wording wins because it is what people search
+          for. simHomeCopy fails if the two drift apart again. The comment
+          sits OUT here rather than inside the props: a comment between the
+          attributes compiles fine but breaks simIndexing's parse of the
+          PageSeo block, which is how this was caught. */}
       <PageSeo
-        title="DoUKnowBall: The Ultimate Sports Trivia Hub"
+        title="DoUKnowBall: Free Daily Sports Trivia Games"
         description="100+ free sports trivia games and career sims covering NFL, NBA, MLB, NHL, Soccer, College Sports, UFC, F1, Tennis, NASCAR and more. Daily challenges, no login required."
         path="/"
       />

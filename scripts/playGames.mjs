@@ -275,6 +275,15 @@ const WANT = /^(?!how to\b).*(play now|start|continue|next|confirm|submit|take t
 const CLOCK = /\b\d{1,2}:\d{2}(?::\d{2})?\b|\b\d+\s?(?:ms|s) (?:left|remaining)\b/gi;
 const screenId = s => s.replace(CLOCK, '<clock>');
 
+/** Round 265: the progress a game claims about itself, like "Throw 3/11",
+ *  "Question 4 of 10" or "Round 2/5". Null when the screen makes no such
+ *  claim, which is most of them. Used to tell a game that legitimately
+ *  returns to the same screen for each turn apart from one that is stuck. */
+const progressMark = text => {
+  const m = String(text).match(/\b(\d{1,3})\s*(?:\/|of)\s*(\d{1,3})\b/i);
+  return m ? `${m[1]}/${m[2]}` : null;
+};
+
 async function playOnce(game) {
   const out = { findings: [], skipped: null, acted: 0 };
   let acted = 0;
@@ -327,6 +336,10 @@ async function playOnce(game) {
        the harness tried every control it could reach and NONE of them moved
        the game on. */
     const duds = new Set();
+    /* Round 265: every distinct "N of M" this run has seen. Two or more means
+       the game completed a turn at some point, whatever the screens looked
+       like, which is the difference between a turn loop and a dead end. */
+    const progressSeen = new Set();
     const loopers = new Set();
     /* Round 122: every screen this run has already shown, so a control that
        hands back one of them can be recognised as going BACKWARDS.
@@ -459,10 +472,22 @@ async function playOnce(game) {
         const answerBox = await page.locator('input:visible:not([type=checkbox]):not([type=radio]), textarea:visible').count().catch(() => 0);
         if (answerBox > 0) {
           skip(`played ${acted} press${acted === 1 ? '' : 'es'} then ran out of controls with an answer box still open, so the way on is a real answer the harness cannot invent`);
-        } else if (duds.size >= MIN_TRIED) {
-          // Genuinely stuck: several distinct controls, none of them moved it.
+        } else if (duds.size >= MIN_TRIED && progressSeen.size < 2) {
+          // Genuinely stuck: several distinct controls, none of them moved it,
+          // and the game never once claimed to have got further than it
+          // started. That second condition is Round 265 and it is the
+          // difference between stuck and looping ON PURPOSE: a counter only
+          // shows on some of a game's screens, so comparing it press to press
+          // misses turns, but a run that has seen two different values has
+          // demonstrably completed a turn whatever the screens looked like.
           const back = loopers.size ? `, ${loopers.size} of them only went back to a screen it had already seen (${[...loopers].slice(0, 3).join(', ')})` : '';
           note('STALL  ', `tried ${duds.size} different controls by step ${s} and none of them moved the game forward${back}`);
+        } else if (duds.size >= MIN_TRIED) {
+          /* it ran out of controls but the game's own counter moved during the
+             run, so it is a turn based loop the walk cannot keep driving, not
+             a dead end. Reported as a skip so it is visible without being an
+             alarm. */
+          skip(`ran out of controls at step ${s}, but the game's own counter moved (${[...progressSeen].slice(0, 4).join(' then ')}), so it is a turn loop this walk cannot keep driving`);
         } else if (sawDisabled) {
           /* The only controls that were not chrome were DISABLED. That is a
              screen waiting for input, not a broken one, and calling it dead
@@ -488,7 +513,24 @@ async function playOnce(game) {
       // a stall. A real stall is the identical screen coming back three
       // presses running, which means nothing is advancing.
       const idBefore = screenId(before), idAfter = screenId(after);
-      if (idAfter === idBefore) duds.add(pressed);
+      /* Round 265: A GAME THAT COMES BACK TO THE SAME SCREEN IS NOT STUCK IF
+         ITS COUNTER MOVED. Dart Draft asks for eleven darts, and every one of
+         them is: pick a position, lock the sweep, throw, draft the player you
+         hit, and back to picking a position. That is the game working, and the
+         screen signature is identical every time, so this walk reported it as
+         a hard stall. Driven by hand it goes 1/11 to 2/11 to 3/11 to 4/11 with
+         no errors and no failed requests, which is what proved the finding
+         false rather than the game broken. Any "N of M" on the page is a
+         progress claim the game makes about itself, so if it has changed then
+         something advanced and the press was not a dud, whatever the rest of
+         the screen looks like. */
+      const progressBefore = progressMark(before), progressAfter = progressMark(after);
+      if (progressBefore) progressSeen.add(progressBefore);
+      if (progressAfter) progressSeen.add(progressAfter);
+      const movedOn = progressAfter !== null && progressAfter !== progressBefore;
+      if (movedOn) {
+        /* it advanced: nothing about this press was a dud */
+      } else if (idAfter === idBefore) duds.add(pressed);
       else if (seen.has(idAfter)) {
         // Went somewhere, and somewhere was backwards.
         duds.add(pressed);

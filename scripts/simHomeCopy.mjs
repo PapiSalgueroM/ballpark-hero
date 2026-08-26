@@ -150,7 +150,32 @@ console.log(`   ${hrefs.length} links, ${gameLinks} of them games, every one a r
 if (gameLinks < 6) fail(`only ${gameLinks} of the links go to a game, which is the point of the block`);
 
 /* ── 5: nothing dated ─────────────────────────────────────────────────── */
-console.log('4) nothing in it belongs to one day');
+/* ── the head a JavaScript-off crawler reads ──────────────────────────── */
+console.log('4) the head the crawler actually gets');
+/* Round 265. Every other page's canonical and title reach a crawler because
+   the prerenderer captures the head AFTER React has drawn it. The home page is
+   deliberately not prerendered, so whatever is in this template is the whole
+   of what a crawler with JavaScript off sees. Measured live on 2026-08-22 with
+   a Googlebot user agent: ten pages, ten canonicals, and the one missing was
+   the home page. */
+const head = html.slice(0, rootStart);
+const canon = head.match(/<link[^>]+rel="canonical"[^>]+href="([^"]+)"/);
+if (!canon) fail('the template has no canonical, so a crawler with JavaScript off sees none on the home page');
+else if (canon[1] !== 'https://douknowball.com/') fail(`the home canonical points at ${canon[1]}`);
+const staticTitle = (head.match(/<title>([^<]*)<\/title>/) ?? [])[1] ?? '';
+if (!staticTitle.trim()) fail('the template has no title');
+/* and the app must not rename the page the moment it boots: a crawler that
+   renders would then read a different title from one that does not */
+const indexPage = readFileSync(path.join(ROOT, 'src/pages/Index.tsx'), 'utf8');
+const appTitle = (indexPage.match(/title="([^"]*)"/) ?? [])[1] ?? '';
+if (appTitle !== staticTitle) {
+  fail(`the template says ${JSON.stringify(staticTitle)} and the app sets ${JSON.stringify(appTitle)}, so the two disagree`);
+}
+const staticDesc = head.match(/<meta name="description" content="([^"]+)"/);
+if (!staticDesc || staticDesc[1].length < 60) fail('the template has no usable meta description');
+console.log(`   canonical ${canon ? canon[1] : 'MISSING'}, title matches the app, description ${staticDesc ? staticDesc[1].length : 0} chars`);
+
+console.log('5) nothing in it belongs to one day');
 const DATED = [
   [/\b(19|20)\d\d\b/, 'a year'],
   [/\b(January|February|March|April|May|June|July|August|September|October|November|December)\b/, 'a month'],
