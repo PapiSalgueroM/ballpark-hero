@@ -228,27 +228,81 @@ for (const route of unique) {
         return st.display !== 'none' && st.visibility !== 'hidden' && Number(st.opacity) > 0.05;
       };
       const SEL = 'h1, h2, h3, h4, p, li, a[href], td, th, blockquote';
+      const BLOCK = 'h1, h2, h3, h4, p, li, td, th, blockquote';
+
+      /* ROUND 269, TWO FIXES TO THIS LOOP, BOTH MEASURED FIRST.
+
+         ONE: A LINK INSIDE A PARAGRAPH WAS WRITTEN OUT TWICE. This used to
+         take each element's innerText, which flattens any link inside it into
+         plain words, and then emit that same link again on its own as a bare
+         anchor. Measured across all 121 snapshots on 2026-08-22: 161 anchors
+         duplicated that way, every document affected, worst case six on
+         /about. Now a block is rebuilt with its links kept where they belong,
+         and those links are not emitted a second time. The link graph is
+         unchanged, because an href inside a paragraph is still an href.
+
+         TWO: ANY ELEMENT OVER 1200 CHARACTERS WAS SILENTLY THROWN AWAY. The
+         cap was there to stop a giant wrapper dumping the whole page into the
+         snapshot, which is a real thing to guard against, but length is the
+         wrong test for it. It was costing /whats-new six of its 112 entries,
+         and on a changelog the longest entries are the biggest features: the
+         Soccer Career squad card, the full browser inspection and the search
+         visibility pass were all missing from the page a crawler receives.
+         The test is now about SHAPE: an element that CONTAINS another block
+         element is a wrapper and is still capped, while a leaf keeps its text
+         up to a ceiling high enough that no honest paragraph reaches it. */
+      const WRAPPER_CAP = 1200;
+      const LEAF_CAP = 8000;
+
+      const consumed = new Set();
+      const inline = el => {
+        let out = '';
+        const walk = node => {
+          for (const child of Array.from(node.childNodes)) {
+            if (child.nodeType === 3) { out += esc(child.nodeValue); continue; }
+            if (child.nodeType !== 1) continue;
+            if (child.tagName === 'A') {
+              const href = child.getAttribute('href') || '';
+              const t = (child.innerText || '').trim().replace(/\s+/g, ' ');
+              if (t && (href.startsWith('/') || href.startsWith('http'))) {
+                out += `<a href="${esc(href)}">${esc(t)}</a>`;
+                consumed.add(child);
+                continue;
+              }
+            }
+            walk(child);
+          }
+        };
+        walk(el);
+        return out.replace(/\s+/g, ' ').trim();
+      };
+
       for (const el of Array.from(document.querySelectorAll(SEL))) {
         if (!visible(el)) continue;
         const text = (el.innerText || '').trim().replace(/\s+/g, ' ');
-        if (!text || text.length > 1200) continue;
+        if (!text) continue;
         const tag = el.tagName.toLowerCase();
         if (tag === 'a') {
+          /* already written out inside the paragraph or list item it sits in */
+          if (consumed.has(el)) continue;
           const href = el.getAttribute('href') || '';
           if (!href.startsWith('/') && !href.startsWith('http')) continue;
+          if (text.length > LEAF_CAP) continue;
           const key = 'a|' + href + '|' + text;
           if (seen.has(key)) continue;
           seen.add(key);
           parts.push(`<a href="${esc(href)}">${esc(text)}</a>`);
           continue;
         }
-        /* a heading or paragraph whose text is already covered by a link
-           we kept would just duplicate it */
-        const key = tag + '|' + text;
+        const cap = el.querySelector(BLOCK) ? WRAPPER_CAP : LEAF_CAP;
+        if (text.length > cap) continue;
+        const html = inline(el);
+        if (!html) continue;
+        const key = tag + '|' + html;
         if (seen.has(key)) continue;
         seen.add(key);
         const out = tag === 'td' || tag === 'th' ? 'p' : tag === 'li' ? 'li' : tag;
-        parts.push(`<${out}>${esc(text)}</${out}>`);
+        parts.push(`<${out}>${html}</${out}>`);
       }
       /* the head is copied as built, minus the runtime-injected <style>
          blocks: they measured 29KB a page (four fifths of the file) and

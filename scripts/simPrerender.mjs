@@ -224,6 +224,82 @@ if (!existsSync(calPath)) {
   console.log(`   ${titles.length} dated titles, ${frozen} of them frozen as a ticker line in the ${docs.size} snapshots`);
 }
 
+console.log('8) nothing a page renders is thrown away for being long');
+/* ROUND 269. The extractor used to skip any element whose text ran past 1200
+   characters. That cap exists for a real reason, a giant wrapper element would
+   otherwise dump the entire page into the snapshot, but length is the wrong
+   test for it and it was quietly costing us content. Measured on /whats-new:
+   the source held 112 entries and the shipped page carried 106. The six it
+   dropped were the longest six, and on a changelog the longest entries are the
+   biggest features, so the Soccer Career squad card, the full browser
+   inspection and the search visibility pass were all missing from the page a
+   crawler receives. The cap is about SHAPE now, a wrapper is capped and a leaf
+   is not, and this is how that stays true. The changelog is the right page to
+   measure it on because it is the only one on the site whose entries are long
+   by nature and whose source is a flat readable list. */
+{
+  const src = readFileSync(path.join(ROOT, 'src/pages/WhatsNew.tsx'), 'utf8');
+  const entries = [...src.matchAll(/<li><strong className="text-foreground">([^<]+)<\/strong>/g)]
+    .map(m => m[1].trim());
+  const shipped = docs.get('/whats-new');
+  if (!entries.length) {
+    fail('could not read any What\'s New entries out of the source, so this check is measuring nothing');
+  } else if (!shipped) {
+    fail('/whats-new has no shipped document at all');
+  } else {
+    const text = textOf(shipped).replace(/&amp;/g, '&').replace(/&#x27;|&apos;/g, "'").replace(/&quot;/g, '"');
+    const missing = entries.filter(e => !text.includes(e.replace(/&amp;/g, '&').replace(/&#x27;|&apos;/g, "'")));
+    for (const m of missing.slice(0, 6)) fail(`/whats-new drops the entry "${m}", which means the extractor is throwing away real content again`);
+    if (missing.length > 6) fail(`/whats-new drops ${missing.length} entries in total`);
+    console.log(`   ${entries.length - missing.length} of ${entries.length} changelog entries reach the shipped page`);
+  }
+}
+
+console.log('9) no link is written into a snapshot twice');
+/* The other half of the same round. Taking an element's innerText flattens any
+   link inside it into plain words, and the loop then emitted that link AGAIN
+   as a bare anchor of its own, always immediately after its container.
+   Measured before the fix: 161 duplicated anchors across all 121 snapshots,
+   every document affected.
+
+   THE ASSERTION IS ON THE EXTRACTOR, NOT ON THE OUTPUT, AND THAT IS A
+   DELIBERATE CLIMBDOWN FROM TWO DRAFTS THAT BOTH CRIED WOLF. Draft one
+   matched "a block followed by an anchor whose text the block contains" and
+   flagged three innocent pages: the terms page says the words Privacy Policy
+   in a long paragraph and the footer's Privacy Policy link happens to be the
+   next thing on the page. Draft two demanded the same href AND the same text
+   and still flagged /contact and /terms, because those pages really do link
+   the privacy policy from their prose AND from the footer, which is normal
+   and correct. The duplication this round removed is not distinguishable from
+   honest repeated linking by reading the finished HTML, because the thing
+   that made it a duplicate was that ONE DOM element got written out twice,
+   and that fact does not survive into the file.
+
+   So the guarantee is kept where it is actually true. The extractor marks
+   every anchor it writes inside a block, and skips it when the loop reaches
+   it on its own, which makes writing one twice structurally impossible. This
+   asserts that mechanism is still there, and REPORTS the adjacency count
+   without asserting on it, the same way simOpposition reports a signal too
+   small to test rather than pretending it is a check. Measured: 161 before
+   this round, 2 after, and both of those two are a page that links the
+   privacy policy from its own text as well as from the footer. */
+{
+  const src = readFileSync(path.join(ROOT, 'scripts/prerender.mjs'), 'utf8');
+  if (!/consumed\.add\(child\)/.test(src) || !/consumed\.has\(el\)/.test(src)) {
+    fail('prerender.mjs no longer marks the anchors it writes inside a block, so every inline link will be written out twice again');
+  }
+  let adjacent = 0;
+  for (const [, html] of docs) {
+    const i = html.indexOf('<div id="root">');
+    if (i < 0) continue;
+    for (const m of html.slice(i).matchAll(/<(p|li|h[1-4]|blockquote)\b[^>]*>([\s\S]*?)<\/\1>\s*<a href="([^"]*)">([^<]+)<\/a>/g)) {
+      const inside = [...m[2].matchAll(/<a href="([^"]*)">([^<]*)<\/a>/g)].map(a => a[1] + '|' + a[2].trim());
+      if (inside.includes(m[3] + '|' + m[4].trim())) adjacent += 1;
+    }
+  }
+  console.log(`   the consumed-anchor guard is in place; ${adjacent} block-then-same-link adjacencies (reported, not asserted on: honest repeat linking looks identical)`);
+}
+
 console.log('');
 if (failures > 0) {
   console.error(`simPrerender: ${failures} failure${failures === 1 ? '' : 's'}`);
