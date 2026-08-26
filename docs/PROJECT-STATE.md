@@ -743,7 +743,7 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
-| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 285** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP146.bat` runs all twenty eight in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 145) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
+| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 286** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP147.bat` runs all twenty nine in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 146) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
 | PREVIOUS HEAD, FOR CONTEXT | `f848aa0` = Round 253, pushed 2026-08-21 morning and published the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
 | WHY THE BACKLOG SAT FOR WEEKS | **Four separate bugs in the RUN bats, not in the code and not on his machine.** Every one of them made a fail-closed assertion STOP a run that should have passed, so a click that looked like it worked shipped a handful of rounds and quit. All four were reproduced on Windows before being fixed, all four are fixed in the bats on his disk AND in pkg/mkbat.py, and pkg/verifybat.py now refuses to build or bless a bat carrying any of them: (1) FORWARD SLASHES in a findstr file argument: findstr rejects them outright and returns errorlevel 1 exactly as if the pattern were missing, which killed 56 bats at Round 179 every single time; (2) RAW DOUBLE QUOTES in a pattern: cmd ends the quoted argument at the first one, so any assertion quoting real code (an aria-label, a JSX prop, an array of strings) was mangled, killing 10 bats at Round 198; (3) A QUOTE FOLLOWED BY A CMD OPERATOR: cmd counts quotes and does not understand the \" escape, so a `>` after one becomes a redirection, which silently turned RUN209's check into a file write; (4) A PERCENT SIGN in a pattern: cmd strips a lone `%` as variable-expansion syntax, so the assertion hunts for text the file does not contain, which stopped RUN251 on a comment reading "the 40% wash". The empirical tests that proved 1, 2 and 3 are worth repeating if a fifth ever appears: write a throwaway bat that runs the shapes against a known file, log the errorlevels, and read the log. Guessing cost more time than testing. |
@@ -1333,6 +1333,56 @@ arrives, triage it into rounds rather than trying to fix everything in one.
 purge. Awards is still unbuilt. See the roadmap below.
 
 ---
+
+## Round 286: the site has a face, and the sitemap stops re-dating every page when the footer moves
+
+Anthony's ask on 2026-08-25: "also want a way better logo". The one in place was an AI banner
+that said "10+ Free Sports Trivia Games" on a site with 113, carried a line of garbled glyphs at
+the bottom, lived on the host's upload bucket (an external image host, and the legal rule allows
+exactly one, flagcdn.com), and doubled as the Organization logo in the structured data. There
+was no favicon.svg, no touch icon and no theme colour.
+
+**One source, every asset.** `scripts/logo/gen_logo.py` draws the mark (a ball with two seams
+and the question mark from the site's own display face, Space Grotesk Bold, as outlines so no
+viewer needs the font) and writes `public/favicon.svg`, `logo-mark.svg`, `logo.svg` (the
+horizontal lockup), `logo-wordmark.svg`, the social image source, and
+`src/components/layout/logoMark.ts`, the geometry the header draws inline. `rasterize.mjs`
+(sharp) makes the PNGs: favicon 16 and 32, apple-touch-icon 180, icon 192 and 512, og-image
+1200 by 630. `make_ico.py` folds three sizes into favicon.ico. The font file ships in the repo
+under its OFL licence so the generator is reproducible anywhere.
+
+**Where it shows.** The header renders `LogoMark` before the wordmark (28px on phones, 32 on
+desktop, aria-hidden, the link is still named by the word). `index.html` links the SVG icon,
+the .ico with three sizes and the touch icon, sets `theme-color`, and points og:image and
+twitter:image at `https://douknowball.com/og-image.png` with width, height and alt. The
+Organization logo is `/icon-512.png` in both copies of the site block (the template and
+`pageSchema.ts`, which `simSchema` already holds together), because a logo field wants a
+square mark and the banner never was one.
+
+**`simBrand` holds all of it**: every asset present at its declared pixel size (PNG headers
+parsed, the .ico header counted), the SVGs made of outlines and not text elements, the
+template's icon links pointing at files that exist, no image the template hands a crawler on
+any host but the domain or flagcdn.com, the logo square and at least 112px, the header drawing
+from the generated geometry, and the shipped SVGs and geometry byte for byte what the generator
+produces when re-run into a temp dir. `BRAND_CONTROL=external` rewrites og:image to an off
+domain host in memory and the harness must go red.
+
+**The sitemap and the furniture.** Round 285 re-dated all 126 pages because the footer changed,
+which is true in the narrowest sense and useless to a crawler: not one page's own words moved.
+The header, the ticker, the game navbar, the footer and the cookie banner now mark themselves
+`data-site-chrome`, the prerenderer writes every block captured from inside one of them wrapped
+in `<div data-site-chrome>` (the words still ship, the footer is the site's link graph), and the
+sitemap reduction looks past those wrappers. Explicit marks rather than landmark tags on
+purpose: `GameShell` draws each game's title inside a `<header>`, and that is the page. The
+fingerprint version moved from 2 to 3, so every date was held across this change as the
+version rule requires, and `simSitemap`'s independent copy of the reduction strips the same
+wrapper so the generator cannot agree with itself.
+
+**The cookie banner said the wrong thing.** "By continuing you agree to our cookie policy" was
+never how it worked: nothing to do with ads loads until Accept is pressed. It now says "Ads and
+analytics only run if you press Accept. Essential only keeps them off and every game works the
+same." That sentence is captured into every snapshot, so it is also the sentence a reviewer
+reads.
 
 ## Round 285: the footer argued for one hub out of six, the privacy policy was two thirds of a policy, and analytics finally exists
 
@@ -1966,6 +2016,9 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-25** Round 286. The logo: mark, wordmark, icons, social image, all from one
+  generator, held by simBrand. Site chrome excluded from the lastmod fingerprint (v3, dates held).
+  Cookie banner copy made true.
 - **2026-08-25** Round 285. Footer links all six hubs, the privacy policy says what Google asks,
   Cookie choices in the footer, GA4 gated behind Accept, About says who makes this. simAdsense
   reads the shipped policy and holds the analytics gate; simInternalLinks holds the six hubs.

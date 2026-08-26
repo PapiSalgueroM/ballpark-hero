@@ -161,7 +161,12 @@ const LEDGER_PATH = path.join(ROOT, 'scripts/data/lastmod.json');
    force a reseed at today's date. That is the right move only when you know the
    content genuinely changed everywhere, which is exactly what happened here, and
    it costs the whole history, so it should be rare. */
-const FINGERPRINT_VERSION = 2;
+/* v3, Round 286: the site chrome (header, ticker, navbar, footer, cookie
+   banner) is left out of the reduction. A footer change re-dated all 126 pages
+   in Round 285, which is true in the narrowest sense and useless to a crawler:
+   the page's own words had not moved. Every date was held across this change,
+   as the version rule below requires. */
+const FINGERPRINT_VERSION = 3;
 const readLedger = () => {
   try { return JSON.parse(fs.readFileSync(LEDGER_PATH, 'utf8')); } catch { return {}; }
 };
@@ -215,6 +220,7 @@ function snapshotFingerprint(route) {
   const title = (html.match(/<title[^>]*>([^<]*)<\/title>/) || [])[1] || '';
   const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
   const text = body
+    .replace(/<div data-site-chrome>[\s\S]*?<\/div>/g, ' ')
     .replace(/<script[\s\S]*?<\/script>/g, ' ')
     .replace(/<style[\s\S]*?<\/style>/g, ' ')
     .replace(/<!--[\s\S]*?-->/g, ' ')

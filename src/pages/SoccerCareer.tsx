@@ -567,9 +567,13 @@ function useFooterLift(enabled: boolean): number {
       const foot = document.querySelector('footer');
       const vh = window.innerHeight || document.documentElement.clientHeight;
       if (!foot) { setLift(0); return; }
-      /* Clamped at half the window so a page that is somehow almost all footer
-         cannot throw the controls off the top of the screen. */
-      const next = Math.max(0, Math.min(Math.round(vh - foot.getBoundingClientRect().top), Math.round(vh * 0.5)));
+      /* Clamped at six tenths of the window so a page that is somehow almost
+         all footer cannot throw the controls off the top of the screen. It was
+         half until Round 286: the footer grew a row of sport hubs, and at 320
+         wide on an 844 tall screen it stands about 440px, so the half clamp
+         left the bar parked 17px into the footer at the very bottom of the
+         page. simMobileChrome measures exactly that. */
+      const next = Math.max(0, Math.min(Math.round(vh - foot.getBoundingClientRect().top), Math.round(vh * 0.6)));
       setLift((prev) => (prev === next ? prev : next));
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(measure); };

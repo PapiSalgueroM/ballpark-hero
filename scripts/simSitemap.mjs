@@ -134,7 +134,13 @@ console.log('5) every lastmod is a claim the shipped files back up');
       const body = i2 < 0 ? html : html.slice(i2);
       const title = (html.match(/<title[^>]*>([^<]*)<\/title>/) || [])[1] || '';
       const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
+      /* Round 286: the site chrome is wrapped in <div data-site-chrome> by the
+         prerenderer and the reduction looks past it, so the footer is not a
+         reason to date a page. Mirrored here for the same reason as the rest
+         of this block: independently, so the generator cannot agree with
+         itself. */
       const text = body
+        .replace(/<div data-site-chrome>[\s\S]*?<\/div>/g, ' ')
         .replace(/<script[\s\S]*?<\/script>/g, ' ')
         .replace(/<style[\s\S]*?<\/style>/g, ' ')
         .replace(/<!--[\s\S]*?-->/g, ' ')

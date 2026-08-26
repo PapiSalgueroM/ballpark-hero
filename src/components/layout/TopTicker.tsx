@@ -199,7 +199,7 @@ export function TopTicker() {
   ));
 
   return (
-    <div className={`${home ? '' : 'hidden md:block'} bg-card border-b border-border overflow-hidden h-7 relative`} aria-label="Site ticker">
+    <div data-site-chrome="" className={`${home ? '' : 'hidden md:block'} bg-card border-b border-border overflow-hidden h-7 relative`} aria-label="Site ticker">
       <div className="flex items-center h-full">
         <span className="shrink-0 z-10 h-full inline-flex items-center gap-1 px-2.5 bg-primary text-primary-foreground text-[10px] font-bold tracking-widest uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-primary-foreground animate-pulse" aria-hidden="true" /> The Ticker

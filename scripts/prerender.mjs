@@ -355,7 +355,13 @@ async function draw(sample, route, url) {
   await page.waitForFunction(
     () => !document.querySelector('[data-seo-content="loading"]'),
     { timeout: 15000 },
-  ).catch(() => {});
+  ).catch(() => {
+    /* said out loud, because a capture taken with the guide still in flight
+       is the generic three question fallback wearing the page's name, and
+       the head agreement check downstream is the only thing that would
+       otherwise notice */
+    console.error(`   ${route} (day ${SAMPLE_DAYS[sample]}): the guide had not landed after 15s, capturing anyway`);
+  });
   await page.waitForTimeout(SETTLE_MS);
   /* THE SNAPSHOT IS DELIBERATELY LIGHT. A full DOM capture measured
      96KB a page, 11.6MB across the site, which is far too heavy to
@@ -435,11 +441,22 @@ async function draw(sample, route, url) {
         return out.replace(/\s+/g, ' ').trim();
       };
 
+      /* ROUND 286: A BLOCK KNOWS WHETHER IT IS THE PAGE OR THE SITE. The
+         header, the ticker, the game navbar, the footer and the cookie banner
+         mark themselves data-site-chrome, and every block captured from inside
+         one of them is written wrapped in <div data-site-chrome>. The words
+         still ship (the footer's links are the site's link graph), but the
+         sitemap generator leaves those wrappers out of the text it dates a
+         page by, so a footer change stops re-dating 126 pages. Explicit marks
+         rather than landmark tags on purpose: GameShell draws each game's own
+         title inside a <header>, and that is the page, not the furniture. */
+      const isChrome = el => !!el.closest('[data-site-chrome]');
       for (const el of Array.from(document.querySelectorAll(SEL))) {
         if (!visible(el)) continue;
         const text = (el.innerText || '').trim().replace(/\s+/g, ' ');
         if (!text) continue;
         const tag = el.tagName.toLowerCase();
+        const chrome = isChrome(el);
         if (tag === 'a') {
           /* already written out inside the paragraph or list item it sits in */
           if (consumed.has(el)) continue;
@@ -449,7 +466,7 @@ async function draw(sample, route, url) {
           const key = 'a|' + href + '|' + text;
           if (seen.has(key)) continue;
           seen.add(key);
-          parts.push(`<a href="${esc(href)}">${esc(text)}</a>`);
+          parts.push({ s: `<a href="${esc(href)}">${esc(text)}</a>`, chrome });
           continue;
         }
         const cap = el.querySelector(BLOCK) ? WRAPPER_CAP : LEAF_CAP;
@@ -460,7 +477,7 @@ async function draw(sample, route, url) {
         if (seen.has(key)) continue;
         seen.add(key);
         const out = tag === 'td' || tag === 'th' ? 'p' : tag === 'li' ? 'li' : tag;
-        parts.push(`<${out}>${html}</${out}>`);
+        parts.push({ s: `<${out}>${html}</${out}>`, chrome });
       }
       /* the head is copied as built, minus the runtime-injected <style>
          blocks: they measured 29KB a page (four fifths of the file) and
@@ -572,12 +589,12 @@ for (const route of unique) {
        counts are kept apart so the third sample's own contribution is
        visible in the summary. */
     const first = samples[0].parts;
-    const inSecond = new Set(samples[1].parts);
-    const afterSecond = first.filter(p => inSecond.has(p));
+    const inSecond = new Set(samples[1].parts.map(p => p.s));
+    const afterSecond = first.filter(p => inSecond.has(p.s));
     let keep = afterSecond;
     for (const later of samples.slice(2)) {
-      const inLater = new Set(later.parts);
-      keep = keep.filter(p => inLater.has(p));
+      const inLater = new Set(later.parts.map(p => p.s));
+      keep = keep.filter(p => inLater.has(p.s));
     }
     const lostToSecond = first.length - afterSecond.length;
     const lostToThird = afterSecond.length - keep.length;
@@ -585,11 +602,21 @@ for (const route of unique) {
       volatileRoutes += 1;
       droppedBySecond += lostToSecond;
       droppedByThird += lostToThird;
-      const gone = first.filter(p => !keep.includes(p));
-      const show = gone.slice(0, 2).map(p => JSON.stringify(p.replace(/<[^>]+>/g, '').slice(0, 70))).join(', ');
+      const kept = new Set(keep.map(p => p.s));
+      const gone = first.filter(p => !kept.has(p.s));
+      const show = gone.slice(0, 2).map(p => JSON.stringify(p.s.replace(/<[^>]+>/g, '').slice(0, 70))).join(', ');
       console.log(`   ${route}: ${gone.length} block(s) change with the date and were left out: ${show}`);
     }
-    const payload = { head: samples[0].head, body: keep.join('\n') };
+    /* runs of site chrome are wrapped so the sitemap can look past them */
+    const lines = [];
+    let open = false;
+    for (const p of keep) {
+      if (p.chrome && !open) { lines.push('<div data-site-chrome>'); open = true; }
+      if (!p.chrome && open) { lines.push('</div>'); open = false; }
+      lines.push(p.s);
+    }
+    if (open) lines.push('</div>');
+    const payload = { head: samples[0].head, body: lines.join('\n') };
     const html = [
       '<!DOCTYPE html>',
       '<html lang="en">',

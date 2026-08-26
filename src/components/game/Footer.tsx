@@ -15,8 +15,11 @@ function resetCookieChoice() {
 }
 
 export function Footer() {
+  /* data-site-chrome: this is on every page, so the prerenderer keeps it out
+     of the text the sitemap dates a page by (Round 286). A footer change is
+     not a reason for Google to recrawl 126 pages. */
   return (
-    <footer className="mt-12 pb-8 text-center text-xs text-muted-foreground space-y-3">
+    <footer data-site-chrome="" className="mt-12 pb-8 text-center text-xs text-muted-foreground space-y-3">
       <p className="max-w-lg mx-auto leading-relaxed">
         All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall
       </p>
@@ -35,7 +38,7 @@ export function Footer() {
           <span key={hub.route} className="inline-flex items-center gap-x-3">
             {i > 0 && <span aria-hidden="true">·</span>}
             <Link to={hub.route} className="underline hover:text-foreground transition-colors">
-              {hub.h1.replace(/ Hub$/, '')}
+              {hub.h1.replace(/ Games( Hub)?$/, '')}
             </Link>
           </span>
         ))}

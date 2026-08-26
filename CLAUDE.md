@@ -420,7 +420,12 @@ These are not preferences, they are the exposure.
   Write around it. Attribute to a role rather than a person ("your captain", "the manager"),
   narrate rather than quote ("he made it clear he expected more"), or use a generated player.
   The repo is public and the site is public, so both are readable.
-- The only permitted external image host is `flagcdn.com`.
+- The only permitted external image host is `flagcdn.com`. That includes the social image and
+  the icons in `index.html`: until Round 286 og:image pointed at the host's upload bucket, and
+  `simBrand` section 3 now fails on any image the template hands a crawler from any other host.
+- The mark, the wordmark, the icons and the social image all come from `scripts/logo/gen_logo.py`.
+  Do not hand edit an asset in `public/`; edit the generator, re-run it with `rasterize.mjs` and
+  `make_ico.py`, and `simBrand` section 6 will confirm the shipped files match.
 - The footer disclaimer naming UEFA and the competitions plus the words "independent fan
   project" is **required** and must not be removed or shortened.
 - The genuinely exposed item is data provenance (Transfermarkt, Futbin). Do not make it worse

@@ -139,7 +139,9 @@ export const SITE_JSON_LD = [
     '@id': `${SITE}/#org`,
     name: 'DoUKnowBall',
     url: `${SITE}/`,
-    logo: `${SITE}/og-image.png`,
+    /* Round 286: a square mark, which is what a logo field wants; the social
+       image is a banner and was never a logo */
+    logo: `${SITE}/icon-512.png`,
   },
   {
     '@context': 'https://schema.org',

@@ -54,15 +54,29 @@
          KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
          scripts/simSchema.mjs parses this block and compares it against that
          export, so the two cannot drift apart quietly. -->
-    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/og-image.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Fantasy Draft","item":"https://douknowball.com/fantasy-draft"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Who decides the winner?","acceptedAnswer":{"@type":"Answer","text":"The community. After the season stories and analysis, players vote for the squad they rate higher, and the totals are shown. One vote per signed in account."}},{"@type":"Question","name":"Does the criteria change?","acceptedAnswer":{"@type":"Answer","text":"Yes, a fresh rule arrives each day, spanning age caps, budget caps, price floors, and nationality limits. Both sides live under it."}},{"@type":"Question","name":"Can the AI cheat the rule?","acceptedAnswer":{"@type":"Answer","text":"No, its picks pass the same legality check as yours. It relaxes for either side only when the pool has no legal option left, so every draft can finish."}},{"@type":"Question","name":"Is Fantasy Draft free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Fantasy Draft is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Fantasy Draft Showdown - Soccer Draft Game | DoUKnowBall","description":"Draft your Starting XI, simulate a full season, and vote for the winner. Daily fantasy football challenge.","url":"https://douknowball.com/fantasy-draft","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Fantasy Draft","item":"https://douknowball.com/fantasy-draft"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Who decides the winner?","acceptedAnswer":{"@type":"Answer","text":"The community. After the season stories and analysis, players vote for the squad they rate higher, and the totals are shown. One vote per signed in account."}},{"@type":"Question","name":"Does the criteria change?","acceptedAnswer":{"@type":"Answer","text":"Yes, a fresh rule arrives each day, spanning age caps, budget caps, price floors, and nationality limits. Both sides live under it."}},{"@type":"Question","name":"Can the AI cheat the rule?","acceptedAnswer":{"@type":"Answer","text":"No, its picks pass the same legality check as yours. It relaxes for either side only when the pool has no legal option left, so every draft can finish."}},{"@type":"Question","name":"Is Fantasy Draft free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Fantasy Draft is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Fantasy Draft Showdown - Soccer Draft Game | DoUKnowBall","description":"Draft your Starting XI, simulate a full season, and vote for the winner. Daily fantasy football challenge.","url":"https://douknowball.com/fantasy-draft","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
     
     
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
     
     
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
     
     
-    
-    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -175,8 +189,10 @@
 <body>
 <div id="root">
 <div id="dukb-snapshot">
+<div data-site-chrome>
 <a href="/whats-new">📰 New stuff ships almost daily. See what changed ·</a>
 <a href="/">DOUKNOWBALL</a>
+</div>
 <h1>Fantasy DraftShowdown</h1>
 <p>Draft your Starting XI. Simulate a season. Vote for the winner.</p>
 <h2>Today's Criteria</h2>
@@ -219,13 +235,14 @@
 <a href="/football-grid">🏈 Pro Football Grid 3×3 grid puzzle with rarity scores</a>
 <a href="/nhl-front-office">🏢 NHL Front Office Full GM sim with real 2026-27 rosters: hard cap, OT points, the bracket, the Cup</a>
 <a href="/hockey-higher-lower">🏒 Higher / Lower Compare career points</a>
+<div data-site-chrome>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
-<a href="/soccer">Soccer Games</a>
-<a href="/pro-basketball">Basketball Games</a>
-<a href="/hockey">Hockey Games</a>
-<a href="/pro-football">Football Games</a>
-<a href="/baseball">Baseball Games</a>
-<a href="/college">College Games</a>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
 <a href="/about">About</a>
 <a href="/contact">Contact</a>
 <a href="/whats-new">What's New</a>
@@ -233,7 +250,8 @@
 <a href="/leaderboard">Leaderboard</a>
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
-<p>We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy. <a href="/privacy">Learn More</a></p>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
 </div>
 </div>
 </body>

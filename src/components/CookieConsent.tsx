@@ -80,11 +80,14 @@ export function CookieConsent() {
      uselessly above a z-50 overlay. Opting this one subtree back in is the
      standard escape hatch and is scoped to the banner alone. */
   return createPortal(
-    <div ref={ref} className="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto p-4 bg-card border-t border-border shadow-lg">
+    <div ref={ref} data-site-chrome="" className="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto p-4 bg-card border-t border-border shadow-lg">
       <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center gap-3 text-sm text-muted-foreground">
+        {/* Round 286: the banner used to say "by continuing you agree", which
+            was never how it worked: nothing to do with ads loads until Accept
+            is pressed. It says what it does now. */}
         <p className="flex-1 text-center sm:text-left">
-          We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy.{' '}
-          <Link to="/privacy" className="underline hover:text-foreground font-medium">Learn More</Link>
+          Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same.{' '}
+          <Link to="/privacy" className="underline hover:text-foreground font-medium">Learn more</Link>
         </p>
         <div className="flex items-center gap-2 whitespace-nowrap">
           <button

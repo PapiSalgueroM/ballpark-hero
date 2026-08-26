@@ -54,15 +54,29 @@
          KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
          scripts/simSchema.mjs parses this block and compares it against that
          export, so the two cannot drift apart quietly. -->
-    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/og-image.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"College Grid","item":"https://douknowball.com/college-grid"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is this different from the NFL grid?","acceptedAnswer":{"@type":"Answer","text":"Same 3x3 bones, different resume. A college football grid asks what a player did in college, so rows are programs or conferences and columns are positions, awards, and draft outcomes. This cfb grid is home turf for people who know where every first rounder went to school."}},{"@type":"Question","name":"What does the rarity percentage mean?","acceptedAnswer":{"@type":"Answer","text":"The share of players who answered that cell with the same name. 3 percent means almost nobody thought of your guy. Lower averages make better Rarity Scores."}},{"@type":"Question","name":"Can I use the same player in more than one cell?","acceptedAnswer":{"@type":"Answer","text":"Yes. Each cell is validated on its own, so one player can fill two intersections, with rarity tracked separately in each."}},{"@type":"Question","name":"What happens when an answer cannot be verified?","acceptedAnswer":{"@type":"Answer","text":"The checker occasionally asks you to resubmit. No guess is charged. It is an unverified answer, not a wrong one."}},{"@type":"Question","name":"Do I need an account?","acceptedAnswer":{"@type":"Answer","text":"No. A free account with email or Google is optional and only matters for keeping your stats."}},{"@type":"Question","name":"Is College Grid free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. College Grid is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"College Football Grid Game - Daily CFB Grid | DoUKnowBall","description":"The college football grid game. Name players who attended each school and match NFL criteria. Free daily CFB puzzle.","url":"https://douknowball.com/college-grid","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"College Grid","item":"https://douknowball.com/college-grid"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is this different from the NFL grid?","acceptedAnswer":{"@type":"Answer","text":"Same 3x3 bones, different resume. A college football grid asks what a player did in college, so rows are programs or conferences and columns are positions, awards, and draft outcomes. This cfb grid is home turf for people who know where every first rounder went to school."}},{"@type":"Question","name":"What does the rarity percentage mean?","acceptedAnswer":{"@type":"Answer","text":"The share of players who answered that cell with the same name. 3 percent means almost nobody thought of your guy. Lower averages make better Rarity Scores."}},{"@type":"Question","name":"Can I use the same player in more than one cell?","acceptedAnswer":{"@type":"Answer","text":"Yes. Each cell is validated on its own, so one player can fill two intersections, with rarity tracked separately in each."}},{"@type":"Question","name":"What happens when an answer cannot be verified?","acceptedAnswer":{"@type":"Answer","text":"The checker occasionally asks you to resubmit. No guess is charged. It is an unverified answer, not a wrong one."}},{"@type":"Question","name":"Do I need an account?","acceptedAnswer":{"@type":"Answer","text":"No. A free account with email or Google is optional and only matters for keeping your stats."}},{"@type":"Question","name":"Is College Grid free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. College Grid is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"College Football Grid Game - Daily CFB Grid | DoUKnowBall","description":"The college football grid game. Name players who attended each school and match NFL criteria. Free daily CFB puzzle.","url":"https://douknowball.com/college-grid","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
     
     
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
     
     
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
     
     
-    
-    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -175,8 +189,10 @@
 <body>
 <div id="root">
 <div id="dukb-snapshot">
+<div data-site-chrome>
 <a href="/whats-new">📰 New stuff ships almost daily. See what changed ·</a>
 <a href="/">DOUKNOWBALL</a>
+</div>
 <h1>🏈COLLEGE FOOTBALL GRID</h1>
 <p>Fill the 3×3 grid with college football players matching both criteria. Daily challenge!</p>
 <h2>College Football Grid | DoUKnowBall</h2>
@@ -228,13 +244,14 @@
 <a href="/guess-the-year">📅 Guess The Year What year did these happen?</a>
 <a href="/hall-of-champions">🏛️ Hall of Champions Idle museum: buy real championships, fill ten wings, earn while you are away</a>
 <p>DoUKnowBall's College Football Grid is a free daily CFB puzzle game where you name NFL players who attended a given college program and meet a second criteria like position, draft round, or award. Where the pro version asks which team a player suited up for, this college one asks which campus he came from, and it tests your knowledge of players from Alabama, Ohio State, Clemson, Georgia, and dozens more programs. A new grid is available every day.</p>
+<div data-site-chrome>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
-<a href="/soccer">Soccer Games</a>
-<a href="/pro-basketball">Basketball Games</a>
-<a href="/hockey">Hockey Games</a>
-<a href="/pro-football">Football Games</a>
-<a href="/baseball">Baseball Games</a>
-<a href="/college">College Games</a>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
 <a href="/about">About</a>
 <a href="/contact">Contact</a>
 <a href="/whats-new">What's New</a>
@@ -242,7 +259,8 @@
 <a href="/leaderboard">Leaderboard</a>
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
-<p>We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy. <a href="/privacy">Learn More</a></p>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
 </div>
 </div>
 </body>

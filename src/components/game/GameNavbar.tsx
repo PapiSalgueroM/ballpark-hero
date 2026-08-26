@@ -93,7 +93,7 @@ export function GameNavbar() {
 
   return (
     <>
-      <nav className="w-full bg-background/95 border-b border-border/40">
+      <nav data-site-chrome="" className="w-full bg-background/95 border-b border-border/40">
         {/* Round 129: flex-wrap, not grid. See the note above. The order swap is
             what puts the stats between the wordmark and Back on a desktop while
             keeping them on their own line on a phone: on the wrapped layout the
