@@ -252,6 +252,76 @@ if (!reachable && listsById.size === 0) {
     reachable = false;
   }
 
+  /* the Brownlow roll is a Round 291 build, two-source verified
+     (afl.com.au/brownlow-medal/history against afltables.com, 2026-08-25;
+     the afltables index carried two vote counts wrong, 1935 and 1958, and
+     its own detail pages settled both in favour of afl.com.au). Exact
+     ratchet: 112 medals to 91 players, 1924 to 2025 with 1942 to 1945
+     vacant, the twelve tie years, and the four triple winners. When the
+     2026 count is held, the new row and these numbers move together. */
+  try {
+    const { data, error } = await supabase.from("afl_brownlow").select("year, winner, club, votes");
+    if (error) throw new Error(error.message);
+    const rows = data ?? [];
+    if (rows.length !== 112) fail(`afl_brownlow: ${rows.length} rows, the verified roll is exactly 112`);
+    const byYear = new Map();
+    for (const r of rows) byYear.set(r.year, (byYear.get(r.year) ?? 0) + 1);
+    for (let y = 1924; y <= 2025; y++) {
+      const vacant = y >= 1942 && y <= 1945;
+      if (vacant && byYear.has(y)) fail(`afl_brownlow: ${y} has a medal and none was awarded in the war years`);
+      if (!vacant && !byYear.has(y)) fail(`afl_brownlow: ${y} is missing`);
+    }
+    const ties = [...byYear.entries()].filter(([, n]) => n > 1).map(([y]) => y).sort();
+    const WANT_TIES = [1930, 1940, 1949, 1952, 1959, 1965, 1981, 1986, 1987, 1996, 2003, 2012];
+    if (ties.join() !== WANT_TIES.join()) fail(`afl_brownlow: tie years are ${ties.join(", ")}, the record has ${WANT_TIES.join(", ")}`);
+    const counts = new Map();
+    for (const r of rows) counts.set(r.winner, (counts.get(r.winner) ?? 0) + 1);
+    if (counts.size !== 91) fail(`afl_brownlow: ${counts.size} distinct medallists, the roll has 91`);
+    for (const name of ["Haydn Bunton", "Dick Reynolds", "Bob Skilton", "Ian Stewart"]) {
+      if ((counts.get(name) ?? 0) !== 3) fail(`afl_brownlow: ${name} shows ${counts.get(name) ?? 0} medals, the record says 3`);
+    }
+    for (const r of rows) {
+      if (!Number.isInteger(r.votes) || r.votes < 4 || r.votes > 60) fail(`afl_brownlow: ${r.year} ${r.winner} carries ${r.votes} votes, outside the 4 to 59 the record spans`);
+      if (!r.club || !r.club.trim()) fail(`afl_brownlow: ${r.year} ${r.winner} has no club`);
+    }
+    const voss = rows.find(r => r.year === 1996 && r.winner === "Michael Voss");
+    if (!voss || voss.club !== "Brisbane Bears") fail("afl_brownlow: 1996 Voss should be a Brisbane Bear, the club he actually played for that year");
+    console.log("   afl_brownlow: 112 medals, 91 players, the twelve ties and the four triples hold");
+  } catch {
+    console.log("   afl_brownlow: UNREACHABLE, NOT CHECKED.");
+    reachable = false;
+  }
+
+  /* the Dally M roll is a Round 291 build, two-source verified
+     (rugbyleagueproject.org against topendsports.com, 2026-08-25, agreeing
+     on every year). Exact ratchet: 47 medals to 34 players, 1979 to 2025,
+     1997 and 2003 vacant, 2014 and 2016 shared, Thurston four and Johns
+     three. When the 2026 medal is awarded, the row and these move together. */
+  try {
+    const { data, error } = await supabase.from("nrl_dally_m").select("year, winner");
+    if (error) throw new Error(error.message);
+    const rows = data ?? [];
+    if (rows.length !== 47) fail(`nrl_dally_m: ${rows.length} rows, the verified roll is exactly 47`);
+    const byYear = new Map();
+    for (const r of rows) byYear.set(r.year, (byYear.get(r.year) ?? 0) + 1);
+    for (let y = 1979; y <= 2025; y++) {
+      const vacant = y === 1997 || y === 2003;
+      if (vacant && byYear.has(y)) fail(`nrl_dally_m: ${y} has a medal and none was awarded`);
+      if (!vacant && !byYear.has(y)) fail(`nrl_dally_m: ${y} is missing`);
+    }
+    const ties = [...byYear.entries()].filter(([, n]) => n > 1).map(([y]) => y).sort();
+    if (ties.join() !== "2014,2016") fail(`nrl_dally_m: shared years are ${ties.join(", ")}, the record has 2014 and 2016`);
+    const counts = new Map();
+    for (const r of rows) counts.set(r.winner, (counts.get(r.winner) ?? 0) + 1);
+    if (counts.size !== 34) fail(`nrl_dally_m: ${counts.size} distinct medallists, the roll has 34`);
+    if ((counts.get("Johnathan Thurston") ?? 0) !== 4) fail("nrl_dally_m: Thurston should show four medals");
+    if ((counts.get("Andrew Johns") ?? 0) !== 3) fail("nrl_dally_m: Johns should show three medals");
+    console.log("   nrl_dally_m: 47 medals, 34 players, the two shared years and the two vacant ones hold");
+  } catch {
+    console.log("   nrl_dally_m: UNREACHABLE, NOT CHECKED.");
+    reachable = false;
+  }
+
   /* ------------------------------------ 4: the finals-table shape fences */
   console.log("3) shape fences on the finals-series tables");
   /* [table, person column that must never carry digits, row floor, floor

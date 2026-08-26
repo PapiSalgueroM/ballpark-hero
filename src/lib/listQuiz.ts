@@ -370,6 +370,35 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     fetch: () => col('nrl_premiers', 'premier'),
   },
   {
+    id: 'brownlow-medallists',
+    title: 'Brownlow Medallists',
+    blurb: "Every player to win the VFL/AFL's fairest and best since 1924.",
+    sport: 'AFL', emoji: '🏅', minAnswers: 10,
+    // afl_brownlow: built Round 291. 112 medals to 91 players, 1924 to 2025
+    // with no award 1942 to 1945, two-source verified 2026-08-25 against
+    // afl.com.au and afltables.com (the two vote counts the afltables index
+    // had wrong, 1935 and 1958, were settled by its own detail pages). Tie
+    // years carry every medallist, including the 1930 and 2012
+    // retrospective awards, and cleanAnswers folds the repeat winners so
+    // Bunton, Reynolds, Skilton and Stewart are one answer each.
+    // simListQuizSources ratchets the table at exactly 112 rows and pins
+    // those four at three medals apiece.
+    fetch: () => col('afl_brownlow', 'winner'),
+  },
+  {
+    id: 'dally-m-medallists',
+    title: 'Dally M Medallists',
+    blurb: "Every rugby league player of the year since 1979.",
+    sport: 'NRL', emoji: '🏉', minAnswers: 8,
+    // nrl_dally_m: built Round 291. 47 medals to 34 players, 1979 to 2025,
+    // no award in 1997 (the split season) or 2003 (the night was called
+    // off), shared in 2014 and 2016. Two-source verified 2026-08-25 against
+    // rugbyleagueproject.org and topendsports.com, agreeing on every year.
+    // simListQuizSources ratchets the table at exactly 47 rows and pins
+    // Thurston at four and Johns at three.
+    fetch: () => col('nrl_dally_m', 'winner'),
+  },
+  {
     id: 'usopen-tennis-champs',
     title: 'US Open Singles Champions',
     blurb: 'Every singles champion at the US Open in our records.',

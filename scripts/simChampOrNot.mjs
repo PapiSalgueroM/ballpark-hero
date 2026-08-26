@@ -79,7 +79,7 @@ console.log("1) live pools through the game's own fetch");
    wnba 29, cfb 49, cbb 87, epl 127 (the filter covers the whole English
    top flight, which the claim phrasing is deliberately neutral about),
    afl 129 */
-const FLOORS = { sb: 30, nba: 40, ws: 60, cup: 55, wnba: 14, cfb: 24, cbb: 40, epl: 60, afl: 64, nrl: 58 };
+const FLOORS = { sb: 30, nba: 40, ws: 60, cup: 55, wnba: 14, cfb: 24, cbb: 40, epl: 60, afl: 64, nrl: 58, brownlow: 56, dallym: 23 };
 const rowsByKey = new Map();
 let reachable = true;
 for (const def of COMPETITIONS) {
@@ -192,8 +192,12 @@ for (const day of dates) {
       fail(`${day}: slots ${i - 1} and ${i} are both ${r.compKey}, back to back`);
     }
   }
-  if (seenComp.size !== COMPETITIONS.length) {
-    fail(`${day}: only ${seenComp.size} of ${COMPETITIONS.length} competitions appeared`);
+  /* Round 291: eleven competitions share ten slots, so a day shows all of
+     them only when there are ten or fewer; otherwise every slot is a distinct
+     competition and one sits out */
+  const wantDistinct = Math.min(DAILY_ROUNDS, COMPETITIONS.length);
+  if (seenComp.size !== wantDistinct) {
+    fail(`${day}: only ${seenComp.size} of ${wantDistinct} competitions appeared`);
   }
 
   const statements = rounds.map(r => r.statement).join("|");
@@ -208,8 +212,14 @@ console.log(`   ${totalCount} rounds over ${dates.length} days, true rate ${(tru
 /* the coin is dailyDraw(2): across 3650 rounds the sd is ~0.8 points, so
    a 46-54 band is over 4 sd of headroom */
 if (trueRate < 0.46 || trueRate > 0.54) fail(`true rate ${(trueRate * 100).toFixed(1)}% is outside 46-54`);
+/* with more competitions than slots each one sits out some days: the
+   expected share is DAILY_ROUNDS over the competition count (ten of twelve
+   is 304 rounds a year; measured across a simulated 2026, every competition
+   sat between 296 and 315), and the floor is 85% of the expectation, 258, so
+   the rotation has to be badly skewed, not merely unlucky, to go red */
+const servedFloor = COMPETITIONS.length <= DAILY_ROUNDS ? 365 : Math.floor(365 * (DAILY_ROUNDS / COMPETITIONS.length) * 0.85);
 for (const [k, n] of perCompServed) {
-  if (n < 365) fail(`${k}: served ${n} rounds over a year, below one a day`);
+  if (n < servedFloor) fail(`${k}: served ${n} rounds over a year, below the floor of ${servedFloor}`);
 }
 
 /* determinism: the same day rebuilt is byte-identical */

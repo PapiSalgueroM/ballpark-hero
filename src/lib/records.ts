@@ -28,6 +28,10 @@ export interface RecordSection {
   blurb: string;
   /** label of the first column (Year or Season) */
   yearLabel: string;
+  /** label of the second column; Champion unless the table is of people (Round 291: Medallist) */
+  championLabel?: string;
+  /** the noun on the show-all button; seasons unless a year can hold more than one row (Round 291: medals) */
+  rowNoun?: string;
   /** extra columns after Champion, in order: [key, label] */
   columns: [string, string][];
   /** honest footnote rendered under the table, when the history needs one */
@@ -186,6 +190,42 @@ export const RECORD_SECTIONS: RecordSection[] = [
       { path: '/list-quiz', label: 'Name Them All' },
     ],
     fetch: () => rows('afl_premiers', 'year', 'premier', {}),
+  },
+  {
+    key: 'brownlow', emoji: '🏅', title: 'Brownlow Medallists',
+    blurb: "The VFL/AFL's fairest and best, as voted by the field umpires, every year since 1924. Haydn Bunton, Dick Reynolds, Bob Skilton and Ian Stewart won three each; no medal was awarded from 1942 to 1945.",
+    yearLabel: 'Year',
+    championLabel: 'Medallist',
+    rowNoun: 'medals',
+    columns: [['club', 'Club'], ['votes', 'Votes']],
+    note: 'Twelve counts ended level and every medallist from those years is listed, including the 1930 count settled retrospectively in 1989 and the 2012 medal reallocated in 2016. Clubs are named as they were at the time: Footscray, South Melbourne, the Brisbane Bears of 1996.',
+    play: [
+      { path: '/list-quiz', label: 'Name Them All' },
+      { path: '/champ-or-not', label: 'Champ or Not' },
+      { path: '/afl-higher-lower', label: 'AFL Higher or Lower' },
+    ],
+    /* afl_brownlow: built Round 291. 112 medals, 91 players, 1924 to 2025, two-source
+       verified 2026-08-25 against afl.com.au/brownlow-medal/history and afltables.com
+       (whose index had two vote counts wrong, 1935 and 1958, settled by its own detail
+       pages). simListQuizSources ratchets the table at exactly 112 rows. */
+    fetch: () => rows('afl_brownlow', 'year', 'winner', { club: 'club', votes: 'votes' }),
+  },
+  {
+    key: 'dallym', emoji: '🏉', title: 'Dally M Medallists',
+    blurb: "Rugby league's player of the year since 1979, judged match by match through the season. Johnathan Thurston won four, Andrew Johns three.",
+    yearLabel: 'Year',
+    championLabel: 'Medallist',
+    rowNoun: 'medals',
+    columns: [],
+    note: 'No medal is shown for 1997, when the game was split between two competitions and none was awarded, or for 2003, when the awards night was called off. 2014 and 2016 were shared and list both winners.',
+    play: [
+      { path: '/list-quiz', label: 'Name Them All' },
+      { path: '/champ-or-not', label: 'Champ or Not' },
+    ],
+    /* nrl_dally_m: built Round 291. 47 medals, 34 players, 1979 to 2025, two-source verified
+       2026-08-25 against rugbyleagueproject.org and topendsports.com, which agree on every
+       year. Winners only: the club was available from one source and is not shipped on one. */
+    fetch: () => rows('nrl_dally_m', 'year', 'winner', {}),
   },
   {
     key: 'nrl', emoji: '🏉', title: 'NRL/NSWRL Premiers',

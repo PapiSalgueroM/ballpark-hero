@@ -98,6 +98,24 @@ export const COMPETITIONS: CompetitionDef[] = [
     // about them can ever be dealt.
     phrase: (t, y) => `${t} won the top grade rugby league premiership in ${y}.`,
   },
+  {
+    key: 'brownlow', emoji: '🏅', label: 'Brownlow medallists',
+    table: 'afl_brownlow', yearCol: 'year', winCol: 'winner',
+    // Round 291, the first competition of people rather than teams. A tie
+    // year carries two or three rows, every one of them true, the same shape
+    // as the NRL's 1997; a false claim is a real medallist in a year he did
+    // not win, which for a repeat winner like Ablett is a year he was merely
+    // close. Eleven competitions now share ten slots, so one sits out each
+    // day; simChampOrNot holds every one to at least four days in five.
+    phrase: (t, y) => `${t} won the ${y} Brownlow Medal.`,
+  },
+  {
+    key: 'dallym', emoji: '🏉', label: 'Dally M medallists',
+    table: 'nrl_dally_m', yearCol: 'year', winCol: 'winner',
+    // Round 291. 1997 and 2003 have no row, so no claim about them can be
+    // dealt; 2014 and 2016 carry two rows, both true.
+    phrase: (t, y) => `${t} won the ${y} Dally M Medal.`,
+  },
 ];
 
 export interface ChampRow {

@@ -743,7 +743,7 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | `origin/main` head | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
-| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 290** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP151.bat` runs all thirty three in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 150) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast, 288 Idle Arena, the first true incremental, plus the rules button off the Back button, 289 Face Off, the duel against a rival or a friend, 290 the manifest that makes the site installable. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
+| WAITING ON ONE DOUBLE CLICK | Rounds **258 through 291** are packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP152.bat` runs all thirty four in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 151) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast, 288 Idle Arena, the first true incremental, plus the rules button off the Back button, 289 Face Off, the duel against a rival or a friend, 290 the manifest that makes the site installable, 291 the Brownlow and the Dally M on the records shelf. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
 | PREVIOUS HEAD, FOR CONTEXT | `f848aa0` = Round 253, pushed 2026-08-21 morning and published the same morning. THE ENTIRE 157-253 BACKLOG IS SHIPPED: 97 rounds, verified on the live domain (bundle hash moved to index-KZ_JE1hg.js, sitemap 115 to 122 URLs, /hall-of-champions and /silverware-sort and /records all 200 on douknowball.com), IndexNow submitted 122 URLs. Every row below describing a 'pending' or 'packaged' round from 157 to 253 is HISTORY now, not a queue. Nothing is waiting on Anthony's machine. |
 | WHY THE BACKLOG SAT FOR WEEKS | **Four separate bugs in the RUN bats, not in the code and not on his machine.** Every one of them made a fail-closed assertion STOP a run that should have passed, so a click that looked like it worked shipped a handful of rounds and quit. All four were reproduced on Windows before being fixed, all four are fixed in the bats on his disk AND in pkg/mkbat.py, and pkg/verifybat.py now refuses to build or bless a bat carrying any of them: (1) FORWARD SLASHES in a findstr file argument: findstr rejects them outright and returns errorlevel 1 exactly as if the pattern were missing, which killed 56 bats at Round 179 every single time; (2) RAW DOUBLE QUOTES in a pattern: cmd ends the quoted argument at the first one, so any assertion quoting real code (an aria-label, a JSX prop, an array of strings) was mangled, killing 10 bats at Round 198; (3) A QUOTE FOLLOWED BY A CMD OPERATOR: cmd counts quotes and does not understand the \" escape, so a `>` after one becomes a redirection, which silently turned RUN209's check into a file write; (4) A PERCENT SIGN in a pattern: cmd strips a lone `%` as variable-expansion syntax, so the assertion hunts for text the file does not contain, which stopped RUN251 on a comment reading "the 40% wash". The empirical tests that proved 1, 2 and 3 are worth repeating if a fifth ever appears: write a throwaway bat that runs the shapes against a known file, log the errorlevels, and read the log. Guessing cost more time than testing. |
@@ -1333,6 +1333,53 @@ arrives, triage it into rounds rather than trying to fix everything in one.
 purge. Awards is still unbuilt. See the roadmap below.
 
 ---
+
+## Round 291: the Brownlow and the Dally M join the records shelf
+
+Lovable's analytics, pulled 2026-08-25 for the fortnight to that day: 10,069 visitors, 34,135
+pageviews, and **Australia was 2,469 of those visitors against 2,696 from the United States**,
+a quarter of the site. The AU vertical (AFL Higher or Lower, the premiers rolls for the AFL and
+the NRL) is what those visitors have, and it deserved a third table. The Brownlow is the one
+every Australian knows.
+
+**The table.** `public.afl_brownlow` (year, winner, club, votes; RLS on, public read), 112
+medals to 91 players, 1924 to 2025, 1942 to 1945 vacant. Two-source verified 2026-08-25 the
+usual way: afl.com.au/brownlow-medal/history against afltables.com's index, which agreed on
+every winner and club and disagreed on two vote counts (1935 Bunton 25 v 24, 1958 Roberts 24 v
+20); afltables' own per-year pages carried 25 and 24, matching the AFL, so the index was the
+error. Clubs are named as they were at the time (Footscray, South Melbourne, and Voss's 1996
+medal is a Brisbane Bears medal, the club that existed that year), the same convention as
+`afl_premiers`. Every tie year lists every medallist, twelve of them, including the two
+retrospective ones (1930 settled in 1989, 2012 reallocated in 2016). Names are the common
+forms without nicknames (Edward Greeves, not Carji; Wilfred Smallhorn, not Chicken).
+
+**Where it plays.** The Record Books section, with a `championLabel` of Medallist and a show
+all button that counts medals rather than seasons (both new optional fields on
+`RecordSection`, defaulting to the old words). Name Them All's `brownlow-medallists` list
+(`cleanAnswers` folds the repeat winners so the four triple winners are one answer each).
+Champ or Not's `brownlow` competition, the first one about people rather than teams: a false
+claim is a real medallist in a year he did not win. Eleven competitions now share ten daily
+slots, so one sits out each day; `buildDailySlots` already handled that shape and
+`simChampOrNot` now asks for `min(DAILY_ROUNDS, competitions)` distinct per day and, per
+competition over a simulated year, at least 85% of the expected share (ten of twelve slots is
+304; measured 296 to 315; the floor is 258).
+
+**And the Dally M.** `public.nrl_dally_m` (year, winner; RLS on, public read): 47 medals to
+34 players, 1979 to 2025, no award in 1997 (the split season) or 2003 (the night was called
+off), shared in 2014 and 2016, Thurston four and Johns three. Two-source verified 2026-08-25
+against rugbyleagueproject.org and topendsports.com, which agree on every year. Winners only:
+the club column was available from one source and a column on one source is not shipped. It
+takes the same three places: a Record Books section, a Name Them All list, a Champ or Not
+competition. Twelve competitions now share Champ or Not's ten slots.
+
+**Held by** `simListQuizSources` (exact 112 rows, 91 names, every year present or vacant as
+the record says, the twelve tie years by list, the four triples, votes inside 4 to 59, Voss a
+Bear) and `simRecords` (eleven sections, the Brownlow floor at 112, club and votes required on
+every row), plus the Dally M ratchet (47 rows, 34 names, the two vacant years, the two shared
+ones, Thurston four, Johns three; floor 47 in `simRecords`). Both need a sandbox that reaches
+Supabase, which this one does not: the node egress
+proxy answers "Host not in allowlist: flawuiqbvjobmkfkauhw.supabase.co". The table itself was
+checked with the same assertions through the Supabase MCP before packaging.
 
 ## Round 290: installable
 
@@ -2161,7 +2208,19 @@ repo.
 
 ## Analytics truth
 
-Fresh 31-day pull, 2026-07-21 through 2026-08-20, taken 2026-08-20:
+Fresh 15-day pull, 2026-08-11 through 2026-08-25, taken 2026-08-25 for Round 291:
+
+- **10,069 visitors, 34,135 pageviews**, 3.39 pages a visit, about 5 minute sessions, 56%
+  bounce; the last two days were 735 and 792 visitors.
+- `/soccer-career` **6,413 pageviews, 19% of the site and 7.2x the next game**. `/club-manager`
+  is second among games at 885, then `/college-grid` 392, `/build-your-xi` 382,
+  `/perfect-season-nba` 297, `/dart-draft` 274, `/nba-my-career` 242.
+- Bing 3,936 visits, Direct 3,890, Google 1,144, DuckDuckGo 351, Yahoo 172.
+- **Devices 84% desktop, 16% mobile.** Countries: US 2,696, **Australia 2,469**, UK 700,
+  Germany 395, China 393, India 328. Australia is a quarter of the site, which is why Round 291
+  put the Brownlow and the Dally M on the records shelf.
+
+The previous pull, kept for the trend (31 days, 2026-07-21 through 2026-08-20, taken 2026-08-20):
 
 - **16,954 visitors, 59,024 pageviews**, 3.48 pages a visit, about 5 minute sessions, 58%
   bounce. The three best days in the window were Aug 17 to 19 (765, 860, 834 visitors), so the
@@ -2240,6 +2299,10 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-25** Round 291. afl_brownlow (112) and nrl_dally_m (47) tables, two-source verified;
+  Record Books sections, Name Them All lists, Champ or Not competitions, fences. The
+  exec_sql hole (closed in Round 289's notes) came out of this round's advisor run. Pending
+  row: 258 through 291 wait on `SHIP152.bat`.
 - **2026-08-25** Round 290. manifest.json, the template links it, simBrand section 7 with
   BRAND_CONTROL=manifest. Pending row: 258 through 290 wait on `SHIP151.bat`.
 - **2026-08-25** Round 289. Face Off at /face-off: engine, hook, page, guide, harness with

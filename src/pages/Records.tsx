@@ -33,7 +33,7 @@ function SectionTable({ def, st }: { def: RecordSection; st: SectionState }) {
           <thead>
             <tr className="bg-secondary/50 text-left">
               <th className="px-3 py-2 font-semibold text-foreground">{def.yearLabel}</th>
-              <th className="px-3 py-2 font-semibold text-foreground">Champion</th>
+              <th className="px-3 py-2 font-semibold text-foreground">{def.championLabel ?? 'Champion'}</th>
               {def.columns.map(([k, label]) => (
                 <th key={k} className="px-3 py-2 font-semibold text-foreground">{label}</th>
               ))}
@@ -57,7 +57,7 @@ function SectionTable({ def, st }: { def: RecordSection; st: SectionState }) {
           onClick={() => setOpen(o => !o)}
           className="mt-1 inline-flex items-center min-h-[32px] px-1.5 text-xs font-semibold text-primary hover:underline"
         >
-          {open ? 'Show fewer' : `Show all ${st.rows.length} seasons`}
+          {open ? 'Show fewer' : `Show all ${st.rows.length} ${def.rowNoun ?? 'seasons'}`}
         </button>
       )}
     </>
@@ -101,7 +101,7 @@ const Records = () => {
       </Link>
       <h1 className="text-3xl font-bold mb-2">The Record Books</h1>
       <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-        Every champion, year by year, across ten competitions. These are the same tables our trivia games run on, checked season by season against the official record before anything was allowed to serve them. Where history is odd we keep it odd: split titles get one row per selector, seasons that were never played are missing on purpose, and stripped titles stay vacant.
+        Every champion, year by year, across twelve competitions and awards. These are the same tables our trivia games run on, checked season by season against the official record before anything was allowed to serve them. Where history is odd we keep it odd: split titles get one row per selector, seasons that were never played are missing on purpose, and stripped titles stay vacant.
       </p>
       {/* Round 251: every control here is a real thumb target. The phone
           sweep finally ran in this sandbox and flagged the whole page at
