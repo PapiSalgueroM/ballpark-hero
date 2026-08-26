@@ -20,7 +20,7 @@
  * (runAllSims files it as a browser harness automatically, it imports
  * playwright, and runs it only with --browser.)
  */
-import pw from './lib/pwLoader.mjs';
+import pw from './lib/playwrightLoader.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';

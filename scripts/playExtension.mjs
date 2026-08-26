@@ -20,7 +20,7 @@
  * Run: npm run build && npx serve -s dist -l 4173, then
  *      ENGINES=chromium node scripts/playExtension.mjs
  */
-import pw from './lib/pwLoader.mjs';
+import pw from './lib/playwrightLoader.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';

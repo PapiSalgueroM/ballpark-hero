@@ -26,7 +26,7 @@
  * never sets a tactic, never signs anyone and chases every game it is losing,
  * so a mid-table club losing patience is the game working as designed.
  */
-import pw from './lib/pwLoader.mjs';
+import pw from './lib/playwrightLoader.mjs';
 const { chromium } = pw;
 
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';

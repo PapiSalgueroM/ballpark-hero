@@ -65,7 +65,7 @@
  *
  * VERBOSE=1 prints every scroll stop instead of just the interesting ones.
  */
-import pw from './lib/pwLoader.mjs';
+import pw from './lib/playwrightLoader.mjs';
 const { chromium } = pw;
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';

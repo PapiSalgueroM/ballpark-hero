@@ -44,7 +44,7 @@ let pw = null;
 try {
   // the same loader every browser harness imports (Round 295), so this
   // patches the exact module instance they will use
-  pw = (await import('./lib/pwLoader.mjs')).default;
+  pw = (await import('./lib/playwrightLoader.mjs')).default;
 } catch {
   // no playwright in this environment: nothing to shim
 }
