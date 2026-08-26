@@ -62,6 +62,25 @@ for (const r of routes) {
   const f = path.join(PUBLIC, r.replace(/^\//, ''), 'index.html');
   if (existsSync(f) && statSync(f).isFile()) docs.push([r, readFileSync(f, 'utf8')]);
 }
+/* ROUND 285 NEGATIVE CONTROL. LINKS_CONTROL=/soccer strips every footer link
+   to that route out of every document in memory, which is exactly what losing
+   the footer link looks like, and section 3 must then report it. The strip is
+   asserted to have landed on most of the corpus, because a control that
+   changes nothing proves nothing. */
+const CONTROL = process.env.LINKS_CONTROL || '';
+if (CONTROL) {
+  let touched = 0;
+  for (const d of docs) {
+    const before = d[1];
+    d[1] = before.replace(new RegExp(`<a href="${CONTROL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}">[^<]*</a>`, 'g'), '');
+    if (d[1] !== before) touched += 1;
+  }
+  if (touched < docs.length / 2) {
+    console.error(`control: only ${touched} of ${docs.length} documents linked ${CONTROL}, so removing it proves nothing`);
+    process.exit(1);
+  }
+  console.log(`   NEGATIVE CONTROL ON: every link to ${CONTROL} removed from ${touched} documents, section 3 must go red`);
+}
 console.log(`1) ${docs.length} crawlable documents against ${routes.length} sitemap routes`);
 if (docs.length < routes.length) {
   fail(`${routes.length - docs.length} sitemap routes have no shipped document, so they cannot link anywhere`);
@@ -108,16 +127,38 @@ console.log(`   ${orphans.length} orphans, thinnest linked route has ${counts[0]
 console.log('3) the pages that exist to gather other pages');
 /* These are the site's own hubs and standing pages. They are reachable from
    the footer, which is on every document, so their floor is high on purpose:
-   if one drops out of the footer this is what notices. */
-const HUBS = ['/records', '/whats-new', '/about', '/contact', '/privacy', '/terms', '/leaderboard', '/college'];
+   if one drops out of the footer this is what notices.
+
+   ROUND 285: ALL SIX SPORT HUBS ARE ON THIS LIST, NOT ONE. This list carried
+   /college and only /college, because Round 266 added it when it was an orphan
+   and the other five were "fine" at seven inbound links each: the home page
+   and the six hubs pointing at one another. Measured on 2026-08-25 across the
+   126 shipped documents: /college 132, the other five 6 apiece. Eighteen to
+   one in favour of the smallest section over the largest, on five pages Google
+   had never indexed. The footer now links every hub and this holds them all to
+   the same floor. The list is read out of sportHub.ts so a seventh hub is
+   covered the day it exists. */
+const hubSrc = readFileSync(path.join(ROOT, 'src/lib/sportHub.ts'), 'utf8');
+const SPORT_HUBS = [...hubSrc.matchAll(/^\s*route:\s*'([^']+)'/gm)].map(m => m[1]);
+if (SPORT_HUBS.length < 6) fail(`only ${SPORT_HUBS.length} sport hubs read out of sportHub.ts, which cannot be right`);
+const HUBS = [...new Set(['/records', '/whats-new', '/about', '/contact', '/privacy', '/terms', '/leaderboard', ...SPORT_HUBS])];
+const hubCounts = [];
 for (const h of HUBS) {
   if (!routeSet.has(h)) { fail(`${h} is not in the sitemap at all`); continue; }
   const n = inbound.get(h).size;
+  hubCounts.push([h, n]);
   /* measured: a footer link puts a page on every one of the 122 documents,
      so the floor is set well below that and still far above an accident */
   if (n < 50) fail(`${h} has only ${n} inbound links, so it is not in the footer any more`);
 }
-console.log(`   ${HUBS.length} hubs, every one linked from most of the site`);
+{
+  /* and the six sport hubs are held to EACH OTHER: the defect was never that
+     a hub had few links, it was that one had eighteen times the others */
+  const sport = hubCounts.filter(([h]) => SPORT_HUBS.includes(h)).map(([, n]) => n);
+  const lo = Math.min(...sport), hi = Math.max(...sport);
+  if (sport.length && hi > lo * 2) fail(`the sport hubs are linked unevenly, ${lo} to ${hi} inbound, so one section is being argued for far harder than the others`);
+  console.log(`   ${HUBS.length} hubs, every one linked from most of the site; sport hubs ${lo} to ${hi} inbound`);
+}
 
 /* ── 2: no dead ends ──────────────────────────────────────────────────── */
 console.log('4) no page is a dead end');
@@ -133,6 +174,12 @@ for (const [r, n] of outbound) {
 if (deadLinks > 5) fail(`${deadLinks} internal links point at routes that do not exist`);
 
 console.log('');
+if (CONTROL) {
+  /* inverted on purpose: under the control the hub check is SUPPOSED to fail */
+  if (failures > 0) { console.log(`simInternalLinks control: green. Losing the footer link to ${CONTROL} was reported (${failures} finding).`); process.exit(0); }
+  console.error(`simInternalLinks control: RED. Every link to ${CONTROL} was removed and nothing noticed, so the hub check proves nothing.`);
+  process.exit(1);
+}
 if (failures > 0) {
   console.error(`simInternalLinks: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);

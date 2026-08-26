@@ -102,6 +102,13 @@
       // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
       // New visitors (no choice yet) do not get the script until they accept;
       // the banner reloads ads on acceptance via the page lifecycle.
+      //
+      // Round 285: Google Analytics rides on the same gate. The measurement
+      // id and the injection are duplicated in src/lib/consentedScripts.ts,
+      // which is what the banner calls the moment somebody accepts; this copy
+      // covers every later page load. simAdsense holds the two ids together
+      // and refuses a gtag script tag that is not behind this check, so the
+      // tag can never be loaded for a visitor who has not accepted.
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
@@ -110,6 +117,15 @@
             s.crossOrigin = 'anonymous';
             s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
             document.head.appendChild(s);
+
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
           }
         } catch (e) { /* storage blocked: default to no ads script */ }
       })();
@@ -166,6 +182,8 @@
 <p>DoUKnowBall is a free sports trivia playground. Over 100 games covering soccer, pro football, basketball, baseball, hockey, college sports, Formula 1, tennis, golf, NASCAR, and combat sports. Some are quick daily puzzles you can knock out on the bus. Others are full career and manager sims you can sink a whole evening into. Everything runs right in your browser, no download and no signup required.</p>
 <h2>How it started</h2>
 <p>DoUKnowBall started in early 2026 as a handful of soccer guessing games built by one fan who was tired of trivia sites that ask you a single question and call it a day. Players kept showing up, so the games kept coming. A few months later the site covers eleven sports, with fresh puzzles dropping every single day and new games shipping constantly.</p>
+<h2>Who makes this</h2>
+<p>One person. DoUKnowBall is an independent project built and run by a lifelong sports fan, not a media company and not a league. The same person writes the game engines, checks the rosters, bakes the daily puzzles and reads every bug report. The games are free, there is no account wall, and the only way the site pays for itself is the ads, which is why it will never be buried in them. If you want to talk to the person behind it, douknowball1@gmail.com goes straight to him.</p>
 <h2>What we care about</h2>
 <p>Getting the data right comes first. Real rosters, real stats, verified lineups. When a grid says a player suited up for two clubs, he actually did. If something looks wrong anyway, every page has a Report a bug button in the footer that lands straight in our inbox with the page attached, and we fix it.</p>
 <p>Second, games have to be worth coming back to. That is why the dailies have streaks and share cards, the grids score you on how rare your answers are, and the sims have real depth: contracts, trades, injuries, playoff runs, whole careers. No two-second gimmicks.</p>
@@ -177,12 +195,17 @@
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer Games</a>
+<a href="/pro-basketball">Basketball Games</a>
+<a href="/hockey">Hockey Games</a>
+<a href="/pro-football">Football Games</a>
+<a href="/baseball">Baseball Games</a>
+<a href="/college">College Games</a>
 <a href="/about">About</a>
 <a href="/contact">Contact</a>
 <a href="/whats-new">What's New</a>
 <a href="/records">Record Books</a>
 <a href="/leaderboard">Leaderboard</a>
-<a href="/college">College Hub</a>
 <p>We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy. <a href="/privacy">Learn More</a></p>
 </div>
 </div>

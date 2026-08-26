@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
+import { loadConsentedScripts } from '@/lib/consentedScripts';
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -42,19 +43,11 @@ export function CookieConsent() {
   const accept = () => {
     localStorage.setItem('cookie-consent', 'accepted');
     setVisible(false);
-    // index.html only loads the AdSense script when consent is already
-    // 'accepted' at page load; inject it now so ads start this session too.
-    try {
-      if (!document.querySelector('script[src*="adsbygoogle.js"]')) {
-        const s = document.createElement('script');
-        s.async = true;
-        s.crossOrigin = 'anonymous';
-        s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
-        document.head.appendChild(s);
-      }
-    } catch {
-      // storage or DOM blocked: ads simply stay off this session
-    }
+    // index.html only loads the ad and analytics scripts when consent is
+    // already 'accepted' at page load; inject them now so both start this
+    // session too. Round 285 moved the injection into one module shared with
+    // nothing else, because the same two scripts are now gated in two places.
+    loadConsentedScripts();
   };
 
   // "Essential only": AdBanner reads this exact value and renders nothing

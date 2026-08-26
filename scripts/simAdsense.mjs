@@ -34,13 +34,18 @@ const adsTxt = existsSync(path.join(ROOT, 'public/ads.txt')) ? read('public/ads.
 const banner = read('src/components/ads/AdBanner.tsx');
 const consent = read('src/components/CookieConsent.tsx');
 
+/* Round 285: the banner no longer carries the id itself, it calls
+   src/lib/consentedScripts.ts, which is where both gated scripts live now. */
+const consented = read('src/lib/consentedScripts.ts');
 const ids = new Set();
-for (const src of [indexHtml, adsTxt, banner, consent]) {
+for (const src of [indexHtml, adsTxt, banner, consented]) {
   for (const m of src.matchAll(/(?:ca-)?pub-(\d{10,20})/g)) ids.add(m[1]);
 }
 if (ids.size === 0) fail('no AdSense publisher id anywhere, so nothing can be verified or paid');
 if (ids.size > 1) fail(`${ids.size} different publisher ids in the repo: ${[...ids].join(', ')}. One of them is wrong.`);
-console.log(`   publisher id pub-${[...ids][0] ?? 'MISSING'} in index.html, ads.txt, AdBanner and the consent banner`);
+if (!/pub-\d{10,20}/.test(consented)) fail('src/lib/consentedScripts.ts carries no publisher id, so the banner cannot start ads in the session somebody accepts');
+if (!/loadConsentedScripts\(\)/.test(consent)) fail('CookieConsent does not call loadConsentedScripts on accept, so ads and analytics wait for the next page load');
+console.log(`   publisher id pub-${[...ids][0] ?? 'MISSING'} in index.html, ads.txt, AdBanner and consentedScripts.ts`);
 
 /* ── 2: verification does not depend on a click ───────────────────────── */
 /* The AdSense script itself is loaded only after a visitor accepts cookies,
@@ -113,18 +118,115 @@ for (const r of REQUIRED) {
 console.log(`   ${REQUIRED.length} required pages, all routed, all submitted, all with real prerendered text`);
 
 /* ── 5: the privacy policy says what Google requires it to say ────────── */
-console.log('5) the advertising disclosures');
-const privacy = read('src/pages/PrivacyPolicy.tsx');
-const MUST_SAY = [
-  [/Google AdSense/i, 'that Google AdSense serves the ads'],
-  [/cookie/i, 'that cookies are used'],
-  [/personali[sz]ed ads/i, 'that ads can be personalised'],
-  [/google\.com\/settings\/ads|adssettings\.google/i, "a link to Google's own ads settings so a reader can opt out"],
-];
-for (const [re, what] of MUST_SAY) {
-  if (!re.test(privacy)) fail(`the privacy policy does not state ${what}`);
+/* ROUND 285 REWROTE THIS SECTION TWICE OVER.
+
+   WHAT IT READS. It used to read src/pages/PrivacyPolicy.tsx, and two of its
+   four checks were being satisfied by the comment explaining why they had been
+   added: prose about the code is the one place the string a guard looks for is
+   guaranteed to appear. It now reads the SHIPPED document, public/privacy/
+   index.html reduced to the words a reviewer's crawler gets, with comments,
+   scripts and markup gone, plus the link targets in it. What the source says
+   is not the question; what the page says is.
+
+   WHAT IT ASKS FOR. Four things were checked and Google's "Required content"
+   page for AdSense asks for more than that. Measured on 2026-08-25 the policy
+   said Google AdSense serves ads, that cookies are used, that ads can be
+   personalised and where Google's ads settings are, and did not say that third
+   party vendors including Google use cookies based on prior visits, that other
+   vendors and ad networks may serve ads too, where the industry opt-out lives
+   (aboutads.info), or where Google explains what it does with the data
+   (policies.google.com/technologies/partner-sites). Roughly two thirds of the
+   list. All of it is on the page now and all of it is held here, as the shape
+   of the sentence rather than one word from it, so a policy that mentions
+   cookies once in passing cannot pass a check about advertising cookies. */
+console.log('5) the advertising disclosures, as shipped');
+{
+  const f = path.join(ROOT, 'public/privacy/index.html');
+  if (!existsSync(f)) {
+    fail('public/privacy/index.html is missing, so the disclosures a reviewer would read cannot be checked');
+  } else {
+    const html = readFileSync(f, 'utf8')
+      .replace(/<!--[\s\S]*?-->/g, ' ')
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ');
+    const words = html.replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/&#x27;|&#39;/g, "'").replace(/\s+/g, ' ').trim();
+    const hrefs = [...html.matchAll(/href="([^"]+)"/g)].map(m => m[1]);
+    const MUST_SAY = [
+      [/Google AdSense/i, 'that Google AdSense serves the ads'],
+      [/third[ -]party vendors, including Google, use cookies to serve ads based on/i, 'that third party vendors including Google use cookies to serve ads based on prior visits'],
+      [/advertising cookies enables it and its partners to serve ads/i, "that Google's advertising cookies let it and its partners serve ads across sites"],
+      [/opt out of personali[sz]ed advertising/i, 'how to opt out of personalised advertising'],
+      [/other third[ -]party vendors and ad networks may also serve ads/i, 'that other vendors and ad networks may serve ads on the site'],
+      [/Essential only/, 'what the Essential only choice on the banner does'],
+      [/Cookie choices/, 'that consent can be withdrawn from the footer'],
+      [/Google Analytics/, 'that Google Analytics is used and behind the same consent'],
+    ];
+    for (const [re, what] of MUST_SAY) {
+      if (!re.test(words)) fail(`the shipped privacy policy does not state ${what}`);
+    }
+    const MUST_LINK = [
+      [/google\.com\/settings\/ads|adssettings\.google\.com/, "Google's ads settings"],
+      [/aboutads\.info/, 'the aboutads.info opt-out'],
+      [/policies\.google\.com\/technologies\/partner-sites/, "Google's partner sites explanation"],
+    ];
+    for (const [re, what] of MUST_LINK) {
+      if (!hrefs.some(h => re.test(h))) fail(`the shipped privacy policy does not link to ${what}`);
+    }
+    console.log(`   ${MUST_SAY.length} statements and ${MUST_LINK.length} links, all present in the shipped document (${words.length} readable characters)`);
+  }
+  /* The withdrawal link the policy promises has to exist and has to do the
+     one thing that makes it a withdrawal: forget the stored answer. Read as
+     code, not as a comment: the call itself. */
+  const footer = read('src/components/game/Footer.tsx').replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\{\/\*[\s\S]*?\*\/\}/g, ' ');
+  if (!/localStorage\.removeItem\(\s*'cookie-consent'\s*\)/.test(footer)) {
+    fail("the footer has no control that removes the stored 'cookie-consent' answer, so the withdrawal the policy promises does not exist");
+  }
+  if (!/Cookie choices/.test(footer)) fail('the footer does not offer the Cookie choices control the policy names');
 }
-console.log(`   all ${MUST_SAY.length} disclosures present`);
+
+/* ── 5b: analytics rides on the same consent gate as the ads ──────────── */
+/* Round 285 wired Google Analytics (G-KZQK2G68YC, from the owner on
+   2026-08-25). It loads in exactly the two places the ad script loads, behind
+   exactly the same check, and this holds three things: the id is one id in
+   both copies, the tag is never a static script element in the template, and
+   every mention of either script URL in index.html sits inside the consent
+   branch. The branch is found by matching braces from the consent check, so a
+   copy of the URL pasted above it, which is how the vendor's snippet arrives,
+   fails here rather than quietly tracking everyone. */
+console.log('5b) analytics loads only behind the same consent as the ads');
+{
+  const gaIds = new Set();
+  for (const src of [indexHtml, consented]) {
+    for (const m of src.matchAll(/\bG-[A-Z0-9]{6,12}\b/g)) gaIds.add(m[0]);
+  }
+  if (gaIds.size === 0) fail('no GA4 measurement id in index.html or consentedScripts.ts');
+  if (gaIds.size > 1) fail(`${gaIds.size} different GA4 ids: ${[...gaIds].join(', ')}`);
+  if (!/G-[A-Z0-9]{6,12}/.test(consented)) fail('consentedScripts.ts has no measurement id, so accepting the banner never starts analytics');
+  if (/<script[^>]*src="https:\/\/www\.googletagmanager\.com\/gtag\/js/i.test(indexHtml)) {
+    fail('index.html loads gtag.js as a plain script tag, which runs for every visitor whether they accepted or not');
+  }
+  const gate = indexHtml.indexOf("localStorage.getItem('cookie-consent') === 'accepted'");
+  if (gate < 0) {
+    fail('index.html has no consent gate, so nothing can be behind it');
+  } else {
+    const open = indexHtml.indexOf('{', gate);
+    let depth = 0, close = -1;
+    for (let i = open; i < indexHtml.length; i++) {
+      if (indexHtml[i] === '{') depth += 1;
+      else if (indexHtml[i] === '}') { depth -= 1; if (depth === 0) { close = i; break; } }
+    }
+    const inside = indexHtml.slice(open, close);
+    /* whole line comments only: a URL contains a double slash too */
+    const stripped = indexHtml.replace(/<!--[\s\S]*?-->/g, ' ').replace(/^\s*\/\/[^\n]*/gm, ' ');
+    for (const url of ['googletagmanager.com/gtag/js', 'adsbygoogle.js']) {
+      const all = (stripped.match(new RegExp(url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
+      const gated = (inside.match(new RegExp(url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
+      if (all === 0) fail(`index.html never loads ${url} at all`);
+      if (all !== gated) fail(`${url} appears ${all} time(s) in index.html code and only ${gated} inside the consent branch`);
+    }
+  }
+  console.log(`   measurement id ${[...gaIds][0] ?? 'MISSING'}, one id in both copies, both scripts inside the consent branch and nowhere else`);
+}
 
 /* ── 6: an empty ad slot is not labelled as an advertisement ──────────── */
 console.log('6) the ad component never labels an empty box');

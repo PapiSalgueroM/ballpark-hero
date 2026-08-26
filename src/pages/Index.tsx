@@ -421,9 +421,16 @@ export default function Index() {
                  Up for anyone who came here to make one. */
               <p className="text-xs text-muted-foreground">
                 Everything below plays without an account.{' '}
+                {/* Round 285: py-2 with a matching negative margin. sweepPhone
+                    measured this control at 16px tall on a phone, which is
+                    half the tap target floor, because Round 283 turned the
+                    signup gate into a sentence and left the button inside it
+                    at text height. The padding grows the hit area to 32px;
+                    the negative margin keeps the sentence's line spacing
+                    exactly where it was. */}
                 <button
                   onClick={() => setAuthOpen(true)}
-                  className="text-primary font-medium underline underline-offset-2 hover:opacity-80"
+                  className="text-primary font-medium underline underline-offset-2 hover:opacity-80 py-2 -my-2"
                 >
                   Make a free one
                 </button>{' '}

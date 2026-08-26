@@ -1334,6 +1334,55 @@ purge. Awards is still unbuilt. See the roadmap below.
 
 ---
 
+## Round 285: the footer argued for one hub out of six, the privacy policy was two thirds of a policy, and analytics finally exists
+
+Rebuilt on 2026-08-25 from the previous session's Round 286 notes, plus the GA4 id Anthony sent
+the same day and the "who makes this" ask from an outside AdSense assessment he pasted.
+
+**The footer.** Round 266 put /college in the footer because it was an orphan and left the
+other five hubs where they were. Measured across the 126 shipped documents before this round:
+/college 132 inbound links, /soccer, /pro-football, /pro-basketball, /baseball and /hockey 6
+each. Eighteen to one in favour of the smallest section over the largest, on five pages Google
+had never indexed. The footer now carries a row with all six, read from `sportHub.ts` so a
+seventh hub lands there on its own, and `simInternalLinks` holds every hub to the same floor
+and the six sport hubs to within a factor of two of each other. `LINKS_CONTROL=/soccer` strips
+that link out of every document in memory and the harness must go red, and it does.
+
+**The privacy policy.** Google's required content for AdSense asks for more than the page said.
+Before: Google AdSense named, cookies mentioned, personalised ads mentioned, a link to Google's
+ads settings. Missing: that third party vendors including Google use cookies based on prior
+visits, that other vendors and ad networks may serve ads, the industry opt-out at aboutads.info,
+and the link to how Google uses data from partner sites. All on the page now in a dedicated
+Advertising section, in Google's own wording, with the EEA, UK and California rights spelled
+out, a security and data location section, a server logs section, and a description of the
+banner that is finally accurate: it was written as "by continuing you agree" when the site has
+gated the ad script behind an explicit Accept since Round 69. The date on the page moved.
+
+The check moved with it. `simAdsense` section 5 used to read the policy's SOURCE, and two of
+its four checks were being satisfied by the comment explaining why they were added. It reads
+the shipped `public/privacy/index.html` now, reduced to words and link targets with comments,
+scripts and markup gone, and asks for seven statements and three links.
+
+**Consent can be withdrawn.** A Cookie choices control in the footer clears the stored answer
+and reloads, which shows the banner again and, because index.html only loads the ad and
+analytics scripts when the stored answer is `accepted`, means a page with no answer carries no
+advertising code at all. The policy names the link, and section 5 checks the footer really has a
+control that removes `cookie-consent` (as code, comments stripped).
+
+**Google Analytics 4, gated.** Measurement id `G-KZQK2G68YC`, from Anthony 2026-08-25. It
+loads in exactly the two places the ad script loads: the inline consent gate in index.html for
+every later page load, and `src/lib/consentedScripts.ts` when the banner is accepted in the
+current session. Never as a plain script tag, never for a visitor who has not accepted.
+`simAdsense` section 5b holds the id to one id across both copies, refuses a static gtag tag in
+the template, and matches braces from the consent check to prove every mention of either script
+URL sits inside the branch. Route changes are covered by GA4's enhanced measurement (history
+events), which is on by default, so there is no page view hook in the app and no double count.
+`docs/PROJECT-STATE.md` Analytics truth and the Services table are updated below.
+
+**About.** A "Who makes this" section: one person, an independent fan, not a media company or a
+league, with the project email. Deliberately no name on the page; that is Anthony's call, and
+he can add it in one line if he wants it there.
+
 ## Round 284: today's puzzle was frozen into seventeen saved pages, and a site-wide noindex nearly shipped
 
 Rebuilt on 2026-08-25 from the previous session's handoff notes, because the original Round 284
@@ -1859,9 +1908,11 @@ Fresh 31-day pull, 2026-07-21 through 2026-08-20, taken 2026-08-20:
   Australia 3,551, China 1,362, UK 1,278.
 
 Source and caveat: Lovable's project analytics
-(`mcp__Lovable__get_project_analytics` on `c29d224f-a662-4a15-b809-d86fa3b3f0ad`). GA4 is
-**not** wired up yet, so Lovable is currently the only analytics source. Re-pull before making
-a big prioritisation call, and update this section.
+(`mcp__Lovable__get_project_analytics` on `c29d224f-a662-4a15-b809-d86fa3b3f0ad`). GA4
+(`G-KZQK2G68YC`) is wired in as of Round 285 but only counts visitors who press Accept on the
+cookie banner, so it will read low against Lovable, which counts everyone. Use Lovable for
+totals and GA4 for behaviour. Re-pull before making a big prioritisation call, and update this
+section.
 
 Approximate at the date above, re-measure rather than quoting: roughly 118 to 122 games, entry
 bundle about 663KB with route-level code splitting, `src/data/gameContent/` about 47k words of
@@ -1880,7 +1931,7 @@ per-game SEO copy, about 52 harnesses in `scripts/`, 53 files in `docs/`.
 | ads.txt line | `google.com, pub-2929318086316376, DIRECT, f08c47fec0942fa0` |
 | Google sign-in | live |
 | Apple sign-in | parked, needs the $99/yr developer account, this is a money question |
-| GA4 | measurement ID still outstanding |
+| GA4 | `G-KZQK2G68YC`, wired in Round 285 behind the cookie Accept (same gate as the ads), pending push |
 
 ---
 
@@ -1915,6 +1966,9 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-25** Round 285. Footer links all six hubs, the privacy policy says what Google asks,
+  Cookie choices in the footer, GA4 gated behind Accept, About says who makes this. simAdsense
+  reads the shipped policy and holds the analytics gate; simInternalLinks holds the six hubs.
 - **2026-08-25** Round 284. Rebuilt from the handoff after the previous session's 284 to 286
   never reached the folder. Three clock sample prerender, the noindex fence (section 14) with
   controls on both sides, the guide readiness mark, stable JSON-LD order, the simCreation

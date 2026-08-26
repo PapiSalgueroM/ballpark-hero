@@ -102,6 +102,13 @@
       // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
       // New visitors (no choice yet) do not get the script until they accept;
       // the banner reloads ads on acceptance via the page lifecycle.
+      //
+      // Round 285: Google Analytics rides on the same gate. The measurement
+      // id and the injection are duplicated in src/lib/consentedScripts.ts,
+      // which is what the banner calls the moment somebody accepts; this copy
+      // covers every later page load. simAdsense holds the two ids together
+      // and refuses a gtag script tag that is not behind this check, so the
+      // tag can never be loaded for a visitor who has not accepted.
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
@@ -110,6 +117,15 @@
             s.crossOrigin = 'anonymous';
             s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
             document.head.appendChild(s);
+
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
           }
         } catch (e) { /* storage blocked: default to no ads script */ }
       })();
@@ -204,12 +220,17 @@
 <a href="/guess-tennis-player">🎾 Guess The Player Guess the mystery tennis player from clues</a>
 <a href="/nfl-career">🏈 NFL Career Path Guess the NFL player from clues</a>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer Games</a>
+<a href="/pro-basketball">Basketball Games</a>
+<a href="/hockey">Hockey Games</a>
+<a href="/pro-football">Football Games</a>
+<a href="/baseball">Baseball Games</a>
+<a href="/college">College Games</a>
 <a href="/about">About</a>
 <a href="/contact">Contact</a>
 <a href="/whats-new">What's New</a>
 <a href="/records">Record Books</a>
 <a href="/leaderboard">Leaderboard</a>
-<a href="/college">College Hub</a>
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
 <p>We use cookies to improve your experience and show personalised ads. By continuing you agree to our cookie policy. <a href="/privacy">Learn More</a></p>

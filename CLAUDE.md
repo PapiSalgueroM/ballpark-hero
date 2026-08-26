@@ -154,7 +154,9 @@ plus `src/lib/squadDeal.ts` (`FORMATIONS`, `EXTRAS`, `playerRating`).
 
 `/soccer-career` is the flagship. As of August 2026 it was about **1 in 5 of all pageviews
 across the whole site and 11x the next most played game**, so it earns proportionally more of
-the work. That figure came from Lovable's project analytics, not GA4, which is not wired up yet.
+the work. That figure came from Lovable's project analytics. GA4 (`G-KZQK2G68YC`) is wired in
+since Round 285 but only counts visitors who accept the cookie banner, so Lovable stays the
+source for totals.
 `docs/PROJECT-STATE.md` carries the source and the date; re-pull it before betting a big
 prioritisation call on it.
 `src/pages/SoccerCareer.tsx` is the biggest file in the repo, so read it in targeted slices

@@ -252,7 +252,15 @@ if (process.env.SKIP_BROWSER === '1') {
 
 function routes() {
   const src = fs.readFileSync(path.join(ROOT, 'src/App.tsx'), 'utf-8');
-  const all = [...src.matchAll(/<Route path="([^"]+)"/g)].map(m => m[1]);
+  /* Round 285: retired routes are <Navigate> redirects, not pages. Since the
+     browser group is served the way the host serves (Round 284), those
+     addresses answer with a meta refresh stub, and a sweep that opens one is
+     measuring the page it lands on, or racing the refresh and crashing
+     mid-evaluate, which is what /world-cup-predictor did. simRetiredRoutes
+     owns those addresses; a sweep owns real pages. */
+  const all = [...src.matchAll(/<Route path="([^"]+)"\s+element={\s*(<Navigate\b)?/g)]
+    .filter(m => !m[2])
+    .map(m => m[1]);
   return [...new Set(all.filter(p => p.startsWith('/') && !p.includes(':') && p !== '*'))];
 }
 const ROUTES = process.env.ROUTE ? [process.env.ROUTE] : routes();

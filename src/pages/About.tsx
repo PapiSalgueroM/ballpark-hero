@@ -35,6 +35,13 @@ const About = () => {
         </div>
 
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">Who makes this</h2>
+          <p>
+            One person. DoUKnowBall is an independent project built and run by a lifelong sports fan, not a media company and not a league. The same person writes the game engines, checks the rosters, bakes the daily puzzles and reads every bug report. The games are free, there is no account wall, and the only way the site pays for itself is the ads, which is why it will never be buried in them. If you want to talk to the person behind it, <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a> goes straight to him.
+          </p>
+        </div>
+
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">What we care about</h2>
           <p>
             Getting the data right comes first. Real rosters, real stats, verified lineups. When a grid says a player suited up for two clubs, he actually did. If something looks wrong anyway, every page has a Report a bug button in the footer that lands straight in our inbox with the page attached, and we fix it.
