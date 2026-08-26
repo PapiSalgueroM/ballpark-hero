@@ -359,7 +359,28 @@ function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; is
 }
 
 /* ─── Contract Offer Card ─── */
-function OfferCard({ offer, onAccept, actionLabel }: { offer: ContractOffer; onAccept: () => void; actionLabel?: string }) {
+/* Round 267: an offer is not just money and a badge, it is a queue you are
+   joining. Where the real squad for that club and season exists, the card says
+   where you would slot into it and who would be in front of you, which is the
+   difference between "Arsenal want me" and "Arsenal want me as a fourth
+   choice". Display only, same as the squad card: it reads the same baked data
+   and changes nothing about the offer or the simulation. No data for that club
+   or year means no line, never a guess. */
+function OfferFitLine({ offer, career }: { offer: ContractOffer; career: CareerState }) {
+  const year = (career.seasons[career.seasons.length - 1]?.year ?? 0) + 1;
+  const chart = depthChart(offer.club.name, year, career.position, career.overall, career.playerName);
+  if (!chart) return null;
+  const label = GROUP_LABEL[chart.group];
+  return (
+    <div data-offer-fit className="text-[11px] text-muted-foreground border-t border-border/50 pt-2">
+      {chart.ahead === 0
+        ? `👑 You would be their best of the ${label} on day one.`
+        : `📋 You would be ${ordinalPlace(chart.ahead + 1)} of ${chart.men.length} ${label} there${chart.aheadOfMe ? `, behind ${chart.aheadOfMe.name}` : ""}.`}
+    </div>
+  );
+}
+
+function OfferCard({ offer, onAccept, actionLabel, career }: { offer: ContractOffer; onAccept: () => void; actionLabel?: string; career?: CareerState }) {
   return (
     <div className="bg-card border border-border rounded-xl p-4 space-y-3">
       <div className="flex items-center gap-3">
@@ -381,6 +402,7 @@ function OfferCard({ offer, onAccept, actionLabel }: { offer: ContractOffer; onA
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40">Tier {offer.club.tier}</span>
       </div>
       {offer.isPayCut && <div className="text-[11px] text-amber-400">⚠️ Lower wages, but it's a dream move</div>}
+      {career && <OfferFitLine offer={offer} career={career} />}
       <Button onClick={onAccept} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
         {actionLabel || "Sign Contract ✍️"}
       </Button>
@@ -1939,6 +1961,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
               <OfferCard
                 key={offer.club.name}
                 offer={offer}
+                career={career}
                 onAccept={() => onAcceptOffer(offer)}
                 actionLabel={situation.mode === "released" ? "Sign as a free agent ✍️" : "Accept and go ✍️"}
               />
@@ -1982,7 +2005,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
       {/* Situation: One Offer */}
       {situation.type === "one_offer" && (
         <div className="space-y-3">
-          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} actionLabel="Accept Offer ✍️" />
+          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} actionLabel="Accept Offer ✍️" career={career} />
           <div className="flex gap-2">
             <Button variant="outline" onClick={onStay} className="flex-1 h-9 text-sm">
               Reject & Stay
@@ -2000,8 +2023,8 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
           <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-center">
             <span className="text-sm font-bold">🔥 Bidding War! Two clubs competing for your signature</span>
           </div>
-          <OfferCard offer={situation.offerA} onAccept={() => onAcceptOffer(situation.offerA)} actionLabel="Join Club A ✍️" />
-          <OfferCard offer={situation.offerB} onAccept={() => onAcceptOffer(situation.offerB)} actionLabel="Join Club B ✍️" />
+          <OfferCard offer={situation.offerA} onAccept={() => onAcceptOffer(situation.offerA)} actionLabel="Join Club A ✍️" career={career} />
+          <OfferCard offer={situation.offerB} onAccept={() => onAcceptOffer(situation.offerB)} actionLabel="Join Club B ✍️" career={career} />
           <Button variant="outline" onClick={onStay} className="w-full h-9 text-sm">
             Stay at {career.currentClub}
           </Button>
@@ -2015,7 +2038,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
             <span className="text-sm font-bold">⭐ Dream Club Interest!</span>
             <p className="text-xs text-muted-foreground mt-1">A top club wants you, but they're offering below market value</p>
           </div>
-          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} actionLabel="Accept pay cut for dream move ⭐" />
+          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} actionLabel="Accept pay cut for dream move ⭐" career={career} />
           <div className="flex gap-2">
             <Button variant="outline" onClick={onStay} className="flex-1 h-9 text-sm">
               Stay for better money 💰
@@ -2038,7 +2061,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
             Sign Extension with {career.currentClub} 📝
           </Button>
           {situation.offers.map((offer) => (
-            <OfferCard key={offer.club.name} offer={offer} onAccept={() => onAcceptOffer(offer)} actionLabel="Leave on free transfer ✍️" />
+            <OfferCard key={offer.club.name} offer={offer} onAccept={() => onAcceptOffer(offer)} actionLabel="Leave on free transfer ✍️" career={career} />
           ))}
         </div>
       )}
@@ -2049,7 +2072,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
           <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-center">
             <span className="text-sm font-bold">📩 A club has responded to your transfer request!</span>
           </div>
-          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} />
+          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} career={career} />
           <Button variant="outline" onClick={onStay} className="w-full h-9 text-sm">
             Changed my mind, stay at {career.currentClub}
           </Button>
@@ -3528,7 +3551,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 <p className="text-xs text-muted-foreground mt-1">Choose a club to start your professional career</p>
               </div>
               {career.pendingOffers.map((offer) => (
-                <OfferCard key={offer.club.name} offer={offer} onAccept={() => onAcceptOffer(offer)} />
+                <OfferCard key={offer.club.name} offer={offer} onAccept={() => onAcceptOffer(offer)} career={career} />
               ))}
             </div>
           )}

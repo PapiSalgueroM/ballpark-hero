@@ -249,6 +249,34 @@ if (!/chart \? <SquadDepthCard chart=\{chart\} \/> : null/.test(page)) {
 }
 console.log(`   ${NOWHERE.length} unknown club and season pairs, all null, and the page renders nothing on null`);
 
+/* ── Round 267: the same picture on every offer ───────────────────────── */
+console.log('5b) an offer says where you would slot in at THAT club');
+if (!page.includes('function OfferFitLine')) fail('offer cards do not show where you would fit');
+/* every OfferCard on the page must be handed the career, or the line silently
+   never renders for that route into the transfer window */
+const offerCards = (page.match(/<OfferCard\b/g) ?? []).length;
+const offerCardsWithCareer = [...page.matchAll(/<OfferCard\b[\s\S]{0,320}?\/>/g)]
+  .filter(m => m[0].includes('career={career}')).length;
+console.log(`   ${offerCards} offer cards on the page, ${offerCardsWithCareer} handed the career`);
+if (offerCards === 0) fail('no offer cards found at all, so this check is not checking anything');
+if (offerCardsWithCareer !== offerCards) {
+  fail(`${offerCards - offerCardsWithCareer} offer card(s) never get the career, so they can never show the fit line`);
+}
+/* and the line itself has to be right: it is the same arithmetic as the
+   squad card, pointed at the OFFERING club rather than the current one */
+let fits = 0;
+for (const club of careerClubs.slice(0, 12)) {
+  for (const year of [2019, 2023, 2026]) {
+    const chart = depthChart(club, year, 'ST', 79, 'Test Player');
+    if (!chart) continue;
+    fits += 1;
+    if (chart.club !== club) fail(`a fit line for ${club} describes ${chart.club}`);
+    if (chart.ahead > 0 && !chart.aheadOfMe) fail(`${club} ${year}: ${chart.ahead} ahead and nobody named`);
+  }
+}
+console.log(`   ${fits} offer fits resolved against the offering club's own squad`);
+if (fits < 20) fail(`only ${fits} offer fits could be built, too few to be testing the feature`);
+
 /* ── 7: it changes nothing ────────────────────────────────────────────── */
 const CAREERS = Number(process.argv[2] || 30);
 console.log(`6) ${CAREERS} careers played twice, once with the depth chart consulted every season`);
