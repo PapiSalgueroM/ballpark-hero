@@ -2444,19 +2444,26 @@ change. If they are not running, they need recreating. Full prompts are in
 `_claude-migration/SCHEDULED-TASKS-TO-RECREATE.md` in Anthony's local folder (gitignored,
 because it contains account emails).
 
-**Recreated 2026-08-16 on the new account**, all three, after the migration. The build-loop
-prompt was rewritten in the process: the archived copy hardcodes head `9da1788` and rounds 101
-to 110 as pending, which is nine months of drift, so the live version now carries **no round
-numbers at all** and points at this file instead. Do not paste the archived prompt back in.
-
-Supabase and Lovable connectors are both connected on the new account as of the same date, so
-the polls task can write and deploys can run.
+**Rebuilt 2026-08-26, the desktop leaves the pipeline.** Anthony pushed the 258 to 293 backlog
+with one click and instructed that everything run without him from now on. The build loop was
+recreated as a claude.ai/code cloud routine (`trig_01KeFPHw3rE1mUqg7Kcsbpdv`): each firing gets
+a fresh clone with push access, builds rounds, runs every gate, pushes a branch, opens a PR and
+merges it itself under his standing authorization from that day. Sessions fired by that routine
+may carry no claude.ai connectors, so publishing is a second routine: the old desktop build
+task (`trig_01K5Lkj1Jx63yC55LJzV67Gs`) was repurposed as the publisher, its sessions hold the
+Lovable connector, and it deploys whenever main is ahead of the published site, one hour offset
+behind the build firings. Nothing schedules the bat pipeline any more.
 
 | Task | Schedule |
 |---|---|
-| DoUKnowBall: continue the career epic (the main build loop) | cron `57 */3 * * *` |
+| DoUKnowBall: continue the career epic (cloud) (build, verify, push, merge) | cron `57 */3 * * *`, fires fresh claude.ai/code sessions |
+| DoUKnowBall: publish to douknowball.com (was the desktop build loop) | cron `57 1-23/3 * * *`, needs the Lovable connector |
 | DoUKnowBall daily polls | cron `0 11 * * *`, needs the Supabase connector |
-| AdSense review day | one-shot 2026-08-20 14:00 UTC |
+| AdSense review day | one-shot 2026-08-20 14:00 UTC, fired |
+
+The 2026-08-16 warning still holds for the polls task and any future rewrite: prompts carry
+**no round numbers at all**, they point at this file and at `git log` instead. Do not paste
+archived prompts back in.
 
 The daily polls task writes to `public.daily_polls`. Columns: `poll_key` (unique, format
 `dp-YYYY-MM-DD-N`), `poll_date`, `sort_order`, `question`, `option_a` through `option_d`, the
