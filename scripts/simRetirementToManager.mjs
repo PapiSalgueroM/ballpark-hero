@@ -6,6 +6,8 @@
  * decoration. This checks they do not.
  * Run: node scripts/simRetirementToManager.mjs
  */
+/* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
+import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';

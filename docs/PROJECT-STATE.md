@@ -2692,3 +2692,10 @@ today rather than adding alongside them.
   pairs) instead of Baller-NNNN; stored handles untouched so nobody's history orphans. The
   wiring of the ten pages was fanned out to three parallel agents and re-verified centrally:
   types, dash scan, coverage guard, board.
+  Late addition, same round: after simAwardRaces flipped once at 47 and simFinance flipped
+  once at 1.15x on back to back boards, the flake population got the systemic fix instead of
+  two more bandages: scripts/lib/seedRandom.mjs seeds Math.random per harness from its own
+  filename, imported first by all 23 stochastic harnesses (SIM_SEED overrides for deliberate
+  fresh-sample measurement). All 23 verified passing twice each, byte identical between runs.
+  A harness that fails now fails every time, which is a threshold conversation, not a coin
+  toss.

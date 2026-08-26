@@ -8,6 +8,8 @@
  *  - the market is the full baked universe with sane real-value prices
  * Run: node scripts/simClubManager.mjs
  */
+/* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
+import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';

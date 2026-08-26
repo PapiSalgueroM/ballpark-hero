@@ -4,6 +4,8 @@
    every event id is reachable, the shop works, and the corruption meter
    actually convicts people. Run: node scripts/simNhlCareer.mjs [careers]
 */
+/* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
+import './lib/seedRandom.mjs';
 import { build } from 'esbuild';
 import { unlinkSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
